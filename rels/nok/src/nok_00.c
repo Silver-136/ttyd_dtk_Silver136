@@ -830,10 +830,8 @@ EVT_BEGIN(first_time_camera)
     WAIT_MS(100)
     CALL(evt_cam3d_evt_off, 500, EASING_QUADRATIC_OUT)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG1_NOK1"), 2000)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG1_01A_PETALBURG_1ST_TIME)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG1_01A_PETALBURG_1ST_TIME)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_party_run, 0)

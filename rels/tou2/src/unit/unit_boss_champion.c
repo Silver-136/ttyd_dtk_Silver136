@@ -94,80 +94,22 @@ USER_FUNC(ceil_exist) {
  * Unit kind of the Rawk Hawk (HP 40, level 49):
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
+BattleUnitKind unit_boss_champion = {
+    UNIT_RAWK_HAWK,
+    "btl_un_champion",
+    40,
+    0,
+    1,
+    1,
 #if VERSION <= VERSION_DEMO_US
-BattleUnitKind unit_boss_champion = {
-    UNIT_RAWK_HAWK,
-    "btl_un_champion",
-    40,
+    49,
     0,
-    1,
-    1,
-49,
-0,
-    0,
-    100,
-    0,
-    50,
-8,
-50,
-    64,
-    3,
-    64,
-    0.0f,
-    32.0f,
-    0.0f,
-    0,
-    0,
-    8.0f,
-    36.0f,
-    0.0f,
-    25.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    25.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    48.0f,
-    10.0f,
-    0.0f,
-    32.0f,
-    0.0f,
-    50.0f,
-    64.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_BLED_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
-};
+        0,
+        100,
+        0,
+        50,
+    8,
 #else
-BattleUnitKind unit_boss_champion = {
-    UNIT_RAWK_HAWK,
-    "btl_un_champion",
-    40,
-    0,
-    1,
-    1,
     34,
     0,
     0,
@@ -179,6 +121,7 @@ BattleUnitKind unit_boss_champion = {
 #else
     8,
 #endif
+#endif
     50,
     64,
     3,
@@ -230,7 +173,6 @@ BattleUnitKind unit_boss_champion = {
     init_event,
     data_table,
 };
-#endif
 
 /** Defence of the Rawk Hawk: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
@@ -565,50 +507,32 @@ BattleWeapon weapon_champion_roof_shake_attack = {
 };
 
 /** Weapon of Rawk Hawk's final Roof Shake: no HP damage. */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon weapon_champion_roof_shake_last_attack = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0,
-0,
-1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    NULL, // hpDamageFn
-    {0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, // element
-    ATTACKPATTERN_NO_DAMAGE_FINISH, // damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL,
-SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH,
-COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 BattleWeapon weapon_champion_roof_shake_last_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
+#if VERSION <= VERSION_DEMO_US
+    0,
+    1.0f, // reserved_14
+        1, // stylishCommandMultiplier
+        1, // reserved_19
+        1, // bingoSlotChance
+        1, // reserved_1B
+        NULL, // hpDamageFn
+        {0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+        TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, // element
+        ATTACKPATTERN_NO_DAMAGE_FINISH, // damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        NULL,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH,
+#else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
@@ -631,6 +555,7 @@ BattleWeapon weapon_champion_roof_shake_last_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
+#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -643,7 +568,6 @@ BattleWeapon weapon_champion_roof_shake_last_attack = {
     NULL, // attackEvtScript
     {0, 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Rawk Hawk jumps up and hangs from the iron frame in the ceiling:

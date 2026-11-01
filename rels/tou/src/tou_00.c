@@ -180,11 +180,10 @@ EVT_BEGIN(evt_to_tou)
     WAIT_FRAMES(1)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG3_URN1"), 18000)
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
     CALL(evt_snd_bgmon_f_d, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG3_URN1"), 18000, 18000)
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

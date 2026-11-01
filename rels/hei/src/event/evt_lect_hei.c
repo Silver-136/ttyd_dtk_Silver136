@@ -491,6 +491,8 @@ EVT_BEGIN(nokotaro_party_lecture)
         CALL(evt_party_nokotaro_kick, 0)
         WAIT_MS(500)
     END_LOOP
+    // A blue switch block is dropped for Koops to hit; the lesson runs twice, explaining the kick and then
+    // the hold.
 #if VERSION <= VERSION_DEMO_US
     CALL(x_flag_set, 0, 1)
     BEGIN_INLINE_EVENT
@@ -501,9 +503,6 @@ EVT_BEGIN(nokotaro_party_lecture)
         CALL(x_flag_set, 0, 0)
     END_INLINE_EVENT
     CALL(x_flag_wait, 0, 0)
-#else
-    // A blue switch block is dropped for Koops to hit; the lesson runs twice, explaining the kick and then
-    // the hold.
 #endif
     CALL(evt_npc_change_fbat_mode, 8)
     SET_VALUE(LW(8), 2)
@@ -517,14 +516,11 @@ EVT_BEGIN(nokotaro_party_lecture)
         SET_VALUE(LW(1), STRING("TESTMOBJ"))
         CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
         ADD(LW(2), -70)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF_HEI_KOOPS_LECTURE_SWITCH, 0)
-        CALL(evt_mobj_switch_blue, 0, LW(1), LW(2), LW(3), LW(4), 0, GSWF_HEI_KOOPS_LECTURE_SWITCH)
-#else
+#if VERSION > VERSION_DEMO_US
         ADD(LW(3), 100)
+#endif
         SET_VALUE(GSWF_HEI_KOOPS_LECTURE_SWITCH, 0)
         CALL(evt_mobj_switch_blue, 0, LW(1), LW(2), LW(3), LW(4), 0, GSWF_HEI_KOOPS_LECTURE_SWITCH)
-#endif
         CALL(evt_mobj_set_camid, LW(1), 7)
 #if VERSION > VERSION_DEMO_US
         CALL(evt_snd_sfxon, STRING("SFX_EVT_LECTURE_BLOCK_FALL1"), LW(7))

@@ -1599,28 +1599,28 @@ MapWork* wp2;
     }
 }
 #if VERSION <= VERSION_DEMO_US
-    wp2 = mapWork;
-    activeGroup = j;
-    for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
+wp2 = mapWork;
+activeGroup = j;
+for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
 
-        // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
-        if (entry3->datAram) {
-            entry3->dat = _mapAllocTail(entry3->datSize);
-            entry3->tpl = _mapAllocTail(entry3->tplSize);
-            aramMgrToMram(entry3->datAram, entry3->dat);
-            aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
-            entry3->datAram = NULL;
-            MAPENT_TPLARAM(entry3) = NULL;
-        } else {
-            entry3->arcData = _mapAllocTail(entry3->arcSize);
-            aramMgrToMram(entry3->arcAram, entry3->arcData);
-            entry3->arcAram = NULL;
-        }
-        makeDisplayList(j);
+    // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
+    if (entry3->datAram) {
+        entry3->dat = _mapAllocTail(entry3->datSize);
+        entry3->tpl = _mapAllocTail(entry3->tplSize);
+        aramMgrToMram(entry3->datAram, entry3->dat);
+        aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
+        entry3->datAram = NULL;
+        MAPENT_TPLARAM(entry3) = NULL;
+    } else {
+        entry3->arcData = _mapAllocTail(entry3->arcSize);
+        aramMgrToMram(entry3->arcAram, entry3->arcData);
+        entry3->arcAram = NULL;
     }
-    if (wp2->entries->arcData) {
-        arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
-    }
+    makeDisplayList(j);
+}
+if (wp2->entries->arcData) {
+    arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
+}
 }
 #endif
 #pragma opt_common_subs reset
@@ -2098,8 +2098,8 @@ static inline void mapMainLight_lc(MapAnim* anim, LightEntry* lp, MapAnimLightDa
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 static inline MapMaterial* mapMainFindTbl_(const char* name) {
+#if VERSION <= VERSION_DEMO_US
     int j;
     int i;
 
@@ -2107,22 +2107,7 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
     MapWork* wp;
     MapMaterialName* mat;
     wp = mapGetWork();
-    for (i = 0; i < wp->entries[0].count; i++) {
-        entry = &wp->entries[i];
-        if (!entry->materialNameTable) {
-            return NULL;
-        }
-        for (j = 0; j < entry->materialNameTable->count; j++) {
-            mat = &entry->materialNameTable->entries[j];
-            if (!strcmp(mat->name, name)) {
-                return mat->data;
-            }
-        }
-    }
-    return NULL;
-}
 #else
-static inline MapMaterial* mapMainFindTbl_(const char* name) {
     MapEntry* entry;
     MapWork* wp;
     int j;
@@ -2130,6 +2115,7 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
     int i;
 
     wp = &mapWork[activeGroup];
+#endif
     for (i = 0; i < wp->entries[0].count; i++) {
         entry = &wp->entries[i];
         if (!entry->materialNameTable) {
@@ -2144,7 +2130,6 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
     }
     return NULL;
 }
-#endif
 
 // A macro, not an inline function: as a function mapMain changes (together with mapMainAlpha).
 #define mapMainMat(a_, i_, b_, x_)           \

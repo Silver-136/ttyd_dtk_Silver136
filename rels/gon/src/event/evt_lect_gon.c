@@ -781,7 +781,6 @@ EVT_BEGIN(slit_majin_lecture)
         CALL(evt_msg_select, 0, STRING("stg1_gon_12_15_yn"))
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_continue)
-#else
 #endif
         IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US

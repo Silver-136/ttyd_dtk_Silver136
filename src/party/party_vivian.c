@@ -31,8 +31,8 @@
 #define VIVIAN_FOLLOW_DIST 22.0f
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 s32 vivian_cancel_req;
+#if VERSION <= VERSION_DEMO_US
 
 
 /**
@@ -469,7 +469,6 @@ void vivian_use(PartyEntry* party) {
     }
 }
 #else
-s32 vivian_cancel_req;
 
 #pragma explicit_zero_data on
 /**

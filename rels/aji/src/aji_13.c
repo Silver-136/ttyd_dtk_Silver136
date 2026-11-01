@@ -43,8 +43,7 @@
 
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 BOOL hitIsGroup(HitEntry* target, HitEntry* group);
-#if VERSION < VERSION_US
-#else
+#if VERSION >= VERSION_US
 #include "memory.h"
 #endif
 typedef struct {
@@ -1210,14 +1209,11 @@ EVT_BEGIN(aji_13_init_evt)
     END_IF
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 200, 60, 100, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, 300, 60, 100, 0, 0)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF_AJI_13_ULTRA_SHROOM, 0)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
-#else
-    CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF_AJI_13_ULTRA_SHROOM, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5996094f))
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
 #endif
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
         CALL(evt_npc_check_delete, STRING("バリアーンＺ"))
     END_IF

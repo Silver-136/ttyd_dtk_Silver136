@@ -828,12 +828,11 @@ static EVT_BEGIN(first_evt)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG7_01_FAHR_OUTPOST_1ST_VISIT)
+#if VERSION <= VERSION_DEMO_US
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(bero_case_switch_on)
 #else
-    SET_VALUE(GSW_STORY_PROGRESS, STG7_01_FAHR_OUTPOST_1ST_VISIT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -1458,19 +1457,14 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_mario_set_pose, STRING("M_N_7"))
     WAIT_FRAMES(1)
     CALL(evt_mario_cont_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_move_position, STRING("me"), -50, -40, 0, FLOAT(80.0f), 1)
-    CALL(evt_npc_move_position, STRING("me"), -55, -30, 0, FLOAT(80.0f), 1)
-    CALL(evt_npc_move_position, STRING("me"), -45, 80, 0, FLOAT(80.0f), 1)
-#else
+#if VERSION > VERSION_DEMO_US
     DEBUG_PUT_MSG(STRING("\203r\203r\203A\203\223\202\265\202\301\202\333\226\263\214\370"))
     CALL(evt_party_vivian_tail, 0, 0)
+#endif
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("me"), -50, -40, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING("me"), -55, -30, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING("me"), -45, 80, 0, FLOAT(80.0f), 1)
-#endif
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("me"), 0, 275, 0, FLOAT(80.0f), 1)
@@ -2823,10 +2817,10 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
-#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_yuka1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_position, STRING("村長"), 520, 0, 0)
     CALL(evt_npc_set_ry, STRING("村長"), 270)
     CALL(evt_npc_status_onoff, 1, STRING("村長"), NPC_STATUS_FACE_MOVE_DIR)
@@ -2850,13 +2844,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(anim_tevcallback, STRING("スラリー"), 1)
     CALL(anim_tevcallback, STRING("ボムヘイD"), 1)
     CALL(anim_tevcallback, STRING("ホワイト"), 1)
-    CALL(yami_view, -1500)
-    CALL(evt_bg_set_color, 64, 64, 64, 255)
-    CALL(starstone_entry, STRING("starstone"), 0, 50, 10)
 #else
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_yuka1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mario_set_pos, 0, -1000, 0)
-    CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("\221\272\222\267"), 520, 0, 0)
     CALL(evt_npc_set_ry, STRING("\221\272\222\267"), 270)
     CALL(evt_npc_status_onoff, 1, STRING("\221\272\222\267"), NPC_STATUS_FACE_MOVE_DIR)
@@ -2880,29 +2868,21 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(anim_tevcallback, STRING("\203X\203\211\203\212\201["), 1)
     CALL(anim_tevcallback, STRING("\203{\203\200\203w\203CD"), 1)
     CALL(anim_tevcallback, STRING("\203z\203\217\203C\203g"), 1)
+#endif
     CALL(yami_view, -1500)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(starstone_entry, STRING("starstone"), 0, 50, 10)
-#endif
     SET_VALUE(GW(0), 50)
     BEGIN_INLINE_EVENT
         LOOP(0)
-#if VERSION >= VERSION_US
             CALL(starstone_set_pos, STRING("starstone"), 0, GW(0), 10)
-#else
-            CALL(starstone_set_pos, STRING("starstone"), 0, GW(0), 10)
-#endif
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
         LOOP(0)
-#if VERSION >= VERSION_US
             CALL(starstone_set_ry, STRING("starstone"), LW(0))
-#else
-            CALL(starstone_set_ry, STRING("starstone"), LW(0))
-#endif
             SUBTRACT_FLOAT(LW(0), FLOAT(3.0f))
             IF_INT_LESS_OR_EQUAL(LW(0), FLOAT(0.0f))
                 ADD_FLOAT(LW(0), FLOAT(360.0f))
@@ -2945,9 +2925,6 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_65"), 0, STRING("村長"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_66"), 0, STRING("村長"))
-    CALL(evt_cam3d_evt_set, 0, 283, 1182, 0, 75, 0, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg8_las_148_67"), 0, 0)
 #else
         CALL(evt_npc_move_position, STRING("\203{\203\200\203w\203CD"), 450, 25, 0, 90, 0)
     END_INLINE_EVENT
@@ -2956,10 +2933,10 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_65"), 0, STRING("\221\272\222\267"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_66"), 0, STRING("\221\272\222\267"))
+#endif
     CALL(evt_cam3d_evt_set, 0, 283, 1182, 0, 75, 0, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_67"), 0, 0)
-#endif
     BEGIN_SIBLING_EVENT
         LOOP(0)
             CALL(bom1000_jump)
@@ -2987,7 +2964,6 @@ static EVT_BEGIN(minnnanokoe_evt)
             CALL(evt_sub_random, 2, LW(3))
             SWITCH(LW(3))
                 CASE_EQUAL(0)
-#if VERSION >= VERSION_US
                 SET_VALUE(LW(3), STRING("stg8_las_148_68"))
                 CASE_EQUAL(1)
                 SET_VALUE(LW(3), STRING("stg8_las_148_69"))
@@ -2995,6 +2971,7 @@ static EVT_BEGIN(minnnanokoe_evt)
                 SET_VALUE(LW(3), STRING("stg8_las_148_70"))
             END_SWITCH
             BEGIN_INLINE_EVENT
+#if VERSION >= VERSION_US
 #if VERSION == VERSION_US
                 CALL(evt_msg_pri, GW(6))
                 ADD(GW(6), 1)
@@ -3002,14 +2979,6 @@ static EVT_BEGIN(minnnanokoe_evt)
                     SET_VALUE(GW(6), 0)
                 END_IF
 #endif
-#else
-                SET_VALUE(LW(3), STRING("stg8_las_148_68"))
-                CASE_EQUAL(1)
-                SET_VALUE(LW(3), STRING("stg8_las_148_69"))
-                CASE_EQUAL(2)
-                SET_VALUE(LW(3), STRING("stg8_las_148_70"))
-            END_SWITCH
-            BEGIN_INLINE_EVENT
 #endif
                 CALL(evt_msg_print, 0, LW(3), 0, 0)
             END_INLINE_EVENT
@@ -3026,9 +2995,6 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("ボムヘイD"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_71"), 0, STRING("村長"))
-    WAIT_MS(2000)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
-    CALL(evt_bero_mapchange, STRING("las_29"), STRING("minnnanokoe"))
 #else
     CALL(evt_npc_set_ry, STRING("\221\272\222\267"), 90)
     WAIT_MS(300)
@@ -3036,10 +3002,10 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("\203{\203\200\203w\203CD"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_71"), 0, STRING("\221\272\222\267"))
+#endif
     WAIT_MS(2000)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("las_29"), STRING("minnnanokoe"))
-#endif
     RETURN
 EVT_END()
 

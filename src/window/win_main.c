@@ -2837,15 +2837,9 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     GXTexObj obj;
     f32 sy;
 
-#if VERSION >= VERSION_US
     if (iconId == ICON_115) {
         iconId = ICON_114;
     }
-#else
-    if (iconId == ICON_115) {
-        iconId = ICON_114;
-    }
-#endif
     iconGetTexObj(&obj, iconId);
     GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&obj, GX_TEXMAP0);

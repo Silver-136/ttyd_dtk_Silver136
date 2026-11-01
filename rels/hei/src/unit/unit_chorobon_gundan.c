@@ -162,11 +162,10 @@ BattleUnitKind unit_chorobon_gundan = {
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
 #if VERSION <= VERSION_DEMO_US
     kUnitLeader | kUnitNoSpin | kUnitNoHpGauge, // attributeFlags
-    &regist.v, // statusVulnerability
 #else
     kUnitLeader | kUnitNoSpin, // attributeFlags
-    &regist.v, // statusVulnerability
 #endif
+    &regist.v, // statusVulnerability
     1, // numParts
     parts, // parts
     init_event, // initEventCode

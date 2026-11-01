@@ -570,48 +570,6 @@ BattleWeapon partyWeapon_VivianMagicalPowder = {
 #endif
 };
 
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon partyWeapon_VivianCharmKissAttack = {
-    "btl_wn_ptr_lv3",
-ICON_PARTNER_MOVE_LV3,
-{0}, // pad_06
-    0, // itemId
-    "msg_ptr_meromero_kiss", // description
-    100, // baseAccuracy
-    4, // baseFpCost
-    0, 0, // baseSpCost..superguardsAllowed
-    1.0f,
-2,
-5, // reserved_19
-    100, // bingoSlotChance
-    50, // reserved_1B
-    NULL, // hpDamageFn
-    {0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    "msg_ac_meromero_kiss", // acHelpMsg
-    SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0,
-90,
-3, // confuseTime
-    0, 0, 0, 0, 0, 0, 0, 0, // electricChance..freezeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeChance..defChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // defChangeStrength..slowChance
-    0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
-    0, 0, 0, // hpRegenStrength..fpRegenStrength
-    {0}, // pad_AE
-    partyVivianAttack_CharmKissAttack,
-{0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0},
-};
-#else
 BattleWeapon partyWeapon_VivianCharmKissAttack = {
     "btl_wn_ptr_lv3", // name
     ICON_PARTNER_MOVE_LV3, // icon
@@ -622,6 +580,37 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
+#if VERSION <= VERSION_DEMO_US
+    2,
+    5, // reserved_19
+        100, // bingoSlotChance
+        50, // reserved_1B
+        NULL, // hpDamageFn
+        {0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+        TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        "msg_ac_meromero_kiss", // acHelpMsg
+        SPECIAL_UNGUARDABLE, // special
+        COUNTER_RESIST_ALL, // counterResistFlags
+        TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+        0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+        0,
+    90,
+    3, // confuseTime
+        0, 0, 0, 0, 0, 0, 0, 0, // electricChance..freezeTime
+        0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeChance..defChangeTime
+        0, 0, 0, 0, 0, 0, 0, 0, // defChangeStrength..slowChance
+        0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
+        0, 0, 0, // hpRegenStrength..fpRegenStrength
+        {0}, // pad_AE
+        partyVivianAttack_CharmKissAttack,
+    {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0},
+#else
 #if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
@@ -659,8 +648,8 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
 #else
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #endif
-};
 #endif
+};
 
 /**
  * Vivian's Shade Fist: she sinks into the shadows,

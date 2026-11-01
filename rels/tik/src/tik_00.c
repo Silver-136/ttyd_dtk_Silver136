@@ -1252,12 +1252,11 @@ EVT_BEGIN(uranaisi_table_talk)
         END_IF
         // A menu lists the three readings with their prices (My Next Path, Star Pieces, Shine Sprites);
         // cancelling ends the talk.
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 1)
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_unitwin_alloc)
     CALL(unitwincoin_disp_onoff, 1)
 #else
-        SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 1)
         CALL(evt_win_coin_on, 0, LW(12))
 #endif
         CALL(evt_uranaisi_msg_alloc)
@@ -1379,13 +1378,13 @@ EVT_BEGIN(starmaniac_get_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(starmaniac_talk)
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("starmaniac_02"), 0, STRING("me"))
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("starmaniac_00"), 0, STRING("me"))
         SET_VALUE(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 1)
@@ -1452,15 +1451,7 @@ EVT_BEGIN(starmaniac_talk)
     END_IF
     CALL(evt_msg_continue)
     GOTO(0)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(starmaniac_talk)
-    CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
-    IF_INT_LESS_OR_EQUAL(LW(0), 0)
-        CALL(evt_msg_print, 0, STRING("starmaniac_02"), 0, STRING("me"))
-        RETURN
-    END_IF
     CALL(tik_snd_off)
     IF_INT_EQUAL(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("starmaniac_00"), 0, STRING("me"))
@@ -1552,9 +1543,9 @@ EVT_BEGIN(starmaniac_talk)
     CALL(evt_msg_continue)
     GOTO(0)
     CALL(tik_snd_on)
+#endif
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(johoyaketi_talk)
     IF_INT_EQUAL(GSWF_TIK_00_WONKY_FIRST_TALK_DONE, 0)
@@ -2093,14 +2084,11 @@ EVT_END()
  */
 EVT_BEGIN(evt_open_01)
     CALL(evt_mapobj_trans, 1, STRING("card"), 0, -1000, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mapobj_trans, 1, STRING("ie_1_naka"), 0, FLOAT(0.19921875f), 0)
+#endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mobj_check, STRING("pblk1"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -3042,12 +3030,10 @@ EVT_END()
  * in between it shows the message stg7_tik_01_01 and does nothing.
  */
 EVT_BEGIN(tensou_sw_event)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_sfxon, STRING("SFX_STG7_SWITCH_WARP1"), 0)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
 #endif
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)

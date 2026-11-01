@@ -202,11 +202,10 @@ static s32 wait_move_end_50hz(EventEntry* event, BOOL isFirstCall) {
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-    CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-    CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
 #endif
+    CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
     RETURN
@@ -220,11 +219,10 @@ EVT_END()
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-    CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-    CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
 #endif
+    CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
     RETURN
@@ -1429,8 +1427,6 @@ EVT_BEGIN(peach_evt_dance)
     CALL(horogram_set_pose, STRING("P_O_S_2"))
     WAIT_MS(1000)
     // The waltz music starts and the dance timer begins.
-    CALL(evt_snd_bgmoff, PSND_PAUSE)
-    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_PEACH_WALTZ1"))
 #else
     CALL(evt_npc_set_position, STRING("\203_\203~\201["), LW(2), FLOAT(5.0f), LW(3))
     CALL(peach_set_pose, STRING("P_O_Z_1"))
@@ -1440,9 +1436,9 @@ EVT_BEGIN(peach_evt_dance)
     CALL(peach_set_pose, STRING("P_O_S_1"))
     CALL(horogram_set_pose, STRING("P_O_S_2"))
     WAIT_MS(1000)
+#endif
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_PEACH_WALTZ1"))
-#endif
     CALL(bgm_start_wait)
     WAIT_MS(4000)
     SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(13))
@@ -1538,11 +1534,10 @@ EVT_BEGIN(peach_evt_dance)
                 CASE_EQUAL(2)
 #if VERSION >= VERSION_US
                 CALL(evt_npc_get_position, STRING("ホログラム"), LW(5), LW(6), LW(7))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_NG1"), LW(5), 0, LW(7), 0)
 #else
                 CALL(evt_npc_get_position, STRING("\203z\203\215\203O\203\211\203\200"), LW(5), LW(6), LW(7))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_NG1"), LW(5), 0, LW(7), 0)
 #endif
+                CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_NG1"), LW(5), 0, LW(7), 0)
                 CALL_CHILD(PTR(dance_btn_batu))
                 SPAWN_EVENT(PTR(peach_dance_action_fail))
             END_SWITCH
@@ -1576,27 +1571,19 @@ EVT_BEGIN(peach_evt_dance)
     // The dance ends and the normal music returns.
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"), 2000)
+    WAIT_MS(400)
+    CALL(horogram_flag_onoff, 1, 4)
+    CALL(peach_set_pose, STRING("P_S_1"))
+    CALL(horogram_set_pose, STRING("P_S_1"))
+    WAIT_MS(300)
+    SET_VALUE(LW(10), LW(15))
 #if VERSION >= VERSION_US
-    CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"), 2000)
-    WAIT_MS(400)
-    CALL(horogram_flag_onoff, 1, 4)
-    CALL(peach_set_pose, STRING("P_S_1"))
-    CALL(horogram_set_pose, STRING("P_S_1"))
-    WAIT_MS(300)
-    SET_VALUE(LW(10), LW(15))
     CALL(evt_npc_get_position, STRING("ホログラム"), LW(2), LW(0), LW(3))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_APPEAR1"), LW(2), 0, LW(3), 0)
 #else
-    CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"), 2000)
-    WAIT_MS(400)
-    CALL(horogram_flag_onoff, 1, 4)
-    CALL(peach_set_pose, STRING("P_S_1"))
-    CALL(horogram_set_pose, STRING("P_S_1"))
-    WAIT_MS(300)
-    SET_VALUE(LW(10), LW(15))
     CALL(evt_npc_get_position, STRING("\203z\203\215\203O\203\211\203\200"), LW(2), LW(0), LW(3))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_APPEAR1"), LW(2), 0, LW(3), 0)
 #endif
+    CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_APPEAR1"), LW(2), 0, LW(3), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 192, 0, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
@@ -1623,11 +1610,11 @@ EVT_BEGIN(peach_evt_dance)
     CALL(evt_mario_set_dir, 90, 200, 0)
     WAIT_MS(500)
     IF_INT_LESS(LW(15), 10)
-#if VERSION >= VERSION_US
         CALL(evt_map_replayanim, 0, STRING("moza"))
         CALL(evt_msg_print, 0, STRING("peach_aji_94"), 0, 0)
         CALL(evt_map_pauseanim, 0, STRING("moza"))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION >= VERSION_US
         CALL(evt_npc_set_position, STRING("ダミー"), LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("peach_aji_95"), 0, STRING("ダミー"))
         CALL(horogram_flag_onoff, 0, 4)
@@ -1635,12 +1622,7 @@ EVT_BEGIN(peach_evt_dance)
         CALL_CHILD(PTR(peach_dance_dark))
         CALL(compute_horogram_pos, 0, -80, LW(2), LW(3))
         CALL(evt_npc_set_position, STRING("ホログラム"), LW(2), 0, LW(3))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_APPEAR1"), LW(2), 0, LW(3), 0)
 #else
-        CALL(evt_map_replayanim, 0, STRING("moza"))
-        CALL(evt_msg_print, 0, STRING("peach_aji_94"), 0, 0)
-        CALL(evt_map_pauseanim, 0, STRING("moza"))
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_set_position, STRING("\203_\203~\201["), LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("peach_aji_95"), 0, STRING("\203_\203~\201["))
         CALL(horogram_flag_onoff, 0, 4)
@@ -1648,8 +1630,8 @@ EVT_BEGIN(peach_evt_dance)
         CALL_CHILD(PTR(peach_dance_dark))
         CALL(compute_horogram_pos, 0, -80, LW(2), LW(3))
         CALL(evt_npc_set_position, STRING("\203z\203\215\203O\203\211\203\200"), LW(2), 0, LW(3))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_APPEAR1"), LW(2), 0, LW(3), 0)
 #endif
+        CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_APPEAR1"), LW(2), 0, LW(3), 0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 192, 500)
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
@@ -3274,36 +3256,20 @@ EVT_BEGIN(aji_17_init_evt)
 EVT_END()
 #else
 EVT_BEGIN(aji_17_init_evt)
-#if VERSION >= VERSION_US
     SET_VALUE(LW(0), STRING("S_camera_1"))
-#else
-    SET_VALUE(LW(0), STRING("S_camera_1"))
-#endif
     SET_VALUE(LW(1), -30)
     SET_VALUE(LW(2), 60)
     // The camera sweep over TEC's room starts.
     SPAWN_EVENT(PTR(evt_camera))
-#if VERSION >= VERSION_US
     SET_VALUE(LW(0), STRING("S_camera_2"))
-#else
-    SET_VALUE(LW(0), STRING("S_camera_2"))
-#endif
     SET_VALUE(LW(1), -60)
     SET_VALUE(LW(2), 30)
     SPAWN_EVENT(PTR(evt_camera))
-#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_meil"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kikai_0"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("polySurface1161_q00063"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("polySurface1168_q00065"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_scale, 0, STRING("ren2"), 5, 5, 1)
-#else
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_meil"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kikai_0"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("polySurface1161_q00063"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("polySurface1168_q00065"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_scale, 0, STRING("ren2"), 5, 5, 1)
-#endif
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_18_01_PEACH_AN_OPEN_DOOR)
         SPAWN_EVENT(PTR(peach_evt_stg1))
     END_IF

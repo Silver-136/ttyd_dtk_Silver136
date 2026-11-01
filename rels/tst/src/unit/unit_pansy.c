@@ -128,51 +128,34 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Crazee Dayzee's attack: 2 damage to every target, a plain attack. */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon weapon_pansy_attack = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0,
-0,
-1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL,
-SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
-COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_RANDOM,
-75,
-5, // sleepTime
-    0, 0, 0, 0, 0, 0, 0, 0, // stopChance..confuseChance
-    0, 0, 0, 0, 0, 0, 0, 0, // confuseTime..freezeChance
-    0, 0, 0, 0, 0, 0, 0, 0, // freezeTime..defChangeChance
-    0, 0, 0, 0, 0, 0, 0, 0, // defChangeTime..fastTime
-    0, 0, 0, 0, 0, 0, 0, 0, // slowChance..invisibleTime
-    0, 0, 0, 0, // hpRegenTime..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 BattleWeapon weapon_pansy_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
+#if VERSION <= VERSION_DEMO_US
+    0,
+    1.0f, // reserved_14
+        1, // stylishCommandMultiplier
+        1, // reserved_19
+        1, // bingoSlotChance
+        1, // reserved_1B
+        weaponGetPowerDefault, // hpDamageFn
+        {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+        TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        NULL,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+    COUNTER_RESIST_ALL, // counterResistFlags
+        TARGET_WEIGHT_RANDOM,
+    75,
+#else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
@@ -201,6 +184,7 @@ BattleWeapon weapon_pansy_attack = {
 #else
     75, // sleepChance
 #endif
+#endif
     5, // sleepTime
     0, 0, 0, 0, 0, 0, 0, 0, // stopChance..confuseChance
     0, 0, 0, 0, 0, 0, 0, 0, // confuseTime..freezeChance
@@ -212,7 +196,6 @@ BattleWeapon weapon_pansy_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Attack event of the Crazee Dayzee: uses an enemy item if it has one;

@@ -154,43 +154,6 @@ BattleUnitKind unit_crimson_patatogemet = {
 };
 
 /** Attack data of the R. Parabuzzy's patamet attack: base damage 3, 100% accuracy. */
-#if VERSION <= VERSION_DEMO_US
-static BattleWeapon weapon_patamet_attack = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, // baseFpCost..baseSpCost
-    1, // superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED,
-COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST,
-TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 static BattleWeapon weapon_patamet_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -214,7 +177,11 @@ static BattleWeapon weapon_patamet_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+#if VERSION <= VERSION_DEMO_US
+    COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST,
+#else
     COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
+#endif
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -226,7 +193,6 @@ static BattleWeapon weapon_patamet_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Defence of the R. Parabuzzy while it still has its wings: 4 against normal, ice and electric hits;
@@ -640,43 +606,6 @@ static BattleDataEntry data_table_ceil[] = {
 };
 
 /** Attack data of the R. Parabuzzy's met attack: base damage 3, 100% accuracy. */
-#if VERSION <= VERSION_DEMO_US
-static BattleWeapon weapon_met_attack = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, // baseFpCost..baseSpCost
-    1, // superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_NO_CEILING | TARGET_PROP_SHELL_TOSSLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE,
-COUNTER_RESIST_ALL,
-TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 static BattleWeapon weapon_met_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -700,7 +629,11 @@ static BattleWeapon weapon_met_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+#if VERSION <= VERSION_DEMO_US
+    COUNTER_RESIST_ALL,
+#else
     COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
+#endif
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -712,46 +645,8 @@ static BattleWeapon weapon_met_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /** Attack data of the R. Parabuzzy's met ceil attack: base damage 5, 100% accuracy. */
-#if VERSION <= VERSION_DEMO_US
-static BattleWeapon weapon_met_ceil_attack = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, // baseFpCost..baseSpCost
-    1, // superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED,
-COUNTER_RESIST_ALL,
-TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 static BattleWeapon weapon_met_ceil_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -775,7 +670,11 @@ static BattleWeapon weapon_met_ceil_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+#if VERSION <= VERSION_DEMO_US
+    COUNTER_RESIST_ALL,
+#else
     COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
+#endif
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -787,7 +686,6 @@ static BattleWeapon weapon_met_ceil_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Defence of the R. Parabuzzy once it has lost its wings: 4 against normal, ice and electric hits;

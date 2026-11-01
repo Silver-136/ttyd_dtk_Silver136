@@ -47,8 +47,6 @@
 #include "driver/extdrv.h"
 #include "driver/seqdrv.h"
 #include <dolphin/pad.h>
-#if VERSION >= VERSION_US
-#endif
 
 typedef struct Fan {
     u16 flags;
@@ -1751,12 +1749,9 @@ EVT_BEGIN(evt_tougi2)
     CALL(evt_msg_print_party, STRING("stg3_tou_36"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
-#else
-    SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 0)
-    SET_VALUE(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_party_run, 0)
@@ -2344,21 +2339,15 @@ EVT_BEGIN(evt_momikucha)
     IF_INT_EQUAL(LF(0), 0)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_entry, STRING("fan"), STRING("c_kinopio"))
     CALL(evt_npc_entry, STRING("fan2"), STRING("c_kinopiko"))
     CALL(evt_npc_entry, STRING("fan3"), STRING("c_jugemu"))
     CALL(evt_npc_set_position, STRING("fan"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("fan2"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("fan3"), 0, -1000, 0)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_ext_entry, 250, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
 #else
-    CALL(evt_npc_entry, STRING("fan"), STRING("c_kinopio"))
-    CALL(evt_npc_entry, STRING("fan2"), STRING("c_kinopiko"))
-    CALL(evt_npc_entry, STRING("fan3"), STRING("c_jugemu"))
-    CALL(evt_npc_set_position, STRING("fan"), 0, -1000, 0)
-    CALL(evt_npc_set_position, STRING("fan2"), 0, -1000, 0)
-    CALL(evt_npc_set_position, STRING("fan3"), 0, -1000, 0)
     CALL(evt_ext_entry, 200, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
 #endif
     IF_INT_EQUAL(GF(10), 0)
@@ -2636,7 +2625,6 @@ EVT_BEGIN(tou_02_init_evt)
     // Music: the lobby theme early in the chapter and after it, the main Glitz Pit theme in between.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
-#if VERSION >= VERSION_US
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -2648,19 +2636,6 @@ EVT_BEGIN(tou_02_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-        CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-        CASE_DEFAULT
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
-        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#endif
     END_SWITCH
     // Entrances; coming back from the arena intro plays evt_tougi2.
     SET_VALUE(LW(0), PTR(bero_data))
@@ -2744,56 +2719,32 @@ EVT_BEGIN(tou_02_init_evt)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
     END_IF
-#if VERSION >= VERSION_US
     // The big screen's animation and its sounds.
     CALL(evt_map_playanim, STRING("anm_paneru"), MAP_ANIM_PLAY_LOOP, 0)
-#else
-    CALL(evt_map_playanim, STRING("anm_paneru"), MAP_ANIM_PLAY_LOOP, 0)
-#endif
     BEGIN_INLINE_EVENT
         LOOP(0)
             LOOP(0)
-#if VERSION >= VERSION_US
                 CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
                 IF_INT_LESS(LW(1), 5333)
                     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN2"), 178, 0, -98, 0)
-#else
-                CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
-                IF_INT_LESS(LW(1), 5333)
-                    CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN2"), 178, 0, -98, 0)
-#endif
                     BREAK_LOOP
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
             WAIT_FRAMES(10)
-#if VERSION >= VERSION_US
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN1"), 178, 0, -98, 0)
             LOOP(0)
                 CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
                 IF_INT_LESS(LW(1), 2000)
                     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN2"), 178, 0, -98, 0)
-#else
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN1"), 178, 0, -98, 0)
-            LOOP(0)
-                CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
-                IF_INT_LESS(LW(1), 2000)
-                    CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN2"), 178, 0, -98, 0)
-#endif
                     BREAK_LOOP
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
             WAIT_FRAMES(5)
-#if VERSION >= VERSION_US
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN1"), 178, 0, -98, 0)
             LOOP(0)
                 CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
-#else
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN1"), 178, 0, -98, 0)
-            LOOP(0)
-                CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
-#endif
                 IF_INT_GREATER(LW(1), 6333)
                     BREAK_LOOP
                 END_IF
@@ -2968,12 +2919,6 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 0)
         END_SWITCH
     END_IF
-    IF_INT_EQUAL(GSWF_TOU_02_POSTER_8_REMOVED, 1)
-        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_13_MAJORS_1ST_PL)
-            CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x13, -110, 200, -180, ITEM_TYPE_STILL, -1, PTR(evt_key))
-        END_IF
-    END_IF
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_kaidan_7"), MAP_OBJ_FLAG_CLIP)
 #else
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
@@ -3052,13 +2997,13 @@ EVT_BEGIN(tou_02_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 0)
     END_SWITCH
+#endif
     IF_INT_EQUAL(GSWF_TOU_02_POSTER_8_REMOVED, 1)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_13_MAJORS_1ST_PL)
             CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x13, -110, 200, -180, ITEM_TYPE_STILL, -1, PTR(evt_key))
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_kaidan_7"), MAP_OBJ_FLAG_CLIP)
-#endif
     RETURN
 EVT_END()
 

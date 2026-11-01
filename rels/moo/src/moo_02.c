@@ -30,8 +30,7 @@ static EvtWord dokan_evt[122];
 #else
 static EvtWord dokan_evt[102];
 #endif
-#if VERSION >= VERSION_US
-#else
+#if VERSION < VERSION_US
 static EvtWord rock_main[79];
 #endif
 #if VERSION >= VERSION_US

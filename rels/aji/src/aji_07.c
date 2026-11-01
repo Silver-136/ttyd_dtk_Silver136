@@ -331,10 +331,10 @@ static EVT_BEGIN(evt_haguruma)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(aji_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
+#if VERSION <= VERSION_DEMO_US
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
@@ -366,12 +366,7 @@ EVT_BEGIN(aji_07_init_evt)
         END_INLINE_EVENT
     END_IF
     SPAWN_EVENT(evt_emergency)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(aji_07_init_evt)
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -418,7 +413,7 @@ EVT_BEGIN(aji_07_init_evt)
         END_INLINE_EVENT
     END_IF
     SPAWN_EVENT(PTR(evt_emergency))
+#endif
     RETURN
 EVT_END()
-#endif
 

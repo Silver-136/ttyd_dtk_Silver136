@@ -786,12 +786,10 @@ static EVT_BEGIN(marco_talk)
         CASE_LESS(STG4_36_BOBBERYS_DECISION)
         CALL(evt_msg_print, 0, STRING("mac_4_045_02"), 0, STRING("me"))
         CASE_EQUAL(STG4_37_TO_THE_PORT)
-#if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
-#else
+#if VERSION > VERSION_DEMO_US
         SPAWN_EVENT(PTR(marco_party_move))
-        IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
 #endif
+        IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
             CALL(evt_msg_print, 0, STRING("mac_4_091"), 0, STRING("me"))
             GOTO(100)
         END_IF
@@ -1299,8 +1297,8 @@ EVT_BEGIN(suifubomb_a_regl)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(suifubomb_a_talk)
+#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IM_HUNGRY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_06_001"), 0, STRING("me"))
@@ -1365,10 +1363,7 @@ EVT_BEGIN(suifubomb_a_talk)
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("gor_00_01_12"), 0, STRING("me"))
     END_SWITCH
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(suifubomb_a_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IM_HUNGRY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_06_001"), 0, STRING("me"))
@@ -1437,9 +1432,9 @@ EVT_BEGIN(suifubomb_a_talk)
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("gor_00_01_12"), 0, STRING("me"))
     END_SWITCH
+#endif
     RETURN
 EVT_END()
-#endif
 
 /** Loops forever: sailor Bob-omb B walks along z=-350 between x=175 and x=-250, pausing a second at each end. */
 EVT_BEGIN(suifubomb_b_urouro2)
@@ -1730,9 +1725,9 @@ EVT_BEGIN(mokorim_init)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(mokorim_talk)
     SET_VALUE(LF(15), 0)
+#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_15_THE_PEDESTAL, STG3_END_TO_STAGE_4)
         IF_INT_EQUAL(GSW_GOR_LUMPY_INVESTMENT_COUNT, 3)
@@ -1896,15 +1891,7 @@ EVT_BEGIN(mokorim_talk)
         END_IF
     END_SWITCH
     // Restore the normal music if the danger music was started.
-    IF_INT_EQUAL(LF(15), 1)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    END_IF
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(mokorim_talk)
-    SET_VALUE(LF(15), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_15_THE_PEDESTAL, STG3_END_TO_STAGE_4)
         IF_INT_EQUAL(GSW_GOR_LUMPY_INVESTMENT_COUNT, 3)
@@ -2076,13 +2063,13 @@ EVT_BEGIN(mokorim_talk)
         END_IF
     END_SWITCH
     // Restore the normal music if the danger music was started.
+#endif
     IF_INT_EQUAL(LF(15), 1)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 /** Init script of the old woman Puni in Bowser's chapter 3 scene: does the shared NPC init and sets the status icon. */
 static EVT_BEGIN(baba_init)
@@ -2874,10 +2861,8 @@ EVT_BEGIN(enter_gorotsuki_town)
     BEGIN_INLINE_EVENT
         CALL(evt_telop_entry, 0)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG0_03_TO_ROGUEPORT)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG0_03_TO_ROGUEPORT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -5187,11 +5172,10 @@ EVT_BEGIN(into_gor_ship)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_party_cont_onoff, 1, 1)
     // If the couple is aboard, Frankie and Francesca get off the ship.
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
+#if VERSION <= VERSION_DEMO_US
         CALL_CHILD(mony_peton_event)
 #else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
         CALL_CHILD(PTR(mony_peton_depart))
 #endif
     END_IF
@@ -6192,9 +6176,7 @@ EVT_BEGIN(tsumini)
     RETURN
 EVT_END()
 
-#if VERSION >= VERSION_US
 // US: two more damage-return points
-#endif
 /**
  * Hazard-water floors of this room (map hit names) and the point each puts Mario back at after he is bitten.
  */
@@ -7065,10 +7047,8 @@ EVT_BEGIN(return_gorotsuki_town)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("mac_8_02"), 0, STRING("party"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG9_02_RETURN_TO_ROGUEPORT)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG9_02_RETURN_TO_ROGUEPORT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_party_run, 0)

@@ -53,18 +53,12 @@ typedef enum winTexMode {
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
 #include <dolphin/pad.h>
-typedef struct seq_e3_entry {
-    s32 id; // 0x0
-    f32 x;  // 0x4
-    f32 y;  // 0x8
-} seq_e3_entry;
-#else
-typedef struct seq_e3_entry {
-    s32 id; // 0x0
-    f32 x;  // 0x4
-    f32 y;  // 0x8
-} seq_e3_entry;
 #endif
+typedef struct seq_e3_entry {
+    s32 id; // 0x0
+    f32 x;  // 0x4
+    f32 y;  // 0x8
+} seq_e3_entry;
 
 //.bss
 static seq_e3_work work;
@@ -903,8 +897,8 @@ void seq_e3Main(SequenceWork* seq) {
             break;
 
         case 4: {
-#if VERSION >= VERSION_US
             prev = wp->scenario;
+#if VERSION >= VERSION_US
             keyGetStickX(0);
             keyGetStickY(0);
             if (keyGetDirTrg(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
@@ -913,7 +907,6 @@ void seq_e3Main(SequenceWork* seq) {
                 wp->scenario ^= 2;
             }
 #else
-            prev = wp->scenario;
             stickX = keyGetStickX(0);
             stickY = keyGetStickY(0);
             switch (wp->scenario) {
@@ -942,7 +935,6 @@ void seq_e3Main(SequenceWork* seq) {
                     }
                     break;
             }
-
 #endif
             if (prev != wp->scenario) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));

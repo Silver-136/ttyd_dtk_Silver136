@@ -215,10 +215,8 @@ EVT_END()
  * and the door slab (tetu) is down; afterwards the door is already open.
  */
 EVT_BEGIN(bigdoor_event_init)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_20_THE_BLUE_BLOCK)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG5_20_THE_BLUE_BLOCK)
+#if VERSION > VERSION_DEMO_US
         DEBUG_PUT_MSG(STRING("dou_05：扉が開く前の処理"))
 #endif
         SET_VALUE(LW(0), STRING("w_bero_3"))

@@ -95,8 +95,6 @@ USER_FUNC(white_off);
 USER_FUNC(white_on);
 static USER_FUNC(yami_view);
 USER_FUNC(party_tev);
-#if VERSION >= VERSION_US
-#endif
 
 EvtWord villagerA_init[28];
 EvtWord villagerA_pig_init[19];
@@ -4167,10 +4165,8 @@ static EVT_BEGIN(evt_after_peach)
     CALL(evt_party_run, 0)
     CALL(evt_msg_print, 0, STRING("stg4_usu_157"), 0, STRING("村長"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG4_16_LEAVING_TWILIGHT_TOWN)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG4_16_LEAVING_TWILIGHT_TOWN)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)

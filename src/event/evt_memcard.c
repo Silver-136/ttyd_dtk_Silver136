@@ -236,9 +236,8 @@ EVT_END()
  */
 EVT_BEGIN(evt_memcard_check)
     SET_VALUE(GF(0), 0)
-#if VERSION <= VERSION_DEMO_US
     // Load the save data from the Memory Card in Slot A and act on the result.
-#else
+#if VERSION > VERSION_DEMO_US
     SET_VALUE(LF(10), 0)
 #endif
     LOOP(0)

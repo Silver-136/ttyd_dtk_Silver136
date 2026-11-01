@@ -88,12 +88,10 @@ static inline f32 orbit_update(f32 x) { return x * 3.141592f / 180.0f; }
 
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
-#if VERSION == VERSION_EU
 /**
  * Declaration of the PAL-only helper in evt_sub.c that writes gp->framerate (50 or 60) to its script
  * argument.
  */
-#endif
 USER_FUNC(cam_test_func);
 USER_FUNC(cam_test_init_func);
 USER_FUNC(dai3_butai_main_func);
@@ -4369,8 +4367,6 @@ EVT_BEGIN(muj_00_init_evt)
         CALL_CHILD(PTR(kiza_entry))
     END_IF
     CALL_CHILD(PTR(koburon_evt))
-    CALL(evt_npc_entry, STRING("船ダミー"), STRING("c_suifu_b"))
-    CALL(evt_npc_flag_onoff, 1, STRING("船ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_WALL_COLLISION)
 #else
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -4381,9 +4377,9 @@ EVT_BEGIN(muj_00_init_evt)
         CALL_CHILD(kiza_entry)
     END_IF
     CALL_CHILD(koburon_evt)
+#endif
     CALL(evt_npc_entry, STRING("船ダミー"), STRING("c_suifu_b"))
     CALL(evt_npc_flag_onoff, 1, STRING("船ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_WALL_COLLISION)
-#endif
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     // Place the spinning floor with its Star Piece and the paper-mode bush and turntable,
     // and start the water and ship animations.

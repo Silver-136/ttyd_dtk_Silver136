@@ -364,7 +364,7 @@ s32 marioRollCancel(void) {
 #endif
 }
 #if VERSION <= VERSION_DEMO_US
-    return ret;
+return ret;
 }
 #endif
 

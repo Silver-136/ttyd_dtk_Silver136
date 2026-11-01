@@ -743,14 +743,13 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     FontDrawCode(hy, hx, c->glyph);
 #endif
                 } else if (c->value & MSG_CHAR_WAVE) {
-#if VERSION >= VERSION_US
                     t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
+#if VERSION >= VERSION_US
                     sx += 3.2f * (f32)cos(t);
                     sy -= 3.2f * (f32)sin(t);
                     MSG_DRAW_SCALE(c);
                     FontDrawCode(sx, sy, c->glyph);
 #else
-                    t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
                     hx = cos(t);
                     hy = sin(t);
                     FontDrawScale(c->scale);
@@ -759,13 +758,12 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                 } else if (c->value & MSG_CHAR_SEL_ROW(data->sel)) {
                     f32 hx2;
                     t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
-#if VERSION >= VERSION_US
                     hx2 = sx + 3.2f * (f32)cos(t);
+#if VERSION >= VERSION_US
                     sy -= 3.2f * (f32)sin(t);
                     hy = sy;
                     MSG_DRAW_SCALE(c);
 #else
-                    hx2 = sx + 3.2f * (f32)cos(t);
                     hy = sy - 3.2f * (f32)sin(t);
                     FontDrawScale(c->scale);
 #endif

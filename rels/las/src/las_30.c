@@ -203,13 +203,11 @@ EVT_BEGIN(las_30_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 1150, 60, -125, 0, 0)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 1, -1050, 860, -75, 0, 0)
-    CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_LAS_30_ULTRA_SHROOM_CHEST)
-        CALL(evt_mobj_itembox, STRING("mobj_box02"), 1050, 0, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_LAS_30_JAMMIN_JELLY_CHEST)
 #else
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 10, -1050, 860, -75, 0, 0)
+#endif
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_LAS_30_ULTRA_SHROOM_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 1050, 0, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_LAS_30_JAMMIN_JELLY_CHEST)
-#endif
     CALL_CHILD(rousoku_init)
     RETURN
 #if VERSION <= VERSION_DEMO_US

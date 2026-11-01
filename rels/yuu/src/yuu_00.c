@@ -1083,8 +1083,8 @@ EVT_BEGIN(minigame01_start)
 EVT_END()
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(minigame01_end)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)
     CALL(yuuminigame_get_dataadr, 1, LW(15))
     CALL(evt_moving_floor_delete, LW(15))
@@ -1163,12 +1163,7 @@ EVT_BEGIN(minigame01_end)
     CALL_CHILD(yuu_00_kaijo_init2)
     WAIT_MS(500)
     CALL_CHILD(light_sub_event)
-    CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE1"), GW(10))
-    CALL(evt_fade_in, 1000)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(minigame01_end)
     CALL(evt_cam_letter_box_onoff, 1, 0)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)
@@ -1263,11 +1258,11 @@ EVT_BEGIN(minigame01_end)
     CALL(yuu_00_cam_shift_reset)
     WAIT_MS(500)
     CALL_CHILD(PTR(light_sub_event))
+#endif
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE1"), GW(10))
     CALL(evt_fade_in, 1000)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Map init for yuu_00 (Plane Mode room): starts the minigame set-up, runs the Pianta NPC set-up,

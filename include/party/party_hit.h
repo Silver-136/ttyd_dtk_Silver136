@@ -14,10 +14,8 @@ HitEntry* partyHitCheck(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec*
 HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang);
 #if VERSION <= VERSION_DEMO_US
 HitEntry* _partySearchGround(PartyEntry* party, f32* outY, f32* outDepth, f32 range, f32 depth);
-HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth);
-#else
-HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth);
 #endif
+HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth);
 HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang);
 HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDist, f32* outAng);
 BOOL partyChkBetweenWalls(PartyEntry* party, Vec pos);

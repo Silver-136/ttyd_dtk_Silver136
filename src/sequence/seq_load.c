@@ -1229,13 +1229,8 @@ void loadMain(SequenceWork* seq) {
                 }
                 psndENVOn(PSND_RESTART | PSND_FADEIN, (const char*)PSND_ENV_SYS_FL1);
             }
-#if VERSION >= VERSION_US
             wp->tx = -74.0f;
             wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
-#else
-            wp->tx = -74.0f;
-            wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
-#endif
             break;
         case 0xc8:
             wp->flags |= LOAD_FLAG_DIM;
@@ -1266,11 +1261,7 @@ void loadMain(SequenceWork* seq) {
             if (wp->rumbleOffSel < 0) {
                 wp->rumbleOffSel = 1;
             }
-#if VERSION >= VERSION_US
             wp->tx = -74.0f;
-#else
-            wp->tx = -74.0f;
-#endif
             wp->ty = 4.0f + (30.0f - 50.0f * wp->rumbleOffSel);
             break;
     }
@@ -1691,11 +1682,7 @@ void loadDraw(CameraId camera, void* param) {
         }
     }
 
-#if VERSION >= VERSION_US
     windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, -250.0f, 200.0f, 500.0f, 40.0f, 20.0f);
-#else
-    windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, -250.0f, 200.0f, 500.0f, 40.0f, 20.0f);
-#endif
     FontDrawStart();
     {
         const char* msg = wp->msg;

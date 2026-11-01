@@ -213,12 +213,10 @@ EVT_END()
  * before the Ruby Star is recovered, then different lines for after the Ruby Star and after the final battle.
  */
 EVT_BEGIN(oumu_talk)
-#if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW_STORY_PROGRESS)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    SWITCH(GSW_STORY_PROGRESS)
 #endif
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_15_03_THE_RUBY_STAR)
         SWITCH(LSW_JIN_08_PARROT_TALK_COUNT)
             CASE_EQUAL(0)
@@ -245,12 +243,10 @@ EVT_END()
  */
 EVT_BEGIN(oumu_juyo_talk)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
 #endif
+    IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
         CALL(evt_msg_print, 0, STRING("stg4_jin_43"), 0, STRING("オウム"))
         SET_VALUE(GSWF_JIN_08_PARROT_SECRET_HEARD, 1)
         SET_VALUE(LSWF_JIN_PARROT_SCENE_PENDING, 1)
@@ -455,13 +451,12 @@ EVT_BEGIN(jin_08_init_evt)
         SET_VALUE(LW(0), STRING("e_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 115, 0, 105, STRING("group87"), 125, GSWF_STARPIECE_70)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("mobj_box01"), 80, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_JIN_08_POWER_PLUS_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -80, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_JIN_08_MR_SOFTENER_CHEST)
 SPAWN_EVENT(oumu_check)
 #else
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 115, 0, 105, STRING("group87"), 125, GSWF_STARPIECE_70)
     CALL(evt_mobj_itembox, STRING("mobj_box01"), 60, 0, -65, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_JIN_08_POWER_PLUS_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -65, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_JIN_08_MR_SOFTENER_CHEST)
     SPAWN_EVENT(PTR(oumu_check))

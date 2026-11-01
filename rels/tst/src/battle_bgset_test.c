@@ -1927,8 +1927,8 @@ BattleGroupSetup btlgrp_test_nakayama = {
 };
 
 /** Enemy lineup of test battle BTLNO_TEST_BARRIERN: Z-Yux, X-Yux. */
-#if VERSION <= VERSION_DEMO_US
 BattleUnitSetup btlparty_test_barriern[] = {
+#if VERSION <= VERSION_DEMO_US
     {
         &unit_barriern_z, // unitKindParams
         1, // alliance
@@ -1949,9 +1949,7 @@ BattleUnitSetup btlparty_test_barriern[] = {
         {4, 0, 0, 0}, // unitWork
         battle_item_NONE, // itemDropTable
     },
-};
 #else
-BattleUnitSetup btlparty_test_barriern[] = {
     {
         &unit_barriern_z, // unitKindParams
         1, // alliance
@@ -1972,8 +1970,8 @@ BattleUnitSetup btlparty_test_barriern[] = {
         {4, 0, 0, 0}, // unitWork
         battle_item_NONE, // itemDropTable
     },
-};
 #endif
+};
 
 /**
  * Battle group of test battle BTLNO_TEST_BARRIERN: Z-Yux, X-Yux, with its item drop odds and heart and

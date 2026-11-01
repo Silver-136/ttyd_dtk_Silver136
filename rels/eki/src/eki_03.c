@@ -704,11 +704,10 @@ static USER_FUNC(test_glare) {
     } else if (rect[0] == 0 && rect[1] == 0 && rect[2] == 0 && rect[3] == 0) {
         envGlareFilter(0, 0, 0, 0, 0);
     } else {
-#if VERSION <= VERSION_DEMO_US
         envGlareFilter(1, rect[1] - 50, rect[0] - 50, rect[3] + 50, rect[2] + 50);
+#if VERSION <= VERSION_DEMO_US
         envGlareFilterZ(0.998f);
 #else
-        envGlareFilter(1, rect[1] - 50, rect[0] - 50, rect[3] + 50, rect[2] + 50);
         envGlareFilterZ(1.148f);
 #endif
     }

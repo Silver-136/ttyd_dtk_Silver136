@@ -1210,15 +1210,13 @@ void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     str[9] = "SIN_DECEL";
     f[1] = sqrtf(x);
     str[10] = "[%8s:% 4d] %s";
-#if VERSION >= VERSION_US
-}
-#else
+#if VERSION < VERSION_US
     d[0] = 1.5;
     d[1] = 2.5;
     d[2] = 1.7;
     f[2] = 1000.0f;
-}
 #endif
+}
 #endif
 
 

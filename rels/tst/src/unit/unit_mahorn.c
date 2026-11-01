@@ -69,85 +69,25 @@ static EvtWord recover_magic_event[96];
 static EvtWord wait_event[386];
 
 /** Unit definition of the Wizzerd: 10 HP, level 30, 5 parts, with its sounds, init script and data table. */
+BattleUnitKind unit_mahorn = {
+    161,
+    "btl_un_mahorn",
+    10,
+    0,
+    1,
+    1,
+    30,
 #if VERSION <= VERSION_DEMO_US
-BattleUnitKind unit_mahorn = {
-    161,
-    "btl_un_mahorn",
-    10,
     0,
     1,
-    1,
-    30,
-0,
-1,
-70,
-3,
-50,
-    9999,
-    48,
-    44,
-    0,
-    44,
-    0.0f,
-    22.0f,
-    0.0f,
-    0,
-    -9,
-    0.0f,
-    0.0f,
-    0.0f,
-    24.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    24.0f,
-    0.0f,
-    0.0f,
-    16.0f,
-    28.6f,
-    10.0f,
-    0.0f,
-    22.0f,
-    0.0f,
-    48.0f,
-    44.0f,
-    0,
-    0,
-    0,
-    2,
-    0,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_MAHO_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    UNIT_ATTR_FLOATING,
-    &regist,
-    5,
-    parts,
-    init_event,
-    data_table,
-};
+    70,
+    3,
 #else
-BattleUnitKind unit_mahorn = {
-    161,
-    "btl_un_mahorn",
-    10,
-    0,
-    1,
-    1,
-    30,
     1,
     4,
     70,
     0,
+#endif
     50,
     9999,
     48,
@@ -201,7 +141,6 @@ BattleUnitKind unit_mahorn = {
     init_event,
     data_table,
 };
-#endif
 
 /** Defence of the Wizzerd: 3 against every kind of attack. */
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
@@ -236,43 +175,6 @@ static BattleUnitKindPart parts[] = {
  * Attack data of the Wizzerd's magic attack: hits one opposing unit for 6 damage, ignoring the target's
  * defence.
  */
-#if VERSION <= VERSION_DEMO_US
-static BattleWeapon weapon_mahorn_attack_magic = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, // baseFpCost..baseSpCost
-    2, // superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL,
-SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE | SPECIAL_IGNORE_VULNERABILITY,
-COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 static BattleWeapon weapon_mahorn_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -295,7 +197,11 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
+#if VERSION <= VERSION_DEMO_US
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE | SPECIAL_IGNORE_VULNERABILITY,
+#else
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
+#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -308,47 +214,8 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /** Attack data of the Wizzerd's all-target magic attack: hits every opposing unit for 2 electric damage. */
-#if VERSION <= VERSION_DEMO_US
-static BattleWeapon weapon_mahorn_all_attack_magic = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, // baseFpCost..baseSpCost
-    0, // superguardsAllowed (JP value; jon's US/PAL copy has 2)
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault,
-{2, 0, 0, 0, 0, 0, 0, 0},
-NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_ELECTRIC, // element
-    0, // damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -362,7 +229,11 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
+#if VERSION <= VERSION_DEMO_US
+    {2, 0, 0, 0, 0, 0, 0, 0},
+#else
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
@@ -385,7 +256,6 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Attack data of the Wizzerd's Huge spell: inflicts Huge (100%, 3 turns) on one of its allies and never
@@ -476,46 +346,6 @@ static BattleWeapon weapon_mahorn_katikati_magic = {
  * Attack data of the Wizzerd's Confuse spell: hits one opposing unit for 0 damage; may inflict Confusion
  * (50%, 3 turns).
  */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon weapon_mahorn_confuse_magic = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, // baseFpCost..baseSpCost
-    2, // superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL,
-SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_IGNORE_VULNERABILITY,
-COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, // poisonStrength
-    50, // confuseChance
-    3, // confuseTime
-    0, 0, 0, 0, 0, 0, 0, 0, // electricChance..freezeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeChance..defChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // defChangeStrength..slowChance
-    0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
-    0, 0, 0, // hpRegenStrength..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 BattleWeapon weapon_mahorn_confuse_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -538,7 +368,11 @@ BattleWeapon weapon_mahorn_confuse_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
+#if VERSION <= VERSION_DEMO_US
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_IGNORE_VULNERABILITY,
+#else
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -554,7 +388,6 @@ BattleWeapon weapon_mahorn_confuse_magic = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Attack data of the Wizzerd's healing spell: no damage; the effect on one of its allies is applied by its

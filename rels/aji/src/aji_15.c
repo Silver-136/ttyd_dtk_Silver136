@@ -405,14 +405,12 @@ EVT_BEGIN(aji_15_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(peach_evt_syawa_init)
-    IF_INT_EQUAL(GSWF_AJI_15_VISITED, 0)
-        SET_VALUE(GSWF_AJI_15_VISITED, 1)
 #else
     CALL(evt_snd_set_rev_mode, 1)
     CALL_CHILD(PTR(peach_evt_syawa_init))
+#endif
     IF_INT_EQUAL(GSWF_AJI_15_VISITED, 0)
         SET_VALUE(GSWF_AJI_15_VISITED, 1)
-#endif
     END_IF
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN

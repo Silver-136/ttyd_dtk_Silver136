@@ -68,46 +68,26 @@ typedef enum IconFlags {
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #define ICON_FLAG_NO_MAP_BLEND 0x80
-typedef struct IconEntry {
-    union {
-        s16 flags;    // 0x0, IconFlags
-        u16 uflags;   // 0x0, unsigned view (icondrv uses lhz)
-    };
-    u8 pad_02;     // 0x2, never accessed
-    Vec position;     // 0x4
-    f32 scale;        // 0x10
-    GXColor color;    // 0x14
-    char name[16];    // 0x18
-    u16 iconId;       // 0x28
-    u16 width;        // 0x2A
-    u16 height;       // 0x2C
-    u16 numIcons;     // 0x2E
-    u16 currIcon;     // 0x30, if animated, currently displayed icon (starts at 0)
-    u16 tplId;        // 0x32
-    u16 frameDelay;   // 0x34
-    u8 pad_36[2]; // 0x36, never accessed
-} IconEntry;
-#else
-typedef struct IconEntry {
-    union {
-        s16 flags;    // 0x0, IconFlags
-        u16 uflags;   // 0x0, unsigned view (icondrv uses lhz)
-    };
-    u8 pad_02;     // 0x2, never accessed
-    Vec position;     // 0x4
-    f32 scale;        // 0x10
-    GXColor color;    // 0x14
-    char name[16];    // 0x18
-    u16 iconId;       // 0x28
-    u16 width;        // 0x2A
-    u16 height;       // 0x2C
-    u16 numIcons;     // 0x2E
-    u16 currIcon;     // 0x30, if animated, currently displayed icon (starts at 0)
-    u16 tplId;        // 0x32
-    u16 frameDelay;   // 0x34
-    u8 pad_36[2]; // 0x36, never accessed
-} IconEntry;
 #endif
+typedef struct IconEntry {
+    union {
+        s16 flags;    // 0x0, IconFlags
+        u16 uflags;   // 0x0, unsigned view (icondrv uses lhz)
+    };
+    u8 pad_02;     // 0x2, never accessed
+    Vec position;     // 0x4
+    f32 scale;        // 0x10
+    GXColor color;    // 0x14
+    char name[16];    // 0x18
+    u16 iconId;       // 0x28
+    u16 width;        // 0x2A
+    u16 height;       // 0x2C
+    u16 numIcons;     // 0x2E
+    u16 currIcon;     // 0x30, if animated, currently displayed icon (starts at 0)
+    u16 tplId;        // 0x32
+    u16 frameDelay;   // 0x34
+    u8 pad_36[2]; // 0x36, never accessed
+} IconEntry;
 
 typedef struct IconWork {
     s32 count;          // 0x0

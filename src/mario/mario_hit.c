@@ -1730,90 +1730,87 @@ void marioHitStrippedPool2(f32* f) {
 }
 #endif
 
+f32 marioChkOverhead(void) {
 #if VERSION <= VERSION_DEMO_US
-f32 marioChkOverhead(void) {
-Vec pos;
-    s32 hj;
-    f32 h;
-f32 d;
-MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId == MARIO_MOTION_JUMP_3) {
-        return mario->position.y;
+    Vec pos;
+        s32 hj;
+        f32 h;
+    f32 d;
+    MarioWork* mario = marioGetPtr();
+        if (mario->currMotionId == MARIO_MOTION_JUMP_3) {
+            return mario->position.y;
+        }
+        if (mario->currMotionId == MARIO_MOTION_JABARA) {
+            pos = mario->position;
+            h = mario->wPlayerCollisionBox.y;
+            if (!jabaraNoHitChk()) {
+                h += 5.0f;
+                mario->hitobjHead = marioSearchHead_jabara(&pos, &h, &hj, 0.0f);
+                if (!mario->hitobjHead) {
+                    mario->hitobjHead = marioSearchHead(&pos, &h, d);
     }
-    if (mario->currMotionId == MARIO_MOTION_JABARA) {
-        pos = mario->position;
-        h = mario->wPlayerCollisionBox.y;
-        if (!jabaraNoHitChk()) {
-            h += 5.0f;
-            mario->hitobjHead = marioSearchHead_jabara(&pos, &h, &hj, 0.0f);
-            if (!mario->hitobjHead) {
+            }
+        } else if (mario->flags & MARIO_FLAG_TUBE_MODE) {
+            pos = mario->position;
+            mario->hitobjHead = marioSearchHead_roll(&pos, &h, 40.0f);
+        } else {
+            pos = mario->position;
+            h = mario->wPlayerCollisionBox.y;
+            d = (mario->flags & MARIO_FLAG_IS_JUMPING) ? mario->jumpVelocityY : 10.0f;
+            if (mario->characterId == CHARACTER_BOWSER) {
+                mario->hitobjHead = kpaSearchHead(d, &pos, &h);
+            } else {
                 mario->hitobjHead = marioSearchHead(&pos, &h, d);
-}
+            }
         }
-    } else if (mario->flags & MARIO_FLAG_TUBE_MODE) {
-        pos = mario->position;
-        mario->hitobjHead = marioSearchHead_roll(&pos, &h, 40.0f);
-    } else {
-        pos = mario->position;
-        h = mario->wPlayerCollisionBox.y;
-        d = (mario->flags & MARIO_FLAG_IS_JUMPING) ? mario->jumpVelocityY : 10.0f;
-        if (mario->characterId == CHARACTER_BOWSER) {
-            mario->hitobjHead = kpaSearchHead(d, &pos, &h);
-        } else {
-            mario->hitobjHead = marioSearchHead(&pos, &h, d);
-        }
+        mario->position.x = pos.x;
+        if (mario->hitobjHead) {
+            if (marioChkHeadBlock(mario->hitobjHead)) {
+                mario->baseSpeed = 0.0f;
+                mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
+            }
+            mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
+            if (mario->characterId == CHARACTER_BOWSER) {
+                marioItemGetDisable();
+                if (!kpaGetBodyStatus()) {
+                    marioClearJumpPara();
+                }
+            }
+            pos.y = (s32)(10.0f * (pos.y - marioGetHeightInl()) + 0.5f) / 10.0f - 1.0f;
+            if (!(mario->flags & MARIO_FLAG_IS_FALLING) && pos.y < mario->lastGroundPos.y) {
+                pos.y = mario->lastGroundPos.y;
+                if (!(mario->flags & MARIO_FLAG_TUBE_MODE) && mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_VIVIAN && mario->characterId != CHARACTER_BOWSER) {
+                    if (mario->baseSpeed == 0.0f) {
+                        marioChgStayMotion();
+                    } else {
+    ((BOOL (*)(s32))marioChgMot)(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
     }
-    mario->position.x = pos.x;
-    if (mario->hitobjHead) {
-        if (marioChkHeadBlock(mario->hitobjHead)) {
-            mario->baseSpeed = 0.0f;
-            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-        }
-        mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
-        if (mario->characterId == CHARACTER_BOWSER) {
-            marioItemGetDisable();
-            if (!kpaGetBodyStatus()) {
+                }
+            }
+            if (mario->currMotionId == MARIO_MOTION_JUMP || mario->currMotionId == MARIO_MOTION_JUMP_STAND) {
+                psndSFXOn_3D((const char*)0x156, &mario->position);
                 marioClearJumpPara();
+                mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+                if (mario->characterId != CHARACTER_BOWSER) {
+                    marioChgMot(MARIO_MOTION_FALL);
+                    marioSetFallPara();
+                }
+                mario->position.y = pos.y;
             }
-        }
-        pos.y = (s32)(10.0f * (pos.y - marioGetHeightInl()) + 0.5f) / 10.0f - 1.0f;
-        if (!(mario->flags & MARIO_FLAG_IS_FALLING) && pos.y < mario->lastGroundPos.y) {
-            pos.y = mario->lastGroundPos.y;
-            if (!(mario->flags & MARIO_FLAG_TUBE_MODE) && mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_VIVIAN && mario->characterId != CHARACTER_BOWSER) {
-                if (mario->baseSpeed == 0.0f) {
-                    marioChgStayMotion();
-                } else {
-((BOOL (*)(s32))marioChgMot)(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
-}
+        } else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
+            if (h >= 0.0f && h <= 5.0f) {
+                mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
+            } else {
+                mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
             }
-        }
-        if (mario->currMotionId == MARIO_MOTION_JUMP || mario->currMotionId == MARIO_MOTION_JUMP_STAND) {
-            psndSFXOn_3D((const char*)0x156, &mario->position);
-            marioClearJumpPara();
-            mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-            if (mario->characterId != CHARACTER_BOWSER) {
-                marioChgMot(MARIO_MOTION_FALL);
-                marioSetFallPara();
-            }
-            mario->position.y = pos.y;
-        }
-    } else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-        if (h >= 0.0f && h <= 5.0f) {
-            mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
         } else {
-            mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
+            if (h >= 0.0f && h + mario->wPlayerCollisionBox.y <= 47.0f) {
+                mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
+            } else {
+                mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
+            }
         }
-    } else {
-        if (h >= 0.0f && h + mario->wPlayerCollisionBox.y <= 47.0f) {
-            mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
-        } else {
-            mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
-        }
-    }
-    return pos.y;
-}
 #else
-f32 marioChkOverhead(void) {
     // FAKE: pa..pd are never used; removing them changes the object
     Vec pa = {0.0f, 0.0f, 0.0f};
     Vec pb = {0.0f, -1.0f, 0.0f};
@@ -1910,9 +1907,9 @@ f32 marioChkOverhead(void) {
             mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
         }
     }
+#endif
     return pos.y;
 }
-#endif
 
 /**
  * Ceiling check for the Spring Jump (mot_jabara.c):

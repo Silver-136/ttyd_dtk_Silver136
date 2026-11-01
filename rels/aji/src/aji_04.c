@@ -35,8 +35,6 @@
 #include "evt/evt_bero.h"
 #include "aji.h"
 
-#if VERSION >= VERSION_US
-#endif
 static void callback(s32 type, void** work);
 void kuti_callback(s32 type, void** work);
 

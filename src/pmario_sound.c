@@ -11327,17 +11327,15 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOn
     if ((psnd.flags & PSND_FLAG_NO_SFX) && (ignoreSfxOff == 0)) {
         return -1;
     }
-#if VERSION <= VERSION_DEMO_US
-    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) <= STG0_02_MARIOS_HOUSE) && (sid == 0x365)) {
-#else
+#if VERSION > VERSION_DEMO_US
     if ((((sid == 0x5B) || (sid == 0x8CA)) || (((u32) (sid - 0x1BE)) <= 1)) || (sid == PSND_SFX_COIN_GET1)) {
         if (psnd.sfxCooldown) {
             return -1;
         }
         psnd.sfxCooldown = 6;
     }
-    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) <= STG0_02_MARIOS_HOUSE) && (sid == 0x365)) {
 #endif
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) <= STG0_02_MARIOS_HOUSE) && (sid == 0x365)) {
         return -1;
     }
     delay = 0;
@@ -12392,10 +12390,10 @@ BOOL psndENVOff(u32 flags) {
     return psndENVOff_f_d(flags, 1000, 0);
 }
 
-#if VERSION <= VERSION_DEMO_US
 BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
     s32 silent = silent_tbl[(flags >> 12) & 0xF];
     PaperSoundFade* fade;
+#if VERSION <= VERSION_DEMO_US
 
     if (psnd.envId[flags & 0xF] == 0) {
         return FALSE;
@@ -12424,12 +12422,7 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
         psndENV_stop(*(&psnd.envId[flags & 0xF]));
         *(&psnd.envId[flags & 0xF]) = 0;
     }
-    return TRUE;
-}
 #else
-BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
-    s32 silent = silent_tbl[(flags >> 12) & 0xF];
-    PaperSoundFade* fade;
 
     if (psnd.envId[flags & 0xF] == 0) {
         return FALSE;
@@ -12464,9 +12457,9 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
         psndENV_stop(psnd.envId[flags & 0xF]);
         psnd.envId[flags & 0xF] = 0;
     }
+#endif
     return TRUE;
 }
-#endif
 
 /**
  * Sets a low-pass filter frequency on environment channel id (0 = none, stored as 32000 Hz);

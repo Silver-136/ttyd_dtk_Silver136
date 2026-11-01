@@ -82,7 +82,6 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
 
     effect = effEntry();
     count = texid_tbl[gp->language].count + 1;
-    effect->type = "Break";
 #else
     effect = effEntry();
     // FAKE: dead language test (both languages use 7 entries); plain `count = 7;` changes the object
@@ -90,8 +89,8 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     if ((u32)gp->language != LANGUAGE_JP) {
         count = 7;
     }
-    effect->type = "Break";
 #endif
+    effect->type = "Break";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffBreakWork) * count);
     effect->userdata = work;

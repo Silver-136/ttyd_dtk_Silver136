@@ -23,8 +23,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-#if VERSION >= VERSION_US
-#else
+#if VERSION < VERSION_US
 USER_FUNC(_test_rtn);
 #endif
 USER_FUNC(_ikasumi_effect);
@@ -316,8 +315,7 @@ static EVT_BEGIN(battle_entry_event)
         CALL(btlevtcmd_AnimeWaitPlayComplete, LW(3), 1)
         CALL(btlevtcmd_StartWaitEvent, LW(3))
     END_INLINE_EVENT
-#if VERSION >= VERSION_US
-#else
+#if VERSION < VERSION_US
     SPAWN_EVENT(gesso_arm_wait_event)
 #endif
     CALL(btlevtcmd_WaitEventEnd, LW(14))

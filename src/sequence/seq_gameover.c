@@ -78,10 +78,10 @@ EVT_BEGIN(_fall_char_last)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(fall_gameover)
     SET_VALUE(LW(0), STRING("g"))
     SPAWN_EVENT(_fall_char)
+#if VERSION <= VERSION_DEMO_US
     WAIT_FRAMES(10)
     SET_VALUE(LW(0), STRING("a"))
     SPAWN_EVENT(_fall_char)
@@ -111,12 +111,7 @@ EVT_BEGIN(fall_gameover)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_FRAMES(120)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(fall_gameover)
-    SET_VALUE(LW(0), STRING("g"))
-    SPAWN_EVENT(_fall_char)
 #if VERSION >= VERSION_US
     WAIT_MS(166)
 #else
@@ -178,9 +173,9 @@ EVT_BEGIN(fall_gameover)
 #else
     WAIT_FRAMES(60)
 #endif
+#endif
     RETURN
 EVT_END()
-#endif
 
 #if VERSION >= VERSION_US
 EVT_BEGIN(fall_gameover_es)
@@ -234,7 +229,6 @@ EVT_END()
  * hides the letters of the other language, sets the camera,
  * plays the dust animation and runs the falling-letters script.
  */
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(evt_gameover)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -248,6 +242,7 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
     CALL(evt_mario_clear_party, 1)
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_D_2"))
     CALL(evt_mario_set_dir, 180, 0, 0)
@@ -276,22 +271,7 @@ EVT_BEGIN(evt_gameover)
     WAIT_FRAMES(1)
     CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)
     CALL_CHILD(fall_gameover)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(evt_gameover)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_normalize)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_mario_set_pos, 0, 0, 0)
-    CALL(evt_cam_road_reset)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_party_set_pos, 0, 0, -1000, 0)
-    CALL(evt_mario_kill_party, 0)
-    CALL(evt_party_cont_onoff, 1, 0)
-    CALL(evt_party_set_pos, 1, 0, -1000, 0)
-    CALL(evt_mario_clear_party, 1)
-    WAIT_FRAMES(1)
     CALL(evt_snd_bgm_unpause)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_D_2"))
@@ -357,9 +337,9 @@ EVT_BEGIN(evt_gameover)
 #if VERSION >= VERSION_US
     END_IF
 #endif
+#endif
     RETURN
 EVT_END()
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 void seq_gameOverInit(SequenceWork* work) {

@@ -1744,8 +1744,8 @@ USER_FUNC(is_dol_viewer) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(evt_mapwrite)
+#if VERSION <= VERSION_DEMO_US
     // The camera moves in: in the prologue Goombella calls out to Frankly; later Mario just raises his hands.
     WAIT_MS(800)
     IF_INT_EQUAL(GW(15), 0)
@@ -2097,26 +2097,7 @@ ADD(LW(6), 10)
         END_LOOP
     END_INLINE_EVENT
     SPAWN_EVENT(evt_fogreset)
-    IF_INT_NOT_EQUAL(GW(15), 0)
-        CALL(evt_cam3d_evt_set, 0, 75, 50, 0, 80, -250, 1000, EASING_SINE_IN_OUT)
-    END_IF
-    BEGIN_INLINE_EVENT
-        WAIT_MS(1700)
-        CALL(evt_mario_set_pose, STRING("M_L_3"))
-    END_INLINE_EVENT
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_item_move_3d_position, STRING("item00"), LW(0), LW(1), LW(2), 2000, EASING_SINE_IN_OUT)
-    CALL(evt_item_delete, STRING("item00"))
-    CALL(evt_eff_delete, STRING("map_map"))
-    WAIT_MS(500)
-    IF_INT_NOT_EQUAL(GW(15), 0)
-        CALL(evt_party_jump_pos, 0, 30, 28, -250, 300, 0, -1000)
-        WAIT_MS(1000)
-    END_IF
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(evt_mapwrite)
     // The camera moves in: in the prologue Goombella calls out to Frankly; later Mario just raises his hands.
     WAIT_MS(800)
     IF_INT_EQUAL(GW(15), 0)
@@ -2484,6 +2465,7 @@ EVT_BEGIN(evt_mapwrite)
         END_LOOP
     END_INLINE_EVENT
     SPAWN_EVENT(PTR(evt_fogreset))
+#endif
     IF_INT_NOT_EQUAL(GW(15), 0)
         CALL(evt_cam3d_evt_set, 0, 75, 50, 0, 80, -250, 1000, EASING_SINE_IN_OUT)
     END_IF
@@ -2502,7 +2484,6 @@ EVT_BEGIN(evt_mapwrite)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 /**
  * Ending of the pedestal scenes before their map change: starts a two-second camera move (0, 225, 469 looking at

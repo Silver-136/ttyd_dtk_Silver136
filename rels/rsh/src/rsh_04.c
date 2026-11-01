@@ -545,34 +545,22 @@ EVT_BEGIN(evt_shorui_funshitu)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_party_move_pos, 0, 255, -150, 500)
-#if VERSION >= VERSION_US
             CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
         END_IF
     END_INLINE_EVENT
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
     CALL(evt_mario_mov_pos, 260, -135, 500)
     CALL(evt_mario_set_dir_npc, STRING("ポワン探偵"))
     CALL(evt_set_dir_to_target, STRING("サラリーマン"), STRING("mario"))
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_status_onoff, 1, STRING("ポワン探偵"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_167"), 0, STRING("me"))
-    CALL(evt_set_dir_to_target, STRING("me"), STRING("サラリーマン"))
-    WAIT_MS(500)
-    CALL(evt_mario_set_dir_npc, STRING("サラリーマン"))
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_168"), 0, STRING("サラリーマン"))
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_168_01"), 0, STRING("ポワン探偵"))
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_168_02"), 0, STRING("サラリーマン"))
 #else
-            CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
-        END_IF
-    END_INLINE_EVENT
     CALL(evt_mario_mov_pos, 260, -135, 500)
     CALL(evt_mario_set_dir_npc, STRING("ポワン探偵"))
     CALL(evt_set_dir_to_target, STRING("サラリーマン"), STRING("mario"))
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
+#endif
     CALL(evt_npc_status_onoff, 1, STRING("ポワン探偵"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_167"), 0, STRING("me"))
     CALL(evt_set_dir_to_target, STRING("me"), STRING("サラリーマン"))
@@ -583,15 +571,10 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_168_01"), 0, STRING("ポワン探偵"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_168_02"), 0, STRING("サラリーマン"))
-#endif
     WAIT_MS(500)
     SPAWN_EVENT_GET_ID(PTR(evt_mario_chuumoku), LW(10))
     SPAWN_EVENT_GET_ID(PTR(evt_party_chuumoku), LW(11))
-#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
-#else
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
-#endif
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
@@ -656,15 +639,9 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     DELETE_EVENT(LW(10))
     DELETE_EVENT(LW(11))
-#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
-#else
-    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
-#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG6_22_DOCUMENT)
     RETURN
 EVT_END()
@@ -1114,24 +1091,14 @@ EVT_END()
  * while Mario stands in cabin 3 on day 2 without talking to anybody; started by evt_powan_room.
  */
 EVT_BEGIN(talk_sarary_repeat)
-#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("サラリーマン"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("サラリーマン"), LW(3))
-#else
-    CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_get_position, STRING("サラリーマン"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_height, STRING("サラリーマン"), LW(3))
-#endif
     ADD(LW(0), -5)
     ADD(LW(1), LW(3))
     ADD(LW(1), 10)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-#if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_01"), 0, STRING("サラリーマン"))
-#else
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_165_01"), 0, STRING("サラリーマン"))
-#endif
     LOOP(0)
         CALL(evt_msg_repeat)
     END_LOOP
@@ -1249,23 +1216,13 @@ EVT_END()
  * Repeats the parents' conversation (talk_papa_mama) when Mario talks to him at the right stage.
  */
 EVT_BEGIN(talk_papa_repeat)
-#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンパパ"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("ナリキンパパ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ナリキンパパ"), LW(3))
-#else
-    CALL(evt_npc_flag_onoff, 1, STRING("ナリキンパパ"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_get_position, STRING("ナリキンパパ"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_height, STRING("ナリキンパパ"), LW(3))
-#endif
     ADD(LW(1), LW(3))
     ADD(LW(1), 15)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-#if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_01"), 0, STRING("ナリキンパパ"))
-#else
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_85_01"), 0, STRING("ナリキンパパ"))
-#endif
     LOOP(0)
         CALL(evt_msg_repeat)
     END_LOOP
@@ -1318,23 +1275,13 @@ EVT_END()
  * repeats the parents' conversation (talk_papa_mama) when Mario talks to her at the right stage.
  */
 EVT_BEGIN(talk_mama_repeat)
-#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンママ"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("ナリキンママ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ナリキンママ"), LW(3))
-#else
-    CALL(evt_npc_flag_onoff, 1, STRING("ナリキンママ"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_get_position, STRING("ナリキンママ"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_height, STRING("ナリキンママ"), LW(3))
-#endif
     ADD(LW(1), LW(3))
     ADD(LW(1), 10)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-#if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_02"), 0, STRING("ナリキンママ"))
-#else
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_85_02"), 0, STRING("ナリキンママ"))
-#endif
     LOOP(0)
         CALL(evt_msg_repeat)
     END_LOOP
@@ -1406,7 +1353,6 @@ s32 item_tbl3[] = {
     ITEM_AUTOGRAPH, -1,
 };
 
-#if VERSION <= VERSION_DEMO_US
 static EVT_BEGIN(talk_konari)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
@@ -1430,6 +1376,7 @@ static EVT_BEGIN(talk_konari)
         END_IF
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
         CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
+#if VERSION <= VERSION_DEMO_US
         // With the Autograph, Mario can hand it over.
         CALL(evt_pouch_check_item, ITEM_AUTOGRAPH, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -1466,41 +1413,7 @@ static EVT_BEGIN(talk_konari)
                 END_IF
             END_IF
         END_IF
-        CASE_LESS(STG6_19_GIVE_BLANKET)
-        CALL(evt_msg_print, 0, STRING("stg6_rsh_102"), 0, 0)
-        CASE_LESS(STG6_20_END_OF_DAY_1)
-        CALL(evt_msg_print, 0, STRING("stg6_rsh_147_11"), 0, 0)
-        CASE_LESS(STG6_27_RIVERSIDE_STATION)
-        CALL(evt_msg_print, 0, STRING("stg6_rsh_165"), 0, 0)
-        CASE_LESS(STG6_44_END_OF_DAY_2)
-        CALL(evt_msg_print, 0, STRING("stg6_rsh_228"), 0, 0)
-    END_SWITCH
-    RETURN
-EVT_END()
 #else
-static EVT_BEGIN(talk_konari)
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
-        CALL(evt_msg_print, 0, STRING("stg6_rsh_17"), 0, 0)
-        CASE_LESS(STG6_07_SYLVIA)
-        CALL(evt_msg_print, 0, STRING("stg6_rsh_90"), 0, 0)
-        CASE_LESS(STG6_09_BUBS_REQUEST)
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG6_08_BUB)
-            SET_VALUE(GSW_STORY_PROGRESS, STG6_08_BUB)
-            CALL(evt_msg_print, 0, STRING("stg6_rsh_91"), 0, 0)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg6_rsh_94"), 0, 0)
-        END_IF
-        CALL(evt_msg_select, 0, STRING("stg6_rsh_94_yn"))
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print_add, 0, STRING("stg6_rsh_92"))
-            SET_VALUE(GSW_STORY_PROGRESS, STG6_09_BUBS_REQUEST)
-        ELSE
-            CALL(evt_msg_print_add, 0, STRING("stg6_rsh_93"))
-        END_IF
-        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-        CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
         // With the Autograph, Mario can hand it over.
         CALL(evt_pouch_check_item, ITEM_AUTOGRAPH, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -1553,6 +1466,7 @@ static EVT_BEGIN(talk_konari)
                 END_IF
             END_IF
         END_IF
+#endif
         CASE_LESS(STG6_19_GIVE_BLANKET)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_102"), 0, 0)
         CASE_LESS(STG6_20_END_OF_DAY_1)
@@ -1564,31 +1478,20 @@ static EVT_BEGIN(talk_konari)
     END_SWITCH
     RETURN
 EVT_END()
-#endif
 
 /**
  * Overheard background line of Detective Pennington (stg6_rsh_165_02) shown in a repeating balloon beside the
  * salaryman's while Mario stands in cabin 3; started by evt_powan_room.
  */
 EVT_BEGIN(talk_powan_repeat)
-#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("ポワン探偵"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ポワン探偵"), LW(3))
-#else
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_get_position, STRING("ポワン探偵"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_height, STRING("ポワン探偵"), LW(3))
-#endif
     ADD(LW(0), 15)
     ADD(LW(1), LW(3))
     SUBTRACT(LW(1), 4)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-#if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_02"), 0, STRING("ポワン探偵"))
-#else
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_165_02"), 0, STRING("ポワン探偵"))
-#endif
     LOOP(0)
         CALL(evt_msg_repeat)
     END_LOOP
@@ -2307,11 +2210,10 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_04_a"))

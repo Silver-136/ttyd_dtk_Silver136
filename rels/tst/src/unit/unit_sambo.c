@@ -231,43 +231,6 @@ static BattleWeapon weapon_sambo_head_attack_2 = {
 };
 
 /** Attack data of the Pokey's headbutt with 1 segment: 3 damage. */
-#if VERSION <= VERSION_DEMO_US
-static BattleWeapon weapon_sambo_head_attack_1 = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, // baseFpCost..baseSpCost
-    1, // superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault,
-{3, 0, 0, 0, 0, 0, 0, 0},
-NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_NO_CEILING | TARGET_PROP_SHELL_TOSSLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED, // special
-    0, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 static BattleWeapon weapon_sambo_head_attack_1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -281,7 +244,11 @@ static BattleWeapon weapon_sambo_head_attack_1 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
+#if VERSION <= VERSION_DEMO_US
+    {3, 0, 0, 0, 0, 0, 0, 0},
+#else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
@@ -303,7 +270,6 @@ static BattleWeapon weapon_sambo_head_attack_1 = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /** Attack data of the Pokey's segment throw with 4 segments: 3 damage. */
 static BattleWeapon weapon_sambo_spike_attack_4 = {

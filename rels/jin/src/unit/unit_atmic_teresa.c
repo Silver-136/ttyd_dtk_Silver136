@@ -295,51 +295,31 @@ BattleWeapon weapon_atmic_teresa_press = {
     {0, 50, 50, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon weapon_atmic_teresa_bikkuri = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0,
-0,
-1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL,
-SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
-COUNTER_RESIST_ALL, // counterResistFlags
-    0, 0, 0, // targetWeightFlags..sleepTime
-    50, // stopChance
-    3, // stopTime
-    0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
-    0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
-    0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeTime..defChangeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // allergicChance..slowTime
-    0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
-    0, 0, // fpRegenTime..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 BattleWeapon weapon_atmic_teresa_bikkuri = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
+#if VERSION <= VERSION_DEMO_US
+    0,
+    1.0f, // reserved_14
+        1, // stylishCommandMultiplier
+        1, // reserved_19
+        1, // bingoSlotChance
+        1, // reserved_1B
+        weaponGetPowerDefault, // hpDamageFn
+        {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+        TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        NULL,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+#else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
@@ -361,6 +341,7 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
+#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
     50, // stopChance
@@ -375,53 +356,32 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon weapon_atmic_teresa_surprise = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0,
-0,
-1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL,
-SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
-COUNTER_RESIST_ALL, // counterResistFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-    0, 0, // poisonTime..poisonStrength
-    50, // confuseChance
-    3, // confuseTime
-    0, 0, 0, 0, 0, 0, 0, 0, // electricChance..freezeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeChance..defChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // defChangeStrength..slowChance
-    0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
-    0, 0, 0, // hpRegenStrength..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 BattleWeapon weapon_atmic_teresa_surprise = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
+#if VERSION <= VERSION_DEMO_US
+    0,
+    1.0f, // reserved_14
+        1, // stylishCommandMultiplier
+        1, // reserved_19
+        1, // bingoSlotChance
+        1, // reserved_1B
+        weaponGetPowerDefault, // hpDamageFn
+        {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+        TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        NULL,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+#else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
@@ -443,6 +403,7 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE, // special
+#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, // poisonTime..poisonStrength
@@ -457,7 +418,6 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /** Atomic Boo's breath: 3 damage to every target, less with each hit; shatters freeze. */
 BattleWeapon weapon_atmic_teresa_breath = {

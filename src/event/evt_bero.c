@@ -1447,8 +1447,8 @@ EVT_BEGIN(bero_case_exec_road)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(bero_case_exec_door)
+#if VERSION <= VERSION_DEMO_US
     CALL_CHILD(bero_case_init_check)
     IF_INT_EQUAL(LW(0), 1)
         RETURN
@@ -1464,25 +1464,7 @@ EVT_BEGIN(bero_case_exec_door)
         CALL(evt_mario_wait_landon)
         CALL(evt_bero_mario_go_wait)
         CALL(bero_get_position_normal, 0, FLOAT(150.0f))
-PEEK_FLOAT(LW(10), PTR(&BeroEX))
-        PEEK_FLOAT(LW(12), PTR(&BeroEZ))
-        CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(150.0f))
-        CALL(evt_bero_exec_onoff, 0, 65536)
-        CALL(evt_bero_exec_onoff, 1, 1)
-    END_INLINE_EVENT
-    CALL(evt_bero_mario_go_wait)
-    WAIT_MS(150)
-    CALL(evt_bero_exec_onoff, 0, 8)
-    WAIT_FRAMES(2)
-    CALL(evt_bero_1stcheck, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        WAIT_MS(1000)
-    END_IF
-    CALL(evt_bero_mapchange, LW(13), LW(14))
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(bero_case_exec_door)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
     CALL(evt_mario_key_onoff, 1)
@@ -1509,6 +1491,7 @@ EVT_BEGIN(bero_case_exec_door)
 #else
         CALL(bero_get_position_normal, 0, FLOAT(150.0f))
 #endif
+#endif
         PEEK_FLOAT(LW(10), PTR(&BeroEX))
         PEEK_FLOAT(LW(12), PTR(&BeroEZ))
         CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(150.0f))
@@ -1526,7 +1509,6 @@ EVT_BEGIN(bero_case_exec_door)
     CALL(evt_bero_mapchange, LW(13), LW(14))
     RETURN
 EVT_END()
-#endif
 
 USER_FUNC(evt_camera_change_event_from_road) {
     MarioWork* mario = marioGetPtr();

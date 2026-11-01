@@ -2670,10 +2670,10 @@ void marioChgMoveMotion(void);
 // the stored zero held in a local z kept alive by a dead int guard (COLOURING M; folded after RA, no code):
 // i = 0 / z = 0 share a block so VN makes z `mr z,i`, numbered between the SR pointer and the counter.
 // The do-while keeps the deleted arm from leaving branches behind.
-#if VERSION <= VERSION_DEMO_US
 static inline void fbatRecoverItems(NpcEntry* npc) {
     NpcBattleInfo* b = &npc->battleInfo;
-s32 i;
+#if VERSION <= VERSION_DEMO_US
+    s32 i;
     s32 z;
     i = 0;
     z = 0;
@@ -2687,10 +2687,7 @@ s32 i;
         }
         i++;
     } while (i < 8);
-}
 #else
-static inline void fbatRecoverItems(NpcEntry* npc) {
-    NpcBattleInfo* b = &npc->battleInfo;
     s32 z;
     s32 i;
     i = 0;
@@ -2715,8 +2712,8 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
         }
         i++;
     } while (i < 8);
-}
 #endif
+}
 
 /**
  * Field battle mode 5, the battle with the enemy hit or touched.

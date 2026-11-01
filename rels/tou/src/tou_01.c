@@ -3004,12 +3004,10 @@ EVT_BEGIN(evt_peach_after)
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_npc_set_position, STRING("美女"), 0, -1000, 0)
-    SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
 #endif
+    SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     RETURN

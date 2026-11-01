@@ -1449,11 +1449,10 @@ EVT_BEGIN(evt_bridge)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_normalize)
-    SET_VALUE(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
 #else
     WAIT_MS(500)
-    SET_VALUE(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
 #endif
+    SET_VALUE(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
     CALL(evt_bero_mapchange, STRING("hom_00"), STRING("n_bero_2"))
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 1)
@@ -2059,11 +2058,10 @@ static s32 item_tbl[] = {
  */
 EVT_BEGIN(evt_elv)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_38_RIDE_THE_ELEVATOR)
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_win_item_select, PTR(item_tbl), LW(1))
 #else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_38_RIDE_THE_ELEVATOR)
         CALL(evt_win_item_select, 0, PTR(item_tbl), LW(1), 0)
 #endif
         IF_INT_EQUAL(LW(1), -1)

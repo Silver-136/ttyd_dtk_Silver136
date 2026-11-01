@@ -31,52 +31,6 @@ static EvtWord wait_event[6];
 /**
  * Unit definition of the Moon Cleft: its HP, level, sizes, sounds, status vulnerability, parts and init script.
  */
-#if VERSION <= VERSION_DEMO_US
-BattleUnitKind unit_sinemon = {
-    114, // unitType
-    "btl_un_sinemon", // name
-    6, // maxHp
-    0, // maxFp
-    1, // dangerHP
-    1, // perilHP
-    26, // level
-    0,
-4,
-70, // bonusCoinRate
-    1, // baseCoin
-    50, // runRate
-    9999, // pbSoftCap
-    26, // width
-    32, // height
-    {4, 32}, // hitOffset
-    {0.0f, 16.0f, 0.0f}, // centerOffset
-    {0}, // hpGaugeOffset
-    {0}, // talkTogeBaseOffset
-    {13.0f, 0.0f, -10.0f}, // heldItemBaseOffset
-    {0}, // burnFlameOffset
-    0.0f, 0.0f, // vivianOffsetX..vivianOffsetZ
-    {13.0f, 0.0f, 0.0f}, // bintaHitOffset
-    {10.0f, 24.0f, 0.0f}, // kissHitOffset
-    {0.0f, 16.0f, 0.0f}, // cutBaseOffset
-    26.0f, // cutWidth
-    32.0f, // cutHeight
-    0, 0, 0, // turnOrder..swallowChance
-    2, // swallowAttributes
-    100, // hammerKnockbackChance
-    20, // itemStealParam
-    {0}, // starPointDispOffset
-    "SFX_ENM_EMON_DAMAGED1", // damageSfxName
-    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
-    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
-    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kUnitLeader, // attributeFlags
-    &regist, // statusVulnerability
-    1, // numParts
-    parts, // parts
-    init_event, // initEventCode
-    (BattleDataEntry*)data_table, // dataTable
-};
-#else
 BattleUnitKind unit_sinemon = {
     114, // unitType
     "btl_un_sinemon", // name
@@ -86,7 +40,11 @@ BattleUnitKind unit_sinemon = {
     1, // perilHP
     26, // level
     0, // bonusExp
+#if VERSION <= VERSION_DEMO_US
+    4,
+#else
     3, // bonusCoin
+#endif
     70, // bonusCoinRate
     1, // baseCoin
     50, // runRate
@@ -121,7 +79,6 @@ BattleUnitKind unit_sinemon = {
     init_event, // initEventCode
     (BattleDataEntry*)data_table, // dataTable
 };
-#endif
 
 /**
  * Defence of the Moon Cleft: 5 against normal, ice, explosion and electric hits;

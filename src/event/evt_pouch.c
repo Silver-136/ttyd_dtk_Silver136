@@ -130,15 +130,12 @@ USER_FUNC(evt_pouch_check_item) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
-GETTER(evt_pouch_get_max_ap, pouchGetMaxAP)
-SETTER(evt_pouch_set_ap, pouchSetAP)
-#else
+#if VERSION > VERSION_DEMO_US
 GETTER(evt_pouch_get_hp, pouchGetHP)
 SETTER(evt_pouch_set_hp, pouchSetHP)
+#endif
 GETTER(evt_pouch_get_max_ap, pouchGetMaxAP)
 SETTER(evt_pouch_set_ap, pouchSetAP)
-#endif
 SETTER(evt_pouch_party_join, partyJoin)
 SETTER(evt_pouch_party_left, partyLeft)
 

@@ -719,8 +719,8 @@ EVT_BEGIN(nokkosu_init)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(nokkosu_talk)
+#if VERSION <= VERSION_DEMO_US
     // Nokkos is made intangible so he can move freely.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
@@ -742,14 +742,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_jump_position_nohit, STRING("me"), -66, 100, -112, 800, 220)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     // The time is recorded and the request is marked solved.
-    CALL(evt_sub_save_playtime, GSW_GON_TRY_TO_FIND_ME_DONE_TIME_UNUSED)
-    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-    SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_TRY_TO_FIND_ME), 1)
-    CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(nokkosu_talk)
     // Nokkos is made intangible so he can move freely.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 #if VERSION >= VERSION_US
@@ -832,13 +825,13 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_jump_position_nohit, STRING("me"), -66, 100, -112, 800, 220)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     // The time is recorded and the request is marked solved.
+#endif
     CALL(evt_sub_save_playtime, GSW_GON_TRY_TO_FIND_ME_DONE_TIME_UNUSED)
     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_TRY_TO_FIND_ME), 1)
     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
     RETURN
 EVT_END()
-#endif
 
 /** NPC setup of gon_08: Nokkos, who gives the side request. */
 static NpcSetupInfo npcEnt[] = {

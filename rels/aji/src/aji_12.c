@@ -273,83 +273,70 @@ static USER_FUNC(thunder_main) {
     return EVT_RETURN_BLOCK;
 }
 
+static USER_FUNC(mario_chk) {
+    s32 n;
+    char name[256];
+    MarioWork* mario = marioGetPtr();
 #if VERSION <= VERSION_DEMO_US
-static USER_FUNC(mario_chk) {
-    s32 n;
-    char name[256];
-    MarioWork* mario = marioGetPtr();
-s32 i;
-    s32 j;
+    s32 i;
+        s32 j;
 
-    if (isFirstCall) {
-        event->userdata[0] = 0;
-        event->userdata[1] = 0;
-    }
-    if (evtGetValue(NULL, GSWF_AJI_12_LIT_FLOOR_DONE)) {
-        return EVT_RETURN_DONE;
-    }
-    for (i = 1; i <= 44; i++) {
-        sprintf(name, "hikaru_%02d", i);
-        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-        sprintf(name, "nashi_%02d", i);
-        mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
-    }
-    for (i = 0; i < 50; i++) {
-        hitGrpAttrOn((const char*)hit_list[i], 0x800);
-    }
-    if (mario->hitobjUnder == NULL) {
-        mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
-        mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
-        hitGrpAttrOff("A_hikaru_01", 0x800);
-        event->userdata[2] = 0;
-} else if (strncmp(hitGetName(mario->hitobjUnder), "A_hikaru_", strlen("A_hikaru_")) != 0) {
-    mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
-        mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
-        hitGrpAttrOff("A_hikaru_01", 0x800);
-        event->userdata[2] = 0;
-} else if (strcmp(hitGetName(mario->hitobjUnder), "A_hikaru_01") == 0 && event->userdata[2] == 0) {
-    event->userdata[2] = 1;
-        event->userdata[0] = 0;
-        event->userdata[1] = 0;
-    }
-    n = 0;
-    j = event->userdata[0];
-    if (j >= 50) {
-        j = 49;
-    }
-    sscanf((const char*)hit_list[j], "A_hikaru_%02d", &n);
-    sprintf(name, "hikaru_%02d", n);
-    mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
-    sprintf(name, "nashi_%02d", n);
-    mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-    sprintf(name, "A_hikaru_%02d", n);
-    hitGrpAttrOff(name, 0x800);
-    j++;
-    if (j >= 50) {
-        j = 49;
-    }
-    sscanf((const char*)hit_list[j], "A_hikaru_%02d", &n);
-    sprintf(name, "hikaru_%02d", n);
-    mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
-    sprintf(name, "nashi_%02d", n);
-    mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-    sprintf(name, "A_hikaru_%02d", n);
-    hitGrpAttrOff(name, 0x800);
-event->userdata[1]++;
-    if (event->userdata[1] > (event->userdata[2] == 0 ? 20 : 60)) {
-        event->userdata[1] = 0;
-        event->userdata[0]++;
-        if (event->userdata[0] > 50) {
+        if (isFirstCall) {
             event->userdata[0] = 0;
+            event->userdata[1] = 0;
         }
-    }
-    return EVT_RETURN_BLOCK;
-}
+        if (evtGetValue(NULL, GSWF_AJI_12_LIT_FLOOR_DONE)) {
+            return EVT_RETURN_DONE;
+        }
+        for (i = 1; i <= 44; i++) {
+            sprintf(name, "hikaru_%02d", i);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+            sprintf(name, "nashi_%02d", i);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
+        }
+        for (i = 0; i < 50; i++) {
+            hitGrpAttrOn((const char*)hit_list[i], 0x800);
+        }
+        if (mario->hitobjUnder == NULL) {
+            mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
+            mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
+            hitGrpAttrOff("A_hikaru_01", 0x800);
+            event->userdata[2] = 0;
+    } else if (strncmp(hitGetName(mario->hitobjUnder), "A_hikaru_", strlen("A_hikaru_")) != 0) {
+        mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
+            mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
+            hitGrpAttrOff("A_hikaru_01", 0x800);
+            event->userdata[2] = 0;
+    } else if (strcmp(hitGetName(mario->hitobjUnder), "A_hikaru_01") == 0 && event->userdata[2] == 0) {
+        event->userdata[2] = 1;
+            event->userdata[0] = 0;
+            event->userdata[1] = 0;
+        }
+        n = 0;
+        j = event->userdata[0];
+        if (j >= 50) {
+            j = 49;
+        }
+        sscanf((const char*)hit_list[j], "A_hikaru_%02d", &n);
+        sprintf(name, "hikaru_%02d", n);
+        mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
+        sprintf(name, "nashi_%02d", n);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+        sprintf(name, "A_hikaru_%02d", n);
+        hitGrpAttrOff(name, 0x800);
+        j++;
+        if (j >= 50) {
+            j = 49;
+        }
+        sscanf((const char*)hit_list[j], "A_hikaru_%02d", &n);
+        sprintf(name, "hikaru_%02d", n);
+        mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
+        sprintf(name, "nashi_%02d", n);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+        sprintf(name, "A_hikaru_%02d", n);
+        hitGrpAttrOff(name, 0x800);
+    event->userdata[1]++;
 #else
-static USER_FUNC(mario_chk) {
-    s32 n;
-    char name[256];
-    MarioWork* mario = marioGetPtr();
     PartyEntry* party;
     HitEntry* hit;
     s32 i;
@@ -435,6 +422,7 @@ static USER_FUNC(mario_chk) {
 #endif
     event->userdata[1]++;
     // The strict threshold advances after 21 or 61 calls, depending on whether the start was entered.
+#endif
     if (event->userdata[1] > (event->userdata[2] == 0 ? 20 : 60)) {
         event->userdata[1] = 0;
         event->userdata[0]++;
@@ -444,7 +432,6 @@ static USER_FUNC(mario_chk) {
     }
     return EVT_RETURN_BLOCK;
 }
-#endif
 
 static USER_FUNC(hikaru_off) {
     char name[256];

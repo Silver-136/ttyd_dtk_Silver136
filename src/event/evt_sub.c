@@ -1602,11 +1602,10 @@ EVT_BEGIN(mail_evt_usu_01)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 300, -2000, 300, 2000, LW(5))
-        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
 #else
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 110, -2000, 110, 2000, LW(5))
-        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
 #endif
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF

@@ -29,8 +29,6 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
-#if VERSION >= VERSION_US
-#endif
 
 EvtWord ne_close[22];
 EvtWord ne_open[22];
@@ -323,10 +321,8 @@ EVT_BEGIN(first_gra06jin)
     CALL(evt_party_run, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)

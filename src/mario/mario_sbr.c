@@ -53,14 +53,14 @@ void marioBottomless(void) {
     if (marioBgmodeChk() == TRUE) {
         marioChgMot(MARIO_MOTION_BOTTOMLESS);
 #if VERSION <= VERSION_DEMO_US
-        return;
-    }
-    if (strcmp(gp->currentMapName, "eki_04") == 0) {
-        mario->position = (Vec){344.0f, 840.0f, 30.0f};
-    } else if (strcmp(gp->currentMapName, "gon_10") == 0) {
-        mario->position = (Vec){980.0f, 74.0f, -17.0f};
-    } else if (strcmp(gp->currentMapName, "muj_00") == 0) {
-        mario->position = (Vec){-182.0f, 25.0f, -104.0f};
+    return;
+}
+if (strcmp(gp->currentMapName, "eki_04") == 0) {
+    mario->position = (Vec){344.0f, 840.0f, 30.0f};
+} else if (strcmp(gp->currentMapName, "gon_10") == 0) {
+    mario->position = (Vec){980.0f, 74.0f, -17.0f};
+} else if (strcmp(gp->currentMapName, "muj_00") == 0) {
+    mario->position = (Vec){-182.0f, 25.0f, -104.0f};
 #else
     } else if (mario->bottomlessReload) {
         seqSetSeq(SEQ_MAP_CHANGE, gp->currentMapName, gp->beroEnterName);

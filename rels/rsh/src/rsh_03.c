@@ -416,8 +416,8 @@ s32 iri_22_item_tbl[] = {
     -1, -1, -1, -1,
 };
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(talk_cook)
+#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_GET_THESE_INGREDIENTS)
         CALL(iri_22_make_item_tbl, LW(0), LW(1))
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
@@ -531,10 +531,7 @@ EVT_BEGIN(talk_cook)
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_12_1"), 0, 0)
     END_SWITCH
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(talk_cook)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_GET_THESE_INGREDIENTS)
         CALL(iri_22_make_item_tbl, LW(0), LW(1))
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
@@ -655,9 +652,9 @@ EVT_BEGIN(talk_cook)
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_12_1"), 0, 0)
     END_SWITCH
+#endif
     RETURN
 EVT_END()
-#endif
 
 /**
  * Init event of the waitress: parked below the floor from day 3 to the Smorg miasma;
@@ -680,12 +677,12 @@ s32 item_tbl_waitless[] = {
     ITEM_SHELL_EARRINGS, -1,
 };
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(talk_waitless_pias_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_npc_get_reglid, STRING("ウェイトレス"), LW(10))
     DELETE_EVENT(LW(10))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_195"), 0, STRING("ウェイトレス"))
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_win_item_select, PTR(item_tbl_waitless), LW(1))
     IF_INT_NOT_EQUAL(LW(1), -1)
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_4"))
@@ -703,23 +700,7 @@ EVT_BEGIN(talk_waitless_pias_return)
     ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_196_2"), 0, STRING("ウェイトレス"))
     END_IF
-    CALL(evt_npc_restart_regular_event, STRING("ウェイトレス"))
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-        CASE_BETWEEN(STG6_49_POSHLEY_HEIGHTS, STG6_55_04_BOWSER_RAWK_HAWK)
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-        CASE_DEFAULT
-        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-    END_SWITCH
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(talk_waitless_pias_return)
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_npc_get_reglid, STRING("ウェイトレス"), LW(10))
-    DELETE_EVENT(LW(10))
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_195"), 0, STRING("ウェイトレス"))
     CALL(evt_win_item_select, 0, PTR(item_tbl_waitless), LW(1), 0)
     IF_INT_NOT_EQUAL(LW(1), -1)
 #if VERSION >= VERSION_US
@@ -762,6 +743,7 @@ EVT_BEGIN(talk_waitless_pias_return)
     ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_196_2"), 0, STRING("ウェイトレス"))
     END_IF
+#endif
     CALL(evt_npc_restart_regular_event, STRING("ウェイトレス"))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
@@ -773,7 +755,6 @@ EVT_BEGIN(talk_waitless_pias_return)
     END_SWITCH
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(talk_waitless)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
@@ -1573,7 +1554,6 @@ EVT_BEGIN(evt_shop_open)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(evt_shop_close)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1584,7 +1564,8 @@ EVT_BEGIN(evt_shop_close)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_OUT1"), LW(0), LW(1), LW(2), 0)
-        END_INLINE_EVENT
+    END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_img_clear_virtual_point, STRING("capture_img"))
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_2"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
@@ -1650,25 +1631,7 @@ EVT_BEGIN(evt_shop_close)
     WAIT_MS(500)
     // The door closes behind them and the page turns back to the dining car.
     CALL_CHILD(shop_door_close)
-    CALL(evt_hitobj_attr_onoff, 0, 0, STRING("tobira_omise"), 8388608)
-    CALL(evt_hitobj_attr_onoff, 0, 0, STRING("tobira_omise_heya"), 8388608)
-    CALL(evt_party_run, 1)
-    CALL(evt_party_run, 0)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(evt_shop_close)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_party_stop, 1)
-    CALL(omiseFukki)
-    CALL(evt_hitobj_attr_onoff, 0, 1, STRING("tobira_omise"), 8388608)
-    CALL(evt_hitobj_attr_onoff, 0, 1, STRING("tobira_omise_heya"), 8388608)
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_OUT1"), LW(0), LW(1), LW(2), 0)
-    END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 500)
         LOOP(0)
@@ -1775,6 +1738,7 @@ EVT_BEGIN(evt_shop_close)
     END_INLINE_EVENT
     WAIT_MS(500)
     CALL_CHILD(PTR(shop_door_close))
+#endif
     CALL(evt_hitobj_attr_onoff, 0, 0, STRING("tobira_omise"), 8388608)
     CALL(evt_hitobj_attr_onoff, 0, 0, STRING("tobira_omise_heya"), 8388608)
     CALL(evt_party_run, 1)
@@ -1782,7 +1746,6 @@ EVT_BEGIN(evt_shop_close)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 USER_FUNC(fire) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);

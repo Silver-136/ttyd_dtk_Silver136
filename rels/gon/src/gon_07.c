@@ -310,14 +310,12 @@ static EVT_BEGIN(bomb_wall_evt)
     WAIT_MS(2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF_GON_07_WALL_BOMBED, 1)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_hitobj_onoff, STRING("san"), 1, 0)
     SET_VALUE(LW(0), STRING("e_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
-    SET_VALUE(GSWF_GON_07_WALL_BOMBED, 1)
 #endif
+    SET_VALUE(GSWF_GON_07_WALL_BOMBED, 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
     RETURN

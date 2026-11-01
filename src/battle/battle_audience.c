@@ -572,7 +572,7 @@ u8 BattleAudience_CheckReaction(void) {
     return FALSE;
 }
 #if VERSION <= VERSION_DEMO_US
-    return FALSE;
+return FALSE;
 }
 #endif
 
@@ -3710,11 +3710,10 @@ s32 BattleAudienceNumToTargetSub(void) {
     count = 0;
 #endif
     for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
-#if VERSION <= VERSION_DEMO_US
         if ((u8)BattleAudience_GetExist(i) == TRUE && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_ESCAPE) {
+#if VERSION <= VERSION_DEMO_US
             audience->presentCount++;
 #else
-        if ((u8)BattleAudience_GetExist(i) == TRUE && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_ESCAPE) {
             count++;
 #endif
         }

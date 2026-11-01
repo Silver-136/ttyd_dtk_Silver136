@@ -3731,11 +3731,9 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
     time = evtGetValue(event, args[4]);
     if (isFirstCall) {
         event->userdata[0] = time;
+        event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
 #if VERSION <= VERSION_DEMO_US
-        event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
         itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
-#else
-        event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
 #endif
         return EVT_RETURN_BLOCK;
     }
@@ -5603,10 +5601,10 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     pos.y = (f32)evtGetValue(event, args[2]);
     pos.z = (f32)evtGetValue(event, args[3]);
     switch (type) {
-#if VERSION >= VERSION_US
         case 0:
             scale *= 0.3f;
             name = "SFX_SYSTEM_NICE_25PERCENT1";
+#if VERSION >= VERSION_US
             w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][1];
             eff = 0;
             break;
@@ -5642,12 +5640,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
         case 6:
             name = "SFX_SYSTEM_EXCELLENT1";
             w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][7];
-            eff = 4;
-            break;
 #else
-        case 0:
-            scale *= 0.3f;
-            name = "SFX_SYSTEM_NICE_25PERCENT1";
             w = 90.0f;
             eff = 0;
             break;
@@ -5683,9 +5676,9 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
         case 6:
             name = "SFX_SYSTEM_EXCELLENT1";
             w = 180.0f;
+#endif
             eff = 4;
             break;
-#endif
         default: return EVT_RETURN_DONE;
     }
     w *= scale;

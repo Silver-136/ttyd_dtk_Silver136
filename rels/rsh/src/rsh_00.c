@@ -329,18 +329,14 @@ void moamoa_init(void) {
             if (x < 185.0f) {
                 z = randf(-160.0f, -165.0f);
             } else if (x < 257.0f) {
+                z = 0.8f * (x - 185.0f) + -160.0f;
 #if VERSION >= VERSION_US
-                z = 0.8f * (x - 185.0f) + -160.0f;
                 z += 50.0f;
-#else
-                z = 0.8f * (x - 185.0f) + -160.0f;
 #endif
             } else {
+                z = randf(-90.0f, -20.0f);
 #if VERSION >= VERSION_US
-                z = randf(-90.0f, -20.0f);
                 z += 50.0f;
-#else
-                z = randf(-90.0f, -20.0f);
 #endif
             }
             {
@@ -1159,11 +1155,10 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_00_a"))

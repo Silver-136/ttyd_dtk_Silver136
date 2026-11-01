@@ -365,11 +365,9 @@ EVT_BEGIN(evt_hiki_open)
     // The partner comes over to the desk when it is the special drawer and Grubba's secret is still unknown.
 #endif
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
             CALL(evt_mario_key_onoff, 0)
-#else
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #endif
             BEGIN_INLINE_EVENT
                 CALL(evt_party_stop, 0)
@@ -419,11 +417,10 @@ EVT_BEGIN(evt_hiki_open)
     CALL(evt_run_case_evt, CASE_PUSH, 1, LW(1), 0, PTR(evt_hiki_close), 0)
     // The special drawer plays the discovery scene of Grubba's secret paper.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
-#if VERSION <= VERSION_DEMO_US
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
+#if VERSION <= VERSION_DEMO_US
             CALL_CHILD(evt_takurami)
 #else
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
             CALL_CHILD(PTR(evt_takurami))
             CALL(evt_mario_key_onoff, 1)
 #endif
@@ -1391,10 +1388,8 @@ EVT_BEGIN(tou_05_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_map_playanim, STRING("anm_camera"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF_STARPIECE_57, 0)
-#else
-    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF_STARPIECE_57, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("paifu"), MAP_OBJ_FLAG_CLIP)
 #endif
     CALL(evt_bero_get_entername, LW(0))
@@ -1505,20 +1500,18 @@ EVT_BEGIN(tou_05_init_evt)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))

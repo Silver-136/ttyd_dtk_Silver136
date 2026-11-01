@@ -801,11 +801,11 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 static EVT_BEGIN(explosion_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
     CALL(evt_snd_sfxoff, LW(0))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, -1)
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(5))
@@ -848,15 +848,7 @@ ADD(LW(1), LW(5))
     END_IF
     LABEL(99)
     SET_VALUE(LW(10), -2)
-    CALL_CHILD(subsetevt_dead_core)
-    CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
-    RETURN
-EVT_END()
 #else
-static EVT_BEGIN(explosion_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
-    CALL(evt_snd_sfxoff, LW(0))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, -1)
 #if VERSION >= VERSION_US
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 60, 4)
 #endif
@@ -902,11 +894,11 @@ static EVT_BEGIN(explosion_event)
     END_IF
     LABEL(99)
     SET_VALUE(LW(10), UNIT_ID_SELF)
+#endif
     CALL_CHILD(subsetevt_dead_core)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
     RETURN
 EVT_END()
-#endif
 
 
 static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling) {

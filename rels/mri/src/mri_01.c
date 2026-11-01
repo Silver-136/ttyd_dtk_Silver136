@@ -1180,12 +1180,10 @@ EVT_BEGIN(bigtree_firstbattle)
     CALL(evt_npc_battle_start, LW(10))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_mario_key_onoff, 1)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_11_X_NAUT_BATTLE)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_party_run, 0)
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_11_X_NAUT_BATTLE)
 #endif
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_11_X_NAUT_BATTLE)
     SET_VALUE(LW(10), STRING("第三勢力部下Ａ"))
     SET_VALUE(LW(11), STRING("第三勢力部下Ｂ"))
     CALL(evt_npc_set_position, STRING("ガイド"), -80, 0, 50)

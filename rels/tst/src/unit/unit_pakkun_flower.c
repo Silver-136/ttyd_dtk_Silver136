@@ -46,76 +46,20 @@ static EvtWord wait_event[6];
 /**
  * Unit definition of the Piranha Plant: 13 HP, level 35, 1 part, with its sounds, init script and data table.
  */
+BattleUnitKind unit_pakkun_flower = {
+    UNIT_PIRANHA_PLANT,
+    "btl_un_pakkun_flower",
 #if VERSION <= VERSION_DEMO_US
-BattleUnitKind unit_pakkun_flower = {
-    UNIT_PIRANHA_PLANT,
-    "btl_un_pakkun_flower",
-13,
-0,
-    1,
-    1,
-35,
+    13,
     0,
-    1,
-    70,
-    3,
-50,
-    9999,
-    40,
-    48,
-    4,
-    48,
-    0.0f,
-    24.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    20.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    20.0f,
-    0.0f,
-    0.0f,
-    16.0f,
-    32.0f,
-    0.0f,
-    0.0f,
-    24.0f,
-    0.0f,
-    40.0f,
-    48.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_PAKKUN_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
-};
+        1,
+        1,
+    35,
+        0,
+        1,
+        70,
+        3,
 #else
-BattleUnitKind unit_pakkun_flower = {
-    UNIT_PIRANHA_PLANT,
-    "btl_un_pakkun_flower",
     15,
     0,
     1,
@@ -125,6 +69,7 @@ BattleUnitKind unit_pakkun_flower = {
     3,
     70,
     1,
+#endif
     50,
     9999,
     40,
@@ -178,7 +123,6 @@ BattleUnitKind unit_pakkun_flower = {
     init_event,
     data_table,
 };
-#endif
 
 /** Defence of the Piranha Plant: none, so it takes full damage from every kind of attack. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
@@ -206,43 +150,6 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Attack data of the Piranha Plant's bite: hits one opposing unit for 8 damage. */
-#if VERSION <= VERSION_DEMO_US
-static BattleWeapon weapon_pakkun_flower_attack = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, // baseFpCost..baseSpCost
-    1, // superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault,
-{8, 0, 0, 0, 0, 0, 0, 0},
-NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
-    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 static BattleWeapon weapon_pakkun_flower_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -256,7 +163,11 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
+#if VERSION <= VERSION_DEMO_US
+    {8, 0, 0, 0, 0, 0, 0, 0},
+#else
     {9, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
@@ -278,7 +189,6 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Attack entry of the Piranha Plant: in a flag-2 battle, or after any enemy-item check,

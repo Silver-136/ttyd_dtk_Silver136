@@ -303,14 +303,11 @@ void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             {
-#if VERSION >= VERSION_US
-                f32 half = width * halfScale;
-#else
+#if VERSION < VERSION_US
                 s32 arr[2][4] = { { 0, 128, 120, 24 }, { 0, 176, 68, 24 } };
                 f32 width = *(s32*)((u8*)arr[gp->language != LANGUAGE_JP] + tofs);
-
-                f32 half = width * halfScale;
 #endif
+                f32 half = width * halfScale;
                 f32 negHalf = -width * halfScale;
                 GXPosition3f32(negHalf, height, 0.0f);
                 GXTexCoord2f32(0.0f, 0.0f);

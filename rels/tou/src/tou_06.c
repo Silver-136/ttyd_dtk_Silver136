@@ -572,8 +572,8 @@ EVT_END()
  * Map init for tou_06, the storage room: NPCs, the floor hole (evt_ana), the containers (cloud-blown),
  * the Lv1 big blocks, the job 13 trunks, and the scene to run from story progress.
  */
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(tou_06_init_evt)
+#if VERSION <= VERSION_DEMO_US
     // Doors, Ms. Mowz and the hole in the floor that drops Mario into Grubba's office.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -723,10 +723,7 @@ EVT_BEGIN(tou_06_init_evt)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, 13)
         CALL_CHILD(iri_13_init)
     END_IF
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(tou_06_init_evt)
     // Doors, Ms. Mowz and the hole in the floor that drops Mario into Grubba's office.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -898,9 +895,9 @@ EVT_BEGIN(tou_06_init_evt)
             END_SWITCH
         END_IF
     END_IF
+#endif
     RETURN
 EVT_END()
-#endif
 
 // The returned pointer uses one shared buffer; callers consume the name before requesting the next.
 USER_FUNC(iri_13_make_name) {

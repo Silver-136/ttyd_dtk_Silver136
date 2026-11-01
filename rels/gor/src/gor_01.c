@@ -2513,12 +2513,10 @@ EVT_BEGIN(bottakuru_init)
         RETURN
     END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_npc_set_ry, STRING("me"), 90)
-    SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
 #endif
+    SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
     RETURN
 EVT_END()
 
@@ -6795,11 +6793,7 @@ EVT_BEGIN(gor_01_init_evt)
     // Create the plaza NPCs; Flavio gets his footstep sounds.
     CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_setup, PTR(npcEnt))
-#if VERSION >= VERSION_US
     CALL(evt_npc_sound_data_set, STRING("マルコ"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
-#else
-    CALL(evt_npc_sound_data_set, STRING("マルコ"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
-#endif
     IF_INT_EQUAL(LF(0), 1)
         CALL_CHILD(koopa_npc_entry)
     END_IF
@@ -6815,15 +6809,13 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -565, 162, -160, ITEM_TYPE_STILL, GSWF_STARPIECE_05, 0)
     // Until Flavio's talk the Skull Gem lies on the ground.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
+        CALL(evt_item_entry, STRING("ドクロジュエル"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
 #if VERSION >= VERSION_US
-        CALL(evt_item_entry, STRING("ドクロジュエル"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
         CALL(evt_item_flag_on, STRING("ドクロジュエル"), ITEM_FLAG_NO_TOUCH)
-        CALL(evt_item_status_on, STRING("ドクロジュエル"), ITEM_FLAG2_NO_PARTNER)
 #else
-        CALL(evt_item_entry, STRING("ドクロジュエル"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
         CALL(evt_item_flag_on, STRING("ドクロジュエル"), 2)
-        CALL(evt_item_status_on, STRING("ドクロジュエル"), ITEM_FLAG2_NO_PARTNER)
 #endif
+        CALL(evt_item_status_on, STRING("ドクロジュエル"), ITEM_FLAG2_NO_PARTNER)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
     END_IF
     // Open the building doors, depending on story progress and whether the lens was delivered.
@@ -7211,54 +7203,6 @@ CookRecipe R_cookbook_recipe_table[] = {
     {"どくキノコ", "ドライフラワー", "うちゅうしょく"}, // ITEM_POISON_SHROOM + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
     {"どくキノコ", "おうごんはっぱ", "こうちゃキノコ"}, // ITEM_POISON_SHROOM + ITEM_GOLDEN_LEAF -> ITEM_SHROOM_BROTH
     {"どくキノコ", "カメカメはっぱ", "こうちゃキノコ"}, // ITEM_POISON_SHROOM + ITEM_TURTLEY_LEAF -> ITEM_SHROOM_BROTH
-    {"ショコラケーキ", "ドライフラワー", "うちゅうしょく"}, // ITEM_CHOCO_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"マンゴープディング", "ドライフラワー", "うちゅうしょく"}, // ITEM_MANGO_DELIGHT + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"マンゴープディング", "ふしぎなタマゴ", "はつこいプディング"}, // ITEM_MANGO_DELIGHT + ITEM_MYSTIC_EGG -> ITEM_LOVE_PUDDING
-    {"はつこいプディング", "ドライフラワー", "うちゅうしょく"}, // ITEM_LOVE_PUDDING + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"ほしふるディナー", "ドライフラワー", "うちゅうしょく"}, // ITEM_METEOR_MEAL + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"ほしふるディナー", "フルーツパフェ", "ナンシーディナー"}, // ITEM_METEOR_MEAL + ITEM_FRUIT_PARFAIT -> ITEM_ZESS_DINNER
-    {"しれんのナベ", "ドライフラワー", "どくキノコ"}, // ITEM_TRIAL_STEW + ITEM_DRIED_BOUQUET -> ITEM_POISON_SHROOM
-    {"いつまでもふたりで", "ドライフラワー", "うちゅうしょく"}, // ITEM_COUPLES_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"いつまでもふたりで", "どくキノコ", "しれんのナベ"}, // ITEM_COUPLES_CAKE + ITEM_POISON_SHROOM -> ITEM_TRIAL_STEW
-    {"すみぢる", "じわじわキノコ", "どくキノコ"}, // ITEM_INKY_SAUCE + ITEM_SLOW_SHROOM -> ITEM_POISON_SHROOM
-    {"すみぢる", "生パスタ", "イカスミパスタ"}, // ITEM_INKY_SAUCE + ITEM_FRESH_PASTA -> ITEM_INK_PASTA
-    {"すみぢる", "おかしのもと", "ショコラケーキ"}, // ITEM_INKY_SAUCE + ITEM_CAKE_MIX -> ITEM_CHOCO_CAKE
-    {"すみぢる", "ムースケーキ", "ショコラケーキ"}, // ITEM_INKY_SAUCE + ITEM_MOUSSE_CAKE -> ITEM_CHOCO_CAKE
-    {"すみぢる", "スパゲティ", "イカスミパスタ"}, // ITEM_INKY_SAUCE + ITEM_SPAGHETTI -> ITEM_INK_PASTA
-    {"キセツのオムレツ", "ドライフラワー", "うちゅうしょく"}, // ITEM_OMELETTE_MEAL + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"カメカメティー", "レッド・カラリン", "すみぢる"}, // ITEM_KOOPA_TEA + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
-    {"カメスパ", "ドライフラワー", "うちゅうしょく"}, // ITEM_KOOPASTA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"カメスパ", "レッド・カラリン", "カラリーナパスタ"}, // ITEM_KOOPASTA + ITEM_HOT_SAUCE -> ITEM_SPICY_PASTA
-    {"カメスパ", "すみぢる", "イカスミパスタ"}, // ITEM_KOOPASTA + ITEM_INKY_SAUCE -> ITEM_INK_PASTA
-    {"カラリーナパスタ", "ドライフラワー", "うちゅうしょく"}, // ITEM_SPICY_PASTA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"カラリーナパスタ", "ヤシの実", "ナンシーディナー"}, // ITEM_SPICY_PASTA + ITEM_COCONUT -> ITEM_ZESS_DINNER
-    {"カラリーナパスタ", "すみぢる", "イカスミパスタ"}, // ITEM_SPICY_PASTA + ITEM_INKY_SAUCE -> ITEM_INK_PASTA
-    {"メロメロケーキ", "ドライフラワー", "うちゅうしょく"}, // ITEM_HEARTFUL_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"ピーチタルト", "ドライフラワー", "うちゅうしょく"}, // ITEM_PEACH_TART + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"びりびりキャンディ", "ドライフラワー", "うちゅうしょく"}, // ITEM_ELECTRO_POP + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"ファイアキャンディ", "ドライフラワー", "うちゅうしょく"}, // ITEM_FIRE_POP + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"ハニーあめ", "ドライフラワー", "うちゅうしょく"}, // ITEM_HONEY_CANDY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"ココナツキャンディ", "ドライフラワー", "うちゅうしょく"}, // ITEM_COCO_CANDY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"ローヤルキャンディ", "ドライフラワー", "うちゅうしょく"}, // ITEM_JELLY_CANDY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"ナンシークッキー", "ドライフラワー", "うちゅうしょく"}, // ITEM_ZESS_COOKIE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"ヘルスィーサラダ", "ドライフラワー", "うちゅうしょく"}, // ITEM_HEALTHY_SALAD + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"ヘルスィーサラダ", "生パスタ", "ナンシーディナー"}, // ITEM_HEALTHY_SALAD + ITEM_FRESH_PASTA -> ITEM_ZESS_DINNER
-    {"ヘルスィーサラダ", "キノコいため", "ナンシーディナー"}, // ITEM_HEALTHY_SALAD + ITEM_SHROOM_FRY -> ITEM_ZESS_DINNER
-    {"ヘルスィーサラダ", "キノコホイルやき", "ナンシースペシャル"}, // ITEM_HEALTHY_SALAD + ITEM_SHROOM_ROAST -> ITEM_ZESS_SPECIAL
-    {"ヘルスィーサラダ", "キノコステーキ", "ナンシーデラックス"}, // ITEM_HEALTHY_SALAD + ITEM_SHROOM_STEAK -> ITEM_ZESS_DELUXE
-    {"ヘルスィーサラダ", "イカスミパスタ", "ナンシースペシャル"}, // ITEM_HEALTHY_SALAD + ITEM_INK_PASTA -> ITEM_ZESS_SPECIAL
-    {"ヘルスィーサラダ", "スパゲティ", "ナンシーディナー"}, // ITEM_HEALTHY_SALAD + ITEM_SPAGHETTI -> ITEM_ZESS_DINNER
-    {"ヘルスィーサラダ", "カメスパ", "ナンシーディナー"}, // ITEM_HEALTHY_SALAD + ITEM_KOOPASTA -> ITEM_ZESS_DINNER
-    {"ヘルスィーサラダ", "カラリーナパスタ", "ナンシースペシャル"}, // ITEM_HEALTHY_SALAD + ITEM_SPICY_PASTA -> ITEM_ZESS_SPECIAL
-    {"カメまん", "ドライフラワー", "うちゅうしょく"}, // ITEM_KOOPA_BUN + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"フレッシュジュース", "レッド・カラリン", "すみぢる"}, // ITEM_FRESH_JUICE + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
-    {"たんこぶ", "ドライフラワー", "うちゅうしょく"}, // ITEM_WHACKA_BUMP + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {"たんこぶ", "おうごんはっぱ", "ナンシーデラックス"}, // ITEM_WHACKA_BUMP + ITEM_GOLDEN_LEAF -> ITEM_ZESS_DELUXE
-    {"きんかい", "イレカエール", "キノコ"}, // ITEM_GOLD_BAR + ITEM_POINT_SWAP -> ITEM_MUSHROOM
-    {"きんかい×３", "イレカエール", "きんかい"}, // ITEM_GOLD_BAR_X3 + ITEM_POINT_SWAP -> ITEM_GOLD_BAR
-    {"ココナッツボム", "ドライフラワー", "ヤシの実"}, // ITEM_COCONUT_BOMB + ITEM_DRIED_BOUQUET -> ITEM_COCONUT
-    {"ココナッツボム", "バクハツタマゴ", "ナンシーダイナマイ"}, // ITEM_COCONUT_BOMB + ITEM_EGG_BOMB -> ITEM_ZESS_DYNAMITE
-    {"カチカチりょうり", "ドライフラワー", "カチカチコウラ"}, // ITEM_COURAGE_MEAL + ITEM_DRIED_BOUQUET -> ITEM_COURAGE_SHELL
 #else
     {"かみなりドッカン", "かみなりゴロゴロ", "しれんのナベ"}, // ITEM_THUNDER_RAGE + ITEM_THUNDER_BOLT -> ITEM_TRIAL_STEW
     {"キノコ", "かみなりゴロゴロ", "びりびりキノコ"}, // ITEM_MUSHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
@@ -7501,6 +7445,7 @@ CookRecipe R_cookbook_recipe_table[] = {
     {"どくキノコ", "イレカエール", "ウルトラキノコ"}, // ITEM_POISON_SHROOM + ITEM_POINT_SWAP -> ITEM_ULTRA_SHROOM
     {"どくキノコ", "ドライフラワー", "うちゅうしょく"}, // ITEM_POISON_SHROOM + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
     {"どくキノコ", "おうごんはっぱ", "こうちゃキノコ"}, // ITEM_POISON_SHROOM + ITEM_GOLDEN_LEAF -> ITEM_SHROOM_BROTH
+#endif
     {"ショコラケーキ", "ドライフラワー", "うちゅうしょく"}, // ITEM_CHOCO_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
     {"マンゴープディング", "ドライフラワー", "うちゅうしょく"}, // ITEM_MANGO_DELIGHT + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
     {"マンゴープディング", "ふしぎなタマゴ", "はつこいプディング"}, // ITEM_MANGO_DELIGHT + ITEM_MYSTIC_EGG -> ITEM_LOVE_PUDDING
@@ -7549,7 +7494,6 @@ CookRecipe R_cookbook_recipe_table[] = {
     {"ココナッツボム", "ドライフラワー", "ヤシの実"}, // ITEM_COCONUT_BOMB + ITEM_DRIED_BOUQUET -> ITEM_COCONUT
     {"ココナッツボム", "バクハツタマゴ", "ナンシーダイナマイ"}, // ITEM_COCONUT_BOMB + ITEM_EGG_BOMB -> ITEM_ZESS_DYNAMITE
     {"カチカチりょうり", "ドライフラワー", "カチカチコウラ"}, // ITEM_COURAGE_MEAL + ITEM_DRIED_BOUQUET -> ITEM_COURAGE_SHELL
-#endif
 };
 #endif
 

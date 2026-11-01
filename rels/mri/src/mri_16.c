@@ -233,14 +233,13 @@ EVT_BEGIN(water_shikake)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_normalize)
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(3))
 #else
     BEGIN_INLINE_EVENT
         CALL(evt_mario_wait_landon)
         CALL(evt_mario_set_mov_spd, FLOAT(0.0f))
     END_INLINE_EVENT
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(3))
 #endif
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(3))
     SET_VALUE(LW(10), 1)
     LOOP(0)
         SET_VALUE(LF(0), 1)

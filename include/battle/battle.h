@@ -151,27 +151,21 @@ typedef struct StChgWork {
     s32 maskLo;           // 0x254
 } StChgWork;
 
-#if VERSION <= VERSION_DEMO_US
-typedef struct BattleAnnounce {
-    s16 x;         // 0x0
-    s16 y;         // 0x2
-    s32 params[4];
-char text[0x100];
-StChgWork stChg; // 0x118, status-change message queue (battle_status_effect)
-} BattleAnnounce;
-#else
 typedef struct BattleAnnounce {
     s16 x;                           // 0x0
     s16 y;                           // 0x2
     s32 params[4];                   // 0x4
+#if VERSION <= VERSION_DEMO_US
+    char text[0x100];
+#else
 #if VERSION >= VERSION_US
     char text[0x100];                 // 0x14 (US 4 shorter)
 #else
     char text[0x104];                 // 0x14
 #endif
+#endif
     StChgWork stChg;                 // 0x118, status-change message queue (battle_status_effect)
 } BattleAnnounce;
-#endif
 
 struct BattleAlliance {
     u16 allianceId;     // 0x0

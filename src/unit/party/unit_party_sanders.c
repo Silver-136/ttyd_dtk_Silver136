@@ -1330,15 +1330,11 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
         CALL(evt_eff, STRING(""), STRING("sandars"), 3, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-#if VERSION >= VERSION_US
-        ELSE
-        CALL(evt_eff, STRING(""), STRING("sandars"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-    END_IF
-    CALL(btlevtcmd_StageDispellFog)
-#else
     ELSE
         CALL(evt_eff, STRING(""), STRING("sandars"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     END_IF
+#if VERSION >= VERSION_US
+    CALL(btlevtcmd_StageDispellFog)
 #endif
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 20, 13)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -1723,11 +1719,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
             WAIT_FRAMES(1)
             SET_VALUE(LW(14), 5)
         END_LOOP
-#if VERSION >= VERSION_US
         DEBUG_PUT_MSG(STRING("イベント終了"))
-#else
-        DEBUG_PUT_MSG(STRING("イベント終了"))
-#endif
     END_SIBLING_EVENT
     // Wait for the command and the throws to finish, refill Star Power (retail only) and end the turn.
     CALL(btlevtcmd_ResultAC)

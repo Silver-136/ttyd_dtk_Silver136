@@ -45,7 +45,6 @@ static EvtWord wait_event[6];
  * Unit kind of Swampire: 20 max HP, level 46. The battle engine reads it when the unit spawns:
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
-#if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_basabasa_green = {
     UNIT_SWAMPIRE,
     "btl_un_basabasa_green",
@@ -53,77 +52,19 @@ BattleUnitKind unit_basabasa_green = {
     0,
     1,
     1,
-46,
+#if VERSION <= VERSION_DEMO_US
+    46,
     0,
     1,
     70,
     4,
-50,
-    9999,
-    32,
-    32,
-    6,
-    32,
-    0.0f,
-    16.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    16.0f,
-    0.0f,
-    -15.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    16.0f,
-    0.0f,
-    0.0f,
-    16.0f,
-    20.8f,
-    0.0f,
-    0.0f,
-    16.0f,
-    0.0f,
-    32.0f,
-    32.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_BASA_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kCeiling | kUnitLeader | kUnitFaceCamera,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
-};
 #else
-BattleUnitKind unit_basabasa_green = {
-    UNIT_SWAMPIRE,
-    "btl_un_basabasa_green",
-    20,
-    0,
-    1,
-    1,
     35,
     2,
     2,
     70,
     2,
+#endif
     50,
     9999,
     32,
@@ -177,7 +118,6 @@ BattleUnitKind unit_basabasa_green = {
     init_event,
     data_table,
 };
-#endif
 
 /**
  * Defence of Swampire per element (normal, fire, ice, explosion, electric), subtracted from each hit:
@@ -189,46 +129,16 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Attack data of Swampire's basabasa drain attack biribiri counterd attack: no damage, 100% accuracy. */
-#if VERSION <= VERSION_DEMO_US
-static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100,
-0, 0, 0,
-1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    NULL, // hpDamageFn
-    {0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, 0, 0, // acHelpMsg..counterResistFlags
-    TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
+#if VERSION <= VERSION_DEMO_US
+    0, 0, 0,
+#else
     0, 0, 2, // baseFpCost..superguardsAllowed
+#endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
     1, // reserved_19
@@ -255,7 +165,6 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Pose table of Swampire: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to

@@ -47,9 +47,7 @@ typedef struct SysChar {
     s32 state;
     s32 texid;
 } SysChar;
-#if VERSION >= VERSION_US
 // US: room for 64 letters, plus the chapter subtitle rendered once into a texture
-#endif
 typedef struct SysWork {
     s32 state;
     FileEntry* file;
@@ -65,11 +63,10 @@ typedef struct SysWork {
     smartEntry* msgTex; // 0x724
     u16 msgTexW;        // 0x728
     u16 msgTexH;        // 0x72A
-} SysWork;
 #else
     SysChar chars[8];
-} SysWork;
 #endif
+} SysWork;
 SysWork* g_wp;
 
 USER_FUNC(bg);
@@ -79,8 +76,6 @@ USER_FUNC(init);
 USER_FUNC(sys_01_start_end_wait);
 #endif
 USER_FUNC(start);
-#if VERSION >= VERSION_US
-#endif
 void sys_01_release(void);
 static void _unresolved(void);
 static void _epilog(void);
@@ -103,8 +98,8 @@ s8 stage6_jp_tbl[6];
 s8 stage7_jp_tbl[6];
 s8 stage8_jp_tbl[6];
 s8* texid_jp_tbl[9];
-#if VERSION >= VERSION_US
 s8 prologue_us_tbl[9];
+#if VERSION >= VERSION_US
 s8 stage1_us_tbl[10];
 s8 stage2_us_tbl[10];
 s8 stage3_us_tbl[10];
@@ -157,7 +152,6 @@ s8* texid_lang6_tbl[9];
 s8** lang_tbl[6];
 const char* lang_prefix[7];
 #else
-s8 prologue_us_tbl[9];
 s8 stage1_us_tbl[7];
 s8 stage2_us_tbl[7];
 s8 stage3_us_tbl[7];

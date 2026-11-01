@@ -19,6 +19,7 @@
 #include <math.h>
 
 /** Slope of a floor normal: its angle from vertical in degrees. */
+/** Slope of a floor normal: its angle from vertical in degrees. */
 #if VERSION <= VERSION_DEMO_US
 #include "mario/mario_balloon.h"
 #include "mario/mario_hit.h"
@@ -28,15 +29,10 @@ static inline void kpaWallSlide(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz
     *mz = 0.5f * (vz - dot * nz);
 }
 /** Slope of a floor normal: its angle from vertical in degrees. */
-static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
-    return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
-}
-#else
-/** Slope of a floor normal: its angle from vertical in degrees. */
-static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
-    return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
-}
 #endif
+static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
+    return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
+}
 
 /** Tilts Bowser's groundRot to match the floor normal (x, y, z) and returns the floor's slope in degrees. */
 static inline f32 kpa_nrmSet(MarioWork* mario, f32 x, f32 y, f32 z) {

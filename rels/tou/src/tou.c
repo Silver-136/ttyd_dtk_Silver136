@@ -704,8 +704,8 @@ static USER_FUNC(evt_tou_get_rule_info) {
     s32 i;
     s32 rank;
 
-#if VERSION <= VERSION_DEMO_US
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
+#if VERSION <= VERSION_DEMO_US
         for (i = 0; i < rank_wp->num; i++) {
             if (rank_wp->entries[i].flags & 4) {
                 break;
@@ -713,7 +713,6 @@ static USER_FUNC(evt_tou_get_rule_info) {
         }
         rank = i;
 #else
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         GET_RANK(rank, i);
 #endif
         if (rank > 10) {
@@ -759,8 +758,8 @@ USER_FUNC(evt_tou_get_rule_msg2) {
     s32 i;
     s32 rank;
 
-#if VERSION <= VERSION_DEMO_US
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
+#if VERSION <= VERSION_DEMO_US
         for (i = 0; i < rank_wp->num; i++) {
             if (rank_wp->entries[i].flags & 4) {
                 break;
@@ -768,7 +767,6 @@ USER_FUNC(evt_tou_get_rule_msg2) {
         }
         rank = i;
 #else
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         GET_RANK(rank, i);
 #endif
         if (rank > 10) {
@@ -3778,10 +3776,8 @@ EVT_BEGIN(evt_eat_cake)
         DELETE_EVENT(LW(0))
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_TOU_CAKE_ON_TABLE, 0)
-#else
-        SET_VALUE(GSWF_TOU_CAKE_ON_TABLE, 0)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_party_flg_onoff, 0, 16777216, 0)
 #endif
         CALL(evt_exit_case_evt)

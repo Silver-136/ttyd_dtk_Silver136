@@ -844,19 +844,15 @@ EVT_BEGIN(dokuroiwa_touch)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg5_muj_93_01"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_18_02_FLAVIOS_FAVOR_2)
-#else
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_18_02_FLAVIOS_FAVOR_2)
+#if VERSION > VERSION_DEMO_US
             CALL(evt_party_stop, 0)
 #endif
             CALL(evt_msg_print_party, STRING("stg5_muj_93_01_01"))
-#if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
-#else
+#if VERSION > VERSION_DEMO_US
             CALL(evt_party_run, 0)
-            SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
 #endif
+            SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
         END_IF
         CALL(evt_mario_key_onoff, 1)
         ELSE

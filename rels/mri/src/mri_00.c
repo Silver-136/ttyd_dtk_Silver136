@@ -1333,10 +1333,8 @@ EVT_BEGIN(mario_see_you)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_party_run, 0)

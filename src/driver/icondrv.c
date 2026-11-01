@@ -96,11 +96,10 @@ static inline IconBinData* iconGetBinData(u16 iconId) {
             break;
     }
     return (IconBinData*)((u8*)bin + bin->offset[(u16)iconId]);
-}
 #else
     return (IconBinData*)((u8*)bin + bin->offset[iconId]);
-}
 #endif
+}
 
 // local prototypes
 void iconDisp(CameraId camId, void* param);

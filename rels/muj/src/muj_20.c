@@ -1131,14 +1131,12 @@ EVT_BEGIN(onryo_event)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_00_LOGBOOK)
     LABEL(100)
     CALL(evt_mario_cont_onoff, 1)
-#if VERSION >= VERSION_US
-#else
+#if VERSION < VERSION_US
     CALL(evt_party_cont_onoff, 0, 0)
 #endif
     CALL(evt_mario_set_pos, 5, 90, -100)
     CALL(evt_mario_set_dir, 90, 0, 0)
-#if VERSION >= VERSION_US
-#else
+#if VERSION < VERSION_US
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_a1"), MAP_OBJ_FLAG_CLIP)
@@ -2462,10 +2460,6 @@ EVT_BEGIN(muj_20_init_evt)
     RETURN
 EVT_END()
 
-#if VERSION >= VERSION_US
-
-
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(logo) {

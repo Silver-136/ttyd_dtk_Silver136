@@ -555,8 +555,8 @@ static EVT_BEGIN(mobj_box00)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(tik_01_init_evt)
+#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_TIK_01_ENTERED, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     ELSE
@@ -616,10 +616,7 @@ EVT_BEGIN(tik_01_init_evt)
     ELSE
         CALL(evt_hitobj_onoff, STRING("a_rec"), 1, 0)
     END_IF
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(tik_01_init_evt)
     SET_VALUE(GSWF_TIK_01_VISITED, 1)
     IF_INT_EQUAL(GSWF_TIK_01_ENTERED, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
@@ -686,7 +683,7 @@ EVT_BEGIN(tik_01_init_evt)
     ELSE
         CALL(evt_hitobj_onoff, STRING("a_rec"), 1, 0)
     END_IF
+#endif
     RETURN
 EVT_END()
-#endif
 

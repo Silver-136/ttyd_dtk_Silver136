@@ -556,12 +556,10 @@ EVT_BEGIN(trap_event)
     CALL(evt_npc_get_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_puni_set_mode, 1, PUNI_MODE_TRAP)
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
 #endif
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
     SET_VALUE(GF(1), 0)
     CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -800,12 +798,10 @@ EVT_BEGIN(switch_event)
     CALL(evt_party_stop, 0)
 #endif
     CALL(evt_msg_print_party, STRING("stg2_mri_e18_00_10"))
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_party_run, 0)
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
 #endif
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

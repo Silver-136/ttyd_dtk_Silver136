@@ -294,10 +294,8 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     WAIT_MS(500)
     WAIT_MS(100)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_001"), 0, STRING("トゲノコＡ"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG1_19_01_BOWSER_BOWSER_CASTLE)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG1_19_01_BOWSER_BOWSER_CASTLE)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)

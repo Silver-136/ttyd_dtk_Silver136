@@ -479,14 +479,10 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
 #if VERSION >= VERSION_US
                 CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_STOLEN_ITEM)
-                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-            END_IF
-            ELSE
-#else
+#endif
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF
         ELSE
-#endif
             // No Life Shroom: the enemy's own KO event 49, else the standard spin-and-smoke defeat.
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)

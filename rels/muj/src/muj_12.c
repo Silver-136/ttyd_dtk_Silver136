@@ -569,11 +569,10 @@ static EVT_BEGIN(korutesu_event)
     SET_VALUE(LW(0), 5)
     SET_VALUE(LW(1), LW(10))
     // The story advances and the Crystal Star is awarded.
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
+#if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_sub_starstone)
 #else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL_CHILD(PTR(evt_sub_starstone))

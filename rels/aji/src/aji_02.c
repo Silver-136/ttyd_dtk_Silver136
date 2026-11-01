@@ -278,12 +278,10 @@ EVT_END()
 
 EVT_BEGIN(aji_02_init_evt)
     CALL(evt_bero_get_entername, LW(0))
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 1)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
 #endif
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
         ELSE

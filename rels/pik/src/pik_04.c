@@ -288,14 +288,11 @@ const char* hotel_npc[] = {
  * dips the BGM and ambience to 50 and low-pass filters the ambience.
  */
 static EVT_BEGIN(door_2_open)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
+#endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()

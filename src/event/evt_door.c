@@ -866,8 +866,8 @@ EVT_BEGIN(evt_door_open)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(evt_door_open_bom_01)
+#if VERSION <= VERSION_DEMO_US
     // Run the door's open script, then set up the rooms as evt_door_open does, without moving the camera.
     CALL(evt_door_param, LW(0), 7, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -986,12 +986,7 @@ EVT_BEGIN(evt_door_open_bom_01)
         END_INLINE_EVENT
     END_IF
     // The indoor sound takes over.
-    WAIT_MS(500)
-    CALL(snd_door_in)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(evt_door_open_bom_01)
     CALL(evt_door_param, LW(0), 7, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         SPAWN_EVENT(LW(1))
@@ -1107,11 +1102,11 @@ EVT_BEGIN(evt_door_open_bom_01)
             END_IF
         END_INLINE_EVENT
     END_IF
+#endif
     WAIT_MS(500)
     CALL(snd_door_in)
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(evt_door_open_roll)
     CALL(evt_mario_key_onoff, 0)

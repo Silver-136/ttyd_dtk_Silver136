@@ -363,10 +363,8 @@ void seq_logoMain(SequenceWork* work) {
  * then the dmo_00 opening (skipped with A or Start to the title), or the kiosk menu on kiosk builds.
  */
 void seq_logoMain(SequenceWork* work) {
-#if VERSION >= VERSION_US
     static OSTime time;
-#else
-    static OSTime time;
+#if VERSION < VERSION_US
     u32 size;
     u8* decode;
     FileEntry* first;
@@ -569,8 +567,6 @@ void seq_logoMain(SequenceWork* work) {
         case 18:
             VISetBlack(FALSE);
             VIWaitForRetrace();
-            if (!(gp->flags & GW_FLAG_E3)) {
-                if (!wp->skipStory) {
 #else
         case 10:
             VISetBlack(FALSE);
@@ -595,17 +591,13 @@ void seq_logoMain(SequenceWork* work) {
                 arcEntry(0, decode, size);
                 fileFree(first);
             }
+#endif
             if (!(gp->flags & GW_FLAG_E3)) {
                 if (!wp->skipStory) { //play story demo
-#endif
                     seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
                     return;
                 }
-#if VERSION >= VERSION_US
                 else {
-#else
-                else { //continue to title screen
-#endif
                     fadeEntry(FADE_OUT_WHITE, 500, (GXColor){0, 0, 0, 0xFF});
                     work->state++;
                     return;

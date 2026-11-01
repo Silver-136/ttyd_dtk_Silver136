@@ -902,9 +902,9 @@ EVT_BEGIN(evt_toile_door2)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(evt_champion_win)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_set_pos, -90, 0, -95)
     CALL(evt_party_set_pos, 0, -120, 0, -105)
     CALL(evt_npc_set_position, STRING("ガンス"), -45, 0, -95)
@@ -956,22 +956,7 @@ EVT_BEGIN(evt_champion_win)
             BREAK_LOOP
         END_IF
     END_LOOP
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("キノシコワ"), -5, -200, 0, FLOAT(80.0f), 1)
-        CALL(evt_npc_set_position, STRING("キノシコワ"), 0, -1000, 0)
-    END_INLINE_EVENT
-    WAIT_MS(300)
-    CALL(evt_mario_mov_pos2, 0, -130, FLOAT(60.0f))
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_mov_pos2, -5, -200, FLOAT(60.0f))
-    END_INLINE_EVENT
-    SET_VALUE(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
-    CALL(evt_bero_mapchange, STRING("tou_04"), 0)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(evt_champion_win)
-    CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_US
     CALL(evt_npc_check, STRING("ハンマーブロス"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1034,6 +1019,7 @@ EVT_BEGIN(evt_champion_win)
             BREAK_LOOP
         END_IF
     END_LOOP
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("キノシコワ"), -5, -200, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_set_position, STRING("キノシコワ"), 0, -1000, 0)
@@ -1047,7 +1033,6 @@ EVT_BEGIN(evt_champion_win)
     CALL(evt_bero_mapchange, STRING("tou_04"), 0)
     RETURN
 EVT_END()
-#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e08, JP tou .text+0x6D44. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
@@ -1306,8 +1291,8 @@ EVT_BEGIN(evt_match_after_stop_npcs)
 EVT_END()
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(tou_08_init_evt)
+#if VERSION <= VERSION_DEMO_US
     // The story is moved up to match Mario's rank, then the debug story-skip flags are applied.
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
@@ -1417,10 +1402,7 @@ SPAWN_EVENT(evt_tou_match_after_default)
         CALL_CHILD(epilogue_npc_entry)
         SPAWN_EVENT(epilogue_evt)
     END_IF
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(tou_08_init_evt)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_LESS_OR_EQUAL(3)
@@ -1529,9 +1511,9 @@ EVT_BEGIN(tou_08_init_evt)
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))
     END_IF
+#endif
     RETURN
 EVT_END()
-#endif
 
 static USER_FUNC(get_yoshi_color) {
     EvtWord* args = event->args;

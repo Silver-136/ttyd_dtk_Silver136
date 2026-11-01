@@ -2258,7 +2258,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
         }
     }
 #if VERSION <= VERSION_DEMO_US
-        {
+    {
 #endif
 
 #if VERSION <= VERSION_DEMO_US

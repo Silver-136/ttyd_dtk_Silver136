@@ -82,56 +82,37 @@ void* fbatNpcTalkCheck(void);
  * Mario's motions by motion id (standing, walking, dashing, jumping, ... and Bowser's): the function that runs
  * each frame, an unused slot and the cleanup run when Mario leaves the motion; marioMotion calls through it.
  */
+MarioMotTblEntry marioMotTbl[] = {
+    {mot_stay, NULL, mot_stay_post},
+    {mot_walk, NULL, NULL},
+    {mot_dash, NULL, NULL},
+    {mot_jump, NULL, NULL},
 #if VERSION <= VERSION_DEMO_US
-MarioMotTblEntry marioMotTbl[] = {
-    {mot_stay, NULL, mot_stay_post},
-    {mot_walk, NULL, NULL},
-    {mot_dash, NULL, NULL},
-    {mot_jump, NULL, NULL},
-{mot_jumpNpc, NULL, NULL},
-{mot_jumpSw, NULL, NULL},
-    {mot_jumpStand, NULL, NULL},
-    {mot_jump, NULL, NULL},
-    {mot_jump, NULL, NULL},
-    {mot_jumpSmall, NULL, NULL},
-    {mot_fall, NULL, mot_fall_post},
-    {mot_fall, NULL, NULL},
-    {mot_upstairs, NULL, NULL},
-    {mot_land, NULL, NULL},
-    {mot_talk, NULL, NULL},
-    {mot_getItem, NULL, NULL},
-    {mot_hip, NULL, mot_hip_post},
-    {mot_hip, NULL, mot_hip_post},
-    {mot_hammer, NULL, NULL},
-    {mot_hammer2, NULL, mot_ham2_post},
-    {mot_jabara, NULL, mot_jabara_post},
-    {mot_slit, NULL, mot_slit_post},
-    {mot_roll, NULL, mot_roll_post},
-    {mot_kaze, NULL, NULL},
-    {mot_plane, NULL, mot_plane_post},
-    {mot_ship, NULL, mot_ship_post},
-    {mot_yoshi, NULL, mot_yoshi_post},
-{mot_cloud, NULL, mot_cloud_post},
-{mot_vivian, NULL, mot_vivian_post},
-    {mot_dokan, NULL, NULL},
-    {mot_grasp, NULL, NULL},
-    {mot_damage, NULL, NULL},
-    {mot_damageToge, NULL, NULL},
-    {mot_bottomless, NULL, NULL},
-    {mot_forceReset, NULL, NULL},
-    {mot_shadow, NULL, NULL},
-    {mot_partyUse, NULL, NULL},
-    {kpa_swim, NULL, NULL},
-    {kpa_powup, NULL, NULL},
-    {kpa_powdown, NULL, NULL},
-    {mot_dummy, NULL, NULL},
-};
+    {mot_jumpNpc, NULL, NULL},
+    {mot_jumpSw, NULL, NULL},
+        {mot_jumpStand, NULL, NULL},
+        {mot_jump, NULL, NULL},
+        {mot_jump, NULL, NULL},
+        {mot_jumpSmall, NULL, NULL},
+        {mot_fall, NULL, mot_fall_post},
+        {mot_fall, NULL, NULL},
+        {mot_upstairs, NULL, NULL},
+        {mot_land, NULL, NULL},
+        {mot_talk, NULL, NULL},
+        {mot_getItem, NULL, NULL},
+        {mot_hip, NULL, mot_hip_post},
+        {mot_hip, NULL, mot_hip_post},
+        {mot_hammer, NULL, NULL},
+        {mot_hammer2, NULL, mot_ham2_post},
+        {mot_jabara, NULL, mot_jabara_post},
+        {mot_slit, NULL, mot_slit_post},
+        {mot_roll, NULL, mot_roll_post},
+        {mot_kaze, NULL, NULL},
+        {mot_plane, NULL, mot_plane_post},
+        {mot_ship, NULL, mot_ship_post},
+        {mot_yoshi, NULL, mot_yoshi_post},
+    {mot_cloud, NULL, mot_cloud_post},
 #else
-MarioMotTblEntry marioMotTbl[] = {
-    {mot_stay, NULL, mot_stay_post},
-    {mot_walk, NULL, NULL},
-    {mot_dash, NULL, NULL},
-    {mot_jump, NULL, NULL},
 #if VERSION >= VERSION_US
     {mot_jumpNpc, NULL, mot_jumpNpc_post},
 #else
@@ -160,6 +141,7 @@ MarioMotTblEntry marioMotTbl[] = {
     {mot_ship, NULL, mot_ship_post},
     {mot_yoshi, NULL, mot_yoshi_post},
     {mot_cloud, NULL, cloudResetAt},
+#endif
     {mot_vivian, NULL, mot_vivian_post},
     {mot_dokan, NULL, NULL},
     {mot_grasp, NULL, NULL},
@@ -174,7 +156,6 @@ MarioMotTblEntry marioMotTbl[] = {
     {kpa_powdown, NULL, NULL},
     {mot_dummy, NULL, NULL},
 };
-#endif
 
 /**
  * Mario's normal jump physics: rising speed, acceleration, jerk and snap; the same for falling; an unread height

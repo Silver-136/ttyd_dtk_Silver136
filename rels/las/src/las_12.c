@@ -135,12 +135,10 @@ EVT_BEGIN(kabenuke_check_evt)
     WAIT_MS(2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
-#else
-    SET_VALUE(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
 #endif
     RETURN
 EVT_END()

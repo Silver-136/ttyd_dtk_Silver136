@@ -1259,16 +1259,14 @@ EVT_BEGIN(powerupya_table_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF_GOR_MERLON_FIRST_TALK_DONE, 0)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_win_party_lankup_chk, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("powerup_16"), 0, STRING("me"))
         GOTO(0)
     END_IF
-    IF_INT_EQUAL(GSWF_GOR_MERLON_FIRST_TALK_DONE, 0)
 #endif
+    IF_INT_EQUAL(GSWF_GOR_MERLON_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("powerup_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_MERLON_FIRST_TALK_DONE, 1)
         SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
@@ -3509,14 +3507,11 @@ static const char* door_data_01_npc[] = {
 };
 
 static EVT_BEGIN(evt_door_01_open)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
+#if VERSION > VERSION_DEMO_US
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
+#endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     CALL_CHILD(PTR(mapball_init))
     CALL(evt_item_delete_check, STRING("item_star1"), LW(0))
@@ -3642,12 +3637,10 @@ static const char* door_data_02_npc[] = {
  * when monosiri_check gives 0.
  */
 EVT_BEGIN(evt_door_02_open)
-#if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW_STORY_PROGRESS)
-#else
+#if VERSION > VERSION_DEMO_US
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
-    SWITCH(GSW_STORY_PROGRESS)
 #endif
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_OR_EQUAL(STG0_15_THE_PEDESTAL)
         CASE_OR_EQUAL(STG1_30_ZESS_T)
         CASE_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
@@ -3698,12 +3691,10 @@ EVT_END()
  * when those steps are pending.
  */
 EVT_BEGIN(evt_door_02_close)
-#if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW_STORY_PROGRESS)
-#else
+#if VERSION > VERSION_DEMO_US
     SPAWN_EVENT(PTR(gor_02_hitobj_on))
-    SWITCH(GSW_STORY_PROGRESS)
 #endif
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_OR_EQUAL(STG6_70_THOUSAND_YEAR_DOOR)
         CASE_OR_EQUAL(STG6_71_FRANKLYS_HOUSE_STG_6)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
@@ -3951,14 +3942,11 @@ EVT_END()
  * The JP and later releases also turn off the outside hit objects.
  */
 static EVT_BEGIN(evt_door_03_open)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
+#if VERSION > VERSION_DEMO_US
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
+#endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
@@ -4429,14 +4417,11 @@ const char* door_data_05_npc_01[] = {
  * and ambience with a low- pass filter.
  */
 EVT_BEGIN(evt_door_05_open)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
+#if VERSION > VERSION_DEMO_US
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
+#endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
@@ -4603,14 +4588,11 @@ const char* door_data_06_npc_01[] = {
  * and ambience with a low- pass filter.
  */
 EVT_BEGIN(evt_door_06_open)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
+#if VERSION > VERSION_DEMO_US
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
+#endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
@@ -7272,7 +7254,6 @@ EVT_BEGIN(epigraphy_map_after_stage5)
 EVT_END()
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(epigraphy_map_after_stage6)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -7280,6 +7261,7 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
+#if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(Mario_Party_position)
     CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -7326,16 +7308,7 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_71_FRANKLYS_HOUSE_STG_6)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(epigraphy_map_after_stage6)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_party_cont_onoff, 0, 1)
     SPAWN_EVENT(PTR(Mario_Party_position))
     CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -7391,9 +7364,9 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #endif
     CALL(evt_snd_env_lpf, 0, 800)
+#endif
     RETURN
 EVT_END()
-#endif
 
 /**
  * Cutscene when Frankly finishes the Chapter 6 research after three minutes of play time:

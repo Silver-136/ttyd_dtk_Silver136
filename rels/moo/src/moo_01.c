@@ -23,8 +23,7 @@
 
 
 static BeroEntry bero_entry_data[3];
-#if VERSION >= VERSION_US
-#else
+#if VERSION < VERSION_US
 static EvtWord rock_main[79];
 #endif
 #if VERSION >= VERSION_US

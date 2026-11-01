@@ -341,8 +341,8 @@ void cardMain(void) {
  * plus the 50/60 Hz choice on PAL) and runtime pointers. Called by the file select's load.
  */
 void cardCopy2Main(s32 slot) {
-#if VERSION >= VERSION_US
     void* savedMapAlloc;
+#if VERSION >= VERSION_US
     s32 savedSoundMode;
     CardSaveSlot* save;
     void* savedFbatData;
@@ -351,7 +351,6 @@ void cardCopy2Main(s32 slot) {
     u32 progressive;
     s32 language;
 #else
-    void* savedMapAlloc;
     u32 progressive;
     CardSaveSlot* save;
     void* savedFbatData;

@@ -807,9 +807,9 @@ static EVT_BEGIN(evt_memo2)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(aji_09_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
+#if VERSION <= VERSION_DEMO_US
     // The exits are set up and the changing-room clothes and hit areas start hidden.
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
@@ -877,11 +877,7 @@ SPAWN_EVENT(evt_emergency)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(aji_09_init_evt)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_hitobj_onoff, STRING("A_R_fuku_g"), 1, 0)
@@ -956,9 +952,9 @@ EVT_BEGIN(aji_09_init_evt)
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     RETURN
 EVT_END()
-#endif
 
 
 USER_FUNC(dot_mario) {

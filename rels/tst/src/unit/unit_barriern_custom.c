@@ -227,46 +227,6 @@ static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 100, 0, 100
 #endif
 
 /** Attack data of X-Yux's wakka attack: base damage 3, 100% accuracy; may inflict stop 100% (80% in the final versions). */
-#if VERSION <= VERSION_DEMO_US
-static BattleWeapon weapon_wakka_attack = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, // baseFpCost..baseSpCost
-    2, // superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
-    0, 0,
-100,
-3, // stopTime
-    0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
-    0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
-    0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeTime..defChangeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // allergicChance..slowTime
-    0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
-    0, 0, // fpRegenTime..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 static BattleWeapon weapon_wakka_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -293,7 +253,11 @@ static BattleWeapon weapon_wakka_attack = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
+#if VERSION <= VERSION_DEMO_US
+    100,
+#else
     80, // stopChance
+#endif
     3, // stopTime
     0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
     0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
@@ -305,49 +269,8 @@ static BattleWeapon weapon_wakka_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /** Attack data of X-Yux's wawawa attack: base damage 2, 100% accuracy; may inflict stop 100% (80% in the final versions). */
-#if VERSION <= VERSION_DEMO_US
-static BattleWeapon weapon_wawawa_attack = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, // baseFpCost..baseSpCost
-    2, // superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    1, // bingoSlotChance
-    1, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0,
-100,
-3, // stopTime
-    0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
-    0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
-    0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeTime..defChangeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // allergicChance..slowTime
-    0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
-    0, 0, // fpRegenTime..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 static BattleWeapon weapon_wawawa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -374,7 +297,11 @@ static BattleWeapon weapon_wawawa_attack = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
+#if VERSION <= VERSION_DEMO_US
+    100,
+#else
     80, // stopChance
+#endif
     3, // stopTime
     0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
     0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
@@ -386,7 +313,6 @@ static BattleWeapon weapon_wawawa_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Spawn setup for a unit that the X-Yux script adds to the battle mid-fight:

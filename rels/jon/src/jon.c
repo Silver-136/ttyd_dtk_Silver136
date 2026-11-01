@@ -177,8 +177,8 @@ extern EvtWord zonbaba_first_event[];
 EvtWord zonbaba_first_event[677];
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(jon_init_evt)
+#if VERSION <= VERSION_DEMO_US
     // When map events are skipped (a debug warp), the floor number is derived from the name of the map.
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
@@ -288,19 +288,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
     END_IF
-    IF_INT_NOT_EQUAL(GSW_PIT_FLOOR, 99)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_100DN1"))
-        CALL(evt_snd_envoff, PSND_FADEOUT)
-        CALL(evt_snd_set_rev_mode, 1)
-    ELSE
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_DAN1"))
-        CALL(evt_snd_set_rev_mode, 2)
-    END_IF
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(jon_init_evt)
     // When map events are skipped (a debug warp), the floor number is derived from the name of the map.
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
@@ -436,6 +424,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
     END_IF
+#endif
     IF_INT_NOT_EQUAL(GSW_PIT_FLOOR, 99)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_100DN1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -447,7 +436,6 @@ EVT_BEGIN(jon_init_evt)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 /**
  * Enemy number for each of the 100 floors of the Pit of 100 Trials: every group of twenty floors cycles through five

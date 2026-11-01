@@ -39,8 +39,6 @@ static USER_FUNC(evt_yuuranking_main_func);
 USER_FUNC(yuuranking_get_monte);
 static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max);
 static void evt_yuuranking_disp_func(CameraId camera, void* param);
-#if VERSION >= VERSION_US
-#endif
 static s32 fontlenpitch(const char* str, s32 pitch);
 
 static EvtWord main_evt[4];

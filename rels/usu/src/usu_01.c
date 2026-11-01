@@ -1834,8 +1834,8 @@ EVT_BEGIN(usu01_check_vivian)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(usu01_crowFG_talk_event)
+#if VERSION <= VERSION_DEMO_US
     // No balloon is showing yet; GW(0) keeps the watcher quiet once the crows have talked.
     SET_VALUE(LW(15), 0)
     LABEL(0)
@@ -1956,12 +1956,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
             SET_VALUE(GW(0), 1)
         END_IF
     END_IF
-    WAIT_FRAMES(1)
-    GOTO(0)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(usu01_crowFG_talk_event)
     // No balloon is showing yet; GW(0) keeps the watcher quiet once the crows have talked.
     SET_VALUE(LW(15), 0)
     LABEL(0)
@@ -2104,11 +2099,11 @@ EVT_BEGIN(usu01_crowFG_talk_event)
             SET_VALUE(GW(0), 1)
         END_IF
     END_IF
+#endif
     WAIT_FRAMES(1)
     GOTO(0)
     RETURN
 EVT_END()
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 /**

@@ -377,10 +377,8 @@ EVT_BEGIN(oidasare_event)
     WAIT_MS(1000)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG5_34_KICKED_OFF)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_34_KICKED_OFF)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)

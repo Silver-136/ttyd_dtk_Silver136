@@ -629,13 +629,11 @@ EVT_BEGIN(gonbaba_event)
     END_INLINE_EVENT
     WAIT_MS(2000)
     // Hooktail is defeated, father and son are reunited: the story advances and the Diamond Star is awarded.
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #else
-    SET_VALUE(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
-    SET_VALUE(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
 #endif
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))

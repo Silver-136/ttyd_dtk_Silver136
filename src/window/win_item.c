@@ -1562,8 +1562,8 @@ void itemUseDisp2(WinMgrEntry* entry) {
     WindowWork* wp = winGetPtr();
     GXColor color = {0, 0, 0, 255};
     if (!winMgrAction(wp->useWin[1])) {
-#if VERSION >= VERSION_US
         const char* msg = msgSearch("msg_window_select_5");
+#if VERSION >= VERSION_US
         u16 lines;
         f32 w = (f32)FontGetMessageWidthLine(msg, &lines);
         winMgrSetSize(wp->useWin[1], entry->x, entry->y, entry->width, entry->description->height + lines * 22);
@@ -1573,7 +1573,6 @@ void itemUseDisp2(WinMgrEntry* entry) {
         }
         winFontSetWidth((Vec){(f32)entry->x + ((f32)entry->width - w) / 2.0f, 134.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, color, entry->width - 20, msg);
 #else
-        const char* msg = msgSearch("msg_window_select_5");
         f32 w = (f32)FontGetMessageWidth(msg);
         winFontInit();
         winFontSet((Vec){(f32)entry->x + ((f32)entry->width - w) / 2.0f, 134.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, color, msg);

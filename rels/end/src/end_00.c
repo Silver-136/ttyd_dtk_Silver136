@@ -143,9 +143,7 @@ EvtWord end_credit_npc_parade[44];
 #if VERSION > VERSION_DEMO_US
 EvtWord end_image_blend_loop[123];
 #endif
-#if VERSION >= VERSION_US
 // US: "THE END" texture per language (indexed by gp->language)
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord end_image_main_evt[];
 #else

@@ -353,46 +353,43 @@ EVT_END()
  * Yoshi's Ground Pound (btl_wn_pys_normal), his basic attack: 1 damage per stomp to a single enemy,
  * no FP cost, a jump-like move that cannot hit the ceiling and is repeated by tapping R.
  */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon partyWeapon_YoshiNormalAttack = {
-    "btl_wn_pys_normal",
-335,
-{0}, // pad_06
-    0, // itemId
-    "msg_pys_hip_drop", // description
-    100, // baseAccuracy
-    0, 0, 0, // baseFpCost..superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    100, // bingoSlotChance
-    50, // reserved_1B
-    weaponGetPowerFromPartyAttackLv, // hpDamageFn
-    {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_NO_CEILING | TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    "msg_ac_hip_drop", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    partyYoshiAttack_NormalAttack,
-{0, 10, 10, 100, 10, 5, 5, 5, 5, 5, 0, 0},
-};
-#else
 BattleWeapon partyWeapon_YoshiNormalAttack = {
     "btl_wn_pys_normal", // name
+#if VERSION <= VERSION_DEMO_US
+    335,
+    {0}, // pad_06
+        0, // itemId
+        "msg_pys_hip_drop", // description
+        100, // baseAccuracy
+        0, 0, 0, // baseFpCost..superguardsAllowed
+        1.0f, // reserved_14
+        1, // stylishCommandMultiplier
+        1, // reserved_19
+        100, // bingoSlotChance
+        50, // reserved_1B
+        weaponGetPowerFromPartyAttackLv, // hpDamageFn
+        {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_SINGLE, // targetClassFlags
+        TARGET_PROP_NO_CEILING | TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, 0, // element..damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        "msg_ac_hip_drop", // acHelpMsg
+        SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
+        COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
+        TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+        0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+        0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+        0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+        0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+        0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+        0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+        {0}, // pad_AE
+        partyYoshiAttack_NormalAttack,
+    {0, 10, 10, 100, 10, 5, 5, 5, 5, 5, 0, 0},
+#else
     343, // icon (tst: one below the US id)
     {0}, // pad_06
     0, // itemId
@@ -426,56 +423,53 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     {0}, // pad_AE
     partyYoshiAttack_NormalAttack, // attackEvtScript
     {0, 10, 10, 100, 10, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
-};
 #endif
+};
 
 /**
  * Yoshi's Gulp as listed in his move menu (btl_wn_pys_lv1, 4 FP):
  * the swallowed enemy is spat at the front-most enemy, with damage values from the table 2/4/3/5/3/6;
  * it ignores Defense and cannot be guarded.
  */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
-    "btl_wn_pys_lv1",
-336,
-{0}, // pad_06
-    0, // itemId
-    "msg_pys_nomikomi", // description
-    100, // baseAccuracy
-    4, // baseFpCost
-    0, 0, // baseSpCost..superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    5, // reserved_19
-    100, // bingoSlotChance
-    50, // reserved_1B
-    weaponGetPowerFromPartyAttackLv, // hpDamageFn
-    {2, 4, 3, 5, 3, 6, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, // element
-    6, // damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    "msg_ac_nomikomi", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    partyYoshiAttack_Nomikomi,
-{0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0},
-};
-#else
 BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     "btl_wn_pys_lv1", // name
+#if VERSION <= VERSION_DEMO_US
+    336,
+    {0}, // pad_06
+        0, // itemId
+        "msg_pys_nomikomi", // description
+        100, // baseAccuracy
+        4, // baseFpCost
+        0, 0, // baseSpCost..superguardsAllowed
+        1.0f, // reserved_14
+        1, // stylishCommandMultiplier
+        5, // reserved_19
+        100, // bingoSlotChance
+        50, // reserved_1B
+        weaponGetPowerFromPartyAttackLv, // hpDamageFn
+        {2, 4, 3, 5, 3, 6, 0, 0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+        TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, // element
+        6, // damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        "msg_ac_nomikomi", // acHelpMsg
+        SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+        COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
+        TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+        0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+        0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+        0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+        0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+        0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+        0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+        {0}, // pad_AE
+        partyYoshiAttack_Nomikomi,
+    {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0},
+#else
     344, // icon (tst: one below the US id)
     {0}, // pad_06
     0, // itemId
@@ -511,55 +505,52 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     {0}, // pad_AE
     partyYoshiAttack_Nomikomi, // attackEvtScript
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
-};
 #endif
+};
 
 /**
  * Variant of Gulp's spat-out hit used for an enemy without swallow flag 2 (damage pattern 5);
  * Yoshi is immune to every counter effect when it connects.
  */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
-    "btl_wn_pys_lv1",
-336,
-{0}, // pad_06
-    0, // itemId
-    "msg_pys_nomikomi", // description
-    100, // baseAccuracy
-    4, // baseFpCost
-    0, 0, // baseSpCost..superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    5, // reserved_19
-    100, // bingoSlotChance
-    50, // reserved_1B
-    weaponGetPowerFromPartyAttackLv, // hpDamageFn
-    {2, 4, 3, 5, 3, 6, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, // element
-    5, // damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    "msg_ac_nomikomi", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    partyYoshiAttack_Nomikomi,
-{0, 0, 0, 100, 0, 5, 5, 5, 0, 0, 0, 0},
-};
-#else
 BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     "btl_wn_pys_lv1", // name
+#if VERSION <= VERSION_DEMO_US
+    336,
+    {0}, // pad_06
+        0, // itemId
+        "msg_pys_nomikomi", // description
+        100, // baseAccuracy
+        4, // baseFpCost
+        0, 0, // baseSpCost..superguardsAllowed
+        1.0f, // reserved_14
+        1, // stylishCommandMultiplier
+        5, // reserved_19
+        100, // bingoSlotChance
+        50, // reserved_1B
+        weaponGetPowerFromPartyAttackLv, // hpDamageFn
+        {2, 4, 3, 5, 3, 6, 0, 0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+        TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, // element
+        5, // damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        "msg_ac_nomikomi", // acHelpMsg
+        SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+        COUNTER_RESIST_ALL, // counterResistFlags
+        TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+        0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+        0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+        0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+        0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+        0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+        0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+        {0}, // pad_AE
+        partyYoshiAttack_Nomikomi,
+    {0, 0, 0, 100, 0, 5, 5, 5, 0, 0, 0, 0},
+#else
     344, // icon (tst: one below the US id)
     {0}, // pad_06
     0, // itemId
@@ -595,55 +586,20 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     {0}, // pad_AE
     partyYoshiAttack_Nomikomi, // attackEvtScript
     {0, 0, 0, 100, 0, 10, 5, 5, 0, 0, 0, 0}, // stageEffectRates
-};
 #endif
+};
 
 /**
  * Gulp's no-damage hit: used when the tongue only touches an enemy that cannot be swallowed,
  * or the action command failed; it deals 0 damage.
  */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
-    "btl_wn_pys_lv1",
-336,
-{0}, // pad_06
-    0, // itemId
-    "msg_pys_nomikomi", // description
-    100, // baseAccuracy
-    2, // baseFpCost
-    0, 0, // baseSpCost..superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    5, // reserved_19
-    100, // bingoSlotChance
-    50, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    "msg_ac_nomikomi", // acHelpMsg
-    SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    partyYoshiAttack_Nomikomi, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     "btl_wn_pys_lv1", // name
+#if VERSION <= VERSION_DEMO_US
+    336,
+#else
     344, // icon (tst: one below the US id)
+#endif
     {0}, // pad_06
     0, // itemId
     "msg_pys_nomikomi", // description
@@ -678,55 +634,18 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     partyYoshiAttack_Nomikomi, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Gulp's fire breath: after eating a fire-type enemy Yoshi breathes fire on every enemy for 1 damage of the
  * fire element, ignoring Defense.
  */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
-    "btl_wn_pys_lv1",
-336,
-{0}, // pad_06
-    0, // itemId
-    "msg_pys_nomikomi", // description
-    100, // baseAccuracy
-    2, // baseFpCost
-    0, 0, // baseSpCost..superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    5, // reserved_19
-    100, // bingoSlotChance
-    50, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_FIRE, // element
-    0, // damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    "msg_ac_nomikomi", // acHelpMsg
-    SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    partyYoshiAttack_Nomikomi, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     "btl_wn_pys_lv1", // name
+#if VERSION <= VERSION_DEMO_US
+    336,
+#else
     344, // icon (tst: one below the US id)
+#endif
     {0}, // pad_06
     0, // itemId
     "msg_pys_nomikomi", // description
@@ -762,43 +681,11 @@ BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     partyYoshiAttack_Nomikomi, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Hit taken by enemies caught in Gulp's spat-out enemy (a hammer-like recoil hit across all enemies,
  * ignoring Defense); not referenced by the scripts in this file.
  */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
-    NULL, 0, // name..icon
-    {0}, // pad_06
-    0, NULL, // itemId..description
-    100, // baseAccuracy
-    0, 0, 0, 0.0f, 0, 0, 0, 0, // baseFpCost..reserved_1B
-    weaponGetPowerFromPartyAttackLv, // hpDamageFn
-    {1, 4, 2, 5, 3, 6, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE,
-TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST,
-ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    NULL, // acHelpMsg
-    SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    NULL, // attackEvtScript
-    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
-};
-#else
 BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -810,7 +697,11 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+#if VERSION <= VERSION_DEMO_US
+    TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST,
+#else
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_RECOIL | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+#endif
     ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -828,56 +719,52 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#endif
 
 /**
  * Yoshi's Mini-Egg (btl_wn_pys_lv2, 3 FP): eggs that hit every ground enemy for 1 damage each and shrink
  * them; the action command is a single press when the light comes on.
  */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
-    "btl_wn_pys_lv2",
-337,
-{0}, // pad_06
-    0, // itemId
-    "msg_pys_wonder_egg", // description
-    100, // baseAccuracy
-    3, // baseFpCost
-    0, 0, // baseSpCost..superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    5, // reserved_19
-    100, // bingoSlotChance
-    50, // reserved_1B
-    weaponGetPowerDefault, // hpDamageFn
-    {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    "msg_ac_wonder_egg", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, // burnTime..freezeTime
-    100, // sizeChangeChance
-    3, // sizeChangeTime
-    -2, // sizeChangeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeChance..allergicTime
-    0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
-    0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
-    {0}, // pad_AE
-    partyYoshiAttack_EggAttack,
-{0, 0, 0, 100, 0, 3, 3, 0, 0, 0, 0, 0},
-};
-#else
 BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     "btl_wn_pys_lv2", // name
+#if VERSION <= VERSION_DEMO_US
+    337,
+    {0}, // pad_06
+        0, // itemId
+        "msg_pys_wonder_egg", // description
+        100, // baseAccuracy
+        3, // baseFpCost
+        0, 0, // baseSpCost..superguardsAllowed
+        1.0f, // reserved_14
+        1, // stylishCommandMultiplier
+        5, // reserved_19
+        100, // bingoSlotChance
+        50, // reserved_1B
+        weaponGetPowerDefault, // hpDamageFn
+        {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+        TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, 0, // element..damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        "msg_ac_wonder_egg", // acHelpMsg
+        SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_UNGUARDABLE, // special
+        COUNTER_RESIST_ALL, // counterResistFlags
+        TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+        0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+        0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+        0, 0, 0, // burnTime..freezeTime
+        100, // sizeChangeChance
+        3, // sizeChangeTime
+        -2, // sizeChangeStrength
+        0, 0, 0, 0, 0, 0, 0, 0, // atkChangeChance..allergicTime
+        0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
+        0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
+        {0}, // pad_AE
+        partyYoshiAttack_EggAttack,
+    {0, 0, 0, 100, 0, 3, 3, 0, 0, 0, 0, 0},
+#else
     345, // icon (tst: one below the US id)
     {0}, // pad_06
     0, // itemId
@@ -915,55 +802,52 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     {0}, // pad_AE
     partyYoshiAttack_EggAttack, // attackEvtScript
     {0, 0, 0, 100, 0, 6, 3, 0, 0, 0, 0, 0}, // stageEffectRates
-};
 #endif
+};
 
 /**
  * Yoshi's Stampede (btl_wn_pys_lv3, 6 FP): the herd of Yoshis that runs across the stage;
  * 1 damage per hit to every ground enemy, repeated as the action command is mashed.
  * Its attack script is partyYoshiAttack_CallGuard.
  */
-#if VERSION <= VERSION_DEMO_US
-BattleWeapon partyWeapon_YoshiCallGuard = {
-    "btl_wn_pys_lv3",
-338,
-{0}, // pad_06
-    0, // itemId
-    "msg_pys_taigun_yoshi", // description
-    100, // baseAccuracy
-    6, // baseFpCost
-    0, 0, // baseSpCost..superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    5, // reserved_19
-    100, // bingoSlotChance
-    50, // reserved_1B
-    weaponGetPowerFromPartyAttackLv, // hpDamageFn
-    {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    "msg_ac_taigun_yoshi", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    partyYoshiAttack_CallGuard,
-{0, 20, 20, 100, 20, 20, 5, 5, 20, 5, 0, 0},
-};
-#else
 BattleWeapon partyWeapon_YoshiCallGuard = {
     "btl_wn_pys_lv3", // name
+#if VERSION <= VERSION_DEMO_US
+    338,
+    {0}, // pad_06
+        0, // itemId
+        "msg_pys_taigun_yoshi", // description
+        100, // baseAccuracy
+        6, // baseFpCost
+        0, 0, // baseSpCost..superguardsAllowed
+        1.0f, // reserved_14
+        1, // stylishCommandMultiplier
+        5, // reserved_19
+        100, // bingoSlotChance
+        50, // reserved_1B
+        weaponGetPowerFromPartyAttackLv, // hpDamageFn
+        {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
+        NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+        TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+        ELEMENT_NORMAL, 0, // element..damagePattern
+        3, // acLevel
+        2, // reserved_6F
+        "msg_ac_taigun_yoshi", // acHelpMsg
+        SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_UNGUARDABLE, // special
+        COUNTER_RESIST_ALL, // counterResistFlags
+        TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+        0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+        0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+        0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+        0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+        0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+        0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+        {0}, // pad_AE
+        partyYoshiAttack_CallGuard,
+    {0, 20, 20, 100, 20, 20, 5, 5, 20, 5, 0, 0},
+#else
     346, // icon (tst: one below the US id)
     {0}, // pad_06
     0, // itemId
@@ -998,8 +882,8 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
     {0}, // pad_AE
     partyYoshiAttack_CallGuard, // attackEvtScript
     {0, 20, 20, 100, 20, 40, 5, 5, 20, 5, 0, 0}, // stageEffectRates
-};
 #endif
+};
 
 /**
  * Footstep sounds for Ground Pound's run-up and slide, one per step of each pose;
@@ -2768,15 +2652,13 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
 EVT_END()
 #endif
 
-#if VERSION <= VERSION_DEMO_US
-u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4))) = {
-0x46, 0x49, 0x47, 0x46, 0x4A, 0x48, 0, 0,
-};
-#else
 u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4))) = { // battle tex id per sweat frame (tst ids: JP +7, JP demo: JP)
+#if VERSION <= VERSION_DEMO_US
+    0x46, 0x49, 0x47, 0x46, 0x4A, 0x48, 0, 0,
+#else
     0x4D, 0x50, 0x4E, 0x4D, 0x51, 0x4F, 0, 0,
-};
 #endif
+};
 
 /**
  * Script helper: args[0] is Yoshi.

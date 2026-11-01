@@ -184,87 +184,50 @@ static StatusVulnerability regist = {90, 80, 60, 100, 90, 100, 100, 60, 100, 90,
  * Pose table of Big Bandit: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
  * animation names, 22 entries such as N_1, Y_1, K_1, X_1.
  */
+static PoseTableEntry pose_table[] = {
+    {1, "N_1"},
+    {2, "Y_1"},
+    {9, "Y_1"},
+    {5, "K_1"},
+    {4, "X_1"},
+    {3, "X_1"},
+    {BTL_POSE_NORMAL, "S_1"},
+    {29, "Q_1"},
+    {30, "Q_1"},
+    {31, "S_1"},
+    {BTL_POSE_DAMAGE, "D_1"},
+    {50, "A_1"},
+    {51, "A_2"},
+    {POSE_TYPE_RUN, "R_1"},
+    {41, "R_1"},
+    {POSE_TYPE_WALK, "W_1"},
 #if VERSION <= VERSION_DEMO_US
-static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
-    {BTL_POSE_NORMAL, "S_1"},
-    {29, "Q_1"},
-    {30, "Q_1"},
-    {31, "S_1"},
-    {BTL_POSE_DAMAGE, "D_1"},
-    {50, "A_1"},
-    {51, "A_2"},
-    {POSE_TYPE_RUN, "R_1"},
-    {41, "R_1"},
-    {POSE_TYPE_WALK, "W_1"},
-{POSE_TYPE_DANGER, "I_1"},
+    {POSE_TYPE_DANGER, "I_1"},
     {POSE_TYPE_PERIL, "I_1"},
-{POSE_TYPE_TALK, "T_1"},
-    {POSE_TYPE_ACTION, "S_1"},
-};
 #else
-static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
-    {BTL_POSE_NORMAL, "S_1"},
-    {29, "Q_1"},
-    {30, "Q_1"},
-    {31, "S_1"},
-    {BTL_POSE_DAMAGE, "D_1"},
-    {50, "A_1"},
-    {51, "A_2"},
-    {POSE_TYPE_RUN, "R_1"},
-    {41, "R_1"},
-    {POSE_TYPE_WALK, "W_1"},
     {POSE_TYPE_DANGER, "X_1"},
     {POSE_TYPE_PERIL, "X_1"},
+#endif
     {POSE_TYPE_TALK, "T_1"},
     {POSE_TYPE_ACTION, "S_1"},
 };
-#endif
 
 /**
  * Pose table of Big Bandit while it holds a stolen item: maps its battle pose types (stay, walk, hurt,
  * dead, talk and so on) to animation names, 20 entries such as N_1, Y_1, K_1, I_1.
  */
+static PoseTableEntry pose_table_item_have[] = {
+    {1, "N_1"},
+    {2, "Y_1"},
+    {9, "Y_1"},
+    {5, "K_1"},
 #if VERSION <= VERSION_DEMO_US
-static PoseTableEntry pose_table_item_have[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-{4, "I_1"},
+    {4, "I_1"},
     {3, "I_1"},
-{BTL_POSE_NORMAL, "S_2"},
-    {29, "Q_1"},
-    {30, "Q_1"},
-    {31, "S_2"},
-    {BTL_POSE_DAMAGE, "D_1"},
-    {50, "A_1"},
-    {51, "A_2"},
-    {POSE_TYPE_RUN, "R_2"},
-    {41, "R_2"},
-    {POSE_TYPE_WALK, "W_2"},
-    {POSE_TYPE_TALK, "S_2"},
-    {POSE_TYPE_ACTION, "S_2"},
-};
 #else
-static PoseTableEntry pose_table_item_have[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
     {4, "X_1"},
     {3, "X_1"},
+#endif
     {BTL_POSE_NORMAL, "S_2"},
     {29, "Q_1"},
     {30, "Q_1"},
@@ -278,7 +241,6 @@ static PoseTableEntry pose_table_item_have[] = {
     {POSE_TYPE_TALK, "S_2"},
     {POSE_TYPE_ACTION, "S_2"},
 };
-#endif
 
 /**
  * Event table of Big Bandit: maps event tags to the scripts that react to them (no custom reactions);

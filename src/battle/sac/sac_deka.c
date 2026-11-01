@@ -1176,10 +1176,9 @@ EVT_BEGIN(marioAttackEvent_Deka)
     CALL(yuka_end)
 #endif
     CALL(btlevtcmd_SacBgsetMove, 1)
+    // Vivian stops tracking her position.
 #if VERSION <= VERSION_DEMO_US
     CALL(end_deka)
-#else
-    // Vivian stops tracking her position.
 #endif
     IF_INT_NOT_EQUAL(LW(14), -1)
         CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))

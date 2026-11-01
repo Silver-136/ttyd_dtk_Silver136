@@ -820,8 +820,8 @@ EVT_END()
  * the drawbridge and the locked station door (opened with the Station Key),
  * and starts the arrival or drawbridge scene as the story requires.
  */
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(hom_00_init_evt)
+#if VERSION <= VERSION_DEMO_US
     // NPCs, music, ambience, the save block and the recovery block.
     SET_VALUE(GF(15), 0)
     CALL(evt_npc_setup, PTR(npc_data))
@@ -897,10 +897,7 @@ EVT_BEGIN(hom_00_init_evt)
         CALL(evt_map_playanim, STRING("n_1_door_open"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     SPAWN_EVENT(evt_sub_mail_event)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(hom_00_init_evt)
     // NPCs, music, ambience, the save block and the recovery block.
     SET_VALUE(GF(15), 0)
 #if VERSION >= VERSION_US
@@ -986,9 +983,9 @@ EVT_BEGIN(hom_00_init_evt)
     END_IF
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
+#endif
     RETURN
 EVT_END()
-#endif
 
 /**
  * Texture-environment callback for the sun: every frame it fills a 64x64 indirect texture with a scrolling sine

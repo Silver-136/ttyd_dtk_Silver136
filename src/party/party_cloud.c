@@ -782,12 +782,6 @@ void cloudGetAt(Vec* position) {
         }
     }
 }
-void partyCloudStrippedPool(f32* f, s32 i) {
-    f[0] = 0.0f;
-    f[1] = 70.0f;
-    f[2] = 180.0f;
-    f[3] = (f32)i;
-}
 #else
 struct HitEntry* cloudGetHitBreathout(s32 which) {
     u32 partyId = marioGetPartyId();
@@ -1333,10 +1327,10 @@ void cloudGetAt(Vec* position) {
 
 // FAKE: stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in
 // this object's constant pool
+#endif
 void partyCloudStrippedPool(f32* f, s32 i) {
     f[0] = 0.0f;
     f[1] = 70.0f;
     f[2] = 180.0f;
     f[3] = (f32)i;
 }
-#endif

@@ -939,12 +939,11 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
 
 /** Frees the reels' card lists at battle end; empty in JP and the demos, which leak them with the battle heap. */
 void BattleBreakSlot_End(void) {
+    // JP frees nothing here: the reel card arrays stay allocated
 #if VERSION >= VERSION_US
     BattleFree(BattleBreakSlotReelGetPtr(0)->cards);
     BattleFree(BattleBreakSlotReelGetPtr(1)->cards);
     BattleFree(BattleBreakSlotReelGetPtr(2)->cards);
-#else
-    // JP frees nothing here: the reel card arrays stay allocated
 #endif
 }
 

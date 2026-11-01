@@ -619,7 +619,6 @@ void pouchHiraToKata(const char* src, char* dst) {
         strcpy(dst, src);
 #endif
     }
-}
 #else
     for (i = 0; i < len; i++) {
         c = *s;
@@ -633,8 +632,8 @@ void pouchHiraToKata(const char* src, char* dst) {
         d++;
     }
     dst[i * 2] = 0;
-}
 #endif
+}
 #endif
 
 
@@ -646,7 +645,6 @@ void pouchHiraToKata(const char* src, char* dst) {
 static inline void pouchAiueoConv(const char* src, char* dst) {
 #if VERSION == VERSION_EU
     pouchHiraToKata(src, dst);
-}
 #else
 #if VERSION >= VERSION_US
     u16* s;
@@ -678,7 +676,6 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
     } else {
         strcpy(dst, src);
     }
-}
 #else
     for (i = 0; i < len; i++) {
         c = *s;
@@ -692,9 +689,9 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
         d++;
     }
     dst[i * 2] = 0;
+#endif
+#endif
 }
-#endif
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 /** The demo compares the item names as they are, without the kana conversion. */

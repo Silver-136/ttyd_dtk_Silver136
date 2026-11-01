@@ -637,7 +637,6 @@ EVT_BEGIN(first_shopping_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 static EVT_BEGIN(sell_evt)
     CALL(sell_pouchcheck_func)
     IF_INT_EQUAL(LW(0), 0)
@@ -650,6 +649,7 @@ static EVT_BEGIN(sell_evt)
     CALL(evt_win_coin_on, 0, LW(8))
     LABEL(0)
     CALL(item_data_db_arrange)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_win_item_select, 3, LW(1))
     CALL(item_data_db_restore)
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
@@ -676,43 +676,7 @@ static EVT_BEGIN(sell_evt)
         GOTO(0)
     END_IF
     CALL(evt_pouch_remove_item, LW(1), LW(0))
-    CALL(evt_pouch_add_coin, LW(3))
-    CALL(evt_win_coin_wait, LW(8))
-    WAIT_MS(200)
-    CALL(evt_win_coin_off, LW(8))
-    CALL(sell_pouchcheck_func)
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(get_msg, LW(10), 11, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        RETURN
-    END_IF
-    CALL(get_msg, LW(10), 10, LW(14))
-    CALL(evt_msg_print_add, 0, LW(14))
-    CALL(get_msg, LW(10), 24, LW(14))
-    CALL(evt_msg_select, 0, LW(14))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(get_msg, LW(10), 22, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        RETURN
-    END_IF
-    CALL(evt_msg_continue)
-    CALL(evt_win_coin_on, 0, LW(8))
-    GOTO(0)
-    RETURN
-EVT_END()
 #else
-static EVT_BEGIN(sell_evt)
-    CALL(sell_pouchcheck_func)
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(get_msg, LW(10), 6, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        RETURN
-    END_IF
-    CALL(get_msg, LW(10), 7, LW(14))
-    CALL(evt_msg_print_add, 0, LW(14))
-    CALL(evt_win_coin_on, 0, LW(8))
-    LABEL(0)
-    CALL(item_data_db_arrange)
     CALL(evt_win_item_select, 1, 3, LW(1), LW(4))
     CALL(item_data_db_restore)
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
@@ -750,6 +714,7 @@ static EVT_BEGIN(sell_evt)
         GOTO(0)
     END_IF
     CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
+#endif
     CALL(evt_pouch_add_coin, LW(3))
     CALL(evt_win_coin_wait, LW(8))
     WAIT_MS(200)
@@ -774,7 +739,6 @@ static EVT_BEGIN(sell_evt)
     GOTO(0)
     RETURN
 EVT_END()
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(keep_evt)

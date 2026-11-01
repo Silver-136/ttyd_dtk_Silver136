@@ -865,10 +865,9 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
         return NULL;
     }
     minDist = -1.0f;
+    // FAKE: 0.5f through the spare local temp; `reach = query->targetDistance * 0.5f` changes the object
 #if VERSION <= VERSION_DEMO_US
     hitIdx = -1;
-#else
-    // FAKE: 0.5f through the spare local temp; `reach = query->targetDistance * 0.5f` changes the object
 #endif
     temp = 0.5f;
     reach = query->targetDistance * temp;

@@ -67,8 +67,6 @@
 #include "mario/mario_pouch.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
-#if VERSION >= VERSION_US
-#endif
 
 typedef struct FuwaTable {
     f32 v[40];
@@ -1706,10 +1704,8 @@ EVT_BEGIN(maffiaboss_train_ticket)
     // The Rogueport music resumes.
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+#if VERSION > VERSION_DEMO_US
     SET_VALUE(GF(5), 1)
 #endif
     RETURN
@@ -1863,8 +1859,8 @@ EVT_BEGIN(maffia1_init)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(maffia1_talk)
+#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_02"), 0, STRING("me"))
@@ -1897,10 +1893,7 @@ EVT_BEGIN(maffia1_talk)
         CASE_GREATER_OR_EQUAL(STG9_00_EPILOGUE)
         CALL(evt_msg_print, 0, STRING("gor_03_02_08"), 0, STRING("me"))
     END_SWITCH
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(maffia1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_02"), 0, STRING("me"))
@@ -1941,9 +1934,9 @@ EVT_BEGIN(maffia1_talk)
         CASE_GREATER_OR_EQUAL(STG9_00_EPILOGUE)
         CALL(evt_msg_print, 0, STRING("gor_03_02_08"), 0, STRING("me"))
     END_SWITCH
+#endif
     RETURN
 EVT_END()
-#endif
 
 /** Init event of the second henchman (マフィア２): places him at (-135, 155, -210). */
 EVT_BEGIN(maffia2_init)
@@ -2667,9 +2660,9 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(bteresa_talk_sub_keihin)
     CALL(evt_badgeShop_bteresa_get_kind_cnt, LW(0))
+#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_64"), 0, STRING("me"))
         GOTO(0)
@@ -2735,11 +2728,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     GOTO(1)
     LABEL(0)
     CALL(evt_msg_print, 0, STRING("bunny_teresa_12"), 0, STRING("me"))
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(bteresa_talk_sub_keihin)
-    CALL(evt_badgeShop_bteresa_get_kind_cnt, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("bunny_teresa_64"))
         GOTO(0)
@@ -2840,9 +2829,9 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     CALL(evt_msg_continue)
     GOTO(1)
     LABEL(0)
+#endif
     RETURN
 EVT_END()
-#endif
 
 /**
  * Talk event of Bunny Teresa at the parlor tables:
@@ -4889,14 +4878,11 @@ static const char* door_data_03_npc[] = {
  * dips the music and ambience with a low-pass.
  */
 EVT_BEGIN(door_data_03_open)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 0)
+#endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
@@ -4985,14 +4971,11 @@ static EVT_BEGIN(evt_door_03_open)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero_n"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 0)
+#endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
@@ -5078,14 +5061,11 @@ static const char* door_data_04_npc[] = {
  * dips the music and ambience to 50 and applies a low-pass filter.
  */
 static EVT_BEGIN(evt_door_04_open)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 0)
+#endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
@@ -6067,8 +6047,8 @@ EVT_BEGIN(kuzi_bomb_bomb)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(kuzi_keiziban_normal)
+#if VERSION <= VERSION_DEMO_US
     // Mario reads the board, which shows today's winning number.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_lottery_todaynum, LW(0))
@@ -6170,13 +6150,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
             CALL(evt_msg_print, 0, STRING("kuji_bomb_035"), 0, STRING("グルメボム兵"))
         END_IF
     END_IF
-    CALL(evt_mario_key_onoff, 1)
-    CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_1"), STRING("T_1"))
-    CALL(evt_npc_set_anim, STRING("グルメボム兵"), STRING("S_1"))
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(kuzi_keiziban_normal)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_lottery_todaynum, LW(0))
     CALL(evt_msg_print_insert, 0, STRING("kuji_bomb_023"), 0, 0, LW(0))
@@ -6298,12 +6272,12 @@ EVT_BEGIN(kuzi_keiziban_normal)
             CALL(evt_msg_print, 0, STRING("kuji_bomb_035"), 0, STRING("グルメボム兵"))
         END_IF
     END_IF
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_1"), STRING("T_1"))
     CALL(evt_npc_set_anim, STRING("グルメボム兵"), STRING("S_1"))
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(kuzi_keiziban_husei)
     CALL(evt_mario_key_onoff, 0)
@@ -7695,29 +7669,25 @@ USER_FUNC(kuzi_get_keihin) {
 
     switch (evtGetValue(event, args[0])) {
         case 0:
+            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
 #if VERSION <= VERSION_DEMO_US
-            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
                 item = ITEM_MUSHROOM;
-                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
 #else
-            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
                 item = ITEM_POWER_PLUS;
-                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
 #endif
+                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
             } else {
                 item = ITEM_ZESS_DYNAMITE;
             }
             break;
         case 1:
+            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
 #if VERSION <= VERSION_DEMO_US
-            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
                 item = ITEM_MUSHROOM;
-                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN, 1);
 #else
-            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
                 item = ITEM_LUCKY_DAY;
-                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN, 1);
 #endif
+                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN, 1);
             } else {
                 item = ITEM_ZESS_SPECIAL;
             }

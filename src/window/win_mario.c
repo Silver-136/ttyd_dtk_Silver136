@@ -217,11 +217,10 @@ s32 winMarioMain(WindowWork* w) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 }
             } else if (w->buttonTrg & PAD_BUTTON_B) {
-#if VERSION <= VERSION_DEMO_US
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
+#if VERSION <= VERSION_DEMO_US
                 animPoseSetAnim(w->mario.poseId, (w->flags & WINDOW_FLAG_8BIT) ? "S_1" : "M_S_1", 0);
 #else
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 if (w->flags & WINDOW_FLAG_8BIT) {
                     COLOR_ANIM(anims[1], "S_1")
                 } else {
