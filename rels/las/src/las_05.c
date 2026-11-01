@@ -1626,7 +1626,7 @@ USER_FUNC(chk_mario_ctrloff) {
  */
 USER_FUNC(party_hit) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-    NpcEntry* npc = npcNameToPtr("\x8D\x95\x83\x4A\x83\x8D\x83\x93");
+    NpcEntry* npc = npcNameToPtr("黒カロン");
     EvtWord* args = event->args;
     f32 dir;
 
@@ -1655,7 +1655,7 @@ EVT_END()
 /** The single NPC of the room, Dark Bones (黒カロン); it does not turn to face Mario. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"黒カロン"*/"\x8D\x95\x83\x4A\x83\x8D\x83\x93", // name
+        "黒カロン", // name
         NPC_FLAG_NO_TALK_TURN, // flags
         0, // reactionFlags
         kurokaron_init, // initEvent
@@ -1667,7 +1667,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カロン"*/"\x83\x4A\x83\x8D\x83\x93", // name
+        "カロン", // name
         0, 0, NULL, NULL, NULL, NULL, NULL, NULL, // flags..lostEvent
         NULL, NULL, 0, // returnEvent..territoryType
         {0}, // territoryBase

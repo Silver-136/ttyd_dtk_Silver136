@@ -817,7 +817,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ガイド"*/"\x83\x4B\x83\x43\x83\x68", // name
+        "ガイド", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         guide_init, // initEvent
@@ -829,7 +829,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ライバル"*/"\x83\x89\x83\x43\x83\x6F\x83\x8B", // name
+        "ライバル", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         rival_init, // initEvent
@@ -841,7 +841,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56", // name
+        "プニ族長老", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         elder_init, // initEvent
@@ -853,7 +853,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"プニ族１"*/"\x83\x76\x83\x6A\x91\xB0\x82\x50", // name
+        "プニ族１", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_1_init, // initEvent
@@ -865,7 +865,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"プニ族２"*/"\x83\x76\x83\x6A\x91\xB0\x82\x51", // name
+        "プニ族２", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_2_init, // initEvent
@@ -877,7 +877,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"プニ族"*/"\x83\x76\x83\x6A\x91\xB0", // name
+        "プニ族", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_init, // initEvent
@@ -887,7 +887,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"プニ族B"*/"\x83\x76\x83\x6A\x91\xB0\x42", // name
+        "プニ族B", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_init, // initEvent
@@ -897,7 +897,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ガイド妹"*/"\x83\x4B\x83\x43\x83\x68\x96\x85", // name
+        "ガイド妹", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         sister_init, // initEvent
@@ -2412,12 +2412,12 @@ EVT_END()
  * Mario then fights it (battle info 20). Sets the story to STG2_24_BOSS_BATTLE, then runs boss_battle_win.
  */
 EVT_BEGIN(boss_battle)
-    CALL(evt_npc_set_position, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), -320, 0, 30)
-    CALL(evt_npc_set_ry, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_set_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), -250, 0, 30)
-    CALL(evt_npc_set_ry, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_set_position, STRING("プニ族長老"), -320, 0, 30)
+    CALL(evt_npc_set_ry, STRING("プニ族長老"), 90)
+    CALL(evt_npc_flag_onoff, 1, STRING("プニ族長老"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_set_position, STRING("第三勢力幹部"), -250, 0, 30)
+    CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 270)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -2449,12 +2449,12 @@ EVT_BEGIN(boss_battle)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_00"), 0, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"))
-    CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_jump_position_nohit, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2), 225, 30)
-    CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_jump_position_nohit, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2), 225, 30)
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_01"), 0, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"))
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_00"), 0, STRING("プニ族長老"))
+    CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_jump_position_nohit, STRING("第三勢力幹部"), LW(0), LW(1), LW(2), 225, 30)
+    CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_jump_position_nohit, STRING("第三勢力幹部"), LW(0), LW(1), LW(2), 225, 30)
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_01"), 0, STRING("第三勢力幹部"))
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_cam3d_evt_set, FLOAT(-285.0f), FLOAT(150.19922f), FLOAT(538.2998f), FLOAT(-285.0f), FLOAT(57.0f), FLOAT(7.0f), 1000, EASING_WAVE_GROWING_FASTER)
@@ -2463,12 +2463,12 @@ EVT_BEGIN(boss_battle)
         WAIT_MS(200)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_get_position, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_get_position, STRING("プニ族長老"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CHOUROU_BIG1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, FLOAT(1.0f), FLOAT(3.0f), 200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
-            CALL(evt_npc_set_scale, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), LW(0), LW(0), LW(0))
+            CALL(evt_npc_set_scale, STRING("プニ族長老"), LW(0), LW(0), LW(0))
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -2476,37 +2476,37 @@ EVT_BEGIN(boss_battle)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
         ADD(LW(0), 10)
-        CALL(evt_npc_move_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(2), 200, 0, 0)
+        CALL(evt_npc_move_position, STRING("第三勢力幹部"), LW(0), LW(2), 200, 0, 0)
     END_INLINE_EVENT
     SET_VALUE(GF(0), 1)
     SET_VALUE(GF(1), 1)
     SET_VALUE(GF(2), 1)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(1), LW(2), LW(3))
+        CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(1), LW(2), LW(3))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_KANBU_SMALL1"), LW(1), LW(2), LW(3), 0)
         SET_FLOAT_VALUE(LW(0), FLOAT(0.7998047f))
-        CALL(evt_npc_set_scale, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(0), LW(0))
+        CALL(evt_npc_set_scale, STRING("第三勢力幹部"), LW(0), LW(0), LW(0))
         WAIT_WHILE(GF(0))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_KANBU_SMALL1"), LW(1), LW(2), LW(3), 0)
         SET_FLOAT_VALUE(LW(0), FLOAT(0.6699219f))
-        CALL(evt_npc_set_scale, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(0), LW(0))
+        CALL(evt_npc_set_scale, STRING("第三勢力幹部"), LW(0), LW(0), LW(0))
         WAIT_WHILE(GF(1))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_KANBU_SMALL1"), LW(1), LW(2), LW(3), 0)
         SET_FLOAT_VALUE(LW(0), FLOAT(0.5292969f))
-        CALL(evt_npc_set_scale, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(0), LW(0))
+        CALL(evt_npc_set_scale, STRING("第三勢力幹部"), LW(0), LW(0), LW(0))
         WAIT_WHILE(GF(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_KANBU_SMALL1"), LW(1), LW(2), LW(3), 0)
         SET_FLOAT_VALUE(LW(0), FLOAT(0.39941406f))
-        CALL(evt_npc_set_scale, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(0), LW(0))
+        CALL(evt_npc_set_scale, STRING("第三勢力幹部"), LW(0), LW(0), LW(0))
     END_INLINE_EVENT
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_02"), 0, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"))
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_02"), 0, STRING("プニ族長老"))
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, FLOAT(3.0f), FLOAT(1.0f), 200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
-            CALL(evt_npc_set_scale, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), LW(0), LW(0), LW(0))
+            CALL(evt_npc_set_scale, STRING("プニ族長老"), LW(0), LW(0), LW(0))
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -2520,37 +2520,37 @@ EVT_BEGIN(boss_battle)
     SET_VALUE(GF(2), 0)
     CALL(evt_msg_continue)
     SET_FLOAT_VALUE(LW(0), FLOAT(1.0f))
-    CALL(evt_npc_set_scale, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(0), LW(0))
+    CALL(evt_npc_set_scale, STRING("第三勢力幹部"), LW(0), LW(0), LW(0))
     CALL(evt_cam3d_evt_set, -240, 86, 302, -240, 35, 7, 0, EASING_SINE_IN_OUT)
-    CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
     ADD(LW(0), 10)
-    CALL(evt_npc_move_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(2), 200, 0, 0)
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_03"), 0, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"))
+    CALL(evt_npc_move_position, STRING("第三勢力幹部"), LW(0), LW(2), 200, 0, 0)
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_03"), 0, STRING("第三勢力幹部"))
     CALL(evt_cam3d_evt_set, -275, 86, 302, -275, 35, 7, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04"), 0, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"))
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04"), 0, STRING("プニ族長老"))
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 50)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_get_position, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_get_position, STRING("プニ族長老"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CHOUROU_WAIST1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
-    CALL(evt_npc_set_anim, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), STRING("D_1"))
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04_00"), 0, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"))
+    CALL(evt_npc_set_anim, STRING("プニ族長老"), STRING("D_1"))
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04_00"), 0, STRING("プニ族長老"))
     WAIT_MS(500)
-    CALL(evt_npc_set_autotalkpose, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), STRING("D_1"), STRING("D_1"))
+    CALL(evt_npc_set_autotalkpose, STRING("プニ族長老"), STRING("D_1"), STRING("D_1"))
     WAIT_FRAMES(1)
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04_01"), 0, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"))
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04_01"), 0, STRING("プニ族長老"))
     WAIT_FRAMES(1)
-    CALL(evt_npc_set_anim, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), STRING("S_2"))
-    CALL(evt_npc_set_autotalkpose, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), STRING("S_1"), STRING("T_1"))
+    CALL(evt_npc_set_anim, STRING("プニ族長老"), STRING("S_2"))
+    CALL(evt_npc_set_autotalkpose, STRING("プニ族長老"), STRING("S_1"), STRING("T_1"))
     WAIT_MS(333)
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04_02"), 0, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"))
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04_02"), 0, STRING("第三勢力幹部"))
     WAIT_MS(250)
     CALL(evt_msg_print_party, STRING("stg2_mri_e24_05"))
-    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), 0, 0, 0, 0, 0, 0, 0, 60)
-    CALL(evt_npc_set_ry, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), 90)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("第三勢力幹部"), 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 90)
     CALL(evt_mario_set_pos, -100, 0, 30)
     CALL(evt_party_set_pos, 0, -70, 0, 30)
     WAIT_MS(1000)
@@ -2570,14 +2570,14 @@ EVT_BEGIN(boss_battle)
     CALL(evt_msg_print_party, STRING("stg2_mri_e24_05_01"))
     CALL(evt_cam3d_evt_set, -230, 88, 253, -230, 45, 7, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_06"), 0, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"))
-    CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_06"), 0, STRING("第三勢力幹部"))
+    CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_SWITCH_APPEAR1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_npc_set_anim, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), STRING("I_6"))
+    CALL(evt_npc_set_anim, STRING("第三勢力幹部"), STRING("I_6"))
     WAIT_MS(1000)
-    CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_TIMER_SET1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_npc_set_anim, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), STRING("I_7"))
+    CALL(evt_npc_set_anim, STRING("第三勢力幹部"), STRING("I_7"))
     CALL(evt_sub_countdown_flag_onoff, 1, COUNTDOWN_FLAG_STOPPED)
     CALL(evt_countdown_stop)
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
@@ -2593,32 +2593,32 @@ EVT_BEGIN(boss_battle)
         CALL(evt_sub_countdown_end)
     END_INLINE_EVENT
     WAIT_MS(1000)
-    CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_SWITCH_AWAY1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_npc_set_anim, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), STRING("I_8"))
+    CALL(evt_npc_set_anim, STRING("第三勢力幹部"), STRING("I_8"))
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -180, 152, 548, -180, 57, 7, 0, EASING_SINE_IN_OUT)
     WAIT_MS(333)
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_07"), 0, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"))
-    CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_07"), 0, STRING("第三勢力幹部"))
+    CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_SWITCH_APPEAR1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_npc_set_anim, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), STRING("I_6"))
+    CALL(evt_npc_set_anim, STRING("第三勢力幹部"), STRING("I_6"))
     WAIT_MS(1000)
-    CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_TIMER_SET1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_npc_set_anim, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), STRING("I_7"))
+    CALL(evt_npc_set_anim, STRING("第三勢力幹部"), STRING("I_7"))
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 150, 186, 549, 150, 90, 7, 500, EASING_SINE_IN_OUT)
-    CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_SWITCH_AWAY1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_npc_set_anim, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), STRING("I_8"))
+    CALL(evt_npc_set_anim, STRING("第三勢力幹部"), STRING("I_8"))
     WAIT_MS(1000)
     DELETE_EVENT(LW(10))
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_set_pos, -120, 0, 30)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_party_set_pos, 0, -150, 0, 30)
-    SET_VALUE(LW(10), STRING(/*"ボスロボット"*/"\x83\x7B\x83\x58\x83\x8D\x83\x7B\x83\x62\x83\x67"))
+    SET_VALUE(LW(10), STRING("ボスロボット"))
     CALL(evt_npc_set_anim, LW(10), STRING("Z_1"))
     CALL(evt_npc_set_position, LW(10), 150, 240, 30)
     CALL(evt_npc_flag_onoff, 1, LW(10), NPC_FLAG_TALK_POSE)
@@ -2631,11 +2631,11 @@ EVT_BEGIN(boss_battle)
     CALL(evt_npc_sound_data_set, LW(10), 0, 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_npc_glide_position, LW(10), 150, 100, 30, 0, FLOAT(120.0f), 0, 0, 0)
     CALL(evt_snd_sfxoff, LW(9))
-    CALL(evt_npc_set_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), -100, 0, 30)
-    CALL(evt_npc_set_ry, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), 90)
-    CALL(evt_npc_move_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), 150, 30, 0, FLOAT(180.0f), 0)
+    CALL(evt_npc_set_position, STRING("第三勢力幹部"), -100, 0, 30)
+    CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 90)
+    CALL(evt_npc_move_position, STRING("第三勢力幹部"), 150, 30, 0, FLOAT(180.0f), 0)
     WAIT_MS(500)
-    CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_FLD_NPC_KANBU_JUMP1"), LW(0), LW(1), LW(2), 0)
     CALL_CHILD(dai3kanbu_suikomare)
     WAIT_MS(200)
@@ -2656,7 +2656,7 @@ EVT_BEGIN(boss_battle)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 150, 185, 400, 150, 115, 7, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_08"), 0, STRING(/*"ボスロボット"*/"\x83\x7B\x83\x58\x83\x8D\x83\x7B\x83\x62\x83\x67"))
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e24_08"), 0, STRING("ボスロボット"))
     CALL(evt_cam3d_evt_set, 145, 186, 549, 145, 90, 7, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_BOSS_LIGHT1"), 0)
@@ -2701,7 +2701,7 @@ EVT_BEGIN(boss_battle)
     CALL(evt_npc_set_anim, LW(10), STRING("S_3"))
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -20, 167, 549, -20, 71, 7, 1500, EASING_SINE_IN_OUT)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"ボスロボット"*/"\x83\x7B\x83\x58\x83\x8D\x83\x7B\x83\x62\x83\x67"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("ボスロボット"), NPC_FLAG_AUTO_MOVE_ANIM)
     BEGIN_INLINE_EVENT_GET_ID(LW(12))
         CALL(evt_npc_move_position, LW(10), -20, 30, 1500, 0, 0)
     END_INLINE_EVENT
@@ -2709,8 +2709,8 @@ EVT_BEGIN(boss_battle)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_24_BOSS_BATTLE)
     CALL(evt_npc_release_filednpc, 1)
-    CALL(evt_npc_set_battle_info, STRING(/*"ボスロボット"*/"\x83\x7B\x83\x58\x83\x8D\x83\x7B\x83\x62\x83\x67"), 20)
-    CALL(evt_npc_battle_start, STRING(/*"ボスロボット"*/"\x83\x7B\x83\x58\x83\x8D\x83\x7B\x83\x62\x83\x67"))
+    CALL(evt_npc_set_battle_info, STRING("ボスロボット"), 20)
+    CALL(evt_npc_battle_start, STRING("ボスロボット"))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI3"))
     DELETE_EVENT(LW(12))
@@ -2723,9 +2723,9 @@ EVT_BEGIN(boss_battle)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_party_set_pos, 0, -10, 0, 5)
     CALL(evt_party_set_dir, 0, 90, 0)
-    CALL(evt_npc_set_ry, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), 90)
-    CALL(evt_npc_set_position, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), -100, 0, 30)
-    CALL(evt_npc_set_position, STRING(/*"ボスロボット"*/"\x83\x7B\x83\x58\x83\x8D\x83\x7B\x83\x62\x83\x67"), 90, 0, 30)
+    CALL(evt_npc_set_ry, STRING("プニ族長老"), 90)
+    CALL(evt_npc_set_position, STRING("プニ族長老"), -100, 0, 30)
+    CALL(evt_npc_set_position, STRING("ボスロボット"), 90, 0, 30)
     CALL(evt_cam3d_evt_set, 70, 156, 549, 70, 60, 7, 0, EASING_SINE_IN_OUT)
     SET_VALUE(LW(0), 0)
     // Control returns briefly, then the victory scene begins.

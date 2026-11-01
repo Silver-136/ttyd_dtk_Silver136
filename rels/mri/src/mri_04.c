@@ -133,7 +133,7 @@ EVT_END()
 /** The single NPC of the room, Jabble (ちびトゲ), the little Jabbi. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ちびトゲ"*/"\x82\xBF\x82\xD1\x83\x67\x83\x51", // name
+        "ちびトゲ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         chibitoge_init, // initEvent
@@ -154,7 +154,7 @@ static NpcSetupInfo npcEnt[] = {
 static USER_FUNC(evt_chuchu_back_loop) {
     EvtWord* args = event->args;
     // チュチュリーナ
-    NpcEntry* npc = evtNpcNameToPtr(event, "\x83\x60\x83\x85\x83\x60\x83\x85\x83\x8A\x81\x5B\x83\x69");
+    NpcEntry* npc = evtNpcNameToPtr(event, "チュチュリーナ");
     s32 total = evtGetValue(event, args[0]);
     s32 elapsed;
 

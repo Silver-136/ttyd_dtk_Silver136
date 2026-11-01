@@ -48,7 +48,7 @@ EvtWord kpa_07_init_evt[52];
 /** NPCs of the Rawk Hawk scene: Kammy Koopa (ババ) and Rawk Hawk (ブレッドハート). */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ババ"*/"\x83\x6F\x83\x6F", // name
+        "ババ", // name
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -58,7 +58,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ブレッドハート"*/"\x83\x75\x83\x8C\x83\x62\x83\x68\x83\x6E\x81\x5B\x83\x67", // name
+        "ブレッドハート", // name
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -455,13 +455,13 @@ void kpa_stg6_014_cb(s32 type, smartEntry* smart) {
         case 3:
             if (info->curPage == 1) {
                 // ブレッドハート
-                npc = npcNameToPtr("\x83\x75\x83\x8C\x83\x62\x83\x68\x83\x6E\x81\x5B\x83\x67");
+                npc = npcNameToPtr("ブレッドハート");
                 strcpy(npc->stayAnim, "S_5");
                 strcpy(npc->talkAnim, "T_5");
             }
             if (info->curPage == 2) {
                 // ブレッドハート
-                npc = npcNameToPtr("\x83\x75\x83\x8C\x83\x62\x83\x68\x83\x6E\x81\x5B\x83\x67");
+                npc = npcNameToPtr("ブレッドハート");
                 strcpy(npc->stayAnim, "S_1");
                 strcpy(npc->talkAnim, "T_1");
             }
@@ -476,12 +476,12 @@ void kpa_stg6_012_1_cb(s32 type, smartEntry* smart) {
     switch (type) {
         case 0:
             // ババ
-            animPoseSetAnim(npcNameToPtr("\x83\x6F\x83\x6F")->poseId, "A_2B", TRUE);
+            animPoseSetAnim(npcNameToPtr("ババ")->poseId, "A_2B", TRUE);
             break;
         case 5:
             if (info->nextEntry == 8) {
                 // ババ
-                animPoseSetAnim(npcNameToPtr("\x83\x6F\x83\x6F")->poseId, "T_1", TRUE);
+                animPoseSetAnim(npcNameToPtr("ババ")->poseId, "T_1", TRUE);
             }
             break;
     }

@@ -200,7 +200,7 @@ NpcBattleSelect btlgrpsel_gor_btlno_gor_02_01_off[] = {
  */
 NpcSetupBattleInfo btlsetup_gor_tbl[] = {
     {
-        /*"マップstg_00_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x30\x5F\x30", // name
+        "マップstg_00_0", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -210,7 +210,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_00_4"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x30\x5F\x34", // name
+        "マップstg_00_4", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -220,7 +220,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"GOR00 幹部その１"*/"\x47\x4F\x52\x30\x30\x20\x8A\xB2\x95\x94\x82\xBB\x82\xCC\x82\x50", // name
+        "GOR00 幹部その１", // name
         "gor_00", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -232,7 +232,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         "BGM_CHUBOSS_BATTLE1", // bgmName
     },
     {
-        /*"GOR02 ACレクチャー"*/"\x47\x4F\x52\x30\x32\x20\x41\x43\x83\x8C\x83\x4E\x83\x60\x83\x83\x81\x5B", // name
+        "GOR02 ACレクチャー", // name
         "gor_02", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -243,7 +243,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
-        /*"GOR02 SACレクチャー"*/"\x47\x4F\x52\x30\x32\x20\x53\x41\x43\x83\x8C\x83\x4E\x83\x60\x83\x83\x81\x5B", // name
+        "GOR02 SACレクチャー", // name
         "gor_02", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -254,7 +254,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
-        /*"GOR02 もんばん"*/"\x47\x4F\x52\x30\x32\x20\x82\xE0\x82\xF1\x82\xCE\x82\xF1", // name
+        "GOR02 もんばん", // name
         "gor_02", // mapName
         0, // fixedItem
         -1, // swFlag

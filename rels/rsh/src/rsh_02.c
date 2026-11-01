@@ -723,7 +723,7 @@ EVT_END()
 USER_FUNC(toron_check) {
     NpcEntry* hit = fbatHitCheckAll();
     // トロン
-    NpcEntry* npc = npcNameToPtr("\x83\x67\x83\x8D\x83\x93");
+    NpcEntry* npc = npcNameToPtr("トロン");
     BOOL busy = FALSE;
 
     if (marioKeyOffChk() || marioCtrlOffChk()) {
@@ -775,7 +775,7 @@ EVT_END()
 /** NPCs of the passenger car: the gourmet Toad, the ghost and Toron. */
 static NpcSetupInfo npc_data[] = {
     {
-        /*"グルメキノピオ"*/"\x83\x4F\x83\x8B\x83\x81\x83\x4C\x83\x6D\x83\x73\x83\x49", // name
+        "グルメキノピオ", // name
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gurume, // initEvent
@@ -787,7 +787,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name
+        "ポワン探偵", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_powan, // talkEvent
@@ -797,7 +797,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ゆうれい"*/"\x82\xE4\x82\xA4\x82\xEA\x82\xA2", // name
+        "ゆうれい", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_yuurei, // initEvent
@@ -809,7 +809,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トロン"*/"\x83\x67\x83\x8D\x83\x93", // name
+        "トロン", // name
         NPC_FLAG_ENEMY | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_toron, // initEvent
@@ -821,7 +821,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93", // name
+        "サラリーマン", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_sarary, // talkEvent

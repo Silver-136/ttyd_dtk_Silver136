@@ -1726,7 +1726,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
 #if VERSION >= VERSION_US
         DEBUG_PUT_MSG(STRING("イベント終了"))
 #else
-        DEBUG_PUT_MSG(STRING(/*"イベント終了"*/"\x83\x43\x83\x78\x83\x93\x83\x67\x8F\x49\x97\xB9"))
+        DEBUG_PUT_MSG(STRING("イベント終了"))
 #endif
     END_SIBLING_EVENT
     // Wait for the command and the throws to finish, refill Star Power (retail only) and end the turn.

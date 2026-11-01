@@ -870,7 +870,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"村人Ａ"*/"\x91\xBA\x90\x6C\x82\x60", // name
+        "村人Ａ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerA_init, // initEvent
@@ -882,7 +882,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"村人Ｂ"*/"\x91\xBA\x90\x6C\x82\x61", // name
+        "村人Ｂ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerB_init, // initEvent
@@ -894,7 +894,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"村人Ｃ"*/"\x91\xBA\x90\x6C\x82\x62", // name
+        "村人Ｃ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerC_init, // initEvent
@@ -906,7 +906,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"村人Ｄ"*/"\x91\xBA\x90\x6C\x82\x63", // name
+        "村人Ｄ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerD_init, // initEvent
@@ -918,7 +918,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"村人Ｅ"*/"\x91\xBA\x90\x6C\x82\x64", // name
+        "村人Ｅ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerE_init, // initEvent
@@ -930,7 +930,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"村人Ｋ"*/"\x91\xBA\x90\x6C\x82\x6A", // name
+        "村人Ｋ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerK_init, // initEvent
@@ -942,7 +942,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"村長"*/"\x91\xBA\x92\xB7", // name
+        "村長", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         village_chief_init, // initEvent
@@ -954,7 +954,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ビビアン"*/"\x83\x72\x83\x72\x83\x41\x83\x93", // name
+        "ビビアン", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         vivian_init, // initEvent
@@ -966,7 +966,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5", // name
+        "宿店員", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -976,7 +976,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ブタ村人Ａ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x60", // name
+        "ブタ村人Ａ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerA_pig_init, // initEvent
@@ -988,7 +988,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ブタ村人Ｄ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x63", // name
+        "ブタ村人Ｄ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerD_pig_init, // initEvent
@@ -1000,7 +1000,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ブタ村人Ｅ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x64", // name
+        "ブタ村人Ｅ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerE_pig_init, // initEvent
@@ -1012,7 +1012,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ブタ村人Ｋ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x6A", // name
+        "ブタ村人Ｋ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerK_pig_init, // initEvent
@@ -1024,7 +1024,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ブタ村長"*/"\x83\x75\x83\x5E\x91\xBA\x92\xB7", // name
+        "ブタ村長", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         village_chief_pig_init, // initEvent
@@ -1036,7 +1036,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カラスＡ"*/"\x83\x4A\x83\x89\x83\x58\x82\x60", // name
+        "カラスＡ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_a_init, // initEvent
@@ -1046,7 +1046,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カラスＢ"*/"\x83\x4A\x83\x89\x83\x58\x82\x61", // name
+        "カラスＢ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_b_init, // initEvent
@@ -1056,7 +1056,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カラスＣ"*/"\x83\x4A\x83\x89\x83\x58\x82\x62", // name
+        "カラスＣ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_c_init, // initEvent
@@ -1066,7 +1066,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カラスＤ"*/"\x83\x4A\x83\x89\x83\x58\x82\x63", // name
+        "カラスＤ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_d_init, // initEvent
@@ -1076,7 +1076,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カラスＥ"*/"\x83\x4A\x83\x89\x83\x58\x82\x64", // name
+        "カラスＥ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_e_init, // initEvent
@@ -2198,14 +2198,14 @@ static KinopioData kino_dt = {
     {135.0f, 122.0f, -171.0f, 366.0f, 46.0f, -228.0f}, // cam
     -50.0f, // bedDeg
     {345.0f, 0.0f, -208.0f}, // npcTalk
-    /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5", // npcName
+    "宿店員", // npcName
     {"usugurayado_00", "usugurayado_01", "usugurayado_02", "usugurayado_03", "usugurayado_04", "usugurayado_05", "usugurayado_06", "usugurayado_07", "usugurayado_08", "usugurayado_09", "usugurayado_10", "usugurayado_11", "usugurayado_12", "usugurayado_13"}, // msg
     NULL, NULL, // toBedEvt..fromBedEvt
 };
 
 /** NPCs hidden and shown with the inn's interior (house 3): the innkeeper. */
 static const char* yado_npc[] = {
-    /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5",
+    "宿店員",
     NULL,
 };
 
@@ -2220,13 +2220,13 @@ const char* yado_mobj[] = {
  * and the partners who can stand inside during his scenes.
  */
 const char* village_chief_npc[] = {
-    /*"村長"*/"\x91\xBA\x92\xB7",
-    /*"ブタ村長"*/"\x83\x75\x83\x5E\x91\xBA\x92\xB7",
-    /*"にせマリオ"*/"\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49",
-    /*"クリスチーヌ"*/"\x83\x4E\x83\x8A\x83\x58\x83\x60\x81\x5B\x83\x6B",
-    /*"ノコタロウ"*/"\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45",
-    /*"クラウダ"*/"\x83\x4E\x83\x89\x83\x45\x83\x5F",
-    /*"チビヨッシー"*/"\x83\x60\x83\x72\x83\x88\x83\x62\x83\x56\x81\x5B",
+    "村長",
+    "ブタ村長",
+    "にせマリオ",
+    "クリスチーヌ",
+    "ノコタロウ",
+    "クラウダ",
+    "チビヨッシー",
     NULL,
 };
 
@@ -2261,7 +2261,7 @@ EVT_END()
 
 /** NPCs that belong to house 1's interior: villager B. */
 const char* door_1_npc[] = {
-    /*"村人Ｂ"*/"\x91\xBA\x90\x6C\x82\x61",
+    "村人Ｂ",
     NULL,
 };
 
@@ -2822,11 +2822,11 @@ EVT_END()
 
 /** The five pig NPCs (pig villagers A, D, E, K and the pig Mayor), whose models get the paper lighting. */
 static BoobooName booboo_name[] = {
-    {/*"ブタ村人Ａ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x60", 2, 1},
-    {/*"ブタ村人Ｄ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x63", 0, 1},
-    {/*"ブタ村人Ｅ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x64", 6, 1},
-    {/*"ブタ村人Ｋ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x6A", 5, 1},
-    {/*"ブタ村長"*/"\x83\x75\x83\x5E\x91\xBA\x92\xB7", 9, 0},
+    {"ブタ村人Ａ", 2, 1},
+    {"ブタ村人Ｄ", 0, 1},
+    {"ブタ村人Ｅ", 6, 1},
+    {"ブタ村人Ｋ", 5, 1},
+    {"ブタ村長", 9, 0},
 };
 
 /**

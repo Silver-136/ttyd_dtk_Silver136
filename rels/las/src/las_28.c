@@ -81,7 +81,7 @@ EvtWord las_28_init_evt[238];
  */
 USER_FUNC(syuryo_baria) {
     // ピーチ単
-    NpcEntry* npc = npcNameToPtr("\x83\x73\x81\x5B\x83\x60\x95\x50");
+    NpcEntry* npc = npcNameToPtr("ピーチ姫");
     EffectEntry* eff = effSyuryouEntry(1, 1000, npc->position.x, npc->position.y - 8.0f, 10.0f + npc->position.z);
 
     ((EffSyuryouWork*)eff->userdata)->scale = 2.0f;
@@ -198,7 +198,7 @@ EVT_END()
 /** NPCs of the throne room scene: Sir Grodus (シュリョー), Bowser (クッパ) and Kammy Koopa (ババ). */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"シュリョー"*/"\x83\x56\x83\x85\x83\x8A\x83\x87\x81\x5B", // name
+        "シュリョー", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         syuryo_init, // initEvent
@@ -208,7 +208,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"クッパ"*/"\x83\x4E\x83\x62\x83\x70", // name
+        "クッパ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         koopa_init, // initEvent
@@ -218,7 +218,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ババ"*/"\x83\x6F\x83\x6F", // name
+        "ババ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         baba_init, // initEvent
@@ -228,7 +228,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ピーチ姫"*/"\x83\x73\x81\x5B\x83\x60\x95\x50", // name
+        "ピーチ姫", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -305,7 +305,7 @@ EVT_END()
 
 USER_FUNC(syuryo_baria_recalc_pos) {
     // ピーチ単
-    NpcEntry* npc = npcNameToPtr("\x83\x73\x81\x5B\x83\x60\x95\x50");
+    NpcEntry* npc = npcNameToPtr("ピーチ姫");
     static const Vec base = {0.0f, -8.0f, 10.0f};
     Vec offset = base;
     CameraEntry* cam = camGetPtr(CAMERA_3D);

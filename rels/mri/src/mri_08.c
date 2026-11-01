@@ -263,7 +263,7 @@ EVT_END()
 /** The six Jabbies (トゲ族１ to 6) of the first hive. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"トゲ族１"*/"\x83\x67\x83\x51\x91\xB0\x82\x50", // name
+        "トゲ族１", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_1_init, // initEvent
@@ -275,7 +275,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲ族２"*/"\x83\x67\x83\x51\x91\xB0\x82\x51", // name
+        "トゲ族２", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_2_init, // initEvent
@@ -287,7 +287,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲ族３"*/"\x83\x67\x83\x51\x91\xB0\x82\x52", // name
+        "トゲ族３", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_3_init, // initEvent
@@ -299,7 +299,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲ族４"*/"\x83\x67\x83\x51\x91\xB0\x82\x53", // name
+        "トゲ族４", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_4_init, // initEvent
@@ -311,7 +311,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲ族５"*/"\x83\x67\x83\x51\x91\xB0\x82\x54", // name
+        "トゲ族５", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_5_init, // initEvent
@@ -323,7 +323,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲ族６"*/"\x83\x67\x83\x51\x91\xB0\x82\x55", // name
+        "トゲ族６", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_6_init, // initEvent

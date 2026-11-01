@@ -2273,7 +2273,7 @@ NpcBattleSelect btlgrpsel_tik_btlno_tik_20_06_off[] = {
  */
 NpcSetupBattleInfo btlsetup_tik_tbl[] = {
     {
-        /*"マップstg_00_1"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x30\x5F\x31", // name
+        "マップstg_00_1", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2283,7 +2283,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_00_2"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x30\x5F\x32", // name
+        "マップstg_00_2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2293,7 +2293,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_00_3"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x30\x5F\x33", // name
+        "マップstg_00_3", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2303,7 +2303,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik12ゲッソー"*/"\x74\x69\x6B\x31\x32\x83\x51\x83\x62\x83\x5C\x81\x5B", // name
+        "tik12ゲッソー", // name
         "tik_02", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -2315,7 +2315,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_CHUBOSS_BATTLE1", // bgmName
     },
     {
-        /*"tik01クリボー３人衆"*/"\x74\x69\x6B\x30\x31\x83\x4E\x83\x8A\x83\x7B\x81\x5B\x82\x52\x90\x6C\x8F\x4F", // name
+        "tik01クリボー３人衆", // name
         "tik_01", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -2327,7 +2327,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik01トゲクリボー"*/"\x74\x69\x6B\x30\x31\x83\x67\x83\x51\x83\x4E\x83\x8A\x83\x7B\x81\x5B", // name
+        "tik01トゲクリボー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2337,7 +2337,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik04ヒンニャー1"*/"\x74\x69\x6B\x30\x34\x83\x71\x83\x93\x83\x6A\x83\x83\x81\x5B\x31", // name
+        "tik04ヒンニャー1", // name
         NULL, 0, // mapName..fixedItem
         GSWF_GOR_FRANKLY_FIRST_MAP_READ, // swFlag
         btlgrpsel_tik_btlno_tik_04_01_on, // altSelect
@@ -2347,7 +2347,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik04ヒンニャー2"*/"\x74\x69\x6B\x30\x34\x83\x71\x83\x93\x83\x6A\x83\x83\x81\x5B\x32", // name
+        "tik04ヒンニャー2", // name
         NULL, 0, // mapName..fixedItem
         GSWF_GOR_FRANKLY_FIRST_MAP_READ, // swFlag
         btlgrpsel_tik_btlno_tik_04_02_on, // altSelect
@@ -2357,7 +2357,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik04カメック"*/"\x74\x69\x6B\x30\x34\x83\x4A\x83\x81\x83\x62\x83\x4E", // name
+        "tik04カメック", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2367,7 +2367,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik04トゲノコ"*/"\x74\x69\x6B\x30\x34\x83\x67\x83\x51\x83\x6D\x83\x52", // name
+        "tik04トゲノコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2377,7 +2377,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik07ハンニャー1"*/"\x74\x69\x6B\x30\x37\x83\x6E\x83\x93\x83\x6A\x83\x83\x81\x5B\x31", // name
+        "tik07ハンニャー1", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2387,7 +2387,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik07ハンニャー2"*/"\x74\x69\x6B\x30\x37\x83\x6E\x83\x93\x83\x6A\x83\x83\x81\x5B\x32", // name
+        "tik07ハンニャー2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2397,7 +2397,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik07トゲノコ"*/"\x74\x69\x6B\x30\x37\x83\x67\x83\x51\x83\x6D\x83\x52", // name
+        "tik07トゲノコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2407,7 +2407,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik07ハンマーブロス"*/"\x74\x69\x6B\x30\x37\x83\x6E\x83\x93\x83\x7D\x81\x5B\x83\x75\x83\x8D\x83\x58", // name
+        "tik07ハンマーブロス", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2417,7 +2417,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik15クリボー"*/"\x74\x69\x6B\x31\x35\x83\x4E\x83\x8A\x83\x7B\x81\x5B", // name
+        "tik15クリボー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2427,7 +2427,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik15パタクリボー"*/"\x74\x69\x6B\x31\x35\x83\x70\x83\x5E\x83\x4E\x83\x8A\x83\x7B\x81\x5B", // name
+        "tik15パタクリボー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2437,7 +2437,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik15トゲクリボー"*/"\x74\x69\x6B\x31\x35\x83\x67\x83\x51\x83\x4E\x83\x8A\x83\x7B\x81\x5B", // name
+        "tik15トゲクリボー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2447,7 +2447,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik15ハンマーブロス"*/"\x74\x69\x6B\x31\x35\x83\x6E\x83\x93\x83\x7D\x81\x5B\x83\x75\x83\x8D\x83\x58", // name
+        "tik15ハンマーブロス", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2457,7 +2457,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik15カメック"*/"\x74\x69\x6B\x31\x35\x83\x4A\x83\x81\x83\x62\x83\x4E", // name
+        "tik15カメック", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2467,7 +2467,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik18ハンニャー1"*/"\x74\x69\x6B\x31\x38\x83\x6E\x83\x93\x83\x6A\x83\x83\x81\x5B\x31", // name
+        "tik18ハンニャー1", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2477,7 +2477,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik18ハンニャー2"*/"\x74\x69\x6B\x31\x38\x83\x6E\x83\x93\x83\x6A\x83\x83\x81\x5B\x32", // name
+        "tik18ハンニャー2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2487,7 +2487,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik18カメック"*/"\x74\x69\x6B\x31\x38\x83\x4A\x83\x81\x83\x62\x83\x4E", // name
+        "tik18カメック", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2497,7 +2497,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik18トゲノコ"*/"\x74\x69\x6B\x31\x38\x83\x67\x83\x51\x83\x6D\x83\x52", // name
+        "tik18トゲノコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2507,7 +2507,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik20ハンニャー"*/"\x74\x69\x6B\x32\x30\x83\x6E\x83\x93\x83\x6A\x83\x83\x81\x5B", // name
+        "tik20ハンニャー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2517,7 +2517,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik20ハンニャー"*/"\x74\x69\x6B\x32\x30\x83\x6E\x83\x93\x83\x6A\x83\x83\x81\x5B", // name
+        "tik20ハンニャー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2527,7 +2527,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik20ハンニャー"*/"\x74\x69\x6B\x32\x30\x83\x6E\x83\x93\x83\x6A\x83\x83\x81\x5B", // name
+        "tik20ハンニャー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2537,7 +2537,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik20ハンニャー"*/"\x74\x69\x6B\x32\x30\x83\x6E\x83\x93\x83\x6A\x83\x83\x81\x5B", // name
+        "tik20ハンニャー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2547,7 +2547,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik20ハンニャー"*/"\x74\x69\x6B\x32\x30\x83\x6E\x83\x93\x83\x6A\x83\x83\x81\x5B", // name
+        "tik20ハンニャー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2557,7 +2557,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"tik20ヘンニャー"*/"\x74\x69\x6B\x32\x30\x83\x77\x83\x93\x83\x6A\x83\x83\x81\x5B", // name
+        "tik20ヘンニャー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect

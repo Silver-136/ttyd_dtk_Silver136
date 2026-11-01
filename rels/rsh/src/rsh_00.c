@@ -944,7 +944,7 @@ EVT_END()
 /** NPCs of the driver's cab: the driver. */
 static NpcSetupInfo npc_data[] = {
     {
-        /*"運転手"*/"\x89\x5E\x93\x5D\x8E\xE8", // name
+        "運転手", // name
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_unten, // initEvent

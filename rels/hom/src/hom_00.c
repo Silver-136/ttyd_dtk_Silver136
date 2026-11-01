@@ -316,7 +316,7 @@ EVT_END()
  */
 static NpcSetupInfo npc_data[] = {
     {
-        /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name
+        "ポワン探偵", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_powan_toron_konari_papa_gurume, // initEvent
@@ -328,7 +328,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トロン"*/"\x83\x67\x83\x8D\x83\x93", // name
+        "トロン", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_powan_toron_konari_papa_gurume, // initEvent
@@ -340,7 +340,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"グルメキノピオ"*/"\x83\x4F\x83\x8B\x83\x81\x83\x4C\x83\x6D\x83\x73\x83\x49", // name
+        "グルメキノピオ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_powan_toron_konari_papa_gurume, // initEvent
@@ -352,7 +352,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70", // name
+        "ナリキンパパ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_powan_toron_konari_papa_gurume, // initEvent
@@ -364,7 +364,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"コナリキン"*/"\x83\x52\x83\x69\x83\x8A\x83\x4C\x83\x93", // name
+        "コナリキン", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_powan_toron_konari_papa_gurume, // initEvent
@@ -376,7 +376,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"駅員1"*/"\x89\x77\x88\xF5\x31", // name
+        "駅員1", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_ekiin1, // initEvent
@@ -388,7 +388,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"駅員2"*/"\x89\x77\x88\xF5\x32", // name
+        "駅員2", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_ekiin2, // initEvent
@@ -400,7 +400,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B", // name
+        "ランペル", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -676,14 +676,14 @@ EVT_BEGIN(evt_hom_touchaku)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_cam3d_evt_set, 275, 260, 1400, 275, 210, 0, 0, EASING_SINE_IN_OUT)
-    CALL(evt_npc_set_position, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), 0, -1000, 0)
-    CALL(evt_npc_set_position, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"), 0, -1000, 0)
-    CALL(evt_npc_set_position, STRING(/*"グルメキノピオ"*/"\x83\x4F\x83\x8B\x83\x81\x83\x4C\x83\x6D\x83\x73\x83\x49"), 0, -1000, 0)
-    CALL(evt_npc_set_position, STRING(/*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70"), 0, -1000, 0)
-    CALL(evt_npc_set_position, STRING(/*"コナリキン"*/"\x83\x52\x83\x69\x83\x8A\x83\x4C\x83\x93"), 0, -1000, 0)
-    CALL(evt_npc_set_ry, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"), 90)
-    CALL(evt_npc_set_ry, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), 90)
-    CALL(evt_npc_set_position, STRING(/*"駅員2"*/"\x89\x77\x88\xF5\x32"), -750, 80, 100)
+    CALL(evt_npc_set_position, STRING("ポワン探偵"), 0, -1000, 0)
+    CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
+    CALL(evt_npc_set_position, STRING("グルメキノピオ"), 0, -1000, 0)
+    CALL(evt_npc_set_position, STRING("ナリキンパパ"), 0, -1000, 0)
+    CALL(evt_npc_set_position, STRING("コナリキン"), 0, -1000, 0)
+    CALL(evt_npc_set_ry, STRING("トロン"), 90)
+    CALL(evt_npc_set_ry, STRING("ポワン探偵"), 90)
+    CALL(evt_npc_set_position, STRING("駅員2"), -750, 80, 100)
     CALL(evt_seq_wait, SEQ_GAME)
     // A caption is shown while the Excess Express rolls into the platform and stops.
     BEGIN_INLINE_EVENT
@@ -705,11 +705,11 @@ EVT_BEGIN(evt_hom_touchaku)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -810, 232, 628, -810, 137, 87, 0, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_set_position, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), -815, 80, 15)
-    CALL(evt_npc_set_position, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"), -800, 80, 20)
-    CALL(evt_set_dir_to_target, STRING(/*"駅員2"*/"\x89\x77\x88\xF5\x32"), STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_set_position, STRING("ポワン探偵"), -815, 80, 15)
+    CALL(evt_npc_set_position, STRING("トロン"), -800, 80, 20)
+    CALL(evt_set_dir_to_target, STRING("駅員2"), STRING("ポワン探偵"))
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -722,15 +722,15 @@ EVT_BEGIN(evt_hom_touchaku)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-    CALL(evt_npc_flag_onoff, 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_flag_onoff, 0, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_status_onoff, 1, STRING(/*"駅員2"*/"\x89\x77\x88\xF5\x32"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_move_position, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"), -800, 100, 0, FLOAT(60.0f), 1)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_status_onoff, 1, STRING("駅員2"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_move_position, STRING("トロン"), -800, 100, 0, FLOAT(60.0f), 1)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"), -780, 100, 0, FLOAT(60.0f), 1)
+        CALL(evt_npc_move_position, STRING("トロン"), -780, 100, 0, FLOAT(60.0f), 1)
     END_INLINE_EVENT
-    CALL(evt_npc_move_position, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), -815, 100, 0, FLOAT(60.0f), 1)
-    CALL(evt_set_dir_to_target, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"))
+    CALL(evt_npc_move_position, STRING("ポワン探偵"), -815, 100, 0, FLOAT(60.0f), 1)
+    CALL(evt_set_dir_to_target, STRING("ポワン探偵"), STRING("トロン"))
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -745,18 +745,18 @@ EVT_BEGIN(evt_hom_touchaku)
     END_IF
     // The fake Zip Toad turns around, then changes into Doopliss in a puff of smoke.
     LOOP(3)
-        CALL(evt_npc_reverse_ry, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"))
+        CALL(evt_npc_reverse_ry, STRING("トロン"))
         WAIT_MS(500)
     END_LOOP
-    CALL(evt_msg_print, 0, STRING("stg6_hom_01_01"), 0, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"))
-    CALL(evt_npc_set_anim, STRING(/*"駅員2"*/"\x89\x77\x88\xF5\x32"), STRING("G_1"))
-    CALL(evt_npc_set_anim, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), STRING("O_1"))
-    CALL(evt_npc_get_position, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"), LW(0), LW(1), LW(2))
+    CALL(evt_msg_print, 0, STRING("stg6_hom_01_01"), 0, STRING("トロン"))
+    CALL(evt_npc_set_anim, STRING("駅員2"), STRING("G_1"))
+    CALL(evt_npc_set_anim, STRING("ポワン探偵"), STRING("O_1"))
+    CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_LANPEL_CHANGE1"), LW(0), LW(1), LW(2), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
-        CALL(evt_npc_set_position, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"), 0, -1000, 0)
-        CALL(evt_npc_set_position, STRING(/*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
+        CALL(evt_npc_set_position, STRING("ランペル"), LW(0), LW(1), LW(2))
     END_INLINE_EVENT
     ADD(LW(2), 20)
     LOOP(3)
@@ -766,17 +766,17 @@ EVT_BEGIN(evt_hom_touchaku)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -780, 194, 481, -780, 125, 87, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg6_hom_01_02"), 0, STRING(/*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B"))
+    CALL(evt_msg_print, 0, STRING("stg6_hom_01_02"), 0, STRING("ランペル"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -780, 259, 776, -780, 137, 87, 500, EASING_SINE_IN_OUT)
-    CALL(evt_npc_sound_data_set, STRING(/*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, STRING("SFX_STG6_LANPEL_JUMP1"), EVT_NULLPTR)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_status_onoff, 1, STRING(/*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_set_ry, STRING(/*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B"), 90)
+    CALL(evt_npc_sound_data_set, STRING("ランペル"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, STRING("SFX_STG6_LANPEL_JUMP1"), EVT_NULLPTR)
+    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_status_onoff, 1, STRING("ランペル"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_set_ry, STRING("ランペル"), 90)
     LOOP(0)
-        CALL(evt_npc_get_position, STRING(/*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_get_position, STRING("ランペル"), LW(0), LW(1), LW(2))
         ADD(LW(0), 60)
-        CALL(evt_npc_jump_position_nohit, STRING(/*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B"), LW(0), LW(1), LW(2), 400, 40)
+        CALL(evt_npc_jump_position_nohit, STRING("ランペル"), LW(0), LW(1), LW(2), 400, 40)
         IF_INT_GREATER(LW(0), -500)
             BREAK_LOOP
         END_IF

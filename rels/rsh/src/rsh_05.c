@@ -1539,11 +1539,11 @@ static EVT_BEGIN(evt_moamoa_init)
     CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_ACTIVE)
     IF_INT_EQUAL(GSWF_RSH_SMORG_WAITRESS_FREED, 1)
         CALL(evt_moamoa_target_off, 0)
-        CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
+        CALL(evt_npc_change_interrupt, STRING(("ウェイトレス")), 6, PTR(talk_waitless))
     END_IF
     IF_INT_EQUAL(GSWF_RSH_SMORG_CONDUCTOR_FREED, 1)
         CALL(evt_moamoa_target_off, 1)
-        CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
+        CALL(evt_npc_change_interrupt, STRING("車掌"), 6, PTR(talk_syashou))
     END_IF
     RETURN
 EVT_END()
@@ -1558,8 +1558,8 @@ static EVT_BEGIN(evt_meet_moamoa)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1500)
     CALL(evt_party_stop, 0)
-    CALL(evt_npc_set_anim, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), STRING("G_1"))
-    CALL(evt_npc_set_anim, STRING("\x8e\xd4\x8f\xb6"), STRING("G_1"))
+    CALL(evt_npc_set_anim, STRING(("ウェイトレス")), STRING("G_1"))
+    CALL(evt_npc_set_anim, STRING("車掌"), STRING("G_1"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("eff0"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1616,7 +1616,7 @@ EVT_END()
 EVT_BEGIN(evt_moamoa_help)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_TALK_POSE)
-        IF_STR_EQUAL(LW(0), STRING("\x8e\xd4\x8f\xb6"))
+        IF_STR_EQUAL(LW(0), STRING("車掌"))
             CALL(evt_msg_print, 0, STRING("stg6_rsh_249_00"), 0, LW(0))
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_249_01"), 0, LW(0))
@@ -1658,7 +1658,7 @@ EVT_BEGIN(evt_moamoa_help)
     CALL(npc_jump, LW(0), LW(1), LW(2), LW(3), FLOAT(0.0f), FLOAT(0.19921875f), 100)
     CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_NO_HIT)
-    IF_STR_EQUAL(LW(10), STRING("\x8e\xd4\x8f\xb6"))
+    IF_STR_EQUAL(LW(10), STRING("車掌"))
         CALL(evt_npc_set_anim, LW(10), STRING("O_1"))
     ELSE
         CALL(evt_npc_set_anim, LW(10), STRING("P_1"))
@@ -1671,18 +1671,18 @@ EVT_END()
  * frees the waitress (evt_moamoa_help) and gives her talk_waitless as her talk event.
  */
 EVT_BEGIN(evt_moamoa_escape0)
-    SET_VALUE(LW(0), STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")))
+    SET_VALUE(LW(0), STRING(("ウェイトレス")))
     SPAWN_EVENT(PTR(evt_moamoa_help))
     SET_VALUE(GSWF_RSH_SMORG_WAITRESS_FREED, 1)
-    CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
+    CALL(evt_npc_change_interrupt, STRING(("ウェイトレス")), 6, PTR(talk_waitless))
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_moamoa_escape1)
-    SET_VALUE(LW(0), STRING("\x8e\xd4\x8f\xb6"))
+    SET_VALUE(LW(0), STRING("車掌"))
     SPAWN_EVENT(PTR(evt_moamoa_help))
     SET_VALUE(GSWF_RSH_SMORG_CONDUCTOR_FREED, 1)
-    CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
+    CALL(evt_npc_change_interrupt, STRING("車掌"), 6, PTR(talk_syashou))
     RETURN
 EVT_END()
 
@@ -1703,16 +1703,16 @@ static EVT_BEGIN(evt_moamoa_escape)
     WAIT_FRAMES(1)
     CALL(evt_party_stop, 0)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_flag_onoff, 1, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("車掌"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING(("ウェイトレス")), 32)
 #endif
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_flag_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), NPC_FLAG_NO_HIT)
+        CALL(evt_npc_flag_onoff, 1, STRING("車掌"), NPC_FLAG_NO_HIT)
 #endif
-        CALL(evt_npc_status_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_move_position, STRING("\x8e\xd4\x8f\xb6"), -80, 22, 1000, 0, 1)
-        CALL(evt_npc_set_ry, STRING("\x8e\xd4\x8f\xb6"), 90)
+        CALL(evt_npc_status_onoff, 1, STRING("車掌"), NPC_STATUS_FACE_MOVE_DIR)
+        CALL(evt_npc_move_position, STRING("車掌"), -80, 22, 1000, 0, 1)
+        CALL(evt_npc_set_ry, STRING("車掌"), 90)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_INTANGIBLE)
 #endif
@@ -1725,9 +1725,9 @@ static EVT_BEGIN(evt_moamoa_escape)
         CALL(evt_npc_set_ry, STRING("ウェイトレス"), 270)
         CALL(evt_npc_flag_onoff, 0, STRING("ウェイトレス"), NPC_FLAG_INTANGIBLE)
 #else
-        CALL(evt_npc_status_onoff, 1, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_move_position, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 0, 15, 1000, 0, 1)
-        CALL(evt_npc_set_ry, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 270)
+        CALL(evt_npc_status_onoff, 1, STRING(("ウェイトレス")), NPC_STATUS_FACE_MOVE_DIR)
+        CALL(evt_npc_move_position, STRING(("ウェイトレス")), 0, 15, 1000, 0, 1)
+        CALL(evt_npc_set_ry, STRING(("ウェイトレス")), 270)
 #endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -1748,7 +1748,7 @@ static EVT_BEGIN(evt_moamoa_escape)
 #endif
     CALL(evt_cam3d_evt_set, -40, 90, 283, -40, 38, -13, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_240_00"), 0, STRING("\x8e\xd4\x8f\xb6"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_240_00"), 0, STRING("車掌"))
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 90, 300)
@@ -1756,7 +1756,7 @@ static EVT_BEGIN(evt_moamoa_escape)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 90, 300, 0)
     END_INLINE_EVENT
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_241"), 0, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_241"), 0, STRING(("ウェイトレス")))
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 270, 300)
@@ -1764,17 +1764,17 @@ static EVT_BEGIN(evt_moamoa_escape)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 270, 300, 0)
     END_INLINE_EVENT
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_240_01"), 0, STRING("\x8e\xd4\x8f\xb6"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_240_01"), 0, STRING("車掌"))
     WAIT_MS(500)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 0, STRING("\x8e\xd4\x8f\xb6"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_flag_onoff, 0, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 0, STRING(("ウェイトレス")), NPC_FLAG_INTANGIBLE)
 #endif
-    CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
-    CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
+    CALL(evt_npc_change_interrupt, STRING("車掌"), 6, PTR(talk_syashou))
+    CALL(evt_npc_change_interrupt, STRING(("ウェイトレス")), 6, PTR(talk_waitless))
     SET_VALUE(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -1795,7 +1795,7 @@ static EVT_BEGIN(init_syashou)
         CALL(evt_npc_set_position, STRING("me"), -115, 0, 20)
 #endif
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("O_1"), STRING("T_3"))
-        CALL(evt_npc_set_tribe, STRING("me"), STRING("\x8e\xd4\x8f\xb6\x94\xdf"))
+        CALL(evt_npc_set_tribe, STRING("me"), STRING("車掌悲"))
         CASE_DEFAULT
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_SWITCH
@@ -1825,7 +1825,7 @@ static EVT_BEGIN(init_waitless)
         CASE_BETWEEN(STG6_46_ENGINEER, STG6_48_SMORG_MIASMA)
         CALL(evt_npc_set_position, STRING("me"), 50, 0, 0)
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("P_1"), STRING("T_5"))
-        CALL(evt_npc_set_tribe, STRING("me"), STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X\x94\xdf")))
+        CALL(evt_npc_set_tribe, STRING("me"), STRING(("ウェイトレス悲")))
         CASE_DEFAULT
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_SWITCH
@@ -1965,7 +1965,7 @@ static BeroEntry bero_data_c[] = {
 /** NPCs of the car: the conductor. */
 static NpcSetupInfo npc_data[] = {
     {
-        /*"車掌"*/"\x8e\xd4\x8f\xb6", // name
+        "車掌", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_syashou, // initEvent
@@ -1975,7 +1975,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ウェイトレス"*/"\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X", // name
+        "ウェイトレス", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_waitless, // initEvent
@@ -2014,7 +2014,7 @@ EVT_BEGIN(evt_ghost_diary_read)
         RETURN
     END_IF
     CALL(evt_msg_print_add, 0, STRING("stg6_rsh_133"))
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_134"), 0, STRING("\x82\xe4\x82\xa4\x82\xea\x82\xa2"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_134"), 0, STRING("ゆうれい"))
     RETURN
 EVT_END()
 
@@ -2154,8 +2154,8 @@ EVT_BEGIN(rsh_05_a_init_evt)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CASE_DEFAULT
-        CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
-        CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
+        CALL(evt_npc_change_interrupt, STRING("車掌"), 6, PTR(talk_syashou))
+        CALL(evt_npc_change_interrupt, STRING(("ウェイトレス")), 6, PTR(talk_waitless))
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_17_GHOST_DIARY)
         CALL(evt_item_entry, STRING("diary"), ITEM_RAGGED_DIARY, -90, 0, -140, ITEM_TYPE_GROUND, -1, PTR(evt_ghost_diary))

@@ -1918,7 +1918,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 if (v > 0) {
                     sprintf(buf, "%3d", v);
                 } else {
-                    sprintf(buf, "  \x81\x48", v);
+                    sprintf(buf, "  ？", v);
                 }
                 FontDrawStart();
                 FontDrawString(206.0f, wp->scroll + (80 - row * 24), buf);
@@ -1996,7 +1996,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     if (v > 0) {
                         sprintf(buf, "%3d", v);
                     } else {
-                        sprintf(buf, "  \x81\x48", v);
+                        sprintf(buf, "  ？", v);
                     }
                     FontDrawStart();
                     FontDrawString(206.0f, wp->scroll + (80 - row * 24), buf);
@@ -2072,7 +2072,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     if (v > 0) {
                         sprintf(buf, "%3d", v);
                     } else {
-                        sprintf(buf, "  \x81\x48", v);
+                        sprintf(buf, "  ？", v);
                     }
                     FontDrawStart();
                     FontDrawString(206.0f, wp->scroll + (80 - row * 24), buf);

@@ -100,7 +100,7 @@ EvtWord senkaron_escape_event[4];
 /** NPC setup of gon_03: the Dry Bones dummy, Richard and the leader of the bone enemies. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"カロン1"*/"\x83\x4A\x83\x8D\x83\x93\x31", // name
+        "カロン1", // name
         0, 0, // flags..reactionFlags
         senkarondummy_init_event, // initEvent
         senkarondummy_regl_event, // regularEvent
@@ -111,7 +111,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"リチャード"*/"\x83\x8A\x83\x60\x83\x83\x81\x5B\x83\x68", // name
+        "リチャード", // name
         0, 0, // flags..reactionFlags
         richard_init_event, // initEvent
         richard_regl_event, // regularEvent
@@ -122,7 +122,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"リーダー"*/"\x83\x8A\x81\x5B\x83\x5F\x81\x5B", // name
+        "リーダー", // name
         0, 0, // flags..reactionFlags
         leaderkaron_init_event, // initEvent
         NULL, // regularEvent
@@ -692,7 +692,7 @@ EVT_BEGIN(leaderkaron_talk_event)
     END_INLINE_EVENT
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_BALLOON)
     IF_INT_EQUAL(GW(0), 0)
-        CALL(evt_npc_set_width, STRING(/*"リーダー"*/"\x83\x8A\x81\x5B\x83\x5F\x81\x5B"), FLOAT(20.0f))
+        CALL(evt_npc_set_width, STRING("リーダー"), FLOAT(20.0f))
         SPAWN_EVENT(senkaron_event)
         SET_VALUE(GW(0), 1)
     END_IF

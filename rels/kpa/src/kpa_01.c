@@ -996,7 +996,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"トゲノコＡ"*/"\x83\x67\x83\x51\x83\x6D\x83\x52\x82\x60", // name
+        "トゲノコＡ", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -1007,7 +1007,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲノコＢ"*/"\x83\x67\x83\x51\x83\x6D\x83\x52\x82\x61", // name
+        "トゲノコＢ", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -1018,7 +1018,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲノコＣ"*/"\x83\x67\x83\x51\x83\x6D\x83\x52\x82\x62", // name
+        "トゲノコＣ", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1027,7 +1027,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲノコＤ"*/"\x83\x67\x83\x51\x83\x6D\x83\x52\x82\x63", // name
+        "トゲノコＤ", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1036,7 +1036,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ハンマーＡ"*/"\x83\x6E\x83\x93\x83\x7D\x81\x5B\x82\x60", // name
+        "ハンマーＡ", // name
         0, 0, // flags..reactionFlags
         hammer_AB_init_evt, // initEvent
         NULL, // regularEvent
@@ -1047,7 +1047,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ハンマーＢ"*/"\x83\x6E\x83\x93\x83\x7D\x81\x5B\x82\x61", // name
+        "ハンマーＢ", // name
         0, 0, // flags..reactionFlags
         hammer_AB_init_evt, // initEvent
         NULL, // regularEvent
@@ -1058,7 +1058,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ハンマーＣ"*/"\x83\x6E\x83\x93\x83\x7D\x81\x5B\x82\x62", // name
+        "ハンマーＣ", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -1069,7 +1069,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ハンマーＤ"*/"\x83\x6E\x83\x93\x83\x7D\x81\x5B\x82\x63", // name
+        "ハンマーＤ", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -1080,7 +1080,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ハンマーＥ"*/"\x83\x6E\x83\x93\x83\x7D\x81\x5B\x82\x64", // name
+        "ハンマーＥ", // name
         0, 0, // flags..reactionFlags
         hammer_E_init_evt, // initEvent
         NULL, // regularEvent
@@ -1091,7 +1091,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ババ"*/"\x83\x6F\x83\x6F", // name
+        "ババ", // name
         0, 0, // flags..reactionFlags
         baba_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1100,7 +1100,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カメック"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E", // name
+        "カメック", // name
         0, 0, // flags..reactionFlags
         kamek_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1109,7 +1109,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"飛クッパ"*/"\x94\xF2\x83\x4E\x83\x62\x83\x70", // name
+        "飛クッパ", // name
         NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         hkoopa_init_evt, // initEvent

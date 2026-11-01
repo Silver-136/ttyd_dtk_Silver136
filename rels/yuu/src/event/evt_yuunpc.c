@@ -318,7 +318,7 @@ s32 chusan_act_tbl[] = {
  * with cells marked in the string set to -500 (holes).
  */
 void yuunpc_maphit_init(void) {
-    signed char key[3] = "\x81\xA1";
+    signed char key[3] = "■";
     s32 i;
     s32 j;
 

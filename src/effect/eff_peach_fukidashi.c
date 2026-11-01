@@ -140,9 +140,9 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     // red cross over the icon
     if (work->flags & 0x80) {
 #if VERSION >= VERSION_US
-        char text[32] = "\xD7"; // US: Latin-1 multiplication sign
+        char text[32] = "ﾗ"; // US: Latin-1 multiplication sign
 #else
-        char text[32] = "\x81\x7E";
+        char text[32] = "×";
 #endif
         GXColor red = { 0xFF, 0x00, 0x00, 0xFF };
 

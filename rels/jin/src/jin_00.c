@@ -1057,7 +1057,7 @@ EVT_END()
  * vanishes and starts the 1000-Boos swarm (senteresa_evt); when it ends the story becomes "1000 Boos".
  */
 EVT_BEGIN(tyuou_teresa_talk)
-    CALL(evt_msg_print, 0, STRING("stg4_jin_54"), 0, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"))
+    CALL(evt_msg_print, 0, STRING("stg4_jin_54"), 0, STRING("中央テレサ"))
     CALL(evt_msg_select, 0, STRING("stg4_jin_54_yn"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("stg4_jin_55"))
@@ -1067,7 +1067,7 @@ EVT_BEGIN(tyuou_teresa_talk)
     END_IF
     // The Boo is startled; Mario and his partner jump back as the camera swings.
     CALL(evt_cam3d_evt_set, 70, 165, 472, 70, 72, -45, 1000, EASING_SINE_IN_OUT)
-    CALL(evt_npc_set_anim, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), STRING("A_1"))
+    CALL(evt_npc_set_anim, STRING("中央テレサ"), STRING("A_1"))
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_pose, STRING("M_I_O"))
@@ -1076,12 +1076,12 @@ EVT_BEGIN(tyuou_teresa_talk)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(3), LW(4), LW(5))
+        CALL(evt_npc_get_position, STRING("中央テレサ"), LW(3), LW(4), LW(5))
         IF_INT_LESS(LW(0), LW(3))
-            CALL(evt_npc_set_ry, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 270)
+            CALL(evt_npc_set_ry, STRING("中央テレサ"), 270)
             SUBTRACT(LW(0), 40)
         ELSE
-            CALL(evt_npc_set_ry, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 90)
+            CALL(evt_npc_set_ry, STRING("中央テレサ"), 90)
             ADD(LW(0), 40)
         END_IF
         CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 300, 0, -1000)
@@ -1093,7 +1093,7 @@ EVT_BEGIN(tyuou_teresa_talk)
     BEGIN_INLINE_EVENT
         CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(3), LW(4), LW(5))
+        CALL(evt_npc_get_position, STRING("中央テレサ"), LW(3), LW(4), LW(5))
         IF_INT_LESS(LW(0), LW(3))
             SUBTRACT(LW(0), 40)
         ELSE
@@ -1120,17 +1120,17 @@ EVT_BEGIN(tyuou_teresa_talk)
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
-        CALL(evt_npc_set_scale, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(0), LW(0))
+        CALL(evt_npc_set_scale, STRING("中央テレサ"), LW(0), LW(0), LW(0))
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(1)
         END_IF
     END_INLINE_EVENT
-    CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("中央テレサ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_TELESA_SURPRISED1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_npc_set_anim, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), STRING("S_1"))
+    CALL(evt_npc_set_anim, STRING("中央テレサ"), STRING("S_1"))
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("stg4_jin_56"), 0, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"))
+    CALL(evt_msg_print, 0, STRING("stg4_jin_56"), 0, STRING("中央テレサ"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     SET_VALUE(GF(0), 1)
     WAIT_FRAMES(1)
@@ -1139,13 +1139,13 @@ EVT_BEGIN(tyuou_teresa_talk)
     LABEL(2)
     CALL(evt_sub_intpl_msec_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
-    CALL(evt_npc_set_scale, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(0), LW(0))
+    CALL(evt_npc_set_scale, STRING("中央テレサ"), LW(0), LW(0), LW(0))
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(2)
     END_IF
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg4_jin_57"), 0, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"))
+    CALL(evt_msg_print, 0, STRING("stg4_jin_57"), 0, STRING("中央テレサ"))
     // The Boo fades out and the swarm of Boos starts; the story advances once it ends.
     CALL(evt_cam3d_evt_set, 70, 400, 1125, 70, 200, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -1154,16 +1154,16 @@ EVT_BEGIN(tyuou_teresa_talk)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 500)
         LABEL(3)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL(evt_npc_set_color, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 255, 255, 255, LW(0))
+        CALL(evt_npc_set_color, STRING("中央テレサ"), 255, 255, 255, LW(0))
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(3)
         END_IF
-        CALL(evt_npc_set_color, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 255, 255, 255, 0)
+        CALL(evt_npc_set_color, STRING("中央テレサ"), 255, 255, 255, 0)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_change_interrupt, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 6, 0)
+    CALL(evt_npc_flag_onoff, 1, STRING("中央テレサ"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("中央テレサ"), NPC_FLAG_NO_TALK_BALLOON)
+    CALL(evt_npc_change_interrupt, STRING("中央テレサ"), 6, 0)
     SPAWN_EVENT(senteresa_evt)
     CALL(senteresa_wait_end_seq)
     WAIT_MS(3500)
@@ -1212,7 +1212,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"テレサ"*/"\x83\x65\x83\x8C\x83\x54", // name
+        "テレサ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1221,7 +1221,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54", // name
+        "中央テレサ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         tyuou_teresa_init, // initEvent
@@ -1233,7 +1233,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"奥扉テレサ"*/"\x89\x9C\x94\xE0\x83\x65\x83\x8C\x83\x54", // name
+        "奥扉テレサ", // name
         NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         oku_teresa_init, // initEvent
@@ -1243,7 +1243,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"手前扉テレサ"*/"\x8E\xE8\x91\x4F\x94\xE0\x83\x65\x83\x8C\x83\x54", // name
+        "手前扉テレサ", // name
         NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         temae_teresa_init, // initEvent
@@ -1253,7 +1253,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54", // name
+        "アトミックテレサ", // name
         NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, // reactionFlags
         atomic_teresa_init, // initEvent
@@ -1263,7 +1263,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"1001テレサ"*/"\x31\x30\x30\x31\x83\x65\x83\x8C\x83\x54", // name
+        "1001テレサ", // name
         NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1272,7 +1272,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"1002テレサ"*/"\x31\x30\x30\x32\x83\x65\x83\x8C\x83\x54", // name
+        "1002テレサ", // name
         NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1281,7 +1281,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"1003テレサ"*/"\x31\x30\x30\x33\x83\x65\x83\x8C\x83\x54", // name
+        "1003テレサ", // name
         NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1290,7 +1290,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"1004テレサ"*/"\x31\x30\x30\x34\x83\x65\x83\x8C\x83\x54", // name
+        "1004テレサ", // name
         NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1299,7 +1299,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"1005テレサ"*/"\x31\x30\x30\x35\x83\x65\x83\x8C\x83\x54", // name
+        "1005テレサ", // name
         NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1308,7 +1308,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"1006テレサ"*/"\x31\x30\x30\x36\x83\x65\x83\x8C\x83\x54", // name
+        "1006テレサ", // name
         NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -2158,12 +2158,12 @@ EVT_BEGIN(senteresa_evt)
     WAIT_MS(2500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 60)
-    CALL(evt_npc_set_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_set_scale, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 1, 1, 1)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_TALK_BALLOON)
+    CALL(evt_npc_set_position, STRING("中央テレサ"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_set_scale, STRING("中央テレサ"), 1, 1, 1)
+    CALL(evt_npc_flag_onoff, 1, STRING("中央テレサ"), NPC_FLAG_NO_TALK_BALLOON)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
-        CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_get_position, STRING("中央テレサ"), LW(0), LW(1), LW(2))
         SUBTRACT(LW(1), 20)
         CALL(evt_cam3d_event_from_road, LW(0), LW(1), LW(2), 0, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
         CALL(evt_cam3d_evt_set, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9), 1000, EASING_SINE_IN_OUT)
@@ -2171,14 +2171,14 @@ EVT_BEGIN(senteresa_evt)
     SET_VALUE(LW(0), 0)
     LOOP(25)
         ADD(LW(0), 10)
-        CALL(evt_npc_set_color, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 255, 255, 255, LW(0))
+        CALL(evt_npc_set_color, STRING("中央テレサ"), 255, 255, 255, LW(0))
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_npc_set_color, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 255, 255, 255, 255)
+    CALL(evt_npc_set_color, STRING("中央テレサ"), 255, 255, 255, 255)
     WAIT_MS(800)
-    CALL(evt_msg_print, 0, STRING("stg4_jin_61"), 0, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"))
+    CALL(evt_msg_print, 0, STRING("stg4_jin_61"), 0, STRING("中央テレサ"))
     WAIT_MS(500)
-    CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("中央テレサ"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(1), 20)
     CALL(evt_cam3d_event_from_road, LW(0), LW(1), LW(2), 0, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
     ADD(LW(5), 160)
@@ -2187,22 +2187,22 @@ EVT_BEGIN(senteresa_evt)
         CALL(evt_cam3d_evt_set, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9), 2000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
     END_INLINE_EVENT
-    CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(2), LW(3), LW(4))
+    CALL(evt_npc_get_position, STRING("中央テレサ"), LW(2), LW(3), LW(4))
     SET_VALUE(LW(5), LW(3))
     ADD(LW(5), 200)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(3), LW(5), 2000)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
-    CALL(evt_npc_set_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(2), LW(0), LW(4))
+    CALL(evt_npc_set_position, STRING("中央テレサ"), LW(2), LW(0), LW(4))
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
     // The Boos gather together into the Atomic Boo.
-    CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_dir, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(3))
-    CALL(evt_npc_set_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_set_ry, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(3))
+    CALL(evt_npc_get_position, STRING("中央テレサ"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_dir, STRING("中央テレサ"), LW(3))
+    CALL(evt_npc_set_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_set_ry, STRING("アトミックテレサ"), LW(3))
     CALL(senteresa_syugo)
     LOOP(0)
         PEEK_INT(LW(0), PTR(g_nNumEndProc))
@@ -2211,17 +2211,17 @@ EVT_BEGIN(senteresa_evt)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("中央テレサ"), LW(0), LW(1), LW(2))
     CALL(teresa_eff, LW(0), LW(1), LW(2))
     WAIT_MS(500)
     CALL(senteresa_dispoff)
-    CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("中央テレサ"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(1), 25)
-    CALL(evt_npc_set_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
-    CALL(evt_npc_flag_onoff, 0, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_set_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_flag_onoff, 1, STRING("中央テレサ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("アトミックテレサ"), NPC_FLAG_NO_DRAW)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("stg4_jin_62"), 0, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"))
+    CALL(evt_msg_print, 0, STRING("stg4_jin_62"), 0, STRING("アトミックテレサ"))
     CALL(evt_cam3d_evt_off, 400, EASING_SINE_IN_OUT)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1_2"), LW(0), LW(1), LW(2), 0)
@@ -2229,30 +2229,30 @@ EVT_BEGIN(senteresa_evt)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 30)
     ADD(LW(2), 3)
-    CALL(evt_npc_glide_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2), 0, FLOAT(450.0f), 1, 11, 0)
+    CALL(evt_npc_glide_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2), 0, FLOAT(450.0f), 1, 11, 0)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     BEGIN_INLINE_EVENT
         LOOP(100)
-            CALL(evt_npc_get_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+            CALL(evt_npc_get_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
             SUBTRACT(LW(1), 4)
-            CALL(evt_npc_set_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+            CALL(evt_npc_set_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
             WAIT_MS(10)
-            CALL(evt_npc_get_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+            CALL(evt_npc_get_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
             ADD(LW(1), 4)
-            CALL(evt_npc_set_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+            CALL(evt_npc_set_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
             WAIT_MS(10)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(50)
-            CALL(evt_npc_get_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+            CALL(evt_npc_get_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
             SUBTRACT(LW(0), 4)
-            CALL(evt_npc_set_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+            CALL(evt_npc_set_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
             WAIT_MS(20)
-            CALL(evt_npc_get_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+            CALL(evt_npc_get_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
             ADD(LW(0), 4)
-            CALL(evt_npc_set_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
+            CALL(evt_npc_set_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
             WAIT_MS(20)
         END_LOOP
     END_INLINE_EVENT
@@ -2320,9 +2320,9 @@ EVT_BEGIN(senteresa_evt)
         WAIT_MS(750)
     END_INLINE_EVENT
     // The Atomic Boo fight starts.
-    CALL(evt_npc_get_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_set_battle_info, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), 7)
-    CALL(evt_npc_battle_start, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"))
+    CALL(evt_npc_get_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_set_battle_info, STRING("アトミックテレサ"), 7)
+    CALL(evt_npc_battle_start, STRING("アトミックテレサ"))
     CALL(evt_npc_wait_battle_end)
     ADD(LW(1), 50)
     // After the fight the Lucky Start pops out, the remaining Boos are blown away and the Atomic Boo is
@@ -2335,7 +2335,7 @@ EVT_BEGIN(senteresa_evt)
     SET_VALUE(GSWF_JIN_00_LUCKY_START, 1)
 #endif
     CALL(senteresa_huttobu)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("アトミックテレサ"), NPC_FLAG_NO_DRAW)
     LOOP(0)
         PEEK_INT(LW(0), PTR(g_nNumEndProc))
         IF_INT_EQUAL(LW(0), 200)

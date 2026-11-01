@@ -885,11 +885,11 @@ static const s32 rsh_texmtx_tbl[] = {
  * of which is rolled for a new game.
  */
 RshRndNpc rsh_01_rnd_npc_1[] = {
-    {"c_kinopiko_v", /*"キノピオ女紫"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x8E\x87", evt_rsh_rnd_npc_2_1_talk},
-    {"c_kinopio_b", /*"キノピオ青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x90\xC2", evt_rsh_rnd_npc_2_2_talk},
-    {"c_kinopio_g", /*"キノピオ緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x97\xCE", evt_rsh_rnd_npc_2_3_talk},
-    {"c_nokonoko", /*"ノコノコ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52", evt_rsh_rnd_npc_2_4_talk},
-    {"c_kuribo_n", /*"NPCクリボー"*/"\x4E\x50\x43\x83\x4E\x83\x8A\x83\x7B\x81\x5B", evt_rsh_rnd_npc_2_5_talk},
+    {"c_kinopiko_v", "キノピオ女紫", evt_rsh_rnd_npc_2_1_talk},
+    {"c_kinopio_b", "キノピオ青", evt_rsh_rnd_npc_2_2_talk},
+    {"c_kinopio_g", "キノピオ緑", evt_rsh_rnd_npc_2_3_talk},
+    {"c_nokonoko", "ノコノコ", evt_rsh_rnd_npc_2_4_talk},
+    {"c_kuribo_n", "NPCクリボー", evt_rsh_rnd_npc_2_5_talk},
 };
 
 /**
@@ -897,9 +897,9 @@ RshRndNpc rsh_01_rnd_npc_1[] = {
  * of which is rolled for a new game.
  */
 RshRndNpc rsh_01_rnd_npc_2[] = {
-    {"c_kinopiko_p", /*"キノピオ女桃"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x93\x8D", evt_rsh_rnd_npc_2_6_talk},
-    {"c_kinopio_b", /*"キノピオ青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x90\xC2", evt_rsh_rnd_npc_2_8_talk},
-    {"c_kinopiko", /*"キノピオ女"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97", evt_rsh_rnd_npc_2_9_talk},
+    {"c_kinopiko_p", "キノピオ女桃", evt_rsh_rnd_npc_2_6_talk},
+    {"c_kinopio_b", "キノピオ青", evt_rsh_rnd_npc_2_8_talk},
+    {"c_kinopiko", "キノピオ女", evt_rsh_rnd_npc_2_9_talk},
 };
 
 /**
@@ -907,8 +907,8 @@ RshRndNpc rsh_01_rnd_npc_2[] = {
  * of which is rolled for a new game.
  */
 RshRndNpc rsh_01_rnd_npc_3[] = {
-    {"c_kokinopio_y", /*"キノピオ子黄緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x89\xA9\x97\xCE", evt_rsh_rnd_npc_2_7_talk},
-    {"c_kokinopio_b", /*"キノピオ子青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x90\xC2", evt_rsh_rnd_npc_2_10_talk},
+    {"c_kokinopio_y", "キノピオ子黄緑", evt_rsh_rnd_npc_2_7_talk},
+    {"c_kokinopio_b", "キノピオ子青", evt_rsh_rnd_npc_2_10_talk},
 };
 
 /**
@@ -916,19 +916,19 @@ RshRndNpc rsh_01_rnd_npc_3[] = {
  * of which is rolled for a new game.
  */
 RshRndNpc rsh_03_rnd_npc_1[] = {
-    {"c_kinopio", /*"キノピオ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49", evt_rsh_rnd_npc_3_1_talk},
-    {"c_kinopiko_p", /*"キノピオ女桃"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x93\x8D", evt_rsh_rnd_npc_3_2_talk},
-    {"c_kinopiko_v", /*"キノピオ女紫"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x8E\x87", evt_rsh_rnd_npc_3_3_talk},
-    {"c_kinopio_b", /*"キノピオ青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x90\xC2", evt_rsh_rnd_npc_3_4_talk},
-    {"c_kinopiko_p", /*"キノピオ女桃"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x93\x8D", evt_rsh_rnd_npc_3_5_talk},
-    {"c_kinopiko_v", /*"キノピオ女紫"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x8E\x87", evt_rsh_rnd_npc_3_7_talk},
-    {"c_nokonoko", /*"ノコノコ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52", evt_rsh_rnd_npc_3_8_talk},
-    {"c_yoshi", /*"ヨッシー大"*/"\x83\x88\x83\x62\x83\x56\x81\x5B\x91\xE5", evt_rsh_rnd_npc_3_9_talk},
-    {"c_nokonoko", /*"ノコノコ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52", evt_rsh_rnd_npc_4_1_talk},
-    {"c_yoshi", /*"ヨッシー大"*/"\x83\x88\x83\x62\x83\x56\x81\x5B\x91\xE5", evt_rsh_rnd_npc_4_2_talk},
-    {"c_jugem_n", /*"ＮＰＣジュゲム"*/"\x82\x6D\x82\x6F\x82\x62\x83\x57\x83\x85\x83\x51\x83\x80", evt_rsh_rnd_npc_4_3_talk},
-    {"c_kinopio_b", /*"キノピオ青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x90\xC2", evt_rsh_rnd_npc_4_4_talk},
-    {"c_nokonoko", /*"ノコノコ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52", evt_rsh_rnd_npc_4_5_talk},
+    {"c_kinopio", "キノピオ", evt_rsh_rnd_npc_3_1_talk},
+    {"c_kinopiko_p", "キノピオ女桃", evt_rsh_rnd_npc_3_2_talk},
+    {"c_kinopiko_v", "キノピオ女紫", evt_rsh_rnd_npc_3_3_talk},
+    {"c_kinopio_b", "キノピオ青", evt_rsh_rnd_npc_3_4_talk},
+    {"c_kinopiko_p", "キノピオ女桃", evt_rsh_rnd_npc_3_5_talk},
+    {"c_kinopiko_v", "キノピオ女紫", evt_rsh_rnd_npc_3_7_talk},
+    {"c_nokonoko", "ノコノコ", evt_rsh_rnd_npc_3_8_talk},
+    {"c_yoshi", "ヨッシー大", evt_rsh_rnd_npc_3_9_talk},
+    {"c_nokonoko", "ノコノコ", evt_rsh_rnd_npc_4_1_talk},
+    {"c_yoshi", "ヨッシー大", evt_rsh_rnd_npc_4_2_talk},
+    {"c_jugem_n", "ＮＰＣジュゲム", evt_rsh_rnd_npc_4_3_talk},
+    {"c_kinopio_b", "キノピオ青", evt_rsh_rnd_npc_4_4_talk},
+    {"c_nokonoko", "ノコノコ", evt_rsh_rnd_npc_4_5_talk},
 };
 
 /**
@@ -936,13 +936,13 @@ RshRndNpc rsh_03_rnd_npc_1[] = {
  * of which is rolled for a new game.
  */
 RshRndNpc rsh_03_rnd_npc_2[] = {
-    {"c_kokinopio_g", /*"キノピオ子緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x97\xCE", evt_rsh_rnd_npc_3_6_talk},
-    {"c_kokinopio_y", /*"キノピオ子黄緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x89\xA9\x97\xCE", evt_rsh_rnd_npc_3_10_talk},
-    {"c_kinopio", /*"キノピオ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49", evt_rsh_rnd_npc_4_6_talk},
-    {"c_kokinopio_g", /*"キノピオ子緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x97\xCE", evt_rsh_rnd_npc_4_7_talk},
-    {"c_kuribo_n", /*"NPCクリボー"*/"\x4E\x50\x43\x83\x4E\x83\x8A\x83\x7B\x81\x5B", evt_rsh_rnd_npc_4_8_talk},
-    {"c_kinopio_g", /*"キノピオ緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x97\xCE", evt_rsh_rnd_npc_4_9_talk},
-    {"c_nokonoko", /*"ノコノコ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52", evt_rsh_rnd_npc_4_10_talk},
+    {"c_kokinopio_g", "キノピオ子緑", evt_rsh_rnd_npc_3_6_talk},
+    {"c_kokinopio_y", "キノピオ子黄緑", evt_rsh_rnd_npc_3_10_talk},
+    {"c_kinopio", "キノピオ", evt_rsh_rnd_npc_4_6_talk},
+    {"c_kokinopio_g", "キノピオ子緑", evt_rsh_rnd_npc_4_7_talk},
+    {"c_kuribo_n", "NPCクリボー", evt_rsh_rnd_npc_4_8_talk},
+    {"c_kinopio_g", "キノピオ緑", evt_rsh_rnd_npc_4_9_talk},
+    {"c_nokonoko", "ノコノコ", evt_rsh_rnd_npc_4_10_talk},
 };
 
 /**
@@ -950,8 +950,8 @@ RshRndNpc rsh_03_rnd_npc_2[] = {
  * of which is rolled for a new game.
  */
 RshRndNpc rsh_04_rnd_npc_1[] = {
-    {"c_kinopio_g", /*"キノピオ緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x97\xCE", evt_rsh_rnd_npc_5_2_talk},
-    {"c_kinopio_b", /*"キノピオ青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x90\xC2", evt_rsh_rnd_npc_5_10_talk},
+    {"c_kinopio_g", "キノピオ緑", evt_rsh_rnd_npc_5_2_talk},
+    {"c_kinopio_b", "キノピオ青", evt_rsh_rnd_npc_5_10_talk},
 };
 
 /**
@@ -959,8 +959,8 @@ RshRndNpc rsh_04_rnd_npc_1[] = {
  * of which is rolled for a new game.
  */
 RshRndNpc rsh_04_rnd_npc_2[] = {
-    {"c_nokonoko", /*"ノコノコ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52", evt_rsh_rnd_npc_5_8_talk},
-    {"c_kinopio", /*"キノピオ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49", evt_rsh_rnd_npc_5_9_talk},
+    {"c_nokonoko", "ノコノコ", evt_rsh_rnd_npc_5_8_talk},
+    {"c_kinopio", "キノピオ", evt_rsh_rnd_npc_5_9_talk},
 };
 
 /**
@@ -968,8 +968,8 @@ RshRndNpc rsh_04_rnd_npc_2[] = {
  * of which is rolled for a new game.
  */
 RshRndNpc rsh_04_rnd_npc_3[] = {
-    {"c_kokinopio_g", /*"キノピオ子緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x97\xCE", evt_rsh_rnd_npc_5_5_talk},
-    {"c_kokinopio", /*"キノピオ子"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71", evt_rsh_rnd_npc_5_6_talk},
+    {"c_kokinopio_g", "キノピオ子緑", evt_rsh_rnd_npc_5_5_talk},
+    {"c_kokinopio", "キノピオ子", evt_rsh_rnd_npc_5_6_talk},
 };
 
 /**
@@ -977,10 +977,10 @@ RshRndNpc rsh_04_rnd_npc_3[] = {
  * of which is rolled for a new game.
  */
 RshRndNpc rsh_04_rnd_npc_4[] = {
-    {"c_kokinopio_b", /*"キノピオ子青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x90\xC2", evt_rsh_rnd_npc_5_1_talk},
-    {"c_kokinopio_y", /*"キノピオ子黄緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x89\xA9\x97\xCE", evt_rsh_rnd_npc_5_3_talk},
-    {"c_kokinopio_b", /*"キノピオ子青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x90\xC2", evt_rsh_rnd_npc_5_4_talk},
-    {"c_kinopiko", /*"キノピオ女"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97", evt_rsh_rnd_npc_5_7_talk},
+    {"c_kokinopio_b", "キノピオ子青", evt_rsh_rnd_npc_5_1_talk},
+    {"c_kokinopio_y", "キノピオ子黄緑", evt_rsh_rnd_npc_5_3_talk},
+    {"c_kokinopio_b", "キノピオ子青", evt_rsh_rnd_npc_5_4_talk},
+    {"c_kinopiko", "キノピオ女", evt_rsh_rnd_npc_5_7_talk},
 };
 
 /**
@@ -1378,11 +1378,11 @@ EVT_END()
  * print uses them.
  */
 const char* rsh_01_rnd_npc_1_list[] = {
-    /*"２−１"*/"\x82\x51\x81\x7C\x82\x50",
-    /*"２−２"*/"\x82\x51\x81\x7C\x82\x51",
-    /*"２−３"*/"\x82\x51\x81\x7C\x82\x52",
-    /*"２−４"*/"\x82\x51\x81\x7C\x82\x53",
-    /*"２−５"*/"\x82\x51\x81\x7C\x82\x54",
+    "２－１",
+    "２－２",
+    "２－３",
+    "２－４",
+    "２－５",
 };
 
 /**
@@ -1390,9 +1390,9 @@ const char* rsh_01_rnd_npc_1_list[] = {
  * print uses them.
  */
 const char* rsh_01_rnd_npc_2_list[] = {
-    /*"２−６"*/"\x82\x51\x81\x7C\x82\x55",
-    /*"２−８"*/"\x82\x51\x81\x7C\x82\x57",
-    /*"２−９"*/"\x82\x51\x81\x7C\x82\x58",
+    "２－６",
+    "２－８",
+    "２－９",
 };
 
 /**
@@ -1400,8 +1400,8 @@ const char* rsh_01_rnd_npc_2_list[] = {
  * print uses them.
  */
 const char* rsh_01_rnd_npc_3_list[] = {
-    /*"２−７"*/"\x82\x51\x81\x7C\x82\x56",
-    /*"２−１０"*/"\x82\x51\x81\x7C\x82\x50\x82\x4F",
+    "２－７",
+    "２－１０",
 };
 
 /**
@@ -1409,19 +1409,19 @@ const char* rsh_01_rnd_npc_3_list[] = {
  * print uses them.
  */
 const char* rsh_03_rnd_npc_1_list[] = {
-    /*"３−１"*/"\x82\x52\x81\x7C\x82\x50",
-    /*"３−２"*/"\x82\x52\x81\x7C\x82\x51",
-    /*"３−３"*/"\x82\x52\x81\x7C\x82\x52",
-    /*"３−４"*/"\x82\x52\x81\x7C\x82\x53",
-    /*"３−５"*/"\x82\x52\x81\x7C\x82\x54",
-    /*"３−７"*/"\x82\x52\x81\x7C\x82\x56",
-    /*"３−８"*/"\x82\x52\x81\x7C\x82\x57",
-    /*"３−９"*/"\x82\x52\x81\x7C\x82\x58",
-    /*"４−１"*/"\x82\x53\x81\x7C\x82\x50",
-    /*"４−２"*/"\x82\x53\x81\x7C\x82\x51",
-    /*"４−３"*/"\x82\x53\x81\x7C\x82\x52",
-    /*"４−４"*/"\x82\x53\x81\x7C\x82\x53",
-    /*"４−５"*/"\x82\x53\x81\x7C\x82\x54",
+    "３－１",
+    "３－２",
+    "３－３",
+    "３－４",
+    "３－５",
+    "３－７",
+    "３－８",
+    "３－９",
+    "４－１",
+    "４－２",
+    "４－３",
+    "４－４",
+    "４－５",
 };
 
 /**
@@ -1429,13 +1429,13 @@ const char* rsh_03_rnd_npc_1_list[] = {
  * print uses them.
  */
 const char* rsh_03_rnd_npc_2_list[] = {
-    /*"３−６"*/"\x82\x52\x81\x7C\x82\x55",
-    /*"３−１０"*/"\x82\x52\x81\x7C\x82\x50\x82\x4F",
-    /*"４−６"*/"\x82\x53\x81\x7C\x82\x55",
-    /*"４−７"*/"\x82\x53\x81\x7C\x82\x56",
-    /*"４−８"*/"\x82\x53\x81\x7C\x82\x57",
-    /*"４−９"*/"\x82\x53\x81\x7C\x82\x58",
-    /*"４−１０"*/"\x82\x53\x81\x7C\x82\x50\x82\x4F",
+    "３－６",
+    "３－１０",
+    "４－６",
+    "４－７",
+    "４－８",
+    "４－９",
+    "４－１０",
 };
 
 /**
@@ -1443,8 +1443,8 @@ const char* rsh_03_rnd_npc_2_list[] = {
  * print uses them.
  */
 const char* rsh_04_rnd_npc_1_list[] = {
-    /*"５−２"*/"\x82\x54\x81\x7C\x82\x51",
-    /*"５−１０"*/"\x82\x54\x81\x7C\x82\x50\x82\x4F",
+    "５－２",
+    "５－１０",
 };
 
 /**
@@ -1452,8 +1452,8 @@ const char* rsh_04_rnd_npc_1_list[] = {
  * print uses them.
  */
 const char* rsh_04_rnd_npc_2_list[] = {
-    /*"５−８"*/"\x82\x54\x81\x7C\x82\x57",
-    /*"５−９"*/"\x82\x54\x81\x7C\x82\x58",
+    "５－８",
+    "５－９",
 };
 
 /**
@@ -1461,8 +1461,8 @@ const char* rsh_04_rnd_npc_2_list[] = {
  * print uses them.
  */
 const char* rsh_04_rnd_npc_3_list[] = {
-    /*"５−５"*/"\x82\x54\x81\x7C\x82\x54",
-    /*"５−６"*/"\x82\x54\x81\x7C\x82\x55",
+    "５－５",
+    "５－６",
 };
 
 /**
@@ -1470,10 +1470,10 @@ const char* rsh_04_rnd_npc_3_list[] = {
  * print uses them.
  */
 const char* rsh_04_rnd_npc_4_list[] = {
-    /*"５−１"*/"\x82\x54\x81\x7C\x82\x50",
-    /*"５−３"*/"\x82\x54\x81\x7C\x82\x52",
-    /*"５−４"*/"\x82\x54\x81\x7C\x82\x53",
-    /*"５−７"*/"\x82\x54\x81\x7C\x82\x56",
+    "５－１",
+    "５－３",
+    "５－４",
+    "５－７",
 };
 
 /**
@@ -1576,7 +1576,7 @@ EVT_END()
 
 NpcSetupInfo rsh_03_rnd_npc_2_ent[] = {
     {
-        /*"乗客２"*/"\x8F\xE6\x8B\x71\x82\x51", // name
+        "乗客２", // name
         0, 0, // flags..reactionFlags
         npc_urouro_init_event, // initEvent
         npc_urouro_move_event, // regularEvent
@@ -1617,7 +1617,7 @@ EVT_END()
 
 NpcSetupInfo rsh_04_rnd_npc_3_ent[] = {
     {
-        /*"乗客３"*/"\x8F\xE6\x8B\x71\x82\x52", // name
+        "乗客３", // name
         0, 0, // flags..reactionFlags
         npc_urouro_init_event, // initEvent
         npc_urouro_move_event, // regularEvent

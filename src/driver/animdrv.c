@@ -2421,7 +2421,7 @@ static BOOL animSetMaterial_ChangeTexture(AnimationPoseData* data, AnimPoseShape
             bindId = 0;
             //"Error: animSetMaterial_ChangeTexture: テクスチャがありません frameExt=%d\n"
             printf("Error: animSetMaterial_ChangeTexture: "
-                   "\x83\x65\x83\x4E\x83\x58\x83\x60\x83\x83\x82\xAA\x82\xA0\x82\xE8\x82\xDC\x82\xB9\x82\xF1 "
+                   "テクスチャがありません "
                    "frameExt=%d\n",
                    frameExt);
         }

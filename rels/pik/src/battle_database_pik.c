@@ -463,7 +463,7 @@ NpcBattleSelect btlgrpsel_pik_btlno_pik_03_09_off[] = {
  */
 NpcSetupBattleInfo btlsetup_pik_tbl[] = {
     {
-        /*"マップstg_06_4"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x36\x5F\x34", // name
+        "マップstg_06_4", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -473,7 +473,7 @@ NpcSetupBattleInfo btlsetup_pik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"pik_03パープルテレサ"*/"\x70\x69\x6B\x5F\x30\x33\x83\x70\x81\x5B\x83\x76\x83\x8B\x83\x65\x83\x8C\x83\x54", // name
+        "pik_03パープルテレサ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -483,7 +483,7 @@ NpcSetupBattleInfo btlsetup_pik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"pik_03パープルテレサ"*/"\x70\x69\x6B\x5F\x30\x33\x83\x70\x81\x5B\x83\x76\x83\x8B\x83\x65\x83\x8C\x83\x54", // name
+        "pik_03パープルテレサ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -493,7 +493,7 @@ NpcSetupBattleInfo btlsetup_pik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"pik_03パープルテレサ"*/"\x70\x69\x6B\x5F\x30\x33\x83\x70\x81\x5B\x83\x76\x83\x8B\x83\x65\x83\x8C\x83\x54", // name
+        "pik_03パープルテレサ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -503,7 +503,7 @@ NpcSetupBattleInfo btlsetup_pik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"pik_03パープルテレサ"*/"\x70\x69\x6B\x5F\x30\x33\x83\x70\x81\x5B\x83\x76\x83\x8B\x83\x65\x83\x8C\x83\x54", // name
+        "pik_03パープルテレサ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -513,7 +513,7 @@ NpcSetupBattleInfo btlsetup_pik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"pik_03パープルテレサ"*/"\x70\x69\x6B\x5F\x30\x33\x83\x70\x81\x5B\x83\x76\x83\x8B\x83\x65\x83\x8C\x83\x54", // name
+        "pik_03パープルテレサ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -523,7 +523,7 @@ NpcSetupBattleInfo btlsetup_pik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"pik_03パープルテレサ"*/"\x70\x69\x6B\x5F\x30\x33\x83\x70\x81\x5B\x83\x76\x83\x8B\x83\x65\x83\x8C\x83\x54", // name
+        "pik_03パープルテレサ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -533,7 +533,7 @@ NpcSetupBattleInfo btlsetup_pik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"pik_03パープルテレサ"*/"\x70\x69\x6B\x5F\x30\x33\x83\x70\x81\x5B\x83\x76\x83\x8B\x83\x65\x83\x8C\x83\x54", // name
+        "pik_03パープルテレサ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -543,7 +543,7 @@ NpcSetupBattleInfo btlsetup_pik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"pik_03パープルテレサ"*/"\x70\x69\x6B\x5F\x30\x33\x83\x70\x81\x5B\x83\x76\x83\x8B\x83\x65\x83\x8C\x83\x54", // name
+        "pik_03パープルテレサ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -553,7 +553,7 @@ NpcSetupBattleInfo btlsetup_pik_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"pik_03パープルテレサ"*/"\x70\x69\x6B\x5F\x30\x33\x83\x70\x81\x5B\x83\x76\x83\x8B\x83\x65\x83\x8C\x83\x54", // name
+        "pik_03パープルテレサ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect

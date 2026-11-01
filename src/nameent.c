@@ -43,52 +43,52 @@ void nameEntDisp(CameraId cameraId, void* param);
  * and a blank, depending on the name type.
  */
 const char* hiragana_tbl[] = {
-    "\x82\xA0", "\x82\xA2", "\x82\xA4", "\x82\xA6", "\x82\xA8", "\x82\xED",
-    "\x81\x40", "\x82\xF0", "\x81\x40", "\x82\xF1", "\x82\x4F", "\x82\x50",
-    "\x82\x51", "\x82\x52", "\x82\xA9", "\x82\xAB", "\x82\xAD", "\x82\xAF",
-    "\x82\xB1", "\x82\xAA", "\x82\xAC", "\x82\xAE", "\x82\xB0", "\x82\xB2",
-    "\x82\x53", "\x82\x54", "\x82\x55", "\x82\x56", "\x82\xB3", "\x82\xB5",
-    "\x82\xB7", "\x82\xB9", "\x82\xBB", "\x82\xB4", "\x82\xB6", "\x82\xB8",
-    "\x82\xBA", "\x82\xBC", "\x82\x57", "\x82\x58", "\x81\x49", "\x81\x48",
-    "\x82\xBD", "\x82\xBF", "\x82\xC2", "\x82\xC4", "\x82\xC6", "\x82\xBE",
-    "\x82\xC0", "\x82\xC3", "\x82\xC5", "\x82\xC7", "\x81\x40", "\x94\xB5",
-    "\x81\x99", "\x81\xF4", "\x82\xC8", "\x82\xC9", "\x82\xCA", "\x82\xCB",
-    "\x82\xCC", "\x82\xCE", "\x82\xD1", "\x82\xD4", "\x82\xD7", "\x82\xDA",
-    NULL,       NULL,       NULL,       NULL,       "\x82\xCD", "\x82\xD0",
-    "\x82\xD3", "\x82\xD6", "\x82\xD9", "\x82\xCF", "\x82\xD2", "\x82\xD5",
-    "\x82\xD8", "\x82\xDB", NULL,       NULL,       NULL,       NULL,
-    "\x82\xDC", "\x82\xDD", "\x82\xDE", "\x82\xDF", "\x82\xE0", "\x82\x9F",
-    "\x82\xA1", "\x82\xA3", "\x82\xA5", "\x82\xA7", NULL,       NULL,
-    NULL,       NULL,       "\x82\xE2", "\x81\x40", "\x82\xE4", "\x81\x40",
-    "\x82\xE6", "\x82\xE1", "\x82\xE3", "\x82\xE5", "\x82\xC1", "\x89\x4C",
-    NULL,       NULL,       NULL,       NULL,       "\x82\xE7", "\x82\xE8",
-    "\x82\xE9", "\x82\xEA", "\x82\xEB", "\x81\x7C", "\x81\x60", "\x81\x45",
-    "\x81\x44", "\x81\x40", NULL,       NULL,       NULL,       NULL
+    "あ", "い", "う", "え", "お", "わ",
+    "　", "を", "　", "ん", "０", "１",
+    "２", "３", "か", "き", "く", "け",
+    "こ", "が", "ぎ", "ぐ", "げ", "ご",
+    "４", "５", "６", "７", "さ", "し",
+    "す", "せ", "そ", "ざ", "じ", "ず",
+    "ぜ", "ぞ", "８", "９", "！", "？",
+    "た", "ち", "つ", "て", "と", "だ",
+    "ぢ", "づ", "で", "ど", "　", "鳩",
+    "☆", "♪", "な", "に", "ぬ", "ね",
+    "の", "ば", "び", "ぶ", "べ", "ぼ",
+    NULL,       NULL,       NULL,       NULL,       "は", "ひ",
+    "ふ", "へ", "ほ", "ぱ", "ぴ", "ぷ",
+    "ぺ", "ぽ", NULL,       NULL,       NULL,       NULL,
+    "ま", "み", "む", "め", "も", "ぁ",
+    "ぃ", "ぅ", "ぇ", "ぉ", NULL,       NULL,
+    NULL,       NULL,       "や", "　", "ゆ", "　",
+    "よ", "ゃ", "ゅ", "ょ", "っ", "鵜",
+    NULL,       NULL,       NULL,       NULL,       "ら", "り",
+    "る", "れ", "ろ", "－", "～", "・",
+    "．", "　", NULL,       NULL,       NULL,       NULL
 };
 
 /** Katakana grid of the name-entry screen: the same layout as hiragana_tbl, cell for cell. */
 const char* katakana_tbl[] = {
-    "\x83\x41", "\x83\x43", "\x83\x45", "\x83\x47", "\x83\x49", "\x83\x8F",
-    "\x81\x40", "\x83\x92", "\x81\x40", "\x83\x93", "\x82\x4F", "\x82\x50",
-    "\x82\x51", "\x82\x52", "\x83\x4A", "\x83\x4C", "\x83\x4E", "\x83\x50",
-    "\x83\x52", "\x83\x4B", "\x83\x4D", "\x83\x4F", "\x83\x51", "\x83\x53",
-    "\x82\x53", "\x82\x54", "\x82\x55", "\x82\x56", "\x83\x54", "\x83\x56",
-    "\x83\x58", "\x83\x5A", "\x83\x5C", "\x83\x55", "\x83\x57", "\x83\x59",
-    "\x83\x5B", "\x83\x5D", "\x82\x57", "\x82\x58", "\x81\x49", "\x81\x48",
-    "\x83\x5E", "\x83\x60", "\x83\x63", "\x83\x65", "\x83\x67", "\x83\x5F",
-    "\x83\x61", "\x83\x64", "\x83\x66", "\x83\x68", "\x81\x40", "\x94\xB5",
-    "\x81\x99", "\x81\xF4", "\x83\x69", "\x83\x6A", "\x83\x6B", "\x83\x6C",
-    "\x83\x6D", "\x83\x6F", "\x83\x72", "\x83\x75", "\x83\x78", "\x83\x7B",
-    NULL,       NULL,       NULL,       NULL,       "\x83\x6E", "\x83\x71",
-    "\x83\x74", "\x83\x77", "\x83\x7A", "\x83\x70", "\x83\x73", "\x83\x76",
-    "\x83\x79", "\x83\x7C", NULL,       NULL,       NULL,       NULL,
-    "\x83\x7D", "\x83\x7E", "\x83\x80", "\x83\x81", "\x83\x82", "\x83\x40",
-    "\x83\x42", "\x83\x44", "\x83\x46", "\x83\x48", NULL,       NULL,
-    NULL,       NULL,       "\x83\x84", "\x81\x40", "\x83\x86", "\x81\x40",
-    "\x83\x88", "\x83\x83", "\x83\x85", "\x83\x87", "\x83\x62", "\x83\x94",
-    NULL,       NULL,       NULL,       NULL,       "\x83\x89", "\x83\x8A",
-    "\x83\x8B", "\x83\x8C", "\x83\x8D", "\x81\x7C", "\x81\x60", "\x81\x45",
-    "\x81\x44", "\x81\x40", NULL,       NULL,       NULL,       NULL
+    "ア", "イ", "ウ", "エ", "オ", "ワ",
+    "　", "ヲ", "　", "ン", "０", "１",
+    "２", "３", "カ", "キ", "ク", "ケ",
+    "コ", "ガ", "ギ", "グ", "ゲ", "ゴ",
+    "４", "５", "６", "７", "サ", "シ",
+    "ス", "セ", "ソ", "ザ", "ジ", "ズ",
+    "ゼ", "ゾ", "８", "９", "！", "？",
+    "タ", "チ", "ツ", "テ", "ト", "ダ",
+    "ヂ", "ヅ", "デ", "ド", "　", "鳩",
+    "☆", "♪", "ナ", "ニ", "ヌ", "ネ",
+    "ノ", "バ", "ビ", "ブ", "ベ", "ボ",
+    NULL,       NULL,       NULL,       NULL,       "ハ", "ヒ",
+    "フ", "ヘ", "ホ", "パ", "ピ", "プ",
+    "ペ", "ポ", NULL,       NULL,       NULL,       NULL,
+    "マ", "ミ", "ム", "メ", "モ", "ァ",
+    "ィ", "ゥ", "ェ", "ォ", NULL,       NULL,
+    NULL,       NULL,       "ヤ", "　", "ユ", "　",
+    "ヨ", "ャ", "ュ", "ョ", "ッ", "ヴ",
+    NULL,       NULL,       NULL,       NULL,       "ラ", "リ",
+    "ル", "レ", "ロ", "－", "～", "・",
+    "．", "　", NULL,       NULL,       NULL,       NULL
 };
 
 //.bss
@@ -120,22 +120,22 @@ const char* latin_tbl[] = {
     "b", "c", "d", "e", "\xFC", "\xFA",
     "\xF9", "\xFB", "F", "G", "H", "I",
     "J", "f", "g", "h", "i", "j",
-    "\xDF", "-", "/", "&", "K", "L",
+    "ﾟ", "-", "/", "&", "K", "L",
     "M", "N", "O", "k", "l", "m",
-    "n", "o", "\xA1", "!", "\xBF", "?",
+    "n", "o", "｡", "!", "ｿ", "?",
     "P", "Q", "R", "S", "T", "p",
     "q", "r", "s", "t", ".", ",",
     "0", "1", "U", "V", "W", "X",
     "Y", "u", "v", "w", "x", "y",
-    "2", "3", "4", "5", "Z", "\xC4",
-    "\xC1", "\xC0", "\xC7", "z", "\xE4", "\xE1",
+    "2", "3", "4", "5", "Z", "ﾄ",
+    "ﾁ", "ﾀ", "ﾇ", "z", "\xE4", "\xE1",
     "\xE0", "\xE2", "6", "7", "8", "9",
-    "\xC9", "\xC8", "\xCD", "\xCC", "\xD1", "\xE7",
+    "ﾉ", "ﾈ", "ﾍ", "ﾌ", "ﾑ", "\xE7",
     "\xEB", "\xE9", "\xE8", "\xEA", NULL, NULL,
-    NULL, NULL, "\xD6", "\xD3", "\xD2", "\x8C",
-    "\xDC", "\xEF", "\xED", "\xEC", "\xEE", "\xF1",
-    NULL, NULL, NULL, NULL, "\xDA", "\xD9",
-    "\xD0", "\xDE", " ", "\xF6", "\xF3", "\xF2",
+    NULL, NULL, "ﾖ", "ﾓ", "ﾒ", "\x8C",
+    "ﾜ", "\xEF", "\xED", "\xEC", "\xEE", "\xF1",
+    NULL, NULL, NULL, NULL, "ﾚ", "ﾙ",
+    "ﾐ", "ﾞ", " ", "\xF6", "\xF3", "\xF2",
     "\xF4", "\x9C", NULL, NULL, NULL, NULL
 };
 #endif
@@ -196,9 +196,9 @@ void nameEntOn(s32 type) {
     strcpy(wp->name, "");
     for (i = 0; i < 8; i++) {
 #if VERSION >= VERSION_US
-        strcat(wp->name, (u32)gp->language == LANGUAGE_JP ? "\x81\x40" : " ");
+        strcat(wp->name, (u32)gp->language == LANGUAGE_JP ? "　" : " ");
 #else
-        strcat(wp->name, "\x81\x40");
+        strcat(wp->name, "　");
 #endif
     }
     wp->maskAlpha = 0.0f;
@@ -206,12 +206,12 @@ void nameEntOn(s32 type) {
     if ((u32)gp->language == LANGUAGE_JP) {
         switch (type) {
             case 2:
-                hiragana_tbl[9] = "\x81\x40";
-                katakana_tbl[9] = "\x81\x40";
+                hiragana_tbl[9] = "　";
+                katakana_tbl[9] = "　";
                 break;
             default:
-                hiragana_tbl[9] = "\x82\xF1";
-                katakana_tbl[9] = "\x83\x93";
+                hiragana_tbl[9] = "ん";
+                katakana_tbl[9] = "ン";
                 break;
         }
     } else {
@@ -227,12 +227,12 @@ void nameEntOn(s32 type) {
 #else
     switch (type) {
         case 2:
-            hiragana_tbl[9] = "\x81\x40";
-            katakana_tbl[9] = "\x81\x40";
+            hiragana_tbl[9] = "　";
+            katakana_tbl[9] = "　";
             break;
         default:
-            hiragana_tbl[9] = "\x82\xF1";
-            katakana_tbl[9] = "\x83\x93";
+            hiragana_tbl[9] = "ん";
+            katakana_tbl[9] = "ン";
             break;
     }
 #endif
@@ -268,7 +268,7 @@ const char* nameEntGetName(void) {
 #if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         for (j = 7; j >= 1; j--) {
-            if (strncmp(&wp->name[j * 2], "\x81\x40", 2)) {
+            if (strncmp(&wp->name[j * 2], "　", 2)) {
                 break;
             }
             wp->name[j * 2] = 0;
@@ -284,7 +284,7 @@ const char* nameEntGetName(void) {
     }
 #else
     for (j = 7; j >= 1; j--) {
-        if (strncmp(&wp->name[j * 2], "\x81\x40", 2)) {
+        if (strncmp(&wp->name[j * 2], "　", 2)) {
             break;
         }
         wp->name[j * 2] = 0;
@@ -398,7 +398,7 @@ static s32 nameMain(void) {
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                     if (wp->nameLen > 0) {
                         wp->nameLen--;
-                        ((u16*)wp->name)[wp->nameLen] = *(u16*)"\x81\x40";
+                        ((u16*)wp->name)[wp->nameLen] = *(u16*)"　";
                         psndSFXOn((const char*)0xB);
                     } else if (wp->nameLen == 0 && wp->type == 0) {
                         psndSFXOn((const char*)0x13);
@@ -548,7 +548,7 @@ s32 nameMain(void) {
                                 if ((u32)gp->language == LANGUAGE_JP) {
                                     n = strlen(wp->name) / 2;
                                     for (k = 0, o = 0; k < n; o += 2, k++) {
-                                        if (strncmp(&wp->name[o], "\x81\x40", 2)) {
+                                        if (strncmp(&wp->name[o], "　", 2)) {
                                             break;
                                         }
                                     }
@@ -597,7 +597,7 @@ s32 nameMain(void) {
 #else
                                 n = strlen(wp->name) / 2;
                                 for (k = 0, o = 0; k < n; o += 2, k++) {
-                                    if (strncmp(&wp->name[o], "\x81\x40", 2)) {
+                                    if (strncmp(&wp->name[o], "　", 2)) {
                                         break;
                                     }
                                 }
@@ -653,7 +653,7 @@ s32 nameMain(void) {
                     if ((u32)gp->language == LANGUAGE_JP) {
                         len = strlen(wp->name) / 2;
                         for (j = 0, off = 0; j < len; off += 2, j++) {
-                            if (strncmp(&wp->name[off], "\x81\x40", 2)) {
+                            if (strncmp(&wp->name[off], "　", 2)) {
                                 break;
                             }
                         }
@@ -702,7 +702,7 @@ s32 nameMain(void) {
 #else
                     len = strlen(wp->name) / 2;
                     for (j = 0, off = 0; j < len; off += 2, j++) {
-                        if (strncmp(&wp->name[off], "\x81\x40", 2)) {
+                        if (strncmp(&wp->name[off], "　", 2)) {
                             break;
                         }
                     }
@@ -721,12 +721,12 @@ s32 nameMain(void) {
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 #if VERSION >= VERSION_US
                     if ((u32)gp->language == LANGUAGE_JP) {
-                        if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "\x81\x40", 2)) {
+                        if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "　", 2)) {
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                             wp->state = 101;
                             wp->flags |= 2;
                         } else {
-                            ((u16*)wp->name)[wp->nameLen] = *(u16*)"\x81\x40";
+                            ((u16*)wp->name)[wp->nameLen] = *(u16*)"　";
                             wp->nameLen--;
                             if (wp->nameLen < 0) {
                                 wp->nameLen = 0;
@@ -748,12 +748,12 @@ s32 nameMain(void) {
                         }
                     }
 #else
-                    if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "\x81\x40", 2)) {
+                    if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "　", 2)) {
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                         wp->state = 101;
                         wp->flags |= NAMEENT_FLAG_CANCELLED;
                     } else {
-                        ((u16*)wp->name)[wp->nameLen] = *(u16*)"\x81\x40";
+                        ((u16*)wp->name)[wp->nameLen] = *(u16*)"　";
                         wp->nameLen--;
                         if (wp->nameLen < 0) {
                             wp->nameLen = 0;

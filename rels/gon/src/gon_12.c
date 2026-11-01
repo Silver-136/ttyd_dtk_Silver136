@@ -100,7 +100,7 @@ static USER_FUNC(evt_chuchu_back_loop) {
     s32 elapsed;
 
     // チュチュリーナ
-    npc = evtNpcNameToPtr(event, "\x83\x60\x83\x85\x83\x60\x83\x85\x83\x8A\x81\x5B\x83\x69");
+    npc = evtNpcNameToPtr(event, "チュチュリーナ");
     total = evtGetValue(event, args[0]);
     if (gp->inBattle) {
         now = gp->renderTime;
@@ -274,7 +274,7 @@ EVT_END()
 /** NPC setup of gon_12: Ms. Mowz. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"チュチュリーナ"*/"\x83\x60\x83\x85\x83\x60\x83\x85\x83\x8A\x81\x5B\x83\x69", // name
+        "チュチュリーナ", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent

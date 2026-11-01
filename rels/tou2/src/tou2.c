@@ -420,7 +420,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     windowDispGX_System(0, 0xFF, left - 30.0f, 165.0f, 310.0f, 330.0f);
 #if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
-        title = "\x83\x89\x83\x93\x83\x4C\x83\x93\x83\x4F";
+        title = "ランキング";
     } else {
         title = msgSearch("stg3_ranking");
     }
@@ -430,7 +430,7 @@ static void disp_proc(CameraId cameraId, void* param) {
 #else
     FontDrawStart();
     FontDrawScale(1.0f);
-    width = FontGetMessageWidth("\x83\x89\x83\x93\x83\x4C\x83\x93\x83\x4F");
+    width = FontGetMessageWidth("ランキング");
 #endif
     {
         GXColor color = titleColor;
@@ -440,7 +440,7 @@ static void disp_proc(CameraId cameraId, void* param) {
 #if VERSION >= VERSION_US
     FontDrawMessage(-width / 2, top, title);
 #else
-    FontDrawMessage(-width / 2, top, "\x83\x89\x83\x93\x83\x4C\x83\x93\x83\x4F");
+    FontDrawMessage(-width / 2, top, "ランキング");
 #endif
     {
         f32 sy = 145.0f;
@@ -766,29 +766,29 @@ USER_FUNC(evt_tou_get_fighter_tribe) {
         }
     }
     if (!found) {
-        name = "\x83\x4E\x83\x8A\x83\x7B\x81\x5B";
+        name = "クリボー";
         tribe = npcGetTribe(name);
     } else {
         name = tribe->nameJp;
     }
     if (setupId == 2 && idx == 1) {
-        name = "\x83\x70\x83\x5E\x83\x74\x83\x40\x83\x43\x83\x5E\x81\x5B";
+        name = "パタファイター";
         tribe = npcGetTribe(name);
     }
     if (setupId == 10 && idx == 1) {
-        name = "\x83\x41\x83\x43\x83\x41\x83\x93\x83\x56\x83\x93\x83\x47\x83\x82\x83\x93\x32";
+        name = "アイアンシンエモン2";
         tribe = npcGetTribe(name);
     }
     if (setupId == 13 && idx == 1) {
-        name = "\x83\x45\x83\x89\x83\x70\x83\x5E";
+        name = "ウラパタ";
         tribe = npcGetTribe(name);
     }
     if (setupId == 15 && idx == 2) {
-        name = "\x83\x4A\x83\x81\x83\x62\x83\x4E\x97\xCE\x8B\xF3";
+        name = "カメック緑空";
         tribe = npcGetTribe(name);
     }
     if (setupId == 11) {
-        name = "\x83\x6E\x83\x43\x83\x70\x81\x5B\x83\x67\x83\x51\x83\x81\x83\x62\x83\x67";
+        name = "ハイパートゲメット";
         tribe = npcGetTribe(name);
     }
     evtSetValue(event, args[2], (EvtWord)tribe->modelName);

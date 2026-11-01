@@ -1209,7 +1209,7 @@ static TreeAccess ki_data[] = {
 /** NPC set up by this table: ババ, Kammy Koopa in the Bowser interlude (hei_00_koopa_evt). */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ババ"*/"\x83\x6F\x83\x6F", // name
+        "ババ", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType

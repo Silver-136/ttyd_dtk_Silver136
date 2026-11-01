@@ -87,7 +87,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"シンノスケ1"*/"\x83\x56\x83\x93\x83\x6D\x83\x58\x83\x50\x31", // name
+        "シンノスケ1", // name
         0, 0, // flags..reactionFlags
         kuriboo_init_event, // initEvent
         kuriboo_move_event, // regularEvent
@@ -106,7 +106,7 @@ static NpcSetupInfo npcEnt[] = {
         8, // battleInfoId
     },
     {
-        /*"シンノスケ2"*/"\x83\x56\x83\x93\x83\x6D\x83\x58\x83\x50\x32", // name
+        "シンノスケ2", // name
         0, 0, // flags..reactionFlags
         kuriboo_init_event, // initEvent
         kuriboo_move_event, // regularEvent

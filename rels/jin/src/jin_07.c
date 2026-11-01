@@ -243,7 +243,7 @@ EVT_END()
 /** NPC of the room: the Boo (Teresa), which cannot be touched. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"テレサ"*/"\x83\x65\x83\x8C\x83\x54", // name
+        "テレサ", // name
         NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType

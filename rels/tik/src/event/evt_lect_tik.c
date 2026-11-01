@@ -616,22 +616,22 @@ EVT_BEGIN(plane_majin_lecture)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_set_camid, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), CAMERA_3D_EFFECTB)
+    CALL(evt_npc_flag_onoff, 1, STRING("ペラ魔人"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("ペラ魔人"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_set_camid, STRING("ペラ魔人"), CAMERA_3D_EFFECTB)
     WAIT_FRAMES(1)
     BEGIN_SIBLING_EVENT
         LOOP(0)
             CALL(evt_cam_get_at, CAMERA_3D, LW(0), LW(1), LW(2))
             SUBTRACT(LW(1), 25)
-            CALL(evt_npc_set_position, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), LW(0), LW(1), LW(2))
+            CALL(evt_npc_set_position, STRING("ペラ魔人"), LW(0), LW(1), LW(2))
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
-    CALL(evt_npc_set_anim, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), STRING("P_1"))
+    CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_1"))
     WAIT_MS(200)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("mac_majin_13"), 0, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"))
+    CALL(evt_msg_print, 0, STRING("mac_majin_13"), 0, STRING("ペラ魔人"))
     CALL(evt_mario_set_pose, STRING("M_N_H"))
     LOOP(4)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -640,7 +640,7 @@ EVT_BEGIN(plane_majin_lecture)
     END_LOOP
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("mac_majin_14"), 0, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"))
+    CALL(evt_msg_print, 0, STRING("mac_majin_14"), 0, STRING("ペラ魔人"))
     // The camera pans as the airplane panel slides in beside Mario.
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(80.0f), FLOAT(42.0f), FLOAT(-101.799805f), 1000, EASING_SINE_IN_OUT)
     SET_FLOAT_VALUE(LW(1), FLOAT(2.6660156f))
@@ -657,7 +657,7 @@ EVT_BEGIN(plane_majin_lecture)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("mac_majin_15"), 0, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"))
+    CALL(evt_msg_print, 0, STRING("mac_majin_15"), 0, STRING("ペラ魔人"))
     LOOP(0)
         CALL(x_flag_set, 0, 1)
         BEGIN_INLINE_EVENT
@@ -828,7 +828,7 @@ EVT_BEGIN(plane_majin_lecture)
         CALL(evt_msg_print_add, 0, STRING("mac_majin_16"))
 #else
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("mac_majin_16"), 0, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"))
+        CALL(evt_msg_print, 0, STRING("mac_majin_16"), 0, STRING("ペラ魔人"))
 #endif
         CALL(evt_msg_select, 0, STRING("mac_majin_17"))
 #if VERSION <= VERSION_DEMO_US
@@ -907,10 +907,10 @@ EVT_BEGIN(plane_majin_lecture)
     CALL(evt_mario_wait_landon)
 #endif
     CALL(evt_msg_print_add, 0, STRING("mac_majin_19"))
-    CALL(evt_npc_set_anim, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), STRING("P_2"))
+    CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_2"))
     WAIT_MS(200)
-    CALL(evt_npc_set_camid, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), CAMERA_3D)
-    CALL(evt_npc_set_position, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), 0, -1000, 0)
+    CALL(evt_npc_set_camid, STRING("ペラ魔人"), CAMERA_3D)
+    CALL(evt_npc_set_position, STRING("ペラ魔人"), 0, -1000, 0)
     RETURN
 #if VERSION <= VERSION_DEMO_US
 EVT_END()

@@ -467,7 +467,7 @@ u8 enemy_100[] = {
  */
 NpcSetupInfo npcEnt_kuriboo[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         kuriboo_init_event, // initEvent
@@ -500,7 +500,7 @@ NpcSetupInfo npcEnt_kuriboo[] = {
  */
 NpcSetupInfo npcEnt_patakuri[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         patakuri_init_event, // initEvent
@@ -533,7 +533,7 @@ NpcSetupInfo npcEnt_patakuri[] = {
  */
 NpcSetupInfo npcEnt_hannya[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         hannya_init_event, // initEvent
@@ -566,7 +566,7 @@ NpcSetupInfo npcEnt_hannya[] = {
  */
 NpcSetupInfo npcEnt_chorobon[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         chorobon_init_event, // initEvent
@@ -599,7 +599,7 @@ NpcSetupInfo npcEnt_chorobon[] = {
  */
 NpcSetupInfo npcEnt_sinnosuke[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         sinnosuke_init_event, // initEvent
@@ -632,7 +632,7 @@ NpcSetupInfo npcEnt_sinnosuke[] = {
  */
 NpcSetupInfo npcEnt_sinemon[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         sinemon_init_event, // initEvent
@@ -665,7 +665,7 @@ NpcSetupInfo npcEnt_sinemon[] = {
  */
 NpcSetupInfo npcEnt_nokonoko[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         nokonoko_init_event, // initEvent
@@ -698,7 +698,7 @@ NpcSetupInfo npcEnt_nokonoko[] = {
  */
 NpcSetupInfo npcEnt_patapata[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         patapata_init_event, // initEvent
@@ -731,7 +731,7 @@ NpcSetupInfo npcEnt_patapata[] = {
  */
 NpcSetupInfo npcEnt_met[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         met_init_event, // initEvent
@@ -764,7 +764,7 @@ NpcSetupInfo npcEnt_met[] = {
  */
 NpcSetupInfo npcEnt_patamet[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         patamet_init_event, // initEvent
@@ -797,7 +797,7 @@ NpcSetupInfo npcEnt_patamet[] = {
  */
 NpcSetupInfo npcEnt_sambo[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         sambo_init_event, // initEvent
@@ -830,7 +830,7 @@ NpcSetupInfo npcEnt_sambo[] = {
  */
 NpcSetupInfo npcEnt_honenoko[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         honenoko2_init_event, // initEvent
@@ -863,7 +863,7 @@ NpcSetupInfo npcEnt_honenoko[] = {
  */
 NpcSetupInfo npcEnt_karon[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         karon_init_event, // initEvent
@@ -896,7 +896,7 @@ NpcSetupInfo npcEnt_karon[] = {
  */
 NpcSetupInfo npcEnt_dokugassun[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         dokugassun_init_event, // initEvent
@@ -929,7 +929,7 @@ NpcSetupInfo npcEnt_dokugassun[] = {
  */
 NpcSetupInfo npcEnt_piders[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         piders_init_event, // initEvent
@@ -961,7 +961,7 @@ NpcSetupInfo npcEnt_piders[] = {
  */
 NpcSetupInfo npcEnt_teresa[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         teresa_init_event, // initEvent
@@ -994,7 +994,7 @@ NpcSetupInfo npcEnt_teresa[] = {
  */
 NpcSetupInfo npcEnt_hbom[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         hbom_init_event, // initEvent
@@ -1027,7 +1027,7 @@ NpcSetupInfo npcEnt_hbom[] = {
  */
 NpcSetupInfo npcEnt_bubble[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         bubble_init_event, // initEvent
@@ -1060,7 +1060,7 @@ NpcSetupInfo npcEnt_bubble[] = {
  */
 NpcSetupInfo npcEnt_wanwan[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         wanwan_init_event, // initEvent
@@ -1092,7 +1092,7 @@ NpcSetupInfo npcEnt_wanwan[] = {
  */
 NpcSetupInfo npcEnt_mahoon[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         mahoon_init_event, // initEvent
@@ -1125,7 +1125,7 @@ NpcSetupInfo npcEnt_mahoon[] = {
  */
 NpcSetupInfo npcEnt_pakkun[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         pakkun_init_event, // initEvent
@@ -1158,7 +1158,7 @@ NpcSetupInfo npcEnt_pakkun[] = {
  */
 NpcSetupInfo npcEnt_togenoko[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         togenoko_init_event, // initEvent
@@ -1191,7 +1191,7 @@ NpcSetupInfo npcEnt_togenoko[] = {
  */
 NpcSetupInfo npcEnt_basabasa2[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         basabasa2_init_event, // initEvent
@@ -1224,7 +1224,7 @@ NpcSetupInfo npcEnt_basabasa2[] = {
  */
 NpcSetupInfo npcEnt_togedaruma[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         togedaruma_init_event, // initEvent
@@ -1257,7 +1257,7 @@ NpcSetupInfo npcEnt_togedaruma[] = {
  */
 NpcSetupInfo npcEnt_pansy[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         pansy_init_event, // initEvent
@@ -1290,7 +1290,7 @@ NpcSetupInfo npcEnt_pansy[] = {
  */
 NpcSetupInfo npcEnt_zonbaba[] = {
     {
-        /*"敵"*/"\x93\x47", // name
+        "敵", // name
         NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, NULL, NULL, NULL, // reactionFlags..talkEvent
         enemy_common_dead_event, // deadEvent
@@ -1865,7 +1865,7 @@ EVT_END()
  */
 NpcSetupInfo npcEnt_idouya[] = {
     {
-        /*"移動屋"*/"\x88\xDA\x93\xAE\x89\xAE", // name
+        "移動屋", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, NULL, // reactionFlags..initEvent
         move_event, // regularEvent
@@ -2092,7 +2092,7 @@ EVT_END()
  */
 NpcSetupInfo npcEnt_gyousyou[] = {
     {
-        /*"行商人"*/"\x8D\x73\x8F\xA4\x90\x6C", // name
+        "行商人", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, NULL, // reactionFlags..initEvent
         move_event, // regularEvent

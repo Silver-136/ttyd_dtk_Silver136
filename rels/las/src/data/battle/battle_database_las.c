@@ -2779,7 +2779,7 @@ NpcBattleSelect btlgrpsel_las_btlno_las_25_06_off[] = {
  */
 NpcSetupBattleInfo btlsetup_las_tbl[] = {
     {
-        /*"マップstg_08_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x38\x5F\x30", // name
+        "マップstg_08_0", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2789,7 +2789,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_08_1"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x38\x5F\x31", // name
+        "マップstg_08_1", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2799,7 +2799,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_08_2"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x38\x5F\x32", // name
+        "マップstg_08_2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2809,7 +2809,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_08_3"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x38\x5F\x33", // name
+        "マップstg_08_3", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2819,7 +2819,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_08_4"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x38\x5F\x34", // name
+        "マップstg_08_4", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2829,7 +2829,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_08_5"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x38\x5F\x35", // name
+        "マップstg_08_5", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2839,7 +2839,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_08_6"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x38\x5F\x36", // name
+        "マップstg_08_6", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2849,7 +2849,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"黒カロン"*/"\x8D\x95\x83\x4A\x83\x8D\x83\x93", // name
+        "黒カロン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2860,7 +2860,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_CHUBOSS_BATTLE1", // bgmName
     },
     {
-        /*"変身ランペル+魔女"*/"\x95\xCF\x90\x67\x83\x89\x83\x93\x83\x79\x83\x8B\x2B\x96\x82\x8F\x97", // name
+        "変身ランペル+魔女", // name
         "las_09", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -2872,7 +2872,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_BOSS_STG3_3WOMEN1", // bgmName
     },
     {
-        /*"las17クリボー"*/"\x6C\x61\x73\x31\x37\x83\x4E\x83\x8A\x83\x7B\x81\x5B", // name
+        "las17クリボー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2882,7 +2882,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las17トゲクリボー"*/"\x6C\x61\x73\x31\x37\x83\x67\x83\x51\x83\x4E\x83\x8A\x83\x7B\x81\x5B", // name
+        "las17トゲクリボー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2892,7 +2892,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las17ノコノコ"*/"\x6C\x61\x73\x31\x37\x83\x6D\x83\x52\x83\x6D\x83\x52", // name
+        "las17ノコノコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2902,7 +2902,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las17シンノスケ"*/"\x6C\x61\x73\x31\x37\x83\x56\x83\x93\x83\x6D\x83\x58\x83\x50", // name
+        "las17シンノスケ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2912,7 +2912,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"クッパ＆カメックオババ"*/"\x83\x4E\x83\x62\x83\x70\x81\x95\x83\x4A\x83\x81\x83\x62\x83\x4E\x83\x49\x83\x6F\x83\x6F", // name
+        "クッパ＆カメックオババ", // name
         "las_28", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -2924,7 +2924,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_BOSS_STG8_KOOPA", // bgmName
     },
     {
-        /*"ブンババ"*/"\x83\x75\x83\x93\x83\x6F\x83\x6F", // name
+        "ブンババ", // name
         "las_26", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -2940,7 +2940,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_BOSS_STG1_GONBABA1", // bgmName
     },
     {
-        /*"バッテンリーダー"*/"\x83\x6F\x83\x62\x83\x65\x83\x93\x83\x8A\x81\x5B\x83\x5F\x81\x5B", // name
+        "バッテンリーダー", // name
         "las_28", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -2952,7 +2952,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_BOSS_STG8_3RDHEAD1", // bgmName
     },
     {
-        /*"ブラックピーチ1回目"*/"\x83\x75\x83\x89\x83\x62\x83\x4E\x83\x73\x81\x5B\x83\x60\x31\x89\xF1\x96\xDA", // name
+        "ブラックピーチ1回目", // name
         "las_29", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -2964,7 +2964,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_BOSS_STG8_WITCH", // bgmName
     },
     {
-        /*"ブラックピーチ2回目"*/"\x83\x75\x83\x89\x83\x62\x83\x4E\x83\x73\x81\x5B\x83\x60\x32\x89\xF1\x96\xDA", // name
+        "ブラックピーチ2回目", // name
         "las_29", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -2976,7 +2976,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_BOSS_STG8_LAST_BOSS2", // bgmName
     },
     {
-        /*"las01バサバサチュルル"*/"\x6C\x61\x73\x30\x31\x83\x6F\x83\x54\x83\x6F\x83\x54\x83\x60\x83\x85\x83\x8B\x83\x8B", // name
+        "las01バサバサチュルル", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2986,7 +2986,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las01バサバサチュルル"*/"\x6C\x61\x73\x30\x31\x83\x6F\x83\x54\x83\x6F\x83\x54\x83\x60\x83\x85\x83\x8B\x83\x8B", // name
+        "las01バサバサチュルル", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2996,7 +2996,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las01バサバサチュルル"*/"\x6C\x61\x73\x30\x31\x83\x6F\x83\x54\x83\x6F\x83\x54\x83\x60\x83\x85\x83\x8B\x83\x8B", // name
+        "las01バサバサチュルル", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3006,7 +3006,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las02カロン"*/"\x6C\x61\x73\x30\x32\x83\x4A\x83\x8D\x83\x93", // name
+        "las02カロン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3016,7 +3016,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las02バサバサチュルル"*/"\x6C\x61\x73\x30\x32\x83\x6F\x83\x54\x83\x6F\x83\x54\x83\x60\x83\x85\x83\x8B\x83\x8B", // name
+        "las02バサバサチュルル", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3026,7 +3026,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las02カロン"*/"\x6C\x61\x73\x30\x32\x83\x4A\x83\x8D\x83\x93", // name
+        "las02カロン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3036,7 +3036,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las02カロン"*/"\x6C\x61\x73\x30\x32\x83\x4A\x83\x8D\x83\x93", // name
+        "las02カロン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3046,7 +3046,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las02スーパーキラー大砲"*/"\x6C\x61\x73\x30\x32\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x89\x81\x5B\x91\xE5\x96\x43", // name
+        "las02スーパーキラー大砲", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3056,7 +3056,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las02スーパーキラー大砲"*/"\x6C\x61\x73\x30\x32\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x89\x81\x5B\x91\xE5\x96\x43", // name
+        "las02スーパーキラー大砲", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3066,7 +3066,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las02スーパーキラー"*/"\x6C\x61\x73\x30\x32\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x89\x81\x5B", // name
+        "las02スーパーキラー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3076,7 +3076,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las03バサバサチュルル"*/"\x6C\x61\x73\x30\x33\x83\x6F\x83\x54\x83\x6F\x83\x54\x83\x60\x83\x85\x83\x8B\x83\x8B", // name
+        "las03バサバサチュルル", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3086,7 +3086,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las03バサバサチュルル"*/"\x6C\x61\x73\x30\x33\x83\x6F\x83\x54\x83\x6F\x83\x54\x83\x60\x83\x85\x83\x8B\x83\x8B", // name
+        "las03バサバサチュルル", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3096,7 +3096,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las03バサバサチュルル"*/"\x6C\x61\x73\x30\x33\x83\x6F\x83\x54\x83\x6F\x83\x54\x83\x60\x83\x85\x83\x8B\x83\x8B", // name
+        "las03バサバサチュルル", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3106,7 +3106,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las04ファントム"*/"\x6C\x61\x73\x30\x34\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las04ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3116,7 +3116,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las06スーパーキラー大砲"*/"\x6C\x61\x73\x30\x36\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x89\x81\x5B\x91\xE5\x96\x43", // name
+        "las06スーパーキラー大砲", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3126,7 +3126,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las06スーパーキラー大砲"*/"\x6C\x61\x73\x30\x36\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x89\x81\x5B\x91\xE5\x96\x43", // name
+        "las06スーパーキラー大砲", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3136,7 +3136,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las06ファントム"*/"\x6C\x61\x73\x30\x36\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las06ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3146,7 +3146,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las06ファントム"*/"\x6C\x61\x73\x30\x36\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las06ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3156,7 +3156,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las06スーパーキラー大砲"*/"\x6C\x61\x73\x30\x36\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x89\x81\x5B\x91\xE5\x96\x43", // name
+        "las06スーパーキラー大砲", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3166,7 +3166,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las06スーパーキラー大砲"*/"\x6C\x61\x73\x30\x36\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x89\x81\x5B\x91\xE5\x96\x43", // name
+        "las06スーパーキラー大砲", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3176,7 +3176,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las06スーパーキラー"*/"\x6C\x61\x73\x30\x36\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x89\x81\x5B", // name
+        "las06スーパーキラー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3186,7 +3186,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las07ファントム"*/"\x6C\x61\x73\x30\x37\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las07ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3196,7 +3196,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las07カロン"*/"\x6C\x61\x73\x30\x37\x83\x4A\x83\x8D\x83\x93", // name
+        "las07カロン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3206,7 +3206,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las07カロン"*/"\x6C\x61\x73\x30\x37\x83\x4A\x83\x8D\x83\x93", // name
+        "las07カロン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3216,7 +3216,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las09ワンワン"*/"\x6C\x61\x73\x30\x39\x83\x8F\x83\x93\x83\x8F\x83\x93", // name
+        "las09ワンワン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3226,7 +3226,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las09ワンワン"*/"\x6C\x61\x73\x30\x39\x83\x8F\x83\x93\x83\x8F\x83\x93", // name
+        "las09ワンワン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3236,7 +3236,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las19スーパーマホーン"*/"\x6C\x61\x73\x31\x39\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x7D\x83\x7A\x81\x5B\x83\x93", // name
+        "las19スーパーマホーン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3246,7 +3246,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las19スーパーマホーン"*/"\x6C\x61\x73\x31\x39\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x7D\x83\x7A\x81\x5B\x83\x93", // name
+        "las19スーパーマホーン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3256,7 +3256,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las19スーパーマホーン"*/"\x6C\x61\x73\x31\x39\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x7D\x83\x7A\x81\x5B\x83\x93", // name
+        "las19スーパーマホーン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3266,7 +3266,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las20スーパーマホーン"*/"\x6C\x61\x73\x32\x30\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x7D\x83\x7A\x81\x5B\x83\x93", // name
+        "las20スーパーマホーン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3276,7 +3276,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las21ワンワン"*/"\x6C\x61\x73\x32\x31\x83\x8F\x83\x93\x83\x8F\x83\x93", // name
+        "las21ワンワン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3286,7 +3286,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las21ワンワン"*/"\x6C\x61\x73\x32\x31\x83\x8F\x83\x93\x83\x8F\x83\x93", // name
+        "las21ワンワン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3296,7 +3296,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las22スーパーマホーン"*/"\x6C\x61\x73\x32\x32\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x7D\x83\x7A\x81\x5B\x83\x93", // name
+        "las22スーパーマホーン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3306,7 +3306,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las22ファントム"*/"\x6C\x61\x73\x32\x32\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las22ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3316,7 +3316,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las22ワンワン"*/"\x6C\x61\x73\x32\x32\x83\x8F\x83\x93\x83\x8F\x83\x93", // name
+        "las22ワンワン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3326,7 +3326,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las24ワンワン"*/"\x6C\x61\x73\x32\x34\x83\x8F\x83\x93\x83\x8F\x83\x93", // name
+        "las24ワンワン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3336,7 +3336,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las25ファントム"*/"\x6C\x61\x73\x32\x35\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las25ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3346,7 +3346,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las25ファントム"*/"\x6C\x61\x73\x32\x35\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las25ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3356,7 +3356,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las25ファントム"*/"\x6C\x61\x73\x32\x35\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las25ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3366,7 +3366,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las25ファントム"*/"\x6C\x61\x73\x32\x35\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las25ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3376,7 +3376,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las25ファントム"*/"\x6C\x61\x73\x32\x35\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las25ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -3386,7 +3386,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"las25ファントム"*/"\x6C\x61\x73\x32\x35\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", // name
+        "las25ファントム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect

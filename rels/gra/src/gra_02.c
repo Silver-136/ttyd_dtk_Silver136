@@ -79,7 +79,7 @@ EVT_END()
 /** NPC of the shed: the shopkeeper who has been turned into a pig, who wanders around and talks to Mario. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ブタお店の主人"*/"\x83\x75\x83\x5E\x82\xA8\x93\x58\x82\xCC\x8E\xE5\x90\x6C", // name
+        "ブタお店の主人", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         shopmaster_pig_init, // initEvent
@@ -193,7 +193,7 @@ EVT_END()
 
 /** Name of the NPC that gets paper-style lighting: the pig shopkeeper. */
 static const char* booboo_name[] = {
-    /*"ブタお店の主人"*/"\x83\x75\x83\x5E\x82\xA8\x93\x58\x82\xCC\x8E\xE5\x90\x6C",
+    "ブタお店の主人",
 };
 
 /**

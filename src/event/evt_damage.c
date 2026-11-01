@@ -13,7 +13,7 @@
 #include <dolphin/os.h>
 #include "evt/evt_damage.h"
 
-#define GAZIGAZI "\x83\x4B\x83\x57\x83\x4B\x83\x57" // "ガジガジ"
+#define GAZIGAZI "ガジガジ" // "ガジガジ"
 
 /**
  * Creates the Gazigazi biter NPC (model c_gazigazi) out of sight at y -1000, not billboarded.

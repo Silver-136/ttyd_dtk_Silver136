@@ -418,7 +418,7 @@ void tess_test_line_disp(CameraId cameraId, void* param) {
     {
         // "Trail buffer %d / %d"
         GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
-        dbgDrawPrintf(120, -200, &white, 1.0f, "@Py\x8B\x4F\x90\xD5\x83\x6F\x83\x62\x83\x74\x83\x40 %d / %d@Pw",
+        dbgDrawPrintf(120, -200, &white, 1.0f, "@Py軌跡バッファ %d / %d@Pw",
                       tess_test_work->vertexCount, TESS_MAX_VERTICES);
     }
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_OR);

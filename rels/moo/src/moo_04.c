@@ -202,7 +202,7 @@ EVT_END()
 /** The single NPC of the scene, an X-Naut officer (幹部) who can move and talk. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"幹部"*/"\x8A\xB2\x95\x94", // name
+        "幹部", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType

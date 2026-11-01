@@ -2826,7 +2826,7 @@ EVT_END()
 /** NPC setup of Kick, Luigi's friend in chapters 2 and 3. */
 NpcSetupInfo kickEnt[] = {
     {
-        /*"キック"*/"\x83\x4C\x83\x62\x83\x4E", // name
+        "キック", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kick_init, // initEvent
@@ -2856,7 +2856,7 @@ EVT_END()
 /** NPC setup of Torque, Luigi's friend in chapters 4 and 5. */
 NpcSetupInfo torqueEnt[] = {
     {
-        /*"トルク"*/"\x83\x67\x83\x8B\x83\x4E", // name
+        "トルク", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         torque_init, // initEvent
@@ -2894,7 +2894,7 @@ EVT_END()
 /** NPC setup of the second Kick, on the rooftop after Lord Crump's defeat. */
 NpcSetupInfo kick2Ent[] = {
     {
-        /*"キック２"*/"\x83\x4C\x83\x62\x83\x4E\x82\x51", // name
+        "キック２", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kick2_init, // initEvent
@@ -3075,7 +3075,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"バッジ店長"*/"\x83\x6F\x83\x62\x83\x57\x93\x58\x92\xB7", // name
+        "バッジ店長", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         badgemaster_init, // initEvent
@@ -3087,7 +3087,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"バッジ店員"*/"\x83\x6F\x83\x62\x83\x57\x93\x58\x88\xF5", // name
+        "バッジ店員", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -3099,7 +3099,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノじい"*/"\x83\x4C\x83\x6D\x82\xB6\x82\xA2", // name
+        "キノじい", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kinoji_init, // initEvent
@@ -3111,7 +3111,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ナンシー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B", // name
+        "ナンシー", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         nancy_init, // initEvent
@@ -3123,7 +3123,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52", // name
+        "マルコ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         marco_init, // initEvent
@@ -3135,7 +3135,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"マスター"*/"\x83\x7D\x83\x58\x83\x5E\x81\x5B", // name
+        "マスター", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         master_init, // initEvent
@@ -3147,7 +3147,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"店長"*/"\x93\x58\x92\xB7", // name
+        "店長", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -3156,7 +3156,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"店員"*/"\x93\x58\x88\xF5", // name
+        "店員", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         shoptender_init, // initEvent
@@ -3168,7 +3168,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5", // name
+        "宿店員", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         yadotender_init, // initEvent
@@ -3180,7 +3180,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ロテン１"*/"\x83\x8D\x83\x65\x83\x93\x82\x50", // name
+        "ロテン１", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         roten1_init, // initEvent
@@ -3192,7 +3192,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ロテン２"*/"\x83\x8D\x83\x65\x83\x93\x82\x51", // name
+        "ロテン２", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         roten2_init, // initEvent
@@ -3204,7 +3204,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"クリボー１"*/"\x83\x4E\x83\x8A\x83\x7B\x81\x5B\x82\x50", // name
+        "クリボー１", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuribo1_init, // initEvent
@@ -3216,7 +3216,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"クリボー２"*/"\x83\x4E\x83\x8A\x83\x7B\x81\x5B\x82\x51", // name
+        "クリボー２", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         kuribo2_init, // initEvent
@@ -3228,7 +3228,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"クリボー３"*/"\x83\x4E\x83\x8A\x83\x7B\x81\x5B\x82\x52", // name
+        "クリボー３", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuribo3_init, // initEvent
@@ -3240,7 +3240,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"チューさん１"*/"\x83\x60\x83\x85\x81\x5B\x82\xB3\x82\xF1\x82\x50", // name
+        "チューさん１", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         chusan1_init, // initEvent
@@ -3252,7 +3252,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"チューさん２"*/"\x83\x60\x83\x85\x81\x5B\x82\xB3\x82\xF1\x82\x51", // name
+        "チューさん２", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         chusan2_init, // initEvent
@@ -3264,7 +3264,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"水夫ボム兵"*/"\x90\x85\x95\x76\x83\x7B\x83\x80\x95\xBA", // name
+        "水夫ボム兵", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         bomhei_init, // initEvent
@@ -3276,7 +3276,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ボッタクール"*/"\x83\x7B\x83\x62\x83\x5E\x83\x4E\x81\x5B\x83\x8B", // name
+        "ボッタクール", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         bottakuru_init, // initEvent
@@ -3288,7 +3288,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57", // name
+        "ルイージ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         luigi_init, // initEvent
@@ -3300,7 +3300,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"盗賊"*/"\x93\x90\x91\xAF", // name
+        "盗賊", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         thief_init, // initEvent
@@ -3312,7 +3312,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノピコ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x52", // name
+        "キノピコ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -3428,7 +3428,7 @@ EVT_END()
  * door's copy with evt_door_set_param once the Contact Lens is delivered.
  */
 static const char* door_data_01_npc[] = {
-    /*"ナンシー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B",
+    "ナンシー",
     NULL,
 };
 
@@ -3532,13 +3532,13 @@ EVT_END()
  * clerk.
  */
 static const char* door_data_02_npc[] = {
-    /*"店長"*/"\x93\x58\x92\xB7",
-    /*"店員"*/"\x93\x58\x88\xF5",
+    "店長",
+    "店員",
     NULL,
 };
 
 const char* door_data_02_npc_01[] = {
-    /*"店長"*/"\x93\x58\x92\xB7",
+    "店長",
     NULL,
 };
 
@@ -3643,8 +3643,8 @@ EVT_END()
 
 /** NPCs of the badge shop upstairs kept lit while Mario is inside: the badge shop owner and clerk. */
 const char* badgemise_npc[] = {
-    /*"バッジ店長"*/"\x83\x6F\x83\x62\x83\x57\x93\x58\x92\xB7",
-    /*"バッジ店員"*/"\x83\x6F\x83\x62\x83\x57\x93\x58\x88\xF5",
+    "バッジ店長",
+    "バッジ店員",
     NULL,
 };
 
@@ -4200,21 +4200,21 @@ EVT_END()
  * listed.
  */
 static const char* door_data_03_npc[] = {
-    /*"マスター"*/"\x83\x7D\x83\x58\x83\x5E\x81\x5B",
-    /*"キノじい"*/"\x83\x4C\x83\x6D\x82\xB6\x82\xA2",
-    /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5",
-    /*"チューさん２"*/"\x83\x60\x83\x85\x81\x5B\x82\xB3\x82\xF1\x82\x51",
-    /*"水夫ボム兵"*/"\x90\x85\x95\x76\x83\x7B\x83\x80\x95\xBA",
-    /*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52",
-    /*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57",
-    /*"トルク"*/"\x83\x67\x83\x8B\x83\x4E",
-    /*"キック２"*/"\x83\x4C\x83\x62\x83\x4E\x82\x51",
+    "マスター",
+    "キノじい",
+    "宿店員",
+    "チューさん２",
+    "水夫ボム兵",
+    "マルコ",
+    "ルイージ",
+    "トルク",
+    "キック２",
     NULL,
 };
 
 /** Field items of house 03 kept lit while Mario is inside: the Skull Gem. */
 const char* door_data_03_item[] = {
-    /*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B",
+    "ドクロジュエル",
     NULL,
 };
 
@@ -4393,7 +4393,7 @@ EVT_END()
 
 /** NPCs of house 04 kept lit while Mario is inside: the thief. */
 static const char* door_data_04_npc[] = {
-    /*"盗賊"*/"\x93\x90\x91\xAF",
+    "盗賊",
     NULL,
 };
 
@@ -4585,7 +4585,7 @@ static ShopDb trade_list[] = {
 
 /** Shopkeeper of the item shop in house 02: name and the shop's message keys. */
 static ShopperData35 shopper_data = {
-    /*"店長"*/"\x93\x58\x92\xB7", // name
+    "店長", // name
     NULL, NULL, // fook_evt..buy_evt
     {"gor_shop1_00", "gor_shop1_01", "gor_shop1_02", "gor_shop1_03", "gor_shop1_04", "gor_shop1_05", "gor_shop1_06", "gor_shop1_07", "gor_shop1_08", "gor_shop1_09", "gor_shop1_10", "gor_shop1_11", "gor_shop1_12", "gor_shop1_13", "gor_shop1_14", "gor_shop1_15", "gor_shop1_16", "gor_shop1_17", "gor_shop1_18", "gor_shop1_19", "gor_shop1_20", "gor_shop1_21", "gor_shop1_22", "gor_shop1_23", "gor_shop1_24", "gor_shop1_25", "gor_shop1_26", "gor_shop1_27", "gor_shop1_28", "gor_shop1_29", "gor_shop1_30", "gor_shop1_31", "gor_shop1_32", "gor_shop1_33", "gor_shop1_34"}, // msgs
 };
@@ -4673,7 +4673,7 @@ static KinopioData kino_dt = {
     {130.0f, 370.0f, -79.0f, 313.0f, 220.0f, -264.0f}, // cam
     -30.0f, // bedDeg
     {227.0f, 154.0f, -200.0f}, // npcTalk
-    /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5", // npcName
+    "宿店員", // npcName
     {"yado_00", "yado_01", "yado_02", "yado_03", "yado_04", "yado_05", "yado_06", "yado_07", "yado_08", "yado_09", "yado_10", "yado_11", "yado_12", "yado_13"}, // msg
     NULL, NULL, // toBedEvt..fromBedEvt
 };
@@ -6592,7 +6592,7 @@ EVT_BEGIN(gor_01_init_evt)
     // Create the plaza NPCs; Flavio gets his footstep sounds.
     CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_npc_sound_data_set, STRING("\x83\x7D\x83\x8B\x83\x52"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
+    CALL(evt_npc_sound_data_set, STRING("マルコ"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     IF_INT_EQUAL(LF(0), 1)
         CALL_CHILD(koopa_npc_entry)
     END_IF
@@ -6608,8 +6608,8 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -565, 162, -160, ITEM_TYPE_STILL, GSWF_STARPIECE_05, 0)
     // Until Flavio's talk the Skull Gem lies on the ground.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
-        CALL(evt_item_entry, STRING("\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
-        CALL(evt_item_flag_on, STRING("\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 2)
+        CALL(evt_item_entry, STRING("ドクロジュエル"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
+        CALL(evt_item_flag_on, STRING("ドクロジュエル"), 2)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
     END_IF
     // Open the building doors, depending on story progress and whether the lens was delivered.
@@ -6798,7 +6798,7 @@ EVT_BEGIN(gor_01_init_evt)
 #if VERSION >= VERSION_US
     CALL(evt_npc_sound_data_set, STRING("マルコ"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
 #else
-    CALL(evt_npc_sound_data_set, STRING(/*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
+    CALL(evt_npc_sound_data_set, STRING("マルコ"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
 #endif
     IF_INT_EQUAL(LF(0), 1)
         CALL_CHILD(koopa_npc_entry)
@@ -6820,9 +6820,9 @@ EVT_BEGIN(gor_01_init_evt)
         CALL(evt_item_flag_on, STRING("ドクロジュエル"), ITEM_FLAG_NO_TOUCH)
         CALL(evt_item_status_on, STRING("ドクロジュエル"), ITEM_FLAG2_NO_PARTNER)
 #else
-        CALL(evt_item_entry, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
-        CALL(evt_item_flag_on, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 2)
-        CALL(evt_item_status_on, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), ITEM_FLAG2_NO_PARTNER)
+        CALL(evt_item_entry, STRING("ドクロジュエル"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
+        CALL(evt_item_flag_on, STRING("ドクロジュエル"), 2)
+        CALL(evt_item_status_on, STRING("ドクロジュエル"), ITEM_FLAG2_NO_PARTNER)
 #endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
     END_IF
@@ -6931,32 +6931,32 @@ EVT_END()
  */
 #if VERSION > VERSION_DEMO_US
 SimpleRecipe R_simple_recipe_table[] = {
-    {/*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"あつあつスープ"*/"\x82\xA0\x82\xC2\x82\xA0\x82\xC2\x83\x58\x81\x5B\x83\x76", /*"あつあつスープ"*/"\x82\xA0\x82\xC2\x82\xA0\x82\xC2\x83\x58\x81\x5B\x83\x76"}, // ITEM_FIRE_FLOWER -> ITEM_SPICY_SOUP
-    {/*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF"}, // ITEM_VOLT_SHROOM -> ITEM_SHROOM_FRY
-    {/*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF"}, // ITEM_MUSHROOM -> ITEM_SHROOM_FRY
-    {/*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF"}, // ITEM_SUPER_SHROOM -> ITEM_SHROOM_FRY
-    {/*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C"}, // ITEM_ULTRA_SHROOM -> ITEM_SHROOM_STEAK
-    {/*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_LIFE_SHROOM -> ITEM_SHROOM_ROAST
-    {/*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", "", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF"}, // ITEM_DRIED_SHROOM -> ITEM_MISTAKE without the Cookbook (no result), ITEM_SHROOM_FRY with it
-    {/*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_HONEY_SYRUP -> ITEM_FRESH_JUICE
-    {/*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_MAPLE_SYRUP -> ITEM_FRESH_JUICE
-    {/*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_JAMMIN_JELLY -> ITEM_FRESH_JUICE
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_SLOW_SHROOM -> ITEM_SHROOM_ROAST
-    {/*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_GRADUAL_SYRUP -> ITEM_FRESH_JUICE
-    {/*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", "", /*"あつあつスープ"*/"\x82\xA0\x82\xC2\x82\xA0\x82\xC2\x83\x58\x81\x5B\x83\x76"}, // ITEM_DRIED_BOUQUET -> ITEM_MISTAKE without the Cookbook (no result), ITEM_SPICY_SOUP with it
-    {/*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"めだまやき"*/"\x82\xDF\x82\xBE\x82\xDC\x82\xE2\x82\xAB", /*"めだまやき"*/"\x82\xDF\x82\xBE\x82\xDC\x82\xE2\x82\xAB"}, // ITEM_MYSTIC_EGG -> ITEM_FRIED_EGG
-    {/*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"ナンシーティー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x65\x83\x42\x81\x5B", /*"ナンシーティー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x65\x83\x42\x81\x5B"}, // ITEM_GOLDEN_LEAF -> ITEM_ZESS_TEA
-    {/*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_KEEL_MANGO -> ITEM_FRESH_JUICE
-    {/*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"スパゲティ"*/"\x83\x58\x83\x70\x83\x51\x83\x65\x83\x42", /*"スパゲティ"*/"\x83\x58\x83\x70\x83\x51\x83\x65\x83\x42"}, // ITEM_FRESH_PASTA -> ITEM_SPAGHETTI
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ムースケーキ"*/"\x83\x80\x81\x5B\x83\x58\x83\x50\x81\x5B\x83\x4C", /*"ムースケーキ"*/"\x83\x80\x81\x5B\x83\x58\x83\x50\x81\x5B\x83\x4C"}, // ITEM_CAKE_MIX -> ITEM_MOUSSE_CAKE
-    {/*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", "", /*"スッキリドリンク"*/"\x83\x58\x83\x62\x83\x4C\x83\x8A\x83\x68\x83\x8A\x83\x93\x83\x4E"}, // ITEM_HOT_SAUCE -> ITEM_MISTAKE without the Cookbook (no result), ITEM_TASTY_TONIC with it
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"カメカメティー"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x83\x65\x83\x42\x81\x5B", /*"カメカメティー"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x83\x65\x83\x42\x81\x5B"}, // ITEM_TURTLEY_LEAF -> ITEM_KOOPA_TEA
-    {/*"つくしんぼ"*/"\x82\xC2\x82\xAD\x82\xB5\x82\xF1\x82\xDA", "", /*"あつあつスープ"*/"\x82\xA0\x82\xC2\x82\xA0\x82\xC2\x83\x58\x81\x5B\x83\x76"}, // ITEM_HORSETAIL -> ITEM_MISTAKE without the Cookbook (no result), ITEM_SPICY_SOUP with it
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_PEACHY_PEACH -> ITEM_FRESH_JUICE
-    {/*"ヤシの実"*/"\x83\x84\x83\x56\x82\xCC\x8E\xC0", /*"スッキリドリンク"*/"\x83\x58\x83\x62\x83\x4C\x83\x8A\x83\x68\x83\x8A\x83\x93\x83\x4E", /*"スッキリドリンク"*/"\x83\x58\x83\x62\x83\x4C\x83\x8A\x83\x68\x83\x8A\x83\x93\x83\x4E"}, // ITEM_COCONUT -> ITEM_TASTY_TONIC
-    {/*"ゆきうさぎ"*/"\x82\xE4\x82\xAB\x82\xA4\x82\xB3\x82\xAC", "", /*"あつあつスープ"*/"\x82\xA0\x82\xC2\x82\xA0\x82\xC2\x83\x58\x81\x5B\x83\x76"}, // ITEM_SNOW_BUNNY -> ITEM_MISTAKE without the Cookbook (no result), ITEM_SPICY_SOUP with it
-    {/*"どくキノコ"*/"\x82\xC7\x82\xAD\x83\x4C\x83\x6D\x83\x52", "", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF"}, // ITEM_POISON_SHROOM -> ITEM_MISTAKE without the Cookbook (no result), ITEM_SHROOM_FRY with it
-    {/*"たんこぶ"*/"\x82\xBD\x82\xF1\x82\xB1\x82\xD4", "", /*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B"}, // ITEM_WHACKA_BUMP -> ITEM_MISTAKE without the Cookbook (no result), ITEM_ZESS_SPECIAL with it
+    {"ファイアフラワー", "あつあつスープ", "あつあつスープ"}, // ITEM_FIRE_FLOWER -> ITEM_SPICY_SOUP
+    {"びりびりキノコ", "キノコいため", "キノコいため"}, // ITEM_VOLT_SHROOM -> ITEM_SHROOM_FRY
+    {"キノコ", "キノコいため", "キノコいため"}, // ITEM_MUSHROOM -> ITEM_SHROOM_FRY
+    {"スーパーキノコ", "キノコいため", "キノコいため"}, // ITEM_SUPER_SHROOM -> ITEM_SHROOM_FRY
+    {"ウルトラキノコ", "キノコステーキ", "キノコステーキ"}, // ITEM_ULTRA_SHROOM -> ITEM_SHROOM_STEAK
+    {"きんきゅうキノコ", "キノコホイルやき", "キノコホイルやき"}, // ITEM_LIFE_SHROOM -> ITEM_SHROOM_ROAST
+    {"しなびたキノコ", "", "キノコいため"}, // ITEM_DRIED_SHROOM -> ITEM_MISTAKE without the Cookbook (no result), ITEM_SHROOM_FRY with it
+    {"ハニーシロップ", "フレッシュジュース", "フレッシュジュース"}, // ITEM_HONEY_SYRUP -> ITEM_FRESH_JUICE
+    {"メイプルシロップ", "フレッシュジュース", "フレッシュジュース"}, // ITEM_MAPLE_SYRUP -> ITEM_FRESH_JUICE
+    {"ローヤルゼリー", "フレッシュジュース", "フレッシュジュース"}, // ITEM_JAMMIN_JELLY -> ITEM_FRESH_JUICE
+    {"じわじわキノコ", "キノコホイルやき", "キノコホイルやき"}, // ITEM_SLOW_SHROOM -> ITEM_SHROOM_ROAST
+    {"じわじわシロップ", "フレッシュジュース", "フレッシュジュース"}, // ITEM_GRADUAL_SYRUP -> ITEM_FRESH_JUICE
+    {"ドライフラワー", "", "あつあつスープ"}, // ITEM_DRIED_BOUQUET -> ITEM_MISTAKE without the Cookbook (no result), ITEM_SPICY_SOUP with it
+    {"ふしぎなタマゴ", "めだまやき", "めだまやき"}, // ITEM_MYSTIC_EGG -> ITEM_FRIED_EGG
+    {"おうごんはっぱ", "ナンシーティー", "ナンシーティー"}, // ITEM_GOLDEN_LEAF -> ITEM_ZESS_TEA
+    {"トロピコマンゴー", "フレッシュジュース", "フレッシュジュース"}, // ITEM_KEEL_MANGO -> ITEM_FRESH_JUICE
+    {"生パスタ", "スパゲティ", "スパゲティ"}, // ITEM_FRESH_PASTA -> ITEM_SPAGHETTI
+    {"おかしのもと", "ムースケーキ", "ムースケーキ"}, // ITEM_CAKE_MIX -> ITEM_MOUSSE_CAKE
+    {"レッド・カラリン", "", "スッキリドリンク"}, // ITEM_HOT_SAUCE -> ITEM_MISTAKE without the Cookbook (no result), ITEM_TASTY_TONIC with it
+    {"カメカメはっぱ", "カメカメティー", "カメカメティー"}, // ITEM_TURTLEY_LEAF -> ITEM_KOOPA_TEA
+    {"つくしんぼ", "", "あつあつスープ"}, // ITEM_HORSETAIL -> ITEM_MISTAKE without the Cookbook (no result), ITEM_SPICY_SOUP with it
+    {"ピチピーチ", "フレッシュジュース", "フレッシュジュース"}, // ITEM_PEACHY_PEACH -> ITEM_FRESH_JUICE
+    {"ヤシの実", "スッキリドリンク", "スッキリドリンク"}, // ITEM_COCONUT -> ITEM_TASTY_TONIC
+    {"ゆきうさぎ", "", "あつあつスープ"}, // ITEM_SNOW_BUNNY -> ITEM_MISTAKE without the Cookbook (no result), ITEM_SPICY_SOUP with it
+    {"どくキノコ", "", "キノコいため"}, // ITEM_POISON_SHROOM -> ITEM_MISTAKE without the Cookbook (no result), ITEM_SHROOM_FRY with it
+    {"たんこぶ", "", "ナンシースペシャル"}, // ITEM_WHACKA_BUMP -> ITEM_MISTAKE without the Cookbook (no result), ITEM_ZESS_SPECIAL with it
 };
 #endif
 
@@ -7260,295 +7260,295 @@ CookRecipe R_cookbook_recipe_table[] = {
     {"ココナッツボム", "バクハツタマゴ", "ナンシーダイナマイ"}, // ITEM_COCONUT_BOMB + ITEM_EGG_BOMB -> ITEM_ZESS_DYNAMITE
     {"カチカチりょうり", "ドライフラワー", "カチカチコウラ"}, // ITEM_COURAGE_MEAL + ITEM_DRIED_BOUQUET -> ITEM_COURAGE_SHELL
 #else
-    {/*"かみなりドッカン"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x68\x83\x62\x83\x4A\x83\x93", /*"かみなりゴロゴロ"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x53\x83\x8D\x83\x53\x83\x8D", /*"しれんのナベ"*/"\x82\xB5\x82\xEA\x82\xF1\x82\xCC\x83\x69\x83\x78"}, // ITEM_THUNDER_RAGE + ITEM_THUNDER_BOLT -> ITEM_TRIAL_STEW
-    {/*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"かみなりゴロゴロ"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x53\x83\x8D\x83\x53\x83\x8D", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52"}, // ITEM_MUSHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
-    {/*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"かみなりドッカン"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x68\x83\x62\x83\x4A\x83\x93", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52"}, // ITEM_MUSHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
-    {/*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_MUSHROOM + ITEM_FIRE_FLOWER -> ITEM_SHROOM_ROAST
-    {/*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_MUSHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_ROAST
-    {/*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"ふにゃふにゃくん"*/"\x82\xD3\x82\xC9\x82\xE1\x82\xD3\x82\xC9\x82\xE1\x82\xAD\x82\xF1", /*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52"}, // ITEM_MUSHROOM + ITEM_MR_SOFTENER -> ITEM_DRIED_SHROOM
-    {/*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"かみなりゴロゴロ"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x53\x83\x8D\x83\x53\x83\x8D", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52"}, // ITEM_SUPER_SHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
-    {/*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"かみなりドッカン"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x68\x83\x62\x83\x4A\x83\x93", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52"}, // ITEM_SUPER_SHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
-    {/*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_SUPER_SHROOM + ITEM_FIRE_FLOWER -> ITEM_ZESS_DINNER
-    {/*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_SUPER_SHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_ROAST
-    {/*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ふにゃふにゃくん"*/"\x82\xD3\x82\xC9\x82\xE1\x82\xD3\x82\xC9\x82\xE1\x82\xAD\x82\xF1", /*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52"}, // ITEM_SUPER_SHROOM + ITEM_MR_SOFTENER -> ITEM_DRIED_SHROOM
-    {/*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_SUPER_SHROOM + ITEM_MUSHROOM -> ITEM_SHROOM_ROAST
-    {/*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"かみなりゴロゴロ"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x53\x83\x8D\x83\x53\x83\x8D", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52"}, // ITEM_ULTRA_SHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
-    {/*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"かみなりドッカン"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x68\x83\x62\x83\x4A\x83\x93", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52"}, // ITEM_ULTRA_SHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
-    {/*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B"}, // ITEM_ULTRA_SHROOM + ITEM_FIRE_FLOWER -> ITEM_ZESS_SPECIAL
-    {/*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C"}, // ITEM_ULTRA_SHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_STEAK
-    {/*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ふにゃふにゃくん"*/"\x82\xD3\x82\xC9\x82\xE1\x82\xD3\x82\xC9\x82\xE1\x82\xAD\x82\xF1", /*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52"}, // ITEM_ULTRA_SHROOM + ITEM_MR_SOFTENER -> ITEM_DRIED_SHROOM
-    {/*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C"}, // ITEM_ULTRA_SHROOM + ITEM_MUSHROOM -> ITEM_SHROOM_STEAK
-    {/*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C"}, // ITEM_ULTRA_SHROOM + ITEM_SUPER_SHROOM -> ITEM_SHROOM_STEAK
-    {/*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"かみなりゴロゴロ"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x53\x83\x8D\x83\x53\x83\x8D", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52"}, // ITEM_LIFE_SHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
-    {/*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"かみなりドッカン"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x68\x83\x62\x83\x4A\x83\x93", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52"}, // ITEM_LIFE_SHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
-    {/*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_LIFE_SHROOM + ITEM_FIRE_FLOWER -> ITEM_ZESS_DINNER
-    {/*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_LIFE_SHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_ROAST
-    {/*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"ふにゃふにゃくん"*/"\x82\xD3\x82\xC9\x82\xE1\x82\xD3\x82\xC9\x82\xE1\x82\xAD\x82\xF1", /*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52"}, // ITEM_LIFE_SHROOM + ITEM_MR_SOFTENER -> ITEM_DRIED_SHROOM
-    {/*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C"}, // ITEM_LIFE_SHROOM + ITEM_MUSHROOM -> ITEM_SHROOM_STEAK
-    {/*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C"}, // ITEM_LIFE_SHROOM + ITEM_SUPER_SHROOM -> ITEM_SHROOM_STEAK
-    {/*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C"}, // ITEM_LIFE_SHROOM + ITEM_ULTRA_SHROOM -> ITEM_SHROOM_STEAK
-    {/*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF"}, // ITEM_DRIED_SHROOM + ITEM_FIRE_FLOWER -> ITEM_SHROOM_FRY
-    {/*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF"}, // ITEM_DRIED_SHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_FRY
-    {/*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"デカデカドリンク"*/"\x83\x66\x83\x4A\x83\x66\x83\x4A\x83\x68\x83\x8A\x83\x93\x83\x4E", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52"}, // ITEM_DRIED_SHROOM + ITEM_POWER_PUNCH -> ITEM_MUSHROOM
-    {/*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF"}, // ITEM_DRIED_SHROOM + ITEM_MUSHROOM -> ITEM_SHROOM_FRY
-    {/*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_DRIED_SHROOM + ITEM_SUPER_SHROOM -> ITEM_SHROOM_ROAST
-    {/*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C"}, // ITEM_DRIED_SHROOM + ITEM_ULTRA_SHROOM -> ITEM_SHROOM_STEAK
-    {/*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C"}, // ITEM_DRIED_SHROOM + ITEM_LIFE_SHROOM -> ITEM_SHROOM_STEAK
-    {/*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"こおりのいぶき"*/"\x82\xB1\x82\xA8\x82\xE8\x82\xCC\x82\xA2\x82\xD4\x82\xAB", /*"アイスキャンディ"*/"\x83\x41\x83\x43\x83\x58\x83\x4C\x83\x83\x83\x93\x83\x66\x83\x42"}, // ITEM_HONEY_SYRUP + ITEM_ICE_STORM -> ITEM_ICICLE_POP
-    {/*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"ハニーキノコ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_HONEY_SYRUP + ITEM_VOLT_SHROOM -> ITEM_HONEY_SHROOM
-    {/*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"ハニーキノコ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_HONEY_SYRUP + ITEM_MUSHROOM -> ITEM_HONEY_SHROOM
-    {/*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ハニーキノコＳ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x4C\x83\x6D\x83\x52\x82\x72"}, // ITEM_HONEY_SYRUP + ITEM_SUPER_SHROOM -> ITEM_HONEY_SUPER
-    {/*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ハニーキノコＺ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x4C\x83\x6D\x83\x52\x82\x79"}, // ITEM_HONEY_SYRUP + ITEM_ULTRA_SHROOM -> ITEM_HONEY_ULTRA
-    {/*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"ハニーキノコＳ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x4C\x83\x6D\x83\x52\x82\x72"}, // ITEM_HONEY_SYRUP + ITEM_LIFE_SHROOM -> ITEM_HONEY_SUPER
-    {/*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"こおりのいぶき"*/"\x82\xB1\x82\xA8\x82\xE8\x82\xCC\x82\xA2\x82\xD4\x82\xAB", /*"ナンシーフラッペ"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x74\x83\x89\x83\x62\x83\x79"}, // ITEM_MAPLE_SYRUP + ITEM_ICE_STORM -> ITEM_ZESS_FRAPPE
-    {/*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"メイプルキノコ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_MAPLE_SYRUP + ITEM_VOLT_SHROOM -> ITEM_MAPLE_SHROOM
-    {/*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"メイプルキノコ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_MAPLE_SYRUP + ITEM_MUSHROOM -> ITEM_MAPLE_SHROOM
-    {/*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"メイプルキノコＳ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x72"}, // ITEM_MAPLE_SYRUP + ITEM_SUPER_SHROOM -> ITEM_MAPLE_SUPER
-    {/*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"メイプルキノコＺ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x79"}, // ITEM_MAPLE_SYRUP + ITEM_ULTRA_SHROOM -> ITEM_MAPLE_ULTRA
-    {/*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"メイプルキノコＳ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x72"}, // ITEM_MAPLE_SYRUP + ITEM_LIFE_SHROOM -> ITEM_MAPLE_SUPER
-    {/*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_MAPLE_SYRUP + ITEM_HONEY_SYRUP -> ITEM_FRESH_JUICE
-    {/*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"こおりのいぶき"*/"\x82\xB1\x82\xA8\x82\xE8\x82\xCC\x82\xA2\x82\xD4\x82\xAB", /*"ナンシーフラッペ"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x74\x83\x89\x83\x62\x83\x79"}, // ITEM_JAMMIN_JELLY + ITEM_ICE_STORM -> ITEM_ZESS_FRAPPE
-    {/*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"ローヤルキノコ"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_JAMMIN_JELLY + ITEM_VOLT_SHROOM -> ITEM_JELLY_SHROOM
-    {/*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"ローヤルキノコ"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_JAMMIN_JELLY + ITEM_MUSHROOM -> ITEM_JELLY_SHROOM
-    {/*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ローヤルキノコＳ"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x72"}, // ITEM_JAMMIN_JELLY + ITEM_SUPER_SHROOM -> ITEM_JELLY_SUPER
-    {/*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ローヤルキノコＺ"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x79"}, // ITEM_JAMMIN_JELLY + ITEM_ULTRA_SHROOM -> ITEM_JELLY_ULTRA
-    {/*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"ローヤルキノコＳ"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x72"}, // ITEM_JAMMIN_JELLY + ITEM_LIFE_SHROOM -> ITEM_JELLY_SUPER
-    {/*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_JAMMIN_JELLY + ITEM_HONEY_SYRUP -> ITEM_FRESH_JUICE
-    {/*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ナンシーティー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x65\x83\x42\x81\x5B"}, // ITEM_JAMMIN_JELLY + ITEM_MAPLE_SYRUP -> ITEM_ZESS_TEA
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"かみなりゴロゴロ"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x53\x83\x8D\x83\x53\x83\x8D", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52"}, // ITEM_SLOW_SHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"かみなりドッカン"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x68\x83\x62\x83\x4A\x83\x93", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52"}, // ITEM_SLOW_SHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"キラキラおとし"*/"\x83\x4C\x83\x89\x83\x4C\x83\x89\x82\xA8\x82\xC6\x82\xB5", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_SLOW_SHROOM + ITEM_SHOOTING_STAR -> ITEM_ZESS_DINNER
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_SLOW_SHROOM + ITEM_FIRE_FLOWER -> ITEM_ZESS_DINNER
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_SLOW_SHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_ROAST
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_SLOW_SHROOM + ITEM_MUSHROOM -> ITEM_SHROOM_ROAST
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_SLOW_SHROOM + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B"}, // ITEM_SLOW_SHROOM + ITEM_ULTRA_SHROOM -> ITEM_ZESS_SPECIAL
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_SLOW_SHROOM + ITEM_LIFE_SHROOM -> ITEM_ZESS_DINNER
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ハニーキノコ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_SLOW_SHROOM + ITEM_HONEY_SYRUP -> ITEM_HONEY_SHROOM
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"メイプルキノコ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_SLOW_SHROOM + ITEM_MAPLE_SYRUP -> ITEM_MAPLE_SHROOM
-    {/*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"メイプルキノコＳ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x72"}, // ITEM_SLOW_SHROOM + ITEM_JAMMIN_JELLY -> ITEM_MAPLE_SUPER
-    {/*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB"}, // ITEM_GRADUAL_SYRUP + ITEM_MUSHROOM -> ITEM_SHROOM_ROAST
-    {/*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_GRADUAL_SYRUP + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
-    {/*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B"}, // ITEM_GRADUAL_SYRUP + ITEM_ULTRA_SHROOM -> ITEM_ZESS_SPECIAL
-    {/*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_GRADUAL_SYRUP + ITEM_LIFE_SHROOM -> ITEM_ZESS_DINNER
-    {/*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_GRADUAL_SYRUP + ITEM_HONEY_SYRUP -> ITEM_FRESH_JUICE
-    {/*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_GRADUAL_SYRUP + ITEM_MAPLE_SYRUP -> ITEM_FRESH_JUICE
-    {/*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_GRADUAL_SYRUP + ITEM_JAMMIN_JELLY -> ITEM_FRESH_JUICE
-    {/*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52"}, // ITEM_GRADUAL_SYRUP + ITEM_SLOW_SHROOM -> ITEM_SLOW_SHROOM
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"かみなりゴロゴロ"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x53\x83\x8D\x83\x53\x83\x8D", /*"ゆらゆらじしん"*/"\x82\xE4\x82\xE7\x82\xE4\x82\xE7\x82\xB6\x82\xB5\x82\xF1"}, // ITEM_POINT_SWAP + ITEM_THUNDER_BOLT -> ITEM_EARTH_QUAKE
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"かみなりドッカン"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x68\x83\x62\x83\x4A\x83\x93", /*"キラキラおとし"*/"\x83\x4C\x83\x89\x83\x4C\x83\x89\x82\xA8\x82\xC6\x82\xB5"}, // ITEM_POINT_SWAP + ITEM_THUNDER_RAGE -> ITEM_SHOOTING_STAR
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"キラキラおとし"*/"\x83\x4C\x83\x89\x83\x4C\x83\x89\x82\xA8\x82\xC6\x82\xB5", /*"かみなりドッカン"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x68\x83\x62\x83\x4A\x83\x93"}, // ITEM_POINT_SWAP + ITEM_SHOOTING_STAR -> ITEM_THUNDER_RAGE
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"こおりのいぶき"*/"\x82\xB1\x82\xA8\x82\xE8\x82\xCC\x82\xA2\x82\xD4\x82\xAB", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B"}, // ITEM_POINT_SWAP + ITEM_ICE_STORM -> ITEM_FIRE_FLOWER
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"こおりのいぶき"*/"\x82\xB1\x82\xA8\x82\xE8\x82\xCC\x82\xA2\x82\xD4\x82\xAB"}, // ITEM_POINT_SWAP + ITEM_FIRE_FLOWER -> ITEM_ICE_STORM
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"ゆらゆらじしん"*/"\x82\xE4\x82\xE7\x82\xE4\x82\xE7\x82\xB6\x82\xB5\x82\xF1", /*"かみなりゴロゴロ"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x53\x83\x8D\x83\x53\x83\x8D"}, // ITEM_POINT_SWAP + ITEM_EARTH_QUAKE -> ITEM_THUNDER_BOLT
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"テレサのふく"*/"\x83\x65\x83\x8C\x83\x54\x82\xCC\x82\xD3\x82\xAD", /*"てきヨケール"*/"\x82\xC4\x82\xAB\x83\x88\x83\x50\x81\x5B\x83\x8B"}, // ITEM_POINT_SWAP + ITEM_BOOS_SHEET -> ITEM_REPEL_CAPE
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_POINT_SWAP + ITEM_VOLT_SHROOM -> ITEM_SUPER_SHROOM
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"てきヨケール"*/"\x82\xC4\x82\xAB\x83\x88\x83\x50\x81\x5B\x83\x8B", /*"テレサのふく"*/"\x83\x65\x83\x8C\x83\x54\x82\xCC\x82\xD3\x82\xAD"}, // ITEM_POINT_SWAP + ITEM_REPEL_CAPE -> ITEM_BOOS_SHEET
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"まどわせのこな"*/"\x82\xDC\x82\xC7\x82\xED\x82\xB9\x82\xCC\x82\xB1\x82\xC8", /*"しかえしのこな"*/"\x82\xB5\x82\xA9\x82\xA6\x82\xB5\x82\xCC\x82\xB1\x82\xC8"}, // ITEM_POINT_SWAP + ITEM_RUIN_POWDER -> ITEM_SPITE_POUCH
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"しかえしのこな"*/"\x82\xB5\x82\xA9\x82\xA6\x82\xB5\x82\xCC\x82\xB1\x82\xC8", /*"まどわせのこな"*/"\x82\xDC\x82\xC7\x82\xED\x82\xB9\x82\xCC\x82\xB1\x82\xC8"}, // ITEM_POINT_SWAP + ITEM_SPITE_POUCH -> ITEM_RUIN_POWDER
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"ねむれよいこよ"*/"\x82\xCB\x82\xDE\x82\xEA\x82\xE6\x82\xA2\x82\xB1\x82\xE6", /*"スッキリドリンク"*/"\x83\x58\x83\x62\x83\x4C\x83\x8A\x83\x68\x83\x8A\x83\x93\x83\x4E"}, // ITEM_POINT_SWAP + ITEM_SLEEPY_SHEEP -> ITEM_TASTY_TONIC
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"デカデカドリンク"*/"\x83\x66\x83\x4A\x83\x66\x83\x4A\x83\x68\x83\x8A\x83\x93\x83\x4E", /*"ミニミニくん"*/"\x83\x7E\x83\x6A\x83\x7E\x83\x6A\x82\xAD\x82\xF1"}, // ITEM_POINT_SWAP + ITEM_POWER_PUNCH -> ITEM_MINI_MR_MINI
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"カチカチコウラ"*/"\x83\x4A\x83\x60\x83\x4A\x83\x60\x83\x52\x83\x45\x83\x89", /*"ふにゃふにゃくん"*/"\x82\xD3\x82\xC9\x82\xE1\x82\xD3\x82\xC9\x82\xE1\x82\xAD\x82\xF1"}, // ITEM_POINT_SWAP + ITEM_COURAGE_SHELL -> ITEM_MR_SOFTENER
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"ミニミニくん"*/"\x83\x7E\x83\x6A\x83\x7E\x83\x6A\x82\xAD\x82\xF1", /*"デカデカドリンク"*/"\x83\x66\x83\x4A\x83\x66\x83\x4A\x83\x68\x83\x8A\x83\x93\x83\x4E"}, // ITEM_POINT_SWAP + ITEM_MINI_MR_MINI -> ITEM_POWER_PUNCH
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"ふにゃふにゃくん"*/"\x82\xD3\x82\xC9\x82\xE1\x82\xD3\x82\xC9\x82\xE1\x82\xAD\x82\xF1", /*"カチカチコウラ"*/"\x83\x4A\x83\x60\x83\x4A\x83\x60\x83\x52\x83\x45\x83\x89"}, // ITEM_POINT_SWAP + ITEM_MR_SOFTENER -> ITEM_COURAGE_SHELL
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76"}, // ITEM_POINT_SWAP + ITEM_MUSHROOM -> ITEM_HONEY_SYRUP
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76"}, // ITEM_POINT_SWAP + ITEM_SUPER_SHROOM -> ITEM_MAPLE_SYRUP
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B"}, // ITEM_POINT_SWAP + ITEM_ULTRA_SHROOM -> ITEM_JAMMIN_JELLY
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_POINT_SWAP + ITEM_LIFE_SHROOM -> ITEM_SUPER_SHROOM
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52"}, // ITEM_POINT_SWAP + ITEM_DRIED_SHROOM -> ITEM_MUSHROOM
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"スッキリドリンク"*/"\x83\x58\x83\x62\x83\x4C\x83\x8A\x83\x68\x83\x8A\x83\x93\x83\x4E", /*"ねむれよいこよ"*/"\x82\xCB\x82\xDE\x82\xEA\x82\xE6\x82\xA2\x82\xB1\x82\xE6"}, // ITEM_POINT_SWAP + ITEM_TASTY_TONIC -> ITEM_SLEEPY_SHEEP
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52"}, // ITEM_POINT_SWAP + ITEM_HONEY_SYRUP -> ITEM_MUSHROOM
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52"}, // ITEM_POINT_SWAP + ITEM_MAPLE_SYRUP -> ITEM_SUPER_SHROOM
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52"}, // ITEM_POINT_SWAP + ITEM_JAMMIN_JELLY -> ITEM_ULTRA_SHROOM
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"どくキノコ"*/"\x82\xC7\x82\xAD\x83\x4C\x83\x6D\x83\x52"}, // ITEM_POINT_SWAP + ITEM_SLOW_SHROOM -> ITEM_POISON_SHROOM
-    {/*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76"}, // ITEM_POINT_SWAP + ITEM_GRADUAL_SYRUP -> ITEM_HONEY_SYRUP
-    {/*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"あつあつスープ"*/"\x82\xA0\x82\xC2\x82\xA0\x82\xC2\x83\x58\x81\x5B\x83\x76"}, // ITEM_DRIED_BOUQUET + ITEM_FIRE_FLOWER -> ITEM_SPICY_SOUP
-    {/*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"かみなりドッカン"*/"\x82\xA9\x82\xDD\x82\xC8\x82\xE8\x83\x68\x83\x62\x83\x4A\x83\x93"}, // ITEM_DRIED_BOUQUET + ITEM_VOLT_SHROOM -> ITEM_THUNDER_RAGE
-    {/*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_DRIED_BOUQUET + ITEM_MUSHROOM -> ITEM_SPACE_FOOD
-    {/*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_DRIED_BOUQUET + ITEM_SUPER_SHROOM -> ITEM_SPACE_FOOD
-    {/*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_DRIED_BOUQUET + ITEM_ULTRA_SHROOM -> ITEM_SPACE_FOOD
-    {/*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_DRIED_BOUQUET + ITEM_LIFE_SHROOM -> ITEM_SPACE_FOOD
-    {/*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_DRIED_BOUQUET + ITEM_DRIED_SHROOM -> ITEM_SPACE_FOOD
-    {/*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_DRIED_BOUQUET + ITEM_SLOW_SHROOM -> ITEM_SPACE_FOOD
-    {/*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"ホットドッグ"*/"\x83\x7A\x83\x62\x83\x67\x83\x68\x83\x62\x83\x4F", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_DRIED_BOUQUET + ITEM_HOT_DOG -> ITEM_SPACE_FOOD
-    {/*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"バクハツタマゴ"*/"\x83\x6F\x83\x4E\x83\x6E\x83\x63\x83\x5E\x83\x7D\x83\x53"}, // ITEM_MYSTIC_EGG + ITEM_FIRE_FLOWER -> ITEM_EGG_BOMB
-    {/*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"キセツのオムレツ"*/"\x83\x4C\x83\x5A\x83\x63\x82\xCC\x83\x49\x83\x80\x83\x8C\x83\x63"}, // ITEM_MYSTIC_EGG + ITEM_MUSHROOM -> ITEM_OMELETTE_MEAL
-    {/*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"キセツのオムレツ"*/"\x83\x4C\x83\x5A\x83\x63\x82\xCC\x83\x49\x83\x80\x83\x8C\x83\x63"}, // ITEM_MYSTIC_EGG + ITEM_SUPER_SHROOM -> ITEM_OMELETTE_MEAL
-    {/*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"キセツのオムレツ"*/"\x83\x4C\x83\x5A\x83\x63\x82\xCC\x83\x49\x83\x80\x83\x8C\x83\x63"}, // ITEM_MYSTIC_EGG + ITEM_ULTRA_SHROOM -> ITEM_OMELETTE_MEAL
-    {/*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"キセツのオムレツ"*/"\x83\x4C\x83\x5A\x83\x63\x82\xCC\x83\x49\x83\x80\x83\x8C\x83\x63"}, // ITEM_MYSTIC_EGG + ITEM_LIFE_SHROOM -> ITEM_OMELETTE_MEAL
-    {/*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_MYSTIC_EGG + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"こおりのいぶき"*/"\x82\xB1\x82\xA8\x82\xE8\x82\xCC\x82\xA2\x82\xD4\x82\xAB", /*"ゆきうさぎ"*/"\x82\xE4\x82\xAB\x82\xA4\x82\xB3\x82\xAC"}, // ITEM_GOLDEN_LEAF + ITEM_ICE_STORM -> ITEM_SNOW_BUNNY
-    {/*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52"}, // ITEM_GOLDEN_LEAF + ITEM_MUSHROOM -> ITEM_LIFE_SHROOM
-    {/*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52"}, // ITEM_GOLDEN_LEAF + ITEM_SUPER_SHROOM -> ITEM_LIFE_SHROOM
-    {/*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52"}, // ITEM_GOLDEN_LEAF + ITEM_ULTRA_SHROOM -> ITEM_LIFE_SHROOM
-    {/*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52"}, // ITEM_GOLDEN_LEAF + ITEM_LIFE_SHROOM -> ITEM_LIFE_SHROOM
-    {/*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"こうちゃキノコ"*/"\x82\xB1\x82\xA4\x82\xBF\x82\xE1\x83\x4C\x83\x6D\x83\x52"}, // ITEM_GOLDEN_LEAF + ITEM_SLOW_SHROOM -> ITEM_SHROOM_BROTH
-    {/*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_GOLDEN_LEAF + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_KEEL_MANGO + ITEM_VOLT_SHROOM -> ITEM_ZESS_DINNER
-    {/*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_KEEL_MANGO + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
-    {/*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_KEEL_MANGO + ITEM_ULTRA_SHROOM -> ITEM_ZESS_DINNER
-    {/*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フルーツパフェ"*/"\x83\x74\x83\x8B\x81\x5B\x83\x63\x83\x70\x83\x74\x83\x46"}, // ITEM_KEEL_MANGO + ITEM_HONEY_SYRUP -> ITEM_FRUIT_PARFAIT
-    {/*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フルーツパフェ"*/"\x83\x74\x83\x8B\x81\x5B\x83\x63\x83\x70\x83\x74\x83\x46"}, // ITEM_KEEL_MANGO + ITEM_MAPLE_SYRUP -> ITEM_FRUIT_PARFAIT
-    {/*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"フルーツパフェ"*/"\x83\x74\x83\x8B\x81\x5B\x83\x63\x83\x70\x83\x74\x83\x46"}, // ITEM_KEEL_MANGO + ITEM_JAMMIN_JELLY -> ITEM_FRUIT_PARFAIT
-    {/*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フルーツパフェ"*/"\x83\x74\x83\x8B\x81\x5B\x83\x63\x83\x70\x83\x74\x83\x46"}, // ITEM_KEEL_MANGO + ITEM_GRADUAL_SYRUP -> ITEM_FRUIT_PARFAIT
-    {/*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_KEEL_MANGO + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_FRESH_PASTA + ITEM_VOLT_SHROOM -> ITEM_ZESS_DINNER
-    {/*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_FRESH_PASTA + ITEM_MUSHROOM -> ITEM_ZESS_DINNER
-    {/*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_FRESH_PASTA + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
-    {/*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B"}, // ITEM_FRESH_PASTA + ITEM_ULTRA_SHROOM -> ITEM_ZESS_SPECIAL
-    {/*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_FRESH_PASTA + ITEM_LIFE_SHROOM -> ITEM_ZESS_DINNER
-    {/*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_FRESH_PASTA + ITEM_DRIED_SHROOM -> ITEM_ZESS_DINNER
-    {/*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_FRESH_PASTA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_FRESH_PASTA + ITEM_MYSTIC_EGG -> ITEM_ZESS_DINNER
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"ファイアキャンディ"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x4C\x83\x83\x83\x93\x83\x66\x83\x42"}, // ITEM_CAKE_MIX + ITEM_FIRE_FLOWER -> ITEM_FIRE_POP
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"びりびりキャンディ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x83\x83\x93\x83\x66\x83\x42"}, // ITEM_CAKE_MIX + ITEM_VOLT_SHROOM -> ITEM_ELECTRO_POP
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"まどわせのこな"*/"\x82\xDC\x82\xC7\x82\xED\x82\xB9\x82\xCC\x82\xB1\x82\xC8", /*"メロメロケーキ"*/"\x83\x81\x83\x8D\x83\x81\x83\x8D\x83\x50\x81\x5B\x83\x4C"}, // ITEM_CAKE_MIX + ITEM_RUIN_POWDER -> ITEM_HEARTFUL_CAKE
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"キノコケーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x50\x81\x5B\x83\x4C"}, // ITEM_CAKE_MIX + ITEM_MUSHROOM -> ITEM_SHROOM_CAKE
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"キノコケーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x50\x81\x5B\x83\x4C"}, // ITEM_CAKE_MIX + ITEM_SUPER_SHROOM -> ITEM_SHROOM_CAKE
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"キノコクレープ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x4E\x83\x8C\x81\x5B\x83\x76"}, // ITEM_CAKE_MIX + ITEM_ULTRA_SHROOM -> ITEM_SHROOM_CREPE
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"キノコケーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x50\x81\x5B\x83\x4C"}, // ITEM_CAKE_MIX + ITEM_LIFE_SHROOM -> ITEM_SHROOM_CAKE
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ハニーあめ"*/"\x83\x6E\x83\x6A\x81\x5B\x82\xA0\x82\xDF"}, // ITEM_CAKE_MIX + ITEM_HONEY_SYRUP -> ITEM_HONEY_CANDY
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ナンシークッキー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x4E\x83\x62\x83\x4C\x81\x5B"}, // ITEM_CAKE_MIX + ITEM_MAPLE_SYRUP -> ITEM_ZESS_COOKIE
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"ローヤルキャンディ"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x4C\x83\x83\x83\x93\x83\x66\x83\x42"}, // ITEM_CAKE_MIX + ITEM_JAMMIN_JELLY -> ITEM_JELLY_CANDY
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"キノコケーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x50\x81\x5B\x83\x4C"}, // ITEM_CAKE_MIX + ITEM_SLOW_SHROOM -> ITEM_SHROOM_CAKE
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"ナンシークッキー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x4E\x83\x62\x83\x4C\x81\x5B"}, // ITEM_CAKE_MIX + ITEM_GRADUAL_SYRUP -> ITEM_ZESS_COOKIE
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_CAKE_MIX + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"ナンシークッキー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x4E\x83\x62\x83\x4C\x81\x5B"}, // ITEM_CAKE_MIX + ITEM_MYSTIC_EGG -> ITEM_ZESS_COOKIE
-    {/*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"マンゴープディング"*/"\x83\x7D\x83\x93\x83\x53\x81\x5B\x83\x76\x83\x66\x83\x42\x83\x93\x83\x4F"}, // ITEM_CAKE_MIX + ITEM_KEEL_MANGO -> ITEM_MANGO_DELIGHT
-    {/*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"あつあつスープ"*/"\x82\xA0\x82\xC2\x82\xA0\x82\xC2\x83\x58\x81\x5B\x83\x76"}, // ITEM_HOT_SAUCE + ITEM_FIRE_FLOWER -> ITEM_SPICY_SOUP
-    {/*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52"}, // ITEM_HOT_SAUCE + ITEM_DRIED_SHROOM -> ITEM_MUSHROOM
-    {/*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"スッキリドリンク"*/"\x83\x58\x83\x62\x83\x4C\x83\x8A\x83\x68\x83\x8A\x83\x93\x83\x4E", /*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9"}, // ITEM_HOT_SAUCE + ITEM_TASTY_TONIC -> ITEM_INKY_SAUCE
-    {/*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"スッキリドリンク"*/"\x83\x58\x83\x62\x83\x4C\x83\x8A\x83\x68\x83\x8A\x83\x93\x83\x4E"}, // ITEM_HOT_SAUCE + ITEM_HONEY_SYRUP -> ITEM_TASTY_TONIC
-    {/*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"スッキリドリンク"*/"\x83\x58\x83\x62\x83\x4C\x83\x8A\x83\x68\x83\x8A\x83\x93\x83\x4E"}, // ITEM_HOT_SAUCE + ITEM_MAPLE_SYRUP -> ITEM_TASTY_TONIC
-    {/*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"スッキリドリンク"*/"\x83\x58\x83\x62\x83\x4C\x83\x8A\x83\x68\x83\x8A\x83\x93\x83\x4E"}, // ITEM_HOT_SAUCE + ITEM_JAMMIN_JELLY -> ITEM_TASTY_TONIC
-    {/*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"カラリーナパスタ"*/"\x83\x4A\x83\x89\x83\x8A\x81\x5B\x83\x69\x83\x70\x83\x58\x83\x5E"}, // ITEM_HOT_SAUCE + ITEM_FRESH_PASTA -> ITEM_SPICY_PASTA
-    {/*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ファイアキャンディ"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x4C\x83\x83\x83\x93\x83\x66\x83\x42"}, // ITEM_HOT_SAUCE + ITEM_CAKE_MIX -> ITEM_FIRE_POP
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52"}, // ITEM_TURTLEY_LEAF + ITEM_MUSHROOM -> ITEM_LIFE_SHROOM
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52"}, // ITEM_TURTLEY_LEAF + ITEM_SUPER_SHROOM -> ITEM_LIFE_SHROOM
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52"}, // ITEM_TURTLEY_LEAF + ITEM_ULTRA_SHROOM -> ITEM_LIFE_SHROOM
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52"}, // ITEM_TURTLEY_LEAF + ITEM_LIFE_SHROOM -> ITEM_LIFE_SHROOM
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_TURTLEY_LEAF + ITEM_HONEY_SYRUP -> ITEM_FRESH_JUICE
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_TURTLEY_LEAF + ITEM_MAPLE_SYRUP -> ITEM_FRESH_JUICE
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_TURTLEY_LEAF + ITEM_JAMMIN_JELLY -> ITEM_FRESH_JUICE
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"こうちゃキノコ"*/"\x82\xB1\x82\xA4\x82\xBF\x82\xE1\x83\x4C\x83\x6D\x83\x52"}, // ITEM_TURTLEY_LEAF + ITEM_SLOW_SHROOM -> ITEM_SHROOM_BROTH
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"じわじわシロップ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_TURTLEY_LEAF + ITEM_GRADUAL_SYRUP -> ITEM_FRESH_JUICE
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_TURTLEY_LEAF + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F"}, // ITEM_TURTLEY_LEAF + ITEM_GOLDEN_LEAF -> ITEM_HEALTHY_SALAD
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"カメまん"*/"\x83\x4A\x83\x81\x82\xDC\x82\xF1"}, // ITEM_TURTLEY_LEAF + ITEM_KEEL_MANGO -> ITEM_KOOPA_BUN
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"カメスパ"*/"\x83\x4A\x83\x81\x83\x58\x83\x70"}, // ITEM_TURTLEY_LEAF + ITEM_FRESH_PASTA -> ITEM_KOOPASTA
-    {/*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9"}, // ITEM_TURTLEY_LEAF + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
-    {/*"つくしんぼ"*/"\x82\xC2\x82\xAD\x82\xB5\x82\xF1\x82\xDA", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_HORSETAIL + ITEM_MUSHROOM -> ITEM_ZESS_DINNER
-    {/*"つくしんぼ"*/"\x82\xC2\x82\xAD\x82\xB5\x82\xF1\x82\xDA", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_HORSETAIL + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
-    {/*"つくしんぼ"*/"\x82\xC2\x82\xAD\x82\xB5\x82\xF1\x82\xDA", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B"}, // ITEM_HORSETAIL + ITEM_ULTRA_SHROOM -> ITEM_ZESS_SPECIAL
-    {/*"つくしんぼ"*/"\x82\xC2\x82\xAD\x82\xB5\x82\xF1\x82\xDA", /*"きんきゅうキノコ"*/"\x82\xAB\x82\xF1\x82\xAB\x82\xE3\x82\xA4\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_HORSETAIL + ITEM_LIFE_SHROOM -> ITEM_ZESS_DINNER
-    {/*"つくしんぼ"*/"\x82\xC2\x82\xAD\x82\xB5\x82\xF1\x82\xDA", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_HORSETAIL + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"つくしんぼ"*/"\x82\xC2\x82\xAD\x82\xB5\x82\xF1\x82\xDA", /*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"キセツのオムレツ"*/"\x83\x4C\x83\x5A\x83\x63\x82\xCC\x83\x49\x83\x80\x83\x8C\x83\x63"}, // ITEM_HORSETAIL + ITEM_MYSTIC_EGG -> ITEM_OMELETTE_MEAL
-    {/*"つくしんぼ"*/"\x82\xC2\x82\xAD\x82\xB5\x82\xF1\x82\xDA", /*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F"}, // ITEM_HORSETAIL + ITEM_TURTLEY_LEAF -> ITEM_HEALTHY_SALAD
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_PEACHY_PEACH + ITEM_VOLT_SHROOM -> ITEM_ZESS_DINNER
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"まどわせのこな"*/"\x82\xDC\x82\xC7\x82\xED\x82\xB9\x82\xCC\x82\xB1\x82\xC8", /*"メロメロケーキ"*/"\x83\x81\x83\x8D\x83\x81\x83\x8D\x83\x50\x81\x5B\x83\x4C"}, // ITEM_PEACHY_PEACH + ITEM_RUIN_POWDER -> ITEM_HEARTFUL_CAKE
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"スーパーキノコ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_PEACHY_PEACH + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_PEACHY_PEACH + ITEM_ULTRA_SHROOM -> ITEM_ZESS_DINNER
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"しなびたキノコ"*/"\x82\xB5\x82\xC8\x82\xD1\x82\xBD\x83\x4C\x83\x6D\x83\x52", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52"}, // ITEM_PEACHY_PEACH + ITEM_DRIED_SHROOM -> ITEM_MUSHROOM
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"ハニーシロップ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フルーツパフェ"*/"\x83\x74\x83\x8B\x81\x5B\x83\x63\x83\x70\x83\x74\x83\x46"}, // ITEM_PEACHY_PEACH + ITEM_HONEY_SYRUP -> ITEM_FRUIT_PARFAIT
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"メイプルシロップ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x56\x83\x8D\x83\x62\x83\x76", /*"フルーツパフェ"*/"\x83\x74\x83\x8B\x81\x5B\x83\x63\x83\x70\x83\x74\x83\x46"}, // ITEM_PEACHY_PEACH + ITEM_MAPLE_SYRUP -> ITEM_FRUIT_PARFAIT
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"ローヤルゼリー"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x5B\x83\x8A\x81\x5B", /*"フルーツパフェ"*/"\x83\x74\x83\x8B\x81\x5B\x83\x63\x83\x70\x83\x74\x83\x46"}, // ITEM_PEACHY_PEACH + ITEM_JAMMIN_JELLY -> ITEM_FRUIT_PARFAIT
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_PEACHY_PEACH + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"フルーツパフェ"*/"\x83\x74\x83\x8B\x81\x5B\x83\x63\x83\x70\x83\x74\x83\x46"}, // ITEM_PEACHY_PEACH + ITEM_KEEL_MANGO -> ITEM_FRUIT_PARFAIT
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ピーチタルト"*/"\x83\x73\x81\x5B\x83\x60\x83\x5E\x83\x8B\x83\x67"}, // ITEM_PEACHY_PEACH + ITEM_CAKE_MIX -> ITEM_PEACH_TART
-    {/*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"スッキリドリンク"*/"\x83\x58\x83\x62\x83\x4C\x83\x8A\x83\x68\x83\x8A\x83\x93\x83\x4E"}, // ITEM_PEACHY_PEACH + ITEM_HOT_SAUCE -> ITEM_TASTY_TONIC
-    {/*"ヤシの実"*/"\x83\x84\x83\x56\x82\xCC\x8E\xC0", /*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"ココナッツボム"*/"\x83\x52\x83\x52\x83\x69\x83\x62\x83\x63\x83\x7B\x83\x80"}, // ITEM_COCONUT + ITEM_FIRE_FLOWER -> ITEM_COCONUT_BOMB
-    {/*"ヤシの実"*/"\x83\x84\x83\x56\x82\xCC\x8E\xC0", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_COCONUT + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ヤシの実"*/"\x83\x84\x83\x56\x82\xCC\x8E\xC0", /*"トロピコマンゴー"*/"\x83\x67\x83\x8D\x83\x73\x83\x52\x83\x7D\x83\x93\x83\x53\x81\x5B", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_COCONUT + ITEM_KEEL_MANGO -> ITEM_FRESH_JUICE
-    {/*"ヤシの実"*/"\x83\x84\x83\x56\x82\xCC\x8E\xC0", /*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_COCONUT + ITEM_FRESH_PASTA -> ITEM_ZESS_DINNER
-    {/*"ヤシの実"*/"\x83\x84\x83\x56\x82\xCC\x8E\xC0", /*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ココナツキャンディ"*/"\x83\x52\x83\x52\x83\x69\x83\x63\x83\x4C\x83\x83\x83\x93\x83\x66\x83\x42"}, // ITEM_COCONUT + ITEM_CAKE_MIX -> ITEM_COCO_CANDY
-    {/*"ヤシの実"*/"\x83\x84\x83\x56\x82\xCC\x8E\xC0", /*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_COCONUT + ITEM_TURTLEY_LEAF -> ITEM_FRESH_JUICE
-    {/*"ヤシの実"*/"\x83\x84\x83\x56\x82\xCC\x8E\xC0", /*"ピチピーチ"*/"\x83\x73\x83\x60\x83\x73\x81\x5B\x83\x60", /*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58"}, // ITEM_COCONUT + ITEM_PEACHY_PEACH -> ITEM_FRESH_JUICE
-    {/*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF", /*"キラキラおとし"*/"\x83\x4C\x83\x89\x83\x4C\x83\x89\x82\xA8\x82\xC6\x82\xB5", /*"ほしふるディナー"*/"\x82\xD9\x82\xB5\x82\xD3\x82\xE9\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_SHROOM_FRY + ITEM_SHOOTING_STAR -> ITEM_METEOR_MEAL
-    {/*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_SHROOM_FRY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB", /*"キラキラおとし"*/"\x83\x4C\x83\x89\x83\x4C\x83\x89\x82\xA8\x82\xC6\x82\xB5", /*"ほしふるディナー"*/"\x82\xD9\x82\xB5\x82\xD3\x82\xE9\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_SHROOM_ROAST + ITEM_SHOOTING_STAR -> ITEM_METEOR_MEAL
-    {/*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_SHROOM_ROAST + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C", /*"キラキラおとし"*/"\x83\x4C\x83\x89\x83\x4C\x83\x89\x82\xA8\x82\xC6\x82\xB5", /*"ほしふるディナー"*/"\x82\xD9\x82\xB5\x82\xD3\x82\xE9\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_SHROOM_STEAK + ITEM_SHOOTING_STAR -> ITEM_METEOR_MEAL
-    {/*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_SHROOM_STEAK + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"しっぱいりょうり"*/"\x82\xB5\x82\xC1\x82\xCF\x82\xA2\x82\xE8\x82\xE5\x82\xA4\x82\xE8", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_MISTAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ハニーキノコ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x4C\x83\x6D\x83\x52", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_HONEY_SHROOM + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"メイプルキノコ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x4C\x83\x6D\x83\x52", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_MAPLE_SHROOM + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ローヤルキノコ"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x4C\x83\x6D\x83\x52", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_JELLY_SHROOM + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ハニーキノコＳ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x4C\x83\x6D\x83\x52\x82\x72", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_HONEY_SUPER + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"メイプルキノコＳ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x72", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_MAPLE_SUPER + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ローヤルキノコＳ"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x72", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_JELLY_SUPER + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ハニーキノコＺ"*/"\x83\x6E\x83\x6A\x81\x5B\x83\x4C\x83\x6D\x83\x52\x82\x79", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_HONEY_ULTRA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"メイプルキノコＺ"*/"\x83\x81\x83\x43\x83\x76\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x79", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_MAPLE_ULTRA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ローヤルキノコＺ"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x4C\x83\x6D\x83\x52\x82\x79", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_JELLY_ULTRA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B", /*"カチカチコウラ"*/"\x83\x4A\x83\x60\x83\x4A\x83\x60\x83\x52\x83\x45\x83\x89", /*"カチカチりょうり"*/"\x83\x4A\x83\x60\x83\x4A\x83\x60\x82\xE8\x82\xE5\x82\xA4\x82\xE8"}, // ITEM_ZESS_DINNER + ITEM_COURAGE_SHELL -> ITEM_COURAGE_MEAL
-    {/*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_ZESS_DINNER + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B", /*"カチカチコウラ"*/"\x83\x4A\x83\x60\x83\x4A\x83\x60\x83\x52\x83\x45\x83\x89", /*"カチカチりょうり"*/"\x83\x4A\x83\x60\x83\x4A\x83\x60\x82\xE8\x82\xE5\x82\xA4\x82\xE8"}, // ITEM_ZESS_SPECIAL + ITEM_COURAGE_SHELL -> ITEM_COURAGE_MEAL
-    {/*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_ZESS_SPECIAL + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ナンシーデラックス"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x89\x83\x62\x83\x4E\x83\x58", /*"カチカチコウラ"*/"\x83\x4A\x83\x60\x83\x4A\x83\x60\x83\x52\x83\x45\x83\x89", /*"カチカチりょうり"*/"\x83\x4A\x83\x60\x83\x4A\x83\x60\x82\xE8\x82\xE5\x82\xA4\x82\xE8"}, // ITEM_ZESS_DELUXE + ITEM_COURAGE_SHELL -> ITEM_COURAGE_MEAL
-    {/*"ナンシーデラックス"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x89\x83\x62\x83\x4E\x83\x58", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_ZESS_DELUXE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ナンシーダイナマイ"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x5F\x83\x43\x83\x69\x83\x7D\x83\x43", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"バクハツタマゴ"*/"\x83\x6F\x83\x4E\x83\x6E\x83\x63\x83\x5E\x83\x7D\x83\x53"}, // ITEM_ZESS_DYNAMITE + ITEM_DRIED_BOUQUET -> ITEM_EGG_BOMB
-    {/*"ナンシーティー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x65\x83\x42\x81\x5B", /*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9"}, // ITEM_ZESS_TEA + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
-    {/*"ゆきうさぎ"*/"\x82\xE4\x82\xAB\x82\xA4\x82\xB3\x82\xAC", /*"あつあつスープ"*/"\x82\xA0\x82\xC2\x82\xA0\x82\xC2\x83\x58\x81\x5B\x83\x76", /*"いつまでもふたりで"*/"\x82\xA2\x82\xC2\x82\xDC\x82\xC5\x82\xE0\x82\xD3\x82\xBD\x82\xE8\x82\xC5"}, // ITEM_SNOW_BUNNY + ITEM_SPICY_SOUP -> ITEM_COUPLES_CAKE
-    {/*"キノコケーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x50\x81\x5B\x83\x4C", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_SHROOM_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"キノコクレープ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x4E\x83\x8C\x81\x5B\x83\x76", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_SHROOM_CREPE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ムースケーキ"*/"\x83\x80\x81\x5B\x83\x58\x83\x50\x81\x5B\x83\x4C", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_MOUSSE_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"フルーツパフェ"*/"\x83\x74\x83\x8B\x81\x5B\x83\x63\x83\x70\x83\x74\x83\x46", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_FRUIT_PARFAIT + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"バクハツタマゴ"*/"\x83\x6F\x83\x4E\x83\x6E\x83\x63\x83\x5E\x83\x7D\x83\x53", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_EGG_BOMB + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"イカスミパスタ"*/"\x83\x43\x83\x4A\x83\x58\x83\x7E\x83\x70\x83\x58\x83\x5E", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_INK_PASTA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"スパゲティ"*/"\x83\x58\x83\x70\x83\x51\x83\x65\x83\x42", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_SPAGHETTI + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"スパゲティ"*/"\x83\x58\x83\x70\x83\x51\x83\x65\x83\x42", /*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"カラリーナパスタ"*/"\x83\x4A\x83\x89\x83\x8A\x81\x5B\x83\x69\x83\x70\x83\x58\x83\x5E"}, // ITEM_SPAGHETTI + ITEM_HOT_SAUCE -> ITEM_SPICY_PASTA
-    {/*"スパゲティ"*/"\x83\x58\x83\x70\x83\x51\x83\x65\x83\x42", /*"カメカメはっぱ"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x82\xCD\x82\xC1\x82\xCF", /*"カメスパ"*/"\x83\x4A\x83\x81\x83\x58\x83\x70"}, // ITEM_SPAGHETTI + ITEM_TURTLEY_LEAF -> ITEM_KOOPASTA
-    {/*"こうちゃキノコ"*/"\x82\xB1\x82\xA4\x82\xBF\x82\xE1\x83\x4C\x83\x6D\x83\x52", /*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9"}, // ITEM_SHROOM_BROTH + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
-    {/*"どくキノコ"*/"\x82\xC7\x82\xAD\x83\x4C\x83\x6D\x83\x52", /*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"ウルトラキノコ"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x4C\x83\x6D\x83\x52"}, // ITEM_POISON_SHROOM + ITEM_POINT_SWAP -> ITEM_ULTRA_SHROOM
-    {/*"どくキノコ"*/"\x82\xC7\x82\xAD\x83\x4C\x83\x6D\x83\x52", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_POISON_SHROOM + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"どくキノコ"*/"\x82\xC7\x82\xAD\x83\x4C\x83\x6D\x83\x52", /*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"こうちゃキノコ"*/"\x82\xB1\x82\xA4\x82\xBF\x82\xE1\x83\x4C\x83\x6D\x83\x52"}, // ITEM_POISON_SHROOM + ITEM_GOLDEN_LEAF -> ITEM_SHROOM_BROTH
-    {/*"ショコラケーキ"*/"\x83\x56\x83\x87\x83\x52\x83\x89\x83\x50\x81\x5B\x83\x4C", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_CHOCO_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"マンゴープディング"*/"\x83\x7D\x83\x93\x83\x53\x81\x5B\x83\x76\x83\x66\x83\x42\x83\x93\x83\x4F", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_MANGO_DELIGHT + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"マンゴープディング"*/"\x83\x7D\x83\x93\x83\x53\x81\x5B\x83\x76\x83\x66\x83\x42\x83\x93\x83\x4F", /*"ふしぎなタマゴ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x83\x5E\x83\x7D\x83\x53", /*"はつこいプディング"*/"\x82\xCD\x82\xC2\x82\xB1\x82\xA2\x83\x76\x83\x66\x83\x42\x83\x93\x83\x4F"}, // ITEM_MANGO_DELIGHT + ITEM_MYSTIC_EGG -> ITEM_LOVE_PUDDING
-    {/*"はつこいプディング"*/"\x82\xCD\x82\xC2\x82\xB1\x82\xA2\x83\x76\x83\x66\x83\x42\x83\x93\x83\x4F", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_LOVE_PUDDING + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ほしふるディナー"*/"\x82\xD9\x82\xB5\x82\xD3\x82\xE9\x83\x66\x83\x42\x83\x69\x81\x5B", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_METEOR_MEAL + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ほしふるディナー"*/"\x82\xD9\x82\xB5\x82\xD3\x82\xE9\x83\x66\x83\x42\x83\x69\x81\x5B", /*"フルーツパフェ"*/"\x83\x74\x83\x8B\x81\x5B\x83\x63\x83\x70\x83\x74\x83\x46", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_METEOR_MEAL + ITEM_FRUIT_PARFAIT -> ITEM_ZESS_DINNER
-    {/*"しれんのナベ"*/"\x82\xB5\x82\xEA\x82\xF1\x82\xCC\x83\x69\x83\x78", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"どくキノコ"*/"\x82\xC7\x82\xAD\x83\x4C\x83\x6D\x83\x52"}, // ITEM_TRIAL_STEW + ITEM_DRIED_BOUQUET -> ITEM_POISON_SHROOM
-    {/*"いつまでもふたりで"*/"\x82\xA2\x82\xC2\x82\xDC\x82\xC5\x82\xE0\x82\xD3\x82\xBD\x82\xE8\x82\xC5", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_COUPLES_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"いつまでもふたりで"*/"\x82\xA2\x82\xC2\x82\xDC\x82\xC5\x82\xE0\x82\xD3\x82\xBD\x82\xE8\x82\xC5", /*"どくキノコ"*/"\x82\xC7\x82\xAD\x83\x4C\x83\x6D\x83\x52", /*"しれんのナベ"*/"\x82\xB5\x82\xEA\x82\xF1\x82\xCC\x83\x69\x83\x78"}, // ITEM_COUPLES_CAKE + ITEM_POISON_SHROOM -> ITEM_TRIAL_STEW
-    {/*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9", /*"じわじわキノコ"*/"\x82\xB6\x82\xED\x82\xB6\x82\xED\x83\x4C\x83\x6D\x83\x52", /*"どくキノコ"*/"\x82\xC7\x82\xAD\x83\x4C\x83\x6D\x83\x52"}, // ITEM_INKY_SAUCE + ITEM_SLOW_SHROOM -> ITEM_POISON_SHROOM
-    {/*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9", /*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"イカスミパスタ"*/"\x83\x43\x83\x4A\x83\x58\x83\x7E\x83\x70\x83\x58\x83\x5E"}, // ITEM_INKY_SAUCE + ITEM_FRESH_PASTA -> ITEM_INK_PASTA
-    {/*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9", /*"おかしのもと"*/"\x82\xA8\x82\xA9\x82\xB5\x82\xCC\x82\xE0\x82\xC6", /*"ショコラケーキ"*/"\x83\x56\x83\x87\x83\x52\x83\x89\x83\x50\x81\x5B\x83\x4C"}, // ITEM_INKY_SAUCE + ITEM_CAKE_MIX -> ITEM_CHOCO_CAKE
-    {/*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9", /*"ムースケーキ"*/"\x83\x80\x81\x5B\x83\x58\x83\x50\x81\x5B\x83\x4C", /*"ショコラケーキ"*/"\x83\x56\x83\x87\x83\x52\x83\x89\x83\x50\x81\x5B\x83\x4C"}, // ITEM_INKY_SAUCE + ITEM_MOUSSE_CAKE -> ITEM_CHOCO_CAKE
-    {/*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9", /*"スパゲティ"*/"\x83\x58\x83\x70\x83\x51\x83\x65\x83\x42", /*"イカスミパスタ"*/"\x83\x43\x83\x4A\x83\x58\x83\x7E\x83\x70\x83\x58\x83\x5E"}, // ITEM_INKY_SAUCE + ITEM_SPAGHETTI -> ITEM_INK_PASTA
-    {/*"キセツのオムレツ"*/"\x83\x4C\x83\x5A\x83\x63\x82\xCC\x83\x49\x83\x80\x83\x8C\x83\x63", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_OMELETTE_MEAL + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"カメカメティー"*/"\x83\x4A\x83\x81\x83\x4A\x83\x81\x83\x65\x83\x42\x81\x5B", /*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9"}, // ITEM_KOOPA_TEA + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
-    {/*"カメスパ"*/"\x83\x4A\x83\x81\x83\x58\x83\x70", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_KOOPASTA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"カメスパ"*/"\x83\x4A\x83\x81\x83\x58\x83\x70", /*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"カラリーナパスタ"*/"\x83\x4A\x83\x89\x83\x8A\x81\x5B\x83\x69\x83\x70\x83\x58\x83\x5E"}, // ITEM_KOOPASTA + ITEM_HOT_SAUCE -> ITEM_SPICY_PASTA
-    {/*"カメスパ"*/"\x83\x4A\x83\x81\x83\x58\x83\x70", /*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9", /*"イカスミパスタ"*/"\x83\x43\x83\x4A\x83\x58\x83\x7E\x83\x70\x83\x58\x83\x5E"}, // ITEM_KOOPASTA + ITEM_INKY_SAUCE -> ITEM_INK_PASTA
-    {/*"カラリーナパスタ"*/"\x83\x4A\x83\x89\x83\x8A\x81\x5B\x83\x69\x83\x70\x83\x58\x83\x5E", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_SPICY_PASTA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"カラリーナパスタ"*/"\x83\x4A\x83\x89\x83\x8A\x81\x5B\x83\x69\x83\x70\x83\x58\x83\x5E", /*"ヤシの実"*/"\x83\x84\x83\x56\x82\xCC\x8E\xC0", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_SPICY_PASTA + ITEM_COCONUT -> ITEM_ZESS_DINNER
-    {/*"カラリーナパスタ"*/"\x83\x4A\x83\x89\x83\x8A\x81\x5B\x83\x69\x83\x70\x83\x58\x83\x5E", /*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9", /*"イカスミパスタ"*/"\x83\x43\x83\x4A\x83\x58\x83\x7E\x83\x70\x83\x58\x83\x5E"}, // ITEM_SPICY_PASTA + ITEM_INKY_SAUCE -> ITEM_INK_PASTA
-    {/*"メロメロケーキ"*/"\x83\x81\x83\x8D\x83\x81\x83\x8D\x83\x50\x81\x5B\x83\x4C", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_HEARTFUL_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ピーチタルト"*/"\x83\x73\x81\x5B\x83\x60\x83\x5E\x83\x8B\x83\x67", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_PEACH_TART + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"びりびりキャンディ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x83\x83\x93\x83\x66\x83\x42", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_ELECTRO_POP + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ファイアキャンディ"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x4C\x83\x83\x83\x93\x83\x66\x83\x42", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_FIRE_POP + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ハニーあめ"*/"\x83\x6E\x83\x6A\x81\x5B\x82\xA0\x82\xDF", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_HONEY_CANDY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ココナツキャンディ"*/"\x83\x52\x83\x52\x83\x69\x83\x63\x83\x4C\x83\x83\x83\x93\x83\x66\x83\x42", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_COCO_CANDY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ローヤルキャンディ"*/"\x83\x8D\x81\x5B\x83\x84\x83\x8B\x83\x4C\x83\x83\x83\x93\x83\x66\x83\x42", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_JELLY_CANDY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ナンシークッキー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x4E\x83\x62\x83\x4C\x81\x5B", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_ZESS_COOKIE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_HEALTHY_SALAD + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F", /*"生パスタ"*/"\x90\xB6\x83\x70\x83\x58\x83\x5E", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_HEALTHY_SALAD + ITEM_FRESH_PASTA -> ITEM_ZESS_DINNER
-    {/*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_HEALTHY_SALAD + ITEM_SHROOM_FRY -> ITEM_ZESS_DINNER
-    {/*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F", /*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB", /*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B"}, // ITEM_HEALTHY_SALAD + ITEM_SHROOM_ROAST -> ITEM_ZESS_SPECIAL
-    {/*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F", /*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C", /*"ナンシーデラックス"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x89\x83\x62\x83\x4E\x83\x58"}, // ITEM_HEALTHY_SALAD + ITEM_SHROOM_STEAK -> ITEM_ZESS_DELUXE
-    {/*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F", /*"イカスミパスタ"*/"\x83\x43\x83\x4A\x83\x58\x83\x7E\x83\x70\x83\x58\x83\x5E", /*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B"}, // ITEM_HEALTHY_SALAD + ITEM_INK_PASTA -> ITEM_ZESS_SPECIAL
-    {/*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F", /*"スパゲティ"*/"\x83\x58\x83\x70\x83\x51\x83\x65\x83\x42", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_HEALTHY_SALAD + ITEM_SPAGHETTI -> ITEM_ZESS_DINNER
-    {/*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F", /*"カメスパ"*/"\x83\x4A\x83\x81\x83\x58\x83\x70", /*"ナンシーディナー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x42\x83\x69\x81\x5B"}, // ITEM_HEALTHY_SALAD + ITEM_KOOPASTA -> ITEM_ZESS_DINNER
-    {/*"ヘルスィーサラダ"*/"\x83\x77\x83\x8B\x83\x58\x83\x42\x81\x5B\x83\x54\x83\x89\x83\x5F", /*"カラリーナパスタ"*/"\x83\x4A\x83\x89\x83\x8A\x81\x5B\x83\x69\x83\x70\x83\x58\x83\x5E", /*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B"}, // ITEM_HEALTHY_SALAD + ITEM_SPICY_PASTA -> ITEM_ZESS_SPECIAL
-    {/*"カメまん"*/"\x83\x4A\x83\x81\x82\xDC\x82\xF1", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_KOOPA_BUN + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"フレッシュジュース"*/"\x83\x74\x83\x8C\x83\x62\x83\x56\x83\x85\x83\x57\x83\x85\x81\x5B\x83\x58", /*"レッド・カラリン"*/"\x83\x8C\x83\x62\x83\x68\x81\x45\x83\x4A\x83\x89\x83\x8A\x83\x93", /*"すみぢる"*/"\x82\xB7\x82\xDD\x82\xC0\x82\xE9"}, // ITEM_FRESH_JUICE + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
-    {/*"たんこぶ"*/"\x82\xBD\x82\xF1\x82\xB1\x82\xD4", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"うちゅうしょく"*/"\x82\xA4\x82\xBF\x82\xE3\x82\xA4\x82\xB5\x82\xE5\x82\xAD"}, // ITEM_WHACKA_BUMP + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
-    {/*"たんこぶ"*/"\x82\xBD\x82\xF1\x82\xB1\x82\xD4", /*"おうごんはっぱ"*/"\x82\xA8\x82\xA4\x82\xB2\x82\xF1\x82\xCD\x82\xC1\x82\xCF", /*"ナンシーデラックス"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x66\x83\x89\x83\x62\x83\x4E\x83\x58"}, // ITEM_WHACKA_BUMP + ITEM_GOLDEN_LEAF -> ITEM_ZESS_DELUXE
-    {/*"きんかい"*/"\x82\xAB\x82\xF1\x82\xA9\x82\xA2", /*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"キノコ"*/"\x83\x4C\x83\x6D\x83\x52"}, // ITEM_GOLD_BAR + ITEM_POINT_SWAP -> ITEM_MUSHROOM
-    {/*"きんかい×３"*/"\x82\xAB\x82\xF1\x82\xA9\x82\xA2\x81\x7E\x82\x52", /*"イレカエール"*/"\x83\x43\x83\x8C\x83\x4A\x83\x47\x81\x5B\x83\x8B", /*"きんかい"*/"\x82\xAB\x82\xF1\x82\xA9\x82\xA2"}, // ITEM_GOLD_BAR_X3 + ITEM_POINT_SWAP -> ITEM_GOLD_BAR
-    {/*"ココナッツボム"*/"\x83\x52\x83\x52\x83\x69\x83\x62\x83\x63\x83\x7B\x83\x80", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"ヤシの実"*/"\x83\x84\x83\x56\x82\xCC\x8E\xC0"}, // ITEM_COCONUT_BOMB + ITEM_DRIED_BOUQUET -> ITEM_COCONUT
-    {/*"ココナッツボム"*/"\x83\x52\x83\x52\x83\x69\x83\x62\x83\x63\x83\x7B\x83\x80", /*"バクハツタマゴ"*/"\x83\x6F\x83\x4E\x83\x6E\x83\x63\x83\x5E\x83\x7D\x83\x53", /*"ナンシーダイナマイ"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x5F\x83\x43\x83\x69\x83\x7D\x83\x43"}, // ITEM_COCONUT_BOMB + ITEM_EGG_BOMB -> ITEM_ZESS_DYNAMITE
-    {/*"カチカチりょうり"*/"\x83\x4A\x83\x60\x83\x4A\x83\x60\x82\xE8\x82\xE5\x82\xA4\x82\xE8", /*"ドライフラワー"*/"\x83\x68\x83\x89\x83\x43\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"カチカチコウラ"*/"\x83\x4A\x83\x60\x83\x4A\x83\x60\x83\x52\x83\x45\x83\x89"}, // ITEM_COURAGE_MEAL + ITEM_DRIED_BOUQUET -> ITEM_COURAGE_SHELL
+    {"かみなりドッカン", "かみなりゴロゴロ", "しれんのナベ"}, // ITEM_THUNDER_RAGE + ITEM_THUNDER_BOLT -> ITEM_TRIAL_STEW
+    {"キノコ", "かみなりゴロゴロ", "びりびりキノコ"}, // ITEM_MUSHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
+    {"キノコ", "かみなりドッカン", "びりびりキノコ"}, // ITEM_MUSHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
+    {"キノコ", "ファイアフラワー", "キノコホイルやき"}, // ITEM_MUSHROOM + ITEM_FIRE_FLOWER -> ITEM_SHROOM_ROAST
+    {"キノコ", "びりびりキノコ", "キノコホイルやき"}, // ITEM_MUSHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_ROAST
+    {"キノコ", "ふにゃふにゃくん", "しなびたキノコ"}, // ITEM_MUSHROOM + ITEM_MR_SOFTENER -> ITEM_DRIED_SHROOM
+    {"スーパーキノコ", "かみなりゴロゴロ", "びりびりキノコ"}, // ITEM_SUPER_SHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
+    {"スーパーキノコ", "かみなりドッカン", "びりびりキノコ"}, // ITEM_SUPER_SHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
+    {"スーパーキノコ", "ファイアフラワー", "ナンシーディナー"}, // ITEM_SUPER_SHROOM + ITEM_FIRE_FLOWER -> ITEM_ZESS_DINNER
+    {"スーパーキノコ", "びりびりキノコ", "キノコホイルやき"}, // ITEM_SUPER_SHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_ROAST
+    {"スーパーキノコ", "ふにゃふにゃくん", "しなびたキノコ"}, // ITEM_SUPER_SHROOM + ITEM_MR_SOFTENER -> ITEM_DRIED_SHROOM
+    {"スーパーキノコ", "キノコ", "キノコホイルやき"}, // ITEM_SUPER_SHROOM + ITEM_MUSHROOM -> ITEM_SHROOM_ROAST
+    {"ウルトラキノコ", "かみなりゴロゴロ", "びりびりキノコ"}, // ITEM_ULTRA_SHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
+    {"ウルトラキノコ", "かみなりドッカン", "びりびりキノコ"}, // ITEM_ULTRA_SHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
+    {"ウルトラキノコ", "ファイアフラワー", "ナンシースペシャル"}, // ITEM_ULTRA_SHROOM + ITEM_FIRE_FLOWER -> ITEM_ZESS_SPECIAL
+    {"ウルトラキノコ", "びりびりキノコ", "キノコステーキ"}, // ITEM_ULTRA_SHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_STEAK
+    {"ウルトラキノコ", "ふにゃふにゃくん", "しなびたキノコ"}, // ITEM_ULTRA_SHROOM + ITEM_MR_SOFTENER -> ITEM_DRIED_SHROOM
+    {"ウルトラキノコ", "キノコ", "キノコステーキ"}, // ITEM_ULTRA_SHROOM + ITEM_MUSHROOM -> ITEM_SHROOM_STEAK
+    {"ウルトラキノコ", "スーパーキノコ", "キノコステーキ"}, // ITEM_ULTRA_SHROOM + ITEM_SUPER_SHROOM -> ITEM_SHROOM_STEAK
+    {"きんきゅうキノコ", "かみなりゴロゴロ", "びりびりキノコ"}, // ITEM_LIFE_SHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
+    {"きんきゅうキノコ", "かみなりドッカン", "びりびりキノコ"}, // ITEM_LIFE_SHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
+    {"きんきゅうキノコ", "ファイアフラワー", "ナンシーディナー"}, // ITEM_LIFE_SHROOM + ITEM_FIRE_FLOWER -> ITEM_ZESS_DINNER
+    {"きんきゅうキノコ", "びりびりキノコ", "キノコホイルやき"}, // ITEM_LIFE_SHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_ROAST
+    {"きんきゅうキノコ", "ふにゃふにゃくん", "しなびたキノコ"}, // ITEM_LIFE_SHROOM + ITEM_MR_SOFTENER -> ITEM_DRIED_SHROOM
+    {"きんきゅうキノコ", "キノコ", "キノコステーキ"}, // ITEM_LIFE_SHROOM + ITEM_MUSHROOM -> ITEM_SHROOM_STEAK
+    {"きんきゅうキノコ", "スーパーキノコ", "キノコステーキ"}, // ITEM_LIFE_SHROOM + ITEM_SUPER_SHROOM -> ITEM_SHROOM_STEAK
+    {"きんきゅうキノコ", "ウルトラキノコ", "キノコステーキ"}, // ITEM_LIFE_SHROOM + ITEM_ULTRA_SHROOM -> ITEM_SHROOM_STEAK
+    {"しなびたキノコ", "ファイアフラワー", "キノコいため"}, // ITEM_DRIED_SHROOM + ITEM_FIRE_FLOWER -> ITEM_SHROOM_FRY
+    {"しなびたキノコ", "びりびりキノコ", "キノコいため"}, // ITEM_DRIED_SHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_FRY
+    {"しなびたキノコ", "デカデカドリンク", "キノコ"}, // ITEM_DRIED_SHROOM + ITEM_POWER_PUNCH -> ITEM_MUSHROOM
+    {"しなびたキノコ", "キノコ", "キノコいため"}, // ITEM_DRIED_SHROOM + ITEM_MUSHROOM -> ITEM_SHROOM_FRY
+    {"しなびたキノコ", "スーパーキノコ", "キノコホイルやき"}, // ITEM_DRIED_SHROOM + ITEM_SUPER_SHROOM -> ITEM_SHROOM_ROAST
+    {"しなびたキノコ", "ウルトラキノコ", "キノコステーキ"}, // ITEM_DRIED_SHROOM + ITEM_ULTRA_SHROOM -> ITEM_SHROOM_STEAK
+    {"しなびたキノコ", "きんきゅうキノコ", "キノコステーキ"}, // ITEM_DRIED_SHROOM + ITEM_LIFE_SHROOM -> ITEM_SHROOM_STEAK
+    {"ハニーシロップ", "こおりのいぶき", "アイスキャンディ"}, // ITEM_HONEY_SYRUP + ITEM_ICE_STORM -> ITEM_ICICLE_POP
+    {"ハニーシロップ", "びりびりキノコ", "ハニーキノコ"}, // ITEM_HONEY_SYRUP + ITEM_VOLT_SHROOM -> ITEM_HONEY_SHROOM
+    {"ハニーシロップ", "キノコ", "ハニーキノコ"}, // ITEM_HONEY_SYRUP + ITEM_MUSHROOM -> ITEM_HONEY_SHROOM
+    {"ハニーシロップ", "スーパーキノコ", "ハニーキノコＳ"}, // ITEM_HONEY_SYRUP + ITEM_SUPER_SHROOM -> ITEM_HONEY_SUPER
+    {"ハニーシロップ", "ウルトラキノコ", "ハニーキノコＺ"}, // ITEM_HONEY_SYRUP + ITEM_ULTRA_SHROOM -> ITEM_HONEY_ULTRA
+    {"ハニーシロップ", "きんきゅうキノコ", "ハニーキノコＳ"}, // ITEM_HONEY_SYRUP + ITEM_LIFE_SHROOM -> ITEM_HONEY_SUPER
+    {"メイプルシロップ", "こおりのいぶき", "ナンシーフラッペ"}, // ITEM_MAPLE_SYRUP + ITEM_ICE_STORM -> ITEM_ZESS_FRAPPE
+    {"メイプルシロップ", "びりびりキノコ", "メイプルキノコ"}, // ITEM_MAPLE_SYRUP + ITEM_VOLT_SHROOM -> ITEM_MAPLE_SHROOM
+    {"メイプルシロップ", "キノコ", "メイプルキノコ"}, // ITEM_MAPLE_SYRUP + ITEM_MUSHROOM -> ITEM_MAPLE_SHROOM
+    {"メイプルシロップ", "スーパーキノコ", "メイプルキノコＳ"}, // ITEM_MAPLE_SYRUP + ITEM_SUPER_SHROOM -> ITEM_MAPLE_SUPER
+    {"メイプルシロップ", "ウルトラキノコ", "メイプルキノコＺ"}, // ITEM_MAPLE_SYRUP + ITEM_ULTRA_SHROOM -> ITEM_MAPLE_ULTRA
+    {"メイプルシロップ", "きんきゅうキノコ", "メイプルキノコＳ"}, // ITEM_MAPLE_SYRUP + ITEM_LIFE_SHROOM -> ITEM_MAPLE_SUPER
+    {"メイプルシロップ", "ハニーシロップ", "フレッシュジュース"}, // ITEM_MAPLE_SYRUP + ITEM_HONEY_SYRUP -> ITEM_FRESH_JUICE
+    {"ローヤルゼリー", "こおりのいぶき", "ナンシーフラッペ"}, // ITEM_JAMMIN_JELLY + ITEM_ICE_STORM -> ITEM_ZESS_FRAPPE
+    {"ローヤルゼリー", "びりびりキノコ", "ローヤルキノコ"}, // ITEM_JAMMIN_JELLY + ITEM_VOLT_SHROOM -> ITEM_JELLY_SHROOM
+    {"ローヤルゼリー", "キノコ", "ローヤルキノコ"}, // ITEM_JAMMIN_JELLY + ITEM_MUSHROOM -> ITEM_JELLY_SHROOM
+    {"ローヤルゼリー", "スーパーキノコ", "ローヤルキノコＳ"}, // ITEM_JAMMIN_JELLY + ITEM_SUPER_SHROOM -> ITEM_JELLY_SUPER
+    {"ローヤルゼリー", "ウルトラキノコ", "ローヤルキノコＺ"}, // ITEM_JAMMIN_JELLY + ITEM_ULTRA_SHROOM -> ITEM_JELLY_ULTRA
+    {"ローヤルゼリー", "きんきゅうキノコ", "ローヤルキノコＳ"}, // ITEM_JAMMIN_JELLY + ITEM_LIFE_SHROOM -> ITEM_JELLY_SUPER
+    {"ローヤルゼリー", "ハニーシロップ", "フレッシュジュース"}, // ITEM_JAMMIN_JELLY + ITEM_HONEY_SYRUP -> ITEM_FRESH_JUICE
+    {"ローヤルゼリー", "メイプルシロップ", "ナンシーティー"}, // ITEM_JAMMIN_JELLY + ITEM_MAPLE_SYRUP -> ITEM_ZESS_TEA
+    {"じわじわキノコ", "かみなりゴロゴロ", "びりびりキノコ"}, // ITEM_SLOW_SHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
+    {"じわじわキノコ", "かみなりドッカン", "びりびりキノコ"}, // ITEM_SLOW_SHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
+    {"じわじわキノコ", "キラキラおとし", "ナンシーディナー"}, // ITEM_SLOW_SHROOM + ITEM_SHOOTING_STAR -> ITEM_ZESS_DINNER
+    {"じわじわキノコ", "ファイアフラワー", "ナンシーディナー"}, // ITEM_SLOW_SHROOM + ITEM_FIRE_FLOWER -> ITEM_ZESS_DINNER
+    {"じわじわキノコ", "びりびりキノコ", "キノコホイルやき"}, // ITEM_SLOW_SHROOM + ITEM_VOLT_SHROOM -> ITEM_SHROOM_ROAST
+    {"じわじわキノコ", "キノコ", "キノコホイルやき"}, // ITEM_SLOW_SHROOM + ITEM_MUSHROOM -> ITEM_SHROOM_ROAST
+    {"じわじわキノコ", "スーパーキノコ", "ナンシーディナー"}, // ITEM_SLOW_SHROOM + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
+    {"じわじわキノコ", "ウルトラキノコ", "ナンシースペシャル"}, // ITEM_SLOW_SHROOM + ITEM_ULTRA_SHROOM -> ITEM_ZESS_SPECIAL
+    {"じわじわキノコ", "きんきゅうキノコ", "ナンシーディナー"}, // ITEM_SLOW_SHROOM + ITEM_LIFE_SHROOM -> ITEM_ZESS_DINNER
+    {"じわじわキノコ", "ハニーシロップ", "ハニーキノコ"}, // ITEM_SLOW_SHROOM + ITEM_HONEY_SYRUP -> ITEM_HONEY_SHROOM
+    {"じわじわキノコ", "メイプルシロップ", "メイプルキノコ"}, // ITEM_SLOW_SHROOM + ITEM_MAPLE_SYRUP -> ITEM_MAPLE_SHROOM
+    {"じわじわキノコ", "ローヤルゼリー", "メイプルキノコＳ"}, // ITEM_SLOW_SHROOM + ITEM_JAMMIN_JELLY -> ITEM_MAPLE_SUPER
+    {"じわじわシロップ", "キノコ", "キノコホイルやき"}, // ITEM_GRADUAL_SYRUP + ITEM_MUSHROOM -> ITEM_SHROOM_ROAST
+    {"じわじわシロップ", "スーパーキノコ", "ナンシーディナー"}, // ITEM_GRADUAL_SYRUP + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
+    {"じわじわシロップ", "ウルトラキノコ", "ナンシースペシャル"}, // ITEM_GRADUAL_SYRUP + ITEM_ULTRA_SHROOM -> ITEM_ZESS_SPECIAL
+    {"じわじわシロップ", "きんきゅうキノコ", "ナンシーディナー"}, // ITEM_GRADUAL_SYRUP + ITEM_LIFE_SHROOM -> ITEM_ZESS_DINNER
+    {"じわじわシロップ", "ハニーシロップ", "フレッシュジュース"}, // ITEM_GRADUAL_SYRUP + ITEM_HONEY_SYRUP -> ITEM_FRESH_JUICE
+    {"じわじわシロップ", "メイプルシロップ", "フレッシュジュース"}, // ITEM_GRADUAL_SYRUP + ITEM_MAPLE_SYRUP -> ITEM_FRESH_JUICE
+    {"じわじわシロップ", "ローヤルゼリー", "フレッシュジュース"}, // ITEM_GRADUAL_SYRUP + ITEM_JAMMIN_JELLY -> ITEM_FRESH_JUICE
+    {"じわじわシロップ", "じわじわキノコ", "じわじわキノコ"}, // ITEM_GRADUAL_SYRUP + ITEM_SLOW_SHROOM -> ITEM_SLOW_SHROOM
+    {"イレカエール", "かみなりゴロゴロ", "ゆらゆらじしん"}, // ITEM_POINT_SWAP + ITEM_THUNDER_BOLT -> ITEM_EARTH_QUAKE
+    {"イレカエール", "かみなりドッカン", "キラキラおとし"}, // ITEM_POINT_SWAP + ITEM_THUNDER_RAGE -> ITEM_SHOOTING_STAR
+    {"イレカエール", "キラキラおとし", "かみなりドッカン"}, // ITEM_POINT_SWAP + ITEM_SHOOTING_STAR -> ITEM_THUNDER_RAGE
+    {"イレカエール", "こおりのいぶき", "ファイアフラワー"}, // ITEM_POINT_SWAP + ITEM_ICE_STORM -> ITEM_FIRE_FLOWER
+    {"イレカエール", "ファイアフラワー", "こおりのいぶき"}, // ITEM_POINT_SWAP + ITEM_FIRE_FLOWER -> ITEM_ICE_STORM
+    {"イレカエール", "ゆらゆらじしん", "かみなりゴロゴロ"}, // ITEM_POINT_SWAP + ITEM_EARTH_QUAKE -> ITEM_THUNDER_BOLT
+    {"イレカエール", "テレサのふく", "てきヨケール"}, // ITEM_POINT_SWAP + ITEM_BOOS_SHEET -> ITEM_REPEL_CAPE
+    {"イレカエール", "びりびりキノコ", "スーパーキノコ"}, // ITEM_POINT_SWAP + ITEM_VOLT_SHROOM -> ITEM_SUPER_SHROOM
+    {"イレカエール", "てきヨケール", "テレサのふく"}, // ITEM_POINT_SWAP + ITEM_REPEL_CAPE -> ITEM_BOOS_SHEET
+    {"イレカエール", "まどわせのこな", "しかえしのこな"}, // ITEM_POINT_SWAP + ITEM_RUIN_POWDER -> ITEM_SPITE_POUCH
+    {"イレカエール", "しかえしのこな", "まどわせのこな"}, // ITEM_POINT_SWAP + ITEM_SPITE_POUCH -> ITEM_RUIN_POWDER
+    {"イレカエール", "ねむれよいこよ", "スッキリドリンク"}, // ITEM_POINT_SWAP + ITEM_SLEEPY_SHEEP -> ITEM_TASTY_TONIC
+    {"イレカエール", "デカデカドリンク", "ミニミニくん"}, // ITEM_POINT_SWAP + ITEM_POWER_PUNCH -> ITEM_MINI_MR_MINI
+    {"イレカエール", "カチカチコウラ", "ふにゃふにゃくん"}, // ITEM_POINT_SWAP + ITEM_COURAGE_SHELL -> ITEM_MR_SOFTENER
+    {"イレカエール", "ミニミニくん", "デカデカドリンク"}, // ITEM_POINT_SWAP + ITEM_MINI_MR_MINI -> ITEM_POWER_PUNCH
+    {"イレカエール", "ふにゃふにゃくん", "カチカチコウラ"}, // ITEM_POINT_SWAP + ITEM_MR_SOFTENER -> ITEM_COURAGE_SHELL
+    {"イレカエール", "キノコ", "ハニーシロップ"}, // ITEM_POINT_SWAP + ITEM_MUSHROOM -> ITEM_HONEY_SYRUP
+    {"イレカエール", "スーパーキノコ", "メイプルシロップ"}, // ITEM_POINT_SWAP + ITEM_SUPER_SHROOM -> ITEM_MAPLE_SYRUP
+    {"イレカエール", "ウルトラキノコ", "ローヤルゼリー"}, // ITEM_POINT_SWAP + ITEM_ULTRA_SHROOM -> ITEM_JAMMIN_JELLY
+    {"イレカエール", "きんきゅうキノコ", "スーパーキノコ"}, // ITEM_POINT_SWAP + ITEM_LIFE_SHROOM -> ITEM_SUPER_SHROOM
+    {"イレカエール", "しなびたキノコ", "キノコ"}, // ITEM_POINT_SWAP + ITEM_DRIED_SHROOM -> ITEM_MUSHROOM
+    {"イレカエール", "スッキリドリンク", "ねむれよいこよ"}, // ITEM_POINT_SWAP + ITEM_TASTY_TONIC -> ITEM_SLEEPY_SHEEP
+    {"イレカエール", "ハニーシロップ", "キノコ"}, // ITEM_POINT_SWAP + ITEM_HONEY_SYRUP -> ITEM_MUSHROOM
+    {"イレカエール", "メイプルシロップ", "スーパーキノコ"}, // ITEM_POINT_SWAP + ITEM_MAPLE_SYRUP -> ITEM_SUPER_SHROOM
+    {"イレカエール", "ローヤルゼリー", "ウルトラキノコ"}, // ITEM_POINT_SWAP + ITEM_JAMMIN_JELLY -> ITEM_ULTRA_SHROOM
+    {"イレカエール", "じわじわキノコ", "どくキノコ"}, // ITEM_POINT_SWAP + ITEM_SLOW_SHROOM -> ITEM_POISON_SHROOM
+    {"イレカエール", "じわじわシロップ", "ハニーシロップ"}, // ITEM_POINT_SWAP + ITEM_GRADUAL_SYRUP -> ITEM_HONEY_SYRUP
+    {"ドライフラワー", "ファイアフラワー", "あつあつスープ"}, // ITEM_DRIED_BOUQUET + ITEM_FIRE_FLOWER -> ITEM_SPICY_SOUP
+    {"ドライフラワー", "びりびりキノコ", "かみなりドッカン"}, // ITEM_DRIED_BOUQUET + ITEM_VOLT_SHROOM -> ITEM_THUNDER_RAGE
+    {"ドライフラワー", "キノコ", "うちゅうしょく"}, // ITEM_DRIED_BOUQUET + ITEM_MUSHROOM -> ITEM_SPACE_FOOD
+    {"ドライフラワー", "スーパーキノコ", "うちゅうしょく"}, // ITEM_DRIED_BOUQUET + ITEM_SUPER_SHROOM -> ITEM_SPACE_FOOD
+    {"ドライフラワー", "ウルトラキノコ", "うちゅうしょく"}, // ITEM_DRIED_BOUQUET + ITEM_ULTRA_SHROOM -> ITEM_SPACE_FOOD
+    {"ドライフラワー", "きんきゅうキノコ", "うちゅうしょく"}, // ITEM_DRIED_BOUQUET + ITEM_LIFE_SHROOM -> ITEM_SPACE_FOOD
+    {"ドライフラワー", "しなびたキノコ", "うちゅうしょく"}, // ITEM_DRIED_BOUQUET + ITEM_DRIED_SHROOM -> ITEM_SPACE_FOOD
+    {"ドライフラワー", "じわじわキノコ", "うちゅうしょく"}, // ITEM_DRIED_BOUQUET + ITEM_SLOW_SHROOM -> ITEM_SPACE_FOOD
+    {"ドライフラワー", "ホットドッグ", "うちゅうしょく"}, // ITEM_DRIED_BOUQUET + ITEM_HOT_DOG -> ITEM_SPACE_FOOD
+    {"ふしぎなタマゴ", "ファイアフラワー", "バクハツタマゴ"}, // ITEM_MYSTIC_EGG + ITEM_FIRE_FLOWER -> ITEM_EGG_BOMB
+    {"ふしぎなタマゴ", "キノコ", "キセツのオムレツ"}, // ITEM_MYSTIC_EGG + ITEM_MUSHROOM -> ITEM_OMELETTE_MEAL
+    {"ふしぎなタマゴ", "スーパーキノコ", "キセツのオムレツ"}, // ITEM_MYSTIC_EGG + ITEM_SUPER_SHROOM -> ITEM_OMELETTE_MEAL
+    {"ふしぎなタマゴ", "ウルトラキノコ", "キセツのオムレツ"}, // ITEM_MYSTIC_EGG + ITEM_ULTRA_SHROOM -> ITEM_OMELETTE_MEAL
+    {"ふしぎなタマゴ", "きんきゅうキノコ", "キセツのオムレツ"}, // ITEM_MYSTIC_EGG + ITEM_LIFE_SHROOM -> ITEM_OMELETTE_MEAL
+    {"ふしぎなタマゴ", "ドライフラワー", "うちゅうしょく"}, // ITEM_MYSTIC_EGG + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"おうごんはっぱ", "こおりのいぶき", "ゆきうさぎ"}, // ITEM_GOLDEN_LEAF + ITEM_ICE_STORM -> ITEM_SNOW_BUNNY
+    {"おうごんはっぱ", "キノコ", "きんきゅうキノコ"}, // ITEM_GOLDEN_LEAF + ITEM_MUSHROOM -> ITEM_LIFE_SHROOM
+    {"おうごんはっぱ", "スーパーキノコ", "きんきゅうキノコ"}, // ITEM_GOLDEN_LEAF + ITEM_SUPER_SHROOM -> ITEM_LIFE_SHROOM
+    {"おうごんはっぱ", "ウルトラキノコ", "きんきゅうキノコ"}, // ITEM_GOLDEN_LEAF + ITEM_ULTRA_SHROOM -> ITEM_LIFE_SHROOM
+    {"おうごんはっぱ", "きんきゅうキノコ", "きんきゅうキノコ"}, // ITEM_GOLDEN_LEAF + ITEM_LIFE_SHROOM -> ITEM_LIFE_SHROOM
+    {"おうごんはっぱ", "じわじわキノコ", "こうちゃキノコ"}, // ITEM_GOLDEN_LEAF + ITEM_SLOW_SHROOM -> ITEM_SHROOM_BROTH
+    {"おうごんはっぱ", "ドライフラワー", "うちゅうしょく"}, // ITEM_GOLDEN_LEAF + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"トロピコマンゴー", "びりびりキノコ", "ナンシーディナー"}, // ITEM_KEEL_MANGO + ITEM_VOLT_SHROOM -> ITEM_ZESS_DINNER
+    {"トロピコマンゴー", "スーパーキノコ", "ナンシーディナー"}, // ITEM_KEEL_MANGO + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
+    {"トロピコマンゴー", "ウルトラキノコ", "ナンシーディナー"}, // ITEM_KEEL_MANGO + ITEM_ULTRA_SHROOM -> ITEM_ZESS_DINNER
+    {"トロピコマンゴー", "ハニーシロップ", "フルーツパフェ"}, // ITEM_KEEL_MANGO + ITEM_HONEY_SYRUP -> ITEM_FRUIT_PARFAIT
+    {"トロピコマンゴー", "メイプルシロップ", "フルーツパフェ"}, // ITEM_KEEL_MANGO + ITEM_MAPLE_SYRUP -> ITEM_FRUIT_PARFAIT
+    {"トロピコマンゴー", "ローヤルゼリー", "フルーツパフェ"}, // ITEM_KEEL_MANGO + ITEM_JAMMIN_JELLY -> ITEM_FRUIT_PARFAIT
+    {"トロピコマンゴー", "じわじわシロップ", "フルーツパフェ"}, // ITEM_KEEL_MANGO + ITEM_GRADUAL_SYRUP -> ITEM_FRUIT_PARFAIT
+    {"トロピコマンゴー", "ドライフラワー", "うちゅうしょく"}, // ITEM_KEEL_MANGO + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"生パスタ", "びりびりキノコ", "ナンシーディナー"}, // ITEM_FRESH_PASTA + ITEM_VOLT_SHROOM -> ITEM_ZESS_DINNER
+    {"生パスタ", "キノコ", "ナンシーディナー"}, // ITEM_FRESH_PASTA + ITEM_MUSHROOM -> ITEM_ZESS_DINNER
+    {"生パスタ", "スーパーキノコ", "ナンシーディナー"}, // ITEM_FRESH_PASTA + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
+    {"生パスタ", "ウルトラキノコ", "ナンシースペシャル"}, // ITEM_FRESH_PASTA + ITEM_ULTRA_SHROOM -> ITEM_ZESS_SPECIAL
+    {"生パスタ", "きんきゅうキノコ", "ナンシーディナー"}, // ITEM_FRESH_PASTA + ITEM_LIFE_SHROOM -> ITEM_ZESS_DINNER
+    {"生パスタ", "しなびたキノコ", "ナンシーディナー"}, // ITEM_FRESH_PASTA + ITEM_DRIED_SHROOM -> ITEM_ZESS_DINNER
+    {"生パスタ", "ドライフラワー", "うちゅうしょく"}, // ITEM_FRESH_PASTA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"生パスタ", "ふしぎなタマゴ", "ナンシーディナー"}, // ITEM_FRESH_PASTA + ITEM_MYSTIC_EGG -> ITEM_ZESS_DINNER
+    {"おかしのもと", "ファイアフラワー", "ファイアキャンディ"}, // ITEM_CAKE_MIX + ITEM_FIRE_FLOWER -> ITEM_FIRE_POP
+    {"おかしのもと", "びりびりキノコ", "びりびりキャンディ"}, // ITEM_CAKE_MIX + ITEM_VOLT_SHROOM -> ITEM_ELECTRO_POP
+    {"おかしのもと", "まどわせのこな", "メロメロケーキ"}, // ITEM_CAKE_MIX + ITEM_RUIN_POWDER -> ITEM_HEARTFUL_CAKE
+    {"おかしのもと", "キノコ", "キノコケーキ"}, // ITEM_CAKE_MIX + ITEM_MUSHROOM -> ITEM_SHROOM_CAKE
+    {"おかしのもと", "スーパーキノコ", "キノコケーキ"}, // ITEM_CAKE_MIX + ITEM_SUPER_SHROOM -> ITEM_SHROOM_CAKE
+    {"おかしのもと", "ウルトラキノコ", "キノコクレープ"}, // ITEM_CAKE_MIX + ITEM_ULTRA_SHROOM -> ITEM_SHROOM_CREPE
+    {"おかしのもと", "きんきゅうキノコ", "キノコケーキ"}, // ITEM_CAKE_MIX + ITEM_LIFE_SHROOM -> ITEM_SHROOM_CAKE
+    {"おかしのもと", "ハニーシロップ", "ハニーあめ"}, // ITEM_CAKE_MIX + ITEM_HONEY_SYRUP -> ITEM_HONEY_CANDY
+    {"おかしのもと", "メイプルシロップ", "ナンシークッキー"}, // ITEM_CAKE_MIX + ITEM_MAPLE_SYRUP -> ITEM_ZESS_COOKIE
+    {"おかしのもと", "ローヤルゼリー", "ローヤルキャンディ"}, // ITEM_CAKE_MIX + ITEM_JAMMIN_JELLY -> ITEM_JELLY_CANDY
+    {"おかしのもと", "じわじわキノコ", "キノコケーキ"}, // ITEM_CAKE_MIX + ITEM_SLOW_SHROOM -> ITEM_SHROOM_CAKE
+    {"おかしのもと", "じわじわシロップ", "ナンシークッキー"}, // ITEM_CAKE_MIX + ITEM_GRADUAL_SYRUP -> ITEM_ZESS_COOKIE
+    {"おかしのもと", "ドライフラワー", "うちゅうしょく"}, // ITEM_CAKE_MIX + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"おかしのもと", "ふしぎなタマゴ", "ナンシークッキー"}, // ITEM_CAKE_MIX + ITEM_MYSTIC_EGG -> ITEM_ZESS_COOKIE
+    {"おかしのもと", "トロピコマンゴー", "マンゴープディング"}, // ITEM_CAKE_MIX + ITEM_KEEL_MANGO -> ITEM_MANGO_DELIGHT
+    {"レッド・カラリン", "ファイアフラワー", "あつあつスープ"}, // ITEM_HOT_SAUCE + ITEM_FIRE_FLOWER -> ITEM_SPICY_SOUP
+    {"レッド・カラリン", "しなびたキノコ", "キノコ"}, // ITEM_HOT_SAUCE + ITEM_DRIED_SHROOM -> ITEM_MUSHROOM
+    {"レッド・カラリン", "スッキリドリンク", "すみぢる"}, // ITEM_HOT_SAUCE + ITEM_TASTY_TONIC -> ITEM_INKY_SAUCE
+    {"レッド・カラリン", "ハニーシロップ", "スッキリドリンク"}, // ITEM_HOT_SAUCE + ITEM_HONEY_SYRUP -> ITEM_TASTY_TONIC
+    {"レッド・カラリン", "メイプルシロップ", "スッキリドリンク"}, // ITEM_HOT_SAUCE + ITEM_MAPLE_SYRUP -> ITEM_TASTY_TONIC
+    {"レッド・カラリン", "ローヤルゼリー", "スッキリドリンク"}, // ITEM_HOT_SAUCE + ITEM_JAMMIN_JELLY -> ITEM_TASTY_TONIC
+    {"レッド・カラリン", "生パスタ", "カラリーナパスタ"}, // ITEM_HOT_SAUCE + ITEM_FRESH_PASTA -> ITEM_SPICY_PASTA
+    {"レッド・カラリン", "おかしのもと", "ファイアキャンディ"}, // ITEM_HOT_SAUCE + ITEM_CAKE_MIX -> ITEM_FIRE_POP
+    {"カメカメはっぱ", "キノコ", "きんきゅうキノコ"}, // ITEM_TURTLEY_LEAF + ITEM_MUSHROOM -> ITEM_LIFE_SHROOM
+    {"カメカメはっぱ", "スーパーキノコ", "きんきゅうキノコ"}, // ITEM_TURTLEY_LEAF + ITEM_SUPER_SHROOM -> ITEM_LIFE_SHROOM
+    {"カメカメはっぱ", "ウルトラキノコ", "きんきゅうキノコ"}, // ITEM_TURTLEY_LEAF + ITEM_ULTRA_SHROOM -> ITEM_LIFE_SHROOM
+    {"カメカメはっぱ", "きんきゅうキノコ", "きんきゅうキノコ"}, // ITEM_TURTLEY_LEAF + ITEM_LIFE_SHROOM -> ITEM_LIFE_SHROOM
+    {"カメカメはっぱ", "ハニーシロップ", "フレッシュジュース"}, // ITEM_TURTLEY_LEAF + ITEM_HONEY_SYRUP -> ITEM_FRESH_JUICE
+    {"カメカメはっぱ", "メイプルシロップ", "フレッシュジュース"}, // ITEM_TURTLEY_LEAF + ITEM_MAPLE_SYRUP -> ITEM_FRESH_JUICE
+    {"カメカメはっぱ", "ローヤルゼリー", "フレッシュジュース"}, // ITEM_TURTLEY_LEAF + ITEM_JAMMIN_JELLY -> ITEM_FRESH_JUICE
+    {"カメカメはっぱ", "じわじわキノコ", "こうちゃキノコ"}, // ITEM_TURTLEY_LEAF + ITEM_SLOW_SHROOM -> ITEM_SHROOM_BROTH
+    {"カメカメはっぱ", "じわじわシロップ", "フレッシュジュース"}, // ITEM_TURTLEY_LEAF + ITEM_GRADUAL_SYRUP -> ITEM_FRESH_JUICE
+    {"カメカメはっぱ", "ドライフラワー", "うちゅうしょく"}, // ITEM_TURTLEY_LEAF + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"カメカメはっぱ", "おうごんはっぱ", "ヘルスィーサラダ"}, // ITEM_TURTLEY_LEAF + ITEM_GOLDEN_LEAF -> ITEM_HEALTHY_SALAD
+    {"カメカメはっぱ", "トロピコマンゴー", "カメまん"}, // ITEM_TURTLEY_LEAF + ITEM_KEEL_MANGO -> ITEM_KOOPA_BUN
+    {"カメカメはっぱ", "生パスタ", "カメスパ"}, // ITEM_TURTLEY_LEAF + ITEM_FRESH_PASTA -> ITEM_KOOPASTA
+    {"カメカメはっぱ", "レッド・カラリン", "すみぢる"}, // ITEM_TURTLEY_LEAF + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
+    {"つくしんぼ", "キノコ", "ナンシーディナー"}, // ITEM_HORSETAIL + ITEM_MUSHROOM -> ITEM_ZESS_DINNER
+    {"つくしんぼ", "スーパーキノコ", "ナンシーディナー"}, // ITEM_HORSETAIL + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
+    {"つくしんぼ", "ウルトラキノコ", "ナンシースペシャル"}, // ITEM_HORSETAIL + ITEM_ULTRA_SHROOM -> ITEM_ZESS_SPECIAL
+    {"つくしんぼ", "きんきゅうキノコ", "ナンシーディナー"}, // ITEM_HORSETAIL + ITEM_LIFE_SHROOM -> ITEM_ZESS_DINNER
+    {"つくしんぼ", "ドライフラワー", "うちゅうしょく"}, // ITEM_HORSETAIL + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"つくしんぼ", "ふしぎなタマゴ", "キセツのオムレツ"}, // ITEM_HORSETAIL + ITEM_MYSTIC_EGG -> ITEM_OMELETTE_MEAL
+    {"つくしんぼ", "カメカメはっぱ", "ヘルスィーサラダ"}, // ITEM_HORSETAIL + ITEM_TURTLEY_LEAF -> ITEM_HEALTHY_SALAD
+    {"ピチピーチ", "びりびりキノコ", "ナンシーディナー"}, // ITEM_PEACHY_PEACH + ITEM_VOLT_SHROOM -> ITEM_ZESS_DINNER
+    {"ピチピーチ", "まどわせのこな", "メロメロケーキ"}, // ITEM_PEACHY_PEACH + ITEM_RUIN_POWDER -> ITEM_HEARTFUL_CAKE
+    {"ピチピーチ", "スーパーキノコ", "ナンシーディナー"}, // ITEM_PEACHY_PEACH + ITEM_SUPER_SHROOM -> ITEM_ZESS_DINNER
+    {"ピチピーチ", "ウルトラキノコ", "ナンシーディナー"}, // ITEM_PEACHY_PEACH + ITEM_ULTRA_SHROOM -> ITEM_ZESS_DINNER
+    {"ピチピーチ", "しなびたキノコ", "キノコ"}, // ITEM_PEACHY_PEACH + ITEM_DRIED_SHROOM -> ITEM_MUSHROOM
+    {"ピチピーチ", "ハニーシロップ", "フルーツパフェ"}, // ITEM_PEACHY_PEACH + ITEM_HONEY_SYRUP -> ITEM_FRUIT_PARFAIT
+    {"ピチピーチ", "メイプルシロップ", "フルーツパフェ"}, // ITEM_PEACHY_PEACH + ITEM_MAPLE_SYRUP -> ITEM_FRUIT_PARFAIT
+    {"ピチピーチ", "ローヤルゼリー", "フルーツパフェ"}, // ITEM_PEACHY_PEACH + ITEM_JAMMIN_JELLY -> ITEM_FRUIT_PARFAIT
+    {"ピチピーチ", "ドライフラワー", "うちゅうしょく"}, // ITEM_PEACHY_PEACH + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ピチピーチ", "トロピコマンゴー", "フルーツパフェ"}, // ITEM_PEACHY_PEACH + ITEM_KEEL_MANGO -> ITEM_FRUIT_PARFAIT
+    {"ピチピーチ", "おかしのもと", "ピーチタルト"}, // ITEM_PEACHY_PEACH + ITEM_CAKE_MIX -> ITEM_PEACH_TART
+    {"ピチピーチ", "レッド・カラリン", "スッキリドリンク"}, // ITEM_PEACHY_PEACH + ITEM_HOT_SAUCE -> ITEM_TASTY_TONIC
+    {"ヤシの実", "ファイアフラワー", "ココナッツボム"}, // ITEM_COCONUT + ITEM_FIRE_FLOWER -> ITEM_COCONUT_BOMB
+    {"ヤシの実", "ドライフラワー", "うちゅうしょく"}, // ITEM_COCONUT + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ヤシの実", "トロピコマンゴー", "フレッシュジュース"}, // ITEM_COCONUT + ITEM_KEEL_MANGO -> ITEM_FRESH_JUICE
+    {"ヤシの実", "生パスタ", "ナンシーディナー"}, // ITEM_COCONUT + ITEM_FRESH_PASTA -> ITEM_ZESS_DINNER
+    {"ヤシの実", "おかしのもと", "ココナツキャンディ"}, // ITEM_COCONUT + ITEM_CAKE_MIX -> ITEM_COCO_CANDY
+    {"ヤシの実", "カメカメはっぱ", "フレッシュジュース"}, // ITEM_COCONUT + ITEM_TURTLEY_LEAF -> ITEM_FRESH_JUICE
+    {"ヤシの実", "ピチピーチ", "フレッシュジュース"}, // ITEM_COCONUT + ITEM_PEACHY_PEACH -> ITEM_FRESH_JUICE
+    {"キノコいため", "キラキラおとし", "ほしふるディナー"}, // ITEM_SHROOM_FRY + ITEM_SHOOTING_STAR -> ITEM_METEOR_MEAL
+    {"キノコいため", "ドライフラワー", "うちゅうしょく"}, // ITEM_SHROOM_FRY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"キノコホイルやき", "キラキラおとし", "ほしふるディナー"}, // ITEM_SHROOM_ROAST + ITEM_SHOOTING_STAR -> ITEM_METEOR_MEAL
+    {"キノコホイルやき", "ドライフラワー", "うちゅうしょく"}, // ITEM_SHROOM_ROAST + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"キノコステーキ", "キラキラおとし", "ほしふるディナー"}, // ITEM_SHROOM_STEAK + ITEM_SHOOTING_STAR -> ITEM_METEOR_MEAL
+    {"キノコステーキ", "ドライフラワー", "うちゅうしょく"}, // ITEM_SHROOM_STEAK + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"しっぱいりょうり", "ドライフラワー", "うちゅうしょく"}, // ITEM_MISTAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ハニーキノコ", "ドライフラワー", "うちゅうしょく"}, // ITEM_HONEY_SHROOM + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"メイプルキノコ", "ドライフラワー", "うちゅうしょく"}, // ITEM_MAPLE_SHROOM + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ローヤルキノコ", "ドライフラワー", "うちゅうしょく"}, // ITEM_JELLY_SHROOM + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ハニーキノコＳ", "ドライフラワー", "うちゅうしょく"}, // ITEM_HONEY_SUPER + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"メイプルキノコＳ", "ドライフラワー", "うちゅうしょく"}, // ITEM_MAPLE_SUPER + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ローヤルキノコＳ", "ドライフラワー", "うちゅうしょく"}, // ITEM_JELLY_SUPER + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ハニーキノコＺ", "ドライフラワー", "うちゅうしょく"}, // ITEM_HONEY_ULTRA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"メイプルキノコＺ", "ドライフラワー", "うちゅうしょく"}, // ITEM_MAPLE_ULTRA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ローヤルキノコＺ", "ドライフラワー", "うちゅうしょく"}, // ITEM_JELLY_ULTRA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ナンシーディナー", "カチカチコウラ", "カチカチりょうり"}, // ITEM_ZESS_DINNER + ITEM_COURAGE_SHELL -> ITEM_COURAGE_MEAL
+    {"ナンシーディナー", "ドライフラワー", "うちゅうしょく"}, // ITEM_ZESS_DINNER + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ナンシースペシャル", "カチカチコウラ", "カチカチりょうり"}, // ITEM_ZESS_SPECIAL + ITEM_COURAGE_SHELL -> ITEM_COURAGE_MEAL
+    {"ナンシースペシャル", "ドライフラワー", "うちゅうしょく"}, // ITEM_ZESS_SPECIAL + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ナンシーデラックス", "カチカチコウラ", "カチカチりょうり"}, // ITEM_ZESS_DELUXE + ITEM_COURAGE_SHELL -> ITEM_COURAGE_MEAL
+    {"ナンシーデラックス", "ドライフラワー", "うちゅうしょく"}, // ITEM_ZESS_DELUXE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ナンシーダイナマイ", "ドライフラワー", "バクハツタマゴ"}, // ITEM_ZESS_DYNAMITE + ITEM_DRIED_BOUQUET -> ITEM_EGG_BOMB
+    {"ナンシーティー", "レッド・カラリン", "すみぢる"}, // ITEM_ZESS_TEA + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
+    {"ゆきうさぎ", "あつあつスープ", "いつまでもふたりで"}, // ITEM_SNOW_BUNNY + ITEM_SPICY_SOUP -> ITEM_COUPLES_CAKE
+    {"キノコケーキ", "ドライフラワー", "うちゅうしょく"}, // ITEM_SHROOM_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"キノコクレープ", "ドライフラワー", "うちゅうしょく"}, // ITEM_SHROOM_CREPE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ムースケーキ", "ドライフラワー", "うちゅうしょく"}, // ITEM_MOUSSE_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"フルーツパフェ", "ドライフラワー", "うちゅうしょく"}, // ITEM_FRUIT_PARFAIT + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"バクハツタマゴ", "ドライフラワー", "うちゅうしょく"}, // ITEM_EGG_BOMB + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"イカスミパスタ", "ドライフラワー", "うちゅうしょく"}, // ITEM_INK_PASTA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"スパゲティ", "ドライフラワー", "うちゅうしょく"}, // ITEM_SPAGHETTI + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"スパゲティ", "レッド・カラリン", "カラリーナパスタ"}, // ITEM_SPAGHETTI + ITEM_HOT_SAUCE -> ITEM_SPICY_PASTA
+    {"スパゲティ", "カメカメはっぱ", "カメスパ"}, // ITEM_SPAGHETTI + ITEM_TURTLEY_LEAF -> ITEM_KOOPASTA
+    {"こうちゃキノコ", "レッド・カラリン", "すみぢる"}, // ITEM_SHROOM_BROTH + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
+    {"どくキノコ", "イレカエール", "ウルトラキノコ"}, // ITEM_POISON_SHROOM + ITEM_POINT_SWAP -> ITEM_ULTRA_SHROOM
+    {"どくキノコ", "ドライフラワー", "うちゅうしょく"}, // ITEM_POISON_SHROOM + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"どくキノコ", "おうごんはっぱ", "こうちゃキノコ"}, // ITEM_POISON_SHROOM + ITEM_GOLDEN_LEAF -> ITEM_SHROOM_BROTH
+    {"ショコラケーキ", "ドライフラワー", "うちゅうしょく"}, // ITEM_CHOCO_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"マンゴープディング", "ドライフラワー", "うちゅうしょく"}, // ITEM_MANGO_DELIGHT + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"マンゴープディング", "ふしぎなタマゴ", "はつこいプディング"}, // ITEM_MANGO_DELIGHT + ITEM_MYSTIC_EGG -> ITEM_LOVE_PUDDING
+    {"はつこいプディング", "ドライフラワー", "うちゅうしょく"}, // ITEM_LOVE_PUDDING + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ほしふるディナー", "ドライフラワー", "うちゅうしょく"}, // ITEM_METEOR_MEAL + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ほしふるディナー", "フルーツパフェ", "ナンシーディナー"}, // ITEM_METEOR_MEAL + ITEM_FRUIT_PARFAIT -> ITEM_ZESS_DINNER
+    {"しれんのナベ", "ドライフラワー", "どくキノコ"}, // ITEM_TRIAL_STEW + ITEM_DRIED_BOUQUET -> ITEM_POISON_SHROOM
+    {"いつまでもふたりで", "ドライフラワー", "うちゅうしょく"}, // ITEM_COUPLES_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"いつまでもふたりで", "どくキノコ", "しれんのナベ"}, // ITEM_COUPLES_CAKE + ITEM_POISON_SHROOM -> ITEM_TRIAL_STEW
+    {"すみぢる", "じわじわキノコ", "どくキノコ"}, // ITEM_INKY_SAUCE + ITEM_SLOW_SHROOM -> ITEM_POISON_SHROOM
+    {"すみぢる", "生パスタ", "イカスミパスタ"}, // ITEM_INKY_SAUCE + ITEM_FRESH_PASTA -> ITEM_INK_PASTA
+    {"すみぢる", "おかしのもと", "ショコラケーキ"}, // ITEM_INKY_SAUCE + ITEM_CAKE_MIX -> ITEM_CHOCO_CAKE
+    {"すみぢる", "ムースケーキ", "ショコラケーキ"}, // ITEM_INKY_SAUCE + ITEM_MOUSSE_CAKE -> ITEM_CHOCO_CAKE
+    {"すみぢる", "スパゲティ", "イカスミパスタ"}, // ITEM_INKY_SAUCE + ITEM_SPAGHETTI -> ITEM_INK_PASTA
+    {"キセツのオムレツ", "ドライフラワー", "うちゅうしょく"}, // ITEM_OMELETTE_MEAL + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"カメカメティー", "レッド・カラリン", "すみぢる"}, // ITEM_KOOPA_TEA + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
+    {"カメスパ", "ドライフラワー", "うちゅうしょく"}, // ITEM_KOOPASTA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"カメスパ", "レッド・カラリン", "カラリーナパスタ"}, // ITEM_KOOPASTA + ITEM_HOT_SAUCE -> ITEM_SPICY_PASTA
+    {"カメスパ", "すみぢる", "イカスミパスタ"}, // ITEM_KOOPASTA + ITEM_INKY_SAUCE -> ITEM_INK_PASTA
+    {"カラリーナパスタ", "ドライフラワー", "うちゅうしょく"}, // ITEM_SPICY_PASTA + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"カラリーナパスタ", "ヤシの実", "ナンシーディナー"}, // ITEM_SPICY_PASTA + ITEM_COCONUT -> ITEM_ZESS_DINNER
+    {"カラリーナパスタ", "すみぢる", "イカスミパスタ"}, // ITEM_SPICY_PASTA + ITEM_INKY_SAUCE -> ITEM_INK_PASTA
+    {"メロメロケーキ", "ドライフラワー", "うちゅうしょく"}, // ITEM_HEARTFUL_CAKE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ピーチタルト", "ドライフラワー", "うちゅうしょく"}, // ITEM_PEACH_TART + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"びりびりキャンディ", "ドライフラワー", "うちゅうしょく"}, // ITEM_ELECTRO_POP + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ファイアキャンディ", "ドライフラワー", "うちゅうしょく"}, // ITEM_FIRE_POP + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ハニーあめ", "ドライフラワー", "うちゅうしょく"}, // ITEM_HONEY_CANDY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ココナツキャンディ", "ドライフラワー", "うちゅうしょく"}, // ITEM_COCO_CANDY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ローヤルキャンディ", "ドライフラワー", "うちゅうしょく"}, // ITEM_JELLY_CANDY + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ナンシークッキー", "ドライフラワー", "うちゅうしょく"}, // ITEM_ZESS_COOKIE + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ヘルスィーサラダ", "ドライフラワー", "うちゅうしょく"}, // ITEM_HEALTHY_SALAD + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"ヘルスィーサラダ", "生パスタ", "ナンシーディナー"}, // ITEM_HEALTHY_SALAD + ITEM_FRESH_PASTA -> ITEM_ZESS_DINNER
+    {"ヘルスィーサラダ", "キノコいため", "ナンシーディナー"}, // ITEM_HEALTHY_SALAD + ITEM_SHROOM_FRY -> ITEM_ZESS_DINNER
+    {"ヘルスィーサラダ", "キノコホイルやき", "ナンシースペシャル"}, // ITEM_HEALTHY_SALAD + ITEM_SHROOM_ROAST -> ITEM_ZESS_SPECIAL
+    {"ヘルスィーサラダ", "キノコステーキ", "ナンシーデラックス"}, // ITEM_HEALTHY_SALAD + ITEM_SHROOM_STEAK -> ITEM_ZESS_DELUXE
+    {"ヘルスィーサラダ", "イカスミパスタ", "ナンシースペシャル"}, // ITEM_HEALTHY_SALAD + ITEM_INK_PASTA -> ITEM_ZESS_SPECIAL
+    {"ヘルスィーサラダ", "スパゲティ", "ナンシーディナー"}, // ITEM_HEALTHY_SALAD + ITEM_SPAGHETTI -> ITEM_ZESS_DINNER
+    {"ヘルスィーサラダ", "カメスパ", "ナンシーディナー"}, // ITEM_HEALTHY_SALAD + ITEM_KOOPASTA -> ITEM_ZESS_DINNER
+    {"ヘルスィーサラダ", "カラリーナパスタ", "ナンシースペシャル"}, // ITEM_HEALTHY_SALAD + ITEM_SPICY_PASTA -> ITEM_ZESS_SPECIAL
+    {"カメまん", "ドライフラワー", "うちゅうしょく"}, // ITEM_KOOPA_BUN + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"フレッシュジュース", "レッド・カラリン", "すみぢる"}, // ITEM_FRESH_JUICE + ITEM_HOT_SAUCE -> ITEM_INKY_SAUCE
+    {"たんこぶ", "ドライフラワー", "うちゅうしょく"}, // ITEM_WHACKA_BUMP + ITEM_DRIED_BOUQUET -> ITEM_SPACE_FOOD
+    {"たんこぶ", "おうごんはっぱ", "ナンシーデラックス"}, // ITEM_WHACKA_BUMP + ITEM_GOLDEN_LEAF -> ITEM_ZESS_DELUXE
+    {"きんかい", "イレカエール", "キノコ"}, // ITEM_GOLD_BAR + ITEM_POINT_SWAP -> ITEM_MUSHROOM
+    {"きんかい×３", "イレカエール", "きんかい"}, // ITEM_GOLD_BAR_X3 + ITEM_POINT_SWAP -> ITEM_GOLD_BAR
+    {"ココナッツボム", "ドライフラワー", "ヤシの実"}, // ITEM_COCONUT_BOMB + ITEM_DRIED_BOUQUET -> ITEM_COCONUT
+    {"ココナッツボム", "バクハツタマゴ", "ナンシーダイナマイ"}, // ITEM_COCONUT_BOMB + ITEM_EGG_BOMB -> ITEM_ZESS_DYNAMITE
+    {"カチカチりょうり", "ドライフラワー", "カチカチコウラ"}, // ITEM_COURAGE_MEAL + ITEM_DRIED_BOUQUET -> ITEM_COURAGE_SHELL
 #endif
 };
 #endif

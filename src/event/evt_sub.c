@@ -2567,8 +2567,8 @@ USER_FUNC(stone_bg) {
     item = itemNameToPtr(name);
     ((EffStarStoneWork*)item->effect->userdata)->cam = CAMERA_3D_EFFECTA;
     // The name is Shift-JIS "にせマリオ", the NPC evt_sub_starstone uses when LW(0) is -1
-    if (npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49") != NULL && evtGetValue(event, GSW_STORY_PROGRESS) < STG4_15_DOOPLISS_BATTLE_2) {
-        npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49")->cameraId = CAMERA_3D_EFFECTA;
+    if (npcNameToPtr_NoAssert("にせマリオ") != NULL && evtGetValue(event, GSW_STORY_PROGRESS) < STG4_15_DOOPLISS_BATTLE_2) {
+        npcNameToPtr_NoAssert("にせマリオ")->cameraId = CAMERA_3D_EFFECTA;
     } else {
         marioSetCamId(CAMERA_3D_EFFECTA);
     }

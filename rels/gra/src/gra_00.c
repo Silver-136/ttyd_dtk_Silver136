@@ -606,7 +606,7 @@ static BeroEntry bero_entry_data[] = {
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"にせマリオ"*/"\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49", // name
+        "にせマリオ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType

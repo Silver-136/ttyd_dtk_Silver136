@@ -517,7 +517,7 @@ EVT_END()
 /** NPCs of the jungle clearing: Mony and Peeton, the couple looking for their lost wedding ring. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"モニー"*/"\x83\x82\x83\x6A\x81\x5B", // name
+        "モニー", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         mony_init, // initEvent
@@ -529,7 +529,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ピートン"*/"\x83\x73\x81\x5B\x83\x67\x83\x93", // name
+        "ピートン", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         peton_init, // initEvent
@@ -689,11 +689,11 @@ void printCount(CameraId camera, void* param) {
     switch ((u32)gp->language) {
         case 0:
             // %3d回
-            sprintf(buf, "%3d\x89\xF1", n);
+            sprintf(buf, "%3d回", n);
             FontDrawStringPitch(90.0f, 120.0f, 20.0f, buf);
             // かい
             n = evtGetValue(NULL, GW(0));
-            sprintf(buf, "\x82\xA9\x82\xA2", n);
+            sprintf(buf, "かい", n);
             FontDrawScale(0.55f);
             FontDrawStringPitch(148.0f, 131.0f, 20.0f, buf);
             break;
@@ -722,12 +722,12 @@ void printCount(CameraId camera, void* param) {
 #else
     // %3d回
     n = evtGetValue(NULL, GW(0));
-    sprintf(buf, "%3d\x89\xF1", n);
+    sprintf(buf, "%3d回", n);
     FontDrawStart();
     FontDrawStringPitch(90.0f, 120.0f, 20.0f, buf);
     // かい
     n = evtGetValue(NULL, GW(0));
-    sprintf(buf, "\x82\xA9\x82\xA2", n);
+    sprintf(buf, "かい", n);
     FontDrawScale(0.55f);
     FontDrawStringPitch(148.0f, 131.0f, 20.0f, buf);
 #endif

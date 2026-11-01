@@ -388,11 +388,11 @@ EVT_BEGIN(win_03_init_evt)
         SPAWN_EVENT(lookat_house)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_02_SEALED_ENTRANCE_2)
-        CALL(evt_npc_check_delete, STRING(/*"パックン1"*/"\x83\x70\x83\x62\x83\x4E\x83\x93\x31"))
+        CALL(evt_npc_check_delete, STRING("パックン1"))
         SPAWN_EVENT(cloud_toujou)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_03_FLURRIE_INTRO)
-        CALL(evt_npc_check_delete, STRING(/*"パックン1"*/"\x83\x70\x83\x62\x83\x4E\x83\x93\x31"))
+        CALL(evt_npc_check_delete, STRING("パックン1"))
         SPAWN_EVENT(cloud_lostitem)
     END_IF
     RETURN

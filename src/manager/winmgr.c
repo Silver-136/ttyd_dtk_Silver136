@@ -86,7 +86,7 @@ static s32 mario_status_icon_table[] = {ICON_HP, ICON_FP, ICON_BP};
 static const char* mario_status_labelname_table[] = {"_hp", "_fp", "_bp"};
 #if VERSION >= VERSION_US
 static const char* mario_status_name_table[][3] = {
-    {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"},
+    {"ＨＰ", "ＦＰ", "ＢＰ"},
     {"HP", "FP", "BP"},
     {"KP", "BP", "OP"},
     {"PC", "PF", "PB"},
@@ -96,7 +96,7 @@ static const char* mario_status_name_table[][3] = {
 };
 #define MARIO_STATUS_NAME(id) mario_status_name_table[gp->language][id]
 #else
-static const char* mario_status_name_table[] = {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"};
+static const char* mario_status_name_table[] = {"ＨＰ", "ＦＰ", "ＢＰ"};
 #define MARIO_STATUS_NAME(id) mario_status_name_table[id]
 #endif
 /** What a level-up adds to Mario's HP, FP and BP: 5, 5 and 3. */

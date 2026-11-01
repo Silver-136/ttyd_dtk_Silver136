@@ -4936,7 +4936,7 @@ static void mapStrippedPool(const char** str, f32* val) {
     str[3] = "ver1.01";
     str[4] = "ver1.02";
     str[5] = "--/--/-- --:--:--";
-    str[6] = "\x83\x52\x83\x93\x83\x6F\x81\x5B\x83\x67\x82\xB3\x82\xEA\x82\xC4\x82\xA2\x82\xDC\x82\xB9\x82\xF1";
+    str[6] = "コンバートされていません";
     str[7] = "animation_table";
     str[8] = "curve_table";
 }

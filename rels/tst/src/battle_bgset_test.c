@@ -2967,8 +2967,8 @@ static USER_FUNC(_wave_offset) {
     if (!pObject) {
         __assert2("battle_bgset_test.c", 102, "pObject",
                   /*"制御しようとする背景セットBの%sは存在しない"*/
-                  "\x90\xA7\x8C\xE4\x82\xB5\x82\xE6\x82\xA4\x82\xC6\x82\xB7\x82\xE9\x94\x77\x8C\x69\x83\x5A\x83\x62"
-                  "\x83\x67\x42\x82\xCC\x25\x73\x82\xCD\x91\xB6\x8D\xDD\x82\xB5\x82\xC8\x82\xA2",
+                  "制御しようとする背景セッ"
+                  "トBの%sは存在しない",
                   name);
     }
 #endif

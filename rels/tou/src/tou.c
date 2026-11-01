@@ -988,8 +988,8 @@ static DispWork* dwp = &disp_work;
 
 /** Full-width digits 0 to 9, used to write ranking numbers into the ranking board text. */
 static const char* suuji[] = {
-    /*"０"*/"\x82\x4F", /*"１"*/"\x82\x50", /*"２"*/"\x82\x51", /*"３"*/"\x82\x52", /*"４"*/"\x82\x53", /*"５"*/"\x82\x54", /*"６"*/"\x82\x55", /*"７"*/"\x82\x56",
-    /*"８"*/"\x82\x57", /*"９"*/"\x82\x58",
+    "０", "１", "２", "３", "４", "５", "６", "７",
+    "８", "９",
 };
 
 /**

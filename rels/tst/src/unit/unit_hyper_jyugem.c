@@ -196,7 +196,7 @@ static BattleDataEntry data_table[] = {
 /** Body parts of the Dark Lakitu: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hyper_jyugem", "c_jugemu_b", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
-    {2, /*"ハイパーパイポ"*/"\x83\x6E\x83\x43\x83\x70\x81\x5B\x83\x70\x83\x43\x83\x7C", "c_jugemu_b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {2, "ハイパーパイポ", "c_jugemu_b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 /** Attack data for the Dark Lakitu's egg throw: 5 damage. */

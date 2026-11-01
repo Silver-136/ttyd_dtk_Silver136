@@ -3291,7 +3291,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"パワーアップ屋"*/"\x83\x70\x83\x8F\x81\x5B\x83\x41\x83\x62\x83\x76\x89\xAE", // name
+        "パワーアップ屋", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         powerupya_init, // initEvent
@@ -3307,7 +3307,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"クリハカセ"*/"\x83\x4E\x83\x8A\x83\x6E\x83\x4A\x83\x5A", // name
+        "クリハカセ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kurihakase_init, // initEvent
@@ -3319,7 +3319,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"情報屋完璧"*/"\x8F\xEE\x95\xF1\x89\xAE\x8A\xAE\xE0\xF8", // name
+        "情報屋完璧", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -3331,7 +3331,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"盗賊団親分"*/"\x93\x90\x91\xAF\x92\x63\x90\x65\x95\xAA", // name
+        "盗賊団親分", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         oyabun_init, // initEvent
@@ -3343,7 +3343,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"盗賊団１"*/"\x93\x90\x91\xAF\x92\x63\x82\x50", // name
+        "盗賊団１", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         tozokudan1_init, // initEvent
@@ -3355,7 +3355,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"盗賊団２"*/"\x93\x90\x91\xAF\x92\x63\x82\x51", // name
+        "盗賊団２", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         tozokudan2_init, // initEvent
@@ -3367,7 +3367,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"盗賊団３"*/"\x93\x90\x91\xAF\x92\x63\x82\x52", // name
+        "盗賊団３", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         tozokudan3_init, // initEvent
@@ -3379,7 +3379,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58", // name
+        "サンダース", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         sanders_init, // initEvent
@@ -3391,7 +3391,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"クリボー４"*/"\x83\x4E\x83\x8A\x83\x7B\x81\x5B\x82\x53", // name
+        "クリボー４", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuribo4_init, // initEvent
@@ -3403,7 +3403,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"チューさん３"*/"\x83\x60\x83\x85\x81\x5B\x82\xB3\x82\xF1\x82\x52", // name
+        "チューさん３", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         chusan3_init, // initEvent
@@ -3415,7 +3415,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ロテン３"*/"\x83\x8D\x83\x65\x83\x93\x82\x52", // name
+        "ロテン３", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         roten3_init, // initEvent
@@ -3427,7 +3427,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ボロドー１"*/"\x83\x7B\x83\x8D\x83\x68\x81\x5B\x82\x50", // name
+        "ボロドー１", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         borodo1_init, // initEvent
@@ -3439,7 +3439,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ボロドー２"*/"\x83\x7B\x83\x8D\x83\x68\x81\x5B\x82\x51", // name
+        "ボロドー２", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         borodo2_init, // initEvent
@@ -3451,7 +3451,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"クラガリさん"*/"\x83\x4E\x83\x89\x83\x4B\x83\x8A\x82\xB3\x82\xF1", // name
+        "クラガリさん", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuragarisan_init, // initEvent
@@ -3463,7 +3463,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57", // name
+        "ルイージ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         luigi_init, // initEvent
@@ -3504,7 +3504,7 @@ EVT_END()
 
 /** NPCs shown inside house 01 (Merlon's shop) when its door opens. */
 static const char* door_data_01_npc[] = {
-    /*"パワーアップ屋"*/"\x83\x70\x83\x8F\x81\x5B\x83\x41\x83\x62\x83\x76\x89\xAE",
+    "パワーアップ屋",
     NULL,
 };
 
@@ -3628,7 +3628,7 @@ EVT_END()
 
 /** NPCs shown inside house 02 (Professor Frankly's house) when its door opens. */
 static const char* door_data_02_npc[] = {
-    /*"クリハカセ"*/"\x83\x4E\x83\x8A\x83\x6E\x83\x4A\x83\x5A",
+    "クリハカセ",
     NULL,
 };
 
@@ -3813,7 +3813,7 @@ EVT_END()
 
 /** NPCs shown inside house 03 (Bobbery's house) when its door opens. */
 static const char* door_data_03_npc[] = {
-    /*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58",
+    "サンダース",
     NULL,
 };
 
@@ -4290,7 +4290,7 @@ EVT_END()
 
 /** NPCs shown inside house 04 (the thieves' house) when its door opens. */
 static const char* door_data_04_npc[] = {
-    /*"盗賊団３"*/"\x93\x90\x91\xAF\x92\x63\x82\x52",
+    "盗賊団３",
     NULL,
 };
 
@@ -4411,16 +4411,16 @@ EVT_END()
 
 /** NPCs shown inside house 05 (the bandit boss's house): the boss and two gang members. */
 const char* door_data_05_npc[] = {
-    /*"盗賊団親分"*/"\x93\x90\x91\xAF\x92\x63\x90\x65\x95\xAA",
-    /*"盗賊団１"*/"\x93\x90\x91\xAF\x92\x63\x82\x50",
-    /*"盗賊団２"*/"\x93\x90\x91\xAF\x92\x63\x82\x51",
+    "盗賊団親分",
+    "盗賊団１",
+    "盗賊団２",
     NULL,
 };
 
 /** Shorter NPC list of house 05: the boss and one gang member. */
 const char* door_data_05_npc_01[] = {
-    /*"盗賊団親分"*/"\x93\x90\x91\xAF\x92\x63\x90\x65\x95\xAA",
-    /*"盗賊団１"*/"\x93\x90\x91\xAF\x92\x63\x82\x50",
+    "盗賊団親分",
+    "盗賊団１",
     NULL,
 };
 
@@ -4589,7 +4589,7 @@ EVT_END()
 
 /** NPCs shown inside house 06 (the thief's locked house): one gang member. */
 const char* door_data_06_npc[] = {
-    /*"盗賊団２"*/"\x93\x90\x91\xAF\x92\x63\x82\x51",
+    "盗賊団２",
     NULL,
 };
 

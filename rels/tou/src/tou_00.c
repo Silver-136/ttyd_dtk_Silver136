@@ -362,7 +362,7 @@ static USER_FUNC(kpa_hikousen_yure) {
     f32 y = evtGetFloat(event, event->args[0]);
 
     // 飛クッパ
-    npcNameToPtr("\x94\xF2\x83\x4E\x83\x62\x83\x70")->moveOffset.y = y;
+    npcNameToPtr("飛クッパ")->moveOffset.y = y;
     return EVT_RETURN_DONE;
 }
 
@@ -632,7 +632,7 @@ USER_FUNC(kemuri_move) {
 /** NPCs of this map: Bowser in his airship, who flies over Glitzville in the chapter 4 interlude. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"飛クッパ"*/"\x94\xF2\x83\x4E\x83\x62\x83\x70", // name
+        "飛クッパ", // name
         NPC_FLAG_TALK_POSE, // flags
         0, // reactionFlags
         hkoopa_init, // initEvent

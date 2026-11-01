@@ -289,7 +289,7 @@ EVT_END()
 /** NPCs of this room: Professor Frankly, who waits by the pedestal in chapter 7. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"クリハカセ"*/"\x83\x4E\x83\x8A\x83\x6E\x83\x4A\x83\x5A", // name
+        "クリハカセ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         kurihakase_init, // initEvent

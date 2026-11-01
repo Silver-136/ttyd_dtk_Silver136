@@ -502,7 +502,7 @@ EVT_END()
 /** NPCs of the west village: General White. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ノコノコA"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x41", // name
+        "ノコノコA", // name
         0, 0, // flags..reactionFlags
         nokonoko_A_init, // initEvent
         nokonoko_A_regl, // regularEvent
@@ -513,7 +513,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ノコノコB"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x42", // name
+        "ノコノコB", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         nokonoko_B_regl, // regularEvent
@@ -525,7 +525,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ノコノコC"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x43", // name
+        "ノコノコC", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         nokonoko_C_regl, // regularEvent
@@ -536,7 +536,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ノコノコD"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x44", // name
+        "ノコノコD", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -547,7 +547,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ノコノコF"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x46", // name
+        "ノコノコF", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -558,7 +558,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5", // name
+        "宿店員", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -567,7 +567,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"店員"*/"\x93\x58\x88\xF5", // name
+        "店員", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -576,7 +576,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ババ"*/"\x83\x6F\x83\x6F", // name
+        "ババ", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -585,7 +585,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ホワイト"*/"\x83\x7A\x83\x8F\x83\x43\x83\x67", // name
+        "ホワイト", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_white, // initEvent
@@ -638,7 +638,7 @@ static BeroEntry bero_entry_data[] = {
 
 /** NPCs inside the inn: the innkeeper. */
 static const char* yado_npc[] = {
-    /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5",
+    "宿店員",
     NULL,
 };
 
@@ -670,7 +670,7 @@ static HouseParam yado_data = {
 
 /** NPCs inside the shop: the clerk. */
 static const char* mise_npc[] = {
-    /*"店員"*/"\x93\x58\x88\xF5",
+    "店員",
     NULL,
 };
 
@@ -692,7 +692,7 @@ static HouseParam mise_data = {
 
 /** NPCs inside the house: Koopa D. */
 static const char* ie_npc[] = {
-    /*"ノコノコD"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x44",
+    "ノコノコD",
     NULL,
 };
 
@@ -761,7 +761,7 @@ static ShopDb trade_list[] = {
  * dialogue.
  */
 static ShopperData35 shopper_data = {
-    /*"店員"*/"\x93\x58\x88\xF5", // name
+    "店員", // name
     NULL, NULL, // fook_evt..buy_evt
     {"shop_00", "shop_01", "shop_02", "shop_03", "shop_04", "shop_05", "shop_06", "shop_07", "shop_08", "shop_09", "shop_10", "shop_11", "shop_12", "shop_13", "shop_14", "shop_15", "shop_16", "shop_17", "shop_18", "shop_19", "shop_20", "shop_21", "shop_22", "shop_23", "shop_24", "shop_25", "shop_26", "shop_27", "shop_28", "shop_29", "shop_30", "shop_31", "shop_32", "shop_33", "shop_34"}, // msgs
 };
@@ -779,7 +779,7 @@ static KinopioData kino_dt = {
     {-495.0f, 227.0f, -56.0f, -327.0f, 90.0f, -225.0f}, // cam
     -30.0f, // bedDeg
     {-330.0f, 25.0f, -180.0f}, // npcTalk
-    /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5", // npcName
+    "宿店員", // npcName
     {"yado_00", "yado_01", "yado_02", "yado_03", "yado_04", "yado_05", "yado_06", "yado_07", "yado_08", "yado_09", "yado_10", "yado_11", "yado_12", "yado_13"}, // msg
     NULL, NULL, // toBedEvt..fromBedEvt
 };
@@ -1255,7 +1255,7 @@ USER_FUNC(pposter_init) {
     memset(poster, 0, sizeof(PosterWork));
     poster->shape = animPoseGetShapeIdx(npcNameToPtr("poster")->poseId, "pPlaneShape2");
     // ノコノコA
-    npc = npcNameToPtr("\x83\x6D\x83\x52\x83\x6D\x83\x52\x41");
+    npc = npcNameToPtr("ノコノコA");
     poster->group = animPoseGetGroupIdx(npc->poseId, "locator7");
     animPoseSetDispCallBack(npc->poseId, draw_poster, NULL);
     return EVT_RETURN_DONE;

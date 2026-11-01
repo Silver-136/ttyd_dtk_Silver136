@@ -127,7 +127,7 @@ EVT_END()
 /** NPCs of the soap-bubble room: Punies 4 and 5. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"プニ族４"*/"\x83\x76\x83\x6A\x91\xB0\x82\x53", // name
+        "プニ族４", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         puni_4_init, // initEvent
@@ -139,7 +139,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"プニ族５"*/"\x83\x76\x83\x6A\x91\xB0\x82\x54", // name
+        "プニ族５", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         puni_5_init, // initEvent

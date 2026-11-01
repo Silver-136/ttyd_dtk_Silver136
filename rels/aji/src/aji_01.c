@@ -2968,7 +2968,7 @@ EVT_END()
 /** The three X-Naut underlings (teshita) in the central hall, each with its own setup and talk scripts. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"手下１"*/"\x8E\xE8\x89\xBA\x82\x50", // name
+        "手下１", // name
         0, 0, // flags..reactionFlags
         teshita1_init, // initEvent
         NULL, // regularEvent
@@ -2979,7 +2979,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"手下２"*/"\x8E\xE8\x89\xBA\x82\x51", // name
+        "手下２", // name
         0, 0, // flags..reactionFlags
         teshita2_init, // initEvent
         teshita2_regl, // regularEvent
@@ -2990,7 +2990,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"手下３"*/"\x8E\xE8\x89\xBA\x82\x52", // name
+        "手下３", // name
         0, 0, // flags..reactionFlags
         teshita3_init, // initEvent
         teshita3_regl, // regularEvent

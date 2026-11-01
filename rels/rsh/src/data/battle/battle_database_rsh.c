@@ -95,7 +95,7 @@ NpcBattleSelect btlgrpsel_rsh_btlno_rsh_06_01_off[] = {
  */
 NpcSetupBattleInfo btlsetup_rsh_tbl[] = {
     {
-        /*"マップstg_06_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x36\x5F\x30", // name
+        "マップstg_06_0", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -105,7 +105,7 @@ NpcSetupBattleInfo btlsetup_rsh_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"rsh_06 もあもあ"*/"\x72\x73\x68\x5F\x30\x36\x20\x82\xE0\x82\xA0\x82\xE0\x82\xA0", // name
+        "rsh_06 もあもあ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect

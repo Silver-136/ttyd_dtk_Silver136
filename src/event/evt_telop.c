@@ -199,11 +199,11 @@ void telop(CameraId cameraId, void* param) {
 
 #if VERSION >= VERSION_US
     {
-        const char* def = (u32)gp->language != LANGUAGE_JP ? "???" : "\x81H\x81H\x81H";
+        const char* def = (u32)gp->language != LANGUAGE_JP ? "???" : "？？？";
         msg = (msg_tbl[wp->id] != NULL) ? msgSearch(msg_tbl[wp->id]) : def;
     }
 #else
-    msg = (msg_tbl[wp->id] != NULL) ? msgSearch(msg_tbl[wp->id]) : "\x81H\x81H\x81H";
+    msg = (msg_tbl[wp->id] != NULL) ? msgSearch(msg_tbl[wp->id]) : "？？？";
 #endif
     width = FontGetMessageWidth(msg);
     scale = 1.0f;

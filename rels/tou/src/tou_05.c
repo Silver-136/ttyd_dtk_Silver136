@@ -658,7 +658,7 @@ EVT_END()
 /** NPCs of Grubba's office: Grubba and Jolene. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ガンス"*/"\x83\x4B\x83\x93\x83\x58", // name
+        "ガンス", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gans, // initEvent
@@ -670,7 +670,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F", // name
+        "キノシコワ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kinoshikowa, // initEvent
@@ -941,13 +941,13 @@ static EVT_BEGIN(evt_1st_leagu)
     // Mario and his partner stand in Grubba's office; the camera frames the desk.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-    CALL(evt_npc_set_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 0, 0, -160)
+    CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -160)
     CALL(evt_mario_set_pos, 0, 0, -165)
     CALL(evt_party_set_pos, 0, 0, 0, -180)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_party_set_dir, 0, 90, 0)
-    CALL(evt_npc_set_position, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), 125, 0, 25)
-    CALL(evt_set_dir_to_target, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), STRING("mario"))
+    CALL(evt_npc_set_position, STRING("ガンス"), 125, 0, 25)
+    CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
     CALL(evt_mapobj_trans, 1, STRING("hikidasi_H"), 0, 0, 10)
     CALL(evt_cam3d_evt_set, 75, 100, 371, 75, 37, 13, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -966,9 +966,9 @@ static EVT_BEGIN(evt_1st_leagu)
     END_LOOP
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_status_onoff, 1, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_move_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 1, -100, 0, FLOAT(50.0f), 1)
-        CALL(evt_npc_move_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 50, -100, 0, FLOAT(50.0f), 1)
+        CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
+        CALL(evt_npc_move_position, STRING("キノシコワ"), 1, -100, 0, FLOAT(50.0f), 1)
+        CALL(evt_npc_move_position, STRING("キノシコワ"), 50, -100, 0, FLOAT(50.0f), 1)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -996,14 +996,14 @@ static EVT_BEGIN(evt_1st_leagu)
         END_LOOP
     END_INLINE_EVENT
     // Grubba, startled, leaps out from behind the desk (the drawer is shoved shut).
-    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_npc_get_position, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), LW(0), LW(1), LW(2))
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("ガンス"), 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_npc_get_position, STRING("ガンス"), LW(0), LW(1), LW(2))
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_npc_sound_data_set, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(evt_npc_sound_data_set, STRING("ガンス"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
-    CALL(evt_npc_jump_position_nohit, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), LW(0), LW(1), LW(2), 300, 20)
+    CALL(evt_npc_jump_position_nohit, STRING("ガンス"), LW(0), LW(1), LW(2), 300, 20)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_npc_sound_data_reset, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
+    CALL(evt_npc_sound_data_reset, STRING("ガンス"))
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(300)
@@ -1016,27 +1016,27 @@ static EVT_BEGIN(evt_1st_leagu)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_set_dir_to_target, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
-    CALL(evt_msg_print, 0, STRING("stg3_tou_287"), 0, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"))
+    CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("ガンス"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_287"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_288"), 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_288"), 0, STRING("ガンス"))
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_289"), 0, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_289"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_290"), 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_290"), 0, STRING("ガンス"))
     WAIT_MS(300)
     // The camera slowly moves in as Grubba walks over to Mario.
     CALL(evt_cam3d_evt_set, 15, 90, 269, 15, 37, -26, 4000, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 70, -100, 0, FLOAT(50.0f), 1)
-        CALL(evt_set_dir_to_target, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), STRING("mario"))
+        CALL(evt_npc_move_position, STRING("キノシコワ"), 70, -100, 0, FLOAT(50.0f), 1)
+        CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
     END_INLINE_EVENT
-    CALL(evt_npc_status_onoff, 1, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_move_position, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), 110, 85, 0, FLOAT(50.0f), 1)
-    CALL(evt_npc_move_position, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), 25, 50, 0, FLOAT(50.0f), 1)
-    CALL(evt_npc_move_position, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), 25, -10, 0, FLOAT(50.0f), 1)
-    CALL(evt_set_dir_to_target, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), STRING("mario"))
-    CALL(evt_msg_print, 0, STRING("stg3_tou_291"), 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
+    CALL(evt_npc_status_onoff, 1, STRING("ガンス"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_move_position, STRING("ガンス"), 110, 85, 0, FLOAT(50.0f), 1)
+    CALL(evt_npc_move_position, STRING("ガンス"), 25, 50, 0, FLOAT(50.0f), 1)
+    CALL(evt_npc_move_position, STRING("ガンス"), 25, -10, 0, FLOAT(50.0f), 1)
+    CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_291"), 0, STRING("ガンス"))
     WAIT_MS(300)
     // Grubba hands Mario 30 coins and Mario holds them up.
     CALL(evt_pouch_add_coin, 30)
@@ -1048,12 +1048,12 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_item_delete, STRING("coin"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_292_02"), 0, 0)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_292"), 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_292"), 0, STRING("ガンス"))
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_293"), 0, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_293"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     // Jolene leaves through the door.
-    CALL(evt_npc_move_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 0, -100, 0, FLOAT(50.0f), 1)
+    CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -100, 0, FLOAT(50.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
@@ -1065,8 +1065,8 @@ static EVT_BEGIN(evt_1st_leagu)
         END_IF
     END_LOOP
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 0, -200, 0, FLOAT(50.0f), 1)
-        CALL(evt_npc_set_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 0, -1000, 0)
+        CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -200, 0, FLOAT(50.0f), 1)
+        CALL(evt_npc_set_position, STRING("キノシコワ"), 0, -1000, 0)
     END_INLINE_EVENT
     // Mario follows, the escort to the major-league room is queued and the map changes to the corridor.
     CALL(evt_party_run, 0)

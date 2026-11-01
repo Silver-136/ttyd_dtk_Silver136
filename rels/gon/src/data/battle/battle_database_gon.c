@@ -1866,7 +1866,7 @@ NpcBattleSelect btlgrpsel_gon_btlno_gon_11_01_off[] = {
  */
 NpcSetupBattleInfo btlsetup_gon_tbl[] = {
     {
-        /*"マップstg_01_03"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x31\x5F\x30\x33", // name
+        "マップstg_01_03", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1876,7 +1876,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_01_05"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x31\x5F\x30\x35", // name
+        "マップstg_01_05", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1886,7 +1886,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_01_06"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x31\x5F\x30\x36", // name
+        "マップstg_01_06", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1896,7 +1896,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon02パタパタ1"*/"\x67\x6F\x6E\x30\x32\x83\x70\x83\x5E\x83\x70\x83\x5E\x31", // name
+        "gon02パタパタ1", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1906,7 +1906,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon02ノコノコ2"*/"\x67\x6F\x6E\x30\x32\x83\x6D\x83\x52\x83\x6D\x83\x52\x32", // name
+        "gon02ノコノコ2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1916,7 +1916,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon02パタパタ2"*/"\x67\x6F\x6E\x30\x32\x83\x70\x83\x5E\x83\x70\x83\x5E\x32", // name
+        "gon02パタパタ2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1926,7 +1926,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon03赤ホネノコ"*/"\x67\x6F\x6E\x30\x33\x90\xD4\x83\x7A\x83\x6C\x83\x6D\x83\x52", // name
+        "gon03赤ホネノコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1937,7 +1937,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_CHUBOSS_BATTLE1", // bgmName
     },
     {
-        /*"gon04ホネノコ2"*/"\x67\x6F\x6E\x30\x34\x83\x7A\x83\x6C\x83\x6D\x83\x52\x32", // name
+        "gon04ホネノコ2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1947,7 +1947,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon04ホネノコ3"*/"\x67\x6F\x6E\x30\x34\x83\x7A\x83\x6C\x83\x6D\x83\x52\x33", // name
+        "gon04ホネノコ3", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1957,7 +1957,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon06トゲクリボー"*/"\x67\x6F\x6E\x30\x36\x83\x67\x83\x51\x83\x4E\x83\x8A\x83\x7B\x81\x5B", // name
+        "gon06トゲクリボー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1967,7 +1967,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon06ホネノコ2"*/"\x67\x6F\x6E\x30\x36\x83\x7A\x83\x6C\x83\x6D\x83\x52\x32", // name
+        "gon06ホネノコ2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1977,7 +1977,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon08ホネノコ"*/"\x67\x6F\x6E\x30\x38\x83\x7A\x83\x6C\x83\x6D\x83\x52", // name
+        "gon08ホネノコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1987,7 +1987,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon08ホネノコ2"*/"\x67\x6F\x6E\x30\x38\x83\x7A\x83\x6C\x83\x6D\x83\x52\x32", // name
+        "gon08ホネノコ2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1997,7 +1997,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon08パタクリ"*/"\x67\x6F\x6E\x30\x38\x83\x70\x83\x5E\x83\x4E\x83\x8A", // name
+        "gon08パタクリ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2007,7 +2007,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon09ノコノコ1"*/"\x67\x6F\x6E\x30\x39\x83\x6D\x83\x52\x83\x6D\x83\x52\x31", // name
+        "gon09ノコノコ1", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2017,7 +2017,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon09ホネノコ1"*/"\x67\x6F\x6E\x30\x39\x83\x7A\x83\x6C\x83\x6D\x83\x52\x31", // name
+        "gon09ホネノコ1", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2027,7 +2027,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon09ホネノコ2"*/"\x67\x6F\x6E\x30\x39\x83\x7A\x83\x6C\x83\x6D\x83\x52\x32", // name
+        "gon09ホネノコ2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2037,7 +2037,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon10トゲクリボー"*/"\x67\x6F\x6E\x31\x30\x83\x67\x83\x51\x83\x4E\x83\x8A\x83\x7B\x81\x5B", // name
+        "gon10トゲクリボー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2047,7 +2047,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon10パタパタ"*/"\x67\x6F\x6E\x31\x30\x83\x70\x83\x5E\x83\x70\x83\x5E", // name
+        "gon10パタパタ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2057,7 +2057,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon10ノコノコ"*/"\x67\x6F\x6E\x31\x30\x83\x6D\x83\x52\x83\x6D\x83\x52", // name
+        "gon10ノコノコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -2067,7 +2067,7 @@ NpcSetupBattleInfo btlsetup_gon_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"gon11ゴンババ"*/"\x67\x6F\x6E\x31\x31\x83\x53\x83\x93\x83\x6F\x83\x6F", // name
+        "gon11ゴンババ", // name
         "gon_11", // mapName
         0, // fixedItem
         -1, // swFlag

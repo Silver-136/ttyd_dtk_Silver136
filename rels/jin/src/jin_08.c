@@ -348,7 +348,7 @@ EVT_END()
 /** NPCs of this room: the parrot. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"オウム"*/"\x83\x49\x83\x45\x83\x80", // name
+        "オウム", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         oumu_init, // initEvent

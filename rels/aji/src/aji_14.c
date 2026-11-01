@@ -117,7 +117,7 @@ USER_FUNC(waku) {
 
     // Copy each visible robot locator to its arm, then move every cached world position below the scene.
     // ロボット
-    npc = npcNameToPtr_NoAssert("\x83\x8D\x83\x7B\x83\x62\x83\x67");
+    npc = npcNameToPtr_NoAssert("ロボット");
     if (npc != NULL) {
         pose = animPoseGetAnimPosePtr(npc->poseId);
         animPoseWorldPositionEvalOn(npc->poseId);
@@ -127,11 +127,11 @@ USER_FUNC(waku) {
 
             if (npc->position.y >= 0.0f) {
                 // 腕
-                npcNameToPtr("\x98\x67")->position = positions[idx];
+                npcNameToPtr("枠")->position = positions[idx];
             } else {
                 Vec hidden = {0.0f, -1000.0f, 0.0f};
                 // 腕
-                npcNameToPtr("\x98\x67")->position = hidden;
+                npcNameToPtr("枠")->position = hidden;
             }
             positions = (Vec*)pose->worldPositions->address;
             for (i = 0; i < pose->numWorldPositions; i++) {
@@ -141,7 +141,7 @@ USER_FUNC(waku) {
     }
 
     // ロボット2
-    npc = npcNameToPtr_NoAssert("\x83\x8D\x83\x7B\x83\x62\x83\x67\x82\x51");
+    npc = npcNameToPtr_NoAssert("ロボット２");
     if (npc != NULL) {
         pose = animPoseGetAnimPosePtr(npc->poseId);
         animPoseWorldPositionEvalOn(npc->poseId);
@@ -151,11 +151,11 @@ USER_FUNC(waku) {
 
             if (npc->position.y >= 0.0f) {
                 // 腕2
-                npcNameToPtr("\x98\x67\x82\x51")->position = positions[idx];
+                npcNameToPtr("枠２")->position = positions[idx];
             } else {
                 Vec hidden = {0.0f, -1000.0f, 0.0f};
                 // 腕2
-                npcNameToPtr("\x98\x67\x82\x51")->position = hidden;
+                npcNameToPtr("枠２")->position = hidden;
             }
             positions = (Vec*)pose->worldPositions->address;
             for (i = 0; i < pose->numWorldPositions; i++) {
@@ -459,7 +459,7 @@ EVT_END()
 /** The two actors of the boss room: Lord Crump (kanbu) and the Magnus von Grapple 2.0 robot. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"幹部"*/"\x8A\xB2\x95\x94", // name
+        "幹部", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -468,7 +468,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ロボット"*/"\x83\x8D\x83\x7B\x83\x62\x83\x67", // name
+        "ロボット", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType

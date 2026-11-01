@@ -239,7 +239,7 @@ EVT_END()
 /** The five Jabbies (トゲ族７ to 11) of the second hive. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"トゲ族７"*/"\x83\x67\x83\x51\x91\xB0\x82\x56", // name
+        "トゲ族７", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_7_init, // initEvent
@@ -251,7 +251,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲ族８"*/"\x83\x67\x83\x51\x91\xB0\x82\x57", // name
+        "トゲ族８", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_8_init, // initEvent
@@ -263,7 +263,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲ族９"*/"\x83\x67\x83\x51\x91\xB0\x82\x58", // name
+        "トゲ族９", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_9_init, // initEvent
@@ -275,7 +275,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲ族１０"*/"\x83\x67\x83\x51\x91\xB0\x82\x50\x82\x4F", // name
+        "トゲ族１０", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_10_init, // initEvent
@@ -287,7 +287,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"トゲ族１１"*/"\x83\x67\x83\x51\x91\xB0\x82\x50\x82\x50", // name
+        "トゲ族１１", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_11_init, // initEvent

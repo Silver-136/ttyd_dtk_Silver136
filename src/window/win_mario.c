@@ -323,8 +323,8 @@ void winMarioMain2(void) {
 #if VERSION <= VERSION_DEMO_US
 /** US: plain ASCII digits */
 const char* winZenkakuStr(s32 n) {
-    const char* tbl[10] = {"\x82\x4f", "\x82\x50", "\x82\x51", "\x82\x52", "\x82\x53",
-                           "\x82\x54", "\x82\x55", "\x82\x56", "\x82\x57", "\x82\x58"};
+    const char* tbl[10] = {"０", "１", "２", "３", "４",
+                           "５", "６", "７", "８", "９"};
     static char tmp2[0x100];
     char buf[0x100];
     u32 i;
@@ -345,13 +345,13 @@ const char* winZenkakuStr(s32 n) {
 #else
 /** US: plain ASCII digits */
 const char* winZenkakuStr(s32 n) {
-    const char* tbl[10] = {"\x82\x4f", "\x82\x50", "\x82\x51", "\x82\x52", "\x82\x53",
-                           "\x82\x54", "\x82\x55", "\x82\x56", "\x82\x57", "\x82\x58"};
+    const char* tbl[10] = {"０", "１", "２", "３", "４",
+                           "５", "６", "７", "８", "９"};
     static char tmp2[0x100];
     char buf[0x100];
     u32 i;
     if (n < 0) {
-        strcpy(tmp2, "\x81\x7c");
+        strcpy(tmp2, "－");
         n = -n;
     } else {
         strcpy(tmp2, "");
@@ -388,12 +388,12 @@ char winZenkakuStrPad_tmp[0x100];
 #if VERSION > VERSION_DEMO_US
 /** Formats n zero-padded to digits places (the play time's hours and minutes); returns a shared static buffer. */
 char* winZenkakuStrPad(s32 n, s32 digits) {
-    const char* tbl[10] = {"\x82\x4f", "\x82\x50", "\x82\x51", "\x82\x52", "\x82\x53",
-                           "\x82\x54", "\x82\x55", "\x82\x56", "\x82\x57", "\x82\x58"};
+    const char* tbl[10] = {"０", "１", "２", "３", "４",
+                           "５", "６", "７", "８", "９"};
     char buf[0x100];
     s32 i;
     if (n < 0) {
-        strcpy(winZenkakuStrPad_tmp, "\x81\x7c");
+        strcpy(winZenkakuStrPad_tmp, "－");
         n = -n;
     } else {
         strcpy(winZenkakuStrPad_tmp, "");
@@ -401,7 +401,7 @@ char* winZenkakuStrPad(s32 n, s32 digits) {
     sprintf(buf, "%d", n);
     for (i = 0; i < digits; i++) {
         if ((u32)i < (u32)(digits - strlen(buf))) {
-            strcat(winZenkakuStrPad_tmp, "\x82\x4f");
+            strcat(winZenkakuStrPad_tmp, "０");
         } else {
             // FAKE: (s8) cast on a digit character; without it the object changes
             strcat(winZenkakuStrPad_tmp, tbl[(s8)buf[i - (digits - strlen(buf))] - '0']);
@@ -550,7 +550,7 @@ s32 i;
     for (i = 0; i < 3; i++) {
         GXColor cols[3] = {{0xCB, 0x8C, 0xA2, 0xFE}, {0xCB, 0xBE, 0x89, 0xFE}, {0x94, 0xB9, 0xC7, 0xFE}};
         GXColor reds[3] = {{0xA7, 0x3C, 0x3C, 0xFF}, {0x37, 0x69, 0x1E, 0xFF}, {0x0F, 0x21, 0x7A, 0xFF}};
-        const char* const stat_name_tbl[3] = {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"};
+        const char* const stat_name_tbl[3] = {"ＨＰ", "ＦＰ", "ＢＰ"};
         const char* ruby[3] = {"msg_menu_mario_ruby_hp", "msg_menu_mario_ruby_fp", "msg_menu_mario_ruby_bp"};
 
         rowA = 50.0f + (x - 270.0f) - 2.0f;
@@ -669,7 +669,7 @@ s32 i;
         winFontInit();
         winFontSetEdge((Vec){(90.0f + x) - 270.0f, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("msg_menu_mario_sac_waza"));
         numX = rowB - 270.0f;
-        winFontSetEdge((Vec){numX, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, "\x82\x72\x82\x6F");
+        winFontSetEdge((Vec){numX, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, "ＳＰ");
         x = left - 270.0f;
         cx = (17.0f + rowB) - 270.0f;
         for (i = 0; i < w->mario.specialCount; i++) {
@@ -678,7 +678,7 @@ s32 i;
             winFontSetLabel((Vec){x, (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, superActionTable[i]->name);
             sprintf(sbuf, "%d", (u8)superActionTable[i]->baseSpCost);
             winFontSet((Vec){numX, (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, sbuf);
-            winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "\x82\x72\x82\x6F");
+            winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "ＳＰ");
         }
 }
 }
@@ -834,7 +834,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
 #if VERSION >= VERSION_US
 // Descriptive name (not in the symbol maps).
         const char* const stat_name_tbl[7][3] = {
-            {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"},
+            {"ＨＰ", "ＦＰ", "ＢＰ"},
             {"HP", "FP", "BP"},
             {"KP", "BP", "OP"},
             {"PC", "PF", "PB"},
@@ -843,7 +843,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             {"HP", "FP", "BP"},
         };
 #else
-        const char* const stat_name_tbl[3] = {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"};
+        const char* const stat_name_tbl[3] = {"ＨＰ", "ＦＰ", "ＢＰ"};
 #endif
         const char* ruby[3] = {"msg_menu_mario_ruby_hp", "msg_menu_mario_ruby_fp", "msg_menu_mario_ruby_bp"};
 
@@ -1082,7 +1082,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         winWazaGX(w, 0, x - 270.0f, 160.0f, 270.0f, 254.0f);
         winFontInit();
         winFontSetEdge((Vec){(90.0f + x) - 270.0f, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("msg_menu_mario_sac_waza"));
-        winFontSetEdge((Vec){rowB - 270.0f, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, "\x82\x72\x82\x6F");
+        winFontSetEdge((Vec){rowB - 270.0f, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, "ＳＰ");
         y = 10.0f + (left - 270.0f);
         x = (228.0f + x) - 270.0f;
         cx = 4.0f + ((17.0f + rowB) - 270.0f);
@@ -1101,7 +1101,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             // FAKE: the star power cost (s8 baseSpCost, never negative) is read unsigned (lbz with no extsb), as by the old u8 view of the move table
             sprintf(sbuf, "%s", winZenkakuStr((u8)superActionTable[i]->baseSpCost));
             winFontSet((Vec){x - (f32)(FontGetMessageWidth(sbuf) / 2), (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, sbuf);
-            winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "\x82\x72\x82\x6F");
+            winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "ＳＰ");
 #endif
         }
     }

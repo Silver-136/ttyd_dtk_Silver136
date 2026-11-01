@@ -960,7 +960,7 @@ NpcBattleSelect btlgrpsel_mri_btlno_mri_mb_off[] = {
  */
 NpcSetupBattleInfo btlsetup_mri_tbl[] = {
     {
-        /*"マップstg_02_1_1"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x32\x5F\x31\x5F\x31", // name
+        "マップstg_02_1_1", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -970,7 +970,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_02_1_2"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x32\x5F\x31\x5F\x32", // name
+        "マップstg_02_1_2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -980,7 +980,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_02_1_3"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x32\x5F\x31\x5F\x33", // name
+        "マップstg_02_1_3", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -990,7 +990,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_02_1_3"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x32\x5F\x31\x5F\x33", // name
+        "マップstg_02_1_3", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1000,7 +1000,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri01ぐんだんザコ"*/"\x6D\x72\x69\x30\x31\x82\xAE\x82\xF1\x82\xBE\x82\xF1\x83\x55\x83\x52", // name
+        "mri01ぐんだんザコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1011,7 +1011,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
-        /*"mri04ぐんだんザコ"*/"\x6D\x72\x69\x30\x34\x82\xAE\x82\xF1\x82\xBE\x82\xF1\x83\x55\x83\x52", // name
+        "mri04ぐんだんザコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1022,7 +1022,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
-        /*"mri05ぐんだんザコ"*/"\x6D\x72\x69\x30\x35\x82\xAE\x82\xF1\x82\xBE\x82\xF1\x83\x55\x83\x52", // name
+        "mri05ぐんだんザコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1032,7 +1032,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri06パイダース2F_２"*/"\x6D\x72\x69\x30\x36\x83\x70\x83\x43\x83\x5F\x81\x5B\x83\x58\x32\x46\x5F\x82\x51", // name
+        "mri06パイダース2F_２", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1042,7 +1042,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri06パイダース2F_３"*/"\x6D\x72\x69\x30\x36\x83\x70\x83\x43\x83\x5F\x81\x5B\x83\x58\x32\x46\x5F\x82\x52", // name
+        "mri06パイダース2F_３", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1052,7 +1052,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri12パックンフラワー"*/"\x6D\x72\x69\x31\x32\x83\x70\x83\x62\x83\x4E\x83\x93\x83\x74\x83\x89\x83\x8F\x81\x5B", // name
+        "mri12パックンフラワー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1062,7 +1062,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri12パックンフラワー"*/"\x6D\x72\x69\x31\x32\x83\x70\x83\x62\x83\x4E\x83\x93\x83\x74\x83\x89\x83\x8F\x81\x5B", // name
+        "mri12パックンフラワー", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1072,7 +1072,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri15ぐんだんザコ"*/"\x6D\x72\x69\x31\x35\x82\xAE\x82\xF1\x82\xBE\x82\xF1\x83\x55\x83\x52", // name
+        "mri15ぐんだんザコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1083,7 +1083,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
-        /*"mri17パイダース"*/"\x6D\x72\x69\x31\x37\x83\x70\x83\x43\x83\x5F\x81\x5B\x83\x58", // name
+        "mri17パイダース", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1093,7 +1093,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri18軍団ザコ"*/"\x6D\x72\x69\x31\x38\x8C\x52\x92\x63\x83\x55\x83\x52", // name
+        "mri18軍団ザコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1103,7 +1103,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri18バリアーン"*/"\x6D\x72\x69\x31\x38\x83\x6F\x83\x8A\x83\x41\x81\x5B\x83\x93", // name
+        "mri18バリアーン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1113,7 +1113,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri19パイダース"*/"\x6D\x72\x69\x31\x39\x83\x70\x83\x43\x83\x5F\x81\x5B\x83\x58", // name
+        "mri19パイダース", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1123,7 +1123,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri19パックン１"*/"\x6D\x72\x69\x31\x39\x83\x70\x83\x62\x83\x4E\x83\x93\x82\x50", // name
+        "mri19パックン１", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1133,7 +1133,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri19パックン３"*/"\x6D\x72\x69\x31\x39\x83\x70\x83\x62\x83\x4E\x83\x93\x82\x52", // name
+        "mri19パックン３", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1143,7 +1143,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri20軍団ザコ"*/"\x6D\x72\x69\x32\x30\x8C\x52\x92\x63\x83\x55\x83\x52", // name
+        "mri20軍団ザコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1153,7 +1153,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"mri20バリアーン２"*/"\x6D\x72\x69\x32\x30\x83\x6F\x83\x8A\x83\x41\x81\x5B\x83\x93\x82\x51", // name
+        "mri20バリアーン２", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1163,7 +1163,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マグナムバッテンダー"*/"\x83\x7D\x83\x4F\x83\x69\x83\x80\x83\x6F\x83\x62\x83\x65\x83\x93\x83\x5F\x81\x5B", // name
+        "マグナムバッテンダー", // name
         "mri_01", // mapName
         0, // fixedItem
         -1, // swFlag

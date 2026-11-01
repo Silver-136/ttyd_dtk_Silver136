@@ -438,27 +438,27 @@ EVT_BEGIN(evt_shorui_funshitu)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_party_move_pos, 0, 255, -150, 500)
-            CALL(evt_party_set_dir_npc, 0, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
+            CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
         END_IF
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos, 260, -135, 500)
-    CALL(evt_mario_set_dir_npc, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
-    CALL(evt_set_dir_to_target, STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), STRING("mario"))
+    CALL(evt_mario_set_dir_npc, STRING("ポワン探偵"))
+    CALL(evt_set_dir_to_target, STRING("サラリーマン"), STRING("mario"))
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
-    CALL(evt_npc_status_onoff, 1, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_status_onoff, 1, STRING("ポワン探偵"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_167"), 0, 0)
-    CALL(evt_set_dir_to_target, STRING("me"), STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
+    CALL(evt_set_dir_to_target, STRING("me"), STRING("サラリーマン"))
     WAIT_MS(500)
-    CALL(evt_mario_set_dir_npc, STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_168"), 0, STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
+    CALL(evt_mario_set_dir_npc, STRING("サラリーマン"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_168"), 0, STRING("サラリーマン"))
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_168_01"), 0, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_168_01"), 0, STRING("ポワン探偵"))
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_168_02"), 0, STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_168_02"), 0, STRING("サラリーマン"))
     WAIT_MS(500)
     SPAWN_EVENT_GET_ID(PTR(evt_mario_chuumoku), LW(10))
     SPAWN_EVENT_GET_ID(PTR(evt_party_chuumoku), LW(11))
-    CALL(evt_npc_flag_onoff, 1, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
@@ -523,9 +523,9 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     DELETE_EVENT(LW(10))
     DELETE_EVENT(LW(11))
-    CALL(evt_npc_flag_onoff, 0, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_flag_onoff, 0, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), -2147483648)
-    CALL(evt_npc_flag_onoff, 0, STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), -2147483648)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), -2147483648)
+    CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), -2147483648)
     // The story advances.
     SET_VALUE(GSW_STORY_PROGRESS, STG6_22_DOCUMENT)
     RETURN
@@ -566,23 +566,23 @@ EVT_BEGIN(evt_shorui_funshitu)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_168_02"), 0, STRING("サラリーマン"))
 #else
-            CALL(evt_party_set_dir_npc, 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
+            CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
         END_IF
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos, 260, -135, 500)
-    CALL(evt_mario_set_dir_npc, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
-    CALL(evt_set_dir_to_target, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), STRING("mario"))
+    CALL(evt_mario_set_dir_npc, STRING("ポワン探偵"))
+    CALL(evt_set_dir_to_target, STRING("サラリーマン"), STRING("mario"))
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
-    CALL(evt_npc_status_onoff, 1, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_status_onoff, 1, STRING("ポワン探偵"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_167"), 0, STRING("me"))
-    CALL(evt_set_dir_to_target, STRING("me"), STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
+    CALL(evt_set_dir_to_target, STRING("me"), STRING("サラリーマン"))
     WAIT_MS(500)
-    CALL(evt_mario_set_dir_npc, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_168"), 0, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
+    CALL(evt_mario_set_dir_npc, STRING("サラリーマン"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_168"), 0, STRING("サラリーマン"))
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_168_01"), 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_168_01"), 0, STRING("ポワン探偵"))
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_168_02"), 0, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_168_02"), 0, STRING("サラリーマン"))
 #endif
     WAIT_MS(500)
     SPAWN_EVENT_GET_ID(PTR(evt_mario_chuumoku), LW(10))
@@ -590,7 +590,7 @@ EVT_BEGIN(evt_shorui_funshitu)
 #if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
 #else
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
 #endif
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
@@ -661,9 +661,9 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
 #else
-    CALL(evt_npc_flag_onoff, 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_flag_onoff, 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_flag_onoff, 0, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), NPC_FLAG_NO_TALK_BALLOON)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
+    CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG6_22_DOCUMENT)
     RETURN
@@ -1119,9 +1119,9 @@ EVT_BEGIN(talk_sarary_repeat)
     CALL(evt_npc_get_position, STRING("サラリーマン"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("サラリーマン"), LW(3))
 #else
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_get_position, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_height, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), LW(3))
+    CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
+    CALL(evt_npc_get_position, STRING("サラリーマン"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_height, STRING("サラリーマン"), LW(3))
 #endif
     ADD(LW(0), -5)
     ADD(LW(1), LW(3))
@@ -1130,7 +1130,7 @@ EVT_BEGIN(talk_sarary_repeat)
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_01"), 0, STRING("サラリーマン"))
 #else
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_165_01"), 0, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_165_01"), 0, STRING("サラリーマン"))
 #endif
     LOOP(0)
         CALL(evt_msg_repeat)
@@ -1254,9 +1254,9 @@ EVT_BEGIN(talk_papa_repeat)
     CALL(evt_npc_get_position, STRING("ナリキンパパ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ナリキンパパ"), LW(3))
 #else
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_get_position, STRING(/*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_height, STRING(/*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70"), LW(3))
+    CALL(evt_npc_flag_onoff, 1, STRING("ナリキンパパ"), NPC_FLAG_NO_TALK_BALLOON)
+    CALL(evt_npc_get_position, STRING("ナリキンパパ"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_height, STRING("ナリキンパパ"), LW(3))
 #endif
     ADD(LW(1), LW(3))
     ADD(LW(1), 15)
@@ -1264,7 +1264,7 @@ EVT_BEGIN(talk_papa_repeat)
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_01"), 0, STRING("ナリキンパパ"))
 #else
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_85_01"), 0, STRING(/*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_85_01"), 0, STRING("ナリキンパパ"))
 #endif
     LOOP(0)
         CALL(evt_msg_repeat)
@@ -1323,9 +1323,9 @@ EVT_BEGIN(talk_mama_repeat)
     CALL(evt_npc_get_position, STRING("ナリキンママ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ナリキンママ"), LW(3))
 #else
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_get_position, STRING(/*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_height, STRING(/*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D"), LW(3))
+    CALL(evt_npc_flag_onoff, 1, STRING("ナリキンママ"), NPC_FLAG_NO_TALK_BALLOON)
+    CALL(evt_npc_get_position, STRING("ナリキンママ"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_height, STRING("ナリキンママ"), LW(3))
 #endif
     ADD(LW(1), LW(3))
     ADD(LW(1), 10)
@@ -1333,7 +1333,7 @@ EVT_BEGIN(talk_mama_repeat)
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_02"), 0, STRING("ナリキンママ"))
 #else
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_85_02"), 0, STRING(/*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_85_02"), 0, STRING("ナリキンママ"))
 #endif
     LOOP(0)
         CALL(evt_msg_repeat)
@@ -1576,9 +1576,9 @@ EVT_BEGIN(talk_powan_repeat)
     CALL(evt_npc_get_position, STRING("ポワン探偵"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ポワン探偵"), LW(3))
 #else
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_FLAG_NO_TALK_BALLOON)
-    CALL(evt_npc_get_position, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_height, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), LW(3))
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
+    CALL(evt_npc_get_position, STRING("ポワン探偵"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_height, STRING("ポワン探偵"), LW(3))
 #endif
     ADD(LW(0), 15)
     ADD(LW(1), LW(3))
@@ -1587,7 +1587,7 @@ EVT_BEGIN(talk_powan_repeat)
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_02"), 0, STRING("ポワン探偵"))
 #else
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_165_02"), 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_165_02"), 0, STRING("ポワン探偵"))
 #endif
     LOOP(0)
         CALL(evt_msg_repeat)
@@ -1686,7 +1686,7 @@ EVT_END()
 /** NPCs of the car: the conductor, the salaryman, Goldbob and his wife, Little Narikin and Pennington. */
 static NpcSetupInfo npc_data[] = {
     {
-        /*"車掌"*/"\x8E\xD4\x8F\xB6", // name
+        "車掌", // name
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_syashou, // initEvent
@@ -1698,7 +1698,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93", // name
+        "サラリーマン", // name
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_sarary, // initEvent
@@ -1710,7 +1710,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70", // name
+        "ナリキンパパ", // name
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_papa, // initEvent
@@ -1722,7 +1722,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D", // name
+        "ナリキンママ", // name
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_mama, // initEvent
@@ -1734,7 +1734,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"コナリキン"*/"\x83\x52\x83\x69\x83\x8A\x83\x4C\x83\x93", // name
+        "コナリキン", // name
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_konari, // initEvent
@@ -1746,7 +1746,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name
+        "ポワン探偵", // name
         NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_powan, // initEvent

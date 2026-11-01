@@ -88,7 +88,7 @@ EvtWord aaa_00_init_evt[81];
 /** The two actors of the house: Parakarry, who delivers the letter in the prologue, and Luigi. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"パレッタ"*/"\x83\x70\x83\x8C\x83\x62\x83\x5E", // name
+        "パレッタ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -97,7 +97,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57", // name
+        "ルイージ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -141,7 +141,7 @@ EVT_END()
 
 /** Actors that stay in view during the house door scenes: Luigi. */
 static const char* ie_npc[] = {
-    /*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57",
+    "ルイージ",
     NULL,
 };
 

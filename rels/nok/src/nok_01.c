@@ -815,7 +815,7 @@ EVT_END()
 /** NPCs of the east village: the mayor, the gate guard, Koops, Koops's father and Koopie Koo. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ノコノコG"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x47", // name
+        "ノコノコG", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         nokonoko_G_regl, // regularEvent
@@ -826,7 +826,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ノコノコH"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x48", // name
+        "ノコノコH", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         nokonoko_H_regl, // regularEvent
@@ -837,7 +837,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ノコノコI"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x49", // name
+        "ノコノコI", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         nokonoko_I_regl, // regularEvent
@@ -848,7 +848,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ノコノコK"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x4B", // name
+        "ノコノコK", // name
         0, 0, // flags..reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -859,7 +859,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"村長"*/"\x91\xBA\x92\xB7", // name
+        "村長", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
@@ -871,7 +871,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"門番ノコノコ"*/"\x96\xE5\x94\xD4\x83\x6D\x83\x52\x83\x6D\x83\x52", // name
+        "門番ノコノコ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         monban_init, // initEvent
@@ -883,7 +883,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ノコタロウ"*/"\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45", // name
+        "ノコタロウ", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         nokotarou_init, // initEvent
@@ -895,7 +895,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ノコタロウ父"*/"\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45\x95\x83", // name
+        "ノコタロウ父", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         nokopapa_init, // initEvent
@@ -907,7 +907,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ノコリン"*/"\x83\x6D\x83\x52\x83\x8A\x83\x93", // name
+        "ノコリン", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         nokorin_init, // initEvent
@@ -980,7 +980,7 @@ static BeroEntry bero_entry_data[] = {
 
 /** NPCs inside the mayor's house: the mayor. */
 const char* son_npc[] = {
-    /*"村長"*/"\x91\xBA\x92\xB7",
+    "村長",
     NULL,
 };
 
@@ -1016,7 +1016,7 @@ HouseParam son_data = {
 
 /** NPCs inside Koops's house: Koops. */
 const char* taro_npc[] = {
-    /*"ノコタロウ"*/"\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45",
+    "ノコタロウ",
     NULL,
 };
 
@@ -1058,7 +1058,7 @@ HouseParam taro_data = {
 
 /** NPCs inside the house: Koopa K. */
 static const char* ie_npc[] = {
-    /*"ノコノコK"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x4B",
+    "ノコノコK",
     NULL,
 };
 

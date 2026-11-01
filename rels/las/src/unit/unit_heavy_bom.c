@@ -570,7 +570,7 @@ static BattleUnitKindPart parts[] = {
     },
     {
         2, // partNum
-        /*"ヘビーボム"*/"\x83\x77\x83\x72\x81\x5B\x83\x7B\x83\x80", // partName
+        "ヘビーボム", // partName
         "c_heavy", // modelName
         {0.0f, 80.0f, 0.0f}, // positionOffset
         {0}, // hitBaseOffset

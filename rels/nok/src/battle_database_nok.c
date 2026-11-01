@@ -82,7 +82,7 @@ NpcBattleSelect btlgrpsel_nok_btlno_hei_test1_off[] = {
  */
 NpcSetupBattleInfo btlsetup_nok_tbl[] = {
     {
-        /*"マップstg_01_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x31\x5F\x30", // name
+        "マップstg_01_0", // name
         "nok_01", // mapName
         0, // fixedItem
         -1, // swFlag

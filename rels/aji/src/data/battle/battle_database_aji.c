@@ -1097,7 +1097,7 @@ NpcBattleSelect btlgrpsel_aji_btlno_aji_15_01_off[] = {
 /** The battle setups of the fortress: one entry per fight with its name, group selector and battle music. */
 NpcSetupBattleInfo btlsetup_aji_tbl[] = {
     {
-        /*"マップstg_07_1"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x37\x5F\x31", // name
+        "マップstg_07_1", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1107,7 +1107,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_07_2"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x37\x5F\x32", // name
+        "マップstg_07_2", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1117,7 +1117,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_07_3"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x37\x5F\x33", // name
+        "マップstg_07_3", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1127,7 +1127,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_07_5"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x37\x5F\x35", // name
+        "マップstg_07_5", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1137,7 +1137,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マップstg_07_6"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x37\x5F\x36", // name
+        "マップstg_07_6", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1147,7 +1147,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"マグナムバッテンダー幕痛"*/"\x83\x7D\x83\x4F\x83\x69\x83\x80\x83\x6F\x83\x62\x83\x65\x83\x93\x83\x5F\x81\x5B\x96\x8B\x92\xC9", // name
+        "マグナムバッテンダー幕痛", // name
         "aji_14", // mapName
         0, // fixedItem
         -1, // swFlag
@@ -1159,7 +1159,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_BOSS_STG3_3RDLEADER1", // bgmName
     },
     {
-        /*"軍団ザコエリート"*/"\x8C\x52\x92\x63\x83\x55\x83\x52\x83\x47\x83\x8A\x81\x5B\x83\x67", // name
+        "軍団ザコエリート", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1170,7 +1170,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_CHUBOSS_BATTLE1", // bgmName
     },
     {
-        /*"aji01軍団ザコエリート"*/"\x61\x6A\x69\x30\x31\x8C\x52\x92\x63\x83\x55\x83\x52\x83\x47\x83\x8A\x81\x5B\x83\x67", // name
+        "aji01軍団ザコエリート", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1180,7 +1180,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji01軍団ザコ"*/"\x61\x6A\x69\x30\x31\x8C\x52\x92\x63\x83\x55\x83\x52", // name
+        "aji01軍団ザコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1190,7 +1190,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji01軍団ザコエリート"*/"\x61\x6A\x69\x30\x31\x8C\x52\x92\x63\x83\x55\x83\x52\x83\x47\x83\x8A\x81\x5B\x83\x67", // name
+        "aji01軍団ザコエリート", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1200,7 +1200,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji01軍団ザコ魔法使い"*/"\x61\x6A\x69\x30\x31\x8C\x52\x92\x63\x83\x55\x83\x52\x96\x82\x96\x40\x8E\x67\x82\xA2", // name
+        "aji01軍団ザコ魔法使い", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1210,7 +1210,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji01バリアーンＺ"*/"\x61\x6A\x69\x30\x31\x83\x6F\x83\x8A\x83\x41\x81\x5B\x83\x93\x82\x79", // name
+        "aji01バリアーンＺ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1220,7 +1220,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji01軍団ザコエリート"*/"\x61\x6A\x69\x30\x31\x8C\x52\x92\x63\x83\x55\x83\x52\x83\x47\x83\x8A\x81\x5B\x83\x67", // name
+        "aji01軍団ザコエリート", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1230,7 +1230,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji01軍団ザコ"*/"\x61\x6A\x69\x30\x31\x8C\x52\x92\x63\x83\x55\x83\x52", // name
+        "aji01軍団ザコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1240,7 +1240,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji01軍団ザコ"*/"\x61\x6A\x69\x30\x31\x8C\x52\x92\x63\x83\x55\x83\x52", // name
+        "aji01軍団ザコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1250,7 +1250,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji04バリアーンカスタム"*/"\x61\x6A\x69\x30\x34\x83\x6F\x83\x8A\x83\x41\x81\x5B\x83\x93\x83\x4A\x83\x58\x83\x5E\x83\x80", // name
+        "aji04バリアーンカスタム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1261,7 +1261,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji06軍団ザコ魔法使い"*/"\x61\x6A\x69\x30\x36\x8C\x52\x92\x63\x83\x55\x83\x52\x96\x82\x96\x40\x8E\x67\x82\xA2", // name
+        "aji06軍団ザコ魔法使い", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1271,7 +1271,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji08軍団ザコ魔法使い"*/"\x61\x6A\x69\x30\x38\x8C\x52\x92\x63\x83\x55\x83\x52\x96\x82\x96\x40\x8E\x67\x82\xA2", // name
+        "aji08軍団ザコ魔法使い", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1281,7 +1281,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji09軍団ザコ"*/"\x61\x6A\x69\x30\x39\x8C\x52\x92\x63\x83\x55\x83\x52", // name
+        "aji09軍団ザコ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1291,7 +1291,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji10バリアーンカスタム"*/"\x61\x6A\x69\x31\x30\x83\x6F\x83\x8A\x83\x41\x81\x5B\x83\x93\x83\x4A\x83\x58\x83\x5E\x83\x80", // name
+        "aji10バリアーンカスタム", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1301,7 +1301,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji13軍団ザコ魔法使い"*/"\x61\x6A\x69\x31\x33\x8C\x52\x92\x63\x83\x55\x83\x52\x96\x82\x96\x40\x8E\x67\x82\xA2", // name
+        "aji13軍団ザコ魔法使い", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1311,7 +1311,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji13バリアーンＺ"*/"\x61\x6A\x69\x31\x33\x83\x6F\x83\x8A\x83\x41\x81\x5B\x83\x93\x82\x79", // name
+        "aji13バリアーンＺ", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -1321,7 +1321,7 @@ NpcSetupBattleInfo btlsetup_aji_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"aji15軍団ザコエリート"*/"\x61\x6A\x69\x31\x35\x8C\x52\x92\x63\x83\x55\x83\x52\x83\x47\x83\x8A\x81\x5B\x83\x67", // name
+        "aji15軍団ザコエリート", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect

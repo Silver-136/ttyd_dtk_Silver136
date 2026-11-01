@@ -519,7 +519,7 @@ NpcBattleSelect btlgrpsel_bom_btlno_bom_04_03_off[] = {
  */
 NpcSetupBattleInfo btlsetup_bom_tbl[] = {
     {
-        /*"マップstg_07_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x37\x5F\x30", // name
+        "マップstg_07_0", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -529,7 +529,7 @@ NpcSetupBattleInfo btlsetup_bom_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"bom03ブリザード"*/"\x62\x6F\x6D\x30\x33\x83\x75\x83\x8A\x83\x55\x81\x5B\x83\x68", // name
+        "bom03ブリザード", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -539,7 +539,7 @@ NpcSetupBattleInfo btlsetup_bom_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"bom03ブリザード"*/"\x62\x6F\x6D\x30\x33\x83\x75\x83\x8A\x83\x55\x81\x5B\x83\x68", // name
+        "bom03ブリザード", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -549,7 +549,7 @@ NpcSetupBattleInfo btlsetup_bom_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"bom03アイスパックン"*/"\x62\x6F\x6D\x30\x33\x83\x41\x83\x43\x83\x58\x83\x70\x83\x62\x83\x4E\x83\x93", // name
+        "bom03アイスパックン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -559,7 +559,7 @@ NpcSetupBattleInfo btlsetup_bom_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"bom04アイスパックン"*/"\x62\x6F\x6D\x30\x34\x83\x41\x83\x43\x83\x58\x83\x70\x83\x62\x83\x4E\x83\x93", // name
+        "bom04アイスパックン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -569,7 +569,7 @@ NpcSetupBattleInfo btlsetup_bom_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"bom04ブリザード"*/"\x62\x6F\x6D\x30\x34\x83\x75\x83\x8A\x83\x55\x81\x5B\x83\x68", // name
+        "bom04ブリザード", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect
@@ -579,7 +579,7 @@ NpcSetupBattleInfo btlsetup_bom_tbl[] = {
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
-        /*"bom04アイスパックン"*/"\x62\x6F\x6D\x30\x34\x83\x41\x83\x43\x83\x58\x83\x70\x83\x62\x83\x4E\x83\x93", // name
+        "bom04アイスパックン", // name
         NULL, 0, // mapName..fixedItem
         -1, // swFlag
         NULL, // altSelect

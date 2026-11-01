@@ -197,8 +197,8 @@ EVT_END()
 
 /** NPCs inside the house at ie_3: two of the Ta-kun (ターくん), Herringway's relatives from Shiver City. */
 const char* ie_3_npc[] = {
-    /*"ターくん１"*/"\x83\x5E\x81\x5B\x82\xAD\x82\xF1\x82\x50",
-    /*"ターくん２"*/"\x83\x5E\x81\x5B\x82\xAD\x82\xF1\x82\x51",
+    "ターくん１",
+    "ターくん２",
     NULL,
 };
 
@@ -278,8 +278,8 @@ EVT_END()
 
 /** NPCs inside the hotel: the receptionist and the French-accented dandy (キザ野郎) who is smitten with her. */
 const char* hotel_npc[] = {
-    /*"店員女"*/"\x93\x58\x88\xF5\x8F\x97",
-    /*"キザ野郎"*/"\x83\x4C\x83\x55\x96\xEC\x98\x59",
+    "店員女",
+    "キザ野郎",
     NULL,
 };
 
@@ -968,7 +968,7 @@ EVT_END()
  */
 static NpcSetupInfo npc_data[] = {
     {
-        /*"土産屋"*/"\x93\x79\x8E\x59\x89\xAE", // name
+        "土産屋", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_miyage, // initEvent
@@ -980,7 +980,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"３人娘１"*/"\x82\x52\x90\x6C\x96\xBA\x82\x50", // name
+        "３人娘１", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_musume1, // initEvent
@@ -992,7 +992,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"３人娘２"*/"\x82\x52\x90\x6C\x96\xBA\x82\x51", // name
+        "３人娘２", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_musume2, // initEvent
@@ -1004,7 +1004,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"３人娘３"*/"\x82\x52\x90\x6C\x96\xBA\x82\x52", // name
+        "３人娘３", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_musume3, // initEvent
@@ -1016,7 +1016,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ターくん１"*/"\x83\x5E\x81\x5B\x82\xAD\x82\xF1\x82\x50", // name
+        "ターくん１", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_takun1, // initEvent
@@ -1028,7 +1028,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ターくん２"*/"\x83\x5E\x81\x5B\x82\xAD\x82\xF1\x82\x51", // name
+        "ターくん２", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_takun2, // initEvent
@@ -1040,7 +1040,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"店員女"*/"\x93\x58\x88\xF5\x8F\x97", // name
+        "店員女", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
@@ -1049,7 +1049,7 @@ static NpcSetupInfo npc_data[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キザ野郎"*/"\x83\x4C\x83\x55\x96\xEC\x98\x59", // name
+        "キザ野郎", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_kiza, // initEvent
@@ -1159,7 +1159,7 @@ static KinopioData kino_dt = {
     {185.0f, 1442.0f, -285.0f, 295.0f, 1386.0f, -24.0f}, // cam
     -60.0f, // bedDeg
     {260.0f, 5.0f, 30.0f}, // npcTalk
-    /*"店員女"*/"\x93\x58\x88\xF5\x8F\x97", // npcName
+    "店員女", // npcName
     {"stg7_pik_clear_20", "stg7_pik_clear_21", "stg7_pik_clear_22", "stg7_pik_clear_23", "stg7_pik_clear_24", "stg7_pik_clear_25", "stg7_pik_clear_26", "stg7_pik_clear_27", "stg7_pik_clear_28", "stg7_pik_clear_29", "stg7_pik_clear_30", "stg7_pik_clear_31", "stg7_pik_clear_32", "stg7_pik_clear_33"}, // msg
     evt_kinopio_to_bed, // toBedEvt
     evt_kinopio_from_bed, // fromBedEvt

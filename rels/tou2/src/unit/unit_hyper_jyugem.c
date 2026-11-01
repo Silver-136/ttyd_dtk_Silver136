@@ -226,7 +226,7 @@ static BattleUnitKindPart parts[] = {
     },
     {
         2, // partNum
-        /*"ハイパーパイポ"*/"\x83\x6E\x83\x43\x83\x70\x81\x5B\x83\x70\x83\x43\x83\x7C", // partName
+        "ハイパーパイポ", // partName
         "c_jugemu_b", // modelName
         {0}, // positionOffset
         {0}, // hitBaseOffset

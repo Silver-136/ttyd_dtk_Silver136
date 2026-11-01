@@ -843,7 +843,7 @@ EVT_END()
 /** NPC setup of gon_08: Nokkos, who gives the side request. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ノッコス"*/"\x83\x6D\x83\x62\x83\x52\x83\x58", // name
+        "ノッコス", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         nokkosu_init, // initEvent

@@ -1391,7 +1391,7 @@ EVT_END()
 /** NPCs of this room: Chet Rippo, whose counter talk is registered on the A_power_down area. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"パワーダウン屋"*/"\x83\x70\x83\x8F\x81\x5B\x83\x5F\x83\x45\x83\x93\x89\xAE", // name
+        "パワーダウン屋", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         powerdownya_init, // initEvent
