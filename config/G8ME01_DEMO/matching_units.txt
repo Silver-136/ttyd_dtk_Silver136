@@ -175,6 +175,8 @@ MarioSt/card/CARDStat
 MarioSt/card/CARDUnlock
 MarioSt/card/CARDWrite
 MarioSt/countdown
+MarioSt/data/battle/battle_database_common
+MarioSt/data/battle/battle_item_data
 MarioSt/data/item_data
 MarioSt/data/mail_data
 MarioSt/data/mapdata
@@ -185,11 +187,13 @@ MarioSt/db/db
 MarioSt/demo/DEMOFont
 MarioSt/demo/DEMOPuts
 MarioSt/demo/DEMOStats
+MarioSt/driver/animdrv
 MarioSt/driver/arcdrv
 MarioSt/driver/bgdrv
 MarioSt/driver/camdrv
 MarioSt/driver/casedrv
 MarioSt/driver/dispdrv
+MarioSt/driver/effdrv
 MarioSt/driver/envdrv
 MarioSt/driver/extdrv
 MarioSt/driver/hitdrv
@@ -354,6 +358,7 @@ MarioSt/effect/n64/eff_opuku_wcurtain_n64
 MarioSt/effect/n64/eff_opuku_wgun_n64
 MarioSt/effect/n64/eff_opuku_wprotect_n64
 MarioSt/effect/n64/eff_packn_bfire_n64
+MarioSt/effect/n64/eff_peach_dust_n64
 MarioSt/effect/n64/eff_pikkyolo_n64
 MarioSt/effect/n64/eff_pokopi_pcharge_n64
 MarioSt/effect/n64/eff_pokopi_pipo_n64
@@ -481,6 +486,7 @@ MarioSt/motion/mot_jump
 MarioSt/motion/mot_plane
 MarioSt/motion/mot_roll
 MarioSt/motion/mot_ship
+MarioSt/motion/mot_slit
 MarioSt/motion/mot_stay
 MarioSt/motion/mot_walk
 MarioSt/motion/mot_yoshi
@@ -569,6 +575,7 @@ MarioSt/sequence/seq_battle
 MarioSt/sequence/seq_demo
 MarioSt/sequence/seq_e3
 MarioSt/sequence/seq_game
+MarioSt/sequence/seq_gameover
 MarioSt/sequence/seq_logo
 MarioSt/sequence/seq_mapchange
 MarioSt/sequence/seq_title
@@ -583,7 +590,13 @@ MarioSt/thp/THPDec
 MarioSt/unit/party/unit_party_christine
 MarioSt/unit/party/unit_party_chuchurina
 MarioSt/unit/party/unit_party_clauda
+MarioSt/unit/party/unit_party_nokotarou
+MarioSt/unit/party/unit_party_sanders
+MarioSt/unit/party/unit_party_vivian
 MarioSt/unit/party/unit_party_yoshi
+MarioSt/unit/unit_bomzou
+MarioSt/unit/unit_koura
+MarioSt/unit/unit_mario
 MarioSt/unit/unit_object_switch
 MarioSt/unit/unit_object_tree
 MarioSt/unit/unit_system

@@ -92,6 +92,9 @@ EvtWord vivian_appeal_event[80];
 static EvtWord party_win_reaction[18];
 static EvtWord attack_audience_event[189];
 
+#if VERSION <= VERSION_DEMO_US
+static VivRegist regist = {{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}, {0, 0}};
+#endif
 /**
  * Vivian's pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze, instant KO),
  * the hurt poses, gliding and fast gliding, low HP, the failed Run Away tumble, talking, item use,
@@ -217,17 +220,21 @@ static VivDef defence = {{{0, 0, 0, 0, 0}}, {0, 0, 0}};
 static VivDefAttr defence_attr = {{{0, 0, 0, 0, 0}}, {0, 0, 0}};
 
 /** Vivian's status chances: 100 for every status (badges lower them in battle). */
+#if VERSION > VERSION_DEMO_US
 static VivRegist regist = {{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}, {0, 0}};
+#endif
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Vivian-style emergence from a shadow for part args[1] of unit args[0]:
@@ -418,6 +425,12 @@ EVT_BEGIN(vivian_hide_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(wait_event)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
+    RETURN
+EVT_END()
+#endif
 /**
  * Shade Fist (0 FP): a punch from the shadows on any single enemy; damage by rank 3, 4 or 5
  * (the same whether or not the action command succeeds); only a successful command burns it for 2 turns.

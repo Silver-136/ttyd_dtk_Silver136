@@ -2945,12 +2945,14 @@ CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     RETURN
 EVT_END()
 
+#if VERSION >= VERSION_JP
 EVT_BEGIN(nokotarou_revive_event)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence))
     CALL(btlevtcmd_OffStatusFlag, LW(10), UNIT_STATUS_FLAG_FLIPPED)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_nokotarou_stay))
     RETURN
 EVT_END()
+#endif
 
 /** Koops's defence while on his feet: 1 against every element, from his shell. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};

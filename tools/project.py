@@ -179,6 +179,10 @@ class ProjectConfig:
         self.warn_missing_config: bool = False  # Warn on missing unit configuration
         self.warn_missing_source: bool = False  # Warn on missing source file
         self.rel_strip_partial: bool = True  # Generate PLFs with -strip_partial
+        # Module name -> symbol list file: before `dtk rel make`, the module's PLF goes through
+        # tools/drop_relocations.py, which drops the relocations against the listed symbols (references the
+        # original linker left unresolved, as 0 with no relocation).
+        self.rel_dropped_relocations: Dict[str, Path] = {}
         self.rel_empty_file: Optional[str] = (
             None  # Object name for generating empty RELs
         )
@@ -504,6 +508,13 @@ def generate_build_ninja(
         name="download_tool",
         command=f"$python {download_tool} $tool $out --tag $tag",
         description="TOOL $out",
+    )
+
+    drop_relocations = config.tools_dir / "drop_relocations.py"
+    n.rule(
+        name="drop_relocations",
+        command=f"$python {drop_relocations} $in $out $symbols",
+        description="DROPREL $out",
     )
 
     decompctx = config.tools_dir / "decompctx.py"
@@ -932,6 +943,10 @@ def generate_build_ninja(
             else:
                 preplf_path = build_path / self.name / f"{self.name}.preplf"
                 plf_path = build_path / self.name / f"{self.name}.plf"
+                # rel make writes each REL next to its PLF, so a PLF with dropped relocations keeps the .plf name
+                # and the linker output gets another one
+                if self.name in config.rel_dropped_relocations:
+                    plf_path = build_path / self.name / f"{self.name}.linked.plf"
                 preplf_ldflags = "$ldflags -sdata 0 -sdata2 0 -r"
                 plf_ldflags = f"$ldflags -sdata 0 -sdata2 0 -r1 -lcf {serialize_path(self.ldscript)}"
                 if self.entry:
@@ -965,6 +980,15 @@ def generate_build_ninja(
                     variables={"ldflags": plf_ldflags},
                     order_only="post-compile",
                 )
+                if self.name in config.rel_dropped_relocations:
+                    symbols = config.rel_dropped_relocations[self.name]
+                    n.build(
+                        outputs=self.partial_output(),
+                        rule="drop_relocations",
+                        inputs=plf_path,
+                        implicit=[symbols, drop_relocations],
+                        variables={"symbols": symbols},
+                    )
             n.newline()
 
     link_outputs: List[Path] = []

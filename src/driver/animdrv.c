@@ -2474,7 +2474,15 @@ static BOOL animSetMaterial_ChangeTexture(AnimationPoseData* data, AnimPoseShape
     return FALSE;
 }
 
+#if VERSION > VERSION_DEMO_US
 static s32 tbl[4] = { 2, 1, 3, 0 }; // shape cullMode -> GXCullMode: GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE
+#else
+/** Sets GX culling for a shape's cull mode; the demo map has one static local table both draw functions read. */
+static inline void animSetCullMode(s32 cullMode) {
+    static s32 tbl[4] = { 2, 1, 3, 0 };
+    GXSetCullMode(tbl[cullMode]);
+}
+#endif
 
 /**
  * Sets up the material of shape shapeId for draw stage xluStage:
@@ -2520,7 +2528,7 @@ void materialProc(s32 shapeId, s32 xluStage) {
         draw = &wp->curPoseData->draws[shape->shapeDrawStart];
         if ((dispMode == 0 && wp->currDispMode == 2) || dispMode == wp->currDispMode || wp->curPose->materialColor.a != 0xFF || wp->curPose->materialColor2.a != 0xFF) {
 #if VERSION <= VERSION_DEMO_US
-            GXSetCullMode(shape->cullMode);
+            animSetCullMode(shape->cullMode);
 #else
             GXSetCullMode(tbl[shape->cullMode]);
 #endif
@@ -2674,7 +2682,7 @@ Mtx* model = g_modeling_mtx;
             s32 firstDrawId;
             f32* texVtxIndices[8];
 #if VERSION <= VERSION_DEMO_US
-            GXSetCullMode(shape->cullMode);
+            animSetCullMode(shape->cullMode);
 #else
 
             GXSetCullMode(tbl[shape->cullMode]);

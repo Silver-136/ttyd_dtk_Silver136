@@ -63,6 +63,32 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 EvtWord mario_win_reaction[9];
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {
+    100, // sleep
+    100, // stop
+    100, // dizzy
+    100, // poison
+    100, // confuse
+    100, // electric
+    100, // burn
+    100, // freeze
+    100, // huge
+    100, // tiny
+    100, // attackUp
+    100, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    100, // allergic
+    100, // fright
+    100, // galeForce
+    100, // fast
+    100, // slow
+    100, // dodgy
+    100, // invisible
+    100, // ohko
+};
+#endif
 /**
  * Mario's pose table: animations for each status (sleep, stop, dizzy, poison, confusion, freeze, instant KO),
  * the hurt poses, walking and running, item use, the low-HP pants, the Happy Heart / Happy Flower
@@ -108,6 +134,13 @@ PoseTableEntry pose_table_mario_stay[] = {
     {POSE_TYPE_ACTION, "M_S_1"},
 };
 
+#if VERSION <= VERSION_DEMO_US
+PoseTableEntry pose_table_object[] = {
+    {POSE_TYPE_NORMAL, "KRN_H_1"},
+    {POSE_TYPE_DAMAGE, "KRN_H_1"},
+    {POSE_TYPE_ACTION, "KRN_H_1"},
+};
+#endif
 /**
  * Mario's data events: Appeal, the audience attack reaction, First Strike (nothing), Life Shroom revival,
  * death, the victory pose, the readied jump attack, the Yoshi-riding battle entry
@@ -133,6 +166,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Mario's status chances: 100 for every status (badges such as Feeling Fine lower them in battle). */
+#if VERSION > VERSION_DEMO_US
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -157,13 +191,16 @@ static StatusVulnerability regist = {
     100, // invisible
     100, // ohko
 };
+#endif
 
 /** Pose table for Mario's two hidden helper parts (2 and 3): the hidden KRN_H_1 animation for every pose. */
+#if VERSION > VERSION_DEMO_US
 PoseTableEntry pose_table_object[] = {
     {POSE_TYPE_NORMAL, "KRN_H_1"},
     {POSE_TYPE_DAMAGE, "KRN_H_1"},
     {POSE_TYPE_ACTION, "KRN_H_1"},
 };
+#endif
 
 /**
  * Mario's battle parts: part 1 is his visible, targetable body; parts 2 and 3 are hidden,
@@ -288,6 +325,13 @@ EVT_BEGIN(mario_ride_btl_entry_event)
     RETURN
 EVT_END()
 
+s32 mario_pinch_pose_sound_callback(BattleUnit* unit);
+#if VERSION <= VERSION_DEMO_US
+static PoseSoundTiming pose_sound_timing_table[] = {
+    {"M_S_3", 0.25f, mario_pinch_pose_sound_callback, NULL, 0, 1},
+    {NULL, 0.0f, NULL, NULL, 0, 1},
+};
+#endif
 /** Empty: Mario's actions come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -471,6 +515,18 @@ static USER_FUNC(_get_mario_hammer_lv) {
     return EVT_RETURN_DONE;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(damage_event)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
+    SET_VALUE(LW(11), 1)
+    CALL_CHILD(PTR(btldefaultevt_Damage))
+    RETURN
+EVT_END()
+static EVT_BEGIN(wait_event)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
+    RETURN
+EVT_END()
+#endif
 EVT_BEGIN(mario_dead_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
 #if VERSION >= VERSION_US
@@ -545,6 +601,13 @@ EVT_BEGIN(mario_appeal_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(mario_win_reaction)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_V_2"))
+    WAIT_MS(1000)
+    RETURN
+EVT_END()
+#endif
 /**
  * Audience-attack reaction (data tag 6): picks at random between jumping on (btlataudevtMarioJump)
  * or hammering (btlataudevtMarioHammer) an audience member.
@@ -831,34 +894,42 @@ EVT_END()
  * Pose sounds for Mario: on the low-HP pant pose M_S_3, at a quarter of the loop,
  * mario_pinch_pose_sound_callback plays one of his relief voice clips.
  */
+#if VERSION > VERSION_DEMO_US
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"M_S_3", 0.25f, mario_pinch_pose_sound_callback, NULL, 0, 1},
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
+#endif
 
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
 EVT_END()
+#endif
 
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Mario's victory pose M_V_2 held for one second (data tag 64),
  * run for Mario and the partner when the battle is won and experience is handed out.
  */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(mario_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_V_2"))
     WAIT_MS(1000)
     RETURN
 EVT_END()
+#endif
 

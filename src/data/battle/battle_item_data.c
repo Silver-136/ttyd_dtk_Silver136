@@ -1187,6 +1187,13 @@ EVT_BEGIN(ItemEvent_Kaminari)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ItemEvent_Kaminari_Dokkan)
+    SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Dokkan))
+    CALL_CHILD(PTR(ItemEvent_Kaminari))
+    RETURN
+EVT_END()
+#endif
 /** Thunder Rage: lightning on every enemy (ItemEvent_Kaminari_Dokkan). */
 BattleWeapon ItemWeaponData_Kaminari_Dokkan = {
     NULL, 0, // name..icon
@@ -1225,6 +1232,13 @@ BattleWeapon ItemWeaponData_Kaminari_Dokkan = {
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ItemEvent_Kaminari_Gorogoro)
+    SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Gorogoro))
+    CALL_CHILD(PTR(ItemEvent_Kaminari))
+    RETURN
+EVT_END()
+#endif
 /** Thunder Bolt: lightning on one enemy (ItemEvent_Kaminari_Gorogoro). */
 BattleWeapon ItemWeaponData_Kaminari_Gorogoro = {
     NULL, 0, // name..icon
@@ -1976,6 +1990,13 @@ BattleWeapon ItemWeaponData_Teki_Yokeeru = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ItemEvent_Madowaseno_Kona)
+    SET_VALUE(LW(12), PTR(&ItemWeaponData_Madowaseno_Kona))
+    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    RETURN
+EVT_END()
+#endif
 /** Ruin Powder: confuses every enemy (ItemEvent_Madowaseno_Kona). */
 BattleWeapon ItemWeaponData_Madowaseno_Kona = {
     NULL, 0, // name..icon
@@ -2276,6 +2297,13 @@ BattleWeapon ItemWeaponData_Guruguru_Memawashi = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ItemEvent_Dekadeka_Drink)
+    SET_VALUE(LW(12), PTR(&ItemWeaponData_Dekadeka_Drink))
+    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    RETURN
+EVT_END()
+#endif
 /** Power Punch: makes one ally huge, raising its attack (ItemEvent_Dekadeka_Drink). */
 BattleWeapon ItemWeaponData_Dekadeka_Drink = {
     NULL, 0, // name..icon
@@ -2316,6 +2344,13 @@ BattleWeapon ItemWeaponData_Dekadeka_Drink = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ItemEvent_Katikati_Koura)
+    SET_VALUE(LW(12), PTR(&ItemWeaponData_Katikati_Koura))
+    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    RETURN
+EVT_END()
+#endif
 /** Courage Shell: raises one ally's defence (ItemEvent_Katikati_Koura). */
 BattleWeapon ItemWeaponData_Katikati_Koura = {
     NULL, 0, // name..icon
@@ -2585,6 +2620,13 @@ BattleWeapon ItemWeaponData_Teki_Kyouka = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ItemEvent_Minimini_Kun)
+    SET_VALUE(LW(12), PTR(&ItemWeaponData_Minimini_Kun))
+    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    RETURN
+EVT_END()
+#endif
 /** Mini Mr. Mini: shrinks every enemy, lowering its attack (ItemEvent_Minimini_Kun). */
 BattleWeapon ItemWeaponData_Minimini_Kun = {
     NULL, 0, // name..icon
@@ -2625,6 +2667,13 @@ BattleWeapon ItemWeaponData_Minimini_Kun = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ItemEvent_Funyafunya_Kun)
+    SET_VALUE(LW(12), PTR(&ItemWeaponData_Funyafunya_Kun))
+    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    RETURN
+EVT_END()
+#endif
 /** Mr. Softener: lowers every enemy's defence (ItemEvent_Funyafunya_Kun). */
 BattleWeapon ItemWeaponData_Funyafunya_Kun = {
     NULL, 0, // name..icon
@@ -2666,6 +2715,13 @@ BattleWeapon ItemWeaponData_Funyafunya_Kun = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ItemEvent_Sukkiri_Drink)
+    SET_VALUE(LW(12), PTR(&ItemWeaponData_Sukkiri_Drink))
+    CALL_CHILD(PTR(ItemEvent_Support_RefreshEffect))
+    RETURN
+EVT_END()
+#endif
 /** Tasty Tonic: cures one ally's poison and other ailments (ItemEvent_Sukkiri_Drink). */
 BattleWeapon ItemWeaponData_Sukkiri_Drink = {
     NULL, 0, // name..icon
@@ -3171,6 +3227,13 @@ s32 R_mystery_item_table[] = {
     ITEM_NULL, // end of list (_naniga_okorukana_check counts up to it)
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ItemEvent_Shikaeshino_Kona)
+    SET_VALUE(LW(12), PTR(&ItemWeaponData_Shikaeshino_Kona))
+    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    RETURN
+EVT_END()
+#endif
 /** Spite Pouch: gives one ally payback against direct attacks (ItemEvent_Shikaeshino_Kona). */
 BattleWeapon ItemWeaponData_Shikaeshino_Kona = {
     NULL, 0, // name..icon
@@ -3209,6 +3272,13 @@ BattleWeapon ItemWeaponData_Shikaeshino_Kona = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ItemEvent_Kameno_Noroi)
+    SET_VALUE(LW(12), PTR(&ItemWeaponData_Kameno_Noroi))
+    CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
+    RETURN
+EVT_END()
+#endif
 /** Koopa Curse: slows one enemy (ItemEvent_Kameno_Noroi). */
 BattleWeapon ItemWeaponData_Kameno_Noroi = {
     NULL, 0, // name..icon
@@ -4973,71 +5043,91 @@ BattleWeapon ItemWeaponData_LastDinner = {
 };
 
 /** Thunder Rage: 5 lightning damage to every enemy. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Kaminari_Dokkan)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Dokkan))
     CALL_CHILD(PTR(ItemEvent_Kaminari))
     RETURN
 EVT_END()
+#endif
 
 /** Thunder Bolt: 5 lightning damage to one enemy. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Kaminari_Gorogoro)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Gorogoro))
     CALL_CHILD(PTR(ItemEvent_Kaminari))
     RETURN
 EVT_END()
+#endif
 
 /** Ruin Powder: confuses every enemy for three turns. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Madowaseno_Kona)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Madowaseno_Kona))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
+#endif
 
 /** Power Punch: makes the chosen ally huge (attack up) for three turns. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Dekadeka_Drink)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Dekadeka_Drink))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
+#endif
 
 /** Courage Shell: raises the chosen ally's defence by 3 for three turns. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Katikati_Koura)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Katikati_Koura))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
+#endif
 
 /** Mini Mr. Mini: shrinks every enemy (attack down) for three turns. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Minimini_Kun)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Minimini_Kun))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
+#endif
 
 /** Mr. Softener: lowers every enemy's defence by 3 for three turns. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Funyafunya_Kun)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Funyafunya_Kun))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
+#endif
 
 /** Tasty Tonic: cures the chosen ally's bad status effects. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Sukkiri_Drink)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Sukkiri_Drink))
     CALL_CHILD(PTR(ItemEvent_Support_RefreshEffect))
     RETURN
 EVT_END()
+#endif
 
 /** Spite Pouch: gives the chosen ally payback for three turns. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Shikaeshino_Kona)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Shikaeshino_Kona))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
+#endif
 
 /** Koopa Curse: slows the chosen enemy for three turns. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Kameno_Noroi)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kameno_Noroi))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
+#endif

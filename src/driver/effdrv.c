@@ -13,6 +13,15 @@
 #include <string.h>
 #include "libc_decls.h"
 
+// The demos still load the effect textures from the old eff folder.
+#if VERSION <= VERSION_DEMO_US
+#define EFF_TPL_PATH "%s/eff/%s/effect_%s.tpl"
+#define EFF_TPL_JP "%s/eff/jp/effect.tpl"
+#else
+#define EFF_TPL_PATH "%s/e/%s/effect_%s.tpl"
+#define EFF_TPL_JP "%s/e/jp/effect.tpl"
+#endif
+
 //.data
 #if VERSION <= VERSION_DEMO_US
 static const char* str_kemuri[] = {"着地", "敵消滅", "重いもの移動用", NULL};
@@ -289,7 +298,7 @@ void effTexSetup(void) {
 #if VERSION >= VERSION_US
         sprintf(path, "%s/e/%s/effect.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
-        sprintf(path, "%s/e/jp/effect.tpl", getMarioStDvdRoot());
+        sprintf(path, EFF_TPL_JP, getMarioStDvdRoot());
 #endif
         entry = DVDMgrOpen(path, 2, 0);
         size = OSRoundUp32B(DVDMgrGetLength(entry));
@@ -408,9 +417,9 @@ void effMain(void) {
         }
         prefix = prefix_tbl[gp->language];
         dvdroot = getMarioStDvdRoot();
-        if (fileAsyncf(FILE_TYPE_TPL, 0, "%s/e/%s/effect_%s.tpl", dvdroot, prefix, prefix) != 0U) {
+        if (fileAsyncf(FILE_TYPE_TPL, 0, EFF_TPL_PATH, dvdroot, prefix, prefix) != 0U) {
             prefix = prefix_tbl[gp->language];
-            wp->handle = fileAllocf(FILE_TYPE_TPL, "%s/e/%s/effect_%s.tpl", getMarioStDvdRoot(), prefix, prefix);
+            wp->handle = fileAllocf(FILE_TYPE_TPL, EFF_TPL_PATH, getMarioStDvdRoot(), prefix, prefix);
             wp->language = gp->language;
         }
     }

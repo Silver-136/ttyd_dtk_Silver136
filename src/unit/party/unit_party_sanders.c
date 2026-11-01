@@ -1974,11 +1974,13 @@ CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, -1)
     RETURN
 EVT_END()
 
+#if VERSION >= VERSION_JP
 EVT_BEGIN(sanders_battle_end_event)
     CALL(btlevtcmd_OnOffStatus, UNIT_ID_SELF, STATUS_HOLD_FAST, 0, 0, 0)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_sanders_stay))
     RETURN
 EVT_END()
+#endif
 
 /** Bobbery's defence: 0 against every element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};

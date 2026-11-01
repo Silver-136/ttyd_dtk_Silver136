@@ -2276,6 +2276,10 @@ if config.version in DEMO_VERSIONS:
     MAIN_PCH -= {"driver/shadowdrv.c"}
 else:
     MATH_PCH_DEMO = set()
+# The Japanese store demo's tst.rel references tst_nakayama_init_evt, which that version does not define; the
+# original linker left it as 0 with no relocation, so the build drops that relocation before `dtk rel make`.
+if config.version == "G8MJ01_DEMO":
+    config.rel_dropped_relocations = {"tst": Path("config/G8MJ01_DEMO/unresolved_symbols.txt")}
 for lib in config.libs:
     for obj in lib.get("objects", []):
         if obj.name in MAIN_PCH:

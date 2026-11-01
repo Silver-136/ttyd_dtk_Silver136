@@ -598,6 +598,43 @@ ItemDropData battle_item_pakkun_flower[] = {
     {0},
 };
 
+#if VERSION <= VERSION_DEMO_US
+ItemDropData battle_item_poison_pakkun[] = {
+    {0, 200, 300},
+    {ITEM_SUPER_SHROOM, 0, 5},
+    {ITEM_MAPLE_SYRUP, 0, 10},
+    {ITEM_FP_PLUS, 0, 1},
+    {0},
+};
+ItemDropData battle_item_ice_pakkun[] = {
+    {0, 200, 300},
+    {ITEM_SUPER_SHROOM, 0, 5},
+    {ITEM_MAPLE_SYRUP, 0, 10},
+    {ITEM_ICE_SMASH, 0, 1},
+    {0},
+};
+ItemDropData battle_item_monochrome__pakkun[] = {
+    {0, 200, 300},
+    {ITEM_MUSHROOM, 0, 5},
+    {ITEM_HONEY_SYRUP, 0, 10},
+    {ITEM_FP_PLUS, 0, 1},
+    {0},
+};
+ItemDropData battle_item_piders[] = {
+    {0, 200, 300},
+    {ITEM_SLOW_SHROOM, 0, 10},
+    {ITEM_GRADUAL_SYRUP, 0, 5},
+    {0},
+};
+ItemDropData battle_item_churantalar[] = {
+    {0, 200, 300},
+    {ITEM_SLOW_SHROOM, 0, 10},
+    {ITEM_GRADUAL_SYRUP, 0, 5},
+    {ITEM_PITY_FLOWER, 0, 2},
+    {ITEM_ALL_OR_NOTHING, 0, 2},
+    {0},
+};
+#endif
 /** Cleft: held items and drops by weight, after a first row of no item. */
 ItemDropData battle_item_monochrome_sinemon[] = {
     {0, 200, 300},
@@ -739,6 +776,22 @@ ItemDropData battle_item_sambo_mummy[] = {
     {0},
 };
 
+#if VERSION <= VERSION_DEMO_US
+ItemDropData battle_item_killer_cannon[] = {
+    {0, 200, 300},
+    {ITEM_MUSHROOM, 0, 5},
+    {ITEM_HONEY_SYRUP, 0, 5},
+    {ITEM_MONEY_MONEY, 0, 2},
+    {0},
+};
+ItemDropData battle_item_super_killer_cannon[] = {
+    {0, 200, 300},
+    {ITEM_SUPER_SHROOM, 0, 5},
+    {ITEM_MAPLE_SYRUP, 0, 5},
+    {ITEM_MONEY_MONEY, 0, 2},
+    {0},
+};
+#endif
 /** Bob-omb: held items and drops by weight, after a first row of no item. */
 ItemDropData battle_item_bomhei[] = {
     {0, 200, 300},
@@ -946,6 +999,15 @@ ItemDropData battle_item_dark_keeper[] = {
     {0},
 };
 
+#if VERSION <= VERSION_DEMO_US
+ItemDropData battle_item_yamitogedaruma[] = {
+    {0, 200, 300},
+    {ITEM_SUPER_SHROOM, 0, 10},
+    {ITEM_MAPLE_SYRUP, 0, 10},
+    {ITEM_HAMMERMAN, 0, 2},
+    {0},
+};
+#endif
 /**
  * Hearts after a won battle, by Mario's HP (rows up to 20/30/50/80/100%): overall chance, then 2 rolls.
  * The lookup stops at the first row that fits, so rows after the first 100% one are never read;
@@ -1296,6 +1358,7 @@ ItemDropData battle_item_red_honenoko[] = {
 };
 
 /** Putrid Piranha: held items and drops by weight, after a first row of no item. */
+#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_poison_pakkun[] = {
     {0, 200, 300},
     {ITEM_SUPER_SHROOM, 0, 5},
@@ -1303,8 +1366,10 @@ ItemDropData battle_item_poison_pakkun[] = {
     {ITEM_FP_PLUS, 0, 1},
     {0},
 };
+#endif
 
 /** Frost Piranha: held items and drops by weight, after a first row of no item. */
+#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_ice_pakkun[] = {
     {0, 200, 300},
     {ITEM_SUPER_SHROOM, 0, 5},
@@ -1312,8 +1377,10 @@ ItemDropData battle_item_ice_pakkun[] = {
     {ITEM_ICE_SMASH, 0, 1},
     {0},
 };
+#endif
 
 /** Pale Piranha: held items and drops by weight, after a first row of no item. */
+#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_monochrome__pakkun[] = {
     {0, 200, 300},
     {ITEM_MUSHROOM, 0, 5},
@@ -1321,16 +1388,20 @@ ItemDropData battle_item_monochrome__pakkun[] = {
     {ITEM_FP_PLUS, 0, 1},
     {0},
 };
+#endif
 
 /** Pider: held items and drops by weight, after a first row of no item. */
+#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_piders[] = {
     {0, 200, 300},
     {ITEM_SLOW_SHROOM, 0, 10},
     {ITEM_GRADUAL_SYRUP, 0, 5},
     {0},
 };
+#endif
 
 /** Arantula: held items and drops by weight, after a first row of no item. */
+#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_churantalar[] = {
     {0, 200, 300},
     {ITEM_SLOW_SHROOM, 0, 10},
@@ -1339,6 +1410,7 @@ ItemDropData battle_item_churantalar[] = {
     {ITEM_ALL_OR_NOTHING, 0, 2},
     {0},
 };
+#endif
 
 /** Yux: holds and drops no items. */
 ItemDropData battle_item_barriern[] = {
@@ -1381,6 +1453,7 @@ ItemDropData battle_item_super_killer[] = {
 };
 
 /** Bill Blaster: held items and drops by weight, after a first row of no item. */
+#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_killer_cannon[] = {
     {0, 200, 300},
     {ITEM_MUSHROOM, 0, 5},
@@ -1388,8 +1461,10 @@ ItemDropData battle_item_killer_cannon[] = {
     {ITEM_MONEY_MONEY, 0, 2},
     {0},
 };
+#endif
 
 /** B. Bill Blaster: held items and drops by weight, after a first row of no item. */
+#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_super_killer_cannon[] = {
     {0, 200, 300},
     {ITEM_SUPER_SHROOM, 0, 5},
@@ -1397,6 +1472,7 @@ ItemDropData battle_item_super_killer_cannon[] = {
     {ITEM_MONEY_MONEY, 0, 2},
     {0},
 };
+#endif
 
 /** Big Bandit: holds and drops no items. */
 ItemDropData battle_item_borodo_king[] = {
@@ -1424,6 +1500,7 @@ ItemDropData battle_item_togedaruma[] = {
 };
 
 /** Dark Bristle: held items and drops by weight, after a first row of no item. */
+#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_yamitogedaruma[] = {
     {0, 200, 300},
     {ITEM_SUPER_SHROOM, 0, 10},
@@ -1431,6 +1508,7 @@ ItemDropData battle_item_yamitogedaruma[] = {
     {ITEM_HAMMERMAN, 0, 2},
     {0},
 };
+#endif
 
 /** Vivian: holds and drops no items. */
 ItemDropData battle_item_vivian1[] = {

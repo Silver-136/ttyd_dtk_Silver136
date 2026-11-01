@@ -104,7 +104,11 @@ if (!(mario->flags & MARIO_FLAG_PAPER_MODE)) {
  */
 BOOL marioSlitKeyDisable(void) {
     MarioWork* mario = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+    s32 st;
+#else
     s16 st;
+#endif
     if (!(mario->flags & MARIO_FLAG_PAPER_MODE)) {
         return TRUE;
     }
@@ -270,7 +274,11 @@ BOOL marioGetSlitFloorPos(Vec* out) {
  */
 BOOL marioChkSlitThrouh(void) {
     MarioWork* mario = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+    s32 st;
+#else
     s16 st;
+#endif
     if (mario->currMotionId != MARIO_MOTION_SLIT) {
         return FALSE;
     }
@@ -284,7 +292,11 @@ BOOL marioChkSlitThrouh(void) {
 /** TRUE on the last frame of a pass through a gap (slit state 0x52 or 0x5E). */
 BOOL marioChkSlitThrouhEnd(void) {
     MarioWork* mario = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+    s32 st;
+#else
     s16 st;
+#endif
     if (mario->currMotionId != MARIO_MOTION_SLIT) {
         return FALSE;
     }
@@ -358,7 +370,11 @@ void motSlitCancel3(void) {
  * evt_mario and mario_sbr wait on it.
  */
 BOOL marioGetMotSlitCancel3(void) {
+#if VERSION <= VERSION_DEMO_US
+    s32 st;
+#else
     s16 st;
+#endif
     BOOL r = FALSE;
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_SLIT) {
@@ -724,7 +740,11 @@ static inline void slitCamFix(void) {
 void mot_slit(void) {
     MarioWork* m = marioGetPtr();
     f32 d;
+#if VERSION <= VERSION_DEMO_US
+    s32 st;
+#else
     s16 st;
+#endif
     if (!m->controlStickSensitivity) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_SLIT_KEEP_POSE;
     }
@@ -1206,7 +1226,11 @@ m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
 void mot_slit(void) {
     MarioWork* m = marioGetPtr();
     f32 d;
+#if VERSION <= VERSION_DEMO_US
+    s32 st;
+#else
     s16 st;
+#endif
     if (!m->controlStickSensitivity) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_SLIT_KEEP_POSE;
     }

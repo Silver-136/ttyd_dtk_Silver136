@@ -2586,6 +2586,12 @@ int msg_compare(const void* a, const void* b) {
     return 0;
 }
 
+#if VERSION > VERSION_DEMO_US
+static inline const char* msgEntryText(MessageEntry* entry) {
+    return (const char*)entry->address;
+}
+#endif
+
 /**
  * Returns the text of the message with this tag, looking in the area file then the global file;
  * if neither has it, a per-language error string.
@@ -2610,9 +2616,9 @@ const char* msgSearch(const char* tag) {
                 if (index >= entry->count) {
                     break;
                 }
-                result = strcmp(tag, (const char*)entry->address + lookup[index].startaddr);
+                result = strcmp(tag, msgEntryText(entry) + lookup[index].startaddr);
                 if (!result) {
-                    return (const char*)entry->address + lookup[index].endaddr;
+                    return msgEntryText(entry) + lookup[index].endaddr;
                 }
                 if (result < 0) {
                     high = index - 1;

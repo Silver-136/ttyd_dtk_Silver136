@@ -102,6 +102,7 @@ BattleUnitKind unit_koura = {
  * 9 reacts to damage by picking the crack stage, 61 refreshes the crack poses,
  * 62 removes the shell at once and 49 plays the break animation.
  */
+#if VERSION > VERSION_DEMO_US
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_KOURA_OPEN_EVENT, koura_open},
     {UNIT_DATA_KOURA_CLOSE_EVENT, koura_close},
@@ -111,6 +112,7 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
+#endif
 
 /** Damage reduction of the shell: none (its limited HP is what makes it wear down). */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
@@ -173,6 +175,17 @@ PoseTableEntry pose_table_crack_lv2[] = {
     {POSE_TYPE_ACTION, "PKO_S_3"},
 };
 
+#if VERSION <= VERSION_DEMO_US
+static BattleDataEntry data_table[] = {
+    {UNIT_DATA_KOURA_OPEN_EVENT, koura_open},
+    {UNIT_DATA_KOURA_CLOSE_EVENT, koura_close},
+    {UNIT_DATA_DAMAGE_SUB_EVENT, damage_core},
+    {UNIT_DATA_POSE_TABLE_RESET_EVENT, pose_tbl_reset},
+    {UNIT_DATA_DESTROY_EVENT, destroy_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
+    {0, NULL},
+};
+#endif
 /**
  * Parts of the shell: part 1 is the shell itself (main target, cannot be tattled); part 2 is a hidden,
  * untargetable copy that plays the second half in the break animation.
@@ -201,6 +214,14 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(damage_event)
+    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(11), 1)
+    CALL_CHILD(PTR(btldefaultevt_Damage))
+    RETURN
+EVT_END()
+#endif
 /**
  * Opens the shell off Mario before the player phase and closes it again after.
  * Since the US release it skips both when the shell has no HP left.
@@ -287,6 +308,12 @@ EVT_BEGIN(koura_close)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(wait_event)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
+    RETURN
+EVT_END()
+#endif
 /**
  * Shell Shield damage reaction (data tag 9): picks the intact,
  * cracked or badly cracked pose table from the shell's HP (above 6, 4-6, 3 or less),
@@ -438,18 +465,22 @@ EVT_BEGIN(destroy_event)
 EVT_END()
 
 /** Hit reaction: the default damage script with no special pose (LW10 = -2); the crack poses come from damage_core. */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
 EVT_END()
+#endif
 
 /** Idle: just plays the stay pose from the current (crack-stage) pose table. */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
+#endif
 
 /** The shell never acts on its own turn; empty. */
 static EVT_BEGIN(attack_event)

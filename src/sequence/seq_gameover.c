@@ -361,6 +361,24 @@ EVT_BEGIN(evt_gameover)
 EVT_END()
 #endif
 
+#if VERSION <= VERSION_DEMO_US
+void seq_gameOverInit(SequenceWork* work) {
+    winReInit();
+    psndStopAllFadeOut();
+    psndSetReverb(0);
+    psndClearFlag(PSND_FLAG_BATTLE_START);
+    psndClearFlag(PSND_FLAG_MUTE_SFX);
+    psndClearFlag(PSND_FLAG_LETTER_BOX);
+    psndClearFlag(PSND_FLAG_LETTER_BOX_OFF);
+    marioStSystemLevel(4);
+}
+
+void seq_gameOverExit(SequenceWork* work) {
+    psndStopAllFadeOut();
+    marioStSystemLevel(0);
+}
+#endif
+
 void seq_gameOverMain(SequenceWork* work) {
     CameraEntry* camera;
     MarioWork* mario;
@@ -497,6 +515,7 @@ gp->resetType = 1;
 }
 
 #if VERSION <= VERSION_DEMO_US
+#if VERSION > VERSION_DEMO_US
 void seq_gameOverInit(SequenceWork* work) {
     winReInit();
     psndStopAllFadeOut();
@@ -512,4 +531,5 @@ void seq_gameOverExit(SequenceWork* work) {
     psndStopAllFadeOut();
     marioStSystemLevel(0);
 }
+#endif
 #endif

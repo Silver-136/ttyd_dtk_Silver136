@@ -234,6 +234,14 @@ static PoseTableEntry pose_table_1[] = {
     {POSE_TYPE_ACTION, "B_4"},
 };
 #endif
+#if VERSION <= VERSION_DEMO_US
+static BattleDataEntry data_table[] = {
+    {UNIT_DATA_DEAD_EVENT, dead_event},
+    {UNIT_DATA_EXPLOSION_EVENT_BOMZOU, explosion_event},
+    {UNIT_DATA_BATTLE_END_EVENT, end_battle_evt},
+    {0, NULL},
+};
+#endif
 /**
  * The bomb's single part: the bomb model (c_bakudan), the main target,
  * which cannot be tattled or have its HP shown.
