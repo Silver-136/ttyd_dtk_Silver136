@@ -641,15 +641,11 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
             break;
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-#else
 #if VERSION >= VERSION_US
     base = wp->entries;
     for (entry = base, i = 0; i < wp->count; i++, entry++) {
 #else
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-#endif
 #endif
         if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
             break;

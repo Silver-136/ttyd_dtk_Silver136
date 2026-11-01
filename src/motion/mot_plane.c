@@ -346,10 +346,6 @@ void mot_plane(void) {
         mp->camShiftTargetY = -70.0f;
         break;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (mp->position.y < 100.0f) {
-        mp->camShiftTargetY = __fabsf(planeData[38]);
-#else
 #if VERSION >= VERSION_US
     // US: per-map floor below which the camera stops following the plane
     if (mp->position.y < planeCamFloor()) {
@@ -358,7 +354,6 @@ void mot_plane(void) {
 #else
     if (mp->position.y < 100.0f) {
         mp->camShiftTargetY = __fabsf(planeData[38]);
-#endif
 #endif
     }
     flyMain();

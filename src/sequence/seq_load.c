@@ -1026,14 +1026,10 @@ void loadDraw(CameraId camera, void* param) {
         if (i == 5 && (wp->flags & LOAD_FLAG_NO_COPY)) {
             col = dark;
         }
-#if VERSION <= VERSION_DEMO_US
-        switch (win1[i].tex) {
-#else
 #if VERSION >= VERSION_US
         switch (win1[0][i].tex) {
 #else
         switch (win1[i].tex) {
-#endif
 #endif
             case 10:
             case 11:
@@ -1041,11 +1037,6 @@ void loadDraw(CameraId camera, void* param) {
             case 13: {
                 col.a = 0xfe;
                 winTexInit(*wp->file->data);
-#if VERSION <= VERSION_DEMO_US
-                winTexSet(0xe, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-                winTexInit(*wp->file->data);
-                winTexSet(win1[i].tex, (Vec){win1[i].x, 60.0f + win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-#else
 #if VERSION >= VERSION_US
                 winTexSet(0xe, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
                 winTexInit(*wp->file->data);
@@ -1055,19 +1046,14 @@ void loadDraw(CameraId camera, void* param) {
                 winTexInit(*wp->file->data);
                 winTexSet(win1[i].tex, (Vec){win1[i].x, 60.0f + win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #endif
-#endif
                 break;
             }
             default: {
                 winTexInit_x2(*wp->file->data);
-#if VERSION <= VERSION_DEMO_US
-                winTexSet_x2(win1[i].tex, win1[i].tex2, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-#else
 #if VERSION >= VERSION_US
                 winTexSet_x2(win1[0][i].tex, win1[0][i].tex2, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #else
                 winTexSet_x2(win1[i].tex, win1[i].tex2, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-#endif
 #endif
                 break;
             }
@@ -1360,14 +1346,6 @@ void loadDraw(CameraId camera, void* param) {
         for (i = 0; i < 2; i++) {
             if (i == wp->rumbleOffSel) {
                 winTexInit(*wp->file->data);
-#if VERSION <= VERSION_DEMO_US
-                winTexSet(0x33, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
-                winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x18, 0x33, (Vec){-4.0f, 34 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-            } else {
-                winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x18, 0x33, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-#else
 #if VERSION >= VERSION_US
                 winTexSet(0x20, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
                 winTexInit_x2(*wp->file->data);
@@ -1382,7 +1360,6 @@ void loadDraw(CameraId camera, void* param) {
             } else {
                 winTexInit_x2(*wp->file->data);
                 winTexSet_x2(i + 0x18, 0x33, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-#endif
 #endif
             }
         }

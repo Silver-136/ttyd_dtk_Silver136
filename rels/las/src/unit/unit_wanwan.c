@@ -725,8 +725,8 @@ static EVT_BEGIN(wait_sound_event2)
 EVT_END()
 #else
 EVT_END_PAD()
-
 #endif
+
 /**
  * Script helper (runs every frame): lays out the Chain-Chomp's chain.
  * The chain has nine parts; part 9 is the stake behind the chomp and parts 2..8 are the links.

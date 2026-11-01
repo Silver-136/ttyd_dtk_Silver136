@@ -3623,27 +3623,19 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_cam3d_evt_set, 0, 80, 687, 0, 70, -13, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    LOOP(2)
-#else
 #if VERSION >= VERSION_US
     LOOP(1)
 #else
     LOOP(2)
 #endif
-#endif
         CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
         CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
         WAIT_MS(100)
         CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
-#if VERSION <= VERSION_DEMO_US
-        WAIT_MS(100)
-#else
 #if VERSION >= VERSION_US
         WAIT_MS(500)
 #else
         WAIT_MS(100)
-#endif
 #endif
     END_LOOP
     // The villagers turn about in panic and the crows fly off.

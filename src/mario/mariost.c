@@ -334,14 +334,10 @@ void marioStInit(void) {
     badgeShop_init(); //Badge Shop
     yuugijou_init(); //Pianta Parlor
     johoya_init(); //information broker (johoya)
-#if VERSION <= VERSION_DEMO_US
-    gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
-#else
 #if VERSION >= VERSION_US
     gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 670 * 1024);
 #else
     gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
-#endif
 #endif
     VISetPostRetraceCallback(viPostCallback);
     romFontInit();
@@ -579,21 +575,6 @@ void viPostCallback(u32 retraceCount) {
     if (gp->retraceLocalTime > (OS_TIMER_CLOCK * (OSTime)359999999)) {
         gp->retraceLocalTime = (OS_TIMER_CLOCK * (OSTime)359999999);
     }
-#if VERSION <= VERSION_DEMO_US
-    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
-        gp->systemLv3Time += gp->retraceDeltaTime;
-    }
-    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV2)) {
-        gp->systemLv2Time += gp->retraceDeltaTime;
-    }
-    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV1)) {
-        gp->systemLv1Time += gp->retraceDeltaTime;
-    }
-    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV0)) {
-        gp->systemLv0Time += gp->retraceDeltaTime;
-    }
-    if (!gp->dvdError && !winCheck()) {
-#else
 #if VERSION >= VERSION_US
     if (!gp->dvdError && !winCheck()) {
         if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
@@ -622,7 +603,6 @@ void viPostCallback(u32 retraceCount) {
         gp->systemLv0Time += gp->retraceDeltaTime;
     }
     if (!gp->dvdError && !winCheck()) {
-#endif
 #endif
         gp->renderTime += gp->retraceDeltaTime;
         if (!gp->inBattle) {

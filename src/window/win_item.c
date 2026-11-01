@@ -644,15 +644,11 @@ s32 winItemMain(WindowWork* w) {
                 }
             }
             for (i = 0; i < 7; i++) {
-#if VERSION <= VERSION_DEMO_US
-                if (party != winPartyDt[i].partyId) {
-#else
 #if VERSION == VERSION_EU
                     if (party != winPartyDt[i].partyId && (pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_JOINED) &&
                         !(pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_AWAY)) {
 #else
                 if (party != winPartyDt[i].partyId) {
-#endif
 #endif
                     list[k++] = &winPartyDt[i];
                 }
@@ -951,15 +947,11 @@ void itemUseDisp(WinMgrEntry* entry) {
             }
         }
         for (i = 0; i < 7; i++) {
-#if VERSION <= VERSION_DEMO_US
-            if (party != winPartyDt[i].partyId) {
-#else
 #if VERSION == VERSION_EU
             if (party != winPartyDt[i].partyId && (pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_JOINED) &&
                 !(pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_AWAY)) {
 #else
             if (party != winPartyDt[i].partyId) {
-#endif
 #endif
                 list[n++] = &winPartyDt[i];
             }

@@ -3550,7 +3550,6 @@ EVT_END()
  * enemy with badgeWeapon_TatsumakiJumpInvolved.
  */
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
     CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
@@ -3561,7 +3560,6 @@ EVT_BEGIN(marioAttackEvent_DokanJump)
     CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
     RETURN
 EVT_END()
-#endif
 #endif
 EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     // Target the selected enemy: the attack is declared, the badge's FP cost paid, Merlee's attack charm used
@@ -4632,7 +4630,6 @@ EVT_END()
  * LW(12) is the weapon and LW(14) picks the badge variant of the swing.
  */
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
@@ -4654,7 +4651,6 @@ EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
     RETURN
 EVT_END()
-#endif
 #endif
 EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     // On a First Strike Mario starts at his home spot facing the target; on a normal turn the attack is declared,

@@ -711,22 +711,6 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     if (w->mario.specialCount > 0) {
         winKirinukiGX(w, 0, 10.0f + x, (20.0f + (130.0f + y)) - 20.0f, 260.0f, 80.0f);
         winIconInit();
-#if VERSION <= VERSION_DEMO_US
-        col = 10.0f + (40.0f + x);
-        rowB = 106.0f + y;
-        winIconSet(ICON_MENU_SP, (Vec){col, rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-        cx = 70.0f + y;
-        winIconSet(ICON_SAC_DEKA, (Vec){col, cx, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-        winFontInit();
-        winFontSet((Vec){10.0f + (70.0f + x), 10.0f + cx, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch("msg_menu_mario_special"));
-        winIconInit();
-        cx = 10.0f + (80.0f + x);
-        for (i = 0; i < w->mario.specialCount; i++) {
-            if (i < pouch->currentSP / 100) {
-                winIconSet(ICON_SP_ORB_1 + i, (Vec){cx + (f32)(i * 22), rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-            } else {
-                winIconSet(ICON_SP_ORB_EMPTY, (Vec){cx + (f32)(i * 22), rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-#else
 #if VERSION >= VERSION_US
         col6 = 10.0f + (40.0f + x);
         nameW3 = 106.0f + y;
@@ -757,7 +741,6 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
                 winIconSet(ICON_SP_ORB_1 + i, (Vec){cx + (f32)(i * 22), rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
             } else {
                 winIconSet(ICON_SP_ORB_EMPTY, (Vec){cx + (f32)(i * 22), rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-#endif
 #endif
             }
         }

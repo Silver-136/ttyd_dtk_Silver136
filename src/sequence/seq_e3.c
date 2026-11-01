@@ -787,15 +787,7 @@ void e3Disp(CameraId cameraId, void* param) {
         }
 
         winTexInit(*wp->handle->data);
-#if VERSION >= VERSION_US
-#if VERSION == VERSION_EU
             winTexSet(tbl[gp->language], (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#else
-        winTexSet(12, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-#endif
-#else
-        winTexSet(MODE_11, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-#endif
         pressStartGX(alpha, 0.0f, -110.0f);
         }
 #else
@@ -808,11 +800,7 @@ void e3Disp(CameraId cameraId, void* param) {
 
         winTexInit(*wp->handle->data);
 #if VERSION >= VERSION_US
-#if VERSION == VERSION_EU
-            winTexSet(tbl[gp->language], (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#else
         winTexSet(12, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-#endif
 #else
         winTexSet(MODE_11, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif

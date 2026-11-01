@@ -1702,20 +1702,14 @@ EVT_BEGIN(evt_random_battle)
         WAIT_MS(300)
         ELSE
         CALL_CHILD(PTR(evt_damage_pose))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("stg3_tou_405"), 0, STRING("乱"))
-        WAIT_MS(300)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_406_01"), 0, STRING("ガンス"))
-#else
-#if VERSION >= VERSION_US
-        CALL(evt_msg_print, 0, STRING("stg3_tou_405"), 0, STRING("乱"))
-        WAIT_MS(300)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_406_01"), 0, STRING("ガンス"))
-#else
+#if VERSION == VERSION_JP
         CALL(evt_msg_print, 0, STRING("stg3_tou_405"), 0, STRING("\227\220"))
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg3_tou_406_01"), 0, STRING("\203K\203\223\203X"))
-#endif
+#else
+        CALL(evt_msg_print, 0, STRING("stg3_tou_405"), 0, STRING("乱"))
+        WAIT_MS(300)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_406_01"), 0, STRING("ガンス"))
 #endif
         WAIT_MS(300)
     END_IF
@@ -2163,26 +2157,18 @@ EVT_BEGIN(evt_match)
     CALL(evt_npc_get_battle_result, LW(0))
     BEGIN_INLINE_EVENT
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_npc_set_stay_anim, STRING("ガンス"))
-            CALL(evt_npc_set_autotalkpose, STRING("ガンス"), STRING("S_2"), STRING("T_2"))
-        ELSE
-            CALL(evt_npc_set_stay_anim, STRING("キノシコワ"))
-            CALL(evt_npc_set_autotalkpose, STRING("キノシコワ"), STRING("S_2"), STRING("T_2"))
-#else
-#if VERSION >= VERSION_US
-            CALL(evt_npc_set_stay_anim, STRING("ガンス"))
-            CALL(evt_npc_set_autotalkpose, STRING("ガンス"), STRING("S_2"), STRING("T_2"))
-            ELSE
-            CALL(evt_npc_set_stay_anim, STRING("キノシコワ"))
-            CALL(evt_npc_set_autotalkpose, STRING("キノシコワ"), STRING("S_2"), STRING("T_2"))
-#else
+#if VERSION == VERSION_JP
             CALL(evt_npc_set_stay_anim, STRING("\203K\203\223\203X"))
             CALL(evt_npc_set_autotalkpose, STRING("\203K\203\223\203X"), STRING("S_2"), STRING("T_2"))
             ELSE
             CALL(evt_npc_set_stay_anim, STRING("\203L\203m\203V\203R\203\217"))
             CALL(evt_npc_set_autotalkpose, STRING("\203L\203m\203V\203R\203\217"), STRING("S_2"), STRING("T_2"))
-#endif
+#else
+            CALL(evt_npc_set_stay_anim, STRING("ガンス"))
+            CALL(evt_npc_set_autotalkpose, STRING("ガンス"), STRING("S_2"), STRING("T_2"))
+        ELSE
+            CALL(evt_npc_set_stay_anim, STRING("キノシコワ"))
+            CALL(evt_npc_set_autotalkpose, STRING("キノシコワ"), STRING("S_2"), STRING("T_2"))
 #endif
         END_IF
     END_INLINE_EVENT

@@ -158,8 +158,8 @@ void msgInit(void) {
 static inline const char* msgEntryText(MessageEntry* entry) {
     return entry->address->address;
 }
-
 #endif
+
 void msgLoad(const char* filename, s32 index) {
     MessageEntry* entry;
     const char* str;

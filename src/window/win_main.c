@@ -880,6 +880,11 @@ OPCODE_END_SCRIPT,
     0 // US and the US demo: a trailing zero word in the object (the JP gap_05 data word)
 };
 #endif
+
+static USER_FUNC(itemUseFunc) {
+    PartyEntry* party;
+    MarioWork* mario;
+    ItemData* item;
 #else
 #if VERSION >= VERSION_US
     LOOP(0)
@@ -897,14 +902,7 @@ EVT_END_PAD() // US: the script ends with one zero word (object 0x1E4 bytes)
 #else
 EVT_END()
 #endif
-#endif
 
-#if VERSION <= VERSION_DEMO_US
-static USER_FUNC(itemUseFunc) {
-    PartyEntry* party;
-    MarioWork* mario;
-    ItemData* item;
-#else
 USER_FUNC(itemUseFunc) {
     PartyEntry* party;
     MarioWork* mario;
@@ -1092,23 +1090,15 @@ void winFontInit(void) {
 
 /** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-#if VERSION <= VERSION_DEMO_US
-    char buf[0x400];
-#else
 #if VERSION >= VERSION_US
     char buf[0x1000];
     const char* msg = fmt;
 #else
     char buf[0x400];
 #endif
-#endif
     Mtx trans;
     Mtx scl;
     va_list args;
-#if VERSION <= VERSION_DEMO_US
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-#else
 #if VERSION >= VERSION_US
     if (strstr(fmt, "%")) {
         va_start(args, fmt);
@@ -1118,7 +1108,6 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #else
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
-#endif
 #endif
     PSMTXTrans(trans, pos.x, pos.y, pos.z);
     PSMTXScale(scl, scale.x, scale.y, scale.z);
@@ -1294,10 +1283,6 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
     FontDrawEdge();
-#if VERSION <= VERSION_DEMO_US
-    FontDrawStringMtx(trans, buf);
-    FontDrawEdgeOff();
-#else
 #if VERSION >= VERSION_US
     FontDrawStringMtx(trans, msg);
     FontDrawEdgeOff();
@@ -1324,7 +1309,6 @@ void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const cha
     FontDrawStringMtx(trans, buf);
     FontDrawEdgeOff();
 #endif
-#endif
 }
 
 /** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
@@ -1344,7 +1328,6 @@ void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
 }
 #endif
 
-#if VERSION < VERSION_US
 #if VERSION == VERSION_DEMO_JP
 void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
@@ -1371,7 +1354,6 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
     FontDrawScaleVec(scale);
     FontDrawStringVecPitch(&pos, buf, pitch);
 }
-#endif
 #endif
 
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
@@ -1416,8 +1398,8 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
 }
 #endif
 #endif
-
 #endif
+
 void winTexInit(TEXPalette* texture) {
     winTexTpl = texture;
     GXSetCullMode(GX_CULL_NONE);
@@ -1514,7 +1496,6 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
 /** winTexSet with the quad rotated rot degrees about the screen's z axis. */
 #if VERSION > VERSION_DEMO_US
 // Descriptive name (not in the symbol maps); placeholder unk_80177008, JP 0x80177008. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
 void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -1549,7 +1530,6 @@ void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
 }
 #endif
 
-#endif
 void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot) {
     Mtx trans;
     Mtx scl;
@@ -1829,12 +1809,10 @@ static void winLectureKeyMask(void) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_80175e98, JP 0x80175E98. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(lecture_key_mask_off) {
     wp->flags &= ~WINDOW_FLAG_LECTURE_KEY_MASK;
     return EVT_RETURN_DONE;
 }
-#endif
 
 /**
  * Badge tutorial input filter, run by winMain each frame:

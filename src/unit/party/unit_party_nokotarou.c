@@ -1290,7 +1290,6 @@ EVT_END()
  * Mario is hidden and untargetable inside it; if he still has a move, the shell opens again.
  */
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
 BattleUnitSetup entry_koura = {
     &unit_koura, // unitKindParams
     ALLIANCE_PLAYER, // alliance
@@ -1301,7 +1300,6 @@ BattleUnitSetup entry_koura = {
     {0}, // unitWork
     NULL, // itemDropTable
 };
-#endif
 #endif
 EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     // Find Mario as the target and pay for the move; with no target, skip to the end.

@@ -845,14 +845,10 @@ void marioLandOn(void) {
         }
         return;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (mario->controlStickSensitivity > 0.0f && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-#else
 #if VERSION >= VERSION_US
     if (mario->controlStickSensitivity > 0.0f && !(mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
 #else
     if (mario->controlStickSensitivity > 0.0f && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-#endif
 #endif
         if (mario->characterId == CHARACTER_BOWSER) {
             if (kpaFireAttackCheck()) {

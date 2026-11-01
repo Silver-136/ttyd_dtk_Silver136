@@ -431,22 +431,4 @@ void seq_gameOverMain(SequenceWork* work) {
 }
 
 #if VERSION <= VERSION_DEMO_US
-#if VERSION > VERSION_DEMO_US
-void seq_gameOverInit(SequenceWork* work) {
-    winReInit();
-    psndStopAllFadeOut();
-    psndSetReverb(0);
-    psndClearFlag(PSND_FLAG_BATTLE_START);
-    psndClearFlag(PSND_FLAG_MUTE_SFX);
-    psndClearFlag(PSND_FLAG_LETTER_BOX);
-    psndClearFlag(PSND_FLAG_LETTER_BOX_OFF);
-    marioStSystemLevel(4);
-}
-
-/** Leaves the game over sequence: fades out all sound and restarts events. */
-void seq_gameOverExit(SequenceWork* work) {
-    psndStopAllFadeOut();
-    marioStSystemLevel(0);
-}
-#endif
 #endif

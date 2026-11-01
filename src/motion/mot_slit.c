@@ -550,9 +550,6 @@ void mot_slit_post(void) {
         mapResetPaperAmbColor();
         mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
-#if VERSION <= VERSION_DEMO_US
-        allPartyForceSlitOff();
-#else
 #if VERSION >= VERSION_US
         if (mario->currMotionId != MARIO_MOTION_ROLL) {
             allPartyForceSlitOff();
@@ -561,7 +558,6 @@ void mot_slit_post(void) {
         }
 #else
         allPartyForceSlitOff();
-#endif
 #endif
     }
 }
@@ -746,11 +742,7 @@ void mot_slit(void) {
     MarioWork* m = marioGetPtr();
     f32 d;
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
     s32 st;
-#else
-    s16 st;
-#endif
 #else
     s16 st;
 #endif
@@ -823,14 +815,10 @@ void mot_slit(void) {
             }
             m->directionView = toMovedirSimple(m->displayDirection);
         }
-#if VERSION <= VERSION_DEMO_US
-        if (m->baseSpeed >= m->baseDashSpeed) {
-#else
 #if VERSION == VERSION_EU
         if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT) && m->baseSpeed >= m->baseDashSpeed) {
 #else
         if (m->baseSpeed >= m->baseDashSpeed) {
-#endif
 #endif
             slitSpeedDown(m);
         }

@@ -516,7 +516,6 @@ static f32 scale_tbl[] = {
     4.2f, 4.4f, 4.6f, 4.8f, 5.0f,
 };
 
-#if VERSION <= VERSION_DEMO_US
 f32 scroll_tbl[] = {
     0.0f, -0.14583334f, -0.29166669f, -0.43750003f, -0.58333337f,
     -0.72916669f, -0.87500006f, -1.0208334f, -1.1666667f, -1.3125f,
@@ -524,7 +523,6 @@ f32 scroll_tbl[] = {
     -2.1875f, -2.3333333f, -2.4791667f, -2.625f, -2.7708333f,
     -2.9166667f, -3.0625f, -3.2083333f, -3.3541667f, -3.5f
 };
-#endif
 #endif
 void effUltraHammerMain(EffectEntry* effect);
 void effUltraHammerDisp(CameraId camId, void* param);

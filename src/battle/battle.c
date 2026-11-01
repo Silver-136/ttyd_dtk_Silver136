@@ -68,14 +68,10 @@ BOOL battleSeqEndCheck(void) {
  */
 void BattleInit(FieldBattleInfo* info) {
     BattleWork* wp;
-#if VERSION <= VERSION_DEMO_US
-    wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
-#else
-#if VERSION >= VERSION_US
-    wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
-#else
+#if VERSION == VERSION_JP
     wp = _battleWorkPointer = (BattleWork*)_mapAlloc(sizeof(BattleWork));
-#endif
+#else
+    wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
 #endif
     memset(_battleWorkPointer, 0, sizeof(BattleWork));
     wp->curtainSfxId = -1;
@@ -182,14 +178,10 @@ void BattleEnd(void) {
     if (subMenu) {
         BattleFree(subMenu);
     }
-#if VERSION <= VERSION_DEMO_US
-    BattleFree(wp);
-#else
-#if VERSION >= VERSION_US
-    BattleFree(wp);
-#else
+#if VERSION == VERSION_JP
     _mapFree(wp);
-#endif
+#else
+    BattleFree(wp);
 #endif
     _battleWorkPointer = NULL;
 }

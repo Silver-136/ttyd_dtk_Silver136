@@ -1147,7 +1147,6 @@ EVT_END()
  * weapon (_make_madowase_weapon) that is then applied to each target; misses make the target dodge.
  */
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
 /**
  * Kiss Thief's spawned helper: runs mono_main, which draws the captured greyscale screen every frame;
  * the move deletes this event when the effect ends.
@@ -1156,7 +1155,6 @@ static EVT_BEGIN(main_evt)
     CALL(mono_main)
     RETURN
 EVT_END()
-#endif
 #endif
 EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.

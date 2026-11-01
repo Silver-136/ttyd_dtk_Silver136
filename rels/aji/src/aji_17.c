@@ -3193,21 +3193,15 @@ EVT_BEGIN(aji_17_init_evt)
             IF_INT_EQUAL(LW(15), 0)
                 CALL(evt_mario_set_party, 0, 1)
                 CALL(evt_party_run, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_pouch_mario_recovery)
-            CALL(evt_pouch_all_party_recovery)
-        END_IF
-#else
 #if VERSION >= VERSION_US
             END_IF
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
             CALL(evt_sub_status_gauge_force_update)
 #else
-                CALL(evt_pouch_mario_recovery)
-                CALL(evt_pouch_all_party_recovery)
-            END_IF
-#endif
+            CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_all_party_recovery)
+        END_IF
 #endif
             SET_VALUE(GSWF_AJI_17_LAST_SCENE_SEEN, 1)
             SPAWN_EVENT(PTR(evt_last))
@@ -3215,14 +3209,10 @@ EVT_BEGIN(aji_17_init_evt)
             SPAWN_EVENT(PTR(evt_last2))
             SET_VALUE(LW(0), PTR(bero_entry_data))
             CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(bero_case_entry)
-#else
-#if VERSION >= VERSION_US
-            CALL_CHILD(bero_case_entry)
-#else
+#if VERSION == VERSION_JP
             CALL_CHILD(PTR(bero_case_entry))
-#endif
+#else
+            CALL_CHILD(bero_case_entry)
 #endif
             RETURN
         END_IF
@@ -3236,14 +3226,10 @@ EVT_BEGIN(aji_17_init_evt)
         CASE_EQUAL(STG3_33_03_PEACH_GRODUS)
         CASE_EQUAL(STG4_15_04_SHADOW_SIRENS_DOOPLISS)
         CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_bero_info_run)
-#else
-#if VERSION >= VERSION_US
-        CALL_CHILD(evt_bero_info_run)
-#else
+#if VERSION == VERSION_JP
         CALL_CHILD(PTR(evt_bero_info_run))
-#endif
+#else
+        CALL_CHILD(evt_bero_info_run)
 #endif
     END_SWITCH
     CALL(evt_mario_get_mode, LW(0))
@@ -3256,13 +3242,6 @@ EVT_BEGIN(aji_17_init_evt)
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kurai"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kikai"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_map_playanim, STRING("kika_1"), 1, 0)
-        CALL(evt_map_playanim, STRING("kika_2"), 1, 0)
-        CALL(evt_map_playanim, STRING("kika_3"), 1, 0)
-        CALL(evt_map_playanim, STRING("moni_1"), 2, 0)
-        CALL(evt_map_playanim, STRING("moza"), 1, 0)
-#else
 #if VERSION >= VERSION_US
         CALL(evt_map_playanim, STRING("kika_1"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("kika_2"), MAP_ANIM_PLAY_LOOP, 0)
@@ -3275,7 +3254,6 @@ EVT_BEGIN(aji_17_init_evt)
         CALL(evt_map_playanim, STRING("kika_3"), 1, 0)
         CALL(evt_map_playanim, STRING("moni_1"), 2, 0)
         CALL(evt_map_playanim, STRING("moza"), 1, 0)
-#endif
 #endif
         CALL(evt_map_pauseanim, 0, STRING("moza"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)

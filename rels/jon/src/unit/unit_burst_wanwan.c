@@ -732,8 +732,8 @@ static EVT_BEGIN(wait_sound_event2)
 EVT_END()
 #else
 EVT_END_PAD()
-
 #endif
+
 /**
  * Per-frame script helper that animates the Chomp's chain (parts 2-9). args[0] = unit.
  * Part 9 is the stake, behind the chomp; when work[2] is 2 the current link layout is recorded relative to the

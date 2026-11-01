@@ -149,11 +149,6 @@ extern EvtWord end_credit_korutesu_evt[];
 extern EvtWord end_credit_para_evt[];
 extern EvtWord end_credit_batten_evt[];
 EvtWord end_credit_queen_evt[];
-
-
-
-
-
 #else
 EvtWord end_credit_npc_parade[44];
 EvtWord end_image_blend_loop[123];
@@ -1609,9 +1604,6 @@ EVT_BEGIN(end_credit_para_evt)
     CALL(evt_npc_delete, STRING("queen"))
     RETURN
 EVT_END()
-
-
-
 #else
     CALL(evt_npc_delete, STRING("para"))
     RETURN

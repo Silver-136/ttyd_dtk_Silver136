@@ -357,15 +357,11 @@ s32 nameMain(void) {
             if ((wp->flags & NAMEENT_FLAG_INPUT_ON) && gp->debugFlag == 0) {
                 if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                     off = wp->cursorX;
-#if VERSION <= VERSION_DEMO_US
-                    if (off >= 10 && wp->cursorY >= 4) {
-#else
 #if VERSION >= VERSION_US
                     // FAKE: no-op (s32) cast; the plain ?: changes the object
                     if (off >= 10 && wp->cursorY >= (s32)((u32)gp->language == LANGUAGE_JP ? 4 : 6)) {
 #else
                     if (off >= 10 && wp->cursorY >= 4) {
-#endif
 #endif
                         switch (wp->cursorY) {
                             case 4:
@@ -748,14 +744,10 @@ s32 nameMain(void) {
                 }
             }
             idx = wp->cursorX;
-#if VERSION <= VERSION_DEMO_US
-            if (idx > 9 && wp->cursorY > 3) {
-#else
 #if VERSION >= VERSION_US
             if (idx > 9 && wp->cursorY > ((u32)gp->language == LANGUAGE_JP ? 3 : 5)) {
 #else
             if (idx > 9 && wp->cursorY > 3) {
-#endif
 #endif
                 wp->x2 = 100.0f;
                 wp->y2 = (f32)(-20 - (wp->cursorY - 4) * 34);

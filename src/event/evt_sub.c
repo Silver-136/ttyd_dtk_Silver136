@@ -1992,8 +1992,8 @@ USER_FUNC(evt_sub_get_framerate) {
     evtSetValue(event, event->args[0], gp->framerate);
     return EVT_RETURN_DONE;
 }
-
 #endif
+
 /** Starts the on-screen countdown timer: args[0] is the time limit, args[1] the restart time. */
 USER_FUNC(evt_sub_countdown_start) {
     EvtWord* args = event->args;

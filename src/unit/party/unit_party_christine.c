@@ -1491,14 +1491,6 @@ static StatusVulnerability regist = {
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 #if VERSION <= VERSION_DEMO_US
-#if VERSION > VERSION_DEMO_US
-PoseTableEntry pose_table_dictionary_page[] = {
-    {POSE_TYPE_NORMAL, "ZYO_Z_1"},
-    {31, "ZYO_Z_1"},
-    {POSE_TYPE_DAMAGE, "ZYO_Z_1"},
-    {BTL_POSE_STAY_DEFAULT, "ZYO_Z_1"},
-};
-#endif
 #endif
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(attack_event)

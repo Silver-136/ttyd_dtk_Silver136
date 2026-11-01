@@ -94,10 +94,6 @@ void effMajinaiMain(EffectEntry* effect) {
             map->entries[0].flags |= 8;
             if (!gp->inBattle) {
                 mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-                for (i = 0; i < 5; i++) {
-                    animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
-#else
 #if VERSION == VERSION_EU
                 for (i = 0; i < 3; i++) {
                     if (mario->paperAnimGroupId[i] != -1) {
@@ -106,7 +102,6 @@ void effMajinaiMain(EffectEntry* effect) {
 #else
                 for (i = 0; i < 5; i++) {
                     animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
-#endif
 #endif
                 }
             } else {
@@ -139,10 +134,6 @@ void effMajinaiMain(EffectEntry* effect) {
             map->entries[0].flags |= 8;
             if (!gp->inBattle) {
                 mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-                for (i = 0; i < 5; i++) {
-                    animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
-#else
 #if VERSION == VERSION_EU
                 for (i = 0; i < 3; i++) {
                     if (mario->paperAnimGroupId[i] != -1) {
@@ -151,7 +142,6 @@ void effMajinaiMain(EffectEntry* effect) {
 #else
                 for (i = 0; i < 5; i++) {
                     animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
-#endif
 #endif
                 }
             } else {

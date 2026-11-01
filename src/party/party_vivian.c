@@ -58,8 +58,8 @@ void marioForceVivianAnime(void) {
     mario->poseTime = 24;
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->poseTime);
 }
-
 #endif
+
 void mot_vivian(void) {
     MarioWork* mario = marioGetPtr();
 

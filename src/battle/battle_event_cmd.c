@@ -7105,8 +7105,8 @@ USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
     unit->hitEventCode = (void*)evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;
 }
-
 #endif
+
 #if VERSION <= VERSION_DEMO_US
 USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
     BattleWork* wp = _battleWorkPointer;

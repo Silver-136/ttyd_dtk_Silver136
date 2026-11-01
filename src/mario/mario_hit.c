@@ -2099,12 +2099,6 @@ void marioCheckWall(f32 dx, f32 dz) {
         } else {
             mario->frontWallDist = h;
             mario->hitobjWall = hit;
-#if VERSION <= VERSION_DEMO_US
-            if (++mario->wallPushTimer >= 20) {
-                mario->wallPushTimer = 20;
-                if (!(hitGetAttr(hit) & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
-                    mario->hitobjPush = hit;
-#else
 #if VERSION >= VERSION_US
             {
                 s32 lim = strncmp(hitGetName(hit), "dokan", 5) != 0 ? 20 : 10;
@@ -2118,7 +2112,6 @@ void marioCheckWall(f32 dx, f32 dz) {
                 mario->wallPushTimer = 20;
                 if (!(hitGetAttr(hit) & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                     mario->hitobjPush = hit;
-#endif
 #endif
                 }
             }

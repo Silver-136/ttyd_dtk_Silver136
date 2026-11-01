@@ -965,12 +965,10 @@ static EVT_BEGIN(piders_attack_common_event1)
         END_IF
     END_IF
 #else
-#if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(1))
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
-#endif
 #endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, 4, 0, 110, 5)
@@ -1030,12 +1028,10 @@ static EVT_BEGIN(piders_attack_common_event1_2)
         END_IF
     END_IF
 #else
-#if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(1))
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
-#endif
 #endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WINDUP_ANGLE, LW(0))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)

@@ -1027,11 +1027,6 @@ void npcMain(void) {
                                     trig = 0;
                                 } else {
                                     f32 angleToMario;
-#if VERSION <= VERSION_DEMO_US
-                                    dist = sqrtf(dist);
-                                    if (dist > 0.25f * entry->searchRange) {
-                                        if (dist > entry->searchRange) {
-#else
 #if VERSION >= VERSION_US
                                     if (sd > 0.25f * entry->searchRange) {
                                         if (sd > entry->searchRange) {
@@ -1039,7 +1034,6 @@ void npcMain(void) {
                                     dist = sqrtf(dist);
                                     if (dist > 0.25f * entry->searchRange) {
                                         if (dist > entry->searchRange) {
-#endif
 #endif
                                             trig = 0;
                                             goto done14;

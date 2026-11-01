@@ -937,8 +937,8 @@ void cloudResetAt() {
         marioCamZoomOffReq2(600);
     }
 }
-
 #endif
+
 void cloudGetAt(Vec* position) {
     MarioWork* mario = marioGetPtr();
     u32 partyId = marioGetPartyId();
