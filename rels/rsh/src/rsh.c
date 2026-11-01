@@ -284,14 +284,6 @@ EVT_END()
  * the partner comments in cabin 5 at the blanket and conductor stages,
  * the BGM dip in cabins 5 and 4 for the ghost scenes, and Zip Toad becoming touchable.
  */
-/**
- * Runs when Mario walks into a cabin door (LW(0) is the door table of evt_rsh_door_entry):
- * locks input, plays the door slide sound and animation, walks Mario in,
- * then plays the page-turn capture while the cabin is revealed.
- * Also plays the story reactions that happen on entering a cabin:
- * the partner comments in cabin 5 at the blanket and conductor stages,
- * the BGM dip in cabins 5 and 4 for the ghost scenes, and Zip Toad becoming touchable.
- */
 EVT_BEGIN(evt_rsh_door_open)
     SET_INT_READ_ADDR(LW(0))
     READ_INT(LW(1))

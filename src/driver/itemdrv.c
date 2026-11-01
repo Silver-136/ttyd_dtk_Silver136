@@ -217,22 +217,16 @@ void itemCoinDrop(Vec* position) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Returns whether Mario may pick up this item now:
  * not in water or lava, Mario has control (later versions skip that for Bowser when his stage flag bit 0 is
  * set), no map event or other sequence runs, Mario is not on the boat or plane panel, hiding with Vivian,
  * taking damage or holding Koops's item, no other get is in progress, and field battle state allows it.
  */
+#if VERSION <= VERSION_DEMO_US
 static BOOL itemGetCheck(ItemEntry* entry) {
 s32 fbatMode = fbatGetPointer()->mode;
 #else
-/**
- * Returns whether Mario may pick up this item now:
- * not in water or lava, Mario has control (later versions skip that for Bowser when his stage flag bit 0 is
- * set), no map event or other sequence runs, Mario is not on the boat or plane panel, hiding with Vivian,
- * taking damage or holding Koops's item, no other get is in progress, and field battle state allows it.
- */
 BOOL itemGetCheck(ItemEntry* entry) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -314,11 +308,9 @@ BOOL itemGetCheck(ItemEntry* entry) {
 
 /** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
 #if VERSION <= VERSION_DEMO_US
-/** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
 static BOOL itemGetNokoCheck(ItemEntry* entry) {
 s32 fbatMode = fbatGetPointer()->mode;
 #else
-/** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
 BOOL itemGetNokoCheck(ItemEntry* entry) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -593,21 +585,15 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Spawns field item itemId at (x, y, z) named name (generated if NULL);
  * type (ItemEntryType) picks how it appears and how long it stays,
  * collectFlag is the GSWF or LSWF that marks it taken (-1 none), pickupEvt runs on collection.
  * When the table is full a dropped coin, heart or flower is replaced. Returns the entry or NULL.
  */
+#if VERSION <= VERSION_DEMO_US
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt, f32 x, f32 y, f32 z) {
 #else
-/**
- * Spawns field item itemId at (x, y, z) named name (generated if NULL);
- * type (ItemEntryType) picks how it appears and how long it stays,
- * collectFlag is the GSWF or LSWF that marks it taken (-1 none), pickupEvt runs on collection.
- * When the table is full a dropped coin, heart or flower is replaced. Returns the entry or NULL.
- */
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z) {
 #endif
     ItemWork* wp = itemGetWork();
@@ -657,7 +643,6 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
 #if VERSION <= VERSION_DEMO_US
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
 #else
-
 #if VERSION >= VERSION_US
     base = wp->entries;
     for (entry = base, i = 0; i < wp->count; i++, entry++) {
@@ -1115,12 +1100,11 @@ void winHelpDisp(WinMgrEntry* win) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** the demo has no badge-full message */
+#if VERSION <= VERSION_DEMO_US
 static void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry;
 #else
-/** the demo has no badge-full message */
 void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     BOOL isBadge = FALSE;
@@ -1155,19 +1139,14 @@ void winFullDisp(WinMgrEntry* win) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * The demo's item-get sequence: no retail sub-states 2 (control off) and 8 (motion abort),
  * so retail 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
  * and the icon flags are 0x40/0x100 where retail has 0x100/0x200.
  */
+#if VERSION <= VERSION_DEMO_US
 static void itemseq_GetItem(ItemEntry* entry) {
 #else
-/**
- * The demo's item-get sequence: no retail sub-states 2 (control off) and 8 (motion abort),
- * so retail 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
- * and the icon flags are 0x40/0x100 where retail has 0x100/0x200.
- */
 void itemseq_GetItem(ItemEntry* entry) {
 #endif
     ItemWork* wp = itemGetWork();
@@ -1607,11 +1586,6 @@ static s32 _move_dir_1090;
 #if VERSION <= VERSION_DEMO_US
 static void itemseq_Bound(ItemEntry* entry) {
 #else
-/**
- * Moves a bouncing or falling item: gravity, bouncing off floors (with fewer, lower bounces each time),
- * walls and ceilings, landing on map objects, water and lava, and despawning where needed;
- * becomes resting when it stops.
- */
 void itemseq_Bound(ItemEntry* entry) {
 #endif
     static s32 _move_dir;

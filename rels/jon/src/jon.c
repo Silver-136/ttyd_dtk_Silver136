@@ -2005,11 +2005,6 @@ EVT_END()
  * with the pipe-appear sound, once the floor's enemy is beaten. Controls are locked meanwhile.
  * Spawned from enemy_setup.
  */
-/**
- * Raises the exit pipe (a_dokan_1 / dokan_1_s) 30 units out of the floor over half a second,
- * with the pipe-appear sound, once the floor's enemy is beaten. Controls are locked meanwhile.
- * Spawned from enemy_setup.
- */
 EVT_BEGIN(dokan_open)
 #if VERSION <= VERSION_DEMO_US
     WAIT_MS(1000)

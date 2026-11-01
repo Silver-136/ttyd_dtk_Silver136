@@ -2361,11 +2361,6 @@ EVT_END()
  * if he has some she moves next to him, says bunny_teresa_91 with the count,
  * stores them with yuugijou_montemedal_keep, and returns to her place.
  */
-/**
- * Bunny Teresa takes care of the medals Mario carries when he leaves the parlor machines:
- * if he has some she moves next to him, says bunny_teresa_91 with the count,
- * stores them with yuugijou_montemedal_keep, and returns to her place.
- */
 EVT_BEGIN(exchange_keep_sub)
     CALL(yuugijou_get_takeoutflag, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -3088,13 +3083,6 @@ static inline Vec fall_vel0(void) { Vec v = {0.0f, 10.0f, 0.0f}; return v; } /* 
  * Each play costs one medal and starts the machine's phase 1;
  * it loops until Mario declines, then the camera returns.
  */
-/**
- * Common talk script of slot machine number LW(8):
- * positions the camera next to the machine, shows how many medals Mario has,
- * and asks to play (slot_mess_00, slot_mess_01 if he has none).
- * Each play costs one medal and starts the machine's phase 1;
- * it loops until Mario declines, then the camera returns.
- */
 EVT_BEGIN(slot_set)
     CALL(goryuugijo_get_dataadr, 1, LW(0))
     CALL(evt_goryuugijo_set_nowslot, LW(0), LW(8))
@@ -3297,12 +3285,6 @@ EVT_BEGIN(ranking_set)
     RETURN
 EVT_END()
 
-/**
- * Talk event of the Pianta Changer (the exchange counter):
- * offers to buy Monte medals with coins at the prices of the current chapter (exchange_mess_00 to 05).
- * The price list is a menu; the coins are taken and the medals are added to the counter;
- * also first returns any medals Mario carries.
- */
 /**
  * Talk event of the Pianta Changer (the exchange counter):
  * offers to buy Monte medals with coins at the prices of the current chapter (exchange_mess_00 to 05).
@@ -7156,21 +7138,15 @@ void kuji_bomb_055_callback(s32 type, MsgWinData** work) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Script helper that picks the lottery prize for rank args[0]:
  * ranks 0 and 1 give a first-win item the first time (Power Plus or Lucky Day in the final versions,
  * Mushroom in the demos) and then Zess Dynamite or Zess Special, rank 2 gives an Ultra Shroom,
  * rank 3 a Life Shroom, otherwise a Mushroom. The item goes to args[1].
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(kuzi_get_keihin) {
 #else
-/**
- * Script helper that picks the lottery prize for rank args[0]:
- * ranks 0 and 1 give a first-win item the first time (Power Plus or Lucky Day in the final versions,
- * Mushroom in the demos) and then Zess Dynamite or Zess Special, rank 2 gives an Ultra Shroom,
- * rank 3 a Life Shroom, otherwise a Mushroom. The item goes to args[1].
- */
 USER_FUNC(kuzi_get_keihin) {
 #endif
     EvtWord* args = event->args;

@@ -149,13 +149,6 @@ static const WinLangTbl winLangTbl;
  * runs winRootMain, and on close restores control.
  * It also starts the item-use and Ragged Diary scenes, swaps partners, and opens the Pianta Parlor window.
  */
-/**
- * Per-frame pause menu driver.
- * In the field it reads the pad, opens the menu on Start
- * or a D-pad shortcut (Party, Items, Badges, Journal tabs), freezes Mario and partners, loads win.tpl,
- * runs winRootMain, and on close restores control.
- * It also starts the item-use and Ragged Diary scenes, swaps partners, and opens the Pianta Parlor window.
- */
 void winMain(void) {
     MarioWork* mario;
     s32 i;
@@ -923,8 +916,8 @@ USER_FUNC(itemUseFunc) {
     MarioWork* mario;
     ItemData* item;
     EffectEntry* eff;
-
 #endif
+
     item = &itemDataTable[event->lwData[10]];
     mario = marioGetPtr();
     party = partyGetPtr(0);
@@ -1012,36 +1005,27 @@ USER_FUNC(itemUseFunc) {
     }
     return EVT_RETURN_BLOCK;
 }
+/** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-/** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 USER_FUNC(itemUseFunc2) {
 #else
-
-/** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 static USER_FUNC(itemUseFunc2) {
 #endif
 #else
-
-/** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
-/** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 USER_FUNC(itemUseFunc2) {
 #endif
     statusWinForceOff();
     return EVT_RETURN_DONE;
 }
+/** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-/** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
 USER_FUNC(famicom_check) {
 #else
-
-/** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
 static USER_FUNC(famicom_check) {
 #endif
 #else
-
-/** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
 USER_FUNC(famicom_check) {
 #endif
     EvtWord* args = event->args;
@@ -1053,19 +1037,14 @@ USER_FUNC(famicom_check) {
     }
     return EVT_RETURN_DONE;
 }
+/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 USER_FUNC(party_color) {
 #else
-
-/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 static USER_FUNC(party_color) {
 #endif
 #else
-
-/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
-/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 USER_FUNC(party_color) {
 #endif
     EvtWord* args = event->args;
@@ -1073,22 +1052,18 @@ USER_FUNC(party_color) {
     evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
     return EVT_RETURN_DONE;
 }
+
 #if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
 /**
  * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
  * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
  */
+#if VERSION == VERSION_DEMO_JP
 USER_FUNC(cam_r) {
 #else
-/**
- * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
- * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
- */
 static USER_FUNC(cam_r) {
 #endif
 #else
-
 // Descriptive name (not in the symbol maps); placeholder unk_80177cf8, JP 0x80177CF8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 USER_FUNC(all_party_slit_off) {
@@ -1097,10 +1072,6 @@ USER_FUNC(all_party_slit_off) {
 }
 #endif
 
-/**
- * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
- * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
- */
 /**
  * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
  * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
@@ -1123,7 +1094,6 @@ USER_FUNC(cam_r) {
 }
 
 /** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
-/** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
 BOOL winGhostDiaryChk(void) {
     if (wp->menuState == WIN_MENU_DIARY_WAIT) {
         return TRUE;
@@ -1140,12 +1110,10 @@ const char* winMainStrippedTpl(void) {
 }
 
 /** Prepares the font renderer for the winFontSet* calls that follow. */
-/** Prepares the font renderer for the winFontSet* calls that follow. */
 void winFontInit(void) {
     FontDrawStart();
 }
 
-/** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
 /** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION <= VERSION_DEMO_US
@@ -1165,7 +1133,6 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
 #else
-
 #if VERSION >= VERSION_US
     if (strstr(fmt, "%")) {
         va_start(args, fmt);
@@ -1214,7 +1181,6 @@ void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* f
 #endif
 }
 
-/** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
 /** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION >= VERSION_US
@@ -1386,7 +1352,6 @@ void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const cha
 }
 
 /** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
-/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
     Mtx trans;
     Mtx scl;
@@ -1437,9 +1402,7 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
 #endif
 
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
-/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 #if VERSION <= VERSION_DEMO_US
-/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 #if VERSION != VERSION_DEMO_JP
     va_list args;
     va_start(args, fmt);
@@ -1495,10 +1458,6 @@ void winTexInit(TEXPalette* texture) {
  * Draws texture textureId of the current TPL centred at translate, sized texture size times scale,
  * tinted by color in 2D camera space. Alpha below 255 blends; opaque draws use an alpha test instead.
  */
-/**
- * Draws texture textureId of the current TPL centred at translate, sized texture size times scale,
- * tinted by color in 2D camera space. Alpha below 255 blends; opaque draws use an alpha test instead.
- */
 void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -1550,7 +1509,6 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
 }
 /** winTexSet with the quad rotated rot degrees about the screen's z axis. */
 #if VERSION > VERSION_DEMO_US
-
 // Descriptive name (not in the symbol maps); placeholder unk_80177008, JP 0x80177008. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
@@ -1587,7 +1545,6 @@ void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
 }
 #endif
 
-/** winTexSet with the quad rotated rot degrees about the screen's z axis. */
 /** winTexSet with the quad rotated rot degrees about the screen's z axis. */
 #endif
 void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot) {
@@ -1648,11 +1605,6 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
  * stage 1 multiplies by the tint and takes the second texture's alpha,
  * so the second texture works as a mask (used for menu tab labels).
  */
-/**
- * Two-texture variant of winTexInit: stage 0 takes the first texture's color,
- * stage 1 multiplies by the tint and takes the second texture's alpha,
- * so the second texture works as a mask (used for menu tab labels).
- */
 void winTexInit_x2(TEXPalette* texture) {
     winTexInit(texture);
     GXSetNumTexGens(2);
@@ -1683,7 +1635,6 @@ void winTexInit_x2(TEXPalette* texture) {
     GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
 }
 
-/** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
 /** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
 void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
@@ -1732,15 +1683,10 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
 }
 
 /** Sets up GX for winIconSet (no TPL; icons come from the icon driver). */
-/** Sets up GX for winIconSet (no TPL; icons come from the icon driver). */
 void winIconInit(void) {
     winTexInit(NULL);
 }
 
-/**
- * Sets up GX so the following winIconSet draws a grayscale icon (R, G and B summed at 1/3 each);
- * used for badges that cost more BP than Mario has left.
- */
 /**
  * Sets up GX so the following winIconSet draws a grayscale icon (R, G and B summed at 1/3 each);
  * used for badges that cost more BP than Mario has left.
@@ -1784,10 +1730,6 @@ void winIconGrayInit(void) {
     GXSetTevSwapMode(GX_TEVSTAGE3, GX_TEV_SWAP0, GX_TEV_SWAP0);
 }
 
-/**
- * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
- * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
- */
 /**
  * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
  * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
@@ -1958,10 +1900,6 @@ void winLectureKeyMask(void) {
  * Starts the badge tutorial menu (from Rogueport, gor_02):
  * sets the tutorial flag, which opens the menu straight away, and starts evt_lecture_msg.
  */
-/**
- * Starts the badge tutorial menu (from Rogueport, gor_02):
- * sets the tutorial flag, which opens the menu straight away, and starts evt_lecture_msg.
- */
 void winLectureOn(void) {
     wp->flags |= WINDOW_FLAG_LECTURE;
 #if VERSION > VERSION_DEMO_US
@@ -1971,7 +1909,6 @@ void winLectureOn(void) {
     wp->lectureEvent = evtEntry(evt_lecture_msg, 0, 0);
 }
 
-/** TRUE while the badge tutorial's text script is still running; once it ends, clears the tutorial flag. */
 /** TRUE while the badge tutorial's text script is still running; once it ends, clears the tutorial flag. */
 BOOL winLectureCheck(void) {
     if ((wp->flags & WINDOW_FLAG_LECTURE) && evtCheckID(wp->lectureEvent->eventId)) {

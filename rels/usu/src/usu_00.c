@@ -1679,11 +1679,6 @@ EVT_END()
  * and Vivian is not the partner, the crow talks ("kpa_stg5_009_7_1" in the Bowser interlude,
  * "stg4_jin_152" otherwise); GW(0) gates repeats.
  */
-/**
- * Background watcher for crows A and B: when Mario is near (area depends on his mode)
- * and Vivian is not the partner, the crow talks ("kpa_stg5_009_7_1" in the Bowser interlude,
- * "stg4_jin_152" otherwise); GW(0) gates repeats.
- */
 EVT_BEGIN(usu00_crowAB_talk_event)
     // Wait until this crow pair is allowed to talk again.
     SET_VALUE(LW(15), 0)
@@ -1817,7 +1812,6 @@ EVT_BEGIN(usu00_crowAB_talk_event)
     RETURN
 EVT_END()
 
-/** Background watcher for crows C, D and E; same as the A/B watcher but using GW(1) as its gate. */
 /** Background watcher for crows C, D and E; same as the A/B watcher but using GW(1) as its gate. */
 EVT_BEGIN(usu00_crowCDE_talk_event)
     // Wait until this crow trio is allowed to talk again.
@@ -4036,11 +4030,6 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
-/**
- * Map init script of Twilight Town's main street:
- * picks BGM by story progress, registers the pipe, doors and bero exits, spawns NPCs and items,
- * and starts Chapter 4 and Bowser interlude cutscenes.
- */
 /**
  * Map init script of Twilight Town's main street:
  * picks BGM by story progress, registers the pipe, doors and bero exits, spawns NPCs and items,

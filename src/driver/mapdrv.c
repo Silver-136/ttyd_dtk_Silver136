@@ -256,12 +256,6 @@ void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
 #if VERSION <= VERSION_DEMO_US
 static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 #else
-/**
- * Takes the next free MapObject of map entry index and fills it from joint:
- * local and world matrices (rotation in degrees), blend mode from the draw mode and the materials,
- * group and shadow flags, centre, and the bounding-box cull flag
- * when its centre-to-corner distance is under about 141 units. Panics on a joint without a draw mode.
- */
 MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 #endif
     MapWork* wp = &mapWork[activeGroup];
@@ -443,12 +437,6 @@ static void mapResetPaperCraftAmbColor(void);
 #if VERSION <= VERSION_DEMO_US
 static void makeDisplayList(BOOL group) {
 #else
-/**
- * Records the material setup and cull mode of each eligible part of map entry group into GX display lists,
- * in two passes (size, then copy into one buffer at the heap tail).
- * Only for ver1.02 map files, and skips light-masked parts and Mario's shadow receivers
- * while a character shadow projection is on.
- */
 void makeDisplayList(BOOL group) {
 #endif
     static const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
@@ -857,11 +845,6 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     u32 r4, r7, r0;
     u32 sizeCheck;
 #else
-/**
- * Loads map into entry group of wp: map.dat and texture.tpl from the archive or the disc,
- * the joint tree as map and hit objects (scaled x10), the map's lights and fog, the camera road (field only),
- * textures, bounding box corners, animation table and display lists.
- */
 void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     MapFileInfo* info;
     int i;
@@ -1045,7 +1028,6 @@ void mapUnLoad(void) {
     int i;
     MapWork* wp;
 #if VERSION > VERSION_DEMO_US
-
     sysWaitDrawSync();
 #endif
     entry = mapWork->entries;
@@ -1146,10 +1128,6 @@ void mapLoad(const char* map) {
 BOOL mapPreLoad(const char* map) {
     FileEntry* file = (FileEntry*)fileAsyncf(0, NULL, "%s/b/%s", getMarioStDvdRoot(), map);
 #else
-/**
- * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
- * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
- */
 void bmapUnLoad(void) {
     MapEntry* entry2;
     MapEntry* entry;
@@ -1366,7 +1344,6 @@ void bmapLoad(const char* map, const char* map2) {
     void* arc2;
     u32 header2;
 #else
-
     sysWaitDrawSync();
 #endif
     activeGroup = 0;
@@ -1860,11 +1837,6 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
  * and rate (looping or stopping at the end, handling pause and resume) and applies its joint, material, alpha,
  * light and light colour tracks, then recalculates the changed object matrices.
  */
-/**
- * Per-frame map update from mariost: advances each playing map animation by its clock
- * and rate (looping or stopping at the end, handling pause and resume) and applies its joint, material, alpha,
- * light and light colour tracks, then recalculates the changed object matrices.
- */
 void mapMain(void) {
     MapObject* o;
     f32 cur;
@@ -1884,7 +1856,6 @@ void mapMain(void) {
     for (i = 0; i < wp->entries[0].count; i++) {
         entry = &wp->entries[i];
 #else
-
     entry = wp->entries;
     for (i = 0; i < wp->entries[0].count; entry++, i++) {
 #endif
@@ -2358,7 +2329,6 @@ void mapDisp(void) {
     MapFileJoint* joint;
     BOOL clipped;
 #if VERSION > VERSION_DEMO_US
-
     if (disableMapDraw) {
         return;
     }
@@ -3907,10 +3877,6 @@ void mapObjFlagOff(const char* name, u32 flags) {
 #if VERSION <= VERSION_DEMO_US
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
 #else
-/**
- * Sets flags on obj and its whole subtree, and its later siblings when doNext;
- * retail versions skip the display-list flag on objects without a display list.
- */
 void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
 #endif

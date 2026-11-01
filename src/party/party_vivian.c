@@ -38,7 +38,6 @@ s32 vivian_cancel_req;
  * clears his wall and push collision; nothing runs on later frames.
  */
 #if VERSION > VERSION_DEMO_US
-
 #pragma explicit_zero_data on
 /**
  * Re-applies Mario's sunk-into-the-shadow look (the "p_bibi" paper pose M_B_3 / PM_B_1, held at frame 24)
@@ -208,7 +207,6 @@ void vivianUnhold(PartyEntry* party) {
 }
 
 #if VERSION <= VERSION_DEMO_US
-
 /**
  * Moves Vivian's tail point (trailPos) a tenth of the way toward her each frame,
  * keeping it within VIVIAN_FOLLOW_DIST (30 units in the US and PAL releases, 22 before);

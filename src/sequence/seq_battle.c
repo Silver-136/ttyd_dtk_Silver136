@@ -490,7 +490,6 @@ BOOL battle_init(void) {
 #endif
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Tears the battle down and restores the field:
  * frees battle data and drivers, restores the camera mode and field NPCs,
@@ -498,15 +497,9 @@ BOOL battle_init(void) {
  * and resumes the field BGM and ambience unless heading to game over (or, in later versions,
  * resumes the time-bomb music in the Great Tree).
  */
+#if VERSION <= VERSION_DEMO_US
 static void battle_exit(void) {
 #else
-/**
- * Tears the battle down and restores the field:
- * frees battle data and drivers, restores the camera mode and field NPCs,
- * resumes field events and Mario's control, resets the paper-craft light,
- * and resumes the field BGM and ambience unless heading to game over (or, in later versions,
- * resumes the time-bomb music in the Great Tree).
- */
 void battle_exit(void) {
 #endif
     LightEntry* light;

@@ -438,7 +438,6 @@ static BattleDataEntry data_table[] = {
 
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 #if VERSION > VERSION_DEMO_US
-/** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -449,7 +448,6 @@ EVT_END()
 
 /** The bomb never acts on its own turn; it just returns to its idle loop. */
 #if VERSION > VERSION_DEMO_US
-/** The bomb never acts on its own turn; it just returns to its idle loop. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

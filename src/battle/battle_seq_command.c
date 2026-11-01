@@ -695,6 +695,7 @@ BattleCheckPartyEntry _checkPartyTable[8] = {
     {UNIT_BOBBERY, "btl_cmd_pt_sanders", ICON_PARTY_BOBBERY, "btl_hlp_cmd_operation_party6"},
     {UNIT_MS_MOWZ, "btl_cmd_pt_chuchurina", ICON_PARTY_MS_MOWZ, "btl_hlp_cmd_operation_party7"},
 };
+
 #if VERSION <= VERSION_DEMO_US
 /**
  * Started by BattleCommandInput when the player picks a greyed-out command:

@@ -1404,7 +1404,6 @@ USER_FUNC(yuuminigame1_floor_chk) {
     }
     return EVT_RETURN_DONE;
 }
-
 #endif
 
 /** Init callback for minigame 1: starts the coin view event and marks the opening cutscene as pending. */

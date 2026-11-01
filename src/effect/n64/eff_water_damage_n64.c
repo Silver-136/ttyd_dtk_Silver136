@@ -253,19 +253,14 @@ void effWaterDamageMain(EffectEntry* effect) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Draws each droplet as a camera-facing 8x8 quad of texture 0x89 (frame cycling every two retraces) in pale cyan
  * with a refraction layer: the demos copy the screen each frame and sample it shifted by the droplet's position,
  * the retail builds use the small built-in water_damage_tex instead.
  */
+#if VERSION <= VERSION_DEMO_US
 static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-/**
- * Draws each droplet as a camera-facing 8x8 quad of texture 0x89 (frame cycling every two retraces) in pale cyan
- * with a refraction layer: the demos copy the screen each frame and sample it shifted by the droplet's position,
- * the retail builds use the small built-in water_damage_tex instead.
- */
 void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffWaterDamageN64Work* work;

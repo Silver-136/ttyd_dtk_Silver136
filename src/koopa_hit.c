@@ -19,7 +19,6 @@
 #include <math.h>
 
 /** Slope of a floor normal: its angle from vertical in degrees. */
-/** Slope of a floor normal: its angle from vertical in degrees. */
 #if VERSION <= VERSION_DEMO_US
 #include "mario/mario_balloon.h"
 #include "mario/mario_hit.h"

@@ -465,11 +465,6 @@ void marioSlitForceCancel(void) {
  * step-up); otherwise restores him and the partners like marioSlitForceCancel (in the US release only once the
  * turn into paper has finished; when switching to Tube Mode the partners turn back by request).
  */
-/**
- * Cleanup when the slit motion ends: nothing if the next motion keeps Mario paper (walk, dash, jumps, falls,
- * step-up); otherwise restores him and the partners like marioSlitForceCancel (in the US release only once the
- * turn into paper has finished; when switching to Tube Mode the partners turn back by request).
- */
 void mot_slit_post(void) {
     MarioWork* mario = marioGetPtr();
 #if VERSION <= VERSION_DEMO_US
@@ -741,12 +736,6 @@ static inline void slitCamFix(void) {
 #define SLITSTOP2(m)
 #endif
 
-/**
- * Paper Mode motion (paper curse, hold R): Mario turns sideways and thin, walks and runs slowly,
- * slips through narrow gaps and bars (states 0x50-0x52, walls off while he passes),
- * squeezes through cracks (0x5A-0x5E), and turns back when R is released and there is room.
- * Scripts end it with their own animations (0x6E, 0x78).
- */
 /**
  * Paper Mode motion (paper curse, hold R): Mario turns sideways and thin, walks and runs slowly,
  * slips through narrow gaps and bars (states 0x50-0x52, walls off while he passes),

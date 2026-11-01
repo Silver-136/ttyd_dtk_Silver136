@@ -531,10 +531,6 @@ s32 senin_event_erumospos[] = {
  * Sets up the crowd of 95 sailors on the hidden dock (mass NPCs with the sailor animation table) from
  * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka.
  */
-/**
- * Sets up the crowd of 95 sailors on the hidden dock (mass NPCs with the sailor animation table) from
- * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka.
- */
 EVT_BEGIN(senin_event)
     // The crew is driven out: Mario loses control and the dock crowd is placed.
     CALL(evt_mario_key_onoff, 0)

@@ -249,12 +249,6 @@ static HitDamageReturn dmgRetPoint[] = {
  * and before STG8_06_MOVING_PLANETS it hides the lower floor and pipe;
  * afterwards it switches to the moved layout with the west door leading to a different room (w_bero_mapchg).
  */
-/**
- * Map init script for las_23, a junction room of the Palace:
- * music (first or third Palace theme by story), the doors, return points for the bottomless pits,
- * and before STG8_06_MOVING_PLANETS it hides the lower floor and pipe;
- * afterwards it switches to the moved layout with the west door leading to a different room (w_bero_mapchg).
- */
 EVT_BEGIN(las_23_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))

@@ -613,12 +613,6 @@ EVT_END()
  * it takes pose type 47 and shows a toge_flush spark just above the top of the stack (its height scaled by its
  * size), then waits 60 frames.
  */
-/**
- * Data-table events 37 and 39, run by btldefaultevt_Damage for damage codes 31 and 33,
- * which BattleCheckCounter gives the Pokey when its top or front spikes hurt the attacker:
- * it takes pose type 47 and shows a toge_flush spark just above the top of the stack (its height scaled by its
- * size), then waits 60 frames.
- */
 static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 47)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))

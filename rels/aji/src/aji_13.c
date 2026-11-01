@@ -1188,26 +1188,20 @@ USER_FUNC(hit_group_chk) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Script function that keeps the camera following Mario's height:
  * when Mario is in background mode, the camera's Y-follow is off
  * and he is on the ground (in the JP and later releases), it turns Y-follow back on. Blocks forever.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(bg_cam_chk) {
 #else
-/**
- * Script function that keeps the camera following Mario's height:
- * when Mario is in background mode, the camera's Y-follow is off
- * and he is on the ground (in the JP and later releases), it turns Y-follow back on. Blocks forever.
- */
 USER_FUNC(bg_cam_chk) {
 #endif
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 #if VERSION <= VERSION_DEMO_US
     if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW)) {
 #else
-
     if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW) && marioGetPtr()->airTimer == 0) {
 #endif
         camFollowYOn();

@@ -1083,20 +1083,6 @@ EVT_END()
  * and an eaten enemy with swallow attribute 4 makes him breathe fire at every enemy
  * (partyWeapon_YoshiNomikomi_Fire). partyWeapon_YoshiNomikomi_Involved is not used here.
  */
-/**
- * Yoshi's Gulp (weapons named btl_wn_pys_lv1, Gulp in English: inhale an enemy and spit it out at another),
- * with an action command whose difficulty comes from the move level.
- * A dodged tongue plays the target's avoid; a failed command
- * or an enemy that cannot be swallowed (_get_swallow_param -1) only takes the no-damage hit
- * (partyWeapon_YoshiNomikomi_Dmg0); a swallowable Pokey segment (swallow attribute 8) is eaten with damage
- * pattern 7.
- * Otherwise the enemy is gulped (damage pattern 2).
- * If a roll of 0 to 99 reaches its swallow value he spits it out (partyWeapon_YoshiNomikomi_Shot,
- * or _Spew when its swallow attribute lacks bit 2);
- * else it is eaten outright (Star Points kept, unit killed),
- * and an eaten enemy with swallow attribute 4 makes him breathe fire at every enemy
- * (partyWeapon_YoshiNomikomi_Fire). partyWeapon_YoshiNomikomi_Involved is not used here.
- */
 EVT_BEGIN(partyYoshiAttack_Nomikomi)
     // The enemy chosen in the menu is the target; Gulp is declared and its FP cost paid.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1828,13 +1814,6 @@ EVT_END()
  * _gundan_yoshi_run_effect runs the herd across the stage,
  * and each sampled enemy takes as many hits as the command's output gives, the last with the last-hit flag.
  */
-/**
- * Yoshi's Stampede (partyWeapon_YoshiCallGuard,
- * named btl_wn_pys_lv3: a herd of Yoshis attacks all ground enemies):
- * he pays the cost, runs the action command (PYS_A_10, A_11) and calls the herd with a call sound;
- * _gundan_yoshi_run_effect runs the herd across the stage,
- * and each sampled enemy takes as many hits as the command's output gives, the last with the last-hit flag.
- */
 EVT_BEGIN(partyYoshiAttack_CallGuard)
     // Stampede is declared and its FP cost paid; all ground enemies are targeted.
     SET_VALUE(LW(12), PTR(&partyWeapon_YoshiCallGuard))
@@ -2216,11 +2195,6 @@ typedef struct YoshiSlideAcWork {
  * Follows the action command: a new stage changes the run pose,
  * and unit work 4 (the slide sound value) follows the AC power.
  */
-/**
- * arg 0 (in/out): last stage seen; arg 1 (out): AC flag bit 0.
- * Follows the action command: a new stage changes the run pose,
- * and unit work 4 (the slide sound value) follows the AC power.
- */
 USER_FUNC(_yoshi_slide_ac_check) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -2394,11 +2368,6 @@ void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
  * args[3]-args[5] receive the world position of the target's hit offset (bintaHitOffset scaled by its size,
  * x mirrored by facing direction).
  */
-/**
- * Script helper: args[0] is Yoshi, args[1] the swallowed target;
- * args[3]-args[5] receive the world position of the target's hit offset (bintaHitOffset scaled by its size,
- * x mirrored by facing direction).
- */
 USER_FUNC(_get_nomikomi_hit_position) {
     BattleWork* wp;
     EvtWord* args;
@@ -2516,11 +2485,6 @@ USER_FUNC(_wait_yoshig_complete) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * Script helper for the Stampede: runs the herd of 256 Yoshi sprites across the stage,
- * animating their run cycles, kicking up smoke and panning a looped sound with the herd's average x.
- * Allocates the herd on its first call and frees it when every Yoshi has arrived; blocks while it runs.
- */
 /**
  * Script helper for the Stampede: runs the herd of 256 Yoshi sprites across the stage,
  * animating their run cycles, kicking up smoke and panning a looped sound with the herd's average x.
@@ -2661,11 +2625,11 @@ s32 _gundan_part_update(YoshiGundanPart* p, s32 i) {
     return TRUE;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Draw callback for the Stampede herd: draws the Yoshi run-cycle sprites (texture plane at the Yoshi's position
  * and frame, flipped by direction).
  */
+#if VERSION <= VERSION_DEMO_US
 void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
     YoshiGundanPart* p;
     s32 i;
@@ -2677,14 +2641,6 @@ void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
     }
 }
 #else
-/**
- * Draw callback for the Stampede herd: draws the Yoshi run-cycle sprites (texture plane at the Yoshi's position
- * and frame, flipped by direction).
- */
-/**
- * Draw callback for the Stampede herd: draws the Yoshi run-cycle sprites (texture plane at the Yoshi's position
- * and frame, flipped by direction).
- */
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
     f32 s;
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;

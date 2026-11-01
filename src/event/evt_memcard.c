@@ -819,5 +819,4 @@ EVT_BEGIN(evt_memcard_save_wrapper)
     END_IF
     RETURN
 EVT_END()
-
 #endif

@@ -270,11 +270,6 @@ void mot_walk(void) {
  * dropping back to walking for a small stick tilt or with the Slow Go badge,
  * with the pushing pose against pushable objects.
  */
-/**
- * Running motion: like mot_walk at marioGetDashSpd,
- * dropping back to walking for a small stick tilt or with the Slow Go badge,
- * with the pushing pose against pushable objects.
- */
 void mot_dash(void) {
     u32 trigFlags;
     BOOL pushCaseActive;

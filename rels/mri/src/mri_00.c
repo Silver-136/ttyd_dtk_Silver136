@@ -1817,12 +1817,6 @@ static USER_FUNC(sysflag) {
  * Fabio and the dancers), the doors, the clouds, the FP Plus badge and the language-specific sign,
  * and starts the chapter 2 scenes and the chapter 8 Puni crowd scenes depending on the story progress.
  */
-/**
- * Map init script of mri_00, the front yard of the Great Boggly Tree:
- * registers the NPCs (Punio, the rival Puni, the little Jabbi, Punio's sister, the Puni elder,
- * Fabio and the dancers), the doors, the clouds, the FP Plus badge and the language-specific sign,
- * and starts the chapter 2 scenes and the chapter 8 Puni crowd scenes depending on the story progress.
- */
 EVT_BEGIN(mri_00_init_evt)
     CALL(sysflag)
     CALL(evt_puni_mem_init)

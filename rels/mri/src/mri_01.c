@@ -176,21 +176,15 @@ static USER_FUNC(evtflash) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Checks whether the Punies are ready for the Puni elder's check.
  * Returns in args[0]: 0 if some Puni is away or lost in another area, 1 if every Puni is with Mario,
  * 2 if all are present but some are caught in traps.
  * Punio waiting at the cell in mri_03 is not counted (US and later).
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(elder_talk_sub_punicheck) {
 #else
-/**
- * Checks whether the Punies are ready for the Puni elder's check.
- * Returns in args[0]: 0 if some Puni is away or lost in another area, 1 if every Puni is with Mario,
- * 2 if all are present but some are caught in traps.
- * Punio waiting at the cell in mri_03 is not counted (US and later).
- */
 USER_FUNC(elder_talk_sub_punicheck) {
 #endif
     EvtWord* args = event->args;

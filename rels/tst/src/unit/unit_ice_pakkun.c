@@ -364,12 +364,6 @@ EVT_END()
  * reappears on the ground at height 0 (PKF_E_1), restores the ground hit offsets and pose table,
  * and returns to the PKF_S_1 idle pose.
  */
-/**
- * Called when the Frost Piranha is knocked off the ceiling:
- * it clears the ceiling fall handler, burrows (PKF_E_4, shrinking its shadow),
- * reappears on the ground at height 0 (PKF_E_1), restores the ground hit offsets and pose table,
- * and returns to the PKF_S_1 idle pose.
- */
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -406,13 +400,6 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
-/**
- * Returns the Frost Piranha to its home after an attack:
- * it burrows (PKF_E_2, shrinking its shadow) and,
- * depending on whether a ceiling spot exists (pakkun_ceil_exist) and a random pick,
- * reappears either on the ground (PKF_E_1, ground tables) or hanging from the ceiling at height 130 (PKF_E_3,
- * ceiling hit offsets and pose table, with the ceiling fall handler).
- */
 /**
  * Returns the Frost Piranha to its home after an attack:
  * it burrows (PKF_E_2, shrinking its shadow) and,
@@ -672,16 +659,11 @@ static USER_FUNC(shadow_scale_memory) {
  * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
  * while the ceiling still exists, so the plant knows whether it can hang from it.
  */
-/**
- * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
- * while the ceiling still exists, so the plant knows whether it can hang from it.
- */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US
     if (_battleWorkPointer->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
 #else
-
     if (TST_BATTLE_WORK(_battleWorkPointer)->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
 #endif
         evtSetValue(event, args[0], 0);

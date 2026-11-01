@@ -516,6 +516,7 @@ static f32 scale_tbl[] = {
     3.2f, 3.4f, 3.6f, 3.8f, 4.0f,
     4.2f, 4.4f, 4.6f, 4.8f, 5.0f,
 };
+
 #if VERSION <= VERSION_DEMO_US
 f32 scroll_tbl[] = {
     0.0f, -0.14583334f, -0.29166669f, -0.43750003f, -0.58333337f,
@@ -577,10 +578,6 @@ EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 
 #if VERSION <= VERSION_DEMO_US
 static void effUltraHammerMain(EffectEntry* effect) {
 #else
-/**
- * Counts down and fades alpha in the last 16 frames;
- * each of the three rings waits for its start delay, then runs its 25-step scroll/scale table and repeats.
- */
 void effUltraHammerMain(EffectEntry* effect) {
 #endif
     EffUltraHammerData* data;

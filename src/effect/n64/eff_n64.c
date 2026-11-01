@@ -353,11 +353,6 @@ void effInit64(void) {
  * otherwise reads it from the game disc (path by version and language) in the background;
  * textures become available once unpacked.
  */
-/**
- * Loads effect_n64.tpl from the archive if present,
- * otherwise reads it from the game disc (path by version and language) in the background;
- * textures become available once unpacked.
- */
 void effTexSetupN64(void) {
     const char* lang;
     DVDEntry* entry;

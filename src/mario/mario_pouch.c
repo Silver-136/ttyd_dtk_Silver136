@@ -144,7 +144,6 @@ ItemType pouchHaveBadge(s32 id) {
 ItemType pouchEquipBadge(s32 id) {
     return mpp->equippedBadges[id];
 }
-
 #endif
 
 /** Number of items Mario carries (out of 20 slots). */
@@ -685,11 +684,10 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
 #endif
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** The demo compares the item names as they are, without the kana conversion. */
+#if VERSION <= VERSION_DEMO_US
 static s32 comp_aiueo(const void* a, const void* b) {
 #else
-/** The demo compares the item names as they are, without the kana conversion. */
 s32 comp_aiueo(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
@@ -702,7 +700,6 @@ s32 comp_aiueo(const void* a, const void* b) {
         return 1;
     return -(r < 0);
 #else
-
     pouchAiueoConv(msgSearch(itemDataTable[ia].name), bufA);
     pouchAiueoConv(msgSearch(itemDataTable[ib].name), bufB);
     return strcmp(bufA, bufB);
@@ -721,10 +718,8 @@ s32 comp_kind(s16* a, s16* b) {
 
 /** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
 #if VERSION <= VERSION_DEMO_US
-/** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
 static s32 comp_aiueo_r(const void* a, const void* b) {
 #else
-/** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
 s32 comp_aiueo_r(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
@@ -737,7 +732,6 @@ s32 comp_aiueo_r(const void* a, const void* b) {
         return 1;
     return -(r > 0);
 #else
-
     pouchAiueoConv(msgSearch(itemDataTable[ia].name), bufA);
     pouchAiueoConv(msgSearch(itemDataTable[ib].name), bufB);
     return strcmp(bufB, bufA);
@@ -754,12 +748,6 @@ s32 comp_kind_r(s16* a, s16* b) {
     return -(x > y);
 }
 
-/**
- * Sorts a pouch list for the item and badge menus (win_root.c).
- * Mode: 0/7 items by name ascending/descending, 1/8 items by kind, 2/9 and 3/10 key items by name and kind,
- * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost then kind. Badges keep their worn state.
- * JP compares internal ids for badge names.
- */
 /**
  * Sorts a pouch list for the item and badge menus (win_root.c).
  * Mode: 0/7 items by name ascending/descending, 1/8 items by kind, 2/9 and 3/10 key items by name and kind,
@@ -870,8 +858,8 @@ void pouchSortItem(s32 mode) {
         s32 j;
         s32 i;
         const char* ida;
-
 #endif
+
         i = 0;
         for (n = 0; n < MAX_BADGES; n++) {
             if (pp[0]->badges[n] != 0) {
@@ -1294,11 +1282,9 @@ BOOL pouchAddKeepItem(s32 id) {
 
 /** Takes the first copy of id out of storage, leaving an empty slot; FALSE if it is not stored. */
 #if VERSION <= VERSION_DEMO_US
-/** Takes the first copy of id out of storage, leaving an empty slot; FALSE if it is not stored. */
 BOOL pouchRemoveKeepItem(s32 id) {
     s32 i;
 #else
-/** Takes the first copy of id out of storage, leaving an empty slot; FALSE if it is not stored. */
 BOOL pouchRemoveKeepItem(s32 id, s32 index) {
     s32 i, j;
 #endif

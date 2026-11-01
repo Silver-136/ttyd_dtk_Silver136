@@ -649,7 +649,6 @@ USER_FUNC(evt_unitwin_select_func) {
         return EVT_RETURN_BLOCK;
     }
 #if VERSION <= VERSION_DEMO_US
-
     switch (wp->mode) {
         case 2:
         case 3:
@@ -1248,7 +1247,6 @@ static inline const char* unitwin_party_name(s32 i) {
     }
     return name;
 }
-#if VERSION <= VERSION_DEMO_US
 /**
  * Draws the unit window each frame: the item name and description for the highlighted counter slot with prices,
  * the counter window that counts toward Mario's coins (or Star Pieces, or pouchGetSuperCoin with flag 0x4000),
@@ -1257,16 +1255,9 @@ static inline const char* unitwin_party_name(s32 i) {
  * the partner lists (5-7) and the HP/FP/BP lists (8-10),
  * with the finger cursor and the help text of the highlighted row.
  */
+#if VERSION <= VERSION_DEMO_US
 static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 #else
-/**
- * Draws the unit window each frame: the item name and description for the highlighted counter slot with prices,
- * the counter window that counts toward Mario's coins (or Star Pieces, or pouchGetSuperCoin with flag 0x4000),
- * the demo's Shine Sprite counter, the lottery number (not in the demos), and the list windows by mode:
- * badge lists (2-3, 11-16), the informant's rumour lists (17-18),
- * the partner lists (5-7) and the HP/FP/BP lists (8-10),
- * with the finger cursor and the help text of the highlighted row.
- */
 void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 #endif
     PouchData* pouch = pouchGetPtr();
@@ -1399,7 +1390,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         }
     }
 #if VERSION > VERSION_DEMO_US
-
     if ((wp->flags & UNITWIN_FLAG_LOTTERY) && (lotteryGetPtr()->flags & LOTTERY_FLAG_TICKET)) {
         Mtx mtx;
         char buf[32];

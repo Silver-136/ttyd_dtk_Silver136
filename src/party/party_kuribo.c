@@ -39,7 +39,6 @@ BOOL christineGetStatus(void) {
     return TRUE;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * First step of the field Tattle script: picks the message Goombella says into LW(0).
  * If the script was handed an NPC Mario can talk to,
@@ -49,17 +48,9 @@ BOOL christineGetStatus(void) {
  * Mutes sound effects for the duration; retail also lifts her off the floor collision,
  * and returns early when she is in paper form (the US demo instead requires her on the ground).
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(pre_kurio_use) {
 #else
-/**
- * First step of the field Tattle script: picks the message Goombella says into LW(0).
- * If the script was handed an NPC Mario can talk to,
- * LW(0) is moved to that NPC's description (its tattle message);
- * otherwise it looks at the map object Mario pushes, faces or stands on and picks the hint for that block,
- * switch, chest or sign, falling back to the "msg_kuri_map" comment on the map itself.
- * Mutes sound effects for the duration; retail also lifts her off the floor collision,
- * and returns early when she is in paper form (the US demo instead requires her on the ground).
- */
 USER_FUNC(pre_kurio_use) {
 #endif
     void* hit;
@@ -73,7 +64,6 @@ USER_FUNC(pre_kurio_use) {
 #if VERSION <= VERSION_DEMO_US
     if (!(party->flags & PARTY_FLAG_IS_GROUNDED)) {
 #else
-
     if (party->flags2 & PARTY_DISP_FLAG_PAPER) {
 #endif
         return EVT_RETURN_DONE;
@@ -260,10 +250,6 @@ USER_FUNC(pre_kurio_use) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(post_kurio_use) {
 #else
-/**
- * Last step of the field Tattle script: advances kuribo_use to its wind-down state,
- * lets Mario move again and unmutes sound effects (retail also restores her floor collision).
- */
 USER_FUNC(post_kurio_use) {
 #endif
     PartyEntry* party = partyGetPtr(marioGetPartyId());

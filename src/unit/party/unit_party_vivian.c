@@ -628,11 +628,6 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
  * reappears beside the enemy (_get_vivian_attack_position) and punches it with the action command,
  * the hit able to burn it for 2 turns (_make_kagenuke_weapon), then returns.
  */
-/**
- * Vivian's Shade Fist: she sinks into the shadows,
- * reappears beside the enemy (_get_vivian_attack_position) and punches it with the action command,
- * the hit able to burn it for 2 turns (_make_kagenuke_weapon), then returns.
- */
 EVT_BEGIN(partyVivianAttack_NormalAttack)
     // Pick the target, set up the burn and pay the cost; the camera follows Vivian and the enemy.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))

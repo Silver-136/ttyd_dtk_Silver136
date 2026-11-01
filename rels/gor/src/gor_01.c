@@ -364,19 +364,14 @@ USER_FUNC(badgeshop_special_cnt) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Zess T.'s ("Nancy") position-blocking helper, setup half:
  * remembers her current z in LW float 10 and 11 as the line she stands on,
  * and (JP and later) makes her keep running her events when Mario leaves the screen.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(nancy_block_init_func) {
 #else
-/**
- * Zess T.'s ("Nancy") position-blocking helper, setup half:
- * remembers her current z in LW float 10 and 11 as the line she stands on,
- * and (JP and later) makes her keep running her events when Mario leaves the screen.
- */
 USER_FUNC(nancy_block_init_func) {
 #endif
     NpcEntry* npc = evtNpcNameToPtr(event, "\203i\203\223\203V\201[");
@@ -596,12 +591,6 @@ static EVT_BEGIN(sell_evt)
     RETURN
 EVT_END()
 
-/**
- * Badge shop purchase menu for the stock ("zaiko") of ordinary badges:
- * tells Mario when the shelves are empty, otherwise lets him pick a badge, checks his coins and badge room,
- * adds the badge and takes the price, and offers to buy more until he declines or the stock runs out.
- * The text formatting differs per release and language.
- */
 /**
  * Badge shop purchase menu for the stock ("zaiko") of ordinary badges:
  * tells Mario when the shelves are empty, otherwise lets him pick a badge, checks his coins and badge room,
@@ -899,12 +888,6 @@ EVT_BEGIN(kinoji_talk)
     RETURN
 EVT_END()
 
-/**
- * Watches for Mario walking up to Zess T. ("Nancy") in the western alley before the contact lens quest:
- * when he enters the box near x -580 to -400 she stops pacing
- * and the first scene runs (gor_01_000 to gor_01_007), where she turns away, Mario bumps into her,
- * her glasses break and she ends up blocking the way. Sets GSWF_GOR01_ZESS_BLOCKS_GATE.
- */
 /**
  * Watches for Mario walking up to Zess T. ("Nancy") in the western alley before the contact lens quest:
  * when he enters the box near x -580 to -400 she stops pacing
@@ -1223,12 +1206,6 @@ s32 item_tbl_nancy[] = {
     ITEM_CONTACT_LENS, -1,
 };
 
-/**
- * Talk event of Zess T. Before the contact lens is delivered,
- * Mario can hand over a Contact Lens (the item list item_tbl_nancy);
- * she then thanks him, walks into her house, the west exit opens and GSWF_GOR01_LENS_DELIVERED is set.
- * After that talking to her runs cooking_evt.
- */
 /**
  * Talk event of Zess T. Before the contact lens is delivered,
  * Mario can hand over a Contact Lens (the item list item_tbl_nancy);
@@ -2237,11 +2214,6 @@ EVT_BEGIN(bottakuru_init)
     RETURN
 EVT_END()
 
-/**
- * Talk event of Charlieton, who sells special badges and items at high prices from the shop's special stock:
- * greets Mario, then loops through a buy menu (coins checked, item added to the pouch, stock decremented)
- * until Mario declines or the stock is empty. The US release formats prices with the message formatter.
- */
 /**
  * Talk event of Charlieton, who sells special badges and items at high prices from the shop's special stock:
  * greets Mario, then loops through a buy menu (coins checked, item added to the pouch, stock decremented)
@@ -5592,13 +5564,6 @@ EVT_END()
  * She then joins the party as a partner (all_party_lecture for partner 7).
  * The "Ms. Mowz" theme plays during the talk.
  */
-/**
- * Trouble Center job 16: Ms. Mowz asks Mario for an item (the Mowz request key item),
- * kisses him when he hands it over and rewards him with the Attack FX B badge,
- * which she leaves on the floor if his badge list is already full (200 badges).
- * She then joins the party as a partner (all_party_lecture for partner 7).
- * The "Ms. Mowz" theme plays during the talk.
- */
 EVT_BEGIN(iri_16_tyutyu_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
         // Ms. Mowz's own theme replaces the plaza music for the whole talk.
@@ -5980,14 +5945,6 @@ EVT_BEGIN(dai_disp)
     RETURN
 EVT_END()
 #endif
-/**
- * Map init for gor_01 (Rogueport plaza).
- * Chooses the music by story stage, sets up the exits (east to gor_02, west to gor_03, south to the harbor),
- * creates the NPCs, buildings' doors, shops, the save block, the star pieces and chests,
- * and starts whichever story scene belongs to the current stage:
- * Goombella joining, the Skull Gem and Ultra Hammer events, Bowser's visit,
- * the Shadow Queen's darkness scenes and the epilogue.
- */
 /**
  * Map init for gor_01 (Rogueport plaza).
  * Chooses the music by story stage, sets up the exits (east to gor_02, west to gor_03, south to the harbor),
@@ -6977,19 +6934,14 @@ BOOL chkCookItem(s32 item) {
     return item != 0;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Builds item_tbl, the list of items Mario carries for the cooking selection (without the item he already
  * picked), ends it with -1 and returns the count in args[1].
  * args[0] is the pouch slot to leave out (the item id in the demos).
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(make_item_tbl) {
 #else
-/**
- * Builds item_tbl, the list of items Mario carries for the cooking selection (without the item he already
- * picked), ends it with -1 and returns the count in args[1].
- * args[0] is the pouch slot to leave out (the item id in the demos).
- */
 USER_FUNC(make_item_tbl) {
 #endif
     EvtWord* args = event->args;
@@ -7177,13 +7129,6 @@ s32 iri_18_item_tbl[] = {
     ITEM_COOKBOOK, -1,
 };
 
-/**
- * Zess T.'s talk after the contact lens: cooking service.
- * Handles the Trouble Center job 18 cookbook request first when it is active,
- * then the introduction on the first visit, and then asks which one or two items Mario wants to cook,
- * shows what she makes, removes the ingredients from the pouch, runs cooking_evt_sub and gives Mario the dish,
- * which also unlocks the recipe log.
- */
 /**
  * Zess T.'s talk after the contact lens: cooking service.
  * Handles the Trouble Center job 18 cookbook request first when it is active,

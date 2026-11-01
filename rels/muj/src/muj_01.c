@@ -329,10 +329,6 @@ EVT_END()
  * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
  * if the timid sailor has not yet been persuaded, otherwise he talks according to the story stage.
  */
-/**
- * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
- * if the timid sailor has not yet been persuaded, otherwise he talks according to the story stage.
- */
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_17_WINE_OBTAINED)

@@ -90,19 +90,14 @@ static void __DEMOInitGX(void) {
     GXSetDispCopyGamma(GX_GM_1_0);
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Picks the render mode: a copy of the given one,
  * or the default for the console's TV format (NTSC, PAL, EURGB60, MPAL) adjusted for overscan.
  * Panics on an unknown format.
  */
+#if VERSION <= VERSION_DEMO_US
 static inline void __DEMOInitRenderMode(GXRenderModeObj* mode) {
 #else
-/**
- * Picks the render mode: a copy of the given one,
- * or the default for the console's TV format (NTSC, PAL, EURGB60, MPAL) adjusted for overscan.
- * Panics on an unknown format.
- */
 static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
 #endif
     if (mode != NULL) {

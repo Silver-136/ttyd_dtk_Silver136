@@ -2454,11 +2454,6 @@ EVT_END()
  * and chooses the entry scene (Grubba escort, Jolene escort, champion escape, storage room talk) from flags
  * and story progress.
  */
-/**
- * Map init for tou_04, the corridor: sets up the guards and doors, the Last Stand badge item, save blocks,
- * and chooses the entry scene (Grubba escort, Jolene escort, champion escape, storage room talk) from flags
- * and story progress.
- */
 EVT_BEGIN(tou_04_init_evt)
     // Set up the doors, guards, the Last Stand badge on the floor and the two save blocks.
     SET_VALUE(LW(0), PTR(bero_data))

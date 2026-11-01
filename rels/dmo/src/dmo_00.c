@@ -99,21 +99,15 @@ EvtWord dmo_00_init_evt[262];
 #endif
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Script helper that starts the opening demo: clears the DemoWork state,
  * hides the status window and mutes sound effects, loads demo.tpl (blocks until the file is in),
  * and sets the fade-in for the map (black after the logo sequence,
  * white after the title screen in the demo versions; black otherwise).
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(demo_init) {
 #else
-/**
- * Script helper that starts the opening demo: clears the DemoWork state,
- * hides the status window and mutes sound effects, loads demo.tpl (blocks until the file is in),
- * and sets the fade-in for the map (black after the logo sequence,
- * white after the title screen in the demo versions; black otherwise).
- */
 USER_FUNC(demo_init) {
 #endif
     if (isFirstCall) {
@@ -609,19 +603,14 @@ USER_FUNC(eff_cam1) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Script helper: args[0] is a message name; measures its width and line count
  * and builds the text window tags (clear, window position/size, once_stop) into buf so the narration is centred.
  * The vertical offset differs slightly in the demo versions.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(make_msg) {
 #else
-/**
- * Script helper: args[0] is a message name; measures its width and line count
- * and builds the text window tags (clear, window position/size, once_stop) into buf so the narration is centred.
- * The vertical offset differs slightly in the demo versions.
- */
 USER_FUNC(make_msg) {
 #endif
     EvtWord* args = event->args;

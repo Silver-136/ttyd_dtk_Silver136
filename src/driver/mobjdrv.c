@@ -666,12 +666,6 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
  * and reports it to the object; runs each object's main function, drops falling ones,
  * keeps their shadows and colours, and queues their drawing (offscreen if they have a region).
  */
-/**
- * Per-frame update of all map objects: works out which one Mario hammered, hit from below, stood on,
- * spun on or touched with an action, which one a partner, a Bobbery bomb or Bowser hit,
- * and reports it to the object; runs each object's main function, drops falling ones,
- * keeps their shadows and colours, and queues their drawing (offscreen if they have a region).
- */
 void mobjMain(void) {
     MapObjectWork* wp;
     MapObjectEntry* entry;
@@ -1279,7 +1273,6 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     entry = wp->entries;
     ret = NULL;
 #if VERSION > VERSION_DEMO_US
-
     // FAKE: unusedVec is never read and the position goes through the zeroed copy _pos; setting pos.x/y/z directly changes the object
     unusedVec = (Vec){ 0.0f, 0.0f, 0.0f };
 #endif

@@ -328,10 +328,6 @@ void effSplashMain(EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_US
 static void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
 #else
-/**
- * Projects the splash position to the screen and reads the frame buffer pixel there for the water tint (the
- * retail build then overrides it with the map colour from eff_funemizu).
- */
 void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffSplashWork* work = effect->userdata;
@@ -391,11 +387,6 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_US
 static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-/**
- * Draws the splash columns (scrolling textured cones,
- * or the Blooper's display lists for type 3) followed by the camera-facing droplet quads tinted from the sampled
- * colour.
- */
 void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffSplashWork* work = effect->userdata;

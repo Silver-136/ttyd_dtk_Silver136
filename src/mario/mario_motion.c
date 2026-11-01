@@ -653,12 +653,6 @@ void marioJump(void) {
  * a passing jabara check (marioPriCheckJabara, stick rub) turns the landing into the jabara motion.
  * On kpa_03 Bowser just falls and lands; the tube uses mot_fall_roll.
  */
-/**
- * Per-frame fall (marioMain and Peach): slows air drift, stops it off screen,
- * steps the fall speed and lands Mario on the floor below (marioLandOn);
- * a passing jabara check (marioPriCheckJabara, stick rub) turns the landing into the jabara motion.
- * On kpa_03 Bowser just falls and lands; the tube uses mot_fall_roll.
- */
 void marioFall(void) {
     MarioWork* mario = marioGetPtr();
     s32 rub;
@@ -757,12 +751,6 @@ void marioFall(void) {
     }
 }
 
-/**
- * Mario touches down: plays the landing sound for the floor type, clears the jump state,
- * and picks the next motion: damage on hazard or spike floors, the red switch or blue spring objects,
- * walk or stand from the stick, Bowser's quake, re-entering the slit in paper mode.
- * Bowser and the tube also call it.
- */
 /**
  * Mario touches down: plays the landing sound for the floor type, clears the jump state,
  * and picks the next motion: damage on hazard or spike floors, the red switch or blue spring objects,

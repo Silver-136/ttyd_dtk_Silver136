@@ -141,13 +141,6 @@ WinMgrDesc list_desc[] = {
  * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
  * then runs the shop's own buy_evt with LW(0) = the item id.
  */
-/**
- * Runs when Mario presses A on a shelf item (started by evt_shop_main_func with LW(0) = the ShopWork):
- * the shopkeeper names the item and price, and on yes takes the coins, gives the item,
- * adds a shop point (doubled during the timed sales at the Great Tree (mri_07),
- * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
- * then runs the shop's own buy_evt with LW(0) = the item id.
- */
 #if VERSION <= VERSION_DEMO_US
 /** the demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
 EVT_BEGIN(evt_shoplist)
@@ -1090,14 +1083,6 @@ USER_FUNC(disp_list) {
  * Puts an item icon over each shelf, hides one-off items Mario already has (Contact Lens, the Super Luigi
  * books), gives the shopkeeper its talk script and starts the shop driver.
  */
-/**
- * Sets up a shop on map load.
- * args: the six shelf objects (map object and hit names), their items and prices,
- * the shopkeeper data (NPC name, hook and after-buy scripts, message ids)
- * and an optional sell-price override table.
- * Puts an item icon over each shelf, hides one-off items Mario already has (Contact Lens, the Super Luigi
- * books), gives the shopkeeper its talk script and starts the shop driver.
- */
 USER_FUNC(evt_shop_setup) {
     s32 i;
     ShopWork* wp;
@@ -1187,10 +1172,6 @@ USER_FUNC(point_disp_onoff) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(point_wait) {
 #else
-/**
- * Blocks until the shop points window has counted up to Mario's points;
- * retail plays a tick sound each frame meanwhile.
- */
 USER_FUNC(point_wait) {
 #endif
     ShopWork* wp = _wp;
@@ -1467,13 +1448,6 @@ USER_FUNC(unkeep_pouchcheck_func) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(evt_shop_main_func) {
 #else
-/**
- * Shop driver, every frame: when Mario stands on a shelf's hit object,
- * opens the name and description windows for that item; A starts buy_evt.
- * Waits while a partner ability, the Ghost Diary or (retail) a field item pickup is active,
- * and on rsh_03 on day 3 until the shopkeeper is woken.
- * Hides the icons of one-off items once bought and of shelves whose map object is hidden.
- */
 USER_FUNC(evt_shop_main_func) {
 #endif
     ShopWork* wp;

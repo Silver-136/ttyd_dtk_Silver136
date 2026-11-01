@@ -70,13 +70,6 @@ BOOL marioChkDeepSleep(void) {
  * After 50 seconds without input Mario yawns and then naps (M_N_5A, snoring).
  * Bowser and Peach run their own versions.
  */
-/**
- * Standing motion: idle pose (tired at low HP, with breathing sounds), turning into Paper Mode,
- * starting the spin hammer, Spring Jump, jumps, items and partner actions,
- * and walking or dashing when the stick moves.
- * After 50 seconds without input Mario yawns and then naps (M_N_5A, snoring).
- * Bowser and Peach run their own versions.
- */
 void mot_stay(void) {
     MarioWork* mario;
     MarioWork* m;

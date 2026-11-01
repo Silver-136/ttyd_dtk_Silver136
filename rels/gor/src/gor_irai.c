@@ -845,7 +845,6 @@ USER_FUNC(irai_end_func) {
 }
 
 #if VERSION >= VERSION_US
-
 // US: text centered in a boxW-wide box at x, x-squeezed to maxW; w is the width variable of the caller.
 // A macro, not an inline function: as a function the US float registers change.
 #define iraiDrawCentered(msg, x, y, boxW, maxW, scale, trans, w) { \
@@ -914,13 +913,12 @@ void irai_window_disp(CameraId camera, void* param) {
     Mtx scale2;
     f32 nameW;
     f32 w;
-
 #else
     const char* msg;
     s32 i;
     s32 no;
-
 #endif
+
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA3, 0xFF, 0xFF}, -280.0f, 170.0f, 135.0f, 90.0f, 12.0f);
     FontDrawStart();

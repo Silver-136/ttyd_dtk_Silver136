@@ -368,7 +368,6 @@ EVT_BEGIN(las_24_init_evt)
 EVT_END()
 
 #if VERSION >= VERSION_US
-
 USER_FUNC(las_24_adjust_for_framerate) {
     EvtWord* args = event->args;
     s32 value = evtGetValue(event, args[0]);

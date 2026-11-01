@@ -176,7 +176,6 @@ void seq_loadExit(SequenceWork* seq) {
 
 #if VERSION >= VERSION_US
 static inline BOOL loadStart(void);
-
 #else
 /** Starts loading the file menu's texture file (name.tpl, per language in US and PAL); TRUE once it is loaded. */
 static inline BOOL loadStart(void) {
@@ -191,8 +190,8 @@ static inline BOOL loadStart(void) {
     }
     return FALSE;
 }
-
 #endif
+
 /**
  * File select sequence: loads name.tpl, runs the memory card check script (back to the title if the card is
  * unusable), reads the sound and rumble settings and last used slot, opens the curtain, then runs loadMain.
@@ -282,15 +281,14 @@ static inline BOOL loadStart(void) {
     }
     return FALSE;
 }
-
 #endif
+
 #define SFX(id) psndSFXOn((const char*)(id))
 
-#if VERSION <= VERSION_DEMO_US
 /** Later versions: the same menu with no return value. */
+#if VERSION <= VERSION_DEMO_US
 static BOOL loadMain(SequenceWork* seq) {
 #else
-/** Later versions: the same menu with no return value. */
 void loadMain(SequenceWork* seq) {
 #endif
     u32 trg;
@@ -928,11 +926,6 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
 #if VERSION <= VERSION_DEMO_US
 static void loadDraw(CameraId camera, void* param) {
 #else
-/**
- * Draws the file menu: the four save slot windows (name, level, play time, crystal star icons;
- * new or corrupted file messages), the copy/delete/back buttons, the sound and rumble options,
- * the prompt message and the wobbling cursor (hidden while a card script runs).
- */
 void loadDraw(CameraId camera, void* param) {
 #endif
     CameraEntry* cam = camGetPtr(CAMERA_2D);
@@ -1135,8 +1128,8 @@ const char* str;
         gsw0 = save->data.global.gSW0;
         name = (char*)save->data.global.playerName;
 #endif
-
 #endif
+
         FontDrawStart();
         FontDrawColor((GXColor){192, 192, 192, 255});
         if (i == wp->slot) {
@@ -1432,7 +1425,6 @@ const char* str;
         winTexSet(0, (Vec){wp->x, wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
     }
 #if VERSION > VERSION_DEMO_US
-
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
     GXSetProjectionv(proj);
     *camGetCurPtr() = saved;

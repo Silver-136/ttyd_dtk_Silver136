@@ -334,10 +334,8 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
 
 /** Per frame: releases the icons one at a time with their shine sounds and sparkles, then deletes the effect. */
 #if VERSION <= VERSION_DEMO_US
-/** Per frame: releases the icons one at a time with their shine sounds and sparkles, then deletes the effect. */
 static void effRecoveryMain(EffectEntry* effect) {
 #else
-/** Per frame: releases the icons one at a time with their shine sounds and sparkles, then deletes the effect. */
 void effRecoveryMain(EffectEntry* effect) {
 #endif
     RecoveryWork* work = effect->userdata;

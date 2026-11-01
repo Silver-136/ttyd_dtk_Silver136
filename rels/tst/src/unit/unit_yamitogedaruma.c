@@ -119,17 +119,13 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 /** Damage reduction while flipped on its back: none, so it takes full damage. */
 static BattleUnitDefense defence_turn = {0};
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Status vulnerabilities of the Dark Bristle (percent chance per status;
  * the newer releases tweak a few values).
  */
+#if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {20, 70, 30, 100, 30, 100, 100, 50, 100, 50, 100, 50, 100, 50, 50, 30, 55, 100, 50, 100, 100, 30};
 #else
-/**
- * Status vulnerabilities of the Dark Bristle (percent chance per status;
- * the newer releases tweak a few values).
- */
 static StatusVulnerability regist = {20, 80, 20, 100, 20, 100, 100, 40, 100, 50, 100, 50, 100, 100, 40, 30, 20, 100, 40, 100, 100, 30};
 #endif
 

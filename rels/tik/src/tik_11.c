@@ -307,14 +307,6 @@ EVT_END()
  * sets the new HP, FP and BP (unitwin_setmariolevel), and says it removed all badges because BP ran low
  * (powerdown_10) when that happened, else that it is finished (powerdown_13).
  */
-/**
- * Chet Rippo's stat trade for Mario. Refuses if Mario has fewer than 39 coins (powerdown_04).
- * Otherwise shows the coin window and two choices (evt_win_other_select 9 and 10: the stat to boost and the stat
- * to decrease) and asks whether that trade sounds good for 39 coins (powerdown_06, powerdown_09);
- * on yes it takes the 39 coins, chants (powerdown_11, powerdown_12) over the light and house effects,
- * sets the new HP, FP and BP (unitwin_setmariolevel), and says it removed all badges because BP ran low
- * (powerdown_10) when that happened, else that it is finished (powerdown_13).
- */
 EVT_BEGIN(powerdownya_mario_level_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins.
     CALL(evt_pouch_get_coin, LW(0))

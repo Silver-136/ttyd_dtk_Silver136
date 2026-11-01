@@ -215,13 +215,6 @@ EVT_END()
  * if Mario or his partner bumps the block with the head during the move,
  * it reverses and the switch is cancelled.
  */
-/**
- * Handler of the sw_0 switch for the floating block blk_0:
- * the camera shakes with rumble while the block rises
- * or falls 600 units (the direction follows LSWF(3), which is toggled), with block-float sounds;
- * if Mario or his partner bumps the block with the head during the move,
- * it reverses and the switch is cancelled.
- */
 static EVT_BEGIN(main_0)
 #if VERSION > VERSION_DEMO_US
     SET_TYPE(239)

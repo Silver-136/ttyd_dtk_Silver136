@@ -190,8 +190,8 @@ static s32 wait_move_end_50hz(EventEntry* event, BOOL isFirstCall) {
     }
     return (dance_dt.flags & 4) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
-
 #endif
+
 #pragma defer_codegen on
 
 /**

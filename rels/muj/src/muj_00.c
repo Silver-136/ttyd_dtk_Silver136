@@ -2952,12 +2952,6 @@ EVT_END()
  * crowds of sailors leap between the ships, and Mario fights Lord Crump in a battle.
  * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
  */
-/**
- * The big scene of Keelhaul Key: the pirate and X-Naut ships come together,
- * Cortez and Lord Crump (the X-Naut "third force", dai3) trade insults (stg5_muj_118 to 123),
- * crowds of sailors leap between the ships, and Mario fights Lord Crump in a battle.
- * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
- */
 EVT_BEGIN(kaizoku_vs_dai3)
     // The fight begins: Mario loses control and the crowds on both ships are set up.
     CALL(evt_mario_key_onoff, 0)
@@ -3284,12 +3278,6 @@ EVT_BEGIN(dai3_taisan_move_trace01)
     RETURN
 EVT_END()
 
-/**
- * After Lord Crump is beaten the X-Naut ship retreats:
- * resets the ships' positions, Crump curses (stg5_muj_125), the ship sails away,
- * Mario's party comments (stg5_muj_126), the story becomes STG5_43_X_NAUTS_RETREAT,
- * the game autosaves and the map changes to aji_10 (Pirate's Grotto).
- */
 /**
  * After Lord Crump is beaten the X-Naut ship retreats:
  * resets the ships' positions, Crump curses (stg5_muj_125), the ship sails away,

@@ -1623,8 +1623,8 @@ static USER_FUNC(nice_effect_shrink) {
     ((NiceEffectWork*)eff->userdata)->overallScale = 0.71428573f;
     return EVT_RETURN_DONE;
 }
-
 #endif
+
 /**
  * Script helper: args[0] is a float Z offset; builds a look-at matrix from (0, 100, 100+z)
  * and hands it to the darkness effect (envSetYamiView) as its view.

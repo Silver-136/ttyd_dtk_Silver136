@@ -370,7 +370,6 @@ char* winZenkakuStrPad(s32 n, s32 digits) {
     sprintf(winZenkakuStrPad_buf, buf, n);
     return winZenkakuStrPad_buf;
 }
-
 #else
 #if VERSION > VERSION_DEMO_US
 char winZenkakuStrPad_tmp[0x100];
@@ -764,7 +763,6 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         }
     }
 #if VERSION > VERSION_DEMO_US
-
 #if VERSION >= VERSION_US
     // FAKE: two dead int guards (gz is 0; folded after register allocation, no code): the first redefines q1/q2 so
     // they are not propagated, the second consumes them into y

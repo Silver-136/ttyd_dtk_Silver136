@@ -1889,13 +1889,6 @@ EVT_END()
  * Peach's scenes of STG5_44, 45 and 46 (peach_evt_stg5, the invisible state and peach_evt_stg5_1)
  * and the wall notes. The magician grunt 軍団ザコ魔法使い is removed once Lord Crump is beaten.
  */
-/**
- * Init script of aji_06, the potion laboratory:
- * music BGM_EVT_PEACH1 before STG7_00_START (Peach's visits) and BGM_STG7_DUN2 after, the exit to aji_01,
- * Mario dropping in from the ceiling when entered as "tenjo", the machine set- up (kikai_init),
- * Peach's scenes of STG5_44, 45 and 46 (peach_evt_stg5, the invisible state and peach_evt_stg5_1)
- * and the wall notes. The magician grunt 軍団ザコ魔法使い is removed once Lord Crump is beaten.
- */
 EVT_BEGIN(aji_06_init_evt)
     // Peach's visits get her own music; later visits use the fortress music and ambience.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)

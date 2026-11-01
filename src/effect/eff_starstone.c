@@ -425,11 +425,6 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 #if VERSION <= VERSION_DEMO_US
 static void effStarStoneMain(EffectEntry* effect) {
 #else
-/**
- * State 0 spins the texture and trails dust, with a looping shine sound when allowed.
- * States 1-5 are the drop: it falls under gravity, bounces on the ground (jump sound, puffs),
- * then the halves separate and tilt.
- */
 void effStarStoneMain(EffectEntry* effect) {
 #endif
     EffStarStoneWork* w = effect->userdata;
@@ -608,7 +603,6 @@ void effStarStoneMain(EffectEntry* effect) {
     for (; k < n##U; k++, sq++, dq++) {   \
         GXCallDisplayList(*dq, *sq << 5); \
     }
-#if VERSION <= VERSION_DEMO_US
 /**
  * Draws the round stone (types 0 and 6): a 10% larger untextured shell, then the textured stone.
  * Each loop walks a display-list table and its size table (32-byte units).
@@ -616,18 +610,12 @@ void effStarStoneMain(EffectEntry* effect) {
  * some share the function's loop variables, others have their own block,
  * and the demo orders the loop variables differently; each form gives the original register allocation.
  */
+#if VERSION <= VERSION_DEMO_US
 static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
 u32 i;
     u8* size;
     u8** list;
 #else
-/**
- * Draws the round stone (types 0 and 6): a 10% larger untextured shell, then the textured stone.
- * Each loop walks a display-list table and its size table (32-byte units).
- * The loops are written the way the compiler saw them:
- * some share the function's loop variables, others have their own block,
- * and the demo orders the loop variables differently; each form gives the original register allocation.
- */
 void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
 #endif
     Mtx m;

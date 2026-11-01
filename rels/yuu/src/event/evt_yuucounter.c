@@ -190,13 +190,6 @@ USER_FUNC(evt_yuucounter_main_func) {
 #if VERSION <= VERSION_DEMO_US
 static void evt_yuucounter_disp_func(CameraId camera, void* param) {
 #else
-/**
- * Updates and draws the counter.
- * Type 0 derives the value from Mario's x position,
- * type 1 counts the remaining time down from the limit using render time,
- * type 2 asks yuunpc_juni for Mario's current rank;
- * then draws the translucent backdrop, the digits and the unit icon with icon sprites.
- */
 void evt_yuucounter_disp_func(CameraId camera, void* param) {
 #endif
     YuuCounterWork* wp = param;

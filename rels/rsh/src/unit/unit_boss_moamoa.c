@@ -160,7 +160,6 @@ USER_FUNC(evt_moamoa_mainUnitIdClear) {
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 #if VERSION == VERSION_EU
-
     return r * (max - min) + min;
 }
 

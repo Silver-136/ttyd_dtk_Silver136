@@ -871,17 +871,6 @@ EVT_END()
  * the Thousand-Year Door. The story becomes STG7_25_00_1_BOWSER_POSHLEY_SANCTUM, the game is saved and the
  * map changes to aji_18.
  */
-/**
- * Bowser interlude in the sanctum (STG7_25_00_BOWSER_POSHLEY_HEIGHTS), with the player as Bowser:
- * Bowser and Kammy (ババ) walk in, Bowser takes the fake Garnet Star from the altar (the star effect "nise"
- * follows
- * his hand), Pennington accuses them of theft and Bowser names himself in one of three ways picked from a menu
- * (kpa_stg7_018); Pennington reveals the star is a fake, it falls and breaks,
- * and he says he gave the real one to
- * "Luigi"; a Paragoomba (パタクリ) crashes in to report that Mario has the seven Crystal Stars and is heading for
- * the Thousand-Year Door. The story becomes STG7_25_00_1_BOWSER_POSHLEY_SANCTUM, the game is saved and the
- * map changes to aji_18.
- */
 EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION > VERSION_DEMO_US
@@ -1224,13 +1213,6 @@ EVT_BEGIN(nise_starstone_init)
     RETURN
 EVT_END()
 
-/**
- * Map init script for pik_02: loads the entrances (depending on whether the Garnet Star theft is still to come),
- * music and ambience, NPCs, the blue switch that opens the curtain (evt_sw),
- * the painting and the altar case events (evt_kaiga, evt_daiza),
- * the Garnet Star theft scene (evt_garnet) on first entry, the return-trip door change, the fake star,
- * and the Bowser interlude.
- */
 /**
  * Map init script for pik_02: loads the entrances (depending on whether the Garnet Star theft is still to come),
  * music and ambience, NPCs, the blue switch that opens the curtain (evt_sw),

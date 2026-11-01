@@ -712,15 +712,6 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
  * Then on-screen culling, draw, shadow, blur and offscreen registration.
  * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
  */
-/**
- * Per-frame NPC update (from mariost.c).
- * For each live NPC: timers, wall-checked movement, gravity, pushing Mario aside,
- * walk/run/stay animations from its speed, half speed in the low part of kpa_03;
- * then the event interrupts: blown by Flurrie (8), left its territory (4),
- * lost Mario while chasing (2) or spotted him (1), handed to npcCheckInterrupt.
- * Then on-screen culling, draw, shadow, blur and offscreen registration.
- * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
- */
 void npcMain(void) {
     const char* kpaSfx;
     NpcWork* npcwork;
@@ -1802,8 +1793,8 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     f32 width;
     f32 shakeX;
     f32 shakeY;
-
 #endif
+
     // US: the announcement may span up to four lines
     message = msgSearch(firstStrike->msg_tag);
     x = firstStrike->x;
@@ -3134,10 +3125,6 @@ NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 
  * Tests the hammer head at every frame of the swing (0 to 11) against an NPC;
  * returns the NPC at the first frame that hits, with the distance in *dist.
  */
-/**
- * Tests the hammer head at every frame of the swing (0 to 11) against an NPC;
- * returns the NPC at the first frame that hits, with the distance in *dist.
- */
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle) {
     f32 t;
     f32 d;
@@ -3608,17 +3595,13 @@ USER_FUNC(_check) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Script helper: spawns Merlee's spell effect ("mjef_coinup") above Mario's head (scale 0.8 in JP and later)
  * and blocks the script until the effect is gone.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(_majinai_effect) {
 #else
-/**
- * Script helper: spawns Merlee's spell effect ("mjef_coinup") above Mario's head (scale 0.8 in JP and later)
- * and blocks the script until the effect is gone.
- */
 USER_FUNC(_majinai_effect) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -3704,10 +3687,6 @@ EVT_BEGIN(_evt_majinai_coin_up_effect)
     RETURN
 EVT_END()
 
-/**
- * Drops the items an enemy carried back (recoveredItems) at its position and clears them;
- * same item flags per version as fbatRecoverItems. Called by a script helper.
- */
 /**
  * Drops the items an enemy carried back (recoveredItems) at its position and clears them;
  * same item flags per version as fbatRecoverItems. Called by a script helper.
@@ -3916,7 +3895,6 @@ s32 npcCalcScore(NpcEntry* npc) {
 BOOL npcCheckBlow(NpcEntry* npc) {
     Vec pos;
 #if VERSION > VERSION_DEMO_US
-
     if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) {
         return FALSE;
     }

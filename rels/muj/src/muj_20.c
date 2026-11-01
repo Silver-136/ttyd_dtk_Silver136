@@ -2108,10 +2108,6 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
  * Display callback for the title logo: draws the logo texture for the current language
  * and the Press Start text with the wp alpha.
  */
-/**
- * Display callback for the title logo: draws the logo texture for the current language
- * and the Press Start text with the wp alpha.
- */
 static void draw(CameraId camera, void* param) {
     LogoWork* wp = param;
     CameraEntry saved;

@@ -685,7 +685,6 @@ USER_FUNC(evt_uranaisi_msg_set) {
     }
     sprintf(uranaisi_msgp, buf, ofs[0], uranaisi_ryokin_rtn(0), ofs[1], uranaisi_ryokin_rtn(1), ofs[2], uranaisi_ryokin_rtn(2));
 #else
-
     sprintf(uranaisi_msgp, msg, uranaisi_ryokin_rtn(0), uranaisi_ryokin_rtn(1), uranaisi_ryokin_rtn(2));
 #endif
     evtSetValue(event, args[1], (EvtWord)uranaisi_msgp);

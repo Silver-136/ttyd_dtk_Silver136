@@ -66,18 +66,11 @@ BOOL battleSeqEndCheck(void) {
  * records the info and initialises the battle subsystems (pad, action-command help, icons, action commands,
  * after-reaction queue, display, units, partner info, stage, audience, Bingo).
  */
-/**
- * Starts a battle from the field's FieldBattleInfo:
- * allocates and clears BattleWork (battle allocator; JP uses the map allocator),
- * records the info and initialises the battle subsystems (pad, action-command help, icons, action commands,
- * after-reaction queue, display, units, partner info, stage, audience, Bingo).
- */
 void BattleInit(FieldBattleInfo* info) {
     BattleWork* wp;
 #if VERSION <= VERSION_DEMO_US
     wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
 #else
-
 #if VERSION >= VERSION_US
     wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
 #else
@@ -164,10 +157,6 @@ BOOL BattleMain(void) {
     return TRUE;
 }
 
-/**
- * Tears a battle down: deletes every unit, ends the icon, menu, stage, audience and Bingo subsystems,
- * frees the command submenu and BattleWork, and clears _battleWorkPointer.
- */
 /**
  * Tears a battle down: deletes every unit, ends the icon, menu, stage, audience and Bingo subsystems,
  * frees the command submenu and BattleWork, and clears _battleWorkPointer.

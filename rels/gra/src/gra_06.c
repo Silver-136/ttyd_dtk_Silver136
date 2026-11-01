@@ -334,11 +334,6 @@ EVT_END()
  * Mario and the partner drop from above onto the trail and land,
  * control returns and the Steeple door's n_bero case is switched on again.
  */
-/**
- * Scene when Mario comes out of the Steeple carried by the Boos:
- * Mario and the partner drop from above onto the trail and land,
- * control returns and the Steeple door's n_bero case is switched on again.
- */
 EVT_BEGIN(teresa_oidasare_evt)
     // Mario and his partner are placed high above the trail, as if dropped out of the Steeple.
     CALL(evt_mario_key_onoff, 0)

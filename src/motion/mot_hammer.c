@@ -721,10 +721,6 @@ f32 marioGetAngleKaitenHammer(void) {
  * Cleanup when the spin hammer motion ends early:
  * paper animation off, camera shift reset and the facing and mirror locks released.
  */
-/**
- * Cleanup when the spin hammer motion ends early:
- * paper animation off, camera shift reset and the facing and mirror locks released.
- */
 void mot_ham2_post(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
@@ -760,11 +756,6 @@ void mot_ham2_post(void) {
 #if VERSION <= VERSION_DEMO_US
 static HitEntry* hitEstimate(s32* out) {
 #else
-/**
- * Probes in front of Mario where the hammer will land and returns the hit object, or NULL;
- * *out gets the hit kind (0 nothing, 4/5/6 a wall or object at high, middle or low height,
- * 7 something just above Mario's head height) that picks the swing pose and sound.
- */
 HitEntry* hitEstimate(s32* out) {
 #endif
     MarioWork* mario;

@@ -1537,6 +1537,7 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
         break;
     }
 }
+
 #if VERSION <= VERSION_DEMO_US
 /** Status 21, demos only: empty (Guess: a no-gravity state, from the name); retail drops the case. */
 static void BattleAudienceCtrlProcessKinopioNoGravity(s32 index, s32 front) {

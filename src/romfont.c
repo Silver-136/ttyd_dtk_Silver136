@@ -258,11 +258,6 @@ void romFontMake(void);
  * Non-JP releases fall back to the English table when the IPL font is ASCII but gp->language is Japanese;
  * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
  */
-/**
- * Returns system message msg (progressive-scan prompt, disc errors, language names) in the console's language.
- * Non-JP releases fall back to the English table when the IPL font is ASCII but gp->language is Japanese;
- * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
- */
 const char* romFontGetMessage(s32 msg) {
 #if VERSION <= VERSION_DEMO_US
     if (wp->language != 0 && (u32)gp->language == 0) {

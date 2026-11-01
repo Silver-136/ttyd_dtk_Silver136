@@ -65,21 +65,17 @@ static seq_e3_work work;
 
 //.sdata
 static seq_e3_work* wp = &work;
-#if VERSION >= VERSION_US
 /**
  * The four scenarios of the trade-show menu: the story progress each one starts at and where its box sits
  * on screen, one box in each corner.
  */
+#if VERSION >= VERSION_US
 seq_e3_entry e3_tbl[4] = {
     { 3, -140.0f, 100.0f },
     { 23, 140.0f, 100.0f },
     { 35, -140.0f, -100.0f },
     { 96, 140.0f, -100.0f },
 #else
-/**
- * The four scenarios of the trade-show menu: the story progress each one starts at and where its box sits
- * on screen, one box in each corner.
- */
 seq_e3_entry e3_tbl[3] = {
     { 23, -140.0f, 100.0f },
     { 35, 140.0f, 100.0f },
@@ -271,12 +267,6 @@ void seq_e3Exit(SequenceWork* seq) {
     psndStopAllFadeOut();
 }
 
-/**
- * Kiosk menu state machine: press A/Start page-flips from the title to the scenario boxes;
- * the stick picks a scenario (B or 2 min idle flips back);
- * A sets story progress to just before the scenario's e3_tbl entry, runs the story init events up to it,
- * sets partners, a 20 HP/FP/BP loadout and items, and starts its map.
- */
 /**
  * Kiosk menu state machine: press A/Start page-flips from the title to the scenario boxes;
  * the stick picks a scenario (B or 2 min idle flips back);
@@ -557,7 +547,6 @@ pouchGetPtr()->availableBP = 20;
                 pouchEquipBadgeID(ITEM_POWER_BOUNCE);
                 pouchEquipBadgeID(ITEM_POWER_SMASH);
 #else
-
 #if VERSION == VERSION_EU
             if (wp->scenario != 0) {
 #endif
@@ -622,13 +611,13 @@ pouchGetPtr()->availableBP = 20;
     dispEntry(CAMERA_3D, 0.0f, 0, e3Disp, seq);
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Draws the active page through the 2D camera: the title page (the US demo's characters,
  * tiles and blinking prompt) or the scenario boxes with their area labels
  * and the blinking corner cursor easing toward the selection.
  * On the offscreen page-flip camera it draws the other page.
  */
+#if VERSION <= VERSION_DEMO_US
 #if VERSION != VERSION_DEMO_JP
 // Texture ids in the demo's monthly TPL.
 typedef enum E3Texture {
@@ -650,12 +639,6 @@ static void e3Disp(CameraId cameraId, void* param) {
     Mtx poseMtx;
     Mtx poseScale;
 #else
-/**
- * Draws the active page through the 2D camera: the title page (the US demo's characters,
- * tiles and blinking prompt) or the scenario boxes with their area labels
- * and the blinking corner cursor easing toward the selection.
- * On the offscreen page-flip camera it draws the other page.
- */
 void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
 #endif
@@ -676,13 +659,12 @@ void e3Disp(CameraId cameraId, void* param) {
     s32 inset, pass, step;
     f32 t, dx, dy;
     s32 mode;
-
 #else
     s32 dy, x;
     s32 col, row;
     s32 inset, pass, step;
-
 #endif
+
     active = wp->curScreen;
     if (cameraId == CAMERA_OFFSCREEN2) {
         active = 1 - wp->curScreen;

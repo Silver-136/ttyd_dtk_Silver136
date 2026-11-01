@@ -322,14 +322,6 @@ s32 j;
     const char* area;
     TattleEntry* t;
 #else
-/**
- * Sets up the Journal when the pause menu opens:
- * adds the entries unlocked by story progress (map always; Tattle log once Goombella joins;
- * Crystal Stars at Frankly's; badge log after the badge tutorial;
- * recipe log once unlocked), spawns the seven Crystal Star effects (unowned ones dark),
- * finds Mario's spot on the world map for the current area, and builds the sorted badge,
- * recipe and Tattle lists with their found counts.
- */
 void winLogInit(WindowWork* w) {
     u32 k;
     const char* area;
@@ -602,14 +594,6 @@ static inline BOOL tubuCheck(u8 type) {
 }
 
 
-/**
- * Journal input.
- * State 0 picks an entry; 10 is the world map (load the map TPL, move the cursor with the stick or D-pad,
- * snap to and name the nearest place); 11 turns the Crystal Star carousel;
- * 12 and 13 browse the badge and recipe logs (7x4 grid pages);
- * 14 the Tattle log, where A opens an entry (21/22); 1000/1001 run the Z sort menu.
- * Returns -1 on B at the top level, -2 on Start, else 0.
- */
 /**
  * Journal input.
  * State 0 picks an entry; 10 is the world map (load the map TPL, move the cursor with the stick or D-pad,
@@ -1186,12 +1170,6 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y);
  * the badge and recipe boxes with the selected icon (and found counts from the US release on),
  * the Tattle log list, and the entry buttons.
  */
-/**
- * Draws the Journal (menu slot idx): the map panel,
- * the Crystal Star carousel (positions the star effects with shadows),
- * the badge and recipe boxes with the selected icon (and found counts from the US release on),
- * the Tattle log list, and the entry buttons.
- */
 void winLogDisp(CameraId cam, void* param, s32 idx) {
     static const GXColor kW = {0xFF, 0xFF, 0xFF, 0xFF};
     WindowWork* w = param;
@@ -1333,11 +1311,6 @@ static inline double fabs(double x) { return __fabs(x); }
 #if VERSION <= VERSION_DEMO_US
 static void mapGX(WindowWork* w, f32 x, f32 y) {
 #else
-/**
- * Draws the world map panel: the scrolled map texture,
- * the route dots revealed so far (the hovered place blinks), the current chapter's goal icon,
- * Mario's marker at his location, the frame, and bobbing arrows on the sides that can still scroll.
- */
 void mapGX(WindowWork* w, f32 x, f32 y) {
 #endif
     static f32 pos_tbl[7][2] = {
@@ -1481,11 +1454,6 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
 #if VERSION <= VERSION_DEMO_US
 static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
 #else
-/**
- * Draws the Tattle log page: the known/total count,
- * 16 entries in two columns with their log numbers (unknown enemies as "???",
- * Doopliss as "?" until his name is guessed), page arrows and the Z sort hint.
- */
 void monoshiriGX(WindowWork* w, f32 x, f32 y) {
 #endif
     GXColor k1;
@@ -1616,11 +1584,6 @@ MonosiriWork* monosiriInit(s32 id, f32 x, f32 y) {
     return m;
 }
 
-/**
- * Per-frame Tattle card update: loads win.tpl and mono.dat (per-enemy framing), allocates the portrait buffer,
- * loads the enemy's model (plus Smorg's extra part model) and fades it in,
- * registers capture and the card's draw, and slides the card toward its target (off screen once closing).
- */
 /**
  * Per-frame Tattle card update: loads win.tpl and mono.dat (per-enemy framing), allocates the portrait buffer,
  * loads the enemy's model (plus Smorg's extra part model) and fades it in,
@@ -1912,19 +1875,14 @@ void capture(CameraId camera, void* param) {
 }
 
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Draws the Tattle card: the half-book page, the captured portrait with a soft edge and fade-in alpha,
  * the enemy's log number and name (Doopliss as "?" until his name is guessed, not in the demos),
  * and where it is found.
  */
+#if VERSION <= VERSION_DEMO_US
 static void monosiri_disp(CameraId camera, void* param) {
 #else
-/**
- * Draws the Tattle card: the half-book page, the captured portrait with a soft edge and fade-in alpha,
- * the enemy's log number and name (Doopliss as "?" until his name is guessed, not in the demos),
- * and where it is found.
- */
 void monosiri_disp(CameraId camera, void* param) {
 #endif
     MonosiriWork* m = param;
@@ -1953,7 +1911,6 @@ void monosiri_disp(CameraId camera, void* param) {
     y = m->curY;
 {
 #else
-
     x = m->curX;
     y = m->curY;
     if (m->file1) {

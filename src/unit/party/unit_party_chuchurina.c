@@ -599,11 +599,6 @@ BattleWeapon partyWeapon_ChuchurinaKiss = {
  * and forth, one hit per successful action command press, the last slap using the final-hit weapon;
  * then returns home.
  */
-/**
- * Ms. Mowz's Love Slap: she moves to the enemy's slap point (_get_binta_hit_position) and slaps it back
- * and forth, one hit per successful action command press, the last slap using the final-hit weapon;
- * then returns home.
- */
 EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     // Find the chosen enemy and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -1147,10 +1142,6 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         RETURN
 EVT_END()
 
-/**
- * Ms. Mowz's Tease: she teases the enemies, and the action command result sets the dizzy chance of a copy of the
- * weapon (_make_madowase_weapon) that is then applied to each target; misses make the target dodge.
- */
 /**
  * Ms. Mowz's Tease: she teases the enemies, and the action command result sets the dizzy chance of a copy of the
  * weapon (_make_madowase_weapon) that is then applied to each target; misses make the target dodge.
@@ -1924,10 +1915,6 @@ EVT_END()
  * Ms. Mowz's Smooch: she kisses Mario, healing him by an amount the action command builds up,
  * with the recovery effect, then returns home.
  */
-/**
- * Ms. Mowz's Smooch: she kisses Mario, healing him by an amount the action command builds up,
- * with the recovery effect, then returns home.
- */
 EVT_BEGIN(partyChuchurinaAttack_Kiss)
     // Find the chosen ally and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -2261,7 +2248,6 @@ EVT_END()
 
 /** Idle: plays the stay pose from the current pose table. */
 #if VERSION > VERSION_DEMO_US
-/** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

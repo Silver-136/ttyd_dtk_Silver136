@@ -384,13 +384,6 @@ EVT_END()
  * moves to height 130 and installs the ceiling scripts, including the fall script.
  * Both set the run and walk sounds and clear the flipped-over count.
  */
-/**
- * Installs the handlers for the unit's current form, chosen by unit work 0.
- * On the ground (0) it installs its normal wait, attack, damage and confusion scripts;
- * on the ceiling (1) it switches to the ceiling pose and data tables,
- * moves to height 130 and installs the ceiling scripts, including the fall script.
- * Both set the run and walk sounds and clear the flipped-over count.
- */
 static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_CRIMSON_MET_ON_CEILING, LW(15))
     IF_INT_EQUAL(LW(15), 0)
@@ -690,10 +683,6 @@ EVT_END()
  * Counter-damage handler on the ceiling: leaves the ceiling state (restores the ground pose and data tables,
  * hit offsets and home position, runs init_event2 for the ground form) and then applies the counter damage.
  */
-/**
- * Counter-damage handler on the ceiling: leaves the ceiling state (restores the ground pose and data tables,
- * hit offsets and home position, runs init_event2 for the ground form) and then applies the counter damage.
- */
 static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
@@ -716,11 +705,6 @@ static EVT_BEGIN(counter_damage_event_ceil)
     RETURN
 EVT_END()
 
-/**
- * Makes the ceiling unit fall: plays the fall sound, drops it to the ground with the landing sound,
- * swaps to the ground tables, runs init_event2 for the ground form,
- * and leaves it lying flipped over (turned defence and pose tables, flipped-over count 1), after two bounces.
- */
 /**
  * Makes the ceiling unit fall: plays the fall sound, drops it to the ground with the landing sound,
  * swaps to the ground tables, runs init_event2 for the ground form,

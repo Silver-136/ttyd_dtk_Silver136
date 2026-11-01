@@ -129,10 +129,6 @@ s32 partyGetFootmarkId(PartyEntry* party) {
 static inline void partyTargetPos(PartyEntry* other, BOOL far, Vec* pos) {
     if (other && !far) {
 #else
-/**
- * Where trail id is chasing: the other party member (anotherPartyGetPtr) when it exists,
- * Koops's nokonokoGetStatus is not 3 and it is within 150 units of Mario, else Mario.
- */
 static void getTargetPos(s32 id, Vec* pos) {
     MarioWork* mario = marioGetPtr();
     BOOL far = FALSE;
@@ -396,10 +392,6 @@ f32 partyGetTargetDistY(s32 id, f32 y) {
 /** Demo: vertical distance from height y to what trail id chases, picked as in partyGetTargetDir. */
 f32 partyGetTargetDistY(s32 id, f32 y) {
 #else
-/**
- * The speed trail id should move at: Mario's walk speed (baseSpeed, else baseDashSpeed) for trail 0 or
- * when the other party member is away, else that member's moveSpeed.
- */
 f32 partyGetTargetMovespd(s32 id) {
     MarioWork* mario = marioGetPtr();
     BOOL far;
@@ -834,10 +826,6 @@ static inline f32 partyUpdSpd2(PartyEntry* party) {
  * partyUpdSpd, except while forced to move (forceMoveFrames) or jumping,
  * falling or climbing a step (motions 2, 3, 6), when moveSpeed is left as it is.
  */
-/**
- * partyUpdSpd, except while forced to move (forceMoveFrames) or jumping,
- * falling or climbing a step (motions 2, 3, 6), when moveSpeed is left as it is.
- */
 static inline f32 partyChkUpdSpd(PartyEntry* party) {
     if (party->forceMoveFrames != 0 || party->motionId == PARTY_MOTION_JUMP || party->motionId == PARTY_MOTION_FALL || party->motionId == PARTY_MOTION_UPSTAIRS) {
         return party->moveSpeed;
@@ -1111,11 +1099,6 @@ void partyMoveNoHosei(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
 static s32 partyMoveMain(PartyEntry* party, s32 hosei) {
 #else
-/**
- * Moves the partner one frame: walls in front (or a straight move with wall checks off), the ceiling,
- * then a jump or the ground search and falling. Returns 0 on the ground, 1 jumping, 2 falling, 3 just landed.
- * hosei 1 adds the corrections of partyGetMoveDirSpd.
- */
 s32 partyMoveMain(PartyEntry* party, s32 hosei) {
 #endif
     Vec pos;
@@ -2038,10 +2021,6 @@ extern f32 partyNrmToAngle(Vec* n);
  * TRUE when hit is floor a partner may appear on:
  * not water or a hazard (attr 0x200 / 0x800) and not a map object from objNames.
  */
-/**
- * TRUE when hit is floor a partner may appear on:
- * not water or a hazard (attr 0x200 / 0x800) and not a map object from objNames.
- */
 static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     if (!hit) {
         return FALSE;
@@ -2062,7 +2041,6 @@ static inline f32 partyAppearNrmAngle(Vec n) {
     return partyNrmToAngle(&n);
 }
 
-/** Moves point out d units back from direction ang, in the horizontal plane. */
 /** Moves point out d units back from direction ang, in the horizontal plane. */
 static inline void partyAppearMoveBack(Vec* out, f32 d, f32 ang) {
     movePos(&out->x, &out->z, -d, ang);
@@ -2433,7 +2411,6 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
 }
 #endif
 
-/** Flying partners appear at least 5 units above Mario's feet. */
 /** Flying partners appear at least 5 units above Mario's feet. */
 static inline void partyAppearAdjustY(PartyEntry* party, MarioWork* mario, Vec* out) {
     if (party->moveKind == 1 && out->y < mario->position.y) {

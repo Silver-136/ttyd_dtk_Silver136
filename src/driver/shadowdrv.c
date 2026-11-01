@@ -843,10 +843,6 @@ static inline void shadowSetMatZero(void) {
 #if VERSION <= VERSION_DEMO_US
 static void cylinderShadowDraw(CameraId cameraId, void* param) {
 #else
-/**
- * Draws the cylinder (mode 2, the default) character shadows:
- * each volume darkens the ground it passes through, and its screen area goes to the shadow's offscreen region.
- */
 void cylinderShadowDraw(CameraId cameraId, void* param) {
 #endif
     ShadowEntry* entry = cswp->entries;

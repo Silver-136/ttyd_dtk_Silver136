@@ -373,11 +373,6 @@ return ret;
  * turns Mario to face left or right on screen, restores his normal collision (marioSetSpec),
  * clears Tube Mode and the paper animation, frees the motion's work and dismounts the partners.
  */
-/**
- * Cleanup when the roll motion ends: stops the roll sound, resets the camera shift,
- * turns Mario to face left or right on screen, restores his normal collision (marioSetSpec),
- * clears Tube Mode and the paper animation, frees the motion's work and dismounts the partners.
- */
 void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
 #if VERSION <= VERSION_DEMO_US
@@ -430,10 +425,6 @@ void mot_roll_post(void) {
     allPartyRideOff();
 }
 
-/**
- * Instantly turns Mario back from Tube Mode (the same reset as mot_roll_post) and puts him in the stay motion;
- * used by evt_mario.
- */
 /**
  * Instantly turns Mario back from Tube Mode (the same reset as mot_roll_post) and puts him in the stay motion;
  * used by evt_mario.
@@ -579,11 +570,6 @@ static inline s32 rollChk(void) {
     return r;
 }
 
-/**
- * Tube Mode motion: Mario rolls up into a tube, then rolls along with the stick,
- * momentum and slope push (rollData constants), jumps a little with A (not on eki_04's steep slopes),
- * and unrolls with B when there is room. Plays the rolling loop sound and squashes the tube on landing.
- */
 /**
  * Tube Mode motion: Mario rolls up into a tube, then rolls along with the stick,
  * momentum and slope push (rollData constants), jumps a little with A (not on eki_04's steep slopes),

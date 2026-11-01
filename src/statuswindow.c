@@ -126,13 +126,6 @@ void statusWinReInit(void) {
  * toggles with Z (held for 10 seconds, with a sound) and pops open for 2 seconds when a value changes.
  * Then starts and runs the slide animation (16 frames in, 28 out).
  */
-/**
- * Per-frame HUD logic in the field: hidden when Mario is not himself (a transformation or another character)
- * and left alone in the Pit of 100 Trials ("yuu").
- * While Mario can move it opens after he stands still for 10 seconds, closes when he walks,
- * toggles with Z (held for 10 seconds, with a sound) and pops open for 2 seconds when a value changes.
- * Then starts and runs the slide animation (16 frames in, 28 out).
- */
 void statusWinMain(void) {
     MarioWork* mario;
     f32 inv;
@@ -328,10 +321,6 @@ static inline void numDisp(f32 x, f32 y, s32 value, BOOL small) {
 #if VERSION <= VERSION_DEMO_US
 static void statusWinDisp(CameraId camId, void* param) {
 #else
-/**
- * Draws the HUD: the HP, FP, Star Power and coin/Star Point banners with their icons and numbers,
- * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
- */
 void statusWinDisp(CameraId camId, void* param) {
 #endif
     alwaysDtEntry* e;
@@ -438,7 +427,6 @@ void statusWinDisp(CameraId camId, void* param) {
 #if VERSION <= VERSION_DEMO_US
     }
 #else
-
     if (wp->flags & STATUS_WINDOW_FLAG_MENU_ICONS && !gp->inBattle) {
         y2 = -180.0f + (wp->openY - wp->y);
         MTXTrans(m2, -190.0f, y2, 0.0f);
@@ -494,10 +482,6 @@ void statusWinDisp(CameraId camId, void* param) {
 #if VERSION <= VERSION_DEMO_US
 static void statusGetValue(StatusValue* values) {
 #else
-/**
- * Reads the values the HUD shows: from the pouch in the field (the partner from the party),
- * from Mario's and the partner's battle units in battle.
- */
 void statusGetValue(StatusValue* values) {
 #endif
     BattleWork* bw;
@@ -632,17 +616,13 @@ static inline s32 calcStep(s32 target, s32 cur) {
     return d;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Counts the displayed HUD numbers toward the real values every other frame while the window is open,
  * with the coin counting sound every 8th frame (6th in the demos).
  */
+#if VERSION <= VERSION_DEMO_US
 static void valueUpdate(void) {
 #else
-/**
- * Counts the displayed HUD numbers toward the real values every other frame while the window is open,
- * with the coin counting sound every 8th frame (6th in the demos).
- */
 void valueUpdate(void) {
 #endif
     static s32 count;

@@ -2702,7 +2702,6 @@ BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_
 
 /** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
 #if VERSION > VERSION_DEMO_US
-/** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
 EVT_BEGIN(_object_turn_event_A1)
     SET_VALUE(LW(9), 0)
     CALL_CHILD(PTR(_object_turn_event_core))
@@ -2712,7 +2711,6 @@ EVT_END()
 
 /** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
 #if VERSION > VERSION_DEMO_US
-/** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
 EVT_BEGIN(_object_turn_event_A2)
     SET_VALUE(LW(9), 1)
     CALL_CHILD(PTR(_object_turn_event_core))
@@ -2722,7 +2720,6 @@ EVT_END()
 
 /** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
 #if VERSION > VERSION_DEMO_US
-/** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
 EVT_BEGIN(_object_turn_event_B)
     SET_VALUE(LW(9), 2)
     CALL_CHILD(PTR(_object_turn_event_core))
@@ -2732,7 +2729,6 @@ EVT_END()
 
 /** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
 #if VERSION > VERSION_DEMO_US
-/** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
 EVT_BEGIN(_nozzle_turn_event)
     CALL(_nozzle_turn)
     RETURN
@@ -3290,7 +3286,6 @@ void _disp_escape_wall_message(CameraId camera, void* param) {
     FontDrawStart();
     FontDrawString(zero - (width / 2), -120.0f, msg);
 }
-
 #endif
 
 /**

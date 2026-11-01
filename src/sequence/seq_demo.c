@@ -1031,7 +1031,6 @@ void THPGXYuv2RgbSetup(GXRenderModeObj* rmode) {
 }
 
 /** Draws one movie frame quad from its Y (full size) and U/V (half size) I8 textures; needs THPGXYuv2RgbSetup. */
-/** Draws one movie frame quad from its Y (full size) and U/V (half size) I8 textures; needs THPGXYuv2RgbSetup. */
 void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 textureWidth, s16 textureHeight,
                       s16 polygonWidth, s16 polygonHeight) {
     GXTexObj tobj0, tobj1, tobj2;

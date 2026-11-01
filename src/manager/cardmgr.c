@@ -449,11 +449,6 @@ void cardCopy(s32 from, s32 to) {
  * then snapshots the global work, pouch, defeated-NPC records, badge shop, Pianta Parlor and informant state,
  * checksums it and starts the write.
  */
-/**
- * Saves the game into a slot: records Mario's position, both partners, the save time and count,
- * then snapshots the global work, pouch, defeated-NPC records, badge shop, Pianta Parlor and informant state,
- * checksums it and starts the write.
- */
 void cardWrite(s32 slot) {
     CardSaveSlot* save;
     MarioWork* mario;
@@ -1184,8 +1179,8 @@ static inline u32 header_sum(u8* data, s32 size) {
     }
     return sum;
 }
-
 #endif
+
 /** PAL: not inlined; the comment and its date order follow gp->language */
 static void make_header(void) {
     CardMetadata* metadata;

@@ -96,16 +96,6 @@ EvtWord subset_attack_ready_jump_event[2];
  * other enemies run their data-table KO event or subsetevt_dead_core.
  * US on, a revived enemy also loses its holding-stolen-item flag.
  */
-/**
- * KO reaction for a unit (LW(10) = unit, LW(11) = part) whose HP reached 0.
- * Mario and the partners first walk home.
- * Mario then runs his data-table event 51 when a Life Shroom revives him (damage code bit 0x800), else event 49.
- * A partner with a Life Shroom keels over, uses it up and gets back up with 10 HP;
- * otherwise it is KO'd and, when it stood in front, swaps places with Mario.
- * Enemies revived by a Life Shroom spin down, show it and recover 10 HP;
- * other enemies run their data-table KO event or subsetevt_dead_core.
- * US on, a revived enemy also loses its holding-stolen-item flag.
- */
 EVT_BEGIN(subsetevt_dead)
     // The command cursor will no longer return to this unit.
     // Mario and the partners first float or walk back home; enemies skip ahead.

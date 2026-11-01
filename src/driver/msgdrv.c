@@ -27,8 +27,8 @@
 #include "driver/mapdrv.h"
 /** Red "No messages" text shown in place of a message key that is not found, Japanese version (ErrMessage). */
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
-#if VERSION >= VERSION_US
 /** The same red "No messages" text for each other language, tagged with its name; ErrMessage picks one. */
+#if VERSION >= VERSION_US
 const char R_no_messages_US[] = "<col ff0000ff>No messages.[English]<col>\012<key>";
 const char R_no_messages_DE[] = "<col ff0000ff>No messages.[German]<col>\012<key>";
 const char R_no_messages_FR[] = "<col ff0000ff>No messages.[French]<col>\012<key>";
@@ -36,7 +36,6 @@ const char R_no_messages_ES[] = "<col ff0000ff>No messages.[Spanish]<col>\012<ke
 const char R_no_messages_IT[] = "<col ff0000ff>No messages.[Italian]<col>\012<key>";
 const char R_no_messages_DU[] = "<col ff0000ff>No messages.[Dutch]<col>\012<key>";
 #else
-/** The same red "No messages" text for each other language, tagged with its name; ErrMessage picks one. */
 const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 #endif
 
@@ -213,7 +212,6 @@ void msgLoad(const char* filename, s32 index) {
         msgcount++;
     }
     entry->count = msgcount / 2; // tag, message
-
 #else
 #if VERSION >= VERSION_US
     // US: the global message buffer is allocated once, sized for the largest message file of all languages
@@ -516,7 +514,6 @@ s32 msgMain(smartEntry* smart) {
 }
 
 #if VERSION >= VERSION_US
-
 // US: <scaleX> letters (MSG_CHAR_SCALE_X) are stretched on x only
 // A macro, not an inline function: as a function the US constant order changes.
 #define MSG_DRAW_SCALE(c)                                \
@@ -3153,16 +3150,8 @@ void msgWindow_Clear_Main(WindowEntry* window) {
  * sign plate, system box, ...) and the text with msgDisp.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draw callback for a message window: draws the frame for its type (speech balloon with tail toward the speaker,
- * sign plate, system box, ...) and the text with msgDisp.
- */
 static void msgWindow_Disp(CameraId camId, void* param) {
 #else
-/**
- * Draw callback for a message window: draws the frame for its type (speech balloon with tail toward the speaker,
- * sign plate, system box, ...) and the text with msgDisp.
- */
 void msgWindow_Disp(CameraId camId, void* param) {
 #endif
     CameraEntry* camera = camGetCurPtr();

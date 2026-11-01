@@ -1933,7 +1933,6 @@ void sort_4_3_func(WindowWork* wp) {
 
 
 /** Journal badge log by name, retail: names folded to katakana first. */
-/** Journal badge log by name, retail: names folded to katakana first. */
 s32 compare_func5_1(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_US
     const s16* ea = a;
@@ -2126,7 +2125,6 @@ void sort_5_3_func(WindowWork* wp) {
 }
 
 /** Journal recipe log by name, retail: names folded to katakana first. */
-/** Journal recipe log by name, retail: names folded to katakana first. */
 s32 compare_func6_1(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_US
     const s16* ea = a;
@@ -2306,7 +2304,6 @@ WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort
 #endif
 
 /** qqsort compare for the Tattle Log by where the enemy is found (getMonosiriPlace of its locationTag). */
-/** qqsort compare for the Tattle Log by where the enemy is found (getMonosiriPlace of its locationTag). */
 s32 compare_func2(const void* a, const void* b) {
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
     TattleEntry* tb = battleGetUnitMonosiriPtr(((WinSortEnt*)b)->id);
@@ -2321,7 +2318,6 @@ s32 compare_func2(const void* a, const void* b) {
     return 0;
 }
 
-/** Reverse of compare_func2. */
 /** Reverse of compare_func2. */
 s32 compare_func2_r(const void* a, const void* b) {
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
@@ -2353,7 +2349,6 @@ void sort_7_2_func(WindowWork* wp) {
 
 /** Tattle Log by name, retail: katakana-folded, with Doopliss's entries under his current name. */
 #if VERSION > VERSION_DEMO_US
-/** Tattle Log by name, retail: katakana-folded, with Doopliss's entries under his current name. */
 s32 compare_func3(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -2817,13 +2812,6 @@ void winZClear(void) {
 #if VERSION <= VERSION_DEMO_US
 static void winMailDisp(WindowWork* wp) {
 #else
-/**
- * Draws the mail window opened from the Items page while it is on screen.
- * As a list: one row per letter with a sender colour (MailData flags 1/2/4), an opened/unopened envelope,
- * its two-digit number and title.
- * While a letter is read (item.state 202): its header, the body scrolled by mailLine,
- * its picture (flags 0x1000) and scroll arrows.
- */
 void winMailDisp(WindowWork* wp) {
 #endif
     s32 i;

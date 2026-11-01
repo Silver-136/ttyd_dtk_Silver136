@@ -1110,11 +1110,6 @@ EVT_END()
  * takes 3 Shine Sprites (supercoins) for each rank up, runs powerupya_party_lank_rtn,
  * and loops until Mario stops, has fewer than 3 sprites or nothing is left to raise.
  */
-/**
- * Merlon's partner rank up menu: lets Mario pick a partner from the other-party window,
- * takes 3 Shine Sprites (supercoins) for each rank up, runs powerupya_party_lank_rtn,
- * and loops until Mario stops, has fewer than 3 sprites or nothing is left to raise.
- */
 EVT_BEGIN(powerupya_party_rtn)
     CALL(evt_win_coin_on, 1, LW(12))
     LOOP(0)
@@ -4566,17 +4561,13 @@ static USER_FUNC(enzan_lw_load) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Switches the map background texture to the file named by args[0] (the current map's name if NULL),
  * from "./bg/" in the demos and "./b/" in the retail versions.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(evt_set_bgtpl) {
 #else
-/**
- * Switches the map background texture to the file named by args[0] (the current map's name if NULL),
- * from "./bg/" in the demos and "./b/" in the retail versions.
- */
 USER_FUNC(evt_set_bgtpl) {
 #endif
     char path[64];
@@ -4793,11 +4784,6 @@ USER_FUNC(lecture) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(monosiri_check) {
 #else
-/**
- * Finds the next enemy tattle that Mario can still learn at this story stage:
- * returns in args[0] 1 if one exists, and its enemy id in args[1].
- * Gus, Bonetail and the Atomic Boo are checked after the per-stage lists.
- */
 USER_FUNC(monosiri_check) {
 #endif
     EvtWord* args = event->args;
@@ -5881,15 +5867,6 @@ EVT_END()
  * and the partner head out (mac_0_104 to 120).
  * It ends with the Rogueport theme and STG0_16_FRANKLYS_HOUSE.
  */
-/**
- * Frankly's first epigraphy scene, after the Thousand-Year Door (STG0_15_THE_PEDESTAL):
- * the pouch's Star Power
- * is filled, Frankly explains the light that shone on Mario (a special move) and offers to show it outside
- * (mac_0_103_01 to 06), then reads the Magical Map: the next Crystal Star is in Petal Meadows, reached by a pipe
- * under the city; he learns that Princess Peach sent the map and had visited him, and stays in town while Mario
- * and the partner head out (mac_0_104 to 120).
- * It ends with the Rogueport theme and STG0_16_FRANKLYS_HOUSE.
- */
 EVT_BEGIN(epigraphy_map)
     // Mario's Star Power gauge is filled and control is taken away while Mario
     // and the partner are moved into place.
@@ -6073,11 +6050,6 @@ EVT_END()
  * he deciphers the Magical Map for the next Crystal Star (mac_1_004 to 010_03)
  * and sets STG1_31_FRANKLYS_HOUSE_STG_1.
  */
-/**
- * Frankly's cutscene after Chapter 1 (STG1_30_ZESS_T):
- * he deciphers the Magical Map for the next Crystal Star (mac_1_004 to 010_03)
- * and sets STG1_31_FRANKLYS_HOUSE_STG_1.
- */
 EVT_BEGIN(epigraphy_map_after_stage1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -6145,10 +6117,6 @@ EVT_BEGIN(epigraphy_map_after_stage1)
     RETURN
 EVT_END()
 
-/**
- * Frankly's cutscene after Chapter 2 (STG2_40_THOUSAND_YEAR_DOOR):
- * he deciphers the map for the next star (mac_2_002_01 to 06) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
- */
 /**
  * Frankly's cutscene after Chapter 2 (STG2_40_THOUSAND_YEAR_DOOR):
  * he deciphers the map for the next star (mac_2_002_01 to 06) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
@@ -6265,11 +6233,6 @@ EVT_END()
  * he deciphers the map for the next star (mac_3_001_01 on);
  * if the Twilight Town pipe has not been reached he adds a hint. Sets STG3_51_FRANKLYS_HOUSE_STG_3.
  */
-/**
- * Frankly's cutscene after Chapter 3 (STG3_50_THOUSAND_YEAR_DOOR):
- * he deciphers the map for the next star (mac_3_001_01 on);
- * if the Twilight Town pipe has not been reached he adds a hint. Sets STG3_51_FRANKLYS_HOUSE_STG_3.
- */
 EVT_BEGIN(epigraphy_map_after_stage3)
     // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
@@ -6373,15 +6336,6 @@ EVT_END()
  * the map points to Keelhaul Key
  * (mac_4_002, 003). It sets STG4_31_FRANKLYS_HOUSE_STG_4.
  */
-/**
- * Frankly's epigraphy scene after Chapter 4 (STG4_30_THOUSAND_YEAR_DOOR):
- * hearing of Princess Peach's e-mail
- * he explains that the treasure is the spirit of an ancient demon beaten by four heroes
- * and that the Thousand-Year
- * Door may be weakening, so the stars must still be gathered (mac_4_001_01 to 12);
- * the map points to Keelhaul Key
- * (mac_4_002, 003). It sets STG4_31_FRANKLYS_HOUSE_STG_4.
- */
 EVT_BEGIN(epigraphy_map_after_stage4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -6453,13 +6407,6 @@ EVT_BEGIN(epigraphy_map_after_stage4)
     RETURN
 EVT_END()
 
-/**
- * Frankly's epigraphy scene after Chapter 5 (STG5_60_RETURN_TO_KEELHAUL):
- * the next Crystal Star is in Poshley
- * Heights, reached on the Excess Express, and he suggests asking Don Pianta for tickets (mac_5_002 to 009).
- * It sets
- * STG5_61_FRANKLYS_HOUSE_STG_5.
- */
 /**
  * Frankly's epigraphy scene after Chapter 5 (STG5_60_RETURN_TO_KEELHAUL):
  * the next Crystal Star is in Poshley
@@ -6597,12 +6544,6 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     RETURN
 EVT_END()
 
-/**
- * Cutscene when Frankly finishes the Chapter 6 research after three minutes of play time:
- * Frankly and the partner discuss it (mac_6_007 to 015),
- * with a different line depending on whether Mario has the Ultra Hammer,
- * then sets STG6_72_3_MINUTES_LATER and restores the controls and music.
- */
 /**
  * Cutscene when Frankly finishes the Chapter 6 research after three minutes of play time:
  * Frankly and the partner discuss it (mac_6_007 to 015),
@@ -6807,6 +6748,7 @@ s32 stg5_list[] = {
     93, 99,
 #endif
 };
+
 #if VERSION <= VERSION_DEMO_US
 s32 stg5_list[] = {
 93, 94, 99,

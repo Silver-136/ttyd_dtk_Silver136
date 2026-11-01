@@ -598,7 +598,6 @@ BOOL N_marioChkUseParty(void) {
 void marioFBattlePrepare(void) {
     MarioWork* wp = mp;
 #if VERSION > VERSION_DEMO_US
-
     R_last_position = wp->position;
 #endif
     marioAdjustMoveDir();
@@ -990,7 +989,6 @@ void marioReInit(void) {
     }
     dotFlag = wp->flags & MARIO_FLAG_IS_8_BIT;
 #else
-
     dotFlag = (wp = mp)->flags & MARIO_FLAG_IS_8_BIT;
 #endif
     camId = marioGetCamId();
@@ -1399,10 +1397,6 @@ static inline BOOL marioChkRollMot(void) {
 #if VERSION <= VERSION_DEMO_US
 static void marioCtrlOff2Main(void) {
 #else
-/**
- * Runs Mario's motion and physics while control is off through marioCtrlOff2 (the pause menu opening),
- * so a jump or fall finishes; skipped for plane, boat, damage, pits, accordion, Yoshi and Vivian's shadow.
- */
 void marioCtrlOff2Main(void) {
 #endif
     MarioWork* wp = mp;
@@ -1566,12 +1560,6 @@ void marioMove(void) {
 #if VERSION <= VERSION_DEMO_US
 static void marioMoveMain(void) {
 #else
-/**
- * Mario's horizontal movement: forced moves (Yoshi, tube, boat),
- * air steering from the stick (weaker with Slow Go or as a tube), shallow-water slowdown, damage floors,
- * slopes and moving floors, the air speed cap, then the wall checks (plus the dou_10 side spears while a tube,
- * from the Japanese release on) and spikes.
- */
 void marioMoveMain(void) {
 #endif
     MarioWork* wp = mp;
@@ -2456,10 +2444,6 @@ void marioDispBlur(CameraId camId, void* param) {
 #if VERSION <= VERSION_DEMO_US
 static void marioDisp(CameraId camId, void* param) {
 #else
-/**
- * Draw callback for Mario: builds his model matrix from scale, the facing mirror, rotation,
- * offsets and tube squash, draws the pose and runs the animation at 75% speed in shallow water.
- */
 void marioDisp(CameraId camId, void* param) {
 #endif
     MarioWork* wp = mp;

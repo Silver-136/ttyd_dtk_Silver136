@@ -63,12 +63,6 @@ void sndFree(void* ptr) {
  * hooks the audio DMA callback and allocates the song (4), effect (40),
  * DVD audio (2) and stream (3) channel tables with their buffers. Fade in/out default to 10 and 500 ms.
  */
-/**
- * Boots the sound system: sets up ARAM and its queue, starts MusyX (64 voices, 12 MB of ARAM),
- * prepares the reverb, chorus and delay effects, sets stereo output,
- * hooks the audio DMA callback and allocates the song (4), effect (40),
- * DVD audio (2) and stream (3) channel tables with their buffers. Fade in/out default to 10 and 500 ms.
- */
 void SoundInit(void) {
     SND_HOOKS hooks = (SND_HOOKS){ sndMalloc, sndFree };
     void* data;
@@ -337,7 +331,6 @@ BOOL SoundLoadDVD2(const char* path) {
         sprintf(_ssGetStr(), "%s/%s%s", root, path, ".pool");
     entry = DVDMgrOpen(_ssGetStr(), 2, 0);
 #else
-
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".pool");
     entry = DVDMgrOpen(_ssGetStr(), 2, 0);
     // FAKE: dead store; removing it changes the object
@@ -1527,19 +1520,14 @@ inline void _ssResetEntries(SoundStream* stream) {
     stream->entries[1].runCount = 0;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Marks the stream entry whose DVD read finished as loaded,
  * then starts the first stream whose entries are all ready.
  * The demo masks interrupts only around the updates, the later versions around the whole search.
  */
+#if VERSION <= VERSION_DEMO_US
 static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #else
-/**
- * Marks the stream entry whose DVD read finished as loaded,
- * then starts the first stream whose entries are all ready.
- * The demo masks interrupts only around the updates, the later versions around the whole search.
- */
 void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
     int i;
 #endif
@@ -1553,7 +1541,6 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
     for (i = 0; i < 3; i++) {
         stream = &sound.streams[i];
 #else
-
     SoundIntOff();
     stream = sound.streams;
     for (i = 0; i < 3; i++, stream++) {
@@ -1816,16 +1803,14 @@ u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 cou
     }
     return src;
 }
-#if VERSION <= VERSION_DEMO_US
 /** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
+#if VERSION <= VERSION_DEMO_US
 static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
 #else
 #if VERSION >= VERSION_US
-/** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
 u32 _sscallback(void* p_b1, u32 p_l1, void* p_b2, u32 p_l2, u32 user) {
     u32 len1;
 #else
-/** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
 u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
 #endif
 #endif
@@ -1847,7 +1832,6 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
     buffer2 = p_b2;
     stream = &sound.streams[(u8)user];
 #else
-
     // FAKE: len2/buffer1/buffer2 are copied from the params into locals of a different type (unsigned int, s16*) so
     // IRO cannot propagate the copies; the params then coalesce into r3/r5/r6 and these statement copies give the
     // target order len1 (param web, after the stream add) < len2 < buffer1 < buffer2 (buffer1 lands in r6).
@@ -2157,11 +2141,6 @@ const char* paths[1];
 #if VERSION <= VERSION_DEMO_US
 static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
 #else
-/**
- * Disc read callback for a stream header: reads format (PCM16, DPCM or ADPCM with its coefficients),
- * sample rate, channel count, loop points and sizes,
- * allocates the MusyX stream(s) (one, or a left/right pair panned hard) and starts loading the data.
- */
 void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
 #endif
     SoundStream* stream;

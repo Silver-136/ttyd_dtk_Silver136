@@ -72,13 +72,6 @@ void _prolog(void) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(bress) {
 #else
-/**
- * Breath-puff script helper, run every frame by evt_bress:
- * spawns a small mist effect in front of Mario and the first partner every 1 to 2 seconds (randomised, 60 to 119
- * frames), and in front of every active NPC, each with its own timer.
- * No puffs while Mario is in certain states (marioChkSts 4, 8, 0x10), and from the JP release on,
- * none while vivianGetStatus() returns 2 (Vivian's shadow state). Simulates visible breath in the cold.
- */
 USER_FUNC(bress) {
 #endif
     static f32 offset[8] = {0.0f, 10.0f, 24.0f, 10.0f, 15.0f, 20.0f, 20.0f, 10.0f};

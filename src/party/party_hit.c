@@ -271,7 +271,6 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     Vec pos;
     Vec dir;
     Vec outNrm;
-
 #else
 HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     HitEntry* hit;
@@ -282,8 +281,8 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     Vec dir;
     Vec outPos, outNrm;
     f32 dist;
-
 #endif
+
     if (party->flags & PARTY_FLAG_FORCE_FALL) {
         return NULL;
     }
@@ -742,12 +741,6 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
  * On a hit slides *pos along the wall and returns it; otherwise moves *pos by dist.
  * Retail versions store frontWallDist (-1 none); the US release narrows paper-mode width to 6.
  */
-/**
- * The partners' main wall check: a ray ahead at 0.75 of the height,
- * then one at step height (11, or 1 for Bobbery in use) that only counts walls of 45 degrees or more.
- * On a hit slides *pos along the wall and returns it; otherwise moves *pos by dist.
- * Retail versions store frontWallDist (-1 none); the US release narrows paper-mode width to 6.
- */
 #if VERSION <= VERSION_DEMO_US
 /** Demo only: partner-filtered ray that returns the hit object, the rounded hit distance in *dist and the normal. */
 static inline HitEntry* partyHitCheckDistNrm(PartyEntry* party, Vec* pos, Vec* dir, Vec* outNrm, f32* dist) {
@@ -1079,7 +1072,6 @@ void partyHitStrippedPool(f32* f, s32 i) {
 }
 
 #if VERSION >= VERSION_US
-
 /* FAKE: inline add keeps the original fadds operand order (pos.y, 10.0f) */
 static inline f32 party_addf(f32 a, f32 b) { return a + b; }
 

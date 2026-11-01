@@ -984,6 +984,7 @@ void partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {
 #endif
     party->motionStep = sub;
 }
+
 #if VERSION <= VERSION_DEMO_US
 /**
  * Returns the partner to the run mode she had before the current one,
@@ -1070,7 +1071,6 @@ void partyMain(void) {
     s32 i;
     PartyEntry* party;
 #if VERSION > VERSION_DEMO_US
-
     marioGetPtr();
 #endif
     if (partyCountActive()) {
@@ -1101,11 +1101,6 @@ s32 partyDokanMain(PartyEntry* party);
 #if VERSION <= VERSION_DEMO_US
 static void driveParty(PartyEntry* party) {
 #else
-/**
- * Runs one partner's frame by run mode (see partyChgRunMode):
- * her move, ability, appear, goodbye, pipe, ride and damage handlers, or frees her in mode 14.
- * A frozen partner only gets drawn. Afterwards updates dust, the off-screen flag and her display.
- */
 void driveParty(PartyEntry* party) {
 #endif
     MarioWork* mario;
@@ -1590,12 +1585,6 @@ static inline void partyChgRunM(PartyEntry* party) {
  * p_dokan_y for the vertical pipe kinds (Mario's dokanType 0-3) and p_dokan_x for the sideways ones (4, 5).
  * Ends Vivian's tail effect.
  */
-/**
- * Puts the partner in the pipe with Mario (run mode 10):
- * she takes Mario's position facing backwards and turns into the spinning pipe paper,
- * p_dokan_y for the vertical pipe kinds (Mario's dokanType 0-3) and p_dokan_x for the sideways ones (4, 5).
- * Ends Vivian's tail effect.
- */
 s32 partyDokanInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
@@ -1743,12 +1732,6 @@ s32 partyDokanInit(PartyEntry* party) {
     return 0;
 }
 
-/**
- * The partner's frames in the pipe (run mode 10):
- * she spins at Mario's position, growing back to full size on the vertical kinds;
- * once partyDokanEnd sets step 100 she plays the PM_D_1B exit paper for 18 frames,
- * then returns to normal and waits beside Mario, offset so two partners do not overlap.
- */
 /**
  * The partner's frames in the pipe (run mode 10):
  * she spins at Mario's position, growing back to full size on the vertical kinds;
@@ -2384,17 +2367,12 @@ void partyRideMain(PartyEntry* party) {
 }
 /** Resets the partner's scale and display offset when she leaves the ride mode. */
 #if VERSION > VERSION_DEMO_US
-/** Resets the partner's scale and display offset when she leaves the ride mode. */
 static inline void partyChgRunMo(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
     party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
 }
 #endif
 
-/**
- * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
- * used by party_yoshi when Mario mounts Yoshi.
- */
 /**
  * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
  * used by party_yoshi when Mario mounts Yoshi.
@@ -2926,11 +2904,6 @@ s32 partyRideYoshiMain(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
 static void party_damage_return(PartyEntry* party) {
 #else
-/**
- * Brings the partner back after Mario takes damage from a pit or spikes (run mode 13):
- * after a splash it waits 100 frames, plays her hurt pose, flies her up off screen,
- * waits for Mario's return fall, then drops her in from above next to him and resumes following.
- */
 void party_damage_return(PartyEntry* party) {
 #endif
     MarioWork* mario = party->playerPtr;
@@ -3178,11 +3151,6 @@ void partyMakeDispDir(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
 static void partyPreDisp(PartyEntry* party) {
 #else
-/**
- * Applies the partner's pose and paper animation changes,
- * advances her model and queues her draw at her screen depth (flickering while invincible after damage),
- * then draws her shadow, following Vivian's shadow tail when she is out or used.
- */
 void partyPreDisp(PartyEntry* party) {
 #endif
     Vec screen;
@@ -3272,19 +3240,14 @@ void partyPreDisp(PartyEntry* party) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Draw callback for the partner: builds her model matrix (scale 2, or 1.2 in background mode; left/right mirror;
  * rotations; offsets; a small per-member height fix for paper animations outside the demos) and draws the model,
  * slowed to 0.75 in shallow water.
  */
+#if VERSION <= VERSION_DEMO_US
 static void partyDisp(CameraId cam, void* param) {
 #else
-/**
- * Draw callback for the partner: builds her model matrix (scale 2, or 1.2 in background mode; left/right mirror;
- * rotations; offsets; a small per-member height fix for paper animations outside the demos) and draws the model,
- * slowed to 0.75 in shallow water.
- */
 void partyDisp(CameraId cam, void* param) {
 #endif
     PartyEntry* party = param;

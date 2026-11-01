@@ -342,14 +342,12 @@ void nameEntMain(void) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** The demo has no cursor travel check, no all-blank name check and no default partner name. */
+#if VERSION <= VERSION_DEMO_US
 static s32 nameMain(void) {
     s32 off;
     s32 idx;
-
 #else
-/** The demo has no cursor travel check, no all-blank name check and no default partner name. */
 s32 nameMain(void) {
     s32 len;
     s32 j;
@@ -837,11 +835,6 @@ s32 nameMain(void) {
 #if VERSION <= VERSION_DEMO_US
 static void nameEntDisp(CameraId cameraId, void* param) {
 #else
-/**
- * Draws the name entry screen in 2D: background, the name boxes with the 8 typed characters, the character grid,
- * the side buttons, the caret, the prompt window for this type and, while confirming,
- * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
- */
 void nameEntDisp(CameraId cameraId, void* param) {
 #endif
     GXColor white2;

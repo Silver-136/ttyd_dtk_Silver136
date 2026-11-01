@@ -46,8 +46,8 @@ const char* build_time_ptr = R_build_time;
 const char* systemStrippedPool0(void) {
     return "assertion \"%s\" failed.\n \"%s\"\n";
 }
-
 #endif
+
 /** Returns the root directory for the game's disc file paths: "." (the disc root). */
 const char* getMarioStDvdRoot(void) {
     return ".";
@@ -70,8 +70,8 @@ BOOL __assert2(const char* filename, int line, const char* assertion, const char
     OSPanic(filename, line, "assertion \"%s\" failed.\n \"%s\"\n", assertion, buf);
     return TRUE;
 }
-
 #endif
+
 /** Wraps an angle in degrees into [0, 360); NaN becomes 0. */
 f32 reviseAngle(f32 angle) {
     f32 result, temp;
@@ -563,12 +563,6 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
  * and stick directions, the analogue sticks and triggers,
  * and applies rumble changes to the motors when rumble is enabled.
  */
-/**
- * Reads the controllers once per frame (DEMOPadRead) into the global input state:
- * held, newly pressed, released and auto-repeat (24 frames first, then every 6) for buttons
- * and stick directions, the analogue sticks and triggers,
- * and applies rumble changes to the motors when rumble is enabled.
- */
 void makeKey(void) {
 #if VERSION <= VERSION_DEMO_US
     s32 delay;
@@ -621,7 +615,6 @@ u32 button;
         gp->triggerRight[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerRight;
     }
 #if VERSION > VERSION_DEMO_US
-
 #if VERSION >= VERSION_US
     for (i = 0; i < 4; i++) {
         if ((gp->button[i] & (PAD_BUTTON_X | PAD_BUTTON_Y | PAD_BUTTON_START)) == (PAD_BUTTON_X | PAD_BUTTON_Y | PAD_BUTTON_START)) {
@@ -883,8 +876,8 @@ void sysDebugReport(const char* filename, int line, const char* format, ...) {
     vsprintf(buf, format, args);
     OSReport("[%8s:% 4d] %s", filename, line, buf);
 }
-
 #endif
+
 /**
  * Extracts the pure rotation of src into dst: normalises the two named axes (firstAxis, secondAxis: 'x', 'y' or
  * 'z') and rebuilds the third with cross products, dropping scale and translation.
@@ -1109,12 +1102,8 @@ void systemStrippedPool1b(f32* f, f64* d) {
 f32 systemStrippedPool2(s32 x) {
     return (f32)x;
 }
-
 #endif
-/**
- * FAKE stand-in (see above): recreates the stripped debug code's constants (the interpolation mode names LINEAR,
- * ACCEL, ..., the file:line report format and a few numbers) in their original pool order.
- */
+
 /**
  * FAKE stand-in (see above): recreates the stripped debug code's constants (the interpolation mode names LINEAR,
  * ACCEL, ..., the file:line report format and a few numbers) in their original pool order.

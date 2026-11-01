@@ -59,7 +59,6 @@ static s32 compare(const void** a, const void** b) {
     value1 = *(u8*)a; // (a const cast here changes the demo code)
     value2 = *(u8*)b;
 #else
-
     value1 = (u8)dvdq[*(u8*)a].priority;
     value2 = (u8)dvdq[*(u8*)b].priority;
 #endif

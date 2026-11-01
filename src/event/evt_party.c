@@ -1099,7 +1099,6 @@ USER_FUNC(evt_party_cloud_breathout) {
 }
 
 #if VERSION >= VERSION_US
-
 /** US only. */
 // US only.
 // Descriptive name (not in the symbol maps).

@@ -2784,10 +2784,6 @@ void puniModeSearch(PuniData* p) {
 #if VERSION <= VERSION_DEMO_US
 static void puniModeMass(PuniData* p) {
 #else
-/**
- * Gather mode: the Puni walks to a gather target (targets with PUNI_TARGET_FLAG_MASS, e.g. a Puni Orb pedestal),
- * nudging away when too close and jittering sideways on floors 13 and 18 when it stands still.
- */
 void puniModeMass(PuniData* p) {
 #endif
     Vec v;
@@ -3326,7 +3322,6 @@ static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
         case 0:
             psndSFXOn_3D(sfx, &p->pos);
 #else
-/** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
 void puniModeDead(PuniData* p) {
     switch (p->modeStep) {
         case 0:
@@ -3343,8 +3338,8 @@ void puniModeDead(PuniData* p) {
             break;
     }
 }
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
 void puniModeDead(PuniData* p) {
     puniModeDeadSfx(p, "SFX_STG2_FIGHT_TOGE3");
@@ -3559,13 +3554,6 @@ void puniModeWind(PuniData* p) {
 #if VERSION <= VERSION_DEMO_US
 static void puniModeFall(PuniData* p) {
 #else
-/**
- * Fall mode: the Puni falls under gravity (0.45 per frame) until it hits something.
- * Depending on what it lands on (attribute 0x100, 0x200,
- * a pit marker target or ordinary floor) it chooses the next mode:
- * the trap/pedestal modes, the water mode or lost mode;
- * a Puni that falls out of the world is put back at the recovery position.
- */
 void puniModeFall(PuniData* p) {
     Vec start;
 #endif
@@ -6260,14 +6248,6 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(evt_puni_setup) {
 #else
-/**
- * Sets up the Puni crowd when a map starts (called through mri_puni_init).
- * args[0] = 2 means the map was entered through a loading zone, whose direction in args[2] sets the entry flags;
- * Punies that Mario had with him (those the story has recruited: Punio, his sister, the little Jabbi,
- * the rival and the first GSW_MRI_PUNI_FOLLOWERS+4 others) are placed either beside Mario after a save load,
- * walking in from the loading zone, or at their saved lost position; trapped ones are skipped.
- * The blockers 103 to 109 are placed at the down pipes.
- */
 USER_FUNC(evt_puni_setup) {
 #endif
     EvtWord* args = event->args;
@@ -7579,11 +7559,6 @@ USER_FUNC(puni_disp_info_kassencheck) {
 #if VERSION <= VERSION_DEMO_US
 static void puniCountDisp(CameraId unused, void* param) {
 #else
-/**
- * Draw callback for the Puni counter at the lower left of the screen: skipped while a shop menu is open;
- * draws the pair of numbers (count in the map and total with Mario,
- * packed in the parameter) with the icon for the counter background, faded by the counter opacity.
- */
 void puniCountDisp(CameraId unused, void* param) {
 #endif
     EvtWord packed = (EvtWord)param;

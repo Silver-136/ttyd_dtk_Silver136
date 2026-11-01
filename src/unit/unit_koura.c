@@ -460,7 +460,6 @@ EVT_END()
 
 /** Hit reaction: the default damage script with no special pose (LW10 = -2); the crack poses come from damage_core. */
 #if VERSION > VERSION_DEMO_US
-/** Hit reaction: the default damage script with no special pose (LW10 = -2); the crack poses come from damage_core. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -471,7 +470,6 @@ EVT_END()
 
 /** Idle: just plays the stay pose from the current (crack-stage) pose table. */
 #if VERSION > VERSION_DEMO_US
-/** Idle: just plays the stay pose from the current (crack-stage) pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

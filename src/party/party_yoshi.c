@@ -50,6 +50,7 @@ f32 ofs_PYS_S_2[52] = {
     0.0f, -0.011f, -0.042f, -0.087f, -0.142f, -0.202f, -0.262f, -0.317f, -0.362f, -0.393f, -0.404f, -0.404f, -0.404f,
     -0.404f, -0.404f, -0.387f, -0.341f, -0.276f, -0.202f, -0.128f, -0.063f, -0.017f, 0.0f, 0.0f, 0.0f, 0.0f,
 };
+
 #if VERSION > VERSION_DEMO_US
 static f32 marioJumpStandData[10] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
 #endif
@@ -1147,11 +1148,10 @@ void yoshi_use(PartyEntry* party) {
     marioUpdateCamCollision(party->position);
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** The demo version works the fly angle in the caller's variable (passed by pointer). */
+#if VERSION <= VERSION_DEMO_US
 void yoshiFlyMove(PartyEntry* party, f32* angle) {
 #else
-/** The demo version works the fly angle in the caller's variable (passed by pointer). */
 void yoshiFlyMove(PartyEntry* party) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -1277,11 +1277,10 @@ void inertia(PartyEntry* party) {
     mario->mot.yoshi.velZ = vz;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** The demo searches 11 up into locals and has the older landing and step code. */
+#if VERSION <= VERSION_DEMO_US
 static void searchGround(PartyEntry* party) {
 #else
-/** The demo searches 11 up into locals and has the older landing and step code. */
 void searchGround(PartyEntry* party) {
 #endif
     HitEntry* hit;
@@ -1421,11 +1420,10 @@ void searchGround(PartyEntry* party) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** The demo searches into locals, always records the hit object, and stops the flutter sound on landing. */
+#if VERSION <= VERSION_DEMO_US
 static void searchGround2(PartyEntry* party) {
 #else
-/** The demo searches into locals, always records the hit object, and stops the flutter sound on landing. */
 void searchGround2(PartyEntry* party) {
 #endif
     HitEntry* hit = NULL;
@@ -1494,7 +1492,6 @@ void searchGround2(PartyEntry* party) {
 
 /** Looks for a ceiling above Yoshi (10 units over his height) and stores it in Mario's hitobjHead. */
 #if VERSION > VERSION_DEMO_US
-/** Looks for a ceiling above Yoshi (10 units over his height) and stores it in Mario's hitobjHead. */
 static void searchHead(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     Vec pos = party->position;
@@ -1511,10 +1508,6 @@ static void searchHead(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
 static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
 #else
-/**
- * Wall check while riding: moves Yoshi by spd in direction dir up to a wall, records the front,
- * push and A-button hit objects for Mario, takes spike damage from walls, then pushes Yoshi out of nearby walls.
- */
 void checkWall(PartyEntry* party, f32 spd, f32 dir) {
 #endif
     MarioWork* mario = marioGetPtr();

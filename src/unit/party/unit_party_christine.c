@@ -1134,11 +1134,6 @@ EVT_END()
  * with a successful action command he gets another move this turn (_set_hustle and the quick-change
  * announcement). Ends with an optional stylish.
  */
-/**
- * Goombella's Rally Wink: she blows a kiss at Mario;
- * with a successful action command he gets another move this turn (_set_hustle and the quick-change
- * announcement). Ends with an optional stylish.
- */
 EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1670,19 +1665,14 @@ USER_FUNC(_dictionary) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Rally Wink effect on unit args[0]: if it has no moves left this turn it gets one more,
  * otherwise it is flagged for an extra move.
  * The US and later releases also raise its max moves and mark Rally Wink when it is slowed.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(_set_hustle) {
 #else
-/**
- * Rally Wink effect on unit args[0]: if it has no moves left this turn it gets one more,
- * otherwise it is flagged for an extra move.
- * The US and later releases also raise its max moves and mark Rally Wink when it is slowed.
- */
 USER_FUNC(_set_hustle) {
 #endif
     BattleWork* wp = _battleWorkPointer;

@@ -481,10 +481,6 @@ USER_FUNC(evt_ryushi_clr) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(evt_ryushi) {
 #else
-/**
- * Per-frame update of the wind particles: moves them at a speed set by the current Paper Mode wind state,
- * wraps them around the view, fades them in and out with the state timer, and queues ryushi_disp.
- */
 USER_FUNC(evt_ryushi) {
 #endif
     RyushiWork* hdr = xwp;
@@ -606,7 +602,6 @@ USER_FUNC(evt_ryushi) {
 
 /** Event wrapper that runs yuu_03_icon_monte_entry as a blocking view event. */
 #if VERSION > VERSION_DEMO_US
-/** Event wrapper that runs yuu_03_icon_monte_entry as a blocking view event. */
 EVT_BEGIN(yuu_03_icon_monte_entry_evt)
     CALL(yuu_03_icon_monte_entry)
     RETURN
@@ -943,7 +938,6 @@ EVT_END()
 void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall) {
     SlitWork* data = ((MiniGameWork*)event->lwData[0])->data;
 #if VERSION > VERSION_DEMO_US
-
     data->viewEvent = evtEntryType(yuu_03_icon_monte_entry_evt, 0, 0, 0);
     data->viewEvent->lwData[0] = event->lwData[0];
 #endif

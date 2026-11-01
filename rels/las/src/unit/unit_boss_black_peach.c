@@ -2917,7 +2917,6 @@ EVT_END()
 
 /** Event script: the queen's line when she is about to die (stg8_las_168). */
 #if VERSION > VERSION_DEMO_US
-/** Event script: the queen's line when she is about to die (stg8_las_168). */
 EVT_BEGIN(queen_dead_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -3684,10 +3683,6 @@ EVT_END()
  * Attack event of the Shadow Queen: chooses her next attack with weighted draws (btlevtcmd_DrawLots) depending
  * on the current form and which stage she has reached (work[0]), then runs that attack script.
  */
-/**
- * Attack event of the Shadow Queen: chooses her next attack with weighted draws (btlevtcmd_DrawLots) depending
- * on the current form and which stage she has reached (work[0]), then runs that attack script.
- */
 EVT_BEGIN(queen_attack_event)
     IF_INT_EQUAL(GW(11), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
@@ -4404,10 +4399,6 @@ EVT_END()
  * Event script: the small hand's drag attack (weapon_peach_dark_drag_attack,
  * with a last hit weapon_peach_dark_drag_last_attack).
  */
-/**
- * Event script: the small hand's drag attack (weapon_peach_dark_drag_attack,
- * with a last hit weapon_peach_dark_drag_last_attack).
- */
 EVT_BEGIN(queen_hand_small_drag_attack)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     // Pick a target for the attack; a confused unit that has none flusters.
@@ -4739,10 +4730,6 @@ USER_FUNC(queen_hand_small_1000hand_set_offset_evt) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(queen_hand_small_1000hand_2_evt) {
 #else
-/**
- * Script helper (runs until done): raises the swarm of small hands from below the floor (y from -80 to 0) in
- * randomised positions, ready for the thousand-hands attack.
- */
 USER_FUNC(queen_hand_small_1000hand_2_evt) {
 #endif
     s32 i;
@@ -4850,10 +4837,8 @@ USER_FUNC(queen_hand_small_1000hand_1_evt) {
 
 /** Script helper (runs until done): drags the hand swarm across the party for the drag attack (first stage). */
 #if VERSION <= VERSION_DEMO_US
-/** Script helper (runs until done): drags the hand swarm across the party for the drag attack (first stage). */
 static USER_FUNC(queen_hand_small_drag_1_evt) {
 #else
-/** Script helper (runs until done): drags the hand swarm across the party for the drag attack (first stage). */
 USER_FUNC(queen_hand_small_drag_1_evt) {
 #endif
     s32 i;
@@ -4976,10 +4961,8 @@ USER_FUNC(queen_hand_small_drag_2_evt) {
 
 /** Script helper (runs until done): the third stage: raises a fresh randomised swarm out of the floor. */
 #if VERSION <= VERSION_DEMO_US
-/** Script helper (runs until done): the third stage: raises a fresh randomised swarm out of the floor. */
 static USER_FUNC(queen_hand_small_drag_3_evt) {
 #else
-/** Script helper (runs until done): the third stage: raises a fresh randomised swarm out of the floor. */
 USER_FUNC(queen_hand_small_drag_3_evt) {
 #endif
     s32 i;
@@ -5116,10 +5099,6 @@ USER_FUNC(queen_hand_small_dead_evt) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(queen_hand_small_entry_evt) {
 #else
-/**
- * Script helper (runs until done): raises the swarm of small hands out of the floor (y -80 to 0) at randomised
- * positions; used when the small hand unit enters.
- */
 USER_FUNC(queen_hand_small_entry_evt) {
 #endif
     s32 i;
@@ -5209,10 +5188,6 @@ USER_FUNC(peach_shock_evt) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(queen_hp_drain_5_evt) {
 #else
-/**
- * Script helper (runs until done): the last stage of the HP drain:
- * raises the hand swarm in front of the stage as the queen takes her heal.
- */
 USER_FUNC(queen_hp_drain_5_evt) {
 #endif
     s32 i;
@@ -5356,10 +5331,6 @@ USER_FUNC(queen_hp_drain_3_evt) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(queen_hp_drain_2_evt) {
 #else
-/**
- * Script helper (runs until done): raises a hand swarm from y -110 to -30 closer to the audience (Z 270) during
- * the HP drain.
- */
 USER_FUNC(queen_hp_drain_2_evt) {
 #endif
     s32 i;
@@ -5483,10 +5454,6 @@ USER_FUNC(queen_kankyaku_delete_evt) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(peach_hand1000_dark_drag_1_evt) {
 #else
-/**
- * Script helper (runs until done): raises the hand swarm for the possessed Peach's dark drag attack, shifted
- * 200 units left.
- */
 USER_FUNC(peach_hand1000_dark_drag_1_evt) {
 #endif
     s32 i;

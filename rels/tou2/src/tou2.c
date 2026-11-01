@@ -1312,7 +1312,6 @@ static void rankingInit(void) {
 #if VERSION <= VERSION_DEMO_US
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
 #else
-
         // If we're past this point in the story, Bandy Andy got "retired" and The Destructors were added.
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_JOINED)) {
 #endif

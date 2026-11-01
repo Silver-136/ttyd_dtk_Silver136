@@ -397,10 +397,8 @@ void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v
 
 /** Retail signature: y is the name-width setting described above. */
 #if VERSION <= VERSION_DEMO_US
-/** Retail signature: y is the name-width setting described above. */
 static void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const char** names, s32* costs, s32* p34, void* party) {
 #else
-/** Retail signature: y is the name-width setting described above. */
 void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const char** names, s32* costs, s32* p34, void* party, s32 y) {
 #endif
     Mtx out[7];
@@ -429,10 +427,8 @@ void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const ch
 
 /** Retail signature: y selects the name squeezing described above. */
 #if VERSION <= VERSION_DEMO_US
-/** Retail signature: y selects the name squeezing described above. */
 static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party) {
 #else
-/** Retail signature: y selects the name squeezing described above. */
 void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y) {
 #endif
     BattleWork* wp = _battleWorkPointer;
@@ -1812,11 +1808,6 @@ void BattleMenuDisp_WeaponSelect_End(BattleWork* wp) {
  * the cursor and the help window (the item description for items and cooked dishes,
  * otherwise the move's description).
  */
-/**
- * Draws the move list: the ring icons, rows with each move's FP and Star Power costs,
- * the cursor and the help window (the item description for items and cooked dishes,
- * otherwise the move's description).
- */
 void DrawWeaponWin(void) {
     Mtx rowMtx[7];
     Mtx iconMtx[5];
@@ -2021,7 +2012,6 @@ void BattleMenuDisp_ChangePartySelect_End(BattleWork* wp) {
     }
 }
 
-/** Draws the Change Partner list with each partner's HP, the cursor and the help window. */
 /** Draws the Change Partner list with each partner's HP, the cursor and the help window. */
 void DrawChangePartyWin(void) {
     Mtx rowMtx[7];

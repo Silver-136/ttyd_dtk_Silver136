@@ -699,16 +699,6 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
  * newItem is shown first, above a divider (the item being picked up when the bag is full).
  * Free with winMgrSelectDelete.
  */
-/**
- * Opens a selection list (list, title and help windows) and fills it by type:
- * 0 key items, 1/3/4 items (use, sell, store), 2 badges, 5 stored items, 6/7 partners to rank up,
- * 8 partner to rank down, 9/10 HP/FP/BP to raise or lower,
- * 11-16 shop stock (badge shop, sell badges, Star Piece badges, bargains, the Pit's trader, Pianta Parlor),
- * 17/18 the informant's lists; a negative type is a -1-terminated item id list.
- * Rows flagged 3 are greyed and refused.
- * newItem is shown first, above a divider (the item being picked up when the bag is full).
- * Free with winMgrSelectDelete.
- */
 WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
     s32 n;
     WinMgrDesc* desc;
@@ -1396,12 +1386,6 @@ void select_main(WinMgrEntry* entry) {
  * a currency icon above the price column (one for 13, another for 16), the hand cursor and scroll arrows.
  * From US on, worn badges in the sell list get a mark.
  */
-/**
- * Draws an item or badge list: icon, name and (for the sell and shop types) price per row,
- * the divider under a new item, the title by type,
- * a currency icon above the price column (one for 13, another for 16), the hand cursor and scroll arrows.
- * From US on, worn badges in the sell list get a mark.
- */
 void select_disp(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     u32 left, top, wd, ht;
@@ -1657,11 +1641,6 @@ static inline s32 select_party_icon(u16 id) {
 static void select_disp_party(WinMgrEntry* entry) {
 s32 i;
 #else
-/**
- * Draws the partner list of the rank-up and rank-swap menus:
- * name, portrait (Yoshi in his colour) and one rank icon per rank already earned, with the two column titles,
- * cursor and scroll arrows.
- */
 void select_disp_party(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
@@ -1899,10 +1878,6 @@ void select_disp_mario(WinMgrEntry* entry) {
     }
 }
 
-/**
- * Draws the informant lists: each entry's title cut at its tag end, read ones in grey,
- * and for type 17 the price of unread entries with a coin icon. Despite the name it serves both 17 and 18.
- */
 /**
  * Draws the informant lists: each entry's title cut at its tag end, read ones in grey,
  * and for type 17 the price of unread entries with a coin icon. Despite the name it serves both 17 and 18.

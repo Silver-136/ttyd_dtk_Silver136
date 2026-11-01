@@ -153,7 +153,6 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
     return effect;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Moves the star by its velocity.
  * Subtypes 2+ bounce off the ground below (hitCheckFilter):
@@ -162,16 +161,9 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
  * It also ends 300 units below Mario (in battle, below y = -300; the demos only check Mario).
  * CAMERA_3D, layer 2.
  */
+#if VERSION <= VERSION_DEMO_US
 static void effSstarMain(EffectEntry* effect) {
 #else
-/**
- * Moves the star by its velocity.
- * Subtypes 2+ bounce off the ground below (hitCheckFilter):
- * each bounce keeps 60% of the fall speed and 70% of the sideways speed and spin,
- * then gravity (-0.5) and spin take over; 10 bounces end it.
- * It also ends 300 units below Mario (in battle, below y = -300; the demos only check Mario).
- * CAMERA_3D, layer 2.
- */
 void effSstarMain(EffectEntry* effect) {
 #endif
     EffSstarN64Work* w = effect->userdata;

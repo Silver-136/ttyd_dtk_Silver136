@@ -290,13 +290,6 @@ EVT_END()
  * turns back up instead. The outer IF_INT_NOT_EQUAL(1, 0) is always true, so its ELSE branch (the switch only
  * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
  */
-/**
- * Runs when Mario hits the floating-block switch for mobj_fltbl01:
- * flips the block between its high position (LSWF(6) clear) and its low one 225 units below, with the
- * floating-block sound and a camera shake, and flips LSWF(6). A sinking block that comes down on Mario's head
- * turns back up instead. The outer IF_INT_NOT_EQUAL(1, 0) is always true, so its ELSE branch (the switch only
- * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
- */
 EVT_BEGIN(evt_gon_04flowblock_updown1)
 #if VERSION > VERSION_DEMO_US
     SET_TYPE(239)

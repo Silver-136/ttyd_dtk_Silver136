@@ -320,10 +320,6 @@ void partyFollowCloseOff(PartyEntry* party) {
  * Floor under the partner for the behind-Mario walks;
  * water (attribute 0x200) counts as no floor and starts a splash.
  */
-/**
- * Floor under the partner for the behind-Mario walks;
- * water (attribute 0x200) counts as no floor and starts a splash.
- */
 static inline HitEntry* partyBehindGround(PartyEntry* party) {
     HitEntry* hit = partySearchGround(party, 10.0f, 0.0f);
     if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
@@ -768,10 +764,6 @@ static inline void partyGetGndYTo(f32* out, f32 x, f32 y, f32 z) {
  */
 static inline BOOL partyChkMarioFollowYDemo(MarioWork* mario) {
 #else
-/**
- * FALSE while the partner should not follow Mario:
- * he is in the air without moving, or in a damage or Spin Jump motion.
- */
 static inline BOOL partyChkMarioFollowY(MarioWork* mario) {
 #endif
     if (mario->airTimer != 0 && mario->baseSpeed == 0.0f) {
@@ -830,8 +822,8 @@ static inline void partyFlyHeadCheck(PartyEntry* party) {
         }
     }
 }
-
 #endif
+
 /**
  * US: keeps a flying partner at Mario's height or the floor's,
  * whichever is higher (faster when below the floor), and hands floors with attribute 0x800 to run mode 13.
@@ -2632,7 +2624,6 @@ static inline void partyJumpFrontMove(PartyEntry* party) {
 #endif
 
 /** Jump arc height for a rise of dy: 25 for a level jump, dy going up, 10 going down. */
-/** Jump arc height for a rise of dy: 25 for a level jump, dy going up, 10 going down. */
 static inline f32 partyJumpHeight(f32 dy) {
     if (__fabsf(dy) < 1.0f) {
         return 25.0f;
@@ -2643,10 +2634,6 @@ static inline f32 partyJumpHeight(f32 dy) {
     }
 }
 
-/**
- * Sets up a follow jump over distance d: 12 to 40 frames, initial velY 3 to 13 and the gravity,
- * scaled by Mario's playerGravity.
- */
 /**
  * Sets up a follow jump over distance d: 12 to 40 frames, initial velY 3 to 13 and the gravity,
  * scaled by Mario's playerGravity.
@@ -3063,7 +3050,6 @@ void party_motion_upstairs(PartyEntry* party) {
 #endif
 
 /** TRUE when hit is water (attribute 0x200). */
-/** TRUE when hit is water (attribute 0x200). */
 static inline BOOL partyChkHitAttr200(HitEntry* hit) {
     if (!hit) {
         return FALSE;
@@ -3229,8 +3215,8 @@ void allPartySlitOffReq(void) {
         partyChgPoseId(party, 1);
     }
 }
-
 #endif
+
 #if VERSION > VERSION_DEMO_US
 /**
  * Demos: ends Paper Mode on this partner at once, facing left or right from its direction, and resets its pose.
@@ -3277,8 +3263,8 @@ void partySlitReset(PartyEntry* party) {
         party->slitOn = 0;
     }
 }
-
 #endif
+
 #if VERSION > VERSION_DEMO_US
 /**
  * Demos: per-frame Paper Mode state for a partner while slitOn is 1:
@@ -3566,7 +3552,6 @@ static f32 partyStayDist(PartyEntry* party) {
 
 /** Height a flying partner hovers above its target: 5, or 1 in 8-bit mode. */
 #if VERSION > VERSION_DEMO_US
-/** Height a flying partner hovers above its target: 5, or 1 in 8-bit mode. */
 static f32 partyHomingOff(PartyEntry* party) {
     f32 off = 5.0f;
     if (party->flags2 & PARTY_DISP_FLAG_FAMICOM) {
@@ -3576,19 +3561,14 @@ static f32 partyHomingOff(PartyEntry* party) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Demos: floor point one partner width ahead in direction dir, rounded to 0.001, written to out;
  * returns its hit attributes, or 0 with out = the partner's position when there is none.
  * Probes from at most 40 above the partner, staying under any ceiling found in front.
  */
+#if VERSION <= VERSION_DEMO_US
 static s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
 #else
-/**
- * Demos: floor point one partner width ahead in direction dir, rounded to 0.001, written to out;
- * returns its hit attributes, or 0 with out = the partner's position when there is none.
- * Probes from at most 40 above the partner, staying under any ceiling found in front.
- */
 s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
 #endif
     f32 s2, c2;
@@ -3720,17 +3700,13 @@ static f32 partyGetGndY(f32 x, f32 y, f32 z) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Demos: hit attributes of the floor 20 units ahead in direction dir (probed from 20 up, 40 down), 0 if none.
  * Homing walk uses it to skip footmarks over 0x800 floors.
  */
+#if VERSION <= VERSION_DEMO_US
 static inline u32 partyGetFrontAttr(PartyEntry* party, f32 dir) {
 #else
-/**
- * Demos: hit attributes of the floor 20 units ahead in direction dir (probed from 20 up, 40 down), 0 if none.
- * Homing walk uses it to skip footmarks over 0x800 floors.
- */
 static u32 partyGetFrontAttr(PartyEntry* party, f32 dir) {
 #endif
     HitCheckQuery q;
@@ -3770,19 +3746,14 @@ static inline void partyDownDirY(HitCheckQuery* q) {
     q->targetDir = (Vec){0.0f, -1.0f, 0.0f};
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Demos: while Mario has control, pulls a partner that has left the screen (more than 40 px past the sides or
  * 650 px down) back toward Mario step by step onto the floor until it is on screen, and clears the footmarks.
  * A partner right under Mario but far down the screen is put at its appear position instead.
  */
+#if VERSION <= VERSION_DEMO_US
 static void party_force_reset_outofscreen(PartyEntry* party) {
 #else
-/**
- * Demos: while Mario has control, pulls a partner that has left the screen (more than 40 px past the sides or
- * 650 px down) back toward Mario step by step onto the floor until it is on screen, and clears the footmarks.
- * A partner right under Mario but far down the screen is put at its appear position instead.
- */
 void party_force_reset_outofscreen(PartyEntry* party) {
 #endif
     MarioWork* m2;

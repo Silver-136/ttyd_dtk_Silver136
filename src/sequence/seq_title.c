@@ -180,24 +180,18 @@ void titleInit(SequenceWork* work) {
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Title screen state machine: waits for the BGM (and curtain animations), opens the curtain,
  * slides the logo halves in, then waits for A or Start (to the file select via SEQ_LOAD)
  * or about 19 s of idling (to the dmo_00 opening demo).
  * Queues the logo draws each frame; later versions also track the debug-mode button code.
  */
+#if VERSION <= VERSION_DEMO_US
 static void titleMain(SequenceWork* work) {
     switch (wp2->state) {
         case 0:
         if (psndBGMStartCheck(0) != 0U) {
 #else
-/**
- * Title screen state machine: waits for the BGM (and curtain animations), opens the curtain,
- * slides the logo halves in, then waits for A or Start (to the file select via SEQ_LOAD)
- * or about 19 s of idling (to the dmo_00 opening demo).
- * Queues the logo draws each frame; later versions also track the debug-mode button code.
- */
 void titleMain(SequenceWork* work) {
     switch (wp2->state) {
         case 0:
@@ -447,19 +441,14 @@ void disp1(CameraId cameraId, void* param) {
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Effect-layer draw callback: draws the two logo halves at their animated positions (per-language images in US
  * and PAL) and the pulsing "press start" prompt.
  * Later versions show the build date and time while Z is held in debug mode.
  */
+#if VERSION <= VERSION_DEMO_US
 static void disp2(CameraId cameraId, void* param) {
 #else
-/**
- * Effect-layer draw callback: draws the two logo halves at their animated positions (per-language images in US
- * and PAL) and the pulsing "press start" prompt.
- * Later versions show the build date and time while Z is held in debug mode.
- */
 void disp2(CameraId cameraId, void* param) {
 #endif
     CameraEntry* cam = camGetPtr(CAMERA_2D);

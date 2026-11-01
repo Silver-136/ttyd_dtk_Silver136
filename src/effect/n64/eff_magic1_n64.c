@@ -75,10 +75,6 @@ EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, 
 #if VERSION <= VERSION_DEMO_US
 static void effMagic1Main(EffectEntry* effect) {
 #else
-/**
- * Moves the bolt along its velocity (the burst slows and fades); a bolt reaching the end spawns the burst there.
- * From JP on, it only draws while the system level is nonzero.
- */
 void effMagic1Main(EffectEntry* effect) {
 #endif
     EffMagic1N64Work* work = effect->userdata;

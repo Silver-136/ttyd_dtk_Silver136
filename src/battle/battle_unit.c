@@ -989,11 +989,6 @@ void _CheckMoveCount(BattleUnit* unit) {
 #if VERSION <= VERSION_DEMO_US
 void BtlUnit_GetStatus(BattleUnit* unit, StatusEffectType type, s8* turns, s8* strength) {
 #else
-/**
- * Reads a status effect's turns and strength into the optional outputs;
- * for statuses with no strength (sleep, stop, dizzy, ...) both get the turn count.
- * A size, attack or defense change of the other sign reads as 0.
- */
 void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
 #endif
     s8 status_turns = 0;
@@ -1131,7 +1126,6 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Stores a status effect's turns and strength (Charge adds to its strength, capped 0..99).
  * Burn and freeze cancel each other, as do Fast and Slow, without applying the new one,
@@ -1139,16 +1133,10 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
  * Returns FALSE when nothing was applied; retail versions also return FALSE when Charge drops below 0
  * or Allergic or Payback is set to 0 turns, which the demos treat as set.
  */
+#if VERSION <= VERSION_DEMO_US
 BOOL BtlUnit_SetStatus(BattleUnit* unit, StatusEffectType type, s8 turns, s8 strength) {
     switch ((s8)type) {
 #else
-/**
- * Stores a status effect's turns and strength (Charge adds to its strength, capped 0..99).
- * Burn and freeze cancel each other, as do Fast and Slow, without applying the new one,
- * and a zero strength for a size, attack or defense change clears an effect of that sign.
- * Returns FALSE when nothing was applied; retail versions also return FALSE when Charge drops below 0
- * or Allergic or Payback is set to 0 turns, which the demos treat as set.
- */
 BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
     switch (type) {
 #endif
@@ -1377,11 +1365,6 @@ void BtlUnit_ClearStatus(BattleUnit* unit) {
 #if VERSION <= VERSION_DEMO_US
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, StatusEffectType type) {
 #else
-/**
- * Counts a status effect down by one turn at the end of the unit's turn (sleep, timed statuses, size,
- * attack and defense changes, poison and regen), clearing its strength when the turns run out.
- * Returns TRUE when the status just wore off; FALSE when it continues, was not active, or the unit is KO'd.
- */
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
 #endif
     s8 turns, strength;
@@ -1507,10 +1490,8 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
 
 /** Returns TRUE while the status effect has turns left; Electric also counts as active when the unit wears Zap Tap. */
 #if VERSION <= VERSION_DEMO_US
-/** Returns TRUE while the status effect has turns left; Electric also counts as active when the unit wears Zap Tap. */
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, StatusEffectType type) {
 #else
-/** Returns TRUE while the status effect has turns left; Electric also counts as active when the unit wears Zap Tap. */
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, s8 type) {
 #endif
     s8 turns, strength;

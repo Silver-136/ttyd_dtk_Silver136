@@ -1795,10 +1795,6 @@ EVT_END()
  * Move event of Fuzzies: bounces 2 to 4 times 50 units in random directions,
  * turns to face Mario and pauses up to half a second.
  */
-/**
- * Move event of Fuzzies: bounces 2 to 4 times 50 units in random directions,
- * turns to face Mario and pauses up to half a second.
- */
 #if VERSION <= VERSION_DEMO_US
 /** Init event of Fuzzies: jumping enemy flags. Demo position of the retail definition below. */
 EVT_BEGIN(chorobon_init_event)
@@ -2882,19 +2878,14 @@ USER_FUNC(piders_draw_yawn) {
 }
 
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Starts Magikoopa's magic effect (eff_magic1_n64) from args[0-2] toward args[3-5]
  * and returns the effect in args[6].
  * Outside the demos the effect is named after the Magikoopa so it can be found later.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(kamec_fire_magic) {
 #else
-/**
- * Starts Magikoopa's magic effect (eff_magic1_n64) from args[0-2] toward args[3-5]
- * and returns the effect in args[6].
- * Outside the demos the effect is named after the Magikoopa so it can be found later.
- */
 USER_FUNC(kamec_fire_magic) {
 #endif
     EvtWord* args = event->args;

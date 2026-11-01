@@ -665,13 +665,6 @@ static s32 item_tbl2[] = {
  * the Blanket exchange (takes the Blanket, gives a Mushroom, STG6_19_GIVE_BLANKET), and day 2,
  * day 3 and return-trip lines.
  */
-/**
- * Talk script of the conductor (syashou) in rsh_04.
- * By story stage: his first greeting (sets STG6_01_THE_CONDUCTOR), ticket and autograph hints,
- * the night talk where Mario can agree to help (STG6_13_TALK_TO_THE_CONDUCTOR),
- * the Blanket exchange (takes the Blanket, gives a Mushroom, STG6_19_GIVE_BLANKET), and day 2,
- * day 3 and return-trip lines.
- */
 static EVT_BEGIN(talk_syashou)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_12_GIVE_AUTOGRAPH, STG6_18_BLANKET_EXCHANGE)

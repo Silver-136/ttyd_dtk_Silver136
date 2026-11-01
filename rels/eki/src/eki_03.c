@@ -341,12 +341,6 @@ EVT_END()
  * the sun's heat-haze shader and glare, and the 15 posters that Flurrie can blow away.
  * Posters already blown are hidden; the wall behind them is opened by evt_chk once all are gone.
  */
-/**
- * Map init for eki_03: sets up the doors to eki_01 and eki_04, the HP Plus item,
- * the Shine Sprite block (power-up block), the brick blocks (one holds a Thunder Rage),
- * the sun's heat-haze shader and glare, and the 15 posters that Flurrie can blow away.
- * Posters already blown are hidden; the wall behind them is opened by evt_chk once all are gone.
- */
 EVT_BEGIN(eki_03_init_evt)
     // Doors, music and ambience; the music is dipped in volume.
     SET_VALUE(LW(0), PTR(bero_data))

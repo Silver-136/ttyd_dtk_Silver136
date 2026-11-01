@@ -90,19 +90,14 @@ static void zFill(void) {
 }
 
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Draw callback for one image: binds its up to three captured textures (screen copies) as the pose's paper
  * textures, advances the animation, and draws the pose as a flat screen-space quad sized to the capture,
  * scaled by distance when it has a virtual point. Later versions flag the entry when no capture is ready.
  */
+#if VERSION <= VERSION_DEMO_US
 static void imgDisp(CameraId camId, void* param) {
 #else
-/**
- * Draw callback for one image: binds its up to three captured textures (screen copies) as the pose's paper
- * textures, advances the animation, and draws the pose as a flat screen-space quad sized to the capture,
- * scaled by distance when it has a virtual point. Later versions flag the entry when no capture is ready.
- */
 void imgDisp(CameraId camId, void* param) {
 #endif
     ImageEntry* entry = param;
@@ -327,19 +322,14 @@ static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
     sh->data = data;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Refreshes capture slot id of an image: takes the texture of its offscreen region (copying it into the image's
  * own buffer once when it keeps the capture) or copies its rectangle straight from the frame buffer.
  * The demo copies from the offscreen texture's address directly.
  */
+#if VERSION <= VERSION_DEMO_US
 static void imgCapture_Prim(ImageEntry* entry, s32 id) {
 #else
-/**
- * Refreshes capture slot id of an image: takes the texture of its offscreen region (copying it into the image's
- * own buffer once when it keeps the capture) or copies its rectangle straight from the frame buffer.
- * The demo copies from the offscreen texture's address directly.
- */
 void imgCapture_Prim(ImageEntry* entry, s32 id) {
 #endif
     ImageShadow* sh = &entry->shadows[id];
@@ -639,10 +629,6 @@ void imgSetShadow(ImageEntry* entry, s32 shadowId) {
 #if VERSION <= VERSION_DEMO_US
 static void imgShadowDisp(CameraId camId, void* param) {
 #else
-/**
- * Draw callback on the shadow camera: draws the image's pose with its captured textures into the shadow pass
- * so it casts a projected or depth shadow, and counts the shadow draw for shadowdrv.
- */
 void imgShadowDisp(CameraId camId, void* param) {
 #endif
     ImageShadow* sh;

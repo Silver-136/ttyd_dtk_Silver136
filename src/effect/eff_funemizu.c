@@ -220,10 +220,8 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
 
 /** Advances the wake and spray timers, spawns a spray piece from the wake, and deletes spent ones. */
 #if VERSION <= VERSION_DEMO_US
-/** Advances the wake and spray timers, spawns a spray piece from the wake, and deletes spent ones. */
 static void effFunemizuMain(EffectEntry* effect) {
 #else
-/** Advances the wake and spray timers, spawns a spray piece from the wake, and deletes spent ones. */
 void effFunemizuMain(EffectEntry* effect) {
 #endif
     EffFunemizuWork* work = effect->userdata;
@@ -329,10 +327,8 @@ static inline void funemizuCallDL(u32 *p_u) {
 }
 /** Draws the wake ripple mesh tinted with the map's water colour. */
 #if VERSION <= VERSION_DEMO_US
-/** Draws the wake ripple mesh tinted with the map's water colour. */
 static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-/** Draws the wake ripple mesh tinted with the map's water colour. */
 void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffFunemizuWork* work = effect->userdata;
@@ -533,10 +529,8 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 
 /** Draws the spray (shibuki) pieces as camera-facing quads. */
 #if VERSION <= VERSION_DEMO_US
-/** Draws the spray (shibuki) pieces as camera-facing quads. */
 static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-/** Draws the spray (shibuki) pieces as camera-facing quads. */
 void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffFunemizuWork* work = effect->userdata;

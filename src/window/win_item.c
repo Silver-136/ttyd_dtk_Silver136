@@ -246,15 +246,6 @@ void winItemExit(WindowWork* w) {
  * Returns -1 on B, -2 to close the menu (also to use an item or read the Ragged Diary in the field), else 0.
  * Luigi's books are the Super Luigi key items.
  */
-/**
- * Items window input.
- * State 0 picks the Items / Important Items tab; 10 moves through the two-column list;
- * 100 pages through one of Luigi's books; 200-202 pick and read mail (Mailbox SP);
- * 300 picks who gets a field-usable item and 301 blinks while it is applied in the menu;
- * 1000 is the Z sort menu.
- * Returns -1 on B, -2 to close the menu (also to use an item or read the Ragged Diary in the field), else 0.
- * Luigi's books are the Super Luigi key items.
- */
 s32 winItemMain(WindowWork* w) {
     s32 cnt;
     s32 mode;
@@ -927,10 +918,6 @@ static const char* hpfp_name_table[7][2] = {
 #if VERSION <= VERSION_DEMO_US
 static void itemUseDisp(WinMgrEntry* entry) {
 #else
-/**
- * winMgr draw callback for the item target window: Mario with his HP and FP, then each partner with HP;
- * the chosen target blinks while the item takes effect and the others gray out. Also draws the hand cursor.
- */
 void itemUseDisp(WinMgrEntry* entry) {
 #endif
     WindowWork* w = winGetPtr();

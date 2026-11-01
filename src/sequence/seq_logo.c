@@ -126,10 +126,6 @@ void seq_logoInit(SequenceWork* work) {
  * Leaves the logo sequence: sets up the font, window, fade, icon,
  * environment and effect textures and Mario's poses for the rest of the game, and frees mariost.tpl.
  */
-/**
- * Leaves the logo sequence: sets up the font, window, fade, icon,
- * environment and effect textures and Mario's poses for the rest of the game, and frees mariost.tpl.
- */
 #if VERSION <= VERSION_DEMO_US
 /**
  * The demos always start interlaced; the US demo also starts the logo files loading
@@ -189,7 +185,6 @@ void seq_logoMain(SequenceWork* work) {
     FileEntry* first;
     FileEntry* ret;
     int ok;
-
 #else
 #if VERSION < VERSION_US
     u32 size;
@@ -198,8 +193,8 @@ void seq_logoMain(SequenceWork* work) {
     s32 ret;
     int ok;
 #endif
-
 #endif
+
     switch (work->state) {
         case 0:
             fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
@@ -812,19 +807,14 @@ void dummy_draw(CameraId camId, void* param) {
 
 #if VERSION < VERSION_US
 //param is unused
-#if VERSION <= VERSION_DEMO_US
 /**
  * JP and demo progressive-scan prompt: asks whether to display in progressive scan (left/right toggles,
  * A confirms, 10 s idle picks the current choice), shows the result for 2 s and switches the video mode.
  * param is unused
  */
+#if VERSION <= VERSION_DEMO_US
 static void progDisp(CameraId camId, void* param) {
 #else
-/**
- * JP and demo progressive-scan prompt: asks whether to display in progressive scan (left/right toggles,
- * A confirms, 10 s idle picks the current choice), shows the result for 2 s and switches the video mode.
- * param is unused
- */
 void progDisp(CameraId camId, void* param) {
 #endif
 #else
@@ -1104,8 +1094,8 @@ void progDisp(CameraId camId, void* param) {
         }
     }
 }
-#if VERSION >= VERSION_US
 
+#if VERSION >= VERSION_US
 /* FAKE: the US build places this static first in .sbss, ahead of progDisp's; a static inside a
    deferred-inline helper defined last gives that order */
 static inline s32* logoStoryTime(void) {

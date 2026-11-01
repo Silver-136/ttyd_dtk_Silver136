@@ -2071,12 +2071,6 @@ HitEntry* marioSearchHead_jabara(Vec* pos, f32* h, s32* side, f32 d) {
  * Sets hitobjFront / hitobjWall, and hitobjPush once he has pushed a wall for 20 frames (10 for pipes, "dokan",
  * from the US release on). Ends with marioChkWallAround and the Pirate's Grotto spear check (dou10_yoko_yari).
  */
-/**
- * Moves Mario dx units (his speed) in direction dz (degrees) and stops him at walls,
- * from mario.c and koopa.c each frame.
- * Sets hitobjFront / hitobjWall, and hitobjPush once he has pushed a wall for 20 frames (10 for pipes, "dokan",
- * from the US release on). Ends with marioChkWallAround and the Pirate's Grotto spear check (dou10_yoko_yari).
- */
 void marioCheckWall(f32 dx, f32 dz) {
     Vec pos;
     f32 h;
@@ -2418,14 +2412,6 @@ static inline void sfwVecSetNested(Vec* d, Vec v) {
 #if VERSION <= VERSION_DEMO_US
 static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
 #else
-/**
- * Moves pos dx in direction dz (degrees) unless a wall blocks it:
- * rays at two to four heights (by character and mode) reach half the width w ahead, plus 45-degree side rays.
- * On a wall pos slides along it, *h gets the distance and the wall is returned;
- * balloon walls (chkBalloon) also go in hitobjFrontWall.
- * On Riverside Station's eki_04, in marioChkSts state 0x10 on a slope of 45 degrees or more,
- * pos just moves with no wall check.
- */
 HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
 #endif
     Vec p;
@@ -2866,11 +2852,10 @@ static inline void wallCopy(Vec* out, Vec* in) {
     *out = t;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** The demo has no mode argument: the push is always limited to 1/8 of the width. */
+#if VERSION <= VERSION_DEMO_US
 BOOL marioChkWallAround(Vec* pos, f32 unused, f32 dir, f32 w, f32 h) {
 #else
-/** The demo has no mode argument: the push is always limited to 1/8 of the width. */
 BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h) {
 #endif
     Vec hi;

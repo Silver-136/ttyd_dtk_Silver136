@@ -62,8 +62,8 @@ static EVT_BEGIN(evt_shake)
 EVT_END()
 #endif
 
-#if VERSION >= VERSION_US
 /** Letter textures of the stage-clear banner, Japanese then English, each with a matching shadow list. */
+#if VERSION >= VERSION_US
 static s16 tex_jp[] = {128, 129, 130, 131, 132, 133, 134, 135};
 s16 tex_shadow_jp[] = {136, 137, 138, 139, 140, 141, 142, 143};
 static s16 tex_us[] = {132, 133, 134, -1, 135, 136, -1, 137, 138, 139, 140, 141, 132, 142};
@@ -95,7 +95,6 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 #else
-/** Letter textures of the stage-clear banner, Japanese then English, each with a matching shadow list. */
 #if VERSION > VERSION_DEMO_US
 static s32 tex_jp[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3};
 s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};

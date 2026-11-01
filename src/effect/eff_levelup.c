@@ -50,8 +50,8 @@ u16 y_trans[] = {
     5, 10, 15, 20, 25, 20, 15, 10, 4, 0,
     5, 10, 15, 20, 25, 20, 15, 10, 4, 0,
 };
-#if VERSION < VERSION_US
 
+#if VERSION < VERSION_US
 /** Effect texture ids of the banner's six letter sprites, one row per language (all rows are the same). */
 #if VERSION > VERSION_DEMO_US
 static s32 texid_tbl[2][6] = { { 146, 147, 148, 149, 150, 151 }, { 146, 147, 148, 149, 150, 151 } };

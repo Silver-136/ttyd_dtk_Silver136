@@ -801,12 +801,6 @@ static USER_FUNC(evt_cloud_main) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
 #else
-/**
- * Running script of one dark cloud entry: waits for Flurrie's breath to touch the cloud's hit area,
- * then builds a paper-cloud image of the scenery under it and counts how long the breath keeps hitting it;
- * when the count reaches the limit the cloud plays its blow-away animation,
- * runs the end event (iri_16_cloud_evt) and the entry is released. If the breath stops first the cloud resets.
- */
 static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
 #endif
     HitEntry *hit0;

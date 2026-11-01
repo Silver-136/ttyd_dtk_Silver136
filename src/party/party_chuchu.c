@@ -139,11 +139,6 @@ static const Vec vecB = {0.0f, 0.0f, 0.0f};
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(search_result) {
 #else
-/**
- * Script helper: reads set_msg's result (LW0 message, LW1 2 near / 1 far / 0 nothing) and,
- * if something was found, plays a 42-frame sniff (sound 0x945, pose PCH_Y_1) and
- * then a 1.5 s speech-bubble effect over her. In the retail versions a far find skips the sniff.
- */
 USER_FUNC(search_result) {
 #endif
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -211,12 +206,12 @@ static inline int chuchu_findTreasure2(PartyEntry* cpp, f32 range, Vec* bestPos)
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * The demo stops at the first item or block in range and has no buried treasure table.
  * Script helper: looks for an item and then a block from mobj_list within 150 units of Mario, then anywhere;
  * sets LW0 to map_exist_near / map_exist_far / map_no_exist and LW1 to 2 / 1 / 0, and turns Ms. Mowz to face it.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(set_msg) {
     int pass;
     PartyEntry* cp = partyGetPtr(marioGetPartyId());
@@ -230,11 +225,6 @@ static USER_FUNC(set_msg) {
     event->lwData[1] = 0;
     if (!party) {
 #else
-/**
- * The demo stops at the first item or block in range and has no buried treasure table.
- * Script helper: looks for an item and then a block from mobj_list within 150 units of Mario, then anywhere;
- * sets LW0 to map_exist_near / map_exist_far / map_no_exist and LW1 to 2 / 1 / 0, and turns Ms. Mowz to face it.
- */
 USER_FUNC(set_msg) {
     MapObjectEntry* mobj;
     ItemEntry* item;
@@ -357,7 +347,6 @@ USER_FUNC(post_msg) {
 
 /** Whether any unfound chuchu_treasure_tbl entry on the current map is within range of Mario. */
 #if VERSION > VERSION_DEMO_US
-/** Whether any unfound chuchu_treasure_tbl entry on the current map is within range of Mario. */
 static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
     u32 i;
     int found;
@@ -389,11 +378,6 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
 }
 #endif
 
-/**
- * Whether there is something to sniff within 150 units of Mario (an item, an unopened item box,
- * a Kururin floor item or a block from mobj_list);
- * party_motion.c and party_move.c play her sniffing pose while it is TRUE.
- */
 /**
  * Whether there is something to sniff within 150 units of Mario (an item, an unopened item box,
  * a Kururin floor item or a block from mobj_list);

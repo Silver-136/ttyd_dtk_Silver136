@@ -1396,7 +1396,6 @@ static void senteresa_ext_main(void) {
 #if VERSION <= VERSION_DEMO_US
     if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL && strcmp(mp->paperAnimName, "P_H_1C") == 0) {
 #else
-
     if (marioGetAngleKaitenHammer() > 0.0f) {
 #endif
         hammer = 1;

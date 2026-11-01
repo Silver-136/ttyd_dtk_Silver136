@@ -259,11 +259,6 @@ EVT_END()
  * args[2] the index of this satellite; args[3]-args[5] receive its starting offset from the Yux (a fixed
  * formation of +-25 units, x mirrored by facing direction).
  */
-/**
- * Script helper: args[0] is the Yux, args[1] the number of satellites (1-4),
- * args[2] the index of this satellite; args[3]-args[5] receive its starting offset from the Yux (a fixed
- * formation of +-25 units, x mirrored by facing direction).
- */
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;

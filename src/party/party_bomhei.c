@@ -457,14 +457,6 @@ static inline void bomheiSetHoldPos(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
 static void bomhei_use_main(PartyEntry* party) {
 #else
-/**
- * The bomb ability's motion steps (party->useMotionId).
- * 0-2: Bobbery hops onto Mario's head; 10: held there with a 3 s fuse while X is held;
- * 20-22: thrown 38 units ahead on release; 30-32: walks forward slowly (X again cuts the fuse to 0.5 s);
- * 40-42: lands in water with a splash; 50-51: A_3 last-moment pose for 40 frames,
- * then check_front picks the hit; 60: the blast (Sanders effect at the partner attack level, camera shake,
- * field enemy hit); 70-71: flies off the top of the screen; 80-82: 0.8 s later drops back near Mario; 100: done.
- */
 void bomhei_use_main(PartyEntry* party) {
 #endif
     MarioWork* mario = party->playerPtr;
@@ -633,7 +625,6 @@ void bomhei_use_main(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
     if (BOMHEI_WORK(party)->timer > 0) {
 #else
-
     if (party->useMotionId < 50 && BOMHEI_WORK(party)->timer > 0) {
 #endif
         BOMHEI_WORK(party)->timer--;

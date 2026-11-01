@@ -180,10 +180,8 @@ void effMahorn2Main(EffectEntry *effect) {
 
 /** Draws the travelling elements as textured quads (effect textures 0x8F and 0x90). */
 #if VERSION <= VERSION_DEMO_US
-/** Draws the travelling elements as textured quads (effect textures 0x8F and 0x90). */
 static void effMahorn2Disp(CameraId cameraId, EffectEntry* effect) {
 #else
-/** Draws the travelling elements as textured quads (effect textures 0x8F and 0x90). */
 void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
 #endif
     effMahorn2Data *data = effect->userdata;
@@ -301,7 +299,6 @@ void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
                     GXPosition3f32(xs[i][0], -h / 2.0f, 0.0f);
                     GXTexCoord2f32(2.0f * us[i][0], v);
 #else
-
                     GXPosition3f32(xs[j][0], h / 2.0f, 0.0f);
                     GXTexCoord2f32(2.0f * us[j][0], 0.0f);
                     GXPosition3f32(xs[j][1], h / 2.0f, 0.0f);

@@ -339,15 +339,6 @@ static USER_FUNC(sysflag) {
  * In that last stretch, entering from e_bero puts a partner back with Mario if he has none,
  * heals Mario and the partners, and starts evt_koopa_after.
  */
-/**
- * Init script of aji_18, the room with the factory door:
- * plays BGM_STG7_DUN2, sets up the exits, lights the three key slots by their flags (all filled from
- * STG7_16_FACTORY_DOOR on), attaches evt_machine to each empty slot
- * and locks the exit e_bero (key_lock_koujyou) before that point and between Lord Crump's defeat
- * and STG7_25_00_1_BOWSER_POSHLEY_SANCTUM.
- * In that last stretch, entering from e_bero puts a partner back with Mario if he has none,
- * heals Mario and the partners, and starts evt_koopa_after.
- */
 EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
     // The fortress music and ambience start and the exits are set up.

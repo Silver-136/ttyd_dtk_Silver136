@@ -160,11 +160,6 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
 #if VERSION <= VERSION_DEMO_US
 static void effKemuri10Main(EffectEntry* effect) {
 #else
-/**
- * Lives 16 frames.
- * The alpha rises and the velocity decays for the first 11 frames, then both drop off quickly;
- * the scale grows by 5% per frame and the texture offset scrolls.
- */
 void effKemuri10Main(EffectEntry* effect) {
 #endif
     EffKemuri10N64Work* work;

@@ -233,7 +233,6 @@ void _epilog(void) {
 
 /** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
 #if VERSION > VERSION_DEMO_US
-/** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
 void _unresolved(void) {
 }
 #endif
@@ -1505,7 +1504,6 @@ EVT_BEGIN(end_credit_korutesu_evt)
     CALL(evt_end_npc_silhouette_on, STRING("kortesu"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
 #else
-/** Parade script (releases) for Atomic Boo (c_atmic_trs): drifts across the screen at 0.8 scale. */
 EVT_BEGIN(end_credit_atomic_evt)
     CALL(evt_npc_entry, STRING("atomic"), STRING("c_atmic_trs"))
     CALL(evt_npc_set_anim, STRING("atomic"), STRING("W_1"))
@@ -1602,10 +1600,6 @@ EVT_BEGIN(end_credit_queen_evt)
     CALL(evt_end_npc_silhouette_on, STRING("queen"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
 #else
-/**
- * Parade script (releases) for the c_bom_sen model, the Bob-omb crowd sprite of Fahr Outpost's cannon scene
- * (bom_01's evt_bom1000), in pose S_2: falls down the screen as a silhouette.
- */
 EVT_BEGIN(end_credit_para_evt)
     WAIT_MS(1000)
     CALL(evt_npc_entry, STRING("para"), STRING("c_bom_sen"))

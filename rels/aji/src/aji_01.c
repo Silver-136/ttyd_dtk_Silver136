@@ -1045,12 +1045,6 @@ EVT_END()
  * and the cabin ere1_m (hit area A_ere1_m) rides to the chosen floor with the doors opening and closing.
  * GW(0) remembers the floor the cabin is on.
  */
-/**
- * Elevator 1 button script, run from the button panels with LW(0) = the floor that was called (0 to 2).
- * Mario and the partner step into the cabin, the floor menu (stg7_aji_ele_1_00 to 02) is shown
- * and the cabin ere1_m (hit area A_ere1_m) rides to the chosen floor with the doors opening and closing.
- * GW(0) remembers the floor the cabin is on.
- */
 EVT_BEGIN(ele_1)
     // Mario stops and waits for his partner to finish what it is doing.
     SET_VALUE(LW(5), LW(0))
@@ -1372,10 +1366,6 @@ EVT_BEGIN(ele2_door_close)
     RETURN
 EVT_END()
 
-/**
- * Elevator 2 button script: the same ride as ele_1 for the second elevator (cabin ere2_m, floors 2 to 4,
- * current floor in GW(1)). Before STG7_14_ELEVATOR_KEY_B it only shows the "needs a key" text stg7_aji_65.
- */
 /**
  * Elevator 2 button script: the same ride as ele_1 for the second elevator (cabin ere2_m, floors 2 to 4,
  * current floor in GW(1)). Before STG7_14_ELEVATOR_KEY_B it only shows the "needs a key" text stg7_aji_65.

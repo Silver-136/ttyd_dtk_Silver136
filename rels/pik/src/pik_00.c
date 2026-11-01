@@ -1163,8 +1163,8 @@ EVT_END()
 // FAKE: the zero Vec initialisers of zoom sit here in .rodata
 static const Vec zoom_zero_a = {0.0f, 0.0f, 0.0f};
 static const Vec zoom_zero_b = {0.0f, 0.0f, 0.0f};
-
 #endif
+
 /**
  * Talk script for Goldbob (ナリキンパパ) in chapter 7:
  * the first time he explains the Fahr Outpost cannon situation, and then he asks Mario a question.
@@ -2285,7 +2285,6 @@ void irai_29_15_cb(s32 type, smartEntry* smart) {
 }
 
 #if VERSION >= VERSION_US
-
 /** Script helper: force-closes the status window (statusWinForceOff). */
 USER_FUNC(pik_00_statuswin_force_off) {
     statusWinForceOff();

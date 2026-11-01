@@ -2486,21 +2486,15 @@ static inline s32 _gundan_part_update(YoshiGundanPart* p, s32 i) {
     return TRUE;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Runs the Stampede herd for unit args[0]: allocates 256 running Yoshi sprites (work stored in
  * countersetWeapon), moves them each frame with dust puffs and a run sound that follows the herd's average X,
  * draws them, and frees the work and stops the sound when all are across.
  * The US and PAL releases cap the herd's depth at 65 instead of 80.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(_gundan_yoshi_run_effect) {
 #else
-/**
- * Runs the Stampede herd for unit args[0]: allocates 256 running Yoshi sprites (work stored in
- * countersetWeapon), moves them each frame with dust puffs and a run sound that follows the herd's average X,
- * draws them, and frees the work and stops the sound when all are across.
- * The US and PAL releases cap the herd's depth at 65 instead of 80.
- */
 USER_FUNC(_gundan_yoshi_run_effect) {
 #endif
     BattleUnit* unit;
@@ -2588,12 +2582,10 @@ USER_FUNC(_gundan_yoshi_run_effect) {
 
 /** Draws one Stampede Yoshi (later releases). */
 #if VERSION <= VERSION_DEMO_US
-/** Draws one Stampede Yoshi (later releases). */
 static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
     YoshiGundanPart* p;
     s32 i;
 #else
-/** Draws one Stampede Yoshi (later releases). */
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
 #endif
     f32 s;

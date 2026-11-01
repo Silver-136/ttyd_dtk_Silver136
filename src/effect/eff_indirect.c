@@ -96,10 +96,8 @@ void effIndirectMain(EffectEntry* effect) {
 
 /** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
 #if VERSION <= VERSION_DEMO_US
-/** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
 static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-/** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
 void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffIndirectWork* work = effect->userdata;

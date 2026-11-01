@@ -4556,15 +4556,6 @@ EVT_END()
  * Marco makes a speech, the sailors scatter, Marco runs off,
  * and the story becomes STG5_59_ROGUEPORT_DOCK before the peach_mail event starts.
  */
-/**
- * Cutscene at STG5_58_FAIR_WINDS, when Mario comes back to the Rogueport harbor
- * from Keelhaul Key (Flavio hails the return to his hometown, mac_5_000_00, and Cortez offers to sail Mario back
- * to
- * the island whenever he likes, mac_5_000_08).
- * Marco (Flavio), Cortez and a crowd of 100 sailor extras are waiting;
- * Marco makes a speech, the sailors scatter, Marco runs off,
- * and the story becomes STG5_59_ROGUEPORT_DOCK before the peach_mail event starts.
- */
 EVT_BEGIN(gorotsuki_kikan)
     // Mario, his partner, Flavio, Cortez and the sailors are placed on the pier; the crowd of 100 sailors is
     // set up.
@@ -6687,15 +6678,6 @@ EVT_BEGIN(return_gorotsuki_town)
     RETURN
 EVT_END()
 
-/**
- * Map init for gor_00 (the Rogueport harbor).
- * Picks the music by story stage, sets up the exit "n_bero" to gor_01, creates the NPCs (including Luigi),
- * the hidden-ship objects, the save block, the star piece and the spin panel,
- * and starts whichever story scene belongs to the current stage:
- * arrival in Rogueport (STG0_02), Goombella's ambush, the X-Naut army, Bowser's visit,
- * the Flavio departure, the return home, the Peach mail, the epilogue and the post- credits return.
- * Also handles a pending ship arrival.
- */
 /**
  * Map init for gor_00 (the Rogueport harbor).
  * Picks the music by story stage, sets up the exit "n_bero" to gor_01, creates the NPCs (including Luigi),

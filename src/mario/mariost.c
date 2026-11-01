@@ -569,21 +569,15 @@ u32 marioStGetSystemLevel(void) {
     return gp->systemLevelFlags;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Runs after every vertical retrace: advances the play-time clocks (each stops while its system level is
  * paused), records the retrace count, watches the console's Reset button
  * and the B+X+Start soft reset (held 0.5 s), then services rumble and the sound driver.
  * JP and later also reset when the drive reports a fatal status.
  */
+#if VERSION <= VERSION_DEMO_US
 static void viPostCallback(u32 retraceCount) {
 #else
-/**
- * Runs after every vertical retrace: advances the play-time clocks (each stops while its system level is
- * paused), records the retrace count, watches the console's Reset button
- * and the B+X+Start soft reset (held 0.5 s), then services rumble and the sound driver.
- * JP and later also reset when the drive reports a fatal status.
- */
 void viPostCallback(u32 retraceCount) {
 #endif
     OSTime time;
@@ -691,21 +685,15 @@ exitcheck:
     psndMainInt();
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Background thread started by marioStInit that polls the disc drive:
  * on cover open, no or wrong disc, retry or fatal error it sets gp->dvdError,
  * mutes sound and draws the ROM-font error message on its own, until the drive recovers.
  * US and PAL wait until the status has been steady for 10 frames before drawing.
  */
+#if VERSION <= VERSION_DEMO_US
 static void* gcDvdCheckThread(void* param) {
 #else
-/**
- * Background thread started by marioStInit that polls the disc drive:
- * on cover open, no or wrong disc, retry or fatal error it sets gp->dvdError,
- * mutes sound and draws the ROM-font error message on its own, until the drive recovers.
- * US and PAL wait until the status has been steady for 10 frames before drawing.
- */
 void* gcDvdCheckThread(void* param) {
 #if VERSION >= VERSION_US
     s32 prevStatus = 0;
@@ -891,11 +879,11 @@ void gcRumbleCheck(void) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * The demos inline the reset check into its callers (the US demo also logs the reset);
  * their restart codes are only RESTART and HOTRESET.
  */
+#if VERSION <= VERSION_DEMO_US
 static inline void gcResetCheck(void) {
     u32 code;
 
@@ -912,10 +900,6 @@ static inline void gcResetCheck(void) {
         DVDMgrDelete();
         if (DvdCheckTreadOn) {
 #else
-/**
- * The demos inline the reset check into its callers (the US demo also logs the reset);
- * their restart codes are only RESTART and HOTRESET.
- */
 void gcResetCheck(void) {
     u32 code;
 

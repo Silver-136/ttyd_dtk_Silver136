@@ -137,7 +137,6 @@ void mario_kemuri_landon(void) {
     MarioWork* mario = marioGetPtr();
     s32 type = 0;
 #if VERSION > VERSION_DEMO_US
-
     if (strcmp(gp->currentMapName, "mri_05") == 0) {
         type = 10;
     }

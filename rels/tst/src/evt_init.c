@@ -461,7 +461,6 @@ void tess_test_line_disp(CameraId cameraId, void* param) {
 }
 
 /** Copies the screen into the texture the filled polygon is drawn with. */
-/** Copies the screen into the texture the filled polygon is drawn with. */
 void tess_test_capture(CameraId cameraId, void* param) {
     tess_test_work->capture = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_I8, GX_FALSE, 0), 1);
     GXSetTexCopySrc(0, 0, 608, 480);
@@ -470,7 +469,6 @@ void tess_test_capture(CameraId cameraId, void* param) {
     GXPixModeSync();
 }
 
-/** Whether segment a-b crosses segment c-d. */
 /** Whether segment a-b crosses segment c-d. */
 BOOL tess_test_cross(TessVertex* a, TessVertex* b, TessVertex* c, TessVertex* d) {
     if (((a->x - b->x) * (c->y - a->y) + (a->y - b->y) * (a->x - c->x)) *
@@ -485,7 +483,6 @@ BOOL tess_test_cross(TessVertex* a, TessVertex* b, TessVertex* c, TessVertex* d)
     return FALSE;
 }
 
-/** Moves the cursor with the stick and adds a point every 6 frames, until the newest segment crosses an older one. */
 /** Moves the cursor with the stick and adds a point every 6 frames, until the newest segment crosses an older one. */
 USER_FUNC(tess_test_draw) {
     s32 j;
@@ -545,7 +542,6 @@ USER_FUNC(tess_test_draw) {
 }
 
 /** Draws the tessellated polygon with the screen copy and records its bounding box for the "ofs" offscreen. */
-/** Draws the tessellated polygon with the screen copy and records its bounding box for the "ofs" offscreen. */
 void tess_test_disp(CameraId cameraId, void* param) {
     GXTexObj texObj;
     Mtx mtx;
@@ -588,7 +584,6 @@ void tess_test_disp(CameraId cameraId, void* param) {
 }
 
 /** Runs the tessellator over the drawn outline and flushes the vertices for the GPU. */
-/** Runs the tessellator over the drawn outline and flushes the vertices for the GPU. */
 USER_FUNC(tess_test_run) {
     tess_test();
     DCFlushRange(tess_test_work->vertices, tess_test_work->vertexCount * sizeof(TessVertex));
@@ -596,13 +591,11 @@ USER_FUNC(tess_test_run) {
 }
 
 /** Script helper: queues the tessellated polygon draw (tess_test_disp) on the second offscreen camera. */
-/** Script helper: queues the tessellated polygon draw (tess_test_disp) on the second offscreen camera. */
 USER_FUNC(tess_test_disp_entry) {
     dispEntry(CAMERA_OFFSCREEN2, 0.0f, 1, tess_test_disp, NULL);
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: frees the screen capture and the work buffer of the tessellator test. */
 /** Script helper: frees the screen capture and the work buffer of the tessellator test. */
 USER_FUNC(tess_test_end) {
     smartFree(tess_test_work->capture);
@@ -610,7 +603,6 @@ USER_FUNC(tess_test_end) {
     return EVT_RETURN_DONE;
 }
 
-/** GLU_TESS_BEGIN_DATA callback: does nothing (the test collects vertices in tess_test_vertex instead). */
 /** GLU_TESS_BEGIN_DATA callback: does nothing (the test collects vertices in tess_test_vertex instead). */
 void tess_test_begin(u32 type, void* polygonData) {
 }
@@ -620,25 +612,17 @@ void tess_test_begin(u32 type, void* polygonData) {
  * Registering any edge flag callback makes GLU deliver plain triangle lists rather than fans and strips,
  * which is what the test wants.
  */
-/**
- * GLU_TESS_EDGE_FLAG_DATA callback: does nothing.
- * Registering any edge flag callback makes GLU deliver plain triangle lists rather than fans and strips,
- * which is what the test wants.
- */
 void tess_test_edge_flag(u8 flag, void* polygonData) {
 }
 
-/** GLU_TESS_END_DATA callback: does nothing. */
 /** GLU_TESS_END_DATA callback: does nothing. */
 void tess_test_end_polygon(void* polygonData) {
 }
 
 /** GLU_TESS_ERROR_DATA callback: ignores tessellator errors. */
-/** GLU_TESS_ERROR_DATA callback: ignores tessellator errors. */
 void tess_test_error(u32 error, void* polygonData) {
 }
 
-/** Collects the triangle list: each vertex is an index into the outline. */
 /** Collects the triangle list: each vertex is an index into the outline. */
 void tess_test_vertex(void* vertexData, void* polygonData) {
     if (tess_test_work->indexCount >= TESS_MAX_INDICES) {
@@ -647,10 +631,6 @@ void tess_test_vertex(void* vertexData, void* polygonData) {
     tess_test_work->indices[tess_test_work->indexCount++] = (s32)vertexData;
 }
 
-/**
- * Adds a vertex where two edges cross, unless it repeats a corner;
- * it is marked as on the outline when the crossing edges are outline edges.
- */
 /**
  * Adds a vertex where two edges cross, unless it repeats a corner;
  * it is marked as on the outline when the crossing edges are outline edges.
@@ -730,7 +710,6 @@ void tess_test_combine(f64 coords[3], u32 index[4], f32 weight[4], u32* outIndex
     tess_test_work->vertexCount++;
 }
 
-/** Feeds each contour of the outline to the tessellator. */
 /** Feeds each contour of the outline to the tessellator. */
 void tess_test(void) {
     GLUtesselator* tess = gluNewTess();

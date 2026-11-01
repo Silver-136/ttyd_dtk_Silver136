@@ -288,7 +288,6 @@ static inline void setChanMatColor(GXColor init, s32 c) {
 }
 
 #if VERSION >= VERSION_US
-
 /** US: draws the chapter subtitle once, flat, and copies it into a texture that display_func bends */
 void sys_01_msg_tex_capture_func(CameraId cameraId, void* param) {
     SysWork* wp = param;
@@ -1361,8 +1360,8 @@ USER_FUNC(display) {
     s32 type = evtGetValue(event, event->args[0]);
     s32 i;
 #endif
-
 #endif
+
     if (isFirstCall) {
         wp = _mapAlloc(sizeof(SysWork));
         event->userdatap[0] = wp;

@@ -880,7 +880,6 @@ static USER_FUNC(vivian_comeback) {
 }
 
 #if VERSION >= VERSION_US
-
 /** US only: restore the moves of the unit for this turn. */
 USER_FUNC(faker_mario_gra_sync_max_moves) {
     BattleUnit* unit;

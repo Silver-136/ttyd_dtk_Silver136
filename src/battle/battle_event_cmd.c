@@ -5386,13 +5386,8 @@ static f32 ac_success_width_tbl[7][8] = {
     {30.0f, 5.0f, 5.0f, 5.0f, 7.0f, 6.0f, 11.0f, 11.0f},
     {30.0f, 5.0f, 5.0f, 5.0f, 6.0f, 6.0f, 7.0f, 7.0f},
 };
-
 #endif
-/**
- * Script: shows the action command rating sign args[0] (0-2 Nice at growing sizes, then Good, Great, Wonderful,
- * Excellent) above the position args[1..3], kept on screen, with its sound.
- * The US release sizes the sign by a per-language width table (ac_success_width_tbl).
- */
+
 /**
  * Script: shows the action command rating sign args[0] (0-2 Nice at growing sizes, then Good, Great, Wonderful,
  * Excellent) above the position args[1..3], kept on screen, with its sound.

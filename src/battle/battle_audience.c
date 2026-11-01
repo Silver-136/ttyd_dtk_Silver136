@@ -262,6 +262,7 @@ s32 haiti_data[][10] = {
     { 20, 20, 20, 20, 18, 18, 18, 16, 0, 0 },
     { 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
 };
+
 #if VERSION >= VERSION_US
 // US: the first three rows narrowed to 12/14/14 seats; BattleAudience_NoUsedFCHaitiRandCenter seats new
 // members there while fewer than 20 are present
@@ -3127,7 +3128,6 @@ void BattleAudience_SetTarget(s32 index) {
     if (member->status == 7 && member->itemId != -1) {
         member->flags |= AUDIENCE_MEMBER_FLAG_TARGETED;
 #else
-
     BattleAudienceGetPtr(index)->flags |= AUDIENCE_MEMBER_FLAG_TARGETED;
 #endif
     for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
@@ -3321,7 +3321,6 @@ s32 BattleAudience_HaitiRandForFallObject(void) {
 #if VERSION <= VERSION_DEMO_US
     irand(18);
 #else
-
     irand(12);
 #endif
     switch (row) {
@@ -3686,19 +3685,15 @@ void BattleAudienceNumToTarget(void) {
 #endif
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Counts the members present in the stands that are not on their way out;
  * the demo stores it in presentCount instead of returning it.
  */
+#if VERSION <= VERSION_DEMO_US
 static void BattleAudienceNumToTargetSub(void) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
     s32 i;
 #else
-/**
- * Counts the members present in the stands that are not on their way out;
- * the demo stores it in presentCount instead of returning it.
- */
 s32 BattleAudienceNumToTargetSub(void) {
     s32 i, count;
 #endif
@@ -5117,7 +5112,6 @@ void BattleAudience_Case_Appeal(BattleUnit* unit) {
 #if VERSION <= VERSION_DEMO_US
     if (BattleAudience_GetPPAudienceNum() > 0) {
 #else
-
     if (BattleAudience_GetPPAudienceNum() > 0.0f) {
         audience->starPowerGain += (s32)(BattleAudience_GetPPAudienceNum() / 4.0f) + 25;
 #endif

@@ -312,13 +312,6 @@ EVT_END()
  * if Mario or his partner bumps the block with the head during the move,
  * it reverses and the switch is cancelled. Ends with a landing sound and the final shake.
  */
-/**
- * Handler of the sw_0 switch for the floating block blk_0:
- * the camera shakes with rumble while the block rises
- * or falls 525 units (the direction follows LSWF(4), which is toggled), with block-float sounds;
- * if Mario or his partner bumps the block with the head during the move,
- * it reverses and the switch is cancelled. Ends with a landing sound and the final shake.
- */
 static EVT_BEGIN(main_0)
 #if VERSION > VERSION_DEMO_US
     SET_TYPE(239)
@@ -569,11 +562,6 @@ EVT_BEGIN(init_1)
     RETURN
 EVT_END()
 
-/**
- * Runs when Mario hits the floating-block switch sw_1:
- * lifts or lowers blk_1 by 489 units with its sound and a camera shake, and flips the saved state LSWF(5).
- * If the block cannot move the switch press is cancelled.
- */
 /**
  * Runs when Mario hits the floating-block switch sw_1:
  * lifts or lowers blk_1 by 489 units with its sound and a camera shake, and flips the saved state LSWF(5).

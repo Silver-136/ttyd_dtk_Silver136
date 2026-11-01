@@ -86,7 +86,6 @@ EVT_END()
 
 /** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
 #if VERSION > VERSION_DEMO_US
-/** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_none)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -95,7 +94,6 @@ EVT_END()
 
 /** Arrival through a gate entrance (type 3): no walk-in, just gives control back to the player. */
 #if VERSION > VERSION_DEMO_US
-/** Arrival through a gate entrance (type 3): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_gate)
     CALL(evt_mario_key_onoff, 1)
     RETURN

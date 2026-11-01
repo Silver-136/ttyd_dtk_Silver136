@@ -531,16 +531,6 @@ USER_FUNC(_btlgon_get_escape_param) {
  * Either way she then sets unit work 3, lunges at the stands, takes away audience members
  * (gon_extra_eaten_event) and is set to 10 HP.
  */
-/**
- * Hooktail's surrender scene, run by her KO event the first time her HP runs out: she begs Mario to stop
- * (stg1_gon_23, 24) and offers in turn coins (24), a rare badge (26) and a sniff of her feet (28), each a yes/no
- * choice (LW(10) = offer, LW(5) = the accepted one); Mario shakes his head at each refusal.
- * If he accepts one she bites him as he walks up (weapon_gonbaba_kamituki_attack), gloats that he was duped
- * (stg1_gon_30, with Goombella's or Koops' reply) and the fight goes on.
- * If he refuses all three she grumbles that he is not very trusting (stg1_gon_31).
- * Either way she then sets unit work 3, lunges at the stands, takes away audience members
- * (gon_extra_eaten_event) and is set to 10 HP.
- */
 EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_prilimit, 1)
     CALL(evt_btl_camera_wait_move_end)
@@ -1395,13 +1385,6 @@ EVT_END()
  * The second time she collapses (GNB_X_1, GNB_D_3, GNB_H_1 to 3, with SFX_BOSS_GNB_DOWN1 to 3),
  * the camera pulls back, the stg1_gon_32 line is shown and the unit is removed.
  */
-/**
- * Defeat of Hooktail.
- * The first time her HP runs out (unit work 3 = 0) she does not die
- * but goes into negotiation_event instead, where she begs and bargains with Mario.
- * The second time she collapses (GNB_X_1, GNB_D_3, GNB_H_1 to 3, with SFX_BOSS_GNB_DOWN1 to 3),
- * the camera pulls back, the stg1_gon_32 line is shown and the unit is removed.
- */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1480,11 +1463,6 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
-/**
- * Init script of Hooktail: registers her wait, attack and damage handlers (confusion uses the default handler)
- * and the battle-entry event, sets her speaking body part to part 1 and clears her unit work (0 to 5;
- * 3 is the negotiation flag, 5 the attack-order counter).
- */
 /**
  * Init script of Hooktail: registers her wait, attack and damage handlers (confusion uses the default handler)
  * and the battle-entry event, sets her speaking body part to part 1 and clears her unit work (0 to 5;

@@ -315,11 +315,10 @@ void cloud_hover_init(PartyEntry* party) {
     party->work.cloud.hoverSpeed = 4.25f;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** Advances Flurrie's idle bob and sets her display offset to a 0-6 unit sine wave above her position. */
+#if VERSION <= VERSION_DEMO_US
 static inline void cloud_hover_main(PartyEntry* party) {
 #else
-/** Advances Flurrie's idle bob and sets her display offset to a 0-6 unit sine wave above her position. */
 // Descriptive name (not in the symbol maps); placeholder unk_8018206c, JP 0x8018206C. See docs/NAME_PROVENANCE.md.
 void cloud_hover_main(PartyEntry* party) {
 #endif
@@ -336,8 +335,8 @@ void cloud_hover_main(PartyEntry* party) {
 void cloud_move(PartyEntry* party) {
 #if VERSION >= VERSION_US
     f32 a;
-
 #endif
+
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyMoveFlyInit(party, 1);
@@ -693,7 +692,6 @@ void _cloud_use(PartyEntry* party) {
 void cloud_exit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 #if VERSION > VERSION_DEMO_US
-
     if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
         psndSFXOff(CLOUD_WORK(party)->sfxId);
         CLOUD_WORK(party)->sfxId = -1;
@@ -904,7 +902,6 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
  * Does nothing with no partner or when Flurrie is out but not gusting.
  */
 #if VERSION <= VERSION_DEMO_US
-
 /**
  * Gale Force state for evt_party.c's script wait:
  * 0 when there is no partner or Flurrie is not gusting, 1 while the gust is in its start state (10),

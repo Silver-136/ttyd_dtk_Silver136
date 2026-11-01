@@ -527,16 +527,6 @@ EVT_END()
  * right answers are counted in LW(14) and after the fifth the statue turns around,
  * the quiz ends and STG7_13_QUIZ_CLEARED is set.
  */
-/**
- * The statue's quiz, the case script of a_sekizou_1_a.
- * The statue wakes up and asks whether to take its quiz (stg7_aji_02);
- * on yes it moves Mario onto the quiz set (BGM_EVT_QUIZ1/2)
- * and asks questions read from kuizu_data (map animation, question text, choice text, correct choice),
- * turning its head and flapping its mouth with every text.
- * Wrong answers earn a scolding and an offer to stop;
- * right answers are counted in LW(14) and after the fifth the statue turns around,
- * the quiz ends and STG7_13_QUIZ_CLEARED is set.
- */
 EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)

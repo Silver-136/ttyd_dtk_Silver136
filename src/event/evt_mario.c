@@ -196,11 +196,6 @@ USER_FUNC(evt_mario_dokan_prepare) {
  * arg 0 = pipe type (evt_bero passes 2 up, 3 down, 5 sideways).
  * Blocks while the spin runs; the partners leave as he goes in.
  */
-/**
- * Plays Mario's paper pipe animation, then switches to the pipe motion;
- * arg 0 = pipe type (evt_bero passes 2 up, 3 down, 5 sideways).
- * Blocks while the spin runs; the partners leave as he goes in.
- */
 USER_FUNC(evt_mario_paper_pose_dokan) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -797,11 +792,6 @@ USER_FUNC(evt_mario_set_pose) {
     SETPOSE_BODY
 }
 
-/**
- * Brings Mario back to his normal standing state before a cutscene:
- * gets him off Yoshi or out of Vivian's shadow, cancels Tube Mode and paper slit,
- * waits for a partner ride to end. Blocks until done.
- */
 /**
  * Brings Mario back to his normal standing state before a cutscene:
  * gets him off Yoshi or out of Vivian's shadow, cancels Tube Mode and paper slit,

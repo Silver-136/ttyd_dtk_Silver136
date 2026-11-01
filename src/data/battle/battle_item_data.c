@@ -4680,17 +4680,13 @@ USER_FUNC(_hpfp_change_declare_1) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Blinks the HP and FP readouts for 120 frames when unit args[0] is Mario or a partner, after Point Swap.
  * The JP and later releases clear any earlier blink first.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(_hpfp_change_declare_2) {
 #else
-/**
- * Blinks the HP and FP readouts for 120 frames when unit args[0] is Mario or a partner, after Point Swap.
- * The JP and later releases clear any earlier blink first.
- */
 USER_FUNC(_hpfp_change_declare_2) {
 #endif
     BattleWork* wp = _battleWorkPointer;
@@ -5040,7 +5036,6 @@ BattleWeapon ItemWeaponData_LastDinner = {
 
 /** Thunder Rage: 5 lightning damage to every enemy. */
 #if VERSION > VERSION_DEMO_US
-/** Thunder Rage: 5 lightning damage to every enemy. */
 EVT_BEGIN(ItemEvent_Kaminari_Dokkan)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Dokkan))
     CALL_CHILD(PTR(ItemEvent_Kaminari))
@@ -5050,7 +5045,6 @@ EVT_END()
 
 /** Thunder Bolt: 5 lightning damage to one enemy. */
 #if VERSION > VERSION_DEMO_US
-/** Thunder Bolt: 5 lightning damage to one enemy. */
 EVT_BEGIN(ItemEvent_Kaminari_Gorogoro)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Gorogoro))
     CALL_CHILD(PTR(ItemEvent_Kaminari))
@@ -5060,7 +5054,6 @@ EVT_END()
 
 /** Ruin Powder: confuses every enemy for three turns. */
 #if VERSION > VERSION_DEMO_US
-/** Ruin Powder: confuses every enemy for three turns. */
 EVT_BEGIN(ItemEvent_Madowaseno_Kona)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Madowaseno_Kona))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
@@ -5070,7 +5063,6 @@ EVT_END()
 
 /** Power Punch: makes the chosen ally huge (attack up) for three turns. */
 #if VERSION > VERSION_DEMO_US
-/** Power Punch: makes the chosen ally huge (attack up) for three turns. */
 EVT_BEGIN(ItemEvent_Dekadeka_Drink)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Dekadeka_Drink))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
@@ -5080,7 +5072,6 @@ EVT_END()
 
 /** Courage Shell: raises the chosen ally's defence by 3 for three turns. */
 #if VERSION > VERSION_DEMO_US
-/** Courage Shell: raises the chosen ally's defence by 3 for three turns. */
 EVT_BEGIN(ItemEvent_Katikati_Koura)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Katikati_Koura))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
@@ -5090,7 +5081,6 @@ EVT_END()
 
 /** Mini Mr. Mini: shrinks every enemy (attack down) for three turns. */
 #if VERSION > VERSION_DEMO_US
-/** Mini Mr. Mini: shrinks every enemy (attack down) for three turns. */
 EVT_BEGIN(ItemEvent_Minimini_Kun)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Minimini_Kun))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
@@ -5100,7 +5090,6 @@ EVT_END()
 
 /** Mr. Softener: lowers every enemy's defence by 3 for three turns. */
 #if VERSION > VERSION_DEMO_US
-/** Mr. Softener: lowers every enemy's defence by 3 for three turns. */
 EVT_BEGIN(ItemEvent_Funyafunya_Kun)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Funyafunya_Kun))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
@@ -5110,7 +5099,6 @@ EVT_END()
 
 /** Tasty Tonic: cures the chosen ally's bad status effects. */
 #if VERSION > VERSION_DEMO_US
-/** Tasty Tonic: cures the chosen ally's bad status effects. */
 EVT_BEGIN(ItemEvent_Sukkiri_Drink)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Sukkiri_Drink))
     CALL_CHILD(PTR(ItemEvent_Support_RefreshEffect))
@@ -5120,7 +5108,6 @@ EVT_END()
 
 /** Spite Pouch: gives the chosen ally payback for three turns. */
 #if VERSION > VERSION_DEMO_US
-/** Spite Pouch: gives the chosen ally payback for three turns. */
 EVT_BEGIN(ItemEvent_Shikaeshino_Kona)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Shikaeshino_Kona))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
@@ -5130,7 +5117,6 @@ EVT_END()
 
 /** Koopa Curse: slows the chosen enemy for three turns. */
 #if VERSION > VERSION_DEMO_US
-/** Koopa Curse: slows the chosen enemy for three turns. */
 EVT_BEGIN(ItemEvent_Kameno_Noroi)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kameno_Noroi))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))

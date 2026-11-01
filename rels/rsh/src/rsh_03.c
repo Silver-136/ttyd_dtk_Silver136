@@ -1937,11 +1937,6 @@ EVT_END()
  * scenery for the outbound or return trip, the dining car NPCs, the shop door and Smorg shop,
  * the random passengers (evt_rsh_03_rnd_npc_entry) and the music for the station the train has reached.
  */
-/**
- * Shared map init for rsh_03 on the second visit:
- * scenery for the outbound or return trip, the dining car NPCs, the shop door and Smorg shop,
- * the random passengers (evt_rsh_03_rnd_npc_entry) and the music for the station the train has reached.
- */
 EVT_BEGIN(rsh_03_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)

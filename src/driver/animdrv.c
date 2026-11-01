@@ -1058,6 +1058,7 @@ GXColor animPoseGetMaterialEvtColor(s32 poseId) {
 static inline f32 apmMul(f32 a, f32 b) {
     return a * b;
 }
+
 #if VERSION <= VERSION_DEMO_US
 /**
  * The demo copies the frame buffers through small inline helpers.
@@ -2316,7 +2317,6 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
 #endif
                 continue;
 #if VERSION > VERSION_DEMO_US
-
             case 1:
                 m = rot;
                 break;
@@ -2366,7 +2366,6 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
         texMtx = GX_TEXMTX0 + j[0];
         GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), texMtx, (GXBool)0, GX_PTIDENTITY);
 #else
-
         j = (u32)i[0] * 3; // FAKE: unsigned multiply (i >= 0, same value) shifts loop-2 colouring toward target
         texMtx = GX_TEXMTX0 + j;
         GXSetTexCoordGen2((GXTexCoordID) i[0], GX_TG_MTX2x4, (GXTexGenSrc) (GX_TG_TEX0 + i[0]), texMtx, GX_FALSE, GX_PTIDENTITY);
@@ -2446,11 +2445,6 @@ static inline void animSetCullMode(s32 cullMode) {
 #if VERSION <= VERSION_DEMO_US
 static void materialProc(s32 shapeId, s32 xluStage) {
 #else
-/**
- * Sets up the material of shape shapeId for draw stage xluStage:
- * the matrices, lighting, cull mode, alpha test and blending, the tint colours and textures,
- * including substituted paper textures.
- */
 void materialProc(s32 shapeId, s32 xluStage) {
 #endif
     AnimationPoseData *cd;
@@ -2566,10 +2560,6 @@ static inline AnimationPoseData* rpCurData(void) {
 #if VERSION <= VERSION_DEMO_US
 static void renderProc(s32 shapeId, s32 unused) {
 #else
-/**
- * Draws shape shapeId of the current pose: points GX at the pose's evaluated vertex positions and normals
- * and the file's colours and texture coordinates, then sends its polygons.
- */
 void renderProc(s32 shapeId, s32 unused) {
 #endif
     AnimationPoseData* cd;
@@ -2639,7 +2629,6 @@ void renderProc(s32 shapeId, s32 unused) {
 #if VERSION <= VERSION_DEMO_US
             animSetCullMode(shape->cullMode);
 #else
-
             GXSetCullMode(tbl[shape->cullMode]);
 #endif
             data = wp->curPoseData;
@@ -2843,11 +2832,6 @@ void renderProc(s32 shapeId, s32 unused) {
 #if VERSION <= VERSION_DEMO_US
 static void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
 #else
-/**
- * Walks the pose's group tree from groupId (children, then siblings) and draws each visible group:
- * pushes its node matrix, sets up its material and draws its shape.
- * Vivian, Marilyn and Beldam's hair and tail chains are bent towards their movement on the way.
- */
 void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
 #endif
     AnimPoseGroup* group;

@@ -327,10 +327,6 @@ static void yuka_main(void) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(yuka_end) {
 #else
-/**
- * Frees the floor texture and mesh and clears the stg_b_yuka flags again.
- * The retail releases also null the buffer addresses, which is what lets main_deka finish.
- */
 USER_FUNC(yuka_end) {
 #endif
     DekaWork* w = get_ptr();
@@ -1256,10 +1252,6 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 static void yuka_disp(CameraId cam, void* param) {
 #else
-/**
- * Draws the rippling floor as 128 textured quads along the strip, using the captured floor texture.
- * The retail releases skip it once the buffers are freed.
- */
 void yuka_disp(CameraId cam, void* param) {
 #endif
     DekaWork* w;

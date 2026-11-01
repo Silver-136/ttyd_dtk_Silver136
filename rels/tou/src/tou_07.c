@@ -80,7 +80,6 @@ EvtWord tou_07_init_evt[286];
 #endif
 
 #if VERSION >= VERSION_US
-
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 USER_FUNC(tou_07_mario_keyoff_check) {
     EvtWord* args = event->args;
@@ -592,11 +591,6 @@ EVT_BEGIN(evt_dakuto2)
     RETURN
 EVT_END()
 
-/**
- * Rest in the Glitz Pit bed (stg3_yado_00/01, with a yes/no prompt):
- * partners leave, Mario hops in and sleeps with the sound muted, HP and FP are restored,
- * and the partners return.
- */
 /**
  * Rest in the Glitz Pit bed (stg3_yado_00/01, with a yes/no prompt):
  * partners leave, Mario hops in and sleeps with the sound muted, HP and FP are restored,

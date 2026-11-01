@@ -105,6 +105,7 @@ static s16 nozle_1_texcoord1_tbl[] __attribute__((aligned(32))) = {
     16384, -5461, 16384, -8192, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 };
+
 #if VERSION <= VERSION_DEMO_US
 static GXColor nozle_1_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 204}, {255, 255, 255, 51}, {255, 255, 255, 76}, {255, 255, 255, 102},
@@ -337,6 +338,7 @@ static s16 nozle_4_texcoord1_tbl[] __attribute__((aligned(32))) = {
     8192, 12288, 8192, 16384, 8192, 20480, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 };
+
 #if VERSION <= VERSION_DEMO_US
 static GXColor nozle_4_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 127}, {255, 255, 255, 76}, {255, 255, 255, 0},
@@ -489,10 +491,8 @@ EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 li
 
 /** Per frame: counts the life down and deletes the effect at the end; chooses the draw layer (8 or 2) by type. */
 #if VERSION <= VERSION_DEMO_US
-/** Per frame: counts the life down and deletes the effect at the end; chooses the draw layer (8 or 2) by type. */
 static void effNozleMain(EffectEntry* effect) {
 #else
-/** Per frame: counts the life down and deletes the effect at the end; chooses the draw layer (8 or 2) by type. */
 void effNozleMain(EffectEntry* effect) {
 #endif
     EffNozleWork* work = effect->userdata;
@@ -585,10 +585,8 @@ static inline void nozleVtxSetup(GXAttrType type, u8 posFrac, u8 texFrac, void* 
 
 /** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
 #if VERSION <= VERSION_DEMO_US
-/** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
 static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #else
-/** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
 void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     void** dl5;

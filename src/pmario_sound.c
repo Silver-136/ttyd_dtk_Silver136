@@ -10414,12 +10414,11 @@ BOOL psndBGMOn(u32 flags, char* bgm_name) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_800d7270, JP 0x800D7270. See docs/NAME_PROVENANCE.md.
-#if VERSION <= VERSION_DEMO_US
 /** Starts BGM bgm_name with flags and fade-in time (psndBGMOn_f_d; US and PAL fade the previous BGM out in 750 ms). */
+#if VERSION <= VERSION_DEMO_US
 BOOL psndBGMOn_f(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
     return psndBGMOn_f_d(flags, bgm_name, fadetime, unused);
 #else
-/** Starts BGM bgm_name with flags and fade-in time (psndBGMOn_f_d; US and PAL fade the previous BGM out in 750 ms). */
 BOOL psndBGMOn_f(u32 flags, const char* bgm_name, u32 fadetime, s32 unused) {
     return psndBGMOn_f_d(flags, bgm_name, fadetime, 750, unused);
 #endif
@@ -10459,7 +10458,6 @@ static inline s32 psndSongFindCh(void) {
 #if VERSION <= VERSION_DEMO_US
 static inline s32 psndBGMSearch(char* name) {
 #else
-/** Looks BGM name up in psbgmlist (or decodes a numeric id) into *pi. */
 static inline void psndBGMSearchP(const char* name, s32* pi) {
 #endif
     SoundBGMEntry* entry;
@@ -10496,11 +10494,10 @@ static inline void psndBGMSearchP(const char* name, s32* pi) {
     return i;
 #endif
 }
-#if VERSION <= VERSION_DEMO_US
 /** JP, US and PAL form of psndBGMOn_f_d above; fadeout is the fade-out time for the BGM being replaced. */
+#if VERSION <= VERSION_DEMO_US
 BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
 #else
-/** JP, US and PAL form of psndBGMOn_f_d above; fadeout is the fade-out time for the BGM being replaced. */
 BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 unused) {
 #endif
     PaperSoundBGM* bgm;

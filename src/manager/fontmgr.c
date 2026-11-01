@@ -72,6 +72,7 @@ u16 JUTFont_CodeToGlyph(u32 code);
 static inline u16 fontByteGlyph(s8 c) {
     return JUTFont_CodeToGlyph(FONT_CH(c));
 }
+
 #if VERSION >= VERSION_US
 void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg);
 #endif
