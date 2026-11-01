@@ -7241,8 +7241,8 @@ USER_FUNC(kuzi_get_keihin) {
 USER_FUNC(kuzi_bomb_bomb_eff) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    s32 phase = (0, evtGetValue(event, args[1]));
+    s32 phase = evtGetValue(event, args[1]);
+    s32 next = phase;
     NpcEntry* npc = npcNameToPtr("\203O\203\213\203\201\203{\203\200\225\272");
 
     if (type == 2 || type == 3) {
@@ -7253,32 +7253,32 @@ USER_FUNC(kuzi_bomb_bomb_eff) {
             if (npc->position.y > 25.0f) {
                 effBombEntry(0, npc->position.x - 30.0f, npc->position.y, npc->position.z, 1.0f);
                 if (type == 0) {
-                    phase = 1;
+                    next = 1;
                 } else {
-                    phase = 2;
+                    next = 2;
                 }
             }
             break;
         case 1:
             if (npc->position.y > 50.0f) {
                 effBombEntry(0, 30.0f + npc->position.x, npc->position.y, npc->position.z, 1.0f);
-                phase = 2;
+                next = 2;
             }
             break;
         case 2:
             if (npc->position.y > 75.0f) {
                 effBombEntry(0, npc->position.x - 30.0f, npc->position.y, npc->position.z, 1.0f);
-                phase = 3;
+                next = 3;
             }
             break;
         case 3:
             if (npc->position.y > 100.0f) {
                 effBombEntry(0, 30.0f + npc->position.x, npc->position.y, npc->position.z, 1.0f);
-                phase = 4;
+                next = 4;
             }
             break;
     }
-    evtSetValue(event, args[2], phase);
+    evtSetValue(event, args[2], next);
     return EVT_RETURN_DONE;
 }
 

@@ -424,8 +424,7 @@ MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, BOOL isR
  * and builds the object tree from the root joint with world matrix mtx; returns the root object.
  */
 MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index) {
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    MapWork* wp = (0, &mapWork[activeGroup]);
+    MapWork* wp = mapGetWork();
     u32 size;
 
     wp->entries[index].numJoints = mapGetJoints(joint);
