@@ -190,10 +190,10 @@ void bomhei_exit(PartyEntry* party) {
 }
 #endif
 /**
- * Cancels a bomb in progress (demo): back to run mode 2 unless in run mode 9,
- * clears the use flags and frees the use work.
+ * Cancels a bomb in progress: drops Mario's carry flag, goes back to run mode 2 unless in run mode 9,
+ * clears the use flags, stops the sounds and frees the use work.
  * Called before plane, ship and bellows rides and on run-mode changes (party_move.c).
- * Unlike the release versions it leaves Mario's carry flag and the sounds alone.
+ * The demos leave Mario's carry flag and the sounds alone.
  */
 void bomhei_use_cancel(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
@@ -214,7 +214,7 @@ void bomhei_use_cancel(void) {
 }
 
 /**
- * Cancels a bomb only while Mario is carrying Bobbery (demo),
+ * Cancels a bomb only while Mario is carrying Bobbery,
  * putting Mario back in his standing pose and stopping the sounds.
  * Called when Mario takes damage (mot_damage.c).
  */
@@ -234,7 +234,7 @@ void bomhei_use_cancel2(void) {
 }
 
 /**
- * Party table post-use handler (demo): drops Mario's carry flag with a standing pose,
+ * Party table post-use handler: drops Mario's carry flag with a standing pose,
  * stops the sounds and frees the use work.
  */
 #if VERSION > VERSION_DEMO_US

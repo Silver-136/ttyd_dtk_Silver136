@@ -1354,7 +1354,7 @@ void searchGround(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
         if (attr & HIT_ATTR_SPIKES) {
 #else
-        if (attr & 0xC00) {
+        if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
 #endif
             yoshi_damageToge(party);
 #if VERSION > VERSION_DEMO_US

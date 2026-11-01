@@ -469,8 +469,7 @@ void mot_slit_post(void) {
     MarioWork* mario = marioGetPtr();
 #if VERSION <= VERSION_DEMO_US
     u16 id;
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     u16 id;
     if (mario->slitState >= 10) {
         id = mario->currMotionId;
@@ -478,12 +477,12 @@ void mot_slit_post(void) {
             mario->currMotionId == MARIO_MOTION_JUMP_3) {
             return;
         }
+    }
 #else
     u16 id = mario->currMotionId;
     if (id == MARIO_MOTION_SLIT || (id == MARIO_MOTION_FALL_2 || id == MARIO_MOTION_UPSTAIRS) || mario->currMotionId <= MARIO_MOTION_JUMP_2 ||
         mario->currMotionId == MARIO_MOTION_JUMP_3) {
         return;
-#endif
     }
 #endif
     if (!(mario->flags & MARIO_FLAG_PAPER_MODE)) {
@@ -507,16 +506,6 @@ void mot_slit_post(void) {
             marioPaperOff();
             mapResetPaperAmbColor();
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-#if VERSION <= VERSION_DEMO_US
-            marioAdjustMoveDir();
-            allPartyForceSlitOff();
-        }
-    } else {
-        id = mario->currMotionId;
-        if (id == 1 || (u16)(id - 2) <= 5 || mario->currMotionId == MARIO_MOTION_JUMP_3) {
-            return;
-        }
-#else
 #if VERSION == VERSION_EU
             if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
                 marioAdjustMoveDir();
@@ -526,6 +515,13 @@ void mot_slit_post(void) {
 #endif
             allPartyForceSlitOff();
         }
+#if VERSION <= VERSION_DEMO_US
+    } else {
+        id = mario->currMotionId;
+        if (id == 1 || (u16)(id - 2) <= 5 || mario->currMotionId == MARIO_MOTION_JUMP_3) {
+            return;
+        }
+#else
     } else if (mario->currMotionId != MARIO_MOTION_FALL) {
 #endif
         mario->flags &= ~MARIO_FLAG_PAPER_MODE;

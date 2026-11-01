@@ -1477,8 +1477,8 @@ USER_FUNC(evt_shop_main_func) {
     hit = mario->hitobjStandOn;
     wp->flags &= ~1;
     trg = keyGetButtonTrg(0);
-    // FAKE: the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
-    if ((BOOL)(!marioChkCtrl() & 0x7ffffff) || (BOOL)(!marioChkKey() & 0x7ffffff)) {
+    // FAKE: the masks do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
+    if ((!marioChkCtrl() & 0x7ffffff) || (!marioChkKey() & 0x7ffffff)) {
         trg = 0;
     }
     if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&
