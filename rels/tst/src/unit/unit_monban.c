@@ -258,7 +258,7 @@ EVT_END()
 
 /**
  * Spark effect (toge_flush) shown when an attack on Gus's spiked head is turned away:
- * it waits 30 frames, then places the flash above his head at a height that depends on whether he has status 10
+ * it waits 30 frames, then places the flash above his head at a height that depends on whether he has STATUS_HUGE
  * or 11.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)

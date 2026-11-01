@@ -52,7 +52,7 @@ static LectButton lbtn[2];
 /**
  * Moves the camera's goal by the offset ofs: records the current camera position and target as the preset,
  * sets the stored (goal) position and target to those plus the offset,
- * and starts an immediate ease (curve 11) at the current time.
+ * and starts an immediate ease (curve EASING_SINE_IN_OUT) at the current time.
  * Used to shift the item-get view out of sight and back.
  */
 static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {

@@ -335,56 +335,56 @@ EvtWord tou_03_init_evt[VERSION_PICK(370, 372)];
  * evt_kyaku registers it with the billboard driver and pose_init groups the frames into animations.
  */
 ExtTexInfo ext_kyaku_data[] = {
-    {("c_kinopio"), ("KNP_S_1"), 0.0f},
-    {("c_kinopio"), ("KNP_S_1"), 10.0f},
-    {("c_kinopio"), ("KNP_S_1"), 20.0f},
-    {("c_kinopio"), ("KNP_S_1"), 30.0f},
-    {("c_kinopio"), ("KNP_S_1"), 40.0f},
-    {("c_kinopio"), ("KNP_S_1"), 50.0f},
-    {("c_kinopio"), ("KNP_S_1"), 60.0f},
-    {("c_kinopio"), ("KNP_S_1"), 70.0f},
-    {("c_kinopio"), ("KNP_S_1"), 80.0f},
-    {("c_kinopio"), ("KNP_S_1"), 90.0f},
-    {("c_kinopio"), ("KNP_S_1"), 100.0f},
-    {("c_kinopio"), ("KNP_S_1"), 110.0f},
-    {("c_kinopio"), ("KNP_S_1"), 120.0f},
-    {("c_kinopio"), ("KNP_S_1"), 130.0f},
-    {("c_kinopio"), ("KNP_S_1"), 140.0f},
-    {("c_kinopio"), ("KNP_S_1"), 150.0f},
-    {("c_kinopio"), ("KNP_S_1"), 160.0f},
-    {("c_kinopio"), ("KNP_S_1"), 170.0f},
-    {("c_kinopio"), ("KNP_S_1"), 180.0f},
-    {("c_kinopio"), ("KNP_S_1"), 190.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 0.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 10.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 20.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 30.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 40.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 50.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 60.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 70.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 80.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 90.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 100.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 110.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 120.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 130.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 140.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 150.0f},
-    {("c_kinopiko"), ("KNF_S_1"), 160.0f},
-    {("c_roten"), ("S_1"), 0.0f},
-    {("c_roten"), ("S_1"), 10.0f},
-    {("c_roten"), ("S_1"), 20.0f},
-    {("c_roten"), ("S_1"), 30.0f},
-    {("c_roten"), ("S_1"), 40.0f},
-    {("c_roten"), ("S_1"), 50.0f},
-    {("c_jugemu"), ("JGM_S_1"), 0.0f},
-    {("c_jugemu"), ("JGM_S_1"), 10.0f},
-    {("c_jugemu"), ("JGM_S_1"), 20.0f},
-    {("c_jugemu"), ("JGM_S_1"), 30.0f},
-    {("c_jugemu"), ("JGM_S_1"), 40.0f},
-    {("c_jugemu"), ("JGM_S_1"), 50.0f},
-    {("c_jugemu"), ("JGM_S_1"), 60.0f},
+    {"c_kinopio", "KNP_S_1", 0.0f},
+    {"c_kinopio", "KNP_S_1", 10.0f},
+    {"c_kinopio", "KNP_S_1", 20.0f},
+    {"c_kinopio", "KNP_S_1", 30.0f},
+    {"c_kinopio", "KNP_S_1", 40.0f},
+    {"c_kinopio", "KNP_S_1", 50.0f},
+    {"c_kinopio", "KNP_S_1", 60.0f},
+    {"c_kinopio", "KNP_S_1", 70.0f},
+    {"c_kinopio", "KNP_S_1", 80.0f},
+    {"c_kinopio", "KNP_S_1", 90.0f},
+    {"c_kinopio", "KNP_S_1", 100.0f},
+    {"c_kinopio", "KNP_S_1", 110.0f},
+    {"c_kinopio", "KNP_S_1", 120.0f},
+    {"c_kinopio", "KNP_S_1", 130.0f},
+    {"c_kinopio", "KNP_S_1", 140.0f},
+    {"c_kinopio", "KNP_S_1", 150.0f},
+    {"c_kinopio", "KNP_S_1", 160.0f},
+    {"c_kinopio", "KNP_S_1", 170.0f},
+    {"c_kinopio", "KNP_S_1", 180.0f},
+    {"c_kinopio", "KNP_S_1", 190.0f},
+    {"c_kinopiko", "KNF_S_1", 0.0f},
+    {"c_kinopiko", "KNF_S_1", 10.0f},
+    {"c_kinopiko", "KNF_S_1", 20.0f},
+    {"c_kinopiko", "KNF_S_1", 30.0f},
+    {"c_kinopiko", "KNF_S_1", 40.0f},
+    {"c_kinopiko", "KNF_S_1", 50.0f},
+    {"c_kinopiko", "KNF_S_1", 60.0f},
+    {"c_kinopiko", "KNF_S_1", 70.0f},
+    {"c_kinopiko", "KNF_S_1", 80.0f},
+    {"c_kinopiko", "KNF_S_1", 90.0f},
+    {"c_kinopiko", "KNF_S_1", 100.0f},
+    {"c_kinopiko", "KNF_S_1", 110.0f},
+    {"c_kinopiko", "KNF_S_1", 120.0f},
+    {"c_kinopiko", "KNF_S_1", 130.0f},
+    {"c_kinopiko", "KNF_S_1", 140.0f},
+    {"c_kinopiko", "KNF_S_1", 150.0f},
+    {"c_kinopiko", "KNF_S_1", 160.0f},
+    {"c_roten", "S_1", 0.0f},
+    {"c_roten", "S_1", 10.0f},
+    {"c_roten", "S_1", 20.0f},
+    {"c_roten", "S_1", 30.0f},
+    {"c_roten", "S_1", 40.0f},
+    {"c_roten", "S_1", 50.0f},
+    {"c_jugemu", "JGM_S_1", 0.0f},
+    {"c_jugemu", "JGM_S_1", 10.0f},
+    {"c_jugemu", "JGM_S_1", 20.0f},
+    {"c_jugemu", "JGM_S_1", 30.0f},
+    {"c_jugemu", "JGM_S_1", 40.0f},
+    {"c_jugemu", "JGM_S_1", 50.0f},
+    {"c_jugemu", "JGM_S_1", 60.0f},
     {0},
 };
 
@@ -908,7 +908,7 @@ EVT_END()
  */
 static BeroEntry bero_data[] = {
     {
-        ("w_bero"), // hitName
+        "w_bero", // hitName
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -919,14 +919,14 @@ static BeroEntry bero_data[] = {
         -1, // caseType
         w_close, // exitEvent
         "tou_04", // nextMapName
-        ("n_bero_2"), // nextBeroName
+        "n_bero_2", // nextBeroName
         5, // enterAnimeType
         5, // exitAnimeType
         w_door_close, // enterAnimeArg
         w_door_open, // exitAnimeArg
     },
     {
-        ("e_bero"), // hitName
+        "e_bero", // hitName
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -937,14 +937,14 @@ static BeroEntry bero_data[] = {
         -1, // caseType
         e_close, // exitEvent
         "tou_04", // nextMapName
-        ("n_bero_1"), // nextBeroName
+        "n_bero_1", // nextBeroName
         5, // enterAnimeType
         5, // exitAnimeType
         e_door_close, // enterAnimeArg
         e_door_open, // exitAnimeArg
     },
     {
-        ("s_bero_1"), // hitName
+        "s_bero_1", // hitName
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -955,14 +955,14 @@ static BeroEntry bero_data[] = {
         -1, // caseType
         s1_close, // exitEvent
         "tou_02", // nextMapName
-        ("n_bero_1"), // nextBeroName
+        "n_bero_1", // nextBeroName
         5, // enterAnimeType
         5, // exitAnimeType
         s1_door_close, // enterAnimeArg
         s1_door_open, // exitAnimeArg
     },
     {
-        ("s_bero_2"), // hitName
+        "s_bero_2", // hitName
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -973,7 +973,7 @@ static BeroEntry bero_data[] = {
         -1, // caseType
         s2_close, // exitEvent
         "tou_02", // nextMapName
-        ("n_bero_2"), // nextBeroName
+        "n_bero_2", // nextBeroName
         5, // enterAnimeType
         5, // exitAnimeType
         s2_door_close, // enterAnimeArg

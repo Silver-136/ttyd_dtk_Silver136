@@ -554,10 +554,10 @@ static PoseTableEntry pose_table_parts[] = {
 };
 
 /**
- * Event table of the Poison Pokey: the spike counters (tags 37 and 39, dmg_avoid_counter_thorn_side_event),
+ * Event table of the Poison Pokey: the spike counters (dmg_avoid_counter_thorn_side_event),
  * knockback hits (damage patterns 15 and 17) (damage_event_bodylost, tag 19), Super Hammer and Ultra Hammer
  * knockback (damage_event_bodylost_blow, tag 18), Koops' shell hits (damage_event_bodylost, tag 16), the
- * First Strike reaction (does nothing) and Yoshi's Gulp (damage_swallow_body, tag 54).
+ * First Strike reaction (does nothing) and Yoshi's Gulp (damage_swallow_body).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_side_event},

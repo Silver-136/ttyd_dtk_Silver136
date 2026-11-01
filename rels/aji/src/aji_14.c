@@ -82,7 +82,7 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
-/** Exit of this room: the west door to aji_10. */
+/** Exit of this room: the west door to aji_13. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

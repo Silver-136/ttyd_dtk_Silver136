@@ -137,7 +137,7 @@ static PoseTableEntry pose_table_turn[] = {
 
 /**
  * Event data table of the KP Koopa: scripts that replace the standard handling for being flipped over by a
- * stomp (tag 13).
+ * stomp.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},

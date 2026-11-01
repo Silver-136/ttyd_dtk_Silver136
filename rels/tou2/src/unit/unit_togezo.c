@@ -278,7 +278,7 @@ static PoseTableEntry pose_table_guard[] = {
 
 /**
  * Event data table of the Spiny: scripts that replace the standard handling for being flipped over by a
- * stomp (tag 13) and an attacker being hurt by its spikes (tags 37 and 39).
+ * stomp and an attacker being hurt by its spikes.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -290,7 +290,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Event data table of the Spiny while it is flipped onto its back: scripts that replace the standard
- * handling for being flipped over by a stomp (tag 13).
+ * handling for being flipped over by a stomp.
  */
 static BattleDataEntry data_table_turn[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -300,7 +300,7 @@ static BattleDataEntry data_table_turn[] = {
 
 /**
  * Event data table of the Spiny while it is curled up guarding: scripts that replace the standard handling
- * for an attacker being hurt by its spikes (tags 37 and 39).
+ * for an attacker being hurt by its spikes.
  */
 static BattleDataEntry data_table_guard[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_event},

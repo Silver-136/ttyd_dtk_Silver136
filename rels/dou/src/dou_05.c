@@ -1,4 +1,4 @@
-// dou_05 (洞窟, Pirate's Grotto): room with waterfalls, a big door opened by a blue switch (story 245) and a lock opened with the Grotto Key.
+// dou_05 (洞窟, Pirate's Grotto): room with waterfalls, a big door opened by a blue switch (story STG5_20_THE_BLUE_BLOCK) and a lock opened with the Grotto Key.
 // Save block, a badge chest and a hidden brick; doors to dou_03 and dou_06.
 
 #include "version.h"

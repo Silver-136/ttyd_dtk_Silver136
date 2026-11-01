@@ -250,7 +250,7 @@ USER_FUNC(replace_evt) {
 
 /**
  * Init event of the trap unit: registers its wait, attack and damage events (default confusion),
- * sets the KURURING_PASS flag on the S_yuka floor object, has replace_evt dress the trap in the floor's texture,
+ * sets MAP_OBJ_FLAG_KURURING on the S_yuka floor object, has replace_evt dress the trap in the floor's texture,
  * and starts waiting.
  */
 static EVT_BEGIN(init_event)

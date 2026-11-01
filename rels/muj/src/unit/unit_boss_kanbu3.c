@@ -30,7 +30,7 @@
 
 USER_FUNC(check_exist_group);
 USER_FUNC(check_exist_kenkyu);
-extern s32 down_ceil[];
+USER_FUNC(down_ceil);
 extern BattleUnitKind unit_boss_gundan_zako_group2;
 extern BattleUnitKind unit_boss_gundan_zako_group3;
 extern BattleUnitKind unit_gundan_zako_magician;
@@ -164,7 +164,7 @@ static StatusVulnerability regist = {
 };
 #endif
 
-/** Event table of Lord Crump: dead_event (tag 49). */
+/** Event table of Lord Crump: dead_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
@@ -610,7 +610,7 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 /**
- * Phase event of Lord Crump: before the player's turn (from turn 2), if he is not KO'd (status 27) and can act,
+ * Phase event of Lord Crump: before the player's turn (from turn 2), if he is not KO'd (STATUS_INSTANT_KILL) and can act,
  * with group 3 in play (unit work 0 = 2) he calls it back when it is gone (call_event).
  */
 static EVT_BEGIN(phase_event)

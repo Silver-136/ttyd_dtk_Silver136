@@ -916,9 +916,9 @@ PoseTableEntry pose_table_honeduka[] = {
 };
 
 /**
- * Event table of Cortez: cortez_damage_sub_event (tag 9), dead_event (tag 49),
- * mode2_honeduka_damage_event (tags 70, 71), cortez_ac_counter_damage_event (tag 36),
- * avoid_thorn_event (tags 39, 37).
+ * Event table of Cortez: cortez_damage_sub_event, dead_event,
+ * mode2_honeduka_damage_event (tags 70, 71), cortez_ac_counter_damage_event,
+ * avoid_thorn_event (37).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},

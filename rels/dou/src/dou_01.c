@@ -1,5 +1,5 @@
 // dou_01 (洞窟, Pirate's Grotto): passage between dou_00 and dou_02 with two blue jump pads.
-// Plays a Cortez (korutesu) cutscene on first entry (story 243 to 244).
+// Plays a Cortez (korutesu) cutscene on first entry (story STG5_19_01_ENTERING_THE_GROTTO to STG5_19_02_THE_CALL_OF_CORTEZ).
 
 #include "version.h"
 #include "battle/battle_unit.h"

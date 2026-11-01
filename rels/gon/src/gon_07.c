@@ -1,4 +1,4 @@
-// gon_07 (ゴンババ, Hooktail Castle): room beyond gon_06 with a treasure chest holding the Black Key (0x22) (story 43).
+// gon_07 (ゴンババ, Hooktail Castle): room beyond gon_06 with a treasure chest holding the Black Key (0x22) (story STG1_13_A_SUSPICIOUS_ROOM).
 // Has a danger-music sequence and a door to gon_13.
 
 #include "version.h"

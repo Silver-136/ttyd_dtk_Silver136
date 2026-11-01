@@ -45,7 +45,7 @@ static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
 /**
  * Jumps a camera by the offset ofs: saves its current position and target as the preset
- * and sets the stored position and target to the current ones plus ofs (state 3, curve 11, zero duration).
+ * and sets the stored position and target to the current ones plus ofs (state 3, curve EASING_SINE_IN_OUT, zero duration).
  */
 static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
     camera->presetPos = camera->cameraPos;

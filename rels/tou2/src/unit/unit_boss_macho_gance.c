@@ -223,7 +223,7 @@ static PoseTableEntry pose_table_furafura[] = {
 };
 
 /**
- * Data table of the Macho Grubba: event handlers for the counter-hit reactions (tags 25-36),
+ * Data table of the Macho Grubba: event handlers for the counter-hit reactions,
  * its damage reaction and being defeated.
  */
 static BattleDataEntry data_table[] = {
@@ -1036,7 +1036,7 @@ EVT_END()
 /**
  * Macho Grubba's move choice, run once per action.
  * Unit work 0 counts the actions this turn (reset by phase_event) and unit work 1 is the HP phase.
- * While he is not Fast (status 19) he uses Macho Speed.
+ * While he is not Fast (STATUS_FAST) he uses Macho Speed.
  * Otherwise his first action of the turn is a pose move drawn at random (Build Up, Body, Footwork,
  * and in phase 2 or later also Posing, the code's names) and his second is a real attack:
  * Attack in phases 0 and 1, and in phases 2 and 3 a draw between Lariat and Body Attack.

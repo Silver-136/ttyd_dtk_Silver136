@@ -239,9 +239,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event data table of the Pider: scripts that replace the standard handling for its defeat (tag 49), being
- * blown away (tag 58), the end of the battle (tag 63) and the battle opening with a First Strike on it
- * (tag 48).
+ * Event data table of the Pider: scripts that replace the standard handling for its defeat, being
+ * blown away, the end of the battle and the battle opening with a First Strike on it.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},

@@ -212,52 +212,52 @@ EvtWord rsh_05_a_init_evt_nidome[29];
  * for each.
  */
 static ExtTexInfo ext_moamoa_data[] = {
-    {("c_n_moa_a"), ("S_1"), 0.0f},
-    {("c_n_moa_a"), ("S_1"), 2.0f},
-    {("c_n_moa_a"), ("S_1"), 4.0f},
-    {("c_n_moa_a"), ("S_1"), 6.0f},
-    {("c_n_moa_a"), ("S_1"), 8.0f},
-    {("c_n_moa_a"), ("S_1"), 10.0f},
-    {("c_n_moa_a"), ("S_1"), 12.0f},
-    {("c_n_moa_a"), ("S_1"), 14.0f},
-    {("c_n_moa_a"), ("S_1"), 16.0f},
-    {("c_n_moa_a"), ("S_1"), 18.0f},
-    {("c_n_moa_a"), ("S_1"), 20.0f},
-    {("c_n_moa_a"), ("S_1"), 22.0f},
-    {("c_n_moa_a"), ("S_1"), 24.0f},
-    {("c_n_moa_a"), ("S_1"), 26.0f},
-    {("c_n_moa_a"), ("S_1"), 28.0f},
-    {("c_n_moa_a"), ("S_1"), 30.0f},
-    {("c_n_moa_a"), ("S_1"), 32.0f},
-    {("c_n_moa_a"), ("S_1"), 34.0f},
-    {("c_n_moa_a"), ("S_1"), 36.0f},
-    {("c_n_moa_a"), ("S_1"), 38.0f},
-    {("c_n_moa_a"), ("D_1"), 0.0f},
-    {("c_n_moa_a"), ("D_1"), 4.0f},
-    {("c_n_moa_a"), ("D_1"), 8.0f},
-    {("c_n_moa_b"), ("S_1"), 0.0f},
-    {("c_n_moa_b"), ("S_1"), 2.0f},
-    {("c_n_moa_b"), ("S_1"), 4.0f},
-    {("c_n_moa_b"), ("S_1"), 6.0f},
-    {("c_n_moa_b"), ("S_1"), 8.0f},
-    {("c_n_moa_b"), ("S_1"), 10.0f},
-    {("c_n_moa_b"), ("S_1"), 12.0f},
-    {("c_n_moa_b"), ("S_1"), 14.0f},
-    {("c_n_moa_b"), ("S_1"), 16.0f},
-    {("c_n_moa_b"), ("S_1"), 18.0f},
-    {("c_n_moa_b"), ("S_1"), 20.0f},
-    {("c_n_moa_b"), ("S_1"), 22.0f},
-    {("c_n_moa_b"), ("S_1"), 24.0f},
-    {("c_n_moa_b"), ("S_1"), 26.0f},
-    {("c_n_moa_b"), ("S_1"), 28.0f},
-    {("c_n_moa_b"), ("S_1"), 30.0f},
-    {("c_n_moa_b"), ("S_1"), 32.0f},
-    {("c_n_moa_b"), ("S_1"), 34.0f},
-    {("c_n_moa_b"), ("S_1"), 36.0f},
-    {("c_n_moa_b"), ("S_1"), 38.0f},
-    {("c_n_moa_b"), ("D_1"), 0.0f},
-    {("c_n_moa_b"), ("D_1"), 4.0f},
-    {("c_n_moa_b"), ("D_1"), 8.0f},
+    {"c_n_moa_a", "S_1", 0.0f},
+    {"c_n_moa_a", "S_1", 2.0f},
+    {"c_n_moa_a", "S_1", 4.0f},
+    {"c_n_moa_a", "S_1", 6.0f},
+    {"c_n_moa_a", "S_1", 8.0f},
+    {"c_n_moa_a", "S_1", 10.0f},
+    {"c_n_moa_a", "S_1", 12.0f},
+    {"c_n_moa_a", "S_1", 14.0f},
+    {"c_n_moa_a", "S_1", 16.0f},
+    {"c_n_moa_a", "S_1", 18.0f},
+    {"c_n_moa_a", "S_1", 20.0f},
+    {"c_n_moa_a", "S_1", 22.0f},
+    {"c_n_moa_a", "S_1", 24.0f},
+    {"c_n_moa_a", "S_1", 26.0f},
+    {"c_n_moa_a", "S_1", 28.0f},
+    {"c_n_moa_a", "S_1", 30.0f},
+    {"c_n_moa_a", "S_1", 32.0f},
+    {"c_n_moa_a", "S_1", 34.0f},
+    {"c_n_moa_a", "S_1", 36.0f},
+    {"c_n_moa_a", "S_1", 38.0f},
+    {"c_n_moa_a", "D_1", 0.0f},
+    {"c_n_moa_a", "D_1", 4.0f},
+    {"c_n_moa_a", "D_1", 8.0f},
+    {"c_n_moa_b", "S_1", 0.0f},
+    {"c_n_moa_b", "S_1", 2.0f},
+    {"c_n_moa_b", "S_1", 4.0f},
+    {"c_n_moa_b", "S_1", 6.0f},
+    {"c_n_moa_b", "S_1", 8.0f},
+    {"c_n_moa_b", "S_1", 10.0f},
+    {"c_n_moa_b", "S_1", 12.0f},
+    {"c_n_moa_b", "S_1", 14.0f},
+    {"c_n_moa_b", "S_1", 16.0f},
+    {"c_n_moa_b", "S_1", 18.0f},
+    {"c_n_moa_b", "S_1", 20.0f},
+    {"c_n_moa_b", "S_1", 22.0f},
+    {"c_n_moa_b", "S_1", 24.0f},
+    {"c_n_moa_b", "S_1", 26.0f},
+    {"c_n_moa_b", "S_1", 28.0f},
+    {"c_n_moa_b", "S_1", 30.0f},
+    {"c_n_moa_b", "S_1", 32.0f},
+    {"c_n_moa_b", "S_1", 34.0f},
+    {"c_n_moa_b", "S_1", 36.0f},
+    {"c_n_moa_b", "S_1", 38.0f},
+    {"c_n_moa_b", "D_1", 0.0f},
+    {"c_n_moa_b", "D_1", 4.0f},
+    {"c_n_moa_b", "D_1", 8.0f},
     {0},
 };
 
@@ -332,17 +332,17 @@ static void moamoa_pose_main(void) {
 #pragma dont_inline reset
 
 static const char* group_tbl[][2] = {
-    {("c_n_moa_a"), ("S_1")},
-    {("c_n_moa_b"), ("S_1")},
-    {("c_kinodebu"), ("G_1")},
-    {("c_puku_c"), ("U_1")},
-    {("c_powan"), ("O_1")},
-    {("c_smoko"), ("T_2")},
-    {("c_rose"), ("G_1")},
-    {("c_papab"), ("G_1")},
-    {("c_mamab"), ("G_1")},
-    {("c_konari"), ("G_1")},
-    {("c_n_moa_a"), ("S_1")},
+    {"c_n_moa_a", "S_1"},
+    {"c_n_moa_b", "S_1"},
+    {"c_kinodebu", "G_1"},
+    {"c_puku_c", "U_1"},
+    {"c_powan", "O_1"},
+    {"c_smoko", "T_2"},
+    {"c_rose", "G_1"},
+    {"c_papab", "G_1"},
+    {"c_mamab", "G_1"},
+    {"c_konari", "G_1"},
+    {"c_n_moa_a", "S_1"},
 };
 static inline void /**/ moamoa_pose_change_i(Moamoa* moa, const char* model, const char* anim) {
     MoamoaPoseDef* def = wp->defs;
@@ -1848,7 +1848,7 @@ EVT_END()
 /** Doors and exits of rsh_05 variant a: e_bero to rsh_04_a; w_bero to rsh_06_a. */
 static BeroEntry bero_data_a[] = {
     {
-        ("e_bero"), // hitName
+        "e_bero", // hitName
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -1859,14 +1859,14 @@ static BeroEntry bero_data_a[] = {
         -1, // caseType
         NULL, // exitEvent
         "rsh_04_a", // nextMapName
-        ("w_bero"), // nextBeroName
+        "w_bero", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         "e_door_close", // enterAnimeArg
         "e_door_open", // exitAnimeArg
     },
     {
-        ("w_bero"), // hitName
+        "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
         BERO_POS_AUTO, // centerPosition
@@ -1876,7 +1876,7 @@ static BeroEntry bero_data_a[] = {
         -1, // caseType
         NULL, // exitEvent
         "rsh_06_a", // nextMapName
-        ("w_bero"), // nextBeroName
+        "w_bero", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
@@ -1887,7 +1887,7 @@ static BeroEntry bero_data_a[] = {
 /** Doors and exits of rsh_05 variant b: e_bero to rsh_04_b; w_bero to rsh_06_a. */
 static BeroEntry bero_data_b[] = {
     {
-        ("e_bero"), // hitName
+        "e_bero", // hitName
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -1898,14 +1898,14 @@ static BeroEntry bero_data_b[] = {
         -1, // caseType
         NULL, // exitEvent
         "rsh_04_b", // nextMapName
-        ("w_bero"), // nextBeroName
+        "w_bero", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         "e_door_close", // enterAnimeArg
         "e_door_open", // exitAnimeArg
     },
     {
-        ("w_bero"), // hitName
+        "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
         BERO_POS_AUTO, // centerPosition
@@ -1915,7 +1915,7 @@ static BeroEntry bero_data_b[] = {
         -1, // caseType
         NULL, // exitEvent
         "rsh_06_a", // nextMapName
-        ("w_bero"), // nextBeroName
+        "w_bero", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
@@ -1926,7 +1926,7 @@ static BeroEntry bero_data_b[] = {
 /** Doors and exits of rsh_05 variant c: e_bero to rsh_04_c; w_bero to rsh_06_a. */
 static BeroEntry bero_data_c[] = {
     {
-        ("e_bero"), // hitName
+        "e_bero", // hitName
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -1937,14 +1937,14 @@ static BeroEntry bero_data_c[] = {
         -1, // caseType
         NULL, // exitEvent
         "rsh_04_c", // nextMapName
-        ("w_bero"), // nextBeroName
+        "w_bero", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         "e_door_close", // enterAnimeArg
         "e_door_open", // exitAnimeArg
     },
     {
-        ("w_bero"), // hitName
+        "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
         BERO_POS_AUTO, // centerPosition
@@ -1954,7 +1954,7 @@ static BeroEntry bero_data_c[] = {
         -1, // caseType
         NULL, // exitEvent
         "rsh_06_a", // nextMapName
-        ("w_bero"), // nextBeroName
+        "w_bero", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg

@@ -1,5 +1,5 @@
 // gon_08 (ゴンババ, Hooktail Castle): room linking gon_04, gon_09 and gon_12.
-// Nokkos (nokkosu) gives a side request with a Special Card reward; Life Shroom, floating block, Castle Key (0x0F) lock (story 52).
+// Nokkos (nokkosu) gives a side request with a Special Card reward; Life Shroom, floating block, Castle Key (0x0F) lock (story STG1_15_02_LOCK_3).
 
 #include "version.h"
 #include "battle/battle_unit.h"

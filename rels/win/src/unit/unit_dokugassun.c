@@ -1,4 +1,5 @@
 // Battle unit Poison Puff (ドクガッスン): win.rel's copy.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "eff/n64/eff_vapor_n64.h"

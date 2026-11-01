@@ -68,7 +68,7 @@ BattleUnitKind unit_sinemon = {
     "SFX_ENM_EMON_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
-    "SFX_BTL_DAMAGE_BIRIBIRI1", // explosionDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
     kUnitLeader, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
@@ -113,7 +113,7 @@ BattleUnitKind unit_sinemon = {
     "SFX_ENM_EMON_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
-    "SFX_BTL_DAMAGE_BIRIBIRI1", // explosionDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
     kUnitLeader, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts

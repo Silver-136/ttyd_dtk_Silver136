@@ -169,7 +169,7 @@ EVT_BEGIN(dai3_battle_init)
 EVT_END()
 
 /**
- * The chase and fight in mri_15 (story 23): Lord Crump runs off,
+ * The chase and fight in mri_15 (story STG2_23_TIME_BOMB_ACTIVATED): Lord Crump runs off,
  * then when Mario steps onto the platform the two X-Naut grunts (battle info 11) attack;
  * afterwards they are removed. Sets the story to STG2_23_01_X_NAUT_BATTLE.
  */

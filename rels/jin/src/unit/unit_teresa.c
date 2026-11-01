@@ -354,7 +354,7 @@ EVT_END()
  * roughly 25 in 114 to turn itself invisible (trans_myself_event, only if it is not already invisible),
  * 25 in 114 to make another Boo invisible (trans_event, only if one exists that is not),
  * 15 in 114 for the group move (move_event, only if some Boo has not moved yet),
- * and otherwise the normal attack. The two special options are skipped while it has status 5.
+ * and otherwise the normal attack. The two special options are skipped while it has STATUS_CONFUSE.
  */
 // Unavailable special actions fall through to later choices using the same random roll.
 static EVT_BEGIN(attack_event)
@@ -546,8 +546,8 @@ EVT_END()
 
 /**
  * The Boo makes itself invisible: it declares an attack on itself,
- * spins and fades out (unless it already is invisible, status 18),
- * and the weapon (weapon_teresa_trans_myself: a sure status 18, Invisible, for 2 turns) applies the invisibility
+ * spins and fades out (unless it already is invisible, STATUS_INVISIBLE),
+ * and the weapon (weapon_teresa_trans_myself: a sure STATUS_INVISIBLE, Invisible, for 2 turns) applies the invisibility
  * to it.
  */
 static EVT_BEGIN(trans_myself_event)
@@ -770,7 +770,7 @@ EVT_END()
 
 /**
  * Battle script helper: sets args[1] to 1 when at least one other Boo
- * or Dark Boo that has no status 0x12 is on the field, else 0.
+ * or Dark Boo that has no STATUS_INVISIBLE is on the field, else 0.
  */
 static USER_FUNC(teresa_check_trans) {
     EvtWord* args = event->args;

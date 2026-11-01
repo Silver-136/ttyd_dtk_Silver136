@@ -242,7 +242,7 @@ EVT_END()
 /**
  * Spark effect (toge_flush) shown when an attack on the Cleft's spiked head is turned away:
  * it waits 30 frames, then places the flash above the head at a height that depends on whether the unit has
- * status 10 or 11.
+ * STATUS_HUGE or STATUS_TINY.
  */
 // Place the spike flash using Huge, Tiny, or normal offsets after the counter delay.
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)

@@ -206,7 +206,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gor_btlno_gor_test1_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -216,7 +216,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gor_btlno_gor_test2_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -228,7 +228,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         btlgrpsel_gor_btlno_gor_00_01_off, // select
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
-        {{0}, {5, 5}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{0}, {5, 5}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_CHUBOSS_BATTLE1", // bgmName
     },
     {
@@ -239,7 +239,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gor_btlno_gor_02_aclec_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
@@ -250,7 +250,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gor_btlno_gor_02_saclec_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}}, // field_20
+        {{1, 1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}}, // randomRanges
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
@@ -262,7 +262,7 @@ NpcSetupBattleInfo btlsetup_gor_tbl[] = {
         btlgrpsel_gor_btlno_gor_02_01_off, // select
         NPC_BATTLE_STORY, // battleFlags
         0, // randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {0},

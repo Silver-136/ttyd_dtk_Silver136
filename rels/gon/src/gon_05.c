@@ -1,5 +1,5 @@
 // gon_05 (ゴンババ, Hooktail Castle): hub room with doors to gon_04, gon_06, gon_09 and gon_10.
-// Floating-block switch puzzles and locks opened with Castle Keys 0x0C and 0x0E (story 47).
+// Floating-block switch puzzles and locks opened with Castle Keys 0x0C and 0x0E (story STG1_13_03_LOCK_2).
 
 #include "version.h"
 #include "battle/battle_unit.h"

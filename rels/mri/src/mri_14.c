@@ -477,14 +477,14 @@ static EVT_BEGIN(punipuni_mario_halt)
 EVT_END()
 
 /**
- * The time bomb scene (story 22 to 23): with the Puni still, the room shakes with growing quakes and flashes,
+ * The time bomb scene (story STG2_22_LORD_CRUMP_APPEARS to STG2_23_TIME_BOMB_ACTIVATED): with the Puni still, the room shakes with growing quakes and flashes,
  * the Crystal Star appears in a ripple of light, Lord Crump grabs it,
  * sets a time bomb that switches on the countdown and flees through a pipe, and the party reacts.
  * Sets the story to STG2_23_TIME_BOMB_ACTIVATED.
  */
 #if VERSION <= VERSION_DEMO_US
 /**
- * The time bomb scene (story 22 to 23): with the Puni still, the room shakes with growing quakes and flashes,
+ * The time bomb scene (story STG2_22_LORD_CRUMP_APPEARS to STG2_23_TIME_BOMB_ACTIVATED): with the Puni still, the room shakes with growing quakes and flashes,
  * the Crystal Star appears in a ripple of light, Lord Crump grabs it,
  * sets a time bomb that switches on the countdown and flees through a pipe, and the party reacts.
  * Sets the story to STG2_23_TIME_BOMB_ACTIVATED.
@@ -719,7 +719,7 @@ BEGIN_INLINE_EVENT
 EVT_END()
 #else
 /**
- * The time bomb scene (story 22 to 23): with the Puni still, the room shakes with growing quakes and flashes,
+ * The time bomb scene (story STG2_22_LORD_CRUMP_APPEARS to STG2_23_TIME_BOMB_ACTIVATED): with the Puni still, the room shakes with growing quakes and flashes,
  * the Crystal Star appears in a ripple of light, Lord Crump grabs it,
  * sets a time bomb that switches on the countdown and flees through a pipe, and the party reacts.
  * Sets the story to STG2_23_TIME_BOMB_ACTIVATED.

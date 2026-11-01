@@ -206,8 +206,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of the Chain-Chomp: dead_event (tag 49), counter_damage_event (tags 26, 25, 27, 28, 29, 30,
- * 31, 32, 33, 34, 35, 36).
+ * Event table of the Chain-Chomp: dead_event, counter_damage_event (36).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -559,7 +558,7 @@ EVT_END()
 
 /**
  * Wait event of the Chain-Chomp: picks the idle behaviour by status.
- * Asleep (status 1) it breathes with a slow tilting;
+ * Asleep (STATUS_SLEEP) it breathes with a slow tilting;
  * stopped or frozen (statuses 2 and 9) it stays in its stunned pose;
  * dizzy, poisoned or confused (statuses 3 to 5) it hops slowly;
  * otherwise it hops in place barking, with sounds.

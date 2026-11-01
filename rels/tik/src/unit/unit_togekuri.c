@@ -223,7 +223,6 @@ EVT_END()
 /**
  * Runs when an attack on the spiky head is stopped by the thorns (the counter damage to the attacker).
  * In the lecture battle it also marks the lecture's unit work 0, so the lesson knows the thorn was triggered.
- * Guess.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

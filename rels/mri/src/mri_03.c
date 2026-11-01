@@ -1242,7 +1242,7 @@ EVT_BEGIN(kinoko_small)
 EVT_END()
 
 /**
- * Scene when the blue cell is opened (story 19 to 20):
+ * Scene when the blue cell is opened (story STG2_19_INSIDE_THE_BLUE_CELL to STG2_20_PUNIO_PETUNI):
  * the Punies step away from the cell, Punio and his sister Petuni talk with the party,
  * a Dried Shroom is found and shown shrinking, and Petuni joins the Puni group (GSWF_MRI_PETUNI_IN_PUNI_GROUP).
  * Sets the story to STG2_20_PUNIO_PETUNI.
@@ -1469,7 +1469,7 @@ EVT_BEGIN(elder_shaberi)
 EVT_END()
 
 /**
- * Cutscene on entering the prison during story 12_01:
+ * Cutscene on entering the prison during story STG2_12_01_A_DARK_FIGURE:
  * the Punies find the elder captured, Punio and the party talk about it.
  * Sets the story to STG2_12_02_PUNI_ELDER_IMPRISONED.
  */
@@ -1602,7 +1602,7 @@ EVT_BEGIN(toraware_elder)
 EVT_END()
 
 /**
- * Short scene before the blue cell opens (story 19): Punio waits by the cell and talks;
+ * Short scene before the blue cell opens (story STG2_19_INSIDE_THE_BLUE_CELL): Punio waits by the cell and talks;
  * sets GSWF_MRI03_PUNIO_WAITING_AT_CELL and the story to STG2_19_01_PUNIO_PETUNI_BEFORE.
  */
 EVT_BEGIN(guide_sister_before)

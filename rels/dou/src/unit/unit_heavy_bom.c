@@ -546,8 +546,7 @@ static PoseTableEntry pose_table_1_to_0[] = {
 };
 
 /**
- * Event table of the Bulky Bob-omb: its defeat (dead_event, tag 49) and its explosion (explosion_event, tag
- * 52).
+ * Event table of the Bulky Bob-omb: its defeat (dead_event) and its explosion (explosion_event).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},

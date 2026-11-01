@@ -118,7 +118,6 @@ USER_FUNC(badgeshop_special_cnt);
 USER_FUNC(wait_mahojin);
 static USER_FUNC(yami_view);
 static s32 npc_process(void);
-extern s32 envSetYami[];
 
 #if VERSION == VERSION_DEMO_JP
 static EvtWord sell_evt[116];

@@ -513,8 +513,8 @@ static PoseTableEntry pose_table_parts[] = {
 
 /**
  * Event data table of the Pokey: scripts that replace the standard handling for an attacker being hurt by
- * its side spikes (tags 37 and 39), losing a segment (tags 16 and 19), a segment being knocked off (tag
- * 18) and being swallowed by Yoshi (tag 54).
+ * its side spikes, losing a segment (tags 16 and 19), a segment being knocked off (tag
+ * 18) and being swallowed by Yoshi.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_side_event},

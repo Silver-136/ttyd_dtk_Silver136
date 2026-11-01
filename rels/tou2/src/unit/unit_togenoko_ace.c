@@ -323,7 +323,7 @@ static PoseTableEntry pose_table_guard_turn[] = {
 
 /**
  * Event data table of the Dark Koopatrol: scripts that replace the standard handling for being flipped
- * over by a stomp (tag 13) and an attacker being hurt by its spiked head (tag 37).
+ * over by a stomp and an attacker being hurt by its spiked head.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -334,7 +334,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Event data table of the Dark Koopatrol while it is flipped onto its back: scripts that replace the
- * standard handling for being flipped over by a stomp (tag 13).
+ * standard handling for being flipped over by a stomp.
  */
 static BattleDataEntry data_table_turn[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -344,8 +344,7 @@ static BattleDataEntry data_table_turn[] = {
 
 /**
  * Event data table of the Dark Koopatrol while it is curled up guarding: scripts that replace the standard
- * handling for an attacker being hurt by its spiked head (tag 37) and being flipped over by a stomp (tag
- * 13).
+ * handling for an attacker being hurt by its spiked head and being flipped over by a stomp.
  */
 static BattleDataEntry data_table_guard[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},

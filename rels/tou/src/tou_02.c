@@ -384,7 +384,7 @@ EVT_END()
  */
 static BeroEntry bero_data[] = {
     {
-        ("s_bero"), // hitName
+        "s_bero", // hitName
         1, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -395,14 +395,14 @@ static BeroEntry bero_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "tou_01", // nextMapName
-        ("a_door_mon"), // nextBeroName
+        "a_door_mon", // nextBeroName
         5, // enterAnimeType
         5, // exitAnimeType
         s_door_close, // enterAnimeArg
         s_door_open, // exitAnimeArg
     },
     {
-        ("n_bero_1"), // hitName
+        "n_bero_1", // hitName
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -413,14 +413,14 @@ static BeroEntry bero_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "tou_03", // nextMapName
-        ("s_bero_1"), // nextBeroName
+        "s_bero_1", // nextBeroName
         5, // enterAnimeType
         5, // exitAnimeType
         n_1_door_close, // enterAnimeArg
         n_1_door_open, // exitAnimeArg
     },
     {
-        ("n_bero_2"), // hitName
+        "n_bero_2", // hitName
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -431,14 +431,14 @@ static BeroEntry bero_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "tou_03", // nextMapName
-        ("s_bero_2"), // nextBeroName
+        "s_bero_2", // nextBeroName
         5, // enterAnimeType
         5, // exitAnimeType
         n_2_door_close, // enterAnimeArg
         n_2_door_open, // exitAnimeArg
     },
     {
-        ("n_bero_3"), // hitName
+        "n_bero_3", // hitName
         1, // type
         4, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -449,14 +449,14 @@ static BeroEntry bero_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "tou_04", // nextMapName
-        ("e_bero"), // nextBeroName
+        "e_bero", // nextBeroName
         5, // enterAnimeType
         5, // exitAnimeType
         n_3_door_close, // enterAnimeArg
         n_3_door_open, // exitAnimeArg
     },
     {
-        ("n_bero_4"), // hitName
+        "n_bero_4", // hitName
         1, // type
         4, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -467,7 +467,7 @@ static BeroEntry bero_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "tou_04", // nextMapName
-        ("w_bero"), // nextBeroName
+        "w_bero", // nextBeroName
         5, // enterAnimeType
         5, // exitAnimeType
         n_4_door_close, // enterAnimeArg
@@ -1774,33 +1774,33 @@ EVT_END()
  * grouped into animations by pose_init and registered with evt_ext_entry.
  */
 ExtTexInfo ext_fan_data[] = {
-    {("c_kinopio"), ("KNP_W_1"), 2.0f},
-    {("c_kinopio"), ("KNP_W_1"), 6.0f},
-    {("c_kinopio"), ("KNP_W_1"), 10.0f},
-    {("c_kinopio"), ("KNP_W_1"), 14.0f},
-    {("c_kinopio"), ("KNP_W_1"), 18.0f},
-    {("c_kinopio"), ("KNP_W_1"), 22.0f},
-    {("c_kinopio"), ("KNP_W_1"), 26.0f},
-    {("c_kinopio"), ("KNP_W_1"), 30.0f},
-    {("c_kinopio"), ("KNP_W_1"), 34.0f},
-    {("c_kinopiko"), ("KNF_W_1"), 2.0f},
-    {("c_kinopiko"), ("KNF_W_1"), 6.0f},
-    {("c_kinopiko"), ("KNF_W_1"), 10.0f},
-    {("c_kinopiko"), ("KNF_W_1"), 14.0f},
-    {("c_kinopiko"), ("KNF_W_1"), 18.0f},
-    {("c_kinopiko"), ("KNF_W_1"), 22.0f},
-    {("c_kinopiko"), ("KNF_W_1"), 26.0f},
-    {("c_kinopiko"), ("KNF_W_1"), 30.0f},
-    {("c_kinopiko"), ("KNF_W_1"), 34.0f},
-    {("c_kinopiko"), ("KNF_W_1"), 38.0f},
-    {("c_jugemu"), ("JGM_W_1"), 0.0f},
-    {("c_jugemu"), ("JGM_W_1"), 4.0f},
-    {("c_jugemu"), ("JGM_W_1"), 8.0f},
-    {("c_jugemu"), ("JGM_W_1"), 12.0f},
-    {("c_jugemu"), ("JGM_W_1"), 16.0f},
-    {("c_jugemu"), ("JGM_W_1"), 20.0f},
-    {("c_jugemu"), ("JGM_W_1"), 24.0f},
-    {("c_jugemu"), ("JGM_W_1"), 28.0f},
+    {"c_kinopio", "KNP_W_1", 2.0f},
+    {"c_kinopio", "KNP_W_1", 6.0f},
+    {"c_kinopio", "KNP_W_1", 10.0f},
+    {"c_kinopio", "KNP_W_1", 14.0f},
+    {"c_kinopio", "KNP_W_1", 18.0f},
+    {"c_kinopio", "KNP_W_1", 22.0f},
+    {"c_kinopio", "KNP_W_1", 26.0f},
+    {"c_kinopio", "KNP_W_1", 30.0f},
+    {"c_kinopio", "KNP_W_1", 34.0f},
+    {"c_kinopiko", "KNF_W_1", 2.0f},
+    {"c_kinopiko", "KNF_W_1", 6.0f},
+    {"c_kinopiko", "KNF_W_1", 10.0f},
+    {"c_kinopiko", "KNF_W_1", 14.0f},
+    {"c_kinopiko", "KNF_W_1", 18.0f},
+    {"c_kinopiko", "KNF_W_1", 22.0f},
+    {"c_kinopiko", "KNF_W_1", 26.0f},
+    {"c_kinopiko", "KNF_W_1", 30.0f},
+    {"c_kinopiko", "KNF_W_1", 34.0f},
+    {"c_kinopiko", "KNF_W_1", 38.0f},
+    {"c_jugemu", "JGM_W_1", 0.0f},
+    {"c_jugemu", "JGM_W_1", 4.0f},
+    {"c_jugemu", "JGM_W_1", 8.0f},
+    {"c_jugemu", "JGM_W_1", 12.0f},
+    {"c_jugemu", "JGM_W_1", 16.0f},
+    {"c_jugemu", "JGM_W_1", 20.0f},
+    {"c_jugemu", "JGM_W_1", 24.0f},
+    {"c_jugemu", "JGM_W_1", 28.0f},
     {0},
 };
 

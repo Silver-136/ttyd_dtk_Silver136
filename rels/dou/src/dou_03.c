@@ -1,4 +1,4 @@
-// dou_03 (洞窟, Pirate's Grotto): hub room with the water gate that the Gate Handle operates (story 248).
+// dou_03 (洞窟, Pirate's Grotto): hub room with the water gate that the Gate Handle operates (story STG5_22_FLOODGATE_HANDLE).
 // Drifting barrels and bottles; doors to dou_04, dou_05, dou_09 and dou_12.
 
 #include "version.h"

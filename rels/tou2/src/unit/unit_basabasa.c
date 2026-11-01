@@ -173,7 +173,7 @@ static PoseTableEntry pose_table_ceil[] = {
 };
 
 /**
- * Data table of the Swooper: event handlers for the counter-hit reactions (tags 25-36) and a First Strike on it.
+ * Data table of the Swooper: event handlers for the counter-hit reactions and a First Strike on it.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

@@ -88,7 +88,6 @@ static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 static USER_FUNC(sysflag);
 static USER_FUNC(yami_view);
-extern s32 envSetYami[];
 
 static s16 puni_rand_position[196];
 EvtWord mario_see_you_init[54];

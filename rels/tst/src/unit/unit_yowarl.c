@@ -130,7 +130,7 @@ EVT_END()
 
 /**
  * Damage event of the placeholder unit: runs the default damage reaction (btldefaultevt_Damage);
- * the END_SCRIPT and second RETURN after it are never reached.
+ * the OPCODE_END_SCRIPT and second RETURN after it are never reached.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)

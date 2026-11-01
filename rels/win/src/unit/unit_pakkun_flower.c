@@ -1,4 +1,5 @@
 // Battle unit Piranha Plant (キラーパックン): win.rel's copy.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "system.h"

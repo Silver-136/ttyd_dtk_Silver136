@@ -495,7 +495,7 @@ static PoseTableEntry pose_table_ceil[] = {
 };
 
 /**
- * Data table of the Putrid Piranha: event handlers for the counter-hit reactions (tags 25-36),
+ * Data table of the Putrid Piranha: event handlers for the counter-hit reactions,
  * the attacker hurt by its spikes and a First Strike on it (no reaction).
  */
 static BattleDataEntry data_table[] = {

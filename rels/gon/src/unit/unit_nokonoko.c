@@ -140,7 +140,7 @@ static PoseTableEntry pose_table_turn[] = {
 };
 
 /**
- * Event table of the Koopa Troopa: being flipped onto its back (dmg_turn_event, tag 13) and the First Strike
+ * Event table of the Koopa Troopa: being flipped onto its back (dmg_turn_event) and the First Strike
  * reaction (does nothing).
  */
 static BattleDataEntry data_table[] = {

@@ -243,8 +243,8 @@ static PoseTableEntry pose_table_ceil[] = {
 };
 
 /**
- * Event table of the Pale Piranha: dmg_avoid_counter_thorn_head_event (tag 37),
- * counter_damage_event (tags 26, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36).
+ * Event table of the Pale Piranha: dmg_avoid_counter_thorn_head_event,
+ * counter_damage_event (36).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},

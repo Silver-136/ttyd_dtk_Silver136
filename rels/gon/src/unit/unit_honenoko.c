@@ -275,8 +275,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of the Dull Bones: its defeat (dead_event, tag 49), its collapse into a pile of bones
- * (fake_dead_event, tag 15) and the First Strike reaction (does nothing).
+ * Event table of the Dull Bones: its defeat (dead_event), its collapse into a pile of bones
+ * (fake_dead_event) and the First Strike reaction (does nothing).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},

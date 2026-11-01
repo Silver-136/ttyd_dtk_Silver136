@@ -5633,7 +5633,7 @@ EVT_END()
 
 /**
  * Cutscene spawned by the map init at STG3_34_RETURN_TO_ROGUEPORT:
- * once Mario walks past z = -300 he stops and is surprised, the mail jingle plays and the screen vibrates,
+ * once Mario walks past z = -300 he stops and is surprised, the mail jingle plays and the controller rumbles (evt_sub_mail_vibration),
  * the partner comments (gor_03_mail3_00), then after he presses A the mail is read (gor_03_mail3_01, 02)
  * and story progress becomes STG3_35_A_MAIL_FROM_PEACH.
  */

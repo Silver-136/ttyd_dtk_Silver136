@@ -333,7 +333,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
-/** Event table of the Z-Yux: the First Strike reaction (barriern_dmg_first_attack_pos, tag 48). */
+/** Event table of the Z-Yux: the First Strike reaction (barriern_dmg_first_attack_pos). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, barriern_dmg_first_attack_pos},
     {0, NULL},

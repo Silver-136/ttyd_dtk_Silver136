@@ -224,8 +224,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of the Pider: dead_event (tag 49), blow_dead_event (tag 58), battle_end_event (tag 63),
- * dmg_first_attack_pos (tag 48).
+ * Event table of the Pider: dead_event, blow_dead_event, battle_end_event,
+ * dmg_first_attack_pos.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -298,7 +298,7 @@ static USER_FUNC(piders_draw_yarn) {
 
 /**
  * Counts the Pider units (kinds 0x1B and 0xA4) that are in the battle
- * and not knocked out (status 0x1B, instant KO), and returns the number in args[0].
+ * and not knocked out (STATUS_INSTANT_KILL, instant KO), and returns the number in args[0].
  */
 static USER_FUNC(piders_get_num) {
     BattleUnit* unit;
@@ -319,7 +319,7 @@ static USER_FUNC(piders_get_num) {
 
 /**
  * Returns in args[1] the position in the group order of Pider args[0],
- * counting the Piders not knocked out (status 0x1B) up to and including it.
+ * counting the Piders not knocked out (STATUS_INSTANT_KILL) up to and including it.
  */
 static USER_FUNC(piders_get_zyun) {
     s32 id;
@@ -783,7 +783,7 @@ static EVT_BEGIN(move_kuuchu_event)
 EVT_END()
 
 /**
- * Unison-phase event: before the player phase, if the Pider is not knocked out (status 27) and can act,
+ * Unison-phase event: before the player phase, if the Pider is not knocked out (STATUS_INSTANT_KILL) and can act,
  * it moves down (move_kuutei_event) or up (move_kuuchu_event).
  * The first Pider in order always switches. With an odd number of Piders the others take the first one's new
  * height; with an even number the odd-placed ones take it and the even-placed ones the other height.

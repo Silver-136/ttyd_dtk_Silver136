@@ -194,8 +194,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of the Lava Bubble: a fire hit (damage_fire_explosion_event, tag 11), the attacker being burned
- * by its flames (avoid_fire_event, tag 40) and the First Strike reaction (does nothing).
+ * Event table of the Lava Bubble: a fire hit (damage_fire_explosion_event), the attacker being burned
+ * by its flames (avoid_fire_event) and the First Strike reaction (does nothing).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT, damage_fire_explosion_event},

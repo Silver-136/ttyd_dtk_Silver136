@@ -220,8 +220,8 @@ static PoseTableEntry pose_table_patapata[] = {
 };
 
 /**
- * Event table of the Koopa Paratroopa: being knocked out of the air (dmg_fall_event, tag 14) and the First
- * Strike reaction (patapata_dmg_first_attack_pos, tag 48).
+ * Event table of the Koopa Paratroopa: being knocked out of the air (dmg_fall_event) and the First
+ * Strike reaction (patapata_dmg_first_attack_pos).
  */
 static BattleDataEntry data_table_patapata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
@@ -531,7 +531,7 @@ static PoseTableEntry pose_table_turn[] = {
 };
 
 /**
- * Event table of the Koopa Troopa: being flipped onto its back (dmg_turn_event, tag 13) and the First Strike
+ * Event table of the Koopa Troopa: being flipped onto its back (dmg_turn_event) and the First Strike
  * reaction (does nothing).
  */
 static BattleDataEntry data_table[] = {

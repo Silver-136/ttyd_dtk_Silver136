@@ -241,9 +241,9 @@ static PoseTableEntry pose_table_pata[] = {
 };
 
 /**
- * Event table of the Spiky Parabuzzy: being knocked out of the air (dmg_fall_event_pata, tag 14), the spike
- * counters (tag 37, dmg_avoid_counter_thorn_head_event_pata) and the First Strike reaction
- * (dmg_first_attack_pos_event_pata, tag 48).
+ * Event table of the Spiky Parabuzzy: being knocked out of the air (dmg_fall_event_pata), the spike
+ * counters (dmg_avoid_counter_thorn_head_event_pata) and the First Strike reaction
+ * (dmg_first_attack_pos_event_pata).
  */
 static BattleDataEntry data_table_pata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event_pata},
@@ -291,7 +291,7 @@ EVT_END()
 /**
  * Data-table event 37, which the default damage event runs when an attacker was hurt by the Spiky Parabuzzy's
  * top spikes (counter hit 0x1F): waits 30 frames and flashes the toge_flush thorn effect above the unit,
- * 50 units up when it is Huge (status 10), 30 when Tiny (status 11), 40 otherwise.
+ * 50 units up when it is Huge (STATUS_HUGE), 30 when Tiny (STATUS_TINY), 40 otherwise.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event_pata)
     WAIT_FRAMES(30)
@@ -557,8 +557,7 @@ static PoseTableEntry pose_table_turn[] = {
 };
 
 /**
- * Event table of the Spike Top: being flipped onto its back (dmg_turn_event, tag 13), the spike counters (tag
- * 37, dmg_avoid_counter_thorn_head_event) and the First Strike reaction (does nothing).
+ * Event table of the Spike Top: being flipped onto its back (dmg_turn_event), the spike counters (dmg_avoid_counter_thorn_head_event) and the First Strike reaction (does nothing).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -568,8 +567,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Event table of the Spike Top while it clings to the ceiling: its counter-damage reactions (tags 25 to 36,
- * all running counter_damage_event_ceil) and the First Strike reaction (does nothing).
+ * Event table of the Spike Top while it clings to the ceiling: its counter-damage reactions (all running counter_damage_event_ceil) and the First Strike reaction (does nothing).
  */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},
@@ -783,7 +781,7 @@ EVT_END()
 /**
  * Data-table event 37 of the grounded Spike Top form, run when an attacker was hurt by its top spikes
  * (counter hit 0x1F): waits 30 frames and flashes the toge_flush thorn effect above the unit,
- * 38 units up when it is Huge (status 10), 18 when Tiny (status 11), 28 otherwise.
+ * 38 units up when it is Huge (STATUS_HUGE), 18 when Tiny (STATUS_TINY), 28 otherwise.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

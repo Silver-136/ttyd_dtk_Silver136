@@ -242,7 +242,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Event table of the Fuzzy:
- * the reaction when it is hurt while attacking (tags 25-36), nothing special on a First Strike.
+ * the reaction when it is hurt while attacking, nothing special on a First Strike.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

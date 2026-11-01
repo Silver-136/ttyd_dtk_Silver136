@@ -100,7 +100,7 @@ static USER_FUNC(teresa_check_move) {
 
 /**
  * Script helper: args[0] = unit; returns in args[1] 1 if some other Boo
- * or Dark Boo is not Invisible (status 0x12), otherwise 0.
+ * or Dark Boo is not Invisible (STATUS_INVISIBLE), otherwise 0.
  */
 static USER_FUNC(teresa_check_trans) {
     EvtWord* args = event->args;
@@ -434,9 +434,9 @@ EVT_END()
 /**
  * Attack event of the Boo.
  * Uses an enemy item if it has one, otherwise rolls among four options:
- * the Invisible move on itself (25, only if it is not already Invisible, status 18),
+ * the Invisible move on itself (25, only if it is not already Invisible, STATUS_INVISIBLE),
  * the same move on another Boo (25, if teresa_check_trans finds one; not allowed while it is Confused,
- * status 5),
+ * STATUS_CONFUSE),
  * the Boo move (15, if teresa_check_move allows it) and the plain attack (the rest, 50).
  */
 static EVT_BEGIN(attack_event)
@@ -628,7 +628,7 @@ EVT_END()
 
 /**
  * The Boo's move that turns itself Invisible.
- * It dips and shows pose A_1, fades its alpha down (unless it was already Invisible, status 18),
+ * It dips and shows pose A_1, fades its alpha down (unless it was already Invisible, STATUS_INVISIBLE),
  * turns around in two 90 degree steps (15 degrees x 6 frames each) with pose S_1,
  * and applies weapon_teresa_trans_myself to itself with the defence check (Invisible for 2 turns).
  */
@@ -686,7 +686,7 @@ EVT_END()
 
 /**
  * The Boo's move that turns another Boo Invisible.
- * It picks another Boo (teresa_check_teresa) that is not yet Invisible (status 18),
+ * It picks another Boo (teresa_check_teresa) that is not yet Invisible (STATUS_INVISIBLE),
  * fades out and reappears beside it,
  * applies weapon_teresa_trans_myself with the defence check (Invisible for 2 turns on that Boo)
  * and returns home.

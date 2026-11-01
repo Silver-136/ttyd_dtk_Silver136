@@ -97,7 +97,6 @@ static USER_FUNC(yami_view);
 USER_FUNC(party_tev);
 #if VERSION >= VERSION_US
 #endif
-extern s32 envSetYami[];
 
 EvtWord villagerA_init[28];
 EvtWord villagerA_pig_init[19];
@@ -1641,7 +1640,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
 EVT_END()
 
 /**
- * Raises the 3D camera and its target by 85 units over 500 ms (curve 11), then waits 600 ms;
+ * Raises the 3D camera and its target by 85 units over 500 ms (curve EASING_SINE_IN_OUT), then waits 600 ms;
  * used by usu00_crowAB_talk_event and usu00_crowCDE_talk_event before a crow speaks from its high perch.
  */
 static EVT_BEGIN(cam_up)

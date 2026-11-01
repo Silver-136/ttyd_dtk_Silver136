@@ -281,7 +281,7 @@ static PoseTableEntry pose_table_guard[] = {
 
 /**
  * Event data table of the Sky-Blue Spiny: scripts that replace the standard handling for being flipped
- * over by a stomp (tag 13) and an attacker being hurt by its spikes (tags 37 and 39).
+ * over by a stomp and an attacker being hurt by its spikes.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -293,7 +293,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Event data table of the Sky-Blue Spiny while it is flipped onto its back: scripts that replace the
- * standard handling for being flipped over by a stomp (tag 13).
+ * standard handling for being flipped over by a stomp.
  */
 static BattleDataEntry data_table_turn[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -303,7 +303,7 @@ static BattleDataEntry data_table_turn[] = {
 
 /**
  * Event data table of the Sky-Blue Spiny while it is curled up guarding: scripts that replace the standard
- * handling for an attacker being hurt by its spikes (tags 37 and 39).
+ * handling for an attacker being hurt by its spikes.
  */
 static BattleDataEntry data_table_guard[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_event},
@@ -420,7 +420,7 @@ EVT_END()
 /**
  * Data event 39 (damage code 33, run when an attacker is hurt by its spikes):
  * after 30 frames flashes the "toge_flush" spike effect above the unit,
- * 45 units up when Huge (status 10), 25 when Tiny (status 11) and 35 otherwise.
+ * 45 units up when Huge (STATUS_HUGE), 25 when Tiny (STATUS_TINY) and 35 otherwise.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_event)
     WAIT_FRAMES(30)

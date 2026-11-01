@@ -260,7 +260,6 @@ EVT_END()
 /**
  * Runs when an attack on the spiky head is stopped by the thorns (the counter damage to the attacker).
  * In the lecture battle it also marks the lecture's unit work 0, so the lesson knows the thorn was triggered.
- * Guess.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
@@ -330,7 +329,7 @@ static f32 SinTable[] = {
 
 /**
  * The Hyper Spiky Goomba's attack: the Spiky Goomba's roll or jump onto the target,
- * with a charge option (weapon_togekuri_charge) at the start unless it is already charged (status 16).
+ * with a charge option (weapon_togekuri_charge) at the start unless it is already charged (STATUS_CHARGE).
  */
 static EVT_BEGIN(attack_event)
     // Already charged: it goes straight to the roll attack.

@@ -1,4 +1,5 @@
 // unit_hyper_jyugem: Dark Lakitu, battle unit.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -194,7 +195,7 @@ static PoseTableEntry pose_table_hold[] = {
 
 /**
  * Event data table of the Dark Lakitu: scripts that replace the standard handling for an attacker being
- * hurt by its spiked head (tag 37) and the battle opening with a First Strike on it (tag 48).
+ * hurt by its spiked head and the battle opening with a First Strike on it.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, avoid_counter_thorn_head_event},
@@ -350,7 +351,7 @@ EVT_END()
 /**
  * Damage event of the Dark Lakitu.
  * When it is not holding a Spiny egg (unit work 0 = 0) it just runs the default damage reaction.
- * When it is holding one, a hit that did damage or left it with instant KO (status 27), sleep, dizzy, confusion,
+ * When it is holding one, a hit that did damage or left it with instant KO (STATUS_INSTANT_KILL), sleep, dizzy, confusion,
  * electric, freeze or stop knocks the egg out of its hands:
  * part 2 is thrown 200 units behind it to the floor and hidden, the hold (unit work 0),
  * its spiky counter attribute, pose table and hit offset are reset, then the default damage reaction runs.
@@ -512,7 +513,7 @@ EVT_END()
 /**
  * Data event 37, run (damage code 31) when an attacker is hurt by the spiky egg the Dark Lakitu holds overhead:
  * after 30 frames it shows the toge_flush spark above it, 35 units up,
- * 45 when Huge (status 10) and 25 when Tiny (status 11).
+ * 45 when Huge (STATUS_HUGE) and 25 when Tiny (STATUS_TINY).
  */
 static EVT_BEGIN(avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

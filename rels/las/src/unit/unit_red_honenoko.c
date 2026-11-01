@@ -234,7 +234,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRN_S_1"},
 };
 
-/** Event table of the Red Bones: dead_event (tag 49), fake_dead_event (tag 15). */
+/** Event table of the Red Bones: dead_event, fake_dead_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FAKE_DEAD_EVENT, fake_dead_event},

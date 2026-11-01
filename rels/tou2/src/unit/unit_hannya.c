@@ -122,7 +122,7 @@ static StatusVulnerability regist = {
 
 /**
  * Event data table of the Spania: scripts that replace the standard handling for an attacker being hurt by
- * its spiked head (tag 37).
+ * its spiked head.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -210,7 +210,7 @@ EVT_END()
 /**
  * Data event 37 (damage code 31, run when an attacker is hurt by its spiked head):
  * plays pose type 31, waits 30 frames, then flashes the "toge_flush" spike effect above the unit for 60 frames.
- * The effect sits 53 units up when the unit is Huge (status 10), 33 when Tiny (status 11) and 43 otherwise.
+ * The effect sits 53 units up when the unit is Huge (STATUS_HUGE), 33 when Tiny (STATUS_TINY) and 43 otherwise.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE_GUARDED)

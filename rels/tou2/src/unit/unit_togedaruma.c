@@ -172,8 +172,8 @@ static PoseTableEntry pose_table_turn[] = {
 
 /**
  * Event data table of the Bristle: scripts that replace the standard handling for being flipped over by a
- * stomp (tag 13), an attacker being hurt by its spiked head (tag 37) and an attacker being hurt by its
- * front spikes (tags 38-39).
+ * stomp, an attacker being hurt by its spiked head and an attacker being hurt by its
+ * front spikes.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -269,9 +269,9 @@ EVT_END()
  * Data-table events 38 and 39, run when an approaching attacker is hurt by the Bristle's front spikes (counter
  * hit
  * events 0x20, pre-emptive front spikes, and 0x21, front spikes): it bounces (SFX_ENM_TOGEDA_MOVE1, pose
- * TGD_J_1/2, or TGD_J_3/4 when flipped, status 17) and
+ * TGD_J_1/2, or TGD_J_3/4 when flipped, STATUS_FLIPPED) and
  * after 30 frames plays the toge_flush spark in front of it,
- * placed by size (Huge, status 10, or Tiny, 11).
+ * placed by size (Huge, STATUS_HUGE, or Tiny, 11).
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_front_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEDA_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)

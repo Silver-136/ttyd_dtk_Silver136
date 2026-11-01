@@ -1,4 +1,4 @@
-// gon_12 (ゴンババ, Hooktail Castle): side room off gon_08 where Ms. Mowz (chuchurina) is met (story 50, 51).
+// gon_12 (ゴンババ, Hooktail Castle): side room off gon_08 where Ms. Mowz (chuchurina) is met (story STG1_15_MS_MOWZ_W_GOOMBELLA, STG1_15_01_KEY_3).
 // Chests with Castle Key (0x0F), Mushroom and Honey Syrup; a power-up block.
 
 #include "version.h"

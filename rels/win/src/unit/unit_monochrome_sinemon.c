@@ -246,7 +246,7 @@ EVT_END()
 /**
  * Data-table hook (entry 37) for when an attacker is hurt by the Cleft's spiky top:
  * after 30 frames shows the toge_flush spark above its head,
- * placed higher while it is huge (status 10) and lower while tiny (status 11).
+ * placed higher while it is huge (STATUS_HUGE) and lower while tiny (STATUS_TINY).
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

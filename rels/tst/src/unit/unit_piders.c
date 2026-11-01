@@ -847,7 +847,7 @@ EVT_END()
 
 /**
  * Unison-phase script: in the phase before the player's turn,
- * unless it is instantly KO'd (status 27) or cannot act,
+ * unless it is instantly KO'd (STATUS_INSTANT_KILL) or cannot act,
  * the Pider changes height with move_kuuchu_event (air) or move_kuutei_event (ground).
  * The first living Pider (turn order 1 from piders_get_zyun) switches to the other height.
  * The others read piders_get_first_pos_attr (the first Pider's height state, unit work 0,

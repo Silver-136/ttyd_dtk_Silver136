@@ -488,7 +488,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
     return EVT_RETURN_BLOCK;
 }
 
-/** Event table of the Yux: barriern_dmg_first_attack_pos (tag 48). */
+/** Event table of the Yux: barriern_dmg_first_attack_pos. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, barriern_dmg_first_attack_pos},
     {0, NULL},

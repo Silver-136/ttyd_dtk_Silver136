@@ -482,7 +482,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Event data table of the Flower Fuzzy: scripts that replace the standard handling for the counter-damage
- * reactions (tags 25-36).
+ * reactions.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

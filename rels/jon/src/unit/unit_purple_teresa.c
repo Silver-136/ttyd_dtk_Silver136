@@ -341,8 +341,8 @@ EVT_END()
 /**
  * Attack event of the Dark Boo.
  * Uses an enemy item if it has one, otherwise rolls among four options:
- * the transparency move on itself (25, only if it is not already in status 18, Invisible),
- * the same move on another Boo (25, if teresa_check_trans finds one; not allowed while status 5, Confuse,
+ * the transparency move on itself (25, only if it is not already in STATUS_INVISIBLE, Invisible),
+ * the same move on another Boo (25, if teresa_check_trans finds one; not allowed while STATUS_CONFUSE, Confuse,
  * is on it),
  * the Boo move (15, if teresa_check_move allows it) and the plain attack (the rest, 50).
  */
@@ -533,10 +533,10 @@ EVT_END()
 
 /**
  * The Dark Boo's move that turns itself invisible.
- * It dips and shows pose A_1, fades its alpha down (unless it was already in status 18),
+ * It dips and shows pose A_1, fades its alpha down (unless it was already in STATUS_INVISIBLE),
  * turns around in two 90 degree steps (15 degrees x 6 frames each) with pose S_1,
  * and applies weapon_teresa_trans_myself to itself with the defence check:
- * a sure status 18 (Invisible) for 2 turns.
+ * a sure STATUS_INVISIBLE (Invisible) for 2 turns.
  */
 static EVT_BEGIN(trans_myself_event)
     SET_VALUE(LW(3), -2)
@@ -592,8 +592,8 @@ EVT_END()
 
 /**
  * The Dark Boo's move that turns an ally invisible.
- * It picks another Boo (teresa_check_teresa) that is not yet in status 18, fades out and reappears beside it,
- * applies weapon_teresa_trans_myself with the defence check (a sure status 18, Invisible,
+ * It picks another Boo (teresa_check_teresa) that is not yet in STATUS_INVISIBLE, fades out and reappears beside it,
+ * applies weapon_teresa_trans_myself with the defence check (a sure STATUS_INVISIBLE, Invisible,
  * for 2 turns on that Boo)
  * and returns home.
  */
@@ -770,7 +770,7 @@ EVT_END()
 
 /**
  * Script helper: args[0] = unit; returns in args[1] 1 if some other Boo
- * or Dark Boo is not in status 0x12 (probably the transparent state), otherwise 0.
+ * or Dark Boo is not in STATUS_INVISIBLE (probably the transparent state), otherwise 0.
  */
 static USER_FUNC(teresa_check_trans) {
     EvtWord* args = event->args;

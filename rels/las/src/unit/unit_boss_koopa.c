@@ -569,7 +569,7 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 /**
- * Phase event of Bowser: skipped while he is knocked out (status 27, instant KO).
+ * Phase event of Bowser: skipped while he is knocked out (STATUS_INSTANT_KILL, instant KO).
  * Before the player phase it handles Kammy's broom flag (unit work 0),
  * and runs harf_hp_event so he can speak when his HP gets low.
  */

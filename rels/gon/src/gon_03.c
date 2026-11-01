@@ -1,4 +1,4 @@
-// gon_03 (ゴンババ, Hooktail Castle): hall between gon_02 and gon_04 with a bone-enemy leader fight and the Richard NPC (story 38, 39, 46).
+// gon_03 (ゴンババ, Hooktail Castle): hall between gon_02 and gon_04 with a bone-enemy leader fight and the Richard NPC (story STG1_10_FATHERS_LETTER, STG1_11_1000_DRY_BONES, STG1_13_02_KEY_2).
 // Castle Key (0x0C) item and a spinning floor.
 
 #include "version.h"

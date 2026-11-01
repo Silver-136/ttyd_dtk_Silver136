@@ -50,7 +50,6 @@ static USER_FUNC(anim_tevcallback_mobj);
 static USER_FUNC(nice_effect_shrink);
 #endif
 static USER_FUNC(yami_view);
-extern s32 envSetYami[];
 
 EvtWord evt_ie1_door_1[12];
 EvtWord evt_ie1_wall[12];
@@ -357,7 +356,7 @@ DoorParam ie3_door = {
     evt_ie3_door_close, // evtClose
 };
 
-/** Exit of this room: the west door to aji_01. */
+/** Exit of this room: the west door to bom_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

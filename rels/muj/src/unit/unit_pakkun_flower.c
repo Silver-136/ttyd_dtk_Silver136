@@ -1,4 +1,5 @@
 // Keelhaul Key (muj) battle unit: Piranha Plant (pakkun_flower): its parts, defence/status tables, and attack events.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "system.h"
@@ -254,7 +255,7 @@ static PoseTableEntry pose_table_ceil[] = {
 };
 
 /**
- * Data table of the Piranha Plant: event handlers for the counter-hit reactions (tags 25-36),
+ * Data table of the Piranha Plant: event handlers for the counter-hit reactions,
  * the attacker hurt by its spikes and a First Strike on it (no reaction).
  */
 static BattleDataEntry data_table[] = {

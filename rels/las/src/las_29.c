@@ -1444,7 +1444,7 @@ EVT_END()
  * Event script: the scene of the Shadow Queen (possessing Peach).
  * Grodus is dismissed, the Shadow Queen (possessing Peach; Japanese ブラックピーチ) taunts Mario in front of Beldam,
  * Marilyn and Doopliss, offers him a yes/no choice, and fights Mario in battle 16.
- * If the battle result is 5 the story continues with last_evt_3_1,
+ * If the battle result is BATTLE_RESULT_STOPPED the story continues with last_evt_3_1,
  * otherwise the story is set to STG8_16_THE_RETURN_OF_THE_QUEEN and the ending starts with last_evt_4.
  */
 #if VERSION <= VERSION_DEMO_US
@@ -1452,7 +1452,7 @@ EVT_END()
  * Event script: the scene of the Shadow Queen (possessing Peach).
  * Grodus is dismissed, the Shadow Queen (possessing Peach; Japanese ブラックピーチ) taunts Mario in front of Beldam,
  * Marilyn and Doopliss, offers him a yes/no choice, and fights Mario in battle 16.
- * If the battle result is 5 the story continues with last_evt_3_1,
+ * If the battle result is BATTLE_RESULT_STOPPED the story continues with last_evt_3_1,
  * otherwise the story is set to STG8_16_THE_RETURN_OF_THE_QUEEN and the ending starts with last_evt_4.
  */
 EVT_BEGIN(last_evt_3)
@@ -1799,7 +1799,7 @@ EVT_END()
  * Event script: the scene of the Shadow Queen (possessing Peach).
  * Grodus is dismissed, the Shadow Queen (possessing Peach; Japanese ブラックピーチ) taunts Mario in front of Beldam,
  * Marilyn and Doopliss, offers him a yes/no choice, and fights Mario in battle 16.
- * If the battle result is 5 the story continues with last_evt_3_1,
+ * If the battle result is BATTLE_RESULT_STOPPED the story continues with last_evt_3_1,
  * otherwise the story is set to STG8_16_THE_RETURN_OF_THE_QUEEN and the ending starts with last_evt_4.
  */
 EVT_BEGIN(last_evt_3)

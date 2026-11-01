@@ -1,4 +1,5 @@
 // Battle unit Hyper Cleft (ハイパーシンエモン): moo.rel's copy.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -263,7 +264,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "SIN_D_2"},
 };
 
-/** Event table of the Hyper Cleft: dmg_turn_event (tag 13), dmg_avoid_counter_thorn_head_event (tag 37). */
+/** Event table of the Hyper Cleft: dmg_turn_event, dmg_avoid_counter_thorn_head_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -286,7 +287,7 @@ EVT_END()
 /**
  * Spark effect (toge_flush) shown when an attack on the Hyper Cleft's spiked head is turned away:
  * it waits 30 frames, then places the flash above the head at a height that depends on whether the unit has
- * status 10 or 11.
+ * STATUS_HUGE or STATUS_TINY.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
@@ -397,7 +398,7 @@ EVT_END()
 /**
  * Attack event of the Hyper Cleft: gets up first if it is flipped over;
  * on a field first strike it goes straight for the first attack target, otherwise,
- * unless it is already charged (status 16), it may use an enemy item
+ * unless it is already charged (STATUS_CHARGE), it may use an enemy item
  * or draw lots (25% on turn 1, 25/25 later) to spend the turn charging (weapon_sinemon_charge, crystal effect).
  * Otherwise it dashes at a target (SFX_ENM_EMON_DASH1);
  * the pre-damage check decides between a dodge and a hit, then it hops back home.

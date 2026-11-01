@@ -308,13 +308,13 @@ EVT_END()
 /**
  * Damage script of the Dark Lakitu. While it is not holding an egg it just takes the default damage.
  * While it is holding one (unit work 0 set), a hit that damages it,
- * or one after which it has status 27, 1, 3, 5, 6, 9 or 2 (KO, Sleep, Dizzy, Confuse, Electric, Freeze, Stop),
+ * or one after which it has STATUS_INSTANT_KILL, STATUS_SLEEP, STATUS_DIZZY, STATUS_CONFUSE, STATUS_ELECTRIC, STATUS_FREEZE or STATUS_STOP (KO, Sleep, Dizzy, Confuse, Electric, Freeze, Stop),
  * makes it drop the egg: the egg part is thrown away behind it,
  * the holding state and counter attribute are cleared and its pose table is restored
  * before the default damage runs.
  * Otherwise, unless the damage code is 22, 30, 31, 38, 39 or 41,
  * it tosses the egg part a shorter way and hides it
- * while it has status 4, 8, 11, 15, 20 or 0 (Poison, Burn, Tiny, Defense Down, Slow, Allergic), without clearing
+ * while it has STATUS_POISON, STATUS_BURN, STATUS_TINY, STATUS_DEFENSE_DOWN, STATUS_SLOW or STATUS_ALLERGIC (Poison, Burn, Tiny, Defense Down, Slow, Allergic), without clearing
  * the holding state; the default damage then runs.
  */
 static EVT_BEGIN(damage_event)
@@ -421,7 +421,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Before the player's phase, on every turn but the first, if the Dark Lakitu can act and is not in status 27, 3,
+ * Before the player's phase, on every turn but the first, if the Dark Lakitu can act and is not in STATUS_INSTANT_KILL, STATUS_DIZZY,
  * 5 or 6 (KO, Dizzy, Confuse, Electric), it has a 50 percent chance to pick up an egg:
  * it plays JGM_A_1 and A_2 with the hold sounds, sets unit work 0 and counter attribute 1 (top-spiky) on part 1,
  * switches to the holding pose table and raises its hit offset by 20.

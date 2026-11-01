@@ -514,7 +514,7 @@ EVT_END()
 /**
  * Top-spike counter (data table entry 37, hit event 0x1F: an attacker hurt by its spiked top, as from a stomp):
  * after half a second it shows the toge_flush spike flash above its head,
- * higher when it is Huge (status 10) and lower when Tiny (status 11).
+ * higher when it is Huge (STATUS_HUGE) and lower when Tiny (STATUS_TINY).
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
@@ -621,7 +621,7 @@ static BattleUnitSetup entry_togenoko = {
  * Attack event of the Dark Koopatrol. In the forced-attack case it just does the normal attack.
  * If it is flipped over it wakes up.
  * While guarding (unit work 0 = 1) it leaves the guard with 80 percent chance.
- * If it is Charged (status 16), it picks the normal or shell attack at 50/35.
+ * If it is Charged (STATUS_CHARGE), it picks the normal or shell attack at 50/35.
  * Otherwise it uses an enemy item if it has one, may call a friend (friend_event) when it is the only one,
  * and else rolls among the normal attack, shell attack, charge and guard.
  */

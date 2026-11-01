@@ -1,4 +1,5 @@
 // unit_wanawana: wanawana battle unit (a trap; UNIT_UNUSED_WANAWANA in the unit table).
+// No formation or script of this REL uses it.
 
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

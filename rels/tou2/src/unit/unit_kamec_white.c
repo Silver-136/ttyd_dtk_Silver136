@@ -319,8 +319,7 @@ static PoseTableEntry pose_table_sky[] = {
 };
 
 /**
- * Event data table of the White Magikoopa: scripts that replace the standard handling for its defeat (tag
- * 49), being blown away (tag 58) and an attack missing it (tag 46).
+ * Event data table of the White Magikoopa: scripts that replace the standard handling for its defeat, being blown away and an attack missing it.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, kamec_subset_dead_event},
@@ -332,8 +331,8 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Event data table of the White Magikoopa while it is flying: scripts that replace the standard handling
- * for its defeat (tag 49), being blown away (tag 58), an attack missing it (tag 46), being knocked out of
- * the air (tag 14) and the battle opening with a First Strike on it (tag 48).
+ * for its defeat, being blown away, an attack missing it, being knocked out of
+ * the air and the battle opening with a First Strike on it.
  */
 static BattleDataEntry data_table_sky[] = {
     {UNIT_DATA_DEAD_EVENT, kamec_subset_dead_event},
@@ -346,7 +345,7 @@ static BattleDataEntry data_table_sky[] = {
 
 /**
  * Event data table of the White Magikoopa for its clones: scripts that replace the standard handling for
- * an attack missing it (tag 46).
+ * an attack missing it.
  */
 static BattleDataEntry data_table_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
@@ -356,8 +355,8 @@ static BattleDataEntry data_table_bunsin[] = {
 
 /**
  * Event data table of the White Magikoopa for its clones while flying: scripts that replace the standard
- * handling for an attack missing it (tag 46), being knocked out of the air (tag 14) and the battle opening
- * with a First Strike on it (tag 48).
+ * handling for an attack missing it, being knocked out of the air and the battle opening
+ * with a First Strike on it.
  */
 static BattleDataEntry data_table_sky_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
@@ -1604,7 +1603,7 @@ static EVT_BEGIN(attack_magic_event_sub_hit)
 EVT_END()
 
 /**
- * Common body of the Huge, Defense Up, Electric and Invisible spells (LW(15) = status 10, 14, 6 or 18):
+ * Common body of the Huge, Defense Up, Electric and Invisible spells (LW(15) = STATUS_HUGE, STATUS_DEFENSE_UP, STATUS_ELECTRIC or STATUS_INVISIBLE):
  * picks a target for the weapon in LW(9) and returns LW(0) = 0 without casting when it already has that status.
  * Otherwise it casts (magic_common_event1), applies the weapon to the target and returns LW(0) = 1.
  */

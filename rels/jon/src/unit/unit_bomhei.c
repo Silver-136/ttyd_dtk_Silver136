@@ -317,7 +317,7 @@ EVT_END()
  * Damage script of the Bob-omb.
  * A damaging hit (damage code 256) of kind 24, 25 or 27 (a fire, explosion or electric hit) sets it off at once
  * (bomb_event).
- * Otherwise it takes the default damage and, if it is still able to act and not in status 27 (KO),
+ * Otherwise it takes the default damage and, if it is still able to act and not in STATUS_INSTANT_KILL (KO),
  * lights its fuse (change_spark_event).
  */
 static EVT_BEGIN(damage_event)

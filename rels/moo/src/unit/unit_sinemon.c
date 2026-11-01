@@ -211,7 +211,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "SIN_D_2"},
 };
 
-/** Event table of the Moon Cleft: dmg_turn_event (tag 13), dmg_avoid_counter_thorn_head_event (tag 37). */
+/** Event table of the Moon Cleft: dmg_turn_event, dmg_avoid_counter_thorn_head_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -234,7 +234,7 @@ EVT_END()
 /**
  * Spark effect (toge_flush) shown when an attack on the Moon Cleft's spiked head is turned away:
  * it waits 30 frames, then places the flash above the head at a height that depends on whether the unit has
- * status 10 or 11.
+ * STATUS_HUGE or STATUS_TINY.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

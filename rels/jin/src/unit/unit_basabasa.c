@@ -184,7 +184,7 @@ static PoseTableEntry pose_table_ceil[] = {
 
 /**
  * Event table of the Swooper:
- * the reaction when it is hurt while attacking (tags 25-36), its reaction to a First Strike.
+ * the reaction when it is hurt while attacking, its reaction to a First Strike.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

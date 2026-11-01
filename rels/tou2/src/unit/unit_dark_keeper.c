@@ -150,7 +150,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Event data table of the Dark Craw: scripts that replace the standard handling for an attacker being hurt
- * by its spiked head (tag 37).
+ * by its spiked head.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -270,7 +270,7 @@ EVT_END()
 /**
  * Data event 37 (damage code 31, run when an attacker is hurt by its spiked head):
  * after 30 frames flashes the "toge_flush" spike effect near its head,
- * placed 60 units up (Huge, status 10), 33 (Tiny, status 11) or 48 otherwise.
+ * placed 60 units up (Huge, STATUS_HUGE), 33 (Tiny, STATUS_TINY) or 48 otherwise.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

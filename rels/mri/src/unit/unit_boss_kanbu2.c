@@ -1,5 +1,6 @@
 // The Great Tree (mri) battle unit: Lord Crump (kanbu2) in the Magnus von Grapple fight: its parts, defence/status
 // tables, and attack events.
+// No formation or script of this REL uses it.
 
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -117,7 +118,7 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
-/** Event table of Lord Crump: dead_event (tag 49). */
+/** Event table of Lord Crump: dead_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},

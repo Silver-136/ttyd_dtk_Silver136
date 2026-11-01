@@ -1,4 +1,5 @@
 // Battle unit Goomba (クリボー): win.rel's copy.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"

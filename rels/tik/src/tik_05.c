@@ -1265,7 +1265,7 @@ static USER_FUNC(tiz_broken) {
  */
 USER_FUNC(tiz_broken) {
 #if VERSION >= VERSION_US
-    f32 sq; // FAKE: tb_sqrtf expanded by hand (see below)
+    f32 sq; // FAKE: sqrtf expanded by hand (see below)
     f64 guess;
 #endif
     s32 x;

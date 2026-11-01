@@ -1,4 +1,4 @@
-// gon_11 (ゴンババ, Hooktail Castle): Hooktail's (Gonbaba's) lair: cutscenes, the Hooktail boss fight (story 55, 56) and the Diamond Star.
+// gon_11 (ゴンババ, Hooktail Castle): Hooktail's (Gonbaba's) lair: cutscenes, the Hooktail boss fight (story STG1_16_HOOKTAIL, STG1_17_FATHER_SON_REUNITED) and the Diamond Star.
 // Also a chest that gives an Attack FX item.
 
 #include "version.h"

@@ -299,7 +299,7 @@ EVT_END()
 /**
  * Attack event of the X-Naut: uses an enemy item if it has one;
  * otherwise picks its attack at random: 50% charging attack (normal_attack_event), 30% jump attack,
- * 20% dekadeka_event, which it skips while it is already Huge (status 10).
+ * 20% dekadeka_event, which it skips while it is already Huge (STATUS_HUGE).
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

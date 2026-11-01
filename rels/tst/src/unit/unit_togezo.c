@@ -391,7 +391,7 @@ EVT_END()
 
 /**
  * Waits half a second, then shows the toge_flush spike flash above the Spiny;
- * it is higher for a big (status 10) than a normal Spiny and lower for a small (status 11) one.
+ * it is higher for a big (STATUS_HUGE) than a normal Spiny and lower for a small (STATUS_TINY) one.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_event)
     WAIT_FRAMES(30)

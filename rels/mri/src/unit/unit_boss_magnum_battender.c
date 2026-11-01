@@ -273,7 +273,7 @@ static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_ACTION, "MGN_S_2"},
 };
 
-/** Event table of Magnus: dead_event (tag 49). */
+/** Event table of Magnus: dead_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},

@@ -1,4 +1,4 @@
-// dou_07 (洞窟, Pirate's Grotto): room where the Black Key (0x24) opens a chest and the paper genie (peramajin) gives the Boat Curse (story 246, 247).
+// dou_07 (洞窟, Pirate's Grotto): room where the Black Key (0x24) opens a chest and the paper genie (peramajin) gives the Boat Curse (story STG5_21_GROTTO_KEY, STG5_21_01_BOAT_MOD_OBTAINED).
 // Elmos (erumosu) appears here; P-Down D-Up badge; the door leads to dou_08.
 
 #include "version.h"

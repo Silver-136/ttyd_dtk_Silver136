@@ -574,7 +574,7 @@ EVT_END()
 
 /**
  * Wait event of the Chain-Chomp: picks the idle behaviour by status.
- * Asleep (status 1) it breathes with a slow tilting;
+ * Asleep (STATUS_SLEEP) it breathes with a slow tilting;
  * stopped or frozen (statuses 2 and 9) it holds pose WAN_Y_1;
  * dizzy, poisoned or confused (statuses 3 to 5) it hops slowly; otherwise it hops in place barking, with sounds.
  * Each runs in a sibling event and the event then loops forever.

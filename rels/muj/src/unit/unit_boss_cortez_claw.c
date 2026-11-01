@@ -181,9 +181,9 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of Cortez Hook: cortez_damage_sub_event (tag 9), cortez_weapon_dead_event (tag 49),
- * cortez_weapon_break_event (tags 70, 71), cortez_weapon_blow_dead_event (tag 58),
- * cortez_weapon_counter_damage_event (tags 36, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35).
+ * Event table of Cortez Hook: cortez_damage_sub_event, cortez_weapon_dead_event,
+ * cortez_weapon_break_event (tags 70, 71), cortez_weapon_blow_dead_event,
+ * cortez_weapon_counter_damage_event (35).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},

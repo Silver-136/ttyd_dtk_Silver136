@@ -1,4 +1,5 @@
 // unit_kuriboo: Goomba, battle unit (Rogueport tutorial/early fights).
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"

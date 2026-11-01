@@ -236,8 +236,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event data table of the Dull Bones: scripts that replace the standard handling for its defeat (tag 49)
- * and running out of HP (it crumbles but can be rebuilt) (tag 15).
+ * Event data table of the Dull Bones: scripts that replace the standard handling for its defeat
+ * and running out of HP (it crumbles but can be rebuilt).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},

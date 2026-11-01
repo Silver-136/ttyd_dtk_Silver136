@@ -989,7 +989,7 @@ NpcSetupInfo npcEnt_teresa[] = {
 };
 
 /**
- * Guess: floor enemy setup of the Pit of 100 Trials for the Bob-omb species, a wandering enemy that starts a
+ * Floor enemy setup of the Pit of 100 Trials for the Bob-omb species, a wandering enemy that starts a
  * battle on contact (picked by enemy_info from enemy_100).
  */
 NpcSetupInfo npcEnt_hbom[] = {
@@ -1087,7 +1087,7 @@ NpcSetupInfo npcEnt_wanwan[] = {
 };
 
 /**
- * Guess: floor enemy setup of the Pit of 100 Trials for the Wizzerd species, a wandering enemy that starts a
+ * Floor enemy setup of the Pit of 100 Trials for the Wizzerd species, a wandering enemy that starts a
  * battle on contact (picked by enemy_info from enemy_100).
  */
 NpcSetupInfo npcEnt_mahoon[] = {
@@ -1120,7 +1120,7 @@ NpcSetupInfo npcEnt_mahoon[] = {
 };
 
 /**
- * Guess: floor enemy setup of the Pit of 100 Trials for the Piranha Plant species, a wandering enemy that
+ * Floor enemy setup of the Pit of 100 Trials for the Piranha Plant species, a wandering enemy that
  * starts a battle on contact (picked by enemy_info from enemy_100).
  */
 NpcSetupInfo npcEnt_pakkun[] = {
@@ -1186,7 +1186,7 @@ NpcSetupInfo npcEnt_togenoko[] = {
 };
 
 /**
- * Guess: floor enemy setup of the Pit of 100 Trials for the Swooper species, a wandering enemy that starts a
+ * Floor enemy setup of the Pit of 100 Trials for the Swooper species, a wandering enemy that starts a
  * battle on contact (picked by enemy_info from enemy_100).
  */
 NpcSetupInfo npcEnt_basabasa2[] = {

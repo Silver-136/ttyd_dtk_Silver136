@@ -477,8 +477,8 @@ EVT_END()
  * Data event 37, run by the default damage event for damage code 0x1F (the name: an attack avoided by the
  * thorn-head counter, i.e. bounced off its spiked helmet): waits 30 frames
  * and flashes the "toge_flush" spike effect for 60 frames above the unit,
- * 70 units up when it is Huge (status 10),
- * 40 when Tiny (status 11) and 55 otherwise.
+ * 70 units up when it is Huge (STATUS_HUGE),
+ * 40 when Tiny (STATUS_TINY) and 55 otherwise.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

@@ -224,7 +224,7 @@ static PoseTableEntry pose_table_patapata[] = {
 
 /**
  * Event data table of the Shady Paratroopa in its winged form: scripts that replace the standard handling
- * for being knocked out of the air (tag 14) and the battle opening with a First Strike on it (tag 48).
+ * for being knocked out of the air and the battle opening with a First Strike on it.
  */
 static BattleDataEntry data_table_patapata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
@@ -522,7 +522,7 @@ static PoseTableEntry pose_table_turn[] = {
 
 /**
  * Event data table of the Shady Paratroopa: scripts that replace the standard handling for being flipped
- * over by a stomp (tag 13).
+ * over by a stomp.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},

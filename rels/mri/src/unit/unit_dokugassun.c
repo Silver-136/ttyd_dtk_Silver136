@@ -1,5 +1,6 @@
 // The Great Tree (mri) battle unit: Poison Puff (dokugassun): its parts, defence/status tables, and the attack, poison
 // gas and barrier events.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "eff/n64/eff_vapor_n64.h"
@@ -528,7 +529,7 @@ static USER_FUNC(eff_poison_barrier) {
     return EVT_RETURN_DONE;
 }
 
-/** Event table of the Poison Puff: counter_event (tag 43), dmg_first_attack_pos (tag 48). */
+/** Event table of the Poison Puff: counter_event, dmg_first_attack_pos. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_POISON_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

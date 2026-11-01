@@ -613,7 +613,7 @@ EVT_END()
 
 /**
  * The Dark Boo turns itself invisible: flies back a little,
- * fades out (when it is not already invisible, status 18),
+ * fades out (when it is not already invisible, STATUS_INVISIBLE),
  * turns round with its back to the camera while it spins, then reappears at its home position.
  * The invisible status is applied through the trans_myself weapon's damage calls.
  */
@@ -833,7 +833,7 @@ EVT_END()
 
 /**
  * Script helper: args[0] is the Boo itself; args[1] receives 1 when some other Boo
- * or Dark Boo (kinds 0x4B, 0x6A) is not invisible (status 0x12),
+ * or Dark Boo (kinds 0x4B, 0x6A) is not invisible (STATUS_INVISIBLE),
  * i.e. there is another one that can still turn visible or invisible, else 0.
  */
 static USER_FUNC(teresa_check_trans) {

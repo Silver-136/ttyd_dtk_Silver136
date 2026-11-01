@@ -19,7 +19,7 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_SOUND_VOLUME 1 // volume of its wait sounds (snd_se volume): 127 at init and each attack; sound_gensui_event cuts it to 70 % (min 32) while asleep or stopped
+#define UNIT_WORK_SOUND_VOLUME 1 // volume of its wait sounds (sound volume): 127 at init and each attack; sound_gensui_event cuts it to 70 % (min 32) while asleep or stopped
 #define UNIT_WORK_CHAIN_MODE 2   // how chain_main places the chain links: 2 record their shape relative to the stake (then 1), 1 keep that shape, 0 hang them between chomp and stake
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_OFFSET_X 0 // chain links (parts 1-8): x offset from the stake (part 9) recorded in chain mode 2
@@ -570,8 +570,8 @@ EVT_END()
 
 /**
  * Wait script of the Red Chomp: its idle depends on its status.
- * With status 1 (Sleep) it nods slowly in pose WAN_N_1; with status 2 or 9 (Stop, Freeze) it plays WAN_Y_1;
- * with status 3, 4 or 5 (Dizzy, Poison, Confuse) it hops on the spot with extra variants;
+ * With STATUS_SLEEP (Sleep) it nods slowly in pose WAN_N_1; with STATUS_STOP or STATUS_FREEZE (Stop, Freeze) it plays WAN_Y_1;
+ * with STATUS_DIZZY, STATUS_POISON or STATUS_CONFUSE (Dizzy, Poison, Confuse) it hops on the spot with extra variants;
  * otherwise it plays its normal idle hops.
  * The hops use the landing and bark sounds of wait_sound_event1 and 2, and sound_gensui_event lowers the volume.
  */

@@ -1,4 +1,4 @@
-// Goomba (kuriboo): battle unit used in Hooktail Castle.
+// Goomba (kuriboo): battle unit linked into gon.rel; no formation or script of this REL uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"

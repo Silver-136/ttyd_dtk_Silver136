@@ -407,8 +407,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of the Ice Puff: the attacker being hurt by its barrier (counter_event, tag 41) and the First
- * Strike reaction (dmg_first_attack_pos, tag 48).
+ * Event table of the Ice Puff: the attacker being hurt by its barrier (counter_event) and the First
+ * Strike reaction (dmg_first_attack_pos).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ICE_EVENT, counter_event},

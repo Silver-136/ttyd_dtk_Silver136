@@ -783,7 +783,7 @@ static EVT_BEGIN(move_kuuchu_event)
 EVT_END()
 
 /**
- * Unison-phase event: before the player phase, if the Pider can act and is not in status 27 (KO) it moves to the
+ * Unison-phase event: before the player phase, if the Pider can act and is not in STATUS_INSTANT_KILL (KO) it moves to the
  * ground or into the air, counting the living Piders and Arantulas together. The first of them (piders_get_zyun
  * gives 1) switches between the floor and the air every turn. With an odd number of them the others go where the
  * first one ends up; with an even number those at odd places in the order follow the first

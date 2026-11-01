@@ -248,8 +248,8 @@ EVT_END()
 
 /**
  * Waits half a second, then shows the toge_flush spike flash on the Moon Cleft's head;
- * the flash sits higher and farther out for a big (status 10)
- * or small (status 11) Moon Cleft than for a normal one.
+ * the flash sits higher and farther out for a big (STATUS_HUGE)
+ * or small (STATUS_TINY) Moon Cleft than for a normal one.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

@@ -2109,7 +2109,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_test1_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2119,7 +2119,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_test2_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2129,7 +2129,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_test3_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2139,7 +2139,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_test4_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2149,7 +2149,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_01_01_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2159,7 +2159,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_02_02_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2169,7 +2169,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_02_03_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {10, 10}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {10, 10}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2179,7 +2179,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_02_04_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2190,7 +2190,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         btlgrpsel_hei_btlno_hei_03_01_off, // select
         (NPC_BATTLE_NO_COIN_DROP | NPC_BATTLE_NO_HEART_DROP | NPC_BATTLE_NO_FLOWER_DROP | NPC_BATTLE_NO_ITEM_DROP | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
@@ -2200,7 +2200,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_04_01_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2210,7 +2210,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_04_02_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {10, 10}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {10, 10}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2221,7 +2221,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         btlgrpsel_hei_btlno_hei_05_01_off, // select
         (NPC_BATTLE_NO_COIN_DROP | NPC_BATTLE_NO_HEART_DROP | NPC_BATTLE_NO_FLOWER_DROP | NPC_BATTLE_NO_ITEM_DROP | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
@@ -2231,7 +2231,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_06_02_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {10, 10}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {10, 10}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2241,7 +2241,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_06_03_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2252,7 +2252,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         btlgrpsel_hei_btlno_hei_07_01_off, // select
         (NPC_BATTLE_NO_COIN_DROP | NPC_BATTLE_NO_HEART_DROP | NPC_BATTLE_NO_FLOWER_DROP | NPC_BATTLE_NO_ITEM_DROP | NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
@@ -2264,7 +2264,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
 #if VERSION > VERSION_DEMO_US
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2275,7 +2275,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         R_btlgrpsel_hei_btlno_hei_08_02_off, // select
         0, 0, // battleFlags..randomMode
 #endif
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2285,7 +2285,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_09_01_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2295,7 +2295,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_09_03_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2307,7 +2307,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         btlgrpsel_hei_btlno_hei_10_01_off, // select
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_KOBOSS_BATTLE1", // bgmName
     },
     {
@@ -2317,7 +2317,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_11_01_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2327,7 +2327,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_11_03_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2339,7 +2339,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
 #if VERSION > VERSION_DEMO_US
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2350,7 +2350,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         R_btlgrpsel_hei_btlno_hei_12_02_off, // select
         0, 0, // battleFlags..randomMode
 #endif
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2360,7 +2360,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_13_02_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2370,7 +2370,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_13_03_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -2380,7 +2380,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_13_04_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {0}, {0}, {10, 10}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {0},

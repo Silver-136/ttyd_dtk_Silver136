@@ -1775,7 +1775,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gra_btlno_gra_test1_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1785,7 +1785,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gra_btlno_gra_test2_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1796,7 +1796,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         btlgrpsel_gra_btlno_gra_00_01_off, // select
         NPC_BATTLE_STORY, // battleFlags
         0, // randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_BOSS_STG4_RUNPELL1", // bgmName
     },
     {
@@ -1807,7 +1807,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         btlgrpsel_gra_btlno_gra_00_02_off, // select
         NPC_BATTLE_STORY, // battleFlags
         0, // randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_BOSS_STG4_RUNPELL1", // bgmName
     },
     {
@@ -1817,7 +1817,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         btlgrpsel_gra_btlno_gra_01_01_on, // altSelect
         btlgrpsel_gra_btlno_gra_01_01_off, // select
         0, 0, // battleFlags..randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {10, 10}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {10, 10}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1827,7 +1827,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         btlgrpsel_gra_btlno_gra_01_03_on, // altSelect
         btlgrpsel_gra_btlno_gra_01_03_off, // select
         0, 0, // battleFlags..randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {10, 10}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {10, 10}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1837,7 +1837,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         btlgrpsel_gra_btlno_gra_01_04_on, // altSelect
         btlgrpsel_gra_btlno_gra_01_04_off, // select
         0, 0, // battleFlags..randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {10, 10}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {10, 10}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1847,7 +1847,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gra_btlno_gra_03_01_off, // select
         0, 0, // battleFlags..randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {10, 10}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {10, 10}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1857,7 +1857,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gra_btlno_gra_03_04_off, // select
         0, 0, // battleFlags..randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {10, 10}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {10, 10}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1867,7 +1867,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gra_btlno_gra_03_05_off, // select
         0, 0, // battleFlags..randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {10, 10}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {10, 10}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1877,7 +1877,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gra_btlno_gra_04_02_off, // select
         0, 0, // battleFlags..randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {10, 10}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {10, 10}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1887,7 +1887,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gra_btlno_gra_05_01_off, // select
         0, 0, // battleFlags..randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {4, 4}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {4, 4}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1897,7 +1897,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
         NULL, // altSelect
         btlgrpsel_gra_btlno_gra_05_03_off, // select
         0, 0, // battleFlags..randomMode
-        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {4, 4}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {4, 4}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {0},

@@ -196,7 +196,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "Z_1"},
 };
 
-/** Event table of X-Nauts: dead_event (tag 49). */
+/** Event table of X-Nauts: dead_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},

@@ -1,5 +1,5 @@
 // gon_01 (ゴンババ, Hooktail Castle): castle gate courtyard between gon_00 and gon_02.
-// Plays the gate cutscene (story 35 and 37) and has an HP Plus item.
+// Plays the gate cutscene (story STG1_09_HOOKTAIL_CASTLE and STG1_09_02_LOCK) and has an HP Plus item.
 
 #include "version.h"
 #include "battle/battle_unit.h"

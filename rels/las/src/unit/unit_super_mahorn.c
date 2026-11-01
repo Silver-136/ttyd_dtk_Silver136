@@ -773,8 +773,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of the Dark Wizzerd: mahorn_subset_dead_event (tag 49),
- * mahorn_subset_blow_dead_event (tag 58), avoid_miss_event (tag 46).
+ * Event table of the Dark Wizzerd: mahorn_subset_dead_event,
+ * mahorn_subset_blow_dead_event, avoid_miss_event.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, mahorn_subset_dead_event},
@@ -784,7 +784,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
-/** Event table of the Dark Wizzerd clone: avoid_miss_event (tag 46). */
+/** Event table of the Dark Wizzerd clone: avoid_miss_event. */
 static BattleDataEntry data_table_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
@@ -2152,7 +2152,7 @@ static USER_FUNC(mahorn_get_bunsin) {
 /**
  * Script helper: sets where hand args[1] (part 2..5 of the Dark Wizzerd, one per hand) should float:
  * stores the offset (-x, y, z) in the hand's destination block,
- * scaled by 1.25 when the unit is shrunk or 0.75 when it is grown (status 10 and 11).
+ * scaled by 1.25 when the unit is shrunk or 0.75 when it is grown (STATUS_HUGE and STATUS_TINY).
  */
 static USER_FUNC(set_hand_dest) {
     s32 hand;
@@ -2292,7 +2292,7 @@ static USER_FUNC(hand_init) {
 }
 
 /**
- * Counts the enemy-side (alliance 1) units in battle that are not knocked out (no status 0x1B, the KO status)
+ * Counts the enemy-side (alliance 1) units in battle that are not knocked out (no STATUS_INSTANT_KILL, the KO status)
  * and returns the count in args[0].
  */
 static USER_FUNC(mahorn_get_live_num) {

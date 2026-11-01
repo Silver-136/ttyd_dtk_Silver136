@@ -220,7 +220,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Event data table of the Iron Cleft: scripts that replace the standard handling for an attacker being
- * hurt by its spiked head (tag 37).
+ * hurt by its spiked head.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -273,7 +273,7 @@ EVT_END()
 
 /**
  * Data event 37 (the thorn-head counter): after 30 frames flashes the "toge_flush" spike effect near its head,
- * placed 67 units up when Huge (status 10), 37 when Tiny (status 11) and 52 otherwise.
+ * placed 67 units up when Huge (STATUS_HUGE), 37 when Tiny (STATUS_TINY) and 52 otherwise.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

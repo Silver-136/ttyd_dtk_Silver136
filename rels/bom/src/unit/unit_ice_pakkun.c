@@ -253,8 +253,8 @@ static PoseTableEntry pose_table_ceil[] = {
 };
 
 /**
- * Event table of the Frost Piranha: the spike counters (tag 37, dmg_avoid_counter_thorn_head_event), its
- * counter-damage reactions (tags 25 to 36, all running counter_damage_event) and the First Strike reaction
+ * Event table of the Frost Piranha: the spike counters (dmg_avoid_counter_thorn_head_event), its
+ * counter-damage reactions (all running counter_damage_event) and the First Strike reaction
  * (does nothing).
  */
 static BattleDataEntry data_table[] = {

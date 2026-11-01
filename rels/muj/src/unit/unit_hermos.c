@@ -188,7 +188,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
-/** Event table of the Ember: damage_fire_explosion_event (tag 11), avoid_fire_event (tag 40). */
+/** Event table of the Ember: damage_fire_explosion_event, avoid_fire_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT, damage_fire_explosion_event},
     {UNIT_DATA_AVOID_FIRE_EVENT, avoid_fire_event},

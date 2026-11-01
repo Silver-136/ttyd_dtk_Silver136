@@ -319,8 +319,7 @@ static PoseTableEntry pose_table_sky[] = {
 };
 
 /**
- * Event data table of the Green Magikoopa: scripts that replace the standard handling for its defeat (tag
- * 49), being blown away (tag 58) and an attack missing it (tag 46).
+ * Event data table of the Green Magikoopa: scripts that replace the standard handling for its defeat, being blown away and an attack missing it.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, kamec_subset_dead_event},
@@ -332,8 +331,8 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Event data table of the Green Magikoopa while it is flying: scripts that replace the standard handling
- * for its defeat (tag 49), being blown away (tag 58), an attack missing it (tag 46), being knocked out of
- * the air (tag 14) and the battle opening with a First Strike on it (tag 48).
+ * for its defeat, being blown away, an attack missing it, being knocked out of
+ * the air and the battle opening with a First Strike on it.
  */
 static BattleDataEntry data_table_sky[] = {
     {UNIT_DATA_DEAD_EVENT, kamec_subset_dead_event},
@@ -346,7 +345,7 @@ static BattleDataEntry data_table_sky[] = {
 
 /**
  * Event data table of the Green Magikoopa for its clones: scripts that replace the standard handling for
- * an attack missing it (tag 46).
+ * an attack missing it.
  */
 static BattleDataEntry data_table_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
@@ -356,8 +355,8 @@ static BattleDataEntry data_table_bunsin[] = {
 
 /**
  * Event data table of the Green Magikoopa for its clones while flying: scripts that replace the standard
- * handling for an attack missing it (tag 46), being knocked out of the air (tag 14) and the battle opening
- * with a First Strike on it (tag 48).
+ * handling for an attack missing it, being knocked out of the air and the battle opening
+ * with a First Strike on it.
  */
 static BattleDataEntry data_table_sky_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},

@@ -1,5 +1,5 @@
 // gon_06 (ゴンババ, Hooktail Castle): room with a chest opened by the Black Key (0x22) that gives the Paper Curse.
-// Paper genie (peramajin) scene (story 43 to 45), Attack FX R item, Dry Bones-type enemies.
+// Paper genie (peramajin) scene (story STG1_13_A_SUSPICIOUS_ROOM to STG1_13_01_01_PAPER_MAGE_2), Attack FX R item, Dry Bones-type enemies.
 
 #include "version.h"
 #include "battle/battle_unit.h"

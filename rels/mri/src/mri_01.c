@@ -2427,7 +2427,7 @@ EVT_BEGIN(boss_robot_pera_after)
 EVT_END()
 
 /**
- * The boss intro in the village (story 23_01): Crump confronts the Puni elder, the Punies are hidden,
+ * The boss intro in the village (story STG2_23_01_X_NAUT_BATTLE): Crump confronts the Puni elder, the Punies are hidden,
  * the time bomb is set and Crump gloats, then the Magnus von Grapple lands.
  * Mario then fights it (battle info 20). Sets the story to STG2_24_BOSS_BATTLE, then runs boss_battle_win.
  */

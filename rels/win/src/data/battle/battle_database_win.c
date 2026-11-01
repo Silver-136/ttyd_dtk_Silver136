@@ -1323,7 +1323,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
         NULL, // altSelect
         btlgrpsel_win_btlno_win_test1_off, // select
         0, 0, // battleFlags..randomMode
-        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1333,7 +1333,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
         btlgrpsel_win_btlno_win_00_01_on, // altSelect
         btlgrpsel_win_btlno_win_00_01_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {5, 5}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {5, 5}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1343,7 +1343,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
         btlgrpsel_win_btlno_win_00_02_on, // altSelect
         btlgrpsel_win_btlno_win_00_02_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {5, 5}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {5, 5}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1353,7 +1353,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
         btlgrpsel_win_btlno_win_00_03_on, // altSelect
         btlgrpsel_win_btlno_win_00_03_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {5, 5}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {5, 5}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1365,7 +1365,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
         btlgrpsel_win_btlno_win_00_04_off, // select
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
-        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {5, 5}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {5, 5}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_BOSS_STG3_3WOMEN1", // bgmName
     },
     {
@@ -1375,7 +1375,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
         btlgrpsel_win_btlno_win_02_01_on, // altSelect
         btlgrpsel_win_btlno_win_02_01_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {5, 5}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {5, 5}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1385,7 +1385,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
         btlgrpsel_win_btlno_win_02_02_on, // altSelect
         btlgrpsel_win_btlno_win_02_02_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {
@@ -1395,7 +1395,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
         btlgrpsel_win_btlno_win_03_01_on, // altSelect
         btlgrpsel_win_btlno_win_03_01_off, // select
         0, 0, // battleFlags..randomMode
-        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
+        {{5, 5}, {0}, {0}, {0}, {5, 5}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
     {0},

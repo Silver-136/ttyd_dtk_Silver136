@@ -19,7 +19,7 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_SOUND_VOLUME 1 // volume of its wait sounds (snd_se volume): 127 at init and each attack; sound_gensui_event reduces it each wait cycle to about 70 % (min 32)
+#define UNIT_WORK_SOUND_VOLUME 1 // volume of its wait sounds (sound volume): 127 at init and each attack; sound_gensui_event reduces it each wait cycle to about 70 % (min 32)
 #define UNIT_WORK_CHAIN_MODE 2   // how chain_main places the chain links: 2 record their shape relative to the stake (then 1), 1 keep that shape, 0 hang them between chomp and stake
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_OFFSET_X 0 // chain links (parts 1-8): x offset from the stake (part 9) recorded in chain mode 2
@@ -215,7 +215,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Data table of the Red Chomp: event handlers for the counter-hit reactions (tags 25-36),
+ * Data table of the Red Chomp: event handlers for the counter-hit reactions,
  * a First Strike on it (no reaction) and being defeated.
  */
 static BattleDataEntry data_table[] = {
@@ -578,7 +578,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Idle behaviour of the Red Chomp, chosen by status: asleep (status 1) it rocks slowly in "WAN_N_1";
+ * Idle behaviour of the Red Chomp, chosen by status: asleep (STATUS_SLEEP) it rocks slowly in "WAN_N_1";
  * stopped or frozen (2, 9) it stays in "WAN_Y_1" making occasional sounds;
  * confused, poisoned or dizzy (5, 4, 3) it hops in a looping series of landings;
  * otherwise it hops in place in a similar loop with its barking poses.

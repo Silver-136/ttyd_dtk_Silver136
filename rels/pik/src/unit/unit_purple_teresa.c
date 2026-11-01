@@ -104,7 +104,7 @@ static USER_FUNC(teresa_check_move) {
 
 /**
  * Script helper: stores 1 in args[1] if the battle has another Boo
- * or Dark Boo (not the unit args[0] itself) that is not invisible (status 0x12);
+ * or Dark Boo (not the unit args[0] itself) that is not invisible (STATUS_INVISIBLE);
  * attack_event stores it in LW(14), which allows the make-an-ally-invisible option (trans_event).
  */
 static USER_FUNC(teresa_check_trans) {
@@ -270,7 +270,7 @@ static BattleWeapon weapon_teresa_attack = {
 
 /**
  * Weapon that makes a Boo invisible, used by trans_myself_event on the Dark Boo itself and by trans_event on
- * another Boo: always hits, no HP damage, Invisible (status 18) for 2 turns.
+ * another Boo: always hits, no HP damage, Invisible (STATUS_INVISIBLE) for 2 turns.
  */
 static BattleWeapon weapon_teresa_trans_myself = {
     NULL, 0, // name..icon
@@ -442,8 +442,8 @@ EVT_END()
 /**
  * Attack event of the Dark Boo.
  * Uses an enemy item if it has one, otherwise rolls among four options:
- * turning itself invisible (25, only if it is not already invisible, status 18),
- * turning another Boo invisible (25, if teresa_check_trans finds one; not while it is confused, status 5),
+ * turning itself invisible (25, only if it is not already invisible, STATUS_INVISIBLE),
+ * turning another Boo invisible (25, if teresa_check_trans finds one; not while it is confused, STATUS_CONFUSE),
  * the group move (15, if teresa_check_move allows it; not while confused) and the plain attack (the rest, 50).
  */
 static EVT_BEGIN(attack_event)
@@ -635,7 +635,7 @@ EVT_END()
 
 /**
  * The Dark Boo's move that turns itself invisible.
- * It dips and shows pose A_1, fades its alpha down (unless it was already invisible, status 18),
+ * It dips and shows pose A_1, fades its alpha down (unless it was already invisible, STATUS_INVISIBLE),
  * turns around in two 90 degree steps (15 degrees x 6 frames each) with pose S_1,
  * and applies weapon_teresa_trans_myself to itself (invisibleChance 100, invisibleTime 2), which makes it
  * invisible for two turns.
@@ -694,7 +694,7 @@ EVT_END()
 
 /**
  * The Dark Boo's move that turns an ally invisible.
- * It picks another Boo (teresa_check_teresa) that is not yet invisible (status 18), fades out and reappears
+ * It picks another Boo (teresa_check_teresa) that is not yet invisible (STATUS_INVISIBLE), fades out and reappears
  * beside it, applies weapon_teresa_trans_myself (invisibleChance 100, invisibleTime 2) to it and returns home.
  */
 static EVT_BEGIN(trans_event)

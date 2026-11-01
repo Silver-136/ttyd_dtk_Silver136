@@ -266,7 +266,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Attack event of the Hyper Goomba: if it is not already charged (status 16) it may use an enemy item;
+ * Attack event of the Hyper Goomba: if it is not already charged (STATUS_CHARGE) it may use an enemy item;
  * otherwise it draws lots (25% on turn 1, 25/25 later) to either spend its turn charging,
  * with a crystal effect and a hop (weapon_kuriboo_charge, unit work 0 set to 1),
  * or to run at a target and headbutt it (weapon_kuriboo_attack),

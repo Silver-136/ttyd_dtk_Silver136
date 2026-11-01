@@ -103,6 +103,7 @@ void envBlurOff(void);
 void envGlare(EnvironmentGlare* glare);
 struct MapTevCallbackInfo;
 void envSetWater(struct MapTevCallbackInfo* info);
+void envSetYami(struct MapTevCallbackInfo* info);
 void envAddTev(s32 type, struct MapTevCallbackInfo* info);
 
 

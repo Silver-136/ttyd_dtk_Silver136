@@ -249,7 +249,7 @@ static PoseTableEntry pose_table_ceil[] = {
 
 /**
  * Event data table of the Pale Piranha: scripts that replace the standard handling for an attacker being
- * hurt by its spiked head (tag 37) and the counter-damage reactions (tags 25-36).
+ * hurt by its spiked head and the counter-damage reactions.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},

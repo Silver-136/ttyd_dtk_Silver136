@@ -55,7 +55,6 @@ static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 static USER_FUNC(yami_view);
-extern s32 envSetYami[];
 
 static HitDamageReturn dmgReturnPt[9];
 static EvtWord n_door_open[22];

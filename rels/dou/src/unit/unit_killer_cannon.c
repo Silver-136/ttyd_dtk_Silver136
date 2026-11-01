@@ -509,11 +509,11 @@ EVT_END()
 
 /**
  * Launches a Bullet Bill (entry_killer) from the front barrel:
- * the barrel animation and cannon sound play, a smoke puff appears at the muzzle (larger when Huge, status 10,
- * smaller when Tiny, status 11), the camera shakes,
+ * the barrel animation and cannon sound play, a smoke puff appears at the muzzle (larger when Huge, STATUS_HUGE,
+ * smaller when Tiny, STATUS_TINY), the camera shakes,
  * the new unit copies the cannon's status (killer_copy_status),
  * flies to the free spot found by the caller and takes that as its home.
- * With LW(12) = 1 it charges first and gives the new Bill Charge (status 16).
+ * With LW(12) = 1 it charges first and gives the new Bill Charge (STATUS_CHARGE).
  */
 static EVT_BEGIN(friend_event)
     IF_INT_EQUAL(LW(12), 1)

@@ -217,8 +217,8 @@ static PoseTableEntry pose_table_pata[] = {
 };
 
 /**
- * Event table of the Parabuzzy: being knocked out of the air (dmg_fall_event_pata, tag 14) and the First
- * Strike reaction (dmg_first_attack_pos_event_pata, tag 48).
+ * Event table of the Parabuzzy: being knocked out of the air (dmg_fall_event_pata) and the First
+ * Strike reaction (dmg_first_attack_pos_event_pata).
  */
 static BattleDataEntry data_table_pata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event_pata},
@@ -511,7 +511,7 @@ static PoseTableEntry pose_table_turn[] = {
 };
 
 /**
- * Event table of the Buzzy Beetle: being flipped onto its back (dmg_turn_event, tag 13) and the First Strike
+ * Event table of the Buzzy Beetle: being flipped onto its back (dmg_turn_event) and the First Strike
  * reaction (does nothing).
  */
 static BattleDataEntry data_table[] = {
@@ -521,8 +521,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Event table of the Buzzy Beetle while it clings to the ceiling: its counter-damage reactions (tags 25 to
- * 36, all running counter_damage_event_ceil) and the First Strike reaction (does nothing).
+ * Event table of the Buzzy Beetle while it clings to the ceiling: its counter-damage reactions (all running counter_damage_event_ceil) and the First Strike reaction (does nothing).
  */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},

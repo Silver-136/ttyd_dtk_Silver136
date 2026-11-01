@@ -822,7 +822,7 @@ EVT_END()
 /**
  * Damage event of Rawk Hawk: default damage reaction;
  * if he is hanging from the ceiling and a hit of damage code 23 to 27 did at least 1 damage,
- * or he is Tiny (status 11), he is knocked down to the floor with to_floor (the wait event is stopped and
+ * or he is Tiny (STATUS_TINY), he is knocked down to the floor with to_floor (the wait event is stopped and
  * restarted around it).
  */
 static EVT_BEGIN(damage_event)

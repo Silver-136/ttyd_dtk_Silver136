@@ -1856,7 +1856,7 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 /**
- * Guess: spline path of five control points that Grodus's satellite 1 of 1 follows
+ * Spline path of five control points that Grodus's satellite 1 of 1 follows
  * when it flies back into place.
  */
 static Vec splineTableIn1_1[] = {
@@ -1868,7 +1868,7 @@ static Vec splineTableIn1_1[] = {
 };
 
 /**
- * Guess: spline path of five control points that Grodus's satellite 1 of 2 follows
+ * Spline path of five control points that Grodus's satellite 1 of 2 follows
  * when it flies back into place.
  */
 static Vec splineTableIn2_1[] = {
@@ -1880,7 +1880,7 @@ static Vec splineTableIn2_1[] = {
 };
 
 /**
- * Guess: spline path of five control points that Grodus's satellite 2 of 2 follows
+ * Spline path of five control points that Grodus's satellite 2 of 2 follows
  * when it flies back into place.
  */
 static Vec splineTableIn2_2[] = {
@@ -1892,7 +1892,7 @@ static Vec splineTableIn2_2[] = {
 };
 
 /**
- * Guess: spline path of five control points that Grodus's satellite 1 of 3 follows
+ * Spline path of five control points that Grodus's satellite 1 of 3 follows
  * when it flies back into place.
  */
 static Vec splineTableIn3_1[] = {
@@ -1904,7 +1904,7 @@ static Vec splineTableIn3_1[] = {
 };
 
 /**
- * Guess: spline path of five control points that Grodus's satellite 2 of 3 follows
+ * Spline path of five control points that Grodus's satellite 2 of 3 follows
  * when it flies back into place.
  */
 static Vec splineTableIn3_2[] = {
@@ -1916,7 +1916,7 @@ static Vec splineTableIn3_2[] = {
 };
 
 /**
- * Guess: spline path of five control points that Grodus's satellite 3 of 3 follows
+ * Spline path of five control points that Grodus's satellite 3 of 3 follows
  * when it flies back into place.
  */
 static Vec splineTableIn3_3[] = {
@@ -1928,7 +1928,7 @@ static Vec splineTableIn3_3[] = {
 };
 
 /**
- * Guess: spline path of five control points that Grodus's satellite 1 of 4 follows
+ * Spline path of five control points that Grodus's satellite 1 of 4 follows
  * when it flies back into place.
  */
 static Vec splineTableIn4_1[] = {
@@ -1940,7 +1940,7 @@ static Vec splineTableIn4_1[] = {
 };
 
 /**
- * Guess: spline path of five control points that Grodus's satellite 2 of 4 follows
+ * Spline path of five control points that Grodus's satellite 2 of 4 follows
  * when it flies back into place.
  */
 static Vec splineTableIn4_2[] = {
@@ -1952,7 +1952,7 @@ static Vec splineTableIn4_2[] = {
 };
 
 /**
- * Guess: spline path of five control points that Grodus's satellite 3 of 4 follows
+ * Spline path of five control points that Grodus's satellite 3 of 4 follows
  * when it flies back into place.
  */
 static Vec splineTableIn4_3[] = {
@@ -1964,7 +1964,7 @@ static Vec splineTableIn4_3[] = {
 };
 
 /**
- * Guess: spline path of five control points that Grodus's satellite 4 of 4 follows
+ * Spline path of five control points that Grodus's satellite 4 of 4 follows
  * when it flies back into place.
  */
 static Vec splineTableIn4_4[] = {
@@ -1975,7 +1975,7 @@ static Vec splineTableIn4_4[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
-/** Guess: spline path of five control points that Grodus's satellite 1 of 1 follows when it flies out. */
+/** Spline path of five control points that Grodus's satellite 1 of 1 follows when it flies out. */
 static Vec splineTableOut1_1[] = {
     {0.0f, 45.0f, -5.0f},
     {-53.2f, -8.200001f, -5.0f},
@@ -1984,7 +1984,7 @@ static Vec splineTableOut1_1[] = {
     {38.0f, 45.0f, 5.0f},
 };
 
-/** Guess: spline path of five control points that Grodus's satellite 1 of 2 follows when it flies out. */
+/** Spline path of five control points that Grodus's satellite 1 of 2 follows when it flies out. */
 static Vec splineTableOut2_1[] = {
     {0.0f, 45.0f, -5.0f},
     {7.6f, 90.600006f, -5.0f},
@@ -1993,7 +1993,7 @@ static Vec splineTableOut2_1[] = {
     {38.0f, 45.0f, 5.0f},
 };
 
-/** Guess: spline path of five control points that Grodus's satellite 2 of 2 follows when it flies out. */
+/** Spline path of five control points that Grodus's satellite 2 of 2 follows when it flies out. */
 static Vec splineTableOut2_2[] = {
     {0.0f, 45.0f, -5.0f},
     {-7.6f, -0.6000023f, -5.0f},
@@ -2002,7 +2002,7 @@ static Vec splineTableOut2_2[] = {
     {-38.0f, 45.0f, 5.0f},
 };
 
-/** Guess: spline path of five control points that Grodus's satellite 1 of 3 follows when it flies out. */
+/** Spline path of five control points that Grodus's satellite 1 of 3 follows when it flies out. */
 static Vec splineTableOut3_1[] = {
     {0.0f, 45.0f, -5.0f},
     {0.0f, 83.0f, -5.0f},
@@ -2011,7 +2011,7 @@ static Vec splineTableOut3_1[] = {
     {0.0f, 83.0f, 5.0f},
 };
 
-/** Guess: spline path of five control points that Grodus's satellite 2 of 3 follows when it flies out. */
+/** Spline path of five control points that Grodus's satellite 2 of 3 follows when it flies out. */
 static Vec splineTableOut3_2[] = {
     {0.0f, 45.0f, -5.0f},
     {38.0f, 14.6f, -5.0f},
@@ -2020,7 +2020,7 @@ static Vec splineTableOut3_2[] = {
     {38.0f, 7.0f, 5.0f},
 };
 
-/** Guess: spline path of five control points that Grodus's satellite 3 of 3 follows when it flies out. */
+/** Spline path of five control points that Grodus's satellite 3 of 3 follows when it flies out. */
 static Vec splineTableOut3_3[] = {
     {0.0f, 45.0f, -5.0f},
     {-38.0f, 14.6f, -5.0f},
@@ -2029,7 +2029,7 @@ static Vec splineTableOut3_3[] = {
     {-38.0f, 7.0f, 5.0f},
 };
 
-/** Guess: spline path of five control points that Grodus's satellite 1 of 4 follows when it flies out. */
+/** Spline path of five control points that Grodus's satellite 1 of 4 follows when it flies out. */
 static Vec splineTableOut4_1[] = {
     {0.0f, 45.0f, -5.0f},
     {38.0f, 75.4f, -5.0f},
@@ -2038,7 +2038,7 @@ static Vec splineTableOut4_1[] = {
     {38.0f, 83.0f, 5.0f},
 };
 
-/** Guess: spline path of five control points that Grodus's satellite 2 of 4 follows when it flies out. */
+/** Spline path of five control points that Grodus's satellite 2 of 4 follows when it flies out. */
 static Vec splineTableOut4_2[] = {
     {0.0f, 45.0f, -5.0f},
     {-38.0f, 75.4f, -5.0f},
@@ -2047,7 +2047,7 @@ static Vec splineTableOut4_2[] = {
     {-38.0f, 83.0f, 5.0f},
 };
 
-/** Guess: spline path of five control points that Grodus's satellite 3 of 4 follows when it flies out. */
+/** Spline path of five control points that Grodus's satellite 3 of 4 follows when it flies out. */
 static Vec splineTableOut4_3[] = {
     {0.0f, 45.0f, -5.0f},
     {38.0f, 14.6f, -5.0f},
@@ -2056,7 +2056,7 @@ static Vec splineTableOut4_3[] = {
     {38.0f, 7.0f, 5.0f},
 };
 
-/** Guess: spline path of five control points that Grodus's satellite 4 of 4 follows when it flies out. */
+/** Spline path of five control points that Grodus's satellite 4 of 4 follows when it flies out. */
 static Vec splineTableOut4_4[] = {
     {0.0f, 45.0f, -5.0f},
     {-38.0f, 14.6f, -5.0f},

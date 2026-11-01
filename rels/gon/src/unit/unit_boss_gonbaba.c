@@ -433,8 +433,7 @@ static PoseTableEntry pose_table_weak[] = {
 };
 
 /**
- * Event table of Hooktail: its damage handler (gonbaba_damage_sub_event, tag 9) and its defeat (dead_event,
- * tag 49).
+ * Event table of Hooktail: its damage handler (gonbaba_damage_sub_event) and its defeat (dead_event).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, gonbaba_damage_sub_event},

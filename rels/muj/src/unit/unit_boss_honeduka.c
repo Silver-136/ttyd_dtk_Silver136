@@ -1,5 +1,6 @@
 // Keelhaul Key (muj) battle unit: the Bone Pile (honeduka) of the Cortez fight: its parts, defence/status tables, and
 // events.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -120,7 +121,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_Z_1"},
 };
 
-/** Event table of the Bone Pile: honeduka_damage_sub_event (tag 9). */
+/** Event table of the Bone Pile: honeduka_damage_sub_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, honeduka_damage_sub_event},
     {0, NULL},

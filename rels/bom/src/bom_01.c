@@ -754,7 +754,7 @@ DoorParam door = {
 /** Exits of this room: the west door to bom_04 and the east door to bom_02. */
 static BeroEntry bero_entry_data[] = {
     {
-        ("w_bero"), // hitName
+        "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
         BERO_POS_AUTO, // centerPosition
@@ -764,13 +764,13 @@ static BeroEntry bero_entry_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "bom_04", // nextMapName
-        ("e_bero4"), // nextBeroName
+        "e_bero4", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
     },
     {
-        ("e_bero"), // hitName
+        "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
         BERO_POS_AUTO, // centerPosition
@@ -780,7 +780,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "bom_02", // nextMapName
-        ("w_bero"), // nextBeroName
+        "w_bero", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg

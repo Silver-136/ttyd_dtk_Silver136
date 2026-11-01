@@ -168,7 +168,7 @@ static PoseTableEntry pose_table_turn[] = {
 
 /**
  * Event data table of the Red Spike Top: scripts that replace the standard handling for being flipped over
- * by a stomp (tag 13) and an attacker being hurt by its spiked head (tag 37).
+ * by a stomp and an attacker being hurt by its spiked head.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -179,7 +179,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Event data table of the Red Spike Top while it hangs from the ceiling: scripts that replace the standard
- * handling for the counter-damage reactions (from the ceiling) (tags 25-36).
+ * handling for the counter-damage reactions (from the ceiling).
  */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},
@@ -380,7 +380,7 @@ EVT_END()
 /**
  * Data event 37 (the thorn-head counter, run when a player attack is bounced off its spiked top):
  * waits 30 frames and flashes the "toge_flush" spike effect above the unit,
- * 38 units up when it is Huge (status 10), 18 when Tiny (status
+ * 38 units up when it is Huge (STATUS_HUGE), 18 when Tiny (status
  * 11) and 28 otherwise.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)

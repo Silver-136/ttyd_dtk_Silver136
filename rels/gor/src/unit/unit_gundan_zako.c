@@ -1,4 +1,5 @@
 // unit_gundan_zako: X-Naut (rank-and-file grunt), battle unit.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -307,7 +308,7 @@ EVT_END()
 /**
  * Attack event of the X-Naut: uses an enemy item if it has one;
  * otherwise picks its attack at random: 50% charging attack (normal_attack_event), 30% jump attack,
- * 20% dekadeka_event, which it skips while it already has status 10 (Huge).
+ * 20% dekadeka_event, which it skips while it already has STATUS_HUGE (Huge).
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

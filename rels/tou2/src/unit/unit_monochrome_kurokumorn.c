@@ -429,8 +429,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event data table of the Dark Puff: scripts that replace the standard handling for its counter hook (tag
- * 42) and the battle opening with a First Strike on it (tag 48).
+ * Event data table of the Dark Puff: scripts that replace the standard handling for its counter hook and the battle opening with a First Strike on it.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ELECTRIC_EVENT, counter_event},

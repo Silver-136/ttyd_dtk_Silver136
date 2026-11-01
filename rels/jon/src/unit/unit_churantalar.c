@@ -776,7 +776,7 @@ static EVT_BEGIN(move_kuuchu_event)
 EVT_END()
 
 /**
- * Before the player's phase, if the Arantula can act and is not in status 27 (KO),
+ * Before the player's phase, if the Arantula can act and is not in STATUS_INSTANT_KILL (KO),
  * it moves up (move_kuuchu_event) or down (move_kuutei_event),
  * counting the living Piders and Arantulas together.
  * The first of them (piders_get_zyun gives 1) switches between the floor and the air every turn.

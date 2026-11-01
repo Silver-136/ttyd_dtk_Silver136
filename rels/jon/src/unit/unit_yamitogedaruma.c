@@ -239,7 +239,7 @@ EVT_END()
 
 /**
  * Waits half a second, then shows the toge_flush spike flash above the Dark Bristle's head (higher for a big
- * status 10 one, lower for a small status 11 one) and waits 60 frames.
+ * STATUS_HUGE one, lower for a small STATUS_TINY one) and waits 60 frames.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

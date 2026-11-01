@@ -215,8 +215,8 @@ EVT_END()
 
 /**
  * Init script shared by the platform NPCs Pennington, the fake Zip Toad, Heff T., Goldbob and Bub:
- * removes the NPC from the map once the drawbridge is down (story 42),
- * and the fake Zip Toad once the station has been reached (story 27).
+ * removes the NPC from the map once the drawbridge is down (story STG6_42_DRAWBRIDGE_DOWN),
+ * and the fake Zip Toad once the station has been reached (story STG6_27_RIVERSIDE_STATION).
  */
 EVT_BEGIN(init_powan_toron_konari_papa_gurume)
     SWITCH(GSW_STORY_PROGRESS)
@@ -283,7 +283,7 @@ EVT_BEGIN(talk_ekiin1)
 EVT_END()
 
 /**
- * Init script of station attendant 2: once the drawbridge is down (story 42),
+ * Init script of station attendant 2: once the drawbridge is down (story STG6_42_DRAWBRIDGE_DOWN),
  * moves him to the gate at (-865, 80, 100).
  */
 EVT_BEGIN(init_ekiin2)

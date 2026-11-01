@@ -419,8 +419,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of the Ruff Puff: the attacker being shocked by its charge (counter_event, tag 42) and the First
- * Strike reaction (dmg_first_attack_pos, tag 48).
+ * Event table of the Ruff Puff: the attacker being shocked by its charge (counter_event) and the First
+ * Strike reaction (dmg_first_attack_pos).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ELECTRIC_EVENT, counter_event},

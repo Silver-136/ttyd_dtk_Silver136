@@ -326,7 +326,7 @@ EVT_END()
 
 /**
  * The Hyper Paragoomba's attack: like the Paragoomba's dive attack,
- * it can instead spend its turn charging (weapon_patakuri_charge) unless it is already charged (status 16).
+ * it can instead spend its turn charging (weapon_patakuri_charge) unless it is already charged (STATUS_CHARGE).
  */
 static EVT_BEGIN(attack_event_patakuri)
     // Already charged: it goes straight to the dive attack.

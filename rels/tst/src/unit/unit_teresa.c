@@ -98,7 +98,7 @@ static USER_FUNC(teresa_check_move) {
 
 /**
  * Script helper: args[0] is the Boo itself; args[1] receives 1 when some other Boo
- * or Dark Boo (kinds 0x4B, 0x6A) is not invisible (status 0x12),
+ * or Dark Boo (kinds 0x4B, 0x6A) is not invisible (STATUS_INVISIBLE),
  * i.e. there is another one that can still turn visible or invisible, else 0.
  */
 static USER_FUNC(teresa_check_trans) {

@@ -1051,7 +1051,7 @@ EVT_END()
 
 /**
  * Cutscene when Mario walks to x >= -275 at the station:
- * the mail alert (vibrating exclamation), the partner comments (gor_04_mail6_00);
+ * the mail alert (exclamation bubble and controller rumble), the partner comments (gor_04_mail6_00);
  * after he presses A the mail is read (gor_04_mail6_01, 02),
  * story progress becomes STG6_57_A_MAIL_FROM_PEACH and mail 5 is received and opened.
  */

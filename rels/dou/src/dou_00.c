@@ -1,5 +1,5 @@
 // dou_00 (洞窟, Pirate's Grotto): entrance cave reached from Keelhaul Key (muj_05).
-// Arrival cutscene (story 242 to 243), a save block and Ruin Powder; the door leads to dou_01.
+// Arrival cutscene (story STG5_19_GEMS_AND_JINGLES to STG5_19_01_ENTERING_THE_GROTTO), a save block and Ruin Powder; the door leads to dou_01.
 
 #include "battle/battle_unit.h"
 #include "driver/animdrv.h"

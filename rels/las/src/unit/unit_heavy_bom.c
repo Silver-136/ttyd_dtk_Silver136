@@ -1,4 +1,5 @@
 // Palace of Shadow battle unit: the Bulky Bob-omb (`heavy_bom`): parts, stats, poses and AI scripts.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -527,7 +528,7 @@ static PoseTableEntry pose_table_1_to_0[] = {
     {POSE_TYPE_ACTION, "B_3"},
 };
 
-/** Event table of the Bulky Bob-omb: dead_event (tag 49), explosion_event (tag 52). */
+/** Event table of the Bulky Bob-omb: dead_event, explosion_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_EXPLOSION_EVENT, explosion_event},

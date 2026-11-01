@@ -551,7 +551,7 @@ EVT_END()
 /**
  * Fires a Bullet Bill from the Bill Blaster's main cannon: LW(12) = 1 plays a longer charge-up first.
  * After a pause the cannon flashes (KTA_A_1) and the shot sound plays;
- * the smoke size depends on whether the Blaster is Huge (status 10) or Tiny (status 11).
+ * the smoke size depends on whether the Blaster is Huge (STATUS_HUGE) or Tiny (STATUS_TINY).
  * The camera shakes and a new Bullet Bill (entry_killer) is spawned with the Blaster's status copied
  * (killer_copy_status), flies to the free position LW(0), LW(2) at y = 10 and becomes its home position.
  * A charged shot gives it status 16.

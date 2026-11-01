@@ -1,4 +1,5 @@
 // The Great Tree (mri) battle unit: Goomba (kuriboo): its parts, defence/status tables, and attack events.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"

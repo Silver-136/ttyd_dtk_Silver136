@@ -233,7 +233,7 @@ EVT_END()
 /** Exit of this room: the west door to aji_01. */
 static BeroEntry bero_entry_data[] = {
     {
-        ("w_bero"), // hitName
+        "w_bero", // hitName
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
@@ -244,7 +244,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "aji_01", // nextMapName
-        ("e_bero_5"), // nextBeroName
+        "e_bero_5", // nextBeroName
         5, // enterAnimeType
         5, // exitAnimeType
         w_door_close, // enterAnimeArg

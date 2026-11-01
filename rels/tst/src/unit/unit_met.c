@@ -199,7 +199,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Event table of the Buzzy Beetle:
- * the reaction when it is hurt while attacking (tags 25-36), nothing special on a First Strike.
+ * the reaction when it is hurt while attacking, nothing special on a First Strike.
  */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},

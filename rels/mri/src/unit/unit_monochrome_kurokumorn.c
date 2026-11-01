@@ -1,5 +1,6 @@
 // The Great Tree (mri) battle unit: Dark Puff (monochrome_kurokumorn): its parts, defence/status tables, and attack
 // events.
+// No formation or script of this REL uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -429,7 +430,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
-/** Event table of the Dark Puff: counter_event (tag 42), dmg_first_attack_pos (tag 48). */
+/** Event table of the Dark Puff: counter_event, dmg_first_attack_pos. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ELECTRIC_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

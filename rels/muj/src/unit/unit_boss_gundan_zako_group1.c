@@ -291,7 +291,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "Z_1"},
 };
 
-/** Event table of X-Nauts: damage_event_kaiten_hammer (tag 18), dead_event (tag 49). */
+/** Event table of X-Nauts: damage_event_kaiten_hammer (tag 18), dead_event. */
 static BattleDataEntry data_table[] = {
     {18, damage_event_kaiten_hammer},
     {UNIT_DATA_DEAD_EVENT, dead_event},

@@ -212,8 +212,8 @@ static PoseTableEntry pose_table_patakuri[] = {
 };
 
 /**
- * Event table of the Paragoomba: being knocked out of the air (dmg_fall_event, tag 14) and the First Strike
- * reaction (patakuri_dmg_first_attack_pos, tag 48).
+ * Event table of the Paragoomba: being knocked out of the air (dmg_fall_event) and the First Strike
+ * reaction (patakuri_dmg_first_attack_pos).
  */
 static BattleDataEntry data_table_patakuri[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},

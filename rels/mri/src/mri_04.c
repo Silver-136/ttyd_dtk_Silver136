@@ -509,8 +509,8 @@ EVT_END()
 /**
  * Map init script of mri_04, the small side room:
  * sets up the Puni, the planter, the Ultra Shroom chest and the second chest, plays the room's water animations,
- * and starts the Ms. Mowz scenes (black silhouette at story 12, her meeting with Mario at 12_02)
- * and drops the Red Key from story 13 on.
+ * and starts the Ms. Mowz scenes (black silhouette at story STG2_12_RIVAL_ARRIVAL, her meeting with Mario at STG2_12_02_PUNI_ELDER_IMPRISONED)
+ * and drops the Red Key from story STG2_13_MS_MOWZ on.
  */
 EVT_BEGIN(mri_04_init_evt)
     CALL(evt_puni_mem_init)

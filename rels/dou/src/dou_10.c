@@ -1,4 +1,4 @@
-// dou_10 (洞窟, Pirate's Grotto): room linking dou_09, dou_06 and dou_11 with a wave-dodging section and a spear trap (story 248 to 249).
+// dou_10 (洞窟, Pirate's Grotto): room linking dou_09, dou_06 and dou_11 with a wave-dodging section and a spear trap (story STG5_22_FLOODGATE_HANDLE to STG5_29_WAVE_DODGING).
 // Bobbing platforms.
 
 #include "battle/battle_unit.h"

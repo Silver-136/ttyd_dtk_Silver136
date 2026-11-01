@@ -65,7 +65,6 @@ static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 static USER_FUNC(yami_view);
-extern s32 envSetYami[];
 
 EvtWord custom_door_dark2[34];
 EvtWord custom_door_light2[30];
