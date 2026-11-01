@@ -10,6 +10,13 @@
 
 typedef void (*OffscreenCallback)(CameraId cameraId, void* param);
 
+// A fade type written as a retail number: the demo has no FADE_IN_SPOT2 pair (5, 6), so its later types are 2 lower.
+#if VERSION <= VERSION_DEMO_US
+#define FADE_NUM(n) ((n) >= 7 ? (n) - 2 : (n))
+#else
+#define FADE_NUM(n) (n)
+#endif
+
 #if VERSION <= VERSION_DEMO_US
 // Fade types of the demo (names from LLCOOLT's tree): it has no FADE_IN_SPOT2/FADE_OUT_SPOT2.
 typedef enum FadeType {

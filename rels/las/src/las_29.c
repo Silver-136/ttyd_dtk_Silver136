@@ -1131,7 +1131,7 @@ CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 
         CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
         CALL(evt_fade_entry, FADE_OUT_WHITE, 1, 255, 255, 255)
         WAIT_MS(100)
-        CALL(evt_fade_entry, 16, 1, 255, 255, 255)
+        CALL(evt_fade_entry, FADE_NUM(16), 1, 255, 255, 255)
         WAIT_MS(100)
     END_LOOP
     SET_VALUE(LW(0), 0)
@@ -1182,7 +1182,7 @@ CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 
     END_IF
     CALL(evt_fade_entry, FADE_OUT_WHITE, 1, 255, 255, 255)
     WAIT_MS(100)
-    CALL(evt_fade_entry, 16, 1, 255, 255, 255)
+    CALL(evt_fade_entry, FADE_NUM(16), 1, 255, 255, 255)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 255, 0, 200)
     LABEL(4)
     CALL(evt_sub_intpl_msec_get_value)

@@ -3670,7 +3670,7 @@ EVT_BEGIN(usu_00_koopa_second_evt)
         SET_VALUE(GF(0), 1)
         CALL(evt_snd_sfxon, STRING("SFX_KUPPA_ITIKORO_EXPLOSION1"), 0)
     END_INLINE_EVENT
-    CALL(evt_fade_entry, 10, 600, 255, 255, 255)
+    CALL(evt_fade_entry, FADE_NUM(10), 600, 255, 255, 255)
     CALL(evt_fade_end_wait)
     WAIT_MS(3000)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_49_BOWSER_TWILIGHT_TOWN_2)

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "version.h"
+
 #include "driver/effdrv.h"
 #include "evt/evt_word.h"
 #include <dolphin/mtx.h>
@@ -56,6 +58,16 @@ typedef enum ItemEntryType {
     ITEM_TYPE_SPREAD_TIMED = 6,             // + ITEM_FLAG2_SPREAD, 5000 ms
     ITEM_TYPE_SCATTER_NO_PICKUP_TIMED_LAND = 7, // 5000 ms counted from landing
     ITEM_TYPE_DROP = 8,                     // enemy and coin drops: 8000 ms from landing
+#if VERSION <= VERSION_DEMO_US // the demo has no type 9
+    ITEM_TYPE_DROP_REPLACEABLE = 9,        // + ITEM_FLAG_REPLACEABLE
+    ITEM_TYPE_DROP_LONG = 10,               // recovered items: 20000 ms from landing
+    ITEM_TYPE_DROP_LONG_REPLACEABLE = 11,
+    ITEM_TYPE_FALL = 12,
+    ITEM_TYPE_FALL_NO_PICKUP = 13,
+    ITEM_TYPE_POP = 14,
+    ITEM_TYPE_STILL = 15,
+    ITEM_TYPE_STILL_NO_TOUCH = 16,          // + ITEM_FLAG_NO_TOUCH_GET
+#else
     ITEM_TYPE_DROP_LOST_BADGE = 9,          // + ITEM_FLAG_LOST_BADGE_TO_SHOP
     ITEM_TYPE_DROP_REPLACEABLE = 10,        // + ITEM_FLAG_REPLACEABLE
     ITEM_TYPE_DROP_LONG = 11,               // recovered items: 20000 ms from landing
@@ -65,6 +77,7 @@ typedef enum ItemEntryType {
     ITEM_TYPE_POP = 15,
     ITEM_TYPE_STILL = 16,
     ITEM_TYPE_STILL_NO_TOUCH = 17,          // + ITEM_FLAG_NO_TOUCH_GET
+#endif
 } ItemEntryType;
 
 // ItemEntry.mode (itemModeChange); descriptive names from itemMain / itemseq_Bound

@@ -1214,7 +1214,7 @@ EVT_BEGIN(sys_01_init_evt)
     CALL(evt_party_set_pos, 0, 0, 0, 0)
     CALL(evt_cam3d_evt_set, 0, 0, 500, 0, 0, 0, 0, EASING_SINE_IN_OUT)
     CALL(bg)
-    CALL(evt_fade_entry, 32, 0, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_NUM(32), 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), 0)
@@ -1272,7 +1272,7 @@ EVT_BEGIN(evt_start)
             END_IF
         END_IF
     END_IF
-    CALL(evt_fade_entry, 35, 0, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_NUM(35), 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(start)
 #if VERSION >= VERSION_US

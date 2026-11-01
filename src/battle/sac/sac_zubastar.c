@@ -1112,9 +1112,9 @@ EVT_BEGIN(marioAttackEvent_ZubaStar)
     CALL(sac_ac_help_off)
     CALL(sac_handbeat_end)
     BEGIN_SIBLING_EVENT
-        CALL(evt_fade_entry, 17, 1, 255, 255, 255)
+        CALL(evt_fade_entry, FADE_NUM(17), 1, 255, 255, 255)
         WAIT_MS(100)
-        CALL(evt_fade_entry, 16, 250, 255, 255, 255)
+        CALL(evt_fade_entry, FADE_NUM(16), 250, 255, 255, 255)
     END_SIBLING_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_btl_camera_shake_h, 0, 10, 0, 60, 0)

@@ -644,7 +644,7 @@ USER_FUNC(fade_alpha) {
     s32 b = evtGetValue(event, args[2]);
     s32 a = evtGetValue(event, args[3]);
 
-    fadeEntry(13, 0, (GXColor){r, g, b, a});
+    fadeEntry(FADE_NUM(13), 0, (GXColor){r, g, b, a});
     return EVT_RETURN_DONE;
 }
 

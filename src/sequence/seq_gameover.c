@@ -429,7 +429,7 @@ void seq_gameOverMain(SequenceWork* work) {
             break;
         case 3: {
             GXColor color = {0, 0, 0, 255};
-            fadeEntry(31, 200, color);
+            fadeEntry(FADE_NUM(31), 200, color);
             work->state++;
             break;
         }
@@ -462,7 +462,7 @@ psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
             }
             {
                 GXColor color = {0, 0, 0, 255};
-                fadeEntry(36, 0, color);
+                fadeEntry(FADE_NUM(36), 0, color);
             }
 #if VERSION > VERSION_DEMO_US
             psndBGMOff_f_d(PSND_FADEOUT, 4000, FALSE);

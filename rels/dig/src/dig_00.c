@@ -476,7 +476,7 @@ EVT_BEGIN(dig_00_init_evt)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(sound_fade)
-        CALL(evt_fade_entry, 21, 1000, 255, 255, 255)
+        CALL(evt_fade_entry, FADE_NUM(21), 1000, 255, 255, 255)
         CALL(evt_fade_end_wait)
         CALL(evt_fade_set_mapchange_type, 1, 21, 0, -1, -1)
         CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)

@@ -555,6 +555,19 @@ typedef enum BattlePoseType {
     POSE_TYPE_ITEM = 52, // receives or uses an item
     POSE_TYPE_DANGER = 56,
     POSE_TYPE_PERIL = 57,
+#if VERSION <= VERSION_DEMO_US // the demo has no kissed poses
+    POSE_TYPE_ESCAPE_STUMBLE = 58, // failed escape
+    POSE_TYPE_ESCAPE_RECOVER = 59,
+    POSE_TYPE_HAPPY_HEART = 60,
+    POSE_TYPE_HAPPY_FLOWER = 61,
+    POSE_TYPE_ZERO_GRAVITY = 62, // cannot act in zero gravity
+    POSE_TYPE_TALK = 63,
+    POSE_TYPE_APPEAL = 64,
+    POSE_TYPE_COMMAND = 65, // command selection
+    POSE_TYPE_SHELL_SHIELD_OPEN = 66,
+    POSE_TYPE_ACTION = 67, // fallback of 40..69
+    POSE_TYPE_MAX = 68,    // types are below this; a larger table entry ends the search
+#else
     POSE_TYPE_KISSED_CHRISTINE = 58, // Goombella's kiss
     POSE_TYPE_KISSED_CHUCHURINA = 59, // Ms. Mowz's kiss
     POSE_TYPE_ESCAPE_STUMBLE = 60, // failed escape
@@ -568,6 +581,7 @@ typedef enum BattlePoseType {
     POSE_TYPE_SHELL_SHIELD_OPEN = 68,
     POSE_TYPE_ACTION = 69, // fallback of 40..69
     POSE_TYPE_MAX = 70,    // types are below this; a larger table entry ends the search
+#endif
 } BattlePoseType;
 
 typedef struct PoseTableEntry {
@@ -1217,9 +1231,17 @@ enum {
     PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET = 4194304,
     BTL_POSE_STAY = 43,
     PART_ATTR_UNTATTLEABLE = 524288,
+#if VERSION <= VERSION_DEMO_US
+    BTL_POSE_TALK = 63,
+#else
     BTL_POSE_TALK = 65,
+#endif
     PART_ATTR_NOT_TARGETABLE = 65536,
+#if VERSION <= VERSION_DEMO_US
+    BTL_POSE_STAY_DEFAULT = 67,
+#else
     BTL_POSE_STAY_DEFAULT = 69,
+#endif
     BATTLE_PHASE_INIT = 67108864,
     BATTLE_PHASE_BEFORE_PLAYER = 67108865,
     BATTLE_PHASE_PLAYER = 67108866,
