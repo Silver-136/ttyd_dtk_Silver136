@@ -126,6 +126,8 @@ EVT_BEGIN(peach_evt_syawa_main)
     ELSE
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_2"), STRING("P_T_2"))
     END_IF
+
+    // She comments on the shower (peach_aji_35, or 35_1 when she has already showered).
     IF_INT_EQUAL(GSWF_AJI_15_PEACH_SHOWER_EXAMINED, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_35"), 0, STRING("mario"))
     ELSE
@@ -143,6 +145,7 @@ EVT_BEGIN(peach_evt_syawa_main)
             CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(48.0f))
         END_IF
     END_IF
+
     // Use the cached or explicitly adjusted X value; the preceding moves do not refresh these locals.
     IF_INT_GREATER_OR_EQUAL(LW(0), 25)
         CALL(evt_mario_mov_pos2, 25, -41, FLOAT(48.0f))
@@ -175,6 +178,7 @@ EVT_BEGIN(peach_evt_syawa_main)
             GOTO(21)
         END_IF
     END_INLINE_EVENT
+
     // The child supplies height through GW(0), while this interpolation supplies depth.
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -45, -15, 600)
     LABEL(10)
@@ -218,6 +222,7 @@ EVT_BEGIN(peach_evt_syawa_main)
         GOTO(0)
     END_IF
     WAIT_MS(500)
+
     // Retain the steam event ID so emission can be deleted after the shower closes.
     SPAWN_EVENT_GET_ID(PTR(peach_evt_yuge), LW(9))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -242,6 +247,8 @@ EVT_BEGIN(peach_evt_syawa_main)
         GOTO(1)
     END_IF
     WAIT_MS(300)
+
+    // She comments on the shower (peach_aji_36 and 37) and changes clothes.
     CALL(evt_msg_print, 0, STRING("peach_aji_36"), 0, STRING("mario"))
     WAIT_MS(500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_SHOWER1"), -40, 0, -30, 0)
@@ -354,6 +361,7 @@ EVT_BEGIN(peach_evt_syawa_main)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_2"), STRING("P_T_2"))
     CALL(evt_msg_print, 0, STRING("peach_aji_37"), 0, STRING("mario"))
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_1"), STRING("P_T_1"))
+
     // The music returns, the shower-examined flag is set and Peach gets control back.
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))

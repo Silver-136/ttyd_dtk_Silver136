@@ -663,6 +663,7 @@ EVT_BEGIN(demo_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_DEMO1"))
 #endif
     CALL(evt_snd_bgm_scope, 0, 1)
+
     // The narrator opens the story ("the story of the Thousand-Year Door") while the book grows on screen.
     BEGIN_INLINE_EVENT_GET_ID(LW(9))
         WAIT_MS(4000)
@@ -685,6 +686,7 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, PTR(buf), 0, 0)
     CALL(evt_msg_print_add, 0, STRING("op_book_04"))
     CALL(demo_winonoff, 0)
+
     // Wait for the first two narration lines to finish.
     LOOP(0)
         IS_EVENT_RUNNING(LW(9), LW(0))
@@ -693,6 +695,7 @@ EVT_BEGIN(demo_evt)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // The book cover opens, then the narrator describes the big, happy town that once stood here.
     CALL(next)
     CALL(evt_snd_sfxon_, STRING("SFX_EVT_OPN_BOOK_OPEN1"), 0)
@@ -706,6 +709,7 @@ EVT_BEGIN(demo_evt)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
     // Narration of the town and the cataclysm that struck it.
     WAIT_MS(1000)
     CALL(demo_winonoff, 1)
@@ -762,6 +766,7 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, PTR(buf), 0, 0)
     CALL(evt_msg_print_add, 0, STRING("op_book_12"))
     CALL(demo_winonoff, 0)
+
     // The second page turns: many moons pass and a new town is built on the site.
     CALL(evt_img_set_paper, STRING("img2"), STRING("OFF_d_meku_right"))
     CALL(evt_img_clear_virtual_point, STRING("img2"))
@@ -789,6 +794,7 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, PTR(buf), 0, 0)
     CALL(evt_msg_print_add, 0, STRING("op_book_16"))
     CALL(demo_winonoff, 0)
+
     // The third page turns: rumors of an ancient city and treasure under the town, the tale of Rogueport.
     CALL(evt_img_set_paper, STRING("img3"), STRING("OFF_d_meku_right"))
     CALL(evt_img_clear_virtual_point, STRING("img3"))
@@ -819,6 +825,8 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, PTR(buf), 0, 0)
     CALL(evt_msg_print_add, 0, STRING("op_book_21"))
     CALL(demo_winonoff, 0)
+
+    // The fourth page turns: the narrator says the Thousand-Year Door starts here.
     CALL(evt_img_set_paper, STRING("img4"), STRING("OFF_d_meku_right"))
     CALL(evt_img_clear_virtual_point, STRING("img4"))
     CALL(evt_img_alloc_capture, STRING("img4"), 0, 0, 1, 124, 0, 386, 480)
@@ -842,6 +850,7 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, PTR(buf), 0, 0)
     CALL(evt_msg_print_add, 0, STRING("op_book_24"))
     CALL(demo_winonoff, 0)
+
     // The storybook scene ends; the Rogueport square is shown, with Peach, the mysterious person and the box
     // still hidden.
     CALL(evt_bg_disp_onoff, 1)
@@ -875,12 +884,15 @@ EVT_BEGIN(demo_evt)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // The page pictures are freed.
     CALL(evt_img_free_capture, STRING("img4"), 0)
     CALL(evt_img_release, STRING("img4"))
     DELETE_EVENT(GW(0))
     CALL(evt_paper_delete, STRING("OFF_d_meku_right"))
     LABEL(100)
+
+    // New music; Peach strolls in and complains that Toadsworth is always watching over her.
     WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO2"))
@@ -898,6 +910,7 @@ EVT_BEGIN(demo_evt)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 200, 837, 0, 200, 437, 4000, EASING_SINE_IN_OUT)
     WAIT_MS(300)
+
     // Peach looks around the odd town.
     LOOP(4)
         CALL(evt_npc_reverse_ry, STRING("peach"))
@@ -906,6 +919,8 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print, 0, STRING("op_02"), 0, 0)
     WAIT_MS(300)
     WAIT_MS(1000)
+
+    // A mysterious figure calls to Peach; she turns to him in surprise and he offers his wares.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("op_03"), 0, STRING("nazo"))
     WAIT_MS(300)
@@ -930,6 +945,7 @@ EVT_BEGIN(demo_evt)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("op_06"), 0, STRING("peach"))
     WAIT_MS(300)
+
     // Peach hesitates, gets nervous, then notices the pretty box.
     CALL(evt_npc_set_tribe, STRING("peach"), STRING("デモピーチ不安"))
     WAIT_MS(1000)
@@ -945,6 +961,9 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print, 0, STRING("op_07"), 0, STRING("peach"))
     WAIT_MS(300)
     WAIT_MS(500)
+
+    // The box floats up as the merchant says it holds a map to a legendary treasure and only opens for the
+    // right person.
     CALL(evt_npc_get_position, STRING("hako"), LW(7), LW(8), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 100, 1000)
     LOOP(0)
@@ -965,6 +984,8 @@ EVT_BEGIN(demo_evt)
     CALL(evt_npc_set_tribe, STRING("peach"), STRING("デモピーチ不安"))
     CALL(evt_msg_print, 0, STRING("op_09"), 0, STRING("peach"))
     WAIT_MS(1000)
+
+    // The camera pulls in; the merchant says the box will open for Peach, and she agrees to try.
     CALL(evt_cam3d_evt_set, -450, 250, 1030, -135, 100, 482, 0, EASING_SINE_IN_OUT)
     CALL(evt_npc_flag_onoff, 1, STRING("peach"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 1, STRING("nazo"), NPC_FLAG_INSTANT_TURN)
@@ -979,6 +1000,7 @@ EVT_BEGIN(demo_evt)
     WAIT_MS(300)
     CALL(evt_npc_status_onoff, 0, STRING("peach"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_status_onoff, 0, STRING("nazo"), NPC_STATUS_FACE_MOVE_DIR)
+
     // Peach steps up and takes the box, which follows the carrying characters while she walks.
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
@@ -1031,6 +1053,7 @@ EVT_BEGIN(demo_evt)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
+
     // The merchant steps away and back while Peach prepares to open the box.
     CALL(evt_npc_get_position, STRING("nazo"), LW(0), LW(1), LW(2))
     ADD(LW(0), 20)
@@ -1041,11 +1064,14 @@ EVT_BEGIN(demo_evt)
     SUBTRACT(LW(0), 20)
     CALL(evt_npc_move_position, STRING("nazo"), LW(0), LW(2), 0, FLOAT(40.0f), 1)
     WAIT_MS(300)
+
+    // Peach says she will try to open it.
     CALL(evt_npc_set_ry, STRING("hako"), 225)
     CALL(evt_cam3d_evt_set, -90, 89, 739, -90, 44, 442, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("op_12"), 0, STRING("peach"))
     WAIT_MS(300)
+
     // The camera moves in; the box opens and light bursts out.
     CALL(evt_cam3d_evt_set, -85, 50, 590, -85, 28, 442, 15000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -1062,6 +1088,7 @@ EVT_BEGIN(demo_evt)
         CALL(evt_eff64, STRING("eff2"), STRING("radiation_n64"), 3, LW(0), LW(1), LW(2), FLOAT(0.5f), 0, 0, 0, 0, 0, 0, 0)
         CALL(eff_cam1)
     END_INLINE_EVENT
+
     // Peach reacts to the glow.
     BEGIN_INLINE_EVENT
         WAIT_MS(300)

@@ -286,6 +286,7 @@ const char* hosi_name[] = {
  */
 EVT_BEGIN(hosi_sw_check)
     SET_VALUE(LW(0), 0)
+
     // Compare the seven star switches against the solution (1, 3, 4 and 6 on, the others off).
     IF_INT_EQUAL(LSWF_LAS_20_STAR_02_LIT, 1)
         ADD(LW(0), 1)
@@ -308,6 +309,7 @@ EVT_BEGIN(hosi_sw_check)
     IF_INT_EQUAL(LSWF_LAS_20_STAR_08_LIT, 0)
         ADD(LW(0), 1)
     END_IF
+
     // Solved: controls off and the camera looks up at the stars.
     IF_INT_EQUAL(LW(0), 7)
         CALL(evt_mario_key_onoff, 0)
@@ -361,6 +363,7 @@ EVT_BEGIN(hosi_sw_check)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
             ADD(LW(0), 1)
         END_LOOP
+
         // The stars flash in a running light, the room quakes, and the switches vanish.
         CALL(evt_snd_sfxon, STRING("SFX_STG8_STAR_LIGHTUP2"), 0)
         WAIT_MS(100)
@@ -374,6 +377,7 @@ EVT_BEGIN(hosi_sw_check)
         CALL(evt_mobj_delete, STRING("hosi_06_sw"))
         CALL(evt_mobj_delete, STRING("hosi_07_sw"))
         CALL(evt_mobj_delete, STRING("hosi_08_sw"))
+
         // The story advances to the solved star puzzle and Mario regains control.
         SET_VALUE(GSW_STORY_PROGRESS, STG8_11_STAR_PUZZLE)
         CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)

@@ -709,6 +709,7 @@ static EVT_BEGIN(attack_punch_event)
         END_IF
         GOTO(99)
     END_IF
+
     // Declares the attack, pays its cost and turns to face the target while the camera zooms in.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -720,6 +721,7 @@ static EVT_BEGIN(attack_punch_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
+
     // The four floating hands are pulled in to their fighting positions, and the Wizzerd drifts to just beside the
     // target with a swish.
     CALL(set_hand_dest, UNIT_ID_SELF, 2, FLOAT(-16.0f), FLOAT(29.0f), FLOAT(-5.0f))
@@ -740,6 +742,7 @@ static EVT_BEGIN(attack_punch_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("MAH_Z_2"))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("MAH_Z_2"))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 5, STRING("MAH_Z_2"))
+
     // Its hands blur (a motion blur is switched on for each of the four) as the barrage begins.
     SET_VALUE(LW(10), 2)
     LOOP(4)
@@ -748,6 +751,7 @@ static EVT_BEGIN(attack_punch_event)
         ADD(LW(10), 1)
     END_LOOP
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+
     // For about 50 frames the four hands flail at random around the target, jabbing in and out.
     LOOP(25)
         SET_VALUE(LW(10), 2)
@@ -768,6 +772,7 @@ static EVT_BEGIN(attack_punch_event)
         END_LOOP
         WAIT_FRAMES(2)
     END_LOOP
+
     // The blur is switched off and the hands return to their resting positions.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MAH_S_1"))
     CALL(set_hand_dest, UNIT_ID_SELF, 2, FLOAT(-16.0f), FLOAT(29.0f), FLOAT(-5.0f))
@@ -779,6 +784,7 @@ static EVT_BEGIN(attack_punch_event)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(10), kMotionBlur)
         ADD(LW(10), 1)
     END_LOOP
+
     // Checks the outcome of the hit: a miss, dodge or guard goes to the no-damage branch; a connecting hit applies
     // the Action Command defence result and deals the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
@@ -806,12 +812,14 @@ static EVT_BEGIN(attack_punch_event)
         LABEL(90)
         WAIT_FRAMES(30)
         GOTO(98)
+
         // Hit branch: the defence result is read and the damage is applied, then another short pause.
         LABEL(91)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         WAIT_FRAMES(30)
         GOTO(98)
+
         // It drifts back to its home position.
         LABEL(98)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_ATTACK1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -856,6 +864,7 @@ static EVT_BEGIN(attack_enemy_common_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // The Wizzerd and each of its clones start the spell together (the charge sound plays, the casting runs once per
     // clone).
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -870,12 +879,14 @@ static EVT_BEGIN(attack_enemy_common_event)
     SPAWN_EVENT(attack_enemy_common_event_sub1)
     SET_VALUE(LW(15), -2)
     CALL_CHILD(attack_enemy_common_event_sub1)
+
     // Two magic hum sounds, 25 frames apart, play while the spell builds.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_MAGIC2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         WAIT_FRAMES(25)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_MAGIC2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
+
     // Checks the outcome of the hit: a miss, dodge or guard goes to the no-damage branch; a connecting hit applies
     // the Action Command defence result and deals the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
@@ -932,6 +943,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         SET_VALUE(LW(15), -2)
         CALL_CHILD(attack_enemy_common_event_sub_no_hit)
         GOTO(98)
+
         // Hit branch: every bolt (the caster's and each clone's) strikes the target; the defence result is read and
         // the damage is applied.
         LABEL(91)
@@ -949,6 +961,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
+
         // Everyone, clones included, goes back to its wait event.
         LABEL(98)
         CALL(mahorn_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
@@ -1482,6 +1495,7 @@ static EVT_BEGIN(wait_event)
             CALL(btlevtcmd_AnimeChangePoseFromTable, LW(4), 1)
         END_IF
     END_IF
+
     // If the Wizzerd is frozen, asleep or stopped, its four hands hang still in their limp pose.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(13))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_SLEEP, LW(14))
@@ -1493,6 +1507,7 @@ static EVT_BEGIN(wait_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("MAH_Z_2"))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("MAH_Z_2"))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 5, STRING("MAH_Z_2"))
+
         // Otherwise each hand (parts 2 to 5) flickers between its two open-hand poses at random 15 to 30 frame intervals.
     ELSE
         BEGIN_SIBLING_EVENT
@@ -1544,6 +1559,7 @@ static EVT_BEGIN(wait_event)
             GOTO(13)
         END_SIBLING_EVENT
     END_IF
+
     // And each of the four hands drifts back and forth between two floating positions around the body, at its own
     // random pace.
     BEGIN_SIBLING_EVENT

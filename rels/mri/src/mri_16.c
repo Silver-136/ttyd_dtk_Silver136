@@ -269,6 +269,7 @@ EVT_BEGIN(water_shikake)
     CALL(evt_hitobj_onoff, STRING("A_f1_rak_l03"), 1, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_before"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
+
     // The room quakes and the water starts draining with a flowing sound while the camera follows the water
     // level down.
     CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), GW(0))
@@ -288,6 +289,7 @@ EVT_BEGIN(water_shikake)
     END_INLINE_EVENT
     CALL(evt_map_checkanim, STRING("mizu_guru"), LW(0), LW(1))
     WAIT_MS(LW(1))
+
     // The water is gone; the stairs and ledges become solid and a jingle plays.
     DELETE_EVENT(LW(10))
     CALL_CHILD(PTR(cam_shake2))

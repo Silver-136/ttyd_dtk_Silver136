@@ -631,6 +631,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
     END_IF
+
     // The real wizard uses an enemy item if it has one.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -638,6 +639,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+
     // Alone on its side, it splits into copies of itself.
     CALL(mahorn_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -658,6 +660,7 @@ static EVT_BEGIN(attack_event)
         ELSE
 #if VERSION > VERSION_DEMO_US
             LABEL(10)
+
             // Otherwise it rolls for an attack by weight: punch, magic, all-target magic or a support spell.
             SET_VALUE(LW(0), 0)
             ADD(LW(0), 30)
@@ -1119,6 +1122,9 @@ static EVT_BEGIN(attack_punch_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+
+    // Announce the attack; the camera swings to follow it.
+    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -1132,6 +1138,7 @@ static EVT_BEGIN(attack_punch_event)
     CALL(set_hand_dest, UNIT_ID_SELF, 3, FLOAT(16.0f), FLOAT(29.0f), FLOAT(5.0f))
     CALL(set_hand_dest, UNIT_ID_SELF, 4, FLOAT(-16.0f), FLOAT(11.0f), FLOAT(-5.0f))
     CALL(set_hand_dest, UNIT_ID_SELF, 5, FLOAT(16.0f), FLOAT(11.0f), FLOAT(5.0f))
+
     // The wizard hops up beside the target, its four hands blurred white and flailing at random.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -1153,6 +1160,7 @@ static EVT_BEGIN(attack_punch_event)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(10), kMotionBlur)
         ADD(LW(10), 1)
     END_LOOP
+
     // The hands slam into the target together.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     LOOP(25)
@@ -1184,6 +1192,7 @@ static EVT_BEGIN(attack_punch_event)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(10), kMotionBlur)
         ADD(LW(10), 1)
     END_LOOP
+
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
@@ -1210,18 +1219,22 @@ static EVT_BEGIN(attack_punch_event)
         LABEL(90)
         WAIT_FRAMES(30)
         GOTO(98)
+
         // The attack connects.
         LABEL(91)
+
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         WAIT_FRAMES(30)
         GOTO(98)
+
         // Return to its place.
         LABEL(98)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_ATTACK1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, 6, FLOAT(0.0009765625f))
+
         // It hops back to its place and the hands settle.
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
         WAIT_FRAMES(45)
@@ -1254,6 +1267,7 @@ static EVT_BEGIN(attack_enemy_common_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // The wizard and each of its copies charge up with a glowing flash.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(mahorn_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
@@ -1266,6 +1280,7 @@ static EVT_BEGIN(attack_enemy_common_event)
     SET_VALUE(LW(15), LW(14))
     SPAWN_EVENT(attack_enemy_common_event_sub1)
     SET_VALUE(LW(15), -2)
+
     // The wizard and its copies cast with their hands and a magic orb flies at the target.
     CALL_CHILD(attack_enemy_common_event_sub1)
     BEGIN_SIBLING_EVENT
@@ -1273,6 +1288,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         WAIT_FRAMES(25)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_MAGIC2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
+
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
@@ -1328,6 +1344,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         SET_VALUE(LW(15), -2)
         CALL_CHILD(attack_enemy_common_event_sub_no_hit)
         GOTO(98)
+
         // The attack connects.
         LABEL(91)
         CALL(mahorn_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
@@ -1340,11 +1357,13 @@ static EVT_BEGIN(attack_enemy_common_event)
         SET_VALUE(LW(15), LW(14))
         SPAWN_EVENT(attack_enemy_common_event_sub_hit)
         SET_VALUE(LW(15), -2)
+
         // The orbs strike the target.
         CALL_CHILD(attack_enemy_common_event_sub_hit)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
+
         // Wrap up the attack.
         LABEL(98)
         CALL(mahorn_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
@@ -1925,6 +1944,7 @@ static EVT_BEGIN(wait_event)
             CALL(btlevtcmd_AnimeChangePoseFromTable, LW(4), 1)
         END_IF
     END_IF
+
     // If asleep, confused or dizzy, the four hands hold still.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(13))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_SLEEP, LW(14))

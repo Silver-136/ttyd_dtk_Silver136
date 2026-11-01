@@ -570,18 +570,22 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+
+    // It announces the attack and turns to face its target.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // Wind-up: it pulls its arm back (KRN_A_1) and then forward (KRN_A_2).
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_2"))
     WAIT_MS(250)
+
     // The throw: a bone (part 2) leaves its hand and spins through the air all the way.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_SEND_GROUP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_BONE_THROW2"), EVT_NULLPTR, 0, LW(15))
@@ -600,6 +604,7 @@ static EVT_BEGIN(normal_attack_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // Decide now whether the bone will miss, be blocked or hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -620,6 +625,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // The bone misses: the target dodges as it flies past, and it lands on the stage floor beyond.
     LABEL(90)
     BEGIN_SIBLING_EVENT
@@ -654,6 +660,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     CALL(evt_snd_sfxoff, LW(15))
     GOTO(98)
+
     // The bone hits: it drops on the target, the Action Command defence result is applied, damage is dealt
     // and the bone bounces back.
     LABEL(91)
@@ -672,6 +679,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(2.0f), FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     GOTO(98)
+
     // The bone stops spinning and the part is switched back on.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -679,6 +687,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
     WAIT_FRAMES(10)
+
     // The Dry Bones turns back to face forward and returns to idling.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -760,6 +769,7 @@ static EVT_BEGIN(link_attack_event_sub)
     WAIT_MS(250)
     CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, UNIT_WORK_LINK_BONE_COUNT, 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LINK_BONE_COUNT, LW(13))
+
     // The throw: the bone part leaves its hand and spins through the air all the way.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_SEND_GROUP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_BONE_THROW3"), EVT_NULLPTR, 0, LW(15))
@@ -778,6 +788,7 @@ static EVT_BEGIN(link_attack_event_sub)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // Only the third bone of the volley decides the real hit; if an earlier bone already hit, the later ones
     // hit as well.
     IF_INT_EQUAL(LW(13), 3)
@@ -791,6 +802,7 @@ static EVT_BEGIN(link_attack_event_sub)
             GOTO(91)
         END_IF
     END_IF
+
     // Branch on the pre-check result: miss or block, hit, or nothing.
     SWITCH(LW(11))
         CASE_OR_EQUAL(4)
@@ -810,6 +822,7 @@ static EVT_BEGIN(link_attack_event_sub)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // The bone misses: the target dodges as it flies past, and it lands on the stage floor beyond.
     LABEL(90)
     BEGIN_SIBLING_EVENT
@@ -844,6 +857,7 @@ static EVT_BEGIN(link_attack_event_sub)
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     CALL(evt_snd_sfxoff, LW(15))
     GOTO(98)
+
     // The bone hits: it drops on the target, the Action Command defence result is applied and damage is
     // dealt, then the bone bounces back.
     LABEL(91)
@@ -866,6 +880,7 @@ static EVT_BEGIN(link_attack_event_sub)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(12), 0, FLOAT(2.0f), FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     GOTO(98)
+
     // The bone stops spinning and the part is switched back on.
     LABEL(98)
     IF_INT_EQUAL(LW(13), 3)
@@ -885,11 +900,13 @@ static EVT_BEGIN(call_friend_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     SET_VALUE(LW(10), 0)
+
     // Six times it tosses up a piece of itself that lands in a growing pile beside it.
     LOOP(6)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_3"))
         WAIT_FRAMES(5)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_4"))
+
         // The pile pulls itself together with a rattling sound.
         WAIT_FRAMES(15)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_SEND_GROUP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -952,11 +969,13 @@ static EVT_BEGIN(call_friend_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 6, STRING("KRN_D_3"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_UNITE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(60)
+
     // The pile stands up as a new skeleton.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 6, STRING("KRN_D_4"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_UNITE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_S_1"))
+
     // A Dull Bones joins the battle where the pile stood and inherits the caller's size status.
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_honenoko), 0)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 6, kHidden | kNoShadow)

@@ -1624,6 +1624,7 @@ EVT_BEGIN(evt_mapwrite)
         CALL(evt_mario_set_pose, STRING("M_I_N"))
         CALL(evt_cam3d_evt_set, 0, 102, 300, 0, 110, -250, 2000, EASING_SINE_IN_OUT)
     END_IF
+
     // The Magical Map appears over Mario's head with the wave, orb and map effects.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 15)
@@ -1644,6 +1645,7 @@ EVT_BEGIN(evt_mapwrite)
     WAIT_MS(200)
     CALL(evt_eff, STRING("map_map"), STRING("treasure_map"), 0, 0, -1000, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
+
     // In the prologue the camera slowly circles the pedestal while the Thousand-Year Door flickers in and out.
     IF_INT_EQUAL(GW(15), 0)
         CALL(cam_kaiten_init, 0, 65, 40, 0, 65, -250, -24, 102, -800, 0, 110, -250)
@@ -1727,6 +1729,7 @@ EVT_BEGIN(evt_mapwrite)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
         END_INLINE_EVENT
     END_IF
+
     // The effects brighten and the map rises; a laser shoots from it and the screen flashes white.
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 4000)
     LOOP(0)
@@ -1763,6 +1766,7 @@ EVT_BEGIN(evt_mapwrite)
     CALL(map_disp_onoff, 0)
     WAIT_FRAMES(1)
 #endif
+
     // The Magical Map fills the screen and its paper animation for this Crystal Star plays.
     CALL(evt_paper_entry, STRING("OFF_d_tizu_tex"))
     CALL(evt_img_entry, STRING("img"))
@@ -1927,6 +1931,7 @@ EVT_BEGIN(evt_mapwrite)
         END_IF
     END_LOOP
     WAIT_MS(2000)
+
     // The map closes, the screen fades back in from white and a light falls on Mario.
     CALL(evt_img_release, STRING("img"))
     CALL(evt_eff_softdelete, STRING("tiz_stone"))
@@ -1952,6 +1957,9 @@ EVT_BEGIN(evt_mapwrite)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_eff, 0, STRING("indirect"), 0, LW(0), LW(1), LW(2), 120, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
+
+    // The screen shatters into the item-get view and the message says the location was recorded on the map.
+    // The screen shatters into the item-get view and the message says the location was recorded on the map.
     CALL(tiz_broken)
     CALL(evt_eff_softdelete, STRING("map_wave"))
     CALL(evt_eff_softdelete, STRING("map_ball"))
@@ -1983,6 +1991,7 @@ EVT_BEGIN(evt_mapwrite)
     END_SWITCH
     CALL(map_bgmode_end, STRING("map_itemget"), STRING("map_map"))
     CALL(evt_eff_softdelete, STRING("map_itemget"))
+
     // The magic circle ends, the fog clears and the map drops back into Mario's hands.
     SET_VALUE(GF(11), 1)
     CALL(evt_eff_softdelete, STRING("mahojin"))
@@ -2131,6 +2140,7 @@ EVT_BEGIN(mahojin_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_MAP_KAKAGERU2"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(2000)
+
     // Seen from above, Mario, Goombella and Frankly look around in confusion while fog fills the room.
     CALL(evt_cam3d_evt_set, 0, 634, 421, 0, 58, -270, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pose, STRING("M_I_N"))
@@ -2174,6 +2184,7 @@ EVT_BEGIN(mahojin_event)
     END_INLINE_EVENT
     SPAWN_EVENT(PTR(evt_fogset))
     WAIT_MS(6000)
+
     // Goombella and Frankly face the pedestal and the Magical Map scene plays.
     DELETE_EVENT(LW(11))
     DELETE_EVENT(LW(12))
@@ -2184,6 +2195,8 @@ EVT_BEGIN(mahojin_event)
         CALL(evt_party_set_dir, 1, 90, -1)
     END_INLINE_EVENT
     CALL_CHILD(PTR(evt_mapwrite))
+
+    // They jump onto the pedestal; Goombella asks about the map and the lights, and Frankly thinks it over.
     BEGIN_INLINE_EVENT
         CALL(evt_party_jump_pos, 0, 30, 28, -250, 300, 0, -1000)
     END_INLINE_EVENT
@@ -2194,6 +2207,8 @@ EVT_BEGIN(mahojin_event)
     CALL(evt_msg_print, 0, STRING("mac_0_101"), 0, STRING("extparty"))
     CALL(evt_cam3d_evt_set, 0, 60, 447, 0, 120, -250, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+
+    // Frankly suggests going back to his place to study the map, and Mario nods.
     CALL(evt_msg_print, 0, STRING("mac_0_101_04"), 0, STRING("extparty"))
     CALL(evt_mario_set_pose, STRING("M_Z_1"))
     WAIT_MS(500)
@@ -2205,6 +2220,7 @@ EVT_BEGIN(mahojin_event)
     END_INLINE_EVENT
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(1000)
+
     // Mario receives the star power of the map (Sweet Treat), the room irises out and he returns to Rogueport.
     CALL(evt_pouch_get_starstone, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
@@ -2536,6 +2552,7 @@ EVT_END()
  * and the story becomes STG7_52_THE_PEDESTAL.
  */
 EVT_BEGIN(mahojin_event7)
+    // Mario walks onto the pedestal and Frankly tells him to hold up the last Crystal Star.
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -2552,6 +2569,7 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+
     // The music stops and the magic circle forms; seen from above, a crystal wave rises around Mario.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_sfxon, STRING("SFX_EVT_MAP_KAKAGERU3_1"), 0)
@@ -2570,6 +2588,7 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_eff64, STRING("map_wave"), STRING("crystal_n64"), 6, LW(0), LW(1), LW(2), FLOAT(1.0f), 60, 0, 0, 0, 0, 0, 0)
     CALL(crystal_bgmode, STRING("map_wave"))
     WAIT_MS(2000)
+
     // The seven Crystal Stars are placed on a ring around Mario, invisible at first.
     CALL(evt_cam3d_evt_set, 0, 65, 40, 0, 65, -250, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
@@ -2601,6 +2620,7 @@ EVT_BEGIN(mahojin_event7)
     CALL(starstone_set_alpha, STRING("stone05"), 0)
     CALL(starstone_set_alpha, STRING("stone06"), 0)
     CALL(starstone_set_alpha, STRING("stone07"), 0)
+
     // The stars spin and fade in as Mario raises his hands, and the camera circles the pedestal.
     BEGIN_INLINE_EVENT
         SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
@@ -2752,6 +2772,7 @@ EVT_BEGIN(mahojin_event7)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
+
     // The stars vanish one by one in bursts of star dust.
     WAIT_MS(14000)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
@@ -2800,6 +2821,7 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_eff64, STRING(""), STRING("stardust_n64"), 0, LW(0), LW(1), LW(2), FLOAT(20.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff64, STRING(""), STRING("stardust_n64"), 2, LW(0), LW(1), LW(2), FLOAT(30.0f), 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1300)
+
     // Seen from above, the stars reappear one by one on a ring around Mario.
     CALL(starstone_setting, STRING("stone01"), 0)
     CALL(starstone_setting, STRING("stone02"), 1)
@@ -2857,6 +2879,8 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_eff64, STRING("sd_7_2"), STRING("stardust_n64"), 2, LW(0), LW(1), LW(2), FLOAT(30.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(stardust_setting, STRING("sd_7_1"), STRING("sd_7_2"))
     WAIT_MS(1000)
+
+    // The room shakes, the partner cries out, and the seven star marks on the Door light up one after another.
     CALL(evt_cam3d_evt_set, 0, 65, 40, 0, 65, -250, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     WAIT_MS(1000)
@@ -2900,6 +2924,7 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_map_playanim, STRING("anm_hosi_7"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, STRING("anm_hosi_7"), LW(0), LW(1))
     WAIT_MS(LW(1))
+
     // The Door glows and pulses, then cracks spread over it as Mario turns to watch.
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 0, 125, 0, 0, 130, -400, 500, EASING_SINE_IN_OUT)
@@ -2930,6 +2955,7 @@ EVT_BEGIN(mahojin_event7)
     END_INLINE_EVENT
     CALL(evt_map_playanim, STRING("anm_hibi"), MAP_ANIM_PLAY_ONCE, 0)
     WAIT_MS(1500)
+
     // Purple smoke pours out and the Thousand-Year Door swings open; the magic circle and the stars fade away.
     BEGIN_INLINE_EVENT
         CALL(evt_eff, STRING("kemuri00"), STRING("mist2"), 0, 50, 40, -580, 20, 10, 0, 0, 0, 0, 0, 0)
@@ -3042,6 +3068,9 @@ EVT_BEGIN(mahojin_event7)
         CALL(starstone_set_position, STRING("stone06"), 0, -1000, 0)
         CALL(starstone_set_position, STRING("stone07"), 0, -1000, 0)
     END_INLINE_EVENT
+
+    // Views of the open Door, then Frankly tells Mario to rescue the princess and the partner urges him on.
+    // Views of the open Door, then Frankly tells Mario to rescue the princess and the partner urges him on.
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, -625, 550, 370, 0, 90, -545, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
@@ -3064,6 +3093,7 @@ EVT_BEGIN(mahojin_event7)
         WAIT_MS(150)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     END_INLINE_EVENT
+
     // Mario jumps down, the open Door becomes the way to the Palace of Shadow, and the music returns.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 300, 0, -1000)

@@ -270,6 +270,7 @@ EVT_END()
  */
 static EVT_BEGIN(song_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // Target: it picks the targets for its song.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -282,9 +283,11 @@ static EVT_BEGIN(song_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+
     // The attack is declared.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
+
     // The map darkens while the Dayzee takes a breath.
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
@@ -299,6 +302,7 @@ static EVT_BEGIN(song_event)
         SUBTRACT(LW(0), 2)
         WAIT_FRAMES(1)
     END_LOOP
+
     // The song begins: music notes float out of the Dayzee for about two seconds.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PANSY_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
@@ -323,6 +327,7 @@ static EVT_BEGIN(song_event)
 #if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
 #endif
+
     // The pre-damage check decides between a dodge and a hit for each target in turn.
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -347,9 +352,11 @@ static EVT_BEGIN(song_event)
         GOTO(97)
         CASE_END
     END_SWITCH
+
     // Miss: the song has no effect on that target (which dodges for some kinds of miss).
     LABEL(90)
     GOTO(97)
+
     // Hit: the song takes effect with the action-command result.
     LABEL(91)
     IF_INT_EQUAL(LW(6), 0)
@@ -378,6 +385,7 @@ static EVT_BEGIN(song_event)
     END_LOOP
     CALL(evt_map_blend_off, 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+
     // The Dayzee goes back to its idle pose.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)

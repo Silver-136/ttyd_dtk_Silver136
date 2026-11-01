@@ -350,6 +350,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // Target: it picks one for its attack; with none, a confused one flusters, otherwise the attack ends.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_gundan_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_chorobon_gundan_attack), LW(3), LW(4))
@@ -357,6 +358,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_chorobon_gundan_attack))
+
     // The attack is declared.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -364,6 +366,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, LW(3), -1)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+
     // The swarm flies up to the target; the pre-damage check decides between a dodge and a hit.
     CALL(chorogun_set_target_id, LW(3))
     CALL(chorogun_approach_target)
@@ -389,10 +392,12 @@ static EVT_BEGIN(attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // Miss: the swarm waits, then breaks off (the target dodges for some kinds of miss).
     LABEL(90)
     WAIT_MS(1000)
     GOTO(98)
+
     // Hit: the Fuzzies dive onto the target in groups, each group bouncing off.
     LABEL(91)
     CALL(chorogun_get_alive_num, LW(15))
@@ -408,6 +413,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         CALL(chorogun_dive_target, 30, LW(6))
         WAIT_FRAMES(30)
+
         // The last group deals the damage.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_gundan_attack))
         IF_INT_EQUAL(LW(14), LW(15))
@@ -424,6 +430,7 @@ static EVT_BEGIN(attack_event)
         WAIT_FRAMES(30)
     END_LOOP
     GOTO(98)
+
     // The swarm flies back to its place.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

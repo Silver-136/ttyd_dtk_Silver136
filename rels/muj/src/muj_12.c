@@ -415,6 +415,7 @@ EVT_END()
 
 static EVT_BEGIN(korutesu_event)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
+
     // Mario enters Cortez's lair and control is taken.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("コルテス"), 46, 35, 25)
@@ -433,6 +434,8 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)
+
+    // Ghostly moaning fills the lair.
     CALL(evt_msg_print, 0, STRING("stg5_dou_21"), 0, 0)
     CALL(evt_cam3d_evt_set, -300, 60, 444, -25, 90, 57, 750, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -447,6 +450,8 @@ static EVT_BEGIN(korutesu_event)
     SPAWN_EVENT(PTR(korutesu_flush))
     CALL_CHILD(PTR(korutesu_apper))
     SET_VALUE(GF(0), 1)
+
+    // Cortez appears and says he has had enough.
     CALL(evt_msg_print, 0, STRING("stg5_dou_22"), 0, STRING("コルテス"))
     BEGIN_INLINE_EVENT
         CALL(evt_env_blur_on, 1, 500)
@@ -460,6 +465,8 @@ static EVT_BEGIN(korutesu_event)
     SET_VALUE(GF(1), 1)
     SPAWN_EVENT(PTR(korutesu_blur))
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED3"))
+
+    // Cortez rages at the intruders.
     CALL(evt_msg_print, 0, STRING("stg5_dou_23"), 0, STRING("コルテス"))
     CALL(evt_npc_set_autotalkpose, STRING("コルテス"), STRING("KRT_S_1"), STRING("KRT_T_2"))
     SET_VALUE(GF(0), 0)
@@ -471,6 +478,7 @@ static EVT_BEGIN(korutesu_event)
     WAIT_MS(250)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_npc_set_battle_info, STRING("コルテス"), 4)
+
     // The battle with Cortez starts.
     CALL(evt_npc_battle_start, STRING("コルテス"))
     CALL(evt_npc_wait_battle_end)
@@ -487,6 +495,8 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_npc_set_autotalkpose, STRING("コルテス"), STRING("KRT_S_1"), STRING("KRT_T_3"))
     WAIT_FRAMES(1)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+
+    // After the battle Cortez cries out in defeat.
     CALL(evt_msg_print, 0, STRING("stg5_dou_25"), 0, STRING("コルテス"))
     CALL(evt_npc_set_autotalkpose, STRING("コルテス"), STRING("KRT_S_1"), STRING("KRT_T_2"))
     SET_VALUE(GF(0), 1)
@@ -518,6 +528,8 @@ static EVT_BEGIN(korutesu_event)
     SPAWN_EVENT(PTR(korutesu_rotate2))
     SPAWN_EVENT(PTR(korutesu_large))
     WAIT_MS(1500)
+
+    // Cortez laughs, then notices Mario is not after his treasure.
     CALL(evt_msg_print, 0, STRING("stg5_dou_27"), 0, STRING("コルテス"))
     CALL(evt_cam3d_evt_set, -20, 125, 505, -20, 80, 7, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -552,6 +564,8 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_cam3d_evt_set, -20, 125, 505, -20, 80, 7, 700, EASING_SINE_IN_OUT)
     CALL(evt_npc_glide_position, STRING("コルテス"), 46, 35, 35, 0, FLOAT(120.0f), 0, 11, 0)
     WAIT_MS(1000)
+
+    // Cortez gives up the stone and it floats over to Mario.
     CALL(evt_msg_print, 0, STRING("stg5_dou_29"), 0, STRING("コルテス"))
     WAIT_MS(1000)
     SET_VALUE(LW(10), STRING("stone"))
@@ -568,6 +582,7 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     SET_VALUE(LW(0), 5)
     SET_VALUE(LW(1), LW(10))
+
     // The story advances and the Crystal Star is awarded.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
 #if VERSION <= VERSION_DEMO_US
@@ -634,6 +649,7 @@ EVT_BEGIN(kosho_event)
     WAIT_MS(1000)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_STG5_KORTESS1"))
+
     // Cortez appears, moaning, and Flavio shakes with fear.
     CALL_CHILD(PTR(korutesu_apper))
     CALL(evt_msg_print, 0, STRING("stg5_dou_31"), 0, STRING("コルテス"))
@@ -653,6 +669,8 @@ EVT_BEGIN(kosho_event)
     CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
     ADD(LW(1), 30)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
+
+    // Flavio nervously introduces himself.
     CALL(evt_msg_print, 0, STRING("stg5_dou_34"), 0, 0)
     CALL(evt_cam3d_evt_set, -25, 125, 505, -25, 80, 7, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -665,6 +683,8 @@ EVT_BEGIN(kosho_event)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_POS, STRING(""), 0, 0, 0, LW(0), LW(1), LW(2), 50, 0, 60)
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_NPC_BIKKURI_MARK1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(1000)
+
+    // Flavio brings out the Skull Gem.
     CALL(evt_msg_print, 0, STRING("stg5_dou_36"), 0, STRING("extparty"))
     CALL(evt_item_entry, STRING("jewel"), ITEM_SKULL_GEM, -115, 0, 30, ITEM_TYPE_STILL, -1, 0)
     WAIT_MS(1000)
@@ -675,6 +695,7 @@ EVT_BEGIN(kosho_event)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg5_dou_36_02"), 0, STRING("extparty"))
     WAIT_MS(500)
+
     // Cortez and Flavio argue over who stole what.
     CALL(evt_msg_print, 0, STRING("stg5_dou_36_03"), 0, STRING("コルテス"))
     CALL(evt_cam3d_evt_set, -120, 107, 337, -120, 40, -6, 0, EASING_SINE_IN_OUT)
@@ -689,6 +710,7 @@ EVT_BEGIN(kosho_event)
     SET_VALUE(GF(2), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_item_get_position, STRING("jewel"), LW(0), LW(1), LW(2))
+
         // The Skull Gem floats toward Cortez.
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_JUWEL_MOVE1"), LW(0), LW(1), LW(2), LW(3))
         LOOP(0)
@@ -726,6 +748,8 @@ EVT_BEGIN(kosho_event)
     CALL(evt_item_delete, STRING("jewel"))
 #endif
     WAIT_MS(500)
+
+    // Cortez has his Black Skull back and Flavio asks for thanks.
     CALL(evt_msg_print, 0, STRING("stg5_dou_37"), 0, STRING("コルテス"))
     CALL(evt_cam3d_evt_set, -120, 107, 337, -120, 40, -6, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -736,12 +760,14 @@ EVT_BEGIN(kosho_event)
     WAIT_MS(300)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
     CALL(evt_snd_bgmon_f, PSND_CONTINUE | PSND_FADEIN, 0, 2000)
+
     // Cortez vanishes.
     CALL_CHILD(PTR(korutesu_vanish))
     WAIT_MS(1000)
     CALL(evt_npc_set_position, STRING("コルテス"), 0, -1000, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+
     // The story advances and control returns.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
     CALL(evt_party_run, 0)

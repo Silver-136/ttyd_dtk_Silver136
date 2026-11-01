@@ -718,6 +718,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(8), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     WAIT_FRAMES(20)
+
     // He reappears at the edge of the audience area; the camera homes in on the chosen audience member and he walks up.
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageAudienceAreaSize, LW(4), EVT_NULLPTR, EVT_NULLPTR)
@@ -733,6 +734,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+
     // Wind-up: picks the swing poses for his hammer upgrade level and raises the hammer with its hold sound.
     CALL(_get_mario_hammer_lv, LW(0))
     SWITCH(LW(0))
@@ -768,6 +770,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SWITCH
     WAIT_MS(500)
+
     // He swings, with the swing sound of his hammer level.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(1))
     WAIT_FRAMES(1)
@@ -780,6 +783,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CASE_DEFAULT
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING3"), 0)
     END_SWITCH
+
     // The hammer lands: ground-thump sound, the audience member is struck and the camera shakes.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(2))
     WAIT_FRAMES(7)
@@ -795,6 +799,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
     CALL(_attack_aud, LW(3), 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
+
     // The camera returns to the stage view after a pause while Mario heads back.
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         WAIT_MS(1500)
@@ -802,6 +807,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CALL(evt_btl_camera_set_mode, 0, 0)
         WAIT_MS(1000)
     END_SIBLING_EVENT
+
     // He reappears at the stage edge and walks home.
     WAIT_MS(30)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
@@ -813,6 +819,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_MS(1000)
     END_SIBLING_EVENT
+
     // Follow-through pose, then he runs back through the audience area, reappears at the stage edge and walks home.
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_H_16"))

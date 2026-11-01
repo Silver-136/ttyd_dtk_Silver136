@@ -2320,6 +2320,8 @@ EVT_BEGIN(evt_great_moamoa)
     CALL(evt_mario_normalize)
     CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_NO_PUSH)
     CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_NO_HIT)
+
+    // The swarm gathers and merges into the giant Smorg.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_244"), 0, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group339"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group340"), MAP_OBJ_FLAG_HIDDEN)
@@ -2401,6 +2403,8 @@ EVT_BEGIN(evt_great_moamoa)
     WAIT_MS(500)
     CALL(evt_party_stop, 0)
     WAIT_MS(300)
+
+    // Mario and his partner react.
     CALL(evt_msg_print_party, STRING("stg6_rsh_245"))
     WAIT_MS(300)
     CALL(evt_party_run, 0)
@@ -2427,6 +2431,7 @@ EVT_BEGIN(evt_great_moamoa)
     WAIT_MS(2000)
     CALL(evt_snd_sfxoff, GW(2))
     CALL(evt_npc_set_battle_info, STRING("base"), 1)
+
     // The battle with the giant Smorg starts.
     CALL(evt_npc_battle_start, STRING("base"))
     CALL(evt_npc_wait_battle_end)
@@ -2470,6 +2475,8 @@ EVT_BEGIN(evt_great_moamoa)
     CALL(evt_npc_set_anim, STRING("konari"), STRING("Z_1"))
     CALL(evt_npc_set_anim, STRING("powan"), STRING("Z_1"))
     CALL(evt_moamoa_kind_onoff, 0, 0)
+
+    // After the fight the Smorg falls apart.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_247"), 0, STRING("base"))
     WAIT_MS(500)
     CALL(evt_npc_get_position, STRING("base"), LW(0), LW(1), LW(2))
@@ -2491,6 +2498,7 @@ EVT_BEGIN(evt_great_moamoa)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(2000)
+
     // The story advances and the map changes to rsh_01_a.
     SET_VALUE(GSW_STORY_PROGRESS, STG6_48_SMORG_MIASMA)
     CALL(evt_bero_mapchange, STRING("rsh_01_a"), STRING("w_bero"))

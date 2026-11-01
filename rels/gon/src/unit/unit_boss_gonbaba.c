@@ -456,6 +456,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(evt_map_replayanim, 0, STRING("dontyo"))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, 0, 110, 1080, 0, 93, -2, 1, 0)
+
     // Mario and his partner start off-stage and Hooktail is hidden above the stage.
     CALL(btlevtcmd_GetStageSize, LW(6), EVT_NULLPTR, EVT_NULLPTR)
     MULTIPLY(LW(6), -1)
@@ -468,6 +469,7 @@ static EVT_BEGIN(battle_entry_event)
     ADD(LW(1), LW(3))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     WAIT_FRAMES(60)
+
     // Mario and his partner walk in and stop, startled (M_I_Y).
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(0))
@@ -496,6 +498,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
     WAIT_FRAMES(2)
+
     // Hooktail drops into view (GNB_F_3).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_F_3"))
     WAIT_FRAMES(1)
@@ -503,6 +506,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_ftomsec, 10, LW(0))
     WAIT_MS(LW(0))
+
     // Mario and his partner jump in fright, Mario with a cry.
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_ftomsec, 5, LW(0))
@@ -522,10 +526,14 @@ static EVT_BEGIN(battle_entry_event)
         CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(0))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), POSE_TYPE_CONFUSE)
     END_INLINE_EVENT
+
     // Her landing shakes the camera.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_APPEAR1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_shake_h, 1, 8, 0, 20, 13)
     WAIT_MS(500)
+
+    // The camera swings to Hooktail, who says she will have the party for a snack and wonders who to taste
+    // first (stg1_gon_20_3).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), POSE_TYPE_NEUTRAL)
@@ -537,6 +545,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_3"))
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_20_3"), 0, -2)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+
     // Everyone goes back to their wait scripts and the camera returns to normal.
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
@@ -587,6 +596,7 @@ USER_FUNC(_btlgon_get_escape_param) {
 EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_btl_camera_wait_move_end)
+
     // Hooktail has just run out of HP for the first time: she shakes off all status effects and the camera
     // moves in as she calls for a halt (stg1_gon_23).
     CALL(btlevtcmd_ClearAllStatus, UNIT_ID_SELF)
@@ -600,6 +610,7 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_23"), 0, -2)
     LABEL(0)
+
     // A loop waits until Mario is back at his home position.
     CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_MARIO, LW(3), LW(4), LW(5))
@@ -607,6 +618,7 @@ EVT_BEGIN(negotiation_event)
         WAIT_FRAMES(1)
         GOTO(0)
     END_IF
+
     // She begs for mercy and offers 1,000 coins, with a yes/no prompt (stg1_gon_24).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
@@ -617,11 +629,16 @@ EVT_BEGIN(negotiation_event)
     WAIT_FRAMES(20)
     CALL(evt_msg_select, 0, STRING("stg1_gon_24_yesno1"))
     CALL(evt_msg_continue)
+
+    // Yes: she says money makes the world turn (stg1_gon_25) and moves on to her trap.
+    // Yes: she says of course he wants it (stg1_gon_27) and moves on to her trap.
+    // Yes: she says she thought so (stg1_gon_29) and moves on to her trap.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 0)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_25"), 0, -2)
         GOTO(40)
     END_IF
+
     // No: Mario shakes his head and she offers a rare badge instead (stg1_gon_26).
     CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_NO1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_C"))
@@ -641,6 +658,7 @@ EVT_BEGIN(negotiation_event)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_27"), 0, -2)
         GOTO(40)
     END_IF
+
     // No again: she offers to let him sniff her feet instead (stg1_gon_28).
     CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_NO1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_C"))
@@ -660,6 +678,7 @@ EVT_BEGIN(negotiation_event)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_29"), 0, -2)
         GOTO(40)
     END_IF
+
     // Refused a third time, she grumbles that he is not very trusting (stg1_gon_31) and skips the trap.
     CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_NO2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_C"))
@@ -671,6 +690,7 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31"), 0, -2)
     GOTO(50)
     LABEL(40)
+
     // If Koops' shell shield is guarding Mario, it is dropped so the bite will land.
     CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
@@ -679,6 +699,7 @@ EVT_BEGIN(negotiation_event)
     END_IF
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_MARIO, FLOAT(3.0f))
+
     // The trap: Mario walks up to her head and she bites down on him (GNB_A_2).
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 400)
@@ -699,11 +720,13 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_ftomsec, 20, LW(0))
     WAIT_MS(LW(0))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_MARIO, LW(4))
+
     // The bite deals damage to Mario with the action-command result.
     CALL(btlevtcmd_ResultACDefence, UNIT_ID_MARIO, PTR(&weapon_gonbaba_kamituki_attack))
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, LW(4), PTR(&weapon_gonbaba_kamituki_attack), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
     WAIT_MS(500)
+
     // If the bite defeats Mario, his damage event plays out here.
     CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -717,6 +740,7 @@ EVT_BEGIN(negotiation_event)
     ELSE
         WAIT_MS(1500)
     END_IF
+
     // Mario walks back to his place.
     CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_MARIO, LW(1), EVT_NULLPTR, EVT_NULLPTR)
@@ -725,11 +749,13 @@ EVT_BEGIN(negotiation_event)
         WAIT_FRAMES(1)
         GOTO(41)
     END_IF
+
     // Koops' shell shield, if it was dropped, is put back.
     CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_SetUnitWork, LW(3), SHELL_SHIELD_WORK_FOLLOW, 1)
     END_IF
+
     // She gloats that they were duped (stg1_gon_30) and the partner calls her a coward (stg1_gon_30_01, _02).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 1, 0)
@@ -745,6 +771,10 @@ EVT_BEGIN(negotiation_event)
         CASE_EQUAL(UNIT_KOOPS)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_02"), 0, -4)
     END_SWITCH
+
+    // She laughs at their gullibility (stg1_gon_30_03), then admits things look bad and that she had better
+    // act (stg1_gon_30_04).
+    // She announces that her strength has returned (stg1_gon_31_01).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
@@ -755,9 +785,11 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_04"), 0, -2)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     LABEL(50)
+
     // Both paths meet here: her one plea is used up (unit work 3 is set to 1).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 1)
+
     // She turns toward the audience with heavy steps that shake the camera.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_W_4"))
     CALL(btlevtcmd_ftomsec, 35, LW(0))
@@ -783,6 +815,7 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_ftomsec, 17, LW(0))
     WAIT_MS(LW(0))
     WAIT_FRAMES(120)
+
     // She moves to the front of the stage and the audience area goes dark.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageAudienceAreaSize, EVT_NULLPTR, LW(3), EVT_NULLPTR)
@@ -807,6 +840,7 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_batstage_set_aud_dark, 0, 24, 0)
     CALL(evt_batstage_set_aud_dark_base, 0, 24, 0)
 #endif
+
     // Mario and his partner jump back in fright.
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(40)
@@ -824,6 +858,7 @@ EVT_BEGIN(negotiation_event)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_PARTNER, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
     END_INLINE_EVENT
     SET_VALUE(LW(0), 13)
+
     // She swallows spectators: gon_extra_eaten_event plays once for each of eight of them.
     SPAWN_EVENT(gon_extra_eaten_event)
     SET_VALUE(LW(0), 14)
@@ -840,6 +875,7 @@ EVT_BEGIN(negotiation_event)
     SPAWN_EVENT(gon_extra_eaten_event)
     SET_VALUE(LW(0), 54)
     SPAWN_EVENT(gon_extra_eaten_event)
+
     // She recovers to 10 HP with a healing sparkle.
     CALL(btlevtcmd_SetHp, UNIT_ID_SELF, 10)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -847,6 +883,7 @@ EVT_BEGIN(negotiation_event)
     ADD(LW(1), 180)
     ADD(LW(2), 70)
     CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
+
     // She starts to chew (GNB_E_1) and the audience panics.
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_E_1"))
@@ -862,6 +899,7 @@ EVT_BEGIN(negotiation_event)
     WAIT_MS(LW(0))
     CALL(evt_snd_sfxon, STRING("SFX_AUDIENCE_GNB_PANIC1"), 0)
     SET_VALUE(LW(0), 0)
+
     // The spectators scream and run for the exits one by one, each with panic and running sounds, and are
     // removed.
     LOOP(100)
@@ -962,6 +1000,7 @@ EVT_BEGIN(negotiation_event)
         LABEL(60)
         ADD(LW(0), 1)
     END_LOOP
+
     // Any spectators still left are removed.
     LOOP(100)
         CALL(evt_audience_delete, LW(0))
@@ -970,6 +1009,7 @@ EVT_BEGIN(negotiation_event)
     END_LOOP
     CALL(btlevtcmd_ftomsec, 38, LW(0))
     WAIT_MS(LW(0))
+
     // Chewing sounds play while she eats.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_ftomsec, 4, LW(0))
@@ -994,11 +1034,13 @@ EVT_BEGIN(negotiation_event)
         WAIT_MS(LW(0))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_EAT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
+
     // The camera pulls back as she finishes.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, 0, 140, 900, 0, 60, 0, 30, 0)
     CALL(btlevtcmd_ftomsec, 284, LW(0))
     WAIT_MS(LW(0))
+
     // The camera moves in on her and her partner reacts (stg1_gon_31_00_kur, _nok).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -115, 50, 200, -115, -30, -670, 20, 0)
@@ -1021,6 +1063,8 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_5"))
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_01"), 0, -2)
     CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 0, 0, 0)
+
+    // The camera pulls back and the partner says it is time to finish her off (stg1_gon_31_02, _03).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -115, 40, 200, -115, 39, 170, 1, 0)
     WAIT_FRAMES(1)
@@ -1038,6 +1082,7 @@ EVT_BEGIN(negotiation_event)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_03"), 0, -4)
     END_SWITCH
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+
     // Mario and his partner jump back to their places, the turn counter is reset and the battle goes on.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, 0, 110, 860, 0, 60, 170, 20, 0)
@@ -1097,6 +1142,7 @@ USER_FUNC(_set_gonbaba_light) {
  */
 EVT_BEGIN(gon_extra_eaten_event)
     WAIT_FRAMES(14)
+
     // One spectator is swallowed: it is marked as busy and jumps up.
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, 6)
     CALL(evt_audience_flag_on, LW(0), 18)
@@ -1109,6 +1155,7 @@ EVT_BEGIN(gon_extra_eaten_event)
     ADD(LW(2), 80)
     SUBTRACT(LW(1), 80)
     CALL(evt_audience_move_position_speed, LW(0), LW(1), LW(2), LW(3), FLOAT(10.0f))
+
     // Spectator 32 is lifted and spun toward her mouth, then lands, screams and runs off before it is
     // removed.
     IF_INT_EQUAL(LW(0), 32)
@@ -1158,6 +1205,7 @@ EVT_BEGIN(gon_extra_eaten_event)
         CALL(evt_audience_delete, LW(0))
         RETURN
     END_IF
+
     // Spectator 53 does the same with a different scream and running sound.
     IF_INT_EQUAL(LW(0), 53)
         CALL(evt_audience_flag_on, LW(0), 4)
@@ -1204,6 +1252,7 @@ EVT_BEGIN(gon_extra_eaten_event)
         CALL(evt_audience_num_updown_in_event, FLOAT(-1.0f))
         RETURN
     END_IF
+
     // Any other spectator is simply removed.
     CALL(evt_audience_delete, LW(0))
     CALL(evt_audience_num_updown_in_event, FLOAT(-1.0f))
@@ -1258,6 +1307,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART_DEFENSE, LW(0))
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_weak))
     END_IF
+
     // A hit that does no damage and has no cricket sound skips the hurt reaction.
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1266,6 +1316,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
             GOTO(90)
         END_IF
     END_IF
+
     // A hit on her body (part 1) plays GNB_D_2.
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(11))
     IF_INT_EQUAL(LW(11), 1)
@@ -1332,11 +1383,14 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     IF_INT_EQUAL(LW(0), 0)
         RETURN
     END_IF
+
     // After her plea (unit work 3 is 1) the cricket speeches are skipped.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(50)
     END_IF
+
+    // Her speech counter (unit work 2) decides which line she speaks.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 2)
         RETURN
@@ -1355,6 +1409,9 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_btl_camera_wait_move_end)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
+
+    // First cricket sound: she complains about the awful noise (stg1_gon_21); second: she struggles not to
+    // gag (stg1_gon_22).
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
@@ -1369,6 +1426,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 2)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_22"), 0, -2)
     END_SWITCH
+
     // The camera returns to normal and she goes back to her usual pose.
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -1380,6 +1438,8 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     IF_INT_GREATER_OR_EQUAL(LW(0), 3)
         RETURN
     END_IF
+
+    // Third time: she gags again and wonders why crickets always make her faint (stg1_gon_31_04).
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 3)
 #if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_WaitAttackEnd)
@@ -1409,6 +1469,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
     LABEL(90)
+
     // A whoosh plays at the spot that was hit.
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_GetHitPos, UNIT_ID_SELF, LW(0), LW(0), LW(1), LW(2))
@@ -1602,10 +1663,12 @@ static EVT_BEGIN(fumituke_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
+
     // The attack is declared and the guard window opens.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_gonbaba_fumituke_attack))
+
     // She steps forward with two heavy steps, each with leg smoke and a camera shake (GNB_W_2).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_W_2"))
     CALL(btlevtcmd_ftomsec, 56, LW(0))
@@ -1630,6 +1693,7 @@ static EVT_BEGIN(fumituke_attack_event)
     CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
     CALL(btlevtcmd_ftomsec, 1, LW(0))
     WAIT_MS(LW(0))
+
     // She raises a foot (GNB_A_3) above the target.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_A_3"))
     BEGIN_INLINE_EVENT
@@ -1640,6 +1704,7 @@ static EVT_BEGIN(fumituke_attack_event)
     END_INLINE_EVENT
     CALL(btlevtcmd_ftomsec, 47, LW(0))
     WAIT_MS(LW(0))
+
     // Hit check: a miss or dodge makes the target avoid, a hit goes on to the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_gonbaba_fumituke_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -1663,6 +1728,7 @@ static EVT_BEGIN(fumituke_attack_event)
     LABEL(90)
     GOTO(97)
     LABEL(91)
+
     // Hit: the damage is dealt with the action-command result.
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_gonbaba_fumituke_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_gonbaba_fumituke_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -1676,12 +1742,14 @@ static EVT_BEGIN(fumituke_attack_event)
         CALL(_leg_smoke_effect, LW(0), LW(1), LW(2))
     END_SIBLING_EVENT
     WAIT_FRAMES(3)
+
     // The stomp: her foot comes down with a big camera shake.
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
     WAIT_FRAMES(7)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_gonbaba_fumituke_attack))
     CALL(evt_btl_camera_shake_h, 0, 8, 0, 30, 13)
     WAIT_FRAMES(35)
+
     // She steps back (GNB_W_3) with two more smoky steps.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_W_3"))
     CALL(btlevtcmd_ftomsec, 51, LW(0))
@@ -1723,11 +1791,13 @@ EVT_BEGIN(firebreath_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
+
     // The attack is declared on all targets and the guard window opens.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_gonbaba_firebreath_attack))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_gonbaba_firebreath_attack))
+
     // Wind-up: her neck rises with a roar (GNB_A_1).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_A_1"))
     SET_VALUE(LW(10), 120)
@@ -1751,6 +1821,7 @@ EVT_BEGIN(firebreath_attack_event)
         SUBTRACT(LW(8), 10)
         CALL(evt_eff, 0, STRING("gonbaba_breath"), 0, LW(6), LW(7), LW(8), FLOAT(3.0f), LW(11), 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
+
     // The flame breath rolls out toward the targets.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(12), EVT_NULLPTR, EVT_NULLPTR)
     SUBTRACT(LW(12), LW(6))
@@ -1764,6 +1835,7 @@ EVT_BEGIN(firebreath_attack_event)
     WAIT_FRAMES(LW(12))
     SET_VALUE(LW(10), 0)
     LABEL(10)
+
     // Each target in turn gets the hit check and then the damage; the action-command result is read once.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_gonbaba_firebreath_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -1804,6 +1876,7 @@ EVT_BEGIN(firebreath_attack_event)
     END_IF
     WAIT_FRAMES(84)
     LABEL(99)
+
     // She goes back to her normal pose and waits.
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

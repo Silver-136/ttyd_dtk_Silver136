@@ -375,6 +375,7 @@ EVT_BEGIN(batten_satellite_attack_attack_event)
     WAIT_MS(400)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // Pick a target for the attack; a confused unit that has none flusters.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -386,6 +387,8 @@ EVT_BEGIN(batten_satellite_attack_attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+
+    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -397,6 +400,7 @@ EVT_BEGIN(batten_satellite_attack_attack_event)
         CALL(bts_wariai_enzan_1, LW(8), 9, LW(0), LW(13), LW(10))
         CALL(bts_wariai_enzan_1, LW(8), 9, LW(1), LW(6), LW(11))
         CALL(bts_wariai_enzan_1, LW(8), 9, LW(2), LW(7), LW(12))
+
         // It dashes toward the target in a straight line.
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(10), LW(11), LW(12))
         WAIT_FRAMES(1)
@@ -421,6 +425,7 @@ EVT_BEGIN(batten_satellite_attack_attack_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -444,14 +449,18 @@ EVT_BEGIN(batten_satellite_attack_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // The attack misses or is dodged.
     LABEL(90)
     GOTO(98)
+
     // The attack connects.
     LABEL(91)
+
     // Deal the damage, reduced by the action command defence.
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
+
     // Return to its place.
     LABEL(98)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SATELLITE_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)

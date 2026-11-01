@@ -238,6 +238,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(1500)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
+
+    // Ms. Mowz's theme plays as she greets Mario with a kiss and tells him about the badges in the tree.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_CYUCYURINA1"))
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -294,6 +296,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_R_1"))
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), 65, 0, 0, FLOAT(120.0f), 0)
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_S_1"))
+
+    // She says the Crystal Star is near the bottom of the tree and that the cell key is in the room.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e13_03"), 0, STRING("チュチュリーナ"))
     CALL(evt_cam3d_evt_set, FLOAT(137.39941f), FLOAT(25.299805f), FLOAT(635.6992f), FLOAT(36.69922f), FLOAT(131.19922f), FLOAT(-83.69922f), 400, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -333,6 +337,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI5"))
     CALL(evt_cam3d_evt_set, 125, 90, 262, 125, 40, 0, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+
+    // The music ends; Mario's partner reacts and Ms. Mowz slips away.
     CALL(evt_msg_print_party, STRING("stg2_mri_e13_06"))
     CALL(evt_mario_set_dir, 270, 100, 0)
     WAIT_MS(500)
@@ -349,6 +355,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     WAIT_MS(500)
+
+    // The X-Naut underling gets up and blames Mario for his bruises.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e13_07"), 0, STRING("第三勢力部下"))
     CALL(evt_npc_set_anim, STRING("第三勢力部下"), STRING("R_1"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -358,6 +366,7 @@ static EVT_BEGIN(chuchurina_sogu)
         CALL(evt_npc_move_position, STRING("第三勢力部下"), LW(0), LW(2), 0, FLOAT(180.0f), 0)
     END_INLINE_EVENT
     WAIT_MS(400)
+
     // The battle with the underling (battle info 5) starts and the script waits for it to end.
     CALL(evt_npc_set_battle_info, STRING("第三勢力部下"), 5)
     CALL(evt_npc_battle_start, STRING("第三勢力部下"))
@@ -366,9 +375,11 @@ static EVT_BEGIN(chuchurina_sogu)
     SET_VALUE(LW(10), STRING("第三勢力部下"))
     SPAWN_EVENT(PTR(enemy_event_dead_event_sub))
     WAIT_MS(500)
+
     // He drops the Red Key, which pops out of him.
     CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
     CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
+
     // The story advances and Mario regains control.
     SET_VALUE(GSW_STORY_PROGRESS, STG2_13_MS_MOWZ)
 #if VERSION > VERSION_DEMO_US

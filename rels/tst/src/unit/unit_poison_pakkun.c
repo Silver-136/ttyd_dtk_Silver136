@@ -291,6 +291,7 @@ static EVT_BEGIN(breath_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_poison_pakkun_breath_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_poison_pakkun_breath_attack), LW(3), LW(4))
+
     // No target to attack: a confused Putrid Piranha just flusters about, otherwise it skips its turn.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -302,6 +303,7 @@ static EVT_BEGIN(breath_event)
     END_IF
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_poison_pakkun_breath_attack))
+
     // The breath is declared against every target.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
@@ -321,6 +323,7 @@ static EVT_BEGIN(breath_event)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+
     // It resurfaces at x = -40, facing its targets.
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, -40, 0, LW(2))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
@@ -346,10 +349,12 @@ static EVT_BEGIN(breath_event)
         END_LOOP
     END_SIBLING_EVENT
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(15))
+
     // It winds up with a wheeze.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_2"))
     WAIT_MS(1000)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_POISON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+
     // It breathes out the poison breath: twenty puffs of it.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_3A"))
     WAIT_MS(300)
@@ -370,10 +375,12 @@ static EVT_BEGIN(breath_event)
             END_LOOP
         END_IF
     END_SIBLING_EVENT
+
     // Every target is checked in turn.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
     LABEL(10)
+
     // Check whether the attack will connect; a miss sends the target into its dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_poison_pakkun_breath_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -397,9 +404,11 @@ static EVT_BEGIN(breath_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // A miss: this target dodges the breath.
     LABEL(90)
     GOTO(97)
+
     // A hit: this target takes the damage and may be poisoned.
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
@@ -407,6 +416,7 @@ static EVT_BEGIN(breath_event)
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_poison_pakkun_breath_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(97)
+
     // On to the next target in line.
     LABEL(97)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
@@ -416,10 +426,12 @@ static EVT_BEGIN(breath_event)
     END_IF
     WAIT_MS(1000)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(15))
+
     // It closes its mouth and burrows back to its place.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_3C"))
     WAIT_MS(200)
     CALL_CHILD(return_event)
+
     // Turn finished: the Putrid Piranha goes back to waiting.
     LABEL(99)
     RETURN
@@ -713,6 +725,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     END_IF
+
     // No target to attack: a confused Putrid Piranha just flusters about, otherwise it skips its turn.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -742,6 +755,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 45)
+
     // It resurfaces on the ground in front of the target.
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
@@ -760,6 +774,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
     WAIT_MS(150)
+
     // It rears up and bites, with the attack sound.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1A"))
     WAIT_MS(200)
@@ -767,6 +782,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1B"))
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1C"))
+
     // Check whether the attack will connect; a miss sends the target into its dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -790,9 +806,11 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // A miss: the target dodges the bite.
     LABEL(90)
     GOTO(98)
+
     // A hit: the camera shakes and the target takes the damage.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
@@ -803,8 +821,10 @@ static EVT_BEGIN(normal_attack_event)
     GOTO(98)
     LABEL(98)
     WAIT_MS(500)
+
     // It burrows back to its place.
     CALL_CHILD(return_event)
+
     // Turn finished: the Putrid Piranha goes back to waiting.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)

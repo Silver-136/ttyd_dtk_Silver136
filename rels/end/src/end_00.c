@@ -1186,6 +1186,8 @@ void end_image_disp(CameraId cameraId, void* param) {
  */
 EVT_BEGIN(end_image_main_evt)
     LOOP(0)
+        // Loop once per credits picture; stop if the credits have already ended, otherwise wait until the roll
+        // asks for the next picture.
         IF_INT_EQUAL(GF(10), 1)
             RETURN
         END_IF
@@ -1195,6 +1197,7 @@ EVT_BEGIN(end_image_main_evt)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
+
         // The picture appears and fades in.
         BEGIN_INLINE_EVENT_GET_ID(LW(9))
             CALL(evt_end_image_disp_entry)
@@ -1209,6 +1212,7 @@ EVT_BEGIN(end_image_main_evt)
             END_IF
         END_LOOP
         LOOP(0)
+            // The picture stays up until the roll asks to remove it.
             IF_INT_EQUAL(GW(10), 2)
                 BREAK_LOOP
             END_IF
@@ -1228,6 +1232,7 @@ EVT_BEGIN(end_image_main_evt)
                 END_IF
             END_LOOP
             WAIT_MS(3000)
+
             // The credits music fades out, and after a pause the closing music begins.
             SET_VALUE(GF(0), 0)
             BEGIN_INLINE_EVENT
@@ -1238,6 +1243,7 @@ EVT_BEGIN(end_image_main_evt)
                 END_IF
             END_INLINE_EVENT
             WAIT_MS(500)
+
             // The final pictures blend back and forth until the player presses a button.
             SPAWN_EVENT_GET_ID(PTR(end_image_blend_loop), LW(10))
             LOOP(0)
@@ -1248,6 +1254,7 @@ EVT_BEGIN(end_image_main_evt)
                 WAIT_FRAMES(1)
             END_LOOP
             SET_VALUE(GF(0), 1)
+
             // The player pressed a button: the screen fades to black, the pictures are cleared and the title
             // return starts.
             DELETE_EVENT(LW(10))

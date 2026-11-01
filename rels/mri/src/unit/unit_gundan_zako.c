@@ -313,6 +313,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+
     // Roll 50/30/20 for charge, jump or growth; reroll growth while already Huge.
     LABEL(10)
     SET_VALUE(LW(0), 0)
@@ -431,8 +432,10 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+
     // The X-Naut runs up to its target (the shared run-up script).
     CALL_CHILD(attack_common_event1)
+
     // It hops forward with a battle cry (A_3) and swings at the target as it lands next to it.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD1_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
@@ -490,6 +493,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
         WAIT_FRAMES(10)
         GOTO(98)
+
         // The swing connects: the screen shakes, the Action Command defence result is applied and damage is
         // dealt, then it hops back and stands up straight.
         LABEL(91)
@@ -508,6 +512,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
         WAIT_FRAMES(20)
         GOTO(98)
+
         // It runs back to its starting spot (the shared return script).
         LABEL(98)
         CALL_CHILD(attack_common_event2)

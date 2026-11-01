@@ -756,6 +756,7 @@ static EVT_BEGIN(attack_event)
     SET_VALUE(LW(10), 0)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(9), PTR(&weapon_kamec_obaba_dekadeka_magic))
+
     // She looks for a support spell to cast on herself.
     CALL_CHILD(PTR(magic_select_pri_obaba))
     IF_INT_NOT_EQUAL(LW(3), -1)
@@ -770,6 +771,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     SET_VALUE(LW(13), LW(3))
     SET_VALUE(LW(14), LW(4))
+
     // Or she looks for one to cast on Bowser.
     CALL_CHILD(PTR(magic_select_pri_koopa))
     IF_INT_NOT_EQUAL(LW(3), -1)
@@ -809,6 +811,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_EQUAL(LW(0), LW(1))
             GOTO(10)
         END_IF
+
         // She casts the chosen spell (heal, Defense up, electric charge, invisibility or growth).
         CALL_CHILD(PTR(recover_magic_event))
         GOTO(99)
@@ -842,6 +845,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     ELSE
         SET_VALUE(LW(9), PTR(&weapon_kamec_obaba_attack_magic))
+
         // Otherwise she casts the magic attack at the party.
         CALL_CHILD(PTR(attack_magic_event))
         GOTO(99)
@@ -998,6 +1002,7 @@ EVT_END()
  */
 static EVT_BEGIN(attack_magic_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // Pick a target for the attack; a confused unit that has none flusters.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1010,15 +1015,19 @@ static EVT_BEGIN(attack_magic_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+
+    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // She conjures a magic blast and sends it at one party member.
     CALL_CHILD(magic_common_event1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KAMEBABA_MAGIC3_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -1074,6 +1083,7 @@ static EVT_BEGIN(attack_magic_event)
         CALL(eff_magic, UNIT_ID_SELF, LW(10), LW(11), LW(12), 60)
         WAIT_FRAMES(60)
         GOTO(98)
+
         // The attack connects.
         LABEL(91)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1082,14 +1092,17 @@ static EVT_BEGIN(attack_magic_event)
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(10), LW(11), LW(12))
         CALL(eff_magic, UNIT_ID_SELF, LW(10), LW(11), LW(12), 45)
         WAIT_FRAMES(45)
+
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
+
         // Wrap up the attack.
         LABEL(98)
         WAIT_FRAMES(30)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
+
         // The attack is over; back to waiting.
         LABEL(99)
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)

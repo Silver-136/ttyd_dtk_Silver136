@@ -293,6 +293,7 @@ static EVT_BEGIN(peach_evt_stg1_1)
     CALL(evt_bero_overwrite, STRING("e_bero"), PTR(bero_peach_data))
     SET_VALUE(LW(0), STRING("e_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
+
     // Remove the blocked-door interaction after installing the replacement exit.
     CALL(evt_del_case_evt, 0, GW(15))
     SET_VALUE(GSW_STORY_PROGRESS, STG1_18_01_PEACH_AN_OPEN_DOOR)
@@ -307,6 +308,7 @@ EVT_END()
 EVT_BEGIN(peach_evt_stg2_1)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
+
     // Keep control enabled during this initial stopwatch delay.
     SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
     LOOP(0)
@@ -467,6 +469,7 @@ EVT_END()
 
 EVT_BEGIN(aji_16_init_evt)
     CALL(evt_bero_get_entername, LW(0))
+
     // This entrance uses the mail scene and bypasses the ordinary room setup.
     IF_STR_EQUAL(LW(0), STRING("peach"))
         CALL_CHILD(PTR(evt_last_mail_init))

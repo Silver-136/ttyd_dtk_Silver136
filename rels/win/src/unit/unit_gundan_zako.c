@@ -351,6 +351,7 @@ static EVT_BEGIN(attack_event)
             GOTO(99)
         END_IF
     END_IF
+
     // Redraw if the bottle was chosen while already Huge.
     GOTO(10)
     LABEL(99)
@@ -427,6 +428,7 @@ EVT_END()
  */
 static EVT_BEGIN(normal_attack_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_attack))
+
     // A First Strike aims at the first-strike target;
     // otherwise the X-Naut picks a target from the opposing side.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -445,8 +447,10 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+
     // Shared run-up: declare the attack, point the camera at the target and dash over, kicking up dust.
     CALL_CHILD(attack_common_event1)
+
     // Lunge: the X-Naut springs at the target,
     // sliding along the ground until it reaches the target's x position.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD1_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -471,6 +475,7 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
     // Damage pre-check: the target either evades the slam or takes it.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
@@ -494,6 +499,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
         LABEL(90)
+
         // Miss: the X-Naut skids past, tumbles over and picks itself up.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD1_MISS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
@@ -507,6 +513,7 @@ static EVT_BEGIN(normal_attack_event)
         WAIT_FRAMES(10)
         GOTO(98)
         LABEL(91)
+
         // Hit: the camera shakes, the guard result is resolved and the damage is dealt;
         // the X-Naut recoils backwards and lands.
         CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
@@ -525,6 +532,7 @@ static EVT_BEGIN(normal_attack_event)
         WAIT_FRAMES(20)
         GOTO(98)
         LABEL(98)
+
         // Shared wind-down: reset the camera and run back to the home position.
         CALL_CHILD(attack_common_event2)
         RETURN

@@ -707,6 +707,7 @@ EVT_BEGIN(flame_attack_event)
     LABEL(90)
     GOTO(97)
     LABEL(91)
+
     // Defense input is checked only for the first selected target.
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))

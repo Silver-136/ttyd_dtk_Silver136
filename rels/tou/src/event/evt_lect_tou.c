@@ -488,6 +488,7 @@ EVT_END()
  * battle moves.
  */
 EVT_BEGIN(yoshi_party_lecture)
+    // Yoshi primer: press X to get on and off, and Mario hops on, off and on again.
     CALL(evt_msg_print, 0, STRING("lecture_friends_09_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_09_1"), 0, 0)
     CALL(evt_cam_letter_box_disable, 1)
@@ -497,6 +498,8 @@ EVT_BEGIN(yoshi_party_lecture)
     CALL(evt_party_yoshi_ride, 0, 0)
     WAIT_MS(1000)
     CALL(evt_party_yoshi_ride, 0, 1)
+
+    // Riding is faster: Yoshi carries Mario across and back with his footstep sounds.
     CALL(evt_msg_print_add, 0, STRING("lecture_friends_09_1_1"))
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(470.0f), FLOAT(71.0f), FLOAT(30.0f), FLOAT(-101.799805f), 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -553,11 +556,15 @@ EVT_BEGIN(yoshi_party_lecture)
     CALL(x_flag_set, 0, 2)
     CALL(evt_mario_set_dir, 90, 300, 0)
     CALL(evt_party_set_dir, 0, 90, 300)
+
+    // Pressing A while riding floats briefly: Yoshi flutters twice.
     CALL(evt_msg_print_add, 0, STRING("lecture_friends_10"))
     LOOP(2)
         CALL(evt_party_yoshi_fly, 0, 1, 1000)
         WAIT_MS(300)
     END_LOOP
+
+    // Mario gets off, Yoshi steps aside and the text explains Ground Pound and Gulp in battle.
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(-2.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_mario_set_dir, 270, 300, 0)
@@ -618,6 +625,7 @@ EVT_BEGIN(all_party_lecture)
     ELSE
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
+
     // The item-get backdrop and jingle play while the "joined your party" message is shown.
     CALL(evt_party_set_camid, 0, 7)
     SPAWN_EVENT_GET_ID(PTR(all_party_lecture_otosub), LW(11))
@@ -643,6 +651,7 @@ EVT_BEGIN(all_party_lecture)
         CASE_EQUAL(7)
         CALL(evt_msg_print, 0, STRING("lecture_friends_17"), 0, 0)
     END_SWITCH
+
     // The jingle is cut short if it is still playing and the field music resumes.
     IS_EVENT_RUNNING(LW(11), LW(12))
     IF_INT_EQUAL(LW(12), 1)
@@ -650,6 +659,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
+
     // The screen is frozen into a paper image over the lecture music, the partner held off to one side.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_set_camid, 7)
@@ -684,6 +694,7 @@ EVT_BEGIN(all_party_lecture)
     WAIT_FRAMES(1)
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_cont_onoff, 0, 1)
+
     // Mario blinks in and, for Yoshi, the lecture is set up and played.
     CALL(lect_test_systemlevel)
     SWITCH(LW(9))
@@ -705,6 +716,7 @@ EVT_BEGIN(all_party_lecture)
         CASE_EQUAL(4)
         CALL_CHILD(PTR(yoshi_party_lecture))
     END_SWITCH
+
     // Mario and the partner blink out; the camera, music and paper image are restored.
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
@@ -816,6 +828,7 @@ EVT_END()
  * (MOBJ_Lv1BigBigBlock) to show it can be broken, mentions it also works in battle and walks off.
  */
 EVT_BEGIN(hammer_lv2_juyoitem_lecture)
+    // Toadette greets Mario and explains the Super Hammer: hold B, rotate the stick, then release.
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)
     END_SIBLING_EVENT
@@ -828,6 +841,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
     CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(80.0f), 0)
     CALL(evt_msg_print, 0, STRING("lecture_s_hammer_04"), 0, STRING("キノピコ"))
     CALL(evt_msg_print_add, 0, STRING("lecture_s_hammer_05"))
+
     // Practice round: Toadette cheers him on while the B and stick prompts follow his input.
     LOOP(0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -878,6 +892,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
         CALL(evt_mario_set_enable_key, PAD_BUTTON_B)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)
+
         // Mario's input is watched until he winds up and releases the Super Hammer.
         LOOP(0)
             CALL(lect_status_off)
@@ -920,6 +935,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
+
         // Practice done: the controls come back and Mario strikes a victory pose.
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_key_onoff, 0)
@@ -939,6 +955,8 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_mario_adjust_dir)
         CALL(evt_mario_set_dir, 90, 150, 0)
+
+        // Toadette praises him and asks whether he wants to try again.
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(26.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_2"), STRING("T_2"))
@@ -951,6 +969,8 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
+
+    // He has mastered it: Toadette steps aside and drops a big block beside Mario.
     CALL(evt_msg_print_add, 0, STRING("lecture_s_hammer_11"))
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(52.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
@@ -975,6 +995,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
     CALL(evt_mobj_set_position, LW(1), LW(2), LW(3), LW(4))
     CALL(evt_mobj_set_gravity_bound, LW(1), FLOAT(0.16601563f), FLOAT(1.0f))
     CALL(evt_snd_sfxon, STRING("SFX_EVT_LECTURE_BLOCK_FALL1"), LW(7))
+
     // The block lands with a thud that shakes the camera.
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -1002,6 +1023,8 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
+    // Toadette says the Super Hammer breaks big blocks like this one, and the block blinks away.
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("A_2"))
     WAIT_MS(170)
@@ -1017,6 +1040,8 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
     END_LOOP
     CALL(evt_mobj_delete, LW(1))
     WAIT_MS(300)
+
+    // She adds that it works in battle too, says goodbye and walks off.
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(52.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("lecture_s_hammer_13"), 0, STRING("キノピコ"))

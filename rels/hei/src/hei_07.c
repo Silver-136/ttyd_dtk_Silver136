@@ -461,6 +461,7 @@ EVT_BEGIN(a_sekizou_1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     WAIT_FRAMES(1)
+
     // On the first visit the statue wakes with a quake that startles Mario; later visits skip straight to
     // the talk.
     IF_INT_EQUAL(GW(0), 0)
@@ -504,6 +505,8 @@ EVT_BEGIN(a_sekizou_1)
         WAIT_MS(1000)
     END_IF
     WAIT_MS(500)
+
+    // The statue greets Mario and asks whether he will take its quiz.
     SET_VALUE(LW(0), STRING("anm_dossun_1"))
     CALL_CHILD(PTR(animation_wait))
     WAIT_MS(500)
@@ -516,6 +519,8 @@ EVT_BEGIN(a_sekizou_1)
     END_IF
     SET_VALUE(GW(0), 1)
     CALL(evt_msg_select, 0, STRING("stg1_hei_yn_01"))
+
+    // If Mario declines, the statue scolds him and goes back to sleep.
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(0), STRING("anm_kaiten1"))
         CALL_CHILD(PTR(animation_wait))
@@ -532,6 +537,7 @@ EVT_BEGIN(a_sekizou_1)
 #endif
         RETURN
     END_IF
+
     // If he accepts, the statue gets ready and the quiz music starts.
     SET_VALUE(LW(0), STRING("anm_kaiten1"))
     CALL_CHILD(PTR(animation_wait))
@@ -545,6 +551,8 @@ EVT_BEGIN(a_sekizou_1)
     WAIT_MS(1500)
     WAIT_MS(500)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+
+    // Question index, correct answers, and wrong answers; finish at five correct or three wrong.
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
     SET_VALUE(LW(13), 0)
@@ -604,6 +612,9 @@ EVT_BEGIN(a_sekizou_1)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
         CALL(evt_msg_continue)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
+
+        // A right answer plays a jingle and the right-answer animation; the fifth ends the quiz, the
+        // statue moves aside and the story advances.
         IF_INT_EQUAL(LF(1), 1)
             IF_INT_EQUAL(LW(12), 4)
                 CALL(evt_snd_sfxon, STRING("SFX_GOOD_SOUND2"), 0)
@@ -658,6 +669,8 @@ EVT_BEGIN(a_sekizou_1)
             END_SWITCH
             CALL_CHILD(PTR(seikai_anime_stop))
         ELSE
+            // A wrong answer plays a buzzer; the third wrong answer summons four Clefts that attack, and after
+            // the fight the statue moves aside as well.
             IF_INT_EQUAL(LW(13), 2)
                 CALL(evt_snd_sfxon, STRING("SFX_BAD_SOUND2"), 0)
             ELSE

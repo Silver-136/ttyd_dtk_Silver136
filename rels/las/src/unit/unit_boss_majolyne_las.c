@@ -637,6 +637,7 @@ EVT_BEGIN(majo_unison_phase_event)
     SET_VALUE(LW(0), -1)
     SET_VALUE(LW(1), -1)
     SET_VALUE(LW(2), -1)
+
     // Read the HP of each Siren that is still standing.
     IF_INT_EQUAL(GW(13), 0)
         CALL(btlevtcmd_GetUnitWork, GW(10), MAJO_WORK_NEXT_LINE_POS, LW(6))
@@ -680,8 +681,10 @@ EVT_BEGIN(majo_unison_phase_event)
             SET_VALUE(LW(5), 3)
         END_SWITCH
     END_IF
+
     // Sort them by HP.
     CALL(majo3_sort)
+
     // Hand out ranks 0 to 2 in the Sirens' unit work, highest HP first.
     SWITCH(LW(0))
         CASE_EQUAL(1)
@@ -795,6 +798,7 @@ static EVT_BEGIN(phase_event)
             DEBUG_PUT_REG(LW(1))
             IF_INT_LESS(LW(1), LW(0))
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, MAJO_WORK_LOW_HP_TALK_DONE, 1)
+
                 // When her own HP is low, Beldam curses Mario.
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL_CHILD(PTR(btl_majolyne_zoom))
@@ -824,6 +828,8 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_GetHp, GW(9), LW(1))
                 IF_INT_LESS(LW(1), LW(0))
                     CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_LOW_HP_TALK_DONE, 1)
+
+                    // Beldam asks after Marilyn, who groans in reply.
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                     CALL_CHILD(PTR(btl_majolyne_zoom))
                     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, GW(9), -1, FACE_DIR_TOWARD_UNIT, LW(15))
@@ -854,6 +860,8 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_GetHp, GW(10), LW(1))
                 IF_INT_LESS(LW(1), LW(0))
                     CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_LOW_HP_TALK_DONE, 1)
+
+                    // Beldam scolds the third Siren for letting her HP fall, who apologises.
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                     CALL_CHILD(PTR(btl_majolyne_zoom))
                     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, GW(10), -1, FACE_DIR_TOWARD_UNIT, LW(15))
@@ -898,11 +906,13 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
+
         // Beldam opens with the blizzard.
         CALL_CHILD(PTR(blizzard_attack_event))
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack4))
+
         // Then comes a powder attack, whose kind depends on where the Sirens stand.
         CALL_CHILD(PTR(powder_attack_check))
         CALL_CHILD(PTR(powder_attack_event))
@@ -915,6 +925,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 4)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
+
         // Another blizzard follows.
         CALL_CHILD(PTR(blizzard_attack_event))
         CASE_EQUAL(4)
@@ -986,6 +997,7 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(1), 40)
         IF_INT_LESS(LW(0), LW(1))
             SET_VALUE(LW(9), PTR(&weapon_majolyne_kagenuke_attack1))
+
             // Sometimes she uses her kagenuke attack instead.
             CALL_CHILD(PTR(kagenuke_attack_event))
             GOTO(90)
@@ -1032,6 +1044,7 @@ static EVT_BEGIN(attack_event)
         ELSE
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
+
             // The cycle ends with a blizzard and starts over.
             CALL_CHILD(PTR(blizzard_attack_event))
         END_IF

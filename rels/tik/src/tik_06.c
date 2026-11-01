@@ -281,6 +281,7 @@ static EVT_BEGIN(evt_kanban2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     SET_VALUE(LW(0), GSW_JON_DEEPEST_LEVEL)
+
     // Reassemble the two saved bytes before displaying the Power Bounce record.
     SET_VALUE(LW(1), GSW_MAIN_POWER_BOUNCE_RECORD_LO)
     SET_VALUE(LW(4), GSW_MAIN_POWER_BOUNCE_RECORD_HI)

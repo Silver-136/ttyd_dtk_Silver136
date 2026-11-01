@@ -654,6 +654,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+
     // Action command (press the button shown on screen) starts as she sinks into her shadow.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
@@ -663,6 +664,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_VIVIAN_ATTACK1"), 0)
     CALL(battle_evt_majo_disp_off, UNIT_ID_SELF, 1, 0, 0)
     CALL(btlevtcmd_StartAC, 1)
+
     // She glides under the stage to a spot beside the enemy and rises out of the floor there.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
@@ -686,6 +688,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_VIVIAN_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(battle_evt_majo_disp_on, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 0)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+
     // She turns to face the enemy and glides in close if she is not there yet.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
@@ -710,12 +713,14 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_VIVIAN_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, 0, EASING_CUBIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     END_IF
+
     // A pre-emptive spiky enemy hurts her first.
     LABEL(9)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_EQUAL(LW(5), 5)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
+
     // Wait for the command result, then check whether the punch connects; a miss plays the enemy's dodge reaction.
     CALL(btlevtcmd_ResultAC)
     SET_VALUE(LW(10), 0)
@@ -749,6 +754,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
         WAIT_MS(500)
         GOTO(90)
     END_IF
+
     // The punch lands; a successful command also burns the enemy and adds the rating effect (Nice, Good...).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A1_2"))
     CALL(btlevtcmd_ftomsec, 4, LW(0))
@@ -769,6 +775,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
     END_IF
     WAIT_MS(500)
+
     // She sinks back into the floor, glides home under the stage and rises again; pressing A as she rises is the
     // stylish.
     LABEL(90)
@@ -802,6 +809,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_Y_1"))
         WAIT_FRAMES(52)
     END_IF
+
     // The audience refills Star Power and her turn ends.
     LABEL(99)
     CALL(evt_audience_ap_recovery)

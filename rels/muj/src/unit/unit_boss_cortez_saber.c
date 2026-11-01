@@ -290,6 +290,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 38, 15, 0)
+
     // The Sabre tilts back 60 degrees and winds up with a swing of 135 degrees.
     BEGIN_SIBLING_EVENT
         CALL(evt_sub_intpl_init, EASING_LINEAR, 0, -60, 20)
@@ -307,6 +308,7 @@ static EVT_BEGIN(attack_event)
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 35)
+
     // It dives onto the target.
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 50, -10, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     WAIT_MS(200)
@@ -318,6 +320,7 @@ static EVT_BEGIN(attack_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // It slashes down with a whooshing sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_SWORD_DANCE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(7)
@@ -338,14 +341,17 @@ static EVT_BEGIN(attack_event)
         CASE_DEFAULT
         GOTO(91)
     END_SWITCH
+
     // The slash misses or is blocked: the Sabre plays its dodge reaction.
     LABEL(90)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     GOTO(95)
+
     // The slash lands: the Action Command defence result and damage are applied.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+
     // A superguard cancels the swing and restores both rotation axes during recoil.
     IF_INT_EQUAL(LW(5), 21)
         DELETE_EVENT(LW(15))
@@ -384,6 +390,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
         RETURN
     END_IF
+
     // Otherwise it straightens up and returns home after a short pause.
     LABEL(95)
     CALL(btlevtcmd_WaitEventEnd, LW(15))

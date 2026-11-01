@@ -979,6 +979,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(attack_magic_event))
         GOTO(99)
     END_IF
+
     // A clone (not the real Magikoopa) does nothing on its own turn;
     // the real one may use an item instead of casting.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
@@ -990,6 +991,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(LW(0))
         GOTO(99)
     END_IF
+
     // Only one Magikoopa is left: it casts its attack spell most of the time, sometimes heals an ally,
     // or else splits into clones.
     CALL(kamec_get_live_num, LW(0))
@@ -1103,6 +1105,7 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
     END_IF
+
     // The spell is done and the Magikoopa returns to waiting.
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -1123,6 +1126,7 @@ static EVT_BEGIN(ground_magic_common_event1)
             WAIT_FRAMES(40)
         END_LOOP
     END_SIBLING_EVENT
+
     // A flare of light gathers on the staff (the real one's, and every clone's).
     CALL(kamec_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
     IF_INT_EQUAL(LW(15), 0)
@@ -1154,6 +1158,7 @@ static EVT_BEGIN(ground_magic_common_event1)
             CALL(eff_staff2, UNIT_ID_SELF)
         END_SIBLING_EVENT
     END_IF
+
     // The Magikoopa and its clones raise their wands.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMK_A_1A"))
     IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1169,6 +1174,7 @@ static EVT_BEGIN(ground_magic_common_event1)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMK_A_1A"))
     END_IF
     WAIT_FRAMES(60)
+
     // The wands glow with a rising sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMK_A_1B"))
@@ -1185,6 +1191,7 @@ static EVT_BEGIN(ground_magic_common_event1)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMK_A_1B"))
     END_IF
     WAIT_FRAMES(20)
+
     // They swing the wands up and hold them.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMK_A_1C"))
     IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1200,6 +1207,7 @@ static EVT_BEGIN(ground_magic_common_event1)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMK_A_1C"))
     END_IF
     WAIT_FRAMES(30)
+
     // A last magic sound, then they thrust the wands forward.
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(10)
@@ -1219,6 +1227,7 @@ static EVT_BEGIN(ground_magic_common_event1)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMK_A_1D"))
     END_IF
     WAIT_FRAMES(20)
+
     // The wand poses finish, ready for the spell itself.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMK_A_1E"))
     IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1276,6 +1285,7 @@ static EVT_BEGIN(sky_magic_common_event)
             WAIT_FRAMES(40)
         END_LOOP
     END_SIBLING_EVENT
+
     // A flare of light gathers on the staff (the real one's, and every clone's).
     CALL(kamec_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
     IF_INT_EQUAL(LW(15), 0)
@@ -1307,6 +1317,7 @@ static EVT_BEGIN(sky_magic_common_event)
             CALL(eff_staff2, UNIT_ID_SELF)
         END_SIBLING_EVENT
     END_IF
+
     // The Magikoopa and its clones raise their wands in the air.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMK_A_3A"))
     IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1321,6 +1332,7 @@ static EVT_BEGIN(sky_magic_common_event)
     IF_INT_NOT_EQUAL(LW(14), -1)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMK_A_3A"))
     END_IF
+
     // The wands glow with a rising sound.
     WAIT_FRAMES(60)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC8"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1337,6 +1349,7 @@ static EVT_BEGIN(sky_magic_common_event)
     IF_INT_NOT_EQUAL(LW(14), -1)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMK_A_3B"))
     END_IF
+
     // They sweep the wands forward as the spell sound peaks.
     WAIT_FRAMES(35)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC7"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1353,6 +1366,7 @@ static EVT_BEGIN(sky_magic_common_event)
     IF_INT_NOT_EQUAL(LW(14), -1)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMK_A_3C"))
     END_IF
+
     // The wand poses finish, ready for the spell itself.
     WAIT_FRAMES(15)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMK_A_3D"))
@@ -1442,6 +1456,7 @@ static EVT_BEGIN(attack_magic_event)
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     END_IF
+
     // No target left: a confused Magikoopa is flustered; either way it ends its turn.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -1451,6 +1466,7 @@ static EVT_BEGIN(attack_magic_event)
         END_IF
         GOTO(99)
     END_IF
+
     // The attack is announced and the guard timing is awaited, and the Magikoopa turns to face its target.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -1459,10 +1475,12 @@ static EVT_BEGIN(attack_magic_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(15), 0)
+
     // The Magikoopa (and its clones) wave their wands and charge the spell.
     CALL_CHILD(magic_common_event1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC3_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+
     // Check how the target defends against the blast.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
@@ -1520,6 +1538,7 @@ static EVT_BEGIN(attack_magic_event)
         CALL_CHILD(attack_magic_event_sub_no_hit)
         WAIT_FRAMES(60)
         GOTO(98)
+
         // Hit: every bolt flies in, the target is blasted and the damage is dealt once.
         LABEL(91)
         CALL(kamec_get_bunsin, LW(6), LW(7), LW(8), LW(13), LW(0))
@@ -1537,6 +1556,7 @@ static EVT_BEGIN(attack_magic_event)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
+
         // All the casters lower their wands and return to their stand pose.
         LABEL(98)
         WAIT_FRAMES(30)
@@ -1746,6 +1766,7 @@ static EVT_BEGIN(all_recover_magic_event)
         GOTO(8)
     END_IF
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
+
     // BUG: inverted check. This should give up when there is no next enemy (LW(3) == -1); as written it
     // gives up whenever there is one, so only the first enemy is checked for missing HP, and if the
     // first is the only one and at full HP, the loop runs again with LW(3) == -1.

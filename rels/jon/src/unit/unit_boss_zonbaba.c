@@ -555,6 +555,7 @@ static EVT_BEGIN(battle_entry_event)
     MULTIPLY(LW(7), -1)
     CALL(btlevtcmd_SetPos, UNIT_ID_MARIO, LW(6), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, UNIT_ID_PARTNER, LW(7), LW(4), LW(5))
+
     // Mario and his partner walk in from the left and stop, looking up.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_PARTNER, FLOAT(6.0f))
@@ -566,12 +567,14 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
     WAIT_FRAMES(2)
+
     // Bonetail drops into the arena.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_F_3"))
     WAIT_FRAMES(1)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     WAIT_FRAMES(10)
+
     // It lands with a crash and a camera shake; Mario and his partner jump back, startled.
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(5)
@@ -598,6 +601,8 @@ static EVT_BEGIN(battle_entry_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 60, 0)
     WAIT_FRAMES(60)
+
+    // Bonetail roars its challenge and the partner answers before the fight starts.
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_boss_12"), 0, -2)
     WAIT_MS(300)
@@ -1148,6 +1153,7 @@ EVT_BEGIN(recover_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+
         // BUG: GetUnitWork (reading into the constant 1), apparently meant as SetUnitWork: the slot stays 0, so
         // tik_boss_14 is printed on every recover
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, 1)

@@ -871,6 +871,7 @@ EVT_BEGIN(talk_kino5)
     CALL(evt_pouch_get_yoshiname, LW(10))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
+        // Before Gonzales debuts the son is a fan of Prince Mush.
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_01"), 0, 0)
         CASE_LESS(STG3_32_BOSS_BATTLE)
         // Up to the title match the line follows Mario's rank, naming the Yoshi when he is the partner.
@@ -917,6 +918,7 @@ EVT_BEGIN(talk_kino5)
             END_IF
         END_SWITCH
         CASE_DEFAULT
+        // After chapter 3: a farewell, or comments on Mario's return to the league.
         IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 4)
@@ -979,6 +981,7 @@ EVT_END()
 EVT_BEGIN(talk_kinopiko)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
+        // Before Gonzales debuts the son is a fan of Prince Mush.
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_07_01"), 0, 0)
         CASE_LESS(STG3_32_BOSS_BATTLE)
         CALL(evt_tou_get_ranking, LW(0))
@@ -995,6 +998,7 @@ EVT_BEGIN(talk_kinopiko)
             CALL(evt_msg_print, 0, STRING("stg3_npc_02_07_06"), 0, 0)
         END_SWITCH
         CASE_DEFAULT
+        // After chapter 3: a farewell, or comments on Mario's return to the league.
         IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_msg_print, 0, STRING("stg3_npc_02_07_07"), 0, 0)
         ELSE
@@ -1575,6 +1579,7 @@ EVT_BEGIN(evt_tougi2)
     ELSE
         CALL(evt_cam3d_evt_set, 0, 90, 190, 0, 38, -158, 0, EASING_SINE_IN_OUT)
     END_IF
+
     // The door opens and they step into the lobby.
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 2)
@@ -1616,6 +1621,8 @@ EVT_BEGIN(evt_tougi2)
             BREAK_LOOP
         END_IF
     END_LOOP
+
+    // The partner asks how to get the Crystal Star, steal it or fight to the top, and answers Mario's choice.
     CALL(evt_msg_print_party, STRING("stg3_tou_33"))
     CALL(evt_msg_select, 0, STRING("stg3_tou_33_yn"))
     IF_INT_EQUAL(LW(0), 0)
@@ -1639,6 +1646,7 @@ EVT_BEGIN(evt_tougi2)
             CALL(evt_msg_print_add, 0, STRING("stg3_tou_35_win"))
         END_SWITCH
     END_IF
+
     // Mario nods, the partner sums up and the story moves on.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
@@ -2500,6 +2508,7 @@ EVT_BEGIN(tou_02_init_evt)
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
     END_SWITCH
+
     // Entrances; coming back from the arena intro plays evt_tougi2.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -2509,6 +2518,7 @@ EVT_BEGIN(tou_02_init_evt)
         ELSE
         CALL_CHILD(PTR(evt_bero_info_run))
     END_IF
+
     // NPCs and the Star Piece panel.
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(init_kinopio_f))
@@ -2569,6 +2579,7 @@ EVT_BEGIN(tou_02_init_evt)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
     END_IF
+
     // Run anm_paneru with the SFX_STG3_AMB_OBJ_SCREEN1/2 cues.
     CALL(evt_map_playanim, STRING("anm_paneru"), MAP_ANIM_PLAY_LOOP, 0)
     BEGIN_INLINE_EVENT
@@ -2602,6 +2613,7 @@ EVT_BEGIN(tou_02_init_evt)
             END_LOOP
         END_LOOP
     END_INLINE_EVENT
+
     // The fan crowd scene.
     CALL_CHILD(PTR(evt_momikucha))
 #if VERSION >= VERSION_US

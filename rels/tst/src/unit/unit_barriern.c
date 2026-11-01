@@ -1114,6 +1114,7 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
     END_IF
+
     // The ring is launched and the target starts to get out of its way.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_5"))
     BEGIN_SIBLING_EVENT
@@ -1137,6 +1138,7 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // The ring sails on past the target to the edge of the stage; the satellites' state (unit work 1) picks how.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
@@ -1415,6 +1417,7 @@ static EVT_BEGIN(wawawa_attack_event)
         END_IF
         GOTO(99)
     END_IF
+
     // Five targets are picked at random from the target list, one per ring, and stored.
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHOTS_DONE, 0)
@@ -1439,6 +1442,7 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_wawawa_attack))
+
     // The attack is announced.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
@@ -1447,6 +1451,7 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, 5, LW(4))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // The Yux and its satellites start to blur and leave afterimages.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK5"), EVT_NULLPTR, 0, EVT_NULLPTR)
     SET_VALUE(LW(0), 0)
@@ -1459,6 +1464,7 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK10"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(barriern_zanzou2, UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK6"), EVT_NULLPTR, 0, EVT_NULLPTR)
+
     // They strike a pose together,
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
     WAIT_FRAMES(20)
@@ -1486,6 +1492,7 @@ static EVT_BEGIN(wawawa_attack_event)
     SET_VALUE(LW(0), 6)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(14))
     MULTIPLY(LW(0), LW(14))
+
     // and spin around in unison.
     LOOP(10)
         WAIT_FRAMES(1)
@@ -1501,6 +1508,7 @@ static EVT_BEGIN(wawawa_attack_event)
         END_LOOP
     END_LOOP
     SET_VALUE(LW(11), UNIT_WORK_SATELLITE)
+
     // The satellites settle into their S_2 poses.
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(11), UNIT_WORK_SATELLITE + 2)
@@ -1511,6 +1519,7 @@ static EVT_BEGIN(wawawa_attack_event)
         CALL(btlevtcmd_AnimeChangePose, LW(12), LW(13), STRING("S_2"))
         ADD(LW(11), 1)
     END_LOOP
+
     // The Yux plays its attack poses A_1 to A_4.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1"))
@@ -1525,6 +1534,7 @@ static EVT_BEGIN(wawawa_attack_event)
     SET_VALUE(LW(13), 0)
     SET_VALUE(LW(14), 5)
     SET_VALUE(LW(15), 7)
+
     // The Yux and every satellite send their rings at the party one after another.
     SPAWN_EVENT(wawawa_attack_event_sub)
     WAIT_FRAMES(30)
@@ -1544,6 +1554,7 @@ static EVT_BEGIN(wawawa_attack_event)
         ADD(LW(14), 1)
         ADD(LW(15), 1)
     END_LOOP
+
     // Wait until all three rings have been resolved.
     LOOP(0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHOTS_DONE, LW(0))
@@ -1553,6 +1564,7 @@ static EVT_BEGIN(wawawa_attack_event)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_FRAMES(10)
+
     // The barrier is rechecked, then the Yux and its satellites turn back the other way.
     CALL(_check_satellite)
     SET_VALUE(LW(0), -6)
@@ -1571,6 +1583,7 @@ static EVT_BEGIN(wawawa_attack_event)
             ADD(LW(11), 1)
         END_LOOP
     END_LOOP
+
     // The Yux faces forward again and returns to idling.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)

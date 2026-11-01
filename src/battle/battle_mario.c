@@ -2283,6 +2283,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
         CALL(evt_btl_camera_set_zoom, 0, 250)
     END_IF
+
     // On a normal turn the Action Command is set up now; on a first strike it is set up while Mario runs in.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_EQUAL(LW(0), 0)
@@ -2290,6 +2291,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 1, 1, 0)
     END_IF
+
     // First strike: Mario starts at his place, waits a second and runs to the takeoff spot. Otherwise he runs
     // there at once, with a star sparkle for Shrink, Sleepy and Soft Stomp.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -2344,6 +2346,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         END_SIBLING_EVENT
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     END_IF
+
     // Mario faces the target and the Action Command starts; each stomp starts at label 10, where the game
     // first checks whether it will land.
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
@@ -2366,6 +2369,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
+
     // Mario jumps onto the target; on the second stomp a Stylish press partway up is possible.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(2), 5)
@@ -2411,6 +2415,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         CALL(btlevtcmd_MarioJumpParam, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6))
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6), 0, MOVE_SOUND_FROM_TABLE)
     END_IF
+
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
     IF_INT_NOT_EQUAL(LW(5), 1)
         IF_INT_EQUAL(LW(5), 3)
@@ -2429,6 +2434,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         WAIT_FRAMES(40)
         GOTO(95)
     END_IF
+
     // The timed press on landing. A missed press deals the hit and Mario hops back off the target.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1D"))
     CALL(btlevtcmd_ac_timing_flag_onoff, 1, 1)
@@ -2461,6 +2467,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
         GOTO(95)
     END_IF
+
     // Pressed in time: the first stomp hits with the success effect and Mario bounces for a second stomp
     // (back to label 10); the second stomp deals the final hit.
     CALL(btlevtcmd_snd_voice, UNIT_ID_SELF, 2)
@@ -2486,6 +2493,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         WAIT_FRAMES(2)
     END_IF
+
     // After the final hit Mario backflips off the target towards his place.
     LABEL(90)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -2537,6 +2545,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+
     // Mario walks back to his place.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -2546,6 +2555,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // End of the attack: HP Drain and FP Drain take effect and Mario waits for the next turn.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -2626,6 +2636,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(6))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     END_IF
+
     // Mario faces the target and the Action Command starts; the game first checks whether the stomp will
     // land.
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
@@ -2648,6 +2659,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
+
     // First stomp: Mario jumps onto the target, and a Stylish press partway up makes him flip.
     IF_INT_LESS_OR_EQUAL(LW(10), 0)
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -2678,6 +2690,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         END_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_MARIO_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6), 0, MOVE_SOUND_FROM_TABLE)
+
         // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
         IF_INT_NOT_EQUAL(LW(5), 1)
             IF_INT_EQUAL(LW(5), 3)
@@ -2696,6 +2709,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
             WAIT_FRAMES(40)
             GOTO(95)
         END_IF
+
         // The timed press on landing. A missed press deals only the first hit and Mario hops back off the
         // target.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1D"))
@@ -2727,6 +2741,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
             CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
             GOTO(95)
         END_IF
+
         // Pressed in time: the first stomp hits with the success effect.
         BEGIN_INLINE_EVENT
             CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
@@ -2741,6 +2756,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
         CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
     END_IF
+
     // Mario bounces up off the target.
     BEGIN_SIBLING_EVENT_GET_ID(LW(14))
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5f))
@@ -2755,6 +2771,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
     WAIT_FRAMES(15)
     DELETE_EVENT(LW(14))
     GOTO(55)
+
     // Never reached (nothing jumps to label 52): Mario would hang in the air, drop to the floor, land hard
     // and get up.
     LABEL(52)
@@ -2773,6 +2790,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
     GOTO(95)
+
     // The spin: Mario somersaults in the air above the target, then dives straight down onto it.
     LABEL(55)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(15))
@@ -2794,6 +2812,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 4, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_A_1B"))
     WAIT_FRAMES(2)
+
     // The timed press as the dive lands: a good press deals the stronger second hit
     // (marioWeapon_KururinJump2) with the success effect; a missed one still deals it without the effect.
     // Either way Mario hops back off.
@@ -2850,6 +2869,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
     END_IF
     GOTO(95)
+
     // Never reached (nothing jumps to label 90): a backflip off the target.
     LABEL(90)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -2868,6 +2888,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+
     // Mario walks back to his place.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -2877,6 +2898,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // End of the attack: HP Drain and FP Drain take effect and Mario waits for the next turn.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -2906,6 +2928,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     CALL_CHILD(marioAttackEvent_MajinaiPowerUpCheck)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // The Action Command starts, then Mario hops, his boots wind up into a spring and he springs high into
     // the air.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
@@ -2941,6 +2964,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_JUMP_JABARA4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_MARIO_AC3_5"), EVT_NULLPTR, 0, EVT_NULLPTR)
+
     // A stage with an iron frame overhead that is still up: Mario spins up into the frame and is knocked flat
     // against it.
     CALL(_bgset_iron_frame_check, LW(0))
@@ -2977,6 +3001,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
                 CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), LW(0), FLOAT(1.0f))
             END_LOOP
         END_SIBLING_EVENT
+
         // Mario drops back down on his spring, bobbing up and down while he sways back and forth and returns
         // to his place.
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -3058,6 +3083,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
+
         // He stretches back to full height and the attack ends without hitting anyone.
         WAIT_FRAMES(130)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_I_S"))
@@ -3084,6 +3110,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         CALL(btlevtcmd_InviteApInfoReport)
         GOTO(95)
     END_IF
+
     // The real jump: Mario spins at the top, then drops onto the target with a random hang time.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1B"))
     CALL(btlevtcmd_AnimeChangePaperAnime, UNIT_ID_SELF, 1, STRING("PM_J_1C"))
@@ -3109,6 +3136,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(2), 5)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(5), MOVE_SOUND_KEEP)
+
     // A dodge or miss: the enemy plays its dodge, Mario tumbles off, falls flat and gets up.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 1)
@@ -3162,6 +3190,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         WAIT_FRAMES(12)
         GOTO(95)
     END_IF
+
     // The timed press on landing (a little later outside JP). A missed press deals one hit, the screen shakes
     // by the damage dealt (at most 9 outside JP) and Mario hops back off.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1D"))
@@ -3213,6 +3242,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_AC_SUCCESS, LW(5))
     END_IF
+
     // Pressed in time: the first hit lands with the success effect and Mario bounces up off the target.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
@@ -3229,6 +3259,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     END_SIBLING_EVENT
     WAIT_FRAMES(15)
     DELETE_EVENT(LW(14))
+
     // Mario somersaults above the target and dives back down onto it.
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(15))
     MULTIPLY(LW(15), -30)
@@ -3249,6 +3280,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 4, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_A_1B"))
     WAIT_FRAMES(2)
+
     // The second timed press: a good press deals the second hit with the success effect; a missed one still
     // deals it, the screen shakes (capped at 9 only in the US version) and Mario hops back off.
     CALL(btlevtcmd_ac_timing_flag_onoff, 1, 1)
@@ -3293,6 +3325,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
         GOTO(95)
     END_IF
+
     // After the second hit the screen shakes by the damage dealt and Mario backflips home; a Stylish press is
     // possible on the way.
     LABEL(90)
@@ -3340,6 +3373,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+
     // Mario walks back to his place.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -3349,6 +3383,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // End of the attack: HP Drain and FP Drain take effect and Mario waits for the next turn.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -3382,6 +3417,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 1, 1, 0)
+
     // Mario runs to the takeoff spot, faces the target and the Action Command starts; the game checks whether
     // the stomp will land.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
@@ -3406,6 +3442,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
+
     // Mario jumps onto the target, and a Stylish press partway up makes him flip.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1B"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -3435,6 +3472,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
         END_SWITCH
     END_SIBLING_EVENT
     CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6), 0, MOVE_SOUND_FROM_TABLE)
+
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
     IF_INT_NOT_EQUAL(LW(5), 1)
         IF_INT_EQUAL(LW(5), 3)
@@ -3453,6 +3491,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
         WAIT_FRAMES(40)
         GOTO(95)
     END_IF
+
     // The timed press on landing. A missed press still deals the hit, the screen shakes by the damage dealt
     // (at most 9 outside JP) and Mario hops back off.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1D"))
@@ -3493,6 +3532,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
         GOTO(95)
     END_IF
+
     // Pressed in time: the stomp hits with the success effect.
     CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -3501,6 +3541,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AudienceDeclareACResult, LW(0), LW(6))
     WAIT_FRAMES(2)
+
     // The screen shakes by the damage dealt and Mario backflips off the target.
     LABEL(90)
     CALL(btlevtcmd_GetDamage, LW(3), LW(0))
@@ -3527,6 +3568,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+
     // Mario walks back to his place.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -3536,6 +3578,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // End of the attack: HP Drain and FP Drain take effect and Mario waits for the next turn.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -3581,6 +3624,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 1, 1, 0)
+
     // Mario runs to the takeoff spot (pausing first if it is close), faces the target and the Action Command
     // starts; the game checks whether the stomp will land.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
@@ -3611,6 +3655,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
+
     // Mario jumps onto the target.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1B"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -3619,6 +3664,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     SET_VALUE(LW(6), 36)
     CALL(btlevtcmd_MarioJumpParam, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6))
     CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6), 0, MOVE_SOUND_FROM_TABLE)
+
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
     IF_INT_NOT_EQUAL(LW(5), 1)
         IF_INT_EQUAL(LW(5), 3)
@@ -3637,6 +3683,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
         WAIT_FRAMES(40)
         GOTO(95)
     END_IF
+
     // The timed press on landing. A missed press deals only the stomp and Mario hops back off (label 90).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1D"))
     CALL(btlevtcmd_ac_timing_flag_onoff, 1, 1)
@@ -3652,6 +3699,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
         GOTO(90)
     END_IF
+
     // Pressed in time: the stomp hits with the success effect and Mario bounces high into the air, turning.
     BEGIN_INLINE_EVENT
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
@@ -3685,6 +3733,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     END_SIBLING_EVENT
     WAIT_FRAMES(27)
     DELETE_EVENT(LW(13))
+
     // The second Action Command, the tornado's button presses, is set up with a setting that depends on the
     // difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
@@ -3712,6 +3761,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 10, 1, 0)
     WAIT_FRAMES(1)
     CALL(btlevtcmd_StartAC, 1)
+
     // Mario spins in the air, faster with each correct press, and the rising whir follows his progress.
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_MARIO, MARIO_WORK_SPIN_PITCH_TARGET, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_MARIO, MARIO_WORK_SPIN_PITCH, 0)
@@ -3774,6 +3824,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
             END_IF
         END_LOOP
     END_SIBLING_EVENT
+
     // The tornado whir plays, sliding towards the pitch set by the presses.
     CALL(evt_snd_sfxon, STRING("SFX_BTL_JUMP_TATUMAKI1"), LW(11))
     BEGIN_SIBLING_EVENT_GET_ID(LW(12))
@@ -3802,6 +3853,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
             SET_VALUE(LW(5), 5)
         END_LOOP
     END_SIBLING_EVENT
+
     // The result of the button presses.
     CALL(btlevtcmd_ResultAC)
     WAIT_FRAMES(1)
@@ -3842,6 +3894,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
         DELETE_EVENT(LW(13))
         DELETE_EVENT(LW(12))
         CALL(evt_snd_sfxoff, LW(11))
+
         // Mario stops spinning, falls to the floor, lands hard and gets up; the attack ends.
         BEGIN_SIBLING_EVENT_GET_ID(LW(13))
             LOOP(60)
@@ -3937,6 +3990,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
             CALL(btlevtcmd_GetResultPrizeLv, LW(3), 1, LW(6))
             CALL(btlevtcmd_AudienceDeclareACResult, LW(0), LW(6))
         END_SIBLING_EVENT
+
         // The spin slows and stops.
         WAIT_FRAMES(60)
         BEGIN_INLINE_EVENT_GET_ID(LW(13))
@@ -3962,6 +4016,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
         CALL(btlevtcmd_WaitEventEnd, LW(13))
         DELETE_EVENT(LW(12))
         CALL(evt_snd_sfxoff, LW(11))
+
         // Mario drops back to the floor; a Stylish press on the way down starts a spinning roll home.
         WAIT_FRAMES(30)
         BEGIN_SIBLING_EVENT
@@ -3982,10 +4037,12 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
             GOTO(80)
         END_IF
     END_IF
+
     // No Stylish: the attack ends.
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
     GOTO(95)
+
     // Stylish: Mario rolls back to his place spinning (from the US version on the first Stylish is also
     // counted). A second press there ends in a confetti pose; a mistimed one plays the miss sound.
     LABEL(80)
@@ -4063,6 +4120,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     GOTO(99)
+
     // A missed first press: the stomp's aftereffects and Mario backflips off the target.
     LABEL(90)
     CALL(btlevtcmd_StopAC)
@@ -4081,6 +4139,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+
     // Mario walks back to his place.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -4090,6 +4149,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // End of the attack: HP Drain and FP Drain take effect and Mario waits for the next turn.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -4141,6 +4201,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 1, 1, 0)
     CALL(btlevtcmd_ac_timing_flag_onoff, 1, 2)
+
     // Mario runs to the takeoff spot, faces the target and the Action Command starts.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
@@ -4153,6 +4214,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
     CALL(btlevtcmd_StartAC, 1)
     SET_VALUE(LW(10), 0)
     LABEL(10)
+
     // Each bounce starts here (label 10); the game first checks whether it will land.
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
@@ -4169,6 +4231,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
+
     // Mario jumps onto the target. The first jump is plain; each later bounce plays a higher bounce sound,
     // and a Stylish press partway up gives one of three random poses.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1B"))
@@ -4232,6 +4295,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
         CALL(btlevtcmd_MarioJumpParam, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8))
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8), 0, MOVE_SOUND_KEEP)
     END_IF
+
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
     IF_INT_NOT_EQUAL(LW(5), 1)
         IF_INT_EQUAL(LW(5), 3)
@@ -4250,6 +4314,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
         WAIT_FRAMES(40)
         GOTO(95)
     END_IF
+
     // The timed press on landing. A missed press deals this hit, the audience reacts to the bounces so far
     // and Mario hops back off.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1D"))
@@ -4290,6 +4355,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
         GOTO(95)
     END_IF
+
     // Pressed in time: the bounce hits and the combo is recorded (_record_renzoku_count); the last bounce
     // allowed by mario_get_renzoku_count_max hits as the final one.
     BEGIN_INLINE_EVENT
@@ -4326,6 +4392,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
         SET_VALUE(GSW_MAIN_POWER_BOUNCE_RECORD_LO, LW(1))
         SET_VALUE(GSW_MAIN_POWER_BOUNCE_RECORD_HI, LW(2))
     END_IF
+
     // The success effect and the audience reaction; while more bounces are allowed, the next one starts.
     SET_VALUE(LW(0), LW(10))
     SUBTRACT(LW(0), 1)
@@ -4340,6 +4407,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
         CALL(btlevtcmd_StartAC, 0)
         GOTO(10)
     END_IF
+
     // The last allowed bounce is done: Mario backflips off the target.
     LABEL(90)
     CALL(btlevtcmd_StopAC)
@@ -4359,6 +4427,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+
     // Mario walks back to his place.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -4368,6 +4437,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // End of the attack: HP Drain and FP Drain take effect and Mario waits for the next turn.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -4397,6 +4467,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 1, 1, 0)
+
     // Mario runs to the takeoff spot and the Action Command starts.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
@@ -4405,6 +4476,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     CALL(btlevtcmd_StartAC, 1)
     SET_VALUE(LW(10), 0)
     LABEL(10)
+
     // Each stomp starts here (label 10); the game first checks whether it will land.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -4417,6 +4489,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
+
     // Mario jumps to the current target; the first jump is plain.
     CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_BTL_JUMP_TUGITUGI1"), 0, 0, -1, -1, 0, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1B"))
@@ -4496,6 +4569,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
         END_SIBLING_EVENT
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8), 4, MOVE_SOUND_KEEP)
     END_SWITCH
+
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
     IF_INT_NOT_EQUAL(LW(5), 1)
         IF_INT_EQUAL(LW(5), 3)
@@ -4514,6 +4588,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
         WAIT_FRAMES(40)
         GOTO(95)
     END_IF
+
     // The timed press on landing. A missed press deals this hit, the audience reacts to the stomps so far and
     // Mario hops back off.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1D"))
@@ -4555,6 +4630,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
         GOTO(95)
     END_IF
+
     // Pressed in time: the stomp hits with the success effect, and Mario goes on to the next enemy with the
     // camera following him.
     CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
@@ -4584,6 +4660,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
         END_INLINE_EVENT
         GOTO(10)
     END_IF
+
     // Every enemy has been stomped: the audience reacts and Mario backflips off the last one.
     CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(10), LW(6))
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
@@ -4607,6 +4684,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+
     // Mario walks back to his place.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -4616,6 +4694,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // End of the attack: HP Drain and FP Drain take effect and Mario waits for the next turn.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -4686,6 +4765,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
         CALL(evt_btl_camera_set_zoom, 0, 300)
     END_IF
+
     // On a normal turn the hold-and-release Action Command is set up; its timing depends on the move.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_EQUAL(LW(0), 0)
@@ -4704,6 +4784,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
         CALL(btlevtcmd_AcSetFlag, 0)
         CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 3, 1, 0)
     END_IF
+
     // Mario walks up to the target; on a First Strike he waits a second first and the Action Command is set up
     // while he is still walking.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -4757,6 +4838,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     END_IF
+
     // Mario faces the target; if its spikes would hurt him first, he takes the damage and the attack ends.
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -4766,6 +4848,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
     END_IF
+
     // Pick the wind-up, raise and swing poses for Mario's hammer level (Piercing Blow has its own swing).
     IF_INT_EQUAL(LW(12), PTR(&badgeWeapon_TsuranukiNaguri))
         CALL(_get_mario_hammer_lv, LW(0))
@@ -4800,6 +4883,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
             SET_VALUE(LW(2), STRING("M_H_1C"))
         END_SWITCH
     END_IF
+
     // Mario raises the hammer and charges; Head Rattle and Piercing Blow make a star sparkle on the hammer.
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 350)
@@ -4837,6 +4921,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
             CASE_END
         END_SWITCH
     END_SIBLING_EVENT
+
     // The Action Command runs; then Mario swings down and the hammer strikes (Piercing Blow has its own sound).
     CALL(btlevtcmd_ftomsec, 30, LW(0))
     WAIT_MS(LW(0))
@@ -4867,6 +4952,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
             CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND1"), 0)
         END_SWITCH
     END_IF
+
     // If the attack misses, the target plays its dodge reaction and no damage is dealt.
     IF_INT_NOT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(6), 3)
@@ -4880,6 +4966,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
         END_IF
         GOTO(90)
     END_IF
+
     // The hit: normal damage after a failed Action Command; a success deals more and shows the rating.
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_CLEAR(LW(6), AC_RESULT_SUCCESS)
@@ -4895,6 +4982,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
     LABEL(90)
+
     // The camera shakes with the damage dealt (capped at 9 from the US version on), the weapon's side effects
     // apply and the first Stylish window opens.
     CALL(btlevtcmd_StopAC)
@@ -4932,6 +5020,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 60, 0)
 #endif
+
     // Without a well-timed press Mario just holds a pose and the attack ends.
     CALL(btlevtcmd_ACRGetResult, LW(15), LW(13))
     IF_INT_EQUAL(LW(15), 1)
@@ -4957,6 +5046,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     GOTO(95)
     LABEL(92)
 #endif
+
     // Stylish: Mario backflips in place; for the plain Hammer and Ice Smash a second good press ends it in a pose
     // with confetti.
     IF_INT_NOT_EQUAL(LW(15), 0)
@@ -5008,6 +5098,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
                 GOTO(95)
             END_SWITCH
         END_IF
+
         // The badge swings (Power Smash, Mega Smash, Piercing Blow) go on into a higher, faster flip with another
         // Stylish window.
         BEGIN_SIBLING_EVENT
@@ -5036,6 +5127,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
         IF_INT_NOT_EQUAL(LW(0), 2)
             GOTO(95)
         END_IF
+
         // A good press there turns it into a long twisting jump, ending in a pose with confetti and the finish sound.
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
         CALL(btlevtcmd_snd_voice, UNIT_ID_SELF, 1)
@@ -5070,6 +5162,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
         CALL(evt_snd_sfxon, STRING("SFX_BTL_ACROBAT_FINISH1"), 0)
         WAIT_FRAMES(90)
     END_IF
+
     // Mario walks back to his home spot.
     LABEL(95)
     CALL(evt_audience_ap_recovery)
@@ -5131,6 +5224,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
         CALL(evt_btl_camera_set_zoom, 0, 300)
     END_IF
+
     // The hold-and-release Action Command is set up (the Ultra Hammer uses different timing).
     CALL(btlevtcmd_GetWeaponActionLv, LW(12), LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
@@ -5144,6 +5238,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     END_SWITCH
     CALL(btlevtcmd_AcSetFlag, AC_STICK_KEEP_LEFT_FLAG_COMPACT_GAUGE)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 3, 1, 0)
+
     // Mario walks up beside the target.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -5160,6 +5255,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // Mario faces the target; if its spikes would hurt him first, he takes the damage and the attack ends.
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -5170,6 +5266,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
     END_IF
+
     // Mario raises the hammer and spins it around while the Action Command runs, with the Super or Ultra Hammer
     // spin sound.
     CALL(_get_mario_hammer_lv, LW(0))
@@ -5215,6 +5312,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
         CASE_END
         CASE_END
     END_SWITCH
+
     // Mario swings the hammer through and the camera pulls back to the whole stage.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(1))
     CALL(btlevtcmd_AnimeChangePaperAnime, UNIT_ID_SELF, 1, STRING("P_H_1C"))
@@ -5222,6 +5320,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_AnimeChangePaperGroup, UNIT_ID_SELF, 1, 0, 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+
     // If the attack misses, the target plays its dodge reaction and no damage is dealt.
     IF_INT_NOT_EQUAL(LW(7), 1)
         IF_INT_EQUAL(LW(7), 3)
@@ -5235,6 +5334,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
         END_IF
         GOTO(90)
     END_IF
+
     // The hit: normal damage after a failed Action Command; a success deals more and shows the rating.
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_CLEAR(LW(6), AC_RESULT_SUCCESS)
@@ -5256,6 +5356,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
     LABEL(90)
     CALL(btlevtcmd_StopAC)
+
     // The weapon's side effects apply.
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     SWITCH(LW(12))
@@ -5266,6 +5367,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
         CASE_DEFAULT
         SET_VALUE(LW(0), 0)
     END_SWITCH
+
     // Ultra Hammer: a whirlwind rises and Mario keeps spinning in place.
     IF_INT_EQUAL(LW(0), 1)
         BEGIN_INLINE_EVENT
@@ -5288,6 +5390,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
             END_LOOP
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
         END_SIBLING_EVENT
+
         // If the swing did not connect, Mario spins to a stop and stands for a moment.
         IF_INT_NOT_EQUAL(LW(7), 1)
             WAIT_FRAMES(50)
@@ -5405,11 +5508,13 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
             END_SWITCH
         END_IF
     END_IF
+
     // Mario walks back to his home spot.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // Ultra Hammer only, after a successful hit: wait for the knocked-away target to leave the stage and land back
     // at its home, then hit it once more.
     SWITCH(LW(12))
@@ -5486,6 +5591,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     CALL(btlevtcmd_AcSetParamAll, 4, 25, 0, 0, 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_AcSetFlag, 0)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 3, 1, 0)
+
     // Mario walks to the middle of the stage and the camera pulls back.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, UNIT_ID_SELF)
@@ -5497,6 +5603,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -60, LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 4)
     CALL(evt_btl_camera_set_zoom, 0, 450)
+
     // Mario raises the hammer and charges while the player holds the stick.
     CALL(_get_mario_hammer_lv, LW(0))
     SWITCH(LW(0))
@@ -5528,6 +5635,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(1))
     CALL(btlevtcmd_StartAC, 1)
     WAIT_FRAMES(75)
+
     // Once the charge reaches level 3, Mario leans back and jumps up for a bigger slam.
     BEGIN_SIBLING_EVENT_GET_ID(LW(13))
         SET_VALUE(LW(5), 5)
@@ -5582,6 +5690,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.2998047f))
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(6), LW(7), LW(8), 40, MOVE_SOUND_FROM_TABLE)
     END_SIBLING_EVENT
+
     // When the player releases before that, Mario slams the ground at once.
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_GetResultAC, LW(8))
@@ -5618,6 +5727,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     CALL(evt_snd_sfxon, STRING("SFX_MARIO_ATTACK_ULTRAQUAKE1"), 0)
     WAIT_FRAMES(10)
     GOTO(40)
+
     // Full charge: Mario slams the hammer down as he comes back down from his jump.
     LABEL(10)
     CALL(btlevtcmd_WaitEventEnd, LW(13))
@@ -5634,6 +5744,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     CALL(evt_snd_sfxon, STRING("SFX_MARIO_ATTACK_ULTRAQUAKE1"), 0)
     CALL(btlevtcmd_WaitEventEnd, LW(14))
     CALL(btlevtcmd_WaitEventEnd, LW(15))
+
     // The quake: the stage shakes, the audience reacts and the Action Command rating is shown on a success.
     LABEL(40)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT_ZOOM)
@@ -5653,6 +5764,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
     END_IF
+
     // Every enemy in turn: those the quake reaches flinch and take damage when the shaking ends (more after a
     // success); the rest play their dodge reaction.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -5691,6 +5803,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
         END_IF
     END_IF
     GOTO(50)
+
     // After the shaking, the weapon's side effects apply and Mario lifts his hammer as the Stylish window opens;
     // without a good press the attack ends.
     LABEL(90)
@@ -5716,6 +5829,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
         CALL(btlevtcmd_InviteApInfoReport)
         GOTO(95)
     END_SWITCH
+
     // Stylish: Mario backflips back to his home spot; a second good press ends it in a pose with confetti.
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -5757,6 +5871,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     END_IF
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
+
     // Mario walks back to his home spot.
     LABEL(95)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_W_1"))
@@ -5789,6 +5904,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     CALL(btlevtcmd_AcSetParamAll, 4, 16, 0, 0, 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_AcSetFlag, 0)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 3, 1, 0)
+
     // Mario walks to the middle of the stage and the camera pulls back.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, UNIT_ID_SELF)
@@ -5800,6 +5916,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -60, LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 4)
     CALL(evt_btl_camera_set_zoom, 0, 450)
+
     // Mario raises the hammer and charges while the player holds the stick.
     CALL(_get_mario_hammer_lv, LW(0))
     SWITCH(LW(0))
@@ -5830,6 +5947,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(1))
     CALL(btlevtcmd_StartAC, 1)
     WAIT_FRAMES(32)
+
     // Once the charge reaches level 2, Mario leans back and jumps up for a bigger slam.
     BEGIN_SIBLING_EVENT_GET_ID(LW(13))
         SET_VALUE(LW(5), 5)
@@ -5884,6 +6002,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.23925781f))
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(6), LW(7), LW(8), 55, MOVE_SOUND_FROM_TABLE)
     END_SIBLING_EVENT
+
     // When the player releases before that, Mario slams the ground at once.
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_GetResultAC, LW(8))
@@ -5910,6 +6029,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     CALL(evt_snd_sfxon, STRING("SFX_MARIO_ATTACK_ULTRAQUAKE1"), 0)
     WAIT_FRAMES(10)
     GOTO(40)
+
     // Charged: Mario slams the hammer down as he comes back down from his jump.
     LABEL(10)
     CALL(btlevtcmd_WaitEventEnd, LW(13))
@@ -5926,6 +6046,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     CALL(evt_snd_sfxon, STRING("SFX_MARIO_ATTACK_ULTRAQUAKE1"), 0)
     CALL(btlevtcmd_WaitEventEnd, LW(14))
     CALL(btlevtcmd_WaitEventEnd, LW(15))
+
     // The quake: the stage shakes, the audience reacts and the Action Command rating is shown on a success.
     LABEL(40)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT_ZOOM)
@@ -5945,6 +6066,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
     END_IF
+
     // Every enemy in turn: those the quake reaches flinch and take damage when the shaking ends (more after a
     // success); the rest play their dodge reaction.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -5983,6 +6105,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
         END_IF
     END_IF
     GOTO(50)
+
     // After the shaking, the weapon's side effects apply and Mario lifts his hammer; Mega Quake has no Stylish.
     LABEL(90)
     WAIT_FRAMES(12)
@@ -5996,6 +6119,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     WAIT_FRAMES(60)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_H_16"))
     WAIT_FRAMES(10)
+
     // Mario walks back to his home spot.
     LABEL(95)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_W_1"))
@@ -6042,12 +6166,14 @@ EVT_BEGIN(marioAttackEvent_HammerNageru)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+
     // Whether the throw can connect is decided now; Mario turns to the target and the camera pulls back.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 4)
     CALL(evt_btl_camera_set_zoom, 0, 450)
+
     // Mario raises the hammer and charges while the player holds the stick; the hammer he will throw is matched to
     // his hammer level.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_MARIO_POWER2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -6083,6 +6209,7 @@ EVT_BEGIN(marioAttackEvent_HammerNageru)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(1))
     CALL(btlevtcmd_StartAC, 1)
     CALL(btlevtcmd_ResultAC)
+
     // On release Mario throws the hammer, which flies on its own, and the Stylish window opens; without a good
     // press he stands for a moment and the attack ends.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -6103,6 +6230,7 @@ EVT_BEGIN(marioAttackEvent_HammerNageru)
         WAIT_MS(667)
         GOTO(94)
     END_SWITCH
+
     // Stylish: Mario backflips in place; a second good press ends it in a pose with confetti.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_voice, UNIT_ID_SELF, 1)
@@ -6139,6 +6267,7 @@ EVT_BEGIN(marioAttackEvent_HammerNageru)
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
         WAIT_MS(1500)
     END_IF
+
     // Wait for the hammer to finish its flight, then Mario walks back to his home spot.
     LABEL(94)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
@@ -6246,6 +6375,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
     CALL(btlevtcmd_AcSetFlag, AC_TIMING_WIDE_FLAG_SWAP_RESULT_ICON)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 11, 1, 0)
     WAIT_FRAMES(2)
+
     // The fireball appears at the top of the stage in front of Mario and drops toward him.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, UNIT_ID_SELF)
@@ -6266,6 +6396,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2), 60, 0, EASING_CUBIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     END_SIBLING_EVENT
+
     // Wait until the player holds the stick left; the fireball stops where it is.
     LABEL(10)
     CALL(btlevtcmd_PadCheckNow, 0, BATTLE_PAD_STICK_LEFT, LW(0))
@@ -6277,6 +6408,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
     IF_INT_NOT_EQUAL(LW(0), 0)
         DELETE_EVENT(LW(15))
     END_IF
+
     // Mario raises the hammer and charges it with fire while the fireball falls toward the floor.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_MARIO_POWER2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(_get_mario_hammer_lv, LW(0))
@@ -6312,6 +6444,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_MARIO_HAMMER_FIRE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_FallPartsPosition, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2), 75)
     END_INLINE_EVENT
+
     // The Action Command runs: the player must release the stick in time to hit the fireball.
     CALL(btlevtcmd_StartAC, 1)
     WAIT_FRAMES(20)
@@ -6343,9 +6476,11 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
         CALL(evt_audience_ap_recovery)
         CALL(btlevtcmd_InviteApInfoReport)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2))
+
         // FAKE: no-op (char*) cast; PTR(battle_mario_nullstr) changes the object
         CALL(evt_eff64, PTR((char*)battle_mario_nullstr), STRING("fire_spark_n64"), 0, LW(0), LW(1), LW(2), 30, 40, FLOAT(1.0f), 12, 100, FLOAT(1.0f), FLOAT(1.0f), 0)
         ADD(LW(1), 5)
+
         // FAKE: no-op (char*) cast; PTR(battle_mario_nullstr) changes the object
         CALL(evt_eff, PTR((char*)battle_mario_nullstr), STRING("kemuri_test"), 11, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT_ZOOM)
@@ -6406,6 +6541,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
     CALL(evt_btl_camera_off_posoffset_manual, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_MARIO_HAMMER_FIRE4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     SPAWN_EVENT_GET_ID(PTR(marioAttackEvent_FireNaguri_object), LW(15))
+
     // A Stylish window opens right after the smash; a good press makes Mario spin and pose.
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 0)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
@@ -6426,6 +6562,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
         WAIT_FRAMES(60)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_S_1"))
     END_SWITCH
+
     // Wait for the fireball to finish, then Mario walks back to his home spot.
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(evt_audience_ap_recovery)
@@ -6462,6 +6599,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri_object)
         CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, MARIO_PARTS_WORK_FIRE_BALL, 0)
         RETURN
     END_IF
+
     // The fireball bounces down onto the floor in front of the first enemy; the weapon's side effects apply and
     // the Action Command rating is shown on a success.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -6482,6 +6620,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri_object)
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
     END_IF
+
     // The fireball runs along the floor toward each enemy in turn, leaving a fire pillar every 6 frames.
     CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 3, LW(7), LW(8), LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, -1, -1, 2, LW(12))
@@ -6521,6 +6660,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri_object)
             GOTO(51)
         END_IF
     END_IF
+
     // The enemy it reaches takes the hit (more after a successful Action Command) and the pillars get smaller;
     // enemies that avoid it play their dodge reaction.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
@@ -6546,6 +6686,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri_object)
         END_IF
     END_IF
     GOTO(50)
+
     // After the last enemy, the trail of fire runs on to the stage edge.
     LABEL(90)
     LABEL(92)

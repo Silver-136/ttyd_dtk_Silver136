@@ -413,6 +413,7 @@ EVT_BEGIN(talk_cook)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             IF_INT_EQUAL(LW(1), 0)
+                // Trouble Center request 22: the cook asks for the ingredients of his dish.
                 CALL(evt_msg_print, 0, STRING("irai_22_00"), 0, 0)
             ELSE
                 CALL(evt_msg_print, 0, STRING("irai_22_01"), 0, 0)
@@ -439,6 +440,7 @@ EVT_BEGIN(talk_cook)
                     DEBUG_PUT_MSG(STRING("iri_22 status ???"))
                 END_SWITCH
             ELSE
+                // Mario picks which ingredient to hand over.
                 CALL(evt_msg_print, 0, STRING("irai_22_09"), 0, 0)
                 GOTO(0)
             END_IF
@@ -470,6 +472,8 @@ EVT_BEGIN(talk_cook)
             CALL(evt_sub_get_coin, 40)
             SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
             SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_GET_THESE_INGREDIENTS), 1)
+
+            // With all three delivered, the request is recorded as solved.
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         ELSE
             IF_INT_NOT_EQUAL(LW(1), -1)
@@ -478,6 +482,7 @@ EVT_BEGIN(talk_cook)
         END_IF
         RETURN
     END_IF
+
     // If Mario has the Galley Pot, he can return it.
     CALL(evt_pouch_check_item, ITEM_GALLEY_POT, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -488,6 +493,8 @@ EVT_BEGIN(talk_cook)
         CASE_LESS(STG6_01_THE_CONDUCTOR)
         IF_INT_EQUAL(LSWF_RSH_03_CHEF_FIRST_TALKED, 0)
             SET_VALUE(LSWF_RSH_03_CHEF_FIRST_TALKED, 1)
+
+            // Without a request, his line depends on the story stage.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_04"), 0, 0)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_05"), 0, 0)
@@ -648,6 +655,7 @@ static EVT_BEGIN(talk_waitless)
             RETURN
         END_IF
     END_IF
+
     // If Mario has the Shell Earrings, he can return them.
     CALL(evt_pouch_check_item, ITEM_SHELL_EARRINGS, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -819,6 +827,7 @@ EVT_BEGIN(evt_lanch_missing)
     CALL(evt_set_dir_to_target, STRING("トロン"), STRING("ポワン探偵"))
     CALL(evt_set_dir_to_target, STRING("ウェイトレス"), STRING("ポワン探偵"))
     CALL(evt_set_dir_to_target, STRING("コック"), STRING("ポワン探偵"))
+
     // The missing lunch mystery: Pennington's theme plays.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_POWAN1"))
     CALL(evt_snd_envoff, PSND_PAUSE)
@@ -1389,6 +1398,7 @@ EVT_BEGIN(evt_shop_open)
             CALL(npc_alpha_except_tenin, LW(0))
             WAIT_FRAMES(1)
             IF_INT_EQUAL(LW(1), 0)
+                // Trouble Center request 22: the cook asks for the ingredients of his dish.
                 BREAK_LOOP
             END_IF
         END_LOOP
@@ -1636,6 +1646,7 @@ static EVT_BEGIN(evt_access)
         CALL(evt_msg_print, 0, LW(1), 0, 0)
 #if VERSION > VERSION_DEMO_US
         ELSE
+        // Mario picks which ingredient to hand over.
         CALL(evt_msg_print, 0, LW(2), 0, 0)
     END_IF
 #endif
@@ -1696,6 +1707,7 @@ EVT_BEGIN(rsh_03_init_evt)
         CASE_BETWEEN(STG6_05_GALLEY_KETTLE_DISCOVERED, STG7_00_START)
         CALL(evt_npc_setup, PTR(npc_data))
     END_SWITCH
+
     // Set up the shop door and the Smorg shop.
     CALL_CHILD(PTR(evt_shop_door_init))
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
@@ -1713,6 +1725,7 @@ EVT_BEGIN(rsh_03_init_evt)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
+
     // Set up the shelf signs.
     CALL_CHILD(PTR(evt_access_entry))
     SWITCH(GSW_STORY_PROGRESS)

@@ -128,6 +128,7 @@ EVT_BEGIN(evt_anim2)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_sub_spline_init, 1, 11, PTR(spline_dt), 3, 0, 10000)
+
     // Once the spline completes, retain its final position while the independent bobbing continues.
     SET_VALUE(LW(3), 1)
     LOOP(0)

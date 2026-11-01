@@ -1366,6 +1366,7 @@ EVT_BEGIN(bgset_aji_space_event)
     SET_VALUE(LW(2), 0)
     SET_VALUE(LW(3), 0)
     LABEL(0)
+
     // Each star keeps an independent frame counter and revolution period.
     CALL(_space_rotate, STRING("star_01"), LW(1), 7500)
     CALL(_space_rotate, STRING("star_02"), LW(2), 6750)

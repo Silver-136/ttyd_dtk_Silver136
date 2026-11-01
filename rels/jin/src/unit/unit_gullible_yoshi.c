@@ -292,6 +292,7 @@ static EVT_BEGIN(attack_event_yoshi)
     SET_VALUE(LW(12), PTR(&enemyWeapon_YoshiNormalAttack))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // Target: he picks one for his stomp.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
@@ -299,6 +300,7 @@ static EVT_BEGIN(attack_event_yoshi)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
+
     // The attack is declared.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -327,6 +329,7 @@ static EVT_BEGIN(attack_event_yoshi)
     DELETE_EVENT(LW(13))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // Flutter jump: he leaps, flaps his legs in the air over the target and works out the dive.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_J_1A"))
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.2998047f))
@@ -370,10 +373,12 @@ static EVT_BEGIN(attack_event_yoshi)
     CALL(btl_yoshi_yoroyoro_jump_calc_param, UNIT_ID_SELF, LW(6), LW(7), LW(8), LW(10), LW(9))
     CALL(btl_yoshi_yoroyoro_jump_move, UNIT_ID_SELF, LW(6), LW(7), LW(8), LW(10), LW(9))
     DELETE_EVENT(LW(13))
+
     // Select 1..5 intermediate hits; the loop follows them with a separate final hit.
     CALL(evt_sub_random, 4, LW(11))
     ADD(LW(11), 1)
     SET_VALUE(LW(10), 0)
+
     // Each stomp: the pre-damage check decides between a dodge and a hit.
     LABEL(10)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
@@ -406,6 +411,7 @@ static EVT_BEGIN(attack_event_yoshi)
         WAIT_FRAMES(15)
         LOOP(LW(0))
             SET_VALUE(LW(2), LW(1))
+
             // He spins in the air and dives onto the target.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_YOSHI_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             LOOP(LW(2))
@@ -461,6 +467,7 @@ static EVT_BEGIN(attack_event_yoshi)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
+
     // Miss: he tumbles back (the target dodges for some kinds of miss).
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
@@ -473,6 +480,7 @@ static EVT_BEGIN(attack_event_yoshi)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     WAIT_FRAMES(20)
+
     // He walks back to his home position.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

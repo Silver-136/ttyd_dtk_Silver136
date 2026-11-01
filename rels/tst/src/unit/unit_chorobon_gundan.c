@@ -352,6 +352,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // It picks a target; with none, it ends the turn (or flusters when confused).
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_gundan_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_chorobon_gundan_attack), LW(3), LW(4))
@@ -359,6 +360,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_chorobon_gundan_attack))
+
     // The attack is declared and paid for, and the camera follows the swarm.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -368,6 +370,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(chorogun_set_target_id, LW(3))
     CALL(chorogun_approach_target)
+
     // The swarm flies in toward the target; the damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -391,10 +394,12 @@ static EVT_BEGIN(attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // On a miss the swarm hovers for a second.
     LABEL(90)
     WAIT_MS(1000)
     GOTO(98)
+
     // On a hit it dives onto the target several times, depending on how many Fuzzies are left, with a guard check each time.
     LABEL(91)
     CALL(chorogun_get_alive_num, LW(15))
@@ -425,6 +430,7 @@ static EVT_BEGIN(attack_event)
         WAIT_FRAMES(30)
     END_LOOP
     GOTO(98)
+
     // The last dive deals the damage; the swarm flies back home and the camera resets.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)

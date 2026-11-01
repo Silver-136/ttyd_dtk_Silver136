@@ -204,6 +204,7 @@ EVT_BEGIN(jon_init_evt)
             SET_VALUE(GSW_PIT_FLOOR, 99)
         END_IF
     END_IF
+
     // Remember the deepest floor reached, then set up the signboard, the mover, the trader and the enemies of
     // this floor.
     SET_VALUE(LSW_JON_PIT_FLOOR, GSW_PIT_FLOOR)
@@ -216,6 +217,7 @@ EVT_BEGIN(jon_init_evt)
     CALL_CHILD(PTR(idouya_setup))
     CALL_CHILD(PTR(gyousyou_setup))
     CALL_CHILD(PTR(enemy_setup))
+
     // Choose the floor layout from the floor number: the boss floor, a rest-room floor, the floor before one,
     // or a plain floor.
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
@@ -271,6 +273,7 @@ EVT_BEGIN(jon_init_evt)
     END_SWITCH
     CALL_CHILD(PTR(iri_12_init))
     CALL(evt_sub_get_mapname, LW(0))
+
     // On floor 50 the graffiti wall of Trouble Center job 30 shows its before or after state and reacts to
     // Bobbery.
     IF_STR_EQUAL(LW(0), STRING("jon_04"))
@@ -1206,6 +1209,7 @@ EVT_BEGIN(enemy_setup)
             RETURN
         END_IF
     END_IF
+
     // Look up this floor's species and battle, create the enemy NPC and pick a random spot for it on the left
     // or right half of the room.
     CALL(enemy_info, GSW_PIT_FLOOR, LW(0), LW(1), LW(2))
@@ -1223,6 +1227,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_sub_random, 200, LW(4))
         ADD(LW(4), -100)
     END_IF
+
     // Goomba family and their Hyper and Dark versions: one setup, placed on the ground.
     IF_STR_EQUAL(LW(1), STRING("クリボー"))
         CALL(evt_npc_setup, PTR(npcEnt_kuriboo))
@@ -1248,6 +1253,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_kuriboo))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+
     // Paragoomba family: flying, so placed above the ground.
     IF_STR_EQUAL(LW(1), STRING("パタクリ"))
         CALL(evt_npc_setup, PTR(npcEnt_patakuri))
@@ -1261,6 +1267,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_patakuri))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 50, LW(4))
     END_IF
+
     // Spania family (Spania, Hyper Spania and the like).
     IF_STR_EQUAL(LW(1), STRING("ヒンニャー"))
         CALL(evt_npc_setup, PTR(npcEnt_hannya))
@@ -1274,6 +1281,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_hannya))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+
     // Fuzzy family and the Green and Flower Fuzzies.
     IF_STR_EQUAL(LW(1), STRING("チョロボン"))
         CALL(evt_npc_setup, PTR(npcEnt_chorobon))
@@ -1287,6 +1295,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_chorobon))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+
     // Moon Cleft and Bald Cleft families.
     IF_STR_EQUAL(LW(1), STRING("シンエモン"))
         CALL(evt_npc_setup, PTR(npcEnt_sinemon))
@@ -1308,6 +1317,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_sinnosuke))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+
     // Koopa Troopa and Paratroopa families.
     IF_STR_EQUAL(LW(1), STRING("ノコノコ敵"))
         CALL(evt_npc_setup, PTR(npcEnt_nokonoko))
@@ -1329,6 +1339,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_patapata))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 50, LW(4))
     END_IF
+
     // Buzzy Beetle and Parabuzzy families.
     IF_STR_EQUAL(LW(1), STRING("メット"))
         CALL(evt_npc_setup, PTR(npcEnt_met))
@@ -1342,6 +1353,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_patamet))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 50, LW(4))
     END_IF
+
     // Pokey and Bone/Mummy Pokey, then the bony enemies.
     IF_STR_EQUAL(LW(1), STRING("サンボ"))
         CALL(evt_npc_setup, PTR(npcEnt_sambo))
@@ -1359,6 +1371,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_karon))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+
     // Poison Puff family (the other puffy clouds share this setup).
     IF_STR_EQUAL(LW(1), STRING("ドクガッスン"))
         CALL(evt_npc_setup, PTR(npcEnt_dokugassun))
@@ -1376,6 +1389,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_dokugassun))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 10, LW(4))
     END_IF
+
     // Pider family: the spiders hang high above the floor and keep that height as their home position.
     IF_STR_EQUAL(LW(1), STRING("パイダース"))
         CALL(evt_npc_setup, PTR(npcEnt_piders))
@@ -1391,6 +1405,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_set_home_position, STRING("敵"), LW(3), 140, LW(4))
 #endif
     END_IF
+
     // Bandit-type thieves share the Goomba setup.
     IF_STR_EQUAL(LW(1), STRING("ボロドー"))
         CALL(evt_npc_setup, PTR(npcEnt_kuriboo))
@@ -1404,6 +1419,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_dokugassun))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 10, LW(4))
     END_IF
+
     // Bob-omb, Boo, bubble and Chain-Chomp style enemies.
     IF_STR_EQUAL(LW(1), STRING("ボムへい"))
         CALL(evt_npc_setup, PTR(npcEnt_kuriboo))
@@ -1463,6 +1479,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_mahoon))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 20, LW(4))
     END_IF
+
     // Piranha Plants, Koopatrols, the Swoopers, Bristles and Crazee Dayzees.
     IF_STR_EQUAL(LW(1), STRING("パックンフラワー"))
         CALL(evt_npc_setup, PTR(npcEnt_pakkun))
@@ -1512,6 +1529,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_pansy))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+
     // Bonetail on floor 100: an invisible-to-billboard NPC at the room centre whose appearance is scripted by
     // zonbaba_first_event.
     IF_STR_EQUAL(LW(1), STRING("ゾンババ"))
@@ -1523,6 +1541,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_set_ry, STRING("敵"), 0)
         SPAWN_EVENT(PTR(zonbaba_first_event))
     END_IF
+
     // Make the chosen spot the enemy's home, then arm its battle and watch for its defeat.
     CALL(evt_npc_get_position, STRING("敵"), LW(3), LW(4), LW(5))
 #if VERSION <= VERSION_DEMO_US
@@ -1531,6 +1550,7 @@ EVT_BEGIN(enemy_setup)
     CALL(evt_npc_set_battle_info, STRING("敵"), LW(2))
     CALL(setup_npc_ex_para, STRING("敵"))
     CALL(yattukeFlag)
+
     // Wait until the enemy is dead, then open the exit pipe and report the kill to Trouble Center job 12.
     BEGIN_INLINE_EVENT
         LABEL(1)
@@ -1789,6 +1809,7 @@ EVT_END()
  * non-English).
  */
 EVT_BEGIN(talk_gyousyou)
+    // The trader pitches his "hot products" to Mario and asks whether he wants to see them (yes or no).
     CALL(evt_msg_print, 0, STRING("100kai_item_01"), 0, STRING("me"))
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
@@ -1796,6 +1817,7 @@ EVT_BEGIN(talk_gyousyou)
         RETURN
     END_IF
     CALL(evt_msg_continue)
+
     // Show the coin window and the list of goods; closing it ends the sale with a goodbye.
     LABEL(0)
     CALL(evt_win_coin_on, 0, LW(12))
@@ -1805,12 +1827,17 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print, 0, STRING("100kai_item_10"), 0, STRING("me"))
         RETURN
     END_IF
+
+    // Not enough coins for the chosen item: the trader says so and the list comes back.
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), LW(3))
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print, 0, STRING("100kai_item_03"), 0, STRING("me"))
         GOTO(0)
     END_IF
+
+    // The trader names the item and its price and asks Mario to confirm (the English text swaps the order of
+    // name and price for some languages).
     IF_INT_GREATER_OR_EQUAL(LW(1), 240)
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
@@ -1857,6 +1884,7 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print_add, 0, STRING("100kai_item_05"))
         RETURN
     END_IF
+
     // Mario agrees: the item goes into his pouch, or the trader sighs that he cannot carry any more.
     CALL(evt_pouch_add_item, LW(1), LW(0))
     IF_INT_EQUAL(LW(0), -1)
@@ -1868,6 +1896,8 @@ EVT_BEGIN(talk_gyousyou)
         END_IF
         RETURN
     END_IF
+
+    // Take the price in coins, thank Mario and offer the list again.
     MULTIPLY(LW(3), -1)
     CALL(evt_pouch_add_coin, LW(3))
     CALL(evt_win_coin_wait, LW(12))
@@ -1880,6 +1910,8 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
         RETURN
     END_IF
+
+    // Not enough coins for the chosen item: the trader says so and the list comes back.
     CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("100kai_item_07"), 0, STRING("me"))
 #else
@@ -1888,6 +1920,9 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print_add, 0, STRING("100kai_item_06"))
         RETURN
     END_IF
+
+    // The trader names the item and its price and asks Mario to confirm (the English text swaps the order of
+    // name and price for some languages).
     CALL(evt_msg_print_add, 0, STRING("100kai_item_07"))
 #endif
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
@@ -1895,6 +1930,8 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print_add, 0, STRING("100kai_item_08"))
         RETURN
     END_IF
+
+    // Take the price in coins, thank Mario and offer the list again.
     CALL(evt_msg_continue)
     GOTO(0)
     RETURN
@@ -3151,6 +3188,7 @@ EVT_BEGIN(zonbaba_first_event)
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
         RETURN
     END_IF
+
     // Fog closes in and control is taken from Mario while Bonetail is placed in front of him, asleep.
     CALL(evt_map_set_fog, 2, 400, 1000, 0, 10, 40)
     CALL(evt_map_fog_onoff, 1)
@@ -3181,6 +3219,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_set_dir_npc, STRING("敵"))
     CALL(evt_party_set_dir_npc, 0, STRING("敵"))
+
     // Bonetail wakes with a roar and stands up while the ground shakes.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_GONBABA_FLY2"))
     BEGIN_INLINE_EVENT
@@ -3191,6 +3230,7 @@ EVT_BEGIN(zonbaba_first_event)
     END_INLINE_EVENT
     SPAWN_EVENT(PTR(gonbaba_standup_shake))
     SPAWN_EVENT(PTR(gonbaba_fog_change))
+
     // The camera pulls back to show his size; the screen shakes.
     CALL(evt_cam3d_evt_set, -755, 24, 376, -84, 114, -22, 4500, EASING_SINE_IN_OUT)
     WAIT_MS(4000)
@@ -3201,11 +3241,13 @@ EVT_BEGIN(zonbaba_first_event)
         WAIT_MS(15)
     END_LOOP
     WAIT_MS(3000)
+
     // The Bonetail battle starts and the script waits for it to end.
     CALL(evt_npc_set_battle_info, STRING("敵"), 51)
     CALL(evt_npc_battle_start, STRING("敵"))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_cam3d_evt_set, -769, 50, 527, -22, 114, 7, 1, EASING_SINE_IN_OUT)
+
     // Bonetail is beaten: he collapses where he stood, shaking the room as he falls.
     CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_H_1"))
     CALL(evt_map_fog_onoff, 0)
@@ -3244,6 +3286,7 @@ EVT_BEGIN(zonbaba_first_event)
     WAIT_MS(600)
     CALL(evt_cam3d_evt_set, -145, 80, 882, 104, 114, 81, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+
     // His mouth opens and the treasure chest tumbles out, bouncing across the floor.
     CALL(evt_mobj_itembox, STRING("box"), 250, 60, 0, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
@@ -3300,6 +3343,7 @@ EVT_BEGIN(zonbaba_first_event)
         CALL(evt_mobj_set_y_position, STRING("box"), 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
+
     // Mario and his partner react to the chest; the room returns to normal.
     CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_H_3"))
     WAIT_MS(200)

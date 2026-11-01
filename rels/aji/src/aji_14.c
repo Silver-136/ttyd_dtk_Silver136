@@ -220,6 +220,8 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(1000)
     CALL(evt_npc_flag_onoff, 1, STRING("幹部"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), NPC_FLAG_INSTANT_TURN)
+
+    // He says he has been waiting for Mario and lured him here with the Crystal Star (stg7_aji_37 to 39).
     CALL(evt_msg_print, 0, STRING("stg7_aji_37"), 0, STRING("幹部"))
     WAIT_MS(300)
 #if VERSION > VERSION_DEMO_US
@@ -246,6 +248,8 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, 140, 100, 295, 140, 110, -105, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+
+    // He laughs off Mario's questions and refuses to explain the plan.
     CALL(evt_msg_print, 0, STRING("stg7_aji_39"), 0, STRING("幹部"))
     WAIT_MS(300)
     WAIT_MS(500)
@@ -286,6 +290,9 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(1000)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+
+// Crump brags that his machine is raw horsepower; the robot walks in, jumps and lands with a shake of the
+// camera.
 #endif
     CALL(evt_msg_print, 0, STRING("stg7_aji_41"), 0, STRING("ロボット"))
 #if VERSION > VERSION_DEMO_US
@@ -333,6 +340,7 @@ static EVT_BEGIN(evt_boss)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_snd_envoff, PSND_FADEOUT)
 #endif
+
     // The fight against Magnus von Grapple 2.0 begins.
     CALL(evt_npc_set_battle_info, STRING("ロボット"), 5)
     CALL(evt_npc_battle_start, STRING("ロボット"))
@@ -384,6 +392,8 @@ static EVT_BEGIN(evt_boss)
         CALL(evt_npc_jump_position_nohit, STRING("幹部"), -200, 200, 100, 1000, FLOAT(80.0f))
     END_INLINE_EVENT
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+
+    // After the fight a cry of "Grodus!" is heard and the scene whites out to the Moon.
     CALL(evt_msg_print, 0, STRING("stg7_aji_42"), 0, STRING("ロボット"))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 900, FADE_IN_WHITE, 900)
     BEGIN_INLINE_EVENT
@@ -418,6 +428,7 @@ EVT_BEGIN(evt_boss2)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // Parent LW(10) retains the event ID; the child uses its own LW(10) as the bobbing angle.
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         SET_VALUE(LW(10), 0)
@@ -445,6 +456,7 @@ EVT_BEGIN(evt_boss2)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, 0, 0, FLOAT(80.0f))
     SET_VALUE(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
+
     // Stop the item-position writer before the star-acquisition child takes control.
     DELETE_EVENT(LW(10))
     SET_VALUE(LW(0), 7)

@@ -490,6 +490,7 @@ EVT_BEGIN(yuu_01_init_evt)
     SET_VALUE(LW(12), 2)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 4, LW(15))
+
     // The eight small whirlpools (S_uzu1-8), which spin the boat around, slide back and forth.
     CALL(yuuminigame2_get_name, 5, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
@@ -574,6 +575,7 @@ EVT_BEGIN(yuu_01_init_evt)
     SET_VALUE(LW(12), 2)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 8, LW(15))
+
     // Small whirlpools 5 to 8.
     CALL(yuuminigame2_get_name, 9, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
@@ -639,6 +641,7 @@ EVT_BEGIN(yuu_01_init_evt)
     SET_VALUE(LW(12), 2)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 12, LW(15))
+
     // The eight barrels (S_taru01-08) bob and float back and forth across the course.
     CALL(yuuminigame2_get_name, 13, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
@@ -791,6 +794,7 @@ EVT_BEGIN(yuu_01_init_evt)
     SET_VALUE(LW(12), 1)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 20, LW(15))
+
     // The game is set up and the audience appears.
     SPAWN_EVENT(PTR(minigame02_main))
     CALL_CHILD(PTR(evt_yuunpc_minigame2))

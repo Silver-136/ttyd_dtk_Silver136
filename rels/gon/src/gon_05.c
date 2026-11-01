@@ -316,6 +316,7 @@ static EVT_BEGIN(main_0)
 #if VERSION > VERSION_DEMO_US
     SET_TYPE(239)
 #endif
+
     // The switch is pressed: the block stops reacting to hits while it moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
@@ -334,6 +335,7 @@ static EVT_BEGIN(main_0)
                 SET_VALUE(LW(10), 0)
             END_IF
         END_IF
+
         // Work out the target height, 525 units from here, and the speed.
         IF_INT_EQUAL(LW(10), 0)
             CALL(evt_mobj_get_y_position, STRING("blk_0"), LW(2))
@@ -373,6 +375,7 @@ static EVT_BEGIN(main_0)
 #else
         END_SIBLING_EVENT
 #endif
+
         // After the camera shake, the block starts to float and its movement sound plays.
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("blk_0"), LW(12), LW(13), LW(14))
@@ -404,6 +407,7 @@ static EVT_BEGIN(main_0)
         END_IF
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
+
         // Each frame the block moves toward its target height.
         LOOP(0)
             // BUG: with no partner out the head test uses the bare mobj name, but mobj hit objects are
@@ -426,6 +430,7 @@ static EVT_BEGIN(main_0)
             END_IF
             GOTO(2)
             LABEL(1)
+
             // If a falling block lands on Mario or his partner it turns around and rises again, and the switch
             // is cancelled.
             IF_INT_EQUAL(LW(10), 1)
@@ -471,6 +476,7 @@ static EVT_BEGIN(main_0)
             // The block has arrived: the moving sound stops.
             CALL(evt_snd_sfxoff, LW(15))
         END_IF
+
         // The landing thud plays for a block that came down.
         BEGIN_INLINE_EVENT
             CALL(evt_mobj_get_position, STRING("blk_0"), LW(13), LW(14), LW(15))
@@ -489,6 +495,7 @@ static EVT_BEGIN(main_0)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_STOP1"), LW(13), LW(14), LW(15), 0)
             END_IF
         END_INLINE_EVENT
+
         // A block that came down shakes the camera again and the scene waits a moment.
         IF_INT_EQUAL(LW(10), 1)
 #if VERSION >= VERSION_US
@@ -516,6 +523,7 @@ static EVT_BEGIN(main_0)
 #endif
             WAIT_MS(1000)
         END_IF
+
         // Remember the block's new position for the next press.
         IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
             SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 1)
@@ -571,6 +579,7 @@ EVT_BEGIN(main_1)
 #if VERSION > VERSION_DEMO_US
     SET_TYPE(239)
 #endif
+
     // The switch is pressed: the block stops reacting to hits while it moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
@@ -589,6 +598,7 @@ EVT_BEGIN(main_1)
                 SET_VALUE(LW(10), 0)
             END_IF
         END_IF
+
         // Work out the target height, 525 units from here, and the speed.
         IF_INT_EQUAL(LW(10), 0)
             CALL(evt_mobj_get_y_position, STRING("blk_1"), LW(2))
@@ -628,6 +638,7 @@ EVT_BEGIN(main_1)
 #else
         END_SIBLING_EVENT
 #endif
+
         // After the camera shake, the block starts to float and its movement sound plays.
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("blk_1"), LW(12), LW(13), LW(14))
@@ -659,6 +670,7 @@ EVT_BEGIN(main_1)
         END_IF
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
+
         // Each frame the block moves toward its target height.
         LOOP(0)
             // BUG: with no partner out the head test uses the bare mobj name, but mobj hit objects are
@@ -681,6 +693,7 @@ EVT_BEGIN(main_1)
             END_IF
             GOTO(2)
             LABEL(1)
+
             // If a falling block lands on Mario or his partner it turns around and rises again, and the switch
             // is cancelled.
             IF_INT_EQUAL(LW(10), 1)
@@ -726,6 +739,7 @@ EVT_BEGIN(main_1)
             // The block has arrived: the moving sound stops.
             CALL(evt_snd_sfxoff, LW(15))
         END_IF
+
         // The landing thud plays for a block that came down.
         BEGIN_INLINE_EVENT
             CALL(evt_mobj_get_position, STRING("blk_1"), LW(13), LW(14), LW(15))
@@ -744,6 +758,7 @@ EVT_BEGIN(main_1)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_STOP1"), LW(13), LW(14), LW(15), 0)
             END_IF
         END_INLINE_EVENT
+
         // A block that came down shakes the camera again and the scene waits a moment.
         IF_INT_EQUAL(LW(10), 1)
 #if VERSION >= VERSION_US
@@ -771,6 +786,7 @@ EVT_BEGIN(main_1)
 #endif
             WAIT_MS(1000)
         END_IF
+
         // Remember the block's new position for the next press.
         IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
             SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 1)

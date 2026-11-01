@@ -619,6 +619,7 @@ EVT_BEGIN(tenkyugi_evt)
     WAIT_FRAMES(1)
     WAIT_MS(1000)
     CALL(evt_mapobj_color, 1, STRING("S_hoshihoshi"), 255, 255, 255, 0)
+
     // The celestial globe fades in and begins to turn.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CELESTIAL_MOVE1"), 0)
@@ -643,6 +644,7 @@ EVT_BEGIN(tenkyugi_evt)
     END_LOOP
     CALL(evt_map_set_playrate, STRING("en"), FLOAT(1.0f))
     WAIT_MS(1000)
+
     // The camera sweeps around the turning globe.
     CALL(evt_cam3d_evt_set, -125, 575, 295, -125, 575, 95, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -653,6 +655,8 @@ EVT_BEGIN(tenkyugi_evt)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mario_set_party, 0, 1)
     END_IF
+
+    // Mario and his partner are set down on the platform and the partner comments (stg8_las_33).
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_pos, 0, -25, 400, 80)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_DISP_DIR_SNAP)
@@ -680,6 +684,7 @@ EVT_BEGIN(tenkyugi_evt)
         CALL(evt_snd_sfxoff, LW(10))
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+
     // Mario is startled as the tower shakes again.
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
 #if VERSION <= VERSION_DEMO_US
@@ -696,6 +701,8 @@ EVT_BEGIN(tenkyugi_evt)
         CALL(evt_mario_set_dir, 90, 100, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
+
+    // The partner speaks once more, then the map changes to las_19 for the planets sequence.
     CALL(evt_msg_print_party, STRING("stg8_las_34"))
     SET_VALUE(GF(0), 1)
     CALL(evt_bero_mapchange, STRING("las_19"), STRING("chgmap_evt"))
@@ -1217,6 +1224,7 @@ EVT_BEGIN(kagi_8_on)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+
     // Turn on the eight stands' hit areas and bind each to its stand model.
     CALL(evt_hitobj_onoff, STRING("A113_daiza1"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A113_daiza2"), 1, 1)
@@ -1234,6 +1242,7 @@ EVT_BEGIN(kagi_8_on)
     CALL(evt_hit_bind_mapobj, STRING("A113_daiza6"), STRING("S_kagi6"))
     CALL(evt_hit_bind_mapobj, STRING("A113_daiza7"), STRING("S_kagi7"))
     CALL(evt_hit_bind_mapobj, STRING("A113_daiza8"), STRING("S_kagi8"))
+
     // For every stand whose lock is still shut, register the key use event; opened stands are shown already
     // turned.
     IF_INT_EQUAL(GSWF_LAS_10_KEY_SLOT_1_FILLED, 0)
@@ -1377,6 +1386,7 @@ EVT_BEGIN(las_10_init_evt)
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+
     // Register the doors, play the first-visit cutscene on the first entry, and set up the Star Key pedestal.
     CALL_CHILD(PTR(evt_bero_info_run))
     SPAWN_EVENT(PTR(las_10_temae_kabe))
@@ -1406,6 +1416,7 @@ EVT_BEGIN(las_10_init_evt)
             SPAWN_EVENT(PTR(tenkyugi_evt2))
         END_IF
     END_IF
+
     // Once the planets are moving, the globe keeps turning with its sound.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CELESTIAL_MOVE2"), 0, 400, -150, LW(10))
@@ -1414,6 +1425,7 @@ EVT_BEGIN(las_10_init_evt)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+
     // Turn off culling by bounding box for the tower walls so they never pop out of view.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group19"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group18"), MAP_OBJ_FLAG_CLIP)

@@ -431,6 +431,7 @@ static EVT_BEGIN(phase_event)
         RETURN
     END_IF
 #endif
+
     // Before Mario's turn, a sleeping Blooper counts turns; after two it wakes up.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -441,6 +442,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE_TURNS, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 2)
                 CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
+
                 // The Blooper stirs and rises with its wake sounds, then takes its normal pose, defences
                 // and status table.
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GSO_U_1"))
@@ -465,6 +467,7 @@ static EVT_BEGIN(phase_event)
             END_IF
         END_IF
     END_IF
+
     // After the enemy turn, the awake Blooper counts turns; after two it takes to the ceiling.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_ENEMY)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -475,6 +478,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE_TURNS, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 2)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE_TURNS, 0)
+
                 // It switches to its ceiling form: ceiling pose table, defences and hit position.
                 CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, 0)
@@ -490,6 +494,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 1, PTR(&defence_attr_ceil))
                 CALL(btlevtcmd_SetRegistStatus, UNIT_ID_SELF, PTR(&regist_ceil))
                 CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 46, -75)
+
                 // It crouches, then springs up in four bounds toward the ceiling.
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GSO_J_1"))
                 WAIT_FRAMES(48)
@@ -512,16 +517,19 @@ static EVT_BEGIN(phase_event)
                     SUBTRACT(LW(1), 30)
                     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, 0, EASING_SINE_IN_OUT, 0, MOVE_SOUND_FROM_TABLE)
                 END_LOOP
+
                 // It latches onto the ceiling and its new home position is set there.
                 CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 SET_VALUE(LW(1), 220)
                 CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+
                 // Its appearance sound plays and it settles into its ceiling pose.
                 CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GESSO_APPEAR1"), EVT_NULLPTR, 0, EVT_NULLPTR)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GSO_F_4"))
                 CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
                 WAIT_MS(333)
+
                 // Its left tentacle grows in at the side.
                 CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(10))
                 CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_gesso_left_arm_entry_data), 0)
@@ -539,6 +547,7 @@ static EVT_BEGIN(phase_event)
                     CALL(btlevtcmd_AnimeWaitPlayComplete, LW(3), 1)
                     CALL(btlevtcmd_StartWaitEvent, LW(3))
                 END_INLINE_EVENT
+
                 // Its right tentacle grows in from above.
                 CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_gesso_right_arm_entry_data), 0)
                 CALL(btlevtcmd_StopWaitEvent, LW(3))
@@ -555,6 +564,7 @@ static EVT_BEGIN(phase_event)
                     CALL(btlevtcmd_AnimeWaitPlayComplete, LW(3), 1)
                     CALL(btlevtcmd_StartWaitEvent, LW(3))
                 END_INLINE_EVENT
+
                 // Both tentacles finish appearing and the Blooper goes back to waiting.
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 CALL(btlevtcmd_WaitEventEnd, LW(14))

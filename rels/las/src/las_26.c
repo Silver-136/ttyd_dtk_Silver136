@@ -171,6 +171,8 @@ EVT_BEGIN(bonbaba_evt)
         END_IF
     END_LOOP
     WAIT_MS(500)
+
+    // A voice from the dark calls to them; Mario and his partner are startled and the danger music starts.
     CALL(evt_msg_print, 0, STRING("stg8_las_44"), 0, STRING("ボンババ"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
@@ -206,6 +208,8 @@ EVT_BEGIN(bonbaba_evt)
     ADD(LW(0), -200)
     ADD(LW(1), 100)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
+
+    // He threatens Mario and his partner answers (stg8_las_45 to stg8_las_48).
     CALL(evt_msg_print, 0, STRING("stg8_las_45"), 0, STRING("ボンババ"))
     CALL(evt_party_stop, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kesu"), MAP_OBJ_FLAG_HIDDEN)
@@ -232,6 +236,7 @@ EVT_BEGIN(bonbaba_evt)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #endif
+
     // The battle with Gloomtail starts and the script waits for it to end.
     CALL(evt_npc_set_battle_info, STRING("ボンババ"), 14)
     CALL(evt_npc_battle_start, STRING("ボンババ"))
@@ -243,6 +248,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_cam3d_evt_set, 0, 25, 845, 0, 100, 150, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_npc_set_position, STRING("ボンババ"), 0, 70, -100)
+
     // Beaten, Gloomtail collapses in the middle of the room with a heavy thud.
     CALL(evt_snd_sfxon, STRING("SFX_STG8_GNB_DOWN1"), 0)
     CALL(evt_npc_set_anim, STRING("ボンババ"), STRING("GNB_H_1"))
@@ -280,6 +286,7 @@ EVT_BEGIN(bonbaba_evt)
     WAIT_MS(600)
     CALL(evt_cam3d_evt_set, 255, 220, 648, 255, 170, 150, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+
     // His mouth opens and he spits out the chest holding the Star Key.
     CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
@@ -357,6 +364,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
 #endif
     WAIT_MS(1000)
+
     // Mario notices the chest; the story advances and he regains control.
     SET_VALUE(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
     CALL(evt_hitobj_onoff, STRING("baba"), 1, 1)

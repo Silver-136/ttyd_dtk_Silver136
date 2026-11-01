@@ -558,8 +558,10 @@ EVT_BEGIN(majo_unison_phase_event)
             SET_VALUE(LW(5), 3)
         END_SWITCH
     END_IF
+
     // Sort the sisters by HP, highest first.
     CALL(majo3_sort)
+
     // Hand out the new formation slots in that order: the healthiest sister takes slot 0 (front),
     // the weakest slot 2; defeated sisters are skipped.
     SWITCH(LW(0))
@@ -667,6 +669,9 @@ static EVT_BEGIN(phase_event)
         IF_INT_EQUAL(LW(0), 0)
             GOTO(90)
         END_IF
+
+        // Beldam below 66% HP: she admits Mario is tougher than she thought and gets serious (btl_majo3_03);
+        // the sisters turn aggressive and her next attack is the blizzard.
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MAJO_WORK_LOW_HP_TALK_DONE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
@@ -691,6 +696,8 @@ static EVT_BEGIN(phase_event)
                 IF_INT_EQUAL(GW(12), 0)
                     CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_LOW_HP_ATTACK, 1)
                 END_IF
+
+                // Vivian below 50% HP: Beldam scolds her (btl_majo3_06) and Vivian apologizes (btl_majo3_07).
                 IF_INT_EQUAL(GW(13), 0)
                     CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_LOW_HP_ATTACK, 1)
                 END_IF
@@ -699,6 +706,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF
         END_IF
+
         // Marilyn below 50% HP: Beldam orders her to hit Mario (btl_majo3_04) and Marilyn grunts back
         // (btl_majo3_05) if she can still act.
         IF_INT_EQUAL(GW(12), 0)
@@ -784,6 +792,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+
     // Opening moves by unit work 8: shadow slip, then shrinking powder on an enemy,
     // then enlarging powder on an ally; 3 is the blizzard.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
@@ -840,6 +849,7 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
         SUBTRACT(LW(14), 1)
+
         // Roll the die and run the chosen attack.
         CALL(evt_sub_random, LW(14), LW(0))
         SET_VALUE(LW(1), 40)
@@ -1022,6 +1032,7 @@ static EVT_BEGIN(blizzard_attack_event)
     LABEL(90)
     GOTO(97)
     LABEL(91)
+
     // Defense input is checked only for the first selected target.
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))

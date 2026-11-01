@@ -256,6 +256,7 @@ static EVT_BEGIN(attack_event)
     ADD(LW(0), 0)
     ADD(LW(0), 10)
     SUBTRACT(LW(0), 1)
+
     // Roll the dice (0 to 54): the weights decide which kind of salvo the Blaster fires.
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 15)
@@ -275,6 +276,7 @@ static EVT_BEGIN(attack_event)
                 ADD(LW(2), LW(13))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(12), 0)
+
                     // One Bombshell Bill is fired from the ground (weight 15).
                     CALL_CHILD(friend_event)
                     GOTO(99)
@@ -305,6 +307,7 @@ static EVT_BEGIN(attack_event)
                 ADD(LW(2), LW(13))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(12), 1)
+
                     // The charged ground Bill (weight 0, never chosen).
                     CALL_CHILD(friend_event)
                     GOTO(99)
@@ -335,6 +338,7 @@ static EVT_BEGIN(attack_event)
                 ADD(LW(2), LW(13))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(12), 0)
+
                     // A ground Bill at every free spot (weight 10).
                     CALL_CHILD(friend_event)
                 END_IF
@@ -368,6 +372,7 @@ static EVT_BEGIN(attack_event)
                 ADD(LW(2), LW(13))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(12), 0)
+
                     // One Bill is fired up into the air (weight 20).
                     CALL_CHILD(friend_event_sky)
                     CALL(btlevtcmd_GetPartsRotate, UNIT_ID_SELF, 2, LW(5), LW(6), LW(11))
@@ -414,6 +419,7 @@ static EVT_BEGIN(attack_event)
                 ADD(LW(2), LW(13))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(12), 1)
+
                     // The charged air Bill (weight 0, never chosen).
                     CALL_CHILD(friend_event_sky)
                     CALL(btlevtcmd_GetPartsRotate, UNIT_ID_SELF, 2, LW(5), LW(6), LW(11))
@@ -460,6 +466,7 @@ static EVT_BEGIN(attack_event)
                 ADD(LW(2), LW(13))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(12), 0)
+
                     // An air Bill at every free spot (weight 10).
                     CALL_CHILD(friend_event_sky)
                 END_IF
@@ -485,6 +492,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
         GOTO(99)
     END_IF
+
     // Turn finished: the B. Bill Blaster goes back to waiting.
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

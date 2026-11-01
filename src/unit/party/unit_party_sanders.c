@@ -633,6 +633,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+
     // Action command (hold A, release when the light comes on): the timing window shrinks at higher difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
@@ -679,6 +680,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     END_SIBLING_EVENT
     CALL(btlevtcmd_StartAC, 1)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
+
     // The command went wrong: his fuse fizzles, he topples over and the move ends without an explosion.
     CALL(btlevtcmd_AcGetOutputParam, 0, LW(1))
     IF_INT_EQUAL(LW(1), 2)
@@ -700,6 +702,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CALL(btlevtcmd_InviteApInfoReport)
         GOTO(95)
     END_IF
+
     // A pre-emptive spiky enemy: he walks into its spikes first and is hurt.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_EQUAL(LW(5), 5)
@@ -713,6 +716,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 60, MOVE_SOUND_KEEP, 1)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
+
     // He walks up to the enemy with his fuse sizzling while the camera zooms in, then glows for a second.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_2"))
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
@@ -738,6 +742,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
+
     // He explodes (a bigger blast for a successful command in retail), the camera shakes and stage fog clears.
     CALL(btlevtcmd_ResultAC)
     CALL(evt_snd_sfxoff, LW(14))
@@ -759,6 +764,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
 #endif
     CALL(btlevtcmd_StageDispellFog)
+
     // A miss: the enemy plays its dodge reaction.
     IF_INT_NOT_EQUAL(LW(5), 1)
         IF_INT_EQUAL(LW(5), 3)
@@ -772,6 +778,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         END_IF
         GOTO(90)
     END_IF
+
     // The hit: a successful command adds the rating effect (Nice, Good...) and the higher damage.
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
@@ -784,6 +791,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
     END_IF
+
     // The blast throws him off the top of the screen and he falls back down to his home spot.
     LABEL(90)
     CALL(btlevtcmd_StopAC)
@@ -814,6 +822,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
     END_SIBLING_EVENT
+
     // Stylish: pressing A as he lands makes him stretch and squash for the audience; otherwise he lands in a heap.
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 15)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
@@ -876,6 +885,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         WAIT_FRAMES(40)
     END_IF
+
     // The audience refills Star Power, then he walks back home.
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
@@ -918,6 +928,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+
     // Action command (tap A to fill the gauge): its length and fill rate depend on the difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
@@ -959,6 +970,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
     WAIT_FRAMES(22)
     CALL(btlevtcmd_StartAC, 1)
+
     // A pre-emptive spiky enemy in front: he walks into its spikes and the move ends there.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_EQUAL(LW(5), 5)
@@ -974,6 +986,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
     END_IF
+
     // While the command runs: sparks burst around him, the fuse hiss rises in pitch and he swells with the gauge.
     BEGIN_SIBLING_EVENT
         SUBTRACT(LW(0), 85)
@@ -1016,6 +1029,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // He walks up to the front enemy; when the command ends he blows up in a huge blast that shakes the screen.
     SET_VALUE(LW(13), LW(0))
     SUBTRACT(LW(13), 85)
@@ -1059,6 +1073,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 20, 13)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+
     // Each enemy in turn: a miss plays its dodge reaction; a hit deals the gauge damage and a full enough gauge
     // earns a rating (Nice, Good...).
     SET_VALUE(LW(10), 0)
@@ -1118,6 +1133,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
     END_IF
+
     // Move on to the next enemy until every one has been hit.
     LABEL(50)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
@@ -1125,6 +1141,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
         ADD(LW(10), 1)
         GOTO(10)
     END_IF
+
     // The blast throws him off the top of the screen and he falls back down to his home spot.
     LABEL(90)
     CALL(btlevtcmd_StopAC)
@@ -1156,6 +1173,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
     END_SIBLING_EVENT
+
     // Stylish: pressing A as he lands makes him stretch and squash for the audience; otherwise he lands in a heap.
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 15)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
@@ -1218,6 +1236,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         WAIT_FRAMES(40)
     END_IF
+
     // The audience refills Star Power, then he walks back home.
     LABEL(95)
     CALL(evt_audience_ap_recovery)
@@ -1356,6 +1375,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
     SET_VALUE(LW(12), LW(3))
+
     // Action command (press A with good timing to throw): the aiming speed depends on the difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
@@ -1389,6 +1409,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 7, 1, 0)
     CALL(btlevtcmd_AcSetFlag, AC_SHOT_FLAG_NO_CHARGE)
     WAIT_FRAMES(20)
+
     // Each successful press shows the next bomb and throws it along the aimed arc; after the third throw comes
     // the stylish chance (retail only) and the throwing stops.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_4A"))
@@ -1441,6 +1462,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
         END_LOOP
         DEBUG_PUT_MSG(STRING("イベント終了"))
     END_SIBLING_EVENT
+
     // Wait for the command and the throws to finish, refill Star Power (retail only) and end the turn.
     CALL(btlevtcmd_ResultAC)
     WAIT_FRAMES(60)

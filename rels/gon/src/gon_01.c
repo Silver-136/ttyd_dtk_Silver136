@@ -159,6 +159,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
     SET_FLOAT_VALUE(LW(0), FLOAT(180.0f))
     CALL_CHILD(PTR(door01_close))
     CALL(evt_seq_wait, SEQ_GAME)
+
     // Mario and the partner lie on the floor in the poses of being thrown.
     CALL(evt_mario_set_pose, STRING("M_I_O"))
     CALL(evt_mario_get_party, LW(0))
@@ -169,6 +170,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
         CALL(evt_party_set_pose, 0, STRING("PNK_D_1"))
     END_SWITCH
     WAIT_MS(1000)
+
     // The door bursts open (closing animation played backward with its sound).
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
@@ -183,6 +185,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
             END_IF
         END_LOOP
     END_INLINE_EVENT
+
     // The partner is flung out through the door and bounces twice on the floor.
     BEGIN_SIBLING_EVENT
         WAIT_MS(500)
@@ -229,6 +232,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
             CALL(evt_party_set_pose, 0, STRING("PNK_D_3"))
         END_SWITCH
     END_SIBLING_EVENT
+
     // Mario is thrown out the same way and bounces twice.
     SET_FLOAT_VALUE(LW(10), FLOAT(500.0f))
     SET_FLOAT_VALUE(LW(11), FLOAT(0.099609375f))
@@ -265,6 +269,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
     // Mario lies on the floor while the partner pops back up.
     CALL(evt_mario_set_pose, STRING("M_D_2"))
     WAIT_FRAMES(120)
@@ -296,6 +301,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // Mario gets up and the partner returns to a standing pose.
     CALL(evt_mario_set_pose, STRING("M_U_3"))
     WAIT_FRAMES(20)
@@ -309,6 +315,8 @@ EVT_BEGIN(honenoko_oidasare_evt)
     END_SWITCH
     WAIT_FRAMES(30)
     CALL(evt_mario_cont_onoff, 1)
+
+    // Pushed out of the castle twice: the partner turns and comments on it.
     IF_INT_EQUAL(GSWF_GON_03_PUSHED_OUT_AGAIN, 1)
         CALL(evt_mario_set_dispdir, 180)
         CALL(evt_mario_get_party, LW(0))
@@ -325,6 +333,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
             CALL(evt_msg_print, 0, STRING("stg1_gon_14"), 0, STRING("party"))
         END_SWITCH
     END_IF
+
     // Control returns, the pushed-out flag is cleared and the door to gon_02 becomes usable again.
     WAIT_FRAMES(1)
     CALL(evt_party_cont_onoff, 0, 1)

@@ -367,6 +367,7 @@ EVT_BEGIN(evt_rokka_open)
     SET_VALUE(LW(4), LW(9))
     SET_VALUE(LW(10), 1)
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(4), 0, PTR(evt_rokka_close), LW(12))
+
     // Each closing trigger remembers both IDs so it can remove the other trigger.
     CALL(evt_set_case_wrk, LW(11), 11, LW(11))
     CALL(evt_set_case_wrk, LW(11), 12, LW(12))

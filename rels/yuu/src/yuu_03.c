@@ -786,6 +786,7 @@ EVT_BEGIN(minigame04_end)
                 END_LOOP
             END_INLINE_EVENT
 #endif
+
         // If Mario finished in time and is above the course, he walks on to the goal side (x 1650) on landing;
 #if VERSION <= VERSION_DEMO_US
         BEGIN_INLINE_EVENT
@@ -829,6 +830,7 @@ EVT_BEGIN(minigame04_end)
 #endif
         END_IF
     END_INLINE_EVENT
+
     // Running the counter out to 701 plays the failure effect; otherwise the success effect plays.
     IF_INT_GREATER_OR_EQUAL(LW(0), 701)
         CALL(eff_call_minigame, 2, 0, 0, 500)
@@ -837,6 +839,7 @@ EVT_BEGIN(minigame04_end)
         CALL(eff_call_minigame, 1, 0, 0, 500)
         WAIT_MS(4000)
     END_IF
+
     // The tally screen shows the score and Mario receives his piantas, then the ranking screen records it.
     CALL(evt_yuucounter_free)
     CALL(yuugijou_montemedal_disp_onoff, 1)
@@ -852,6 +855,7 @@ EVT_BEGIN(minigame04_end)
     WAIT_FRAMES(1)
     CALL(yuuranking_wait_button)
     CALL(evt_yuuranking_free)
+
     // With fewer than 10 piantas the game ends; otherwise the player picks Continue (10 piantas) or Quit.
     SET_VALUE(LW(1), 10)
     CALL(yuugijou_get_montemedal, LW(0))
@@ -860,6 +864,7 @@ EVT_BEGIN(minigame04_end)
         ELSE
         CALL(evt_msg_select, 0, STRING("sysyuu_03_00"))
     END_IF
+
     // Quitting sends Mario back through the pipe to gor_03.
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
@@ -869,6 +874,7 @@ EVT_BEGIN(minigame04_end)
         CALL(evt_bero_mapchange, STRING("gor_03"), STRING("A_dokan_02"))
         RETURN
     END_IF
+
     // Continuing pays 10 piantas; the course fades out, Mario goes back to the start and the racers line up.
     MULTIPLY(LW(1), -1)
     CALL(yuugijou_add_montemedal, 0, LW(1))

@@ -492,6 +492,7 @@ static EVT_BEGIN(puni_winlose_check)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
     // Loss takes priority if both sides report annihilation on the same check.
     IF_INT_EQUAL(LW(10), 1)
         SPAWN_EVENT(PTR(puni_lose))

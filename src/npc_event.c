@@ -683,6 +683,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
             CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
             ADD(LW(0), LW(3))
             CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(0.0f), -300)
+
         // Stomped flat on the ground: it lies squashed for half a second,
         // then sways down off screen like a falling leaf.
         ELSE
@@ -731,6 +732,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
                 END_IF
             END_LOOP
         END_IF
+
         // Hit by fire: scores with the fire combo and flips off screen.
         CASE_FLAG(KPA_ENCOUNT_FIRE)
         CALL(evt_npc_calc_score, STRING("me"))
@@ -740,6 +742,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
         CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
         ADD(LW(0), LW(3))
         CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
+
         // Every other way of defeat (8 is a block bumped from below, 16 is lava,
         // 32 gives no score) flips it off screen too.
         CASE_FLAG(KPA_ENCOUNT_STAR)
@@ -770,6 +773,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
         CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
         ADD(LW(0), LW(3))
         CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
+
         // Anything else: a short pause only.
         CASE_DEFAULT
         WAIT_MS(500)
@@ -1102,6 +1106,7 @@ EVT_BEGIN(nokonoko_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_rotate, STRING("me"), 0, 0, 0)
+
     // BUG: the destination 0 is not a variable (evtSetValue ignores it), so this call does nothing
     CALL(evt_npc_get_unitwork, STRING("me"), 0, 0)
     CALL(evt_npc_set_unitwork, STRING("me"), 1, 0)
@@ -1234,6 +1239,7 @@ EVT_BEGIN(togenoko_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_rotate, STRING("me"), 0, 0, 0)
+
     // BUG: the destination 0 is not a variable (evtSetValue ignores it), so this call does nothing
     CALL(evt_npc_get_unitwork, STRING("me"), 0, 0)
     CALL(evt_npc_set_unitwork, STRING("me"), 1, 0)
@@ -5566,6 +5572,7 @@ EVT_BEGIN(gesso2D_move_event)
     GOTO(0)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     LABEL(1)
+
     // Sink, slowly speeding up, until the Blooper is below Mario or close to the floor;
     // while Mario is far away it just keeps sinking.
     SET_FLOAT_VALUE(LW(1), FLOAT(0.0f))
@@ -5604,6 +5611,7 @@ EVT_BEGIN(gesso2D_move_event)
             CALL(evt_npc_set_position, STRING("me"), LW(0), LW(14), LW(2))
         END_IF
     END_LOOP
+
     // Turn to Mario and aim 100 units ahead and 50 up (never above 350), still sinking for one more second.
     CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(0))
     CALL(evt_npc_set_ry, STRING("me"), LW(0))
@@ -5627,6 +5635,7 @@ EVT_BEGIN(gesso2D_move_event)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
     // Swim up to that point with the swim sound, stopping early at a ceiling, then start sinking again.
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_1"))
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_GESSO_MOVE1"), LW(10), LW(11), LW(12), 0)

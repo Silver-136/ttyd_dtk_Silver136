@@ -1143,6 +1143,7 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
     END_IF
+
     // The Yux plays its A_5 pose, and a watcher starts the target's dodge as soon as the ring flies past it.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_5"))
     BEGIN_SIBLING_EVENT
@@ -1166,6 +1167,7 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // Without satellites out, the ring swells and shrinks as it hops to the far end of the stage past the target.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
@@ -1433,6 +1435,7 @@ EVT_END()
  */
 static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // The Yux picks its targets; with nothing to hit it ends the attack (or flusters when confused).
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_wawawa_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_wawawa_attack), LW(3), LW(4))
@@ -1446,6 +1449,7 @@ static EVT_BEGIN(wawawa_attack_event)
     END_IF
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_RINGS_DONE, 0)
+
     // Five targets are picked at random from the target list, one per ring, and stored.
     CALL(barriern_wawawa_set_target, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 0, LW(0))
@@ -1463,6 +1467,7 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 12, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 13, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 14, 0)
+
     // The camera zooms in on the Yux, the attack is declared on every target and its cost is paid.
     CALL(evt_btl_camera_set_mode, 0, 7)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -1476,6 +1481,7 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, 5, LW(4))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // The Yux and its four satellites start to spin with afterimages, one satellite after another.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK5"), EVT_NULLPTR, 0, EVT_NULLPTR)
     SET_VALUE(LW(0), 0)
@@ -1487,6 +1493,7 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(barriern_zanzou, UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK10"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(barriern_zanzou2, UNIT_ID_SELF)
+
     // The Yux and the satellites strike their F_1 and F_2 poses.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK6"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
@@ -1515,6 +1522,7 @@ static EVT_BEGIN(wawawa_attack_event)
     SET_VALUE(LW(0), 6)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(14))
     MULTIPLY(LW(0), LW(14))
+
     // The Yux and its satellites all turn together for 10 frames.
     LOOP(10)
         WAIT_FRAMES(1)
@@ -1530,6 +1538,7 @@ static EVT_BEGIN(wawawa_attack_event)
         END_LOOP
     END_LOOP
     SET_VALUE(LW(11), UNIT_WORK_SATELLITE)
+
     // The satellites settle into their S_2 poses.
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(11), 8)
@@ -1540,6 +1549,7 @@ static EVT_BEGIN(wawawa_attack_event)
         CALL(btlevtcmd_AnimeChangePose, LW(12), LW(13), STRING("S_2"))
         ADD(LW(11), 1)
     END_LOOP
+
     // The Yux winds up through its A_1 to A_4 poses while the camera pulls back.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1"))
@@ -1554,6 +1564,7 @@ static EVT_BEGIN(wawawa_attack_event)
     SET_VALUE(LW(13), 0)
     SET_VALUE(LW(14), 5)
     SET_VALUE(LW(15), 7)
+
     // The Yux fires its ring first, then each satellite in turn.
     SPAWN_EVENT(wawawa_attack_event_sub)
     WAIT_FRAMES(30)
@@ -1573,6 +1584,7 @@ static EVT_BEGIN(wawawa_attack_event)
         ADD(LW(14), 1)
         ADD(LW(15), 1)
     END_LOOP
+
     // Waits until every ring has landed.
     LOOP(0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RINGS_DONE, LW(0))
@@ -1582,6 +1594,7 @@ static EVT_BEGIN(wawawa_attack_event)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_FRAMES(10)
+
     // The barrier is rechecked, then the Yux and its satellites turn back the other way.
     CALL(_check_satellite)
     SET_VALUE(LW(0), -6)
@@ -1601,6 +1614,7 @@ static EVT_BEGIN(wawawa_attack_event)
         END_LOOP
     END_LOOP
     LABEL(99)
+
     // The Yux faces forward again and goes back to waiting.
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

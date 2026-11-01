@@ -395,6 +395,7 @@ EVT_BEGIN(ufo_main)
     SET_VALUE(GW(10), 230)
     SET_VALUE(GW(11), 100)
     CALL(evt_mapobj_trans, 1, STRING("S_kure"), GW(10), 0, GW(11))
+
     // The claw slides sideways while the player holds A and stops when A is released.
     LOOP(0)
         SPAWN_EVENT_GET_ID(PTR(ufo_hand), LW(9))
@@ -421,6 +422,7 @@ EVT_BEGIN(ufo_main)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_snd_sfxoff, LW(3))
+
         // Then it slides forward while B is held.
         LOOP(0)
             IF_INT_EQUAL(GF(11), 1)
@@ -445,6 +447,7 @@ EVT_BEGIN(ufo_main)
         END_LOOP
         CALL(evt_snd_sfxoff, LW(3))
         LABEL(100)
+
         // The claw lowers, closes and looks for a prize underneath.
         IF_INT_EQUAL(GF(9), 1)
             WAIT_FRAMES(1)
@@ -464,6 +467,7 @@ EVT_BEGIN(ufo_main)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(0)
         END_IF
+
         // Both outcomes use the same closing animation; the result only controls item transport.
         CALL(item_chk, LW(0), LW(8))
         IF_INT_EQUAL(LW(0), 1)
@@ -473,6 +477,7 @@ EVT_BEGIN(ufo_main)
             CALL_CHILD(PTR(hand_success))
             SET_VALUE(LF(0), 0)
         END_IF
+
         // A prize is lifted and carried to the drop point, then dropped with a random bounce.
         IF_INT_EQUAL(LF(0), 1)
             BEGIN_INLINE_EVENT
@@ -548,6 +553,7 @@ EVT_BEGIN(ufo_main)
                 CALL(evt_item_status_on, LW(8), ITEM_FLAG2_SKIP_BOUND_INIT)
                 CALL(evt_item_change_mode, LW(8), 5)
             END_INLINE_EVENT
+
             // The claw opens and is ready for the next try.
             CALL_CHILD(PTR(hand_release))
         ELSE
@@ -694,6 +700,7 @@ EVT_BEGIN(evt_ufo_sousaban)
         CALL(evt_msg_print, 0, STRING("stg7_aji_00_01"), 0, 0)
     END_IF
     WAIT_MS(300)
+
     // The A button icon is shown until the player holds A to move the claw sideways.
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         LOOP(0)
@@ -727,6 +734,7 @@ EVT_BEGIN(evt_ufo_sousaban)
 #endif
     SET_VALUE(GF(10), 0)
     DELETE_EVENT(LW(10))
+
     // The B button icon is shown until the player holds B to move the claw forward.
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         LOOP(0)
@@ -760,6 +768,7 @@ EVT_BEGIN(evt_ufo_sousaban)
 #endif
     SET_VALUE(GF(11), 0)
     DELETE_EVENT(LW(10))
+
     // The claw grabs; when the game ends the crane lights go out and Mario gets control back.
     LOOP(0)
         IF_INT_EQUAL(GF(12), 0)
@@ -1041,6 +1050,7 @@ EVT_BEGIN(aji_03_init_evt)
         SET_VALUE(GSWF_AJI_03_SWITCH_2_PRESSED, 1)
         SET_VALUE(GSWF_AJI_03_SWITCH_3_PRESSED, 1)
     END_IF
+
     // Before the cog is inserted, the shelf door is the place to use it; afterwards the clockwork runs.
     // The crane panel is registered only when GSWF_AJI_03_SWITCH_PUZZLE_SOLVED is set.
     IF_INT_EQUAL(GSWF_AJI_03_COG_PLACED, 0)
@@ -1069,6 +1079,7 @@ EVT_BEGIN(aji_03_init_evt)
             SPAWN_EVENT_GET_ID(PTR(blink_sw), GW(15))
         END_IF
     END_IF
+
     // The three crane buttons blink until the player has pressed them, and the lit or unlit versions of their
     // parts are shown.
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 0)
@@ -1135,6 +1146,7 @@ EVT_BEGIN(aji_03_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_2_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+
     // The prizes sit in a grid: coins, and the Feeling Fine badges and a Star Piece if not yet taken.
     CALL(evt_item_entry, STRING("keihin00"), ITEM_COIN, -150, 50, 100, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_entry, STRING("keihin01"), ITEM_COIN, -100, 50, 100, ITEM_TYPE_STILL, -1, 0)

@@ -431,6 +431,7 @@ EVT_BEGIN(cortez_weapon_phase_event)
                 CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
                 CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(5), LW(2))
                 CALL_CHILD(PTR(cortez_weapon_set_formation_attribute))
+
                 // Recover to full HP and clear statuses when the down-turn countdown expires.
                 CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
                 CALL(btlevtcmd_SetHp, UNIT_ID_SELF, LW(0))
@@ -474,6 +475,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
     CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)
+
     // The Sword lies flat and spins as it flies at its target.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_Z_1"))
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -545,14 +547,17 @@ static EVT_BEGIN(attack_event)
         CASE_DEFAULT
         GOTO(41)
     END_SWITCH
+
     // First slash: the target dodges or blocks it.
     LABEL(40)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     GOTO(45)
+
     // First slash lands: the Action Command defence result and damage are applied.
     LABEL(41)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 0, LW(6))
+
     // If the target Superguarded, the Sword is repelled: it tumbles backwards and recoils home at once.
     IF_INT_EQUAL(LW(6), 21)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -593,6 +598,7 @@ static EVT_BEGIN(attack_event)
     LABEL(45)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     WAIT_MS(800)
+
     // The Sword swings round for a second slash.
     LABEL(50)
     BEGIN_SIBLING_EVENT
@@ -636,6 +642,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_SWORD_DANCE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
     WAIT_FRAMES(7)
+
     // Reuse the first swing's precheck result for the second swing.
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -653,10 +660,12 @@ static EVT_BEGIN(attack_event)
         CASE_DEFAULT
         GOTO(91)
     END_SWITCH
+
     // Second slash: the target dodges or blocks it.
     LABEL(90)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     GOTO(95)
+
     // Second slash lands: damage is applied (this is the last hit of the move).
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
@@ -691,6 +700,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
         RETURN
     END_IF
+
     // After a short pause the Sword flies off the side of the stage...
     LABEL(95)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
@@ -710,6 +720,7 @@ static EVT_BEGIN(attack_event)
     SET_VALUE(LW(0), 0)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), LW(1))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), LW(2))
+
     // ...and then comes back in from the other side of the stage and returns home.
     CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), FLOAT(5.0f), LW(13))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(13), 0, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)

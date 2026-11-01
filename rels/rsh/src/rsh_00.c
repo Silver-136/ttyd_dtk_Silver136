@@ -853,17 +853,22 @@ static EVT_BEGIN(talk_unten)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 0)
+            // His greeting alternates and early lines mention Pennington's assistant.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_00"), 0, 0)
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_01"), 0, 0)
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 0)
         END_IF
+
+        // He asks for the conductor and signs an autograph for Mario.
         CASE_LESS(STG6_10_THE_CONDUCTOR_ZIP_TOAD)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
         CASE_LESS(STG6_11_OBTAIN_AUTOGRAPH)
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_ANIM)
+
+        // He signs the autograph and gives it to Mario.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_108"), 0, 0)
 #else
         CALL(evt_msg_print, 0, STRING("stg6_rsh_108"), 0, STRING("me"))
@@ -890,6 +895,7 @@ static EVT_BEGIN(talk_unten)
 #endif
         CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
+
         // Hints for each later stage of the train mystery.
         CASE_LESS(STG6_19_GIVE_BLANKET)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_02"), 0, 0)
@@ -906,6 +912,7 @@ static EVT_BEGIN(talk_unten)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_209"), 0, 0)
         CASE_LESS(STG6_44_END_OF_DAY_2)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_217"), 0, 0)
+
         // The Smorg scene (evt_moamoa) before the engineer stage.
         CASE_LESS(STG6_46_ENGINEER)
         CALL_CHILD(PTR(evt_moamoa))
@@ -916,6 +923,7 @@ static EVT_BEGIN(talk_unten)
         CASE_LESS(STG6_57_A_MAIL_FROM_PEACH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_253"), 0, 0)
         CASE_DEFAULT
+        // After the story he comments on where the train is.
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
             RETURN
@@ -1165,6 +1173,7 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
             END_IF
+
             // Revisit variant B retains the current moving-train audio.
             IF_STR_EQUAL(LW(0), STRING("rsh_00_b"))
             END_IF

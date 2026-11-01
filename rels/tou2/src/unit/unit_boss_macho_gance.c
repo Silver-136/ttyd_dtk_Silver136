@@ -819,6 +819,7 @@ static EVT_BEGIN(phase_event)
             WAIT_MS(300)
             SET_VALUE(LW(0), 0)
             CALL_CHILD(macho_gance_blur_zoom)
+
             // He swells in two spinning steps, growing to 1.3 times his size with growth sounds.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_BIG3"), EVT_NULLPTR, 0, LW(15))
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_1"))
@@ -862,6 +863,7 @@ static EVT_BEGIN(phase_event)
             CALL_CHILD(base_size_change)
             WAIT_MS(400)
             CALL(evt_snd_sfxoff, LW(15))
+
             // He jumps twice, shaking the camera with each landing.
             CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5996094f))
             SET_VALUE(LW(8), 2)
@@ -889,6 +891,7 @@ static EVT_BEGIN(phase_event)
                 END_SIBLING_EVENT
                 WAIT_MS(200)
             END_LOOP
+
             // He settles back to his stance.
             CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
             WAIT_MS(400)
@@ -897,6 +900,7 @@ static EVT_BEGIN(phase_event)
             WAIT_MS(1000)
         END_IF
         CASE_EQUAL(2)
+        // Phase 2: at a quarter of his HP he becomes wobbly (his tired poses) and says his last line.
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
         MULTIPLY(LW(0), 25)
         DIVIDE(LW(0), 100)
@@ -1267,6 +1271,7 @@ EVT_BEGIN(gance_attack_attack_event)
     CALL(evt_snd_sfxoff, LW(15))
     CALL(evt_eff_delete, STRING("hikari"))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5996094f))
+
     // Choose a target; a confused Grubba with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1278,11 +1283,13 @@ EVT_BEGIN(gance_attack_attack_event)
         END_IF
         RETURN
     END_IF
+
     // The attack is announced.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+
     // He turns his back on the target and stomps off to the far side of the stage,
     // the camera trembling at each step.
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1296,6 +1303,7 @@ EVT_BEGIN(gance_attack_attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 70, MOVE_SOUND_FROM_TABLE, 1)
     CALL(x_flag_wait, 0, 0)
     WAIT_MS(500)
+
     // Then he stomps back toward the party.
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
@@ -1303,6 +1311,7 @@ EVT_BEGIN(gance_attack_attack_event)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 500)
     END_SIBLING_EVENT
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE, 0)
+
     // He jumps high at the target.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("J_1A"))
@@ -1322,6 +1331,7 @@ EVT_BEGIN(gance_attack_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, MOVE_SOUND_FROM_TABLE)
     CALL(x_flag_set, 0, 0)
+
     // Check how the target defends against the hip drop.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -1345,6 +1355,7 @@ EVT_BEGIN(gance_attack_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // The target dodged: he lands beside it in a heavy hip drop that shakes the camera, then bounces away.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
@@ -1362,6 +1373,7 @@ EVT_BEGIN(gance_attack_attack_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     WAIT_MS(300)
     GOTO(98)
+
     // The hip drop hits: the damage is dealt, the camera shakes and he bounces off the target in three hops.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
@@ -1380,6 +1392,7 @@ EVT_BEGIN(gance_attack_attack_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 12)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 6, MOVE_SOUND_FROM_TABLE)
+
     // He stands up and stomps back home, the camera shaking.
     LABEL(98)
     CALL(x_flag_wait, 0, 0)
@@ -1465,6 +1478,7 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
     WAIT_MS(1000)
     CALL(evt_eff_delete, STRING("hikari"))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5996094f))
+
     // Choose the targets; a confused Grubba with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1475,11 +1489,13 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
         END_IF
         RETURN
     END_IF
+
     // The attack is announced.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+
     // He winds up, arm out, and charges across the stage, the camera shaking.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2A"))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
@@ -1491,6 +1507,7 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
     SET_VALUE(LW(11), 0)
     CALL(x_flag_set, 0, 0)
     CALL(x_flag_set, 1, 0)
+
     // He barrels from one target to the next: each target is checked as he reaches it,
     // and those who dodge are missed.
     LOOP(0)
@@ -1538,6 +1555,7 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
         GOTO(LW(6))
         LABEL(90)
         GOTO(97)
+
         // Each lariat that lands deals its damage, and the first one shakes the camera.
         LABEL(91)
         IF_INT_EQUAL(LW(11), 0)
@@ -1560,6 +1578,7 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // After the last target he skids to a stop, then stomps back home while the camera shakes.
     CALL(x_flag_wait, 1, 0)
     SUBTRACT(LW(0), LW(7))
@@ -1607,6 +1626,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_1"))
     WAIT_MS(1000)
     CALL(evt_eff_delete, STRING("hikari"))
+
     // He spins around once on the spot.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1622,6 +1642,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     WAIT_MS(500)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5996094f))
+
     // Choose a target; a confused Grubba with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1633,11 +1654,13 @@ EVT_BEGIN(gance_body_attack_attack_event)
         END_IF
         RETURN
     END_IF
+
     // The attack is announced.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+
     // He crouches, then leaps at the target, rolling forward in the air.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_MS(300)
@@ -1663,6 +1686,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, MOVE_SOUND_FROM_TABLE)
     CALL(x_flag_set, 0, 0)
+
     // Check how the target defends against the body slam.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -1686,6 +1710,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // The target dodged: he lands beside it in a hip drop that shakes the camera.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
@@ -1698,6 +1723,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1D"))
     WAIT_MS(300)
     GOTO(98)
+
     // The body slam hits: the damage is dealt and the camera shakes.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
@@ -1710,6 +1736,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1D"))
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
+
     // He bounces off in two hops and stomps back home, the camera shaking.
     LABEL(98)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

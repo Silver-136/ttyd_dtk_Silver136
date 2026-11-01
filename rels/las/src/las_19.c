@@ -288,6 +288,7 @@ EVT_BEGIN(change_map_evt)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
+
     // The camera drops to the foot of the tower and follows the pieces as they are pushed up in waves, with a
     // rumble and shaking.
     CALL(evt_cam3d_evt_set, -5, -547, 531, -5, -623, -13, 9200, EASING_LINEAR)
@@ -325,6 +326,7 @@ EVT_BEGIN(change_map_evt)
     END_INLINE_EVENT
     WAIT_MS(7600)
     SET_VALUE(GF(0), 1)
+
     // Back to the Riddle Tower hub (las_10) with the tower risen.
     CALL(evt_bero_mapchange, STRING("las_10"), STRING("ret_chgmap_evt"))
     RETURN

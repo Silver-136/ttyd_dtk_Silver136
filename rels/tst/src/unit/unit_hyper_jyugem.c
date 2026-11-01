@@ -331,6 +331,7 @@ static EVT_BEGIN(damage_event)
         ELSE
             SET_VALUE(LW(15), 0)
         END_IF
+
         // Holding an egg: a hit that damages it, or leaves it knocked out, asleep, dizzy, confused, shocked,
         // frozen or stopped, makes it drop the egg.
         CALL(btlevtcmd_CheckStatus, LW(10), STATUS_INSTANT_KILL, LW(14))
@@ -362,6 +363,7 @@ static EVT_BEGIN(damage_event)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 2, kNoShadow)
             END_INLINE_EVENT
             CALL(btlevtcmd_SetUnitWork, LW(10), UNIT_WORK_HOLD, 0)
+
             // The spikes are gone and its normal poses return.
             CALL(btlevtcmd_OffPartsCounterAttribute, LW(10), 1, kCounterTopSpiky)
             CALL(btlevtcmd_AnimeSetPoseTable, LW(10), 1, PTR(pose_table))
@@ -369,6 +371,7 @@ static EVT_BEGIN(damage_event)
             CALL_CHILD(PTR(btldefaultevt_Damage))
         ELSE
             CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
+
             // Otherwise, unless the hit is one of a few special kinds, a lingering status (poison, burn, tiny,
             // defense down, slow or allergic) makes it fumble the egg a short way and hide it; it still counts
             // as holding it.
@@ -635,6 +638,7 @@ static EVT_BEGIN(normal_attack_event)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_jyugem_attack))
+
     // Declare the attack.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -656,6 +660,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     END_IF
+
     // It winds up and lobs the egg at the target in a high arc.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("JGM_A_3"))
     WAIT_FRAMES(2)
@@ -667,6 +672,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 45, 0, FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 45, MOVE_SOUND_FROM_TABLE)
+
     // Find out whether the egg lands.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_jyugem_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -690,11 +696,13 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // Miss or dodge: the egg sails on past the target.
     LABEL(90)
     CALL(btlevtcmd_JumpPartsContinue, UNIT_ID_SELF, 2)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_JUGEM_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     GOTO(98)
+
     // Hit: the egg strikes the target and the damage is dealt.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_jyugem_attack))
@@ -751,6 +759,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 15, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_JUGEM_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(20)
+
     // A Spiny hatches from the egg and spins into place.
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_togezo), 0)
     CALL(togezo_copy_status, UNIT_ID_SELF, LW(3))
@@ -773,6 +782,7 @@ static EVT_BEGIN(normal_attack_event)
     END_LOOP
     CALL(btlevtcmd_SetRotateOffset, LW(3), 0, 0, 0)
     GOTO(99)
+
     // The egg hops back to the Dark Lakitu and is picked up again.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

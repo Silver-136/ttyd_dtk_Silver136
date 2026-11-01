@@ -1048,6 +1048,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
+
     // Mario declares the attack, pays the Star Power and Earth Tremor's work starts.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1058,6 +1059,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
     BEGIN_SIBLING_EVENT
         CALL(main_deka, LW(14))
     END_SIBLING_EVENT
+
     // Crystal Star opening: Mario holds up the star item and the Crystal Star appears in stardust.
     CALL_CHILD(sac_start_camera_evt)
     WAIT_MS(500)
@@ -1074,11 +1076,13 @@ EVT_BEGIN(marioAttackEvent_Deka)
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(40)
+
     // Mario puts the item away and returns home while the Crystal Star settles.
     CALL_CHILD(sac_mario_item_on_end_evt)
     CALL(btlevtcmd_SacBgsetMove, 0)
     CALL_CHILD(sac_mario_back_home)
     CALL(wait_star_stone_take_on)
+
     // Mario and the partner jump onto the Crystal Star (Vivian's position is kept in her unit work).
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_JUMP)
@@ -1112,6 +1116,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
         END_IF
     END_SIBLING_EVENT
     WAIT_FRAMES(30)
+
     // They stay on top of the star wherever it moves.
     BEGIN_SIBLING_EVENT_GET_ID(LW(13))
         LOOP(0)
@@ -1125,6 +1130,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
             END_IF
         END_LOOP
     END_SIBLING_EVENT
+
     // The timing game runs with the Action Command help shown and the crowd cheering.
     BEGIN_SIBLING_EVENT
         CALL(sac_cheer, 0)
@@ -1134,6 +1140,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
     CALL(wait_game_end)
     CALL(sac_ac_help_off)
     CALL(sac_cheer_end)
+
     // The Crystal Star pounds the floor and the enemies take damage a second later.
     WAIT_MS(1000)
     CALL(star_stone_attack)
@@ -1144,6 +1151,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
         CALL_CHILD(dmg_evt)
     END_INLINE_EVENT
     WAIT_MS(500)
+
     // Mario and the partner jump back to their home positions.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_JUMP)
@@ -1162,12 +1170,14 @@ EVT_BEGIN(marioAttackEvent_Deka)
         END_IF
     END_SIBLING_EVENT
     WAIT_FRAMES(30)
+
     // The camera resets and the background and rippling floor are cleaned up.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION <= VERSION_DEMO_US
     CALL(yuka_end)
 #endif
     CALL(btlevtcmd_SacBgsetMove, 1)
+
     // Vivian stops tracking her position.
 #if VERSION <= VERSION_DEMO_US
     CALL(end_deka)

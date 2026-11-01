@@ -256,6 +256,7 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     // While the Hook is knocked down it only goes back to idling.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_DOWN_TURNS, LW(0))
+
     // Any nonzero down-turn count suppresses this attack.
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -272,6 +273,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
+
     // The Hook leans back to -135 degrees while it dives in front of its target.
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 25, 12, 0)
     BEGIN_SIBLING_EVENT
@@ -295,6 +297,7 @@ static EVT_BEGIN(attack_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // It swings forward to 45 degrees in a single slash, with a whooshing sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_SWORD_DANCE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(7)
@@ -315,14 +318,17 @@ static EVT_BEGIN(attack_event)
         CASE_DEFAULT
         GOTO(91)
     END_SWITCH
+
     // The swing misses or is blocked: the Hook plays its dodge reaction.
     LABEL(90)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     GOTO(95)
+
     // The swing lands: the Action Command defence result and damage are applied.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+
     // A superguard cancels the swing event and takes a separate recoil path home.
     IF_INT_EQUAL(LW(5), 21)
         DELETE_EVENT(LW(15))
@@ -353,6 +359,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
         RETURN
     END_IF
+
     // Otherwise it straightens up and returns home after a short pause.
     LABEL(95)
     CALL(btlevtcmd_WaitEventEnd, LW(15))

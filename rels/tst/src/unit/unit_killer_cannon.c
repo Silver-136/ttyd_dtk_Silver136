@@ -241,6 +241,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+
     // Draws lots among six ways to load the cannon: three ground shots and three sky shots (with the barrel aimed
     // up); each one needs a free spot in front of the cannon to land.
     SET_VALUE(LW(0), 15)
@@ -252,6 +253,7 @@ static EVT_BEGIN(attack_event)
     SUBTRACT(LW(0), 1)
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 15)
+
     // Ground shot: scans up to three positions in front of the cannon for a free spot and fires a plain Bullet Bill
     // there.
     IF_INT_LESS(LW(1), LW(0))
@@ -282,6 +284,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+
     // Ground shot with a longer charge-up before firing; the Bill it fires is charged.
     ADD(LW(0), 0)
     IF_INT_LESS(LW(1), LW(0))
@@ -312,6 +315,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+
     // Ground shot again, with a plain fire.
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
@@ -341,6 +345,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+
     // Sky shot: the barrel part is raised and the cannon fires a Bullet Bill down onto a free spot, then the barrel
     // swings back down.
     ADD(LW(0), 20)
@@ -388,6 +393,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+
     // Sky shot with a longer charge-up; the Bill it fires is charged.
     ADD(LW(0), 0)
     IF_INT_LESS(LW(1), LW(0))
@@ -434,6 +440,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+
     // Sky shot again; this one lowers the barrel after the scan finishes.
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
@@ -479,6 +486,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
         GOTO(99)
     END_IF
+
     // Back to waiting.
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

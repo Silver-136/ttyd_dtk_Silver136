@@ -398,6 +398,7 @@ EVT_END()
  */
 static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // The Fuzzy picks a target; with none, it ends the turn (or flusters when confused).
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_drain_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_chorobon_drain_attack), LW(3), LW(4))
@@ -410,6 +411,7 @@ static EVT_BEGIN(drain_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_chorobon_drain_attack))
+
     // The attack is declared and paid for, and the camera follows the Fuzzy.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -420,6 +422,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
+
     // It hops toward the target and jumps up onto it.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(4.0f), FLOAT(0.5996094f))
@@ -438,6 +441,7 @@ static EVT_BEGIN(drain_attack_event)
     SUBTRACT(LW(1), 10)
     SUBTRACT(LW(2), 2)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+
     // The damage check decides between a miss, a counter and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_drain_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -461,6 +465,7 @@ static EVT_BEGIN(drain_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // On a miss it bounces off the target and lands in front of it.
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))
@@ -477,6 +482,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("CBN_N_1"))
     WAIT_MS(1000)
     GOTO(98)
+
     // On a hit it first checks whether the target would counter with a shock.
     LABEL(91)
     SET_VALUE(LF(0), 0)
@@ -487,6 +493,7 @@ static EVT_BEGIN(drain_attack_event)
     IF_INT_EQUAL(LW(5), 14)
         SET_VALUE(LF(0), 1)
     END_IF
+
     // If the target counters, the Fuzzy takes the counter damage instead and the attack ends.
     IF_INT_EQUAL(LF(0), 1)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -495,6 +502,7 @@ static EVT_BEGIN(drain_attack_event)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
     END_IF
+
     // Otherwise it clings on: the target shakes while the Fuzzy spins on its back.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO1_ATTACK1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetBodyId, LW(3), LW(0))
@@ -530,6 +538,7 @@ static EVT_BEGIN(drain_attack_event)
     END_IF
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(14))
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(1.5f))
+
     // It holds on for a moment in its attack pose, draining.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("CBN_A_2"))
     WAIT_FRAMES(90)
@@ -547,6 +556,7 @@ static EVT_BEGIN(drain_attack_event)
     END_LOOP
     WAIT_FRAMES(1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
+
     // The drain lands: the camera shakes and the damage is dealt.
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -557,6 +567,7 @@ static EVT_BEGIN(drain_attack_event)
     SET_VALUE(LW(9), PTR(&weapon_chorobon_drain_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_GetHpDamage, LW(3), LW(10))
+
     // The Fuzzy lets go and hops off.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
@@ -591,6 +602,7 @@ static EVT_BEGIN(drain_attack_event)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         LOOP(20)
             CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(-0.024414062f), FLOAT(-0.024414062f), 0)
+
             // It heals itself by the amount drained (HP, or FP for the FP-draining weapon), with a recovery effect.
             WAIT_FRAMES(1)
         END_LOOP
@@ -635,6 +647,7 @@ static EVT_BEGIN(drain_attack_event)
         WAIT_FRAMES(1)
     END_LOOP
     GOTO(98)
+
     // It hops back home and the camera resets.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)

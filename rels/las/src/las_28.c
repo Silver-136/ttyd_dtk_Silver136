@@ -329,6 +329,7 @@ USER_FUNC(syuryo_baria_recalc_pos) {
  */
 EVT_BEGIN(syuryo_thunder)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+
     // Grodus's lightning strikes: hit effects on Mario and his partner, then a bolt between them with thunder
     // and a camera shake.
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))

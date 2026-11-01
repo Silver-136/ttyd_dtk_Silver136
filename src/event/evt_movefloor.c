@@ -609,6 +609,7 @@ EVT_BEGIN(moving_floor_bero_check)
     END_IF
     LOOP(0)
         CALL(evt_bero_exec_wait, 65536)
+
         // debug text (Shift-JIS): waiting for the auto-delete check
         DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\203`\203F\203b\203N\221\322\202\277"))
         CALL(evt_bero_exec_wait, 1)
@@ -618,6 +619,7 @@ EVT_BEGIN(moving_floor_bero_check)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // debug text (Shift-JIS): auto-delete done
     DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\212\256\227\271"))
     CALL(moving_floor_stop_se, LW(9))
@@ -666,6 +668,7 @@ EVT_BEGIN(moving_floor)
                     CALL(evt_mapobj_scale, 1, LW(7), LW(8), 1, LW(8))
                 END_IF
             END_LOOP
+
             // Each frame: move the floor, its collision and its shadow along the leg.
             WAIT_FRAMES(1)
             CALL(evt_moving_floor_main, LW(9), LW(12), LW(13), LW(14))
@@ -680,6 +683,7 @@ EVT_BEGIN(moving_floor)
                 CALL(moving_floor_getf_xz_scale, LW(9), LW(8))
                 CALL(evt_mapobj_scale, 1, LW(7), LW(8), 1, LW(8))
             END_IF
+
             // A floor moving along Y turns back when it comes down on the head of Mario or a partner.
             CALL(evt_mario_get_name_hitobj_head, LW(2))
             CALL(evt_mario_get_party, LW(10))
@@ -707,6 +711,7 @@ EVT_BEGIN(moving_floor)
             IF_INT_EQUAL(LF(0), 1)
                 CALL(moving_floor_reverse, LW(9))
             END_IF
+
             // A kind 0 floor carries whoever stands on it.
             CALL(moving_floor_get_kind, LW(9), LW(8))
             IF_INT_EQUAL(LW(8), 0)
@@ -724,6 +729,7 @@ EVT_BEGIN(moving_floor)
                     CALL(evt_party_set_hosei_xyz, 1, LW(12), LW(13), LW(14))
                 END_IF
             END_IF
+
             // At the end of the leg, stop; otherwise its sound plays only while it is actually moving.
             CALL(moving_floor_get_end, LW(9), LW(8))
             IF_INT_NOT_EQUAL(LW(8), 0)
@@ -746,6 +752,7 @@ EVT_BEGIN(moving_floor)
                 END_IF
             END_IF
         END_LOOP
+
         // Wait the stop time at the end of the leg, still turning and bobbing;
         // a mode 5 floor waits here forever.
         CALL(moving_floor_stop_se, LW(9))
@@ -794,6 +801,7 @@ EVT_BEGIN(moving_floor)
             END_IF
         END_LOOP
     END_LOOP
+
     // Never reached: the floor runs until the map unloads.
     CALL(evt_moving_floor_free, LW(9))
     RETURN
@@ -850,6 +858,7 @@ EVT_BEGIN(ridedown_floor)
                 SET_INT_INDEXED(LW(7), LW(12))
             END_IF
         END_IF
+
         // With nobody on either platform, the first one drifts the shared position back to where it started.
         GET_INT_INDEXED(LW(7), LW(12))
         IF_INT_EQUAL(LW(12), 0)
@@ -869,6 +878,7 @@ EVT_BEGIN(ridedown_floor)
                 SET_INT_INDEXED(LW(6), LW(11))
             END_IF
         END_IF
+
         // Turn the shared position into this platform's height (the two sides move opposite ways)
         // and move it.
         GET_INT_INDEXED(LW(6), LW(11))
@@ -884,6 +894,7 @@ EVT_BEGIN(ridedown_floor)
         END_IF
         CALL(evt_mapobj_trans, 1, LW(0), 0, LW(12), 0)
         CALL(evt_hit_bind_update, LW(1))
+
         // Carry Mario and partners standing on it by the height change.
         SET_FLOAT_VALUE(LW(13), LW(12))
         SUBTRACT_FLOAT(LW(13), LW(14))
@@ -900,6 +911,7 @@ EVT_BEGIN(ridedown_floor)
         IF_STR_EQUAL(LW(11), LW(1))
             CALL(evt_party_set_hosei_xyz, 1, 0, LW(13), 0)
         END_IF
+
         // Its moving sound plays only while the height is changing.
         IF_FLOAT_EQUAL(LW(13), FLOAT(0.0f))
             IF_INT_NOT_EQUAL(LW(9), 0)

@@ -187,6 +187,7 @@ static EVT_BEGIN(evt_first)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
+
         // Mario and the partner tumble down the spline toward the Moon's surface.
         CALL(evt_sub_spline_init, 1, 1, PTR(spline_dt), 3, 0, 1000)
         LABEL(10)
@@ -224,6 +225,7 @@ static EVT_BEGIN(evt_first)
         GOTO(0)
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+
     // They hit the ground with a thud and lie there.
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_LAND_DAMAGE2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -268,6 +270,7 @@ static EVT_BEGIN(evt_first)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(mario_reset)
+
     // Mario gets up; the partner speaks (stg7_moo_03, stg7_moo_04) and Mario nods.
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP5"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_jump_pos, LW(0), 0, LW(2), 500, 0, -1000)
@@ -309,6 +312,7 @@ static EVT_BEGIN(evt_first)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
+
     // Control returns, the story advances and the Moon banner appears.
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)

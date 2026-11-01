@@ -132,6 +132,7 @@ EVT_BEGIN(tensou_ride)
     WAIT_MS(300)
     CALL(evt_hit_get_position, STRING("A_tensou"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP_LIGHT1"), LW(0), LW(1), LW(2), LW(9))
+
     // The spin child accumulates this shared angular step once per frame.
     SET_VALUE(GW(0), 0)
     CALL(evt_mario_get_dispdir, LW(0))
@@ -156,6 +157,7 @@ EVT_BEGIN(tensou_ride)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // They shrink and rise while the spin continues.
     CALL(evt_mario_cam_off)
     CALL(evt_mario_cont_onoff, 0)
@@ -193,12 +195,14 @@ EVT_BEGIN(tensou_ride)
     END_LOOP
     WAIT_MS(2000)
     CALL(evt_snd_sfxoff, LW(9))
+
     // The map changes: to the Rogueport sewers normally, or to the Moon (moo_04) during the story point of the
     // last mail.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_25_THE_LAST_MAIL)
         SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 1)
         CALL(evt_bero_mapchange, STRING("tik_00"), 0)
+
         // Only this exact story checkpoint selects the alternate destination.
         CASE_EQUAL(STG7_25_THE_LAST_MAIL)
         CALL(evt_bero_mapchange, STRING("moo_04"), 0)
@@ -311,6 +315,7 @@ EVT_BEGIN(tensou_init)
     IF_INT_EQUAL(GSWF_TIK_TELEPORT_TO_AJI_PENDING, 0)
         RETURN
     END_IF
+
     // Consume the arrival request before launching the restoration sequence.
     SET_VALUE(GSWF_TIK_TELEPORT_TO_AJI_PENDING, 0)
     CALL(evt_mario_key_onoff, 0)

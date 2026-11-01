@@ -105,6 +105,7 @@ EVT_BEGIN(rsh_08_a_init_evt)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
         END_IF
     END_IF
+
     // Default to route A; independent checks let B override A and C override both.
     SET_VALUE(LW(0), PTR(bero_data_a_nidome))
     IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_A, 1)

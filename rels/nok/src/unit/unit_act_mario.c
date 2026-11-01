@@ -501,12 +501,14 @@ EVT_BEGIN(_act_clauda_press_attack)
     CALL_CHILD(_act_target_enemy)
     CALL(btlevtcmd_CalculateFaceDirection, LW(5), -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, LW(5), LW(15))
+
     // She leaps high over the stage and comes down on the victim.
     CALL(btlevtcmd_AnimeChangePose, LW(5), LW(6), STRING("PWD_A1_1"))
     CALL(btlevtcmd_SetFallAccel, LW(5), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(2), 5)
     CALL(btlevtcmd_JumpPosition, LW(5), LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE)
+
     // The victim is squashed flat, stays pressed for a moment, then springs back up to its full height.
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_DAMAGE)
@@ -535,6 +537,7 @@ EVT_BEGIN(_act_clauda_press_attack)
         WAIT_MS(500)
         CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_NORMAL)
     END_SIBLING_EVENT
+
     // Flurrie squashes on landing and stretches wide as she bounces off.
     CALL(btlevtcmd_JumpContinue, LW(5))
     BEGIN_SIBLING_EVENT_GET_ID(LW(14))
@@ -569,6 +572,7 @@ EVT_BEGIN(_act_clauda_press_attack)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // She hops off the victim, strikes her victory pose and the audience cheers.
     CALL(btlevtcmd_GetPos, LW(5), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(5), LW(0), 20)
@@ -580,6 +584,7 @@ EVT_BEGIN(_act_clauda_press_attack)
     CALL(evt_audience_joy_ending)
     WAIT_MS(500)
     CALL(btlevtcmd_WaitEventEnd, LW(14))
+
     // She floats back to her spot on stage.
     CALL(btlevtcmd_SetMoveSpeed, LW(5), FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, LW(5), LW(6), POSE_TYPE_WALK)

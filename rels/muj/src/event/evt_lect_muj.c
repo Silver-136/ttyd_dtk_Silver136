@@ -532,6 +532,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_npc_get_position, LW(8), LW(0), LW(1), LW(2))
         CALL(evt_npc_get_dir, LW(8), LW(3))
         CALL(evt_npc_set_position, LW(8), 0, -1000, 0)
+
         // The partner joins the party and the item-get backdrop appears behind him.
         CALL(evt_pouch_party_join, LW(9))
         CALL(evt_mario_set_party_pos, 0, LW(9), LW(0), LW(1), LW(2))
@@ -547,6 +548,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     SWITCH(LW(9))
         CASE_EQUAL(1)
+        // A system message announces the new partner.
         CALL(evt_msg_print, 0, STRING("lecture_friends_00"), 0, 0)
         CASE_EQUAL(2)
         CALL(evt_msg_print, 0, STRING("lecture_friends_04"), 0, 0)
@@ -577,6 +579,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_npc_stop_for_event)
     WAIT_MS(1000)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
+
     // The lecture music starts and the partner demonstrates his moves.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_LECTURE1"))
     CALL(evt_snd_envoff, PSND_PAUSE)
@@ -646,6 +649,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+
     // The lecture ends: the music resumes and the camera goes back to normal.
     CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_PARTY_LECTURE1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))

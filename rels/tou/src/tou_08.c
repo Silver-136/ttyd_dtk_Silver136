@@ -598,6 +598,8 @@ static EVT_BEGIN(evt_1st_leagu)
             END_IF
         END_LOOP
     END_INLINE_EVENT
+
+    // She explains the major league and walks out.
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -20, 84, 174, -20, 37, -93, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -609,6 +611,8 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     SET_VALUE(LW(0), STRING("キノシコワ"))
     CALL_CHILD(PTR(evt_1st_sub))
+
+    // The camera pans over the silent fighters and the partner remarks on the cold welcome.
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -138, 150, 533, -138, 50, -8, 0, EASING_SINE_IN_OUT)
     WAIT_MS(300)
@@ -618,6 +622,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_mario_set_dir, 90, 0, 0)
     WAIT_MS(1000)
     CALL(evt_msg_print_party, STRING("stg3_tou_294_01"))
+
     // The music fades and Rawk Hawk swaggers in through the door.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     WAIT_MS(500)
@@ -652,6 +657,8 @@ static EVT_BEGIN(evt_1st_leagu)
             BREAK_LOOP
         END_IF
     END_LOOP
+
+    // Rawk Hawk boasts about the rising star and recognises Mario as him.
     CALL(evt_msg_print, 0, STRING("stg3_tou_294_02"), 0, STRING("チャンピョン"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -30, 104, 238, -30, 60, -8, 500, EASING_SINE_IN_OUT)
@@ -667,6 +674,7 @@ static EVT_BEGIN(evt_1st_leagu)
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
     WAIT_MS(1000)
+
     // Mario eyes the belt and the partner realises its Crystal Star is a fake.
     CALL(evt_cam3d_evt_set, -80, 104, 238, -80, 60, -8, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_dir, 270, 200, 0)
@@ -689,6 +697,8 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(1000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+
+    // Rawk Hawk is furious, threatens Mario in the ring and storms out.
     CALL(evt_msg_print, 0, STRING("stg3_tou_294_06"), 0, STRING("チャンピョン"))
     CALL(evt_party_set_dir_npc, 0, STRING("チャンピョン"))
     WAIT_MS(500)
@@ -700,6 +710,8 @@ static EVT_BEGIN(evt_1st_leagu)
     WAIT_MS(300)
     SET_VALUE(LW(0), STRING("チャンピョン"))
     CALL_CHILD(PTR(evt_1st_sub))
+
+    // The partner shrugs him off and wonders where the real Crystal Star is.
     CALL(evt_cam3d_evt_set, -45, 120, 484, -45, 45, -9, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_party_set_dir, 0, 270, 300)
@@ -711,6 +723,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_msg_print_party, STRING("stg3_tou_294_10"))
     WAIT_MS(300)
     WAIT_MS(1000)
+
     // Mail arrives: the jingle plays, the partner points it out and Mario waits with a "!" until A is pressed.
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -739,6 +752,7 @@ static EVT_BEGIN(evt_1st_leagu)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_balloon_off)
+
     // Mario reads X's mail about the Crystal Star, the partner finds it fishy, mail 6 is filed
     // and the story advances.
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
@@ -1257,6 +1271,7 @@ EVT_BEGIN(tou_08_init_evt)
             SET_VALUE(GSW_STORY_PROGRESS, STG3_20_MAJORS_10TH_PLACE)
         END_IF
     END_SWITCH
+
     // These pending story jumps are consumed after the rank-based minimum progress updates.
     IF_INT_EQUAL(GSWF_TOU_08_JUMP_STORY_CONFISCATED, 1)
         SET_VALUE(GSWF_TOU_08_JUMP_STORY_CONFISCATED, 0)

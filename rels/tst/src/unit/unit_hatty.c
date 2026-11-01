@@ -305,12 +305,14 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+
     // It rolls for a helper; as the roll is always under 100, it always tries to call one.
     CALL(evt_sub_random, 99, LW(10))
     IF_INT_LESS(LW(10), 100)
         SET_VALUE(LW(15), 0)
         SET_VALUE(LW(14), 160)
         SET_VALUE(LW(13), 30)
+
         // It checks up to three spots in front of itself for free room, nearest last.
         LOOP(0)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -323,6 +325,7 @@ static EVT_BEGIN(attack_event)
                 ADD(LW(2), LW(13))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(12), 0)
+
                     // In the first free spot it spawns a kohatty helper, and its turn ends.
                     CALL_CHILD(kohatty_spawn_event)
                     GOTO(99)
@@ -337,6 +340,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+
     // The dive attack that follows (a swoop at a target) is never reached, because the helper roll always ends the turn first.
     IF_INT_LESS(LW(10), 50)
         SET_VALUE(LW(6), PTR(&weapon_hatty_attack))
@@ -365,6 +369,7 @@ static EVT_BEGIN(attack_event)
     WAIT_MS(300)
     CALL(evt_btl_camera_set_mode, 0, 3)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
+
     // The damage check decides between a miss and a hit for the dive.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), 256, LW(5))
     SWITCH(LW(5))
@@ -388,6 +393,7 @@ static EVT_BEGIN(attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // On a miss it flies past the target.
     LABEL(90)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
@@ -398,6 +404,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
     GOTO(98)
+
     // On a hit the damage is dealt and hatty flies back home.
     LABEL(91)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))

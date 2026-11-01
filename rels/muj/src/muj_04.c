@@ -358,11 +358,14 @@ EVT_BEGIN(sanders_funto)
     CALL(evt_npc_flag_onoff, 1, STRING("エルモスB"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_position, STRING("エルモスA"), -60, 125, 0)
     CALL(evt_npc_set_position, STRING("エルモスB"), 60, 125, 0)
+
     // Mario arrives at the bridge: control is taken and the exit is waited out.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
+
+    // Bobbery, holding the bridge against the ghosts, curses them and spots Mario.
     CALL(evt_msg_print, 0, STRING("stg5_muj_23"), 0, STRING("サンダース"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -392,6 +395,8 @@ EVT_BEGIN(sanders_funto)
     CALL(evt_set_dir_to_target, STRING("オドオド水夫"), STRING("サンダース"))
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+
+    // The nervous sailor worries about the admiral; Bobbery tells them to leave the ghosts to him.
     CALL(evt_msg_print, 0, STRING("stg5_muj_25"), 0, STRING("オドオド水夫"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_26"), 0, STRING("サンダース"))
     BEGIN_INLINE_EVENT
@@ -403,6 +408,9 @@ EVT_BEGIN(sanders_funto)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
+
+        // The bespectacled sailor says Bobbery thinks this is the right thing to do, and the group leaves the
+        // bridge.
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(200)
@@ -410,6 +418,7 @@ EVT_BEGIN(sanders_funto)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_flag_onoff, 0, STRING("めがね水夫"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_get_position, STRING("めがね水夫"), LW(0), LW(1), LW(2))
+
         // Bobbery throws a bomb at the Embers.
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_THUNDERS_THROW1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -434,6 +443,7 @@ EVT_BEGIN(sanders_funto)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -110, 260, 532, -110, 165, -10, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+
     // The Embers charge and Bobbery fights back.
     SPAWN_EVENT(erumos00_attack)
     SPAWN_EVENT(erumos01_attack)
@@ -463,6 +473,7 @@ EVT_BEGIN(sanders_funto)
         CALL(evt_party_move_pos2, 0, -300, -20, FLOAT(180.0f))
     END_INLINE_EVENT
     WAIT_MS(2000)
+
     // The story advances and Mario crosses to muj_03.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_13_BOBBERY_THE_BRIDGE)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)

@@ -188,6 +188,7 @@ static EVT_BEGIN(first_evt)
     END_INLINE_EVENT
     CALL(evt_npc_move_position, STRING("手下１"), -200, 0, 0, FLOAT(200.0f), 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
+
     // The first NPC owns the encounter; both NPCs remain for the post-battle scene.
     CALL(evt_npc_set_battle_info, STRING("手下１"), 6)
     CALL(evt_npc_battle_start, STRING("手下１"))
@@ -222,6 +223,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(800)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+
     // Mark this encounter complete before restoring exploration controls.
     SET_VALUE(GSW_STORY_PROGRESS, STG7_08_ELITE_X_NAUTS)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)

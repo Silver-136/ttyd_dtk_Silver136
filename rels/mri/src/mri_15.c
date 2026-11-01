@@ -178,6 +178,7 @@ EVT_BEGIN(dai3_battle)
     IF_INT_EQUAL(GSWF_MRI_15_CRUMP_GONE, 0)
         SPAWN_EVENT_GET_ID(PTR(dai3_escape), LW(10))
     END_IF
+
     // LW(10), initially the escape event ID, is reused below for Mario's X coordinate.
     CALL(evt_bero_exec_wait, 65536)
     LOOP(0)

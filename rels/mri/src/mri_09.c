@@ -445,6 +445,7 @@ EVT_BEGIN(slot_event)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_01A02a"), GW(1), 0, 0)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_01A03a"), GW(2), 0, 0)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_01A04a"), GW(3), 0, 0)
+
         // The four panels must read 270, 180, 0 and 90 degrees in order.
         IF_INT_EQUAL(GW(0), 270)
             IF_INT_EQUAL(GW(1), 180)

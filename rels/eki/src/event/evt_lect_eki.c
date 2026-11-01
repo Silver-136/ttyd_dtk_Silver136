@@ -575,8 +575,14 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 85)
     CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(80.0f), 0)
+
+    // Toadette congratulates Mario on the Ultra Boots and explains the Spring Jump: hold A, rotate the stick,
+    // release A.
     CALL(evt_msg_print, 0, STRING("lecture_u_boots_04"), 0, STRING("キノピコ"))
     CALL(evt_msg_print_add, 0, STRING("lecture_u_boots_05"))
+
+    // Practice loop: the prompt tells Mario to try it, and Toadette encourages him now and then until he
+    // reaches the target height.
     LOOP(0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("lecture_u_boots_06"), 0, 0)
@@ -606,6 +612,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
             CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_1"), STRING("T_1"))
             CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("S_1"))
         END_INLINE_EVENT
+
         // The camera moves in and the on-screen button icons show the controls.
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(85.0f), FLOAT(520.0f), FLOAT(0.0f), FLOAT(40.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
@@ -619,6 +626,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(lecture_button_set_seq, 1, 2)
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(lecture_button_seq_wait, 1, 1)
+
         // Mario gets limited controls; the button icons change as he crouches and launches.
         SPAWN_EVENT_GET_ID(PTR(boots_lv3_juyoitem_lecture_sub01), LW(11))
         SET_VALUE(LW(7), 0)
@@ -662,6 +670,9 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(evt_mario_trigflag_onoff, 0, MARIO_TRIG_FLAG_DISABLE_SUB_STICK)
         CALL(evt_mario_set_enable_key, 0)
         CALL(mainwindow_openenable)
+
+        // Mario reached the height: controls are restored and Toadette explains how the Spring Jump lets him
+        // grab pipes overhead.
         DELETE_EVENT(LW(11))
         CALL(lecture_button_set_seq, 0, 3)
         CALL(lecture_button_set_seq, 1, 3)
@@ -683,6 +694,8 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_mario_set_pos, LW(0), LW(1), 0)
         CALL(evt_mario_set_dir, 90, 300, 0)
+
+        // Toadette steps next to Mario and asks if he wants to try again.
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(26.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -694,6 +707,8 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(evt_msg_print_add, 0, STRING("lecture_u_boots_10"))
 #else
         CALL(evt_msg_print, 0, STRING("lecture_u_boots_10"), 0, STRING("キノピコ"))
+
+// If he says "One more time" the loop repeats; otherwise it ends.
 #endif
         CALL(evt_msg_select, 0, STRING("lecture_u_boots_11"))
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_1"), STRING("T_1"))
@@ -703,6 +718,8 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
+
+    // Toadette says goodbye, telling him he has mastered the Spring Jump, and walks off.
     CALL(evt_msg_print_add, 0, STRING("lecture_u_boots_13"))
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
     ADD(LW(0), 100)

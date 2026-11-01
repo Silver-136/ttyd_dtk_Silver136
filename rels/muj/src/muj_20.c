@@ -2170,6 +2170,7 @@ static EVT_BEGIN(evt_prologue)
     WAIT_MS(4000)
 #else
     WAIT_MS(500)
+
     // The opening title scene: music starts and the logo appears.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_OPENING1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_OPN_MUJ1"))
@@ -2214,6 +2215,7 @@ static EVT_BEGIN(evt_prologue)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
     // After Press Start the steamship sails off and the screen fades to white into the chapter card.
     CALL(evt_snd_sfxon, STRING("SFX_PRESS_START1"), 0)
     BEGIN_INLINE_EVENT

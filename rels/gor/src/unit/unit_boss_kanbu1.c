@@ -250,6 +250,8 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
             CALL(btlevtcmd_SetTalkPose, LW(3), STRING("PKR_T_1"))
             CALL(btlevtcmd_SetStayPose, LW(3), STRING("PKR_S_1"))
+
+            // Goombella speaks and Mario raises his hand; the camera swings back.
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_000"), 0, LW(3))
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_HAND_UP1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -270,6 +272,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
     END_IF
+
     // The half-HP message returns early; action-command feedback can follow on a later phase.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -283,6 +286,8 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
+
+                // Lord Crump is at half HP or less: Goombella comments.
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_003"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
                 RETURN
@@ -295,6 +300,8 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_SUCCESS_TALKED, 1)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
+
+                // Mario's first successful action command: Goombella comments.
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_001"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_IF
@@ -306,6 +313,8 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_FAIL_TALKED, 1)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
+
+                // Mario's first failed action command: Goombella comments.
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_002"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_IF
@@ -497,6 +506,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     END_IF
+
     // No target: a confused Crump flusters, otherwise the attack ends.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -510,12 +520,14 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+
     // He runs at the target.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_2"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 60)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 1)
+
     // Wind-up: he hops up (A_1A, A_1B) over the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
@@ -526,6 +538,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(2.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
+
     // The pre-damage check decides between a dodge and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
@@ -551,6 +564,7 @@ static EVT_BEGIN(normal_attack_event)
         // Miss: he comes down without hitting (the target dodges for some kinds of miss).
         LABEL(90)
         GOTO(98)
+
         // Hit: he belly flops onto the target for the weapon damage.
         LABEL(91)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
@@ -558,6 +572,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         LABEL(98)
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
+
         // He lands flat (A_1C) with a thud, then bounces twice.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1C"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_HIP_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -577,12 +592,14 @@ static EVT_BEGIN(normal_attack_event)
             WAIT_FRAMES(7)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_HIP_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         END_SIBLING_EVENT
+
         // He gets up (D_1) and dusts himself off.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_1"))
         WAIT_FRAMES(15)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 15, 0, FLOAT(1.0f))
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, MOVE_SOUND_FROM_TABLE)
+
         // He trots back to his home position.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
         WAIT_FRAMES(10)

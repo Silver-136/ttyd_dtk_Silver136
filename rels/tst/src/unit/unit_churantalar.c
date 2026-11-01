@@ -1158,6 +1158,7 @@ EVT_END()
  */
 static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // The Arantula draws three random targets, repeats allowed.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1180,6 +1181,7 @@ static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_PART, LW(4))
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+
     // The attack is declared on all of them and its cost paid.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1189,6 +1191,7 @@ static EVT_BEGIN(renzoku_attack_event)
     SET_VALUE(LW(7), 3)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(5), LW(3))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(6), LW(4))
+
     // It winds up and fires its first web shot.
     CALL_CHILD(piders_attack_common_event1)
     CALL_CHILD(piders_attack_common_event3)
@@ -1212,6 +1215,7 @@ static EVT_BEGIN(renzoku_attack_event)
         END_LOOP
     END_SIBLING_EVENT
     WAIT_FRAMES(15)
+
     // After a short pause it fires the second shot.
     CALL_CHILD(piders_attack_common_event3)
     SPAWN_EVENT(renzoku_attack_event_sub)
@@ -1234,6 +1238,7 @@ static EVT_BEGIN(renzoku_attack_event)
         END_LOOP
     END_SIBLING_EVENT
     WAIT_FRAMES(15)
+
     // And then the third shot, each one resolved against its own target.
     CALL_CHILD(piders_attack_common_event3)
     CALL_CHILD(renzoku_attack_event_sub)
@@ -1250,6 +1255,7 @@ static EVT_BEGIN(renzoku_attack_event)
         CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, LW(0))
         WAIT_FRAMES(1)
     END_LOOP
+
     // The Arantula swings back to its idle pose and the camera resets.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PAI_S_1"))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)

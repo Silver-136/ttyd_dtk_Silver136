@@ -294,6 +294,8 @@ USER_FUNC(cameraman_on) {
  * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
  */
 EVT_BEGIN(kinopio_house_talk_evt)
+    // The innkeeper greets Mario with the night's price in the coin window and asks if he will stay;
+    // "no" ends it.
     CALL(evt_mario_key_onoff, 0)
     CALL(get_ryoukin, LW(10))
     CALL(get_npcname, LW(11))
@@ -309,6 +311,9 @@ EVT_BEGIN(kinopio_house_talk_evt)
         CALL(evt_win_coin_off, LW(12))
         RETURN
     END_IF
+
+    // If Mario and the party are already fully rested, the innkeeper asks whether he wants a bed anyway.
+    // If Mario and the party are already fully rested, the innkeeper asks whether he wants a bed anyway.
     CALL(power_chk, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(msg_no, 1, LW(0))
@@ -323,6 +328,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
             RETURN
         END_IF
     END_IF
+
     // With an Inn Coupon, offer to use it instead of paying.
     SET_VALUE(LF(0), 0)
     CALL(evt_pouch_check_item, ITEM_INN_COUPON, LW(0))
@@ -336,6 +342,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
             CALL(evt_pouch_remove_item, ITEM_INN_COUPON, LW(0))
         END_IF
     END_IF
+
     // Otherwise pay the price, or turn Mario away if he is short of coins.
     IF_INT_EQUAL(LF(0), 0)
         CALL(coin_chk, LW(0))
@@ -351,6 +358,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
         CALL(evt_pouch_add_coin, LW(10))
         WAIT_MS(1000)
     END_IF
+
     // "Enjoy your stay!": the partners step away and Mario walks to the bedside (or the inn's own walk-to-bed
     // script runs) while the camera moves to the bed view.
     CALL(evt_win_coin_off, LW(12))
@@ -391,6 +399,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
         CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, EASING_SINE_IN_OUT)
         WAIT_MS(500)
     END_IF
+
     // Mario jumps into bed with a yelp and lies down flat with sleeping sounds.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
@@ -424,6 +433,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
         CALL(evt_snd_sfxon_3d, 132027, LW(0), LW(1), LW(2), 0)
 #endif
     END_INLINE_EVENT
+
     // Sound effects mute, the sleep tune plays and a spotlight closes in on Mario until the screen is black.
     CALL(snd_off)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -438,6 +448,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_fade_end_wait)
     CALL(evt_fade_entry, FADE_OUT_BLACK_2D, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
+
     // In the dark, HP, FP and the partners are restored, breakfast is set out, and the party is put
     // back on its feet beside the bed facing the innkeeper.
     CALL(evt_pouch_mario_recovery)
@@ -531,6 +542,8 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_mario_set_dir_npc, LW(11))
     CALL(evt_party_set_dir_npc, 0, LW(11))
 #endif
+
+    // The innkeeper asks how he slept and sees him off; Mario gets control back.
     CALL(get_npcname, LW(11))
     CALL(msg_no, 5, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(11))

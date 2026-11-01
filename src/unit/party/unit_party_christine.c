@@ -462,6 +462,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
+
     // Camera follows her and the target; set up the timed-press action command.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
@@ -470,6 +471,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 1, 1, 0)
+
     // She runs to the takeoff spot in front of the enemy and turns to face it.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
@@ -480,6 +482,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(14), MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // Each bonk starts here: check whether the enemy can be jumped on (spikes, fire or out of reach mean a miss).
     CALL(btlevtcmd_StartAC, 1)
     SET_VALUE(LW(10), 0)
@@ -499,6 +502,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
+
     // First bonk only: she crouches before the jump, with the stylish window.
     IF_INT_LESS_OR_EQUAL(LW(10), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_A_2B"))
@@ -513,6 +517,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
         END_SIBLING_EVENT
         WAIT_FRAMES(10)
     END_IF
+
     // She jumps onto the enemy.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_J_1A"))
     BEGIN_INLINE_EVENT
@@ -582,6 +587,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8), 0, MOVE_SOUND_NONE)
     END_IF
+
     // She cannot hit it: the enemy's dodge or counter plays, she bounces off behind it and runs home.
     IF_INT_NOT_EQUAL(LW(5), 1)
         IF_INT_EQUAL(LW(5), 3)
@@ -607,6 +613,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
         WAIT_MS(500)
         GOTO(95)
     END_IF
+
     // She lands on the head: read the timed press.
     CALL(btlevtcmd_ac_timing_flag_onoff, 1, 1)
     CALL(btlevtcmd_ac_timing_get_success_frame, LW(0))
@@ -616,6 +623,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(btlevtcmd_GetResultAC, LW(6))
+
     // Missed press: this hit ends the move.
     IF_BITS_CLEAR(LW(6), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -625,6 +633,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
         END_IF
         GOTO(90)
     END_IF
+
     // Good press with another bonk left: damage with the rating effect, the camera pulses, and she jumps again.
     CALL(btlevtcmd_GetResultCountAC, LW(6))
     IF_INT_LESS_OR_EQUAL(LW(6), 1)
@@ -649,6 +658,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         CALL(btlevtcmd_GetResultAC, LW(0))
     END_IF
+
     // The audience gives AP; she straightens out and bounces back down off the enemy in three hops.
     LABEL(90)
     CALL(btlevtcmd_StopAC)
@@ -683,6 +693,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+
     // She runs back to her home spot.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -691,6 +702,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // End of the move: face forward, apply the HP and FP drain badges, back to idle.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -997,6 +1009,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
             ADD(LW(2), 5)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8), 0, MOVE_SOUND_NONE)
+
             // BUG: deletes the event with id 15, not the sibling event whose id was stored in LW(15)
             DELETE_EVENT(15)
             ELSE
@@ -1151,6 +1164,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
 #if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // Set the action command timing from the difficulty.
 #else
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
@@ -1214,8 +1228,9 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 5, 3, 60)
     WAIT_FRAMES(22)
     CALL(btlevtcmd_StartAC, 1)
-#if VERSION <= VERSION_DEMO_US
+
     // Success: a sparkle over her head.
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_GetResultAC, LW(0))
     IF_BITS_SET(LW(0), 2)

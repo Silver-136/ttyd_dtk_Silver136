@@ -531,6 +531,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(viewport, 0, 0, 608, 480)
     WAIT_MS(500)
     SET_VALUE(LW(1), 0)
+
     // The underlings open the door of Grodus's room and bring Peach in.
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
@@ -614,6 +615,9 @@ static EVT_BEGIN(peach_evt_stg1)
         CALL(evt_npc_move_position, STRING("手下２"), 30, -50, 700, 0, 0)
     END_INLINE_EVENT
     WAIT_MS(900)
+
+    // An underling announces Peach to Grodus. Guess: the electric crackle that follows is the TEC screen
+    // effect ending the opening view.
     CALL(evt_msg_print, 0, STRING("peach_aji_00_01"), 0, STRING("手下３"))
     CALL(evt_cam3d_evt_set, 60, 80, 233, 60, 37, -13, 500, EASING_LINEAR)
     WAIT_MS(700)
@@ -627,6 +631,8 @@ static EVT_BEGIN(peach_evt_stg1)
     WAIT_MS(730)
     CALL(evt_fade_tec_onoff, 0, 1)
     WAIT_MS(800)
+
+    // Grodus questions Peach about the map; she says she doesn't know (peach_aji_00 to 04).
     CALL(evt_msg_print, 0, STRING("peach_aji_00"), 0, STRING("シュリョー"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 200, 130, 283, 200, 78, -13, 800, EASING_SINE_IN_OUT)
@@ -644,6 +650,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_msg_print, 0, STRING("peach_aji_04"), 0, STRING("mario"))
     CALL(evt_cam3d_evt_set, 125, 226, 576, 125, 110, -13, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+
     // The monitor lights up and an underling reports that a Crystal Star was stolen (peach_aji_05 to 09).
     CALL_CHILD(PTR(monitor_on))
     BEGIN_INLINE_EVENT
@@ -679,6 +686,8 @@ static EVT_BEGIN(peach_evt_stg1)
     ADD(LW(1), 50)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("peach_aji_09"), 0, STRING("手下１"))
+
+    // He mentions Mario; Peach reacts and Grodus orders the underlings to guard her closely.
     CALL(evt_msg_print, 0, STRING("peach_aji_10"), 0, STRING("mario"))
     CALL(evt_npc_move_position, STRING("シュリョー"), 190, 0, 300, 0, 0)
     WAIT_MS(300)
@@ -730,6 +739,8 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_npc_flag_onoff, 1, STRING("手下３"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(PTR(monitor_off))
     WAIT_MS(700)
+
+    // Grodus sends Lord Crump to deal with Mario (peach_aji_17 to 19).
     CALL(evt_msg_print, 0, STRING("peach_aji_17"), 0, STRING("シュリョー"))
     CALL(evt_cam3d_evt_set, 0, 119, 183, 0, 80, -13, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -747,6 +758,8 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_msg_print, 0, STRING("peach_aji_19"), 0, STRING("シュリョー"))
     CALL(evt_npc_set_ry, STRING("シュリョー"), 270)
     WAIT_MS(400)
+
+    // Grodus summons an underling and sends him to fetch the Shadow Sirens (peach_aji_20 to 25).
     CALL(evt_msg_print, 0, STRING("peach_aji_20"), 0, STRING("シュリョー"))
     CALL(evt_cam3d_evt_set, 130, 162, 429, 130, 75, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -778,6 +791,8 @@ static EVT_BEGIN(peach_evt_stg1)
     WAIT_MS(1000)
     LABEL(100)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+
+    // Beldam, Marilyn and Vivian appear; Grodus tells them to find the map (peach_aji_26 to 33).
     CALL(evt_msg_print, 0, STRING("peach_aji_25_01"), 0, 0)
     CALL(evt_cam3d_evt_set, 40, 95, 283, 40, 43, -13, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
@@ -819,6 +834,7 @@ static EVT_BEGIN(peach_evt_stg1)
     WAIT_MS(1000)
     WAIT_MS(1000)
     CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK_2D, 100, FADE_IN_BLACK_2D, 100)
+
     // The scene fades out and the game returns to the central hall.
     CALL(evt_bero_mapchange, STRING("aji_01"), STRING("peach_evt_stg1"))
     RETURN
@@ -848,6 +864,8 @@ static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_cam3d_evt_set, 200, 130, 283, 200, 78, -13, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(500)
+
+    // Grodus learns that Lord Crump cannot be reached.
     CALL(evt_msg_print, 0, STRING("peach_aji_72_01"), 0, STRING("シュリョー"))
     CALL(evt_cam3d_evt_set, 60, 90, 283, 60, 38, -12, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -857,6 +875,7 @@ static EVT_BEGIN(peach_evt_stg2)
     WAIT_FRAMES(1)
     CALL(evt_npc_set_position, STRING("手下２"), -420, 0, 0)
     SET_VALUE(LW(1), 0)
+
     // An underling comes in through the west door, asking to enter.
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
@@ -904,11 +923,16 @@ static EVT_BEGIN(peach_evt_stg2)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
+    // He reports that the Crystal Star in the Boggly Woods is gone and that Mario beat Lord Crump and the
+    // Shadow Sirens (peach_aji_72_05 to 07).
     CALL(evt_msg_print, 0, STRING("peach_aji_72_05"), 0, STRING("手下２"))
     CALL(evt_msg_print, 0, STRING("peach_aji_72_06"), 0, STRING("シュリョー"))
     CALL(evt_msg_print, 0, STRING("peach_aji_72_07"), 0, STRING("手下２"))
     CALL(evt_cam3d_evt_set, 200, 130, 283, 200, 78, -13, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+
+    // Grodus wonders about Mario and orders the search for the other Crystal Stars (peach_aji_72_08 to 11).
     CALL(evt_msg_print, 0, STRING("peach_aji_72_08"), 0, STRING("シュリョー"))
     CALL(evt_cam3d_evt_set, 60, 90, 283, 60, 38, -12, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -924,6 +948,8 @@ static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_npc_set_ry, STRING("手下２"), 270)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("手下２"), -50, 0, 0, 60, 0)
+
+    // Grodus is convinced Mario has the map; the scene fades to Peach's room, aji_16.
     CALL(evt_msg_print, 0, STRING("peach_aji_72_12"), 0, STRING("シュリョー"))
     CALL(evt_msg_print, 0, STRING("peach_aji_72_13"), 0, STRING("研究員"))
     CALL(evt_npc_set_anim, STRING("研究員"), STRING("P_1"))
@@ -1508,6 +1534,7 @@ EVT_BEGIN(aji_10_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_npc_check_delete, STRING("バリアーンカスタム"))
     END_IF
+
     // The visited flag is already set before this test; retain the event words.
     SET_VALUE(GSWF_AJI_10_VISITED, 1)
     IF_INT_EQUAL(GSWF_AJI_10_VISITED, 0)

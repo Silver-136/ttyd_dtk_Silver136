@@ -269,6 +269,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_killer_charge_attack))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // The Bill charges up with a rumble (pose type 50), then rockets forward (SFX_ENM_KILLER_MOVE1).
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KILLER_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
@@ -293,6 +294,7 @@ static EVT_BEGIN(attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // The Bill misses or is blocked: it flies past the target, the target dodges, and it speeds off past the
     // edge of the screen.
     LABEL(90)
@@ -310,6 +312,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
     WAIT_MS(500)
     GOTO(98)
+
     // The Bill hits: it slams into the target and the screen shakes, then it explodes in a puff of smoke.
     LABEL(91)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
@@ -328,6 +331,7 @@ static EVT_BEGIN(attack_event)
     ADD(LW(2), 10)
     ADD(LW(1), 20)
     CALL(evt_eff, STRING(""), STRING("kemuri_test"), 17, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
+
     // It pays out its coins and Star Points, shown over the spot where it blew up.
     CALL(btlevtcmd_GetCoin, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_StoreCoin, LW(0))
@@ -344,10 +348,12 @@ static EVT_BEGIN(attack_event)
     END_IF
     WAIT_MS(500)
     GOTO(98)
+
     // The camera resets.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(200)
+
     // The Bill has spent its single shot, so it removes itself from the battle.
     LABEL(99)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)

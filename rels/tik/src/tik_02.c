@@ -463,6 +463,7 @@ char geso_checkpose[] = "M_S_1";
 static EVT_BEGIN(ukishima_apper)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ugo_yuka_1"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ugo_yuka_2"), MAP_OBJ_FLAG_CLIP)
+
     // The islands rise from 30 units under the water up to the surface.
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -30, 0, 100)
     LOOP(0)
@@ -481,6 +482,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // First bob: they dip 10 units and come back up.
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -10, 400)
     LOOP(0)
@@ -516,6 +518,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // Second, smaller bob of 5 units.
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -5, 300)
     LOOP(0)
@@ -551,6 +554,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // Last bob of 1 unit, after which the islands rest at the surface.
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -1, 200)
     LOOP(0)
@@ -611,6 +615,7 @@ EVT_BEGIN(geso_battle)
     CALL(geso_set_checkpose, STRING("ゲッソーのゲソ"))
     SET_VALUE(GF(0), 1)
     WAIT_WHILE(GF(0))
+
     // Mario is held back from the edge while the Blooper yelps in pain and pulls the tentacle away.
     BEGIN_INLINE_EVENT_GET_ID(LW(12))
         LOOP(0)
@@ -652,6 +657,7 @@ EVT_BEGIN(geso_battle)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
+
     // The camera turns to the water; Mario and Goombella step to the edge as ripples spread.
     CALL(evt_cam3d_evt_set, -580, 110, 241, -385, 40, 24, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -672,6 +678,7 @@ EVT_BEGIN(geso_battle)
         WAIT_MS(400)
     END_INLINE_EVENT
     WAIT_MS(1500)
+
     // The Blooper bursts out of the water onto the walkway, startling Mario, and the camera shakes.
     CALL(evt_npc_set_anim, STRING("ゲッソー"), STRING("GSO_O_1"))
     CALL(evt_npc_set_position, STRING("ゲッソー"), -250, -200, -60)
@@ -697,11 +704,13 @@ EVT_BEGIN(geso_battle)
     END_LOOP
     CALL(evt_cam3d_evt_set, -635, 52, 302, -385, 75, 24, 50, EASING_SINE_IN_OUT)
     WAIT_MS(50)
+
     // The Blooper battle.
     CALL(evt_npc_flag_onoff, 1, STRING("ゲッソー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_battle_info, STRING("ゲッソー"), 3)
     CALL(evt_npc_battle_start, STRING("ゲッソー"))
     CALL(evt_npc_wait_battle_end)
+
     // The beaten Blooper trembles, wails and leaps up, crashing into the ceiling.
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(tik_npc_buruburu, STRING("ゲッソー"), 1, FLOAT(1.0f), 10, 0)
@@ -734,6 +743,7 @@ EVT_BEGIN(geso_battle)
     CALL(hokori_color_func, STRING("hokori00"))
     CALL(hokori_color_func, STRING("hokori01"))
     WAIT_MS(2000)
+
     // A pipe rises from the water and the floating islands come up and start sliding back and forth.
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN, -30, 0, 1600)
@@ -797,6 +807,7 @@ static EVT_BEGIN(wall_bomb)
     CALL(evt_mapobj_set_offscreen, 1, STRING("bom_kabe_3"), STRING("offscreen"))
     CALL(evt_offscreen_get_boundingbox2, STRING("offscreen"), LW(10), LW(11), LW(12), LW(13))
     SET_VALUE(LF(0), 0)
+
     // Skip capture only when both bounding-box dimensions are zero.
     IF_INT_EQUAL(LW(12), 0)
         IF_INT_EQUAL(LW(13), 0)

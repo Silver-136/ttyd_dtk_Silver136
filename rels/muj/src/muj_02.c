@@ -203,6 +203,7 @@ EVT_BEGIN(lost_wedding_ring)
     DELETE_EVENT(LW(0))
     CALL(evt_npc_get_reglid, STRING("ピートン"), LW(0))
     DELETE_EVENT(LW(0))
+
     // Mony and Peeton are placed; Mario and his partner approach them.
     CALL_CHILD(PTR(mony_peton_setup))
     BEGIN_INLINE_EVENT
@@ -214,6 +215,8 @@ EVT_BEGIN(lost_wedding_ring)
     CALL(evt_set_dir_to_target, STRING("ピートン"), STRING("mario"))
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+
+    // Peeton and Mony learn that the boss is sick.
     CALL(evt_msg_print, 0, STRING("stg5_muj_171"), 0, STRING("ピートン"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_172"), 0, STRING("モニー"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -226,6 +229,8 @@ EVT_BEGIN(lost_wedding_ring)
     DIVIDE(LW(0), 2)
     CALL(evt_cam3d_evt_set, LW(0), 118, 343, LW(0), 54, -18, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+
+    // Mony explains that she dropped the wedding ring and Peeton tries to calm her.
     CALL(evt_msg_print, 0, STRING("stg5_muj_173"), 0, STRING("モニー"))
     CALL(evt_set_dir_to_target, STRING("ピートン"), STRING("モニー"))
     WAIT_MS(500)
@@ -234,6 +239,8 @@ EVT_BEGIN(lost_wedding_ring)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg5_muj_175"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_176"), 0, STRING("ピートン"))
+
+    // Mony makes Peeton promise to say he loves her 100 times.
     CALL(evt_msg_print, 0, STRING("stg5_muj_177"), 0, STRING("モニー"))
     CALL(evt_npc_get_position, STRING("ピートン"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("ピートン"), LW(0), LW(1), LW(2), 225, 30)
@@ -249,8 +256,10 @@ EVT_BEGIN(lost_wedding_ring)
     WAIT_MS(500)
     SET_VALUE(GW(0), 10)
     SPAWN_EVENT_GET_ID(PTR(lost_wedding_ring_sub), LW(0))
+
     // Advance the count from 10 to 100, incrementing after each repeated message.
     LOOP(90)
+        // Peeton says it again and again, tiring himself out.
         CALL(evt_msg_print_add, 0, STRING("stg5_muj_182_01"))
         ADD(GW(0), 1)
     END_LOOP
@@ -259,6 +268,8 @@ EVT_BEGIN(lost_wedding_ring)
     CALL(evt_msg_print_add, 0, STRING("stg5_muj_182_03"))
     CALL(evt_set_dir_to_target, STRING("モニー"), STRING("ピートン"))
     WAIT_MS(500)
+
+    // Mony forgives him.
     CALL(evt_msg_print, 0, STRING("stg5_muj_183"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_184"), 0, STRING("ピートン"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -267,6 +278,8 @@ EVT_BEGIN(lost_wedding_ring)
     DIVIDE(LW(0), 2)
     CALL(evt_cam3d_evt_set, LW(0), 118, 343, LW(0), 54, -18, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+
+    // Mario's partner comments on the ring and the scene wraps up.
     CALL(evt_pouch_check_item, ITEM_WEDDING_RING, LW(10))
     IF_INT_EQUAL(LW(10), 0)
         CALL(evt_msg_print_party, STRING("stg5_muj_185"))

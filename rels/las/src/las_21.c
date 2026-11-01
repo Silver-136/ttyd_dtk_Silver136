@@ -290,10 +290,12 @@ EVT_BEGIN(floatblk_evt)
         SET_FLOAT_VALUE(LW(9), FLOAT(-0.049804688f))
         SET_VALUE(LF(1), 1)
     END_IF
+
     // The block starts moving toward its other height and the camera shakes.
     SPAWN_EVENT(PTR(floatblk_shake))
     WAIT_MS(500)
     CALL(evt_mobj_get_position, LW(15), LW(0), LW(1), LW(2))
+
     // The block's colour decides whether the large or the small float sound plays.
     CALL(evt_mobj_get_kindname, LW(15), LW(3))
     SET_VALUE(LF(0), 0)
@@ -320,11 +322,13 @@ EVT_BEGIN(floatblk_evt)
         END_IF
         SET_VALUE(LW(8), -1)
     END_IF
+
     // Each frame the block speeds up to 2 units per frame and carries Mario and his partner if they stand on
     // it.
     CALL(evt_mobj_get_y_position, LW(15), LW(7))
     LOOP(0)
         SET_VALUE(LF(0), 0)
+
         // If the block is coming down and one of them is under it, it reverses.
         IF_INT_EQUAL(LF(1), 1)
             CALL(evt_mario_get_name_hitobj_head, LW(0))
@@ -398,6 +402,7 @@ EVT_BEGIN(floatblk_evt)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
     // It lands at the end height; the move sound stops and the landing sound plays.
     CALL(evt_snd_sfxoff, LW(8))
     SPAWN_EVENT(PTR(floatblk_stop_se))

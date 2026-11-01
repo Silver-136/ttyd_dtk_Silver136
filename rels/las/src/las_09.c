@@ -522,6 +522,7 @@ EVT_BEGIN(switch_1_evt)
     CALL(evt_cam3d_evt_set, 0, 400, 1368, 0, -40, 700, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     WAIT_MS(500)
+
     // An earthquake rumbles through the room.
     CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE2"), LW(10))
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 1500)
@@ -553,6 +554,7 @@ EVT_BEGIN(switch_1_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
+
         // Then the second segment.
         CALL(evt_mapobj_get_position, STRING("S_daizadai1_2"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR1"), LW(0), LW(1), LW(2), 0)
@@ -578,6 +580,7 @@ EVT_BEGIN(switch_1_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(600)
+
     // Then the first segment, which completes the bridge.
     CALL(evt_mapobj_get_position, STRING("S_daizadai1_1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR2"), LW(0), LW(1), LW(2), 0)
@@ -602,6 +605,7 @@ EVT_BEGIN(switch_1_evt)
         END_IF
     END_LOOP
     CALL(evt_hitobj_onoff, STRING("A_daizadai1"), 0, 0)
+
     // If the other switch was already pressed, a short success jingle plays over the music.
     IF_INT_EQUAL(GSWF_LAS_09_SWITCH_2_PRESSED, 1)
         CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -610,6 +614,7 @@ EVT_BEGIN(switch_1_evt)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
+
     // The harbour exit appears and the camera returns to Mario.
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change"), STRING("Ship_Change2"))
     WAIT_MS(1000)
@@ -630,6 +635,7 @@ EVT_BEGIN(switch_2_evt)
     CALL(evt_cam3d_evt_set, 0, 450, 45, 0, -75, -558, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     WAIT_MS(500)
+
     // An earthquake rumbles through the room.
     CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE2"), LW(10))
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 1500)
@@ -661,6 +667,7 @@ EVT_BEGIN(switch_2_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
+
         // Then the second segment.
         CALL(evt_mapobj_get_position, STRING("S_daizadai2_2"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR1"), LW(0), LW(1), LW(2), 0)
@@ -686,6 +693,7 @@ EVT_BEGIN(switch_2_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(600)
+
     // Then the first segment, which completes the bridge.
     CALL(evt_mapobj_get_position, STRING("S_daizadai2_1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR2"), LW(0), LW(1), LW(2), 0)
@@ -709,6 +717,7 @@ EVT_BEGIN(switch_2_evt)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // If the other switch was already pressed, a short success jingle plays over the music.
     IF_INT_EQUAL(GSWF_LAS_09_SWITCH_1_PRESSED, 1)
         CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -717,6 +726,7 @@ EVT_BEGIN(switch_2_evt)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
+
     // The harbour exit appears and the camera returns to Mario.
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change1"), STRING("Ship_Change1"))
     CALL(evt_hitobj_attr_onoff, 0, 1, STRING("Ship_Change1"), HIT_ATTR_SHIP_PANEL2)

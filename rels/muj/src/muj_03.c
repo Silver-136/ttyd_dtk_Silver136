@@ -42,6 +42,7 @@ EVT_BEGIN(muj_03_event_01)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_13_BOBBERY_THE_BRIDGE)
         IF_INT_EQUAL(GSWF_MUJ_03_FLEEING_SAILORS_SEEN, 0)
             SPAWN_EVENT(PTR(nigeru_suifu01))
+
             // Mark the scene seen when it is spawned, before the sailors finish fleeing.
             SET_VALUE(GSWF_MUJ_03_FLEEING_SAILORS_SEEN, 1)
             SET_VALUE(LW(0), 1)

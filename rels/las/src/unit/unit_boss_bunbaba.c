@@ -459,6 +459,7 @@ BattleWeapon weapon_bunbaba_mega_attack = {
 static EVT_BEGIN(battle_entry_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_map_replayanim, 0, STRING("dontyo"))
+
     // The camera moves in on Gloomtail while Mario and his partner take their places.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, 0, 110, 1080, 0, 93, -2, 1, 0)
@@ -498,6 +499,7 @@ static EVT_BEGIN(battle_entry_event)
     END_SIBLING_EVENT
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_MARIO, FLOAT(6.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // Mario flinches as Gloomtail rises up from the floor.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
     WAIT_MS(33)
@@ -512,6 +514,7 @@ static EVT_BEGIN(battle_entry_event)
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_MARIO, FLOAT(0.2998047f))
         CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_SURPRISED2_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+
         // Mario and his partner jump back in fright as Gloomtail roars and the camera shakes.
         CALL(btlevtcmd_JumpPosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 25, MOVE_SOUND_FROM_TABLE)
     END_INLINE_EVENT
@@ -535,8 +538,11 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_3"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_3"))
+
+    // Gloomtail laughs and says he will toy with them awhile.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_49_01"), 0, -2)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+
     // Everyone goes back to waiting and the battle begins.
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)

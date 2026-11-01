@@ -1388,6 +1388,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     BEGIN_SIBLING_EVENT
         CALL(star_control)
     END_SIBLING_EVENT
+
     // Crystal Star opening: Mario holds up the star item and the Crystal Star appears in stardust.
     CALL_CHILD(sac_start_camera_evt)
     WAIT_MS(500)
@@ -1404,6 +1405,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(40)
+
     // Mario puts the item away and returns home, and the camera pulls back to show the whole stage.
     CALL_CHILD(sac_mario_item_on_end_evt)
     CALL_CHILD(sac_mario_back_home)
@@ -1417,6 +1419,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
         CALL(evt_btl_camera_set_moveto, 0, 75, 105, 600, 75, 55, 0, 30, 0)
 #endif
     END_SIBLING_EVENT
+
     // Once the star is in place as the drawing cursor, the timer runs, the crowd cheers and help shows.
     CALL(wait_star_standby)
     BEGIN_SIBLING_EVENT
@@ -1445,6 +1448,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
             GOTO(90)
         END_IF
         WAIT_FRAMES(1)
+
         // The drawn loop is closed and the area inside it is captured from the screen.
         CALL(scissor_tess)
         WAIT_FRAMES(1)
@@ -1465,6 +1469,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
             CALL(evt_img_clear_virtual_point, STRING("img"))
             WAIT_FRAMES(60)
         END_IF
+
         // The cut-out is cleared before the next loop.
         CALL(evt_img_onoff, STRING("img"), 0)
         CALL(evt_img_set_shadow, STRING("img"), 0)
@@ -1477,6 +1482,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
         END_IF
     END_LOOP
     LABEL(90)
+
     // Time's up: Mario pays the Star Power and each enemy that took damage gets the finishing hit.
     CALL(sac_ac_help_off)
     CALL(sac_cheer_end)
@@ -1496,6 +1502,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     GOTO(95)
     LABEL(97)
+
     // The camera resets and the drawing work is freed.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(1000)

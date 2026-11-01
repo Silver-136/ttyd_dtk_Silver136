@@ -341,6 +341,7 @@ static USER_FUNC(sysflag) {
  */
 EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
+
     // The fortress music and ambience start and the exits are set up.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
@@ -395,6 +396,7 @@ EVT_BEGIN(aji_18_init_evt)
         SET_VALUE(LW(0), 2)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi3"), 0, PTR(evt_machine), 0)
     END_IF
+
     // Before the factory door opens, the east exit is locked behind the key slots, and the light panels show
     // red.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_16_FACTORY_DOOR)
@@ -426,6 +428,7 @@ EVT_BEGIN(aji_18_init_evt)
 #if VERSION >= VERSION_US
             END_IF
 #endif
+
                 // US recovery is outside the missing-partner branch; the other version keeps it inside.
             CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
@@ -437,6 +440,7 @@ EVT_BEGIN(aji_18_init_evt)
             SPAWN_EVENT(PTR(evt_koopa_after))
         END_IF
     END_SWITCH
+
     // Monitor for STG7_25_THE_LAST_MAIL before applying the emergency blend.
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN

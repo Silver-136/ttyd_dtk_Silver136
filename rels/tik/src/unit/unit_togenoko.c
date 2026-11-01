@@ -579,12 +579,14 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(normal_attack_event))
         GOTO(99)
     END_IF
+
     // A Koopatrol flipped onto its back spends its turn getting back up.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(wakeup_event))
         RETURN
     END_IF
+
     // A guarding Koopatrol usually lowers its guard on its turn.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -623,6 +625,7 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             RETURN
         END_IF
+
         // It looks for free room on the stage near itself, since a friend needs room to join the fight.
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         LOOP(0)
@@ -654,6 +657,7 @@ static EVT_BEGIN(attack_event)
                 GOTO(11)
             END_IF
         END_LOOP
+
         // With room to spare, it may call a friend to join (the fewer Koopatrols are alive, the likelier).
         LABEL(10)
         CALL(togenoko_getnum, LW(10))
@@ -678,6 +682,7 @@ static EVT_BEGIN(attack_event)
             END_IF
             CASE_END
         END_SWITCH
+
         // Otherwise it picks its move at random: the normal attack, the shell attack, the charge or guarding.
         LABEL(11)
         SET_VALUE(LW(0), 0)
@@ -708,6 +713,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(guard_event))
         GOTO(99)
     END_IF
+
     // The move is done and the Koopatrol returns to waiting.
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -729,6 +735,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     END_IF
+
     // No target left: a confused Koopatrol is flustered; either way it ends its turn.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -738,6 +745,7 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+
     // The attack is announced and the guard timing is awaited, and the camera frames the Koopatrol
     // and its target.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -750,6 +758,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+
     // It marches up to the target with a stamping tread, then lunges with its spear.
     BEGIN_SIBLING_EVENT
         LOOP(10)
@@ -767,6 +776,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 10)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(10.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+
     // Check how the target defends against the thrust.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
@@ -790,6 +800,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // The target dodged: the Koopatrol runs on past, reappears from the far side and walks home.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 500)
@@ -804,6 +815,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     GOTO(98)
+
     // The thrust hits: the camera shakes and the damage is dealt, then it hops back toward home in two hops.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
@@ -831,6 +843,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGENOKO_MOVE6"), EVT_NULLPTR, 0, EVT_NULLPTR)
     GOTO(98)
+
     // It settles at home.
     LABEL(98)
     CALL(btlevtcmd_ResetFaceDirection, -2)
@@ -859,6 +872,7 @@ static EVT_BEGIN(shell_attack_event)
         END_IF
         GOTO(99)
     END_IF
+
     // The camera frames the Koopatrol and its target, and the attack is announced.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
@@ -871,6 +885,7 @@ static EVT_BEGIN(shell_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(100)
+
     // The Koopatrol hops into its shell.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGENOKO_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -878,6 +893,7 @@ static EVT_BEGIN(shell_attack_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGENOKO_SHELL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1"))
+
     // It spins up in three steps, faster each time.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGENOKO_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 0)
@@ -899,6 +915,7 @@ static EVT_BEGIN(shell_attack_event)
     WAIT_MS(200)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 40)
     WAIT_MS(200)
+
     // It starts its slide, kicking up dust.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -916,6 +933,7 @@ static EVT_BEGIN(shell_attack_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(5), EVT_NULLPTR)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_NONE, 0)
     SET_VALUE(LW(6), 0)
+
     // It slides through each target in turn: those that dodge are slipped past, the rest take the damage.
     LABEL(10)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(12.0f))
@@ -948,6 +966,7 @@ static EVT_BEGIN(shell_attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_NONE, 0)
     GOTO(97)
     LABEL(91)
+
     // Resolve the defense command once, at the first selected target that passes the damage precheck.
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
@@ -960,6 +979,7 @@ static EVT_BEGIN(shell_attack_event)
     IF_INT_NOT_EQUAL(LW(3), -1)
         GOTO(10)
     END_IF
+
     // After the last target it slides on off the stage, reappears on the far side and slides home.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 500)
@@ -967,6 +987,7 @@ static EVT_BEGIN(shell_attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE, 0)
     WAIT_MS(500)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, 250, LW(1), LW(2))
+
     // It pops out of its shell at home.
     LABEL(98)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGENOKO_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)

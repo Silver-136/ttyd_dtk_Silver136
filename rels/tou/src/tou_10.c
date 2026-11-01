@@ -769,6 +769,8 @@ EVT_BEGIN(evt_saisyo_after)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
+
+    // Grubba comments on the fight and walks out.
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_LESS(LW(0), 20)
         CALL(evt_msg_print, 0, STRING("stg3_tou_89"), 0, STRING("ガンス"))
@@ -803,11 +805,13 @@ EVT_BEGIN(evt_saisyo_after)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // Jolene steps up to pay the fight money.
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), -55, -95, 0, FLOAT(80.0f), 1)
     IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 1)
+        // After a win: 3 coins and how to reserve the next match.
         CALL(evt_msg_print, 0, STRING("stg3_tou_90"), 0, STRING("キノシコワ"))
         WAIT_MS(300)
         CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("A_1"))
@@ -846,6 +850,7 @@ EVT_BEGIN(evt_saisyo_after)
         WAIT_MS(600)
         CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
     ELSE
+        // After a loss: 1 coin and her parting words.
         CALL(evt_msg_print, 0, STRING("stg3_tou_93_2"), 0, STRING("キノシコワ"))
         WAIT_MS(300)
         CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("A_1"))
@@ -885,6 +890,7 @@ EVT_BEGIN(evt_saisyo_after)
         WAIT_MS(600)
         CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
     END_IF
+
     // Jolene leaves through the door.
     CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
@@ -913,6 +919,8 @@ EVT_BEGIN(evt_saisyo_after)
             BREAK_LOOP
         END_IF
     END_LOOP
+
+    // Master Crash is put back on his spot, then King K welcomes Mario and introduces himself.
     CALL(evt_npc_get_reglid, STRING("オクトール"), LW(0))
     DELETE_EVENT(LW(0))
     CALL(evt_npc_set_position, STRING("オクトール"), 80, 0, 85)
@@ -924,6 +932,8 @@ EVT_BEGIN(evt_saisyo_after)
     CALL(evt_npc_move_position, STRING("マイケル"), 40, -80, 0, FLOAT(60.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_6"), 0, STRING("マイケル"))
     WAIT_MS(300)
+
+    // He introduces Master Crash, who offers his advice.
     CALL(evt_cam3d_evt_set, 75, 107, 423, 75, 55, 128, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_7"), 0, STRING("マイケル"))
@@ -934,6 +944,7 @@ EVT_BEGIN(evt_saisyo_after)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_10"), 0, STRING("オクトール"))
     WAIT_MS(300)
+
     // Next comes Bandy Andy.
     CALL(evt_cam3d_evt_set, -160, 95, 315, -160, 37, -14, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -945,6 +956,7 @@ EVT_BEGIN(evt_saisyo_after)
     CALL(evt_party_set_dir, 0, 270, 300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_12"), 0, STRING("ブロッツ"))
     WAIT_MS(300)
+
     // Last is Cleftor, who wants nothing to do with Mario.
     CALL(evt_cam3d_evt_set, -60, 107, 423, -60, 55, 128, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -961,6 +973,7 @@ EVT_BEGIN(evt_saisyo_after)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_15"), 0, STRING("マイケル"))
     WAIT_MS(300)
+
     // King K sums up the crew, goes back to his spot and the story advances.
     CALL(evt_cam3d_evt_set, -35, 96, 315, -35, 57, -8, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -987,9 +1000,11 @@ EVT_BEGIN(evt_saisyo_after_re)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
+
     // Jolene's verdict and the fight money depend on whether Mario won.
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_LESS(LW(0), 20)
+        // A win: the crowd needed more excitement, and 3 coins.
         CALL(evt_msg_print, 0, STRING("stg3_tou_re_028"), 0, STRING("キノシコワ"))
         CALL(evt_msg_print, 0, STRING("stg3_tou_re_029"), 0, STRING("キノシコワ"))
         WAIT_MS(300)
@@ -1024,6 +1039,7 @@ EVT_BEGIN(evt_saisyo_after_re)
         WAIT_MS(600)
         CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
     ELSE
+        // A loss: retire or reclaim his glory, and 1 coin.
         CALL(evt_msg_print, 0, STRING("stg3_tou_re_032"), 0, STRING("キノシコワ"))
         CALL(evt_msg_print, 0, STRING("stg3_tou_re_033"), 0, STRING("キノシコワ"))
         WAIT_MS(300)
@@ -1058,6 +1074,7 @@ EVT_BEGIN(evt_saisyo_after_re)
         WAIT_MS(600)
         CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
     END_IF
+
     // Jolene bows and leaves through the door, and control returns.
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 90)
     WAIT_MS(300)
@@ -1132,6 +1149,8 @@ EVT_BEGIN(evt_tou_chibi_yoshi)
     CALL(evt_npc_set_position, STRING("ヨッシー"), 0, -1000, 0)
     CALL(evt_npc_set_tribe, STRING("ヨッシー"), STRING("ヨッシー"))
     CALL(evt_npc_flag_onoff, 1, STRING("ヨッシー"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
+
+    // The partner notices the egg is gone and looks around; Yoshi appears and says "Yo!".
     CALL(evt_mario_set_dir, 270, 300, 0)
     CALL(evt_msg_print_party, STRING("stg3_tou_278"))
     CALL(evt_party_set_dir, 0, 270, -1)
@@ -1148,6 +1167,8 @@ EVT_BEGIN(evt_tou_chibi_yoshi)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1500)
+
+    // Everyone turns as Yoshi walks up and thanks Mario for hatching him.
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
@@ -1164,6 +1185,9 @@ EVT_BEGIN(evt_tou_chibi_yoshi)
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING("stg3_tou_280"), 0, STRING("ヨッシー"))
     WAIT_MS(300)
+
+    // Mario is startled, the partner reacts, and Yoshi offers to help win the Crystal Star
+    // and asks for a name.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
@@ -1178,6 +1202,7 @@ EVT_BEGIN(evt_tou_chibi_yoshi)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_283"), 0, STRING("ヨッシー"))
     WAIT_MS(300)
+
     // The name entry window unrolls; a blank name becomes "Yoshi".
     CALL(evt_paper_entry, STRING("OFF_d_roll"))
     CALL(evt_img_entry, STRING("img"))
@@ -1211,6 +1236,8 @@ EVT_BEGIN(evt_tou_chibi_yoshi)
     CALL(evt_img_release, STRING("img"))
     CALL(evt_paper_delete, STRING("OFF_d_roll"))
     CALL(evt_cam_letter_box_disable, 0)
+
+    // Yoshi approves the name, which is saved, and he joins the party.
     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_284"), 0, STRING("ヨッシー"), LW(0))
     WAIT_MS(300)
     CALL(evt_mario_clear_party, 1)
@@ -1517,6 +1544,7 @@ static EVT_BEGIN(evt_gardman)
     WAIT_FRAMES(1)
 #else
     CALL(tou_10_mario_free_wait)
+
     // Take control once Mario has landed and finished talking.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)
@@ -1528,6 +1556,7 @@ static EVT_BEGIN(evt_gardman)
     WAIT_FRAMES(1)
 #endif
 #endif
+
     // If Mario stands in the doorway, he is startled and hops back out of the way.
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -1555,6 +1584,7 @@ static EVT_BEGIN(evt_gardman)
         CALL(evt_mario_set_dir_npc, STRING("キノシコワ"))
         CALL(evt_mario_set_dir_npc, STRING("ガードマン"))
     END_INLINE_EVENT
+
     // The guard opens the door, walks in and the door closes behind him.
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -1581,6 +1611,9 @@ static EVT_BEGIN(evt_gardman)
             BREAK_LOOP
         END_IF
     END_LOOP
+
+    // The guard calls Mario to his match and Jolene says Security will escort him.
+    // The guard calls Mario to his match and Jolene says Security will escort him.
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_74"), 0, STRING("ガードマン"))
     WAIT_MS(300)
@@ -1699,6 +1732,8 @@ EVT_BEGIN(evt_okorareru)
         WAIT_FRAMES(1)
         GOTO(0)
     END_IF
+
+    // The music fades and she scolds Mario: major leaguers may not come in here, let alone bash walls.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -1716,6 +1751,7 @@ EVT_BEGIN(evt_okorareru)
     CALL(evt_msg_print, 0, STRING("stg3_tou_297_17"), 0, STRING("キノシコワ"))
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_cam3d_evt_off, 2000, EASING_SINE_IN_OUT)
+
     // She walks over and confiscates the Dubious Paper.
     CALL(evt_npc_move_position, STRING("キノシコワ"), -155, -55, 0, FLOAT(70.0f), 1)
     CALL(evt_npc_move_position, STRING("キノシコワ"), -161, 90, 0, FLOAT(70.0f), 1)
@@ -1732,6 +1768,7 @@ EVT_BEGIN(evt_okorareru)
     CALL(evt_item_delete, STRING("fmoney"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_pouch_remove_item, ITEM_DUBIOUS_PAPER, LW(0))
+
     // She leaves through the door.
     CALL(evt_npc_move_position, STRING("キノシコワ"), -155, -55, 0, FLOAT(70.0f), 1)
     CALL(evt_cam3d_evt_set, 0, 100, 287, 0, 55, -10, 2000, EASING_SINE_IN_OUT)
@@ -1761,6 +1798,7 @@ EVT_BEGIN(evt_okorareru)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // The partner grumbles about the lost document but guesses the Crystal Star is in the arena.
     WAIT_MS(1000)
     CALL(evt_msg_print_party, STRING("stg3_tou_297_20"))
@@ -1862,6 +1900,7 @@ EVT_BEGIN(tou_10_init_evt)
             SET_VALUE(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
         END_IF
     END_IF
+
     // The door, lockers, the fighters, Master Crash's talk hook, and the match terminal and monitor.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -1882,6 +1921,8 @@ EVT_BEGIN(tou_10_init_evt)
         CALL(evt_mobj_lv_blk, STRING("blk"), -280, 0, 100, PTR(evt_block), GSWF_TOU_10_BIG_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
         CALL(evt_mobj_flag_onoff, 1, STRING("blk"), MOBJ_FLAG_NO_CULL)
     END_IF
+
+    // First visit: Jolene's welcome scene, with the door locked.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_05_MATCH)
         SPAWN_EVENT(PTR(evt_rec))
@@ -1889,6 +1930,7 @@ EVT_BEGIN(tou_10_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         RETURN
     END_SWITCH
+
     // After a match: Goombella, Koops and Flurrie rejoin if the cake poisoning was never cured,
     // then the matching after-match scene plays.
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
@@ -1930,6 +1972,7 @@ EVT_BEGIN(tou_10_init_evt)
             SPAWN_EVENT(PTR(evt_tou_match_after_default))
         END_SWITCH
     END_IF
+
     // The bed, the Dubious Paper until Jolene confiscates it, and the one-time Iron Clefts hint.
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))

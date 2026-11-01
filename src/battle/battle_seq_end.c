@@ -1127,6 +1127,7 @@ EVT_BEGIN(_curtain_close_event)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
         CALL(evt_fade_end_wait)
     END_SIBLING_EVENT
+
     // On a wide stage, Mario and the partner walk off to the left while the curtains close.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_PARTY_IN_AUDIENCE)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1145,6 +1146,7 @@ EVT_BEGIN(_curtain_close_event)
             END_SIBLING_EVENT
         END_IF
     END_IF
+
     // The three nozzles above the stage lower together.
     BEGIN_SIBLING_EVENT
         CALL(evt_sub_intpl_init_float, EASING_LINEAR, 0, FLOAT(-40.0f), 29)
@@ -1170,11 +1172,13 @@ EVT_BEGIN(_curtain_close_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // The wide-stage flag is cleared and the camera returns to its normal view.
     CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_PARTY_IN_AUDIENCE)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     WAIT_MS(1500)
+
     // Confetti falls, the level-up effect plays and Star Power refills to full.
     BEGIN_SIBLING_EVENT
         LOOP(6)
@@ -1188,6 +1192,7 @@ EVT_BEGIN(_curtain_close_event)
     WAIT_FRAMES(48)
     CALL(_lvup_ap_recover_full)
     WAIT_MS(1000)
+
     // A spotlight comes on and follows Mario, and the enemies are hidden.
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         WAIT_FRAMES(2)
@@ -1195,6 +1200,7 @@ EVT_BEGIN(_curtain_close_event)
         CALL(_lvup_spot_move, 0)
     END_SIBLING_EVENT
     CALL(_disable_enemy_unit_disp)
+
     // The partner reappears off to the left and walks back on with its own footstep sounds.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(3))
@@ -1233,6 +1239,7 @@ EVT_BEGIN(_curtain_close_event)
             CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_NEUTRAL)
         END_IF
     END_SIBLING_EVENT
+
     // Mario walks back to centre stage, strikes a victory pose and the audience cheers.
     CALL(btlevtcmd_SetPos, UNIT_ID_MARIO, -200, 0, 90)
     CALL(btlevtcmd_ClearAllStatus, UNIT_ID_MARIO)
@@ -1242,13 +1249,15 @@ EVT_BEGIN(_curtain_close_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_V_2"))
     CALL(evt_audience_sound_cheer, 180, 40)
     WAIT_MS(1000)
+
     // The HP, FP and BP blocks appear dimmed and the spotlight fades.
     CALL(_lvup_select_object_init)
     BEGIN_SIBLING_EVENT
         CALL(_lvup_spot_off, 30)
     END_SIBLING_EVENT
-#if VERSION >= VERSION_US
+
     // The stage lights come back and the curtains open.
+#if VERSION >= VERSION_US
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_batstage_set_stg_dark, 0, 30, 0)
         CALL(evt_batstage_set_stg_dark_base, 0, 30, 0)
@@ -1275,6 +1284,7 @@ EVT_BEGIN(_curtain_close_event)
 #if VERSION >= VERSION_US
     END_INLINE_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(10))
+
     // The "select one to upgrade" prompt stays on screen until the stick is pushed.
     BEGIN_SIBLING_EVENT_GET_ID(LW(10))
         SET_VALUE(LW(5), 5)
@@ -1284,6 +1294,7 @@ EVT_BEGIN(_curtain_close_event)
             SET_VALUE(LW(5), 5)
         END_LOOP
     END_SIBLING_EVENT
+
     // Pushing left puts the cursor on BP: the spotlight swings left and the BP block lights up.
     LABEL(60)
     CALL(btlevtcmd_PadCheckTrigger, 0, BTL_PAD_STICK_LEFT, LW(0))
@@ -1305,6 +1316,7 @@ EVT_BEGIN(_curtain_close_event)
         CALL(btlevtcmd_WaitEventEnd, LW(0))
         GOTO(69)
     END_IF
+
     // Pushing right puts the cursor on HP: the spotlight swings right and the HP block lights up.
     LABEL(61)
     CALL(btlevtcmd_PadCheckTrigger, 0, BTL_PAD_STICK_RIGHT, LW(0))
@@ -1326,9 +1338,11 @@ EVT_BEGIN(_curtain_close_event)
         CALL(btlevtcmd_WaitEventEnd, LW(0))
         GOTO(69)
     END_IF
+
     // No push yet: check the stick again next frame.
     WAIT_FRAMES(1)
     GOTO(60)
+
     // The prompt goes away and every block shows its current and next value.
     LABEL(69)
     DELETE_EVENT(LW(10))

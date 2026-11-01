@@ -347,6 +347,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+
     // Pick the front or rear swat at random and choose a target.
     CALL(evt_sub_random, 1, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -360,11 +361,15 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
+
     // The attack is announced and the guard timing is awaited.
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
+
+    // The first time the target is Mario, the Blooper stops to ask whether he thinks it would taste good (yes
+    // or no).
     SET_VALUE(LW(11), 0)
     CALL(btlevtcmd_GetUnitKind, LW(3), LW(0))
     IF_INT_EQUAL(LW(0), UNIT_MARIO)
@@ -395,6 +400,7 @@ static EVT_BEGIN(attack_event)
             END_INLINE_EVENT
         END_IF
     END_IF
+
     // The tentacle swings across the stage, from the near or far side depending on where the target stands.
     CALL(_check_zenei_kouei, LW(3), LW(13))
     IF_INT_EQUAL(LW(13), 0)
@@ -416,6 +422,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_ftof, 94, LW(0))
 #endif
     WAIT_FRAMES(LW(0))
+
     // The swat lands unless the target dodges; then the damage is dealt.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 1)
@@ -431,6 +438,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
+
     // The swing finishes and the tentacle returns to waiting.
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     LABEL(99)

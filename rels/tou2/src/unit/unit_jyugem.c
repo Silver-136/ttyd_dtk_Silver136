@@ -294,6 +294,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
+
     // With no egg in hand, Lakitu just reacts to the hit normally.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HOLD, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -305,6 +306,7 @@ static EVT_BEGIN(damage_event)
         ELSE
             SET_VALUE(LW(15), 0)
         END_IF
+
         // A hit that did damage, or left instant KO, sleep, dizzy, confusion, electric, freeze or stop, knocks the egg out of its hands.
         CALL(btlevtcmd_CheckStatus, LW(10), STATUS_INSTANT_KILL, LW(14))
         OR(LW(15), LW(14))
@@ -360,6 +362,7 @@ static EVT_BEGIN(damage_event)
             IF_INT_EQUAL(LW(0), DAMAGE_CODE_PROTECTED)
                 GOTO(90)
             END_IF
+
             // A poison, burn, Tiny, defense-down, slow or allergic status only makes the egg pop up and drop back; Lakitu keeps holding it.
             CALL(btlevtcmd_CheckStatus, LW(10), STATUS_POISON, LW(15))
             CALL(btlevtcmd_CheckStatus, LW(10), STATUS_BURN, LW(14))
@@ -551,6 +554,7 @@ EVT_END()
 
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // Lakitu chooses a target for its egg throw.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_jyugem_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_jyugem_attack), LW(3), LW(4))
@@ -564,12 +568,14 @@ static EVT_BEGIN(normal_attack_event)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_jyugem_attack))
+
     // The attack is announced and Lakitu turns to face its target.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_jyugem_attack))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // If Lakitu is not already holding an egg, it raises a new one over its head.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HOLD, LW(10))
     IF_INT_EQUAL(LW(10), 0)
@@ -591,11 +597,13 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 35)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
+
     // Lakitu throws the egg in an arc toward the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_JUGEM_THROW1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 45, 0, FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 45, MOVE_SOUND_FROM_TABLE)
+
     // Find out how the target reacts to the egg.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_jyugem_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -619,11 +627,13 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // The throw missed: the egg flies on past the target.
     LABEL(90)
     CALL(btlevtcmd_JumpPartsContinue, UNIT_ID_SELF, 2)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_JUGEM_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     GOTO(98)
+
     // The egg hits: the damage is applied.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_jyugem_attack))
@@ -680,6 +690,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 15, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_JUGEM_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(20)
+
     // The new Spiny takes on Lakitu's Huge or Tiny status and uncurls with a spin.
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_togezo), 0)
     CALL(togezo_copy_status, UNIT_ID_SELF, LW(3))
@@ -702,6 +713,7 @@ static EVT_BEGIN(normal_attack_event)
     END_LOOP
     CALL(btlevtcmd_SetRotateOffset, LW(3), 0, 0, 0)
     GOTO(99)
+
     // Otherwise the egg bounces on to the floor and is hidden.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

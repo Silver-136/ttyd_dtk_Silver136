@@ -502,6 +502,7 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+
     // Declares the attack, pays its cost and turns to face the target.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -509,12 +510,14 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // Wind-up: it pauses, raises its arm (KRN_A_1) and swings it back (KRN_A_2).
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_2"))
     WAIT_MS(250)
+
     // It hurls a bone (part 2) that spins end over end as it flies; the spin runs until the throw ends.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_SEND_GROUP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_BONE_THROW1"), EVT_NULLPTR, 0, LW(15))
@@ -533,6 +536,7 @@ static EVT_BEGIN(normal_attack_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
     // Checks the outcome of the hit: a miss, dodge or guard goes to the no-damage branch; a connecting hit applies
     // the Action Command defence result and deals the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_attack), 256, LW(5))
@@ -554,6 +558,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // Miss branch: the bone flies past the target and lands at the far edge of the stage, and the target starts its
     // dodge when the bone gets level with it.
     LABEL(90)
@@ -589,6 +594,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, 0)
     CALL(evt_snd_sfxoff, LW(15))
     GOTO(98)
+
     // Hit branch: the bone arcs onto the target, the defence result is read and the damage is applied, then the bone
     // bounces off behind it.
     LABEL(91)
@@ -607,6 +613,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(2.0f), FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, 0)
     GOTO(98)
+
     // Ends the bone's spin and hides the bone part again; the unit settles back into its wait event.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)
@@ -633,6 +640,7 @@ static EVT_BEGIN(call_friend_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     SET_VALUE(LW(10), 0)
+
     // Six times it tosses a bone piece (part 3) in an arc onto a heap (part 4) that grows a little taller with each
     // piece.
     LOOP(6)
@@ -696,6 +704,7 @@ static EVT_BEGIN(call_friend_event)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
         ADD(LW(10), 1)
     END_LOOP
+
     // The heap shakes and the bones pull together (reunite sounds).
     WAIT_FRAMES(15)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("KRN_D_3"))
@@ -704,6 +713,7 @@ static EVT_BEGIN(call_friend_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("KRN_D_4"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_UNITE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(30)
+
     // A new bony unit is spawned on the heap and given this unit's status effects.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_S_1"))
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_honenoko), 0)

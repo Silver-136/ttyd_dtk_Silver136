@@ -633,11 +633,13 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(attack_punch_event))
         GOTO(99)
     END_IF
+
     // Illusion copies (unit work 4 set) never act on their own.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
     END_IF
+
     // If the AI wants to use a held item, it does that instead and ends its turn.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -645,6 +647,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+
     // When it is the only Dark Wizzerd left, it conjures its illusions (bunsin_event).
     CALL(mahorn_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -737,6 +740,7 @@ static EVT_BEGIN(attack_event)
             GOTO(10)
         END_IF
     END_IF
+
     // The turn ends and the Dark Wizzerd returns to its idle loop.
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -1115,6 +1119,7 @@ static EVT_BEGIN(attack_punch_event)
     CALL(set_hand_dest, UNIT_ID_SELF, 3, FLOAT(16.0f), FLOAT(29.0f), FLOAT(5.0f))
     CALL(set_hand_dest, UNIT_ID_SELF, 4, FLOAT(-16.0f), FLOAT(11.0f), FLOAT(-5.0f))
     CALL(set_hand_dest, UNIT_ID_SELF, 5, FLOAT(16.0f), FLOAT(11.0f), FLOAT(5.0f))
+
     // The camera pulls in and the four floating hands gather for the punch.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -1123,6 +1128,7 @@ static EVT_BEGIN(attack_punch_event)
     ELSE
         SUBTRACT(LW(0), 35)
     END_IF
+
     // The Dark Wizzerd hops forward in front of its target.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, 4, FLOAT(0.0009765625f))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 20, LW(2), 0, MOVE_SOUND_FROM_TABLE)
@@ -1137,6 +1143,7 @@ static EVT_BEGIN(attack_punch_event)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(10), kMotionBlur)
         ADD(LW(10), 1)
     END_LOOP
+
     // The hands turn into blurred fists that jitter wildly in front of the target for about 50 frames.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     LOOP(25)
@@ -1158,6 +1165,7 @@ static EVT_BEGIN(attack_punch_event)
         END_LOOP
         WAIT_FRAMES(2)
     END_LOOP
+
     // The hands settle back into place and the blur is switched off.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MAH_S_1"))
     CALL(set_hand_dest, UNIT_ID_SELF, 2, FLOAT(-16.0f), FLOAT(29.0f), FLOAT(-5.0f))
@@ -1194,12 +1202,14 @@ static EVT_BEGIN(attack_punch_event)
         LABEL(90)
         WAIT_FRAMES(30)
         GOTO(98)
+
         // The punch hits: damage is dealt with the Action Command defence result, then a short pause.
         LABEL(91)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         WAIT_FRAMES(30)
         GOTO(98)
+
         // The Dark Wizzerd hops back to where it started.
         LABEL(98)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_ATTACK1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1242,6 +1252,7 @@ static EVT_BEGIN(attack_enemy_common_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // All the hands (and those of any illusions) charge up a magic ball together.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(mahorn_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
@@ -1315,6 +1326,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         SET_VALUE(LW(15), UNIT_ID_SELF)
         CALL_CHILD(attack_enemy_common_event_sub_no_hit)
         GOTO(98)
+
         // The ball hits: every caster's ball strikes, then the Action Command defence result and damage are
         // applied.
         LABEL(91)
@@ -1332,6 +1344,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
+
         // The Dark Wizzerd and its illusions return to their idle loops.
         LABEL(98)
         CALL(mahorn_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
@@ -1896,6 +1909,7 @@ static EVT_BEGIN(wait_event)
             CALL(btlevtcmd_AnimeChangePoseFromTable, LW(4), 1)
         END_IF
     END_IF
+
     // If it is frozen, stopped or asleep, the hands droop and flap limply (MAH_S_4A and MAH_S_4B at random
     // intervals).
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(13))
@@ -1920,6 +1934,7 @@ static EVT_BEGIN(wait_event)
             CALL(evt_sub_random, 15, LW(0))
             ADD(LW(0), 15)
             WAIT_FRAMES(LW(0))
+
             // Each hand flaps in its own random rhythm while the others do the same.
             GOTO(10)
         END_SIBLING_EVENT

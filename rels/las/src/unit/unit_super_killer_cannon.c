@@ -266,9 +266,11 @@ static EVT_BEGIN(attack_event)
     ADD(LW(0), 0)
     ADD(LW(0), 10)
     SUBTRACT(LW(0), 1)
+
     // A random roll picks one of six weighted launches.
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 15)
+
     // Launch 1: a Bombshell Bill is fired from the front barrel, if free space is found beside the Blaster.
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -299,6 +301,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     ADD(LW(0), 0)
+
     // Launch 2: the same front-barrel shot, but as the charged version with extra charging flashes.
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -329,6 +332,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     ADD(LW(0), 10)
+
     // Launch 3: another plain front-barrel shot.
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -358,6 +362,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     ADD(LW(0), 20)
+
     // Launch 4: the upper barrel is raised and a Bombshell Bill is fired from it, then the barrel is lowered
     // again.
     IF_INT_LESS(LW(1), LW(0))
@@ -405,6 +410,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     ADD(LW(0), 0)
+
     // Launch 5: the charged shot from the raised upper barrel.
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -451,6 +457,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     ADD(LW(0), 10)
+
     // Launch 6: another plain shot from the raised upper barrel.
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -495,6 +502,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kHidden)
         GOTO(99)
     END_IF
+
     // The turn is over and the Blaster goes back to idling.
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

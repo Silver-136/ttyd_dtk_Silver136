@@ -564,6 +564,7 @@ EVT_BEGIN(senin_event)
     END_LOOP
     SET_RAW_VALUE(LW(0), GW(0))
     SET_FLOAT_VALUE(LW(1), FLOAT(1.5f))
+
     // The ship starts to bob.
     SPAWN_EVENT(PTR(muj_ship_puka))
     CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
@@ -624,14 +625,19 @@ EVT_BEGIN(senin_event)
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(1000)
+
+    // The sailors say they are coming too.
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_01"), 0, STRING("水夫D"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_02"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_03"), 0, STRING("ガラの悪い水夫"))
     CALL(evt_cam3d_evt_set, -150, 300, 682, -150, 150, -175, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_npc_set_position, STRING("コルテス"), -215, 120, -160)
+
     // Cortez appears on the dock.
     CALL_CHILD(korutesu_apper)
+
+    // Cortez speaks after a millennium and the Embers appear.
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_04"), 0, STRING("コルテス"))
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR3"), 0)
     SET_VALUE(LW(0), 95)
@@ -640,6 +646,7 @@ EVT_BEGIN(senin_event)
         ADD(LW(0), 1)
     END_LOOP
     WAIT_MS(3000)
+
     // The story advances and the crew boards the ship at muj_00.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_41_01_ALL_ABOARD)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
@@ -654,14 +661,19 @@ EVT_BEGIN(senin_event)
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(1000)
+
+    // The sailors say they are coming too.
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_01"), 0, STRING("水夫D"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_02"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_03"), 0, STRING("ガラの悪い水夫"))
     CALL(evt_cam3d_evt_set, -150, 300, 682, -150, 150, -175, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_npc_set_position, STRING("コルテス"), -215, 120, -160)
+
     // Cortez appears on the dock.
     CALL_CHILD(PTR(korutesu_apper))
+
+    // Cortez speaks after a millennium and the Embers appear.
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_04"), 0, STRING("コルテス"))
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR3"), 0)
     SET_VALUE(LW(0), 95)
@@ -670,6 +682,7 @@ EVT_BEGIN(senin_event)
         ADD(LW(0), 1)
     END_LOOP
     WAIT_MS(3000)
+
     // The story advances and the crew boards the ship at muj_00.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_41_01_ALL_ABOARD)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)

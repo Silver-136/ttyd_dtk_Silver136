@@ -463,6 +463,7 @@ EVT_BEGIN(gonbaba_evt)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, PARTY_MEMBER_GOOMBELLA)
     END_IF
+
     // Mario freezes and Hooktail's roar echoes from off-screen; Mario and his partner react.
     CALL(evt_mario_key_onoff, 0)
     WAIT_FRAMES(1)
@@ -485,6 +486,7 @@ EVT_BEGIN(gonbaba_evt)
         CALL(evt_mario_set_pose, STRING("M_I_N"))
     END_INLINE_EVENT
     WAIT_MS(1000)
+
     // Hooktail's shadow passes over the field.
     CALL_CHILD(PTR(evt_gonbaba_shadow))
     CALL(evt_mario_get_pos, 0, LW(0), LW(2), LW(2))
@@ -503,6 +505,7 @@ EVT_BEGIN(gonbaba_evt)
     CALL(evt_mario_set_dir_npc, STRING("（・ｘ・）"))
     WAIT_MS(1000)
     CALL(evt_mario_cont_onoff, 0)
+
     // Hooktail's sprite flies in from the back, grows and swoops away.
     CALL(evt_npc_set_position, STRING("（・ｘ・）"), 0, 210, -500)
     CALL(evt_npc_set_anim, STRING("（・ｘ・）"), STRING("GNB_F_1"))
@@ -557,6 +560,8 @@ EVT_BEGIN(gonbaba_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(1000)
+
+    // The camera returns to Mario and his partner comments on what they saw.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_cam3d_evt_set_xyz, 270, LW(1), LW(2), 0, 7000, EASING_SINE_IN_OUT)
     WAIT_MS(9500)
@@ -1358,6 +1363,7 @@ EVT_BEGIN(hei_00_init_evt)
         CALL(evt_mario_set_mode, 2)
         SPAWN_EVENT(PTR(hei_00_koopa_evt))
     END_IF
+
     // Register the exits and the NPCs of the room.
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -1365,6 +1371,7 @@ EVT_BEGIN(hei_00_init_evt)
     SET_VALUE(LW(0), STRING("dokan"))
     CALL_CHILD(PTR(bero_case_switch_off))
     CALL(evt_npc_setup, PTR(npcEnt))
+
     // Story-dependent cutscenes: the opening and the Hooktail flyover.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_00_PETAL_MEADOWS)
         SPAWN_EVENT(PTR(first_evt))
@@ -1389,6 +1396,7 @@ EVT_BEGIN(hei_00_init_evt)
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_moji"), 1, 0)
+
     // Before that: the timer switch that opens the path, and the tablet once both stones are in place.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_08_OPENING_THE_PATH)
         CALL(evt_mapobj_get_position, STRING("isi_3"), LW(0), LW(1), LW(2))
@@ -1402,6 +1410,7 @@ EVT_BEGIN(hei_00_init_evt)
             END_IF
         END_IF
     END_IF
+
     // Restore the Sun Stone and Moon Stone sockets according to which stones Mario has taken and placed.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
@@ -1419,6 +1428,7 @@ EVT_BEGIN(hei_00_init_evt)
             CALL_CHILD(PTR(setting_moon_stone))
         END_IF
     END_IF
+
     // Trees, wheat animation, Mushroom block, save block and the Hooktail shadow NPC.
     SET_VALUE(LW(0), PTR(ki_data))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))

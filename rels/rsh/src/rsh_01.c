@@ -1140,6 +1140,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
             END_IF
+
             // Revisit variant B leaves the current moving-train audio unchanged.
             IF_STR_EQUAL(LW(0), STRING("rsh_01_b"))
             END_IF

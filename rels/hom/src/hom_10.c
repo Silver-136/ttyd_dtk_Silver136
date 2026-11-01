@@ -302,6 +302,7 @@ EVT_BEGIN(hom_10_evt_resha_start)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(200)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
+
     // The engine sound for this station (Rogueport, the platform or Poshley Heights) starts.
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
@@ -317,6 +318,7 @@ EVT_BEGIN(hom_10_evt_resha_start)
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
         CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_3"), 0)
     END_IF
+
     // On the platform and in Rogueport the train model itself slides away from the stop.
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
@@ -339,6 +341,7 @@ EVT_BEGIN(hom_10_evt_resha_start)
             END_LOOP
         END_INLINE_EVENT
     END_IF
+
     // The train accelerates over 20 seconds to full speed.
     BEGIN_INLINE_EVENT
         SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -356,6 +359,7 @@ EVT_BEGIN(hom_10_evt_resha_start)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
+
     // The drive wheels follow the train's speed; after 1.5 seconds they spin up to 10 faster and settle back.
     BEGIN_INLINE_EVENT
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
@@ -406,6 +410,7 @@ EVT_BEGIN(hom_10_evt_resha_start2)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(200)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
+
     // The engine sound for this station starts.
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
@@ -417,6 +422,7 @@ EVT_BEGIN(hom_10_evt_resha_start2)
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
         CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_3"), 0)
     END_IF
+
     // The train model slides away from the stop.
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
@@ -449,6 +455,7 @@ EVT_BEGIN(hom_10_evt_resha_start2)
             END_LOOP
         END_INLINE_EVENT
     END_IF
+
     // The train accelerates over 20 seconds to full speed in the opposite direction.
     BEGIN_INLINE_EVENT
         SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -466,6 +473,7 @@ EVT_BEGIN(hom_10_evt_resha_start2)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
+
     // The drive wheels follow the train's speed; after 1.5 seconds they spin up to 10 faster and settle back.
     BEGIN_INLINE_EVENT
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))

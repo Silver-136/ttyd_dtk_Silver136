@@ -510,6 +510,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(fire_bottle_event))
         GOTO(99)
     END_IF
+
     // Otherwise the AI may use a held item instead.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -517,6 +518,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+
     // It checks whether Lord Crump is on the field, since that changes what it will do.
     CALL(kanbu_get_id, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -524,6 +526,7 @@ static EVT_BEGIN(attack_event)
     ELSE
         GOTO(20)
     END_IF
+
     // Without Crump: a weighted roll picks fire bottle 20, hunyahunya bottle 10, a dodgy potion for itself 10
     // (only if not already Dodgy), shrinking bottle 20, healing one ally 10 or healing all allies 5.
     LABEL(10)
@@ -576,6 +579,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     GOTO(10)
+
     // With Lord Crump on the field: fire bottle 60, a Dodgy potion for Crump 20, an HP-regen potion for Crump
     // 20; Crump only gets one he does not already have.
     LABEL(20)
@@ -689,6 +693,7 @@ static EVT_BEGIN(attack_common_event2)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 10)
     ADD(LW(1), 20)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
+
     // It winds up (A_1B or A_2B) with a grunt...
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD2_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
@@ -698,6 +703,7 @@ static EVT_BEGIN(attack_common_event2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
     END_IF
     WAIT_FRAMES(24)
+
     // ...and hurls the bottle, which arcs toward the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD2_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
@@ -743,6 +749,7 @@ static EVT_BEGIN(attack_common_event2)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
         GOTO(98)
+
         // The bottle hits: a fire bottle bursts into flame and smoke, the glass shatters, the Action Command
         // defence result is applied and damage is dealt.
         LABEL(91)
@@ -762,6 +769,7 @@ static EVT_BEGIN(attack_common_event2)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
         GOTO(98)
+
         // After a short pause the camera resets.
         LABEL(98)
         WAIT_FRAMES(10)
@@ -946,6 +954,7 @@ static EVT_BEGIN(minimini_bottle_event)
         END_IF
         GOTO(99)
     END_IF
+
     // The X-Naut PhD steps up and prepares to throw (the shared run-up script).
     CALL_CHILD(attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1E"))
@@ -953,6 +962,7 @@ static EVT_BEGIN(minimini_bottle_event)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 10)
     ADD(LW(1), 20)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
+
     // It winds up (A_3C) and hurls the minimini bottle into the middle of the opposing side.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD2_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3C"))
@@ -971,6 +981,7 @@ static EVT_BEGIN(minimini_bottle_event)
         SET_VALUE(LW(10), -125)
     END_IF
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+
     // The bottle lands there and bursts into a cloud of smoke and glass.
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(6.0f), FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(10), 0, 0, 0, MOVE_SOUND_FROM_TABLE)
@@ -987,6 +998,7 @@ static EVT_BEGIN(minimini_bottle_event)
     END_INLINE_EVENT
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
+
     // Each target is checked in turn.
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
@@ -1012,9 +1024,11 @@ static EVT_BEGIN(minimini_bottle_event)
         CASE_END
         LABEL(90)
         GOTO(97)
+
         // A hit applies the damage and a chance of shrinking the target (the defence result counts for the
         // first target only).
         LABEL(91)
+
         // Only target ordinal zero runs the defence command; an avoided first target still advances.
         IF_INT_EQUAL(LW(10), 0)
             CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
@@ -1027,6 +1041,7 @@ static EVT_BEGIN(minimini_bottle_event)
             ADD(LW(10), 1)
             GOTO(0)
         END_IF
+
         // The camera resets after a pause.
         LABEL(98)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

@@ -339,6 +339,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_borodo_attack))
+
     // Declare the attack, then run past the target to the far side of it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -353,6 +354,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // It turns around and stamps its feet, winding up the charge.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
@@ -363,6 +365,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         WAIT_FRAMES(3)
     END_LOOP
     CALL(evt_btl_camera_set_mode, 0, 3)
+
     // Find out whether the charge connects.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_EQUAL(LW(5), 5)
@@ -377,6 +380,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
         // The dash back into the target.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_ATT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
@@ -415,6 +419,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // Miss or dodge: the Badge Bandit hops away twice.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
@@ -426,6 +431,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_MOVE1R"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(20)
     GOTO(98)
+
     // Hit: the damage is dealt and the Badge Bandit is sent spinning backward in a flip, landing flat (X_1).
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_borodo_attack))
@@ -453,6 +459,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, -1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("X_1"))
     WAIT_MS(1000)
+
     // Walk back home.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)
@@ -492,6 +499,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_borodo_attack))
+
     // Declare the attack, then run past the target to the far side of it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -506,6 +514,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
     // It turns around and stamps its feet, winding up the charge.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(evt_btl_camera_set_zoom, 0, 350)
@@ -516,6 +525,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         WAIT_FRAMES(3)
     END_LOOP
     CALL(evt_btl_camera_set_mode, 0, 3)
+
     // Find out whether the charge connects.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_EQUAL(LW(5), 5)
@@ -530,6 +540,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+
         // The dash back into the target.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_ATT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
@@ -568,6 +579,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // Miss or dodge: the Badge Bandit hops away twice.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
@@ -579,6 +591,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_MOVE1R"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(20)
     GOTO(98)
+
     // Hit: the damage is dealt, and if the defence command went badly enough the Badge Bandit tries to steal
     // something.
     LABEL(91)
@@ -616,6 +629,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     WAIT_FRAMES(10)
     IF_INT_EQUAL(LW(8), 0)
         WAIT_FRAMES(20)
+
         // Nothing was taken: it bows apologetically (B_1, R_4) and heads home.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_INCLINE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("B_1"))
@@ -627,12 +641,16 @@ static EVT_BEGIN(_borodo_steal_attack)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
         GOTO(99)
     END_IF
+
+    // It laughs over its loot and switches to the loot-carrying poses.
+    // It laughs over its loot and switches to the loot-carrying poses.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("O_2"))
     WAIT_FRAMES(14)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_LAUGH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_item_have))
     GOTO(98)
+
     // Walk back home.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)

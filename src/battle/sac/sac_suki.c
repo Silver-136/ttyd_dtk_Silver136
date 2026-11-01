@@ -917,6 +917,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
+
     // Mario declares the attack, pays the Star Power and Showstopper's work starts.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -927,6 +928,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
     BEGIN_SIBLING_EVENT
         CALL(main_suki, LW(14))
     END_SIBLING_EVENT
+
     // Crystal Star opening: Mario holds up the star item and the Crystal Star appears in stardust.
     CALL_CHILD(sac_start_camera_evt)
     WAIT_MS(500)
@@ -942,12 +944,14 @@ EVT_BEGIN(marioAttackEvent_Suki)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_snd_sfxoff, LW(11))
     WAIT_FRAMES(40)
+
     // Mario puts the item away, returns home and waits for the star to rise.
     CALL_CHILD(sac_mario_item_on_end_evt)
     CALL_CHILD(sac_mario_back_home)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_I_Y"))
     CALL(wait_star_stone_up_end)
     WAIT_MS(100)
+
     // The button game runs with the help shown and the crowd cheering; the stars earned set the KO chance.
     BEGIN_SIBLING_EVENT
         CALL(sac_cheer, 0)
@@ -959,10 +963,12 @@ EVT_BEGIN(marioAttackEvent_Suki)
     CALL(sac_cheer_end)
     CALL(set_weapon, LW(0), LW(9))
     WAIT_MS(500)
+
     // The camera pulls back to show the whole stage.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     WAIT_MS(1000)
+
     // Each star earned flies out with a paper flourish, a crystal shine and a screen shake.
     SET_VALUE(LW(10), 0)
     SET_VALUE(LW(11), LW(0))
@@ -1010,6 +1016,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
         CALL(wait_star_stone_attack_end)
         ADD(LW(10), 1)
     END_LOOP
+
     // The paper flourishes are cleared away.
     CALL(evt_paper_delete, STRING("OFF_d_yabu_small"))
     SET_VALUE(LW(10), 0)
@@ -1019,6 +1026,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
         CALL(evt_img_release, LW(13))
         ADD(LW(10), 1)
     END_LOOP
+
     // The stage flashes white four times.
     CALL_CHILD(flash_evt)
     SET_VALUE(LW(10), 3)
@@ -1038,6 +1046,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
         END_LOOP
     END_LOOP
     CALL_CHILD(flash_cancel_evt)
+
     // Every enemy that is not evasive is checked against the instant-KO chance.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon))
@@ -1054,6 +1063,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     GOTO(10)
     LABEL(20)
+
     // The camera resets and the move's work is freed.
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

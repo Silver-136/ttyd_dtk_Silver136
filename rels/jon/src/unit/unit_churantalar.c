@@ -1153,6 +1153,7 @@ static EVT_BEGIN(renzoku_attack_event)
         END_IF
         GOTO(99)
     END_IF
+
     // Choose three targets at random; the same one can come up twice.
     CALL(piders_renzoku_attack_set_target, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_ID, LW(0))
@@ -1165,6 +1166,7 @@ static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_PART, LW(4))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+
     // Declare the attack.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1174,6 +1176,7 @@ static EVT_BEGIN(renzoku_attack_event)
     SET_VALUE(LW(7), 3)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(5), LW(3))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(6), LW(4))
+
     // First throw: the Arantula winds up its arm and the web ball flies to the first target.
     CALL_CHILD(piders_attack_common_event1)
     CALL_CHILD(piders_attack_common_event3)
@@ -1186,6 +1189,7 @@ static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(6), LW(4))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
+
     // It swings its arm back for the second throw while the first web is resolved.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 100, -200, 20)
@@ -1198,6 +1202,7 @@ static EVT_BEGIN(renzoku_attack_event)
         END_LOOP
     END_SIBLING_EVENT
     WAIT_FRAMES(15)
+
     // Second throw: the web ball flies to the second target.
     CALL_CHILD(piders_attack_common_event3)
     SPAWN_EVENT(renzoku_attack_event_sub)
@@ -1209,6 +1214,7 @@ static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(6), LW(4))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
+
     // The arm swings back again for the third throw.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, -200, 170, 20)
@@ -1221,6 +1227,7 @@ static EVT_BEGIN(renzoku_attack_event)
         END_LOOP
     END_SIBLING_EVENT
     WAIT_FRAMES(15)
+
     // Third throw: the last web ball flies out, and this time the script waits for its damage to be resolved.
     CALL_CHILD(piders_attack_common_event3)
     CALL_CHILD(renzoku_attack_event_sub)
@@ -1237,6 +1244,7 @@ static EVT_BEGIN(renzoku_attack_event)
         CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, LW(0))
         WAIT_FRAMES(1)
     END_LOOP
+
     // The arm returns to rest and the Arantula settles down.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PAI_S_1"))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)

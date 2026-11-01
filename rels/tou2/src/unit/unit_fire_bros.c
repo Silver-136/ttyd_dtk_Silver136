@@ -600,6 +600,7 @@ EVT_BEGIN(fire_move_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(9), LW(10), LW(11))
     SUBTRACT(LW(9), LW(0))
     SET_VALUE(LW(10), 0)
+
     // In parallel, the fireball is checked against the party every frame; it ends if it hits someone or leaves the screen.
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -650,6 +651,7 @@ EVT_BEGIN(fire_move_event)
             END_SWITCH
         END_LOOP
     END_SIBLING_EVENT
+
     // The fireball spins as it travels.
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -660,6 +662,7 @@ EVT_BEGIN(fire_move_event)
     CALL(evt_sub_random, 1, LW(11))
     IF_INT_EQUAL(LW(11), 0)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(15), LW(0), LW(1), LW(2))
+
         // The fireball bounces along the ground in a series of hops, with a sizzle on each landing, until it is used up.
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(15), 0, 6, FLOAT(0.5996094f))
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 100)
@@ -739,6 +742,7 @@ EVT_BEGIN(fire_move_event)
         END_IF
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_FIREB_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_IF
+
     // The fireball disappears and the throw is counted as finished.
     LABEL(99)
     WAIT_FRAMES(6)
@@ -873,11 +877,13 @@ static EVT_BEGIN(nagemakuri_attack_event)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_fire_bros_nagemakuri_attack))
+
     // The attack on the whole party is announced.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_fire_bros_nagemakuri_attack))
     SET_VALUE(LW(10), 2)
+
     // Aim up to eight fireballs, each at a target in the party.
     LOOP(0)
         IF_INT_GREATER(LW(10), 7)
@@ -904,6 +910,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
     WAIT_FRAMES(12)
     SET_VALUE(LW(10), 0)
     SET_VALUE(LW(11), 5)
+
     // Throw the fireballs one by one: the Fire Bro turns to the next target, winds up and flings a fireball.
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRE_THROWN, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRE_DONE, 0)
@@ -942,6 +949,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
         END_LOOP
         ADD(LW(10), 1)
         ADD(LW(11), 1)
+
         // Wait until every fireball has finished, then the Fire Bro relaxes.
         IF_INT_GREATER(LW(10), 0)
             BREAK_LOOP
@@ -955,6 +963,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
         END_IF
     END_LOOP
     WAIT_FRAMES(30)
+
     // The Fire Bro goes back to waiting.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)

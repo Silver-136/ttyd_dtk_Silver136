@@ -126,6 +126,7 @@ static EVT_BEGIN(chuchurina_sogu)
         CALL(evt_npc_set_position, STRING("チュチュリーナ"), 0, -1000, 0)
         RETURN
     END_IF
+
     // The music stops and Mario walks into the room.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -145,6 +146,7 @@ static EVT_BEGIN(chuchurina_sogu)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
+
     // The story advances: Mario has met Ms. Mowz.
     CALL(evt_party_stop, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
@@ -152,6 +154,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("チュチュリーナ"), NPC_FLAG_AUTO_MOVE_ANIM)
     WAIT_MS(750)
+
     // Mario spots Ms. Mowz at the far side and is startled.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
@@ -160,12 +163,17 @@ static EVT_BEGIN(chuchurina_sogu)
     WAIT_MS(800)
     CALL(evt_cam3d_evt_set, -78, 152, 528, -78, 57, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+
+    // Ms. Mowz turns around and her theme starts; she greets Mario and introduces herself as a globe-trotting
+    // thief.
     CALL(evt_npc_reverse_ry, STRING("チュチュリーナ"))
     WAIT_MS(500)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_CYUCYURINA1"))
     CALL(evt_msg_print, 0, STRING("stg1_gon_18_01"), 0, STRING("チュチュリーナ"))
     CALL(evt_cam3d_evt_set, 141, 91, 263, 141, 45, -2, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+
+    // Mario's partner asks her about the castle and the Crystal Star; Ms. Mowz is intrigued.
     CALL(evt_msg_print_party, STRING("stg1_gon_18_02"))
     CALL(evt_cam3d_evt_set, -110, 75, 225, -110, 35, 0, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -182,6 +190,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_msg_print_party, STRING("stg1_gon_18_08"))
     CALL(evt_cam3d_evt_set, -110, 75, 225, -110, 35, 0, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+
+    // Ms. Mowz says she already found a badge and walks toward Mario.
     CALL(evt_msg_print, 0, STRING("stg1_gon_18_10"), 0, STRING("チュチュリーナ"))
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_W_1"))
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), 0, 0, 0, FLOAT(60.0f), 0)
@@ -194,6 +204,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), LW(0), LW(2), 0, FLOAT(60.0f), 0)
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_S_1"))
     CALL(evt_msg_print_party, STRING("stg1_gon_18_11"))
+
     // She plants a kiss on Mario, who is stunned.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(0), -15)
@@ -213,11 +224,14 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_S_1"))
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+
+    // She says goodbye and backs away.
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_R_1"))
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), 85, 0, 0, FLOAT(80.0f), 0)
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_S_1"))
     CALL(evt_msg_print, 0, STRING("stg1_gon_18_13"), 0, STRING("チュチュリーナ"))
     CALL(evt_mario_set_pose, STRING("M_Z_1"))
+
     // Ms. Mowz does a flip and leaps away while the partner reacts.
     CALL(evt_cam3d_evt_set, 217, 14, 228, 101, 52, -35, 400, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -233,6 +247,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_msg_print_party, STRING("stg1_gon_18_14"))
     CALL(evt_cam3d_evt_set, 91, 66, 99, 43, 82, -10, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+
+    // She shares a secret about the castle before escaping.
     CALL(evt_msg_print, 0, STRING("stg1_gon_18_16"), 0, STRING("チュチュリーナ"))
     CALL(evt_cam3d_evt_set, 179, 36, 299, 43, 82, -10, 300, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -248,6 +264,8 @@ static EVT_BEGIN(chuchurina_sogu)
     WAIT_MS(700)
     CALL(evt_cam3d_evt_set, 141, 91, 263, 141, 45, -2, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+
+    // She is gone: the partner remarks, the area music comes back and Mario gets control again.
     CALL(evt_msg_print_party, STRING("stg1_gon_18_17"))
     CALL(evt_mario_set_dir, 90, 200, 0)
     CALL(evt_msg_continue)

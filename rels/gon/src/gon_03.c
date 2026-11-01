@@ -239,6 +239,7 @@ EVT_BEGIN(tegami_event)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // Story set to the father's letter step; Koops joins as the partner if someone else was with Mario.
     SET_VALUE(GSW_STORY_PROGRESS, STG1_10_FATHERS_LETTER)
     CALL(evt_mario_key_onoff, 0)
@@ -247,12 +248,14 @@ EVT_BEGIN(tegami_event)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, 2)
     END_IF
+
     // The music dips and Koops is startled by a skeleton, crying out.
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_party_stop, 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING("fukidashi"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1300)
     CALL(evt_msg_print, 0, STRING("stg1_gon_02"), 0, STRING("party"))
+
     // Koops walks over to the skeleton while Mario follows and the camera moves in.
     LOOP(0)
         WAIT_FRAMES(1)
@@ -272,12 +275,16 @@ EVT_BEGIN(tegami_event)
         CALL(evt_mario_set_dir, 90, 0, 0)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
     END_SIBLING_EVENT
+
+    // Koops says it reminds him of his father and breaks down.
     WAIT_MS(1500)
     CALL(evt_msg_print, 0, STRING("stg1_gon_03"), 0, STRING("party"))
     CALL(evt_party_set_pose, 0, STRING("PNK_T_2"))
     CALL(evt_msg_npc, STRING("(^x^)party"))
     CALL(evt_msg_continue)
     WAIT_MS(1000)
+
+    // Koops notices a letter in the skeleton's hand and asks whether to read it.
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING("fukidashi"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_party_set_pose, 0, STRING("PNK_S_1"))
     WAIT_MS(1300)
@@ -287,6 +294,9 @@ EVT_BEGIN(tegami_event)
     CALL(evt_msg_print, 0, STRING("stg1_gon_04_1"), 0, STRING("party"))
     CALL(evt_msg_select, 0, STRING("stg1_gon_05_yesno"))
     CALL(evt_msg_continue)
+
+    // Mario says yes: Koops reads the letter aloud (the Hooktail warning), thinks it over and realizes it is
+    // not his father after all.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(GSWF_GON_03_LETTER_READ_UNUSED, 1)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -306,12 +316,15 @@ EVT_BEGIN(tegami_event)
         CALL(evt_party_set_dir, 0, 90, 200)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg1_gon_09_00_01"), 0, STRING("party"))
+
+    // Mario says no: Koops agrees it is wrong to read someone else's letter and they leave it.
     ELSE
         CALL(evt_mario_set_pose, STRING("M_N_B"))
         WAIT_MS(1000)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_msg_print, 0, STRING("stg1_gon_06"), 0, STRING("party"))
     END_IF
+
     // The music returns and control goes back to the player.
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
@@ -332,6 +345,7 @@ static EVT_BEGIN(senkaron_event)
         CALL_CHILD(PTR(senkaron_entry_event))
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
+
         // Mario freezes while the Dry Bones leader collapses and rebuilds himself, then threatens the
         // intruders.
         CALL(evt_mario_key_onoff, 0)
@@ -344,6 +358,7 @@ static EVT_BEGIN(senkaron_event)
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg1_gon_10"), 0, 0)
         WAIT_MS(300)
+
         // The danger music starts as the leader gets up and the camera shakes.
         BEGIN_INLINE_EVENT
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
@@ -376,6 +391,7 @@ static EVT_BEGIN(senkaron_event)
                 BREAK_LOOP
             END_IF
         END_LOOP
+
         // The thousand Dry Bones rush in and sweep Mario along the floor, spinning him.
         CALL(evt_npc_set_anim, STRING("リーダー"), STRING("KRN_R_1"))
         CALL(evt_cam3d_evt_off, 300, EASING_LINEAR)
@@ -413,6 +429,8 @@ static EVT_BEGIN(senkaron_event)
             END_IF
             CALL(evt_mario_set_dispdir, LW(5))
         END_LOOP
+
+        // Mario recovers; once only, the partner complains about being pushed around.
         CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
         CALL(evt_mario_cont_onoff, 1)
         CALL(evt_cam_letter_box_disable, 1)
@@ -434,6 +452,7 @@ static EVT_BEGIN(senkaron_event)
             CALL(senkaronFlagOffMesPushing)
             CALL(evt_mario_cont_onoff, 1)
         END_IF
+
         // Mario can now move, but the bones keep shoving him back and spinning him.
         CALL(evt_cam_letter_box_disable, 0)
         BEGIN_SIBLING_EVENT
@@ -466,6 +485,7 @@ static EVT_BEGIN(senkaron_event)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
+
         // Loop until Mario reaches the leader (battle) or the west door: the door opens as he gets close, and
         // reaching it shoves him back to gon_01.
         LOOP(0)
@@ -487,6 +507,7 @@ static EVT_BEGIN(senkaron_event)
                     CALL(evt_map_playanim, STRING("m_door01_b"), MAP_ANIM_PLAY_ONCE, 0)
                 END_IF
             END_IF
+
             // Mario reached the west door: he is flung out to gon_01 and the pushed-out counters are updated.
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_sub_area_check, 0, -390, 0, 20, LW(0), LW(2), LW(10))
@@ -515,11 +536,13 @@ static EVT_BEGIN(senkaron_event)
                 CALL(evt_bero_mapchange, STRING("gon_01"), STRING("e_bero"))
             END_IF
         END_LOOP
+
         // Mario touched the leader: the leader fight begins.
         CALL(senkaronFlagOnMesPushing)
         CALL(evt_npc_set_battle_info, STRING("リーダー"), 6)
         CALL(evt_npc_battle_start, STRING("リーダー"))
         CALL(evt_npc_wait_battle_end)
+
         // After the fight the leader runs off, the story advances, and the hall's two doors unlock.
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_GON1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))

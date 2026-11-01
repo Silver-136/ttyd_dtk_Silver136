@@ -118,6 +118,7 @@ EVT_BEGIN(gon_00_init_evt)
     IF_BITS_SET(LW(0), GW_FLAG_E3)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
+
         // The E3 exit loops back to this room instead of returning to Petal Meadows.
         CALL(evt_bero_overwrite, STRING("w_bero"), PTR(e3_bero))
         SET_VALUE(LW(0), STRING("w_bero"))

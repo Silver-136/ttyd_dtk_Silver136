@@ -269,6 +269,7 @@ EVT_BEGIN(peach_evt_disksys)
 #else
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
 #endif
+
     // Cancellation leaves the disk and the current interaction unchanged.
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
@@ -326,6 +327,7 @@ EVT_END()
 
 EVT_BEGIN(peach_evt_tana2)
     CALL(evt_mario_key_onoff, 0)
+
     // Remove the disk when returning it here, not when playing it in the monitor.
     CALL(evt_pouch_check_item, ITEM_DATA_DISK, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)

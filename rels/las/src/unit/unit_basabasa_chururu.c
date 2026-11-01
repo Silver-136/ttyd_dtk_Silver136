@@ -433,6 +433,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+
     // Pick a target for the attack; a confused unit that has none flusters.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_basabasa_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_basabasa_attack), LW(3), LW(4))
@@ -445,6 +446,8 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_basabasa_attack))
+
+    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_basabasa_attack))
@@ -472,6 +475,7 @@ static EVT_BEGIN(attack_event)
     ADD(LW(1), -6)
     LOOP(2)
         ADD(LW(1), 13)
+
         // Swoop in on the target.
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, 10, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
         ADD(LW(1), -13)
@@ -483,6 +487,7 @@ static EVT_BEGIN(attack_event)
     SUBTRACT(LW(1), 10)
     SUBTRACT(LW(2), 10)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
+
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_basabasa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -506,18 +511,21 @@ static EVT_BEGIN(attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+
     // The attack misses or is dodged.
     LABEL(90)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.5f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 50)
     ADD(LW(1), 10)
+
     // The Swoopula swoops on past the target.
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     WAIT_MS(200)
     GOTO(98)
     LABEL(91)
     SET_VALUE(LF(0), 0)
+
     // A target that is electrified or under Hold Fast gets a no-damage variant of the bite, with no drain.
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_basabasa_attack), 256, LW(5))
     IF_INT_EQUAL(LW(5), 17)
@@ -528,12 +536,14 @@ static EVT_BEGIN(attack_event)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_basabasa_attack))
         SET_VALUE(LW(9), PTR(&weapon_basabasa_drain_attack_biribiri_counterd))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
     END_IF
+
     // On contact it tilts into the target and sinks its fangs in.
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, -45)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BASA_SUCK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -564,6 +574,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("CYU_N_1"))
         WAIT_MS(300)
+
         // It heals itself for the damage it dealt, with the recovery effect.
         CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, 1, LW(10))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
@@ -602,6 +613,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     WAIT_MS(500)
     GOTO(98)
+
     // Return to its place.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -613,6 +625,7 @@ static EVT_BEGIN(attack_event)
         SUBTRACT(LW(1), 30)
     END_IF
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
+
     // The attack is over; back to waiting.
     LABEL(99)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))

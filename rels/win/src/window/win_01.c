@@ -284,6 +284,7 @@ static EVT_BEGIN(peach_mail)
     WAIT_FRAMES(1)
     GOTO(0)
     LABEL(1)
+
     // The mail jingle plays and the partner points out that mail has arrived; Mario waits for A.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -306,6 +307,7 @@ static EVT_BEGIN(peach_mail)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
     // The field music returns and the camera moves in on Mario.
     CALL(evt_mario_balloon_off)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
@@ -335,6 +337,7 @@ static EVT_BEGIN(peach_mail)
 #endif
     END_IF
     WAIT_MS(1000)
+
     // Mario reads Peach's letter, the partner reacts, and Mario can move again.
     CALL(evt_mario_set_pose, STRING("M_N_9"))
     WAIT_MS(500)

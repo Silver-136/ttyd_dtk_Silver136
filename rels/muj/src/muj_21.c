@@ -111,6 +111,8 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(2000)
     CALL(evt_npc_flag_onoff, 0, STRING("ピーチ姫"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_7"), STRING("P_T_13"))
+
+    // Peach tells Mario how lovely the people of Rogueport are, and how little she liked it at first.
     CALL(evt_msg_print, 0, STRING("ep_27"), 0, STRING("ピーチ姫"))
     CALL(evt_npc_set_ry, STRING("ピーチ姫"), 270)
     WAIT_FRAMES(1)
@@ -119,6 +121,8 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_msg_print, 0, STRING("ep_28"), 0, STRING("ピーチ姫"))
     CALL(evt_cam3d_evt_set, 44, 137, 380, 44, 79, 50, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+
+    // Peach remembers how frightened she was when taken captive.
     CALL(evt_msg_print, 0, STRING("ep_29"), 0, STRING("ピーチ姫"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAND_UP1_3"), LW(0), LW(1), LW(2), 0)
@@ -136,6 +140,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_map_playanim, STRING("ake"), MAP_ANIM_PLAY_ONCE, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
+
         // The sun comes up and the music changes.
         CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
@@ -179,6 +184,8 @@ static EVT_BEGIN(epilogue_evt)
     SUBTRACT(LW(1), 8000)
     WAIT_MS(LW(1))
     CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_5"), STRING("P_T_5"))
+
+    // Peach spots Rogueport ahead and the ship heads there.
     CALL(evt_msg_print, 0, STRING("ep_30"), 0, STRING("ピーチ姫"))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 1000, FADE_IN_BLACK, 1000)
     CALL(evt_bero_mapchange, STRING("gor_12"), STRING(""))

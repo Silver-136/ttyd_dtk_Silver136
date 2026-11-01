@@ -565,6 +565,7 @@ EVT_BEGIN(evt_shabon_s)
             CALL(evt_sub_random, 60, LW(2))
             ADD(LW(3), -80)
             ADD(LW(2), 55)
+
             // First loop: a bubble effect rises from the bottom of the room at a random spot, then pops near
             // the top.
             // First loop: a bubble effect rises from the bottom of the room at a random spot, then pops near
@@ -602,6 +603,7 @@ EVT_BEGIN(evt_shabon_s)
             CALL(evt_sub_random, 20, LW(2))
             ADD(LW(3), -50)
             ADD(LW(2), 100)
+
             // Second loop, running independently, does the same.
             CALL(evt_eff, STRING("shabon2eff"), STRING("puni_balloon"), 0, LW(3), -319, LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
             CALL(evt_sub_random, 280, LW(4))
@@ -635,6 +637,7 @@ EVT_BEGIN(evt_shabon_s)
         CALL(evt_sub_random, 160, LW(2))
         ADD(LW(3), 60)
         SUBTRACT(LW(2), 100)
+
         // Third loop, again independent.
         CALL(evt_eff, STRING("shabon3eff"), STRING("puni_balloon"), 0, LW(3), -319, LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_sub_random, 280, LW(4))

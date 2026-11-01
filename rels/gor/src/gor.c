@@ -276,6 +276,7 @@ EVT_BEGIN(mario_and_party_sleep)
     SET_VALUE(LW(3), 600)
     SET_VALUE(LF(0), 0)
     SET_VALUE(LW(15), -1)
+
     // Every frame while Luigi talks on:
     LOOP(0)
         // Mario nods off and starts to snore.
@@ -283,6 +284,7 @@ EVT_BEGIN(mario_and_party_sleep)
             CALL(evt_mario_set_pose, STRING("M_N_5A"))
             SPAWN_EVENT_GET_ID(PTR(inemuri_snd), LW(15))
         END_IF
+
         // The partner falls asleep as well, in its own sleeping pose.
         IF_INT_EQUAL(LW(2), 0)
             CALL(evt_mario_get_party, LW(0))
@@ -305,6 +307,7 @@ EVT_BEGIN(mario_and_party_sleep)
                 END_SWITCH
             END_IF
         END_IF
+
         // Mario yawns and stretches, then goes back to standing; this repeats.
         IF_INT_EQUAL(LW(3), 0)
             IF_INT_EQUAL(LF(0), 0)
@@ -332,6 +335,7 @@ EVT_BEGIN(mario_and_party_sleep)
             SUBTRACT(LW(3), 1)
         END_IF
     END_LOOP
+
     // Luigi has finished: the snoring stops.
     IF_INT_NOT_EQUAL(LW(15), -1)
         DELETE_EVENT(LW(15))
@@ -339,6 +343,7 @@ EVT_BEGIN(mario_and_party_sleep)
         CALL(evt_gor_inemuri_snd_off)
 #endif
     END_IF
+
     // The partner wakes up.
     IF_INT_LESS_OR_EQUAL(LW(2), 0)
         CALL(evt_mario_get_party, LW(0))
@@ -361,6 +366,7 @@ EVT_BEGIN(mario_and_party_sleep)
             END_SWITCH
         END_IF
     END_IF
+
     // If Mario was mid-yawn, let him finish.
     IF_INT_EQUAL(LF(0), 1)
         IF_INT_NOT_EQUAL(LW(3), 0)
@@ -369,6 +375,7 @@ EVT_BEGIN(mario_and_party_sleep)
         WAIT_FRAMES(LW(3))
         CALL(evt_mario_set_pose, STRING("M_S_1"))
     END_IF
+
     // If Mario was asleep he wakes with a voice and a short stretch.
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

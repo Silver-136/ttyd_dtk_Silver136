@@ -360,11 +360,13 @@ static EVT_BEGIN(hom_10_evt_resha_start)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+
     // The departure bell rings twice.
     CALL(evt_mapobj_get_position, STRING("ranpu"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(200)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
+
     // The engine sound for the current map starts.
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
@@ -380,6 +382,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
         CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_3"), 0)
     END_IF
+
     // The train model slides along the track at the current speed.
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
@@ -402,6 +405,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
             END_LOOP
         END_INLINE_EVENT
     END_IF
+
     // The train accelerates over 20 seconds to its cruising speed.
     BEGIN_INLINE_EVENT
         SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -419,6 +423,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
+
     // After 1.5 seconds the cars start to sway for a moment, then settle.
     BEGIN_INLINE_EVENT
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
@@ -468,11 +473,13 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+
     // The departure bell rings twice.
     CALL(evt_mapobj_get_position, STRING("ranpu"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(200)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
+
     // The engine sound for the current map starts.
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
@@ -488,6 +495,7 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
         BEGIN_INLINE_EVENT
             SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
+
             // The train model slides along the track at the current speed.
             LOOP(0)
                 ADD_FLOAT(LW(0), GW(0))
@@ -527,6 +535,7 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(0)
+
         // After 1.5 seconds the cars start to sway for a moment, then settle.
         END_IF
         LOOP(0)
@@ -945,12 +954,14 @@ EVT_BEGIN(evt_train2)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
+
     // The camera looks at the platform and the station attendant takes his spot.
     CALL(evt_cam3d_evt_set, -360, 232, 603, -360, 137, 62, 0, EASING_SINE_IN_OUT)
     CALL(evt_npc_flag_onoff, 1, STRING("駅員"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_position, STRING("駅員"), -400, 80, 100)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
+
     // Wait for the train to come to a stop.
     LOOP(0)
         IF_INT_EQUAL(GW(0), 0)
@@ -959,6 +970,7 @@ EVT_BEGIN(evt_train2)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_npc_flag_onoff, 0, STRING("駅員"), NPC_FLAG_INSTANT_TURN)
+
     // Mario and the partners appear inside the train car, facing the door.
     CALL(evt_mario_set_pos, -350, 80, 30)
     CALL(evt_party_set_pos, 0, -370, 80, 30)
@@ -970,6 +982,7 @@ EVT_BEGIN(evt_train2)
     CALL(evt_party_set_dir, 0, 270, 0)
     CALL(evt_party_set_dir, 1, 270, 0)
     WAIT_MS(1000)
+
     // The train door slides open.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_SLIDE1_3"), LW(0), LW(1), LW(2), 0)
@@ -982,12 +995,14 @@ EVT_BEGIN(evt_train2)
         GOTO(0)
     END_IF
     WAIT_MS(500)
+
     // Mario and the partners step out onto the platform.
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, -345, 85, FLOAT(80.0f))
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -330, 100, FLOAT(80.0f))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+
     // The door slides shut behind them.
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_SLIDE1_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -40, 0, 500)
@@ -1000,6 +1015,7 @@ EVT_BEGIN(evt_train2)
     END_IF
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+
     // Story progress moves to Rogueport Station if it was earlier.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
@@ -1007,10 +1023,12 @@ EVT_BEGIN(evt_train2)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
+
     // The partners follow Mario and he gets control back.
     CALL(evt_party_run, 1)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
+
     // Wait until Mario moves, then free the camera.
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -1031,10 +1049,12 @@ EVT_BEGIN(evt_train2)
     SET_VALUE(GSWF_RSH_TRAIN_AT_POSHLEY, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
 #endif
+
     // Until Mario reads it, Peach's mail scene plays.
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
+
     // Until Mario reads it, Peach's mail scene plays.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_57_A_MAIL_FROM_PEACH)
         SPAWN_EVENT(peach_mail)
@@ -2285,6 +2305,7 @@ EVT_BEGIN(gor_04_init_evt)
         CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_HIT)
         SPAWN_EVENT(PTR(gor_04_koopa_evt))
     END_IF
+
     // US always restores HP here; JP restores it only when a partner must be supplied.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
         CALL(evt_mario_get_party, LW(15))
@@ -2296,6 +2317,7 @@ EVT_BEGIN(gor_04_init_evt)
         CALL(evt_pouch_all_party_recovery)
     END_IF
 END_IF
+
 // The mail event runs in the background.
 SPAWN_EVENT(evt_sub_mail_event)
 #else

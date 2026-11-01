@@ -473,6 +473,8 @@ EVT_BEGIN(evt_shorui_funshitu)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
+
+        // The salaryman paces and mumbles.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_169_00"), 0, 0)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
         SET_VALUE(GF(0), 1)
@@ -529,6 +531,8 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_cam3d_evt_set, 225, 93, 115, 225, 40, -180, 500, EASING_SINE_IN_OUT)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     WAIT_MS(500)
+
+    // The screen blurs as the mystery deepens.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_169_04"), 0, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     DELETE_EVENT(LW(10))
@@ -600,6 +604,8 @@ EVT_BEGIN(evt_daijisouna_kami)
         WAIT_MS(500)
         CALL(evt_set_dir_to_target, STRING("ポワン探偵"), STRING("サラリーマン"))
         CALL(evt_mario_set_dir_npc, STRING("サラリーマン"))
+
+    // The salaryman answers while Pennington presses him.
     END_INLINE_EVENT
     CALL(evt_msg_print, 0, STRING("stg6_rsh_174"), 0, STRING("サラリーマン"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -883,6 +889,8 @@ EVT_BEGIN(talk_papa_mama)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_cam3d_evt_set, -220, 105, 186, -220, 40, -183, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+
+    // The screen blurs as the mystery deepens.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_86"), 0, STRING("ナリキンママ"))
     WAIT_MS(300)
     CALL(evt_set_dir_to_target, STRING("ナリキンパパ"), STRING("ナリキンママ"))
@@ -1139,6 +1147,7 @@ static EVT_BEGIN(talk_konari)
                     CALL(evt_item_delete, STRING("sign"))
 #endif
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_97"), 0, 0)
+
                     // He pays Mario with a Shine Sprite.
                     CALL(evt_item_entry, STRING("orei"), ITEM_SHINE_SPRITE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("orei"))
@@ -1249,8 +1258,10 @@ static EVT_BEGIN(talk_powan)
         CASE_LESS(STG6_13_TALK_TO_THE_CONDUCTOR)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_104"), 0, 0)
         CASE_LESS(STG6_15_GHOST_REQUEST)
+        // Hints for the ghost and the baggage car.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_116"), 0, 0)
         CASE_LESS(STG6_19_GIVE_BLANKET)
+        // The Blanket exchange: he takes the Blanket and gives a Mushroom.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_124"), 0, 0)
         SET_VALUE(GSWF_RSH_PENNINGTON_GHOST_TALK_DONE, 1)
         CASE_LESS(STG6_20_END_OF_DAY_1)
@@ -1903,6 +1914,7 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
             END_IF
+
             // Revisit variant B retains the current moving-train audio.
             IF_STR_EQUAL(LW(0), STRING("rsh_04_b"))
             END_IF

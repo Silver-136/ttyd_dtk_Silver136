@@ -450,6 +450,8 @@ EVT_BEGIN(gor_irai_tenshu_main)
     ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_ROUST_THESE_CADS))
     ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_HELP_ME_MAKE_UP))
     ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI))
+
+    // All 30 are solved: the manager says there is no more trouble.
     IF_INT_EQUAL(LW(0), 30)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 150, 12, -156)
@@ -457,23 +459,31 @@ EVT_BEGIN(gor_irai_tenshu_main)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+
     // The first time, the manager gives his lecture on how the Trouble Center works.
     IF_INT_EQUAL(GSWF_TROUBLE_BOARD_EXPLAINED, 0)
         CALL_CHILD(PTR(gor_irai_lecture))
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
+
+    // No request is active: he tells Mario to look at the board.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 150, 12, -156)
         CALL(evt_msg_print, 0, STRING("irai_06"), 0, 0)
     ELSE
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 150, 12, -156)
+
+        // A request is active: he asks what Mario wants to know (about the trouble, cancel it, or what the
+        // place is).
         CALL(evt_msg_print, 0, STRING("irai_07"), 0, 0)
         CALL(evt_msg_select, 0, STRING("irai_08"))
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_msg_continue)
             DEBUG_PUT_MSG(STRING("依頼メニューキャンセル"))
         END_IF
+
+        // About this trouble: he reminds Mario of the status of the current request.
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LW(10), GSW_TROUBLE_ACCEPTED)
             SET_INT_READ_ADDR(PTR(&irai_msg_hikiukechu))
@@ -481,6 +491,8 @@ EVT_BEGIN(gor_irai_tenshu_main)
             READ_INT_INDEXED(LW(11), LW(10))
             CALL(evt_msg_print_add, 0, LW(11))
         END_IF
+
+        // Cancel: he asks for a 30-coin fee.
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_msg_print_add, 0, STRING("irai_09"))
             CALL(evt_msg_select, 0, STRING("irai_01"))
@@ -500,15 +512,19 @@ EVT_BEGIN(gor_irai_tenshu_main)
                     READ_INT_INDEXED(LW(1), LW(0))
                     SPAWN_EVENT(LW(1))
                 ELSE
+                    // Not enough coins: the request stays.
                     CALL(evt_msg_print_add, 0, STRING("irai_11"))
                 END_IF
             ELSE
+                // Mario declined to cancel.
                 CALL(evt_msg_print_add, 0, STRING("irai_12"))
             END_IF
 #if VERSION >= VERSION_US
             SET_VALUE(LW(0), 1)
 #endif
         END_IF
+
+        // What is this place: the manager explains the Trouble Center.
         IF_INT_EQUAL(LW(0), 2)
             CALL(evt_msg_print_add, 0, STRING("irai_04"))
         END_IF

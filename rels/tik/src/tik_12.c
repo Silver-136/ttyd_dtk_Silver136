@@ -104,6 +104,7 @@ EVT_END()
  * the box and crystal effects play around Mario, and she promises he will win battles in style (majinaisi_08).
  */
 EVT_BEGIN(majinaisi_table_talk)
+    // Merlee greets Mario and asks whether he wants a charm; saying no ends the talk.
     CALL(setmertn, STRING("まじない師"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -119,6 +120,8 @@ EVT_BEGIN(majinaisi_table_talk)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+
+    // She shows Mario's coins and the three prices; he can back out, or be turned away if he is short of coins.
     CALL(evt_msg_print_add, 0, STRING("majinaisi_04"))
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_unitwin_alloc)
@@ -147,6 +150,7 @@ EVT_BEGIN(majinaisi_table_talk)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+
     // Mario pays, the charm is set, and Mario and the partners step into place in front of her.
     MULTIPLY(LW(1), -1)
     CALL(evt_pouch_add_coin, LW(1))
@@ -162,6 +166,8 @@ EVT_BEGIN(majinaisi_table_talk)
         CALL(evt_party_move_pos2, 0, 75, 0, 60)
         CALL(evt_party_set_dir, 0, 270, 300)
     END_INLINE_EVENT
+
+    // The cube opens and Mario jumps out in a burst of star dust; Merlee promises he will win in style.
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 1, 105, 0, 60)
         CALL(evt_party_set_dir, 1, 270, 300)
@@ -169,6 +175,7 @@ EVT_BEGIN(majinaisi_table_talk)
     CALL(evt_mario_mov_pos2, 25, 0, 60)
     CALL(evt_mario_set_dir, 270, 300, 0)
     WAIT_MS(1000)
+
     // The charm cube moves under Mario, unfolds around him and closes over him, then rises into the air.
     CALL(evt_mapobj_get_position, STRING("majinai_BOX"), LW(0), LW(1), LW(2))
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -205,6 +212,7 @@ EVT_BEGIN(majinaisi_table_talk)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(1)
     END_IF
+
     // The cube spins faster and faster while crystal sparkles pulse around it, then slows to a stop.
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_2"))
     BEGIN_INLINE_EVENT
@@ -286,6 +294,7 @@ EVT_BEGIN(majinaisi_table_talk)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
     // The cube sinks back to the floor and the room fades out around it.
     WAIT_MS(1000)
     CALL(evt_npc_set_anim, STRING("me"), STRING("H_2"))
@@ -346,6 +355,7 @@ EVT_BEGIN(majinaisi_table_talk)
     CALL(evt_map_checkanim, STRING("anm_ten"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_msg_print, 0, STRING("majinaisi_08"), 0, STRING("me"))
+
     // The room and the cube are put back and control returns.
     CALL(evt_mario_set_motion, MARIO_MOTION_STAY)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("majinai_BOX"), MAP_OBJ_FLAG_HIDDEN)

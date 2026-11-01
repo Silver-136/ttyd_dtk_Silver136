@@ -633,10 +633,12 @@ EVT_BEGIN(surprise_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_atmic_teresa_surprise))
+
     // The attack is announced.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_atmic_teresa_surprise))
+
     // The Atomic Boo turns its back to the party, still covering its face, and drifts away.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_FACE_HIDE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
@@ -654,12 +656,14 @@ EVT_BEGIN(surprise_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2"))
     CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, 0, LW(1), LW(2), 10, 0, 5, 0, -1)
+
     // It spins around, uncovers its face and lunges at the party with a strong camera shake.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_SURPRISED1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_shake_w, 0, 10, 0, 60, 0)
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 60, 4)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
+
     // For each target in turn, find out how it reacts: it dodges or takes the hit.
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_surprise), 0, LW(5))
@@ -687,6 +691,7 @@ EVT_BEGIN(surprise_event)
     END_SWITCH
     LABEL(90)
     GOTO(97)
+
     // The surprise attack lands: the damage is applied (the guard result only counts on the first target).
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
@@ -694,6 +699,7 @@ EVT_BEGIN(surprise_event)
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_surprise), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(97)
+
     // Move on to the next target, if there is one.
     LABEL(97)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
@@ -702,6 +708,7 @@ EVT_BEGIN(surprise_event)
         GOTO(0)
     END_IF
     CALL(evt_btl_camera_set_mode, 0, 0)
+
     // The Atomic Boo floats back to its home position.
     LABEL(98)
     WAIT_FRAMES(90)
@@ -737,10 +744,12 @@ EVT_BEGIN(bikkuri_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_atmic_teresa_bikkuri))
+
     // The attack is announced.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_atmic_teresa_press))
+
     // Small Boos split off the Atomic Boo and circle the party's side of the stage.
     CALL(teresa_appear_bikkuri)
     WAIT_FRAMES(75)
@@ -754,11 +763,14 @@ EVT_BEGIN(bikkuri_event)
     CALL(teresa_wait_bikkuri)
     CALL(evt_snd_sfxoff, LW(15))
     WAIT_FRAMES(30)
+
+    // The Atomic Boo cries out and the Boos swoop in.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_SURPRISED2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
+
     // For each target in turn, find out how it reacts: it dodges or takes the hit.
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_bikkuri), 0, LW(5))
@@ -785,6 +797,7 @@ EVT_BEGIN(bikkuri_event)
     END_SWITCH
     LABEL(90)
     GOTO(97)
+
     // The split-up attack lands: the damage is applied.
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
@@ -792,6 +805,7 @@ EVT_BEGIN(bikkuri_event)
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_bikkuri), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(97)
+
     // Move on to the next target, if there is one.
     LABEL(97)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
@@ -803,6 +817,7 @@ EVT_BEGIN(bikkuri_event)
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_FRAMES(60)
+
     // The Atomic Boo whistles the small Boos back and they merge into it in puffs of smoke.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_WHISTLE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_4"))

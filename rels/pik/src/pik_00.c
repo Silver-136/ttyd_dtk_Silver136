@@ -420,6 +420,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(200)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
+
     // The departure sound and the first speeds depend on the station (Rogueport, Riverside or Poshley
     // Heights).
     CALL(evt_sub_get_mapname, LW(0))
@@ -523,6 +524,7 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(200)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
+
     // The departure sound and the first speeds depend on the station.
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
@@ -1176,6 +1178,8 @@ static const Vec zoom_zero_b = {0.0f, 0.0f, 0.0f};
 EVT_BEGIN(talk_papa_taihou_kyoka)
     IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
         SET_VALUE(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 1)
+
+        // Goldbob greets Mario and hears about the Fahr Outpost cannon.
         CALL(evt_msg_print, 0, STRING("stg7_pik_01"), 0, STRING("ナリキンパパ"))
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(800)
@@ -1193,8 +1197,12 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
         CALL(zoom, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
         CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
+
+        // On later visits he asks how much Mario would pay.
         CALL(evt_msg_print, 0, STRING("stg7_pik_05"), 0, STRING("ナリキンパパ"))
     END_IF
+
+    // Mario names a price: nothing, 1 coin, 64 coins or everything.
     CALL(evt_msg_select, 0, STRING("stg7_pik_04_yn"))
     DEBUG_PUT_REG(LW(0))
     SWITCH(LW(0))
@@ -1256,6 +1264,8 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
                 CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
                 RETURN
             END_IF
+
+            // Mario agrees to hand over all his coins.
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_16"))
             CALL(evt_pouch_get_coin, LW(10))
             MULTIPLY(LW(10), -1)
@@ -1271,6 +1281,7 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
             WAIT_MS(500)
             CALL(evt_sub_status_gauge_force_close)
             CALL(evt_msg_print, 0, STRING("stg7_pik_17"), 0, STRING("ナリキンパパ"))
+
             // Goldbob gives Mario the Goldbob Guide and returns the coins.
             CALL(evt_item_entry, STRING("a"), ITEM_GOLDBOB_GUIDE, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
             CALL(evt_item_get_item, STRING("a"))
@@ -1293,6 +1304,7 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
             CALL(pik_00_statuswin_force_off)
 #endif
             CALL(evt_msg_print, 0, STRING("stg7_pik_19"), 0, STRING("ナリキンパパ"))
+
             // His approval of the cannon is recorded.
             SET_VALUE(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
             SET_VALUE(LW(0), 0)
@@ -1404,6 +1416,7 @@ static EVT_BEGIN(talk_mama)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             CALL(evt_pouch_check_item, ITEM_PRESENT, LW(0))
             IF_INT_GREATER(LW(0), 0)
+                // Trouble Center request 29: Goldbob's wife asks what Mario needs, and he shows the Present.
                 CALL(evt_msg_print, 0, STRING("irai_29_14"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_win_item_select, PTR(iri_29_item_tbl), LW(0))
@@ -1412,6 +1425,8 @@ static EVT_BEGIN(talk_mama)
 #endif
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     CALL(evt_pouch_remove_item, ITEM_PRESENT, LW(0))
+
+                    // She learns the Present is from Little Bub and is moved.
                     CALL(evt_msg_print, 0, STRING("irai_29_15"), PTR(irai_29_15_cb), 0)
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     CALL(evt_npc_get_position, STRING("ナリキンママ"), LW(3), LW(4), LW(5))
@@ -1459,6 +1474,8 @@ static EVT_BEGIN(talk_mama)
                     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
                     CALL(evt_npc_move_position, STRING("me"), 115, 330, 0, 150, 0)
                     WAIT_MS(1000)
+
+                    // She is delighted with the gift.
                     CALL(evt_msg_print, 0, STRING("irai_29_16"), 0, 0)
                     WAIT_MS(1500)
                     BEGIN_INLINE_EVENT
@@ -1484,12 +1501,14 @@ static EVT_BEGIN(talk_mama)
                 RETURN
             END_IF
         ELSE
+            // She thanks Mario and the request moves on.
             CALL(evt_msg_print, 0, STRING("irai_29_18"), 0, 0)
             RETURN
         END_IF
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_54_WELCOME_BACK)
+        // With no request pending, her talk follows the story.
         CALL(evt_msg_print, 0, STRING("stg6_pik_02"), 0, 0)
         CASE_LESS(STG7_02_MAYOR_BOB)
         CALL(evt_msg_print, 0, STRING("stg7_pik_21_1"), 0, 0)
@@ -2144,6 +2163,7 @@ EVT_BEGIN(pik_00_init_evt)
     SET_INT_READ_ADDR(PTR(&name_tbl))
     LOOP(6)
         READ_INT(LW(9))
+
         // Start the arrow signs and the background music.
         SPAWN_EVENT(PTR(evt_pik_yajirushi))
     END_LOOP
@@ -2152,12 +2172,14 @@ EVT_BEGIN(pik_00_init_evt)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -100, 60, 25, 0, 0)
+
     // Place the spinning platform, the HP Drain P chest and the two Star Pieces.
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 8, -5, 130, STRING("jimenn"), 125, GSWF_STARPIECE_88)
     CALL(evt_mobj_itembox, STRING("mobj_badge_gat"), -225, 15, -15, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_PIK_00_HP_DRAIN_P_CHEST)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 488, 0, 15, ITEM_TYPE_STILL, GSWF_STARPIECE_87, 0)
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -460, 0, 100, ITEM_TYPE_STILL, GSWF_STARPIECE_89, 0)
     SET_VALUE(LW(0), PTR(&door_1))
+
     // Set up the two villa doors.
     CALL_CHILD(PTR(evt_door_entry))
     SET_VALUE(LW(0), PTR(&door_2))
@@ -2165,6 +2187,7 @@ EVT_BEGIN(pik_00_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("resha"))
         CALL(evt_npc_set_position, STRING("サラリーマン"), 0, -1000, 0)
+
         // Entering from the train plays the arrival scene.
         SPAWN_EVENT(PTR(evt_pik_00_arrival))
         CALL_CHILD(PTR(hom_10_evt_resha_stop))
@@ -2209,6 +2232,7 @@ EVT_BEGIN(pik_00_init_evt)
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_ie_1_2_yuka"), 0, PTR(evt_seacret), 0)
     CALL(evt_hitobj_attr_onoff, 0, 1, STRING("se_bero"), 4)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
+
     // Finally the entrances, the biting Gazigazi and the mail check.
     CALL_CHILD(PTR(evt_gazigazi_entry))
     SPAWN_EVENT(PTR(evt_sub_mail_event))

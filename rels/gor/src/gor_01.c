@@ -896,6 +896,7 @@ EVT_END()
  */
 EVT_BEGIN(nancy_init_check)
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
+
     // Wait until Mario walks into the alley zone in front of Zess T.
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
@@ -922,6 +923,7 @@ EVT_BEGIN(nancy_init_check)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // Mario's controls are taken; Zess T. stops pacing and everyone turns to face her.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -943,6 +945,8 @@ EVT_BEGIN(nancy_init_check)
         CALL(evt_party_stop, 1)
         CALL(evt_party_set_dir_npc, 1, STRING("ナンシー"))
     END_INLINE_EVENT
+
+    // She yells at them to freeze.
     CALL(evt_msg_print, 0, STRING("gor_01_000"), 0, STRING("me"))
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), LW(2))
@@ -959,6 +963,9 @@ EVT_BEGIN(nancy_init_check)
         ADD(LW(3), 180)
     END_IF
     CALL(evt_npc_set_ry, STRING("me"), LW(3))
+
+    // She orders them not to move: someone bumped into her and she lost a contact lens. She paces and keeps
+    // hissing the order.
     CALL(evt_msg_print, 0, STRING("gor_01_001"), 0, STRING("me"))
     CALL(evt_npc_reverse_ry, STRING("me"))
     WAIT_MS(700)
@@ -978,6 +985,7 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_npc_restart_regular_event, STRING("me"))
     CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
+
     // Control returns to Mario, who is expected to stay put; the script waits until he takes a step or one
     // second passes.
     CALL(evt_mario_key_onoff, 1)
@@ -1015,8 +1023,9 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_mario_wait_landon)
-#if VERSION > VERSION_DEMO_US
+
     // Guess: if a partner is still in use, wait for that to finish before Mario resumes his normal pose.
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
         LOOP(0)
@@ -1030,6 +1039,7 @@ EVT_BEGIN(nancy_init_check)
     END_IF
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+
     // Mario steps on the lens: it breaks with a squish.
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_LENS_BREAK1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -1046,6 +1056,8 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_cam3d_evt_set, LW(0), 80, LW(1), LW(0), 40, LW(2), 500, EASING_SINE_IN_OUT)
     WAIT_MS(400)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
+
+    // Zess T. screams that Mario crushed her lens and storms toward him.
     CALL(evt_msg_print, 0, STRING("gor_01_005"), 0, STRING("me"))
     CALL(evt_mario_set_dir_npc, STRING("me"))
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -1080,6 +1092,8 @@ EVT_BEGIN(nancy_init_check)
     WAIT_MS(800)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     WAIT_MS(200)
+
+    // She blames Mario and demands he pay for a new lens while he cowers.
     CALL(evt_msg_print, 0, STRING("gor_01_006"), 0, STRING("me"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NO1"), LW(0), LW(1), LW(2), 0)
@@ -1098,12 +1112,15 @@ EVT_BEGIN(nancy_init_check)
             CALL(evt_mario_set_dir, 270, 200, 0)
         END_INLINE_EVENT
     END_IF
+
     // She walks back to the alley's west end to block the way.
     CALL(evt_npc_move_position, STRING("me"), -573, 56, 0, FLOAT(180.0f), 0)
     WAIT_WHILE(GF(0))
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_ry, STRING("me"), 90)
     WAIT_MS(300)
+
+    // She announces she will block the west gate until Mario brings her a new contact lens.
     CALL(evt_msg_print, 0, STRING("gor_01_007"), 0, STRING("me"))
     CALL(evt_npc_restart_regular_event, STRING("me"))
     CALL(evt_npc_change_interrupt, STRING("me"), 6, PTR(nancy_talk))
@@ -1113,6 +1130,7 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_party_run, 1)
 #endif
     CALL(evt_mario_key_onoff, 1)
+
     // Story flag set: the gate to the west side is now blocked.
     SET_VALUE(GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE, 1)
     RETURN
@@ -1335,6 +1353,7 @@ static EVT_BEGIN(marco_talk)
             CASE_EQUAL(3)
             CALL(evt_msg_print_add, 0, STRING("mac_4_012"))
         END_SWITCH
+
         // Flavio walks along the plaza, musing; the partner and Mario step up to him.
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
@@ -1349,6 +1368,8 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_party_move_pos2, 0, 215, -160, FLOAT(120.0f))
             CALL(evt_party_set_dir_npc, 0, STRING("me"))
         END_INLINE_EVENT
+
+        // She yells at them to freeze.
         BEGIN_INLINE_EVENT
             CALL(evt_mario_mov_pos2, 250, -160, FLOAT(100.0f))
             CALL(evt_mario_set_dir_npc, STRING("me"))
@@ -1417,6 +1438,7 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_msg_print, 0, STRING("mac_4_023"), 0, STRING("me"))
         CALL(evt_npc_set_ry, STRING("me"), 90)
         WAIT_MS(500)
+
         // The Skull Gem is taken from Mario and Flavio hurries off; he leaves the plaza.
         CALL(evt_del_case_evt, 0, GW(8))
         CALL(evt_item_delete, STRING("ドクロジュエル"))
@@ -1430,6 +1452,7 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         END_INLINE_EVENT
         WAIT_MS(3000)
+
         // Story advances: the expedition to Keelhaul Key is being arranged.
         SET_VALUE(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
         CASE_LESS(STG6_54_WELCOME_BACK)
@@ -1598,6 +1621,7 @@ EVT_BEGIN(master_talk)
             RETURN
         END_IF
         CALL(evt_msg_print_add, 0, STRING("mac_4_073"))
+
         // Podley agrees and walks out from behind the bar, jumping the counter.
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         IF_INT_EQUAL(GF(5), 1)
@@ -1621,6 +1645,7 @@ EVT_BEGIN(master_talk)
         CALL(evt_npc_move_position, STRING("me"), 325, -275, 0, FLOAT(40.0f), 0)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+
         // Mario receives the Old Letter.
         CALL(evt_item_entry, STRING("letter"), ITEM_OLD_LETTER, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
         CALL(evt_item_flag_on, STRING("letter"), ITEM_FLAG_BGM_SILENT | ITEM_FLAG_NO_TOUCH)
@@ -1642,6 +1667,7 @@ EVT_BEGIN(master_talk)
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_set_pose, STRING("M_N_2"))
         WAIT_MS(800)
+
         // Story advances: Podley's advice has been given.
         SET_VALUE(GSW_STORY_PROGRESS, STG4_35_ADVICE_FROM_PODLEY)
         CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 1000)
@@ -1729,6 +1755,8 @@ EVT_BEGIN(shoptender_talk)
             CALL(evt_npc_move_position, STRING("me"), LW(10), LW(12), 0, FLOAT(90.0f), 0)
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
             CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
+
+            // Zess T. screams that Mario crushed her lens and storms toward him.
             WAIT_MS(500)
             CALL(evt_msg_print, 0, STRING("gor_01_013_01"), 0, STRING("me"))
             IF_INT_LESS(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
@@ -2254,6 +2282,7 @@ EVT_BEGIN(bottakuru_talk)
         RETURN
     END_IF
     CALL(evt_msg_continue)
+
     // Shopping loop: the stock window opens; backing out ends the visit, and too few coins sends Mario back to
     // the list.
     LABEL(0)
@@ -2270,6 +2299,7 @@ EVT_BEGIN(bottakuru_talk)
         CALL(evt_msg_print, 0, STRING("bottakuru_05"), 0, STRING("me"))
         GOTO(0)
     END_IF
+
     // Charlieton quotes the price of the chosen item; for a badge (id 240 and up) he also gives its BP cost.
     IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
 #if VERSION <= VERSION_DEMO_US
@@ -2329,6 +2359,7 @@ EVT_BEGIN(bottakuru_talk)
         END_IF
         RETURN
     END_IF
+
     // The stock of that item drops by one, the coins are paid and the 'bought something' flag is set.
     CALL(evt_badgeShop_bottakuru_dec, LW(1))
     MULTIPLY(LW(3), -1)
@@ -2562,6 +2593,8 @@ static EVT_BEGIN(borodo2_talk)
     CALL(evt_sub_get_coin, 20)
     CALL(evt_npc_set_ry, STRING("クリボー１"), 270)
     WAIT_MS(200)
+
+    // She blames Mario and demands he pay for a new lens while he cowers.
     CALL(evt_msg_print, 0, STRING("irai_04_008"), 0, STRING("クリボー１"))
     CALL(evt_msg_print, 0, STRING("irai_04_009"), 0, STRING("me"))
     SET_VALUE(GF(0), 1)
@@ -4363,6 +4396,8 @@ EVT_BEGIN(christine_nakama)
     CALL(evt_party_set_pose, 0, STRING("PKR_A_2A"))
     CALL(evt_snd_sfxon, STRING("SFX_STG0_KURI_KISS1"), 0)
     WAIT_MS(300)
+
+    // She announces she will block the west gate until Mario brings her a new contact lens.
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -5112,6 +5147,8 @@ EVT_BEGIN(gor_01_koopa_evt)
     CALL(kpa_chg_pose, STRING("KPA_S_1"))
     CALL(evt_mario_set_dir, 90, 500, 0)
     WAIT_MS(700)
+
+    // Flavio is struck by the legend of Cortez's treasure on Keelhaul Key and decides to find it.
     CALL(evt_cam3d_evt_set, -225, 120, 755, 416, 150, -12, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     SET_VALUE(GF(0), 0)
@@ -5329,6 +5366,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
+
     // The shop, inn and street NPCs are put out of sight or removed so the plaza is empty.
     CALL(evt_npc_set_position, STRING("ロテン１"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("クリボー１"), 0, -1000, 0)
@@ -5352,6 +5390,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_check_delete, STRING("盗賊"))
     CALL(evt_npc_check_delete, STRING("キノピオ"))
     CALL(evt_npc_check_delete, STRING("キック２"))
+
     // The camera looks down on the darkened plaza (Shadow Queen's darkness).
     CALL(evt_cam3d_evt_set, 0, 645, 824, 0, 55, 283, 0, EASING_SINE_IN_OUT)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
@@ -5362,11 +5401,13 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(yami_view, -800)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(evt_seq_wait, SEQ_GAME)
+
     // A magic circle appears over the plaza.
     CALL(evt_eff, STRING("mahojin"), STRING("mahojin"), 8, 0, 5, 250, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(wait_mahojin)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_STARSTONE_EFFECT1"), 0)
     WAIT_MS(7000)
+
     // A star stone rises out of the circle and spins as the voices theme starts.
     CALL(starstone_entry, 0, -50, 250)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -5399,6 +5440,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // The stone pulses in height while the camera pushes in.
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
@@ -5429,6 +5471,7 @@ static EVT_BEGIN(minnnanokoe_evt)
         SET_VALUE(GF(1), 1)
     END_INLINE_EVENT
     WAIT_MS(3000)
+
     // The camera pulls back, then rises as the stone climbs into the sky.
     CALL(evt_cam3d_evt_set, 0, 110, 1093, 0, 110, 293, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -5454,6 +5497,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     END_IF
     WAIT_MS(2000)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
+
     // Fade out and change to the scene where everyone's voices are heard.
     CALL(evt_bero_mapchange, STRING("nok_01"), STRING("minnnanokoe"))
     RETURN
@@ -5607,6 +5651,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                     WAIT_MS(600)
                     CALL(evt_mario_set_pose, STRING("M_S_1"))
                     CALL(evt_msg_print, 0, STRING("irai_16_05"), 0, STRING("チュチュリーナ"))
+
                     // Her reward is the Attack FX B badge, handed over only if Mario has room for another
                     // badge.
                     CALL(evt_pouch_get_havebadgecnt, LW(0))
@@ -5685,6 +5730,8 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                     CALL(evt_cam3d_evt_set, -525, 290, 230, -525, 225, -140, 800, EASING_SINE_IN_OUT)
 #endif
                     WAIT_MS(800)
+
+                    // Mario shows the treasure map; Flavio grabs it and recognises the way to Keelhaul Key.
                     // Ms. Mowz joins the party and the partner lecture plays.
                     SET_VALUE(LW(8), STRING("チュチュリーナ"))
                     SET_VALUE(LW(9), PARTY_MEMBER_MS_MOWZ)
@@ -5702,6 +5749,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                 CALL(evt_party_run, 0)
             END_IF
         END_IF
+
         // Ms. Mowz's theme fades out and the plaza music returns.
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
@@ -5841,6 +5889,8 @@ static EVT_BEGIN(epilogue_evt)
     SPAWN_EVENT_GET_ID(PTR(epilogue_evt_sub), LW(0))
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
+
+    // Flavio accuses Mario of stealing his treasure, then calms down when Mario explains the Crystal Stars.
     CALL(evt_msg_print, 0, STRING("ep_43"), 0, 0)
     WAIT_WHILE(GF(15))
     DELETE_EVENT(LW(0))
@@ -5854,6 +5904,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_set_position, STRING("チュチュリーナ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_ry, STRING("チュチュリーナ"), LW(3))
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_INSTANT_TURN)
+
     // The shop owner and Ms. Mowz spin together and trade places, revealing the owner as Ms. Mowz.
     CALL(evt_npc_set_anim, STRING("バッジ店長"), STRING("CHU_Z_1"))
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_Z_1"))
@@ -5890,6 +5941,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_set_anim, STRING("バッジ店長"), STRING("CHU_S_1"))
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_S_1"))
     WAIT_MS(300)
+
     // The camera pulls back as Ms. Mowz leaps away across the rooftops.
     CALL(evt_cam3d_evt_set, 0, 275, 1397, 0, 200, -100, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -5909,6 +5961,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), 290, 354, -216, 700, 70)
     CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), 490, 504, -216, 700, 120)
     WAIT_MS(1000)
+
     // Music fades, then a fade to black and on to the next scene.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
@@ -5970,6 +6023,7 @@ EVT_BEGIN(gor_01_init_evt)
             SET_VALUE(LF(1), 1)
         END_IF
     END_IF
+
     // Choose the music and ambience: darkness themes, Bowser's theme, or the plaza theme.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR1"))
@@ -5998,6 +6052,7 @@ EVT_BEGIN(gor_01_init_evt)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR1"))
         END_IF
     END_IF
+
     // Register the exits and, if Goombella is about to join, prepare her scene's NPCs.
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -6010,6 +6065,7 @@ EVT_BEGIN(gor_01_init_evt)
             SPAWN_EVENT(christine_nakama_after)
         END_IF
     END_IF
+
     // The ordered contact lens arrives once the story has moved on or enough time has passed.
     IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 0)
         IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ORDERED_EARLY, 1)
@@ -6030,6 +6086,7 @@ EVT_BEGIN(gor_01_init_evt)
             END_IF
         END_IF
     END_IF
+
     // Create the plaza NPCs; Flavio gets his footstep sounds.
     CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -6037,16 +6094,19 @@ EVT_BEGIN(gor_01_init_evt)
     IF_INT_EQUAL(LF(0), 1)
         CALL_CHILD(koopa_npc_entry)
     END_IF
+
     // The Save Block stands in the plaza except during Bowser's visit.
     IF_INT_NOT_EQUAL(LF(0), 1)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 185, 60, -55, 0, 0)
     END_IF
+
     // Star Piece panels and the hidden Star Pieces.
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -455, 0, -260, STRING("S_ground"), 125, GSWF_STARPIECE_02)
     CALL(evt_mobj_kururing_floor, STRING("kururin2"), 0, 0, 450, STRING("S_ground"), 125, GSWF_STARPIECE_06)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 490, 0, 245, ITEM_TYPE_STILL, GSWF_STARPIECE_03, 0)
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 550, 0, -150, ITEM_TYPE_STILL, GSWF_STARPIECE_04, 0)
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -565, 162, -160, ITEM_TYPE_STILL, GSWF_STARPIECE_05, 0)
+
     // Until Flavio's talk the Skull Gem lies on the ground.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
         CALL(evt_item_entry, STRING("ドクロジュエル"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
@@ -6062,6 +6122,7 @@ EVT_BEGIN(gor_01_init_evt)
 #endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
     END_IF
+
     // Open the building doors, depending on story progress and whether the lens was delivered.
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         SET_VALUE(LW(0), PTR(&door_data_01))
@@ -6090,6 +6151,7 @@ EVT_BEGIN(gor_01_init_evt)
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_04))
     CALL_CHILD(evt_door_entry)
+
     // Shops, townsfolk and ambient animations.
     CALL_CHILD(gor_01_shop_setup)
     CALL(evt_kinopio_setup, PTR(&kino_dt))
@@ -6098,6 +6160,7 @@ EVT_BEGIN(gor_01_init_evt)
     SPAWN_EVENT(gate_disp)
     SPAWN_EVENT(gor_goki1_urouro)
     SPAWN_EVENT(gor_goki2_urouro)
+
     // Trouble Center request items and NPCs, except during the darkness scenes.
     IF_INT_EQUAL(LF(1), 0)
         IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
@@ -6115,6 +6178,7 @@ EVT_BEGIN(gor_01_init_evt)
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_keizi_mae"), 0, PTR(keijiban_omote_joho), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_keizi_ura"), 0, PTR(keijiban_ura_joho), 0)
+
     // The Ultra Hammer chest: on the roof until it has fallen, then on the ground.
     CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -6129,6 +6193,7 @@ EVT_BEGIN(gor_01_init_evt)
             CALL(evt_mobj_itembox, STRING("mobj_box00"), 275, 0, 75, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
         END_IF
     END_IF
+
     // Map object culling for the fence, stage and houses.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_saku"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai"), MAP_OBJ_FLAG_CLIP)
@@ -6136,11 +6201,13 @@ EVT_BEGIN(gor_01_init_evt)
     SPAWN_EVENT(dai_disp)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f1A"), MAP_OBJ_FLAG_CLIP)
+
     // Chapter 6: Bowser arrives and the Bowser interlude starts.
     IF_INT_EQUAL(LF(0), 1)
         CALL(evt_mario_kill_party, 0)
         SPAWN_EVENT(gor_01_koopa_evt)
     END_IF
+
     // Chapter 8: start the matching darkness scene.
     IF_INT_EQUAL(LF(1), 1)
         CALL(evt_bero_get_entername, LW(0))
@@ -6151,12 +6218,14 @@ EVT_BEGIN(gor_01_init_evt)
             SPAWN_EVENT(minnnanokoe_evt)
         END_IF
     END_IF
+
     // After the final battle: the epilogue scene starts.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mario_kill_party, 0)
         CALL_CHILD(epilogue_npc_entry)
         SPAWN_EVENT(epilogue_evt)
     END_IF
+
     // Plaza mail delivery event.
     SPAWN_EVENT(evt_sub_mail_event)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_roten"), MAP_OBJ_FLAG_HIDDEN)
@@ -7145,6 +7214,7 @@ EVT_BEGIN(cooking_evt)
     SET_VALUE(LW(14), 0)
     SET_VALUE(LW(15), 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ナンシー"), NPC_FLAG_NO_HIT)
+
     // The partners and Mario line up in front of her and face her.
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
@@ -7206,6 +7276,8 @@ EVT_BEGIN(cooking_evt)
                 CALL(evt_item_entry, STRING("cb"), ITEM_COOKBOOK, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                 CALL(evt_mario_set_pose, STRING("M_C_3"))
                 WAIT_MS(800)
+
+                // Flavio hears there is no ship, laughs, then eagerly volunteers to lead the expedition.
                 CALL(evt_item_delete, STRING("cb"))
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 WAIT_MS(500)
@@ -7223,13 +7295,20 @@ EVT_BEGIN(cooking_evt)
                     IF_INT_GREATER_OR_EQUAL(LW(0), 10)
                         SET_VALUE(LF(0), 1)
                     END_IF
+
+                    // Trouble Center job 25: Podley says General White was just here.
                     ELSE
                     IF_INT_GREATER_OR_EQUAL(LW(0), 20)
                         SET_VALUE(LF(0), 1)
                     END_IF
+
+                // If Podley already told the tale, he only asks again whether they want Bobbery back on the sea.
                 END_IF
+
+                // Podley tells the tale of Bobbery and his wife Scarlette, with the camera pushed in.
                 IF_INT_EQUAL(LF(0), 0)
                     CALL(evt_msg_continue)
+
                     // Her reward, a Honey Shroom, goes to Mario if he has room in his pouch.
                     CALL(evt_item_entry, STRING("hk"), ITEM_HONEY_SHROOM, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("hk"))
@@ -7247,6 +7326,8 @@ EVT_BEGIN(cooking_evt)
                     WAIT_FRAMES(1)
                     CALL(evt_npc_wait_pera, STRING("ナンシー"))
                 END_IF
+
+                // Charlieton's sales pitch (a longer one on the first visit), then he asks if Mario wants to shop.
                 CALL(evt_msg_print, 0, STRING("irai_18_007"), 0, STRING("ナンシー"))
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
@@ -7259,16 +7340,28 @@ EVT_BEGIN(cooking_evt)
                     ELSE
                     CALL(evt_msg_print_add, 0, STRING("irai_18_008"))
                 END_IF
+
+                // Asked whether to shop: if Mario says no, Charlieton says goodbye.
                 CALL(evt_msg_print_add, 0, STRING("irai_18_008_1"))
             END_IF
+
+        // Mario confirms or declines the purchase.
         END_IF
+
+    // The item goes into Mario's pouch; if the pouch is full, Charlieton says so and the sale is off.
     END_IF
+
+    // Charlieton's sales pitch (a longer one on the first visit), then he asks if Mario wants to shop.
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_COOKING_INTRO_DONE, 0)
         IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 0)
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_000"), 0, STRING("ナンシー"))
             END_IF
+
+        // Asked whether to shop: if Mario says no, Charlieton says goodbye.
         END_IF
+
+        // Mario confirms or declines the purchase.
         CALL(evt_msg_print_add, 0, STRING("gor_01_cook_001"))
         SET_VALUE(GSWF_GOR_ZESS_T_COOKING_INTRO_DONE, 1)
         ELSE
@@ -7279,23 +7372,38 @@ EVT_BEGIN(cooking_evt)
                     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 0)
                         SET_VALUE(LF(0), 1)
                     END_IF
+
+                // The item goes into Mario's pouch; if the pouch is full, Charlieton says so and the sale is off.
                 END_IF
             END_IF
             IF_INT_EQUAL(LF(0), 0)
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
                     CALL(evt_msg_print, 0, STRING("gor_01_cook_002"), 0, STRING("ナンシー"))
                     ELSE
+                    // Badge list full: she hops over the rooftops and leaves the badge on the ground for
+                    // Mario to pick up later.
                     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_002"))
                 END_IF
+
+                // She thanks Mario with a kiss.
                 ELSE
+                // Badge list full: she hops over the rooftops and leaves the badge on the ground for
+                // Mario to pick up later.
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_003"), 0, STRING("ナンシー"))
             END_IF
+
+            // She thanks Mario with a kiss.
             ELSE
+            // Later: she asks whether he found the book, and Mario can show it in the item menu.
             IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_004"), 0, STRING("ナンシー"))
                 ELSE
+                // Pouch full: she leaves the Honey Shroom on the ground for him to pick up.
                 CALL(evt_msg_print_add, 0, STRING("gor_01_cook_004"))
             END_IF
+
+        // Request complete: she can now cook with two ingredients, and the Trouble Center marks it
+        // done.
         END_IF
     END_IF
     SET_VALUE(LSWF_GOR_01_ZESS_T_GREETED, 1)
@@ -7333,12 +7441,14 @@ EVT_BEGIN(cooking_evt)
     SET_VALUE(LW(14), LW(0))
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(LF(0), 0)
+
     // With the Cookbook recipes unlocked, Mario may add a second ingredient.
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
         CALL(make_item_tbl, LW(14), LW(0))
 #else
     SET_VALUE(LW(11), LW(1))
     SET_VALUE(LF(0), 0)
+
     // With the Cookbook recipes unlocked, Mario may add a second ingredient.
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
         CALL(make_item_tbl, LW(11), LW(0))
@@ -7383,10 +7493,13 @@ EVT_BEGIN(cooking_evt)
             END_IF
         END_IF
     END_IF
+
     // She repeats what she will cook, and Mario confirms or cancels.
     LABEL(3)
     IF_INT_EQUAL(LW(15), 0)
         CALL(get_item_name, LW(14), LW(0))
+
+        // Mario came without the book: she tells him where to look and the visit ends.
         IF_INT_EQUAL(LF(0), 0)
 #if VERSION == VERSION_EU
             CALL(evt_msg_fmt_str, 0, LW(2), STRING("gor_01_cook_012"), LW(0))
@@ -7400,7 +7513,11 @@ EVT_BEGIN(cooking_evt)
             CALL(evt_msg_print_add_insert, 0, STRING("gor_01_cook_012"), LW(0))
 #endif
         END_IF
+
+        // First visit after the lens: Zess T. introduces herself and her cooking service.
         ELSE
+        // Later visits: she asks if Mario wants her to cook, with a hint about the Cookbook once the story has
+        // reached Chapter 4.
         CALL(get_item_name, LW(14), LW(0))
         CALL(get_item_name, LW(15), LW(1))
 #if VERSION == VERSION_EU
@@ -7411,10 +7528,14 @@ EVT_BEGIN(cooking_evt)
         CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_013"), 0, STRING("ナンシー"), LW(0), LW(1))
 #endif
     END_IF
+
+    // Mario answers whether he wants her to cook something.
     CALL(evt_msg_select, 0, STRING("gor_01_select"))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(4)
     END_IF
+
+    // She asks for an ingredient; Mario picks it from his pouch (backing out asks again).
     // The ingredients leave the pouch and the dish is worked out from the recipe.
     IF_INT_EQUAL(LW(15), 0)
         CALL(cook_chk, LW(14), LW(0), LW(1))
@@ -7442,11 +7563,13 @@ EVT_BEGIN(cooking_evt)
         SET_VALUE(LW(2), ITEM_MISTAKE)
     END_IF
     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_015"))
+
     // The cooking cutscene plays.
     SET_VALUE(LW(13), LW(2))
     CALL_CHILD(PTR(cooking_evt_sub))
     SET_VALUE(LW(2), LW(13))
     CALL(chk_cook_msg, LW(2), LW(3))
+
     // Her reaction depends on how the dish turned out.
     SWITCH(LW(3))
         CASE_EQUAL(0)
@@ -7460,6 +7583,8 @@ EVT_BEGIN(cooking_evt)
         CASE_EQUAL(4)
         CALL(evt_msg_print, 0, STRING("gor_01_cook_021"), 0, STRING("ナンシー"))
     END_SWITCH
+
+    // She hands over the dish; the recipe log is unlocked and she invites Mario to come back.
     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_022"))
     CALL(evt_item_entry, STRING("cook"), LW(2), 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_get_item, STRING("cook"))
@@ -7467,13 +7592,18 @@ EVT_BEGIN(cooking_evt)
     CALL(cooking_flag, LW(2))
     CALL(evt_msg_print, 0, STRING("gor_01_cook_023"), 0, STRING("ナンシー"))
     GOTO(5)
+
     // Mario declined to have anything cooked: she is let down.
     LABEL(0)
     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_006"))
     GOTO(5)
+
+    // Mario cancelled at the last moment: she tells him to come back whenever.
+    // Mario cancelled at the last moment: she tells him to come back whenever.
     LABEL(4)
     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_014"))
     GOTO(5)
+
     // The visit ends and Mario's controls return.
     LABEL(5)
     CALL(evt_mario_key_onoff, 1)

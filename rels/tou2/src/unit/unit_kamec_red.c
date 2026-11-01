@@ -999,12 +999,14 @@ static EVT_BEGIN(attack_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
     END_IF
+
     // Use an enemy item if one fits.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
         GOTO(99)
     END_IF
+
     // Alone on the stage (no clones), it casts the attack spell, heals itself or makes clones of itself.
     CALL(kamec_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1063,6 +1065,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 20)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_dekadeka_magic))
+
                 // the Huge spell on an ally,
                 CALL_CHILD(PTR(dekadeka_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
@@ -1073,6 +1076,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 20)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_katikati_magic))
+
                 // the defense-boosting spell,
                 CALL_CHILD(PTR(katikati_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
@@ -1083,6 +1087,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 0)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_biribiri_magic))
+
                 // the Electric spell,
                 CALL_CHILD(PTR(biribiri_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
@@ -1093,6 +1098,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 0)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_trans_magic))
+
                 // the Invisible spell,
                 CALL_CHILD(PTR(trans_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
@@ -1103,6 +1109,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 0)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_recover_magic))
+
                 // and the healing spells, for one ally or for all.
                 CALL_CHILD(PTR(recover_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
@@ -1169,6 +1176,7 @@ static EVT_BEGIN(ground_magic_common_event1)
             CALL(eff_staff2, UNIT_ID_SELF)
         END_SIBLING_EVENT
     END_IF
+
     // The caster and every clone raise their staffs together.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_1A"))
     IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1184,6 +1192,7 @@ static EVT_BEGIN(ground_magic_common_event1)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMR_A_1A"))
     END_IF
     WAIT_FRAMES(60)
+
     // The staffs wave and the magic gathers.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_1B"))
@@ -1218,6 +1227,7 @@ static EVT_BEGIN(ground_magic_common_event1)
         WAIT_FRAMES(10)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC8"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
+
     // The staffs are thrust forward to release the spell.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_1D"))
     IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1318,6 +1328,7 @@ static EVT_BEGIN(sky_magic_common_event)
             CALL(eff_staff2, UNIT_ID_SELF)
         END_SIBLING_EVENT
     END_IF
+
     // The caster and every clone raise their staffs together.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_3A"))
     IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1333,6 +1344,7 @@ static EVT_BEGIN(sky_magic_common_event)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMR_A_3A"))
     END_IF
     WAIT_FRAMES(60)
+
     // The staffs wave and the magic gathers.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC8"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_3B"))
@@ -1364,6 +1376,7 @@ static EVT_BEGIN(sky_magic_common_event)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMR_A_3C"))
     END_IF
     WAIT_FRAMES(15)
+
     // The staffs are thrust forward to release the spell.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_3D"))
     IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1460,6 +1473,7 @@ static EVT_BEGIN(attack_magic_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+
     // The attack is announced.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1467,11 +1481,14 @@ static EVT_BEGIN(attack_magic_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(15), 0)
+
     // The Magikoopa and its clones go through the casting motions.
     CALL_CHILD(magic_common_event1)
+
     // Magic bolts shoot toward the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC3_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+
     // Find out how the target reacts to the bolts.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
@@ -1528,6 +1545,7 @@ static EVT_BEGIN(attack_magic_event)
         CALL_CHILD(attack_magic_event_sub_no_hit)
         WAIT_FRAMES(60)
         GOTO(98)
+
         // The bolts hit: the damage is applied.
         LABEL(91)
         CALL(kamec_get_bunsin, LW(6), LW(7), LW(8), LW(13), LW(0))
@@ -1545,6 +1563,7 @@ static EVT_BEGIN(attack_magic_event)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
+
         // The Magikoopa and its clones lower their staffs.
         LABEL(98)
         WAIT_FRAMES(30)
@@ -1753,6 +1772,7 @@ static EVT_BEGIN(all_recover_magic_event)
         GOTO(8)
     END_IF
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
+
     // BUG: inverted check. This should give up when there is no next enemy (LW(3) == -1); as written it
     // gives up whenever there is one, so only the first enemy is checked for missing HP, and if the
     // first is the only one and at full HP, the loop runs again with LW(3) == -1.

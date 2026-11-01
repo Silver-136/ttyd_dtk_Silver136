@@ -429,6 +429,7 @@ EVT_BEGIN(boomerang_move_event)
                 IF_INT_GREATER_OR_EQUAL(LW(10), LW(11))
                     BREAK_SWITCH
                 END_IF
+
                 // On the way out it strikes the first target as it passes.
                 CALL_CHILD(damage_check_no_last)
                 SET_VALUE(LW(9), 1)
@@ -445,6 +446,7 @@ EVT_BEGIN(boomerang_move_event)
                 IF_INT_GREATER_OR_EQUAL(LW(10), LW(11))
                     BREAK_SWITCH
                 END_IF
+
                 // Then it strikes the second target.
                 CALL_CHILD(damage_check_no_last)
                 SET_VALUE(LW(9), 2)
@@ -503,6 +505,7 @@ EVT_BEGIN(boomerang_move_event)
             CALL(btlevtcmd_AddPartsRotate, UNIT_ID_SELF, LW(15), 0, 0, 64)
         END_LOOP
     END_SIBLING_EVENT
+
     // The boomerang's flight sounds play while it curves out and back.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK2"), EVT_NULLPTR, 0, LW(8))
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), -200, LW(1), LW(2), 40, FLOAT(-20.0f), 4, 0, -1)
@@ -512,6 +515,7 @@ EVT_BEGIN(boomerang_move_event)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_NO_SHADOW)
+
     // The boomerang disappears and the throw is counted as finished.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, UNIT_WORK_RETURNED, 1)
@@ -675,6 +679,7 @@ EVT_BEGIN(normal_attack_event_confuse)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("BRO_A_2A"))
     WAIT_FRAMES(27)
     SET_VALUE(LW(15), 2)
+
     // He throws a boomerang out toward his allies; it spins out and curves back to his hand.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(15), STRING("BRO_A_1B"))
@@ -705,6 +710,7 @@ EVT_BEGIN(normal_attack_event_confuse)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_NO_SHADOW)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     LABEL(0)
+
     // Each selected ally is checked for the hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_boomerang_bros_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -754,6 +760,7 @@ EVT_BEGIN(normal_attack_event_confuse)
         GOTO(0)
     END_IF
     LABEL(99)
+
     // The Bro pauses to watch the result before the camera resets.
     WAIT_FRAMES(100)
     CALL(evt_btl_camera_set_mode, 0, 0)
@@ -780,6 +787,7 @@ EVT_BEGIN(renzoku_attack_event_confuse)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("BRO_A_2A"))
         WAIT_FRAMES(27)
         SET_VALUE(LW(15), 2)
+
         // He throws two boomerangs out toward his allies, each spinning out and curving back.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(15), STRING("BRO_A_1B"))
@@ -811,6 +819,7 @@ EVT_BEGIN(renzoku_attack_event_confuse)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_LOOP
     LABEL(0)
+
     // Each selected ally is checked for the hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_boomerang_bros_renzoku_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -862,6 +871,7 @@ EVT_BEGIN(renzoku_attack_event_confuse)
         GOTO(0)
     END_IF
     LABEL(99)
+
     // The Bro pauses to watch the result before the camera resets.
     WAIT_FRAMES(160)
     CALL(evt_btl_camera_set_mode, 0, 0)

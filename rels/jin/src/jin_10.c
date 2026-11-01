@@ -189,6 +189,7 @@ EVT_BEGIN(unpush_evt)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
+
         // Checks whether Mario, his partner or Vivian is standing in the gate's way back.
         SET_VALUE(LF(0), 1)
         CALL(evt_mapobj_get_position, STRING("saku"), LW(0), LW(1), LW(2))
@@ -240,6 +241,7 @@ EVT_BEGIN(unpush_evt)
                 BREAK_LOOP
             END_LOOP
         END_IF
+
         // Slides the gate back and plays its grid-movement sound.
         IF_INT_EQUAL(LF(0), 0)
             IF_INT_EQUAL(GF(0), 1)

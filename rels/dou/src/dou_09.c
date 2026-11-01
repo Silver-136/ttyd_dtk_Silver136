@@ -518,6 +518,7 @@ static EVT_BEGIN(bombwall_bomb)
     CALL(evt_offscreen_entry, STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("S_ki"), STRING("offscreen"))
     CALL(evt_offscreen_get_boundingbox2, STRING("offscreen"), LW(10), LW(11), LW(12), LW(13))
+
     // Skip the capture animation only when both bounding-box dimensions are zero.
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(LW(12), 0)

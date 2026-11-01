@@ -275,15 +275,18 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_map_fog_onoff, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
+
     // If the intro was already seen, skip straight to the aftermath.
     IF_INT_EQUAL(GSWF_GON_11_HOOKTAIL_INTRO_SKIP, 1)
         GOTO(100)
     END_IF
+
     // Mario and his partner enter the room.
     CALL(evt_cam3d_evt_set, -480, 150, 459, -480, 67, -13, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pos, -560, 10, 0)
     CALL(evt_party_set_pos, 0, -600, 10, 0)
     CALL(evt_seq_wait, SEQ_GAME)
+
     // The door slams shut behind them and the camera shakes.
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(1), 0)
@@ -305,6 +308,8 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_mario_mov_pos2, -450, 0, FLOAT(120.0f))
     SPAWN_EVENT(PTR(bero_case_entry))
     WAIT_MS(1300)
+
+    // A voice from the dark asks who dares approach; Mario jumps in surprise.
     CALL(evt_msg_print, 0, STRING("stg1_gon_19"), 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
@@ -313,6 +318,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
     WAIT_MS(2000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+
     // Hooktail roars and stands up, the fog changes and the battle music begins.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_GONBABA_FLY2"))
     BEGIN_INLINE_EVENT
@@ -330,6 +336,7 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kesu"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     WAIT_MS(4000)
+
     // The camera trembles as Hooktail towers over them.
     LOOP(30)
         CALL(evt_cam3d_evt_set, -890, 33, 483, -205, 175, 20, 15, EASING_SINE_IN_OUT)
@@ -341,6 +348,8 @@ EVT_BEGIN(gonbaba_event)
     SET_VALUE(LW(0), -246)
     SET_VALUE(LW(1), 146)
     SET_VALUE(LW(2), 43)
+
+    // Hooktail taunts them about the strange-garbed one who came before, then threatens to eat them.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg1_gon_19_2"), 0, STRING("ゴンババ"))
     CALL(evt_cam3d_evt_set, -545, -14, 417, -225, 227, 12, 0, EASING_SINE_IN_OUT)
@@ -363,10 +372,12 @@ EVT_BEGIN(gonbaba_event)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, -325, 30, 650, -350, 125, -33, 3000, EASING_SINE_IN_OUT)
     WAIT_MS(2500)
+
     // The battle with Hooktail starts.
     CALL(evt_npc_set_battle_info, STRING("ゴンババ"), 20)
     CALL(evt_npc_battle_start, STRING("ゴンババ"))
     CALL(evt_npc_wait_battle_end)
+
     // After the battle: lights and fog are reset and Hooktail is lying on the floor, groaning.
     LABEL(100)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -408,6 +419,8 @@ EVT_BEGIN(gonbaba_event)
             WAIT_MS(2333)
         END_LOOP
     END_INLINE_EVENT
+
+    // The partner is worried about Hooktail, and Mario nods.
     CALL(evt_msg_print_party, STRING("stg1_gon_33_01"))
     CALL(evt_party_set_dir, 0, 270, -1)
     WAIT_MS(800)
@@ -418,6 +431,8 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
+
+    // Mario hears a voice and notices something moving in Hooktail.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 220, 160, -160)
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_03"), 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -429,6 +444,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_cam3d_evt_set, 255, 220, 648, 255, 170, 150, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     DELETE_EVENT(LW(10))
+
     // Muffled sounds come from inside Hooktail as someone fights his way out.
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("ゴンババ"), LW(0), LW(1), LW(2))
@@ -445,6 +461,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_npc_set_anim, STRING("ゴンババ"), STRING("GNB_H_4"))
     WAIT_MS(2750)
     SET_VALUE(GW(10), 30)
+
     // Mr. Koopa spins out of Hooktail's mouth and lands in the room.
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_npc_set_anim, STRING("ノコタロウ父"), STRING("NKP_Z_2"))
@@ -498,7 +515,10 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_npc_pera_onoff, STRING("ノコタロウ父"), 1)
     CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ父"), NPC_FLAG_AUTO_MOVE_ANIM)
     WAIT_MS(300)
+
+    // He shouts that he is finally free.
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_04"), 0, STRING("ノコタロウ父"))
+
     // Koops is swapped in as the partner if someone else was along.
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 2)
@@ -516,6 +536,8 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_npc_status_onoff, 1, STRING("クリスチーヌ"), NPC_STATUS_FACE_MOVE_DIR)
     END_IF
     WAIT_MS(500)
+
+    // Koops recognizes his father and the two have a tearful reunion.
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_05"), 0, STRING("party"))
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -530,6 +552,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_NOKO_SAIKAI1"))
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_07"), 0, STRING("party"))
+
     // Koops runs to his father while they chat about the ten years apart.
     CALL(evt_cam3d_evt_set, 240, 75, 450, 240, 50, 200, 1000, EASING_SINE_IN_OUT)
     SET_VALUE(GF(0), 0)
@@ -571,6 +594,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_14"), 0, STRING("ノコタロウ父"))
     CALL(evt_cam3d_evt_set, 245, 75, 450, 245, 50, 200, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+
     // The father fishes the Crystal Star out of his pocket: he kept it from Hooktail's belly.
     CALL(evt_npc_set_anim, STRING("ノコタロウ父"), STRING("NKP_A_1"))
     CALL(evt_item_entry, STRING("stone"), ITEM_DIAMOND_STAR, 245, 45, 220, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
@@ -584,6 +608,7 @@ EVT_BEGIN(gonbaba_event)
         WAIT_MS(1000)
         CALL(evt_npc_set_anim, STRING("ノコタロウ父"), STRING("NKP_S_1"))
     END_INLINE_EVENT
+
     // The star bounces on the floor.
     LOOP(0)
         ADD_FLOAT(LW(1), LW(3))
@@ -604,6 +629,8 @@ EVT_BEGIN(gonbaba_event)
     END_LOOP
     CALL(evt_item_set_position, STRING("stone"), LW(0), FLOAT(10.0f), LW(2))
     CALL(evt_npc_set_anim, STRING("ノコタロウ父"), STRING("NKP_S_1"))
+
+    // He insists Mario takes it as a friend of Koops.
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_15"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_16"), 0, STRING("ノコタロウ父"))
     CALL(evt_cam3d_evt_set, 190, 75, 450, 190, 50, 200, 500, EASING_SINE_IN_OUT)
@@ -621,6 +648,7 @@ EVT_BEGIN(gonbaba_event)
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 90, -1)
     END_INLINE_EVENT
+
     // Mario and the partner walk over; the music fades.
     CALL(evt_cam3d_evt_set, 245, 75, 450, 245, 50, 245, 2000, EASING_SINE_IN_OUT)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
@@ -628,6 +656,7 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_mario_mov_pos2, 245, 215, FLOAT(30.0f))
     END_INLINE_EVENT
     WAIT_MS(2000)
+
     // Hooktail is defeated, father and son are reunited: the story advances and the Diamond Star is awarded.
     SET_VALUE(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
