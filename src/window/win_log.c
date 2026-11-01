@@ -473,7 +473,7 @@ void winLogInit(WindowWork* w) {
         if (itemDataTable[i].type_sort_order != -1) {
             w->log.recipeIds[w->log.recipe.num++] = i - ITEM_SHROOM_FRY;
 #if VERSION >= VERSION_US
-            if (swGet(i - ITEM_SHROOM_FRY + 0x41)) {
+            if (swGet(i - ITEM_SHROOM_FRY + GSWF_RECIPE_FOUND_BASE)) {
                 w->log.recipe.page++;
             }
 #endif
@@ -972,7 +972,7 @@ s32 winLogMain(WindowWork* w) {
         }
         w->helpTgtX = w->log.recipe.cursor % 28 % 7 * 56 - 140;
         w->helpTgtY = 90 - w->log.recipe.cursor % 28 / 7 * 56;
-        if (swGet(w->log.recipeIds[w->log.recipe.cursor] + 0x41)) {
+        if (swGet(w->log.recipeIds[w->log.recipe.cursor] + GSWF_RECIPE_FOUND_BASE)) {
             winMsgEntry(w, -2, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].menu_description, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].name);
         } else {
             winMsgEntry(w, -2, "msg_menu_stone_none_help", "msg_menu_stone_none_name");
@@ -1259,7 +1259,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
 #endif
         winTexInit(*w->res->data);
         winTexSet(0x96, (Vec){x + w->log.recipe.iconX, y + w->log.recipe.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
-        if (swGet(w->log.recipeIds[w->log.recipe.cursor] + 0x41)) {
+        if (swGet(w->log.recipeIds[w->log.recipe.cursor] + GSWF_RECIPE_FOUND_BASE)) {
             winIconInit();
             winIconSet(itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].icon_id, (Vec){x + w->log.recipe.iconX, (y + w->log.recipe.iconY) - 10.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         }

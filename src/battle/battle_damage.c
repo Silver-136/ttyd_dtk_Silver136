@@ -1473,7 +1473,7 @@ s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, Ba
     s8 strength;
 
     if (!(flags & DAMAGE_RESULT_NO_STATUS)) {
-        for (i = 0; i < 28; i++) {
+        for (i = 0; i < STATUS_INVALID; i++) {
             _getSickStatusParam(attacker, weapon, i, &time, &strength);
             rate = (s8)_getSickStatusRate(weapon, i);
             levelDiff = 0;

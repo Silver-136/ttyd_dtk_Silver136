@@ -312,7 +312,7 @@ s32 winItemMain(WindowWork* w) {
         if (w->buttonTrg & PAD_BUTTON_A) {
             if (w->item.mode == 0) {
                 id = pouchHaveItem(w->item.cursor[mode]);
-                if (itemDataTable[id].usable_locations & 4) {
+                if (itemDataTable[id].usable_locations & ITEM_USABLE_MENU) {
                     w->item.useItem = id;
                     w->item.useIdx = w->item.cursor[mode];
                     w->item.state = 300;
@@ -836,7 +836,7 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
             id = p->item.skip[0];
         }
         scroll = w->item.scroll[w->item.mode];
-        grayed = (w->item.mode != 0 || (itemDataTable[id].usable_locations & 4)) == 0;
+        grayed = (w->item.mode != 0 || (itemDataTable[id].usable_locations & ITEM_USABLE_MENU)) == 0;
         y = scroll + (20.0f + ((yBase = (100.0f + yo) - row * 38) - 10.0f));
         if (y > 240.0f) {
             continue;

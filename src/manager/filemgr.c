@@ -139,7 +139,7 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
             break;
         case FILE_TYPE_TPL:
             tpl = data;
-            if (tpl->versionNumber != 0x0020AF30) {
+            if (tpl->versionNumber != PALETTE_VERSION) {
 #if VERSION == VERSION_EU
                 OSPanic("filemgr.c", 150, "invalid version number for texture palette");
 #else
@@ -345,7 +345,7 @@ void fileGarbageDataAdrSet(void* data, s32 type) {
             break;
         case FILE_TYPE_TPL:
             tpl = data;
-            if (tpl->versionNumber != 0x0020AF30) {
+            if (tpl->versionNumber != PALETTE_VERSION) {
 #if VERSION == VERSION_EU
                 OSPanic("filemgr.c", 109, "invalid version number for texture palette");
 #else

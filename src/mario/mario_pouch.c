@@ -1,6 +1,7 @@
 // Mario's pouch (save data): items, badges, coins, HP/FP, Star Points and level, partners, Star Pieces and
 // Shine Sprites, the item and badge sorts.
 
+#include "evt/evt_story.h"
 #include "version.h"
 #include "system.h"
 #include "mario/mario_pouch.h"
@@ -326,7 +327,7 @@ BOOL pouchGetItem(ItemType type) {
     } else if (type == ITEM_BOWSER_BROS_MEAT) {
         return 1;
     } else if (type >= BADGE_MIN && type < BADGE_MAX) {
-        swSet(type - 0x70);
+        swSet(type - BADGE_MIN + GSWF_BADGE_FOUND_BASE);
     }
     size = 0;
     itemLists[0] = NULL;

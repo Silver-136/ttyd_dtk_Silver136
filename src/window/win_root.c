@@ -1468,7 +1468,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
                         continue;
                     }
                 } else {
-                    if (swGet(w->log.recipeIds[n] + 0x41)) {
+                    if (swGet(w->log.recipeIds[n] + GSWF_RECIPE_FOUND_BASE)) {
                         continue;
                     }
                 }
@@ -1494,7 +1494,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
                     }
                     icon = itemDataTable[w->log.badgeIds[n] + BADGE_MIN].icon_id;
                 } else {
-                    if (!swGet(w->log.recipeIds[n] + 0x41)) {
+                    if (!swGet(w->log.recipeIds[n] + GSWF_RECIPE_FOUND_BASE)) {
                         continue;
                     }
                     icon = itemDataTable[w->log.recipeIds[n] + ITEM_SHROOM_FRY].icon_id;
