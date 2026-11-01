@@ -283,6 +283,8 @@ void vivian_move(PartyEntry* party) {
 }
 
 /** demo: Vivian always hides 13 behind Mario, with no ground search outside the hidden state */
+
+// The demo's vivianFollow/vivian_use are older (fixed hide offset, ground search in vivian_use): one copy each
 static inline void vivianFollow(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
     MarioWork* mario = party->playerPtr;

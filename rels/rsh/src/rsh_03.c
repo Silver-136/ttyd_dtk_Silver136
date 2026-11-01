@@ -1448,6 +1448,8 @@ EVT_BEGIN(evt_shop_close)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_OUT1"), LW(0), LW(1), LW(2), 0)
+
+    // The door closes behind them and the page turns back to the dining car.
     END_INLINE_EVENT
 #if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT
@@ -1538,6 +1540,8 @@ EVT_BEGIN(evt_shop_close)
         SUBTRACT(LW(12), 30)
         CALL(evt_party_move_pos, 1, LW(10), LW(12), 300)
     END_INLINE_EVENT
+
+    // Mario steps out of the shop: the shop door slides open.
     CALL_CHILD(PTR(shop_door_open))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT

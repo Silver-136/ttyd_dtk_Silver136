@@ -1943,6 +1943,12 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_02_TO_THE_GREAT_TREE)
+        // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
+        // capture waits for Flurrie's gust.
+        // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
+        // capture waits for Flurrie's gust.
+        // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
+        // capture waits for Flurrie's gust.
         SPAWN_EVENT(PTR(first_bigtree))
     END_IF
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_09_FLURRIE_JOINS)

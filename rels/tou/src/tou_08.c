@@ -1252,6 +1252,7 @@ EVT_END()
 #endif
 
 EVT_BEGIN(tou_08_init_evt)
+    // The story is moved up to match Mario's rank, then the debug story-skip flags are applied.
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_LESS_OR_EQUAL(3)
@@ -1285,6 +1286,9 @@ EVT_BEGIN(tou_08_init_evt)
         SET_VALUE(GSWF_TOU_08_JUMP_STORY_MAJORS_1ST, 0)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_20_13_MAJORS_1ST_PL)
     END_IF
+
+    // Doors, the Ice Storm badge, lockers, the fighters, the match terminal and monitor,
+    // the restroom doors and the bed.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -1307,6 +1311,8 @@ EVT_BEGIN(tou_08_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_3"), 0, PTR(evt_toile_door2), 0)
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
+
+    // After a match: the title win scene at rank 0, otherwise the default after-match scene.
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
         SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
@@ -1325,6 +1331,8 @@ EVT_BEGIN(tou_08_init_evt)
         END_IF
         RETURN
     END_IF
+
+    // Music: Grubba's theme and his tour on the first visit, else the music for the story stage.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
@@ -1365,6 +1373,8 @@ EVT_BEGIN(tou_08_init_evt)
             END_IF
         END_SWITCH
     END_SWITCH
+
+    // The promotion scene, Shady Koopa's word about the cake, and the epilogue.
     IF_INT_EQUAL(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
         SET_VALUE(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 0)
         SPAWN_EVENT(PTR(evt_1st_leagu))

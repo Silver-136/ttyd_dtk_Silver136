@@ -2231,6 +2231,8 @@ EVT_END()
  * heals Mario and his partners.
  */
 EVT_BEGIN(gor_04_init_evt)
+    // Pick the music: Bowser's tune during the Bowser interlude, otherwise the Rogueport tune (unless Mario
+    // arrived by blimp).
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
         CALL(evt_snd_bgm_scope, 0, 1)
@@ -2243,19 +2245,29 @@ EVT_BEGIN(gor_04_init_evt)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
     END_IF
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+
+    // Set up the exits, Luigi, and the NPCs of the station.
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(luigi_npcEnt))
     CALL(evt_npc_setup, PTR(npcEnt))
+
+    // A save block is placed, except during the Bowser interlude.
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 140, 60, 85, 0, 0)
     END_IF
+
+    // The spinning panel with a Star Piece, and another Star Piece on the floor, are placed.
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -510, 80, 120, STRING("S_ground"), 125, GSWF_STARPIECE_16)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, ITEM_TYPE_STILL, GSWF_STARPIECE_17, 0)
     SPAWN_EVENT(PTR(evt_wing))
+
+    // Stepping on the blimp platform starts the blimp ride.
     CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("A_noriba"), 0, PTR(evt_hikousen), 0)
     CALL(evt_bero_get_entername, LW(0))
+
+    // Arriving back by blimp starts the blimp-landing scene; otherwise the second gondola is hidden.
     IF_STR_EQUAL(LW(0), STRING("hikousen_return"))
         SPAWN_EVENT(PTR(evt_hikousen_return))
         ELSE
@@ -2264,6 +2276,8 @@ EVT_BEGIN(gor_04_init_evt)
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_bero_get_entername, LW(0))
+
+    // Entering through the train door means this is the return trip, and the train is at Rogueport.
     IF_STR_EQUAL(LW(0), STRING("n_bero"))
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
         SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
@@ -2274,6 +2288,8 @@ EVT_BEGIN(gor_04_init_evt)
         ELSE
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
     END_IF
+
+    // Arriving from Poshley Heights on the train plays the station-arrival scene.
     IF_STR_EQUAL(LW(0), STRING("resha_return"))
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
         CALL_CHILD(PTR(hom_10_evt_resha_left))
@@ -2282,6 +2298,7 @@ EVT_BEGIN(gor_04_init_evt)
         SET_VALUE(LW(0), STRING("n_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
         ELSE
+        // Otherwise, the train sits at the platform in the correct state for the trip direction.
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
             CALL_CHILD(PTR(hom_10_evt_resha_left))
             SET_VALUE(LW(0), STRING("n_bero"))
@@ -2293,9 +2310,13 @@ EVT_BEGIN(gor_04_init_evt)
             CALL_CHILD(PTR(bero_case_switch_off))
         END_IF
     END_IF
+
+    // After the train ride, Peach's mail scene begins.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SPAWN_EVENT(PTR(peach_mail))
     END_IF
+
+    // Bowser interlude: Bowser is the player character, Kammy's broom is placed, and her story scene starts.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_mario_set_mode, 2)
         CALL(evt_mario_kill_party, 0)
@@ -2307,6 +2328,7 @@ EVT_BEGIN(gor_04_init_evt)
     END_IF
 
     // US always restores HP here; JP restores it only when a partner must be supplied.
+    // At this story stage Mario and his partners are fully healed.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)

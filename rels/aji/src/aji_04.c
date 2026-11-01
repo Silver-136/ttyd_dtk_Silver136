@@ -908,6 +908,7 @@ BREAK_LOOP
     CALL(evt_snd_sfxoff, LW(10))
 
     // Both quiz outcomes reach this reward; collecting it advances the story again.
+    // The statue shakes and drops the Elevator Key, then Mario gets control back.
     CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 100, 0, ITEM_TYPE_FALL, -1, PTR(evt_item))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
     SPAWN_EVENT(PTR(sekizou_talk))

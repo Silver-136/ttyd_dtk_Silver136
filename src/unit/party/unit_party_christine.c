@@ -1148,6 +1148,7 @@ EVT_END()
  * announcement). Ends with an optional stylish.
  */
 EVT_BEGIN(partyChristineAttack_Kiss)
+    // Find the chosen ally and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1157,6 +1158,8 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
+
+    // Camera on her as she turns to Mario; in JP and later he turns to face her if he can move.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1223,6 +1226,8 @@ EVT_BEGIN(partyChristineAttack_Kiss)
         SET_VALUE(LW(1), 32)
 #endif
     END_SWITCH
+
+    // The A/B press command; in JP and later she walks up to Mario while it runs.
     CALL(btlevtcmd_AcSetParamAll, 16, 220, 70, 0, 0, LW(0), LW(1), 0)
     CALL(btlevtcmd_AcSetFlag, 0)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 5, 3, 60)
@@ -1253,6 +1258,8 @@ EVT_BEGIN(partyChristineAttack_Kiss)
         CALL(btlevtcmd_GetResultPrizeLv, UNIT_ID_SYSTEM, 0, LW(6))
         CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
     END_IF
+
+    // She blows a kiss towards Mario.
     CALL(btlevtcmd_GetResultAC, LW(6))
     CALL(btlevtcmd_StopAC)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
@@ -1269,6 +1276,8 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(14))
     MULTIPLY(LW(14), 45)
     CALL(evt_eff, STRING(""), STRING("kiss"), 1, LW(0), LW(1), LW(2), LW(14), 0, 0, 0, 0, 0, 0, 0)
+
+    // On success Mario blushes, hearts rise from him and he gains another move; on failure nothing happens.
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
 #if VERSION <= VERSION_DEMO_US
         IF_BITS_SET(LW(6), 2)
@@ -1298,6 +1307,8 @@ EVT_BEGIN(partyChristineAttack_Kiss)
             CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&partyWeapon_ChristineKiss), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_STATUS, LW(5))
         END_IF
     END_INLINE_EVENT
+
+    // Stylish window after the kiss.
     CALL(btlevtcmd_ftof, 24, LW(0))
     CALL(btlevtcmd_ftof, 48, LW(1))
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, LW(0), LW(1), LW(1), 0)
@@ -1313,11 +1324,15 @@ EVT_BEGIN(partyChristineAttack_Kiss)
         CALL(evt_audience_acrobat_notry)
         WAIT_FRAMES(20)
     END_IF
+
+    // On success the "Mario can move again" message shows.
     IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_AnnounceMessage, 0, 0, 0, STRING("msg_st_chg_mario_quick"), 60)
         ELSE
         WAIT_MS(500)
     END_IF
+
+    // Camera back to normal and audience AP; in JP and later Mario goes back to idle and she walks home.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_WaitEventEnd, LW(15))

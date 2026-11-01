@@ -163,6 +163,10 @@ void seq_logoExit(SequenceWork* work) {
 #endif
 }
 
+/**
+ * US and PAL logo sequence: the story screen, the three logos (1 s each, 500 ms fades) while sound groups load,
+ * then the dmo_00 opening (skipped with A or Start to the title), or the kiosk menu on kiosk builds.
+ */
 void seq_logoMain(SequenceWork* work) {
     static OSTime time;
 #if VERSION <= VERSION_DEMO_US

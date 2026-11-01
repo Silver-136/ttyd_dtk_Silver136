@@ -1423,6 +1423,8 @@ EVT_BEGIN(evt_toron_appear)
     CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
     CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
     CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_NO_HIT)
+
+    // The chase music starts and the catch begins.
     SET_VALUE(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
     CALL(evt_del_case_evt, 0, GW(11))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_EGG1"))

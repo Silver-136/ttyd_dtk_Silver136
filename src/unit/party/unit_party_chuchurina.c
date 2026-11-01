@@ -897,6 +897,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
             CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
 
             // BUG: this IF never gets an END_IF (END_SIBLING_EVENT comes first); the rest of the script is indented one level deeper because of it
+            // BUG: this IF has no END_IF; END_SIBLING_EVENT below comes first (the missing end-if in Love Slap).
             IF_INT_GREATER_OR_EQUAL(LW(0), 180)
                 SUBTRACT(LW(0), 360)
                 CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, LW(0), 0, 4)
@@ -1964,6 +1965,8 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
+
+    // Camera on her as she turns to the ally; in JP and later the ally turns to face her if it can move.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -2069,6 +2072,8 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     ELSE
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
     END_IF
+
+    // She kisses the ally; in JP and later it blushes when the command went well.
     CALL(btlevtcmd_GetResultAC, LW(6))
     CALL(btlevtcmd_StopAC)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -2130,6 +2135,8 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
         CASE_DEFAULT
         CALL(evt_audience_acrobat_notry)
     END_SWITCH
+
+    // Camera back to normal and audience AP; in JP and later the ally goes back to idle; she runs home.
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)

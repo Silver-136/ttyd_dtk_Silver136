@@ -382,6 +382,11 @@ EVT_BEGIN(minigame02_end)
     RETURN
 EVT_END()
 
+/**
+ * Map init for yuu_01 (Boat Mode room): starts the water, cloud and neon animations,
+ * spawns the whirlpool and barrel moving floors, starts the minigame set-up and the NPC script,
+ * and (US and later) hides all but the current game-language sign graphics.
+ */
 EVT_BEGIN(yuu_01_init_evt)
     // The room's lights, clouds and water start animating.
     CALL(evt_map_playanim, STRING("den1"), MAP_ANIM_PLAY_LOOP, 0)
@@ -390,6 +395,8 @@ EVT_BEGIN(yuu_01_init_evt)
     CALL(evt_map_playanim, STRING("wakka"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("nagare"), MAP_ANIM_PLAY_LOOP, 0)
+
+    // The four big whirlpools (S_dai_uzu1-4) each drift on their own path; the demos move them more slowly.
     CALL(yuuminigame2_get_name, 1, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
     SET_VALUE(LW(1), LW(1))
@@ -466,6 +473,8 @@ EVT_BEGIN(yuu_01_init_evt)
     SET_VALUE(LW(12), 2)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 3, LW(15))
+
+    // Big whirlpool 4 stays in place in the demos; later versions slide it a short way.
     CALL(yuuminigame2_get_name, 4, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
     SET_VALUE(LW(1), LW(1))
@@ -707,6 +716,8 @@ EVT_BEGIN(yuu_01_init_evt)
     SET_VALUE(LW(12), 1)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 16, LW(15))
+
+    // Barrels 5 to 7 hold still in the demos; later versions move them too.
     CALL(yuuminigame2_get_name, 17, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
     SET_VALUE(LW(1), LW(1))

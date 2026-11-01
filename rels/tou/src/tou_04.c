@@ -2508,6 +2508,9 @@ EVT_BEGIN(tou_04_init_evt)
         CALL(evt_party_set_pos, 0, -630, 0, -300)
         SPAWN_EVENT(PTR(evt_kinoshikowa3))
     END_IF
+
+    // Choose the music and ambience for the story point: quiet while Grubba's plans unfold,
+    // the league theme for most of the story and the ring-side theme otherwise.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -2588,6 +2591,9 @@ EVT_BEGIN(tou_04_init_evt)
         CALL(evt_party_set_pos, 1, 0, -1000, 0)
         SPAWN_EVENT(PTR(evt_gardman4))
     END_IF
+
+    // Coming back from the toilets, Mario appears by the toilet door
+    // and its scene runs instead of the usual setup.
     IF_INT_EQUAL(GSWF_TOU_09_TOILET_WARP_PENDING, 1)
         CALL(evt_mario_set_pos, 530, 0, 530)
         CALL(evt_party_set_pos, 0, 530, 0, 530)

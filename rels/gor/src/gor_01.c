@@ -5777,6 +5777,8 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                     CALL_CHILD(PTR(all_party_lecture))
 #endif
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+
+                    // The request is marked solved and the Trouble Center completion message appears.
                     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ELUSIVE_BADGE), 1)
                     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)

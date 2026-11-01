@@ -271,6 +271,8 @@ EVT_BEGIN(jon_init_evt)
         END_IF
 #endif
     END_SWITCH
+
+    // Trouble Center job 12 is set up on every floor map.
     CALL_CHILD(PTR(iri_12_init))
     CALL(evt_sub_get_mapname, LW(0))
 

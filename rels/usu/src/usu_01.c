@@ -1977,6 +1977,9 @@ EVT_BEGIN(usu01_crowFG_talk_event)
                 CALL(evt_msg_print, 0, STRING("stg4_usu_139"), 0, STRING("カラスＦ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_140"), 0, STRING("カラスＧ"))
                 CALL_CHILD(PTR(cam_down))
+
+                // The first time, Vivian and Mario step aside and she proposes searching under Creepy Steeple
+                // for the villain's real name (stg4_usu_149_viv, 150_viv).
                 IF_INT_EQUAL(GSWF_USU_01_CROWS_FG_PARTNER_TALK_DONE, 0)
                     CALL(evt_party_cont_onoff, 0, 1)
                     LOOP(0)

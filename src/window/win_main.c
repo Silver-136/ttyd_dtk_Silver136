@@ -997,6 +997,8 @@ USER_FUNC(itemUseFunc) {
     }
     return EVT_RETURN_BLOCK;
 }
+
+/** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 #if VERSION == VERSION_DEMO_US
 static USER_FUNC(itemUseFunc2) {
 #else
@@ -1022,6 +1024,7 @@ USER_FUNC(famicom_check) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 #if VERSION == VERSION_DEMO_US
 static USER_FUNC(party_color) {
 #else
@@ -1044,6 +1047,10 @@ USER_FUNC(all_party_slit_off) {
 #if VERSION == VERSION_DEMO_US
 static USER_FUNC(cam_r) {
 #else
+/**
+ * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
+ * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
+ */
 USER_FUNC(cam_r) {
 #endif
     CameraEntry* cam;
@@ -1061,6 +1068,7 @@ USER_FUNC(cam_r) {
     return EVT_RETURN_BLOCK;
 }
 
+/** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
 BOOL winGhostDiaryChk(void) {
     if (wp->menuState == WIN_MENU_DIARY_WAIT) {
         return TRUE;
@@ -1076,10 +1084,12 @@ const char* winMainStrippedTpl(void) {
 #endif
 }
 
+/** Prepares the font renderer for the winFontSet* calls that follow. */
 void winFontInit(void) {
     FontDrawStart();
 }
 
+/** Formats the text and draws it; before US it always formats into a 1 KB buffer first. */
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION >= VERSION_US
     char buf[0x1000];
@@ -1302,6 +1312,7 @@ void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const cha
 #endif
 }
 
+/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
     Mtx trans;
     Mtx scl;
@@ -1362,6 +1373,7 @@ FontDrawScaleVec(scale);
 }
 #endif
 #endif
+/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 void winTexInit(TEXPalette* texture) {
     winTexTpl = texture;
     GXSetCullMode(GX_CULL_NONE);
@@ -1402,6 +1414,10 @@ void winTexInit(TEXPalette* texture) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 }
 
+/**
+ * Draws texture textureId of the current TPL centred at translate, sized texture size times scale,
+ * tinted by color in 2D camera space. Alpha below 255 blends; opaque draws use an alpha test instead.
+ */
 void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -1487,6 +1503,7 @@ void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
 }
 #endif
 
+/** winTexSet with the quad rotated rot degrees about the screen's z axis. */
 void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot) {
     Mtx trans;
     Mtx scl;
@@ -1540,6 +1557,11 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
     GXTexCoord2f32(0.0f, 0.0f);
 }
 
+/**
+ * Two-texture variant of winTexInit: stage 0 takes the first texture's color,
+ * stage 1 multiplies by the tint and takes the second texture's alpha,
+ * so the second texture works as a mask (used for menu tab labels).
+ */
 void winTexInit_x2(TEXPalette* texture) {
     winTexInit(texture);
     GXSetNumTexGens(2);
@@ -1570,6 +1592,7 @@ void winTexInit_x2(TEXPalette* texture) {
     GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
 }
 
+/** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
 void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -1616,10 +1639,15 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
     GXTexCoord2f32(0.0f, 0.0f);
 }
 
+/** Sets up GX for winIconSet (no TPL; icons come from the icon driver). */
 void winIconInit(void) {
     winTexInit(NULL);
 }
 
+/**
+ * Sets up GX so the following winIconSet draws a grayscale icon (R, G and B summed at 1/3 each);
+ * used for badges that cost more BP than Mario has left.
+ */
 void winIconGrayInit(void) {
     winTexInit(NULL);
     GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_ALPHA);
@@ -1659,6 +1687,10 @@ void winIconGrayInit(void) {
     GXSetTevSwapMode(GX_TEVSTAGE3, GX_TEV_SWAP0, GX_TEV_SWAP0);
 }
 
+/**
+ * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
+ * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
+ */
 void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -1819,6 +1851,10 @@ void winLectureKeyMask(void) {
     }
 }
 
+/**
+ * Starts the badge tutorial menu (from Rogueport, gor_02):
+ * sets the tutorial flag, which opens the menu straight away, and starts evt_lecture_msg.
+ */
 void winLectureOn(void) {
     wp->flags |= WINDOW_FLAG_LECTURE;
 #if VERSION > VERSION_DEMO_US
@@ -1828,6 +1864,7 @@ void winLectureOn(void) {
     wp->lectureEvent = evtEntry(evt_lecture_msg, 0, 0);
 }
 
+/** TRUE while the badge tutorial's text script is still running; once it ends, clears the tutorial flag. */
 BOOL winLectureCheck(void) {
     if ((wp->flags & WINDOW_FLAG_LECTURE) && evtCheckID(wp->lectureEvent->eventId)) {
         return TRUE;

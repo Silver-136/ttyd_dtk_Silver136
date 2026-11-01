@@ -863,6 +863,8 @@ EVT_BEGIN(hom_00_init_evt)
     ELSE
         CALL_CHILD(PTR(hom_10_evt_resha_left))
     END_IF
+
+    // Late in the story the crossing barrier is shown in its open position.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_map_playanim, STRING("shadanki"), MAP_ANIM_PLAY_AT_END, 0)
@@ -918,11 +920,15 @@ EVT_BEGIN(hom_00_init_evt)
         SET_VALUE(LW(0), STRING("n_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_on))
     END_IF
+
+    // The station door stays locked until the Station Key has been used.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_29_STATION_DOOR_UNLOCKED)
         CALL(evt_mobj_lock, STRING("lock"), 24, -260, 90, -190, 0, PTR(evt_chk), PTR(evt_lock), GSWF_HOM_00_STATION_DOOR_LOCK)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
+
+    // From the drawbridge-down step on, the bridge is lowered and the train door can be used.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_42_DRAWBRIDGE_DOWN)
         CALL(evt_map_playanim, STRING("hasi"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF

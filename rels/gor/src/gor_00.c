@@ -1761,6 +1761,7 @@ EVT_BEGIN(mokorim_talk)
 
         // After the Rogueport station chapter: Lumpy has returned from the desert.
         CASE_GREATER_OR_EQUAL(STG6_56_ROGUEPORT_STATION)
+        // First return visit: Lumpy reveals he struck oil and shares his story.
         IF_INT_EQUAL(GSWF_GOR_LUMPY_REPAYMENT_DONE, 0)
             SET_VALUE(GSWF_GOR_LUMPY_REPAYMENT_DONE, 1)
             CALL(evt_cam3d_evt_set, 500, 120, 90, 500, 55, -280, 800, EASING_SINE_IN_OUT)
@@ -6830,6 +6831,7 @@ EVT_BEGIN(gor_00_init_evt)
         CALL(evt_light_bind_mapobj, STRING("pointLight4"), STRING("S_fune_b"), 0)
     END_INLINE_EVENT
     SWITCH(GSW_STORY_PROGRESS)
+        // Choose the background music and ambient sound for the current story stage.
         CASE_BETWEEN(STG0_00_PROLOGUE, STG0_03_TO_ROGUEPORT)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
@@ -6963,6 +6965,8 @@ EVT_BEGIN(gor_00_init_evt)
         CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
         SET_VALUE(LW(0), 1)
         SPAWN_EVENT(PTR(gundan1000tai_afterbattle))
+
+        // Chapter 4 Bowser interlude.
         CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
         CALL(evt_mario_kill_party, 0)
         CALL(evt_npc_entry, STRING("houki"), STRING("c_kamek_be"))
@@ -6972,6 +6976,8 @@ EVT_BEGIN(gor_00_init_evt)
         CALL(evt_npc_set_position, STRING("houki"), 0, -1000, 0)
         CALL(evt_npc_set_ry, STRING("houki"), 90)
         SPAWN_EVENT(PTR(gor_00_koopa_evt))
+
+        // Between Chapters 3 and 4's departure, the Chapter 4 ship is hidden from the pier.
         CASE_BETWEEN(STG3_34_RETURN_TO_ROGUEPORT, STG4_END_OFF_TO_THE_KEYS)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_c"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_fune_C"), 1, 1)
@@ -6987,15 +6993,21 @@ EVT_BEGIN(gor_00_init_evt)
             CALL_CHILD(PTR(epilogue_npc_entry))
             SPAWN_EVENT(PTR(epilogue_evt))
         END_IF
+
+        // Chapter 5: Mario returns from Keelhaul Key.
         CASE_EQUAL(STG5_58_FAIR_WINDS)
 #if VERSION <= VERSION_DEMO_US
         CALL_CHILD(gor_muj_ship_init)
 #endif
         SPAWN_EVENT(PTR(gorotsuki_kikan))
+
+        // After the credits: the return to Rogueport.
         CASE_EQUAL(STG9_01_END_CREDITS)
         CALL_CHILD(PTR(return_gorotsuki_town_init))
         SPAWN_EVENT(PTR(return_gorotsuki_town))
     END_SWITCH
+
+    // Late in the game, handle a ship arriving at the dock.
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
             IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_58_FAIR_WINDS)

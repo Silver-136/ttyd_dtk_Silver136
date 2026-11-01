@@ -1860,6 +1860,7 @@ EVT_END()
  * The versions before the US release wait 240 frames of free movement first.
  */
 static EVT_BEGIN(evt_gardman)
+    // Work out which locker room this is: minor league (tou_10), major league (tou_08) or champion (tou_07).
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
     SET_VALUE(LF(2), 0)
@@ -1939,6 +1940,8 @@ static EVT_BEGIN(evt_gardman)
         CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
         CALL(evt_mario_set_dir_npc, STRING("ガードマン"))
     END_INLINE_EVENT
+
+    // The door swings open, the guard steps in and shuts it behind him.
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
@@ -1997,6 +2000,8 @@ static EVT_BEGIN(evt_gardman)
         CALL(evt_msg_print, 0, STRING("stg3_tou_453"), 0, STRING("ガードマン"))
     END_IF
     WAIT_MS(300)
+
+    // The guard keeps watch again and Mario can move.
     CALL(evt_npc_change_interrupt, STRING("ガードマン"), 6, PTR(talk_gardman))
     CALL(evt_npc_status_onoff, 1, STRING("ガードマン"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
@@ -2019,6 +2024,7 @@ EVT_END()
  * sets which map (tou_10, tou_08 or tou_07) is running and prepares the registration prompts.
  */
 EVT_BEGIN(evt_tou_match_make_default_sub)
+    // Work out which locker room this is (and, in French, the order of the inserted rank and name).
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
     SET_VALUE(LF(2), 0)
@@ -2061,6 +2067,9 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
     CALL_CHILD(PTR(evt_tou_monitor_on))
     WAIT_MS(800)
     CALL(evt_party_run, 0)
+
+    // Minor league: Grubba (or Jolene after chapter 3) names the next opponent and its rank,
+    // with a special greeting for the promotion match.
     IF_INT_EQUAL(LF(0), 1)
         CALL(evt_mapobj_get_position, STRING("gamen"), LW(0), LW(1), LW(2))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -2110,6 +2119,8 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
 #endif
         END_IF
     END_IF
+
+    // Major league: the same announcement; booking Rawk Hawk for the first time reserves the title match.
     IF_INT_EQUAL(LF(1), 1)
         CALL(evt_mapobj_get_position, STRING("gamenn"), LW(0), LW(1), LW(2))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -2152,6 +2163,8 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
             END_IF
         END_IF
     END_IF
+
+    // Champion's room: the same announcement.
     IF_INT_EQUAL(LF(2), 1)
         CALL(evt_mapobj_get_position, STRING("gamenn"), LW(0), LW(1), LW(2))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -2179,11 +2192,15 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
 #endif
         END_IF
     END_IF
+
+    // The special condition for this match is read out and stored for the battle.
     CALL(evt_tou_get_rule_info, GSW_GLITZ_PIT_OPPONENT, LW(10), LW(13), LW(14), LW(15))
     SET_VALUE(GSW_GLITZ_PIT_CONDITION, LW(13))
     SET_VALUE(GSW_GLITZ_PIT_CONDITION_PARAM, LW(14))
     SET_VALUE(GSW_GLITZ_PIT_CONDITION_PARAM2, LW(15))
     CALL(evt_msg_print_add, 0, LW(10))
+
+    // The screen goes dark and the guard is sent for.
     CALL_CHILD(PTR(evt_tou_monitor_off))
     WAIT_MS(500)
     SET_VALUE(LW(0), 0)
@@ -2195,6 +2212,8 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
     END_IF
 #endif
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+
+    // At 3rd place the poisoned cake is delivered once.
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 3)
         IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_DELIVERED, 0)
@@ -2202,6 +2221,8 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
             CALL_CHILD(PTR(evt_doku_cake))
         END_IF
     END_IF
+
+    // The guard comes to fetch Mario; booking King K's match plays his good-luck scene the first time.
     SPAWN_EVENT(PTR(evt_gardman))
     SET_VALUE(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)

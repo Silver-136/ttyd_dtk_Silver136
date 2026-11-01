@@ -1463,6 +1463,7 @@ EVT_BEGIN(peach_evt_dance)
     CALL(evt_npc_set_anim, STRING("ホログラム"), STRING("P_O_Z_1"))
     CALL(evt_npc_set_anim, STRING("ホログラム2"), STRING("P_O_Z_1R"))
 #else
+    // The waltz music starts and the dance timer begins.
     CALL(evt_npc_set_position, STRING("\203_\203~\201["), LW(2), FLOAT(5.0f), LW(3))
     CALL(peach_set_pose, STRING("P_O_Z_1"))
     CALL(evt_npc_set_anim, STRING("\203z\203\215\203O\203\211\203\200"), STRING("P_O_Z_1"))
@@ -3283,6 +3284,8 @@ EVT_BEGIN(aji_17_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("polySurface1161_q00063"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("polySurface1168_q00065"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_scale, 0, STRING("ren2"), 5, 5, 1)
+
+    // Peach's scenes: each story point from chapter 1 to chapter 6 starts its own conversation with TEC.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_18_01_PEACH_AN_OPEN_DOOR)
         SPAWN_EVENT(PTR(peach_evt_stg1))
     END_IF
@@ -3315,6 +3318,9 @@ EVT_BEGIN(aji_17_init_evt)
         CALL(evt_shuryolight_run_evt, PTR(shuryolight_pow_normal), PTR(shuryolight_head_normal), PTR(shuryolight_tue_normal))
         SPAWN_EVENT(PTR(peach_evt_stg6))
     END_IF
+
+    // Mario's visits: at the story point after the Moon, the first visit restores HP and FP and plays TEC's
+    // farewell (evt_last); the second plays the aftermath (evt_last2).
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
         IF_INT_EQUAL(GSWF_AJI_17_LAST_SCENE_SEEN, 0)
             CALL(evt_mario_get_party, LW(15))
@@ -3365,9 +3371,13 @@ EVT_BEGIN(aji_17_init_evt)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_kill_party, 0)
         ELSE
+        // As Mario, the fortress music and ambience play; as Peach, her partner is removed.
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
     END_IF
+
+    // After the final battle the room's machine runs again and the keyboard can be used to talk to TEC
+    // (tec_talk).
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kurai"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kikai"), MAP_OBJ_FLAG_HIDDEN)

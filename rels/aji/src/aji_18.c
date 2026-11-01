@@ -352,6 +352,9 @@ EVT_BEGIN(aji_18_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
+
+    // From the factory-door story point on, all three card-key slots count as filled; each slot shows green
+    // when filled and red when empty.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_16_FACTORY_DOOR)
         SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
         SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
@@ -410,6 +413,8 @@ EVT_BEGIN(aji_18_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+
+    // Between Lord Crump's defeat and the story point after the Moon, the east exit is locked again.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), 0)

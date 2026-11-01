@@ -4180,6 +4180,9 @@ EVT_BEGIN(usu_00_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki5"), MAP_OBJ_FLAG_CLIP)
     CALL_CHILD(PTR(usu_00_kusa_init))
     CALL_CHILD(PTR(usu_00_tree_init))
+
+    // Story scenes: the chapter 4 arrival, the pig Mayor, Mario's talk with the Mayor while a shadow, the Shadow
+    // Sirens, Vivian crying, the lost Super Bombomb in bush 7 and Doopliss found again.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
         SPAWN_EVENT(PTR(usu00_stage4_coming_event))
@@ -4206,6 +4209,9 @@ EVT_BEGIN(usu_00_init_evt)
         CALL_CHILD(PTR(usu00_3witch_init))
         SPAWN_EVENT(PTR(gra00_2witch_find_ranpel_event))
     END_IF
+
+    // Background watchers for Vivian and the crows; the pipe is blocked while Doopliss has Mario's name, and the
+    // pig villagers' material loop runs outside Bowser's visit.
     SPAWN_EVENT(PTR(usu00_check_vivian))
     SET_VALUE(GW(0), 0)
     SET_VALUE(GW(1), 0)
@@ -4275,6 +4281,8 @@ EVT_BEGIN(usu_00_init_evt)
         CALL(evt_party_set_pos, 0, -130, 0, -60)
         SPAWN_EVENT(PTR(evt_after_peach))
     END_IF
+
+    // Chapter 8: the world going dark and the townsfolk's voices cheering Mario.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))

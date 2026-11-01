@@ -273,6 +273,8 @@ static EVT_BEGIN(main_0)
             LABEL(1)
 
             // A head-contact match while descending reverses the endpoints and cancels the switch event.
+            // If a falling block lands on Mario or his partner it turns around and rises again, and the switch
+            // is cancelled.
             IF_INT_EQUAL(LW(10), 1)
                 SET_FLOAT_VALUE(LW(5), LW(2))
                 SET_FLOAT_VALUE(LW(2), LW(3))

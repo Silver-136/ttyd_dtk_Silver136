@@ -154,6 +154,7 @@ void SoundInit(void) {
     sound.groups = NULL;
 
     // FAKE: spare temporary tempsong; songs = sndMalloc(...); sound.songs = songs changes the object
+    // force register
     tempsong = (sound.songs = sndMalloc(sizeof(SoundSong) * 4));
     songs = tempsong;
     if (songs == NULL) {

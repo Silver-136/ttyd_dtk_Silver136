@@ -1965,6 +1965,8 @@ EVT_BEGIN(aji_06_init_evt)
     // Start the emergency map-blend script and initialize the potion machine.
     SPAWN_EVENT(PTR(evt_emergency))
     SPAWN_EVENT(PTR(kikai_init))
+
+    // The magician underling is removed once Lord Crump has been beaten.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
     END_IF

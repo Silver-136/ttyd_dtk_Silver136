@@ -3565,7 +3565,15 @@ static EVT_BEGIN(mobj_box00)
 EVT_END()
 
 // Set up map objects and localized assets before selecting entrance-specific scenes.
+/**
+ * Map init for tou_01, Glitzville's front plaza:
+ * sets up the blocks, Star Pieces, Inn Coupon, doors,
+ * NPCs (spectators, vendors, the egg and the blimp) and their talk scripts,
+ * and chooses the scene to run from the entrance and the story progress (the ship shadow, the gondola ride,
+ * the Chapter 3 intro, etc.).
+ */
 EVT_BEGIN(tou_01_init_evt)
+    // Entrances, blocks, the Star Piece panel, the Star Pieces and the Inn Coupon.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -3579,6 +3587,8 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, 60, 30, -365, ITEM_TYPE_STILL, GSWF_STARPIECE_53, 0)
     CALL(evt_item_entry, STRING("item_04"), ITEM_STAR_PIECE, 615, 160, -75, ITEM_TYPE_STILL, GSWF_STARPIECE_54, 0)
     CALL(evt_item_entry, STRING("item_05"), ITEM_INN_COUPON, 450, 10, -90, ITEM_TYPE_STILL, GSWF_TOU_01_INN_COUPON, 0)
+
+    // The NPCs are left out when Mario arrives for the chapter 8 scenes.
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
@@ -3594,9 +3604,13 @@ EVT_BEGIN(tou_01_init_evt)
         CALL_CHILD(PTR(init_roten_1))
         CALL(evt_npc_change_interrupt, STRING("ロテン1"), 6, PTR(talk_roten_1))
     END_IF
+
+    // Hot Sauce left on the ground after the salaryman's request.
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SECURITY_CODE), 1)
         CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF_TOU_01_HOT_SAUCE_REWARD, 0)
     END_IF
+
+    // The shop and tavern doors, the looping map animations, the searchlights and the telephone box.
     SET_VALUE(LW(0), PTR(&door_1))
     CALL_CHILD(PTR(evt_door_entry))
     SET_VALUE(LW(0), PTR(&door_2))
@@ -3612,12 +3626,19 @@ EVT_BEGIN(tou_01_init_evt)
     SPAWN_EVENT(PTR(evt_search_light))
     SPAWN_EVENT(PTR(evt_kanban))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_telbox"), 0, PTR(evt_telbox), 0)
+
+    // The Storage Key lies on the plaza during Rawk Hawk's warning.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_06_RAWK_HAWKS_WARNING)
         CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x12, -745, 20, 435, ITEM_TYPE_STILL, -1, PTR(evt_key))
     END_IF
+
+    // The item shop, the airship's shadow and the airship landing spot.
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     SPAWN_EVENT(PTR(evt_ship_shadow))
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
+
+    // Until the hidden switch is spun, the neon sign hangs loose and the tavern stairs are blocked;
+    // afterwards it is fixed.
     IF_INT_EQUAL(GSWF_TOU_01_TORNADO_SWITCH_PRESSED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("neon_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("neon_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -3646,6 +3667,8 @@ EVT_BEGIN(tou_01_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
     END_IF
+
+    // The blimp gondola starts raised and hidden.
     CALL(evt_hit_bind_mapobj, STRING("a_gondora"), STRING("gondora"))
     CALL(evt_mapobj_trans, 1, STRING("gondora"), 0, 300, 0)
     CALL(evt_hit_bind_update, STRING("a_gondora"))
@@ -3860,6 +3883,8 @@ EVT_BEGIN(tou_01_init_evt)
             CALL(evt_cam_road_reset)
         END_IF
     END_IF
+
+    // Music: the chapter 8 themes, the egg tune while the egg story runs, or the plaza theme.
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
@@ -3934,6 +3959,8 @@ EVT_BEGIN(tou_01_init_evt)
 #endif
         SPAWN_EVENT(PTR(evt_peach_after))
     END_IF
+
+    // Chapter 8 scenes: the darkness over Glitzville, or everyone's voices.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))

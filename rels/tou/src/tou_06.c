@@ -656,6 +656,8 @@ EVT_BEGIN(tou_06_init_evt)
     IF_INT_EQUAL(GSWF_TOU_06_BIG_BLOCK_H_BROKEN, 0)
         CALL(evt_mobj_flag_onoff, 0, STRING("h"), MOBJ_FLAG_GRAVITY)
     END_IF
+
+    // Until the stairway appears: the blue switch, the hidden stairs and their paper-unfold image.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_10_HIDDEN_STAIRWAY)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), -165, 0, -115, PTR(evt_kaidan), GSWF_TOU_06_SWITCH_PRESSED)
         CALL(evt_mobj_flag_onoff, 0, STRING("sw"), MOBJ_FLAG_GRAVITY)

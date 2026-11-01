@@ -1175,6 +1175,9 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_posoffset, 0, 0, 0, 0)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
+
+    // For each enemy in turn: he reaches it and, if it can be hit, deals the damage (with the rating effect after a
+    // good command); otherwise its dodge plays. In JP and later, a counter stops his spin.
     SET_VALUE(LW(10), 0)
     LABEL(10)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(10.0f))
@@ -1411,6 +1414,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     CALL(btlevtcmd_GetResultAC, LW(6))
 
     // Always true: the script between this block's END_IF and LABEL(99) is never reached.
+    // This branch always runs: Mario looks up in surprise, and a stylish window opens for Koops.
     IF_INT_EQUAL(0, 0)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(10)
@@ -1508,6 +1512,8 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
             LOOP(LW(5))
                 // BUG: stores the follow state in LW(10) but tests LW(0), which still holds the target's unit id, so the
                 // loop does not wait for the slide (state 3) to end unless that id is 3.
+                // BUG: reads into LW(10) but tests LW(0) (Mario's unit id), so the loop ends on its first pass and the slide
+                // is not waited for. Fix: read into LW(0).
                 CALL(btlevtcmd_GetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, LW(10))
                 IF_INT_NOT_EQUAL(LW(0), KOURA_FOLLOW_SLIDE)
                     BREAK_LOOP
@@ -1635,6 +1641,8 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
+
+    // Camera closes in on him, then pulls back.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, 1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1643,6 +1651,8 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     WAIT_FRAMES(20)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 4)
     CALL(evt_btl_camera_set_zoom, 0, 400)
+
+    // Set up the tilt-left gauge command from the difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AcGetDifficulty, LW(0))
@@ -1675,6 +1685,8 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     CALL(btlevtcmd_AcSetFlag, 0)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
     WAIT_FRAMES(22)
+
+    // Once the stick is first tilted, he pops into his shell with puffs of smoke and starts spinning.
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGE_SFX, -1)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         LABEL(5)
@@ -1693,10 +1705,14 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPIN_SPEED, 15)
         CALL_CHILD(_koura_rotate_start)
     END_SIBLING_EVENT
+
+    // The charge effect grows around him while the command runs.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         CALL(_tsuranuki_effect_control, UNIT_ID_SELF)
     END_SIBLING_EVENT
+
+    // The command runs: the faster the gauge fills, the faster he spins and the higher the whirr.
     CALL(btlevtcmd_StartAC, 1)
     BEGIN_SIBLING_EVENT_GET_ID(LW(14))
         SET_VALUE(LW(5), 5)
@@ -1729,6 +1745,8 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
             SET_VALUE(LW(5), 5)
         END_LOOP
     END_SIBLING_EVENT
+
+    // Never tilted: he spins slowly to a halt on his back, wobbles and gets up; the move ends.
     CALL(btlevtcmd_ResultAC)
     DELETE_EVENT(LW(14))
     CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
@@ -1759,6 +1777,8 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
         WAIT_FRAMES(30)
         GOTO(99)
     END_IF
+
+    // Charged: a launch sound and he shoots off along the ground.
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_SPIN_DUST, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGE_SFX, LW(13))
@@ -1773,6 +1793,9 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_posoffset, 0, 0, 0, 0)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
+
+    // For each enemy in turn: he reaches it and, if it can be hit, deals the damage (with the rating effect when
+    // the gauge got high enough); otherwise its dodge plays. In JP and later, a counter stops his spin.
     SET_VALUE(LW(10), 0)
     LABEL(10)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(10.0f))

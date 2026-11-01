@@ -810,6 +810,8 @@ EVT_END()
 
 EVT_BEGIN(aji_09_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
+
+    // The exits are set up and the changing-room clothes and hit areas start hidden.
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_hitobj_onoff, STRING("A_R_fuku_g"), 1, 0)
@@ -817,6 +819,8 @@ EVT_BEGIN(aji_09_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fuku1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fuku2"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LF(0), 0)
+
+    // During Peach's disguise scenes (chapter 3) she takes over and her scene starts.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_33_01_PEACH_TECS_REQUEST)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG3_33_03_PEACH_GRODUS)
             SET_VALUE(LF(0), 1)
@@ -828,6 +832,8 @@ EVT_BEGIN(aji_09_init_evt)
         SPAWN_EVENT(PTR(peach_evt_stg3))
     ELSE
         SET_VALUE(GF(0), 0)
+
+        // Otherwise the two changing booths get their curtain scripts and the lockers are set up.
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_omo"), 0, PTR(evt_kou1), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_ura"), 0, PTR(evt_kou1), 0)
         SET_VALUE(GF(1), 0)
@@ -838,6 +844,8 @@ EVT_BEGIN(aji_09_init_evt)
     END_IF
     CALL_CHILD(PTR(evt_rokka_init))
     CALL(evt_bero_get_entername, LW(0))
+
+    // Entering from the ceiling (tenjo): Mario and his partner drop into the room and land.
     IF_STR_EQUAL(LW(0), STRING("tenjo"))
         CALL(evt_cam_letter_box_disable, 1)
         CALL(evt_mario_key_onoff, 0)
@@ -884,6 +892,7 @@ EVT_BEGIN(aji_09_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
     ELSE
+        // As Peach: the notes are hidden and her music plays.
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_memo"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)

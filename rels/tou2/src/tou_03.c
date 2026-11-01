@@ -1072,6 +1072,8 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_msg_print, 0, PTR("stg3_tou_26"), 0, PTR(/*("\203`\203\203\203\223\203s\203\207\203\223")*/("\203`\203\203\203\223\203s\203\207\203\223")))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -85, 172, 326, -85, 96, -104, 1000, EASING_SINE_IN_OUT)
+
+    // Rawk Hawk backs off and flattens his opponent with a flying body slam that shakes the ring.
     CALL(evt_npc_get_position, STRING(/*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223"), LW(10), LW(11), LW(12))
     CALL(evt_npc_status_onoff, 1, STRING(/*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_get_position, STRING(/*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223"), LW(0), LW(1), LW(2))
@@ -1622,6 +1624,8 @@ EVT_BEGIN(evt_random_battle)
     CALL(evt_msg_print, 0, STRING("stg3_tou_404"), 0, STRING("\227\220"))
 #endif
     WAIT_MS(300)
+
+    // The gong rings and the battle starts.
     CALL(evt_snd_sfxon, STRING("SFX_STG3_GONG1"), 0)
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
@@ -1684,6 +1688,8 @@ EVT_BEGIN(evt_random_battle)
     ADD(LW(0), -50)
     ADD(LW(2), -20)
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
+
+    // The Iron Clefts moan about losing and Grubba cheers Gonzales, or they gloat and Grubba calls the upset.
     CALL(evt_npc_get_battle_result, LW(0))
     IF_INT_EQUAL(LW(0), BATTLE_RESULT_WIN)
 #if VERSION <= VERSION_DEMO_US
@@ -2126,6 +2132,9 @@ EVT_BEGIN(evt_match)
         CASE_DEFAULT
         CALL_CHILD(PTR(evt_default_opening))
     END_SWITCH
+
+    // The battle itself, under the match's special rule;
+    // until the Goomba Bros.' surprise attack has been seen, the opponents strike first.
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN, 0)
 #if VERSION <= VERSION_DEMO_US
@@ -2182,6 +2191,8 @@ EVT_BEGIN(evt_match)
 #endif
         END_IF
     END_INLINE_EVENT
+
+    // Mario won: the victory music and scene, a special one the first time against each of the three teams.
     IF_INT_EQUAL(LW(0), BATTLE_RESULT_WIN)
         SWITCH(GSW_GLITZ_PIT_OPPONENT)
             CASE_EQUAL(19)
@@ -2212,6 +2223,8 @@ EVT_BEGIN(evt_match)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
             CALL_CHILD(PTR(evt_default_win))
         END_SWITCH
+
+        // Update the ranking; a win at rank 7 or rank 5 can set off the Iron Clefts' or Bowser's ambush.
         CALL(evt_tou_get_ranking, LW(10))
         CALL(evt_tou_set_ranking_win_lose, 0, GSW_GLITZ_PIT_OPPONENT)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -2247,6 +2260,7 @@ EVT_BEGIN(evt_match)
             END_IF
         END_IF
         ELSE
+        // Mario lost: the loss scene; losses to the Iron Clefts are counted.
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
         SWITCH(GSW_GLITZ_PIT_OPPONENT)
             CASE_EQUAL(19)
@@ -2266,6 +2280,9 @@ EVT_BEGIN(evt_match)
         CALL(evt_tou_set_ranking_win_lose, 1, GSW_GLITZ_PIT_OPPONENT)
         CALL(evt_tou_get_ranking, LW(10))
     END_IF
+
+    // The first match moves the story on. Fade out to the locker room that fits Mario's rank:
+    // the champion's room, the major-league room (ranks 1 to 10) or the minor-league room.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
     END_IF
@@ -3362,6 +3379,7 @@ EVT_END()
  * The party may comment on first appearances, then both sides speak their pre-match lines.
  */
 EVT_BEGIN(evt_default_opening)
+    // The announcer waits in the ring; Mario and the partner wait at the west steps, the opponents at the east.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -3397,6 +3415,8 @@ EVT_BEGIN(evt_default_opening)
         CALL(evt_npc_set_position, STRING("\223G\202T"), 430, 0, -25)
     END_SWITCH
     CALL(evt_cam3d_evt_set, 0, 585, 1310, 0, 400, -145, 0, EASING_SINE_IN_OUT)
+
+    // While Rawk Hawk is still champion he wears his belt.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
             CALL(evt_npc_set_tribe, STRING("\223G\202P"), STRING("\203u\203\214\203b\203h\203n\201[\203g\203x\203\213\203g"))
@@ -3405,6 +3425,8 @@ EVT_BEGIN(evt_default_opening)
             END_INLINE_EVENT
         END_IF
     END_IF
+
+    // The music starts; Mario and the partner hop up into the ring while the opponents walk in.
     CALL(evt_seq_wait, SEQ_GAME)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU1"))
@@ -3548,6 +3570,8 @@ EVT_BEGIN(evt_default_opening)
         CALL(evt_msg_print_party, STRING("stg3_tou_re_151"))
         WAIT_MS(300)
     END_IF
+
+    // The opponent's pre-match line, with special ones for the Iron Clefts' rematch and for Rawk Hawk.
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     SWITCH(LW(1))
         CASE_EQUAL(3)
@@ -3584,6 +3608,8 @@ EVT_BEGIN(evt_default_opening)
     CALL(evt_msg_print, 0, LW(0), 0, STRING("\223G\202P"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 150, 141, 0, 100, -154, 0, EASING_SINE_IN_OUT)
+
+    // The announcer calls the start of the battle and the gong rings.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LW(0), STRING("\203K\203\223\203X"))
         SET_VALUE(LW(1), STRING("stg3_tou_116_20_01"))
@@ -3770,6 +3796,8 @@ EVT_BEGIN(evt_default_lose)
 EVT_END()
 
 static EVT_BEGIN(evt_champion)
+    // The title-match music starts; Grubba stands in the ring and Rawk Hawk gets his belt.
+    // Mark the scene seen and move on to the passage beside the arena (tou_11).
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -3801,6 +3829,8 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_npc_set_ry, STRING("ガンス"), 90)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg3_tou_412"), 0, STRING("ガンス"))
+
+    // The east door opens and Rawk Hawk marches into the ring while the crowd cheers him.
     CALL(evt_npc_set_position, STRING("敵１"), 550, 0, 0)
 #else
     CALL(evt_npc_status_onoff, 1, STRING("\203K\203\223\203X"), NPC_STATUS_FACE_MOVE_DIR)
@@ -3889,6 +3919,8 @@ static EVT_BEGIN(evt_champion)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1000)
+
+    // Grubba interviews Rawk Hawk, who brags that there is only one champ and blows a raspberry at the challenger.
 #if VERSION >= VERSION_US
     CALL(evt_npc_move_position, STRING("ガンス"), 20, -20, 0, FLOAT(70.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_414"), 0, STRING("ガンス"))
@@ -4500,6 +4532,7 @@ s32 gans_white_off(EventEntry* event, BOOL isFirstCall) {
 }
 
 static EVT_BEGIN(evt_boss)
+    // Hide the stage props, lock the east door, place Grubba in the ring and set the Crystal Star spinning.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group34"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_hitobj_onoff, STRING("polySurface731_q00050"), 0, 0)
@@ -4607,6 +4640,8 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_jump_pos, -150, 60, 0, 500, 0, -1000)
     CALL(evt_mario_set_dir, 90, 200, 0)
+
+    // The ring blocks sink and Grubba's power-absorbing machine rises with him on top.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("butai_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("butai_1"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION >= VERSION_US

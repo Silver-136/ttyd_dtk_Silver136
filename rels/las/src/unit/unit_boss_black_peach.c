@@ -4644,6 +4644,10 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the small hand's thousand-hands attack (weapon_peach_black_1000hand_attack):
+ * the swarm of c_s_hand poses sweeps over the party.
+ */
 EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_peach_black_1000hand_attack))
@@ -4660,6 +4664,8 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_black_1000hand_attack))
+
+    // The camera shakes as the swarm of small hands sweeps over the party.
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 180, 0)
     CALL(evt_eff_softdelete, STRING("m_h_s1"))
     CALL(evt_eff_softdelete, STRING("m_h_s2"))

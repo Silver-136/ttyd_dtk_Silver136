@@ -861,6 +861,8 @@ EVT_BEGIN(evt_door_open)
 EVT_END()
 
 EVT_BEGIN(evt_door_open_bom_01)
+    // Run the door's open script, then set up the rooms as evt_door_open does, without moving the camera.
+    // The indoor sound takes over.
     CALL(evt_door_param, LW(0), 7, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         SPAWN_EVENT(LW(1))
@@ -890,6 +892,8 @@ EVT_BEGIN(evt_door_open_bom_01)
     END_IF
     CALL(door_dark_flag, LW(0), 1)
     SPAWN_EVENT(PTR(door_open_se))
+
+    // The door swings open with its sound.
 #if VERSION > VERSION_DEMO_US
 #if VERSION < VERSION_US
     CALL(evt_mario_party_door_halve_hitbox)
@@ -911,6 +915,8 @@ EVT_BEGIN(evt_door_open_bom_01)
             END_IF
         END_INLINE_EVENT
     END_IF
+
+    // Hold the door open until the map's cutscene clears GF(0).
     WAIT_MS(500)
     SET_VALUE(GF(0), 1)
     LOOP(0)
@@ -919,6 +925,8 @@ EVT_BEGIN(evt_door_open_bom_01)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
+    // The outside darkens and the door swings shut.
     SPAWN_EVENT(PTR(door_dark))
     CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
@@ -939,6 +947,8 @@ EVT_BEGIN(evt_door_open_bom_01)
             END_IF
         END_INLINE_EVENT
     END_IF
+
+    // The house wall swings open, the outside finishes darkening and the out-piece swings down.
     CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(9), 0)
         BEGIN_INLINE_EVENT

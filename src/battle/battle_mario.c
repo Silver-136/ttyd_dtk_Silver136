@@ -3939,6 +3939,10 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
             WAIT_FRAMES(1)
             GOTO(62)
         END_IF
+
+        // The tornado strikes every other enemy the tornado weapon (badgeWeapon_TatsumakiJumpInvolved) can
+        // reach, skipping the stomped enemy (in the demo, reaching it ends the round early); a dodge plays
+        // the enemy's dodge.
         BEGIN_SIBLING_EVENT
             SET_VALUE(LW(6), LW(3))
             CALL(_tatsumaki_effect, UNIT_ID_SELF)

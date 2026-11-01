@@ -1819,6 +1819,8 @@ EVT_BEGIN(evt_mapwrite)
     CALL(evt_img_wait_animend, STRING("img"))
     WAIT_MS(1000)
     WAIT_MS(1000)
+
+    // The next Crystal Star's place appears on the map: star dust, the place picture (TIZ_stg_N) and its sound.
     SWITCH(GW(15))
         CASE_EQUAL(0)
         SET_VALUE(LW(5), 55)

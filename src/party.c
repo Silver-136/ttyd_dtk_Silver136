@@ -2797,6 +2797,10 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
 const Vec party_unused_zero_vec0 = {0.0f, 0.0f, 0.0f};
 const Vec party_unused_zero_vec1 = {0.0f, 0.0f, 0.0f};
 #endif
+/**
+ * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
+ * used by party_yoshi when Mario mounts Yoshi.
+ */
 void party_force_ride_yoshi(PartyEntry* party) {
     Vec pos;
 
