@@ -228,7 +228,7 @@ void effTimestampDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(scale, 0.015625f, 0.015625f, 0.0f);
     GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
     GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 0, work->alpha});
-    vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, 3)->address;
+    vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, SMART_GROUP_TEMP)->address;
     for (i = 0; i < 16; i++) {
         p = &vtx[i * 2];
         sc = work->scale2;

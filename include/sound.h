@@ -170,6 +170,13 @@ typedef struct SoundTemp {
     s32 seqId;      // 0xC, sndSetAuxProcessingCallbacks seqID
 } SoundTemp;
 
+// SoundWork.coverState: disc cover.
+enum {
+    SOUND_COVER_CLOSED = 0,
+    SOUND_COVER_OPEN = 1,
+    SOUND_COVER_RELOADING = 2,  // closed again; waiting for the streams to reload
+};
+
 typedef struct SoundWork {
     void* poolData[8];         // 0x0
     void* projData[8];         // 0x20

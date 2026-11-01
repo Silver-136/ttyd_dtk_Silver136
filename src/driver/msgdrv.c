@@ -194,7 +194,7 @@ void msgLoad(const char* filename, s32 index) {
         dvd = DVDMgrOpen(dvdpath, 2, 0);
         if (dvd) {
             entry->length = DVDMgrGetLength(dvd);
-            entry->address = smartAlloc(OSRoundUp32B(entry->length), 0);
+            entry->address = smartAlloc(OSRoundUp32B(entry->length), SMART_GROUP_PERMANENT);
             DVDMgrRead(dvd, entry->address->address, OSRoundUp32B(entry->length), 0);
             DVDMgrClose(dvd);
         }
@@ -301,10 +301,10 @@ void msgLoad(const char* filename, s32 index) {
         if (entry->lookup) {
             smartFree(entry->lookup);
         }
-        entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), 0);
+        entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), SMART_GROUP_PERMANENT);
         str = msgEntryText(entry);
 #else
-        entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), 0);
+        entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), SMART_GROUP_PERMANENT);
         str = entry->address;
 #endif
         lookup = entry->lookup->address;
@@ -1869,7 +1869,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     // BUG: the copy gets strlen(msg) bytes, so strcpy writes the terminator one byte past the requested size
     copy = __memAlloc(HEAP_DEFAULT, strlen(msg));
     strcpy(copy, msg);
-    smart = smartAlloc(sizeof(MsgWinData), 1);
+    smart = smartAlloc(sizeof(MsgWinData), SMART_GROUP_MAP);
     data = smart->address;
     memset(data, 0, sizeof(MsgWinData));
     data->window = window;

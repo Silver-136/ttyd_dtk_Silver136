@@ -411,7 +411,7 @@ void seq_gameOverMain(SequenceWork* work) {
                 break;
             }
 #if VERSION <= VERSION_DEMO_US
-            gp->resetType = 1;
+            gp->resetType = RESET_TYPE_SOFT;
 #else
             _relUnLoad();
             _unload("sys_00", NULL, NULL);

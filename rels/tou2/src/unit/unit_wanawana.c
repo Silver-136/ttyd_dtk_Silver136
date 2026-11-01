@@ -246,7 +246,7 @@ USER_FUNC(replace_evt) {
     w += w & 1;
     h += h & 1;
     wp = BTL_ALLOC(sizeof(WanaWork));
-    wp->tex = smartAlloc(GXGetTexBufferSize(w / 2, h / 2, GX_TF_RGB5A3, GX_FALSE, 0), 1);
+    wp->tex = smartAlloc(GXGetTexBufferSize(w / 2, h / 2, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
     wp->poseId = part->poseId;
     wp->part = part;
     GXInitTexObj(&wp->obj, wp->tex->address, w / 2, h / 2, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);

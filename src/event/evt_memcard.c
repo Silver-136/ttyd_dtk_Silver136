@@ -167,7 +167,7 @@ USER_FUNC(memcard_header_write) {
  * gp->resetType 2 makes the main loop reset, and the script never resumes.
  */
 USER_FUNC(memcard_ipl) {
-    gp->resetType = 2;
+    gp->resetType = RESET_TYPE_MENU;
     return EVT_RETURN_BLOCK;
 }
 

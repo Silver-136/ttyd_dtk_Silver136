@@ -42,6 +42,13 @@ typedef enum Language {
     LANGUAGE_IT = 5,
 } Language;
 
+// GlobalWork.resetType
+enum {
+    RESET_TYPE_NONE = 0,
+    RESET_TYPE_SOFT = 1,
+    RESET_TYPE_MENU = 2,  // back to the system menu (evt_memcard)
+};
+
 typedef struct GlobalWork {
     s32 flags; //0x0, GlobalWorkFlags
     s32 framerate; //0x4

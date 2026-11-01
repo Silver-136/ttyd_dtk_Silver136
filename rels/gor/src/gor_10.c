@@ -98,7 +98,7 @@ void tegami_delete(void) {
 static void depthDisp(CameraId camera, void* param) {
     f32 amp = evtGetFloat(NULL, GW(0)) / 100.0f;
     CameraEntry* cam = camGetPtr(camera);
-    smartEntry* buf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGB565, GX_FALSE, 0), 3);
+    smartEntry* buf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXTexObj obj;
     Mtx mtx;
     f32 a;

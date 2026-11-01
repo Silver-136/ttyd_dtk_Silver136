@@ -824,7 +824,7 @@ USER_FUNC(make_shadow) {
     if (isFirstCall) {
         wp = _mapAlloc(sizeof(ShadowWork));
         event->userdata[0] = (EvtWord)wp;
-        wp->tex = smartAlloc(GXGetTexBufferSize(128, 128, GX_TF_RGB5A3, GX_FALSE, 0), 1);
+        wp->tex = smartAlloc(GXGetTexBufferSize(128, 128, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
     }
     wp = (ShadowWork*)event->userdata[0];
     GXInitTexObj(&wp->obj, wp->tex->address, 128, 128, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);

@@ -203,7 +203,7 @@ void effKamekiTornadeDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevColor(GX_TEVREG0, (GXColor){work->c0r, work->c0g, work->c0b, (s32)((f32)a * work->alphaScale)});
     GXSetTevColor(GX_TEVREG1, (GXColor){work->c1r, work->c1g, work->c1b, 32});
     GXSetCullMode(GX_CULL_NONE);
-    tmpl = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, 3)->address;
+    tmpl = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, SMART_GROUP_TEMP)->address;
     for (i = 0, k = 0; i < 16; i++, k += 128) {
         p = &tmpl[i];
         r = (6.2831855f * (f32)(i * 360 / 15)) / 360.0f;
@@ -224,7 +224,7 @@ void effKamekiTornadeDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(base, 0.1f, 0.1f, 0.1f);
     PSMTXConcat(rot, base, base);
     for (i = 0; i < 7; i++) {
-        vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, 3)->address;
+        vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, SMART_GROUP_TEMP)->address;
         effSetVtxDescN64(vtx);
         PSMTXTrans(mtx, 10.0f * work->px[i], 10.0f * work->py[i], 10.0f * work->pz[i]);
         PSMTXRotRad(rot, 'z', 0.017453292f * work->rot[i]);

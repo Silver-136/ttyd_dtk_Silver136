@@ -3557,8 +3557,8 @@ void raster_disp(CameraId cameraId, void* param) {
     if (amp > 127.0f) {
         amp = 127.0f;
     }
-    copyBuf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), 3)->address;
-    buf = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), 3)->address;
+    copyBuf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
+    buf = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
     phase = 6.2831855f * phase;
     for (i = 0; i < 64; i++) {
         for (j = 0; j < 64; j++) {

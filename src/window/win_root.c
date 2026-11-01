@@ -260,7 +260,7 @@ s32 winRootMain(WindowWork* w) {
             w->tabSel = 0;
         }
 #if VERSION > VERSION_DEMO_US
-        w->texBuf = smartAlloc(GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0), 1);
+        w->texBuf = smartAlloc(GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_MAP);
         w->texBufValid = 0;
         dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, (DispCallback)winRootBgCaptureDisp, w);
 #endif

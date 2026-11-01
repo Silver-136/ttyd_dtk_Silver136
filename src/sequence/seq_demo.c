@@ -1086,7 +1086,7 @@ void seq_demoInit(SequenceWork* seq) {
     iconReInit();
     memClear(HEAP_MALLOC);
     memClear(HEAP_EXT);
-    smartAutoFree(1);
+    smartAutoFree(SMART_GROUP_MAP);
     statusWinDispOff();
     wp->frame = 0;
     wp->fullScreen = rand() % 100 <= 50;

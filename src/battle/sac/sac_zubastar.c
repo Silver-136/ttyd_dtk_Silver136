@@ -415,7 +415,7 @@ USER_FUNC(zubastar_main) {
     s32 audience = BattleAudience_GetAudienceNum();
     s32 i;
     if (isFirstCall) {
-        w->capture = smartAlloc(GXGetTexBufferSize(400, 480, 4, 0, 0), 1);
+        w->capture = smartAlloc(GXGetTexBufferSize(400, 480, 4, 0, 0), SMART_GROUP_MAP);
         pts[0] = (Vec){-96.0f, 240.0f, 0.0f};
         pts[1] = (Vec){304.0f, 240.0f, 0.0f};
         pts[2] = (Vec){304.0f, -240.0f, 0.0f};

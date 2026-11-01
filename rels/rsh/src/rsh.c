@@ -1866,7 +1866,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     height = y1 - y0;
     halfWidth = width / 2;
     halfHeight = height / 2;
-    buf = smartAlloc(GXGetTexBufferSize(halfWidth, halfHeight, GX_TF_RGB5A3, GX_FALSE, 0), 3)->address;
+    buf = smartAlloc(GXGetTexBufferSize(halfWidth, halfHeight, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
     GXSetTexCopySrc(x0, y0, width, height);
     GXSetTexCopyDst(halfWidth, halfHeight, GX_TF_RGB5A3, GX_TRUE);
     GXCopyTex(buf, GX_FALSE);

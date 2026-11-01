@@ -3472,7 +3472,7 @@ void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     pose->paperTexScaleY = (f32)(pose->paperRectBottom - pose->paperRectTop) / (f32)h;
     GXSetTexCopySrc(left, top, w, h);
     GXSetTexCopyDst(w, h, GX_TF_RGB5A3, GX_FALSE);
-    pose->paperCapture0 = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), 3);
+    pose->paperCapture0 = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXCopyTex(pose->paperCapture0->address, GX_TRUE);
     GXPixModeSync();
     GXInitTexObj(&pose->paperTexObj[0], pose->paperCapture0->address, w, h, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -3583,7 +3583,7 @@ void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame,
     GXSetTexCopySrc(left, top, w, h);
     GXSetTexCopyDst(w, h, GX_TF_RGB5A3, GX_FALSE);
     anim_ext_tex_size += GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0);
-    *image = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), 1);
+    *image = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
     GXCopyTex((*image)->address, GX_TRUE);
     GXPixModeSync();
     GXInitTexObj(obj, (*image)->address, w, h, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);

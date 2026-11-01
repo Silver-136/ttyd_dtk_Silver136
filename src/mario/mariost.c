@@ -461,7 +461,7 @@ void marioStMain(void) {
                     none_key = OSGetTime();
 #endif
 } else {
-                    gp->resetType = 1;
+                    gp->resetType = RESET_TYPE_SOFT;
                 }
 #else
             if (gp->dirs[i]) {
@@ -620,13 +620,13 @@ void viPostCallback(u32 retraceCount) {
             }
         } else {
             if (!OSGetResetButtonState()) {
-                gp->resetType = 1;
+                gp->resetType = RESET_TYPE_SOFT;
             }
         }
         if (gp->keyDataValid) {
             if (OSIsRestart() && !gp->restartChecked) {
                 if ((keyGetButton(0) & reset) == reset) {
-                    gp->resetType = 0;
+                    gp->resetType = RESET_TYPE_NONE;
                     goto exitcheck;
                 } else {
                     gp->restartChecked = TRUE;
@@ -638,14 +638,14 @@ void viPostCallback(u32 retraceCount) {
                     gp->softResetTimeout = OSGetTime();
                 }
                 if (OSTicksToMilliseconds(OSGetTime() - gp->softResetTimeout) > 500) {
-                    gp->resetType = 1;
+                    gp->resetType = RESET_TYPE_SOFT;
                 }
             } else {
                 gp->softResetWait = FALSE;
             }
 #if VERSION > VERSION_DEMO_US
             if (DVDGetDriveStatus() == DVD_STATE_FATAL_ERROR) {
-                gp->resetType = 0;
+                gp->resetType = RESET_TYPE_NONE;
             }
 #endif
         }
@@ -894,7 +894,7 @@ void gcResetCheck(void) {
             cardMain();
             VIWaitForRetrace();
         }
-        if (gp->resetType != 2) {
+        if (gp->resetType != RESET_TYPE_MENU) {
             if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
 #if VERSION <= VERSION_DEMO_US
                 code = OS_RESET_RESTART;

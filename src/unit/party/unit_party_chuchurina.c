@@ -2579,7 +2579,7 @@ USER_FUNC(_chuchu_item_steal) {
 void mono_capture(CameraId camId, void* param) {
     BattleUnit* unit = param;
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-    unit->screenTexBuf = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I8, GX_FALSE, 0), 1);
+    unit->screenTexBuf = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I8, GX_FALSE, 0), SMART_GROUP_MAP);
     GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
     GXSetTexCopyDst(0x260, 0x1E0, GX_TF_I8, GX_FALSE);
     GXCopyTex(unit->screenTexBuf->address, GX_FALSE);

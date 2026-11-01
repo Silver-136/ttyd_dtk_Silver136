@@ -328,7 +328,7 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetCullMode(GX_CULL_NONE);
     work++;
 #if VERSION <= VERSION_DEMO_US
-    buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), 4)->address;
+    buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP_KEEP)->address;
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(304, 240, GX_TF_RGB565, GX_TRUE);
     GXCopyTex(buffer, GX_FALSE);

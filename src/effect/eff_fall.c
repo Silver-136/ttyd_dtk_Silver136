@@ -429,7 +429,7 @@ void effFallMain(EffectEntry* effect) {
                         done++;
                         break;
                 }
-                e->vtx = smartAlloc(32 * sizeof(EffFallVtx), 3);
+                e->vtx = smartAlloc(32 * sizeof(EffFallVtx), SMART_GROUP_TEMP);
                 {
                     EffFallVtx* v = e->vtx->address;
                     for (j = 0; j < 32; j++, v++) {

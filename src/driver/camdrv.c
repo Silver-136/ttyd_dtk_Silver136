@@ -110,7 +110,7 @@ CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 ne
     camera->viewYaw = 0.0f;
     camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);
     camera->callback = callback;
-    camera->mode = 0;
+    camera->mode = CAM_MODE_OFF;
     camera->stateA = 0;
     camera->progressA = 0.0f;
     camera->fovY = fovY;
@@ -170,7 +170,7 @@ inline CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect,
     camera->viewYaw = 0.0f;
     camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);
     camera->callback = callback;
-    camera->mode = 0;
+    camera->mode = CAM_MODE_OFF;
     camera->rollAngle = 0.0f;
     camera->viewOffset.z = 0.0f;
     camera->viewOffset.y = 0.0f;
@@ -388,10 +388,10 @@ void camLoadRoad(CameraId cameraId, const char* filename) {
     camera->blendPos.x = 0.0f;
     if (camRoadSetup(filename)) {
         camera->flags |= CAMERA_FLAG_ROAD;
-        camGetPtr(cameraId)->mode = 1;
+        camGetPtr(cameraId)->mode = CAM_MODE_FIELD;
     } else {
         camera->flags &= ~CAMERA_FLAG_ROAD;
-        camGetPtr(cameraId)->mode = 3;
+        camGetPtr(cameraId)->mode = CAM_MODE_NO_ROAD;
     }
     camera->fovY = 25.0f;
     camera->rollAngle = 0.0f;
@@ -412,7 +412,7 @@ void camLoadRoad(CameraId cameraId, const char* filename) {
 void camUnLoadRoad(CameraId cameraId) {
     CameraEntry* camera = camGetPtr(cameraId);
     camera->flags &= ~CAMERA_FLAG_ROAD;
-    camGetPtr(cameraId)->mode = 0;
+    camGetPtr(cameraId)->mode = CAM_MODE_OFF;
     camera->stateA = 0;
     camera->progressA = 0.0f;
     camera->fovY = 25.0f;
@@ -449,7 +449,7 @@ void cam3dMain(CameraEntry* camera) {
     }
 
     switch (camera->mode) {
-        case 1:
+        case CAM_MODE_FIELD:
             switch (camera->stateA) {
                 case 1:
                     if (camera->durationA > 0) {
@@ -634,7 +634,7 @@ void cam3dMain(CameraEntry* camera) {
             }
             break;
 
-        case 2:
+        case CAM_MODE_BATTLE:
             if (gp->inBattle) {
                 battleCameraMain();
                 camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);
@@ -651,8 +651,8 @@ void cam3dMain(CameraEntry* camera) {
                 }
             }
             break;
-        case 0:
-        case 3:
+        case CAM_MODE_OFF:
+        case CAM_MODE_NO_ROAD:
             break;
     }
 

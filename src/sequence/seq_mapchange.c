@@ -457,7 +457,7 @@ void _unload(const char* prevMap, const char* nextMap, const char* bero) {
     }
     memClear(HEAP_MALLOC);
     memClear(HEAP_EXT);
-    smartAutoFree(1);
+    smartAutoFree(SMART_GROUP_MAP);
     nanNPCWork = NULL;
 }
 

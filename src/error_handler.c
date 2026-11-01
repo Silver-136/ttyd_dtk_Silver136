@@ -131,9 +131,9 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     HW_ENABLE_MSR_FP_RI();
     smartReInit();
     if (OSGetFontEncode() == OS_FONT_ENCODE_SJIS) {
-        fontHeader = smartAlloc(OS_FONT_SIZE_SJIS, 0)->address;
+        fontHeader = smartAlloc(OS_FONT_SIZE_SJIS, SMART_GROUP_PERMANENT)->address;
     } else {
-        fontHeader = smartAlloc(OS_FONT_SIZE_ANSI, 0)->address;
+        fontHeader = smartAlloc(OS_FONT_SIZE_ANSI, SMART_GROUP_PERMANENT)->address;
     }
     OSInitFont(fontHeader);
     GXSetCopyClear((GXColor) { 0, 0, 0, 0xFF }, GX_MAX_Z24);

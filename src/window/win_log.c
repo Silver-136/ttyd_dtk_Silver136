@@ -1631,7 +1631,7 @@ void monosiriMain(MonosiriWork* m) {
         m->state++;
 #endif
         TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
-        m->smart = smartAlloc(GXGetTexBufferSize(GXGetTexObjWidth(&tex), GXGetTexObjHeight(&tex), GX_TF_RGB5A3, GX_FALSE, 0), 0);
+        m->smart = smartAlloc(GXGetTexBufferSize(GXGetTexObjWidth(&tex), GXGetTexObjHeight(&tex), GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_PERMANENT);
         break;
     case 1:
         t = battleGetUnitMonosiriPtr(m->id);
@@ -1829,8 +1829,8 @@ void capture(CameraId camera, void* param) {
     animPosePeraOn(m->pose1);
     if (m->id == UNIT_SMORG) {
         gpos = (Vec*)animPoseGetAnimPosePtr(m->pose1)->worldPositions->address;
-        cnt = smartAlloc(g_moamoa_chain_num * 4, 3)->address;
-        idx = smartAlloc(2000, 3)->address;
+        cnt = smartAlloc(g_moamoa_chain_num * 4, SMART_GROUP_TEMP)->address;
+        idx = smartAlloc(2000, SMART_GROUP_TEMP)->address;
         memset(cnt, 0, g_moamoa_chain_num * 4);
         // FAKE: reversed loop compare; i < 500 changes the object
         for (i = 0; 500 > i; i++) {

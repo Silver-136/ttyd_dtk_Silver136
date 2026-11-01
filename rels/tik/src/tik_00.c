@@ -814,7 +814,7 @@ void uranai_cap(CameraId cameraId, void* param) {
     animPoseDrawMtx(npc->poseId, ident, 3, 0.0f, scale);
     animPosePeraOn(npc->poseId);
     PSMTXCopy(saved.view, camGetCurPtr()->view);
-    uranai_wp->buf = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), 3);
+    uranai_wp->buf = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXSetTexCopySrc(0, 0, w, h);
     GXSetTexCopyDst(w, h, GX_TF_RGB5A3, GX_FALSE);
     GXCopyTex(uranai_wp->buf->address, GX_TRUE);

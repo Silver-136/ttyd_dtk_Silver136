@@ -909,7 +909,7 @@ static void ext_init(void) {
     f32 angle;
     f32 dist;
 
-    lp = smartAlloc(sizeof(BomWork), 1);
+    lp = smartAlloc(sizeof(BomWork), SMART_GROUP_MAP);
     wp = lp->address;
     memset(wp, 0, sizeof(BomWork));
     wp->count = extGetPoseNum();
@@ -2508,7 +2508,7 @@ s32 taihou_r(EventEntry* event, BOOL isFirstCall) {
 static void depthDisp(CameraId camera, void* param) {
     f32 amp = evtGetValue(NULL, GW(5)) / 100.0f;
     CameraEntry* cam = camGetPtr(camera);
-    smartEntry* buf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGB565, GX_FALSE, 0), 3);
+    smartEntry* buf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXTexObj obj;
     Mtx mtx;
     f32 a;
@@ -2625,7 +2625,7 @@ void ext_init_minnnanokoe(void) {
     s32 x;
     s32 z;
 
-    lp = smartAlloc(sizeof(BomWork), 1);
+    lp = smartAlloc(sizeof(BomWork), SMART_GROUP_MAP);
     wp = lp->address;
     memset(wp, 0, sizeof(BomWork));
     wp->count = extGetPoseNum();

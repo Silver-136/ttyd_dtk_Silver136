@@ -3629,7 +3629,7 @@ void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
     sysWaitDrawSync();
     hh = ((u32)width >> 1) & 0x7fff;
     ww = ((u32)height >> 1) & 0x7fff;
-    mobj->paperTexData = smartAlloc(GXGetTexBufferSize(hh, ww, GX_TF_RGBA8, 0, 0), 3);
+    mobj->paperTexData = smartAlloc(GXGetTexBufferSize(hh, ww, GX_TF_RGBA8, 0, 0), SMART_GROUP_TEMP);
     GXSetTexCopySrc(0, 0, width, height);
     GXSetTexCopyDst(hh, ww, GX_TF_RGBA8, GX_TRUE);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);

@@ -205,7 +205,7 @@ void effOpukuJetwrainDisp(CameraId cameraId, EffectEntry* effect) {
     C_MTXOrtho(ortho, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f);
     GXSetProjection(ortho, GX_ORTHOGRAPHIC);
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    buf = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), 3)->address;
+    buf = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(304, 240, GX_TF_RGB565, GX_TRUE);
     GXCopyTex(buf, GX_FALSE);

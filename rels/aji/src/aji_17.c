@@ -294,7 +294,7 @@ void noiseDisp(CameraId cameraId, void* param) {
     Mtx mtx;
     s32 start;
     cam = camGetPtr(cameraId);
-    buf = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_I8, GX_FALSE, 0), 3)->address;
+    buf = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_I8, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
     for (y = 0; y < 64; y++) {
         for (x = 0; x < 64; x++) {
             by = y / 4;

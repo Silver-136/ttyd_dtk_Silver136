@@ -377,7 +377,7 @@ void sys_01_msg_tex_capture_func(CameraId cameraId, void* param) {
     h = bottom - top;
     wp->msgTexW = w;
     wp->msgTexH = h;
-    wp->msgTex = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), 1);
+    wp->msgTex = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
     GXSetTexCopySrc(left, top, w, h);
     GXSetTexCopyDst(w, h, GX_TF_RGB5A3, GX_FALSE);
     GXCopyTex(wp->msgTex->address, GX_FALSE);

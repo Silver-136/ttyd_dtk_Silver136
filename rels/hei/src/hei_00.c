@@ -189,7 +189,7 @@ USER_FUNC(make_gonbaba_projection_evt) {
         event->userdata[0] = (EvtWord)_mapAlloc(sizeof(GonbabaProj));
     }
     wp = (GonbabaProj*)event->userdata[0];
-    wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), 3);
+    wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXInitTexObj(&wp->obj, wp->tex->address, 608, 480, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&wp->obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     mapSetProjTexObj(&wp->obj, wp->tex);

@@ -212,8 +212,8 @@ static void yuka_init(void) {
     if (w->texH > 0x1E0) {
         w->texH = 0x1E0;
     }
-    w->tex = smartAlloc(GXGetTexBufferSize(w->texW, w->texH, GX_TF_RGB565, GX_FALSE, 0), 2);
-    w->mesh = smartAlloc(sizeof(YukaMesh), 2);
+    w->tex = smartAlloc(GXGetTexBufferSize(w->texW, w->texH, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_BATTLE);
+    w->mesh = smartAlloc(sizeof(YukaMesh), SMART_GROUP_BATTLE);
     m = w->mesh->address;
     for (r = 0; r < 2; r++) {
         for (i = 0; i < 129; i++) {

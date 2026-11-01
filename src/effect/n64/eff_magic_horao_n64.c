@@ -230,7 +230,7 @@ void effMagicHoraoDisp(CameraId cameraId, EffectEntry* effect) {
             effGetTexObjN64(0x56, &texObj);
             GXLoadTexObj(&texObj, GX_TEXMAP0);
         }
-        vtx = smartAlloc(sizeof(effN64Vtx) * 32, 3)->address;
+        vtx = smartAlloc(sizeof(effN64Vtx) * 32, SMART_GROUP_TEMP)->address;
         for (i = 0; i < 16; i++) {
             v = vtx + i * 2;
             ang = 500.0f * (f32)sin(6.2831855f * (f32)(angle + (frame * 10 + i * 60)) / 360.0f);

@@ -1160,11 +1160,11 @@ USER_FUNC(tiz_broken) {
     if (isFirstCall) {
         memset(broken_wp, 0, sizeof(BrokenWork));
 #if VERSION <= VERSION_DEMO_US
-        broken_wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), 1);
+        broken_wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), SMART_GROUP_MAP);
 #else
-        broken_wp->tex = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB5A3, GX_FALSE, 0), 1);
+        broken_wp->tex = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
 #endif
-        broken_wp->pieces = smartAlloc(sizeof(BrokenPiece) * 31 * 39, 1);
+        broken_wp->pieces = smartAlloc(sizeof(BrokenPiece) * 31 * 39, SMART_GROUP_MAP);
         broken_wp->copied = 0;
         p = broken_wp->pieces->address;
         for (y = 0; y < 30; y++) {

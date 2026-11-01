@@ -531,7 +531,7 @@ static void sun_tev(MapTevCallbackInfo* info) {
 
     // a scrolling sine-wave warp texture for the sun's heat haze
     if (ind_lp == NULL) {
-        ind_lp = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), 1);
+        ind_lp = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), SMART_GROUP_MAP);
     }
     buf = ind_lp->address;
     for (i = 0; i < 64; i++) {

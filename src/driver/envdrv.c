@@ -161,7 +161,7 @@ void envCapture(CameraId camId, void* param) {
         GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);
         GXSetTexCopyDst(halfWidth, halfHeight, GX_TF_RGBA8, GX_TRUE);
         size = GXGetTexBufferSize(halfWidth, halfHeight, GX_TF_RGBA8, GX_FALSE, 0);
-        wp->capture = smartAlloc(size, 3);
+        wp->capture = smartAlloc(size, SMART_GROUP_TEMP);
         GXCopyTex(wp->capture->address, GX_FALSE);
         GXPixModeSync();
         GXInitTexObj(&wp->captureObj, wp->capture->address, halfWidth, halfHeight, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -171,7 +171,7 @@ void envCapture(CameraId camId, void* param) {
         GXSetTexCopySrc(0, 0, width, height);
         GXSetTexCopyDst(halfWidth, halfHeight, GX_CTF_Z8M, GX_TRUE);
         size = GXGetTexBufferSize(halfWidth, halfHeight, GX_CTF_Z8M, GX_FALSE, 0);
-        wp->capture2 = smartAlloc(size, 3);
+        wp->capture2 = smartAlloc(size, SMART_GROUP_TEMP);
         GXCopyTex(wp->capture2->address, GX_FALSE);
         GXPixModeSync();
         GXInitTexObj(&wp->captureObj2, wp->capture2->address, halfWidth, halfHeight, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -660,7 +660,7 @@ void envGlare(EnvironmentGlare* glare) {
     texH = height >> 1;
     texW = width >> 1;
     size = GXGetTexBufferSize((u16)texW, (u16)texH, GX_TF_RGB565, GX_FALSE, 0);
-    texBuf = smartAlloc(size, 3)->address;
+    texBuf = smartAlloc(size, SMART_GROUP_TEMP)->address;
     GXSetTexCopySrc(x0, y0, width, height);
     GXSetTexCopyDst((u16)texW, (u16)texH, GX_TF_RGB565, GX_TRUE);
     GXCopyTex(texBuf, GX_FALSE);
@@ -1318,7 +1318,7 @@ void envSetWater(MapTevCallbackInfo* info) {
     w = x1 - x0;
     hw = w / 2;
     hh = h / 2;
-    buf = smartAlloc(GXGetTexBufferSize((u16)hw, (u16)hh, GX_TF_RGB565, GX_FALSE, 0), 3)->address;
+    buf = smartAlloc(GXGetTexBufferSize((u16)hw, (u16)hh, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
     GXSetTexCopySrc((u16)x0, (u16)y0, (u16)w, (u16)h);
     GXSetTexCopyDst((u16)hw, (u16)hh, GX_TF_RGB565, GX_TRUE);
     GXCopyTex(buf, GX_FALSE);
@@ -1334,7 +1334,7 @@ void envSetWater(MapTevCallbackInfo* info) {
     if (scale > 127.0f) {
         scale = 127.0f;
     }
-    buf2 = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), 3)->address;
+    buf2 = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
     for (i = 0; i < 64; i++) {
         for (j = 0; j < 64; j++) {
             f32 s = sin((f32)gp->retraceCount / 10.0f + (18.849552f * j) / 64.0f);

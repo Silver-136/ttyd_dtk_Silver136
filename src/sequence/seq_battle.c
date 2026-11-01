@@ -394,7 +394,7 @@ static void battle_init(void) {
 #else
     pouch = pouchGetPtr();
 #endif
-    camSetMode(CAMERA_3D, 2);
+    camSetMode(CAMERA_3D, CAM_MODE_BATTLE);
     if (gp->debugBattle) {
         const char* msg = DbgBtlSel_GetMsgDataPtr();
         if (msg) {
@@ -407,7 +407,7 @@ static void battle_init(void) {
     battleMapAlloc();
 #else
     memClear(HEAP_BATTLE);
-    smartAutoFree(2);
+    smartAutoFree(SMART_GROUP_BATTLE);
 #endif
     _battleWorkPointer = NULL;
     animPoseBattleInit();
@@ -498,16 +498,16 @@ void battle_exit(void) {
     BattleEnd();
 #if VERSION >= VERSION_US
     battleMapFree();
-    smartAutoFree(2);
+    smartAutoFree(SMART_GROUP_BATTLE);
 #endif
     itemReInit();
     iconReInit();
     extReset();
     bmapUnLoad();
     if (camGetPtr(CAMERA_3D)->flags & CAMERA_FLAG_ROAD) {
-        camSetMode(CAMERA_3D, 1);
+        camSetMode(CAMERA_3D, CAM_MODE_FIELD);
     } else {
-        camSetMode(CAMERA_3D, 3);
+        camSetMode(CAMERA_3D, CAM_MODE_NO_ROAD);
     }
     npcReset(TRUE);
     mobjReset(TRUE);

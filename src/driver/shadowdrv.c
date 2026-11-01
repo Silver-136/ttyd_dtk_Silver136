@@ -260,7 +260,7 @@ void shadowInit(void) {
     memset(cswp->entries, 0, sizeof(ShadowEntry) * 64);
     wp = cswp;
     bufferSize = GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], GX_TF_IA4, GX_FALSE, 0);
-    wp->base.texBuffer = smartAlloc(bufferSize, 0);
+    wp->base.texBuffer = smartAlloc(bufferSize, SMART_GROUP_PERMANENT);
     depthShadowInit();
 
     {
@@ -1199,7 +1199,7 @@ void projShadowEnd(CameraId cameraId, void* param) {
     cfg = &shadowConfig[wp->configIdx];
     size = ShadowSizeTbl[cfg->sizeIdx];
     if (wp->flags & SHADOW_WORK_ALLOC) {
-        wp->texBuffer = smartAlloc((wp->flags & SHADOW_WORK_HALF_SIZE_UNUSED) ? GXGetTexBufferSize(size / 2, size / 2, GX_TF_IA4, GX_FALSE, 0)
+        wp->texBuffer = smartAlloc((wp->flags & SHADOW_WORK_HALF_SIZE_UNUSED) ? GXGetTexBufferSize(size / 2, size / 2, GX_TF_IA4, GX_FALSE, SMART_GROUP_PERMANENT)
                                               : GXGetTexBufferSize(size, size, GX_TF_IA4, GX_FALSE, 0), 3);
     }
     GXSetTexCopySrc(0, 0, size, size);
@@ -1250,7 +1250,7 @@ void depthShadowEnd(CameraId cameraId, void* param) {
     }
     if (wp->flags & SHADOW_WORK_ALLOC) {
         size = ShadowSizeTbl[cfg->sizeIdx];
-        wp->texBuffer = smartAlloc(GXGetTexBufferSize(size, size, texFmt, GX_FALSE, 0), 3);
+        wp->texBuffer = smartAlloc(GXGetTexBufferSize(size, size, texFmt, GX_FALSE, 0), SMART_GROUP_TEMP);
     }
     GXSetTexCopySrc(0, 0, size, size);
     GXSetTexCopyDst(size, size, copyFmt, GX_FALSE);

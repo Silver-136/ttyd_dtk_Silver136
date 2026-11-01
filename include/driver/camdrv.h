@@ -5,6 +5,14 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
+// CameraEntry.mode: which camera logic cam3dMain runs (camLoadRoad picks FIELD or NO_ROAD).
+enum {
+    CAM_MODE_OFF = 0,
+    CAM_MODE_FIELD = 1,
+    CAM_MODE_BATTLE = 2,
+    CAM_MODE_NO_ROAD = 3,  // field camera with no road loaded: nothing runs
+};
+
 typedef struct CameraEntry CameraEntry;
 typedef void (*CameraCallback)(CameraEntry* entry);
 

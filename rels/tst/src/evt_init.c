@@ -463,7 +463,7 @@ void tess_test_line_disp(CameraId cameraId, void* param) {
 
 /** Copies the screen into the texture the filled polygon is drawn with. */
 void tess_test_capture(CameraId cameraId, void* param) {
-    tess_test_work->capture = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_I8, GX_FALSE, 0), 1);
+    tess_test_work->capture = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_I8, GX_FALSE, 0), SMART_GROUP_MAP);
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(608, 480, GX_TF_I8, GX_FALSE);
     GXCopyTex(tess_test_work->capture->address, GX_FALSE);

@@ -91,7 +91,7 @@ void offscreenDisp(CameraId camId, void* param) {
             height = entry->currBottom - entry->currTop;
             GXSetTexCopySrc(entry->currLeft, entry->currTop, width, height);
             GXSetTexCopyDst(width, height, (GXTexFmt)entry->copyFmt, GX_FALSE);
-            entry->texBuf = smartAlloc(GXGetTexBufferSize(width, height, (u32)entry->copyFmt, GX_FALSE, 0), 3);
+            entry->texBuf = smartAlloc(GXGetTexBufferSize(width, height, (u32)entry->copyFmt, GX_FALSE, 0), SMART_GROUP_TEMP);
             GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
             GXCopyTex(entry->texBuf->address, GX_TRUE);
             GXPixModeSync();

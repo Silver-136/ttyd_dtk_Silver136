@@ -271,7 +271,7 @@ void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect) {
         work->z[i] = zero + (0.09090909f * ((f32)i * (work->end.z - work->start.z)) + work->start.z);
         work->w[i] = 0.1f * (f32)data[i + 12];
     }
-    vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, 3)->address;
+    vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, SMART_GROUP_TEMP)->address;
     v = vtx;
     for (i = 0; i < 12; i++) {
         f32 ox, a, oy, r, ang2;

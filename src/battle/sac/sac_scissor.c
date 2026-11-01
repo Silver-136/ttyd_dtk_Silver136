@@ -947,7 +947,7 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
                     smartFree(w->smart);
                     w->smart = NULL;
                 }
-                w->smart = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_RGB565, GX_FALSE, 0), 1);
+                w->smart = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_MAP);
                 dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, scissor_capture, NULL);
                 return 2;
             }
