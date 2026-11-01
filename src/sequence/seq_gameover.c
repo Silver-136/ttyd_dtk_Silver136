@@ -19,6 +19,9 @@
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
 #include "statuswindow.h"
+#if VERSION <= VERSION_DEMO_US
+#include "win/win_main.h"
+#endif
 #include "countdown.h"
 #include "cam_road.h"
 #include "cam_shift.h"
@@ -492,3 +495,21 @@ gp->resetType = 1;
             break;
     }
 }
+
+#if VERSION <= VERSION_DEMO_US
+void seq_gameOverInit(SequenceWork* work) {
+    winReInit();
+    psndStopAllFadeOut();
+    psndSetReverb(0);
+    psndClearFlag(PSND_FLAG_BATTLE_START);
+    psndClearFlag(PSND_FLAG_MUTE_SFX);
+    psndClearFlag(PSND_FLAG_LETTER_BOX);
+    psndClearFlag(PSND_FLAG_LETTER_BOX_OFF);
+    marioStSystemLevel(4);
+}
+
+void seq_gameOverExit(SequenceWork* work) {
+    psndStopAllFadeOut();
+    marioStSystemLevel(0);
+}
+#endif

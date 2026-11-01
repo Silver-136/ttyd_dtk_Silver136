@@ -22,6 +22,11 @@ typedef struct CamShiftWork {
     u8 pad_34[0x38 - 0x34]; // 0x34, never accessed
 } CamShiftWork;
 
+#if VERSION <= VERSION_DEMO_US
+// FAKE: the demo times the shift with the field clock (it stops in battle), the other versions with the render clock.
+#define renderTime renderFieldTime
+#endif
+
 static CamShiftWork work;
 /**
  * State of the sideways camera lead

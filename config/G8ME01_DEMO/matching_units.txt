@@ -95,6 +95,7 @@ MarioSt/amcstubs/AmcExi2Stubs
 MarioSt/ar/ar
 MarioSt/ar/arq
 MarioSt/base/PPCArch
+MarioSt/battle/ac/ac_air_gauge
 MarioSt/battle/ac/ac_crane_timing
 MarioSt/battle/ac/ac_gauge_timing
 MarioSt/battle/ac/ac_gauge_timing2
@@ -149,6 +150,7 @@ MarioSt/battle/sac/sac_scissor
 MarioSt/battle/sac/sac_suki
 MarioSt/battle/sac/sac_zubastar
 MarioSt/cam_road
+MarioSt/cam_shift
 MarioSt/card/CARDBios
 MarioSt/card/CARDBlock
 MarioSt/card/CARDCheck
@@ -389,6 +391,7 @@ MarioSt/event/evt_paper
 MarioSt/event/evt_party
 MarioSt/event/evt_pouch
 MarioSt/event/evt_seq
+MarioSt/event/evt_sub
 MarioSt/event/evt_telop
 MarioSt/event/evt_twoddisp
 MarioSt/event/evt_uranaisi

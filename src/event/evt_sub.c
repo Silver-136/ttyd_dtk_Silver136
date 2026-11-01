@@ -2404,7 +2404,7 @@ Vec scr;
 iconEntry2D("iraiCoin", ICON_ITEM_COIN);
             getScreenPoint(&b, &scr);
             iconSetPos("iraiCoin", scr.x, scr.y, scr.z);
-            iconFlagOn("iraiCoin", ICON_FLAG_CAM_EFFECT_A);
+            iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN);
 #else
         iconEntry("iraiCoin", ICON_ITEM_COIN);
         iconSetPos("iraiCoin", b.x, b.y, b.z);
