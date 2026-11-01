@@ -365,8 +365,6 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
-    // The first time the target is Mario, the Blooper stops to ask whether he thinks it would taste good (yes
-    // or no).
     SET_VALUE(LW(11), 0)
     CALL(btlevtcmd_GetUnitKind, LW(3), LW(0))
     IF_INT_EQUAL(LW(0), UNIT_MARIO)

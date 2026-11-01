@@ -488,7 +488,6 @@ EVT_END()
  * battle moves.
  */
 EVT_BEGIN(yoshi_party_lecture)
-    // Yoshi primer: press X to get on and off, and Mario hops on, off and on again.
     CALL(evt_msg_print, 0, STRING("lecture_friends_09_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_09_1"), 0, 0)
     CALL(evt_cam_letter_box_disable, 1)
@@ -498,7 +497,6 @@ EVT_BEGIN(yoshi_party_lecture)
     CALL(evt_party_yoshi_ride, 0, 0)
     WAIT_MS(1000)
     CALL(evt_party_yoshi_ride, 0, 1)
-    // Riding is faster: Yoshi carries Mario across and back with his footstep sounds.
     CALL(evt_msg_print_add, 0, STRING("lecture_friends_09_1_1"))
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(470.0f), FLOAT(71.0f), FLOAT(30.0f), FLOAT(-101.799805f), 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -555,13 +553,11 @@ EVT_BEGIN(yoshi_party_lecture)
     CALL(x_flag_set, 0, 2)
     CALL(evt_mario_set_dir, 90, 300, 0)
     CALL(evt_party_set_dir, 0, 90, 300)
-    // Pressing A while riding floats briefly: Yoshi flutters twice.
     CALL(evt_msg_print_add, 0, STRING("lecture_friends_10"))
     LOOP(2)
         CALL(evt_party_yoshi_fly, 0, 1, 1000)
         WAIT_MS(300)
     END_LOOP
-    // Mario gets off, Yoshi steps aside and the text explains Ground Pound and Gulp in battle.
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(-2.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_mario_set_dir, 270, 300, 0)
@@ -820,7 +816,6 @@ EVT_END()
  * (MOBJ_Lv1BigBigBlock) to show it can be broken, mentions it also works in battle and walks off.
  */
 EVT_BEGIN(hammer_lv2_juyoitem_lecture)
-    // Toadette greets Mario and explains the Super Hammer: hold B, rotate the stick, then release.
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)
     END_SIBLING_EVENT
@@ -944,7 +939,6 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_mario_adjust_dir)
         CALL(evt_mario_set_dir, 90, 150, 0)
-        // Toadette praises him and asks whether he wants to try again.
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(26.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_2"), STRING("T_2"))
@@ -957,7 +951,6 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // He has mastered it: Toadette steps aside and drops a big block beside Mario.
     CALL(evt_msg_print_add, 0, STRING("lecture_s_hammer_11"))
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(52.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
@@ -1009,7 +1002,6 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    // Toadette says the Super Hammer breaks big blocks like this one, and the block blinks away.
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("A_2"))
     WAIT_MS(170)
@@ -1025,7 +1017,6 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
     END_LOOP
     CALL(evt_mobj_delete, LW(1))
     WAIT_MS(300)
-    // She adds that it works in battle too, says goodbye and walks off.
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(52.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("lecture_s_hammer_13"), 0, STRING("キノピコ"))

@@ -1089,7 +1089,6 @@ static EVT_BEGIN(attack_punch_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -1220,7 +1219,6 @@ EVT_END()
 
 static EVT_BEGIN(attack_enemy_common_event)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))

@@ -650,8 +650,6 @@ static EVT_BEGIN(hip_attack_event)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2E"))
     WAIT_MS(300)
-    // If Mario guards poorly, one of his commands is sealed: its icon is tossed across the screen
-    // and an announcement tells which.
     CALL(btlevtcmd_GetResultACDefence, LW(7))
     IF_INT_LESS_OR_EQUAL(LW(7), 3)
         SET_VALUE(LW(15), 0)

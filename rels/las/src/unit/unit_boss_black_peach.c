@@ -1772,13 +1772,11 @@ EVT_BEGIN(peach_change_evt)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, 83, 69, 332, 83, 46, 0, 30, 11)
     WAIT_MS(800)
-    // Speaking through Peach, the queen admits that Mario is not as weak as he looks.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_141_01"), 0, -2)
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_L_2"))
     WAIT_MS(200)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("KRT_T_3"))
-    // She finds this body unfamiliar and says she will show her true form.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_141_02"), 0, -2)
     WAIT_MS(200)
     BEGIN_INLINE_EVENT
@@ -1858,7 +1856,6 @@ EVT_BEGIN(peach_change_evt)
     CALL(evt_btl_camera_set_moveto, 0, 83, 141, 412, 83, 111, 0, 30, 11)
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_BOSS_STG8_LAST_BOSS1"))
     WAIT_MS(800)
-    // In this form she says Mario's attacks are like a child's.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_141_03"), 0, -2)
     WAIT_MS(300)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -2062,7 +2059,6 @@ EVT_BEGIN(peack_attack_dark_drag)
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_dark_drag_attack))
@@ -2218,7 +2214,6 @@ EVT_BEGIN(peack_attack_drain)
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_drain_attack))
@@ -2733,7 +2728,6 @@ EVT_BEGIN(queen_hp_drain_evt)
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
 #endif
     WAIT_MS(800)
-    // The queen calls Mario a troublesome little pest.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_144"), 0, -2)
     WAIT_MS(300)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -2823,7 +2817,6 @@ EVT_BEGIN(queen_hp_drain_evt)
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
 #endif
     WAIT_MS(800)
-    // She says she has recovered and will punish Mario for resisting.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_142_01"), 0, -2)
     WAIT_MS(300)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -3194,7 +3187,6 @@ EVT_BEGIN(queen_attack_black_wave)
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_black_wave_attack))
@@ -3401,7 +3393,6 @@ EVT_BEGIN(queen_attack_bress1)
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_black_sigh_attack))
@@ -3502,7 +3493,6 @@ EVT_BEGIN(queen_attack_bress2)
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_black_temptation_attack))
@@ -3603,7 +3593,6 @@ EVT_BEGIN(queen_attack_bress3)
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_black_poison_attack))
@@ -4061,7 +4050,6 @@ EVT_BEGIN(queen_hand_1_press_attack)
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_black_press_attack))
@@ -4174,7 +4162,6 @@ EVT_BEGIN(queen_hand_1_drain_attack)
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_drain_attack))
@@ -4495,7 +4482,6 @@ EVT_BEGIN(queen_hand_small_drag_attack)
         CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_dark_drag_attack))
@@ -4601,7 +4587,6 @@ EVT_BEGIN(queen_hand_small_drag_attack)
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_dark_drag_attack))
@@ -4719,7 +4704,6 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
         CALL_CHILD(subsetevt_confuse_flustered)
         RETURN
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_black_1000hand_attack))

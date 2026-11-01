@@ -826,7 +826,6 @@ EVT_BEGIN(bikkuri_event)
     CALL(teresa_wait_bikkuri)
     CALL(evt_snd_sfxoff, LW(15))
     WAIT_FRAMES(30)
-    // The Atomic Boo cries out and the Boos swoop in.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_SURPRISED2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)

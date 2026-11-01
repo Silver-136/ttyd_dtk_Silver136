@@ -305,7 +305,6 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_mario_mov_pos2, -450, 0, FLOAT(120.0f))
     SPAWN_EVENT(PTR(bero_case_entry))
     WAIT_MS(1300)
-    // A voice from the dark asks who dares approach; Mario jumps in surprise.
     CALL(evt_msg_print, 0, STRING("stg1_gon_19"), 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
@@ -342,7 +341,6 @@ EVT_BEGIN(gonbaba_event)
     SET_VALUE(LW(0), -246)
     SET_VALUE(LW(1), 146)
     SET_VALUE(LW(2), 43)
-    // Hooktail taunts them about the strange-garbed one who came before, then threatens to eat them.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg1_gon_19_2"), 0, STRING("ゴンババ"))
     CALL(evt_cam3d_evt_set, -545, -14, 417, -225, 227, 12, 0, EASING_SINE_IN_OUT)
@@ -410,7 +408,6 @@ EVT_BEGIN(gonbaba_event)
             WAIT_MS(2333)
         END_LOOP
     END_INLINE_EVENT
-    // The partner is worried about Hooktail, and Mario nods.
     CALL(evt_msg_print_party, STRING("stg1_gon_33_01"))
     CALL(evt_party_set_dir, 0, 270, -1)
     WAIT_MS(800)
@@ -421,7 +418,6 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
-    // Mario hears a voice and notices something moving in Hooktail.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 220, 160, -160)
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_03"), 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -502,7 +498,6 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_npc_pera_onoff, STRING("ノコタロウ父"), 1)
     CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ父"), NPC_FLAG_AUTO_MOVE_ANIM)
     WAIT_MS(300)
-    // He shouts that he is finally free.
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_04"), 0, STRING("ノコタロウ父"))
     // Koops is swapped in as the partner if someone else was along.
     CALL(evt_mario_get_party, LW(0))
@@ -521,7 +516,6 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_npc_status_onoff, 1, STRING("クリスチーヌ"), NPC_STATUS_FACE_MOVE_DIR)
     END_IF
     WAIT_MS(500)
-    // Koops recognizes his father and the two have a tearful reunion.
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_05"), 0, STRING("party"))
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -610,7 +604,6 @@ EVT_BEGIN(gonbaba_event)
     END_LOOP
     CALL(evt_item_set_position, STRING("stone"), LW(0), FLOAT(10.0f), LW(2))
     CALL(evt_npc_set_anim, STRING("ノコタロウ父"), STRING("NKP_S_1"))
-    // He insists Mario takes it as a friend of Koops.
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_15"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_16"), 0, STRING("ノコタロウ父"))
     CALL(evt_cam3d_evt_set, 190, 75, 450, 190, 50, 200, 500, EASING_SINE_IN_OUT)

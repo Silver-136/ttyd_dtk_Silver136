@@ -781,8 +781,6 @@ EVT_BEGIN(stamp_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_STAMP_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STAMP_TALK_DONE, 1)
-        // The first time, the camera swings around and Magnus shouts out the name of his attack before it
-        // starts.
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
         CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)

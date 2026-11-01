@@ -326,7 +326,6 @@ EVT_BEGIN(gorotuki_sanninngumi)
     CALL(evt_party_set_pos, 1, LW(0), 0, LW(2))
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_party_set_dir, 0, 90, -1)
-    // The Goombas flirt with Goombella, she turns them down flat, and they decide to fight.
     CALL(evt_msg_print, 0, STRING("mac_0_087"), 0, STRING("クリボー２"))
     CALL(evt_msg_print, 0, STRING("mac_0_088"), 0, STRING("クリボー３"))
     CALL(evt_cam3d_evt_set, -140, 65, 310, -140, 33, 37, 0, EASING_SINE_IN_OUT)
@@ -390,7 +389,6 @@ EVT_BEGIN(gorotuki_sanninngumi)
     CALL(evt_cam3d_evt_set, -120, 150, 588, -120, 55, 37, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_npc_flag_onoff, 0, STRING("クリボー１"), NPC_FLAG_TALK_POSE)
-    // The first Goomba wails and the three flee off the left edge while Mario and Goombella watch.
     CALL(evt_msg_print, 0, STRING("mac_0_093"), 0, STRING("クリボー１"))
     SET_VALUE(GF(0), 1)
     SET_VALUE(GF(1), 1)
@@ -438,7 +436,6 @@ EVT_BEGIN(gorotuki_sanninngumi)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_WHILE(GF(1))
-    // Goombella gloats; Mario is then warned that more enemies lie ahead and told to strike first in the field.
     WAIT_MS(200)
     CALL(evt_cam3d_evt_set, -140, 65, 310, -140, 33, 37, 0, EASING_SINE_IN_OUT)
     WAIT_MS(200)

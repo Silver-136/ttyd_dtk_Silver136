@@ -561,7 +561,6 @@ EVT_BEGIN(gonbaba_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(1000)
-    // The camera returns to Mario and his partner comments on what they saw.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_cam3d_evt_set_xyz, 270, LW(1), LW(2), 0, 7000, EASING_SINE_IN_OUT)
     WAIT_MS(9500)

@@ -982,8 +982,6 @@ EVT_END()
  * and gives story- dependent lines about the league, Grubba and the rematch.
  */
 EVT_BEGIN(talk_g_4)
-    // Before the match with Grubba is arranged, the guard lets Mario through the first time he asks to become
-    // a fighter.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
         // He steps aside, out of the doorway, and a door to Grubba's office opens for Mario.
@@ -1011,20 +1009,15 @@ EVT_BEGIN(talk_g_4)
             CALL_CHILD(PTR(bero_case_switch_on))
 #endif
         ELSE
-            // On later visits he only tells Mario to go talk to Mr. Grubba.
             CALL(evt_msg_print, 0, STRING("stg3_tou_42_01"), 0, 0)
         END_IF
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        // While Grubba's plans unfold the guard sends Mario to Grubba, saying he ran by toward the ring,
-        // or that the office is closed to visitors.
         CALL(evt_msg_print, 0, STRING("stg3_tou_42_01"), 0, 0)
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
         CALL(evt_msg_print, 0, STRING("stg3_tou_102_02"), 0, 0)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print, 0, STRING("stg3_tou_102_01"), 0, 0)
         CASE_DEFAULT
-        // After the return to Rogueport the guard stands at his post: he welcomes Mario back to the league
-        // or waves him in to see Ms. Jolene.
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         IF_INT_EQUAL(LW(0), -350)
             SWITCH(GSW_TROUBLE_ACCEPTED)
@@ -2110,7 +2103,6 @@ EVT_BEGIN(evt_gardman3)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // The partner asks why they are not heading to the ring, and the guard says a special match is this way.
     CALL(evt_party_stop, 0)
     WAIT_MS(300)
     CALL(evt_msg_print_party, STRING("stg3_tou_407"))

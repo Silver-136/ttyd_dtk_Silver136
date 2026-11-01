@@ -477,7 +477,6 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, 127)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, LW(14))
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_wanwan_attack))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_wanwan_attack))

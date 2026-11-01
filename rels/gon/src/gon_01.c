@@ -309,7 +309,6 @@ EVT_BEGIN(honenoko_oidasare_evt)
     END_SWITCH
     WAIT_FRAMES(30)
     CALL(evt_mario_cont_onoff, 1)
-    // Pushed out of the castle twice: the partner turns and comments on it.
     IF_INT_EQUAL(GSWF_GON_03_PUSHED_OUT_AGAIN, 1)
         CALL(evt_mario_set_dispdir, 180)
         CALL(evt_mario_get_party, LW(0))

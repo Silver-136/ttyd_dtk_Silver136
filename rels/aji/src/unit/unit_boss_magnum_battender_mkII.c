@@ -1385,8 +1385,6 @@ EVT_BEGIN(drill_attack_event)
         END_IF
         RETURN
     END_IF
-    // The first time (unit work 5), Crump announces the drill attack over a close-up of the boss
-    // (stg7_aji_41_02).
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DRILL_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DRILL_TALK_DONE, 1)

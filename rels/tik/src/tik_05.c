@@ -2052,7 +2052,6 @@ ADD(LW(6), 10)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_eff, 0, STRING("indirect"), 0, LW(0), LW(1), LW(2), 120, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
-    // The screen shatters into the item-get view and the message says the location was recorded on the map.
     CALL(tiz_broken)
     CALL(evt_eff_softdelete, STRING("map_wave"))
     CALL(evt_eff_softdelete, STRING("map_ball"))
@@ -2439,7 +2438,6 @@ EVT_BEGIN(evt_mapwrite)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_eff, 0, STRING("indirect"), 0, LW(0), LW(1), LW(2), 120, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
-    // The screen shatters into the item-get view and the message says the location was recorded on the map.
     CALL(tiz_broken)
     CALL(evt_eff_softdelete, STRING("map_wave"))
     CALL(evt_eff_softdelete, STRING("map_ball"))
@@ -2671,7 +2669,6 @@ EVT_BEGIN(mahojin_event)
         CALL(evt_party_set_dir, 1, 90, -1)
     END_INLINE_EVENT
     CALL_CHILD(PTR(evt_mapwrite))
-    // They jump onto the pedestal; Goombella asks about the map and the lights, and Frankly thinks it over.
     BEGIN_INLINE_EVENT
         CALL(evt_party_jump_pos, 0, 30, 28, -250, 300, 0, -1000)
     END_INLINE_EVENT
@@ -2682,7 +2679,6 @@ EVT_BEGIN(mahojin_event)
     CALL(evt_msg_print, 0, STRING("mac_0_101"), 0, STRING("extparty"))
     CALL(evt_cam3d_evt_set, 0, 60, 447, 0, 120, -250, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    // Frankly suggests going back to his place to study the map, and Mario nods.
     CALL(evt_msg_print, 0, STRING("mac_0_101_04"), 0, STRING("extparty"))
     CALL(evt_mario_set_pose, STRING("M_Z_1"))
     WAIT_MS(500)
@@ -3026,7 +3022,6 @@ EVT_END()
  * and the story becomes STG7_52_THE_PEDESTAL.
  */
 EVT_BEGIN(mahojin_event7)
-    // Mario walks onto the pedestal and Frankly tells him to hold up the last Crystal Star.
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -3341,7 +3336,6 @@ SPAWN_EVENT(mahojin_se_event)
     CALL(evt_eff64, STRING("sd_7_2"), STRING("stardust_n64"), 2, LW(0), LW(1), LW(2), FLOAT(30.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(stardust_setting, STRING("sd_7_1"), STRING("sd_7_2"))
     WAIT_MS(1000)
-    // The room shakes, the partner cries out, and the seven star marks on the Door light up one after another.
     CALL(evt_cam3d_evt_set, 0, 65, 40, 0, 65, -250, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     WAIT_MS(1000)
@@ -3527,7 +3521,6 @@ SPAWN_EVENT(mahojin_se_event)
         CALL(starstone_set_position, STRING("stone06"), 0, -1000, 0)
         CALL(starstone_set_position, STRING("stone07"), 0, -1000, 0)
     END_INLINE_EVENT
-    // Views of the open Door, then Frankly tells Mario to rescue the princess and the partner urges him on.
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, -625, 550, 370, 0, 90, -545, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
@@ -3580,7 +3573,6 @@ EVT_END()
  * and the story becomes STG7_52_THE_PEDESTAL.
  */
 EVT_BEGIN(mahojin_event7)
-    // Mario walks onto the pedestal and Frankly tells him to hold up the last Crystal Star.
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -3898,7 +3890,6 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_eff64, STRING("sd_7_2"), STRING("stardust_n64"), 2, LW(0), LW(1), LW(2), FLOAT(30.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(stardust_setting, STRING("sd_7_1"), STRING("sd_7_2"))
     WAIT_MS(1000)
-    // The room shakes, the partner cries out, and the seven star marks on the Door light up one after another.
     CALL(evt_cam3d_evt_set, 0, 65, 40, 0, 65, -250, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     WAIT_MS(1000)
@@ -4084,7 +4075,6 @@ EVT_BEGIN(mahojin_event7)
         CALL(starstone_set_position, STRING("stone06"), 0, -1000, 0)
         CALL(starstone_set_position, STRING("stone07"), 0, -1000, 0)
     END_INLINE_EVENT
-    // Views of the open Door, then Frankly tells Mario to rescue the princess and the partner urges him on.
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, -625, 550, 370, 0, 90, -545, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)

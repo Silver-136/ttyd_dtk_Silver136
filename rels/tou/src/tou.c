@@ -1972,7 +1972,6 @@ BEGIN_INLINE_EVENT
             BREAK_LOOP
         END_IF
     END_LOOP
-    // The guard tells Mario it is time for his match ("Follow me, bub").
     CALL(evt_set_dir_to_target, STRING("ガードマン"), STRING("mario"))
     IF_INT_EQUAL(LF(0), 1)
         CALL(evt_msg_print, 0, STRING("stg3_tou_74"), 0, STRING("ガードマン"))
@@ -3267,7 +3266,6 @@ static USER_FUNC(tou_champion_belt_onoff) {
  * (stg3_tou_93_31 to 37) and Swoop introduces himself (stg3_tou_93_38), then the guard comes in.
  */
 EVT_BEGIN(evt_michel_8)
-    // The Bob-omb fighter and Cleftor talk about missing King K.
     CALL(evt_npc_set_position, STRING("オクトール"), 145, 0, 50)
     CALL(evt_npc_set_position, STRING("ガンガン"), 95, 0, 50)
     CALL(evt_cam3d_evt_set, 95, 109, 419, 95, 45, -6, 1000, EASING_SINE_IN_OUT)
@@ -3312,7 +3310,6 @@ EVT_BEGIN(evt_michel_8)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    // Jolene shows Swoop his dressing room and the match terminal, and Mario steps aside.
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_31"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
@@ -3336,7 +3333,6 @@ EVT_BEGIN(evt_michel_8)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_35"), 0, STRING("ガンス"))
     CALL_CHILD(evt_tou_monitor_off)
     WAIT_MS(500)
-    // Jolene explains how fights work, then Swoop introduces himself.
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_36"), 0, STRING("キノシコワ"))
     CALL(evt_npc_get_position, STRING("ポグ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("ポグ"), LW(0), LW(1), LW(2), 500, 30)
@@ -3439,7 +3435,6 @@ EVT_END()
  * (stg3_tou_93_31 to 37) and Swoop introduces himself (stg3_tou_93_38), then the guard comes in.
  */
 EVT_BEGIN(evt_michel_8)
-    // The Bob-omb fighter and Cleftor talk about missing King K.
     CALL(evt_npc_set_position, STRING("オクトール"), 145, 0, 50)
     CALL(evt_npc_set_position, STRING("ガンガン"), 95, 0, 50)
     CALL(evt_cam3d_evt_set, 95, 109, 419, 95, 45, -6, 1000, EASING_SINE_IN_OUT)
@@ -3485,7 +3480,6 @@ EVT_BEGIN(evt_michel_8)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    // Jolene shows Swoop his dressing room and the match terminal, and Mario steps aside.
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_31"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
@@ -3501,7 +3495,6 @@ EVT_BEGIN(evt_michel_8)
     CALL(evt_npc_move_position, STRING("ポグ"), -70, -95, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING("ポグ"), -70, -120, 0, FLOAT(80.0f), 1)
     WAIT_MS(1000)
-    // Swoop uses the terminal and Grubba books his first match over the monitor.
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_34"), 0, STRING("キノシコワ"))
     CALL(evt_npc_get_position, STRING("ポグ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("ポグ"), LW(0), LW(1), LW(2), 500, 30)
@@ -3512,7 +3505,6 @@ EVT_BEGIN(evt_michel_8)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_35"), 0, STRING("ガンス"))
     CALL_CHILD(PTR(evt_tou_monitor_off))
     WAIT_MS(500)
-    // Jolene explains how fights work, then Swoop introduces himself.
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_36"), 0, STRING("キノシコワ"))
     CALL(evt_npc_get_position, STRING("ポグ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("ポグ"), LW(0), LW(1), LW(2), 500, 30)
@@ -4451,8 +4443,6 @@ EVT_BEGIN(evt_tou_match_after_default)
         CALL(evt_msg_print_party, STRING("stg3_tou_365_04_03"))
         CALL(evt_pouch_add_item, ITEM_CHAMPS_BELT, LW(0))
     END_IF
-    // After the Iron Clefts match the egg hatches into Yoshi (or Pogo has a word);
-    // otherwise the egg says hello.
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
         CALL(chk, LW(0))
@@ -5031,8 +5021,6 @@ EVT_BEGIN(evt_tou_match_after_default)
         CALL(evt_msg_print_party, STRING("stg3_tou_365_04_03"))
         CALL(evt_pouch_add_item, ITEM_CHAMPS_BELT, LW(0))
     END_IF
-    // After the Iron Clefts match the egg hatches into Yoshi (or Pogo has a word);
-    // otherwise the egg says hello.
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
         CALL(chk, LW(0))

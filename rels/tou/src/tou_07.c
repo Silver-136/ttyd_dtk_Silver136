@@ -337,7 +337,6 @@ static EVT_BEGIN(evt_champion)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // The camera moves in and Jolene says this is now the champion's room.
     CALL(evt_cam3d_evt_set, 20, 90, 189, 20, 60, -9, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg3_tou_449"), 0, STRING("キノシコワ"))
@@ -450,7 +449,6 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MAIL_RECEPTION2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_10"))
     WAIT_MS(500)
-    // He reads the mail, and the partner reacts.
     CALL(evt_msg_print, 0, STRING("stg3_tou_450_06"), 0, 0)
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -479,7 +477,6 @@ EVT_BEGIN(evt_champion_re)
     CALL(evt_cam3d_evt_set, 45, 91, 266, 45, 57, -11, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-    // She congratulates Mario on winning the title back.
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_140"), 0, STRING("キノシコワ"))
 #if VERSION > VERSION_DEMO_US
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
@@ -508,7 +505,6 @@ EVT_BEGIN(evt_champion_re)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_npc_delete, STRING("ベルト"))
     CALL(evt_eff_delete, STRING("belt"))
-    // She guesses he means to move on and keeps him registered to defend his title.
 #endif
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_141"), 0, STRING("キノシコワ"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
@@ -518,7 +514,6 @@ EVT_BEGIN(evt_champion_re)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    // She says she must plan Rawk Hawk's return, bows out and leaves through the door.
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_143"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
@@ -623,7 +618,6 @@ EVT_BEGIN(evt_tou_bed)
     IF_STR_EQUAL(LW(0), STRING("tou_10"))
         SET_VALUE(LF(2), 1)
     END_IF
-    // The attendant asks whether Mario wants to rest; saying no ends the scene.
     CALL(evt_msg_print, 0, STRING("stg3_yado_00"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg3_yado_01"))
     CALL(evt_msg_continue)
@@ -766,7 +760,6 @@ EVT_BEGIN(evt_tou_bed)
     IF_STR_EQUAL(LW(0), STRING("tou_10"))
         SET_VALUE(LF(2), 1)
     END_IF
-    // The attendant asks whether Mario wants to rest; saying no ends the scene.
     CALL(evt_msg_print, 0, STRING("stg3_yado_00"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg3_yado_01"))
     CALL(evt_msg_continue)
@@ -989,7 +982,6 @@ EVT_BEGIN(tou_07_init_evt)
         END_IF
         RETURN
     END_IF
-    // Otherwise, the pending Grubba escort starts his speech scene.
     IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)

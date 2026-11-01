@@ -477,7 +477,6 @@ EVT_END()
  * the lecture_friends_05 messages explain the kick and the hold. The camera and Koops are restored at the end.
  */
 EVT_BEGIN(nokotaro_party_lecture)
-    // Koops introduces himself and the camera moves in for the lesson.
     CALL(evt_msg_print, 0, STRING("lecture_friends_04_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_04_1"), 0, 0)
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(100.0f), FLOAT(630.0f), FLOAT(45.0f), FLOAT(39.0f), FLOAT(-100.0f), 1000, EASING_LINEAR)

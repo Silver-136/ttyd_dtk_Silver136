@@ -1241,7 +1241,6 @@ EVT_BEGIN(uranaisi_table_talk)
                     CALL(evt_msg_print, 0, STRING("uranaisi_19"), 0, STRING("me"))
                 END_IF
             END_IF
-            // She asks whether he wants a reading; "No" ends the talk.
             CALL(evt_msg_select, 0, STRING("uranaisi_03"))
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_msg_print_add, 0, STRING("uranaisi_06"))
@@ -1275,7 +1274,6 @@ EVT_BEGIN(uranaisi_table_talk)
             CALL(evt_msg_print_add, 0, STRING("uranaisi_06"))
             GOTO(0)
         END_IF
-        // If Mario cannot afford the chosen reading, she says her visions need coins and the talk ends.
         CALL(uranaisi_ryokin, LW(0), LW(2))
         CALL(evt_pouch_get_coin, LW(1))
         IF_INT_LESS(LW(1), LW(2))
@@ -1383,7 +1381,6 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(starmaniac_talk)
-    // If Dazzle has no badges left to trade, he apologises and the talk ends.
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("starmaniac_02"), 0, STRING("me"))
@@ -1395,7 +1392,6 @@ EVT_BEGIN(starmaniac_talk)
     ELSE
         CALL(evt_msg_print, 0, STRING("starmaniac_01"), 0, STRING("me"))
     END_IF
-    // He asks if Mario wants to trade; "No way!" sends him off with a farewell.
     CALL(evt_msg_select, 0, STRING("starmaniac_03"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_05"))
@@ -1407,7 +1403,6 @@ EVT_BEGIN(starmaniac_talk)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_06"))
         RETURN
     END_IF
-    // Mario picks which badge to trade for from the list; backing out earns a "LAME!" and ends the talk.
     CALL(evt_msg_print_add, 0, STRING("starmaniac_07"))
     LABEL(0)
     CALL(evt_win_coin_on, 2, LW(12))
@@ -1449,7 +1444,6 @@ EVT_BEGIN(starmaniac_talk)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
         RETURN
     END_IF
-    // Otherwise he offers another trade: accepting loops back to the badge list, declining ends the talk.
     CALL(evt_msg_print_add, 0, STRING("starmaniac_13"))
     CALL(evt_msg_select, 0, STRING("starmaniac_10"))
     IF_INT_EQUAL(LW(0), 1)
@@ -1462,7 +1456,6 @@ EVT_BEGIN(starmaniac_talk)
 EVT_END()
 #else
 EVT_BEGIN(starmaniac_talk)
-    // If Dazzle has no badges left to trade, he apologises and the talk ends.
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("starmaniac_02"), 0, STRING("me"))
@@ -1475,7 +1468,6 @@ EVT_BEGIN(starmaniac_talk)
     ELSE
         CALL(evt_msg_print, 0, STRING("starmaniac_01"), 0, STRING("me"))
     END_IF
-    // He asks if Mario wants to trade; "No way!" sends him off with a farewell.
     CALL(evt_msg_select, 0, STRING("starmaniac_03"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_05"))
@@ -1489,7 +1481,6 @@ EVT_BEGIN(starmaniac_talk)
         CALL(tik_snd_on)
         RETURN
     END_IF
-    // Mario picks which badge to trade for from the list; backing out earns a "LAME!" and ends the talk.
     CALL(evt_msg_print_add, 0, STRING("starmaniac_07"))
     LABEL(0)
     CALL(evt_win_coin_on, 2, LW(12))
@@ -1551,7 +1542,6 @@ EVT_BEGIN(starmaniac_talk)
         CALL(tik_snd_on)
         RETURN
     END_IF
-    // Otherwise he offers another trade: accepting loops back to the badge list, declining ends the talk.
     CALL(evt_msg_print_add, 0, STRING("starmaniac_13"))
     CALL(evt_msg_select, 0, STRING("starmaniac_10"))
     IF_INT_EQUAL(LW(0), 1)

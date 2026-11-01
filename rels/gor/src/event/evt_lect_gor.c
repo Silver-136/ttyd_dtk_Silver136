@@ -683,7 +683,6 @@ EVT_BEGIN(all_party_lecture)
     CALL(lect_itemget_kesan, 0, FLOAT(600.0f), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("sub_bg"), STRING("itemget"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(effitemgetchange_cam, STRING("sub_bg"), 5)
-    // The partner explains itself in a text box that depends on who it is.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     SWITCH(LW(9))
         CASE_EQUAL(1)
@@ -904,11 +903,8 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 85)
     CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(80.0f), 0)
-    // She congratulates Mario on the Ultra Hammer and explains the new hammer technique: hold B and twist the
-    // stick.
     CALL(evt_msg_print, 0, STRING("lecture_u_hammer_04"), 0, STRING("キノピコ"))
     CALL(evt_msg_print_add, 0, STRING("lecture_u_hammer_05"))
-    // Practice loop: Toadette tells Mario to try it, and nags him now and then until he does.
     LOOP(0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("lecture_u_hammer_06"), 0, 0)
@@ -1025,7 +1021,6 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
         CALL(evt_mario_set_dir, 90, 150, 0)
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(26.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_LINEAR)
         WAIT_MS(1000)
-        // Toadette asks whether Mario understood; if not, the practice repeats.
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_2"), STRING("T_2"))
         CALL(evt_msg_print, 0, STRING("lecture_u_hammer_08"), 0, STRING("キノピコ"))
         CALL(evt_msg_select, 0, STRING("lecture_u_hammer_09"))
@@ -1036,7 +1031,6 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // Toadette is pleased and steps aside to show what the new hammer can do.
     CALL(evt_msg_print_add, 0, STRING("lecture_u_hammer_11"))
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(52.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
@@ -1067,7 +1061,6 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     WAIT_MS(400)
     CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("A_2"))
     WAIT_MS(170)
-    // Toadette comments as the block flashes and disappears.
     CALL(evt_msg_print, 0, STRING("lecture_u_hammer_12"), 0, STRING("キノピコ"))
     WAIT_MS(300)
     LOOP(6)
@@ -1078,7 +1071,6 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     END_LOOP
     CALL(evt_mobj_delete, LW(1))
     WAIT_MS(300)
-    // She gives a few last pointers, strolling along in the room.
     CALL(evt_msg_print, 0, STRING("lecture_u_hammer_13"), 0, STRING("キノピコ"))
     CALL(evt_npc_flag_onoff, 0, STRING("キノピコ"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_4"), STRING("T_4"))
@@ -1103,7 +1095,6 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(30.0f), 0)
     CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("S_4"))
     WAIT_MS(1500)
-    // Toadette says goodbye and walks off.
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
     ADD(LW(0), 70)
     CALL(evt_npc_set_ry, STRING("キノピコ"), 90)

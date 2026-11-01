@@ -1057,7 +1057,6 @@ EVT_END()
  * vanishes and starts the 1000-Boos swarm (senteresa_evt); when it ends the story becomes "1000 Boos".
  */
 EVT_BEGIN(tyuou_teresa_talk)
-    // The central Boo asks Mario whether he means to be mean to it; a no sends him away.
     CALL(evt_msg_print, 0, STRING("stg4_jin_54"), 0, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"))
     CALL(evt_msg_select, 0, STRING("stg4_jin_54_yn"))
     IF_INT_EQUAL(LW(0), 0)
@@ -1116,7 +1115,6 @@ EVT_BEGIN(tyuou_teresa_talk)
             WAIT_MS(60)
         END_LOOP
     END_INLINE_EVENT
-    // The Boo swells to four times its size and shouts for the others to come out.
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 100, 400, 100)
         LABEL(1)
@@ -2222,7 +2220,6 @@ EVT_BEGIN(senteresa_evt)
     CALL(evt_npc_set_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
     CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 0, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
-    // The Atomic Boo speaks, startling Mario, then floats toward him shaking the camera.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg4_jin_62"), 0, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"))
     CALL(evt_cam3d_evt_off, 400, EASING_SINE_IN_OUT)

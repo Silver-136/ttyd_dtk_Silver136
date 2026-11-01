@@ -215,7 +215,6 @@ static EVT_BEGIN(item_evt)
     CALL(evt_map_pauseanim, 0, STRING("a_to_ue"))
     CALL(evt_party_stop, 0)
     WAIT_MS(200)
-    // The partner warns that the ceiling is coming down.
     CALL(evt_msg_print_party, STRING("stg1_gon_16"))
     CALL(evt_map_replayanim, 0, STRING("a_to_ue"))
     // The ceiling closes in and a countdown starts; if Mario does not escape through a door in time, the game

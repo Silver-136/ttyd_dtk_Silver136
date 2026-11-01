@@ -226,8 +226,6 @@ static EVT_BEGIN(buy_evt)
             CALL(evt_msg_print, 0, STRING("item_first_hit"), 0, 0)
         END_IF
     END_IF
-    // Hand out every shop point prize now reached; at 300 points the shopkeeper announces the maximum and the
-    // count resets.
     LOOP(0)
         CALL(chk_shop_point, LW(0), LW(1), LW(2))
         IF_INT_EQUAL(LW(0), -1)
@@ -370,8 +368,6 @@ static EVT_BEGIN(buy_evt)
             CALL(evt_msg_print, 0, STRING("item_first_hit"), 0, 0)
         END_IF
     END_IF
-    // Hand out every shop point prize now reached; at 300 points the shopkeeper announces the maximum and the
-    // count resets.
     LOOP(0)
         CALL(chk_shop_point, LW(0), LW(1), LW(2))
         IF_INT_EQUAL(LW(0), -1)
@@ -476,8 +472,6 @@ EVT_BEGIN(shopper_talk_evt)
                 CALL(evt_mario_key_onoff, 1)
                 RETURN
             END_IF
-            // Nothing (left) to hand out: greet Mario, with the double-points greeting during a timed sale at
-            // the Great Tree, Twilight Town or the Excess Express shop.
             SET_VALUE(LF(11), 0)
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("mri_07"))

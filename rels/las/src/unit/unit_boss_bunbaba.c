@@ -596,7 +596,6 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_3"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_3"))
-    // Gloomtail laughs and says he will toy with them awhile.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_49_01"), 0, -2)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     // Everyone goes back to waiting and the battle begins.

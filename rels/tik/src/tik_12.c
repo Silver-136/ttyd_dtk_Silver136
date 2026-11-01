@@ -104,7 +104,6 @@ EVT_END()
  * the box and crystal effects play around Mario, and she promises he will win battles in style (majinaisi_08).
  */
 EVT_BEGIN(majinaisi_table_talk)
-    // Merlee greets Mario and asks whether he wants a charm; saying no ends the talk.
     CALL(setmertn, STRING("まじない師"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -120,7 +119,6 @@ EVT_BEGIN(majinaisi_table_talk)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-    // She shows Mario's coins and the three prices; he can back out, or be turned away if he is short of coins.
     CALL(evt_msg_print_add, 0, STRING("majinaisi_04"))
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_unitwin_alloc)
@@ -327,7 +325,6 @@ EVT_BEGIN(majinaisi_table_talk)
             GOTO(4)
         END_IF
     END_INLINE_EVENT
-    // The cube opens and Mario jumps out in a burst of star dust; Merlee promises he will win in style.
     BEGIN_INLINE_EVENT
         WAIT_MS(100)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

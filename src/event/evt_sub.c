@@ -671,7 +671,6 @@ EVT_BEGIN(evt_sub_starstone)
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_msg_print, 0, STRING("stg4_jin_10_03"), 0, 0)
     END_IF
-    // Offer to save; the save kind tells which chapter was just finished.
     WAIT_MS(1000)
     IF_INT_EQUAL(LF(1), 1)
         SET_VALUE(LW(0), 1)
@@ -1051,7 +1050,6 @@ EVT_BEGIN(evt_sub_starstone)
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_msg_print, 0, STRING("stg4_jin_10_03"), 0, 0)
     END_IF
-    // Offer to save; the save kind tells which chapter was just finished.
     WAIT_MS(1000)
     IF_INT_EQUAL(LF(1), 1)
         SET_VALUE(LW(0), 1)

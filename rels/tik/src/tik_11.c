@@ -323,7 +323,6 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
         CALL(evt_msg_print, 0, STRING("powerdown_04"), 0, STRING("me"))
         RETURN
     END_IF
-    // Mario picks the stat to raise and the stat to lower, and confirms the trade.
     CALL(evt_msg_continue)
     CALL(evt_win_coin_on, 0, LW(12))
     LOOP(0)
@@ -492,7 +491,6 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // Mario poses, the music comes back and the new HP, FP and BP are set; Chet Rippo says if badges came off.
     CALL(evt_mario_set_pose, STRING("M_V_2"))
     WAIT_MS(1500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -524,7 +522,6 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
         CALL(evt_msg_print_add, 0, STRING("powerdown_04"))
         RETURN
     END_IF
-    // Mario picks the stat to raise and the stat to lower, and confirms the trade.
     CALL(evt_msg_continue)
     CALL(evt_win_coin_on, 0, LW(12))
     LOOP(0)
@@ -705,7 +702,6 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // Mario poses, the music comes back and the new HP, FP and BP are set; Chet Rippo says if badges came off.
     CALL(evt_mario_set_pose, STRING("M_V_2"))
     WAIT_MS(1500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -1038,7 +1034,6 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         CALL(evt_msg_print_add, 0, STRING("powerdown_07"))
         RETURN
     END_IF
-    // Mario picks the partner to rank up and the partner to rank down, and confirms the trade.
     CALL(evt_msg_continue)
     CALL(evt_win_coin_on, 0, LW(12))
     LOOP(0)

@@ -1006,7 +1006,6 @@ EVT_BEGIN(peach_evt_kusuri_nomu)
             END_IF
         END_SWITCH
         SET_VALUE(LSW_AJI_06_WRONG_POTION_EFFECT, LW(2))
-        // She panics, TEC calls it unsuccessful and asks her to start over.
         CALL(evt_msg_print, 0, STRING("peach_aji_234"), 0, STRING("mario"))
         CALL(evt_msg_print, 0, STRING("peach_aji_235"), 0, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_236"), 0, STRING("mario"))
@@ -1028,7 +1027,6 @@ EVT_BEGIN(peach_evt_kusuri_nomu)
         CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_TOUMEI1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_peach_set_condition, 2)
         WAIT_MS(1000)
-        // TEC congratulates her and asks her to take her clothes off; Peach objects but agrees.
         CALL(evt_msg_print, 0, STRING("peach_aji_237"), 0, 0)
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_3"), STRING("P_T_3"))
         CALL(evt_msg_print, 0, STRING("peach_aji_238"), 0, STRING("mario"))
@@ -1053,7 +1051,6 @@ EVT_BEGIN(peach_evt_kusuri_nomu)
         WAIT_MS(2000)
         CALL(peach_evt_toumei_onoff, 1)
         CALL(evt_mario_mov_pos2, 100, 115, FLOAT(72.0f))
-        // TEC explains the plan: find the data disk in Sir Grodus's room and insert it into the computer.
         CALL(evt_msg_print, 0, STRING("peach_aji_240"), 0, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_241"), 0, STRING("mario"))
         CALL(evt_msg_print, 0, STRING("peach_aji_242"), 0, 0)
@@ -1159,8 +1156,6 @@ s32 peach_evt_bika_move_data[] = {
  */
 EVT_BEGIN(peach_evt_tyogo_sub)
     CALL(evt_mario_key_onoff, 0)
-    // The machine stops its floor and TEC tells Peach to press the button where the beaker stops
-    // (peach_aji_230).
     CALL(evt_map_pauseanim, 0, STRING("yuka"))
     CALL(evt_snd_sfxoff, GW(3))
     CALL_CHILD(PTR(peach_evt_wait_memo))
@@ -1253,7 +1248,6 @@ EVT_BEGIN(peach_evt_tyogo_sub)
     SET_VALUE(LW(0), STRING("S_pato2"))
     CALL_CHILD(PTR(peach_evt_pato_off))
     CALL_CHILD(PTR(peach_evt_wait_memo))
-    // TEC asks Peach to stop the heating after exactly 30 seconds; the stopwatch runs.
     CALL(evt_msg_print, 0, STRING("peach_aji_230_01"), 0, 0)
     SET_VALUE(LW(0), STRING("S_pato3"))
     SPAWN_EVENT_GET_ID(PTR(peach_evt_pato_on), GW(0))
@@ -1471,7 +1465,6 @@ EVT_BEGIN(peach_evt_tyogo)
     END_IF
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(peach_evt_wait_memo))
-    // TEC asks whether the result came out right; if so Peach is asked to drink it.
     CALL(evt_msg_print, 0, STRING("peach_aji_231"), 0, 0)
     CALL(evt_msg_select, 0, STRING("peach_aji_227_sel"))
     IF_INT_EQUAL(LW(0), 0)
@@ -1485,7 +1478,6 @@ EVT_BEGIN(peach_evt_tyogo)
         CALL(evt_del_case_evt, 0, GW(8))
         CALL(evt_del_case_evt, 0, GW(9))
     ELSE
-        // If not, the machine is emptied and reopened for another try.
         CALL(evt_msg_print_add, 0, STRING("peach_aji_231_01"))
         CALL(evt_mapobj_scale, 0, STRING("S_naka"), 0, 0, 0)
         CALL(evt_mapobj_trans, 0, STRING("S_bika"), 0, -100, 0)

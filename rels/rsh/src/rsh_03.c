@@ -423,7 +423,6 @@ EVT_BEGIN(talk_cook)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             IF_INT_EQUAL(LW(1), 0)
-                // Trouble Center request 22: the cook asks for the ingredients of his dish.
                 CALL(evt_msg_print, 0, STRING("irai_22_00"), 0, 0)
             ELSE
                 CALL(evt_msg_print, 0, STRING("irai_22_01"), 0, 0)
@@ -450,7 +449,6 @@ EVT_BEGIN(talk_cook)
                     DEBUG_PUT_MSG(STRING("iri_22 status ???"))
                 END_SWITCH
             ELSE
-                // Mario picks which ingredient to hand over.
                 CALL(evt_msg_print, 0, STRING("irai_22_09"), 0, 0)
                 GOTO(0)
             END_IF
@@ -478,7 +476,6 @@ EVT_BEGIN(talk_cook)
             CALL(evt_sub_get_coin, 40)
             SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
             SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_GET_THESE_INGREDIENTS), 1)
-            // With all three delivered, the request is recorded as solved.
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         ELSE
             IF_INT_NOT_EQUAL(LW(1), -1)
@@ -497,7 +494,6 @@ EVT_BEGIN(talk_cook)
         CASE_LESS(STG6_01_THE_CONDUCTOR)
         IF_INT_EQUAL(LSWF(5), 0)
             SET_VALUE(LSWF(5), 1)
-            // Without a request, his line depends on the story stage.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_04"), 0, 0)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_05"), 0, 0)
@@ -544,7 +540,6 @@ EVT_BEGIN(talk_cook)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             IF_INT_EQUAL(LW(1), 0)
-                // Trouble Center request 22: the cook asks for the ingredients of his dish.
                 CALL(evt_msg_print, 0, STRING("irai_22_00"), 0, 0)
             ELSE
                 CALL(evt_msg_print, 0, STRING("irai_22_01"), 0, 0)
@@ -571,7 +566,6 @@ EVT_BEGIN(talk_cook)
                     DEBUG_PUT_MSG(STRING("iri_22 status ???"))
                 END_SWITCH
             ELSE
-                // Mario picks which ingredient to hand over.
                 CALL(evt_msg_print, 0, STRING("irai_22_09"), 0, 0)
                 GOTO(0)
             END_IF
@@ -599,7 +593,6 @@ EVT_BEGIN(talk_cook)
             CALL(evt_sub_get_coin, 40)
             SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
             SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_GET_THESE_INGREDIENTS), 1)
-            // With all three delivered, the request is recorded as solved.
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         ELSE
             IF_INT_NOT_EQUAL(LW(1), -1)
@@ -618,7 +611,6 @@ EVT_BEGIN(talk_cook)
         CASE_LESS(STG6_01_THE_CONDUCTOR)
         IF_INT_EQUAL(LSWF_RSH_03_CHEF_FIRST_TALKED, 0)
             SET_VALUE(LSWF_RSH_03_CHEF_FIRST_TALKED, 1)
-            // Without a request, his line depends on the story stage.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_04"), 0, 0)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_05"), 0, 0)
@@ -784,7 +776,6 @@ EVT_END()
 #endif
 
 static EVT_BEGIN(talk_waitless)
-    // From Pennington's assistant on, the waitress asks Mario for help.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(GSWF_RSH_WAITRESS_REQUEST_ACCEPTED, 0)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -1001,7 +992,6 @@ EVT_BEGIN(evt_lanch_missing)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 0, 102, 174, 0, 50, -122, 500, EASING_SINE_IN_OUT)
     WAIT_MS(600)
-    // Pennington begins the questioning.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_23"), 0, STRING("ポワン探偵"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 45, 75, 75, 45, 40, -122, 500, EASING_SINE_IN_OUT)
@@ -1060,7 +1050,6 @@ EVT_BEGIN(evt_lanch_missing)
     WAIT_MS(500)
     SET_VALUE(LW(0), STRING("コック"))
     SPAWN_EVENT(PTR(dir_target))
-    // The cook gives his account.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_26"), 0, STRING("コック"))
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
@@ -1134,7 +1123,6 @@ EVT_BEGIN(evt_lanch_missing)
     END_INLINE_EVENT
     WAIT_MS(1500)
     CALL(evt_npc_set_autotalkpose, STRING("ウェイトレス"), STRING("B_2"), STRING("T_2"))
-    // The waitress gives hers.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_31"), 0, STRING("ウェイトレス"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 102, 174, 0, 50, -122, 0, EASING_SINE_IN_OUT)
@@ -1161,7 +1149,6 @@ EVT_BEGIN(evt_lanch_missing)
     CALL(evt_npc_set_autotalkpose, STRING("ウェイトレス"), STRING("O_1"), STRING("T_3"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_34"), 0, STRING("ポワン探偵"))
     WAIT_MS(300)
-    // The salaryman and Toron take their turns.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_35"), 0, STRING("サラリーマン"))
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_36"), 0, STRING("トロン"))
@@ -1170,7 +1157,6 @@ EVT_BEGIN(evt_lanch_missing)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_38"), 0, STRING("ウェイトレス"))
     WAIT_MS(300)
-    // Pennington gives his conclusion.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_39"), 0, STRING("ポワン探偵"))
     WAIT_MS(300)
     CALL(evt_npc_set_autotalkpose, STRING("ウェイトレス"), STRING("S_1"), STRING("T_1"))

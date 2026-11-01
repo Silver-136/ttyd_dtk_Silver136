@@ -472,7 +472,6 @@ static EVT_BEGIN(normal_attack_event)
     END_IF
     // Wind-up: it runs up to the target (attack_common_event1).
     CALL_CHILD(attack_common_event1)
-    // It springs at the target with a shout.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD1_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

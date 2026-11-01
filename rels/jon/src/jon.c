@@ -1910,7 +1910,6 @@ EVT_END()
  * non-English).
  */
 EVT_BEGIN(talk_gyousyou)
-    // The trader pitches his "hot products" to Mario and asks whether he wants to see them (yes or no).
     CALL(evt_msg_print, 0, STRING("100kai_item_01"), 0, STRING("me"))
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
@@ -1927,15 +1926,12 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print, 0, STRING("100kai_item_10"), 0, STRING("me"))
         RETURN
     END_IF
-    // Not enough coins for the chosen item: the trader says so and the list comes back.
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), LW(3))
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print, 0, STRING("100kai_item_03"), 0, STRING("me"))
         GOTO(0)
     END_IF
-    // The trader names the item and its price and asks Mario to confirm (the English text swaps the order of
-    // name and price for some languages).
     IF_INT_GREATER_OR_EQUAL(LW(1), 240)
         CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
     ELSE
@@ -1958,7 +1954,6 @@ EVT_BEGIN(talk_gyousyou)
         END_IF
         RETURN
     END_IF
-    // Take the price in coins, thank Mario and offer the list again.
     MULTIPLY(LW(3), -1)
     CALL(evt_pouch_add_coin, LW(3))
     CALL(evt_win_coin_wait, LW(12))
@@ -1991,7 +1986,6 @@ EVT_END()
  * non-English).
  */
 EVT_BEGIN(talk_gyousyou)
-    // The trader pitches his "hot products" to Mario and asks whether he wants to see them (yes or no).
     CALL(evt_msg_print, 0, STRING("100kai_item_01"), 0, STRING("me"))
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
@@ -2008,15 +2002,12 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print, 0, STRING("100kai_item_10"), 0, STRING("me"))
         RETURN
     END_IF
-    // Not enough coins for the chosen item: the trader says so and the list comes back.
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), LW(3))
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print, 0, STRING("100kai_item_03"), 0, STRING("me"))
         GOTO(0)
     END_IF
-    // The trader names the item and its price and asks Mario to confirm (the English text swaps the order of
-    // name and price for some languages).
     IF_INT_GREATER_OR_EQUAL(LW(1), 240)
         CALL(evt_sub_get_language, LW(0))
 #if VERSION >= VERSION_US
@@ -2073,7 +2064,6 @@ EVT_BEGIN(talk_gyousyou)
         END_IF
         RETURN
     END_IF
-    // Take the price in coins, thank Mario and offer the list again.
     MULTIPLY(LW(3), -1)
     CALL(evt_pouch_add_coin, LW(3))
     CALL(evt_win_coin_wait, LW(12))

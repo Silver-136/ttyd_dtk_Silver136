@@ -1340,7 +1340,6 @@ static EVT_BEGIN(attack_head_1_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_sambo_head_attack_1))
-    // The lone segment announces its attack.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_sambo_head_attack_1))

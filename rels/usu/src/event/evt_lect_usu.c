@@ -1058,7 +1058,6 @@ EVT_BEGIN(roll_majin_lecture)
     CALL(evt_npc_set_camid, STRING("ペラ魔人"), 7)
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_1"))
     WAIT_MS(200)
-    // The spirit mocks Mario, curses him with flashes of light and tells him to hold R and rotate the stick.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_12"), 0, STRING("ペラ魔人"))
     CALL(evt_mario_set_pose, STRING("M_N_H"))

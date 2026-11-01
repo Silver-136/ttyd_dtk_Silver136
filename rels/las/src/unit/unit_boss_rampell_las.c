@@ -750,7 +750,6 @@ static EVT_BEGIN(dead_event)
             CASE_EQUAL(2)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL_CHILD(btl_vivian_zoom)
-            // If a Siren is already down, he cries out in despair.
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("btl_majo3_13"), 0, -2)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             GOTO(90)
@@ -758,7 +757,6 @@ static EVT_BEGIN(dead_event)
     END_SWITCH
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL_CHILD(btl_vivian_zoom)
-    // Otherwise he gasps that it is bad news.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("btl_majo3_10"), 0, -2)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     LABEL(90)
@@ -884,7 +882,6 @@ static EVT_BEGIN(ogg_attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -1420,7 +1417,6 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -1523,7 +1519,6 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -1656,7 +1651,6 @@ static EVT_BEGIN(marioAttackEvent_NormalHammer)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -1756,7 +1750,6 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -2045,7 +2038,6 @@ static EVT_BEGIN(attack_event_christine)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
@@ -2651,7 +2643,6 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
@@ -2769,7 +2760,6 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
@@ -3047,7 +3037,6 @@ static EVT_BEGIN(attack_event_clauda)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
@@ -3335,7 +3324,6 @@ static EVT_BEGIN(attack_event_yoshi)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))

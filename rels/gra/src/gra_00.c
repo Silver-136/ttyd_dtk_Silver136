@@ -132,8 +132,6 @@ EVT_BEGIN(name_seikai)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_NM_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_set_anim, STRING("にせマリオ"), STRING("EM_O_2"))
     CALL(evt_npc_set_autotalkpose, STRING("にせマリオ"), STRING("EM_Z_3"), STRING("EM_T_4"))
-    // The camera closes in step by step as he stammers "Wha...", "What did you just say?!?" and "It can't
-    // be...".
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(10), LW(11), LW(12))
     ADD(LW(2), LW(12))
@@ -434,7 +432,6 @@ EVT_BEGIN(evt_machibuse)
     ADD(LW(3), 542)
     CALL(evt_cam3d_evt_set, LW(0), 137, LW(3), LW(0), 30, LW(2), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-    // His first taunts (on the first meeting he tells Mario that he now has his name and his body).
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_11_02_WAITING_DOOPLISS)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg4_gra_01"), 0, STRING("にせマリオ"))
@@ -515,7 +512,6 @@ EVT_BEGIN(evt_machibuse)
             RETURN
         END_IF
     END_SWITCH
-    // A wrong guess: Doopliss mocks it and attacks, starting the fight.
     CALL(evt_msg_print, 0, STRING("stg4_gra_04"), 0, STRING("にせマリオ"))
     CALL(evt_npc_set_battle_info, STRING("にせマリオ"), 2)
     CALL(evt_npc_battle_start, STRING("にせマリオ"))

@@ -369,8 +369,6 @@ EVT_BEGIN(evt_rsh_door_open)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
-        // Entering cabin 5 at the blanket stage makes Mario's partner remark that they should leave
-        // everything to the conductor.
         IF_STR_EQUAL(LW(1), STRING("heya_5"))
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_EQUAL(STG6_19_GIVE_BLANKET)
@@ -400,7 +398,6 @@ EVT_BEGIN(evt_rsh_door_open)
                 // During the vital clue stage the background music dips for the ghost scenes.
                 CASE_BETWEEN(STG6_24_A_VITAL_CLUE, STG6_24_02_ANOTHER_CLUE)
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-                // When the conductor appears, the partner comments on entering cabin 5.
                 CASE_EQUAL(STG6_43_CONDUCTOR_APPEARS)
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_img_wait_animend, STRING("capture_img"))
@@ -561,8 +558,6 @@ EVT_BEGIN(evt_rsh_door_open)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
-        // Entering cabin 5 at the blanket stage makes Mario's partner remark that they should leave
-        // everything to the conductor.
         IF_STR_EQUAL(LW(1), STRING("heya_5"))
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_EQUAL(STG6_19_GIVE_BLANKET)

@@ -1027,7 +1027,6 @@ static EVT_BEGIN(attack_head_2_event)
         END_IF
         GOTO(99)
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     SWITCH(LW(10))
@@ -1219,7 +1218,6 @@ static EVT_BEGIN(attack_head_1_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_sambo_head_attack_1))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_sambo_head_attack_1))
@@ -1411,7 +1409,6 @@ static EVT_BEGIN(attack_spike_event)
         END_IF
         GOTO(99)
     END_IF
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     SWITCH(LW(10))

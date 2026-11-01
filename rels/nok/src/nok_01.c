@@ -517,10 +517,8 @@ EVT_BEGIN(boss_noko_talk)
             WAIT_WHILE(GF(0))
             CALL(evt_mario_sleep_on)
         END_INLINE_EVENT
-        // The mayor asks Mario for help with Trouble Center request 8.
         CALL(evt_msg_print, 0, STRING("irai_08_001"), PTR(iri_08_msg), STRING("me"))
         CALL(evt_mario_sleep_off)
-        // He forgot to set out the tea and gives Mario a Turtley Leaf.
         CALL(evt_msg_print, 0, STRING("irai_08_002"), 0, STRING("me"))
         CALL(evt_pouch_get_haveitemcnt, LW(0))
         CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
@@ -549,7 +547,6 @@ EVT_BEGIN(boss_noko_talk)
             CALL(evt_npc_wait_pera, STRING("me"))
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         END_IF
-        // Request 8 is marked solved.
         CALL(evt_msg_print, 0, STRING("irai_08_004"), 0, STRING("me"))
         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
         SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_LISTEN_TO_ME), 1)
@@ -562,7 +559,6 @@ EVT_BEGIN(boss_noko_talk)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             ELSE
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
-                    // Request 17: the mayor takes the Routing Slip from Mario.
                     CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
                     CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
@@ -592,7 +588,6 @@ EVT_BEGIN(boss_noko_talk)
         CASE_LESS(STG1_08_OPENING_THE_PATH)
         IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
             IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
-                // After the Sun Stone and Moon Stone errand he congratulates Mario.
                 CALL(evt_msg_print, 0, STRING("stg1_nok_56"), 0, 0)
                 RETURN
             END_IF
@@ -638,7 +633,6 @@ EVT_BEGIN(nokorin_talk)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_FIRST_TALK_DONE, 0)
             SET_VALUE(GSWF_NOK_KOOPIE_KOO_FIRST_TALK_DONE, 1)
-            // Koopie Koo introduces herself to Mario.
             CALL(evt_msg_print, 0, STRING("stg1_nok_64"), 0, 0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_5"), LW(0), LW(1), LW(2), 0)
@@ -647,7 +641,6 @@ EVT_BEGIN(nokorin_talk)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             CALL(evt_msg_print, 0, STRING("stg1_nok_64_01"), 0, 0)
             ELSE
-            // She confides her worries about her boyfriend Koops.
             CALL(evt_msg_print, 0, STRING("stg1_nok_65"), 0, 0)
             IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_CONFESSION_SEEN, 0)
                 SET_VALUE(GSWF_NOK_KOOPIE_KOO_CONFESSION_SEEN, 1)
@@ -664,7 +657,6 @@ EVT_BEGIN(nokorin_talk)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 2)
                 SET_VALUE(GSWF_NOK_KOOPIE_KOO_BLESSING_DONE, 1)
-                // Koops is in the party: she apologizes to him and hops away.
                 CALL(evt_msg_print, 0, STRING("stg1_nok_67"), 0, 0)
                 CALL(evt_msg_print, 0, STRING("stg1_nok_68"), 0, 0)
                 CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -686,7 +678,6 @@ EVT_BEGIN(nokorin_talk)
     CASE_LESS(STG2_00_BOGGLY_WOODS)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
-        // Chapter 2 on: she cheers Koops on and asks Mario to look after him.
         CALL(evt_msg_print, 0, STRING("stg1_nok_71"), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_72"), 0, 0)
@@ -708,7 +699,6 @@ EVT_BEGIN(nokorin_talk)
     CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
-        // The late game: she wonders whether Koops has changed.
         CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)

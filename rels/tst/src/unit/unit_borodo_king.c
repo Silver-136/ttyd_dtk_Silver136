@@ -834,7 +834,6 @@ static EVT_BEGIN(_borodo_steal_attack)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
         GOTO(99)
     END_IF
-    // If it got the loot it laughs and switches to its item-carrying poses.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("O_2"))
     WAIT_FRAMES(14)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_LAUGH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1008,7 +1007,6 @@ static EVT_BEGIN(_borodo_steal_attack)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
         GOTO(99)
     END_IF
-    // If it got the loot it laughs and switches to its item-carrying poses.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("O_2"))
     WAIT_FRAMES(14)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_LAUGH1"), EVT_NULLPTR, 0, EVT_NULLPTR)

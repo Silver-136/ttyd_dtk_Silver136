@@ -621,7 +621,6 @@ BEGIN_INLINE_EVENT
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
     CALL(evt_msg_print_party, STRING("stg2_mri_e23_00"))
     SET_VALUE(LW(10), STRING("第三勢力幹部"))
-    // He gloats, then reveals a remote time bomb switch to bury Mario and the Punies.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e23_01"), 0, LW(10))
     WAIT_MS(500)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), LW(10), 0, 0, 0, 0, 0, 0, 0, 60)
@@ -863,7 +862,6 @@ EVT_BEGIN(time_bomb)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
     CALL(evt_msg_print_party, STRING("stg2_mri_e23_00"))
     SET_VALUE(LW(10), STRING("第三勢力幹部"))
-    // He gloats, then reveals a remote time bomb switch to bury Mario and the Punies.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e23_01"), 0, LW(10))
     WAIT_MS(500)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), LW(10), 0, 0, 0, 0, 0, 0, 0, 60)

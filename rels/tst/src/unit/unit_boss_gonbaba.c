@@ -617,7 +617,6 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_StatusWindowOnOff, 0)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
-    // She yells for Mario to wait.
     CALL(evt_msg_print, 2, STRING("stg1_gon_23"), 0, UNIT_ID_SELF)
     // Wait until Mario is back at his home position.
     LABEL(0)
@@ -631,7 +630,6 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
     SET_VALUE(LW(10), 0)
-    // She says she gives up and offers 1,000 coins in apology, a yes/no choice.
     CALL(evt_msg_print, 2, STRING("stg1_gon_24"), 0, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_mode, 1, 0)
     WAIT_FRAMES(20)
@@ -639,7 +637,6 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_msg_continue)
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 0)
-        // If Mario accepts, she is delighted and tells him to come and collect.
         CALL(evt_msg_print, 2, STRING("stg1_gon_25"), 0, UNIT_ID_SELF)
         GOTO(40)
     END_IF
@@ -659,7 +656,6 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_msg_continue)
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 1)
-        // If he accepts the badge, she tells him to come and get it.
         CALL(evt_msg_print, 2, STRING("stg1_gon_27"), 0, UNIT_ID_SELF)
         GOTO(40)
     END_IF
@@ -679,12 +675,9 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_msg_continue)
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 2)
-        // If he accepts, she tells him to come and sniff.
         CALL(evt_msg_print, 2, STRING("stg1_gon_29"), 0, UNIT_ID_SELF)
         GOTO(40)
     END_IF
-    // If he refuses all three offers, he shakes his head once more, she complains that he is not very
-    // trusting and the bite is skipped.
     CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_NO2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_C"))
     CALL(btlevtcmd_AnimeFlagOnOff, UNIT_ID_MARIO, 1, PART_ANIM_RESTART, 1)
@@ -757,7 +750,6 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_mode, 1, 3)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
-    // She gloats that Mario was completely duped by her ruse.
     CALL(evt_msg_print, 2, STRING("stg1_gon_30"), 0, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_mode, 1, 3)
     CALL(evt_btl_camera_set_moveto, 1, -115, 50, 265, -115, 49, 170, 1, 0)
@@ -773,12 +765,10 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_mode, 1, 3)
     CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
-    // Hooktail mocks the heroes for being so gullible.
     CALL(evt_msg_print, 2, STRING("stg1_gon_30_03"), 0, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_mode, 1, 3)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 20, 0)
     WAIT_FRAMES(20)
-    // She admits things are not looking good and says she had better do something.
     CALL(evt_msg_print, 2, STRING("stg1_gon_30_04"), 0, UNIT_ID_SELF)
     CALL(btlevtcmd_StatusWindowOnOff, 0)
     LABEL(50)
@@ -1040,7 +1030,6 @@ BEGIN_INLINE_EVENT
     CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 310, 60, 0)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_5"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_5"))
-    // Hooktail laughs: her strength is back.
     CALL(evt_msg_print, 2, STRING("stg1_gon_31_01"), 0, UNIT_ID_SELF)
     CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 0, 0, 0)
     CALL(evt_btl_camera_set_mode, 1, 3)
@@ -1128,7 +1117,6 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_StatusWindowOnOff, 0)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
-    // She yells for Mario to wait.
     CALL(evt_msg_print, 2, STRING("stg1_gon_23"), 0, UNIT_ID_SELF)
     // Wait until Mario is back at his home position.
     LABEL(0)
@@ -1142,7 +1130,6 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
     SET_VALUE(LW(10), 0)
-    // She says she gives up and offers 1,000 coins in apology, a yes/no choice.
     CALL(evt_msg_print, 2, STRING("stg1_gon_24"), 0, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_mode, 1, 0)
     WAIT_FRAMES(20)
@@ -1150,7 +1137,6 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_msg_continue)
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 0)
-        // If Mario accepts, she is delighted and tells him to come and collect.
         CALL(evt_msg_print, 2, STRING("stg1_gon_25"), 0, UNIT_ID_SELF)
         GOTO(40)
     END_IF
@@ -1170,7 +1156,6 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_msg_continue)
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 1)
-        // If he accepts the badge, she tells him to come and get it.
         CALL(evt_msg_print, 2, STRING("stg1_gon_27"), 0, UNIT_ID_SELF)
         GOTO(40)
     END_IF
@@ -1190,12 +1175,9 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_msg_continue)
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 2)
-        // If he accepts, she tells him to come and sniff.
         CALL(evt_msg_print, 2, STRING("stg1_gon_29"), 0, UNIT_ID_SELF)
         GOTO(40)
     END_IF
-    // If he refuses all three offers, he shakes his head once more, she complains that he is not very
-    // trusting and the bite is skipped.
     CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_NO2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_C"))
     CALL(btlevtcmd_AnimeFlagOnOff, UNIT_ID_MARIO, 1, PART_ANIM_RESTART, 1)
@@ -1268,7 +1250,6 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_mode, 1, 3)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
-    // She gloats that Mario was completely duped by her ruse.
     CALL(evt_msg_print, 2, STRING("stg1_gon_30"), 0, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_mode, 1, 3)
     CALL(evt_btl_camera_set_moveto, 1, -115, 50, 265, -115, 49, 170, 1, 0)
@@ -1284,12 +1265,10 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_mode, 1, 3)
     CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
-    // Hooktail mocks the heroes for being so gullible.
     CALL(evt_msg_print, 2, STRING("stg1_gon_30_03"), 0, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_mode, 1, 3)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 20, 0)
     WAIT_FRAMES(20)
-    // She admits things are not looking good and says she had better do something.
     CALL(evt_msg_print, 2, STRING("stg1_gon_30_04"), 0, UNIT_ID_SELF)
     CALL(btlevtcmd_StatusWindowOnOff, 0)
     LABEL(50)
@@ -1552,7 +1531,6 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 310, 60, 0)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_5"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_5"))
-    // Hooktail laughs: her strength is back.
     CALL(evt_msg_print, 2, STRING("stg1_gon_31_01"), 0, UNIT_ID_SELF)
     CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 0, 0, 0)
     CALL(evt_btl_camera_set_mode, 1, 3)
@@ -1901,7 +1879,6 @@ EVT_BEGIN(gonbaba_damage_sub_event)
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_WaitAttackEnd)
 #endif
-    // When the cricket sound finishes her off for the first or second time she complains about the awful chirping.
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
     CALL(evt_btl_camera_set_prilimit, 1)

@@ -628,7 +628,6 @@ EVT_BEGIN(plane_majin_lecture)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
-    // The demon reveals his trick, laughs at Mario and curses him in flashes of light.
     CALL(evt_npc_set_anim, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), STRING("P_1"))
     WAIT_MS(200)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -657,7 +656,6 @@ EVT_BEGIN(plane_majin_lecture)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    // The demon explains airplane panels; the lesson below repeats until Mario says he gets it.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_majin_15"), 0, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"))
     LOOP(0)
@@ -717,7 +715,6 @@ EVT_BEGIN(plane_majin_lecture)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
-        // Mario walks onto the panel and is told to press the button; its icon flashes until he does.
         CALL(evt_mario_mov_pos2, FLOAT(-200.0f), FLOAT(0.0f), FLOAT(80.0f))
         CALL(evt_msg_print_add, 0, STRING("mac_majin_15_1"))
         CALL(lecture_button_set_pos, 0, FLOAT(-200.0f), FLOAT(-25.0f), FLOAT(0.0f))
@@ -820,7 +817,6 @@ EVT_BEGIN(plane_majin_lecture)
                 WAIT_FRAMES(1)
             END_LOOP
         END_INLINE_EVENT
-        // The demon explains steering and asks whether Mario got all that.
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(lecture_button_flag_on_off, 0, 2, 0)
         WAIT_MS(300)
@@ -891,7 +887,6 @@ EVT_BEGIN(plane_majin_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // The demon hints at how to change back; Mario drops out of plane mode and the demon leaves.
     CALL(evt_msg_print_add, 0, STRING("mac_majin_18_1"))
 #if VERSION > VERSION_DEMO_US
     CALL(x_flag_set, 1, 2)

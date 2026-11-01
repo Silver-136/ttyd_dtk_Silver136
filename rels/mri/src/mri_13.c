@@ -455,7 +455,6 @@ EVT_BEGIN(yuka_event)
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    // Punio comments on the shaking floor while the camera drops to the shaft.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e21_00"), 0, STRING("ガイドsp"))
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)

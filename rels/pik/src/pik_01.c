@@ -232,7 +232,6 @@ static const char* name_tbl[] = {
 EVT_BEGIN(evt_powan)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    // Detective Pennington hops in and greets Mario.
     CALL(evt_msg_print, 0, STRING("stg6_pik_06"), 0, 0)
     WAIT_MS(300)
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -247,7 +246,6 @@ EVT_BEGIN(evt_powan)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
-        // Mario's partner comments.
         CALL(evt_msg_print, 0, STRING("stg6_pik_07_0"), 0, STRING("party"))
         CASE_EQUAL(2)
         CALL(evt_msg_print, 0, STRING("stg6_pik_07_1"), 0, STRING("party"))
@@ -265,7 +263,6 @@ EVT_BEGIN(evt_powan)
     WAIT_MS(500)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_set_dir_to_target, STRING("ポワン探偵"), STRING("mario"))
-    // Pennington speaks about the sanctum.
     CALL(evt_msg_print, 0, STRING("stg6_pik_08"), 0, STRING("ポワン探偵"))
     CALL(evt_mario_set_dir, 270, 200, 0)
     CALL(evt_party_set_dir, 0, 270, 200)
@@ -293,7 +290,6 @@ EVT_BEGIN(evt_powan)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
-        // Mario's partner comments again.
         CALL(evt_msg_print, 0, STRING("stg6_pik_09_0"), 0, STRING("party"))
         CASE_EQUAL(2)
         CALL(evt_msg_print, 0, STRING("stg6_pik_09_1"), 0, STRING("party"))
@@ -309,7 +305,6 @@ EVT_BEGIN(evt_powan)
         CALL(evt_msg_print, 0, STRING("stg6_pik_09_6"), 0, STRING("party"))
     END_SWITCH
     WAIT_MS(500)
-    // Pennington unlocks the padlocked gate.
     CALL(evt_msg_print, 0, STRING("stg6_pik_10"), 0, STRING("ポワン探偵"))
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
     WAIT_MS(1000)
@@ -369,7 +364,6 @@ EVT_BEGIN(miyageya_talk)
         CALL(chk_luigi_color, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
-                // Trouble Center request 27: the shop owner asks for help.
                 CALL(evt_msg_print, 0, STRING("irai_27_001"), 0, 0)
                 CALL(evt_mario_set_pose, STRING("M_N_5B"))
                 WAIT_MS(300)
@@ -424,7 +418,6 @@ EVT_BEGIN(miyageya_talk)
                 SET_VALUE(LW(4), 20)
             END_IF
             IF_INT_LESS(LW(3), LW(4))
-                // The owner rewards Mario with a Choco Cake.
                 CALL(evt_msg_print, 0, STRING("irai_27_006"), 0, 0)
                 CALL(evt_item_entry, STRING("sc"), ITEM_CHOCO_CAKE, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                 CALL(evt_item_get_item, STRING("sc"))
@@ -445,7 +438,6 @@ EVT_BEGIN(miyageya_talk)
             CALL(evt_npc_set_position, STRING("ルイージ"), -386, 0, 214)
             CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
             CALL(evt_npc_move_position, STRING("ルイージ"), -330, 272, 0, 60, 0)
-            // The real Luigi turns up.
             CALL(evt_msg_print, 0, STRING("irai_27_008"), 0, STRING("ルイージ"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             CALL(evt_mario_set_dir_npc, STRING("ルイージ"))
@@ -478,7 +470,6 @@ EVT_BEGIN(miyageya_talk)
             WAIT_MS(800)
             SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
             SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 1)
-            // The request is recorded as solved.
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             CALL(evt_party_run, 0)
         END_IF
@@ -492,7 +483,6 @@ EVT_BEGIN(miyageya_talk)
             CALL(evt_npc_set_force_regl_anim, STRING("me"), STRING("KNF_S_2"))
             CALL(evt_npc_set_anim, STRING("me"), STRING("KNF_S_1"))
             CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("KNF_S_2"), STRING("KNF_T_2"))
-            // During the Bowser interlude he reacts to Bowser.
             CALL(evt_msg_print, 0, STRING("kpa_stg7_004"), 0, STRING("me"))
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
             SET_VALUE(LSWF_PIK_01_SOUVENIR_NPC_SCREAMED, 1)
@@ -562,7 +552,6 @@ EVT_BEGIN(konarikin_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
-                // Trouble Center request 29: Little Narikin asks for a gift.
                 CALL(evt_msg_print, 0, STRING("irai_29_00"), 0, 0)
                 CALL(evt_msg_select, 0, STRING("irai_29_00_s"))
                 IF_INT_GREATER_OR_EQUAL(LW(0), 3)
@@ -580,8 +569,6 @@ EVT_BEGIN(konarikin_talk)
                 END_IF
                 SWITCH(GSW_TROUBLE_WORK(0))
                     CASE_EQUAL(0)
-                    // He may ask for a Shroom Cake, a Keelhaul Mango or a Fright Mask, depending on Mario's
-                    // first answer.
                     CALL(evt_pouch_check_item, ITEM_SHROOM_CAKE, LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_05"), 0, 0)
@@ -641,7 +628,6 @@ EVT_BEGIN(konarikin_talk)
                 END_SWITCH
             END_IF
         ELSE
-            // On the second visit Mario is paid 3 coins.
             CALL(evt_msg_print, 0, STRING("irai_29_12"), 0, 0)
             CALL(evt_mario_set_pose, STRING("M_N_2"))
             WAIT_MS(500)
@@ -662,12 +648,10 @@ EVT_BEGIN(konarikin_talk)
             CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
             SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
             SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_HELP_ME_MAKE_UP), 1)
-            // The request is recorded as solved.
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         END_IF
         RETURN
     END_IF
-    // During the Bowser interlude he reacts to Bowser.
     CALL(evt_msg_print, 0, STRING("kpa_stg7_005"), 0, STRING("me"))
     CALL(evt_msg_select, 0, STRING("kpa_stg7_005_1"))
     CALL(evt_msg_continue)
@@ -1468,7 +1452,6 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     CALL(evt_npc_flag_onoff, 0, STRING("マダム"), NPC_FLAG_INSTANT_TURN)
-    // Everyone's voices: the madam and the Goldbob family worry and then cheer for Mario.
     CALL(evt_msg_print, 0, STRING("stg8_las_148_53"), 0, STRING("マダム"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_54"), 0, STRING("ポワン探偵"))
@@ -1494,7 +1477,6 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(500)
     CALL(evt_npc_reverse_ry, STRING("ポワン探偵"))
     WAIT_MS(500)
-    // Pennington is puzzled that they are not cheering for Luigi.
     CALL(evt_msg_print, 0, STRING("stg8_las_148_62"), 0, STRING("ポワン探偵"))
     BEGIN_INLINE_EVENT
         LOOP(0)

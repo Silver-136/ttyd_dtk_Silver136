@@ -1558,7 +1558,6 @@ EVT_BEGIN(suifu_orei)
         CALL(evt_party_stop, 0)
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
-    // Sailor D thanks Mario and Sailor E tells how they came to be here.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_set_dir_to_target, STRING("水夫D"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_16"), 0, STRING("水夫D"))
@@ -1939,7 +1938,6 @@ EVT_BEGIN(bombwall_after)
     CALL(evt_msg_print, 0, STRING("stg5_dou_17_13"), 0, STRING("水夫D"))
     CALL(evt_npc_move_position, STRING("水夫D"), 780, -185, 0, FLOAT(180.0f), 0)
     CALL(evt_npc_set_position, STRING("水夫D"), 0, -1000, 0)
-    // Peeton and Monie follow and Monie says they are leaving.
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_ry, STRING("ピートン"), 270)

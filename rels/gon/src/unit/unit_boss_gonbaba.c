@@ -614,8 +614,6 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_APPEAR1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_shake_h, 1, 8, 0, 20, 13)
     WAIT_MS(500)
-    // The camera swings to Hooktail, who says she will have the party for a snack and wonders who to taste
-    // first (stg1_gon_20_3).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), POSE_TYPE_NEUTRAL)
@@ -707,7 +705,6 @@ EVT_BEGIN(negotiation_event)
     WAIT_FRAMES(20)
     CALL(evt_msg_select, 0, STRING("stg1_gon_24_yesno1"))
     CALL(evt_msg_continue)
-    // Yes: she says money makes the world turn (stg1_gon_25) and moves on to her trap.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 0)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_25"), 0, -2)
@@ -727,7 +724,6 @@ EVT_BEGIN(negotiation_event)
     WAIT_FRAMES(20)
     CALL(evt_msg_select, 0, STRING("stg1_gon_26_yesno1"))
     CALL(evt_msg_continue)
-    // Yes: she says of course he wants it (stg1_gon_27) and moves on to her trap.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 1)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_27"), 0, -2)
@@ -747,7 +743,6 @@ EVT_BEGIN(negotiation_event)
     WAIT_FRAMES(20)
     CALL(evt_msg_select, 0, STRING("stg1_gon_28_yesno1"))
     CALL(evt_msg_continue)
-    // Yes: she says she thought so (stg1_gon_29) and moves on to her trap.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 2)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_29"), 0, -2)
@@ -838,8 +833,6 @@ EVT_BEGIN(negotiation_event)
         CASE_EQUAL(UNIT_KOOPS)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_02"), 0, -4)
     END_SWITCH
-    // She laughs at their gullibility (stg1_gon_30_03), then admits things look bad and that she had better
-    // act (stg1_gon_30_04).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
@@ -1108,7 +1101,6 @@ EVT_BEGIN(negotiation_event)
         CASE_EQUAL(UNIT_KOOPS)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_00_nok"), 0, -4)
     END_SWITCH
-    // She announces that her strength has returned (stg1_gon_31_01).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, 40, 98, 686, 57, 125, 182, 1, 0)
     WAIT_FRAMES(1)
@@ -1117,7 +1109,6 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_5"))
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_01"), 0, -2)
     CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 0, 0, 0)
-    // The camera pulls back and the partner says it is time to finish her off (stg1_gon_31_02, _03).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -115, 40, 200, -115, 39, 170, 1, 0)
     WAIT_FRAMES(1)
@@ -1434,7 +1425,6 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(50)
     END_IF
-    // Her speech counter (unit work 2) decides which line she speaks.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 2)
         RETURN
@@ -1453,8 +1443,6 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_btl_camera_wait_move_end)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
-    // First cricket sound: she complains about the awful noise (stg1_gon_21); second: she struggles not to
-    // gag (stg1_gon_22).
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
@@ -1480,7 +1468,6 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     IF_INT_GREATER_OR_EQUAL(LW(0), 3)
         RETURN
     END_IF
-    // Third time: she gags again and wonders why crickets always make her faint (stg1_gon_31_04).
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 3)
 #if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_WaitAttackEnd)

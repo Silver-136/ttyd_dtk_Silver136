@@ -317,7 +317,6 @@ EVT_BEGIN(evt_chuchu)
     END_INLINE_EVENT
     CALL(evt_set_dir_to_target, STRING("チュチュリーナ"), STRING("mario"))
     WAIT_MS(500)
-    // She greets Mario and trades words with the partner about the noise Security heard.
     CALL(evt_cam3d_evt_set, -75, 117, 224, -75, 88, -8, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     CALL(evt_msg_print, 0, STRING("stg3_tou_308"), 0, STRING("チュチュリーナ"))
@@ -341,7 +340,6 @@ EVT_BEGIN(evt_chuchu)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_312"), 0, STRING("チュチュリーナ"))
     WAIT_MS(300)
-    // She hops down to Mario, says goodbye and blows him a kiss.
     CALL(evt_cam3d_evt_set, 4, 67, 224, 4, 38, -8, 1000, EASING_LINEAR)
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), -65, -60, 0, FLOAT(80.0f), 1)
@@ -363,7 +361,6 @@ EVT_BEGIN(evt_chuchu)
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_S_1"))
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), -20, -60, 0, FLOAT(80.0f), 1)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    // The partner reacts to the kiss and Ms. Mowz warns about the poor souls upstairs.
     CALL(evt_cam3d_evt_set, 25, 67, 224, 25, 38, -8, 300, EASING_SINE_IN_OUT)
     WAIT_MS(300)
     CALL(evt_msg_print_party, STRING("stg3_tou_314"))
@@ -403,7 +400,6 @@ EVT_BEGIN(evt_chuchu)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // The Glitz Pit music returns and the partner wonders what she meant.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
@@ -435,7 +431,6 @@ EVT_BEGIN(evt_chuchu)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_balloon_off)
-    // Mario reads X's mail about the staircase switch and the partner wonders where the stairs could be.
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

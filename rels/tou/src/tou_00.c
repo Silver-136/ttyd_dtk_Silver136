@@ -533,7 +533,6 @@ EVT_BEGIN(tou_00_koopa_evt)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    // Bowser wonders about the warning light while more smoke pours out and the engine dies.
     CALL(evt_msg_print, 0, STRING("kpa_stg4_008"), 0, STRING("飛クッパ"))
     CALL(evt_npc_get_position, STRING("飛クッパ"), LW(0), LW(1), LW(2))
     ADD(LW(2), 80)

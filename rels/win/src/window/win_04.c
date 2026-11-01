@@ -402,7 +402,6 @@ EVT_BEGIN(clouda_irai)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_FOLLOWER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
-    // Mario and the partners step up to the door and Punio asks if Flurrie is there.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
@@ -428,7 +427,6 @@ EVT_BEGIN(clouda_irai)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_04"), 0, STRING("extparty"))
     WAIT_MS(1000)
-    // Flurrie recognizes Punio, who explains that the Great Tree's door is blocked; Flurrie offers to help.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_05"), 0, 0)
     WAIT_MS(500)
@@ -437,14 +435,12 @@ EVT_BEGIN(clouda_irai)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_07"), 0, 0)
     WAIT_MS(500)
-    // The partner asks what is wrong: Flurrie has lost her favorite necklace and won't go out without it.
     CALL(evt_msg_print_party, STRING("stg2_win_e05_00_08"))
     WAIT_MS(500)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_09"), 0, 0)
     CALL(evt_cam3d_evt_set, 200, 120, 194, 200, 85, -3, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    // The partner remembers hearing about a necklace, and Flurrie begs whoever spoke to find it.
     CALL(evt_msg_print_party, STRING("stg2_win_e05_00_10"))
     CALL(evt_cam3d_evt_set, 110, 199, 257, 393, 72, -135, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -452,7 +448,6 @@ EVT_BEGIN(clouda_irai)
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_11"), 0, 0)
     CALL(evt_cam3d_evt_set, 220, 130, 243, 220, 87, -3, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    // Punio volunteers Mario: answering Nah earns a retort, Sure a nod.
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_12"), 0, STRING("extparty"))
     CALL(evt_mario_set_dir, 270, 200, 0)
     CALL(evt_msg_select, 0, STRING("stg2_win_e05_00_12_yn"))
@@ -468,7 +463,6 @@ EVT_BEGIN(clouda_irai)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_13"), 0, STRING("extparty"))
     END_IF
-    // Flurrie apologizes for the trouble, the story advances and the west door now leads to win_00.
     CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
     WAIT_MS(300)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
@@ -711,7 +705,6 @@ EVT_BEGIN(clouda_nakama)
     SET_VALUE(LW(1), 500)
     SPAWN_EVENT(PTR(evt_win_door_open_pure))
     WAIT_MS(1500)
-    // Flurrie rejoices; the chandelier lifts and the room goes dark, puzzling Mario.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e09_01"), 0, 0)
     BEGIN_INLINE_EVENT
@@ -889,7 +882,6 @@ EVT_BEGIN(clouda_nakama)
     END_INLINE_EVENT
     CALL(evt_mario_set_pose, STRING("M_I_G"))
     WAIT_MS(1000)
-    // She wants to thank him with a kiss; Mario shakes his head.
     CALL(evt_cam3d_evt_set, 270, 134, 245, 270, 90, -1, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg2_win_e09_03"), 0, STRING("クラウダ"))
@@ -1033,7 +1025,6 @@ EVT_BEGIN(clouda_nakama)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    // Flurrie gushes over Mario, asks about the Crystal Stars and decides to join to keep him safe.
     CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("stg2_win_e09_06"), 0, STRING("クラウダ"))
     CALL(evt_mario_set_pose, STRING("M_U_3"))

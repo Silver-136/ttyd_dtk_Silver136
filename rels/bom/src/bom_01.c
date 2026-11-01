@@ -1489,11 +1489,9 @@ static EVT_BEGIN(evt_taihou)
     WAIT_MS(300)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_ry, STRING("me"), 90)
-    // The mayor asks General White whether the big bomb cannon is ready, and White calls his crew to the drill.
     CALL(evt_msg_print, 0, STRING("stg7_bom_64"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("stg7_bom_64_01"), 0, STRING("\203z\203\217\203C\203g"))
     SET_INT_READ_ADDR(PTR(&oh_data))
-    // The four crew members shout their drill calls in turn (Ho, Hup, Hut, Boom).
     LOOP(4)
         READ_INT2(LW(0), LW(1))
         BEGIN_INLINE_EVENT
@@ -1507,7 +1505,6 @@ static EVT_BEGIN(evt_taihou)
         WAIT_MS(300)
     END_LOOP
     WAIT_MS(500)
-    // White orders positions, and the crew answer (stg7_bom_66 and 67).
     CALL(evt_msg_print, 0, STRING("stg7_bom_66"), 0, STRING("me"))
     SET_VALUE(GF(0), 0)
     CALL(evt_npc_flag_onoff, 0, STRING("\203z\203\217\203C\203g"), NPC_FLAG_TALK_ANIM)
@@ -1634,7 +1631,6 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_cam3d_evt_set, -160, 125, -100, 10, 55, -427, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_set_dir_to_target, STRING("\203z\203\217\203C\203g"), STRING("\203y\203\223\203g\203\212\203b\203g"))
-    // System check: the guidance system is brought online (stg7_bom_68 to 72).
     CALL(evt_msg_print, 0, STRING("stg7_bom_68"), 0, STRING("\203z\203\217\203C\203g"))
     WAIT_MS(300)
     CALL(evt_set_dir_to_target, STRING("\203y\203\223\203g\203\212\203b\203g"), STRING("\203z\203\217\203C\203g"))
@@ -1663,8 +1659,6 @@ static EVT_BEGIN(evt_taihou)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        // The detonation sequence is announced and the outer hatch and inner shutter open, with the camera
-        // cutting between inside and outside (stg7_bom_73 to 76).
         CALL(evt_msg_print, 0, STRING("stg7_bom_73"), 0, STRING("\203z\203\217\203C\203g"))
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
@@ -1817,7 +1811,6 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
     CALL_CHILD(PTR(cam_inside))
     WAIT_MS(300)
-    // White sights the moon and reads out the aim and wind figures (stg7_bom_77 to 80).
     CALL(evt_msg_print, 0, STRING("stg7_bom_77"), 0, STRING("\203z\203\217\203C\203g"))
     WAIT_MS(300)
     SET_VALUE(GW(5), 70)
@@ -1921,7 +1914,6 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(evt_cam3d_evt_set, 21, 175, 781, 9, 42, 265, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-    // The mayor orders everyone in; the crowd squeezes into the chamber, grumbling (stg7_bom_81 to 85_6).
     CALL(evt_msg_print, 0, STRING("stg7_bom_81"), 0, STRING("\221\272\222\267"))
     WAIT_MS(300)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_BOMB_TOGETHER1"), LW(8))
@@ -1976,7 +1968,6 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
     CALL_CHILD(PTR(cam_inside))
     WAIT_MS(300)
-    // White reports all green and the mayor gives the order to fire (stg7_bom_86 and 87).
     CALL(evt_msg_print, 0, STRING("stg7_bom_86"), 0, STRING("\203z\203\217\203C\203g"))
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(10))
@@ -2035,7 +2026,6 @@ static EVT_BEGIN(evt_taihou)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 340, 200, -590)
-        // The crowd cheers (stg7_bom_88 to 90).
         CALL(evt_msg_print, 0, STRING("stg7_bom_88"), 0, 0)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 400, 160, -590)
         CALL(evt_msg_print, 0, STRING("stg7_bom_89"), 0, 0)
@@ -2050,7 +2040,6 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_npc_flag_onoff, 1, STRING("\221\272\222\267"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, -60, 26, 493, 22, 33, 257, 0, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
-    // The mayor wishes Mario luck, the Goldbob guide is taken from the pouch and the map changes to moo_03.
     CALL(evt_msg_print, 0, STRING("stg7_bom_91"), 0, STRING("\221\272\222\267"))
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     WAIT_MS(300)

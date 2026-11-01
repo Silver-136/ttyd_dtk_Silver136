@@ -171,7 +171,6 @@ EVT_BEGIN(bonbaba_evt)
         END_IF
     END_LOOP
     WAIT_MS(500)
-    // A voice from the dark calls to them; Mario and his partner are startled and the danger music starts.
     CALL(evt_msg_print, 0, STRING("stg8_las_44"), 0, STRING("ボンババ"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
@@ -207,7 +206,6 @@ EVT_BEGIN(bonbaba_evt)
     ADD(LW(0), -200)
     ADD(LW(1), 100)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-    // He threatens Mario and his partner answers (stg8_las_45 to stg8_las_48).
     CALL(evt_msg_print, 0, STRING("stg8_las_45"), 0, STRING("ボンババ"))
     CALL(evt_party_stop, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kesu"), MAP_OBJ_FLAG_HIDDEN)

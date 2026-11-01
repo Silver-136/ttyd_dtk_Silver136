@@ -483,10 +483,8 @@ static EVT_BEGIN(kuribo_init)
 EVT_END()
 
 EVT_BEGIN(kuribo_talk)
-    // Only while job 21 is active does he have anything to say.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LOOKING_FOR_A_GAL)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
-            // First talk: he thanks Mario for taking the request and says he feels lonely on the island.
             CALL(evt_msg_print, 0, STRING("irai_21_001"), 0, 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
         ELSE
@@ -494,8 +492,6 @@ EVT_BEGIN(kuribo_talk)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), PARTY_MEMBER_GOOMBELLA)
                 CALL(evt_party_stop, 0)
-                // Mario and Goombella walk up to him, and he asks whether they found a cute girl, then notices
-                // Goombella.
                 CALL(evt_npc_set_ry, STRING("me"), 90)
                 CALL(evt_party_set_dir_npc, 0, STRING("クリチェロ"))
                 WAIT_MS(300)
@@ -513,7 +509,6 @@ EVT_BEGIN(kuribo_talk)
                     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
                     SET_VALUE(GF(0), 0)
                 END_INLINE_EVENT
-                // The Goomba walks over to Goombella, nervously confesses his love and asks her out.
                 CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
                 CALL(evt_npc_move_position, STRING("me"), -175, 86, 0, 40, 0)
                 WAIT_WHILE(GF(0))
@@ -540,7 +535,6 @@ EVT_BEGIN(kuribo_talk)
                     CALL(evt_party_jump_pos, 0, LW(0), LW(1), LW(2), 200, 1, 5)
                     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
                 END_INLINE_EVENT
-                // He says he loves her and asks her to go out with him.
                 CALL(evt_msg_print, 0, STRING("irai_21_005"), 0, STRING("me"))
                 CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
                 ADD(LW(0), 10)
@@ -549,7 +543,6 @@ EVT_BEGIN(kuribo_talk)
                 // A Couples Cake appears next to him for Goombella.
                 CALL(evt_item_entry, STRING("ff"), ITEM_COUPLES_CAKE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, GSWF_DOU_04_COUPLES_CAKE, 0)
                 WAIT_MS(800)
-                // Goombella is flustered and says she is already going out with Mario; Mario and she react.
                 CALL(evt_msg_print, 0, STRING("irai_21_006"), 0, STRING("party"))
                 WAIT_MS(500)
                 CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 30)
@@ -586,7 +579,6 @@ EVT_BEGIN(kuribo_talk)
                     END_LOOP
                 END_INLINE_EVENT
                 WAIT_MS(800)
-                // Heartbroken, the Goomba says he has had enough, shouts "Peace!" and runs off the screen.
                 CALL(evt_msg_print, 0, STRING("irai_21_008"), 0, STRING("me"))
                 CALL(evt_npc_move_position, STRING("me"), -140, -76, 0, 60, 0)
                 WAIT_MS(1000)
@@ -606,7 +598,6 @@ EVT_BEGIN(kuribo_talk)
                 END_INLINE_EVENT
                 CALL(evt_npc_move_position, STRING("me"), 140, -76, 0, 150, 0)
                 CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
-                // Goombella feels bad about it, picks up the Couples Cake and gives it to Mario as a reward.
                 CALL(evt_msg_print, 0, STRING("irai_21_010"), 0, STRING("party"))
                 CALL(evt_item_get_position, STRING("ff"), LW(0), LW(1), LW(2))
                 SUBTRACT(LW(2), 10)
@@ -644,14 +635,11 @@ EVT_BEGIN(kuribo_talk)
                     WAIT_MS(300)
                     CALL(evt_party_set_dir, 0, 90, 300)
                 END_IF
-                // The request is finished: Trouble Center job 21 is solved.
                 CALL(evt_msg_print, 0, STRING("irai_21_013"), 0, STRING("party"))
                 CALL(evt_party_run, 0)
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_LOOKING_FOR_A_GAL), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
-                // Any other partner: the Goomba turns them down with a line specific to that partner (Koops,
-                // Flurrie, Yoshi, Vivian, Bobbery, Ms. Mowz) and the partner replies.
             ELSE
                 LOOP(0)
                     CALL(evt_mario_party_use_check, LW(1))

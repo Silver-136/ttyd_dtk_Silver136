@@ -659,7 +659,6 @@ static EVT_BEGIN(battle_entry_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 60, 0)
     WAIT_FRAMES(60)
-    // Bonetail roars its challenge and the partner answers before the fight starts.
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_boss_12"), 0, -2)
     WAIT_MS(300)

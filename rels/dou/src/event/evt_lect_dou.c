@@ -631,8 +631,6 @@ EVT_BEGIN(ship_majin_lecture)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
-    // The genie gloats and curses Mario, the light flashes over him four times, and the genie explains that Y
-    // now turns him into a paper boat in certain places.
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_1"))
     WAIT_MS(200)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -661,7 +659,6 @@ EVT_BEGIN(ship_majin_lecture)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    // The genie tells Mario to try it: a Boat Panel glows when he stands on it.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_14"), 0, STRING("ペラ魔人"))
     // Once Mario passes x -220 the camera follows him; the Boat Panel's glow events (evt_ride_airport while
@@ -709,12 +706,9 @@ EVT_BEGIN(ship_majin_lecture)
             DELETE_EVENT(LW(2))
         END_IF
     END_INLINE_EVENT
-    // Mario walks onto the panel at x -200 and the genie tells him to press Y and become a paper boat.
     CALL(evt_mario_mov_pos2, FLOAT(-200.0f), FLOAT(0.0f), FLOAT(80.0f))
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_14_1"), 0, STRING("ペラ魔人"))
-    // Practice loop: the button prompt appears and flashes while the player is asked to turn Mario into a
-    // boat.
     LOOP(0)
         CALL(lecture_button_flag_on_off, 0, 2, 1)
         CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y)
@@ -795,7 +789,6 @@ EVT_BEGIN(ship_majin_lecture)
         CALL(evt_mario_mov_pos2, FLOAT(-145.0f), FLOAT(0.0f), FLOAT(80.0f))
         CALL(evt_snd_sfxoff, LW(3))
         WAIT_MS(500)
-        // The genie tells Mario to return to normal by approaching the panel and pressing Y.
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_15_0"), 0, STRING("ペラ魔人"))
         CALL(lecture_button_flag_on_off, 0, 2, 1)
@@ -880,8 +873,6 @@ EVT_BEGIN(ship_majin_lecture)
                 DELETE_EVENT(LW(2))
             END_IF
         END_INLINE_EVENT
-        // The genie asks whether Mario understands; on "Run that by me again" he says to just press Y and try
-        // again, and the loop repeats; otherwise it exits.
         CALL(evt_msg_print_add, 0, STRING("stg1_gon_majin4_15_1"))
         CALL(evt_msg_select, 0, STRING("stg1_gon_majin4_16"))
 #if VERSION <= VERSION_DEMO_US
@@ -902,8 +893,6 @@ EVT_BEGIN(ship_majin_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // The platform slides back into place while the genie says goodbye and thanks Mario for letting him do his
-    // thing.
     BEGIN_INLINE_EVENT
         CALL(x_flag_set, 0, 1)
         SET_FLOAT_VALUE(LW(1), FLOAT(2.6660156f))

@@ -667,8 +667,6 @@ static EVT_BEGIN(phase_event)
         IF_INT_EQUAL(LW(0), 0)
             GOTO(90)
         END_IF
-        // Beldam below 66% HP: she admits Mario is tougher than she thought and gets serious (btl_majo3_03);
-        // the sisters turn aggressive and her next attack is the blizzard.
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MAJO_WORK_LOW_HP_TALK_DONE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
@@ -733,7 +731,6 @@ static EVT_BEGIN(phase_event)
                 END_IF
             END_IF
         END_IF
-        // Vivian below 50% HP: Beldam scolds her (btl_majo3_06) and Vivian apologizes (btl_majo3_07).
         IF_INT_EQUAL(GW(13), 0)
             CALL(btlevtcmd_GetUnitWork, GW(10), MAJO_WORK_LOW_HP_TALK_DONE, LW(0))
             IF_INT_EQUAL(LW(0), 0)

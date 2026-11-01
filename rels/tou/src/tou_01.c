@@ -947,7 +947,6 @@ EVT_END()
  * including the Chapter 3 scene where Mario hears about the 8th-place rank.
  */
 EVT_BEGIN(talk_sakaba)
-    // The Trouble Center search for General White: the keeper says White just stopped by.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 1)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(4), 0)
@@ -1035,7 +1034,6 @@ EVT_BEGIN(talk_sakaba)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_20_01_SUPER_HAMMER)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
         CASE_EQUAL(STG3_20_01_SUPER_HAMMER)
-        // Later: the fan gift, General White during chapter 7, and comeback talk after chapter 3.
         CALL(evt_msg_print, 0, STRING("stg3_tou_297_09"), 0, 0)
         CASE_BETWEEN(STG7_02_MAYOR_BOB, STG7_02_MAYOR_BOB)
         IF_INT_EQUAL(GSWF_NOK_GENERAL_WHITE_HINT_HEARD, 1)
@@ -1786,7 +1784,6 @@ static EVT_BEGIN(talk_sarary)
             CALL(evt_msg_print_add, 0, STRING("irai_24_002"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
         ELSE
-            // Later: Mario gives the four chair counts, and one wrong number ends the talk.
             CALL(evt_msg_print, 0, STRING("irai_24_006"), 0, 0)
             CALL(evt_msg_select, 0, STRING("irai_24_007"))
             IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1818,7 +1815,6 @@ static EVT_BEGIN(talk_sarary)
                 CALL(evt_msg_print_add, 0, STRING("irai_24_028"))
                 RETURN
             END_IF
-            // The briefcase opens; he pitches his hot sauce to the hot dog vendor and is turned down.
             CALL(evt_msg_print_add, 0, STRING("irai_24_021"))
             BEGIN_INLINE_EVENT
                 WAIT_MS(500)
@@ -1838,8 +1834,6 @@ static EVT_BEGIN(talk_sarary)
             CALL(evt_mario_set_dir_npc, STRING("サラリーマン"))
             WAIT_MS(2000)
             CALL(evt_fade_in, 800)
-            // Mario talks him out of giving up and he rewards Mario with Hot Sauce
-            // (left on the ground if the pouch is full).
             CALL(evt_msg_print, 0, STRING("irai_24_024"), 0, 0)
             CALL(evt_mario_set_pose, STRING("M_I_2"))
             WAIT_MS(1000)
@@ -1929,7 +1923,6 @@ static EVT_BEGIN(talk_sarary)
         CALL(evt_unitwin_free)
         RETURN
     END_IF
-    // Otherwise he just chats.
     CALL(evt_msg_print, 0, STRING("stg3_tou_16_1"), 0, 0)
     RETURN
 EVT_END()
@@ -2552,7 +2545,6 @@ EVT_BEGIN(evt_tamago_move)
     SET_VALUE(LW(3), 400)
     SPAWN_EVENT(PTR(evt_tamago_scale2))
     WAIT_MS(500)
-    // The vendor shouts at the egg, which falls asleep up there while the music fades.
     CALL(evt_msg_print, 0, STRING("stg3_tou_244"), 0, STRING("ホットドッグ"))
     WAIT_MS(300)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)

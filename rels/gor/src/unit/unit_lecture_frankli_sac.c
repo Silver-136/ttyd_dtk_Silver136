@@ -473,7 +473,6 @@ EVT_END()
 EVT_BEGIN(actend_event)
 #if VERSION > VERSION_DEMO_US
     CALL_CHILD(PTR(stop_wait_event))
-    // After a special move: Frankly points to the emptied Star Power gauge and says it can be filled again.
 #endif
     CALL(get_actkind, LW(0))
     IF_INT_EQUAL(LW(0), 4)
@@ -486,8 +485,6 @@ EVT_BEGIN(actend_event)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
             CALL(evt_btl_camera_set_moveto, 0, 92, 94, 320, 92, 44, 13, 1, 11)
             WAIT_MS(500)
-            // Frankly shows the emptied gauge and the audience,
-            // and explains how a lively crowd builds Star Power.
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_003"), 0, -6)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -515,7 +512,6 @@ EVT_BEGIN(actend_event)
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_005"), 0, -6)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-            // Now he asks Mario and Goombella to attack and get the audience excited.
             CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_LECTURE_SPECIAL)
             CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_ATTACK)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, UNIT_WORK_LESSON, 2)
@@ -549,7 +545,6 @@ EVT_BEGIN(actend_event)
                     CALL(aud_inc)
                     WAIT_MS(2000)
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-                    // Frankly adds that livelier battles draw bigger crowds.
                     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_007"), 0, -6)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
                     WAIT_FRAMES(60)
@@ -560,8 +555,6 @@ EVT_BEGIN(actend_event)
                     GOTO(99)
                 END_IF
                 IF_INT_EQUAL(LW(0), 2)
-                    // Three matching icons: the crowd goes wild; Frankly explains the bingo
-                    // and the Appeal command.
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_013"), 0, -6)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -569,7 +562,6 @@ EVT_BEGIN(actend_event)
                     WAIT_FRAMES(30)
                     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_014"), 0, -6)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-                    // A member of the audience pulls out a hammer and Frankly warns Mario about it.
                     WAIT_MS(1600)
                     CALL(hammer_on)
                     WAIT_MS(1000)
@@ -588,7 +580,6 @@ EVT_BEGIN(actend_event)
                     WAIT_FRAMES(30)
                     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_014_3"), 0, -6)
                     CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, UNIT_WORK_LESSON, 3)
-                    // Frankly explains that audience throws can be stopped with a button press.
                     CALL(aud_attack_init)
                     CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_LECTURE_ATTACK)
                     CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_NO_COMMAND)
@@ -597,7 +588,6 @@ EVT_BEGIN(actend_event)
             ELSE
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, UNIT_WORK_AC_FAILURES, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
-                    // Bad result: the audience feels cheated and shrinks; Frankly scolds the miss.
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_008"), 0, -6)
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -629,7 +619,6 @@ EVT_BEGIN(actend_event)
         WAIT_MS(200)
         CALL(aud_attack_end)
         CALL_CHILD(PTR(stop_wait_event))
-        // Frankly sums up the defence against thrown objects and ends the lecture.
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_014_4"), 0, -6)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 0, 92, 94, 320, 92, 44, 13, 30, 11)

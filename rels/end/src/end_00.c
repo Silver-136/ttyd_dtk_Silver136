@@ -1372,8 +1372,6 @@ void end_image_disp(CameraId cameraId, void* param) {
  */
 EVT_BEGIN(end_image_main_evt)
     LOOP(0)
-        // Loop once per credits picture; stop if the credits have already ended, otherwise wait until the roll
-        // asks for the next picture.
         IF_INT_EQUAL(GF(10), 1)
             RETURN
         END_IF
@@ -1397,7 +1395,6 @@ EVT_BEGIN(end_image_main_evt)
             END_IF
         END_LOOP
         LOOP(0)
-            // The picture stays up until the roll asks to remove it.
             IF_INT_EQUAL(GW(10), 2)
                 BREAK_LOOP
             END_IF

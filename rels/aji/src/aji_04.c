@@ -572,7 +572,6 @@ EVT_BEGIN(kuizu_sekizou)
         SET_VALUE(LW(2), STRING("DOSN"))
         CALL_CHILD(sekizou_kaiten)
         SPAWN_EVENT(sekizou_talk)
-        // If Mario bails out, the statue scolds him and lets him go.
         CALL(evt_msg_print_add, 0, STRING("stg7_aji_04"))
         WAIT_MS(500)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
@@ -586,7 +585,6 @@ EVT_BEGIN(kuizu_sekizou)
     SET_VALUE(LW(2), STRING("DOSN"))
     CALL_CHILD(sekizou_kaiten)
     SPAWN_EVENT(sekizou_talk)
-    // If he takes the challenge, the quiz set appears and the quiz music starts.
     CALL(evt_msg_print_add, 0, STRING("stg7_aji_05"))
     WAIT_MS(500)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_QUIZ1"))
@@ -635,7 +633,6 @@ EVT_BEGIN(kuizu_sekizou)
             END_IF
             IF_INT_EQUAL(LW(0), 0)
                 SPAWN_EVENT(sekizou_talk)
-                // The statue asks "You sure about that?" and Mario confirms or chooses again.
                 CALL(evt_msg_print_add, 0, STRING("stg7_aji_20"))
                 CALL(evt_msg_select, 0, STRING("stg7_aji_03"))
                 IF_INT_EQUAL(LW(0), 0)
@@ -707,7 +704,6 @@ SPAWN_EVENT(quiz_ng)
 IF_INT_EQUAL(LW(15), 2)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND2"), 0)
 ELSE
-                // A wrong answer sounds a buzzer and the statue gloats; the third wrong answer ends the quiz.
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND1"), 0)
 END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
@@ -854,7 +850,6 @@ EVT_BEGIN(kuizu_sekizou)
         SET_VALUE(LW(2), STRING("DOSN"))
         CALL_CHILD(PTR(sekizou_kaiten))
         SPAWN_EVENT(PTR(sekizou_talk))
-        // If Mario bails out, the statue scolds him and lets him go.
         CALL(evt_msg_print_add, 0, STRING("stg7_aji_04"))
         WAIT_MS(500)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
@@ -868,7 +863,6 @@ EVT_BEGIN(kuizu_sekizou)
     SET_VALUE(LW(2), STRING("DOSN"))
     CALL_CHILD(PTR(sekizou_kaiten))
     SPAWN_EVENT(PTR(sekizou_talk))
-    // If he takes the challenge, the quiz set appears and the quiz music starts.
     CALL(evt_msg_print_add, 0, STRING("stg7_aji_05"))
     WAIT_MS(500)
     CALL(evt_map_playanim, STRING("anm_denshoku"), MAP_ANIM_PLAY_LOOP, 0)
@@ -878,7 +872,6 @@ EVT_BEGIN(kuizu_sekizou)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, 0, 83, 591, 0, 100, 91, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    // Count questions, correct answers, and wrong answers separately.
     SET_VALUE(LW(13), 0)
     SET_VALUE(LW(14), 0)
     SET_VALUE(LW(15), 0)
@@ -922,7 +915,6 @@ EVT_BEGIN(kuizu_sekizou)
             END_IF
             IF_INT_EQUAL(LW(0), 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
-                // The statue asks "You sure about that?" and Mario confirms or chooses again.
                 CALL(evt_msg_print_add, 0, STRING("stg7_aji_20"))
                 CALL(evt_msg_select, 0, STRING("stg7_aji_03"))
                 IF_INT_EQUAL(LW(0), 0)
@@ -942,7 +934,6 @@ EVT_BEGIN(kuizu_sekizou)
         CALL(evt_msg_continue)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
         ADD(LW(13), 1)
-        // A right answer earns a fanfare; the statue reacts to the first, fourth and fifth correct answers.
         IF_INT_EQUAL(LF(0), 1)
             IF_INT_EQUAL(LW(14), 4)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_GOOD_SOUND2"), 0)
@@ -996,7 +987,6 @@ EVT_BEGIN(kuizu_sekizou)
             IF_INT_EQUAL(LW(15), 2)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND2"), 0)
             ELSE
-                // A wrong answer sounds a buzzer and the statue gloats; the third wrong answer ends the quiz.
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND1"), 0)
             END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)

@@ -206,7 +206,6 @@ static BeroEntry bero_data[] = {
 EVT_BEGIN(evt_takurami)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
-    // The partner spots a paper in the drawer and Mario takes it out.
 #endif
     CALL(evt_msg_print_party, STRING("stg3_tou_456_01"))
     CALL(evt_party_stop, 0)
@@ -222,8 +221,6 @@ EVT_BEGIN(evt_takurami)
     WAIT_MS(1000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
-    // The partner explains the blueprints of a machine under the ring powered by a Crystal Star,
-    // and the music fades out.
     CALL(evt_msg_print_party, STRING("stg3_tou_458"))
     WAIT_MS(300)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
@@ -275,7 +272,6 @@ EVT_BEGIN(evt_takurami)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 82, 150, 0, 37, -112, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-    // Grubba bolts for the door and leaves, closing it behind him.
     CALL(evt_msg_print, 0, STRING("stg3_tou_461"), 0, STRING("ガンス"))
     WAIT_MS(300)
     CALL(evt_npc_move_position, STRING("ガンス"), 0, -130, 0, FLOAT(100.0f), 1)
@@ -571,8 +567,6 @@ static EVT_BEGIN(talk_kinoshikowa)
                 END_IF
             END_IF
         ELSE
-            // With the trunks gone from his pack she thanks him, pays 30 coins and the job is finished;
-            // while he still carries any she complains about the smell.
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, 0, STRING("irai_13_03"), 0, 0)
                 CALL(evt_sub_get_coin, 30)
@@ -591,8 +585,6 @@ static EVT_BEGIN(talk_kinoshikowa)
         END_IF
         RETURN
     END_IF
-    // Job 23 (Toodles's magazine): if Mario already has the Wrestling Mag she insists she only reads it to
-    // follow trends.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_MUST_HAVE_THAT_BOOK)
         CALL(evt_pouch_check_item, ITEM_WRESTLING_MAG, LW(0))
         IF_INT_GREATER(LW(0), 0)
@@ -602,8 +594,6 @@ static EVT_BEGIN(talk_kinoshikowa)
             WAIT_MS(200)
             CALL(evt_msg_print, 0, STRING("irai_23_03"), 0, 0)
         ELSE
-            // Otherwise she promises to return it soon, gives in when Mario insists,
-            // hurries to the back of the office with the camera following her and fetches it.
             CALL(evt_msg_print, 0, STRING("irai_23_00"), 0, 0)
             CALL(evt_mario_set_pose, STRING("M_N_3"))
             WAIT_MS(500)
@@ -649,7 +639,6 @@ static EVT_BEGIN(talk_kinoshikowa)
             WAIT_MS(200)
             CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
             WAIT_MS(200)
-            // She hands the Wrestling Mag over to Mario.
             CALL(evt_msg_print, 0, STRING("irai_23_02"), 0, 0)
             CALL(evt_item_entry, STRING("pm"), ITEM_WRESTLING_MAG, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("pm"))
@@ -658,7 +647,6 @@ static EVT_BEGIN(talk_kinoshikowa)
         END_IF
         RETURN
     END_IF
-    // Outside the jobs she says nothing early in the story and later tells Mario she is busy.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_32_BOSS_BATTLE)
         CASE_DEFAULT
@@ -783,14 +771,12 @@ static EVT_BEGIN(evt_sensyu)
     CALL(evt_mario_set_dir_npc, STRING("ガンス"))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING("eff"), STRING("ガンス"), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
-    // Grubba welcomes the new challenger and the camera pushes in while the partner steps aside.
     CALL(evt_msg_print, 0, STRING("stg3_tou_43"), 0, STRING("ガンス"))
     CALL(evt_cam3d_evt_set, 75, 114, 386, 75, 45, -8, 1000, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, 0, -30, FLOAT(60.0f))
         CALL(evt_party_set_dir_npc, 0, STRING("ガンス"))
     END_INLINE_EVENT
-    // Mario raises his hand to volunteer and nods as Grubba explains the contract.
     CALL(evt_mario_mov_pos2, 20, 0, FLOAT(60.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
     WAIT_MS(300)
@@ -807,7 +793,6 @@ static EVT_BEGIN(evt_sensyu)
     WAIT_MS(800)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_45"), 0, STRING("ガンス"))
-    // Grubba asks whether Mario wants to fight (a yes/no menu); either answer carries on.
     CALL(evt_msg_select, 0, STRING("stg3_tou_45_yn"))
     CALL(evt_msg_print_add, 0, STRING("stg3_tou_46_00"))
     // Grubba circles around Mario, the camera following, talking as he goes.
@@ -1031,7 +1016,6 @@ static EVT_BEGIN(evt_1st_leagu)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    // Jolene and Grubba talk about Mario's promotion to the majors.
     CALL(evt_set_dir_to_target, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_287"), 0, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"))
     WAIT_MS(300)
@@ -1063,7 +1047,6 @@ static EVT_BEGIN(evt_1st_leagu)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("coin"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    // Grubba and Jolene finish talking.
     CALL(evt_msg_print, 0, STRING("stg3_tou_292_02"), 0, 0)
     CALL(evt_msg_print, 0, STRING("stg3_tou_292"), 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
     WAIT_MS(300)
@@ -1174,7 +1157,6 @@ EVT_BEGIN(evt_nozoki)
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg3_tou_316_10"), 0, STRING("キノシコワ"))
         WAIT_MS(300)
-        // The camera pulls back; Grubba asks where Jolene keeps vanishing to and she refuses to say.
         CALL(evt_cam3d_evt_set, 0, 145, 534, 0, 50, -8, 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(evt_msg_print, 0, STRING("stg3_tou_316_11"), 0, STRING("ガンス"))
@@ -1242,8 +1224,6 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_cam3d_evt_set, 100, 114, 386, 100, 45, -8, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
-        // Grubba hears something in the ceiling and asks who is there; Mario answers with a noise (Squeak,
-        // Meow or Belch) and Grubba reacts.
         CALL(evt_msg_print, 0, STRING("stg3_tou_322"), 0, STRING("ガンス"))
         CALL(evt_msg_select, 0, STRING("stg3_tou_322_yn"))
         CALL(evt_msg_continue)
@@ -1493,8 +1473,6 @@ EVT_BEGIN(tou_05_init_evt)
             CALL(evt_bero_mapchange, STRING("tou_06"), STRING("fall"))
         END_INLINE_EVENT
     END_IF
-    // Unless map events are being skipped, choose the scene: Grubba's first-visit speech,
-    // the promotion scene, or none.
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN

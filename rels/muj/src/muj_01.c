@@ -204,15 +204,12 @@ EVT_END()
 static EVT_BEGIN(garawaru_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
-        // Early on, the rough sailor muses about the mysterious eastern end of the island.
         CALL(evt_msg_print, 0, STRING("stg5_muj_22_1"), 0, STRING("me"))
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_18_BOBBERY_RESCUE_2)
-        // While Bobbery is being rescued, he comments on the admiral's plight.
         CALL(evt_msg_print, 0, STRING("stg5_muj_32_02"), 0, STRING("me"))
         CASE_EQUAL(STG5_18_01_BOBBERY_JOINS)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 3)
-            // With Bobbery in the party, he greets the captain and spots Bobbery.
             CALL(evt_msg_print, 0, STRING("stg5_muj_71_05"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_71_04"), 0, STRING("me"))
@@ -220,7 +217,6 @@ static EVT_BEGIN(garawaru_talk)
         CASE_BETWEEN(STG5_18_02_FLAVIOS_FAVOR_2, STG5_18_03_MARCOS_JEWEL)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 3)
-            // He grows suspicious of the skull rock.
             CALL(evt_msg_print, 0, STRING("stg5_muj_90_02"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_90_02_01"), 0, STRING("me"))
@@ -235,7 +231,6 @@ static EVT_BEGIN(garawaru_talk)
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 3)
-            // After the departure, he reacts to the Piantas' commotion.
             CALL(evt_msg_print, 0, STRING("stg5_muj_149"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_1492_01"), 0, STRING("me"))
@@ -282,7 +277,6 @@ static EVT_BEGIN(garawaru_talk)
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 3)
-            // Late in the game, he remarks that the camp is quiet but dull.
             CALL(evt_msg_print, 0, STRING("stg5_muj_153"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_1532_01"), 0, STRING("me"))
@@ -350,18 +344,15 @@ static EVT_BEGIN(marco_talk)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
-        // Flavio asks what Mario has found.
         CALL(evt_msg_print, 0, STRING("stg5_muj_22_0"), 0, STRING("me"))
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_13_BOBBERY_THE_BRIDGE)
         IF_INT_EQUAL(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 0)
-            // Flavio brushes off talk of the admiral and tells Mario to hurry.
             CALL(evt_msg_print, 0, STRING("stg5_muj_31"), 0, STRING("me"))
             SET_VALUE(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 1)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_32"), 0, STRING("me"))
         END_IF
         CASE_EQUAL(STG5_15_RUNAWAY_SAILORS)
-        // Mario asks Flavio for Chuckola Cola to help the admiral.
         CALL(evt_msg_print, 0, STRING("stg5_muj_31_01"), 0, STRING("me"))
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(500)
@@ -440,7 +431,6 @@ static EVT_BEGIN(marco_talk)
         END_IF
         CALL(evt_pouch_remove_item, LW(0), LW(1))
         IF_INT_EQUAL(LF(0), 0)
-            // Flavio inspects the item he is offered.
             CALL(evt_msg_print, 0, STRING("stg5_muj_31_02_03"), 0, STRING("me"))
             RETURN
         END_IF
@@ -485,7 +475,6 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_party_set_dir, 0, 270, -1)
             SET_VALUE(GF(0), 0)
         END_INLINE_EVENT
-        // Bobbery rejoins and Flavio welcomes him back.
         CALL(evt_msg_print, 0, STRING("stg5_muj_71"), 0, STRING("me"))
         WAIT_WHILE(GF(0))
         IF_INT_EQUAL(LF(10), 0)
@@ -500,7 +489,6 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_80"), 0, STRING("extparty"))
         END_IF
         CALL(evt_set_dir_to_target, STRING("ガラの悪い水夫"), STRING("me"))
-        // The rough sailor heckles Flavio.
         CALL(evt_msg_print, 0, STRING("stg5_muj_81"), 0, STRING("ガラの悪い水夫"))
         CALL(evt_npc_get_position, STRING("ガラの悪い水夫"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SAILER_FART1"), LW(0), LW(1), LW(2), 0)
@@ -528,7 +516,6 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_cam3d_evt_set, -60, 144, 753, -60, 40, 162, 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
         BEGIN_INLINE_EVENT
-            // The sailors cheer at the thought of Flavio going away.
             CALL(evt_msg_print, 0, STRING("stg5_muj_86"), 0, STRING("ガラの悪い水夫"))
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
@@ -568,7 +555,6 @@ static EVT_BEGIN(marco_talk)
             WAIT_MS(160)
         END_LOOP
         WAIT_MS(1000)
-        // Flavio calls it unfair but joins the party for a short time.
         CALL(evt_msg_print, 0, STRING("stg5_muj_90"), 0, STRING("me"))
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg5_sys_00"), 0, 0)
@@ -604,18 +590,15 @@ static EVT_BEGIN(marco_talk)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
-        // Flavio asks what Mario has found.
         CALL(evt_msg_print, 0, STRING("stg5_muj_22_0"), 0, STRING("me"))
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_13_BOBBERY_THE_BRIDGE)
         IF_INT_EQUAL(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 0)
-            // Flavio brushes off talk of the admiral and tells Mario to hurry.
             CALL(evt_msg_print, 0, STRING("stg5_muj_31"), 0, STRING("me"))
             SET_VALUE(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 1)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_32"), 0, STRING("me"))
         END_IF
         CASE_EQUAL(STG5_15_RUNAWAY_SAILORS)
-        // Mario asks Flavio for Chuckola Cola to help the admiral.
         CALL(evt_msg_print, 0, STRING("stg5_muj_31_01"), 0, STRING("me"))
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(500)
@@ -695,7 +678,6 @@ static EVT_BEGIN(marco_talk)
         END_IF
         CALL(evt_pouch_remove_item, LW(0), LW(1))
         IF_INT_EQUAL(LF(0), 0)
-            // Flavio inspects the item he is offered.
             CALL(evt_msg_print, 0, STRING("stg5_muj_31_02_03"), 0, STRING("me"))
             RETURN
         END_IF
@@ -750,7 +732,6 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_party_set_dir, 0, 270, -1)
             SET_VALUE(GF(0), 0)
         END_INLINE_EVENT
-        // Bobbery rejoins and Flavio welcomes him back.
         CALL(evt_msg_print, 0, STRING("stg5_muj_71"), 0, STRING("me"))
         WAIT_WHILE(GF(0))
         IF_INT_EQUAL(LF(10), 0)
@@ -765,7 +746,6 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_80"), 0, STRING("extparty"))
         END_IF
         CALL(evt_set_dir_to_target, STRING("ガラの悪い水夫"), STRING("me"))
-        // The rough sailor heckles Flavio.
         CALL(evt_msg_print, 0, STRING("stg5_muj_81"), 0, STRING("ガラの悪い水夫"))
         CALL(evt_npc_get_position, STRING("ガラの悪い水夫"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SAILER_FART1"), LW(0), LW(1), LW(2), 0)
@@ -778,7 +758,6 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_83"), 0, STRING("extparty"))
         END_IF
         CALL(evt_party_run, 1)
-        // Flavio stammers an excuse and paces nervously.
         CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
         LOOP(3)
             SET_VALUE(LW(0), 0)
@@ -795,7 +774,6 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_cam3d_evt_set, -60, 144, 753, -60, 40, 162, 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
         BEGIN_INLINE_EVENT
-            // The sailors cheer at the thought of Flavio going away.
             CALL(evt_msg_print, 0, STRING("stg5_muj_86"), 0, STRING("ガラの悪い水夫"))
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
@@ -845,7 +823,6 @@ static EVT_BEGIN(marco_talk)
             WAIT_MS(160)
         END_LOOP
         WAIT_MS(1000)
-        // Flavio calls it unfair but joins the party for a short time.
         CALL(evt_msg_print, 0, STRING("stg5_muj_90"), 0, STRING("me"))
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg5_sys_00"), 0, 0)
@@ -1881,7 +1858,6 @@ EVT_BEGIN(nakamaware_event)
     CALL(evt_mario_normalize)
     CALL(evt_npc_set_position, STRING("水夫A"), -220, 0, 0)
     CALL(evt_npc_move_position, STRING("水夫A"), -330, 0, 0, FLOAT(120.0f), 0)
-    // Sailor A begs the captain to stop Flavio and the rough sailor, who are about to fight.
     CALL(evt_msg_print, 0, STRING("stg5_muj_05"), 0, STRING("水夫A"))
     CALL(evt_mario_mov_pos2, -385, 0, FLOAT(120.0f))
     BEGIN_INLINE_EVENT
@@ -1893,7 +1869,6 @@ EVT_BEGIN(nakamaware_event)
     CALL(evt_mario_mov_pos2, -247, 26, FLOAT(120.0f))
     CALL(evt_mario_mov_pos2, -170, 174, FLOAT(120.0f))
     WAIT_MS(1000)
-    // Flavio and the rough sailor trade insults about who was the coward.
     CALL(evt_msg_print, 0, STRING("stg5_muj_06"), 0, STRING("マルコ"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_07"), 0, STRING("ガラの悪い水夫"))
     CALL(evt_npc_get_position, STRING("マルコ"), LW(0), LW(1), LW(2))
@@ -1924,7 +1899,6 @@ EVT_BEGIN(nakamaware_event)
     CALL(evt_npc_set_ry, STRING("マルコ"), 90)
     CALL(evt_npc_move_position, STRING("マルコ"), 98, 166, 0, FLOAT(100.0f), 0)
     WAIT_MS(1000)
-    // Flavio shrieks that the ghosts are here and the sailors cower.
     CALL(evt_msg_print, 0, STRING("stg5_muj_12"), 0, STRING("マルコ"))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1997,7 +1971,6 @@ EVT_BEGIN(nakamaware_event)
     WAIT_MS(3200)
     CALL(evt_cam3d_evt_set, -100, 136, 714, -100, 40, 172, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    // Flavio pushes Mario to the front.
     CALL(evt_msg_print, 0, STRING("stg5_muj_14"), 0, STRING("マルコ"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2346,7 +2319,6 @@ static EVT_BEGIN(sekai_yami_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(1000)
-    // Someone screams as the darkness spreads.
     CALL(evt_msg_print, 0, STRING("stg8_dark_06"), 0, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
@@ -2435,7 +2407,6 @@ static EVT_BEGIN(sekai_yami_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(1000)
-    // Someone screams as the darkness spreads.
     CALL(evt_msg_print, 0, STRING("stg8_dark_06"), 0, 0)
     BEGIN_INLINE_EVENT
 #if VERSION >= VERSION_US
@@ -2545,7 +2516,6 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_INSTANT_TURN)
-    // The sailors cheer the fighter on: don't give up, thump them.
     CALL(evt_msg_print, 0, STRING("stg8_las_148_38"), 0, STRING("水夫D"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_39"), 0, STRING("ボロ水夫A"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_40"), 0, STRING("ボロ水夫B"))
@@ -2560,7 +2530,6 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_43"), 0, STRING("ボロ水夫A"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_44"), 0, STRING("ボロ水夫B"))
     CALL(evt_npc_jump_position_nohit, STRING("ガラの悪い水夫"), LW(0), LW(1), LW(2), 300, 10)
-    // The cheering grows louder.
     CALL(evt_msg_print, 0, STRING("stg8_las_148_45"), 0, STRING("ガラの悪い水夫"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_46"), 0, STRING("水夫D"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_47"), 0, STRING("ボロ水夫A"))

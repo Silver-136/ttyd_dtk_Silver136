@@ -271,8 +271,6 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        // Step 0, before the player's phase: Frankly introduces the Jump action command
-        // and asks Mario to jump on an enemy.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
@@ -292,8 +290,6 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(2)
-        // Step 1, after Mario's jump: Frankly points out the NICE rating,
-        // then asks Goombella to take her turn and she answers.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 3)
@@ -335,7 +331,6 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(4)
-        // Step 2, before the player's phase: Frankly explains the Guard action command Mario just did.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 5)
@@ -351,8 +346,6 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(6)
-        // Step 3, after the attack: Frankly praises the Action Command,
-        // then asks Goombella to attack Mario once more for the Superguard lesson.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 7)
@@ -404,8 +397,6 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(8)
-        // Step 4, before the player's phase: Frankly explains the Superguard
-        // and offers more practice (a yes or no choice).
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 9)
@@ -512,7 +503,6 @@ EVT_BEGIN(lecAttackEvent_Jump)
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
-        // Frankly explains how the Action Command details appear once a target is chosen.
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_001"), 0, -6)
     END_IF
     // The attack is declared.
@@ -553,8 +543,6 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         IF_INT_LESS_OR_EQUAL(LW(10), 0)
-            // Frankly freezes the action and tells Mario to press A just before landing,
-            // then waits for the button.
             BEGIN_SIBLING_EVENT_GET_ID(LW(0))
                 CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, 180, 20)
                 LOOP(21)
@@ -740,7 +728,6 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     IF_INT_EQUAL(LW(0), 5)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
-        // Frankly tells Mario to tilt and hold the stick left, and waits until he does.
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_008"), 0, -6)
         LABEL(1)
         CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
@@ -829,7 +816,6 @@ EVT_BEGIN(lecAttackEvent_Hammer)
                         CALL(btlevtcmd_AcSetParam, 2, 1)
                         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
                         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
-                        // Frankly tells him to keep holding the stick.
                         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_009"), 0, -6)
                         LABEL(6)
                         CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
@@ -860,7 +846,6 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     IF_INT_EQUAL(LW(0), 5)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
-        // Frankly tells him to release the stick when the light comes on, and waits.
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_010"), 0, -6)
         LABEL(10)
         CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))

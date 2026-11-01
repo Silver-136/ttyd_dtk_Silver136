@@ -653,7 +653,6 @@ EVT_BEGIN(tenkyugi_evt)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mario_set_party, 0, 1)
     END_IF
-    // Mario and his partner are set down on the platform and the partner comments (stg8_las_33).
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_pos, 0, -25, 400, 80)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_DISP_DIR_SNAP)
@@ -697,7 +696,6 @@ EVT_BEGIN(tenkyugi_evt)
         CALL(evt_mario_set_dir, 90, 100, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
-    // The partner speaks once more, then the map changes to las_19 for the planets sequence.
     CALL(evt_msg_print_party, STRING("stg8_las_34"))
     SET_VALUE(GF(0), 1)
     CALL(evt_bero_mapchange, STRING("las_19"), STRING("chgmap_evt"))

@@ -544,7 +544,6 @@ EVT_END()
  * stronger (stg1_hei_12_09). Skipped once GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN is set.
  */
 EVT_BEGIN(evt_nokorin)
-    // Skipped once Koopie Koo has said her farewell.
     IF_INT_EQUAL(GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN, 1)
         RETURN
     END_IF
@@ -598,7 +597,6 @@ EVT_BEGIN(evt_nokorin)
     END_IF
     CALL(evt_cam3d_evt_set, 400, 89, 279, 400, 38, -8, 0, EASING_SINE_IN_OUT)
     WAIT_MS(200)
-    // She and the party talk about Koops fighting Hooktail, with the camera cutting between them.
     CALL(evt_msg_print, 0, STRING("stg1_hei_12_02"), 0, STRING("party"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 460, 126, 485, 460, 40, -8, 0, EASING_SINE_IN_OUT)
@@ -614,7 +612,6 @@ EVT_BEGIN(evt_nokorin)
     CALL(evt_msg_print, 0, STRING("stg1_hei_12_06"), 0, STRING("party"))
     CALL(evt_cam3d_evt_set, 460, 126, 485, 460, 40, -8, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    // These three flags join the Mario spin, partner spin, and dialogue events after the first pass.
     SET_VALUE(GF(10), 0)
     SET_VALUE(GF(11), 0)
     SET_VALUE(GF(12), 0)
@@ -776,7 +773,6 @@ EVT_BEGIN(evt_nokorin)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1000)
-    // The partners comment; Koops promises to come back stronger and Mario nods.
     CALL(evt_msg_print, 0, STRING("stg1_hei_12_09"), 0, STRING("party"))
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -895,7 +891,6 @@ static EVT_BEGIN(peach_mail)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(300)
-    // The partner comments; Mario waits for A to open the mail.
     CALL(evt_msg_print_party, STRING("stg1_gon_44"))
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)

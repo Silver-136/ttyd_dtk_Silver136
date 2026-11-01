@@ -336,7 +336,6 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     WAIT_FRAMES(1)
     CALL(evt_npc_move_position, STRING("ババ"), -650, 0, 0, FLOAT(60.0f), 0)
     WAIT_FRAMES(1)
-    // Kammy Koopa arrives out of breath; the door shuts behind her.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_021"), 0, STRING("ババ"))
     SPAWN_EVENT(PTR(kpa_01_door_close))
     CALL(evt_npc_move_position, STRING("ババ"), -480, 0, 0, FLOAT(90.0f), 0)
@@ -358,8 +357,6 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_npc_set_stay_anim, STRING("ババ"))
     CALL(evt_cam3d_evt_set, 470, 85, 311, 470, 44, -14, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-    // Bowser demands to know why she called him here; she asks for patience and explains that Mario is hunting
-    // for treasure, the Crystal Stars.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_022"), 0, STRING("ババ"))
     CALL(evt_cam3d_evt_set, 600, 158, 338, 600, 99, 20, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -382,8 +379,6 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_029"), 0, STRING("ババ"))
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
     CALL(evt_msg_print, 0, STRING("kpa_stg1_030"), 0, STRING("mario"))
-    // Bowser loves the idea of using the Crystal Stars to conquer the world; Kammy asks the question of the
-    // choice (does he like fried eggs?).
     CALL(evt_msg_print, 0, STRING("kpa_stg1_031"), 0, STRING("ババ"))
     CALL(evt_msg_select, 0, STRING("kpa_stg1_032"))
     CALL(evt_msg_continue)
@@ -406,8 +401,6 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         CALL(evt_npc_set_anim, STRING("ババ"), STRING("A_2A"))
     END_INLINE_EVENT
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("U_1"), STRING("T_5"))
-    // Kammy confesses she took a picnic break in Petal Meadows and Bowser explodes in rage, shaking the room
-    // and scaring the guards.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_034"), PTR(kpa_stg1_034_cb), STRING("ババ"))
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("S_1"), STRING("T_1"))
     DELETE_EVENT(LW(0))
@@ -484,8 +477,6 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_npc_set_anim, STRING("ババ"), STRING("P_1"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 470, 85, 311, 470, 44, -14, 500, EASING_SINE_IN_OUT)
-    // Kammy tries to calm him down; a message arrives that Princess Peach was abducted in Rogueport and Bowser
-    // rages again.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_037"), 0, STRING("ババ"))
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("S_1"), STRING("T_1"))
     CALL(evt_npc_set_position, STRING("カメック"), 300, 0, -5)
@@ -515,7 +506,6 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     WAIT_MS(600)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_043"), 0, STRING("ババ"))
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_4"), STRING("KPA_T_3"))
-    // Bowser storms off; the Spiny guards break through the wall as he leaves in his airship.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_044"), 0, STRING("mario"))
     CALL(evt_cam3d_evt_set, 430, 180, 517, 430, 90, 0, 1500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -747,7 +737,6 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         GOTO(7)
     END_IF
     SET_VALUE(GF(0), 1)
-    // Kammy rushes after him on her broom and the scene returns to kpa_00 for the flight to Petalburg.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_045"), 0, STRING("ババ"))
     CALL(evt_sub_get_sincos, 132, LW(0), LW(1))
     SET_FLOAT_VALUE(GW(0), LW(1))

@@ -759,7 +759,6 @@ EVT_BEGIN(nokkosu_talk)
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT
 #else
-    // Nokkos greets Mario.
     CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
 #endif
     // Wait until the partner is free, then put the partner beside Mario.
@@ -783,7 +782,6 @@ EVT_BEGIN(nokkosu_talk)
 #endif
     END_IF
 #if VERSION >= VERSION_US
-    // The partner walks up next to Mario and Nokkos greets them.
     CALL(evt_party_move_pos2, 0, -228, -130, FLOAT(120.0f))
     CALL(evt_party_set_dir, 0, 90, 200)
     CALL(evt_npc_set_ry_lr, STRING("me"), 0)
@@ -798,7 +796,6 @@ EVT_BEGIN(nokkosu_talk)
 #if VERSION >= VERSION_US
     CALL(evt_party_stop, 0)
 #endif
-    // Koops comments on the visit.
     CALL(evt_msg_print, 0, STRING("irai_07_01"), 0, STRING("party"))
 #if VERSION >= VERSION_US
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -811,7 +808,6 @@ EVT_BEGIN(nokkosu_talk)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("me"))
 #endif
-    // Nokkos explains his trouble; Mario and the partner answer.
     CALL(evt_msg_print, 0, STRING("irai_07_02"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("irai_07_03"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("irai_07_04"), 0, STRING("me"))
@@ -823,7 +819,6 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_wait_pera, STRING("me"))
     CALL(evt_party_run, 0)
 #endif
-    // Nokkos hands over a Special Card as thanks.
     CALL(evt_item_entry, STRING("irai_item"), ITEM_SPECIAL_CARD, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("irai_item"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_get_item, STRING("irai_item"))

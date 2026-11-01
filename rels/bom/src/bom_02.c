@@ -549,7 +549,6 @@ static EVT_BEGIN(talk_soncho)
         IF_INT_NOT_EQUAL(LW(0), 3)
             IF_INT_EQUAL(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 0)
                 SET_VALUE(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 1)
-                // First conversation: Mario asks about the cannon and the mayor denies there is one.
                 CALL(evt_msg_print, 0, STRING("stg7_bom_20"), 0, STRING("me"))
                 WAIT_MS(300)
                 CALL(evt_mario_set_pose, STRING("M_I_2"))
@@ -595,7 +594,6 @@ static EVT_BEGIN(talk_soncho)
             WAIT_MS(300)
             CALL(evt_party_move_pos2, 0, 80, 300, FLOAT(60.0f))
             CALL(evt_party_set_dir_npc, 0, STRING("me"))
-            // The partner scolds the mayor for lying, and the mayor explains the rules (stg7_bom_24 to 32_02).
             CALL(evt_msg_print, 0, STRING("stg7_bom_24"), 0, STRING("party"))
             WAIT_MS(300)
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 60)
@@ -614,7 +612,6 @@ static EVT_BEGIN(talk_soncho)
             WAIT_MS(300)
             CALL(evt_msg_print, 0, STRING("stg7_bom_29"), 0, STRING("party"))
             WAIT_MS(300)
-            // The cannon can only be fired with the permission of Goldbob and General White.
             CALL(evt_msg_print, 0, STRING("stg7_bom_30"), 0, STRING("me"))
             WAIT_MS(300)
             CALL(evt_msg_print, 0, STRING("stg7_bom_31"), 0, STRING("party"))
@@ -628,14 +625,11 @@ static EVT_BEGIN(talk_soncho)
             CALL(evt_mario_set_pose, STRING("M_N_2"))
             WAIT_MS(500)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-            // The mayor tells Mario to come back once he has found them; the story advances.
             CALL(evt_msg_print, 0, STRING("stg7_bom_33"), 0, STRING("me"))
             SET_VALUE(GSW_STORY_PROGRESS, STG7_02_MAYOR_BOB)
             CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
             CALL(evt_party_run, 0)
         END_IF
-        // Reminders: the mayor asks whether Mario forgot who to meet, and what has been done so far depends on
-        // the two permissions.
         CASE_LESS(STG7_03_GOLDBOB)
         SET_VALUE(LW(0), 0)
         IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
@@ -655,7 +649,6 @@ static EVT_BEGIN(talk_soncho)
             END_IF
             CASE_EQUAL(1)
             IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
-                // Hints about where to find Goldbob and General White (stg7_bom_38_01 and 38_02).
                 CALL(evt_msg_print, 0, STRING("stg7_bom_38_01"), 0, STRING("me"))
             END_IF
             IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 0)
@@ -684,8 +677,6 @@ EVT_END()
  * while that job is active, with a short walk-up of Mario and the partner.
  */
 static EVT_BEGIN(talk_murabito_e)
-    // Trouble Center job 30: the villager asks Mario to erase the graffiti on the 50th floor of the Pit of 100
-    // Trials.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
 #if VERSION >= VERSION_US
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
@@ -735,7 +726,6 @@ static EVT_BEGIN(talk_murabito_e)
 #if VERSION >= VERSION_US
             IF_INT_EQUAL(LF(0), 0)
 #endif
-                // Mario has erased it: the villager thanks him.
                 CALL(evt_msg_print, 0, STRING("irai_30_004"), 0, 0)
 #if VERSION >= VERSION_US
                 ELSE
@@ -766,7 +756,6 @@ static EVT_BEGIN(talk_murabito_e)
                     CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 0, 60, 0)
                     CALL(evt_npc_status_onoff, 0, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
                 END_IF
-                // He explains his own wish, and the job is complete.
                 CALL(evt_msg_print, 0, STRING("irai_30_006"), 0, 0)
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 1)
@@ -779,7 +768,6 @@ static EVT_BEGIN(talk_murabito_e)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
-        // Otherwise his remarks change with the story, up to the cannon.
         CALL(evt_msg_print, 0, STRING("stg7_bom_10_00"), 0, STRING("me"))
         CASE_LESS(STG7_04_BACK_ONLINE)
         CALL(evt_msg_print, 0, STRING("stg7_bom_10"), 0, STRING("me"))
@@ -1155,7 +1143,6 @@ EVT_END()
 EVT_BEGIN(iri_25_white_bed)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-    // Mario is asked again and again whether to keep bouncing on General White's bed (irai_25_02 to 12).
     CALL(evt_msg_print, 0, STRING("irai_25_02"), 0, 0)
     CALL(evt_msg_select, 0, STRING("irai_25_yesno"))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1244,7 +1231,6 @@ EVT_BEGIN(iri_25_white_bed)
     RETURN
     LABEL(101)
     CALL(evt_party_run, 0)
-    // After the last hop General White wakes with a grunt and greets Mario (irai_25_14 and 15).
     CALL(evt_msg_print, 0, STRING("irai_25_14"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("ホワイト"), STRING("N_2"))
@@ -1264,7 +1250,6 @@ EVT_BEGIN(iri_25_white_bed)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(1000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    // White learns that Mario has brought a delivery from Goldbob (irai_25_16 and 17) and takes the package.
     CALL(evt_msg_print, 0, STRING("irai_25_16"), 0, STRING("ホワイト"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
@@ -1288,8 +1273,6 @@ EVT_END()
 EVT_BEGIN(evt_white_bed)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-    // Mario is asked whether to wake the sleeping White by bouncing on his bed; he keeps jumping while the
-    // player agrees.
     CALL(evt_msg_print, 0, STRING("stg7_bom_43"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg7_bom_43_yn"))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1386,13 +1369,11 @@ EVT_BEGIN(evt_white_bed)
     CALL_CHILD(PTR(mario_jump))
     GOTO(1)
     LABEL(0)
-    // Answering no gives up with a guilty remark.
     CALL(evt_msg_print_add, 0, STRING("stg7_bom_54"))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
     LABEL(1)
-    // General White finally wakes up (stg7_bom_55 to 59).
     CALL(evt_msg_print, 0, STRING("stg7_bom_55"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("ホワイト"), STRING("N_2"))
@@ -1413,7 +1394,6 @@ EVT_BEGIN(evt_white_bed)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAND_UP1_4"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(800)
-    // He recognises Mario's mustache, hat and hammer and learns why Mario needs the cannon.
     CALL(evt_msg_print, 0, STRING("stg7_bom_57"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
@@ -1803,7 +1783,6 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_wait_pera, STRING("村長"))
     CALL(evt_cam3d_evt_set, -30, 55, 473, -30, 35, 24, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    // The mayor wonders what has happened, and the map changes to las_26.
     CALL(evt_msg_print, 0, STRING("stg8_dark_08"), 0, STRING("村長"))
     WAIT_MS(2000)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)

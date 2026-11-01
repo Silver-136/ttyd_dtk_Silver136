@@ -272,14 +272,12 @@ EVT_BEGIN(tegami_event)
         CALL(evt_mario_set_dir, 90, 0, 0)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
     END_SIBLING_EVENT
-    // Koops says it reminds him of his father and breaks down.
     WAIT_MS(1500)
     CALL(evt_msg_print, 0, STRING("stg1_gon_03"), 0, STRING("party"))
     CALL(evt_party_set_pose, 0, STRING("PNK_T_2"))
     CALL(evt_msg_npc, STRING("(^x^)party"))
     CALL(evt_msg_continue)
     WAIT_MS(1000)
-    // Koops notices a letter in the skeleton's hand and asks whether to read it.
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING("fukidashi"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_party_set_pose, 0, STRING("PNK_S_1"))
     WAIT_MS(1300)
@@ -289,8 +287,6 @@ EVT_BEGIN(tegami_event)
     CALL(evt_msg_print, 0, STRING("stg1_gon_04_1"), 0, STRING("party"))
     CALL(evt_msg_select, 0, STRING("stg1_gon_05_yesno"))
     CALL(evt_msg_continue)
-    // Mario says yes: Koops reads the letter aloud (the Hooktail warning), thinks it over and realizes it is
-    // not his father after all.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(GSWF_GON_03_LETTER_READ_UNUSED, 1)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -310,7 +306,6 @@ EVT_BEGIN(tegami_event)
         CALL(evt_party_set_dir, 0, 90, 200)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg1_gon_09_00_01"), 0, STRING("party"))
-        // Mario says no: Koops agrees it is wrong to read someone else's letter and they leave it.
     ELSE
         CALL(evt_mario_set_pose, STRING("M_N_B"))
         WAIT_MS(1000)
@@ -418,7 +413,6 @@ static EVT_BEGIN(senkaron_event)
             END_IF
             CALL(evt_mario_set_dispdir, LW(5))
         END_LOOP
-        // Mario recovers; once only, the partner complains about being pushed around.
         CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
         CALL(evt_mario_cont_onoff, 1)
         CALL(evt_cam_letter_box_disable, 1)

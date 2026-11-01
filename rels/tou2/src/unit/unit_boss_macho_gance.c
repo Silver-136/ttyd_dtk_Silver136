@@ -897,7 +897,6 @@ static EVT_BEGIN(phase_event)
             WAIT_MS(1000)
         END_IF
         CASE_EQUAL(2)
-        // Phase 2: at a quarter of his HP he becomes wobbly (his tired poses) and says his last line.
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
         MULTIPLY(LW(0), 25)
         DIVIDE(LW(0), 100)

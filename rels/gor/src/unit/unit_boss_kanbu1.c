@@ -250,7 +250,6 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
             CALL(btlevtcmd_SetTalkPose, LW(3), STRING("PKR_T_1"))
             CALL(btlevtcmd_SetStayPose, LW(3), STRING("PKR_S_1"))
-            // Goombella speaks and Mario raises his hand; the camera swings back.
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_000"), 0, LW(3))
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_HAND_UP1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -284,7 +283,6 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
-                // Lord Crump is at half HP or less: Goombella comments.
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_003"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
                 RETURN
@@ -297,7 +295,6 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_SUCCESS_TALKED, 1)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
-                // Mario's first successful action command: Goombella comments.
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_001"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_IF
@@ -309,7 +306,6 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_FAIL_TALKED, 1)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
-                // Mario's first failed action command: Goombella comments.
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_002"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_IF

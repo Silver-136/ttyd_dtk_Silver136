@@ -704,8 +704,6 @@ static EVT_BEGIN(_borodo_steal_attack)
     IF_INT_LESS_OR_EQUAL(LW(7), 3)
         CALL(_steal_item, UNIT_ID_SELF, LW(3), LW(8), LW(9), LW(7))
         IF_INT_NOT_EQUAL(LW(8), 0)
-            // A stolen item: the success jingle plays, a message announces what was lost
-            // and the item flies off the target into the Bandit's loot.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_SUCCESS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             BEGIN_INLINE_EVENT
                 WAIT_FRAMES(20)

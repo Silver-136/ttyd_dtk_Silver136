@@ -1057,7 +1057,6 @@ EVT_BEGIN(evt_tougi)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(2)
     END_IF
-    // The partner reacts, and Rawk Hawk tells the Dark Koopatrol it is time to feel the Rawk.
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 90, 300, 0)
     END_INLINE_EVENT
@@ -1164,7 +1163,6 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_eff, 0, PTR("starstone"), 9, LW(0), LW(1), LW(2), FLOAT(0.75f), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon_3d, PTR("SFX_STG3_WIN_AUDIENCE2"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(2000)
-    // Mario and the partner turn to the champion and the partner comments on him.
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_cam3d_evt_set, 0, 95, 692, 0, 43, 397, 0, EASING_SINE_IN_OUT)
     ELSE
@@ -1549,7 +1547,6 @@ EVT_END()
  * a gong rings and a battle starts (battle setup 10); afterwards Grubba reacts to whether Mario won or lost.
  */
 EVT_BEGIN(evt_random_battle)
-    // Mario is startled as the Iron Clefts shout for Gonzales and charge into the ring.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1585,7 +1582,6 @@ EVT_BEGIN(evt_random_battle)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    // Grubba announces the raging Iron Clefts and they tell Mario he will pay for the other day.
     CALL(evt_cam3d_evt_set, 0, 130, 62, 0, 115, -22, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_403_01"), 0, STRING("ガンス"))
@@ -3747,7 +3743,6 @@ BEGIN_INLINE_EVENT
     WAIT_MS(3000)
     CALL(evt_cam3d_evt_set, 0, 127, 105, 0, 95, -145, 0, EASING_LINEAR)
     WAIT_FRAMES(1)
-    // The announcer introduces the match: the title match against Rawk Hawk, or Gonzales against the named team.
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     CALL(evt_tou_get_fighter_name2, GSW_GLITZ_PIT_OPPONENT, LW(2))
     IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
@@ -4334,7 +4329,6 @@ static EVT_BEGIN(evt_champion)
     END_INLINE_EVENT
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(2000)
-    // Grubba opens the main event and announces Rawk Hawk.
     CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 155, 327, 0, 96, -8, 0, EASING_LINEAR)
     WAIT_FRAMES(1)
@@ -5219,7 +5213,6 @@ BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    // Mario walks up to Grubba, who starts his theme and scolds the snoops; the ground starts to rumble.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_cam3d_evt_set, 0, 197, 484, 0, 110, -8, 2000, EASING_SINE_IN_OUT)
@@ -5405,7 +5398,6 @@ BREAK_LOOP
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 0, 170, 385, 0, 135, -11, 300, EASING_SINE_IN_OUT)
     WAIT_MS(300)
-    // In a white flash Grubba becomes Macho Grubba and shouts his new name; Mario and the partner react.
     CALL(gans_white_on)
     CALL(evt_paper_entry, STRING("OFF_d_bom"))
     CALL(evt_npc_get_position, STRING("ガンス"), LW(0), LW(1), LW(2))
@@ -5431,7 +5423,6 @@ BREAK_LOOP
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 170, 385, 0, 135, -11, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-    // Macho Grubba threatens to snack on their energy and the boss battle starts.
     CALL(evt_msg_print, 0, STRING("stg3_tou_468"), 0, STRING("マッチョガンス"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 210, 852, 0, 135, -12, 1000, EASING_SINE_IN_OUT)
@@ -5502,7 +5493,6 @@ BREAK_LOOP
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -25, 197, 574, -25, 105, -8, 3000, EASING_SINE_IN_OUT)
-    // Jolene climbs into the ring and demands answers; Grubba admits what he did to her brother, Prince Mush.
     CALL(evt_npc_move_position, STRING("キノシコワ"), -280, 20, 0, FLOAT(60.0f), 1)
     CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -250, 20, 20, 500, 30)
     CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -215, 40, 20, 500, 30)
@@ -5739,7 +5729,6 @@ static EVT_BEGIN(evt_boss)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    // Mario walks up to Grubba, who starts his theme and scolds the snoops; the ground starts to rumble.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_cam3d_evt_set, 0, 197, 484, 0, 110, -8, 2000, EASING_SINE_IN_OUT)
@@ -6038,7 +6027,6 @@ static EVT_BEGIN(evt_boss)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 0, 170, 385, 0, 135, -11, 300, EASING_SINE_IN_OUT)
     WAIT_MS(300)
-    // In a white flash Grubba becomes Macho Grubba and shouts his new name; Mario and the partner react.
     CALL(gans_white_on)
 #if VERSION >= VERSION_US
     CALL(evt_paper_entry, STRING("OFF_d_bom"))
@@ -6093,7 +6081,6 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, 0, 170, 385, 0, 135, -11, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
 #if VERSION >= VERSION_US
-    // Macho Grubba threatens to snack on their energy and the boss battle starts.
     CALL(evt_msg_print, 0, STRING("stg3_tou_468"), 0, STRING("マッチョガンス"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_468"), 0, STRING("\203}\203b\203`\203\207\203K\203\223\203X"))
@@ -6141,7 +6128,6 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_msg_print, 0, STRING("stg3_tou_473"), 0, STRING("\203K\203\223\203X"))
 #endif
     WAIT_MS(300)
-    // The music-box theme plays and Jolene runs in, thanks Mario and admits she sent him the mysterious emails.
     SET_VALUE(GF(10), 1)
     CALL(evt_cam3d_evt_set, -130, 140, 385, -130, 105, -11, 700, EASING_SINE_IN_OUT)
     WAIT_MS(700)
@@ -6222,7 +6208,6 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -25, 197, 574, -25, 105, -8, 3000, EASING_SINE_IN_OUT)
-    // Jolene climbs into the ring and demands answers; Grubba admits what he did to her brother, Prince Mush.
     CALL(evt_npc_move_position, STRING("キノシコワ"), -280, 20, 0, FLOAT(60.0f), 1)
     CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -250, 20, 20, 500, 30)
     CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -215, 40, 20, 500, 30)

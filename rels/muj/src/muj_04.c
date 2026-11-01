@@ -363,7 +363,6 @@ EVT_BEGIN(sanders_funto)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
-    // Bobbery, holding the bridge against the ghosts, curses them and spots Mario.
     CALL(evt_msg_print, 0, STRING("stg5_muj_23"), 0, STRING(/*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -393,7 +392,6 @@ EVT_BEGIN(sanders_funto)
     CALL(evt_set_dir_to_target, STRING(/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76"), STRING(/*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58"))
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    // The nervous sailor worries about the admiral; Bobbery tells them to leave the ghosts to him.
     CALL(evt_msg_print, 0, STRING("stg5_muj_25"), 0, STRING(/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_26"), 0, STRING(/*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58"))
     BEGIN_INLINE_EVENT
@@ -425,7 +423,6 @@ EVT_BEGIN(sanders_funto)
         CALL(evt_npc_jump_position_nohit, STRING(/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76"), -105, 116, 0, 500, 70)
         CALL(evt_npc_set_anim, STRING(/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76"), STRING("F_1"))
         CALL(evt_npc_flag_onoff, 1, STRING(/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
-        // The nervous sailor screams.
         CALL(evt_msg_print, 0, STRING("stg5_muj_27"), 0, STRING(/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76"))
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
@@ -446,8 +443,6 @@ EVT_BEGIN(sanders_funto)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"めがね水夫"*/"\x82\xDF\x82\xAA\x82\xCB\x90\x85\x95\x76"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     WAIT_FRAMES(1)
-    // The bespectacled sailor says Bobbery thinks this is the right thing to do, and the group leaves the
-    // bridge.
     CALL(evt_msg_print, 0, STRING("stg5_muj_28"), 0, STRING(/*"めがね水夫"*/"\x82\xDF\x82\xAA\x82\xCB\x90\x85\x95\x76"))
     WAIT_MS(1000)
     CALL(evt_mario_cam_keep_off)

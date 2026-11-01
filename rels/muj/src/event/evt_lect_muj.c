@@ -547,7 +547,6 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     SWITCH(LW(9))
         CASE_EQUAL(1)
-        // A system message announces the new partner.
         CALL(evt_msg_print, 0, STRING("lecture_friends_00"), 0, 0)
         CASE_EQUAL(2)
         CALL(evt_msg_print, 0, STRING("lecture_friends_04"), 0, 0)

@@ -295,8 +295,6 @@ USER_FUNC(cameraman_on) {
  * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
  */
 EVT_BEGIN(kinopio_house_talk_evt)
-    // The innkeeper greets Mario with the night's price in the coin window and asks if he will stay;
-    // "no" ends it.
     CALL(evt_mario_key_onoff, 0)
     CALL(get_ryoukin, LW(10))
     CALL(get_npcname, LW(11))
@@ -312,7 +310,6 @@ EVT_BEGIN(kinopio_house_talk_evt)
         CALL(evt_win_coin_off, LW(12))
         RETURN
     END_IF
-    // If Mario and the party are already fully rested, the innkeeper asks whether he wants a bed anyway.
     CALL(power_chk, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(msg_no, 1, LW(0))
@@ -498,8 +495,6 @@ EVT_END()
  * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
  */
 EVT_BEGIN(kinopio_house_talk_evt)
-    // The innkeeper greets Mario with the night's price in the coin window and asks if he will stay;
-    // "no" ends it.
     CALL(evt_mario_key_onoff, 0)
     CALL(get_ryoukin, LW(10))
     CALL(get_npcname, LW(11))
@@ -515,7 +510,6 @@ EVT_BEGIN(kinopio_house_talk_evt)
         CALL(evt_win_coin_off, LW(12))
         RETURN
     END_IF
-    // If Mario and the party are already fully rested, the innkeeper asks whether he wants a bed anyway.
     CALL(power_chk, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(msg_no, 1, LW(0))
@@ -697,7 +691,6 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(get_npcname, LW(11))
     CALL(evt_mario_set_dir_npc, LW(11))
     CALL(evt_party_set_dir_npc, 0, LW(11))
-    // The innkeeper asks how he slept and sees him off; Mario gets control back.
     CALL(get_npcname, LW(11))
     CALL(msg_no, 5, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(11))

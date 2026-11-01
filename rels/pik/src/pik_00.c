@@ -1181,7 +1181,6 @@ static const Vec zoom_zero_b = {0.0f, 0.0f, 0.0f};
 EVT_BEGIN(talk_papa_taihou_kyoka)
     IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
         SET_VALUE(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 1)
-        // Goldbob greets Mario and hears about the Fahr Outpost cannon.
         CALL(evt_msg_print, 0, STRING("stg7_pik_01"), 0, STRING("ナリキンパパ"))
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(800)
@@ -1199,10 +1198,8 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
         CALL(zoom, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
         CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
-        // On later visits he asks how much Mario would pay.
         CALL(evt_msg_print, 0, STRING("stg7_pik_05"), 0, STRING("ナリキンパパ"))
     END_IF
-    // Mario names a price: nothing, 1 coin, 64 coins or everything.
     CALL(evt_msg_select, 0, STRING("stg7_pik_04_yn"))
     DEBUG_PUT_REG(LW(0))
     SWITCH(LW(0))
@@ -1264,7 +1261,6 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
                 CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
                 RETURN
             END_IF
-            // Mario agrees to hand over all his coins.
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_16"))
             CALL(evt_pouch_get_coin, LW(10))
             MULTIPLY(LW(10), -1)
@@ -1413,7 +1409,6 @@ static EVT_BEGIN(talk_mama)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             CALL(evt_pouch_check_item, ITEM_PRESENT, LW(0))
             IF_INT_GREATER(LW(0), 0)
-                // Trouble Center request 29: Goldbob's wife asks what Mario needs, and he shows the Present.
                 CALL(evt_msg_print, 0, STRING("irai_29_14"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_win_item_select, PTR(iri_29_item_tbl), LW(0))
@@ -1422,7 +1417,6 @@ static EVT_BEGIN(talk_mama)
 #endif
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     CALL(evt_pouch_remove_item, ITEM_PRESENT, LW(0))
-                    // She learns the Present is from Little Bub and is moved.
                     CALL(evt_msg_print, 0, STRING("irai_29_15"), PTR(irai_29_15_cb), 0)
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     CALL(evt_npc_get_position, STRING("ナリキンママ"), LW(3), LW(4), LW(5))
@@ -1470,7 +1464,6 @@ static EVT_BEGIN(talk_mama)
                     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
                     CALL(evt_npc_move_position, STRING("me"), 115, 330, 0, 150, 0)
                     WAIT_MS(1000)
-                    // She is delighted with the gift.
                     CALL(evt_msg_print, 0, STRING("irai_29_16"), 0, 0)
                     WAIT_MS(1500)
                     BEGIN_INLINE_EVENT
@@ -1496,14 +1489,12 @@ static EVT_BEGIN(talk_mama)
                 RETURN
             END_IF
         ELSE
-            // She thanks Mario and the request moves on.
             CALL(evt_msg_print, 0, STRING("irai_29_18"), 0, 0)
             RETURN
         END_IF
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_54_WELCOME_BACK)
-        // With no request pending, her talk follows the story.
         CALL(evt_msg_print, 0, STRING("stg6_pik_02"), 0, 0)
         CASE_LESS(STG7_02_MAYOR_BOB)
         CALL(evt_msg_print, 0, STRING("stg7_pik_21_1"), 0, 0)

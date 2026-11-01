@@ -515,7 +515,6 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
-    // It announces the attack and turns to face its target.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)

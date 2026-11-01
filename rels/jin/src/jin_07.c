@@ -535,7 +535,6 @@ EVT_BEGIN(evt_teresa_box_open)
         WAIT_MS(5500)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
     END_INLINE_EVENT
-    // The Boos jeer at Mario with speech bubbles as they fly out.
     BEGIN_INLINE_EVENT
         LOOP(0)
             IF_INT_EQUAL(GF(0), 1)
@@ -579,8 +578,6 @@ EVT_BEGIN(evt_teresa_box_open)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1200)
-    // A late Boo floats in after the others and asks Mario a question; it tosses him an item depending on
-    // his answer.
     CALL(evt_npc_set_position, STRING("テレサ"), 0, 6, 80)
     CALL(evt_npc_set_ry, STRING("テレサ"), 90)
     CALL(evt_npc_flag_onoff, 0, STRING("テレサ"), NPC_FLAG_NO_DRAW)

@@ -1968,7 +1968,6 @@ EVT_BEGIN(dai3_shurai_sub)
     CALL(evt_mario_mov_pos2, 1285, -80, FLOAT(120.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
     WAIT_MS(1000)
-    // Flavio welcomes Mario back and asks about the treasure; Mario answers with a shrug.
     CALL(evt_msg_print, 0, STRING("stg5_muj_95"), 0, STRING("マルコ"))
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1978,7 +1977,6 @@ EVT_BEGIN(dai3_shurai_sub)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     WAIT_MS(500)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-    // The rough sailor learns that Cortez guarded the treasure and that Mario left it behind.
     CALL(evt_msg_print, 0, STRING("stg5_muj_96"), 0, STRING("ガラの悪い水夫"))
     CALL(evt_set_dir_to_target, STRING("オドオド水夫"), STRING("水夫E"))
     CALL(evt_npc_get_position, STRING("オドオド水夫"), LW(0), LW(1), LW(2))
@@ -1990,7 +1988,6 @@ EVT_BEGIN(dai3_shurai_sub)
     CALL(evt_npc_move_position, STRING("オドオド水夫"), 1325, -150, 0, FLOAT(180.0f), 0)
     WAIT_MS(500)
     CALL(evt_set_dir_to_target, STRING("水夫E"), STRING("オドオド水夫"))
-    // The nervous sailor recognizes his brother (sailor E) and the two talk.
     CALL(evt_msg_print, 0, STRING("stg5_muj_99"), 0, STRING("オドオド水夫"))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("水夫E"), 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
@@ -2010,7 +2007,6 @@ EVT_BEGIN(dai3_shurai_sub)
     CALL(evt_npc_flag_onoff, 0, STRING("水夫D"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_flag_onoff, 0, STRING("水夫E"), NPC_FLAG_TALK_POSE)
     BEGIN_INLINE_EVENT
-        // The sailors fall silent together; then a cannon fires and the crowd starts to mill about nervously.
         CALL(evt_msg_print, 0, STRING("stg5_muj_103"), 0, STRING("マルコ"))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -2061,7 +2057,6 @@ EVT_BEGIN(dai3_shurai_sub)
     SET_VALUE(LW(0), STRING("マルコ"))
     SPAWN_EVENT(PTR(npc_kyorokyoro))
     WAIT_MS(3000)
-    // The nervous sailor cries out as cannonballs start landing around the beach.
     CALL(evt_msg_print, 0, STRING("stg5_muj_104"), 0, STRING("オドオド水夫"))
     WAIT_MS(1000)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
@@ -2105,7 +2100,6 @@ EVT_BEGIN(dai3_shurai_sub)
     CALL(evt_npc_set_ry, STRING("めがね水夫"), 90)
     CALL(evt_npc_set_position, STRING("第三勢力幹部"), 0, -100, 0)
     CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 90)
-    // The bespectacled sailor, Four-Eyes, appears on the X-Naut ship and jumps over to the pier.
     CALL(evt_msg_print, 0, STRING("stg5_muj_105"), 0, STRING("めがね水夫"))
     WAIT_MS(1000)
     CALL(evt_npc_jump_position_nohit, STRING("めがね水夫"), -802, 162, 0, 500, 120)
@@ -2157,12 +2151,10 @@ EVT_BEGIN(dai3_shurai_sub)
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
-    // He spins around and reveals himself as the great Lord Crump.
     CALL(evt_msg_print, 0, STRING("stg5_muj_110"), 0, STRING("第三勢力幹部"))
     CALL(evt_npc_set_ry, STRING("マルコ"), 180)
     CALL(evt_cam3d_evt_set, 1195, 50, 405, 200, 180, -43, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    // Lord Crump demands the Crystal Star.
     CALL(evt_msg_print, 0, STRING("stg5_muj_111"), 0, STRING("第三勢力幹部"))
     SET_VALUE(LW(0), 991)
     SET_VALUE(LW(1), -60)
@@ -2189,7 +2181,6 @@ EVT_BEGIN(dai3_shurai_sub)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("stg5_muj_112"), 0, STRING("第三勢力幹部"))
     SPAWN_EVENT_GET_ID(PTR(dai3_shurai_after), GW(8))
-    // The sailors cry out in shock at the revelation.
     CALL(evt_msg_print, 0, STRING("stg5_muj_113"), 0, STRING("マルコ"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_114"), 0, STRING("ガラの悪い水夫"))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("マルコ"), 0, 0, 0, 0, 0, 0, 0, 60)
@@ -3000,7 +2991,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -847, 334, 977, -847, 78, -475, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    // Lord Crump gloats that he has ammunition to spare as the X-Naut ship starts to fire.
     CALL(evt_msg_print, 0, STRING("stg5_muj_118"), 0, STRING("第三勢力幹部"))
     DELETE_EVENT(GW(8))
     CALL(evt_cam3d_evt_set, 0, 470, -91, 0, 400, -383, 500, EASING_SINE_IN_OUT)
@@ -3019,7 +3009,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    // Cortez's ghost ship appears and he scolds the X-Nauts for firing without his permission.
     CALL(evt_msg_print, 0, STRING("stg5_muj_119"), 0, STRING("コルテス"))
     CALL(evt_msg_continue)
     SET_VALUE(GF(0), 1)
@@ -3042,7 +3031,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        // Lord Crump is startled as the ghost ship arrives and the boss music starts.
         CALL(evt_msg_print, 0, STRING("stg5_muj_120"), 0, STRING("第三勢力幹部"))
         CALL(evt_msg_continue)
     END_INLINE_EVENT
@@ -3073,7 +3061,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     DELETE_EVENT(LW(13))
     DELETE_EVENT(LW(14))
     DELETE_EVENT(LW(15))
-    // Lord Crump swears to sink the ghost ship; Cortez calls on his spirits to take the X-Naut ship.
     CALL(evt_msg_print, 0, STRING("stg5_muj_121"), 0, STRING("第三勢力幹部"))
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
@@ -3093,7 +3080,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_DRAW)
     CALL(evt_mario_set_dir, 90, 200, 0)
     WAIT_MS(500)
-    // Flavio tells Mario to cross over and duel Lord Crump.
     CALL(evt_msg_print, 0, STRING("stg5_muj_123"), 0, STRING("マルコ"))
     CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 0, EASING_SINE_IN_OUT)
     CALL(evt_npc_flag_onoff, 0, STRING("コルテス"), NPC_FLAG_NO_DRAW)
@@ -3157,7 +3143,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -847, 334, 977, -847, 78, -475, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    // Lord Crump gloats that he has ammunition to spare as the X-Naut ship starts to fire.
     CALL(evt_msg_print, 0, STRING("stg5_muj_118"), 0, STRING("第三勢力幹部"))
     DELETE_EVENT(GW(8))
     CALL(evt_cam3d_evt_set, 0, 470, -91, 0, 400, -383, 500, EASING_SINE_IN_OUT)
@@ -3176,7 +3161,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    // Cortez's ghost ship appears and he scolds the X-Nauts for firing without his permission.
     CALL(evt_msg_print, 0, STRING("stg5_muj_119"), 0, STRING("コルテス"))
     CALL(evt_msg_continue)
     SET_VALUE(GF(0), 1)
@@ -3199,7 +3183,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        // Lord Crump is startled as the ghost ship arrives and the boss music starts.
         CALL(evt_msg_print, 0, STRING("stg5_muj_120"), 0, STRING("第三勢力幹部"))
         CALL(evt_msg_continue)
     END_INLINE_EVENT
@@ -3244,7 +3227,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     DELETE_EVENT(LW(13))
     DELETE_EVENT(LW(14))
     DELETE_EVENT(LW(15))
-    // Lord Crump swears to sink the ghost ship; Cortez calls on his spirits to take the X-Naut ship.
     CALL(evt_msg_print, 0, STRING("stg5_muj_121"), 0, STRING("第三勢力幹部"))
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
@@ -3264,7 +3246,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_DRAW)
     CALL(evt_mario_set_dir, 90, 200, 0)
     WAIT_MS(500)
-    // Flavio tells Mario to cross over and duel Lord Crump.
     CALL(evt_msg_print, 0, STRING("stg5_muj_123"), 0, STRING("マルコ"))
     CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 0, EASING_SINE_IN_OUT)
     CALL(evt_npc_flag_onoff, 0, STRING("コルテス"), NPC_FLAG_NO_DRAW)
@@ -3892,7 +3873,6 @@ EVT_BEGIN(leave_island)
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, 660, 267, -170, 660, 190, -603, 0, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    // Cortez thanks Mario and the sailors talk about going home.
     CALL(evt_msg_print, 0, STRING("stg5_muj_133"), 0, STRING("コルテス"))
     CALL(evt_cam3d_evt_set, 775, 133, -36, 775, 45, -550, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -3911,7 +3891,6 @@ EVT_BEGIN(leave_island)
     CALL(evt_npc_jump_position_nohit, STRING("マルコ"), 745, 40, -555, 500, 30)
     CALL(evt_npc_set_ry, STRING("マルコ"), 90)
     SPAWN_EVENT(PTR(option_ship_marco))
-    // Mony, Peeton and the rough sailor say they will stay on the island.
     CALL(evt_msg_print, 0, STRING("stg5_muj_138"), 0, STRING("モニー"))
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 90, 200)
@@ -3929,7 +3908,6 @@ EVT_BEGIN(leave_island)
     CALL(evt_cam3d_evt_set, 820, 133, -36, 820, 45, -550, 500, EASING_SINE_IN_OUT)
     CALL(evt_party_set_dir, 0, 270, 200)
     WAIT_MS(200)
-    // Mario's partner speaks; Mario nods and jumps aboard.
     CALL(evt_msg_print_party, STRING("stg5_muj_142"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -3952,7 +3930,6 @@ EVT_BEGIN(leave_island)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, 640, 270, -110, 640, 185, -603, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    // Cortez gives the order to cast off and the ship sails out to sea.
     CALL(evt_msg_print, 0, STRING("stg5_muj_143"), 0, STRING("コルテス"))
     CALL(evt_npc_set_ry, STRING("コルテス"), 270)
     SET_VALUE(LW(0), 10)
@@ -4008,7 +3985,6 @@ EVT_BEGIN(leave_island)
     SPAWN_EVENT(PTR(back_dark))
     CALL_CHILD(PTR(suifu_dark))
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    // The light fades to dusk and the voyage is written into the diary.
     CALL(evt_msg_print, 0, STRING("stg5_muj_144"), 0, 0)
     WAIT_MS(2000)
     // The story advances and the ship sails to Rogueport (gor_00).

@@ -301,7 +301,6 @@ EVT_BEGIN(evt_mezame)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(3000)
-    // A ship's crewman politely wakes Mario and tells him Rogueport has come into view; the sea ambience starts.
     CALL(evt_msg_print, 0, STRING("mac_0_012"), 0, 0)
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING("mac_0_013"), 0, 0)
@@ -380,7 +379,6 @@ EVT_BEGIN(evt_mezame)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // The crewman says they will arrive shortly and asks Mario to prepare to disembark.
     WAIT_MS(3000)
     CALL(evt_msg_print, 0, STRING("mac_0_013_01"), 0, 0)
     WAIT_MS(300)

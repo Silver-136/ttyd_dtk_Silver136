@@ -166,7 +166,6 @@ EVT_BEGIN(peramajin_before)
                 CALL(evt_mario_set_dir, 270, 200, 0)
             END_IF
         END_INLINE_EVENT
-        // Mario has no Black Key: the chest tells him to beat the ghost and get it, then stays shut.
         CALL(evt_pouch_check_item, ITEM_BLACK_KEY_0x24, LW(10))
         IF_INT_LESS_OR_EQUAL(LW(10), 0)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -176,7 +175,6 @@ EVT_BEGIN(peramajin_before)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        // Mario has the key: the chest asks him to pick it from the item menu.
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_09"), PTR(majin_callback), 0)
 #if VERSION <= VERSION_DEMO_US
@@ -193,8 +191,6 @@ EVT_BEGIN(peramajin_before)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        // Mario picks the key: the partner steps aside and the chest says it will start its curse; the key is
-        // used up.
         BEGIN_INLINE_EVENT
             CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
             ADD(LW(3), 35)
@@ -217,7 +213,6 @@ EVT_BEGIN(peramajin_before)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-    // First visit (before the Ember has appeared): Mario faces the chest, which shouts and wobbles.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
@@ -239,7 +234,6 @@ EVT_BEGIN(peramajin_before)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_snd_sfxoff, LW(15))
     WAIT_MS(300)
-    // The chest rejoices that someone finally came, then asks to be left to its spiel as Mario reacts.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_02"), PTR(majin_callback), 0)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
@@ -260,7 +254,6 @@ EVT_BEGIN(peramajin_before)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(800)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    // It grumbles that this is the fourth cursing chest Mario has met and gives in.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_06"), PTR(majin_callback), 0)
     CALL(evt_mario_set_pose, STRING("M_N_2"))

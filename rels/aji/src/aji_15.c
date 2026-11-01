@@ -128,7 +128,6 @@ EVT_BEGIN(peach_evt_syawa_main)
     ELSE
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_2"), STRING("P_T_2"))
     END_IF
-    // She comments on the shower (peach_aji_35, or 35_1 when she has already showered).
     IF_INT_EQUAL(GSWF_AJI_15_PEACH_SHOWER_EXAMINED, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_35"), 0, STRING("mario"))
     ELSE
@@ -247,7 +246,6 @@ EVT_BEGIN(peach_evt_syawa_main)
         GOTO(1)
     END_IF
     WAIT_MS(300)
-    // She comments on the shower (peach_aji_36 and 37) and changes clothes.
     CALL(evt_msg_print, 0, STRING("peach_aji_36"), 0, STRING("mario"))
     WAIT_MS(500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_SHOWER1"), -40, 0, -30, 0)

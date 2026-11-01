@@ -386,7 +386,6 @@ EVT_BEGIN(batten_satellite_attack_attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))

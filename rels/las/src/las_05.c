@@ -1187,7 +1187,6 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_cam3d_evt_set, 550, 80, 310, 550, 30, -90, 300, EASING_LINEAR)
         WAIT_MS(300)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        // Dark Bones speaks to Mario from across the room; Mario is startled and the danger music starts.
         CALL(evt_msg_print, 0, STRING("stg8_las_02"), 0, STRING("黒カロン"))
         CALL(evt_ext_entry, 1000, PTR(senkaron_ext_entry_data), PTR(senkaron_ext_init), PTR(senkaron_ext_main), PTR(senkaron_ext_dispent))
         CALL(senkaronFlagOffMesPushing)
@@ -1250,7 +1249,6 @@ static EVT_BEGIN(senkaron_event)
             CALL(evt_mario_set_dir, 270, 300, 0)
         END_INLINE_EVENT
         WAIT_MS(1000)
-        // Mario's partner reacts, then Dark Bones taunts them again (stg8_las_04).
         CALL(evt_msg_print_party, STRING("stg8_las_03"))
         LOOP(0)
             IF_INT_NOT_EQUAL(GF(0), 0)

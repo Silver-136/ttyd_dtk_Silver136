@@ -827,7 +827,6 @@ EVT_BEGIN(phase_event_fmario)
         CALL(btlevtcmd_get_turn, LW(0))
         IF_INT_EQUAL(LW(0), 3)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            // Vivian says she is sorry to her sister but Mario has been the only one kind to her.
             CALL(evt_msg_print, 0, STRING("stg4_jin_23"), 0, 0)
             WAIT_MS(200)
             SET_VALUE(GW(21), 1)
@@ -863,7 +862,6 @@ EVT_BEGIN(phase_event_fmario)
                 END_LOOP
             END_SIBLING_EVENT
             CALL(btlevtcmd_WaitEventEnd, LW(0))
-            // Vivian: she will fight at his side from now on.
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_24"), 0, LW(3))
             WAIT_MS(200)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_MARIO_FIND1_3"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -871,7 +869,6 @@ EVT_BEGIN(phase_event_fmario)
             CALL(btlevtcmd_JumpSetting, LW(5), 12, FLOAT(1.0f), FLOAT(1.1992188f))
             CALL(btlevtcmd_JumpPosition, LW(5), LW(7), LW(8), LW(10), 0, MOVE_SOUND_FROM_TABLE)
             WAIT_MS(1000)
-            // Vivian: she has made her choice and is not turning back.
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_25"), 0, LW(3))
             WAIT_MS(1000)
             BEGIN_SIBLING_EVENT_GET_ID(LW(0))
@@ -932,7 +929,6 @@ EVT_BEGIN(phase_event_fmario)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_50, LW(1))
             IF_INT_LESS(LW(0), LW(1))
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_TALK_STEP, 2)
-                // The fake Mario is hurting and complains.
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL_CHILD(fmario_zoom)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_01"), 0, -2)

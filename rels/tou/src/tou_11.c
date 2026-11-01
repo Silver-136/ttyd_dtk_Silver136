@@ -196,7 +196,6 @@ EVT_BEGIN(evt_tojikome)
     CALL(evt_mario_mov_pos2, 0, -80, FLOAT(60.0f))
     CALL(evt_mario_mov_pos2, 30, -80, FLOAT(60.0f))
     CALL(evt_mario_set_dir_npc, STRING("ガードマン"))
-    // The guard tells them to wait here and they look puzzled.
     CALL(evt_msg_print, 0, STRING("stg3_tou_409"), 0, STRING("ガードマン"))
     WAIT_MS(300)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -230,7 +229,6 @@ EVT_BEGIN(evt_tojikome)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -200, 0, FLOAT(70.0f), 1)
-    // The partner wonders why they are in a minor-league locker room, then the scene irises to the arena.
     CALL(evt_party_stop, 0)
     CALL(evt_msg_print_party, STRING("stg3_tou_409_01"))
     WAIT_MS(1000)

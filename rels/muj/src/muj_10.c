@@ -618,7 +618,6 @@ EVT_BEGIN(senin_event)
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(1000)
-    // The sailors say they are coming too.
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_01"), 0, STRING("水夫D"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_02"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_03"), 0, STRING("ガラの悪い水夫"))
@@ -627,7 +626,6 @@ EVT_BEGIN(senin_event)
     CALL(evt_npc_set_position, STRING("コルテス"), -215, 120, -160)
     // Cortez appears on the dock.
     CALL_CHILD(korutesu_apper)
-    // Cortez speaks after a millennium and the Embers appear.
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_04"), 0, STRING("コルテス"))
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR3"), 0)
     SET_VALUE(LW(0), 95)
@@ -728,7 +726,6 @@ EVT_BEGIN(senin_event)
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(1000)
-    // The sailors say they are coming too.
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_01"), 0, STRING("水夫D"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_02"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_03"), 0, STRING("ガラの悪い水夫"))
@@ -737,7 +734,6 @@ EVT_BEGIN(senin_event)
     CALL(evt_npc_set_position, STRING("コルテス"), -215, 120, -160)
     // Cortez appears on the dock.
     CALL_CHILD(PTR(korutesu_apper))
-    // Cortez speaks after a millennium and the Embers appear.
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_04"), 0, STRING("コルテス"))
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR3"), 0)
     SET_VALUE(LW(0), 95)
