@@ -247,16 +247,18 @@ void kpa_walk(void) {
             if (m->controlStickSensitivity) {
                 kpaChgPose("KPA_W_1", "KPA2_W_1");
             } else if (!(m->kpaWork->flags & KPA_WORK_FLAG_WEARY)) {
-#else
-        if (!(m->kpaWork->flags & KPA_WORK_FLAG_WEARY)) {
-#endif
             kpaChgPose("KPA_W_1", "KPA2_W_1");
         } else {
             kpaChgPose("KPA_W_2", "KPA2_W_1");
         }
-#if VERSION <= VERSION_DEMO_US
         } else {
             kpaChgPose("KPA_W_1", "KPA2_W_1");
+        }
+#else
+        if (!(m->kpaWork->flags & KPA_WORK_FLAG_WEARY)) {
+            kpaChgPose("KPA_W_1", "KPA2_W_1");
+        } else {
+            kpaChgPose("KPA_W_2", "KPA2_W_1");
         }
 #endif
         m->mot.kpa.animFrame = 0;
@@ -457,12 +459,11 @@ void kpa_fall(void) {
         if (mario->currMotionId != MARIO_MOTION_FALL_2) {
 #if VERSION <= VERSION_DEMO_US
             if ((s32)(u8)mario->characterId == CHARACTER_BOWSER) {
+                    kpaChgPose("KPA_J_1B", "KPA2_J_1B");
 #else
             if (mario->characterId == CHARACTER_BOWSER) {
                 if (!kpaFireAttackCheck()) {
-#endif
                     kpaChgPose("KPA_J_1B", "KPA2_J_1B");
-#if VERSION > VERSION_DEMO_US
                 }
 #endif
             } else if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {

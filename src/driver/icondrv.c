@@ -311,12 +311,14 @@ void iconEntry(const char* name, u16 iconId) {
         if (!strncmp(gp->currentMapName, "aji", 3) && evtGetValue(0, GSW_STORY_PROGRESS) == STG7_25_THE_LAST_MAIL) {
             entry->uflags &= ~ICON_FLAG_NO_MAP_BLEND;
         } else {
-#endif
             entry->uflags |= ICON_FLAG_NO_MAP_BLEND;
         }
     }
-#if VERSION > VERSION_DEMO_US
 }
+#else
+            entry->uflags |= ICON_FLAG_NO_MAP_BLEND;
+        }
+    }
 #endif
 
 /** Creates a named icon showing iconId drawn with the 2D (screen) camera. */

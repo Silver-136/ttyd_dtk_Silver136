@@ -1553,41 +1553,9 @@ void animPoseMain(s32 poseId) {
         kf = &anim->keyframes[nextFrame];
 #if VERSION > VERSION_DEMO_US
         { AnimVtxDelta* d; AnimVtxDelta* e;
-#endif
         s = 0.0625f * t;
         v = grpA;
         d = &anim->vtxPosDeltas[kf->vtxPosStart];
-#if VERSION <= VERSION_DEMO_US
-        v = (u8*)pose->bufferVtxPos;
-        n = kf->vtxPosCount;
-        apmCopyTo(grpA, v, nA, sizeof(Vec));
-        v = grpA;
-        for (j = 0; j < n; j++, d++) {
-            v += d->step * sizeof(Vec);
-            ((Vec*)v)->x += (f32)d->x * s;
-            ((Vec*)v)->y += (f32)d->y * s;
-            ((Vec*)v)->z += (f32)d->z * s;
-        }
-        d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
-        v = (u8*)pose->bufferVtxNrm;
-        n = kf->vtxNrmCount;
-        apmCopyTo(grpB, v, nB, sizeof(Vec));
-        v = grpB;
-        for (j = 0; j < n; j++, d++) {
-            v += d->step * sizeof(Vec);
-            ((Vec*)v)->x += (f32)d->x * s;
-            ((Vec*)v)->y += (f32)d->y * s;
-            ((Vec*)v)->z += (f32)d->z * s;
-        }
-        {AnimNodeDelta* d;
-        d = &anim->nodeDeltas[kf->nodeStart];
-        v = (u8*)pose->bufferNode;
-        dt = anim->keyframes[nextFrame].time - anim->keyframes[frame].time;
-        n = kf->nodeCount;
-        apmCopyTo((u8*)pose->nodes, v, nD, 4);
-        v = (u8*)pose->nodes;
-        for (j = 0; j < n; j++, d++) {
-#else
         e = d + kf->vtxPosCount;
         p = (u8*)pose->bufferVtxPos;
         if (nA != 0) {
@@ -1631,6 +1599,39 @@ void animPoseMain(s32 poseId) {
             memcpy_as4(v, p, nD * 4);
         }
         for (; d < e; d++) {
+#else
+        s = 0.0625f * t;
+        v = grpA;
+        d = &anim->vtxPosDeltas[kf->vtxPosStart];
+        v = (u8*)pose->bufferVtxPos;
+        n = kf->vtxPosCount;
+        apmCopyTo(grpA, v, nA, sizeof(Vec));
+        v = grpA;
+        for (j = 0; j < n; j++, d++) {
+            v += d->step * sizeof(Vec);
+            ((Vec*)v)->x += (f32)d->x * s;
+            ((Vec*)v)->y += (f32)d->y * s;
+            ((Vec*)v)->z += (f32)d->z * s;
+        }
+        d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
+        v = (u8*)pose->bufferVtxNrm;
+        n = kf->vtxNrmCount;
+        apmCopyTo(grpB, v, nB, sizeof(Vec));
+        v = grpB;
+        for (j = 0; j < n; j++, d++) {
+            v += d->step * sizeof(Vec);
+            ((Vec*)v)->x += (f32)d->x * s;
+            ((Vec*)v)->y += (f32)d->y * s;
+            ((Vec*)v)->z += (f32)d->z * s;
+        }
+        {AnimNodeDelta* d;
+        d = &anim->nodeDeltas[kf->nodeStart];
+        v = (u8*)pose->bufferNode;
+        dt = anim->keyframes[nextFrame].time - anim->keyframes[frame].time;
+        n = kf->nodeCount;
+        apmCopyTo((u8*)pose->nodes, v, nD, 4);
+        v = (u8*)pose->nodes;
+        for (j = 0; j < n; j++, d++) {
 #endif
             b = d->tangentEnd;
             v += d->step * 4;
@@ -1670,18 +1671,15 @@ void animPoseMain(s32 poseId) {
         f -= pose->rotationY;
 #if VERSION <= VERSION_DEMO_US
         while (f < -360.0f)
+            f += 360.0f;
+        while (f >= 360.0f)
+            f -= 360.0f;
 #else
         while (f < -360.0f) {
-#endif
             f += 360.0f;
-#if VERSION <= VERSION_DEMO_US
-        while (f >= 360.0f)
-#else
         }
         while (f >= 360.0f) {
-#endif
             f -= 360.0f;
-#if VERSION > VERSION_DEMO_US
         }
 #endif
         if ((f > 90.0f && f <= 270.0f) || (f < -90.0f && f >= -270.0f)) {
@@ -1692,8 +1690,8 @@ void animPoseMain(s32 poseId) {
     }
 }
 
-#if VERSION > VERSION_DEMO_US
 /** the demo always builds every matrix and concatenates them all */
+#if VERSION > VERSION_DEMO_US
 void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
     Mtx trans, scale, rot, tmp;
     Mtx sc1, sc2, sc3;
@@ -2016,9 +2014,6 @@ void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *
         // FAKE: (u32) index cast; texIdRemap[texCount - i[0] - 1] changes the object
         id = texIdRemap[(u32) ((texCount - i[0]) - 1)];
 #else
-
-
-/** the demo always builds every matrix and concatenates them all */
 static void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
     Mtx trans, scale, rot, tmp;
     Mtx sc1, sc2, sc3;
@@ -2213,9 +2208,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
     }
 #if VERSION <= VERSION_DEMO_US
     {
-#endif
 
-#if VERSION <= VERSION_DEMO_US
     // r22); j is a one-element array (an IRO temp, so j colours r20 and texMtx r21), and the dead gz guard keeps k = 0 from
     // being propagated into j, giving the target's li r22,0 / mr r20,r22 (the guard leaves no code after RA)
     s32 gz;
@@ -2231,37 +2224,56 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
     s32 j[1];
     s32 k;
     k = 0;
-#endif
     // FAKE: dead int guard (no code after RA) keeps the three copies from being propagated away
     gz = 0;
     if (gz != 0) {
-#if VERSION <= VERSION_DEMO_US
         k = 0;
+    }
+    for (j[0] = k; k < texCount; k++, j[0] += 3) {
+        anim = &animEntries[texIdRemap[(u32)((texCount - k) - 1)]];
+        scaleS = anim->scaleS;
+        scaleT = anim->scaleT;
+        transS = anim->transS;
+        transT = anim->transT;
+        rotate = anim->rotate;
+        if (scaleS == 1.0f && scaleT == 1.0f && transS == 0.0f && transT == 0.0f && rotate == 0.0f) {
+            GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), GX_IDENTITY, (GXBool)0, GX_PTIDENTITY);
+                continue;
+        }
+        PSMTXIdentity(m);
+        PSMTXTrans(tmp, 0.5f, 0.5f, 0.0f);
+        PSMTXConcat(m, tmp, m);
+        PSMTXRotRad(tmp, 'z', 0.017453292f * (-rotate));
+        PSMTXConcat(m, tmp, m);
+        PSMTXTrans(tmp, -0.5f, -0.5f, 0.0f);
+        PSMTXConcat(m, tmp, m);
+        PSMTXTrans(tmp, transS, (1.0f - transT) - scaleT, 0.0f);
+        PSMTXConcat(m, tmp, m);
+        PSMTXScale(tmp, scaleS, scaleT, 0.0f);
+        PSMTXConcat(m, tmp, m);
+        texMtx = GX_TEXMTX0 + j[0];
+        GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), texMtx, (GXBool)0, GX_PTIDENTITY);
+        GXLoadTexMtxImm(m, texMtx, GX_MTX2x4);
+    }
+}
+}
 #else
+    // FAKE: dead int guard (no code after RA) keeps the three copies from being propagated away
+    gz = 0;
+    if (gz != 0) {
         texCount = 0;
         texIdRemap = NULL;
         pTexEntries = NULL;
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
-    for (j[0] = k; k < texCount; k++, j[0] += 3) {
-        anim = &animEntries[texIdRemap[(u32)((texCount - k) - 1)]];
-#else
     for (i[0] = 0; i[0] < texCount; i[0]++) {
         flags = 0;
         // FAKE: (u32) index cast; texIdRemap[texCount - i[0] - 1] changes the object
         anim = &animEntries[texIdRemap[(u32) ((texCount - i[0]) - 1)]];
         rotate = anim->rotate;
-#endif
         scaleS = anim->scaleS;
         scaleT = anim->scaleT;
         transS = anim->transS;
         transT = anim->transT;
-#if VERSION <= VERSION_DEMO_US
-        rotate = anim->rotate;
-        if (scaleS == 1.0f && scaleT == 1.0f && transS == 0.0f && transT == 0.0f && rotate == 0.0f) {
-            GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), GX_IDENTITY, (GXBool)0, GX_PTIDENTITY);
-#else
         if (rotate != 0.0f) {
             flags |= 1;
             PSMTXTrans(tmp, 0.5f, 0.5f, 0.0f);
@@ -2281,9 +2293,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
         switch (flags) {
             case 0:
                 GXSetTexCoordGen2((GXTexCoordID) i[0], GX_TG_MTX2x4, (GXTexGenSrc) (GX_TG_TEX0 + i[0]), GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-#endif
                 continue;
-#if VERSION > VERSION_DEMO_US
             case 1:
                 m = rot;
                 break;
@@ -2316,31 +2326,12 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
                 PSMTXConcat(tmp, scale, trans);
                 m = trans;
                 break;
-#endif
         }
-#if VERSION <= VERSION_DEMO_US
-        PSMTXIdentity(m);
-        PSMTXTrans(tmp, 0.5f, 0.5f, 0.0f);
-        PSMTXConcat(m, tmp, m);
-        PSMTXRotRad(tmp, 'z', 0.017453292f * (-rotate));
-        PSMTXConcat(m, tmp, m);
-        PSMTXTrans(tmp, -0.5f, -0.5f, 0.0f);
-        PSMTXConcat(m, tmp, m);
-        PSMTXTrans(tmp, transS, (1.0f - transT) - scaleT, 0.0f);
-        PSMTXConcat(m, tmp, m);
-        PSMTXScale(tmp, scaleS, scaleT, 0.0f);
-        PSMTXConcat(m, tmp, m);
-        texMtx = GX_TEXMTX0 + j[0];
-        GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), texMtx, (GXBool)0, GX_PTIDENTITY);
-#else
         j = (u32)i[0] * 3; // FAKE: unsigned multiply (i >= 0, same value) shifts loop-2 colouring toward target
         texMtx = GX_TEXMTX0 + j;
         GXSetTexCoordGen2((GXTexCoordID) i[0], GX_TG_MTX2x4, (GXTexGenSrc) (GX_TG_TEX0 + i[0]), texMtx, GX_FALSE, GX_PTIDENTITY);
-#endif
         GXLoadTexMtxImm(m, texMtx, GX_MTX2x4);
     }
-}
-#if VERSION <= VERSION_DEMO_US
 }
 #endif
 

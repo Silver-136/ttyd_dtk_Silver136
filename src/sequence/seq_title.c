@@ -293,7 +293,6 @@ void titleMain(SequenceWork* work) {
 #if VERSION >= VERSION_US
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {
-#endif
             wp2->fadeAlpha += 0.1f;
             if (wp2->fadeAlpha > 1.0f) {
                 wp2->fadeAlpha = 1.0f;
@@ -304,7 +303,17 @@ void titleMain(SequenceWork* work) {
             } else if (++wp2->idle > TITLE_FRAMES_PER_SEC * 20 - TITLE_FRAMES_PER_SEC) {
                 wp2->state = 20;
             }
-#if VERSION >= VERSION_US
+            }
+#else
+            wp2->fadeAlpha += 0.1f;
+            if (wp2->fadeAlpha > 1.0f) {
+                wp2->fadeAlpha = 1.0f;
+            }
+            if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_PRESS_START1));
+                wp2->state = 10;
+            } else if (++wp2->idle > TITLE_FRAMES_PER_SEC * 20 - TITLE_FRAMES_PER_SEC) {
+                wp2->state = 20;
             }
 #endif
 #endif

@@ -368,14 +368,13 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
         work->color.r = 0x00;
         work->color.g = 0x04;
         work->color.b = 0x61;
+}
+}
 #else
     c = effFunemizuGetMapColor();
     work->color.r = c.r;
     work->color.g = c.g;
     work->color.b = c.b;
-#endif
-}
-#if VERSION <= VERSION_DEMO_US
 }
 #endif
 

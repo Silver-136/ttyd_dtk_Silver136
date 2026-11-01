@@ -1876,12 +1876,29 @@ void ext_fan_main(void) {
 
 #if VERSION > VERSION_DEMO_US
     {
-#endif
         for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
             if (fan->state == 0) {
                 s32 j;
                 Fan* other;
-#if VERSION <= VERSION_DEMO_US
+
+                for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
+                    if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
+                        PSVECSubtract(&fan->pos, &other->pos, &dir);
+                        dir.y = 0.0f;
+                        PSVECNormalize(&dir, &dir);
+                        PSVECScale(&dir, &dir, 5.0f);
+                        PSVECAdd(&fan->vel, &dir, &fan->vel);
+                        PSVECSubtract(&other->vel, &dir, &other->vel);
+                    }
+                }
+            }
+        }
+    }
+#else
+        for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
+            if (fan->state == 0) {
+                s32 j;
+                Fan* other;
                 f32 d;
 
                 for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
@@ -1892,23 +1909,12 @@ void ext_fan_main(void) {
                         }
                         dir.y = 0.0f;
                         PSVECScale(&dir, &dir, 8.0f * (1.0f / d));
-#else
-
-                for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
-                    if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
-                        PSVECSubtract(&fan->pos, &other->pos, &dir);
-                        dir.y = 0.0f;
-                        PSVECNormalize(&dir, &dir);
-                        PSVECScale(&dir, &dir, 5.0f);
-#endif
                         PSVECAdd(&fan->vel, &dir, &fan->vel);
                         PSVECSubtract(&other->vel, &dir, &other->vel);
                     }
                 }
             }
         }
-#if VERSION > VERSION_DEMO_US
-    }
 #endif
     {
         f32 angle;
@@ -2031,6 +2037,38 @@ void ext_fan_main(void) {
                     lfan->pos.z += lfan->param.y * -polyCosf(angle);
                     if (--lfan->timer < 0) {
                         lfan->state = 100;
+                    }
+                    break;
+                case 20:
+                    if (--lfan->timer > 0) {
+                        lfan->target.x += lfan->param.x;
+                        lfan->target.y += lfan->param.y;
+                        lfan->target.z += lfan->param.z;
+                        lfan->pos.x += lfan->target.x;
+                        lfan->pos.y += lfan->target.y;
+                        lfan->pos.z += lfan->target.z;
+                    } else {
+                        lfan->state = 100;
+                    }
+                    break;
+                case 100:
+                    pose->flags &= ~(EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD);
+                    lfan->state++;
+                    break;
+                case 101:
+                    break;
+            }
+            if (lfan->flags & 1) {
+                fan_wp->count--;
+            } else if (lfan->state != 0) {
+                fan_wp->count--;
+            }
+            (*pose->mtx)[0][3] = lfan->pos.x;
+            (*pose->mtx)[1][3] = lfan->pos.y;
+            (*pose->mtx)[2][3] = lfan->pos.z;
+            pose->dir = angleABf(target.x, target.z, lfan->pos.x, lfan->pos.z);
+        }
+    }
 #else
         pose = extGetPosePtr();
         fan = fan_wp->fans;
@@ -2057,11 +2095,9 @@ void ext_fan_main(void) {
                     fan->pos.z += fan->param.y * -polyCosf(angle);
                     if (--fan->timer < 0) {
                         fan->state = 100;
-#endif
                     }
                     break;
                 case 20:
-#if VERSION <= VERSION_DEMO_US
                     if (--fan->timer > 0) {
                         fan->target.x += fan->param.x;
                         fan->target.y += fan->param.y;
@@ -2069,60 +2105,26 @@ void ext_fan_main(void) {
                         fan->pos.x += fan->target.x;
                         fan->pos.y += fan->target.y;
                         fan->pos.z += fan->target.z;
-#else
-                    if (--lfan->timer > 0) {
-                        lfan->target.x += lfan->param.x;
-                        lfan->target.y += lfan->param.y;
-                        lfan->target.z += lfan->param.z;
-                        lfan->pos.x += lfan->target.x;
-                        lfan->pos.y += lfan->target.y;
-                        lfan->pos.z += lfan->target.z;
-#endif
                     } else {
-#if VERSION <= VERSION_DEMO_US
                         fan->state = 100;
-#else
-                        lfan->state = 100;
-#endif
                     }
                     break;
                 case 100:
-#if VERSION <= VERSION_DEMO_US
                     pose->flags &= ~3;
                     fan->state++;
-#else
-                    pose->flags &= ~(EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD);
-                    lfan->state++;
-#endif
                     break;
                 case 101:
                     break;
             }
-#if VERSION <= VERSION_DEMO_US
             if (fan->state != 0) {
-#else
-            if (lfan->flags & 1) {
-                fan_wp->count--;
-            } else if (lfan->state != 0) {
-#endif
                 fan_wp->count--;
             }
-#if VERSION <= VERSION_DEMO_US
             (*pose->mtx)[0][3] = fan->pos.x;
             (*pose->mtx)[1][3] = fan->pos.y;
             (*pose->mtx)[2][3] = fan->pos.z;
             pose->dir = angleABf(target.x, target.z, fan->pos.x, fan->pos.z);
-#else
-            (*pose->mtx)[0][3] = lfan->pos.x;
-            (*pose->mtx)[1][3] = lfan->pos.y;
-            (*pose->mtx)[2][3] = lfan->pos.z;
-            pose->dir = angleABf(target.x, target.z, lfan->pos.x, lfan->pos.z);
-#endif
         }
-#if VERSION <= VERSION_DEMO_US
     pose_main();
-#else
-    }
 #endif
     psndSFX_pos(fan_wp->sfxId, &target);
     psndSFX_vol(fan_wp->sfxId, fan_wp->vol * fan_wp->count / fan_wp->num);

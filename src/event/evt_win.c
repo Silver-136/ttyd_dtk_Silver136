@@ -279,9 +279,7 @@ void unitwin_point_disp(WinMgrEntry* entry) {
         }
     }
 }
-
 #else
-
 static s32 iconid_conv(s32 icon) {
     if (icon == ICON_PARTY_YOSHI) {
         switch (pouchGetPartyColor(4)) {
@@ -368,11 +366,12 @@ USER_FUNC(evt_unitwin_alloc) {
     iconFlagOn("yubicursor_2", ICON_FLAG_FLIP_X);
 #if VERSION > VERSION_DEMO_US
     if (!(wp->flags & UNITWIN_FLAG_WINMGR)) {
-#endif
         wp->evt = evtEntry(main_evt, 0, 0);
         wp->evt->lwData[0] = (EvtWord)wp;
-#if VERSION > VERSION_DEMO_US
     }
+#else
+        wp->evt = evtEntry(main_evt, 0, 0);
+        wp->evt->lwData[0] = (EvtWord)wp;
 #endif
     mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
     mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
@@ -414,11 +413,10 @@ USER_FUNC(evt_unitwin_free) {
         entry = caseIdToPtr(wp->caseId[i]);
         if (evtCheckID(entry->evtId)) {
             evtDeleteID(entry->evtId);
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
     caseDelete(wp->caseId[i]);
 #else
+    }
     if (wp->flags & UNITWIN_FLAG_WINMGR) {
         for (i = 0; i < 3; i++) {
             winMgrDelete(wp->winId[i]);
@@ -671,8 +669,6 @@ USER_FUNC(evt_unitwin_select_func) {
             } else {
                 iconFlagOff(name, ICON_FLAG_HIDDEN);
 #else
-
-
 // Descriptive name (not in the symbol maps); placeholder unk_80174e98, JP 0x80174E98. See docs/NAME_PROVENANCE.md.
 /** list window: arg = window kind; returns lwData[0] = 1 and the picked entry in lwData[1..] */
 USER_FUNC(unitwin_window_select_func) {

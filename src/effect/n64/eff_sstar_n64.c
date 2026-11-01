@@ -208,12 +208,12 @@ void effSstarMain(EffectEntry* effect) {
     }
 #if VERSION > VERSION_DEMO_US
     if (gp->inBattle == 0) {
-#endif
         if (mario->position.y - w->position.y > 300.0f) {
-#if VERSION > VERSION_DEMO_US
             w->life = -1;
         }
     } else if (w->position.y < -300.0f) {
+#else
+        if (mario->position.y - w->position.y > 300.0f) {
 #endif
         w->life = -1;
     }

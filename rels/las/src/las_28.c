@@ -1451,7 +1451,6 @@ static USER_FUNC(make_name) {
     number = evtGetValue(event, args[0]);
     sprintf(name, "hi%d", number);
 #else
-
     sprintf(name, "hi%d", evtGetValue(event, args[0]));
 #endif
     evtSetValue(event, args[1], (EvtWord)name);

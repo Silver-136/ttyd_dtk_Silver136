@@ -3116,9 +3116,6 @@ void BattleAudience_SetTarget(s32 index) {
     member = BattleAudienceGetPtr(index);
     if (member->status == 7 && member->itemId != -1) {
         member->flags |= AUDIENCE_MEMBER_FLAG_TARGETED;
-#else
-    BattleAudienceGetPtr(index)->flags |= AUDIENCE_MEMBER_FLAG_TARGETED;
-#endif
     for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if (i != index && (u8)BattleAudience_GetExist(i)) {
             member = BattleAudienceGetPtr(i);
@@ -3130,7 +3127,19 @@ void BattleAudience_SetTarget(s32 index) {
         }
     }
 }
-#if VERSION <= VERSION_DEMO_US
+}
+#else
+    BattleAudienceGetPtr(index)->flags |= AUDIENCE_MEMBER_FLAG_TARGETED;
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
+        if (i != index && (u8)BattleAudience_GetExist(i)) {
+            member = BattleAudienceGetPtr(i);
+            if (member->status == AUDIENCE_STATUS_ITEM_ON) {
+                BattleAudienceItemGetPtr(member->itemId)->flags = 0;
+                member->itemId = -1;
+                BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_WAIT);
+            }
+        }
+    }
 }
 #endif
 

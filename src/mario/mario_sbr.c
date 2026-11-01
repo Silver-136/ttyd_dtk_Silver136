@@ -84,10 +84,11 @@ if (strcmp(gp->currentMapName, "eki_04") == 0) {
         }
 #if VERSION <= VERSION_DEMO_US
         }
-#endif
         marioChgMot(MARIO_MOTION_FORCE_RESET);
     }
-#if VERSION > VERSION_DEMO_US
+#else
+        marioChgMot(MARIO_MOTION_FORCE_RESET);
+    }
 }
 #endif
 

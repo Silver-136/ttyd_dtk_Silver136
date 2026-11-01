@@ -389,7 +389,6 @@ void mot_stay_post(void) {
 #if VERSION > VERSION_DEMO_US
     MarioMotion id = marioGetPtr()->currMotionId;
     if (id != MARIO_MOTION_HAMMER_2 && id != MARIO_MOTION_JABARA) {
-#endif
         mario = marioGetPtr();
         if (mario->soundId[0] != (u32)-1) {
             psndSFXOff(mario->soundId[0]);
@@ -400,15 +399,24 @@ void mot_stay_post(void) {
             psndSFXOff(mario->soundId[1]);
             mario->soundId[1] = -1;
         }
-#if VERSION > VERSION_DEMO_US
     } else {
         mario = marioGetPtr();
         if (mario->soundId[0] != (u32)-1) {
             psndSFXOff(mario->soundId[0]);
             mario->soundId[0] = -1;
-#endif
         }
-#if VERSION > VERSION_DEMO_US
     }
 }
+#else
+        mario = marioGetPtr();
+        if (mario->soundId[0] != (u32)-1) {
+            psndSFXOff(mario->soundId[0]);
+            mario->soundId[0] = -1;
+        }
+        mario = marioGetPtr();
+        if (mario->soundId[1] != (u32)-1) {
+            psndSFXOff(mario->soundId[1]);
+            mario->soundId[1] = -1;
+        }
+        }
 #endif

@@ -277,13 +277,6 @@ void seq_battleMain(SequenceWork* work) {
 /** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
 BOOL battle_init(void) {
 #else
-
-/**
- * Per-frame battle sequence: curtain fade, audience texture loads,
- * waits out a pending first strike (up to 200 frames), loads the bti_01..04 audience stage for Mario's rank,
- * starts the battle via battle_init, then once the battle ends returns to the field (or game over on a kiosk
- * timeout; states 10/11 end a debug battle).
- */
 void seq_battleMain(SequenceWork* work) {
     switch (work->state) {
         case 0: {

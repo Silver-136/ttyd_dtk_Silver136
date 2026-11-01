@@ -773,13 +773,12 @@ USER_FUNC(aud_suikomi) {
 #if VERSION <= VERSION_DEMO_US
     if (done < 20) {
         return EVT_RETURN_BLOCK;
-#else
-    return done < 20 ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
-#endif
 }
-#if VERSION <= VERSION_DEMO_US
 psndSFXOff(screamId);
 return EVT_RETURN_DONE;
+}
+#else
+    return done < 20 ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 #endif
 

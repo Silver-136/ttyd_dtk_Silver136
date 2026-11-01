@@ -666,13 +666,12 @@ BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
 #if VERSION <= VERSION_DEMO_US
             if ((data->pos.x < fukkipoint[data->index + 1].x && mario->position.x >= fukkipoint[data->index + 1].x) ||
                 (data->pos.x > fukkipoint[data->index + 1].x && mario->position.x <= fukkipoint[data->index + 1].x)) {
+                    data->index++;
 #else
             if ((mario->position.z >= 0.0f && data->pos.x < fukkipoint[data->index + 1].x && mario->position.x >= fukkipoint[data->index + 1].x) ||
                 (mario->position.z < 0.0f && data->pos.x > fukkipoint[data->index + 1].x && mario->position.x <= fukkipoint[data->index + 1].x)) {
                 if (data->index < 14) {
-#endif
                     data->index++;
-#if VERSION > VERSION_DEMO_US
                 }
                 icon_monte_p->hidden = 1;
             }

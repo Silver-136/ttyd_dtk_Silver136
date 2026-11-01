@@ -194,9 +194,7 @@ const char* battlePartyMsgStr[] = {"_kur", "_nok", "_yos", "_win", "_viv", "_bom
 #if VERSION > VERSION_DEMO_US
 static const char* battlePartyMsgPad[6] = {0};
 #endif
-
 #else
-
 #include "mario/mariost.h"
 // US-only localized article/plural helpers (evt_msg_fmt_int / evtMsgFmtInt, evt_msg_fmt_str / evtMsgFmtStr, below).
 // clang-format off

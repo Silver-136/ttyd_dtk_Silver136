@@ -1448,15 +1448,16 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     if (len > ((mario->wPlayerCollisionBox.z > 4.0f) ? (3.0f) : (1.5f))) {
         if (1) {
         scale = 1.0f / len;
+        dx *= scale;
+        dz *= scale;
+    }
+    }
 #else
     len = sqrtf(dx * dx + dz * dz);
     if (len > (mario->wPlayerCollisionBox.z > 4.0f ? 3.0f : 1.5f)) {
         scale = 2.0f / len;
-#endif
         dx *= scale;
         dz *= scale;
-    }
-#if VERSION <= VERSION_DEMO_US
     }
 #endif
     mario->position.x += dx;

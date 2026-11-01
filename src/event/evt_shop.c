@@ -759,7 +759,6 @@ u16 point_disp_icons[] = {0x226, 0x227, 0x228, 0x227, 0x229, 0x22A};
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(0))
     RETURN
 EVT_END()
-
 #endif
 
 #if VERSION > VERSION_DEMO_US
@@ -1177,13 +1176,12 @@ USER_FUNC(point_wait) {
     PouchData* pouch = pouchGetPtr();
 #if VERSION <= VERSION_DEMO_US
     return wp->points != pouch->shopPoints ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    }
 #else
     if (wp->points != pouch->shopPoints) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
         return EVT_RETURN_BLOCK;
-#endif
     }
-#if VERSION > VERSION_DEMO_US
     return EVT_RETURN_DONE;
 }
 #endif

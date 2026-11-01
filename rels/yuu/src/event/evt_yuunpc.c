@@ -1912,13 +1912,14 @@ void yuunpc_pose_minigame4_main(void) {
                         }
 #if VERSION <= VERSION_DEMO_US
                             } break;
-#endif
                         }
                         break;
                     }
-#if VERSION <= VERSION_DEMO_US
                     d -= 20.0f;
 #else
+                        }
+                        break;
+                    }
                     break;
                 }
                 d -= 17.0f;
@@ -2161,10 +2162,6 @@ void yuunpc_pose_minigame4_main(void) {
                     }
 #if VERSION <= VERSION_DEMO_US
                     t = gp->retraceCount;
-#else
-                    if (!(c28 & 0x3f)) {
-                        t = gp->retraceCount + i;
-#endif
                         if (!(t & 0xf)) {
                             if (t & 0x10) {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
@@ -2172,7 +2169,16 @@ void yuunpc_pose_minigame4_main(void) {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
                             }
                         }
-#if VERSION > VERSION_DEMO_US
+#else
+                    if (!(c28 & 0x3f)) {
+                        t = gp->retraceCount + i;
+                        if (!(t & 0xf)) {
+                            if (t & 0x10) {
+                                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
+                            } else {
+                                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
+                            }
+                        }
                     }
                     c28++;
 #endif
@@ -2231,10 +2237,6 @@ void yuunpc_pose_minigame4_main(void) {
                     }
 #if VERSION <= VERSION_DEMO_US
                     t = gp->retraceCount;
-#else
-                    if (!(c27 & 0x3f)) {
-                        t = gp->retraceCount + i;
-#endif
                         if (!(t & 7)) {
                             if (t & 8) {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
@@ -2242,7 +2244,16 @@ void yuunpc_pose_minigame4_main(void) {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
                             }
                         }
-#if VERSION > VERSION_DEMO_US
+#else
+                    if (!(c27 & 0x3f)) {
+                        t = gp->retraceCount + i;
+                        if (!(t & 7)) {
+                            if (t & 8) {
+                                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
+                            } else {
+                                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
+                            }
+                        }
                     }
                     c27++;
 #endif

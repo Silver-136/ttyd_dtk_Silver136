@@ -6738,8 +6738,6 @@ EVT_BEGIN(marioAttackEvent_NormalChargeP)
     RETURN
 EVT_END()
 #else
-
-
 /** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
 
 /** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */

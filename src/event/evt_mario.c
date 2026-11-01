@@ -1398,6 +1398,7 @@ USER_FUNC(evt_mario_party_bero_move) {
             if (party) {
 #if VERSION <= VERSION_DEMO_US
                 partyMoveBehindMario3(party, 0, revise360(mp->targetYaw + ((mp->displayDirectionTarget >= 90.0f && mp->displayDirectionTarget <= 270.0f) ? 200.0f : 160.0f)));
+                }
 #else
                 partyMoveBehindMario3(party, 0,
                     party->moveKind == 0
@@ -1405,9 +1406,7 @@ USER_FUNC(evt_mario_party_bero_move) {
                         : revise360(mp->targetYaw + ((mp->displayDirectionTarget >= 90.0f && mp->displayDirectionTarget <= 270.0f) ? 225.0f : 135.0f)));
                 if (party->moveKind == 1) {
                     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-#endif
                 }
-#if VERSION > VERSION_DEMO_US
             }
             event->userdata[1] = sysMsec2Frame(400);
             event->userdata[0] = 6;
@@ -2439,9 +2438,7 @@ USER_FUNC(evt_mario_keyon_wait) {
     marioGetPtr();
     return marioKeyOffChk() ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
-
 #else
-
 HITOBJ(head, hitobjHead)
 
 HITOBJ(ride, hitobjStandOn)

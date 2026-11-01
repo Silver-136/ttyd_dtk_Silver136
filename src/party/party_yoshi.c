@@ -1379,11 +1379,10 @@ void searchGround(PartyEntry* party) {
                 if (party->moveSpeed) {
 #if VERSION <= VERSION_DEMO_US
                     party->useMotionId = 40;
+                        return;
 #else
                     if (chgMotion(party, 40)) {
-#endif
                         return;
-#if VERSION > VERSION_DEMO_US
                     }
 #endif
                 }
@@ -1445,7 +1444,6 @@ void searchGround2(PartyEntry* party) {
         psndSFXOff(party->yoshiPsndSFXId);
         party->yoshiPsndSFXId = -1;
 #else
-
     if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
         hit = partySearchGround(party, 11.0f, 0.0f);
     }

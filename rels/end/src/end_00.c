@@ -2424,8 +2424,6 @@ f32 fd_end_00___local_PIO2_367 = 1.5707964f;
 /** Float constant 1 used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00_one_364 = 1.0f;
 #else
-
-
 /** Float constant -1 used by the ending's trigonometric code, placed here by the compiler. */
 
 /** Float constant pi used by the ending's trigonometric code, placed here by the compiler. */

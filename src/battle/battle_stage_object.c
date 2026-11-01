@@ -2720,7 +2720,6 @@ EVT_BEGIN(_nozzle_turn_event)
     RETURN
 EVT_END()
 #else
-
 /** The overhead spotlight; the entry with no name ends the list. */
 
 /** Unit setup for a hittable stage tree, spawned for stage objects that ask for one (unit_object_tree.c). */

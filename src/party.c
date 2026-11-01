@@ -879,6 +879,8 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
 #if VERSION <= VERSION_DEMO_US
     if (party->runMode != 9 && party->runMode != 3) {
         party->prevRunMode = party->runMode;
+            }
+            if (party->runMode == 4) {
 #else
     switch (prev) {
         case 11:
@@ -894,11 +896,7 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
                 party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
                 party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
                 partyShadowOn(party);
-#endif
             }
-#if VERSION <= VERSION_DEMO_US
-            if (party->runMode == 4) {
-#else
             break;
         case 4:
 #endif
@@ -936,8 +934,8 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
             }
             partyUsePost(party);
     }
-
 #endif
+
 /**
  * Switches the partner to run mode mode (0 stand, 1 wait, 2 follow, 3 ability, 4-7 appear, 8 goodbye,
  * 9 forced walk, 10 pipe, 11 ride, 12 ride Yoshi, 13 return after damage, 14 delete),
@@ -1154,15 +1152,14 @@ void driveParty(PartyEntry* party) {
         case 1:
 #if VERSION <= VERSION_DEMO_US
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF))
-#else
-            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
-#endif
                 break;
-#if VERSION <= VERSION_DEMO_US
                 if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
                 party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
                 partyChgPoseId(party, 1);
                 party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+#else
+            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
+                break;
 #endif
             }
 #if VERSION <= VERSION_DEMO_US

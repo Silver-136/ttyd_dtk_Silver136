@@ -235,18 +235,17 @@ void seq_loadMain(SequenceWork* seq) {
 #if VERSION <= VERSION_DEMO_US
                     } else if (gp->soundMode == 0) {
                         SoundSetOutputMode(1);
+                            wp->soundMode = 1;
+                        } else {
+                            SoundSetOutputMode(2);
+                            wp->soundMode = 2;
 #else
                     } else {
                         SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                         if (gp->soundMode == 0) {
-#endif
                             wp->soundMode = 1;
                         } else {
-#if VERSION <= VERSION_DEMO_US
-                            SoundSetOutputMode(2);
-#endif
                             wp->soundMode = 2;
-#if VERSION > VERSION_DEMO_US
                         }
 #endif
                     }

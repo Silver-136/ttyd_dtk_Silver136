@@ -1202,13 +1202,8 @@ static void make_header(void) {
             break;
         case 1:
         case 6:
-#endif
     strcpy(metadata->data.fileName, cardGameTitle);
-#if VERSION != VERSION_EU
-    OSTicksToCalendarTime(OSGetTime(), &td);
-#endif
     sprintf(metadata->data.dateString, cardDateFormat, td.mon + 1, td.mday);
-#if VERSION == VERSION_EU
             break;
         case 2:
             strcpy(metadata->data.fileName, cardGameTitle);
@@ -1227,6 +1222,10 @@ static void make_header(void) {
             sprintf(metadata->data.dateString, card_date_it, td.mday, td.mon + 1);
             break;
     }
+#else
+    strcpy(metadata->data.fileName, cardGameTitle);
+    OSTicksToCalendarTime(OSGetTime(), &td);
+    sprintf(metadata->data.dateString, cardDateFormat, td.mon + 1, td.mday);
 #endif
     memcpy(metadata->data.bannerTex, _mariost_banner_tex, sizeof(metadata->data.bannerTex));
     memcpy(metadata->data.iconTex, _mariost_icon_tex, sizeof(metadata->data.iconTex));

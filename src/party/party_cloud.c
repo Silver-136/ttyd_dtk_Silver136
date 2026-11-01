@@ -218,7 +218,6 @@ struct HitEntry* cloudGetHitBreathout(s32 which) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
 #else
-
 static void getHitBreatheout2(PartyEntry* party, f32 tilt);
 struct HitEntry* cloudGetHitBreathout(s32 which) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);

@@ -362,10 +362,10 @@ s32 chkground(void) {
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
 #if VERSION == VERSION_EU
         if (!marioBgmodeChk()) {
-#endif
         camFollowYOn();
-#if VERSION == VERSION_EU
         }
+#else
+        camFollowYOn();
 #endif
         attr = hitGetAttr(hit);
         if (attr & HIT_ATTR_WATER_HAZARD) {

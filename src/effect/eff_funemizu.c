@@ -361,11 +361,7 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     if (sx > 0.0f && sx < 608.0f && sy > 0.0f && sy < 480.0f) {
         // FAKE: unprototyped call: the SDK u16 parameters would add two narrowings (FAKES.md)
         ((void (*)())GXPeekARGB)((s32)sx, (s32)sy, argb);
-#else
-    color = effFunemizuGetMapColor();
-#endif
     if (type == 0) {
-#if VERSION <= VERSION_DEMO_US
         {
             s32 r = funemizu_color0_tbl[0];
             s32 g = funemizu_color0_tbl[1];
@@ -378,13 +374,7 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
             funemizu_color0_tbl[2] = b;
         }
         DCFlushRange(funemizu_color0_tbl, 4);
-#else
-        funemizu_color0_tbl[0] = color.r;
-        funemizu_color0_tbl[1] = color.g;
-        funemizu_color0_tbl[2] = color.b;
-#endif
     } else {
-#if VERSION <= VERSION_DEMO_US
         {
             s32 r = gor_fune_color0_tbl[0];
             s32 g = gor_fune_color0_tbl[1];
@@ -404,6 +394,12 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
         gor_fune_color0_tbl[1] = 0x00;
         gor_fune_color0_tbl[2] = 0xFF;
 #else
+    color = effFunemizuGetMapColor();
+    if (type == 0) {
+        funemizu_color0_tbl[0] = color.r;
+        funemizu_color0_tbl[1] = color.g;
+        funemizu_color0_tbl[2] = color.b;
+    } else {
         gor_fune_color0_tbl[0] = color.r;
         gor_fune_color0_tbl[1] = color.g;
         gor_fune_color0_tbl[2] = color.b;

@@ -95,7 +95,6 @@ static PoseTableEntry pose_table_1[] = {
     {POSE_TYPE_ACTION, "B_4"},
 };
 #else
-
 /** Poses while the fuse has 3 or more turns left (all frames use B_2). */
 
 /** Poses while the fuse has 2 turns left (all frames use B_3). */

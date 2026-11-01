@@ -2613,11 +2613,12 @@ void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
 #if VERSION > VERSION_DEMO_US
         if (!strcmp(gp->currentMapName, "kpa_01")) {
             ((EffKemuri10N64Work*)effect->userdata)->camera = CAMERA_3D_EFFECTB;
-#endif
         }
     }
-#if VERSION > VERSION_DEMO_US
 }
+#else
+        }
+    }
 #endif
 
 /**

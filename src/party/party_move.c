@@ -238,8 +238,6 @@ f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
         if (nokonokoGetStatus(other) == 3 ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #else
-
-
 /**
  * Demo: direction in degrees from (x, z) to what trail id chases: Mario for trail 0;
  * for trail 1 the partner in slot 0, or Mario while Koops's nokonokoGetStatus is 3.
@@ -356,13 +354,12 @@ f32 partyGetTargetDistY(s32 id, f32 y) {
 #if VERSION <= VERSION_DEMO_US
     partyTargetPos(other, far, &pos);
     return PSVECDistance(&pos, p);
+    }
 #else
     if (other && !far) {
         getTargetPos(id, &pos);
         return __fabsf(pos.y - y);
-#endif
     }
-#if VERSION > VERSION_DEMO_US
     return __fabsf(mario->position.y - y);
 }
 #endif
@@ -410,12 +407,11 @@ f32 partyGetTargetMovespd(s32 id) {
 #if VERSION <= VERSION_DEMO_US
     partyTargetPos(other, far, &pos);
     return __fabsf(pos.y - y);
+    }
 #else
     if (other && !far) {
         return other->moveSpeed;
-#endif
     }
-#if VERSION > VERSION_DEMO_US
     mario = marioGetPtr();
     if (mario->baseSpeed > 0.0f) {
         return mario->baseSpeed;
@@ -475,14 +471,18 @@ f32 partyGetTargetMovespd2(PartyEntry* party) {
 void partyNextReadId(s32 id) {
 #if VERSION > VERSION_DEMO_US
     if (readId[id] != writeId[id]) {
-#endif
         readId[id]++;
         if (readId[id] >= 80) {
             readId[id] = 0;
         }
     }
-#if VERSION > VERSION_DEMO_US
 }
+#else
+        readId[id]++;
+        if (readId[id] >= 80) {
+            readId[id] = 0;
+        }
+    }
 #endif
 
 /** Copies the position of the footmark at trail id's read position into x, y, z. */
@@ -676,13 +676,12 @@ void partyRecordFootmark(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
         if (other) {
             if (nokonokoGetStatus(other) == 3) {
+            far = TRUE;
+            }
 #else
         if (other && (nokonokoGetStatus(other) == 3 ||
                       PSVECDistance(&mario->position, &other->position) >= 150.0f)) {
-#endif
             far = TRUE;
-#if VERSION <= VERSION_DEMO_US
-            }
 #endif
         }
         if (other && !far) {
@@ -1354,13 +1353,12 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
 #if VERSION <= VERSION_DEMO_US
             if (p) {
                 if (nokonokoGetStatus(p) == 3) {
+                far = TRUE;
+                }
 #else
             if (p && (nokonokoGetStatus(p) == 3 ||
                       PSVECDistance(&mario->position, &p->position) >= 150.0f)) {
-#endif
                 far = TRUE;
-#if VERSION <= VERSION_DEMO_US
-                }
 #endif
             }
             if (far) {
@@ -1862,12 +1860,12 @@ void partyMoveFlyInit(PartyEntry* party, s32 arg) {
     party->flags |= PARTY_FLAG_IS_GROUNDED;
 #if VERSION > VERSION_DEMO_US
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
-#endif
         partyClearFootmark();
-#if VERSION > VERSION_DEMO_US
     } else {
         partyClearFootmark2();
     }
+#else
+        partyClearFootmark();
 #endif
     if (party->moveMode == PARTY_MOVE_MODE_BEHIND_MARIO) {
         party->homingDist = 50.0f;

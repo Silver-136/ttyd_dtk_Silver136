@@ -3774,12 +3774,12 @@ void party_force_reset_outofscreen(PartyEntry* party) {
 #if VERSION > VERSION_DEMO_US
     // BUG: both branches call partyClearFootmark; the other motions call partyClearFootmark2 when PARTY_FLAG_IS_PARTNER is set
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
-#endif
         partyClearFootmark();
-#if VERSION > VERSION_DEMO_US
     } else {
         partyClearFootmark();
     }
+#else
+        partyClearFootmark();
 #endif
     m2 = party->playerPtr;
     i = 0;
@@ -3821,10 +3821,10 @@ void party_force_reset_outofscreen(PartyEntry* party) {
             if (hit) {
 #if VERSION > VERSION_DEMO_US
                 if (!partyChkHitAttr200(hit)) {
-#endif
                     y = hitPos.y;
-#if VERSION > VERSION_DEMO_US
                 }
+#else
+                    y = hitPos.y;
 #endif
             } else {
                 y = m2->position.y;

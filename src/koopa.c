@@ -994,26 +994,13 @@ void kpaFireMain(void) {
                     void* hit;
 #if VERSION <= VERSION_DEMO_US
                     sc = 7.0f * w->scale;
-#else
-                    ballScale = 7.0f * w->scale;
-                    f30 = ballScale * headScale;
-                    if (!(f30 < 7.0f)) {
-#endif
                         PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
-#if VERSION <= VERSION_DEMO_US
                         PSMTXScale(mb0, sc, sc, sc);
-#else
-                        PSMTXScale(mb0, ballScale, ballScale, ballScale);
-#endif
                         PSMTXConcat(m80, mb0, m80);
                         PSMTXConcat(m20, m80, m80);
                         zero = *(Vec*)vec3_802fc920;
                         PSMTXMultVec(m80, &zero, &out);
-#if VERSION <= VERSION_DEMO_US
                         hit = kpaFlameHitCheck(out.x, out.y, out.z, sc * base);
-#else
-                        hit = kpaFlameHitCheck(out.x, out.y, out.z, f30);
-#endif
                         if (hit) {
                             mario->kpaWork->flameHit = hit;
                             break;
@@ -1022,11 +1009,7 @@ void kpaFireMain(void) {
                 }
             }
         }
-#if VERSION <= VERSION_DEMO_US
     {
-#else
-    }
-#endif
     if (kpaFireAttackCheck() == 0) {
         if (fireefp) {
             effSoftDelete(fireefp);
@@ -1034,7 +1017,33 @@ void kpaFireMain(void) {
         }
     }
 }
-#if VERSION <= VERSION_DEMO_US
+}
+#else
+                    ballScale = 7.0f * w->scale;
+                    f30 = ballScale * headScale;
+                    if (!(f30 < 7.0f)) {
+                        PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
+                        PSMTXScale(mb0, ballScale, ballScale, ballScale);
+                        PSMTXConcat(m80, mb0, m80);
+                        PSMTXConcat(m20, m80, m80);
+                        zero = *(Vec*)vec3_802fc920;
+                        PSMTXMultVec(m80, &zero, &out);
+                        hit = kpaFlameHitCheck(out.x, out.y, out.z, f30);
+                        if (hit) {
+                            mario->kpaWork->flameHit = hit;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (kpaFireAttackCheck() == 0) {
+        if (fireefp) {
+            effSoftDelete(fireefp);
+            fireefp = NULL;
+        }
+    }
 }
 #endif
 

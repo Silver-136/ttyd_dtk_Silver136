@@ -240,11 +240,11 @@ void bomhei_use_cancel2(void) {
     }
 }
 
-#if VERSION > VERSION_DEMO_US
 /**
  * Party table post-use handler (demo): drops Mario's carry flag with a standing pose,
  * stops the sounds and frees the use work.
  */
+#if VERSION > VERSION_DEMO_US
 void bomhei_use_post(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
     const char* name;
@@ -273,13 +273,7 @@ void bomhei_use_post(PartyEntry* party) {
     bomheiCleanSfx(party);
     bomheiFree(party);
 }
-
 #else
-
-/**
- * Party table post-use handler (demo): drops Mario's carry flag with a standing pose,
- * stops the sounds and frees the use work.
- */
 void bomhei_use_post(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     if (mario->flags & (MARIO_FLAG_ACTIVE << 13)) {
@@ -306,7 +300,6 @@ void bomhei_use(PartyEntry* party) {
 
 #if VERSION > VERSION_DEMO_US
     if (party->flags & PARTY_FLAG_IS_BEING_USED) {
-#endif
         bomhei_use_main(party);
         if ((party->useMotionId >= 30 && party->useMotionId <= 32) ||
             (party->useMotionId >= 50 && party->useMotionId <= 51) || party->useMotionId == 60) {
@@ -321,7 +314,21 @@ void bomhei_use(PartyEntry* party) {
                 party->moveDir = party->targetDir;
             }
         }
-#if VERSION <= VERSION_DEMO_US
+#else
+        bomhei_use_main(party);
+        if ((party->useMotionId >= 30 && party->useMotionId <= 32) ||
+            (party->useMotionId >= 50 && party->useMotionId <= 51) || party->useMotionId == 60) {
+            partyChkGnd(party);
+            if (party->flags & PARTY_FLAG_IS_GROUNDED) {
+                partyChgMot(party, PARTY_MOTION_STAY);
+                party->velY = 0.0f;
+            }
+            if (strcmp(gp->currentMapName, "muj_05") == 0 && party->hitobjStandOn != NULL &&
+                strcmp(hitGetName(party->hitobjStandOn), "A_dokuro_bero") == 0) {
+                party->targetDir = angleABf(party->position.x, party->position.z, 638.0f, 12.5f);
+                party->moveDir = party->targetDir;
+            }
+        }
         if (party->flags & PARTY_FLAG_IS_BEING_USED) {
             mario = party->playerPtr;
 #endif
@@ -330,12 +337,15 @@ void bomhei_use(PartyEntry* party) {
                 party->work.bomhei.state = 0x66;
 #if VERSION <= VERSION_DEMO_US
                 } else {
+            mario_controll(party);
+        }
+    }
+}
+}
 #else
                 return;
             }
-#endif
             mario_controll(party);
-#if VERSION > VERSION_DEMO_US
         }
         if (party->useMotionId <= 10 && mario->hitobjStandOn != NULL && (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_MOBJ)) {
             mobj = mobjHitObjPtrToPtr(mario->hitobjStandOn);
@@ -353,11 +363,8 @@ void bomhei_use(PartyEntry* party) {
             bomhei_use_cancel();
         } else if (party->useMotionId <= 10 && (mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
             bomhei_use_cancel();
-#endif
         }
     }
-}
-#if VERSION <= VERSION_DEMO_US
 }
 #endif
 
@@ -385,27 +392,27 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
     if (party->hitobjFront != NULL) {
         if (hitGetAttr(party->hitobjFront) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
-#else
-    hit = party->hitobjFront;
-    if (hit != NULL && (hitGetAttr(hit) & 0xC00)) {
-#endif
         party->useMotionId = 60;
         return TRUE;
     }
-#if VERSION <= VERSION_DEMO_US
     } else if (party->hitobjHead != NULL) {
         if (hitGetAttr(party->hitobjHead) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
-#else
-    hit = party->hitobjHead;
-    if (hit != NULL && (hitGetAttr(hit) & 0xC00)) {
-#endif
         party->useMotionId = 60;
         return TRUE;
     }
-#if VERSION <= VERSION_DEMO_US
     } else if (party->hitobjStandOn != NULL) {
         attr = hitGetAttr(party->hitobjStandOn);
 #else
+    hit = party->hitobjFront;
+    if (hit != NULL && (hitGetAttr(hit) & 0xC00)) {
+        party->useMotionId = 60;
+        return TRUE;
+    }
+    hit = party->hitobjHead;
+    if (hit != NULL && (hitGetAttr(hit) & 0xC00)) {
+        party->useMotionId = 60;
+        return TRUE;
+    }
     hit = party->hitobjStandOn;
     if (hit != NULL) {
         attr = hitGetAttr(hit);

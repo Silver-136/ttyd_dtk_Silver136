@@ -2592,11 +2592,13 @@ void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
 #if VERSION <= VERSION_DEMO_US
     for (i = 0; i < 256; i++) {
         p = &w->parts[i];
-#endif
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;
     btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
 }
-#if VERSION <= VERSION_DEMO_US
+}
+#else
+    s = (p->vx < 0.0f) ? 0.4f : -0.4f;
+    btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
 }
 #endif
 

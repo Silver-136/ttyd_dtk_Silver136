@@ -264,14 +264,14 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
         enemy->heldItem = ITEM_NULL;
         heldItem = setup->stolenItems[enemy->groupSetupId];
         if (heldItem) {
-#endif
             enemy->heldItem = heldItem;
-#if VERSION > VERSION_DEMO_US
             enemy->flags |= BATTLE_UNIT_FLAG_STOLEN_ITEM;
         } else {
             enemy->heldItem = setup->heldItems[i];
             BtlUnit_EquipItem(enemy, EQUIP_RESET, setup->heldItems[i]);
         }
+#else
+            enemy->heldItem = heldItem;
 #endif
         enemy->dropTable = setup->itemDropLists[i];
         enemy->currentHp = enemy->maxHp;

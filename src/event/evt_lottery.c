@@ -181,9 +181,7 @@ USER_FUNC(evt_lottery) {
         lot->todayNum = -1;
 #if VERSION <= VERSION_DEMO_US
         if (idx == 1) {
-#endif
         lot->lastTime = now;
-#if VERSION <= VERSION_DEMO_US
         }
     }
 
@@ -203,6 +201,8 @@ USER_FUNC(evt_lottery) {
             lot->flags |= LOTTERY_FLAG_NEW_DAY;
             lot->times[idx] = now;
         }
+#else
+        lot->lastTime = now;
 #endif
     }
 

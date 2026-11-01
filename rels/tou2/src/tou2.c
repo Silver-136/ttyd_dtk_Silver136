@@ -645,16 +645,19 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
         for (i = 0; i < rank_wp->count; i++) {
 #if VERSION > VERSION_DEMO_US
             if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
-#endif
                 if (rank_wp->entries[i].flags & RANK_PLAYER) {
                     break;
                 }
                 rank++;
             }
-#if VERSION <= VERSION_DEMO_US
-        rank = i;
-#else
         }
+#else
+                if (rank_wp->entries[i].flags & RANK_PLAYER) {
+                    break;
+                }
+                rank++;
+            }
+        rank = i;
 #endif
         if (rank > 10) {
             rules = ruleDt_2bu;
@@ -698,16 +701,19 @@ static USER_FUNC(evt_tou_get_rule_info) {
         for (i = 0; i < rank_wp->count; i++) {
 #if VERSION > VERSION_DEMO_US
             if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
-#endif
                 if (rank_wp->entries[i].flags & RANK_PLAYER) {
                     break;
                 }
                 rank++;
             }
-#if VERSION <= VERSION_DEMO_US
-        rank = i;
-#else
         }
+#else
+                if (rank_wp->entries[i].flags & RANK_PLAYER) {
+                    break;
+                }
+                rank++;
+            }
+        rank = i;
 #endif
         if (rank > 10) {
             rules = ruleDt_2bu;

@@ -750,14 +750,13 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     }
 #if VERSION <= VERSION_DEMO_US
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (20.0f + mario->wPlayerCollisionBox.x) / 2.0f && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING) && wp->bounceCount < 2) {
+            marioChgMot(MARIO_MOTION_JUMP_SW);
 #else
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (20.0f + mario->wPlayerCollisionBox.x) / 2.0f
         && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING)
         && wp->bounceCount < 2) {
         if (mario->currMotionId != MARIO_MOTION_ROLL && mario->currMotionId != MARIO_MOTION_YOSHI) {
-#endif
             marioChgMot(MARIO_MOTION_JUMP_SW);
-#if VERSION > VERSION_DEMO_US
         }
 #endif
         wp->bounceCount++;
@@ -1432,7 +1431,6 @@ static void ext_moamoa_main(void) {
         mario->floorMove.y = 0.0f;
         mario->floorMove.z = 0.0f;
     } else {
-#endif
         v = (Vec){mario->floorMove.x, mario->floorMove.y, mario->floorMove.z};
         { static const Vec zv2 = {0.0f, 0.0f, 0.0f}; } // FAKE: unreferenced 12-byte .rodata pad object, defined after the compound literal's template so the template comes first (target order)
         if (PSVECMag(&v) > 2.0f) {
@@ -1442,8 +1440,17 @@ static void ext_moamoa_main(void) {
             mario->floorMove.z = 2.0f * v.z;
         }
     }
-#if VERSION > VERSION_DEMO_US
 }
+#else
+        v = (Vec){mario->floorMove.x, mario->floorMove.y, mario->floorMove.z};
+        { static const Vec zv2 = {0.0f, 0.0f, 0.0f}; } // FAKE: unreferenced 12-byte .rodata pad object, defined after the compound literal's template so the template comes first (target order)
+        if (PSVECMag(&v) > 2.0f) {
+            PSVECNormalize(&v, &v);
+            mario->floorMove.x = 2.0f * v.x;
+            mario->floorMove.y = 2.0f * v.y;
+            mario->floorMove.z = 2.0f * v.z;
+        }
+    }
 #endif
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset

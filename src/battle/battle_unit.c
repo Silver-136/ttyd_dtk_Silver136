@@ -1274,13 +1274,13 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
         case STATUS_ALLERGIC:
 #if VERSION > VERSION_DEMO_US
             if (turns > 0) {
-#endif
                 unit->allergicTurns = turns;
-#if VERSION > VERSION_DEMO_US
             } else {
                 unit->allergicTurns = 0;
                 return FALSE;
             }
+#else
+                unit->allergicTurns = turns;
 #endif
             break;
         case STATUS_FLIPPED:
@@ -1292,13 +1292,13 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
         case STATUS_PAYBACK:
 #if VERSION > VERSION_DEMO_US
             if (turns > 0) {
-#endif
                 unit->paybackTurns = turns;
-#if VERSION > VERSION_DEMO_US
             } else {
                 unit->paybackTurns = 0;
                 return FALSE;
             }
+#else
+                unit->paybackTurns = turns;
 #endif
             break;
         case STATUS_HOLD_FAST:

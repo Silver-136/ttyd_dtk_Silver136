@@ -1238,38 +1238,13 @@ void bmapUnLoad(void) {
     memset(wp, 0, sizeof(MapWork));
 #if VERSION <= VERSION_DEMO_US
     j = 0;
-#else
-    wp = mapWork;
-    activeGroup = 0;
-    for (i = 0, entry = wp->entries; i < wp->entries[0].count; entry++, i++) {
-#endif
         // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
-#if VERSION <= VERSION_DEMO_US
         {
             s32 gz = 0;
             if (gz != 0) {
                 j = 0;
-#else
-        if (entry->datAram) {
-            entry->dat = _mapAllocTail(entry->datSize);
-            entry->tpl = _mapAllocTail(entry->tplSize);
-            aramMgrToMram(entry->datAram, entry->dat);
-            aramMgrToMram(MAPENT_TPLARAM(entry), entry->tpl);
-            entry->datAram = NULL;
-            MAPENT_TPLARAM(entry) = NULL;
-        } else {
-            entry->arcData = _mapAllocTail(entry->arcSize);
-            aramMgrToMram(entry->arcAram, entry->arcData);
-            entry->arcAram = NULL;
-        }
-        makeDisplayList(i);
-    }
-    if (wp->entries->arcData) {
-        arcEntry(1, wp->entries->arcData, wp->entries->arcSize);
-#endif
     }
 }
-#if VERSION <= VERSION_DEMO_US
 wp2 = mapWork;
 activeGroup = j;
 for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
@@ -1292,6 +1267,29 @@ for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
 if (wp2->entries->arcData) {
     arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
 }
+}
+#else
+    wp = mapWork;
+    activeGroup = 0;
+    for (i = 0, entry = wp->entries; i < wp->entries[0].count; entry++, i++) {
+        // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
+        if (entry->datAram) {
+            entry->dat = _mapAllocTail(entry->datSize);
+            entry->tpl = _mapAllocTail(entry->tplSize);
+            aramMgrToMram(entry->datAram, entry->dat);
+            aramMgrToMram(MAPENT_TPLARAM(entry), entry->tpl);
+            entry->datAram = NULL;
+            MAPENT_TPLARAM(entry) = NULL;
+        } else {
+            entry->arcData = _mapAllocTail(entry->arcSize);
+            aramMgrToMram(entry->arcAram, entry->arcData);
+            entry->arcAram = NULL;
+        }
+        makeDisplayList(i);
+    }
+    if (wp->entries->arcData) {
+        arcEntry(1, wp->entries->arcData, wp->entries->arcSize);
+    }
 }
 #endif
 #pragma opt_common_subs reset
@@ -3845,11 +3843,12 @@ void mapObjFlagOn(const char* name, u32 flags) {
     }
 #if VERSION > VERSION_DEMO_US
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
-#endif
         obj->flags |= flags;
     }
-#if VERSION > VERSION_DEMO_US
 }
+#else
+        obj->flags |= flags;
+    }
 #endif
 
 void mapObjFlagOff(const char* name, u32 flags) {
@@ -3872,12 +3871,11 @@ void mapObjFlagOff(const char* name, u32 flags) {
  */
 #if VERSION <= VERSION_DEMO_US
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
+        obj->flags |= flags;
 #else
 void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
-#endif
         obj->flags |= flags;
-#if VERSION > VERSION_DEMO_US
     }
 #endif
     if (obj->child) {

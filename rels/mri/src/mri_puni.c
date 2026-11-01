@@ -5115,7 +5115,6 @@ void puniMoveMain(PuniData* p) {
 
 void puniOption(void) {
 #else
-
 static void puniOption(void) {
 #endif
     PuniData* p;
@@ -5191,11 +5190,12 @@ static void puniOption(void) {
         if (PSVECMag(&p->vel) >= 8.0f) {
             PSVECNormalize(&p->vel, &p->vel);
             PSVECScale(&p->vel, &p->vel, 8.0f);
-#endif
         }
     }
-#if VERSION > VERSION_DEMO_US
 }
+#else
+        }
+    }
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_mri_00014ad4, JP mri .text+0x14A10. See docs/NAME_PROVENANCE.md.
@@ -5759,11 +5759,10 @@ void puni_puni_main(void) {
                             puniMoveDecel(q);
                             puniSetYPosition(q);
                             break;
+                }
 #else
                     puniMoveMain(q);
-#endif
                 }
-#if VERSION > VERSION_DEMO_US
                 puniAnimation(q, ps);
             }
         }

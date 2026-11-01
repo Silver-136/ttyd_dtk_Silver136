@@ -886,10 +886,8 @@ OPCODE_END_SCRIPT,
 };
 static USER_FUNC(itemUseFunc) {
     PartyEntry* party;
-
-
-
 #endif
+
     MarioWork* mario;
     ItemData* item;
 #else
@@ -1368,9 +1366,6 @@ void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
 #if VERSION == VERSION_DEMO_JP
 }
 #endif
-#else
-}
-#endif
 
 #if VERSION < VERSION_US
 #if VERSION == VERSION_DEMO_JP
@@ -1403,7 +1398,6 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
 #endif
 
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
-#if VERSION <= VERSION_DEMO_US
 #if VERSION != VERSION_DEMO_JP
 va_list args;
 va_start(args, fmt);
@@ -1414,6 +1408,40 @@ FontDrawScaleVec(scale);
 }
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 #endif
+#else
+}
+
+#if VERSION < VERSION_US
+#if VERSION == VERSION_DEMO_JP
+void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
+    char buf[0x400];
+    va_list args;
+
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+    FontDrawColor(color);
+    FontDrawScaleVec(scale);
+    FontDrawStringVecPitch(&pos, buf, pitch);
+}
+#elif VERSION == VERSION_DEMO_US
+}
+void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
+    char buf[0x400];
+#else
+void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
+    char buf[0x400];
+    va_list args;
+
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+    FontDrawColor(color);
+    FontDrawScaleVec(scale);
+    FontDrawStringVecPitch(&pos, buf, pitch);
+}
+#endif
+#endif
+
+/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 #endif
 void winTexInit(TEXPalette* texture) {
     winTexTpl = texture;

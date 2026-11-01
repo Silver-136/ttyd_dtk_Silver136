@@ -167,9 +167,7 @@ TubuDt tubuDt[] = {
     {-33, -62, 0, 0, 382, "gor"},
     {-33, -74, 1, 0, 382, "las"},
 };
-
 #else
-
 static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
 #endif
 s32 stone_tbl[] = {ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
@@ -1713,11 +1711,11 @@ void monosiriExit(MonosiriWork* m) {
         }
 #if VERSION > VERSION_DEMO_US
         if (m->smart) {
-#endif
             smartFree(m->smart);
-#if VERSION > VERSION_DEMO_US
             m->smart = NULL;
         }
+#else
+            smartFree(m->smart);
 #endif
         _mapFree(m);
     }

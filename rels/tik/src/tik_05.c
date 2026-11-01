@@ -1480,13 +1480,12 @@ USER_FUNC(cam_mahojin_kaiten_main) {
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
     if (elapsed > msec) {
         elapsed = msec;
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
+    event->lwData[14] = sysMsec2Frame(elapsed);
+#else
+    }
     }
 event->lwData[14]++;
-#else
-    event->lwData[14] = sysMsec2Frame(elapsed);
 #endif
     if (frames == event->lwData[14]) {
         cont = 0;

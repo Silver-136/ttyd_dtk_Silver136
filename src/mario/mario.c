@@ -211,7 +211,6 @@ void marioSetCharMode(s32 mode) {
     }
 #if VERSION > VERSION_DEMO_US
     if (!(wp->flags & MARIO_FLAG_BG_MODE)) {
-#endif
         if (wp->currMotionId == MARIO_MOTION_PLANE) {
             marioForcePlaneAnime();
             return;
@@ -221,25 +220,36 @@ void marioSetCharMode(s32 mode) {
         } else if (wp->currMotionId == MARIO_MOTION_ROLL) {
             marioForceRollAnime();
             return;
-#if VERSION <= VERSION_DEMO_US
-        } else if (wp->currMotionId == MARIO_MOTION_SLIT) {
-#else
         } else if (wp->dispFlags & MARIO_DISP_FLAG_SLIT) {
-#endif
             marioForceSlitAnime();
-#if VERSION > VERSION_DEMO_US
             return;
         } else if (wp->currMotionId == MARIO_MOTION_VIVIAN) {
             marioForceVivianAnime();
-#endif
             return;
         } else if (wp->currMotionId == MARIO_MOTION_YOSHI) {
             marioChgPose("M_Y_2");
             marioChgPose("M_Y_1");
             return;
         }
-#if VERSION > VERSION_DEMO_US
     }
+#else
+        if (wp->currMotionId == MARIO_MOTION_PLANE) {
+            marioForcePlaneAnime();
+            return;
+        } else if (wp->currMotionId == MARIO_MOTION_SHIP) {
+            marioForceShipAnime();
+            return;
+        } else if (wp->currMotionId == MARIO_MOTION_ROLL) {
+            marioForceRollAnime();
+            return;
+        } else if (wp->currMotionId == MARIO_MOTION_SLIT) {
+            marioForceSlitAnime();
+            return;
+        } else if (wp->currMotionId == MARIO_MOTION_YOSHI) {
+            marioChgPose("M_Y_2");
+            marioChgPose("M_Y_1");
+            return;
+        }
 #endif
     if (wp->currMotionId != MARIO_MOTION_PLANE && wp->currMotionId != MARIO_MOTION_SHIP && wp->currMotionId != MARIO_MOTION_JABARA) {
         marioSetSpec();
@@ -603,10 +613,10 @@ void marioFBattlePrepare(void) {
     marioAdjustMoveDir();
 #if VERSION > VERSION_DEMO_US
     if (wp->currMotionId != MARIO_MOTION_JABARA) {
-#endif
         wp->flags |= MARIO_FLAG_PRE_BATTLE_PHYSICS;
-#if VERSION > VERSION_DEMO_US
     }
+#else
+        wp->flags |= MARIO_FLAG_PRE_BATTLE_PHYSICS;
 #endif
     partyUsePost(partyGetPtr(marioGetPartyId()));
     partyCtrlOff();
@@ -1172,9 +1182,7 @@ void marioMain(void) {
     }
 #if VERSION > VERSION_DEMO_US
     if (N_marioChkUseParty()) {
-#endif
         marioColorChk();
-#if VERSION > VERSION_DEMO_US
         p = mp;
         if (pouchEquipCheckBadge(ITEM_SLOW_GO)) {
             if (p->currMotionId == MARIO_MOTION_STAY) {
@@ -1187,6 +1195,8 @@ void marioMain(void) {
             }
         }
     }
+#else
+        marioColorChk();
 #endif
     marioSetDirEventMain();
 #if VERSION > VERSION_DEMO_US
@@ -1507,16 +1517,17 @@ void marioMove(void) {
     if (wp->flags & MARIO_FLAG_BG_MODE) {
 #if VERSION > VERSION_DEMO_US
         if (strcmp(gp->currentMapName, "aji_13")) {
-#endif
             if (wp->controlStickSensitivity && !(wp->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
                 camFollowYOff();
-#if VERSION > VERSION_DEMO_US
             }
         } else {
             marioGetScreenPos(wp->position, &x2, &y2, &z2);
             if (y2 >= 400.0f) {
                 camFollowYOn();
             }
+#else
+            if (wp->controlStickSensitivity && !(wp->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
+                camFollowYOff();
 #endif
         }
         if (wp->currMotionId == MARIO_MOTION_WALK || wp->currMotionId == MARIO_MOTION_DASH) {

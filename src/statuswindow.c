@@ -500,12 +500,8 @@ void statusGetValue(StatusValue* values) {
 #if VERSION <= VERSION_DEMO_US
         if (!marioBgmodeChk()) {
             values->party = marioGetParty();
-#else
-        values->party = !marioBgmodeChk() ? (s16)marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
-#endif
         values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
         values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
-#if VERSION <= VERSION_DEMO_US
     if (values->party) {
         wp->cur.lastParty = values->party;
     }
@@ -514,6 +510,10 @@ void statusGetValue(StatusValue* values) {
     values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
     values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
 }
+#else
+        values->party = !marioBgmodeChk() ? (s16)marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
+        values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
+        values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
 #endif
     } else {
         bw = _battleWorkPointer;

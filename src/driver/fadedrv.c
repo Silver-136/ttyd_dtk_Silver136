@@ -185,9 +185,12 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
                     if (duration) {
                         entry->delayFrames = 2;
                     }
-#endif
                     break;
-#if VERSION <= VERSION_DEMO_US
+            }
+            break;
+        case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28: case 0x33:
+#else
+                    break;
             case FADE_CURTAIN_UP_DOWN_A1:
             case FADE_CURTAIN_VERTICAL_A2:
             case FADE_CURTAIN_SIDES_A1_3D:
@@ -208,10 +211,6 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
             case FADE_CURTAIN_LEAVE:
             case FADE_CURTAIN_ENTER:
             case FADE_PAGE_FLIP_FOUR:
-#else
-            }
-            break;
-        case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28: case 0x33:
 #endif
             id = 1;
             entry = &wp->entries[1];
@@ -591,11 +590,8 @@ void fadeMain(void) {
                             if ((s32)entry->delayFrames != 0) {
                                 entry->delayFrames--;
                             } else {
-#endif
                                 entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
-#if VERSION > VERSION_DEMO_US
                             }
-#endif
                             entry->progress = entry->elapsed / entry->duration;
                             entry->progress = 1.0f - entry->progress;
                             entry->rotation += 10.0f;
@@ -604,12 +600,21 @@ void fadeMain(void) {
                                 entry->flags |= FADE_FLAG_DONE;
                                 entry->state++;
                             }
-#if VERSION > VERSION_DEMO_US
                         } else {
                             entry->progress = 0.0f;
                             entry->flags |= FADE_FLAG_DONE;
                             entry->state++;
                         }
+#else
+                                entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
+                            entry->progress = entry->elapsed / entry->duration;
+                            entry->progress = 1.0f - entry->progress;
+                            entry->rotation += 10.0f;
+                            if (entry->progress < 0.0f) {
+                                entry->progress = 0.0f;
+                                entry->flags |= FADE_FLAG_DONE;
+                                entry->state++;
+                            }
 #endif
                         break;
                 }
@@ -629,7 +634,6 @@ void fadeMain(void) {
                     case 0:
 #if VERSION > VERSION_DEMO_US
                         if (entry->duration != 0) {
-#endif
                             entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
                             entry->progress = entry->elapsed / entry->duration;
                             entry->rotation -= 10.0f;
@@ -638,12 +642,20 @@ void fadeMain(void) {
                                 entry->flags |= FADE_FLAG_DONE;
                                 entry->state++;
                             }
-#if VERSION > VERSION_DEMO_US
                         } else {
                             entry->progress = 1.0f;
                             entry->flags |= FADE_FLAG_DONE;
                             entry->state++;
                         }
+#else
+                            entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
+                            entry->progress = entry->elapsed / entry->duration;
+                            entry->rotation -= 10.0f;
+                            if (entry->progress > 1.0f) {
+                                entry->progress = 1.0f;
+                                entry->flags |= FADE_FLAG_DONE;
+                                entry->state++;
+                            }
 #endif
                         break;
                 }

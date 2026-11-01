@@ -805,12 +805,14 @@ BOOL SoundDropData(void) {
 void SoundSetOutputMode(SND_OUTPUTMODE mode) {
 #if VERSION > VERSION_DEMO_US
     if (sound.outputMode != mode) {
-#endif
         sound.outputMode = mode;
         sndOutputMode(mode);
     }
-#if VERSION > VERSION_DEMO_US
 }
+#else
+        sound.outputMode = mode;
+        sndOutputMode(mode);
+    }
 #endif
 
 /** Called when the disc cover opens: mutes sound until it is closed. */
@@ -1446,13 +1448,12 @@ static inline u32 _ssCalcLen(SoundStreamEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
         if (entry->offset + 2 * SS_LOAD_BUFFER_SIZE > entry->size) {
             len -= (SS_LOAD_BUFFER_SIZE - (entry->size - (entry->offset + SS_LOAD_BUFFER_SIZE))) / 2;
+                len += 0x20 - (len % 0x20);
 #else
         for (i = 2; i < 6; i++) {
             if (entry->offset + i * SS_LOAD_BUFFER_SIZE > entry->size) {
                 len -= (SS_LOAD_BUFFER_SIZE - (entry->size - (entry->offset + (i - 1) * SS_LOAD_BUFFER_SIZE))) / i;
-#endif
                 len += 0x20 - (len % 0x20);
-#if VERSION > VERSION_DEMO_US
                 break;
             }
 #endif
@@ -1560,11 +1561,6 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #if VERSION <= VERSION_DEMO_US
                 if (result >= 0) {
                     SoundIntOff();
-#else
-                if (result < 0) {
-                    goto end;
-                }
-#endif
                 entry->offset += entry->requestLength;
                 entry->loadedLen[1 - entry->curBuf] = entry->requestLength;
                 entry->loaded = 1;
@@ -1584,9 +1580,7 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
                 } else {
                     stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
                 }
-#if VERSION <= VERSION_DEMO_US
                 SoundIntOn();
-#endif
                 if (stream->count == 2) {
                     if (sound.coverState == 2 && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
                         sound.coverState = 0;
@@ -1594,11 +1588,39 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
                 } else if (sound.coverState == 2 && stream->entries[0].loaded == 1) {
                     sound.coverState = 0;
                 }
-#if VERSION <= VERSION_DEMO_US
                 continue;
                 }
                 return;
 #else
+                if (result < 0) {
+                    goto end;
+                }
+                entry->offset += entry->requestLength;
+                entry->loadedLen[1 - entry->curBuf] = entry->requestLength;
+                entry->loaded = 1;
+                if (entry->offset >= entry->size) {
+                    entry->offset = entry->loopStart;
+                    if (stream->flags & SOUND_STREAM_FLAG_LOOP) {
+                        if (ch == 0) {
+                            stream->flags &= ~SOUND_STREAM_FLAG_READ_L;
+                        } else {
+                            stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
+                        }
+                    } else {
+                        stream->flags |= SOUND_STREAM_FLAG_READ_END;
+                    }
+                } else if (ch == 0) {
+                    stream->flags &= ~SOUND_STREAM_FLAG_READ_L;
+                } else {
+                    stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
+                }
+                if (stream->count == 2) {
+                    if (sound.coverState == 2 && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
+                        sound.coverState = 0;
+                    }
+                } else if (sound.coverState == 2 && stream->entries[0].loaded == 1) {
+                    sound.coverState = 0;
+                }
                 break;
 #endif
             }

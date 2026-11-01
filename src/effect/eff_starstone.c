@@ -650,19 +650,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
         for (i = 0, size = diamond_1_dl_0_size_tbl, list = diamond_1_dl_0_tbl; i < sizeof(diamond_1_dl_0_tbl) / sizeof(diamond_1_dl_0_tbl[0]); i++, size++, list++) {
             GXCallDisplayList(*list, *size << 5);
-#else
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
-        CALL_DL_TABLE(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
-        CALL_DL_TABLE(diamond_1_dl_1_tbl, diamond_1_dl_1_size_tbl, 34)
-    } else {
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
-        CALL_DL_TABLE(diamond_7_dl_0_tbl, diamond_7_dl_0_size_tbl, 34)
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
-        CALL_DL_TABLE(diamond_7_dl_1_tbl, diamond_7_dl_1_size_tbl, 33)
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
     VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
     {
                 u8* sz;
@@ -713,6 +701,16 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
         GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
         GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
 #else
+        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
+        CALL_DL_TABLE(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
+        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
+        CALL_DL_TABLE(diamond_1_dl_1_tbl, diamond_1_dl_1_size_tbl, 34)
+    } else {
+        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
+        CALL_DL_TABLE(diamond_7_dl_0_tbl, diamond_7_dl_0_size_tbl, 34)
+        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
+        CALL_DL_TABLE(diamond_7_dl_1_tbl, diamond_7_dl_1_size_tbl, 33)
+    }
     DISP_MID(w)
 #endif
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
@@ -777,16 +775,8 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
 
             for (n = 0, sz = diamond_1_dl_1_size_tbl, dl = diamond_1_dl_1_tbl; n < sizeof(diamond_1_dl_1_tbl) / sizeof(diamond_1_dl_1_tbl[0]); n++, sz++, dl++) {
                 GXCallDisplayList(*dl, *sz << 5);
-#else
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
-        LOOPK2(diamond_1_dl_1_tbl, diamond_1_dl_1_size_tbl, 34)
-    } else {
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
-        LOOPK2(diamond_7_dl_1_tbl, diamond_7_dl_1_size_tbl, 33)
-#endif
     }
 }
-#if VERSION <= VERSION_DEMO_US
 } else {
     VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
     {
@@ -799,6 +789,14 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
         }
     }
 }
+}
+#else
+        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
+        LOOPK2(diamond_1_dl_1_tbl, diamond_1_dl_1_size_tbl, 34)
+    } else {
+        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
+        LOOPK2(diamond_7_dl_1_tbl, diamond_7_dl_1_size_tbl, 33)
+    }
 }
 #endif
 

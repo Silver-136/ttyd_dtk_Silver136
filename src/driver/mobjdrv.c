@@ -741,16 +741,6 @@ void mobjMain(void) {
         }
 #if VERSION <= VERSION_DEMO_US
         if (!(gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)))) {
-#else
-        // FAKE: `gp->inBattle != 0 ||` is always false here; without it the object changes
-#if VERSION >= VERSION_US
-        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
-#else
-        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8))) {
-#endif
-            goto afterHit;
-        }
-#endif
         if (entry->flags & MOBJ_FLAG_UPDATE_MTX) {
             if (mobjCheckItemboxOpen(entry) == 2) {
                 mobjCalcMtx2(entry);
@@ -764,15 +754,9 @@ void mobjMain(void) {
                 entry->position.y += entry->velocity.y;
                 entry->velocity.y -= entry->gravity;
             } else {
-#if VERSION <= VERSION_DEMO_US
                 dist = 1.0f + (f32)__fabs(entry->velocity.y);
                 if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
                                    10.0f + entry->position.y, entry->position.z, 0.0f, -10.0f, 0.0f) != NULL) {
-#else
-                dist = 10.0f + (1.0f + (f32)__fabs(entry->velocity.y));
-                if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
-                                   10.0f + entry->position.y, entry->position.z, 0.0f, -1.0f, 0.0f) != NULL) {
-#endif
                     entry->position.y = hy;
                     entry->velocity.y = (-0.5f * entry->bounce) * entry->velocity.y;
                     if (__fabs(entry->velocity.y) <= 2.0) {
@@ -814,11 +798,7 @@ void mobjMain(void) {
                     hit = 1;
                     goto hitDone;
                 }
-#if VERSION <= VERSION_DEMO_US
                 if ((entry->flags & MOBJ_FLAG_HIT_A_BUTTON) && mario->hitobjFront == hitPtr &&
-#else
-                if (marioFrontActionValidChk() && (entry->flags & MOBJ_FLAG_HIT_A_BUTTON) && mario->hitobjFront == hitPtr &&
-#endif
                     (mario->buttonTrg & PAD_BUTTON_A) && !partyFlag) {
                     entry->hitFlag = MOBJ_FLAG_HIT_A_BUTTON;
                     hit = 1;
@@ -900,10 +880,163 @@ void mobjMain(void) {
         if (entry->flags & MOBJ_FLAG_HIT_EVERY_FRAME) {
             entry->flags &= ~MOBJ_FLAG_HIT;
         }
-#if VERSION <= VERSION_DEMO_US
         if ((u32)marioStGetSystemLevel() != 0) {
             entry->flags &= ~MOBJ_FLAG_HIT;
+        }
+        if (entry->mainFunc != NULL) {
+            if (entry->mainFunc(entry) == -1) {
+                continue;
+            }
+        }
+    }
 #else
+        // FAKE: `gp->inBattle != 0 ||` is always false here; without it the object changes
+#if VERSION >= VERSION_US
+        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
+#else
+        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8))) {
+#endif
+            goto afterHit;
+        }
+        if (entry->flags & MOBJ_FLAG_UPDATE_MTX) {
+            if (mobjCheckItemboxOpen(entry) == 2) {
+                mobjCalcMtx2(entry);
+            } else {
+                mobjCalcMtx(entry);
+            }
+            entry->flags &= ~MOBJ_FLAG_UPDATE_MTX;
+        }
+        if (entry->flags & MOBJ_FLAG_GRAVITY) {
+            if (entry->velocity.y >= 0.0f) {
+                entry->position.y += entry->velocity.y;
+                entry->velocity.y -= entry->gravity;
+            } else {
+                dist = 10.0f + (1.0f + (f32)__fabs(entry->velocity.y));
+                if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
+                                   10.0f + entry->position.y, entry->position.z, 0.0f, -1.0f, 0.0f) != NULL) {
+                    entry->position.y = hy;
+                    entry->velocity.y = (-0.5f * entry->bounce) * entry->velocity.y;
+                    if (__fabs(entry->velocity.y) <= 2.0) {
+                        entry->velocity.y = 0.0f;
+                    }
+                } else {
+                    entry->position.y += entry->velocity.y;
+                    entry->velocity.y -= entry->gravity;
+                }
+            }
+            mobjCalcMtx(entry);
+        }
+        if (!(entry->flags & MOBJ_FLAG_HIT)) {
+            hit = 0;
+            hitPtr = entry->hitObj[0].hitObject;
+            if (mario->characterId != CHARACTER_BOWSER) {
+                // The first hit kind that applies wins. The goto is kept: the hammer and partner checks
+                // fall through to the next kind when their inner test fails, and no if/else-if form of
+                // that gives the same code (the partner blocks merge or re-test the flag).
+                if ((entry->flags & MOBJ_FLAG_HIT_HAMMER) && mario->hitobjHammer == hitPtr) {
+                    if (marioGetPtr()->position.y <= 5.0f + entry->position.y) {
+                        entry->hitFlag = MOBJ_FLAG_HIT_HAMMER;
+                        hit = 1;
+                        goto hitDone;
+                    }
+                }
+                if ((entry->flags & MOBJ_FLAG_HIT_HEAD) && hitJump == hitPtr) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_HEAD;
+                    hit = 1;
+                    goto hitDone;
+                }
+                if ((entry->flags & MOBJ_FLAG_HIT_STAND) && mario->hitobjStandOn == hitPtr) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_STAND;
+                    hit = 1;
+                    goto hitDone;
+                }
+                if ((entry->flags & MOBJ_FLAG_HIT_SPIN_JUMP) && mario->hitobjStandOn == hitPtr && marioChkHipBump()) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_SPIN_JUMP;
+                    hit = 1;
+                    goto hitDone;
+                }
+                if (marioFrontActionValidChk() && (entry->flags & MOBJ_FLAG_HIT_A_BUTTON) && mario->hitobjFront == hitPtr &&
+                    (mario->buttonTrg & PAD_BUTTON_A) && !partyFlag) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_A_BUTTON;
+                    hit = 1;
+                    goto hitDone;
+                }
+                if ((entry->flags & MOBJ_FLAG_HIT_PARTY) && party != NULL) {
+                    if (party->hitobjAction == hitPtr) {
+                        entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
+                        hit = 1;
+                        goto hitDone;
+                    } else if (party->hitobjAction != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+                        if (PSVECDistance(&party->position, &entry->position) <
+                            entry->hitObj[0].hitObject->radius + party->width) {
+                            entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
+                            hit = 1;
+                            goto hitDone;
+                        }
+                    }
+                }
+                if ((entry->flags & MOBJ_FLAG_HIT_BOBBERY) && party != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+                    if (party->hitobjAction == hitPtr) {
+                        entry->hitFlag = MOBJ_FLAG_HIT_BOBBERY;
+                        hit = 1;
+                        goto hitDone;
+                    } else if (party->hitobjAction != NULL) {
+                        // Bobbery's distance fallback reports MOBJ_FLAG_HIT_PARTY, unlike the direct hit above (MOBJ_FLAG_HIT_BOBBERY); the events tell the two apart.
+                        if (PSVECDistance(&party->position, &entry->position) <
+                            entry->hitObj[0].hitObject->radius + party->width) {
+                            entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
+                            hit = 1;
+                            goto hitDone;
+                        }
+                    }
+                }
+            } else {
+                if (entry->flags & MOBJ_FLAG_HIT_KOOPA_HEAD) {
+                    for (k = 0; k < 10; k++) {
+                        if (kpaGetHitobjHead(k) == hitPtr) {
+                            entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_HEAD;
+                            hit = 1;
+                            break;
+                        }
+                    }
+                }
+                if (entry->flags & MOBJ_FLAG_HIT_KOOPA_HIP) {
+                    for (k = 0; k < 10 && hit == 0; k++) {
+                        if (kpaGetHitobjRide(k) == hitPtr && kpaHipAttackCheck()) {
+                            entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_HIP;
+                            hit = 1;
+                            break;
+                        }
+                    }
+                }
+                if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_BODY_LV3) && kpaGetHitobj() == hitPtr && kpaGetLevel() == 3) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_BODY_LV3;
+                    hit = 1;
+                    goto hitDone;
+                }
+                if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_FLAME) && kpaGetHitFlame() == hitPtr) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_FLAME;
+                    hit = 1;
+                    goto hitDone;
+                }
+                if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_FRONT) && mario->hitobjFront == hitPtr) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_FRONT;
+                    hit = 1;
+                    goto hitDone;
+                }
+                if ((entry->flags & MOBJ_FLAG_HIT_STAND) && mario->hitobjStandOn == hitPtr) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_STAND;
+                    hit = 1;
+                }
+            }
+        hitDone:
+            if (hit != 0) {
+                entry->flags |= MOBJ_FLAG_HIT;
+            }
+        }
+        if (entry->flags & MOBJ_FLAG_HIT_EVERY_FRAME) {
+            entry->flags &= ~MOBJ_FLAG_HIT;
+        }
         if (marioStGetSystemLevel() != 0) {
             entry->flags &= ~MOBJ_FLAG_HIT;
         }
@@ -912,16 +1045,12 @@ void mobjMain(void) {
             if (motion == MARIO_MOTION_DAMAGE || motion == MARIO_MOTION_DAMAGE_TOGE) {
                 entry->flags &= ~MOBJ_FLAG_HIT;
             }
-#endif
         }
         if (entry->mainFunc != NULL) {
             if (entry->mainFunc(entry) == -1) {
                 continue;
             }
         }
-#if VERSION <= VERSION_DEMO_US
-    }
-#else
     afterHit:
 #endif
         if (!(entry->flags & MOBJ_FLAG_ACTIVE)) {
@@ -1145,12 +1274,11 @@ void mobjCalcMtx2(MapObjectEntry* entry) {
 BOOL mobjGetHint(MapObjectEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
     return (entry->flags & MOBJ_FLAG_HINT) != 0;
+    }
 #else
     if (entry == NULL) {
         return FALSE;
-#endif
     }
-#if VERSION > VERSION_DEMO_US
     return (entry->flags >> 5) & 1; // MOBJ_FLAG_SHOW_HINT, normalized to BOOL
 }
 #endif

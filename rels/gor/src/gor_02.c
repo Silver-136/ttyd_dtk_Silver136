@@ -528,7 +528,6 @@ EvtWord front_wall_keshi[27];
 EvtWord tobiori_check[48];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gor_02_init_evt[];
-
 #else
 EvtWord gor_02_init_evt[543];
 
@@ -1439,7 +1438,6 @@ EVT_BEGIN(powerupya_orb_use)
     WAIT_MS(1500)
     CALL(evt_eff_softdelete, STRING("aaax"))
 #else
-
 /**
  * The demo has no Up Arrow trade: Merlon takes the item and turns the star chart himself.
  * This talk event has the name that retail gives to its door animation.

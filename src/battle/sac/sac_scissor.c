@@ -1215,9 +1215,7 @@ void scissor_disp_control(CameraId camera, void* param) {
             sign = -1.0f;
         } else {
             sign = 1.0f;
-#endif
 }
-#if VERSION <= VERSION_DEMO_US
 width = unit->cutWidth * unit->sizeMultiplier;
 height = unit->cutHeight * unit->sizeMultiplier;
 BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
@@ -1270,6 +1268,8 @@ GXBegin(0xA8, 0, 2);
 GXPosition3f32(a.x, a.y, 0.0f);
 GXPosition3f32(b.x, b.y, 0.0f);
     }
+}
+#else
 }
 #endif
 

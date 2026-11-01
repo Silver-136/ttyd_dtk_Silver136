@@ -185,7 +185,6 @@ void imgDisp(CameraId camId, void* param) {
     }
 #if VERSION <= VERSION_DEMO_US
     {
-#endif
     if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
         fl = entry->shadows[first].rect.left;
         ft = entry->shadows[first].rect.top;
@@ -197,10 +196,20 @@ void imgDisp(CameraId camId, void* param) {
         rectW = entry->width;
         rectH = entry->height;
     }
-#if VERSION <= VERSION_DEMO_US
     }
     PSMTXTrans(m3, 64.0f * ((entry->offsetX + fl) / (f32)DEMOGetRenderModeObj()->fbWidth), 48.0f * (-(entry->offsetY + ft) / (f32)DEMOGetRenderModeObj()->efbHeight), zoff);
 #else
+    if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
+        fl = entry->shadows[first].rect.left;
+        ft = entry->shadows[first].rect.top;
+        rectW = entry->shadows[first].rect.width;
+        rectH = entry->shadows[first].rect.height;
+    } else {
+        fl = entry->shadows[first].x;
+        ft = entry->shadows[first].y;
+        rectW = entry->width;
+        rectH = entry->height;
+    }
     PSMTXTrans(m3, 64.0f * ((entry->offsetX + fl) / (f32)(DEMOGetRenderModeObj())->fbWidth), 48.0f * (-(entry->offsetY + ft) / (f32)(DEMOGetRenderModeObj())->efbHeight), zoff);
 #endif
     PSMTXTrans(m4, -32.0f, 24.0f, 0.0f);
@@ -216,15 +225,14 @@ void imgDisp(CameraId camId, void* param) {
     animSetPaperTexMtx(NULL, NULL, NULL);
 #if VERSION <= VERSION_DEMO_US
     sysWaitDrawSync();
+    }
 #else
     e2 = wp->entries;
     for (i = 0; i < wp->count; i++, e2++) {
         if ((e2->flags & IMAGE_FLAG_IN_USE) && e2->poseId != -1 && !(e2->flags & IMAGE_FLAG_HIDE) && strcmp(e2->name, entry->name) != 0 &&
             strcmp(animPoseGetAnimBaseDataPtr(e2->poseId)->fileName, animPoseGetAnimBaseDataPtr(entry->poseId)->fileName) == 0)
             break;
-#endif
     }
-#if VERSION > VERSION_DEMO_US
     if (i < wp->count) sysWaitDrawSync();
 }
 #endif

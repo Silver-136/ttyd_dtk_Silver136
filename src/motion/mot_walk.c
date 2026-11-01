@@ -207,10 +207,10 @@ void mot_walk(void) {
         }
 #if VERSION > VERSION_DEMO_US
         if (!(player->dispFlags & MARIO_DISP_FLAG_SLIT)) {
-#endif
             player->currSubMotionId = 0;
-#if VERSION > VERSION_DEMO_US
         }
+#else
+            player->currSubMotionId = 0;
 #endif
         player->multiTimer = 0;
     }

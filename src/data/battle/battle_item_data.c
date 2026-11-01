@@ -4752,9 +4752,7 @@ USER_FUNC(_naniga_okorukana_check) {
             supportItemCount = &wp->actRecord.partnerSupportItems;
         } else {
             goto end;
-#endif
         }
-#if VERSION > VERSION_DEMO_US
         switch (item) {
             case ITEM_THUNDER_BOLT:
             case ITEM_THUNDER_RAGE:
@@ -4769,6 +4767,8 @@ USER_FUNC(_naniga_okorukana_check) {
         }
     }
 end:
+#else
+        }
 #endif
     if (effNameToPtr("effNaniga")) {
         return EVT_RETURN_BLOCK;
@@ -5106,7 +5106,6 @@ EVT_BEGIN(ItemEvent_Kameno_Noroi)
     RETURN
 EVT_END()
 #else
-
 /** Thunder Bolt: 5 lightning damage to one enemy. */
 
 /** Ruin Powder: confuses every enemy for three turns. */

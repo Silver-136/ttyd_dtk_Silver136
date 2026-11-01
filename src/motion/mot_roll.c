@@ -356,15 +356,15 @@ s32 marioRollCancel(void) {
 #if VERSION <= VERSION_DEMO_US
     if (!(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING)) {
         ret = 1;
-#endif
     mario->currSubMotionId = 0x14;
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-#if VERSION > VERSION_DEMO_US
-    return 1;
-#endif
 }
-#if VERSION <= VERSION_DEMO_US
 return ret;
+}
+#else
+    mario->currSubMotionId = 0x14;
+    camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
+    return 1;
 }
 #endif
 

@@ -2385,12 +2385,12 @@ void btlseqAct(BattleWork* wp) {
                             unit->moveState = 10;
 #if VERSION > VERSION_DEMO_US
                             if (!(unit->tokenFlags & kHasRallyWinkStatus)) {
-#endif
                                 unit->activeTurns = 0;
-#if VERSION > VERSION_DEMO_US
                             } else {
                                 unit->tokenFlags &= ~kHasRallyWinkStatus;
                             }
+#else
+                                unit->activeTurns = 0;
 #endif
                             if (!BtlUnit_GetBelong(unit) && unit->attackPhase == BATTLE_PHASE_PLAYER &&
                                 !BattlePhaseEndCheck() && !(wp->flags & BATTLE_FLAG_RESET_TURN)) {

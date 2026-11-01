@@ -6952,10 +6952,11 @@ USER_FUNC(make_item_tbl) {
     for (i = 0; i < cnt; i++) {
 #if VERSION > VERSION_DEMO_US
         if (skip != i) {
-#endif
             item = pouchHaveItem(i);
             if (item != 0) {
-#if VERSION <= VERSION_DEMO_US
+#else
+            item = pouchHaveItem(i);
+            if (item != 0) {
                 if (skip == item) {
                     skip = 0;
                 } else {

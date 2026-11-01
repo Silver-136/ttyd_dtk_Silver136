@@ -2122,10 +2122,10 @@ void select_disp3_mario(WinMgrEntry* entry) {
             if (sel->items[sel->cursor].flags & SELECT_ITEM_OVER_MAX) {
                 help = "helperr2";
             } else {
-#endif
                 help = "helperr";
-#if VERSION > VERSION_DEMO_US
             }
+#else
+                help = "helperr";
 #endif
         } else {
             help = "help";

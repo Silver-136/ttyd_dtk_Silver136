@@ -100,15 +100,16 @@ WinMgrDesc itemdrv_window_desc[4] = {
 inline void itemCheckBadge(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
     if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX && !(entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP)) {
+                pouchArriveBadge(entry->itemId);
+            }
+        }
 #else
     if (!gp->inBattle) {
         if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX) {
             if (entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP) {
-#endif
                 pouchArriveBadge(entry->itemId);
             }
         }
-#if VERSION > VERSION_DEMO_US
     }
 }
 #endif

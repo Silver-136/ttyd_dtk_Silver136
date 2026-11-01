@@ -87,9 +87,7 @@ s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
     0, 0, -13714, // 40
     0, 0, -26514, // 41
 };
-
 #else
-
 s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
     24347, 2284, -8524,
     20710, 4131, -15417,

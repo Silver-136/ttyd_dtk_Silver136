@@ -717,14 +717,13 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     }
 #if VERSION <= VERSION_DEMO_US
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (mario->wPlayerCollisionBox.x + 20.0f) / 2 && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING) && wp->bounceCount < 2) {
+            marioChgMot(MARIO_MOTION_JUMP_SW);
 #else
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (mario->wPlayerCollisionBox.x + 20.0f) / 2
         && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING)
         && wp->bounceCount < 2) {
         if (mario->currMotionId != MARIO_MOTION_ROLL && mario->currMotionId != MARIO_MOTION_YOSHI) {
-#endif
             marioChgMot(MARIO_MOTION_JUMP_SW);
-#if VERSION > VERSION_DEMO_US
         }
 #endif
         wp->bounceCount++;
