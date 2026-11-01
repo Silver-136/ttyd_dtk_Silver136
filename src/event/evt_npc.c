@@ -579,7 +579,6 @@ USER_FUNC(evt_npc_move_position) {
             }
         }
         npc->footstepAccum = 0.0f;
-        // FAKE: (s8) cast before the store to the s16 field; the plain form changes the object
         npc->footstepToggle = (s8)(1 - npc->footstepToggle); // alternate L/R
     }
 
@@ -956,7 +955,6 @@ USER_FUNC(evt_npc_glide_position) {
             }
         }
         npc->footstepAccum = 0.0f;
-        // FAKE: (s8) cast before the store to the s16 field; the plain form changes the object
         npc->footstepToggle = (s8)(1 - npc->footstepToggle);
     }
 
@@ -1127,7 +1125,6 @@ USER_FUNC(evt_npc_homing_target) {
             }
         }
         npc->footstepAccum = 0.0f;
-        // FAKE: (s8) cast before the store to the s16 field; the plain form changes the object
         npc->footstepToggle = (s8)(1 - npc->footstepToggle);
     }
 

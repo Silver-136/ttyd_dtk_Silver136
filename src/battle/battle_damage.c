@@ -1501,7 +1501,6 @@ s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, Ba
 #if VERSION <= VERSION_DEMO_US
             BattleSetStatusDamage(&result, target, part, weapon->special, i, (s8)rate, levelDiff, time, strength);
 #else
-            // FAKE: no-op (s8) cast on rate; the plain argument changes the object
             if (BattleSetStatusDamage(&result, target, part, weapon->special, i, (s8)rate, levelDiff, time, strength) && i == STATUS_INVISIBLE) {
                 btlDispPoseAnime(part);
             }
