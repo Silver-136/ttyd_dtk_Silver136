@@ -7320,11 +7320,11 @@ USER_FUNC(_fire_wave) {
 USER_FUNC(_majinai_powerup_check) {
     BattleWork* wp = _battleWorkPointer;
     s32 ret = *event->args;
-    if (pouchGetPtr()->merleeNextCurseType != 1) {
+    if (pouchGetPtr()->merleeNextCurseType != MAJINAI_POWER_UP) {
         evtSetValue(event, ret, 0);
     } else {
         evtSetValue(event, ret, 1);
-        wp->majinaiState = 1;
+        wp->majinaiState = MAJINAI_POWER_UP;
         BattleMajinaiDone();
         BattleMajinaiEndCheck();
     }

@@ -369,6 +369,16 @@ typedef enum ItemType {
     ITEM_TYPE_MAX
 } ItemType;
 
+// Merlee's charms: PouchData.merleeNextCurseType, and BattleWork.majinaiState while one acts in battle. Names from
+// the charm events marioAttackEvent_Majinai{PowerUpCheck,DefenceUp,ExpUp} and _evt_majinai_coin_up_effect.
+typedef enum MajinaiType {
+    MAJINAI_NONE = 0,
+    MAJINAI_POWER_UP = 1,    // +3 attack on Mario's attack
+    MAJINAI_DEFENCE_UP = 2,  // +3 defense against the enemy phase
+    MAJINAI_EXP_UP = 3,      // double Star Points
+    MAJINAI_COIN_UP = 4,     // coin bonus after the battle
+} MajinaiType;
+
 typedef enum MarioPartner {
     PARTNER_NONE,
     PARTNER_GOOMBELLA,

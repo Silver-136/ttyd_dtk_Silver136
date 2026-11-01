@@ -1032,12 +1032,12 @@ u8 BattleMajinaiCheck(void) {
         return 0;
     }
     if (pouch->turnsUntilMerleeActivation < 0) {
-        pouch->merleeNextCurseType = 0;
+        pouch->merleeNextCurseType = MAJINAI_NONE;
         pouch->turnsUntilMerleeActivation = irand(5) + 6;
         pouch->turnsUntilMerleeActivation--;
         return 0;
     }
-    if (pouch->merleeNextCurseType != 0) {
+    if (pouch->merleeNextCurseType != MAJINAI_NONE) {
         return pouch->merleeNextCurseType;
     }
     pouch->turnsUntilMerleeActivation--;
@@ -1048,22 +1048,22 @@ u8 BattleMajinaiCheck(void) {
     if (wp->fbatInfo->setup->battleFlags & NPC_BATTLE_MERLEE_SAFE_CURSE_UNUSED) {
         r = irand(100);
         if (r < 45) {
-            pouch->merleeNextCurseType = 1;
+            pouch->merleeNextCurseType = MAJINAI_POWER_UP;
         } else if (r < 90) {
-            pouch->merleeNextCurseType = 2;
+            pouch->merleeNextCurseType = MAJINAI_DEFENCE_UP;
         } else {
-            pouch->merleeNextCurseType = 3;
+            pouch->merleeNextCurseType = MAJINAI_EXP_UP;
         }
     } else {
         r = irand(100);
         if (r < 30) {
-            pouch->merleeNextCurseType = 1;
+            pouch->merleeNextCurseType = MAJINAI_POWER_UP;
         } else if (r < 60) {
-            pouch->merleeNextCurseType = 2;
+            pouch->merleeNextCurseType = MAJINAI_DEFENCE_UP;
         } else if (r < 80) {
-            pouch->merleeNextCurseType = 3;
+            pouch->merleeNextCurseType = MAJINAI_EXP_UP;
         } else {
-            pouch->merleeNextCurseType = 4;
+            pouch->merleeNextCurseType = MAJINAI_COIN_UP;
         }
     }
     return pouch->merleeNextCurseType;
@@ -1075,10 +1075,10 @@ void BattleMajinaiDone(void) {
     pouch->merleeCurseUsesRemaining--;
     if (pouch->merleeCurseUsesRemaining != 0) {
         pouch->turnsUntilMerleeActivation = -1;
-        pouch->merleeNextCurseType = 0;
+        pouch->merleeNextCurseType = MAJINAI_NONE;
     } else {
         pouch->turnsUntilMerleeActivation = -1;
-        pouch->merleeNextCurseType = 0;
+        pouch->merleeNextCurseType = MAJINAI_NONE;
     }
 }
 

@@ -1956,13 +1956,13 @@ void btlseqMove(BattleWork* wp) {
             case 0x5000002:
                 pouch = pouchGetPtr();
                 mario = BattleGetMarioPtr(wp);
-                if (pouch->merleeNextCurseType != 2 || BattleGetSeq(wp, SEQ_PHASE) != BATTLE_PHASE_ENEMY) {
+                if (pouch->merleeNextCurseType != MAJINAI_DEFENCE_UP || BattleGetSeq(wp, SEQ_PHASE) != BATTLE_PHASE_ENEMY) {
                     BattleIncSeq(wp, SEQ_MOVE);
                     BattleIncSeq(wp, SEQ_MOVE);
                     loop = TRUE;
                     break;
                 }
-                wp->majinaiState = 2;
+                wp->majinaiState = MAJINAI_DEFENCE_UP;
                 BattleMajinaiDone();
                 BattleMajinaiEndCheck();
                 evt = evtEntry(marioAttackEvent_MajinaiDefenceUp, 10, 0);
@@ -2121,8 +2121,8 @@ void btlseqMove(BattleWork* wp) {
                     end = TRUE;
                 }
                 if (end) {
-                    if (wp->majinaiState == 2) {
-                        wp->majinaiState = 0;
+                    if (wp->majinaiState == MAJINAI_DEFENCE_UP) {
+                        wp->majinaiState = MAJINAI_NONE;
                     }
                     BattleAudience_PerPhase(BattleGetSeq(wp, SEQ_PHASE));
                     BattleIncSeq(wp, SEQ_MOVE);
@@ -2347,8 +2347,8 @@ void btlseqAct(BattleWork* wp) {
                     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
                     unit->tokenFlags &= ~kChargeExpended;
                 }
-                if (wp->majinaiState == 1) {
-                    wp->majinaiState = 0;
+                if (wp->majinaiState == MAJINAI_POWER_UP) {
+                    wp->majinaiState = MAJINAI_NONE;
                 }
                 unit->reserved_258 = 0;
                 switch (unit->moveState) {

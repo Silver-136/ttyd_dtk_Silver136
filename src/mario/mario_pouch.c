@@ -1475,7 +1475,7 @@ void pouchMajinaiInit(s32 curseCount) {
     if (mpp->merleeCurseUsesRemaining < curseCount) {
         mpp->merleeCurseUsesRemaining = (u8)curseCount;
         mpp->turnsUntilMerleeActivation = -1;
-        mpp->merleeNextCurseType = 0;
+        mpp->merleeNextCurseType = MAJINAI_NONE;
     }
 }
 

@@ -435,7 +435,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     if (fn) {
         damage = fn(attacker, weapon, target, part);
     }
-    if (wp->majinaiState == 1 && (weapon->special & SPECIAL_STATUS_POWER)) {
+    if (wp->majinaiState == MAJINAI_POWER_UP && (weapon->special & SPECIAL_STATUS_POWER)) {
         damage += 3;
     }
     if (weapon->special & SPECIAL_BADGE_POWER) {
@@ -554,7 +554,7 @@ skip:
                 defense = 0;
             }
         }
-        if (wp->majinaiState == 2 && target->currentKind == UNIT_MARIO) {
+        if (wp->majinaiState == MAJINAI_DEFENCE_UP && target->currentKind == UNIT_MARIO) {
             defense += 3;
         }
         // JP tests bit 0x20 here; Hooktail's parts carry kPartUnitWorkDefense (0x80) in both versions
@@ -1648,7 +1648,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         target->currentTarget = part;
     }
     damage = 0;
-    if (!(weapon->special & SPECIAL_UNGUARDABLE) && BtlUnit_GetACPossibility(target) && BattleActionCommandGetDefenceResult() == 5) {
+    if (!(weapon->special & SPECIAL_UNGUARDABLE) && BtlUnit_GetACPossibility(target) && BattleActionCommandGetDefenceResult() == GUARD_RESULT_SUPERGUARD) {
         BtlUnit_GetHitPos(target, part, &hit.x, &hit.y, &hit.z);
         eff = effNiceEntry(NICE_EFFECT_GREAT, hit.x - 60.0f, 45.0f + hit.y, hit.z - 10.0f);
         ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;

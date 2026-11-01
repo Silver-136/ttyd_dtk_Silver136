@@ -149,6 +149,15 @@ void BattleActionCommandDeclareACResult(BattleWork* work, BattleWeapon* weapon, 
 
 void BattleActionCommandStart(BattleWork* work);
 void BattleActionCommandStop(BattleWork* work);
+// BattleActionCommandCheckDefence: ActionCommands.defenseResult (3 is never set; battle_damage.c tests > 3 for "guarded")
+enum {
+    GUARD_RESULT_NONE = 0,
+    GUARD_RESULT_MASHED = 1,   // two or more presses in the last 15 frames
+    GUARD_RESULT_NO_PRESS = 2,
+    GUARD_RESULT_GUARD = 4,
+    GUARD_RESULT_SUPERGUARD = 5,
+};
+
 s32 BattleActionCommandGetDefenceResult(void);
 void BattleActionCommandResetDefenceResult(void);
 s32 BattleActionCommandGetDifficulty(BattleWork* work);

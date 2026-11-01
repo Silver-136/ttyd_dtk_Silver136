@@ -2372,7 +2372,7 @@ void fbatBattleMode(void) {
             if (!gp->inBattle) {
                 data->merleeCoinBonus = 0;
                 result = BattleInformationGetResult(&data->info);
-                if (pouch->merleeNextCurseType == 4 && result == BATTLE_RESULT_WIN) {
+                if (pouch->merleeNextCurseType == MAJINAI_COIN_UP && result == BATTLE_RESULT_WIN) {
                     data->subState = 3;
                     data->merleeCoinBonus = 1;
                     evt = evtEntry(_evt_majinai_coin_up_effect, 0, 0);

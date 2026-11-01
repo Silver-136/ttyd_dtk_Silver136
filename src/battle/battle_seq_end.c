@@ -343,9 +343,9 @@ void btlseqEnd(BattleWork* wp) {
         BattleInformationSetDropMaterial(info);
         pp = pouchGetPtr();
         mario = BattleGetMarioPtr(wp);
-        if (pp->merleeNextCurseType == 3) {
+        if (pp->merleeNextCurseType == MAJINAI_EXP_UP) {
             EventEntry* e;
-            wp->majinaiState = 3;
+            wp->majinaiState = MAJINAI_EXP_UP;
             BattleMajinaiDone();
             BattleMajinaiEndCheck();
             e = evtEntry(marioAttackEvent_MajinaiExpUp, 10, 0);
@@ -366,7 +366,7 @@ void btlseqEnd(BattleWork* wp) {
         BattleFogForceStop();
         work->levelUp = 0;
         work->exp = BattleGetStockExp(wp);
-        if (wp->majinaiState == 3) {
+        if (wp->majinaiState == MAJINAI_EXP_UP) {
             work->exp = work->exp * 2;
         }
         if (pouch->level >= LEVEL_MAX) {

@@ -155,7 +155,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     done = 0;
     wp = _battleWorkPointer;
     pad = &wp->actionCommands.pad;
-    wp->actionCommands.defenseResult = 0;
+    wp->actionCommands.defenseResult = GUARD_RESULT_NONE;
     diff = unit->badgesEquipped.Unsimplifier + 3;
     diff -= unit->badgesEquipped.Simplifier;
     if (diff < 0) {
@@ -171,10 +171,10 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
         if (wp->actionCommands.countdown > 0) {
             wp->actionCommands.countdown--;
             done = 1;
-            wp->actionCommands.defenseResult = 5;
+            wp->actionCommands.defenseResult = GUARD_RESULT_SUPERGUARD;
         } else if (unit->badgesEquipped.AutoCommand) {
             done = 1;
-            wp->actionCommands.defenseResult = 5;
+            wp->actionCommands.defenseResult = GUARD_RESULT_SUPERGUARD;
         } else {
             for (i = 0; i < superguard; i++) {
                 if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_B)) {
@@ -193,7 +193,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 }
                 if (count < 2) {
                     done = 1;
-                    wp->actionCommands.defenseResult = 5;
+                    wp->actionCommands.defenseResult = GUARD_RESULT_SUPERGUARD;
                 }
             }
         }
@@ -202,7 +202,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     if (!done) {
         if (wp->actionCommands.countdown > 0) {
             wp->actionCommands.countdown--;
-            wp->actionCommands.defenseResult = 4;
+            wp->actionCommands.defenseResult = GUARD_RESULT_GUARD;
         } else {
             count = 0;
             for (i = 0; i < 15; i++) {
@@ -214,7 +214,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 }
             }
             if (count >= 2) {
-                wp->actionCommands.defenseResult = 1;
+                wp->actionCommands.defenseResult = GUARD_RESULT_MASHED;
             } else {
                 for (i = 0; i < normal; i++) {
                     if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_A)) {
@@ -223,12 +223,12 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 }
                 if (i >= normal) {
                     if (count > 0) {
-                        wp->actionCommands.defenseResult = 1;
+                        wp->actionCommands.defenseResult = GUARD_RESULT_MASHED;
                     } else {
-                        wp->actionCommands.defenseResult = 2;
+                        wp->actionCommands.defenseResult = GUARD_RESULT_NO_PRESS;
                     }
                 } else {
-                    wp->actionCommands.defenseResult = 4;
+                    wp->actionCommands.defenseResult = GUARD_RESULT_GUARD;
                 }
             }
         }
@@ -253,7 +253,7 @@ s32 BattleActionCommandGetDefenceResult(void) {
  */
 void BattleActionCommandResetDefenceResult(void) {
     BattleWork* wp = _battleWorkPointer;
-    wp->actionCommands.defenseResult = 0;
+    wp->actionCommands.defenseResult = GUARD_RESULT_NONE;
     BtlPad_WorkInit(&wp->actionCommands.pad);
 }
 
