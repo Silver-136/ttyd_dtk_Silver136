@@ -1,3 +1,5 @@
+// Action command: power gauge with level tables (ac_power_gauge_lv2); charged while the button is held.
+
 #include "version.h"
 #include "icon_ids.h"
 #include "battle/battle.h"

@@ -1,3 +1,5 @@
+// Keelhaul Key (muj): the partner lecture (all_party_lecture, lecture_friends messages).
+
 #include "version.h"
 #include "icon_ids.h"
 #include "eff/eff_mario_balloon.h"

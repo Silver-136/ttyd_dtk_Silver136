@@ -1,3 +1,5 @@
+// Battle unit Paragloomba (`yami_patakuri`): tst.rel's copy of rels/jon/src/unit/unit_yami_patakuri.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

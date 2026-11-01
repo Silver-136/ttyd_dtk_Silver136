@@ -1,3 +1,6 @@
+// X-Naut Fortress (aji) battle unit: Magnus von Grapple 2.0 (magnum_battender_mkII): its parts, defence/status tables,
+// and attack events.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

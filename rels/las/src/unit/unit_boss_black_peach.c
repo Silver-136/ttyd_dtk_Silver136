@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: Shadow Queen (final boss), her hands and the possessed-Peach first phase (`boss_black_peach`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "eff/n64/eff_shock_n64.h"
 #include "eff/n64/eff_pokopi_thunder_n64.h"

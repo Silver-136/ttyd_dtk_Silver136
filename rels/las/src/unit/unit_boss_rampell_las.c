@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: Doopliss (Shadow Sirens rematch, transformed) (`boss_rampell_las`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_scanning.h"

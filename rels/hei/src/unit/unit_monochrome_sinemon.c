@@ -1,3 +1,5 @@
+// Cleft (monochrome_sinemon): battle unit used in Petal Meadows.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

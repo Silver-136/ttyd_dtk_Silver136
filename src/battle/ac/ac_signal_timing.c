@@ -1,3 +1,5 @@
+// Action command: signal timing (ac_signal_timing); press the shown input (stick direction or A/B/X/Y) in time.
+
 #include "version.h"
 #include "battle/ac/ac_table.h"
 #include "battle/battle_disp.h"

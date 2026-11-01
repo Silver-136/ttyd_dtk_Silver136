@@ -1,3 +1,6 @@
+// evt_lect_tou: lecture scripts for Yoshi (lecture_friends messages) and the Hammer level 2 key item, with their
+// helpers: button prompts, movement, flags.
+
 #include "version.h"
 #include "icon_ids.h"
 #include "evt/evt_window.h"

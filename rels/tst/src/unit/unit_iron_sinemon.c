@@ -1,3 +1,5 @@
+// Battle unit Iron Cleft (`iron_sinemon`): tst.rel's copy of rels/tou2/src/unit/unit_iron_sinemon.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

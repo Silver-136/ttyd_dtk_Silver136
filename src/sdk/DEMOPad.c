@@ -1,3 +1,5 @@
+// DEMOPad: the SDK demo-library pad reader (button edges, repeat, stick directions) used by makeKey.
+
 #include <demo/DEMOPad.h>
 
 #define DEMO_STICK_THRESHOLD 48

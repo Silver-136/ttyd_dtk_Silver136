@@ -1,3 +1,5 @@
+// Keelhaul Key (muj) battle unit: Green Fuzzy (green_chorobon): its parts, defence/status tables, and attack events.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

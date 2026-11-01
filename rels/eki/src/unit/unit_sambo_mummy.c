@@ -1,3 +1,5 @@
+// Poison Pokey (sambo_mummy): enemy battle unit; Riverside Station's copy of the unit data and scripts.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

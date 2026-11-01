@@ -1,3 +1,5 @@
+// Battle unit Dark Wizzerd (`super_mahorn`): tst.rel's copy of rels/jon/src/unit/unit_super_mahorn.c.
+
 #include "version.h"
 #include "eff/eff_mahorn2.h"
 #include "battle/battle_unit.h"

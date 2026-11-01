@@ -1,3 +1,5 @@
+// unit_nokonoko_fighter: KP Koopa (`nokonoko_fighter`), a Koopa Troopa fighter of the Glitz Pit, battle unit.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

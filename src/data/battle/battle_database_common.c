@@ -1,3 +1,5 @@
+// Shared battle drop tables: item drops and heart and flower point drops used by enemy units.
+
 #include "version.h"
 // Shared battle drop tables: item drops and heart and flower point drops used by enemy units.
 

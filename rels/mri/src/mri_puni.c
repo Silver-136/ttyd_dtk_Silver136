@@ -1,3 +1,7 @@
+// mri_puni (巨木の中, The Great Tree): the Puni crowd system: every puni and Jabbi follows Mario or its group leader,
+// walks the maze maps (puniMapdata), falls, fights and is saved/restored through the LSW bytes; driven by the
+// evt_puni_* calls.
+
 #include "version.h"
 #include "eff/eff_fukidashi.h"
 #include "evt/evt_story.h"

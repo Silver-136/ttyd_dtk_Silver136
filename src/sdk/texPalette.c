@@ -1,3 +1,5 @@
+// TPL texture palette helpers (SDK charPipeline): unpack a .tpl and build GXTexObjs from it.
+
 #include <charPipeline/texPalette.h>
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/os.h>

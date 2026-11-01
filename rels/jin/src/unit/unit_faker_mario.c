@@ -1,3 +1,5 @@
+// Fake Mario (faker_mario): the form Doopliss takes in his Mario-disguise battle in Creepy Steeple.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

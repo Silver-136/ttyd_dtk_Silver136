@@ -1,3 +1,6 @@
+// The Great Tree (mri) battle unit: Pale Piranha (monochrome_pakkun): its parts, defence/status tables, and attack
+// events.
+
 #include "version.h"
 #include "system.h"
 #include "battle/battle_unit.h"

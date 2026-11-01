@@ -1,3 +1,5 @@
+// unit_monochrome_kurokumorn: Dark Puff (`monochrome_kurokumorn`), battle unit.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

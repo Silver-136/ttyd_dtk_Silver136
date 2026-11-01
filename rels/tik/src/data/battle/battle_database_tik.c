@@ -1,3 +1,6 @@
+// Rogueport Sewers (tik): battle database: the enemy groups (BattleSetup) and stages of the sewers,
+// the Blooper fight and Professor Frankly's lecture battle.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"

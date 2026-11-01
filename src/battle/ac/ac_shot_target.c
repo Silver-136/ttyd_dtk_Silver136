@@ -1,3 +1,6 @@
+// Action command: shooting at a target (ac_shot_target); a cursor that drifts on its own and is steered with the
+// Control Stick.
+
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"

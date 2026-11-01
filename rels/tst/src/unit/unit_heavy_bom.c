@@ -1,3 +1,5 @@
+// Battle unit Bulky Bob-omb (`heavy_bom`): tst.rel's copy of rels/dou/src/unit/unit_heavy_bom.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

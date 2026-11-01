@@ -1,3 +1,6 @@
+// Keelhaul Key (muj) battle unit: Cortez Sword (cortez_sword), Cortez's sword, one of his weapons: its parts, defence/status tables,
+// and attack events.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

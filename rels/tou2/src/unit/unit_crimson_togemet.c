@@ -1,3 +1,5 @@
+// unit_crimson_togemet: Red Spike Top (`crimson_togemet`; "R. S. Buzzy" in the US text), the red Spike Top.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// evt_keijiban: notice board (keijiban) text helper; builds board entries from "<prefix>_NNNN" messages.
+
 #include "battle/battle_unit.h"
 #include "gor.h"
 #include "evt/evt_cmd.h"

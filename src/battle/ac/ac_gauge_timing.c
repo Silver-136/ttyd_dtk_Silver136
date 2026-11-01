@@ -1,3 +1,5 @@
+// Action command: gauge timing (ac_gauge_timing); a gauge driven by stick left, A or R (held, pressed or released).
+
 #include "icon_ids.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"

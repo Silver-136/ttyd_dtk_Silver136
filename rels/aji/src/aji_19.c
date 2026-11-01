@@ -1,3 +1,6 @@
+// aji_19 (敵のアジト, X-Naut Fortress): the room reached from the Moon (moo_02), with the first-visit scene
+// (evt_hajimete).
+
 #include "version.h"
 #include "mario/mariost.h"
 // aji_19 (敵のアジト, X-Naut Fortress): the room reached from the Moon (moo_02), with the first-visit scene

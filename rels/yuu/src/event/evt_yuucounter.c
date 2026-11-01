@@ -1,3 +1,5 @@
+// evt_yuucounter: Pianta Parlor score/counter display: flag and data store plus on-screen counter.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

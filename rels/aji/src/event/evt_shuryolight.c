@@ -1,3 +1,5 @@
+// X-Naut Fortress (aji): the lights on Sir Grodus's (shuryo) head and staff (light_head, light_tue).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_shuryolight.h"

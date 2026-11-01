@@ -1,3 +1,5 @@
+// Battle unit Sky-Blue Spiny (`hyper_togezo`): tst.rel's copy of rels/jon/src/unit/unit_hyper_togezo.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

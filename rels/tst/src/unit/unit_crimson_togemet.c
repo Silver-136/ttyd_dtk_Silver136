@@ -1,3 +1,5 @@
+// Battle unit Red Spike Top (`crimson_togemet`, "R. S. Buzzy"): tst.rel's copy of rels/tou2/src/unit/unit_crimson_togemet.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

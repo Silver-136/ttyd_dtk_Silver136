@@ -1,3 +1,5 @@
+// Battle event commands (btlevtcmd_*): the script functions battle scripts use to query and control units.
+
 #include "version.h"
 #include "driver/itemdrv.h"
 #include "battle/ac/ac_timing_a.h"

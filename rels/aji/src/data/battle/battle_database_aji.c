@@ -1,3 +1,6 @@
+// X-Naut Fortress (aji): battle database: the enemy groups (BattleSetup) and stages of the fortress and
+// of the Magnus von Grapple 2.0 boss fight.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

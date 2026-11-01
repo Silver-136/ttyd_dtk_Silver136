@@ -1,3 +1,6 @@
+// Keelhaul Key (muj) battle unit: X-Naut platoon (gundan_zako_group1, horde group 1) in Lord Crump's fight: its parts,
+// defence/status tables, and attack events.
+
 #include "version.h"
 #include "zakogun.h"
 #include "battle/battle_unit.h"

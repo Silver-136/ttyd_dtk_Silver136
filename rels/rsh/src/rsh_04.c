@@ -1,3 +1,6 @@
+// rsh_04 (列車, Excess Express): passenger car with compartments 3-5: Narikin family, conductor, salaryman and Powan
+// detective NPCs, and a lost-documents event; doors to rsh_03, rsh_05 and rsh_07.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"

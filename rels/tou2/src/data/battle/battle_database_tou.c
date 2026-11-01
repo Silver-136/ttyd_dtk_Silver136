@@ -1,3 +1,6 @@
+// battle_database_tou: Glitz Pit battle data: arena stage layouts and the ranked match groups (tou_rank_N)
+// with their unit setups, plus the field battle selection tables.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

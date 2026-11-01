@@ -1,3 +1,5 @@
+// Action command: gauge timing, second variant (ac_gauge_timing2); press A in time on the gauge.
+
 #include "version.h"
 #include "battle/ac/ac_table.h"
 #include "icon_ids.h"

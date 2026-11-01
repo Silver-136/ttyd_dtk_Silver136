@@ -1,3 +1,5 @@
+// Gold Fuzzy (gold_chorobon): battle unit used in Petal Meadows.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "unit/unit_chorobon_gundan.h"

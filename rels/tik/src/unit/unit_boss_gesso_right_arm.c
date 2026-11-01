@@ -1,3 +1,6 @@
+// Rogueport Sewers (tik) battle unit: R. Tentacle (gesso_right_arm), Blooper's right tentacle: its parts, defence/status tables, and
+// attack events.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

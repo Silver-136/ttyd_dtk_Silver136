@@ -1,3 +1,5 @@
+// Smorg Miasma (moamoa_tentacle_a), Smorg's tentacle A part of the boss battle unit, used on the Excess Express.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "rsh.h"

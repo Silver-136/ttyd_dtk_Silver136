@@ -1,3 +1,6 @@
+// dmo_00 (オープニングデモ, opening demo): the storybook prologue that seq_logo.c starts after the boot logos. A book
+// on a desk opens and its pages zoom into pictures while text windows narrate; A or Start skips to the title.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_urouro.h"

@@ -1,3 +1,5 @@
+// unit_hyper_sinnosuke: Hyper Bald Cleft (`hyper_sinnosuke`), battle unit.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

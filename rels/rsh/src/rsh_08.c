@@ -1,3 +1,6 @@
+// rsh_08 (列車, Excess Express): tiny connector room off rsh_01; only door data and an init event for the second trip
+// (nidome).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

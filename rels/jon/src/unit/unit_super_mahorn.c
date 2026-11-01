@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Dark Wizzerd (`super_mahorn`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "eff/eff_mahorn2.h"
 #include "battle/battle_unit.h"

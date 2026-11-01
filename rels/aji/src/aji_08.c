@@ -1,3 +1,5 @@
+// aji_08 (敵のアジト, X-Naut Fortress): the corridor with the moving ceiling (evt_slit, tenjo).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

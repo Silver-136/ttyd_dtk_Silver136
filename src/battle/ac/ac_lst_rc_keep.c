@@ -1,3 +1,5 @@
+// Action command: hold the stick left and the sub stick right (ac_lst_rc_keep).
+
 #include "battle/ac/ac_table.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"

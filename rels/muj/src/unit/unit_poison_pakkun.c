@@ -1,3 +1,5 @@
+// Keelhaul Key (muj) battle unit: Putrid Piranha (poison_pakkun): its parts, defence/status tables, and attack events.
+
 #include "version.h"
 #include "system.h"
 #include "battle/battle_unit.h"

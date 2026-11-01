@@ -1,3 +1,5 @@
+// Battle unit Dark Koopatrol (`togenoko_ace`): tst.rel's copy of rels/jon/src/unit/unit_togenoko_ace.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

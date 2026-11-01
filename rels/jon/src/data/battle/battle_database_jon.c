@@ -1,3 +1,5 @@
+// Pit of 100 Trials (jon): battle database: the enemy groups (BattleSetup) and stages of the Pit floors.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

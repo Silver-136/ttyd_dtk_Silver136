@@ -1,3 +1,5 @@
+// Battle unit Dark Koopa (`yami_noko`): tst.rel's copy of rels/jon/src/unit/unit_yami_noko.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: Grodus X, the satellites Sir Grodus summons (`boss_batten_satellite`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "system.h"
 #include "las.h"

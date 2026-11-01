@@ -1,3 +1,5 @@
+// Battle unit Hammer Bro (`hammer_bros`): tst.rel's copy of rels/tik/src/unit/unit_hammer_bros.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

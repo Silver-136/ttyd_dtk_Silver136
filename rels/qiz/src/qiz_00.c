@@ -1,3 +1,5 @@
+// qiz_00 (はてなむしクイズ, a quiz): an empty map (JP, JP demo and PAL); its init event only returns.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

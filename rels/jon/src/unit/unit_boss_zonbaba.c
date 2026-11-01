@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: Bonetail (boss of floor 100) (`boss_zonbaba`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

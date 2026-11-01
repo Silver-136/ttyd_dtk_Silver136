@@ -1,3 +1,5 @@
+// unit_togenoko_ace: Dark Koopatrol (`togenoko_ace`), battle unit.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

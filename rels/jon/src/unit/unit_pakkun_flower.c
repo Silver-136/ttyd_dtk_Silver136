@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Piranha Plant (`pakkun_flower`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "system.h"
 #include "battle/battle_unit.h"

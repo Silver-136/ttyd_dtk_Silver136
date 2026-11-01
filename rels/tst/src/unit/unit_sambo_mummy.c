@@ -1,3 +1,5 @@
+// Battle unit Poison Pokey (`sambo_mummy`): tst.rel's copy of rels/eki/src/unit/unit_sambo_mummy.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// Action command: shooting (ac_shot); a target mark, the Control Stick and A.
+
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"

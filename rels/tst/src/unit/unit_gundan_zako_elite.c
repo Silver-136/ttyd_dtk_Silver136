@@ -1,3 +1,5 @@
+// Battle unit Elite X-Naut (`gundan_zako_elite`): tst.rel's copy of rels/aji/src/unit/unit_gundan_zako_elite.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// Bulky Bob-omb (heavy_bom): battle unit used in Pirate's Grotto.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

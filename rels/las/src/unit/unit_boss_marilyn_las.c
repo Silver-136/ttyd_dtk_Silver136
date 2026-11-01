@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: Marilyn (Shadow Sirens rematch) (`boss_marilyn_las`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

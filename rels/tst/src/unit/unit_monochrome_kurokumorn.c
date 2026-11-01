@@ -1,3 +1,5 @@
+// Battle unit Dark Puff (`monochrome_kurokumorn`): tst.rel's copy of rels/jon/src/unit/unit_monochrome_kurokumorn.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

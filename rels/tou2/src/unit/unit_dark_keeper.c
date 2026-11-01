@@ -1,3 +1,5 @@
+// unit_dark_keeper: Dark Craw (`dark_keeper`), battle unit.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

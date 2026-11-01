@@ -1,3 +1,5 @@
+// unit_patapata_fighter: KP Paratroopa (`patapata_fighter`), a Koopa Paratroopa fighter of the Glitz Pit, battle unit.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

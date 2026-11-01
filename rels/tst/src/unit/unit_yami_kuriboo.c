@@ -1,3 +1,5 @@
+// Battle unit Gloomba (`yami_kuriboo`): tst.rel's copy of rels/jon/src/unit/unit_yami_kuriboo.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,6 @@
+// battle_database_nok (ノコ村, Petalburg): the battle database; the epilogue's stage-play battle (btlgrp_nok_hei_ep) on
+// the Petal Meadows stage.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"

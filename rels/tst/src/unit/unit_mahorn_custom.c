@@ -1,3 +1,5 @@
+// Battle unit Elite Wizzerd (`mahorn_custom`): tst.rel's copy of rels/jon/src/unit/unit_mahorn_custom.c.
+
 #include "version.h"
 #include "eff/eff_mahorn2.h"
 #include "battle/battle_unit.h"

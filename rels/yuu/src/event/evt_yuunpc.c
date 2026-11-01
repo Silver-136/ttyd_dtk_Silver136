@@ -1,3 +1,5 @@
+// evt_yuunpc: Pianta Parlor NPC contestants and crowd: poses, movement, goal and fall checks for each minigame.
+
 #pragma defer_codegen on
 #include "version.h"
 #include "battle/battle_unit.h"

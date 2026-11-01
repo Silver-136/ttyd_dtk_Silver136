@@ -1,3 +1,6 @@
+// The Great Tree (mri): the Super Boots lecture (boots_lv2_juyoitem_lecture, lecture_s_boots messages), with the black
+// breaking floor.
+
 #include "icon_ids.h"
 #include "evt/evt_window.h"
 #include "eff/eff_fukidashi.h"

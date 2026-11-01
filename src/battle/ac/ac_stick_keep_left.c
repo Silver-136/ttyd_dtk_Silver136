@@ -1,3 +1,5 @@
+// Action command: hold the control stick to the left (ac_stick_keep_left) for the required duration.
+
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"

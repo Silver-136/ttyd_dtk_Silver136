@@ -1,3 +1,5 @@
+// Atomic Boo (atmic_teresa): boss battle unit used in Creepy Steeple.
+
 #include "version.h"
 #include "system.h"
 #include "eff/eff_magic1_n64.h"

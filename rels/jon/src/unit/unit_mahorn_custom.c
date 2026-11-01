@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Elite Wizzerd (`mahorn_custom`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "eff/eff_mahorn2.h"
 #include "battle/battle_unit.h"

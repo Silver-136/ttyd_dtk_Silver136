@@ -1,3 +1,5 @@
+// Battle unit Dark Lakitu (`hyper_jyugem`): tst.rel's copy of rels/jon/src/unit/unit_hyper_jyugem.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// Action command: pendulum crane timing (ac_pendulum_crane_timing); press A in time on the swinging marker.
+
 #include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"

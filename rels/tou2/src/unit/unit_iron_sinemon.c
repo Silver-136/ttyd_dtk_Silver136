@@ -1,3 +1,5 @@
+// unit_iron_sinemon: Iron Cleft (`iron_sinemon`), battle unit.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

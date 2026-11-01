@@ -1,3 +1,5 @@
+// Battle unit Spiky Gloomba (`yami_togekuri`): tst.rel's copy of rels/jon/src/unit/unit_yami_togekuri.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

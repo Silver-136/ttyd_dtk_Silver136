@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: Kammy Koopa (fought with Bowser) (`boss_kamec_obaba`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "battle/battle_unit.h"

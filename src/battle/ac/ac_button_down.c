@@ -1,3 +1,5 @@
+// Action command: press the inputs shown on screen in order (ac_button_down); buttons from _button_table.
+
 #include "battle/battle.h"
 #include <dolphin/pad.h>
 #include "battle/battle_ac.h"

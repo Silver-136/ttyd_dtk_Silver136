@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: Sir Grodus (boss) (`boss_batten_leader`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "las.h"
 #include "battle/battle_unit.h"

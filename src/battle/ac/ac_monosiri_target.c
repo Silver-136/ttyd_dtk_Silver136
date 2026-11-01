@@ -1,3 +1,5 @@
+// Action command: Tattle targeting (ac_monosiri_target); a moving cursor, press A.
+
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"

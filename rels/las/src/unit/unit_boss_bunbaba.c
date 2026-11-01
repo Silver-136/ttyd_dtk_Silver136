@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: Gloomtail (boss) (`boss_bunbaba`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

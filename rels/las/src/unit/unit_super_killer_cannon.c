@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: the Bombshell Bill Blaster (`super_killer_cannon`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

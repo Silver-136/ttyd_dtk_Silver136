@@ -1,3 +1,6 @@
+// X-Naut Fortress (aji) battle unit: Mini-X-Yux (barriern_custom_satellite), the shield an X-Yux creates: its parts,
+// defence/status tables, and attack events.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

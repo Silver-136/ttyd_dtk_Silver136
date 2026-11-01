@@ -1,3 +1,5 @@
+// Battle unit Cleft (`monochrome_sinemon`): tst.rel's copy of rels/hei/src/unit/unit_monochrome_sinemon.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

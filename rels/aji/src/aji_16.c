@@ -1,3 +1,6 @@
+// aji_16 (敵のアジト, X-Naut Fortress): Peach's room: her captivity scenes (peach_evt_stg*) and the last e-mail
+// (evt_last_mail).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

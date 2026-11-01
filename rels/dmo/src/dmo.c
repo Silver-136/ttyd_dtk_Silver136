@@ -1,3 +1,5 @@
+// dmo.rel (オープニングデモ, opening demo): registers dmo_00; unloading frees the demo's texture file.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

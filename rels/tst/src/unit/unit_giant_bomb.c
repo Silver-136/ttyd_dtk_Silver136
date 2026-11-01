@@ -1,3 +1,5 @@
+// Battle unit Bob-ulk (`giant_bomb`): tst.rel's copy of rels/jon/src/unit/unit_giant_bomb.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

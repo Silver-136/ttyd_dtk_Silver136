@@ -1,3 +1,5 @@
+// Action command: press the shown input in time (ac_timing_wide); wider sibling of ac_timing_a.
+
 #include "icon_ids.h"
 #include "battle/ac/ac_table.h"
 #include "battle/battle.h"

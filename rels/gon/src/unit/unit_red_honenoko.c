@@ -1,3 +1,5 @@
+// Red Bones (red_honenoko): battle unit used in Hooktail Castle.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

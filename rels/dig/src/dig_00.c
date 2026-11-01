@@ -1,3 +1,7 @@
+// dig_00 (ダイジェスト, digest movie): the digest map; no code or script names it as a destination. It plays demo.thp
+// full screen while random characters walk, jump, fall and pop up in front of it, until a button press or the
+// movie's end returns to the title.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"

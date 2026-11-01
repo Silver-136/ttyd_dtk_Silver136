@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Swampire (`basabasa_green`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

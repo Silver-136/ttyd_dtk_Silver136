@@ -1,3 +1,5 @@
+// Battle unit Hyper Bald Cleft (`hyper_sinnosuke`): tst.rel's copy of rels/tou2/src/unit/unit_hyper_sinnosuke.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

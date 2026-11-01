@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Spiky Gloomba (`yami_togekuri`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

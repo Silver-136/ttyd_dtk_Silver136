@@ -1,3 +1,5 @@
+// unit_burst_wanwan: Red Chomp (`burst_wanwan`), the Glitz Pit's red Chain-Chomp, battle unit.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

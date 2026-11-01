@@ -1,3 +1,6 @@
+// X-Naut Fortress (aji) battle unit: Z-Yux (barriern_z), which creates Mini-Z-Yux shields: its parts, defence/status
+// tables, and attack events.
+
 #include "version.h"
 #include "system.h"
 #include "battle/battle_unit.h"

@@ -1,3 +1,5 @@
+// Battle unit KP Paratroopa (`patapata_fighter`): tst.rel's copy of rels/tou2/src/unit/unit_patapata_fighter.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// dou_12 (洞窟, Pirate's Grotto): side passage between dou_02 and dou_03.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

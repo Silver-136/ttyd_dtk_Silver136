@@ -1,3 +1,5 @@
+// Battle unit Dark Craw (`dark_keeper`): tst.rel's copy of rels/jon/src/unit/unit_dark_keeper.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,6 @@
+// tik_19 (埋没した都市, Rogueport Sewers): the room with the black chest whose paper demon (peramajin) gives Mario his plane
+// power (mac_majin messages).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"

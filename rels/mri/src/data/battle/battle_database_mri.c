@@ -1,3 +1,6 @@
+// The Great Tree (mri): battle database: the enemy groups (BattleSetup) and stages of the tree's rooms
+// and of the Magnus von Grapple boss fight.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

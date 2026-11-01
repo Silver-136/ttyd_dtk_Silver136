@@ -1,3 +1,6 @@
+// battle_database_gor: Rogueport battle data: stage layouts (bti_01), the Crump and Gus fights and the
+// action-command and special-action-command tutorial battles, plus field battle selection tables.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"

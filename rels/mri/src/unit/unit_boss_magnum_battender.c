@@ -1,3 +1,6 @@
+// The Great Tree (mri) battle unit: Magnus von Grapple (magnum_battender): its parts, defence/status tables, and attack
+// events.
+
 #include "version.h"
 #include "eff/n64/eff_hokori_n64.h"
 #include "battle/battle_unit.h"

@@ -1,3 +1,5 @@
+// Shared pieces for the star-power special moves (sac_*): the opening camera, cheering and hand-beat helpers.
+
 #include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_ac_help.h"

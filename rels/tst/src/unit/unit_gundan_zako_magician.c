@@ -1,3 +1,5 @@
+// Battle unit X-Naut PhD (`gundan_zako_magician`): tst.rel's copy of rels/aji/src/unit/unit_gundan_zako_magician.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

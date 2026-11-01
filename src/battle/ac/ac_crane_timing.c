@@ -1,3 +1,5 @@
+// Action command: crane timing (ac_crane_timing); press A in time.
+
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"

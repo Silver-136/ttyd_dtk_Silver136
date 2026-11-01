@@ -1,3 +1,5 @@
+// Action command: power gauge (ac_power_gauge); a gauge charged with the given button (A, L or R).
+
 #include "version.h"
 #include "battle/ac/ac_table.h"
 #include "icon_ids.h"

@@ -1,3 +1,5 @@
+// Battle unit Bombshell Bill (`super_killer`): tst.rel's copy of rels/las/src/unit/unit_super_killer.c.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

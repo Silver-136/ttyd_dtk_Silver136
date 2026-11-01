@@ -1,3 +1,5 @@
+// qiz.rel (はてなむしクイズ, a quiz; JP, JP demo and PAL): registers qiz_00.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

@@ -1,3 +1,5 @@
+// evt_goryuugijo: Pianta Parlor hall helpers: the driver of the Monte medal counter and slot machine minigames.
+
 #include "eff/eff_minigame.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

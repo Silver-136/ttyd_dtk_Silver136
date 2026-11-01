@@ -1,3 +1,6 @@
+// Small GX helpers: queen_uv (texture offsets extdrv scrolls), and in the demo the 2D textured-quad
+// helpers seq_demo draws with.
+
 #include "version.h"
 #include "gxsub.h"
 

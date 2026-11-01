@@ -1,3 +1,6 @@
+// evt_lect_gor: lecture scripts for partners (Goombella, Ms. Mowz: lecture_friends messages) and the Hammer level 3
+// key item, with their helpers: button prompts, camera/Mario movement, flags.
+
 #include "version.h"
 #include "icon_ids.h"
 #include "evt/evt_window.h"
