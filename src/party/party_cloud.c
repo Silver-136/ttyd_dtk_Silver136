@@ -416,7 +416,7 @@ void cloud_use(PartyEntry* party) {
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
         partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
     } else {
-        partyChgPose(party, partyChgPoseId(party, 1));
+        partyChgPose(party, partyChgPoseId(party, PARTY_POSE_STAND));
         partyChgRunMode(party, PARTY_RUN_MOVE);
         partyChgMot(party, PARTY_MOTION_STAY);
     }

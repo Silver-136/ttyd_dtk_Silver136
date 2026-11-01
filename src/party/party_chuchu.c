@@ -492,7 +492,7 @@ void chuchu_use(PartyEntry* party) {
         if (--cp->moveFrames > 0) {
             return;
         }
-        partyChgPoseId(party, 1);
+        partyChgPoseId(party, PARTY_POSE_STAND);
         cp->moveSpeed = 0.0f;
         cp->useMotionId = 10;
         break;
@@ -515,12 +515,12 @@ void chuchu_use(PartyEntry* party) {
         if (--cp->moveFrames > 0) {
             break;
         }
-        partyChgPoseId(party, 1);
+        partyChgPoseId(party, PARTY_POSE_STAND);
         evtEntryType(msg_evt, 0, 0, 26);
         cp->useMotionId = 22;
         break;
     case 23:
-        partyChgPoseId(party, 1);
+        partyChgPoseId(party, PARTY_POSE_STAND);
         cp->useMotionId = 80;
         break;
     }

@@ -1328,12 +1328,12 @@ void npcSetTalkPose(char* name) {
     if (!strcmp(name, "party")) {
         party = partyGetPtr(marioGetPartyId());
         if (party) {
-            partyChgPoseId(party, 7);
+            partyChgPoseId(party, PARTY_POSE_TALK);
         }
     } else if (!strcmp(name, "extparty")) {
         party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
-            partyChgPoseId(party, 7);
+            partyChgPoseId(party, PARTY_POSE_TALK);
         }
     } else if (!strcmp(name, "mario")) {
         marioChgPose(MarioTalkPose);
@@ -1365,12 +1365,12 @@ void npcSetStayPose(char* name) {
     if (!strcmp(name, "party")) {
         party = partyGetPtr(marioGetPartyId());
         if (party) {
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
         }
     } else if (!strcmp(name, "extparty")) {
         party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
         }
     } else if (!strcmp(name, "mario")) {
         marioChgPose(MarioStayPose);

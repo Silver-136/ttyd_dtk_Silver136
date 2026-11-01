@@ -547,7 +547,7 @@ USER_FUNC(evt_party_jump_pos) {
         if (mode == 0) {
             p->moveDir = p->targetDir;
         }
-        partyChgPoseId(p, 4);
+        partyChgPoseId(p, PARTY_POSE_JUMP);
         dy = y - p->position.y;
         half = 0.5f * ff;
         if (__fabsf(dy) < 1.0f) {
@@ -611,7 +611,7 @@ USER_FUNC(evt_party_jump_pos) {
             p->position.y += p->velY;
         }
         if (--event->userdata[2] <= 0) {
-            partyChgPoseId(p, 1);
+            partyChgPoseId(p, PARTY_POSE_STAND);
             p->gravity = 0.0f;
             p->work.common.accelY = 0.0f;
             p->moveSpeed = 0.0f;
@@ -687,7 +687,7 @@ USER_FUNC(evt_party_set_pose) {
 USER_FUNC(evt_party_sleep_on) {
     PartyEntry* p = GETPARTY(event->args);
     if (p != NULL) {
-        partyChgPoseId(p, 6);
+        partyChgPoseId(p, PARTY_POSE_SLEEP);
         p->flags |= PARTY_FLAG_SLEEP_ON;
     }
     return EVT_RETURN_DONE;
@@ -697,7 +697,7 @@ USER_FUNC(evt_party_sleep_on) {
 USER_FUNC(evt_party_sleep_off) {
     PartyEntry* p = GETPARTY(event->args);
     if (p != NULL) {
-        partyChgPoseId(p, 1);
+        partyChgPoseId(p, PARTY_POSE_STAND);
         p->flags &= ~PARTY_FLAG_SLEEP_ON;
     }
     return EVT_RETURN_DONE;

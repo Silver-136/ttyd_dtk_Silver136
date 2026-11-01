@@ -188,7 +188,7 @@ USER_FUNC(pre_kurio_use) {
         // FAKE: msg is always set by the chain above; dropping the test changes the object
         if (msg) {
             event->lwData[0] = (EvtWord)msg;
-            partyChgPoseId(party, 7);
+            partyChgPoseId(party, PARTY_POSE_TALK);
         }
         return EVT_RETURN_DONE;
     }
@@ -281,7 +281,7 @@ void kuribo_use(PartyEntry* party) {
                 }
             }
             if (!wall) {
-                partyChgPoseId(party, 1);
+                partyChgPoseId(party, PARTY_POSE_STAND);
                 party->moveSpeed = 0.0f;
                 party->moveFrames = 100;
                 party->useMotionId = 10;
@@ -315,7 +315,7 @@ void kuribo_use(PartyEntry* party) {
         if (--party->moveFrames > 0) {
             return;
         }
-        partyChgPoseId(party, 1);
+        partyChgPoseId(party, PARTY_POSE_STAND);
         party->moveSpeed = 0.0f;
         party->moveFrames = 100;
         party->useMotionId = 10;
@@ -337,7 +337,7 @@ void kuribo_use(PartyEntry* party) {
         partyChgRunMode(party, PARTY_RUN_MOVE);
         partyChgMoveMode(party, PARTY_MOVE_MODE_STAY);
         partyChgMot(party, PARTY_MOTION_STAY);
-        partyChgPoseId(party, 1);
+        partyChgPoseId(party, PARTY_POSE_STAND);
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
         party->flags &= ~PARTY_FLAG_FORCE_FALL;
@@ -366,7 +366,7 @@ void kuribo_use(PartyEntry* party) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyChgMoveMode(party, 0);
         partyChgMot(party, PARTY_MOTION_STAY);
-        partyChgPoseId(party, 1);
+        partyChgPoseId(party, PARTY_POSE_STAND);
         party->moveFrames = 100;
         party->useMotionId = 0;
     }
@@ -388,7 +388,7 @@ void kuribo_use(PartyEntry* party) {
             partyChgRunMode(party, PARTY_RUN_MOVE);
             partyChgMoveMode(party, 0);
             partyChgMot(party, PARTY_MOTION_STAY);
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
             party->flags &= ~PARTY_FLAG_IS_BEING_USED;
             break;
     }

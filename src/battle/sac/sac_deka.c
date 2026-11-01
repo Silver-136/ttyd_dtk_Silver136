@@ -694,7 +694,7 @@ static void main_star(void) {
             f32 shake[6] = {1.0f, 1.3f, 2.0f, 2.6f, 3.3f, 3.8f};
             f32 amp[6] = {1.0f, 1.3f, 2.0f, 2.6f, 3.3f, 3.8f};
             w->starCount++;
-            btl_camera_shake_h(0, w->starCount * shake[w->result], 0.0f, 20, 0);
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, w->starCount * shake[w->result], 0.0f, 20, 0);
             psndSFXOn("SFX_BTL_SAC_DOKKAN5");
             for (j = 0; j < 2; j++) {
                 for (k = 0; k < 6; k++) {

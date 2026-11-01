@@ -1614,7 +1614,7 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
             btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
         } else if (++cmd->idleTimer >= 900) {
             btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_AUDIENCE);
-            btl_camera_set_moveSpeedLv(0, 5);
+            btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 5);
         }
         if (wp->commandMenu.attackAudience) {
             type = cmd->act[cursor->absPos].type;

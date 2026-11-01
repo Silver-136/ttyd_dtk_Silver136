@@ -627,7 +627,7 @@ USER_FUNC(zubastar_main) {
         if (w->cursor.timer == 30) {
             w->phase = 38;
             w->phaseCount = 60;
-            btl_camera_shake_h(0, 5.0f, 5.0f, 60, 0);
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 5.0f, 60, 0);
         }
         break;
     case 38:
@@ -704,9 +704,9 @@ USER_FUNC(zubastar_main) {
 #if VERSION <= VERSION_DEMO_US
             // The demo flashes the screen from here.
             fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            btl_camera_shake_h(0, 5.0f, 0.0f, 30, 0);
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 0.0f, 30, 0);
 #else
-            btl_camera_shake_h(0, 8.0f, 0.0f, 30, 0);
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 8.0f, 0.0f, 30, 0);
 #endif
         }
         break;

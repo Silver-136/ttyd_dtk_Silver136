@@ -5719,7 +5719,7 @@ USER_FUNC(queen_thunder) {
     ((EffShockN64Work*)eff->userdata)->col1[0] = 255;
     ((EffShockN64Work*)eff->userdata)->col1[1] = 160;
     ((EffShockN64Work*)eff->userdata)->col1[2] = 192;
-    btl_camera_shake_w(0, 1.0f, 1.0f, 8, 0);
+    btl_camera_shake_w(BTL_CAM_PRI_NORMAL, 1.0f, 1.0f, 8, 0);
     return EVT_RETURN_DONE;
 }
 

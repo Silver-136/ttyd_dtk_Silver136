@@ -128,7 +128,7 @@ void mot_vivian_post(void) {
             }
             partyChgRunMode(party, PARTY_RUN_MOVE);
             party->moveMode = PARTY_MOVE_MODE_STAY;
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
             partyVivianTailStart(party);
         }
 #if VERSION <= VERSION_DEMO_US
@@ -707,7 +707,7 @@ void vivian_use(PartyEntry* party) {
             party->dispOfs.y = 0.0f;
             partyChgRunMode(party, PARTY_RUN_MOVE);
             party->moveMode = PARTY_MOVE_MODE_STAY;
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
             party->flags &= ~PARTY_FLAG_IS_EVT_USE;
         }
         break;

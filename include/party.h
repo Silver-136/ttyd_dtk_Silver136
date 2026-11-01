@@ -405,6 +405,21 @@ void party_ride_yoshi_force_move(void);
 
 extern char* yoshigroup[7];
 
+// partyChgPoseId index: column of partyPoseTbl (animation name letter in the table). Columns 8 and 9 hold other
+// animations in the demos, and some callers build the same number for every version, so they stay numeric.
+enum {
+    PARTY_POSE_PIPE = 0,
+    PARTY_POSE_STAND = 1,
+    PARTY_POSE_WALK = 2,
+    PARTY_POSE_RUN = 3,
+    PARTY_POSE_JUMP = 4,
+    PARTY_POSE_SLEEP = 6,   // evt_party_sleep_on
+    PARTY_POSE_TALK = 7,
+    PARTY_POSE_PINCH_STAND = 12,
+    PARTY_POSE_PINCH_WALK = 13,
+    PARTY_POSE_PINCH_RUN = 14,
+};
+
 const char* partyChgPoseId(PartyEntry* party, s32 index);
 void partyChgPose(PartyEntry* party, const char* pose);
 void partyUsePost(PartyEntry* party);

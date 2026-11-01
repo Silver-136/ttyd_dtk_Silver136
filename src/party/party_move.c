@@ -953,11 +953,11 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
 void partyChgStayPose(PartyEntry* party) {
     if (party->runMode != PARTY_RUN_MOVE_RESET) {
         if (marioChkDeepSleep() == TRUE || (party->flags & PARTY_FLAG_SLEEP_ON)) {
-            partyChgPoseId(party, 6);
+            partyChgPoseId(party, PARTY_POSE_SLEEP);
         } else if (party->currentMemberId != PARTY_MEMBER_MS_MOWZ) {
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
         } else if (!chuchu_searchObject()) {
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
         }
     }
 }
@@ -970,7 +970,7 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
     f32 b;
 
     if (party->flags2 & PARTY_DISP_FLAG_SLIT) {
-        partyChgPoseId(party, 3);
+        partyChgPoseId(party, PARTY_POSE_RUN);
         partyWalkSe(party, 1);
         return;
     }
@@ -978,17 +978,17 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
     b = (1.0f == party->playerPtr->playerGravity) ? 0.8f : 0.0f;
     if (a - b < spd && spd < spd + b) {
         if (marioGetMovementSpeed() == 1) {
-            partyChgPoseId(party, 2);
+            partyChgPoseId(party, PARTY_POSE_WALK);
             partyWalkSe(party, 0);
         } else {
-            partyChgPoseId(party, 3);
+            partyChgPoseId(party, PARTY_POSE_RUN);
             partyWalkSe(party, 1);
         }
     } else if (spd >= a) {
-        partyChgPoseId(party, 3);
+        partyChgPoseId(party, PARTY_POSE_RUN);
         partyWalkSe(party, 1);
     } else {
-        partyChgPoseId(party, 2);
+        partyChgPoseId(party, PARTY_POSE_WALK);
         partyWalkSe(party, 0);
     }
 }
@@ -1495,7 +1495,7 @@ void partyChkWall(PartyEntry* party) {
 void party_move_mode_wait(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
-        partyChgPoseId(party, 1);
+        partyChgPoseId(party, PARTY_POSE_STAND);
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
             cloud_hover_init(party);
@@ -1554,7 +1554,7 @@ void partyWalkInit(PartyEntry* party) {
     party->accelY = 1.8f;
     party->velY = 0.0f;
     if (!(mario->flags & MARIO_FLAG_PARTY_WALK_DISABLED)) {
-        partyChgPoseId(party, 1);
+        partyChgPoseId(party, PARTY_POSE_STAND);
         partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
         partyChgMot(party, PARTY_MOTION_STAY);
     }
@@ -1633,7 +1633,7 @@ void partyWalkMain(PartyEntry* party) {
 void party_move_mode_stay(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
-        partyChgPoseId(party, 1);
+        partyChgPoseId(party, PARTY_POSE_STAND);
 #if VERSION > VERSION_DEMO_US
         if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
             cloud_hover_init(party);
@@ -1884,7 +1884,7 @@ void partyMoveFlyInit(PartyEntry* party, s32 arg) {
     party->reserved_44 = 0x10;
     party->homingDist = 50.0f;
     party->reserved_3E = 0;
-    partyChgPoseId(party, 1);
+    partyChgPoseId(party, PARTY_POSE_STAND);
     partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
     partyChgMot(party, PARTY_MOTION_STAY);
 }

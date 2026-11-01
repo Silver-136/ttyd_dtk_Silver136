@@ -1021,7 +1021,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
             m->velocity.y = 0.0f;
             m->velocity.z = 5.0f * (dz / d);
             btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE);
-            btl_camera_set_moveto(0, 698.0f * m->counterF, 100.0f, 0.0f, 0.0f, 60.0f, 0.0f, 30, 4);
+            btl_camera_set_moveto(BTL_CAM_PRI_NORMAL, 698.0f * m->counterF, 100.0f, 0.0f, 0.0f, 60.0f, 0.0f, 30, 4);
             intrudeSound = psndSFXOn("SFX_AUDIENCE_HEIHO_MOVE1");
         }
         break;
@@ -1039,7 +1039,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
             m->step = 18;
             m->counter = 25;
             btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
-            btl_camera_set_moveSpeedLv(0, 2);
+            btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
             psndSFXOff(intrudeSound);
         }
         break;
@@ -1048,7 +1048,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
         if (m->counter <= 0) {
             m->step = 19;
             m->counter = 60;
-            btl_camera_set_moveSpeedLv(0, 1);
+            btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 1);
             effSmallStarEntry(0, 4, 185.0f * m->counterF, 20.0f, 40.0f, 0.0f, -1.0f, 0.0f);
         }
         break;
@@ -1056,7 +1056,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
         m->counter--;
         if (m->counter <= 0) {
             m->step = 20;
-            btl_camera_set_moveSpeedLv(0, 1);
+            btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 1);
         }
     case 20:
         m->statusTimer = BattleStage_ObjectFallCheck();
@@ -1349,7 +1349,7 @@ void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
             if (index < 60) {
                 effSandarsEntry(4, m->position.x, 35.0f + m->position.y, m->position.z, 0.0f);
             }
-            btl_camera_shake_h(0, 5.0f, 0.0f, 30, 0);
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 0.0f, 30, 0);
             for (i = 0; i < 24; i++) {
                 s32 n = BattleAudience_GetAudienceNoFromOffset(index, offs[i][0], offs[i][1]);
                 if (n != -1) {
