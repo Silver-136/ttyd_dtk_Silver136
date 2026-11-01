@@ -1344,14 +1344,14 @@ void bakuGameAudienceSurprise(void) {
             m->flags |= AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
             memset(&m->interpFrameCounter, 0, 0x34); // interpFrameCounter..interpType
             if (!bakuGameAudienceCanThrowPos(i)) {
-                BattleAudience_SetAnim(i, 7, 0);
+                BattleAudience_SetAnim(i, AUD_ANIM_RUN_FRONT, 0);
                 if (irand(2) == 0) {
                     m->angle = 90.0f;
                 } else {
                     m->angle = 270.0f;
                 }
             } else {
-                BattleAudience_SetAnim(i, 3, 0);
+                BattleAudience_SetAnim(i, AUD_ANIM_JUMP_BACK, 0);
             }
         }
     }

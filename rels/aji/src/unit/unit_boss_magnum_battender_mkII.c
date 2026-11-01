@@ -738,7 +738,7 @@ USER_FUNC(aud_suikomi) {
         for (i = 0; i < 20; i++) {
             mem = BattleAudienceGetPtr(ids[i]);
             mem->flags |= AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
-            BattleAudience_SetAnim(ids[i], 9, FALSE);
+            BattleAudience_SetAnim(ids[i], AUD_ANIM_DAMAGE_FRONT, FALSE);
             mem->interpFramesTotal = i * 3 + 60;
             mem->counter = 0;
             mem->rotation.y = 0.0f;
@@ -842,7 +842,7 @@ USER_FUNC(aud_fire_hit) {
         BtlUnit_GetHitPos(unit, part, &hx, &hy, &hz);
         for (i = start; i < start + 2; i++) {
             mem = BattleAudienceGetPtr(list[i]);
-            BattleAudience_SetAnim(list[i], 9, FALSE);
+            BattleAudience_SetAnim(list[i], AUD_ANIM_DAMAGE_FRONT, FALSE);
             mem->position = (Vec){x, y, z};
             mem->interpFramesTotal = 0;
             mem->counter = 0;
@@ -895,7 +895,7 @@ USER_FUNC(aud_fire_no_hit) {
         BtlUnit_GetHitPos(unit, part, &hx, &hy, &hz);
         for (i = start; i < start + 2; i++) {
             mem = BattleAudienceGetPtr(list[i]);
-            BattleAudience_SetAnim(list[i], 9, FALSE);
+            BattleAudience_SetAnim(list[i], AUD_ANIM_DAMAGE_FRONT, FALSE);
             mem->position = (Vec){x, y, z};
             mem->interpFramesTotal = 0;
             mem->counter = 0;

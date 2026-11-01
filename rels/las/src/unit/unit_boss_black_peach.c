@@ -5385,7 +5385,7 @@ USER_FUNC(queen_hp_drain_4_evt) {
             event->userdata[0]++;
             for (i = 0; i < 200; i++) {
                 if ((u8)BattleAudience_GetSysCtrl(i)) {
-                    BattleAudience_SetAnim(i, 9, TRUE);
+                    BattleAudience_SetAnim(i, AUD_ANIM_DAMAGE_FRONT, TRUE);
                 }
             }
         case 1:

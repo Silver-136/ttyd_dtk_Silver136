@@ -1046,7 +1046,7 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
         if (w->audienceVolume >= 100) {
             w->audienceVolume = 100;
         }
-        BattleAudienceSoundSetVol(4, w->audienceVolume, 30);
+        BattleAudienceSoundSetVol(AUD_SOUND_CHEER_A, w->audienceVolume, 30);
     }
     return 2;
 }

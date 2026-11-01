@@ -13,7 +13,6 @@ typedef union BeroINFO {
 
 #define BERO_TYPE_KIND_MASK 0xFFF // BeroEntry.type: the exit kind
 #define BERO_TYPE_BG_MODE 0x1000  // BeroEntry.type: Mario is in BG mode at this exit (evt_mario_bgmode_on)
-#define BERO_TYPE_NO_PIPE_FADE 0x2000 // BeroEntry.type: the pipe exit does not set the pipe-direction fade
 
 // BeroEXEC bits. evt_bero_exec_onoff's first argument is reversed: 0 sets the mask, 1 clears it.
 enum {

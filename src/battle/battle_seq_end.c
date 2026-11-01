@@ -821,7 +821,7 @@ void btlseqEnd(BattleWork* wp) {
         pe = partyGetPtr(marioGetPartyId());
         if (pe) pe->flags2 &= ~PARTY_DISP_FLAG_HIDE;
         BtlActRec_JudgeRuleKeep();
-        BattleAudienceSoundStop(1);
+        BattleAudienceSoundStop(AUD_SOUND_CLAP);
         break;
     }
     }

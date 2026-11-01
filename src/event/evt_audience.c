@@ -360,7 +360,7 @@ USER_FUNC(evt_audience_entry) {
     id = evtGetValue(event, args[0]);
     type = (AudienceMemberType)evtGetValue(event, args[1]);
     if (BattleAudience_Entry(id, type, AUDIENCE_STATUS_WAIT) == TRUE) {
-        BattleAudience_SetAnim(id, 1, TRUE);
+        BattleAudience_SetAnim(id, AUD_ANIM_WAIT_BACK, TRUE);
     }
     return EVT_RETURN_DONE;
 }

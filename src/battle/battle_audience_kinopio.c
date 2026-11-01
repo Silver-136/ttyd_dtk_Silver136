@@ -204,9 +204,9 @@ void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
     m = BattleAudienceGetPtr(index);
     pouchGetPtr();
     if ((u8)front == 1) {
-        BattleAudience_SetAnim(index, 0, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
     } else {
-        BattleAudience_SetAnim(index, 1, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_WAIT_BACK, FALSE);
     }
     r = (base->targetAudienceCount + base->addedAudienceCount) / base->audienceDeltaMultiplier;
     if (r >= 0.75f) {
@@ -364,9 +364,9 @@ void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
 void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
-        BattleAudience_SetAnim(index, 0, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
     } else {
-        BattleAudience_SetAnim(index, 1, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_WAIT_BACK, FALSE);
     }
     if (m->timer <= 15) {
         m->rotation.y = 12.0f * (f32)m->timer;
@@ -385,9 +385,9 @@ void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front) {
 void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
-        BattleAudience_SetAnim(index, 0, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
     } else {
-        BattleAudience_SetAnim(index, 1, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_WAIT_BACK, FALSE);
     }
     if (m->timer >= 0 && m->timer <= 10) {
         m->dispOffset.x = 1.5f * (f32)m->timer;
@@ -409,9 +409,9 @@ void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front) {
 void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
-        BattleAudience_SetAnim(index, 2, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_JUMP_FRONT, FALSE);
     } else {
-        BattleAudience_SetAnim(index, 3, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_JUMP_BACK, FALSE);
     }
     switch (m->step) {
     case 0:
@@ -446,7 +446,7 @@ void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front) {
 void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 0) {
-        BattleAudience_SetAnim(index, 4, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_RAISE_BACK, FALSE);
     }
     switch (m->step) {
     case 0:
@@ -474,9 +474,9 @@ void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front) {
 void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
-        BattleAudience_SetAnim(index, 2, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_JUMP_FRONT, FALSE);
     } else {
-        BattleAudience_SetAnim(index, 3, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_JUMP_BACK, FALSE);
     }
     switch (m->step) {
     case 0:
@@ -502,9 +502,9 @@ void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front) {
 void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
-        BattleAudience_SetAnim(index, 2, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_JUMP_FRONT, FALSE);
     } else {
-        BattleAudience_SetAnim(index, 3, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_JUMP_BACK, FALSE);
     }
     switch (m->step) {
     case 0:
@@ -539,9 +539,9 @@ void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     BattleAudienceItem* item;
     if ((u8)front == 1) {
-        BattleAudience_SetAnim(index, 0, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
     } else {
-        BattleAudience_SetAnim(index, 5, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_ITEM_ON_BACK, FALSE);
     }
     if (m->flags & AUDIENCE_MEMBER_FLAG_ATTACKED) {
         item = BattleAudienceItemGetPtr(m->itemId);
@@ -570,7 +570,7 @@ void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
  */
 void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
-    BattleAudience_SetAnim(index, 6, FALSE);
+    BattleAudience_SetAnim(index, AUD_ANIM_ITEM_THROW_BACK, FALSE);
     if (BattleAudience_GetAnimEnd(index) == 1) {
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT);
     }
@@ -590,7 +590,7 @@ void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
 /** Status 9, booing: bobs with the arms-up animation for counterF cycles of 30 frames, then idles. */
 void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
-    BattleAudience_SetAnim(index, 4, FALSE);
+    BattleAudience_SetAnim(index, AUD_ANIM_RAISE_BACK, FALSE);
     switch (m->step) {
     case 0:
         if (irand(2) == 0) {
@@ -623,7 +623,7 @@ void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front) {
     m = BattleAudienceGetPtr(index);
     switch (m->step) {
     case 0:
-        BattleAudience_SetAnim(index, 9, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_DAMAGE_FRONT, FALSE);
         m->hopSpeed = 8.0f;
         m->hopAccel = -1.0f;
         m->timer = 0;
@@ -664,7 +664,7 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
     BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
     camGetPtr(CAMERA_2D);
-    BattleAudience_SetAnim(index, 7, FALSE);
+    BattleAudience_SetAnim(index, AUD_ANIM_RUN_FRONT, FALSE);
     if (m->type == AUDIENCE_PIRANHA_PLANT) {
         switch (m->step) {
         case 0:
@@ -741,7 +741,7 @@ void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front) {
     BattleAudienceMember* m;
     BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
-    BattleAudience_SetAnim(index, 7, FALSE);
+    BattleAudience_SetAnim(index, AUD_ANIM_RUN_FRONT, FALSE);
     if (m->type == AUDIENCE_PIRANHA_PLANT) {
         switch (m->step) {
         case 0:
@@ -796,9 +796,9 @@ void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front) {
     m = BattleAudienceGetPtr(index);
     if (m->step <= 1) {
         if ((u8)front == 1) {
-            BattleAudience_SetAnim(index, 10, FALSE);
+            BattleAudience_SetAnim(index, AUD_ANIM_SLEEP_FRONT, FALSE);
         } else {
-            BattleAudience_SetAnim(index, 11, FALSE);
+            BattleAudience_SetAnim(index, AUD_ANIM_SLEEP_BACK, FALSE);
         }
         if (m->timer >= 320) {
             m->baseScale.y = 1.0f;
@@ -831,9 +831,9 @@ void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front) {
         m->hopSpeed = 6.0f + (f32)rand() / 32767.0f;
         m->hopAccel = -0.5f;
         if ((u8)front == 1) {
-            BattleAudience_SetAnim(index, 0, FALSE);
+            BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
         } else {
-            BattleAudience_SetAnim(index, 1, FALSE);
+            BattleAudience_SetAnim(index, AUD_ANIM_WAIT_BACK, FALSE);
         }
         m->baseScale.y = 1.0f;
         m->colorB = 0;
@@ -896,7 +896,7 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
     s8 st0;
     switch (m->step) {
     case 0:
-        BattleAudience_SetAnim(index, 1, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_WAIT_BACK, FALSE);
         m->targetUnit = BattleAudienceDetectTargetAll();
         m->counter = 0;
         psndSFXOn_3D("SFX_AUDIENCE_TELESA_MOVE1", &m->position);
@@ -909,7 +909,7 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
         m->position.y = intplGetValue(EASING_CUBIC_OUT, m->homePosition.y, 80.0f, m->counter, 60);
         m->position.z = intplGetValue(EASING_CUBIC_OUT, m->homePosition.z, 100.0f, m->counter, 60);
         if (m->counter >= 60) {
-            BattleAudience_SetAnim(index, 7, FALSE);
+            BattleAudience_SetAnim(index, AUD_ANIM_RUN_FRONT, FALSE);
             BtlUnit_GetHitPos(unit, parts, &x, &y, &z);
             if (m->position.x >= x) {
                 m->angle = 270.0f;
@@ -967,7 +967,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
     BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
     pouch = pouchGetPtr();
-    BattleAudience_SetAnim(index, 7, FALSE);
+    BattleAudience_SetAnim(index, AUD_ANIM_RUN_FRONT, FALSE);
     switch (m->step) {
     case 0:
         if (irand(2) == 0) {
@@ -1179,7 +1179,7 @@ void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
         m->counter--;
         m->rotation.y += 6.0f;
         if (m->counter == 15) {
-            BattleAudience_SetAnim(index, 14, FALSE);
+            BattleAudience_SetAnim(index, AUD_ANIM_SING_FRONT, FALSE);
             BattleAudienceSoundSing(index);
         }
         if (m->counter <= 0) {
@@ -1208,7 +1208,7 @@ void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
         m->counter--;
         m->rotation.y += 6.0f;
         if (m->counter <= 15) {
-            BattleAudience_SetAnim(index, 1, FALSE);
+            BattleAudience_SetAnim(index, AUD_ANIM_WAIT_BACK, FALSE);
         }
         if (m->counter <= 0) {
             BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT);
@@ -1238,9 +1238,9 @@ void BattleAudienceCtrlProcessKinopioSingSub(s32 index) {
 void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if (m->step >= 2 && m->step <= 5) {
-        BattleAudience_SetAnim(index, 15, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_SHELL_BACK, FALSE);
     } else {
-        BattleAudience_SetAnim(index, 1, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_WAIT_BACK, FALSE);
     }
     switch (m->step) {
     case 0:
@@ -1290,9 +1290,9 @@ void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front) {
 void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
-        BattleAudience_SetAnim(index, 16, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_IGNITE_FRONT, FALSE);
     } else {
-        BattleAudience_SetAnim(index, 17, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_IGNITE_BACK, FALSE);
     }
     switch (m->step) {
     case 0:
@@ -1328,9 +1328,9 @@ void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
     base = BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
-        BattleAudience_SetAnim(index, 16, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_IGNITE_FRONT, FALSE);
     } else {
-        BattleAudience_SetAnim(index, 17, FALSE);
+        BattleAudience_SetAnim(index, AUD_ANIM_IGNITE_BACK, FALSE);
     }
     switch (m->step) {
     case 0:
@@ -1426,7 +1426,7 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
             } else {
                 m->angle = 90.0f;
             }
-            BattleAudience_SetAnim(index, 0, FALSE);
+            BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
         } else {
             BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT);
             break;
@@ -1439,7 +1439,7 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
             m->counter--;
         }
         if (m->counter <= 0 && 0.0f == t->hopY) {
-            BattleAudience_SetAnim(index, 18, FALSE);
+            BattleAudience_SetAnim(index, AUD_ANIM_EAT_FRONT, FALSE);
             t->flags |= AUDIENCE_MEMBER_FLAG_NOT_EXIST;
             m->step = 3;
         }

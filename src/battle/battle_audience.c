@@ -368,7 +368,7 @@ void BattleAudience_Init(void) {
     audience->currentAudienceIntCount = audience->currentAudienceIntCountRight + audience->currentAudienceIntCountLeft;
     window->count = (f32)audience->currentAudienceIntCount;
     BattleAudienceSoundNoiseAlways();
-    BattleAudienceSoundSetVol(2, 60, 180);
+    BattleAudienceSoundSetVol(AUD_SOUND_NOISE, 60, 180);
     audience->excited = FALSE;
     BattleAudienceNumToTarget();
 }
@@ -2071,8 +2071,8 @@ void BattleAudienceItemCtrlProcess(void) {
                     it->state = 7;
                     break;
                 case 1:
-                    BattleAudienceSoundStop(10);
-                    BattleAudienceSoundStop(11);
+                    BattleAudienceSoundStop(AUD_SOUND_ITEM_THROW_L);
+                    BattleAudienceSoundStop(AUD_SOUND_ITEM_THROW_R);
                     if (it->velocity.x < 0.0f) {
                         it->velocity.x *= -0.2f;
                     }
@@ -2099,8 +2099,8 @@ void BattleAudienceItemCtrlProcess(void) {
             it->velocity.y += it->accel.y;
             it->velocity.z += it->accel.z;
             if (it->position.y <= 0.0f) {
-                BattleAudienceSoundStop(10);
-                BattleAudienceSoundStop(11);
+                BattleAudienceSoundStop(AUD_SOUND_ITEM_THROW_L);
+                BattleAudienceSoundStop(AUD_SOUND_ITEM_THROW_R);
                 it->state = 5;
                 it->position.y = 0.1f;
                 it->velocity.y = 1.0f;
@@ -2143,8 +2143,8 @@ void BattleAudienceItemCtrlProcess(void) {
             }
         }
         done:
-            BattleAudienceSoundStop(10);
-            BattleAudienceSoundStop(11);
+            BattleAudienceSoundStop(AUD_SOUND_ITEM_THROW_L);
+            BattleAudienceSoundStop(AUD_SOUND_ITEM_THROW_R);
             if (it->audienceId != -1) {
                 BattleAudienceGetPtr(it->audienceId);
                 BattleAudience_ChangeStatus(it->audienceId, AUDIENCE_STATUS_WAIT);
@@ -2663,7 +2663,7 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
         cg = m->colorG;
         cb = m->colorB;
         ca = m->colorA;
-        if (m->animStart == m->animTable[9]) off = 8;
+        if (m->animStart == m->animTable[AUD_ANIM_DAMAGE_FRONT]) off = 8;
         t0 = m->angle;
         if (t0 >= 360.0f) {
             m->angle = t0 - 360.0f * (f32)(s32)(t0 / 360.0f);
@@ -2675,7 +2675,7 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
         t0 = m->angle;
         if (t0 > 0.0f && t0 <= 180.0f) flip = 1;
         if (t0 == 0.0f || (t0 > 180.0f && t0 < 360.0f)) flip = 0;
-        if ((u8)front == 1 && (cur = m->animStart) != m->animTable[9] && cur != m->animTable[8] && cur != m->animTable[7]) {
+        if ((u8)front == 1 && (cur = m->animStart) != m->animTable[AUD_ANIM_DAMAGE_FRONT] && cur != m->animTable[8] && cur != m->animTable[7]) {
             flip ^= 1;
         }
 #if VERSION <= VERSION_DEMO_US
@@ -2868,7 +2868,7 @@ void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status) {
     m->itemId = -1;
     m->animTable = audience_kind[type].animTable;
     m->timer = 0;
-    BattleAudience_SetAnim(index, 1, TRUE);
+    BattleAudience_SetAnim(index, AUD_ANIM_WAIT_BACK, TRUE);
     m->animDepth = 0;
     m->colorB = 0;
     m->colorG = 0;
@@ -4168,10 +4168,10 @@ void BattleAudienceSoundBooingKind(s32 kind) {
     s32 right, left;
 
     BattleAudienceBaseGetPtr();
-    sound = BattleAudienceSoundGetPtr(0);
+    sound = BattleAudienceSoundGetPtr(AUD_SOUND_BOOING);
     right = BattleAudience_GetPPAudienceNum_R();
     left = BattleAudience_GetPPAudienceNum_L();
-    BattleAudienceSoundStop(0);
+    BattleAudienceSoundStop(AUD_SOUND_BOOING);
     if (kind == 1) {
         strcpy(name, "SFX_AUDIENCE_BOO_ALLY1");
         sound->kind = 1;
@@ -4220,11 +4220,11 @@ void BattleAudienceSoundClap(s32 duration, s32 fade) {
     s32 right, left, sum;
 
     BattleAudienceBaseGetPtr();
-    sound = BattleAudienceSoundGetPtr(1);
+    sound = BattleAudienceSoundGetPtr(AUD_SOUND_CLAP);
     right = BattleAudience_GetPPAudienceNum_R();
     left = BattleAudience_GetPPAudienceNum_L();
     sum = right + left;
-    BattleAudienceSoundStop(1);
+    BattleAudienceSoundStop(AUD_SOUND_CLAP);
     if (sum >= 1 && sum <= 49) {
         strcpy(name, "SFX_AUDIENCE_CLAPPING1");
         sound->kind = 1;
@@ -4257,7 +4257,7 @@ void BattleAudienceSoundNoiseAlways(void) {
     s32 right, left, sum;
 
     audience = BattleAudienceBaseGetPtr();
-    sound = BattleAudienceSoundGetPtr(2);
+    sound = BattleAudienceSoundGetPtr(AUD_SOUND_NOISE);
     right = BattleAudience_GetPPAudienceNum_R();
     left = BattleAudience_GetPPAudienceNum_L();
     sum = right + left;
@@ -4338,24 +4338,24 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 duration, s32 fade) {
     lowPitch = 0;
     right = BattleAudience_GetPPAudienceNum_R();
     left = BattleAudience_GetPPAudienceNum_L();
-    sound = BattleAudienceSoundGetPtr(4);
-    sound5 = BattleAudienceSoundGetPtr(5);
+    sound = BattleAudienceSoundGetPtr(AUD_SOUND_CHEER_A);
+    sound5 = BattleAudienceSoundGetPtr(AUD_SOUND_CHEER_B);
     if ((sound->flags & AUD_SOUND_FLAG_PLAYING) && (sound5->flags & AUD_SOUND_FLAG_PLAYING)) {
         if (sound->duration <= sound5->duration) {
-            BattleAudienceSoundStop(4);
-            sound = BattleAudienceSoundGetPtr(4);
+            BattleAudienceSoundStop(AUD_SOUND_CHEER_A);
+            sound = BattleAudienceSoundGetPtr(AUD_SOUND_CHEER_A);
         } else {
-            BattleAudienceSoundStop(5);
-            sound = BattleAudienceSoundGetPtr(5);
+            BattleAudienceSoundStop(AUD_SOUND_CHEER_B);
+            sound = BattleAudienceSoundGetPtr(AUD_SOUND_CHEER_B);
         }
     } else if (sound->flags & AUD_SOUND_FLAG_PLAYING) {
-        sound = BattleAudienceSoundGetPtr(5);
+        sound = BattleAudienceSoundGetPtr(AUD_SOUND_CHEER_B);
         lowPitch = 1;
     } else if (sound5->flags & AUD_SOUND_FLAG_PLAYING) {
-        sound = BattleAudienceSoundGetPtr(4);
+        sound = BattleAudienceSoundGetPtr(AUD_SOUND_CHEER_A);
         lowPitch = 1;
     } else {
-        sound = BattleAudienceSoundGetPtr(4);
+        sound = BattleAudienceSoundGetPtr(AUD_SOUND_CHEER_A);
     }
     if (kind == 1) {
         strcpy(name, "SFX_AUDIENCE_CHEER_ALLY1");
@@ -4413,9 +4413,9 @@ void BattleAudienceSoundWhistleKind(s32 kind) {
         idx = list[irand(count)];
         BattleAudienceSoundGetInfo2(idx, &pos);
         if (pos.x <= 0.0f) {
-            id = 6;
+            id = AUD_SOUND_WHISTLE_L;
         } else {
-            id = 7;
+            id = AUD_SOUND_WHISTLE_R;
         }
         sound = BattleAudienceSoundGetPtr(id);
         BattleAudienceSoundStop(id);
@@ -4443,10 +4443,10 @@ void BattleAudienceSoundCallKind(s32 kind) {
     s32 right, left;
 
     BattleAudienceBaseGetPtr();
-    sound = BattleAudienceSoundGetPtr(8);
+    sound = BattleAudienceSoundGetPtr(AUD_SOUND_CALL);
     right = BattleAudience_GetPPAudienceNum_R();
     left = BattleAudience_GetPPAudienceNum_L();
-    BattleAudienceSoundStop(8);
+    BattleAudienceSoundStop(AUD_SOUND_CALL);
     switch (kind) {
         case 1:
             sound->sfxId = BattleAudienceSound1("SFX_AUDIENCE_CALL_ALLY1", right, left);
@@ -4469,11 +4469,11 @@ void BattleAudienceSoundHandBeat(void) {
     s32 sum;
 
     BattleAudienceBaseGetPtr();
-    sound = BattleAudienceSoundGetPtr(9);
+    sound = BattleAudienceSoundGetPtr(AUD_SOUND_HAND_BEAT);
     right = BattleAudience_GetPPAudienceNum_R();
     left = BattleAudience_GetPPAudienceNum_L();
     sum = right + left;
-    BattleAudienceSoundStop(9);
+    BattleAudienceSoundStop(AUD_SOUND_HAND_BEAT);
     sound->sfxId = BattleAudienceSound1("SFX_AUDIENCE_HANDBEAT1", right, left);
     if (sound->sfxId != -1) {
         sound->flags |= AUD_SOUND_FLAG_PLAYING;
@@ -4504,9 +4504,9 @@ void BattleAudienceSoundItemThrow(s32 kind, s32 index) {
 
     BattleAudienceSoundGetInfo2(index, &pos);
     if (pos.x <= 0.0f) {
-        id = 10;
+        id = AUD_SOUND_ITEM_THROW_L;
     } else {
-        id = 11;
+        id = AUD_SOUND_ITEM_THROW_R;
     }
     sound = BattleAudienceSoundGetPtr(id);
     BattleAudienceSoundStop(id);
@@ -4526,9 +4526,9 @@ void BattleAudienceSoundItemThrow(s32 kind, s32 index) {
  * the bingo slots play it when their result brings fans in or sends them away.
  */
 void BattleAudienceSoundRun(s32 kind) {
-    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(13);
+    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(AUD_SOUND_RUN);
 
-    BattleAudienceSoundStop(13);
+    BattleAudienceSoundStop(AUD_SOUND_RUN);
     switch (kind) {
         case 0:
             sound->sfxId = BattleAudienceSound0("SFX_AUDIENCE_RUN1");
@@ -4551,9 +4551,9 @@ void BattleAudienceSoundSleep(s32 index) {
 
     BattleAudienceSoundGetInfo2(index, &pos);
     if (pos.x <= 0.0f) {
-        id = 14;
+        id = AUD_SOUND_SLEEP_L;
     } else {
-        id = 15;
+        id = AUD_SOUND_SLEEP_R;
     }
     sound = BattleAudienceSoundGetPtr(id);
     BattleAudienceSoundStop(id);
@@ -4577,9 +4577,9 @@ void BattleAudienceSoundSleep(s32 index) {
  * and cannot stop or fade this sound.
  */
 void BattleAudienceSoundZZZ(s32 index) {
-    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(16);
+    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(AUD_SOUND_ZZZ);
 
-    BattleAudienceSoundStop(16);
+    BattleAudienceSoundStop(AUD_SOUND_ZZZ);
     // BUG: the returned id is not stored in sound->sfxId, so AUD_SOUND_START tests and fetches the volume of the
     // slot's previous id.
     BattleAudienceSound2("SFX_AUDIENCE_ZZZ1", index);
@@ -4588,9 +4588,9 @@ void BattleAudienceSoundZZZ(s32 index) {
 
 /** Plays the Crazee Dayzee's song (SFX_AUDIENCE_PANSY_SINGING1) at member index on channel 17. */
 void BattleAudienceSoundSing(s32 index) {
-    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(17);
+    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(AUD_SOUND_SING);
 
-    BattleAudienceSoundStop(17);
+    BattleAudienceSoundStop(AUD_SOUND_SING);
     sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_PANSY_SINGING1", index);
     AUD_SOUND_START(sound, -1, 0);
 }
@@ -4606,9 +4606,9 @@ void BattleAudienceSoundShell(s32 index) {
 
     BattleAudienceSoundGetInfo2(index, &pos);
     if (pos.x <= 0.0f) {
-        id = 18;
+        id = AUD_SOUND_SHELL_L;
     } else {
-        id = 19;
+        id = AUD_SOUND_SHELL_R;
     }
     sound = BattleAudienceSoundGetPtr(id);
     BattleAudienceSoundStop(id);
@@ -4621,9 +4621,9 @@ void BattleAudienceSoundShell(s32 index) {
  * frames, fading over the last fade (180 and 120 when it lights).
  */
 void BattleAudienceSoundBombIgnite(s32 index, s32 duration, s32 fade) {
-    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(20);
+    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(AUD_SOUND_BOMB_IGNITE);
 
-    BattleAudienceSoundStop(20);
+    BattleAudienceSoundStop(AUD_SOUND_BOMB_IGNITE);
     sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_BOMB_READY1", index);
     AUD_SOUND_START(sound, duration + fade, fade);
 }
@@ -4639,9 +4639,9 @@ void BattleAudienceSoundBombFire(s32 index) {
 
     BattleAudienceSoundGetInfo2(index, &pos);
     if (pos.x <= 0.0f) {
-        id = 21;
+        id = AUD_SOUND_BOMB_FIRE_L;
     } else {
-        id = 22;
+        id = AUD_SOUND_BOMB_FIRE_R;
     }
     sound = BattleAudienceSoundGetPtr(id);
     BattleAudienceSoundStop(id);
@@ -4651,9 +4651,9 @@ void BattleAudienceSoundBombFire(s32 index) {
 
 /** Plays a Piranha Plant's bite (SFX_AUDIENCE_PAKU_EAT1) at member index on channel 23. */
 void BattleAudienceSoundPakkunEat(s32 index) {
-    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(23);
+    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(AUD_SOUND_PAKKUN_EAT);
 
-    BattleAudienceSoundStop(23);
+    BattleAudienceSoundStop(AUD_SOUND_PAKKUN_EAT);
     sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_PAKU_EAT1", index);
     AUD_SOUND_START(sound, -1, 0);
 }
@@ -4778,7 +4778,7 @@ void BattleAudienceSoundMain(void) {
 
     BattleAudienceBaseGetPtr();
     BattleAudienceNoiseMain();
-    for (i = 0, sound = BattleAudienceSoundGetPtr(0); i < 24; i++, sound++) {
+    for (i = 0, sound = BattleAudienceSoundGetPtr(AUD_SOUND_BOOING); i < 24; i++, sound++) {
         if (psndSFXChk(sound->sfxId) == -1) {
             sound->flags &= ~AUD_SOUND_FLAG_PLAYING;
             continue;
@@ -4820,14 +4820,14 @@ void BattleAudienceSoundMain(void) {
 void BattleAudienceNoiseMain(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleAudience* audience = BattleAudienceBaseGetPtr();
-    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(2);
+    BattleAudienceSound* sound = BattleAudienceSoundGetPtr(AUD_SOUND_NOISE);
     s32 num = BattleAudience_GetPPAudienceNum();
 
     if (!(audience->flags & AUDIENCE_FLAG_PREV_COMMAND_INPUT) && (wp->flags & BATTLE_FLAG_COMMAND_INPUT)) {
-        BattleAudienceSoundSetVol(2, 60, 80);
+        BattleAudienceSoundSetVol(AUD_SOUND_NOISE, 60, 80);
     }
     if ((audience->flags & AUDIENCE_FLAG_PREV_COMMAND_INPUT) && !(wp->flags & BATTLE_FLAG_COMMAND_INPUT)) {
-        BattleAudienceSoundSetVol(2, 0, 80);
+        BattleAudienceSoundSetVol(AUD_SOUND_NOISE, 0, 80);
     }
     if (num == 0 && sound->kind != 0) {
         psndSFXOff(sound->sfxId);
@@ -5136,7 +5136,7 @@ void BattleAudience_Case_Escape(void) {
  */
 void BattleAudience_Case_Escape_Good(void) {
     BattleAudienceAddTargetNum(-0.099999994f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
-    BattleAudienceSoundSetVol(2, 100, 30);
+    BattleAudienceSoundSetVol(AUD_SOUND_NOISE, 100, 30);
     BattleAudienceSoundBooing();
 }
 

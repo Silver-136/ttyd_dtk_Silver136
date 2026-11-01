@@ -2870,7 +2870,7 @@ USER_FUNC(_cortez_collect_energy) {
                 if (aid != -1) {
                     member = BattleAudienceGetPtr(aid);
                     member->flags |= (AUDIENCE_MEMBER_FLAG_NOT_EXIST | AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL);
-                    BattleAudience_SetAnim(aid, 9, TRUE);
+                    BattleAudience_SetAnim(aid, AUD_ANIM_DAMAGE_FRONT, TRUE);
                     work->wait[i] = irand(60) + 30;
                     work->srcPos[i] = member->position;
                     BtlUnit_GetPos(unit, &work->dstPos[i].x, &work->dstPos[i].y, &work->dstPos[i].z);
