@@ -2105,7 +2105,7 @@ void _mapDispMapObj(CameraId cam, MapObject* obj) {
             mesh = obj->joints->parts[i].mesh;
             material = obj->joints->parts[i].material;
             mapSetTextureMatrix(material);
-            mapSetMaterialLastStageBlend(obj->flags, obj->color, ((MapMaterial*)material)->blendColor);
+            mapSetMaterialLastStageBlend(obj->flags, obj->color, material->blendColor);
             mapSetPolygonVtxDesc(obj, mesh);
             GXCallDisplayList(obj->displayList[i], obj->displayListSize[i]);
             callPackedLists(mesh);
@@ -2115,7 +2115,7 @@ void _mapDispMapObj(CameraId cam, MapObject* obj) {
             material = obj->joints->parts[i].material;
             mesh = obj->joints->parts[i].mesh;
             mapSetTextureMatrix(material);
-            mapSetMaterialLastStageBlend(obj->flags, obj->color, ((MapMaterial*)material)->blendColor);
+            mapSetMaterialLastStageBlend(obj->flags, obj->color, material->blendColor);
             mapSetMaterial(obj, material);
             mapSetPolygon(obj, mesh);
         }
