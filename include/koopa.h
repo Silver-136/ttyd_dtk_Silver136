@@ -46,6 +46,23 @@ typedef enum KpaWorkFlags {
 #define KPA_BODY_PARTLY_SUBMERGED 1
 #define KPA_BODY_SUBMERGED 2
 
+// KpaWork.attackState: Bowser's fire breath, from kpaAttackStart (1, 20..24) or kpaAttackStart2 (30, 40..44; no motion change).
+typedef enum KpaAttackState {
+    KPA_ATTACK_NONE = 0,
+    KPA_ATTACK_START = 1,            // stop moving, reset the fire counters
+    KPA_ATTACK_WINDUP_POSE = 20,     // KPA_A_1A
+    KPA_ATTACK_WINDUP = 21,          // timer, then KPA_A_1B and the fire sound
+    KPA_ATTACK_FIRE_START = 22,      // fire entries, then KPA_A_1C
+    KPA_ATTACK_FIRE_HOLD = 23,       // fire entries while B or fireHold, then KPA_A_1D
+    KPA_ATTACK_FINISH = 24,          // timer, then back to standing
+    KPA_ATTACK_SCRIPTED_START = 30,
+    KPA_ATTACK_SCRIPTED_WINDUP_POSE = 40,
+    KPA_ATTACK_SCRIPTED_WINDUP = 41,
+    KPA_ATTACK_SCRIPTED_FIRE_START = 42,
+    KPA_ATTACK_SCRIPTED_FIRE_HOLD = 43,
+    KPA_ATTACK_SCRIPTED_FINISH = 44,
+} KpaAttackState;
+
 typedef struct KpaWork {
     u32 flags;                    // 0x000, KpaWorkFlags
     s32 level;                    // 0x004, kpaGetLevel/kpaSetLevel (0..3)
