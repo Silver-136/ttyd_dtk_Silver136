@@ -1,8 +1,8 @@
 // Tattle (monosiri) data: per-unit-type tattle messages and the groups of unit types that share a tattle flag
 
-enum { TATTLE_SAVE_FLAG_BASE = 0x117A };
 #include "version.h"
 #include "battle/battle_monosiri.h"
+#include "evt/evt_story.h"
 #include "battle/battle_unit.h"
 #include "driver/swdrv.h"
 #include "battle/battle.h"
@@ -365,7 +365,7 @@ BOOL battleCheckUnitMonosiriFlag(BattleUnit* unit) {
     if (wp->badgeEquippedFlags & BATTLE_BADGE_PEEKABOO) {
         return TRUE;
     }
-    flag = swGet(kind + TATTLE_SAVE_FLAG_BASE);
+    flag = swGet(kind + GSWF_TATTLE_BASE);
     flag |= wp->tattledUnitTypeFlags[kind / 32] & (1 << (kind % 32));
     if (unit->flags & BATTLE_UNIT_FLAG_KIND_CHANGED) {
         kind = unit->initialKind;
@@ -396,7 +396,7 @@ void battleSetUnitMonosiriFlag(BattleUnitType kind) {
             if (kind == group[j]) {
                 // the kind is in this group: set the tattle flag of every kind in it
                 for (k = 0; (kind = group[k]) != UNIT_NULL; k++) {
-                    swSet(kind + TATTLE_SAVE_FLAG_BASE);
+                    swSet(kind + GSWF_TATTLE_BASE);
                     wp->tattledUnitTypeFlags[kind / 32] |= 1 << (kind % 32);
                 }
                 return;
@@ -404,6 +404,6 @@ void battleSetUnitMonosiriFlag(BattleUnitType kind) {
         }
     }
     // no group holds the kind: set its own tattle flag only
-    swSet(kind + TATTLE_SAVE_FLAG_BASE);
+    swSet(kind + GSWF_TATTLE_BASE);
     wp->tattledUnitTypeFlags[kind / 32] |= 1 << (kind % 32);
 }
