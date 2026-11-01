@@ -215,8 +215,12 @@ static void alpha_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+#if VERSION > VERSION_DEMO_US
 EvtWord gor_02_hitobj_off[27];
+#endif
+#if VERSION > VERSION_DEMO_US
 EvtWord gor_02_hitobj_on[54];
+#endif
 EvtWord gor_02_event_00[18];
 EvtWord gor_02_event_01[30];
 static BeroEntry bero_entry_data[3];
@@ -247,15 +251,23 @@ EvtWord powerupya_direct_talk[96];
 #if VERSION > VERSION_DEMO_US
 s32 powerupya_item_tbl[2];
 #endif
+#if VERSION > VERSION_DEMO_US
 EvtWord powerupya_stardust[32];
+#endif
+#if VERSION > VERSION_DEMO_US
 EvtWord powerupya_mario_move[48];
+#endif
+#if VERSION > VERSION_DEMO_US
 EvtWord powerupya_party_move[38];
+#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord powerupya_orb_use[];
 #else
 EvtWord powerupya_orb_use[544];
 #endif
+#if VERSION > VERSION_DEMO_US
 EvtWord powerupya_talk[119];
+#endif
 EvtWord mapball_init[19];
 EvtWord powerupya_init[58];
 #if VERSION >= VERSION_US
@@ -8105,51 +8117,21 @@ EVT_BEGIN(gor_02_init_evt)
         SPAWN_EVENT(PTR(kurihakase_lecture))
 #endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW_STORY_PROGRESS)
-#else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_15_THE_PEDESTAL)
         SPAWN_EVENT(PTR(epigraphy_map))
-#endif
         CASE_EQUAL(STG1_30_ZESS_T)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(epigraphy_map)
-#else
         SPAWN_EVENT(PTR(epigraphy_map_after_stage1))
-#endif
         CASE_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(epigraphy_map_after_stage1)
-#else
         SPAWN_EVENT(PTR(epigraphy_map_after_stage2))
-#endif
         CASE_EQUAL(STG3_50_THOUSAND_YEAR_DOOR)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(epigraphy_map_after_stage2)
-#else
         SPAWN_EVENT(PTR(epigraphy_map_after_stage3))
-#endif
         CASE_EQUAL(STG4_30_THOUSAND_YEAR_DOOR)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(epigraphy_map_after_stage3)
-#else
         SPAWN_EVENT(PTR(epigraphy_map_after_stage4))
-#endif
         CASE_EQUAL(STG5_60_RETURN_TO_KEELHAUL)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(epigraphy_map_after_stage4)
-#else
         SPAWN_EVENT(PTR(epigraphy_map_after_stage5))
-#endif
         CASE_EQUAL(STG6_70_THOUSAND_YEAR_DOOR)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(epigraphy_map_after_stage5)
-        CASE_EQUAL(STG6_70_THOUSAND_YEAR_DOOR)
-        SPAWN_EVENT(epigraphy_map_after_stage6)
-#else
         SPAWN_EVENT(PTR(epigraphy_map_after_stage6))
-#endif
     END_SWITCH
 #if VERSION <= VERSION_DEMO_US
     // The harbor scenes, wandering Goombas and Trouble Center jobs are started.

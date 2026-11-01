@@ -21,7 +21,11 @@
 BattleUnitKind unit_crimson_togemet;
 static PoseTableEntry pose_table[17];
 static PoseTableEntry pose_table_ceil[17];
+#if VERSION == VERSION_DEMO_JP
+static PoseTableEntry pose_table_turn[14];
+#else
 static PoseTableEntry pose_table_turn[16];
+#endif
 static BattleDataEntry data_table[4];
 static BattleDataEntry data_table_ceil[14];
 static BattleWeapon weapon_met_attack;

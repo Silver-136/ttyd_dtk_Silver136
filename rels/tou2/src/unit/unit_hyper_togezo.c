@@ -33,7 +33,11 @@ static BattleUnitDefense defence_guard;
 static BattleUnitDefenseAttr defence_attr_guard;
 static StatusVulnerability regist_guard;
 static PoseTableEntry pose_table[15];
+#if VERSION == VERSION_DEMO_JP
+static PoseTableEntry pose_table_turn[12];
+#else
 static PoseTableEntry pose_table_turn[14];
+#endif
 static PoseTableEntry pose_table_guard[12];
 static BattleDataEntry data_table[5];
 static BattleDataEntry data_table_turn[3];

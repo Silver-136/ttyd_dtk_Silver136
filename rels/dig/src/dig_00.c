@@ -460,7 +460,7 @@ EVT_BEGIN(dig_00_init_evt)
         SET_TYPE(0)
         CALL(movie)
     END_INLINE_EVENT
-    CALL(evt_fade_set_mapchange_type, 1, -1, -1, 20, 1000)
+    CALL(evt_fade_set_mapchange_type, 1, -1, -1, FADE_NUM(20), 1000)
     BEGIN_INLINE_EVENT
         SET_TYPE(0)
         CALL(evt_seq_wait, SEQ_GAME)
@@ -478,7 +478,7 @@ EVT_BEGIN(dig_00_init_evt)
         CALL(sound_fade)
         CALL(evt_fade_entry, FADE_NUM(21), 1000, 255, 255, 255)
         CALL(evt_fade_end_wait)
-        CALL(evt_fade_set_mapchange_type, 1, 21, 0, -1, -1)
+        CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(21), 0, -1, -1)
         CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
     END_INLINE_EVENT
     RETURN

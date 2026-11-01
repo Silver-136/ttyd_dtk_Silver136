@@ -7789,7 +7789,7 @@ void goryuugijo_disp_slot(CameraId camera, void* param) {
             iconDispGx2(mtx, ICON_FLAG_2D, ICON_FUKIDASHI);
             PSMTXTrans(trans, -304.0f + sx, 31.35f + (240.0f - sy), 0.0f);
             PSMTXConcat(trans, scale, mtx);
-            ((void (*)(Mtx, s16, u16))iconDispGx2)(mtx, 0x10, icons.v[i]);
+            ((void (*)(Mtx, s16, u16))iconDispGx2)(mtx, ICON_FLAG_2D, icons.v[i]);
         }
     }
 }

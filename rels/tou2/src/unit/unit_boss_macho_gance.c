@@ -958,7 +958,7 @@ CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             SET_VALUE(LW(0), 1)
             CALL_CHILD(macho_gance_zoom)
-            CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 65)
+            CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, BTL_POSE_TALK)
             CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, BTL_POSE_STAY)
 #if VERSION <= VERSION_DEMO_US
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_19"), 0, UNIT_ID_SELF)

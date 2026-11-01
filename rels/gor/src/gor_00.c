@@ -127,14 +127,20 @@ s16 dai3_run_animtbl[VERSION_PICK(22, 42)];
 EvtWord no00_custom[48];
 static BeroEntry bero_entry_data[2];
 static EvtWord mony_init[18];
+#if VERSION > VERSION_DEMO_US
 EvtWord gor_00_mony_regl[VERSION_PICK(9, 11)];
+#endif
 EvtWord mony_peton_talk[286];
 static EvtWord mony_talk[28];
 static EvtWord peton_init[18];
+#if VERSION > VERSION_DEMO_US
 EvtWord gor_00_peton_regl[VERSION_PICK(9, 11)];
+#endif
 static EvtWord peton_talk[28];
 static EvtWord marco_init[32];
+#if VERSION > VERSION_DEMO_US
 EvtWord marco_party_move[120];
+#endif
 #if VERSION <= VERSION_DEMO_US
 static EvtWord marco_talk[362];
 #else
@@ -247,7 +253,9 @@ static s16 suifu_animtbl[42];
 static s16 suifu_run_animtbl[22];
 Vec suifu100kaidanDOWN[];
 Vec suifu100kaidanUP[];
+#if VERSION > VERSION_DEMO_US
 EvtWord marco_run_away[100];
+#endif
 EvtWord gorotsuki_kikan[];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord into_gor_ship[];
@@ -266,7 +274,9 @@ EvtWord mony_run_away[108];
 #if VERSION > VERSION_DEMO_US
 EvtWord peton_run_away[88];
 #endif
+#if VERSION > VERSION_DEMO_US
 EvtWord mony_peton_depart[VERSION_PICK(61, 64)];
+#endif
 #if VERSION > VERSION_DEMO_US
 EvtWord gor_00_koopa_evt[1095];
 #endif
@@ -7235,7 +7245,7 @@ CALL_CHILD(luigi_npcEnt)
     END_IF
     // Start the story scene that belongs to the current stage.
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(STG0_03_TO_ROGUEPORT)
+        CASE_EQUAL(STG0_02_MARIOS_HOUSE)
         CALL_CHILD(enter_gorotsuki_town_init)
         SPAWN_EVENT(enter_gorotsuki_town)
         CASE_EQUAL(STG0_03_TO_ROGUEPORT)

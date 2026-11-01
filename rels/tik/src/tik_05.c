@@ -1538,8 +1538,13 @@ USER_FUNC(cam_mahojin_kaiten_main) {
     f32 end = evtGetFloat(event, args[1]);
     s32 cont;
     f32 cur;
+#if VERSION <= VERSION_DEMO_US
+    f32 speed;
+    f32 total;
+#else
     f32 total;
     f32 speed;
+#endif
     s32 elapsed;
     s32 i;
 

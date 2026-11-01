@@ -1128,7 +1128,7 @@ EvtWord mario_jump[] = {
     END_INLINE_EVENT
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, 335, 30, -130, 500, 2, -1000)
-#if VERSION >= VERSION_US
+#if VERSION >= VERSION_US || VERSION <= VERSION_DEMO_US
     CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), NPC_FLAG_NO_HIT)
     CALL(evt_mario_cam_keep_off)
     RETURN
@@ -1138,7 +1138,7 @@ EVT_END()
 };
 #endif
 
-#if VERSION < VERSION_US  // US: this tail is part of mario_jump (US script above)
+#if VERSION < VERSION_US && VERSION > VERSION_DEMO_US  // US and the demos: this tail is part of mario_jump (US script above)
 EvtWord mario_jump_tail[] = {
     STRING(/*"ホワイト"*/"\x83\x7A\x83\x8F\x83\x43\x83\x67"), 32, /* rest of mario_jump's evt_npc_flag_onoff call */
     CALL(evt_mario_cam_keep_off)

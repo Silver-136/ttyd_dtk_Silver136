@@ -67,7 +67,12 @@ typedef struct CloudWork {
     f32 lastFrame;
 } CloudWork;
 static CloudWork* cloud;
+#include "version.h"
+#if VERSION <= VERSION_DEMO_US
+static s8 cloud_once_flag;
+#else
 static u8 cloud_once_flag;
+#endif
 static void _mapsetofs_all(CloudWork* wp);
 static void _mapclsofs_all(CloudWork* wp);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);

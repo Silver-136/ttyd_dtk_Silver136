@@ -29,7 +29,7 @@
 // Unit work slots of Hooktail.
 enum {
     UNIT_WORK_POWER_DOWN = 0,    // Attack FX R cricket hits so far (up to 20); taken off her attack power
-    UNIT_WORK_PART_DEFENSE = 1, // defence change from cricket hits (down to -2), read by kPartUnitWorkDefense
+    UNIT_WORK_PART_DEFENSE = 1, // defence change from cricket hits (down to -2), read by GONBABA_DEFENSE_ATTR
     UNIT_WORK_MESSAGE_STEP = 2,   // which cricket speech she gives next (0-3)
     UNIT_WORK_NEGOTIATED = 3,      // 1 once her plea for mercy (negotiation_event) has run
     UNIT_WORK_EATEN_AUDIENCE = 4, // swallowed spectators left that a head hit can shake loose
@@ -45,6 +45,12 @@ USER_FUNC(_wait_damage_event_end);
 BattleWeapon weapon_gonbaba_fumituke_attack;
 BattleWeapon weapon_gonbaba_firebreath_attack;
 BattleWeapon weapon_gonbaba_kamituki_attack;
+// tst's copy of Hooktail still has the older bit for the same attribute.
+#if VERSION == VERSION_DEMO_JP
+#define GONBABA_DEFENSE_ATTR (1 << 5)
+#else
+#define GONBABA_DEFENSE_ATTR kPartUnitWorkDefense
+#endif
 BattleUnitKind unit_boss_gonbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -480,8 +486,8 @@ static BattleDataEntry data_table[] = {
  * Each part names its defence tables and pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, kImportantPart | kPartUnitWorkDefense, 0, pose_table},
-    {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | kPartUnitWorkDefense | PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET | PART_ATTR_HIDDEN, 0, pose_table},
+    {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, kImportantPart | GONBABA_DEFENSE_ATTR, 0, pose_table},
+    {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | GONBABA_DEFENSE_ATTR | PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET | PART_ATTR_HIDDEN, 0, pose_table},
     {3, "btl_un_gonbaba", "c_gonbaba4", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN, 0, pose_table},
 };
 
@@ -1810,7 +1816,7 @@ EVT_END()
 /**
  * Hooktail's damage reaction (data-table event 9, run by subsetevt_damage).
  * A hit with the Attack FX R sound (DAMAGE_RESULT_ATTACK_FX_R, the cricket chirp) counts up unit work 0 (to 20),
- * lowers unit work 1, the defense change of her kPartUnitWorkDefense parts (down to -2), and switches
+ * lowers unit work 1, the defense change of her GONBABA_DEFENSE_ATTR parts (down to -2), and switches
  * to the weak pose table.
  * A hit that does damage plays GNB_D_2 (part 1) or GNB_D_1, and the latter sends up to two spectators (counted
  * down in unit work 4) jumping off the stands and running away.

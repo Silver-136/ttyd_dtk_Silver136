@@ -430,23 +430,12 @@ EVT_END()
  * after the Puni praise he says a thank-you line.
  */
 static EVT_BEGIN(guide_talk)
-#if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW_STORY_PROGRESS)
-#else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_03_THE_GREAT_TREE)
         SPAWN_EVENT(PTR(seal_bigtree))
-#endif
         CASE_EQUAL(STG2_03_01_SEALED_ENTRANCE)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(seal_bigtree)
-        CASE_EQUAL(STG2_03_01_SEALED_ENTRANCE)
-        SPAWN_EVENT(seal_bigtree2)
-        CASE_EQUAL(STORY_STG2_10_SECRET_ENTRANCE_REVEALED)
-#else
         SPAWN_EVENT(PTR(seal_bigtree2))
         CASE_EQUAL(STG2_10_SECRET_ENTRANCE_REVEALED)
-#endif
         CALL(evt_msg_print, 0, STRING("stg2_mri_e10_05"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
 CASE_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -1888,7 +1877,7 @@ EVT_END()
 static USER_FUNC(sysflag) {
     if (gp->flags & GW_FLAG_SAVE_LOADED) {
         gp->flags &= ~GW_FLAG_SAVE_LOADED;
-        fadeEntry(0x1C, 0, (GXColor){0, 0, 0, 0});
+        fadeEntry(FADE_NUM(0x1C), 0, (GXColor){0, 0, 0, 0});
     }
     return EVT_RETURN_DONE;
 }

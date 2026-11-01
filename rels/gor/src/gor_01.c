@@ -7805,6 +7805,10 @@ USER_FUNC(cook_chk2) {
 }
 #endif
 
+static inline BOOL fileAsyncMissing(FileEntry* file) {
+    return (s32)file == -1;
+}
+
 /** Returns TRUE when item is not 0, i.e. when there is a dish to cook. */
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(cook_chk) {

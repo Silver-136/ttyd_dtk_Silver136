@@ -149,7 +149,9 @@ extern EvtWord end_credit_npc_parade[];
 #else
 EvtWord end_credit_npc_parade[44];
 #endif
+#if VERSION > VERSION_DEMO_US
 EvtWord end_image_blend_loop[123];
+#endif
 #if VERSION >= VERSION_US
 // US: "THE END" texture per language (indexed by gp->language)
 #endif
@@ -200,7 +202,9 @@ extern EvtWord end_credit_batten_evt[];
 EvtWord end_credit_batten_evt[83];
 #endif
 EvtWord end_credit_queen_evt[];
+#if VERSION > VERSION_DEMO_US
 EvtWord end_credit_moamoa_evt[108];
+#endif
 #if VERSION > VERSION_DEMO_US
 f32 fd_end_00_negone_one_374[2] __attribute__((aligned(8)));
 #endif

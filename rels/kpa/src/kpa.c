@@ -46,6 +46,12 @@ typedef struct KpaWork {
 KpaWork* kwp;
 void FontDrawString(f32 x, f32 y, const char* message);
 void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
+// IconFlags.ICON_FLAG_2D (icondrv.h clashes with the prototype above)
+#if VERSION <= VERSION_DEMO_US
+#define KPA_ICON_2D 0x4
+#else
+#define KPA_ICON_2D 0x10
+#endif
 f32 kpaGetWidth(s32 type);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
@@ -673,23 +679,23 @@ void kpa_status_disp(CameraId camera, void* param) {
     pos.x = -210.0f;
     pos.y = 160.0f;
 #if VERSION >= VERSION_US
-    iconDispGx(1.0f, &pos, 0x10, kpa_status_icon_tbl[gp->language][0]);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, kpa_status_icon_tbl[gp->language][0]);
 #else
-    iconDispGx(1.0f, &pos, 0x10, (u32)gp->language ? 0x210 : 0x206);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, (u32)gp->language ? 0x210 : 0x206);
 #endif
     pos.x = 50.0f;
     pos.y = 160.0f;
 #if VERSION >= VERSION_US
-    iconDispGx(1.0f, &pos, 0x10, kpa_status_icon_tbl[gp->language][1]);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, kpa_status_icon_tbl[gp->language][1]);
 #else
-    iconDispGx(1.0f, &pos, 0x10, 0x208);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, 0x208);
 #endif
     pos.x = 220.0f;
     pos.y = 160.0f;
 #if VERSION >= VERSION_US
-    iconDispGx(1.0f, &pos, 0x10, kpa_status_icon_tbl[gp->language][2]);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, kpa_status_icon_tbl[gp->language][2]);
 #else
-    iconDispGx(1.0f, &pos, 0x10, 0x207);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, 0x207);
 #endif
 
     n = pouchGetKpaScore();
@@ -706,34 +712,34 @@ void kpa_status_disp(CameraId camera, void* param) {
     digit[4] = n / 10;
     digit[5] = n % 10;
     for (i = 0; i < 6; i++) {
-        iconDispGx(1.0f, &pos, 0x10, numeric_id[digit[i]]);
+        iconDispGx(1.0f, &pos, KPA_ICON_2D, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
     pos.x += 20.0f;
-    iconDispGx(0.7f, &pos, 0x10, ICON_ITEM_COIN);
+    iconDispGx(0.7f, &pos, KPA_ICON_2D, ICON_ITEM_COIN);
     pos.x += 30.0f;
-    iconDispGx(1.0f, &pos, 0x10, ICON_TIMES_SMALL);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, ICON_TIMES_SMALL);
 
     n = pouchGetKpaCoin();
     digit[0] = n / 10;
     digit[1] = n % 10;
     pos.x += 20.0f;
     for (i = 0; i < 2; i++) {
-        iconDispGx(1.0f, &pos, 0x10, numeric_id[digit[i]]);
+        iconDispGx(1.0f, &pos, KPA_ICON_2D, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
 
     pos.x = 50.0f;
-    iconDispGx(1.0f, &pos, 0x10, numeric_id[kwp->stage]);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, numeric_id[kwp->stage]);
     pos.x += 20.0f;
-    iconDispGx(1.0f, &pos, 0x10, ICON_MINUS);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, ICON_MINUS);
 
     n = kwp->lives;
     digit[0] = n / 10;
     digit[1] = n % 10;
     pos.x += 20.0f;
     for (i = digit[0] == 0; i < 2; i++) {
-        iconDispGx(1.0f, &pos, 0x10, numeric_id[digit[i]]);
+        iconDispGx(1.0f, &pos, KPA_ICON_2D, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
 
@@ -744,7 +750,7 @@ void kpa_status_disp(CameraId camera, void* param) {
     digit[1] = n / 10;
     digit[2] = n % 10;
     for (i = 0; i < 3; i++) {
-        iconDispGx(1.0f, &pos, 0x10, numeric_id[digit[i]]);
+        iconDispGx(1.0f, &pos, KPA_ICON_2D, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
 }
