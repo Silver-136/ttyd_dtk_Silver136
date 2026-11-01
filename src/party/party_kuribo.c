@@ -365,7 +365,7 @@ void kuribo_use(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyChgMoveMode(party, 0);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
         partyChgPoseId(party, 1);
         party->moveFrames = 100;
         party->useMotionId = 0;
@@ -385,9 +385,9 @@ void kuribo_use(PartyEntry* party) {
             if (--party->moveFrames > 0) {
                 break;
             }
-            partyChgRunMode(party, 2);
+            partyChgRunMode(party, PARTY_RUN_MOVE);
             partyChgMoveMode(party, 0);
-            partyChgMot(party, 0);
+            partyChgMot(party, PARTY_MOTION_STAY);
             partyChgPoseId(party, 1);
             party->flags &= ~PARTY_FLAG_IS_BEING_USED;
             break;

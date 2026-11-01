@@ -745,7 +745,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
-    {0, 0, 1, 1, 2, 2, 241, 1}, // hpDamageWork
+    {0, 0, 1, 1, 2, 2, ITEM_MULTIBOUNCE, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -787,7 +787,7 @@ BattleWeapon badgeWeapon_GatsunJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
-    {1, 2, 2, 4, 3, 6, 240, 2}, // hpDamageWork
+    {1, 2, 2, 4, 3, 6, ITEM_POWER_JUMP, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -825,7 +825,7 @@ BattleWeapon badgeWeapon_DokanJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
-    {1, 2, 2, 4, 3, 6, 332, 4}, // hpDamageWork
+    {1, 2, 2, 4, 3, 6, ITEM_MEGA_JUMP, 4}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -863,7 +863,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
-    {0, 0, 1, 1, 2, 2, 242, 1}, // hpDamageWork
+    {0, 0, 1, 1, 2, 2, ITEM_POWER_BOUNCE, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -909,7 +909,7 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
-    {0, 1, 1, 3, 2, 5, 243, 1}, // hpDamageWork
+    {0, 1, 1, 3, 2, 5, ITEM_TORNADO_JUMP, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1124,7 +1124,7 @@ BattleWeapon badgeWeapon_GatsunHammer = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-    {1, 2, 2, 4, 3, 6, 247, 2}, // hpDamageWork
+    {1, 2, 2, 4, 3, 6, ITEM_POWER_SMASH, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1162,7 +1162,7 @@ BattleWeapon badgeWeapon_DokanHammer = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-    {1, 2, 2, 4, 3, 6, 333, 4}, // hpDamageWork
+    {1, 2, 2, 4, 3, 6, ITEM_MEGA_SMASH, 4}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1207,7 +1207,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-    {0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 248, 2}, // hpDamageWork
+    {0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 0xFFFFFFFF, 0, ITEM_QUAKE_HAMMER, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1245,7 +1245,7 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-    {3, 6, 3, 6, 3, 6, 334, 4}, // hpDamageWork
+    {3, 6, 3, 6, 3, 6, ITEM_MEGA_QUAKE, 4}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1283,7 +1283,7 @@ BattleWeapon badgeWeapon_HammerNageru = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-    {0, 1, 1, 3, 2, 5, 249, 1}, // hpDamageWork
+    {0, 1, 1, 3, 2, 5, ITEM_HAMMER_THROW, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1430,7 +1430,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
         {0}, // fpDamageWork
         TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_MULTIPLE, // targetClassFlags
 #else
-    {0xFFFFFFFF, 3, 0, 3, 1, 3, 252, 2}, // hpDamageWork
+    {0xFFFFFFFF, 3, 0, 3, 1, 3, ITEM_FIRE_DRIVE, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags

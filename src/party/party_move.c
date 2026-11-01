@@ -87,13 +87,13 @@ static inline void partyModeTail(PartyEntry* party) {
     if (--party->splashTimer < 0) {
         party->splashTimer = 0;
     }
-    if (party->runMode != 13) {
+    if (party->runMode != PARTY_RUN_DAMAGE_RETURN) {
         if (party->hitobjStandOn && (hitGetAttr(party->hitobjStandOn) & HIT_ATTR_TOGE)) {
-            partyChgRunMode(party, 13);
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
         } else if (party->hitobjFront && (hitGetAttr(party->hitobjFront) & HIT_ATTR_TOGE)) {
-            partyChgRunMode(party, 13);
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
         } else if (party->hitobjHead && (hitGetAttr(party->hitobjHead) & HIT_ATTR_TOGE)) {
-            partyChgRunMode(party, 13);
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
         }
     }
 }

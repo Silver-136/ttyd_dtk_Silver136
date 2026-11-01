@@ -593,7 +593,7 @@ void btlseqFirstAct(BattleWork* wp) {
                 if (unit && unit->badgesEquipped.LuckyStart && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
                     flag = 1;
                 }
-            } while (++k < 64);
+            } while (++k < BATTLE_UNIT_MAX);
             if (flag) {
                 evt = evtEntry(nanika_luck_event, 10, 0);
                 evt->unitId = UNIT_ID_SYSTEM;
@@ -678,7 +678,7 @@ USER_FUNC(_set_effect_luck) {
     pw = (0, &weapon);
     pz = (0, &z);
     py = (0, &y);
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && unit->badgesEquipped.LuckyStart && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
             switch (irand(4)) {
@@ -2893,7 +2893,7 @@ USER_FUNC(_set_haikei_entry_scale) {
                 } else if (event->userdata[1] < 40) {
                     sx = intpl_sub(EASING_SINE_IN_OUT, 110.0f, 100.0f, event->userdata[1] - 35, 5);
                 }
-                for (i = 0; i < 32; i++) {
+                for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                     obj = &wp->stageObjects[i];
                     if (obj->id > 0 && obj->data->layer == 0) {
                         mapObjScale(obj->data->name, sx / 100.0f, sy / 100.0f, 1.0f);
@@ -2929,7 +2929,7 @@ USER_FUNC(_set_haikei_entry_scale) {
                 } else if (event->userdata[1] < 45) {
                     sx = intpl_sub(EASING_SINE_IN_OUT, 110.0f, 100.0f, event->userdata[1] - 40, 5);
                 }
-                for (i = 0; i < 32; i++) {
+                for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                     obj = &wp->stageObjects[i];
                     if (obj->id > 0 && obj->data->layer == 1) {
                         mapObjScale(obj->data->name, sx / 100.0f, sy / 100.0f, 1.0f);

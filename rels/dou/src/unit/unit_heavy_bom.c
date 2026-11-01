@@ -645,7 +645,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LIT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

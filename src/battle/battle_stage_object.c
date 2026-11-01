@@ -2896,7 +2896,7 @@ USER_FUNC(_mobj_destroy) {
     int i;
 
     layer = evtGetValue(event, event->args[0]);
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && obj->data->layer == layer) {
             obj->flags |= 1;
@@ -3017,7 +3017,7 @@ USER_FUNC(_set_mobj_shake_init) {
     u8 position;
 
     layer = evtGetValue(event, event->args[0]);
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && obj->data->layer == layer) {
             obj->reserved_72 = 0;
@@ -3056,7 +3056,7 @@ USER_FUNC(_set_mobj_shake) {
     switch (layer) {
         case 0:
         case 1:
-            for (i = 0; i < 32; i++) {
+            for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                 obj = &wp->stageObjects[i];
                 if (obj->id > 0 && obj->data->layer == layer) {
                     _mobj_shake_main(obj);
@@ -3312,7 +3312,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
     int i;
 
     if (isFirstCall) {
-        for (i = 0; i < 64; i++) {
+        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             unit = BattleGetUnitPtr(wp, i);
 #if VERSION <= VERSION_DEMO_US
             if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && unit->ceilFallEventCode) {
@@ -3328,7 +3328,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
             }
         }
     }
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN)) {
             if (unit->ceilFallEventId && !evtCheckID(unit->ceilFallEventId)) {

@@ -920,7 +920,7 @@ void yoshi_use(PartyEntry* party) {
 
     yoshiAnimeCtrl(party);
 #if VERSION <= VERSION_DEMO_US
-    if (yoshiGetStatus() == 1 || yoshiGetStatus() == YOSHI_STATUS_FLUTTER) {
+    if (yoshiGetStatus() == YOSHI_STATUS_RIDING || yoshiGetStatus() == YOSHI_STATUS_FLUTTER) {
 #else
     if (party->useMotionId == 13 || yoshiGetStatus() == YOSHI_STATUS_STAND_JUMP || yoshiGetStatus() == YOSHI_STATUS_FALL || yoshiGetStatus() == YOSHI_STATUS_FLUTTER) {
 #endif

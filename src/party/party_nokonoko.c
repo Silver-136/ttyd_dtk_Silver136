@@ -103,7 +103,7 @@ void nokonoko_bye(PartyEntry* party) {
         partyGoodbyeInit(party);
     }
     if (partyGoodbyeMain(party)) {
-        partyChgRunMode(party, 14);
+        partyChgRunMode(party, PARTY_RUN_DELETE);
     }
 }
 
@@ -179,8 +179,8 @@ void nokonoko_use_cancel(void) {
             party->work.nokonoko.word17C = 0;
             party->work.nokonoko.word180 = 0;
         }
-        if (party->runMode != 8 && party->runMode != 13) {
-            partyChgRunMode(party, 2);
+        if (party->runMode != PARTY_RUN_GOODBYE && party->runMode != PARTY_RUN_DAMAGE_RETURN) {
+            partyChgRunMode(party, PARTY_RUN_MOVE);
             party->moveMode = PARTY_MOVE_MODE_STAY;
         }
     }
@@ -935,13 +935,13 @@ void nokonoko_use(PartyEntry* party) {
 void nokonoko_finish(PartyEntry* party) {
     if (party != NULL && party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         nokonoko_use_post(party);
-        if (party->runMode != 9) {
+        if (party->runMode != PARTY_RUN_FORCE_WALK) {
             if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
-                partyChgRunMode(party, 2);
+                partyChgRunMode(party, PARTY_RUN_MOVE);
                 party->moveMode = PARTY_MOVE_MODE_STAY;
             } else {
                 party->flags &= ~PARTY_FLAG_IS_EVT_USE;
-                partyChgRunMode(party, 0);
+                partyChgRunMode(party, PARTY_RUN_MOVE_RESET);
             }
         }
     }

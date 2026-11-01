@@ -1539,7 +1539,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
     EventEntry* evt;
     s32 kind;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (!unit) continue;
         if (unit->flags & BATTLE_UNIT_FLAG_BROKEN) continue;

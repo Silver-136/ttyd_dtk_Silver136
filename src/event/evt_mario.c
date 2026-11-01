@@ -2121,7 +2121,7 @@ USER_FUNC(evt_mario_set_prev_party_dokan) {
         if (id >= 0) {
             mp->currPartySlotId[slot] = id;
             party = partyGetPtr(id);
-            partyChgRunMode(party, 0);
+            partyChgRunMode(party, PARTY_RUN_MOVE_RESET);
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
             party->flags |= PARTY_FLAG_FORCE_FALL;
             party->scale = (Vec){0.0f, 0.0f, 0.0f};
@@ -2162,7 +2162,7 @@ USER_FUNC(evt_mario_hello_party) {
     if (!party) {
         return EVT_RETURN_DONE;
     }
-    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != 1) {
+    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != PARTY_RUN_WAIT) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -2197,7 +2197,7 @@ USER_FUNC(evt_mario_hello_exparty_pos) {
     if (!party) {
         return EVT_RETURN_DONE;
     }
-    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != 1) {
+    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != PARTY_RUN_WAIT) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;

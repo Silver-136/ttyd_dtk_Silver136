@@ -430,7 +430,7 @@ static void battle_init(void) {
     if (party) {
         s32 id = party->currentMemberId;
         BattleUnitType kind = BattleTransPartyIdToUnitKind(id);
-        if (!(pouch->partyData[id].flags & 2)) {
+        if (!(pouch->partyData[id].flags & POUCH_PARTY_FLAG_AWAY)) {
             BattleInformationSetParty(info, kind);
         }
     }

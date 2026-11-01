@@ -62,7 +62,7 @@ static void _partyEntry(s32 flag) {
             }
             mario->currPartySlotId[i] = id;
             party = partyGetPtr(id);
-            partyChgRunMode(party, 10);
+            partyChgRunMode(party, PARTY_RUN_PIPE);
             if (flag == 0) {
                 Vec zero = {0.0f, 0.0f, 0.0f};
                 party->scale = zero;
@@ -84,7 +84,7 @@ static void _partyEntry(s32 flag) {
             party->moveDir = mario->moveDirection;
         } else {
             party = partyGetPtr(mario->currPartySlotId[i]);
-            partyChgRunMode(party, 10);
+            partyChgRunMode(party, PARTY_RUN_PIPE);
             if (flag == 0) {
                 Vec zero = {0.0f, 0.0f, 0.0f};
                 party->scale = zero;

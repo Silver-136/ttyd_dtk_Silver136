@@ -1774,7 +1774,7 @@ void party_motion_homing_fly(PartyEntry* party) {
             }
         }
         if ((party->flags & PARTY_FLAG_IS_GROUNDED) && (fm->flag & FOOTMARK_FLAG_JUMP)) {
-            partyChgMot(party, 2);
+            partyChgMot(party, PARTY_MOTION_JUMP);
             break;
         }
         if ((party->flags & PARTY_FLAG_IS_GROUNDED) && (fm->flag & FOOTMARK_FLAG_SLIT)) {
@@ -1861,7 +1861,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         }
         if (t.y > party->position.y) {
             if (t.y - party->position.y > 5.0f) {
-                partyChgMot(party, 2);
+                partyChgMot(party, PARTY_MOTION_JUMP);
                 return;
             }
             if (t.y > party->position.y) {
@@ -1916,7 +1916,7 @@ void party_motion_homing_fly(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
                 d3 = partyGetTargetDistY(id, party->position.y);
                 if (d3 >= 100.0f) {
-                    partyChgMot(party, 0);
+                    partyChgMot(party, PARTY_MOTION_STAY);
                     if (++party->wallStuckCount > 60) {
                         party->wallStuckCount = 100;
                         partyGetAppearPos(party, &party->position);
@@ -1925,7 +1925,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                 } else if (d3 >= 1.0f) {
                     getFrontFloor(party, &t2, party->targetDir);
                     if (t2.y - party->position.y > 5.0f) {
-                        partyChgMot(party, 2);
+                        partyChgMot(party, PARTY_MOTION_JUMP);
                         return;
                     }
                     if (!(party->flags & (PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING))) {
@@ -1933,7 +1933,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                         if (fsy - party->position.y >= 5.0f && party->groundSlope <= 30.0f) {
                             party->stepY = fsy;
                             if (party->moveSpeed) {
-                                partyChgMot(party, 6);
+                                partyChgMot(party, PARTY_MOTION_UPSTAIRS);
                                 return;
                             }
                         }
@@ -1944,11 +1944,11 @@ void party_motion_homing_fly(PartyEntry* party) {
                     a = t3.y - party->position.y;
                     if (a > 100.0f) {
                         party->position = t3;
-                        partyChgMot(party, 1);
+                        partyChgMot(party, PARTY_MOTION_WALK);
                     } else if (a >= 0.0f) {
-                        partyChgMot(party, 2);
+                        partyChgMot(party, PARTY_MOTION_JUMP);
                     } else {
-                        partyChgMot(party, 0);
+                        partyChgMot(party, PARTY_MOTION_STAY);
 #else
                 x = party->position.x;
                 gy = party->position.y;
@@ -2021,7 +2021,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     }
     party->hitobjStandOn = hit;
     if (!hit) {
-        partyChgMot(party, 3);
+        partyChgMot(party, PARTY_MOTION_FALL);
         party->gravity = -1.0f;
     } else {
         if (hitGetAttr(hit) & HIT_ATTR_SHALLOW_WATER) {
@@ -3934,7 +3934,7 @@ void party_motion_jump(PartyEntry* party) {
     }
     switch (party->motionStep) {
         case 0:
-            if (party->forceMoveFrames == 0 && party->runMode != 9) {
+            if (party->forceMoveFrames == 0 && party->runMode != PARTY_RUN_FORCE_WALK) {
                 if (partyGetFootmarkReadId(0) == partyGetFootmarkWriteId(0)) {
                     d = partyGetTargetDist(id, party->position.x, party->position.z);
                     if (d > 2.0f * mario->wPlayerCollisionBox.x) {
@@ -4006,7 +4006,7 @@ void party_motion_jump(PartyEntry* party) {
                 party->velY = 0.0f;
                 party->targetDir = angleABf(party->position.x, party->position.z, mario->position.x, mario->position.z);
                 party->position = mario->position;
-                partyChgMot(party, 0);
+                partyChgMot(party, PARTY_MOTION_STAY);
                 break;
             }
             if (party->velY <= 0.0f) {
@@ -4017,7 +4017,7 @@ void party_motion_jump(PartyEntry* party) {
                         party->flags |= PARTY_FLAG_FORCE_FALL;
                     }
                     party->hitobjStandOn = NULL;
-                    partyChgMot(party, 3);
+                    partyChgMot(party, PARTY_MOTION_FALL);
                     party->gravity = -1.0f;
                     break;
                 }
@@ -4099,7 +4099,7 @@ void party_motion_jump2(PartyEntry* party) {
                         party->flags |= PARTY_FLAG_FORCE_FALL;
                     }
                     party->hitobjStandOn = NULL;
-                    partyChgMot(party, 3);
+                    partyChgMot(party, PARTY_MOTION_FALL);
                     party->gravity = -1.0f;
                     return;
                 }
@@ -4120,7 +4120,7 @@ void party_motion_jump2(PartyEntry* party) {
         party->velY = 0.0f;
         party->targetDir = angleABf(party->position.x, party->position.z, mario->position.x, mario->position.z);
         party->position = mario->position;
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
     }
 }
 /**
@@ -4220,7 +4220,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                 if (!(party->flags & PARTY_FLAG_KEEP_POSE_UNUSED)) {
                     partyChgPoseId(party, 1);
                 }
-                partyChgMot(party, 0);
+                partyChgMot(party, PARTY_MOTION_STAY);
             }
             break;
         }
@@ -4236,7 +4236,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         }
         party->hitobjStandOn = hit;
         if (!hit) {
-            partyChgMot(party, 3);
+            partyChgMot(party, PARTY_MOTION_FALL);
             party->gravity = -1.0f;
             continue;
         }
@@ -4247,14 +4247,14 @@ void party_motion_homing_fly(PartyEntry* party) {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         }
         if (attr & HIT_ATTR_SPIKES) {
-            partyChgMot(party, 0);
+            partyChgMot(party, PARTY_MOTION_STAY);
             break;
         }
     }
     if (party->moveSpeed) {
         partyChgWalkPose(party, party->moveSpeed);
     } else {
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
     }
     if (touch_wall_ct > 10) {
         dir = angleABf(party->position.x, party->position.z, mario->position.x, mario->position.z);
@@ -4378,7 +4378,7 @@ s32 party_motion_fall(PartyEntry* party) {
             party->homeDir = revise360(180.0f + toMovedir(mario->displayDirectionTarget));
             partyGetAppearPos4(party, &party->position);
             party->position.y += 37.0f;
-            partyChgMot(party, 0);
+            partyChgMot(party, PARTY_MOTION_STAY);
         }
         if (party->moveSpeed) {
             Vec pos = party->position;
@@ -4394,9 +4394,9 @@ s32 party_motion_fall(PartyEntry* party) {
         party->velY = 0.0f;
         party->position.y = gy;
         if (party->moveSpeed == 0.0f) {
-            partyChgMot(party, 0);
+            partyChgMot(party, PARTY_MOTION_STAY);
         } else {
-            partyChgMot(party, 1);
+            partyChgMot(party, PARTY_MOTION_WALK);
         }
         psndSFXOn_3D((const char*)0x928, &party->position);
         return 3;
@@ -4408,9 +4408,9 @@ s32 party_motion_fall(PartyEntry* party) {
         party->velY = 0.0f;
         party->position.y = gy;
         if (party->moveSpeed == 0.0f) {
-            partyChgMot(party, 0);
+            partyChgMot(party, PARTY_MOTION_STAY);
         } else {
-            partyChgMot(party, 1);
+            partyChgMot(party, PARTY_MOTION_WALK);
         }
         psndSFXOn_3D((const char*)0x928, &party->position);
         partyClearFootmark();
@@ -4442,7 +4442,7 @@ void party_motion_upstairs(PartyEntry* party) {
             party->position.y += party->velY;
             if (--party->moveFrames <= 0) {
                 party->flags &= ~PARTY_FLAG_IS_STEPPING;
-                partyChgMot(party, 1);
+                partyChgMot(party, PARTY_MOTION_WALK);
             }
             break;
     }
@@ -4591,7 +4591,7 @@ void party_motion_behind_mario(PartyEntry* party) {
                 party->moveTarget.x = x;
                 party->moveTarget.y = thr;
                 party->moveTarget.z = z;
-                partyChgMot(party, 2);
+                partyChgMot(party, PARTY_MOTION_JUMP);
                 return;
             }
         } else if (ty > party->position.y) {
@@ -4618,7 +4618,7 @@ void party_motion_behind_mario(PartyEntry* party) {
                 party->moveTarget.x = x;
                 party->moveTarget.y = thr;
                 party->moveTarget.z = z;
-                partyChgMot(party, 2);
+                partyChgMot(party, PARTY_MOTION_JUMP);
                 return;
             }
         }
@@ -4632,14 +4632,14 @@ void party_motion_behind_mario(PartyEntry* party) {
         }
         party->hitobjStandOn = hit;
         if (!hit) {
-            partyChgMot(party, 3);
+            partyChgMot(party, PARTY_MOTION_FALL);
             party->gravity = -1.0f;
         }
         party->position.y = gy;
     } else {
         party->moveFrames = 0;
         partyChgMoveMode(party, 1);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, mario->position.x, mario->position.z);
         party->homingDist = 50.0f;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -4649,7 +4649,7 @@ void party_motion_behind_mario(PartyEntry* party) {
     }
     if (party->hitobjPush) {
         partyChgMoveMode(party, 1);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, x, z);
         party->homingDist = 50.0f;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -4748,7 +4748,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         }
         party->hitobjStandOn = hit;
         if (!hit) {
-            partyChgMot(party, 3);
+            partyChgMot(party, PARTY_MOTION_FALL);
             party->gravity = -1.0f;
         }
         party->position.y = gy;
@@ -4757,7 +4757,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         if (mario->baseSpeed == 0.0f) {
             party->flags |= PARTY_FLAG_IS_BEHIND_MARIO;
             partyChgMoveMode(party, 1);
-            partyChgMot(party, 0);
+            partyChgMot(party, PARTY_MOTION_STAY);
             partySetDir(party, mario->position.x, mario->position.z);
             party->homingDist = 50.0f;
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -4765,7 +4765,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
     }
     if (party->hitobjPush) {
         partyChgMoveMode(party, 1);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, x, z);
         party->homingDist = 50.0f;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -4880,7 +4880,7 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
     } else {
         party->moveFrames = 0;
         partyChgMoveMode(party, 1);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, mario->position.x, mario->position.z);
         party->homingDist = 50.0f;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -4890,7 +4890,7 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
     }
     if (party->hitobjPush) {
         partyChgMoveMode(party, 1);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, mario->position.x, mario->position.z);
         party->homingDist = 50.0f;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -4988,14 +4988,14 @@ void party_motion_beside_mario(PartyEntry* party) {
         }
         party->hitobjStandOn = hit;
         if (!hit) {
-            partyChgMot(party, 3);
+            partyChgMot(party, PARTY_MOTION_FALL);
             party->gravity = -1.0f;
         }
         party->position.y = y;
     } else {
         party->moveFrames = 0;
         partyChgMoveMode(party, 1);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, mario->position.x, mario->position.z);
         party->homingDist = 50.0f;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -5003,7 +5003,7 @@ void party_motion_beside_mario(PartyEntry* party) {
     }
     if (party->hitobjPush) {
         partyChgMoveMode(party, 1);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, mario->position.x, mario->position.z);
         party->homingDist = 50.0f;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -5056,7 +5056,7 @@ void party_motion_stay(PartyEntry* party) {
     }
     party_slit(party);
     party_roll(party);
-    if (party->runMode != 0) {
+    if (party->runMode != PARTY_RUN_MOVE_RESET) {
         if (marioChkDeepSleep() == 1 || (party->flags & PARTY_FLAG_SLEEP_ON)) {
             partyChgPoseId(party, 6);
         } else if (party->currentMemberId != PARTY_MEMBER_MS_MOWZ) {
@@ -5069,7 +5069,7 @@ void party_motion_stay(PartyEntry* party) {
         partyMoveBehindMario(party, 0);
         return;
     }
-    if (party->runMode != 0) {
+    if (party->runMode != PARTY_RUN_MOVE_RESET) {
         if (!party->currentSlotId || !partyGetPtr(marioGetPartyId())) {
             if (partyChkMarioFollowYDemo(party->playerPtr)) {
                 if (party->moveKind == 0) {
@@ -5083,7 +5083,7 @@ void party_motion_stay(PartyEntry* party) {
                     d = distABf(x, z, mario->position.x, mario->position.z);
                 }
                 if (marioChkSlitThrouh() || d >= lim) {
-                    partyChgMot(party, 1);
+                    partyChgMot(party, PARTY_MOTION_WALK);
                 }
             }
         } else {
@@ -5091,23 +5091,23 @@ void party_motion_stay(PartyEntry* party) {
             if (other) {
                 if (nokonokoGetStatus(other) == 3) {
                     if (partyGetTargetDist(id, party->position.x, party->position.z) >= lim) {
-                        partyChgMot(party, 1);
+                        partyChgMot(party, PARTY_MOTION_WALK);
                         partyClearFootmark2();
                     }
                     // 3 = PARTY_MEMBER_BOBBERY, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
-                } else if (other->currentMemberId == 3 && other->runMode == 3) {
+                } else if (other->currentMemberId == 3 && other->runMode == PARTY_RUN_USE) {
                     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
                         distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim) {
-                        partyChgMot(party, 1);
+                        partyChgMot(party, PARTY_MOTION_WALK);
                     }
                 } else if (!(other->flags & PARTY_FLAG_IS_BEING_USED) || other->currentMemberId == 4) {
                     if (distABf(party->position.x, party->position.z, other->position.x, other->position.z) >= lim) {
-                        partyChgMot(party, 1);
+                        partyChgMot(party, PARTY_MOTION_WALK);
                     }
                 }
                 // d is only set in the branch above: on this path the demo compares an uninitialised value (the demo's own bug)
                 if (marioChkSlitThrouh() || d >= lim) {
-                    partyChgMot(party, 1);
+                    partyChgMot(party, PARTY_MOTION_WALK);
                 }
             }
         }
@@ -5212,7 +5212,7 @@ static void partyStayChkGnd(PartyEntry* party) {
         party->hitobjStandOn = hit;
         if (!hit) {
             party->flags &= ~PARTY_FLAG_IS_GROUNDED;
-            partyChgMot(party, 3);
+            partyChgMot(party, PARTY_MOTION_FALL);
             party->gravity = -1.5f;
         } else {
             party->flags |= PARTY_FLAG_IS_GROUNDED;
@@ -5296,7 +5296,7 @@ void party_motion_damage(PartyEntry* party) {
             break;
         case 12:
             if (--party->moveFrames <= 0) {
-                partyChgRunMode(party, 2);
+                partyChgRunMode(party, PARTY_RUN_MOVE);
                 party->moveMode = 0;
                 party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             }

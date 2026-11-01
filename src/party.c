@@ -877,7 +877,7 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
     PartyFunc func;
 
 #if VERSION <= VERSION_DEMO_US
-    if (party->runMode != 9 && party->runMode != 3) {
+    if (party->runMode != PARTY_RUN_FORCE_WALK && party->runMode != PARTY_RUN_USE) {
         party->prevRunMode = party->runMode;
     }
     if (party->runMode == 4) {
@@ -992,7 +992,7 @@ void partyPrevRunMode(PartyEntry* party) {
     partyUsePost(party);
     party->runMode = party->prevRunMode;
     party->trigFlags |= PARTY_TRIG_CHG_RUN_MODE;
-    partyChgMot(party, 0);
+    partyChgMot(party, PARTY_MOTION_STAY);
 }
 #endif
 #pragma dont_inline reset
@@ -1168,7 +1168,7 @@ void driveParty(PartyEntry* party) {
             }
             partyChkGnd(party);
             if (distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) > 31.0f) {
-                partyChgRunMode(party, 2);
+                partyChgRunMode(party, PARTY_RUN_MOVE);
             }
 #else
             party_move_mode_wait(party);
@@ -1936,12 +1936,12 @@ void allPartyRideJabara(void) {
     if (party) {
         bomhei_use_cancel();
         party->flags |= PARTY_FLAG_IS_RIDING_JABARA;
-        partyChgRunMode(party, 11);
+        partyChgRunMode(party, PARTY_RUN_RIDE);
     }
     party = partyPtrTbl[1];
     if (party) {
         party->flags |= PARTY_FLAG_IS_RIDING_JABARA;
-        partyChgRunMode(party, 11);
+        partyChgRunMode(party, PARTY_RUN_RIDE);
     }
 }
 /**

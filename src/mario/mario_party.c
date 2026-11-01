@@ -45,7 +45,7 @@ s32 marioUseParty(void) {
         return 0;
     }
     party = partyGetPtr(marioGetPartyId());
-    if (party != NULL && party->runMode == 3) {
+    if (party != NULL && party->runMode == PARTY_RUN_USE) {
         return 0;
     }
     if (mario->currPartySlotId[0] < 0) {
