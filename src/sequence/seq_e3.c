@@ -521,11 +521,9 @@ void seq_e3Main(SequenceWork* seq) {
             }
 
             if (wp->scenario == 0) {
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
                 seqSetSeq(SEQ_MAP_CHANGE, "gor_00", NULL);
             } else if (wp->scenario == 1) {
-#endif
 #endif
                 seqSetSeq(SEQ_MAP_CHANGE, "hei_00", "dokan_2");
             } else {

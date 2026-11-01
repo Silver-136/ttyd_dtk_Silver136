@@ -1872,98 +1872,9 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
                 SPAWN_EVENT(PTR(mario_see_you_init))
             END_INLINE_EVENT
         END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
-CALL(evt_map_playanim, STRING("kawa_sibu_01"), MAP_ANIM_PLAY_LOOP, 0)
-CALL(evt_map_playanim, STRING("kawa_01"), MAP_ANIM_PLAY_LOOP, 0)
-CALL(evt_map_playanim, STRING("kawa_02"), MAP_ANIM_PLAY_LOOP, 0)
-CALL(evt_map_playanim, STRING("neon"), MAP_ANIM_PLAY_LOOP, 0)
-SET_VALUE(LW(0), -220)
-SET_VALUE(LW(1), 1)
-SET_VALUE(LW(2), -295)
-SET_FLOAT_VALUE(LW(3), FLOAT(1.0f))
-// The waterfall effects play on the tree.
-SPAWN_EVENT(mri_waterfall_effect)
-SET_VALUE(LW(0), 531)
-SET_VALUE(LW(1), 1)
-SET_VALUE(LW(2), 118)
-SET_FLOAT_VALUE(LW(3), FLOAT(1.0f))
-SPAWN_EVENT(mri_waterfall_effect)
-SET_VALUE(LF(0), 0)
-// Chapter 8 music: the witch theme or the voices theme, depending on which door Mario came through.
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-    CALL(evt_bero_get_entername, LW(0))
-    IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
-        CALL(evt_snd_envoff, PSND_FADEOUT)
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
-        CALL(evt_snd_envoff, PSND_FADEOUT)
-        SET_VALUE(LF(0), 1)
-    END_IF
-END_IF
-IF_INT_EQUAL(LF(0), 0)
-    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG2_02_TO_THE_GREAT_TREE)
-        // Chapter 2 music and ambience for the Great Tree.
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
-    ELSE
-        BEGIN_INLINE_EVENT
-            WAIT_MS(2000)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
-        END_INLINE_EVENT
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
-    END_IF
-END_IF
-// The FP Plus badge sits on the ground until Mario picks it up.
-CALL(evt_item_entry, STRING("i"), ITEM_FP_PLUS, 528, 0, 110, ITEM_TYPE_GROUND, GSWF_MRI_00_FP_PLUS, 0)
-CALL(evt_npc_setup, PTR(npcEnt))
-IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_10_SECRET_ENTRANCE_REVEALED)
-    IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
-        IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 1)
-            // While Punio follows Mario, the three dancer Punies dance in the yard.
-            CALL_CHILD(odoriko_1_init)
-            CALL_CHILD(odoriko_2_init)
-            CALL_CHILD(odoriko_3_init)
-        END_IF
-    END_IF
-END_IF
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_02_TO_THE_GREAT_TREE)
-    // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
-    // capture waits for Flurrie's gust.
-    // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
-    // capture waits for Flurrie's gust.
-    // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
-    // capture waits for Flurrie's gust.
-    SPAWN_EVENT(first_bigtree)
-END_IF
-IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_09_FLURRIE_JOINS)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_non"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mri_cloud_init)
-    CALL(evt_mri_cloud_ent, PTR(&capturemap), STRING("A_kaze"), PTR(open_bigtree))
-    SET_VALUE(LW(0), STRING("ne_bero"))
-    CALL_CHILD(bero_case_switch_off)
-ELSE
-    CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_AT_END, 0)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
-END_IF
-CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kesu"), MAP_OBJ_FLAG_HIDDEN)
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-    CALL(evt_bero_get_entername, LW(0))
-    IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
-        // In chapter 8 the dark-world scene or the voices scene runs, depending on the entrance.
-        SPAWN_EVENT(sekai_yami_evt)
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-        SPAWN_EVENT(minnnanokoe_evt)
-    END_IF
-END_IF
-RETURN
-EVT_END()
-#else
+#if VERSION > VERSION_DEMO_US
     END_SWITCH
+#endif
     CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kawa_sibu_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kawa_01"), MAP_ANIM_PLAY_LOOP, 0)
@@ -2069,4 +1980,3 @@ EVT_END()
 #endif
     RETURN
 EVT_END()
-#endif

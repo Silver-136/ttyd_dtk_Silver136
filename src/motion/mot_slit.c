@@ -1226,12 +1226,10 @@ void mot_slit(void) {
         m->slitTimer2 = 0;
         m->flags &= ~MARIO_FLAG_PAPER_MODE;
         m->wPlayerCollisionBox.x = 20.0f;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         if (m->controlStickSensitivity) {
             slitSpeedDown(m);
         }
-#endif
 #endif
         if (m->baseSpeed == 0.0f) {
             marioChgPose("M_S_1");
@@ -1268,12 +1266,10 @@ void mot_slit(void) {
         if (!m->controlStickSensitivity) {
             m->baseSpeed = 0.0f;
             marioChgPose("M_S_1");
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         } else {
             slitSpeedDown(m);
             m->directionView = m->controlStickAngle;
-#endif
 #endif
         }
         if (--m->slitTimer2 > 0) {

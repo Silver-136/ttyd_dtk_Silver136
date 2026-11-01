@@ -464,10 +464,8 @@ typedef struct MarioWork {
     f32 baseWalkSpeed;            // 0x184
     f32 baseDashSpeed;            // 0x188, same on US
     f32 moveDist;                  // 0x18C, distance to move this frame (marioMove)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     f32 jumpStartSpeed;            // 0x190 US only (+4 from here): baseSpeed at jump start
-#endif
 #endif
     f32 controlStickSensitivity;   // 0x190
     f32 controlStickAngle;         // 0x194

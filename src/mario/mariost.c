@@ -954,10 +954,8 @@ void gcResetCheck(void) {
                     code = OS_RESET_HOTRESET;
                 }
             }
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             code |= gp->language << 2;
-#endif
 #endif
             OSResetSystem(OS_RESET_RESTART, code, FALSE);
         } else {

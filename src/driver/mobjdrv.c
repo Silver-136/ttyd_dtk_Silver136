@@ -927,62 +927,9 @@ void mobjMain(void) {
         }
 #if VERSION <= VERSION_DEMO_US
     }
-    if (!(entry->flags & MOBJ_FLAG_ACTIVE)) {
-        continue;
-    }
-    if (!koopaRunFlag && !(entry->flags & (MOBJ_FLAG_NO_SHADOW | MOBJ_FLAG_HIDDEN))) {
-        MapWork* mw = mapGetWork();
-        s32 shadowId;
-        mapGetBlend(&blend1);
-        mapGetBlend2(&blend2);
-        if ((mw->entries[0].flags & MAP_ENTRY_BLEND) && !(animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_NO_MAP_BLEND) && blend1.a != 0xff) {
-        } else if ((mw->entries[0].flags & MAP_ENTRY_BLEND2) && !(animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_NO_MAP_BLEND2) &&
-                   blend2.a != 0xff) {
-        } else {
-            shadowId = shadowEntry(entry->position.x, entry->position.y, entry->position.z,
-                                   10.0f * entry->scale.x * entry->scale2.x / 25.0f);
-            if (entry->flags & MOBJ_FLAG_HIT_HEAD) {
-                shadowSetType(shadowId, 1);
-                shadowSetSize(shadowId, 10.0f * entry->scale.x * entry->scale2.x / 20.0f);
-            }
-        }
-    }
-    animPoseMain(entry->poseId);
-    evt = animPoseGetMaterialEvtColor(entry->poseId);
-    if (entry->flags & MOBJ_FLAG_NO_DISP) {
-        continue;
-    }
-    if (!(entry->flags & MOBJ_FLAG_NO_CULL)) {
-        PSMTXMultVec(camGetPtr(CAMERA_3D)->view, &entry->position, &camPos);
-        PSMTX44MultVec(camGetPtr(CAMERA_3D)->projection, &camPos, &camPos);
-        if (__fabs(camPos.x) > 1.5 || __fabs(camPos.y) > 1.5 || __fabs(camPos.z) > 1.0) {
-            continue;
-        }
-    }
-    if ((entry->flags & MOBJ_FLAG_BLINK) && ((gp->retraceCount >> 3) & 1)) {
-        continue;
-    }
-    if (entry->offscreenId == -1) {
-        if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
-            dispEntry(entry->camId, dispCalcZ(&entry->position), 2, mobjDispXLU, entry);
-        } else {
-            dispEntry(entry->camId, dispCalcZ(&entry->position), 0, mobjDisp, entry);
-            dispEntry(entry->camId, dispCalcZ(&entry->position), 1, mobjDisp, entry);
-            dispEntry(entry->camId, dispCalcZ(&entry->position), 2, mobjDisp, entry);
-        }
-    } else {
-        if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
-            dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 2, mobjDisp_OffscreenXLU, entry);
-        } else {
-            dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 0, mobjDisp_OffscreenXLU, entry);
-            dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 1, mobjDisp_OffscreenXLU, entry);
-            dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 2, mobjDisp_OffscreenXLU, entry);
-        }
-    }
-}
-}
 #else
     afterHit:
+#endif
         if (!(entry->flags & MOBJ_FLAG_ACTIVE)) {
             continue;
         }
@@ -1037,7 +984,6 @@ void mobjMain(void) {
         }
     }
 }
-#endif
 
 
 /** Returns the map object with this name; one past the table when there is none (the name is expected to exist). */
