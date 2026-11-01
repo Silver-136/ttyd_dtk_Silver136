@@ -2824,7 +2824,7 @@ void _mapobj_data_touch_scale(s32 layer) {
     for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && obj->data->layer == layer) {
-            obj->flags |= 2;
+            obj->flags |= STAGE_OBJECT_FLAG_UPDATE;
         }
     }
 }
@@ -2897,7 +2897,7 @@ USER_FUNC(_set_haikei_entry_scale) {
                     obj = &wp->stageObjects[i];
                     if (obj->id > 0 && obj->data->layer == 0) {
                         mapObjScale(obj->data->name, sx / 100.0f, sy / 100.0f, 1.0f);
-                        obj->flags |= 2;
+                        obj->flags |= STAGE_OBJECT_FLAG_UPDATE;
                     }
                 }
             }
@@ -2933,7 +2933,7 @@ USER_FUNC(_set_haikei_entry_scale) {
                     obj = &wp->stageObjects[i];
                     if (obj->id > 0 && obj->data->layer == 1) {
                         mapObjScale(obj->data->name, sx / 100.0f, sy / 100.0f, 1.0f);
-                        obj->flags |= 2;
+                        obj->flags |= STAGE_OBJECT_FLAG_UPDATE;
                     }
                 }
             }

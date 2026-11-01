@@ -17,6 +17,12 @@ typedef struct BattleStageObjectData {
     u8 pad_16[2]; //0x16
 } BattleStageObjectData;
 
+// BattleStageObject.flags
+typedef enum BattleStageObjectFlags {
+    STAGE_OBJECT_FLAG_HIDDEN = (1 << 0), // 0x1, map group hidden with the object (_mobj_destroy, battle_seq_end)
+    STAGE_OBJECT_FLAG_UPDATE = (1 << 1), // 0x2, BattleStageObjectMain rebuilds the transform once
+} BattleStageObjectFlags;
+
 typedef struct BattleStageObject {
     s32 id; //0x0
     Vec position; //0x4
@@ -28,7 +34,7 @@ typedef struct BattleStageObject {
     Vec prevRotation; //0x4C
     Vec prevPositionOffset2; //0x58
     BattleStageObjectData* data; //0x64
-    u32 flags; //0x68
+    u32 flags; //0x68, BattleStageObjectFlags
     s32 battleUnitIdx; //0x6C
     u8 numFramesToStartFalling; //0x70
     u8 numFramesFalling; //0x71

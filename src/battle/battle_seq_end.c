@@ -1566,7 +1566,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
     obj = BattleSearchObjectPtr("if_body");
     if (obj) {
         wp->stageObjectWork.flags |= STAGE_FLAG_NO_IRON_FRAME;
-        obj->flags |= 1;
+        obj->flags |= STAGE_OBJECT_FLAG_HIDDEN;
         mapGrpFlagOn("if_body", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("if_wire", MAP_OBJ_FLAG_HIDDEN);
     }

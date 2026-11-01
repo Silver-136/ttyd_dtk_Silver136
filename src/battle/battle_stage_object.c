@@ -291,7 +291,7 @@ void BattleStageObjectInit(void) {
     obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
     obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
     mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
-    obj->flags |= 1;
+    obj->flags |= STAGE_OBJECT_FLAG_HIDDEN;
     id++;
 
     j = 0;
@@ -316,7 +316,7 @@ void BattleStageObjectInit(void) {
         obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
         obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
         mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
-        obj->flags |= 1;
+        obj->flags |= STAGE_OBJECT_FLAG_HIDDEN;
         id++;
         j++;
     }
@@ -395,8 +395,8 @@ void BattleStageObjectMain(void) {
             obj->prevRotation = obj->rotation;
             changed = TRUE;
         }
-        if (obj->flags & 2) {
-            obj->flags &= ~2;
+        if (obj->flags & STAGE_OBJECT_FLAG_UPDATE) {
+            obj->flags &= ~STAGE_OBJECT_FLAG_UPDATE;
             changed = TRUE;
         }
         switch (obj->data->layer) {
@@ -447,7 +447,7 @@ void BattleStageObjectMain(void) {
                 }
                 break;
         }
-        if (obj->flags & 1) {
+        if (obj->flags & STAGE_OBJECT_FLAG_HIDDEN) {
             if (!(mapGetMapObj(obj->data->name)->flags & MAP_OBJ_FLAG_HIDDEN)) {
                 mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
             }
@@ -2899,7 +2899,7 @@ USER_FUNC(_mobj_destroy) {
     for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && obj->data->layer == layer) {
-            obj->flags |= 1;
+            obj->flags |= STAGE_OBJECT_FLAG_HIDDEN;
             unit = BattleGetUnitPtr(wp, obj->battleUnitIdx);
             if (unit) {
                 for (part = unit->parts; part; part = part->nextPart) {
