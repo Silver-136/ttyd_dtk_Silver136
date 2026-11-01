@@ -426,6 +426,7 @@ EVT_BEGIN(vivian_hide_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -672,6 +673,11 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
  * the hit able to burn it for 2 turns (_make_kagenuke_weapon), then returns.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Vivian's Shade Fist: she sinks into the shadows,
+ * reappears beside the enemy (_get_vivian_attack_position) and punches it with the action command,
+ * the hit able to burn it for 2 turns (_make_kagenuke_weapon), then returns.
+ */
 EVT_BEGIN(partyVivianAttack_NormalAttack)
     // Pick the target, set up the burn and pay the cost; the camera follows Vivian and the enemy.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -840,6 +846,11 @@ END_SIBLING_EVENT
     RETURN
 EVT_END()
 #else
+/**
+ * Vivian's Shade Fist: she sinks into the shadows,
+ * reappears beside the enemy (_get_vivian_attack_position) and punches it with the action command,
+ * the hit able to burn it for 2 turns (_make_kagenuke_weapon), then returns.
+ */
 EVT_BEGIN(partyVivianAttack_NormalAttack)
     // Pick the target, set up the burn and pay the cost; the camera follows Vivian and the enemy.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -1744,6 +1755,12 @@ USER_FUNC(_get_move_frame) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_8017d03c, JP 0x8017D03C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Takes target unit args[0] and a position in args[1]-args[3]
+ * and adjusts it in place to where Vivian should surface for Shade Fist:
+ * 30 units behind her facing, plus the target's vivianOffsetX/Z, 20 units lower but not below the floor.
+ * Not in the US demo.
+ */
 USER_FUNC(_get_vivian_attack_position) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

@@ -53,6 +53,10 @@ static s32 logoAsyncFirst(void);
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * The demos always start interlaced; the US demo also starts the logo files loading
+ * and preloads the E3 demo's models and textures.
+ */
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
 #if VERSION >= VERSION_US
@@ -123,6 +127,10 @@ void seq_logoInit(SequenceWork* work) {
  * environment and effect textures and Mario's poses for the rest of the game, and frees mariost.tpl.
  */
 #if VERSION == VERSION_DEMO_JP
+/**
+ * The demos always start interlaced; the US demo also starts the logo files loading
+ * and preloads the E3 demo's models and textures.
+ */
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
 wp->texture = fileAllocf(4, "%s/monthry.tpl", getMarioStDvdRoot());
@@ -131,6 +139,10 @@ VIConfigure(&sRMObjHReso);
     VIFlush();
     VIWaitForRetrace();
 }
+/**
+ * Leaves the logo sequence: sets up the font, window, fade, icon,
+ * environment and effect textures and Mario's poses for the rest of the game, and frees mariost.tpl.
+ */
 void seq_logoExit(SequenceWork* work) {
     fontmgrTexSetup();
     windowTexSetup();
@@ -143,6 +155,10 @@ void seq_logoExit(SequenceWork* work) {
 gp->flags |= GW_FLAG_VIDEO_MODE_SET;
 }
 #elif VERSION == VERSION_DEMO_US
+/**
+ * The demos always start interlaced; the US demo also starts the logo files loading
+ * and preloads the E3 demo's models and textures.
+ */
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
 wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
@@ -159,6 +175,10 @@ animGroupBaseAsync("c_pkr", 0, NULL);
     animGroupBaseAsync("EFF_Mugi", 0, NULL);
     fileAsyncf(4, 0, "%s/e3.tpl", getMarioStDvdRoot());
 }
+/**
+ * Leaves the logo sequence: sets up the font, window, fade, icon,
+ * environment and effect textures and Mario's poses for the rest of the game, and frees mariost.tpl.
+ */
 void seq_logoExit(SequenceWork* work) {
     fontmgrTexSetup();
     windowTexSetup();
@@ -171,6 +191,10 @@ void seq_logoExit(SequenceWork* work) {
 gp->flags |= GW_FLAG_VIDEO_MODE_SET;
 }
 #else
+/**
+ * Leaves the logo sequence: sets up the font, window, fade, icon,
+ * environment and effect textures and Mario's poses for the rest of the game, and frees mariost.tpl.
+ */
 void seq_logoExit(SequenceWork* work) {
     fontmgrTexSetup();
     windowTexSetup();
@@ -184,6 +208,10 @@ void seq_logoExit(SequenceWork* work) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * US and PAL logo sequence: the story screen, the three logos (1 s each, 500 ms fades) while sound groups load,
+ * then the dmo_00 opening (skipped with A or Start to the title), or the kiosk menu on kiosk builds.
+ */
 void seq_logoMain(SequenceWork* work) {
     static OSTime time; // time instance 1
     u32 size;
@@ -330,6 +358,10 @@ void seq_logoMain(SequenceWork* work) {
     }
 }
 #else
+/**
+ * US and PAL logo sequence: the story screen, the three logos (1 s each, 500 ms fades) while sound groups load,
+ * then the dmo_00 opening (skipped with A or Start to the title), or the kiosk menu on kiosk builds.
+ */
 void seq_logoMain(SequenceWork* work) {
 #if VERSION >= VERSION_US
     static OSTime time;
@@ -890,10 +922,16 @@ void logoDisp(CameraId camId, void* param) {
 
 
 #if VERSION < VERSION_US
+/** JP and the demo start reading the first data file while the logos show */
 static s32 logoAsyncFirst(void) {
     return fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
 }
 #endif
+/**
+ * Background draw callback queued for the frame the video mode switches:
+ * sets the display copy and a 608x480 viewport and scissor for the interlaced
+ * or progressive (PAL: 50 or 60 Hz) render mode.
+ */
 void dummy_draw(CameraId camId, void* param) {
     GXRenderModeObj* rmode;
     f32 scale;
@@ -920,8 +958,18 @@ void dummy_draw(CameraId camId, void* param) {
 #if VERSION < VERSION_US
 //param is unused
 #if VERSION <= VERSION_DEMO_US
+/**
+ * JP and demo progressive-scan prompt: asks whether to display in progressive scan (left/right toggles,
+ * A confirms, 10 s idle picks the current choice), shows the result for 2 s and switches the video mode.
+ * param is unused
+ */
 static void progDisp(CameraId camId, void* param) {
 #else
+/**
+ * JP and demo progressive-scan prompt: asks whether to display in progressive scan (left/right toggles,
+ * A confirms, 10 s idle picks the current choice), shows the result for 2 s and switches the video mode.
+ * param is unused
+ */
 void progDisp(CameraId camId, void* param) {
 #endif
     static OSTime time;
@@ -1042,6 +1090,11 @@ void progDisp(CameraId camId, void* param) {
     }
 }
 #else
+/**
+ * JP and demo progressive-scan prompt: asks whether to display in progressive scan (left/right toggles,
+ * A confirms, 10 s idle picks the current choice), shows the result for 2 s and switches the video mode.
+ * param is unused
+ */
 void progDisp(CameraId camId, void* param) {
     static OSTime time;
     const char* msg;

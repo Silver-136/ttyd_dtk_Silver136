@@ -2817,6 +2817,10 @@ EvtWord* evtSearchEndIf(EventEntry* entry) {
     }
 }
 
+/**
+ * Returns the END_SWITCH command of the current switch (not past it, so it runs and pops the level).
+ * Note that END_SCRIPT is counted as an opening SWITCH here.
+ */
 EvtWord* evtSearchEndSwitch(EventEntry* entry) {
     EvtWord* cmd;
     s32 opcode;

@@ -343,6 +343,7 @@ void winMarioMain2(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** US: plain ASCII digits */
 const char* winZenkakuStr(s32 n) {
     const char* tbl[10] = {"\x82\x4f", "\x82\x50", "\x82\x51", "\x82\x52", "\x82\x53",
                            "\x82\x54", "\x82\x55", "\x82\x56", "\x82\x57", "\x82\x58"};
@@ -407,6 +408,7 @@ char winZenkakuStrPad_tmp[0x100];
 /** Formats n zero-padded to digits places (the play time's hours and minutes); returns a shared static buffer. */
 // Descriptive name (not in the symbol maps); placeholder unk_8016af5c, JP 0x8016AF5C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Formats n zero-padded to digits places (the play time's hours and minutes); returns a shared static buffer. */
 char* winZenkakuStrPad(s32 n, s32 digits) {
     const char* tbl[10] = {"\x82\x4f", "\x82\x50", "\x82\x51", "\x82\x52", "\x82\x53",
                            "\x82\x54", "\x82\x55", "\x82\x56", "\x82\x57", "\x82\x58"};
@@ -495,6 +497,12 @@ void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
 
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the Mario window (menu slot idx): name, level and rank, the gear and curse bubbles, HP/FP/BP,
+ * the Star Power gauge, Star Points, coins, Star Pieces, Shine Sprites and play time (capped at 99:59),
+ * Mario's model, and the special-move list when open.
+ * US: every float live range has its own variable (register order); rowC is the second value of rowB
+ */
 void winMarioDisp(s32 camId, void* param, s32 idx) {
     static s32 pri[6] = {3, 2, 8, 10, 7, 9};
     WindowWork* w;

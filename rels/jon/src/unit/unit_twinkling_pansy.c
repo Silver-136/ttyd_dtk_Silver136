@@ -436,6 +436,10 @@ static EVT_BEGIN(song_event)
     RETURN
 EVT_END()
 
+/**
+ * The Amazy Dayzee flees the battle: it turns away, blurs,
+ * hops and dashes off the right side of the stage at speed 9 with the escape sounds, then is removed (KillUnit).
+ */
 static EVT_BEGIN(escape_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PANSY_ESCAPE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PAN_E_1"))

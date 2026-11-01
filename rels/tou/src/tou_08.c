@@ -779,6 +779,14 @@ static EVT_BEGIN(evt_1st_leagu)
     RETURN
 EVT_END()
 
+/**
+ * Restroom door (t_door_2) used from the locker room:
+ * Mario gets "OCCUPIED!" (stg3_tou_t_00) while a non-title match is reserved,
+ * before STG3_21_1ST_MATCH_WITH_RAWK_HAWK, from STG3_34_RETURN_TO_ROGUEPORT on,
+ * and in JP and later once the champion's opening scene has played.
+ * Otherwise Mario and the partner walk to the door, it opens with a wood-door sound,
+ * they step through into the restroom and it shuts.
+ */
 // This entrance is available only for the first title-match escape; the return path is separate.
 EVT_BEGIN(evt_toile_door)
 #if VERSION <= VERSION_DEMO_US

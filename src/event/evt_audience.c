@@ -454,6 +454,10 @@ USER_FUNC(evt_audience_num_updown_in_event) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Run when Mario skips the Stylish command.
+ * Up to the US demo it clears AUDIENCE_FLAG_STYLISH_MISSED; the later releases do nothing here.
+ */
 USER_FUNC(evt_audience_acrobat_notry) {
     BattleAudience_Case_AcrobatNoTry();
     return EVT_RETURN_DONE;

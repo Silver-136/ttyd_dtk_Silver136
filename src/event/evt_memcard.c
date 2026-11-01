@@ -33,6 +33,10 @@ USER_FUNC(memcard_code) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_802564b4, JP 0x802564B4. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Clears cardmgr's read buffer so the next check rereads the card;
+ * the retail evt_memcard_check calls it before a retry.
+ */
 USER_FUNC(memcard_buf_reset) {
     cardBufReset();
     return EVT_RETURN_DONE;
@@ -42,6 +46,7 @@ USER_FUNC(memcard_buf_reset) {
 /** Starts watching the card slot for the card being pulled or swapped while a format or create prompt is open. */
 // Descriptive name (not in the symbol maps); placeholder unk_80256490, JP 0x80256490. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Starts watching the card slot for the card being pulled or swapped while a format or create prompt is open. */
 USER_FUNC(memcard_watch_start) {
     cardInsertWatchStart();
     return EVT_RETURN_DONE;
@@ -54,6 +59,10 @@ USER_FUNC(memcard_watch_start) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_80256428, JP 0x80256428. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Sets args[0] to 1 if the card in the slot changed since memcard_watch_start, else 0;
+ * the scripts then print msg_out_mcard_warnning and abandon the format or create.
+ */
 USER_FUNC(memcard_watch_chk) {
     EvtWord* args = event->args;
 
@@ -69,6 +78,7 @@ USER_FUNC(memcard_watch_chk) {
 /** Stops the card-slot watch started by memcard_watch_start. */
 // Descriptive name (not in the symbol maps); placeholder unk_80256404, JP 0x80256404. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Stops the card-slot watch started by memcard_watch_start. */
 USER_FUNC(memcard_watch_end) {
     cardInsertWatchEnd();
     return EVT_RETURN_DONE;
@@ -225,6 +235,11 @@ EVT_BEGIN(evt_memcard_nosave)
     RETURN
 EVT_END()
 
+/**
+ * Demo version of the boot-time card check: reads the card, offers to format it or create the save file, and sets
+ * GF(0) once the game may start. Unlike retail it does not watch for the card being pulled mid-prompt, and a
+ * failed format or create offers to play without saving instead of retrying.
+ */
 EVT_BEGIN(evt_memcard_check)
     SET_VALUE(GF(0), 0)
 #if VERSION <= VERSION_DEMO_US
@@ -865,6 +880,10 @@ EVT_BEGIN(evt_memcard_save)
 EVT_END()
 
 #if VERSION >= VERSION_US
+/**
+ * US/PAL: runs evt_memcard_save, then for any save other than a Save Block (LW(0) nonzero) waits one more
+ * second. Save Blocks, intermissions and the new-file save on the load screen call it.
+ */
 EVT_BEGIN(evt_memcard_save_wrapper)
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(evt_memcard_save)

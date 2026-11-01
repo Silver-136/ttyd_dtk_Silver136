@@ -8,6 +8,11 @@ PADStatus Pad[PAD_MAX_CONTROLLERS];
 /** Bit of each controller port, used by DEMOPadRead to reset ports with no controller attached. */
 u32 PadChanMask[PAD_MAX_CONTROLLERS] = {PAD_CHAN0_BIT, PAD_CHAN1_BIT, PAD_CHAN2_BIT, PAD_CHAN3_BIT};
 
+/**
+ * Updates one demo pad from a PAD read: stick and C-stick directions past 48,
+ * newly pressed and released buttons and directions, and stick deltas.
+ * On a transfer error the edges are cleared and the last state kept.
+ */
 void DEMOPadCopy(PADStatus* pad, DEMOPadStatus* dmpad) {
     u16 dirs;
 

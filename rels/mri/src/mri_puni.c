@@ -1565,6 +1565,10 @@ typedef void* (*PuniHitCheckStartFirst)(f32, f32, f32, void*, f32*, f32*, f32*, 
 #endif
 // Descriptive name (not in the symbol maps); placeholder unk_mri_000095f0, JP mri .text+0x952C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Move step of the limited-speed Puni (JP and later):
+ * like puniMoveAtari but without reflecting the velocity, and on floor 18 a hit simply stops the step.
+ */
 void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
     Vec pa;
     Vec hit;
@@ -1605,6 +1609,11 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
 static const Vec puni_fall_dir;
 // Descriptive name (not in the symbol maps); placeholder unk_mri_0000980c, JP mri .text+0x9748. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Move step with wall collision that reflects the velocity off the wall (JP and later):
+ * the Puni slides along the wall, loses speed as the velocity is mirrored,
+ * and the move is undone if the slid position would cross another wall.
+ */
 void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
     Vec pa;
     Vec hit;
@@ -1891,6 +1900,7 @@ static void puniMoveNormal(PuniData* p) {
     }
 }
 #endif
+/** Moves a Puni by its velocity with no collision at all. */
 void puniMoveSimple(PuniData* p) {
     if (PSVECMag(&p->vel)) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
@@ -2772,8 +2782,16 @@ void puniModeSearch(PuniData* p) {
  * nudging away when too close and jittering sideways on floors 13 and 18 when it stands still.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Gather mode: the Puni walks to a gather target (targets with PUNI_TARGET_FLAG_MASS, e.g. a Puni Orb pedestal),
+ * nudging away when too close and jittering sideways on floors 13 and 18 when it stands still.
+ */
 static void puniModeMass(PuniData* p) {
 #else
+/**
+ * Gather mode: the Puni walks to a gather target (targets with PUNI_TARGET_FLAG_MASS, e.g. a Puni Orb pedestal),
+ * nudging away when too close and jittering sideways on floors 13 and 18 when it stands still.
+ */
 void puniModeMass(PuniData* p) {
 #endif
     Vec v;
@@ -3306,6 +3324,7 @@ void puniModeRecover(PuniData* p) {
 
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
 #if VERSION <= VERSION_DEMO_US
+/** The demo's puni main loop calls this directly with the sound name; every version reaches it through puniModeDead. */
 // The demo's puni main loop calls this directly with the sound name.
 static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
     switch (p->modeStep) {
@@ -3323,10 +3342,12 @@ static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
     }
 }
 
+/** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
 void puniModeDead(PuniData* p) {
     puniModeDeadSfx(p, "SFX_STG2_FIGHT_TOGE3");
 }
 #else
+/** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
 void puniModeDead(PuniData* p) {
     switch (p->modeStep) {
         case 0:
@@ -3550,8 +3571,22 @@ void puniModeWind(PuniData* p) {
  * a Puni that falls out of the world is put back at the recovery position.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Fall mode: the Puni falls under gravity (0.45 per frame) until it hits something.
+ * Depending on what it lands on (attribute 0x100, 0x200,
+ * a pit marker target or ordinary floor) it chooses the next mode:
+ * the trap/pedestal modes, the water mode or lost mode;
+ * a Puni that falls out of the world is put back at the recovery position.
+ */
 static void puniModeFall(PuniData* p) {
 #else
+/**
+ * Fall mode: the Puni falls under gravity (0.45 per frame) until it hits something.
+ * Depending on what it lands on (attribute 0x100, 0x200,
+ * a pit marker target or ordinary floor) it chooses the next mode:
+ * the trap/pedestal modes, the water mode or lost mode;
+ * a Puni that falls out of the world is put back at the recovery position.
+ */
 void puniModeFall(PuniData* p) {
     Vec start;
 #endif
@@ -3860,6 +3895,11 @@ p->timer = 20;
     }
 }
 #else
+/**
+ * Wonder mode: pops the soap bubble (sound and burst effect),
+ * then after 20 frames the Puni gets a hop animation and goes to the funbari mode.
+ * The demo build has this as a helper taking the sound name.
+ */
 void puniModeWonder(PuniData* p) {
     Vec pos;
 
@@ -3897,10 +3937,19 @@ void puniModeWonder(PuniData* p) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Wonder mode: pops the soap bubble (sound and burst effect),
+ * then after 20 frames the Puni gets a hop animation and goes to the funbari mode.
+ * The demo build has this as a helper taking the sound name.
+ */
 static void puniModeWonder(PuniData* p) {
     puniModeWonderSfx(p, "SFX_STG2_SOAPBALL_BREAK1");
 }
 #endif
+/**
+ * Inline copy of the speed-limited wall-collision move (see puniMoveLimitedNormal) taking the start
+ * and direction by pointer; used by puniModeFunbari in the US and later releases.
+ */
 static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
     Vec pa;
     Vec hit;
@@ -4963,6 +5012,12 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
 
 // Descriptive name (not in the symbol maps); placeholder fn_19_13A90, JP mri .text+0x13A90. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Moves one Puni according to its mode (JP and later):
+ * the following, fighting and walking modes use the normal move with speed limit and slowdown,
+ * the gather mode the speed-limited move, damage the plain move, the scripted mode its own moveFunc;
+ * flee, wind and updraft modes have already moved themselves. Every mode then sets the Puni's height.
+ */
 void puniMoveMain(PuniData* p) {
     switch (p->mode) {
         case PUNI_MODE_IDLE:
@@ -5210,6 +5265,11 @@ void puniOption(void) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_mri_00014ad4, JP mri .text+0x14A10. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Same push-apart pass as puniOption for slots 0 to 109 (JP and later),
+ * used outside the two battle floors where there are no Jabbi slots:
+ * separates overlapping Punies and blockers and caps the speed at 8.
+ */
 void puniCollideAll(void) {
     PuniData* p;
     PuniData* q;
@@ -6288,8 +6348,24 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
  * The blockers 103 to 109 are placed at the down pipes.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Sets up the Puni crowd when a map starts (called through mri_puni_init).
+ * args[0] = 2 means the map was entered through a loading zone, whose direction in args[2] sets the entry flags;
+ * Punies that Mario had with him (those the story has recruited: Punio, his sister, the little Jabbi,
+ * the rival and the first GSW_MRI_PUNI_FOLLOWERS+4 others) are placed either beside Mario after a save load,
+ * walking in from the loading zone, or at their saved lost position; trapped ones are skipped.
+ * The blockers 103 to 109 are placed at the down pipes.
+ */
 static USER_FUNC(evt_puni_setup) {
 #else
+/**
+ * Sets up the Puni crowd when a map starts (called through mri_puni_init).
+ * args[0] = 2 means the map was entered through a loading zone, whose direction in args[2] sets the entry flags;
+ * Punies that Mario had with him (those the story has recruited: Punio, his sister, the little Jabbi,
+ * the rival and the first GSW_MRI_PUNI_FOLLOWERS+4 others) are placed either beside Mario after a save load,
+ * walking in from the loading zone, or at their saved lost position; trapped ones are skipped.
+ * The blockers 103 to 109 are placed at the down pipes.
+ */
 USER_FUNC(evt_puni_setup) {
 #endif
     EvtWord* args = event->args;
@@ -7646,8 +7722,18 @@ USER_FUNC(puni_disp_info_kassencheck) {
  * packed in the parameter) with the icon for the counter background, faded by the counter opacity.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draw callback for the Puni counter at the lower left of the screen: skipped while a shop menu is open;
+ * draws the pair of numbers (count in the map and total with Mario,
+ * packed in the parameter) with the icon for the counter background, faded by the counter opacity.
+ */
 static void puniCountDisp(CameraId unused, void* param) {
 #else
+/**
+ * Draw callback for the Puni counter at the lower left of the screen: skipped while a shop menu is open;
+ * draws the pair of numbers (count in the map and total with Mario,
+ * packed in the parameter) with the icon for the counter background, faded by the counter opacity.
+ */
 void puniCountDisp(CameraId unused, void* param) {
 #endif
     EvtWord packed = (EvtWord)param;

@@ -91,6 +91,7 @@ static void npc_report_pos(NpcEntry* npc) {
     OSReport("%f%f%f", npc->position.x, npc->position.y, npc->position.z);
 }
 #endif
+/** const char* lookupName */
 USER_FUNC(evt_npc_delete) {
     const char* name;
     NpcEntry* npc;
@@ -2015,6 +2016,11 @@ USER_FUNC(evt_npc_battle_start) {
  * The US release also runs marioFBattlePost.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Blocks until a field battle has ended and the game is back in the field sequence with a result,
+ * then gives control back to Mario and the partner and stops the battle music handling.
+ * The US release also runs marioFBattlePost.
+ */
 USER_FUNC(evt_npc_wait_battle_end) {
     FieldBattleInfo* info = &fbatGetPointer()->info;
     PartyEntry* party;
@@ -2034,6 +2040,11 @@ psndClearFlag(PSND_FLAG_BATTLE_START);
 return EVT_RETURN_DONE;
 }
 #else
+/**
+ * Blocks until a field battle has ended and the game is back in the field sequence with a result,
+ * then gives control back to Mario and the partner and stops the battle music handling.
+ * The US release also runs marioFBattlePost.
+ */
 USER_FUNC(evt_npc_wait_battle_end) {
     FieldBattleInfo* info = &fbatGetPointer()->info;
     PartyEntry* party;
@@ -2152,6 +2163,10 @@ USER_FUNC(evt_npc_get_drop_fixitem) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Writes the item the defeated enemy NPC args[0] drops to args[1] (0 if its battle flags forbid drops).
+ * The demo releases always write 0.
+ */
 USER_FUNC(evt_npc_get_drop_item) {
     EvtWord* args = event->args;
     const char* npcName = (const char*)evtGetValue(event, *args++);
@@ -2589,8 +2604,18 @@ USER_FUNC(evt_npc_calc_score) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Puffs broom smoke (kemuri) behind Kamek's broom every 8
+ * or 16 frames depending on the animation state (3 or 2), sized by the NPC's scale.
+ * On kpa_01 the smoke is drawn on camera 7 (not in the JP demo).
+ */
 static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
 #else
+/**
+ * Puffs broom smoke (kemuri) behind Kamek's broom every 8
+ * or 16 frames depending on the animation state (3 or 2), sized by the NPC's scale.
+ * On kpa_01 the smoke is drawn on camera 7 (not in the JP demo).
+ */
 void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
 #endif
     static u8 cnt;

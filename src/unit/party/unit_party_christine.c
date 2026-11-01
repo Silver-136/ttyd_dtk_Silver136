@@ -252,6 +252,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -1134,6 +1135,11 @@ EVT_END()
  * announcement). Ends with an optional stylish.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Goombella's Rally Wink: she blows a kiss at Mario;
+ * with a successful action command he gets another move this turn (_set_hustle and the quick-change
+ * announcement). Ends with an optional stylish.
+ */
 EVT_BEGIN(partyChristineAttack_Kiss)
     // Find the chosen ally and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -1268,6 +1274,11 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     RETURN
 EVT_END()
 #else
+/**
+ * Goombella's Rally Wink: she blows a kiss at Mario;
+ * with a successful action command he gets another move this turn (_set_hustle and the quick-change
+ * announcement). Ends with an optional stylish.
+ */
 EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1595,12 +1606,14 @@ PoseTableEntry pose_table_dictionary_page[] = {
 };
 #endif
 #endif
+/** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
 /** Victory reaction (data tag 64): Goombella's PKR_Y_1 cheer for 64 frames, then her stay pose. */
 #if VERSION > VERSION_DEMO_US
+/** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -1759,8 +1772,18 @@ USER_FUNC(_dictionary) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Rally Wink effect on unit args[0]: if it has no moves left this turn it gets one more,
+ * otherwise it is flagged for an extra move.
+ * The US and later releases also raise its max moves and mark Rally Wink when it is slowed.
+ */
 static USER_FUNC(_set_hustle) {
 #else
+/**
+ * Rally Wink effect on unit args[0]: if it has no moves left this turn it gets one more,
+ * otherwise it is flagged for an extra move.
+ * The US and later releases also raise its max moves and mark Rally Wink when it is slowed.
+ */
 USER_FUNC(_set_hustle) {
 #endif
     BattleWork* wp = _battleWorkPointer;

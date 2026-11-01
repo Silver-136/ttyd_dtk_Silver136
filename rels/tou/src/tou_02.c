@@ -877,6 +877,14 @@ EVT_END()
  * name (LW(10)).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Talk script of the fifth Toad (キノピオ５), a parent who brought their son to the Glitz Pit: before Gonzales
+ * debuts the son is a fan of Prince Mush (stg3_npc_02_06_01);
+ * until the title match the line follows Mario's rank
+ * (02 to 05), then congratulations (06) and, after the chapter, a farewell (07) or, when Mario re-entered the
+ * league, the stg3_npc_re_031/032 lines. With Yoshi as the partner the _yos variants address him by the Yoshi's
+ * name (LW(10)).
+ */
 EVT_BEGIN(talk_kino5)
     CALL(evt_pouch_get_yoshiname, LW(10))
     SWITCH(GSW_STORY_PROGRESS)
@@ -965,6 +973,14 @@ ELSE
     RETURN
 EVT_END()
 #else
+/**
+ * Talk script of the fifth Toad (キノピオ５), a parent who brought their son to the Glitz Pit: before Gonzales
+ * debuts the son is a fan of Prince Mush (stg3_npc_02_06_01);
+ * until the title match the line follows Mario's rank
+ * (02 to 05), then congratulations (06) and, after the chapter, a farewell (07) or, when Mario re-entered the
+ * league, the stg3_npc_re_031/032 lines. With Yoshi as the partner the _yos variants address him by the Yoshi's
+ * name (LW(10)).
+ */
 EVT_BEGIN(talk_kino5)
     CALL(evt_pouch_get_yoshiname, LW(10))
     SWITCH(GSW_STORY_PROGRESS)
@@ -1872,8 +1888,18 @@ ExtTexInfo ext_fan_data[] = {
  * and starts the crowd noise SFX_STG3_AUDIENCE_FAN1, keeping its full volume.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Init callback of the lobby fan crowd (extdrv sprites): allocates FanWork and one Fan per pose, gives each fan
+ * a random facing, a random Toad, Toadette or Lakitu walk animation and a random spot within 100 of the centre,
+ * and starts the crowd noise SFX_STG3_AUDIENCE_FAN1, keeping its full volume.
+ */
 static void ext_fan_init(void) {
 #else
+/**
+ * Init callback of the lobby fan crowd (extdrv sprites): allocates FanWork and one Fan per pose, gives each fan
+ * a random facing, a random Toad, Toadette or Lakitu walk animation and a random spot within 100 of the centre,
+ * and starts the crowd noise SFX_STG3_AUDIENCE_FAN1, keeping its full volume.
+ */
 void ext_fan_init(void) {
 #endif
     s32 i;
@@ -1943,8 +1969,22 @@ void fan_disp(CameraId camera, void* param) {
 #pragma opt_propagation off
 static Vec fan_zero;
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame callback of the fan crowd: the fans press toward the target (Mario when GF(10) is set, otherwise the
+ * champion, with Mario also in the crowd), push each other apart and bounce off walls; a fan that Mario's hammer
+ * hits (check_hammer 1) flies off in an arc, one caught in Flurrie's gust (2) drifts away, and both then vanish;
+ * the crowd noise follows the target and its volume the share of fans left (count).
+ * The demos and the releases have different bodies.
+ */
 static void ext_fan_main(void) {
 #else
+/**
+ * Per-frame callback of the fan crowd: the fans press toward the target (Mario when GF(10) is set, otherwise the
+ * champion, with Mario also in the crowd), push each other apart and bounce off walls; a fan that Mario's hammer
+ * hits (check_hammer 1) flies off in an arc, one caught in Flurrie's gust (2) drifts away, and both then vanish;
+ * the crowd noise follows the target and its volume the share of fans left (count).
+ * The demos and the releases have different bodies.
+ */
 void ext_fan_main(void) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -2314,6 +2354,11 @@ void ext_fan_main(void) {
 static __declspec(section ".rodata") Vec fan_zero = {0.0f, 0.0f, 0.0f};
 #pragma opt_propagation reset
 
+/**
+ * Loop spawned while the fans mob Mario (GF(10) set): every 2 to 7 s a fan's cry for Gonzales (stg3_tou_236 to
+ * 240 and 240_01, in turn) pops up with its tail at a random spot (near Mario in the demos, within -50 to 150 of
+ * the lobby centre in the releases); it ends once fewer than 10 fans are left.
+ */
 EVT_BEGIN(mario_momikucha_msg)
     SET_VALUE(LW(10), 0)
     LOOP(0)
@@ -2527,8 +2572,22 @@ void ext_fan_dispent(void) {
 
 #pragma opt_propagation off
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Checks whether a fan is knocked away, only while Mario is on the ground: returns 1 when his hammer swing (more
+ * than 10 frames in) lands within 35 of the fan 35 in front of him,
+ * or his spin hammer (submotion 0x14) is within 65;
+ * 2 when Flurrie's gust reaches within 30 of it; 0 otherwise. In JP and later, the fan standing in for Mario or
+ * the champion (flags bit 1) is never hit.
+ */
 static s32 check_hammer(Fan* fan) {
 #else
+/**
+ * Checks whether a fan is knocked away, only while Mario is on the ground: returns 1 when his hammer swing (more
+ * than 10 frames in) lands within 35 of the fan 35 in front of him,
+ * or his spin hammer (submotion 0x14) is within 65;
+ * 2 when Flurrie's gust reaches within 30 of it; 0 otherwise. In JP and later, the fan standing in for Mario or
+ * the champion (flags bit 1) is never hit.
+ */
 s32 check_hammer(Fan* fan) {
 #endif
     MarioWork* mario = marioGetPtr();

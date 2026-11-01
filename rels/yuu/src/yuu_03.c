@@ -110,6 +110,7 @@ EvtWord yuu_03_init_evt[VERSION_PICK(26, 140)];
 /** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_0000371c, JP yuu .text+0x3650. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
 USER_FUNC(yuu_03_cam_shift_reset) {
     camShiftReset();
     return EVT_RETURN_DONE;
@@ -143,6 +144,10 @@ void yuu_03_icon_monte_disp(CameraId camera, void* param) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_000034bc, JP yuu .text+0x33F0. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * View event that creates the single marker icon on its first call,
+ * keeps it 40 units above Mario every frame and draws it through yuu_03_icon_monte_disp. Blocks forever.
+ */
 USER_FUNC(yuu_03_icon_monte_entry) {
     BOOL exists = FALSE;
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
@@ -195,6 +200,10 @@ USER_FUNC(yuu_03_icon_monte_entry) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_0000341c, JP yuu .text+0x3350. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Rebuilds the marker icon view event for the next round:
+ * stops the old event, frees the icon array and starts a new one.
+ */
 USER_FUNC(yuu_03_icon_monte_restart) {
     SlitWork* data;
 
@@ -477,8 +486,16 @@ USER_FUNC(evt_ryushi_clr) {
  * wraps them around the view, fades them in and out with the state timer, and queues ryushi_disp.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame update of the wind particles: moves them at a speed set by the current Paper Mode wind state,
+ * wraps them around the view, fades them in and out with the state timer, and queues ryushi_disp.
+ */
 static USER_FUNC(evt_ryushi) {
 #else
+/**
+ * Per-frame update of the wind particles: moves them at a speed set by the current Paper Mode wind state,
+ * wraps them around the view, fades them in and out with the state timer, and queues ryushi_disp.
+ */
 USER_FUNC(evt_ryushi) {
 #endif
     RyushiWork* hdr = xwp;
@@ -600,6 +617,7 @@ speed = 3.3333333f;
 
 /** Event wrapper that runs yuu_03_icon_monte_entry as a blocking view event. */
 #if VERSION > VERSION_DEMO_US
+/** Event wrapper that runs yuu_03_icon_monte_entry as a blocking view event. */
 EVT_BEGIN(yuu_03_icon_monte_entry_evt)
     CALL(yuu_03_icon_monte_entry)
     RETURN

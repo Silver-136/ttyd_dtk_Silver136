@@ -337,6 +337,10 @@ EVT_END()
  * if the timid sailor has not yet been persuaded, otherwise he talks according to the story stage.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
+ * if the timid sailor has not yet been persuaded, otherwise he talks according to the story stage.
+ */
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_17_WINE_OBTAINED)
@@ -587,6 +591,10 @@ LOOP(3)
     RETURN
 EVT_END()
 #else
+/**
+ * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
+ * if the timid sailor has not yet been persuaded, otherwise he talks according to the story stage.
+ */
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_17_WINE_OBTAINED)
@@ -2279,6 +2287,12 @@ static USER_FUNC(starstone_set_ry) {
  * and the game returns to pik_01 at "sekai_yami2".
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The world-goes-dark cutaway at STG8_15_GRODUS (entered from "sekai_yami2"):
+ * control is taken, the camp is drawn dark with the camera shaking and a quake sound,
+ * four sailors run back and forth in panic, someone screams for help (stg8_dark_06), the screen flashes,
+ * and the game returns to pik_01 at "sekai_yami2".
+ */
 static EVT_BEGIN(sekai_yami_evt)
     // The darkening of the world: Mario loses control and the island starts to shake.
     CALL(evt_mario_key_onoff, 0)
@@ -2362,6 +2376,12 @@ CALL(evt_snd_sfxoff, LW(0))
     RETURN
 EVT_END()
 #else
+/**
+ * The world-goes-dark cutaway at STG8_15_GRODUS (entered from "sekai_yami2"):
+ * control is taken, the camp is drawn dark with the camera shaking and a quake sound,
+ * four sailors run back and forth in panic, someone screams for help (stg8_dark_06), the screen flashes,
+ * and the game returns to pik_01 at "sekai_yami2".
+ */
 static EVT_BEGIN(sekai_yami_evt)
     // The darkening of the world: Mario loses control and the island starts to shake.
     CALL(evt_mario_key_onoff, 0)

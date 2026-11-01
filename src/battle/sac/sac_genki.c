@@ -462,8 +462,20 @@ void main_target(void) {
  * and a poison mushroom makes Mario dizzy. The audience cheers or boos.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Moves one of Mario's shots (with a three-point trail):
+ * launches it from Mario at the reticle angle under gravity, and when it comes close to a falling item pops it:
+ * hearts add 1 to Mario's HP total (big ones 3), partner icons to the partner's HP, flowers to FP,
+ * and a poison mushroom makes Mario dizzy. The audience cheers or boos.
+ */
 static void main_weapon(s32 idx) {
 #else
+/**
+ * Moves one of Mario's shots (with a three-point trail):
+ * launches it from Mario at the reticle angle under gravity, and when it comes close to a falling item pops it:
+ * hearts add 1 to Mario's HP total (big ones 3), partner icons to the partner's HP, flowers to FP,
+ * and a poison mushroom makes Mario dizzy. The audience cheers or boos.
+ */
 void main_weapon(s32 idx) {
 #endif
     GenkiWork* w = get_ptr();
@@ -1253,6 +1265,11 @@ static void disp_3D_alpha(CameraId cam, void* param) {
 
 
 
+/**
+ * Shared body of Sweet Treat and Sweet Feast; LW(15) is the mode (0 or 1).
+ * Pays the Star Power, plays the star intro, moves Mario left, runs the shooting game, then restores Mario's HP,
+ * the partner's HP and FP by the three scores, cures both of bad statuses and slides the enemies back.
+ */
 EVT_BEGIN(genki_evt_common)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(13))
     CALL(btlevtcmd_GetBodyId, LW(13), LW(14))
@@ -1532,6 +1549,10 @@ static USER_FUNC(star_stone_appear) {
     return 2;
 }
 
+/**
+ * Clears the turns left on the command blocks set by Bowser's command-blocking attacks (US and PAL keep two of
+ * them on the partner unit); part of status_recover_evt's cure.
+ */
 USER_FUNC(recover_cmd_disable) {
     BattleWork* w = _battleWorkPointer;
     w->commandDisabled[0] = 0;

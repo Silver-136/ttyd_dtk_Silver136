@@ -459,6 +459,14 @@ static inline BOOL marioChkYoshiKey(void) {
     return FALSE;
 }
 
+/**
+ * TRUE when the pause menu may not open now: control off, playing Peach or Bowser in the side view, mid-hammer,
+ * accordion, plane or boat changing form, taking damage, in the air, Bobbery busy,
+ * or a partner action holding the keys.
+ * In the Pianta Parlor game rooms (yuu_) only the control and key locks count.
+ * Called by win_main and a dou_04 script call; with Vivian in use,
+ * the US and PAL releases also block it while her party entry has flag 0x80000000.
+ */
 BOOL marioCheckMenuDisable(void) {
     MarioWork* wp = mp;
 
@@ -608,6 +616,12 @@ void marioFBattlePrepare(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Undoes marioFBattlePrepare once the battle start is over or cancelled:
+ * restores movement, puts Mario back after the accordion motion, gets him off Yoshi,
+ * gives the partner control back and ends a hammer swing.
+ * The US and PAL releases also move the partner back to its spot beside Mario.
+ */
 void marioFBattlePost(void) {
     MarioWork* wp = mp;
 
@@ -621,6 +635,12 @@ marioChgMot(MARIO_MOTION_STAY);
     }
 }
 #else
+/**
+ * Undoes marioFBattlePrepare once the battle start is over or cancelled:
+ * restores movement, puts Mario back after the accordion motion, gets him off Yoshi,
+ * gives the partner control back and ends a hammer swing.
+ * The US and PAL releases also move the partner back to its spot beside Mario.
+ */
 void marioFBattlePost(void) {
     MarioWork* wp = mp;
 
@@ -949,6 +969,11 @@ void marioInit(void) {
     partyInit();
 }
 
+/**
+ * Resets MarioWork on a map change (seq_mapchange) but keeps the character, pose sets, current motion, facing,
+ * partners, camera and 8-bit mode; the rest is cleared and the partners, balloon,
+ * blur trail and camera shift are reset. The US demo carries flag 0x200000 over as the party-walk lock.
+ */
 void marioReInit(void) {
     CameraId camId;
     s32 slot0;
@@ -1148,6 +1173,13 @@ static inline BOOL marioChkRollMot2(void) {
     return ret;
 }
 
+/**
+ * Mario's per-frame update, run from mariost while he is active:
+ * outfit and Slow Go checks, the Moon's low gravity (moo maps), invincibility and coin-drop timers, input,
+ * partner use and motion, then the movement, ground and wall checks for his state, bottomless pits,
+ * display set-up, balloon, partner and camera. Bowser and Peach hand off to kpaMain/peachMain.
+ * The US demo always rechecks the outfit and has no Slow Go walk forcing here.
+ */
 void marioMain(void) {
     MarioWork* wp = mp;
 #if VERSION > VERSION_DEMO_US
@@ -1387,8 +1419,16 @@ static inline BOOL marioChkRollMot(void) {
  * so a jump or fall finishes; skipped for plane, boat, damage, pits, accordion, Yoshi and Vivian's shadow.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Runs Mario's motion and physics while control is off through marioCtrlOff2 (the pause menu opening),
+ * so a jump or fall finishes; skipped for plane, boat, damage, pits, accordion, Yoshi and Vivian's shadow.
+ */
 static void marioCtrlOff2Main(void) {
 #else
+/**
+ * Runs Mario's motion and physics while control is off through marioCtrlOff2 (the pause menu opening),
+ * so a jump or fall finishes; skipped for plane, boat, damage, pits, accordion, Yoshi and Vivian's shadow.
+ */
 void marioCtrlOff2Main(void) {
 #endif
     MarioWork* wp = mp;
@@ -1556,8 +1596,20 @@ void marioMove(void) {
  * from the Japanese release on) and spikes.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Mario's horizontal movement: forced moves (Yoshi, tube, boat),
+ * air steering from the stick (weaker with Slow Go or as a tube), shallow-water slowdown, damage floors,
+ * slopes and moving floors, the air speed cap, then the wall checks (plus the dou_10 side spears while a tube,
+ * from the Japanese release on) and spikes.
+ */
 static void marioMoveMain(void) {
 #else
+/**
+ * Mario's horizontal movement: forced moves (Yoshi, tube, boat),
+ * air steering from the stick (weaker with Slow Go or as a tube), shallow-water slowdown, damage floors,
+ * slopes and moving floors, the air speed cap, then the wall checks (plus the dou_10 side spears while a tube,
+ * from the Japanese release on) and spikes.
+ */
 void marioMoveMain(void) {
 #endif
     MarioWork* wp = mp;
@@ -1793,6 +1845,10 @@ const char* dotMarioPose[4][6] = {
     {"Z_18", "S_4", "W_18", "R_18", "U_4", "J_4"}
 };
 #endif
+/**
+ * Maps a normal Mario pose (idle, stand, walk, run, jump) to the matching 8-bit pose for his outfit colour;
+ * NULL for poses 8-bit Mario lacks.
+ */
 const char* toDotMarioPose(const char* name) {
     const char* dot = NULL;
 
@@ -2295,6 +2351,10 @@ inline BOOL marioChkRevDir(f32 angle) {
     return ret;
 }
 
+/**
+ * Draws one ghost of Mario's motion-blur trail at recorded position blurId, more transparent the older it is;
+ * used by marioDispBlur.
+ */
 void marioDispBlurSub(Mtx unused, s32 blurId) {
     MarioWork* wp = mp;
     Mtx mtx;
@@ -2371,6 +2431,10 @@ void marioDispBlurSub(Mtx unused, s32 blurId) {
 }
 
 #pragma opt_dead_assignments off
+/**
+ * Draw callback for Mario with motion blur: draws the seven older trail positions as fading ghosts through
+ * marioDispBlurSub. The angle values it computes are never used.
+ */
 void marioDispBlur(CameraId camId, void* param) {
     MarioWork* wp = param;
     s32 i;
@@ -2428,8 +2492,16 @@ void marioDispBlur(CameraId camId, void* param) {
  * offsets and tube squash, draws the pose and runs the animation at 75% speed in shallow water.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draw callback for Mario: builds his model matrix from scale, the facing mirror, rotation,
+ * offsets and tube squash, draws the pose and runs the animation at 75% speed in shallow water.
+ */
 static void marioDisp(CameraId camId, void* param) {
 #else
+/**
+ * Draw callback for Mario: builds his model matrix from scale, the facing mirror, rotation,
+ * offsets and tube squash, draws the pose and runs the animation at 75% speed in shallow water.
+ */
 void marioDisp(CameraId camId, void* param) {
 #endif
     MarioWork* wp = mp;
@@ -2509,6 +2581,7 @@ f32 yofs = 0.0f;
     animPoseSetLocalTimeRate(wp->paperAnimGroupId[marioAnimeId()], (wp->flags & MARIO_FLAG_IN_SHALLOW_WATER) ? 0.75f : 1.0f);
 }
 
+/** Returns the back-facing version of a Mario or Peach pose name, or NULL if it has none; PAL adds M_I_3. */
 const char* toRearPose(const char* name) {
     const char* rear = NULL;
     if (mp->characterId == CHARACTER_PEACH && !(mp->peachFlags & PEACH_FLAG_GUNDAN)) {

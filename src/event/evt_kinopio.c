@@ -289,6 +289,11 @@ USER_FUNC(cameraman_on) {
  */
 //.data
 #if VERSION <= VERSION_DEMO_US
+/**
+ * .data The innkeeper's talk script: asks to stay, takes an Inn Coupon or the price,
+ * puts Mario to bed with a spotlight fade and sleep music, restores HP/FP and partners,
+ * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
+ */
 EVT_BEGIN(kinopio_house_talk_evt)
     // The innkeeper greets Mario with the night's price in the coin window and asks if he will stay;
     // "no" ends it.
@@ -487,6 +492,11 @@ CALL(get_npcname, LW(11))
     RETURN
 EVT_END()
 #else
+/**
+ * .data The innkeeper's talk script: asks to stay, takes an Inn Coupon or the price,
+ * puts Mario to bed with a spotlight fade and sleep music, restores HP/FP and partners,
+ * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
+ */
 EVT_BEGIN(kinopio_house_talk_evt)
     // The innkeeper greets Mario with the night's price in the coin window and asks if he will stay;
     // "no" ends it.
@@ -698,6 +708,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
 EVT_END()
 #endif
 
+/** Retail 50th-stay celebration with the Lakitu cameraman's photo and the 200-coin gift; see the demo version above. */
 EVT_BEGIN(evt_50)
     CALL(get_npcname, LW(10))
 #if VERSION > VERSION_DEMO_US

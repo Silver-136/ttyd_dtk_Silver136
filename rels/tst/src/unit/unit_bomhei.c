@@ -291,6 +291,14 @@ static BattleWeapon weapon_bomhei_bomb = {
     {0, 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * The Bob-omb explodes: it shakes the camera, hides itself,
+ * stops the fuse hiss (unit work 0 is the sound handle, then -1),
+ * plays SFX_BTL_ENEMY_DIE1_2 and SFX_BTL_ENM_BOMB_ATTACK2 with the sandars blast effect, clears any fog,
+ * stores its coin and experience rewards, waits one second and removes itself from the battle.
+ * When it was set off by its own attack (LW(15) = 1 in the later versions) it first waits for that attack to
+ * end.
+ */
 static EVT_BEGIN(bomb_event)
     CALL(evt_btl_camera_shake_w, 0, 5, 0, 15, 0)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
@@ -418,6 +426,11 @@ static EVT_BEGIN(change_spark_event)
     RETURN
 EVT_END()
 
+/**
+ * The Bob-omb's attack with the fuse unlit: uses an item or picks a target,
+ * scurries toward it (SFX_ENM_BOMB_MOVE1, pose type 42) and rams it;
+ * a miss lets it dodge past, a hit applies the damage with SFX_ENM_BOMB_MOVE3, and it walks back.
+ */
 static EVT_BEGIN(attack_event)
 #if VERSION > VERSION_DEMO_US
     // Use an item if it has one; otherwise pick a target (a confused Bob-omb with nobody to bump gets

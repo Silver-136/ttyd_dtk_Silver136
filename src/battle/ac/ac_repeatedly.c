@@ -120,6 +120,12 @@ static void _init_param(BattleWork* work) {
     work->actionCommands.outputParams[0] = 0;
 }
 
+/**
+ * Per-frame driver of action command 5, used when running away from battle and by Goombella's Rally Wink.
+ * Each press adds params[5] x a difficulty factor (higher in the demos) to the gauge, which drains every frame;
+ * the gauge locks once full.
+ * After the time limit it succeeds when the gauge has reached the target mark or filled.
+ */
 s32 battleAcMain_Repeatedly(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     RepeatWork* r = (RepeatWork*)ac->work;

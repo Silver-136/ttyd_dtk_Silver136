@@ -57,6 +57,13 @@ static void BattleAudienceCtrlProcessKinopioAudBall(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioSingSub(s32 index);
 void BattleAudienceCtrlProcessKinopioFireSub(s32 index);
 
+/**
+ * Per-frame update of one audience member, whatever its kind (the "Kinopio" Toad routine is shared by all):
+ * runs the handler for its status (0 idle, 1-3 idle fidgets, 4-6 cheering, 7-8 item throw, 9 booing, 10 hit,
+ * 11 enter, 12 leave, 13 asleep, 14-20 the kind-specific phase events; 21-22 empty, demos only),
+ * then integrates velocity and hop height and works out the draw position.
+ * Boos bob up and down; Piranha Plants never hop.
+ */
 void BattleAudienceCtrlProcessKinopio(s32 index) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     BOOL front = BattleAudience_GetFront(index);
@@ -1531,8 +1538,10 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
     }
 }
 #if VERSION <= VERSION_DEMO_US
+/** Status 21, demos only: empty (Guess: a no-gravity state, from the name); retail drops the case. */
 static void BattleAudienceCtrlProcessKinopioNoGravity(s32 index, s32 front) {
 }
+/** Status 22, demos only: empty; whatever the "audience ball" event was, it was cut. */
 static void BattleAudienceCtrlProcessKinopioAudBall(s32 index, s32 front) {
 }
 #endif

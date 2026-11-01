@@ -308,6 +308,10 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo);
  * the BP panel with total and remaining BP and a pip per BP point, then the badge list via badge_disp.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the Badges window (menu slot n): the two tabs,
+ * the BP panel with total and remaining BP and a pip per BP point, then the badge list via badge_disp.
+ */
 void winBadgeDisp(s32 camId, void* param, s32 n) {
     WindowWork* w = param;
     GXColor white = {255, 255, 255, 255};
@@ -356,6 +360,10 @@ winTexInit((TEXPalette*)*w->res->data);
     badge_disp(w, x, y);
 }
 #else
+/**
+ * Draws the Badges window (menu slot n): the two tabs,
+ * the BP panel with total and remaining BP and a pip per BP point, then the badge list via badge_disp.
+ */
 void winBadgeDisp(s32 camId, void* param, s32 n) {
     WindowWork* w = param;
     GXColor white = {255, 255, 255, 255};
@@ -423,6 +431,11 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the scrolling badge list for the current tab:
+ * equipped highlight, icon, name, BP cost and cost pips, plus the page arrows and the Z sort hint.
+ * The JP and later releases gray out badges Mario cannot afford.
+ */
 static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     ItemData* item;
     s8* cost;
@@ -515,6 +528,11 @@ if (w->badge.page[w->badge.tab] > 0) {
     }
 }
 #else
+/**
+ * Draws the scrolling badge list for the current tab:
+ * equipped highlight, icon, name, BP cost and cost pips, plus the page arrows and the Z sort hint.
+ * The JP and later releases gray out badges Mario cannot afford.
+ */
 void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     WindowWork* p0;
     ItemData* item;

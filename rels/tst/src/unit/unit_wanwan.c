@@ -354,6 +354,14 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table events 25-36, which btldefaultevt_Damage runs for damage codes 44-55 when a counter (spikes, fire,
+ * ice, electricity, explosions, poison, Payback, Hold Fast) hurts the Chomp while attacking:
+ * the Chomp's head recoils 25 units back and up in the damage pose and hangs for 30 frames,
+ * then the camera resets. The two demos also bounce it twice down to the floor first.
+ * It restarts its wait event unless the counter knocked it out (KO flag 0x200 without the Life Shroom flag
+ * 0x800).
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_SetPartsFallAccel, LW(10), 1, FLOAT(1.0f))

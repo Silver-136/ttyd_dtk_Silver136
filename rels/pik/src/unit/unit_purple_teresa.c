@@ -770,6 +770,12 @@ static EVT_BEGIN(trans_event)
     RETURN
 EVT_END()
 
+/**
+ * The Dark Boo's group move: for every Boo that has not moved yet (unit work 0 = 0) it starts move_event_sub,
+ * adding 20 frames to the wait each time, then waits 80 frames plus that before returning to the S_1 pose.
+ * The EU release also counts the Boos and guarantees a minimum wait of 145 frames,
+ * but its count is cleared on every pass and never reaches 2.
+ */
 static EVT_BEGIN(move_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_teresa_move))

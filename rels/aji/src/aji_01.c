@@ -182,6 +182,11 @@ extern EvtWord aji_01_init_evt[];
 EvtWord aji_01_init_evt[171];
 #endif
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w1_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -194,6 +199,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w1_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -206,6 +216,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door2_2
+ * and S_door2_1 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(e1_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -218,6 +233,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door2_2
+ * and S_door2_1 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(e1_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -230,6 +250,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door3_1
+ * and S_door3_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w2_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -242,6 +267,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door3_1
+ * and S_door3_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w2_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -254,6 +284,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door4_2
+ * and S_door4_1 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(e2_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -266,6 +301,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door4_2
+ * and S_door4_1 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(e2_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -376,6 +416,10 @@ EVT_BEGIN(n4_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Slides the double door w3 (S_door5_1 and S_door5_2) along Z by LW(0) scaled by 0.25 (0.2217 in the demos);
+ * door animation of the w3 exit.
+ */
 EVT_BEGIN(w3_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -401,6 +445,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door10_2
+ * and S_door10_1 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(e3_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -413,6 +462,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door10_2
+ * and S_door10_1 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(e3_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -425,6 +479,10 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Slides the double door w4 (S_door11_1 and S_door11_2) along Z by LW(0) scaled by 0.25 (0.2217 in the demos);
+ * door animation of the w4 exit.
+ */
 EVT_BEGIN(w4_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -450,6 +508,10 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Slides the double door e4 (S_door12_1 and S_door12_2) along Z by LW(0) scaled by 0.25 (0.2217 in the demos);
+ * door animation of the e4 exit.
+ */
 EVT_BEGIN(e4_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -475,6 +537,10 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Slides the double door w5 (S_door13_1 and S_door13_2) along Z by LW(0) scaled by 0.25 (0.2217 in the demos);
+ * door animation of the w5 exit.
+ */
 EVT_BEGIN(w5_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -500,6 +566,10 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Slides the double door e5 (S_door14_1 and S_door14_2) along Z by LW(0) scaled by 0.25 (0.2217 in the demos);
+ * door animation of the e5 exit, also called directly by peach_evt_stg1_2.
+ */
 EVT_BEGIN(e5_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -1028,6 +1098,12 @@ EVT_END()
  * GW(0) remembers the floor the cabin is on.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Elevator 1 button script, run from the button panels with LW(0) = the floor that was called (0 to 2).
+ * Mario and the partner step into the cabin, the floor menu (stg7_aji_ele_1_00 to 02) is shown
+ * and the cabin ere1_m (hit area A_ere1_m) rides to the chosen floor with the doors opening and closing.
+ * GW(0) remembers the floor the cabin is on.
+ */
 EVT_BEGIN(ele_1)
     // Mario stops and waits for his partner to finish what it is doing.
     SET_VALUE(LW(5), LW(0))
@@ -1239,6 +1315,12 @@ CALL(evt_party_run, 0)
     RETURN
 EVT_END()
 #else
+/**
+ * Elevator 1 button script, run from the button panels with LW(0) = the floor that was called (0 to 2).
+ * Mario and the partner step into the cabin, the floor menu (stg7_aji_ele_1_00 to 02) is shown
+ * and the cabin ere1_m (hit area A_ere1_m) rides to the chosen floor with the doors opening and closing.
+ * GW(0) remembers the floor the cabin is on.
+ */
 EVT_BEGIN(ele_1)
     // Mario stops and waits for his partner to finish what it is doing.
     SET_VALUE(LW(5), LW(0))
@@ -1563,6 +1645,10 @@ EVT_END()
  * current floor in GW(1)). Before STG7_14_ELEVATOR_KEY_B it only shows the "needs a key" text stg7_aji_65.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Elevator 2 button script: the same ride as ele_1 for the second elevator (cabin ere2_m, floors 2 to 4,
+ * current floor in GW(1)). Before STG7_14_ELEVATOR_KEY_B it only shows the "needs a key" text stg7_aji_65.
+ */
 EVT_BEGIN(ele_2)
     SET_VALUE(LW(5), LW(0))
     // Without the second Elevator Key the elevator only asks for it.
@@ -1783,6 +1869,10 @@ CALL(evt_party_run, 0)
     RETURN
 EVT_END()
 #else
+/**
+ * Elevator 2 button script: the same ride as ele_1 for the second elevator (cabin ere2_m, floors 2 to 4,
+ * current floor in GW(1)). Before STG7_14_ELEVATOR_KEY_B it only shows the "needs a key" text stg7_aji_65.
+ */
 EVT_BEGIN(ele_2)
     SET_VALUE(LW(5), LW(0))
     // Without the second Elevator Key the elevator only asks for it.

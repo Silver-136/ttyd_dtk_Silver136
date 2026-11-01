@@ -602,6 +602,12 @@ USER_FUNC(evt_uranaisi_msg_alloc) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for her price menu (US and later).
+ * args[0] is the message id, args[1] receives the formatted string.
+ * It scans the message for her position tags and pads the three reading prices to their column using the font's
+ * text width, then formats the result into the buffer from evt_uranaisi_msg_alloc.
+ */
 USER_FUNC(evt_uranaisi_msg_set) {
     EvtWord* args = event->args;
     const char* msg = msgSearch((const char*)evtGetValue(event, args[0]));
@@ -1399,6 +1405,11 @@ EVT_BEGIN(uranaisi_init)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Init script for Dazzle (starmaniac, the Star Piece collector).
+ * Before the badge tutorial step he is placed at (400, -20, 175) instead of his default spot.
+ * Not used in the US demo, which uses the shared NPC init.
+ */
 EVT_BEGIN(starmaniac_init)
     CALL_CHILD(PTR(npc_init_evt))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG0_17_BADGE_TUTORIAL)
@@ -2963,6 +2974,11 @@ USER_FUNC(card_camid) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_000005e8, JP tik .text+0x524. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper (JP and later).
+ * Sets the blend mode of the "supotto" spotlight map object to 10
+ * so it fades with the house walls during the card reading.
+ */
 USER_FUNC(supotto_blendmode) {
     MapObject* obj = mapGetMapObj("supotto");
 
@@ -2973,6 +2989,7 @@ USER_FUNC(supotto_blendmode) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_000005c0, JP tik .text+0x4FC. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script helper (JP and later). Mutes sound effects (PSND_FLAG_MUTE_SFX). */
 USER_FUNC(tik_snd_off) {
     psndSetFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
@@ -2981,6 +2998,7 @@ USER_FUNC(tik_snd_off) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_00000598, JP tik .text+0x4D4. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script helper (JP and later). Unmutes sound effects (clears PSND_FLAG_MUTE_SFX). */
 USER_FUNC(tik_snd_on) {
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;

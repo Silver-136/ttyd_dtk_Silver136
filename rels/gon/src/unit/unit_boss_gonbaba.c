@@ -1627,6 +1627,11 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of Hooktail. The first time she would die (unit work 3 is 0) it runs negotiation_event instead.
+ * Otherwise she collapses (GNB_X_1), the camera closes in on her, she speaks her last line (stg1_gon_32),
+ * the death animation plays (GNB_D_3, GNB_H_1), exp and coins are stored and the unit is removed with KillUnit.
+ */
 // The first defeat enters negotiation; only a defeat after negotiation takes the final death path.
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, LW(0))
@@ -1704,6 +1709,13 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Hooktail.
+ * Installs her wait, attack, damage and entry events (confusion uses the default confusion script),
+ * registers the audience entries 13, 14, 32 to 35, 53 and 54 with flag 512,
+ * sets the audience base flag (32768 in the US demo and earlier, 16384 otherwise),
+ * sets her base scale and clears unit works 0 to 5.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))

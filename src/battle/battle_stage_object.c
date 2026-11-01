@@ -2435,16 +2435,19 @@ BattleStageObjectData _object_spot_light_data[] = {
 };
 BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
 BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
+/** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
 EVT_BEGIN(_object_turn_event_A1)
     SET_VALUE(LW(9), 0)
     CALL_CHILD(PTR(_object_turn_event_core))
     RETURN
 EVT_END()
+/** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
 EVT_BEGIN(_object_turn_event_A2)
     SET_VALUE(LW(9), 1)
     CALL_CHILD(PTR(_object_turn_event_core))
     RETURN
 EVT_END()
+/** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
 EVT_BEGIN(_object_turn_event_B)
     SET_VALUE(LW(9), 2)
     CALL_CHILD(PTR(_object_turn_event_core))
@@ -2517,6 +2520,7 @@ EVT_BEGIN(_object_turn_event_core)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
 EVT_BEGIN(_nozzle_turn_event)
     CALL(_nozzle_turn)
     RETURN
@@ -2561,11 +2565,20 @@ EVT_BEGIN(_fall_frame_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The same nozzle script for the other builds, placed after _set_mobj_rotate_x
+ * so the string pool keeps its order; see the JP copy above.
+ * These builds show the wall banner with btlevtcmd_AnnounceMessage for 180 frames instead.
+ */
 EVT_BEGIN(_nozzle_work_event_0)
     SET_VALUE(LW(10), 0)
     CALL_CHILD(PTR(_nozzle_work_event_core))
     RETURN
 EVT_END()
+/**
+ * Nozzle attack during battle (BattleStage_NozzleWorkCheck(1)):
+ * _nozzle_work_event_core with LW(10) = 1, which also lets a type-0 nozzle set fill the stage with fog.
+ */
 EVT_BEGIN(_nozzle_work_event_1)
     SET_VALUE(LW(10), 1)
     CALL_CHILD(PTR(_nozzle_work_event_core))
@@ -2689,6 +2702,7 @@ BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_
 
 /** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
 #if VERSION > VERSION_DEMO_US
+/** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
 EVT_BEGIN(_object_turn_event_A1)
     SET_VALUE(LW(9), 0)
     CALL_CHILD(PTR(_object_turn_event_core))
@@ -2698,6 +2712,7 @@ EVT_END()
 
 /** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
 #if VERSION > VERSION_DEMO_US
+/** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
 EVT_BEGIN(_object_turn_event_A2)
     SET_VALUE(LW(9), 1)
     CALL_CHILD(PTR(_object_turn_event_core))
@@ -2707,6 +2722,7 @@ EVT_END()
 
 /** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
 #if VERSION > VERSION_DEMO_US
+/** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
 EVT_BEGIN(_object_turn_event_B)
     SET_VALUE(LW(9), 2)
     CALL_CHILD(PTR(_object_turn_event_core))
@@ -2716,6 +2732,7 @@ EVT_END()
 
 /** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
 #if VERSION > VERSION_DEMO_US
+/** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
 EVT_BEGIN(_nozzle_turn_event)
     CALL(_nozzle_turn)
     RETURN
@@ -3257,6 +3274,10 @@ USER_FUNC(_announce_wall_message) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * 2D draw callback for the JP/demo wall banner:
+ * a white window frame with btl_msg_escape_wall_close2 centred near the top of the screen.
+ */
 void _disp_escape_wall_message(CameraId camera, void* param) {
     const char* msg = msgSearch("btl_msg_escape_wall_close2");
     s32 width = FontGetMessageWidth(msg);
@@ -3303,6 +3324,10 @@ USER_FUNC(_fall_frame_wait) {
     return EVT_RETURN_YIELD;
 }
 
+/**
+ * Runs each living unit's ceiling-fall script (btlevtcmd_SetEventCeilFall) and waits for all of them to end.
+ * The US and later builds skip units with the instant-kill status.
+ */
 USER_FUNC(_fall_frame_wait_unit_ready) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;

@@ -620,6 +620,13 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Shady Koopa's attack from its back (called from wakeup_event on the turn after it is flipped):
+ * it spins round once, gathers a dark aura (eff_aura) while spinning faster,
+ * then slides through every target in the row in turn with the 6-damage multi-target weapon,
+ * each one dodging or taking the hit (the action-command defence is read on the first hit only).
+ * It shoots off the right side of the screen and slides back home, still on its back.
+ */
 static EVT_BEGIN(ura_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     // Pick a target for the attack; a confused unit that has none flusters.

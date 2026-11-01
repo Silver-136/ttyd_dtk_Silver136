@@ -234,6 +234,10 @@ EvtWord stg_08_6_init_event[4];
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000775c, JP las .text+0x7690. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper: raises hi_fire_end_flag so hi_fire_main stops
+ * and deletes the six torch flame effects at the end of a battle (JP and later).
+ */
 USER_FUNC(hi_fire_end) {
     hi_fire_end_flag[0] = 1;
     return EVT_RETURN_DONE;
@@ -3527,6 +3531,10 @@ EVT_BEGIN(stg_08_1_init_event)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Battle stage event for stage stg_08_6: lights six dark-flame torches (hi1..hi6);
+ * in JP and later the flames follow the torch objects through hi_fire_main, and all are removed at battle end.
+ */
 EVT_BEGIN(stg_08_6_init_sub_event)
     BEGIN_SIBLING_EVENT
         CALL(hi_fire_main)
@@ -3545,6 +3553,11 @@ EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_00007774, JP las .text+0x76A8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper (runs every frame until hi_fire_end_flag is set):
+ * creates six dark flame effects and keeps each one over the torch object hi1..hi6 whenever that torch is above
+ * the floor; deletes them softly when the end flag is raised. JP and later.
+ */
 USER_FUNC(hi_fire_main) {
     const char* names[6] = {"hi1", "hi2", "hi3", "hi4", "hi5", "hi6"};
     Vec pos;
@@ -3578,6 +3591,10 @@ USER_FUNC(hi_fire_main) {
 
 /** Script helper: blocks until the battle sequence has ended. */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Battle stage event for stage stg_08_6: lights six dark-flame torches (hi1..hi6);
+ * in JP and later the flames follow the torch objects through hi_fire_main, and all are removed at battle end.
+ */
 EVT_BEGIN(stg_08_6_init_sub_event)
 CALL(evt_mapobj_get_position, STRING("hi1"), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("__hi1"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)

@@ -258,6 +258,11 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init script of the Hyper Bald Cleft: installs the wait, attack,
+ * damage and confusion handlers (confusion reuses the attack), sets its walk,
+ * run and jump sounds and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -314,6 +319,11 @@ static EVT_BEGIN(damage_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * Flips the Hyper Bald Cleft onto its back: swaps in the flipped defence and pose tables,
+ * marks status flag 1 (flipped) with a flipped-over count of 2,
+ * plays the flip sound and SIS_D_2 and drops it to height 5 in two bounces.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -335,6 +345,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Turn-over recovery of the Hyper Bald Cleft: counts down the flipped-over count;
+ * at 0 it restores the normal defence and pose tables, clears status flag 1,
+ * plays SIS_S_1 and the wake-up sound and hops to the ground.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

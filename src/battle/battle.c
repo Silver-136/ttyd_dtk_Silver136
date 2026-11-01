@@ -67,6 +67,12 @@ BOOL battleSeqEndCheck(void) {
  * after-reaction queue, display, units, partner info, stage, audience, Bingo).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Starts a battle from the field's FieldBattleInfo:
+ * allocates and clears BattleWork (battle allocator; JP uses the map allocator),
+ * records the info and initialises the battle subsystems (pad, action-command help, icons, action commands,
+ * after-reaction queue, display, units, partner info, stage, audience, Bingo).
+ */
 void BattleInit(FieldBattleInfo* info) {
     BattleWork* wp;
 wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
@@ -116,6 +122,12 @@ memset(_battleWorkPointer, 0, sizeof(BattleWork));
     BattleBreakSlot_Init();
 }
 #else
+/**
+ * Starts a battle from the field's FieldBattleInfo:
+ * allocates and clears BattleWork (battle allocator; JP uses the map allocator),
+ * records the info and initialises the battle subsystems (pad, action-command help, icons, action commands,
+ * after-reaction queue, display, units, partner info, stage, audience, Bingo).
+ */
 void BattleInit(FieldBattleInfo* info) {
     BattleWork* wp;
 
@@ -171,6 +183,11 @@ void BattleInit(FieldBattleInfo* info) {
 }
 #endif
 
+/**
+ * Runs one battle frame: removes units marked for deletion, then the pad, sequence, action-command,
+ * stage object, icon, stage, help, audience, Bingo and display managers.
+ * Returns FALSE when the battle is over; on kiosk (demo station) builds an idle timeout aborts the battle.
+ */
 BOOL BattleMain(void) {
     BattleWork* wp = _battleWorkPointer;
 
@@ -205,6 +222,10 @@ BOOL BattleMain(void) {
  * frees the command submenu and BattleWork, and clears _battleWorkPointer.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Tears a battle down: deletes every unit, ends the icon, menu, stage, audience and Bingo subsystems,
+ * frees the command submenu and BattleWork, and clears _battleWorkPointer.
+ */
 void BattleEnd(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -230,6 +251,10 @@ BattleFree(wp);
 _battleWorkPointer = NULL;
 }
 #else
+/**
+ * Tears a battle down: deletes every unit, ends the icon, menu, stage, audience and Bingo subsystems,
+ * frees the command submenu and BattleWork, and clears _battleWorkPointer.
+ */
 void BattleEnd(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -462,6 +487,10 @@ void BattleIncSeq(BattleWork* wp, BattleSequence seq) {
     BattleSetSeq(wp, seq, value + 1);
 }
 
+/**
+ * Allocates battle memory: from the battle area of the map heap in US and PAL,
+ * from HEAP_BATTLE in JP and the demos.
+ */
 void* BattleAlloc(u32 size) {
 #if VERSION >= VERSION_US
     return (_mapAlloc)(R_battlemapalloc_base_ptr, size);
@@ -929,6 +958,10 @@ void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type) {
     }
 }
 
+/**
+ * Resets the saved per-partner state (size, status flags and turns,
+ * and in US/PAL the disabled-command bits) kept while partners are swapped out.
+ */
 void BattlePartyInfoWorkInit(BattleWork* wp) {
     BattleWorkPartyInfo* partyInfo;
     int i;

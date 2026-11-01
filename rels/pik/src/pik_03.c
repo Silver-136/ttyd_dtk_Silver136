@@ -104,6 +104,12 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Examine script of the hidden room's altar: locks the controls,
+ * sets story progress to STG6_53_THE_REAL_GARNET_STAR, stops the NPCs,
+ * fades out the music (JP and later) and runs evt_sub_starstone for the Garnet Star (star number 6),
+ * then returns the controls.
+ */
 static EVT_BEGIN(evt_daiza)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US

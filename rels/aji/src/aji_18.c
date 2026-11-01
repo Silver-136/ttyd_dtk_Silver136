@@ -75,6 +75,11 @@ static USER_FUNC(make_list) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -87,6 +92,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -99,6 +109,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door2_1
+ * and S_door2_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(e_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -111,6 +126,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door2_1
+ * and S_door2_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(e_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -343,6 +363,15 @@ static USER_FUNC(sysflag) {
  * heals Mario and the partners, and starts evt_koopa_after.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Init script of aji_18, the room with the factory door:
+ * plays BGM_STG7_DUN2, sets up the exits, lights the three key slots by their flags (all filled from
+ * STG7_16_FACTORY_DOOR on), attaches evt_machine to each empty slot
+ * and locks the exit e_bero (key_lock_koujyou) before that point and between Lord Crump's defeat
+ * and STG7_25_00_1_BOWSER_POSHLEY_SANCTUM.
+ * In that last stretch, entering from e_bero puts a partner back with Mario if he has none,
+ * heals Mario and the partners, and starts evt_koopa_after.
+ */
 EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
     // The fortress music and ambience start and the exits are set up.
@@ -440,6 +469,15 @@ SPAWN_EVENT(evt_koopa_after)
     RETURN
 EVT_END()
 #else
+/**
+ * Init script of aji_18, the room with the factory door:
+ * plays BGM_STG7_DUN2, sets up the exits, lights the three key slots by their flags (all filled from
+ * STG7_16_FACTORY_DOOR on), attaches evt_machine to each empty slot
+ * and locks the exit e_bero (key_lock_koujyou) before that point and between Lord Crump's defeat
+ * and STG7_25_00_1_BOWSER_POSHLEY_SANCTUM.
+ * In that last stretch, entering from e_bero puts a partner back with Mario if he has none,
+ * heals Mario and the partners, and starts evt_koopa_after.
+ */
 EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
     // The fortress music and ambience start and the exits are set up.

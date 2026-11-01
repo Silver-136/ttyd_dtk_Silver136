@@ -1101,6 +1101,11 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage handler while the Spiky Parabuzzy hangs on the ceiling:
+ * runs the default damage reaction and, if the hit warrants it,
+ * calls ceil_fall_ready_event so the Spiky Parabuzzy drops to the ground.
+ */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)

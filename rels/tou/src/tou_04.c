@@ -559,6 +559,15 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Shared guard movement loop, run as a child of the guards' movement scripts:
+ * the calling guard ("me") faces Mario, and when Mario comes within 100 units of the guard's post he steps 50
+ * units to the side away from Mario, then goes back to the post once Mario is 100 units away again;
+ * it loops forever.
+ * LW(0) is the caller's guard number: for 3, 4 and 5 the guard sidesteps along x, otherwise along z.
+ * In JP and later, LW(0) = 1 fixes the post at (-520, 0, 0) and starts by waiting for Mario to move away,
+ * so guard 2 can return to his post from where his init placed him.
+ */
 // LW(0) selects the guard layout; retain its home position while stepping away from nearby Mario.
 EVT_BEGIN(move_g)
     SET_VALUE(LF(0), 0)
@@ -1362,6 +1371,12 @@ static EVT_BEGIN(init_champ)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Brots (ブロッツ), who researches the "Seven Wonders of the Glitz Pit":
+ * before STG3_34_RETURN_TO_ROGUEPORT (in JP and later, only until the fourth mail has arrived) and
+ * while Mario's rank is 5 to 18, he appears at one of four corridor spots chosen at random:
+ * (-525, 0, 225), (-175, 0, -475), (525, 0, -175) or (525, 0, 425).
+ */
 static EVT_BEGIN(init_brots)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -1394,6 +1409,13 @@ EVT_END()
 
 // Reuse a map-allocated selection string; US measures localized entries, while JP uses a fixed width.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper: builds the menu text for Brots's "Seven Wonders" list,
+ * a <select> tag followed by the seven entry names (stg3_tou_hushigi_list_1 to 7,
+ * The Sealed Wall to Grubba and Jolene), in a buffer allocated once from the map heap,
+ * and returns it in args[0].
+ * In US and later the menu width fits the longest entry plus 80; earlier versions use a fixed width of 300.
+ */
 static USER_FUNC(make_list) {
     static char* tmp;
     static const char* list[] = {
@@ -1420,6 +1442,13 @@ for (i = 0; i < 7; i++) {
     return EVT_RETURN_DONE;
 }
 #else
+/**
+ * Script helper: builds the menu text for Brots's "Seven Wonders" list,
+ * a <select> tag followed by the seven entry names (stg3_tou_hushigi_list_1 to 7,
+ * The Sealed Wall to Grubba and Jolene), in a buffer allocated once from the map heap,
+ * and returns it in args[0].
+ * In US and later the menu width fits the longest entry plus 80; earlier versions use a fixed width of 300.
+ */
 static USER_FUNC(make_list) {
     static char* tmp;
     static const char* list[] = {
@@ -2496,6 +2525,11 @@ EVT_END()
  * and story progress.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init for tou_04, the corridor: sets up the guards and doors, the Last Stand badge item, save blocks,
+ * and chooses the entry scene (Grubba escort, Jolene escort, champion escape, storage room talk) from flags
+ * and story progress.
+ */
 EVT_BEGIN(tou_04_init_evt)
     // Set up the doors, guards, the Last Stand badge on the floor and the two save blocks.
     SET_VALUE(LW(0), PTR(bero_data))
@@ -2749,6 +2783,11 @@ END_IF
     RETURN
 EVT_END()
 #else
+/**
+ * Map init for tou_04, the corridor: sets up the guards and doors, the Last Stand badge item, save blocks,
+ * and chooses the entry scene (Grubba escort, Jolene escort, champion escape, storage room talk) from flags
+ * and story progress.
+ */
 EVT_BEGIN(tou_04_init_evt)
     // Set up the doors, guards, the Last Stand badge on the floor and the two save blocks.
     SET_VALUE(LW(0), PTR(bero_data))

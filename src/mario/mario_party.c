@@ -37,6 +37,13 @@ static inline void marioPartyKillSlot1(void) {
  * Always returns 0; marioUsePartyMain later fires the ability.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Partner button check, run every frame from marioMain:
+ * X arms MARIO_TRIG_FLAG_USE_PARTNER with a 5-frame partyUseDelay when Mario stands,
+ * walks or dashes with a usable partner.
+ * Airborne, field-battle locks, slits, an airborne Goombella or a busy Yoshi block or cancel it.
+ * Always returns 0; marioUsePartyMain later fires the ability.
+ */
 s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
@@ -109,6 +116,11 @@ s32 marioUseParty(void) {
  */
 // Descriptive name (not in the symbol maps; docs/NAME_PROVENANCE.md).
 #if VERSION > VERSION_DEMO_US
+/**
+ * Runs from partyMain while a partner is out: after the partner button,
+ * counts down partyUseDelay and then calls partyDoWork to use the partner's field ability (returns its result,
+ * else 0). Losing control (marioKeyOffChk) cancels.
+ */
 s32 marioUsePartyMain(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -216,6 +228,13 @@ void marioPartyKill(void) {
  * Used by the pause menu, item menu and status window.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Partner button check, run every frame from marioMain:
+ * X arms MARIO_TRIG_FLAG_USE_PARTNER with a 5-frame partyUseDelay when Mario stands,
+ * walks or dashes with a usable partner.
+ * Airborne, field-battle locks, slits, an airborne Goombella or a busy Yoshi block or cancel it.
+ * Always returns 0; marioUsePartyMain later fires the ability.
+ */
 s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
@@ -269,6 +288,10 @@ s32 marioUseParty(void) {
     return 0;
 }
 #endif
+/**
+ * The PartyMember kind of the partner out with Mario (PARTY_MEMBER_GOOMBELLA, ...), or 0 when none.
+ * Used by the pause menu, item menu and status window.
+ */
 s32 marioGetParty(void) {
     s32 id;
 
@@ -366,6 +389,10 @@ BOOL partyChkJoin(PartyId partnerId) {
     return ret;
 }
 
+/**
+ * The partner's current HP from the pouch (0 for invalid ids);
+ * party.c compares it with PARTY_PINCH_HP for the low-HP (peril) animations.
+ */
 s32 partyGetHp(PartyId partnerId) {
     s32 ret = 0;
     if (partnerId < PARTNER_COUNT) {

@@ -268,6 +268,13 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 37, run when an attacker is hurt by the spike on its head:
+ * after 30 frames a toge_flush flash appears over the spike (higher when Huge, lower when Tiny).
+ * If a lecture unit is in the battle with its unit work 0 still 0 and the attacker was Mario
+ * or Goombella (get_attacker), it then hides the status window and the lecture unit says mac_0_092_06 (Mario)
+ * or mac_0_092_07 (Goombella), and its unit work 0 is set to 1 so the tip is given once.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

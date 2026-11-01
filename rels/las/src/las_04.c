@@ -612,8 +612,24 @@ void _firebar_trans(FirebarWork* wp) {
  * the fire-bar sound plays while Mario is within 120 units in X.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper: creates and runs one fire bar from the FirebarSetup in args[0].
+ * The first call allocates the work area and the fire ball poses; every call updates the bar and blocks.
+ * When flags has bit 8 (set after the bar has been jumped over ten times) it puffs smoke,
+ * frees everything and finishes.
+ * Mario's invulnerability motions or invincibility timer set the "no damage" bit;
+ * the fire-bar sound plays while Mario is within 120 units in X.
+ */
 static USER_FUNC(firebar_entry) {
 #else
+/**
+ * Script helper: creates and runs one fire bar from the FirebarSetup in args[0].
+ * The first call allocates the work area and the fire ball poses; every call updates the bar and blocks.
+ * When flags has bit 8 (set after the bar has been jumped over ten times) it puffs smoke,
+ * frees everything and finishes.
+ * Mario's invulnerability motions or invincibility timer set the "no damage" bit;
+ * the fire-bar sound plays while Mario is within 120 units in X.
+ */
 USER_FUNC(firebar_entry) {
 #endif
     FirebarSetup* setup = (FirebarSetup*)evtGetValue(event, event->args[0]);

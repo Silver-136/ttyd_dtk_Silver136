@@ -336,6 +336,13 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Fuzzy Horde: for each point of damage taken it either flags the horde as shrinking (unit
+ * work 0 = 1, once at most 50 Fuzzies are alive) or makes a Fuzzy escape (chorogun_escape);
+ * if the damage killed (damage code
+ * 256) and at most 500 Fuzzies remain, the whole swarm flees (escape_chorogun_event). The demos instead remove the
+ * unit as soon as work 0 is set.
+ */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(0), 0)

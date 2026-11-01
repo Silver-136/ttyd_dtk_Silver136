@@ -144,6 +144,10 @@ EVT_END()
  * when Mario leaves through the door.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Entrance script: cancels a registered but unplayed match (clears GSWF_TOU_MATCH_RESERVED)
+ * when Mario leaves through the door.
+ */
 EVT_BEGIN(n_bero_match_reset)
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
         DEBUG_PUT_MSG(STRING("登録していた試合をリセット"))

@@ -96,6 +96,7 @@ void effIndirectMain(EffectEntry* effect) {
 
 /** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
 #if VERSION <= VERSION_DEMO_US
+/** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
 static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     EffIndirectWork* work = effect->userdata;
     CameraEntry* camera;
@@ -207,6 +208,7 @@ GXSetNumIndStages(0);
     GXSetTevDirect(GX_TEVSTAGE1);
 }
 #else
+/** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
 void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     EffIndirectWork* work = effect->userdata;
     CameraEntry* camera;

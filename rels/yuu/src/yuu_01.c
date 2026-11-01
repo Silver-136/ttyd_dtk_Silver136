@@ -210,6 +210,10 @@ EVT_BEGIN(yuu_01_kaijo_init)
     RETURN
 EVT_END()
 
+/**
+ * Puts Mario back on the start spot after the opening camera or between rounds (x -800 on US and later,
+ * -670 in the US demo, z 200).
+ */
 EVT_BEGIN(yuu_01_kaijo_init2)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_mario_set_pos, -670, 0, 200)
@@ -404,6 +408,11 @@ EVT_BEGIN(minigame02_end)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init for yuu_01 (Boat Mode room): starts the water, cloud and neon animations,
+ * spawns the whirlpool and barrel moving floors, starts the minigame set-up and the NPC script,
+ * and (US and later) hides all but the current game-language sign graphics.
+ */
 EVT_BEGIN(yuu_01_init_evt)
     // The room's lights, clouds and water start animating.
     CALL(evt_map_playanim, STRING("den1"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1568,6 +1577,7 @@ static BOOL get_monte_check(Vec* a, Vec* b) {
 /** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00005268, JP yuu .text+0x519C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
 USER_FUNC(yuu_01_cam_shift_reset) {
     camShiftReset();
     return EVT_RETURN_DONE;

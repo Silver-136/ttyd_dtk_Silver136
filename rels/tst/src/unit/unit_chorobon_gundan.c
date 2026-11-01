@@ -331,6 +331,10 @@ BattleWeapon weapon_chorobon_gundan_attack = {
  * plays its death sound, pays out its coins and EXP and spawns the star point effect above it.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Reward script run when a Fuzzy from the horde is defeated (unit LW(10)):
+ * plays its death sound, pays out its coins and EXP and spawns the star point effect above it.
+ */
 EVT_BEGIN(chorogun_dead_reward)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -374,6 +378,11 @@ EVT_END()
  * After a lethal hit, it runs escape_chorogun_event if 500 or fewer are alive.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Damage handler of the Fuzzy Horde: for each point of damage one Fuzzy leaves the swarm (chorogun_escape)
+ * while more than 50 remain; once 50 or fewer are left it sets unit work 0 to 1.
+ * After a lethal hit, it runs escape_chorogun_event if 500 or fewer are alive.
+ */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(0), 0)
@@ -409,6 +418,11 @@ CALL(chorogun_get_alive_num, LW(0))
     RETURN
 EVT_END()
 #else
+/**
+ * Damage handler of the Fuzzy Horde: for each point of damage one Fuzzy leaves the swarm (chorogun_escape)
+ * while more than 50 remain; once 50 or fewer are left it sets unit work 0 to 1.
+ * After a lethal hit, it runs escape_chorogun_event if 500 or fewer are alive.
+ */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(0), 0)

@@ -1020,8 +1020,18 @@ USER_FUNC(tiz_stone) {
  * each tile whose delay is over is drawn flying off with its own rotation and velocity.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draw callback of the screen-shatter effect.
+ * On the first call it copies the frame to a texture, then draws it as a 38 by 30 grid of 16 pixel tiles;
+ * each tile whose delay is over is drawn flying off with its own rotation and velocity.
+ */
 static void tiz_broken_draw(CameraId cameraId, void* param) {
 #else
+/**
+ * Draw callback of the screen-shatter effect.
+ * On the first call it copies the frame to a texture, then draws it as a 38 by 30 grid of 16 pixel tiles;
+ * each tile whose delay is over is drawn flying off with its own rotation and velocity.
+ */
 void tiz_broken_draw(CameraId cameraId, void* param) {
 #endif
     GXTexObj tex;
@@ -1136,6 +1146,13 @@ GXInitTexObj(&tex, broken_wp->tex->address, 608, 480, GX_TF_RGBA8, GX_CLAMP, GX_
  * Parts of it are written with hand-expanded math to keep the original code.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Blocking script helper for evt_mapwrite: shatters the screen into the item-get view. On the first call it sets
+ * up a 38 by 30 grid of tiles, each flying outward from the centre after a delay proportional to its distance
+ * (param_tbl); every frame it moves the tiles and queues tiz_broken_draw on camera 8, and it returns once every
+ * tile has left the screen (|x| over 340 or |y| over 260), freeing its buffers.
+ * Parts of it are written with hand-expanded math to keep the original code.
+ */
 static USER_FUNC(tiz_broken) {
     s32 x;
     s32 y;
@@ -1241,6 +1258,13 @@ static USER_FUNC(tiz_broken) {
     return EVT_RETURN_BLOCK;
 }
 #else
+/**
+ * Blocking script helper for evt_mapwrite: shatters the screen into the item-get view. On the first call it sets
+ * up a 38 by 30 grid of tiles, each flying outward from the centre after a delay proportional to its distance
+ * (param_tbl); every frame it moves the tiles and queues tiz_broken_draw on camera 8, and it returns once every
+ * tile has left the screen (|x| over 340 or |y| over 260), freeing its buffers.
+ * Parts of it are written with hand-expanded math to keep the original code.
+ */
 USER_FUNC(tiz_broken) {
 #if VERSION >= VERSION_US
     f32 sq; // FAKE: tb_sqrtf expanded by hand (see below)
@@ -1467,6 +1491,10 @@ static USER_FUNC(evtflash) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_0000247c, JP tik .text+0x23B8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper (JP and later).
+ * With a nonzero args[0] shows the map display (mapDispOn), otherwise hides it (mapDispOff).
+ */
 USER_FUNC(map_disp_onoff) {
     if (evtGetValue(event, event->args[0])) {
         mapDispOn();
@@ -1527,8 +1555,20 @@ USER_FUNC(map_bgmode_end) {
  * The speed ramps up over the first 20 percent of the time and down over the last 20 percent.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper that turns the camera around the pedestal.
+ * args: [0] start angle, [1] end angle, [2] duration in ms, [3] receives the current angle,
+ * [4] receives 1 while still turning and 0 when done.
+ * The speed ramps up over the first 20 percent of the time and down over the last 20 percent.
+ */
 static USER_FUNC(cam_mahojin_kaiten_main) {
 #else
+/**
+ * Script helper that turns the camera around the pedestal.
+ * args: [0] start angle, [1] end angle, [2] duration in ms, [3] receives the current angle,
+ * [4] receives 1 while still turning and 0 when done.
+ * The speed ramps up over the first 20 percent of the time and down over the last 20 percent.
+ */
 USER_FUNC(cam_mahojin_kaiten_main) {
 #endif
     s32 frames;
@@ -2984,6 +3024,15 @@ EVT_BEGIN(lastdungeon)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The last pedestal scene, registered on a_dai from STG7_50_A_WAITING_PROF_FRANKLY to STG7_51.
+ * Professor Frankly urges Mario to hold up the last Crystal Star (mac_7_009) and the eighth magic circle forms
+ * (effect type 8, 7 in the demos) with a crystal wave;
+ * the seven Crystal Stars fade in around Mario and the camera
+ * circles while the charge rises; the partner cries out at the door (mac_7_010), the seven star marks
+ * (anm_hosi_1 to 7) and the door (anm_tobira) animate, Frankly and the partner speak (mac_7_011, mac_7_013)
+ * and the story becomes STG7_52_THE_PEDESTAL.
+ */
 EVT_BEGIN(mahojin_event7)
     // Mario walks onto the pedestal and Frankly tells him to hold up the last Crystal Star.
     CALL(evt_cam_letter_box_disable, 1)
@@ -3529,6 +3578,15 @@ SPAWN_EVENT(mahojin_se_event)
     RETURN
 EVT_END()
 #else
+/**
+ * The last pedestal scene, registered on a_dai from STG7_50_A_WAITING_PROF_FRANKLY to STG7_51.
+ * Professor Frankly urges Mario to hold up the last Crystal Star (mac_7_009) and the eighth magic circle forms
+ * (effect type 8, 7 in the demos) with a crystal wave;
+ * the seven Crystal Stars fade in around Mario and the camera
+ * circles while the charge rises; the partner cries out at the door (mac_7_010), the seven star marks
+ * (anm_hosi_1 to 7) and the door (anm_tobira) animate, Frankly and the partner speak (mac_7_011, mac_7_013)
+ * and the story becomes STG7_52_THE_PEDESTAL.
+ */
 EVT_BEGIN(mahojin_event7)
     // Mario walks onto the pedestal and Frankly tells him to hold up the last Crystal Star.
     CALL(evt_cam_letter_box_disable, 1)

@@ -488,6 +488,14 @@ static s32 iri_17_item_tbl[] = {
     ITEM_ROUTING_SLIP, -1,
 };
 
+/**
+ * Talk script for Mayor Kroop.
+ * In order of priority: Trouble Center request 8 (he asks for help and gives a Turtley Leaf,
+ * handed over directly if Mario has room, otherwise he hops to a ledge and drops it as a pickup;
+ * the request is then marked solved), request 17 (he takes the Routing Slip from Mario and returns it),
+ * then the story schedule: the first meeting (boss_noko_open_gate), the Sun Stone / Moon Stone errand,
+ * and chatter up to the end of chapter 8. In chapter 7 he gives the white Petalburg hint (JP and later).
+ */
 EVT_BEGIN(boss_noko_talk)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LISTEN_TO_ME)
@@ -1137,6 +1145,12 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Cutscene after Mario returns from Hooktail: Mario, Koops's father, Koopie Koo,
+ * Kroop and Goombella gather in Petalburg and Koops says goodbye.
+ * Both partners are walked off and deleted, the story becomes STG1_20_KOOPS_LEAVES,
+ * the party is cleared and control is returned (JP and later also record the respawn position).
+ */
 EVT_BEGIN(nokotarou_tabidachi)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 142, 453, 0, 47, -86, 0, EASING_SINE_IN_OUT)
@@ -1663,6 +1677,13 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script of bush 4 (S_kamehapa_04, from kusa_data):
+ * when it is the bush the map init chose at random for this visit (LSW(1) = 0)
+ * and its leaf is not already out (evt_item_delete_check),
+ * a Turtley Leaf launches out of it at (-407, 70, -160) and sets LSWF(4) when picked up.
+ * In the US demo and earlier it appears at z = -148 instead.
+ */
 static EVT_BEGIN(evt_kusa_4)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_NOT_EQUAL(LSW(1), 0)

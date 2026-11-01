@@ -285,6 +285,10 @@ static USER_FUNC(bgm_start_wait) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Loop that keeps Mario and his partner facing the shopkeeper (the point X = -9) every frame,
+ * until the script is stopped. JP and later.
+ */
 EVT_BEGIN(powerdownya_face_left)
     LOOP(0)
         CALL(evt_party_set_dir_pos, 0, -9, 0)
@@ -304,6 +308,14 @@ EVT_END()
  * (powerdown_10) when that happened, else that it is finished (powerdown_13).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Chet Rippo's stat trade for Mario. Refuses if Mario has fewer than 39 coins (powerdown_04).
+ * Otherwise shows the coin window and two choices (evt_win_other_select 9 and 10: the stat to boost and the stat
+ * to decrease) and asks whether that trade sounds good for 39 coins (powerdown_06, powerdown_09);
+ * on yes it takes the 39 coins, chants (powerdown_11, powerdown_12) over the light and house effects,
+ * sets the new HP, FP and BP (unitwin_setmariolevel), and says it removed all badges because BP ran low
+ * (powerdown_10) when that happened, else that it is finished (powerdown_13).
+ */
 EVT_BEGIN(powerdownya_mario_level_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins.
     CALL(evt_pouch_get_coin, LW(0))
@@ -497,6 +509,14 @@ CALL(enzan_lw_load)
     RETURN
 EVT_END()
 #else
+/**
+ * Chet Rippo's stat trade for Mario. Refuses if Mario has fewer than 39 coins (powerdown_04).
+ * Otherwise shows the coin window and two choices (evt_win_other_select 9 and 10: the stat to boost and the stat
+ * to decrease) and asks whether that trade sounds good for 39 coins (powerdown_06, powerdown_09);
+ * on yes it takes the 39 coins, chants (powerdown_11, powerdown_12) over the light and house effects,
+ * sets the new HP, FP and BP (unitwin_setmariolevel), and says it removed all badges because BP ran low
+ * (powerdown_10) when that happened, else that it is finished (powerdown_13).
+ */
 EVT_BEGIN(powerdownya_mario_level_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins.
     CALL(evt_pouch_get_coin, LW(0))
@@ -705,6 +725,17 @@ EVT_END()
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Chet Rippo's rank trade between two partners.
+ * Refuses if Mario has fewer than 39 coins (powerdown_04) or, in JP and later, if no partner can be ranked down
+ * (evt_win_party_lankdown_chk, powerdown_07).
+ * Otherwise Mario picks the partner to boost and the partner to drop (evt_win_other_select 7 and 8) and confirms
+ * the trade for 39 coins (powerdown_08, powerdown_09);
+ * on yes it takes the coins, brings out the boosted partner,
+ * chants (powerdown_11, powerdown_12), raises that partner's rank by one,
+ * lowers the other's by one and says it is
+ * finished (powerdown_13).
+ */
 EVT_BEGIN(powerdownya_party_lank_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins (or, from JP on, if no partner can lose a rank).
     CALL(evt_pouch_get_coin, LW(0))
@@ -984,6 +1015,17 @@ CALL(unitwin_getpartylank, LW(1), LW(0))
     RETURN
 EVT_END()
 #else
+/**
+ * Chet Rippo's rank trade between two partners.
+ * Refuses if Mario has fewer than 39 coins (powerdown_04) or, in JP and later, if no partner can be ranked down
+ * (evt_win_party_lankdown_chk, powerdown_07).
+ * Otherwise Mario picks the partner to boost and the partner to drop (evt_win_other_select 7 and 8) and confirms
+ * the trade for 39 coins (powerdown_08, powerdown_09);
+ * on yes it takes the coins, brings out the boosted partner,
+ * chants (powerdown_11, powerdown_12), raises that partner's rank by one,
+ * lowers the other's by one and says it is
+ * finished (powerdown_13).
+ */
 EVT_BEGIN(powerdownya_party_lank_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins (or, from JP on, if no partner can lose a rank).
     CALL(evt_pouch_get_coin, LW(0))

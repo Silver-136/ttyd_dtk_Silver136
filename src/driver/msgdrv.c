@@ -160,6 +160,7 @@ static inline const char* msgEntryText(MessageEntry* entry) {
     return entry->address->address;
 }
 
+/** the demo loads the text into a smart heap block and points a missing file at an empty text */
 void msgLoad(const char* filename, s32 index) {
     MessageEntry* entry;
     const char* str;
@@ -227,6 +228,7 @@ void msgLoad(const char* filename, s32 index) {
     }
 }
 #else
+/** the demo loads the text into a smart heap block and points a missing file at an empty text */
 void msgLoad(const char* filename, s32 index) {
     MessageEntry* entry;
     const char* str;
@@ -826,6 +828,11 @@ u16 hankakuSearch(char c);
  * word wrap and scrolling. Called when a window opens and for each added message.
  */
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Parses a message's markup into the window's character list:
+ * text and Japanese ruby, <col>, <shake>, <wave>, <icon>, <k> key waits, <p> pages, <select>, speeds and waits,
+ * word wrap and scrolling. Called when a window opens and for each added message.
+ */
 void msgAnalize(smartEntry* smart, const char* msg) {
     u16 glyphD;
     s32 wwD;
@@ -1365,6 +1372,11 @@ entry->time = time;
     }
 }
 #elif VERSION == VERSION_DEMO_US
+/**
+ * Parses a message's markup into the window's character list:
+ * text and Japanese ruby, <col>, <shake>, <wave>, <icon>, <k> key waits, <p> pages, <select>, speeds and waits,
+ * word wrap and scrolling. Called when a window opens and for each added message.
+ */
 void msgAnalize(smartEntry* smart, const char* msg) {
     u16 glyphD;
     s32 wwD;
@@ -1876,6 +1888,11 @@ entry->time = time;
     }
 }
 #else
+/**
+ * Parses a message's markup into the window's character list:
+ * text and Japanese ruby, <col>, <shake>, <wave>, <icon>, <k> key waits, <p> pages, <select>, speeds and waits,
+ * word wrap and scrolling. Called when a window opens and for each added message.
+ */
 void msgAnalize(smartEntry* smart, char* msg) {
     u16 glyphD;
     s32 wwD;
@@ -2587,6 +2604,7 @@ int msg_compare(const void* a, const void* b) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/** the text of a loaded message file (the demo keeps it in a smart heap block) */
 static inline const char* msgEntryText(MessageEntry* entry) {
     return (const char*)entry->address;
 }
@@ -2631,6 +2649,10 @@ const char* msgSearch(const char* tag) {
     return ErrMessage[gp->language];
 }
 
+/**
+ * Returns TRUE if byte c starts a two-byte Shift-JIS character.
+ * Later versions return FALSE for every language but Japanese.
+ */
 BOOL _ismbblead(u32 c) {
 #if VERSION >= VERSION_US
     if ((u32)gp->language != LANGUAGE_JP) {
@@ -3156,8 +3178,16 @@ void msgWindow_Clear_Main(WindowEntry* window) {
  * sign plate, system box, ...) and the text with msgDisp.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draw callback for a message window: draws the frame for its type (speech balloon with tail toward the speaker,
+ * sign plate, system box, ...) and the text with msgDisp.
+ */
 static void msgWindow_Disp(CameraId camId, void* param) {
 #else
+/**
+ * Draw callback for a message window: draws the frame for its type (speech balloon with tail toward the speaker,
+ * sign plate, system box, ...) and the text with msgDisp.
+ */
 void msgWindow_Disp(CameraId camId, void* param) {
 #endif
     CameraEntry* camera = camGetCurPtr();

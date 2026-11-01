@@ -1034,6 +1034,7 @@ void THPGXYuv2RgbSetup(GXRenderModeObj* rmode) {
 
 /** Draws one movie frame quad from its Y (full size) and U/V (half size) I8 textures; needs THPGXYuv2RgbSetup. */
 #if VERSION <= VERSION_DEMO_US
+/** Draws one movie frame quad from its Y (full size) and U/V (half size) I8 textures; needs THPGXYuv2RgbSetup. */
 void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 textureWidth, s16 textureHeight,
                       s16 polygonWidth, s16 polygonHeight) {
     GXTexObj tobj0, tobj1, tobj2;
@@ -1079,6 +1080,11 @@ void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 text
 #include "gxsub.h"
 static SeqDemoWork* wp = &work;
 static void demoDisp(CameraId cameraId, void* param);
+/**
+ * Enters the demo's movie sequence: frees field memory, hides the status bar,
+ * randomly picks full-size or two half-size pictures, opens demo.thp in a map-heap buffer,
+ * preloads it and starts its audio.
+ */
 void seq_demoInit(SequenceWork* seq) {
     iconReInit();
     memClear(HEAP_MALLOC);
@@ -1095,12 +1101,17 @@ void seq_demoInit(SequenceWork* seq) {
     THPSimplePreLoad(FALSE);
     THPSimpleAudioStart();
 }
+/** Leaves the movie sequence: frees icons and heap memory, shows the status bar again and frees mariost.tpl. */
 void seq_demoExit(SequenceWork* seq) {
     iconReInit();
     memClear(HEAP_MALLOC);
     statusWinDispOn();
     fileFree(wp->tpl);
 }
+/**
+ * Per-frame movie sequence: fades in, plays until A or Start or the movie's end, stops and closes the player,
+ * fades out and returns to the title screen. Queues demoDisp while the movie plays.
+ */
 void seq_demoMain(SequenceWork* seq) {
     switch (seq->state) {
         case 0:
@@ -1135,6 +1146,11 @@ void seq_demoMain(SequenceWork* seq) {
         dispEntry(CAMERA_2D, 0.0f, 0, demoDisp, NULL);
     }
 }
+/**
+ * 2D-camera draw callback: decodes the next movie frame
+ * and draws it centred (or twice at half size at two offsets),
+ * then draws mariost.tpl image 5 (the title logo's top half) at a third of its size near the top left.
+ */
 static void demoDisp(CameraId cameraId, void* param) {
     GXRenderModeObj* rmode;
     THPVideoInfo video;
@@ -1173,6 +1189,7 @@ static void demoDisp(CameraId cameraId, void* param) {
     gxsubMiscSetGX(-1);
 }
 #else
+/** Draws one movie frame quad from its Y (full size) and U/V (half size) I8 textures; needs THPGXYuv2RgbSetup. */
 void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 textureWidth, s16 textureHeight,
                       s16 polygonWidth, s16 polygonHeight) {
     GXTexObj tobj0, tobj1, tobj2;

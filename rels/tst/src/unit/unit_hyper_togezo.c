@@ -838,6 +838,13 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Sky-Blue Spiny curls up into its guard stance:
+ * plays the curl sound and a half-spin into TGZ_P_1,
+ * then swaps in the guarding defence (99 to every element, so no hit hurts it),
+ * defence attributes, status resistances, pose and data tables,
+ * clears the shelled part attribute (0x1000) and sets unit work 0 to 1.
+ */
 static EVT_BEGIN(guard_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -865,6 +872,12 @@ static EVT_BEGIN(guard_event)
     RETURN
 EVT_END()
 
+/**
+ * The Sky-Blue Spiny uncurls from its guard stance:
+ * plays the uncurl sound and a half-spin into TGZ_S_1, restores the normal defence (4), defence attributes,
+ * status resistances, pose and data tables, sets the shelled part attribute (0x1000) again
+ * and clears unit work 0.
+ */
 static EVT_BEGIN(guard_cancel_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

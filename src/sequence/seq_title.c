@@ -64,6 +64,7 @@ const char* DbgBtlSel_GetMsgDataPtr(void) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/** Later versions: titleInit does the setup, then the same flags are cleared. */
 void seq_titleInit(SequenceWork* work) {
     titleInit(work);
     gp->flags &= ~GW_FLAG_NO_ENTRANCE;
@@ -75,6 +76,7 @@ void seq_titleInit(SequenceWork* work) {
 
 /** Leaves the title sequence: frees mariost.tpl and fades out all sound unless going on to the file select. */
 #if VERSION <= VERSION_DEMO_US
+/** Later versions: titleInit does the setup, then the same flags are cleared. */
 void seq_titleInit(SequenceWork* work) {
     memset(wp2, 0, sizeof(TitleWork));
     wp2->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
@@ -107,6 +109,7 @@ void seq_titleInit(SequenceWork* work) {
     gp->flags &= ~GW_FLAG_E3;
 }
 #endif
+/** Leaves the title sequence: frees mariost.tpl and fades out all sound unless going on to the file select. */
 void seq_titleExit(SequenceWork* work) {
     fileFree(wp2->texture);
     if (seqGetNextSeq() != SEQ_LOAD) {
@@ -127,6 +130,12 @@ s32 getDebugMode(void) {
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Later versions' title setup (called by seq_titleInit):
+ * loads mariost.tpl, parks the logo off screen,
+ * stops leftover field sound (BGM fades over 3 s after a map change), and starts the title BGM,
+ * or the digest theme after a game over, held paused until the curtain opens.
+ */
 void titleInit(SequenceWork* work) {
     memset(wp2, 0, sizeof(TitleWork));
     wp2->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
@@ -172,6 +181,12 @@ void titleInit(SequenceWork* work) {
 
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Title screen state machine: waits for the BGM (and curtain animations), opens the curtain,
+ * slides the logo halves in, then waits for A or Start (to the file select via SEQ_LOAD)
+ * or about 19 s of idling (to the dmo_00 opening demo).
+ * Queues the logo draws each frame; later versions also track the debug-mode button code.
+ */
 static void titleMain(SequenceWork* work) {
     switch (wp2->state) {
         case 0:
@@ -290,6 +305,12 @@ gp->areaFadeInDuration = 0;
 }
 }
 #else
+/**
+ * Title screen state machine: waits for the BGM (and curtain animations), opens the curtain,
+ * slides the logo halves in, then waits for A or Start (to the file select via SEQ_LOAD)
+ * or about 19 s of idling (to the dmo_00 opening demo).
+ * Queues the logo draws each frame; later versions also track the debug-mode button code.
+ */
 void titleMain(SequenceWork* work) {
     switch (wp2->state) {
         case 0:
@@ -502,6 +523,11 @@ void disp1(CameraId cameraId, void* param) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Effect-layer draw callback: draws the two logo halves at their animated positions (per-language images in US
+ * and PAL) and the pulsing "press start" prompt.
+ * Later versions show the build date and time while Z is held in debug mode.
+ */
 static void disp2(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     CameraEntry saved;
@@ -533,6 +559,11 @@ pressStartGX(alpha, 0.0f, -110.0f);
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 #else
+/**
+ * Effect-layer draw callback: draws the two logo halves at their animated positions (per-language images in US
+ * and PAL) and the pulsing "press start" prompt.
+ * Later versions show the build date and time while Z is held in debug mode.
+ */
 void disp2(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     CameraEntry saved;
@@ -721,6 +752,10 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
 }
 #endif
 
+/**
+ * Prefetches demo.tpl and the animations used by the dmo_00 opening demo (Peach, the treasure chest,
+ * a Goomba and the other characters of the opening) once the logo has landed, so the idle demo starts quickly.
+ */
 static void titleLoadDemo(void) {
     fileAsyncf(FILE_TYPE_TPL, 0, "%s/demo.tpl", getMarioStDvdRoot());
     animGroupBaseAsync("c_peach", 0, 0);

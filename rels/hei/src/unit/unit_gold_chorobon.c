@@ -337,6 +337,11 @@ EVT_BEGIN(call_chorogun_event)
     RETURN
 EVT_END()
 
+/**
+ * Script for the Gold Fuzzy's end: after two seconds it releases the Fuzzy Horde (paying its reward),
+ * sends all the Fuzzies running off the stage and removes the horde unit;
+ * marks the unit work so it only happens once (JP and later).
+ */
 EVT_BEGIN(escape_chorogun_event)
     WAIT_MS(2000)
     CALL(get_gold_chorobon_id, LW(4))
@@ -382,6 +387,14 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Gold Fuzzy: while the swarm is out (work 0)
+ * and he is hit by a counter-type attack (512 without 2048),
+ * the swarm unit is removed with its reward (chorogun_dead_reward in JP and later) and the horde flees.
+ * After the default damage handling, the first time his HP drops to 7
+ * or less (but not 0) he spawns the Fuzzy swarm (entry_chorogun) and calls it in (call_chorogun_event);
+ * unit work 0 marks that it is out.
+ */
 // Summon the horde once at 1-7 HP; a non-reviving lethal hit sends an already-called horde away first.
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)

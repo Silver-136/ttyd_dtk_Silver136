@@ -104,6 +104,7 @@ void continueGame(void);
  */
 #if VERSION <= VERSION_DEMO_US
 s32 stone_id[7] = {ICON_SAC_DEKA, ICON_SAC_BAKUGAME, ICON_SAC_MUKI, ICON_SAC_SCISSOR, ICON_SAC_GENKI1, ICON_SAC_SUKI, ICON_SAC_ZUBASTAR};
+/** Demo: a 150 ms rumble on controller 0, as feedback when rumble is switched on in the file select options. */
 static EVT_BEGIN(evt_shake)
     CALL(evt_sub_rumble_onoff, 0, 0)
     WAIT_MS(150)
@@ -177,6 +178,7 @@ void seq_loadExit(SequenceWork* seq) {
 static inline BOOL loadStart(void);
 
 #else
+/** Starts loading the file menu's texture file (name.tpl, per language in US and PAL); TRUE once it is loaded. */
 static inline BOOL loadStart(void) {
 #if VERSION <= VERSION_DEMO_US
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/window/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
@@ -271,6 +273,7 @@ void seq_loadMain(SequenceWork* seq) {
 }
 
 #if VERSION >= VERSION_US
+/** Starts loading the file menu's texture file (name.tpl, per language in US and PAL); TRUE once it is loaded. */
 static inline BOOL loadStart(void) {
     const char* lang[] = {"jp", "us", "ge", "fr", "sp", "it"};
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
@@ -284,6 +287,7 @@ static inline BOOL loadStart(void) {
 #define SFX(id) psndSFXOn((const char*)(id))
 
 #if VERSION <= VERSION_DEMO_US
+/** Later versions: the same menu with no return value. */
 static BOOL loadMain(SequenceWork* seq) {
 u32 trg;
     u32 dir;
@@ -761,6 +765,7 @@ dispEntry(CAMERA_2D, 1000.0f, 0, loadDraw, NULL);
     return FALSE;
 }
 #else
+/** Later versions: the same menu with no return value. */
 void loadMain(SequenceWork* seq) {
     u32 trg;
     u32 dir;
@@ -1312,6 +1317,11 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
  * the prompt message and the wobbling cursor (hidden while a card script runs).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the file menu: the four save slot windows (name, level, play time, crystal star icons;
+ * new or corrupted file messages), the copy/delete/back buttons, the sound and rumble options,
+ * the prompt message and the wobbling cursor (hidden while a card script runs).
+ */
 static void loadDraw(CameraId camera, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     GXColor white = {255, 255, 255, 255};
@@ -1558,6 +1568,11 @@ w = FontGetMessageWidth("\x82\x57\x82\x57");
     }
 }
 #else
+/**
+ * Draws the file menu: the four save slot windows (name, level, play time, crystal star icons;
+ * new or corrupted file messages), the copy/delete/back buttons, the sound and rumble options,
+ * the prompt message and the wobbling cursor (hidden while a card script runs).
+ */
 void loadDraw(CameraId camera, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     GXColor white = {255, 255, 255, 255};
@@ -1969,6 +1984,7 @@ s32 stone_id[7] = {
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/** Demo: a 150 ms rumble on controller 0, as feedback when rumble is switched on in the file select options. */
 static EVT_BEGIN(evt_shake)
     CALL(evt_sub_rumble_onoff, 0, 0)
     WAIT_MS(150)

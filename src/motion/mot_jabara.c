@@ -161,6 +161,12 @@ static inline BOOL priChk(void) {
     return ret;
 }
 
+/**
+ * Checked from the stay motion: TRUE once A is held with the Ultra Boots
+ * and the stick has been rotated (marioGetRub), starting the Spring Jump.
+ * While A is held Mario glares (M_I_Y pose and voice);
+ * the US and later releases start the glare from a trigger flag instead of a 10-frame hold.
+ */
 BOOL marioChkJabara(void) {
     MarioWork* mario = marioGetPtr();
     s32 rubCount, rubDir;

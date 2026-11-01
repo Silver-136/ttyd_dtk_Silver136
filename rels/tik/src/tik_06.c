@@ -294,6 +294,11 @@ static EVT_BEGIN(evt_kanban2)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_06, the room in front of the Pit of 100 Trials.
+ * Starts the ambience (music only in the demo), sets up the exits and the Trouble request 12 characters,
+ * two signboards (one shows the Pit record: deepest floor and best times) and a Star Piece.
+ */
 EVT_BEGIN(tik_06_init_evt)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))

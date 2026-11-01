@@ -1300,6 +1300,11 @@ static EVT_BEGIN(renzoku_attack_event_sub_no_last)
     RETURN
 EVT_END()
 
+/**
+ * Chain step for the last target: if its record shows a still-pending hit it applies the damage with
+ * ResultACDefence and CheckDamage directly, otherwise it resolves the shot with damage_check_event_sub (LW(8) =
+ * 1, LW(10) = 0).
+ */
 static EVT_BEGIN(renzoku_attack_event_sub_last)
     SET_VALUE(LW(0), 5)
     SET_VALUE(LW(1), 8)

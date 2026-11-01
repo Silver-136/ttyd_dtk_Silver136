@@ -125,6 +125,7 @@ EvtWord tou_10_init_evt[254];
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e5c, JP tou .text+0x6D98. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 USER_FUNC(tou_10_mario_keyoff_check) {
     EvtWord* args = event->args;
 
@@ -150,6 +151,10 @@ s32 tou_10_mario_talk_end_wait(void) {
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006ec8, JP tou .text+0x6E04. See docs/NAME_PROVENANCE.md.
 // Accumulate 241 eligible checks; blocked controls or other motions pause rather than reset the count.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper: waits until Mario has been free (idle, walking or dashing, with no lockout) for a total of 240
+ * frames.
+ */
 USER_FUNC(tou_10_mario_free_wait) {
     MarioWork* mario = marioGetPtr();
 
@@ -1512,6 +1517,13 @@ EVT_END()
  * and Jolene says Security is here to escort him (75). Control then returns to Mario.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Spawned once the first match is reserved: in the pre-US versions it first waits for Mario to be free for 240
+ * frames.
+ * If Mario stands by the door (x within 35, z at or below -60) he is bounced back to (40, 0, -120);
+ * the guard (ガードマン) opens the door, walks in and closes it, calls Mario to his match (stg3_tou_74),
+ * and Jolene says Security is here to escort him (75). Control then returns to Mario.
+ */
 static EVT_BEGIN(evt_gardman)
 SET_VALUE(LW(0), 0)
     LOOP(0)

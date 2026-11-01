@@ -426,6 +426,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -1237,6 +1238,7 @@ EVT_BEGIN(clauda_appeal_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Victory reaction (data tag 64): plays Flurrie's PWD_Y_1 pose to the end. */
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_Y_1"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)

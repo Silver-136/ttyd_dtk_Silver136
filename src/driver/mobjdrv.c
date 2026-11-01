@@ -682,6 +682,12 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
  * keeps their shadows and colours, and queues their drawing (offscreen if they have a region).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame update of all map objects: works out which one Mario hammered, hit from below, stood on,
+ * spun on or touched with an action, which one a partner, a Bobbery bomb or Bowser hit,
+ * and reports it to the object; runs each object's main function, drops falling ones,
+ * keeps their shadows and colours, and queues their drawing (offscreen if they have a region).
+ */
 void mobjMain(void) {
     MapObjectWork* wp;
     MapObjectEntry* entry;
@@ -955,6 +961,12 @@ if (entry->mainFunc != NULL) {
     }
 }
 #else
+/**
+ * Per-frame update of all map objects: works out which one Mario hammered, hit from below, stood on,
+ * spun on or touched with an action, which one a partner, a Bobbery bomb or Bowser hit,
+ * and reports it to the object; runs each object's main function, drops falling ones,
+ * keeps their shadows and colours, and queues their drawing (offscreen if they have a region).
+ */
 void mobjMain(void) {
     MapObjectWork* wp;
     MapObjectEntry* entry;
@@ -1287,6 +1299,7 @@ MapObjectEntry* mobjNameToPtrNoAssert(const char* name) {
     return entry;
 }
 
+/** the demo searches the mobj list for the entry whose first hit object is hitObj */
 MapObjectEntry* mobjHitObjPtrToPtr(HitEntry* hitObj) {
 #if VERSION <= VERSION_DEMO_US
     int i;
@@ -1404,6 +1417,10 @@ void mobjCalcMtx2(MapObjectEntry* entry) {
     }
 }
 
+/**
+ * Returns whether a map object shows the "!" hint balloon over Mario when he is near (MOBJ_FLAG_HINT).
+ * Later versions accept NULL.
+ */
 BOOL mobjGetHint(MapObjectEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
 return (entry->flags & MOBJ_FLAG_HINT) != 0;
@@ -1432,6 +1449,10 @@ BOOL mobjCheckExec(void) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * For a MOBJ_KururinFloor object returns 2 while its item is still there to find,
+ * 1 once its item is out or its flag is set, and 0 for any other object. The demo keeps it as a real function.
+ */
 static int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // was always inlined in retail but not in demo
     if (!strcmp(entry->animName, kururinName)) {
         ItemEntry* item = itemNameToPtr(entry->name);
@@ -1477,6 +1498,7 @@ void mobjStrippedFallPool(MapObjectEntry* entry) {
         entry->velocity.z = 0.0f;
     }
 }
+/** demo only: the nearest active mobj within minMagnitude of (x, y, z) */
 MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude) {
     int entryCount;
     Vec pos;
@@ -1588,6 +1610,10 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * For a MOBJ_KururinFloor object returns 2 while its item is still there to find,
+ * 1 once its item is out or its flag is set, and 0 for any other object. The demo keeps it as a real function.
+ */
 // A real function in the demo, defined after its callers.
 int mobjCheckKururingFloorItem(MapObjectEntry* entry) {
     if (!strcmp(entry->animName, kururinName)) {

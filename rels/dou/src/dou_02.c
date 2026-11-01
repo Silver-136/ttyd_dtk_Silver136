@@ -97,6 +97,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Spear trap loop (only one at a time, guarded by GW(15)):
+ * the spear s02_yari shoots up 50 units in 0.15 seconds with SFX_MOBJ_FLOOR_TRAP1, stays up for 1 second,
+ * retracts over 0.3 seconds with SFX_MOBJ_FLOOR_TRAP2, the hit flag 2048 on "bb" is cleared while it is down,
+ * and after 2.5 seconds (2.8 seconds at 50 Hz in the PAL release) it repeats until GW(15) is set to 2.
+ */
 static EVT_BEGIN(yari_trap_sub)
     IF_INT_NOT_EQUAL(GW(15), 0)
         RETURN

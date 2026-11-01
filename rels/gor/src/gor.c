@@ -101,6 +101,7 @@ void _unresolved(void) {
 /** Script helper (Japanese release and later): frees the string built by evt_gor_msg_cat_alloc, if there is one. */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_0000050c, JP gor .text+0x440. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script helper (Japanese release and later): frees the string built by evt_gor_msg_cat_alloc, if there is one. */
 USER_FUNC(evt_gor_msg_cat_free) {
     if (gor_msg_cat_buf == NULL) {
         return EVT_RETURN_DONE;
@@ -119,6 +120,12 @@ USER_FUNC(evt_gor_msg_cat_free) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_0000041c, JP gor .text+0x350. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper (Japanese release and later): builds one string out of args[0],
+ * the message named args[1] and args[2], in a map-allocated buffer,
+ * and writes the buffer's address into args[3].
+ * Used to put fixed text around a looked-up message in Rogueport scripts.
+ */
 USER_FUNC(evt_gor_msg_cat_alloc) {
     EvtWord* args = event->args;
     const char* head = (const char*)evtGetValue(event, args[0]);
@@ -204,6 +211,10 @@ USER_FUNC(evt_goki_sub_intpl_get_value) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_00000104, JP gor .text+0x38. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper (Japanese release and later): remembers the sound effect id args[0] of Mario's snoring
+ * so it can be stopped later (-1 for none).
+ */
 USER_FUNC(evt_gor_inemuri_snd_set) {
     gor_inemuri_snd_id = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
@@ -216,6 +227,10 @@ USER_FUNC(evt_gor_inemuri_snd_set) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_000000cc, JP gor .text+0x0. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper (Japanese release and later): stops the snoring sound effect saved by evt_gor_inemuri_snd_set,
+ * if any.
+ */
 USER_FUNC(evt_gor_inemuri_snd_off) {
     if (gor_inemuri_snd_id != -1) {
         psndSFXOff(gor_inemuri_snd_id);

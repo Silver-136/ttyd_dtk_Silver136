@@ -101,6 +101,10 @@ s32 evt_sub_mail_event_end[1];
  * offsets, swinging out and settling back to rest. tree_evt reads it.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Stopwatch script that just waits a frame forever: scripts spawn it with SPAWN_EVENT_GET_ID
+ * and read how long it has run with evt_sub_get_stopwatch (Peach's timed tasks in aji_06, aji_16 and aji_17).
+ */
 EVT_BEGIN(evt_sub_stopwatch)
     LOOP(0)
         WAIT_FRAMES(1)
@@ -126,6 +130,10 @@ s32 tree_data[] = {
  * and read how long it has run with evt_sub_get_stopwatch (Peach's timed tasks in aji_06, aji_16 and aji_17).
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Stopwatch script that just waits a frame forever: scripts spawn it with SPAWN_EVENT_GET_ID
+ * and read how long it has run with evt_sub_get_stopwatch (Peach's timed tasks in aji_06, aji_16 and aji_17).
+ */
 EVT_BEGIN(evt_sub_stopwatch)
     LOOP(0)
         WAIT_FRAMES(1)
@@ -139,6 +147,12 @@ EVT_END()
  * kusa_evt reads it.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Shakes a tree hit with the hammer: plays the tree and leaves sounds,
+ * drops falling-leaf effects (LW(0) picks the leaf variant), spawns the optional drop script in LW(5),
+ * then sways map objects LW(2) (trunk, rotated)
+ * and LW(3)/LW(4) (leaves, shifted) through tree_data for 25 frames. Run per tree by evt_sub_tree_access_entry.
+ */
 EVT_BEGIN(tree_evt)
     SET_VALUE(LF(0), 0)
     IF_INT_NOT_EQUAL(LW(3), 0)
@@ -193,6 +207,11 @@ EVT_BEGIN(tree_evt)
     END_LOOP
     RETURN
 EVT_END()
+/**
+ * Map setup helper: walks the tree table at LW(0) (rows of six words: leaf variant 0-6, hit object, trunk,
+ * leaves, leaves, drop script; a first word of 7 ends it)
+ * and registers a hammer case on each hit object that runs tree_evt.
+ */
 EVT_BEGIN(evt_sub_tree_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -216,6 +235,11 @@ static s32 kusa_data[] = {
  * coingetDisp draws it.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Shakes a bush Mario checks: plays the grass sound at Mario, spawns the optional drop script in LW(3),
+ * and sways map object LW(2) sideways through kusa_data for 12 frames.
+ * Run per bush by evt_sub_kusa_access_entry.
+ */
 EVT_BEGIN(kusa_evt)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(10), LW(11), LW(12), 0)
@@ -232,6 +256,11 @@ EVT_BEGIN(kusa_evt)
     END_LOOP
     RETURN
 EVT_END()
+/**
+ * Map setup helper: walks the bush table at LW(0) (rows of four words: kind, hit object, map object,
+ * drop script; a first word of 4 ends it) and registers an A-button case in front of each one that runs
+ * kusa_evt.
+ */
 EVT_BEGIN(evt_sub_kusa_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -256,6 +285,12 @@ WinMgrDesc coinget_window_desc[] = {
  * and LW(3)/LW(4) (leaves, shifted) through tree_data for 25 frames. Run per tree by evt_sub_tree_access_entry.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Shakes a tree hit with the hammer: plays the tree and leaves sounds,
+ * drops falling-leaf effects (LW(0) picks the leaf variant), spawns the optional drop script in LW(5),
+ * then sways map objects LW(2) (trunk, rotated)
+ * and LW(3)/LW(4) (leaves, shifted) through tree_data for 25 frames. Run per tree by evt_sub_tree_access_entry.
+ */
 EVT_BEGIN(tree_evt)
     SET_TYPE(0)
     SET_VALUE(LF(0), 0)
@@ -319,6 +354,11 @@ EVT_END()
  * and registers a hammer case on each hit object that runs tree_evt.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Map setup helper: walks the tree table at LW(0) (rows of six words: leaf variant 0-6, hit object, trunk,
+ * leaves, leaves, drop script; a first word of 7 ends it)
+ * and registers a hammer case on each hit object that runs tree_evt.
+ */
 EVT_BEGIN(evt_sub_tree_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -339,6 +379,11 @@ EVT_END()
  * Run per bush by evt_sub_kusa_access_entry.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Shakes a bush Mario checks: plays the grass sound at Mario, spawns the optional drop script in LW(3),
+ * and sways map object LW(2) sideways through kusa_data for 12 frames.
+ * Run per bush by evt_sub_kusa_access_entry.
+ */
 EVT_BEGIN(kusa_evt)
     SET_TYPE(0)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
@@ -364,6 +409,11 @@ EVT_END()
  * kusa_evt.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Map setup helper: walks the bush table at LW(0) (rows of four words: kind, hit object, map object,
+ * drop script; a first word of 4 ends it) and registers an A-button case in front of each one that runs
+ * kusa_evt.
+ */
 EVT_BEGIN(evt_sub_kusa_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -379,6 +429,15 @@ EVT_END()
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The Crystal Star pickup cutscene.
+ * LW(0) is the star (1 Diamond ... 7 Crystal, -1 the chapter 4 scene where the star is shown with Doopliss as
+ * Mario, NPC "nise Mario"), LW(1) the item entry, LW(2) the pickup flag.
+ * Adds the star to the pouch, spins it up around Mario with the fanfare, prints the chapter's lines,
+ * runs the stage-clear curtain and save prompt, then changes map:
+ * Peach's interlude at aji_10 after chapters 1-3, usu_00, muj_12 and so on after the others.
+ * US and PAL time the spin in milliseconds and scale its steps by the frame rate.
+ */
 EVT_BEGIN(evt_sub_starstone)
     // Mario stops and the star goes into his pouch; the Doopliss scene (-1) adds nothing.
     CALL(evt_mario_key_onoff, 0)
@@ -718,6 +777,15 @@ EVT_BEGIN(evt_sub_starstone)
     RETURN
 EVT_END()
 #else
+/**
+ * The Crystal Star pickup cutscene.
+ * LW(0) is the star (1 Diamond ... 7 Crystal, -1 the chapter 4 scene where the star is shown with Doopliss as
+ * Mario, NPC "nise Mario"), LW(1) the item entry, LW(2) the pickup flag.
+ * Adds the star to the pouch, spins it up around Mario with the fanfare, prints the chapter's lines,
+ * runs the stage-clear curtain and save prompt, then changes map:
+ * Peach's interlude at aji_10 after chapters 1-3, usu_00, muj_12 and so on after the others.
+ * US and PAL time the spin in milliseconds and scale its steps by the frame rate.
+ */
 EVT_BEGIN(evt_sub_starstone)
     // Mario stops and the star goes into his pouch; the Doopliss scene (-1) adds nothing.
     CALL(evt_mario_key_onoff, 0)
@@ -1315,6 +1383,11 @@ EVT_BEGIN(mail_evt_gor_04)
     RETURN
 EVT_END()
 
+/**
+ * Excess Express (rsh_02_a in US and PAL, rsh_03_a in JP and the demos):
+ * from day 3 (STG6_45) sends Pa-Patch's mail (21)
+ * when Mario crosses the line at x = -100 (JP and demos: 400).
+ */
 EVT_BEGIN(mail_evt_rsh_03_a)
     IF_INT_EQUAL(GSWF_MAIL_PA_PATCH_SENT, 1)
         RETURN
@@ -1371,6 +1444,10 @@ EVT_BEGIN(mail_evt_hom_00)
     RETURN
 EVT_END()
 
+/**
+ * Rogueport (gor_02): at STG6_71 sends Zip Toad's mail (23) when Mario enters the map's area.
+ * PAL also waits until Mario is out of motion 25.
+ */
 EVT_BEGIN(mail_evt_gor_02_2)
     IF_INT_EQUAL(GSWF_MAIL_ZIP_TOAD_SENT, 1)
         RETURN
@@ -1515,6 +1592,10 @@ EVT_BEGIN(mail_evt_tou_01)
     RETURN
 EVT_END()
 
+/**
+ * Twilight Town (usu_01): at STG4_04_01 sends mail 29 (RDM issue 3)
+ * when Mario crosses x = 110 (the demos: 300).
+ */
 EVT_BEGIN(mail_evt_usu_01)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
@@ -2210,6 +2291,7 @@ USER_FUNC(evt_sub_status_gauge_check_update) {
 }
 
 #if VERSION >= VERSION_US
+/** Makes the status bar refresh its numbers at once. Not in JP or the demos. */
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_sub_status_gauge_force_update) {
     statusWinForceUpdate();
@@ -2283,6 +2365,7 @@ USER_FUNC(evt_sub_animgroup_async) {
 
 /** Starts the on-screen countdown timer: args[0] is the time limit, args[1] the restart time. */
 #if VERSION == VERSION_EU
+/** Returns the display frame rate (50 or 60) in args[0]. PAL only. */
 USER_FUNC(evt_sub_get_framerate) {
     evtSetValue(event, event->args[0], gp->framerate);
     return EVT_RETURN_DONE;
@@ -2290,6 +2373,7 @@ USER_FUNC(evt_sub_get_framerate) {
 
 /** Starts the on-screen countdown timer: args[0] is the time limit, args[1] the restart time. */
 #endif
+/** Starts the on-screen countdown timer: args[0] is the time limit, args[1] the restart time. */
 USER_FUNC(evt_sub_countdown_start) {
     EvtWord* args = event->args;
     s32 limit = evtGetValue(event, args[0]);
@@ -2330,6 +2414,11 @@ USER_FUNC(evt_sub_countdown_set_restart_time) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Draws the "You got N coins!" message inside the coin window of evt_sub_get_coin;
+ * work[0] is the coin count, work[1] turns the text on.
+ * US and PAL widen the window to fit the message and formats it per language.
+ */
 void coingetDisp(WinMgrEntry* entry) {
     s32* work = entry->param;
     char buf[0x400];
@@ -2534,6 +2623,10 @@ USER_FUNC(bgm_start_wait) {
 }
 
 #if VERSION >= VERSION_US
+/**
+ * Scales the two float variables args[0] and args[1] by 60 / frame rate,
+ * so per-frame steps cover the same distance at 50 Hz. Not in JP or the demos.
+ */
 USER_FUNC(evt_sub_scale_by_fps) {
     EvtWord* args = event->args;
     s32 a0 = args[0];

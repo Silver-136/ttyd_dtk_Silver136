@@ -361,6 +361,10 @@ EvtWord cooking_evt[];
 
 // Descriptive name (not in the symbol maps); placeholder unk_gor_00004db4, JP gor .text+0x4CE8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Returns in args[0] how many special badges the badge shop currently has in stock (badgeShop_SpecialCheck).
+ * JP and later releases.
+ */
 USER_FUNC(badgeshop_special_cnt) {
     EvtWord* args = event->args;
 
@@ -370,8 +374,18 @@ USER_FUNC(badgeshop_special_cnt) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Zess T.'s ("Nancy") position-blocking helper, setup half:
+ * remembers her current z in LW float 10 and 11 as the line she stands on,
+ * and (JP and later) makes her keep running her events when Mario leaves the screen.
+ */
 static USER_FUNC(nancy_block_init_func) {
 #else
+/**
+ * Zess T.'s ("Nancy") position-blocking helper, setup half:
+ * remembers her current z in LW float 10 and 11 as the line she stands on,
+ * and (JP and later) makes her keep running her events when Mario leaves the screen.
+ */
 USER_FUNC(nancy_block_init_func) {
 #endif
     NpcEntry* npc = evtNpcNameToPtr(event, "\203i\203\223\203V\201[");
@@ -493,6 +507,7 @@ static USER_FUNC(mario_keyoff_wait) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** The demo's badge shop: each step is a new message from the clerk, and the coin window opens with each menu */
 static EVT_BEGIN(sell_evt)
     CALL(evt_pouch_get_havebadgecnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -535,6 +550,7 @@ static EVT_BEGIN(sell_evt)
     RETURN
 EVT_END()
 #else
+/** The demo's badge shop: each step is a new message from the clerk, and the coin window opens with each menu */
 static EVT_BEGIN(sell_evt)
     CALL(evt_pouch_get_havebadgecnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -603,6 +619,12 @@ EVT_END()
  * The text formatting differs per release and language.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Badge shop purchase menu for the stock ("zaiko") of ordinary badges:
+ * tells Mario when the shelves are empty, otherwise lets him pick a badge, checks his coins and badge room,
+ * adds the badge and takes the price, and offers to buy more until he declines or the stock runs out.
+ * The text formatting differs per release and language.
+ */
 EVT_BEGIN(zaiko_buy_evt)
     CALL(evt_badgeShop_throw_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -657,6 +679,12 @@ EVT_BEGIN(zaiko_buy_evt)
     RETURN
 EVT_END()
 #else
+/**
+ * Badge shop purchase menu for the stock ("zaiko") of ordinary badges:
+ * tells Mario when the shelves are empty, otherwise lets him pick a badge, checks his coins and badge room,
+ * adds the badge and takes the price, and offers to buy more until he declines or the stock runs out.
+ * The text formatting differs per release and language.
+ */
 EVT_BEGIN(zaiko_buy_evt)
     CALL(evt_badgeShop_throw_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -735,6 +763,11 @@ EVT_BEGIN(zaiko_buy_evt)
 EVT_END()
 #endif
 
+/**
+ * The badge shop's buy menu in the demos and earlier:
+ * the clerk greets (badgeshop_36) and Mario picks one of three choices:
+ * 0 says badgeshop_05, 1 runs zaiko_buy_evt (the stock list) and 2 leaves with badgeshop_22.
+ */
 static EVT_BEGIN(buy_evt)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_msg_print, 0, STRING("badgeshop_36"), 0, STRING("バッジ店員"))
@@ -905,6 +938,12 @@ EVT_END()
  * her glasses break and she ends up blocking the way. Sets GSWF_GOR01_ZESS_BLOCKS_GATE.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Watches for Mario walking up to Zess T. ("Nancy") in the western alley before the contact lens quest:
+ * when he enters the box near x -580 to -400 she stops pacing
+ * and the first scene runs (gor_01_000 to gor_01_007), where she turns away, Mario bumps into her,
+ * her glasses break and she ends up blocking the way. Sets GSWF_GOR01_ZESS_BLOCKS_GATE.
+ */
 EVT_BEGIN(nancy_init_check)
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     // Wait until Mario walks into the alley zone in front of Zess T.
@@ -1111,6 +1150,12 @@ CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Watches for Mario walking up to Zess T. ("Nancy") in the western alley before the contact lens quest:
+ * when he enters the box near x -580 to -400 she stops pacing
+ * and the first scene runs (gor_01_000 to gor_01_007), where she turns away, Mario bumps into her,
+ * her glasses break and she ends up blocking the way. Sets GSWF_GOR01_ZESS_BLOCKS_GATE.
+ */
 EVT_BEGIN(nancy_init_check)
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     // Wait until Mario walks into the alley zone in front of Zess T.
@@ -1431,6 +1476,12 @@ s32 item_tbl_nancy[] = {
  * After that talking to her runs cooking_evt.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Talk event of Zess T. Before the contact lens is delivered,
+ * Mario can hand over a Contact Lens (the item list item_tbl_nancy);
+ * she then thanks him, walks into her house, the west exit opens and GSWF_GOR01_LENS_DELIVERED is set.
+ * After that talking to her runs cooking_evt.
+ */
 EVT_BEGIN(nancy_talk)
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
@@ -1485,6 +1536,12 @@ CALL(evt_npc_set_ry, STRING("me"), 270)
     RETURN
 EVT_END()
 #else
+/**
+ * Talk event of Zess T. Before the contact lens is delivered,
+ * Mario can hand over a Contact Lens (the item list item_tbl_nancy);
+ * she then thanks him, walks into her house, the west exit opens and GSWF_GOR01_LENS_DELIVERED is set.
+ * After that talking to her runs cooking_evt.
+ */
 EVT_BEGIN(nancy_talk)
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
@@ -2509,6 +2566,11 @@ EVT_END()
  * until Mario declines or the stock is empty. The US release formats prices with the message formatter.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Talk event of Charlieton, who sells special badges and items at high prices from the shop's special stock:
+ * greets Mario, then loops through a buy menu (coins checked, item added to the pouch, stock decremented)
+ * until Mario declines or the stock is empty. The US release formats prices with the message formatter.
+ */
 EVT_BEGIN(bottakuru_talk)
     // If nothing is left to buy, Charlieton only thanks Mario.
     CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
@@ -2605,6 +2667,11 @@ EVT_BEGIN(bottakuru_talk)
     RETURN
 EVT_END()
 #else
+/**
+ * Talk event of Charlieton, who sells special badges and items at high prices from the shop's special stock:
+ * greets Mario, then loops through a buy menu (coins checked, item added to the pouch, stock decremented)
+ * until Mario declines or the stock is empty. The US release formats prices with the message formatter.
+ */
 EVT_BEGIN(bottakuru_talk)
     // Charlieton is sold out, or has nothing Mario can still buy: he only thanks him.
     CALL(U_evt_badgeShop_get_special_zaiko, LW(0))
@@ -3634,6 +3701,12 @@ const char* badgemise_npc[] = {
 };
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Handler for the badge shop's display shelves ("S_item_07" to "S_item_11", see uwnobj_list):
+ * when Mario picks a shelf item the clerk faces him, quotes the price,
+ * and on a yes checks his coins and badge space, adds the badge, updates the shop stock and takes the coins.
+ * The demo version is a simpler variant without the language switch.
+ */
 EVT_BEGIN(evt_badge_dummy)
     SET_VALUE(LW(10), LW(0))
     CALL(disp_off, LW(10))
@@ -3685,6 +3758,12 @@ EVT_BEGIN(evt_badge_dummy)
     RETURN
 EVT_END()
 #else
+/**
+ * Handler for the badge shop's display shelves ("S_item_07" to "S_item_11", see uwnobj_list):
+ * when Mario picks a shelf item the clerk faces him, quotes the price,
+ * and on a yes checks his coins and badge space, adds the badge, updates the shop stock and takes the coins.
+ * The demo version is a simpler variant without the language switch.
+ */
 EVT_BEGIN(evt_badge_dummy)
     CALL(evt_mario_normalize)
     SET_VALUE(LW(10), LW(0))
@@ -5980,6 +6059,13 @@ EVT_END()
  * The "Ms. Mowz" theme plays during the talk.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Trouble Center job 16: Ms. Mowz asks Mario for an item (the Mowz request key item),
+ * kisses him when he hands it over and rewards him with the Attack FX B badge,
+ * which she leaves on the floor if his badge list is already full (200 badges).
+ * She then joins the party as a partner (all_party_lecture for partner 7).
+ * The "Ms. Mowz" theme plays during the talk.
+ */
 EVT_BEGIN(iri_16_tyutyu_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
         // Ms. Mowz's own theme replaces the plaza music for the whole talk.
@@ -6121,6 +6207,13 @@ WAIT_MS(800)
     RETURN
 EVT_END()
 #else
+/**
+ * Trouble Center job 16: Ms. Mowz asks Mario for an item (the Mowz request key item),
+ * kisses him when he hands it over and rewards him with the Attack FX B badge,
+ * which she leaves on the floor if his badge list is already full (200 badges).
+ * She then joins the party as a partner (all_party_lecture for partner 7).
+ * The "Ms. Mowz" theme plays during the talk.
+ */
 EVT_BEGIN(iri_16_tyutyu_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
         // Ms. Mowz's own theme replaces the plaza music for the whole talk.
@@ -6479,6 +6572,10 @@ CALL(evt_unitwin_alloc)
 EVT_END()
 
 #if VERSION >= VERSION_US
+/**
+ * Loops forever: shows the stage platform pieces "S_dai" only while Mario stands near x -60 to 60,
+ * z -300 to -200 (the area near the fountain); hides it otherwise. US and later releases.
+ */
 EVT_BEGIN(dai_disp)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -6511,6 +6608,14 @@ EVT_END()
  * the Shadow Queen's darkness scenes and the epilogue.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init for gor_01 (Rogueport plaza).
+ * Chooses the music by story stage, sets up the exits (east to gor_02, west to gor_03, south to the harbor),
+ * creates the NPCs, buildings' doors, shops, the save block, the star pieces and chests,
+ * and starts whichever story scene belongs to the current stage:
+ * Goombella joining, the Skull Gem and Ultra Hammer events, Bowser's visit,
+ * the Shadow Queen's darkness scenes and the epilogue.
+ */
 EVT_BEGIN(gor_01_init_evt)
     // Work out which special scene this visit belongs to: Bowser's visit in Chapter 6 or the darkness scenes in
     // Chapter 8.
@@ -6706,6 +6811,14 @@ CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f1A"), MAP_OBJ_FLAG
     RETURN
 EVT_END()
 #else
+/**
+ * Map init for gor_01 (Rogueport plaza).
+ * Chooses the music by story stage, sets up the exits (east to gor_02, west to gor_03, south to the harbor),
+ * creates the NPCs, buildings' doors, shops, the save block, the star pieces and chests,
+ * and starts whichever story scene belongs to the current stage:
+ * Goombella joining, the Skull Gem and Ultra Hammer events, Bowser's visit,
+ * the Shadow Queen's darkness scenes and the epilogue.
+ */
 EVT_BEGIN(gor_01_init_evt)
     // Work out which special scene this visit belongs to: Bowser's visit in Chapter 6 or the darkness scenes in
     // Chapter 8.
@@ -7746,6 +7859,11 @@ s32 itemNameToID(const char* name) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * The demo reads the recipes from cooking.xml on the disc:
+ * <cooking_x1> blocks for one ingredient, <cooking_x2> blocks for two.
+ * Each call loads the file (blocking until it is in), scans for the matching block and frees it.
+ */
 USER_FUNC(cook_chk) {
     // FAKE: `(volatile u32)args[n]` index casts on the evtSetValue calls below (plain args[n] changes
     // the object in both versions)
@@ -7774,6 +7892,12 @@ USER_FUNC(cook_chk) {
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Zess T.'s two-ingredient recipe lookup: given items args[0] and args[1] (in either order),
+ * returns the dish in args[2] or 0 if the pair has no recipe.
+ * Anything with the Mystery item gives a random result.
+ * The demos read cooking.xml from the disc, later releases search R_cookbook_recipe_table.
+ */
 USER_FUNC(cook_chk2) {
     // FAKE: `(volatile u32)args[n]` index casts on the evtSetValue calls below (plain args[n] changes
     // the object in both versions)
@@ -7811,6 +7935,11 @@ static inline BOOL fileAsyncMissing(FileEntry* file) {
 
 /** Returns TRUE when item is not 0, i.e. when there is a dish to cook. */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo reads the recipes from cooking.xml on the disc:
+ * <cooking_x1> blocks for one ingredient, <cooking_x2> blocks for two.
+ * Each call loads the file (blocking until it is in), scans for the matching block and frees it.
+ */
 static USER_FUNC(cook_chk) {
     EvtWord* args = event->args;
     s32 item = evtGetValue(event, args[0]);
@@ -7859,6 +7988,12 @@ static USER_FUNC(cook_chk) {
     evtSetValue(event, (volatile u32)args[2], itemNameToID(result2));
     return EVT_RETURN_DONE;
 }
+/**
+ * Zess T.'s two-ingredient recipe lookup: given items args[0] and args[1] (in either order),
+ * returns the dish in args[2] or 0 if the pair has no recipe.
+ * Anything with the Mystery item gives a random result.
+ * The demos read cooking.xml from the disc, later releases search R_cookbook_recipe_table.
+ */
 static USER_FUNC(cook_chk2) {
     EvtWord* args = event->args;
     s32 item1 = evtGetValue(event, args[0]);
@@ -7909,13 +8044,24 @@ static USER_FUNC(cook_chk2) {
     return EVT_RETURN_DONE;
 }
 #endif
+/** Returns TRUE when item is not 0, i.e. when there is a dish to cook. */
 BOOL chkCookItem(s32 item) {
     return item != 0;
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Builds item_tbl, the list of items Mario carries for the cooking selection (without the item he already
+ * picked), ends it with -1 and returns the count in args[1].
+ * args[0] is the pouch slot to leave out (the item id in the demos).
+ */
 static USER_FUNC(make_item_tbl) {
 #else
+/**
+ * Builds item_tbl, the list of items Mario carries for the cooking selection (without the item he already
+ * picked), ends it with -1 and returns the count in args[1].
+ * args[0] is the pouch slot to leave out (the item id in the demos).
+ */
 USER_FUNC(make_item_tbl) {
 #endif
     EvtWord* args = event->args;
@@ -7946,6 +8092,10 @@ USER_FUNC(make_item_tbl) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Returns in args[1] the display name of item args[0] (a message string in the US and later,
+ * the id string in earlier releases).
+ */
 USER_FUNC(get_item_name) {
     EvtWord* args = event->args;
     s32 item = evtGetValue(event, args[0]);
@@ -8107,6 +8257,13 @@ s32 iri_18_item_tbl[] = {
  * which also unlocks the recipe log.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Zess T.'s talk after the contact lens: cooking service.
+ * Handles the Trouble Center job 18 cookbook request first when it is active,
+ * then the introduction on the first visit, and then asks which one or two items Mario wants to cook,
+ * shows what she makes, removes the ingredients from the pouch, runs cooking_evt_sub and gives Mario the dish,
+ * which also unlocks the recipe log.
+ */
 EVT_BEGIN(cooking_evt)
     // Controls are locked while Mario and his partners walk up to Zess T.'s stove.
     CALL(evt_mario_key_onoff, 0)
@@ -8410,6 +8567,13 @@ END_IF
     RETURN
 EVT_END()
 #else
+/**
+ * Zess T.'s talk after the contact lens: cooking service.
+ * Handles the Trouble Center job 18 cookbook request first when it is active,
+ * then the introduction on the first visit, and then asks which one or two items Mario wants to cook,
+ * shows what she makes, removes the ingredients from the pouch, runs cooking_evt_sub and gives Mario the dish,
+ * which also unlocks the recipe log.
+ */
 EVT_BEGIN(cooking_evt)
     // Controls are locked while Mario and his partners walk up to Zess T.'s stove.
     CALL(evt_mario_key_onoff, 0)

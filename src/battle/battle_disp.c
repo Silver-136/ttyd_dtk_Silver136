@@ -298,6 +298,11 @@ void btlDispInit(void) {
     wp->dispFlags |= BATTLE_DISP_FLAG_STAR_POINTS;
 }
 
+/**
+ * Picks the status pose for a unit: the KO pose when it is inactive,
+ * else the first status it has from _status_pose_table (the demos check sleep before stop and freeze,
+ * retail checks it after), else BTL_POSE_NORMAL.
+ */
 StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
     s32* table = _status_pose_table;
     StatusEffectType type;

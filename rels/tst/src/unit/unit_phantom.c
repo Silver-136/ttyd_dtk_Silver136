@@ -769,6 +769,12 @@ static EVT_BEGIN(all_fire_attackEvent_sub)
     RETURN
 EVT_END()
 
+/**
+ * Fire attack on every target: the Phantom Ember moves to x = -40,
+ * shakes for 20 beats while ten fire effects are spawned (one every 2 frames),
+ * then every target is checked in turn for avoid or damage (the attack defence result is taken once).
+ * Afterwards it returns home. The unit's attack AI never selects it.
+ */
 static EVT_BEGIN(all_fire_attack_event)
     // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Phantom
     // Ember with nobody to hit gets flustered.

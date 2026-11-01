@@ -362,6 +362,14 @@ EVT_END()
  * the ceiling attributes cleared and the ground pose table.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Ceiling-fall script, installed by return_event while the Pale Piranha hangs from the ceiling and run
+ * when the stage's overhead iron frame falls (_fall_frame_event): it clears itself,
+ * sinks into the ceiling (PKF_E_4 with the move sound, shadow shrunk, hidden),
+ * moves its position and home to its home x/z on the ground (y = 0),
+ * then pops back up standing (PKF_E_1, then PKF_S_1) with the ground hit, cursor, status-icon and kiss offsets,
+ * the ceiling attributes cleared and the ground pose table.
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -395,6 +403,14 @@ CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
     RETURN
 EVT_END()
 #else
+/**
+ * Ceiling-fall script, installed by return_event while the Pale Piranha hangs from the ceiling and run
+ * when the stage's overhead iron frame falls (_fall_frame_event): it clears itself,
+ * sinks into the ceiling (PKF_E_4 with the move sound, shadow shrunk, hidden),
+ * moves its position and home to its home x/z on the ground (y = 0),
+ * then pops back up standing (PKF_E_1, then PKF_S_1) with the ground hit, cursor, status-icon and kiss offsets,
+ * the ceiling attributes cleared and the ground pose table.
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -444,6 +460,17 @@ EVT_END()
  * the ceiling pose table) with ceil_fall_ready_event as its ceiling-fall script.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Burrow back after an attack (run by normal_attack_event and counter_damage_event):
+ * the Pale Piranha sinks (PKF_E_2 with the move sound, shadow shrunk, hidden).
+ * If the stage has a ceiling (pakkun_ceil_exist) it picks ground or ceiling at random (half each),
+ * else the ground.
+ * On the ground it reappears at its home x/z at y = 0 standing (PKF_E_1 then PKF_S_1,
+ * ground offsets and pose table, ceiling attributes off, no ceiling-fall script);
+ * on the ceiling it reappears at y = 130 hanging upside down (PKF_E_3 then PKF_S_3,
+ * flipped hit and cursor offsets, ceiling unit attribute and the two part attributes on,
+ * the ceiling pose table) with ceil_fall_ready_event as its ceiling-fall script.
+ */
 static EVT_BEGIN(return_event)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(pakkun_ceil_exist, LW(0))
@@ -508,6 +535,17 @@ CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
     RETURN
 EVT_END()
 #else
+/**
+ * Burrow back after an attack (run by normal_attack_event and counter_damage_event):
+ * the Pale Piranha sinks (PKF_E_2 with the move sound, shadow shrunk, hidden).
+ * If the stage has a ceiling (pakkun_ceil_exist) it picks ground or ceiling at random (half each),
+ * else the ground.
+ * On the ground it reappears at its home x/z at y = 0 standing (PKF_E_1 then PKF_S_1,
+ * ground offsets and pose table, ceiling attributes off, no ceiling-fall script);
+ * on the ceiling it reappears at y = 130 hanging upside down (PKF_E_3 then PKF_S_3,
+ * flipped hit and cursor offsets, ceiling unit attribute and the two part attributes on,
+ * the ceiling pose table) with ceil_fall_ready_event as its ceiling-fall script.
+ */
 static EVT_BEGIN(return_event)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(pakkun_ceil_exist, LW(0))
@@ -763,6 +801,10 @@ static USER_FUNC(shadow_scale_memory) {
  * while the ceiling still exists, so the plant knows whether it can hang from it.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
+ * while the ceiling still exists, so the plant knows whether it can hang from it.
+ */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 if (_battleWorkPointer->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
@@ -773,6 +815,10 @@ evtSetValue(event, args[0], 0);
     return EVT_RETURN_DONE;
 }
 #else
+/**
+ * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
+ * while the ceiling still exists, so the plant knows whether it can hang from it.
+ */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 

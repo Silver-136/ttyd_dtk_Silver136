@@ -246,8 +246,20 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame gauge change: a drain rate chosen by difficulty params[7],
+ * minus a lift that rises over the first 20 frames A is held after a press and fades out by frame 80,
+ * so tapping A keeps the gauge rising. Also sets the flag that shows the A icon as pressed.
+ * The demos use a steeper, shorter lift curve and lower drain rates.
+ */
 static f32 _GetGaugeDecValue(void) {
 #else
+/**
+ * Per-frame gauge change: a drain rate chosen by difficulty params[7],
+ * minus a lift that rises over the first 20 frames A is held after a press and fades out by frame 80,
+ * so tapping A keeps the gauge rising. Also sets the flag that shows the A icon as pressed.
+ * The demos use a steeper, shorter lift curve and lower drain rates.
+ */
 f32 _GetGaugeDecValue(void) {
 #endif
     BattleWork* work = _battleWorkPointer;

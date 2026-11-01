@@ -528,6 +528,10 @@ void fadeSetAnimVirtualPos(f32 x, f32 y, f32 z) {
     entry->flags |= FADE_FLAG_VIRTUAL_POS;
 }
 
+/**
+ * Sets the callback slot 3's page-flip transitions call to draw into the offscreen image;
+ * used by the E3 demo sequence.
+ */
 void fadeSetOffscreenCallback(OffscreenCallback callback, void* param) {
     FadeEntry* entry = &wp->entries[3];
     entry->callback = callback;

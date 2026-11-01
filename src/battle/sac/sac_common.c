@@ -256,6 +256,11 @@ USER_FUNC(sac_enemy_slide_go) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Starts enemy_slide_return_evt on every enemy-side unit to slide them home.
+ * The PAL release also records each script's id in the unit (slideReturnEventId)
+ * so battle_seq can wait for the slide to finish.
+ */
 USER_FUNC(sac_enemy_slide_return) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;

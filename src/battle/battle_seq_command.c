@@ -95,6 +95,10 @@ s32 _hammer_badge_table[9] = {ITEM_POWER_SMASH, ITEM_PIERCING_BLOW, ITEM_HAMMER_
  * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Started by BattleCommandInput when the player picks a greyed-out command:
+ * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
+ */
 EVT_BEGIN(_btl_cmd_error_msg_event)
     CALL(_get_msg, LW(0))
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -30, LW(0), 60)
@@ -696,6 +700,10 @@ BattleCheckPartyEntry _checkPartyTable[8] = {
     {UNIT_MS_MOWZ, "btl_cmd_pt_chuchurina", ICON_PARTY_MS_MOWZ, "btl_hlp_cmd_operation_party7"},
 };
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Started by BattleCommandInput when the player picks a greyed-out command:
+ * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
+ */
 EVT_BEGIN(_btl_cmd_error_msg_event)
     CALL(_get_msg, LW(0))
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -30, LW(0), 60)
@@ -772,6 +780,13 @@ s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon*
     return targets.numTargets;
 }
 
+/**
+ * Builds the Tactics menu: Change Partner (when another partner can be picked),
+ * Appeal (once a Star Power is obtained), Charge and Super Charge (if equipped, with their FP cost),
+ * Defend and Run Away.
+ * Run Away is greyed out in no-escape battles or when the unit cannot act, and most entries while veiled.
+ * The demos leave the cost of the free entries unset.
+ */
 void _btlcmd_MakeOperationTable(BattleWork* wp) {
     PouchData* pouch;
     NpcBattleInfo* info;
@@ -1961,6 +1976,11 @@ check:
     return done;
 }
 
+/**
+ * Draws the Double/Triple Dip cancel prompt: btl_msg_multi_item_cancel_check with Yes/No and the hand cursor.
+ * Before the US release Yes/No are hardcoded Japanese;
+ * the PAL release sizes the window by the text's measured width instead of its length.
+ */
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* param) {
     BattleWork* wp = param;
     char buf[36];
@@ -2874,6 +2894,11 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
 }
 
 #pragma dont_inline on
+/**
+ * Draws one HP bar at screen position pos: the frame texture, then the fill by barRatio,
+ * with a black trail for recent damage while it drains (mode 1).
+ * The US and PAL releases use other texture ids than JP and the demos.
+ */
 void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     f32 x, y;
@@ -2904,6 +2929,15 @@ void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
 #pragma dont_inline reset
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Picks the random action of a Confused Mario or partner
+ * and returns its script (btlevtcmd in battle_event_cmd.c retries while it returns NULL):
+ * a random enabled command other than Items or Special,
+ * then a random single-target move usable while confused aimed at a random target, or Defend,
+ * Run Away or Change Partner from Tactics.
+ * Enemies, and cases with no valid pick, get subsetevt_confuse_flustered.
+ * The US and PAL releases first drop a Double or Triple Dip in progress.
+ */
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     BattleCommand* cmd = &wp->commandMenu;
     BattleCursor* cursor;
@@ -3063,6 +3097,15 @@ return subsetevt_confuse_flustered;
     }
 }
 #else
+/**
+ * Picks the random action of a Confused Mario or partner
+ * and returns its script (btlevtcmd in battle_event_cmd.c retries while it returns NULL):
+ * a random enabled command other than Items or Special,
+ * then a random single-target move usable while confused aimed at a random target, or Defend,
+ * Run Away or Change Partner from Tactics.
+ * Enemies, and cases with no valid pick, get subsetevt_confuse_flustered.
+ * The US and PAL releases first drop a Double or Triple Dip in progress.
+ */
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     BattleCommand* cmd = &wp->commandMenu;
     BattleCursor* cursor;

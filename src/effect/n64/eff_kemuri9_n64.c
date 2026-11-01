@@ -125,8 +125,10 @@ work->anim = 0.0f;
 
 /** Eases the ring radius toward radiusEnd, lifts each puff, advances the texture animation; deletes at end of life. */
 #if VERSION <= VERSION_DEMO_US
+/** Eases the ring radius toward radiusEnd, lifts each puff, advances the texture animation; deletes at end of life. */
 static void effKemuri9Main(EffectEntry* effect) {
 #else
+/** Eases the ring radius toward radiusEnd, lifts each puff, advances the texture animation; deletes at end of life. */
 void effKemuri9Main(EffectEntry* effect) {
 #endif
     EffKemuri9N64Work* work = effect->userdata;
@@ -175,8 +177,16 @@ work->anim = 8.0f * (f32)work->counter / (f32)work->life;
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo draws the smoke as N64 quads, blending two frames of one texture strip;
+ * the later versions use a 16-cell GX texture and draw the quads directly.
+ */
 static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
 #else
+/**
+ * The demo draws the smoke as N64 quads, blending two frames of one texture strip;
+ * the later versions use a 16-cell GX texture and draw the quads directly.
+ */
 void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
 #endif
     CameraEntry* camera = camGetPtr(cameraId);

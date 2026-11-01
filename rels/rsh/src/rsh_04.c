@@ -424,6 +424,12 @@ EVT_END()
  */
 // Each timed speech signals GF(0); the main movement waits for it before starting the next speech.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Cutscene of the lost documents (shorui funshitu) in cabin 3 at STG6_21_DAY_2:
+ * Pennington questions the salaryman while the camera frames them,
+ * the salaryman paces and mumbles (stg6_rsh_169_xx),
+ * the screen blurs as the mystery deepens and the story advances to STG6_22_DOCUMENT.
+ */
 EVT_BEGIN(evt_shorui_funshitu)
     // The lost documents scene: Pennington's theme plays and he questions the salaryman.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_POWAN1"))
@@ -528,6 +534,12 @@ CALL(evt_set_dir_to_target, STRING("me"), STRING("\x83\x54\x83\x89\x83\x8A\x81\x
     RETURN
 EVT_END()
 #else
+/**
+ * Cutscene of the lost documents (shorui funshitu) in cabin 3 at STG6_21_DAY_2:
+ * Pennington questions the salaryman while the camera frames them,
+ * the salaryman paces and mumbles (stg6_rsh_169_xx),
+ * the screen blurs as the mystery deepens and the story advances to STG6_22_DOCUMENT.
+ */
 EVT_BEGIN(evt_shorui_funshitu)
     // The lost documents scene: Pennington's theme plays and he questions the salaryman.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_POWAN1"))
@@ -677,6 +689,12 @@ static s32 item_tbl[] = {
  */
 // Cancelling leaves the clue unresolved; accepting displays a temporary paper without consuming the pouch item.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Cutscene when Mario brings the important-looking paper (Vital Paper) to the cabin:
+ * the camera frames the NPCs, Mario chooses the paper from the item menu,
+ * the salaryman recognises it and says thanks (stg6_rsh_172 to 177),
+ * and the story advances to STG6_24_A_VITAL_CLUE.
+ */
 EVT_BEGIN(evt_daijisouna_kami)
     CALL(evt_cam3d_evt_set, 220, 107, 165, 220, 45, -180, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -731,6 +749,12 @@ IF_INT_EQUAL(LW(1), -1)
     RETURN
 EVT_END()
 #else
+/**
+ * Cutscene when Mario brings the important-looking paper (Vital Paper) to the cabin:
+ * the camera frames the NPCs, Mario chooses the paper from the item menu,
+ * the salaryman recognises it and says thanks (stg6_rsh_172 to 177),
+ * and the story advances to STG6_24_A_VITAL_CLUE.
+ */
 EVT_BEGIN(evt_daijisouna_kami)
     CALL(evt_cam3d_evt_set, 220, 107, 165, 220, 45, -180, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -836,6 +860,13 @@ static s32 item_tbl2[] = {
  * day 3 and return-trip lines.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Talk script of the conductor (syashou) in rsh_04.
+ * By story stage: his first greeting (sets STG6_01_THE_CONDUCTOR), ticket and autograph hints,
+ * the night talk where Mario can agree to help (STG6_13_TALK_TO_THE_CONDUCTOR),
+ * the Blanket exchange (takes the Blanket, gives a Mushroom, STG6_19_GIVE_BLANKET), and day 2,
+ * day 3 and return-trip lines.
+ */
 static EVT_BEGIN(talk_syashou)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_12_GIVE_AUTOGRAPH, STG6_18_BLANKET_EXCHANGE)
@@ -952,6 +983,13 @@ END_IF
     RETURN
 EVT_END()
 #else
+/**
+ * Talk script of the conductor (syashou) in rsh_04.
+ * By story stage: his first greeting (sets STG6_01_THE_CONDUCTOR), ticket and autograph hints,
+ * the night talk where Mario can agree to help (STG6_13_TALK_TO_THE_CONDUCTOR),
+ * the Blanket exchange (takes the Blanket, gives a Mushroom, STG6_19_GIVE_BLANKET), and day 2,
+ * day 3 and return-trip lines.
+ */
 static EVT_BEGIN(talk_syashou)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_12_GIVE_AUTOGRAPH, STG6_18_BLANKET_EXCHANGE)

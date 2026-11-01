@@ -40,8 +40,26 @@ BOOL christineGetStatus(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * First step of the field Tattle script: picks the message Goombella says into LW(0).
+ * If the script was handed an NPC Mario can talk to,
+ * LW(0) is moved to that NPC's description (its tattle message);
+ * otherwise it looks at the map object Mario pushes, faces or stands on and picks the hint for that block,
+ * switch, chest or sign, falling back to the "msg_kuri_map" comment on the map itself.
+ * Mutes sound effects for the duration; retail also lifts her off the floor collision,
+ * and returns early when she is in paper form (the US demo instead requires her on the ground).
+ */
 static USER_FUNC(pre_kurio_use) {
 #else
+/**
+ * First step of the field Tattle script: picks the message Goombella says into LW(0).
+ * If the script was handed an NPC Mario can talk to,
+ * LW(0) is moved to that NPC's description (its tattle message);
+ * otherwise it looks at the map object Mario pushes, faces or stands on and picks the hint for that block,
+ * switch, chest or sign, falling back to the "msg_kuri_map" comment on the map itself.
+ * Mutes sound effects for the duration; retail also lifts her off the floor collision,
+ * and returns early when she is in paper form (the US demo instead requires her on the ground).
+ */
 USER_FUNC(pre_kurio_use) {
 #endif
     void* hit;
@@ -270,8 +288,16 @@ if (!(party->flags & PARTY_FLAG_IS_GROUNDED)) {
  * lets Mario move again and unmutes sound effects (retail also restores her floor collision).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Last step of the field Tattle script: advances kuribo_use to its wind-down state,
+ * lets Mario move again and unmutes sound effects (retail also restores her floor collision).
+ */
 static USER_FUNC(post_kurio_use) {
 #else
+/**
+ * Last step of the field Tattle script: advances kuribo_use to its wind-down state,
+ * lets Mario move again and unmutes sound effects (retail also restores her floor collision).
+ */
 USER_FUNC(post_kurio_use) {
 #endif
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -319,6 +345,10 @@ s32 fbatNpcTalkCheck(void);
 
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
+ * retail clears the floor-collision overrides kuribo_use may have set; empty in the demos.
+ */
 void kuribo_use_post(PartyEntry* party) {
     party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
     party->flags &= ~PARTY_FLAG_FORCE_FALL;
@@ -326,6 +356,7 @@ void kuribo_use_post(PartyEntry* party) {
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/** The demo starts the message right where Goombella stands; retail first walks her next to Mario. */
 void kuribo_use(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
     HitEntry* wall;
@@ -419,8 +450,13 @@ void kuribo_use(PartyEntry* party) {
  * plays the standard leave-the-party motion and switches to run mode 14 once it ends.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
+ * retail clears the floor-collision overrides kuribo_use may have set; empty in the demos.
+ */
 void kuribo_use_post(PartyEntry* party) {
 }
+/** The demo starts the message right where Goombella stands; retail first walks her next to Mario. */
 void kuribo_use(PartyEntry* party) {
     EventEntry* evt;
 
@@ -457,6 +493,10 @@ void kuribo_use(PartyEntry* party) {
     partyChkGnd(party);
 }
 #endif
+/**
+ * Goodbye routine shared by Goombella, Flurrie, Vivian, Ms. Mowz and the walking NPC followers:
+ * plays the standard leave-the-party motion and switches to run mode 14 once it ends.
+ */
 void kuribo_bye(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;

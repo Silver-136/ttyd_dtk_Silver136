@@ -129,6 +129,10 @@ static EVT_BEGIN(minigame_view_monte)
 EVT_END()
 
 #if VERSION >= VERSION_US
+/**
+ * Deletes the five moving floors (platforms) of the Plane Mode course once, guarded by the floor-exists flag;
+ * runs when Mario touches a platform or the game ends. US and later only.
+ */
 EVT_BEGIN(minigame01_floor_delete)
     CALL(yuuminigame1_floor_chk, LW(0), LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -391,6 +395,11 @@ EVT_BEGIN(minigame01_start_cam_cancel)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Phase 1 of Plane Mode: builds the five floating platforms (S_dai_01 to S_dai_05;
+ * US and later pick a random height and direction for each), plays the opening camera (skippable),
+ * shows the countdown effect, switches Mario into plane mode and starts the coin counter.
+ */
 EVT_BEGIN(minigame01_start)
     CALL(yuu_atai_init)
     CALL(yuu_atai_push, LW(0))
@@ -516,6 +525,11 @@ WAIT_MS(1000)
 RETURN
 EVT_END()
 #else
+/**
+ * Phase 1 of Plane Mode: builds the five floating platforms (S_dai_01 to S_dai_05;
+ * US and later pick a random height and direction for each), plays the opening camera (skippable),
+ * shows the countdown effect, switches Mario into plane mode and starts the coin counter.
+ */
 EVT_BEGIN(minigame01_start)
     CALL(yuu_atai_init)
     CALL(yuu_atai_push, LW(0))
@@ -1261,6 +1275,10 @@ EVT_BEGIN(minigame01_end)
 EVT_END()
 #endif
 
+/**
+ * Map init for yuu_00 (Plane Mode room): starts the minigame set-up, runs the Pianta NPC set-up,
+ * and (US and later) hides all but the current game-language sign graphics on the stage.
+ */
 EVT_BEGIN(yuu_00_init_evt)
     // The neon sign lights up, the game is set up and the audience appears.
     CALL(evt_map_playanim, STRING("neon_02"), MAP_ANIM_PLAY_LOOP, 0)

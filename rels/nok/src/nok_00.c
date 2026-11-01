@@ -423,6 +423,12 @@ CALL(evt_win_item_select, 1, LW(0))
     RETURN
 EVT_END()
 
+/**
+ * Init event of General White (ホワイト), the wandering Bob-omb:
+ * does nothing in the kiosk demo or during the Bowser interlude (STG2_25_04).
+ * Before STG5_59_ROGUEPORT_DOCK it moves him to (375, 50, -105);
+ * after that he stays where the map put him.
+ */
 static EVT_BEGIN(init_white)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_E3)

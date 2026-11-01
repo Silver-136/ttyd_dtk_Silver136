@@ -29,6 +29,10 @@ char makestring[16];
  * and looked up by its six-digit hex form, so scripts can name crowd NPCs by index. NULL if none matches.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo turns the name into a string in a helper (same code, other register order).
+ * Demo only: in the other versions the helper's "%06x" literal would move ahead in the string pool even unused.
+ */
 static inline char* nanNPCEntryName(char* name) {
     if (!((EvtWord)name & 0x80000000)) {
         sprintf(makestring, "%06x", name);
@@ -36,6 +40,7 @@ static inline char* nanNPCEntryName(char* name) {
     }
     return name;
 }
+/** the demo search through that helper */
 static inline NanNPC* nanNPCSearch2(char* name) {
     s32 i;
     NanNPC* p;
@@ -50,6 +55,11 @@ static inline NanNPC* nanNPCSearch2(char* name) {
     return NULL;
 }
 #endif
+/**
+ * Finds the crowd NPC with the given name.
+ * Names are strings; a value without the top address bit is treated as a number
+ * and looked up by its six-digit hex form, so scripts can name crowd NPCs by index. NULL if none matches.
+ */
 static inline NanNPC* nanNPCSearch(char* name) {
     s32 i;
     NanNPC* p;

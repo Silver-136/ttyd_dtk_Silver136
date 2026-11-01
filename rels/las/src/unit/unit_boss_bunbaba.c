@@ -611,6 +611,10 @@ static EVT_BEGIN(battle_entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Gloomtail: installs its wait, phase, attack, damage and confusion events and entry event,
+ * and clears unit work 1 (the flag that its last line before death was spoken).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -627,6 +631,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of Gloomtail: default damage handling. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -634,6 +639,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Gloomtail's sub-event when he is hit:
+ * plays the pain animation of the part that was hit (GNB_D_2 for the head part 1, GNB_D_1 otherwise) and,
+ * if the hit did no damage, a miss sound at the hit position.
+ */
 EVT_BEGIN(bunbaba_damage_sub_event)
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(11))
     IF_INT_EQUAL(LW(11), 1)
@@ -774,6 +784,11 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Stomp attack of Gloomtail (fumituke): it raises a foot
+ * and stamps on one target (weapon_bunbaba_fumituke_attack, with the camera shaking),
+ * which dodges or takes the damage with the action command defence check.
+ */
 static EVT_BEGIN(fumituke_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -877,6 +892,10 @@ static EVT_BEGIN(fumituke_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Bite attack of Gloomtail (kamituki): it bites one target (GNB_A_2),
+ * which dodges or takes the damage with the action command defence check.
+ */
 static EVT_BEGIN(kamituki_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -928,6 +947,11 @@ static EVT_BEGIN(kamituki_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Gloomtail's earthquake attack (weapon_bunbaba_eq_attack):
+ * a stomp that shakes the stage and hits the sampled target;
+ * the damage is checked once the animation reaches the impact.
+ */
 EVT_BEGIN(eq_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -994,6 +1018,10 @@ EVT_BEGIN(eq_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Gloomtail's poison breath (weapon_bunbaba_poison_attack):
+ * raises his neck (GNB_A2_1..3) and breathes poison at the chosen target.
+ */
 EVT_BEGIN(poison_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1079,6 +1107,11 @@ EVT_BEGIN(poison_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Gloomtail's Mega Breath (weapon_bunbaba_mega_attack):
+ * charges (SFX_BOSS_GNB_CHARGE1) and breathes fire with the mega breath sound at the chosen targets;
+ * the attack he announces with a message.
+ */
 EVT_BEGIN(mega_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 #if VERSION <= VERSION_DEMO_US

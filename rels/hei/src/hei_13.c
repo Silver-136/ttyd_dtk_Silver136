@@ -130,6 +130,11 @@ EVT_BEGIN(evt_anm_kan)
     RETURN
 EVT_END()
 
+/**
+ * Petal Meadows hei_13 map init: resets the can counter, adds the Close Call badge block,
+ * a brick that hides a coin, a Happy Heart (not in the kiosk demo), a brick with ten coins and the tree rewards,
+ * and enables the can hit script outside the kiosk demo.
+ */
 EVT_BEGIN(hei_13_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

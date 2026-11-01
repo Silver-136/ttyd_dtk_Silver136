@@ -47,6 +47,12 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of gor_12, the final sea view of the ending:
+ * plays the sea and sparkle animations and, when the story is at STG8_END_AFTER_THE_BATTLE,
+ * removes the partner and runs the epilogue (7 seconds, then everything fades out to aaa_00, the title).
+ * JP and later skip it if map events are being skipped.
+ */
 EVT_BEGIN(gor_12_init_evt)
     CALL(evt_map_playanim, STRING("anm_umi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), MAP_ANIM_PLAY_LOOP, 0)

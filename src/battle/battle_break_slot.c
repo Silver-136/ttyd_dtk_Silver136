@@ -45,6 +45,7 @@ void item_appear_force(BreakSlotReel* reel, s32 item);
 u16 tex_id_list_small[5] = {0x2B, 0x2D, 0x2F, 0x2E, 0x2C};
 u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
 #endif
+/** BINGO! with three Mushrooms: fully restores Mario's HP and, unless the partner is knocked out, the partner's. */
 EVT_BEGIN(kinoko_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
@@ -295,6 +296,14 @@ void BattleBreakSlot_Init(void) {
     memcpy(reel->cards, &c3, reel->numCards * sizeof(s32));
 }
 
+/**
+ * Per-frame Bingo slot sequence: once three reels are filled the camera turns to the reels, they spin and stop,
+ * and on a match the BINGO!
+ * plays out: the matching recovery script runs,
+ * the crowd grows (to full for Shine Sprites, empties for Poison Mushrooms) and the result is announced;
+ * the boosted turns are set in breakTurn. A mismatch plays the failure sound.
+ * PAL plays a language-dependent number of break hits (one more in Italian).
+ */
 void BattleBreakSlot_Main(void) {
     static f32 updown;
     BattleWork* wp = _battleWorkPointer;
@@ -930,6 +939,7 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
     GXSetScissor(0, 0, gp->fbWidth, gp->efbHeight);
 }
 
+/** Frees the reels' card lists at battle end; empty in JP and the demos, which leak them with the battle heap. */
 void BattleBreakSlot_End(void) {
 #if VERSION >= VERSION_US
     BattleFree(BattleBreakSlotReelGetPtr(0)->cards);
@@ -940,6 +950,13 @@ void BattleBreakSlot_End(void) {
 #endif
 }
 
+/**
+ * Fills the next Bingo card with a random card from its reel;
+ * called from BattleAudience_ApRecoveryBuild with the weapon's bingoSlotChance,
+ * never before the first crystal star.
+ * The third card is always drawn different from the second (the real result comes from the spin).
+ * Debug flags and slot->flags force a card (Shine Sprite; the demos' bit 1 forces a Star).
+ */
 // Writes reels[reelNo] before the reelNo > 3 test below: reelNo must be below 3 on entry.
 void BattleBreakSlot_PointInc(void) {
     BattleDebugCtrl* dbg = &_battleWorkPointer->debug;

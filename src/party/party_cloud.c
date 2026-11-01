@@ -81,6 +81,11 @@ static inline void cloudCalcPos(PartyEntry* party) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Mario's motion while Flurrie gusts (MARIO_MOTION_CLOUD):
+ * on its first frame clears his jump, step and fall flags and timers so he stands still.
+ * The demo keeps this handler in mario_motion.c.
+ */
 void mot_cloud(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -95,6 +100,11 @@ void mot_cloud(void) {
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Saves the 3D camera's look-at point into cloud_at and, if Mario's camera is zoomed in,
+ * requests a zoom-out (marioCamZoomOffReq2(600)).
+ * Called when Mario's Flurrie motion ends (mot_cloud_post in mario_motion.c).
+ */
 void cloudResetAt(void) {
     MarioWork* mario = marioGetPtr();
     u32 partyId = marioGetPartyId();
@@ -122,6 +132,11 @@ void cloudResetAt(void) {
  * otherwise 2 (also when the partner is not Flurrie).
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Gale Force state for evt_party.c's script wait:
+ * 0 when there is no partner or Flurrie is not gusting, 1 while the gust is in its start state (10),
+ * otherwise 2 (also when the partner is not Flurrie).
+ */
 u8 cloudGetStatus(void) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
@@ -143,6 +158,10 @@ u8 cloudGetStatus(void) {
  * -1 while she is still moving into position, 0 when there is no gust work. No callers in this tree.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Direction of Flurrie's gust in movement degrees:
+ * -1 while she is still moving into position, 0 when there is no gust work. No callers in this tree.
+ */
 f32 cloudGetBreathDir(void) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
     f32 breathDir;
@@ -172,6 +191,13 @@ f32 cloudGetBreathDir(void) {
  * npcdrv.c uses it to tell whether an NPC is caught by the gust.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Gust strength (0-100) at a point: nonzero only while Flurrie is mid-gust,
+ * the point is within 10 units of 18 below her,
+ * within reach (allowing half the target's width)
+ * and within 30 degrees of the gust's direction (cosine falloff).
+ * npcdrv.c uses it to tell whether an NPC is caught by the gust.
+ */
 f32 cloudGetBreathPower(f32 size, Vec* pos) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
     f32 breathPower;
@@ -890,6 +916,10 @@ void cloud_move(PartyEntry* party) {
     }
 }
 
+/**
+ * Flurrie's init handler (party_data.c): marks her a flying partner,
+ * sets her collision size (38 tall, 36 wide in the demo, 24 in later versions) and clears her gust state.
+ */
 void cloud_init(PartyEntry* party) {
     party->memberKind = PARTY_MEMBER_FLURRIE;
     party->moveKind = 1;

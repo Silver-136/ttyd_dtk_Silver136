@@ -670,6 +670,12 @@ EVT_END()
  * From the JP release on it is also moved far below the stage.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Death script: spins the Pider 15 degrees per frame for 48 frames, then shows an explosion effect,
+ * banks its coins and experience and star points and tips it over for 30 frames.
+ * It then hides its parts, takes it out of the turn order and removes the unit (kill mode 1).
+ * From the JP release on it is also moved far below the stage.
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -717,6 +723,12 @@ CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Death script: spins the Pider 15 degrees per frame for 48 frames, then shows an explosion effect,
+ * banks its coins and experience and star points and tips it over for 30 frames.
+ * It then hides its parts, takes it out of the turn order and removes the unit (kill mode 1).
+ * From the JP release on it is also moved far below the stage.
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -775,6 +787,12 @@ EVT_END()
  * moved far below the stage from the JP release on).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Death when the Pider is blown away: plays the blow sound,
+ * spins it 20 degrees per frame as it flies up and off the stage, banks its coins and experience,
+ * hides its parts, takes it out of the turn order and removes it (kill mode 1;
+ * moved far below the stage from the JP release on).
+ */
 static EVT_BEGIN(blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
@@ -803,6 +821,12 @@ CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Death when the Pider is blown away: plays the blow sound,
+ * spins it 20 degrees per frame as it flies up and off the stage, banks its coins and experience,
+ * hides its parts, takes it out of the turn order and removes it (kill mode 1;
+ * moved far below the stage from the JP release on).
+ */
 static EVT_BEGIN(blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
@@ -1107,6 +1131,12 @@ EVT_END()
  * holds 15, then to 100, each with the attack sound; the final angle is stored in unit work 4.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Wind-up of the web attack: the Pider faces the target,
+ * takes its attack pose (PAI_A_1, part 2 shown as PAI_A_2a at its position, pivot 30 scaled by its size,
+ * or 20 Tiny / 40 Huge / 30 in the demos) and swings part 2 to 110 degrees, holds 20 frames, back to 70,
+ * holds 15, then to 100, each with the attack sound; the final angle is stored in unit work 4.
+ */
 static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
@@ -1158,6 +1188,12 @@ CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPT
     RETURN
 EVT_END()
 #else
+/**
+ * Wind-up of the web attack: the Pider faces the target,
+ * takes its attack pose (PAI_A_1, part 2 shown as PAI_A_2a at its position, pivot 30 scaled by its size,
+ * or 20 Tiny / 40 Huge / 30 in the demos) and swings part 2 to 110 degrees, holds 20 frames, back to 70,
+ * holds 15, then to 100, each with the attack sound; the final angle is stored in unit work 4.
+ */
 static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
@@ -1224,6 +1260,11 @@ EVT_END()
  * Nothing in this file runs it.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Shorter wind-up: like piders_attack_common_event1
+ * but it swings part 2 from the angle in unit work 4 straight to 100 degrees in 5 frames and stores it again.
+ * Nothing in this file runs it.
+ */
 static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
@@ -1258,6 +1299,11 @@ CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WINDUP_ANGLE, LW(0))
     RETURN
 EVT_END()
 #else
+/**
+ * Shorter wind-up: like piders_attack_common_event1
+ * but it swings part 2 from the angle in unit work 4 straight to 100 degrees in 5 frames and stores it again.
+ * Nothing in this file runs it.
+ */
 static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
@@ -1513,11 +1559,19 @@ EVT_END()
  * so it matches the current state.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Wait (idle) event: refreshes the body animation (part 1) from the unit's pose table
+ * so it matches the current state.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Wait (idle) event: refreshes the body animation (part 1) from the unit's pose table
+ * so it matches the current state.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

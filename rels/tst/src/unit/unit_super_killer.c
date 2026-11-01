@@ -224,6 +224,14 @@ static EVT_BEGIN(start_avoid)
     RETURN
 EVT_END()
 
+/**
+ * Attack (also used when confused): uses a held item if the AI wants to, otherwise picks a target,
+ * charges up (SFX_ENM_KILLER_CHARGE1) and flies at it.
+ * On a hit it deals 6 damage, explodes in smoke, hides itself and pays out its coins and Star Points;
+ * on a miss or dodge it flies past off screen and hides.
+ * Then, as also when it has no target (unless confused into the flustered act),
+ * the Bill removes itself (KillUnit): one shot per Bill.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

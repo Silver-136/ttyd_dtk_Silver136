@@ -89,6 +89,10 @@ const char* getMapDataDvdRoot(void) {
 
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
+/**
+ * Stops mapDisp from drawing the map until the next map load or mapDispOn;
+ * used by evt_map and win_root (the pause menu). Not in the demo.
+ */
 void mapDispOff(void) {
     disableMapDraw = TRUE;
 }
@@ -97,6 +101,7 @@ void mapDispOff(void) {
 /** Lets mapDisp draw the map again after mapDispOff. */
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
+/** Lets mapDisp draw the map again after mapDispOff. */
 void mapDispOn(void) {
     disableMapDraw = FALSE;
 }
@@ -249,6 +254,12 @@ void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
  * when its centre-to-corner distance is under about 141 units. Panics on a joint without a draw mode.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Takes the next free MapObject of map entry index and fills it from joint:
+ * local and world matrices (rotation in degrees), blend mode from the draw mode and the materials,
+ * group and shadow flags, centre, and the bounding-box cull flag
+ * when its centre-to-corner distance is under about 141 units. Panics on a joint without a draw mode.
+ */
 static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
     MapWork* wp = &mapWork[activeGroup];
     MapObject* obj;
@@ -383,6 +394,12 @@ OSPanic("mapdrv.c", 0x2c1, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83
     return obj;
 }
 #else
+/**
+ * Takes the next free MapObject of map entry index and fills it from joint:
+ * local and world matrices (rotation in degrees), blend mode from the draw mode and the materials,
+ * group and shadow flags, centre, and the bounding-box cull flag
+ * when its centre-to-corner distance is under about 141 units. Panics on a joint without a draw mode.
+ */
 MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
     MapWork* wp = &mapWork[activeGroup];
     MapObject* obj;
@@ -559,8 +576,20 @@ static void mapResetPaperCraftAmbColor(void);
  * while a character shadow projection is on.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Records the material setup and cull mode of each eligible part of map entry group into GX display lists,
+ * in two passes (size, then copy into one buffer at the heap tail).
+ * Only for ver1.02 map files, and skips light-masked parts and Mario's shadow receivers
+ * while a character shadow projection is on.
+ */
 static void makeDisplayList(BOOL group) {
 #else
+/**
+ * Records the material setup and cull mode of each eligible part of map entry group into GX display lists,
+ * in two passes (size, then copy into one buffer at the heap tail).
+ * Only for ver1.02 map files, and skips light-masked parts and Mario's shadow receivers
+ * while a character shadow projection is on.
+ */
 void makeDisplayList(BOOL group) {
 #endif
     static const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
@@ -962,6 +991,11 @@ found:
  * textures, bounding box corners, animation table and display lists.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Loads map into entry group of wp: map.dat and texture.tpl from the archive or the disc,
+ * the joint tree as map and hit objects (scaled x10), the map's lights and fog, the camera road (field only),
+ * textures, bounding box corners, animation table and display lists.
+ */
 static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     MapFileInfo* info;
     u32 datSize, k;
@@ -1132,6 +1166,11 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     }
 }
 #else
+/**
+ * Loads map into entry group of wp: map.dat and texture.tpl from the archive or the disc,
+ * the joint tree as map and hit objects (scaled x10), the map's lights and fog, the camera road (field only),
+ * textures, bounding box corners, animation table and display lists.
+ */
 void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     MapFileInfo* info;
     int i;
@@ -1365,12 +1404,20 @@ void mapUnLoad(void) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * The demo reads each map's LZ77-compressed archive "<root>/b/<map>" itself:
+ * mapPreLoad starts the read, mapLoad unpacks it into the arc slot before loading the map.
+ */
 BOOL mapPreLoad(const char* map) {
     return TRUE;
 }
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Loads the field map map into MapWork slot 0 as its only entry; called by seq_mapchange.
+ * The demo first unpacks the map's compressed archive.
+ */
 void mapLoad(const char* map) {
     MapWork* wp;
     // FAKE: wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object
@@ -1397,9 +1444,17 @@ void mapLoad(const char* map) {
  * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo reads each map's LZ77-compressed archive "<root>/b/<map>" itself:
+ * mapPreLoad starts the read, mapLoad unpacks it into the arc slot before loading the map.
+ */
 BOOL mapPreLoad(const char* map) {
     FileEntry* file = (FileEntry*)fileAsyncf(0, NULL, "%s/b/%s", getMarioStDvdRoot(), map);
 #else
+/**
+ * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
+ * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
+ */
 void bmapUnLoad(void) {
     MapEntry* entry2;
     MapEntry* entry;
@@ -1416,6 +1471,10 @@ void bmapUnLoad(void) {
     }
     return TRUE;
 }
+/**
+ * Loads the field map map into MapWork slot 0 as its only entry; called by seq_mapchange.
+ * The demo first unpacks the map's compressed archive.
+ */
 void mapLoad(const char* map) {
     char path[256];
     MapWork* wp;
@@ -1444,6 +1503,10 @@ void mapLoad(const char* map) {
     _mapLoad(wp, 0, map);
     wp->entries[0].count = 1;
 }
+/**
+ * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
+ * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
+ */
 void bmapUnLoad(void) {
 MapWork* wp2;
     MapEntry* entry3;
@@ -1567,6 +1630,10 @@ j = 0;
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Demo only: starts the async read of the battle map archives arc_d/<map>.arc;
+ * TRUE once both requested files are available.
+ */
 BOOL bmapPreLoad(const char* map, const char* map2) {
     FileEntry* file = NULL;
     FileEntry* file2 = NULL;
@@ -1583,6 +1650,11 @@ BOOL bmapPreLoad(const char* map, const char* map2) {
     return file2 != NULL;
 }
 #endif
+/**
+ * Called by seq_battle at battle start: parks the field map's files in ARAM,
+ * then loads the battle stage map into MapWork slot 1 as entry 0 and, if given,
+ * the stage-specific map map2 as entry 1. The demo reads and unpacks both archives itself.
+ */
 void bmapLoad(const char* map, const char* map2) {
 #if VERSION <= VERSION_DEMO_US
 char path[256];
@@ -2117,6 +2189,11 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
  * light and light colour tracks, then recalculates the changed object matrices.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame map update from mariost: advances each playing map animation by its clock
+ * and rate (looping or stopping at the end, handling pause and resume) and applies its joint, material, alpha,
+ * light and light colour tracks, then recalculates the changed object matrices.
+ */
 void mapMain(void) {
     int i_, j_;
     MapEntry* e_;
@@ -2243,6 +2320,11 @@ if (cur < anim->time) {
     }
 }
 #else
+/**
+ * Per-frame map update from mariost: advances each playing map animation by its clock
+ * and rate (looping or stopping at the end, handling pause and resume) and applies its joint, material, alpha,
+ * light and light colour tracks, then recalculates the changed object matrices.
+ */
 void mapMain(void) {
     MapObject* o;
     f32 cur;
@@ -4106,6 +4188,10 @@ const GXVtxAttrFmtList attr_fmt[12] = {
     {GX_VA_NULL, GX_POS_XY, GX_U8, 0},
 };
 
+/**
+ * Sends the mesh's geometry to GX: older map files as indexed float triangle strips written vertex by vertex,
+ * ver1.02 files as packed s16 vertex arrays and the file's display lists.
+ */
 void mapSetPolygon(MapObject* obj, MapFileMesh* mesh) {
     MapWork* wp;
     void* pos;
@@ -4352,8 +4438,16 @@ void mapObjFlagOff(const char* name, u32 flags) {
  * retail versions skip the display-list flag on objects without a display list.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Sets flags on obj and its whole subtree, and its later siblings when doNext;
+ * retail versions skip the display-list flag on objects without a display list.
+ */
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
 #else
+/**
+ * Sets flags on obj and its whole subtree, and its later siblings when doNext;
+ * retail versions skip the display-list flag on objects without a display list.
+ */
 void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
 #endif

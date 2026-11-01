@@ -1953,6 +1953,11 @@ static USER_FUNC(fune_eff) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_muj_00004328, JP muj .text+0x4264. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper: bends a ship position (GW(0), GW(1), GW(2)) onto a large circle of radius 6000
+ * so the ship follows the curve of the horizon,
+ * writing the result to LW(7) to LW(9) and the added heading to LW(0).
+ */
 USER_FUNC(fune_curve_pos) {
     f32 x = evtGetFloat(event, GW(0));
     f32 y = evtGetFloat(event, GW(1));
@@ -1978,6 +1983,11 @@ USER_FUNC(fune_curve_pos) {
 }
 #endif
 
+/**
+ * Rocks the ship S_fune_m of the opening scene:
+ * rolls it from +5 to -5 degrees and back every 2 seconds forever (on later versions along the curved horizon
+ * from fune_curve_pos), moving its foam layer and a ship sound with it.
+ */
 EVT_BEGIN(anm_yure)
     CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
     CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), GW(0), GW(1), GW(2))
@@ -2101,6 +2111,10 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
  * and the Press Start text with the wp alpha.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Display callback for the title logo: draws the logo texture for the current language
+ * and the Press Start text with the wp alpha.
+ */
 static void draw(CameraId camera, void* param) {
     LogoWork* wp = param;
     CameraEntry saved;
@@ -2134,6 +2148,10 @@ winTexSet(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColo
     GXSetProjectionv(projection);
 }
 #else
+/**
+ * Display callback for the title logo: draws the logo texture for the current language
+ * and the Press Start text with the wp alpha.
+ */
 static void draw(CameraId camera, void* param) {
     LogoWork* wp = param;
     CameraEntry saved;
@@ -2168,6 +2186,13 @@ static void draw(CameraId camera, void* param) {
 }
 #endif
 
+/**
+ * The title scene of the opening (entered as "prologue" from aaa_00 after the Mario's house prologue):
+ * plays BGM_OPENING1 (the init starts it on the US demo and earlier), starts the title logo,
+ * sails the steamship S_fune_m in over 10 seconds and waits for Press Start (GF(1)),
+ * switching to BGM_EVT_SAILING1 if nothing is pressed within 5 seconds.
+ * After the press it plays SFX_PRESS_START1, sails the ship on out and fades to white into sys_01 ("prologue").
+ */
 static EVT_BEGIN(evt_prologue)
 #if VERSION <= VERSION_DEMO_US
 WAIT_MS(4000)

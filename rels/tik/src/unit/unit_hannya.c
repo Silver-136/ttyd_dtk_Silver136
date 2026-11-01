@@ -240,6 +240,16 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Spania, a single spinning charge.
+ * On a first strike it takes the first-attack target;
+ * otherwise it uses an enemy item if it has one, or samples a
+ * target for its weapon. It shakes in place for 40 frames (10 one-unit wiggles) while the charge sound plays,
+ * then rushes along the floor to the target (the avoid animation or the ResultACDefence/CheckDamage hit decide
+ * the outcome) and carries on 500 units past it.
+ * It then reappears at x=300 and glides back to its home position in four slowing steps (speeds 10, 5, 2, 1).
+ * A flustered (confused) unit with no target runs subsetevt_confuse_flustered.
+ */
 static EVT_BEGIN(attack_event)
     // Choose the target: the First Strike target if the battle opened with one,
     // otherwise it may use an item or pick a normal target.

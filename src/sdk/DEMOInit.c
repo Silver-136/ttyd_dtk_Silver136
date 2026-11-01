@@ -91,8 +91,18 @@ static void __DEMOInitGX(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Picks the render mode: a copy of the given one,
+ * or the default for the console's TV format (NTSC, PAL, EURGB60, MPAL) adjusted for overscan.
+ * Panics on an unknown format.
+ */
 static inline void __DEMOInitRenderMode(GXRenderModeObj* mode) {
 #else
+/**
+ * Picks the render mode: a copy of the given one,
+ * or the default for the console's TV format (NTSC, PAL, EURGB60, MPAL) adjusted for overscan.
+ * Panics on an unknown format.
+ */
 static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
 #endif
     if (mode != NULL) {
@@ -125,6 +135,10 @@ OSPanic(demo_file, 0x203, demo_msg);
     }
 }
 
+/**
+ * Boot-time setup: OS, DVD, VI, pads, render mode, frame buffers,
+ * the game's heaps (memInit) and GX with its FIFO (0x60000 bytes in the demo, 0x64000 later).
+ */
 void DEMOInit(GXRenderModeObj* mode) {
     OSInit();
     DVDInit();

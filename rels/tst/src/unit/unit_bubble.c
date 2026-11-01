@@ -390,6 +390,13 @@ static EVT_BEGIN(avoid_fire_event)
     RETURN
 EVT_END()
 
+/**
+ * Reaction script bound to data-table entry 11 (hit by fire or an explosion):
+ * plays pose A_2B, then looks along the stage for a free spot, first toward the front then toward the back,
+ * in 10-unit steps; at the first free spot it runs friend_event
+ * and the Lava Bubble splits into a second Lava Bubble.
+ * Ends if no free spot is found.
+ */
 static EVT_BEGIN(damage_fire_explosion_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

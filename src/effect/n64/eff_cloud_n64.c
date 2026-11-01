@@ -202,6 +202,11 @@ void effCloudMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effCloudDisp, effect);
 }
 
+/**
+ * Builds a camera-facing triangle strip along the trail (width grows with the age of each point)
+ * and draws it with texture 0x83 scrolling along the path length;
+ * older points shift in colour toward the second tint.
+ */
 void effCloudDisp(CameraId cameraId, EffectEntry* effect) {
     EffCloudN64Work* work;
     f32 scale;

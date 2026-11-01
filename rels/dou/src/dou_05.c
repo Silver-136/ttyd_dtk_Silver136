@@ -317,6 +317,10 @@ static HitDamageReturn hitDmgRetPoints[] = {
 };
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Item-box script for the chest mobj_box00: gives the Defend Plus P badge in the US and PAL releases
+ * and the Damage Dodge P badge in the Japanese ones (and demos), picked up with the chest-open animation.
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
 CALL(evt_item_entry, STRING("item00"), ITEM_DAMAGE_DODGE_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
@@ -327,6 +331,10 @@ CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     RETURN
 EVT_END()
 #else
+/**
+ * Item-box script for the chest mobj_box00: gives the Defend Plus P badge in the US and PAL releases
+ * and the Damage Dodge P badge in the Japanese ones (and demos), picked up with the chest-open animation.
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_US
@@ -394,6 +402,12 @@ EVT_BEGIN(nonride_waterfall)
     RETURN
 EVT_END()
 
+/**
+ * Init script of dou_05, the waterfall room: music and ambience, exits, save block, the Grotto Key lock,
+ * the blue switch for the big door, a badge chest (Defend Plus P in the US and PAL releases,
+ * Damage Dodge P in the JP and demo versions), Shine Sprite block, hidden coin brick,
+ * waterfalls and the ship-change platform.
+ */
 EVT_BEGIN(dou_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU5"))

@@ -222,6 +222,10 @@ static const char* msg_tbl[] = {
     "msg_stg_seq_stg8",
 };
 
+/**
+ * JP and the demo list _epilog and _unresolved as file-local in their symbol maps (US and PAL: global).
+ * The binding does not reach the REL, so they follow rel_module.h, which declares the hooks for every module.
+ */
 static void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -390,6 +394,12 @@ void sys_01_msg_tex_capture_func(CameraId cameraId, void* param) {
 }
 #endif
 
+/**
+ * Draw callback of the chapter title card (camera 3D effect A):
+ * lights the letters with a rotating rainbow light, scrolls the background,
+ * and draws each flying title letter and the subtitle in 3D using the effect_sys texture.
+ * The US release and later lay the letters out per language; JP and the demo use a fixed layout.
+ */
 void display_func(CameraId cameraId, void* param) {
     SysWork* wp = param;
     CameraEntry* camera = camGetPtr(cameraId);

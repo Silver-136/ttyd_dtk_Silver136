@@ -707,8 +707,22 @@ USER_FUNC(get_aud_num) {
  * Blocks until all 20 arrived.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script function for the audience attack's suction:
+ * picks 20 random audience members, makes them spin
+ * and fly toward the boss's pod (a dust-cloud effect and SFX_AUDIENCE_PANIC_SCREAM1 start),
+ * and removes each when it arrives. The list of 20 is kept for the shots that follow.
+ * Blocks until all 20 arrived.
+ */
 static USER_FUNC(aud_suikomi) {
 #else
+/**
+ * Script function for the audience attack's suction:
+ * picks 20 random audience members, makes them spin
+ * and fly toward the boss's pod (a dust-cloud effect and SFX_AUDIENCE_PANIC_SCREAM1 start),
+ * and removes each when it arrives. The list of 20 is kept for the shots that follow.
+ * Blocks until all 20 arrived.
+ */
 USER_FUNC(aud_suikomi) {
 #endif
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
@@ -798,6 +812,7 @@ if (done < 20) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_aji_00007668, JP aji .text+0x75A4. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script function (JP and later): fades the audience scream sound (screamId) out over 120 frames after the suction. */
 USER_FUNC(aud_scream_fadeout) {
     if (isFirstCall) {
         scream_fade_timer = 120;

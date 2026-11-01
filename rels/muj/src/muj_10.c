@@ -537,6 +537,10 @@ s32 senin_event_erumospos[] = {
  * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Sets up the crowd of 95 sailors on the hidden dock (mass NPCs with the sailor animation table) from
+ * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka.
+ */
 EVT_BEGIN(senin_event)
     // The crew is driven out: Mario loses control and the dock crowd is placed.
     CALL(evt_mario_key_onoff, 0)
@@ -642,6 +646,10 @@ CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
 RETURN
 EVT_END()
 #else
+/**
+ * Sets up the crowd of 95 sailors on the hidden dock (mass NPCs with the sailor animation table) from
+ * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka.
+ */
 EVT_BEGIN(senin_event)
     // The crew is driven out: Mario loses control and the dock crowd is placed.
     CALL(evt_mario_key_onoff, 0)
@@ -820,6 +828,11 @@ static HitDamageReturn hitDmgRetPoints[] = {
  * oidasare_event, senin_event or korutesu_appear_event).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init for muj_10 (the hidden dock): picks music for the story stage, registers the exits and NPCs,
+ * hides or places sailors, Mony and Cortez for the current stage and spawns the scene (nazo_event,
+ * oidasare_event, senin_event or korutesu_appear_event).
+ */
 EVT_BEGIN(muj_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))

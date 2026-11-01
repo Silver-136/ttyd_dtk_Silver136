@@ -60,6 +60,10 @@ typedef struct MotShipWork {
 #if VERSION <= VERSION_DEMO_US
 f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
 #endif
+/**
+ * Plays SFX_MARIO_SHIP1_1 four times, 12 frames apart,
+ * at the position in LW(0..2) while Mario spins and folds into the paper boat.
+ */
 static EVT_BEGIN(sound_evt)
 CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_SHIP1_1"), LW(0), LW(1), LW(2), 0)
 WAIT_FRAMES(12)
@@ -263,6 +267,11 @@ void marioReInit_ship(void) {
     allPartyForceRideOn();
 }
 
+/**
+ * Cleanup when the boat motion ends: dismounts the partners, turns paper off,
+ * restores the normal collision box (not in the demos), stops the engine sound,
+ * resets the offsets and frees the boat work.
+ */
 void mot_ship_post(void) {
     MarioWork* mario = marioGetPtr();
     s32 t;
@@ -1090,8 +1099,18 @@ BOOL marioChkShipMoveMode(void) {
  * keeps the engine sound playing and moves Mario; stores the distance moved in mario->moveDist.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame boat steering: accelerates toward the stick direction,
+ * drifts and slows with water friction (shipData constants), adds any whirlpool push,
+ * keeps the engine sound playing and moves Mario; stores the distance moved in mario->moveDist.
+ */
 static void shipMove(void) {
 #else
+/**
+ * Per-frame boat steering: accelerates toward the stick direction,
+ * drifts and slows with water friction (shipData constants), adds any whirlpool push,
+ * keeps the engine sound playing and moves Mario; stores the distance moved in mario->moveDist.
+ */
 void shipMove(void) {
 #endif
     MarioWork* m = marioGetPtr();

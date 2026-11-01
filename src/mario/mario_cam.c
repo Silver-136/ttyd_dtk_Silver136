@@ -75,6 +75,11 @@ f32 marioGetCamFollowRate(void) {
     return marioGetPtr()->camFollowRate;
 }
 
+/**
+ * Copies the 3D camera's yaw into mario->targetYaw,
+ * the screen-to-world angle offset used by toMovedir and the stick.
+ * The demos round it to 0.01 degree, JP and later to 0.001 degree with proper rounding.
+ */
 void marioPreCamera(void) {
 #if VERSION <= VERSION_DEMO_US
 marioGetPtr()->targetYaw = revise360((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);

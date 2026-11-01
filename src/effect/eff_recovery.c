@@ -337,8 +337,10 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
 
 /** Per frame: releases the icons one at a time with their shine sounds and sparkles, then deletes the effect. */
 #if VERSION <= VERSION_DEMO_US
+/** Per frame: releases the icons one at a time with their shine sounds and sparkles, then deletes the effect. */
 static void effRecoveryMain(EffectEntry* effect) {
 #else
+/** Per frame: releases the icons one at a time with their shine sounds and sparkles, then deletes the effect. */
 void effRecoveryMain(EffectEntry* effect) {
 #endif
     RecoveryWork* work = effect->userdata;
@@ -747,6 +749,11 @@ void effRecoveryDisp2(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws the label for the large forms (types 4/5) as a camera-facing 108x40 quad, twice:
+ * a dark shadow offset by 2 units, then the label in pink for HP (type 4) or green for FP (type 5).
+ * Texture 111/110 in US and PAL (173/172 when gp->language is 4), 0x8B/0x8A in JP and the demos.
+ */
 void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
     RecoveryWork* work = effect->userdata;
     CameraEntry* cam;

@@ -22,6 +22,10 @@ void _prolog(void) {
     relSetEvtAddr("dmo_00", dmo_00_init_evt);
 }
 
+/**
+ * REL module epilog, run when dmo.rel is unloaded:
+ * runs the static destructors and releases the demo's resources (demo_exit).
+ */
 void _epilog(void) {
     voidfunctionptr* dtor;
 

@@ -153,6 +153,11 @@ static USER_FUNC(_anime_load) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: saves the HP, FP, size, status
+ * and (US and later) disabled commands of the party member unit args[1] into the fake Mario's table,
+ * so they are kept while that partner is swapped out.
+ */
 USER_FUNC(_save_param) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -191,6 +196,11 @@ USER_FUNC(_save_param) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: restores the saved HP, FP, size,
+ * status and (US and later) disabled commands of the party member unit args[1] from the fake Mario's table
+ * when the partner is swapped back in.
+ */
 USER_FUNC(_load_param) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

@@ -762,6 +762,11 @@ static EVT_BEGIN(_borodo_steal_attack)
     RETURN
 EVT_END()
 
+/**
+ * The Bandit runs away with its loot: turns its back, hops,
+ * then leaves the screen to x=300 in a blur at speed 9 with the escape sound
+ * and removes itself from the battle (KillUnit).
+ */
 static EVT_BEGIN(escape_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_WAIT1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_3"))
@@ -799,6 +804,11 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #if VERSION >= VERSION_US
+/**
+ * Revival when the Bandit holds a Life Shroom (US and later):
+ * the knocked-out unit spins, uses the item (its icon floats above it), is cured of all status,
+ * recovers HP and jumps back up into its wait pose. LW(10) is the unit, LW(11) the part.
+ */
 EVT_BEGIN(_borodo_emergency_revival_event)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
     SET_VALUE(LW(0), 48)

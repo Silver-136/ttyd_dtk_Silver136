@@ -270,6 +270,14 @@ static inline void noko_star(PartyEntry* party, s32 n) {
  * nokonokoGetStatus reports the state; the US release reworked the wall push-out.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Shell Toss, run every frame while Koops is in use.
+ * He tucks into his shell beside Mario, shoots forward 120 units (picking up the first item it touches),
+ * stops spinning in place while X is held (or while an event holds it),
+ * then slides back to a safe spot next to Mario; hitting a wall ends the throw early.
+ * Off screen, he is placed near Mario and the toss ends at once.
+ * nokonokoGetStatus reports the state; the US release reworked the wall push-out.
+ */
 void nokonoko_use(PartyEntry* party) {
     Vec out;
     Vec out2;
@@ -861,6 +869,14 @@ party->useMotionId = 70;
     }
 }
 #else
+/**
+ * Shell Toss, run every frame while Koops is in use.
+ * He tucks into his shell beside Mario, shoots forward 120 units (picking up the first item it touches),
+ * stops spinning in place while X is held (or while an event holds it),
+ * then slides back to a safe spot next to Mario; hitting a wall ends the throw early.
+ * Off screen, he is placed near Mario and the toss ends at once.
+ * nokonokoGetStatus reports the state; the US release reworked the wall push-out.
+ */
 void nokonoko_use(PartyEntry* party) {
     Vec out;
     Vec out2;
@@ -1542,8 +1558,20 @@ void nokotaro_hold_cancel(PartyEntry* party) {
  * Mode 0 is the outbound throw; mode 1 the return, where hitobjAction is only set after a held shot.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Shell collision for Shell Toss: snaps the shell onto floors within 11 units,
+ * then probes ahead along its direction (centre, then each side) for a wall and pushes it out along the wall.
+ * Returns the wall hit, or NULL.
+ * Mode 0 is the outbound throw; mode 1 the return, where hitobjAction is only set after a held shot.
+ */
 static HitEntry* ccwall(PartyEntry* party, s32 mode) {
 #else
+/**
+ * Shell collision for Shell Toss: snaps the shell onto floors within 11 units,
+ * then probes ahead along its direction (centre, then each side) for a wall and pushes it out along the wall.
+ * Returns the wall hit, or NULL.
+ * Mode 0 is the outbound throw; mode 1 the return, where hitobjAction is only set after a held shot.
+ */
 HitEntry* ccwall(PartyEntry* party, s32 mode) {
 #endif
     f32 s;

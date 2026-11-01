@@ -462,6 +462,10 @@ EVT_BEGIN(evt_sakaba_4)
     RETURN
 EVT_END()
 
+/**
+ * Opens or closes the tavern's front by running the four panel scripts in sequence (150 ms apart in the US and
+ * later versions, 100 ms in JP), in forward or reverse order depending on LW(1).
+ */
 EVT_BEGIN(evt_wall2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
 #if VERSION >= VERSION_US
@@ -2328,6 +2332,7 @@ static USER_FUNC(mario_chk) {
  * and 120% to look like it breathes in its sleep.
  */
 #if VERSION <= VERSION_DEMO_US
+/** The demo's champion reset: the releases use evt_rankingReset of tou.c, which also rebuilds the ranking. */
 static USER_FUNC(rankingReset) {
     s32 i;
 
@@ -2345,6 +2350,10 @@ static USER_FUNC(rankingReset) {
     return EVT_RETURN_DONE;
 }
 #endif
+/**
+ * Idle loop of the egg NPC: while the story is at STG3_11_RUNAWAY_EGG it pulses its scale between 100%
+ * and 120% to look like it breathes in its sleep.
+ */
 EVT_BEGIN(evt_tamago_sleep)
     LOOP(0)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
@@ -3709,6 +3718,10 @@ static EVT_BEGIN(evt_key)
     RETURN
 EVT_END()
 
+/**
+ * Opens the plaza's item box (mobj_box00): takes control from Mario,
+ * the box pops an item (ITEM_POWER_PLUS_P, the Power Plus P badge) at its position and Mario receives it.
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION > VERSION_DEMO_US
@@ -3729,6 +3742,13 @@ EVT_END()
 
 // Set up map objects and localized assets before selecting entrance-specific scenes.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init for tou_01, Glitzville's front plaza:
+ * sets up the blocks, Star Pieces, Inn Coupon, doors,
+ * NPCs (spectators, vendors, the egg and the blimp) and their talk scripts,
+ * and chooses the scene to run from the entrance and the story progress (the ship shadow, the gondola ride,
+ * the Chapter 3 intro, etc.).
+ */
 EVT_BEGIN(tou_01_init_evt)
     // Entrances, blocks, the Star Piece panel, the Star Pieces and the Inn Coupon.
     SET_VALUE(LW(0), PTR(bero_data))

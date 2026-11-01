@@ -832,6 +832,13 @@ void nokotaro_callback(s32 type) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_gon_00000374, JP gon .text+0x290. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper (US and later): writes 1 into LW(0)
+ * when Mario is touching the Dry Bones leader (the NPC marioGetTouchNpcPtr finds) while he has control,
+ * otherwise 0.
+ * The swarm scene polls it to start the fight; earlier versions started the fight
+ * when Mario simply reached x = 350.
+ */
 USER_FUNC(leader_touch_check) {
     NpcEntry* npc = marioGetTouchNpcPtr();
     BOOL off = FALSE;

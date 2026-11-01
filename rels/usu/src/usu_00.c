@@ -1730,6 +1730,11 @@ EVT_END()
  * "stg4_jin_152" otherwise); GW(0) gates repeats.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Background watcher for crows A and B: when Mario is near (area depends on his mode)
+ * and Vivian is not the partner, the crow talks ("kpa_stg5_009_7_1" in the Bowser interlude,
+ * "stg4_jin_152" otherwise); GW(0) gates repeats.
+ */
 EVT_BEGIN(usu00_crowAB_talk_event)
     // Wait until this crow pair is allowed to talk again.
     SET_VALUE(LW(15), 0)
@@ -1832,6 +1837,11 @@ SET_VALUE(GW(0), 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Background watcher for crows A and B: when Mario is near (area depends on his mode)
+ * and Vivian is not the partner, the crow talks ("kpa_stg5_009_7_1" in the Bowser interlude,
+ * "stg4_jin_152" otherwise); GW(0) gates repeats.
+ */
 EVT_BEGIN(usu00_crowAB_talk_event)
     // Wait until this crow pair is allowed to talk again.
     SET_VALUE(LW(15), 0)
@@ -1960,6 +1970,7 @@ EVT_END()
 
 /** Background watcher for crows C, D and E; same as the A/B watcher but using GW(1) as its gate. */
 #if VERSION <= VERSION_DEMO_US
+/** Background watcher for crows C, D and E; same as the A/B watcher but using GW(1) as its gate. */
 EVT_BEGIN(usu00_crowCDE_talk_event)
     // Wait until this crow trio is allowed to talk again.
     SET_VALUE(LW(15), 0)
@@ -2062,6 +2073,7 @@ SET_VALUE(GW(1), 1)
     RETURN
 EVT_END()
 #else
+/** Background watcher for crows C, D and E; same as the A/B watcher but using GW(1) as its gate. */
 EVT_BEGIN(usu00_crowCDE_talk_event)
     // Wait until this crow trio is allowed to talk again.
     SET_VALUE(LW(15), 0)
@@ -3839,6 +3851,15 @@ EVT_END()
  * and the game moves on to muj_01 (entrance sekai_yami2).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Final-chapter scene ("sekai yami", the world goes dark)
+ * when the map is entered through sekai_yami2 at STG8_15_GRODUS:
+ * with Mario and the partner off stage the town is drawn in darkness (envSetYami),
+ * the light flickers with SFX_STG8_LIGHT1 (once from US on, twice before),
+ * villagers A to E turn about in panic (sekai_yami_npc), crows C, D and E fly off,
+ * a quake rumbles with the camera shaking, a villager screams (stg8_dark_05)
+ * and the game moves on to muj_01 (entrance sekai_yami2).
+ */
 static EVT_BEGIN(sekai_yami_evt)
     // The town is drawn in darkness and the light flickers.
     CALL(evt_mario_key_onoff, 0)
@@ -3914,6 +3935,15 @@ CALL(evt_snd_sfxoff, LW(0))
     RETURN
 EVT_END()
 #else
+/**
+ * Final-chapter scene ("sekai yami", the world goes dark)
+ * when the map is entered through sekai_yami2 at STG8_15_GRODUS:
+ * with Mario and the partner off stage the town is drawn in darkness (envSetYami),
+ * the light flickers with SFX_STG8_LIGHT1 (once from US on, twice before),
+ * villagers A to E turn about in panic (sekai_yami_npc), crows C, D and E fly off,
+ * a quake rumbles with the camera shaking, a villager screams (stg8_dark_05)
+ * and the game moves on to muj_01 (entrance sekai_yami2).
+ */
 static EVT_BEGIN(sekai_yami_evt)
     // The town is drawn in darkness and the light flickers.
     CALL(evt_mario_key_onoff, 0)
@@ -4337,6 +4367,11 @@ EVT_END()
  * and starts Chapter 4 and Bowser interlude cutscenes.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init script of Twilight Town's main street:
+ * picks BGM by story progress, registers the pipe, doors and bero exits, spawns NPCs and items,
+ * and starts Chapter 4 and Bowser interlude cutscenes.
+ */
 EVT_BEGIN(usu_00_init_evt)
     // In Bowser's interlude (from Peach's talk with TEC to Bowser's town visit) Mario is Bowser; GF(1) marks it.
     SET_VALUE(GF(1), 0)
@@ -4552,6 +4587,11 @@ CALL(evt_party_stop, 0)
     RETURN
 EVT_END()
 #else
+/**
+ * Map init script of Twilight Town's main street:
+ * picks BGM by story progress, registers the pipe, doors and bero exits, spawns NPCs and items,
+ * and starts Chapter 4 and Bowser interlude cutscenes.
+ */
 EVT_BEGIN(usu_00_init_evt)
     // In Bowser's interlude (from Peach's talk with TEC to Bowser's town visit) Mario is Bowser; GF(1) marks it.
     SET_VALUE(GF(1), 0)

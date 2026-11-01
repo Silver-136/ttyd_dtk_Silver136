@@ -42,6 +42,11 @@ extern EvtWord aji_19_init_evt[];
 EvtWord aji_19_init_evt[56];
 #endif
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -54,6 +59,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -66,6 +76,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door2_1
+ * and S_door2_2 in opposite directions along Z by the animation value in LW(0) times -0.25;
+ * the open and close scripts apply the same transform. The demo builds use -0.2217.
+ */
 static EVT_BEGIN(e_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
@@ -78,6 +93,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door2_1
+ * and S_door2_2 in opposite directions along Z by the animation value in LW(0) times -0.25;
+ * the open and close scripts apply the same transform. The demo builds use -0.2217.
+ */
 static EVT_BEGIN(e_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
@@ -196,6 +216,11 @@ static inline f32 beltSpeed(void) {
 #endif
 }
 
+/**
+ * Script function that carries Mario and his partners on the conveyor belts of the room:
+ * whoever stands on the upper belt A_b_ue is pushed along X at beltSpeed(),
+ * on the lower belt A_b_shita the other way. Blocks forever.
+ */
 static USER_FUNC(mario_chk) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;

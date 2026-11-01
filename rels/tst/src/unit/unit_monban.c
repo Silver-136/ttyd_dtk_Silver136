@@ -345,6 +345,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Gus's spear charge on one target (the fixed first target in a flag-2 battle, otherwise a sampled enemy):
+ * he rears up with marching sounds, then dashes to the target and thrusts.
+ * A hit shakes the camera and he hops back; a miss makes him run past and turn.
+ * Afterwards he walks home and laughs three times.
+ */
 static EVT_BEGIN(normal_attack_event)
     // Target: the first-strike target if the battle opened that way, otherwise one picked for his attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

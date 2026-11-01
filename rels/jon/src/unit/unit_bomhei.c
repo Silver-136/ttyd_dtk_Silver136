@@ -378,6 +378,12 @@ static EVT_BEGIN(change_spark_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Bob-omb: a body bump.
+ * After an item check it picks a target, hops twice, runs to it and, if the bump connects,
+ * deals the damage and gets knocked back in two hops; a miss makes it circle the target and then it walks home.
+ * When confused with no target it is flustered. The demo builds use longer waits and a slower walk home.
+ */
 static EVT_BEGIN(attack_event)
     // Use an item if it has one; otherwise pick a target (a confused Bob-omb with nobody to bump gets
     // flustered).

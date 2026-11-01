@@ -1469,6 +1469,13 @@ EVT_END()
  * otherwise the story is set to STG8_16_THE_RETURN_OF_THE_QUEEN and the ending starts with last_evt_4.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Event script: the scene of the Shadow Queen (possessing Peach).
+ * Grodus is dismissed, the Shadow Queen (possessing Peach; Japanese ブラックピーチ) taunts Mario in front of Beldam,
+ * Marilyn and Doopliss, offers him a yes/no choice, and fights Mario in battle 16.
+ * If the battle result is 5 the story continues with last_evt_3_1,
+ * otherwise the story is set to STG8_16_THE_RETURN_OF_THE_QUEEN and the ending starts with last_evt_4.
+ */
 EVT_BEGIN(last_evt_3)
     // Light floods the hall; the Shadow Queen is reborn in Peach's body.
     CALL(evt_mario_key_onoff, 0)
@@ -1809,6 +1816,13 @@ CALL(evt_npc_set_battle_info, STRING("ブラックピーチ"), 16)
     RETURN
 EVT_END()
 #else
+/**
+ * Event script: the scene of the Shadow Queen (possessing Peach).
+ * Grodus is dismissed, the Shadow Queen (possessing Peach; Japanese ブラックピーチ) taunts Mario in front of Beldam,
+ * Marilyn and Doopliss, offers him a yes/no choice, and fights Mario in battle 16.
+ * If the battle result is 5 the story continues with last_evt_3_1,
+ * otherwise the story is set to STG8_16_THE_RETURN_OF_THE_QUEEN and the ending starts with last_evt_4.
+ */
 EVT_BEGIN(last_evt_3)
     // Light floods the hall; the Shadow Queen is reborn in Peach's body.
     CALL(evt_mario_key_onoff, 0)
@@ -2446,6 +2460,13 @@ EVT_END()
  * afterwards the story becomes STG8_16_THE_RETURN_OF_THE_QUEEN and last_evt_4 starts.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Event script: the scene where everyone's voices call to Mario and heal him.
+ * The partner and the three Sirens speak, Peach answers,
+ * Mario's party is fully healed with evt_pouch_all_party_recovery, the Shadow Queen (possessing Peach) is
+ * angered, and the second fight with her (battle 17) follows;
+ * afterwards the story becomes STG8_16_THE_RETURN_OF_THE_QUEEN and last_evt_4 starts.
+ */
 EVT_BEGIN(last_evt_3_2)
     // Voices of everyone Mario met call out to him in the darkness.
     CALL(evt_mario_key_onoff, 0)
@@ -2856,6 +2877,13 @@ CALL(evt_pouch_mario_recovery)
     RETURN
 EVT_END()
 #else
+/**
+ * Event script: the scene where everyone's voices call to Mario and heal him.
+ * The partner and the three Sirens speak, Peach answers,
+ * Mario's party is fully healed with evt_pouch_all_party_recovery, the Shadow Queen (possessing Peach) is
+ * angered, and the second fight with her (battle 17) follows;
+ * afterwards the story becomes STG8_16_THE_RETURN_OF_THE_QUEEN and last_evt_4 starts.
+ */
 EVT_BEGIN(last_evt_3_2)
     // Voices of everyone Mario met call out to him in the darkness.
     CALL(evt_mario_key_onoff, 0)
@@ -3287,6 +3315,12 @@ EVT_END()
  * then the story is set to STG8_END_AFTER_THE_BATTLE and the map changes to gor_11.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Event script: the ending of the main game in the throne hall.
+ * The Shadow Queen is defeated, the Sirens and the partners speak, the ending music starts,
+ * Peach and Professor Frankly (クリハカセ) talk to Mario and a chest appears;
+ * then the story is set to STG8_END_AFTER_THE_BATTLE and the map changes to gor_11.
+ */
 EVT_BEGIN(last_evt_4)
     // The Shadow Queen is gone: the music stops and the Sirens and Mario's partners speak.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -3794,6 +3828,12 @@ CALL(evt_bero_mapchange, STRING("gor_11"), STRING(""))
 RETURN
 EVT_END()
 #else
+/**
+ * Event script: the ending of the main game in the throne hall.
+ * The Shadow Queen is defeated, the Sirens and the partners speak, the ending music starts,
+ * Peach and Professor Frankly (クリハカセ) talk to Mario and a chest appears;
+ * then the story is set to STG8_END_AFTER_THE_BATTLE and the map changes to gor_11.
+ */
 EVT_BEGIN(last_evt_4)
     // The Shadow Queen is gone: the music stops and the Sirens and Mario's partners speak.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -4550,6 +4590,12 @@ EVT_END()
  * starstone: last_evt_3_1; minnnanokoe: last_evt_3_2; STG8_16_THE_RETURN_OF_THE_QUEEN: last_evt_4).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init script for las_29, the Shadow Queen's throne hall:
+ * sets up the doors and the NPCs and then runs the scene that matches the story step
+ * and the way Mario came in (west door: last_evt_1; sekai_yami1: last_evt_2; sekai_yami2: last_evt_3;
+ * starstone: last_evt_3_1; minnnanokoe: last_evt_3_2; STG8_16_THE_RETURN_OF_THE_QUEEN: last_evt_4).
+ */
 EVT_BEGIN(las_29_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -4610,6 +4656,12 @@ CALL_CHILD(evt_bero_info_run)
     RETURN
 EVT_END()
 #else
+/**
+ * Map init script for las_29, the Shadow Queen's throne hall:
+ * sets up the doors and the NPCs and then runs the scene that matches the story step
+ * and the way Mario came in (west door: last_evt_1; sekai_yami1: last_evt_2; sekai_yami2: last_evt_3;
+ * starstone: last_evt_3_1; minnnanokoe: last_evt_3_2; STG8_16_THE_RETURN_OF_THE_QUEEN: last_evt_4).
+ */
 EVT_BEGIN(las_29_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

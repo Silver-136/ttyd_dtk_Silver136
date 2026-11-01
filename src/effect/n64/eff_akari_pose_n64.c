@@ -63,6 +63,11 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 void effAkariPoseMain(EffectEntry* effect);
 void effAkariPoseDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns `count` flares around (x, y, z), `scale` times the base size,
+ * for `lifetime` frames (0 or less: until soft deleted).
+ * Type 0 or 1 selects a 24 or 12 frame sequence (the AKR_B_1 / AKR_B_2 patterns in the effect table).
+ */
 EffectEntry* effAkariPoseN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     f32 half;
     EffectEntry* effect;

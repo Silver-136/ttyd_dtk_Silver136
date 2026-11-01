@@ -1684,6 +1684,15 @@ EVT_BEGIN(attack_event_mode3)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's audience drain (third form, run once by attack_event_mode3):
+ * with the status window hidden he groans that he can't take much more (stg5_dou_24_bt01),
+ * rises above the stage and boasts of the true might of his spirit form (stg5_dou_24_bt02).
+ * He inhales while the audience screams and their spirits fly to him (_cortez_collect_energy),
+ * heals 1 HP per audience member drained (_cortez_drain_energy),
+ * and the drained members are removed (_cortez_recovery_audience) as he dives back home.
+ * On JP and later the audience area is darkened meanwhile.
+ */
 static EVT_BEGIN(attack_audience_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, 140, 120, 500, 140, 85, 9, 60, 11)
@@ -2608,6 +2617,11 @@ CALL(btlevtcmd_GetDataFromDataTable, LW(3), LW(0), 70)
     RETURN
 EVT_END()
 
+/**
+ * Opens Cortez's ribs in the second form for two turns (unit work 11 = 2):
+ * plays the rib-open pose for his stance and (on JP and later) an inhale sound,
+ * then makes the rib cage (part 2) targetable and resets his pose table.
+ */
 EVT_BEGIN(mode2_rib_open_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, 2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
@@ -2628,6 +2642,11 @@ EVT_BEGIN(mode2_rib_open_event)
     RETURN
 EVT_END()
 
+/**
+ * Closes Cortez's ribs in the second form (unit work 11 = 0):
+ * plays the rib-close pose for his stance and (on JP and later) the rib counter sound,
+ * makes the rib cage (part 2) untargetable again and resets his pose table.
+ */
 EVT_BEGIN(mode2_rib_close_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
@@ -2988,6 +3007,7 @@ USER_FUNC(_cortez_check_drain_audience) {
 /** Script helper: writes the current volume of sound effect args[0] to args[1]. */
 // Descriptive name (not in the symbol maps); placeholder unk_muj_0000652c, JP muj .text+0x6468. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script helper: writes the current volume of sound effect args[0] to args[1]. */
 USER_FUNC(_cortez_get_sfx_vol) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);

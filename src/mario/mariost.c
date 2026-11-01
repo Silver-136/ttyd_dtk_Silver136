@@ -218,6 +218,12 @@ void gcResetCheck(void);
 
 
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Start-up.
+ * The demos have no error handler (they turn on the SDK's DVD fatal message instead),
+ * show English (US demo) or Japanese (JP demo) text whatever the console font,
+ * set flag 4 on a restart and always set flag 0x1000.
+ */
 void marioStInit(void) {
     static u8 stack[0x1000];
     // the releases also start cold after a shutdown reset
@@ -329,6 +335,12 @@ VISetPostRetraceCallback(viPostCallback);
 none_key = OSGetTime();
 }
 #elif VERSION == VERSION_DEMO_US
+/**
+ * Start-up.
+ * The demos have no error handler (they turn on the SDK's DVD fatal message instead),
+ * show English (US demo) or Japanese (JP demo) text whatever the console font,
+ * set flag 4 on a restart and always set flag 0x1000.
+ */
 void marioStInit(void) {
     static u8 stack[0x1000];
     // the releases also start cold after a shutdown reset
@@ -440,6 +452,12 @@ VISetPostRetraceCallback(viPostCallback);
 none_key = OSGetTime();
 }
 #else
+/**
+ * Start-up.
+ * The demos have no error handler (they turn on the SDK's DVD fatal message instead),
+ * show English (US demo) or Japanese (JP demo) text whatever the console font,
+ * set flag 4 on a restart and always set flag 0x1000.
+ */
 void marioStInit(void) {
     static u8 stack[0x1000];
     // the releases also start cold after a shutdown reset
@@ -876,6 +894,12 @@ u32 marioStGetSystemLevel(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Runs after every vertical retrace: advances the play-time clocks (each stops while its system level is
+ * paused), records the retrace count, watches the console's Reset button
+ * and the B+X+Start soft reset (held 0.5 s), then services rumble and the sound driver.
+ * JP and later also reset when the drive reports a fatal status.
+ */
 static void viPostCallback(u32 retraceCount) {
     OSTime time;
     u32 reset = PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_START;
@@ -945,6 +969,12 @@ exitcheck:
     psndMainInt();
 }
 #else
+/**
+ * Runs after every vertical retrace: advances the play-time clocks (each stops while its system level is
+ * paused), records the retrace count, watches the console's Reset button
+ * and the B+X+Start soft reset (held 0.5 s), then services rumble and the sound driver.
+ * JP and later also reset when the drive reports a fatal status.
+ */
 void viPostCallback(u32 retraceCount) {
     OSTime time;
     u32 reset = PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_START;
@@ -1035,6 +1065,12 @@ exitcheck:
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Background thread started by marioStInit that polls the disc drive:
+ * on cover open, no or wrong disc, retry or fatal error it sets gp->dvdError,
+ * mutes sound and draws the ROM-font error message on its own, until the drive recovers.
+ * US and PAL wait until the status has been steady for 10 frames before drawing.
+ */
 static void* gcDvdCheckThread(void* param) {
 const char* message;
     s32 msgId;
@@ -1092,6 +1128,12 @@ DEMODoneRender();
     }
 }
 #else
+/**
+ * Background thread started by marioStInit that polls the disc drive:
+ * on cover open, no or wrong disc, retry or fatal error it sets gp->dvdError,
+ * mutes sound and draws the ROM-font error message on its own, until the drive recovers.
+ * US and PAL wait until the status has been steady for 10 frames before drawing.
+ */
 void* gcDvdCheckThread(void* param) {
 #if VERSION >= VERSION_US
     s32 prevStatus = 0;
@@ -1266,6 +1308,10 @@ void gcRumbleCheck(void) {
 }
 
 #if VERSION == VERSION_DEMO_JP
+/**
+ * The demos inline the reset check into its callers (the US demo also logs the reset);
+ * their restart codes are only RESTART and HOTRESET.
+ */
 static inline void gcResetCheck(void) {
     u32 code;
 
@@ -1303,6 +1349,10 @@ VISetBlack(TRUE);
     }
 }
 #elif VERSION == VERSION_DEMO_US
+/**
+ * The demos inline the reset check into its callers (the US demo also logs the reset);
+ * their restart codes are only RESTART and HOTRESET.
+ */
 static inline void gcResetCheck(void) {
     u32 code;
 
@@ -1341,6 +1391,10 @@ VISetBlack(TRUE);
     }
 }
 #else
+/**
+ * The demos inline the reset check into its callers (the US demo also logs the reset);
+ * their restart codes are only RESTART and HOTRESET.
+ */
 void gcResetCheck(void) {
     u32 code;
 

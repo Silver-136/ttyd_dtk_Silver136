@@ -135,6 +135,7 @@ static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 w
 /** Draws message msg at (x, y) with the given scale, squeezing it horizontally when it is wider than width. */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_0000dfc4, JP gor .text+0xDEF8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Draws message msg at (x, y) with the given scale, squeezing it horizontally when it is wider than width. */
 void gor_yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;
@@ -1058,6 +1059,12 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 
 static YuuRankingWork* _wp;
 
+/**
+ * Converts a minigame score into the number of Monte (tokens) it is worth:
+ * type 0 by score divided by 30000 (25000 in the demos), types 2 and 3 by the score above a base,
+ * type 1 (a time) by how far under max it is out of 15;
+ * then adds bonus and applies mul (a multiplier below 0x100, an additive amount above it). Never negative.
+ */
 static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
     s32 ret;
 

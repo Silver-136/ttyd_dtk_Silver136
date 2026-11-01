@@ -148,10 +148,18 @@ const char* latin_tbl[] = {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Starts loading the name entry textures (w/<language>/name.tpl; the JP builds always use jp,
+ * the demo reads window/jp) and returns TRUE once they are loaded. Callers poll it before nameEntOn.
+ */
 BOOL nameEntPrepare(void) {
 return fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != 0;
 }
 #else
+/**
+ * Starts loading the name entry textures (w/<language>/name.tpl; the JP builds always use jp,
+ * the demo reads window/jp) and returns TRUE once they are loaded. Callers poll it before nameEntOn.
+ */
 BOOL nameEntPrepare(void) {
 #if VERSION >= VERSION_US
     const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
@@ -162,6 +170,16 @@ BOOL nameEntPrepare(void) {
 }
 #endif
 
+/**
+ * Opens the name entry screen.
+ * type selects the prompt from msg_tbl and the rules:
+ * 0 the save file name (seq_load), 1 Yoshi's name (tou_10, blank gives his default name),
+ * 2 and 3 guessing Doopliss's name (gra_00) before and after the Letter P is recovered,
+ * 4 the password in the X-Naut Fortress (aji_01).
+ * Starts with hiragana (latin outside Japanese in the US and PAL releases),
+ * an empty 8-character name and the cursor at the top left.
+ * Type 2 blanks the grid cell the name needs (hiragana and katakana n, latin p), so it cannot be typed yet.
+ */
 void nameEntOn(s32 type) {
     s32 i;
 
@@ -335,6 +353,7 @@ void nameEntMain(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** The demo has no cursor travel check, no all-blank name check and no default partner name. */
 static s32 nameMain(void) {
     s32 off;
     s32 idx;
@@ -496,6 +515,7 @@ static s32 nameMain(void) {
     return 0;
 }
 #else
+/** The demo has no cursor travel check, no all-blank name check and no default partner name. */
 s32 nameMain(void) {
     s32 len;
     s32 j;
@@ -875,6 +895,11 @@ s32 nameMain(void) {
  * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the name entry screen in 2D: background, the name boxes with the 8 typed characters, the character grid,
+ * the side buttons, the caret, the prompt window for this type and, while confirming,
+ * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
+ */
 static void nameEntDisp(CameraId cameraId, void* param) {
     GXColor white2;
     GXColor white;
@@ -974,6 +999,11 @@ if (strlen(buf)) {
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 #else
+/**
+ * Draws the name entry screen in 2D: background, the name boxes with the 8 typed characters, the character grid,
+ * the side buttons, the caret, the prompt window for this type and, while confirming,
+ * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
+ */
 void nameEntDisp(CameraId cameraId, void* param) {
     GXColor white2;
     GXColor white;

@@ -51,6 +51,11 @@ EvtWord evt_action_walk[57];
 EvtWord evt_action[111];
 EvtWord dig_00_init_evt[107];
 
+/**
+ * Prepares the THP movie player for demo.thp: initialises the simple THP decoder, opens the file,
+ * gives it a buffer from the map heap, preloads and starts the audio at volume 80.
+ * Skipped on a development unit with an IS-Viewer attached (EXI channel 0 device 2), which has no movie.
+ */
 // dig_00 (JP demo and JP release only; the US release drops this REL): a credits test left on the disc. It plays
 // demo.thp (Super Mario Sunshine's credits video) while TTYD characters pop up, like the real staff roll in end_00.
 void dig_thpInit(void) {
@@ -84,6 +89,12 @@ void dig_thpStop(void) {
     }
 }
 
+/**
+ * Draw callback for the digest map: decodes and draws the next frame of demo.thp over the whole screen
+ * and records the frame number in work[0].
+ * On an IS-Viewer unit it draws the line "the movie plays here" (in Japanese) instead and counts frames.
+ * The EU release logs a message when a frame fails to decode.
+ */
 void movie_draw(CameraId camera, void* param) {
     u16 width;
     u16 height;

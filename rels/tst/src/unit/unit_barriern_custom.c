@@ -2163,6 +2163,14 @@ static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx) {
  * and args[0] receives 1.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper run from the Yux's wait event.
+ * Drops satellites (work[4], work[5]) that no longer exist;
+ * with none left the barrier breaks (the body loses its damage immunity,
+ * the barrier effect in work[3] is deleted and glass shards fly) and args[0] receives 0.
+ * While satellites live it raises the barrier (immune body part, barrier effect kept under the Yux)
+ * and args[0] receives 1.
+ */
 static USER_FUNC(_check_satellite) {
     s32 id = BattleTransID(event, -2);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -2232,6 +2240,14 @@ return EVT_RETURN_DONE;
     return EVT_RETURN_DONE;
 }
 #else
+/**
+ * Script helper run from the Yux's wait event.
+ * Drops satellites (work[4], work[5]) that no longer exist;
+ * with none left the barrier breaks (the body loses its damage immunity,
+ * the barrier effect in work[3] is deleted and glass shards fly) and args[0] receives 0.
+ * While satellites live it raises the barrier (immune body part, barrier effect kept under the Yux)
+ * and args[0] receives 1.
+ */
 static USER_FUNC(_check_satellite) {
     s32 id = BattleTransID(event, -2);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -2311,6 +2327,11 @@ static USER_FUNC(_check_satellite) {
  * formation of +-25 units, x mirrored by facing direction).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper: args[0] is the Yux, args[1] the number of satellites (1-4),
+ * args[2] the index of this satellite; args[3]-args[5] receive its starting offset from the Yux (a fixed
+ * formation of +-25 units, x mirrored by facing direction).
+ */
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -2364,6 +2385,11 @@ p = VecData;
     return EVT_RETURN_DONE;
 }
 #else
+/**
+ * Script helper: args[0] is the Yux, args[1] the number of satellites (1-4),
+ * args[2] the index of this satellite; args[3]-args[5] receive its starting offset from the Yux (a fixed
+ * formation of +-25 units, x mirrored by facing direction).
+ */
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;

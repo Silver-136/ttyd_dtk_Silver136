@@ -472,6 +472,10 @@ void vivian_use(PartyEntry* party) {
 s32 vivian_cancel_req;
 
 #pragma explicit_zero_data on
+/**
+ * Re-applies Mario's sunk-into-the-shadow look (the "p_bibi" paper pose M_B_3 / PM_B_1, held at frame 24)
+ * when mario.c refreshes his animation during the Vivian motion. Not in the demos.
+ */
 // Descriptive name (not in the symbol maps).
 void marioForceVivianAnime(void) {
     // FAKE: padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout
@@ -606,12 +610,14 @@ void vivianUnhold(PartyEntry* party) {
     }
 }
 
+/** Demo copy: hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
 void partyVivianTailStop(PartyEntry* party) {
     if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
         party->tailFlags |= 1;
     }
 }
 
+/** Demo copy: shows Vivian's shadow tail again. */
 void partyVivianTailStart(PartyEntry* party) {
     if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
         party->tailFlags &= ~1;
@@ -640,6 +646,11 @@ BOOL vivianDisplayTailCheck(PartyEntry* party) {
     return TRUE;
 }
 
+/**
+ * Moves Vivian's tail point (trailPos) a tenth of the way toward her each frame,
+ * keeping it within VIVIAN_FOLLOW_DIST (30 units in the US and PAL releases, 22 before);
+ * party.c draws her shadow tail to it.
+ */
 void vivianShadow(PartyEntry* party) {
     f32 dx, dy, dz;
 
@@ -668,6 +679,7 @@ void vivian_move(PartyEntry* party) {
     vivianShadow(party);
 }
 
+/** demo: Vivian always hides 13 behind Mario, with no ground search outside the hidden state */
 static inline void vivianFollow(PartyEntry* party) {
     HitEntry* hit;
     u8 id;
@@ -727,6 +739,11 @@ static inline void vivianFollow(PartyEntry* party) {
 
 #pragma defer_codegen off
 #pragma explicit_zero_data on
+/**
+ * Demo Veil: Vivian moves behind Mario and both sink into the floor shadow (ripple effect, sounds),
+ * then stay hidden riding the ground under Mario until B
+ * or X (or vivian_cancel_req) brings them back up with a small hop.
+ */
 void vivian_use(PartyEntry* party) {
     Vec s;
     EffectEntry* rip;

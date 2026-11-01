@@ -434,6 +434,14 @@ static PoseSoundTiming pose_sound_timing_table[] = {
  * Leaves the home position in LW(0) to LW(2).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Brings the bat down from the ceiling into the open air the first time it is needed:
+ * if it is still hanging (unit attribute 2 set) it clears that, sets attribute 4,
+ * restores the flying pose table (pose type 40),
+ * shifts the unit and its home position down 30 (then another 40 for its home), adjusts the hit,
+ * cursor and status icon offsets and hands the damage event over to damage_event.
+ * Leaves the home position in LW(0) to LW(2).
+ */
 static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -458,6 +466,14 @@ CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 6, 32)
     RETURN
 EVT_END()
 #else
+/**
+ * Brings the bat down from the ceiling into the open air the first time it is needed:
+ * if it is still hanging (unit attribute 2 set) it clears that, sets attribute 4,
+ * restores the flying pose table (pose type 40),
+ * shifts the unit and its home position down 30 (then another 40 for its home), adjusts the hit,
+ * cursor and status icon offsets and hands the damage event over to damage_event.
+ * Leaves the home position in LW(0) to LW(2).
+ */
 static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -493,6 +509,12 @@ EVT_END()
  * and if it starts in the sky (unit work 0 = 1) runs ceil_sky_event right away; then starts the idle event.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Init script of the bat: registers its wait, attack,
+ * damage (damage_event_ceil, for while it hangs) and confusion handlers and the ceiling-fall event,
+ * sets the pose sound table and the offsets of its hit, cursor and status icon for the upside-down pose,
+ * and if it starts in the sky (unit work 0 = 1) runs ceil_sky_event right away; then starts the idle event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -513,6 +535,12 @@ CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_START_FLYING, LW(0))
     RETURN
 EVT_END()
 #else
+/**
+ * Init script of the bat: registers its wait, attack,
+ * damage (damage_event_ceil, for while it hangs) and confusion handlers and the ceiling-fall event,
+ * sets the pose sound table and the offsets of its hit, cursor and status icon for the upside-down pose,
+ * and if it starts in the sky (unit work 0 = 1) runs ceil_sky_event right away; then starts the idle event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

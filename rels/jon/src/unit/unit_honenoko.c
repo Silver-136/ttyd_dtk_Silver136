@@ -626,6 +626,14 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Dull Bones builds a friend: it winds up six times (KRN_A_3 and A_4),
+ * each time throwing a spinning bone (part
+ * 3, KRN_H poses, SFX_ENM_HONENOKO_SEND_GROUP1 and 2) to the free spot, where part 4 grows as a heap of bones
+ * through the KRN_C poses.
+ * The heap then reassembles (KRN_D_3, KRN_D_4 with the reunite sounds) and a new Dull Bones
+ * is spawned there, copying its size status through honenoko_copy_status.
+ */
 static EVT_BEGIN(call_friend_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)

@@ -374,6 +374,12 @@ EVT_END()
  * A special pre-damage result of 5 skips the miss handling.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The Bandit's plain attack: it runs up to the target (SFX_ENM_BORODO_MOVE1L/R),
+ * bumps it (SFX_ENM_BORODO_ATT1) and either misses or applies the damage with the action-command defence;
+ * afterwards it falls over or recovers and runs back home.
+ * A special pre-damage result of 5 skips the miss handling.
+ */
 static EVT_BEGIN(_borodo_normal_attack)
     // Pick a target; a confused Badge Bandit with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -515,6 +521,12 @@ CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     RETURN
 EVT_END()
 #else
+/**
+ * The Bandit's plain attack: it runs up to the target (SFX_ENM_BORODO_MOVE1L/R),
+ * bumps it (SFX_ENM_BORODO_ATT1) and either misses or applies the damage with the action-command defence;
+ * afterwards it falls over or recovers and runs back home.
+ * A special pre-damage result of 5 skips the miss handling.
+ */
 static EVT_BEGIN(_borodo_normal_attack)
     // Pick a target; a confused Badge Bandit with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -670,6 +682,14 @@ EVT_END()
  * If nothing was stolen it sulks (SFX_ENM_BORODO_INCLINE1) and walks home.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The Bandit's stealing attack: it runs at the target and bumps it like the plain attack;
+ * on a hit where Mario's action command result (LW(7)) was 3 or less,
+ * _steal_item takes an item from Mario's pouch (LW(8) = the item, LW(9) = its icon),
+ * which flies out of the target while btl_msg_steal_item_lost is announced and sets the unit flag 0x40000000,
+ * and the Bandit laughs (SFX_ENM_BORODO_LAUGH1) and switches to the pose table showing the loot.
+ * If nothing was stolen it sulks (SFX_ENM_BORODO_INCLINE1) and walks home.
+ */
 static EVT_BEGIN(_borodo_steal_attack)
     // Pick a target; a confused Badge Bandit with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -838,6 +858,14 @@ CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     RETURN
 EVT_END()
 #else
+/**
+ * The Bandit's stealing attack: it runs at the target and bumps it like the plain attack;
+ * on a hit where Mario's action command result (LW(7)) was 3 or less,
+ * _steal_item takes an item from Mario's pouch (LW(8) = the item, LW(9) = its icon),
+ * which flies out of the target while btl_msg_steal_item_lost is announced and sets the unit flag 0x40000000,
+ * and the Bandit laughs (SFX_ENM_BORODO_LAUGH1) and switches to the pose table showing the loot.
+ * If nothing was stolen it sulks (SFX_ENM_BORODO_INCLINE1) and walks home.
+ */
 static EVT_BEGIN(_borodo_steal_attack)
     // Pick a target; a confused Badge Bandit with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1060,6 +1088,12 @@ EVT_END()
  * because held is 0).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper for the Badge Bandit's steal.
+ * args[0] is the thief, args[1] the victim; args[2]-args[4] receive the item id, its icon and the amount taken.
+ * 40% of the time it takes up to 10 coins, otherwise it picks among the held badges (the item branch is skipped
+ * because held is 0).
+ */
 static USER_FUNC(_steal_item) {
     EvtWord* args = event->args;
     s32 count;
@@ -1168,6 +1202,12 @@ return EVT_RETURN_DONE;
     return EVT_RETURN_DONE;
 }
 #else
+/**
+ * Script helper for the Badge Bandit's steal.
+ * args[0] is the thief, args[1] the victim; args[2]-args[4] receive the item id, its icon and the amount taken.
+ * 40% of the time it takes up to 10 coins, otherwise it picks among the held badges (the item branch is skipped
+ * because held is 0).
+ */
 static USER_FUNC(_steal_item) {
     EvtWord* args = event->args;
     s32 count;

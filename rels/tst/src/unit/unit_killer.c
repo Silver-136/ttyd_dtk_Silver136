@@ -226,6 +226,14 @@ static EVT_BEGIN(start_avoid)
     RETURN
 EVT_END()
 
+/**
+ * Attack of the Bullet Bill: picks a target (the fixed first target in a flag-2 battle,
+ * otherwise a sampled enemy; uses an enemy item first if it has one), zooms the camera on it,
+ * charges for 30 frames and then flies into it.
+ * The Bill always ends up removed from the battle:
+ * after a miss it flies past the target and off, after a hit it explodes in smoke, banks its coins,
+ * experience and star points and is killed (KillUnit) once the damage has been dealt.
+ */
 // Common attack cleanup removes the projectile, including the no-target path.
 static EVT_BEGIN(attack_event)
     // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.

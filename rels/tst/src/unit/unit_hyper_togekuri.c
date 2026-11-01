@@ -604,6 +604,12 @@ static u16 krb_comp_dir(f32 x, f32 z) {
     return (u16)mid;
 }
 
+/**
+ * Script helper: writes to args[0] who the active unit (the attacker) is by its initial kind:
+ * 0 for Mario (0xDE), 1 for Goombella (0xE0) and 2 for anyone else.
+ * dmg_avoid_counter_thorn_head_event uses it to pick the lecture unit's scolding line for jumping on the spiky
+ * head (mac_0_092_06 for Mario, mac_0_092_07 for Goombella) and to skip it for anyone else.
+ */
 static USER_FUNC(get_attacker) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

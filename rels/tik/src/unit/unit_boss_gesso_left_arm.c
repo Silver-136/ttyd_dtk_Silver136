@@ -232,6 +232,12 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Damage reaction of the Blooper's left tentacle (JP and later).
+ * Plays the hit pose (38 or 39 depending on the damage pattern), runs the damage and,
+ * if the tentacle was defeated, the death event; otherwise it returns to the wait pose.
+ * Afterwards the body is told to wait again when no tentacle fall is in progress.
+ */
 EVT_BEGIN(gesso_left_arm_damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

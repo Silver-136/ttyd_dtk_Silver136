@@ -302,6 +302,11 @@ static EVT_BEGIN(suifu_d_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of sailor E (水夫E): from STG5_30_SHIPWRECKED_SAILORS to STG5_35_ESCAPE_ROUTE he stands at
+ * (736, 50,
+ * 113) in the US and PAL releases and at (750, 50, -25) in the earlier ones, facing east at STG5_34_KICKED_OFF.
+ */
 static EVT_BEGIN(suifu_e_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_35_ESCAPE_ROUTE)
@@ -1200,6 +1205,10 @@ SET_VALUE(GSWF_DOU_11_SWITCH_1_PRESSED, 1)
     RETURN
 EVT_END()
 
+/**
+ * At map load: hides the second pair of barrels (S_taru_n03, n04) and their hit areas
+ * until both island switches have been pressed (or in the demos, the second switch).
+ */
 EVT_BEGIN(ukishima_init2)
 #if VERSION <= VERSION_DEMO_US
 IF_INT_EQUAL(GSWF_DOU_11_SWITCH_2_PRESSED, 0)
@@ -1262,6 +1271,11 @@ SET_VALUE(GSWF_DOU_11_SWITCH_2_PRESSED, 1)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Event of the first blue island switch (mobj01):
+ * sets its flag and runs ukishima_part1 or ukishima_part2 depending on how many switches are now down.
+ * (JP and later; the demos call ukishima_part1 directly.)
+ */
 EVT_BEGIN(ukishima_switch1_evt)
     SET_VALUE(GSWF_DOU_11_SWITCH_1_PRESSED, 1)
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
@@ -1277,6 +1291,11 @@ EVT_END()
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Event of the second blue island switch (mobj02):
+ * sets its flag and runs ukishima_part1 or ukishima_part2 depending on how many switches are now down.
+ * (JP and later.)
+ */
 EVT_BEGIN(ukishima_switch2_evt)
     SET_VALUE(GSWF_DOU_11_SWITCH_2_PRESSED, 1)
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
@@ -1693,6 +1712,10 @@ EVT_BEGIN(escapeway_event)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * After the wall is blown open: Sailor C is made intangible and Mario
+ * and the partner are walked to their places at (730, -120) and (712, -126) to watch. JP and later only.
+ */
 EVT_BEGIN(bombwall_escape_move)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     BEGIN_INLINE_EVENT

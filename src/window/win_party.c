@@ -371,6 +371,11 @@ static const GXColor winPartyBlackC = {0x00, 0x00, 0x00, 0xFF};
  * the partner's name, the switch and move-list hints, and the move list with FP costs.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the Party window (menu slot idx): the selected partner's HP
+ * and rank (one Shine Sprite icon per rank-up), the partner carousel with shadows (others shrunk and grayed),
+ * the partner's name, the switch and move-list hints, and the move list with FP costs.
+ */
 void winPartyDisp(s32 camId, void* param, s32 idx) {
     WindowWork* wp = param;
     GXColor white2;
@@ -643,6 +648,11 @@ winFontSetLabel((Vec){10.0f + x, iy = (wy - ((f32)(i * 26))) - 30.0f, 0.0f}, (Ve
 }
 }
 #else
+/**
+ * Draws the Party window (menu slot idx): the selected partner's HP
+ * and rank (one Shine Sprite icon per rank-up), the partner carousel with shadows (others shrunk and grayed),
+ * the partner's name, the switch and move-list hints, and the move list with FP costs.
+ */
 void winPartyDisp(s32 camId, void* param, s32 idx) {
     WindowWork* wp = param;
     GXColor white2;

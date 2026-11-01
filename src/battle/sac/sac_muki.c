@@ -347,8 +347,20 @@ static inline void sacMukiAudienceCall(s32 num) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The cursor on the 3x3 grid: moves square to square with the Control Stick (slower while Mario is dizzy)
+ * and on A hits what is in its square: a red arrow adds to the attack gauge,
+ * a blue arrow to the defense gauge (0.25 in JP and the demos, 0.2 in US and PAL, up to level 9),
+ * a poison mushroom makes Mario dizzy and the crowd boo.
+ */
 static void main_cursor(void) {
 #else
+/**
+ * The cursor on the 3x3 grid: moves square to square with the Control Stick (slower while Mario is dizzy)
+ * and on A hits what is in its square: a red arrow adds to the attack gauge,
+ * a blue arrow to the defense gauge (0.25 in JP and the demos, 0.2 in US and PAL, up to level 9),
+ * a poison mushroom makes Mario dizzy and the crowd boo.
+ */
 void main_cursor(void) {
 #endif
     MukiWork* w = get_ptr();
@@ -1023,6 +1035,11 @@ static USER_FUNC(star_stone_appear) {
     return 2;
 }
 
+/**
+ * Attack event of Power Lift: pays the Star Power, plays the star intro, runs the 3x3 grid game,
+ * then raises Mario's and the partner's attack and defense for 3 turns by the levels earned.
+ * PAL stops the US double run of the enemy return and cleanup when only defense was raised.
+ */
 EVT_BEGIN(marioAttackEvent_Muki)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(14))
     CALL(btlevtcmd_GetBodyId, LW(14), LW(15))

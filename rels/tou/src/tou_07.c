@@ -101,6 +101,7 @@ USER_FUNC(tou_07_mario_keyoff_check) {
 /** Script helper: re-enables sound effects (clears the SFX mute flag). */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006bd8, JP tou .text+0x6B14. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script helper: re-enables sound effects (clears the SFX mute flag). */
 USER_FUNC(tou_07_snd_on) {
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
@@ -110,6 +111,7 @@ USER_FUNC(tou_07_snd_on) {
 /** Script helper: mutes sound effects (sets the SFX mute flag), used while Mario sleeps in the bed. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006c00, JP tou .text+0x6B3C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script helper: mutes sound effects (sets the SFX mute flag), used while Mario sleeps in the bed. */
 USER_FUNC(tou_07_snd_off) {
     psndSetFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
@@ -653,6 +655,11 @@ EVT_END()
  * and the partners return.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Rest in the Glitz Pit bed (stg3_yado_00/01, with a yes/no prompt):
+ * partners leave, Mario hops in and sleeps with the sound muted, HP and FP are restored,
+ * and the partners return.
+ */
 EVT_BEGIN(evt_tou_bed)
 CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LF(0), 0)
@@ -784,6 +791,11 @@ CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
     RETURN
 EVT_END()
 #else
+/**
+ * Rest in the Glitz Pit bed (stg3_yado_00/01, with a yes/no prompt):
+ * partners leave, Mario hops in and sleeps with the sound muted, HP and FP are restored,
+ * and the partners return.
+ */
 EVT_BEGIN(evt_tou_bed)
 #if VERSION >= VERSION_US
     CALL(tou_07_mario_keyoff_check, LW(0))
@@ -1165,6 +1177,7 @@ static USER_FUNC(paper_on) {
 /** Script helper: hides the belt item's icon. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006cfc, JP tou .text+0x6C38. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script helper: hides the belt item's icon. */
 USER_FUNC(tou_07_icon_off) {
     iconFlagOn(itemNameToPtr("belt")->name, ICON_FLAG_HIDDEN);
     return EVT_RETURN_DONE;
@@ -1178,6 +1191,11 @@ USER_FUNC(tou_07_icon_off) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006d34, JP tou .text+0x6C70. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper: moves the belt's star stone effect ("belt")
+ * and the belt NPC (ベルト) to camera 7 (CAMERA_3D_EFFECTB),
+ * the camera itemdrv also puts Mario on while an important item is being received, so they are drawn with him.
+ */
 USER_FUNC(tou_07_belt_camid) {
     EffectEntry* eff = effNameToPtr("belt");
     // ベルト

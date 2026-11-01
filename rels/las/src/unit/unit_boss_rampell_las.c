@@ -4837,6 +4837,10 @@ static USER_FUNC(eff_scanning) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000855c, JP las .text+0x8490. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper: returns 1 in args[0] if Mario currently has a shadow guard (the Vivian partner's protective
+ * status) and 0 otherwise. JP and later.
+ */
 USER_FUNC(mario_shadow_guard_check) {
     EvtWord* args = event->args;
 

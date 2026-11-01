@@ -319,6 +319,11 @@ void npcDisp_xlu(CameraId cameraId, void* param) {
     animPoseDrawMtx(entry->poseId, mtx, 3, rotY, 2.0f);
 }
 
+/**
+ * Draw callback for an opaque NPC, registered once per render mode:
+ * mode 0 updates and draws the opaque pass, modes 1 and 2 the other two passes.
+ * The US and later releases apply the dimmed colour before the switch; JP and the demos only in mode 0.
+ */
 void npcDisp(CameraId camId, void* param) {
     NpcEntry* entry = param;
     Mtx mtx;
@@ -742,6 +747,15 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
             ok = 1;                                                  \
         }                                                            \
     } while (0)
+/**
+ * Per-frame NPC update (from mariost.c).
+ * For each live NPC: timers, wall-checked movement, gravity, pushing Mario aside,
+ * walk/run/stay animations from its speed, half speed in the low part of kpa_03;
+ * then the event interrupts: blown by Flurrie (8), left its territory (4),
+ * lost Mario while chasing (2) or spotted him (1), handed to npcCheckInterrupt.
+ * Then on-screen culling, draw, shadow, blur and offscreen registration.
+ * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
+ */
 void npcMain(void) {
     const char* kpaSfx;
     NpcWork* npcwork;
@@ -1168,6 +1182,15 @@ trig = 0;
     }
 }
 #else
+/**
+ * Per-frame NPC update (from mariost.c).
+ * For each live NPC: timers, wall-checked movement, gravity, pushing Mario aside,
+ * walk/run/stay animations from its speed, half speed in the low part of kpa_03;
+ * then the event interrupts: blown by Flurrie (8), left its territory (4),
+ * lost Mario while chasing (2) or spotted him (1), handed to npcCheckInterrupt.
+ * Then on-screen culling, draw, shadow, blur and offscreen registration.
+ * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
+ */
 void npcMain(void) {
     const char* kpaSfx;
     NpcWork* npcwork;
@@ -1912,6 +1935,12 @@ marioChkWallAround(&mario->position, 0.0f, 160.0f + angle, 20.0f, dz);
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
+/**
+ * Vertical movement for one frame: the script's moveOffset.y plus the jump arc (gravity 980 units/s^2 x
+ * jumpGravity, limited by maxFallSpeed, slowed in the low part of kpa_03).
+ * With NPC_FLAG_LAND_ON_FLOOR it lands on the floor found below (US and later also probe both side edges)
+ * and sets NPC_STATUS_AIRBORNE while off the floor; otherwise it just moves, no lower than -1000.
+ */
 void npcMoveG(NpcEntry* npc) {
     f32 dy;
     f32 vel;
@@ -2202,6 +2231,11 @@ void npcStrippedAnnouncePool(f32* f) {
     f[1] = 600.0f;
 }
 
+/**
+ * Draws the first-strike banner (FirstStrikeInfo param, registered on camera 9 by npcMain):
+ * a coloured window sized to the message with the shaking white text at the banner's x/y.
+ * US and later split the text into up to four lines.
+ */
 void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
 #if VERSION >= VERSION_US
     s32 height;
@@ -2310,6 +2344,14 @@ static inline BOOL fbat_setHit(NpcEntry* npc) {
     return TRUE;
 }
 
+/**
+ * Each frame in normal field mode: 1) a hit or touch with an enemy starts a battle (mode 5) with the hit
+ * animation, star sparks, damage sound and the enemy turned to face the camera;
+ * 2) finds the friendly NPC Mario faces close enough to talk to (wp->talkTarget, turning it toward him)
+ * and starts talking (mode 2) on A; 3) hammering
+ * or jumping on a friendly NPC that reacts runs its hit event (mode 3); 4) the Bowser stage checks.
+ * Not while the system level is raised, Mario is locked or (JP and later) picking up an item.
+ */
 void fbatEncountCheck(void) {
 #if VERSION <= VERSION_DEMO_US
     NpcWork* wp = (gp->inBattle) ? (&work.battle) : (&work.field);
@@ -3211,6 +3253,15 @@ static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) 
 }
 #endif
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Finds the NPC Mario or the partner hits this frame.
+ * flags pick the checks: 0x20 touch/jump, 0x40 hammer, 0x80 spin hammer, 0x100 Koops' shell,
+ * 0x200 Bobbery's bomb; 0x10 also checks enemy contact (and no checks while invincible),
+ * 0x1 tests only the current hammer frame instead of the whole swing,
+ * 0x1000 tests enemies instead of friendly NPCs, 0x2000 only NPCs whose reactionFlags allow that hit,
+ * without setting the banner.
+ * Returns the closest NPC hit and writes the FbatHitResult (kind first) to the second argument if given.
+ */
 void* fbatHitCheck(u32 flags, void* result) {
     u32 f1000a;
     u32 f20;
@@ -3552,6 +3603,15 @@ void* fbatHitCheck(u32 flags, void* result) {
     return hit;
 }
 #else
+/**
+ * Finds the NPC Mario or the partner hits this frame.
+ * flags pick the checks: 0x20 touch/jump, 0x40 hammer, 0x80 spin hammer, 0x100 Koops' shell,
+ * 0x200 Bobbery's bomb; 0x10 also checks enemy contact (and no checks while invincible),
+ * 0x1 tests only the current hammer frame instead of the whole swing,
+ * 0x1000 tests enemies instead of friendly NPCs, 0x2000 only NPCs whose reactionFlags allow that hit,
+ * without setting the banner.
+ * Returns the closest NPC hit and writes the FbatHitResult (kind first) to the second argument if given.
+ */
 void* fbatHitCheck(u32 flags, void* result) {
     u32 f1000a;
     u32 f20;
@@ -4143,6 +4203,10 @@ NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 
  * returns the NPC at the first frame that hits, with the distance in *dist.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Tests the hammer head at every frame of the swing (0 to 11) against an NPC;
+ * returns the NPC at the first frame that hits, with the distance in *dist.
+ */
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle) {
     f32 t;
     f32 d;
@@ -4161,6 +4225,10 @@ NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle
     return hit;
 }
 #else
+/**
+ * Tests the hammer head at every frame of the swing (0 to 11) against an NPC;
+ * returns the NPC at the first frame that hits, with the distance in *dist.
+ */
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle) {
     f32 t;
     f32 d;
@@ -4197,6 +4265,13 @@ NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle
 }
 #endif
 
+/**
+ * Turns the interrupt bits npcMain set into an event switch:
+ * dead (0x10) runs deadEvent, resume (0x10000000) moveEvent, blown away (8) blowEvent,
+ * found Mario (1) findEvent, lost Mario (2) lostEvent, out of territory (4) returnEvent, first match wins.
+ * The new event replaces the regular one.
+ * Clears the bits (keeping 0x100-0x800 outside the demos); returns TRUE if an event started.
+ */
 BOOL npcCheckInterrupt(NpcEntry* npc) {
     EventEntry* evt;
     u32 flags;
@@ -4616,8 +4691,16 @@ USER_FUNC(_check) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper: spawns Merlee's spell effect ("mjef_coinup") above Mario's head (scale 0.8 in JP and later)
+ * and blocks the script until the effect is gone.
+ */
 static USER_FUNC(_majinai_effect) {
 #else
+/**
+ * Script helper: spawns Merlee's spell effect ("mjef_coinup") above Mario's head (scale 0.8 in JP and later)
+ * and blocks the script until the effect is gone.
+ */
 USER_FUNC(_majinai_effect) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -4708,6 +4791,10 @@ EVT_END()
  * same item flags per version as fbatRecoverItems. Called by a script helper.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Drops the items an enemy carried back (recoveredItems) at its position and clears them;
+ * same item flags per version as fbatRecoverItems. Called by a script helper.
+ */
 void npcGetBackItemEntry(NpcEntry* npc) {
     NpcBattleInfo* info = &npc->battleInfo;
     s32 i;
@@ -4720,6 +4807,10 @@ info->recoveredItems[i] = 0;
     }
 }
 #else
+/**
+ * Drops the items an enemy carried back (recoveredItems) at its position and clears them;
+ * same item flags per version as fbatRecoverItems. Called by a script helper.
+ */
 void npcGetBackItemEntry(NpcEntry* npc) {
     NpcBattleInfo* info = &npc->battleInfo;
     s32 i;
@@ -4914,6 +5005,10 @@ s32 npcCalcScore(NpcEntry* npc) {
     return score;
 }
 
+/**
+ * Whether Flurrie's breath reaches the NPC at its top,
+ * middle or bottom (JP and later: never for NPCs that cannot be attacked or touched).
+ */
 BOOL npcCheckBlow(NpcEntry* npc) {
     Vec pos;
 #if VERSION > VERSION_DEMO_US

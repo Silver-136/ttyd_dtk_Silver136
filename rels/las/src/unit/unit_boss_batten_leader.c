@@ -1648,6 +1648,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Grodus's reaction when hit. A zero-damage hit plays the miss sound.
+ * A body hit (part 1) plays the damage pose; a hit on another part (the staff) switches the staff lamp off
+ * and plays pose D_2.
+ * Hits that carry damage code 256 raise his HP gauge flag (JP and later)
+ * and add ten times the damage to his work[2] counter, capped at 100.
+ */
 EVT_BEGIN(damage_sub_event)
 #if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
@@ -2989,6 +2996,10 @@ void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
 }
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000d538, JP las .text+0xD46C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper: sets the HP gauge flag 1 on the unit args[0] (JP and later),
+ * used when a part that shows the gauge is hit.
+ */
 USER_FUNC(_hp_gauge_flag_on) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

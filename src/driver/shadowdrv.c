@@ -847,8 +847,16 @@ static inline void shadowSetMatZero(void) {
  * each volume darkens the ground it passes through, and its screen area goes to the shadow's offscreen region.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the cylinder (mode 2, the default) character shadows:
+ * each volume darkens the ground it passes through, and its screen area goes to the shadow's offscreen region.
+ */
 static void cylinderShadowDraw(CameraId cameraId, void* param) {
 #else
+/**
+ * Draws the cylinder (mode 2, the default) character shadows:
+ * each volume darkens the ground it passes through, and its screen area goes to the shadow's offscreen region.
+ */
 void cylinderShadowDraw(CameraId cameraId, void* param) {
 #endif
     ShadowEntry* entry = cswp->entries;
@@ -995,6 +1003,7 @@ void shadowSetType(s32 id, u8 type) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/** Sets the alpha of shadow id (despite the name); the demo has no per-shadow alpha. */
 void shadowSetMode(s32 id, u8 alpha) {
     ShadowEntry* entry = &cswp->entries[id];
     entry->alpha = alpha;

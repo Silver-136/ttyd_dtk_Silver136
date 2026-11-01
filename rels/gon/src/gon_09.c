@@ -152,6 +152,13 @@ EVT_END()
  * it reverses and the switch is cancelled.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Handler of the sw_0 switch for the floating block blk_0:
+ * the camera shakes with rumble while the block rises
+ * or falls 200 units (the direction follows LSWF(1), which is toggled), with block-float sounds;
+ * if Mario or his partner bumps the block with the head during the move,
+ * it reverses and the switch is cancelled.
+ */
 static EVT_BEGIN(main_0)
 CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
@@ -360,6 +367,13 @@ WAIT_MS(1000)
     RETURN
 EVT_END()
 #else
+/**
+ * Handler of the sw_0 switch for the floating block blk_0:
+ * the camera shakes with rumble while the block rises
+ * or falls 200 units (the direction follows LSWF(1), which is toggled), with block-float sounds;
+ * if Mario or his partner bumps the block with the head during the move,
+ * it reverses and the switch is cancelled.
+ */
 static EVT_BEGIN(main_0)
     SET_TYPE(239)
     // The switch is pressed: the block stops reacting to hits while it moves.

@@ -260,6 +260,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the Koopa is flipped onto its back:
+ * lowers its hit offset, switches part 1 to the upside-down defence table and pose table,
+ * sets the overturn status flag and an overturn count of 2,
+ * plays the flip pose (NKT_D_1) and sound and lets it fall back with two bounces.
+ */
 // Use the overturned defense and poses, then require two recovery turns before standing up.
 static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -15, 0)
@@ -280,6 +286,12 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs on the Koopa's turn while it is on its back: counts the overturn count down.
+ * While it is still above 0 the Koopa only wiggles (NKT_S_3) and goes back to waiting;
+ * at 0 it restores the normal defence table and pose table, clears the overturn flag, plays the wake-up sound,
+ * hops upright and restarts the wait event.
+ */
 // Decrement the recovery counter; restore the upright state only when it reaches zero.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

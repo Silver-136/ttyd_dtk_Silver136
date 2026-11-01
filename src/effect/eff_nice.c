@@ -470,6 +470,11 @@ void acrobatMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draw callback for type 7: draws each letter as a camera-facing textured quad (textures from acrobat_tbl for
+ * the current language) at its offset and squash/stretch, with no depth test.
+ * US and PAL skip letters whose texture id is -1.
+ */
 void effAcrobatDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     NiceEffectWork* wp = effect->userdata;

@@ -124,6 +124,13 @@ USER_FUNC(evt_yuucounter_free) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args: [0] = x, [1] = y of the on-screen counter,
+ * [2] = type (0 distance in Plane Mode, 1 countdown timer, 2 rank),
+ * [3] = limit in seconds for type 1 or start count for type 2.
+ * Allocates the counter and starts its draw event;
+ * on JP and later also tells the Pianta Parlor window event whether to show the timer.
+ */
 USER_FUNC(evt_yuucounter_alloc) {
     EvtWord* args = event->args;
     YuuCounterWork* wp = _mapAlloc(sizeof(YuuCounterWork));
@@ -181,8 +188,22 @@ USER_FUNC(evt_yuucounter_main_func) {
  * then draws the translucent backdrop, the digits and the unit icon with icon sprites.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Updates and draws the counter.
+ * Type 0 derives the value from Mario's x position,
+ * type 1 counts the remaining time down from the limit using render time,
+ * type 2 asks yuunpc_juni for Mario's current rank;
+ * then draws the translucent backdrop, the digits and the unit icon with icon sprites.
+ */
 static void evt_yuucounter_disp_func(CameraId camera, void* param) {
 #else
+/**
+ * Updates and draws the counter.
+ * Type 0 derives the value from Mario's x position,
+ * type 1 counts the remaining time down from the limit using render time,
+ * type 2 asks yuunpc_juni for Mario's current rank;
+ * then draws the translucent backdrop, the digits and the unit icon with icon sprites.
+ */
 void evt_yuucounter_disp_func(CameraId camera, void* param) {
 #endif
     YuuCounterWork* wp = param;
@@ -357,6 +378,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00009d5c, JP yuu .text+0x9C90. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** args[0] = on/off, args[1] = flag mask. Sets or clears those display flag bits of the counter (JP and later). */
 USER_FUNC(yuucounter_disp_flag_onoff) {
     EvtWord* args = event->args;
     BOOL on = evtGetValue(event, args[0]);
@@ -379,6 +401,10 @@ static EVT_BEGIN(main_evt)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script run for timer counters: sets display flag 4 so the timer restarts its baseline
+ * when the window opens (JP and later).
+ */
 EVT_BEGIN(yuucounter_window_disp_evt)
     CALL(yuucounter_disp_flag_onoff, 1, 4)
     RETURN
@@ -386,6 +412,7 @@ EVT_END()
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/** Empty script used for counters that are not timers (JP and later). */
 EVT_BEGIN(yuucounter_window_null_evt)
     RETURN
 EVT_END()

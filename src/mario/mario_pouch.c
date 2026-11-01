@@ -251,6 +251,14 @@ static inline BOOL pouchAdd(s16 *t1, s16 *t2, s32 size, ItemType type) {
     return 0;
 }
 
+/**
+ * Gives Mario an item (pickups, scripts, battle audience gifts).
+ * Coins (max 999), Pianta tokens (max 99999; the demo has no cap),
+ * hearts and flowers (1 HP / FP to Mario and the current partner),
+ * Star Pieces and Shine Sprites only bump counters.
+ * Boots and hammers set the jump/hammer level, badges set their found flag (GSWF id - 0x70),
+ * and both join a list. Returns FALSE when the list is full or the id is not a pouch item.
+ */
 BOOL pouchGetItem(ItemType type) {
     s16 *itemLists[2];
     s32 size;
@@ -501,6 +509,11 @@ BOOL pouchRemoveItem(ItemType type) {
  * Badges drop their worn state too.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo's pouchRemoveItemIndex shifts the second table wrongly:
+ * it clears the slot it has just filled instead of the one it moved from (the demo's own bug;
+ * the later versions call pouchShift).
+ */
 static inline void pouchShiftDemo(s16* table1, s16* table2, int i, s32 maximum) {
     table1[i] = ITEM_NULL;
     if (table2 != 0)
@@ -515,6 +528,11 @@ static inline void pouchShiftDemo(s16* table1, s16* table2, int i, s32 maximum) 
     }
 }
 #endif
+/**
+ * Removes the item id from list slot index (the item used or thrown away, from the item menu,
+ * battle and evt_pouch) and closes the gap; FALSE if the slot holds another item.
+ * Badges drop their worn state too.
+ */
 BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     s16* table1, * table2, * p;
     BOOL valid;
@@ -666,6 +684,10 @@ void pouchHiraToKata(const char* src, char* dst) {
 #endif
 
 
+/**
+ * Sort key of an item name for the alphabetical sorts.
+ * JP and US inline their own copy of the kana conversion here; PAL calls pouchHiraToKata.
+ */
 // PAL calls pouchHiraToKata; JP and US inline their own copy of the conversion
 static inline void pouchAiueoConv(const char* src, char* dst) {
 #if VERSION == VERSION_EU
@@ -721,8 +743,10 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/** The demo compares the item names as they are, without the kana conversion. */
 static s32 comp_aiueo(const void* a, const void* b) {
 #else
+/** The demo compares the item names as they are, without the kana conversion. */
 s32 comp_aiueo(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
@@ -754,8 +778,10 @@ s32 comp_kind(s16* a, s16* b) {
 
 /** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
 #if VERSION <= VERSION_DEMO_US
+/** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
 static s32 comp_aiueo_r(const void* a, const void* b) {
 #else
+/** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
 s32 comp_aiueo_r(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
@@ -792,6 +818,12 @@ s32 comp_kind_r(s16* a, s16* b) {
  * JP compares internal ids for badge names.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Sorts a pouch list for the item and badge menus (win_root.c).
+ * Mode: 0/7 items by name ascending/descending, 1/8 items by kind, 2/9 and 3/10 key items by name and kind,
+ * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost then kind. Badges keep their worn state.
+ * JP compares internal ids for badge names.
+ */
 void pouchSortItem(s32 mode) {
     s32 k;
     s16 items[MAX_HELD_ITEMS];
@@ -899,6 +931,12 @@ memcpy(pp[0]->badges, badges, sizeof(badges));
 }
 }
 #else
+/**
+ * Sorts a pouch list for the item and badge menus (win_root.c).
+ * Mode: 0/7 items by name ascending/descending, 1/8 items by kind, 2/9 and 3/10 key items by name and kind,
+ * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost then kind. Badges keep their worn state.
+ * JP compares internal ids for badge names.
+ */
 void pouchSortItem(s32 mode) {
     s32 k;
     s16 items[MAX_HELD_ITEMS];
@@ -1350,6 +1388,7 @@ s32 pouchGetPartyAttackLv(PartyId partyId) {
     return ((PouchPartyData*)((u8*)mpp + partyId * sizeof(PouchPartyData)))->attackLevel;
 }
 
+/** The demo stores into the first empty slot and removes by id alone, without shifting the list. */
 BOOL pouchAddKeepItem(s32 id) {
 #if VERSION <= VERSION_DEMO_US
     s32 i;
@@ -1386,9 +1425,11 @@ BOOL pouchAddKeepItem(s32 id) {
 
 /** Takes the first copy of id out of storage, leaving an empty slot; FALSE if it is not stored. */
 #if VERSION <= VERSION_DEMO_US
+/** Takes the first copy of id out of storage, leaving an empty slot; FALSE if it is not stored. */
 BOOL pouchRemoveKeepItem(s32 id) {
     s32 i;
 #else
+/** Takes the first copy of id out of storage, leaving an empty slot; FALSE if it is not stored. */
 BOOL pouchRemoveKeepItem(s32 id, s32 index) {
     s32 i, j;
 #endif
@@ -1527,6 +1568,10 @@ BOOL pouchEquipCheckBadgeIndex(s32 index) {
     return mpp->equippedBadges[index] != 0;
 }
 
+/**
+ * Equips the first copy of a badge in the badge list; FALSE if Mario does not have it.
+ * Used by the story-progress setup in event.c (Attack FX R) and the E3 demo sequence. Does not recompute BP.
+ */
 BOOL pouchEquipBadgeID(s32 badgeId) {
     int i;
 
@@ -1543,6 +1588,10 @@ BOOL pouchEquipBadgeID(s32 badgeId) {
 
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
+/**
+ * Unequips the first worn copy of a badge; FALSE if none is worn.
+ * The Game Over sequence takes off Slow Go with it. Not in the US demo.
+ */
 BOOL pouchUnEquipBadgeID(s32 badgeId) {
     int i;
 
@@ -1558,6 +1607,13 @@ BOOL pouchUnEquipBadgeID(s32 badgeId) {
 }
 #endif
 
+/**
+ * Puts a badge on sale at the badge shop (Lovely Howz)
+ * when a dropped badge item carrying ITEM_FLAG_BADGE_RETURN goes away uncollected (itemdrv.c itemCheckBadge),
+ * so it is not lost for good.
+ * In retail those are the badges field enemies drop when beaten (enemy_common_dead_event).
+ * Adds it to the special table outside battle; the demo adds it to the bargain table, in or out of battle.
+ */
 s32 pouchArriveBadge(s32 id) {
 #if VERSION <= VERSION_DEMO_US
 return badgeShop_add(bdsw->bargain_table, (s16)id, 1);

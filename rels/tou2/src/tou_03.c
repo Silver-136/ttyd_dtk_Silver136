@@ -1717,6 +1717,11 @@ EVT_BEGIN(npc_entry)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Ambush played after a won match at rank 7 until the second mail is read:
+ * two Iron Cleft-type fighters ("Ran") burst in, Grubba comments,
+ * a gong rings and a battle starts (battle setup 10); afterwards Grubba reacts to whether Mario won or lost.
+ */
 EVT_BEGIN(evt_random_battle)
     // Mario is startled as the Iron Clefts shout for Gonzales and charge into the ring.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1804,6 +1809,11 @@ CALL(evt_msg_print, 0, STRING("stg3_tou_406"), 0, STRING("乱"))
     RETURN
 EVT_END()
 #else
+/**
+ * Ambush played after a won match at rank 7 until the second mail is read:
+ * two Iron Cleft-type fighters ("Ran") burst in, Grubba comments,
+ * a gong rings and a battle starts (battle setup 10); afterwards Grubba reacts to whether Mario won or lost.
+ */
 EVT_BEGIN(evt_random_battle)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION >= VERSION_US
@@ -1961,6 +1971,12 @@ EVT_BEGIN(evt_random_battle)
 EVT_END()
 #endif
 
+/**
+ * Bowser's ambush, played after a won match at rank 5 until GSWF_TOU_BOWSER_RAID_DONE is set:
+ * Bowser crashes in (Bowser theme), taunts Mario and the battle starts (battle setup 24);
+ * after it Grubba and Bowser comment on the result
+ * and the music fades out (with story progress temporarily set so the right fade plays).
+ */
 EVT_BEGIN(evt_random_battle2)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION >= VERSION_US
@@ -2111,6 +2127,12 @@ EVT_BEGIN(evt_random_battle2)
     RETURN
 EVT_END()
 
+/**
+ * Entrance walk of one opponent into the ring: LW(0) = NPC name,
+ * LW(1) = index in the team (picks its resting x and z lane).
+ * It walks in from the east, waits, hops down three steps and stops at its place.
+ * Used for the Iron Cleft-type opening (see evt_shinemon_opening).
+ */
 EVT_BEGIN(evt_teki_nyuujyou)
     SWITCH(LW(1))
         CASE_EQUAL(0)
@@ -2143,6 +2165,12 @@ EVT_BEGIN(evt_teki_nyuujyou)
     RETURN
 EVT_END()
 
+/**
+ * Entrance walk used by the default opening: LW(0) = NPC name, LW(1) = index in the team,
+ * LW(2) = non-zero for the one-enemy layout.
+ * The fighter walks in from the east and hops down three steps to its place (flying green Magikoopas hover and
+ * drop in instead). A Burst Wanwan then starts burst_wangwang.
+ */
 EVT_BEGIN(evt_teki_nyuujyou_default)
     SWITCH(LW(1))
         CASE_EQUAL(0)
@@ -2196,6 +2224,12 @@ EVT_BEGIN(evt_teki_nyuujyou_default)
     RETURN
 EVT_END()
 
+/**
+ * Creates the chain links for a Chain Chomp-type fighter:
+ * LW(0) selects which one (0 and 1 = team members "enemy 1" and "enemy 2", 6 and 7 = the sparring fighters).
+ * Five link NPCs are spawned with the Burst Wanwan model
+ * and burst_chain pulls them along behind the head every frame.
+ */
 EVT_BEGIN(burst_chain_entry)
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -2270,6 +2304,10 @@ EVT_BEGIN(burst_chain_entry)
     RETURN
 EVT_END()
 
+/**
+ * Forever loop that makes the Burst Wanwan named in LW(0) hop around its spot in random directions,
+ * landing with a thud sound each time.
+ */
 EVT_BEGIN(burst_wangwang)
     SET_VALUE(LW(10), LW(0))
     CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
@@ -2292,6 +2330,14 @@ EVT_BEGIN(burst_wangwang)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Main script of a match, run when the ring is entered with a match reserved.
+ * It plays the matching opening (special scenes the first time for the Goomba Bros, Iron Clefts and Rawk Hawk,
+ * otherwise the default one), starts the battle with the reserved rule, handles the rule result,
+ * plays the win or lose scene, updates the ranking, advances story progress after the first match,
+ * may trigger the rank 7 and rank 5 ambushes, and finally warps to the locker room map (tou_07, tou_08 or tou_10
+ * by the player's rank).
+ */
 EVT_BEGIN(evt_match)
 CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_FF_ENV_TOU1"))
 SWITCH(GSW_GLITZ_PIT_OPPONENT)
@@ -2455,6 +2501,14 @@ END_IF
     RETURN
 EVT_END()
 #else
+/**
+ * Main script of a match, run when the ring is entered with a match reserved.
+ * It plays the matching opening (special scenes the first time for the Goomba Bros, Iron Clefts and Rawk Hawk,
+ * otherwise the default one), starts the battle with the reserved rule, handles the rule result,
+ * plays the win or lose scene, updates the ranking, advances story progress after the first match,
+ * may trigger the rank 7 and rank 5 ambushes, and finally warps to the locker room map (tou_07, tou_08 or tou_10
+ * by the player's rank).
+ */
 EVT_BEGIN(evt_match)
 #if VERSION >= VERSION_US
     BEGIN_INLINE_EVENT
@@ -2667,6 +2721,11 @@ EVT_BEGIN(evt_match)
 EVT_END()
 #endif
 
+/**
+ * First-time opening against the Goomba Bros.
+ * (fighter 19): Grubba announces the match, Mario and partner walk in through the west door
+ * and hop down the steps, and the lead Goomba Bro. jumps in from the crowd with a spin attack.
+ */
 EVT_BEGIN(evt_kurikuri_opening)
 #if VERSION <= VERSION_DEMO_US
     // Grubba and the five Goomba Bros. wait in the ring while the camera sweeps over the arena.
@@ -2816,6 +2875,11 @@ EVT_BEGIN(evt_kurikuri_opening)
     RETURN
 EVT_END()
 
+/**
+ * First-time victory scene against the Goomba Bros.:
+ * the defeated Goombas lie dazed, Mario strikes his victory pose,
+ * Grubba asks a yes/no question and confetti and crowd cheers close the scene.
+ */
 EVT_BEGIN(evt_kurikuri_win)
     CALL(evt_cam3d_evt_set, 70, 138, 263, 70, 90, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_npc_set_position, STRING(("\223G\202P")), 50, 60, 0)
@@ -2866,6 +2930,10 @@ EVT_BEGIN(evt_kurikuri_win)
     RETURN
 EVT_END()
 
+/**
+ * Scene after losing to the Goomba Bros.: Mario is hurt, confetti falls on the winners,
+ * the announcer declares them winners and the lead Goomba Bro. speaks.
+ */
 EVT_BEGIN(evt_kurikuri_lose)
     CALL_CHILD(PTR(evt_damage_pose))
     CALL(evt_npc_set_rotate, STRING(("\223G\202P")), 0, 0, 0)
@@ -2908,6 +2976,11 @@ EVT_BEGIN(evt_kurikuri_lose)
     RETURN
 EVT_END()
 
+/**
+ * First-time opening against the Iron Cleft fighters (the Armored Harriers, fighter 10):
+ * Grubba explains the rules, spectators shout comments,
+ * the Iron Clefts march in through the east door and Grubba and both fighters exchange lines before the match.
+ */
 EVT_BEGIN(evt_shinemon_opening)
 #if VERSION <= VERSION_DEMO_US
     // Grubba waits in the ring while the camera sweeps over the arena, then announces the main event and Gonzales.
@@ -3324,6 +3397,10 @@ CALL(evt_npc_set_position, STRING("敵１"), 55, 60, 0)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Scene after losing to the Iron Clefts: the announcer names the winners,
+ * confetti falls and the two Iron Clefts gloat.
+ */
 EVT_BEGIN(evt_shinemon_lose)
     CALL_CHILD(evt_damage_pose)
     CALL(evt_npc_get_position, STRING("敵１"), LW(0), LW(1), LW(2))
@@ -3346,6 +3423,10 @@ WAIT_FRAMES(1)
     RETURN
 EVT_END()
 #else
+/**
+ * Scene after losing to the Iron Clefts: the announcer names the winners,
+ * confetti falls and the two Iron Clefts gloat.
+ */
 EVT_BEGIN(evt_shinemon_lose)
     CALL_CHILD(PTR(evt_damage_pose))
     CALL(evt_npc_get_position, STRING(("\223G\202P")), LW(0), LW(1), LW(2))
@@ -3379,6 +3460,12 @@ EVT_BEGIN(evt_shinemon_lose)
 EVT_END()
 #endif
 
+/**
+ * First-time opening of the title match against Rawk Hawk:
+ * his belt effect is attached, the crowd and Grubba hype the match,
+ * the audience reacts (the speech bubbles come from spots in the stands), the party comments,
+ * and Rawk Hawk enters.
+ */
 EVT_BEGIN(evt_champ_opening)
 #if VERSION <= VERSION_DEMO_US
     // Rawk Hawk, wearing his belt, waits in the ring with Grubba as the title-match music starts.
@@ -3654,6 +3741,10 @@ CALL(evt_msg_print, 0, STRING("stg3_tou_430_04"), 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * Opening of the first Rawk Hawk rematch after the return to Rogueport:
+ * the announcer and Rawk Hawk talk, the crowd reacts and the champion enters.
+ */
 EVT_BEGIN(evt_champ_opening_re)
 #if VERSION <= VERSION_DEMO_US
     // The announcer waits in the ring as the title-match music starts, then introduces Rawk Hawk.
@@ -4041,6 +4132,11 @@ CALL(evt_msg_print, 0, STRING("stg3_tou_re_113"), 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * Victory scene after beating Rawk Hawk: his belt is hidden,
+ * the winner and loser exchange lines (texts picked by story progress),
+ * confetti falls and the crowd speaks from the stands.
+ */
 EVT_BEGIN(evt_champ_win)
     CALL(tou_champion_belt_onoff, 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -4132,6 +4228,10 @@ EVT_BEGIN(evt_champ_win)
     RETURN
 EVT_END()
 
+/**
+ * Scene after losing to Rawk Hawk: the announcer names the winner,
+ * with different text when the title match was reserved, then Rawk Hawk speaks.
+ */
 EVT_BEGIN(evt_champ_lose)
     CALL_CHILD(PTR(evt_damage_pose))
     CALL(evt_npc_get_position, STRING(("\223G\202P")), LW(0), LW(1), LW(2))
@@ -4187,6 +4287,13 @@ EVT_BEGIN(evt_champ_lose)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Opening used for every match without a special scene:
+ * the camera surveys the ring, the opponent team walks in,
+ * and the announcer introduces the fighters with texts from the fighter tables (different lines before and after
+ * the return to Rogueport; Rawk Hawk is introduced with his belt).
+ * The party may comment on first appearances, then both sides speak their pre-match lines.
+ */
 EVT_BEGIN(evt_default_opening)
     // The announcer waits in the ring; Mario and the partner wait at the west steps, the opponents at the east.
     CALL(evt_mario_key_onoff, 0)
@@ -4413,6 +4520,13 @@ WAIT_FRAMES(1)
     RETURN
 EVT_END()
 #else
+/**
+ * Opening used for every match without a special scene:
+ * the camera surveys the ring, the opponent team walks in,
+ * and the announcer introduces the fighters with texts from the fighter tables (different lines before and after
+ * the return to Rogueport; Rawk Hawk is introduced with his belt).
+ * The party may comment on first appearances, then both sides speak their pre-match lines.
+ */
 EVT_BEGIN(evt_default_opening)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -4654,6 +4768,11 @@ EVT_BEGIN(evt_default_opening)
 EVT_END()
 #endif
 
+/**
+ * Victory scene for every ordinary match: the belt is hidden when the champion lost, confetti falls,
+ * Mario strikes his victory pose, the announcer declares Mario winner
+ * and the party (or announcer after the story point) comments.
+ */
 EVT_BEGIN(evt_default_win)
     CALL(evt_cam3d_evt_set, 0, 220, 533, 0, 125, -8, 0, EASING_LINEAR)
     WAIT_FRAMES(1)
@@ -4774,6 +4893,10 @@ EVT_BEGIN(evt_default_win)
     RETURN
 EVT_END()
 
+/**
+ * Scene after losing an ordinary match: Mario and partner are hurt, confetti falls,
+ * the announcer names the winning team, and the opponent speaks its victory line.
+ */
 EVT_BEGIN(evt_default_lose)
     CALL(evt_cam3d_evt_set, 0, 220, 533, 0, 125, -8, 0, EASING_LINEAR)
     CALL_CHILD(PTR(evt_damage_pose))
@@ -7536,6 +7659,10 @@ EVT_BEGIN(evt_kyaku_8)
 EVT_END()
 
 #if VERSION >= VERSION_US
+/**
+ * Background loop (US and later) that shows Mario's "..." balloon whenever he stands in front of a talkable
+ * spectator and nobody is using a partner action, and removes it when he turns away.
+ */
 EVT_BEGIN(evt_kyaku_check)
     SET_VALUE(LW(0), 0)
     LOOP(0)

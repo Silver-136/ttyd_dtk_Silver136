@@ -73,6 +73,10 @@ void make_pri_table(void) {
 #pragma dont_inline reset
 
 #pragma warn_no_side_effect off
+/**
+ * Scans an event's script up to END_SCRIPT and records the position
+ * after each LABEL (up to 16) for GOTO to jump to.
+ */
 static void make_jump_table(EventEntry* entry) {
     s32 params, opcode;
     s32 label;

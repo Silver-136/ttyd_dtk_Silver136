@@ -306,6 +306,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of the Red Bones: it spins for 48 frames with the death sound, a smoke puff appears and the coins,
+ * experience and star points are awarded once (unit work 1 guards it);
+ * then it tips over and is killed: with damage flag 0x400 (out for good, as from fire or an explosion) the unit
+ * is
+ * KOed and deleted, otherwise it is only marked inactive (KillUnit flag 2).
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(0), 48)

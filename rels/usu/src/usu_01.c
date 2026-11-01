@@ -2184,6 +2184,15 @@ EVT_END()
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Background watcher for crows H and I: when Mario stands within 80 units of crow H,
+ * a "..." balloon shows over him
+ * (US and later: only while he stands, walks, dashes or rides in Vivian's shadow,
+ * and no other partner's action is in use); pressing A makes the crow caw (stg4_jin_153).
+ * When Mario is hidden in Vivian's shadow (after STG4_13_VIVIAN_JOINS) the crows talk instead,
+ * by story progress (stg4_usu_143 to 146_2_2); that sets GW(1),
+ * which keeps the watcher quiet until usu01_check_vivian clears it.
+ */
 EVT_BEGIN(usu01_crowHI_talk_event)
     // No balloon is showing yet; GW(1) keeps the watcher quiet once the crows have talked.
     SET_VALUE(LW(15), 0)
@@ -2280,6 +2289,15 @@ SET_VALUE(GW(1), 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Background watcher for crows H and I: when Mario stands within 80 units of crow H,
+ * a "..." balloon shows over him
+ * (US and later: only while he stands, walks, dashes or rides in Vivian's shadow,
+ * and no other partner's action is in use); pressing A makes the crow caw (stg4_jin_153).
+ * When Mario is hidden in Vivian's shadow (after STG4_13_VIVIAN_JOINS) the crows talk instead,
+ * by story progress (stg4_usu_143 to 146_2_2); that sets GW(1),
+ * which keeps the watcher quiet until usu01_check_vivian clears it.
+ */
 EVT_BEGIN(usu01_crowHI_talk_event)
     // No balloon is showing yet; GW(1) keeps the watcher quiet once the crows have talked.
     SET_VALUE(LW(15), 0)
@@ -2400,6 +2418,14 @@ EVT_END()
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Background watcher for crow J: when Mario stands within 20 units of crow J, a "..." balloon shows over him
+ * (US and later: only while he stands, walks, dashes or rides in Vivian's shadow,
+ * and no other partner's action is in use); pressing A makes the crow caw (stg4_jin_153).
+ * When Mario is hidden in Vivian's shadow (after STG4_13_VIVIAN_JOINS) the crow talks instead,
+ * by story progress (stg4_usu_147 to 148_1_1); that sets GW(2),
+ * which keeps the watcher quiet until usu01_check_vivian clears it.
+ */
 EVT_BEGIN(usu01_crowJ_talk_event)
     // No balloon is showing yet; GW(2) keeps the watcher quiet once the crow has talked.
     SET_VALUE(LW(15), 0)
@@ -2490,6 +2516,14 @@ SET_VALUE(GW(2), 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Background watcher for crow J: when Mario stands within 20 units of crow J, a "..." balloon shows over him
+ * (US and later: only while he stands, walks, dashes or rides in Vivian's shadow,
+ * and no other partner's action is in use); pressing A makes the crow caw (stg4_jin_153).
+ * When Mario is hidden in Vivian's shadow (after STG4_13_VIVIAN_JOINS) the crow talks instead,
+ * by story progress (stg4_usu_147 to 148_1_1); that sets GW(2),
+ * which keeps the watcher quiet until usu01_check_vivian clears it.
+ */
 EVT_BEGIN(usu01_crowJ_talk_event)
     // No balloon is showing yet; GW(2) keeps the watcher quiet once the crow has talked.
     SET_VALUE(LW(15), 0)
@@ -3955,6 +3989,11 @@ EVT_BEGIN(usu_01_tree_init)
     RETURN
 EVT_END()
 
+/**
+ * Opening script of the item chest "mobj_box00":
+ * gives the Defend Plus badge as a fixed item with the pickup fanfare (badge-return flag outside the early
+ * demos).
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))

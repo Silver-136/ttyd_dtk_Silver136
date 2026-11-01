@@ -1190,6 +1190,12 @@ USER_FUNC(moamoa2_on) {
     return 2;
 }
 
+/**
+ * Script helper: creates the boss's swarm.
+ * Allocates 750 Moamoa with small random offsets (EU: from its own seeded generator), reads the main body pose,
+ * sets up the bone chains and the animation groups from ext_moamoa_data,
+ * and attaches the chains to the tentacles (moamoa1_on) and the passengers' models (types 1 to 10).
+ */
 USER_FUNC(moamoa_on) {
     s32 i;
     Moamoa* elem;

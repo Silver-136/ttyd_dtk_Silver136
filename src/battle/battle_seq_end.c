@@ -153,6 +153,7 @@ s32 bp_tex_tbl[6] = {59, 59, 60, 61, 62, 63};
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/** Defined after _koura_delete_event, where the demo's .data places it (retail keeps it in .sdata). */
 EVT_BEGIN(_rank_up_event)
     CALL(_get_rank_up_msg, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, 0)
@@ -948,6 +949,7 @@ void _LvupParamConfirmDisp(CameraId camId, void* param) {
     iconDispGx(&pos, ICON_FLAG_2D, EXP_ICON, 1.0f);
 }
 
+/** The demo has this function but never calls it (the linker strips it; its strings stay). */
 void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;
     PouchData* pouch;
@@ -1104,6 +1106,16 @@ USER_FUNC(_display_select_one_to_upgrade_text);
 USER_FUNC(_set_initial_upgrade_cursor_position);
 
 #endif
+/**
+ * US and later level-up show, started by btlseqEnd when the Star Points reach 100.
+ * The stage darkens and the curtains close (on a wide stage Mario and the partner walk off first and the
+ * wide-stage flag is cleared), the nozzle objects lower,
+ * confetti and the level-up effect play and Star Power refills,
+ * a spotlight cone follows Mario while the enemies are hidden, Mario and the partner walk back on,
+ * the HP/FP/BP blocks appear and the curtains open.
+ * The select_HPFPBP prompt then stays up until the stick is pushed:
+ * left picks BP, right picks HP, and the spotlight swings there.
+ */
 EVT_BEGIN(_curtain_close_event)
     // The stage darkens and the side curtains close.
     BEGIN_SIBLING_EVENT
@@ -1452,6 +1464,7 @@ USER_FUNC(_set_initial_upgrade_cursor_position) {
     return 2;
 }
 
+/** US and later: draws the select_HPFPBP prompt (choose one to upgrade) in a window near the bottom of the screen. */
 // Descriptive name (not in the symbol maps).
 void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
     const char* msg;
@@ -1470,6 +1483,10 @@ void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
     FontDrawMessage(zero - width / 2, (s32)y + (lines - 1) * 29, msg);
 }
 
+/**
+ * US and later script helper: queues _draw_select_one_to_upgrade_text for one frame;
+ * the level-up show calls it every frame until the first stick press.
+ */
 // Descriptive name (not in the symbol maps).
 USER_FUNC(_display_select_one_to_upgrade_text) {
     dispEntry(CAMERA_2D, 900.0f, 1, _draw_select_one_to_upgrade_text, _battleWorkPointer);
@@ -1975,6 +1992,11 @@ s32 _keta_get(s32 n) {
                         (o)->scale.x, (o)->scale.y, LVOBJ_TEX(n, tbl), (o)->color, 0); \
     }
 
+/**
+ * 3D display callback for the level-up blocks: steps the 8-frame blink of the chosen block,
+ * draws each block and its label (per-language label textures in the US and later), and below it the old value,
+ * an arrow and the new value (paramDisp 1) or the new value alone (2 and 5).
+ */
 void _lvup_select_object_disp(CameraId camId, void* param) {
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
     SeqEndObj* obj;

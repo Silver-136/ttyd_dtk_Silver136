@@ -344,6 +344,13 @@ SET_VALUE(LW(0), 70)
     RETURN
 EVT_END()
 
+/**
+ * Poison gas attack (weapon_dokugassun_poisongas_attack: 10 damage to every enemy, piercing defense,
+ * 70% poison for 10 turns, 50% in the demos):
+ * the Puff (retail: after moving to x -40) charges,
+ * drops its barrier and exhales green vapor puffs on the targets' side of the stage,
+ * each target is hit or avoids it by the usual guard check, and it returns home.
+ */
 static EVT_BEGIN(poisongas_event)
     // The Puff picks a target from the opposing side; with none it gives up (flustered if confused).
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

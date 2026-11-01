@@ -188,6 +188,12 @@ MarioJumpData marioJumpData = {
 };
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Puts Mario back into stay/walk/dash from the field battle code (fbatBattleMode state 4).
+ * The plane is cancelled, the tube makes the partners ride on (not in the demo),
+ * and Yoshi (and, US and later, the damage motions) are left alone.
+ * With no speed it switches to stay but then still to walk, as there is no return.
+ */
 void marioChgMoveMotion(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_PLANE) {
@@ -207,6 +213,12 @@ if (mario->currMotionId == MARIO_MOTION_YOSHI) {
     }
 }
 #else
+/**
+ * Puts Mario back into stay/walk/dash from the field battle code (fbatBattleMode state 4).
+ * The plane is cancelled, the tube makes the partners ride on (not in the demo),
+ * and Yoshi (and, US and later, the damage motions) are left alone.
+ * With no speed it switches to stay but then still to walk, as there is no return.
+ */
 void marioChgMoveMotion(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_PLANE) {
@@ -384,6 +396,12 @@ BOOL marioChkTalkable(void) {
     return ret;
 }
 
+/**
+ * Per-frame air check (from marioMain, Peach's and Bowser's main) that starts the Spin Jump (MARIO_MOTION_HIP)
+ * on A: Mario needs a jump input and marioChkHipAttack;
+ * Bowser instead needs kpaHipAttackOk and 6 frames to his peak.
+ * Never in 8-bit or paper mode; the PAL release also skips it in plane mode.
+ */
 void marioBoots(void) {
     MarioWork* mario = marioGetPtr();
     u32 flags = mario->flags;
@@ -703,6 +721,12 @@ void marioJump(void) {
  * On kpa_03 Bowser just falls and lands; the tube uses mot_fall_roll.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame fall (marioMain and Peach): slows air drift, stops it off screen,
+ * steps the fall speed and lands Mario on the floor below (marioLandOn);
+ * a passing jabara check (marioPriCheckJabara, stick rub) turns the landing into the jabara motion.
+ * On kpa_03 Bowser just falls and lands; the tube uses mot_fall_roll.
+ */
 void marioFall(void) {
     MarioWork* mario = marioGetPtr();
     s32 rub;
@@ -783,6 +807,12 @@ marioChgMot(MARIO_MOTION_JABARA);
     }
 }
 #else
+/**
+ * Per-frame fall (marioMain and Peach): slows air drift, stops it off screen,
+ * steps the fall speed and lands Mario on the floor below (marioLandOn);
+ * a passing jabara check (marioPriCheckJabara, stick rub) turns the landing into the jabara motion.
+ * On kpa_03 Bowser just falls and lands; the tube uses mot_fall_roll.
+ */
 void marioFall(void) {
     MarioWork* mario = marioGetPtr();
     s32 rub;
@@ -885,6 +915,12 @@ void marioFall(void) {
  * Bowser and the tube also call it.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Mario touches down: plays the landing sound for the floor type, clears the jump state,
+ * and picks the next motion: damage on hazard or spike floors, the red switch or blue spring objects,
+ * walk or stand from the stick, Bowser's quake, re-entering the slit in paper mode.
+ * Bowser and the tube also call it.
+ */
 void marioLandOn(void) {
     MarioWork* mario = marioGetPtr();
     MapObjectEntry* mobj;
@@ -1011,6 +1047,12 @@ return;
     }
 }
 #else
+/**
+ * Mario touches down: plays the landing sound for the floor type, clears the jump state,
+ * and picks the next motion: damage on hazard or spike floors, the red switch or blue spring objects,
+ * walk or stand from the stick, Bowser's quake, re-entering the slit in paper mode.
+ * Bowser and the tube also call it.
+ */
 void marioLandOn(void) {
     MarioWork* mario = marioGetPtr();
     MapObjectEntry* mobj;
@@ -1165,6 +1207,11 @@ static f32 marioDemoHalf(f32 x) {
     }
     return 0.5 * x * (3.0 - x);
 }
+/**
+ * Talk motion: turns Mario left or right to face the NPC he touched and takes that NPC's talk pose;
+ * the M_I_2 pose (M_I_3 in the PAL release) returns to M_S_1 after 60 frames.
+ * Peach uses peach_talk, Bowser his own pose.
+ */
 void mot_talk(void) {
     MarioWork* mario = marioGetPtr();
     NpcEntry* npc;
@@ -1227,6 +1274,11 @@ mario->multiTimer = 60;
     }
 }
 #else
+/**
+ * Talk motion: turns Mario left or right to face the NPC he touched and takes that NPC's talk pose;
+ * the M_I_2 pose (M_I_3 in the PAL release) returns to M_S_1 after 60 frames.
+ * Peach uses peach_talk, Bowser his own pose.
+ */
 void mot_talk(void) {
     MarioWork* mario = marioGetPtr();
     NpcEntry* npc;
@@ -1308,6 +1360,11 @@ void mot_getItem(void) {
     }
 }
 
+/**
+ * Starts a jump on A from stand, walk or the slit unless A belongs to something else:
+ * an object hint or A-button case in front or underfoot, an NPC in talk range, or Yoshi.
+ * PAL also refuses on a damage floor. TRUE if Mario jumped.
+ */
 BOOL marioChkJump(void) {
     MarioWork* mario = marioGetPtr();
     CaseEntry* ce;
@@ -1478,6 +1535,10 @@ if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED) {
 
 /** TRUE for display angles strictly between 90 and 270 degrees, so mot_kaze ends facing 180 rather than 0. */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * In the demo the Flurrie motion lives here: party_cloud.c has no mot_cloud yet,
+ * and the motion's post function resets the camera target.
+ */
 static void mot_cloud(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -1489,10 +1550,12 @@ static void mot_cloud(void) {
         mario->currSubMotionId = 0;
     }
 }
+/** Leaving the demo's Flurrie motion: puts the camera target back on Mario (cloudResetAt). */
 static void mot_cloud_post(void) {
     cloudResetAt();
 }
 #endif
+/** TRUE for display angles strictly between 90 and 270 degrees, so mot_kaze ends facing 180 rather than 0. */
 static inline BOOL marioChkBackAngle(f32 a) {
     BOOL ret = FALSE;
     if (a > 90.0f && a < 270.0f) {

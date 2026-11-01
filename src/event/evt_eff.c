@@ -912,6 +912,11 @@ USER_FUNC(evt_eff_delete_ptr) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Shows an emote bubble (!, ?, ...) of type args[3] over Mario (args[0] 0),
+ * NPC args[2] (1, "me" = the owner NPC), point args[5..7] (2), the partner (3) or the follower (4);
+ * args[1] names the effect. The US and later releases keep the bubble at a fixed height over Flurrie.
+ */
 USER_FUNC(evt_eff_fukidashi) {
     EvtWord* args = event->args;
     s32 mode = evtGetValue(event, args[0]);

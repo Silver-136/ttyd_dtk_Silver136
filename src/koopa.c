@@ -322,8 +322,18 @@ void kpaMain(void) {
  * then the shared player effects, balloon and camera.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Side-scrolling Bowser update: hit checks, item pickup, the fire attack, the star timer,
+ * horizontal movement limited by his dash speed and walls, jumping and falling, floors and ceilings,
+ * then the shared player effects, balloon and camera.
+ */
 static void kpa2DMain(void) {
 #else
+/**
+ * Side-scrolling Bowser update: hit checks, item pickup, the fire attack, the star timer,
+ * horizontal movement limited by his dash speed and walls, jumping and falling, floors and ceilings,
+ * then the shared player effects, balloon and camera.
+ */
 void kpa2DMain(void) {
 #endif
     MarioWork* mp = marioGetPtr();
@@ -921,8 +931,20 @@ void kpaStrippedPool(f32* f, s32 i) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Keeps the fire breath effect at Bowser's mouth
+ * and tests every fourth live flame puff against objects (kpaFlameHitCheck), storing the first hit in flameHit.
+ * Retail skips the test at level 0 and for puffs smaller than 7 units; the demo tests them all.
+ * Deletes the effect when the attack ends.
+ */
 static void kpaFireMain(void) {
 #else
+/**
+ * Keeps the fire breath effect at Bowser's mouth
+ * and tests every fourth live flame puff against objects (kpaFlameHitCheck), storing the first hit in flameHit.
+ * Retail skips the test at level 0 and for puffs smaller than 7 units; the demo tests them all.
+ * Deletes the effect when the attack ends.
+ */
 void kpaFireMain(void) {
 #endif
     MarioWork* mario = marioGetPtr();

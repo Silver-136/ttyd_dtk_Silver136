@@ -987,8 +987,18 @@ void _CheckMoveCount(BattleUnit* unit) {
  * A size, attack or defense change of the other sign reads as 0.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Reads a status effect's turns and strength into the optional outputs;
+ * for statuses with no strength (sleep, stop, dizzy, ...) both get the turn count.
+ * A size, attack or defense change of the other sign reads as 0.
+ */
 void BtlUnit_GetStatus(BattleUnit* unit, StatusEffectType type, s8* turns, s8* strength) {
 #else
+/**
+ * Reads a status effect's turns and strength into the optional outputs;
+ * for statuses with no strength (sleep, stop, dizzy, ...) both get the turn count.
+ * A size, attack or defense change of the other sign reads as 0.
+ */
 void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
 #endif
     s8 status_turns = 0;
@@ -1127,8 +1137,22 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Stores a status effect's turns and strength (Charge adds to its strength, capped 0..99).
+ * Burn and freeze cancel each other, as do Fast and Slow, without applying the new one,
+ * and a zero strength for a size, attack or defense change clears an effect of that sign.
+ * Returns FALSE when nothing was applied; retail versions also return FALSE when Charge drops below 0
+ * or Allergic or Payback is set to 0 turns, which the demos treat as set.
+ */
 BOOL BtlUnit_SetStatus(BattleUnit* unit, StatusEffectType type, s8 turns, s8 strength) {
 #else
+/**
+ * Stores a status effect's turns and strength (Charge adds to its strength, capped 0..99).
+ * Burn and freeze cancel each other, as do Fast and Slow, without applying the new one,
+ * and a zero strength for a size, attack or defense change clears an effect of that sign.
+ * Returns FALSE when nothing was applied; retail versions also return FALSE when Charge drops below 0
+ * or Allergic or Payback is set to 0 turns, which the demos treat as set.
+ */
 BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
 #endif
 #if VERSION <= VERSION_DEMO_US
@@ -1363,8 +1387,18 @@ void BtlUnit_ClearStatus(BattleUnit* unit) {
  * Returns TRUE when the status just wore off; FALSE when it continues, was not active, or the unit is KO'd.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Counts a status effect down by one turn at the end of the unit's turn (sleep, timed statuses, size,
+ * attack and defense changes, poison and regen), clearing its strength when the turns run out.
+ * Returns TRUE when the status just wore off; FALSE when it continues, was not active, or the unit is KO'd.
+ */
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, StatusEffectType type) {
 #else
+/**
+ * Counts a status effect down by one turn at the end of the unit's turn (sleep, timed statuses, size,
+ * attack and defense changes, poison and regen), clearing its strength when the turns run out.
+ * Returns TRUE when the status just wore off; FALSE when it continues, was not active, or the unit is KO'd.
+ */
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
 #endif
     s8 turns, strength;
@@ -1490,8 +1524,10 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
 
 /** Returns TRUE while the status effect has turns left; Electric also counts as active when the unit wears Zap Tap. */
 #if VERSION <= VERSION_DEMO_US
+/** Returns TRUE while the status effect has turns left; Electric also counts as active when the unit wears Zap Tap. */
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, StatusEffectType type) {
 #else
+/** Returns TRUE while the status effect has turns left; Electric also counts as active when the unit wears Zap Tap. */
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, s8 type) {
 #endif
     s8 turns, strength;
@@ -1727,6 +1763,12 @@ BOOL BtlUnit_CanActStatus(BattleUnit* unit) {
     return !BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_FLIPPED);
 }
 
+/**
+ * Loads Mario's or a partner's HP and FP from the save data (pouch) into the battle unit;
+ * partners also get back the size, status flags
+ * and status turns saved in the battle's party info (and, in US and PAL, the disabled commands) and are KO'd
+ * if their HP is 0.
+ */
 void BtlUnit_SetParamFromPouch(BattleUnit* unit) {
     BattleWork* wp = _battleWorkPointer;
     PouchData* pouch = pouchGetPtr();
@@ -1792,6 +1834,11 @@ void BtlUnit_ReviseHpFp(BattleUnit* unit) {
     }
 }
 
+/**
+ * Writes Mario's or a partner's HP and FP back to the save data (pouch) and keeps a partner's size,
+ * status flags and status turns (and, in US and PAL, disabled commands) in the battle's party info for
+ * when it is switched back in.
+ */
 void BtlUnit_SetParamToPouch(BattleUnit* unit) {
     BattleWork* wp = _battleWorkPointer;
     PouchData* pouch = pouchGetPtr();

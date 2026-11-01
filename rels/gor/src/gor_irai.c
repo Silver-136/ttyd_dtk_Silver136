@@ -306,6 +306,10 @@ EVT_BEGIN(irai_end_event04)
 EVT_END()
 
 #if VERSION >= VERSION_US
+/**
+ * End event of Trouble 19 (the request of ピートン, from its debug message):
+ * if Mario still has the field item "wr", removes it. US and PAL only.
+ */
 EVT_BEGIN(irai_end_event19)
     DEBUG_PUT_MSG(STRING("ピートンの依頼キャンセル"))
     CALL(evt_item_delete_check, STRING("wr"), LW(0))
@@ -876,6 +880,12 @@ USER_FUNC(irai_end_func) {
     FontDrawString(msg, x, v);                                                          \
 }
 
+/**
+ * Draw callback of the request window (US and PAL):
+ * draws the blue title frames and header texts,
+ * the list of requests (client and contents columns) clipped to the window,
+ * with texts centred or squeezed to fit; solved requests are grey and the active one is red.
+ */
 void irai_window_disp(CameraId camera, void* param) {
     IraiWork* wp = param;
     u32 left;
@@ -946,6 +956,12 @@ static inline f32 iraiAddI(f32 a, s32 b) {
     return a + b;
 }
 
+/**
+ * Draw callback of the request window (US and PAL):
+ * draws the blue title frames and header texts,
+ * the list of requests (client and contents columns) clipped to the window,
+ * with texts centred or squeezed to fit; solved requests are grey and the active one is red.
+ */
 void irai_window_disp(CameraId camera, void* param) {
     f32 negX;
     IraiWork* wp = param;

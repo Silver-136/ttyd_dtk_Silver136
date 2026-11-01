@@ -69,6 +69,12 @@ EffectEntry* effSunlightN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f3
     return effect;
 }
 
+/**
+ * Eases the alpha 8 per frame toward alphaMax (clamped 0-255),
+ * drops it 16 per frame over the last 16 frames (a delete request starts that; lifetime 1000 means endless)
+ * and drifts each of the five shafts' texture scroll on two sine waves.
+ * Drawn on layer 2 in JP and the demos, 10 in US and PAL.
+ */
 void effSunlightMain(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};

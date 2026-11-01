@@ -427,6 +427,10 @@ void peach_dash(void) {
     }
 }
 
+/**
+ * Peach's talking motion (from mario_motion): stops her and turns her to the talk pose.
+ * In the PAL release she returns to the standing pose after 60 frames while in the X-Naut disguise.
+ */
 void peach_talk(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {

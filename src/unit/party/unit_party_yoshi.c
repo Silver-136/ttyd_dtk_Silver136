@@ -332,6 +332,11 @@ static EVT_BEGIN(battle_entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Init for Yoshi: registers his wait, attack, damage, confusion and entry scripts and his walk,
+ * run and jump sounds, clears UW_YOSHI_GROUND_POUND_ACTIVE
+ * and loads the model for his hatched colour.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -361,6 +366,7 @@ EVT_END()
  * lowered by each earlier hit; flips shelled enemies and grounds winged ones. Usable while confused.
  */
 #if VERSION <= VERSION_DEMO_US
+/** Idle (retail position; the demo defines it near the top of the file): plays the stay pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -2111,6 +2117,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/** Idle (retail position; the demo defines it near the top of the file): plays the stay pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -2278,6 +2285,11 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_calc_param) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Runs the flutter set up by btl_yoshi_yoroyoro_jump_calc_param one frame per call:
+ * drifts unit args[0] toward the target while bobbing up and down, sets the slide sound volume in UW_YOSHI_SLIDE_SOUND_PERCENT,
+ * and spawns a sweat drop every 20 frames. Blocks until the 180 frames are over, then snaps to the target.
+ */
 USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -2346,6 +2358,10 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Pose sound callback for Yoshi's walk, run and flutter poses:
+ * plays the footstep sound at volume UW_YOSHI_SLIDE_SOUND_POWER * UW_YOSHI_SLIDE_SOUND_PERCENT / 100.
+ */
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
     BtlUnit_snd_se(unit, s->sfxName, EVT_NULLPTR, (s16)(unit->work[UNIT_WORK_STEP_PITCH] * unit->work[UNIT_WORK_STEP_PITCH_SCALE] / 100)); // the slide sound's pitch
 }
@@ -2508,8 +2524,20 @@ static inline s32 _gundan_part_update(YoshiGundanPart* p, s32 i) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Runs the Stampede herd for unit args[0]: allocates 256 running Yoshi sprites (work stored in
+ * countersetWeapon), moves them each frame with dust puffs and a run sound that follows the herd's average X,
+ * draws them, and frees the work and stops the sound when all are across.
+ * The US and PAL releases cap the herd's depth at 65 instead of 80.
+ */
 static USER_FUNC(_gundan_yoshi_run_effect) {
 #else
+/**
+ * Runs the Stampede herd for unit args[0]: allocates 256 running Yoshi sprites (work stored in
+ * countersetWeapon), moves them each frame with dust puffs and a run sound that follows the herd's average X,
+ * draws them, and frees the work and stops the sound when all are across.
+ * The US and PAL releases cap the herd's depth at 65 instead of 80.
+ */
 USER_FUNC(_gundan_yoshi_run_effect) {
 #endif
     BattleUnit* unit;
@@ -2603,10 +2631,12 @@ dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)_btlYoshiDisp, w);
 
 /** Draws one Stampede Yoshi (later releases). */
 #if VERSION <= VERSION_DEMO_US
+/** Draws one Stampede Yoshi (later releases). */
 static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
     YoshiGundanPart* p;
     s32 i;
 #else
+/** Draws one Stampede Yoshi (later releases). */
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
 #endif
     f32 s;

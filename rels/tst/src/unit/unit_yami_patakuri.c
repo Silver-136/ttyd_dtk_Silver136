@@ -334,6 +334,12 @@ static EVT_BEGIN(patakuri_dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the flying Paragloomba: uses an item if it decides to, otherwise picks a target,
+ * flies to a spot 50 units in front of and 40 above it and dives at it.
+ * A dodge or miss dives past to the far side; a hit shakes the camera and damages the target.
+ * It then flies home.
+ */
 static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

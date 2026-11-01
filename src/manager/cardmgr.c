@@ -102,6 +102,11 @@ CardData* cardGetFilePtr(void) {
     return wp->data;
 }
 
+/**
+ * Cancels any card access in flight and resets the in-memory save file to an empty header and four erased slots;
+ * the memory card scripts call it before loading the file again.
+ * The demo keeps its insert-watch flag across the reset.
+ */
 void cardBufReset(void) {
 #if VERSION <= VERSION_DEMO_US
     s32 flags;
@@ -173,6 +178,10 @@ void cardInit(void) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_800b0ed0, JP 0x800B0ED0. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Starts watching slot A for a card being inserted or removed (memcard_watch_start);
+ * also keeps cardIsExec busy for 10 frames while the probe settles. Not in the demo.
+ */
 void cardInsertWatchStart(void) {
     wp->prevInserted = wp->chan;
     wp->busyFrames = 10;
@@ -183,6 +192,7 @@ void cardInsertWatchStart(void) {
 /** Stops the insert watch and clears its changed flag. */
 // Descriptive name (not in the symbol maps); placeholder unk_800b0eac, JP 0x800B0EAC. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Stops the insert watch and clears its changed flag. */
 void cardInsertWatchEnd(void) {
     wp->flags &= ~CARD_FLAG_INSERT_WATCH;
     wp->flags &= ~(CARD_FLAG_INSERT_CHANGED | CARD_FLAG_INSERT_WATCH);
@@ -192,6 +202,7 @@ void cardInsertWatchEnd(void) {
 /** TRUE once a card was inserted or removed in slot A since cardInsertWatchStart; the file select scripts poll it. */
 // Descriptive name (not in the symbol maps); placeholder unk_800b0e80, JP 0x800B0E80. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** TRUE once a card was inserted or removed in slot A since cardInsertWatchStart; the file select scripts poll it. */
 BOOL cardInsertChanged(void) {
     if (wp->flags & CARD_FLAG_INSERT_WATCH && wp->flags & CARD_FLAG_INSERT_CHANGED) {
         return TRUE;
@@ -348,6 +359,12 @@ void cardMain(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Loads a save slot into the running game: copies its global work, pouch, defeated-NPC records, badge shop,
+ * Pianta Parlor and informant state over the live ones,
+ * keeping the console settings (sound mode, rumble, last slot, progressive scan, and the language,
+ * plus the 50/60 Hz choice on PAL) and runtime pointers. Called by the file select's load.
+ */
 void cardCopy2Main(s32 slot) {
 CardSaveSlot* save;
     void* savedFbatData;
@@ -387,6 +404,12 @@ gp->retraceTime = OSGetTime();
     }
 }
 #else
+/**
+ * Loads a save slot into the running game: copies its global work, pouch, defeated-NPC records, badge shop,
+ * Pianta Parlor and informant state over the live ones,
+ * keeping the console settings (sound mode, rumble, last slot, progressive scan, and the language,
+ * plus the 50/60 Hz choice on PAL) and runtime pointers. Called by the file select's load.
+ */
 void cardCopy2Main(s32 slot) {
 #if VERSION >= VERSION_US
     void* savedMapAlloc;
@@ -499,6 +522,11 @@ void cardCopy(s32 from, s32 to) {
  * checksums it and starts the write.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Saves the game into a slot: records Mario's position, both partners, the save time and count,
+ * then snapshots the global work, pouch, defeated-NPC records, badge shop, Pianta Parlor and informant state,
+ * checksums it and starts the write.
+ */
 void cardWrite(s32 slot) {
     CardSaveSlot* save;
     MarioWork* mario;
@@ -548,6 +576,11 @@ memcpy(&save->data.global, gp, sizeof(GlobalWork));
     }
 }
 #else
+/**
+ * Saves the game into a slot: records Mario's position, both partners, the save time and count,
+ * then snapshots the global work, pouch, defeated-NPC records, badge shop, Pianta Parlor and informant state,
+ * checksums it and starts the write.
+ */
 void cardWrite(s32 slot) {
     CardSaveSlot* save;
     MarioWork* mario;
@@ -1281,6 +1314,7 @@ static inline u32 header_sum(u8* data, s32 size) {
 }
 
 #endif
+/** PAL: not inlined; the comment and its date order follow gp->language */
 static void make_header(void) {
     CardMetadata* metadata;
 #if VERSION != VERSION_EU

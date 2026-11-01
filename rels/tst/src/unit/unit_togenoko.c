@@ -504,6 +504,12 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * Flip-over reaction (data event 13): moves its hit point down, switches to the flipped defence,
+ * defence-attribute, status-resistance and data tables
+ * and the flipped poses (the guarding ones if it was in its shell), sets the flipped status flag,
+ * turns its helmet spike off and sets an overturn count of 2, then bounces with SFX_ENM_INSIDE1.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -533,6 +539,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Run instead of an attack while flipped: counts the overturn count down and, when it reaches 0,
+ * restores the normal tables and helmet spike, hops upright with SFX_ENM_INSIDE2
+ * and clears unit work 0 (no longer guarding).
+ */
 // Recovery consumes this attack opportunity, including the turn that restores the standing stance.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)

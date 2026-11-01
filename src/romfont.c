@@ -259,6 +259,11 @@ void romFontMake(void);
  * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Returns system message msg (progressive-scan prompt, disc errors, language names) in the console's language.
+ * Non-JP releases fall back to the English table when the IPL font is ASCII but gp->language is Japanese;
+ * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
+ */
 const char* romFontGetMessage(s32 msg) {
 if (wp->language != 0 && (u32)gp->language == 0) {
         return msg_tbl[1][msg];
@@ -266,6 +271,11 @@ if (wp->language != 0 && (u32)gp->language == 0) {
     return msg_tbl[gp->language][msg];
 }
 #else
+/**
+ * Returns system message msg (progressive-scan prompt, disc errors, language names) in the console's language.
+ * Non-JP releases fall back to the English table when the IPL font is ASCII but gp->language is Japanese;
+ * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
+ */
 const char* romFontGetMessage(s32 msg) {
 #if VERSION >= VERSION_US
     if (wp->language != ROM_FONT_LANGUAGE_SJIS && (u32)gp->language == LANGUAGE_JP) {
@@ -550,6 +560,10 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
     }
 }
 
+/**
+ * Returns the pixel width of the widest line of message (lines split on '\n'), using the cached glyph widths.
+ * SJIS double-byte codes count as one glyph unless the US/PAL ASCII font is active.
+ */
 s32 romFontGetWidth(const char* message) {
 #if VERSION < VERSION_US
     u16 c16;

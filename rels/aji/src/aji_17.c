@@ -198,6 +198,11 @@ static s32 wait_move_end_50hz(EventEntry* event, BOOL isFirstCall) {
 #endif
 #pragma defer_codegen on
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -215,6 +220,11 @@ CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -360,6 +370,11 @@ void noiseDisp(CameraId cameraId, void* param) {
     GXTexCoord2s16(0, 0);
 }
 
+/**
+ * Emergency lighting: waits until the story reaches STG7_25_THE_LAST_MAIL,
+ * then fades the map's blend colour from white down to a red tint (green and blue to 96, 32 in the demos) over
+ * one second and keeps it. Already at that story point it sets the tint at once. Every fortress map starts it.
+ */
 EVT_BEGIN(evt_emergency)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
@@ -3221,6 +3236,15 @@ EVT_BEGIN(tec_talk)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Init script of aji_17, TEC's room: starts the camera sweep and, for Peach,
+ * the scene of her current story point (peach_evt_stg1 at STG1_18_01, stg2 at STG2_25_01,
+ * stg3 at STG3_33, stg3_1 at 33_03, stg4, stg5, stg5_1 at STG5_46,
+ * stg6 with the Grodus lights at STG6_55).
+ * For Mario, at STG7_25_00_1_BOWSER_POSHLEY_SANCTUM the first visit restores HP and starts evt_last
+ * and the second runs evt_last2; later it starts the emergency lights and, after the final battle,
+ * the TEC terminal talk.
+ */
 EVT_BEGIN(aji_17_init_evt)
     SET_VALUE(LW(0), STRING("S_camera_1"))
     SET_VALUE(LW(1), -30)

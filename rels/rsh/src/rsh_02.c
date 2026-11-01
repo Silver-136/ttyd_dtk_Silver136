@@ -1300,6 +1300,14 @@ CALL(evt_win_item_select, PTR(item_tbl), LW(1))
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Spawned by the map init during STG6_24: loops until the story has reached STG6_24_02_ANOTHER_CLUE
+ * and Mario stands at x -110 or less (not below -330 in JP and later), z -70 or less, hidden with Vivian's
+ * ability (partner 6) for over 300 frames; then Toron (トロン) rises into view with an appear sound at one of two
+ * spots (sinking away again if Mario comes out within 60 frames). Once Mario leaves the shadow, Toron jumps out
+ * and taunts him (stg6_rsh_181), the story moves to STG6_25_ZIP_TOAD_APPEARS, the chase music starts and
+ * evt_toron_catch is spawned.
+ */
 EVT_BEGIN(evt_toron_appear)
     LABEL(100)
     CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
@@ -1439,6 +1447,14 @@ CALL(evt_npc_jump_position_nohit, STRING("トロン"), LW(0), LW(1), LW(2), 300,
     RETURN
 EVT_END()
 #else
+/**
+ * Spawned by the map init during STG6_24: loops until the story has reached STG6_24_02_ANOTHER_CLUE
+ * and Mario stands at x -110 or less (not below -330 in JP and later), z -70 or less, hidden with Vivian's
+ * ability (partner 6) for over 300 frames; then Toron (トロン) rises into view with an appear sound at one of two
+ * spots (sinking away again if Mario comes out within 60 frames). Once Mario leaves the shadow, Toron jumps out
+ * and taunts him (stg6_rsh_181), the story moves to STG6_25_ZIP_TOAD_APPEARS, the chase music starts and
+ * evt_toron_catch is spawned.
+ */
 EVT_BEGIN(evt_toron_appear)
     LABEL(100)
     CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)

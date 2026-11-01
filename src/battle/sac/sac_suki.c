@@ -454,6 +454,11 @@ USER_FUNC(end_suki) {
     return 2;
 }
 
+/**
+ * Draws the 2D panel: the frame, the remaining-time bar
+ * and the button row (the last round's buttons sliding out above the current ones),
+ * clipped to the panel's strip of screen. The JP and later releases draw the buttons through _disp_2D.
+ */
 static void disp_2D(CameraId cam, void* param) {
     Mtx m;
     SukiWork* w = get_ptr();
@@ -622,6 +627,10 @@ static void disp_2D(CameraId cam, void* param) {
  */
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
+/**
+ * Draws button idx of the previous round's row (side 0, 80 pixels higher) or the current row (side 1),
+ * with the pressed icon for buttons already entered.
+ */
 void _disp_2D(s32 side, s32 idx) {
     SukiWork* w = get_ptr();
     SukiBtn* b;
@@ -707,6 +716,7 @@ void _disp_2D(s32 side, s32 idx) {
 }
 #endif
 
+/** 3D draw callback; draws nothing (the demo only fetches the work). */
 static void disp_3D(CameraId cam, void* param) {
 #if VERSION <= VERSION_DEMO_US
 get_ptr();

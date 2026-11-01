@@ -1235,6 +1235,11 @@ static EVT_BEGIN(bunsin_kill_event)
     RETURN
 EVT_END()
 
+/**
+ * Punch with the attack weapon in LW(9) (5 damage):
+ * floats up to the target, pummels it with blurred hands flailing for about 50 frames,
+ * then deals the damage on a hit (the target may dodge) and floats home.
+ */
 static EVT_BEGIN(attack_punch_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1569,6 +1574,11 @@ static EVT_BEGIN(attack_enemy_all_common_event)
         RETURN
 EVT_END()
 
+/**
+ * Charge-up for the unit in LW(15) (-1 does nothing):
+ * stops its idle loop, shows akari_charge_n64 above it,
+ * takes the casting pose with its hands drawn in and waits 50 frames.
+ */
 static EVT_BEGIN(attack_enemy_common_event_sub1)
     IF_INT_EQUAL(LW(15), -1)
         RETURN

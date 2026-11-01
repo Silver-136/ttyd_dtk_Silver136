@@ -953,6 +953,11 @@ static USER_FUNC(lect_push_r_check) {
     return EVT_RETURN_DONE;
 }
 #endif
+/**
+ * Script helper (normal change).
+ * Cancels Mario's roll and paper mode so he is back to normal,
+ * and blocks until the roll is finished and the slit (paper) pose is over.
+ */
 static USER_FUNC(evt_nomal_cange) {
     MarioWork* mario = marioGetPtr();
 

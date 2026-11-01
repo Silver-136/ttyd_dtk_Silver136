@@ -247,6 +247,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/** Damage reaction of the Blooper's right tentacle (JP and later); the same as the left tentacle's damage event. */
 EVT_BEGIN(gesso_right_arm_damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

@@ -291,6 +291,13 @@ EVT_END()
  * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Runs when Mario hits the floating-block switch for mobj_fltbl01:
+ * flips the block between its high position (LSWF(6) clear) and its low one 225 units below, with the
+ * floating-block sound and a camera shake, and flips LSWF(6). A sinking block that comes down on Mario's head
+ * turns back up instead. The outer IF_INT_NOT_EQUAL(1, 0) is always true, so its ELSE branch (the switch only
+ * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
+ */
 EVT_BEGIN(evt_gon_04flowblock_updown1)
 CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
@@ -498,6 +505,13 @@ WAIT_MS(1000)
     RETURN
 EVT_END()
 #else
+/**
+ * Runs when Mario hits the floating-block switch for mobj_fltbl01:
+ * flips the block between its high position (LSWF(6) clear) and its low one 225 units below, with the
+ * floating-block sound and a camera shake, and flips LSWF(6). A sinking block that comes down on Mario's head
+ * turns back up instead. The outer IF_INT_NOT_EQUAL(1, 0) is always true, so its ELSE branch (the switch only
+ * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
+ */
 EVT_BEGIN(evt_gon_04flowblock_updown1)
     SET_TYPE(239)
     // The switch is disabled while the block moves.
@@ -754,6 +768,11 @@ EVT_END()
  */
 // This switch moves block 2 only after the large level-1 block has been broken.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Runs when Mario hits the floating-block switch for mobj_fltbl02:
+ * flips that block between its low and high position (200 units apart) with the floating-block sound
+ * and camera shake, and flips the state flag LSWF(7).
+ */
 EVT_BEGIN(evt_gon_04flowblock_updown2)
 CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(GSWF_GON_04_LV1_BIG_BLOCK_BROKEN, 0)
@@ -961,6 +980,11 @@ WAIT_MS(1000)
     RETURN
 EVT_END()
 #else
+/**
+ * Runs when Mario hits the floating-block switch for mobj_fltbl02:
+ * flips that block between its low and high position (200 units apart) with the floating-block sound
+ * and camera shake, and flips the state flag LSWF(7).
+ */
 EVT_BEGIN(evt_gon_04flowblock_updown2)
     SET_TYPE(239)
     // The switch is disabled while the block moves.

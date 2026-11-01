@@ -127,6 +127,13 @@ void statusWinReInit(void) {
  * Then starts and runs the slide animation (16 frames in, 28 out).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame HUD logic in the field: hidden when Mario is not himself (a transformation or another character)
+ * and left alone in the Pit of 100 Trials ("yuu").
+ * While Mario can move it opens after he stands still for 10 seconds, closes when he walks,
+ * toggles with Z (held for 10 seconds, with a sound) and pops open for 2 seconds when a value changes.
+ * Then starts and runs the slide animation (16 frames in, 28 out).
+ */
 void statusWinMain(void) {
     MarioWork* mario;
     f32 inv;
@@ -242,6 +249,13 @@ if (wp->timer >= wp->duration) {
     }
 }
 #else
+/**
+ * Per-frame HUD logic in the field: hidden when Mario is not himself (a transformation or another character)
+ * and left alone in the Pit of 100 Trials ("yuu").
+ * While Mario can move it opens after he stands still for 10 seconds, closes when he walks,
+ * toggles with Z (held for 10 seconds, with a sound) and pops open for 2 seconds when a value changes.
+ * Then starts and runs the slide animation (16 frames in, 28 out).
+ */
 void statusWinMain(void) {
     MarioWork* mario;
     f32 inv;
@@ -434,6 +448,10 @@ static inline void numDisp(f32 x, f32 y, s32 value, BOOL small) {
  * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the HUD: the HP, FP, Star Power and coin/Star Point banners with their icons and numbers,
+ * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
+ */
 static void statusWinDisp(CameraId camId, void* param) {
     alwaysDtEntry* e;
     s32 i;
@@ -538,6 +556,10 @@ static void statusWinDisp(CameraId camId, void* param) {
     }
 }
 #else
+/**
+ * Draws the HUD: the HP, FP, Star Power and coin/Star Point banners with their icons and numbers,
+ * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
+ */
 void statusWinDisp(CameraId camId, void* param) {
     alwaysDtEntry* e;
     s32 i;
@@ -694,8 +716,16 @@ void statusWinDisp(CameraId camId, void* param) {
  * from Mario's and the partner's battle units in battle.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Reads the values the HUD shows: from the pouch in the field (the partner from the party),
+ * from Mario's and the partner's battle units in battle.
+ */
 static void statusGetValue(StatusValue* values) {
 #else
+/**
+ * Reads the values the HUD shows: from the pouch in the field (the partner from the party),
+ * from Mario's and the partner's battle units in battle.
+ */
 void statusGetValue(StatusValue* values) {
 #endif
     BattleWork* bw;
@@ -831,8 +861,16 @@ static inline s32 calcStep(s32 target, s32 cur) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Counts the displayed HUD numbers toward the real values every other frame while the window is open,
+ * with the coin counting sound every 8th frame (6th in the demos).
+ */
 static void valueUpdate(void) {
 #else
+/**
+ * Counts the displayed HUD numbers toward the real values every other frame while the window is open,
+ * with the coin counting sound every 8th frame (6th in the demos).
+ */
 void valueUpdate(void) {
 #endif
     static s32 count;

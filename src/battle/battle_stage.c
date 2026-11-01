@@ -229,6 +229,11 @@ void BattleStageMain(void) {
     }
 }
 
+/**
+ * Battle teardown (from BattleEnd): frees the spline data still held by any light.
+ * The US and later releases also free the spotlight cone array (batSpotEnd);
+ * the demos and the Japanese release leave it allocated.
+ */
 void BattleStageEnd(void) {
     s32 i;
     BattleStage* s = STG;

@@ -140,6 +140,11 @@ static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     return _hitIsGroupSub(target, group, FALSE);
 }
 
+/**
+ * Door close animation step: moves the two door leaves S_door2_1
+ * and S_door2_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -152,6 +157,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door2_1
+ * and S_door2_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -164,6 +174,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times -0.25;
+ * the open and close scripts apply the same transform. The demo builds use -0.2217.
+ */
 static EVT_BEGIN(e_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
@@ -176,6 +191,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times -0.25;
+ * the open and close scripts apply the same transform. The demo builds use -0.2217.
+ */
 static EVT_BEGIN(e_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
@@ -476,6 +496,14 @@ const char* name_tbl2[] = {
     "A_zenmai6",
 };
 
+/**
+ * Script function that carries Mario and his partner on the moving platforms of the room:
+ * every frame it measures how far each of the 13 platform groups in name_tbl moved
+ * and adds that to the floor motion of whoever stands on it;
+ * after STG7_17_CONVEYOR_BELT it pushes them along the conveyor belt A_bel at 0.6 per frame (scaled for
+ * the frame rate on PAL); and on the six rotating platforms in name_tbl2 it moves Mario around the platform's
+ * pivot by the angle the platform turned. Blocks forever.
+ */
 static USER_FUNC(mario_chk) {
     BeltWork* work;
     s32 i;
@@ -633,6 +661,12 @@ EVT_BEGIN(move_left_right)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script for one platform of up_down_tbl: binds the hit area to the map object
+ * and moves it between two heights over the row's time.
+ * In the JP and later releases the platform A_ugoku_2 only starts
+ * after something is standing on it (GF(1) is set once its movement value passes a small threshold).
+ */
 EVT_BEGIN(move_up_down)
     // The hit area is tied to the platform and the row's heights are scaled for smooth movement.
     SET_VALUE(LW(5), LW(0))
@@ -689,6 +723,12 @@ WAIT_MS(300)
     RETURN
 EVT_END()
 #else
+/**
+ * Script for one platform of up_down_tbl: binds the hit area to the map object
+ * and moves it between two heights over the row's time.
+ * In the JP and later releases the platform A_ugoku_2 only starts
+ * after something is standing on it (GF(1) is set once its movement value passes a small threshold).
+ */
 EVT_BEGIN(move_up_down)
     // The hit area is tied to the platform and the row's heights are scaled for smooth movement.
     SET_VALUE(LW(5), LW(0))
@@ -1082,6 +1122,12 @@ static s32 key_tbl[] = {
     ITEM_CARD_KEY_0x20, -1,
 };
 
+/**
+ * Case script on the locked door to Lord Crump: without the Card Key (ITEM_CARD_KEY_0x20) it shows stg7_aji_67;
+ * with it, opens the item menu, and if the key is chosen removes it,
+ * unlocks the door's entrance and sets the story progress to STG7_19_THE_DOOR_TO_LORD_CRUMP.
+ * Menu argument layout differs between the demos and the final game.
+ */
 static EVT_BEGIN(evt_door_msg)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_pouch_check_item, ITEM_CARD_KEY_0x20, LW(0))
@@ -1246,8 +1292,18 @@ USER_FUNC(hit_group_chk) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script function that keeps the camera following Mario's height:
+ * when Mario is in background mode, the camera's Y-follow is off
+ * and he is on the ground (in the JP and later releases), it turns Y-follow back on. Blocks forever.
+ */
 static USER_FUNC(bg_cam_chk) {
 #else
+/**
+ * Script function that keeps the camera following Mario's height:
+ * when Mario is in background mode, the camera's Y-follow is off
+ * and he is on the ground (in the JP and later releases), it turns Y-follow back on. Blocks forever.
+ */
 USER_FUNC(bg_cam_chk) {
 #endif
     CameraEntry* camera = camGetPtr(CAMERA_3D);

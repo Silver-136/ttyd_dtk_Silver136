@@ -388,6 +388,12 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Installs the handlers for the spiked unit's current form, chosen by unit work 0:
+ * on the ground (0) its normal wait, attack, damage and confusion scripts;
+ * on the ceiling (1) the ceiling pose and data tables at height 130 with the ceiling scripts
+ * and the fall script. Both set the run and walk sounds and clear the flipped-over count.
+ */
 static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CEILING, LW(15))
     IF_INT_EQUAL(LW(15), 0)
@@ -459,6 +465,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Flips the spiked unit onto its back: swaps in the flipped defence, pose and attribute tables,
+ * marks status flag 1 (flipped) with a flipped-over count of 1, plays the shell sound,
+ * lands it in two bounces at height 5 and turns off the spike counter on part 1.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -479,6 +490,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Turn-over recovery of the spiked unit: counts down the flipped-over count;
+ * at 0 it restores the normal defence and pose tables, clears status flag 1, plays the wake-up sound,
+ * hops to the ground and turns the spike counter on part 1 back on; otherwise it keeps lying flipped.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -700,6 +716,11 @@ static EVT_BEGIN(damage_event_ceil)
     RETURN
 EVT_END()
 
+/**
+ * Counter-damage handler on the ceiling for the spiked unit:
+ * leaves the ceiling state (ground pose and data tables, hit offsets, home position,
+ * init_event2 for the ground form) and then applies the counter damage.
+ */
 static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)

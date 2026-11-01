@@ -837,6 +837,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Opening scene of the steeple: Mario and Goombella (the partner) appear at the west door (x=-640),
+ * the door animation plays, the story becomes "Steeple demo" and control returns.
+ */
 EVT_BEGIN(first_jin00)
     CALL(evt_mario_set_pos, -640, 0, 0)
     CALL(evt_party_set_pos, 0, -640, 0, 0)

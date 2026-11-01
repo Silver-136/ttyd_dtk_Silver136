@@ -86,6 +86,13 @@ void caseDelete(s32 caseId) {
     wp->entries[caseId].flags &= ~CASE_FLAG_ACTIVE;
 }
 
+/**
+ * Once per field frame: checks every active case against what Mario stands on, faces, pushes,
+ * hammers or bumps his head on (plus button and stick presses, Bobbery's blast and flags)
+ * and starts each fired case's event script with the case's saved LW values, unless one is still running.
+ * Skipped in battle, with a window open, or while Mario can't take case events;
+ * the demo checks the field battle mode directly instead of fbatPreventMarioEventChk.
+ */
 void caseMain(void) {
     MarioWork* mario;
     PartyEntry* party;

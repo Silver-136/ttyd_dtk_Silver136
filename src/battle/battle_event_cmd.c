@@ -4425,6 +4425,11 @@ USER_FUNC(btlevtcmd_PhaseEventStartDeclare) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: picks the action a confused unit args[0] takes (BattleSetConfuseAct)
+ * and returns its script in args[1]; after 20 failed tries (10 in the demos) it falls back to
+ * subsetevt_confuse_flustered.
+ */
 USER_FUNC(btlevtcmd_GetConfuseActEvent) {
     EvtWord* args = event->args;
     s32 id;
@@ -5389,6 +5394,11 @@ static f32 ac_success_width_tbl[7][8] = {
  * The US release sizes the sign by a per-language width table (ac_success_width_tbl).
  */
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Script: shows the action command rating sign args[0] (0-2 Nice at growing sizes, then Good, Great, Wonderful,
+ * Excellent) above the position args[1..3], kept on screen, with its sound.
+ * The US release sizes the sign by a per-language width table (ac_success_width_tbl).
+ */
 USER_FUNC(btlevtcmd_ACSuccessEffect) {
     EvtWord* args = event->args;
     s32 type;
@@ -5463,6 +5473,11 @@ default: return EVT_RETURN_DONE;
     return EVT_RETURN_DONE;
 }
 #elif VERSION == VERSION_DEMO_US
+/**
+ * Script: shows the action command rating sign args[0] (0-2 Nice at growing sizes, then Good, Great, Wonderful,
+ * Excellent) above the position args[1..3], kept on screen, with its sound.
+ * The US release sizes the sign by a per-language width table (ac_success_width_tbl).
+ */
 USER_FUNC(btlevtcmd_ACSuccessEffect) {
     EvtWord* args = event->args;
     s32 type;
@@ -5535,6 +5550,11 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     return EVT_RETURN_DONE;
 }
 #else
+/**
+ * Script: shows the action command rating sign args[0] (0-2 Nice at growing sizes, then Good, Great, Wonderful,
+ * Excellent) above the position args[1..3], kept on screen, with its sound.
+ * The US release sizes the sign by a per-language width table (ac_success_width_tbl).
+ */
 USER_FUNC(btlevtcmd_ACSuccessEffect) {
     EvtWord* args = event->args;
     s32 type;
@@ -7185,6 +7205,11 @@ USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
     return EVT_RETURN_DONE;
 }
 #endif
+/**
+ * Script: slides the battle stage's background objects off screen (args[0] = 0: sideways 450 units for the back
+ * layers, up 260 for the top layer) or back into place (nonzero) over 45 frames; blocks until done.
+ * Used by Star Power special moves that need a clear stage.
+ */
 USER_FUNC(btlevtcmd_SacBgsetMove) {
     BattleWork* wp = _battleWorkPointer;
     s32 on, i;
@@ -7361,6 +7386,10 @@ USER_FUNC(btlevtcmd_ftomsec) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: converts args[0] frames at 60 fps into frames at the running frame rate and returns them in args[1];
+ * the PAL 50 Hz mode needs fewer frames. In the US release a 60 Hz setting returns the value unchanged.
+ */
 USER_FUNC(btlevtcmd_ftof) {
     EvtWord* args = event->args;
     s32 index, value, frames;

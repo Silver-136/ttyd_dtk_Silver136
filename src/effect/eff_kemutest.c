@@ -78,6 +78,7 @@ static const Vec kemu_tmp = { 0.0f, 0.0f, 0.0f };
 static f32 bom_dir[10] = {10.0f, 40.0f, 80.0f, 170.0f, 140.0f, 100.0f, 25.0f, 155.0f, 60.0f, 120.0f};
 static f32 bom_spd[10] = {2.2f, 2.7f, 3.0f, 2.2f, 2.7f, 3.0f, 1.9f, 1.9f, 1.5f, 1.5f};
 #endif
+/** Sets the X and Z rotation used by type 11, which is drawn tilted rather than camera-facing. */
 void effKemuTestSetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
     KemuTestWork* work = effect->userdata;
     work->rx = rx;

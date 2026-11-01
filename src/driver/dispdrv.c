@@ -56,6 +56,13 @@ void dispReInit(void) {
     entry_n = 0;
 }
 
+/**
+ * Queues a draw callback for camera camId this frame.
+ * renderMode picks the blend, alpha test and depth setup (0 opaque, 1 alpha-tested, 2/5 translucent,
+ * 3/4 no depth) and a base depth from offset_tbl;
+ * order shifts it within that band (translucent modes draw far to near, the rest near to far).
+ * NaN orders are dropped. The JP and later releases add translucent modes 9 and 10.
+ */
 void dispEntry(CameraId camId, f32 order, s32 renderMode, DispCallback callback, void* param) {
     DispEntry* entry = &pDispWork[entry_n];
 

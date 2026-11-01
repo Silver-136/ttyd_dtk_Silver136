@@ -670,8 +670,18 @@ void cam3dImgMain(CameraEntry* camera) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Update callback of the two 3D effect cameras:
+ * copies the main 3D camera's position, target and up vector so effects draw from the same viewpoint.
+ * The JP and later releases also rebuild the projection each frame.
+ */
 static void camEffMain(CameraEntry* camera) {
 #else
+/**
+ * Update callback of the two 3D effect cameras:
+ * copies the main 3D camera's position, target and up vector so effects draw from the same viewpoint.
+ * The JP and later releases also rebuild the projection each frame.
+ */
 void camEffMain(CameraEntry* camera) {
 #endif
     CameraEntry* camera3D = camGetPtr(CAMERA_3D);

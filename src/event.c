@@ -2037,6 +2037,11 @@ void stg6_44_init(void) {
     pouchReceiveMail(0x16);
 }
 
+/**
+ * Story point STG6_46 "Engineer" (rsh_00_a) in the US and PAL releases,
+ * STG6_47_00 "Baggage Car Smorgs" (rsh_05_a) in JP and the demos: delivers mail 0x15;
+ * sets GSWF_MAIL_PA_PATCH_SENT.
+ */
 void stg6_47_00_init(void) {
     swSet(0xC); // GSWF_MAIL_PA_PATCH_SENT
     pouchReceiveMail(0x15);
@@ -2341,6 +2346,11 @@ void stg8_15_init(void) {
     swSet(GSWF_LAS25_DOOR_UNLOCKED); // GSWF_LAS_25_DOOR_UNLOCKED
 }
 
+/**
+ * Story point STG9_02 "Return to Rogueport" (gor_00):
+ * after the ending, marks Trouble 16 solved and has Ms. Mowz join.
+ * Not used in the demos, whose STG9_02 entry has no setup.
+ */
 // Descriptive name (not in the symbol maps).
 void stg9_02_init(void) {
     swSet(GSWF_TROUBLE_16_SOLVED);

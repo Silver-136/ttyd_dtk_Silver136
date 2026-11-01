@@ -336,6 +336,11 @@ evtEntry(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0);
 #pragma dont_inline on
 #endif
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Landing check for the spin jump: 0 while in the air,
+ * 1 when the floor sent Mario into the water (0x200) or spike (0xC00) damage motion, 2 for a normal landing.
+ * Also resets the spin rotation and turns camera y-follow back on (not in background mode in the PAL release).
+ */
 s32 chkground(void) {
     MarioWork* mario;
     HitEntry* hit;
@@ -373,6 +378,11 @@ marioChgMot(MARIO_MOTION_DAMAGE);
     return 0;
 }
 #else
+/**
+ * Landing check for the spin jump: 0 while in the air,
+ * 1 when the floor sent Mario into the water (0x200) or spike (0xC00) damage motion, 2 for a normal landing.
+ * Also resets the spin rotation and turns camera y-follow back on (not in background mode in the PAL release).
+ */
 s32 chkground(void) {
     MarioWork* mario;
     HitEntry* hit;

@@ -5,6 +5,10 @@
 #include "mario/mariost.h"
 #include <string.h>
 
+/**
+ * Clears all saved work: the global flags (GSWF) and words (GSW, including GSW0)
+ * and the area-local ones (LSWF, LSW). Runs at boot, on a new or loaded file (seq_load) and in the E3 demo.
+ */
 void swInit(void) {
     memset(gp->gSWF, 0, sizeof(gp->gSWF));
     memset(gp->gSW, 0, sizeof(gp->gSW));

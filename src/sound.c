@@ -66,6 +66,12 @@ void sndFree(void* ptr) {
  * DVD audio (2) and stream (3) channel tables with their buffers. Fade in/out default to 10 and 500 ms.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Boots the sound system: sets up ARAM and its queue, starts MusyX (64 voices, 12 MB of ARAM),
+ * prepares the reverb, chorus and delay effects, sets stereo output,
+ * hooks the audio DMA callback and allocates the song (4), effect (40),
+ * DVD audio (2) and stream (3) channel tables with their buffers. Fade in/out default to 10 and 500 ms.
+ */
 void SoundInit(void) {
     SND_HOOKS hooks = (SND_HOOKS){sndMalloc, sndFree};
     void* data;
@@ -249,6 +255,12 @@ sound.sampleBank = 0;
     slot->seqId = 0;
 }
 #else
+/**
+ * Boots the sound system: sets up ARAM and its queue, starts MusyX (64 voices, 12 MB of ARAM),
+ * prepares the reverb, chorus and delay effects, sets stereo output,
+ * hooks the audio DMA callback and allocates the song (4), effect (40),
+ * DVD audio (2) and stream (3) channel tables with their buffers. Fade in/out default to 10 and 500 ms.
+ */
 void SoundInit(void) {
     SND_HOOKS hooks = (SND_HOOKS){ sndMalloc, sndFree };
     void* data;
@@ -1002,6 +1014,7 @@ if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
     return TRUE;
 }
 
+/** Switches MusyX between mono, stereo and surround output (US and PAL only when it changes). */
 void SoundSetOutputMode(SND_OUTPUTMODE mode) {
 #if VERSION > VERSION_DEMO_US
     if (sound.outputMode != mode) {
@@ -1723,8 +1736,18 @@ inline void _ssResetEntries(SoundStream* stream) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Marks the stream entry whose DVD read finished as loaded,
+ * then starts the first stream whose entries are all ready.
+ * The demo masks interrupts only around the updates, the later versions around the whole search.
+ */
 static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #else
+/**
+ * Marks the stream entry whose DVD read finished as loaded,
+ * then starts the first stream whose entries are all ready.
+ * The demo masks interrupts only around the updates, the later versions around the whole search.
+ */
 void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
     int i;
 #endif
@@ -2002,6 +2025,7 @@ u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 cou
     return src;
 }
 #if VERSION <= VERSION_DEMO_US
+/** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
 static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
 s16* dst;
     SoundStream* stream;
@@ -2191,9 +2215,11 @@ if (entry->pos >= stream->loopEnd) {
 }
 #else
 #if VERSION >= VERSION_US
+/** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
 u32 _sscallback(void* p_b1, u32 p_l1, void* p_b2, u32 p_l2, u32 user) {
     u32 len1;
 #else
+/** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
 u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
 #endif
     s16* dst;
@@ -2486,8 +2512,18 @@ if (!(stream->entries[0].dvd = DVDMgrOpen(path, 0, 0))) {
  * allocates the MusyX stream(s) (one, or a left/right pair panned hard) and starts loading the data.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Disc read callback for a stream header: reads format (PCM16, DPCM or ADPCM with its coefficients),
+ * sample rate, channel count, loop points and sizes,
+ * allocates the MusyX stream(s) (one, or a left/right pair panned hard) and starts loading the data.
+ */
 static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
 #else
+/**
+ * Disc read callback for a stream header: reads format (PCM16, DPCM or ADPCM with its coefficients),
+ * sample rate, channel count, loop points and sizes,
+ * allocates the MusyX stream(s) (one, or a left/right pair panned hard) and starts loading the data.
+ */
 void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
 #endif
     SoundStream* stream;
@@ -2642,6 +2678,10 @@ SoundSSSetPanCh(i, stream->pan);
     }
 }
 
+/**
+ * Stops stream chan and frees its MusyX streams and files;
+ * the demo defers the stop when the stream has not started.
+ */
 void SoundSSStopCh(s32 chan) {
     SoundStream* stream;
 
@@ -2673,6 +2713,7 @@ SoundIntOff();
     }
 }
 
+/** Fades stream chan out over the fade-out time (converted to frames at the current frame rate in US and PAL). */
 void SoundSSFadeoutCh(s32 chan) {
     SoundStream* stream = &sound.streams[chan];
     f32 frames;

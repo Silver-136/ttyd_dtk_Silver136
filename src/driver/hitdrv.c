@@ -188,6 +188,10 @@ typedef struct HitAnimJointList {
     void* joints[1];
 } HitAnimJointList;
 
+/**
+ * Builds the list of hit objects the checks walk (hitActiveListTop).
+ * The demo has no active list: hit objects without parts are flagged 0x8000 and skipped by the checks.
+ */
 static void hitPreCheck(void) {
     MapEntry* entry;
     s32 i;
@@ -228,6 +232,10 @@ hit->flags |= HIT_FLAG_NO_GEOMETRY;
 }
 #endif
 
+/**
+ * Removes the collision object named name: it is flagged deleted (0x80) and the checks skip it from then on;
+ * the JP and later releases also rebuild the active list.
+ */
 void hitDelete(const char* name) {
     MapWork* wp = mapGetWork();
     s32 j;
@@ -810,6 +818,7 @@ inline BOOL tempfunc3(HitCheckQuery* query, HitVector* vector) {
     return 1;
 }
 
+/** The demo walks every map entry's hit objects (no active list) and has no separate straight-up case. */
 HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
 #if VERSION <= VERSION_DEMO_US
     HitVector* vector2;
@@ -1397,6 +1406,7 @@ void hitObjGetNormal(const char* name, Vec* normal) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/** Returns hit's joint name, or NULL for NULL (the demo has no range check). */
 const char* hitGetName(HitEntry* hit) {
     MapEntry* map;
     s32 count;
@@ -1425,6 +1435,7 @@ const char* hitGetName(HitEntry* hit) {
 
 /** Returns hit's attribute bits, 0 for NULL. */
 #if VERSION <= VERSION_DEMO_US
+/** Returns hit's joint name, or NULL for NULL (the demo has no range check). */
 const char* hitGetName(HitEntry* hit) {
     if (hit != NULL) {
         return hit->joint->name;
@@ -1432,6 +1443,7 @@ const char* hitGetName(HitEntry* hit) {
     return NULL;
 }
 #endif
+/** Returns hit's attribute bits, 0 for NULL. */
 s32 hitGetAttr(HitEntry* hit) {
     return hit != NULL ? hit->attributes : 0;
 }

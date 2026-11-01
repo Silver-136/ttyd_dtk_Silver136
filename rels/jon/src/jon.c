@@ -1800,6 +1800,7 @@ EVT_BEGIN(get_map_name)
     RETURN
 EVT_END()
 
+/** The demo's mover takes 10 coins for every trip and picks the destination before checking the coins. */
 EVT_BEGIN(talk_idouya)
     CALL(evt_msg_print, 0, STRING("msg_jon_mover"), 0, 0)
     CALL(evt_msg_select, 0, STRING("msg_jon_mover_select"))
@@ -1932,6 +1933,14 @@ EVT_BEGIN(idouya_setup)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Talk script of the peddler (行商人, tribe ボッタクール, a rip-off merchant):
+ * offers an item shop window with coin display.
+ * Mario picks an item at its price, the peddler checks the coins and the item pouch,
+ * and he can keep buying until he declines or is out of coins.
+ * Non-Japanese versions word the price message by language order (US and later use a format string for
+ * non-English).
+ */
 EVT_BEGIN(talk_gyousyou)
     // The trader pitches his "hot products" to Mario and asks whether he wants to see them (yes or no).
     CALL(evt_msg_print, 0, STRING("100kai_item_01"), 0, STRING("me"))
@@ -2005,6 +2014,14 @@ CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     RETURN
 EVT_END()
 #else
+/**
+ * Talk script of the peddler (行商人, tribe ボッタクール, a rip-off merchant):
+ * offers an item shop window with coin display.
+ * Mario picks an item at its price, the peddler checks the coins and the item pouch,
+ * and he can keep buying until he declines or is out of coins.
+ * Non-Japanese versions word the price message by language order (US and later use a format string for
+ * non-English).
+ */
 EVT_BEGIN(talk_gyousyou)
     // The trader pitches his "hot products" to Mario and asks whether he wants to see them (yes or no).
     CALL(evt_msg_print, 0, STRING("100kai_item_01"), 0, STRING("me"))
@@ -2212,6 +2229,11 @@ EVT_END()
  * Spawned from enemy_setup.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Raises the exit pipe (a_dokan_1 / dokan_1_s) 30 units out of the floor over half a second,
+ * with the pipe-appear sound, once the floor's enemy is beaten. Controls are locked meanwhile.
+ * Spawned from enemy_setup.
+ */
 EVT_BEGIN(dokan_open)
 WAIT_MS(1000)
     CALL(evt_mario_key_onoff, 0)
@@ -2237,6 +2259,11 @@ WAIT_MS(500)
     RETURN
 EVT_END()
 #else
+/**
+ * Raises the exit pipe (a_dokan_1 / dokan_1_s) 30 units out of the floor over half a second,
+ * with the pipe-appear sound, once the floor's enemy is beaten. Controls are locked meanwhile.
+ * Spawned from enemy_setup.
+ */
 EVT_BEGIN(dokan_open)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1000)

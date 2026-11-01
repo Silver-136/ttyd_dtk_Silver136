@@ -796,6 +796,10 @@ static EVT_BEGIN(damage_event_bodylost)
     RETURN
 EVT_END()
 
+/**
+ * Run while a segment is lost: the body (LW(10), part LW(11)) takes the hurt pose LW(14),
+ * pops up 18 units and settles down in a few bouncing steps, so the stack looks one segment shorter.
+ */
 static EVT_BEGIN(subset_dmg_sambo_fall)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -1721,6 +1725,12 @@ static EVT_BEGIN(attack_spike_event)
     RETURN
 EVT_END()
 
+/**
+ * Summons another Poison Pokey: sways back and forth with the summon sounds,
+ * then spawns entry_sambo below the free spot LW(6)-LW(8),
+ * which pops out of the ground in smoke and makes the spot its home.
+ * The new Pokey's unit work 1 is the caller's plus one, which limits how many generations can summon.
+ */
 static EVT_BEGIN(call_friend_event)
     // The Pokey rocks its stack from side to side, with a calling sound for each swing.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("SNB_S_1"))

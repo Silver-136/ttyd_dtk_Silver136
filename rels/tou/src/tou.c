@@ -456,6 +456,11 @@ static USER_FUNC(evt_rankingReInit) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00002e24, JP tou .text+0x2D60. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper (no arguments): resets the Glitz Pit to its starting state.
+ * Removes item 0x41 from the pouch, clears every fighter's lost flag
+ * and the first-match/champion/title-match/last-opponent flags, then rebuilds the ranking.
+ */
 USER_FUNC(evt_rankingReset) {
     s32 i;
 
@@ -1321,6 +1326,16 @@ EVT_BEGIN(evt_close)
     RETURN
 EVT_END()
 
+/**
+ * Locker door open script, run when Mario pushes on a locker (registered by the locker setup script;
+ * evt_close is its counterpart).
+ * Before STG3_05_MATCH in tou_10, with no match reserved yet,
+ * the locker stays shut and a staff member says stg3_tou_67 (the US and later versions skip the line if Mario's
+ * input is already locked).
+ * Otherwise it plays the locker-open sound at the door,
+ * swings the door open 120 degrees over 40 frames (mirrored when LF(0) is 1),
+ * and registers evt_close for pushing at or standing on it.
+ */
 static EVT_BEGIN(evt_open)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_05_MATCH)
         CALL(evt_sub_get_mapname, LW(5))
@@ -1550,6 +1565,7 @@ EVT_BEGIN(evt_tou_monitor_on)
     RETURN
 EVT_END()
 
+/** Turns the registration monitor off, with the computer sound at the "M_make" console. */
 EVT_BEGIN(evt_tou_monitor_off)
     CALL(evt_hit_get_position, STRING("M_make"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_TOUROKU_COM2"), LW(0), LW(1), LW(2), 0)
@@ -1557,6 +1573,10 @@ EVT_BEGIN(evt_tou_monitor_off)
     RETURN
 EVT_END()
 
+/**
+ * Map-init helper for tou_10, tou_08 and tou_07:
+ * starts the monitor renderer and hooks the screen mesh onto monitor_tev so it shows the live texture.
+ */
 EVT_BEGIN(evt_tou_monitor_init)
     BEGIN_INLINE_EVENT
         CALL(make_monitor)
@@ -1588,30 +1608,39 @@ EVT_BEGIN(talk_gardman_doku)
     RETURN
 EVT_END()
 
+/** Talk script of Goombella's stand-in NPC: her line, then the guard's remark. */
 EVT_BEGIN(dummy_party_msg_pkr)
     CALL(evt_msg_print, 0, STRING("stg3_tou_303_kur"), 0, STRING("me"))
     CALL_CHILD(PTR(talk_gardman_doku))
     RETURN
 EVT_END()
 
+/** Talk script of Koops' stand-in NPC: his line, then the guard's remark. */
 EVT_BEGIN(dummy_party_msg_pnk)
     CALL(evt_msg_print, 0, STRING("stg3_tou_303_nok"), 0, STRING("me"))
     CALL_CHILD(PTR(talk_gardman_doku))
     RETURN
 EVT_END()
 
+/** Talk script of Yoshi's stand-in NPC: his line, then the guard's remark. */
 EVT_BEGIN(dummy_party_msg_yos)
     CALL(evt_msg_print, 0, STRING("stg3_tou_303_yos"), 0, STRING("me"))
     CALL_CHILD(PTR(talk_gardman_doku))
     RETURN
 EVT_END()
 
+/** Talk script of Flurrie's stand-in NPC (Windy in the data names): her line, then the guard's remark. */
 EVT_BEGIN(dummy_party_msg_win)
     CALL(evt_msg_print, 0, STRING("stg3_tou_303_win"), 0, STRING("me"))
     CALL_CHILD(PTR(talk_gardman_doku))
     RETURN
 EVT_END()
 
+/**
+ * Swaps the partner for a stand-in NPC ("dummy_party") at the partner's position,
+ * matching the current partner (Goombella, Koops, Yoshi in its color, Flurrie),
+ * and parks the real partner offscreen.
+ */
 // Keep a talkable NPC proxy at the partner position while hiding and stopping the actual party actor.
 EVT_BEGIN(party_npc_replace)
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1659,6 +1688,11 @@ EVT_BEGIN(party_npc_replace)
     RETURN
 EVT_END()
 
+/**
+ * Squash-and-stretch of the egg NPC ("たまご") over a hop of LW(3) milliseconds:
+ * the width scale eases from 1.2 down to 0.9 and the height scale from 0.9 up to 1.1 (two inline events),
+ * while the loop applies both scales to the egg every frame.
+ */
 static EVT_BEGIN(evt_tamago_scale)
     SET_VALUE(GW(10), FLOAT(1.1992188f))
     SET_VALUE(GW(11), FLOAT(0.89941406f))
@@ -1697,6 +1731,11 @@ static EVT_BEGIN(evt_tamago_scale)
     RETURN
 EVT_END()
 
+/**
+ * Second squash-and-stretch step for the egg NPC ("たまご"), over LW(3) milliseconds:
+ * the width eases from 0.9 back to 1.0 and the height from 1.1 back to 1.0,
+ * and the loop applies the scales every frame (the settle after the hops of evt_tamago_scale).
+ */
 static EVT_BEGIN(evt_tamago_scale2)
     BEGIN_INLINE_EVENT
         DIVIDE(LW(3), 2)
@@ -1733,6 +1772,10 @@ static EVT_BEGIN(evt_tamago_scale2)
     RETURN
 EVT_END()
 
+/**
+ * Mini-Yoshi egg scene (story stage 12 to 19): the egg Yoshi NPC takes the partner's place,
+ * Yoshi leaves the party, and the egg hops away in squashing jumps.
+ */
 EVT_BEGIN(evt_tamago_byebye)
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_check, STRING("たまご"), LW(10))
@@ -1780,6 +1823,10 @@ EVT_BEGIN(evt_tamago_byebye)
     RETURN
 EVT_END()
 
+/**
+ * Guard's talk script: after the poison remark or the egg scene,
+ * he steps out and swings the door of the current map (tou_10, tou_08 or tou_07) open and closed for Mario.
+ */
 EVT_BEGIN(talk_gardman)
     IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
         IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
@@ -1853,6 +1900,18 @@ EVT_BEGIN(talk_gardman)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The guard's match call, spawned after a match is booked.
+ * The guard (ガードマン) is the NPC of the map; LF(0),
+ * LF(1) and LF(2) tell which map it is (tou_10, tou_08 or tou_07)
+ * and select the door message (stg3_tou_74, 327 or 453).
+ * It waits for Mario to be free; if Mario stands near the door (x within 35, z at or below -60) he is bounced
+ * back to (40, 0, -120), and the guard opens the door_1 map object (with the door sounds), steps in,
+ * closes it and tells Gonzales (or the champion, in tou_07) it is time for his match.
+ * It then gives the guard his
+ * talk event (talk_gardman) back, turns off entrance 0 and returns control to Mario.
+ * The versions before the US release wait 240 frames of free movement first.
+ */
 static EVT_BEGIN(evt_gardman)
     // Work out which locker room this is: minor league (tou_10), major league (tou_08) or champion (tou_07).
     SET_VALUE(LF(0), 0)
@@ -1985,6 +2044,18 @@ CALL(evt_mario_set_pose, STRING("M_N_7"))
     RETURN
 EVT_END()
 #else
+/**
+ * The guard's match call, spawned after a match is booked.
+ * The guard (ガードマン) is the NPC of the map; LF(0),
+ * LF(1) and LF(2) tell which map it is (tou_10, tou_08 or tou_07)
+ * and select the door message (stg3_tou_74, 327 or 453).
+ * It waits for Mario to be free; if Mario stands near the door (x within 35, z at or below -60) he is bounced
+ * back to (40, 0, -120), and the guard opens the door_1 map object (with the door sounds), steps in,
+ * closes it and tells Gonzales (or the champion, in tou_07) it is time for his match.
+ * It then gives the guard his
+ * talk event (talk_gardman) back, turns off entrance 0 and returns control to Mario.
+ * The versions before the US release wait 240 frames of free movement first.
+ */
 static EVT_BEGIN(evt_gardman)
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
@@ -2104,6 +2175,7 @@ EVT_END()
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/** Spawns the guard's walk-through script (evt_gardman). */
 EVT_BEGIN(evt_gardman_spawn)
     CALL_CHILD(PTR(evt_gardman))
     RETURN
@@ -2111,6 +2183,10 @@ EVT_END()
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Shared part of the match registration console:
+ * sets which map (tou_10, tou_08 or tou_07) is running and prepares the registration prompts.
+ */
 EVT_BEGIN(evt_tou_match_make_default_sub)
     // Work out which locker room this is (and, in French, the order of the inserted rank and name).
     SET_VALUE(LF(0), 0)
@@ -2250,6 +2326,10 @@ CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     RETURN
 EVT_END()
 #else
+/**
+ * Shared part of the match registration console:
+ * sets which map (tou_10, tou_08 or tou_07) is running and prepares the registration prompts.
+ */
 EVT_BEGIN(evt_tou_match_make_default_sub)
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
@@ -2448,6 +2528,11 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
 EVT_END()
 #endif
 
+/**
+ * Interaction with the match registration console ("M_make"):
+ * prints the registration prompt and lets Mario reserve a match, picking the opponent and rule.
+ * Returns without effect if Mario's controls are disabled.
+ */
 EVT_BEGIN(evt_tou_match_make_default)
 #if VERSION > VERSION_DEMO_US
     CALL(tou_mario_keyoff_check, LW(0))
@@ -2599,6 +2684,7 @@ CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
     RETURN
 EVT_END()
 
+/** Talk script of the poison cake: Mario gets a message (stg3_tou_307_04). */
 EVT_BEGIN(evt_talk_doku_cake)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg3_tou_307_04"), 0, STRING("me"))
@@ -2606,6 +2692,7 @@ EVT_BEGIN(evt_talk_doku_cake)
     RETURN
 EVT_END()
 
+/** Mario's decision to eat the poison cake: partner remark, a yes/no prompt and, on yes, the eating sequence. */
 EVT_BEGIN(evt_eat_doku_cake)
 #if VERSION <= VERSION_DEMO_US
     // The partner comes over and comments; the game asks whether to eat the cake and No ends the scene.
@@ -3129,6 +3216,7 @@ USER_FUNC(chk) {
 // Descriptive name (not in the symbol maps); placeholder unk_tou_0000063c, JP tou .text+0x578. See docs/NAME_PROVENANCE.md.
 // Accumulate 241 eligible checks; ineligible controls or motions pause rather than reset the count.
 #if VERSION > VERSION_DEMO_US
+/** Script helper: waits until Mario has been idle, walking or dashing (and not locked out) for 240 frames in total. */
 USER_FUNC(tou_mario_free_wait) {
     MarioWork* mario = marioGetPtr();
 
@@ -3155,6 +3243,7 @@ USER_FUNC(tou_mario_talk_end_wait) {
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_000005d0, JP tou .text+0x50C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 USER_FUNC(tou_mario_keyoff_check) {
     EvtWord* args = event->args;
 
@@ -3290,6 +3379,12 @@ static USER_FUNC(tou_champion_belt_onoff) {
  * (stg3_tou_93_31 to 37) and Swoop introduces himself (stg3_tou_93_38), then the guard comes in.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Rank 11 scene (once: GSWF_TOU_RANK11_SWOOPS_JOINS), after King K has gone: オクトール and ガンガン (Cleftor)
+ * talk about missing him (stg3_tou_93_28 to 30); Jolene brings in the new fighter Sir Swoop (ポグ), shows him
+ * the minor-league room and the match terminal, Grubba (ガンス) books his first match over the monitor
+ * (stg3_tou_93_31 to 37) and Swoop introduces himself (stg3_tou_93_38), then the guard comes in.
+ */
 EVT_BEGIN(evt_michel_8)
     // The Bob-omb fighter and Cleftor talk about missing King K.
     CALL(evt_npc_set_position, STRING("オクトール"), 145, 0, 50)
@@ -3456,6 +3551,12 @@ CALL(evt_npc_move_position, STRING("ガードマン"), 0, -200, 0, FLOAT(80.0f),
     RETURN
 EVT_END()
 #else
+/**
+ * Rank 11 scene (once: GSWF_TOU_RANK11_SWOOPS_JOINS), after King K has gone: オクトール and ガンガン (Cleftor)
+ * talk about missing him (stg3_tou_93_28 to 30); Jolene brings in the new fighter Sir Swoop (ポグ), shows him
+ * the minor-league room and the match terminal, Grubba (ガンス) books his first match over the monitor
+ * (stg3_tou_93_31 to 37) and Swoop introduces himself (stg3_tou_93_38), then the guard comes in.
+ */
 EVT_BEGIN(evt_michel_8)
     // The Bob-omb fighter and Cleftor talk about missing King K.
     CALL(evt_npc_set_position, STRING("オクトール"), 145, 0, 50)
@@ -4091,6 +4192,10 @@ EVT_END()
  */
 // Reward routing uses the room and pre-match rank; later one-time events use the current rank.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script run after a match: story follow-ups (Yoshi egg, poison cake, Swoops joining),
+ * ranking announcements and cleanup.
+ */
 EVT_BEGIN(evt_tou_match_after_default)
     // Back in the locker room: the partner is hidden for the Yoshi egg scenes,
     // and the Shady Koopa and Cleftor are placed where needed.
@@ -4590,6 +4695,10 @@ END_IF
     RETURN
 EVT_END()
 #else
+/**
+ * Script run after a match: story follow-ups (Yoshi egg, poison cake, Swoops joining),
+ * ranking announcements and cleanup.
+ */
 EVT_BEGIN(evt_tou_match_after_default)
     // Back in the locker room: the partner is hidden for the Yoshi egg scenes,
     // and the Shady Koopa and Cleftor are placed where needed.

@@ -274,6 +274,11 @@ if (strcmp(player->animName, "M_I_Y") == 0 || player->wMotionTimer > 0xA) {
  * with the pushing pose against pushable objects.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Running motion: like mot_walk at marioGetDashSpd,
+ * dropping back to walking for a small stick tilt or with the Slow Go badge,
+ * with the pushing pose against pushable objects.
+ */
 void mot_dash(void) {
     f32 dashSpeed;
     u32 trigFlags;
@@ -381,6 +386,11 @@ marioChgMot(MARIO_MOTION_WALK);
     }
 }
 #else
+/**
+ * Running motion: like mot_walk at marioGetDashSpd,
+ * dropping back to walking for a small stick tilt or with the Slow Go badge,
+ * with the pushing pose against pushable objects.
+ */
 void mot_dash(void) {
     u32 trigFlags;
     BOOL pushCaseActive;

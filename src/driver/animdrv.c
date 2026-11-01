@@ -1063,19 +1063,30 @@ static inline f32 apmMul(f32 a, f32 b) {
     return a * b;
 }
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo copies the frame buffers through small inline helpers.
+ * Kept: writing the copies out as `if (n != 0) memcpy_as4(...)` changes the demo animPoseMain's registers,
+ * and calling the helpers from the later versions' animPoseMain changes theirs.
+ */
 static inline void apmCopy4(void* src, void* dst, s32 count, s32 size) {
     if (count != 0)
         memcpy_as4(dst, src, count * size);
 }
+/** Copies count bytes of a frame buffer when there are any (demo animPoseMain helper). */
 static inline void apmCopy(void* src, void* dst, s32 count) {
     if (count != 0)
         memcpy(dst, src, count);
 }
+/**
+ * Copies count elements of size bytes from src to dst, 4 bytes at a time,
+ * when there are any (demo animPoseMain helper).
+ */
 static inline void apmCopyTo(void* dst, void* src, s32 count, s32 size) {
     if (count != 0)
         memcpy_as4(dst, src, count * size);
 }
 #endif
+/** the demo converts the s8 deltas with plain casts (no fast-cast setup) and walks the keyframes and deltas by index */
 void animPoseMain(s32 poseId) {
     s32 frame;
     s32 nA;
@@ -1780,6 +1791,7 @@ void animPoseMain(s32 poseId) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/** the demo always builds every matrix and concatenates them all */
 void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
     Mtx trans, scale, rot, tmp;
     Mtx sc1, sc2, sc3;
@@ -1906,6 +1918,10 @@ void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Pushes the modelling matrix of a joint node (translation, two rotations and a scale,
+ * cancelling the parent's scale): demo version, which always builds and concatenates every matrix.
+ */
 void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
     Mtx trans, scale, iscale, rot, tmp;
     MtxPtr p;
@@ -2053,11 +2069,18 @@ void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/** the demo always builds every matrix and concatenates them all */
 static void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
     Mtx trans, scale, rot, tmp;
     Mtx sc1, sc2, sc3;
     Mtx rc1, rc2, rc3;
 #else
+/**
+ * the demo sets up each texture object, then builds the full texture matrix
+ * unless the animation is the identity.
+ * The local declaration order is load-bearing: it decides the register colouring (wrapFlags r30, params
+ * r23-r29).
+ */
 void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *pTexEntries_, AnimTexMtx *animEntries, s32 texBindsCapacity, AnimTexBind *texBinds, AnimationTextureFile *texFile) {
     s32 texCount;
     s32* texIdRemap;
@@ -2128,6 +2151,10 @@ void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *
     PSMTXConcat(tmp, scale, trans);
     PSMTXConcat(g_modeling_mtx_stack[g_modeling_mtx_lv - 1], trans, g_modeling_mtx_stack[g_modeling_mtx_lv]);
 }
+/**
+ * Pushes the modelling matrix of a joint node (translation, two rotations and a scale,
+ * cancelling the parent's scale): demo version, which always builds and concatenates every matrix.
+ */
 static void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
     Mtx trans, scale, iscale, rot, tmp;
 #endif
@@ -2172,6 +2199,12 @@ static void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 s
     PSMTXConcat(tmp, scale, trans);
     PSMTXConcat(g_modeling_mtx_stack[g_modeling_mtx_lv - 1], trans, g_modeling_mtx_stack[g_modeling_mtx_lv]);
 }
+/**
+ * the demo sets up each texture object, then builds the full texture matrix
+ * unless the animation is the identity.
+ * The local declaration order is load-bearing: it decides the register colouring (wrapFlags r30, params
+ * r23-r29).
+ */
 static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEntry* pTexEntries, AnimTexMtx* animEntries, s32 texBindsCapacity, AnimTexBind* texBinds, AnimationTextureFile* texFile) {
     u32 mipmap;
     u32 texId;
@@ -2490,8 +2523,18 @@ static inline void animSetCullMode(s32 cullMode) {
  * including substituted paper textures.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Sets up the material of shape shapeId for draw stage xluStage:
+ * the matrices, lighting, cull mode, alpha test and blending, the tint colours and textures,
+ * including substituted paper textures.
+ */
 static void materialProc(s32 shapeId, s32 xluStage) {
 #else
+/**
+ * Sets up the material of shape shapeId for draw stage xluStage:
+ * the matrices, lighting, cull mode, alpha test and blending, the tint colours and textures,
+ * including substituted paper textures.
+ */
 void materialProc(s32 shapeId, s32 xluStage) {
 #endif
     AnimationPoseData *cd;
@@ -2613,8 +2656,16 @@ static inline AnimationPoseData* rpCurData(void) {
  * and the file's colours and texture coordinates, then sends its polygons.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws shape shapeId of the current pose: points GX at the pose's evaluated vertex positions and normals
+ * and the file's colours and texture coordinates, then sends its polygons.
+ */
 static void renderProc(s32 shapeId, s32 unused) {
 #else
+/**
+ * Draws shape shapeId of the current pose: points GX at the pose's evaluated vertex positions and normals
+ * and the file's colours and texture coordinates, then sends its polygons.
+ */
 void renderProc(s32 shapeId, s32 unused) {
 #endif
     AnimationPoseData* cd;
@@ -2913,8 +2964,18 @@ Mtx* model = g_modeling_mtx;
  * Vivian, Marilyn and Beldam's hair and tail chains are bent towards their movement on the way.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Walks the pose's group tree from groupId (children, then siblings) and draws each visible group:
+ * pushes its node matrix, sets up its material and draws its shape.
+ * Vivian, Marilyn and Beldam's hair and tail chains are bent towards their movement on the way.
+ */
 static void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
 #else
+/**
+ * Walks the pose's group tree from groupId (children, then siblings) and draws each visible group:
+ * pushes its node matrix, sets up its material and draws its shape.
+ * Vivian, Marilyn and Beldam's hair and tail chains are bent towards their movement on the way.
+ */
 void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
 #endif
     AnimPoseGroup* group;

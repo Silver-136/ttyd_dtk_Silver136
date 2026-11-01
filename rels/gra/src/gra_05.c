@@ -62,6 +62,11 @@ EVT_BEGIN(gra_05_in_01)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the first hole (A_ana_1) of gra_05, a bero entry with no next map: the partner walks to the hole
+ * (JP and later), then Mario and both partners are placed below the floor at (250, -50, 0) and jump back out to
+ * x 310, with the camera released (JP and later also record the spot as the fall-respawn position).
+ */
 EVT_BEGIN(gra_05_out_01)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)

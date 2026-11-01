@@ -62,6 +62,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Reward script for tree ki_6: if the coin has not been collected yet, a Coin falls out when Mario hits the tree. */
 EVT_BEGIN(evt_ki_6)
     CALL(evt_item_delete_check, STRING("item_ki_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

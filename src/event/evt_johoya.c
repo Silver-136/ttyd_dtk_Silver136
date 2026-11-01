@@ -113,6 +113,13 @@ USER_FUNC(johoya_keti_newjoho_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Picks the args[0]-th unbought rumour: writes its message label to args[1], the title text to args[2],
+ * its length to args[3] and the cost to args[4], and remembers it for setreadflag.
+ * Empty label and zeros when there is none.
+ * Retail reads the title from the "jketi_title_%04d" message;
+ * the demos use the text inside the rumour's own tag.
+ */
 USER_FUNC(johoya_keti_newjoho_makelabel) {
     EvtWord* args = event->args;
 #if VERSION > VERSION_DEMO_US

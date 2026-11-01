@@ -1653,6 +1653,11 @@ USER_FUNC(check_ceil) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou2_000027b8, JP tou2 .text+0x26F4. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper (JP and later) for roof_shake_attack_event:
+ * spawns a falling stage object with effFallEntry (args[1] type, args[2..4] position, args[5] width,
+ * args[6] drop height, args[7] direction, args[8] count, args[9] duration) and stores the effect in args[0].
+ */
 USER_FUNC(eff_fall_entry) {
     EvtWord* args = event->args;
     s32 var = args[0];
@@ -1674,6 +1679,10 @@ USER_FUNC(eff_fall_entry) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou2_00002770, JP tou2 .text+0x26AC. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper (JP and later): blocks until the falling object in args[0] has landed far enough for its hit to
+ * apply (effFallCheckHit); returns at once for NULL.
+ */
 USER_FUNC(eff_fall_hit_wait) {
     EffectEntry* eff = (EffectEntry*)evtGetValue(event, event->args[0]);
 
@@ -1684,6 +1693,15 @@ USER_FUNC(eff_fall_hit_wait) {
 }
 #endif
 
+/**
+ * Rawk Hawk's roof shake while hanging from the ceiling (weapon in LW(9),
+ * weapon_champion_roof_shake_attack: 1 damage per object):
+ * ten times he picks a target, shakes the ceiling and drops a bucket,
+ * a tub or a light (fall types 4, 5, 8) on it, each hit or dodge resolving when the object lands.
+ * JP and later wait for all ten drops (event ids kept in parts work 0 to 9)
+ * before a final check with weapon_champion_roof_shake_last_attack on Mario, or the shell guarding him,
+ * and on the partner; the demos make that final check on Mario and the partner after a fixed 32 frames.
+ */
 EVT_BEGIN(roof_shake_attack_event)
 #if VERSION > VERSION_DEMO_US
     SET_VALUE(LW(15), 0)

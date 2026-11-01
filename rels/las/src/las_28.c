@@ -510,6 +510,13 @@ CALL(evt_party_set_pose, 0, STRING("PBM_D_3"))
     RETURN
 EVT_END()
 
+/**
+ * Event script: the Sir Grodus scene in the Queen's Chamber (las_28).
+ * Grodus (シュリョー) gloats over the imprisoned Peach and the third-force music plays; he fights Mario in battle 15.
+ * Afterwards Peach, held in her barrier, speaks to Mario,
+ * Grodus shocks Mario and the partner with lightning (syuryo_thunder), and Mario answers a yes/no question.
+ * The scene ends by starting koopa_evt.
+ */
 EVT_BEGIN(syuryo_evt)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -925,6 +932,13 @@ EVT_BEGIN(gareki_fall)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Bowser crashes through the ceiling of the Queen's Chamber in a rain of rubble,
+ * landing on top of Sir Grodus, and quarrels with him while Kammy Koopa (ババ) flies in.
+ * Mario fights Bowser and Kammy in battle 13; the barrier around Peach drops afterwards,
+ * Bowser and Kammy are left dazed with spinning stars, Grodus (now cracked) staggers away,
+ * and the story moves to STG8_15_GRODUS. Bowser and Kammy get talk events (koopa_talk/baba_talk).
+ */
 EVT_BEGIN(koopa_evt)
     CALL(evt_party_stop, 0)
 #if VERSION <= VERSION_DEMO_US

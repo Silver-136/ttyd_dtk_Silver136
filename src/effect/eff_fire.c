@@ -596,8 +596,10 @@ void effFireDisp2(CameraId cameraId, EffectEntry* effect) {
 
 /** Draws the spark particles (types 5-7) around the flame. */
 #if VERSION <= VERSION_DEMO_US
+/** Draws the spark particles (types 5-7) around the flame. */
 static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
 #else
+/** Draws the spark particles (types 5-7) around the flame. */
 void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
 #endif
     CameraEntry* camera;

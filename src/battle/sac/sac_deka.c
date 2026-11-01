@@ -143,6 +143,12 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(main_deka) {
 #else
+/**
+ * Runs Earth Tremor every frame: the timing game, its gauge and markers, the Crystal Star,
+ * the enemies on the rippling floor and the floor mesh, then queues the displays.
+ * args[0] is the partner's unit id (-1 = none).
+ * The retail releases end it once yuka_end has freed the floor buffers; the demo has no such exit.
+ */
 USER_FUNC(main_deka) {
 #endif
     EvtWord* args;
@@ -323,8 +329,16 @@ static void yuka_main(void) {
  * The retail releases also null the buffer addresses, which is what lets main_deka finish.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Frees the floor texture and mesh and clears the stg_b_yuka flags again.
+ * The retail releases also null the buffer addresses, which is what lets main_deka finish.
+ */
 static USER_FUNC(yuka_end) {
 #else
+/**
+ * Frees the floor texture and mesh and clears the stg_b_yuka flags again.
+ * The retail releases also null the buffer addresses, which is what lets main_deka finish.
+ */
 USER_FUNC(yuka_end) {
 #endif
     DekaWork* w = get_ptr();
@@ -1265,8 +1279,16 @@ EVT_END()
  * The retail releases skip it once the buffers are freed.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the rippling floor as 128 textured quads along the strip, using the captured floor texture.
+ * The retail releases skip it once the buffers are freed.
+ */
 static void yuka_disp(CameraId cam, void* param) {
 #else
+/**
+ * Draws the rippling floor as 128 textured quads along the strip, using the captured floor texture.
+ * The retail releases skip it once the buffers are freed.
+ */
 void yuka_disp(CameraId cam, void* param) {
 #endif
     DekaWork* w;

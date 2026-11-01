@@ -675,6 +675,13 @@ static EVT_BEGIN(battle_entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Init script of Bonetail: marks the unit with flag 0x1000000, registers the wait, phase,
+ * attack and damage handlers, uses the default confusion handler,
+ * sets part 1 as the talking body and its base scale to (1.3, 1.3, 0.5), clears unit work 0 (stage 0),
+ * sets unit work 1 to 2 (recoveries left), clears unit work 2 (has spoken the recovery line)
+ * and installs battle_entry_event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -692,6 +699,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage script of Bonetail: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -699,6 +707,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Hit reaction of Bonetail: plays the head-hit pose (GNB_D_2) when the damaged part is part 1,
+ * otherwise GNB_D_1. A miss (zero damage) plays a miss sound at the hit spot. Lasts one second.
+ */
 EVT_BEGIN(zonbaba_damage_sub_event)
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(11))
     IF_INT_EQUAL(LW(11), 1)
@@ -715,6 +727,12 @@ EVT_BEGIN(zonbaba_damage_sub_event)
     RETURN
 EVT_END()
 
+/**
+ * Defeat script of Bonetail: it collapses onto its side (GNB_X_1),
+ * the camera pulls back and Bonetail says its last words (tik_boss_16).
+ * It then topples over (GNB_D_3, GNB_H_1 to H_3) with a camera shake and the fall sounds,
+ * the experience is paid out, and Bonetail is removed from the battle.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_X_1"))
     CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_DOWN1"), EVT_NULLPTR, 0, -250, 0, 0, LW(15))
@@ -785,6 +803,12 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Bonetail's phase script, run after the player's phase while it can act.
+ * Unit work 0 holds its stage: stage 0 moves to stage 1 once its HP is at or below 50 percent of the maximum;
+ * stage 1 moves to stage 2 at 25 percent, with the line tik_boss_15.
+ * The stage selects the move table in attack_event.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_EQUAL(LW(0), 0)
@@ -820,6 +844,12 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Bonetail's trampling attack (fumituke): it takes a few steps forward with a dust cloud
+ * and a camera shake at each footstep, raises an arm (GNB_A_3, SFX_BOSS_GNB_ARM_UP1 and ARM_DOWN1)
+ * and brings it down on the target, then steps back.
+ * The target is checked for avoidance and takes the damage if the arm lands on it.
+ */
 static EVT_BEGIN(fumituke_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -923,6 +953,10 @@ static EVT_BEGIN(fumituke_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Bonetail's bite: it picks a target, plays the bite sounds and opens its jaws (GNB_A_2)
+ * and the target takes the damage if the bite connects.
+ */
 static EVT_BEGIN(kamituki_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -974,6 +1008,12 @@ static EVT_BEGIN(kamituki_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Bonetail's breath attack (first variant, GNB_A_1):
+ * it samples all enemies, raises its neck and spits the breath effect whose type matches the weapon (cold,
+ * confusion, sleep or tiny), then checks each target in turn for avoidance or damage,
+ * and the Action Command defence.
+ */
 EVT_BEGIN(breath1_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1068,6 +1108,11 @@ EVT_BEGIN(breath1_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Bonetail's breath attack (second variant, GNB_A2_1 to GNB_A2_3):
+ * the same breath effects and per-target damage checks as breath1_attack_event,
+ * but with a different wind-up (the neck rises first, 1.8 s before the breath).
+ */
 EVT_BEGIN(breath2_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1188,6 +1233,13 @@ EVT_BEGIN(recover_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of Bonetail.
+ * After an item check it draws lots by stage, with weights stomp 25, bite 20 and 10 each for the cold,
+ * confusion, sleep and tiny breaths.
+ * From stage 1 it can also heal itself (recover_event), with a weight of 20 (50 in stage 2),
+ * while it has recoveries left in unit work 1. The demo builds use weights 30 and 15 for the stomp and bite.
+ */
 static EVT_BEGIN(attack_event)
 #if VERSION <= VERSION_DEMO_US
     // Use an item if it has one; otherwise choose a move by stage.

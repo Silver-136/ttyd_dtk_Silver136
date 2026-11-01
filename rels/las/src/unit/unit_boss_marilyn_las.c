@@ -461,6 +461,13 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Marilyn's turn: uses an enemy item if she has one;
+ * otherwise draws lots between the shadow-slip attack,
+ * the lightning attack and a charge-up (weights 40/35/25 in the retail releases, 50/25/25 in the demos).
+ * The charge-up has weight 25 only while she has charged fewer than twice in a row (unit work 9 counts charges
+ * and resets after either attack).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

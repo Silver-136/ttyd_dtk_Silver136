@@ -119,6 +119,10 @@ void partyPaperLightOff(PartyEntry* party) {
 #define PARTY_PINCH_HP 5
 #endif
 
+/**
+ * TRUE when one of the seven partners is in a pinch:
+ * HP at or below PARTY_PINCH_HP (1 in the demos, 5 in the full game), which switches her to the tired pose set.
+ */
 static inline BOOL partyIsPinch(PartyEntry* party) {
     BOOL pinch = FALSE;
 
@@ -858,8 +862,15 @@ static inline void partyChgRunMo(PartyEntry* party);
  */
 // Descriptive name (not in the symbol maps).
 #if VERSION <= VERSION_DEMO_US
+/** the demo only leaves the hello state (4) and runs the post function (3) on a run-mode change */
 static inline void partyLeaveRunMode(PartyEntry* party) {
 #else
+/**
+ * Cleanup when the partner leaves run mode prev for mode:
+ * gets off a ride (11) unless she is leaving, ends the hello pop-out (4) back into following,
+ * shows the shadow again after riding Yoshi (12), ends her ability (3),
+ * and drops the paper slit from waiting/following.
+ */
 void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
 #endif
     MarioWork* mario;
@@ -932,6 +943,11 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
 #if VERSION > VERSION_DEMO_US
 #pragma dont_inline on
 #endif
+/**
+ * Switches the partner to run mode mode (0 stand, 1 wait, 2 follow, 3 ability, 4-7 appear, 8 goodbye,
+ * 9 forced walk, 10 pipe, 11 ride, 12 ride Yoshi, 13 return after damage, 14 delete),
+ * remembering the old mode for partyPrevRunMode. The demo only ends the appear and ability modes.
+ */
 void partyChgRunMode(PartyEntry* party, s32 mode) {
 #if VERSION <= VERSION_DEMO_US
     partyLeaveRunMode(party);
@@ -973,6 +989,10 @@ partyLeaveRunMode(party);
     party->motionStep = sub;
 }
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Returns the partner to the run mode she had before the current one,
+ * ending her ability first (evt_party and party_move).
+ */
 void partyPrevRunMode(PartyEntry* party) {
     if (party->runMode == party->prevRunMode) {
         return;
@@ -992,6 +1012,10 @@ void partyPrevRunMode(PartyEntry* party) {
  * ending her ability first (evt_party and party_move).
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Returns the partner to the run mode she had before the current one,
+ * ending her ability first (evt_party and party_move).
+ */
 void partyPrevRunMode(PartyEntry* party) {
     if (party->runMode == party->prevRunMode) {
         return;
@@ -1085,8 +1109,18 @@ s32 partyDokanMain(PartyEntry* party);
  * A frozen partner only gets drawn. Afterwards updates dust, the off-screen flag and her display.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Runs one partner's frame by run mode (see partyChgRunMode):
+ * her move, ability, appear, goodbye, pipe, ride and damage handlers, or frees her in mode 14.
+ * A frozen partner only gets drawn. Afterwards updates dust, the off-screen flag and her display.
+ */
 static void driveParty(PartyEntry* party) {
 #else
+/**
+ * Runs one partner's frame by run mode (see partyChgRunMode):
+ * her move, ability, appear, goodbye, pipe, ride and damage handlers, or frees her in mode 14.
+ * A frozen partner only gets drawn. Afterwards updates dust, the off-screen flag and her display.
+ */
 void driveParty(PartyEntry* party) {
 #endif
     MarioWork* mario;
@@ -1633,6 +1667,12 @@ static inline void partyChgRunM(PartyEntry* party) {
  * Ends Vivian's tail effect.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Puts the partner in the pipe with Mario (run mode 10):
+ * she takes Mario's position facing backwards and turns into the spinning pipe paper,
+ * p_dokan_y for the vertical pipe kinds (Mario's dokanType 0-3) and p_dokan_x for the sideways ones (4, 5).
+ * Ends Vivian's tail effect.
+ */
 s32 partyDokanInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
@@ -1683,6 +1723,12 @@ s32 partyDokanInit(PartyEntry* party) {
 return 0;
 }
 #else
+/**
+ * Puts the partner in the pipe with Mario (run mode 10):
+ * she takes Mario's position facing backwards and turns into the spinning pipe paper,
+ * p_dokan_y for the vertical pipe kinds (Mario's dokanType 0-3) and p_dokan_x for the sideways ones (4, 5).
+ * Ends Vivian's tail effect.
+ */
 s32 partyDokanInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
@@ -1811,6 +1857,12 @@ s32 partyDokanInit(PartyEntry* party) {
  * then returns to normal and waits beside Mario, offset so two partners do not overlap.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The partner's frames in the pipe (run mode 10):
+ * she spins at Mario's position, growing back to full size on the vertical kinds;
+ * once partyDokanEnd sets step 100 she plays the PM_D_1B exit paper for 18 frames,
+ * then returns to normal and waits beside Mario, offset so two partners do not overlap.
+ */
 s32 partyDokanMain(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     s32 n;
@@ -1884,6 +1936,12 @@ break;
     return 0;
 }
 #else
+/**
+ * The partner's frames in the pipe (run mode 10):
+ * she spins at Mario's position, growing back to full size on the vertical kinds;
+ * once partyDokanEnd sets step 100 she plays the PM_D_1B exit paper for 18 frames,
+ * then returns to normal and waits beside Mario, offset so two partners do not overlap.
+ */
 s32 partyDokanMain(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     s32 n;
@@ -2080,8 +2138,16 @@ void allPartyRideJabara(void) {
         partyChgRunMode(party, 11);
     }
 }
+/**
+ * Where the partner rides with Mario: behind him on Yoshi (the follower behind the main partner),
+ * above him in plane mode, in front of the boat in boat mode (not in the demos), otherwise 20 above him.
+ */
 static void getRidePos(PartyEntry* party, Vec* pos) {
 #else
+/**
+ * Where the partner rides with Mario: behind him on Yoshi (the follower behind the main partner),
+ * above him in plane mode, in front of the boat in boat mode (not in the demos), otherwise 20 above him.
+ */
 void getRidePos(PartyEntry* party, Vec* pos) {
 #endif
     MarioWork* mario = party->playerPtr;
@@ -2172,6 +2238,11 @@ void L_allPartyRideOn(void) {
     }
 }
 
+/**
+ * Makes both riding partners hop off Mario to their appear position (step 100) when he leaves the rolling,
+ * bellows or boat mode.
+ * In the US and PAL releases, a partner that has not started riding yet just goes back to waiting.
+ */
 void allPartyRideOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party && party->runMode == PARTY_RUN_RIDE) {
@@ -2582,6 +2653,7 @@ party->moveDir = ((MarioWork*)mario)->moveDirection;
 }
 /** Resets the partner's scale and display offset when she leaves the ride mode. */
 #if VERSION > VERSION_DEMO_US
+/** Resets the partner's scale and display offset when she leaves the ride mode. */
 static inline void partyChgRunMo(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
     party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
@@ -2597,15 +2669,24 @@ static inline void partyChgRunMo(PartyEntry* party) {
 #include "driver/npcdrv.h"
 extern f32 partyNrmToAngle(Vec* n);
 extern s32 marioPlaneGetFlyingDir(void);
+/** TRUE when hit is a floor the partner may stand on (not flagged with hit attributes 0x200 or 0x800). */
 static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     return hit == NULL ? FALSE : (hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_SPIKES)) == 0;
 }
+/** Slope angle in degrees of the floor normal n (partyNrmToAngle on a copy). */
 static inline f32 partyAppearNrmAngle(Vec n) {
     return partyNrmToAngle(&n);
 }
+/** Moves out by d units against direction ang (behind it). */
 static inline void partyAppearMoveBack(Vec* out, f32 d, f32 ang) {
     movePos(&out->x, &out->z, -d, ang);
 }
+/**
+ * Demo copy of the appear-position search (retail has it in party_move.c):
+ * finds a free spot with floor 30 units from Mario for the partner to land on, trying behind him first,
+ * then his sides and front; with a follower present the two take mirrored offsets.
+ * In plane mode only checks behind. Returns FALSE if no spot has floor within 100 below.
+ */
 BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
     HitCheckQuery query;
     f32 s;
@@ -2795,6 +2876,11 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
     }
     return FALSE;
 }
+/**
+ * Demo copy of the spot search for a partner placed directly (partyEntry, landing from plane mode):
+ * 30 units behind Mario, or beside him when a follower is present, needing floor within one step below.
+ * Returns FALSE if none fits.
+ */
 BOOL partyGetAppearPos2(PartyEntry* party, Vec* out) {
     HitCheckQuery query;
     f32 s;
@@ -2869,6 +2955,12 @@ BOOL partyGetAppearPos2(PartyEntry* party, Vec* out) {
     }
     return FALSE;
 }
+/**
+ * Demo copy of the search for a free spot around Mario (Goombella's and Ms. Mowz's moves,
+ * the partner motion code): tries nine directions starting diagonally behind him, needing open space,
+ * a flat enough walkable floor (60 degrees at most) and no NPC in the way, then pushes the spot off walls.
+ * Returns FALSE if none fits.
+ */
 BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
     HitCheckQuery query;
     s32 angles[9] = {45, 135, -135, 315, -315, 180, -180, 90, -90};
@@ -2922,6 +3014,11 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
     }
     return FALSE;
 }
+/**
+ * Demo copy of the search for a spot near the partner's home direction (partner motion code):
+ * starts from Mario, or from the other partner for a follower, and tries eleven directions around it;
+ * falls back to partyGetAppearPos. Returns TRUE only if one of its own directions fits.
+ */
 BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
     PartyEntry* other;
     MarioWork* mario = party->playerPtr;
@@ -2995,6 +3092,10 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
 }
 const Vec party_unused_zero_vec0 = {0.0f, 0.0f, 0.0f};
 const Vec party_unused_zero_vec1 = {0.0f, 0.0f, 0.0f};
+/**
+ * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
+ * used by party_yoshi when Mario mounts Yoshi.
+ */
 void party_force_ride_yoshi(PartyEntry* party) {
     Vec pos;
 
@@ -3009,6 +3110,10 @@ void party_force_ride_yoshi(PartyEntry* party) {
     party->moveDir = toMovedir(party->displayDirectionTarget);
 }
 #else
+/**
+ * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
+ * used by party_yoshi when Mario mounts Yoshi.
+ */
 void party_force_ride_yoshi(PartyEntry* party) {
     Vec pos;
 
@@ -3102,6 +3207,11 @@ s32 partyRideYoshiMain(PartyEntry* party) {
  * waits for Mario's return fall, then drops her in from above next to him and resumes following.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Brings the partner back after Mario takes damage from a pit or spikes (run mode 13):
+ * after a splash it waits 100 frames, plays her hurt pose, flies her up off screen,
+ * waits for Mario's return fall, then drops her in from above next to him and resumes following.
+ */
 static void party_damage_return(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 x, y, z;
@@ -3205,6 +3315,11 @@ party->motionStep = 23;
     }
 }
 #else
+/**
+ * Brings the partner back after Mario takes damage from a pit or spikes (run mode 13):
+ * after a splash it waits 100 frames, plays her hurt pose, flies her up off screen,
+ * waits for Mario's return fall, then drops her in from above next to him and resumes following.
+ */
 void party_damage_return(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 x, y, z;
@@ -3431,8 +3546,18 @@ void partyMakeDispDir(PartyEntry* party) {
  * then draws her shadow, following Vivian's shadow tail when she is out or used.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Applies the partner's pose and paper animation changes,
+ * advances her model and queues her draw at her screen depth (flickering while invincible after damage),
+ * then draws her shadow, following Vivian's shadow tail when she is out or used.
+ */
 static void partyPreDisp(PartyEntry* party) {
 #else
+/**
+ * Applies the partner's pose and paper animation changes,
+ * advances her model and queues her draw at her screen depth (flickering while invincible after damage),
+ * then draws her shadow, following Vivian's shadow tail when she is out or used.
+ */
 void partyPreDisp(PartyEntry* party) {
 #endif
     Vec screen;
@@ -3531,8 +3656,18 @@ if (party->currentMemberId == PARTY_MEMBER_VIVIAN && !(party->work.vivian.tailFl
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draw callback for the partner: builds her model matrix (scale 2, or 1.2 in background mode; left/right mirror;
+ * rotations; offsets; a small per-member height fix for paper animations outside the demos) and draws the model,
+ * slowed to 0.75 in shallow water.
+ */
 static void partyDisp(CameraId cam, void* param) {
 #else
+/**
+ * Draw callback for the partner: builds her model matrix (scale 2, or 1.2 in background mode; left/right mirror;
+ * rotations; offsets; a small per-member height fix for paper animations outside the demos) and draws the model,
+ * slowed to 0.75 in shallow water.
+ */
 void partyDisp(CameraId cam, void* param) {
 #endif
     PartyEntry* party = param;

@@ -383,6 +383,7 @@ static USER_FUNC(tama_shoot_kemuri_entry) {
     evtSetValue(event, args[3], (s32)effKemuTestEntry(11, x, y, z, 1.0f));
     return EVT_RETURN_DONE;
 }
+/** Turns the smoke from tama_shoot_kemuri_entry; the effect pointer goes through effNameToPtr as is. */
 static USER_FUNC(tama_shoot_kemuri) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -393,6 +394,11 @@ static USER_FUNC(tama_shoot_kemuri) {
     return EVT_RETURN_DONE;
 }
 #endif
+/**
+ * Script helper that keeps the X-Naut ship's crowd (mass NPCs 205 to 304) riding along with the ship:
+ * adds the turn from angle args[0] to args[1] to each NPC's orbit angle
+ * and places it on its circle around the ship centre (args[2], args[3]).
+ */
 USER_FUNC(dai3_butai_main_func) {
     s32 d;
     EvtWord* args = event->args;
@@ -3003,6 +3009,12 @@ EVT_END()
  * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The big scene of Keelhaul Key: the pirate and X-Naut ships come together,
+ * Cortez and Lord Crump (the X-Naut "third force", dai3) trade insults (stg5_muj_118 to 123),
+ * crowds of sailors leap between the ships, and Mario fights Lord Crump in a battle.
+ * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
+ */
 EVT_BEGIN(kaizoku_vs_dai3)
     // The fight begins: Mario loses control and the crowds on both ships are set up.
     CALL(evt_mario_key_onoff, 0)
@@ -3154,6 +3166,12 @@ CALL(evt_npc_release_filednpc, 1)
     RETURN
 EVT_END()
 #else
+/**
+ * The big scene of Keelhaul Key: the pirate and X-Naut ships come together,
+ * Cortez and Lord Crump (the X-Naut "third force", dai3) trade insults (stg5_muj_118 to 123),
+ * crowds of sailors leap between the ships, and Mario fights Lord Crump in a battle.
+ * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
+ */
 EVT_BEGIN(kaizoku_vs_dai3)
     // The fight begins: Mario loses control and the crowds on both ships are set up.
     CALL(evt_mario_key_onoff, 0)
@@ -3487,6 +3505,12 @@ EVT_END()
  * the game autosaves and the map changes to aji_10 (Pirate's Grotto).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * After Lord Crump is beaten the X-Naut ship retreats:
+ * resets the ships' positions, Crump curses (stg5_muj_125), the ship sails away,
+ * Mario's party comments (stg5_muj_126), the story becomes STG5_43_X_NAUTS_RETREAT,
+ * the game autosaves and the map changes to aji_10 (Pirate's Grotto).
+ */
 EVT_BEGIN(dai3_beat_back)
     CALL(evt_mario_key_onoff, 0)
 CALL(evt_mario_cont_onoff, 1)
@@ -3553,6 +3577,12 @@ CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     RETURN
 EVT_END()
 #else
+/**
+ * After Lord Crump is beaten the X-Naut ship retreats:
+ * resets the ships' positions, Crump curses (stg5_muj_125), the ship sails away,
+ * Mario's party comments (stg5_muj_126), the story becomes STG5_43_X_NAUTS_RETREAT,
+ * the game autosaves and the map changes to aji_10 (Pirate's Grotto).
+ */
 EVT_BEGIN(dai3_beat_back)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pose, STRING("M_S_1"))

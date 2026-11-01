@@ -1261,6 +1261,10 @@ static USER_FUNC(make_name) {
     return EVT_RETURN_DONE;
 }
 #endif
+/**
+ * Message callback for kpa_stg1_008: when the text reaches page 1 it sets LSWF(1),
+ * which lets the Hammer Bro turn toward Bowser.
+ */
 void kpa_stg1_008_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 

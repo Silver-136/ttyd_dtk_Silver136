@@ -86,6 +86,7 @@ EVT_END()
 
 /** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
 #if VERSION > VERSION_DEMO_US
+/** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_none)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -94,6 +95,7 @@ EVT_END()
 
 /** Arrival through a gate entrance (type 3): no walk-in, just gives control back to the player. */
 #if VERSION > VERSION_DEMO_US
+/** Arrival through a gate entrance (type 3): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_gate)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -121,6 +123,10 @@ BeroEntry bero_null[] = {
     },
 };
 #endif
+/**
+ * Sets where Mario respawns after falling into a bottomless pit; args are x, y, z as whole numbers.
+ * Retail only (the demos lack it).
+ */
 USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
     EvtWord* args = event->args;
     s32 x, y, z;
@@ -1937,11 +1943,16 @@ EVT_END()
  * while partners follow closely (homing distance 20, back to 50 after).
  */
 #if VERSION <= VERSION_DEMO_US
+/** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_none)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 #endif
+/**
+ * Arrival by road: Mario walks from the map edge to the end point
+ * while partners follow closely (homing distance 20, back to 50 after).
+ */
 EVT_BEGIN(evt_bero_info_run_road)
     PEEK_FLOAT(LW(13), PTR(&BeroEX))
     PEEK_FLOAT(LW(14), PTR(&BeroEY))
@@ -2030,11 +2041,17 @@ EVT_END()
  * sets the pipe fade and spawns the walk-in.
  */
 #if VERSION <= VERSION_DEMO_US
+/** Arrival through a gate entrance (type 3): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_gate)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 #endif
+/**
+ * Map-entry script run after evt_bero_get_info: on a save load just registers exits;
+ * otherwise sets up Mario (background mode, partners, pipe pose), places him,
+ * sets the pipe fade and spawns the walk-in.
+ */
 EVT_BEGIN(evt_bero_info_run)
     // Find the entrance Mario arrived by and whether he is in paper form.
     CALL(evt_bero_get_into_info)

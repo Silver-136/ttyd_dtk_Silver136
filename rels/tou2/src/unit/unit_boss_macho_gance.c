@@ -1003,6 +1003,14 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Data events 24 to 36 (JP and later), which the standard damage reaction runs for the counter-damage codes 43
+ * to 55, with the damage code in LW(0) and the unit in LW(10):
+ * picks the hurt pose type (36 with a miss sound for code 43, 29 for 46, 49, 50 and 54, otherwise 39;
+ * codes 43 to 46 also play Mario's hurt voice if the unit is Mario) and runs data event 10 alongside.
+ * He is knocked 25 units back and up, waits half a second
+ * and comes back toward his home position in three shrinking hops, each landing shaking the camera.
+ */
 EVT_BEGIN(macho_gance_damage_event)
     CALL(btlevtcmd_ResetFaceDirection, LW(10))
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)

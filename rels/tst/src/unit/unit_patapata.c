@@ -312,6 +312,12 @@ static EVT_BEGIN(patapata_dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Attack of the flying Koopa Paratroopa: picks a target as in attack_event, flies in behind/above it,
+ * flaps up (PTP_A_1, PTP_A_4) and dive-kicks it. In a flag-2 battle the attack uses an extra damage flag.
+ * A miss makes it fly past and loop away; a hit shakes the camera,
+ * the Paratroopa somersaults away (a 24-frame spin) and then returns to its home position.
+ */
 static EVT_BEGIN(attack_event_patapata)
     // Choose the target: the First Strike target if the battle opened with one,
     // otherwise it may use an item or pick a normal target.
@@ -648,6 +654,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the Koopa is flipped onto its back:
+ * lowers its hit offset, switches part 1 to the upside-down defence table and pose table,
+ * sets the overturn status flag and an overturn count of 2,
+ * plays the flip pose (NKT_D_1) and sound and lets it fall back with two bounces.
+ */
 static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -15, 0)
     SET_VALUE(LW(10), -2)
@@ -667,6 +679,12 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs on the Koopa's turn while it is on its back: counts the overturn count down.
+ * While it is still above 0 the Koopa only wiggles (NKT_S_3) and goes back to waiting;
+ * at 0 it restores the normal defence table and pose table, clears the overturn flag, plays the wake-up sound,
+ * hops upright and restarts the wait event.
+ */
 // Use this turn to reduce the overturned count; reaching zero restores the standing form without attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)

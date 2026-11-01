@@ -832,6 +832,10 @@ USER_FUNC(dist_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Talk script for the stone tablet in front of the pillars (a_moji) once both stones are placed:
+ * shows the tablet message stg1_hei_02_01 (skipped when a cutscene has taken control away in JP and later).
+ */
 EVT_BEGIN(moji_msg)
 #if VERSION > VERSION_DEMO_US
     CALL(hei_00_mario_keyoff_check, LW(0))

@@ -292,6 +292,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)
 #if VERSION <= VERSION_DEMO_US
 SET_VALUE(LW(10), -2)
@@ -368,6 +369,7 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Idle: plays the stay pose from the current pose table (normal or flipped). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -791,6 +793,10 @@ EVT_END()
  * the action command (charging the spin) setting the damage, then bounces back home.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Koops's Shell Toss: he spins in his shell along the ground into the front enemy,
+ * the action command (charging the spin) setting the damage, then bounces back home.
+ */
 EVT_BEGIN(partyNokotarouAttack_NormalAttack)
     // Find the chosen enemy and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1032,6 +1038,10 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
     RETURN
 EVT_END()
 #else
+/**
+ * Koops's Shell Toss: he spins in his shell along the ground into the front enemy,
+ * the action command (charging the spin) setting the damage, then bounces back home.
+ */
 EVT_BEGIN(partyNokotarouAttack_NormalAttack)
     // Find the chosen enemy and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1288,6 +1298,10 @@ EVT_END()
  * the action command deciding the damage, then returns home.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Koops's Power Shell: he spins in his shell and sweeps through every enemy on the ground,
+ * the action command deciding the damage, then returns home.
+ */
 EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1502,6 +1516,10 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
     RETURN
 EVT_END()
 #else
+/**
+ * Koops's Power Shell: he spins in his shell and sweeps through every enemy on the ground,
+ * the action command deciding the damage, then returns home.
+ */
 EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1743,6 +1761,11 @@ BattleUnitSetup entry_koura = {
     NULL, // itemDropTable
 };
 #endif
+/**
+ * Koops's Shell Shield: removes any existing shell,
+ * then drops a new shell unit (unit_koura) over Mario whose HP the action command sets.
+ * Mario is hidden and untargetable inside it; if he still has a move, the shell opens again.
+ */
 EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     // Find Mario as the target and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -2001,6 +2024,11 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     RETURN
 EVT_END()
 #else
+/**
+ * Koops's Shell Shield: removes any existing shell,
+ * then drops a new shell unit (unit_koura) over Mario whose HP the action command sets.
+ * Mario is hidden and untargetable inside it; if he still has a move, the shell opens again.
+ */
 EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     // Find Mario as the target and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -2273,6 +2301,10 @@ EVT_END()
  * the charge level) and slams through every ground enemy, ignoring defence, then returns home.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Koops's Shell Slam: he charges a spin with the action command (_tsuranuki_effect_control grows the effect with
+ * the charge level) and slams through every ground enemy, ignoring defence, then returns home.
+ */
 EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -2556,6 +2588,10 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     RETURN
 EVT_END()
 #else
+/**
+ * Koops's Shell Slam: he charges a spin with the action command (_tsuranuki_effect_control grows the effect with
+ * the charge level) and slams through every ground enemy, ignoring defence, then returns home.
+ */
 EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -2993,6 +3029,7 @@ static StatusVulnerability regist = {
 
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 #if VERSION > VERSION_DEMO_US
+/** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -3008,6 +3045,7 @@ EVT_END()
 
 /** Idle: plays the stay pose from the current pose table (normal or flipped). */
 #if VERSION > VERSION_DEMO_US
+/** Idle: plays the stay pose from the current pose table (normal or flipped). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

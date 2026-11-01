@@ -373,12 +373,17 @@ void seq_gameOverInit(SequenceWork* work) {
     marioStSystemLevel(4);
 }
 
+/** Leaves the game over sequence: fades out all sound and restarts events. */
 void seq_gameOverExit(SequenceWork* work) {
     psndStopAllFadeOut();
     marioStSystemLevel(0);
 }
 #endif
 
+/**
+ * seq_gameOverMain is defined last: functions are emitted in reverse order (-inline deferred),
+ * so it comes first in the object.
+ */
 void seq_gameOverMain(SequenceWork* work) {
     CameraEntry* camera;
     MarioWork* mario;
@@ -527,6 +532,7 @@ void seq_gameOverInit(SequenceWork* work) {
     marioStSystemLevel(4);
 }
 
+/** Leaves the game over sequence: fades out all sound and restarts events. */
 void seq_gameOverExit(SequenceWork* work) {
     psndStopAllFadeOut();
     marioStSystemLevel(0);

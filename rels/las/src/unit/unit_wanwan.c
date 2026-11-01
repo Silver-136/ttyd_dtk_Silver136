@@ -343,6 +343,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Counter-damage event of the Chain-Chomp: after it is hit by a counter-type attack it is thrown into the air
+ * and tumbles back to the ground (in the US and later versions the landing is handled by the engine),
+ * then returns to its idle pose unless it was hit by damage code 512 without 2048.
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_SetPartsFallAccel, LW(10), 1, FLOAT(1.0f))
@@ -744,6 +749,13 @@ EVT_END_PAD()
  * and with work[2] == 1 it keeps the recorded shape fixed (used after the chomp is knocked loose).
  */
 #endif
+/**
+ * Script helper (runs every frame): lays out the Chain-Chomp's chain.
+ * The chain has nine parts; part 9 is the stake behind the chomp and parts 2..8 are the links.
+ * Normally the links hang like a catenary between the chomp (part 1) and the stake,
+ * sagging by 300 / length squared; with work[2] == 2 it records the current shape
+ * and with work[2] == 1 it keeps the recorded shape fixed (used after the chomp is knocked loose).
+ */
 static USER_FUNC(chain_main) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

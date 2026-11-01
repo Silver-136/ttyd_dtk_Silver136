@@ -7,7 +7,7 @@ Paper Mario: The Thousand-Year Door
 [Data Progress]: https://img.shields.io/badge/Data-100.00%25-blue
 [Linked Progress]: https://img.shields.io/badge/Linked-100.00%25-blue
 
-A matching decompilation of Paper Mario: The Thousand-Year Door. The Japanese (G8MJ01) and US (G8ME01) releases are complete: every function is matched from C and each build reproduces its original game byte for byte.
+A matching decompilation of Paper Mario: The Thousand-Year Door. Five versions are complete: the Japanese (G8MJ01), US (G8ME01) and European (G8MP01) releases and the Japanese and US demos (G8MJ01_DEMO, G8ME01_DEMO). Every unit is built from C and each build reproduces its original game byte for byte.
 
 ## Origins and credit
 
@@ -17,7 +17,7 @@ It is an **independent project and is not affiliated with doldecomp**. The code 
 
 ## Cleanup
 
-With both releases matching, the work here is cleanup: the C should read like plausible original source, with no matching tricks left, while both builds stay byte-identical to the retail game. Every change is checked against both releases (hashes) and objdiff (100 % code and data). Highlights so far:
+With every version matching, the work here is cleanup: the C should read like plausible original source, with no matching tricks left, while all builds stay byte-identical to the original games. The European release and the demos came from LLCOOLT's tree (with the author's permission), adapted to this tree's names. Every change is checked against all five versions (hashes) and objdiff (100 % code and data). Highlights so far:
 
 - **MSL math headers as precompiled headers.** Every unit of the original carries constants from MSL's paired-single sine/cosine helpers and the sqrtf inline, which the compiler emits when the math headers are precompiled. The units now load `include/msl_rel.pch` / `include/msl_main.pch` (`libs/msl/include/math.h`, `libs/msl/include/dtrigf.h`, our own reconstruction) instead of carrying about 17,000 lines of hand-made copies; the RELs are linked without stripping, as the originals were, so none of the 600 REL `force_active` pragmas is needed.
 - **No dead-strip guards**: functions the linker strips are ordinary C again (the JP demo's linker maps list them as unused).
@@ -69,6 +69,9 @@ Supported versions:
 
 - `G8MJ01`: Rev 0 (JP), the default
 - `G8ME01`: Rev 0 (US)
+- `G8MP01`: European release
+- `G8ME01_DEMO`: US demo
+- `G8MJ01_DEMO`: Japanese demo
 
 Dependencies
 ============
@@ -181,8 +184,8 @@ Project layout
 Working on the code
 ===================
 
-- Keep the hash check passing for both versions. Rebuild JP and US (`configure.py --version ...` and `ninja` for each) before committing.
-- Use struct fields, never pointer arithmetic on raw offsets. Where the US release changed a struct, the US-only members sit inside `#ifdef VERSION_G8ME01` in the struct, so field accesses are right for both versions.
+- Keep the hash check passing for every version. Rebuild all five (`configure.py --version ...` and `ninja` for each) before committing.
+- Use struct fields, never pointer arithmetic on raw offsets. Where the US release changed a struct, the US-only members sit inside `#if VERSION >= VERSION_US` in the struct, so field accesses are right for every version. Game code tests the ordered `VERSION` from `include/version.h`; libs/ use the `VERSION_<id>` macros.
 - Script values and anything that may hold an address use the named types instead of `s32`: `EvtWord` for script words, `AddrWord` for address arithmetic, `SfxNameWord` for sound parameters that take a name or an id.
 - If a function needs a behaviour-identical trick to match, mark it with a `// FAKE:` comment that says what it does, and add a row to [docs/FAKES.md](docs/FAKES.md).
 - In the game code, inline asm appears only where the original source had it: the hardware helpers in `include/hwaccess.h` and the word copy `memcpy_as4` in `src/system.c`.

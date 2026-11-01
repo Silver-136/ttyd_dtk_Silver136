@@ -301,6 +301,10 @@ void marioForceRollAnime(void) {
     mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
+/**
+ * Starts unrolling (sub-motion 0x14) if Mario is in Tube Mode and could stand up here; returns 1 if it started.
+ * Used by evt_mario when a script needs Mario out of Tube Mode (JP and later).
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_8009f9c8, JP 0x8009F9C8. See docs/NAME_PROVENANCE.md.
 s32 marioRollTryCancel(void) {
     s32 ret = 0;
@@ -370,6 +374,11 @@ s32 marioRollCancel(void) {
  * clears Tube Mode and the paper animation, frees the motion's work and dismounts the partners.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Cleanup when the roll motion ends: stops the roll sound, resets the camera shift,
+ * turns Mario to face left or right on screen, restores his normal collision (marioSetSpec),
+ * clears Tube Mode and the paper animation, frees the motion's work and dismounts the partners.
+ */
 void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
 MarioWork* m;
@@ -411,6 +420,11 @@ m = marioGetPtr();
     allPartyRideOff();
 }
 #else
+/**
+ * Cleanup when the roll motion ends: stops the roll sound, resets the camera shift,
+ * turns Mario to face left or right on screen, restores his normal collision (marioSetSpec),
+ * clears Tube Mode and the paper animation, frees the motion's work and dismounts the partners.
+ */
 void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
     MarioWork* m = marioGetPtr();
@@ -466,6 +480,10 @@ void mot_roll_post(void) {
  * used by evt_mario.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Instantly turns Mario back from Tube Mode (the same reset as mot_roll_post) and puts him in the stay motion;
+ * used by evt_mario.
+ */
 void marioRollForceCancel(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
@@ -510,6 +528,10 @@ m = marioGetPtr();
     }
 }
 #else
+/**
+ * Instantly turns Mario back from Tube Mode (the same reset as mot_roll_post) and puts him in the stay motion;
+ * used by evt_mario.
+ */
 void marioRollForceCancel(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
@@ -655,6 +677,11 @@ static inline s32 rollChk(void) {
  * and unrolls with B when there is room. Plays the rolling loop sound and squashes the tube on landing.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Tube Mode motion: Mario rolls up into a tube, then rolls along with the stick,
+ * momentum and slope push (rollData constants), jumps a little with A (not on eki_04's steep slopes),
+ * and unrolls with B when there is room. Plays the rolling loop sound and squashes the tube on landing.
+ */
 void mot_roll(void) {
     MarioWork* mario = marioGetPtr();
     f32 v31;
@@ -1231,6 +1258,11 @@ if (mario->baseSpeed) {
     marioRollCan();
 }
 #else
+/**
+ * Tube Mode motion: Mario rolls up into a tube, then rolls along with the stick,
+ * momentum and slope push (rollData constants), jumps a little with A (not on eki_04's steep slopes),
+ * and unrolls with B when there is room. Plays the rolling loop sound and squashes the tube on landing.
+ */
 void mot_roll(void) {
     MarioWork* mario = marioGetPtr();
     f32 v31;

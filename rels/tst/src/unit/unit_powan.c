@@ -516,6 +516,7 @@ static USER_FUNC(powan_set_post_battle_event) {
 
 /** args: unit id, part id. Keeps the part on the "pPlane1" joint of the unit's body animation. */
 #if VERSION <= VERSION_DEMO_US
+/** args: unit id, part id. Keeps the part on the "pPlane1" joint of the unit's body animation. */
 static USER_FUNC(powan_rider_follow) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -549,6 +550,7 @@ static USER_FUNC(powan_rider_follow) {
 return EVT_RETURN_DONE;
 }
 #else
+/** args: unit id, part id. Keeps the part on the "pPlane1" joint of the unit's body animation. */
 static USER_FUNC(powan_rider_follow) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);

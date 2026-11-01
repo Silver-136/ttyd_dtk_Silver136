@@ -1106,8 +1106,16 @@ s32 goalincheck(YuuNpc* npc) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Picks a random steering error rate for an NPC (between about -0.25 and +0.25,
+ * narrower for some states in the demos), so the Paper Mode racers do not all take the same line.
+ */
 static void errper_set_rtn(YuuNpc* npc) {
 #else
+/**
+ * Picks a random steering error rate for an NPC (between about -0.25 and +0.25,
+ * narrower for some states in the demos), so the Paper Mode racers do not all take the same line.
+ */
 void errper_set_rtn(YuuNpc* npc) {
 #endif
     switch (npc->state) {
@@ -1542,8 +1550,22 @@ static inline void yuunpc_walk(YuuNpc* npc) {
  * and then update their pose.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame update of the Paper Mode crowd and racers. Spectators are handled like the other games.
+ * Racers read the terrain code under them to pick a destination,
+ * react to the current wind state of the minigame by walking, running, stopping or jumping,
+ * move with hitcheck and fallcheck, are flagged out when they fall below y -100 or -500,
+ * and then update their pose.
+ */
 static void yuunpc_pose_minigame4_main(void) {
 #else
+/**
+ * Per-frame update of the Paper Mode crowd and racers. Spectators are handled like the other games.
+ * Racers read the terrain code under them to pick a destination,
+ * react to the current wind state of the minigame by walking, running, stopping or jumping,
+ * move with hitcheck and fallcheck, are flagged out when they fall below y -100 or -500,
+ * and then update their pose.
+ */
 void yuunpc_pose_minigame4_main(void) {
 #endif
     s32 i;

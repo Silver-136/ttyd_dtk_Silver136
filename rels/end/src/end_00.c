@@ -251,6 +251,11 @@ f32 fd_end_00_one_364;
 
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * REL prolog of the ending module (the releases keep it in end_00.c):
+ * runs the static constructors, registers the init event of end_00 and, in the US and later versions,
+ * switches off the 2D camera's letterbox bars so the credits fill the screen.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 
@@ -267,6 +272,10 @@ void _prolog(void) {
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * REL epilog of the ending module: runs the static destructors, ends the staff roll (end_staff_roll_exit) and,
+ * in the US and later versions, lets the 2D letterbox bars come back.
+ */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -282,6 +291,7 @@ void _epilog(void) {
 
 /** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
 #if VERSION > VERSION_DEMO_US
+/** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
 void _unresolved(void) {
 }
 #endif
@@ -763,6 +773,13 @@ CreditNpc R_credits_npc_info[] = {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00001d90, JP end .text+0x1CCC. See docs/NAME_PROVENANCE.md.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Runs one silhouette of the character parade (credit NPC number args[0] in R_credits_npc_info).
+ * Characters with their own script (evt) just start it.
+ * Others get a CreditActor that is drawn as a silhouette spinning around a screen corner chosen by the current
+ * staff roll position, rotating until it passes its limit angle and is then freed.
+ * The next character's animation group is requested early so it is loaded in time.
+ */
 USER_FUNC(evt_end_credit_npc_main) {
     s32 id = evtGetValue(event, event->args[0]);
     BOOL inBattle;
@@ -868,6 +885,13 @@ animPoseMain(actor->poseId);
     return 0;
 }
 #else
+/**
+ * Runs one silhouette of the character parade (credit NPC number args[0] in R_credits_npc_info).
+ * Characters with their own script (evt) just start it.
+ * Others get a CreditActor that is drawn as a silhouette spinning around a screen corner chosen by the current
+ * staff roll position, rotating until it passes its limit angle and is then freed.
+ * The next character's animation group is requested early so it is loaded in time.
+ */
 USER_FUNC(evt_end_credit_npc_main) {
     s32 id = evtGetValue(event, event->args[0]);
     BOOL inBattle;
@@ -1048,6 +1072,11 @@ s32 end_overlay_tex_tbl[6] = {52, 52, 54, 55, 55, 56};
  * by driving evt_end_image_set_mode and the TEV blend value.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Japanese release and later: loops the two ending pictures during the last credit image:
+ * shows one, cross-fades to the next and back, with long holds (about 18 s) and 4 s fades,
+ * by driving evt_end_image_set_mode and the TEV blend value.
+ */
 EVT_BEGIN(end_image_blend_loop)
     LOOP(0)
         CALL(evt_end_image_set_mode, 1)
@@ -1112,6 +1141,11 @@ EVT_END()
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00001324, JP end .text+0x1260. See docs/NAME_PROVENANCE.md.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Requests the animation groups of the credit NPCs after the ones already loaded,
+ * one for each NPC that has left the screen, so the parade's next characters are ready in time;
+ * runs until the roll ends (GF(10)).
+ */
 USER_FUNC(evt_end_credit_npc_preload) {
     BOOL inBattle = gp->inBattle != 0;
     s32 i;
@@ -1126,6 +1160,12 @@ USER_FUNC(evt_end_credit_npc_preload) {
     end_wp->npcLoadRequest = 0;
     return evtGetValue(event, GF(10)) ? 2 : 0;
 }
+/**
+ * Guess (details): draw callback of the ending pictures (Japanese release and later):
+ * draws the picture selected by GW(11) from ending.tpl in the position given by GW(12), with the fade alpha,
+ * the overlay picture and the cross-blend of end_image_blend_loop;
+ * for picture 9 it shows the version where Ms. Mowz was met with Koops if that flag is set.
+ */
 void end_image_disp(CameraId cameraId, void* param) {
     s32 i;
     f32 w;
@@ -1210,6 +1250,12 @@ void end_image_disp(CameraId cameraId, void* param) {
     }
 }
 #else
+/**
+ * Guess (details): draw callback of the ending pictures (Japanese release and later):
+ * draws the picture selected by GW(11) from ending.tpl in the position given by GW(12), with the fade alpha,
+ * the overlay picture and the cross-blend of end_image_blend_loop;
+ * for picture 9 it shows the version where Ms. Mowz was met with Koops if that flag is set.
+ */
 void end_image_disp(CameraId cameraId, void* param) {
     s32 i;
     f32 w;
@@ -1478,6 +1524,11 @@ EVT_BEGIN(end_image_main_evt)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * End of the credits: fades the screen to black, restores the font, sets the story to STG9_01_END_CREDITS,
+ * saves the game to the memory card (the European release first heals Mario and the party),
+ * fades the music out and changes map to the title screen.
+ */
 EVT_BEGIN(end_return_title_evt)
     CALL(evt_fade_entry, FADE_OUT_BLACK_2D, 2000, 0, 0, 0)
     CALL(evt_fade_end_wait)
@@ -1495,6 +1546,11 @@ CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 2000, -1, -1)
     RETURN
 EVT_END()
 #else
+/**
+ * End of the credits: fades the screen to black, restores the font, sets the story to STG9_01_END_CREDITS,
+ * saves the game to the memory card (the European release first heals Mario and the party),
+ * fades the music out and changes map to the title screen.
+ */
 EVT_BEGIN(end_return_title_evt)
     CALL(evt_fade_entry, FADE_OUT_BLACK_2D, 2000, 0, 0, 0)
     CALL(evt_fade_end_wait)
@@ -1521,6 +1577,12 @@ EVT_BEGIN(end_return_title_evt)
 EVT_END()
 #endif
 
+/**
+ * Map init for end_00 (the only room): hides Mario and the partner, sets the fixed camera and black background,
+ * loads the ending data, starts the character parade and the staff roll message script,
+ * and starts the staff roll music (BGM_STAFF_ROLL1).
+ * The demo versions also start the NPC preload script and queue the return to the title.
+ */
 EVT_BEGIN(end_00_init_evt)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -1555,6 +1617,10 @@ SPAWN_EVENT(end_return_title_evt)
     RETURN
 EVT_END()
 
+/**
+ * the demo's silhouette scripts: other models and paths than the releases' (most rise straight up through the
+ * middle of the screen)
+ */
 EVT_BEGIN(end_credit_gesso_evt)
     CALL(evt_npc_entry, STRING("gesso"), STRING("c_gesso"))
     CALL(evt_npc_set_anim, STRING("gesso"), STRING("GSO_S2_1"))
@@ -1578,6 +1644,7 @@ EVT_BEGIN(end_credit_gesso_evt)
     RETURN
 EVT_END()
 
+/** Demo parade script for Hooktail (ゴンババ): the silhouette slides across the screen from the right. */
 EVT_BEGIN(end_credit_gonbaba_evt)
     CALL(evt_npc_entry, STRING("gonbaba"), STRING("c_gonbaba"))
 #if VERSION <= VERSION_DEMO_US
@@ -1638,6 +1705,10 @@ EVT_BEGIN(end_credit_batten_evt)
     CALL(evt_end_npc_silhouette_on, STRING("batten"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
 #else
+/**
+ * Demo parade script for the second robot model (c_mb_robo_2b):
+ * rises up through the middle of the screen as a silhouette.
+ */
 EVT_BEGIN(end_credit_batten2_evt)
     CALL(evt_npc_entry, STRING("batten2"), STRING("c_mb_robo_2a"))
     CALL(evt_npc_set_anim, STRING("batten2"), STRING("J_2"))
@@ -1669,6 +1740,7 @@ EVT_END()
 
 /** Parade script (releases) for Atomic Boo (c_atmic_trs): drifts across the screen at 0.8 scale. */
 #if VERSION <= VERSION_DEMO_US
+/** Demo parade script for Cortez (korutesu): rises up through the middle of the screen. */
 EVT_BEGIN(end_credit_korutesu_evt)
     CALL(evt_npc_entry, STRING("kortesu"), STRING("c_korutesu1"))
     CALL(evt_npc_set_anim, STRING("kortesu"), STRING("KRT_S_1"))
@@ -1676,6 +1748,7 @@ EVT_BEGIN(end_credit_korutesu_evt)
     CALL(evt_end_npc_silhouette_on, STRING("kortesu"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
 #else
+/** Parade script (releases) for Atomic Boo (c_atmic_trs): drifts across the screen at 0.8 scale. */
 EVT_BEGIN(end_credit_atomic_evt)
     CALL(evt_npc_entry, STRING("atomic"), STRING("c_atmic_trs"))
     CALL(evt_npc_set_anim, STRING("atomic"), STRING("W_1"))
@@ -1707,6 +1780,10 @@ EVT_BEGIN(end_credit_atomic_evt)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Demo parade script for the second robot model (c_mb_robo_2b):
+ * rises up through the middle of the screen as a silhouette.
+ */
 EVT_BEGIN(end_credit_batten2_evt)
     CALL(evt_npc_entry, STRING("batten2"), STRING("c_mb_robo_2b"))
     CALL(evt_npc_set_anim, STRING("batten2"), STRING("MGN_W_1"))
@@ -1714,6 +1791,7 @@ EVT_BEGIN(end_credit_batten2_evt)
     CALL(evt_end_npc_silhouette_on, STRING("batten2"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
 #else
+/** Demo parade script for Cortez (korutesu): rises up through the middle of the screen. */
 EVT_BEGIN(end_credit_korutesu_evt)
     CALL(evt_npc_entry, STRING("korutesu"), STRING("c_korutesu1"))
     CALL(evt_npc_set_anim, STRING("korutesu"), STRING("KRT_S_1"))
@@ -1759,6 +1837,7 @@ EVT_END()
  * (bom_01's evt_bom1000), in pose S_2: falls down the screen as a silhouette.
  */
 #if VERSION <= VERSION_DEMO_US
+/** Demo parade script for the Shadow Queen model (c_q_kage): rises up through the middle of the screen. */
 EVT_BEGIN(end_credit_queen_evt)
     CALL(evt_npc_entry, STRING("queen"), STRING("c_q_kage"))
     CALL(evt_npc_set_anim, STRING("queen"), STRING("KRT_S_1"))
@@ -1766,6 +1845,10 @@ EVT_BEGIN(end_credit_queen_evt)
     CALL(evt_end_npc_silhouette_on, STRING("queen"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
 #else
+/**
+ * Parade script (releases) for the c_bom_sen model, the Bob-omb crowd sprite of Fahr Outpost's cannon scene
+ * (bom_01's evt_bom1000), in pose S_2: falls down the screen as a silhouette.
+ */
 EVT_BEGIN(end_credit_para_evt)
     WAIT_MS(1000)
     CALL(evt_npc_entry, STRING("para"), STRING("c_bom_sen"))
@@ -1829,6 +1912,7 @@ EVT_END()
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/** Demo parade script for the Shadow Queen model (c_q_kage): rises up through the middle of the screen. */
 EVT_BEGIN(end_credit_queen_evt)
     WAIT_MS(7000)
     CALL(evt_npc_entry, STRING("queen"), STRING("c_q_kage_m"))
@@ -1895,6 +1979,12 @@ USER_FUNC(evt_end_image_set_alpha) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00001268, JP end .text+0x11A4. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper: sets args[0] as alpha2, the opacity of the overlay picture end_image_disp draws over the
+ * picture while it is above 0 (image 52 in JP, end_overlay_tex_tbl by language later).
+ * The staff roll fades it in
+ * over the last picture (49) before end_image_blend_loop starts.
+ */
 USER_FUNC(evt_end_image_set_overlay_alpha) {
     end_wp->alpha2 = evtGetValue(event, event->args[0]);
     return 2;
@@ -1907,6 +1997,10 @@ USER_FUNC(evt_end_image_set_overlay_alpha) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000122c, JP end .text+0x1168. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper: selects what end_image_disp draws (args[0]): 0 the current picture, 1 images 49 and 50 blended,
+ * 2 images 50 and 51 blended; end_image_blend_loop switches between 1 and 2.
+ */
 USER_FUNC(evt_end_image_set_mode) {
     end_wp->mode = evtGetValue(event, event->args[0]);
     return 2;
@@ -1920,6 +2014,11 @@ USER_FUNC(evt_end_image_set_mode) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000011f0, JP end .text+0x112C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper: sets args[0] (0 to 255) as the TEV blend alpha of the ending pictures:
+ * in modes 1 and 2 it is the
+ * cross-fade amount between the two blended images, which end_image_blend_loop ramps over 4 seconds.
+ */
 USER_FUNC(evt_end_image_set_blend) {
     end_wp->tevAlpha = evtGetValue(event, event->args[0]);
     return 2;
@@ -1935,6 +2034,13 @@ USER_FUNC(evt_end_image_set_blend) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000bc8, JP end .text+0xB04. See docs/NAME_PROVENANCE.md.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper that runs the whole staff roll:
+ * steps through end_staff_roll_msg_tbl, and for each entry opens two message windows (job title and names) at
+ * one of five screen positions, waits the entry's time, closes them and starts the next,
+ * while telling end_image_main_evt when to show each picture (GW(10) and GW(11)).
+ * Starts end_image_main_evt on its first call.
+ */
 USER_FUNC(evt_end_staff_roll_msg_main) {
     s32 state = event->userdata[0];
     s32 idx = event->userdata[1];
@@ -2093,6 +2199,13 @@ case 4:
     return 0;
 }
 #else
+/**
+ * Script helper that runs the whole staff roll:
+ * steps through end_staff_roll_msg_tbl, and for each entry opens two message windows (job title and names) at
+ * one of five screen positions, waits the entry's time, closes them and starts the next,
+ * while telling end_image_main_evt when to show each picture (GW(10) and GW(11)).
+ * Starts end_image_main_evt on its first call.
+ */
 USER_FUNC(evt_end_staff_roll_msg_main) {
     s32 state = event->userdata[0];
     s32 idx = event->userdata[1];
@@ -2258,6 +2371,12 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000a6c, JP end .text+0x9A8. See docs/NAME_PROVENANCE.md.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper: prepares the staff roll.
+ * On the first call it resets the roll state, mutes the sound effects,
+ * and in the Japanese versions switches the language to English for the credits text;
+ * then it waits until ending.tpl (the picture file) and the first characters' animation groups have loaded.
+ */
 USER_FUNC(evt_end_staff_roll_init) {
     BOOL inBattle = gp->inBattle ? TRUE : FALSE;
     s32 i;
@@ -2291,6 +2410,12 @@ for (i = 0; i < end_wp->npcLoadNum; i++) {
     return 2;
 }
 #else
+/**
+ * Script helper: prepares the staff roll.
+ * On the first call it resets the roll state, mutes the sound effects,
+ * and in the Japanese versions switches the language to English for the credits text;
+ * then it waits until ending.tpl (the picture file) and the first characters' animation groups have loaded.
+ */
 USER_FUNC(evt_end_staff_roll_init) {
     BOOL inBattle = gp->inBattle ? TRUE : FALSE;
     s32 i;
@@ -2328,6 +2453,10 @@ USER_FUNC(evt_end_staff_roll_init) {
 #pragma dont_inline on
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000a14, JP end .text+0x950. See docs/NAME_PROVENANCE.md.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Cleans up after the staff roll: frees the ending picture file, lets sound effects play again and,
+ * in the Japanese versions, switches back to Japanese text (and in the demos reloads the global messages).
+ */
 void end_staff_roll_exit(void) {
     fileFree(end_wp->tpl);
     psndClearFlag(PSND_FLAG_NO_SFX);
@@ -2337,6 +2466,10 @@ gp->language = 0;
 msgLoad("global", 1);
 }
 #else
+/**
+ * Cleans up after the staff roll: frees the ending picture file, lets sound effects play again and,
+ * in the Japanese versions, switches back to Japanese text (and in the demos reloads the global messages).
+ */
 void end_staff_roll_exit(void) {
     fileFree(end_wp->tpl);
     psndClearFlag(PSND_FLAG_NO_SFX);
@@ -2355,6 +2488,10 @@ void end_staff_roll_exit(void) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000009cc, JP end .text+0x908. See docs/NAME_PROVENANCE.md.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script helper: puts the font and messages back to normal before the game continues:
+ * restores Japanese text where the credits switched it, or turns the sound effects back on.
+ */
 USER_FUNC(evt_end_font_restore) {
 gp->language = 0;
     JUTFont_Free();
@@ -2363,6 +2500,10 @@ msgLoad("global", 1);
 return 2;
 }
 #else
+/**
+ * Script helper: puts the font and messages back to normal before the game continues:
+ * restores Japanese text where the credits switched it, or turns the sound effects back on.
+ */
 USER_FUNC(evt_end_font_restore) {
 #if VERSION < VERSION_US
     gp->language = 0;
@@ -2397,6 +2538,7 @@ USER_FUNC(evt_end_npc_silhouette_on) {
 /** Random float in [min, max] from rand(). */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000008bc, JP end .text+0x7F8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Random float in [min, max] from rand(). */
 f32 end_randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 
@@ -2411,6 +2553,11 @@ f32 end_randf(f32 min, f32 max) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000006f8, JP end .text+0x634. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Ext-pose init for the Smorg silhouette in the credits:
+ * gives each of the 300 small Moamoa a random offset of up to 10 units
+ * and assigns it to a chain (between two points of the big Smorg's skeleton) and a place along that chain.
+ */
 void end_ext_moamoa_init(void) {
     ExtdrvPose* pose = extGetPosePtr();
     EndMoa* elem = end_moa_tbl;
@@ -2439,6 +2586,12 @@ void end_ext_moamoa_init(void) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000440, JP end .text+0x37C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Per-frame update of the Smorg silhouette: places each small Moamoa on its chain between two joints of the big
+ * Smorg model (c_g_moamoa), hides it when a joint is off screen, scales it with the model,
+ * and sets its animation frame from the retrace counter.
+ * Then clears the model's joint positions for the next frame.
+ */
 void end_ext_moamoa_main(void) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
     Vec* wpos = (Vec*)animPoseGetAnimPosePtr(npc->poseId)->worldPositions->address;
@@ -2499,6 +2652,10 @@ void end_ext_moamoa_main(void) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000039c, JP end .text+0x2D8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Draw callback for the Smorg silhouette: draws all the small Moamoa in plain black using the silhouette render
+ * mode.
+ */
 void end_ext_disp(CameraId cameraId, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -2514,6 +2671,7 @@ void end_ext_disp(CameraId cameraId, void* param) {
 /** Queues end_ext_disp into the 3D camera every frame. */
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000035c, JP end .text+0x298. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Queues end_ext_disp into the 3D camera every frame. */
 void end_ext_moamoa_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, end_ext_disp, NULL);
 }
@@ -2526,6 +2684,11 @@ void end_ext_moamoa_dispent(void) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000012c, JP end .text+0x68. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper: allocates the Smorg silhouette's tables (300 Moamoa, 40 animation frames,
+ * the chains between joints of the big Smorg model),
+ * turns on world-position tracking for its pose and writes the animation table to LW(10) for evt_ext_entry.
+ */
 USER_FUNC(evt_end_moamoa_init) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
     AnimationPose* ap;
@@ -2565,6 +2728,7 @@ USER_FUNC(evt_end_moamoa_init) {
 /** Script helper: turns off the joint tracking, frees the Smorg silhouette's tables and resets the ext-pose driver. */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000000c4, JP end .text+0x0. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Script helper: turns off the joint tracking, frees the Smorg silhouette's tables and resets the ext-pose driver. */
 USER_FUNC(evt_end_moamoa_exit) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
 
@@ -2583,6 +2747,10 @@ USER_FUNC(evt_end_moamoa_exit) {
  * raises it up the screen over 2 seconds, holds it for 3 seconds, lowers it away, and cleans it up.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Parade script for the giant Smorg: builds the big Smorg out of 300 small Moamoa as a silhouette,
+ * raises it up the screen over 2 seconds, holds it for 3 seconds, lowers it away, and cleans it up.
+ */
 EVT_BEGIN(end_credit_moamoa_evt)
     CALL(evt_npc_entry, STRING("モアモアダミー"), STRING("c_n_moa_a"))
     CALL(evt_npc_set_position, STRING("モアモアダミー"), 0, -1000, 0)

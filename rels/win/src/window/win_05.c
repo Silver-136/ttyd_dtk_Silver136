@@ -77,6 +77,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Opening script of the item chest "mobj_box00":
+ * gives the Super Appeal P badge as a fixed item with the pickup fanfare (badge-return flag outside the early
+ * demos).
+ */
 static EVT_BEGIN(item_get00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))

@@ -30,6 +30,16 @@ void setupErrorHandler(void) {
     OSSetErrorHandler(OS_ERROR_PROGRAM, (OSErrorHandler)systemErrorHandler);
 }
 
+/**
+ * Crash screen.
+ * If the title screen's debug mode (getDebugMode) is 0 or more it stops sound and hangs;
+ * otherwise it formats the exception type, all 32 GPRs,
+ * LR/CR/SRR0/SRR1/DSISR/DAR and a 16-frame stack back chain,
+ * reinitialises the heap for the ROM font and draws the text to the frame buffer forever.
+ * The US and PAL releases scroll the text upward, use a 0.8 horizontal scale instead of 0.5,
+ * and halt once it has scrolled off.
+ * Debug mode (-1) comes from the title-screen button code X, B, R, B, Y, L (seq_title.c).
+ */
 // Descriptive name (not in the symbol maps).
 void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     // registers

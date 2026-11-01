@@ -678,6 +678,12 @@ EVT_END()
  * hides its parts and kills the unit (moving it off screen from the JP release on).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Death script of the Arantula (LW(10) is the dying unit):
+ * spins it for 48 frames with the defeat sound, bursts it with an explosion effect,
+ * hands the coins and experience to the battle and shows the star points, then tilts it for 30 frames,
+ * hides its parts and kills the unit (moving it off screen from the JP release on).
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -725,6 +731,12 @@ CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Death script of the Arantula (LW(10) is the dying unit):
+ * spins it for 48 frames with the defeat sound, bursts it with an explosion effect,
+ * hands the coins and experience to the battle and shows the star points, then tilts it for 30 frames,
+ * hides its parts and kills the unit (moving it off screen from the JP release on).
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -782,6 +794,11 @@ EVT_END()
  * hides its parts and kills the unit (moving it off screen from the JP release on).
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Death script for when the Arantula is blown away:
+ * plays the breath sound, spins it while it flies up and off the stage, then stores its coins and experience,
+ * hides its parts and kills the unit (moving it off screen from the JP release on).
+ */
 static EVT_BEGIN(blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
@@ -810,6 +827,11 @@ CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Death script for when the Arantula is blown away:
+ * plays the breath sound, spins it while it flies up and off the stage, then stores its coins and experience,
+ * hides its parts and kills the unit (moving it off screen from the JP release on).
+ */
 static EVT_BEGIN(blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
@@ -1116,6 +1138,11 @@ EVT_END()
  * to 100 degrees) and stores the final angle in unit work 4.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Wind-up of the Arantula's attack: turns toward the target, takes pose PAI_A_1 and shows part 2 (pose PAI_A_2a)
+ * beside it, then swings part 2 in three steps with SFX_ENM_PAIDA_ATTACK1 each (z rotation 0 to 110, to 70,
+ * to 100 degrees) and stores the final angle in unit work 4.
+ */
 static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
@@ -1167,6 +1194,11 @@ CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPT
     RETURN
 EVT_END()
 #else
+/**
+ * Wind-up of the Arantula's attack: turns toward the target, takes pose PAI_A_1 and shows part 2 (pose PAI_A_2a)
+ * beside it, then swings part 2 in three steps with SFX_ENM_PAIDA_ATTACK1 each (z rotation 0 to 110, to 70,
+ * to 100 degrees) and stores the final angle in unit work 4.
+ */
 static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
@@ -1232,6 +1264,10 @@ EVT_END()
  * angle in unit work 4 to 100 degrees with one SFX_ENM_PAIDA_ATTACK1.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Shorter wind-up (no script of this unit calls it): turns to the target, shows part 2 and swings it from the
+ * angle in unit work 4 to 100 degrees with one SFX_ENM_PAIDA_ATTACK1.
+ */
 static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
@@ -1266,6 +1302,10 @@ CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_ROTATION, LW(0))
     RETURN
 EVT_END()
 #else
+/**
+ * Shorter wind-up (no script of this unit calls it): turns to the target, shows part 2 and swings it from the
+ * angle in unit work 4 to 100 degrees with one SFX_ENM_PAIDA_ATTACK1.
+ */
 static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))

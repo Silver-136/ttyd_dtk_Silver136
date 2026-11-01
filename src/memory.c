@@ -155,6 +155,10 @@ void memInit(void) {
     }
 }
 
+/**
+ * Turns the whole HEAP_MALLOC heap into one free map heap block for _mapAlloc.
+ * JP and the demo also reset the allocation id counter.
+ */
 static inline void mapallocInit(void) {
 // the declaration order differs per version (it sets which callee-saved register holds each)
 #if VERSION >= VERSION_US
@@ -225,6 +229,10 @@ void __memFree(HEAP_TYPE heap, void* ptr) {
 }
 
 #if VERSION >= VERSION_US
+/**
+ * US and PAL: carves a 0x64000-byte sub-heap out of the map heap for the battle's own map allocations (battle.c
+ * allocates from it). Called when a battle starts (seq_battle); replaces JP's fixed battle heap.
+ */
 // Descriptive name (not in the symbol maps).
 void battleMapAlloc(void) {
     MapAllocEntry* entry;
@@ -240,6 +248,7 @@ void battleMapAlloc(void) {
     entry->inuse = 0;
 }
 
+/** US and PAL: returns the battle map sub-heap to the map heap when the battle ends (seq_battle). */
 // Descriptive name (not in the symbol maps).
 void battleMapFree(void) {
     (_mapFree)(mapalloc_base_ptr, R_battlemapalloc_base_ptr);
@@ -405,6 +414,11 @@ void (_mapFree)(MAPBASE_PARAM void* alloc) {
 #pragma dont_inline reset
 #endif
 
+/**
+ * Allocates the smart heap (the US and PAL releases use their whole smart heap, the demo a fixed 7 MiB)
+ * and resets its 0x800 block descriptors: all free, nothing allocated.
+ * The first smartAlloc after this also frees group 3.
+ */
 void smartInit(void) {
     smartEntry* e;
     u32 size;
@@ -437,6 +451,10 @@ void smartInit(void) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * JP and later: empties the smart heap again without reallocating it.
+ * Used by the crash screen to get memory for the ROM font.
+ */
 void smartReInit(void) {
     smartEntry* e;
     int i;
@@ -460,6 +478,10 @@ void smartReInit(void) {
 #endif
 
 #pragma dont_inline on
+/**
+ * Frees every smart heap block of group type; freeing group 3 also frees the group 4 blocks.
+ * Called with group 1 on map changes (and by the demo movie), group 2 when a battle starts and ends.
+ */
 void smartAutoFree(s32 allocType) {
     smartEntry* entry;
     smartEntry* next;

@@ -269,6 +269,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Final death of the Dull Bones: it spins around quickly with the defeat sound, puffs smoke,
+ * pays its coins and EXP (once, tracked in unit work 1,
+ * since a crumbled Dull Bones may already have paid) with a star-point effect,
+ * spins for 30 more frames and removes the unit (KillUnit mode 2, or 0 when the hit has damage-code bit 1024).
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(0), 48)
@@ -465,6 +471,13 @@ static EVT_BEGIN(start_avoid)
     RETURN
 EVT_END()
 
+/**
+ * The Dull Bones' bone throw (weapon_honenoko_attack):
+ * winds up for half a second, then throws a bone (part 2) spinning at the target.
+ * A miss triggers the target's dodge when the bone passes and it flies on to the edge of the stage;
+ * a hit drops the bone on the target (guard judged with ResultACDefence), which bounces off.
+ * The bone is then hidden and the Dull Bones returns to its stance.
+ */
 static EVT_BEGIN(normal_attack_event)
     // Use the target of the opening first attack if there was one, otherwise choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

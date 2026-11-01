@@ -278,6 +278,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -316,6 +317,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** The bomb never acts on its own turn; it just returns to its idle loop. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -344,6 +346,10 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Death data event (tag 49): queues explosion_event (tag 53) as an after-reaction,
+ * so a bomb that is knocked out still blows up.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT_BOMZOU)
     RETURN
@@ -434,6 +440,7 @@ static BattleDataEntry data_table[] = {
 
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 #if VERSION > VERSION_DEMO_US
+/** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -444,6 +451,7 @@ EVT_END()
 
 /** The bomb never acts on its own turn; it just returns to its idle loop. */
 #if VERSION > VERSION_DEMO_US
+/** The bomb never acts on its own turn; it just returns to its idle loop. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -455,6 +463,10 @@ EVT_END()
  * so a bomb that is knocked out still blows up.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Death data event (tag 49): queues explosion_event (tag 53) as an after-reaction,
+ * so a bomb that is knocked out still blows up.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT_BOMZOU)
     RETURN

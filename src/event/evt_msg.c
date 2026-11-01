@@ -289,6 +289,10 @@ USER_FUNC(evt_msg_print_battle_party) {
     return _evt_msg_print(event, isFirstCall, MSG_PRINT_NO_SPEAKER, partyLabel, 0, UNIT_ID_PARTNER);
 }
 
+/**
+ * Like evt_msg_print, but first fills the message's printf placeholders with up to four extra script arguments
+ * (counts, slot numbers, coin amounts) into a local buffer (twice as large in the US and PAL releases).
+ */
 USER_FUNC(evt_msg_print_insert) {
     char buf[MSG_BUF_SIZE];
     s32 vals[4];
@@ -506,6 +510,15 @@ USER_FUNC(evt_msg_npc) {
 }
 
 #if VERSION >= VERSION_US
+/**
+ * US-only localized article/plural helpers.
+ * The US build emits functions in reverse source order,
+ * so these sit at the end of the file to come first in .text.
+ * US/PAL: replaces the article and item markers in buf (<AN>, <AN_ITEM>, <ITEM>, and the German,
+ * French and Spanish <Ein_ITEM>/<un_ITEM> forms) with the right article for the item name and the name itself,
+ * using the gender and plural tags in the name (<M>, <F>, <PLles>, ...).
+ * Picks the rules by gp->language; Italian (5) only substitutes <ITEM>.
+ */
 // US-only localized article/plural helpers. The US build emits functions in reverse source
 // order, so these sit at the end of the file to come first in .text.
 void evtMsgFmtStr(char* buf, const char* name) {
@@ -760,6 +773,11 @@ void evtMsgFmtStr(char* buf, const char* name) {
     strcpy(buf, tmp);
 }
 
+/**
+ * US/PAL: builds a message with an item name and its article:
+ * args[2] is the message (id when args[0] is 0, literal text when 1), args[3] the item name;
+ * returns the formatted text in args[1] (a shared static buffer).
+ */
 USER_FUNC(evt_msg_fmt_str) {
     EvtWord* args = event->args;
     s32 mode = args[0];
@@ -782,6 +800,11 @@ USER_FUNC(evt_msg_fmt_str) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * US/PAL: replaces <NUM> in buf with count and then fixes the plural markers for the language:
+ * <S> (and <X> in French) adds the plural ending, <N> is dropped,
+ * and German and Italian spell out coin and point words (<COIN>, <POINT>, ...).
+ */
 void evtMsgFmtInt(char* buf, s32 count) {
     char* marker;
     u32 len;
@@ -944,6 +967,10 @@ void evtMsgFmtInt(char* buf, s32 count) {
     strcpy(buf, msg_plural_buf);
 }
 
+/**
+ * US/PAL: builds a message with a number: args[2] is the message (id when args[0] is 0, literal text when 1),
+ * args[3] the count; returns the text with the number and matching plural in args[1] (a shared static buffer).
+ */
 USER_FUNC(evt_msg_fmt_int) {
     EvtWord* args = event->args;
     s32 mode = args[0];

@@ -120,6 +120,14 @@ EVT_BEGIN(kairyu_evt)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Script of the stage's red jump stand (KPA_OBJ_JUMPSTAND_RED), run when Bowser stands on it:
+ * kills the stage clock (kpa_time, its event id in GW(15)),
+ * saves Bowser's current power level (evt_koopa_get_level), loads kpa_04 after 600 ms,
+ * turns the camera off once he is above y = 400
+ * and launches him up with evt_mario_jump_jumpstand 700 units above the platform (a lower launch speed in the US
+ * demo and earlier). The EU release also cancels the attack mode first.
+ */
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
 BEGIN_INLINE_EVENT
@@ -144,6 +152,14 @@ CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), 
 RETURN
 EVT_END()
 #else
+/**
+ * Script of the stage's red jump stand (KPA_OBJ_JUMPSTAND_RED), run when Bowser stands on it:
+ * kills the stage clock (kpa_time, its event id in GW(15)),
+ * saves Bowser's current power level (evt_koopa_get_level), loads kpa_04 after 600 ms,
+ * turns the camera off once he is above y = 400
+ * and launches him up with evt_mario_jump_jumpstand 700 units above the platform (a lower launch speed in the US
+ * demo and earlier). The EU release also cancels the attack mode first.
+ */
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
 #if VERSION == VERSION_EU

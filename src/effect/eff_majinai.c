@@ -48,6 +48,10 @@ EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
  * wait, restore) and deletes the effect when the animation has looped.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per frame: runs the 4-state sequence (load the MOBJ_EFF_majinai animation, darken the map and make Mario glow,
+ * wait, restore) and deletes the effect when the animation has looped.
+ */
 static void effMajinaiMain(EffectEntry* effect) {
     EffMajinaiWork* work = effect->userdata;
     Vec position;
@@ -140,6 +144,10 @@ for (i = 0; i < 5; i++) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMajinaiDisp, effect);
 }
 #else
+/**
+ * Per frame: runs the 4-state sequence (load the MOBJ_EFF_majinai animation, darken the map and make Mario glow,
+ * wait, restore) and deletes the effect when the animation has looped.
+ */
 void effMajinaiMain(EffectEntry* effect) {
     EffMajinaiWork* work = effect->userdata;
     Vec position;

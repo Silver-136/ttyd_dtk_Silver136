@@ -301,6 +301,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Shared damage check for the boomerang hits: LW(6) is the weapon, LW(3) and LW(4) the target and part,
+ * and LW(7) = 1 marks the last hit. It pre-checks the hit and returns LW(0) = 1 when it hit.
+ * The first hit runs ResultACDefence so the action command is judged once (unit work 7 tracks that);
+ * the last hit includes the last-hit flag (256) in CheckDamage.
+ */
 static EVT_BEGIN(damage_check_sub)
     SET_VALUE(LW(0), 0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), 0, LW(5))

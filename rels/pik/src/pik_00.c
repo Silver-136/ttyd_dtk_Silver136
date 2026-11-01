@@ -2404,6 +2404,10 @@ USER_FUNC(img_flag) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * The demo's version: while Yoshi is ridden it updates the hit object under Mario,
+ * which the house floor's case events (erase_house, appear_house) react to.
+ */
 USER_FUNC(under) {
     HitEntry* hit;
     BOOL flag;
@@ -2436,6 +2440,10 @@ USER_FUNC(under) {
  * when the second page of the text appears it starts the BGM_EVT_NOKO_SAIKAI1 (reunion) music.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo's version: while Yoshi is ridden it updates the hit object under Mario,
+ * which the house floor's case events (erase_house, appear_house) react to.
+ */
 static USER_FUNC(under) {
     PartyEntry* party = partyGetPtr(0);
 
@@ -2445,6 +2453,10 @@ static USER_FUNC(under) {
     return EVT_RETURN_DONE;
 }
 #endif
+/**
+ * Message callback for Trouble Center request 29 (irai_29_15):
+ * when the second page of the text appears it starts the BGM_EVT_NOKO_SAIKAI1 (reunion) music.
+ */
 void irai_29_15_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 

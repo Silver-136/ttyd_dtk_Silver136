@@ -45,6 +45,11 @@ static inline void chgPoseC(MarioWork* mario) {
     }
 }
 
+/**
+ * Common take-off for every jump: sets the jumping flag, clears the air timers, remembers the floor jumped from,
+ * detaches from riding objects, loads the jump parameters and the take-off position.
+ * The US and later releases also record the run speed at take-off for the Spring Jump check in mot_fall.
+ */
 void marioPreJump(void) {
     MarioWork* mario = marioGetPtr();
     mario->flags &= ~MARIO_FLAG_IS_FALLING;
@@ -361,6 +366,10 @@ static inline void jumpSfx(MarioWork* mario) {
 }
 
 #if VERSION >= VERSION_US
+/**
+ * Turns camera y-follow back on when the mot_jumpNpc bounce ends on gon_10 (Hooktail Castle),
+ * where it would otherwise stay off. US and later only.
+ */
 // Descriptive name (not in the symbol maps).
 void mot_jumpNpc_post(void) {
     MarioWork* mario = marioGetPtr();

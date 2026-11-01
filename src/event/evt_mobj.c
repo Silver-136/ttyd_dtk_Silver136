@@ -120,6 +120,7 @@ extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u
 
 /** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
 #if VERSION > VERSION_DEMO_US
+/** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
 EVT_BEGIN(kpa_powerup_evt)
     CALL(kpa_powerup, LW(0), LW(1), LW(2))
     RETURN
@@ -127,6 +128,7 @@ EVT_END()
 #endif
 /** Event that runs fire_func with LW(0)-LW(3) to spawn a fire effect for Bowser's stage objects. */
 #if VERSION > VERSION_DEMO_US
+/** Event that runs fire_func with LW(0)-LW(3) to spawn a fire effect for Bowser's stage objects. */
 EVT_BEGIN(evt_fire)
     CALL(fire_func, LW(0), LW(1), LW(2), LW(3))
     RETURN
@@ -142,6 +144,7 @@ EVT_END()
 extern EvtWord kpa_powerup_evt[];
 extern EvtWord evt_fire[];
 #endif
+/** Creates a bare map object. args: name, animation group. Waits (blocks) until the animation group has loaded. */
 USER_FUNC(evt_mobj_entry) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -732,8 +735,20 @@ USER_FUNC(evt_mobj_tornadoswitch_red) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Main function of the paired timer switches: pressing one starts a countdown of typeWork frames;
+ * if the other switch of the pair is pressed before it runs out, the event runs.
+ * The blue pair then sparkles, sets both flags and deletes itself; the red pair resets for another try.
+ * The demo does not stop on timeout first.
+ */
 static s32 mobj_timerswitch(MapObjectEntry* mobj) {
 #else
+/**
+ * Main function of the paired timer switches: pressing one starts a countdown of typeWork frames;
+ * if the other switch of the pair is pressed before it runs out, the event runs.
+ * The blue pair then sparkles, sets both flags and deletes itself; the red pair resets for another try.
+ * The demo does not stop on timeout first.
+ */
 s32 mobj_timerswitch(MapObjectEntry* mobj) {
 #endif
     MapObjectEntry* other = mobjNameToPtr(mobj->linkedName);
@@ -1371,8 +1386,20 @@ USER_FUNC(evt_mobj_jumpstand_blue) {
  * and plays the "P_box_y" paper-peel animation through an offscreen capture before deleting itself.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Main function of the hammer-level blocks: a hit only counts with a strong enough hammer (Lv1 any,
+ * Lv1 huge block needs Super Hammer and a spin-charged hammer, Lv2 needs Ultra Hammer).
+ * It then runs the event, sets the flag variable
+ * and plays the "P_box_y" paper-peel animation through an offscreen capture before deleting itself.
+ */
 static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
 #else
+/**
+ * Main function of the hammer-level blocks: a hit only counts with a strong enough hammer (Lv1 any,
+ * Lv1 huge block needs Super Hammer and a spin-charged hammer, Lv2 needs Ultra Hammer).
+ * It then runs the event, sets the flag variable
+ * and plays the "P_box_y" paper-peel animation through an offscreen capture before deleting itself.
+ */
 s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
 #endif
     char oname[16] = "o_";
@@ -2317,8 +2344,16 @@ USER_FUNC(evt_mobj_itembox) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Main function of the signboards: reading one runs its event and waits for it to finish.
+ * JP and later lock Mario's controls while it runs; the demo's sign scripts do that themselves.
+ */
 static s32 mobj_signboard(MapObjectEntry* mobj) {
 #else
+/**
+ * Main function of the signboards: reading one runs its event and waits for it to finish.
+ * JP and later lock Mario's controls while it runs; the demo's sign scripts do that themselves.
+ */
 s32 mobj_signboard(MapObjectEntry* mobj) {
 #endif
     switch (mobj->state) {
@@ -2842,6 +2877,7 @@ USER_FUNC(evt_mobj_blk) {
  * The block then turns into an empty block that just bounces when hit again.
  */
 #if VERSION <= VERSION_DEMO_US
+/** Plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit; not in JP. */
 static s32 mobj_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
         case 0:
@@ -2881,6 +2917,10 @@ static s32 mobj_blk(MapObjectEntry* mobj) {
     }
     return 0;
 }
+/**
+ * Places a plain block that runs an event when hit from below.
+ * args: name, x, y, z, kind (0 yellow MOBJ_Block, 1 MOBJ_PinkBlock), event, flag variable. Not in JP.
+ */
 USER_FUNC(evt_mobj_blk) {
     EvtWord* args = event->args;
     const char* name;
@@ -2927,6 +2967,12 @@ USER_FUNC(evt_mobj_blk) {
     return EVT_RETURN_DONE;
 }
 #endif
+/**
+ * Main function of the ?
+ * blocks and badge (pink) blocks: the first hit pops out the stored item (or a coin,
+ * which is collected at once and sets the flag), or runs the event instead if one is set.
+ * The block then turns into an empty block that just bounces when hit again.
+ */
 s32 mobj_badgeblk(MapObjectEntry* mobj) {
     ItemEntry* item;
     switch (mobj->state) {
@@ -3051,8 +3097,20 @@ USER_FUNC(evt_mobj_badgeblk) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Main function of the Shine Sprite blocks: when hit it pops a Shine Sprite, gives it to Mario,
+ * sets the flag variable and deletes itself.
+ * In Pirate's Grotto (dou_02, dou_05/dou_10 when hit by a partner) it also stops Mario
+ * while the Shine is collected; the demo has no such maps.
+ */
 static s32 mobj_powerupblk(MapObjectEntry* mobj) {
 #else
+/**
+ * Main function of the Shine Sprite blocks: when hit it pops a Shine Sprite, gives it to Mario,
+ * sets the flag variable and deletes itself.
+ * In Pirate's Grotto (dou_02, dou_05/dou_10 when hit by a partner) it also stops Mario
+ * while the Shine is collected; the demo has no such maps.
+ */
 s32 mobj_powerupblk(MapObjectEntry* mobj) {
 #endif
     switch (mobj->state) {
@@ -3164,8 +3222,18 @@ USER_FUNC(evt_mobj_powerupblk) {
  * capture, then deletes itself.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Main function of the brick blocks: when hit it runs the event,
+ * sets the flag variable and breaks apart with the "P_box_y" paper-peel animation drawn through an offscreen
+ * capture, then deletes itself.
+ */
 static s32 mobj_brickblk(MapObjectEntry* mobj) {
 #else
+/**
+ * Main function of the brick blocks: when hit it runs the event,
+ * sets the flag variable and breaks apart with the "P_box_y" paper-peel animation drawn through an offscreen
+ * capture, then deletes itself.
+ */
 s32 mobj_brickblk(MapObjectEntry* mobj) {
 #endif
     char oname[16] = "o_";
@@ -3263,8 +3331,18 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
  * and starts a 200-frame window in which every further hit gives another coin; then it becomes an empty block.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Main function of the coin blocks that pay out several coins (MOBJ_10CountBlock):
+ * the first hit gives a coin, sets the flag variable (or runs the event instead)
+ * and starts a 200-frame window in which every further hit gives another coin; then it becomes an empty block.
+ */
 static s32 mobj_10countblk(MapObjectEntry* mobj) {
 #else
+/**
+ * Main function of the coin blocks that pay out several coins (MOBJ_10CountBlock):
+ * the first hit gives a coin, sets the flag variable (or runs the event instead)
+ * and starts a 200-frame window in which every further hit gives another coin; then it becomes an empty block.
+ */
 s32 mobj_10countblk(MapObjectEntry* mobj) {
 #endif
     switch (mobj->state) {
@@ -3479,8 +3557,16 @@ USER_FUNC(evt_mobj_brick) {
  * sets the flag variable, turns off the panel's collision and fades it out over 64 frames before deleting it.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Main function of the breakable floor panels: a spin jump onto one (Super Boots) runs the event,
+ * sets the flag variable, turns off the panel's collision and fades it out over 64 frames before deleting it.
+ */
 static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
 #else
+/**
+ * Main function of the breakable floor panels: a spin jump onto one (Super Boots) runs the event,
+ * sets the flag variable, turns off the panel's collision and fades it out over 64 frames before deleting it.
+ */
 s32 mobj_breaking_floor(MapObjectEntry* mobj) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -3663,6 +3749,13 @@ static inline BOOL kururing_in_box(f32 x, f32 z, f32 px, f32 pz, f32 r) {
 }
 
 
+/**
+ * Main function of the flipping floor panels (MOBJ_KururinFloor) that hide Star Pieces:
+ * a Super Boots spin jump next to it (within 60) with nothing standing on it flips it over
+ * and pops out the Star Piece; a hammer hit, a farther spin jump
+ * or anything on it gives the half flip that carries Mario, partners, NPCs and items with it.
+ * US and later skip a partner with flag 0x100 set.
+ */
 s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     PartyEntry* party;
     MarioWork* mario = marioGetPtr();
@@ -4929,8 +5022,22 @@ USER_FUNC(evt_mobj_koopa_sango) {
  * event, flag, 400/500 points, and the fireballs fly off towards the camera and are deleted.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Main function of the Fire Bar platforms in Bowser's stages:
+ * rotates its column of c_fireber NPCs around the base every frame (typeDataF[3] degrees) with a crackling sound
+ * while Mario is near.
+ * Fire breath (anything at level 3) breaks the base:
+ * event, flag, 400/500 points, and the fireballs fly off towards the camera and are deleted.
+ */
 static s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
 #else
+/**
+ * Main function of the Fire Bar platforms in Bowser's stages:
+ * rotates its column of c_fireber NPCs around the base every frame (typeDataF[3] degrees) with a crackling sound
+ * while Mario is near.
+ * Fire breath (anything at level 3) breaks the base:
+ * event, flag, 400/500 points, and the fireballs fly off towards the camera and are deleted.
+ */
 s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
 #endif
     Mtx mtx;
@@ -5062,6 +5169,12 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
     return 0;
 }
 
+/**
+ * Places a Fire Bar base with its fireballs.
+ * args: direction (nonzero: positive rotation), name, x, y, z, fireball count,
+ * rotation speed in degrees per frame (0 means 1), event, flag variable (already set: removed).
+ * The fireballs are NPCs named name plus a hex index; US and later offset each one's Z by its index.
+ */
 USER_FUNC(evt_mobj_koopa_fireber_dodai) {
     const char* name;
     s32 dir, count, script, flagVar, i;
@@ -5130,6 +5243,7 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
  * or 0 outside a map object event.
  */
 #if VERSION <= VERSION_DEMO_US
+/** demo-only: turn Mario to face the given angle */
 static USER_FUNC(kpa_set_dir) {
     f32 dir = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();
@@ -5140,6 +5254,10 @@ static USER_FUNC(kpa_set_dir) {
     return EVT_RETURN_DONE;
 }
 #endif
+/**
+ * Writes the name of the goal pole whose event is running (event->thisMapObj) to args[0],
+ * or 0 outside a map object event.
+ */
 USER_FUNC(kpa_get_pole_name) {
     MapObjectEntry* mobj = event->thisMapObj;
     EvtWord* args = event->args;
@@ -5179,6 +5297,7 @@ USER_FUNC(kpa_get_width) {
 
 /** Formats the score args[0] (0-9999) without leading zeros into the floating pole-score text. */
 #if VERSION <= VERSION_DEMO_US
+/** demo-only: read Mario's position into three float variables */
 static USER_FUNC(kpa_get_mario_pos) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
@@ -5188,6 +5307,7 @@ static USER_FUNC(kpa_get_mario_pos) {
     return EVT_RETURN_DONE;
 }
 #endif
+/** Formats the score args[0] (0-9999) without leading zeros into the floating pole-score text. */
 USER_FUNC(kpa_score_to_str) {
     s32 score = evtGetValue(event, event->args[0]);
     s32 d[4];
@@ -5268,6 +5388,7 @@ USER_FUNC(kpa_clear_jump_data) {
  * Run by mobj_koopa_pole_evt with the score in LW(0).
  */
 #if VERSION <= VERSION_DEMO_US
+/** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
 EVT_BEGIN(kpa_powerup_evt)
     CALL(kpa_powerup, LW(0), LW(1), LW(2))
     RETURN

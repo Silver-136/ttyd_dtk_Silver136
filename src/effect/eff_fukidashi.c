@@ -354,8 +354,10 @@ void effFukidashiMain(EffectEntry* effect) {
 
 /** Draws the bubble from the moja model display lists with its mark or icon, lit by a GX light. */
 #if VERSION <= VERSION_DEMO_US
+/** Draws the bubble from the moja model display lists with its mark or icon, lit by a GX light. */
 static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
 #else
+/** Draws the bubble from the moja model display lists with its mark or icon, lit by a GX light. */
 void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     CameraEntry* camera;

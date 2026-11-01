@@ -48,6 +48,7 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
+/** Script helper: deletes the icy cloud effect eff_ice_barrier left in work[1]. */
 static USER_FUNC(eff_ice_barrier_end) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

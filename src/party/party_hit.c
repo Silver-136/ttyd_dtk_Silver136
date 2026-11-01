@@ -546,6 +546,11 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
 }
 #endif
 
+/**
+ * Probes the floor 0.265 of the partner's width ahead, from her height above (half her height in the demo).
+ * On a floor not more than 2 units lower, returns it with *outY = floor height and *outDist = 0;
+ * on a lower floor returns NULL with *outDist = the drop. Also sets her floor tilt and slope.
+ */
 HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDist, f32* outAng) {
     HitEntry* hit;
     f32 dx, sn, cs, h, ang, ox, oy, oz, gy;
@@ -635,6 +640,12 @@ static inline void partyWallSlide(Vec* out, Vec n, f32 d, f32 sn, f32 cs) {
  * No callers in this tree.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Wall probe with Mario's filter (marioHitCheckVec) at 0.75 and 0.5 of the height and step height (11,
+ * or 1 when airborne or yoshiGetStatus() is 2; an extra 1-unit ray in one corner of gor_02):
+ * slides *pos along the nearest wall, or moves it by dist; it stays put when both diagonals are blocked.
+ * No callers in this tree.
+ */
 HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     Vec qpos;
     Vec qdir;
@@ -784,6 +795,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
  * Retail versions store frontWallDist (-1 none); the US release narrows paper-mode width to 6.
  */
 #if VERSION <= VERSION_DEMO_US
+/** Demo only: partner-filtered ray that returns the hit object, the rounded hit distance in *dist and the normal. */
 static inline HitEntry* partyHitCheckDistNrm(PartyEntry* party, Vec* pos, Vec* dir, Vec* outNrm, f32* dist) {
     HitCheckQuery query;
     HitEntry* hit;
@@ -813,6 +825,7 @@ static inline HitEntry* partyHitCheckDistNrm(PartyEntry* party, Vec* pos, Vec* d
     outNrm->z = query.hitNormal.z;
     return hit;
 }
+/** Demo only: partner-filtered ray of fixed length that returns the hit object and the surface normal. */
 static inline HitEntry* partyHitCheckNrm(PartyEntry* party, Vec* pos, Vec* dir, Vec* outNrm, f32 dist) {
     HitCheckQuery query;
     HitEntry* hit;
@@ -835,6 +848,12 @@ static inline HitEntry* partyHitCheckNrm(PartyEntry* party, Vec* pos, Vec* dir, 
     outNrm->z = query.hitNormal.z;
     return hit;
 }
+/**
+ * Wall probe with Mario's filter (marioHitCheckVec) at 0.75 and 0.5 of the height and step height (11,
+ * or 1 when airborne or yoshiGetStatus() is 2; an extra 1-unit ray in one corner of gor_02):
+ * slides *pos along the nearest wall, or moves it by dist; it stays put when both diagonals are blocked.
+ * No callers in this tree.
+ */
 HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     f32 sn, cs;
     f32 d, dy;
@@ -885,6 +904,12 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     pos->z += dist * cs;
     return NULL;
 }
+/**
+ * The partners' main wall check: a ray ahead at 0.75 of the height,
+ * then one at step height (11, or 1 for Bobbery in use) that only counts walls of 45 degrees or more.
+ * On a hit slides *pos along the wall and returns it; otherwise moves *pos by dist.
+ * Retail versions store frontWallDist (-1 none); the US release narrows paper-mode width to 6.
+ */
 HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     f32 sn, cs;
     f32 d, dy, hh;
@@ -926,6 +951,12 @@ pos->x += dist * sn;
     return NULL;
 }
 #else
+/**
+ * The partners' main wall check: a ray ahead at 0.75 of the height,
+ * then one at step height (11, or 1 for Bobbery in use) that only counts walls of 45 degrees or more.
+ * On a hit slides *pos along the wall and returns it; otherwise moves *pos by dist.
+ * Retail versions store frontWallDist (-1 none); the US release narrows paper-mode width to 6.
+ */
 HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     f32 sn, cs;
     f32 d, dy, hh;
@@ -1163,6 +1194,10 @@ static inline HitEntry* partyHitNrm(PartyEntry* party, Vec* pos, Vec* dir, Vec* 
     return hit;
 }
 
+/**
+ * Pushes *pos out of nearby walls with Mario's marioChkWallAround, using the partner's width (6 in paper mode).
+ * The demo arm is never built: the whole block is US and PAL only.
+ */
 void partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width, f32 height) {
     if (party->flags & PARTY_FLAG_PAPER_MODE) {
         width = 6.0f;

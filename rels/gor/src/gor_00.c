@@ -481,6 +481,11 @@ static EVT_BEGIN(mony_init)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Regular event of Francesca (Mony).
+ * On the Chapter 5 step where Frankie and Francesca arrive (STG5_64_03_F_F_ARRIVE) it runs
+ * mony_run_away; the US and later releases first wait for GF(15).
+ */
 EVT_BEGIN(gor_00_mony_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
@@ -591,6 +596,11 @@ static EVT_BEGIN(peton_init)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Regular event of Frankie (Peton).
+ * Same as gor_00_mony_regl: on the Chapter 5 arrival step it runs peton_run_away;
+ * the US and later releases first wait for GF(15).
+ */
 EVT_BEGIN(gor_00_peton_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
@@ -646,6 +656,11 @@ EVT_END()
  * hops it up onto the ledge at (90, 50, 150) and turns it to face left, then lets it follow again.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Moves Mario's partner out of the way before Marco's (Flavio's) departure talk:
+ * depending on where the partner stands it walks it to the pier,
+ * hops it up onto the ledge at (90, 50, 150) and turns it to face left, then lets it follow again.
+ */
 EVT_BEGIN(marco_party_move)
     CALL(evt_party_stop, 0)
     CALL(evt_party_force_reset_outofscreen, 0)
@@ -3056,6 +3071,13 @@ EVT_BEGIN(christine_osoware)
     RETURN
 EVT_END()
 
+/**
+ * Waits for Mario to walk up to the X-Nauts, then Lord Crump spots him
+ * and the first fight starts (battle info 2 against Lord Crump;
+ * in the non-demo releases Mario's HP is raised to at least 5 first).
+ * Afterwards the story becomes STG0_05_1000_X_NAUTS_BEFORE,
+ * the sailors' events are cancelled and moved back, and gundan1000tai_afterbattle runs.
+ */
 EVT_BEGIN(gundan1000tai_beforebattle)
     // If started directly, place Mario and the X-Nauts where they would be.
     IF_INT_EQUAL(LW(0), 1)
@@ -3669,6 +3691,12 @@ const char* shukko_npc_list[] = {
     NULL,
 };
 
+/**
+ * Slides the Chapter 4 ship "S_fune_c" (with its collision,
+ * wake and all passengers listed in shukko_npc_list) out of the harbor:
+ * first a slow 100 units over 6 seconds, then on to x=600 (700 in the US and later).
+ * Mario and the partner are carried along by the movement.
+ */
 EVT_BEGIN(shukko_event_move_ship)
     SPAWN_EVENT(PTR(shukko_event_move_ship_se00))
     SPAWN_EVENT(PTR(shukko_event_move_ship_se01))
@@ -4817,6 +4845,11 @@ void suifu100taikikan_seq01(NanNPC* npc) {
 }
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Marco (Flavio) runs off across the harbor and up the stairs and out of the map:
+ * along the pier, then up through a series of jumps at the back, and is hidden below the map at the end.
+ * Only in JP and later releases.
+ */
 EVT_BEGIN(marco_run_away)
     CALL(evt_npc_set_ry, STRING("マルコ"), 270)
     CALL(evt_npc_move_position, STRING("マルコ"), -130, 200, 0, FLOAT(240.0f), 0)
@@ -4846,6 +4879,15 @@ EVT_END()
  * and the story becomes STG5_59_ROGUEPORT_DOCK before the peach_mail event starts.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Cutscene at STG5_58_FAIR_WINDS, when Mario comes back to the Rogueport harbor
+ * from Keelhaul Key (Flavio hails the return to his hometown, mac_5_000_00, and Cortez offers to sail Mario back
+ * to
+ * the island whenever he likes, mac_5_000_08).
+ * Marco (Flavio), Cortez and a crowd of 100 sailor extras are waiting;
+ * Marco makes a speech, the sailors scatter, Marco runs off,
+ * and the story becomes STG5_59_ROGUEPORT_DOCK before the peach_mail event starts.
+ */
 EVT_BEGIN(gorotsuki_kikan)
     // Mario, his partner, Flavio, Cortez and the sailors are placed on the pier; the crowd of 100 sailors is
     // set up.
@@ -4991,6 +5033,15 @@ CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Cutscene at STG5_58_FAIR_WINDS, when Mario comes back to the Rogueport harbor
+ * from Keelhaul Key (Flavio hails the return to his hometown, mac_5_000_00, and Cortez offers to sail Mario back
+ * to
+ * the island whenever he likes, mac_5_000_08).
+ * Marco (Flavio), Cortez and a crowd of 100 sailor extras are waiting;
+ * Marco makes a speech, the sailors scatter, Marco runs off,
+ * and the story becomes STG5_59_ROGUEPORT_DOCK before the peach_mail event starts.
+ */
 EVT_BEGIN(gorotsuki_kikan)
     // Mario, his partner, Flavio, Cortez and the sailors are placed on the pier; the crowd of 100 sailors is
     // set up.
@@ -5259,6 +5310,7 @@ CALL_CHILD(mony_peton_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Mony and Peton step off the ship and run off into town one after the other */
 static EVT_BEGIN(mony_peton_event)
     CALL(evt_msg_print, 0, STRING("mac_5_038"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("mac_5_039"), 0, STRING("ピートン"))
@@ -5268,6 +5320,10 @@ static EVT_BEGIN(mony_peton_event)
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
 #else
+/**
+ * Francesca (Mony) hops off the ship, runs along the pier, up the back stairs and out of the map,
+ * then is hidden below it. JP and later releases.
+ */
 EVT_BEGIN(mony_run_away)
 #endif
     CALL(evt_npc_jump_position_nohit, STRING("モニー"), 145, 15, 225, 400, 20)
@@ -5311,6 +5367,10 @@ EVT_BEGIN(mony_run_away)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Frankie (Peton) runs along the pier, up the back stairs and out of the map, then is hidden below it.
+ * JP and later releases.
+ */
 EVT_BEGIN(peton_run_away)
     CALL(evt_npc_move_position, STRING("ピートン"), -230, -170, 0, FLOAT(240.0f), 0)
     CALL(evt_npc_move_position, STRING("ピートン"), -230, -400, 0, FLOAT(240.0f), 0)
@@ -5329,6 +5389,12 @@ EVT_END()
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Frankie and Francesca's goodbye after the voyage:
+ * sets STG5_64_03_F_F_ARRIVE, they speak (mac_5_038, mac_5_039),
+ * and then each jumps off the ship at the dock and runs off in turn.
+ * In the US and later releases it also clears GF(15). JP and later releases (earlier ones use mony_peton_event).
+ */
 EVT_BEGIN(mony_peton_depart)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
 #if VERSION >= VERSION_US
@@ -6033,6 +6099,10 @@ static USER_FUNC(get_yoshi_color) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_gor_000006d8, JP gor .text+0x60C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Deletes every NPC on the map, cancelling their regular events first. Used to clear the cast for the epilogue.
+ * JP and later releases.
+ */
 USER_FUNC(npc_all_delete) {
     NpcWork* wp = npcGetWorkPtr();
     s32 i;
@@ -6248,6 +6318,10 @@ static HitDamageReturn dmgRetPoint[] = {
     {0},
 };
 
+/**
+ * Opens the chest mobj_box00 and gives Mario the HP Drain badge (ITEM_HP_DRAIN_BADGE;
+ * the US and later releases add ITEM_FLAG_BADGE_RETURN).
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
@@ -6263,6 +6337,12 @@ CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the ending scene at the harbor: deletes the harbor NPCs (Francesca, Frankie, Marco, sailors, Cortez,
+ * Baba; every NPC in the US and later releases) and enters the cast who gather there:
+ * Peach, Toadsworth, Professor Frankly, Goombella, Koops, Flurrie, the Yoshi kid, Vivian, Bobbery (Sanders),
+ * Ms. Mowz and Punio and Puniko.
+ */
 static EVT_BEGIN(epilogue_npc_entry)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_npc_delete, STRING("モニー"))
@@ -7141,6 +7221,15 @@ EVT_END()
  * Also handles a pending ship arrival.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init for gor_00 (the Rogueport harbor).
+ * Picks the music by story stage, sets up the exit "n_bero" to gor_01, creates the NPCs (including Luigi),
+ * the hidden-ship objects, the save block, the star piece and the spin panel,
+ * and starts whichever story scene belongs to the current stage:
+ * arrival in Rogueport (STG0_02), Goombella's ambush, the X-Naut army, Bowser's visit,
+ * the Flavio departure, the return home, the Peach mail, the epilogue and the post- credits return.
+ * Also handles a pending ship arrival.
+ */
 EVT_BEGIN(gor_00_init_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_light_bind_mapobj, STRING("pointLight1"), STRING("S_fune_b"), 0)
@@ -7329,6 +7418,15 @@ SPAWN_EVENT(gorotsuki_kikan)
     RETURN
 EVT_END()
 #else
+/**
+ * Map init for gor_00 (the Rogueport harbor).
+ * Picks the music by story stage, sets up the exit "n_bero" to gor_01, creates the NPCs (including Luigi),
+ * the hidden-ship objects, the save block, the star piece and the spin panel,
+ * and starts whichever story scene belongs to the current stage:
+ * arrival in Rogueport (STG0_02), Goombella's ambush, the X-Naut army, Bowser's visit,
+ * the Flavio departure, the return home, the Peach mail, the epilogue and the post- credits return.
+ * Also handles a pending ship arrival.
+ */
 EVT_BEGIN(gor_00_init_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_light_bind_mapobj, STRING("pointLight1"), STRING("S_fune_b"), 0)

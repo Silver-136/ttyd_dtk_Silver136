@@ -2249,6 +2249,15 @@ EVT_END()
  * heals Mario and his partners.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Init script of gor_04, the station: music (Bowser's tune at STG4_15_05_PEACH_X_NAUT_PHD_REPORT,
+ * otherwise the Rogueport tune except on arriving by blimp), exits, Luigi and his companion, the NPCs,
+ * a save block, the spinning panel with a Star Piece, a second Star Piece, and the blimp ride trigger.
+ * Depending on how Mario entered (blimp return, train return trip, n_bero door) it sets the train flags
+ * and starts the matching scene.
+ * Also starts Peach's mail scene, the Bowser interlude and, after STG6_55_04_BOWSER_RAWK_HAWK,
+ * heals Mario and his partners.
+ */
 EVT_BEGIN(gor_04_init_evt)
     // Pick the music: Bowser's tune during the Bowser interlude, otherwise the Rogueport tune (unless Mario
     // arrived by blimp).
@@ -2348,6 +2357,15 @@ END_IF
 RETURN
 EVT_END()
 #else
+/**
+ * Init script of gor_04, the station: music (Bowser's tune at STG4_15_05_PEACH_X_NAUT_PHD_REPORT,
+ * otherwise the Rogueport tune except on arriving by blimp), exits, Luigi and his companion, the NPCs,
+ * a save block, the spinning panel with a Star Piece, a second Star Piece, and the blimp ride trigger.
+ * Depending on how Mario entered (blimp return, train return trip, n_bero door) it sets the train flags
+ * and starts the matching scene.
+ * Also starts Peach's mail scene, the Bowser interlude and, after STG6_55_04_BOWSER_RAWK_HAWK,
+ * heals Mario and his partners.
+ */
 EVT_BEGIN(gor_04_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))

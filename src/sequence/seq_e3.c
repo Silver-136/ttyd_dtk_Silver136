@@ -135,6 +135,7 @@ void e3DispOffscreen(CameraId cameraId, void* param);
 static
 #endif
 #if VERSION == VERSION_DEMO_JP
+/** Sets every character to the given column of anim_tbl. */
 USER_FUNC(e3PoseSetAnim) {
     s32 col = evtGetValue(event, event->args[0]);
     s32 i;
@@ -144,6 +145,7 @@ USER_FUNC(e3PoseSetAnim) {
     }
     return EVT_RETURN_DONE;
 }
+/** Starts the action animation on the first call, then waits until every character has played it once. */
 USER_FUNC(e3PoseWaitAction) {
     s32 i;
 
@@ -159,10 +161,15 @@ USER_FUNC(e3PoseWaitAction) {
     }
     return EVT_RETURN_DONE;
 }
+/** Turns the characters to the given angle. */
 USER_FUNC(e3PoseSetRotY) {
     wp->poseRotY = evtGetFloat(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
+/**
+ * US demo title screen loop: the four characters walk,
+ * then every 5-15 s play their action animation and turn to face the other way and back.
+ */
 EVT_BEGIN(e3_pose_evt)
     LOOP(0)
         CALL(e3PoseSetAnim, 1)
@@ -188,6 +195,7 @@ void alarm_handler(OSAlarm* alarm, OSContext* context) {
 }
 #elif VERSION == VERSION_DEMO_US
 static f32 e3BlinkTime(void);
+/** Sets every character to the given column of anim_tbl. */
 USER_FUNC(e3PoseSetAnim) {
     s32 col = evtGetValue(event, event->args[0]);
     s32 i;
@@ -197,6 +205,7 @@ USER_FUNC(e3PoseSetAnim) {
     }
     return EVT_RETURN_DONE;
 }
+/** Starts the action animation on the first call, then waits until every character has played it once. */
 USER_FUNC(e3PoseWaitAction) {
     s32 i;
 
@@ -212,10 +221,15 @@ USER_FUNC(e3PoseWaitAction) {
     }
     return EVT_RETURN_DONE;
 }
+/** Turns the characters to the given angle. */
 USER_FUNC(e3PoseSetRotY) {
     wp->poseRotY = evtGetFloat(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
+/**
+ * US demo title screen loop: the four characters walk,
+ * then every 5-15 s play their action animation and turn to face the other way and back.
+ */
 EVT_BEGIN(e3_pose_evt)
     LOOP(0)
         CALL(e3PoseSetAnim, 1)
@@ -246,6 +260,11 @@ void alarm_handler(OSAlarm* alarm, OSContext* context) {
 #endif
 
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Enters the kiosk menu: loads its textures (monthry.tpl; the US demo's e3.tpl plus its four title characters),
+ * starts the play-time alarm (5 min in US, 10 min otherwise; the US demo arms it when a scenario starts),
+ * sets the kiosk and save-blocks-off flags and plays the file menu BGM.
+ */
 void seq_e3Init(SequenceWork* seq) {
     wp->handle = fileAllocf(FILE_TYPE_TPL, "%s/monthry.tpl", getMarioStDvdRoot());
     wp->curScreen = 0;
@@ -267,6 +286,11 @@ wp->initTime = OSGetTime();
     animGroupBaseAsync("OFF_d_meku", 0, NULL);
 }
 #elif VERSION == VERSION_DEMO_US
+/**
+ * Enters the kiosk menu: loads its textures (monthry.tpl; the US demo's e3.tpl plus its four title characters),
+ * starts the play-time alarm (5 min in US, 10 min otherwise; the US demo arms it when a scenario starts),
+ * sets the kiosk and save-blocks-off flags and plays the file menu BGM.
+ */
 void seq_e3Init(SequenceWork* seq) {
 s32 type = gp->inBattle != 0;
     s32 i;
@@ -297,6 +321,11 @@ gp->flags &= ~GW_FLAG_NO_ENTRANCE;
     animGroupBaseAsync("OFF_d_meku", 0, NULL);
 }
 #else
+/**
+ * Enters the kiosk menu: loads its textures (monthry.tpl; the US demo's e3.tpl plus its four title characters),
+ * starts the play-time alarm (5 min in US, 10 min otherwise; the US demo arms it when a scenario starts),
+ * sets the kiosk and save-blocks-off flags and plays the file menu BGM.
+ */
 void seq_e3Init(SequenceWork* seq) {
     wp->handle = fileAllocf(FILE_TYPE_TPL, "%s/monthry.tpl", getMarioStDvdRoot());
     wp->curScreen = 0;
@@ -328,11 +357,13 @@ void seq_e3Init(SequenceWork* seq) {
 #endif
 
 #if VERSION == VERSION_DEMO_JP
+/** Leaves the kiosk menu: frees its textures (and the US demo's characters and their script) and fades out sound. */
 void seq_e3Exit(SequenceWork* seq) {
     fileFree(wp->handle);
     psndStopAllFadeOut();
 }
 #elif VERSION == VERSION_DEMO_US
+/** Leaves the kiosk menu: frees its textures (and the US demo's characters and their script) and fades out sound. */
 void seq_e3Exit(SequenceWork* seq) {
 s32 i;
 
@@ -344,6 +375,7 @@ fileFree(wp->handle);
     psndStopAllFadeOut();
 }
 #else
+/** Leaves the kiosk menu: frees its textures (and the US demo's characters and their script) and fades out sound. */
 void seq_e3Exit(SequenceWork* seq) {
     fileFree(wp->handle);
     psndStopAllFadeOut();
@@ -357,6 +389,12 @@ void seq_e3Exit(SequenceWork* seq) {
  * sets partners, a 20 HP/FP/BP loadout and items, and starts its map.
  */
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Kiosk menu state machine: press A/Start page-flips from the title to the scenario boxes;
+ * the stick picks a scenario (B or 2 min idle flips back);
+ * A sets story progress to just before the scenario's e3_tbl entry, runs the story init events up to it,
+ * sets partners, a 20 HP/FP/BP loadout and items, and starts its map.
+ */
 void seq_e3Main(SequenceWork* seq) {
     CameraEntry* camera;
     s32 prevId;
@@ -579,6 +617,12 @@ pouchReviseMarioParam();
     dispEntry(CAMERA_3D, 0.0f, 0, e3Disp, seq);
 }
 #elif VERSION == VERSION_DEMO_US
+/**
+ * Kiosk menu state machine: press A/Start page-flips from the title to the scenario boxes;
+ * the stick picks a scenario (B or 2 min idle flips back);
+ * A sets story progress to just before the scenario's e3_tbl entry, runs the story init events up to it,
+ * sets partners, a 20 HP/FP/BP loadout and items, and starts its map.
+ */
 void seq_e3Main(SequenceWork* seq) {
     CameraEntry* camera;
     s32 prevId;
@@ -804,6 +848,12 @@ OSCreateAlarm(&wp->alarm);
     dispEntry(CAMERA_3D, 0.0f, 0, e3Disp, seq);
 }
 #else
+/**
+ * Kiosk menu state machine: press A/Start page-flips from the title to the scenario boxes;
+ * the stick picks a scenario (B or 2 min idle flips back);
+ * A sets story progress to just before the scenario's e3_tbl entry, runs the story init events up to it,
+ * sets partners, a 20 HP/FP/BP loadout and items, and starts its map.
+ */
 void seq_e3Main(SequenceWork* seq) {
     CameraEntry* camera;
     s32 prevId;
@@ -1058,6 +1108,12 @@ void seq_e3Main(SequenceWork* seq) {
 #endif
 
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Draws the active page through the 2D camera: the title page (the US demo's characters,
+ * tiles and blinking prompt) or the scenario boxes with their area labels
+ * and the blinking corner cursor easing toward the selection.
+ * On the offscreen page-flip camera it draws the other page.
+ */
 static void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
 Mtx poseMtx;
@@ -1186,6 +1242,12 @@ typedef enum E3Texture {
     E3_TEX_CURSOR1 = 6,
 } E3Texture;
 
+/**
+ * Draws the active page through the 2D camera: the title page (the US demo's characters,
+ * tiles and blinking prompt) or the scenario boxes with their area labels
+ * and the blinking corner cursor easing toward the selection.
+ * On the offscreen page-flip camera it draws the other page.
+ */
 static void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
     Mtx poseMtx;
@@ -1333,6 +1395,12 @@ static void e3Disp(CameraId cameraId, void* param) {
                   viewportBackup[5]);
 }
 #else
+/**
+ * Draws the active page through the 2D camera: the title page (the US demo's characters,
+ * tiles and blinking prompt) or the scenario boxes with their area labels
+ * and the blinking corner cursor easing toward the selection.
+ * On the offscreen page-flip camera it draws the other page.
+ */
 void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
     Mtx mtx;
@@ -1566,9 +1634,11 @@ GXLoadTexObj(&gradient, GX_TEXMAP1);
     GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }
 #elif VERSION == VERSION_DEMO_US
+/** Phase for the US demo title's blinking prompt: retrace count / 15 (radians for sin). */
 static f32 e3BlinkTime(void) {
     return (f32)gp->retraceCount / 15.0f;
 }
+/** Draws the shadow under a character on the demo's title screen. */
 static void e3DispShadow(f32 x, f32 y, f32 z) {
     Mtx mtx;
     Mtx trans;

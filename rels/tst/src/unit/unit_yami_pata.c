@@ -361,6 +361,13 @@ static EVT_BEGIN(patapata_dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the flying Dark Paratroopa: uses an item if it decides to,
+ * otherwise picks a target (the first-attack target on a first strike),
+ * flies above it and swoops down in a kick.
+ * A dodge or miss swoops past; a hit shakes the camera, damages the target and somersaults back up into the air.
+ * It then flies home.
+ */
 static EVT_BEGIN(attack_event_patapata)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

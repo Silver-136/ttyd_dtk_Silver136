@@ -246,6 +246,13 @@ EVT_BEGIN(damage_event_christine)
     RETURN
 EVT_END()
 
+/**
+ * Death event of the Goombella double: she returns to her home position, then,
+ * depending on GW(19) (the fake Mario's state),
+ * speaks stg4_jin_26_03_kur and the fake Mario answers with stg4_jin_26_04,
+ * or she just waits for the fake Mario's defeat;
+ * she plays the defeat pose (PKR_D_3, defeat sound in JP and later), is removed and GW(20) is set to 2.
+ */
 static EVT_BEGIN(dead_event_christine)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(4), LW(5))

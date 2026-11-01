@@ -266,6 +266,12 @@ USER_FUNC(evt_win_party_lankup_chk) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_802399f8, JP 0x802399F8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * The power-down shop's check (Rogueport Sewers, tik_11) before trading partner ranks:
+ * sets args[0] to 1 when at least two partners have joined,
+ * one of them can still be ranked up (same limit as evt_win_party_lankup_chk) and one has a rank to give;
+ * otherwise 0.
+ */
 USER_FUNC(evt_win_party_lankdown_chk) {
     PouchData* pouch;
     u16* p;
@@ -593,6 +599,12 @@ void winMgrHelpInit(WinMgrEntry* entry) {
     entry->msg = NULL;
 }
 
+/**
+ * Per-frame input of a help (description) window:
+ * counts the lines of entry->msg and, when it has more than two, scrolls two lines at a time with the C stick.
+ * Used by the select lists, the item and shop windows and evt_win.
+ * PAL computes the last scroll position differently.
+ */
 void winMgrHelpMain(WinMgrEntry* entry) {
     u16 lines = 0;
 
@@ -692,6 +704,16 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
  * Free with winMgrSelectDelete.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Opens a selection list (list, title and help windows) and fills it by type:
+ * 0 key items, 1/3/4 items (use, sell, store), 2 badges, 5 stored items, 6/7 partners to rank up,
+ * 8 partner to rank down, 9/10 HP/FP/BP to raise or lower,
+ * 11-16 shop stock (badge shop, sell badges, Star Piece badges, bargains, the Pit's trader, Pianta Parlor),
+ * 17/18 the informant's lists; a negative type is a -1-terminated item id list.
+ * Rows flagged 3 are greyed and refused.
+ * newItem is shown first, above a divider (the item being picked up when the bag is full).
+ * Free with winMgrSelectDelete.
+ */
 WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
     s32 n;
     WinMgrDesc* desc;
@@ -975,6 +997,16 @@ break;
     return sel;
 }
 #else
+/**
+ * Opens a selection list (list, title and help windows) and fills it by type:
+ * 0 key items, 1/3/4 items (use, sell, store), 2 badges, 5 stored items, 6/7 partners to rank up,
+ * 8 partner to rank down, 9/10 HP/FP/BP to raise or lower,
+ * 11-16 shop stock (badge shop, sell badges, Star Piece badges, bargains, the Pit's trader, Pianta Parlor),
+ * 17/18 the informant's lists; a negative type is a -1-terminated item id list.
+ * Rows flagged 3 are greyed and refused.
+ * newItem is shown first, above a divider (the item being picked up when the bag is full).
+ * Free with winMgrSelectDelete.
+ */
 WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
     s32 n;
     WinMgrDesc* desc;
@@ -1662,6 +1694,12 @@ void select_main(WinMgrEntry* entry) {
  * From US on, worn badges in the sell list get a mark.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws an item or badge list: icon, name and (for the sell and shop types) price per row,
+ * the divider under a new item, the title by type,
+ * a currency icon above the price column (one for 13, another for 16), the hand cursor and scroll arrows.
+ * From US on, worn badges in the sell list get a mark.
+ */
 static void select_disp(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     u32 left, top, wd, ht;
@@ -1800,6 +1838,12 @@ PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
     }
 }
 #else
+/**
+ * Draws an item or badge list: icon, name and (for the sell and shop types) price per row,
+ * the divider under a new item, the title by type,
+ * a currency icon above the price column (one for 13, another for 16), the hand cursor and scroll arrows.
+ * From US on, worn badges in the sell list get a mark.
+ */
 void select_disp(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     u32 left, top, wd, ht;
@@ -2031,6 +2075,11 @@ static inline s32 select_party_icon(u16 id) {
  * cursor and scroll arrows.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the partner list of the rank-up and rank-swap menus:
+ * name, portrait (Yoshi in his colour) and one rank icon per rank already earned, with the two column titles,
+ * cursor and scroll arrows.
+ */
 static void select_disp_party(WinMgrEntry* entry) {
 s32 i;
     WinMgrSelect* sel = entry->param;
@@ -2097,6 +2146,11 @@ iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_DISP_2D | ICON_FLAG_F
     }
 }
 #else
+/**
+ * Draws the partner list of the rank-up and rank-swap menus:
+ * name, portrait (Yoshi in his colour) and one rank icon per rank already earned, with the two column titles,
+ * cursor and scroll arrows.
+ */
 void select_disp_party(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
@@ -2327,6 +2381,10 @@ void select_disp_mario(WinMgrEntry* entry) {
  * and for type 17 the price of unread entries with a coin icon. Despite the name it serves both 17 and 18.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the informant lists: each entry's title cut at its tag end, read ones in grey,
+ * and for type 17 the price of unread entries with a coin icon. Despite the name it serves both 17 and 18.
+ */
 static void select_disp_luigi(WinMgrEntry* entry) {
 WinMgrEntry* ent = entry;
     WinMgrSelect* sel = ent->param;
@@ -2394,6 +2452,10 @@ iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_DISP_2D | ICON_FLAG_F
     }
 }
 #else
+/**
+ * Draws the informant lists: each entry's title cut at its tag end, read ones in grey,
+ * and for type 17 the price of unread entries with a coin icon. Despite the name it serves both 17 and 18.
+ */
 void select_disp_luigi(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;

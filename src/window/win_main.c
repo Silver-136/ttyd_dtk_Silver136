@@ -150,6 +150,13 @@ static const WinLangTbl winLangTbl;
  * It also starts the item-use and Ragged Diary scenes, swaps partners, and opens the Pianta Parlor window.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame pause menu driver.
+ * In the field it reads the pad, opens the menu on Start
+ * or a D-pad shortcut (Party, Items, Badges, Journal tabs), freezes Mario and partners, loads win.tpl,
+ * runs winRootMain, and on close restores control.
+ * It also starts the item-use and Ragged Diary scenes, swaps partners, and opens the Pianta Parlor window.
+ */
 void winMain(void) {
     MarioWork* mario;
     s32 i;
@@ -423,6 +430,13 @@ wp->currentEvent = evtEntryType(evt_item_use, 0, 0, 0);
     }
 }
 #else
+/**
+ * Per-frame pause menu driver.
+ * In the field it reads the pad, opens the menu on Start
+ * or a D-pad shortcut (Party, Items, Badges, Journal tabs), freezes Mario and partners, loads win.tpl,
+ * runs winRootMain, and on close restores control.
+ * It also starts the item-use and Ragged Diary scenes, swaps partners, and opens the Pianta Parlor window.
+ */
 void winMain(void) {
     MarioWork* mario;
     s32 i;
@@ -845,6 +859,10 @@ EVT_BEGIN(win_main_child_evt)
 EVT_END()
 #endif
 
+/**
+ * The 8-bit (Famicom-style) version of the partner item poses, used while Mario is in his 8-bit form;
+ * Yoshi's pose depends on his color (party_color).
+ */
 EVT_BEGIN(kime_pose_famicom)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_party_nokotaro_get_status, 0, LW(0))
@@ -889,6 +907,12 @@ EVT_BEGIN(kime_pose_famicom)
     RETURN
 EVT_END()
 
+/**
+ * Field scene for using a recovery item from the Items menu:
+ * LW(10) is the item, LW(11) the target partner (0 for Mario).
+ * The item floats above the user with a sparkle and sound,
+ * then itemUseFunc applies HP/FP/SP and shows the recovery numbers. Started by winMain (menuState 200).
+ */
 EVT_BEGIN(evt_item_use)
     SET_TYPE(0)
     CALL(evt_mario_normalize)
@@ -978,6 +1002,11 @@ CALL(evt_party_set_breed_pose, 0, 1)
     RETURN
 EVT_END()
 
+/**
+ * Reading the Ragged Diary (chapter 6, Excess Express) from Important Items.
+ * After three yes/no prompts a ghost appears, the camera rolls and the game goes to the Game Over screen.
+ * Started by winMain (menuState 300).
+ */
 EVT_BEGIN(evt_diary_read)
     SET_TYPE(0)
 #if VERSION <= VERSION_DEMO_US
@@ -1104,6 +1133,11 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 EVT_END()
 
 #if VERSION == VERSION_DEMO_JP
+/**
+ * The badge tutorial's text (lecture_badge_00..07) shown over the pause menu;
+ * each wait step blocks until the player has made the input winLectureKeyMask allows for that step.
+ * Started by winLectureOn.
+ */
 EVT_BEGIN(evt_lecture_msg)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("lecture_badge_00"), 0, 0)
@@ -1134,6 +1168,11 @@ WAIT_MS(500)
 RETURN
 EVT_END()
 #elif VERSION == VERSION_DEMO_US
+/**
+ * The badge tutorial's text (lecture_badge_00..07) shown over the pause menu;
+ * each wait step blocks until the player has made the input winLectureKeyMask allows for that step.
+ * Started by winLectureOn.
+ */
 EVT_BEGIN(evt_lecture_msg)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("lecture_badge_00"), 0, 0)
@@ -1168,6 +1207,11 @@ OPCODE_END_SCRIPT,
 static USER_FUNC(itemUseFunc) {
     PartyEntry* party;
 #else
+/**
+ * The badge tutorial's text (lecture_badge_00..07) shown over the pause menu;
+ * each wait step blocks until the player has made the input winLectureKeyMask allows for that step.
+ * Started by winLectureOn.
+ */
 EVT_BEGIN(evt_lecture_msg)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("lecture_badge_00"), 0, 0)
@@ -1486,6 +1530,7 @@ USER_FUNC(itemUseFunc) {
 
 /** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 #if VERSION == VERSION_DEMO_JP
+/** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 USER_FUNC(itemUseFunc2) {
     statusWinForceOff();
     return EVT_RETURN_DONE;
@@ -1498,6 +1543,7 @@ USER_FUNC(itemUseFunc2) {
 static USER_FUNC(itemUseFunc2) {
     statusWinForceOff();
 #else
+/** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 USER_FUNC(itemUseFunc2) {
     statusWinForceOff();
     return EVT_RETURN_DONE;
@@ -1505,6 +1551,7 @@ USER_FUNC(itemUseFunc2) {
 #endif
 
 #if VERSION == VERSION_DEMO_JP
+/** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
 USER_FUNC(famicom_check) {
     EvtWord* args = event->args;
 
@@ -1526,6 +1573,7 @@ static USER_FUNC(famicom_check) {
         evtSetValue(event, args[0], 1);
     }
 #else
+/** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
 USER_FUNC(famicom_check) {
     EvtWord* args = event->args;
 
@@ -1540,6 +1588,7 @@ USER_FUNC(famicom_check) {
 
 /** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 #if VERSION == VERSION_DEMO_JP
+/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 USER_FUNC(party_color) {
     EvtWord* args = event->args;
 
@@ -1558,6 +1607,7 @@ static USER_FUNC(party_color) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
 #else
+/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 USER_FUNC(party_color) {
     EvtWord* args = event->args;
 
@@ -1579,6 +1629,10 @@ USER_FUNC(all_party_slit_off) {
  * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
  */
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
+ * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
+ */
 USER_FUNC(cam_r) {
     CameraEntry* cam;
     Vec v;
@@ -1596,6 +1650,10 @@ USER_FUNC(cam_r) {
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/**
+ * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
+ * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
+ */
 USER_FUNC(cam_r) {
     CameraEntry* cam;
     Vec v;
@@ -1615,6 +1673,7 @@ USER_FUNC(cam_r) {
 
 /** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
 #if VERSION == VERSION_DEMO_JP
+/** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
 BOOL winGhostDiaryChk(void) {
     if (wp->menuState == WIN_MENU_DIARY_WAIT) {
         return TRUE;
@@ -1624,6 +1683,10 @@ BOOL winGhostDiaryChk(void) {
 #elif VERSION == VERSION_DEMO_US
     return EVT_RETURN_DONE;
 }
+/**
+ * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
+ * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
+ */
 static USER_FUNC(cam_r) {
     CameraEntry* cam;
     Vec v;
@@ -1645,6 +1708,7 @@ BOOL winGhostDiaryChk(void) {
         return TRUE;
     }
 #else
+/** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
 BOOL winGhostDiaryChk(void) {
     if (wp->menuState == WIN_MENU_DIARY_WAIT) {
         return TRUE;
@@ -1673,6 +1737,7 @@ const char* winMainStrippedTpl(void) {
 
 /** Prepares the font renderer for the winFontSet* calls that follow. */
 #if VERSION == VERSION_DEMO_JP
+/** Prepares the font renderer for the winFontSet* calls that follow. */
 void winFontInit(void) {
     FontDrawStart();
 }
@@ -1683,6 +1748,7 @@ void winFontInit(void) {
 void winFontInit(void) {
     FontDrawStart();
 #else
+/** Prepares the font renderer for the winFontSet* calls that follow. */
 void winFontInit(void) {
     FontDrawStart();
 }
@@ -1690,6 +1756,7 @@ void winFontInit(void) {
 
 /** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
 #if VERSION == VERSION_DEMO_JP
+/** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 char buf[0x400];
 Mtx trans;
@@ -1705,6 +1772,7 @@ FontDrawMessageMtx(trans, buf);
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION >= VERSION_US
     char buf[0x1000];
@@ -1759,6 +1827,7 @@ void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* f
 
 /** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
 #if VERSION == VERSION_DEMO_JP
+/** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 char buf[0x400];
 Mtx trans;
@@ -1777,6 +1846,7 @@ FontDrawStringMtx(trans, buf);
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION >= VERSION_US
     char buf[0x1000];
@@ -1825,6 +1895,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 
 /** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
 #if VERSION == VERSION_EU
+/** PAL: right-aligned like winFontSetR, squeezed horizontally to fit width */
 void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...) {
     char buf[0x1000];
     const char* msg;
@@ -1861,6 +1932,7 @@ void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* 
 /** Draws formatted text as a plain string with the font's outline (edge) turned on. */
 #endif
 #if VERSION == VERSION_DEMO_JP
+/** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 char buf[0x400];
 Mtx trans;
@@ -1878,6 +1950,7 @@ FontDrawStringMtx(trans, buf);
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION >= VERSION_US
     char buf[0x1000];
@@ -1935,6 +2008,7 @@ void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const cha
 
 /** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
 #if VERSION == VERSION_DEMO_JP
+/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
     Mtx trans;
     Mtx scl;
@@ -1949,6 +2023,7 @@ void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
 }
 #elif VERSION == VERSION_DEMO_US
 }
+/** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
     Mtx trans;
@@ -1962,6 +2037,7 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     FontDrawColor(color);
     FontDrawMessageMtx(trans, buf);
 }
+/** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
     Mtx trans;
@@ -1981,6 +2057,7 @@ while (0);
     FontDrawColor(color);
     FontDrawStringMtx(trans, buf);
 }
+/** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
     Mtx trans;
@@ -1996,6 +2073,7 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     FontDrawStringMtx(trans, buf);
     FontDrawEdgeOff();
 }
+/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
     Mtx trans;
     Mtx scl;
@@ -2007,6 +2085,7 @@ void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
         FontDrawMessageMtx(trans, msgSearch(msg));
     }
 #else
+/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
     Mtx trans;
     Mtx scl;
@@ -2053,6 +2132,7 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
 
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 #if VERSION == VERSION_DEMO_JP
+/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 void winTexInit(TEXPalette* texture) {
     winTexTpl = texture;
     GXSetCullMode(GX_CULL_NONE);
@@ -2076,6 +2156,7 @@ void winTexInit(TEXPalette* texture) {
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 void winTexInit(TEXPalette* texture) {
     winTexTpl = texture;
     GXSetCullMode(GX_CULL_NONE);
@@ -2104,6 +2185,10 @@ void winTexInit(TEXPalette* texture) {
  * tinted by color in 2D camera space. Alpha below 255 blends; opaque draws use an alpha test instead.
  */
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Draws texture textureId of the current TPL centred at translate, sized texture size times scale,
+ * tinted by color in 2D camera space. Alpha below 255 blends; opaque draws use an alpha test instead.
+ */
 void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -2145,6 +2230,10 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/**
+ * Draws texture textureId of the current TPL centred at translate, sized texture size times scale,
+ * tinted by color in 2D camera space. Alpha below 255 blends; opaque draws use an alpha test instead.
+ */
 void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -2224,6 +2313,7 @@ void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
 
 /** winTexSet with the quad rotated rot degrees about the screen's z axis. */
 #if VERSION == VERSION_DEMO_JP
+/** winTexSet with the quad rotated rot degrees about the screen's z axis. */
 void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot) {
     Mtx trans;
     Mtx scl;
@@ -2268,6 +2358,7 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/** winTexSet with the quad rotated rot degrees about the screen's z axis. */
 void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot) {
     Mtx trans;
     Mtx scl;
@@ -2318,6 +2409,11 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
  * so the second texture works as a mask (used for menu tab labels).
  */
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Two-texture variant of winTexInit: stage 0 takes the first texture's color,
+ * stage 1 multiplies by the tint and takes the second texture's alpha,
+ * so the second texture works as a mask (used for menu tab labels).
+ */
 void winTexInit_x2(TEXPalette* texture) {
     winTexInit(texture);
     GXSetNumTexGens(2);
@@ -2339,6 +2435,11 @@ void winTexInit_x2(TEXPalette* texture) {
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/**
+ * Two-texture variant of winTexInit: stage 0 takes the first texture's color,
+ * stage 1 multiplies by the tint and takes the second texture's alpha,
+ * so the second texture works as a mask (used for menu tab labels).
+ */
 void winTexInit_x2(TEXPalette* texture) {
     winTexInit(texture);
     GXSetNumTexGens(2);
@@ -2362,6 +2463,7 @@ void winTexInit_x2(TEXPalette* texture) {
 
 /** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
 #if VERSION == VERSION_DEMO_JP
+/** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
 void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -2399,6 +2501,7 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
 void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -2438,6 +2541,7 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
 
 /** Sets up GX for winIconSet (no TPL; icons come from the icon driver). */
 #if VERSION == VERSION_DEMO_JP
+/** Sets up GX for winIconSet (no TPL; icons come from the icon driver). */
 void winIconInit(void) {
     winTexInit(NULL);
 }
@@ -2449,6 +2553,7 @@ void winIconInit(void) {
     FontDrawScaleVec(scale);
     ((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
 }
+/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 void winTexInit(TEXPalette* texture) {
     winTexTpl = texture;
     GXSetCullMode(GX_CULL_NONE);
@@ -2514,6 +2619,7 @@ else {
     GXPosition3f32(-0.5f, HALF_F, 0.0f);
     GXTexCoord2f32(0.0f, 0.0f);
 }
+/** winTexSet with the quad rotated rot degrees about the screen's z axis. */
 void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot) {
     Mtx trans;
     Mtx scl;
@@ -2622,6 +2728,7 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
 void winIconInit(void) {
     winTexInit(NULL);
 #else
+/** Sets up GX for winIconSet (no TPL; icons come from the icon driver). */
 void winIconInit(void) {
     winTexInit(NULL);
 }
@@ -2632,6 +2739,10 @@ void winIconInit(void) {
  * used for badges that cost more BP than Mario has left.
  */
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Sets up GX so the following winIconSet draws a grayscale icon (R, G and B summed at 1/3 each);
+ * used for badges that cost more BP than Mario has left.
+ */
 void winIconGrayInit(void) {
     winTexInit(NULL);
     GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_ALPHA);
@@ -2666,6 +2777,10 @@ void winIconGrayInit(void) {
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/**
+ * Sets up GX so the following winIconSet draws a grayscale icon (R, G and B summed at 1/3 each);
+ * used for badges that cost more BP than Mario has left.
+ */
 void winIconGrayInit(void) {
     winTexInit(NULL);
     GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_ALPHA);
@@ -2705,6 +2820,10 @@ void winIconGrayInit(void) {
  * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
  */
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
+ * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
+ */
 void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -2751,6 +2870,10 @@ iconGetTexObj(&obj, iconId);
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/**
+ * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
+ * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
+ */
 void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -2935,6 +3058,12 @@ USER_FUNC(lecture_key_mask_off) {
 #endif
 
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Badge tutorial input filter, run by winMain each frame:
+ * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
+ * steps 0-1 take A (read from the pad and swallowed), 2-4 Right, 5-8 A, 9 Start. In JP and later nothing gets
+ * through while WIN_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
+ */
 static void winLectureKeyMask(void) {
     if (wp->flags & WINDOW_FLAG_LECTURE) {
 switch (wp->lectureStep) {
@@ -2989,6 +3118,12 @@ switch (wp->lectureStep) {
     }
     return EVT_RETURN_DONE;
 }
+/**
+ * Badge tutorial input filter, run by winMain each frame:
+ * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
+ * steps 0-1 take A (read from the pad and swallowed), 2-4 Right, 5-8 A, 9 Start. In JP and later nothing gets
+ * through while WIN_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
+ */
 static void winLectureKeyMask(void) {
     if (wp->flags & WINDOW_FLAG_LECTURE) {
 switch (wp->lectureStep) {
@@ -3037,6 +3172,12 @@ switch (wp->lectureStep) {
         }
     }
 #else
+/**
+ * Badge tutorial input filter, run by winMain each frame:
+ * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
+ * steps 0-1 take A (read from the pad and swallowed), 2-4 Right, 5-8 A, 9 Start. In JP and later nothing gets
+ * through while WIN_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
+ */
 void winLectureKeyMask(void) {
     if (wp->flags & WINDOW_FLAG_LECTURE) {
         if (wp->flags & WINDOW_FLAG_LECTURE_KEY_MASK) {
@@ -3099,6 +3240,10 @@ void winLectureKeyMask(void) {
  * sets the tutorial flag, which opens the menu straight away, and starts evt_lecture_msg.
  */
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Starts the badge tutorial menu (from Rogueport, gor_02):
+ * sets the tutorial flag, which opens the menu straight away, and starts evt_lecture_msg.
+ */
 void winLectureOn(void) {
     wp->flags |= WINDOW_FLAG_LECTURE;
 wp->lectureStep = 0;
@@ -3106,6 +3251,10 @@ wp->lectureStep = 0;
 }
 #elif VERSION == VERSION_DEMO_US
 #else
+/**
+ * Starts the badge tutorial menu (from Rogueport, gor_02):
+ * sets the tutorial flag, which opens the menu straight away, and starts evt_lecture_msg.
+ */
 void winLectureOn(void) {
     wp->flags |= WINDOW_FLAG_LECTURE;
     wp->flags |= WINDOW_FLAG_LECTURE_KEY_MASK;
@@ -3116,6 +3265,7 @@ void winLectureOn(void) {
 
 /** TRUE while the badge tutorial's text script is still running; once it ends, clears the tutorial flag. */
 #if VERSION == VERSION_DEMO_JP
+/** TRUE while the badge tutorial's text script is still running; once it ends, clears the tutorial flag. */
 BOOL winLectureCheck(void) {
     if ((wp->flags & WINDOW_FLAG_LECTURE) && evtCheckID(wp->lectureEvent->eventId)) {
         return TRUE;
@@ -3143,6 +3293,7 @@ BOOL winLectureCheck(void) {
         return TRUE;
     }
 #else
+/** TRUE while the badge tutorial's text script is still running; once it ends, clears the tutorial flag. */
 BOOL winLectureCheck(void) {
     if ((wp->flags & WINDOW_FLAG_LECTURE) && evtCheckID(wp->lectureEvent->eventId)) {
         return TRUE;

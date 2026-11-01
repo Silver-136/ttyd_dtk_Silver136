@@ -109,6 +109,16 @@ EvtWord subset_attack_ready_jump_event[2];
  * US on, a revived enemy also loses its holding-stolen-item flag.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * KO reaction for a unit (LW(10) = unit, LW(11) = part) whose HP reached 0.
+ * Mario and the partners first walk home.
+ * Mario then runs his data-table event 51 when a Life Shroom revives him (damage code bit 0x800), else event 49.
+ * A partner with a Life Shroom keels over, uses it up and gets back up with 10 HP;
+ * otherwise it is KO'd and, when it stood in front, swaps places with Mario.
+ * Enemies revived by a Life Shroom spin down, show it and recover 10 HP;
+ * other enemies run their data-table KO event or subsetevt_dead_core.
+ * US on, a revived enemy also loses its holding-stolen-item flag.
+ */
 EVT_BEGIN(subsetevt_dead)
     // The command cursor will no longer return to this unit.
     // Mario and the partners first float or walk back home; enemies skip ahead.
@@ -294,6 +304,16 @@ CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 #else
+/**
+ * KO reaction for a unit (LW(10) = unit, LW(11) = part) whose HP reached 0.
+ * Mario and the partners first walk home.
+ * Mario then runs his data-table event 51 when a Life Shroom revives him (damage code bit 0x800), else event 49.
+ * A partner with a Life Shroom keels over, uses it up and gets back up with 10 HP;
+ * otherwise it is KO'd and, when it stood in front, swaps places with Mario.
+ * Enemies revived by a Life Shroom spin down, show it and recover 10 HP;
+ * other enemies run their data-table KO event or subsetevt_dead_core.
+ * US on, a revived enemy also loses its holding-stolen-item flag.
+ */
 EVT_BEGIN(subsetevt_dead)
     // The command cursor will no longer return to this unit.
     // Mario and the partners first float or walk back home; enemies skip ahead.
@@ -1063,6 +1083,11 @@ EVT_BEGIN(subsetevt_nodamage_motion)
     RETURN
 EVT_END()
 #endif
+/**
+ * Swaps Mario and the partner (the front-and-back switch):
+ * both arc to each other's home positions and the Koops shell shield follows Mario.
+ * Retail only moves the shell when it still has HP.
+ */
 EVT_BEGIN(btldefaultevt_ChangePosition)
     CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)
@@ -1195,6 +1220,7 @@ EVT_BEGIN(subsetevt_regeneration)
     RETURN
 EVT_END()
 #endif
+/** Fright: the unit hops, runs off the edge of the stage and is removed from the battle (no coins or Star Points). */
 EVT_BEGIN(subsetevt_terror)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

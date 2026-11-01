@@ -513,8 +513,10 @@ EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 li
 
 /** Per frame: counts the life down and deletes the effect at the end; chooses the draw layer (8 or 2) by type. */
 #if VERSION <= VERSION_DEMO_US
+/** Per frame: counts the life down and deletes the effect at the end; chooses the draw layer (8 or 2) by type. */
 static void effNozleMain(EffectEntry* effect) {
 #else
+/** Per frame: counts the life down and deletes the effect at the end; chooses the draw layer (8 or 2) by type. */
 void effNozleMain(EffectEntry* effect) {
 #endif
     EffNozleWork* work = effect->userdata;
@@ -607,8 +609,10 @@ static inline void nozleVtxSetup(GXAttrType type, u8 posFrac, u8 texFrac, void* 
 
 /** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
 #if VERSION <= VERSION_DEMO_US
+/** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
 static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #else
+/** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
 void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     void** dl5;

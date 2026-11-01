@@ -93,6 +93,10 @@ WinMgrDesc itemdrv_window_desc[4] = {
 // A macro: the symbol map has no itemGetWork function.
 #define itemGetWork() (gp->inBattle ? &work[1] : &work[0])
 
+/**
+ * The demo puts a removed badge item on sale at the badge shop (pouchArriveBadge, the bargain table)
+ * when its ITEM_FLAG_BADGE_RETURN bit (0x100) is clear, in or out of battle.
+ */
 inline void itemCheckBadge(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
     if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX && !(entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP)) {
@@ -135,6 +139,10 @@ static inline BOOL itemGetPouch(ItemEntry* entry) {
     return TRUE;
 }
 
+/**
+ * Ends an item get sequence: gives Mario back his controls and keys and unmutes the sound effects.
+ * Later versions also undo the control lock if the get set it.
+ */
 static inline void itemGetEnd(ItemEntry* entry) {
     marioStSystemLevel(0);
     psndClearFlag(PSND_FLAG_MUTE_SFX);
@@ -210,9 +218,21 @@ void itemCoinDrop(Vec* position) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Returns whether Mario may pick up this item now:
+ * not in water or lava, Mario has control (later versions skip that for Bowser when his stage flag bit 0 is
+ * set), no map event or other sequence runs, Mario is not on the boat or plane panel, hiding with Vivian,
+ * taking damage or holding Koops's item, no other get is in progress, and field battle state allows it.
+ */
 static BOOL itemGetCheck(ItemEntry* entry) {
 s32 fbatMode = fbatGetPointer()->mode;
 #else
+/**
+ * Returns whether Mario may pick up this item now:
+ * not in water or lava, Mario has control (later versions skip that for Bowser when his stage flag bit 0 is
+ * set), no map event or other sequence runs, Mario is not on the boat or plane panel, hiding with Vivian,
+ * taking damage or holding Koops's item, no other get is in progress, and field battle state allows it.
+ */
 BOOL itemGetCheck(ItemEntry* entry) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -308,9 +328,11 @@ if (fbatMode != 0 && fbatMode != 1)
 
 /** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
 #if VERSION <= VERSION_DEMO_US
+/** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
 static BOOL itemGetNokoCheck(ItemEntry* entry) {
 s32 fbatMode = fbatGetPointer()->mode;
 #else
+/** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
 BOOL itemGetNokoCheck(ItemEntry* entry) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -605,6 +627,12 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Spawns field item itemId at (x, y, z) named name (generated if NULL);
+ * type (ItemEntryType) picks how it appears and how long it stays,
+ * collectFlag is the GSWF or LSWF that marks it taken (-1 none), pickupEvt runs on collection.
+ * When the table is full a dropped coin, heart or flower is replaced. Returns the entry or NULL.
+ */
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt, f32 x, f32 y, f32 z) {
     ItemWork* wp = itemGetWork();
     int i;
@@ -794,6 +822,12 @@ case ITEM_TYPE_DROP:
     return entry;
 }
 #else
+/**
+ * Spawns field item itemId at (x, y, z) named name (generated if NULL);
+ * type (ItemEntryType) picks how it appears and how long it stays,
+ * collectFlag is the GSWF or LSWF that marks it taken (-1 none), pickupEvt runs on collection.
+ * When the table is full a dropped coin, heart or flower is replaced. Returns the entry or NULL.
+ */
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z) {
     ItemWork* wp = itemGetWork();
     int i;
@@ -1016,6 +1050,10 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
 }
 #endif
 
+/**
+ * Removes the named field item (and its name windows);
+ * JP, US and PAL first put a dropped badge on sale at the badge shop (itemCheckBadge).
+ */
 void itemDelete(const char* name) {
     ItemWork* wp = itemGetWork();
     ItemEntry* entry;
@@ -1273,9 +1311,11 @@ void winHelpDisp(WinMgrEntry* win) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** the demo has no badge-full message */
 static void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry;
 #else
+/** the demo has no badge-full message */
 void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     BOOL isBadge = FALSE;
@@ -1311,6 +1351,11 @@ void winFullDisp(WinMgrEntry* win) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo's item-get sequence: no retail sub-states 2 (control off) and 8 (motion abort),
+ * so retail 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
+ * and the icon flags are 0x40/0x100 where retail has 0x100/0x200.
+ */
 static void itemseq_GetItem(ItemEntry* entry) {
     ItemWork* wp = itemGetWork();
     MarioWork* mario;
@@ -1585,6 +1630,11 @@ static void itemseq_GetItem(ItemEntry* entry) {
     }
 }
 #else
+/**
+ * The demo's item-get sequence: no retail sub-states 2 (control off) and 8 (motion abort),
+ * so retail 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
+ * and the icon flags are 0x40/0x100 where retail has 0x100/0x200.
+ */
 void itemseq_GetItem(ItemEntry* entry) {
     ItemWork* wp = itemGetWork();
     MarioWork* mario;
@@ -1944,6 +1994,11 @@ static s32 _move_dir_1090;
  * becomes resting when it stops.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Moves a bouncing or falling item: gravity, bouncing off floors (with fewer, lower bounces each time),
+ * walls and ceilings, landing on map objects, water and lava, and despawning where needed;
+ * becomes resting when it stops.
+ */
 static void itemseq_Bound(ItemEntry* entry) {
     static s32 _move_dir;
     MarioWork* mario;
@@ -2254,6 +2309,11 @@ break;
     entry->flags2 &= ~ITEM_FLAG2_SKIP_BOUND_INIT;
 }
 #else
+/**
+ * Moves a bouncing or falling item: gravity, bouncing off floors (with fewer, lower bounces each time),
+ * walls and ceilings, landing on map objects, water and lava, and despawning where needed;
+ * becomes resting when it stops.
+ */
 void itemseq_Bound(ItemEntry* entry) {
     static s32 _move_dir;
     MarioWork* mario;

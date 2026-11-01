@@ -436,6 +436,11 @@ CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
     RETURN
 EVT_END()
 
+/**
+ * Init script of gor_10: before STG0_02_MARIOS_HOUSE it plays the prologue letter,
+ * afterwards the waking-up scene on the ship.
+ * In JP and later it starts the sea animations and does nothing else if map events are being skipped.
+ */
 EVT_BEGIN(gor_10_init_evt)
 #if VERSION <= VERSION_DEMO_US
 IF_INT_LESS(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)

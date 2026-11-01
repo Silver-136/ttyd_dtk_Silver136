@@ -50,8 +50,16 @@ void DVDMgrDelete(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * qqsort comparator over queue indices: lower priority values are served first.
+ * The demo compares the indices themselves, so it serves requests in queue order.
+ */
 static s32 compare(const void* a, const void* b) {
 #else
+/**
+ * qqsort comparator over queue indices: lower priority values are served first.
+ * The demo compares the indices themselves, so it serves requests in queue order.
+ */
 static s32 compare(const void** a, const void** b) {
 #endif
     u8 value1, value2;

@@ -486,6 +486,10 @@ USER_FUNC(moving_floor_getf_now_bpoint) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Returns the stop time at each end of the floor's travel in frames (from the ms value in LW(5)),
+ * or 0 during mode 3's mid-point stops. PAL converts with the 50 Hz frame rate instead of a fixed 60.
+ */
 USER_FUNC(moving_floor_get_stmsec) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();

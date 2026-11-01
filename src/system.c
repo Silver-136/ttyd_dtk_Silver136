@@ -547,6 +547,7 @@ void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*)) {
     }
 }
 
+/** Returns the DEMO pad library's status for controller i. */
 static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
     return DemoPad + i;
 }
@@ -563,6 +564,12 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
  * and applies rumble changes to the motors when rumble is enabled.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Reads the controllers once per frame (DEMOPadRead) into the global input state:
+ * held, newly pressed, released and auto-repeat (24 frames first, then every 6) for buttons
+ * and stick directions, the analogue sticks and triggers,
+ * and applies rumble changes to the motors when rumble is enabled.
+ */
 void makeKey(void) {
     s32 delay;
 u32 button;
@@ -612,6 +619,12 @@ int i;
 gp->keyDataValid = 1;
 }
 #else
+/**
+ * Reads the controllers once per frame (DEMOPadRead) into the global input state:
+ * held, newly pressed, released and auto-repeat (24 frames first, then every 6) for buttons
+ * and stick directions, the analogue sticks and triggers,
+ * and applies rumble changes to the motors when rumble is enabled.
+ */
 void makeKey(void) {
     u16 button;
     u16 dirs;
@@ -888,6 +901,10 @@ f32 sysFrame2SecFloat(f32 frame) {
     return frame / 60.0f;
 }
 
+/**
+ * Converts milliseconds to whole frames at the current frame rate (50 or 60 in US and PAL;
+ * always 60 in JP and the demos).
+ */
 s32 sysMsec2Frame(s32 msec) {
 #if VERSION >= VERSION_US
     return (msec * gp->framerate) / 1000;
@@ -896,6 +913,7 @@ s32 sysMsec2Frame(s32 msec) {
 #endif
 }
 
+/** Converts milliseconds to frames as a float, at the current frame rate (60 in JP and the demos). */
 f32 sysMsec2FrameFloat(f32 msec) {
 #if VERSION >= VERSION_US
     return (msec * (f32)gp->framerate) / 1000.0f;
@@ -1147,6 +1165,10 @@ f32 systemStrippedPool2(s32 x) {
  * ACCEL, ..., the file:line report format and a few numbers) in their original pool order.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * FAKE stand-in (see above): recreates the stripped debug code's constants (the interpolation mode names LINEAR,
+ * ACCEL, ..., the file:line report format and a few numbers) in their original pool order.
+ */
 void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     f[0] = 1.0f;
 str[0] = "LINEAR";
@@ -1170,6 +1192,10 @@ f[1] = sqrtf(x);
     f[2] = 1000.0f;
 }
 #else
+/**
+ * FAKE stand-in (see above): recreates the stripped debug code's constants (the interpolation mode names LINEAR,
+ * ACCEL, ..., the file:line report format and a few numbers) in their original pool order.
+ */
 void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     f[0] = 1.0f;
     str[0] = "LINEAR";

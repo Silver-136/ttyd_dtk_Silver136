@@ -134,6 +134,11 @@ USER_FUNC(evt_party_set_camid) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * If the partner is off screen, walks it toward Mario a unit at a time,
+ * snapping it to the floor below (or Mario's height), until it is on screen; clears its footmarks first.
+ * The EU release also stops once Mario himself is off screen.
+ */
 USER_FUNC(evt_party_force_reset_outofscreen) {
     MarioWork* mario;
     PartyEntry* p = GETPARTY(event->args);
@@ -177,6 +182,11 @@ f32 ang;
     return EVT_RETURN_DONE;
 }
 #else
+/**
+ * If the partner is off screen, walks it toward Mario a unit at a time,
+ * snapping it to the floor below (or Mario's height), until it is on screen; clears its footmarks first.
+ * The EU release also stops once Mario himself is off screen.
+ */
 USER_FUNC(evt_party_force_reset_outofscreen) {
     MarioWork* mario;
     PartyEntry* p = GETPARTY(event->args);
@@ -531,6 +541,12 @@ USER_FUNC(evt_party_wait_landon) {
     return (p->flags & PARTY_FLAG_IS_GROUNDED) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/**
+ * Makes the partner jump to (args[1], args[2], args[3]) in args[4] milliseconds, blocking until it lands.
+ * args[5] = 0 also turns it toward the target; args[6] is the arc height for a level jump (-1000 or below = 20).
+ * Rising jumps add headroom (half the partner's height in the JP and US demo releases, 37 units later).
+ * args[0]: slot.
+ */
 USER_FUNC(evt_party_jump_pos) {
     PartyEntry* p;
     EvtWord* args = event->args;
@@ -745,6 +761,11 @@ USER_FUNC(evt_party_set_breed_pose) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Writes 0 to args[1] while the partner is in run mode 0xB or 0xC and 1 otherwise.
+ * Those are the ride modes of partyChgRunMode (11 riding along on Mario's plane, boat or bellows,
+ * 12 ride Yoshi), not the pipe mode (10); jin_04 (JP and later) only has the partner jump along when it is 1.
+ */
 USER_FUNC(evt_party_dokan) {
     PartyEntry* p;
     s32 dst, v;
@@ -888,6 +909,11 @@ USER_FUNC(evt_party_vivian_unhold) {
     return vivianGetStatus() == 0 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/**
+ * Shows (args[1] nonzero) or hides Vivian's tail (partyVivianTailStart/Stop),
+ * the vivihimo ribbon drawn from her body to the floor below her.
+ * bom_01 hides it and moo_00 shows it again (JP and later, with the debug notes "Vivian tail off/on").
+ */
 USER_FUNC(evt_party_vivian_tail) {
     PartyEntry* p;
     EvtWord* args = event->args;

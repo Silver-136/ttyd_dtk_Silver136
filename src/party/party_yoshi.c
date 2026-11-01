@@ -145,6 +145,11 @@ void sweatMain(PartyEntry* party) {
     }
 }
 
+/**
+ * Ride state from Yoshi's use motion: 0 not riding (or the partner is not Yoshi), 1 riding on the ground,
+ * 2 flutter jump, 3 jump-stand bounce, 4 falling after it,
+ * 5 anything else (mounting, getting off, step-up, water). The demo has only 0, 1, 2 and 3 for everything else.
+ */
 s32 yoshiGetStatus(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 #if VERSION <= VERSION_DEMO_US
@@ -394,6 +399,7 @@ void yoshiAnimeCtrl(PartyEntry* party) {
     }
 }
 
+/** Yoshi's init handler (party_data): sets his member kind and size (26 tall; 28 wide in the demo, 20 later). */
 void yoshi_init(PartyEntry* party) {
     party->memberKind = PARTY_MEMBER_YOSHI;
     party->moveKind = 0;
@@ -430,6 +436,10 @@ static inline f32 getOfs(PartyEntry* party) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo version of this routine is older: no head search, the fly bob adds the speed straight to the height,
+ * and the move speed is cut to 3/4 while bit 0x80 is set.
+ */
 void yoshi_use(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     PartyEntry* extra;
@@ -976,6 +986,10 @@ mario->camTarget.x = party->position.x;
     marioUpdateCamCollision(party->position);
 }
 #else
+/**
+ * The demo version of this routine is older: no head search, the fly bob adds the speed straight to the height,
+ * and the move speed is cut to 3/4 while bit 0x80 is set.
+ */
 void yoshi_use(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     PartyEntry* extra;
@@ -1597,8 +1611,10 @@ void yoshi_use(PartyEntry* party) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/** The demo version works the fly angle in the caller's variable (passed by pointer). */
 void yoshiFlyMove(PartyEntry* party, f32* angle) {
 #else
+/** The demo version works the fly angle in the caller's variable (passed by pointer). */
 void yoshiFlyMove(PartyEntry* party) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -1727,8 +1743,10 @@ void inertia(PartyEntry* party) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** The demo searches 11 up into locals and has the older landing and step code. */
 static void searchGround(PartyEntry* party) {
 #else
+/** The demo searches 11 up into locals and has the older landing and step code. */
 void searchGround(PartyEntry* party) {
 #endif
     HitEntry* hit;
@@ -1871,8 +1889,10 @@ void searchGround(PartyEntry* party) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** The demo searches into locals, always records the hit object, and stops the flutter sound on landing. */
 static void searchGround2(PartyEntry* party) {
 #else
+/** The demo searches into locals, always records the hit object, and stops the flutter sound on landing. */
 void searchGround2(PartyEntry* party) {
 #endif
     HitEntry* hit = NULL;
@@ -1945,6 +1965,7 @@ void searchGround2(PartyEntry* party) {
 
 /** Looks for a ceiling above Yoshi (10 units over his height) and stores it in Mario's hitobjHead. */
 #if VERSION > VERSION_DEMO_US
+/** Looks for a ceiling above Yoshi (10 units over his height) and stores it in Mario's hitobjHead. */
 static void searchHead(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     Vec pos = party->position;
@@ -1959,6 +1980,10 @@ static void searchHead(PartyEntry* party) {
  * push and A-button hit objects for Mario, takes spike damage from walls, then pushes Yoshi out of nearby walls.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Wall check while riding: moves Yoshi by spd in direction dir up to a wall, records the front,
+ * push and A-button hit objects for Mario, takes spike damage from walls, then pushes Yoshi out of nearby walls.
+ */
 static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
     MarioWork* mario = marioGetPtr();
     HitEntry* hit;
@@ -2033,6 +2058,10 @@ party->position.x = pos.x;
     party->position.z = pos.z;
 }
 #else
+/**
+ * Wall check while riding: moves Yoshi by spd in direction dir up to a wall, records the front,
+ * push and A-button hit objects for Mario, takes spike damage from walls, then pushes Yoshi out of nearby walls.
+ */
 void checkWall(PartyEntry* party, f32 spd, f32 dir) {
     MarioWork* mario = marioGetPtr();
     HitEntry* hit;

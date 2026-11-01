@@ -445,6 +445,11 @@ BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
     return TRUE;
 }
 
+/**
+ * Empties the unit's six-entry status-change queue (statusChangeInfo).
+ * Called when the unit enters battle, from BtlUnit_ClearStatus and (not in the demos)
+ * after the status messages have been shown.
+ */
 void BattleStatusChangeInfoWorkInit(BattleUnit* unit) {
     s32 i;
     StChgInfo* e = &unit->statusChangeInfo[0];

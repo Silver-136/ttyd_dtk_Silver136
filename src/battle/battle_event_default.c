@@ -574,6 +574,7 @@ EVT_BEGIN(btldefaultevt_ChangeParty)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** The short scripts sit where the demo's .data places them (retail keeps them in .sdata). */
 EVT_BEGIN(btldefaultevt_ProtectPartner)
     CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(3))
     CALL(btlevtcmd_SetGuard, UNIT_ID_SELF, LW(3))
@@ -656,10 +657,12 @@ EVT_BEGIN(btldefaultevt_guard_return)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Action for a unit that does nothing this turn: restarts its wait event. */
 EVT_BEGIN(btldefaultevt_Wait)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+/** Action that ends a tutorial battle turn: runs the lecture unit's data-table event 70 (69 in the demos). */
 EVT_BEGIN(btldefaultevt_LectureEnd)
 CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, 69)
     RETURN
@@ -746,11 +749,13 @@ EVT_BEGIN(_Defence_core)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Mario's Defend command. */
 EVT_BEGIN(btldefaultevt_Defend)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommand))
     CALL_CHILD(PTR(_Defence_core))
     RETURN
 EVT_END()
+/** The partner's Defend command. */
 EVT_BEGIN(btldefaultevt_DefendParty)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommandP))
     CALL_CHILD(PTR(_Defence_core))

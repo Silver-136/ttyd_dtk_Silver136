@@ -107,8 +107,10 @@ EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 dur
 
 /** Per frame: advances the display's state machine and deletes the effect when finished. */
 #if VERSION <= VERSION_DEMO_US
+/** Per frame: advances the display's state machine and deletes the effect when finished. */
 static void effPointGetMain(EffectEntry* effect) {
 #else
+/** Per frame: advances the display's state machine and deletes the effect when finished. */
 void effPointGetMain(EffectEntry* effect) {
 #endif
     EffPointGetWork* work = effect->userdata;
@@ -160,6 +162,7 @@ work->position.x = intplGetValue(EASING_SINE_IN_OUT, 50.0f * work->scale, 1000.0
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** The demo draws the point count as three fixed digit cells (leading zeros skipped) after the header. */
 static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     EffPointGetWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
@@ -268,6 +271,7 @@ static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 #else
+/** The demo draws the point count as three fixed digit cells (leading zeros skipped) after the header. */
 void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
 #if VERSION >= VERSION_US
     f32 w;

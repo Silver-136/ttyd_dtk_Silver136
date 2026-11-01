@@ -163,6 +163,10 @@ Vec fukkipoint[] = {
  * so the checkpoint arrow icon is drawn for the whole minigame.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Event wrapper that runs yuu_02_icon_monte_entry as a blocking view event,
+ * so the checkpoint arrow icon is drawn for the whole minigame.
+ */
 EVT_BEGIN(yuu_02_icon_monte_entry_evt)
     CALL(yuu_02_icon_monte_entry)
     RETURN
@@ -204,6 +208,7 @@ USER_FUNC(yuu_02_cam_shift_reset) {
 /** Shows the one-entry arrow icon array (icon_monte_p[idx]). */
 // Descriptive name (not in the symbol maps); placeholder fn_31_112C, JP yuu .text+0x112C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Shows the one-entry arrow icon array (icon_monte_p[idx]). */
 void yuu_02_icon_monte_on(s32 idx) {
     icon_monte_p[idx].hidden = 0;
 }
@@ -212,6 +217,7 @@ void yuu_02_icon_monte_on(s32 idx) {
 /** Hides the arrow icon array entry idx. */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_000011e0, JP yuu .text+0x1114. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Hides the arrow icon array entry idx. */
 void yuu_02_icon_monte_off(s32 idx) {
     icon_monte_p[idx].hidden = 1;
 }
@@ -223,6 +229,10 @@ void yuu_02_icon_monte_off(s32 idx) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00001160, JP yuu .text+0x1094. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * args[0] = on/off, args[1] = icon index.
+ * Shows or hides that entry of the arrow icon array if it has been created.
+ */
 USER_FUNC(yuu_02_icon_monte_onoff) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
@@ -273,6 +283,10 @@ void yuu_02_icon_monte_disp(CameraId camera, void* param) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00000f1c, JP yuu .text+0xE50. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * View event that creates the single hidden arrow icon on its first call,
+ * registers yuu_02_icon_monte_disp as a 2D draw callback and then blocks forever.
+ */
 USER_FUNC(yuu_02_icon_monte_entry) {
     BOOL exists = FALSE;
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
@@ -563,6 +577,10 @@ USER_FUNC(yuuminigame3_opening_chk) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Init callback for minigame 3: starts the coin view event (and, JP and later, the arrow icon event),
+ * marks the opening cutscene as pending and switches Mario to the tube-rolling motion.
+ */
 void yuuminigame_init_3roll(EventEntry* event, BOOL isFirstCall) {
     RollWork* data = ((MiniGameWork*)event->lwData[0])->data;
 #if VERSION > VERSION_DEMO_US
@@ -643,6 +661,12 @@ USER_FUNC(yuu_roll_reset) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Per-frame rules of Tube Mode: when Mario falls off the course (y <= -50) it starts yuu_02_jumpret to put him
+ * back at the last checkpoint (fukkipoint) and counts a penalty;
+ * otherwise it tracks the checkpoint index as he rolls along the course (JP and later also allow going
+ * backwards). Returns TRUE when the counter runs out or the last checkpoint is reached.
+ */
 BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, RollWork* data) {
     MarioWork* mario = marioGetPtr();
 
@@ -777,6 +801,10 @@ EVT_BEGIN(yuu_02_kaijo_init)
     RETURN
 EVT_END()
 
+/**
+ * Puts Mario back on the start spot after the opening camera
+ * or between rounds (x 200 on US and later, 300 in the US demo, z 300).
+ */
 EVT_BEGIN(yuu_02_kaijo_init2)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_mario_set_pos, 300, 0, 300)
@@ -1035,6 +1063,11 @@ EVT_BEGIN(s_en1_turn)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init for yuu_02 (Tube Mode room): starts the animations and the S_en1 rotation,
+ * the minigame set-up and the NPC script, and (US and later) hides all
+ * but the current game-language sign graphics.
+ */
 EVT_BEGIN(yuu_02_init_evt)
     CALL(evt_map_playanim, STRING("den1"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("den2"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1046,6 +1079,11 @@ EVT_BEGIN(yuu_02_init_evt)
     RETURN
 EVT_END()
 #else
+/**
+ * Map init for yuu_02 (Tube Mode room): starts the animations and the S_en1 rotation,
+ * the minigame set-up and the NPC script, and (US and later) hides all
+ * but the current game-language sign graphics.
+ */
 EVT_BEGIN(yuu_02_init_evt)
     CALL(evt_map_playanim, STRING("den1"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("den2"), MAP_ANIM_PLAY_LOOP, 0)

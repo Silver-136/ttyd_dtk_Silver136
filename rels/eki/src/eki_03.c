@@ -295,6 +295,11 @@ EVT_BEGIN(evt_poster_11)
     RETURN
 EVT_END()
 
+/**
+ * Case event when poster 12 is blown off: sets its flag,
+ * turns off the hit areas of the posters it covered (a_kami_8, a_kami_9, a_kami_5;
+ * the demo versions also a_kami_2), then checks whether all are gone.
+ */
 EVT_BEGIN(evt_poster_12)
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_EKI_03_POSTER_12_BLOWN_AWAY, 1)
@@ -341,6 +346,12 @@ EVT_END()
  * Posters already blown are hidden; the wall behind them is opened by evt_chk once all are gone.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init for eki_03: sets up the doors to eki_01 and eki_04, the HP Plus item,
+ * the Shine Sprite block (power-up block), the brick blocks (one holds a Thunder Rage),
+ * the sun's heat-haze shader and glare, and the 15 posters that Flurrie can blow away.
+ * Posters already blown are hidden; the wall behind them is opened by evt_chk once all are gone.
+ */
 EVT_BEGIN(eki_03_init_evt)
     // Doors, music and ambience; the music is dipped in volume.
     SET_VALUE(LW(0), PTR(bero_data))
@@ -475,6 +486,12 @@ END_IF
     RETURN
 EVT_END()
 #else
+/**
+ * Map init for eki_03: sets up the doors to eki_01 and eki_04, the HP Plus item,
+ * the Shine Sprite block (power-up block), the brick blocks (one holds a Thunder Rage),
+ * the sun's heat-haze shader and glare, and the 15 posters that Flurrie can blow away.
+ * Posters already blown are hidden; the wall behind them is opened by evt_chk once all are gone.
+ */
 EVT_BEGIN(eki_03_init_evt)
     // Doors, music and ambience; the music is dipped in volume.
     SET_VALUE(LW(0), PTR(bero_data))

@@ -288,6 +288,7 @@ USER_FUNC(door_entry) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** the demo defines house_close_se right after house_open_se */
 EVT_BEGIN(house_close_se)
     CALL_CHILD(house_open_se)
     RETURN
@@ -2106,6 +2107,7 @@ USER_FUNC(npc_hide_onoff) {
  * so a map can change it with evt_door_set_param (Rogueport, gor_01/gor_02).
  */
 #if VERSION <= VERSION_DEMO_US
+/** the demo defines these with the door helpers at the end of the file */
 static USER_FUNC(snd_door_in) {
     psndSetFlag(PSND_FLAG_DOOR_IN);
     return EVT_RETURN_DONE;
@@ -2115,6 +2117,10 @@ static USER_FUNC(snd_door_out) {
     return EVT_RETURN_DONE;
 }
 #endif
+/**
+ * Copies the DoorParam in args[0] onto the map heap and returns the copy in args[1],
+ * so a map can change it with evt_door_set_param (Rogueport, gor_01/gor_02).
+ */
 USER_FUNC(evt_door_data_copy) {
     EvtWord* args = event->args;
     DoorParam* src = (DoorParam*)evtGetValue(event, args[0]);

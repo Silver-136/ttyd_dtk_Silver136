@@ -597,6 +597,12 @@ EvtWord gor_02_init_evt[543];
 #endif
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Turns off the east side's collision pieces ("A_kabe", "A_saku", "A_kmn", "A_gomi", "A_l_ura_gomi")
+ * so Mario can pass through them. The house doors' open callbacks (evt_door_01_open to evt_door_06_open and
+ * evt_door_03_roll_open) spawn it as he goes inside; gor_02_hitobj_on restores the pieces.
+ * JP and later.
+ */
 EVT_BEGIN(gor_02_hitobj_off)
     CALL(evt_hitobj_onoff, STRING("A_kabe"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_saku"), 1, 0)
@@ -613,6 +619,11 @@ EVT_END()
  * and the center wall "A_center_kabe_atr" once Gus has been beaten or paid off.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Turns the east side's collision pieces back on after gor_02_hitobj_off,
+ * then reopens the ones that must stay open: the fence piece "A_saku_04" once the fence has been removed,
+ * and the center wall "A_center_kabe_atr" once Gus has been beaten or paid off.
+ */
 EVT_BEGIN(gor_02_hitobj_on)
     CALL(evt_hitobj_onoff, STRING("A_kabe"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_saku"), 1, 1)
@@ -1141,6 +1152,11 @@ EVT_END()
  * and loops until Mario stops, has fewer than 3 sprites or nothing is left to raise.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Merlon's partner rank up menu: lets Mario pick a partner from the other-party window,
+ * takes 3 Shine Sprites (supercoins) for each rank up, runs powerupya_party_lank_rtn,
+ * and loops until Mario stops, has fewer than 3 sprites or nothing is left to raise.
+ */
 EVT_BEGIN(powerupya_party_rtn)
     CALL(evt_win_coin_on, 1, LW(12))
     LOOP(0)
@@ -1197,6 +1213,11 @@ CALL(evt_win_coin_on, 1, LW(12))
     RETURN
 EVT_END()
 #else
+/**
+ * Merlon's partner rank up menu: lets Mario pick a partner from the other-party window,
+ * takes 3 Shine Sprites (supercoins) for each rank up, runs powerupya_party_lank_rtn,
+ * and loops until Mario stops, has fewer than 3 sprites or nothing is left to raise.
+ */
 EVT_BEGIN(powerupya_party_rtn)
     CALL(evt_win_coin_on, 1, LW(12))
     LOOP(0)
@@ -1263,6 +1284,12 @@ EVT_BEGIN(powerupya_party_rtn)
 EVT_END()
 #endif
 
+/**
+ * Talk event of Merlon at his table.
+ * Greets Mario (powerup_00, 00_01, 00_02), says if no partner can be raised (JP and later),
+ * and otherwise offers the rank up through powerupya_party_rtn while Mario has at least 3 Shine Sprites.
+ * Locks controls for the talk and frees them at the end.
+ */
 EVT_BEGIN(powerupya_table_talk)
     CALL(setmertn, STRING("パワーアップ屋"))
     CALL(evt_mario_key_onoff, 0)
@@ -1322,6 +1349,10 @@ IF_INT_EQUAL(GSWF_GOR_MERLON_FIRST_TALK_DONE, 0)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * The demo has no Up Arrow trade: Merlon takes the item and turns the star chart himself.
+ * This talk event has the name that retail gives to its door animation.
+ */
 EVT_BEGIN(powerupya_direct_talk)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_01_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, STRING("S_ie_01_doa"), LW(0), LW(1), LW(2))
@@ -1364,6 +1395,10 @@ s32 powerupya_item_tbl[] = {
  * spawned while he spins up in the air in powerupya_orb_use and stopped with DELETE_EVENT.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Loops forever spawning a Stardust particle burst above Merlon's NPC every frame;
+ * spawned while he spins up in the air in powerupya_orb_use and stopped with DELETE_EVENT.
+ */
 EVT_BEGIN(powerupya_stardust)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -1380,6 +1415,10 @@ EVT_END()
  * depending on whether he is south of z=-210, and faces him right.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Walks Mario to the spot beside the stone (-395, -160) or (-404, -220),
+ * depending on whether he is south of z=-210, and faces him right.
+ */
 EVT_BEGIN(powerupya_mario_move)
     WAIT_MS(200)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1402,6 +1441,10 @@ EVT_END()
  * by the same two routes as powerupya_mario_move.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Walks the active partner to the spot beside the stone (-425, -186),
+ * by the same two routes as powerupya_mario_move.
+ */
 EVT_BEGIN(powerupya_party_move)
     WAIT_MS(200)
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1417,6 +1460,10 @@ EVT_END()
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo has no Up Arrow trade: Merlon takes the item and turns the star chart himself.
+ * This talk event has the name that retail gives to its door animation.
+ */
 EVT_BEGIN(powerupya_direct_talk)
     IF_INT_EQUAL(GSWF_GOR_MERLON_HINT_PENDING, 1)
         IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
@@ -1627,6 +1674,12 @@ EVT_END()
  * Falls back to powerup_ev_03 or powerup_05.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Talk event of Merlon in the retail versions, run when the player talks to him at the portent point.
+ * If the portent is pending he describes it (powerup_ev_01 and 02) while the door opens;
+ * otherwise, if Mario has the Up Arrow, asks him to hand it over and runs powerupya_orb_use.
+ * Falls back to powerup_ev_03 or powerup_05.
+ */
 EVT_BEGIN(powerupya_talk)
     IF_INT_EQUAL(GSWF_GOR_MERLON_HINT_PENDING, 1)
         IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
@@ -1713,6 +1766,14 @@ EVT_BEGIN(powerupya_init)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Talk event of Grifty (情報屋完璧), the traveling minstrel who sells tales: after his greeting (johoyaperfect_00,
+ * or 00_01 on later talks in JP and later) Mario picks a tale from a list (johoya_data_alloc,
+ * evt_win_other_select 17).
+ * A tale already heard is retold for free (johoyaperfect_06); a new one is offered for its coin price
+ * (johoyaperfect_01 and 02), refused when Mario is short (09), otherwise paid for, told and marked as read.
+ * The data is then freed; JP and later loop back to the list.
+ */
 EVT_BEGIN(johoyaperfect_talk)
     IF_INT_EQUAL(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("johoyaperfect_00"), 0, STRING("me"))
@@ -1760,6 +1821,14 @@ END_IF
 RETURN
 EVT_END()
 #else
+/**
+ * Talk event of Grifty (情報屋完璧), the traveling minstrel who sells tales: after his greeting (johoyaperfect_00,
+ * or 00_01 on later talks in JP and later) Mario picks a tale from a list (johoya_data_alloc,
+ * evt_win_other_select 17).
+ * A tale already heard is retold for free (johoyaperfect_06); a new one is offered for its coin price
+ * (johoyaperfect_01 and 02), refused when Mario is short (09), otherwise paid for, told and marked as read.
+ * The data is then freed; JP and later loop back to the list.
+ */
 EVT_BEGIN(johoyaperfect_talk)
     IF_INT_EQUAL(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("johoyaperfect_00"), 0, STRING("me"))
@@ -3627,6 +3696,10 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     RETURN
 EVT_END()
 
+/**
+ * Called when the power-up shop door closes: brings the music and ambience back
+ * and moves the Star Pieces up again. The JP and later releases also turn the outside hit objects back on.
+ */
 static EVT_BEGIN(evt_door_01_close)
 #if VERSION > VERSION_DEMO_US
     SPAWN_EVENT(PTR(gor_02_hitobj_on))
@@ -3948,6 +4021,14 @@ static const char* door_data_03_mobj[] = {
 };
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Called when the house 03 door closes: brings the music and ambience back.
+ * At STG4_34_BOBBERY_DECLINES, once (GSWF_GOR02_BOBBERY_DECLINE_SCENE_DONE),
+ * the partner comments on Bobbery declining (mac_4_058, mac_4_059).
+ * At STG4_36_BOBBERYS_DECISION it runs the scene where Bobbery decides to join,
+ * moving the party members (mac_4_087) and advancing the story to STG4_37_TO_THE_PORT.
+ * The JP and later releases also turn the outside hit objects back on.
+ */
 static EVT_BEGIN(evt_door_03_close)
 CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -3992,6 +4073,14 @@ CALL(evt_party_move_pos2, 1, -165, 140, FLOAT(120.0f))
     RETURN
 EVT_END()
 #else
+/**
+ * Called when the house 03 door closes: brings the music and ambience back.
+ * At STG4_34_BOBBERY_DECLINES, once (GSWF_GOR02_BOBBERY_DECLINE_SCENE_DONE),
+ * the partner comments on Bobbery declining (mac_4_058, mac_4_059).
+ * At STG4_36_BOBBERYS_DECISION it runs the scene where Bobbery decides to join,
+ * moving the party members (mac_4_087) and advancing the story to STG4_37_TO_THE_PORT.
+ * The JP and later releases also turn the outside hit objects back on.
+ */
 static EVT_BEGIN(evt_door_03_close)
     SPAWN_EVENT(PTR(gor_02_hitobj_on))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -4054,6 +4143,10 @@ static EVT_BEGIN(evt_door_03_close)
 EVT_END()
 #endif
 
+/**
+ * Called when the house 03 door opens: dips the music and ambience to 50 percent and low-passes the ambience.
+ * The JP and later releases also turn off the outside hit objects.
+ */
 static EVT_BEGIN(evt_door_03_open)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4338,6 +4431,11 @@ static EVT_BEGIN(evt_wall_04)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Called when the house 04 door opens: dips the music and ambience to 50 percent and low-passes the ambience.
+ * The JP and later releases also turn off the outside hit objects,
+ * and the US and later releases switch off the hit object polySurface1317.
+ */
 static EVT_BEGIN(evt_door_04_open)
 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4345,6 +4443,11 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     RETURN
 EVT_END()
 #else
+/**
+ * Called when the house 04 door opens: dips the music and ambience to 50 percent and low-passes the ambience.
+ * The JP and later releases also turn off the outside hit objects,
+ * and the US and later releases switch off the hit object polySurface1317.
+ */
 static EVT_BEGIN(evt_door_04_open)
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
 #if VERSION >= VERSION_US
@@ -4358,6 +4461,11 @@ EVT_END()
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Called when the house 04 door closes: brings the music and ambience back.
+ * The JP and later releases also turn the outside hit objects back on,
+ * and the US and later releases switch polySurface1317 back on.
+ */
 static EVT_BEGIN(evt_door_04_close)
 CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -4365,6 +4473,11 @@ CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     RETURN
 EVT_END()
 #else
+/**
+ * Called when the house 04 door closes: brings the music and ambience back.
+ * The JP and later releases also turn the outside hit objects back on,
+ * and the US and later releases switch polySurface1317 back on.
+ */
 static EVT_BEGIN(evt_door_04_close)
     SPAWN_EVENT(PTR(gor_02_hitobj_on))
 #if VERSION >= VERSION_US
@@ -4833,8 +4946,16 @@ static USER_FUNC(enzan_lw_load) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Switches the map background texture to the file named by args[0] (the current map's name if NULL),
+ * from "./bg/" in the demos and "./b/" in the retail versions.
+ */
 static USER_FUNC(evt_set_bgtpl) {
 #else
+/**
+ * Switches the map background texture to the file named by args[0] (the current map's name if NULL),
+ * from "./bg/" in the demos and "./b/" in the retail versions.
+ */
 USER_FUNC(evt_set_bgtpl) {
 #endif
     char path[64];
@@ -4895,6 +5016,10 @@ USER_FUNC(stonechangertn) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_gor_0000574c, JP gor .text+0x5680. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Returns in args[0] the direction Mario's sprite is turning toward (displayDirectionTarget: 0 for facing right,
+ * other for left). JP and later; powerupya_orb_use uses it to place the offered item beside him.
+ */
 USER_FUNC(get_mario_dir_target) {
     EvtWord* args = event->args;
 
@@ -5045,8 +5170,18 @@ USER_FUNC(lecture) {
  * Gus, Bonetail and the Atomic Boo are checked after the per-stage lists.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Finds the next enemy tattle that Mario can still learn at this story stage:
+ * returns in args[0] 1 if one exists, and its enemy id in args[1].
+ * Gus, Bonetail and the Atomic Boo are checked after the per-stage lists.
+ */
 static USER_FUNC(monosiri_check) {
 #else
+/**
+ * Finds the next enemy tattle that Mario can still learn at this story stage:
+ * returns in args[0] 1 if one exists, and its enemy id in args[1].
+ * Gus, Bonetail and the Atomic Boo are checked after the per-stage lists.
+ */
 USER_FUNC(monosiri_check) {
 #endif
     EvtWord* args = event->args;
@@ -5104,6 +5239,10 @@ USER_FUNC(monosiri_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Returns in args[0] whether the 3D camera is facing the front of the house (yaw below 90 or above 270 degrees),
+ * 1 for yes. US and later return 0 when Mario is west of x=-300.
+ */
 USER_FUNC(camera_front_check) {
     EvtWord* args = event->args;
     f32 angle = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
@@ -6150,6 +6289,15 @@ EVT_END()
  * It ends with the Rogueport theme and STG0_16_FRANKLYS_HOUSE.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Frankly's first epigraphy scene, after the Thousand-Year Door (STG0_15_THE_PEDESTAL):
+ * the pouch's Star Power
+ * is filled, Frankly explains the light that shone on Mario (a special move) and offers to show it outside
+ * (mac_0_103_01 to 06), then reads the Magical Map: the next Crystal Star is in Petal Meadows, reached by a pipe
+ * under the city; he learns that Princess Peach sent the map and had visited him, and stays in town while Mario
+ * and the partner head out (mac_0_104 to 120).
+ * It ends with the Rogueport theme and STG0_16_FRANKLYS_HOUSE.
+ */
 EVT_BEGIN(epigraphy_map)
     // Mario's Star Power gauge is filled and control is taken away while Mario
     // and the partner are moved into place.
@@ -6322,6 +6470,15 @@ SET_VALUE(GSW_STORY_PROGRESS, STG0_16_FRANKLYS_HOUSE)
     RETURN
 EVT_END()
 #else
+/**
+ * Frankly's first epigraphy scene, after the Thousand-Year Door (STG0_15_THE_PEDESTAL):
+ * the pouch's Star Power
+ * is filled, Frankly explains the light that shone on Mario (a special move) and offers to show it outside
+ * (mac_0_103_01 to 06), then reads the Magical Map: the next Crystal Star is in Petal Meadows, reached by a pipe
+ * under the city; he learns that Princess Peach sent the map and had visited him, and stays in town while Mario
+ * and the partner head out (mac_0_104 to 120).
+ * It ends with the Rogueport theme and STG0_16_FRANKLYS_HOUSE.
+ */
 EVT_BEGIN(epigraphy_map)
     // Mario's Star Power gauge is filled and control is taken away while Mario
     // and the partner are moved into place.
@@ -6511,6 +6668,11 @@ EVT_END()
  * and sets STG1_31_FRANKLYS_HOUSE_STG_1.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Frankly's cutscene after Chapter 1 (STG1_30_ZESS_T):
+ * he deciphers the Magical Map for the next Crystal Star (mac_1_004 to 010_03)
+ * and sets STG1_31_FRANKLYS_HOUSE_STG_1.
+ */
 EVT_BEGIN(epigraphy_map_after_stage1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -6571,6 +6733,11 @@ SET_VALUE(GSW_STORY_PROGRESS, STG1_31_FRANKLYS_HOUSE_STG_1)
     RETURN
 EVT_END()
 #else
+/**
+ * Frankly's cutscene after Chapter 1 (STG1_30_ZESS_T):
+ * he deciphers the Magical Map for the next Crystal Star (mac_1_004 to 010_03)
+ * and sets STG1_31_FRANKLYS_HOUSE_STG_1.
+ */
 EVT_BEGIN(epigraphy_map_after_stage1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -6642,6 +6809,10 @@ EVT_END()
  * he deciphers the map for the next star (mac_2_002_01 to 06) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Frankly's cutscene after Chapter 2 (STG2_40_THOUSAND_YEAR_DOOR):
+ * he deciphers the map for the next star (mac_2_002_01 to 06) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
+ */
 EVT_BEGIN(epigraphy_map_after_stage2)
     // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
@@ -6740,6 +6911,10 @@ SET_VALUE(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
     RETURN
 EVT_END()
 #else
+/**
+ * Frankly's cutscene after Chapter 2 (STG2_40_THOUSAND_YEAR_DOOR):
+ * he deciphers the map for the next star (mac_2_002_01 to 06) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
+ */
 EVT_BEGIN(epigraphy_map_after_stage2)
     // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
@@ -6850,6 +7025,11 @@ EVT_END()
  * if the Twilight Town pipe has not been reached he adds a hint. Sets STG3_51_FRANKLYS_HOUSE_STG_3.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Frankly's cutscene after Chapter 3 (STG3_50_THOUSAND_YEAR_DOOR):
+ * he deciphers the map for the next star (mac_3_001_01 on);
+ * if the Twilight Town pipe has not been reached he adds a hint. Sets STG3_51_FRANKLYS_HOUSE_STG_3.
+ */
 EVT_BEGIN(epigraphy_map_after_stage3)
     // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
@@ -6943,6 +7123,11 @@ SET_VALUE(GSW_STORY_PROGRESS, STG3_51_FRANKLYS_HOUSE_STG_3)
     RETURN
 EVT_END()
 #else
+/**
+ * Frankly's cutscene after Chapter 3 (STG3_50_THOUSAND_YEAR_DOOR):
+ * he deciphers the map for the next star (mac_3_001_01 on);
+ * if the Twilight Town pipe has not been reached he adds a hint. Sets STG3_51_FRANKLYS_HOUSE_STG_3.
+ */
 EVT_BEGIN(epigraphy_map_after_stage3)
     // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
@@ -7052,6 +7237,15 @@ EVT_END()
  * (mac_4_002, 003). It sets STG4_31_FRANKLYS_HOUSE_STG_4.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Frankly's epigraphy scene after Chapter 4 (STG4_30_THOUSAND_YEAR_DOOR):
+ * hearing of Princess Peach's e-mail
+ * he explains that the treasure is the spirit of an ancient demon beaten by four heroes
+ * and that the Thousand-Year
+ * Door may be weakening, so the stars must still be gathered (mac_4_001_01 to 12);
+ * the map points to Keelhaul Key
+ * (mac_4_002, 003). It sets STG4_31_FRANKLYS_HOUSE_STG_4.
+ */
 EVT_BEGIN(epigraphy_map_after_stage4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -7116,6 +7310,15 @@ SET_VALUE(GSW_STORY_PROGRESS, STG4_31_FRANKLYS_HOUSE_STG_4)
     RETURN
 EVT_END()
 #else
+/**
+ * Frankly's epigraphy scene after Chapter 4 (STG4_30_THOUSAND_YEAR_DOOR):
+ * hearing of Princess Peach's e-mail
+ * he explains that the treasure is the spirit of an ancient demon beaten by four heroes
+ * and that the Thousand-Year
+ * Door may be weakening, so the stars must still be gathered (mac_4_001_01 to 12);
+ * the map points to Keelhaul Key
+ * (mac_4_002, 003). It sets STG4_31_FRANKLYS_HOUSE_STG_4.
+ */
 EVT_BEGIN(epigraphy_map_after_stage4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -7194,6 +7397,13 @@ EVT_END()
  * STG5_61_FRANKLYS_HOUSE_STG_5.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Frankly's epigraphy scene after Chapter 5 (STG5_60_RETURN_TO_KEELHAUL):
+ * the next Crystal Star is in Poshley
+ * Heights, reached on the Excess Express, and he suggests asking Don Pianta for tickets (mac_5_002 to 009).
+ * It sets
+ * STG5_61_FRANKLYS_HOUSE_STG_5.
+ */
 EVT_BEGIN(epigraphy_map_after_stage5)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -7248,6 +7458,13 @@ SET_VALUE(GSW_STORY_PROGRESS, STG5_61_FRANKLYS_HOUSE_STG_5)
     RETURN
 EVT_END()
 #else
+/**
+ * Frankly's epigraphy scene after Chapter 5 (STG5_60_RETURN_TO_KEELHAUL):
+ * the next Crystal Star is in Poshley
+ * Heights, reached on the Excess Express, and he suggests asking Don Pianta for tickets (mac_5_002 to 009).
+ * It sets
+ * STG5_61_FRANKLYS_HOUSE_STG_5.
+ */
 EVT_BEGIN(epigraphy_map_after_stage5)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -7438,6 +7655,12 @@ EVT_END()
  * then sets STG6_72_3_MINUTES_LATER and restores the controls and music.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Cutscene when Frankly finishes the Chapter 6 research after three minutes of play time:
+ * Frankly and the partner discuss it (mac_6_007 to 015),
+ * with a different line depending on whether Mario has the Ultra Hammer,
+ * then sets STG6_72_3_MINUTES_LATER and restores the controls and music.
+ */
 EVT_BEGIN(kurihakase_after3minutes)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("mac_6_007"), 0, STRING("クリハカセ"))
@@ -7485,6 +7708,12 @@ CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 #else
+/**
+ * Cutscene when Frankly finishes the Chapter 6 research after three minutes of play time:
+ * Frankly and the partner discuss it (mac_6_007 to 015),
+ * with a different line depending on whether Mario has the Ultra Hammer,
+ * then sets STG6_72_3_MINUTES_LATER and restores the controls and music.
+ */
 EVT_BEGIN(kurihakase_after3minutes)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("mac_6_007"), 0, STRING("クリハカセ"))
@@ -7630,6 +7859,10 @@ static EVT_BEGIN(gor_goki2_urouro)
     RETURN
 EVT_END()
 
+/**
+ * Opens the chest mobj_box01 and gives Mario the Double Dip badge (ITEM_DOUBLE_DIP;
+ * the US and later releases add ITEM_FLAG_BADGE_RETURN).
+ */
 static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
@@ -7776,6 +8009,11 @@ EVT_BEGIN(evt_cloud)
     RETURN
 EVT_END()
 
+/**
+ * Init for Trouble Center job 19: while it is active and the ring has been lost (GSWF_TROUBLE_WORK_BASE),
+ * places the Wedding Ring on the ground in the east side,
+ * at (525, 0, 160) in US and later and at (-65, 120, 196) in earlier releases.
+ */
 EVT_BEGIN(iri_19_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)

@@ -563,6 +563,14 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Bowser's Hip Drop: walks to the target, jumps up and slams down on it (camera shake on a hit).
+ * If the action command result is 3 or less and the target is Mario or a partner,
+ * it also seals one of that character's commands:
+ * the lost command's icon is tossed across the screen with _icon_jump_icon
+ * and an announcement message is shown (the US and later versions pass the partner to party_cannot_use_command).
+ * Then he walks back home.
+ */
 static EVT_BEGIN(hip_attack_event)
     // Choose a target; a confused Bowser with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1047,6 +1055,14 @@ static USER_FUNC(_icon_jump_icon) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper for Bowser's command-sealing attack when it hits the partner:
+ * at random it seals the partner's special-move
+ * or item command for 3 turns (before US in BattleWork commandDisabled[3] or [4];
+ * in US and later in usCommandDisabled[0] or [1] of the partner unit passed in args[1]).
+ * LW(0) receives the announcement message key (btl_party_tech_cmd_disable or btl_party_item_cmd_disable)
+ * and args[0] the id of the command icon that the attack script tosses at the partner.
+ */
 static USER_FUNC(party_cannot_use_command) {
     BattleWork* wp = _battleWorkPointer;
     s32 r = irand(1);

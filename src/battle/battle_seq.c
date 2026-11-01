@@ -78,6 +78,10 @@ EVT_END()
  * pops the stage background layers in with _set_haikei_entry_scale.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Started by btlseqFirstAct on a normal battle start (no first strike):
+ * pops the stage background layers in with _set_haikei_entry_scale.
+ */
 EVT_BEGIN(_default_haikei_set_entry_event)
     CALL(_set_haikei_entry_scale)
     RETURN
@@ -178,6 +182,10 @@ const char* _rule_msg_table_after[] = {
     "stg3_tou_cp_053", "stg3_tou_cp_052", "a", "a",
 };
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Started by btlseqFirstAct on a normal battle start (no first strike):
+ * pops the stage background layers in with _set_haikei_entry_scale.
+ */
 EVT_BEGIN(_default_haikei_set_entry_event)
     CALL(_set_haikei_entry_scale)
     RETURN
@@ -729,6 +737,14 @@ USER_FUNC(_set_effect_luck) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * SEQ_TURN steps, one full turn: start-of-turn bookkeeping, the Glitz Pit bonus-condition banner on turn 1,
+ * poison and burn damage, HP and FP Regen, Happy Heart and Happy Flower (from turn 2),
+ * the per-status recovery checks with SFX_REST_CONDITION1, the command-disable countdowns,
+ * then the phase loop (btlseqPhase) and the audience's turn-end check before starting the next turn.
+ * A step with nothing to do skips its wait step.
+ * In the US and PAL releases two of the countdowns are per unit (usCommandDisabled).
+ */
 static void btlseqTurn(BattleWork* wp) {
     Vec pos;
     f32 hpX;
@@ -1845,6 +1861,14 @@ BattleIncSeq(wp, SEQ_TURN);
     }
 }
 #else
+/**
+ * SEQ_TURN steps, one full turn: start-of-turn bookkeeping, the Glitz Pit bonus-condition banner on turn 1,
+ * poison and burn damage, HP and FP Regen, Happy Heart and Happy Flower (from turn 2),
+ * the per-status recovery checks with SFX_REST_CONDITION1, the command-disable countdowns,
+ * then the phase loop (btlseqPhase) and the audience's turn-end check before starting the next turn.
+ * A step with nothing to do skips its wait step.
+ * In the US and PAL releases two of the countdowns are per unit (usCommandDisabled).
+ */
 void btlseqTurn(BattleWork* wp) {
     Vec pos;
     f32 hpX;
@@ -3248,8 +3272,16 @@ if (unit) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * TRUE when no unit in this phase's move queue can still act (done for the turn or KO'd).
+ * Outside the demos a unit also needs movesRemaining above 0.
+ */
 static BOOL BattlePhaseEndCheck(void) {
 #else
+/**
+ * TRUE when no unit in this phase's move queue can still act (done for the turn or KO'd).
+ * Outside the demos a unit also needs movesRemaining above 0.
+ */
 BOOL BattlePhaseEndCheck(void) {
 #endif
     BattleWork* wp = _battleWorkPointer;
@@ -3284,8 +3316,24 @@ if (unit && unit->moveState != 10 && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_K
  * the audience reaction and the unit's act-end event, and returns to btlseqMove.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * SEQ_ACT steps, one unit's action: Mario or the partner gets the command menu (BattleCommandInput)
+ * unless asleep, stopped, frozen or KO'd (turn skipped), veiled by Vivian or flipped (their own data scripts).
+ * Then runs the chosen attack script, or the zero-gravity can't-move script,
+ * or the confused action half the time when Confused;
+ * afterwards updates moves left, Charge, Double/Triple Dip progress,
+ * the audience reaction and the unit's act-end event, and returns to btlseqMove.
+ */
 static void btlseqAct(BattleWork* wp) {
 #else
+/**
+ * SEQ_ACT steps, one unit's action: Mario or the partner gets the command menu (BattleCommandInput)
+ * unless asleep, stopped, frozen or KO'd (turn skipped), veiled by Vivian or flipped (their own data scripts).
+ * Then runs the chosen attack script, or the zero-gravity can't-move script,
+ * or the confused action half the time when Confused;
+ * afterwards updates moves left, Charge, Double/Triple Dip progress,
+ * the audience reaction and the unit's act-end event, and returns to btlseqMove.
+ */
 void btlseqAct(BattleWork* wp) {
 #endif
     BattleUnit* unit;
@@ -3594,8 +3642,18 @@ void btlseqTurnFirstProcess(BattleWork* wp) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Start-of-phase bookkeeping: queues the units whose attackPhase is this phase into movePriorityQueue (skipping
+ * units done for the turn; outside the demos Slowed units are still queued),
+ * resets their protect target and pose sounds, then sorts the queue and builds the phase event order.
+ */
 static void btlseqPhaseFirstProcess(BattleWork* wp) {
 #else
+/**
+ * Start-of-phase bookkeeping: queues the units whose attackPhase is this phase into movePriorityQueue (skipping
+ * units done for the turn; outside the demos Slowed units are still queued),
+ * resets their protect target and pose sounds, then sorts the queue and builds the phase event order.
+ */
 void btlseqPhaseFirstProcess(BattleWork* wp) {
 #endif
     BattleUnit* unit;
@@ -3776,6 +3834,13 @@ BOOL BattleWaitAllActiveEvtEnd(BattleWork* wp) {
     return TRUE;
 }
 
+/**
+ * TRUE once no unit has a running phase, attack,
+ * damage or entry event (the PAL release also waits for the slide-return event)
+ * and BattleAfterReactionMain is idle; clears the ids of finished events.
+ * Unlike BattleWaitAllActiveEvtEnd it ignores the stage-object events,
+ * so battle_stage_object.c can use it while those run.
+ */
 BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp) {
     // FAKE: wp copied into a void* and cast back at its use; using wp directly changes the object
     void* w;

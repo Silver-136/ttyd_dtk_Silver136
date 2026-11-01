@@ -629,6 +629,12 @@ static BattleWeapon weapon_mahorn_recover_magic = {
  * The first two weights are 60 and 10 in the demo versions.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Attack AI of the Wizzerd. In a fixed-attack battle it always casts the attack spell.
+ * Otherwise it uses an enemy item if it has one, then draws one of:
+ * attack spell (50), spell on all targets (30), Huge (10), Defense up (10), confuse (10) or heal an ally (10).
+ * The first two weights are 60 and 10 in the demo versions.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -694,6 +700,12 @@ IF_INT_LESS(LW(1), LW(0))
     RETURN
 EVT_END()
 #else
+/**
+ * Attack AI of the Wizzerd. In a fixed-attack battle it always casts the attack spell.
+ * Otherwise it uses an enemy item if it has one, then draws one of:
+ * attack spell (50), spell on all targets (30), Huge (10), Defense up (10), confuse (10) or heal an ally (10).
+ * The first two weights are 60 and 10 in the demo versions.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

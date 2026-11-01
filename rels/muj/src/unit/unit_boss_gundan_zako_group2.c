@@ -621,6 +621,10 @@ USER_FUNC(zakogun_ext_init2) {
  * moves each member through its state machine and updates its pose matrix and sounds.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Per-frame update of formation 2 (25 X-Nauts):
+ * moves each member through its state machine and updates its pose matrix and sounds.
+ */
 void zakogun_ext_main2(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit = zakogun_get_ptr();
@@ -888,6 +892,10 @@ zako->rot.y = 0.0f;
     }
 }
 #else
+/**
+ * Per-frame update of formation 2 (25 X-Nauts):
+ * moves each member through its state machine and updates its pose matrix and sounds.
+ */
 void zakogun_ext_main2(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit = zakogun_get_ptr();

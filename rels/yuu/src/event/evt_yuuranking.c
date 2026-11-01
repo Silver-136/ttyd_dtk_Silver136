@@ -135,6 +135,7 @@ static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 w
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00008e40, JP yuu .text+0x8D74. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Squeezes a label to `width`. The demo has no such function: it draws the labels unscaled with FontDrawMessage. */
 void yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;
@@ -211,6 +212,13 @@ EVT_END()
  * highlighting the new entry in red.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Draws the minigame score/ranking window.
+ * In mode 0 it shows the title and the score tally for the finished round (score,
+ * the monte earned and the bonus multiplier, revealed phase by phase);
+ * in modes 1 and 2 it lists the top five records of the minigame type (score or time, and the monte earned),
+ * highlighting the new entry in red.
+ */
 static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 YuuRankingWork* wp = param;
     const char* titles[4] = {"menu_title_minigame1", "menu_title_minigame4", "menu_title_minigame3", "menu_title_minigame2"};
@@ -497,6 +505,13 @@ sprintf(buf, msgSearch("menu_error_minigame4"));
     }
 }
 #else
+/**
+ * Draws the minigame score/ranking window.
+ * In mode 0 it shows the title and the score tally for the finished round (score,
+ * the monte earned and the bonus multiplier, revealed phase by phase);
+ * in modes 1 and 2 it lists the top five records of the minigame type (score or time, and the monte earned),
+ * highlighting the new entry in red.
+ */
 static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 #if VERSION >= VERSION_US
     const char* head;
@@ -1125,6 +1140,13 @@ ret = score / 10000;
     return ret;
 }
 
+/**
+ * args: [0], [1] = window x, y; [2] = minigame type (0 Plane, 3 Boat, 2 Tube, 1 Paper);
+ * [3] = mode (0 tally, 1 ranking and record the result, 2 ranking only); [4] = score; [5] = bonus;
+ * [6] = multiplier; [7] = score limit (Paper Mode only).
+ * In mode 1 it inserts the result into the saved top-five record table (separate rows for 50Hz on US and later),
+ * sets the minigame's record story flag when it takes first place, then starts the display event.
+ */
 USER_FUNC(evt_yuuranking_alloc) {
     EvtWord* args = event->args;
     YuuRankingWork* wp = _mapAlloc(sizeof(YuuRankingWork));

@@ -99,6 +99,13 @@ static EVT_BEGIN(kpa_fall)
     RETURN
 EVT_END()
 
+/**
+ * Script of the stage's red jump stand (KPA_OBJ_JUMPSTAND_RED), run when Bowser stands on it:
+ * kills the stage clock (kpa_time, its event id in GW(15)), saves Bowser's power level,
+ * loads kpa_06 after 500 ms, turns the camera off once he is above y = 400
+ * and launches him up with evt_mario_jump_jumpstand 800 units above the platform (a lower launch speed in the US
+ * demo and earlier).
+ */
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
     BEGIN_INLINE_EVENT

@@ -226,6 +226,15 @@ static EVT_BEGIN(start_avoid)
     RETURN
 EVT_END()
 
+/**
+ * The Bullet Bill's suicide charge.
+ * It picks a target (the first-attack target on a pre-emptive strike),
+ * charges up with SFX_ENM_KILLER_CHARGE1 and flies at it.
+ * If the pre-damage check says the attack misses or is guarded,
+ * it flies past the target with the avoid animation; on a hit it deals damage with a camera shake.
+ * Either way it ends by exploding (smoke effect, then coin, exp and star points are paid out)
+ * and KillUnit removes it.
+ */
 // Common attack cleanup removes the projectile, including the no-target path.
 static EVT_BEGIN(attack_event)
     // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.

@@ -36,6 +36,14 @@ typedef struct GT2Work {
 
 static void actionCommandDisp(f32 x, f32 y);
 
+/**
+ * Per-frame driver of action command 20, used by Yoshi's Mini-Egg.
+ * A bar fills over params[1] frames past params[2] evenly spaced targets;
+ * each A press within 6 of an unresolved target scores it (outputParams[0] counts hits),
+ * and pressing too early marks that target so it fails. Succeeds with at least one hit.
+ * The releases also wait until every target is hit or missed and stop at the first target a press reaches;
+ * the demos end on the time limit.
+ */
 s32 battleAcMain_GaugeTiming2(BattleWork *work) {
     BOOL pressed;
     const char *sfxNg;

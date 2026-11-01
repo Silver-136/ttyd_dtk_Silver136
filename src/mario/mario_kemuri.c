@@ -295,6 +295,11 @@ void kemuri(void) {
     }
 }
 
+/**
+ * Dust trail behind the partner, run each frame from party.c:
+ * every 7 frames while it walks at speed 2 or more, or while Yoshi carries Mario.
+ * The demo version also puffs over water and at any system level.
+ */
 void party_kemuri(PartyEntry* party) {
 
 #if VERSION >= VERSION_US

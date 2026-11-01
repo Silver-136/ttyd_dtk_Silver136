@@ -352,6 +352,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data events 25 to 36, which the standard damage reaction runs for the counter-damage codes 44 to 55:
+ * the Red Chomp takes the hurt pose (type 39) and its head (part 1) is flung 25 units back and up;
+ * up to the US demo it then drops back to the floor in two hops.
+ * After 30 frames the camera resets, and it restarts its wait event
+ * unless the damage code has 512 set without 2048.
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_SetPartsFallAccel, LW(10), 1, FLOAT(1.0f))

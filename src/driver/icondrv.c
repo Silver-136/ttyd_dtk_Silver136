@@ -70,8 +70,16 @@ u16 icon_067_lang_tbl[6] = {0x67, 0x68, 0x69, 0x6A, 0x67, 0x6B};
 #endif
 
 #if VERSION >= VERSION_US
+/**
+ * Returns icon iconId's frame data in icon.bin, or NULL until both icon.tpl and icon.bin have loaded.
+ * The US and later builds swap icons 0x49 and 0x67 for their variant in the current language.
+ */
 static inline IconBinData* iconGetBinData(s32 iconId) {
 #else
+/**
+ * Returns icon iconId's frame data in icon.bin, or NULL until both icon.tpl and icon.bin have loaded.
+ * The US and later builds swap icons 0x49 and 0x67 for their variant in the current language.
+ */
 static inline IconBinData* iconGetBinData(u16 iconId) {
 #endif
     IconBinary* bin = icon_bin;
@@ -265,6 +273,11 @@ void iconMain(void) {
     }
 }
 
+/**
+ * Creates a named 3D icon showing iconId at the origin, scale 1, opaque white.
+ * On maps whose first map entry has flag 2 the map blend colour is not applied to it;
+ * later versions make an exception for Rogueport Sewers' X-Naut Fortress (aji) during the last-mail story step.
+ */
 void iconEntry(const char* name, u16 iconId) {
     IconWork* wp = iconGetWork();
     int i;
@@ -556,6 +569,7 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     iconGX(m, ep);
 }
 
+/** JP and demo signature: the id is an s16. */
 void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
     static char dummy[] ATTRIBUTE_ALIGN(32) = "";
     IconBinData* data;
@@ -576,6 +590,7 @@ void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
     GXInitTexObjLOD(texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 }
 
+/** JP and demo signature: the id is an s16. */
 void iconGetWidthHight(u16* width, u16* height, s32 iconId) {
     IconBinData* data;
     TEXDescriptor* descriptor;
@@ -595,8 +610,16 @@ void iconGetWidthHight(u16* width, u16* height, s32 iconId) {
  * flips, 2D or map-lit 3D lighting, grayscale and colour tint, culling. Shared by every icon draw path.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Sets up GX and draws one icon quad with matrix mtx:
+ * flips, 2D or map-lit 3D lighting, grayscale and colour tint, culling. Shared by every icon draw path.
+ */
 static void iconGX(Mtx mtx, IconEntry* entry) {
 #else
+/**
+ * Sets up GX and draws one icon quad with matrix mtx:
+ * flips, 2D or map-lit 3D lighting, grayscale and colour tint, culling. Shared by every icon draw path.
+ */
 void iconGX(Mtx mtx, IconEntry* entry) {
 #endif
     static char dummy[] ATTRIBUTE_ALIGN(32) = "";

@@ -292,6 +292,10 @@ const char* hotel_npc[] = {
     NULL,
 };
 
+/**
+ * Door 2 open callback: hides the map object group ERE (JP and later),
+ * dips the BGM and ambience to 50 and low-pass filters the ambience.
+ */
 static EVT_BEGIN(door_2_open)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -351,6 +355,12 @@ EVT_BEGIN(imginit)
     RETURN
 EVT_END()
 
+/**
+ * Fades the hotel lobby out when an elevator ride starts (spawned by evt_up and evt_down as the doors close):
+ * the lobby objects (hotel_naka, door_h), the clerk (店員女) and the dandy (キザ野郎) are hidden and rendered to
+ * the offscreen buffer instead, shown through the capture image as it fades from 255 to 0 alpha over one second;
+ * they stay hidden afterwards. In JP and later the breakfast item fades with them.
+ */
 EVT_BEGIN(imgstart)
     CALL(evt_mapobj_set_offscreen, 1, STRING("hotel_naka"), STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("door_h"), STRING("offscreen"))
@@ -426,6 +436,12 @@ EVT_BEGIN(imgend)
     RETURN
 EVT_END()
 
+/**
+ * Elevator ride up to the inn room (US and later):
+ * the elevator doors open, the box "hako" (with its hit area a_hako) rises 1325 units over ten seconds carrying
+ * Mario and the partner, the lobby fades through imgend,
+ * and the doors open on the upper floor and Mario walks out.
+ */
 EVT_BEGIN(evt_up)
     // The ride up: the elevator doors slide open.
     CALL(evt_mario_key_onoff, 0)
@@ -608,6 +624,10 @@ EVT_BEGIN(evt_up)
     RETURN
 EVT_END()
 
+/**
+ * Elevator ride back down from the inn room (US and later): the reverse of evt_up.
+ * The camera follows the box down, the doors open at the bottom and Mario walks out onto the street.
+ */
 EVT_BEGIN(evt_down)
     // The ride down: the elevator doors slide open.
     CALL(evt_mario_key_onoff, 0)
@@ -809,6 +829,10 @@ EVT_BEGIN(evt_down)
     RETURN
 EVT_END()
 
+/**
+ * Init for the souvenir stall owner (土産屋), who sells Fresh Pasta at the stall a_roten (evt_roten): places the
+ * owner at (-363, 10, 142) (y 15 in the demos).
+ */
 EVT_BEGIN(init_miyage)
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_position, STRING("me"), -363, 10, 142)

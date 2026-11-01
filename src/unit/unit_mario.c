@@ -293,6 +293,14 @@ static EVT_BEGIN(battle_entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Mario's battle entry (data tag 0x41) used instead of battle_entry_event
+ * when he entered the battle in field motion 0x1A:
+ * he runs from offstage to the partner's spot, hops from there to his home position,
+ * then waits for the stand pose loop.
+ * Motion 0x1A is MARIO_MOTION_YOSHI (battle_seq.c picks this event then), so Mario arrives riding Yoshi
+ * and jumps off.
+ */
 EVT_BEGIN(mario_ride_btl_entry_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 250)
@@ -527,6 +535,11 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #endif
+/**
+ * Mario's death (data tag 49): camera zooms in on him, he collapses with the fainted voice and pose,
+ * and the unit is killed about four seconds later.
+ * The US and later releases also lock the camera's height and reset its offset.
+ */
 EVT_BEGIN(mario_dead_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
 #if VERSION >= VERSION_US
@@ -602,6 +615,10 @@ EVT_BEGIN(mario_appeal_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Mario's victory pose M_V_2 held for one second (data tag 64),
+ * run for Mario and the partner when the battle is won and experience is handed out.
+ */
 EVT_BEGIN(mario_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_V_2"))
     WAIT_MS(1000)
@@ -684,6 +701,12 @@ EVT_BEGIN(btlataudevtMarioJump)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Audience-attack reaction: Mario runs off the stage,
+ * reappears in the audience and hammers the chosen audience member,
+ * using the swing poses and sounds of his current hammer level, then returns home.
+ * The US and later releases add a follow-through pose and walk him back through the audience area.
+ */
 EVT_BEGIN(btlataudevtMarioHammer)
     // Mario runs off the side of the stage.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -782,6 +805,12 @@ EVT_BEGIN(btlataudevtMarioHammer)
     RETURN
 EVT_END()
 #else
+/**
+ * Audience-attack reaction: Mario runs off the stage,
+ * reappears in the audience and hammers the chosen audience member,
+ * using the swing poses and sounds of his current hammer level, then returns home.
+ * The US and later releases add a follow-through pose and walk him back through the audience area.
+ */
 EVT_BEGIN(btlataudevtMarioHammer)
     // Mario runs off the side of the stage.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -926,6 +955,10 @@ EVT_END()
  * run for Mario and the partner when the battle is won and experience is handed out.
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Mario's victory pose M_V_2 held for one second (data tag 64),
+ * run for Mario and the partner when the battle is won and experience is handed out.
+ */
 EVT_BEGIN(mario_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_V_2"))
     WAIT_MS(1000)

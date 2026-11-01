@@ -2955,6 +2955,10 @@ NpcTerritoryInfo btl_tst_setup_no_tbl[] = {
  * Args: object name, x step var, x period, x amplitude, y step var, y period, y amplitude.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Moves a stage object along two sine waves: x = ampX * sin(stepX / periodX), y = ampY * (1 + sin(...)).
+ * Args: object name, x step var, x period, x amplitude, y step var, y period, y amplitude.
+ */
 static USER_FUNC(_wave_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -2982,6 +2986,10 @@ pObject->positionOffset.x = ampX * sinfd(stepX * 360 / periodX);
     return EVT_RETURN_DONE;
 }
 #else
+/**
+ * Moves a stage object along two sine waves: x = ampX * sin(stepX / periodX), y = ampY * (1 + sin(...)).
+ * Args: object name, x step var, x period, x amplitude, y step var, y period, y amplitude.
+ */
 static USER_FUNC(_wave_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

@@ -94,6 +94,10 @@ static inline void planeReset(void) {
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
+/**
+ * Inline form of mario_plane_cancel (JP and later):
+ * starts the landing (sub-motion 50) if Mario is in the gliding phase.
+ */
 static inline BOOL planeCancel(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId != MARIO_MOTION_PLANE) {
@@ -144,8 +148,16 @@ s32 marioGetPlaneStatus(void) {
  * Called from evt_mario's plane command and when the field motion is changed while flying.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Ends a glide early: switches to the landing phase (sub-motion 50) from the current height.
+ * Called from evt_mario's plane command and when the field motion is changed while flying.
+ */
 void mario_plane_cancel(void) {
 #else
+/**
+ * Ends a glide early: switches to the landing phase (sub-motion 50) from the current height.
+ * Called from evt_mario's plane command and when the field motion is changed while flying.
+ */
 BOOL mario_plane_cancel(void) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -197,6 +209,11 @@ static inline void planeRoll2(MarioWork* mario, f32 rate, f32 max) {
 }
 
 #if VERSION >= VERSION_US
+/**
+ * Height below which the camera stops following the plane down, per map:
+ * tik_01, tik_19 (Rogueport Underground), mri_19 (Great Tree), las_25 (Palace of Shadow), 90 elsewhere.
+ * US and later only.
+ */
 static inline f32 planeCamFloor(void) {
     if (strcmp(gp->currentMapName, "tik_01") == 0) {
         return 30.0f;
@@ -218,6 +235,12 @@ static inline f32 planeCamFloor(void) {
  * dropping into water (splash, then the water damage motion) and the camera following the flight.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Plane Mode motion (from a plane panel): Mario jumps, spins and folds into a paper airplane,
+ * then glides with the stick pitching it up and down (flyMain); A or B or a key-off lands him.
+ * Handles landing on the ground, hitting walls (falling back to the jump motion),
+ * dropping into water (splash, then the water damage motion) and the camera following the flight.
+ */
 void mot_plane(void) {
     MarioWork* mp;
     BOOL done;
@@ -524,6 +547,12 @@ p = mp->position;
     mp->moveDist = mp->baseSpeed;
 }
 #else
+/**
+ * Plane Mode motion (from a plane panel): Mario jumps, spins and folds into a paper airplane,
+ * then glides with the stick pitching it up and down (flyMain); A or B or a key-off lands him.
+ * Handles landing on the ground, hitting walls (falling back to the jump motion),
+ * dropping into water (splash, then the water damage motion) and the camera following the flight.
+ */
 void mot_plane(void) {
     MarioWork* mp;
     BOOL done;
@@ -1169,8 +1198,20 @@ static f32 planeDead270(void) {
  * (mario->hitobjHead). Returns TRUE on any hit, with the hit height in *outY.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Checks the plane against the world: rays ahead of its front point for walls (mario->hitobjFront),
+ * downward rays under its front and nose points for a floor (mario->hitobjStandOn,
+ * plus from JP on a ray between the two), and with no floor a short upward ray for a ceiling
+ * (mario->hitobjHead). Returns TRUE on any hit, with the hit height in *outY.
+ */
 static BOOL chkCollision(f32* outY) {
 #else
+/**
+ * Checks the plane against the world: rays ahead of its front point for walls (mario->hitobjFront),
+ * downward rays under its front and nose points for a floor (mario->hitobjStandOn,
+ * plus from JP on a ray between the two), and with no floor a short upward ray for a ceiling
+ * (mario->hitobjHead). Returns TRUE on any hit, with the hit height in *outY.
+ */
 BOOL chkCollision(f32* outY) {
 #endif
     Vec dir, hpos, v, v2;

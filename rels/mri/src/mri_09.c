@@ -208,6 +208,11 @@ EVT_END()
  * Sets the story to STG2_21_02_MATCHING_THE_PATTERNS.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Reward scene for the slot puzzle: with a quake and fanfare the four wall panels roll away one by one,
+ * the floor and wall collisions change, small stars burst from the four switches, which are removed.
+ * Sets the story to STG2_21_02_MATCHING_THE_PATTERNS.
+ */
 EVT_BEGIN(wall_roll)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -278,6 +283,11 @@ CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 #else
+/**
+ * Reward scene for the slot puzzle: with a quake and fanfare the four wall panels roll away one by one,
+ * the floor and wall collisions change, small stars burst from the four switches, which are removed.
+ * Sets the story to STG2_21_02_MATCHING_THE_PATTERNS.
+ */
 EVT_BEGIN(wall_roll)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -582,6 +592,11 @@ EVT_END()
  * the Blue Key chest, the Charge badge, a Shine Sprite block and the breaking floor.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Map init script of mri_09, the slot-switch room:
+ * sets up the Puni, planters and Piders checker, the four red switches and wall panels for the story state,
+ * the Blue Key chest, the Charge badge, a Shine Sprite block and the breaking floor.
+ */
 EVT_BEGIN(mri_09_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 9, 100, 0, -310, -1000, 2, 2)
@@ -635,6 +650,11 @@ CASE_GREATER_OR_EQUAL(STG2_21_02_MATCHING_THE_PATTERNS)
     RETURN
 EVT_END()
 #else
+/**
+ * Map init script of mri_09, the slot-switch room:
+ * sets up the Puni, planters and Piders checker, the four red switches and wall panels for the story state,
+ * the Blue Key chest, the Charge badge, a Shine Sprite block and the breaking floor.
+ */
 EVT_BEGIN(mri_09_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 9, 100, 0, -310, -1000, 2, 2)

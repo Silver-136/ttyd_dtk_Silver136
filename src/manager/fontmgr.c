@@ -123,14 +123,26 @@ void fontmgrInit(void) {
 }
 
 #if VERSION == VERSION_DEMO_JP
+/**
+ * Loads the font for the current language (US and PAL by gp->language, the US demo the US font,
+ * JP and the JP demo the Japanese one). Called from the logo sequence; does nothing once a font is loaded.
+ */
 void fontmgrTexSetup(void) {
 JUTFontSetup(0);
 }
 #elif VERSION == VERSION_DEMO_US
+/**
+ * Loads the font for the current language (US and PAL by gp->language, the US demo the US font,
+ * JP and the JP demo the Japanese one). Called from the logo sequence; does nothing once a font is loaded.
+ */
 void fontmgrTexSetup(void) {
 JUTFontSetup(1);
 }
 #else
+/**
+ * Loads the font for the current language (US and PAL by gp->language, the US demo the US font,
+ * JP and the JP demo the Japanese one). Called from the logo sequence; does nothing once a font is loaded.
+ */
 void fontmgrTexSetup(void) {
 #if VERSION >= VERSION_US
     JUTFontSetup(gp->language);
@@ -277,6 +289,10 @@ void FontDrawCodeMtx(Mtx mtx, u16 code) {
     fontDrawCodeEdge(code);
 }
 
+/**
+ * JP and demo body of FontDrawString: draws a plain string (no tags, no line breaks) left to right from pos with
+ * the current scale and outline, Shift-JIS pairs as one glyph.
+ */
 static void FontDrawStringVec(Vec pos, const s8* str) {
     CameraEntry* camera;
     Mtx trans, scale;
@@ -306,17 +322,30 @@ static void FontDrawStringVec(Vec pos, const s8* str) {
 }
 
 #if VERSION >= VERSION_US
+/**
+ * Draws a single-line string at x, y with proportional spacing;
+ * message tags are drawn as text in JP and the demos and skipped in the US and PAL releases.
+ */
 // US: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
 void FontDrawString(f32 x, f32 y, const char* msg) {
     // US: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
     FontDrawStringVecPitch((Vec){x, y, 0.0f}, -1.0f, (const s8*)msg);
 }
 #else
+/**
+ * Draws a single-line string at x, y with proportional spacing;
+ * message tags are drawn as text in JP and the demos and skipped in the US and PAL releases.
+ */
 void FontDrawString(f32 x, f32 y, const char* msg) {
     FontDrawStringVec((Vec){x, y, 0.0f}, (const s8*)msg);
 }
 #endif
 
+/**
+ * JP and demo: FontDrawStringPitch's copy of FontDrawStringVecPitch.
+ * It walks the string through a local copy (msg = str);
+ * calling FontDrawStringVecPitch itself, or giving it the same copy, changes the registers.
+ */
 static inline void fontDrawStringVecPitch(Vec pos, f32 pitch, const s8* str) {
     CameraEntry* camera;
     Mtx trans, scale;
@@ -365,6 +394,11 @@ void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* msg) {
 // FAKE: auto_inline off keeps the wrappers from inlining FontDrawStringVecPitch (the US wrappers call it)
 #pragma auto_inline off
 #endif
+/**
+ * Draws a single-line string from pos, fixed pitch or (pitch < 0) proportional;
+ * the shared body of FontDrawString and FontDrawStringPitch in the US and PAL releases,
+ * where it also skips <tag>s.
+ */
 void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
     CameraEntry* camera;
     Mtx trans, scale;
@@ -945,6 +979,12 @@ GXColor HSV2RGB(GXColor hsv) {
     return out;
 }
 
+/**
+ * Loads font file fontname[font] (.bfn) from the disc into the default heap, finds its INF1 and GLY1 blocks,
+ * sets up the glyph sheet texture and forces the widths of the space (7) and full-width space (9).
+ * Does nothing once a font is loaded.
+ * The US and PAL releases size the buffer for the largest of the seven font files.
+ */
 void JUTFontSetup(u16 font) {
 #if VERSION >= VERSION_US
     DVDEntry* dvd;
@@ -1166,6 +1206,13 @@ static inline void fontPos(const s16 x, s16 y, GXColor* hsv, u8 hue) {
     fontHueX(hsv, x, hue);
 }
 
+/**
+ * Emits one glyph as a quad at x, y in the current matrix:
+ * texture coordinates of its cell in the glyph sheet,
+ * a rainbow vertex colour whose hue moves with x and the frame count,
+ * and random noise texture coordinates (used only when FontDrawRainbowColor or FontDrawNoise add their stage).
+ * The US and PAL fonts trim 2 px off the cell.
+ */
 void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
     s32 row;
     u8 hue;

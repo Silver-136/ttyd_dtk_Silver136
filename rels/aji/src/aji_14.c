@@ -48,6 +48,11 @@ extern EvtWord aji_14_init_evt[];
 EvtWord aji_14_init_evt[71];
 #endif
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -60,6 +65,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -474,6 +484,13 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Init script of aji_14, Lord Crump's boss room:
+ * plays BGM_STG7_DUN2 unless entered as "tuzuki" (silent in that case, JP and later),
+ * sets up the exits and the officer and robot NPCs;
+ * entering as "tuzuki" runs evt_boss2 (the post-battle Crystal Star scene),
+ * and before STG7_20_LORD_CRUMP_DEFEATED the second robot is placed and evt_boss starts the fight.
+ */
 EVT_BEGIN(aji_14_init_evt)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_bero_get_entername, LW(0))

@@ -130,6 +130,11 @@ static const LangTbl lang_tbl = {{
 #endif
 }};
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The demo's map change differs in the DEMO blocks below:
+ * no SFX stop, the REL is unloaded inline and the sound mode is not set in step 1,
+ * psndMapChange runs right after the unload, and the respawn point is not set.
+ */
 void seq_mapChangeMain(SequenceWork* work) {
 BOOL newarea = strcmp(_next_area, gp->currentAreaName) ? TRUE : FALSE;
 const char* area_name;
@@ -332,6 +337,11 @@ marioKeyOff();
     }
 }
 #else
+/**
+ * The demo's map change differs in the DEMO blocks below:
+ * no SFX stop, the REL is unloaded inline and the sound mode is not set in step 1,
+ * psndMapChange runs right after the unload, and the respawn point is not set.
+ */
 void seq_mapChangeMain(SequenceWork* work) {
     BOOL newarea = strcmp(_next_area, gp->currentAreaName) != 0;
     const char* area_name;

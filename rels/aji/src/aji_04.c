@@ -94,6 +94,11 @@ extern EvtWord aji_04_init_evt[];
 EvtWord aji_04_init_evt[55];
 #endif
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -106,6 +111,11 @@ MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.25;
+ * the open and close scripts apply the same transform. The demo builds use 0.2217.
+ */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
 MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
@@ -196,6 +206,10 @@ EVT_END()
  * while its text is shown (it is spawned next to every statue message).
  */
 #if VERSION > VERSION_DEMO_US
+/**
+ * Makes the statue's lower jaw (kuti, kuti2) flap for three open-and-close cycles
+ * while its text is shown (it is spawned next to every statue message).
+ */
 EVT_BEGIN(sekizou_talk)
     RETURN
 EVT_END()
@@ -206,6 +220,10 @@ EVT_END()
  * sets the story to STG7_14_ELEVATOR_KEY_B.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Makes the statue's lower jaw (kuti, kuti2) flap for three open-and-close cycles
+ * while its text is shown (it is spawned next to every statue message).
+ */
 EVT_BEGIN(sekizou_talk)
 LOOP(3)
         CALL(evt_sub_intpl_msec_init, 11, 0, 70, 100)
@@ -230,6 +248,10 @@ LOOP(3)
 RETURN
 EVT_END()
 #endif
+/**
+ * Pick-up event of the elevator key dropped after the quiz (ITEM_ELEVATOR_KEY_0x1C):
+ * sets the story to STG7_14_ELEVATOR_KEY_B.
+ */
 EVT_BEGIN(evt_item)
     SET_VALUE(GSW_STORY_PROGRESS, STG7_14_ELEVATOR_KEY_B)
     RETURN
@@ -520,6 +542,16 @@ EVT_END()
  * the quiz ends and STG7_13_QUIZ_CLEARED is set.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * The statue's quiz, the case script of a_sekizou_1_a.
+ * The statue wakes up and asks whether to take its quiz (stg7_aji_02);
+ * on yes it moves Mario onto the quiz set (BGM_EVT_QUIZ1/2)
+ * and asks questions read from kuizu_data (map animation, question text, choice text, correct choice),
+ * turning its head and flapping its mouth with every text.
+ * Wrong answers earn a scolding and an offer to stop;
+ * right answers are counted in LW(14) and after the fifth the statue turns around,
+ * the quiz ends and STG7_13_QUIZ_CLEARED is set.
+ */
 EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
@@ -791,6 +823,16 @@ SET_VALUE(LW(0), 360)
     RETURN
 EVT_END()
 #else
+/**
+ * The statue's quiz, the case script of a_sekizou_1_a.
+ * The statue wakes up and asks whether to take its quiz (stg7_aji_02);
+ * on yes it moves Mario onto the quiz set (BGM_EVT_QUIZ1/2)
+ * and asks questions read from kuizu_data (map animation, question text, choice text, correct choice),
+ * turning its head and flapping its mouth with every text.
+ * Wrong answers earn a scolding and an offer to stop;
+ * right answers are counted in LW(14) and after the fifth the statue turns around,
+ * the quiz ends and STG7_13_QUIZ_CLEARED is set.
+ */
 EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)

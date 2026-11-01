@@ -641,6 +641,10 @@ EVT_END()
  * damaging the target, then walks back home.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Bobbery's Bomb: he walks up to the enemy, lights his fuse during the action command and explodes on it,
+ * damaging the target, then walks back home.
+ */
 EVT_BEGIN(partySandersAttack_NormalAttack)
     // Pick the target, pay the cost and aim the camera at Bobbery and the enemy.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -910,6 +914,10 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     RETURN
 EVT_END()
 #else
+/**
+ * Bobbery's Bomb: he walks up to the enemy, lights his fuse during the action command and explodes on it,
+ * damaging the target, then walks back home.
+ */
 EVT_BEGIN(partySandersAttack_NormalAttack)
     // Pick the target, pay the cost and aim the camera at Bobbery and the enemy.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -1865,6 +1873,7 @@ CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, -1)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
+/** Victory reaction (data tag 64): Bobbery's Y_1 pose for 48 frames. */
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("Y_1"))
     WAIT_FRAMES(48)
@@ -2040,6 +2049,7 @@ BattleUnitSetup entry_bomzou = {
 
 /** Victory reaction (data tag 64): Bobbery's Y_1 pose for 48 frames. */
 #if VERSION > VERSION_DEMO_US
+/** Victory reaction (data tag 64): Bobbery's Y_1 pose for 48 frames. */
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("Y_1"))
     WAIT_FRAMES(48)

@@ -35,6 +35,10 @@ static inline void fogOff(void) {
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, fog_color);
 }
 
+/**
+ * Allocates the 7 window slots and marks them free; called once at boot.
+ * Later versions also forget the frame texture so windowTexSetup reloads it.
+ */
 void windowInit(void) {
     WindowEntry* w;
 
@@ -64,8 +68,10 @@ void windowInit(void) {
 // Descriptive name (not in the symbol maps); placeholder unk_8007f204, JP 0x8007F204. See docs/NAME_PROVENANCE.md.
 #if VERSION <= VERSION_DEMO_US
 void windowLoadTpl(const char* name);
+/** the demo loads msgWindow.tpl synchronously */
 void windowTexSetup(void) {
 #else
+/** new in retail */
 void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;
 #endif
@@ -88,8 +94,10 @@ void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** inlined into windowTexSetup; the linker strips the unreferenced copy */
 void windowLoadTpl(const char* name) {
 #else
+/** the demo loads msgWindow.tpl synchronously */
 void windowTexSetup(void) {
 #endif
     DVDEntry* entry;

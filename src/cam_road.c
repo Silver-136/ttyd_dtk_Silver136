@@ -34,6 +34,12 @@ static CamRoadWork* wp = &work;
 // camRoadSetup, where the map lists the stripped camRoadDraw (0x8b8 bytes, UNUSED in the demo as well), so
 // no build contains its code.
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Loads the map's camera road file (from the map archive, else from the disc onto the map heap),
+ * turns its offsets into pointers, resets the road state and the sideways shift,
+ * and notes whether the file is version 1.01 (state 0x65, which supports switching curves on and off by name)
+ * or older (0x64). Returns 0 if the file is missing. Called by the camera driver on map load.
+ */
 s32 camRoadSetup(const char* name) {
     char path[128];
     u32 size;
@@ -88,12 +94,19 @@ s32 camRoadSetup(const char* name) {
     return 1;
 }
 #endif
+/** The demo pools the two strings ahead of camRoadSetup's, so the stand-in follows camRoadSetup. */
 static void camRoadStrippedReport(const char* p, s32 a, s32 b) {
     OSReport("%scam = %d\n", p, a);
     OSReport("%scurve = %d\n", p, b);
 }
 
 #if VERSION > VERSION_DEMO_US
+/**
+ * Loads the map's camera road file (from the map archive, else from the disc onto the map heap),
+ * turns its offsets into pointers, resets the road state and the sideways shift,
+ * and notes whether the file is version 1.01 (state 0x65, which supports switching curves on and off by name)
+ * or older (0x64). Returns 0 if the file is missing. Called by the camera driver on map load.
+ */
 s32 camRoadSetup(const char* name) {
     char path[128];
     u32 size;

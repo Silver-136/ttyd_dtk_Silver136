@@ -300,6 +300,11 @@ EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_gra_00000530, JP gra .text+0x46C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Script helper used by the exit scripts of this map:
+ * stores 1 in args[0] when marioRollCancelDisable() is 0, i.e. when Mario's roll may be cancelled,
+ * and 0 otherwise. JP and later only.
+ */
 USER_FUNC(roll_release_check) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], marioRollCancelDisable() == 0);

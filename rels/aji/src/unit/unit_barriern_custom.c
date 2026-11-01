@@ -1763,6 +1763,10 @@ static USER_FUNC(barriernSatelliteToInside) {
     return moving == FALSE ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script function: moves args[1] satellites (1 to 4) of the Yux args[0] out to their outer positions along the
+ * splineTableOut tables. Blocks until all satellites have arrived.
+ */
 static USER_FUNC(barriernSatelliteToOutside) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);

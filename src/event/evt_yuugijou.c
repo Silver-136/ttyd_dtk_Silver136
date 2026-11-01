@@ -80,6 +80,12 @@ static inline s32 MAX0(s32 x) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Resets the Pianta Parlor work: token counts and flags cleared,
+ * and the default record tables (five ranks per minigame, score plus a derived per-rank value) filled in.
+ * Called on a new game (mariost.c) and from event.c.
+ * The demo has its own records; US/PAL keep eight record rows, JP four.
+ */
 void yuugijou_init(void) {
 yuwp = &yuugijouwork;
     memset(yuwp, 0, sizeof(PiantaParlorWork));
@@ -156,6 +162,12 @@ yuwp->recordOn[0][0] = 1;
     yuwp->recordParam[3][4] = 0xC;
 }
 #else
+/**
+ * Resets the Pianta Parlor work: token counts and flags cleared,
+ * and the default record tables (five ranks per minigame, score plus a derived per-rank value) filled in.
+ * Called on a new game (mariost.c) and from event.c.
+ * The demo has its own records; US/PAL keep eight record rows, JP four.
+ */
 void yuugijou_init(void) {
     s32 t;
     yuwp = &yuugijouwork;
@@ -436,6 +448,10 @@ monte_snd_flag = 0;
 }
 #endif
 
+/**
+ * Adds args[1] Pianta tokens (negative to spend). Retail caps the total at 99999; the demo does not.
+ * A nonzero args[0] snaps the counter display to the new total instead of letting it count up.
+ */
 USER_FUNC(yuugijou_add_montemedal) {
     EvtWord* args = event->args;
     s32 immediate = evtGetValue(event, args[0]);
@@ -578,6 +594,7 @@ USER_FUNC(yuuminigame_get_window_evt) {
 /** Retail: sets the script window_open runs as a child before the quit prompt; each minigame sets its own. */
 // Descriptive name (not in the symbol maps); placeholder unk_8022439c, JP 0x8022439C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/** Retail: sets the script window_open runs as a child before the quit prompt; each minigame sets its own. */
 void evtYuuSetWindowEvt(EvtWord* evt) {
     yuu_window_evt = evt;
 }

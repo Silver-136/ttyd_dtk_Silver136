@@ -197,6 +197,11 @@ USER_FUNC(evt_mario_dokan_prepare) {
  * Blocks while the spin runs; the partners leave as he goes in.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Plays Mario's paper pipe animation, then switches to the pipe motion;
+ * arg 0 = pipe type (evt_bero passes 2 up, 3 down, 5 sideways).
+ * Blocks while the spin runs; the partners leave as he goes in.
+ */
 USER_FUNC(evt_mario_paper_pose_dokan) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -359,6 +364,11 @@ event->userdata[0]++;
     return ret;
 }
 #else
+/**
+ * Plays Mario's paper pipe animation, then switches to the pipe motion;
+ * arg 0 = pipe type (evt_bero passes 2 up, 3 down, 5 sideways).
+ * Blocks while the spin runs; the partners leave as he goes in.
+ */
 USER_FUNC(evt_mario_paper_pose_dokan) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -766,6 +776,10 @@ USER_FUNC(evt_mario_get_dir) {
 extern const f32 evt_mario_full_turn;
 extern const f32 evt_mario_half_turn;
 #endif
+/**
+ * Turns Mario's sprite to face arg 0 (degrees) over arg 1 ms, blocking during the turn;
+ * arg 2 non-zero waits one more call and then zeroes the view and move directions. With 0 ms he turns at once.
+ */
 USER_FUNC(evt_mario_set_dir) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -888,6 +902,7 @@ USER_FUNC(evt_mario_set_dir_pos) {
 const f32 evt_mario_full_turn = 360.0f;
 const f32 evt_mario_half_turn = 180.0f;
 #endif
+/** Realigns Mario's move direction with the way his sprite faces (marioAdjustMoveDir). */
 USER_FUNC(evt_mario_adjust_dir) {
     marioAdjustMoveDir();
     return EVT_RETURN_DONE;
@@ -916,6 +931,10 @@ USER_FUNC(evt_mario_set_normal_pose) {
     SETPOSE_BODY
 }
 
+/**
+ * Plays the Mario animation named in arg 0, unless he is a plane, boat, tube or sideways paper.
+ * Names not in a_mario_group come from the second animation set. The EU release swaps M_I_2 for M_I_3.
+ */
 USER_FUNC(evt_mario_set_pose) {
     s32 i;
     BOOL notFound;
@@ -941,6 +960,11 @@ USER_FUNC(evt_mario_set_pose) {
  * waits for a partner ride to end. Blocks until done.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Brings Mario back to his normal standing state before a cutscene:
+ * gets him off Yoshi or out of Vivian's shadow, cancels Tube Mode and paper slit,
+ * waits for a partner ride to end. Blocks until done.
+ */
 USER_FUNC(evt_mario_normalize) {
     s32 ret = 0;
     MarioWork* mp = marioGetPtr();
@@ -1057,6 +1081,11 @@ if (event->userdata[1]) {
     return ret;
 }
 #else
+/**
+ * Brings Mario back to his normal standing state before a cutscene:
+ * gets him off Yoshi or out of Vivian's shadow, cancels Tube Mode and paper slit,
+ * waits for a partner ride to end. Blocks until done.
+ */
 USER_FUNC(evt_mario_normalize) {
     s32 ret = 0;
     MarioWork* mp = marioGetPtr();
@@ -1238,6 +1267,10 @@ USER_FUNC(evt_mario_set_talk_motion) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Takes Mario out of Tube Mode and blocks until the tube flag clears; used in gor_02.
+ * The demos call marioRollCancel instead of marioRollTryCancel.
+ */
 USER_FUNC(evt_mario_cancel_roll_motion) {
     if (isFirstCall) {
 #if VERSION <= VERSION_DEMO_US
@@ -1363,6 +1396,7 @@ static inline f32 doorAngle(f32 cam) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** the demo turns the partners behind Mario by the camera only, without close-follow mode */
 USER_FUNC(evt_mario_party_door_move) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -1463,6 +1497,7 @@ USER_FUNC(evt_mario_party_door_move) {
     return ret;
 }
 #else
+/** the demo turns the partners behind Mario by the camera only, without close-follow mode */
 USER_FUNC(evt_mario_party_door_move) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -1602,6 +1637,7 @@ USER_FUNC(evt_mario_party_door_move) {
 }
 #endif
 
+/** the demo moves the partners behind Mario without close-follow mode or the ride-kind angles */
 USER_FUNC(evt_mario_party_bero_move) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();

@@ -801,6 +801,11 @@ static EVT_BEGIN(kamec_subset_bunsin_all_kill)
     RETURN
 EVT_END()
 
+/**
+ * Death handler shared by the dead events, for the unit in LW(10):
+ * runs its data-table death event if it has one (slot 50), takes its back item, clears its statuses,
+ * removes its clones and then kills the unit (kill mode 2, or 0 when the damage code says it was blown away).
+ */
 static EVT_BEGIN(kamec_subset_dead_event)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_PRE_DEAD_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -885,6 +890,10 @@ static EVT_BEGIN(kamec_subset_blow_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs when an attack misses the Magikoopa; kills the clones (bunsin_kill_event) so the player sees
+ * which one was real. Guess.
+ */
 static EVT_BEGIN(avoid_miss_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -917,6 +926,10 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Fall reaction when a Magikoopa is hit while floating:
+ * it switches to the clone data table, fades, falls with SFX_ENM_FALL1 and lands. Guess.
+ */
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -2050,6 +2063,11 @@ static USER_FUNC(kamec_get_live_num) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Spawns one clone at the position in LW(0) to LW(2):
+ * copies the airborne flag and statuses of the real unit, marks it as a clone in work 1,
+ * gives it the clone attack event and resistances, and starts it invisible until alpha_up_event.
+ */
 static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_kamec), 0)
     CALL(btlevtcmd_SetAlpha, LW(3), 1, 0)

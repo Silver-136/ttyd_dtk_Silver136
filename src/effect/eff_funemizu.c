@@ -147,6 +147,10 @@ static u8 gor_fune_dl_1_size_tbl[] = { 0x02, 0x02};
  */
 // Descriptive name (not in the symbol maps); placeholder unk_80224298, JP 0x80224298. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+/**
+ * Returns the water colour for the current map:
+ * exact name match in the table first, then a 3-letter area prefix, then the default.
+ */
 GXColor effFunemizuGetMapColor(void) {
     ColorEntry* e;
     for (e = funemizu_color_tbl.e; e != NULL; e++) {
@@ -224,8 +228,10 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
 
 /** Advances the wake and spray timers, spawns a spray piece from the wake, and deletes spent ones. */
 #if VERSION <= VERSION_DEMO_US
+/** Advances the wake and spray timers, spawns a spray piece from the wake, and deletes spent ones. */
 static void effFunemizuMain(EffectEntry* effect) {
 #else
+/** Advances the wake and spray timers, spawns a spray piece from the wake, and deletes spent ones. */
 void effFunemizuMain(EffectEntry* effect) {
 #endif
     EffFunemizuWork* work = effect->userdata;
@@ -340,8 +346,10 @@ static inline void funemizuCallDL(u32 *p_u) {
 }
 /** Draws the wake ripple mesh tinted with the map's water colour. */
 #if VERSION <= VERSION_DEMO_US
+/** Draws the wake ripple mesh tinted with the map's water colour. */
 static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 #else
+/** Draws the wake ripple mesh tinted with the map's water colour. */
 void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffFunemizuWork* work = effect->userdata;
@@ -544,8 +552,10 @@ GXSetProjection(cam->projection, cam->projType);
 
 /** Draws the spray (shibuki) pieces as camera-facing quads. */
 #if VERSION <= VERSION_DEMO_US
+/** Draws the spray (shibuki) pieces as camera-facing quads. */
 static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
 #else
+/** Draws the spray (shibuki) pieces as camera-facing quads. */
 void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffFunemizuWork* work = effect->userdata;

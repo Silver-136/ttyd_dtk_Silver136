@@ -27,10 +27,12 @@ static inline void kpaWallSlide(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz
     *mx = 0.5f * (vx - dot * nx);
     *mz = 0.5f * (vz - dot * nz);
 }
+/** Slope of a floor normal: its angle from vertical in degrees. */
 static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
     return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
 }
 #else
+/** Slope of a floor normal: its angle from vertical in degrees. */
 static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
     return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
 }
@@ -394,6 +396,7 @@ HitEntry* kpaGetHitobjHead(s32 i) {
     return *e;
 }
 
+/** The first object any ceiling probe hit; JP and the demo check only the first probe. */
 HitEntry* kpaGetHitobjHead2(void) {
 #if VERSION >= VERSION_US
     s32 i;
@@ -647,6 +650,7 @@ HitEntry* kpaFlameHitCheck(f32 x, f32 y, f32 z, f32 r) {
 // _reflect2/_reflect; the demo kpaSearchWallFront's literals are 45, 0.75, 0.25, 0.5, so the US original
 // (whose only literal left is 0.5) was a different version and cannot be taken from the demo.
 #if VERSION <= VERSION_DEMO_US
+/** demo only: Koopa's front-wall search (two rays at 3/4 and 1/4 of the body height), called from searchFrontWall */
 HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz) {
     Vec p;
     Vec dir;

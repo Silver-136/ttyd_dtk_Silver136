@@ -275,6 +275,12 @@ static BattleWeapon weapon_dokugassun_poisongas_attack = {
 };
 #endif
 
+/**
+ * Poison Puff's turn: after an item-use check,
+ * if it has saved up toxins (counter attribute 0x200, poison status, on part 1) it breathes poison gas;
+ * otherwise it picks between a normal attack and charging up the barrier at random (a 65 to 35 split, 70 to 30
+ * in the demos).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

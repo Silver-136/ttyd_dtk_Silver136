@@ -810,8 +810,16 @@ void kpa_powdown(void) {
 
 #pragma dont_inline on
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Underwater horizontal movement: accelerates kpaSpeed from the stick up to 40
+ * and turns it into a walking speed (retail caps it at 2, the demo at 1 and also moves him here).
+ */
 static void kpaSwimMove(void) {
 #else
+/**
+ * Underwater horizontal movement: accelerates kpaSpeed from the stick up to 40
+ * and turns it into a walking speed (retail caps it at 2, the demo at 1 and also moves him here).
+ */
 void kpaSwimMove(void) {
 #endif
     MarioWork* mario = marioGetPtr();
@@ -878,6 +886,11 @@ movePos(&mario->position.x, &mario->position.z, mario->baseSpeed, mario->directi
  * and stepping onto a platform stops him. Also spawns the droplet effects.
  */
 #if VERSION <= VERSION_DEMO_US
+/**
+ * Swimming motion in kpa_03: A starts a swim stroke upward (limited near the surface),
+ * he sinks slowly between strokes, B breathes fire (which freezes the stick),
+ * and stepping onto a platform stops him. Also spawns the droplet effects.
+ */
 void kpa_swim(void) {
     MarioWork* mario = marioGetPtr();
     f32 v;
@@ -1084,6 +1097,11 @@ mario->currSubMotionId = 20;
     }
 }
 #else
+/**
+ * Swimming motion in kpa_03: A starts a swim stroke upward (limited near the surface),
+ * he sinks slowly between strokes, B breathes fire (which freezes the stick),
+ * and stepping onto a platform stops him. Also spawns the droplet effects.
+ */
 void kpa_swim(void) {
     MarioWork* mario = marioGetPtr();
     f32 v;

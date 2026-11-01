@@ -642,6 +642,7 @@ USER_FUNC(evt_badgeShop_bottakuru_dec) {
 
 #pragma opt_common_subs reset
 #if VERSION <= VERSION_DEMO_US
+/** the demo counts the thrown badges through an inline copy of badgeShop_ThrowCheck (with its bug: always 0) */
 static inline s32 badgeShop_ThrowCount(s32 itemId) {
     int i;
     s32 count;
@@ -654,6 +655,10 @@ static inline s32 badgeShop_ThrowCount(s32 itemId) {
     return count;
 }
 #endif
+/**
+ * Counts how many different badges are left in the Lovely Howz bargain_table and writes it to args[0].
+ * The demo also subtracts badgeShop_ThrowCount from each badge's stock first, which is always 0.
+ */
 USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
     EvtWord* args = event->args;
     s16 badge;
@@ -749,11 +754,19 @@ USER_FUNC(evt_badgeShop_bteresa_get_kind_cnt) {
  * Guess: it was meant to count copies already set aside.
  */
 #if VERSION <= VERSION_DEMO_US
+/** demo only: TRUE once word 6 of the block in LW(0) reaches the bargain count (no caller in the demo dol) */
 USER_FUNC(evt_badgeShop_getBargainKind) {
     evtSetValue(event, event->args[0], !(((s32*)event->lwData[0])[6] < bdsw->bargainNum));
     return EVT_RETURN_DONE;
 }
 #endif
+/**
+ * Counts itemId in bargainBadges[bargainNum..2*bargainNum-1];
+ * the callers (winmgr.c, evt_win.c) subtract the count from the bargain stock when they build the badge lists.
+ * Those slots lie past the five-entry array (bargainNum, reserved_110, restockFlags and padding),
+ * which never hold a badge id, so it always returns 0.
+ * Guess: it was meant to count copies already set aside.
+ */
 s32 badgeShop_ThrowCheck(s32 itemId) {
     int i;
     s32 count;

@@ -265,6 +265,10 @@ static void _callback_tpl(s32 error, DVDFileInfo* info) {
     wp->texLoaded = TRUE;
 }
 
+/**
+ * Boot setup: allocates the effect entry pool (512 entries in the US and later releases, 256 before),
+ * clears it and the texture state, and initialises the N64-style effects.
+ */
 void effInit(void) {
 #if VERSION >= VERSION_US
     wp->count = 0x200;
@@ -286,6 +290,11 @@ void effInit(void) {
 #define EFF_NTEX 146
 #endif
 
+/**
+ * Loads effect.tpl, the shared effect textures:
+ * from the startup archive if it is there, otherwise asynchronously from the disc (the jp or us folder by
+ * language in the US and later releases). Called from the logo sequence at boot.
+ */
 void effTexSetup(void) {
     DVDEntry* entry;
     char path[128];
