@@ -851,12 +851,6 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     pos->z += dist * cs;
     return NULL;
 }
-/**
- * The partners' main wall check: a ray ahead at 0.75 of the height,
- * then one at step height (11, or 1 for Bobbery in use) that only counts walls of 45 degrees or more.
- * On a hit slides *pos along the wall and returns it; otherwise moves *pos by dist.
- * Retail versions store frontWallDist (-1 none); the US release narrows paper-mode width to 6.
- */
 #endif
 HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     f32 sn, cs;

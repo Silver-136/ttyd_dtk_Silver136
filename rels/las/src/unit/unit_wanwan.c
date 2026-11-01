@@ -726,13 +726,6 @@ EVT_END()
 #else
 EVT_END_PAD()
 
-/**
- * Script helper (runs every frame): lays out the Chain-Chomp's chain.
- * The chain has nine parts; part 9 is the stake behind the chomp and parts 2..8 are the links.
- * Normally the links hang like a catenary between the chomp (part 1) and the stake,
- * sagging by 300 / length squared; with work[2] == 2 it records the current shape
- * and with work[2] == 1 it keeps the recorded shape fixed (used after the chomp is knocked loose).
- */
 #endif
 /**
  * Script helper (runs every frame): lays out the Chain-Chomp's chain.

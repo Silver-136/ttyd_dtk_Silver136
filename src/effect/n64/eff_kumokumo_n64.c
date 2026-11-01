@@ -144,7 +144,6 @@ GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 127}, {255, 255, 255, 204},
 };
 #else
-/** The round cloud model's four display lists. */
 /** Size in 32-byte units of each of the round cloud model's four display lists. */
 u8 cloud_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
 s8 batten_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};

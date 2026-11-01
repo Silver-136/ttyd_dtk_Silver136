@@ -127,7 +127,6 @@ static
 /** Sets every character to the given column of anim_tbl. */
 #if VERSION != VERSION_DEMO_JP
 static f32 e3BlinkTime(void);
-/** Sets every character to the given column of anim_tbl. */
 #endif
 USER_FUNC(e3PoseSetAnim) {
     s32 col = evtGetValue(event, event->args[0]);
@@ -620,14 +619,7 @@ pouchGetPtr()->availableBP = 20;
     dispEntry(CAMERA_3D, 0.0f, 0, e3Disp, seq);
 }
 
-/**
- * Draws the active page through the 2D camera: the title page (the US demo's characters,
- * tiles and blinking prompt) or the scenario boxes with their area labels
- * and the blinking corner cursor easing toward the selection.
- * On the offscreen page-flip camera it draws the other page.
- */
-#if VERSION <= VERSION_DEMO_US
-#if VERSION != VERSION_DEMO_JP
+#if VERSION == VERSION_DEMO_US
 // Texture ids in the demo's monthly TPL.
 typedef enum E3Texture {
     E3_TEX_BOX = 1,
@@ -635,6 +627,7 @@ typedef enum E3Texture {
     E3_TEX_CURSOR0 = 5,
     E3_TEX_CURSOR1 = 6,
 } E3Texture;
+#endif
 
 /**
  * Draws the active page through the 2D camera: the title page (the US demo's characters,
@@ -642,7 +635,7 @@ typedef enum E3Texture {
  * and the blinking corner cursor easing toward the selection.
  * On the offscreen page-flip camera it draws the other page.
  */
-#endif
+#if VERSION <= VERSION_DEMO_US
 static void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
     Mtx poseMtx;

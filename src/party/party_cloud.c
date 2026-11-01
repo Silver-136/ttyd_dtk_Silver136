@@ -938,11 +938,6 @@ void cloudResetAt() {
     }
 }
 
-/**
- * Called by marioCamZoomUp: while the 3D camera's stateA is 0, remembers the given look-at point in cloud_at;
- * otherwise replaces it with the remembered point.
- * Does nothing with no partner or when Flurrie is out but not gusting.
- */
 #endif
 void cloudGetAt(Vec* position) {
     MarioWork* mario = marioGetPtr();

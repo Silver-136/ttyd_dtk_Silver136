@@ -154,10 +154,6 @@ void seq_logoInit(SequenceWork* work) {
     fileAsyncf(4, 0, "%s/e3.tpl", getMarioStDvdRoot());
 #endif
 }
-/**
- * Leaves the logo sequence: sets up the font, window, fade, icon,
- * environment and effect textures and Mario's poses for the rest of the game, and frees mariost.tpl.
- */
 #endif
 void seq_logoExit(SequenceWork* work) {
     fontmgrTexSetup();

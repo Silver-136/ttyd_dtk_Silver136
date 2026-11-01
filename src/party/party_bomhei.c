@@ -195,12 +195,6 @@ void bomhei_exit(PartyEntry* party) {
     bomheiCleanUseSfx(party);
     bomheiFree(party);
 }
-/**
- * Cancels a bomb in progress (demo): back to run mode 2 unless in run mode 9,
- * clears the use flags and frees the use work.
- * Called before plane, ship and bellows rides and on run-mode changes (party_move.c).
- * Unlike the release versions it leaves Mario's carry flag and the sounds alone.
- */
 #endif
 void bomhei_use_cancel(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());

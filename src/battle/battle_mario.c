@@ -3562,11 +3562,6 @@ EVT_BEGIN(marioAttackEvent_DokanJump)
     RETURN
 EVT_END()
 #endif
-/**
- * Tornado Jump badge attack: a stomp on the chosen enemy,
- * then on a successful second command Mario spins into a tornado (_tatsumaki_effect) that hits every airborne
- * enemy with badgeWeapon_TatsumakiJumpInvolved.
- */
 #endif
 EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     // Target the selected enemy: the attack is declared, the badge's FP cost paid, Merlee's attack charm used
@@ -4660,11 +4655,6 @@ EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     RETURN
 EVT_END()
 #endif
-/**
- * Shared hammer attack: walk up to the front enemy, wind up with the hold-and-release command, swing and return.
- * Also runs as Mario's first strike (battle flag 2) with marioDefaultWeapon_Hammer.
- * LW(12) is the weapon and LW(14) picks the badge variant of the swing.
- */
 #endif
 EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     // On a First Strike Mario starts at his home spot facing the target; on a normal turn the attack is declared,
@@ -6737,21 +6727,6 @@ EVT_BEGIN(marioAttackEvent_NormalChargeP)
     CALL_CHILD(PTR(_NormalCharge_core))
     RETURN
 EVT_END()
-#else
-/** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
-
-/** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */
-
-/** Soft Stomp badge attack: a normal jump; the defense-down effect comes from the badge's weapon data. */
-
-
-
-/** Ice Smash badge attack: a normal hammer swing (LW(14) = 0); the freeze comes from badgeWeapon_IceNaguri. */
-
-
-/** Charge badge move for Mario. */
-
-/** Charge P badge move for the partner. */
 #endif
 
 /** Super Charge badge move for Mario. */

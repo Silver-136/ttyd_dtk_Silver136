@@ -2719,20 +2719,6 @@ EVT_BEGIN(_nozzle_turn_event)
     CALL(_nozzle_turn)
     RETURN
 EVT_END()
-#else
-/** The overhead spotlight; the entry with no name ends the list. */
-
-/** Unit setup for a hittable stage tree, spawned for stage objects that ask for one (unit_object_tree.c). */
-
-/** Unit setup for a hittable stage switch, spawned for stage objects that ask for one (unit_object_switch.c). */
-
-/** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
-
-/** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
-
-/** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
-
-/** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
 #endif
 
 #if VERSION < VERSION_US

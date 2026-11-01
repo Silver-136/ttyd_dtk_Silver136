@@ -159,7 +159,6 @@ static inline const char* msgEntryText(MessageEntry* entry) {
     return entry->address->address;
 }
 
-/** the demo loads the text into a smart heap block and points a missing file at an empty text */
 #endif
 void msgLoad(const char* filename, s32 index) {
     MessageEntry* entry;

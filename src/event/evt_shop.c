@@ -149,13 +149,6 @@ EVT_BEGIN(evt_shoplist)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-/**
- * Runs when Mario presses A on a shelf item (started by evt_shop_main_func with LW(0) = the ShopWork):
- * the shopkeeper names the item and price, and on yes takes the coins, gives the item,
- * adds a shop point (doubled during the timed sales at the Great Tree (mri_07),
- * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
- * then runs the shop's own buy_evt with LW(0) = the item id.
- */
 #endif
 static EVT_BEGIN(buy_evt)
     // Mario stops and the item's highlight goes away;

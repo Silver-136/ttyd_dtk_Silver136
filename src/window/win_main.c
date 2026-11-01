@@ -875,21 +875,11 @@ EVT_BEGIN(evt_lecture_msg)
     RETURN
 #if VERSION == VERSION_DEMO_JP
 EVT_END()
-
-
-
-static USER_FUNC(itemUseFunc) {
-    PartyEntry* party;
 #else
 OPCODE_END_SCRIPT,
     0 // US and the US demo: a trailing zero word in the object (the JP gap_05 data word)
 };
-static USER_FUNC(itemUseFunc) {
-    PartyEntry* party;
 #endif
-
-    MarioWork* mario;
-    ItemData* item;
 #else
 #if VERSION >= VERSION_US
     LOOP(0)
@@ -907,9 +897,14 @@ EVT_END_PAD() // US: the script ends with one zero word (object 0x1E4 bytes)
 #else
 EVT_END()
 #endif
+#endif
 
-
-
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(itemUseFunc) {
+    PartyEntry* party;
+    MarioWork* mario;
+    ItemData* item;
+#else
 USER_FUNC(itemUseFunc) {
     PartyEntry* party;
     MarioWork* mario;
@@ -1005,25 +1000,18 @@ USER_FUNC(itemUseFunc) {
     return EVT_RETURN_BLOCK;
 }
 /** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
-USER_FUNC(itemUseFunc2) {
-#else
+#if VERSION == VERSION_DEMO_US
 static USER_FUNC(itemUseFunc2) {
-#endif
 #else
 USER_FUNC(itemUseFunc2) {
 #endif
     statusWinForceOff();
     return EVT_RETURN_DONE;
 }
+
 /** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
-USER_FUNC(famicom_check) {
-#else
+#if VERSION == VERSION_DEMO_US
 static USER_FUNC(famicom_check) {
-#endif
 #else
 USER_FUNC(famicom_check) {
 #endif
@@ -1036,13 +1024,10 @@ USER_FUNC(famicom_check) {
     }
     return EVT_RETURN_DONE;
 }
+
 /** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
-USER_FUNC(party_color) {
-#else
+#if VERSION == VERSION_DEMO_US
 static USER_FUNC(party_color) {
-#endif
 #else
 USER_FUNC(party_color) {
 #endif
@@ -1052,17 +1037,6 @@ USER_FUNC(party_color) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
-/**
- * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
- * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
- */
-#if VERSION == VERSION_DEMO_JP
-USER_FUNC(cam_r) {
-#else
-static USER_FUNC(cam_r) {
-#endif
-#else
 // Descriptive name (not in the symbol maps); placeholder unk_80177cf8, JP 0x80177CF8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 USER_FUNC(all_party_slit_off) {
@@ -1075,6 +1049,9 @@ USER_FUNC(all_party_slit_off) {
  * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
  * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
  */
+#if VERSION == VERSION_DEMO_US
+static USER_FUNC(cam_r) {
+#else
 USER_FUNC(cam_r) {
 #endif
     CameraEntry* cam;
@@ -1406,7 +1383,6 @@ FontDrawColor(color);
 FontDrawScaleVec(scale);
 ((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
 }
-/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 #endif
 #else
 }
@@ -1441,7 +1417,6 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
 #endif
 #endif
 
-/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 #endif
 void winTexInit(TEXPalette* texture) {
     winTexTpl = texture;
@@ -1574,7 +1549,6 @@ void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
 }
 #endif
 
-/** winTexSet with the quad rotated rot degrees about the screen's z axis. */
 #endif
 void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot) {
     Mtx trans;

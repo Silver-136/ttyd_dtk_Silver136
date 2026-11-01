@@ -354,8 +354,6 @@ static u32 nozle_4_dl_0_6[] __attribute__((aligned(32))) = {0x98000618, 0x000018
 static u32 nozle_4_dl_0_7[] __attribute__((aligned(32))) = {0x98000619, 0x00011919, 0x1A00021A, 0x1A100001, 0x0E0E1100, 0x02101007, 0x00010F0F, 0x08000211, 0x11000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 #if VERSION <= VERSION_DEMO_US
 static s8 nozle_1_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
-/** Display-list sizes (32-byte units) for the first layer of nozzle model 1 (type 0). */
-/** Display-list sizes for the second layer of nozzle model 1 (type 0), drawn over the first. */
 #else
 static s8 nozle_1_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0,

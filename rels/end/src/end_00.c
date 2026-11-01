@@ -154,7 +154,6 @@ EvtWord end_credit_queen_evt[];
 
 
 
-/** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
 #else
 EvtWord end_credit_npc_parade[44];
 EvtWord end_image_blend_loop[123];
@@ -986,12 +985,6 @@ USER_FUNC(evt_end_credit_npc_preload) {
     end_wp->npcLoadRequest = 0;
     return evtGetValue(event, GF(10)) ? 2 : 0;
 }
-/**
- * Guess (details): draw callback of the ending pictures (Japanese release and later):
- * draws the picture selected by GW(11) from ending.tpl in the position given by GW(12), with the fade alpha,
- * the overlay picture and the cross-blend of end_image_blend_loop;
- * for picture 9 it shows the version where Ms. Mowz was met with Koops if that flag is set.
- */
 #endif
 void end_image_disp(CameraId cameraId, void* param) {
     s32 i;
@@ -1619,9 +1612,6 @@ EVT_END()
 
 
 
-/** Model name of the Smorg silhouette used in the ending's closing pictures. */
-
-/** Animation name of the Smorg silhouette used in the ending's closing pictures. */
 #else
     CALL(evt_npc_delete, STRING("para"))
     RETURN
@@ -2423,27 +2413,4 @@ f32 fd_end_00___local_PIO2_367 = 1.5707964f;
 
 /** Float constant 1 used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00_one_364 = 1.0f;
-#else
-/** Float constant -1 used by the ending's trigonometric code, placed here by the compiler. */
-
-/** Float constant pi used by the ending's trigonometric code, placed here by the compiler. */
-
-/** Float constant 3 pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
-
-
-/** Float constant pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
-
-/** Float constant 1 used by the ending's trigonometric code, placed here by the compiler. */
-
-
-/** Float constant -1 used by the ending's trigonometric code, placed here by the compiler. */
-
-/** Float constant pi used by the ending's trigonometric code, placed here by the compiler. */
-
-/** Float constant 3 pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
-
-
-/** Float constant pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
-
-/** Float constant 1 used by the ending's trigonometric code, placed here by the compiler. */
 #endif

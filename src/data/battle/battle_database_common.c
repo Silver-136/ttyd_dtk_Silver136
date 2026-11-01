@@ -1392,14 +1392,6 @@ ItemDropData battle_item_churantalar[] = {
     {ITEM_ALL_OR_NOTHING, 0, 2},
     {0},
 };
-#else
-/** Frost Piranha: held items and drops by weight, after a first row of no item. */
-
-/** Pale Piranha: held items and drops by weight, after a first row of no item. */
-
-/** Pider: held items and drops by weight, after a first row of no item. */
-
-/** Arantula: held items and drops by weight, after a first row of no item. */
 #endif
 
 /** Yux: holds and drops no items. */

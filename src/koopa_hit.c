@@ -27,7 +27,6 @@ static inline void kpaWallSlide(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz
     *mx = 0.5f * (vx - dot * nx);
     *mz = 0.5f * (vz - dot * nz);
 }
-/** Slope of a floor normal: its angle from vertical in degrees. */
 #endif
 static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
     return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);

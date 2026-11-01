@@ -7106,11 +7106,6 @@ USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * Script: slides the battle stage's background objects off screen (args[0] = 0: sideways 450 units for the back
- * layers, up 260 for the top layer) or back into place (nonzero) over 45 frames; blocks until done.
- * Used by Star Power special moves that need a clear stage.
- */
 #endif
 #if VERSION <= VERSION_DEMO_US
 USER_FUNC(btlevtcmd_SetCounterAcCallBack) {

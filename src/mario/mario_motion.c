@@ -929,11 +929,6 @@ static f32 marioDemoHalf(f32 x) {
     }
     return 0.5 * x * (3.0 - x);
 }
-/**
- * Talk motion: turns Mario left or right to face the NPC he touched and takes that NPC's talk pose;
- * the M_I_2 pose (M_I_3 in the PAL release) returns to M_S_1 after 60 frames.
- * Peach uses peach_talk, Bowser his own pose.
- */
 #endif
 void mot_talk(void) {
     MarioWork* mario = marioGetPtr();

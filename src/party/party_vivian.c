@@ -59,11 +59,6 @@ void marioForceVivianAnime(void) {
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->poseTime);
 }
 
-/**
- * Mario motion MARIO_MOTION_VIVIAN (entered while Veil hides him in the floor):
- * on entry it stops any jump or fall, zeroes his speed and timers and, in retail,
- * clears his wall and push collision; nothing runs on later frames.
- */
 #endif
 void mot_vivian(void) {
     MarioWork* mario = marioGetPtr();

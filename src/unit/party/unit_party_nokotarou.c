@@ -1302,11 +1302,6 @@ BattleUnitSetup entry_koura = {
     NULL, // itemDropTable
 };
 #endif
-/**
- * Koops's Shell Shield: removes any existing shell,
- * then drops a new shell unit (unit_koura) over Mario whose HP the action command sets.
- * Mario is hidden and untargetable inside it; if he still has a move, the shell opens again.
- */
 #endif
 EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     // Find Mario as the target and pay for the move; with no target, skip to the end.

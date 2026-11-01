@@ -10857,12 +10857,6 @@ static inline void psndEnvDone(PaperSoundEnv* e) {
     }
 }
 
-/**
- * Per-frame environment sound update: ramps the environment volume (80% in the camera idle mix),
- * then runs each entry by type: 0 plays at a random spot around the listener at random intervals,
- * 1 loops at a fixed position, 2 repeats at a fixed position at intervals, 3 plays once at the listener.
- * Also runs the environment fades and low-pass filter.
- */
 /** Number of environment sounds in the table. */
 #if VERSION <= VERSION_DEMO_US
 #define PSENV_COUNT 0x75

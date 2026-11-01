@@ -5105,22 +5105,4 @@ EVT_BEGIN(ItemEvent_Kameno_Noroi)
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
-#else
-/** Thunder Bolt: 5 lightning damage to one enemy. */
-
-/** Ruin Powder: confuses every enemy for three turns. */
-
-/** Power Punch: makes the chosen ally huge (attack up) for three turns. */
-
-/** Courage Shell: raises the chosen ally's defence by 3 for three turns. */
-
-/** Mini Mr. Mini: shrinks every enemy (attack down) for three turns. */
-
-/** Mr. Softener: lowers every enemy's defence by 3 for three turns. */
-
-/** Tasty Tonic: cures the chosen ally's bad status effects. */
-
-/** Spite Pouch: gives the chosen ally payback for three turns. */
-
-/** Koopa Curse: slows the chosen enemy for three turns. */
 #endif

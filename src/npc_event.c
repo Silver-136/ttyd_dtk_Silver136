@@ -1797,10 +1797,6 @@ EVT_BEGIN(chorobon_init_event)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
-/**
- * Move event of Fuzzies: bounces 2 to 4 times 50 units in random directions,
- * turns to face Mario and pauses up to half a second.
- */
 #endif
 EVT_BEGIN(chorobon_move_event)
     CALL(evt_npc_set_scale, STRING("me"), 1, 1, 1)

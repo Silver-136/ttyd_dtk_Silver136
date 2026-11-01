@@ -1157,10 +1157,6 @@ static EVT_BEGIN(main_evt)
     RETURN
 EVT_END()
 #endif
-/**
- * Ms. Mowz's Tease: she teases the enemies, and the action command result sets the dizzy chance of a copy of the
- * weapon (_make_madowase_weapon) that is then applied to each target; misses make the target dodge.
- */
 #endif
 EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.
