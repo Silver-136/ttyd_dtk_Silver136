@@ -71,11 +71,7 @@ static EvtWord peach_mail[250];
 #else
 static EvtWord peach_mail[287];
 #endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord christine_hei_01[];
-#else
 EvtWord christine_hei_01[46];
-#endif
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
 EvtWord hei_01_init_evt[148];
@@ -938,12 +934,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_party_run, 0)
     CALL(evt_cam_shift_reset)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    // The story advances to "A Mail from Peach" and the letter is added to Mario's mailbox.
     SET_VALUE(GSW_STORY_PROGRESS, STG1_21_A_MAIL_FROM_PEACH)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG1_21_A_MAIL_FROM_PEACH)
-#endif
     CALL(evt_pouch_receive_mail, 0)
     CALL(evt_pouch_open_mail, 0)
     RETURN
@@ -967,11 +958,7 @@ CALL(evt_bero_exec_wait, 65536)
     CALL(evt_msg_print, 0, STRING("stg1_hei_02_02"), 0, STRING("party"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 1)
-#else
-    SET_VALUE(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 1)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_npc_start_for_event)

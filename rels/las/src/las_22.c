@@ -469,65 +469,33 @@ EVT_BEGIN(las_22_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#endif
         CALL(evt_npc_check_delete, STRING("スーパーマホーン"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_11_STAR_PUZZLE)
-        SPAWN_EVENT(kaitendai_evt)
-#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_11_STAR_PUZZLE)
         SPAWN_EVENT(PTR(kaitendai_evt))
-#endif
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_01a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_05a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_08a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(haguruma_evt)
-#else
     SPAWN_EVENT(PTR(haguruma_evt))
-#endif
     CALL(evt_map_playanim, STRING("kusari"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_hit_bind_mapobj, STRING("A_move_dai"), STRING("S_move_dai"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_move_dai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_switch_red, 0, STRING("dai_switch"), 100, -409, -10, PTR(dai_evt), 0)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -660, -500, 100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_LAS_22_SHOOTING_STAR_CHEST)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -150, 220, -100, ITEM_LIFE_SHROOM, 0, GSWF_LAS_22_LIFE_SHROOM_BLOCK, 0)
-#else
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), -660, -500, 100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_LAS_22_SHOOTING_STAR_CHEST)
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -150, 220, -100, ITEM_LIFE_SHROOM, 0, GSWF_LAS_22_LIFE_SHROOM_BLOCK, 0)
-#endif
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -650, 100, -100, 0, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_09_KEY)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_09_KEY)
-#endif
         CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x2F, -25, -80, -100, ITEM_TYPE_STILL, -1, PTR(key_evt))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_10_LOCK)
         CALL(evt_mobj_lock, STRING("lock"), 47, -695, 50, 0, 90, PTR(key_check_evt), PTR(unlock_evt), GSWF_LAS_22_DOOR_UNLOCKED)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_10_LOCK)
-        CALL(evt_mobj_lock, STRING("lock"), 47, -695, 50, 0, 90, PTR(key_check_evt), PTR(unlock_evt), GSWF_LAS_22_DOOR_UNLOCKED)
-#endif
         SET_VALUE(LW(0), STRING("w_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
     END_IF
     RETURN
 EVT_END()

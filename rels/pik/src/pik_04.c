@@ -563,11 +563,7 @@ EVT_BEGIN(evt_up)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     // The upper floor fades in and its doors open.
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(imgend)
-#else
     SPAWN_EVENT(PTR(imgend))
-#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(10))
@@ -763,11 +759,7 @@ EVT_BEGIN(evt_down)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     // The street fades in and its doors open.
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(imgend)
-#else
     SPAWN_EVENT(PTR(imgend))
-#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(10))
@@ -1296,11 +1288,7 @@ EVT_END()
 EVT_BEGIN(pik_04_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
 #if VERSION > VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
@@ -1314,66 +1302,31 @@ EVT_BEGIN(pik_04_init_evt)
     SET_INT_READ_ADDR(PTR(&name_tbl))
     LOOP(6)
         READ_INT(LW(9))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(evt_pik_yajirushi)
-#else
         SPAWN_EVENT(PTR(evt_pik_yajirushi))
-#endif
     END_LOOP
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_gazigazi_entry)
-#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
-#endif
     CALL(evt_npc_setup, PTR(npc_data))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(init_takun3)
-#else
     CALL_CHILD(PTR(init_takun3))
-#endif
     CALL(evt_npc_change_interrupt, STRING("ターくん３"), 6, PTR(talk_takun3))
     SET_VALUE(LW(0), PTR(&door_1))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_entry)
-#else
     CALL_CHILD(PTR(evt_door_entry))
-#endif
     SET_VALUE(LW(0), PTR(&door_2))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_entry)
-#else
     CALL_CHILD(PTR(evt_door_entry))
-#endif
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_door_2"), 0, PTR(evt_up), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_door_3"), 0, PTR(evt_down), 0)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("nw_bero"), HIT_ATTR_NPC_ONLY)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("se_bero"), HIT_ATTR_NPC_ONLY)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_roten"), 0, PTR(evt_roten), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -250, 5, -425, ITEM_TYPE_STILL, GSWF_STARPIECE_90, 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -305, 0, 105, ITEM_TYPE_STILL, GSWF_PIK_04_INN_COUPON, 0)
-    CALL_CHILD(imginit)
-#else
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -250, 5, -425, ITEM_TYPE_STILL, GSWF_STARPIECE_90, 0)
     CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -305, 0, 105, ITEM_TYPE_STILL, GSWF_PIK_04_INN_COUPON, 0)
     CALL_CHILD(PTR(imginit))
-#endif
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("front_"), 0, PTR(kinopio_house_talk_evt), 0)
     CALL(evt_kinopio_setup, PTR(&kino_dt))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-#endif
         CALL(evt_mario_kill_party, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(epilogue_npc_entry)
-        SPAWN_EVENT(epilogue_evt)
-#else
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))
-#endif
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_bero"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group92"), MAP_OBJ_FLAG_CLIP)

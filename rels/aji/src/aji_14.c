@@ -507,42 +507,21 @@ EVT_BEGIN(aji_14_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("tuzuki"))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(evt_boss2)
-#else
         SPAWN_EVENT(PTR(evt_boss2))
-#endif
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
-#endif
         CALL(evt_npc_entry, STRING("ロボット２"), STRING("c_mb_robo_2b"))
         CALL(evt_npc_set_anim, STRING("ロボット２"), STRING("MGN_Q_1"))
         CALL(evt_npc_set_position, STRING("ロボット２"), 0, -1000, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_robot_waku)
-        SPAWN_EVENT(evt_boss)
-#else
         CALL_CHILD(PTR(evt_robot_waku))
         SPAWN_EVENT(PTR(evt_boss))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_emergency)
-#else
     SPAWN_EVENT(PTR(evt_emergency))
-#endif
     RETURN
 EVT_END()
 

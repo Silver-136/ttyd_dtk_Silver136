@@ -103,11 +103,7 @@ EvtWord hikari_off_evt[42];
 EvtWord hikari_on_evt[63];
 EvtWord flush_on[106];
 EvtWord flush_off[106];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord last_evt_1[];
-#else
 EvtWord last_evt_1[1078];
-#endif
 #if VERSION >= VERSION_US
 EvtWord last_evt_2[358];
 #else
@@ -1028,19 +1024,11 @@ EVT_BEGIN(last_evt_1)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(300)
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_open_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(w_door_open)
-#else
         CALL_CHILD(PTR(w_door_open))
-#endif
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -1050,19 +1038,11 @@ EVT_BEGIN(last_evt_1)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -310, 0, FLOAT(150.0f))
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_close_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(w_door_close)
-#else
         CALL_CHILD(PTR(w_door_close))
-#endif
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF

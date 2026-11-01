@@ -141,8 +141,6 @@ SETTER(evt_pouch_set_ap, pouchSetAP)
 #endif
 SETTER(evt_pouch_party_join, partyJoin)
 SETTER(evt_pouch_party_left, partyLeft)
-#if VERSION <= VERSION_DEMO_US
-#endif
 
 USER_FUNC(evt_pouch_mario_recovery) {
     pouchSetHP(pouchGetMaxHP());

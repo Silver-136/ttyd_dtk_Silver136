@@ -73,9 +73,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
     PADStatus* pad;
     f32 accel;
     f32 mag;
-#if VERSION > VERSION_DEMO_US
     s32 zone;
-#endif
     s32 rate;
 
     ac = &work->actionCommands;

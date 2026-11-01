@@ -118,19 +118,11 @@ EVT_END()
 EVT_BEGIN(hei_12_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_TORIDE1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI3"))
     CALL(evt_snd_set_rev_mode, 1)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
-#else
-    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
-#endif
         CALL(evt_npc_change_interrupt, STRING("チョロボン"), 1, 0)
         CALL(evt_npc_restart_regular_event, STRING("チョロボン"))
         CALL(evt_npc_set_position, STRING("チョロボン"), 0, 400, 0)

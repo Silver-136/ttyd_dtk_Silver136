@@ -69,13 +69,11 @@ static void _partyEntry(s32 flag) {
             }
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
             party->flags |= PARTY_FLAG_FORCE_FALL;
-#if VERSION > VERSION_DEMO_US
             if (count == 1) {
                 off = 180.0f;
             } else {
                 off = 120.0f;
             }
-#endif
             party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
 #if VERSION <= VERSION_DEMO_US
             party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
@@ -93,13 +91,11 @@ static void _partyEntry(s32 flag) {
             }
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
             party->flags |= PARTY_FLAG_FORCE_FALL;
-#if VERSION > VERSION_DEMO_US
             if (count == 1) {
                 off = 180.0f;
             } else {
                 off = -120.0f;
             }
-#endif
             party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
 #if VERSION <= VERSION_DEMO_US
             party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);

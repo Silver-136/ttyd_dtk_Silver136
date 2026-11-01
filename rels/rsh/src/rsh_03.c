@@ -53,9 +53,7 @@ USER_FUNC(iri_22_make_item_tbl);
 static USER_FUNC(mario_flag);
 USER_FUNC(omiseFukki);
 USER_FUNC(omiseHozon);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(npc_alpha_except_tenin);
-#endif
 
 static BeroEntry bero_data_a[3];
 static BeroEntry bero_data_b[3];
@@ -410,11 +408,7 @@ CALL(evt_win_item_select, PTR(item_tbl_cook), LW(1))
         CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_STARPIECE_83, 1)
-#else
-        SET_VALUE(GSWF_STARPIECE_83, 1)
-#endif
         CALL(evt_pouch_remove_item, ITEM_GALLEY_POT, LW(0))
     END_IF
     RETURN
@@ -1538,11 +1532,7 @@ EVT_BEGIN(evt_shop_open)
         ADD(LW(12), 50)
         CALL(evt_party_move_pos, 1, LW(10), LW(12), 300)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(shop_door_open)
-#else
     CALL_CHILD(PTR(shop_door_open))
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_hit_get_position, STRING("tobira_omise"), LW(10), LW(11), LW(12))
         SUBTRACT(LW(12), 30)
@@ -1554,11 +1544,7 @@ EVT_BEGIN(evt_shop_open)
     CALL(evt_hit_get_position, STRING("tobira_omise"), LW(10), LW(11), LW(12))
     SUBTRACT(LW(12), 10)
     CALL(evt_party_move_pos, 1, LW(10), LW(12), 300)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(shop_door_close)
-#else
     CALL_CHILD(PTR(shop_door_close))
-#endif
     CALL(omiseHozon)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_jaba"))

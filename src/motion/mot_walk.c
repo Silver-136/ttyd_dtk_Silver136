@@ -145,9 +145,6 @@ f32 marioGetDashSpd(void) {
  * and back to standing when the stick is released. Bowser and Peach run their own versions.
  */
 void mot_walk(void) {
-#if VERSION <= VERSION_DEMO_US
-    f32 walkSpeed;
-#endif
     s32 trigFlags;
     s32 flags;
     BOOL pushCaseActive;

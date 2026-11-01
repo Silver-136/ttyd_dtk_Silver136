@@ -938,9 +938,6 @@ static EVT_BEGIN(switch_evt)
 EVT_END()
 
 static EVT_BEGIN(dokan_evt)
-#if VERSION <= VERSION_DEMO_US
-    // Mario freezes, the partner is moved out of the way and the music fades out.
-#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
@@ -965,9 +962,6 @@ static EVT_BEGIN(dokan_evt)
         END_IF
     END_INLINE_EVENT
     SET_VALUE(GF(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    // A quake rumbles and the camera shakes.
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -991,9 +985,6 @@ static EVT_BEGIN(dokan_evt)
     WAIT_MS(1000)
 #endif
     SET_VALUE(GF(1), 1)
-#if VERSION <= VERSION_DEMO_US
-    // The rock carving is captured as a paper image that crumples away.
-#endif
     CALL(evt_paper_entry, STRING("OFF_hei_00"))
     CALL(evt_offscreen_entry, STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 0, STRING("isi_0"), STRING("offscreen"))
@@ -1010,11 +1001,7 @@ CALL(evt_img_clear_virtual_point, STRING("img"))
 #endif
     CALL(evt_img_set_shadow, STRING("img"), 2)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_snd)
-#else
     SPAWN_EVENT(PTR(evt_snd))
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(3200)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_SUCCESS1"))
@@ -1028,9 +1015,6 @@ CALL(evt_img_clear_virtual_point, STRING("img"))
     CALL(evt_img_set_shadow, STRING("img"), 0)
     CALL(evt_img_onoff, STRING("img"), 0)
     WAIT_MS(830)
-#if VERSION <= VERSION_DEMO_US
-    // The hidden pipe rises out of the ground.
-#endif
     CALL(evt_mapobj_get_position, STRING("h_dokan"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mapobj_trans, 0, STRING("h_dokan"), 0, -20, 0)
@@ -1045,10 +1029,6 @@ CALL(evt_img_clear_virtual_point, STRING("img"))
     END_IF
     WAIT_MS(300)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    // The carvings are removed for good, the pipe becomes usable and the story advances to "opening the
-    // path".
-#endif
     CALL(evt_mapobj_clear_offscreen, 1, STRING("isi_0"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_moji"))
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("isi_0"), MAP_OBJ_FLAG_HIDDEN)
@@ -1057,13 +1037,8 @@ CALL(evt_img_clear_virtual_point, STRING("img"))
     CALL(evt_hitobj_onoff, STRING("a_moji"), 0, 0)
     CALL(evt_mapobj_flag_onoff, 0, 0, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), STRING("dokan"))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(bero_case_switch_on)
-    SET_VALUE(GSW_STORY_PROGRESS, STG1_08_OPENING_THE_PATH)
-#else
     CALL_CHILD(PTR(bero_case_switch_on))
     SET_VALUE(GSW_STORY_PROGRESS, STG1_08_OPENING_THE_PATH)
-#endif
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG1_HEI1"), 2000)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -1115,11 +1090,7 @@ static s32 itemsel_table00[] = {
  * then runs switch_evt to check whether both stones are in.
  */
 EVT_BEGIN(sun_stone_set_event)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
-#else
-    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
-#endif
         CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_win_item_select, PTR(itemsel_table00), LW(0))
@@ -1130,22 +1101,14 @@ CALL(evt_win_item_select, PTR(itemsel_table00), LW(0))
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_HEI_SUN_STONE_PLACED, 1)
-#else
-        SET_VALUE(GSWF_HEI_SUN_STONE_PLACED, 1)
-#endif
         CALL(evt_pouch_remove_item, ITEM_SUN_STONE, LW(0))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taiyou_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, STRING("taiyounoisi"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_STONE_SET1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_msg_print, 0, STRING("stg1_hei_00_sun"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(switch_evt)
-#else
         CALL_CHILD(PTR(switch_evt))
-#endif
         CALL(evt_mario_key_onoff, 1)
     END_IF
     CALL(evt_exit_case_evt)
@@ -1181,11 +1144,7 @@ static s32 itemsel_table01[] = {
  * then runs switch_evt to check whether both stones are in.
  */
 EVT_BEGIN(moon_stone_set_event)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
-#else
-    IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
-#endif
         CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
@@ -1196,22 +1155,14 @@ CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_HEI_MOON_STONE_PLACED, 1)
-#else
-        SET_VALUE(GSWF_HEI_MOON_STONE_PLACED, 1)
-#endif
         CALL(evt_pouch_remove_item, ITEM_MOON_STONE, LW(0))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tuki_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, STRING("tukinoisi"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_STONE_SET1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_msg_print, 0, STRING("stg1_hei_00_moon"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(switch_evt)
-#else
         CALL_CHILD(PTR(switch_evt))
-#endif
         CALL(evt_mario_key_onoff, 1)
     END_IF
     CALL(evt_exit_case_evt)

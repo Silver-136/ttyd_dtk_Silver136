@@ -276,11 +276,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     // If the intro was already seen, skip straight to the aftermath.
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GON_11_HOOKTAIL_INTRO_SKIP, 1)
-#else
-    IF_INT_EQUAL(GSWF_GON_11_HOOKTAIL_INTRO_SKIP, 1)
-#endif
         GOTO(100)
     END_IF
     // Mario and his partner enter the room.
@@ -291,19 +287,11 @@ EVT_BEGIN(gonbaba_event)
     // The door slams shut behind them and the camera shakes.
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(bero_close_door_play_se)
-#else
         SPAWN_EVENT(PTR(bero_close_door_play_se))
-#endif
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(door01_close)
-#else
             CALL_CHILD(PTR(door01_close))
-#endif
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -315,11 +303,7 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_party_move_pos2, 0, -490, 0, FLOAT(120.0f))
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -450, 0, FLOAT(120.0f))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_case_entry)
-#else
     SPAWN_EVENT(PTR(bero_case_entry))
-#endif
     WAIT_MS(1300)
     // A voice from the dark asks who dares approach; Mario jumps in surprise.
     CALL(evt_msg_print, 0, STRING("stg1_gon_19"), 0, 0)
@@ -338,13 +322,8 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_npc_wait_anim, STRING("ゴンババ"), FLOAT(1.0f))
         CALL(evt_npc_set_anim, STRING("ゴンババ"), STRING("GNB_S_1"))
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(gonbaba_standup_shake)
-    SPAWN_EVENT(gonbaba_fog_change)
-#else
     SPAWN_EVENT(PTR(gonbaba_standup_shake))
     SPAWN_EVENT(PTR(gonbaba_fog_change))
-#endif
     CALL(evt_cam3d_evt_set, -900, 31, 490, -205, 175, 20, 4500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         WAIT_MS(1800)
@@ -407,11 +386,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_party_set_pos, 0, -25, 10, 150)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 90, -1)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(gonbaba_down_shake)
-#else
     SPAWN_EVENT(PTR(gonbaba_down_shake))
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_npc_flag_onoff, 1, STRING("ゴンババ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -535,19 +510,11 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, 2)
         CALL(evt_party_stop, 0)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
-#else
-        SET_VALUE(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
-#endif
     END_IF
     CALL(evt_mario_set_pos, 25, 10, 200)
     CALL(evt_party_set_pos, 0, -25, 10, 200)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
-#else
-    IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
-#endif
         CALL(evt_npc_set_position, STRING("クリスチーヌ"), -10, 10, 160)
         CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_INSTANT_TURN)
         CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 90)
@@ -585,11 +552,7 @@ EVT_BEGIN(gonbaba_event)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
-#else
-    IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
-#endif
         BEGIN_INLINE_EVENT
             CALL(evt_npc_move_position, STRING("クリスチーヌ"), 150, 200, 0, FLOAT(80.0f), 1)
         END_INLINE_EVENT
@@ -688,11 +651,7 @@ CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #endif
     SET_VALUE(LW(0), 1)
     SET_VALUE(LW(1), STRING("stone"))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_sub_starstone)
-#else
     CALL_CHILD(PTR(evt_sub_starstone))
-#endif
     RETURN
 EVT_END()
 
@@ -899,17 +858,10 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
         return 0;
     }
 #endif
-#if VERSION <= VERSION_DEMO_US
-hit0 = (HitEntry*)cloudGetHitBreathout(0);
-    hit1 = (HitEntry*)cloudGetHitBreathout(1);
-    hit2 = (HitEntry*)cloudGetHitBreathout(2);
-    hit3 = (HitEntry*)cloudGetHitBreathout(3);
-#else
     hit0 = cloudGetHitBreathout(0);
     hit1 = cloudGetHitBreathout(1);
     hit2 = cloudGetHitBreathout(2);
     hit3 = cloudGetHitBreathout(3);
-#endif
     switch (wp->state) {
         case 0:
 #if VERSION <= VERSION_DEMO_US
@@ -921,23 +873,13 @@ hit0 = (HitEntry*)cloudGetHitBreathout(0);
                 break;
             }
             hit = hitNameToPtr(wp->hitName);
-#if VERSION <= VERSION_DEMO_US
-            if (hit0 == hit || hit1 == hit || hit2 == hit || hit3 == hit) {
-#else
             if ((((hit0 == hit) || (hit1 == hit)) || (hit2 == hit)) || (hit3 == hit)) {
-#endif
                 wp->state++;
             }
             wp->counter = 0;
             break;
-#if VERSION <= VERSION_DEMO_US
-#endif
         case 1:
-#if VERSION <= VERSION_DEMO_US
-            if (mario->displayDirectionTarget > 90.0f && mario->displayDirectionTarget <= 270.0f) {
-#else
             if ((mario->displayDirectionTarget > 90.0f) && (mario->displayDirectionTarget <= 270.0f)) {
-#endif
                 strcpy(wp->animName, "P_oof_cloud_2");
             } else {
                 strcpy(wp->animName, "P_oof_cloud_1");
@@ -957,24 +899,16 @@ off->texFmt = off->copyFmt = 6;
             _mapsetofs_all(wp);
             wp->state++;
             break;
-#if VERSION <= VERSION_DEMO_US
-#endif
         case 2:
             imgEntry(wp->imgName, inBattle);
             img = imgNameToPtr(wp->imgName, inBattle);
             img->poseId = animPaperPoseGetId(wp->animName, inBattle);
-#if VERSION <= VERSION_DEMO_US
-            img->animTime = animTimeGetTime(inBattle);
-#else
             *(&img->animTime) = animTimeGetTime(inBattle);
-#endif
             imgClearVirtualPoint(img);
             imgSetShadow(img, 2);
             img->flags |= IMAGE_FLAG_HIDE;
             wp->state = 222;
             break;
-#if VERSION <= VERSION_DEMO_US
-#endif
         case 222:
             if (!_get_boundingbox(wp->hitName, &wp->x, &wp->y, &wp->w, &wp->h)) {
                 break;
@@ -982,39 +916,23 @@ off->texFmt = off->copyFmt = 6;
             _img_alloc_capture(wp->imgName, 0, wp->offscreenName, 1, wp->x, wp->y, wp->w, wp->h);
             wp->state = 223;
             break;
-#if VERSION <= VERSION_DEMO_US
-#endif
         case 223:
             img = imgNameToPtr(wp->imgName, inBattle);
             img->flags &= ~IMAGE_FLAG_HIDE;
             wp->state = 3;
-#if VERSION <= VERSION_DEMO_US
-#endif
         case 3:
             img = imgNameToPtr(wp->imgName, inBattle);
             img->animName = "A_1";
-#if VERSION <= VERSION_DEMO_US
-            img->animTime = animTimeGetTime(inBattle);
-#else
             *(&img->animTime) = animTimeGetTime(inBattle);
-#endif
             img->flags &= ~IMAGE_FLAG_HIDE;
             wp->timer = 30;
             wp->lastFrame = 0.0f;
             wp->state++;
             break;
-#if VERSION <= VERSION_DEMO_US
-        case 4:
-#else
 
         case 4: {
-#endif
                 img = imgNameToPtr(wp->imgName, inBattle);
-#if VERSION <= VERSION_DEMO_US
-            if (wp->lastFrame == 0.0f || wp->lastFrame + 1.0f < img->loopTimes) {
-#else
                 if ((wp->lastFrame == 0.0f) || ((wp->lastFrame + 1.0f) < img->loopTimes)) {
-#endif
                     psndSFXOn_3D("SFX_OFF_CLAUD_WIND2", &mario->position);
                     wp->lastFrame = img->loopTimes;
                 }
@@ -1023,11 +941,7 @@ off->texFmt = off->copyFmt = 6;
                     break;
                 }
                 hit = hitNameToPtr(wp->hitName);
-#if VERSION <= VERSION_DEMO_US
-            if (hit0 != hit && hit1 != hit && hit2 != hit && hit3 != hit) {
-#else
                 if ((((hit0 != hit) && (hit1 != hit)) && (hit2 != hit)) && (hit3 != hit)) {
-#endif
                     if (wp->timer == 0) {
                         wp->state = 10;
                     } else {
@@ -1042,14 +956,10 @@ off->texFmt = off->copyFmt = 6;
                     }
                 }
                 break;
-#if VERSION > VERSION_DEMO_US
             }
-#endif
         case 10:
             wp->state = 99;
             break;
-#if VERSION <= VERSION_DEMO_US
-#endif
         case 20:
             psndSFXOn_3D("SFX_OFF_CLAUD_WIND3", &mario->position);
             if (wp->endEvt != NULL) {
@@ -1057,16 +967,10 @@ off->texFmt = off->copyFmt = 6;
             }
             img = imgNameToPtr(wp->imgName, inBattle);
             img->animName = "A_2";
-#if VERSION <= VERSION_DEMO_US
-            img->animTime = animTimeGetTime(inBattle);
-#else
             *(&img->animTime) = animTimeGetTime(inBattle);
-#endif
             wp->timer = 60;
             wp->state++;
             break;
-#if VERSION <= VERSION_DEMO_US
-#endif
         case 21:
             if (wp->timer != 0) {
                 wp->timer--;
@@ -1076,11 +980,7 @@ off->texFmt = off->copyFmt = 6;
             wp->counter += 2;
             wp->state = 100;
             break;
-#if VERSION <= VERSION_DEMO_US
-#endif
         case 99:
-#if VERSION <= VERSION_DEMO_US
-#endif
         case 100:
             img = imgNameToPtr(wp->imgName, inBattle);
             _mapclsofs_all(wp);
@@ -1095,11 +995,7 @@ off->texFmt = off->copyFmt = 6;
                 break;
             }
             return 2;
-#if VERSION <= VERSION_DEMO_US
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
-#endif
     return 0;
 }
 
@@ -1231,24 +1127,12 @@ EVT_END()
 EVT_BEGIN(gon_11_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG1_16_HOOKTAIL)
         CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_bero_info_run)
-#else
         CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG1_16_HOOKTAIL)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CASE_DEFAULT
@@ -1259,21 +1143,13 @@ EVT_BEGIN(gon_11_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ父"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_npc_flag_onoff, 1, STRING("ゴンババ"), NPC_FLAG_NO_HIT)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
-#else
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
-#endif
         CALL(evt_npc_set_position, STRING("ゴンババ"), 0, -1000, 0)
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
         ELSE
         CALL(evt_npc_flag_onoff, 1, STRING("ゴンババ"), NPC_FLAG_NO_VIEW_CORRECTION)
         CALL(evt_npc_set_scale, STRING("ゴンババ"), FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(1.2998047f))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(gonbaba_event)
-#else
         SPAWN_EVENT(PTR(gonbaba_event))
-#endif
     END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("ゴンババ"), NPC_FLAG_NO_CULL)
     CALL(evt_light_charalight_all_onoff, 1)

@@ -496,13 +496,8 @@ EVT_BEGIN(house_in)
         RETURN
     END_IF
     POKE_INT(1, PTR(&DoorFLAG))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_letter_box_disable, 1)
@@ -542,20 +537,11 @@ EVT_BEGIN(house_in)
     SPAWN_EVENT_GET_ID(PTR(in_dooranim), LW(15))
     BEGIN_INLINE_EVENT
         CALL(npc_dark, LW(10))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(in_houseanim)
-        SPAWN_EVENT(evt_dark2)
-#else
         CALL_CHILD(PTR(in_houseanim))
         SPAWN_EVENT(PTR(evt_dark2))
-#endif
     END_INLINE_EVENT
     WAIT_MS(300)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_dark)
-#else
     SPAWN_EVENT(PTR(evt_dark))
-#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(in_pos, LW(10), LW(0), LW(2))
     CALL(evt_mario_party_door_move, LW(0), LW(2), FLOAT(135.0f))
@@ -594,15 +580,9 @@ EVT_BEGIN(house_out)
         CALL(evt_cam3d_evt_set_xyz, LW(0), LW(1), LW(2), 0, 150, EASING_SINE_IN_OUT)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(evt_light2)
-        CALL_CHILD(out_houseanim)
-        SPAWN_EVENT(evt_light)
-#else
         SPAWN_EVENT(PTR(evt_light2))
         CALL_CHILD(PTR(out_houseanim))
         SPAWN_EVENT(PTR(evt_light))
-#endif
     END_INLINE_EVENT
     SPAWN_EVENT_GET_ID(PTR(out_dooranim), LW(15))
     WAIT_MS(1000)
@@ -718,9 +698,6 @@ EVT_BEGIN(door_light2)
 EVT_END()
 
 EVT_BEGIN(evt_door_open)
-#if VERSION <= VERSION_DEMO_US
-    // Lock the controls and run the door's own open script, if it has one.
-#endif
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     POKE_INT(1, PTR(&DoorFLAG))
@@ -729,10 +706,6 @@ EVT_BEGIN(evt_door_open)
         SET_VALUE(LF(0), 0)
         SPAWN_EVENT(LW(1))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // Set up the rooms: the outside stops culling and fading, the camera heads for the door,
-    // the door itself stays solid, and the inside is revealed with its collision switched on.
-#endif
     CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_door_save_mapflag, LW(1))
@@ -762,28 +735,17 @@ EVT_BEGIN(evt_door_open)
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 1)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // Hide the door's NPCs if it asks for that,
-    // and keep Mario, partners and NPCs lit while the outside darkens.
-#endif
     CALL(evt_door_param, LW(0), 9, LW(1))
     IF_BITS_SET(LW(1), 1)
         CALL(npc_hide_onoff, LW(0), 0)
     END_IF
     CALL(door_dark_flag, LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-    // With bit 4 the house wall swings open early, half a second in.
-#endif
     IF_BITS_SET(LW(15), 4)
         CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
         IF_INT_NOT_EQUAL(LW(9), 0)
             BEGIN_INLINE_EVENT
                 WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-                SPAWN_EVENT(house_open_se)
-#else
                 SPAWN_EVENT(PTR(house_open_se))
-#endif
                 CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
                 SET_VALUE(LW(6), 0)
                 CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
@@ -809,18 +771,9 @@ EVT_BEGIN(evt_door_open)
     CALL(evt_party_move_beside_mario, 0)
     CALL(evt_party_move_beside_mario, 1)
     IF_BITS_CLEAR(LW(15), 2)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(door_dark)
-#else
         SPAWN_EVENT(PTR(door_dark))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // The door swings open with its sound.
-    SPAWN_EVENT(door_open_se)
-#else
     SPAWN_EVENT(PTR(door_open_se))
-#endif
     CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
@@ -838,20 +791,13 @@ EVT_BEGIN(evt_door_open)
             END_IF
         END_INLINE_EVENT
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // The party walks in to the inside spot while the door swings shut behind them.
-#endif
     WAIT_MS(500)
     CALL(evt_door_param, LW(0), 4, LW(1), LW(2), LW(3))
     CALL(evt_mario_party_door_move, LW(1), LW(3), FLOAT(135.0f))
     CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(door_close_se)
-#else
             SPAWN_EVENT(PTR(door_close_se))
-#endif
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
@@ -868,18 +814,11 @@ EVT_BEGIN(evt_door_open)
             END_IF
         END_INLINE_EVENT
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // Otherwise the house wall swings open now.
-#endif
     IF_BITS_CLEAR(LW(15), 4)
         CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
         IF_INT_NOT_EQUAL(LW(9), 0)
             BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-                SPAWN_EVENT(house_open_se)
-#else
                 SPAWN_EVENT(PTR(house_open_se))
-#endif
                 CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
                 SET_VALUE(LW(6), 0)
                 CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
@@ -897,26 +836,15 @@ EVT_BEGIN(evt_door_open)
             END_INLINE_EVENT
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // The outside finishes darkening, and the door's out-piece, if any, swings down with its sound.
-#endif
     WAIT_MS(500)
     IF_BITS_CLEAR(LW(15), 2)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(door_dark2)
-#else
         SPAWN_EVENT(PTR(door_dark2))
-#endif
     END_IF
     CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(8), 0)
         BEGIN_INLINE_EVENT
             WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(door_down_se)
-#else
             SPAWN_EVENT(PTR(door_down_se))
-#endif
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
@@ -931,9 +859,6 @@ EVT_BEGIN(evt_door_open)
             END_IF
         END_INLINE_EVENT
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // The camera is released, the controls come back and the indoor sound takes over.
-#endif
     WAIT_MS(500)
     CALL(evt_cam3d_evt_xyz_off, 0, EASING_SINE_IN_OUT)
     POKE_INT(0, PTR(&DoorFLAG))
@@ -1649,7 +1574,6 @@ USER_FUNC(animation) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
 #define NPC_LIGHT_BODY(FN, ICONFN)                                                                      \
     HouseWork* w = (HouseWork*)evtGetValue(event, *event->args);                                        \
     MarioWork* mario = marioGetPtr();                                                                   \
@@ -1695,53 +1619,6 @@ USER_FUNC(animation) {
         }                                                                                               \
     }                                                                                                   \
     return EVT_RETURN_DONE;
-#else
-#define NPC_LIGHT_BODY(FN, ICONFN)                                                                      \
-    HouseWork* w = (HouseWork*)evtGetValue(event, *event->args);                                        \
-    MarioWork* mario = marioGetPtr();                                                                   \
-    PartyEntry* party = partyGetPtr(0);                                                                 \
-    PartyEntry* follower = partyGetPtr(1);                                                              \
-    const char** list;                                                                                  \
-    if (mario) {                                                                                        \
-        FN(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2); \
-        FN(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2); \
-        FN(marioGetPtr()->paperAnimGroupId[2], MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2); \
-    }                                                                                                   \
-    if (party) {                                                                                        \
-        FN(party->paperAnimGroup, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);              \
-    }                                                                                                   \
-    if (follower) {                                                                                     \
-        FN(follower->paperAnimGroup, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);           \
-    }                                                                                                   \
-    list = w->data->npcs;                                                                               \
-    if (list) {                                                                                         \
-        for (; *list; list++) {                                                                         \
-            NpcEntry* npc = npcNameToPtr_NoAssert(*list);                                               \
-            if (npc) {                                                                                  \
-                FN(npc->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);                \
-            }                                                                                           \
-        }                                                                                               \
-    }                                                                                                   \
-    list = w->data->mobjs;                                                                              \
-    if (list) {                                                                                         \
-        for (; *list; list++) {                                                                         \
-            MapObjectEntry* mobj = mobjNameToPtrNoAssert(*list);                                        \
-            if (mobj) {                                                                                 \
-                FN(mobj->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);               \
-            }                                                                                           \
-        }                                                                                               \
-    }                                                                                                   \
-    list = w->data->items;                                                                              \
-    if (list) {                                                                                         \
-        for (; *list; list++) {                                                                         \
-            ItemEntry* item = itemNameToPtr((char*)*list);                                              \
-            if (item) {                                                                                 \
-                ICONFN(item->name, ICON_FLAG_NO_MAP_BLEND);                                             \
-            }                                                                                           \
-        }                                                                                               \
-    }                                                                                                   \
-    return EVT_RETURN_DONE;
-#endif
 
 /**
  * Keeps Mario, both partners and the house's listed NPCs,

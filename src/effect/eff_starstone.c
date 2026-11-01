@@ -569,18 +569,10 @@ void effStarStoneMain(EffectEntry* effect) {
             w->half0OffsetZ -= (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
             w->half1OffsetX += (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
             w->half1OffsetZ += (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
-#if VERSION <= VERSION_DEMO_US
-                w->rot.z += (90.0f - w->rot.z) / 10.0f;
-#else
             w->rot.z += (90.0f - w->rot.z) / 10.0f;
-#endif
         }
         if (w->state > 3) {
-#if VERSION <= VERSION_DEMO_US
-                w->rot.x += (-90.0f - w->rot.x) / 10.0f;
-#else
             w->rot.x += (-90.0f - w->rot.x) / 10.0f;
-#endif
         }
         break;
     }
@@ -690,33 +682,11 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     s32 k;
 #endif
 
-#if VERSION <= VERSION_DEMO_US
-    mapSetMaterialFog();
-    GXSetArray(GX_VA_CLR0, color_tbl[w->type], 4);
-    GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetChanMatColor(GX_COLOR0A0, w->color);
-    GXSetNumTexGens(0);
-    GXSetNumTevStages(2);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
-#else
     DISP_START(w)
-#endif
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
     PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
     PSMTXConcat(m, s, m);
-#if VERSION <= VERSION_DEMO_US
     PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
-#else
-    PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
-#endif
     PSMTXConcat(m, r, m);
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, GX_PNMTX0);
@@ -796,11 +766,7 @@ VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
     PSMTXScale(s, w->scale, w->scale, w->scale);
     PSMTXConcat(m, s, m);
-#if VERSION <= VERSION_DEMO_US
     PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
-#else
-    PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
-#endif
     PSMTXConcat(m, r, m);
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, GX_PNMTX0);

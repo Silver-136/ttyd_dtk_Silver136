@@ -120,11 +120,7 @@ static StatusVulnerability regist = {100, 100, 90, 100, 90, 100, 100, 75, 100, 8
  * Invisible and instant KO; otherwise Sleep 95, Stop 95, Dizzy 90, Confuse 95, Freeze 80, Tiny 90,
  * Attack Down 90, Defense Down 95, Allergic 70, Fright 95, Gale Force 90 and Slow 90.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {100, 100, 90, 100, 90, 100, 100, 75, 100, 80, 100, 80, 100, 75, 75, 95, 95, 100, 75, 100, 100, 100};
-#else
 static StatusVulnerability regist = {95, 95, 90, 100, 95, 100, 100, 80, 100, 90, 100, 90, 100, 95, 70, 95, 90, 100, 90, 100, 100, 100};
-#endif
 #endif
 
 /**
@@ -228,11 +224,7 @@ static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
-#if VERSION <= VERSION_DEMO_US
-    0, 0, 0, // baseFpCost..superguardsAllowed
-#else
     0, 0, 2, // baseFpCost..superguardsAllowed
-#endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
     1, // reserved_19

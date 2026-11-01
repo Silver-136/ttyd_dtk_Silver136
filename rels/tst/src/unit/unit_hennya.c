@@ -58,48 +58,17 @@ BattleUnitKind unit_hennya = {
     9999, // pbSoftCap
     26, // width
     40, // height
-#if VERSION <= VERSION_DEMO_US
-    3,
-    35,
-    0.0f,
-    20.0f,
-    0.0f,
-    0,
-    0,
-#else
     {3, 35}, // hitOffset
     {0.0f, 20.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {13.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
-#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    13.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    13.0f,
-    0.0f,
-    0.0f,
-    13.0f,
-    20.0f,
-    0.0f,
-    0.0f,
-    20.0f,
-    0.0f,
-#else
     {13.0f, 0.0f, 0.0f}, // bintaHitOffset
     {13.0f, 20.0f, 0.0f}, // kissHitOffset
     {0.0f, 20.0f, 0.0f}, // cutBaseOffset
-#endif
     26.0f, // cutWidth
     40.0f, // cutHeight
     0, // turnOrder
@@ -108,13 +77,7 @@ BattleUnitKind unit_hennya = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_ENM_HANNYA_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName

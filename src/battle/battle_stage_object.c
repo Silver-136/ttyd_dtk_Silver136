@@ -3952,9 +3952,7 @@ USER_FUNC(_object_fall_attack) {
     s32 k;
     const char* sfxTub2;
     FallObjectEntry* o2;
-#if VERSION > VERSION_DEMO_US
     const char* sfxRest;
-#endif
     s32 i;
     s32 sum;
     s32 r;
@@ -4085,9 +4083,7 @@ USER_FUNC(_object_fall_attack) {
     }
     sfxTub2 = (0, "SFX_BTL_STAGE_DAMAGE_TUB1"); // FAKE: comma expr makes the literal an early @ temp (same pointer)
     sfxNormal = "SFX_BTL_STAGE_DAMAGE_NORMAL1";
-#if VERSION > VERSION_DEMO_US
     sfxRest = "SFX_REST_CONDITION1";
-#endif
     w = event->userdatap[0];
     done = TRUE;
     for (i = 0; i < w->count; i++) {

@@ -764,11 +764,7 @@ CALL(evt_puni_flag_onoff, LW(10), 1, 0xA00000)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_04_ESCAPE)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_04_ESCAPE)
-#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
     RETURN
@@ -834,41 +830,22 @@ EVT_BEGIN(mri_17_init_evt)
     SET_VALUE(LW(7), 0)
     SET_VALUE(LW(8), 0)
     SET_VALUE(LW(9), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(mri_puni_init)
-#else
     CALL_CHILD(PTR(mri_puni_init))
-#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    SPAWN_EVENT(puni_disp_info)
-    SPAWN_EVENT(mri_countdown)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     SPAWN_EVENT(PTR(puni_disp_info))
     SPAWN_EVENT(PTR(mri_countdown))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_map_playanim, STRING("mizu_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("mizu_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("awa_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("awa_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("sui_hikari"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(mri_countdown)
-#else
     SPAWN_EVENT(PTR(mri_countdown))
-#endif
     SET_VALUE(LW(0), PTR(ueki_access_data))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_sub_kusa_access_entry)
-    SWITCH(GSW_STORY_PROGRESS)
-#else
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
@@ -878,30 +855,15 @@ EVT_BEGIN(mri_17_init_evt)
     END_SWITCH
     SET_VALUE(LW(10), STRING("punipuni"))
     SET_VALUE(LW(11), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(punipuni_ball00_init)
-#else
     SPAWN_EVENT(PTR(punipuni_ball00_init))
-#endif
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball00), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(breakyuka_init)
-    CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, -35, 1, PTR(breakyuka_main), GSWF_MRI_17_BREAKING_FLOOR_BROKEN)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
-#else
     SPAWN_EVENT(PTR(breakyuka_init))
     CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, -35, 1, PTR(breakyuka_main), GSWF_MRI_17_BREAKING_FLOOR_BROKEN)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
-#endif
         CALL(evt_mobj_switch_blue, 1, STRING("switch"), 60, -309, 53, PTR(switch_event), 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF_STARPIECE_50, 0)
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF_STARPIECE_50, 0)
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS_OR_EQUAL(STG2_20_PUNIO_PETUNI)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 0)
@@ -909,11 +871,7 @@ EVT_BEGIN(mri_17_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_dokan1"), 1, 0)
         CALL(evt_paper_entry, STRING("OFF_d_batan"))
         CALL(evt_paper_entry, STRING("OFF_d_saku"))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(trap_check)
-#else
         SPAWN_EVENT(PTR(trap_check))
-#endif
         CASE_BETWEEN(STG2_21_BUBBLES_2, STG2_21_03_SUPER_BOOTS)
 #if VERSION <= VERSION_DEMO_US
         SPAWN_EVENT(trap_main)

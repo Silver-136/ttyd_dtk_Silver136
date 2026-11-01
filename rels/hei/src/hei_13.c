@@ -25,11 +25,7 @@
 static BeroEntry bero_entry_data[5];
 static TreeAccess ki_data[2];
 EvtWord evt_anm_kan[59];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord hei_13_init_evt[];
-#else
 EvtWord hei_13_init_evt[110];
-#endif
 
 /** Doors of this room: the west exit (w_bero) to hei_00 and the east exit (e_bero) to hei_01. */
 static BeroEntry bero_entry_data[] = {
@@ -138,29 +134,14 @@ EVT_END()
 EVT_BEGIN(hei_13_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     SET_VALUE(GF(0), 0)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_HEI_13_HAMMER_HIT_COUNT, 0)
-#else
-    SET_VALUE(GSW_HEI_13_HAMMER_HIT_COUNT, 0)
-#endif
     CALL(evt_npc_change_fbat_mode, 1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_badgeblk, STRING("m"), -320, 60, -100, ITEM_CLOSE_CALL, 0, GSWF_HEI_13_CLOSE_CALL_BADGE_BLOCK, 1)
-    SET_VALUE(LSWF(3), 0)
-    CALL(evt_mobj_brick, STRING("mm"), 325, 175, -100, 0, 0, 0, LSWF(3))
-    IF_INT_EQUAL(LSWF(3), 0)
-#else
     CALL(evt_mobj_badgeblk, STRING("m"), -320, 60, -100, ITEM_CLOSE_CALL, 0, GSWF_HEI_13_CLOSE_CALL_BADGE_BLOCK, 1)
     SET_VALUE(LSWF_HEI_13_BRICK_MM, 0)
     CALL(evt_mobj_brick, STRING("mm"), 325, 175, -100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_HEI_13_BRICK_MM)
     IF_INT_EQUAL(LSWF_HEI_13_BRICK_MM, 0)
-#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("mm"), MOBJ_FLAG_NO_SHADOW)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
@@ -171,17 +152,9 @@ CALL(evt_item_entry, STRING("i"), ITEM_HAPPY_HEART, 325, 200, -100, ITEM_TYPE_GR
         CALL(evt_item_entry, STRING("i"), ITEM_HAPPY_HEART, 325, 200, -100, ITEM_TYPE_STILL, GSWF_HEI_13_HAPPY_HEART, 0)
 #endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_brick, STRING("10m"), 325, 60, -100, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF_HEI_13_TEN_COIN_BRICK)
-#else
-    CALL(evt_mobj_brick, STRING("10m"), 325, 60, -100, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF_HEI_13_TEN_COIN_BRICK)
-#endif
     SET_VALUE(LW(0), PTR(ki_data))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_sub_tree_access_entry)
-#else
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
-#endif
     CALL(evt_map_playanim, STRING("anm_mugi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))

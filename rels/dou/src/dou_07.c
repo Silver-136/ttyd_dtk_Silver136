@@ -154,11 +154,7 @@ EVT_END()
  */
 EVT_BEGIN(peramajin_before)
     // The Ember has already appeared (Black Key stage): the chest now wants the key.
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
-#endif
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_normalize)
         CALL(evt_party_stop, 0)
@@ -277,17 +273,9 @@ CALL(evt_win_item_select, PTR(key_tbl), LW(10))
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_07"), PTR(majin_callback), 0)
     // The Ember ghost appears from the chest and the story advances to the Grotto key stage.
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR1"), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(apper_elmos)
-#else
     CALL_CHILD(PTR(apper_elmos))
-#endif
     CALL(evt_mobj_exec_cancel, STRING("mobj_box00"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -384,11 +372,7 @@ CALL_CHILD(ship_majin_lecture)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
 #endif
     CALL(evt_msg_print_party, STRING("stg1_gon_majin4_19"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG5_21_01_BOAT_MOD_OBTAINED)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_21_01_BOAT_MOD_OBTAINED)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))

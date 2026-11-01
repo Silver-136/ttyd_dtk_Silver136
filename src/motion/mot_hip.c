@@ -432,9 +432,7 @@ s32 chkground(void) {
 }
 #endif
 
-#if VERSION > VERSION_DEMO_US
 #pragma dont_inline reset
-#endif
 
 /** Cleanup when the spin jump motion ends: resets the spin offsets and air timers and stops the looping sounds. */
 void mot_hip_post(void) {

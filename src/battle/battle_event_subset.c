@@ -1046,27 +1046,15 @@ CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
     CALL(btlevtcmd_GetPos, LW(10), LW(2), LW(3), LW(4))
     CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(2), 25)
     ADD(LW(3), 25)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DivePosition, LW(10), LW(2), LW(3), LW(4), 10, 0, EASING_LINEAR, 0, -1)
-#else
     CALL(btlevtcmd_DivePosition, LW(10), LW(2), LW(3), LW(4), 10, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
-#endif
     WAIT_MS(500)
     CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(1.0f))
     CALL(btlevtcmd_GetPos, LW(10), LW(2), LW(3), LW(4))
     CALL(btlevtcmd_TransStageFloorPosition, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(2), 30)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_JumpPosition, LW(10), LW(2), LW(3), LW(4), 20, -1)
-#else
     CALL(btlevtcmd_JumpPosition, LW(10), LW(2), LW(3), LW(4), 20, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(2), 15)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_JumpPosition, LW(10), LW(2), LW(3), LW(4), 10, -1)
-#else
     CALL(btlevtcmd_JumpPosition, LW(10), LW(2), LW(3), LW(4), 10, MOVE_SOUND_FROM_TABLE)
-#endif
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
@@ -1150,11 +1138,7 @@ EVT_END()
  */
 EVT_BEGIN(subsetevt_happy_heart)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
-#if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), 60, LW(0))
-#else
     CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_HEART, LW(0))
-#endif
     IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 60)
@@ -1183,11 +1167,7 @@ EVT_END()
 /** Happy Flower badge regeneration: like subsetevt_happy_heart for FP. */
 EVT_BEGIN(subsetevt_happy_flower)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
-#if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), 61, LW(0))
-#else
     CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_FLOWER, LW(0))
-#endif
     IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 61)
@@ -1438,11 +1418,7 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
         CALL(btlevtcmd_GetHitPos, LW(8), LW(9), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, LW(8), LW(0), 20)
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 0, -1)
-#else
         CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
-#endif
     END_SIBLING_EVENT
     // While it flies, every enemy it passes is hit by the knocked-back unit,
     // unless it dodges or the attack misses.
@@ -1506,11 +1482,7 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(0), LW(5))
     CALL(btlevtcmd_GetPos, LW(10), EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(5.0f), FLOAT(0.099609375f))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_JumpPosition, LW(10), LW(0), 80, LW(2), 0, -1)
-#else
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), 80, LW(2), 0, MOVE_SOUND_FROM_TABLE)
-#endif
     WAIT_FRAMES(30)
     // For an Ultra Hammer hit it waits off stage until Mario's attack script calls it back.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ULTRA_HAMMER, LW(5))
@@ -1529,11 +1501,7 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     CALL(btlevtcmd_SetPos, LW(10), LW(0), 80, LW(2))
     CALL(btlevtcmd_GetHomePos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(7.0f), FLOAT(0.099609375f))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 0, -1)
-#else
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ULTRA_HAMMER, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 0)
         CALL(btlevtcmd_OnToken, LW(10), kKnockedAwayReturned)
@@ -1543,11 +1511,7 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     END_IF
     // A last hop at home, then the spin stops.
     CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.14941406f))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 20, -1)
-#else
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
-#endif
     WAIT_FRAMES(30)
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1607,18 +1571,10 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
         CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(0.5f))
         CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(0), 30)
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 20, -1)
-#else
         CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
-#endif
         CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(0), 18)
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 12, -1)
-#else
         CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
-#endif
         WAIT_FRAMES(20)
         GOTO(99)
     END_IF
@@ -1638,29 +1594,17 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
         CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(0.5f))
         CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(0), 30)
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 20, -1)
-#else
         CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
-#endif
         CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(0), 18)
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 12, -1)
-#else
         CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
-#endif
         WAIT_FRAMES(20)
         GOTO(99)
     END_IF
     // The unit flies at the target, which takes the hit unless it dodges or the attack misses.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(5.0f), FLOAT(0.099609375f))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 0, -1)
-#else
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_PARTNER, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_EQUAL(2)
@@ -1706,18 +1650,10 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
     CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(0.5f))
     CALL(btlevtcmd_FaceDirectionAdd, LW(10), LW(0), 30)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 20, -1)
-#else
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(btlevtcmd_FaceDirectionAdd, LW(10), LW(0), 18)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 12, -1)
-#else
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
-#endif
     WAIT_FRAMES(20)
     LABEL(99)
     RETURN

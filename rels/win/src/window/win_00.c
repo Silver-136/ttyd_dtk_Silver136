@@ -51,11 +51,7 @@ static EvtWord kizayarou_talk[8];
 static EvtWord kizayarou_init[38];
 static NpcSetupInfo npcEnt[5];
 static BeroEntry bero_entry_data[3];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord witchtrio_momeru[];
-#else
 EvtWord witchtrio_momeru[880];
-#endif
 EvtWord majorin_have_picture[25];
 EvtWord witchtrio_picture[533];
 EvtWord mario_vs_witchtrio[554];
@@ -68,11 +64,7 @@ static EvtWord ki_data_evt_01[20];
 static TreeAccess tree_access_data[10];
 EvtWord iri_28_enemy_all_dead[148];
 EvtWord iri_28_enemy_dead[13];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord iri_28_init[];
-#else
 EvtWord iri_28_init[60];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord win_00_init_evt[];
 #else
@@ -523,11 +515,7 @@ CALL(evt_bero_exec_wait, 65536)
     CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG2_01_A_SIREN_ARGUMENT)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_01_A_SIREN_ARGUMENT)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
@@ -1104,11 +1092,7 @@ EVT_BEGIN(iri_28_enemy_dead)
 EVT_END()
 
 EVT_BEGIN(iri_28_init)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
-#else
-    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
-#endif
         SET_VALUE(GSW_TROUBLE_WORK(0), 0)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_npc_check, STRING("ドクガッスン１"), LW(0))
@@ -1159,23 +1143,13 @@ EVT_END()
 EVT_BEGIN(win_00_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_WIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
     CALL(evt_npc_setup, PTR(npcEnt))
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF_WIN_00_NECKLACE, 1)
-        IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
-            CALL_CHILD(kizayarou_init)
-#else
     IF_INT_EQUAL(GSWF_WIN_00_NECKLACE, 1)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
             CALL_CHILD(PTR(kizayarou_init))
-#endif
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -1184,55 +1158,24 @@ CALL(evt_npc_check_delete, STRING("ドクガッスン１_2"))
     CALL(evt_npc_check_delete, STRING("ドクガッスン３_2"))
 #endif
     SET_VALUE(LW(0), PTR(tree_access_data))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_sub_tree_access_entry)
-    IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_00_BOGGLY_WOODS)
-        SPAWN_EVENT(witchtrio_momeru)
-#else
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_00_BOGGLY_WOODS)
         SPAWN_EVENT(PTR(witchtrio_momeru))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_05_02_FLURRIE_REQUEST)
-        SPAWN_EVENT(witchtrio_picture)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_05_02_FLURRIE_REQUEST)
         SPAWN_EVENT(PTR(witchtrio_picture))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_06_THE_SKETCH)
-        SPAWN_EVENT(mario_vs_witchtrio)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_06_THE_SKETCH)
         SPAWN_EVENT(PTR(mario_vs_witchtrio))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_07_MARIO_VS_SHADOW_SIRENS)
-        SPAWN_EVENT(witchtrio_lose)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_07_MARIO_VS_SHADOW_SIRENS)
         SPAWN_EVENT(PTR(witchtrio_lose))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_08_SHADOW_SIRENS_LOSE)
         CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, -361, 0, -22, ITEM_TYPE_STILL, GSWF_WIN_00_NECKLACE, PTR(get_necklace))
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_08_SHADOW_SIRENS_LOSE)
-        CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, -361, 0, -22, ITEM_TYPE_STILL, GSWF_WIN_00_NECKLACE, PTR(get_necklace))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("i"), ITEM_HONEY_SYRUP, 385, 0, -115, ITEM_TYPE_GROUND, GSWF_WIN_00_HONEY_SYRUP, 0)
-    CALL_CHILD(iri_28_init)
-#else
     CALL(evt_item_entry, STRING("i"), ITEM_HONEY_SYRUP, 385, 0, -115, ITEM_TYPE_GROUND, GSWF_WIN_00_HONEY_SYRUP, 0)
     CALL_CHILD(PTR(iri_28_init))
-#endif
     RETURN
 EVT_END()
 

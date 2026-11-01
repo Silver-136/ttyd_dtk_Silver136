@@ -116,11 +116,7 @@ EvtWord evt_okorareru[301];
 EvtWord evt_syorui[92];
 EvtWord first_tamago[52];
 static EvtWord evt_block[5];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord tou_10_init_evt[];
-#else
 EvtWord tou_10_init_evt[254];
-#endif
 
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e5c, JP tou .text+0x6D98. See docs/NAME_PROVENANCE.md.
@@ -1757,34 +1753,20 @@ EVT_BEGIN(evt_match_make)
     CALL(evt_msg_select, 0, STRING("stg3_tou_103_yn"))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
             CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
             CALL(evt_tou_get_rule_msg2, GSW_GLITZ_PIT_CONDITION, LW(2))
-#else
-        IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
-            CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
-            CALL(evt_tou_get_rule_msg2, GSW_GLITZ_PIT_CONDITION, LW(2))
-#endif
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
             CALL(evt_msg_print_add_insert, 0, STRING("stg3_tou_104_01"), LW(0), LW(2))
             ELSE
             CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(evt_match_make_sub)
-#else
             CALL_CHILD(PTR(evt_match_make_sub))
-#endif
         END_IF
         CASE_EQUAL(1)
         CALL(evt_msg_continue)
         CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
         CALL(evt_mario_set_dir_npc, STRING("キノシコワ"))
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
-#else
-        IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
-#endif
             CALL(evt_msg_print, 0, STRING("stg3_tou_68"), 0, STRING("キノシコワ"))
             ELSE
             CALL(evt_msg_print, 0, STRING("stg3_tou_73_02"), 0, STRING("キノシコワ"))
@@ -1951,11 +1933,7 @@ EVT_END()
 
 EVT_BEGIN(tou_10_init_evt)
     // Music for the story stage, and the debug skip straight to the Yoshi egg stage.
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
@@ -1978,88 +1956,44 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_TOU_10_JUMP_STORY_TO_EGG, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
             SET_VALUE(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
-#else
-    IF_INT_EQUAL(GSWF_TOU_10_JUMP_STORY_TO_EGG, 1)
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
-            SET_VALUE(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
-#endif
         END_IF
     END_IF
     // The door, lockers, the fighters, Master Crash's talk hook, and the match terminal and monitor.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL_CHILD(evt_tou_locker_init)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_tou_locker_init))
-#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_setup, PTR(npcEnt))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(init_octo)
-#else
     CALL_CHILD(PTR(init_octo))
-#endif
     CALL(evt_npc_change_interrupt, STRING("オクトール"), 6, PTR(talk_octo))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
-#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_match_make), 0)
         ELSE
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_tou_monitor_init)
-    // The huge yellow block until it is broken.
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_03_THE_YELLOW_BLOCK)
-        CALL(evt_mobj_lv_blk, STRING("blk"), -280, 0, 100, PTR(evt_block), GSWF_TOU_10_BIG_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
-#else
     CALL_CHILD(PTR(evt_tou_monitor_init))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_03_THE_YELLOW_BLOCK)
         CALL(evt_mobj_lv_blk, STRING("blk"), -280, 0, 100, PTR(evt_block), GSWF_TOU_10_BIG_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
-#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("blk"), MOBJ_FLAG_NO_CULL)
     END_IF
     // First visit: Jolene's welcome scene, with the door locked.
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG3_05_MATCH)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(evt_rec)
-#else
         SPAWN_EVENT(PTR(evt_rec))
-#endif
         SET_VALUE(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         RETURN
     END_SWITCH
     // After a match: Goombella, Koops and Flurrie rejoin if the cake poisoning was never cured,
     // then the matching after-match scene plays.
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
         IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
             IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
-#else
-    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
-        IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
-            IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
-#endif
                 CALL(evt_pouch_party_join, 1)
                 CALL(evt_pouch_party_join, 2)
                 CALL(evt_pouch_party_join, 5)
@@ -2067,101 +2001,48 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             END_IF
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
         SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         SWITCH(GSW_GLITZ_PIT_OPPONENT)
-#else
-    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
-        SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
-        SWITCH(GSW_GLITZ_PIT_OPPONENT)
-#endif
             CASE_EQUAL(19)
-#if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN, 0)
-                SET_VALUE(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN, 1)
-                IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-                    SPAWN_EVENT(evt_saisyo_after)
-#else
             IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN, 0)
                 SET_VALUE(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN, 1)
                 IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                     SPAWN_EVENT(PTR(evt_saisyo_after))
-#endif
                     ELSE
-#if VERSION <= VERSION_DEMO_US
-                    SPAWN_EVENT(evt_saisyo_after_re)
-#else
                     SPAWN_EVENT(PTR(evt_saisyo_after_re))
-#endif
                 END_IF
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                SPAWN_EVENT(evt_tou_match_after_default)
-#else
                 SPAWN_EVENT(PTR(evt_tou_match_after_default))
-#endif
             END_IF
             CASE_EQUAL(10)
             CALL(evt_tou_get_ranking, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 10)
-#if VERSION <= VERSION_DEMO_US
-                IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-                    SPAWN_EVENT(evt_1st_leagu)
-#else
                 IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                     SPAWN_EVENT(PTR(evt_1st_leagu))
-#endif
                     ELSE
-#if VERSION <= VERSION_DEMO_US
-                    SPAWN_EVENT(evt_1st_leagu_re)
-#else
                     SPAWN_EVENT(PTR(evt_1st_leagu_re))
-#endif
                 END_IF
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                SPAWN_EVENT(evt_tou_match_after_default)
-#else
                 SPAWN_EVENT(PTR(evt_tou_match_after_default))
-#endif
             END_IF
             CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(evt_tou_match_after_default)
-#else
             SPAWN_EVENT(PTR(evt_tou_match_after_default))
-#endif
         END_SWITCH
     END_IF
     // The bed, the Dubious Paper until Jolene confiscates it, and the one-time Iron Clefts hint.
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_04_CONFISCATED)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_04_CONFISCATED)
-#endif
         CALL(evt_item_entry, STRING("syorui"), ITEM_DUBIOUS_PAPER, -475, 90, 75, ITEM_TYPE_STILL, -1, PTR(evt_syorui))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
-        IF_INT_EQUAL(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 0)
-            IF_INT_GREATER_OR_EQUAL(GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT, 2)
-                SPAWN_EVENT(first_tamago)
-#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
         IF_INT_EQUAL(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 0)
             IF_INT_GREATER_OR_EQUAL(GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT, 2)
                 SPAWN_EVENT(PTR(first_tamago))
-#endif
             END_IF
         END_IF
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 1)
-#else
-        SET_VALUE(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 1)
-#endif
     END_IF
     RETURN
 EVT_END()

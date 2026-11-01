@@ -31,11 +31,7 @@ static EvtWord damage_event[10];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord song_event[298];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord song_event[298];
-#else
 static EvtWord song_event[300];
-#endif
 #endif
 static EvtWord escape_event[96];
 static EvtWord wait_event[6];
@@ -330,9 +326,6 @@ static EVT_BEGIN(song_event)
     // Target: it picks the targets for its song.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
-#if VERSION <= VERSION_DEMO_US
-    // No target to attack: a confused Amazy Dayzee just flusters about, otherwise it skips its turn.
-#endif
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -342,14 +335,10 @@ static EVT_BEGIN(song_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-#if VERSION > VERSION_DEMO_US
     // The attack is declared.
-#endif
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
-#if VERSION > VERSION_DEMO_US
     // The map darkens while the Dayzee takes a breath.
-#endif
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -359,28 +348,17 @@ static EVT_BEGIN(song_event)
         IF_INT_LESS(LW(0), 192)
             BREAK_LOOP
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        // The stage takes a cyan tint.
-#endif
         CALL(evt_map_set_blend, 0, LW(0), LW(1), LW(1), 255)
         SUBTRACT(LW(0), 2)
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION > VERSION_DEMO_US
     // The song begins: music notes float out of the Dayzee for about two seconds.
-#endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PANSY_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
-    // The Amazy Dayzee starts to sing.
-#endif
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     BEGIN_SIBLING_EVENT
         LOOP(10)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             IF_INT_LESS(LW(15), 0)
-#if VERSION <= VERSION_DEMO_US
-                // Music notes drift out of it for about two seconds.
-#endif
                 CALL(evt_eff64, STRING(""), STRING("onpu_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
             ELSE
                 CALL(evt_eff64, STRING(""), STRING("onpu_n64"), 2, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -400,9 +378,6 @@ WAIT_FRAMES(60)
     // The pre-damage check decides between a dodge and a hit for each target in turn.
 #endif
     LABEL(10)
-#if VERSION <= VERSION_DEMO_US
-    // Check whether the attack will connect; a miss sends the target into its dodge.
-#endif
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -436,26 +411,18 @@ WAIT_FRAMES(60)
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(97)
-#if VERSION <= VERSION_DEMO_US
-    // On to the next target in line.
-#endif
     LABEL(97)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(98)
     END_IF
     GOTO(10)
-#if VERSION <= VERSION_DEMO_US
-    // The tint fades back out.
-#endif
     LABEL(98)
     SET_VALUE(LW(0), 192)
     SET_VALUE(LW(1), 255)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(0), 256)
-#if VERSION > VERSION_DEMO_US
             // The notes stop and the map fades back to normal.
-#endif
             BREAK_LOOP
         END_IF
         CALL(evt_map_set_blend, 0, LW(0), LW(1), LW(1), 255)
@@ -464,14 +431,9 @@ WAIT_FRAMES(60)
     END_LOOP
     CALL(evt_map_blend_off, 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-#if VERSION > VERSION_DEMO_US
     // The Dayzee goes back to its idle pose.
-#endif
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    // Turn finished: the Amazy Dayzee goes back to waiting.
-#endif
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

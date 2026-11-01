@@ -41,9 +41,7 @@ USER_FUNC(evt_tou_get_ranking);
 static USER_FUNC(get_yoshi_color);
 USER_FUNC(icon_off);
 USER_FUNC(tou_champion_belt);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(tou_08_belt_camid);
-#endif
 
 static EvtWord evt_toile[42];
 static EvtWord n_door_open[12];
@@ -789,24 +787,15 @@ EVT_END()
  */
 // This entrance is available only for the first title-match escape; the return path is separate.
 EVT_BEGIN(evt_toile_door)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
-#else
-    IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
-        IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
-#endif
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-#endif
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
         CALL(evt_mario_key_onoff, 1)

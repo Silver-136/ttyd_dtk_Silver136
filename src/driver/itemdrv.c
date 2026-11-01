@@ -297,27 +297,13 @@ if (fbatMode != 0 && fbatMode != 1)
     switch (entry->mode) {
         case ITEM_MODE_SCATTER:
         case ITEM_MODE_SCATTER_NO_PICKUP:
-#if VERSION <= VERSION_DEMO_US
-            if (!entry->subState)
-                break;
-            if (entry->flags2 & ITEM_FLAG2_NO_PICKUP_RISING)
-                break;
-            if (entry->flags2 & ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND)
-                break;
-#else
             if (!entry->subState) break;
             if (entry->flags2 & ITEM_FLAG2_NO_PICKUP_RISING) break;
             if (entry->flags2 & ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND) break;
-#endif
             return TRUE;
         case ITEM_MODE_FALL:
         case ITEM_MODE_FALL_NO_PICKUP:
-#if VERSION <= VERSION_DEMO_US
-            if (entry->flags2 & ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND)
-                break;
-#else
             if (entry->flags2 & ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND) break;
-#endif
             return TRUE;
         case ITEM_MODE_GROUND:
         case ITEM_MODE_STILL:
@@ -430,12 +416,7 @@ void itemMain(void) {
     }
 
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-#if VERSION <= VERSION_DEMO_US
-        if (!(entry->flags & ITEM_FLAG_ACTIVE))
-            continue;
-#else
         if (!(entry->flags & ITEM_FLAG_ACTIVE)) continue;
-#endif
         mode = entry->mode;
         active = TRUE;
         switch (mode) {
@@ -487,18 +468,14 @@ void itemMain(void) {
                 y = entry->position.y;
                 {
                     f32 dirY = -1.0f;
-#if VERSION <= VERSION_DEMO_US
-#endif
                     if (entry->flags2 & ITEM_FLAG2_SUNK) {
                         hit = NULL;
                         newY = y + dirY;
                     } else {
                         f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
                         f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
-#if VERSION > VERSION_DEMO_US
                         // FAKE: f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY);
                         // `hitDist = 20.0 + __fabs(-1.0)` changes the object
-#endif
                         {
                             f64 d = __fabs(-1.0);
                             hitDist = 20.0 + d;
@@ -549,17 +526,7 @@ itemCheckBadge(entry);
 
         if (entry->flags & ITEM_FLAG_ACTIVE) {
             switch (entry->itemId) {
-#if VERSION <= VERSION_DEMO_US
-                case ITEM_DIAMOND_STAR:
-                case ITEM_EMERALD_STAR:
-                case ITEM_GOLD_STAR:
-                case ITEM_RUBY_STAR:
-                case ITEM_SAPPHIRE_STAR:
-                case ITEM_GARNET_STAR:
-                case ITEM_CRYSTAL_STAR:
-#else
                 case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
-#endif
                     if (!(entry->flags2 & ITEM_FLAG2_HIDDEN)) {
                         ((EffStarStoneWork*)entry->effect->userdata)->position.x = entry->position.x;
                         ((EffStarStoneWork*)entry->effect->userdata)->position.y = 16.0f + entry->position.y;
@@ -1065,17 +1032,7 @@ void itemDelete(const char* name) {
             itemCheckBadge(entry);
 #endif
             switch (entry->itemId) {
-#if VERSION <= VERSION_DEMO_US
-                case ITEM_DIAMOND_STAR:
-                case ITEM_EMERALD_STAR:
-                case ITEM_GOLD_STAR:
-                case ITEM_RUBY_STAR:
-                case ITEM_SAPPHIRE_STAR:
-                case ITEM_GARNET_STAR:
-                case ITEM_CRYSTAL_STAR:
-#else
                 case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
-#endif
                     effSoftDelete(entry->effect);
                     break;
                 default:

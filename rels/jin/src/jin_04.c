@@ -255,11 +255,7 @@ EVT_BEGIN(irekawatta_mario)
         GOTO(100)
     END_IF
     // Stage the scene; Mario spins and falls to the floor.
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(irekawatta_mario_init)
-#else
     CALL_CHILD(PTR(irekawatta_mario_init))
-#endif
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     WAIT_MS(100)
     CALL(evt_mario_set_pose, STRING("M_D_1"))
@@ -300,29 +296,13 @@ EVT_BEGIN(irekawatta_mario)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_npc_jump_position_nohit, STRING("ランペル"), 35, 470, 51, 600, FLOAT(30.0f))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(starstone_jump_se)
-#else
     SPAWN_EVENT(PTR(starstone_jump_se))
-#endif
     CALL(evt_npc_jump_position_nohit, STRING("ランペル"), 10, 470, 51, 300, FLOAT(15.0f))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(starstone_jump_se)
-#else
     SPAWN_EVENT(PTR(starstone_jump_se))
-#endif
     CALL(evt_npc_jump_position_nohit, STRING("ランペル"), -2, 470, 51, 150, FLOAT(7.5f))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(starstone_jump_se)
-#else
     SPAWN_EVENT(PTR(starstone_jump_se))
-#endif
     CALL(evt_npc_jump_position_nohit, STRING("ランペル"), -8, 470, 51, 79, FLOAT(3.25f))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(starstone_jump_se)
-#else
     SPAWN_EVENT(PTR(starstone_jump_se))
-#endif
     CALL(evt_npc_set_position, STRING("ランペル"), -8, 470, 51)
     WAIT_MS(300)
     WAIT_MS(500)
@@ -418,14 +398,8 @@ CALL_CHILD(evt_sub_starstone)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
 #endif
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    // The story advances to "Trading Places", Mario stays a shadow and control returns.
     SET_VALUE(GSW_STORY_PROGRESS, STG4_10_02_TRADING_PLACES)
     SET_VALUE(GSWF_JIN_TRADING_PLACES_ACTIVE, 1)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG4_10_02_TRADING_PLACES)
-    SET_VALUE(GSWF_JIN_TRADING_PLACES_ACTIVE, 1)
-#endif
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -604,11 +578,7 @@ EVT_END()
 // The Ruby Star follows the hidden dummy during its bounces, then Vivian until the handoff.
 EVT_BEGIN(hontonosugata_mario)
     // Stage the scene; the Ruby Star appears at the fake Mario's position and bounces along.
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(hontonosugata_mario_init)
-#else
     CALL_CHILD(PTR(hontonosugata_mario_init))
-#endif
     CALL(evt_item_entry, STRING("rubystar"), ITEM_RUBY_STAR, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_npc_entry, STRING("ダミー"), STRING("c_mario"))
     CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), NPC_FLAG_NO_DRAW)
@@ -628,27 +598,15 @@ EVT_BEGIN(hontonosugata_mario)
         SUBTRACT(LW(0), 25)
         ADD(LW(2), 20)
         CALL(evt_npc_jump_position_nohit, STRING("ダミー"), LW(0), 670, LW(2), 300, FLOAT(15.0f))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(starstone_jump_se)
-#else
         SPAWN_EVENT(PTR(starstone_jump_se))
-#endif
         SUBTRACT(LW(0), 12)
         ADD(LW(2), 10)
         CALL(evt_npc_jump_position_nohit, STRING("ダミー"), LW(0), 670, LW(2), 150, FLOAT(7.5f))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(starstone_jump_se)
-#else
         SPAWN_EVENT(PTR(starstone_jump_se))
-#endif
         SUBTRACT(LW(0), 6)
         ADD(LW(2), 5)
         CALL(evt_npc_jump_position_nohit, STRING("ダミー"), LW(0), 670, LW(2), 75, FLOAT(3.25f))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(starstone_jump_se)
-#else
         SPAWN_EVENT(PTR(starstone_jump_se))
-#endif
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -863,13 +821,8 @@ EVT_BEGIN(hontonosugata_mario)
     CALL(evt_pouch_party_join, 5)
     CALL(evt_pouch_party_join, 4)
     CALL(evt_pouch_party_join, 6)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG4_15_02_BACK_TO_NORMAL)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_15_03_THE_RUBY_STAR)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG4_15_02_BACK_TO_NORMAL)
-    SET_VALUE(GSW_STORY_PROGRESS, STG4_15_03_THE_RUBY_STAR)
-#endif
     SET_VALUE(LW(0), 4)
     SET_VALUE(LW(1), STRING("rubystar"))
 #if VERSION <= VERSION_DEMO_US
@@ -983,11 +936,7 @@ static NpcSetupInfo npcEnt[] = {
 // The ascent waits for the partner jump; the descent temporarily disables the spring hit object.
 EVT_BEGIN(jin_04_jumpstand)
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
         SWITCH(GSW_STORY_PROGRESS)
-#else
-        SWITCH(GSW_STORY_PROGRESS)
-#endif
             CASE_OR_EQUAL(STG4_09_05_LOCK)
             CASE_OR_EQUAL(STG4_14_NAME_GUESSING)
             CALL(evt_cam3d_evt_set, -55, 790, 438, -55, 727, 79, 600, EASING_SINE_IN_OUT)
@@ -1056,11 +1005,7 @@ EVT_END()
  * and fake-Mario scenes depending on the story progress.
  */
 EVT_BEGIN(jin_04_init_evt)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
@@ -1082,51 +1027,26 @@ END_SWITCH
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL_CHILD(evt_usu_kagemario_party_kill)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, -100, 60, 150, 0, 0)
     CALL(evt_mobj_jumpstand_red, 0, STRING("mobj_jump"), -75, 450, 100, PTR(jin_04_jumpstand), 0)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_yuka"), 0, PTR(ranperu_toujou), 0)
         CASE_EQUAL(STG4_14_NAME_GUESSING)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(yoshi_color)
-#else
         CALL_CHILD(PTR(yoshi_color))
-#endif
         CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_yuka"), 0, PTR(ranperu_lastbattle), 0)
         CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(yoshi_color)
-#else
         CALL_CHILD(PTR(yoshi_color))
-#endif
         SET_VALUE(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(irekawatta_mario)
-#else
         SPAWN_EVENT(PTR(irekawatta_mario))
-#endif
         CASE_EQUAL(STG4_15_DOOPLISS_BATTLE_2)
         CALL(evt_mario_key_onoff, 0)
         BEGIN_INLINE_EVENT
             CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(hontonosugata_mario)
-#else
             SPAWN_EVENT(PTR(hontonosugata_mario))
-#endif
         END_INLINE_EVENT
     END_SWITCH
     RETURN

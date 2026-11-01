@@ -86,11 +86,7 @@ BattleUnitKind unit_sinemon = {
     1, // perilHP
     26, // level
     0, // bonusExp
-#if VERSION <= VERSION_DEMO_US
-    4, // bonusCoin
-#else
     3, // bonusCoin
-#endif
     70, // bonusCoinRate
     1, // baseCoin
     50, // runRate
@@ -148,11 +144,7 @@ static StatusVulnerability regist = {20, 70, 30, 100, 30, 100, 0, 50, 100, 50, 1
 /**
  * Status vulnerability of the Moon Cleft in the retail builds: immune to burn; resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {20, 70, 30, 100, 30, 100, 0, 50, 100, 50, 100, 50, 100, 60, 60, 30, 10, 100, 60, 100, 100, 95};
-#else
 static StatusVulnerability regist = {30, 80, 30, 100, 30, 100, 0, 50, 100, 60, 100, 60, 100, 100, 50, 30, 20, 100, 50, 100, 100, 95};
-#endif
 #endif
 
 /** Body part of the Moon Cleft: a single part using the c_sinemon model. */

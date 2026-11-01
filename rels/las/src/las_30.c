@@ -181,11 +181,7 @@ EVT_END()
  * a save block, a recovery block, two chests (an Ultra Shroom and a Jammin' Jelly) and the torches.
  */
 EVT_BEGIN(las_30_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
 #if VERSION > VERSION_DEMO_US
         CALL(evt_snd_envoff, PSND_FADEOUT)

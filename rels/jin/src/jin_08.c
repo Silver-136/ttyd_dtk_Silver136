@@ -60,11 +60,7 @@ static EvtWord lock_item_check[23];
 #endif
 static EvtWord mobj_box01[34];
 static EvtWord mobj_box02[34];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord jin_08_init_evt[];
-#else
 EvtWord jin_08_init_evt[138];
-#endif
 
 /**
  * Door animation callback: closes door07 as Mario arrives through e_bero_1 (from jin_07);
@@ -230,25 +226,13 @@ SWITCH(GSW_STORY_PROGRESS)
     SWITCH(GSW_STORY_PROGRESS)
 #endif
         CASE_LESS(STG4_15_03_THE_RUBY_STAR)
-#if VERSION <= VERSION_DEMO_US
-        SWITCH(LSW(2))
-#else
         SWITCH(LSW_JIN_08_PARROT_TALK_COUNT)
-#endif
             CASE_EQUAL(0)
             CALL(evt_msg_print, 0, STRING("stg4_jin_40"), 0, STRING("オウム"))
-#if VERSION <= VERSION_DEMO_US
-            ADD(LSW(2), 1)
-#else
             ADD(LSW_JIN_08_PARROT_TALK_COUNT, 1)
-#endif
             CASE_EQUAL(1)
             CALL(evt_msg_print, 0, STRING("stg4_jin_41"), 0, STRING("オウム"))
-#if VERSION <= VERSION_DEMO_US
-            ADD(LSW(2), 1)
-#else
             ADD(LSW_JIN_08_PARROT_TALK_COUNT, 1)
-#endif
             CASE_EQUAL(2)
             CALL(evt_msg_print, 0, STRING("stg4_jin_42"), 0, STRING("オウム"))
         END_SWITCH
@@ -274,13 +258,8 @@ IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
     IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
 #endif
         CALL(evt_msg_print, 0, STRING("stg4_jin_43"), 0, STRING("オウム"))
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF_JIN_08_PARROT_SECRET_HEARD, 1)
-        SET_VALUE(LSWF(1), 1)
-#else
         SET_VALUE(GSWF_JIN_08_PARROT_SECRET_HEARD, 1)
         SET_VALUE(LSWF_JIN_PARROT_SCENE_PENDING, 1)
-#endif
         ELSE
         CALL(evt_msg_print, 0, STRING("stg4_jin_44"), 0, STRING("オウム"))
     END_IF
@@ -328,11 +307,7 @@ EVT_BEGIN(oumu_check)
                     CALL(evt_mario_balloon_off)
                     SET_VALUE(LF(0), 0)
                     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-                    CALL_CHILD(oumu_talk)
-#else
                     CALL_CHILD(PTR(oumu_talk))
-#endif
                     CALL(evt_mario_key_onoff, 1)
                 END_IF
             END_IF
@@ -342,24 +317,15 @@ EVT_BEGIN(oumu_check)
                 SET_VALUE(LF(0), 0)
             END_IF
             IF_INT_EQUAL(LW(6), 1)
-#if VERSION <= VERSION_DEMO_US
                 IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
                     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-#else
-                IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
-                    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-#endif
                         CALL(evt_mario_key_onoff, 0)
                         CALL(evt_party_cont_onoff, 0, 0)
 #if VERSION > VERSION_DEMO_US
                         CALL(mainwindow_opendisable)
 #endif
                         WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-                        CALL_CHILD(oumu_juyo_talk)
-#else
                         CALL_CHILD(PTR(oumu_juyo_talk))
-#endif
                         CALL(evt_party_cont_onoff, 0, 1)
                         LOOP(0)
                             CALL(evt_party_get_status, 6, LW(0))
@@ -472,54 +438,28 @@ EVT_BEGIN(jin_08_init_evt)
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL_CHILD(evt_usu_kagemario_party_kill)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_13_04_THE_LETTER_P)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_13_04_THE_LETTER_P)
-#endif
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 90, 0, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isu"), 0, PTR(evt_open), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 0, 0, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_JIN_08_STEEPLE_KEY_TAKEN, 0)
-#else
-    IF_INT_EQUAL(GSWF_JIN_08_STEEPLE_KEY_TAKEN, 0)
-#endif
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa2"), 0, 0, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_hoko2"), 0, PTR(evt_open_kagi), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa2"), -90, 0, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_lock, STRING("mobj_lock00"), 23, 195, 10, 25, 270, PTR(lock_item_check), PTR(evt_unlock), GSWF_JIN_08_DOOR_UNLOCKED)
     IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
-#else
-    CALL(evt_mobj_lock, STRING("mobj_lock00"), 23, 195, 10, 25, 270, PTR(lock_item_check), PTR(evt_unlock), GSWF_JIN_08_DOOR_UNLOCKED)
-    IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
-#endif
         SET_VALUE(LW(0), STRING("e_bero_1"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_on)
-#else
         CALL_CHILD(PTR(bero_case_switch_on))
-#endif
         ELSE
         SET_VALUE(LW(0), STRING("e_bero_1"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 115, 0, 105, STRING("group87"), 125, GSWF_STARPIECE_70)

@@ -670,11 +670,7 @@ EVT_BEGIN(evt_garnet)
     CALL(evt_npc_move_position, STRING("ポワン探偵"), -30, 600, 1000, 0, 1)
     SET_VALUE(LW(1), 0)
     // The doors swing shut behind Mario.
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_close_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 70, 0, 500)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value)

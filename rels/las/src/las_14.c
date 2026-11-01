@@ -334,30 +334,17 @@ EVT_BEGIN(las_14_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_hitobj_onoff, STRING("A_taka"), 1, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
-#else
-    IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
-#endif
         CALL(evt_las_cloud_init)
         CALL(evt_las_cloud_ent, PTR(&capturemap), STRING("A_kura"), PTR(cloud_evt))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kura"), 0, PTR(touch_evt), 0)
     ELSE
         CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_14_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
-#else
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_14_PALACE_KEY_CHEST)
-    IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
-#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF

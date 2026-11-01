@@ -151,16 +151,8 @@ BattleUnitKind unit_killer_cannon = {
     0.0f,
     0.0f,
     0.0f,
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-#else
     20.0f,
-#endif
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-#else
     10.0f,
-#endif
     26.0f,
     0.0f,
     0.0f,
@@ -208,11 +200,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 50, 100, 50, 100, 50, 100, 50, 50, 0, 15, 100, 50, 100, 100, 95};
 #else
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 50, 100, 50, 100, 50, 100, 50, 50, 0, 15, 100, 50, 100, 100, 95};
-#else
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 100, 100, 90, 100, 90, 100, 95, 50, 0, 15, 100, 50, 100, 100, 95};
-#endif
 #endif
 
 /**

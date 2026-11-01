@@ -101,48 +101,17 @@ BattleUnitKind unit_heavy_bom = {
     9999, // pbSoftCap
     54, // width
     70, // height
-#if VERSION <= VERSION_DEMO_US
-    7,
-    70,
-    0.0f,
-    35.0f,
-    0.0f,
-    0,
-    0,
-#else
     {7, 70}, // hitOffset
     {0.0f, 35.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {27.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
-#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    27.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    27.0f,
-    0.0f,
-    0.0f,
-    27.0f,
-    45.5f,
-    0.0f,
-    0.0f,
-    35.0f,
-    0.0f,
-#else
     {27.0f, 0.0f, 0.0f}, // bintaHitOffset
     {27.0f, 45.5f, 0.0f}, // kissHitOffset
     {0.0f, 35.0f, 0.0f}, // cutBaseOffset
-#endif
     54.0f, // cutWidth
     70.0f, // cutHeight
     0, // turnOrder
@@ -151,13 +120,7 @@ BattleUnitKind unit_heavy_bom = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     0, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_ENM_HEAVYB_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName

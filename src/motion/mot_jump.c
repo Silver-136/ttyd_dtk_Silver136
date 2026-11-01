@@ -405,21 +405,13 @@ if (mario->currMotionId != MARIO_MOTION_JUMP_3) {
         if (mario->currMotionId != MARIO_MOTION_JUMP_3) {
             jumpSfx(mario);
         }
-#if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((char*)0x14D, &mario->position);
-#else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_JUMP1), &mario->position);
-#endif
         if (mario->airTimer == 0) {
             mario->fallStartPos = mario->position;
         }
         mario->trigFlags &= ~MARIO_TRIG_FLAG_SET_JUMP_PARAMS;
     }
-#if VERSION <= VERSION_DEMO_US
-    switch ((s32)mario->currSubMotionId) {
-#else
     switch (mario->currSubMotionId) {
-#endif
     case 0:
         if (--mario->multiTimer <= 0) {
             chgPoseB(mario);
@@ -480,18 +472,10 @@ void mot_upstairs(void) {
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioClearJumpPara();
         mario->multiTimer = 3;
-#if VERSION <= VERSION_DEMO_US
-        mario->jumpVelocityY = (mario->stepUpY - mario->position.y) / (f32)(s32)mario->multiTimer;
-#else
         mario->jumpVelocityY = (mario->stepUpY - mario->position.y) / (f32)mario->multiTimer;
-#endif
         mario->currSubMotionId = 0;
     }
-#if VERSION <= VERSION_DEMO_US
-    switch ((s32)mario->currSubMotionId) {
-#else
     switch (mario->currSubMotionId) {
-#endif
     case 0:
         mario->position.y = mario->position.y + mario->jumpVelocityY;
         if (--mario->multiTimer <= 0) {

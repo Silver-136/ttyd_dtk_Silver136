@@ -82,11 +82,7 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)
     CALL(evt_msg_print, 0, STRING("stg5_dou_01"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG5_19_02_THE_CALL_OF_CORTEZ)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_19_02_THE_CALL_OF_CORTEZ)
-#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

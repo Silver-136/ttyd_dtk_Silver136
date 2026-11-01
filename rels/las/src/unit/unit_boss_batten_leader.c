@@ -69,9 +69,7 @@ static USER_FUNC(enzan_lw_save);
 USER_FUNC(enzan_lw_save2);
 USER_FUNC(pose_check_evt_run);
 USER_FUNC(pose_check_evt_stop);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(_hp_gauge_flag_on);
-#endif
 USER_FUNC(battenSatelliteToOutside);
 USER_FUNC(battenSatelliteToInside);
 USER_FUNC(battleGetBattenSatelliteInitPos);
@@ -164,11 +162,7 @@ EvtWord monster_before_phase_event[195];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[126];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[126];
-#else
 static EvtWord dead_event[165];
-#endif
 #endif
 static Vec splineTableIn1_1[5];
 static Vec splineTableIn2_1[5];
@@ -204,11 +198,7 @@ EvtWord batten_leader_stop_attack_event[328];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord wait_event[15];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord wait_event[15];
-#else
 static EvtWord wait_event[16];
-#endif
 #endif
 
 /**
@@ -571,13 +561,7 @@ BattleUnitKind unit_boss_batten_leader = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_BOSS_SRYO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -1853,11 +1837,7 @@ CALL(btlevtcmd_KillUnit, LW(1), 1)
     WAIT_MS(750)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_5"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("D_4"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_69"), 0, UNIT_ID_SELF)
-#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_69"), 0, -2)
-#endif
     WAIT_MS(300)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_4"))
     WAIT_MS(500)

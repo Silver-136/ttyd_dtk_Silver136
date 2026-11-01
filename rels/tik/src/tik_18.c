@@ -21,11 +21,7 @@
 static BeroEntry bero_entry_data[5];
 EvtWord tik_18_cloud_evt[5];
 static HitDamageReturn hitDmgRetPoints[13];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord tik_18_init_evt[];
-#else
 EvtWord tik_18_init_evt[96];
-#endif
 
 /** Doors of this room: the pipes to tik_06 and tik_07 and two east exits to tik_17. */
 static BeroEntry bero_entry_data[] = {
@@ -132,34 +128,18 @@ EVT_BEGIN(tik_18_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_gazigazi_entry)
-#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
-#endif
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_TIK_18_WALL_BLOWN_AWAY, 0)
-#else
-    IF_INT_EQUAL(GSWF_TIK_18_WALL_BLOWN_AWAY, 0)
-#endif
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("s_win_1"), STRING("a_win_1"), PTR(tik_18_cloud_evt))
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_win_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_win_1"), 1, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
-#endif
         CALL(evt_npc_check_delete, STRING("カメック"))
         CALL(evt_npc_check_delete, STRING("トゲノコ"))
         ELSE

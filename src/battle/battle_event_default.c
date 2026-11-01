@@ -64,11 +64,7 @@ EvtWord btldefaultevt_avoid_counter_event[34];
 EvtWord btldefaultevt_ProtectPartner[10];
 EvtWord btldefaultevt_Dummy[2];
 EvtWord btldefaultevt_Wait[5];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord btldefaultevt_LectureEnd[];
-#else
 EvtWord btldefaultevt_LectureEnd[6];
-#endif
 EvtWord btldefaultevt_Defend[7];
 EvtWord btldefaultevt_DefendParty[7];
 
@@ -1059,11 +1055,7 @@ EVT_END()
 
 #if VERSION > VERSION_DEMO_US
 EVT_BEGIN(btldefaultevt_LectureEnd)
-#if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, 69)
-#else
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, UNIT_DATA_LECTURE_END_EVENT)
-#endif
     RETURN
 EVT_END()
 #endif

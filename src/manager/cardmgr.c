@@ -108,17 +108,10 @@ CardData* cardGetFilePtr(void) {
  * The demo keeps its insert-watch flag across the reset.
  */
 void cardBufReset(void) {
-#if VERSION <= VERSION_DEMO_US
-    s32 flags;
-#endif
     s32 timeout;
 
-#if VERSION <= VERSION_DEMO_US
-    flags = wp->flags;
-#else
     // FAKE: extra volatile status read; removing it changes the object
     wp->flags;
-#endif
     if (wp->flags & CARD_FLAG_BUSY) {
         CARDCancel(&wp->info);
         for (timeout = 1000000; timeout > 0; timeout--) {
@@ -138,14 +131,7 @@ void cardBufReset(void) {
     wp->op = CARD_OP_IDLE;
     wp->result = CARD_RESULT_NOCARD;
     wp->flags = 0;
-#if VERSION <= VERSION_DEMO_US
-if (flags & CARD_FLAG_INSERT_WATCH) {
-        wp->flags |= CARD_FLAG_INSERT_WATCH;
-#endif
 }
-#if VERSION <= VERSION_DEMO_US
-}
-#endif
 
 /**
  * Boot-time setup: allocates the card work, the SDK work area,
@@ -177,7 +163,6 @@ void cardInit(void) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_800b0ed0, JP 0x800B0ED0. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
 /**
  * Starts watching slot A for a card being inserted or removed (memcard_watch_start);
  * also keeps cardIsExec busy for 10 frames while the probe settles. Not in the demo.
@@ -187,21 +172,17 @@ void cardInsertWatchStart(void) {
     wp->busyFrames = 10;
     wp->flags |= CARD_FLAG_INSERT_WATCH;
 }
-#endif
 
 /** Stops the insert watch and clears its changed flag. */
 // Descriptive name (not in the symbol maps); placeholder unk_800b0eac, JP 0x800B0EAC. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
 /** Stops the insert watch and clears its changed flag. */
 void cardInsertWatchEnd(void) {
     wp->flags &= ~CARD_FLAG_INSERT_WATCH;
     wp->flags &= ~(CARD_FLAG_INSERT_CHANGED | CARD_FLAG_INSERT_WATCH);
 }
-#endif
 
 /** TRUE once a card was inserted or removed in slot A since cardInsertWatchStart; the file select scripts poll it. */
 // Descriptive name (not in the symbol maps); placeholder unk_800b0e80, JP 0x800B0E80. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
 /** TRUE once a card was inserted or removed in slot A since cardInsertWatchStart; the file select scripts poll it. */
 BOOL cardInsertChanged(void) {
     if (wp->flags & CARD_FLAG_INSERT_WATCH && wp->flags & CARD_FLAG_INSERT_CHANGED) {
@@ -209,18 +190,15 @@ BOOL cardInsertChanged(void) {
     }
     return FALSE;
 }
-#endif
 
 /**
  * TRUE while a card operation is running or a card call is in flight (or the insert watch is settling).
  * Scripts wait on it, and mariost.c waits for it before a reset so a save is never cut off.
  */
 BOOL cardIsExec(void) {
-#if VERSION > VERSION_DEMO_US
     if (wp == NULL) {
         return FALSE;
     }
-#endif
     if (wp->flags & CARD_FLAG_EXEC) {
         return TRUE;
     }
@@ -241,7 +219,6 @@ s32 cardGetCode(void) {
  * Delete (op 7) has no starter function.
  */
 void cardMain(void) {
-#if VERSION > VERSION_DEMO_US
     s32 inserted;
 
     if (wp->flags & CARD_FLAG_INSERT_WATCH) {
@@ -254,7 +231,6 @@ void cardMain(void) {
             wp->busyFrames--;
         }
     }
-#endif
     switch (wp->op) {
         case CARD_OP_WRITE:
             write_main();
@@ -358,52 +334,6 @@ void cardMain(void) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
-/**
- * Loads a save slot into the running game: copies its global work, pouch, defeated-NPC records, badge shop,
- * Pianta Parlor and informant state over the live ones,
- * keeping the console settings (sound mode, rumble, last slot, progressive scan, and the language,
- * plus the 50/60 Hz choice on PAL) and runtime pointers. Called by the file select's load.
- */
-void cardCopy2Main(s32 slot) {
-CardSaveSlot* save;
-    void* savedFbatData;
-    void* savedMapAlloc;
-    s32 savedSoundMode;
-    s32 savedRumble;
-    s32 savedLastSlot;
-    u32 progressive;
-save = &wp->data->saves[slot];
-    savedFbatData = gp->fbatData;
-    savedMapAlloc = gp->mapAlloc;
-    progressive = (u32)(gp->flags & GW_FLAG_PROGRESSIVE);
-savedSoundMode = gp->soundMode;
-    savedRumble = gp->rumbleEnabled;
-    savedLastSlot = gp->lastSlot;
-    memcpy(gp, &save->data.global, sizeof(GlobalWork));
-    gp->fbatData = savedFbatData;
-    memcpy(pouchGetPtr(), &save->data.pouch, sizeof(PouchData));
-    memcpy(fbatGetPointer()->deadInfo, save->data.deadInfo, sizeof(NpcDeadInfo) * 64);
-    memcpy(bdsw, &save->data.badgeShop, sizeof(BadgeShopWork));
-    memcpy(yuwp, &save->data.parlor, sizeof(PiantaParlorWork));
-    memcpy(&_jdt.readFlags, &save->data.informant, sizeof(InformantUnknown));
-    gp->resetType = 0;
-gp->retraceTime = OSGetTime();
-    strcpy(gp->currentAreaName, "123");
-    gp->relocationBase = NULL;
-    gp->soundMode = savedSoundMode;
-    gp->rumbleEnabled = savedRumble;
-    gp->lastSlot = savedLastSlot;
-    gp->mapAlloc = savedMapAlloc;
-    gp->debugFlag = 0;
-    gp->debugBattle = 0;
-    if (progressive != 0) {
-        gp->flags |= GW_FLAG_PROGRESSIVE;
-    } else {
-        gp->flags &= ~GW_FLAG_PROGRESSIVE;
-    }
-}
-#else
 /**
  * Loads a save slot into the running game: copies its global work, pouch, defeated-NPC records, badge shop,
  * Pianta Parlor and informant state over the live ones,
@@ -481,7 +411,6 @@ void cardCopy2Main(s32 slot) {
 #endif
 #endif
 }
-#endif
 
 /** Starts erasing a save slot: writes an empty slot marked erased (flag 1) over both its copies on the card. */
 void cardErase(s32 slotNo) {
@@ -521,61 +450,6 @@ void cardCopy(s32 from, s32 to) {
  * then snapshots the global work, pouch, defeated-NPC records, badge shop, Pianta Parlor and informant state,
  * checksums it and starts the write.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Saves the game into a slot: records Mario's position, both partners, the save time and count,
- * then snapshots the global work, pouch, defeated-NPC records, badge shop, Pianta Parlor and informant state,
- * checksums it and starts the write.
- */
-void cardWrite(s32 slot) {
-    CardSaveSlot* save;
-    MarioWork* mario;
-    PartyEntry* party;
-    s8 partyId;
-
-    if (!(wp->flags & CARD_FLAG_EXEC)) {
-        wp->op = CARD_OP_WRITE;
-        wp->currSlot = slot;
-        wp->opStep = 0;
-        wp->result = CARD_RESULT_READY;
-        wp->flags |= CARD_FLAG_EXEC;
-        wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED);
-        wp->flags &= ~CARD_FLAG_ERASE;
-        save = &wp->data->saves[slot];
-        mario = marioGetPtr();
-        memset(save, 0, sizeof(CardSaveSlot));
-        gp->savePlayerPos = mario->position;
-        party = partyGetPtr(marioGetPartyId());
-        if (party != NULL) {
-            partyId = party->currentMemberId;
-        } else {
-            partyId = mario->prevPartyMemberId[0];
-        }
-        gp->savePartyId[0] = partyId;
-        party = partyGetPtr(marioGetExtraPartyId());
-        if (party != NULL) {
-            partyId = party->currentMemberId;
-        } else {
-            partyId = mario->prevPartyMemberId[1];
-        }
-        gp->savePartyId[1] = partyId;
-        gp->saveTime = OSGetTime();
-        gp->saveCount++;
-        gp->flags &= ~GW_FLAG_SAVE_LOADED;
-        gp->flags &= ~GW_FLAG_NO_ENTRANCE;
-        gp->resetType = 0;
-memcpy(&save->data.global, gp, sizeof(GlobalWork));
-        memcpy(&save->data.pouch, pouchGetPtr(), sizeof(PouchData));
-        memcpy(save->data.deadInfo, fbatGetPointer()->deadInfo, sizeof(save->data.deadInfo));
-        memcpy(&save->data.badgeShop, bdsw, sizeof(BadgeShopWork));
-        memcpy(&save->data.parlor, yuwp, sizeof(PiantaParlorWork));
-        memcpy(&save->data.informant, &_jdt.readFlags, sizeof(_jdt.readFlags));
-        save->data.flags &= ~CARD_SAVE_FLAG_ERASED;
-        save->data.flags &= ~CARD_SAVE_FLAG_NO_VALID_COPY;
-        check_sum(save);
-    }
-}
-#else
 /**
  * Saves the game into a slot: records Mario's position, both partners, the save time and count,
  * then snapshots the global work, pouch, defeated-NPC records, badge shop, Pianta Parlor and informant state,
@@ -634,7 +508,6 @@ void cardWrite(s32 slot) {
         check_sum(save);
     }
 }
-#endif
 
 static void memcard_probe(void) {
     s32 memSize, sectorSize;

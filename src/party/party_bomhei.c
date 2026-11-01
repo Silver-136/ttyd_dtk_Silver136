@@ -222,29 +222,15 @@ void bomhei_use_cancel(void) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
-/**
- * Cancels a bomb only while Mario is carrying Bobbery (demo),
- * putting Mario back in his standing pose and stopping the sounds.
- * Called when Mario takes damage (mot_damage.c).
- */
-void bomhei_use_cancel2() {
-#else
 /**
  * Cancels a bomb only while Mario is carrying Bobbery (demo),
  * putting Mario back in his standing pose and stopping the sounds.
  * Called when Mario takes damage (mot_damage.c).
  */
 void bomhei_use_cancel2(void) {
-#endif
     PartyEntry* p = partyGetPtr(marioGetPartyId());
-#if VERSION <= VERSION_DEMO_US
-    if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED) && (p->playerPtr->flags & (MARIO_FLAG_ACTIVE << 13))) {
-        p->playerPtr->flags &= ~(MARIO_FLAG_ACTIVE << 13);
-#else
     if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED) && (p->playerPtr->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
         p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
-#endif
         marioChgPose("M_S_1");
         if (p->runMode != PARTY_RUN_FORCE_WALK) {
             partyChgRunMode(p, PARTY_RUN_MOVE);
@@ -317,12 +303,8 @@ HitEntry* check_front(PartyEntry* party);
  * and drives Mario's carry poses unless Mario is in a damage motion (state 0x66).
  */
 void bomhei_use(PartyEntry* party) {
-#if VERSION <= VERSION_DEMO_US
-    MarioWork* mario;
-#else
     MarioWork* mario = party->playerPtr;
     MapObjectEntry* mobj;
-#endif
 
 #if VERSION > VERSION_DEMO_US
     if (party->flags & PARTY_FLAG_IS_BEING_USED) {
@@ -390,17 +372,6 @@ typedef struct BomheiWork {
 // Bobbery's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
 #define BOMHEI_WORK(p) ((BomheiWork*)(p)->useStruct)
 
-#if VERSION <= VERSION_DEMO_US
-/**
- * The demo checks only the first hit object present.
- * Ends the fuse early when the first of Bobbery's front,
- * head or floor hits present has attribute 0xC00 (use motion 60, explode)
- * or his floor has 0x200 (use motion 40, the splash).
- * 0x200 is the hazard water that sinks Mario (mario_hit.c, MARIO_MOTION_DAMAGE) and 0x800 the spikes
- * (MARIO_MOTION_DAMAGE_TOGE). Guess: 0x400, the other bit of 0xC00, is a further hazard.
- */
-static inline void bomheiChkHitAttr(PartyEntry* party) {
-#else
 /**
  * The demo checks only the first hit object present.
  * Ends the fuse early when the first of Bobbery's front,
@@ -411,7 +382,6 @@ static inline void bomheiChkHitAttr(PartyEntry* party) {
  */
 static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
     HitEntry* hit;
-#endif
     u32 attr;
 
 #if VERSION <= VERSION_DEMO_US
@@ -422,9 +392,7 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
     if (hit != NULL && (hitGetAttr(hit) & 0xC00)) {
 #endif
         party->useMotionId = 60;
-#if VERSION > VERSION_DEMO_US
         return TRUE;
-#endif
     }
 #if VERSION <= VERSION_DEMO_US
     } else if (party->hitobjHead != NULL) {
@@ -434,9 +402,7 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
     if (hit != NULL && (hitGetAttr(hit) & 0xC00)) {
 #endif
         party->useMotionId = 60;
-#if VERSION > VERSION_DEMO_US
         return TRUE;
-#endif
     }
 #if VERSION <= VERSION_DEMO_US
     } else if (party->hitobjStandOn != NULL) {
@@ -456,14 +422,10 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
         if (attr & HIT_ATTR_WATER_HAZARD) {
 #endif
             party->useMotionId = 40;
-#if VERSION > VERSION_DEMO_US
             return TRUE;
-#endif
         }
     }
-#if VERSION > VERSION_DEMO_US
     return FALSE;
-#endif
 }
 
 /**
@@ -557,9 +519,7 @@ void bomhei_use_main(PartyEntry* party) {
         party->targetDir = angleABf(party->position.x, party->position.z, x, z);
         party->moveDir = party->targetDir;
         party->velY = 7.5f;
-#if VERSION > VERSION_DEMO_US
         // FAKE: the acceleration is negated from a spare temporary; party->accelY = -0.8333333f changes the object
-#endif
         tmp = 0.8333333f;
         party->accelY = -tmp;
         partyChgPose(party, "J_1A");
@@ -611,14 +571,10 @@ party->work.bomhei.reserved_17C = psndSFXOn_3D((const char*)0x939, &party->playe
         party->targetDir = angleABf(party->position.x, party->position.z, x, z);
         party->moveDir = party->targetDir;
         party->velY = 3.5555556f;
-#if VERSION > VERSION_DEMO_US
         // FAKE: the acceleration is negated from a spare temporary; party->accelY = -0.35555556f changes the object
-#endif
         tmp = 0.35555556f;
         party->accelY = -tmp;
-#if VERSION > VERSION_DEMO_US
         // FAKE: 10.5f is converted to the frame count (10) at run time through tmp; party->moveFrames = 10 changes the object
-#endif
         tmp = 10.5f;
         party->moveFrames = (s16)tmp;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -633,9 +589,7 @@ party->work.bomhei.reserved_17C = psndSFXOn_3D((const char*)0x939, &party->playe
         }
         party->velY = 0.0f;
         party->accelY = -0.33333334f;
-#if VERSION > VERSION_DEMO_US
         // FAKE: 10.5f is converted to the frame count (10) at run time through tmp; party->moveFrames = 10 changes the object
-#endif
         tmp = 10.5f;
         party->moveFrames = (s16)tmp;
         party->flags &= ~PARTY_FLAG_IS_JUMPING;
@@ -735,9 +689,7 @@ if (BOMHEI_WORK(party)->timer > 0) {
             party->accelY = 0.0f;
         }
     case 42:
-#if VERSION > VERSION_DEMO_US
         // FAKE: the speed step goes through a spare temporary; adding the expression directly changes the object
-#endif
         tmp = 0.1f * (-1.0f - party->moveSpeed);
         party->moveSpeed += tmp;
         if (party->moveSpeed <= 0.0f) {
@@ -892,11 +844,7 @@ hit = _partySearchGround(party, &groundY, &dropDepth, 11.0f, party->velY);
                 partyChgPose(party, "F_1");
                 party->useMotionId = 82;
                 party->moveFrames = 30;
-#if VERSION <= VERSION_DEMO_US
-                    psndSFXOn_3D((const char*)0x93A, &party->position);
-#else
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_DOWN1), &party->position);
-#endif
             }
         }
         break;

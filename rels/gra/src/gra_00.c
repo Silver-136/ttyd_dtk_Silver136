@@ -649,39 +649,19 @@ EVT_BEGIN(gra_00_init_evt)
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL_CHILD(evt_usu_kagemario_party_kill)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
     SET_VALUE(LW(0), PTR(tree_tbl))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_sub_tree_access_entry)
-    CALL(evt_mobj_brick, STRING("blk01"), 250, 15, 100, 0, 0, 0, LSWF(1))
-    CALL(evt_mobj_brick, STRING("blk02"), -265, 60, -85, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF_GRA_00_TEN_COIN_BRICK)
-    IF_INT_EQUAL(GSWF_GRA_00_BLACK_KEY, 0)
-#else
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     CALL(evt_mobj_brick, STRING("blk01"), 250, 15, 100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_GRA_00_BRICK_BLK01)
     CALL(evt_mobj_brick, STRING("blk02"), -265, 60, -85, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF_GRA_00_TEN_COIN_BRICK)
     IF_INT_EQUAL(GSWF_GRA_00_BLACK_KEY, 0)
-#endif
         CALL(evt_item_entry, STRING("majin_key"), ITEM_BLACK_KEY_0x23, -258, 0, -85, ITEM_TYPE_STILL, -1, PTR(evt_majin_key))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG4_11_SUPERBOMBBOMB_LOST, STG4_13_04_THE_LETTER_P)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(evt_machibuse)
-#else
         SPAWN_EVENT(PTR(evt_machibuse))
-#endif
     END_SWITCH
     RETURN
 EVT_END()

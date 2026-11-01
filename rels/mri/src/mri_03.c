@@ -917,11 +917,7 @@ CALL(evt_win_item_select, LW(10), LW(0))
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
             CALL(evt_msg_print, 0, STRING("stg2_mri_e14_15"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_puni_get_lsw_index, LSW(0), 0, LW(0), LW(1), LW(2), LW(3))
-#else
             CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, 0, LW(0), LW(1), LW(2), LW(3))
-#endif
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
                 CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -1598,11 +1594,7 @@ EVT_BEGIN(toraware_elder)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     // The story advances and Mario regains control.
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG2_12_02_PUNI_ELDER_IMPRISONED)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_12_02_PUNI_ELDER_IMPRISONED)
-#endif
     CALL(evt_npc_restart_regular_event, STRING("ガイド妹"))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)

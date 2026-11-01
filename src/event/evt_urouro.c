@@ -124,15 +124,11 @@ USER_FUNC(urouro_main_func) {
                 work->flags &= ~(UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME);
             }
         }
-#if VERSION <= VERSION_DEMO_US
-            if (animPoseGetPeraEnd(npc->poseId) && npc == marioGetTouchNpcPtr() && __fabsf(compAngle(npc->moveDir, mario->directionView)) < 90.0f && __fabsf(compAngle(angleABf(npc->position.x, npc->position.z, mario->position.x, mario->position.z), mario->directionView)) < 90.0f && dist < work->radius) {
-#else
         if (animPoseGetPeraEnd(npc->poseId) && npc == marioGetTouchNpcPtr()
             && __fabsf(compAngle(npc->moveDir, mario->directionView)) < 90.0f
             && __fabsf(compAngle(angleABf(npc->position.x, npc->position.z, mario->position.x, mario->position.z),
                               mario->directionView)) < 90.0f
             && dist < work->radius) {
-#endif
             npc->direction = reviseAngle(npc->moveDir - 180.0f);
             npc->moveDir = npc->direction;
             work->flags &= ~(UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME);

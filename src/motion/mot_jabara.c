@@ -289,13 +289,8 @@ void mot_jabara(void) {
         }
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->currSubMotionId = 0;
-#if VERSION <= VERSION_DEMO_US
-        marioGetPtr()->motStruct = __memAlloc(HEAP_DEFAULT, 0x20);
-        memset(marioGetPtr()->motStruct, 0, 0x20);
-#else
         marioGetPtr()->motStruct = __memAlloc(HEAP_DEFAULT, sizeof(MotJabaraWork));
         memset(marioGetPtr()->motStruct, 0, sizeof(MotJabaraWork));
-#endif
     }
     mario->hitobjHead = NULL;
     switch (mario->currSubMotionId) {
@@ -363,11 +358,7 @@ if (mario->hitobjHead != NULL) {
         if (mario->hammerChargeTimer == 3) {
             if (!(marioGetPtr()->motJabara->flags & JABARA_FLAG_CHARGE_3)) {
                 marioGetPtr()->motJabara->flags |= JABARA_FLAG_CHARGE_3;
-#if VERSION <= VERSION_DEMO_US
-                    psndSFXOn_3D(SFX_NAME_WORD(0x184), &mario->position);
-#else
                 psndSFXOn_3D((const char*)(0x184), &mario->position);
-#endif
             }
             marioChgPaper("PM_J_3B");
             mario->hammerChargeLv = 3;
@@ -375,11 +366,7 @@ if (mario->hitobjHead != NULL) {
         } else if (mario->hammerChargeTimer == 2) {
             if (!(marioGetPtr()->motJabara->flags & JABARA_FLAG_CHARGE_2)) {
                 marioGetPtr()->motJabara->flags |= JABARA_FLAG_CHARGE_2;
-#if VERSION <= VERSION_DEMO_US
-                    psndSFXOn_3D(SFX_NAME_WORD(0x183), &mario->position);
-#else
                 psndSFXOn_3D((const char*)(0x183), &mario->position);
-#endif
             }
             marioChgPaper("PM_J_2B");
             mario->hammerChargeLv = 2;
@@ -425,13 +412,8 @@ if (mario->hitobjHead != NULL) {
         camFollowYOff();
         marioChgPose("M_J_5A");
         marioChgPaper("PM_J_1C");
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn_3D(SFX_NAME_WORD(0x20185), &mario->position);
-            psndSFXOn_3D(SFX_NAME_WORD(0x200b5), &mario->position);
-#else
         psndSFXOn_3D((const char*)(0x20185), &mario->position);
         psndSFXOn_3D((const char*)(0x200b5), &mario->position);
-#endif
         if (mario->hammerChargeLv == 3) {
             mario->jumpVelocityY = 10.45f;
             mario->jumpAccelerationY = 0.278f;
@@ -479,9 +461,7 @@ allPartyRideOff();
 #endif
             marioPaperOff();
             {
-#if VERSION > VERSION_DEMO_US
                 // FAKE: spare copy of hitobjStandOn in its own block; passing the field directly changes the object
-#endif
                 void* standOn = mario->hitobjStandOn;
                 jabaraLand(mario->lastGroundPos.y, standOn);
             }
@@ -517,11 +497,7 @@ allPartyRideOff();
             camFollowYOn();
             mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
             marioChgPose("M_J_5A");
-#if VERSION <= VERSION_DEMO_US
-                psndSFXOn_3D(SFX_NAME_WORD(0x186), &mario->position);
-#else
             psndSFXOn_3D((const char*)(0x186), &mario->position);
-#endif
             jabaraSwingStart(overheadHit);
         } else {
             mario->currSubMotionId = 0x28;
@@ -634,23 +610,11 @@ psndSFXOn_3D(SFX_NAME_WORD(0x188), &mario->position);
         }
         if (changed) {
             if (marioGetPtr()->motJabara->wobbleCount == 1) {
-#if VERSION <= VERSION_DEMO_US
-                    psndSFXOn_3D(SFX_NAME_WORD(0x189), &mario->position);
-#else
                 psndSFXOn_3D((const char*)(0x189), &mario->position);
-#endif
             } else if (marioGetPtr()->motJabara->wobbleCount == 2) {
-#if VERSION <= VERSION_DEMO_US
-                    psndSFXOn_3D(SFX_NAME_WORD(0x18a), &mario->position);
-#else
                 psndSFXOn_3D((const char*)(0x18a), &mario->position);
-#endif
             } else if (marioGetPtr()->motJabara->wobbleCount == 3) {
-#if VERSION <= VERSION_DEMO_US
-                    psndSFXOn_3D(SFX_NAME_WORD(0x18b), &mario->position);
-#else
                 psndSFXOn_3D((const char*)(0x18b), &mario->position);
-#endif
             }
         }
         mario->dispOfs.x += step * (f32)cos(3.1415927f * mario->targetYaw / 180.0f);
@@ -827,18 +791,10 @@ allPartyRideOff();
                                 }
                             }
                             if (mario->mot.jabara.animFrame == 0) {
-#if VERSION <= VERSION_DEMO_US
-                                        psndSFXOn_3D(SFX_NAME_WORD(0x187), &mario->position);
-#else
                                 psndSFXOn_3D((const char*)(0x187), &mario->position);
-#endif
                             }
                             if (mario->mot.jabara.animFrame == 0x10) {
-#if VERSION <= VERSION_DEMO_US
-                                        psndSFXOn_3D(SFX_NAME_WORD(0x187), &mario->position);
-#else
                                 psndSFXOn_3D((const char*)(0x187), &mario->position);
-#endif
                             }
                         }
                     }
@@ -905,11 +861,7 @@ allPartyRideOff();
     m2 = marioGetPtr();
     m2->camShiftTargetZ = 0.0f;
     m2->camShiftRate.z = 0.01f;
-#if VERSION <= VERSION_DEMO_US
-    if ((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
-#else
     if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
-#endif
         marioPaperOff();
     }
 #if VERSION > VERSION_DEMO_US
@@ -920,11 +872,7 @@ allPartyRideOff();
         __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
         marioGetPtr()->motStruct = NULL;
     }
-#if VERSION <= VERSION_DEMO_US
-    switch ((u16)mario->currMotionId) {
-#else
     switch (mario->currMotionId) {
-#endif
     case MARIO_MOTION_JUMP_SMALL:
     default:
         marioClearJumpPara();

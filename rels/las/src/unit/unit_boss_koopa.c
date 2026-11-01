@@ -670,27 +670,15 @@ static EVT_BEGIN(attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         SET_VALUE(LW(9), PTR(&weapon_koopa_fire_attack))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(fire_attack_event)
-#else
         CALL_CHILD(PTR(fire_attack_event))
-#endif
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
         CASE_EQUAL(1)
         SET_VALUE(LW(9), PTR(&weapon_koopa_bite_attack))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bite_attack_event)
-#else
         CALL_CHILD(PTR(bite_attack_event))
-#endif
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
         CASE_EQUAL(2)
         SET_VALUE(LW(9), PTR(&weapon_koopa_hip_attack))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(hip_attack_event)
-#else
         CALL_CHILD(PTR(hip_attack_event))
-#endif
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
         CASE_DEFAULT
 #if VERSION <= VERSION_DEMO_US
@@ -701,41 +689,21 @@ CALL(btlevtcmd_DrawLots, LW(0), 4, 20, 30, 0, 30)
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_koopa_hip_attack))
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(hip_attack_event)
-#else
             CALL_CHILD(PTR(hip_attack_event))
-#endif
             CASE_EQUAL(1)
             SET_VALUE(LW(9), PTR(&weapon_koopa_bite_attack))
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(bite_attack_event)
-#else
             CALL_CHILD(PTR(bite_attack_event))
-#endif
             CASE_EQUAL(2)
             SET_VALUE(LW(9), PTR(&weapon_koopa_critical_bite_attack))
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(critical_bite_attack_event)
-#else
             CALL_CHILD(PTR(critical_bite_attack_event))
-#endif
             CASE_EQUAL(3)
             SET_VALUE(LW(9), PTR(&weapon_koopa_fire_attack))
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(fire_attack_event)
-#else
             CALL_CHILD(PTR(fire_attack_event))
-#endif
         END_SWITCH
     END_SWITCH
     LABEL(90)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(first_mario_damage_event)
-#else
     CALL_CHILD(PTR(first_mario_damage_event))
-#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

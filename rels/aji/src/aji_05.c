@@ -192,38 +192,20 @@ EVT_BEGIN(aji_05_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF_AJI_05_LIT_FLOOR_DONE, 0)
-        CALL_CHILD(hikaru_yuka_init)
-#else
     IF_INT_EQUAL(GSWF_AJI_05_LIT_FLOOR_DONE, 0)
         CALL_CHILD(PTR(hikaru_yuka_init))
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(hikaru_off)
-#else
         CALL_CHILD(PTR(hikaru_off))
-#endif
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), HIT_ATTR_TOGE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -75, 60, -125, ITEM_SLEEPY_SHEEP, 0, GSWF_AJI_05_SLEEPY_SHEEP_BLOCK, 0)
-    SPAWN_EVENT(evt_emergency)
-#else
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -75, 60, -125, ITEM_SLEEPY_SHEEP, 0, GSWF_AJI_05_SLEEPY_SHEEP_BLOCK, 0)
     SPAWN_EVENT(PTR(evt_emergency))
-#endif
     RETURN
 EVT_END()
 
@@ -286,11 +268,7 @@ if (strcmp(mario->hitobjUnder->joint->name, hitName) == 0) {
             mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
-#if VERSION <= VERSION_DEMO_US
     if (evtGetValue(event, GSWF_AJI_05_LIT_FLOOR_DONE)) {
-#else
-    if (evtGetValue(event, GSWF_AJI_05_LIT_FLOOR_DONE)) {
-#endif
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

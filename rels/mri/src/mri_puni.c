@@ -1560,9 +1560,7 @@ static const Vec puni_fall_dir;
 /* FAKE: hitCheckFilter called through a cast with the three start floats listed first. EABI assigns float and
    pointer args to f1-f6 and r3-r10 independently, so the registers and the call are identical; the reorder makes
    the start loads code-generate before the pointer args, so they read r4 directly (scheduling). */
-#if VERSION > VERSION_DEMO_US
 typedef void* (*PuniHitCheckStartFirst)(f32, f32, f32, void*, f32*, f32*, f32*, f32*, f32*, f32*, f32*, f32, f32, f32);
-#endif
 // Descriptive name (not in the symbol maps); placeholder unk_mri_000095f0, JP mri .text+0x952C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 /**
@@ -1661,7 +1659,6 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
 void puniMoveDecel(PuniData* p) {
     Vec start;
     Vec dir;
-#if VERSION > VERSION_DEMO_US
     Vec s2;
     Vec d2;
     Vec old;
@@ -1672,7 +1669,6 @@ void puniMoveDecel(PuniData* p) {
     f32 d;
     f32 c3, c2, c1;
     f32 b3, b2, b1;
-#endif
     f32 dist = PSVECMag(&p->vel);
     if (!dist) {
         return;
@@ -5183,8 +5179,6 @@ void puniOption(void) {
     PuniData* end;
     Vec diff;
     f32 dist, r2, r;
-#if VERSION <= VERSION_DEMO_US
-#endif
     for (p = Punidat; p < Punidat + PUNI_DATA_MAX; p++) {
         p->flags &= ~PUNI_FLAG_NEAR;
 #if VERSION <= VERSION_DEMO_US
@@ -5199,11 +5193,7 @@ void puniOption(void) {
             end = Punidat + 109;
         } else {
             start = Punidat + PUNI_ENEMY_FIRST;
-#if VERSION <= VERSION_DEMO_US
-            end = Punidat + (PUNI_ENEMY_END - 1);
-#else
             end = Punidat + 209;
-#endif
         }
         for (q = start; q <= end; q++) {
             if (!(q->flags & PUNI_FLAG_ACTIVE) || !(q->flags & PUNI_FLAG_COLLIDE) || p == q) {
@@ -5527,12 +5517,7 @@ void puni_puni_main(void) {
         for (i = 1, p = Punidat + 1; i < PUNI_DATA_MAX; i++, p++) {
             PSVECSubtract(&p->pos, &p->prevPos, &diff);
             p->moveDist = PSVECMag(&diff);
-#if VERSION <= VERSION_DEMO_US
-        if (!(p->flags & PUNI_FLAG_ACTIVE))
-            continue;
-#else
             if (!(p->flags & PUNI_FLAG_ACTIVE)) continue;
-#endif
             p->flags &= ~(PUNI_FLAG_UPDATED | PUNI_FLAG_SENSED);
             p->flags2 &= ~PUNI_FLAG2_CROSSING_LEDGE;
             p->attacked = 0;
@@ -5543,35 +5528,16 @@ void puni_puni_main(void) {
     if (Punigp->flags & PUNI_WORK_FLAG_BATTLE_FLOOR) {
 #endif
         for (k = 0; k < 2; k++) {
-#if VERSION <= VERSION_DEMO_US
-#endif
             for (i = 1, p = Punidat + 1; i < PUNI_DATA_MAX; i++, p++) {
-#if VERSION <= VERSION_DEMO_US
-            if (!(p->flags & PUNI_FLAG_ACTIVE))
-                continue;
-#else
                 if (!(p->flags & PUNI_FLAG_ACTIVE)) continue;
-#endif
                 if (k == 0) {
-#if VERSION <= VERSION_DEMO_US
-                if (p->mode != PUNI_MODE_ATTACK)
-                    continue;
-#else
                     if (p->mode != PUNI_MODE_ATTACK) continue;
-#endif
                     p->flags |= PUNI_FLAG_UPDATED;
                 } else {
-#if VERSION <= VERSION_DEMO_US
-                if (p->flags & PUNI_FLAG_UPDATED)
-                    continue;
-#else
                     if (p->flags & PUNI_FLAG_UPDATED) continue;
-#endif
                     p->flags |= PUNI_FLAG_UPDATED;
                 }
                 if (!(p->flags & PUNI_FLAG_SENSED)) {
-#if VERSION <= VERSION_DEMO_US
-#endif
                     p->flags |= PUNI_FLAG_SENSED;
                     if (p->flags2 & PUNI_FLAG2_DEATH_PENDING) {
                         p->flags2 &= ~PUNI_FLAG2_DEATH_PENDING;
@@ -5808,8 +5774,6 @@ void puni_puni_main(void) {
         PuniData* q;
         PunidrvPose* ps;
         ps = puniGetPosePtr();
-#if VERSION <= VERSION_DEMO_US
-#endif
         for (ii = 1, q = Punidat + 1; ii < PUNI_DATA_MAX; ii++, ps++, q++) {
             if (q->flags & PUNI_FLAG_ACTIVE) {
                 if (!(q->flags & PUNI_FLAG_MOVE_STOP)) {
@@ -5881,22 +5845,10 @@ void puni_puni_main(void) {
     puniSound();
     switch (Punigp->allMode) {
         case 2:
-#if VERSION <= VERSION_DEMO_US
-            if (Punigp->prevAllMode == 2)
-                Punigp->allMode = 0;
-#else
             if (Punigp->prevAllMode == 2) Punigp->allMode = 0;
-#endif
             break;
-#if VERSION <= VERSION_DEMO_US
-        case 1:
-            break;
-        case 3:
-            break;
-#else
         case 1: break;
         case 3: break;
-#endif
     }
     Punigp->prevAllMode = Punigp->allMode;
 }
@@ -6424,65 +6376,28 @@ USER_FUNC(evt_puni_setup) {
         fx = pos.x;
         fy = pos.y;
         fz = pos.z;
-#if VERSION <= VERSION_DEMO_US
-        if (b0 != 0 && b0 != Punigp->floor)
-            continue;
-#else
         if (b0 != 0 && b0 != Punigp->floor) continue;
-#endif
         puniswTrapGetindex(i, &a);
-#if VERSION <= VERSION_DEMO_US
-        if (a != 0)
-            continue;
-#else
         if (a != 0) continue;
-#endif
         if (i == 1) {
-#if VERSION <= VERSION_DEMO_US
-            if (!swGet(GSWF_MRI_PUNIO_IN_PUNI_GROUP))
-                continue;
-            if (swGet(GSWF_MRI03_PUNIO_WAITING_AT_CELL))
-                continue;
-#else
             if (!swGet(GSWF_MRI_PUNIO_IN_PUNI_GROUP)) continue; // GSWF_MRI_PUNIO_JOINED
             if (swGet(GSWF_MRI03_PUNIO_WAITING_AT_CELL)) continue; // GSWF_MRI_PUNIO_WAITING_AT_JAIL
-#endif
             Punigp->guidePuni = p;
             p->flags |= PUNI_FLAG_NPC_GUIDE;
         } else if (i == 2) {
-#if VERSION <= VERSION_DEMO_US
-            if (!swGet(GSWF_MRI_PETUNI_IN_PUNI_GROUP))
-                continue;
-#else
             if (!swGet(GSWF_MRI_PETUNI_IN_PUNI_GROUP)) continue; // GSWF_MRI_PETUNI_JOINED
-#endif
             Punigp->sisterPuni = p;
             p->flags |= PUNI_FLAG_NPC_GUIDE_SISTER;
         } else if (i == 4) {
-#if VERSION <= VERSION_DEMO_US
-            if (!swGet(GSWF_MRI_RIVAL_IN_PUNI_GROUP))
-                continue;
-#else
             if (!swGet(GSWF_MRI_RIVAL_IN_PUNI_GROUP)) continue; // GSWF_MRI_PUNIPER_JOINED
-#endif
             Punigp->rivalPuni = p;
             p->flags |= PUNI_FLAG_NPC_RIVAL;
         } else if (i == 3) {
-#if VERSION <= VERSION_DEMO_US
-            if (!swGet(GSWF_MRI_JABBI_IN_PUNI_GROUP))
-                continue;
-#else
             if (!swGet(GSWF_MRI_JABBI_IN_PUNI_GROUP)) continue; // GSWF_MRI_JABBLE_JOINED
-#endif
             Punigp->jabbiPuni = p;
             p->flags |= PUNI_FLAG_NPC_CHIBI_TOGE;
         } else {
-#if VERSION <= VERSION_DEMO_US
-            if (swByteGet(GSW_MRI_PUNI_FOLLOWERS) + 5 <= i)
-                continue;
-#else
             if (swByteGet(GSW_MRI_PUNI_FOLLOWERS) + 5 <= i) continue; // GSW_MRI_PUNI_FOLLOWER_COUNT
-#endif
             p->flags |= PUNI_FLAG_SPRITE_PUNI;
         }
         if (b0 == 0) {
@@ -6493,9 +6408,7 @@ USER_FUNC(evt_puni_setup) {
                 p->mode = PUNI_MODE_JOIN;
             } else {
                 f32 ex, ey, ez;
-#if VERSION > VERSION_DEMO_US
                 f32 d, e;
-#endif
                 sx = bero_get_BeroSX();
                 sy = puni_init_posy(bero_get_BeroSY());
                 sz = bero_get_BeroSZ();
@@ -6547,11 +6460,7 @@ USER_FUNC(evt_puni_setup) {
         p->child1 = NULL;
         p->child2 = NULL;
         PuniDokuritsu(p);
-#if VERSION <= VERSION_DEMO_US
-        p->flags |= PUNI_FLAG_PUNI | PUNI_FLAG_ACTIVE | PUNI_FLAG_WALL_CHECK;
-#else
         p->flags |= (PUNI_FLAG_PUNI | PUNI_FLAG_ACTIVE | PUNI_FLAG_WALL_CHECK);
-#endif
     }
     bero = bero_get_ptr();
     n = bero_get_BeroNUM();
@@ -6560,11 +6469,7 @@ USER_FUNC(evt_puni_setup) {
     for (j = 0; j < n; j++) {
         if (bero[j]->directionId == BERO_DIR_DOWN) {
             PuniData* q = Punidat + j + PUNI_SOLID_FIRST;
-#if VERSION <= VERSION_DEMO_US
-                q->flags |= PUNI_FLAG_ACTIVE | PUNI_FLAG_COLLIDE;
-#else
             q->flags |= (PUNI_FLAG_ACTIVE | PUNI_FLAG_COLLIDE);
-#endif
             q->prevMode = PUNI_MODE_DOKAN;
             q->mode = PUNI_MODE_DOKAN;
             q->radius.x = 25.0f;
@@ -7750,17 +7655,9 @@ void puniCountDisp(CameraId unused, void* param) {
     c2.a = c2.a * Punigp->puniCounterAlpha / 255;
     c3.a = c3.a * Punigp->puniCounterAlpha / 255;
     PSMTXTrans(m, -160.0f, -180.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
-iconDispGxCol(m, 4, VERSION_PICK(0x203, 0x20A), c1);
-#else
     iconDispGxCol(m, ICON_FLAG_2D, VERSION_PICK(0x203, 0x20A), c1);
-#endif
     PSMTXTrans(m, -232.0f, -178.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
-iconDispGxCol(m, 4, VERSION_PICK(0x204, 0x20B), c2);
-#else
     iconDispGxCol(m, ICON_FLAG_2D, VERSION_PICK(0x204, 0x20B), c2);
-#endif
     PSMTXTrans(m, -160.0f, -178.0f, 0.0f);
     if (Punigp->showRemaining) {
         if (gp->retraceCount & 0x10) {
@@ -7770,11 +7667,7 @@ iconDispGxCol(m, 4, VERSION_PICK(0x204, 0x20B), c2);
         iconNumberDispGx(m, num2, FALSE, c3);
     }
     PSMTXTrans(m, -140.0f, -178.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
-iconDispGxCol(m, 4, VERSION_PICK(0x1D8, 0x1E0), c3);
-#else
     iconDispGxCol(m, ICON_FLAG_2D, VERSION_PICK(0x1D8, 0x1E0), c3);
-#endif
     PSMTXTrans(m, -90.0f, -178.0f, 0.0f);
     iconNumberDispGx(m, num1, TRUE, c3);
 }

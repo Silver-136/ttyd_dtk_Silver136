@@ -166,11 +166,7 @@ extern EvtWord end_00_init_evt[];
 #else
 EvtWord end_00_init_evt[63];
 #endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord end_credit_gesso_evt[];
-#else
 EvtWord end_credit_gesso_evt[48];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord end_credit_gonbaba_evt[];
 #else
@@ -1609,11 +1605,7 @@ SPAWN_EVENT(end_return_title_evt)
 #endif
     END_INLINE_EVENT
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STAFF_ROLL1"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
-#endif
     RETURN
 EVT_END()
 

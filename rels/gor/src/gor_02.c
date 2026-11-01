@@ -113,9 +113,7 @@ USER_FUNC(set_talk_memory_ry);
 static USER_FUNC(setmertn);
 USER_FUNC(status_gauge_force_off);
 USER_FUNC(stonechangertn);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(get_mario_dir_target);
-#endif
 void kuragarisan_msgcb(s32 type, void* param);
 static USER_FUNC(enzan_set_f_i);
 static USER_FUNC(enzan_set_i_f);
@@ -1024,11 +1022,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
     WAIT_MS(7000)
     // The glow fades.
     CALL(evt_eff_softdelete, STRING("aaax"))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
-#else
-    IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -1306,25 +1300,12 @@ IF_INT_EQUAL(GSWF_GOR_MERLON_FIRST_TALK_DONE, 0)
     IF_INT_EQUAL(GSWF_GOR_MERLON_FIRST_TALK_DONE, 0)
 #endif
         CALL(evt_msg_print, 0, STRING("powerup_00"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GOR_MERLON_FIRST_TALK_DONE, 1)
         SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
-#else
-        SET_VALUE(GSWF_GOR_MERLON_FIRST_TALK_DONE, 1)
-        SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 0)
-#else
-        IF_INT_EQUAL(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 0)
-#endif
             CALL(evt_msg_print, 0, STRING("powerup_00_01"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
-#else
-            SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
-#endif
             ELSE
             CALL(evt_msg_print, 0, STRING("powerup_00_02"), 0, STRING("me"))
         END_IF
@@ -1334,11 +1315,7 @@ IF_INT_EQUAL(GSWF_GOR_MERLON_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print_add, 0, STRING("powerup_01"))
         ELSE
         CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(powerupya_party_rtn)
-#else
         CALL_CHILD(PTR(powerupya_party_rtn))
-#endif
     END_IF
 #if VERSION > VERSION_DEMO_US
     LABEL(0)
@@ -1941,11 +1918,7 @@ static EVT_BEGIN(kurihakase_init)
 EVT_END()
 
 static EVT_BEGIN(kurihakase_talk)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_EQUAL(STG0_10_01_FRANKLYS_TUTORIAL)
         // Frankly's line for the story stage: after the tutorial, the Prologue.
         CALL(evt_msg_print, 0, STRING("mac_0_085"), 0, STRING("me"))
@@ -1971,18 +1944,10 @@ static EVT_BEGIN(kurihakase_talk)
         // Chapter 3.
         CALL(evt_msg_print, 0, STRING("mac_3_000"), 0, STRING("me"))
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
-#else
-        IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
-#endif
             CALL(evt_msg_print, 0, STRING("gor_02_019"), 0, STRING("me"))
             ELSE
-#if VERSION <= VERSION_DEMO_US
             IF_INT_EQUAL(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 0)
-#else
-            IF_INT_EQUAL(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 0)
-#endif
                 // After the Twilight Town trip: the partner speaks up, Frankly stares in surprise,
                 // then answers.
                 CALL(evt_party_stop, 0)
@@ -1992,11 +1957,7 @@ static EVT_BEGIN(kurihakase_talk)
                 CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クリハカセ"), 0, 0, 0, 0, 0, 0, 0, 60)
                 WAIT_MS(1000)
                 CALL(evt_msg_print, 0, STRING("mac_3_010"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 1)
-#else
-                SET_VALUE(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 1)
-#endif
                 CALL(evt_party_run, 0)
                 ELSE
                 // Later Chapter 3 lines.
@@ -2012,11 +1973,7 @@ static EVT_BEGIN(kurihakase_talk)
         CALL(evt_msg_print, 0, STRING("gor_02_022"), 0, STRING("me"))
         CASE_EQUAL(STG4_33_MEET_BOBBERY)
         CALL(evt_msg_print, 0, STRING("mac_4_048"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GOR_BOBBERY_HOME_LEARNED, 1)
-#else
-        SET_VALUE(GSWF_GOR_BOBBERY_HOME_LEARNED, 1)
-#endif
         CASE_EQUAL(STG4_34_BOBBERY_DECLINES)
         CALL(evt_msg_print, 0, STRING("mac_4_060"), 0, STRING("me"))
         CASE_BETWEEN(STG5_44_PEACH_TECS_REQUEST_2, STG5_60_RETURN_TO_KEELHAUL)
@@ -2032,13 +1989,8 @@ static EVT_BEGIN(kurihakase_talk)
         // Chapter 6: if Mario was away long, Frankly remarks on how much time has passed.
         CALL(evt_msg_print, 0, STRING("mac_6_000"), 0, STRING("me"))
         CASE_EQUAL(STG6_71_FRANKLYS_HOUSE_STG_6)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_sub_load_progresstime, GSW_GOR_FRANKLY_STG6_START_TIME, LW(0))
         IF_INT_EQUAL(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
-#else
-        CALL(evt_sub_load_progresstime, GSW_GOR_FRANKLY_STG6_START_TIME, LW(0))
-        IF_INT_EQUAL(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
-#endif
             CALL(evt_msg_print, 0, STRING("mac_6_006"), 0, STRING("クリハカセ"))
             RETURN
         END_IF
@@ -2062,11 +2014,7 @@ static EVT_BEGIN(kurihakase_talk)
             CALL(evt_cam_letter_box_disable, 1)
             CALL(evt_cam_letter_box_onoff, 1, 0)
             WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(kurihakase_after3minutes)
-#else
             SPAWN_EVENT(PTR(kurihakase_after3minutes))
-#endif
         END_IF
 #if VERSION <= VERSION_DEMO_US
 CASE_LESS(STG7_03_GOLDBOB)
@@ -2093,11 +2041,7 @@ CASE_LESS(STG7_03_GOLDBOB)
         // Chapter 8: Frankly's last lines, including his reaction to Mario's pose.
         CALL(evt_msg_print, 0, STRING("gor_02_028"), 0, STRING("me"))
         CASE_GREATER_OR_EQUAL(STG9_00_EPILOGUE)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 0)
-#else
-        IF_INT_EQUAL(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 0)
-#endif
             CALL(evt_msg_print, 0, STRING("gor_02_029"), 0, STRING("me"))
             CALL(evt_mario_set_pose, STRING("M_I_2"))
             WAIT_MS(1000)
@@ -2107,11 +2051,7 @@ CASE_LESS(STG7_03_GOLDBOB)
             WAIT_MS(500)
             CALL(evt_msg_print, 0, STRING("gor_02_029_02"), 0, STRING("me"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 1)
-#else
-            SET_VALUE(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 1)
-#endif
             ELSE
             CALL(evt_msg_print, 0, STRING("gor_02_029_03"), 0, STRING("me"))
         END_IF
@@ -2568,11 +2508,7 @@ EVT_END()
  * and lets Mario hand it over (evt_unlock_npc); otherwise a line per story stage.
  */
 EVT_BEGIN(tozokudan2_talk)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
-#else
-    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
-#endif
         CALL(evt_pouch_check_item, ITEM_HOUSE_KEY, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("irai_01_02"), 0, STRING("me"))
@@ -2582,11 +2518,7 @@ CALL(evt_win_item_select, PTR(key_tbl), LW(0))
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
 #endif
             IF_INT_NOT_EQUAL(LW(0), -1)
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(evt_unlock_npc)
-#else
                 CALL_CHILD(PTR(evt_unlock_npc))
-#endif
             END_IF
             RETURN
             ELSE
@@ -2599,11 +2531,7 @@ CALL(evt_win_item_select, PTR(key_tbl), LW(0))
         END_IF
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
         CALL(evt_msg_print, 0, STRING("gor_02_011"), 0, STRING("me"))
         CASE_LESS(STG3_32_BOSS_BATTLE)
@@ -2885,11 +2813,7 @@ static s32 item_tbl[] = {
 };
 
 EVT_BEGIN(kuribo4_talk)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SAFE_DELIVERY)
-#else
-    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SAFE_DELIVERY)
-#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
             // Trouble Center job 2: if Mario carries a Box, the Goomba asks for it
             // and takes the one Mario hands over.
@@ -2910,11 +2834,7 @@ CALL(evt_win_item_select, PTR(item_tbl), LW(0))
             END_IF
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
-#else
-    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
-#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
             // Trouble Center job 13: the Goomba wants Battle Trunks;
             // Mario hands them over one at a time from a list.
@@ -2976,11 +2896,7 @@ CALL(evt_win_item_select, LW(1), LW(0))
             END_IF
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
         // Otherwise: a line per story stage.
         CALL(evt_msg_print, 0, STRING("gor_02_030_00"), 0, STRING("me"))
@@ -3665,11 +3581,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #endif
     CALL(evt_snd_env_lpf, 0, 800)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(mapball_init)
-#else
     CALL_CHILD(PTR(mapball_init))
-#endif
     CALL(evt_item_delete_check, STRING("item_star1"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_item_get_position, STRING("item_star1"), LW(0), LW(1), LW(2))
@@ -3688,11 +3600,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
         ADD(LW(1), -1000)
         CALL(evt_item_set_position, STRING("item_star3"), LW(0), LW(1), LW(2))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 0)
-#else
-    SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 0)
-#endif
     RETURN
 EVT_END()
 
@@ -3810,48 +3718,25 @@ SWITCH(GSW_STORY_PROGRESS)
         CASE_OR_EQUAL(STG4_30_THOUSAND_YEAR_DOOR)
         CASE_OR_EQUAL(STG5_60_RETURN_TO_KEELHAUL)
         CASE_OR_EQUAL(STG6_70_THOUSAND_YEAR_DOOR)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
-        CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
         CALL(evt_snd_env_lpf, 0, 800)
         CASE_END
         CASE_EQUAL(STG6_71_FRANKLYS_HOUSE_STG_6)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_FRANKURI1"))
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
-        CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
         CALL(evt_snd_env_lpf, 0, 800)
         CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
             CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
-        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-            CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
             CALL(evt_snd_env_lpf, 0, 800)
         END_IF
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_08_STOLEN_COINS)
-        SPAWN_EVENT(kurihakase_first_talk)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_08_STOLEN_COINS)
         SPAWN_EVENT(PTR(kurihakase_first_talk))
-#endif
     END_IF
     CALL(evt_mapobj_rotate, 1, STRING("S_open_book_r"), 0, 0, 180)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG1_17_FATHER_SON_REUNITED, STG1_END_TO_STAGE_2)
         CALL(evt_mapobj_trans, 1, STRING("S_open_book"), -15, 0, 0)
         CASE_BETWEEN(STG3_32_BOSS_BATTLE, STG3_END_TO_STAGE_4)
@@ -3859,11 +3744,7 @@ SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_54_WELCOME_BACK, STG6_END_ULTRA_HAMMER)
         CALL(evt_mapobj_trans, 1, STRING("S_open_book"), -15, 0, 0)
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_15_THE_PEDESTAL)
-#else
-    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_15_THE_PEDESTAL)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tizu_on"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(monosiri_check, LW(0), LW(1))
@@ -3897,30 +3778,15 @@ SWITCH(GSW_STORY_PROGRESS)
         CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
         CALL(evt_snd_env_lpf, 0, 0)
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
         SET_VALUE(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 0)
-#else
-    IF_INT_EQUAL(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
-        SET_VALUE(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 0)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_09_PROF_FRANKLY)
-        SPAWN_EVENT(kurihakase_wall_remove)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_09_PROF_FRANKLY)
         SPAWN_EVENT(PTR(kurihakase_wall_remove))
-#endif
         GOTO(100)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_16_FRANKLYS_HOUSE)
-        SPAWN_EVENT(kurihakase_lecture_badge)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_16_FRANKLYS_HOUSE)
         SPAWN_EVENT(PTR(kurihakase_lecture_badge))
-#endif
         GOTO(100)
     END_IF
     LABEL(100)
@@ -4298,13 +4164,8 @@ EVT_BEGIN(evt_door_03_roll_open)
     WAIT_MS(150)
     CALL(evt_cam_ctrl_onoff, 4, 0)
     CALL(evt_hitobj_onoff, STRING("A_i03_rol"), 1, 1)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     WAIT_MS(1000)
     CALL(evt_mario_get_pos, 0, LW(1), LW(2), LW(3))
@@ -5185,11 +5046,7 @@ static USER_FUNC(monosiri_check) {
 USER_FUNC(monosiri_check) {
 #endif
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
     s32 seq = evtGetValue(event, GSW_STORY_PROGRESS);
-#else
-    s32 seq = evtGetValue(event, GSW_STORY_PROGRESS);
-#endif
     u32 i;
     s32 j;
     MonosiriFollow* f = follow;
@@ -8157,11 +8014,7 @@ EVT_END()
  */
 EVT_BEGIN(gor_02_init_evt)
     // Music and ambience: Frankly's theme during his scenes, otherwise the Rogueport theme.
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_OR_EQUAL(STG0_15_THE_PEDESTAL)
         CASE_OR_EQUAL(STG1_30_ZESS_T)
         CASE_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
@@ -8173,11 +8026,7 @@ EVT_BEGIN(gor_02_init_evt)
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CASE_END
         CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-#else
-        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
         END_IF
@@ -8185,30 +8034,16 @@ EVT_BEGIN(gor_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     // The exits are set up.
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_58_FAIR_WINDS)
-        SPAWN_EVENT(dearu_event)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_58_FAIR_WINDS)
         SPAWN_EVENT(PTR(dearu_event))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
-#else
-        SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
-#endif
     END_IF
     // The NPCs are created, including the thief and Goombella stand-in used in cutscenes, and the water
     // and light animations start.
     CALL(evt_npc_setup, PTR(npcEnt))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
-#endif
         CALL(evt_npc_entry, STRING("盗賊"), STRING("c_borodo_n"))
         CALL(evt_npc_set_tribe, STRING("盗賊"), STRING("盗賊"))
         CALL(evt_npc_set_position, STRING("盗賊"), 0, -1000, 0)
@@ -8220,18 +8055,6 @@ EVT_BEGIN(gor_02_init_evt)
     // Fall recovery points, the spinning Star Piece floors, the item box, the three Shine Sprite blocks
     // and the three Star Pieces are set up.
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_gazigazi_entry)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 0, 50, STRING("S_yuka_A01"), 125, GSWF_STARPIECE_07)
-    CALL(evt_mobj_kururing_floor, STRING("kururin2"), 500, 124, -75, STRING("S_i06_kabe_01A"), 125, GSWF_STARPIECE_11)
-    CALL(evt_mobj_itembox, STRING("mobj_box01"), 175, -50, 350, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_GOR_02_DOUBLE_DIP_CHEST)
-    CALL(evt_mobj_powerupblk, STRING("pblk1"), -250, 288, -500, 0, GSWF_SHINE_00, 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk2"), -30, 60, -215, 0, GSWF_SHINE_01, 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk3"), 540, 60, -260, 0, GSWF_SHINE_04, 0)
-    CALL(evt_item_entry, STRING("item_star1"), ITEM_STAR_PIECE, -3, 40, -325, ITEM_TYPE_STILL, GSWF_STARPIECE_08, 0)
-    CALL(evt_item_entry, STRING("item_star2"), ITEM_STAR_PIECE, 65, 150, -165, ITEM_TYPE_STILL, GSWF_STARPIECE_09, 0)
-    CALL(evt_item_entry, STRING("item_star3"), ITEM_STAR_PIECE, 50, 0, -390, ITEM_TYPE_STILL, GSWF_STARPIECE_10, 0)
-#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 0, 50, STRING("S_yuka_A01"), 125, GSWF_STARPIECE_07)
     CALL(evt_mobj_kururing_floor, STRING("kururin2"), 500, 124, -75, STRING("S_i06_kabe_01A"), 125, GSWF_STARPIECE_11)
@@ -8242,19 +8065,10 @@ EVT_BEGIN(gor_02_init_evt)
     CALL(evt_item_entry, STRING("item_star1"), ITEM_STAR_PIECE, -3, 40, -325, ITEM_TYPE_STILL, GSWF_STARPIECE_08, 0)
     CALL(evt_item_entry, STRING("item_star2"), ITEM_STAR_PIECE, 65, 150, -165, ITEM_TYPE_STILL, GSWF_STARPIECE_09, 0)
     CALL(evt_item_entry, STRING("item_star3"), ITEM_STAR_PIECE, 50, 0, -390, ITEM_TYPE_STILL, GSWF_STARPIECE_10, 0)
-#endif
     SET_VALUE(LW(0), PTR(&door_data_02))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_02_entry)
-#else
     CALL_CHILD(PTR(evt_door_02_entry))
-#endif
     SET_VALUE(LW(0), PTR(&door_data_03))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_03_entry)
-#else
     CALL_CHILD(PTR(evt_door_03_entry))
-#endif
     SET_VALUE(LW(0), PTR(&door_data_03_roll))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_door_03_roll_entry)
@@ -8268,20 +8082,12 @@ EVT_BEGIN(gor_02_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie_04_doa01"), 0, PTR(evt_door_04_junbi), 0)
         ELSE
         SET_VALUE(LW(0), PTR(&door_data_04))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_door_entry)
-#else
         CALL_CHILD(PTR(evt_door_entry))
-#endif
     END_IF
     SET_VALUE(LW(0), PTR(&door_data_05))
     CALL(evt_door_data_copy, LW(0), GW(11))
     SET_VALUE(LW(0), GW(11))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
-#else
-    IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
-#endif
         CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc))
         ELSE
         CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc_01))
@@ -8302,13 +8108,8 @@ EVT_BEGIN(gor_02_init_evt)
         SET_VALUE(LW(15), 4)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(3), 0, PTR(evt_door_open), 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED, 0)
         CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_HOUSE_KEY, 446, 18, 50, 0, PTR(evt_chk), PTR(evt_unlock), GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED)
-#else
-    IF_INT_EQUAL(GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED, 0)
-        CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_HOUSE_KEY, 446, 18, 50, 0, PTR(evt_chk), PTR(evt_unlock), GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED)
-#endif
         ELSE
         SET_VALUE(LW(0), PTR(&door_data_06))
         CALL(evt_door_data_copy, LW(0), LW(1))
@@ -8318,42 +8119,23 @@ EVT_BEGIN(gor_02_init_evt)
             ELSE
             CALL(evt_door_set_param, LW(0), 0, PTR(&door_data_06_npc_01))
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_door_entry)
-#else
         CALL_CHILD(PTR(evt_door_entry))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_10_REMOVING_THE_FENCE)
-#else
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_10_REMOVING_THE_FENCE)
-#endif
         // The fence piece and the extra NPCs are set up.
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_saku04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_saku_04"), 1, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG0_10_REMOVING_THE_FENCE)
-#else
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
-        IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG0_10_REMOVING_THE_FENCE)
-#endif
             CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
             CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
             CALL(evt_npc_set_position, STRING("クリスチーヌ"), 0, -1000, 0)
             CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 90)
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_10_REMOVING_THE_FENCE)
-        // The story cutscenes are started: the Frankly lecture and the epigraphy scenes for each chapter.
-        SPAWN_EVENT(kurihakase_lecture)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_10_REMOVING_THE_FENCE)
         SPAWN_EVENT(PTR(kurihakase_lecture))
-#endif
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_15_THE_PEDESTAL)
@@ -8371,30 +8153,17 @@ EVT_BEGIN(gor_02_init_evt)
         CASE_EQUAL(STG6_70_THOUSAND_YEAR_DOOR)
         SPAWN_EVENT(PTR(epigraphy_map_after_stage6))
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
-    // The harbor scenes, wandering Goombas and Trouble Center jobs are started.
-    SPAWN_EVENT(evt_gor_offscren_door_entry)
-    SPAWN_EVENT(gor_goki1_urouro)
-    SPAWN_EVENT(gor_goki2_urouro)
-    SPAWN_EVENT(gor_irai_init)
-    IF_INT_EQUAL(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 0)
-#else
     SPAWN_EVENT(PTR(evt_gor_offscren_door_entry))
     SPAWN_EVENT(PTR(gor_goki1_urouro))
     SPAWN_EVENT(PTR(gor_goki2_urouro))
     SPAWN_EVENT(PTR(gor_irai_init))
     IF_INT_EQUAL(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 0)
-#endif
         // The wall cover Flurrie can blow away in front of the thieves' back door is set up.
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_i04_kabe_msk"), STRING("A_i04_kabe_msk"), PTR(evt_cloud))
         BEGIN_INLINE_EVENT
             LOOP(0)
-#if VERSION <= VERSION_DEMO_US
                 IF_INT_EQUAL(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 1)
-#else
-                IF_INT_EQUAL(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 1)
-#endif
                     BREAK_LOOP
                 END_IF
                 CALL(evt_cloud_get_mode, LW(0))
@@ -8410,40 +8179,22 @@ EVT_BEGIN(gor_02_init_evt)
         END_INLINE_EVENT
         ELSE
         SET_VALUE(LW(0), PTR(&door_data_04_ura))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_door_entry)
-#else
         CALL_CHILD(PTR(evt_door_entry))
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i04_kabe_msk"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_i04_kabe_msk"), 1, 0)
     END_IF
     // The harbors for the ships, mail, and the epilogue scene are set up.
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_sanbashi_01"), STRING("Ship_Change01"))
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_sanbashi_02"), STRING("Ship_Change02"))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(front_wall_keshi)
-    SPAWN_EVENT(tobiori_check)
-    SPAWN_EVENT(evt_sub_mail_event)
-    CALL_CHILD(evt_monosiri_follow)
-    SPAWN_EVENT(iri_19_init)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-#else
     SPAWN_EVENT(PTR(front_wall_keshi))
     SPAWN_EVENT(PTR(tobiori_check))
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     CALL_CHILD(PTR(evt_monosiri_follow))
     SPAWN_EVENT(PTR(iri_19_init))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-#endif
         CALL(evt_mario_kill_party, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(epilogue_npc_entry)
-        SPAWN_EVENT(epilogue_evt)
-#else
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))
-#endif
     END_IF
     RETURN
 EVT_END()

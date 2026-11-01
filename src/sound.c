@@ -30,9 +30,7 @@ SND_AUX_DELAY dly;
 SoundWork sound;
 
 //.sbss
-#if VERSION > VERSION_DEMO_US
 u32 aramMemArray[8];
-#endif
 
 /** Returns the shared 256-byte buffer the loaders build file paths in. */
 static inline char* _ssGetStr(void) {
@@ -554,13 +552,8 @@ entry = DVDMgrOpen(_ssGetStr(), 2, 0);
     }
     sound.poolData[sound.dataId] = pointer;
 
-#if VERSION <= VERSION_DEMO_US
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".proj");
     entry = DVDMgrOpen(_ssGetStr(), 2, 0);
-#else
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".proj");
-    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
-#endif
     if (entry == NULL) {
         pointer = NULL;
     } else {
@@ -585,13 +578,8 @@ entry = DVDMgrOpen(_ssGetStr(), 2, 0);
     }
     sound.projData[sound.dataId] = pointer;
 
-#if VERSION <= VERSION_DEMO_US
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".sdir");
     entry = DVDMgrOpen(_ssGetStr(), 2, 0);
-#else
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".sdir");
-    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
-#endif
     if (entry == NULL) {
         pointer = NULL;
     } else {
@@ -616,13 +604,8 @@ entry = DVDMgrOpen(_ssGetStr(), 2, 0);
     }
     sound.sdirData[sound.dataId] = pointer;
 
-#if VERSION <= VERSION_DEMO_US
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".samp");
     strcpy(sound.filepath, _ssGetStr());
-#else
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".samp");
-    strcpy(sound.filepath, _ssGetStr());
-#endif
     sndSetSampleDataUploadCallback(loadDVD_callback, 0x20000);
     return TRUE;
 }
@@ -901,9 +884,7 @@ BOOL SoundDropData(void) {
         }
     }
     for (i = 0; i < 40; i++) {
-#if VERSION > VERSION_DEMO_US
         // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-#endif
         SoundEffect* effect = (0, &sound.effects[i]);
         if (effect->flags) {
             sndFXKeyOff(effect->voiceId);
@@ -915,9 +896,7 @@ BOOL SoundDropData(void) {
     }
 
     for (i = 0; i < 2; i++) {
-#if VERSION > VERSION_DEMO_US
         // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-#endif
         SoundDVD* dvd = (0, &sound.dvds[i]);
         if (dvd->flags & (SOUND_DVD_FLAG_PLAY | SOUND_DVD_FLAG_MUTE)) {
             AISetStreamPlayState(0);
@@ -1651,9 +1630,7 @@ static inline u32 _ssAlign32(u32 x) {
  */
 static inline u32 _ssCalcLen(SoundStreamEntry* entry) {
     u32 len;
-#if VERSION > VERSION_DEMO_US
     int i;
-#endif
     len = SS_LOAD_BUFFER_SIZE;
     if (entry->offset + SS_LOAD_BUFFER_SIZE > entry->size) {
         len = entry->size - entry->offset;
@@ -2495,11 +2472,7 @@ if (!(stream->entries[0].dvd = DVDMgrOpen(path, 0, 0))) {
         stream->flags = 0;
         return;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (!(stream->entries[1].dvd = DVDMgrOpen(path, 0, 0))) {
-#else
     if (!(stream->entries[1].dvd = DVDMgrOpen(paths[0], 0, 0))) {
-#endif
         stream->flags = 0;
         return;
     }
@@ -2558,11 +2531,7 @@ void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
         stream->entries[1].initHist = header->initHist1;
         stream->entries[0].loopHist = header->loopHist0;
         stream->entries[1].loopHist = header->loopHist1;
-#if VERSION <= VERSION_DEMO_US
-        if (stream->loopStart != 0xFFFFFFFF) {
-#else
         if (stream->loopStart != -1) {
-#endif
             stream->flags |= SOUND_STREAM_FLAG_LOOP;
         } else {
             stream->loopStart = 0;

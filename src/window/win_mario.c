@@ -115,11 +115,7 @@ void winMarioInit(WindowWork* w) {
         w->mario.poseId = animPoseEntry(name, 0);
         animPoseSetAnim(w->mario.poseId, "M_S_1", 1);
     }
-#if VERSION <= VERSION_DEMO_US
-    animPoseSetMaterialFlagOn(w->mario.poseId, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
-#else
     animPoseSetMaterialFlagOn(w->mario.poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
-#endif
     if (marioGetPtr()->flags & MARIO_FLAG_IS_SHADOW_MARIO) {
         animPoseSetMaterialFlagOn(w->mario.poseId, MAP_OBJ_TEV_CALLBACK(10));
     }
@@ -142,9 +138,7 @@ void winMarioInit(WindowWork* w) {
  */
 void winMarioInit2(WindowWork* w) {
     w->marioSel = 0;
-#if VERSION > VERSION_DEMO_US
     // FAKE: each target field is assigned twice in one chain; the single assignment changes the object
-#endif
     w->helpTgtX = w->helpTgtX = linkDt[w->marioSel].x;
     w->helpTgtY = w->helpTgtY = linkDt[w->marioSel].y;
     switch (w->marioSel) {
@@ -220,11 +214,7 @@ s32 winMarioMain(WindowWork* w) {
                 if (w->marioSel == 12) {
                     w->mario.mode = 1;
                     w->mario.specialCursor = 0;
-#if VERSION <= VERSION_DEMO_US
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-#else
-                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-#endif
                 }
             } else if (w->buttonTrg & PAD_BUTTON_B) {
 #if VERSION <= VERSION_DEMO_US
@@ -305,28 +295,16 @@ animPoseSetAnim(w->mario.poseId, (w->flags & WINDOW_FLAG_8BIT) ? "S_1" : "M_S_1"
                 if (w->mario.specialCursor < 0) {
                     w->mario.specialCursor = w->mario.specialCount - 1;
                 }
-#if VERSION <= VERSION_DEMO_US
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#else
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
             } else if (w->dirRep & DEMO_STICK_DOWN) {
                 w->mario.specialCursor++;
                 if (w->mario.specialCursor >= w->mario.specialCount) {
                     w->mario.specialCursor = 0;
                 }
-#if VERSION <= VERSION_DEMO_US
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#else
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
             } else if (w->buttonTrg & PAD_BUTTON_B) {
                 w->mario.mode = 0;
-#if VERSION <= VERSION_DEMO_US
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#else
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#endif
             } else if (w->buttonTrg & PAD_BUTTON_START) {
                 return -2;
             }

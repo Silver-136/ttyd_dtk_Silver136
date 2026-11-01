@@ -3194,12 +3194,8 @@ void msgWindow_Disp(CameraId camId, void* param) {
     BOOL ret = FALSE;
     WindowEntry* window = param;
     Vec pos;
-#if VERSION <= VERSION_DEMO_US
-    f32 w, h;
-#else
     f32 w;
     f32 h;
-#endif
     f32 ex;
     f32 ey;
     s32 sy;
@@ -3247,11 +3243,7 @@ void msgWindow_Disp(CameraId camId, void* param) {
                 h = intplGetValue(EASING_LINEAR, 10.0f, window->height, window->alpha, 255);
                 windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - (w / 2.0f), ey + (h / 2.0f), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
-#if VERSION <= VERSION_DEMO_US
-                            sy = 240 - (((s32)window->y) - 10);
-#else
                     sy = 240 - ((s32)window->y - 10);
-#endif
                     if (sy < 0) {
                         sy = 0;
                     }

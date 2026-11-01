@@ -29,11 +29,7 @@ EvtWord* yuu_window_evt;
 
 EVT_BEGIN(minigame_end)
     SET_VALUE(GW(0), 2)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
-#else
-    SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
-#endif
     CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
     CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
 #if VERSION > VERSION_DEMO_US
@@ -405,9 +401,7 @@ void monteCountDisp(void) {
         yuwp->dispTick = 0;
         if (monte_snd_flag == 0 && y != 0) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
-#if VERSION > VERSION_DEMO_US
             monte_snd_flag = 8;
-#endif
         }
 #if VERSION <= VERSION_DEMO_US
 monte_snd_flag = 0;

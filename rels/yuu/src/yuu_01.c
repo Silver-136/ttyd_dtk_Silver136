@@ -83,9 +83,7 @@ static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
 
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(yuu_01_cam_shift_reset);
-#endif
 USER_FUNC(yuuminigame2_get_name);
 USER_FUNC(yuuminigame2_opening_chk);
 USER_FUNC(yuuminigame2_opening_on_off);
@@ -101,17 +99,9 @@ s32 hoko_tbl[22];
 static MonteTable montetable[6];
 static EvtWord minigame_view_monte[4];
 EvtWord yuu_01_kaijo_init[12];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord yuu_01_kaijo_init2[];
-#else
 EvtWord yuu_01_kaijo_init2[12];
-#endif
 EvtWord minigame02_main[37];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord minigame02_start_cam[];
-#else
 EvtWord minigame02_start_cam[40];
-#endif
 EvtWord minigame02_start_cam_cancel[17];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame02_start[];
@@ -299,22 +289,14 @@ EVT_BEGIN(minigame02_start)
                 IF_BITS_SET(LW(9), 768)
                     DELETE_EVENT(LW(8))
                     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION <= VERSION_DEMO_US
-                    CALL_CHILD(minigame02_start_cam_cancel)
-#else
                     CALL_CHILD(PTR(minigame02_start_cam_cancel))
-#endif
                     BREAK_LOOP
                 END_IF
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
         CALL(yuuminigame2_opening_on_off, LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(yuu_01_kaijo_init2)
-#else
         CALL_CHILD(PTR(yuu_01_kaijo_init2))
-#endif
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
     END_IF
@@ -373,11 +355,7 @@ EVT_BEGIN(minigame02_end)
         CALL(evt_msg_select, 0, STRING("sysyuu_01_00"))
     END_IF
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
-#else
-        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
-#endif
         CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
         CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -1132,9 +1110,6 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
     f32 angle;
     s32 i;
     s32 j;
-#if VERSION <= VERSION_DEMO_US
-    s32 rnd;
-#endif
 
     if (data->index == 0x15) {
         if ((mario->position.x <= -700.0f && mario->position.z <= 0.0f) || yuucounter_get_data() < 0) {
@@ -1177,11 +1152,7 @@ data->timer = 240;
 #endif
                     data->y = mario->position.y;
                     mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-#if VERSION <= VERSION_DEMO_US
-                    psndSFXOn_3D((const char*)0x8DB, &mario->position);
-#else
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_BOAT_UZUSIO1), &mario->position);
-#endif
                     data->result--;
                     break;
                 }
@@ -1200,11 +1171,7 @@ data->timer = 240;
                 for (j = 0; j < 3; j++) {
                     if (PSVECSquareDistance(&box[j], &pos) <= 225.0f) {
                         if (!marioChkSwirlPower()) {
-#if VERSION <= VERSION_DEMO_US
-                            psndSFXOn_3D((const char*)0x8DC, &mario->position);
-#else
                             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_BOAT_UZUSIO2), &mario->position);
-#endif
                             data->result--;
                         }
                         data->index = i;

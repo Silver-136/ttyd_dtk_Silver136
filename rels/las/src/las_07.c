@@ -244,24 +244,14 @@ EVT_BEGIN(las_07_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_cam_road_reset)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -100, 60, -300, ITEM_COIN, 0, GSWF_LAS_07_COIN_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj01"), 100, 60, -300, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_07_JAMMIN_JELLY_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 0, 60, -300, ITEM_P_UP_D_DOWN_P, 0, GSWF_LAS_07_P_UP_D_DOWN_P_BADGE_BLOCK, 1)
-#else
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -100, 60, -300, ITEM_COIN, 0, GSWF_LAS_07_COIN_BLOCK, 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj01"), 100, 60, -300, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_07_JAMMIN_JELLY_BLOCK, 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 0, 60, -300, ITEM_P_UP_D_DOWN_P, 0, GSWF_LAS_07_P_UP_D_DOWN_P_BADGE_BLOCK, 1)
-#endif
     RETURN
 EVT_END()
 

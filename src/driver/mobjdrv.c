@@ -471,33 +471,18 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
     min = (Vec){pose->bboxMin.x, pose->bboxMin.y, pose->bboxMin.z};
     max = (Vec){pose->bboxMax.x, pose->bboxMax.y, pose->bboxMax.z};
     for (i = 0; i < 2; i++) {
-#if VERSION <= VERSION_DEMO_US
-        if (entry->hitObj[i].hitObject != NULL)
-#else
         if (entry->hitObj[i].hitObject != NULL) {
-#endif
             hitDelete(entry->hitObj[i].name);
-#if VERSION > VERSION_DEMO_US
         }
-#endif
     }
     PSVECAdd(&max, &min, &entry->translation);
     PSVECScale(&entry->translation, &entry->translation, 0.5f);
     PSVECScale(&entry->translation, &entry->translation, 10.0f);
     entry->translation.y = 0.0f;
     // FAKE: (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object
-#if VERSION <= VERSION_DEMO_US
-    // target float registers; the values are the same
-    entry->scale2.x = 10.0f * (entry->scale.x * (f32)(0, __fabs((0, max.x - min.x))));
-#else
     entry->scale2.x = 10.0f * (entry->scale.x * (f32)(0, __fabs(max.x - min.x)));
-#endif
     entry->scale2.y = 10.0f * (entry->scale.y * (f32)__fabs(max.y));
-#if VERSION <= VERSION_DEMO_US
-    entry->scale2.z = 10.0f * (entry->scale.z * (f32)(0, __fabs((0, max.z - min.z))));
-#else
     entry->scale2.z = 10.0f * (entry->scale.z * (f32)(0, __fabs(max.z - min.z)));
-#endif
     if (strncmp(pose->fileName, "HOBJ_", strlen("HOBJ_")) == 0) {
         entry->translation.z = 0.0f;
         entry->scale2.z = 10.0f * (2.5f * entry->scale.z);
@@ -1596,9 +1581,6 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
                 if (mag < minMagnitude) {
                     minMagnitude = mag;
                     ret = entry;
-#if VERSION <= VERSION_DEMO_US
-                    break;
-#endif
                 }
                 break;
             }

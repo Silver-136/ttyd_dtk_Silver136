@@ -20,9 +20,7 @@
 #include "pmario_sound.h"
 
 USER_FUNC(evt_kagemario_init);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(roll_release_check);
-#endif
 
 static EvtWord in_evt[5];
 #if VERSION <= VERSION_DEMO_US

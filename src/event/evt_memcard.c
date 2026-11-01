@@ -268,19 +268,10 @@ EVT_BEGIN(evt_memcard_check)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_lord_finish"))
             SET_VALUE(GF(0), 1)
             // No card, or some other device in Slot A: offer to play without saving.
-#if VERSION <= VERSION_DEMO_US
-            CASE_EQUAL(-3)
-#else
             CASE_EQUAL(CARD_RESULT_NOCARD)
-#endif
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_nocard"))
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(evt_memcard_nosave)
-            CASE_EQUAL(-2)
-#else
             CALL_CHILD(PTR(evt_memcard_nosave))
             CASE_EQUAL(CARD_RESULT_WRONGDEVICE)
-#endif
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_card"))
 #if VERSION <= VERSION_DEMO_US
             CALL_CHILD(evt_memcard_nosave)
@@ -348,26 +339,14 @@ EVT_BEGIN(evt_memcard_check)
                                 SET_VALUE(GF(0), 1)
                             END_IF
                             ELSE
-#if VERSION <= VERSION_DEMO_US
-                            CALL_CHILD(evt_memcard_nosave)
-#else
                             CALL_CHILD(PTR(evt_memcard_nosave))
-#endif
                         END_IF
                     END_IF
                     ELSE
-#if VERSION <= VERSION_DEMO_US
-                    CALL_CHILD(evt_memcard_nosave)
-#else
                     CALL_CHILD(PTR(evt_memcard_nosave))
-#endif
                 END_IF
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(evt_memcard_nosave)
-#else
                 CALL_CHILD(PTR(evt_memcard_nosave))
-#endif
             END_IF
             CASE_END
 #if VERSION <= VERSION_DEMO_US
@@ -404,20 +383,10 @@ EVT_BEGIN(evt_memcard_check)
                     SET_VALUE(GF(0), 1)
                 END_IF
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(evt_memcard_nosave)
-#else
                 CALL_CHILD(PTR(evt_memcard_nosave))
-#endif
             END_IF
-#if VERSION <= VERSION_DEMO_US
-            // Not enough free space: offer to open the Memory Card Screen.
-            CASE_OR_EQUAL(-8)
-            CASE_OR_EQUAL(-9)
-#else
             CASE_OR_EQUAL(CARD_RESULT_NOENT)
             CASE_OR_EQUAL(CARD_RESULT_INSSPACE)
-#endif
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_nospace"))
             CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_open"))
@@ -425,11 +394,7 @@ EVT_BEGIN(evt_memcard_check)
             IF_INT_EQUAL(LW(0), 0)
                 CALL(memcard_ipl)
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(evt_memcard_nosave)
-#else
                 CALL_CHILD(PTR(evt_memcard_nosave))
-#endif
             END_IF
             CASE_END
 #if VERSION > VERSION_DEMO_US
@@ -440,11 +405,7 @@ EVT_BEGIN(evt_memcard_check)
             // Damaged card: it cannot be used.
             CASE_DEFAULT
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_damage"))
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(evt_memcard_nosave)
-#else
             CALL_CHILD(PTR(evt_memcard_nosave))
-#endif
         END_SWITCH
 #if VERSION > VERSION_DEMO_US
         CALL(memcard_watch_end, LW(0))
@@ -619,11 +580,7 @@ EVT_BEGIN(evt_memcard_save)
     END_IF
     // Remember the save kind and write the save file.
     LABEL(1)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_SAVE_RESUME_POINT, LW(10))
-#else
-    SET_VALUE(GSW_SAVE_RESUME_POINT, LW(10))
-#endif
     IF_INT_EQUAL(LW(10), 23)
         CALL(evt_msg_print, 0, STRING("msg_savefile_first_warnning"), 0, 0)
         ELSE
@@ -650,19 +607,11 @@ EVT_BEGIN(evt_memcard_save)
         CASE_EQUAL(0)
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_finish"))
         RETURN
-#if VERSION <= VERSION_DEMO_US
-        CASE_EQUAL(-3)
-#else
         CASE_EQUAL(CARD_RESULT_NOCARD)
-#endif
         CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_nocard"))
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-#if VERSION <= VERSION_DEMO_US
-        CASE_EQUAL(-2)
-#else
         CASE_EQUAL(CARD_RESULT_WRONGDEVICE)
-#endif
         CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_card"))
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
@@ -792,20 +741,11 @@ EVT_BEGIN(evt_memcard_save)
             ELSE
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        CASE_EQUAL(-10)
-#else
         CASE_EQUAL(CARD_RESULT_NOPERM)
-#endif
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_savedata"))
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-#if VERSION <= VERSION_DEMO_US
-        CASE_OR_EQUAL(-8)
-        CASE_OR_EQUAL(-9)
-#else
         CASE_OR_EQUAL(CARD_RESULT_NOENT)
         CASE_OR_EQUAL(CARD_RESULT_INSSPACE)
-#endif
         CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_nospace"))
 #if VERSION > VERSION_DEMO_US

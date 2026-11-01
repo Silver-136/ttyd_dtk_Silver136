@@ -35,15 +35,9 @@ EVT_BEGIN(hom_12_init_evt)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-        CALL_CHILD(hom_10_evt_resha_right)
-        CALL_CHILD(hom_10_evt_resha_start3)
-#else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
-#endif
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
 #if VERSION > VERSION_DEMO_US
@@ -55,13 +49,8 @@ EVT_BEGIN(hom_12_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
 #endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(hom_10_evt_resha_left)
-        CALL_CHILD(hom_10_evt_resha_start4)
-#else
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
-#endif
         SET_VALUE(LW(0), 0)
         SET_VALUE(LW(1), 1000)
         CALL(evt_mapobj_trans, 1, STRING("train"), -1500, 0, 0)

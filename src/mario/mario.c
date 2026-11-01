@@ -152,9 +152,7 @@ void marioSetCharMode(s32 mode) {
     MarioWork* wp = mp;
     u32 matFlag;
     u32 lightFlag;
-#if VERSION > VERSION_DEMO_US
     s32 color;
-#endif
     if (mode == CHARACTER_PEACH) {
         wp->characterId = CHARACTER_PEACH;
         peachPreInit();
@@ -1021,9 +1019,7 @@ flag22 = FALSE;
     dispDirTarget = wp->displayDirectionTarget;
     dirView = wp->directionView;
     moveDir = wp->moveDirection;
-#if VERSION > VERSION_DEMO_US
     // FAKE: spare copy t of paperPoseId; testing poseId directly changes the object
-#endif
     t = wp->paperPoseId;
     poseId = t;
     prev0 = wp->prevPartyMemberId[0];
@@ -1182,9 +1178,7 @@ static inline BOOL marioChkRollMot2(void) {
  */
 void marioMain(void) {
     MarioWork* wp = mp;
-#if VERSION > VERSION_DEMO_US
     MarioWork* p;
-#endif
     u32 flags;
     f32 y;
     f32 c, b, a;
@@ -1236,9 +1230,7 @@ void marioMain(void) {
             pos.x = wp->position.x;
             pos.y = 30.0f + wp->position.y;
             pos.z = wp->position.z;
-#if VERSION > VERSION_DEMO_US
             // FAKE: spare copy drop of pos; passing &pos changes the object
-#endif
             drop = pos;
             itemCoinDrop(&drop);
         }
@@ -1535,9 +1527,7 @@ static inline void marioMove_screenPos(void) {
 void marioMove(void) {
     MarioWork* wp = mp;
     Vec prev;
-#if VERSION > VERSION_DEMO_US
     f32 x2, y2, z2;
-#endif
     s32 stick;
 
     prev = wp->position;
@@ -1571,11 +1561,7 @@ void marioMove(void) {
                     marioChgPose("M_R_1");
                 }
             } else {
-#if VERSION <= VERSION_DEMO_US
-                stick = (s8)wp->wStickDir1;
-#else
                 stick = wp->wStickDir1;
-#endif
                 stick = stick * stick;
                 if (stick < 25) {
                     marioChgPose("M_Z_1");

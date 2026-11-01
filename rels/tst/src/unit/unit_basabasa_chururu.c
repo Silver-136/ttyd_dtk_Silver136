@@ -31,11 +31,7 @@ static PoseSoundTiming pose_sound_timing_table[9];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord init_event[72];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord init_event[72];
-#else
 static EvtWord init_event[78];
-#endif
 #endif
 static EvtWord dmg_first_attack_pos[12];
 static EvtWord damage_event[10];
@@ -125,15 +121,9 @@ BattleUnitKind unit_basabasa_chururu = {
     1,
     30,
     0,
-#if VERSION <= VERSION_DEMO_US
-    2,
-    70,
-    2,
-#else
     4,
     70,
     0,
-#endif
     50,
     9999,
     32,
@@ -238,11 +228,7 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
-#if VERSION <= VERSION_DEMO_US
-    0, 0, 0, // baseFpCost..superguardsAllowed
-#else
     0, 0, 2, // baseFpCost..superguardsAllowed
-#endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
     1, // reserved_19
@@ -365,11 +351,7 @@ static StatusVulnerability regist = {60, 75, 90, 100, 70, 100, 100, 70, 100, 70,
  * otherwise Sleep 70, Stop 75, Confuse 70, Freeze 70, Tiny 80, Attack Down 80, Defense Down 90,
  * Allergic 70, Fright 70, Gale Force 85, Slow 70 and instant KO 95.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {60, 75, 90, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 70, 100, 100, 70, 100, 100, 95};
-#else
 static StatusVulnerability regist = {70, 75, 100, 100, 70, 100, 100, 70, 100, 80, 100, 80, 100, 90, 70, 70, 85, 100, 70, 100, 100, 95};
-#endif
 #endif
 
 /** Attack data of Swoopula's basabasa attack: base damage 4, 100% accuracy. */
@@ -433,39 +415,6 @@ static PoseSoundTiming pose_sound_timing_table[] = {
  * cursor and status icon offsets and hands the damage event over to damage_event.
  * Leaves the home position in LW(0) to LW(2).
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Brings the bat down from the ceiling into the open air the first time it is needed:
- * if it is still hanging (unit attribute 2 set) it clears that, sets attribute 4,
- * restores the flying pose table (pose type 40),
- * shifts the unit and its home position down 30 (then another 40 for its home), adjusts the hit,
- * cursor and status icon offsets and hands the damage event over to damage_event.
- * Leaves the home position in LW(0) to LW(2).
- */
-static EVT_BEGIN(ceil_sky_event)
-    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        GOTO(99)
-    END_IF
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, UNIT_ATTR_FLOATING)
-    CALL(btlevtcmd_SetPossessionItemOffset, UNIT_ID_SELF, 0, 0, 0)
-    CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
-    WAIT_FRAMES(1)
-    CALL(btlevtcmd_AddPos, UNIT_ID_SELF, 0, -30, 0)
-    CALL(btlevtcmd_AddHomePos, UNIT_ID_SELF, 0, -30, 0)
-    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
-    CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-    CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 30, 0)
-CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 6, 32)
-    CALL(btlevtcmd_AddHomePos, UNIT_ID_SELF, 0, -40, 0)
-    LABEL(99)
-    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    RETURN
-EVT_END()
-#else
 /**
  * Brings the bat down from the ceiling into the open air the first time it is needed:
  * if it is still hanging (unit attribute 2 set) it clears that, sets attribute 4,
@@ -500,7 +449,6 @@ static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     RETURN
 EVT_END()
-#endif
 
 /**
  * Init script of the bat: registers its wait, attack,
@@ -508,33 +456,6 @@ EVT_END()
  * sets the pose sound table and the offsets of its hit, cursor and status icon for the upside-down pose,
  * and if it starts in the sky (unit work 0 = 1) runs ceil_sky_event right away; then starts the idle event.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Init script of the bat: registers its wait, attack,
- * damage (damage_event_ceil, for while it hangs) and confusion handlers and the ceiling-fall event,
- * sets the pose sound table and the offsets of its hit, cursor and status icon for the upside-down pose,
- * and if it starts in the sky (unit work 0 = 1) runs ceil_sky_event right away; then starts the idle event.
- */
-static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
-    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
-    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event_ceil))
-    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
-    CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, PTR(ceil_fall_ready_event))
-    CALL(btlevtcmd_SetPossessionItemOffset, UNIT_ID_SELF, 0, -20, 0)
-    CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, PTR(pose_sound_timing_table))
-    CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -50, 0)
-    CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, -30, 0)
-    CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 6, 10)
-CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_START_FLYING, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL_CHILD(ceil_sky_event)
-        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    END_IF
-    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-    RETURN
-EVT_END()
-#else
 /**
  * Init script of the bat: registers its wait, attack,
  * damage (damage_event_ceil, for while it hangs) and confusion handlers and the ceiling-fall event,
@@ -563,7 +484,6 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Position event for a first strike on the bat:

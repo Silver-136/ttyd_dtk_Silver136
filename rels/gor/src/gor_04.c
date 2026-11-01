@@ -816,15 +816,9 @@ static EVT_BEGIN(hom_10_init_evt)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-        CALL_CHILD(hom_10_evt_resha_right)
-        CALL_CHILD(hom_10_evt_resha_start3)
-#else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
-#endif
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
 #if VERSION > VERSION_DEMO_US
@@ -836,13 +830,8 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
 #endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(hom_10_evt_resha_left)
-        CALL_CHILD(hom_10_evt_resha_start4)
-#else
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
-#endif
         SET_VALUE(LW(0), 0)
         SET_VALUE(LW(1), 1000)
         CALL(evt_mapobj_trans, 1, STRING("train"), -1500, 0, 0)
@@ -915,29 +904,15 @@ SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
     CALL(evt_msg_print, 0, STRING("train_07"), 0, STRING("駅員"))
     WAIT_MS(500)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG4_TRAIN1"))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(hom_10_evt_resha_start)
-#else
     SPAWN_EVENT(PTR(hom_10_evt_resha_start))
-#endif
     WAIT_MS(4000)
     CALL(evt_cam3d_evt_set, 410, 90, 571, 410, 90, 121, 2000, EASING_SINE_OUT)
     WAIT_MS(9500)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
-#else
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
-        SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
     SET_VALUE(GSWF_HOM_TRAIN_BOARDED_UNUSED, 1)
-#else
-    SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-    SET_VALUE(GSWF_HOM_TRAIN_BOARDED_UNUSED, 1)
-#endif
     WAIT_FRAMES(1)
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_HOM_TRAIN_LEG, 0)
@@ -1034,13 +1009,8 @@ EVT_BEGIN(evt_train2)
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     // Story progress moves to Rogueport Station if it was earlier.
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
-        SET_VALUE(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
-#endif
     END_IF
 #if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)

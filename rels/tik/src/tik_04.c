@@ -42,11 +42,7 @@ EvtWord tik04_wall_blow_evt[5];
 EvtWord kaidan_pera[122];
 EvtWord tik_04_switch_evt[41];
 static EvtWord mobj_box00[34];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord tik_04_init_evt[];
-#else
 EvtWord tik_04_init_evt[220];
-#endif
 
 static BeroEntry bero_entry_data[] = {
     {
@@ -403,41 +399,20 @@ EVT_BEGIN(tik_04_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG0_11_3_GOOMBA_GOONS)
-        SPAWN_EVENT(puni_soguu_1)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG0_11_3_GOOMBA_GOONS)
         SPAWN_EVENT(PTR(puni_soguu_1))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_31_FRANKLYS_HOUSE_STG_1)
-        SPAWN_EVENT(puni_soguu_2)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_31_FRANKLYS_HOUSE_STG_1)
         SPAWN_EVENT(PTR(puni_soguu_2))
-#endif
     END_IF
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hikou"))
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG0_12_02_PAPER_MAGE_1)
-        IF_INT_EQUAL(GSWF_TIK_04_PLANE_FLIGHT_LANDED, 0)
-            SPAWN_EVENT(plane_tobashi_check)
-#else
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG0_12_02_PAPER_MAGE_1)
         IF_INT_EQUAL(GSWF_TIK_04_PLANE_FLIGHT_LANDED, 0)
             SPAWN_EVENT(PTR(plane_tobashi_check))
-#endif
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_TIK_04_WALL_BLOWN_AWAY, 0)
-#else
-    IF_INT_EQUAL(GSWF_TIK_04_WALL_BLOWN_AWAY, 0)
-#endif
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("win_1"), STRING("a_win_1"), PTR(tik04_wall_blow_evt))
         ELSE
@@ -449,35 +424,18 @@ EVT_BEGIN(tik_04_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dai_toreru"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_dai_6"), 1, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_TIK_04_STAIRS_SWITCH_PRESSED, 0)
-#else
-    IF_INT_EQUAL(GSWF_TIK_04_STAIRS_SWITCH_PRESSED, 0)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_nise"), 1, 1)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_mobj_switch_blue, 0, STRING("mobj_switch00"), 275, 0, 100, PTR(tik_04_switch_evt), GSWF_TIK_04_STAIRS_SWITCH_PRESSED)
-#else
-        CALL(evt_mobj_switch_blue, 0, STRING("mobj_switch00"), 275, 0, 100, PTR(tik_04_switch_evt), GSWF_TIK_04_STAIRS_SWITCH_PRESSED)
-#endif
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_6"), 1, 1)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_item_entry, STRING("blackkey"), ITEM_BLACK_KEY_0x21, 175, 125, -100, ITEM_TYPE_STILL, GSWF_TIK_04_BLACK_KEY, 0)
-#else
-    CALL(evt_item_entry, STRING("blackkey"), ITEM_BLACK_KEY_0x21, 175, 125, -100, ITEM_TYPE_STILL, GSWF_TIK_04_BLACK_KEY, 0)
-#endif
     CALL(evt_mobj_jumpstand_blue, 0, STRING("mobj_jump00"), 150, -450, 0, 0, 0, 0)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_lv_blk, STRING("block"), -425, 0, 0, 0, GSWF_TIK_04_LV1_BIGBIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
     IF_INT_EQUAL(GSWF_TIK_04_LV1_BIGBIG_BLOCK_BROKEN, 0)
-#else
-    CALL(evt_mobj_lv_blk, STRING("block"), -425, 0, 0, 0, GSWF_TIK_04_LV1_BIGBIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
-    IF_INT_EQUAL(GSWF_TIK_04_LV1_BIGBIG_BLOCK_BROKEN, 0)
-#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("block"), MOBJ_FLAG_NO_CULL)
     END_IF
 #if VERSION <= VERSION_DEMO_US

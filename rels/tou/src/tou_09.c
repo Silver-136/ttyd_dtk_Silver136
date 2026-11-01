@@ -37,11 +37,7 @@ static EvtWord evt_toile[201];
 #endif
 static EvtWord evt_toile2[136];
 static EvtWord evt_tojikome_msg[30];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord tou_09_init_evt[];
-#else
 EvtWord tou_09_init_evt[84];
-#endif
 
 /**
  * Door animation callback for the room door (door_1), opening: LW(0) is the swing angle;
@@ -345,11 +341,7 @@ EVT_END()
  * and the "shut in" message at the n_bero exit.
  */
 EVT_BEGIN(tou_09_init_evt)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
@@ -374,19 +366,10 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL_CHILD(evt_tou_locker_init)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_tou_locker_init))
-#endif
     SET_VALUE(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(bero_case_switch_off)
-#else
     CALL_CHILD(PTR(bero_case_switch_off))
-#endif
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_2"), 0, PTR(evt_toile), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_3"), 0, PTR(evt_toile2), 0)

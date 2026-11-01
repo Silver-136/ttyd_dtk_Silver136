@@ -183,11 +183,7 @@ EVT_BEGIN(aji_19_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_map_playanim, STRING("hosi_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_03"), MAP_ANIM_PLAY_LOOP, 0)
@@ -195,13 +191,8 @@ EVT_BEGIN(aji_19_init_evt)
     BEGIN_INLINE_EVENT
         CALL(mario_chk)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_07_01_INSIDE_THE_BUILDING)
-        SPAWN_EVENT(evt_hajimete)
-#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_07_01_INSIDE_THE_BUILDING)
         SPAWN_EVENT(PTR(evt_hajimete))
-#endif
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kanaami2"), MAP_OBJ_FLAG_CLIP)
     RETURN

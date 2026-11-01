@@ -92,11 +92,7 @@ static EvtWord init_event[26];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord damage_event[80];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event[80];
-#else
 static EvtWord damage_event[59];
-#endif
 #endif
 static EvtWord attack_event[217];
 static EvtWord wait_event[6];
@@ -138,48 +134,17 @@ BattleUnitKind unit_chorobon_gundan = {
     5, // pbSoftCap
     260, // width
     50, // height
-#if VERSION <= VERSION_DEMO_US
-    0,
-    50,
-#else
     {0, 50}, // hitOffset
     {0.0f, 0.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {130.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
-#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    130.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    130.0f,
-    0.0f,
-    0.0f,
-    130.0f,
-    32.5f,
-    0.0f,
-    0.0f,
-    25.0f,
-    0.0f,
-#else
     {130.0f, 0.0f, 0.0f}, // bintaHitOffset
     {130.0f, 32.5f, 0.0f}, // kissHitOffset
     {0.0f, 25.0f, 0.0f}, // cutBaseOffset
-#endif
     260.0f, // cutWidth
     50.0f, // cutHeight
     0, // turnOrder
@@ -188,13 +153,7 @@ BattleUnitKind unit_chorobon_gundan = {
     0, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_BOSS_TEAM_CHORO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -373,11 +332,7 @@ static EVT_BEGIN(damage_event)
 #endif
     CALL(chorogun_get_alive_num, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 500)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(escape_chorogun_event)
-#else
         CALL_CHILD(PTR(escape_chorogun_event))
-#endif
         GOTO(99)
     END_IF
     LABEL(99)

@@ -77,48 +77,17 @@ BattleUnitKind unit_hyper_togezo = {
     9999, // pbSoftCap
     32, // width
     30, // height
-#if VERSION <= VERSION_DEMO_US
-    4,
-    30,
-    0.0f,
-    15.0f,
-    0.0f,
-    0,
-    0,
-#else
     {4, 30}, // hitOffset
     {0.0f, 15.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {16.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
-#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    16.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    16.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    16.0f,
-    0.0f,
-    0.0f,
-    15.0f,
-    0.0f,
-#else
     {16.0f, 0.0f, 0.0f}, // bintaHitOffset
     {12.0f, 16.0f, 0.0f}, // kissHitOffset
     {0.0f, 15.0f, 0.0f}, // cutBaseOffset
-#endif
     32.0f, // cutWidth
     30.0f, // cutHeight
     0, // turnOrder
@@ -127,13 +96,7 @@ BattleUnitKind unit_hyper_togezo = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_ENM_TOGEZO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -366,11 +329,7 @@ static BattleWeapon weapon_togezo_attack = {
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel

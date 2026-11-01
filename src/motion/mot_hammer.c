@@ -142,9 +142,6 @@ s32 marioGetHammerLevel(void) {
  */
 void mot_hammer(void) {
     MarioWork* mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-    Vec* unused;
-#endif
     s32 snd;
     s32 kind;
     f32 px, pz;
@@ -198,9 +195,7 @@ void mot_hammer(void) {
         }
         if (kind != 0) {
             {
-#if VERSION > VERSION_DEMO_US
                 // FAKE: spare copy of kind in its own block; using kind directly changes the object
-#endif
                 s32 k = kind;
                 mario->mot.hammer.hitFrames = k == 7 ? 3 : k;
             }
@@ -815,13 +810,8 @@ f32 ang;
     *out = 0;
     a = mario->displayDirection;
     {
-#if VERSION <= VERSION_DEMO_US
-        f32 off = (marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE) ? (-20.0f) : (0.0f);
-        if ((a >= 90.0f) && (a <= 270.0f)) {
-#else
         f32 off = (marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE) ? -20.0f : 0.0f;
         if (a >= 90.0f && a <= 270.0f) {
-#endif
             a = toMovedir2(180.0f, off);
         } else {
             a = toMovedir2(0.0f, off);
@@ -870,11 +860,7 @@ ang = 1.2217306f;
         q.targetDistance = 26.0f;
         hit = hitCheckVecFilter(&q, NULL);
         if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
-#if VERSION <= VERSION_DEMO_US
-            *out = ((q.hitPos.y - mario->position.y) > 30.0f) ? (4) : (5);
-#else
             *out = (q.hitPos.y - mario->position.y > 30.0f) ? 4 : 5;
-#endif
             return hit;
         }
     }
@@ -935,16 +921,10 @@ ang = 0.0f;
                 q.targetDistance = d;
                 hit = hitCheckVecFilter(&q, NULL);
                 if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
-#if VERSION <= VERSION_DEMO_US
-                    *out = ((q.hitPos.y - mario->position.y) > 13.0f) ? (5) : (6);
-#else
                     *out = (q.hitPos.y - mario->position.y > 13.0f) ? 5 : 6;
-#endif
                     return hit;
                 }
             }
-#if VERSION <= VERSION_DEMO_US
-#endif
         }
     }
     return hit;

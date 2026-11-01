@@ -63,11 +63,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
     }
     switch (work->actionCommands.acState) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
-            memset(disp, 0, 0x2C);
-#else
             memset(disp, 0, sizeof(BattleACDispParams));
-#endif
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
@@ -151,8 +147,6 @@ if (gw->frame > gw->totalFrames)
                         psndSFXOn(sfxNames[0]);
                     }
                 }
-#if VERSION <= VERSION_DEMO_US
-#endif
             }
             gw->hit = 0;
             {
@@ -165,8 +159,6 @@ if (gw->frame > gw->totalFrames)
                         }
                     }
                 }
-#if VERSION <= VERSION_DEMO_US
-#endif
             }
             doAuto = 0;
             if (autoCommand) {
@@ -186,15 +178,9 @@ if (gw->frame > gw->totalFrames)
             if (pressed || doAuto) {
                 sfxNg = "SFX_AC_COMMAND_NG1";
                 sfxOk = "SFX_AC_COMMAND_OK1";
-#if VERSION > VERSION_DEMO_US
                 found = 0;
-#endif
                 for (i4 = 0; i4 < work->actionCommands.params[2]; i4++) {
-#if VERSION <= VERSION_DEMO_US
-                    if (!gw->state[i4]) {
-#else
                     if ((!gw->state[i4]) && (!found)) {
-#endif
                         f64 d = __fabs(gw->cursor - gw->targets[i4]);
                         if (d <= 6.0) {
                             if ((!doAuto) && gw->flag[i4]) {
@@ -223,8 +209,6 @@ if (gw->frame > gw->totalFrames)
                         }
                     }
                 }
-#if VERSION <= VERSION_DEMO_US
-#endif
             }
             break;
 
@@ -261,20 +245,11 @@ if (gw->frame > gw->totalFrames)
             break;
 
         case 1005:
-#if VERSION <= VERSION_DEMO_US
-            work->actionCommands.maincb = (void*)0;
-            work->actionCommands.dispcb = (void*)0;
-            work->actionCommands.resultcb = (void*)0;
-            work->actionCommands.deletecb = (void*)0;
-#else
             work->actionCommands.maincb = NULL;
             work->actionCommands.dispcb = NULL;
             work->actionCommands.resultcb = NULL;
             work->actionCommands.deletecb = NULL;
-#endif
             return 0;
-#if VERSION <= VERSION_DEMO_US
-#endif
     }
 
     return 1;

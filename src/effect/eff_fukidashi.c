@@ -584,17 +584,9 @@ for (j = 0, sp = moja_model_dl_0_size_tbl, dp = moja_model_dl_0_tbl; j < 21; j++
                     PSMTXConcat(mH, mD, mH);
                     PSMTXConcat(mH, mA, mH);
                     if (pass == 0) {
-#if VERSION <= VERSION_DEMO_US
-                        iconDispGxCol(mH, 0x200, ICON_ITEM_COIN, (GXColor){0xFF, 0xFF, 0xFF, alpha});
-#else
                         iconDispGxCol(mH, ICON_FLAG_CULL_BACK, ICON_ITEM_COIN, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
-#endif
                     } else {
-#if VERSION <= VERSION_DEMO_US
-                        iconDispGxCol(mH, 0x400, ICON_ITEM_COIN, (GXColor){0xA0, 0xA0, 0xA0, alpha});
-#else
                         iconDispGxCol(mH, ICON_FLAG_CULL_FRONT, ICON_ITEM_COIN, (GXColor){ 0xA0, 0xA0, 0xA0, alpha });
-#endif
                     }
                     PSMTXTrans(mA, 10.0f, 22.0f, 0.0f);
                     PSMTXConcat(mH, mA, mH);

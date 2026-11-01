@@ -267,11 +267,7 @@ EVT_END()
  * After STG8_06_MOVING_PLANETS it uses the moved layout with an airport harbour exit.
  */
 EVT_BEGIN(las_25_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
@@ -282,13 +278,8 @@ EVT_BEGIN(las_25_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#endif
         CALL(evt_npc_check_delete, STRING("ファントム３"))
         CALL(evt_npc_check_delete, STRING("ファントム４"))
         CALL(evt_npc_check_delete, STRING("ファントム５"))
@@ -297,11 +288,7 @@ EVT_BEGIN(las_25_init_evt)
         CALL(evt_npc_check_delete, STRING("ファントム１"))
         CALL(evt_npc_check_delete, STRING("ファントム２"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hikou"), MAP_OBJ_FLAG_HIDDEN)
@@ -311,44 +298,21 @@ EVT_BEGIN(las_25_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))
         SET_VALUE(LW(0), STRING("w_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_bero_overwrite, STRING("w_bero"), PTR(w_bero_mapchg))
         SET_VALUE(LW(0), STRING("w_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_on)
-        SPAWN_EVENT(hikari_evt)
-#else
         CALL_CHILD(PTR(bero_case_switch_on))
         SPAWN_EVENT(PTR(hikari_evt))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_lock, STRING("lock"), 48, 690, -380, 0, -90, PTR(key_check_evt), PTR(unlock_evt), GSWF_LAS_25_DOOR_UNLOCKED)
     IF_INT_EQUAL(GSWF_LAS_25_DOOR_UNLOCKED, 0)
-#else
-    CALL(evt_mobj_lock, STRING("lock"), 48, 690, -380, 0, -90, PTR(key_check_evt), PTR(unlock_evt), GSWF_LAS_25_DOOR_UNLOCKED)
-    IF_INT_EQUAL(GSWF_LAS_25_DOOR_UNLOCKED, 0)
-#endif
         SET_VALUE(LW(0), STRING("e_bero_2"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
     END_IF
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 720, -675, -600, 75, 0, 0)
     CALL(evt_mobj_flag_onoff, 0, STRING("jump"), MOBJ_FLAG_GRAVITY)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_item_entry, STRING("item02"), ITEM_LIFE_SHROOM, 225, -350, 0, ITEM_TYPE_STILL, GSWF_LAS_25_LIFE_SHROOM, 0)
     CALL(evt_item_entry, STRING("item03"), ITEM_SHOOTING_STAR, 375, -450, 0, ITEM_TYPE_STILL, GSWF_LAS_25_SHOOTING_STAR, 0)
-#else
-    CALL(evt_item_entry, STRING("item02"), ITEM_LIFE_SHROOM, 225, -350, 0, ITEM_TYPE_STILL, GSWF_LAS_25_LIFE_SHROOM, 0)
-    CALL(evt_item_entry, STRING("item03"), ITEM_SHOOTING_STAR, 375, -450, 0, ITEM_TYPE_STILL, GSWF_LAS_25_SHOOTING_STAR, 0)
-#endif
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 600, 60, -75, 0, 0)
     RETURN
 EVT_END()

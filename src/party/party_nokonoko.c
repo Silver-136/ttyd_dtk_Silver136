@@ -127,12 +127,7 @@ void nokonoko_move(PartyEntry* party) {
     marioGetPtr();
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
-#if VERSION <= VERSION_DEMO_US
-        // FAKE: the call passes a second argument partyWalkInit does not take (no effect); the cast keeps it.
-        ((void (*)(PartyEntry*, s32))partyWalkInit)(party, 1);
-#else
         partyWalkInit(party, 1);
-#endif
     }
 #if VERSION > VERSION_DEMO_US
     partyUpdMoveSpd(party);
@@ -1605,9 +1600,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     yofs = 10.0f;
     x = party->position.x;
     z = party->position.z;
-#if VERSION > VERSION_DEMO_US
     // FAKE: assignment inside the expression and the spare copy k of 30.0f; the plain statements change the object
-#endif
     y0 = party->position.y + (w = party->height);
     k = 30.0f;
     dist = w + k;
@@ -1622,8 +1615,6 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
         hy = (f32)(s32)(100.0f * hy + 0.5f) / 100.0f;
         py = (f32)(s32)(100.0f * party->position.y + 0.5f) / 100.0f;
         if (__fabsf(py - hy) <= 11.0f) {
-#if VERSION <= VERSION_DEMO_US
-#endif
             if (py <= hy) {
                 if (mode == 0) {
                     party->position.y = hy;
@@ -1651,11 +1642,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     dist = 0.5f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c);
-#if VERSION <= VERSION_DEMO_US
-    if (hit != NULL && !(hitGetAttr(hit) & 5)) {
-#else
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
-#endif
         sincosf(&s1, &c1, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s1 * party->width);
         party->position.z = hz + 0.5f * (c1 * party->width);
@@ -1678,11 +1665,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     dist = 0.4f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c);
-#if VERSION <= VERSION_DEMO_US
-    if (hit != NULL && !(hitGetAttr(hit) & 5)) {
-#else
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
-#endif
         sincosf(&s2, &c2, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s2 * party->width);
         party->position.z = hz + 0.5f * (c2 * party->width);
@@ -1699,9 +1682,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
             party->hitobjAction = hit;
         }
         party->hitobjFront = hit;
-#if VERSION > VERSION_DEMO_US
         // This overwrites the corrected x with the raw hit x; z keeps its corrected value.
-#endif
         party->position.x = hx;
         return hit;
     }
@@ -1710,18 +1691,12 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     z = w * (f32)cos(3.1415927f * (90.0f + party->targetDir) / 180.0f) + party->position.z;
     x = w * (f32)sin(3.1415927f * (90.0f + party->targetDir) / 180.0f) + party->position.x;
     y = party->position.y + yofs;
-#if VERSION > VERSION_DEMO_US
     // FAKE: the same assignment twice; dropping one changes the object
-#endif
     dist = 0.4f * party->width + party->moveSpeed;
     dist = 0.4f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c);
-#if VERSION <= VERSION_DEMO_US
-    if (hit != NULL && !(hitGetAttr(hit) & 5)) {
-#else
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
-#endif
         sincosf(&s3, &c3, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s3 * party->width);
         party->position.z = hz + 0.5f * (c3 * party->width);
@@ -1738,9 +1713,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
             party->hitobjAction = hit;
         }
         party->hitobjFront = hit;
-#if VERSION > VERSION_DEMO_US
         // This overwrites the corrected x with the raw hit x; z keeps its corrected value.
-#endif
         party->position.x = hx;
         return hit;
     }

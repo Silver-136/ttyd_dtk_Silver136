@@ -1370,11 +1370,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
 /** clears the 0x1E bytes of status turns and strengths from sleepTurns on */
 // the 0x1E bytes from sleepTurns are every status's turns and strength
 void BtlUnit_ClearStatus(BattleUnit* unit) {
-#if VERSION <= VERSION_DEMO_US
-    memset(&unit->sleepTurns, 0, 0x1Eu);
-#else
     memset(&unit->sleepTurns, 0, sizeof(BtlStatusCopy));
-#endif
     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
 #if VERSION > VERSION_DEMO_US
     BattleStatusChangeInfoWorkInit(unit);

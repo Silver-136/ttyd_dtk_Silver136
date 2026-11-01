@@ -102,11 +102,7 @@ EvtWord iwa02_nonride_a[5];
 static EvtWord bombwall_bomb[143];
 EvtWord dokuroiwa_bomb[309];
 EvtWord dokuroiwa_init[123];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord muj_05_first[];
-#else
 EvtWord muj_05_first[26];
-#endif
 EvtWord yure_yashi_ha1[180];
 EvtWord yure_yashi[88];
 static EvtWord evt_kusa_1[20];
@@ -219,41 +215,25 @@ EVT_BEGIN(sanders_nakama)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 180)
     SET_VALUE(LW(3), 200)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sanders_rotate)
-#else
     SPAWN_EVENT(PTR(sanders_rotate))
-#endif
     WAIT_MS(500)
     SET_VALUE(LW(10), STRING("me"))
     SET_VALUE(LW(1), 180)
     SET_VALUE(LW(2), 0)
     SET_VALUE(LW(3), 200)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sanders_rotate)
-#else
     SPAWN_EVENT(PTR(sanders_rotate))
-#endif
     WAIT_MS(500)
     SET_VALUE(LW(10), STRING("me"))
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 180)
     SET_VALUE(LW(3), 200)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sanders_rotate)
-#else
     SPAWN_EVENT(PTR(sanders_rotate))
-#endif
     WAIT_MS(500)
     SET_VALUE(LW(10), STRING("me"))
     SET_VALUE(LW(1), 180)
     SET_VALUE(LW(2), 0)
     SET_VALUE(LW(3), 200)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sanders_rotate)
-#else
     SPAWN_EVENT(PTR(sanders_rotate))
-#endif
     WAIT_MS(500)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_party_stop, 0)
@@ -265,19 +245,11 @@ EVT_BEGIN(sanders_nakama)
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_msg_print, 0, STRING("stg5_muj_69"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(sanders_nakama_sub)
-#else
     CALL_CHILD(PTR(sanders_nakama_sub))
-#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG5_18_01_BOBBERY_JOINS)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_18_01_BOBBERY_JOINS)
-#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_npc_return_interrupt, STRING("me"))
     RETURN
@@ -336,11 +308,7 @@ EVT_BEGIN(sanders_talk_sub)
 EVT_END()
 
 static EVT_BEGIN(sanders_talk)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG5_15_RUNAWAY_SAILORS, STG5_17_WINE_OBTAINED)
         CALL(evt_pouch_check_item, ITEM_CHUCKOLA_COLA, LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -355,18 +323,10 @@ CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
                 RETURN
             END_IF
             CALL(evt_pouch_remove_item, ITEM_CHUCKOLA_COLA, LW(0))
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(sanders_talk_sub)
-#else
             SPAWN_EVENT(PTR(sanders_talk_sub))
-#endif
         END_IF
         CASE_EQUAL(STG5_18_BOBBERY_RESCUE_2)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 0)
-#else
-        IF_INT_EQUAL(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 0)
-#endif
             CALL(evt_msg_print, 0, STRING("stg5_muj_47"), 0, STRING("me"))
             BEGIN_INLINE_EVENT
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -375,11 +335,7 @@ CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
             WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 1)
-#else
-            SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 1)
-#endif
             ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_48"), 0, STRING("me"))
             BEGIN_INLINE_EVENT
@@ -917,13 +873,8 @@ CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
         BEGIN_INLINE_EVENT
             WAIT_MS(400)
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(blueeye_flush)
-            SPAWN_EVENT(redeye_flush)
-#else
             SPAWN_EVENT(PTR(blueeye_flush))
             SPAWN_EVENT(PTR(redeye_flush))
-#endif
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, FLOAT(0.0f), FLOAT(1.0f), 500)
@@ -938,11 +889,7 @@ CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
             END_LOOP
         END_INLINE_EVENT
         CALL(evt_mario_dump_item, ITEM_SKULL_GEM)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_MUJ_05_SKULL_GEM_PLACED, 1)
-#else
-        SET_VALUE(GSWF_MUJ_05_SKULL_GEM_PLACED, 1)
-#endif
         CALL(evt_exit_case_evt)
     END_IF
     RETURN
@@ -1423,11 +1370,7 @@ EVT_BEGIN(muj_05_first)
 CALL(evt_bero_exec_wait, 65536)
 #endif
     CALL(evt_msg_print, 0, STRING("stg5_muj_33"), 0, STRING("サンダース"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN, 1)
-#else
-    SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN, 1)
-#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

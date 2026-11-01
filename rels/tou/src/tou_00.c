@@ -45,11 +45,7 @@ EvtWord evt_to_tou[293];
 EvtWord evt_pos_keep[39];
 EvtWord evt_to_gor[247];
 const char* kemuri_name[5];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord tou_00_koopa_evt[];
-#else
 EvtWord tou_00_koopa_evt[678];
-#endif
 static EvtWord hkoopa_init[7];
 static NpcSetupInfo npcEnt[2];
 EvtWord evt_skip[43];

@@ -292,11 +292,7 @@ s32 iri_15_item_tbl2[] = {
 };
 
 EVT_BEGIN(nokonoko_F_talk)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_THE_FOOD_I_WANT)
-#else
-    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_THE_FOOD_I_WANT)
-#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             // Bub-ulber introduces himself and asks Mario to bring him something to eat.
             CALL(evt_msg_print, 0, STRING("irai_15_001"), 0, 0)
@@ -344,13 +340,8 @@ CALL(evt_win_item_select, 1, LW(0))
                     CALL(evt_item_get_item, STRING("df"))
                     CALL(evt_item_get_item_end_wait, STRING("df"))
                     CALL(evt_msg_print, 0, STRING("irai_15_007"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
                     CALL(evt_sub_save_playtime, GSW_NOK_FOOD_I_WANT_DONE_TIME_UNUSED)
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#else
-                    CALL(evt_sub_save_playtime, GSW_NOK_FOOD_I_WANT_DONE_TIME_UNUSED)
-                    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#endif
                     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_THE_FOOD_I_WANT), 1)
                     // The request is recorded as solved and the play time is saved.
                     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
@@ -403,11 +394,7 @@ CALL(evt_win_item_select, 1, LW(0))
         END_IF
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         // Without a request, he chats about the weather; the lines change as the story advances.
         CALL(evt_msg_print, 0, STRING("stg1_nok_17"), 0, 0)

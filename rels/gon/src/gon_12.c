@@ -43,11 +43,7 @@ static NpcSetupInfo npcEnt[2];
 static EvtWord item_get00[37];
 EvtWord item_get01[34];
 EvtWord item_get02[34];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord gon_12_init_evt[];
-#else
 EvtWord gon_12_init_evt[93];
-#endif
 
 /**
  * Door animation callback, closing for the e_bero exit to gon_08:
@@ -126,11 +122,7 @@ static USER_FUNC(evt_chuchu_back_loop) {
 
 static EVT_BEGIN(chuchurina_sogu)
     // Ms. Mowz is only met once; after that she is removed from the room.
-#if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
-#else
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
-#endif
         CALL(evt_npc_set_position, STRING("チュチュリーナ"), 0, -1000, 0)
         RETURN
     END_IF
@@ -144,11 +136,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_bero_mario_go_init)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_play_enter_anime)
-#else
     SPAWN_EVENT(PTR(bero_play_enter_anime))
-#endif
     CALL(evt_bero_mario_go_wait)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, 160, 15, FLOAT(150.0f))
@@ -159,11 +147,7 @@ static EVT_BEGIN(chuchurina_sogu)
     // The story advances: Mario has met Ms. Mowz.
 #endif
     CALL(evt_party_stop, 0)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
-#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_heya"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("チュチュリーナ"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -276,11 +260,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_msg_continue)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_GON1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_case_entry)
-#else
     SPAWN_EVENT(PTR(bero_case_entry))
-#endif
     CALL(evt_cam3d_evt_off, 500, EASING_QUADRATIC_OUT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
@@ -362,28 +342,17 @@ EVT_END()
 EVT_BEGIN(gon_12_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
-        CALL_CHILD(evt_bero_info_run)
-#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
         CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     END_IF
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_GON1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_change_fbat_mode, 1)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(chuchurina_sogu)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_01_KEY_3)
-        SET_VALUE(GSWF_GON_12_CASTLE_KEY_CHEST, 1)
-#else
     SPAWN_EVENT(PTR(chuchurina_sogu))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_01_KEY_3)
         SET_VALUE(GSWF_GON_12_CASTLE_KEY_CHEST, 1)
-#endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -117, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get00), GSWF_GON_12_CASTLE_KEY_CHEST)
@@ -395,11 +364,7 @@ CALL(evt_mobj_itembox, STRING("mobj_box02"), -175, 0, 50, MOBJ_ITEMBOX_NORMAL, 0
     CALL(evt_mobj_itembox, STRING("mobj_box02"), -175, 0, 50, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get02), GSWF_GON_12_HONEY_SYRUP_CHEST)
 #endif
     CALL(evt_mobj_itembox, STRING("mobj_box03"), -150, 0, 20, MOBJ_ITEMBOX_NORMAL, 0, 0, 1)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -150, 60, -25, 0, GSWF_SHINE_15, 0)
-#else
-    CALL(evt_mobj_powerupblk, STRING("pblk00"), -150, 60, -25, 0, GSWF_SHINE_15, 0)
-#endif
     CALL(evt_map_playanim, STRING("hokori"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN
 EVT_END()

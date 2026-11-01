@@ -1339,22 +1339,14 @@ EVT_BEGIN(koburon_regp)
             WAIT_MS(300)
             CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
             CALL(evt_npc_set_position, STRING("me"), LW(3), -1000, LW(5))
-#if VERSION <= VERSION_DEMO_US
-            SET_VALUE(LSWF(1), 0)
-#else
             SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 0)
-#endif
         END_IF
 #if VERSION > VERSION_DEMO_US
         CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
         CALL(evt_npc_set_position, STRING("me"), LW(3), -1000, LW(5))
 #endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(LSWF(1), 0)
-#else
         IF_INT_EQUAL(LSWF_MUJ_00_WHACKA_OUT, 0)
-#endif
             CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
             CALL(evt_npc_set_position, STRING("me"), LW(3), 35, LW(5))
             CALL(evt_npc_set_anim, STRING("me"), STRING("A_1"))
@@ -1420,11 +1412,7 @@ CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     ADD(LW(2), 10)
     CALL(evt_item_entry, STRING("item_99"), ITEM_WHACKA_BUMP, LW(0), LW(1), LW(2), ITEM_TYPE_FALL_NO_PICKUP, -1, 0)
     WAIT_MS(400)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_MUJ_WHACKA_HIT_COUNT, 7)
-#else
-    IF_INT_EQUAL(GSW_MUJ_WHACKA_HIT_COUNT, 7)
-#endif
         CALL(evt_msg_print, 0, STRING("koburon_14"), 0, STRING("me"))
         GOTO(99)
     END_IF
@@ -1450,23 +1438,14 @@ CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     LABEL(99)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     WAIT_MS(100)
-#if VERSION <= VERSION_DEMO_US
-    ADD(GSW_MUJ_WHACKA_HIT_COUNT, 1)
-    SET_VALUE(LSWF(2), 1)
-#else
     ADD(GSW_MUJ_WHACKA_HIT_COUNT, 1)
     SET_VALUE(LSWF_MUJ_00_WHACKA_HIT_UNUSED, 1)
-#endif
     CALL(evt_npc_reaction_flag_onoff, 0, STRING("me"), 15)
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_2"))
     WAIT_MS(500)
     CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_MUJ_WHACKA_FIRST_TALK_DONE, 1)
-#else
-    SET_VALUE(GSWF_MUJ_WHACKA_FIRST_TALK_DONE, 1)
-#endif
     RETURN
 EVT_END()
 
@@ -1774,11 +1753,7 @@ EVT_BEGIN(mujinto_hyochaku)
     WAIT_MS(1500)
     SET_VALUE(LW(10), 300)
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(back_light)
-#else
     SPAWN_EVENT(PTR(back_light))
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
@@ -1811,11 +1786,7 @@ EVT_BEGIN(mujinto_hyochaku)
     CALL(evt_npc_set_position, STRING("ガラの悪い水夫"), 0, -1000, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG5_11_DESERTED_ISLAND)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_11_DESERTED_ISLAND)
-#endif
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
@@ -4294,13 +4265,8 @@ EVT_BEGIN(into_muj_ship)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_62_AN_ILL_DON_PIANTA)
         SET_VALUE(GSW_STORY_PROGRESS, STG5_63_KEELHAUL_ANYTIME)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_62_AN_ILL_DON_PIANTA)
-        SET_VALUE(GSW_STORY_PROGRESS, STG5_63_KEELHAUL_ANYTIME)
-#endif
     END_IF
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     RETURN

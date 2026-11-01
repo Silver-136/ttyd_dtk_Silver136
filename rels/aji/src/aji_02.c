@@ -298,48 +298,26 @@ IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         WAIT_FRAMES(1)
         CALL(evt_cam3d_evt_set, -78, 172, 560, -78, 50, -9, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(peach_evt_stg1)
-#else
         SPAWN_EVENT(PTR(peach_evt_stg1))
-#endif
         RETURN
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_cam_road_reset)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_09_ELEVATOR_KEY_A_LIT_FLOOR)
-        SPAWN_EVENT(hikaru_yuka_init)
-#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_09_ELEVATOR_KEY_A_LIT_FLOOR)
         SPAWN_EVENT(PTR(hikaru_yuka_init))
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_FRAMES(1)
         ELSE
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(hikaru_off)
-#else
         CALL_CHILD(PTR(hikaru_off))
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, ITEM_SUPER_SHROOM, 0, GSWF_AJI_02_SUPER_SHROOM_BLOCK, 0)
-    SPAWN_EVENT(evt_emergency)
-#else
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, ITEM_SUPER_SHROOM, 0, GSWF_AJI_02_SUPER_SHROOM_BLOCK, 0)
     SPAWN_EVENT(PTR(evt_emergency))
-#endif
     RETURN
 EVT_END()
 
@@ -352,9 +330,7 @@ static USER_FUNC(ride_chk) {
     PartyEntry* party = partyGetPtr(0);
 #endif
     s32 i;
-#if VERSION > VERSION_DEMO_US
     HitEntry* hit;
-#endif
     if (isFirstCall) {
         memset(onoff, 0, sizeof(onoff));
     }
@@ -403,11 +379,7 @@ if (strcmp(mario->hitobjUnder->joint->name, hitName) == 0) {
             mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
-#if VERSION <= VERSION_DEMO_US
     if (evtGetValue(event, GSW_STORY_PROGRESS) >= STG7_09_ELEVATOR_KEY_A_LIT_FLOOR) {
-#else
-    if (evtGetValue(event, GSW_STORY_PROGRESS) >= STG7_09_ELEVATOR_KEY_A_LIT_FLOOR) {
-#endif
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

@@ -98,9 +98,7 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
 #endif
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
-#if VERSION > VERSION_DEMO_US
             // no break: case 100 sets iconX to 30.0f, so the icon does not slide in
-#endif
         case 100:
 #if VERSION > VERSION_DEMO_US
             disp->iconX = 30.0f;

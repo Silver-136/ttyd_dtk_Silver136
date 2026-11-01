@@ -1436,9 +1436,7 @@ void mapLoad(const char* map) {
 // before the lifetime-split temps, so wp's register lands above i's. With it off, the second web of the reused `wp` is a
 // split temp; split temps are created in order of the variables' first reference (i before wp before entry), which gives
 // the target's i r31 / wp r30 / entry r29. Code is otherwise identical.
-#if VERSION > VERSION_DEMO_US
 #pragma opt_common_subs off
-#endif
 /**
  * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
  * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
@@ -1625,9 +1623,7 @@ j = 0;
     }
 }
 #endif
-#if VERSION > VERSION_DEMO_US
 #pragma opt_common_subs reset
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 /**
@@ -1706,9 +1702,7 @@ FileEntry* file;
         }
     }
 
-#if VERSION > VERSION_DEMO_US
     // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-#endif
     wp = (0, &mapWork[1]);
     activeGroup = 1;
     memset(wp, 0, sizeof(MapWork));
@@ -1750,11 +1744,7 @@ if (map != NULL) {
 #endif
     _mapLoad(wp, 0, map);
     wp->entries[0].count = 1;
-#if VERSION <= VERSION_DEMO_US
-    if (map2 != NULL) {
-#else
     if (map2) {
-#endif
         _mapLoad(wp, 1, map2);
         wp->entries[0].count = 2;
     }
@@ -2827,39 +2817,19 @@ void mapDisp(void) {
         }
         obj = entry->objects;
         for (j = 0; j < entry->numJoints; j++, obj++) {
-#if VERSION <= VERSION_DEMO_US
-            if (obj->flags & MAP_OBJ_FLAG_DISABLED)
-                continue;
-            if ((obj->flags & MAP_OBJ_FLAG_HIDDEN) && !(obj->flags & MAP_OBJ_FLAG_OFFSCREEN))
-                continue;
-            if ((obj->flags & MAP_OBJ_FLAG_COLOR) && obj->color.a == 0)
-                continue;
-#else
             if (obj->flags & MAP_OBJ_FLAG_DISABLED) continue;
             if ((obj->flags & MAP_OBJ_FLAG_HIDDEN) && !(obj->flags & MAP_OBJ_FLAG_OFFSCREEN)) continue;
             if ((obj->flags & MAP_OBJ_FLAG_COLOR) && obj->color.a == 0) continue;
-#endif
             if (obj->flags & MAP_OBJ_FLAG_SCREEN_RECT) {
                 obj->screenRect[2] = 0;
                 obj->screenRect[3] = 0;
                 obj->screenRect[0] = 0;
                 obj->screenRect[1] = 0;
             }
-#if VERSION <= VERSION_DEMO_US
-            if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER)
-                continue;
-            if (!(obj->flags & MAP_OBJ_FLAG_GROUP) && obj->joints->partCount < 1)
-                continue;
-            if (!(obj->flags & MAP_OBJ_FLAG_NO_MAP_BLEND) && (entry->flags & MAP_ENTRY_BLEND) && entry->blend.a == 0)
-                continue;
-            if (!(obj->flags & MAP_OBJ_FLAG_NO_MAP_BLEND2) && (entry->flags & MAP_ENTRY_BLEND2) && entry->blend2.a == 0)
-                continue;
-#else
             if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) continue;
             if (!(obj->flags & MAP_OBJ_FLAG_GROUP) && obj->joints->partCount < 1) continue;
             if (!(obj->flags & MAP_OBJ_FLAG_NO_MAP_BLEND) && (entry->flags & MAP_ENTRY_BLEND) && entry->blend.a == 0) continue;
             if (!(obj->flags & MAP_OBJ_FLAG_NO_MAP_BLEND2) && (entry->flags & MAP_ENTRY_BLEND2) && entry->blend2.a == 0) continue;
-#endif
             PSMTXConcat(camera->view, obj->modelWorldMtx, mtx);
             if ((obj->flags & MAP_OBJ_FLAG_CLIP) && !mapClipOffFlag) {
                 joint = obj->joints;
@@ -2870,45 +2840,25 @@ void mapDisp(void) {
                 v.z = joint->bboxMax.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
-#if VERSION <= VERSION_DEMO_US
-                if (MAP_CLIP_IN(v))
-                    goto vis;
-#else
                 if (MAP_CLIP_IN(v)) goto vis;
-#endif
                 v.x = joint->bboxMin.x;
                 v.y = joint->bboxMin.y;
                 v.z = joint->bboxMin.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
-#if VERSION <= VERSION_DEMO_US
-                if (MAP_CLIP_IN(v))
-                    goto vis;
-#else
                 if (MAP_CLIP_IN(v)) goto vis;
-#endif
                 v.x = joint->bboxMin.x;
                 v.y = joint->bboxMax.y;
                 v.z = joint->bboxMax.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
-#if VERSION <= VERSION_DEMO_US
-                if (MAP_CLIP_IN(v))
-                    goto vis;
-#else
                 if (MAP_CLIP_IN(v)) goto vis;
-#endif
                 v.x = joint->bboxMax.x;
                 v.y = joint->bboxMin.y;
                 v.z = joint->bboxMax.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
-#if VERSION <= VERSION_DEMO_US
-                if (MAP_CLIP_IN(v))
-                    goto vis;
-#else
                 if (MAP_CLIP_IN(v)) goto vis;
-#endif
                 v.x = joint->bboxMax.x;
                 v.y = joint->bboxMax.y;
                 v.z = joint->bboxMin.z;
@@ -2916,53 +2866,28 @@ void mapDisp(void) {
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
-#if VERSION <= VERSION_DEMO_US
-                if (MAP_CLIP_IN(v))
-                    goto vis;
-#else
                 if (MAP_CLIP_IN(v)) goto vis;
-#endif
                 v.x = joint->bboxMin.x;
                 v.y = joint->bboxMin.y;
                 v.z = joint->bboxMax.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
-#if VERSION <= VERSION_DEMO_US
-                if (MAP_CLIP_IN(v))
-                    goto vis;
-#else
                 if (MAP_CLIP_IN(v)) goto vis;
-#endif
                 v.x = joint->bboxMax.x;
                 v.y = joint->bboxMin.y;
                 v.z = joint->bboxMin.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
-#if VERSION <= VERSION_DEMO_US
-                if (MAP_CLIP_IN(v))
-                    goto vis;
-#else
                 if (MAP_CLIP_IN(v)) goto vis;
-#endif
                 v.x = joint->bboxMin.x;
                 v.y = joint->bboxMax.y;
                 v.z = joint->bboxMin.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
-#if VERSION <= VERSION_DEMO_US
-                if (MAP_CLIP_IN(v))
-                    goto vis;
-#else
                 if (MAP_CLIP_IN(v)) goto vis;
-#endif
                 clipped = TRUE;
             vis:
-#if VERSION <= VERSION_DEMO_US
-                if (clipped)
-                    continue;
-#else
                 if (clipped) continue;
-#endif
             }
             PSMTXMultVec(mtx, &obj->center, &center);
             PSMTX44MultVec(camera->projection, &center, &center);
@@ -2981,25 +2906,13 @@ void mapDisp(void) {
                 }
             }
             if (obj->flags & MAP_OBJ_FLAG_SCREEN_RECT) {
-#if VERSION <= VERSION_DEMO_US
-                dispEntry((CameraId)1, 5000.0f, 3, (!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox), obj);
-#else
                 dispEntry(CAMERA_OFFSCREEN2, 5000.0f, 3, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox, obj);
-#endif
             }
             if (obj->flags & MAP_OBJ_FLAG_OFFSCREEN) {
-#if VERSION <= VERSION_DEMO_US
-                dispEntry((CameraId)1, z, mode, (!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off), obj);
-#else
                 dispEntry(CAMERA_OFFSCREEN2, z, mode, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off, obj);
-#endif
             }
             if (!(obj->flags & MAP_OBJ_FLAG_HIDDEN)) {
-#if VERSION <= VERSION_DEMO_US
-                dispEntry(obj->cameraId, z, mode, (!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp), obj);
-#else
                 dispEntry(obj->cameraId, z, mode, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp, obj);
-#endif
             }
         }
     }

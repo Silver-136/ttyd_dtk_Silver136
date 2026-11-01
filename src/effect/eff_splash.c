@@ -343,12 +343,8 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
     f32 proj[7];
     f32 vp[6];
     f32 sx, sy, sz;
-#if VERSION <= VERSION_DEMO_US
-    u8 argb[4];
-#else
     union { u32 word; struct { u8 a, r, g, b; } color; } pixel;
     GXColor c;
-#endif
     cam = camGetPtr(cameraId);
     GXSetProjection(cam->projection, cam->projType);
     GXGetProjectionv(proj);
@@ -356,18 +352,10 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
     GXProject(work->position.x, work->position.y, work->position.z, cam->view, proj, vp, &sx, &sy, &sz);
     if (sx > 0.0f && sx < 608.0f && sy > 0.0f && sy < 480.0f) {
         sysWaitDrawSync();
-#if VERSION <= VERSION_DEMO_US
-        // FAKE: unprototyped call: the SDK u16 parameters would add two narrowings (FAKES.md)
-        ((void (*)())GXPeekARGB)((s32)sx, (s32)sy, argb);
-        work->color.r = argb[1];
-        work->color.g = argb[2];
-        work->color.b = argb[3];
-#else
         GXPeekARGB((u16)sx, (u16)sy, &pixel.word);
         work->color.r = pixel.color.r;
         work->color.g = pixel.color.g;
         work->color.b = pixel.color.b;
-#endif
         work->color.a = 255;
     }
     work->hasColor = 1;
@@ -426,8 +414,6 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx mtx;
     GXTexObj texObj;
     GXColor color;
-#if VERSION <= VERSION_DEMO_US
-#endif
     s32 i;
     s32 k;
     s32 type;
@@ -437,17 +423,10 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     f32 r0, g0, b0, r1, g1, b1;
     f32 ang, sn, cs;
     f32 w;
-#if VERSION <= VERSION_DEMO_US
-    u32 u;
-
-    f32 nw;
-#endif
     u32 k2;
     u8* sz;
     u8** dl;
-#if VERSION > VERSION_DEMO_US
     s32 kb;
-#endif
     cam = camGetPtr(cameraId);
     type = work->type;
     color = work->color;
@@ -582,16 +561,10 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
                 ang = 6.2831855f * (f32)k / 8.0f;
                 cs = (f32)cos(ang);
                 sn = (f32)sin(ang);
-#if VERSION > VERSION_DEMO_US
                 kb = k & 1;
-#endif
                 GXPosition3f32(a * sn, 0.0f, a * cs);
                 GXColor4u8((u8)(255.0f * r0), (u8)(255.0f * g0), (u8)(255.0f * b0), 255);
-#if VERSION <= VERSION_DEMO_US
-GXTexCoord2f32((f32)(k & 1), 0.1f);
-#else
                 GXTexCoord2f32((f32)kb, 0.1f);
-#endif
                 cs = (f32)cos(ang);
                 sn = (f32)sin(ang);
                 GXPosition3f32(b * sn, c, b * cs);
@@ -618,14 +591,8 @@ GXTexCoord2f32((f32)(k & 1), 2.1f);
             GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
             GXSetArray(GX_VA_TEX0, geso_shibuki_texcoord0_tbl, 4);
-#if VERSION <= VERSION_DEMO_US
-                {
-#endif
             for (k2 = 0, sz = geso_shibuki_dl_0_size_tbl, dl = geso_shibuki_dl_0_tbl; k2 < 5; k2++, sz++, dl++) {
                 GXCallDisplayList(*dl, *sz << 5);
-#if VERSION <= VERSION_DEMO_US
-                    }
-#endif
             }
             break;
         }
@@ -639,8 +606,6 @@ GXTexCoord2f32((f32)(k & 1), 2.1f);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     w = 8.0f;
-#if VERSION <= VERSION_DEMO_US
-#endif
     for (i = n + 1; i < effect->count; i++, work++) {
         if (work->delay != 0) {
             continue;
@@ -667,9 +632,7 @@ GXTexCoord2f32((f32)(k & 1), 2.1f);
             r0 = (1.0f + color.r / 255.0f) / 2;
             g0 = (1.0f + color.g / 255.0f) / 2;
             b0 = (1.0f + color.b / 255.0f) / 2;
-#if VERSION > VERSION_DEMO_US
             break;
-#endif
         }
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3f32(-w / 2, (w / 2), 0.0f);

@@ -59,16 +59,8 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[7];
 static PoseTableEntry pose_table_weak[7];
 #else
-#if VERSION <= VERSION_DEMO_US
-static PoseTableEntry pose_table[7];
-#else
 static PoseTableEntry pose_table[9];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static PoseTableEntry pose_table_weak[7];
-#else
 static PoseTableEntry pose_table_weak[9];
-#endif
 #endif
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[3];
@@ -78,11 +70,7 @@ extern EvtWord gonbaba_damage_sub_event[];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[281];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[281];
-#else
 static EvtWord dead_event[283];
-#endif
 #endif
 static EvtWord init_event[160];
 static EvtWord attack_event[56];
@@ -340,11 +328,7 @@ BattleUnitKind unit_boss_gonbaba = {
 #endif
     0.0f,
     0.0f,
-#if VERSION <= VERSION_DEMO_US
-    250.0f,
-#else
     20.0f,
-#endif
     0.0f,
     250.0f,
     0.0f,
@@ -403,28 +387,13 @@ static StatusVulnerability regist = {10, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 
  * Invisible and instant KO; always hit by Burn, Defense Up, Allergic and Fast;
  * otherwise Sleep 20, Dizzy 50, Confuse 50, Electric 10 and Attack Up 50.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {10, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 100, 0, 100, 0, 0, 100, 0, 0, 0, 0};
-#else
 static StatusVulnerability regist = {20, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 100, 0, 100, 0, 0, 100, 0, 0, 0, 0};
-#endif
 #endif
 
 /**
  * Pose table of Hooktail: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
  * animation names, 9 entries such as GNB_N_1, GNB_X_1, GNB_Z_1, GNB_S_3.
  */
-#if VERSION <= VERSION_DEMO_US
-static PoseTableEntry pose_table[] = {
-    {1, "GNB_N_1"},
-    {5, "GNB_X_1"},
-{BTL_POSE_NORMAL, "GNB_S_3"},
-    {POSE_TYPE_TALK, "GNB_T_3"},
-    {31, "GNB_S_3"},
-    {BTL_POSE_DAMAGE, "GNB_D_1"},
-    {POSE_TYPE_ACTION, "GNB_S_3"},
-};
-#else
 static PoseTableEntry pose_table[] = {
     {1, "GNB_N_1"},
     {5, "GNB_X_1"},
@@ -438,24 +407,12 @@ static PoseTableEntry pose_table[] = {
     {BTL_POSE_DAMAGE, "GNB_D_1"},
     {POSE_TYPE_ACTION, "GNB_S_3"},
 };
-#endif
 
 /**
  * Pose table of Hooktail once she is weakened, installed by gonbaba_damage_sub_event on each hit with the
  * Attack FX R sound (which she takes for a cricket): stay and talk become GNB_S_4 and GNB_T_4, pose 39
  * becomes GNB_V_1. negotiation_event puts the normal table back.
  */
-#if VERSION <= VERSION_DEMO_US
-static PoseTableEntry pose_table_weak[] = {
-    {1, "GNB_N_1"},
-    {5, "GNB_X_1"},
-{BTL_POSE_NORMAL, "GNB_S_4"},
-    {POSE_TYPE_TALK, "GNB_T_4"},
-    {31, "GNB_S_4"},
-    {BTL_POSE_DAMAGE, "GNB_V_1"},
-    {POSE_TYPE_ACTION, "GNB_S_4"},
-};
-#else
 static PoseTableEntry pose_table_weak[] = {
     {1, "GNB_N_1"},
     {5, "GNB_X_1"},
@@ -469,7 +426,6 @@ static PoseTableEntry pose_table_weak[] = {
     {BTL_POSE_DAMAGE, "GNB_V_1"},
     {POSE_TYPE_ACTION, "GNB_S_4"},
 };
-#endif
 
 /**
  * Event table of Hooktail: maps event tags to the scripts that react to them (gonbaba_damage_sub_event
@@ -1383,13 +1339,8 @@ EVT_BEGIN(negotiation_event)
         CALL(evt_btl_camera_noshake, 1)
         CALL(evt_btl_camera_shake_h, 1, 7, 0, 30, 12)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_batstage_set_aud_dark, 0, 180, 0)
-    CALL(evt_batstage_set_aud_dark_base, 0, 180, 0)
-#else
     CALL(evt_batstage_set_aud_dark, 0, 24, 0)
     CALL(evt_batstage_set_aud_dark_base, 0, 24, 0)
-#endif
     // Mario and his partner jump back in surprise.
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(40)
@@ -1843,169 +1794,6 @@ EVT_END()
  * On the last hit with that sound she complains the first two times (stg1_gon_21, 22, unit work 2), or after the
  * surrender (unit work 3) once with stg1_gon_31_04.
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(gonbaba_damage_sub_event)
-    // A hit with the cricket chirp (Attack FX R) is recognised: Hooktail's weak spot.
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_POWER_DOWN, LW(0))
-        IF_INT_LESS(LW(0), 20)
-            ADD(LW(0), 1)
-        END_IF
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_POWER_DOWN, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART_DEFENSE, LW(0))
-        IF_INT_GREATER(LW(0), -2)
-            SUBTRACT(LW(0), 1)
-        END_IF
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART_DEFENSE, LW(0))
-        // She switches to her weakened poses and the cricket's effect builds up on her.
-        CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_weak))
-    END_IF
-    CALL(btlevtcmd_GetDamage, LW(10), LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
-            GOTO(90)
-        END_IF
-    END_IF
-    // She reels from the damage in her hurt pose.
-    CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(11))
-    IF_INT_EQUAL(LW(11), 1)
-        CALL(btlevtcmd_AnimeChangePose, LW(10), 1, STRING("GNB_D_2"))
-    ELSE
-        CALL(btlevtcmd_AnimeChangePose, LW(10), 1, STRING("GNB_D_1"))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, LW(0))
-        SET_VALUE(LW(9), LW(0))
-        IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-            SUBTRACT(LW(0), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, LW(0))
-            BEGIN_INLINE_EVENT
-                CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-                SUBTRACT(LW(0), 350)
-                ADD(LW(1), 20)
-                // Spectators jump down from the stands and run away in fright.
-                CALL(evt_audience_entry, LW(9), 0)
-                CALL(evt_audience_set_position, LW(9), LW(0), LW(1), LW(2))
-                CALL(evt_audience_flag_on, LW(9), 22)
-                CALL(evt_audience_set_animpose, LW(9), 9, 0)
-                CALL(btlevtcmd_GetStageAudienceAreaSize, EVT_NULLPTR, LW(1), EVT_NULLPTR)
-                SUBTRACT(LW(0), 50)
-                CALL(evt_audience_jump_position_firstsp, LW(9), LW(0), LW(1), LW(2), 60, FLOAT(1.0f))
-                CALL(evt_audience_set_animpose, LW(9), 7, 0)
-                CALL(evt_audience_get_position, LW(9), LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_AUDIENCE_RUN1"), LW(0), LW(1), LW(2), LW(7))
-                CALL(evt_audience_move_position_speed, LW(9), -300, LW(1), LW(2), FLOAT(4.5f))
-                CALL(evt_snd_sfxoff, LW(7))
-                CALL(evt_audience_delete, LW(9))
-            END_INLINE_EVENT
-        END_IF
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, LW(0))
-        SET_VALUE(LW(9), LW(0))
-        IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-            SUBTRACT(LW(0), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, LW(0))
-            BEGIN_INLINE_EVENT
-                CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-                SUBTRACT(LW(0), 320)
-                ADD(LW(1), 30)
-                CALL(evt_audience_entry, LW(9), 0)
-                CALL(evt_audience_set_position, LW(9), LW(0), LW(1), LW(2))
-                CALL(evt_audience_flag_on, LW(9), 22)
-                CALL(evt_audience_set_animpose, LW(9), 9, 0)
-                CALL(btlevtcmd_GetStageAudienceAreaSize, EVT_NULLPTR, LW(1), EVT_NULLPTR)
-                SUBTRACT(LW(0), 10)
-                ADD(LW(2), 30)
-                CALL(evt_audience_jump_position_firstsp, LW(9), LW(0), LW(1), LW(2), 54, FLOAT(1.0f))
-                CALL(evt_audience_set_animpose, LW(9), 7, 0)
-                CALL(evt_audience_get_position, LW(9), LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_AUDIENCE_RUN1"), LW(0), LW(1), LW(2), LW(7))
-                CALL(evt_audience_move_position_speed, LW(9), -300, LW(1), LW(2), FLOAT(4.5f))
-                CALL(evt_snd_sfxoff, LW(7))
-                CALL(evt_audience_delete, LW(9))
-            END_INLINE_EVENT
-        END_IF
-    END_IF
-    WAIT_FRAMES(30)
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_FINAL_HIT, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        RETURN
-    END_IF
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        RETURN
-    END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        GOTO(50)
-    END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
-    IF_INT_GREATER_OR_EQUAL(LW(0), 2)
-        RETURN
-    END_IF
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
-        IF_INT_LESS_OR_EQUAL(LW(0), 0)
-            RETURN
-        END_IF
-    END_IF
-CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
-    CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
-    CALL(evt_btl_camera_set_prilimit, 1)
-    CALL(evt_btl_camera_wait_move_end)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(0)
-        CALL(evt_btl_camera_set_mode, 1, 3)
-        CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
-        WAIT_FRAMES(20)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 1)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_21"), 0, UNIT_ID_SELF)
-        CASE_EQUAL(1)
-        CALL(evt_btl_camera_set_mode, 1, 3)
-        CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
-        WAIT_FRAMES(20)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 2)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_22"), 0, UNIT_ID_SELF)
-    END_SWITCH
-    CALL(evt_btl_camera_set_prilimit, 0)
-    CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
-    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
-    RETURN
-    LABEL(50)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
-    IF_INT_GREATER_OR_EQUAL(LW(0), 3)
-        RETURN
-    END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 3)
-CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
-    CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
-    CALL(evt_btl_camera_set_prilimit, 1)
-    CALL(evt_btl_camera_wait_move_end)
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    SET_VALUE(LW(1), 160)
-    SET_VALUE(LW(2), 536)
-    CALL(btlevtcmd_GetStageAudienceAreaSize, EVT_NULLPTR, LW(5), EVT_NULLPTR)
-    ADD(LW(1), LW(5))
-    CALL(btlevtcmd_GetStageSize, EVT_NULLPTR, EVT_NULLPTR, LW(5))
-    ADD(LW(2), LW(5))
-    ADD(LW(2), 80)
-    SET_VALUE(LW(5), LW(1))
-    SUBTRACT(LW(5), 37)
-    SET_VALUE(LW(6), LW(2))
-    SUBTRACT(LW(6), 511)
-    CALL(evt_btl_camera_set_moveto, 1, 93, LW(1), LW(2), 93, LW(5), LW(6), 20, 0)
-    WAIT_FRAMES(20)
-    CALL(evt_msg_print, 2, STRING("stg1_gon_31_04"), 0, UNIT_ID_SELF)
-    CALL(evt_btl_camera_set_prilimit, 0)
-    CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
-    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
-    RETURN
-    LABEL(90)
-RETURN
-EVT_END()
-#else
 EVT_BEGIN(gonbaba_damage_sub_event)
     // A hit with the cricket chirp (Attack FX R) is recognised: Hooktail's weak spot.
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
@@ -2180,7 +1968,6 @@ EVT_BEGIN(gonbaba_damage_sub_event)
 #endif
     RETURN
 EVT_END()
-#endif
 
 /**
  * Defeat of Hooktail.
@@ -2189,89 +1976,6 @@ EVT_END()
  * The second time she collapses (GNB_X_1, GNB_D_3, GNB_H_1 to 3, with SFX_BOSS_GNB_DOWN1 to 3),
  * the camera pulls back, the stg1_gon_32 line is shown and the unit is removed.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Defeat of Hooktail.
- * The first time her HP runs out (unit work 3 = 0) she does not die
- * but goes into negotiation_event instead, where she begs and bargains with Mario.
- * The second time she collapses (GNB_X_1, GNB_D_3, GNB_H_1 to 3, with SFX_BOSS_GNB_DOWN1 to 3),
- * the camera pulls back, the stg1_gon_32 line is shown and the unit is removed.
- */
-static EVT_BEGIN(dead_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL_CHILD(negotiation_event)
-        RETURN
-    END_IF
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_X_1"))
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_DOWN1"), EVT_NULLPTR, 0, LW(15))
-CALL(evt_btl_camera_set_prilimit, 1)
-    CALL(evt_btl_camera_wait_move_end)
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    SET_VALUE(LW(1), 160)
-    SET_VALUE(LW(2), 536)
-    CALL(btlevtcmd_GetStageAudienceAreaSize, EVT_NULLPTR, LW(5), EVT_NULLPTR)
-    ADD(LW(1), LW(5))
-    CALL(btlevtcmd_GetStageSize, EVT_NULLPTR, EVT_NULLPTR, LW(5))
-    ADD(LW(2), LW(5))
-    ADD(LW(2), 80)
-    SET_VALUE(LW(5), LW(1))
-    SUBTRACT(LW(5), 37)
-    SET_VALUE(LW(6), LW(2))
-    SUBTRACT(LW(6), 511)
-    CALL(evt_btl_camera_set_moveto, 1, 93, LW(1), LW(2), 93, LW(5), LW(6), 30, 0)
-    WAIT_MS(1500)
-    CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_X_1"))
-    CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_X_1"))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 310)
-    ADD(LW(1), 60)
-    CALL(evt_msg_toge, 2, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("stg1_gon_32"), 0, 0)
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, -38, 33, 1005, -38, 92, 13, 60, 0)
-    CALL(evt_snd_sfxoff, LW(15))
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_DOWN2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_D_3"))
-    WAIT_FRAMES(42)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_H_1"))
-    WAIT_FRAMES(1)
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    ADD(LW(0), 25)
-    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_H_1"))
-    BEGIN_INLINE_EVENT
-        SET_VALUE(LW(5), 100)
-        SET_VALUE(LW(4), 120)
-        CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, LW(5), 0)
-        LOOP(40)
-            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(4))
-            SUBTRACT(LW(4), 3)
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    END_INLINE_EVENT
-    CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.19921875f))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 300)
-    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, -1)
-    CALL(evt_snd_sfxon, STRING("SFX_BOSS_GNB_DOWN3"), 0)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_H_2"))
-    CALL(evt_btl_camera_shake_h, 1, 8, 0, 30, 13)
-    WAIT_FRAMES(10)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_H_3"))
-    CALL(btlevtcmd_GetExp, LW(10), LW(0))
-    CALL(btlevtcmd_StoreExp, LW(0))
-    IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        LOOP(LW(0))
-        END_LOOP
-    END_IF
-    WAIT_FRAMES(60)
-    CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)
-    CALL(evt_btl_camera_set_prilimit, 0)
-    RETURN
-EVT_END()
-#else
 /**
  * Defeat of Hooktail.
  * The first time her HP runs out (unit work 3 = 0) she does not die
@@ -2356,7 +2060,6 @@ static EVT_BEGIN(dead_event)
     CALL(evt_btl_camera_set_prilimit, 0)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Init script of Hooktail: registers her wait, attack and damage handlers (confusion uses the default handler)
@@ -2449,11 +2152,7 @@ static EVT_BEGIN(init_event)
     CALL(evt_audience_flag_on, 35, 512)
     CALL(evt_audience_flag_on, 53, 512)
     CALL(evt_audience_flag_on, 54, 512)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_audience_base_flag_on, 32768)
-#else
     CALL(evt_audience_base_flag_on, 16384)
-#endif
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
     CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(0.5f))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 0)

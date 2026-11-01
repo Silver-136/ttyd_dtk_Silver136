@@ -70,11 +70,7 @@ static EvtWord init_event[26];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord damage_event[80];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event[80];
-#else
 static EvtWord damage_event[59];
-#endif
 #endif
 static EvtWord attack_event[217];
 static EvtWord wait_event[6];
@@ -224,11 +220,7 @@ BattleUnitKind unit_chorobon_gundan = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-#if VERSION <= VERSION_DEMO_US
-    kUnitLeader | kUnitNoSpin | kUnitNoHpGauge,
-#else
     kUnitLeader | kUnitNoSpin,
-#endif
     &regist.v,
     1,
     parts,
@@ -330,7 +322,6 @@ BattleWeapon weapon_chorobon_gundan_attack = {
  * Reward script run when a Fuzzy from the horde is defeated (unit LW(10)):
  * plays its death sound, pays out its coins and EXP and spawns the star point effect above it.
  */
-#if VERSION > VERSION_DEMO_US
 /**
  * Reward script run when a Fuzzy from the horde is defeated (unit LW(10)):
  * plays its death sound, pays out its coins and EXP and spawns the star point effect above it.
@@ -354,7 +345,6 @@ EVT_BEGIN(chorogun_dead_reward)
     END_IF
     RETURN
 EVT_END()
-#endif
 #endif
 
 /**
@@ -442,15 +432,6 @@ static EVT_BEGIN(damage_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_CHOROBON_GUNDAN_FEW_LEFT, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_btl_camera_set_mode, 0, 0)
-        CALL(chorogun_escape)
-        CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
-        GOTO(99)
-    END_IF
-#endif
     CALL(chorogun_get_alive_num, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 500)
         CALL_CHILD(escape_chorogun_event)

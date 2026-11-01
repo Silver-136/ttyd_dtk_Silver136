@@ -64,9 +64,7 @@ static void monte_disp(CameraId camera, void* param);
 USER_FUNC(evt_change_plane);
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(yuu_00_cam_shift_reset);
-#endif
 USER_FUNC(yuuminigame1_opening_chk);
 USER_FUNC(yuuminigame1_opening_on_off);
 USER_FUNC(yuuminigame1_set_phase);
@@ -79,11 +77,7 @@ EvtWord yuu_00_kaijo_init[12];
 EvtWord yuu_00_kaijo_init2[12];
 EvtWord light_sub_event[497];
 EvtWord minigame01_main[35];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord minigame01_start_cam[];
-#else
 EvtWord minigame01_start_cam[40];
-#endif
 EvtWord minigame01_start_cam_cancel[20];
 #if VERSION >= VERSION_US
 EvtWord minigame01_start[1504];

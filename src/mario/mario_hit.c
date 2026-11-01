@@ -592,11 +592,7 @@ if (mario->jumpVelocityY == 0.0f) {
             if (hit && d <= 11.0f && d >= 5.0f && mario->groundSlope <= 30.0f) {
                 mario->stepUpY = sy;
                 if (mario->baseSpeed) {
-#if VERSION <= VERSION_DEMO_US
-                    if (!((u32)mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
-#else
                     if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
-#endif
                         marioChgMot(MARIO_MOTION_UPSTAIRS);
                     } else {
                         marioChgMotSub(MARIO_MOTION_UPSTAIRS, 0);
@@ -1535,9 +1531,7 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
     f32 pz;
 #endif
     f32 py;
-#if VERSION > VERSION_DEMO_US
     f32 x, z;
-#endif
     s32 i;
     HitEntry* hit;
     MarioWork* mario = marioGetPtr();
@@ -2580,10 +2574,6 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
         if (marioChkBeroInl(hit)) {
             if (dx) {
                 mario->hitobjPush = hit;
-#if VERSION <= VERSION_DEMO_US
-                do {
-                } while (0);
-#endif
                 mario->hitobjWall = hit;
             }
             movePos(&mario->position.x, &mario->position.z, dx, dz);
@@ -3534,9 +3524,7 @@ void marioCheckWallShip(f32 dx, f32 dz) {
                 mario->hitobjWall = hit;
             }
             movePos(&mario->position.x, &mario->position.z, dx, dz);
-#if VERSION > VERSION_DEMO_US
             // FAKE: dead store to the local pos before the return; removing it changes the object
-#endif
             pos = mario->position;
             return;
         }

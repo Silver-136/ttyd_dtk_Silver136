@@ -42,11 +42,7 @@ static EvtWord init_event[43];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord damage_event[104];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event[104];
-#else
 static EvtWord damage_event[131];
-#endif
 #endif
 static EvtWord counter_damage_event[30];
 static EvtWord return_event[24];
@@ -385,9 +381,6 @@ EVT_BEGIN(escape_chorogun_event)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetUnitWork, LW(4), UNIT_WORK_CHOROGUN, LW(3))
     CALL(btlevtcmd_KillUnit, LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_SetUnitWork, LW(4), UNIT_WORK_CHOROGUN_GONE, 1)
-#endif
     RETURN
 EVT_END()
 #endif
@@ -500,11 +493,7 @@ static EVT_BEGIN(damage_event)
                         CALL(chorogun_escape_all)
                         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))
                         CALL(btlevtcmd_KillUnit, LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
-                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, 1)
-#else
                     END_IF
-#endif
                 END_IF
             END_IF
         END_IF

@@ -106,9 +106,7 @@ void windowTexSetup(void) {
     u32 len;
 #endif
     char path[128];
-#if VERSION > VERSION_DEMO_US
     s32 i;
-#endif
 
 #if VERSION <= VERSION_DEMO_US
     arcOpen(name, (void**)&winTpl, &size);

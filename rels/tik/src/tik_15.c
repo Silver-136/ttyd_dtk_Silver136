@@ -18,11 +18,7 @@
 
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[13];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord tik_15_init_evt[];
-#else
 EvtWord tik_15_init_evt[91];
-#endif
 
 /**
  * Doors of this room: the pipes to tik_04 and tik_01, two west exits to tik_16, the east exit to tik_20
@@ -160,32 +156,16 @@ EVT_BEGIN(tik_15_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_gazigazi_entry)
-#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
-#endif
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
-#else
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
-#endif
         CALL(evt_npc_check_delete, STRING("クリボー"))
         CALL(evt_npc_check_delete, STRING("パタクリボー"))
         CALL(evt_npc_check_delete, STRING("トゲクリボー"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
-#endif
         CALL(evt_npc_check_delete, STRING("ハンマーブロス"))
         CALL(evt_npc_check_delete, STRING("カメック"))
     END_IF

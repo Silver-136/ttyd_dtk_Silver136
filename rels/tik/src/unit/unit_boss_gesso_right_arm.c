@@ -66,48 +66,17 @@ BattleUnitKind unit_boss_gesso_right_arm = {
     9, // pbSoftCap
     60, // width
     110, // height
-#if VERSION <= VERSION_DEMO_US
-    -68,
-    -100,
-#else
     {-68, -100}, // hitOffset
     {0.0f, 0.0f, 0.0f}, // centerOffset
     {-85, -140}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {30.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
-#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    -85,
-    -140,
-    0.0f,
-    0.0f,
-    0.0f,
-    30.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    30.0f,
-    0.0f,
-    0.0f,
-    30.0f,
-    71.5f,
-    0.0f,
-    -60.0f,
-    -60.0f,
-    0.0f,
-#else
     {30.0f, 0.0f, 0.0f}, // bintaHitOffset
     {30.0f, 71.5f, 0.0f}, // kissHitOffset
     {-60.0f, -60.0f, 0.0f}, // cutBaseOffset
-#endif
     60.0f, // cutWidth
     100.0f, // cutHeight
     0, // turnOrder
@@ -116,13 +85,7 @@ BattleUnitKind unit_boss_gesso_right_arm = {
     0, // swallowAttributes
     0, // hammerKnockbackChance
     0, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_BOSS_GESSO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName

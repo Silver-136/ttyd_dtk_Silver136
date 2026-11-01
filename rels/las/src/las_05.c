@@ -1755,40 +1755,19 @@ EVT_BEGIN(las_05_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
-#endif
         CALL(evt_npc_setup, PTR(npcEnt))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_01_1000_DRY_BONES)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_01_1000_DRY_BONES)
-#endif
         CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x2E, 0, 0, 0, ITEM_TYPE_GROUND, -1, PTR(key_evt))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
-#endif
         CALL(evt_mobj_lock, STRING("lock"), 46, 590, 20, 0, -90, PTR(key_check_evt), PTR(unlock_evt), 0)
         SET_VALUE(LW(0), STRING("e_bero_1"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(shan_init)
-#else
     CALL_CHILD(PTR(shan_init))
-#endif
     RETURN
 EVT_END()
 

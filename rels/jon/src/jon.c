@@ -1318,11 +1318,7 @@ EVT_BEGIN(enemy_setup)
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
-#else
-    SET_VALUE(LW(0), GSW_PIT_FLOOR)
-#endif
     ADD(LW(0), 1)
     IF_INT_NOT_EQUAL(LW(0), 100)
         MODULO(LW(0), 10)
@@ -1332,11 +1328,7 @@ EVT_BEGIN(enemy_setup)
     END_IF
     // Look up this floor's species and battle, create the enemy NPC and pick a random spot for it on the left
     // or right half of the room.
-#if VERSION <= VERSION_DEMO_US
     CALL(enemy_info, GSW_PIT_FLOOR, LW(0), LW(1), LW(2))
-#else
-    CALL(enemy_info, GSW_PIT_FLOOR, LW(0), LW(1), LW(2))
-#endif
     CALL(evt_npc_entry, STRING("敵"), LW(0))
     CALL(evt_npc_set_tribe, STRING("敵"), LW(1))
     CALL(evt_sub_random, 100, LW(3))
@@ -1649,11 +1641,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_CULL | NPC_FLAG_NO_VIEW_CORRECTION)
         CALL(evt_npc_pera_onoff, STRING("敵"), 0)
         CALL(evt_npc_set_ry, STRING("敵"), 0)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(zonbaba_first_event)
-#else
         SPAWN_EVENT(PTR(zonbaba_first_event))
-#endif
     END_IF
     // Make the chosen spot the enemy's home, then arm its battle and watch for its defeat.
     CALL(evt_npc_get_position, STRING("敵"), LW(3), LW(4), LW(5))
@@ -1671,30 +1659,14 @@ CALL(evt_npc_set_home_position, STRING("敵"), LW(3), LW(4), LW(5))
         IF_INT_EQUAL(LW(0), 0)
             GOTO(1)
         END_IF
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(LW(0), GSW_PIT_FLOOR)
-#else
-        SET_VALUE(LW(0), GSW_PIT_FLOOR)
-#endif
         ADD(LW(0), 1)
         IF_INT_NOT_EQUAL(LW(0), 100)
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(dokan_open)
-#else
             SPAWN_EVENT(PTR(dokan_open))
-#endif
             ELSE
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
-#else
-            SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
-#endif
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(iri_12_enemy_dead_event)
-#else
         SPAWN_EVENT(PTR(iri_12_enemy_dead_event))
-#endif
     END_INLINE_EVENT
     RETURN
 EVT_END()
@@ -1878,11 +1850,7 @@ EVT_BEGIN(talk_idouya)
     CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     IF_STR_EQUAL(LW(0), STRING("tik_06"))
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSW_PIT_FLOOR, 0)
-#else
-        SET_VALUE(GSW_PIT_FLOOR, 0)
-#endif
     END_IF
 #if VERSION > VERSION_DEMO_US
     CALL(evt_mario_goodbye_party, 0)
@@ -3403,18 +3371,10 @@ EVT_END()
 EVT_BEGIN(zonbaba_first_event)
     // Arriving on floor 100 for the first time: Bonetail is hidden underground and the chest is not placed
     // yet; if he was already beaten the room is set up with only the chest.
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_PIT_BONETAIL_DEFEATED, 1)
-#else
-    IF_INT_EQUAL(GSWF_PIT_BONETAIL_DEFEATED, 1)
-#endif
         CALL(evt_npc_set_position, STRING("敵"), 0, -1000, 0)
         CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_mobj_itembox, STRING("box"), 270, 0, 200, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
-#else
-        CALL(evt_mobj_itembox, STRING("box"), 270, 0, 200, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
-#endif
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
         RETURN
     END_IF
@@ -3456,13 +3416,8 @@ WAIT_MS(4000)
         CALL(evt_npc_wait_anim, STRING("敵"), FLOAT(1.0f))
         CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_S_1"))
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(gonbaba_standup_shake)
-    SPAWN_EVENT(gonbaba_fog_change)
-#else
     SPAWN_EVENT(PTR(gonbaba_standup_shake))
     SPAWN_EVENT(PTR(gonbaba_fog_change))
-#endif
     // The camera pulls back to show his size; the screen shakes.
     CALL(evt_cam3d_evt_set, -755, 24, 376, -84, 114, -22, 4500, EASING_SINE_IN_OUT)
     WAIT_MS(4000)
@@ -3486,11 +3441,7 @@ WAIT_MS(4000)
     CALL(evt_party_set_pos, 0, -25, 10, 150)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 90, -1)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(gonbaba_down_shake)
-#else
     SPAWN_EVENT(PTR(gonbaba_down_shake))
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -3521,11 +3472,7 @@ WAIT_MS(4000)
     CALL(evt_cam3d_evt_set, -145, 80, 882, 104, 114, 81, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     // His mouth opens and the treasure chest tumbles out, bouncing across the floor.
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("box"), 250, 60, 0, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
-#else
-    CALL(evt_mobj_itembox, STRING("box"), 250, 60, 0, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
-#endif
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("敵"), LW(0), LW(1), LW(2))
@@ -3605,11 +3552,7 @@ WAIT_MS(4000)
                 DELETE_EVENT(LW(0))
                 CALL(evt_npc_change_interrupt, STRING("マッキノ"), 1, 0)
                 CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-                SPAWN_EVENT(iri_12_makkino_return_zonbaba)
-#else
                 SPAWN_EVENT(PTR(iri_12_makkino_return_zonbaba))
-#endif
                 SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
             END_IF
         END_IF

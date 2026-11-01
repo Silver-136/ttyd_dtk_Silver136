@@ -107,13 +107,7 @@ BattleUnitKind unit_boss_moamoa_tentacle_c = {
     0, // swallowAttributes
     0, // hammerKnockbackChance
     0, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_BOSS_MOA_G_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName

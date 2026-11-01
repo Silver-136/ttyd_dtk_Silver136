@@ -184,9 +184,7 @@ void effKemuri10Main(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
-#if VERSION > VERSION_DEMO_US
     // FAKE: the timer goes through a temporary for the decrement; `work->timer--;` changes the object
-#endif
     timer = work->timer;
 #if VERSION > VERSION_DEMO_US
     camera = work->camera;
@@ -200,24 +198,13 @@ void effKemuri10Main(EffectEntry* effect) {
     }
     for (i = 0; i < effect->count; i++) {
         if (timer > 5) {
-#if VERSION <= VERSION_DEMO_US
-            work->alpha = (s32)((f32)work->alpha + 0.3f * (f32)(255 - work->alpha));
-#else
             work->alpha += 0.3f * (255 - work->alpha);
-#endif
             work->velocity.x *= 0.8f;
             work->velocity.y *= 0.8f;
             work->velocity.z *= 0.8f;
         }
         if (timer < 5) {
-#if VERSION <= VERSION_DEMO_US
-            {
-                f32 fa = work->alpha;
-                work->alpha = (fa *= 0.6f);
-            }
-#else
             work->alpha *= 0.6f;
-#endif
             work->velocity.x *= 0.7f;
             work->velocity.y *= 0.7f;
             work->velocity.z *= 0.7f;

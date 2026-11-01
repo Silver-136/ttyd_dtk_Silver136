@@ -116,11 +116,7 @@ static BattleUnitDefenseAttr defence_attr = {0};
 static StatusVulnerability regist = {90, 80, 90, 100, 90, 100, 100, 50, 100, 90, 100, 90, 100, 90, 90, 100, 90, 100, 90, 100, 100, 100};
 #else
 /** Status vulnerability of the Pokey in the retail builds: resists most statuses. */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {90, 80, 90, 100, 90, 100, 100, 50, 100, 90, 100, 90, 100, 90, 90, 100, 90, 100, 90, 100, 100, 100};
-#else
 static StatusVulnerability regist = {95, 80, 80, 100, 90, 100, 100, 60, 100, 90, 100, 90, 100, 95, 90, 100, 90, 100, 90, 100, 100, 100};
-#endif
 #endif
 
 /** Attack data of the Pokey's headbutt with 4 segments: 2 damage. */
@@ -285,11 +281,7 @@ static BattleWeapon weapon_sambo_head_attack_1 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
-    {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
@@ -687,11 +679,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHeight, LW(10), LW(3))
     CALL(btlevtcmd_GetStatusMg, LW(10), LW(4))
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY(LW(3), LW(4))
-#else
     MULTIPLY_FLOAT(LW(3), LW(4))
-#endif
     ADD(LW(1), LW(3))
     ADD(LW(1), 5)
     ADD(LW(2), 10)

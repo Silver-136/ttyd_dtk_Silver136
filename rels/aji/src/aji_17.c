@@ -115,11 +115,7 @@ static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t);
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord evt_emergency[];
-#else
 EvtWord evt_emergency[48];
-#endif
 EvtWord evt_last[728];
 EvtWord evt_last2[339];
 EvtWord evt_camera[68];
@@ -212,11 +208,7 @@ CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_1")), 0, 0, LW(0))
 #endif
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
-#else
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_2")), 0, 0, LW(0))
-#endif
     RETURN
 EVT_END()
 
@@ -234,11 +226,7 @@ CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_1")), 0, 0, LW(0))
 #endif
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
-#else
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_2")), 0, 0, LW(0))
-#endif
     RETURN
 EVT_END()
 
@@ -376,17 +364,9 @@ void noiseDisp(CameraId cameraId, void* param) {
  * one second and keeps it. Already at that story point it sets the tint at once. Every fortress map starts it.
  */
 EVT_BEGIN(evt_emergency)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
-#else
-    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
-#endif
         LOOP(0)
-#if VERSION <= VERSION_DEMO_US
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
-#else
-            IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
-#endif
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)

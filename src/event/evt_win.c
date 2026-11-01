@@ -102,11 +102,7 @@ typedef struct UnitWinWork {
     f32 cursorX;           // 0x3C
     f32 cursorY;           // 0x40
     f32 scroll;            // 0x44
-#if VERSION <= VERSION_DEMO_US
-    u8 pad3C[4];           // 0x3C
-#else
     u8 pad48[4];           // 0x48
-#endif
     s32 skipEntry;         // 0x4C, never written (0 after the memset); both lists skip the entry equal to it
     s32 mode;              // 0x50
     u16 flags2;            // 0x54, UNITWIN_FREE_*
@@ -138,18 +134,10 @@ USER_FUNC(evt_unitwin_select_func);
 #endif
 void evt_unitwin_disp_func(CameraId cameraId, void* param);
 
-#if VERSION > VERSION_DEMO_US
 void unitwin_help_main(WinMgrEntry* entry);
-#endif
-#if VERSION > VERSION_DEMO_US
 void unitwin_help_disp(WinMgrEntry* entry);
-#endif
-#if VERSION > VERSION_DEMO_US
 void unitwin_point_disp(WinMgrEntry* entry);
-#endif
-#if VERSION > VERSION_DEMO_US
 void unitwin_name_disp(WinMgrEntry* entry);
-#endif
 
 /** The three windows of the unit window: the name plate, the help text box and the points counter. */
 #if VERSION > VERSION_DEMO_US
@@ -1231,11 +1219,7 @@ static inline s32 unitwin_party_icon(s32 icon) {
     return icon;
 }
 
-#if VERSION <= VERSION_DEMO_US
 #define ICONGX2 ((void (*)(Vec*, u16, f32, u16))iconDispGx)
-#else
-#define ICONGX2 ((void (*)(Vec*, u16, f32, u16))iconDispGx)
-#endif
 
 static inline const char* unitwin_party_name(s32 i) {
     const char* name;
@@ -1504,11 +1488,7 @@ if (abs(coin - wp->coin) == 1 || gp->retraceCount % 6 == 0) {
             } else if (mode == 14) {
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
-#if VERSION <= VERSION_DEMO_US
-                max = 0x152;
-#else
                 max = ITEM_TYPE_MAX - 1;
-#endif
                 title = msgSearch("msg_window_title_3");
                 titleX = 20;
             } else if (mode == 15) {
@@ -1520,11 +1500,7 @@ if (abs(coin - wp->coin) == 1 || gp->retraceCount % 6 == 0) {
             } else if (mode == 16) {
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
-#if VERSION <= VERSION_DEMO_US
-                max = 0x152;
-#else
                 max = ITEM_TYPE_MAX - 1;
-#endif
                 title = msgSearch("msg_window_title_4");
                 titleX = 30;
             } else {
@@ -1563,8 +1539,6 @@ if (abs(coin - wp->coin) == 1 || gp->retraceCount % 6 == 0) {
             GXGetScissor(&sl, &st, &sw, &sh);
             GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
             for (tbl = badge_bottakuru100_table, i = 0; i < max; i++) {
-#if VERSION <= VERSION_DEMO_US
-#endif
                 GXColor color = {0x00, 0x00, 0x00, 0xFF};
                 s32 id;
                 ItemData* item;

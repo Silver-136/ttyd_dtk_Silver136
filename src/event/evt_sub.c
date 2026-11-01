@@ -75,15 +75,11 @@ typedef struct SplineWork {
     s32 manual;    // 0x28
 } SplineWork;
 
-#if VERSION > VERSION_DEMO_US
 #pragma force_active on
-#endif
 #if VERSION > VERSION_DEMO_US
 static const char coin_fmt[] = "%f%f%f";
 #endif
-#if VERSION > VERSION_DEMO_US
 #pragma force_active reset
-#endif
 
 /** Black text colour of the "You got N coins!" line in the coin reward window (coingetDisp). */
 static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
@@ -1597,11 +1593,7 @@ EVT_END()
  * when Mario crosses x = 110 (the demos: 300).
  */
 EVT_BEGIN(mail_evt_usu_01)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
-#else
-    IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
-#endif
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1623,11 +1615,7 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
-#else
-    SET_VALUE(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
-#endif
     CALL(evt_pouch_receive_mail, 29)
     CALL_CHILD(mail_evt)
     RETURN
@@ -2506,11 +2494,7 @@ iconEntry2D("iraiCoin", ICON_ITEM_COIN);
         winMgrSetParam(event->userdata3, work);
         work[0] = coin;
         work[1] = 0;
-#if VERSION <= VERSION_DEMO_US
-            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-#else
         psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-#endif
         psndBGMOn(PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
         event->userdata[2] = 200;
         event->savedTime = gp->renderTime;

@@ -174,11 +174,7 @@ static StatusVulnerability regist = {70, 90, 90, 100, 90, 100, 100, 70, 100, 90,
  * Dodgy and Invisible; otherwise Stop 90, Dizzy 70, Freeze 70, Tiny 95, Attack Down 95, Allergic 90,
  * Fright 95, Gale Force 80, Slow 90 and instant KO 95.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {70, 90, 90, 100, 90, 100, 100, 70, 100, 90, 100, 90, 100, 90, 90, 95, 80, 100, 90, 100, 100, 95};
-#else
 static StatusVulnerability regist = {100, 90, 70, 100, 100, 100, 100, 70, 100, 95, 100, 95, 100, 100, 90, 95, 80, 100, 90, 100, 100, 95};
-#endif
 #endif
 
 /**
@@ -226,13 +222,8 @@ static PoseTableEntry pose_table[] = {
     {42, "R_1"},
     {41, "R_1"},
     {40, "W_1"},
-#if VERSION <= VERSION_DEMO_US
-    {56, "I_1"},
-    {57, "I_1"},
-#else
     {56, "X_1"},
     {57, "X_1"},
-#endif
     {POSE_TYPE_TALK, "T_1"},
     {POSE_TYPE_ACTION, "S_1"},
 };
@@ -269,13 +260,8 @@ static PoseTableEntry pose_table_item_have[] = {
     {2, "Y_1"},
     {9, "Y_1"},
     {5, "K_1"},
-#if VERSION <= VERSION_DEMO_US
-    {4, "I_1"},
-    {3, "I_1"},
-#else
     {4, "X_1"},
     {3, "X_1"},
-#endif
     {28, "S_2"},
     {29, "Q_1"},
     {30, "Q_1"},
@@ -585,11 +571,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), 256, LW(5))
     IF_INT_EQUAL(LW(5), 5)
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
-#if VERSION <= VERSION_DEMO_US
-        MULTIPLY(LW(6), 40)
-#else
         MULTIPLY_FLOAT(LW(6), 40)
-#endif
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
@@ -922,11 +904,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), 256, LW(5))
     IF_INT_EQUAL(LW(5), 5)
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
-#if VERSION <= VERSION_DEMO_US
-        MULTIPLY(LW(6), 40)
-#else
         MULTIPLY_FLOAT(LW(6), 40)
-#endif
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
@@ -1259,11 +1237,7 @@ static USER_FUNC(_steal_item) {
         }
         if (num > 0) {
             evtSetValue(event, itemVar, ITEM_COIN);
-#if VERSION <= VERSION_DEMO_US
-            evtSetValue(event, iconVar, 394);
-#else
             evtSetValue(event, iconVar, 402);
-#endif
             evtSetValue(event, numVar, num);
             TST_BATTLE_UNIT(unit)->heldItem = ITEM_COIN;
             TST_BATTLE_UNIT(unit)->stolenCoins = num;

@@ -826,11 +826,7 @@ state_end:
                     if (u != NULL && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
                         u->alliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u)) {
                         if (w->frame == 0) {
-#if VERSION <= VERSION_DEMO_US
-                            BtlUnit_SetBodyAnimType(u, 0x3F);
-#else
                             BtlUnit_SetBodyAnimType(u, POSE_TYPE_TALK);
-#endif
                         }
                         if (w->frame == 26) {
                             btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));

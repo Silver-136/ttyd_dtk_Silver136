@@ -320,7 +320,6 @@ void partyFollowCloseOff(PartyEntry* party) {
  * Floor under the partner for the behind-Mario walks;
  * water (attribute 0x200) counts as no floor and starts a splash.
  */
-#if VERSION > VERSION_DEMO_US
 /**
  * Floor under the partner for the behind-Mario walks;
  * water (attribute 0x200) counts as no floor and starts a splash.
@@ -336,36 +335,15 @@ static inline HitEntry* partyBehindGround(PartyEntry* party) {
     }
     return hit;
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 static f32 partyStayDist(PartyEntry* party);
-#endif
-#if VERSION <= VERSION_DEMO_US
-static inline u32 partyGetFrontAttr(PartyEntry* party, f32 dir);
-#else
 static u32 partyGetFrontAttr(PartyEntry* party, f32 dir);
-#endif
-#if VERSION > VERSION_DEMO_US
 static f32 partyHomingOff(PartyEntry* party);
-#endif
-#if VERSION > VERSION_DEMO_US
 static f32 partyGetGndY(f32 x, f32 y, f32 z);
-#endif
-#if VERSION > VERSION_DEMO_US
 static f32 partyGetDirGndY(Vec u, f32 md);
-#endif
-#if VERSION <= VERSION_DEMO_US
-static inline u32 partyGetFrontAttrFar(PartyEntry* party);
-#else
 static u32 partyGetFrontAttrFar(PartyEntry* party);
-#endif
-#if VERSION > VERSION_DEMO_US
 static void partyGorFix(PartyEntry* party);
-#endif
-#if VERSION > VERSION_DEMO_US
 static void partyPoseA2(PartyEntry* party);
-#endif
 s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir);
 
 void party_force_reset_outofscreen(PartyEntry* party);
@@ -2716,7 +2694,6 @@ static inline void partyJumpFrontMove(PartyEntry* party) {
 #endif
 
 /** Jump arc height for a rise of dy: 25 for a level jump, dy going up, 10 going down. */
-#if VERSION > VERSION_DEMO_US
 /** Jump arc height for a rise of dy: 25 for a level jump, dy going up, 10 going down. */
 static inline f32 partyJumpHeight(f32 dy) {
     if (__fabsf(dy) < 1.0f) {
@@ -2727,13 +2704,11 @@ static inline f32 partyJumpHeight(f32 dy) {
         return 10.0f;
     }
 }
-#endif
 
 /**
  * Sets up a follow jump over distance d: 12 to 40 frames, initial velY 3 to 13 and the gravity,
  * scaled by Mario's playerGravity.
  */
-#if VERSION > VERSION_DEMO_US
 /**
  * Sets up a follow jump over distance d: 12 to 40 frames, initial velY 3 to 13 and the gravity,
  * scaled by Mario's playerGravity.
@@ -2768,7 +2743,6 @@ static inline void partyJumpCalc(PartyEntry* party, MarioWork* mario, f32 d) {
     }
     party->gravity = -g * mario->playerGravity;
 }
-#endif
 
 #if VERSION > VERSION_DEMO_US
 /**
@@ -3151,7 +3125,6 @@ void party_motion_upstairs(PartyEntry* party) {
 #endif
 
 /** TRUE when hit is water (attribute 0x200). */
-#if VERSION > VERSION_DEMO_US
 /** TRUE when hit is water (attribute 0x200). */
 static inline BOOL partyChkHitAttr200(HitEntry* hit) {
     if (!hit) {
@@ -3162,7 +3135,6 @@ static inline BOOL partyChkHitAttr200(HitEntry* hit) {
     }
     return FALSE;
 }
-#endif
 
 #if VERSION > VERSION_DEMO_US
 /**
@@ -3726,9 +3698,7 @@ s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
         q.targetPos.y = party->position.y + party->height;
         q.targetDistance = 100.0f;
         if (hitCheckVecFilter(&q, NULL)) {
-#if VERSION > VERSION_DEMO_US
             // The returned normal is normalized; for finite unit normals the 45 threshold imposes no restriction.
-#endif
             if (sqrtf(q.hitNormal.x * q.hitNormal.x + q.hitNormal.z * q.hitNormal.z) < 45.0f) {
                 y = q.hitPos.y;
                 goto found;
@@ -3977,9 +3947,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
         }
         up = 200.0f;
         j = 0;
-#if VERSION > VERSION_DEMO_US
         y = pos.y;
-#endif
         while (TRUE) {
             dist = 300.0f;
             start = pos;
@@ -5331,9 +5299,6 @@ static void partyPoseA2(PartyEntry* party) {
     partyChgPose(party, "PCH_A2_1");
     party->useMotionId = 1;
     party->moveFrames = 30;
-#if VERSION <= VERSION_DEMO_US
-                break;
-#endif
 }
 #if VERSION <= VERSION_DEMO_US
     }

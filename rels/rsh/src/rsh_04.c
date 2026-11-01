@@ -1803,11 +1803,7 @@ EVT_BEGIN(evt_tana_5)
     CALL(evt_item_entry, STRING("_item00"), ITEM_STAR_PIECE, -260, 0, -240, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("_item00"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_get_item, STRING("_item00"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_STARPIECE_85, 1)
-#else
-    SET_VALUE(GSWF_STARPIECE_85, 1)
-#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -2108,31 +2104,15 @@ EVT_END()
 
 /** Init script of rsh_04_b (first visit): doors (a scripted entry skips the normal door run), shared init. */
 EVT_BEGIN(rsh_04_b_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
-#else
-    IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
-#endif
         SET_VALUE(LW(0), PTR(bero_data_b))
         CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_bero_info_run)
-#else
         CALL_CHILD(PTR(evt_bero_info_run))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
-#else
-        SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
-#endif
         SET_VALUE(LW(0), PTR(bero_data_b))
         CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_entry)
-#else
         CALL_CHILD(PTR(bero_case_entry))
-#endif
         CALL(evt_mario_set_pos, 220, 0, -20)
         CALL(evt_party_set_pos, 0, 200, 0, -20)
 #if VERSION > VERSION_DEMO_US
@@ -2140,11 +2120,7 @@ EVT_BEGIN(rsh_04_b_init_evt)
         CALL(evt_party_trigflg_onoff, 0, PARTY_TRIG_FOLLOW_CLOSE | PARTY_TRIG_HALF_PUSH | PARTY_TRIG_BEHIND_DIR_SET | PARTY_TRIG_DOOR_MOVE, 0)
 #endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(rsh_04_init_evt)
-#else
     CALL_CHILD(PTR(rsh_04_init_evt))
-#endif
     RETURN
 EVT_END()
 
@@ -2161,31 +2137,15 @@ static const char* window_tbl[] = {
  * shared init and window scenery.
  */
 EVT_BEGIN(rsh_04_c_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
-#else
-    IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
-#endif
         SET_VALUE(LW(0), PTR(bero_data_c))
         CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_bero_info_run)
-#else
         CALL_CHILD(PTR(evt_bero_info_run))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
-#else
-        SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
-#endif
         SET_VALUE(LW(0), PTR(bero_data_c))
         CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_entry)
-#else
         CALL_CHILD(PTR(bero_case_entry))
-#endif
         CALL(evt_mario_set_pos, -200, 0, -30)
         CALL(evt_party_set_pos, 0, -230, 0, -30)
 #if VERSION > VERSION_DEMO_US
@@ -2193,27 +2153,14 @@ EVT_BEGIN(rsh_04_c_init_evt)
         CALL(evt_party_trigflg_onoff, 0, PARTY_TRIG_FOLLOW_CLOSE | PARTY_TRIG_HALF_PUSH | PARTY_TRIG_BEHIND_DIR_SET | PARTY_TRIG_DOOR_MOVE, 0)
 #endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(rsh_04_init_evt)
-#else
     CALL_CHILD(PTR(rsh_04_init_evt))
-#endif
     CALL(evt_map_playanim, STRING("ranpu"), MAP_ANIM_PLAY_LOOP, 0)
     SET_VALUE(LW(0), PTR(&window_tbl))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_window)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_17_GHOST_DIARY)
-#else
     CALL_CHILD(PTR(evt_rsh_window))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_17_GHOST_DIARY)
-#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("w_bero"))
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(evt_syasyou_auto_talk)
-#else
             SPAWN_EVENT(PTR(evt_syasyou_auto_talk))
-#endif
         END_IF
     END_IF
     RETURN
@@ -2348,21 +2295,11 @@ static BeroEntry bero_data_c_return[] = {
  * shelf signs and the music for the station the train has reached.
  */
 EVT_BEGIN(rsh_04_init_evt_nidome)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#else
-    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
-        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
-            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#endif
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-#else
-                IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-#endif
                     CALL(evt_map_playanim, STRING("hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -2376,50 +2313,21 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
             END_IF
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_door_init)
-#else
     CALL_CHILD(PTR(evt_rsh_door_init))
-#endif
     SET_VALUE(LW(0), PTR(&door_3))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_door_entry)
-#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
-#endif
     SET_VALUE(LW(0), PTR(&door_4))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_door_entry)
-#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
-#endif
     SET_VALUE(LW(0), PTR(&door_5))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_door_entry)
-    CALL_CHILD(evt_access_entry)
-#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
     CALL_CHILD(PTR(evt_access_entry))
-#endif
     CALL(evt_npc_setup, PTR(npc_data))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
-#else
-    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#else
-        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
@@ -2434,9 +2342,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
             END_IF
-#if VERSION > VERSION_DEMO_US
             // Revisit variant B retains the current moving-train audio.
-#endif
             IF_STR_EQUAL(LW(0), STRING("rsh_04_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_04_c"))
@@ -2445,11 +2351,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             END_IF
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_04_rnd_npc_entry)
-#else
     CALL_CHILD(PTR(evt_rsh_04_rnd_npc_entry))
-#endif
     RETURN
 EVT_END()
 

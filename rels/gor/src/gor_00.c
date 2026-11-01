@@ -265,11 +265,7 @@ EvtWord into_gor_ship[265];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord mony_peton_event[251];
 #else
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord mony_run_away[];
-#else
 EvtWord mony_run_away[108];
-#endif
 #endif
 #if VERSION > VERSION_DEMO_US
 EvtWord peton_run_away[88];
@@ -277,9 +273,7 @@ EvtWord peton_run_away[88];
 #if VERSION > VERSION_DEMO_US
 EvtWord mony_peton_depart[VERSION_PICK(61, 64)];
 #endif
-#if VERSION > VERSION_DEMO_US
 EvtWord gor_00_koopa_evt[1095];
-#endif
 #if VERSION == VERSION_EU
 static EvtWord peach_mail[215];
 #else
@@ -710,11 +704,7 @@ EVT_END()
 #endif
 
 static EVT_BEGIN(marco_talk)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_EQUAL(STG4_32_CHATTING_WITH_FLAVIO)
         // Chapter 4: the partner steps aside while Flavio addresses Mario.
         CALL(evt_party_stop, 0)
@@ -793,18 +783,9 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_msg_print, 0, STRING("mac_4_044"), 0, STRING("me"))
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         CALL(evt_party_run, 0)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSW_STORY_PROGRESS, STG4_33_MEET_BOBBERY)
-        // Reminder to bring Bobbery, with an extra line if Bobbery has already refused.
-#else
-        SET_VALUE(GSW_STORY_PROGRESS, STG4_33_MEET_BOBBERY)
-#endif
         CASE_EQUAL(STG4_33_MEET_BOBBERY)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD, 0)
-#else
-        IF_INT_EQUAL(GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD, 0)
-#endif
             CALL(evt_msg_print, 0, STRING("mac_4_045"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("mac_4_045_01"), 0, STRING("me"))
@@ -830,11 +811,7 @@ IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
         CALL(evt_npc_reverse_ry, STRING("me"))
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("mac_4_090"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
-#else
-        SET_VALUE(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
-#endif
         LABEL(100)
         // Ask whether Mario is ready to sail.
         CALL(evt_msg_select, 0, STRING("mac_4_090_yesno"))
@@ -845,11 +822,7 @@ IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
         // Mario is ready: the music fades and the departure scene starts.
         CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
         CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(shukko_event)
-#else
         SPAWN_EVENT(PTR(shukko_event))
-#endif
     END_SWITCH
     RETURN
 EVT_END()
@@ -1656,11 +1629,7 @@ EVT_END()
  * and sets tentyou_talk as his talk event.
  */
 EVT_BEGIN(tentyou_init)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CALL(evt_npc_entry, STRING("店長"), STRING("c_gshop_m"))
         CALL(evt_npc_set_tribe, STRING("店長"), STRING("店員男"))
@@ -1688,11 +1657,7 @@ EVT_END()
  * and sets tenin_talk as her talk event.
  */
 EVT_BEGIN(tenin_init)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CALL(evt_npc_entry, STRING("店員"), STRING("c_gshop_w"))
         CALL(evt_npc_set_tribe, STRING("店員"), STRING("店員女"))
@@ -2734,11 +2699,7 @@ EVT_BEGIN(enter_gorotsuki_town)
     SET_VALUE(GW(7), 180)
     SET_VALUE(GF(5), 1)
     // The ship sails into the harbor with its wake and engine sound, and the screen fades in.
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(ship_a_animation)
-#else
     SPAWN_EVENT(PTR(ship_a_animation))
-#endif
     WAIT_MS(3000)
     SET_VALUE(GF(10), 1)
     BEGIN_INLINE_EVENT
@@ -2817,11 +2778,7 @@ EVT_BEGIN(enter_gorotsuki_town)
     CALL(evt_npc_set_position, STRING("船ダミー"), 0, GW(8), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(ship_pera)
-#else
         CALL_CHILD(PTR(ship_pera))
-#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -2951,11 +2908,7 @@ BEGIN_INLINE_EVENT
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(LW(0), 0)
     CALL(evt_snd_bgm_scope, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(christine_osoware)
-#else
     SPAWN_EVENT(PTR(christine_osoware))
-#endif
     RETURN
 EVT_END()
 
@@ -3209,11 +3162,7 @@ EVT_BEGIN(gundan1000tai_beforebattle)
     CALL(evt_npc_set_ry, STRING("第三勢力部下Ａ"), 270)
     CALL(evt_npc_set_position, STRING("第三勢力部下Ｂ"), 130, 15, -330)
     CALL(evt_npc_set_ry, STRING("第三勢力部下Ｂ"), 270)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG0_05_1000_X_NAUTS_BEFORE)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG0_05_1000_X_NAUTS_BEFORE)
-#endif
     CALL(evt_npc_get_reglid, STRING("ガラの悪い水夫"), LW(0))
     DELETE_EVENT(LW(0))
     CALL(evt_npc_get_reglid, STRING("水夫ボム兵Ｂ"), LW(0))
@@ -3223,11 +3172,7 @@ EVT_BEGIN(gundan1000tai_beforebattle)
     CALL(evt_npc_set_position, STRING("水夫ボム兵Ｂ"), -250, 15, -350)
     CALL(evt_npc_set_ry, STRING("水夫ボム兵Ｂ"), 90)
     SET_VALUE(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(gundan1000tai_afterbattle)
-#else
     CALL_CHILD(PTR(gundan1000tai_afterbattle))
-#endif
     RETURN
 EVT_END()
 
@@ -5234,11 +5179,7 @@ EVT_BEGIN(into_gor_ship)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_party_set_dir, 1, 90, 0)
     CALL(evt_npc_set_ry, STRING("コルテス"), 270)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
-#endif
         SET_FLOAT_VALUE(LW(4), FLOAT(145.0f))
         ADD_FLOAT(LW(4), LW(10))
         SET_FLOAT_VALUE(LW(5), FLOAT(185.0f))
@@ -5282,11 +5223,7 @@ EVT_BEGIN(into_gor_ship)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     WAIT_MS(1000)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
-#else
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
-#endif
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_party_cont_onoff, 1, 1)
@@ -6684,11 +6621,7 @@ CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_8"), STRING("
     SET_VALUE(GF(4), 0)
     SET_VALUE(GW(7), 180)
     SET_VALUE(GF(5), 1)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(ship_a_animation)
-#else
     SPAWN_EVENT(PTR(ship_a_animation))
-#endif
     WAIT_MS(500)
     SET_VALUE(GF(10), 1)
     BEGIN_INLINE_EVENT
@@ -6770,11 +6703,7 @@ CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_8"), STRING("
     SET_VALUE(GF(10), 1)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(ship_pera)
-#else
         CALL_CHILD(PTR(ship_pera))
-#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("S_fune_a"), LW(0), LW(1), LW(2))
@@ -6989,11 +6918,7 @@ EVT_BEGIN(return_gorotsuki_town)
     SET_VALUE(GW(7), 180)
     SET_VALUE(GF(5), 1)
     // A ship sails into the harbor with its wake and engine sound.
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(ship_a_animation)
-#else
     SPAWN_EVENT(PTR(ship_a_animation))
-#endif
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(3000)
     SET_VALUE(GF(10), 1)
@@ -7075,11 +7000,7 @@ EVT_BEGIN(return_gorotsuki_town)
     CALL(evt_npc_set_position, STRING("船ダミー"), 0, GW(8), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(ship_pera)
-#else
         CALL_CHILD(PTR(ship_pera))
-#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)

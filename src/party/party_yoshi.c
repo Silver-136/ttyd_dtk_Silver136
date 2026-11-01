@@ -413,9 +413,7 @@ party->width = 28.0f;
 }
 
 // Descriptive name (inline helper; not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
 static void searchHead(PartyEntry* party);
-#endif
 /**
  * How far Mario sits above Yoshi this frame: twice the bob table entry for Yoshi's pose (PYS_S_2, PYS_R_2 or
  * PYS_F_1) at the shared pose time.
@@ -1618,9 +1616,7 @@ void yoshiFlyMove(PartyEntry* party, f32* angle) {
 void yoshiFlyMove(PartyEntry* party) {
 #endif
     MarioWork* mario = marioGetPtr();
-#if VERSION > VERSION_DEMO_US
     f32 z;
-#endif
     f32 x;
     f32 spd;
     f32 max;
@@ -1752,9 +1748,7 @@ void searchGround(PartyEntry* party) {
     HitEntry* hit;
     MarioWork* mario;
     s32 attr;
-#if VERSION > VERSION_DEMO_US
     f32 groundY;
-#endif
     f32 range;
 #if VERSION <= VERSION_DEMO_US
     Vec ground; // the search fills only .y
@@ -1928,11 +1922,7 @@ void searchGround2(PartyEntry* party) {
     }
     attr = hitGetAttr(hit);
     if (attr & HIT_ATTR_WATER_HAZARD) {
-#if VERSION <= VERSION_DEMO_US
-        pos = party->position;
-#else
         Vec pos = party->position;
-#endif
         marioSetSplash(0, &pos);
         L_sweatEntry(party, NULL);
         party->gravity = -0.4f;

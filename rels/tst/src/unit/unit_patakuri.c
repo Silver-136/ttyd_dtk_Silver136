@@ -129,11 +129,7 @@ static StatusVulnerability regist_patakuri = {100, 120, 120, 100, 100, 100, 100,
  * Status vulnerability of the Paragoomba while it still has its wings in the retail builds:
  * extra prone to stop, dizzy, fright, Gale Force and instant KO.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist_patakuri = {100, 120, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 150, 100, 100, 100, 100, 150};
-#else
 static StatusVulnerability regist_patakuri = {100, 110, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 110, 110, 100, 100, 100, 100, 150};
-#endif
 #endif
 
 /** Attack data of the Paragoomba's dive attack: 1 damage. */
@@ -462,11 +458,7 @@ static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100
  * Status vulnerability of the Paragoomba once its wings are gone in the retail builds:
  * extra prone to stop, fright and instant KO.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
-#else
 static StatusVulnerability regist = {100, 110, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 110, 100, 100, 100, 100, 100, 150};
-#endif
 #endif
 
 /** Body part of the Paragoomba once its wings are gone: a single part using the c_kuribo model. */

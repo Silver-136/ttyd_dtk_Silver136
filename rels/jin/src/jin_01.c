@@ -153,21 +153,13 @@ EVT_END()
  */
 // The rear switch decrements the staircase position when the current value is at most 1.
 EVT_BEGIN(evt_kaidan_oku)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS_OR_EQUAL(LSW(1), 1)
-#else
     IF_INT_LESS_OR_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
-#endif
         CALL(evt_mario_key_onoff, 0)
 #if VERSION > VERSION_DEMO_US
         CALL(evt_mario_normalize)
 #endif
         CALL(evt_party_stop, 0)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
-#else
-        IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
-#endif
             BEGIN_INLINE_EVENT_GET_ID(LW(3))
                 WAIT_MS(500)
                 CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -199,27 +191,14 @@ EVT_BEGIN(evt_kaidan_oku)
                 END_LOOP
             END_INLINE_EVENT
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(cam_shake)
-        IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
-#else
         CALL_CHILD(PTR(cam_shake))
         IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
-#endif
             WAIT_MS(500)
             DELETE_EVENT(LW(3))
             DELETE_EVENT(LW(4))
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 1)
-#else
-            SET_VALUE(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 1)
-#endif
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        SUBTRACT(LSW(1), 1)
-#else
         SUBTRACT(LSW_JIN_STAIRCASE_POS, 1)
-#endif
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_party_run, 0)
     END_IF

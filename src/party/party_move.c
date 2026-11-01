@@ -579,9 +579,7 @@ void partyClearFootmark2(void) {
     Vec pos;
 #endif
     u32 i;
-#if VERSION > VERSION_DEMO_US
     Footmark* fm;
-#endif
 
 #if VERSION > VERSION_DEMO_US
     if (other) {
@@ -684,9 +682,7 @@ static inline BOOL partyChkOtherFlag(PartyEntry* other) {
  * or Mario while Koops's nokonokoGetStatus is 3; switching between the two restarts the trail (footmarkMode).
  */
 void partyRecordFootmark(PartyEntry* party) {
-#if VERSION > VERSION_DEMO_US
     MarioWork* mario = party->playerPtr;
-#endif
     u32 flags = 0;
     PartyEntry* other;
     BOOL far;
@@ -767,11 +763,9 @@ void partyClearJumpPara(PartyEntry* party) {
     party->gravity = 0.0f;
 }
 
-#if VERSION > VERSION_DEMO_US
 static inline f32 partySpdRate(PartyEntry* party) {
     return (party->flags & PARTY_FLAG_IN_SHALLOW_WATER) ? 0.75f : 1.0f;
 }
-#endif
 
 /**
  * Eases moveSpeed toward the target speed (targetSpeed scaled by Mario's playerGravity, 0.75 in shallow water;
@@ -848,7 +842,6 @@ static inline f32 partyUpdSpd2(PartyEntry* party) {
  * partyUpdSpd, except while forced to move (forceMoveFrames) or jumping,
  * falling or climbing a step (motions 2, 3, 6), when moveSpeed is left as it is.
  */
-#if VERSION > VERSION_DEMO_US
 /**
  * partyUpdSpd, except while forced to move (forceMoveFrames) or jumping,
  * falling or climbing a step (motions 2, 3, 6), when moveSpeed is left as it is.
@@ -859,7 +852,6 @@ static inline f32 partyChkUpdSpd(PartyEntry* party) {
     }
     return partyUpdSpd2(party);
 }
-#endif
 
 /** Sets the speed the partner eases toward (0 = stop) and, when nonzero, takes one easing step at once. Returns spd. */
 // Descriptive name (not in the symbol maps); placeholder unk_800c93d0, JP 0x800C93D0. See docs/NAME_PROVENANCE.md.
@@ -1758,9 +1750,7 @@ void partyMoveWalk(PartyEntry* party) {
 void partyWalkMain(PartyEntry* party) {
     PartyEntry* other;
     u32 flags = 0;
-#if VERSION > VERSION_DEMO_US
     MarioWork* mario = party->playerPtr;
-#endif
     if (party->currentSlotId == 0) {
         if (partyChkMarioJumpFlag()) {
             flags |= FOOTMARK_FLAG_JUMP;
@@ -2175,7 +2165,6 @@ extern f32 partyNrmToAngle(Vec* n);
  * TRUE when hit is floor a partner may appear on:
  * not water or a hazard (attr 0x200 / 0x800) and not a map object from objNames.
  */
-#if VERSION > VERSION_DEMO_US
 /**
  * TRUE when hit is floor a partner may appear on:
  * not water or a hazard (attr 0x200 / 0x800) and not a map object from objNames.
@@ -2192,24 +2181,19 @@ static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     }
     return TRUE;
 }
-#endif
 
 /** Slope of a floor normal in degrees (partyNrmToAngle), taking the normal by value. */
 // FAKE: one-use inline helper; writing the call out changes the object in both versions
-#if VERSION > VERSION_DEMO_US
 /** Slope of a floor normal in degrees (partyNrmToAngle), taking the normal by value. */
 static inline f32 partyAppearNrmAngle(Vec n) {
     return partyNrmToAngle(&n);
 }
-#endif
 
 /** Moves point out d units back from direction ang, in the horizontal plane. */
-#if VERSION > VERSION_DEMO_US
 /** Moves point out d units back from direction ang, in the horizontal plane. */
 static inline void partyAppearMoveBack(Vec* out, f32 d, f32 ang) {
     movePos(&out->x, &out->z, -d, ang);
 }
-#endif
 
 /**
  * Where the partner appears next to Mario: 30 units behind him (behind and to the side when he has two party
@@ -2592,14 +2576,12 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
 #endif
 
 /** Flying partners appear at least 5 units above Mario's feet. */
-#if VERSION > VERSION_DEMO_US
 /** Flying partners appear at least 5 units above Mario's feet. */
 static inline void partyAppearAdjustY(PartyEntry* party, MarioWork* mario, Vec* out) {
     if (party->moveKind == 1 && out->y < mario->position.y) {
         out->y = 5.0f + mario->position.y;
     }
 }
-#endif
 
 /**
  * The partner's follow spot: radius units (26, 28 on door walks, 32 for Flurrie) from Mario,

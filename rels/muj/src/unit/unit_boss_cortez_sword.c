@@ -386,17 +386,9 @@ CALL_CHILD(cortez_weapon_get_home_height)
 #endif
                 IF_INT_NOT_EQUAL(LW(1), LW(5))
                     CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
-#if VERSION <= VERSION_DEMO_US
-                    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, -1)
-#else
                     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
-#endif
                     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(5), LW(2))
-#if VERSION <= VERSION_DEMO_US
-                    CALL_CHILD(cortez_weapon_set_formation_attribute)
-#else
                     CALL_CHILD(PTR(cortez_weapon_set_formation_attribute))
-#endif
                     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                     RETURN
                 END_IF

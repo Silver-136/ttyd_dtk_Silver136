@@ -122,10 +122,8 @@ USER_FUNC(johoya_keti_newjoho_check) {
  */
 USER_FUNC(johoya_keti_newjoho_makelabel) {
     EvtWord* args = event->args;
-#if VERSION > VERSION_DEMO_US
     char tmp[64];
     const char* msg;
-#endif
     s32 target = evtGetValue(event, args[0]);
     InformantWork* wp = &_jdt;
     u8* table = wp->readFlags.ketiRead;
@@ -157,11 +155,7 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
             n++;
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    *(char*)wp->infoEnd = 0;
-#else
     *wp->infoEnd = 0;
-#endif
     evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
     evtSetValue(event, args[2], (EvtWord)wp->infoEnd);
     evtSetValue(event, args[3], 0);

@@ -194,13 +194,8 @@ EvtWord gor_10_init_evt[29];
 EVT_BEGIN(tegami_init_evt)
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_snd_envon, PSND_FADEIN | PSND_SLOT(1), STRING("ENV_STG0_GOR6"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_cam_ctrl_onoff, 4, 0)
     CALL(evt_mario_key_onoff, 0)
@@ -428,11 +423,7 @@ CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
     BEGIN_INLINE_EVENT
         CALL(cam_yure)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_mezame)
-#else
     SPAWN_EVENT(PTR(evt_mezame))
-#endif
     RETURN
 EVT_END()
 
@@ -456,11 +447,7 @@ IF_INT_LESS(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
         CALL_CHILD(PTR(tegami_init_evt))
 #endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(mezame_init_evt)
-#else
         CALL_CHILD(PTR(mezame_init_evt))
-#endif
     END_IF
     RETURN
 EVT_END()

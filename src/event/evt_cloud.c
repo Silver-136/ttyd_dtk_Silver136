@@ -84,9 +84,7 @@ if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
     hit3 = cloudGetHitBreathout(3);
     switch (wp->state) {
         case 0:
-#if VERSION > VERSION_DEMO_US
             // FAKE: no-op (s32) cast; the plain comparison changes the object
-#endif
             if ((s32)cloud_once_flag == 1) {
                 break;
             }
@@ -137,9 +135,7 @@ if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
                 uh = wp->h;
                 w = uw;
                 h = uh;
-#if VERSION > VERSION_DEMO_US
                 // FAKE: (u32)/(s32) casts on the half sizes; (f32)(uw >> 1) changes the object
-#endif
                 x = (s32)(pos.x - (f32)(s32)((u32)uw >> 1));
                 y = (s32)(pos.y - (f32)(s32)(uh >> 1));
                 if (x < 0) {

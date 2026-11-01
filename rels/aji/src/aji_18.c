@@ -216,11 +216,7 @@ CALL(evt_win_item_select, PTR(key_list), LW(10))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
-#else
-            SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
-#endif
             CALL(evt_pouch_remove_item, LW(10), LW(1))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
@@ -232,11 +228,7 @@ CALL(evt_win_item_select, PTR(key_list), LW(10))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
-#else
-            SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
-#endif
             CALL(evt_pouch_remove_item, LW(10), LW(1))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
@@ -248,11 +240,7 @@ CALL(evt_win_item_select, PTR(key_list), LW(10))
         IF_INT_EQUAL(LW(0), 2)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
-#else
-            SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
-#endif
             CALL(evt_pouch_remove_item, LW(10), LW(1))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
@@ -262,24 +250,13 @@ CALL(evt_win_item_select, PTR(key_list), LW(10))
         END_IF
         CASE_DEFAULT
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
         IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
             IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
                 SET_VALUE(GSW_STORY_PROGRESS, STG7_16_FACTORY_DOOR)
-#else
-    IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
-        IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
-            IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
-                SET_VALUE(GSW_STORY_PROGRESS, STG7_16_FACTORY_DOOR)
-#endif
                 CALL(evt_del_case_evt, 0, GW(10))
                 SET_VALUE(LW(0), STRING("e_bero"))
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(bero_case_switch_on)
-#else
                 CALL_CHILD(PTR(bero_case_switch_on))
-#endif
                 CALL(evt_cam3d_evt_set, -140, 90, 369, 150, 60, -98, 500, EASING_SINE_IN_OUT)
                 WAIT_MS(1200)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)

@@ -117,11 +117,7 @@ static StatusVulnerability regist = {40, 90, 50, 100, 50, 100, 0, 70, 100, 70, 1
 /**
  * Status vulnerability of the Bald Cleft in the retail builds: immune to burn; resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {40, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 80, 80, 50, 30, 100, 80, 100, 100, 95};
-#else
 static StatusVulnerability regist = {50, 100, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 100, 70, 50, 40, 100, 70, 100, 100, 95};
-#endif
 #endif
 
 /** Body part of the Bald Cleft: a single part using the c_sinnosuke model. */

@@ -84,11 +84,7 @@ u8 enemy_monoshiri_sort_table[] = {
 #include "driver/swdrv.h"
 #include "mario/mario_party.h"
 #include "memory.h"
-#if VERSION <= VERSION_DEMO_US
 #include "evt/evt_lottery.h"
-#else
-#include "evt/evt_lottery.h"
-#endif
 #include "icon_ids.h"
 #include "driver/animdrv.h"
 
@@ -178,9 +174,6 @@ s32 winRootMain(WindowWork* w) {
     static char* msg_help[] = {
         "msg_menu_mario", "msg_menu_nakama", "msg_menu_mochimono", "msg_menu_badge", "msg_menu_kiroku",
     };
-#if VERSION <= VERSION_DEMO_US
-    s32 x;
-#endif
     s32 i;
     s32 ret;
 
@@ -943,9 +936,7 @@ static inline void winRootTexQuad(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f
     GXTexCoord2f32(1.0f, 0.0f);
 }
 
-#if VERSION > VERSION_DEMO_US
 #pragma inline_max_total_size(100000)
-#endif
 /**
  * Draws a "kirinuki" (cut-out) inset panel of w x h at (x, y) from 8-pixel corner and edge pieces,
  * used for the boxes inside the pages.
@@ -2361,24 +2352,6 @@ WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort
 #endif
 
 /** qqsort compare for the Tattle Log by where the enemy is found (getMonosiriPlace of its locationTag). */
-#if VERSION <= VERSION_DEMO_US
-/** qqsort compare for the Tattle Log by where the enemy is found (getMonosiriPlace of its locationTag). */
-s32 compare_func2(const void* a, const void* b) {
-    const WinSortEnt* ea = a;
-    const WinSortEnt* eb = b;
-    TattleEntry* ta = battleGetUnitMonosiriPtr(ea->id);
-    TattleEntry* tb = battleGetUnitMonosiriPtr(eb->id);
-    s32 ia = getMonosiriPlace(ta->locationTag);
-    s32 ib = getMonosiriPlace(tb->locationTag);
-
-    if (ia > ib) {
-        return 1;
-    } else if (ia < ib) {
-        return -1;
-    }
-    return 0;
-}
-#else
 /** qqsort compare for the Tattle Log by where the enemy is found (getMonosiriPlace of its locationTag). */
 s32 compare_func2(const void* a, const void* b) {
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
@@ -2393,27 +2366,8 @@ s32 compare_func2(const void* a, const void* b) {
     }
     return 0;
 }
-#endif
 
 /** Reverse of compare_func2. */
-#if VERSION <= VERSION_DEMO_US
-/** Reverse of compare_func2. */
-s32 compare_func2_r(const void* a, const void* b) {
-    const WinSortEnt* ea = a;
-    const WinSortEnt* eb = b;
-    TattleEntry* ta = battleGetUnitMonosiriPtr(ea->id);
-    TattleEntry* tb = battleGetUnitMonosiriPtr(eb->id);
-    s32 ia = getMonosiriPlace(ta->locationTag);
-    s32 ib = getMonosiriPlace(tb->locationTag);
-
-    if (ia < ib) {
-        return 1;
-    } else if (ia > ib) {
-        return -1;
-    }
-    return 0;
-}
-#else
 /** Reverse of compare_func2. */
 s32 compare_func2_r(const void* a, const void* b) {
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
@@ -2428,7 +2382,6 @@ s32 compare_func2_r(const void* a, const void* b) {
     }
     return 0;
 }
-#endif
 
 /** Tattle Log by place: sorts by number first, then by place. */
 void sort_7_2_func(WindowWork* wp) {

@@ -445,13 +445,8 @@ EVT_BEGIN(las_08_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    SPAWN_EVENT(mugen_kairou_init)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     SPAWN_EVENT(PTR(mugen_kairou_init))
-#endif
     RETURN
 EVT_END()
 

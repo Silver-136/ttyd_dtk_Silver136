@@ -37,11 +37,7 @@ static EvtWord talk_brots[91];
 static EvtWord init_kinoshikowa[2];
 static EvtWord talk_kinoshikowa[2];
 static NpcSetupInfo npcEnt[6];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord tou_12_init_evt[];
-#else
 EvtWord tou_12_init_evt[133];
-#endif
 
 /**
  * Door animation callback for the west door (door_1), opening: LW(0) is the swing angle;
@@ -150,13 +146,8 @@ CALL(evt_party_set_dir, 0, 270, 200)
     CALL(evt_msg_print, 0, STRING("stg3_tou_307_11"), 0, STRING("ブロッツダミー"))
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_kinoshikowa)
-    SET_VALUE(GSW_STORY_PROGRESS, STG3_20_16_FLATTENED)
-#else
     SPAWN_EVENT(PTR(evt_kinoshikowa))
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_16_FLATTENED)
-#endif
     RETURN
 EVT_END()
 
@@ -319,19 +310,11 @@ static NpcSetupInfo npcEnt[] = {
  * music by story stage, NPCs, a Star Piece, and the big block that Mario breaks open until the boss battle.
  */
 EVT_BEGIN(tou_12_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
-#endif
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
-#if VERSION <= VERSION_DEMO_US
         SWITCH(GSW_STORY_PROGRESS)
-#else
-        SWITCH(GSW_STORY_PROGRESS)
-#endif
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
@@ -357,28 +340,14 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     END_IF
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 190, 0, 30, ITEM_TYPE_STILL, GSWF_STARPIECE_60, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_16_FLATTENED)
         CALL(evt_mobj_lv_blk, STRING("aa"), 125, 0, 0, PTR(evt_block_broken), GSWF_TOU_12_BIG_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
-#else
-    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 190, 0, 30, ITEM_TYPE_STILL, GSWF_STARPIECE_60, 0)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_16_FLATTENED)
-        CALL(evt_mobj_lv_blk, STRING("aa"), 125, 0, 0, PTR(evt_block_broken), GSWF_TOU_12_BIG_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
-#endif
         CALL(evt_mobj_flag_onoff, 0, STRING("aa"), MOBJ_FLAG_GRAVITY)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
-#else
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_map_playanim, STRING("anm_hae"), MAP_ANIM_PLAY_LOOP, 0)

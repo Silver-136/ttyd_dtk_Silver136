@@ -1237,9 +1237,6 @@ BOOL chkCollision(f32* outY) {
     y += -s0 * r;
     z += c1 * c0 * r;
     v = (Vec){x, y, z};
-#if VERSION <= VERSION_DEMO_US
-    }
-#endif
     mario->motPlane->tipPos = v;
     sincosf(&s2, &c2, mario->motPlane->roll);
     sincosf(&s0, &c0, mario->motPlane->pitch);
@@ -1256,9 +1253,6 @@ BOOL chkCollision(f32* outY) {
     x += planeData[39] * (c0 * s1) - planeData[39] * (s2 * c1);
     y += planeData[39] * (s0 * c2);
     z += planeData[39] * (c0 * c1) - planeData[39] * (s2 * s1);
-#if VERSION <= VERSION_DEMO_US
-    {
-#endif
     v2 = (Vec){x, y, z};
 #if VERSION <= VERSION_DEMO_US
     }
@@ -1268,12 +1262,7 @@ BOOL chkCollision(f32* outY) {
     y = mario->motPlane->frontPos.y;
     z = mario->motPlane->frontPos.z - 10.0f * c1;
     dist = 10.0f + mario->baseSpeed;
-#if VERSION <= VERSION_DEMO_US
-    hit = marioHitCheck(&ox, &oy, &oz, &dist, &nx, &ny, &nz, x, y,
-                        z, s1, 0.0f, c1);
-#else
     hit = marioHitCheck(&ox, &oy, &oz, &dist, &nx, &ny, &nz, x, y, z, s1, 0.0f, c1);
-#endif
     if (hit != NULL) {
         mario->hitobjFront = hit;
         ret = TRUE;

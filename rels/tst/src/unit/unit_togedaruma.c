@@ -120,11 +120,7 @@ static StatusVulnerability regist = {40, 90, 50, 100, 50, 100, 0, 70, 100, 70, 1
 /**
  * Status vulnerability of the Bristle in the retail builds: immune to burn; resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {40, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 70, 70, 50, 75, 100, 70, 100, 100, 95};
-#else
 static StatusVulnerability regist = {40, 100, 40, 100, 40, 100, 0, 60, 100, 60, 100, 60, 100, 100, 60, 50, 40, 100, 60, 100, 100, 95};
-#endif
 #endif
 
 /**

@@ -1103,9 +1103,7 @@ ret = score / 10000;
     }
 #endif
     ret += bonus;
-#if VERSION > VERSION_DEMO_US
     // Positive values below 0x100 multiply; 0x100 and above encode an additive bonus.
-#endif
     if (mul > 0) {
         if (mul < 0x100) {
             ret *= mul;

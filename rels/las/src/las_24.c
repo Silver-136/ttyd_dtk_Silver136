@@ -329,27 +329,14 @@ EVT_BEGIN(las_24_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_05a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_24a"), MAP_OBJ_FLAG_CLIP)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(haguruma_evt)
-#else
     SPAWN_EVENT(PTR(haguruma_evt))
-#endif
     CALL(evt_map_playanim, STRING("kusari"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_12_LARGE_STONE_BLOCK)
         IF_INT_EQUAL(GSWF_LAS_24_HAKO_BLOWN_AWAY, 0)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_12_LARGE_STONE_BLOCK)
-        IF_INT_EQUAL(GSWF_LAS_24_HAKO_BLOWN_AWAY, 0)
-#endif
             CALL(evt_cloud_init)
             CALL(evt_cloud_ent, 0, STRING("S_hako"), STRING("A_hako"), PTR(cloud_blk_evt))
         ELSE
@@ -360,42 +347,23 @@ EVT_BEGIN(las_24_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_lv_blk, STRING("blk"), -495, 100, 0, 0, GSWF_LAS_24_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv2BigBigBlock"))
     IF_INT_EQUAL(GSWF_LAS_24_BIG_BLOCK_BROKEN, 0)
-#else
-    CALL(evt_mobj_lv_blk, STRING("blk"), -495, 100, 0, 0, GSWF_LAS_24_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv2BigBigBlock"))
-    IF_INT_EQUAL(GSWF_LAS_24_BIG_BLOCK_BROKEN, 0)
-#endif
         CALL(evt_mobj_flag_onoff, 0, STRING("blk"), MOBJ_FLAG_GRAVITY)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_LAS_24_HAKO_BLOWN_AWAY, 0)
-#else
-        IF_INT_EQUAL(GSWF_LAS_24_HAKO_BLOWN_AWAY, 0)
-#endif
             CALL(evt_mobj_flag_onoff, 1, STRING("blk"), MOBJ_FLAG_HIT_EVERY_FRAME)
             CALL(evt_mobj_set_scale, STRING("blk"), FLOAT(0.9980469f), FLOAT(0.9980469f), FLOAT(0.9980469f))
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_breaking_floor, STRING("brkflr"), -500, 100, 0, 0, PTR(break_floor_evt), GSWF_LAS_24_FLOOR_BROKEN)
-#else
-    CALL(evt_mobj_breaking_floor, STRING("brkflr"), -500, 100, 0, 0, PTR(break_floor_evt), GSWF_LAS_24_FLOOR_BROKEN)
-#endif
     CALL(evt_mobj_jumpstand_red, 0, STRING("jump"), -500, -200, 0, PTR(jump_evt), 0)
     CALL(evt_hit_bind_mapobj, STRING("A_move_dai"), STRING("S_move_dai"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_move_dai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_floatswitch_red, 0, STRING("dai_switch"), -150, -440, 75, PTR(dai_evt), 0)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -625, -200, -100, ITEM_COIN, 0, GSWF_LAS_24_COIN_BLOCK, 0)
     CALL(evt_mobj_brick, STRING("mobj_kakusi"), -625, -115, -100, ITEM_POINT_SWAP, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_LAS_24_POINT_SWAP_HIDDEN_BLOCK)
     CALL(evt_mobj_itembox, STRING("box"), -255, -380, 75, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_24_PALACE_KEY_CHEST)
-#else
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -625, -200, -100, ITEM_COIN, 0, GSWF_LAS_24_COIN_BLOCK, 0)
-    CALL(evt_mobj_brick, STRING("mobj_kakusi"), -625, -115, -100, ITEM_POINT_SWAP, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_LAS_24_POINT_SWAP_HIDDEN_BLOCK)
-    CALL(evt_mobj_itembox, STRING("box"), -255, -380, 75, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_24_PALACE_KEY_CHEST)
-#endif
     RETURN
 EVT_END()
 

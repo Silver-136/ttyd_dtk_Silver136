@@ -70,12 +70,8 @@ static BOOL get_monte_check(Vec* a, Vec* b);
 
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(yuu_02_icon_monte_entry);
-#endif
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(yuu_02_cam_shift_reset);
-#endif
 USER_FUNC(yuu_roll_reset);
 USER_FUNC(yuuminigame3_opening_chk);
 USER_FUNC(yuuminigame3_opening_on_off);
@@ -98,17 +94,9 @@ extern EvtWord yuu_02_jumpret[];
 EvtWord yuu_02_jumpret[164];
 #endif
 EvtWord yuu_02_kaijo_init[12];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord yuu_02_kaijo_init2[];
-#else
 EvtWord yuu_02_kaijo_init2[12];
-#endif
 EvtWord minigame03_main[33];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord minigame03_start_cam[];
-#else
 EvtWord minigame03_start_cam[40];
-#endif
 EvtWord minigame03_start_cam_cancel[17];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame03_start[];
@@ -923,22 +911,14 @@ EVT_BEGIN(minigame03_start)
                 IF_BITS_SET(LW(9), 768)
                     DELETE_EVENT(LW(8))
                     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION <= VERSION_DEMO_US
-                    CALL_CHILD(minigame03_start_cam_cancel)
-#else
                     CALL_CHILD(PTR(minigame03_start_cam_cancel))
-#endif
                     BREAK_LOOP
                 END_IF
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
         CALL(yuuminigame3_opening_on_off, LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(yuu_02_kaijo_init2)
-#else
         CALL_CHILD(PTR(yuu_02_kaijo_init2))
-#endif
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
     END_IF
@@ -1014,11 +994,7 @@ EVT_BEGIN(minigame03_end)
         CALL(evt_msg_select, 0, STRING("sysyuu_02_00"))
     END_IF
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
-#else
-        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
-#endif
         CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
         CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
         CALL(evt_bero_mapchange, STRING("gor_03"), STRING("A_dokan_02"))

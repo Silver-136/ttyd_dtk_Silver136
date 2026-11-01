@@ -114,13 +114,7 @@ void effMagic1Main(EffectEntry* effect) {
     if (type == 0 && work->life == 0) {
         EffectEntry* e = effMagic1N64Entry(1, 0x30, work->position.x + work->offset.x, work->position.y + work->offset.y,
                                            work->position.z + work->offset.z, 0.0f, 0.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
-        EffMagic1N64Work* sparkle = e->userdata;
-
-        sparkle->scale = work->scale;
-#else
         ((EffMagic1N64Work*)e->userdata)->scale = work->scale;
-#endif
     }
     if (type == 1) {
         work->velocity.x *= 0.83f;

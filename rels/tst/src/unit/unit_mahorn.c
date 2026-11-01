@@ -144,22 +144,10 @@ BattleUnitKind unit_mahorn = {
     1,
     1,
     30,
-#if VERSION <= VERSION_DEMO_US
-    0,
-#else
     1,
-#endif
-#if VERSION <= VERSION_DEMO_US
-    1,
-#else
     4,
-#endif
     70,
-#if VERSION <= VERSION_DEMO_US
-    3,
-#else
     0,
-#endif
     50,
     9999,
     48,
@@ -229,11 +217,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {10, 50, 50, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 30, 75, 100, 40, 100, 100, 40};
 #else
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {10, 50, 50, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 30, 75, 100, 40, 100, 100, 40};
-#else
 static StatusVulnerability regist = {10, 50, 90, 100, 40, 100, 100, 50, 100, 85, 100, 85, 100, 90, 40, 30, 85, 100, 40, 100, 100, 40};
-#endif
 #endif
 
 /**
@@ -311,11 +295,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE | SPECIAL_IGNORE_VULNERABILITY, // special
-#else
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
-#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -382,11 +362,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
-    {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#else
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
@@ -562,11 +538,7 @@ BattleWeapon weapon_mahorn_confuse_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_IGNORE_VULNERABILITY, // special
-#else
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
-#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -721,37 +693,21 @@ static EVT_BEGIN(attack_event)
     END_IF
     LABEL(10)
     SET_VALUE(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-    ADD(LW(0), 60)
-#else
     ADD(LW(0), 50)
-#endif
-#if VERSION <= VERSION_DEMO_US
-    ADD(LW(0), 10)
-#else
     ADD(LW(0), 30)
-#endif
     ADD(LW(0), 10)
     ADD(LW(0), 10)
     ADD(LW(0), 10)
     ADD(LW(0), 10)
     SUBTRACT(LW(0), 1)
     CALL(evt_sub_random, LW(0), LW(1))
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LW(0), 60)
-#else
     SET_VALUE(LW(0), 50)
-#endif
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
         CALL_CHILD(attack_magic_event)
         GOTO(99)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    ADD(LW(0), 10)
-#else
     ADD(LW(0), 30)
-#endif
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(9), PTR(&weapon_mahorn_all_attack_magic))
         CALL_CHILD(all_attack_magic_event)

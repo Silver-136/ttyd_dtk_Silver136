@@ -239,9 +239,7 @@ void effFunemizuMain(EffectEntry* effect) {
     Vec v = {0.0f, 0.0f, 0.0f};
     s32 i;
     s32 type;
-#if VERSION > VERSION_DEMO_US
     CameraId cam;
-#endif
     s32 dead = 0;
     f32 a, b, s, c, t, f;
 
@@ -250,17 +248,13 @@ void effFunemizuMain(EffectEntry* effect) {
     v.z = work->position.z;
     position = v;
     type = work->type;
-#if VERSION > VERSION_DEMO_US
     cam = work->cam;
-#endif
     work->timer++;
     if (work->timer > 1000) {
         work->timer -= 1000;
     }
     if (work->type == 0 || work->type == 2) {
-#if VERSION > VERSION_DEMO_US
         // FAKE: spare temporary f; `a = work->size; b = a - 1.0f;` changes the object
-#endif
         f = work->size;
         a = f;
         b = f - 1.0f;
@@ -294,9 +288,6 @@ void effFunemizuMain(EffectEntry* effect) {
             effFunemizuEntry(1, work->position.x - 14.0f * c, work->position.y, work->position.z - 14.0f * s, work->size, work->yaw);
         }
     } else {
-#if VERSION <= VERSION_DEMO_US
-        EffFunemizuWork* p;
-#endif
         work->wave0Width = 1.0f;
         for (i = 1, work++; i < effect->count; i++, work++) {
             if (work->position.y < 0.0f) {
@@ -484,9 +475,7 @@ GXSetProjection(cam->projection, cam->projType);
             GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 12);
             GXSetArray(GX_VA_TEX0, funemizu_texcoord0_tbl, 4);
-#if VERSION > VERSION_DEMO_US
             // FAKE: funemizuCallDL wraps this display-list loop with a dead read and write-back of u; the plain loop changes the object
-#endif
             funemizuCallDL(&u);
         } else {
             GXClearVtxDesc();
@@ -567,9 +556,6 @@ void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     s32 i;
     f32 w = 3.0f;
     f32 nw;
-#if VERSION <= VERSION_DEMO_US
-    f32 h, p;
-#endif
 
     cam = camGetPtr(cameraId);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);

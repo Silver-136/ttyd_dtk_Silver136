@@ -146,11 +146,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-#if VERSION <= VERSION_DEMO_US
-        (s32*)bero_05_custom_in, // enterEvent
-#else
         bero_05_custom_in, // enterEvent
-#endif
         10, // caseType
         NULL, // exitEvent
         "win_06", // nextMapName

@@ -70,9 +70,6 @@ const AudWArr R_num_audience_type_weights = {{20,40,20,5,3,2,1,1,1,1,1}};
         (sound)->volumeMultiplier = 100;                                                           \
     }
 
-#if VERSION <= VERSION_DEMO_US
-static u8 check_exe_phase_evt_status(BattleAudienceMember* member);
-#endif
 void psndSFX_vol(s32 id, s32 vol);
 void psndSFX_pit(s32 id, s32 pitch);
 
@@ -759,11 +756,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             }
             break;
         case 13:
-#if VERSION <= VERSION_DEMO_US
-            memcpy(queue, pe->phaseList, pe->phaseListCount * 4);
-#else
             memcpy(queue, pe->phaseList, pe->phaseListCount * sizeof(s32));
-#endif
             qn = pe->phaseListCount;
             pe->phaseListCount = counter = 0;
             for (; counter < qn; counter++) {
@@ -2191,14 +2184,8 @@ void BattleAudienceApSrcCtrlProcess(void) {
     s32 i;
     s32 k;
     f32 dy;
-#if VERSION <= VERSION_DEMO_US
-    f32 dx;
-    Vec tmp;
-    Vec tmp2;
-#else
     f32 dx;
     Vec tmp2;
-#endif
 
     if (!(base->flags & AUDIENCE_FLAG_SP_GAINED)) {
         return;
@@ -2254,17 +2241,8 @@ void BattleAudienceApSrcCtrlProcess(void) {
             /* fallthrough */
         case 5:
             s->timer++;
-#if VERSION <= VERSION_DEMO_US
-            dx = s->startPos.x;
-            dy = s->targetPos.x;
-            s->position.x = intplGetValue(EASING_CUBIC_OUT, dx, dy, s->timer, s->duration);
-            dx = s->startPos.y;
-            dy = s->targetPos.y;
-            s->position.y = intplGetValue(EASING_CUBIC_OUT, dx, dy, s->timer, s->duration);
-#else
             s->position.x = intplGetValue(EASING_CUBIC_OUT, s->startPos.x, s->targetPos.x, s->timer, s->duration);
             s->position.y = intplGetValue(EASING_CUBIC_OUT, s->startPos.y, s->targetPos.y, s->timer, s->duration);
-#endif
             if (s->timer >= s->duration - 20) {
                 s->scale.y = intplGetValue(EASING_QUADRATIC_OUT, 0.9f, 0.8f, s->timer - (s->duration - 20), 10);
             }
@@ -2282,12 +2260,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
                 s->timer = 0;
                 s->duration = 20 + irand(20);
                 s->startPos = s->position;
-#if VERSION <= VERSION_DEMO_US
-                tmp = statusGetApPos();
-                s->targetPos = tmp;
-#else
                 s->targetPos = statusGetApPos();
-#endif
                 dx = s->startPos.x - s->targetPos.x;
                 dy = s->startPos.y - s->targetPos.y;
                 s->radius = s->startRadius = sqrt(dx * dx + dy * dy);
@@ -2308,12 +2281,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
                 s->state = 20;
                 s->timer = 0;
                 s->duration = 15;
-#if VERSION <= VERSION_DEMO_US
-                tmp2 = statusGetApPos();
-                s->position = tmp2;
-#else
                 s->position = statusGetApPos();
-#endif
             }
             break;
         case 20:
@@ -3574,10 +3542,8 @@ s32 BattleAudience_GetPPAudienceNum_L(void) {
     return BattleAudience_GetPPAudienceNum_RL_Sub(0);
 }
 
-#if VERSION > VERSION_DEMO_US
 #pragma push
 #pragma opt_loop_invariants off
-#endif
 /**
  * Counts the members in one half of the stands (offset 0 = left ten columns, 10 = right) that are present
  * and taking part: not asleep, in a shell or leaving (BattleAudience_GetPPAudienceNum_Sub).
@@ -3597,9 +3563,7 @@ s32 BattleAudience_GetPPAudienceNum_RL_Sub(s32 offset) {
     }
     return count;
 }
-#if VERSION > VERSION_DEMO_US
 #pragma pop
-#endif
 
 /** TRUE when member id exists and takes part: not asleep (13), hiding in its shell (17) or leaving (12). */
 BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id) {

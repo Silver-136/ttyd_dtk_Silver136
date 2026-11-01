@@ -1403,9 +1403,6 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
             case 6:
             case 7:
                 evt->lwData[1] = party_id_table[id];
-#if VERSION <= VERSION_DEMO_US
-                name = select_party_name(id);
-#else
                 switch (id) {
                     case 0:
                         name = msgSearch(name_party0);
@@ -1429,7 +1426,6 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                         name = msgSearch(name_party6);
                         break;
                 }
-#endif
                 evt->lwData[3] = (EvtWord)name;
                 break;
             case 8:
@@ -1505,11 +1501,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
             case 15:
                 evt->lwData[1] = id;
                 evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
-#if VERSION <= VERSION_DEMO_US
                 evt->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[id].buy_price) / 10;
-#else
-                evt->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[id].buy_price) / 10;
-#endif
                 evt->lwData[4] = itemDataTable[id].bp_cost;
                 break;
             case 16:
@@ -1519,11 +1511,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 evt->lwData[4] = itemDataTable[id].bp_cost;
                 break;
             case 17:
-#if VERSION <= VERSION_DEMO_US
-                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
-#else
                 sprintf(jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
-#endif
                 sprintf(buf, "jperfect_title_%04d", jdt->info[id].storyId);
                 jdt->curIndex = id;
                 name = msgSearch(buf);
@@ -1537,11 +1525,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 }
                 break;
             case 18:
-#if VERSION <= VERSION_DEMO_US
-                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
-#else
                 sprintf(jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
-#endif
                 jdt->curIndex = id;
                 evt->lwData[1] = (EvtWord)jdt->infoEnd;
                 evt->lwData[2] = (EvtWord)jdt->info[id].initEndPos;
@@ -2036,7 +2020,6 @@ void select_disp(WinMgrEntry* entry) {
 }
 #endif
 
-#if VERSION > VERSION_DEMO_US
 static inline s32 select_party_icon(u16 id) {
     s32 icon = party_icon_table[id];
     if (icon == ICON_PARTY_YOSHI) {
@@ -2067,7 +2050,6 @@ static inline s32 select_party_icon(u16 id) {
     }
     return icon;
 }
-#endif
 
 /**
  * Draws the partner list of the rank-up and rank-swap menus:
@@ -2677,11 +2659,7 @@ void select_disp3_party(WinMgrEntry* entry) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
-static void select_disp3_mario(WinMgrEntry* entry) {
-#else
 void select_disp3_mario(WinMgrEntry* entry) {
-#endif
     WinMgrSelect* sel = entry->param;
     char buf[0x48];
     const char* help;

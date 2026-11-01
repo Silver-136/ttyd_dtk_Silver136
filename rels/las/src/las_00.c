@@ -186,13 +186,8 @@ static EVT_BEGIN(first_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW_STORY_PROGRESS, STG8_00_START)
-    CALL_CHILD(bero_case_entry)
-#else
     SET_VALUE(GSW_STORY_PROGRESS, STG8_00_START)
     CALL_CHILD(PTR(bero_case_entry))
-#endif
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_snd_bgm_scope, 0, 0)
@@ -233,27 +228,13 @@ EVT_BEGIN(las_00_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
-        CALL_CHILD(evt_bero_info_run)
-#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_00_START)
-        SPAWN_EVENT(first_evt)
-#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_00_START)
         SPAWN_EVENT(PTR(first_evt))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(shan_init)
-#else
     CALL_CHILD(PTR(shan_init))
-#endif
     RETURN
 EVT_END()
 

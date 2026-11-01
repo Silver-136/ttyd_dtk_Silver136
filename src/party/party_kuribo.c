@@ -180,27 +180,13 @@ if (!(party->flags & PARTY_FLAG_IS_GROUNDED)) {
             }
 #endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv2BigBigBlock")) {
-#if VERSION <= VERSION_DEMO_US
-            if (pouchGetHammerLv() < 1)
-#else
             if (pouchGetHammerLv() < 1) {
-#endif
                 msg = "obj_hlp_block_s_0";
-#if VERSION <= VERSION_DEMO_US
-            else if (pouchGetHammerLv() < 3)
-#else
             } else if (pouchGetHammerLv() < 3) {
-#endif
                 msg = "obj_hlp_block_s_1";
-#if VERSION <= VERSION_DEMO_US
-            else
-#else
             } else {
-#endif
                 msg = "obj_hlp_block_s_3";
-#if VERSION > VERSION_DEMO_US
             }
-#endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv3BigBigBlock") || !strcmp(mobj->animName, "MOBJ_Lv3BigBlock") || !strcmp(mobj->animName, "MOBJ_Lv3Block")) {
             msg = "obj_hlp_redyellow_block";
         } else if (!strcmp(mobj->animName, "MOBJ_Block") || !strcmp(mobj->animName, "MOBJ_PinkBlock")) {
@@ -224,17 +210,9 @@ if (!(party->flags & PARTY_FLAG_IS_GROUNDED)) {
             msg = pouchGetJumpLv() < 2 ? "obj_hlp_big_switch_1" : "obj_hlp_big_switch_2";
         } else if (!strcmp(mobj->animName, "MOBJ_TreasureBox") || !strcmp(mobj->animName, "MOBJ_GrayTreasureBox") ||
                    !strcmp(mobj->animName, "MOBJ_BigTreasureBox")) {
-#if VERSION <= VERSION_DEMO_US
-            msg = mobjCheckItemboxOpen((void*)mobj) == 2 ? "obj_hlp_takara_1" : "obj_hlp_takara_0";
-#else
             msg = mobjCheckItemboxOpen(mobj) == 2 ? "obj_hlp_takara_1" : "obj_hlp_takara_0";
-#endif
         } else if (!strcmp(mobj->animName, "MOBJ_BlackTreasureBox")) {
-#if VERSION <= VERSION_DEMO_US
-            msg = mobjCheckItemboxOpen((void*)mobj) == 2 ? "obj_hlp_blackbox_1" : "obj_hlp_blackbox_0";
-#else
             msg = mobjCheckItemboxOpen(mobj) == 2 ? "obj_hlp_blackbox_1" : "obj_hlp_blackbox_0";
-#endif
         } else if (!strcmp(mobj->animName, "MOBJ_RedJumpStand") || !strcmp(mobj->animName, "MOBJ_RedJumpStand2") ||
                    !strcmp(mobj->animName, "MOBJ_BlueJumpStand") || !strcmp(mobj->animName, "MOBJ_BlueJumpStand2") ||
                    !strcmp(mobj->animName, "MOBJ_MapJumpStand")) {
@@ -249,15 +227,9 @@ if (!(party->flags & PARTY_FLAG_IS_GROUNDED)) {
             msg = "obj_hlp_yuka_switch";
         } else if (!strcmp(mobj->animName, "MOBJ_BreakingFloor") || !strcmp(mobj->animName, "MOBJ_BlackBreakingFloor")) {
             msg = "obj_hlp_hip_attack";
-#if VERSION <= VERSION_DEMO_US
-            if (pouchGetJumpLv() >= 2)
-#else
             if (pouchGetJumpLv() >= 2) {
-#endif
                 msg = "obj_hlp_hip_attack_1";
-#if VERSION > VERSION_DEMO_US
             }
-#endif
         } else if (!strcmp(mobj->animName, "MOBJ_BombRock")) {
             msg = "obj_hlp_bomb_rock";
         } else if (!strcmp(mobj->animName, "MOBJ_Signboard")) {
@@ -271,9 +243,7 @@ if (!(party->flags & PARTY_FLAG_IS_GROUNDED)) {
         } else {
             msg = "msg_kuri_map";
         }
-#if VERSION > VERSION_DEMO_US
         // FAKE: msg is always set by the chain above; dropping the test changes the object
-#endif
         if (msg) {
             event->lwData[0] = (EvtWord)msg;
             partyChgPoseId(party, 7);

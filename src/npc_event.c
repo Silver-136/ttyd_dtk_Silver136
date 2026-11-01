@@ -260,11 +260,7 @@ USER_FUNC(chain_main);
 USER_FUNC(kamec_fire_magic_delete);
 USER_FUNC(kamec_fire_magic);
 
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord enemy_common_dead_event[];
-#else
 EvtWord enemy_common_dead_event[156];
-#endif
 EvtWord enemy_event_dead_event_sub[36];
 EvtWord enemy_common_blow_event[13];
 EvtWord enemy_2d_common_dead_event[415];
@@ -356,11 +352,7 @@ EvtWord honenoko2_lost_event[36];
 EvtWord honenoko2_return_event[46];
 EvtWord killer_init_event[19];
 EvtWord killer_move_event[79];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord killer_dead_event[];
-#else
 EvtWord killer_dead_event[156];
-#endif
 EvtWord killer_cannon_init_event[13];
 EvtWord killer_cannon_move_event[157];
 EvtWord sambo_move_event[22];
@@ -491,11 +483,7 @@ EvtWord mahoon_dead_event[24];
 EvtWord mahoon_find_event[177];
 EvtWord mahoon_lost_event[142];
 EvtWord mahoon_return_event[251];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord kamec_init_event[];
-#else
 EvtWord kamec_init_event[54];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord kamec_move_event[];
 #else
@@ -507,11 +495,7 @@ EvtWord kamec_return_event[150];
 EvtWord kamec_blow_event[19];
 EvtWord kamec2_init_event[54];
 EvtWord kamec2_move_event[58];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord kamec2_find_event[];
-#else
 EvtWord kamec2_find_event[153];
-#endif
 EvtWord kamec2_lost_event[31];
 EvtWord kamec2_return_event[37];
 EvtWord kamec2_blow_event[19];
@@ -579,11 +563,7 @@ extern EvtWord zakoM2D_find_start_event[];
 EvtWord zakoM2D_find_start_event[88];
 #endif
 EvtWord gesso2D_init_event[34];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord gesso2D_move_event[];
-#else
 EvtWord gesso2D_move_event[262];
-#endif
 
 /**
  * Dead event of most field enemies, run when the enemy is beaten in battle or killed on the field:
@@ -5082,17 +5062,9 @@ USER_FUNC(zakoEntryDokan) {
     for (i = 0; i < 3; i++) {
         zako = npcNameToPtr(names[i]);
         if (zako->position.y <= -75.0f) {
-#if VERSION <= VERSION_DEMO_US
-            zako->flags |= NPC_FLAG_JUMPING | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR;
-#else
             zako->flags |= (NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY);
-#endif
             zako->flags &= ~NPC_FLAG_NO_HIT;
-#if VERSION <= VERSION_DEMO_US
-            zako->statusFlags |= NPC_STATUS_NO_FIND_ONCE | NPC_STATUS_FACE_MOVE_DIR;
-#else
             zako->statusFlags |= (NPC_STATUS_FACE_MOVE_DIR | NPC_STATUS_NO_FIND_ONCE);
-#endif
             zako->statusFlags &= ~(NPC_STATUS_DEAD | NPC_STATUS_IN_WATER | NPC_STATUS_DARKEN | NPC_STATUS_NO_WATER_DRAG);
             {
                 Vec pos = {0.0f, 0.0f, 0.0f};

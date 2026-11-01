@@ -22,11 +22,7 @@ extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 s, f32 c)
 
 void kemuri(void);
 void kemuri_mugi(void);
-#if VERSION <= VERSION_DEMO_US
-static inline void mario_kemuri_landon(void);
-#else
 void mario_kemuri_landon(void);
-#endif
 
 
 /**

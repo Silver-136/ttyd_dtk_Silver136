@@ -78,11 +78,7 @@ static EvtWord damage_event[111];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[216];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[216];
-#else
 static EvtWord dead_event[234];
-#endif
 #endif
 static EvtWord entry_event[78];
 static EvtWord attack_event[150];
@@ -176,13 +172,7 @@ BattleUnitKind unit_boss_magnum_battender = {
     0, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_BOSS_MBTN_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -609,11 +599,7 @@ static EVT_BEGIN(dead_event)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, BTL_POSE_DAMAGE)
     CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, BTL_POSE_DAMAGE)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg2_mri_e24_16"), 0, UNIT_ID_SELF)
-#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg2_mri_e24_16"), 0, -2)
-#endif
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -1271,11 +1257,7 @@ static BattleWeapon weapon_batten_rocket_attack = {
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
     TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel

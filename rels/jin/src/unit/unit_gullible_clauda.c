@@ -28,11 +28,7 @@ EvtWord damage_event_clauda[22];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event_clauda[156];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event_clauda[156];
-#else
 static EvtWord dead_event_clauda[177];
-#endif
 #endif
 static EvtWord attack_event_clauda[393];
 static EvtWord wait_event_clauda[6];
@@ -238,11 +234,7 @@ static EVT_BEGIN(dead_event_clauda)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
@@ -252,11 +244,7 @@ static EVT_BEGIN(dead_event_clauda)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 0, 130, 58, 228, 130, 38, -20, 30, 11)
         WAIT_FRAMES(37)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_win"), 0, UNIT_ID_SELF)
-#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_win"), 0, -2)
-#endif
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
 #if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)

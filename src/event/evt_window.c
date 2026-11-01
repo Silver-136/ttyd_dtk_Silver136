@@ -75,9 +75,7 @@ USER_FUNC(evt_win_item_select) {
 #endif
     WinMgrSelect* sel;
     s32 result;
-#if VERSION > VERSION_DEMO_US
     s32 cursor;
-#endif
     if (isFirstCall) {
         event->userdatap[0] = winMgrSelectEntry(type, 0, 1);
         marioKeyOff();
@@ -321,29 +319,15 @@ static void coin_disp(WinMgrEntry* entry) {
     switch (w->type) {
     case COIN_WINDOW_COINS:
         target = pouchGetCoin();
-#if VERSION <= VERSION_DEMO_US
-        icon = 0x18B;
-#else
         icon = ICON_ITEM_COIN;
-#endif
         break;
     case COIN_WINDOW_SHINE_SPRITES:
-#if VERSION <= VERSION_DEMO_US
-        target = pouchGetSuperCoin();
-        icon = 0x102;
-#else
         target = pouchGetSuperCoin();
         icon = ICON_ITEM_SHINE_SPRITE;
-#endif
         break;
     case COIN_WINDOW_STAR_PIECES:
-#if VERSION <= VERSION_DEMO_US
-        target = pouchGetStarPiece();
-        icon = 0x18D;
-#else
         target = pouchGetStarPiece();
         icon = ICON_ITEM_STAR_PIECE;
-#endif
         break;
     }
     PSMTXTrans(pos, -220.0f, -113.0f, 0.0f);
@@ -351,11 +335,7 @@ static void coin_disp(WinMgrEntry* entry) {
     PSMTXConcat(pos, scale, pos);
     iconDispGx2(pos, ICON_FLAG_2D, icon);
     PSMTXTrans(pos, -192.0f, -113.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
-    iconDispGx2(pos, ICON_FLAG_2D, 0x1D6);
-#else
     iconDispGx2(pos, ICON_FLAG_2D, ICON_TIMES);
-#endif
     PSMTXTrans(pos, -126.0f, -113.0f, 0.0f);
     {
         GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};

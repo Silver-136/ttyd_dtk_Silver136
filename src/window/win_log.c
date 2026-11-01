@@ -2089,24 +2089,12 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
 void mapGX(WindowWork* w, f32 x, f32 y) {
 #endif
     static f32 pos_tbl[7][2] = {
-#if VERSION <= VERSION_DEMO_US
-        {165.0f, 68.0f},
-        {0.0f, 75.0f},
-        {97.0f, 150.0f},
-        {-139.0f, -33.0f},
-        {41.0f, -163.0f},
-        {211.0f, -91.0f},
-        {-209.0f, 159.0f},
-#else
         {165.0f, 68.0f}, {0.0f, 75.0f}, {97.0f, 150.0f}, {-139.0f, -33.0f},
         {41.0f, -163.0f}, {211.0f, -91.0f}, {-209.0f, 159.0f},
-#endif
     };
     GXColor c2;
     GXColor c0;
-#if VERSION > VERSION_DEMO_US
     // FAKE: c2 and c0 are never read; GXColor white = {0xFF, 0xFF, 0xFF, 0xFF} alone changes the object
-#endif
     GXColor white = (c2 = (c0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF}));
     s32 tex;
     Mtx m;
@@ -2141,9 +2129,7 @@ if (swByteGet(0) < t->id)
             if (swByteGet(0) >= t->id || tubuCheck(t->type)) { // GSW_STORY_PROGRESS
 #endif
                 if (w->log.mapSel == i) {
-#if VERSION > VERSION_DEMO_US
                     // FAKE: the texture id goes through a spare temporary tex in a comma expression; ((gp->retraceCount >> 4) & 1) ? 0xB9 : 0xBA changes the object
-#endif
                     winTexSet((tex = 0xBA, ((gp->retraceCount >> 4) & 1) ? tex = 0xB9 : 0, tex), (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
                 } else {
                     winTexSet(t->big ? 0xBA : 0xB8, (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);

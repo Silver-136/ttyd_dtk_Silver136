@@ -39,9 +39,7 @@ USER_FUNC(_disp_heart_entry_stop);
 void _disp_heart(CameraId camera, void* param);
 USER_FUNC(_disp_heart_entry);
 USER_FUNC(_make_kagenuke_weapon);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(_get_vivian_attack_position);
-#endif
 USER_FUNC(_get_move_frame);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
@@ -1015,12 +1013,7 @@ EVT_END()
 #endif
 
 EVT_BEGIN(partyVivianAttack_ShadowGuard)
-#if VERSION <= VERSION_DEMO_US
-    // Target Mario, pay the cost and focus the camera on Vivian as she floats over to him.
-    SET_VALUE(LW(3), -3)
-#else
     SET_VALUE(LW(3), UNIT_ID_MARIO)
-#endif
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
@@ -1037,17 +1030,9 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     CALL(btlevtcmd_FaceDirectionSub, LW(3), LW(0), 15)
     ADD(LW(2), 5)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(2.0f))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-#endif
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), -1, FACE_DIR_TOWARD_UNIT, LW(0))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(0))
-#if VERSION <= VERSION_DEMO_US
-    // Action command (press the buttons in order as they appear); on a failure she floats back home and nothing
-    // happens.
-#endif
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
@@ -1082,11 +1067,7 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
         CALL(btlevtcmd_StopAC)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(2.0f))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-#endif
         GOTO(90)
     END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -1111,19 +1092,11 @@ CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
         CALL(btlevtcmd_AnimeChangePose, LW(3), 1, STRING("M_B_3"))
         CALL(battle_evt_majo_disp_off, LW(3), 1, 1, 0)
         CALL(btlevtcmd_OnAttribute, LW(3), kVeiled)
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
-#else
         CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, (kHidden | kNoShadow))
-#endif
         WAIT_FRAMES(1)
         CALL(btlevtcmd_GetHomePos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
     END_SIBLING_EVENT
-#if VERSION <= VERSION_DEMO_US
-    // Vivian follows him under with a ripple on the floor; she stays untargetable until vivian_hide_event brings
-    // them back out.
-#endif
     CALL(battle_evt_majo_disp_off, UNIT_ID_SELF, 1, 1, 1)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, LW(3), LW(5), LW(1), LW(2))
@@ -1143,9 +1116,6 @@ CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, -1, -1, FACE_DIR_ATTACK_DIR, LW(0))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(0))
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    // The audience refills Star Power and the camera returns.
-#endif
     LABEL(90)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)

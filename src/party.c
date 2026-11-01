@@ -874,9 +874,7 @@ static inline void partyLeaveRunMode(PartyEntry* party) {
 void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
 #endif
     MarioWork* mario;
-#if VERSION > VERSION_DEMO_US
     PartyFunc func;
-#endif
 
 #if VERSION <= VERSION_DEMO_US
     if (party->runMode != 9 && party->runMode != 3) {
@@ -960,9 +958,7 @@ void partyChgRunMode(PartyEntry* party, s32 mode) {
     party->runMode = mode;
     party->trigFlags |= PARTY_TRIG_CHG_RUN_MODE;
 }
-#if VERSION > VERSION_DEMO_US
 #pragma dont_inline reset
-#endif
 
 #if VERSION > VERSION_DEMO_US
 #pragma dont_inline on
@@ -1003,9 +999,7 @@ void partyPrevRunMode(PartyEntry* party) {
     partyChgMot(party, 0);
 }
 #endif
-#if VERSION > VERSION_DEMO_US
 #pragma dont_inline reset
-#endif
 
 /**
  * Returns the partner to the run mode she had before the current one,
@@ -1140,26 +1134,16 @@ void driveParty(PartyEntry* party) {
         case 14:
             break;
         default:
-#if VERSION <= VERSION_DEMO_US
-            if (!(party->flags & PARTY_FLAG_CTRL_OFF))
-#else
             if (!(party->flags & PARTY_FLAG_CTRL_OFF)) {
-#endif
                 break;
-#if VERSION > VERSION_DEMO_US
             }
-#endif
             if (vivianGetStatus() != 2) {
                 vivianShadow(party);
             }
             partyPreDisp(party);
             return;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (*(u32*)mario & MARIO_FLAG_BG_MODE) {
-#else
     if (mario->flags & MARIO_FLAG_BG_MODE) {
-#endif
         party->flags |= PARTY_FLAG_BG_MODE;
     } else {
         party->flags &= ~PARTY_FLAG_BG_MODE;
@@ -1171,15 +1155,9 @@ void driveParty(PartyEntry* party) {
     party->hitobjAction = NULL;
     switch (party->runMode) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
-            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF))
-#else
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
-#endif
                 break;
-#if VERSION > VERSION_DEMO_US
             }
-#endif
             if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
                 party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
                 partyChgPoseId(party, 1);
@@ -1217,46 +1195,24 @@ if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
 #endif
             break;
         case 2:
-#if VERSION <= VERSION_DEMO_US
-            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF))
-#else
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
-#endif
                 break;
-#if VERSION > VERSION_DEMO_US
             }
-#endif
             party_dp = &partyDataTbl[party->currentMemberId];
             party_dp->move_func(party);
             break;
         case 9:
-#if VERSION <= VERSION_DEMO_US
-            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF))
-#else
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
-#endif
                 break;
-#if VERSION > VERSION_DEMO_US
             }
-#endif
             partyForceWalk(party);
             break;
         case 3:
-#if VERSION <= VERSION_DEMO_US
-            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF))
-#else
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
-#endif
                 break;
-#if VERSION > VERSION_DEMO_US
             }
-#endif
             {
-#if VERSION <= VERSION_DEMO_US
-                void (*fn)(PartyEntry*);
-#else
                 PartyFunc fn;
-#endif
                 party_dp = &partyDataTbl[party->currentMemberId];
                 fn = party_dp->use_func;
                 party->flags |= PARTY_FLAG_IS_BEING_USED;
@@ -1302,15 +1258,9 @@ if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
             partyRideMain(party);
             break;
         case 12:
-#if VERSION <= VERSION_DEMO_US
-            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF))
-#else
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
-#endif
                 break;
-#if VERSION > VERSION_DEMO_US
             }
-#endif
             if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
                 party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
                 party->motionStep = 0;
@@ -1319,15 +1269,9 @@ if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
             partyRideYoshiMain(party);
             break;
         case 13:
-#if VERSION <= VERSION_DEMO_US
-            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF))
-#else
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
-#endif
                 break;
-#if VERSION > VERSION_DEMO_US
             }
-#endif
             party_damage_return(party);
             break;
         case 14:
@@ -1441,13 +1385,8 @@ psndSFXOn_3D((const char*)0x920, &party->position);
                 party->moveFrames = 16;
                 party->moveDistance = distABf(x, z, party->moveTarget.x, party->moveTarget.z);
                 party->targetDir = angleABf(x, z, party->moveTarget.x, party->moveTarget.z);
-#if VERSION <= VERSION_DEMO_US
-            party->moveSpeed = party->moveDistance / (f32) * &party->moveFrames;
-            h = 0.5f * (f32) * &party->moveFrames;
-#else
                 party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
                 h = 0.5f * (f32)party->moveFrames;
-#endif
                 dy = party->moveTarget.y - party->position.y;
                 if (__fabsf(dy) < 1.0f) {
                     dy = 10.0f;
@@ -2338,19 +2277,10 @@ void partyRideMain(PartyEntry* party) {
             party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
             party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
             party->moveFrames = 30;
-#if VERSION <= VERSION_DEMO_US
-            party->moveSpeed = (party->moveDistance) / ((f32)(party->moveFrames));
-            dy0 = (party->moveTarget.y) - party->position.y;
-#else
             party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
             dy0 = party->moveTarget.y - party->position.y;
-#endif
             party->gravity = 0.4f;
-#if VERSION <= VERSION_DEMO_US
-            party->velY = (dy0 + (0.5f * (((f32)(party->moveFrames)) * ((party->gravity) * ((f32)(party->moveFrames)))))) / ((f32)(party->moveFrames));
-#else
             party->velY = (dy0 + 0.5f * ((f32)party->moveFrames * (party->gravity * (f32)party->moveFrames))) / (f32)party->moveFrames;
-#endif
             party->spinSpeed = 1.0f;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             partyChgPoseId(party, 4);
@@ -2359,43 +2289,22 @@ void partyRideMain(PartyEntry* party) {
 
         case 1: {
                 f32 t;
-#if VERSION <= VERSION_DEMO_US
-            party->velY = (party->velY) - (party->gravity);
-            party->position.y = party->position.y + (party->velY);
-#else
                 party->velY = party->velY - party->gravity;
                 party->position.y = party->position.y + party->velY;
-#endif
                 movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
-#if VERSION <= VERSION_DEMO_US
-            party->displayDirection = revise360((party->displayDirection) + (party->spinSpeed));
-#else
                 party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
-#endif
                 party->spinSpeed += 2.0f;
-#if VERSION <= VERSION_DEMO_US
-            if ((party->spinSpeed) >= 30.0f) {
-#else
                 if (party->spinSpeed >= 30.0f) {
-#endif
                     party->spinSpeed = 30.0f;
                 }
-#if VERSION <= VERSION_DEMO_US
-            t = (f32)(party->moveFrames);
-#else
                 t = (f32)party->moveFrames;
-#endif
                 if (t > 10.0f) {
                     t = 10.0f;
                 }
                 party->scale.x = t / 10.0f;
                 party->scale.y = party->scale.x;
                 party->scale.z = party->scale.x;
-#if VERSION <= VERSION_DEMO_US
-            if ((--(party->moveFrames)) < 0) {
-#else
                 if (--party->moveFrames < 0) {
-#endif
                     party->motionStep = 2;
                 }
                 break;
@@ -2449,15 +2358,9 @@ party->velY = 0.0f;
             party->work.common.accelY = 0.5f;
 
         case 21:
-#if VERSION <= VERSION_DEMO_US
-            party->position.y = party->position.y + (party->velY);
-            party->velY = (party->velY) + (party->work.common.accelY);
-            if ((--(party->moveFrames)) > 0) {
-#else
             party->position.y = party->position.y + party->velY;
             party->velY = party->velY + party->work.common.accelY;
             if (--party->moveFrames > 0) {
-#endif
                 break;
             }
             party->motionStep = 22;
@@ -2468,11 +2371,7 @@ party->velY = 0.0f;
             break;
 
         case 200:
-#if VERSION <= VERSION_DEMO_US
-            party->flags &= ~(PARTY_FLAG_IS_RIDING_PLANE | PARTY_FLAG_IS_RIDING_SHIP | PARTY_FLAG_IS_RIDING_JABARA);
-#else
             party->flags &= ~PARTY_RIDE_CLEAR_MASK;
-#endif
             party->dispOfs.y = 0.0f;
             party->scale.x = 1.0f;
             party->scale.y = party->scale.x;
@@ -2496,11 +2395,7 @@ party->velY = 0.0f;
                 y = ((MarioWork*)mario)->position.y;
                 z = ((MarioWork*)mario)->position.z;
                 party->position.x = x;
-#if VERSION <= VERSION_DEMO_US
-            party->position.y = y + (0.5f * (((MarioWork*)mario)->wPlayerCollisionBox.y));
-#else
                 party->position.y = y + 0.5f * ((MarioWork*)mario)->wPlayerCollisionBox.y;
-#endif
                 party->position.z = z;
                 if (party->motionStep == 100) {
                     partyGetAppearPos(party, &party->moveTarget);
@@ -2511,31 +2406,17 @@ party->velY = 0.0f;
                 party->moveFrames = 16;
                 party->moveDistance = distABf(x, z, party->moveTarget.x, party->moveTarget.z);
                 party->targetDir = angleABf(x, z, party->moveTarget.x, party->moveTarget.z);
-#if VERSION <= VERSION_DEMO_US
-            party->moveSpeed = (party->moveDistance) / ((f32)(party->moveFrames));
-            h = 0.5f * ((f32)(party->moveFrames));
-            dy = (party->moveTarget.y) - party->position.y;
-#else
                 party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
                 h = 0.5f * (f32)party->moveFrames;
                 dy = party->moveTarget.y - party->position.y;
-#endif
                 if (__fabsf(dy) < 1.0f) {
                     dy = 10.0f;
                 } else if (dy >= 0.0f) {
-#if VERSION <= VERSION_DEMO_US
-                dy += 0.5f * (party->height);
-#else
                     dy += 0.5f * party->height;
-#endif
                 } else {
                     dy = 10.0f;
                 }
-#if VERSION <= VERSION_DEMO_US
-            dy = (dy + dy) / ((h * h) - h);
-#else
                 dy = (dy + dy) / (h * h - h);
-#endif
                 party->velY = dy * h;
                 party->accelY = -dy;
                 party->flags |= PARTY_FLAG_IS_JUMPING;
@@ -2549,68 +2430,35 @@ party->velY = 0.0f;
 
         case 110:
             partyMoveNoHosei(party);
-#if VERSION <= VERSION_DEMO_US
-            if ((party->velY) <= 0.0f) {
-#else
             if (party->velY <= 0.0f) {
-#endif
                 party->flags &= ~PARTY_FLAG_IS_JUMPING;
                 party->accelY = -1.6f;
             }
-#if VERSION <= VERSION_DEMO_US
-            if (party->position.y < (-2000.0f)) {
-#else
             if (party->position.y < -2000.0f) {
-#endif
                 party->moveFrames = 0;
                 party->motionStep = 111;
                 break;
             }
             if (party->hitobjStandOn == NULL) {
                 // FAKE: no-op (PartyEntry*) cast on the shrink-timer reads/stores of moveFrames; the plain field access reschedules the int->float conversion
-#if VERSION <= VERSION_DEMO_US
-                shrink = (f32)(16 - ((((PartyEntry*)party)->moveFrames)));
-#else
                 shrink = (f32)(16 - ((PartyEntry*)party)->moveFrames);
-#endif
                 s = (Vec){0.0f, 0.0f, 0.0f};
-#if VERSION <= VERSION_DEMO_US
-                s.x = (s.y = (s.z = shrink / 16.0f));
-#else
                 s.x = s.y = s.z = shrink / 16.0f;
-#endif
                 party->scale = s;
-#if VERSION <= VERSION_DEMO_US
-                if ((--(party->moveFrames)) <= 0) {
-                    (((PartyEntry*)party)->moveFrames) = 0;
-#else
                 if (--party->moveFrames <= 0) {
                     ((PartyEntry*)party)->moveFrames = 0;
-#endif
                 }
                 break;
             }
             party->motionStep = 111;
 
         case 111:
-#if VERSION <= VERSION_DEMO_US
-            shrink = (f32)(16 - ((((PartyEntry*)party)->moveFrames)));
-#else
             shrink = (f32)(16 - ((PartyEntry*)party)->moveFrames);
-#endif
             {
                 s = (Vec){0.0f, 0.0f, 0.0f};
-#if VERSION <= VERSION_DEMO_US
-                s.x = (s.y = (s.z = shrink / 16.0f));
-#else
                 s.x = s.y = s.z = shrink / 16.0f;
-#endif
                 party->scale = s;
-#if VERSION <= VERSION_DEMO_US
-                if ((--(party->moveFrames)) > 0) {
-#else
                 if (--party->moveFrames > 0) {
-#endif
                     break;
                 }
 #if VERSION <= VERSION_DEMO_US
@@ -2629,11 +2477,7 @@ party->moveDir = ((MarioWork*)mario)->moveDirection;
                 partyClearJumpPara(party);
                 partyChgPoseId(party, 1);
                 party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-#if VERSION <= VERSION_DEMO_US
-                party->flags &= ~(PARTY_FLAG_IS_RIDING_PLANE | PARTY_FLAG_IS_RIDING_SHIP | PARTY_FLAG_IS_RIDING_JABARA);
-#else
                 party->flags &= ~PARTY_RIDE_CLEAR_MASK;
-#endif
                 party->dispOfs.y = 0.0f;
                 party->scale.x = 1.0f;
                 party->scale.y = party->scale.x;
@@ -2645,8 +2489,6 @@ party->moveDir = ((MarioWork*)mario)->moveDirection;
                 partyChgRunMode(party, PARTY_RUN_WAIT);
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
-#endif
     }
 
     party->trailPos = party->position;
@@ -3587,11 +3429,7 @@ void partyPreDisp(PartyEntry* party) {
         return;
     }
     screen = party->position;
-#if VERSION <= VERSION_DEMO_US
-    PSMTX44MultVec(camGetPtr((CameraId)4)->projection, &screen, &screen);
-#else
     PSMTX44MultVec(camGetPtr(CAMERA_3D)->projection, &screen, &screen);
-#endif
     z = 5000.0f * screen.z + 5000.0f;
     if (z < 0.0f) {
         z = 0.0f;
@@ -3609,11 +3447,7 @@ void partyPreDisp(PartyEntry* party) {
     }
     mode = 2;
     size = 13.333333f;
-#if VERSION <= VERSION_DEMO_US
-    if ((s8)(u8)party->currentMemberId != PARTY_MEMBER_VIVIAN) {
-#else
     if (party->currentMemberId != PARTY_MEMBER_VIVIAN) {
-#endif
         party->trailPos = party->position;
     } else {
         if (party->runMode == 4 || (party->runMode == PARTY_RUN_GOODBYE && !(party->flags & PARTY_FLAG_IS_BEING_USED))) {

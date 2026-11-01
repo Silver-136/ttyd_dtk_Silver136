@@ -333,11 +333,7 @@ static void rankingInit(void) {
     RankEntry* entry;
 
     memset(rank_wp, 0, sizeof(RankWork));
-#if VERSION <= VERSION_DEMO_US
     rank_wp->num = evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? 23 : 21;
-#else
-    rank_wp->num = evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? 23 : 21;
-#endif
     rank_wp->entries = _mapAlloc(rank_wp->num * sizeof(RankEntry));
     memset(rank_wp->entries, 0, rank_wp->num * sizeof(RankEntry));
     entry = rank_wp->entries;
@@ -352,49 +348,25 @@ static void rankingInit(void) {
                 entry->sw[j] = swByteGet(j + (entry->id * 2 + GSW_TOU_FIGHTER_POINTS_BASE));
             }
         } else {
-#if VERSION <= VERSION_DEMO_US
             entry->score = fighterDt[entry->id].score;
-#else
-            entry->score = fighterDt[entry->id].score;
-#endif
         }
         if (entry->id == 20) {
             entry->flags |= RANK_FLAG_PLAYER;
         }
     }
     swSet(GSWF_TOU_RANKING_SAVED); // GSWF_GLITZ_PIT_RANKING_SAVED
-#if VERSION <= VERSION_DEMO_US
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-#else
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-#endif
         rank_wp->entries[21].flags |= RANK_FLAG_HIDDEN;
         rank_wp->entries[22].flags |= RANK_FLAG_HIDDEN;
-#if VERSION <= VERSION_DEMO_US
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED)) {
-#else
-        if (evtGetValue(NULL, GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED)) {
-#endif
             rank_wp->entries[18].flags |= RANK_FLAG_HIDDEN;
         }
-#if VERSION <= VERSION_DEMO_US
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_SIR_SWOOP_JOINED)) {
-#else
-        if (evtGetValue(NULL, GSWF_GLITZ_PIT_SIR_SWOOP_JOINED)) {
-#endif
             rank_wp->entries[21].flags &= ~RANK_FLAG_HIDDEN;
-#if VERSION <= VERSION_DEMO_US
             if (!evtGetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED)) {
-#else
-            if (!evtGetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED)) {
-#endif
                 rank_wp->entries[21].flags |= RANK_FLAG_BEATEN;
             }
-#if VERSION <= VERSION_DEMO_US
             evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, 1);
-#else
-            evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, 1);
-#endif
         }
 #if VERSION <= VERSION_DEMO_US
 if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
@@ -403,18 +375,10 @@ if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
 #endif
             rank_wp->entries[11].flags |= RANK_FLAG_HIDDEN;
             rank_wp->entries[22].flags &= ~RANK_FLAG_HIDDEN;
-#if VERSION <= VERSION_DEMO_US
             if (!evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED)) {
-#else
-            if (!evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED)) {
-#endif
                 rank_wp->entries[22].flags |= RANK_FLAG_BEATEN;
             }
-#if VERSION <= VERSION_DEMO_US
             evtSetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED, 1);
-#else
-            evtSetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED, 1);
-#endif
         }
     }
     rankingControll();
@@ -623,11 +587,7 @@ USER_FUNC(evt_tou_get_ranking) {
  */
 static USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
     s32 flag = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
-#else
-    s32 flag = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
-#endif
     s32 rank;
     RankEntry* entry;
     s32 i;
@@ -641,9 +601,7 @@ static USER_FUNC(evt_tou_get_next_match) {
         }
     }
     GET_RANK(rank, i);
-#if VERSION > VERSION_DEMO_US
     // A kept condition selects the fighter above; otherwise select below when available.
-#endif
     if (rank > 0) {
         if (flag) {
             evtSetValue(event, args[0], list[rank - 1]);
@@ -835,9 +793,7 @@ for (i = 0; i < rank_wp->num; i++) {
             break;
         }
     }
-#if VERSION > VERSION_DEMO_US
     // An unknown rule ID uses the final entry of the selected division table.
-#endif
     if (i == num) {
         i = num - 1;
     }
@@ -2571,24 +2527,13 @@ EVT_BEGIN(evt_tou_match_make_default)
         SET_VALUE(LW(11), STRING("stg3_tou_476_yn"))
         SET_VALUE(LW(12), STRING("stg3_tou_477_01"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // Mario chooses Reserve a Match or View Rankings.
-#endif
     CALL(evt_msg_print, 0, LW(10), 0, 0)
     CALL(evt_msg_select, 0, LW(11))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
-        // Reservations are suspended at some story points,
-        // and a major-leaguer must use the major-league terminal.
-#endif
         SET_VALUE(LF(10), 0)
         SET_VALUE(LF(11), 0)
-#if VERSION <= VERSION_DEMO_US
         SWITCH(GSW_STORY_PROGRESS)
-#else
-        SWITCH(GSW_STORY_PROGRESS)
-#endif
             CASE_BETWEEN(STG3_20_00_MAJORS_8TH_PLACE, STG3_20_03_THE_YELLOW_BLOCK)
             SET_VALUE(LF(10), 1)
             IF_INT_EQUAL(LF(0), 1)
@@ -2623,9 +2568,6 @@ CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
                 END_IF
             END_IF
         END_SWITCH
-#if VERSION <= VERSION_DEMO_US
-        // Reservations suspended: the system says so and the partner comments.
-#endif
         IF_INT_EQUAL(LF(10), 1)
             CALL(evt_party_stop, 0)
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
@@ -2642,38 +2584,21 @@ CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        // Wrong locker room for Mario's league.
-#endif
         IF_INT_EQUAL(LF(11), 1)
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
             CALL(evt_msg_print_add, 0, STRING("stg3_tou_104_01_1"))
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        // A match already booked is repeated with its opponent and condition; otherwise a new one is booked.
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
             CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
             CALL(evt_tou_get_rule_msg2, GSW_GLITZ_PIT_CONDITION, LW(2))
-#else
-        IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
-            CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
-            CALL(evt_tou_get_rule_msg2, GSW_GLITZ_PIT_CONDITION, LW(2))
-#endif
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
             CALL(evt_msg_print_add_insert, 0, LW(12), LW(0), LW(2))
             ELSE
             CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(evt_tou_match_make_default_sub)
-#else
             CALL_CHILD(PTR(evt_tou_match_make_default_sub))
-#endif
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        // View Rankings shows the ranking board.
-#endif
         CASE_EQUAL(1)
         CALL(evt_msg_continue)
         CALL(evt_tou_print_ranking)
@@ -2694,9 +2619,6 @@ EVT_END()
 
 /** Mario's decision to eat the poison cake: partner remark, a yes/no prompt and, on yes, the eating sequence. */
 EVT_BEGIN(evt_eat_doku_cake)
-#if VERSION <= VERSION_DEMO_US
-    // The partner comes over and comments; the game asks whether to eat the cake and No ends the scene.
-#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
 #if VERSION > VERSION_DEMO_US
@@ -2749,9 +2671,6 @@ CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(50.0f))
     END_INLINE_EVENT
     WAIT_MS(1000)
     DELETE_EVENT(LW(0))
-#if VERSION <= VERSION_DEMO_US
-    // The partner starts to feel funny, the music stops and a surprise jingle plays.
-#endif
     CALL(evt_msg_print_party, STRING("stg3_tou_300"))
     WAIT_MS(300)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -2765,12 +2684,7 @@ CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(50.0f))
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    // The partner, now standing apart as an NPC, says their body is going numb.
-    CALL_CHILD(party_npc_replace)
-#else
     CALL_CHILD(PTR(party_npc_replace))
-#endif
     WAIT_MS(300)
     CALL(evt_mario_get_party, LW(3))
     SWITCH(LW(3))
@@ -2799,15 +2713,8 @@ CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(50.0f))
     CALL(evt_pouch_party_left, 2)
     CALL(evt_pouch_party_left, 5)
     CALL(evt_pouch_party_left, 4)
-#if VERSION <= VERSION_DEMO_US
-    // The locker room music returns and Mario can move again.
-#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -2819,11 +2726,7 @@ EVT_BEGIN(evt_doku_cake)
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -180)
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 270)
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_open_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -2837,11 +2740,7 @@ EVT_BEGIN(evt_doku_cake)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(bero_close_door_play_se)
-#else
         SPAWN_EVENT(PTR(bero_close_door_play_se))
-#endif
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
@@ -2871,11 +2770,7 @@ EVT_BEGIN(evt_doku_cake)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_open_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -2889,11 +2784,7 @@ EVT_BEGIN(evt_doku_cake)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -200, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, -1000, 0)
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_close_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -2904,11 +2795,7 @@ EVT_BEGIN(evt_doku_cake)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_TOU_POISON_CAKE_ON_TABLE_UNUSED, 1)
-#else
-    SET_VALUE(GSWF_TOU_POISON_CAKE_ON_TABLE_UNUSED, 1)
-#endif
     RETURN
 EVT_END()
 
@@ -3924,13 +3811,8 @@ EVT_END()
 EVT_BEGIN(evt_cake_init)
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 6)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_TOU_RANK_6_CAKE_DONE, 0)
             IF_INT_EQUAL(GSWF_TOU_CAKE_ON_TABLE, 0)
-#else
-        IF_INT_EQUAL(GSWF_TOU_RANK_6_CAKE_DONE, 0)
-            IF_INT_EQUAL(GSWF_TOU_CAKE_ON_TABLE, 0)
-#endif
                 CALL(evt_item_entry, STRING("cake"), ITEM_CAKE, 20, 25, -25, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
 #if VERSION > VERSION_DEMO_US
                 CALL(evt_item_status_on, STRING("cake"), ITEM_FLAG2_NO_PARTNER)

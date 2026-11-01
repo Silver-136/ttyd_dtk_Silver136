@@ -368,18 +368,10 @@ CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 68, -120
     CALL(evt_npc_wait_battle_end)
     CALL(evt_cam3d_evt_off, 0, EASING_QUADRATIC_OUT)
     SET_VALUE(LW(10), STRING("第三勢力部下"))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(enemy_event_dead_event_sub)
-#else
     SPAWN_EVENT(PTR(enemy_event_dead_event_sub))
-#endif
     WAIT_MS(500)
     // He drops the Red Key, which pops out of him.
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
-#else
-    CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
-#endif
     CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     // The story advances and Mario regains control.
 #if VERSION <= VERSION_DEMO_US

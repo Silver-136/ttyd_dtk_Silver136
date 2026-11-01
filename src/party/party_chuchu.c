@@ -479,12 +479,7 @@ void chuchu_move(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-#if VERSION <= VERSION_DEMO_US
-        // FAKE: the call passes a second argument partyWalkInit does not take (no effect); the cast keeps it.
-        ((void (*)(PartyEntry*, s32))partyWalkInit)(party, 1);
-#else
         partyWalkInit(party, 1);
-#endif
     }
 #if VERSION > VERSION_DEMO_US
     partyUpdMoveSpd(party);

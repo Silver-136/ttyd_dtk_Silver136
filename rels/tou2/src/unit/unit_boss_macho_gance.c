@@ -109,48 +109,17 @@ BattleUnitKind unit_boss_macho_gance = {
     6, // pbSoftCap
     116, // width
     124, // height
-#if VERSION <= VERSION_DEMO_US
-    30,
-    100,
-    0.0f,
-    62.0f,
-    0.0f,
-    0,
-    -3,
-    40.0f,
-    80.0f,
-    0.0f,
-    58.0f,
-    0.0f,
-    -10.0f,
-#else
     {30, 100}, // hitOffset
     {0.0f, 62.0f, 0.0f}, // centerOffset
     {0, -3}, // hpGaugeOffset
     {40.0f, 80.0f, 0.0f}, // talkTogeBaseOffset
     {58.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
-#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-    58.0f,
-    0.0f,
-    0.0f,
-    42.0f,
-    80.0f,
-    0.0f,
-    0.0f,
-    62.0f,
-    0.0f,
-#else
     {58.0f, 0.0f, 0.0f}, // bintaHitOffset
     {42.0f, 80.0f, 0.0f}, // kissHitOffset
     {0.0f, 62.0f, 0.0f}, // cutBaseOffset
-#endif
     116.0f, // cutWidth
     124.0f, // cutHeight
     0, // turnOrder
@@ -159,13 +128,7 @@ BattleUnitKind unit_boss_macho_gance = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_BOSS_GANSU_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -834,11 +797,7 @@ static EVT_BEGIN(phase_event)
             IF_INT_GREATER(LW(0), 0)
                 WAIT_MS(LW(0))
             END_IF
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_17"), 0, UNIT_ID_SELF)
-#else
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_17"), 0, -2)
-#endif
             WAIT_MS(300)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -856,11 +815,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             SET_VALUE(LW(0), 1)
             CALL_CHILD(macho_gance_zoom)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_18"), 0, UNIT_ID_SELF)
-#else
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_18"), 0, -2)
-#endif
             WAIT_MS(300)
             SET_VALUE(LW(0), 0)
             CALL_CHILD(macho_gance_blur_zoom)
@@ -927,11 +882,7 @@ CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
                 END_SIBLING_EVENT
                 CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
-                CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, -1)
-#else
                 CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, MOVE_SOUND_FROM_TABLE)
-#endif
                 BEGIN_SIBLING_EVENT
                     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_HIPDROP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
                     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 800)
@@ -960,11 +911,7 @@ CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
             CALL_CHILD(macho_gance_zoom)
             CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, BTL_POSE_TALK)
             CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, BTL_POSE_STAY)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_19"), 0, UNIT_ID_SELF)
-#else
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_19"), 0, -2)
-#endif
             WAIT_MS(300)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

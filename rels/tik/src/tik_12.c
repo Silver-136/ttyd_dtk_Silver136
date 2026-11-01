@@ -380,11 +380,7 @@ s32 iri_14_item_tbl[] = {
  * Mario hands one over, gets 30 coins and the request is marked solved. Otherwise she says majinaisi_00.
  */
 EVT_BEGIN(majinaisi_direct_talk)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HEARTFUL_CAKE_RECIPE)
-#else
-    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HEARTFUL_CAKE_RECIPE)
-#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_14_00"), 0, 0)
             ELSE
@@ -408,11 +404,7 @@ CALL(evt_win_item_select, PTR(iri_14_item_tbl), LW(0))
                         CALL(evt_pouch_remove_item, ITEM_CAKE_MIX, LW(0))
                         CALL(evt_msg_print, 0, STRING("irai_14_05"), 0, 0)
                         CALL(evt_sub_get_coin, 30)
-#if VERSION <= VERSION_DEMO_US
                         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#else
-                        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#endif
                         SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_HEARTFUL_CAKE_RECIPE), 1)
                         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                     END_IF

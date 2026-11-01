@@ -658,21 +658,12 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
 
     for (i = 0; _st_pri_data[i] != -1; i++) {
         msg = &base->msg[_st_pri_data[i]];
-#if VERSION <= VERSION_DEMO_US
-        if (msg->type == -1)
-            continue;
-#else
         if (msg->type == -1) continue;
-#endif
         ret = TRUE;
         BattleGetUnitPtr(wp, msg->unitId);
         if (msg->timer) {
             msg->timer--;
-#if VERSION <= VERSION_DEMO_US
-            if (BattlePadCheckTrigger((PAD_BUTTON_A | PAD_BUTTON_B))) {
-#else
             if (BattlePadCheckTrigger(PAD_BUTTON_A | PAD_BUTTON_B)) {
-#endif
                 msg->timer = 0;
             }
             if (!msg->timer) {

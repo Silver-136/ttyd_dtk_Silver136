@@ -24,19 +24,11 @@ static EvtWord init_event[46];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord phase_event[22];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[22];
-#else
 static EvtWord phase_event[38];
-#endif
 #endif
 EvtWord koura_open[72];
 EvtWord koura_close[79];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord damage_core[];
-#else
 EvtWord damage_core[92];
-#endif
 EvtWord pose_tbl_reset[58];
 static EvtWord dead_event[243];
 EvtWord destroy_event[47];

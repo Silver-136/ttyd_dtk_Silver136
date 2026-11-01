@@ -84,24 +84,12 @@ BeroEntry bero_data_c_nidome[] = {
 };
 
 EVT_BEGIN(rsh_08_a_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
-#else
-    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#else
-        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
@@ -115,37 +103,19 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
         END_IF
     END_IF
-#if VERSION > VERSION_DEMO_US
     // Default to route A; independent checks let B override A and C override both.
-#endif
     SET_VALUE(LW(0), PTR(bero_data_a_nidome))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_A, 1)
-#else
-    IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_A, 1)
-#endif
         SET_VALUE(LW(0), PTR(bero_data_a_nidome))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_B, 1)
-#else
-    IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_B, 1)
-#endif
         SET_VALUE(LW(0), PTR(bero_data_b_nidome))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_C, 1)
-#else
-    IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_C, 1)
-#endif
         SET_VALUE(LW(0), PTR(bero_data_c_nidome))
     END_IF
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN
 EVT_END()

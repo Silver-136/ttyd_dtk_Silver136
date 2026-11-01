@@ -31,11 +31,7 @@ static EvtWord haguruma_evt[194];
 static EvtWord dai_evt[13];
 const char* hosi_name[14];
 EvtWord hosi_sw_check[303];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord hosi_onoff[];
-#else
 EvtWord hosi_onoff[69];
-#endif
 EvtWord hosi_02_sw_evt[15];
 EvtWord hosi_03_sw_evt[15];
 EvtWord hosi_04_sw_evt[15];
@@ -529,35 +525,21 @@ EVT_BEGIN(las_20_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_01a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_08a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_09a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_12a"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(haguruma_evt)
-#else
     SPAWN_EVENT(PTR(haguruma_evt))
-#endif
     CALL(evt_map_playanim, STRING("kusari"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_hit_bind_mapobj, STRING("A_move_dai"), STRING("S_move_dai"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_move_dai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_switch_red, 0, STRING("dai_switch"), -250, -290, 100, PTR(dai_evt), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(hosi_init)
-    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 295, -440, -15, ITEM_REPEL_CAPE, 0, GSWF_LAS_20_REPEL_CAPE_BLOCK, 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_item01"), 640, -320, -135, ITEM_LIFE_SHROOM, 0, GSWF_LAS_20_LIFE_SHROOM_BLOCK, 0)
-#else
     SPAWN_EVENT(PTR(hosi_init))
     CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 295, -440, -15, ITEM_REPEL_CAPE, 0, GSWF_LAS_20_REPEL_CAPE_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_item01"), 640, -320, -135, ITEM_LIFE_SHROOM, 0, GSWF_LAS_20_LIFE_SHROOM_BLOCK, 0)
-#endif
     RETURN
 EVT_END()
 

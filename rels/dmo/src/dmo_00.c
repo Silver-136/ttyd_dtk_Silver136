@@ -661,10 +661,6 @@ EVT_END()
  * where Peach meets the mysterious person who gives her the golden treasure box (op_00 to op_12 onwards).
  */
 EVT_BEGIN(demo_evt)
-#if VERSION <= VERSION_DEMO_US
-    // The demo starts: a watcher is spawned so A or Start skips to the title screen, and the storybook music
-    // begins.
-#endif
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(10), 0)
     SPAWN_EVENT_GET_ID(PTR(buttonCheck), GW(10))
@@ -1087,9 +1083,6 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO2"))
         WAIT_MS(300)
         CALL(evt_npc_set_anim, STRING("peach"), STRING("P_B_4"))
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    // After a pause the demo ends with a white fade to the title screen.
-#endif
     WAIT_MS(2000)
     LOOP(0)
         IF_INT_EQUAL(GF(10), 0)

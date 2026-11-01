@@ -77,11 +77,7 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
 #endif
         CALL(evt_mario_kill_party, 0)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(epilogue_evt)
-#else
         SPAWN_EVENT(PTR(epilogue_evt))
-#endif
     END_IF
     RETURN
 EVT_END()

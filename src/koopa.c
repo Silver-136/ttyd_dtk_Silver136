@@ -359,15 +359,9 @@ void kpa2DMain(void) {
     kpaFireMain();
     {
         MarioWork* m2 = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
         if (m2->kpaWork->mutekiTimer > 0) {
             if (--m2->kpaWork->mutekiTimer <= 0) {
                 m2->kpaWork->mutekiTimer = 0;
-#else
-        if (m2->kpaWork->mutekiTimer > 0) {
-            if (--m2->kpaWork->mutekiTimer <= 0) {
-                m2->kpaWork->mutekiTimer = 0;
-#endif
                 kpaMutekiOff();
             }
         }
@@ -954,9 +948,6 @@ void kpaFireMain(void) {
     Mtx m20;
     Vec out;
     Vec zero;
-#if VERSION <= VERSION_DEMO_US
-    s32 flag;
-#endif
     s32 lv;
     EffectEntry* fe;
     EffGonbabaBreathWork* w;
@@ -964,19 +955,10 @@ void kpaFireMain(void) {
     f32 ballScale;
     f32 f30;
     f32 headScale;
-#if VERSION <= VERSION_DEMO_US
-    mario->kpaWork->flameHit = NULL;
-    flag = 0;
-    if (fireefp && (f32)flag == 0.0f) {
-#else
     mario->kpaWork->flameHit = NULL;
     if (fireefp) {
-#endif
         f32 dir;
         f32 scale;
-#if VERSION <= VERSION_DEMO_US
-        f32 x;
-#endif
         f32 y;
         f32 z;
         s32 t;
@@ -1049,11 +1031,7 @@ void kpaFireMain(void) {
                         hit = kpaFlameHitCheck(out.x, out.y, out.z, f30);
 #endif
                         if (hit) {
-#if VERSION <= VERSION_DEMO_US
-                        mario->kpaWork->flameHit = hit;
-#else
                             mario->kpaWork->flameHit = hit;
-#endif
                             break;
                         }
                     }
@@ -1067,11 +1045,7 @@ void kpaFireMain(void) {
 #endif
     if (kpaFireAttackCheck() == 0) {
         if (fireefp) {
-#if VERSION <= VERSION_DEMO_US
-                effSoftDelete((void*)fireefp);
-#else
             effSoftDelete(fireefp);
-#endif
             fireefp = NULL;
         }
     }

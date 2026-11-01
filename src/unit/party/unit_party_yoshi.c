@@ -2559,12 +2559,6 @@ USER_FUNC(_gundan_yoshi_run_effect) {
         w->state = 0;
         w->timer = 0.0f;
         event->userdata[0] = 0;
-#if VERSION <= VERSION_DEMO_US
-            {
-                Vec tmp;
-                tmp.x = (f32)id;
-            }
-#endif
         event->userdata[1] = psndSFXOn("SFX_BTL_YOSHI_TAIGUN1");
     } else {
         w = (YoshiGundanWork*)unit->countersetWeapon;
@@ -2645,11 +2639,7 @@ void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
         p = &w->parts[i];
 #endif
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;
-#if VERSION <= VERSION_DEMO_US
-        btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255, 255, 255, 255}, 0);
-#else
     btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
-#endif
 }
 #if VERSION <= VERSION_DEMO_US
 }

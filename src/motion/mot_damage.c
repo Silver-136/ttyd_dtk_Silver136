@@ -199,11 +199,7 @@ if (mario->prevMotionId != MARIO_MOTION_YOSHI) {
     case 10:
         if (++mario->multiTimer == 2) {
             mario->currSubMotionId = 11;
-#if VERSION <= VERSION_DEMO_US
-                psndSFXOn_3D((char*)0x195, &mario->position);
-#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_LEAP_WATER1), &mario->position);
-#endif
             if (mario->damageHit != NULL) {
                 evtEntry(evt_gazigazi, 0, 0);
             }
@@ -260,11 +256,7 @@ if (mario->prevMotionId != MARIO_MOTION_YOSHI) {
             d = distABf(dest.x, dest.z, mario->position.x, mario->position.z);
             mario->multiTimer = (s16)(d / 8);
             mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
-#if VERSION <= VERSION_DEMO_US
-                mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)(s32)mario->multiTimer;
-#else
             mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
-#endif
             mario->currSubMotionId = 12;
             mario->dispFlags |= MARIO_DISP_FLAG_HIDE;
 #if VERSION > VERSION_DEMO_US
@@ -347,13 +339,8 @@ if (mario->prevMotionId != MARIO_MOTION_YOSHI) {
                 marioChgPose("M_D_2");
             }
             marioDmgRetQuakeOn();
-#if VERSION <= VERSION_DEMO_US
-                psndSFXOn_3D((char*)0xCB, &mario->position);
-                psndSFXOn_3D((char*)0x197, &mario->position);
-#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_LAND_DAMAGE2), &mario->position);
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_CRUSH1), &mario->position);
-#endif
             mario_simple_kemuri();
         }
         if (mario->hitobjStandOn == NULL) {
@@ -453,11 +440,7 @@ void mot_damageToge(void) {
         } else {
             marioChgPose("M_D_6");
         }
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn_3D((char*)0xBA, &mario->position);
-#else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_DAMAGED2), &mario->position);
-#endif
         mario_simple_kemuri();
         mario->currSubMotionId = 11;
     case 11: {
@@ -487,11 +470,7 @@ void mot_damageToge(void) {
             d = distABf(dest.x, dest.z, mario->position.x, mario->position.z);
             mario->multiTimer = (s16)(d / 8);
             mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
-#if VERSION <= VERSION_DEMO_US
-                mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)(s32)mario->multiTimer;
-#else
             mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
-#endif
             mario->currSubMotionId = 12;
         }
         break;
@@ -529,13 +508,8 @@ void mot_damageToge(void) {
         } else {
             marioChgPose("M_D_2");
             marioDmgRetQuakeOn();
-#if VERSION <= VERSION_DEMO_US
-                psndSFXOn_3D((char*)0xCB, &mario->position);
-                psndSFXOn_3D((char*)0x197, &mario->position);
-#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_LAND_DAMAGE2), &mario->position);
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_CRUSH1), &mario->position);
-#endif
             mario_simple_kemuri();
             mario->hitobjStandOn = h;
             mario->hitobjJumpFrom = NULL;

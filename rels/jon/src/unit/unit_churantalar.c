@@ -69,20 +69,12 @@ static EvtWord damage_event[10];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[183];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[183];
-#else
 static EvtWord dead_event[189];
 #endif
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord blow_dead_event[98];
-#else
 #if VERSION <= VERSION_DEMO_US
 static EvtWord blow_dead_event[98];
 #else
 static EvtWord blow_dead_event[104];
-#endif
 #endif
 static EvtWord battle_end_event[7];
 static EvtWord yure_event[76];
@@ -677,11 +669,7 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageSize, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     ADD(LW(1), 40)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_CUBIC_IN, 0, -1)
-#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_CUBIC_IN, 0, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))
     CALL(btlevtcmd_StoreCoin, LW(0))
     CALL(btlevtcmd_GetExp, LW(10), LW(0))

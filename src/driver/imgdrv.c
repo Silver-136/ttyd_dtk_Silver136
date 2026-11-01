@@ -146,12 +146,7 @@ void imgDisp(CameraId camId, void* param) {
         }
         if (texs[i] != NULL) {
             mp[i] = mtxs[i];
-#if VERSION <= VERSION_DEMO_US
-            if (first == -1)
-                first = i;
-#else
             if (first == -1) first = i;
-#endif
         } else {
             mp[i] = NULL;
         }
@@ -215,11 +210,7 @@ void imgDisp(CameraId camId, void* param) {
 #endif
     PSMTXTrans(m4, -32.0f, 24.0f, 0.0f);
     PSMTXConcat(m3, m4, m3);
-#if VERSION <= VERSION_DEMO_US
-    PSMTXScale(m4, rectW / (f32)DEMOGetRenderModeObj()->fbWidth, rectH / (f32)DEMOGetRenderModeObj()->efbHeight, rectW / (f32)DEMOGetRenderModeObj()->fbWidth);
-#else
     PSMTXScale(m4, rectW / (f32)(DEMOGetRenderModeObj())->fbWidth, rectH / (f32)(DEMOGetRenderModeObj())->efbHeight, rectW / (f32)(DEMOGetRenderModeObj())->fbWidth);
-#endif
     PSMTXConcat(m3, m4, m3);
     PSMTXTrans(m4, 32.0f, -24.0f, 0.0f);
     PSMTXConcat(m3, m4, m3);
@@ -361,12 +352,7 @@ void* src;
     u32 size;
     GXTexObj* obj;
     smartEntry* buf;
-#if VERSION <= VERSION_DEMO_US
-    if (!(sh->flags & IMG_SHADOW_ACTIVE))
-        return;
-#else
     if (!(sh->flags & IMG_SHADOW_ACTIVE)) return;
-#endif
     offId = sh->offscreenId;
     sh->flags |= IMG_SHADOW_PENDING;
     if (offId != -1) {
@@ -400,16 +386,9 @@ src = buf->address;
                     sh->flags &= ~IMG_SHADOW_COPY_PENDING;
                 }
             }
-#if VERSION <= VERSION_DEMO_US
-            if (!(sh->flags & IMG_SHADOW_COPY_PENDING))
-                sh->flags &= ~IMG_SHADOW_PENDING;
-#else
             if (!(sh->flags & IMG_SHADOW_COPY_PENDING)) sh->flags &= ~IMG_SHADOW_PENDING;
-#endif
         } else {
-#if VERSION > VERSION_DEMO_US
             // separate locals from obj/buf, as in the game code (reusing obj/buf changes the object)
-#endif
             GXTexObj* o2;
             smartEntry* b2;
             offscreenGetTexObj(offId, &o2, &b2);
@@ -427,12 +406,7 @@ src = buf->address;
             imgCaptureCopy(sh, entry);
             sh->flags &= ~IMG_SHADOW_COPY_PENDING;
         }
-#if VERSION <= VERSION_DEMO_US
-        if (!(sh->flags & IMG_SHADOW_COPY_PENDING))
-            sh->flags &= ~IMG_SHADOW_PENDING;
-#else
         if (!(sh->flags & IMG_SHADOW_COPY_PENDING)) sh->flags &= ~IMG_SHADOW_PENDING;
-#endif
     } else {
         imgCaptureCopy(sh, entry);
         sh->flags &= ~IMG_SHADOW_PENDING;
@@ -567,12 +541,7 @@ void imgMain(void) {
         if (entry->flags & IMAGE_FLAG_IN_USE && entry->poseId != -1 && !(entry->flags & IMAGE_FLAG_HIDE)) {
             if (entry->type == 2 || entry->type == type) {
                 for (shadow = 0; shadow < 3; shadow++) {
-#if VERSION <= VERSION_DEMO_US
-                    if (entry->shadows[shadow].flags & IMG_SHADOW_ACTIVE)
-                        break;
-#else
                     if (entry->shadows[shadow].flags & IMG_SHADOW_ACTIVE) break;
-#endif
                 }
                 if (shadow != 3) {
 #if VERSION <= VERSION_DEMO_US
@@ -716,9 +685,6 @@ void imgShadowDisp(CameraId camId, void* param) {
                 w = entry->width;
                 h = entry->height;
             }
-#if VERSION <= VERSION_DEMO_US
-            r = &sh->rect;
-#endif
             PSMTXTrans(m, -((f32)r->left - x0) / (f32)r->width, -((f32)r->top - y0) / (f32)r->height, 0.0f);
             PSMTXScale(m1, w / (f32)r->width, h / (f32)r->height, 1.0f);
             PSMTXConcat(m, m1, mtxs[i]);
@@ -752,24 +718,16 @@ animSetPaperTexMtx((void*)mp[0], (void*)mp[1], (void*)mp[2]);
 #endif
     animSetPaperTexObj(objs[0], objs[1], objs[2], datas[0], datas[1], datas[2],
                        entry->shadows[0].offscreenId != -1 ? 1 : 0, entry->shadows[1].offscreenId != -1 ? 1 : 0);
-#if VERSION <= VERSION_DEMO_US
-    if (entry->animName != NULL)
-#else
     if (entry->animName != NULL) {
-#endif
         animPoseSetAnim(entry->poseId, entry->animName, FALSE);
-#if VERSION > VERSION_DEMO_US
     }
-#endif
     animPoseSetStartTime(entry->poseId, entry->animTime);
     animPoseMain(entry->poseId);
     animPoseSetMaterialLightFlagOn(entry->poseId, MATERIAL_LIGHT_PAPER);
     entry->loopTimes = animPoseGetLoopTimes(entry->poseId);
     {
-#if VERSION > VERSION_DEMO_US
         // As in the game code: these locals shadow the outer ones of the same names, and both branches below set
         // the same values (reusing the outer locals or one plain assignment changes the object)
-#endif
         f32 x0, y0, w, h;
         f32 sc, z;
         if (entry->flags & IMAGE_FLAG_NO_VIRTUAL_POINT) {

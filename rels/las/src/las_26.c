@@ -158,28 +158,16 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_party_run, 0)
     CALL(evt_party_set_homing_dist, 0, FLOAT(50.0f))
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_close_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(10))
         IF_INT_EQUAL(LW(10), 0)
             SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(w_door_close)
-#else
             CALL_CHILD(PTR(w_door_close))
-#endif
             BREAK_LOOP
         ELSE
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(w_door_close)
-#else
             CALL_CHILD(PTR(w_door_close))
-#endif
         END_IF
     END_LOOP
     WAIT_MS(500)
@@ -295,11 +283,7 @@ CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG8_LST3"))
     CALL(evt_cam3d_evt_set, 255, 220, 648, 255, 170, 150, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     // His mouth opens and he spits out the chest holding the Star Key.
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
-#else
-    CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
-#endif
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("ボンババ"), LW(0), LW(1), LW(2))
@@ -376,11 +360,7 @@ CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 
 #endif
     WAIT_MS(1000)
     // Mario notices the chest; the story advances and he regains control.
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
-#endif
     CALL(evt_hitobj_onoff, STRING("baba"), 1, 1)
     CALL(evt_npc_flag_onoff, 1, STRING("ボンババ"), NPC_FLAG_NO_HIT)
 #if VERSION <= VERSION_DEMO_US
@@ -536,22 +516,14 @@ EVT_END()
  * and blocks with an Ultra Shroom and Jammin' Jelly.
  */
 EVT_BEGIN(las_26_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
-#endif
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
 #if VERSION > VERSION_DEMO_US
         CALL(evt_snd_set_rev_mode, 2)
 #endif
     ELSE
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-#else
-        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-#endif
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
 #if VERSION > VERSION_DEMO_US
@@ -572,11 +544,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL(evt_npc_setup, PTR(npcEnt))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_LAS_26_WALL_BOMBED, 0)
-#else
-    IF_INT_EQUAL(GSWF_LAS_26_WALL_BOMBED, 0)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_after"), 1, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_ana_before1"), 0, PTR(bomb_wall), 0)
@@ -584,44 +552,23 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_before1"), 1, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yukaato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_yukaato"), 1, 0)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yukamae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_yukamae"), 1, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
-        SPAWN_EVENT(bonbaba_evt)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
         SPAWN_EVENT(PTR(bonbaba_evt))
-#endif
     ELSE
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_bero_info_run)
-#else
         CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_EQUAL(STG8_03_THE_PALACE_GARDEN)
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
         CASE_GREATER_OR_EQUAL(STG8_04_GLOOMTAIL)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 0)
-#else
-        IF_INT_EQUAL(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 0)
-#endif
             CALL(evt_hitobj_onoff, STRING("baba"), 1, 1)
         ELSE
             CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
@@ -629,29 +576,14 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
         CASE_DEFAULT
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
         CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
-#else
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
-        CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-        SPAWN_EVENT(sekai_yami_evt)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         SPAWN_EVENT(PTR(sekai_yami_evt))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 1000, 60, -150, ITEM_ULTRA_SHROOM, 0, GSWF_LAS_26_ULTRA_SHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_26_JAMMIN_JELLY_BLOCK, 0)
-#else
-    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 1000, 60, -150, ITEM_ULTRA_SHROOM, 0, GSWF_LAS_26_ULTRA_SHROOM_BLOCK, 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_26_JAMMIN_JELLY_BLOCK, 0)
-#endif
     RETURN
 EVT_END()
 

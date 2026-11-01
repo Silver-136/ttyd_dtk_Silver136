@@ -26,9 +26,7 @@ s8 hi_fire_end_flag[4];
 USER_FUNC(_gear_rotate);
 USER_FUNC(check_battle_end);
 USER_FUNC(hi_fire_end);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(hi_fire_main);
-#endif
 extern BattleUnitKind unit_black_karon;
 extern BattleUnitKind unit_boss_batten_leader;
 extern BattleUnitKind unit_boss_koopa;
@@ -2856,11 +2854,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_05_01_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
-#endif
         0, // randomMode
         {{3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_CHUBOSS_BATTLE1", // bgmName
@@ -2872,11 +2866,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_09_rampell_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
-#endif
         6, // randomMode
         {{3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG3_3WOMEN1", // bgmName
@@ -2928,11 +2918,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_28_koopa_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
-#endif
         6, // randomMode
         {{3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG8_KOOPA", // bgmName
@@ -2960,11 +2946,7 @@ NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY,
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_28_batten_leader_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
-#endif
         5, // randomMode
         {{0}, {10, 10}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG8_3RDHEAD1", // bgmName
@@ -2976,11 +2958,7 @@ NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY,
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_29_black_peach_1_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
-#endif
         6, // randomMode
         {{10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG8_WITCH", // bgmName
@@ -2992,11 +2970,7 @@ NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY,
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_29_black_peach_2_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
-#endif
         6, // randomMode
         {{10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG8_LAST_BOSS2", // bgmName

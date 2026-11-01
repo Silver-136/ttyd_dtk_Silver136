@@ -984,11 +984,7 @@ EVT_END()
 EVT_BEGIN(talk_g_4)
     // Before the match with Grubba is arranged, the guard lets Mario through the first time he asks to become
     // a fighter.
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG3_03_GRUBBA)
         // He steps aside, out of the doorway, and a door to Grubba's office opens for Mario.
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1031,37 +1027,17 @@ EVT_BEGIN(talk_g_4)
         // or waves him in to see Ms. Jolene.
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         IF_INT_EQUAL(LW(0), -350)
-#if VERSION <= VERSION_DEMO_US
             SWITCH(GSW_TROUBLE_ACCEPTED)
-#else
-            SWITCH(GSW_TROUBLE_ACCEPTED)
-#endif
                 CASE_EQUAL(13)
                 CALL(evt_msg_print, 0, STRING("stg3_tou_re_311"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
-#else
-                SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
-#endif
                 CASE_EQUAL(23)
                 CALL(evt_msg_print, 0, STRING("stg3_tou_re_311"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
-#else
-                SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
-#endif
                 CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
                 IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
-#else
-                IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
-#endif
                     CALL(evt_msg_print, 0, STRING("stg3_tou_re_310"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
                     SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
-#else
-                    SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
-#endif
                     ELSE
                     CALL(evt_msg_print, 0, STRING("stg3_tou_re_314"), 0, 0)
                     RETURN
@@ -1088,18 +1064,9 @@ EVT_BEGIN(talk_g_4)
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
             SET_VALUE(LW(0), 5)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(bero_case_switch_on)
-#else
             CALL_CHILD(PTR(bero_case_switch_on))
-#endif
             ELSE
-#if VERSION <= VERSION_DEMO_US
-            // Otherwise he points Mario to Ms. Jolene, who is just inside.
             SWITCH(GSW_TROUBLE_ACCEPTED)
-#else
-            SWITCH(GSW_TROUBLE_ACCEPTED)
-#endif
                 CASE_EQUAL(13)
                 CALL(evt_msg_print, 0, STRING("stg3_tou_re_313"), 0, 0)
                 CASE_EQUAL(23)

@@ -159,11 +159,7 @@ EVT_BEGIN(las_27_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 520, 60, -150, 0, 0)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_mobj_recovery_blk, STRING("r_blk"), 5, 450, 60, -150, 0, 0)

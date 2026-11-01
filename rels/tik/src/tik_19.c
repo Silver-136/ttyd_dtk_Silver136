@@ -72,11 +72,7 @@ static EVT_BEGIN(evt_majin)
     CALL(evt_mario_adjust_dir)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 0)
-#else
-    IF_INT_EQUAL(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 0)
-#endif
         // First visit: the chest cries out, Mario and the partners gather round, and it rattles open a crack.
         CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
         ADD(LW(1), 30)
@@ -145,11 +141,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("mac_majin_08"), PTR(majin_callback), 0)
         CALL(evt_mobj_exec_cancel, STRING("box"))
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 1)
-#else
-        SET_VALUE(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 1)
-#endif
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         ELSE
         // Later visits without the Black Key: the voice just pleads for it.
@@ -248,13 +240,8 @@ CALL(evt_mario_normalize)
     CALL(lect_cam_save)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(plane_majin_lecture_init)
-    CALL_CHILD(plane_majin_lecture)
-#else
     CALL_CHILD(PTR(plane_majin_lecture_init))
     CALL_CHILD(PTR(plane_majin_lecture))
-#endif
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
@@ -284,13 +271,8 @@ CALL(evt_mario_normalize)
     CALL(evt_paper_delete, STRING("OFF_d_kusya"))
     CALL(evt_party_stop, 0)
     CALL(evt_msg_print_party, STRING("mac_majin_20"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG0_12_02_PAPER_MAGE_1)
     SET_VALUE(GSWF_TIK_19_BLACK_CHEST_OPENED, 1)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG0_12_02_PAPER_MAGE_1)
-    SET_VALUE(GSWF_TIK_19_BLACK_CHEST_OPENED, 1)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))

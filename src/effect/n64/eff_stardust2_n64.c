@@ -219,11 +219,7 @@ void effStardust2Main(EffectEntry* effect) {
     w->frame++;
     type = w->type;
     frame = w->frame;
-#if VERSION <= VERSION_DEMO_US
-    if (((u32)type <= 1 || type == 3 || type >= 10) && w->life < 0) {
-#else
     if ((type == 0 || type == 1 || type == 3 || type >= 10) && w->life < 0) {
-#endif
         effDelete(effect);
         return;
     }
@@ -329,9 +325,7 @@ if (frame - 1 < 14) {
             break;
         }
     }
-#if VERSION > VERSION_DEMO_US
     // FAKE: (u32)type > 1 tests type other than 0 and 1; type != 0 && type != 1 changes the object
-#endif
     if ((u32)type > 1 && type != 3 && type < 10 && done >= effect->count - 1) {
         effDelete(effect);
         return;

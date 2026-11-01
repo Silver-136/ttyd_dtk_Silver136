@@ -213,11 +213,7 @@ static StatusVulnerability regist = {50, 50, 90, 0, 50, 100, 100, 50, 100, 60, 1
  * Status vulnerability of the Boo in the retail builds: immune to poison; extra prone to dizzy;
  * resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {50, 50, 90, 0, 50, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 50, 95, 100, 10, 100, 100, 10};
-#else
 static StatusVulnerability regist = {50, 50, 105, 0, 50, 100, 100, 50, 100, 90, 100, 90, 100, 95, 60, 50, 90, 100, 10, 100, 100, 10};
-#endif
 #endif
 
 /** Body part of the Boo: a single part using the c_teresa model. */

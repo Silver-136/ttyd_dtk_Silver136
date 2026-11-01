@@ -189,11 +189,7 @@ EVT_BEGIN(lookat_house)
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_02"), 0, STRING("extparty"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG2_04_EXTENDING_PLANE_PANEL)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_04_EXTENDING_PLANE_PANEL)
-#endif
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_npc_start_for_event)
     CALL(evt_mario_key_onoff, 1)
@@ -383,36 +379,19 @@ EVT_BEGIN(win_03_init_evt)
     SET_VALUE(LW(0), PTR(tree_access_data))
     CALL_CHILD(evt_sub_tree_access_entry)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 7, 425, 60, 75, 0, 0)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_item_entry, STRING("i"), ITEM_VOLT_SHROOM, 475, 0, -60, ITEM_TYPE_STILL, GSWF_WIN_03_VOLT_SHROOM, 0)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -150, 0, -30, ITEM_TYPE_STILL, GSWF_STARPIECE_43, 0)
-#else
-    CALL(evt_item_entry, STRING("i"), ITEM_VOLT_SHROOM, 475, 0, -60, ITEM_TYPE_STILL, GSWF_WIN_03_VOLT_SHROOM, 0)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -150, 0, -30, ITEM_TYPE_STILL, GSWF_STARPIECE_43, 0)
-#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_siro_asu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_siro_asu"), 1, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_05_TO_FLURRIES_PLACE)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_05_TO_FLURRIES_PLACE)
-#endif
         SPAWN_EVENT(lookat_house)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_02_SEALED_ENTRANCE_2)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_02_SEALED_ENTRANCE_2)
-#endif
         CALL(evt_npc_check_delete, STRING(/*"パックン1"*/"\x83\x70\x83\x62\x83\x4E\x83\x93\x31"))
         SPAWN_EVENT(cloud_toujou)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_03_FLURRIE_INTRO)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_03_FLURRIE_INTRO)
-#endif
         CALL(evt_npc_check_delete, STRING(/*"パックン1"*/"\x83\x70\x83\x62\x83\x4E\x83\x93\x31"))
         SPAWN_EVENT(cloud_lostitem)
     END_IF

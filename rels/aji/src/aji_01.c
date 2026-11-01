@@ -57,58 +57,18 @@ EvtWord n3_door_open[22];
 EvtWord n3_door_close[22];
 EvtWord n4_door_open[22];
 EvtWord n4_door_close[22];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord w3_door_open[];
-#else
 EvtWord w3_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord w3_door_close[];
-#else
 EvtWord w3_door_close[22];
-#endif
 static EvtWord e3_door_open[22];
 static EvtWord e3_door_close[22];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord w4_door_open[];
-#else
 EvtWord w4_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord w4_door_close[];
-#else
 EvtWord w4_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord e4_door_open[];
-#else
 EvtWord e4_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord e4_door_close[];
-#else
 EvtWord e4_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord w5_door_open[];
-#else
 EvtWord w5_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord w5_door_close[];
-#else
 EvtWord w5_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord e5_door_open[];
-#else
 EvtWord e5_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord e5_door_close[];
-#else
 EvtWord e5_door_close[22];
-#endif
 static BeroEntry bero_entry_data[15];
 BeroEntry e_bero_5_peach[2];
 s32 elv_key1[2];
@@ -160,11 +120,7 @@ static EvtWord peach_evt_stg5[51];
 static EvtWord peach_evt_stg5_1[46];
 static EvtWord peach_evt_door_stop[14];
 EvtWord peach_evt_ele_2[505];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord peach_evt_ele_init[];
-#else
 EvtWord peach_evt_ele_init[177];
-#endif
 EvtWord peach_evt_key_init[178];
 EvtWord peach_evt_init[365];
 static EvtWord teshita1_init[42];
@@ -921,11 +877,7 @@ CALL(evt_win_item_select, PTR(elv_key1), LW(0))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi3"), 0, PTR(ele_1), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_KEY1"), LW(0), LW(1), LW(2), 0)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSW_STORY_PROGRESS, STG7_10_ELEVATOR_ACTIVATED)
-#else
-        SET_VALUE(GSW_STORY_PROGRESS, STG7_10_ELEVATOR_ACTIVATED)
-#endif
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_exit_case_evt)
         RETURN
@@ -973,11 +925,7 @@ CALL(evt_win_item_select, PTR(elv_key2), LW(0))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi6"), 0, PTR(ele_2), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_KEY1"), LW(0), LW(1), LW(2), 0)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSW_STORY_PROGRESS, STG7_15_ELEVATOR_ACTIVATED_2)
-#else
-        SET_VALUE(GSW_STORY_PROGRESS, STG7_15_ELEVATOR_ACTIVATED_2)
-#endif
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_exit_case_evt)
         RETURN
@@ -2681,11 +2629,7 @@ EVT_END()
 EVT_BEGIN(peach_evt_ele_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -2709,11 +2653,7 @@ CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SET_VALUE(GW(1), 4)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_PEACH_THE_SECRET_WEAPON)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_PEACH_THE_SECRET_WEAPON)
-#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("e_bero_5"))
             SET_VALUE(LW(0), 4)
@@ -3091,26 +3031,14 @@ EVT_BEGIN(aji_01_init_evt)
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_map_playanim, STRING("hosi_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_03"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("polySurface1300_q00266"), MAP_OBJ_FLAG_CLIP)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_12_PASSWORD_ENTRY)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_12_PASSWORD_ENTRY)
-#endif
         SET_VALUE(LW(0), STRING("e_bero_2"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_aikotoba), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -3120,13 +3048,8 @@ EVT_BEGIN(aji_01_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights5_r"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_emergency)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
-#else
     SPAWN_EVENT(PTR(evt_emergency))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
-#endif
         CALL(evt_npc_check_delete, STRING("軍団ザコ１"))
         CALL(evt_npc_check_delete, STRING("軍団ザコ２"))
         CALL(evt_npc_check_delete, STRING("軍団ザコ３"))
@@ -3150,13 +3073,8 @@ EVT_BEGIN(aji_01_init_evt)
         ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_elv_init)
-        CALL_CHILD(evt_key_init)
-#else
         CALL_CHILD(PTR(evt_elv_init))
         CALL_CHILD(PTR(evt_key_init))
-#endif
     END_IF
     RETURN
 EVT_END()

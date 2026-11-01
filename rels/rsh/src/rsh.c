@@ -131,11 +131,7 @@ EvtWord evt_rsh_01_rnd_npc_entry[137];
 NpcSetupInfo rsh_03_rnd_npc_2_ent[2];
 EvtWord evt_rsh_03_rnd_npc_entry[95];
 NpcSetupInfo rsh_04_rnd_npc_3_ent[2];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord evt_rsh_04_rnd_npc_entry[];
-#else
 EvtWord evt_rsh_04_rnd_npc_entry[185];
-#endif
 
 /**
  * Shows the stained floor object (s_yuka_simi, probably the spilled stew) in rsh_02_a
@@ -714,56 +710,31 @@ EVT_BEGIN(evt_rsh_door_close)
     CALL(img_wait)
     BEGIN_INLINE_EVENT
         // Leaving a cabin at certain stages starts a scripted map change to rsh_04.
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
-#else
-        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
-#endif
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_04_a"))
                 WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
-#else
-                SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
-#endif
                 CALL(evt_bero_mapchange, STRING("rsh_04_b"), STRING("e_bero"))
             END_IF
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_12_GIVE_AUTOGRAPH)
-#else
-        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_12_GIVE_AUTOGRAPH)
-#endif
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_04_b"))
                 WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
-#else
-                SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
-#endif
                 CALL(evt_bero_mapchange, STRING("rsh_04_c"), STRING("e_bero"))
             END_IF
         END_IF
     END_INLINE_EVENT
     // In rsh_02_c the ghost's voice is heard once as Mario leaves.
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_15_GHOST_REQUEST)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_15_GHOST_REQUEST)
-#endif
         CALL(evt_sub_get_mapname, LW(10))
         IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
-#if VERSION <= VERSION_DEMO_US
             IF_INT_EQUAL(GSWF_RSH_GHOST_DIARY_WARNING_SEEN, 0)
                 SET_VALUE(GSWF_RSH_GHOST_DIARY_WARNING_SEEN, 1)
-#else
-            IF_INT_EQUAL(GSWF_RSH_GHOST_DIARY_WARNING_SEEN, 0)
-                SET_VALUE(GSWF_RSH_GHOST_DIARY_WARNING_SEEN, 1)
-#endif
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_123"), 0, STRING("ゆうれい"))
             END_IF
         END_IF
@@ -772,11 +743,7 @@ EVT_BEGIN(evt_rsh_door_close)
         CALL(evt_sub_get_mapname, LW(10))
         IF_STR_EQUAL(LW(10), STRING("rsh_02_a"))
             IF_STR_EQUAL(LW(1), STRING("heya_5"))
-#if VERSION <= VERSION_DEMO_US
                 SWITCH(GSW_STORY_PROGRESS)
-#else
-                SWITCH(GSW_STORY_PROGRESS)
-#endif
                     CASE_BETWEEN(STG6_24_A_VITAL_CLUE, STG6_24_02_ANOTHER_CLUE)
                     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
                 END_SWITCH
@@ -801,26 +768,16 @@ EVT_BEGIN(evt_rsh_door_close)
         IF_INT_EQUAL(LF(0), 1)
 #endif
             IF_STR_EQUAL(LW(1), STRING("heya_4"))
-#if VERSION <= VERSION_DEMO_US
                 IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
-#else
-                IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
-#endif
                     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
                 END_IF
             END_IF
         END_IF
     END_INLINE_EVENT
     // Remember that Mario is no longer inside a cabin.
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 0)
     SET_VALUE(GSWF_RSH_04_IN_ROOM_3, 0)
     SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 0)
-#else
-    SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 0)
-    SET_VALUE(GSWF_RSH_04_IN_ROOM_3, 0)
-    SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 0)
-#endif
     CALL(evt_map_playanim, LW(5), MAP_ANIM_PLAY_AT_END, 0)
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
     CALL(evt_img_free_capture, STRING("capture_img"), 1)
@@ -835,13 +792,8 @@ CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 0, 0,
     CALL(evt_mapobj_set_offscreen, 1, STRING("rouka"), STRING("offscreen"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)
     // The cabin is captured and the page turns back as Mario walks out into the corridor.
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(kami_offscreen_check)
-    CALL_CHILD(simi_offscreen_check)
-#else
     CALL_CHILD(PTR(kami_offscreen_check))
     CALL_CHILD(PTR(simi_offscreen_check))
-#endif
     CALL(evt_npc_check, STRING("車掌"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_npc_set_offscreen, STRING("車掌"), STRING("offscreen"))

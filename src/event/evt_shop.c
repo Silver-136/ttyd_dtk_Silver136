@@ -1868,22 +1868,13 @@ USER_FUNC(evt_shop_main_func) {
     hit = mario->hitobjStandOn;
     wp->flags &= ~1;
     trg = keyGetButtonTrg(0);
-#if VERSION <= VERSION_DEMO_US
-    if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE)) {
-#else
     // FAKE: the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
     if ((BOOL)(!marioChkCtrl() & 0x7ffffff) || (BOOL)(!marioChkKey() & 0x7ffffff)) {
-#endif
         trg = 0;
     }
     if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&
-#if VERSION <= VERSION_DEMO_US
         evtGetValue(event, GSW_STORY_PROGRESS) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW_STORY_PROGRESS) < STG6_48_SMORG_MIASMA &&
         !evtGetValue(event, GSWF_RSH_03_SHOP_CLERK_REVIVED)) {
-#else
-        evtGetValue(event, GSW_STORY_PROGRESS) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW_STORY_PROGRESS) < STG6_48_SMORG_MIASMA &&
-        !evtGetValue(event, GSWF_RSH_03_SHOP_CLERK_REVIVED)) {
-#endif
         return EVT_RETURN_BLOCK;
     }
     if (party && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
@@ -1913,9 +1904,7 @@ if (winGhostDiaryChk()) {
                     break;
                 }
             }
-#if VERSION > VERSION_DEMO_US
             // itemFlags[i] is read before the i < wp->count test; a full six-item shop with no matching hit reads one past itemFlags.
-#endif
             if (!(wp->itemFlags[i] & 1) && i < wp->count) {
                 if (wp->sel != i) {
                     if (wp->sel == -1) {

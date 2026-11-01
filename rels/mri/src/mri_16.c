@@ -291,11 +291,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(3))
     WAIT_MS(LW(1))
     // The water is gone; the stairs and ledges become solid and a jingle plays.
     DELETE_EVENT(LW(10))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(cam_shake2)
-#else
     CALL_CHILD(PTR(cam_shake2))
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))

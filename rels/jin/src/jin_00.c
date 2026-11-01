@@ -1462,11 +1462,7 @@ if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL &&
                 if (pTeresa[i].wait == 0) {
                     if (i == 0) {
                         Vec pos = {0.0f, 200.0f, 0.0f};
-#if VERSION <= VERSION_DEMO_US
-                        psndSFXOn_3D((const char*)0x5D3, &pos);
-#else
                         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_APPEAR2), &pos);
-#endif
                     }
                     pTeresa[i].seq++;
                 }
@@ -1496,11 +1492,7 @@ if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL &&
                     g_nNumEndProc[0]++;
                     if (i == 0) {
                         Vec pos = {0.0f, 200.0f, 0.0f};
-#if VERSION <= VERSION_DEMO_US
-                        psndSFXOn_3D((const char*)0x5D3, &pos);
-#else
                         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_APPEAR2), &pos);
-#endif
                     }
                 } else {
                     pTeresa[i].alpha = alpha;
@@ -1510,11 +1502,7 @@ if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL &&
                         g_nNumEndProc[0]++;
                         if (i == 0) {
                             Vec pos = {0.0f, 200.0f, 0.0f};
-#if VERSION <= VERSION_DEMO_US
-                            psndSFXOn_3D((const char*)0x5D3, &pos);
-#else
                             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_APPEAR2), &pos);
-#endif
                         }
                     }
                 }
@@ -1668,11 +1656,7 @@ if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL &&
                         pos.x = (*pose->mtx)[0][3];
                         pos.y = (*pose->mtx)[1][3];
                         pos.z = (*pose->mtx)[2][3];
-#if VERSION <= VERSION_DEMO_US
-                        psndSFXOn_3D((const char*)0x5D7, &pos);
-#else
                         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_ESCAPE1), &pos);
-#endif
                     }
                 }
                 break;
@@ -1751,11 +1735,7 @@ if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL &&
                         pos.x = (*pose->mtx)[0][3];
                         pos.y = (*pose->mtx)[1][3];
                         pos.z = (*pose->mtx)[2][3];
-#if VERSION <= VERSION_DEMO_US
-                        psndSFXOn_3D((const char*)0x5D4, &pos);
-#else
                         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_TOGETHER1), &pos);
-#endif
                     }
                     g_nNumEndProc[0]++;
                 } else {
@@ -2167,17 +2147,9 @@ EVT_BEGIN(senteresa_evt)
                 CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
                 WAIT_FRAMES(1)
             END_LOOP
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_JIN_BOOS_THREW_MARIO_OUT, 1)
-#else
-            SET_VALUE(GSWF_JIN_BOOS_THREW_MARIO_OUT, 1)
-#endif
             CALL(evt_mario_normalize)
-#if VERSION <= VERSION_DEMO_US
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_10_02_TRADING_PLACES)
-#else
-            IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_10_02_TRADING_PLACES)
-#endif
                 CALL(evt_bero_mapchange, STRING("usu_00"), STRING("evt_majo3"))
             ELSE
                 CALL(evt_bero_mapchange, STRING("gra_06"), STRING("n_bero"))
@@ -2193,11 +2165,7 @@ EVT_BEGIN(senteresa_evt)
     ADD(LW(1), 60)
     CALL(evt_npc_set_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_scale, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 1, 1, 1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), -2147483648)
-#else
     CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_TALK_BALLOON)
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
@@ -2383,16 +2351,10 @@ EVT_BEGIN(senteresa_evt)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(300)
-#if VERSION > VERSION_DEMO_US
     // All 200 dispersal completions were counted before resetting the ext controller.
-#endif
     CALL(senteresa_end)
     CALL(evt_mario_key_onoff, 1)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_JIN_00_ATOMIC_BOO_DEFEATED, 1)
-#else
-    SET_VALUE(GSWF_JIN_00_ATOMIC_BOO_DEFEATED, 1)
-#endif
     RETURN
 EVT_END()
 

@@ -464,76 +464,37 @@ EVT_END()
 
 EVT_BEGIN(aji_16_init_evt)
     CALL(evt_bero_get_entername, LW(0))
-#if VERSION > VERSION_DEMO_US
     // This entrance uses the mail scene and bypasses the ordinary room setup.
-#endif
     IF_STR_EQUAL(LW(0), STRING("peach"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_last_mail_init)
-#else
         CALL_CHILD(PTR(evt_last_mail_init))
-#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("peach_evt_stg1"))
         CALL(evt_cam3d_evt_set, 78, 152, 528, 78, 57, -13, 0, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(peach_evt_stg1)
-#else
         SPAWN_EVENT(PTR(peach_evt_stg1))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_18_PEACH_CAUGHT)
-        IF_INT_EQUAL(GSWF_AJI_15_VISITED, 1)
-            SPAWN_EVENT(peach_evt_stg1_1)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_18_PEACH_CAUGHT)
         IF_INT_EQUAL(GSWF_AJI_15_VISITED, 1)
             SPAWN_EVENT(PTR(peach_evt_stg1_1))
-#endif
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
-        IF_INT_EQUAL(GSWF_AJI_16_PEACH_STG2_SCENE_SEEN, 0)
-            SPAWN_EVENT(peach_evt_stg2)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
         IF_INT_EQUAL(GSWF_AJI_16_PEACH_STG2_SCENE_SEEN, 0)
             SPAWN_EVENT(PTR(peach_evt_stg2))
-#endif
             ELSE
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(peach_evt_stg2_1)
-#else
             SPAWN_EVENT(PTR(peach_evt_stg2_1))
-#endif
         END_IF
     END_IF
     IF_STR_EQUAL(LW(0), STRING("peach_evt_stg3"))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(peach_evt_stg3)
-#else
         SPAWN_EVENT(PTR(peach_evt_stg3))
-#endif
     END_IF
     IF_STR_EQUAL(LW(0), STRING("peach_evt_stg6"))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(peach_evt_stg6)
-#else
         SPAWN_EVENT(PTR(peach_evt_stg6))
-#endif
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_18_PEACH_CAUGHT)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_18_PEACH_CAUGHT)
-#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING(""))
             CALL(evt_mario_set_pos, 100, 0, 0)
@@ -541,37 +502,17 @@ EVT_BEGIN(aji_16_init_evt)
             CALL(evt_cam_road_reset)
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_18_01_PEACH_AN_OPEN_DOOR)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_18_01_PEACH_AN_OPEN_DOOR)
-#endif
         SET_VALUE(LW(0), STRING("e_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(peach_evt_door_stop), GW(15))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
-#endif
         SET_VALUE(LW(0), STRING("e_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(peach_evt_door_stop), GW(15))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
-#endif
         CALL(evt_mario_kill_party, 0)
         CALL(evt_mario_set_mode, 1)
         ELSE
@@ -585,11 +526,7 @@ EVT_BEGIN(aji_16_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_door1_2"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_door2_1"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_door2_2"), 1, 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_emergency)
-#else
     SPAWN_EVENT(PTR(evt_emergency))
-#endif
     RETURN
 EVT_END()
 

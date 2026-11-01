@@ -229,9 +229,7 @@ if (f - 1 < 25) {
             p->position.x += p->velocity.x;
             p->position.y += p->velocity.y;
             p->velocity.y += p->velocity.z;
-#if VERSION > VERSION_DEMO_US
             // z moves with the x step; the third stored velocity component accelerates y (above).
-#endif
             p->position.z += p->velocity.x;
         }
     }

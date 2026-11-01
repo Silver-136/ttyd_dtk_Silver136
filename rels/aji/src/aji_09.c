@@ -255,11 +255,7 @@ EVT_END()
 EVT_BEGIN(evt_kou2)
     CALL(evt_hit_bind_mapobj, STRING("A_kou2_ka_omo"), STRING("S_kou2_ka"))
     CALL(evt_hit_bind_mapobj, STRING("A_kou2_ka_ura"), STRING("S_kou2_ka"))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_AJI_09_DOT_MARIO_SEEN, 0)
-#else
-    IF_INT_EQUAL(GSWF_AJI_09_DOT_MARIO_SEEN, 0)
-#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("tenjo"))
 #if VERSION > VERSION_DEMO_US
@@ -268,11 +264,7 @@ EVT_BEGIN(evt_kou2)
             CALL(evt_mario_normalize)
             CALL(dot_mario)
             WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_AJI_09_DOT_MARIO_SEEN, 1)
-#else
-            SET_VALUE(GSWF_AJI_09_DOT_MARIO_SEEN, 1)
-#endif
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION > VERSION_DEMO_US
@@ -283,11 +275,7 @@ EVT_BEGIN(evt_kou2)
     IF_INT_EQUAL(GF(1), 0)
         CALL(evt_mapobj_get_position, STRING("S_kou2_ka"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_CURTAIN_OPEN1"), LW(0), LW(1), LW(2), 0)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_AJI_09_DOT_MARIO_SEEN, 1)
-#else
-        IF_INT_EQUAL(GSWF_AJI_09_DOT_MARIO_SEEN, 1)
-#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DOT_MARIO1"))
         END_IF
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1000, 200, 500)

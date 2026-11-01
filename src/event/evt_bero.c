@@ -617,17 +617,13 @@ USER_FUNC(bero_get_position_normal) {
 #endif
     s32 dir = evtGetValue(event, args[0]);
     float halfTurn;
-#if VERSION > VERSION_DEMO_US
     f32 respawnZ;
-#endif
     f32 len = evtGetFloat(event, args[1]);
     s32* pos = (s32*)event->lwData[6];
     const char* name = (const char*)event->lwData[3];
     s32 angle = event->lwData[5];
     Vec start;
-#if VERSION > VERSION_DEMO_US
     f32 *hxPtr;
-#endif
     Vec end;
     start.x = pos[0];
     start.y = pos[1];
@@ -636,11 +632,7 @@ USER_FUNC(bero_get_position_normal) {
     end.y = pos[1];
     end.z = pos[2];
     if (pos[0] == BERO_POS_AUTO) {
-#if VERSION <= VERSION_DEMO_US
-        hitObjGetPos((const char*)name, &start);
-#else
         hitObjGetPos(name, &start);
-#endif
     }
     if (len != 0.0f) {
         Vec tmp2;
@@ -656,48 +648,29 @@ USER_FUNC(bero_get_position_normal) {
         f32 rad;
         hz = hy = hx = 0.0f;
         dist = 1000000.0f;
-#if VERSION > VERSION_DEMO_US
         // FAKE: two-step product; `deg = (angle * 360.0f) * 0.125f` changes the object
-#endif
         deg = 0.125f;
         deg = (angle * 360.0f) * deg;
-#if VERSION <= VERSION_DEMO_US
-        halfTurn = 180.0f;
-#endif
         if (dir == 1) {
             deg += 180.0f;
         }
         rad = (6.2831855f * deg) / 360.0f;
-#if VERSION <= VERSION_DEMO_US
-        tmp.x = start.x - (30.0f * ((f32)sin((6.2831855f * deg) / 360.0f)));
-#else
         tmp.x = start.x - (30.0f * (f32)sin(rad));
-#endif
         tmp.y = start.y;
-#if VERSION > VERSION_DEMO_US
         // FAKE: block-scoped temporary for cos(rad); the direct expression changes the object
-#endif
         {
             f32 c0 = (f32) cos(rad);
             tmp.z = start.z - (30.0f * (-c0));
         }
-#if VERSION > VERSION_DEMO_US
         // FAKE: repeated store of dist and a spare pointer to hx; dropping both changes the object
-#endif
         dist = 1000000.0f;
-#if VERSION <= VERSION_DEMO_US
-        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f)) {
-#else
         hxPtr = &hx;
         if (hitCheckFilter(NULL, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f)) {
-#endif
             tmp.y = hy;
         }
         tmp2 = tmp;
         tmp2.x += (30.0f + len) * (f32)sin(rad);
-#if VERSION > VERSION_DEMO_US
         // FAKE: recomputes rad; `cos(rad)` changes the object
-#endif
         tmp2.z += (30.0f + len) * (-((f32) cos((6.2831855f * deg) / 360.0f)));
         start = tmp;
         end = tmp2;
@@ -1758,11 +1731,7 @@ CALL_CHILD(bero_case_init_check)
     CALL(evt_mario_wait_landon)
     CALL(evt_mario_cont_onoff, 0)
     IF_INT_EQUAL(LW(13), 0)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(bero_case_exec_pipe_sub)
-#else
         SPAWN_EVENT(PTR(bero_case_exec_pipe_sub))
-#endif
         RETURN
     END_IF
     CALL(evt_mario_cam_off)
@@ -2078,11 +2047,7 @@ EVT_BEGIN(evt_bero_info_run)
         CALL(evt_npc_start_for_event)
         CALL(evt_bero_exec_onoff, 1, 1)
         CALL(evt_bero_exec_onoff, 0, 65536)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_entry)
-#else
         CALL_CHILD(PTR(bero_case_entry))
-#endif
         RETURN
     END_IF
     // Normal arrival: lock the controls. A background entrance hides the partners;
@@ -2131,11 +2096,7 @@ EVT_BEGIN(evt_bero_info_run)
     END_IF
     // Place Mario and the partners at the entrance, choose the pipe fade-in for its direction
     // and start the walk-in.
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_initial_pos)
-#else
     CALL_CHILD(PTR(evt_bero_initial_pos))
-#endif
     IF_BITS_CLEAR(LW(4), BERO_TYPE_FLAG_NO_FADE)
         SET_VALUE(LW(0), LW(4))
         AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
@@ -2157,11 +2118,7 @@ EVT_BEGIN(evt_bero_info_run)
         END_IF
     END_IF
     DEBUG_PUT_MSG(STRING("\202\331\202\251\202\314\217\211\212\372\220\335\222\350\212J\216n"))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_bero_mario_enter)
-#else
     SPAWN_EVENT(PTR(evt_bero_mario_enter))
-#endif
     RETURN
 EVT_END()
 

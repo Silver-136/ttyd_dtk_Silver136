@@ -956,17 +956,9 @@ EVT_BEGIN(evt_item_use)
         CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_MARIO_USE1"), LW(0), LW(1), LW(2), 0)
         CALL(famicom_check, LW(0))
         IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(kime_pose)
-#else
             CALL_CHILD(PTR(kime_pose))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(kime_pose_famicom)
-#else
             CALL_CHILD(PTR(kime_pose_famicom))
-#endif
         END_IF
         WAIT_MS(1000)
         CALL(evt_item_delete, STRING("menu_dummy"))
@@ -976,17 +968,9 @@ EVT_BEGIN(evt_item_use)
         WAIT_MS(1400)
         CALL(famicom_check, LW(0))
         IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(kime_pose2)
-#else
             CALL_CHILD(PTR(kime_pose2))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(kime_pose_famicom)
-#else
             CALL_CHILD(PTR(kime_pose_famicom))
-#endif
         END_IF
         CALL(itemUseFunc)
         WAIT_MS(1500)
@@ -1009,9 +993,6 @@ EVT_END()
  */
 EVT_BEGIN(evt_diary_read)
     SET_TYPE(0)
-#if VERSION <= VERSION_DEMO_US
-    // "Read the diary?" Saying no ends it here.
-#endif
     CALL(evt_party_cont_onoff, 0, 1)
     WAIT_FRAMES(1)
     CALL(evt_mario_normalize)
@@ -1022,9 +1003,6 @@ EVT_BEGIN(evt_diary_read)
         CALL(evt_party_cont_onoff, 0, 0)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // "You may be cursed by the ghost!" Saying no ends it here.
-#endif
     CALL(evt_msg_print_add, 0, STRING("stg6_rsh_diary_02"))
     CALL(evt_msg_select, 0, STRING("stg6_rsh_diary_01_yn"))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1032,9 +1010,6 @@ EVT_BEGIN(evt_diary_read)
         CALL(evt_party_cont_onoff, 0, 0)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // "This could be really, REALLY bad." Saying no ends it here.
-#endif
     CALL(evt_msg_print_add, 0, STRING("stg6_rsh_diary_03"))
     CALL(evt_msg_select, 0, STRING("stg6_rsh_diary_01_yn"))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1043,9 +1018,6 @@ EVT_BEGIN(evt_diary_read)
         RETURN
     END_IF
     CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
-    // The music fades and Mario reads the first lines of the diary.
-#endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1054,9 +1026,6 @@ EVT_BEGIN(evt_diary_read)
     CALL(evt_mario_set_pose, STRING("M_L_2"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_diary_04"), 0, 0)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-    // The ghost is brought in (once) and starts pulsing between faint and solid.
-#endif
     CALL(evt_npc_check, STRING("\202\344\202\244\202\352\202\242"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_npc_entry, STRING("\202\344\202\244\202\352\202\242"), STRING("c_ghost_k"))
@@ -1065,11 +1034,7 @@ EVT_BEGIN(evt_diary_read)
         CALL(evt_npc_set_anim, STRING("\202\344\202\244\202\352\202\242"), STRING("O_1"))
         CALL(evt_npc_set_autotalkpose, STRING("\202\344\202\244\202\352\202\242"), STRING("O_2"), STRING("T_2"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("\202\344\202\244\202\352\202\242"), NPC_FLAG_NO_SHADOW | NPC_FLAG_INTANGIBLE)
-#else
     CALL(evt_npc_flag_onoff, 1, STRING("\202\344\202\244\202\352\202\242"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_SHADOW)
-#endif
     BEGIN_INLINE_EVENT
         LOOP(0)
             CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 64, 1000)
@@ -1090,9 +1055,6 @@ EVT_BEGIN(evt_diary_read)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    // The ghost music plays and the ghost appears right behind Mario: "YOU LOOKED!"
-#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
@@ -1107,9 +1069,6 @@ CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_APPEAR1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_I_O"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_diary_05"), 0, STRING("\202\344\202\244\202\352\202\242"))
     WAIT_MS(300)
-#if VERSION <= VERSION_DEMO_US
-    // Silence, then the screen blurs with a shaking sound and the camera rolls.
-#endif
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     BEGIN_INLINE_EVENT
         CALL(evt_env_blur_on, 0, 0)
@@ -1123,9 +1082,6 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     BEGIN_INLINE_EVENT
         CALL(cam_r)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    // Four seconds later: Game Over.
-#endif
     WAIT_MS(4000)
     CALL(evt_fade_set_mapchange_type, 1, -1, 600, -1, -1)
     CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)

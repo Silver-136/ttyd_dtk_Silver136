@@ -365,11 +365,7 @@ dx = (s32)work->position.x + ix;
         GXSetCurrentMtx(GX_PNMTX0);
         GXSetTevColor(GX_TEVREG0, (GXColor){ 0xC8, 0xFF, 0xFF, alpha * work->alpha / 255 });
         GXSetTevColor(GX_TEVREG1, (GXColor){ 0x00, 0x20, 0x20, 0x00 });
-#if VERSION <= VERSION_DEMO_US
-        switch (i + (gp->retraceCount >> 1) & 3) {
-#else
         switch ((i + (gp->retraceCount >> 1)) & 3) {
-#endif
         case 0:
         case 2:
             effSetVtxDescN64(size8x8_tex16x16_0_vtx);

@@ -173,11 +173,7 @@ EvtWord evt_moamoa_escape1[15];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_moamoa_escape[205];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord evt_moamoa_escape[205];
-#else
 static EvtWord evt_moamoa_escape[228];
-#endif
 #endif
 static EvtWord init_syashou[30];
 static EvtWord talk_syashou[19];
@@ -903,9 +899,7 @@ static void ext_moamoa_main(void) {
         wp->breathPos.y = party->position.y;
         wp->breathPos.z = party->position.z - wp->breathDist * polyCosf(6.2831855f * wp->breathDir / 360.0f);
     }
-#if VERSION > VERSION_DEMO_US
     // Each captive is freed after more than 50 nearby hits; cleared targets redirect to the other side.
-#endif
     if (wp->targetHits[0] > 50) {
         wp->target[0] = wp->target[1];
         if (!(wp->flags & MOAMOA_WORK_FLAG_TARGET0_CLEARED)) {
@@ -942,9 +936,7 @@ static void ext_moamoa_main(void) {
         }
     }
 
-#if VERSION > VERSION_DEMO_US
     // One ordinary hit per update; Bobbery's hit code 4 deliberately leaves that latch clear.
-#endif
     pose = extGetPosePtr();
     sfx = 0;
     moa = wp->moa;
@@ -971,11 +963,7 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");
                 hit = 1;
             } else if (ret == 2 || ret == 4) {
-#if VERSION <= VERSION_DEMO_US
-                moa->flags |= MOAMOA_FLAG_HIT | MOAMOA_FLAG_KNOCKED_AWAY;
-#else
                 moa->flags |= (MOAMOA_FLAG_HIT | MOAMOA_FLAG_KNOCKED_AWAY);
-#endif
                 moa->state = MOAMOA_STATE_KNOCKED_AWAY;
                 {
                     s32 idx;
@@ -991,11 +979,7 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                 }
             } else if (ret == 3) {
                 angle = (wp->breathDir + wp->angle) / 2.0f;
-#if VERSION <= VERSION_DEMO_US
-                moa->flags |= MOAMOA_FLAG_HIT | MOAMOA_FLAG_BLOWN;
-#else
                 moa->flags |= (MOAMOA_FLAG_HIT | MOAMOA_FLAG_BLOWN);
-#endif
                 moa->state = MOAMOA_STATE_BLOWN_DRIFT;
                 moa->target = moamoa_zero_vec;
                 spd = randf(0.1f, 0.2f);
@@ -1031,9 +1015,7 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                 tmp.z = (*pose->mtx)[2][3];
                 sp2_ = tmp;
             }
-#if VERSION > VERSION_DEMO_US
             // FAKE: integer cast hoists the literal as an @ temp (same values)
-#endif
             psndSFXOn_3D(SFX_NAME_WORD("SFX_STG6_MOAMOA_VOICE1"), &sp2_);
         }
         switch (moa->state) {
@@ -1134,15 +1116,7 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                     x = (*pose->mtx)[0][3] + (15.0f * polySinf(rad));
                     dist = (*pose->mtx)[1][3];
                     z = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
-#if VERSION <= VERSION_DEMO_US
-                {
-                    f32 hopSpeed;
-                    f32 k;
-                    f32 r1 = rand() / 32767.0f;
-                    hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
-#else
                     { f32 hopSpeed; f32 k; f32 r1 = rand() / 32767.0f; hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
-#endif
                         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
                         {
                             f32 g2 = randf(0.4f, 0.4f);
@@ -1156,12 +1130,8 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                             }
                         }
                         }
-#if VERSION <= VERSION_DEMO_US
-            } break;
-#else
                 }
                 break;
-#endif
 
             case MOAMOA_STATE_APPROACH: {
                     f32 z;
@@ -1258,12 +1228,8 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                             moamoa_jump(pose, moa, moa->state + 1, 1, ty, y, z, (r1 * k) + 1.0f, (r2 * k) + 1.0f);
                         }
                     }
-#if VERSION <= VERSION_DEMO_US
-            } break;
-#else
                 }
                 break;
-#endif
 
             case MOAMOA_STATE_SHRINK:
                 if ((++moa->timer) < 30) {
@@ -1279,14 +1245,7 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                     f32 rad;
                     s = rand() / 32767.0f;
                     dist = randf(300.0f, 500.0f);
-#if VERSION <= VERSION_DEMO_US
-                {
-                    f32 k;
-                    rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f;
-                }
-#else
                     { f32 k; rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f; }
-#endif
                     x = (dist * polySinf(rad)) + (*pose->mtx)[0][3];
                     y = (*pose->mtx)[2][3] - (dist * polyCosf(rad));
                 }
@@ -1305,11 +1264,7 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                     pos.x = (*pose->mtx)[0][3];
                     pos.y = (*pose->mtx)[1][3];
                     pos.z = (*pose->mtx)[2][3];
-#if VERSION <= VERSION_DEMO_US
-                    psndSFXOn_3D((const char*)0x6c3, &pos);
-#else
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG6_MOAMOA_DAMAGED1), &pos);
-#endif
                     sfx = 1;
                 }
                 dist = -100.0f;
@@ -1369,14 +1324,7 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
 
             case MOAMOA_STATE_ESCAPE_RUN:
                 d = distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], -275.0f, -100.0f);
-#if VERSION <= VERSION_DEMO_US
-                {
-                    f32 a3;
-                    f32 k;
-                    tz = rand() / 32767.0f;
-#else
                 { f32 a3; f32 k; tz = rand() / 32767.0f;
-#endif
                     a3 = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], -275.0f, -100.0f);
                     a3 += ((tz * (k = 45.0f - -45.0f)) + -45.0f);
                     if (d > 6.0f && (x = (*pose->mtx)[1][3]) < 60.0f) {
@@ -1385,16 +1333,9 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                         angle = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
                         {
                             f32 k;
-#if VERSION <= VERSION_DEMO_US
-                            f32 k2;
-#endif
                             f32 r1 = rand() / 32767.0f;
                             f32 r2 = rand() / 32767.0f;
-#if VERSION <= VERSION_DEMO_US
-                            moamoa_jump(pose, moa, moa->state, 1, dist, x, angle, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * (k2 = 1.0f - 1.0f)) + 1.0f);
-#else
                             moamoa_jump(pose, moa, moa->state, 1, dist, x, angle, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
-#endif
                         }
                     } else {
                         moa->state++;
@@ -1416,16 +1357,9 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                     grav = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
                     {
                         f32 k;
-#if VERSION <= VERSION_DEMO_US
-                        f32 k2;
-#endif
                         f32 r1 = rand() / 32767.0f;
                         f32 r2 = rand() / 32767.0f;
-#if VERSION <= VERSION_DEMO_US
-                        moamoa_jump(pose, moa, moa->state, 1, x, y, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * (k2 = 1.0f - 1.0f)) + 1.0f);
-#else
                         moamoa_jump(pose, moa, moa->state, 1, x, y, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
-#endif
                     }
                 } else {
                     moa->state = MOAMOA_STATE_GONE;
@@ -1470,8 +1404,6 @@ if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_H
                     moa->state = MOAMOA_STATE_GONE;
                 }
                 break;
-#if VERSION <= VERSION_DEMO_US
-#endif
         }
 
         if (!(moa->flags & (MOAMOA_FLAG_KNOCKED_AWAY | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_BLOWN))) {
@@ -1824,11 +1756,7 @@ static EVT_BEGIN(evt_moamoa_escape)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 90, 300, 0)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_241"), 0, STRING("ウェイトレス"))
-#else
     CALL(evt_msg_print, 0, STRING("stg6_rsh_241"), 0, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")))
-#endif
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 270, 300)
@@ -1846,19 +1774,10 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_npc_flag_onoff, 0, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), NPC_FLAG_INTANGIBLE)
 #endif
     CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_change_interrupt, STRING("ウェイトレス"), 6, PTR(talk_waitless))
-    SET_VALUE(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
-#else
     CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
     SET_VALUE(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
-#endif
     SET_VALUE(LW(0), STRING("w_bero"))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(bero_case_switch_on)
-#else
     CALL_CHILD(PTR(bero_case_switch_on))
-#endif
     RETURN
 EVT_END()
 
@@ -1868,11 +1787,7 @@ EVT_END()
  * 車掌悲, begging Mario to help the waitress the Smorgs have caught; at other times he is off the map.
  */
 static EVT_BEGIN(init_syashou)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG6_46_ENGINEER, STG6_48_SMORG_MIASMA)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_npc_set_position, STRING("me"), -100, 0, 0)
@@ -2253,38 +2168,20 @@ EVT_END()
  * scenery, NPCs and the music for the station the train has reached.
  */
 EVT_BEGIN(rsh_05_init_evt_nidome)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#else
-    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
-        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
-            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#endif
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
             END_IF
         END_IF
     END_IF
     CALL(evt_npc_setup, PTR(npc_data))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
-#else
-    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#else
-        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))

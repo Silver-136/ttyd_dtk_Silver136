@@ -580,9 +580,7 @@ USER_FUNC(evt_npc_move_position) {
             }
         }
         npc->footstepAccum = 0.0f;
-#if VERSION > VERSION_DEMO_US
         // FAKE: (s8) cast before the store to the s16 field; the plain form changes the object
-#endif
         npc->footstepToggle = (s8)(1 - npc->footstepToggle); // alternate L/R
     }
 

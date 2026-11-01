@@ -640,12 +640,8 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
     s32 i;
     s32 rank;
 
-#if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-#else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank = 0;
-#endif
         for (i = 0; i < rank_wp->count; i++) {
 #if VERSION > VERSION_DEMO_US
             if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
@@ -653,9 +649,7 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
                 if (rank_wp->entries[i].flags & RANK_PLAYER) {
                     break;
                 }
-#if VERSION > VERSION_DEMO_US
                 rank++;
-#endif
             }
 #if VERSION <= VERSION_DEMO_US
         rank = i;
@@ -699,12 +693,8 @@ static USER_FUNC(evt_tou_get_rule_info) {
     s32 i;
     s32 rank;
 
-#if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-#else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank = 0;
-#endif
         for (i = 0; i < rank_wp->count; i++) {
 #if VERSION > VERSION_DEMO_US
             if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
@@ -712,9 +702,7 @@ static USER_FUNC(evt_tou_get_rule_info) {
                 if (rank_wp->entries[i].flags & RANK_PLAYER) {
                     break;
                 }
-#if VERSION > VERSION_DEMO_US
                 rank++;
-#endif
             }
 #if VERSION <= VERSION_DEMO_US
         rank = i;
@@ -889,11 +877,7 @@ USER_FUNC(evt_tou_get_fighter_info) {
  */
 static USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
     BOOL reverse = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
-#else
-    BOOL reverse = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
-#endif
     s32 list[32];
     s32 i;
     s32 rank;
@@ -1276,11 +1260,7 @@ static void rankingInit(void) {
 
     memset(rank_wp, 0, sizeof(RankData));
     // We need to handle the excluded entries if we're doing rematches
-#if VERSION <= VERSION_DEMO_US
     temp = evtGetValue(NULL, GSW_STORY_PROGRESS);
-#else
-    temp = evtGetValue(NULL, GSW_STORY_PROGRESS);
-#endif
     count = 21;
     if (temp < STG3_34_RETURN_TO_ROGUEPORT) {
         count = 23;
@@ -1311,43 +1291,23 @@ static void rankingInit(void) {
     swSet(GSWF_TOU_RANKING_SAVED); // GSWF_GLITZ_PIT_RANKING_SAVED
 
     // Set up the initial run-through
-#if VERSION <= VERSION_DEMO_US
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-#else
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-#endif
         rank_wp->entries[FIGHTER_SWOOPS].flags |= RANK_HIDDEN;
         rank_wp->entries[FIGHTER_SPINIA].flags |= RANK_HIDDEN;
 
         // If we're past this point in the story, hide King K
-#if VERSION <= VERSION_DEMO_US
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED)) {
-#else
-        if (evtGetValue(NULL, GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED)) {
-#endif
             rank_wp->entries[FIGHTER_KP_KOOPAS].flags |= RANK_HIDDEN;
         }
 
         // If we're past this story, Sir Swoop has been introduced
-#if VERSION <= VERSION_DEMO_US
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_SIR_SWOOP_JOINED)) {
-#else
-        if (evtGetValue(NULL, GSWF_GLITZ_PIT_SIR_SWOOP_JOINED)) {
-#endif
             rank_wp->entries[FIGHTER_SWOOPS].flags &= ~RANK_HIDDEN;
 
-#if VERSION <= VERSION_DEMO_US
             if (!evtGetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED)) {
-#else
-            if (!evtGetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED)) {
-#endif
                 rank_wp->entries[FIGHTER_SWOOPS].flags |= RANK_BELOW;
             }
-#if VERSION <= VERSION_DEMO_US
             evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, TRUE);
-#else
-            evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, TRUE);
-#endif
         }
 #if VERSION <= VERSION_DEMO_US
 if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
@@ -1359,18 +1319,10 @@ if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
             rank_wp->entries[FIGHTER_BANDITS].flags |= RANK_HIDDEN;
             rank_wp->entries[FIGHTER_SPINIA].flags &= ~RANK_HIDDEN;
 
-#if VERSION <= VERSION_DEMO_US
             if (!evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED)) {
-#else
-            if (!evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED)) {
-#endif
                 rank_wp->entries[FIGHTER_SPINIA].flags |= RANK_BELOW;
             }
-#if VERSION <= VERSION_DEMO_US
             evtSetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED, TRUE);
-#else
-            evtSetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED, TRUE);
-#endif
         }
     }
     rankingControll();

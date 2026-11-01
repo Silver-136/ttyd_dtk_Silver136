@@ -1099,29 +1099,16 @@ EVT_END()
  */
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
-        CALL_CHILD(mri_punipuni_itemselect)
-#else
     IF_INT_EQUAL(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
         CALL_CHILD(PTR(mri_punipuni_itemselect))
-#endif
         IF_INT_EQUAL(LW(1), 0)
             GOTO(100)
         END_IF
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 1)
-#else
-        SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 1)
-#endif
         CALL(evt_item_set_position, LW(10), 0, 30, -100)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(15), 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(mri_punipuni_itemset)
-#else
         CALL_CHILD(PTR(mri_punipuni_itemset))
-#endif
         SET_VALUE(GF(15), 0)
 #if VERSION <= VERSION_DEMO_US
 IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_22_LORD_CRUMP_APPEARS)
@@ -1132,17 +1119,9 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_22_LORD_CRUMP_APPEARS)
         END_IF
 #endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
-#else
-        SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(mri_punipuni_itemremove)
-#else
         CALL_CHILD(PTR(mri_punipuni_itemremove))
-#endif
     END_IF
     LABEL(100)
     CALL(evt_mario_key_onoff, 1)

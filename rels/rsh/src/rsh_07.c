@@ -172,15 +172,9 @@ static EVT_BEGIN(evt_access_entry)
 EVT_END()
 
 EVT_BEGIN(rsh_07_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#else
-    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
-        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
-            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#endif
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
                 CALL(evt_map_playanim, STRING("hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                 CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -190,30 +184,14 @@ EVT_BEGIN(rsh_07_init_evt)
         END_IF
     END_IF
     CALL(evt_npc_setup, PTR(npc_data))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_access_entry)
-#else
     CALL_CHILD(PTR(evt_access_entry))
-#endif
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 210, 60, -145, 0, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
-#else
-    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#else
-        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
@@ -228,9 +206,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
             END_IF
-#if VERSION > VERSION_DEMO_US
             // This variant leaves the current moving-train audio unchanged.
-#endif
             IF_STR_EQUAL(LW(0), STRING("rsh_07_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_07_c"))

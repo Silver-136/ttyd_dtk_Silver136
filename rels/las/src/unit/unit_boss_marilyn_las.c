@@ -489,29 +489,17 @@ CALL(btlevtcmd_DrawLots, LW(0), 3, 50, 25, LW(2))
         CASE_EQUAL(0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGE_COUNT, 0)
         SET_VALUE(LW(9), PTR(&weapon_marilyn_kagenuke_attack1))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(kagenuke_attack_event)
-#else
         CALL_CHILD(PTR(kagenuke_attack_event))
-#endif
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGE_COUNT, 0)
         SET_VALUE(LW(9), PTR(&weapon_marilyn_thunder_attack1))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(thunder_attack_event)
-#else
         CALL_CHILD(PTR(thunder_attack_event))
-#endif
         CASE_EQUAL(2)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGE_COUNT, LW(0))
         ADD(LW(0), 1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGE_COUNT, LW(0))
         SET_VALUE(LW(9), PTR(&weapon_marilyn_charge1))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(charge_attack_event)
-#else
         CALL_CHILD(PTR(charge_attack_event))
-#endif
     END_SWITCH
     LABEL(90)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)

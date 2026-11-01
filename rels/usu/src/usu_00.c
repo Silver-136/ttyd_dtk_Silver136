@@ -153,11 +153,7 @@ extern EvtWord usu00_vivian_cry_event[];
 #else
 EvtWord usu00_vivian_cry_event[58];
 #endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord usu00_vivian_joinup_event[];
-#else
 EvtWord usu00_vivian_joinup_event[608];
-#endif
 static EvtWord cam_up[34];
 static EvtWord cam_down[8];
 EvtWord usu00_check_vivian[33];
@@ -611,11 +607,7 @@ s32 iri_15_item_tbl[] = {
  * then takes it back (item menu) and pays the reward; otherwise it says the line for the current story progress.
  */
 EVT_BEGIN(village_chief_talk)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
-#else
-    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
-#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
             CALL(evt_item_entry, STRING("kairanban"), ITEM_ROUTING_SLIP, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
@@ -640,11 +632,7 @@ CALL(evt_win_item_select, PTR(iri_15_item_tbl), LW(0))
                         CALL(evt_msg_print, 0, STRING("irai_17_04"), 0, 0)
                         CALL(evt_sub_get_coin, 30)
                         CALL(evt_msg_print, 0, STRING("irai_17_05"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
                         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#else
-                        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#endif
                         SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_NEWSLETTER), 1)
                         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                     END_IF
@@ -653,11 +641,7 @@ CALL(evt_win_item_select, PTR(iri_15_item_tbl), LW(0))
         END_IF
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG4_01_THE_MAYORS_A_PIG)
         CALL(evt_msg_print, 0, STRING("stg4_usu_20"), 0, STRING("me"))
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -665,13 +649,8 @@ CALL(evt_win_item_select, PTR(iri_15_item_tbl), LW(0))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_msg_print, 0, STRING("stg4_usu_22"), 0, STRING("me"))
         CASE_LESS(STG4_14_NAME_GUESSING)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_USU_00_MAYOR_SHADOW_TALK_DONE, 0)
             SET_VALUE(GSWF_USU_00_MAYOR_SHADOW_TALK_DONE, 1)
-#else
-        IF_INT_EQUAL(GSWF_USU_00_MAYOR_SHADOW_TALK_DONE, 0)
-            SET_VALUE(GSWF_USU_00_MAYOR_SHADOW_TALK_DONE, 1)
-#endif
             CALL(evt_msg_print, 0, STRING("stg4_usu_24"), 0, STRING("me"))
             CALL(evt_set_dir_to_target, STRING("me"), STRING("にせマリオ"))
             ELSE
@@ -806,11 +785,7 @@ CALL(evt_win_item_select, PTR(key_tbl), LW(0))
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
 #endif
         IF_INT_NOT_EQUAL(LW(0), -1)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(usu00_vivian_joinup_event)
-#else
             CALL_CHILD(PTR(usu00_vivian_joinup_event))
-#endif
             RETURN
         END_IF
     END_IF
@@ -1491,11 +1466,7 @@ EVT_BEGIN(usu00_vivian_cry_event)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg4_usu_108"), 0, STRING("ビビアン"))
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG4_12_VIVIAN)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG4_12_VIVIAN)
-#endif
     CALL(evt_npc_change_interrupt, STRING("ビビアン"), 1, PTR(urouro_move))
     CALL(evt_npc_restart_regular_event, STRING("ビビアン"))
     CALL(evt_mario_key_onoff, 1)
@@ -1653,9 +1624,6 @@ CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG4_USU1"))
     CALL_CHILD(PTR(all_party_lecture))
 #endif
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
-#if VERSION <= VERSION_DEMO_US
-    // The partner comments, then the story becomes STORY_STG4_13_VIVIAN_JOINS and Mario is no longer a shadow.
-#endif
     CALL(evt_msg_print_party, STRING("stg4_usu_123"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
@@ -1665,13 +1633,8 @@ CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG4_USU1"))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
 #endif
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
     SET_VALUE(GSWF_JIN_TRADING_PLACES_ACTIVE, 0)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
-    SET_VALUE(GSWF_JIN_TRADING_PLACES_ACTIVE, 0)
-#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     RETURN

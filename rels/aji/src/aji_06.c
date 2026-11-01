@@ -347,35 +347,19 @@ s32 kusuri_id[] = {
 EVT_BEGIN(peach_evt_kusuri_select)
     CALL(kusuri_list_init)
     SET_VALUE(LF(0), 0)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_NOT_EQUAL(LSWF(2), 0)
-#else
     IF_INT_NOT_EQUAL(LSWF_AJI_06_BLUE_POTION_HELD, 0)
-#endif
         CALL(kusuri_list_add, 2)
         SET_VALUE(LF(0), 1)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_NOT_EQUAL(LSWF(1), 0)
-#else
     IF_INT_NOT_EQUAL(LSWF_AJI_06_RED_POTION_HELD, 0)
-#endif
         CALL(kusuri_list_add, 1)
         SET_VALUE(LF(0), 1)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_NOT_EQUAL(LSWF(3), 0)
-#else
     IF_INT_NOT_EQUAL(LSWF_AJI_06_ORANGE_POTION_HELD, 0)
-#endif
         CALL(kusuri_list_add, 3)
         SET_VALUE(LF(0), 1)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_NOT_EQUAL(LSWF(4), 0)
-#else
     IF_INT_NOT_EQUAL(LSWF_AJI_06_GREEN_POTION_HELD, 0)
-#endif
         CALL(kusuri_list_add, 4)
         SET_VALUE(LF(0), 1)
     END_IF

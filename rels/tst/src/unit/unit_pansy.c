@@ -30,11 +30,7 @@ static EvtWord damage_event[10];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord song_event[298];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord song_event[298];
-#else
 static EvtWord song_event[300];
-#endif
 #endif
 static EvtWord escape_event[96];
 static EvtWord wait_event[6];
@@ -306,14 +302,8 @@ EVT_END()
  * and finally fades the map back to normal.
  */
 static EVT_BEGIN(song_event)
-#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
-#endif
     // Target: it picks the targets for its song.
-#if VERSION <= VERSION_DEMO_US
-    // with no target it does nothing (or is flustered when confused).
-    CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
-#endif
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -324,24 +314,14 @@ static EVT_BEGIN(song_event)
         END_IF
         GOTO(99)
     END_IF
-#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-#endif
     // The attack is declared.
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_WeaponAftereffect, LW(9))
-#endif
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
-#if VERSION > VERSION_DEMO_US
     // The map darkens while the Dayzee takes a breath.
-#endif
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-#if VERSION <= VERSION_DEMO_US
-    // The stage dims and takes on a blue tint as the Crazee Dayzee starts to sing.
-#endif
     SET_VALUE(LW(0), 255)
     SET_VALUE(LW(1), 255)
     LOOP(0)
@@ -411,26 +391,18 @@ WAIT_FRAMES(60)
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(97)
-#if VERSION <= VERSION_DEMO_US
-    // Next target, until all have been checked.
-#endif
     LABEL(97)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(98)
     END_IF
     GOTO(10)
-#if VERSION <= VERSION_DEMO_US
-    // The stage light fades back to normal.
-#endif
     LABEL(98)
     SET_VALUE(LW(0), 192)
     SET_VALUE(LW(1), 255)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(0), 256)
-#if VERSION > VERSION_DEMO_US
             // The notes stop and the map fades back to normal.
-#endif
             BREAK_LOOP
         END_IF
         CALL(evt_map_set_blend, 0, LW(0), LW(0), LW(1), 255)

@@ -182,29 +182,15 @@ EVT_BEGIN(las_13_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 0)
-        SET_VALUE(LSW(1), 0)
-        SET_VALUE(LSW(2), 0)
-        CALL(evt_mobj_floatswitch_red, 0, STRING("switch1"), 150, 60, 0, PTR(switch1_evt), GSWF_LAS_13_SWITCH_PUZZLE_SOLVED)
-        CALL(evt_mobj_floatswitch_red, 0, STRING("switch2"), -150, 60, 0, PTR(switch2_evt), GSWF_LAS_13_SWITCH_PUZZLE_SOLVED)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_EQUAL(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 0)
         SET_VALUE(LSW_LAS_13_SWITCH_1_COUNT, 0)
         SET_VALUE(LSW_LAS_13_SWITCH_2_COUNT, 0)
         CALL(evt_mobj_floatswitch_red, 0, STRING("switch1"), 150, 60, 0, PTR(switch1_evt), GSWF_LAS_13_SWITCH_PUZZLE_SOLVED)
         CALL(evt_mobj_floatswitch_red, 0, STRING("switch2"), -150, 60, 0, PTR(switch2_evt), GSWF_LAS_13_SWITCH_PUZZLE_SOLVED)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_13_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 0)
-#else
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_13_PALACE_KEY_CHEST)
-    IF_INT_EQUAL(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 0)
-#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF

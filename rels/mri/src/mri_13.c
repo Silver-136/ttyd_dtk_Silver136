@@ -44,16 +44,8 @@ static EvtWord punipuni_ball00_init[54];
 static EvtWord punipuni_ball00[68];
 static EvtWord yuka_init[48];
 EvtWord yuka_slot[113];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord yuka_shake[];
-#else
 EvtWord yuka_shake[11];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord yuka_shake2[];
-#else
 EvtWord yuka_shake2[68];
-#endif
 static EvtWord yuka_check[133];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord yuka_event[];
@@ -424,11 +416,7 @@ EVT_BEGIN(yuka_event)
         // stand on it too.
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_area_check, 1, -50, 60, 60, LW(0), LW(2), LW(15))
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_MRI_13_PUNI_ORB_PLACED, 1)
-#else
-        IF_INT_EQUAL(GSWF_MRI_13_PUNI_ORB_PLACED, 1)
-#endif
             IF_INT_EQUAL(GW(0), 0)
                 IF_INT_EQUAL(GF(0), 0)
                     IF_INT_EQUAL(LW(14), 1)
@@ -477,11 +465,7 @@ EVT_BEGIN(yuka_event)
     CALL(evt_snd_sfxoff, GW(4))
     DELETE_EVENT(LW(10))
     CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), GW(3))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(yuka_shake2)
-#else
     SPAWN_EVENT(PTR(yuka_shake2))
-#endif
     CALL(evt_hit_bind_mapobj, STRING("A_sui_l1"), STRING("S_sui_l"))
     CALL(evt_hit_bind_mapobj, STRING("A_dai"), STRING("S_dai"))
     CALL(evt_hit_bind_mapobj, STRING("A_dai_02"), STRING("S_dai"))
@@ -543,18 +527,10 @@ EVT_BEGIN(yuka_event)
     CALL(evt_hitobj_onoff, STRING("A_sui_l1"), 1, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(yuka_check)
-#else
     SPAWN_EVENT(PTR(yuka_check))
-#endif
     CALL(evt_target_flag_onoff, 0, 0, 1)
     CALL(evt_target_set_position, 0, -55, -309, 50)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_06_WATER_SWITCH)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_06_WATER_SWITCH)
-#endif
     CALL(evt_puni_set_hamari, -180, -310, 60, 2, -2, -306, -312)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_puni_winddisable_onoff, 0)

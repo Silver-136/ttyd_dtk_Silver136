@@ -54,9 +54,7 @@ typedef struct {
 
 USER_FUNC(bg_cam_chk);
 static USER_FUNC(mario_chk);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(hit_group_chk);
-#endif
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
 static EvtWord w_door_close[22];
@@ -1144,13 +1142,8 @@ CALL(evt_win_item_select, PTR(key_tbl), LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_pouch_remove_item, LW(0), LW(1))
         SET_VALUE(LW(0), STRING("e_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_on)
-        SET_VALUE(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
-#else
         CALL_CHILD(PTR(bero_case_switch_on))
         SET_VALUE(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
@@ -1171,24 +1164,14 @@ EVT_BEGIN(aji_13_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL_CHILD(shikake_init)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(shikake_init))
-#endif
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou1"), STRING("A_hikou1"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ami2"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai5"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai3"), MAP_OBJ_FLAG_CLIP)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_17_CONVEYOR_BELT)
         CALL(evt_mobj_switch_blue, 0, STRING("bcv_sw"), -150, 0, 100, PTR(evt_bcv_sw), GSWF_AJI_13_CONVEYOR_SWITCH_PRESSED)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_17_CONVEYOR_BELT)
-        CALL(evt_mobj_switch_blue, 0, STRING("bcv_sw"), -150, 0, 100, PTR(evt_bcv_sw), GSWF_AJI_13_CONVEYOR_SWITCH_PRESSED)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_pato1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_1_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_2_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -1200,11 +1183,7 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_4_2"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_map_playanim, STRING("kon"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_ramp)
-#else
         CALL_CHILD(PTR(evt_ramp))
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_1_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_2_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_3_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -1214,34 +1193,17 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_4_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_AJI_13_CARD_KEY, 0)
-#else
-    IF_INT_EQUAL(GSWF_AJI_13_CARD_KEY, 0)
-#endif
         CALL(evt_item_entry, STRING("key"), ITEM_CARD_KEY_0x20, -50, 100, 100, ITEM_TYPE_STILL, -1, PTR(evt_key_get))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_18_OFF_SCREEN_STAIRS)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), 650, 200, 100, PTR(evt_sw), GSWF_AJI_13_STAIRS_SWITCH_PRESSED)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_18_OFF_SCREEN_STAIRS)
-        CALL(evt_mobj_switch_blue, 0, STRING("sw"), 650, 200, 100, PTR(evt_sw), GSWF_AJI_13_STAIRS_SWITCH_PRESSED)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kaidan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_kaidan"), 1, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
-#endif
         SET_VALUE(LW(0), STRING("e_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_door_msg), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
@@ -1262,11 +1224,7 @@ IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
         CALL(evt_npc_check_delete, STRING("バリアーンＺ"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_emergency)
-#else
     SPAWN_EVENT(PTR(evt_emergency))
-#endif
     BEGIN_INLINE_EVENT
         CALL(bg_cam_chk)
     END_INLINE_EVENT

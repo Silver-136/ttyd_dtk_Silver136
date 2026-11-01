@@ -2191,11 +2191,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_03_01_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_NO_COIN_DROP | NPC_BATTLE_NO_HEART_DROP | NPC_BATTLE_NO_FLOWER_DROP | NPC_BATTLE_NO_ITEM_DROP | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_COIN_DROP | NPC_BATTLE_NO_HEART_DROP | NPC_BATTLE_NO_FLOWER_DROP | NPC_BATTLE_NO_ITEM_DROP | NPC_BATTLE_STORY), // battleFlags
-#endif
         0, // randomMode
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
         "BGM_KOBOSS_BATTLE1", // bgmName
@@ -2226,11 +2222,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_05_01_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_NO_COIN_DROP | NPC_BATTLE_NO_HEART_DROP | NPC_BATTLE_NO_FLOWER_DROP | NPC_BATTLE_NO_ITEM_DROP | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_COIN_DROP | NPC_BATTLE_NO_HEART_DROP | NPC_BATTLE_NO_FLOWER_DROP | NPC_BATTLE_NO_ITEM_DROP | NPC_BATTLE_STORY), // battleFlags
-#endif
         0, // randomMode
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
         "BGM_KOBOSS_BATTLE1", // bgmName
@@ -2261,11 +2253,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_07_01_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_NO_COIN_DROP | NPC_BATTLE_NO_HEART_DROP | NPC_BATTLE_NO_FLOWER_DROP | NPC_BATTLE_NO_ITEM_DROP | NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_COIN_DROP | NPC_BATTLE_NO_HEART_DROP | NPC_BATTLE_NO_FLOWER_DROP | NPC_BATTLE_NO_ITEM_DROP | NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
-#endif
         0, // randomMode
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
         "BGM_KOBOSS_BATTLE1", // bgmName
@@ -2276,11 +2264,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_08_01_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
-#endif
         0, // randomMode
 #if VERSION > VERSION_DEMO_US
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
@@ -2324,11 +2308,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_10_01_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
-#endif
         0, // randomMode
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20
         "BGM_KOBOSS_BATTLE1", // bgmName
@@ -2359,11 +2339,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_hei_btlno_hei_12_01_off, // select
-#if VERSION <= VERSION_DEMO_US
-        NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY, // battleFlags
-#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
-#endif
         0, // randomMode
 #if VERSION > VERSION_DEMO_US
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // field_20

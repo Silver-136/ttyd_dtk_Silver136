@@ -89,11 +89,7 @@ EvtWord ryushi_event[25];
 EvtWord yuu_03_kaijo_init[12];
 EvtWord yuu_03_kaijo_init2[12];
 EvtWord minigame04_main[33];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord minigame04_start_cam[];
-#else
 EvtWord minigame04_start_cam[40];
-#endif
 EvtWord minigame04_start_cam_cancel[20];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame04_start[];
@@ -733,22 +729,14 @@ EVT_BEGIN(minigame04_start)
                 IF_BITS_SET(LW(9), 768)
                     DELETE_EVENT(LW(8))
                     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION <= VERSION_DEMO_US
-                    CALL_CHILD(minigame04_start_cam_cancel)
-#else
                     CALL_CHILD(PTR(minigame04_start_cam_cancel))
-#endif
                     BREAK_LOOP
                 END_IF
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
         CALL(yuuminigame4_opening_on_off, LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(yuu_03_kaijo_init2)
-#else
         CALL_CHILD(PTR(yuu_03_kaijo_init2))
-#endif
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
     END_IF
@@ -886,11 +874,7 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
     // Quitting sends Mario back through the pipe to gor_03.
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
-#else
-        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
-#endif
         CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
         CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -911,11 +895,7 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #endif
     SET_VALUE(GF(0), 0)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(yuu_03_kaijo_init2)
-#else
     CALL_CHILD(PTR(yuu_03_kaijo_init2))
-#endif
     CALL(evt_cam_road_reset)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_slit_cancel)

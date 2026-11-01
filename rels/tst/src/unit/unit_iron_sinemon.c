@@ -45,11 +45,7 @@ static EvtWord damage_event[102];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord phase_event[164];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[164];
-#else
 static EvtWord phase_event[188];
-#endif
 #endif
 static EvtWord attack_event[385];
 static EvtWord wait_event[6];
@@ -375,11 +371,7 @@ DEBUG_PUT_MSG(STRING("ぺぺぺまん５"))
             CALL(evt_btl_camera_set_moveto, 1, -104, 74, 334, -102, 52, 0, 30, 4)
             WAIT_FRAMES(30)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-#if VERSION <= VERSION_DEMO_US
             IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
-#else
-            IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
-#endif
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_266"))
                 ELSE
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_267"))
@@ -419,13 +411,8 @@ CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_270"), 0, UNIT_ID_SEL
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_271"), 0, LW(0))
             END_IF
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-#if VERSION <= VERSION_DEMO_US
             IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
                 SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 1)
-#else
-            IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
-                SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 1)
-#endif
             END_IF
             CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

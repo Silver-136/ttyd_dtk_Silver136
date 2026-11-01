@@ -38,9 +38,7 @@
 #if VERSION >= VERSION_US
 #endif
 static void callback(s32 type, void** work);
-#if VERSION > VERSION_DEMO_US
 void kuti_callback(s32 type, void** work);
-#endif
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
@@ -62,11 +60,7 @@ QuizEntry kuizu_data[7];
 #if VERSION > VERSION_DEMO_US
 EvtWord UNK_0x00022a90[46];
 #endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord quiz_ok[];
-#else
 EvtWord quiz_ok[19];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord quiz_ng[];
 #else
@@ -1233,31 +1227,17 @@ EVT_BEGIN(aji_04_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
-        CALL_CHILD(sekizou_init)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
         CALL_CHILD(PTR(sekizou_init))
-#endif
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
-#endif
         CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 0, 0, ITEM_TYPE_STILL, -1, PTR(evt_item))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_emergency)
-#else
     SPAWN_EVENT(PTR(evt_emergency))
-#endif
     RETURN
 EVT_END()
 

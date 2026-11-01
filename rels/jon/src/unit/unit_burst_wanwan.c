@@ -42,11 +42,7 @@ static EvtWord damage_event[33];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord counter_damage_event[115];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord counter_damage_event[115];
-#else
 static EvtWord counter_damage_event[68];
-#endif
 #endif
 static EvtWord dead_event[200];
 static EvtWord attack_event[452];
@@ -56,11 +52,7 @@ static EvtWord wait_sound_event1[25];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord wait_sound_event2[11];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord wait_sound_event2[11];
-#else
 static EvtWord wait_sound_event2[12];
-#endif
 #endif
 
 /** Unit data of the Red Chomp: stats, sounds, attributes, parts, init script and data table. */
@@ -135,13 +127,7 @@ BattleUnitKind unit_burst_wanwan = {
 #endif
     100, // hammerKnockbackChance
     20, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_ENM_WAN_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName

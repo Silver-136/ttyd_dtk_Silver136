@@ -99,11 +99,7 @@ USER_FUNC(evt_lottery) {
             if (!(lot->flags & LOTTERY_FLAG_TICKET)) {
                 lot->todayNum = rand() % 10000;
             } else if (!(now < lot->buyTime)) {
-#if VERSION <= VERSION_DEMO_US
-                day = (now - lot->buyTime) / OS_TIMER_CLOCK / 60 / 60 / 24;
-#else
                 day = OSTicksToSeconds(now - lot->buyTime) / 60 / 60 / 24;
-#endif
                 v = lot->days[0];
                 if (day > v) {
                     while (day > v) {
@@ -217,14 +213,10 @@ USER_FUNC(evt_lottery) {
 
     evtSetValue(event, args[1], lot->flags);
     evtSetValue(event, args[2], lot->todayNum);
-#if VERSION > VERSION_DEMO_US
     // The calendar dates computed below (today, the purchase day and the four match days) are never used.
-#endif
     OSTicksToCalendarTime(now, &e);
     if (lot->flags & LOTTERY_FLAG_TICKET) {
-#if VERSION > VERSION_DEMO_US
         // FAKE: bt is a spare temporary (two different shapes for the same sum); passing lot->buyTime + ... directly changes the object
-#endif
         OSTime bt;
         OSTicksToCalendarTime(lot->buyTime, &e);
         bt = lot->buyTime;

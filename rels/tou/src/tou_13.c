@@ -23,11 +23,7 @@ static BeroEntry bero_data[3];
 static EvtWord evt_dakuto[44];
 EvtWord evt_nusumi[182];
 static EvtWord evt_first[42];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord tou_13_init_evt[];
-#else
 EvtWord tou_13_init_evt[117];
-#endif
 
 /** Exits of this passage: east to the champion's room tou_07 and west to Grubba's office tou_05. */
 static BeroEntry bero_data[] = {
@@ -153,11 +149,7 @@ EVT_END()
  * and the entry scenes by story progress.
  */
 EVT_BEGIN(tou_13_init_evt)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
@@ -183,23 +175,14 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    SWITCH(GSW_STORY_PROGRESS)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG3_30_04_AIR_DUCT_EXIT)
         SET_VALUE(LF(0), 0)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LF(0), 1)
         CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
-#else
-        IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
-#endif
             SET_VALUE(LF(0), 0)
             ELSE
             SET_VALUE(LF(0), 1)
@@ -208,30 +191,16 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_run_case_evt, CASE_HAMMER_2, 1, STRING("deguti"), 0, PTR(evt_dakuto), 0)
         SET_VALUE(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         ELSE
         CALL(evt_hitobj_onoff, STRING("deguti"), 1, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_03_EAVESDROPPING)
-        SPAWN_EVENT(evt_nusumi)
-#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_03_EAVESDROPPING)
         SPAWN_EVENT(PTR(evt_nusumi))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_02_AIR_DUCT_1ST_TIME)
-        SPAWN_EVENT(evt_first)
-#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_02_AIR_DUCT_1ST_TIME)
         SPAWN_EVENT(PTR(evt_first))
-#endif
     END_IF
     RETURN
 EVT_END()

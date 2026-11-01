@@ -489,9 +489,7 @@ USER_FUNC(evt_nannpc_entry) {
     NanNPCWork* w;
     args = event->args;
     pose = extGetPosePtr();
-#if VERSION > VERSION_DEMO_US
     // FAKE: the value goes through a long long cast; plain name = evtGetValue(...) changes the object
-#endif
     name = (long long) evtGetValue(event, args[0]);
     w = nanNPCWork;
     for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
@@ -685,11 +683,7 @@ npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
     }
     PSVECSubtract(&target, &npc->startPos, &diff);
     total = (s32)(1000.0f * PSVECMag(&diff) / speed);
-#if VERSION <= VERSION_DEMO_US
-    elapsed = (u64)(s32)((u32)now - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
-#else
     elapsed = OSTicksToMilliseconds((u64)OSDiffTick(now, event->savedTime));
-#endif
     PSVECScale(&diff, &step, (f32)elapsed / (f32)total);
     if (elapsed < total) {
         PSVECAdd(&npc->startPos, &step, &npc->pos);
@@ -728,12 +722,8 @@ NanNPC* npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
         event->userdataf[1] = -4.0f * height;
         event->userdataf[2] = y - (f32)npc->ipos[1] - event->userdataf[1];
     }
-#if VERSION <= VERSION_DEMO_US
-    el = ((u32)gp->renderTime - (u32)npc->startTime) / (OS_TIMER_CLOCK / 1000);
-#else
     // FAKE: el and uel are spare copies of the elapsed time; a single s32 elapsed changes the object
     el = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
-#endif
     uel = el;
     if (el < duration) {
         elapsed = uel;

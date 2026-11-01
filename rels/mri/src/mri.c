@@ -115,22 +115,14 @@ EvtWord _ueki_anime[64];
 EvtWord mri_ueki_entry[32];
 EvtWord mri_puni_save[6];
 s32 mri_itemsel_table[2];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord mri_punipuni_setup[];
-#else
 EvtWord mri_punipuni_setup[16];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mri_punipuni_itemselect[];
 #else
 EvtWord mri_punipuni_itemselect[40];
 #endif
 EvtWord mri_punipuni_itemset[36];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord mri_punipuni_itemremove[];
-#else
 EvtWord mri_punipuni_itemremove[29];
-#endif
 EvtWord mri_hikari_color[66];
 #if VERSION >= VERSION_US
 EvtWord mri_countdown[176];
@@ -693,11 +685,7 @@ EVT_BEGIN(mri_guide_hagure_check)
 EVT_END()
 
 EVT_BEGIN(mri_guide_goryu)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(mri_guide_hagure_check)
-#else
     CALL_CHILD(PTR(mri_guide_hagure_check))
-#endif
     IF_INT_EQUAL(LW(1), 0)
         RETURN
     END_IF

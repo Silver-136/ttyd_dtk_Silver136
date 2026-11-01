@@ -112,11 +112,7 @@ static BeroEntry bero_data[] = {
  */
 static EVT_BEGIN(evt_daiza)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
-#endif
     CALL(evt_npc_stop_for_event)
     SET_VALUE(LW(0), 6)
     SET_VALUE(LW(1), STRING("star"))

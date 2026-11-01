@@ -278,11 +278,7 @@ static NpcSetupInfo npcEnt[] = {
  * from STG7_25_THE_LAST_MAIL on, the west door w_bero is shut with evt_door_msg.
  */
 EVT_BEGIN(aji_00_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_08_ELITE_X_NAUTS)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_08_ELITE_X_NAUTS)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
         ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
@@ -293,40 +289,22 @@ EVT_BEGIN(aji_00_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_08_ELITE_X_NAUTS)
-        SPAWN_EVENT(first_evt)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_08_ELITE_X_NAUTS)
         SPAWN_EVENT(PTR(first_evt))
-#endif
     END_IF
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 20, -100, 60, -200, 0, 0)
     CALL(evt_mobj_save_blk, STRING("s_blk"), 100, 60, -200, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_emergency)
-#else
     SPAWN_EVENT(PTR(evt_emergency))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_map_playanim, STRING("hosi_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_03"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW_STORY_PROGRESS)
-#else
     SWITCH(GSW_STORY_PROGRESS)
         // Replace the west exit with a message throughout this story interval.
-#endif
         CASE_BETWEEN(STG7_25_THE_LAST_MAIL, STG8_END_AFTER_THE_BATTLE)
         SET_VALUE(LW(0), STRING("w_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(evt_door_msg), 0)
     END_SWITCH
     RETURN

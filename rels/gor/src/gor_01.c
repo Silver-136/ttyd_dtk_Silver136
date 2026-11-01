@@ -3839,13 +3839,8 @@ UnitWinSell uwnobj_list[] = {
  * and fills it with the day's bargain badges (badgeShop_getBargainTable).
  */
 EVT_BEGIN(evt_open_02_01_f2)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_unitwin_alloc)
@@ -5028,9 +5023,6 @@ EVT_BEGIN(maffia_assault)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     WAIT_WHILE(GF(10))
-#if VERSION <= VERSION_DEMO_US
-    // The two mafia thugs run in from the south.
-#endif
     SET_VALUE(GF(10), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("マフィア２"), 45, -390, 0, FLOAT(300.0f), 0)
@@ -5046,9 +5038,6 @@ EVT_BEGIN(maffia_assault)
     CALL(evt_npc_move_position, STRING("マフィア１"), 5, -60, 0, FLOAT(300.0f), 0)
     WAIT_WHILE(GF(10))
     SET_VALUE(GF(10), 1)
-#if VERSION <= VERSION_DEMO_US
-    // The two bandit-gang members arrive from the east and the groups run at each other.
-#endif
     CALL(evt_npc_set_position, STRING("盗賊団１"), 225, 0, 10)
     CALL(evt_npc_set_ry, STRING("盗賊団１"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("盗賊団１"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -5087,9 +5076,6 @@ EVT_BEGIN(maffia_assault)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア１"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), NPC_FLAG_AUTO_MOVE_ANIM)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        // The thugs beat up the bandits, spinning them around in the brawl.
-#endif
         CALL(evt_npc_set_anim, STRING("マフィア２"), STRING("A_1"))
         CALL(evt_npc_move_position, STRING("マフィア２"), 180, 15, 0, FLOAT(360.0f), 0)
         CALL(evt_npc_move_position, STRING("マフィア２"), 200, 15, 0, FLOAT(360.0f), 0)
@@ -5105,32 +5091,17 @@ EVT_BEGIN(maffia_assault)
     CALL(evt_npc_move_position, STRING("マフィア１"), 110, 15, 0, FLOAT(360.0f), 0)
     CALL(evt_npc_set_anim, STRING("盗賊団１"), STRING("D_1"))
     CALL(evt_npc_set_anim, STRING("盗賊団２"), STRING("D_1"))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(maffia_turn)
-#else
     SPAWN_EVENT(PTR(maffia_turn))
-#endif
     CALL(evt_npc_move_position, STRING("マフィア１"), 90, 15, 0, FLOAT(360.0f), 0)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("マフィア１"), 110, 15, 0, FLOAT(360.0f), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(maffia_turn)
-#else
     SPAWN_EVENT(PTR(maffia_turn))
-#endif
     CALL(evt_npc_move_position, STRING("マフィア１"), 90, 15, 0, FLOAT(360.0f), 0)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("マフィア１"), 110, 15, 0, FLOAT(360.0f), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(maffia_turn)
-#else
     SPAWN_EVENT(PTR(maffia_turn))
-#endif
     CALL(evt_npc_move_position, STRING("マフィア１"), 90, 15, 0, FLOAT(360.0f), 0)
     CALL(evt_npc_set_anim, STRING("マフィア１"), STRING("S_1"))
-#if VERSION <= VERSION_DEMO_US
-    // The first bandit yells as he takes a hit.
-#endif
     CALL(evt_msg_print, 0, STRING("mac_0_054"), 0, STRING("盗賊団１"))
     CALL(evt_npc_set_anim, STRING("盗賊団１"), STRING("K_1"))
     WAIT_MS(500)
@@ -5148,9 +5119,6 @@ EVT_BEGIN(maffia_assault)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
-    // A bandit is knocked down and the mafia thugs taunt them.
-#endif
     CALL(evt_snd_sfxon, STRING("SFX_STG0_THIEF_DOWN1"), 0)
     SET_VALUE(LW(10), STRING("盗賊団２"))
     CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
@@ -5204,9 +5172,6 @@ EVT_BEGIN(maffia_assault)
     WAIT_WHILE(GF(15))
     WAIT_MS(1000)
     CALL(evt_npc_set_anim, STRING("盗賊団２"), STRING("D_1"))
-#if VERSION <= VERSION_DEMO_US
-    // The bandits get up, curse the thugs and run off to the east.
-#endif
     CALL(evt_msg_print, 0, STRING("mac_0_058"), 0, STRING("盗賊団２"))
     CALL(evt_npc_set_anim, STRING("盗賊団２"), STRING("S_1"))
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 90, 0, 150)
@@ -6012,11 +5977,7 @@ CALL(evt_win_item_select, LW(1), LW(2))
                 CALL(evt_item_get_item, STRING("uk"))
                 CALL(evt_item_get_item_end_wait, STRING("uk"))
                 CALL(evt_msg_print, 0, STRING("irai_09_006"), 0, STRING("店長"))
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#else
-                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#endif
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ORDER_ME_AN_ITEM), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                 SET_VALUE(LW(0), -1)

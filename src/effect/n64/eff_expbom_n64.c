@@ -72,11 +72,7 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     data = __memAlloc(HEAP_EFFECT, sizeof(effExpBomData) * 10);
     effect->userdata = data;
     effect->callback = effExpBomMain;
-#if VERSION <= VERSION_DEMO_US
-for (i = 0; i < effect->count; i++, data++) {
-#else
     for (i = 0, direction = bom_dir, speed = bom_spd; i < effect->count; direction++, speed++, i++, data++) {
-#endif
         data->age = 0;
         random = rand() % 6 + 16;
         data->lifetime = random;

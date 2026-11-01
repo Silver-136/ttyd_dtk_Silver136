@@ -37,16 +37,10 @@ s32 BattleAcrobatStart(BattleWork* work, s32 unitId, s32 windowStartFrame,
  * Returns EVT_RETURN_BLOCK while still waiting, EVT_RETURN_YIELD once decided.
  */
 s32 BattleAcrobatMain(BattleWork* work) {
-#if VERSION <= VERSION_DEMO_US
-    BattleActions* manager;
-#endif
     BattleUnit* unit;
     BOOL doSimplified;
     s32 i;
 
-#if VERSION <= VERSION_DEMO_US
-    manager = &work->actionCommands;
-#endif
     unit = BattleGetUnitPtr(work, work->stylishUnitId);
     doSimplified = FALSE;
     work->stylishCurFrame++;

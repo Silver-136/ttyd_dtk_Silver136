@@ -406,11 +406,7 @@ static s32 item_tbl_madam[] = {
  */
 // Item-selection cancellation gives no reward; a non-cancelled selection pays 30 coins, then removes the ring.
 static EVT_BEGIN(talk_madam_ring_return)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_msg_print, 0, STRING("stg6_rsh_200"), 0, STRING("マダム"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
@@ -425,23 +421,11 @@ CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_201_2"), 0, STRING("マダム"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
         CASE_BETWEEN(STG6_49_POSHLEY_HEIGHTS, STG6_55_04_BOWSER_RAWK_HAWK)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
         CASE_DEFAULT
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     END_SWITCH
@@ -732,11 +716,7 @@ EVT_END()
  * or the per-variant train theme).
  */
 EVT_BEGIN(rsh_01_init_evt)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CASE_GREATER_OR_EQUAL(STG6_49_00_TRAIN_ARRIVAL)
         CASE_DEFAULT
@@ -746,47 +726,25 @@ EVT_BEGIN(rsh_01_init_evt)
         CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("hai_saboten"), MAP_ANIM_PLAY_LOOP, 0)
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_door_init)
-#else
     CALL_CHILD(PTR(evt_rsh_door_init))
-#endif
     SET_VALUE(LW(0), PTR(&door_3))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_door_entry)
-#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
-#endif
     SET_VALUE(LW(0), PTR(&door_4))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_door_entry)
-    CALL_CHILD(evt_access_entry)
-    SWITCH(GSW_STORY_PROGRESS)
-#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
     CALL_CHILD(PTR(evt_access_entry))
     SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CASE_GREATER_OR_EQUAL(STG6_49_00_TRAIN_ARRIVAL)
         CASE_DEFAULT
         SET_VALUE(LW(0), 2)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         SET_VALUE(LW(1), STRING("stg6_rsh_261"))
 #if VERSION > VERSION_DEMO_US
         SET_VALUE(LW(2), STRING("stg6_rsh_261"))
 #endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG6_02_A_CASE_OF_LOST_STEW, STG6_04_GRILLING_HEFF_T)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_POWAN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
@@ -796,11 +754,7 @@ EVT_BEGIN(rsh_01_init_evt)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
         CASE_BETWEEN(STG6_44_END_OF_DAY_2, STG6_45_DAY_3_STARTS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
@@ -810,11 +764,7 @@ EVT_BEGIN(rsh_01_init_evt)
         CASE_BETWEEN(STG6_49_POSHLEY_HEIGHTS, STG6_55_04_BOWSER_RAWK_HAWK)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
         CASE_DEFAULT
         CALL(evt_sub_get_mapname, LW(0))
         IF_STR_EQUAL(LW(0), STRING("rsh_01_a"))
@@ -1140,21 +1090,11 @@ BeroEntry gor_bero[] = {
 };
 
 EVT_BEGIN(rsh_01_init_evt_nidome)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#else
-    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
-        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
-            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#endif
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-#else
-                IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-#endif
                     CALL(evt_map_playanim, STRING("hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1168,40 +1108,20 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
             END_IF
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_door_init)
-#else
     CALL_CHILD(PTR(evt_rsh_door_init))
-#endif
     SET_VALUE(LW(0), PTR(&door_3))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_door_entry)
-#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
-#endif
     SET_VALUE(LW(0), PTR(&door_4))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_door_entry)
-    CALL_CHILD(evt_access_entry)
-    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
-        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
-            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
     CALL_CHILD(PTR(evt_access_entry))
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
                 // Wait for the Bero execution bit before replacing the side exit with its interaction message.
-#endif
                 BEGIN_INLINE_EVENT
                     CALL(evt_bero_exec_wait, 65536)
                     SET_VALUE(LW(0), STRING("s_bero"))
-#if VERSION <= VERSION_DEMO_US
-                    CALL_CHILD(bero_case_switch_off)
-#else
                     CALL_CHILD(PTR(bero_case_switch_off))
-#endif
                     SET_VALUE(LW(1), STRING("stg6_rsh_261"))
 #if VERSION > VERSION_DEMO_US
                     SET_VALUE(LW(2), STRING("stg6_rsh_261"))
@@ -1211,24 +1131,12 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
             END_IF
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
-#else
-    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#else
-        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
@@ -1243,9 +1151,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
             END_IF
-#if VERSION > VERSION_DEMO_US
             // Revisit variant B leaves the current moving-train audio unchanged.
-#endif
             IF_STR_EQUAL(LW(0), STRING("rsh_01_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_01_c"))
@@ -1254,23 +1160,14 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             END_IF
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_rsh_01_rnd_npc_entry)
-    IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
-#else
     CALL_CHILD(PTR(evt_rsh_01_rnd_npc_entry))
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
-#endif
         CALL(evt_npc_set_position, STRING("車掌"), 395, 0, -90)
         CALL(evt_npc_flag_onoff, 1, STRING("車掌"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_set_ry, STRING("車掌"), 270)
         CALL(evt_npc_change_interrupt, STRING("車掌"), 6, PTR(talk_syasyou))
         SET_VALUE(LW(0), STRING("e_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
     END_IF
     RETURN
 EVT_END()

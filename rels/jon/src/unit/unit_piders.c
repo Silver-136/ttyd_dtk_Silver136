@@ -63,20 +63,12 @@ static EvtWord damage_event[10];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[183];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[183];
-#else
 static EvtWord dead_event[189];
 #endif
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord blow_dead_event[98];
-#else
 #if VERSION <= VERSION_DEMO_US
 static EvtWord blow_dead_event[98];
 #else
 static EvtWord blow_dead_event[104];
-#endif
 #endif
 static EvtWord battle_end_event[7];
 static EvtWord yure_event[76];
@@ -105,11 +97,7 @@ static EvtWord renzoku_attack_event_sub_last[79];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord wait_event[6];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord wait_event[6];
-#else
 static EvtWord wait_event[7];
-#endif
 #endif
 
 /**
@@ -141,48 +129,17 @@ BattleUnitKind unit_piders = {
     9999, // pbSoftCap
     46, // width
     56, // height
-#if VERSION <= VERSION_DEMO_US
-    0,
-    56,
-    0.0f,
-    28.0f,
-    0.0f,
-    0,
-    0,
-#else
     {0, 56}, // hitOffset
     {0.0f, 28.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {23.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
-#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    23.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    18.0f,
-    0.0f,
-    0.0f,
-    13.0f,
-    32.0f,
-    0.0f,
-    0.0f,
-    28.0f,
-    0.0f,
-#else
     {18.0f, 0.0f, 0.0f}, // bintaHitOffset
     {13.0f, 32.0f, 0.0f}, // kissHitOffset
     {0.0f, 28.0f, 0.0f}, // cutBaseOffset
-#endif
     46.0f, // cutWidth
     56.0f, // cutHeight
     0, // turnOrder
@@ -719,11 +676,7 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageSize, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     ADD(LW(1), 40)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_CUBIC_IN, 0, -1)
-#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_CUBIC_IN, 0, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))
     CALL(btlevtcmd_StoreCoin, LW(0))
     CALL(btlevtcmd_GetExp, LW(10), LW(0))

@@ -843,11 +843,7 @@ EVT_BEGIN(iri_20_aunt_to_house)
 EVT_END()
 
 EVT_BEGIN(aunt_talk)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TELL_THAT_PERSON)
-#else
-    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TELL_THAT_PERSON)
-#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             // Trouble 20 (Podley's old flame): the aunt asks Mario to step outside because she can't talk in
             // front of the children (irai_20_001).
@@ -864,11 +860,7 @@ EVT_BEGIN(aunt_talk)
             SET_VALUE(LW(0), PTR(&door_1))
             SET_VALUE(LW(14), 0)
             SET_VALUE(LW(15), 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(iri_20_out_house)
-#else
             CALL_CHILD(PTR(iri_20_out_house))
-#endif
             // The town music fades out and music-box music takes over.
             CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
             WAIT_MS(1000)
@@ -965,11 +957,7 @@ CALL_CHILD(iri_20_aunt_to_house)
                     CALL(evt_item_entry, STRING("sd"), ITEM_METEOR_MEAL, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("sd"))
                     CALL(evt_item_get_item_end_wait, STRING("sd"))
-#if VERSION <= VERSION_DEMO_US
                     SET_VALUE(GSWF_USU_01_METEOR_MEAL, 1)
-#else
-                    SET_VALUE(GSWF_USU_01_METEOR_MEAL, 1)
-#endif
                     ELSE
                     // Items full: she leaves the Meteor Meal on the ground for him (irai_20_012_1).
                     CALL(evt_msg_print_add, 0, STRING("irai_20_012_1"))
@@ -977,11 +965,7 @@ CALL_CHILD(iri_20_aunt_to_house)
                     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
                     CALL(evt_npc_move_position, STRING("me"), -363, -152, 0, 40, 0)
                     WAIT_MS(300)
-#if VERSION <= VERSION_DEMO_US
                     CALL(evt_item_entry, STRING("iri_20"), ITEM_METEOR_MEAL, -345, 20, -132, ITEM_TYPE_STILL, GSWF_USU_01_METEOR_MEAL, 0)
-#else
-                    CALL(evt_item_entry, STRING("iri_20"), ITEM_METEOR_MEAL, -345, 20, -132, ITEM_TYPE_STILL, GSWF_USU_01_METEOR_MEAL, 0)
-#endif
                     WAIT_MS(300)
                     CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 0, 40, 0)
                     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
@@ -989,13 +973,8 @@ CALL_CHILD(iri_20_aunt_to_house)
                 // She thanks Mario (irai_20_014), the playtime is saved,
                 // the trouble is solved and the children cheer (irai_20_015 to 017).
                 CALL(evt_msg_print, 0, STRING("irai_20_014"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
                 CALL(evt_sub_save_playtime, GSW_USU_TROUBLE_20_DONE_TIME)
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#else
-                CALL(evt_sub_save_playtime, GSW_USU_TROUBLE_20_DONE_TIME)
-                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#endif
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_TELL_THAT_PERSON), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                 BEGIN_INLINE_EVENT
@@ -1014,25 +993,13 @@ CALL_CHILD(iri_20_aunt_to_house)
         RETURN
     END_IF
     // No trouble active: her words depend on how far the story has gone.
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 0)
-#else
-        IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 0)
-#endif
             // Before the Doopliss fight, first talk: she says she can't buy food for the children since her
             // husband turned into a pig (stg4_usu_62), and they pipe up.
             CALL(evt_msg_print, 0, STRING("stg4_usu_62"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(childABC_talk_01)
-#else
             CALL_CHILD(PTR(childABC_talk_01))
-#endif
             WAIT_MS(1400)
             // She begs for spare food (stg4_usu_66) with a yes/no menu;
             // a food item from Mario's pouch earns a Shooting Star (stg4_usu_68).
@@ -1106,11 +1073,7 @@ CALL(evt_win_item_select, LW(0), LW(1))
                 WAIT_MS(600)
                 CALL(evt_msg_print, 0, STRING("stg4_usu_73"), 0, STRING("子供Ｃ"))
             END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
-#else
-            SET_VALUE(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
-#endif
             ELSE
             // As a pig she only oinks (stg4_usu_73_01).
             CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -3548,11 +3511,7 @@ CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
         ELSE
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
-#else
-        IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
-#endif
             CALL(evt_set_dir_to_target, STRING("お店の奥さん"), STRING("mario"))
             CALL(evt_msg_print, 0, STRING("stg4_usu_57"), 0, STRING("お店の奥さん"))
             CALL(evt_mobj_exec_cancel, STRING("me"))
@@ -3683,11 +3642,7 @@ static EVT_BEGIN(evt_majin)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -235, -370, FLOAT(80.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE, 0)
-#else
-    IF_INT_EQUAL(GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE, 0)
-#endif
         // First visit: a voice inside the chest startles Mario (stg4_usu_majin3_01).
         CALL(evt_mobj_get_position, STRING("pera_box"), LW(0), LW(1), LW(2))
         ADD(LW(1), 30)
@@ -3731,11 +3686,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_07"), PTR(majin_callback), 0)
         // The chest is left alone and the first talk is recorded.
         CALL(evt_mobj_exec_cancel, STRING("pera_box"))
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE, 1)
-#else
-        SET_VALUE(GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE, 1)
-#endif
         ELSE
         // Later visits: without the Black Key the voice just begs Mario to find it (majin3_08).
         CALL(evt_pouch_check_item, ITEM_BLACK_KEY_0x23, LW(0))
@@ -3817,13 +3768,8 @@ CALL(evt_mario_normalize)
     CALL(lect_cam_save)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(roll_majin_lecture_init)
-    CALL_CHILD(roll_majin_lecture)
-#else
     CALL_CHILD(PTR(roll_majin_lecture_init))
     CALL_CHILD(PTR(roll_majin_lecture))
-#endif
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
@@ -3851,13 +3797,8 @@ CALL(evt_mario_normalize)
     END_INLINE_EVENT
     CALL(evt_img_release, STRING("img"))
     CALL(evt_paper_delete, STRING("OFF_d_kusya"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
     SET_VALUE(GSWF_USU_01_BLACK_CHEST_OPENED, 1)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
-    SET_VALUE(GSWF_USU_01_BLACK_CHEST_OPENED, 1)
-#endif
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))

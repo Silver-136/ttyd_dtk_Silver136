@@ -41,11 +41,7 @@ EvtWord evt_tojikome_nidome[104];
 EvtWord evt_tojikome_sandome[37];
 static EvtWord evt_tojikome_msg[30];
 EvtWord evt_postar[23];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord tou_11_init_evt[];
-#else
 EvtWord tou_11_init_evt[178];
-#endif
 
 /**
  * Door animation callback for the north door (door_1), opening: LW(0) is the swing angle;
@@ -323,19 +319,10 @@ EVT_END()
 EVT_BEGIN(tou_11_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL_CHILD(evt_tou_locker_init)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_tou_locker_init))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_TOU_11_POSTER_BLOWN_AWAY, 0)
-#else
-    IF_INT_EQUAL(GSWF_TOU_11_POSTER_BLOWN_AWAY, 0)
-#endif
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("pos_1"), STRING("a_pos_1"), PTR(evt_postar))
         ELSE
@@ -344,11 +331,7 @@ EVT_BEGIN(tou_11_init_evt)
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_1"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(bero_case_switch_off)
-#else
     CALL_CHILD(PTR(bero_case_switch_off))
-#endif
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome"))
@@ -381,25 +364,13 @@ SPAWN_EVENT(evt_tojikome_sandome)
         CALL(evt_cam_road_reset)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
-#else
-    IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
-#endif
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(evt_tojikome)
-#else
         SPAWN_EVENT(PTR(evt_tojikome))
-#endif
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US

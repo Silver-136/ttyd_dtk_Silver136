@@ -101,11 +101,7 @@ EvtWord torinoko_suifu_sakebu[103];
 EvtWord torinoko_suifu_init[192];
 EvtWord torinoko_suifu[172];
 EvtWord suifu_orei[339];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord escapeway_event[];
-#else
 EvtWord escapeway_event[98];
-#endif
 #if VERSION > VERSION_DEMO_US
 EvtWord bombwall_escape_move[58];
 #endif
@@ -1174,33 +1170,17 @@ SET_VALUE(GSWF_DOU_11_SWITCH_1_PRESSED, 1)
 #endif
     SET_VALUE(LW(2), STRING("S_taru_n01"))
     SET_VALUE(LW(3), STRING("A_taru_n01"))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(ukishima_apper)
-#else
     SPAWN_EVENT(PTR(ukishima_apper))
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(700)
         SET_VALUE(LW(2), STRING("S_taru_n02"))
         SET_VALUE(LW(3), STRING("A_taru_n02"))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(ukishima_apper)
-#else
         SPAWN_EVENT(PTR(ukishima_apper))
-#endif
     END_INLINE_EVENT
     WAIT_MS(2500)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(pukapuka_watari_init01)
-#else
     SPAWN_EVENT(PTR(pukapuka_watari_init01))
-#endif
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(ukishima_check)
-#else
     CALL_CHILD(PTR(ukishima_check))
-#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1239,33 +1219,17 @@ SET_VALUE(GSWF_DOU_11_SWITCH_2_PRESSED, 1)
 #endif
     SET_VALUE(LW(2), STRING("S_taru_n03"))
     SET_VALUE(LW(3), STRING("A_taru_n03"))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(ukishima_apper)
-#else
     SPAWN_EVENT(PTR(ukishima_apper))
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(700)
         SET_VALUE(LW(2), STRING("S_taru_n04"))
         SET_VALUE(LW(3), STRING("A_taru_n04"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(ukishima_apper)
-#else
         CALL_CHILD(PTR(ukishima_apper))
-#endif
     END_INLINE_EVENT
     WAIT_MS(2500)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(pukapuka_watari_init02)
-#else
     SPAWN_EVENT(PTR(pukapuka_watari_init02))
-#endif
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(ukishima_check)
-#else
     CALL_CHILD(PTR(ukishima_check))
-#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1702,11 +1666,7 @@ EVT_BEGIN(escapeway_event)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg5_dou_17_06"), 0, STRING("水夫E"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG5_35_ESCAPE_ROUTE)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_35_ESCAPE_ROUTE)
-#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1798,23 +1758,11 @@ CALL(evt_mario_normalize)
         END_IF
     END_LOOP
     CALL(evt_mario_wait_landon)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bombwall_after)
-#else
     SPAWN_EVENT(PTR(bombwall_after))
-#endif
     SET_VALUE(LW(0), STRING("n_bero"))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(bero_case_switch_on)
-#else
     CALL_CHILD(PTR(bero_case_switch_on))
-#endif
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("n_bero"), 4)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG5_36_HOLE_IN_THE_WALL)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_36_HOLE_IN_THE_WALL)
-#endif
     WAIT_FRAMES(2)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -2871,11 +2819,7 @@ EVT_BEGIN(dou_11_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
     CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
@@ -2883,79 +2827,37 @@ EVT_BEGIN(dou_11_init_evt)
     CALL(evt_map_playanim, STRING("moku"), MAP_ANIM_PLAY_LOOP, 0)
     // The bombable wall is set up; at the wave-dodging step the stranded sailors cutscenes are prepared, and at
     // the kicked-off step the escape-route scene starts.
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bombwall_init)
-    SWITCH(GSW_STORY_PROGRESS)
-#else
     SPAWN_EVENT(PTR(bombwall_init))
     SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_EQUAL(STG5_29_WAVE_DODGING)
-#if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF_DOU_11_SAILORS_SHOUT_SEEN, 0)
-            SPAWN_EVENT(torinoko_suifu)
-#else
         IF_INT_EQUAL(GSWF_DOU_11_SAILORS_SHOUT_SEEN, 0)
             SPAWN_EVENT(PTR(torinoko_suifu))
-#endif
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF_DOU_11_SAILORS_CROSSED, 0)
-            SPAWN_EVENT(torinoko_suifu_init)
-            SPAWN_EVENT(torinoko_suifu_sakebu)
-#else
         IF_INT_EQUAL(GSWF_DOU_11_SAILORS_CROSSED, 0)
             SPAWN_EVENT(PTR(torinoko_suifu_init))
             SPAWN_EVENT(PTR(torinoko_suifu_sakebu))
-#endif
         END_IF
         CASE_EQUAL(STG5_34_KICKED_OFF)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(escapeway_event)
-#else
         SPAWN_EVENT(PTR(escapeway_event))
-#endif
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
-    // Once the sailors have crossed, the ship hit area is on; if the story is still at the wave-dodging step
-    // Monie and Peeton wait on the platform and the thank-you scene runs.
     IF_INT_EQUAL(GSWF_DOU_11_SAILORS_CROSSED, 1)
-#else
-    IF_INT_EQUAL(GSWF_DOU_11_SAILORS_CROSSED, 1)
-#endif
         CALL(evt_hitobj_onoff, STRING("fune_atari"), 1, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_29_WAVE_DODGING)
-        IF_INT_EQUAL(GSWF_DOU_11_SAILORS_CROSSED, 1)
-            SPAWN_EVENT(watarikiri_suifu_init)
-#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_29_WAVE_DODGING)
         IF_INT_EQUAL(GSWF_DOU_11_SAILORS_CROSSED, 1)
             SPAWN_EVENT(PTR(watarikiri_suifu_init))
-#endif
             CALL(evt_npc_set_position, STRING("モニー"), 681, 50, -75)
             CALL(evt_npc_set_ry_lr, STRING("モニー"), 1)
             CALL(evt_npc_set_position, STRING("ピートン"), 714, 50, -78)
             CALL(evt_npc_set_ry_lr, STRING("ピートン"), 1)
             SET_VALUE(GW(10), 0)
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(suifu_orei)
-#else
             SPAWN_EVENT(PTR(suifu_orei))
-#endif
         END_IF
     END_IF
     // Between the shipwrecked-sailors and escape-route steps the sailors stand in their finished positions.
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_30_SHIPWRECKED_SAILORS)
-        IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_35_ESCAPE_ROUTE)
-            SPAWN_EVENT(watarikiri_suifu_init)
-#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_30_SHIPWRECKED_SAILORS)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_35_ESCAPE_ROUTE)
             SPAWN_EVENT(PTR(watarikiri_suifu_init))
-#endif
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -2978,26 +2880,14 @@ IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_32_CORTEZS_WARNING)
     END_IF
     // The background ship sways, the damage-return points depend on the story step, and the bobbing barrels and
     // bottles start.
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(haikei_funeyure)
-#else
     SPAWN_EVENT(PTR(haikei_funeyure))
-#endif
     CALL(evt_map_entry_airport_harbor, 0, STRING("S_hikou"), STRING("A_hikou"))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_30_SHIPWRECKED_SAILORS)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG5_30_SHIPWRECKED_SAILORS)
-#endif
         CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints_1st))
         ELSE
         CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_gazigazi_entry)
-#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
-#endif
     SET_VALUE(LW(0), STRING("s11fune1"))
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main0), LW(10))
@@ -3045,15 +2935,9 @@ SPAWN_EVENT(pukapuka_watari_init02)
     END_IF
     // Ship-change platform; after Cortez attacks, dust shaking starts.
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("Ship_Change_01"))
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-            SPAWN_EVENT(dai3_shurai_after)
-#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
             SPAWN_EVENT(PTR(dai3_shurai_after))
-#endif
         END_IF
     END_IF
     CALL(evt_hitobj_onoff, STRING("A_ana_before"), 1, 0)

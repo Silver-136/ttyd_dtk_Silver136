@@ -1022,11 +1022,7 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
     for (i = 0; i < n; i++) {
         if (w->unitIds[i] != -1 && w->power[i] >= 1) {
             unit = BattleGetUnitPtr(wp, w->unitIds[i]);
-#if VERSION <= VERSION_DEMO_US
-            BattleCheckDamage(mario, unit, BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), (void*)&weapon_scissor, 0);
-#else
             BattleCheckDamage(mario, unit, BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &weapon_scissor, 0);
-#endif
             hit = 1;
         }
     }
@@ -1195,11 +1191,7 @@ BattleWork* wp;
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetNumChans(1);
-#if VERSION <= VERSION_DEMO_US
-    GXSetChanCtrl(4, 0, GX_DF_NONE, 0, 0, 0, 2);
-#else
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
-#endif
     GXSetNumTexGens(0);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);

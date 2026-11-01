@@ -166,11 +166,7 @@ BattleUnitKind unit_red_honenoko = {
     0,
     2,
     100,
-#if VERSION <= VERSION_DEMO_US
-    100,
-#else
     20,
-#endif
     0.0f,
     0.0f,
     0.0f,
@@ -204,11 +200,7 @@ static StatusVulnerability regist = {50, 50, 100, 0, 50, 100, 100, 100, 100, 100
  * Status vulnerability of the Red Bones in the retail builds: immune to sleep, poison, fright and instant KO;
  * resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {50, 50, 100, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0};
-#else
 static StatusVulnerability regist = {0, 85, 40, 0, 40, 100, 90, 80, 100, 90, 100, 90, 100, 90, 80, 0, 80, 100, 80, 100, 100, 0};
-#endif
 #endif
 
 /**

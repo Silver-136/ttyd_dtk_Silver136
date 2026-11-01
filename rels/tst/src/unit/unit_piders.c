@@ -64,16 +64,8 @@ static EvtWord damage_event[10];
 static EvtWord dead_event[183];
 static EvtWord blow_dead_event[98];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[183];
-#else
 static EvtWord dead_event[189];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord blow_dead_event[98];
-#else
 static EvtWord blow_dead_event[104];
-#endif
 #endif
 static EvtWord battle_end_event[7];
 static EvtWord unison_phase_event[120];
@@ -86,11 +78,7 @@ static EvtWord renzoku_attack_event_sub_last[79];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord wait_event[6];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord wait_event[6];
-#else
 static EvtWord wait_event[7];
-#endif
 #endif
 
 /** Script helper: allocates the Pider's PidersYarn buffer and keeps it in the unit's countersetWeapon slot. */
@@ -222,11 +210,7 @@ BattleUnitKind unit_piders = {
     0,
     0,
     2,
-#if VERSION <= VERSION_DEMO_US
-    0,
-#else
     100,
-#endif
     0,
     0.0f,
     0.0f,
@@ -255,11 +239,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {80, 100, 90, 100, 90, 100, 100, 90, 100, 90, 100, 90, 100, 90, 90, 100, 70, 100, 90, 100, 100, 95};
 #else
 /** Status vulnerability of the Pider in the retail builds: resists most statuses. */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {80, 100, 90, 100, 90, 100, 100, 90, 100, 90, 100, 90, 100, 90, 90, 100, 70, 100, 90, 100, 100, 95};
-#else
 static StatusVulnerability regist = {90, 90, 50, 100, 90, 100, 100, 90, 100, 90, 100, 90, 100, 95, 90, 100, 70, 100, 90, 100, 100, 95};
-#endif
 #endif
 
 /**
@@ -669,60 +649,6 @@ EVT_END()
  * It then hides its parts, takes it out of the turn order and removes the unit (kill mode 1).
  * From the JP release on it is also moved far below the stage.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Death script: spins the Pider 15 degrees per frame for 48 frames, then shows an explosion effect,
- * banks its coins and experience and star points and tips it over for 30 frames.
- * It then hides its parts, takes it out of the turn order and removes the unit (kill mode 1).
- * From the JP release on it is also moved far below the stage.
- */
-static EVT_BEGIN(dead_event)
-    SET_VALUE(LW(0), 48)
-    CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    LABEL(10)
-    WAIT_FRAMES(1)
-    CALL(btlevtcmd_AddRotate, LW(10), 0, -15, 0)
-    SUBTRACT(LW(0), 1)
-    IF_INT_GREATER(LW(0), 0)
-        GOTO(10)
-    END_IF
-    CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
-    CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-    ADD(LW(2), 10)
-    CALL(evt_eff64, STRING(""), STRING("expbom_n64"), LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(btlevtcmd_GetCoin, LW(10), LW(0))
-    CALL(btlevtcmd_StoreCoin, LW(0))
-    CALL(btlevtcmd_GetExp, LW(10), LW(0))
-    CALL(btlevtcmd_StoreExp, LW(0))
-    CALL(btlevtcmd_GetPos, LW(10), LW(3), LW(1), LW(2))
-    ADD(LW(2), 10)
-    ADD(LW(1), 30)
-    CALL(_add_star_point_disp_offset, LW(10), LW(3), LW(1), LW(2))
-    CALL(evt_eff, STRING(""), STRING("star_point"), 0, LW(3), LW(1), LW(2), LW(0), 0, 0, 0, 0, 0, 0, 0)
-    IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        LOOP(LW(0))
-        END_LOOP
-    END_IF
-    CALL(btlevtcmd_SetRotateOffset, LW(10), 0, 0, 0)
-    SET_VALUE(LW(0), 30)
-    LABEL(20)
-    WAIT_FRAMES(1)
-    CALL(btlevtcmd_AddRotate, LW(10), 3, 0, 0)
-    SUBTRACT(LW(0), 1)
-    IF_INT_GREATER(LW(0), 0)
-        GOTO(20)
-    END_IF
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_NOT_TARGETABLE)
-    CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
-    CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
-    CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
-CALL(btlevtcmd_KillUnit, LW(10), 1)
-    RETURN
-EVT_END()
-#else
 /**
  * Death script: spins the Pider 15 degrees per frame for 48 frames, then shows an explosion effect,
  * banks its coins and experience and star points and tips it over for 30 frames.
@@ -778,7 +704,6 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Death when the Pider is blown away: plays the blow sound,
@@ -786,41 +711,6 @@ EVT_END()
  * hides its parts, takes it out of the turn order and removes it (kill mode 1;
  * moved far below the stage from the JP release on).
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Death when the Pider is blown away: plays the blow sound,
- * spins it 20 degrees per frame as it flies up and off the stage, banks its coins and experience,
- * hides its parts, takes it out of the turn order and removes it (kill mode 1;
- * moved far below the stage from the JP release on).
- */
-static EVT_BEGIN(blow_dead_event)
-    CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
-    CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), BTL_POSE_DAMAGE)
-    BEGIN_SIBLING_EVENT
-        LABEL(0)
-        CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 20, 0)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(2.0f))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetStageSize, LW(0), EVT_NULLPTR, EVT_NULLPTR)
-    ADD(LW(1), 40)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, 2, 0, -1)
-    CALL(btlevtcmd_GetCoin, LW(10), LW(0))
-    CALL(btlevtcmd_StoreCoin, LW(0))
-    CALL(btlevtcmd_GetExp, LW(10), LW(0))
-    CALL(btlevtcmd_StoreExp, LW(0))
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_NOT_TARGETABLE)
-    CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
-    CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
-    CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
-CALL(btlevtcmd_KillUnit, LW(10), 1)
-    RETURN
-EVT_END()
-#else
 /**
  * Death when the Pider is blown away: plays the blow sound,
  * spins it 20 degrees per frame as it flies up and off the stage, banks its coins and experience,
@@ -857,7 +747,6 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
-#endif
 
 /** Battle-end event: sets unit work 1 to 254 so the thread stops being drawn. */
 static EVT_BEGIN(battle_end_event)
@@ -1209,19 +1098,6 @@ static EVT_BEGIN(piders_attack_common_event1)
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
 #endif
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
-    ELSE
-        CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 40, 0)
-        ELSE
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 30, 0)
-        END_IF
-    END_IF
-#endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, 4, 0, 110, 5)
     LOOP(5)
@@ -1319,18 +1195,6 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
-#endif
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
-    ELSE
-        CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 40, 0)
-        ELSE
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 30, 0)
-        END_IF
-    END_IF
 #endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WINDUP_ANGLE, LW(0))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1575,10 +1439,6 @@ EVT_END()
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
-#if VERSION <= VERSION_DEMO_US
-EVT_END()
-#else
 EVT_END_PAD()
-#endif
 #endif
 

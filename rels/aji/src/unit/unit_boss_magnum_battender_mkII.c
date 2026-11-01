@@ -124,11 +124,7 @@ static EvtWord damage_event[111];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[216];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[216];
-#else
 static EvtWord dead_event[234];
-#endif
 #endif
 static EvtWord entry_event[78];
 static EvtWord attack_event[320];
@@ -225,13 +221,7 @@ BattleUnitKind unit_boss_magnum_battender_mkII = {
     0, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_BOSS_MBTN_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -751,9 +741,7 @@ USER_FUNC(aud_suikomi) {
                 n++;
             }
         }
-#if VERSION > VERSION_DEMO_US
         // Shuffle the occupied-seat IDs before taking the first twenty.
-#endif
         for (i = 0; i < 1000; i++) {
             s32 a = irand(n);
             s32 b = irand(n);
@@ -1134,11 +1122,7 @@ static EVT_BEGIN(dead_event)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, BTL_POSE_DAMAGE)
     CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, BTL_POSE_DAMAGE)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_07"), 0, UNIT_ID_SELF)
-#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_07"), 0, -2)
-#endif
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -1670,11 +1654,7 @@ EVT_BEGIN(aud_attack_event)
             CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("MGN_T_2"))
             CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("MGN_S_2"))
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_04"), 0, UNIT_ID_SELF)
-#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_04"), 0, -2)
-#endif
         CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -1718,11 +1698,7 @@ EVT_BEGIN(aud_attack_event)
     // It rises on its jets while the camera moves to the audience and the audience area darkens.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 300)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, -1)
-#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
-#endif
     WAIT_MS(300)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_AUDIENCE)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1741,11 +1717,7 @@ EVT_BEGIN(aud_attack_event)
     ADD(LW(2), 150)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 300)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), 25, LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, -1)
-#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), 25, LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_3"))
@@ -1772,11 +1744,7 @@ EVT_BEGIN(aud_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 300)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, -1)
-#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(aud_jet_end)
     WAIT_MS(300)
     // The audience lighting comes back, the camera returns and the boss goes back to its home position.
@@ -1797,11 +1765,7 @@ EVT_BEGIN(aud_attack_event)
     ADD(LW(1), 300)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, -1)
-#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
-#endif
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_MOTOR_ACTIVE1"), EVT_NULLPTR, 0, LW(15))
         WAIT_MS(600)
@@ -1835,11 +1799,7 @@ EVT_BEGIN(aud_attack_event)
             CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("MGN_T_4"))
             CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("MGN_A5_8"))
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_05"), 0, UNIT_ID_SELF)
-#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_05"), 0, -2)
-#endif
         CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, BTL_POSE_TALK)
         CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, BTL_POSE_STAY_DEFAULT)
         CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
@@ -2211,11 +2171,7 @@ static BattleWeapon weapon_batten_rocket_attack = {
     {9, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
     TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel

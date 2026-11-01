@@ -38,11 +38,7 @@ static EvtWord counter_damage_event[30];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord return_event[244];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord return_event[244];
-#else
 static EvtWord return_event[256];
-#endif
 #endif
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
@@ -120,27 +116,15 @@ BattleUnitKind unit_pakkun_flower = {
 BattleUnitKind unit_pakkun_flower = {
     UNIT_PIRANHA_PLANT,
     "btl_un_pakkun_flower",
-#if VERSION <= VERSION_DEMO_US
-    13,
-#else
     15,
-#endif
     0,
     1,
     1,
-#if VERSION <= VERSION_DEMO_US
-    35,
-    0,
-    1,
-    70,
-    3,
-#else
     33,
     1,
     3,
     70,
     1,
-#endif
     50,
     9999,
     40,
@@ -210,11 +194,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {80, 80, 60, 100, 75, 100, 100, 80, 100, 70, 100, 70, 100, 70, 70, 20, 30, 100, 70, 100, 100, 30};
 #else
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {80, 80, 60, 100, 75, 100, 100, 80, 100, 70, 100, 70, 100, 70, 70, 20, 30, 100, 70, 100, 100, 30};
-#else
 static StatusVulnerability regist = {100, 70, 40, 100, 80, 100, 100, 60, 100, 85, 100, 85, 100, 85, 70, 10, 30, 100, 70, 100, 100, 30};
-#endif
 #endif
 
 /**
@@ -276,11 +256,7 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
-    {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#else
     {9, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
@@ -481,48 +457,6 @@ EVT_END()
  * then pops back up standing (PKF_E_1, then PKF_S_1) with the ground hit, cursor, status-icon and kiss offsets,
  * the ceiling attributes cleared and the ground pose table.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Ceiling-fall script, installed by return_event while the Piranha Plant hangs from the ceiling and run
- * when the stage's overhead iron frame falls (_fall_frame_event): it clears itself,
- * sinks into the ceiling (PKF_E_4 with the move sound, shadow shrunk, hidden),
- * moves its position and home to its home x/z on the ground (y = 0),
- * then pops back up standing (PKF_E_1, then PKF_S_1) with the ground hit, cursor, status-icon and kiss offsets,
- * the ceiling attributes cleared and the ground pose table.
- */
-static EVT_BEGIN(ceil_fall_ready_event)
-    CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_small, UNIT_ID_SELF)
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_4"))
-    WAIT_MS(300)
-    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
-    CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
-    WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_return, UNIT_ID_SELF)
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
-    CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-    CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 50, 0)
-    CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 4, 48)
-CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-    WAIT_MS(500)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
-    RETURN
-EVT_END()
-#else
 /**
  * Ceiling-fall script, installed by return_event while the Piranha Plant hangs from the ceiling and run
  * when the stage's overhead iron frame falls (_fall_frame_event): it clears itself,
@@ -566,7 +500,6 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
     RETURN
 EVT_END()
-#endif
 
 /**
  * Burrow back after an attack (run by normal_attack_event and counter_damage_event):
@@ -579,82 +512,6 @@ EVT_END()
  * flipped hit and cursor offsets, ceiling unit attribute and the two part attributes on,
  * the ceiling pose table) with ceil_fall_ready_event as its ceiling-fall script.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Burrow back after an attack (run by normal_attack_event and counter_damage_event):
- * the Piranha Plant sinks (PKF_E_2 with the move sound, shadow shrunk, hidden).
- * If the stage has a ceiling (pakkun_ceil_exist) it picks ground or ceiling at random (half each),
- * else the ground.
- * On the ground it reappears at its home x/z at y = 0 standing (PKF_E_1 then PKF_S_1,
- * ground offsets and pose table, ceiling attributes off, no ceiling-fall script);
- * on the ceiling it reappears at y = 130 hanging upside down (PKF_E_3 then PKF_S_3,
- * flipped hit and cursor offsets, ceiling unit attribute and the two part attributes on,
- * the ceiling pose table) with ceil_fall_ready_event as its ceiling-fall script.
- */
-static EVT_BEGIN(return_event)
-    CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(pakkun_ceil_exist, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_sub_random, 1, LW(15))
-    ELSE
-        SET_VALUE(LW(15), 0)
-    END_IF
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_small, UNIT_ID_SELF)
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_2"))
-    WAIT_MS(300)
-    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
-    IF_INT_EQUAL(LW(15), 0)
-        CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
-        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
-        CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
-        WAIT_MS(500)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        BEGIN_SIBLING_EVENT
-            CALL(shadow_scale_return, UNIT_ID_SELF)
-        END_SIBLING_EVENT
-        CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
-        CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-        CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 50, 0)
-        CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 4, 48)
-CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-        WAIT_MS(500)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
-    ELSE
-        CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, PTR(ceil_fall_ready_event))
-        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 130, LW(2))
-        CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 130, LW(2))
-        WAIT_MS(500)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        BEGIN_SIBLING_EVENT
-            CALL(shadow_scale_return, UNIT_ID_SELF)
-        END_SIBLING_EVENT
-        CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_3"))
-        CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -80, 0)
-        CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, -50, 0)
-        CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 4, 10)
-CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_ceil))
-        WAIT_MS(500)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_3"))
-    END_IF
-    RETURN
-EVT_END()
-#else
 /**
  * Burrow back after an attack (run by normal_attack_event and counter_damage_event):
  * the Piranha Plant sinks (PKF_E_2 with the move sound, shadow shrunk, hidden).
@@ -735,7 +592,6 @@ static EVT_BEGIN(return_event)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 /**
  * The Piranha Plant's bite with the weapon in LW(9), at the First Strike target in a battle-flag-2 battle,
@@ -942,11 +798,7 @@ evtSetValue(event, args[0], 0);
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 
-#if VERSION <= VERSION_DEMO_US // the JP demo's tst has the JP demo BattleWork layout
-    if (_battleWorkPointer->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
-#else
     if (TST_BATTLE_WORK(_battleWorkPointer)->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
-#endif
         evtSetValue(event, args[0], 0);
     } else {
         evtSetValue(event, args[0], 1);

@@ -110,19 +110,11 @@ BattleUnitKind unit_yamitogedaruma = {
     0,
     1,
     1,
-#if VERSION <= VERSION_DEMO_US
-    40,
-    0,
-    1,
-    70,
-    4,
-#else
     34,
     1,
     2,
     70,
     2,
-#endif
     50,
     9999,
     46,
@@ -198,11 +190,7 @@ static StatusVulnerability regist = {20, 70, 30, 100, 30, 100, 100, 50, 100, 50,
  * Status vulnerabilities of the Dark Bristle (percent chance per status;
  * the newer releases tweak a few values).
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {20, 70, 30, 100, 30, 100, 100, 50, 100, 50, 100, 50, 100, 50, 50, 30, 55, 100, 50, 100, 100, 30};
-#else
 static StatusVulnerability regist = {20, 80, 20, 100, 20, 100, 100, 40, 100, 50, 100, 50, 100, 100, 40, 30, 20, 100, 40, 100, 100, 30};
-#endif
 #endif
 
 /**
@@ -327,11 +315,7 @@ static BattleWeapon weapon_togedaruma_attack = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
-    {7, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#else
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags

@@ -223,11 +223,7 @@ static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 100, 10, 100, 10, 1
  * Allergic, Fright, Gale Force and Slow; always hit by Huge, Attack Up, Defense Up, Fast,
  * Dodgy and Invisible; otherwise instant KO 10.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 100, 10, 100, 10, 100, 10, 10, 0, 0, 100, 10, 100, 100, 10};
-#else
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 10};
-#endif
 #endif
 
 /** Attack data of X-Yux's wakka attack: base damage 3, 100% accuracy; may inflict stop 100% (80% in the final versions). */
@@ -297,11 +293,7 @@ static BattleWeapon weapon_wakka_attack = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
-#if VERSION <= VERSION_DEMO_US
-    100, // stopChance
-#else
     80, // stopChance
-#endif
     3, // stopTime
     0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
     0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
@@ -382,11 +374,7 @@ static BattleWeapon weapon_wawawa_attack = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
-#if VERSION <= VERSION_DEMO_US
-    100, // stopChance
-#else
     80, // stopChance
-#endif
     3, // stopTime
     0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
     0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
@@ -2162,84 +2150,6 @@ static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx) {
  * While satellites live it raises the barrier (immune body part, barrier effect kept under the Yux)
  * and args[0] receives 1.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Script helper run from the Yux's wait event.
- * Drops satellites (work[4], work[5]) that no longer exist;
- * with none left the barrier breaks (the body loses its damage immunity,
- * the barrier effect in work[3] is deleted and glass shards fly) and args[0] receives 0.
- * While satellites live it raises the barrier (immune body part, barrier effect kept under the Yux)
- * and args[0] receives 1.
- */
-static USER_FUNC(_check_satellite) {
-    s32 id = BattleTransID(event, -2);
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    EvtWord* args = event->args;
-    BattleUnitPart* part;
-    f32 x;
-    f32 y;
-    f32 z;
-    s32 i;
-    BOOL alive;
-    s32 j;
-
-    alive = FALSE;
-    if (unit == NULL) {
-return EVT_RETURN_DONE;
-    }
-    for (i = 4; i < 8; i++) {
-        if (unit->work[i] != -1) {
-            if (BattleGetUnitPtr(_battleWorkPointer, unit->work[i]) != NULL) {
-                alive = TRUE;
-            } else {
-                unit->work[i] = -1;
-            }
-        }
-    }
-    if (!alive) {
-        part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-        if (part->attributes & kImmuneToDamageAndStatus) {
-            effDelete((EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT]);
-            unit->work[UNIT_WORK_BARRIER_EFFECT] = 0;
-            BtlUnit_snd_se(unit, "SFX_ENM_BARRI_BARRIER_BREAK1", 0xF1194D80, 0);
-            BtlUnit_GetPos(unit, &x, &y, &z);
-            for (j = 0; j < 20; j++) {
-                s32 w = BtlUnit_GetWidth(unit) + 15;
-                s32 h = BtlUnit_GetHeight(unit) + 15;
-                s32 dx = irand(w) - w / 2;
-                s32 dy = irand(h) - h / 2;
-
-                effGlassN64Entry(2, 60, x + dx, y + dy, z, 1.0f);
-            }
-        }
-        part->attributes &= ~kImmuneToDamageAndStatus;
-        evtSetValue(event, args[0], 0);
-    } else {
-        part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-        if (!(part->attributes & kImmuneToDamageAndStatus)) {
-            f32 px;
-            f32 py;
-            f32 pz;
-
-            BtlUnit_snd_se(unit, "SFX_ENM_BARRI_BARRIER1", 0xF1194D80, 0);
-            BtlUnit_GetPos(unit, &px, &py, &pz);
-            unit->work[UNIT_WORK_BARRIER_EFFECT] = (EvtWord)effSyuryouEntry(1, 1000, 0.0f, -1000.0f, 0.0f);
-        }
-        part->attributes |= kImmuneToDamageAndStatus;
-        evtSetValue(event, args[0], 1);
-        if (unit->work[UNIT_WORK_BARRIER_EFFECT] != 0) {
-            f32* ud = ((EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT])->userdata;
-
-            BtlUnit_GetPos(unit, &x, &y, &z);
-            ud[1] = x;
-            ud[2] = y - 32.0f * unit->sizeMultiplier;
-            ud[3] = 10.0f + z;
-            ud[4] = 1.8f * unit->sizeMultiplier;
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-#else
 /**
  * Script helper run from the Yux's wait event.
  * Drops satellites (work[4], work[5]) that no longer exist;
@@ -2319,72 +2229,12 @@ static USER_FUNC(_check_satellite) {
     }
     return EVT_RETURN_DONE;
 }
-#endif
 
 /**
  * Script helper: args[0] is the Yux, args[1] the number of satellites (1-4),
  * args[2] the index of this satellite; args[3]-args[5] receive its starting offset from the Yux (a fixed
  * formation of +-25 units, x mirrored by facing direction).
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Script helper: args[0] is the Yux, args[1] the number of satellites (1-4),
- * args[2] the index of this satellite; args[3]-args[5] receive its starting offset from the Yux (a fixed
- * formation of +-25 units, x mirrored by facing direction).
- */
-static USER_FUNC(battleGetBarriernSatelliteInitPos) {
-    EvtWord* args = event->args;
-    BattleUnit* unit;
-    s32 max;
-    s32 index;
-    s32 id;
-    s32 x;
-    s32 y;
-    s32 z;
-    s32 i;
-    s32 j;
-    static const Vec VecData[] = {
-        // 1 satellite
-        {25.0f, 0.0f, 0.0f},
-        // 2 satellites
-        {25.0f, 0.0f, 0.0f},
-        {-25.0f, 0.0f, 0.0f},
-        // 3 satellites
-        {0.0f, 25.0f, 0.0f},
-        {25.0f, -25.0f, 0.0f},
-        {-25.0f, -25.0f, 0.0f},
-        // 4 satellites
-        {25.0f, 25.0f, 0.0f},
-        {-25.0f, 25.0f, 0.0f},
-        {25.0f, -25.0f, 0.0f},
-        {-25.0f, -25.0f, 0.0f},
-    };
-    const Vec* p;
-    BattleWork* wp = _battleWorkPointer;
-
-    id = evtGetValue(event, args[0]);
-    id = BattleTransID(event, id);
-    unit = BattleGetUnitPtr(wp, id);
-    max = evtGetValue(event, args[1]);
-    index = evtGetValue(event, args[2]);
-    x = args[3];
-    y = args[4];
-    z = args[5];
-p = VecData;
-    for (i = 0; i < max; i++) {
-        for (j = 0; j < i; j++) {
-            p++;
-        }
-    }
-    for (j = 0; j < index; j++) {
-        p++;
-    }
-    evtSetValue(event, x, (s32)(p->x * unit->faceDirection));
-    evtSetValue(event, y, (s32)p->y);
-    evtSetValue(event, z, (s32)p->z);
-    return EVT_RETURN_DONE;
-}
-#else
 /**
  * Script helper: args[0] is the Yux, args[1] the number of satellites (1-4),
  * args[2] the index of this satellite; args[3]-args[5] receive its starting offset from the Yux (a fixed
@@ -2445,4 +2295,3 @@ static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     evtSetValue(event, z, (s32)p->z);
     return EVT_RETURN_DONE;
 }
-#endif

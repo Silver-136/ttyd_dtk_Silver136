@@ -3241,11 +3241,7 @@ if (unit) {
                 }
                 break;
             case 0x500000B:
-#if VERSION <= VERSION_DEMO_US
-                if ((u8)BattleAudience_CheckReactionPerPhase()) {
-#else
                 if (BattleAudience_CheckReactionPerPhase()) {
-#endif
                     break;
                 }
                 if (!BattleWaitAllActiveEvtEnd(wp)) {
@@ -3342,9 +3338,7 @@ void btlseqAct(BattleWork* wp) {
 
     switch (BattleGetSeq(wp, SEQ_ACT)) {
         case 0x6000000: {
-#if VERSION > VERSION_DEMO_US
                 // FAKE: block-local unit shadowing the function's; using the function's unit changes the object
-#endif
                 BattleUnit* unit;
                 BOOL cantMove;
 
@@ -3438,9 +3432,7 @@ void btlseqAct(BattleWork* wp) {
                 !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
                 (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->attributeFlags & kUndead))) {
-#if VERSION > VERSION_DEMO_US
                 // BUG: irand(100) < 0 never holds, so an electrified unit never runs btldefaultevt_BiribiriMove
-#endif
                 if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC) && irand(100) < 0) {
                     evt = evtEntry(btldefaultevt_BiribiriMove, 10, 0);
                 } else if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && irand(100) < 50) {
@@ -3505,9 +3497,7 @@ void btlseqAct(BattleWork* wp) {
                         break;
                 }
                 if (unit->moveState == 0) {
-#if VERSION > VERSION_DEMO_US
                     // FAKE: decrement is always TRUE; the plain form without the flag and its test changes the object
-#endif
                     decrement = TRUE;
                     if (wp->flags & BATTLE_FLAG_RESET_TURN) {
                         decrement = TRUE;
@@ -3549,18 +3539,10 @@ void btlseqAct(BattleWork* wp) {
             BattleAudience_PerAct();
             BattleIncSeq(wp, SEQ_ACT);
         case 0x600000A:
-#if VERSION <= VERSION_DEMO_US
-            if ((u8)BattleAudience_CheckReaction()) {
-#else
             if (BattleAudience_CheckReaction()) {
-#endif
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
-            if (!BattleCheckConcluded(wp) && (u8)BattleBreakSlot_CheckReaction()) {
-#else
             if (!BattleCheckConcluded(wp) && BattleBreakSlot_CheckReaction()) {
-#endif
                 break;
             }
             BattleIncSeq(wp, SEQ_ACT);

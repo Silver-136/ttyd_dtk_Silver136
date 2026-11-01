@@ -1492,17 +1492,9 @@ EVT_BEGIN(muj_00_door_open)
     END_IF
     CALL(door_dark_flag, LW(0), 1)
     IF_BITS_CLEAR(LW(15), 2)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(door_dark)
-#else
         SPAWN_EVENT(PTR(door_dark))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(door_open_se)
-#else
     SPAWN_EVENT(PTR(door_open_se))
-#endif
     CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT

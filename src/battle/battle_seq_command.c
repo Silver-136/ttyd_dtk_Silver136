@@ -2737,13 +2737,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             unit->moveState = 4;
             break;
         }
-#if VERSION <= VERSION_DEMO_US
-            // FAKE: called through a cast that passes unit->unitId: btlataudGetMoveEventPtr takes no argument, but the
-            // target loads the id into r3 for the call (the plain call is one instruction short).
-            unit->attackEventCode = ((EvtWord * (*)(s32)) btlataudGetMoveEventPtr)(unit->unitId);
-#else
         unit->attackEventCode = btlataudGetMoveEventPtr(unit->unitId);
-#endif
         unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS;
         break;
     case 13:

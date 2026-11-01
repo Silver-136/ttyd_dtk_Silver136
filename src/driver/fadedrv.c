@@ -115,9 +115,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
     if (!type) {
         return;
     }
-#if VERSION > VERSION_DEMO_US
     // types 16-21 are types 9, 10, 11, 12, 14 and 15 in near-white (0xF0F0F0)
-#endif
     if (type == FADE_IN_WHITE) {
         type = FADE_IN_BLACK;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
@@ -664,11 +662,7 @@ void fadeMain(void) {
 #endif
                 switch (entry->state) {
                     case 0:
-#if VERSION <= VERSION_DEMO_US
-                        if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
-#else
                         if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
-#endif
                             if (entry->paperPoseId < 0 && (entry->type == FADE_PIPE_UP_A2 || entry->type == FADE_PIPE_DOWN_A2 || entry->type == FADE_PIPE_LEFT_A2 || entry->type == FADE_PIPE_RIGHT_A2)) {
                                 wp->flags |= FADE_WORK_LOAD_BLACK;
                             }
@@ -786,11 +780,7 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN8"));
 #endif
                 switch (entry->state) {
                     case 0:
-#if VERSION <= VERSION_DEMO_US
-                        if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
-#else
                         if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
-#endif
                             break;
                         }
                         if (entry->paperPoseId >= 0) {
@@ -800,11 +790,7 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN8"));
                             entry->image = NULL;
                         }
                         entry->paperPoseId = animPaperPoseEntry(entry->animFile, entry->imageType);
-#if VERSION <= VERSION_DEMO_US
-                        animPoseSetMaterialFlagOn(entry->paperPoseId, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
-#else
                         animPoseSetMaterialFlagOn(entry->paperPoseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
-#endif
                         imgEntry("fImg_peron", entry->imageType);
                         entry->image = imgNameToPtr("fImg_peron", entry->imageType);
                         entry->image->poseId = animPaperPoseGetId(entry->animFile, entry->imageType);
@@ -937,22 +923,14 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
             case FADE_CURTAIN_UP_DOWN_A1:
                 switch (entry->state) {
                     case 0:
-#if VERSION <= VERSION_DEMO_US
-                        if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
-#else
                         if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
-#endif
                             break;
                         }
                         if (entry->poseId >= 0) {
                             animPoseRelease(entry->poseId);
                         }
                         entry->poseId = animPoseEntry(entry->animFile, entry->imageType);
-#if VERSION <= VERSION_DEMO_US
-                        animPoseSetMaterialFlagOn(entry->poseId, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
-#else
                         animPoseSetMaterialFlagOn(entry->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
-#endif
                         animPoseSetAnim(entry->poseId, entry->animName, TRUE);
                         entry->animColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
                         animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_COLOR);
@@ -972,22 +950,14 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
             case FADE_CURTAIN_VERTICAL_A2:
                 switch (entry->state) {
                     case 0:
-#if VERSION <= VERSION_DEMO_US
-                        if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
-#else
                         if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
-#endif
                             break;
                         }
                         if (entry->poseId >= 0) {
                             animPoseRelease(entry->poseId);
                         }
                         entry->poseId = animPoseEntry(entry->animFile, entry->imageType);
-#if VERSION <= VERSION_DEMO_US
-                        animPoseSetMaterialFlagOn(entry->poseId, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
-#else
                         animPoseSetMaterialFlagOn(entry->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
-#endif
                         animPoseSetAnim(entry->poseId, entry->animName, TRUE);
                         entry->animColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
                         animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_COLOR);
@@ -1035,11 +1005,7 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
 #endif
                 switch (entry->state) {
                     case 0:
-#if VERSION <= VERSION_DEMO_US
-                        if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
-#else
                         if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
-#endif
                             break;
                         }
                         switch (entry->type) {
@@ -1086,11 +1052,7 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
                             animPoseRelease(entry->poseId);
                         }
                         entry->poseId = animPoseEntry(entry->animFile, entry->imageType);
-#if VERSION <= VERSION_DEMO_US
-                        animPoseSetMaterialFlagOn(entry->poseId, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
-#else
                         animPoseSetMaterialFlagOn(entry->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
-#endif
                         animPoseSetAnim(entry->poseId, entry->animName, TRUE);
                         entry->state++;
                         if (entry->type == FADE_CURTAIN_ENTER_3D || entry->type == FADE_CURTAIN_ENTER) {
@@ -1562,19 +1524,11 @@ void disp_maku(CameraId camId, void* param) {
     }
     if (entry->flags & FADE_FLAG_VIRTUAL_POS) {
         camera = camGetPtr(CAMERA_3D);
-#if VERSION > VERSION_DEMO_US
         mag = 3.141592f;
-#endif
         depth = camera->fovY;
-#if VERSION <= VERSION_DEMO_US
-        depth *= 0.5f;
-        mag = depth / 180.0f;
-        depth = tan(3.141592f * mag);
-#else
         // FAKE: depth is halved in place inside the expression; depth * 0.5f / 180.0f changes the object
         depth = (depth *= 0.5f) / 180.0f;
         depth = tan(mag * depth);
-#endif
         depth = 24.0f / depth;
         PSVECSubtract(&camGetPtr(CAMERA_3D)->cameraPos, &entry->VirtualPos, &dist);
         camera = camGetPtr(CAMERA_3D);

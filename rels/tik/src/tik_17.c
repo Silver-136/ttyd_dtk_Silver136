@@ -32,11 +32,7 @@ static EvtWord evt_switch_01_init[26];
 static EvtWord evt_switch_01_after[11];
 static EvtWord evt_switch_01[56];
 static EvtWord mobj_box01[34];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord tik_17_init_evt[];
-#else
 EvtWord tik_17_init_evt[116];
-#endif
 
 /**
  * Doors of this room: two west exits to tik_18, two east exits to tik_16, and the pipes to Poshley Heights
@@ -265,38 +261,18 @@ EVT_BEGIN(tik_17_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK7"))
     CALL(evt_snd_set_rev_mode, 2)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_switch_00_init)
-    CALL_CHILD(evt_switch_01_init)
-#else
     CALL_CHILD(PTR(evt_switch_00_init))
     CALL_CHILD(PTR(evt_switch_01_init))
-#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL_CHILD(evt_switch_00_after)
-    CALL_CHILD(evt_switch_01_after)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_switch_00_after))
     CALL_CHILD(PTR(evt_switch_01_after))
-#endif
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_gazigazi_entry)
-#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
-#endif
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_lv_blk, STRING("block"), 0, 0, 0, 0, GSWF_TIK_17_LV2_BIGBIG_BLOCK_BROKEN, STRING("MOBJ_Lv2BigBigBlock"))
     IF_INT_EQUAL(GSWF_TIK_17_LV2_BIGBIG_BLOCK_BROKEN, 0)
-#else
-    CALL(evt_mobj_lv_blk, STRING("block"), 0, 0, 0, 0, GSWF_TIK_17_LV2_BIGBIG_BLOCK_BROKEN, STRING("MOBJ_Lv2BigBigBlock"))
-    IF_INT_EQUAL(GSWF_TIK_17_LV2_BIGBIG_BLOCK_BROKEN, 0)
-#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("block"), MOBJ_FLAG_NO_CULL)
     END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -314,15 +290,9 @@ CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -125, MOBJ_ITEMBOX_NORMA
     SET_VALUE(LW(7), 0)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(moving_floor)
-    CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch00"), -125, 0, 0, PTR(evt_switch_00), GSWF_TIK_17_PIK_PIPE_RAISED)
-    CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch01"), 125, 0, 0, PTR(evt_switch_01), GSWF_TIK_17_MUJ_PIPE_RAISED)
-#else
     SPAWN_EVENT(PTR(moving_floor))
     CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch00"), -125, 0, 0, PTR(evt_switch_00), GSWF_TIK_17_PIK_PIPE_RAISED)
     CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch01"), 125, 0, 0, PTR(evt_switch_01), GSWF_TIK_17_MUJ_PIPE_RAISED)
-#endif
     RETURN
 EVT_END()
 

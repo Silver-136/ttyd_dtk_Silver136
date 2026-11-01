@@ -210,11 +210,7 @@ GXRenderModeObj GXNtsc480ProgMarioSt = {
 void viPostCallback(u32 retraceCount);
 void* gcDvdCheckThread(void* param);
 void gcRumbleCheck(void);
-#if VERSION <= VERSION_DEMO_US
-static inline void gcResetCheck(void);
-#else
 void gcResetCheck(void);
-#endif
 
 
 #if VERSION == VERSION_DEMO_JP

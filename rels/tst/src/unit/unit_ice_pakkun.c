@@ -38,11 +38,7 @@ static EvtWord counter_damage_event[30];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord return_event[244];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord return_event[244];
-#else
 static EvtWord return_event[256];
-#endif
 #endif
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
@@ -126,17 +122,10 @@ BattleUnitKind unit_ice_pakkun = {
     1,
     26,
     0,
-#if VERSION <= VERSION_DEMO_US
-    2,
-    70,
-    2,
-    50,
-#else
     3,
     70,
     1,
     50,
-#endif
     9999,
     40,
     48,
@@ -208,11 +197,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 1, 3, 0, 0}};
  */
 static StatusVulnerability regist = {80, 80, 60, 100, 75, 100, 100, 0, 100, 70, 100, 70, 100, 70, 70, 20, 30, 100, 70, 100, 100, 95};
 #else
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {80, 80, 60, 100, 75, 100, 100, 0, 100, 70, 100, 70, 100, 70, 70, 20, 30, 100, 70, 100, 100, 95};
-#else
 static StatusVulnerability regist = {100, 70, 40, 100, 80, 100, 100, 0, 100, 85, 100, 85, 100, 85, 70, 10, 40, 100, 70, 100, 100, 95};
-#endif
 #endif
 
 /**
@@ -441,46 +426,6 @@ EVT_END()
  * reappears on the ground at height 0 (PKF_E_1), restores the ground hit offsets and pose table,
  * and returns to the PKF_S_1 idle pose.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Called when the Frost Piranha is knocked off the ceiling:
- * it clears the ceiling fall handler, burrows (PKF_E_4, shrinking its shadow),
- * reappears on the ground at height 0 (PKF_E_1), restores the ground hit offsets and pose table,
- * and returns to the PKF_S_1 idle pose.
- */
-static EVT_BEGIN(ceil_fall_ready_event)
-    CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_small, UNIT_ID_SELF)
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_4"))
-    WAIT_MS(300)
-    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
-    CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
-    WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_return, UNIT_ID_SELF)
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
-    CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-    CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 50, 0)
-    CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 4, 48)
-CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-    WAIT_MS(500)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
-    RETURN
-EVT_END()
-#else
 /**
  * Called when the Frost Piranha is knocked off the ceiling:
  * it clears the ceiling fall handler, burrows (PKF_E_4, shrinking its shadow),
@@ -522,7 +467,6 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
     RETURN
 EVT_END()
-#endif
 
 /**
  * Returns the Frost Piranha to its home after an attack:
@@ -531,78 +475,6 @@ EVT_END()
  * reappears either on the ground (PKF_E_1, ground tables) or hanging from the ceiling at height 130 (PKF_E_3,
  * ceiling hit offsets and pose table, with the ceiling fall handler).
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Returns the Frost Piranha to its home after an attack:
- * it burrows (PKF_E_2, shrinking its shadow) and,
- * depending on whether a ceiling spot exists (pakkun_ceil_exist) and a random pick,
- * reappears either on the ground (PKF_E_1, ground tables) or hanging from the ceiling at height 130 (PKF_E_3,
- * ceiling hit offsets and pose table, with the ceiling fall handler).
- */
-static EVT_BEGIN(return_event)
-    CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(pakkun_ceil_exist, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_sub_random, 1, LW(15))
-    ELSE
-        SET_VALUE(LW(15), 0)
-    END_IF
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_small, UNIT_ID_SELF)
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_2"))
-    WAIT_MS(300)
-    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
-    IF_INT_EQUAL(LW(15), 0)
-        CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
-        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
-        CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
-        WAIT_MS(500)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        BEGIN_SIBLING_EVENT
-            CALL(shadow_scale_return, UNIT_ID_SELF)
-        END_SIBLING_EVENT
-        CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
-        CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-        CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 50, 0)
-        CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 4, 48)
-CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-        WAIT_MS(500)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
-    ELSE
-        CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, PTR(ceil_fall_ready_event))
-        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 130, LW(2))
-        CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 130, LW(2))
-        WAIT_MS(500)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        BEGIN_SIBLING_EVENT
-            CALL(shadow_scale_return, UNIT_ID_SELF)
-        END_SIBLING_EVENT
-        CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_3"))
-        CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -80, 0)
-        CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, -50, 0)
-        CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 4, 10)
-CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_ceil))
-        WAIT_MS(500)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_3"))
-    END_IF
-    RETURN
-EVT_END()
-#else
 /**
  * Returns the Frost Piranha to its home after an attack:
  * it burrows (PKF_E_2, shrinking its shadow) and,
@@ -679,7 +551,6 @@ static EVT_BEGIN(return_event)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 /**
  * The Frost Piranha's normal attack (weapon_ice_pakkun_attack):
@@ -885,11 +756,7 @@ evtSetValue(event, args[0], 0);
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 
-#if VERSION <= VERSION_DEMO_US // the JP demo's tst has the JP demo BattleWork layout
-    if (_battleWorkPointer->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
-#else
     if (TST_BATTLE_WORK(_battleWorkPointer)->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
-#endif
         evtSetValue(event, args[0], 0);
     } else {
         evtSetValue(event, args[0], 1);

@@ -95,11 +95,7 @@ static EvtWord bunsin_event[152];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord spawn_event[72];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord spawn_event[72];
-#else
 static EvtWord spawn_event[76];
-#endif
 #endif
 static EvtWord wait_event[386];
 
@@ -130,48 +126,17 @@ BattleUnitKind unit_mahorn_custom = {
     9999, // pbSoftCap
     48, // width
     44, // height
-#if VERSION <= VERSION_DEMO_US
-    0,
-    44,
-    0.0f,
-    22.0f,
-    0.0f,
-    0,
-    -9,
-#else
     {0, 44}, // hitOffset
     {0.0f, 22.0f, 0.0f}, // centerOffset
     {0, -9}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {24.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
-#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    24.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    24.0f,
-    0.0f,
-    0.0f,
-    16.0f,
-    28.6f,
-    10.0f,
-    0.0f,
-    22.0f,
-    0.0f,
-#else
     {24.0f, 0.0f, 0.0f}, // bintaHitOffset
     {16.0f, 28.6f, 10.0f}, // kissHitOffset
     {0.0f, 22.0f, 0.0f}, // cutBaseOffset
-#endif
     48.0f, // cutWidth
     44.0f, // cutHeight
     0, // turnOrder
@@ -180,13 +145,7 @@ BattleUnitKind unit_mahorn_custom = {
     2, // swallowAttributes
     0, // hammerKnockbackChance
     20, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    0.0f,
-    0.0f,
-#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
-#endif
     "SFX_ENM_MAHO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -360,11 +319,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
@@ -721,16 +676,9 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_punch))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(attack_punch_event)
-#else
         CALL_CHILD(PTR(attack_punch_event))
-#endif
         GOTO(99)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // Does nothing on its turn while unit work 4 is set (a clone).
-#endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
@@ -742,50 +690,26 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // Only one Wizzerd left alive: it conjures clones of itself.
-#endif
     CALL(mahorn_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bunsin_event)
-#else
         // If it is the only unit left on its side, it splits into copies.
         CALL_CHILD(PTR(bunsin_event))
-#endif
         RETURN
-#if VERSION <= VERSION_DEMO_US
-        // Several Wizzerds with some clones: the group casts a magic attack together (a confused one is flustered
-        // instead).
-#endif
     ELSE
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(subsetevt_confuse_flustered)
-#else
                 CALL_CHILD(PTR(subsetevt_confuse_flustered))
-#endif
                 GOTO(99)
             END_IF
             SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(attack_magic_event)
-#else
             // With copies around it only casts its single-target magic.
             CALL_CHILD(PTR(attack_magic_event))
-#endif
             GOTO(99)
-#if VERSION > VERSION_DEMO_US
         ELSE
-#endif
             // Otherwise it draws a move: the punch flurry, single-target magic, or one of the other spells
             // (all-enemy magic, size-up, defence-up, invisibility, dodgy, heal).
-#if VERSION <= VERSION_DEMO_US
-        ELSE
-#endif
             LABEL(10)
             SET_VALUE(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
@@ -810,11 +734,7 @@ SET_VALUE(LW(0), 50)
 #endif
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_punch))
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(attack_punch_event)
-#else
                 CALL_CHILD(PTR(attack_punch_event))
-#endif
                 GOTO(99)
             END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -824,79 +744,48 @@ ADD(LW(0), 50)
 #endif
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(attack_magic_event)
-#else
                 CALL_CHILD(PTR(attack_magic_event))
-#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_all_attack_magic))
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(all_attack_magic_event)
-#else
                 CALL_CHILD(PTR(all_attack_magic_event))
-#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_dekadeka_magic))
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(dekadeka_magic_event)
-#else
                 CALL_CHILD(PTR(dekadeka_magic_event))
-#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_katikati_magic))
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(katikati_magic_event)
-#else
                 CALL_CHILD(PTR(katikati_magic_event))
-#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_trans_magic))
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(trans_magic_event)
-#else
                 CALL_CHILD(PTR(trans_magic_event))
-#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_yokeyoke_magic))
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(yokeyoke_magic_event)
-#else
                 CALL_CHILD(PTR(yokeyoke_magic_event))
-#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_recover_magic))
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(recover_magic_event)
-#else
                 CALL_CHILD(PTR(recover_magic_event))
-#endif
                 GOTO(99)
             END_IF
             GOTO(10)
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // Back to waiting.
-#endif
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

@@ -411,11 +411,7 @@ DoorParam door_data_04_roll;
 static EvtWord evt_door_04_entry[20];
 EvtWord wall_bomb_init[51];
 static EvtWord wall_bomb[146];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord uraguchi_tenin[];
-#else
 EvtWord uraguchi_tenin[23];
-#endif
 EvtWord uraguchi_event[323];
 EvtWord uraguchi_check[34];
 static ShopObj obj_list[6];
@@ -1157,11 +1153,7 @@ EVT_BEGIN(maffiaboss_maffiaboss)
     // Mario is frozen and the henchmen are made intangible for the scene.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LSWF(3), 1)
-#else
     SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 1)
-#endif
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GF(0), 1)
@@ -1761,12 +1753,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    // Story progress: the Train Ticket has been obtained.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_del_case_evt, 0, GW(12))
         CALL(evt_del_case_evt, 0, GW(13))
@@ -2029,11 +2016,7 @@ EVT_END()
 
 /** Talk event of the second henchman: the same structure as the first one's, with his own messages. */
 EVT_BEGIN(maffia2_talk)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_03"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
@@ -2051,23 +2034,11 @@ CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
         CASE_BETWEEN(STG2_46_BLIMP_TICKET, STG2_END_TO_GLITZVILLE)
         CALL(evt_msg_print, 0, STRING("mac_2_122"), 0, STRING("me"))
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(maffiaboss_nekomu00)
-#else
         CALL_CHILD(PTR(maffiaboss_nekomu00))
-#endif
         CASE_EQUAL(STG5_62_AN_ILL_DON_PIANTA)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(maffiaboss_nekomu01)
-#else
         CALL_CHILD(PTR(maffiaboss_nekomu01))
-#endif
         CASE_BETWEEN(STG5_63_KEELHAUL_ANYTIME, STG5_64_LOST_WEDDING_RING)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(maffiaboss_nekomu02)
-#else
         CALL_CHILD(PTR(maffiaboss_nekomu02))
-#endif
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
         CALL(evt_msg_print, 0, STRING("mac_5_043"), 0, STRING("me"))
         CASE_LESS(STG2_41_FRANKLYS_HOUSE_STG_2)
@@ -2198,19 +2169,10 @@ s32 iri_19_item_tbl[] = {
 };
 
 EVT_BEGIN(peton_talk_common)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
-        SET_VALUE(LSWF(3), 1)
-#else
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
         SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 1)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
-#else
-    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
-#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_19_00"), 0, STRING("ピートン"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
@@ -2239,11 +2201,7 @@ CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
                     CALL(evt_npc_move_position, STRING("ピートン"), 224, 478, 0, 150, 0)
                     CALL(evt_npc_move_position, STRING("ピートン"), -20, 478, 0, 150, 0)
                     CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_NO_HIT)
-#if VERSION <= VERSION_DEMO_US
                     SWITCH(GSW_STORY_PROGRESS)
-#else
-                    SWITCH(GSW_STORY_PROGRESS)
-#endif
                         CASE_BETWEEN(STG5_65_TRAIN_TICKET, STG5_END_THE_TRAIN_LEAVES)
                         CALL(evt_npc_set_position, STRING("ピートン"), -290, 155, -80)
                         CALL(evt_npc_set_ry, STRING("ピートン"), 90)
@@ -2251,11 +2209,7 @@ CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
                         CALL(evt_npc_set_position, STRING("ピートン"), -198, 155, -90)
                         CALL(evt_npc_set_ry, STRING("ピートン"), 90)
                     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#else
-                    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#endif
                     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_IMPORTANT_THING), 1)
                     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                     CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
@@ -2266,11 +2220,7 @@ CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
     END_IF
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_04"), 0, STRING("me"))
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
@@ -2284,13 +2234,8 @@ CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
         CASE_GREATER_OR_EQUAL(STG9_00_EPILOGUE)
         CALL(evt_msg_print, 0, STRING("gor_03_05_04"), 0, STRING("ピートン"))
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
-        SET_VALUE(LSWF(3), 0)
-#else
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
         SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 0)
-#endif
     END_IF
     RETURN
 EVT_END()
@@ -2323,11 +2268,7 @@ EVT_BEGIN(peton_desk_talk)
             CALL(evt_set_dir_to_target, STRING("ピートン"), STRING("mario"))
         END_INLINE_EVENT
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(peton_talk_common)
-#else
     CALL_CHILD(PTR(peton_talk_common))
-#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -2736,11 +2677,7 @@ CALL(evt_msg_print_add, 0, STRING("bunny_teresa_12"))
     CALL(evt_msg_print_add, 0, STRING("bunny_teresa_36"))
     WAIT_MS(500)
     // The pipe rises and Mario walks over and jumps into it.
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(gor_03_dokan_up_evt)
-#else
     CALL_CHILD(PTR(gor_03_dokan_up_evt))
-#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mapobj_get_position, STRING("S_dokan_1"), LW(3), LW(4), LW(5))
     CALL(mario_walkpoint_enzan, LW(0), LW(2), LW(3), LW(5), FLOAT(40.0f), LW(0), LW(2))
@@ -2753,60 +2690,28 @@ CALL(evt_msg_print_add, 0, STRING("bunny_teresa_12"))
     SWITCH(LW(15))
         CASE_EQUAL(0)
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_bero_overwrite, STRING("A_dokan_02"), PTR(yuu_00_data))
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_on)
-#else
         CALL_CHILD(PTR(bero_case_switch_on))
-#endif
         CASE_EQUAL(1)
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_bero_overwrite, STRING("A_dokan_02"), PTR(yuu_03_data))
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_on)
-#else
         CALL_CHILD(PTR(bero_case_switch_on))
-#endif
         CASE_EQUAL(2)
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_bero_overwrite, STRING("A_dokan_02"), PTR(yuu_02_data))
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_on)
-#else
         CALL_CHILD(PTR(bero_case_switch_on))
-#endif
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_bero_overwrite, STRING("A_dokan_02"), PTR(yuu_01_data))
         SET_VALUE(LW(0), STRING("A_dokan_02"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_on)
-#else
         CALL_CHILD(PTR(bero_case_switch_on))
-#endif
     END_SWITCH
     // The parlor music fades out as Mario goes down the pipe.
     CALL(yuugijou_montemedal_disp_onoff, 0)
@@ -2816,11 +2721,7 @@ CALL(evt_msg_print_add, 0, STRING("bunny_teresa_12"))
     SET_VALUE(LW(1), STRING("A_dokan_02"))
     CALL(evt_bero_id_filter, LW(1))
     CALL(evt_bero_get_info_num, LW(1))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(bero_case_exec_pipe)
-#else
     CALL_CHILD(PTR(bero_case_exec_pipe))
-#endif
     RETURN
 EVT_END()
 
@@ -3048,11 +2949,7 @@ CALL(evt_party_stop, 0)
 #endif
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     // Trouble Center request 11 (bringing back Teresa's medals) is active: she hands over the reward.
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_PLAY_WITH_ME)
-#else
-    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_PLAY_WITH_ME)
-#endif
         CALL(evt_msg_print, 0, STRING("irai_11_001"), 0, STRING("me"))
         CALL(yuugijou_get_takeoutflag, LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -3067,11 +2964,7 @@ CALL(evt_party_stop, 0)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_msg_print, 0, STRING("irai_11_004"), 0, STRING("me"))
         // The request is finished and marked solved.
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#else
-        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
-#endif
         SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_PLAY_WITH_ME), 1)
         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
@@ -3084,52 +2977,32 @@ CALL(evt_party_stop, 0)
         CALL(yuugijou_get_montemedal_keep, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(11), 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(exchange_return_sub)
-#else
             CALL_CHILD(PTR(exchange_return_sub))
-#endif
             ELSE
             CALL(yuugijou_montemedal_return)
         END_IF
     END_IF
     // Check whether Mario carries a membership card for a minigame that is still locked.
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
-#else
-    IF_INT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
-#endif
         CALL(evt_pouch_check_item, ITEM_SPECIAL_CARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             ADD(LW(1), 1)
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
-#else
-    IF_INT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
-#endif
         CALL(evt_pouch_check_item, ITEM_PLATINUM_CARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             ADD(LW(1), 1)
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
-#else
-    IF_INT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
-#endif
         CALL(evt_pouch_check_item, ITEM_GOLD_CARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             ADD(LW(1), 1)
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
-#else
-    IF_INT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
-#endif
         CALL(evt_pouch_check_item, ITEM_SILVER_CARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             ADD(LW(1), 1)
@@ -3138,130 +3011,64 @@ CALL(evt_party_stop, 0)
     // Teresa recognizes the card and unlocks the matching minigame (plane, paper, tube or boat).
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_42"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
-#else
-        IF_INT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
-#endif
             CALL(evt_pouch_check_item, ITEM_SPECIAL_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_GOR_PLANE_GAME_UNLOCKED, 1)
-#else
-                SET_VALUE(GSWF_GOR_PLANE_GAME_UNLOCKED, 1)
-#endif
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_43"), 0, 0)
             END_IF
         END_IF
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
-#else
-        IF_INT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
-#endif
             CALL(evt_pouch_check_item, ITEM_SILVER_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_GOR_PAPER_GAME_UNLOCKED, 1)
-#else
-                SET_VALUE(GSWF_GOR_PAPER_GAME_UNLOCKED, 1)
-#endif
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_44"), 0, 0)
             END_IF
         END_IF
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
-#else
-        IF_INT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
-#endif
             CALL(evt_pouch_check_item, ITEM_GOLD_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_GOR_TUBE_GAME_UNLOCKED, 1)
-#else
-                SET_VALUE(GSWF_GOR_TUBE_GAME_UNLOCKED, 1)
-#endif
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_45"), 0, 0)
             END_IF
         END_IF
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
-#else
-        IF_INT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
-#endif
             CALL(evt_pouch_check_item, ITEM_PLATINUM_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_GOR_BOAT_GAME_UNLOCKED, 1)
-#else
-                SET_VALUE(GSWF_GOR_BOAT_GAME_UNLOCKED, 1)
-#endif
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_46"), 0, 0)
             END_IF
         END_IF
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
-#else
-        SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
-#endif
         SET_VALUE(LW(14), 1)
         ELSE
         SET_VALUE(LW(14), 0)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
-#else
-        IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
-#endif
             SET_VALUE(LW(14), 1)
         END_IF
-#if VERSION <= VERSION_DEMO_US
         IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
-#else
-        IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
-#endif
             SET_VALUE(LW(14), 1)
         END_IF
-#if VERSION <= VERSION_DEMO_US
         IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
-#else
-        IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
-#endif
             SET_VALUE(LW(14), 1)
         END_IF
-#if VERSION <= VERSION_DEMO_US
         IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
-#else
-        IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
-#endif
             SET_VALUE(LW(14), 1)
         END_IF
     END_IF
     // Teresa greets Mario: a first greeting, a repeat greeting, or the epilogue greeting.
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
             IF_INT_EQUAL(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 0)
-#else
-    IF_INT_EQUAL(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
-            IF_INT_EQUAL(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 0)
-#endif
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_00"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 1)
-#else
-                SET_VALUE(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 1)
-#endif
                 ELSE
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_01"), 0, STRING("me"))
             END_IF
             ELSE
             CALL(evt_msg_print, 0, STRING("bunny_teresa_01_1"), 0, STRING("me"))
         END_IF
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
-#else
-        SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
-#endif
         ELSE
         CALL(evt_msg_print, 0, STRING("bunny_teresa_02"), 0, STRING("me"))
     END_IF
@@ -3275,44 +3082,28 @@ LOOP(0)
     IF_INT_NOT_EQUAL(LW(0), 5)
         // Map the menu choice to a game, skipping games that are not unlocked yet.
         LOOP(0)
-#if VERSION <= VERSION_DEMO_US
-                IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
-#else
             IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
-#endif
                 IF_INT_EQUAL(LW(0), 0)
                     BREAK_LOOP
                 END_IF
                 ELSE
                 ADD(LW(0), 1)
             END_IF
-#if VERSION <= VERSION_DEMO_US
-                IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
-#else
             IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
-#endif
                 IF_INT_EQUAL(LW(0), 1)
                     BREAK_LOOP
                 END_IF
                 ELSE
                 ADD(LW(0), 1)
             END_IF
-#if VERSION <= VERSION_DEMO_US
-                IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
-#else
             IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
-#endif
                 IF_INT_EQUAL(LW(0), 2)
                     BREAK_LOOP
                 END_IF
                 ELSE
                 ADD(LW(0), 1)
             END_IF
-#if VERSION <= VERSION_DEMO_US
-                IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
-#else
             IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
-#endif
                 IF_INT_EQUAL(LW(0), 3)
                     BREAK_LOOP
                 END_IF
@@ -3336,11 +3127,7 @@ CALL_CHILD(bteresa_talk_sub_keihin)
         CALL_CHILD(PTR(bteresa_talk_sub_keihin))
 #endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(bteresa_talk_sub_minigame)
-#else
         CALL_CHILD(PTR(bteresa_talk_sub_minigame))
-#endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
 END_LOOP
@@ -4022,11 +3809,7 @@ EVT_END()
  */
 static EVT_BEGIN(kinopiko_b_talk)
     CALL(evt_mario_get_party, LW(0))
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
 #if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
@@ -5052,11 +4835,7 @@ EVT_BEGIN(evt_door_02_1_open)
 #endif
     BEGIN_INLINE_EVENT
         WAIT_MS(1600)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
-#else
-        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
-#endif
             CALL(evt_snd_bgmoff, PSND_PAUSE)
             CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
             CALL(evt_snd_envoff, PSND_PAUSE)
@@ -5065,32 +4844,20 @@ EVT_BEGIN(evt_door_02_1_open)
             CALL(evt_snd_envoff, PSND_PAUSE)
         END_IF
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-#else
-    SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG5_58_FAIR_WINDS)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_02_bed"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_i02_bed"), 1, 0)
         CASE_LESS(STG5_65_TRAIN_TICKET)
         CALL(evt_npc_set_anim, STRING("マフィアボス"), STRING("S_2"))
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
-#else
-        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
-#endif
             CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
             CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_RIGHT_ONLY)
             CALL(evt_door_end_wait)
             CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_RIGHT_ONLY)
             CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
             CALL(evt_mario_set_dir, 90, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(maffiaboss_train_ticket_init)
-#else
             CALL_CHILD(PTR(maffiaboss_train_ticket_init))
-#endif
         END_IF
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_f2_set00C"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("Ai02_tke"), 1, 0)
@@ -5844,12 +5611,7 @@ EVT_BEGIN(majorin_nusumigiki)
     // The partner urges Mario to reach Poshley Heights before Beldam does.
     CALL(evt_msg_print_party, STRING("mac_5_905"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    // Story progress: Beldam has found out about Poshley Heights.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_66_BELDAM_FINDS_OUT)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_66_BELDAM_FINDS_OUT)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5871,17 +5633,9 @@ EVT_BEGIN(yuureturn_rtn)
     CALL(evt_mario_key_onoff, 0)
     CALL(yuugijou_montemedal_disp_onoff, 1)
     SET_VALUE(LW(0), PTR(&door_data_02_0r))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_door_open_quick)
-#else
     SPAWN_EVENT(PTR(evt_door_open_quick))
-#endif
     SET_VALUE(LW(0), PTR(&door_data_02_0l))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_door_open_quick)
-#else
     SPAWN_EVENT(PTR(evt_door_open_quick))
-#endif
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(1000)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -5890,17 +5644,9 @@ EVT_BEGIN(yuureturn_rtn)
     CALL(evt_mario_jump_pos, LW(3), 0, LW(5), 500, 0, 20)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_LANDING1"), LW(3), LW(4), LW(5), 0)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(gor_03_dokan_down_evt)
-#else
     CALL_CHILD(PTR(gor_03_dokan_down_evt))
-#endif
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
-#endif
         CALL(evt_msg_print, 0, STRING("bunny_teresa_17"), 0, STRING("バニーテレサ"))
         ELSE
         CALL(evt_msg_print, 0, STRING("bunny_teresa_17_1"), 0, STRING("バニーテレサ"))
@@ -6008,14 +5754,8 @@ CALL(evt_unitwin_alloc)
 #endif
     CALL(evt_cam3d_evt_set, -150, 120, 890, -150, 50, 470, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
-#if VERSION <= VERSION_DEMO_US
-    // First visit: Lucky explains the lottery and offers Mario a number.
     IF_INT_EQUAL(GSWF_GOR_LOTTERY_FIRST_TALK_DONE, 0)
         SET_VALUE(GSWF_GOR_LOTTERY_FIRST_TALK_DONE, 1)
-#else
-    IF_INT_EQUAL(GSWF_GOR_LOTTERY_FIRST_TALK_DONE, 0)
-        SET_VALUE(GSWF_GOR_LOTTERY_FIRST_TALK_DONE, 1)
-#endif
         CALL(evt_msg_print, 0, STRING("kuji_bomb_000"), 0, STRING("グルメボム兵"))
         CALL(evt_msg_select, 0, STRING("kuji_bomb_001"))
         IF_INT_EQUAL(LW(0), 0)
@@ -6023,9 +5763,6 @@ CALL(evt_unitwin_alloc)
             CALL(unitwincoin_disp_onoff, 1)
             CALL(evt_msg_select, 0, STRING("kuji_bomb_003"))
             IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-                // The number costs 10 coins; if Mario is short, Lucky says so.
-#endif
                 CALL(evt_pouch_get_coin, LW(0))
                 IF_INT_LESS(LW(0), 10)
                     CALL(unitwincoin_disp_onoff, 0)
@@ -6036,9 +5773,6 @@ CALL(evt_unitwin_alloc)
                     CALL(unitwincoin_disp_onoff, 0)
                     CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_2"), STRING("T_2"))
                     CALL(evt_msg_print_add, 0, STRING("kuji_bomb_004"))
-#if VERSION <= VERSION_DEMO_US
-                    // Lucky hands over the lottery number as an item.
-#endif
                     CALL(evt_lottery_buy, LW(0))
                     CALL(evt_item_entry, STRING("kuzi"), ITEM_LOTTERY_PICK, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("kuzi"))
@@ -6055,17 +5789,11 @@ CALL(evt_unitwin_alloc)
             CALL(evt_msg_print_add, 0, STRING("kuji_bomb_007"))
         END_IF
         ELSE
-#if VERSION <= VERSION_DEMO_US
-        // Later visits: Lucky offers a number, the explanation again, or nothing.
-#endif
         CALL(evt_msg_print, 0, STRING("kuji_bomb_008"), 0, STRING("グルメボム兵"))
         LABEL(0)
         CALL(evt_msg_select, 0, STRING("kuji_bomb_009"))
         SWITCH(LW(0))
             CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
-            // Mario has no number yet: the first one costs 10 coins.
-#endif
             CALL(evt_pouch_check_item, ITEM_LOTTERY_PICK, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print_add, 0, STRING("kuji_bomb_010"))
@@ -6094,9 +5822,6 @@ CALL(evt_unitwin_alloc)
                     CALL(evt_msg_print_add, 0, STRING("kuji_bomb_022"))
                 END_IF
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                // Mario already holds a number: swapping it for a new one costs 100 coins.
-#endif
                 CALL(evt_msg_print_add, 0, STRING("kuji_bomb_015"))
                 CALL(unitwincoin_disp_onoff, 1)
                 CALL(evt_msg_select, 0, STRING("kuji_bomb_016"))
@@ -6125,23 +5850,14 @@ CALL(evt_unitwin_alloc)
                 END_IF
             END_IF
             CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
-            // Mario asks for the explanation again.
-#endif
             CALL(evt_msg_print_add, 0, STRING("kuji_bomb_020"))
             CALL(evt_msg_print, 0, STRING("kuji_bomb_021"), 0, STRING("グルメボム兵"))
             GOTO(0)
             CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
-            // Mario declines and Lucky says good-bye.
-#endif
             CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_4"), STRING("T_4"))
             CALL(evt_msg_print_add, 0, STRING("kuji_bomb_022"))
         END_SWITCH
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // The coin window closes and the camera returns.
-#endif
     CALL(evt_unitwin_free)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -6171,9 +5887,6 @@ CALL(evt_unitwin_alloc)
     CALL(evt_cam3d_evt_set, -150, 120, 890, -150, 50, 470, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-        // Repeat visit: Lucky repeats his 500-coin offer, or says the lottery restarts tomorrow.
-#endif
         CALL(evt_lottery_flag, LW(0))
         IF_BITS_SET(LW(0), LOTTERY_FLAG_REBOUGHT)
             SET_VALUE(LW(0), 1)
@@ -6188,9 +5901,6 @@ CALL(evt_unitwin_alloc)
             GOTO(99)
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // First talk: Lucky is grim, says something unhappy has happened and asks if Mario knows about it.
-#endif
     CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_4"), STRING("T_4"))
     CALL(evt_msg_print, 0, STRING("kuji_bomb_037"), 0, STRING("グルメボム兵"))
     CALL(evt_mario_set_pose, STRING("M_N_1"))
@@ -6203,9 +5913,6 @@ CALL(evt_unitwin_alloc)
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_print, 0, STRING("kuji_bomb_041"), 0, STRING("グルメボム兵"))
-#if VERSION <= VERSION_DEMO_US
-    // Lucky asks again and again whether Mario cheated; Mario answers each time.
-#endif
     CALL(evt_msg_select, 0, STRING("kuji_bomb_042"))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(10)
@@ -6223,18 +5930,11 @@ CALL(evt_unitwin_alloc)
                 CALL(evt_msg_print_add, 0, STRING("kuji_bomb_047"))
                 CALL(evt_msg_select, 0, STRING("kuji_bomb_048"))
                 IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-                    // Mario denies it to the end: Lucky offers to call it a mistake and sell a new number for
-                    // 500 coins.
-#endif
                     CALL(evt_msg_print_add, 0, STRING("kuji_bomb_049"))
                     LABEL(0)
                     CALL(unitwincoin_disp_onoff, 1)
                     CALL(evt_msg_select, 0, STRING("kuji_bomb_050"))
                     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-                        // Mario pays 500 coins, or Lucky points out he is short.
-#endif
                         CALL(evt_pouch_get_coin, LW(0))
                         IF_INT_LESS(LW(0), 500)
                             CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_4"), STRING("T_4"))
@@ -6267,9 +5967,6 @@ CALL(evt_unitwin_alloc)
     END_IF
     GOTO(99)
     LABEL(10)
-#if VERSION <= VERSION_DEMO_US
-    // Mario owned up: Lucky glares in menacing silence while the screen shakes (up to 30 seconds).
-#endif
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
     BEGIN_INLINE_EVENT
@@ -6301,9 +5998,6 @@ CALL(evt_unitwin_alloc)
 #endif
     END_INLINE_EVENT
     CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
-    // The shaking stops and Lucky speaks.
-#endif
     CALL(evt_msg_print, 0, STRING("kuji_bomb_055"), PTR(kuji_bomb_055_callback), STRING("グルメボム兵"))
     SET_VALUE(GF(1), 1)
     WAIT_MS(300)
@@ -6371,14 +6065,8 @@ WAIT_MS(20000)
     END_LOOP
     CALL(viewport, 0, 0, 608, 480)
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    // The Rogueport music returns.
-#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
-    // Lucky warns he will end the game if Mario ever cheats again and makes him swear it.
-#endif
     CALL(evt_msg_print, 0, STRING("kuji_bomb_056"), 0, STRING("グルメボム兵"))
     CALL(evt_msg_select, 0, STRING("kuji_bomb_057"))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -6395,9 +6083,6 @@ WAIT_MS(20000)
         END_IF
     END_IF
     LABEL(99)
-#if VERSION <= VERSION_DEMO_US
-    // The coin window closes and the camera returns.
-#endif
     CALL(evt_unitwin_free)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -6720,17 +6405,9 @@ EVT_BEGIN(kuzi_keiziban_entry)
 #endif
     CALL(evt_lottery, 1, LW(0), LW(1))
     IF_BITS_SET(LW(0), LOTTERY_FLAG_CLOCK_ERROR)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(kuzi_keiziban_husei)
-#else
         CALL_CHILD(PTR(kuzi_keiziban_husei))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(kuzi_keiziban_normal)
-#else
         CALL_CHILD(PTR(kuzi_keiziban_normal))
-#endif
     END_IF
 #if VERSION > VERSION_DEMO_US
     CALL(unitwin_lottery_disp_onoff, 0)
@@ -6810,11 +6487,7 @@ CALL(evt_party_run, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
     CALL(enzan_lw_load)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_close)
-#else
     CALL_CHILD(PTR(evt_door_close))
-#endif
     RETURN
 EVT_END()
 
@@ -7224,13 +6897,9 @@ static USER_FUNC(fall_rtn) {
     }
     // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfx1 = (0, "SFX_EVT_GAME_MONTE_LEAPED1");
-#if VERSION > VERSION_DEMO_US
     // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-#endif
     sfx2 = (0, "SFX_EVT_GAME_MONTE_COUNT1");
-#if VERSION > VERSION_DEMO_US
     // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-#endif
     sfx3 = (0, "SFX_EVT_GAME_MONTE_COUNT1");
     for (i = 0; i < monte_p->owner->monteCount; i++) {
         GMonte* m = &monte_p[i];
@@ -7772,8 +7441,6 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
         case 5: {
             s32 n;
             s32 m;
-#if VERSION <= VERSION_DEMO_US
-#endif
             n = 0;
             for (m = 0; m < 3; m++) {
                 if (data->state[m] == 0) {
@@ -7873,13 +7540,7 @@ data->monteCount = 5;
             data->extra[0] = data->extra[1] = data->extra[2] = 0;
             if (data->flags & 1) {
                 data->flags &= ~1;
-#if VERSION <= VERSION_DEMO_US
-                {
-                    s32 n;
-                    CaseSetup* s = &setup;
-#else
                 {s32 n; CaseSetup* s = &setup;
-#endif
                 for (n = 0; n < 2; n++) {
                     s->conditionId = 0x8009;
                     s->hitObjName = drumname[n].anim;

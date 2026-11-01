@@ -38,11 +38,7 @@ static EvtWord attack_event[69];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord poisongas_event[274];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord poisongas_event[274];
-#else
 static EvtWord poisongas_event[303];
-#endif
 #endif
 static PoseTableEntry pose_table[17];
 static BattleDataEntry data_table[3];
@@ -57,11 +53,7 @@ static EvtWord charge_event[58];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord wait_event[12];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord wait_event[12];
-#else
 static EvtWord wait_event[13];
-#endif
 #endif
 
 /** Unit data of the Poison Puff: stats, sounds, attributes, parts, init script and data table. */
@@ -291,11 +283,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterPoisonStatus, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(9), PTR(&weapon_dokugassun_poisongas_attack))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(poisongas_event)
-#else
         CALL_CHILD(PTR(poisongas_event))
-#endif
         GOTO(99)
     END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -314,18 +302,10 @@ SET_VALUE(LW(0), 70)
 #endif
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(9), PTR(&weapon_dokugassun_attack))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(normal_attack_event)
-#else
         CALL_CHILD(PTR(normal_attack_event))
-#endif
         GOTO(99)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(charge_event)
-#else
     CALL_CHILD(PTR(charge_event))
-#endif
     GOTO(99)
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -437,11 +417,7 @@ static EVT_BEGIN(poisongas_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE3"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 0, EASING_QUADRATIC_OUT, 0, -1)
-#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     WAIT_MS(250)
     LABEL(99)

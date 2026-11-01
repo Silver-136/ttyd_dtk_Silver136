@@ -24,9 +24,7 @@ FileManagerWork fileWork;
 char _filename[0x400]; //for fileAllocf/fileAsyncf vsprintf
 
 //.sbss
-#if VERSION > VERSION_DEMO_US
 FileManagerWork fileWork;
-#endif
 
 //.sdata
 FileManagerWork* afp = &fileWork;

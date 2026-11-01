@@ -123,15 +123,9 @@ BattleUnitKind unit_purple_teresa = {
     1,
     24,
     0,
-#if VERSION <= VERSION_DEMO_US
-    3,
-    70,
-    1,
-#else
     4,
     70,
     0,
-#endif
     50,
     9999,
     34,
@@ -204,11 +198,7 @@ static StatusVulnerability regist = {40, 40, 80, 0, 40, 100, 100, 40, 100, 50, 1
  * Status vulnerability of the Dark Boo in the retail builds: immune to poison and slow;
  * resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {40, 40, 80, 0, 40, 100, 100, 40, 100, 50, 100, 50, 100, 50, 50, 40, 85, 100, 0, 100, 100, 10};
-#else
 static StatusVulnerability regist = {40, 40, 100, 0, 40, 100, 100, 40, 100, 85, 100, 85, 100, 90, 50, 40, 85, 100, 0, 100, 100, 10};
-#endif
 #endif
 
 /** Body part of the Dark Boo: a single part using the c_teresa_p model. */

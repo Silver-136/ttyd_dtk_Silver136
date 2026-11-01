@@ -87,15 +87,9 @@ USER_FUNC(evt_uranaisi_msg_set);
 static USER_FUNC(scale_func);
 static USER_FUNC(setmertn);
 static USER_FUNC(ss_set);
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(tik_snd_on);
-#endif
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(tik_snd_off);
-#endif
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(supotto_blendmode);
-#endif
 USER_FUNC(uranai_bbox);
 USER_FUNC(uranai_cap_evt);
 USER_FUNC(uranai_exit_func);
@@ -1246,25 +1240,12 @@ IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
             IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_FIRST_TALK_DONE, 0)
 #endif
                 CALL(evt_msg_print, 0, STRING("uranaisi_00"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
                 SET_VALUE(GSWF_TIK_00_MERLUVLEE_FIRST_TALK_DONE, 1)
                 SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 1)
-#else
-                SET_VALUE(GSWF_TIK_00_MERLUVLEE_FIRST_TALK_DONE, 1)
-                SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 1)
-#endif
                 ELSE
-#if VERSION <= VERSION_DEMO_US
                 IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
-#else
-                IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
-#endif
                     CALL(evt_msg_print, 0, STRING("uranaisi_01"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
                     SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 1)
-#else
-                    SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 1)
-#endif
                     ELSE
                     CALL(evt_msg_print, 0, STRING("uranaisi_19"), 0, STRING("me"))
                 END_IF
@@ -1347,34 +1328,18 @@ CALL_CHILD(uranai_init)
             WAIT_MS(240)
             CALL(evt_npc_set_anim, STRING("me"), STRING("S_2"))
         END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(uranai_main)
-#else
         CALL_CHILD(PTR(uranai_main))
-#endif
         CALL(evt_npc_set_anim, STRING("me"), STRING("D_1"))
         WAIT_MS(170)
         // The chosen reading follows: the next step in the story, where the Star Pieces are,
         // or where the Shine Sprites are.
         SWITCH(LW(0))
             CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(uranaisi_next_evt)
-#else
             CALL_CHILD(PTR(uranaisi_next_evt))
-#endif
             CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(uranaisi_starpiece_evt)
-#else
             CALL_CHILD(PTR(uranaisi_starpiece_evt))
-#endif
             CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(uranaisi_supercoin_evt)
-#else
             CALL_CHILD(PTR(uranaisi_supercoin_evt))
-#endif
         END_SWITCH
 #if VERSION <= VERSION_DEMO_US
         // The table is cleared and Mario is free to move again.
@@ -2680,13 +2645,8 @@ static EVT_BEGIN(evt_door_04_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
         IF_INT_EQUAL(GSWF_TIK_00_DOOR_04_TALK_DONE, 0)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
-        IF_INT_EQUAL(GSWF_TIK_00_DOOR_04_TALK_DONE, 0)
-#endif
             CALL(evt_door_end_wait)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_stop, 0)
@@ -2698,21 +2658,13 @@ static EVT_BEGIN(evt_door_04_close)
             END_INLINE_EVENT
             CALL(evt_party_set_dir, 0, 90, 200)
             CALL(evt_msg_print_party, STRING("tik_00_tensou_1"))
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_TIK_00_DOOR_04_TALK_DONE, 1)
-#else
-            SET_VALUE(GSWF_TIK_00_DOOR_04_TALK_DONE, 1)
-#endif
             CALL(evt_party_run, 0)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
-#endif
         CALL(evt_door_end_wait)
         CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
@@ -2899,11 +2851,7 @@ IF_INT_EQUAL(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
 #endif
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
-#else
-    SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
-#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, -305, 38, -250)
@@ -2915,28 +2863,14 @@ IF_INT_EQUAL(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
     CALL(evt_cam_road_reset)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(0), PTR(&door_data_04))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(evt_door_open_quick)
-    CALL_CHILD(tensou_return)
-    SWITCH(GSW_STORY_PROGRESS)
-#else
     SPAWN_EVENT(PTR(evt_door_open_quick))
     CALL_CHILD(PTR(tensou_return))
     SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_LESS(STG7_26_THE_HIDEOUT_EXPLODES)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_TIK_00_TELEPORT_ARRIVAL_TALK_DONE, 0)
-#else
-        IF_INT_EQUAL(GSWF_TIK_00_TELEPORT_ARRIVAL_TALK_DONE, 0)
-#endif
             WAIT_MS(1500)
             CALL(evt_msg_print_party, STRING("tik_00_tensou_0"))
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(GSWF_TIK_00_TELEPORT_ARRIVAL_TALK_DONE, 1)
-#else
-            SET_VALUE(GSWF_TIK_00_TELEPORT_ARRIVAL_TALK_DONE, 1)
-#endif
         END_IF
         CASE_LESS(STG7_50_A_WAITING_PROF_FRANKLY)
         WAIT_MS(1000)
@@ -3136,27 +3070,15 @@ IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(tensou_anim_event)
-#else
         SPAWN_EVENT(PTR(tensou_anim_event))
-#endif
         CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
         CALL(evt_exit_case_evt)
         ELSE
-#if VERSION <= VERSION_DEMO_US
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
-#else
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
-#endif
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(tensou_anim_event)
-#else
             SPAWN_EVENT(PTR(tensou_anim_event))
-#endif
             CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
             CALL(evt_exit_case_evt)
             ELSE
@@ -3375,13 +3297,8 @@ EVT_END()
  * which ends with the change to moo_04.
  */
 EVT_BEGIN(tik_00_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
-#else
-    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
-#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK2"))
             ELSE
@@ -3392,47 +3309,21 @@ EVT_BEGIN(tik_00_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(johoya_data_alloc, STRING("jketi_code"))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
     SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
-#else
-    SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
-    SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
-#endif
     CALL(uranaisi_table_clear)
     SET_VALUE(LW(0), PTR(&door_data_01))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_entry)
-#else
     CALL_CHILD(PTR(evt_door_entry))
-#endif
     SET_VALUE(LW(0), PTR(&door_data_02))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_entry)
-#else
     CALL_CHILD(PTR(evt_door_entry))
-#endif
     SET_VALUE(LW(0), PTR(&door_data_03))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_entry)
-#else
     CALL_CHILD(PTR(evt_door_entry))
-#endif
     SET_VALUE(LW(0), PTR(&door_data_04))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_04_entry)
-    SPAWN_EVENT(tensou_init_event)
-#else
     CALL_CHILD(PTR(evt_door_04_entry))
     SPAWN_EVENT(PTR(tensou_init_event))
-#endif
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_sui"), 0, PTR(tensou_sw_event), 0)
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     SET_VALUE(LW(0), STRING("ugo_yuka"))
@@ -3445,17 +3336,6 @@ EVT_BEGIN(tik_00_init_evt)
     SET_VALUE(LW(7), 0)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(moving_floor)
-    SPAWN_EVENT(hashira_bomb)
-    CALL(evt_mobj_powerupblk, STRING("pblk1"), 525, 209, -175, 0, GSWF_SHINE_05, 0)
-    CALL(evt_mobj_itembox, STRING("mobj_box01"), -375, -60, 320, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_TIK_00_SOFT_STOMP_CHEST)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 95, -360, STRING("ie_3_naka"), 125, GSWF_STARPIECE_21)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 460, -40, 215, ITEM_TYPE_STILL, GSWF_STARPIECE_18, 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 530, 20, -220, ITEM_TYPE_STILL, GSWF_STARPIECE_19, 0)
-    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -530, 20, -220, ITEM_TYPE_STILL, GSWF_STARPIECE_20, 0)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-#else
     SPAWN_EVENT(PTR(moving_floor))
     SPAWN_EVENT(PTR(hashira_bomb))
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 525, 209, -175, 0, GSWF_SHINE_05, 0)
@@ -3465,15 +3345,9 @@ EVT_BEGIN(tik_00_init_evt)
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 530, 20, -220, ITEM_TYPE_STILL, GSWF_STARPIECE_19, 0)
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -530, 20, -220, ITEM_TYPE_STILL, GSWF_STARPIECE_20, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-#endif
         CALL(evt_mario_kill_party, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(epilogue_npc_entry)
-        SPAWN_EVENT(epilogue_evt)
-#else
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))
-#endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(evt_sub_mail_event)

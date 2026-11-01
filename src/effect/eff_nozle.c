@@ -636,8 +636,6 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx d;
     GXTexObj texObj;
     CameraEntry* cam;
-#if VERSION <= VERSION_DEMO_US
-#endif
     cam = camGetPtr(cameraId);
     alpha = work->alpha;
 #if VERSION > VERSION_DEMO_US
@@ -698,24 +696,12 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     switch (work->type) {
         case 0:
             nozleVtxSetup(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
-#if VERSION <= VERSION_DEMO_US
-            {
-#endif
             for (k = 0, sz = nozle_1_dl_0_size_tbl, dl = nozle_1_dl_0_tbl; k < 10; k++, sz++, dl++) {
                 GXCallDisplayList(*dl, *sz * 32);
             }
-#if VERSION <= VERSION_DEMO_US
-            }
             nozleVtxSetup(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
-            {
-#else
-            nozleVtxSetup(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
-#endif
             for (k = 0, sz2 = nozle_1_dl_1_size_tbl, dl2 = nozle_1_dl_1_tbl; k < 10; k++, sz2++, dl2++) {
                 GXCallDisplayList(*dl2, *sz2 * 32);
-#if VERSION <= VERSION_DEMO_US
-                }
-#endif
             }
             break;
         case 2:

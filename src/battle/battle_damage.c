@@ -148,9 +148,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     }
 
     if (!(result & DAMAGE_RESULT_ABSORBED) && damage > 0) {
-#if VERSION > VERSION_DEMO_US
         s32 n = 0;
-#endif
         s32 i = target->badgesEquipped.PityFlower;
         for (; i > 0; i--) {
 #if VERSION <= VERSION_DEMO_US
@@ -1009,11 +1007,8 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
     s8 curTurns;
     s8 curStrength;
 
-#if VERSION > VERSION_DEMO_US
     ok = 0;
-#endif
     BtlUnit_GetStatus(unit, STATUS_CHARGE, NULL, &prevStrength);
-#if VERSION > VERSION_DEMO_US
     switch (type) {
         case STATUS_HOLD_FAST:
         case STATUS_HP_REGEN:
@@ -1055,7 +1050,6 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
             }
             break;
     }
-#endif
     if (part->attributes & kImmuneToDamageAndStatus) {
         return 0;
     }

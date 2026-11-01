@@ -296,11 +296,7 @@ if (yuwp->tokens < 0x7FFFFFFF)
         if (mpp->currentFP < mpp->maximumFP) {
             mpp->currentFP++;
             // FAKE: dead store (function returns right after); steers register allocation
-#if VERSION <= VERSION_DEMO_US
-            itemLists[1] = (void*)0;
-#else
             itemLists[1] = NULL;
-#endif
         }
         return 1;
     }
@@ -312,90 +308,48 @@ if (yuwp->tokens < 0x7FFFFFFF)
         mpp->shineSpriteCount++;
         return 1;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (((type == ITEM_BOOTS) || (type == ITEM_SUPER_BOOTS)) || (type == ITEM_ULTRA_BOOTS)) {
-#else
     if (type == ITEM_BOOTS || type == ITEM_SUPER_BOOTS || type == ITEM_ULTRA_BOOTS) {
-#endif
         switch (type) {
             case ITEM_BOOTS:
                 mpp->jumpLevel = 1;
                 break;
-#if VERSION <= VERSION_DEMO_US
-#endif
             case ITEM_SUPER_BOOTS:
                 mpp->jumpLevel = 2;
                 break;
-#if VERSION <= VERSION_DEMO_US
-#endif
             case ITEM_ULTRA_BOOTS:
                 mpp->jumpLevel = 3;
                 break;
         }
-#if VERSION <= VERSION_DEMO_US
-
-    } else if (((type == ITEM_HAMMER) || (type == ITEM_SUPER_HAMMER)) || (type == ITEM_ULTRA_HAMMER)) {
-#else
     } else if (type == ITEM_HAMMER || type == ITEM_SUPER_HAMMER || type == ITEM_ULTRA_HAMMER) {
-#endif
         switch (type) {
             case ITEM_HAMMER:
                 mpp->hammerLevel = 1;
                 break;
-#if VERSION <= VERSION_DEMO_US
-#endif
             case ITEM_SUPER_HAMMER:
                 mpp->hammerLevel = 2;
                 break;
-#if VERSION <= VERSION_DEMO_US
-#endif
             case ITEM_ULTRA_HAMMER:
                 mpp->hammerLevel = 3;
                 break;
         }
-#if VERSION <= VERSION_DEMO_US
-#endif
     } else if (type == ITEM_BOWSER_BROS_MEAT) {
         return 1;
-#if VERSION <= VERSION_DEMO_US
-    } else if ((type >= BADGE_MIN) && (type < BADGE_MAX)) {
-#else
     } else if (type >= BADGE_MIN && type < BADGE_MAX) {
-#endif
         swSet(type - 0x70);
     }
     size = 0;
-#if VERSION <= VERSION_DEMO_US
-    itemLists[0] = (void*)0;
-    itemLists[1] = (void*)0;
-    if ((type >= ITEM_MIN) && (type < ITEM_MAX)) {
-#else
     itemLists[0] = NULL;
     itemLists[1] = NULL;
     if (type >= ITEM_MIN && type < ITEM_MAX) {
-#endif
         itemLists[0] = mpp->heldItems;
-#if VERSION <= VERSION_DEMO_US
-        size = (pouchCheckItem(ITEM_STRANGE_SACK)) ? (20) : (10);
-#else
         size = pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
-#endif
         ok = 1;
-#if VERSION <= VERSION_DEMO_US
-    } else if ((type >= KEY_ITEM_MIN) && (type < KEY_ITEM_MAX)) {
-        itemLists[1] = (void*)0;
-#else
     } else if (type >= KEY_ITEM_MIN && type < KEY_ITEM_MAX) {
         itemLists[1] = NULL;
-#endif
         size = MAX_KEY_ITEMS;
         ok = 1;
         itemLists[0] = mpp->keyItems;
-#if VERSION <= VERSION_DEMO_US
-    } else if ((type >= BADGE_MIN) && (type < BADGE_MAX)) {
-#else
     } else if (type >= BADGE_MIN && type < BADGE_MAX) {
-#endif
         size = MAX_BADGES;
         ok = 1;
         itemLists[0] = mpp->badges;
@@ -1390,11 +1344,7 @@ s32 pouchGetPartyAttackLv(PartyId partyId) {
 
 /** The demo stores into the first empty slot and removes by id alone, without shifting the list. */
 BOOL pouchAddKeepItem(s32 id) {
-#if VERSION <= VERSION_DEMO_US
-    s32 i;
-#else
     s32 i, j;
-#endif
 
 #if VERSION <= VERSION_DEMO_US
     for (i = 0; i < MAX_STORED_ITEMS; i++) {

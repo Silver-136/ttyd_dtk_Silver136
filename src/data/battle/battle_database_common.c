@@ -8,18 +8,6 @@
 #include "battle/battle_database_common.h"
 
 /** X-Naut: held items and drops by weight, after a first row of no item. */
-#if VERSION <= VERSION_DEMO_US
-ItemDropData battle_item_kinoko[1];
-ItemDropData battle_item_funyafunya_kun[1];
-ItemDropData battle_item_pow_block[1];
-ItemDropData battle_item_dekadeka_drink[1];
-ItemDropData battle_item_kirakira_otoshi[1];
-ItemDropData battle_item_koorino_ibuki[1];
-ItemDropData battle_item_fire_flower[1];
-ItemDropData battle_item_yurayura_jishin[1];
-ItemDropData battle_item_suitooru[1];
-ItemDropData battle_item_sinabita_kinoko[1];
-#endif
 ItemDropData battle_item_gundan_zako[] = {
     {0, 200, 300},
     {ITEM_SUPER_SHROOM, 10, 10},

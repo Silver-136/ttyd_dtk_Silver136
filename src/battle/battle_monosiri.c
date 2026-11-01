@@ -312,9 +312,7 @@ TattleEntry monosiriMessageTable[] = {
 #include "../src/battle/battle_monosiri_same_tbl.inc"
 #endif
 
-#if VERSION > VERSION_DEMO_US
 #include "../src/battle/battle_monosiri_rampell.inc"
-#endif
 
 /**
  * The Tattle groups: units that count as one enemy for Tattle, so Tattling one marks the whole group

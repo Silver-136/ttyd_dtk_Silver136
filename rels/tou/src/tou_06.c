@@ -374,11 +374,7 @@ CALL(evt_party_set_dir_npc, 0, STRING("チュチュリーナ"))
     // She walks out through the north door, which swings open and shut behind her.
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), 0, -140, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_open_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -395,11 +391,7 @@ CALL(evt_party_set_dir_npc, 0, STRING("チュチュリーナ"))
     END_INLINE_EVENT
     WAIT_MS(500)
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_close_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -412,11 +404,7 @@ CALL(evt_party_set_dir_npc, 0, STRING("チュチュリーナ"))
     END_LOOP
     // The Glitz Pit music returns and the partner wonders what she meant.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#else
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#endif
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     CALL(evt_msg_print_party, STRING("stg3_tou_316"))
     // Mail arrives: the mail jingle plays and Mario waits with a "!" until A is pressed.
@@ -472,11 +460,7 @@ CALL(evt_party_set_dir_npc, 0, STRING("チュチュリーナ"))
     WAIT_MS(500)
     CALL(evt_pouch_receive_mail, 12)
     CALL(evt_pouch_open_mail, 12)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_08_MS_MOWZ)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG3_20_08_MS_MOWZ)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN

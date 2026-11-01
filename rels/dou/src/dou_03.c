@@ -287,11 +287,7 @@ EVT_END()
  */
 // Stop the stored barrel/bottle bobbing events before their downstream translation.
 EVT_BEGIN(watergate_handle)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
-#endif
         CALL(evt_pouch_check_item, ITEM_GATE_HANDLE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_mario_key_onoff, 0)
@@ -341,19 +337,10 @@ CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
         CALL(evt_mapobj_get_position, STRING("s03_mon"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_FLOODGATE_UP2"), LW(0), LW(1), LW(2), LW(9))
         DELETE_EVENT(GW(10))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(nagare_taru)
-        SPAWN_EVENT(nagare_taru_se)
-#else
         SPAWN_EVENT(PTR(nagare_taru))
         SPAWN_EVENT(PTR(nagare_taru_se))
-#endif
         DELETE_EVENT(GW(11))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(nagare_bin)
-#else
         SPAWN_EVENT(PTR(nagare_bin))
-#endif
         WAIT_MS(2000)
         CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
         WAIT_MS(500)
@@ -369,17 +356,9 @@ CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
         CALL(evt_party_run, 0)
 #endif
         SET_VALUE(LW(0), STRING("s_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_on)
-#else
         CALL_CHILD(PTR(bero_case_switch_on))
-#endif
         CALL(evt_hitobj_attr_onoff, 1, 1, STRING("s_bero"), HIT_ATTR_SHIP_ONLY)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
-#else
-        SET_VALUE(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
-#endif
         CALL(evt_mario_key_onoff, 1)
         ELSE
         CALL(evt_mario_key_onoff, 0)

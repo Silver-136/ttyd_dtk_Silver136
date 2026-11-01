@@ -287,11 +287,7 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_door)
-#else
         CALL_CHILD(PTR(evt_door))
-#endif
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -304,11 +300,7 @@ static EVT_BEGIN(evt_prologue)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(evt_door)
-#else
             CALL_CHILD(PTR(evt_door))
-#endif
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -341,11 +333,7 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(evt_door)
-#else
         CALL_CHILD(PTR(evt_door))
-#endif
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -364,13 +352,8 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_door"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_bg_set_color, 0, 0, 0, 255)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mapobj_get_position, STRING("S_ie_door"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT1"), LW(0), LW(1), LW(2), 0)
@@ -378,11 +361,7 @@ static EVT_BEGIN(evt_prologue)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(evt_door)
-#else
             CALL_CHILD(PTR(evt_door))
-#endif
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF

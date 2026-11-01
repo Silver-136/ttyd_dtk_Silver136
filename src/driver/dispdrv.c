@@ -66,12 +66,7 @@ void dispReInit(void) {
 void dispEntry(CameraId camId, f32 order, s32 renderMode, DispCallback callback, void* param) {
     DispEntry* entry = &pDispWork[entry_n];
 
-#if VERSION <= VERSION_DEMO_US
-    if (order != order)
-        return;
-#else
     if (order != order) return;
-#endif
     entry->cameraId = camId;
     entry->renderMode = (u8)renderMode;
     entry->callback = callback;

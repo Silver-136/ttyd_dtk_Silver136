@@ -33,21 +33,13 @@ EvtWord damage_event_christine[22];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event_christine[126];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event_christine[126];
-#else
 static EvtWord dead_event_christine[147];
-#endif
 #endif
 static EvtWord attack_event_christine[690];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord wait_event_christine[6];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord wait_event_christine[6];
-#else
 static EvtWord wait_event_christine[7];
-#endif
 #endif
 
 /**
@@ -267,11 +259,7 @@ static EVT_BEGIN(dead_event_christine)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
@@ -279,11 +267,7 @@ static EVT_BEGIN(dead_event_christine)
     SWITCH(GW(19))
         CASE_EQUAL(0)
         CALL_CHILD(gparty_zoom_christine)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_kur"), 0, UNIT_ID_SELF)
-#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_kur"), 0, -2)
-#endif
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
 #if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)

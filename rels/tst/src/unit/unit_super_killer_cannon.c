@@ -128,17 +128,9 @@ BattleUnitKind unit_super_killer_cannon = {
     1,
     31,
     0,
-#if VERSION <= VERSION_DEMO_US
-    3,
-#else
     1,
-#endif
     70,
-#if VERSION <= VERSION_DEMO_US
-    2,
-#else
     3,
-#endif
     50,
     9999,
     52,
@@ -159,16 +151,8 @@ BattleUnitKind unit_super_killer_cannon = {
     0.0f,
     0.0f,
     0.0f,
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-#else
     20.0f,
-#endif
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-#else
     10.0f,
-#endif
     26.0f,
     0.0f,
     0.0f,
@@ -221,11 +205,7 @@ static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 40, 100, 40, 100, 
  * immune to sleep, stop, dizzy, poison, confusion and fright; extra prone to electric;
  * resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 5, 100, 40, 100, 100, 90};
-#else
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 90, 100, 80, 100, 80, 100, 95, 40, 0, 5, 100, 40, 100, 100, 90};
-#endif
 #endif
 
 /**

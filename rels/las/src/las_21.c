@@ -430,41 +430,21 @@ IF_INT_EQUAL(LSWF(8), 0)
         SET_VALUE(LW(2), STRING("21switch1"))
         SET_VALUE(LW(3), -130)
         SET_VALUE(LW(4), -580)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LSWF(8), 1)
-#else
         SET_VALUE(LSWF_LAS_21_BLK1_LOWERED, 1)
-#endif
     ELSE
         SET_VALUE(LW(0), STRING("21blk1"))
         SET_VALUE(LW(1), STRING("MOBJ_21blk1"))
         SET_VALUE(LW(2), STRING("21switch1"))
         SET_VALUE(LW(3), -580)
         SET_VALUE(LW(4), -130)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LSWF(8), 0)
-#else
         SET_VALUE(LSWF_LAS_21_BLK1_LOWERED, 0)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(floatblk_evt)
-#else
     CALL_CHILD(PTR(floatblk_evt))
-#endif
     CALL(evt_mobj_get_y_position, STRING("21blk1"), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), -130)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LSWF(8), 0)
-#else
         SET_VALUE(LSWF_LAS_21_BLK1_LOWERED, 0)
-#endif
     ELSE
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LSWF(8), 1)
-#else
         SET_VALUE(LSWF_LAS_21_BLK1_LOWERED, 1)
-#endif
     END_IF
     RETURN
 EVT_END()
@@ -485,41 +465,21 @@ IF_INT_EQUAL(LSWF(9), 0)
         SET_VALUE(LW(2), STRING("21switch2"))
         SET_VALUE(LW(3), -130)
         SET_VALUE(LW(4), -580)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LSWF(9), 1)
-#else
         SET_VALUE(LSWF_LAS_21_BLK2_LOWERED, 1)
-#endif
     ELSE
         SET_VALUE(LW(0), STRING("21blk2"))
         SET_VALUE(LW(1), STRING("MOBJ_21blk2"))
         SET_VALUE(LW(2), STRING("21switch2"))
         SET_VALUE(LW(3), -580)
         SET_VALUE(LW(4), -130)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LSWF(9), 0)
-#else
         SET_VALUE(LSWF_LAS_21_BLK2_LOWERED, 0)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(floatblk_evt)
-#else
     CALL_CHILD(PTR(floatblk_evt))
-#endif
     CALL(evt_mobj_get_y_position, STRING("21blk2"), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), -130)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LSWF(9), 0)
-#else
         SET_VALUE(LSWF_LAS_21_BLK2_LOWERED, 0)
-#endif
     ELSE
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LSWF(9), 1)
-#else
         SET_VALUE(LSWF_LAS_21_BLK2_LOWERED, 1)
-#endif
     END_IF
     RETURN
 EVT_END()
@@ -531,11 +491,7 @@ EVT_END()
  * with their float switches and a blue jump stand.
  */
 EVT_BEGIN(las_21_init_evt)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
@@ -546,13 +502,8 @@ EVT_BEGIN(las_21_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
         CALL(evt_npc_check_delete, STRING("ワンワン２"))
@@ -560,57 +511,28 @@ EVT_BEGIN(las_21_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_bero_overwrite, STRING("w_bero"), PTR(w_bero_mapchg))
         SET_VALUE(LW(0), STRING("w_bero"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_on)
-#else
         CALL_CHILD(PTR(bero_case_switch_on))
-#endif
         CALL(evt_npc_check_delete, STRING("ワンワン１"))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(hikari_evt)
-#else
         SPAWN_EVENT(PTR(hikari_evt))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
-#else
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-        IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
-#endif
             SET_VALUE(LW(0), -220)
         ELSE
             SET_VALUE(LW(0), -580)
         END_IF
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
-#else
-        IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
-#endif
             SET_VALUE(LW(1), -120)
         ELSE
             SET_VALUE(LW(1), -580)
         END_IF
         SET_VALUE(LW(2), -580)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LSWF(8), 1)
-#else
         SET_VALUE(LSWF_LAS_21_BLK1_LOWERED, 1)
-#endif
         SET_VALUE(LW(3), -580)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LSWF(9), 1)
-#else
         SET_VALUE(LSWF_LAS_21_BLK2_LOWERED, 1)
-#endif
         CALL(evt_mobj_float_blk, STRING("19blk1"), -350, LW(0), 0, 2, 2, 0, 0)
         CALL(evt_mobj_float_blk, STRING("19blk2"), -250, LW(1), 0, 0, 2, 0, 0)
         CALL(evt_mobj_float_blk, STRING("21blk1"), 50, LW(2), 0, 1, 2, 0, 0)

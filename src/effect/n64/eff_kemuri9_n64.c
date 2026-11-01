@@ -63,10 +63,8 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     EffKemuri9N64Work* work;
     EffKemuri9N64Work* p;
     s32 i;
-#if VERSION > VERSION_DEMO_US
     f32 twoPi;
     f32 zero;
-#endif
     f32 ang;
 
     effect = effEntry();
@@ -75,10 +73,8 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     work = __memAlloc(HEAP_EFFECT, (count + 1) * sizeof(EffKemuri9N64Work));
     effect->userdata = work;
     effect->callback = effKemuri9Main;
-#if VERSION > VERSION_DEMO_US
     zero = 0.0f;
     twoPi = 6.2831855f;
-#endif
     work->timer = life;
     work->counter = 0;
     work->life = life;
@@ -103,21 +99,12 @@ work->anim = 0.0f;
 #endif
     p = work + 1;
     for (i = 1; i < count + 1; i++, p++) {
-#if VERSION <= VERSION_DEMO_US
-        p->position.x = 0.0f;
-        p->position.y = 0.0f;
-        p->position.z = 0.0f;
-        ang = 6.2831855f * (angle + (f32)((i - 1) * 360 / count)) / 360.0f;
-        p->dirX = sin(ang);
-        p->velY = 0.0f;
-#else
         p->position.x = zero;
         p->position.y = zero;
         p->position.z = zero;
         ang = twoPi * (angle + (f32)((i - 1) * 360 / count)) / 360.0f;
         p->dirX = sin(ang);
         p->velY = zero;
-#endif
         p->dirZ = cos(ang);
     }
     return effect;
@@ -203,20 +190,16 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     s32 blend;
 #endif
     u16 type;
-#if VERSION > VERSION_DEMO_US
     s32 v;
     GXColor color;
-#endif
     GXTexObj texObj;
     Mtx mtx;
     Mtx scale;
     Mtx rot;
     Mtx view;
-#if VERSION > VERSION_DEMO_US
     f32 w;
     f32 half = 0.5f;
     f32 h;
-#endif
 
 #if VERSION > VERSION_DEMO_US
     u = work->texU;

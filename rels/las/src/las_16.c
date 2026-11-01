@@ -177,13 +177,8 @@ EVT_BEGIN(las_16_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSWF_LAS_16_WALL_BOMBED, 0)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_EQUAL(GSWF_LAS_16_WALL_BOMBED, 0)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_after"), 1, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_ana_ana"), 0, PTR(bomb_wall_evt), 0)
@@ -193,11 +188,7 @@ EVT_BEGIN(las_16_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_ana_ana"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_ana_before"), 1, 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("box"), 150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_16_PALACE_KEY_CHEST)
-#else
-    CALL(evt_mobj_itembox, STRING("box"), 150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_16_PALACE_KEY_CHEST)
-#endif
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
     RETURN
 EVT_END()

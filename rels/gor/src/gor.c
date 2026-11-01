@@ -400,11 +400,7 @@ EVT_END()
  */
 EVT_BEGIN(luigi_gor_first_talk)
     CALL(evt_party_stop, 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 0)
-#else
-    IF_INT_EQUAL(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 0)
-#endif
         CALL(evt_msg_print, 0, STRING("gor_luigi_00"), 0, STRING("me"))
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(500)
@@ -427,17 +423,9 @@ IF_INT_LESS(GSW_STORY_PROGRESS, STG8_16_THE_RETURN_OF_THE_QUEEN)
 #endif
         CALL(evt_mario_set_pose, STRING("M_N_5B"))
         WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 1)
-#else
-        SET_VALUE(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 1)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-SWITCH(GSW_STORY_PROGRESS)
-#else
     SWITCH(GSW_STORY_PROGRESS)
-#endif
         CASE_BETWEEN(STG1_17_FATHER_SON_REUNITED, STG2_24_BOSS_BATTLE)
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print, 0, STRING("gor_luigi_02"), 0, STRING("me"))
@@ -510,11 +498,7 @@ SWITCH(GSW_STORY_PROGRESS)
         SET_VALUE(LW(10), 1)
     END_IF
     SET_VALUE(GF(0), 0)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(mario_and_party_sleep)
-#else
     SPAWN_EVENT(PTR(mario_and_party_sleep))
-#endif
     CALL(evt_msg_print, 0, LW(1), 0, STRING("me"))
     SET_VALUE(GF(0), 1)
     WAIT_WHILE(GF(0))

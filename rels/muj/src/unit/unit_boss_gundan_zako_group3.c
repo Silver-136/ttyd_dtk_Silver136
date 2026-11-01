@@ -91,11 +91,7 @@ static EvtWord dead_event[136];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord attack_event[260];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event[260];
-#else
 static EvtWord attack_event[287];
-#endif
 #endif
 static EvtWord hit_check_event[119];
 static EvtWord wait_event[6];
@@ -423,11 +419,7 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("W_1"))
             CALL(btlevtcmd_GetPos, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_FaceDirectionSub, LW(5), LW(0), 50)
-#if VERSION <= VERSION_DEMO_US
-            CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 60, -1, 0)
-#else
             CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE, 0)
-#endif
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
         END_SIBLING_EVENT
 #if VERSION > VERSION_DEMO_US
@@ -445,11 +437,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("A_1A"))
         CALL(btlevtcmd_snd_se, LW(5), STRING("SFX_BOSS_KANBU_JUMP1"), EVT_NULLPTR, 0, LW(13))
         CALL(btlevtcmd_JumpSetting, LW(5), 0, FLOAT(6.0f), FLOAT(0.2998047f))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_JumpPosition, LW(5), 0, 100, 0, 0, -1)
-#else
         CALL(btlevtcmd_JumpPosition, LW(5), 0, 100, 0, 0, MOVE_SOUND_FROM_TABLE)
-#endif
         CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
         CALL(evt_snd_sfxoff, LW(13))
 #if VERSION > VERSION_DEMO_US
@@ -490,21 +478,13 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("A_1A"))
             CALL(btlevtcmd_GetPos, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_JumpSetting, LW(5), 30, 0, FLOAT(0.2998047f))
-#if VERSION <= VERSION_DEMO_US
-            CALL(btlevtcmd_JumpPosition, LW(5), LW(0), 0, LW(2), 30, -1)
-#else
             CALL(btlevtcmd_JumpPosition, LW(5), LW(0), 0, LW(2), 30, MOVE_SOUND_FROM_TABLE)
-#endif
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
             CALL(btlevtcmd_ChangeFaceDirection, LW(5), 1)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("R_1"))
             CALL(btlevtcmd_GetHomePos, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetMoveSpeed, LW(5), FLOAT(6.0f))
-#if VERSION <= VERSION_DEMO_US
-            CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 0, -1, 0)
-#else
             CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-#endif
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
             CALL(btlevtcmd_ResetFaceDirection, LW(5))
         END_INLINE_EVENT

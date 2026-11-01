@@ -95,11 +95,7 @@ BattleWeapon ItemWeaponData_Teki_Yokeeru;
 BattleWeapon ItemWeaponData_Madowaseno_Kona;
 EvtWord ItemEvent_Nemure_Yoikoyo[VERSION_PICK(57, 91)];
 BattleWeapon ItemWeaponData_Nemure_Yoikoyo;
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord ItemEvent_Stop_Watch_Core[];
-#else
 EvtWord ItemEvent_Stop_Watch_Core[143];
-#endif
 EvtWord ItemEvent_Stop_Watch[86];
 BattleWeapon ItemWeaponData_Stop_Watch;
 EvtWord ItemEvent_Guruguru_Memawashi[35];
@@ -1592,11 +1588,7 @@ BattleWeapon ItemWeaponData_Koorino_Ibuki = {
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_ICE, // element
     ATTACKPATTERN_NULL, // damagePattern
@@ -2088,11 +2080,7 @@ BattleWeapon ItemWeaponData_Nemure_Yoikoyo = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
@@ -2159,11 +2147,7 @@ CALL(evt_eff64, 0, STRING("timestamp_n64"), 0, 0, 0, 0, FLOAT(1.0f), 200, 0, 0, 
     GOTO(10)
     LABEL(90)
     CALL(evt_audience_ap_recovery)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(_return_home_event)
-#else
     CALL_CHILD(PTR(_return_home_event))
-#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -2211,11 +2195,7 @@ BattleWeapon ItemWeaponData_Stop_Watch = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
@@ -4970,18 +4950,10 @@ USER_FUNC(_full_ap_recover) {
  */
 EVT_BEGIN(ItemEvent_LastDinner)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_PoisonKinoko))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
-#else
     CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
-#endif
     WAIT_FRAMES(30)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(ItemEvent_GetTarget)
-#else
     CALL_CHILD(PTR(ItemEvent_GetTarget))
-#endif
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHeight, LW(10), LW(5))
     CALL(btlevtcmd_GetStatusMg, LW(10), LW(6))
@@ -5024,11 +4996,7 @@ CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
 #endif
     WAIT_MS(1750)
     CALL(evt_audience_ap_recovery)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(_return_home_event)
-#else
     CALL_CHILD(PTR(_return_home_event))
-#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

@@ -301,11 +301,7 @@ EVT_END()
  * the demo versions also a_kami_2), then checks whether all are gone.
  */
 EVT_BEGIN(evt_poster_12)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_EKI_03_POSTER_12_BLOWN_AWAY, 1)
-#else
-    SET_VALUE(GSWF_EKI_03_POSTER_12_BLOWN_AWAY, 1)
-#endif
     CALL(evt_hitobj_onoff, STRING("a_kami_8"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("a_kami_9"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
@@ -695,17 +691,13 @@ static void sun_tev(MapTevCallbackInfo* info) {
 static USER_FUNC(test_glare) {
     MapObject* sun = mapGetMapObj("sun");
     u16* rect;
-#if VERSION <= VERSION_DEMO_US
-#endif
     // FAKE: discarded getter call; removing it changes the object.
     marioGetPtr();
     if (isFirstCall) {
         sun->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
         return EVT_RETURN_BLOCK;
     }
-#if VERSION > VERSION_DEMO_US
     // 0x3FF marks off-screen bounds; an all-zero rectangle also disables glare.
-#endif
     rect = sun->screenRect;
     if (rect[0] == 0x3FF || rect[1] == 0x3FF || rect[2] == 0x3FF || rect[3] == 0x3FF) {
         envGlareFilter(0, 0, 0, 0, 0);

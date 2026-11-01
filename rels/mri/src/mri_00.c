@@ -1034,9 +1034,7 @@ hit0 = (HitEntry*)cloudGetHitBreathout(0);
                 break;
             }
             hit = hitNameToPtr(wp->hitName);
-#if VERSION > VERSION_DEMO_US
             // A brief loss of contact still builds progress until the grace timer expires.
-#endif
             if (hit0 != hit && hit1 != hit && hit2 != hit && hit3 != hit) {
                 if (wp->timer == 0) {
                     wp->state = 10;
@@ -1311,11 +1309,7 @@ EVT_BEGIN(mario_see_you)
     CALL(evt_cam3d_evt_set, 180, 130, 567, 180, 44, 127, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_puni_wait_systemmode, 2)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(mario_see_you_init)
-#else
     CALL_CHILD(PTR(mario_see_you_init))
-#endif
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -1534,15 +1528,8 @@ EVT_END()
  * and the game moves on to tou_01 (Mario arrives through sekai_yami1).
  */
 static EVT_BEGIN(sekai_yami_evt)
-#if VERSION <= VERSION_DEMO_US
-    // The Punies are set up and Mario is hidden.
-#endif
     CALL(evt_puni_wait_systemmode, 2)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(puni_set)
-#else
     SPAWN_EVENT(PTR(puni_set))
-#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -1576,53 +1563,24 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(anim_tevcallback, STRING("ガイド"), 1)
     CALL(anim_tevcallback, STRING("ガイド妹"), 1)
     CALL(anim_tevcallback, STRING("プニ族長老"), 1)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LSWF(3), 1)
-#else
     SET_VALUE(LSWF_MRI_00_DARKNESS_ON, 1)
-#endif
     SET_VALUE(GW(0), -800)
     SET_VALUE(LW(0), STRING("ライバル"))
-#if VERSION <= VERSION_DEMO_US
-    // The NPCs and the Punies of the yard are lined up, all facing left, to watch the darkness arrive.
-    SPAWN_EVENT(sekai_yami_npc)
-#else
     SPAWN_EVENT(PTR(sekai_yami_npc))
-#endif
     SET_VALUE(LW(0), STRING("ガイド"))
     SPAWN_EVENT_GET_ID(PTR(sekai_yami_npc), GW(1))
     SET_VALUE(LW(0), STRING("ガイド妹"))
     SPAWN_EVENT_GET_ID(PTR(sekai_yami_npc), GW(2))
     SET_VALUE(LW(0), STRING("プニ族長老"))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sekai_yami_npc)
-#else
     SPAWN_EVENT(PTR(sekai_yami_npc))
-#endif
     SET_VALUE(LW(0), 6)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sekai_yami_puni)
-#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
-#endif
     SET_VALUE(LW(0), 39)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sekai_yami_puni)
-#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
-#endif
     SET_VALUE(LW(0), 88)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sekai_yami_puni)
-#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
-#endif
     SET_VALUE(LW(0), 46)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sekai_yami_puni)
-#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
-#endif
     SET_VALUE(LW(0), 64)
 #if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(sekai_yami_puni)
@@ -1656,9 +1614,6 @@ static EVT_BEGIN(sekai_yami_evt)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -150, 74, 650, -150, 40, 150, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    // The dark view has swept in; the NPC scripts are stopped.
-#endif
     DELETE_EVENT(GW(1))
     DELETE_EVENT(GW(2))
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
@@ -1666,16 +1621,10 @@ static EVT_BEGIN(sekai_yami_evt)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("ガイド"))
     CALL(evt_npc_wait_pera, STRING("ガイド妹"))
-#if VERSION <= VERSION_DEMO_US
-    // Punio's sister and Punio talk about the darkened world.
-#endif
     CALL(evt_msg_print, 0, STRING("stg8_dark_02"), 0, STRING("ガイド妹"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg8_dark_02_01"), 0, STRING("ガイド"))
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    // The screen fades out and the game moves on to tou_01.
-#endif
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("tou_01"), STRING("sekai_yami1"))
     CALL(evt_mario_key_onoff, 1)
@@ -1689,11 +1638,7 @@ EVT_END()
  */
 static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_puni_wait_systemmode, 2)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(puni_set)
-#else
     SPAWN_EVENT(PTR(puni_set))
-#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -1717,11 +1662,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(anim_tevcallback, STRING("ガイド"), 1)
     CALL(anim_tevcallback, STRING("ガイド妹"), 1)
     CALL(anim_tevcallback, STRING("プニ族長老"), 1)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LSWF(3), 1)
-#else
     SET_VALUE(LSWF_MRI_00_DARKNESS_ON, 1)
-#endif
     CALL(yami_view, 800)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(evt_cam3d_evt_set, -150, 258, 1648, -150, 180, 150, 0, EASING_SINE_IN_OUT)

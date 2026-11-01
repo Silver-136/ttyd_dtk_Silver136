@@ -147,15 +147,6 @@ const char* latin_tbl[] = {
 #define NAME_TPL_JP "%s/w/jp/name.tpl"
 #endif
 
-#if VERSION <= VERSION_DEMO_US
-/**
- * Starts loading the name entry textures (w/<language>/name.tpl; the JP builds always use jp,
- * the demo reads window/jp) and returns TRUE once they are loaded. Callers poll it before nameEntOn.
- */
-BOOL nameEntPrepare(void) {
-return fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != 0;
-}
-#else
 /**
  * Starts loading the name entry textures (w/<language>/name.tpl; the JP builds always use jp,
  * the demo reads window/jp) and returns TRUE once they are loaded. Callers poll it before nameEntOn.
@@ -168,7 +159,6 @@ BOOL nameEntPrepare(void) {
     return fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != 0;
 #endif
 }
-#endif
 
 /**
  * Opens the name entry screen.
@@ -1206,9 +1196,7 @@ void nameBG(void) {
     GXTexCoord2f32(1.0f, 0.0f);
 }
 
-#if VERSION > VERSION_DEMO_US
 #pragma inline_max_total_size(100000)
-#endif
 /** Draws one textured quad from name.tpl texture id at (x, y), w x h, with the texture scaled to fit. */
 static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;

@@ -684,25 +684,13 @@ EVT_BEGIN(jin_07_init_evt)
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL_CHILD(evt_usu_kagemario_party_kill)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
-#endif
     CALL(evt_npc_setup, PTR(npcEnt))
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(jin_07_juyo_oumu_vivian)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 220, 75, -20, ITEM_TYPE_STILL, GSWF_STARPIECE_69, 0)
-    IF_INT_NOT_EQUAL(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
-        SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
-#else
     SPAWN_EVENT(PTR(jin_07_juyo_oumu_vivian))
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 220, 75, -20, ITEM_TYPE_STILL, GSWF_STARPIECE_69, 0)
     IF_INT_NOT_EQUAL(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
         SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
-#endif
         BEGIN_INLINE_EVENT
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mario_set_pos, 0, 365, -50)
@@ -719,37 +707,17 @@ EVT_BEGIN(jin_07_init_evt)
             CALL(evt_mario_key_onoff, 1)
         END_INLINE_EVENT
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
-#else
-    IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
-#endif
         SET_VALUE(LW(0), STRING("w_bero_1"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_on)
-#else
         CALL_CHILD(PTR(bero_case_switch_on))
-#endif
         ELSE
         SET_VALUE(LW(0), STRING("w_bero_1"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 0)
-#else
-    IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 0)
-#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero_1"), 0, PTR(evt_locked), 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_02_BOO_BOX)
-#else
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_02_BOO_BOX)
-#endif
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 95, 0, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_hako"), 0, PTR(evt_teresa_box_open), 0)
         ELSE

@@ -258,15 +258,9 @@ EVT_BEGIN(las_03_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -350, 0, -100, ITEM_ALL_OR_NOTHING, 0, GSWF_LAS_03_ALL_OR_NOTHING_BADGE_BLOCK, 1)
-    SPAWN_EVENT(toge_evt)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -350, 0, -100, ITEM_ALL_OR_NOTHING, 0, GSWF_LAS_03_ALL_OR_NOTHING_BADGE_BLOCK, 1)
     SPAWN_EVENT(PTR(toge_evt))
-#endif
     RETURN
 EVT_END()
 

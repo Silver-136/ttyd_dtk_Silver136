@@ -437,11 +437,7 @@ void marioSlitForceCancel(void) {
             m->displayDirection = 180.0f;
             m->displayDirectionTarget = m->displayDirection;
         }
-#if VERSION <= VERSION_DEMO_US
-        m->dispFlags &= CLR_DISP;
-#else
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
-#endif
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
 #if VERSION <= VERSION_DEMO_US
@@ -1278,11 +1274,7 @@ m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
 void mot_slit(void) {
     MarioWork* m = marioGetPtr();
     f32 d;
-#if VERSION <= VERSION_DEMO_US
-    s32 st;
-#else
     s16 st;
-#endif
     if (!m->controlStickSensitivity) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_SLIT_KEEP_POSE;
     }

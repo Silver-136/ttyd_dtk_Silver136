@@ -135,11 +135,7 @@ EvtWord init_kinopiko[8];
 EvtWord talk_kinopiko[112];
 EvtWord init_kinopio_f[8];
 EvtWord talk_kinopio_f[112];
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord init_chu[];
-#else
 EvtWord init_chu[20];
-#endif
 EvtWord talk_chu[67];
 static EvtWord init_champ[32];
 s32 move_pos[26];
@@ -167,11 +163,7 @@ extern EvtWord mario_momikucha_msg[];
 #else
 EvtWord mario_momikucha_msg[111];
 #endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord evt_momikucha[];
-#else
 EvtWord evt_momikucha[105];
-#endif
 static EvtWord evt_key[173];
 static EvtWord evt_poster_1[5];
 static EvtWord evt_poster_2[5];
@@ -1191,11 +1183,7 @@ CALL(evt_npc_set_position, STRING("me"), 245, 0, 125)
         CALL(evt_npc_set_position, STRING(("me")), 245, 0, 125)
 #endif
         CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
-#else
         CALL(evt_npc_set_position, STRING(("me")), 0, -1000, 0)
-#endif
     END_SWITCH
     RETURN
 EVT_END()
@@ -1676,11 +1664,7 @@ EVT_BEGIN(evt_tougi2)
     CALL(evt_party_stop, 0)
     SET_VALUE(LF(0), 0)
     CALL(evt_bero_get_entername, LW(0))
-#if VERSION <= VERSION_DEMO_US
-    IF_STR_EQUAL(LW(0), STRING("n_bero_2"))
-#else
     IF_STR_EQUAL(LW(0), STRING(("n_bero_2")))
-#endif
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
@@ -1700,26 +1684,14 @@ EVT_BEGIN(evt_tougi2)
     // The door opens and they step into the lobby.
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 2)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_open_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         IF_INT_EQUAL(LF(0), 1)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(n_2_door_open)
-#else
             CALL_CHILD(PTR(n_2_door_open))
-#endif
             ELSE
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(n_1_door_open)
-#else
             CALL_CHILD(PTR(n_1_door_open))
-#endif
         END_IF
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -1737,101 +1709,50 @@ EVT_BEGIN(evt_tougi2)
     END_INLINE_EVENT
     WAIT_MS(700)
     SET_VALUE(LW(1), 2)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(bero_close_door_play_se)
-#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         IF_INT_EQUAL(LF(0), 1)
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(n_2_door_close)
-#else
             CALL_CHILD(PTR(n_2_door_close))
-#endif
             ELSE
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(n_1_door_close)
-#else
             CALL_CHILD(PTR(n_1_door_close))
-#endif
         END_IF
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
     // The partner asks how to get the Crystal Star, steal it or fight to the top, and answers Mario's choice.
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print_party, STRING("stg3_tou_33"))
-    CALL(evt_msg_select, 0, STRING("stg3_tou_33_yn"))
-#else
     CALL(evt_msg_print_party, STRING(("stg3_tou_33")))
     CALL(evt_msg_select, 0, STRING(("stg3_tou_33_yn")))
-#endif
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mario_get_party, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_add, 0, STRING("stg3_tou_34_kur"))
-#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_34_kur")))
-#endif
             CASE_EQUAL(PARTY_MEMBER_KOOPS)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_add, 0, STRING("stg3_tou_34_nok"))
-#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_34_nok")))
-#endif
             CASE_EQUAL(PARTY_MEMBER_FLURRIE)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_add, 0, STRING("stg3_tou_34_win"))
-#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_34_win")))
-#endif
         END_SWITCH
         ELSE
         CALL(evt_mario_get_party, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_add, 0, STRING("stg3_tou_35_kur"))
-#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_35_kur")))
-#endif
             CASE_EQUAL(PARTY_MEMBER_KOOPS)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_add, 0, STRING("stg3_tou_35_nok"))
-#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_35_nok")))
-#endif
             CASE_EQUAL(PARTY_MEMBER_FLURRIE)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_add, 0, STRING("stg3_tou_35_win"))
-#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_35_win")))
-#endif
         END_SWITCH
     END_IF
     // Mario nods, the partner sums up and the story moves on.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_set_pose, STRING("M_N_2"))
-#else
     CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_NOD1_4")), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING(("M_N_2")))
-#endif
     WAIT_MS(800)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_msg_print_party, STRING("stg3_tou_36"))
-#else
     CALL(evt_mario_set_pose, STRING(("M_S_1")))
     CALL(evt_msg_print_party, STRING(("stg3_tou_36")))
-#endif
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
@@ -1915,11 +1836,7 @@ void ext_fan_init(void) {
     pose = extGetPosePtr();
     fan = fan_wp->fans;
     for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
-#if VERSION <= VERSION_DEMO_US
-        pose->flags |= 7;
-#else
         pose->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
-#endif
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = 0.0f;
         (*pose->mtx)[1][3] = 0.0f;
@@ -2195,9 +2112,7 @@ void ext_fan_main(void) {
             }
         }
     }
-#if VERSION > VERSION_DEMO_US
     // Exclude hidden anchor fans and every fan that has left the walking state.
-#endif
     fan_wp->count = fan_wp->num;
 
 #if VERSION > VERSION_DEMO_US
@@ -2390,41 +2305,17 @@ ADD(LW(5), LW(0))
         BEGIN_INLINE_EVENT
             SWITCH(LW(10))
                 CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_print, 0, STRING("stg3_tou_236"), 0, 0)
-#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_236")), 0, 0)
-#endif
                 CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_print, 0, STRING("stg3_tou_237"), 0, 0)
-#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_237")), 0, 0)
-#endif
                 CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_print, 0, STRING("stg3_tou_238"), 0, 0)
-#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_238")), 0, 0)
-#endif
                 CASE_EQUAL(3)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_print, 0, STRING("stg3_tou_239"), 0, 0)
-#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_239")), 0, 0)
-#endif
                 CASE_EQUAL(4)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_print, 0, STRING("stg3_tou_240"), 0, 0)
-#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_240")), 0, 0)
-#endif
                 CASE_EQUAL(5)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_print, 0, STRING("stg3_tou_240_01"), 0, 0)
-#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_240_01")), 0, 0)
-#endif
             END_SWITCH
         END_INLINE_EVENT
         ADD(LW(10), 1)
@@ -2439,28 +2330,17 @@ EVT_END()
 EVT_BEGIN(evt_momikucha)
     SET_VALUE(LF(0), 0)
     SET_VALUE(GF(10), 0)
-#if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
         IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 0)
             SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
-#else
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
-        IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 0)
-            SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
-#endif
             SET_VALUE(LF(0), 1)
             SET_VALUE(GF(10), 0)
         END_IF
     END_IF
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 0)
             SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
-#else
-        IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 0)
-            SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
-#endif
             SET_VALUE(LF(0), 1)
             SET_VALUE(GF(10), 1)
         END_IF
@@ -2486,19 +2366,10 @@ CALL(evt_ext_entry, 250, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main)
     CALL(evt_ext_entry, 200, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
 #endif
     IF_INT_EQUAL(GF(10), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_set_position, STRING("チャンピョン"), 0, 0, 0)
-        CALL(evt_npc_change_interrupt, STRING("チャンピョン"), 1, PTR(move_champ))
-#else
         CALL(evt_npc_set_position, STRING(("\203`\203\203\203\223\203s\203\207\203\223")), 0, 0, 0)
         CALL(evt_npc_change_interrupt, STRING(("\203`\203\203\203\223\203s\203\207\203\223")), 1, PTR(move_champ))
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(mario_momikucha_msg)
-#else
         SPAWN_EVENT(PTR(mario_momikucha_msg))
-#endif
     END_IF
     RETURN
 EVT_END()

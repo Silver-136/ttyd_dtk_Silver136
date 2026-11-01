@@ -202,9 +202,6 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     s32 delay;
     RecoveryWork* pp;
     s32 size;
-#if VERSION <= VERSION_DEMO_US
-    f32 ang;
-#endif
     f32 zero;
     s32 i;
 
@@ -357,10 +354,6 @@ void effRecoveryMain(EffectEntry* effect) {
 #endif
     f32 a, d;
 
-#if VERSION <= VERSION_DEMO_US
-    work = effect->userdata;
-    type = work->type;
-#endif
     effCalcMayaAnim(work->anim);
     if (gp->retraceCount > work->tick) {
         n = gp->retraceCount - work->tick;
@@ -595,9 +588,7 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     s32 type;
     s32 i;
-#if VERSION > VERSION_DEMO_US
     u8* c;
-#endif
     GXColor color;
     GXTexObj texObj;
     Mtx transMtx;
@@ -862,9 +853,7 @@ void effRecoveryDisp4(CameraId cameraId, EffectEntry* effect) {
     Mtx scaleMtx;
     Mtx base;
     GXTexObj texObj;
-#if VERSION > VERSION_DEMO_US
     u8* c;
-#endif
     f32 w;
     f32 nw;
     f32 l;

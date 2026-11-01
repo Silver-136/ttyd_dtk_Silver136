@@ -45,7 +45,6 @@ extern EvtWord testnpc_move_event[];
 
 #if VERSION >= VERSION_JP
 // One point of the drawn outline (and of the vertices the tessellator adds where edges cross).
-#if VERSION > VERSION_DEMO_US
 typedef struct TessVertex {
     f64 x;                // 0x00
     f64 y;                // 0x08
@@ -56,16 +55,10 @@ typedef struct TessVertex {
     s32 edge;             // 0x48, 3 for a combined vertex, 4 when it lies on an outline edge
     u8 reserved_4C[0xC];  // 0x4C, never accessed
 } TessVertex;
-#endif
 
-#if VERSION > VERSION_DEMO_US
 #define TESS_MAX_VERTICES 512
-#endif
-#if VERSION > VERSION_DEMO_US
 #define TESS_MAX_INDICES 2048
-#endif
 
-#if VERSION > VERSION_DEMO_US
 typedef struct TessTestWork {
     s32 x;                                  // 0x00, cursor position, moved with the stick
     s32 y;                                  // 0x04
@@ -78,35 +71,20 @@ typedef struct TessTestWork {
     s32 indexCount;                         // 0xB020
     s32 indices[TESS_MAX_INDICES];          // 0xB024, triangle list from the tessellator
 } TessTestWork;
-#endif
 
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(tess_test_draw);
-#endif
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(tess_test_run);
-#endif
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(tess_test_disp_entry);
-#endif
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(tess_test_end);
-#endif
 
-#if VERSION > VERSION_DEMO_US
 extern EvtWord tst_nakayama_tess_evt[];
-#endif
 
-#if VERSION > VERSION_DEMO_US
 void tess_test(void);
-#endif
 #endif
 
 // MWCC emits file-scope variables in reverse order: item_name comes first in .bss.
 #if VERSION >= VERSION_JP
-#if VERSION > VERSION_DEMO_US
 TessTestWork* tess_test_work;
-#endif
 #endif
 char item_name[32];
 
@@ -366,7 +344,6 @@ EVT_END()
  * Keep the event out of that version; tst.c explains how the build reproduces the reference.
  */
 #if VERSION >= VERSION_JP
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(tst_nakayama_init_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 0, 0, 0)
@@ -374,10 +351,8 @@ EVT_BEGIN(tst_nakayama_init_evt)
     SPAWN_EVENT(tst_nakayama_tess_evt)
     RETURN
 EVT_END()
-#endif
 
 /** Shows a random paper, draws the outline with the stick, and cuts the paper to the tessellated polygon. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(tst_nakayama_tess_evt)
     CALL(evt_seq_wait, 2)
     LOOP(0)
@@ -428,14 +403,12 @@ EVT_BEGIN(tst_nakayama_tess_evt)
     RETURN
 EVT_END()
 #endif
-#endif
 
 // The unit is built with -inline auto,deferred, which emits the functions in reverse order: the last one here comes
 // first in the REL.
 
 #if VERSION >= VERSION_JP
 /** Draws the outline: one rainbow line per segment, the buffer use, and the cursor. */
-#if VERSION > VERSION_DEMO_US
 void tess_test_line_disp(CameraId cameraId, void* param) {
     s32 i;
 
@@ -486,10 +459,8 @@ void tess_test_line_disp(CameraId cameraId, void* param) {
     }
     dbgDrawReset(-1);
 }
-#endif
 
 /** Copies the screen into the texture the filled polygon is drawn with. */
-#if VERSION > VERSION_DEMO_US
 /** Copies the screen into the texture the filled polygon is drawn with. */
 void tess_test_capture(CameraId cameraId, void* param) {
     tess_test_work->capture = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_I8, GX_FALSE, 0), 1);
@@ -498,10 +469,8 @@ void tess_test_capture(CameraId cameraId, void* param) {
     GXCopyTex(tess_test_work->capture->address, GX_FALSE);
     GXPixModeSync();
 }
-#endif
 
 /** Whether segment a-b crosses segment c-d. */
-#if VERSION > VERSION_DEMO_US
 /** Whether segment a-b crosses segment c-d. */
 BOOL tess_test_cross(TessVertex* a, TessVertex* b, TessVertex* c, TessVertex* d) {
     if (((a->x - b->x) * (c->y - a->y) + (a->y - b->y) * (a->x - c->x)) *
@@ -515,10 +484,8 @@ BOOL tess_test_cross(TessVertex* a, TessVertex* b, TessVertex* c, TessVertex* d)
     }
     return FALSE;
 }
-#endif
 
 /** Moves the cursor with the stick and adds a point every 6 frames, until the newest segment crosses an older one. */
-#if VERSION > VERSION_DEMO_US
 /** Moves the cursor with the stick and adds a point every 6 frames, until the newest segment crosses an older one. */
 USER_FUNC(tess_test_draw) {
     s32 j;
@@ -576,10 +543,8 @@ USER_FUNC(tess_test_draw) {
     dispEntry(CAMERA_2D, 0.0f, 0, tess_test_line_disp, NULL);
     return EVT_RETURN_BLOCK;
 }
-#endif
 
 /** Draws the tessellated polygon with the screen copy and records its bounding box for the "ofs" offscreen. */
-#if VERSION > VERSION_DEMO_US
 /** Draws the tessellated polygon with the screen copy and records its bounding box for the "ofs" offscreen. */
 void tess_test_disp(CameraId cameraId, void* param) {
     GXTexObj texObj;
@@ -621,50 +586,40 @@ void tess_test_disp(CameraId cameraId, void* param) {
     GXReadBoundingBox(&left, &top, &right, &bottom);
     offscreenAddBoundingBox(offscreenNameToId("ofs"), left, top, right, bottom);
 }
-#endif
 
 /** Runs the tessellator over the drawn outline and flushes the vertices for the GPU. */
-#if VERSION > VERSION_DEMO_US
 /** Runs the tessellator over the drawn outline and flushes the vertices for the GPU. */
 USER_FUNC(tess_test_run) {
     tess_test();
     DCFlushRange(tess_test_work->vertices, tess_test_work->vertexCount * sizeof(TessVertex));
     return EVT_RETURN_DONE;
 }
-#endif
 
 /** Script helper: queues the tessellated polygon draw (tess_test_disp) on the second offscreen camera. */
-#if VERSION > VERSION_DEMO_US
 /** Script helper: queues the tessellated polygon draw (tess_test_disp) on the second offscreen camera. */
 USER_FUNC(tess_test_disp_entry) {
     dispEntry(CAMERA_OFFSCREEN2, 0.0f, 1, tess_test_disp, NULL);
     return EVT_RETURN_DONE;
 }
-#endif
 
 /** Script helper: frees the screen capture and the work buffer of the tessellator test. */
-#if VERSION > VERSION_DEMO_US
 /** Script helper: frees the screen capture and the work buffer of the tessellator test. */
 USER_FUNC(tess_test_end) {
     smartFree(tess_test_work->capture);
     _mapFree(tess_test_work);
     return EVT_RETURN_DONE;
 }
-#endif
 
 /** GLU_TESS_BEGIN_DATA callback: does nothing (the test collects vertices in tess_test_vertex instead). */
-#if VERSION > VERSION_DEMO_US
 /** GLU_TESS_BEGIN_DATA callback: does nothing (the test collects vertices in tess_test_vertex instead). */
 void tess_test_begin(u32 type, void* polygonData) {
 }
-#endif
 
 /**
  * GLU_TESS_EDGE_FLAG_DATA callback: does nothing.
  * Registering any edge flag callback makes GLU deliver plain triangle lists rather than fans and strips,
  * which is what the test wants.
  */
-#if VERSION > VERSION_DEMO_US
 /**
  * GLU_TESS_EDGE_FLAG_DATA callback: does nothing.
  * Registering any edge flag callback makes GLU deliver plain triangle lists rather than fans and strips,
@@ -672,24 +627,18 @@ void tess_test_begin(u32 type, void* polygonData) {
  */
 void tess_test_edge_flag(u8 flag, void* polygonData) {
 }
-#endif
 
 /** GLU_TESS_END_DATA callback: does nothing. */
-#if VERSION > VERSION_DEMO_US
 /** GLU_TESS_END_DATA callback: does nothing. */
 void tess_test_end_polygon(void* polygonData) {
 }
-#endif
 
 /** GLU_TESS_ERROR_DATA callback: ignores tessellator errors. */
-#if VERSION > VERSION_DEMO_US
 /** GLU_TESS_ERROR_DATA callback: ignores tessellator errors. */
 void tess_test_error(u32 error, void* polygonData) {
 }
-#endif
 
 /** Collects the triangle list: each vertex is an index into the outline. */
-#if VERSION > VERSION_DEMO_US
 /** Collects the triangle list: each vertex is an index into the outline. */
 void tess_test_vertex(void* vertexData, void* polygonData) {
     if (tess_test_work->indexCount >= TESS_MAX_INDICES) {
@@ -697,13 +646,11 @@ void tess_test_vertex(void* vertexData, void* polygonData) {
     }
     tess_test_work->indices[tess_test_work->indexCount++] = (s32)vertexData;
 }
-#endif
 
 /**
  * Adds a vertex where two edges cross, unless it repeats a corner;
  * it is marked as on the outline when the crossing edges are outline edges.
  */
-#if VERSION > VERSION_DEMO_US
 /**
  * Adds a vertex where two edges cross, unless it repeats a corner;
  * it is marked as on the outline when the crossing edges are outline edges.
@@ -782,10 +729,8 @@ void tess_test_combine(f64 coords[3], u32 index[4], f32 weight[4], u32* outIndex
     *outIndex = tess_test_work->vertexCount;
     tess_test_work->vertexCount++;
 }
-#endif
 
 /** Feeds each contour of the outline to the tessellator. */
-#if VERSION > VERSION_DEMO_US
 /** Feeds each contour of the outline to the tessellator. */
 void tess_test(void) {
     GLUtesselator* tess = gluNewTess();
@@ -814,7 +759,6 @@ void tess_test(void) {
     gluTessEndPolygon(tess);
     gluDeleteTess(tess);
 }
-#endif
 #endif
 
 /**

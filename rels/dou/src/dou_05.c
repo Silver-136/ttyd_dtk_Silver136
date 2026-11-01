@@ -225,11 +225,7 @@ EVT_BEGIN(bigdoor_event_init)
         DEBUG_PUT_MSG(STRING("dou_05：扉が開く前の処理"))
 #endif
         SET_VALUE(LW(0), STRING("w_bero_3"))
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
         CALL(evt_mapobj_trans, 0, STRING("tetu"), 1, 0, 0)
         ELSE
 #if VERSION > VERSION_DEMO_US
@@ -288,17 +284,9 @@ EVT_BEGIN(bigdoor_event)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)
     CALL(evt_msg_print, 0, STRING("stg5_dou_10"), 0, 0)
     SET_VALUE(LW(0), STRING("w_bero_3"))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(bero_case_switch_on)
-#else
     CALL_CHILD(PTR(bero_case_switch_on))
-#endif
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero_3"), 4)
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG5_20_THE_BLUE_BLOCK)
-#else
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_20_THE_BLUE_BLOCK)
-#endif
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     RETURN

@@ -1038,9 +1038,7 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
     Mtx mtx;
     Mtx scale;
     Mtx rot;
-#if VERSION > VERSION_DEMO_US
     Mtx ident;
-#endif
     CameraEntry* cam = camGetPtr(cameraId);
     s32 x;
     s32 y;
@@ -1599,13 +1597,7 @@ USER_FUNC(cam_mahojin_kaiten_main) {
         event->savedTime = gp->renderTime;
 #endif
     }
-#if VERSION <= VERSION_DEMO_US
-    {
-        s32 lo = frames * 20 / 100;
-        s32 hi = frames * 80 / 100;
-#else
     {s32 lo = frames * 20 / 100; s32 hi = frames * 80 / 100;
-#endif
     total = 0.0f;
     speed = total;
     for (i = 0; i < frames; i++) {

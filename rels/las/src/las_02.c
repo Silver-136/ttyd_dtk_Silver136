@@ -160,22 +160,13 @@ EVT_BEGIN(las_02_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -550, 480, 60, ITEM_SHOOTING_STAR, 0, GSWF_LAS_02_SHOOTING_STAR_BLOCK, 0)
-#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -550, 480, 60, ITEM_SHOOTING_STAR, 0, GSWF_LAS_02_SHOOTING_STAR_BLOCK, 0)
-#endif
     CALL(evt_npc_check, STRING("スーパーキラー大砲１"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_npc_set_link, STRING("スーパーキラー大砲１"), STRING("スーパーキラー大砲２"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(rousoku_init)
-#else
     CALL_CHILD(PTR(rousoku_init))
-#endif
     RETURN
 EVT_END()
 

@@ -2382,12 +2382,7 @@ EVT_BEGIN(muj_20_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hai_r_04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hai_r_05"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_m"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-    // A Bowser interlude plays at this point of the story.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-#endif
         CALL(evt_mario_set_mode, 2)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
@@ -2397,74 +2392,33 @@ EVT_BEGIN(muj_20_init_evt)
         CALL(evt_map_playanim, STRING("fune_01"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("kumo"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("yoru_hiru"), MAP_ANIM_PLAY_AT_END, 0)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(muj_20_koopa_evt)
-#else
         SPAWN_EVENT(PTR(muj_20_koopa_evt))
-#endif
         RETURN
     END_IF
     CALL(evt_map_playanim, STRING("nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("nami_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("fune_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kumo"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
-    // Pick the music and scene for the ship's crossing to or from Rogueport.
     IF_INT_EQUAL(GSWF_GOR_SAILING_TO_KEELHAUL, 1)
-#else
-    IF_INT_EQUAL(GSWF_GOR_SAILING_TO_KEELHAUL, 1)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(gor_muj_ship)
-#else
         SPAWN_EVENT(PTR(gor_muj_ship))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
-#else
-    IF_INT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(muj_gor_ship)
-#else
         SPAWN_EVENT(PTR(muj_gor_ship))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // The voyage to Keelhaul Key begins.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_END_OFF_TO_THE_KEYS)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_END_OFF_TO_THE_KEYS)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_SAILING1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(onryo_event)
-#else
         SPAWN_EVENT(PTR(onryo_event))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_00_LOGBOOK)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_00_LOGBOOK)
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_SAILING1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(onryo_event)
-#else
         SPAWN_EVENT(PTR(onryo_event))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // When entered as the prologue, the ship animations start and the opening title scene runs.
-#endif
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("prologue"))
 #if VERSION <= VERSION_DEMO_US
@@ -2490,39 +2444,20 @@ CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_OPENING1"))
         SET_FLOAT_VALUE(GW(0), FLOAT(-2000.0f))
         SET_FLOAT_VALUE(GW(1), FLOAT(0.0f))
         SET_FLOAT_VALUE(GW(2), FLOAT(-3000.0f))
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(anm_kaji)
-        SPAWN_EVENT(anm_wakka)
-        SPAWN_EVENT(anm_entotsu)
-        SPAWN_EVENT(anm_neji)
-        SPAWN_EVENT(anm_yure)
-        SPAWN_EVENT(evt_prologue)
-#else
         SPAWN_EVENT(PTR(anm_kaji))
         SPAWN_EVENT(PTR(anm_wakka))
         SPAWN_EVENT(PTR(anm_entotsu))
         SPAWN_EVENT(PTR(anm_neji))
         SPAWN_EVENT(PTR(anm_yure))
         SPAWN_EVENT(PTR(evt_prologue))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // At the end of the game the epilogue scene on the ship starts.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-#else
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-#endif
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_a1"), 1, 0)
         CALL(evt_map_playanim, STRING("yoru_hiru"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mario_kill_party, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(epilogue_npc_entry)
-        SPAWN_EVENT(epilogue_evt)
-#else
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))
-#endif
     END_IF
     RETURN
 EVT_END()

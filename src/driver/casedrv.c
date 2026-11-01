@@ -134,232 +134,125 @@ if ((u32)marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
         pressedA = btn & PAD_BUTTON_A;
         entry = wp->entries;
         for (i = 0; i < wp->count; i++, entry++) {
-#if VERSION <= VERSION_DEMO_US
-            if (!(entry->flags & CASE_FLAG_ACTIVE))
-                continue;
-#else
             if (!(entry->flags & CASE_FLAG_ACTIVE)) continue;
-#endif
             switch (entry->conditionId) {
             case CASE_STAND_ON:
-#if VERSION <= VERSION_DEMO_US
-                    if (standOn != NULL && !strcmp(hitGetName(standOn), entry->hitObjName))
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                 if (standOn != NULL && !strcmp(hitGetName(standOn), entry->hitObjName)) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
                 }
-#endif
                 break;
             case CASE_NOT_STAND_ON:
                 if (standOn != NULL) {
-#if VERSION <= VERSION_DEMO_US
-                        if (strcmp(hitGetName(standOn), entry->hitObjName) != 0)
-                            entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     if (strcmp(hitGetName(standOn), entry->hitObjName) != 0) {
                         entry->flags |= CASE_FLAG_TRIGGERED;
                     }
-#endif
                 } else {
-#if VERSION <= VERSION_DEMO_US
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     entry->flags |= CASE_FLAG_TRIGGERED;
-#endif
                 }
                 break;
             case CASE_UNDER:
-#if VERSION <= VERSION_DEMO_US
-                    if (under != NULL && !strcmp(hitGetName(under), entry->hitObjName))
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                 if (under != NULL && !strcmp(hitGetName(under), entry->hitObjName)) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
                 }
-#endif
                 break;
             case CASE_NOT_UNDER:
                 if (under != NULL) {
-#if VERSION <= VERSION_DEMO_US
-                        if (strcmp(hitGetName(under), entry->hitObjName) != 0)
-                            entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     if (strcmp(hitGetName(under), entry->hitObjName) != 0) {
                         entry->flags |= CASE_FLAG_TRIGGERED;
                     }
-#endif
                 } else {
-#if VERSION <= VERSION_DEMO_US
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     entry->flags |= CASE_FLAG_TRIGGERED;
-#endif
                 }
                 break;
             case CASE_FRONT:
-#if VERSION <= VERSION_DEMO_US
-                    if (front != NULL && !strcmp(hitGetName(front), entry->hitObjName))
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                 if (front != NULL && !strcmp(hitGetName(front), entry->hitObjName)) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
                 }
-#endif
                 break;
             case CASE_JUMP_FROM_A:
                 if (jumpFrom != NULL && mario->airTimer == 1 && fbatNpcTalkCheck() == NULL &&
                     !strcmp(hitGetName(jumpFrom), entry->hitObjName) && (mario->buttonTrg & PAD_BUTTON_A)) {
-#if VERSION <= VERSION_DEMO_US
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     entry->flags |= CASE_FLAG_TRIGGERED;
-#endif
                 }
                 break;
             case CASE_STAND_ON_A:
                 if (standOn != NULL && fbatNpcTalkCheck() == NULL &&
                     !strcmp(hitGetName(standOn), entry->hitObjName) && pressedA) {
-#if VERSION <= VERSION_DEMO_US
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     entry->flags |= CASE_FLAG_TRIGGERED;
-#endif
                 }
                 break;
             case CASE_STAND_ON_STICK:
                 if (standOn != NULL && !strcmp(hitGetName(standOn), entry->hitObjName) &&
-#if VERSION <= VERSION_DEMO_US
-                        (s8)mario->wStickDir2 > 30) {
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     mario->wStickDir2 > 30) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
-#endif
                 }
                 break;
             case CASE_STAND_ON_STICK_UP:
                 if (standOn != NULL && !strcmp(hitGetName(standOn), entry->hitObjName) &&
                     (keyGetDirTrg(0) & DEMO_STICK_UP)) {
-#if VERSION <= VERSION_DEMO_US
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     entry->flags |= CASE_FLAG_TRIGGERED;
-#endif
                 }
                 break;
             case CASE_FRONT_A:
                 if (front != NULL && fbatNpcTalkCheck() == NULL &&
                     !strcmp(hitGetName(front), entry->hitObjName) && pressedA) {
-#if VERSION <= VERSION_DEMO_US
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     entry->flags |= CASE_FLAG_TRIGGERED;
-#endif
                 }
                 break;
             case CASE_PUSH:
-#if VERSION <= VERSION_DEMO_US
-                    if (push != NULL && !strcmp(hitGetName(push), entry->hitObjName))
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                 if (push != NULL && !strcmp(hitGetName(push), entry->hitObjName)) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
                 }
-#endif
                 break;
             case CASE_NOT_PUSH:
-#if VERSION <= VERSION_DEMO_US
-                    if (push == NULL || strcmp(hitGetName(push), entry->hitObjName) != 0)
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                 if (push == NULL || strcmp(hitGetName(push), entry->hitObjName) != 0) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
                 }
-#endif
                 break;
             case CASE_PUSH_A:
                 if (push != NULL && fbatNpcTalkCheck() == NULL &&
                     !strcmp(hitGetName(push), entry->hitObjName) && pressedA) {
-#if VERSION <= VERSION_DEMO_US
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     entry->flags |= CASE_FLAG_TRIGGERED;
-#endif
                 }
                 break;
             case CASE_HAMMER:
-#if VERSION <= VERSION_DEMO_US
-                    if (hammer != NULL && !strcmp(hitGetName(hammer), entry->hitObjName))
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                 if (hammer != NULL && !strcmp(hitGetName(hammer), entry->hitObjName)) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
                 }
-#endif
                 break;
             case CASE_HAMMER_2:
                 if (hammer != NULL && mario->currMotionId == MARIO_MOTION_HAMMER_2 &&
                     !strcmp(hitGetName(hammer), entry->hitObjName)) {
-#if VERSION <= VERSION_DEMO_US
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     entry->flags |= CASE_FLAG_TRIGGERED;
-#endif
                 }
                 break;
             case CASE_BOBBERY:
                 party = partyGetPtr(marioGetPartyId());
                 if (party != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                     HitEntry* ph = party->hitobjAction;
-#if VERSION <= VERSION_DEMO_US
-                        if (ph != NULL && !strcmp(hitGetName(ph), entry->hitObjName))
-                            entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                     if (ph != NULL && !strcmp(hitGetName(ph), entry->hitObjName)) {
                         entry->flags |= CASE_FLAG_TRIGGERED;
                     }
-#endif
                 }
                 break;
             case CASE_HEAD:
-#if VERSION <= VERSION_DEMO_US
-                    if (head != NULL && !strcmp(hitGetName(head), entry->hitObjName))
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                 if (head != NULL && !strcmp(hitGetName(head), entry->hitObjName)) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
                 }
-#endif
                 break;
             case CASE_GSWF:
-#if VERSION <= VERSION_DEMO_US
-                    if (swGet(entry->swFlag))
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                 if (swGet(entry->swFlag)) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
                 }
-#endif
                 break;
             case CASE_LSWF:
-#if VERSION <= VERSION_DEMO_US
-                    if (_swGet(entry->swFlag))
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                 if (_swGet(entry->swFlag)) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
                 }
-#endif
                 break;
             case CASE_FUNC:
-#if VERSION <= VERSION_DEMO_US
-                    if (entry->activeFunc != NULL && ((s32 (*)(CaseEntry*))entry->activeFunc)(entry)) {
-                        entry->flags |= CASE_FLAG_TRIGGERED;
-#else
                 if (entry->activeFunc != NULL && ((s32 (*)(CaseEntry*))entry->activeFunc)(entry)) {
                     entry->flags |= CASE_FLAG_TRIGGERED;
-#endif
                 }
                 break;
             }
@@ -368,27 +261,13 @@ if ((u32)marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
         for (i = 0; i < wp->count; i++, entry++) {
             if ((entry->flags & CASE_FLAG_ACTIVE) && (entry->flags & CASE_FLAG_TRIGGERED)) {
                 EventEntry* evt;
-#if VERSION <= VERSION_DEMO_US
-                if (!evtCheckID(entry->evtId))
-                    entry->evtId = 0;
-#else
                 if (!evtCheckID(entry->evtId)) entry->evtId = 0;
-#endif
                 if (entry->evtId == 0) {
-#if VERSION <= VERSION_DEMO_US
                     evt = evtEntry(entry->evtCode, entry->priority, EVENT_START_IMMEDIATE);
-#else
-                    evt = evtEntry(entry->evtCode, entry->priority, EVENT_START_IMMEDIATE);
-#endif
                     evt->caseId = entry->caseId;
                     entry->evtId = evt->eventId;
                     memcpy(evt->lwData, entry->lwData, sizeof(entry->lwData));
-#if VERSION <= VERSION_DEMO_US
-                    if (entry->priority == 0x14)
-                        npcStopForEvent();
-#else
                     if (entry->priority == 0x14) npcStopForEvent();
-#endif
                 }
                 entry->flags &= ~CASE_FLAG_TRIGGERED;
             }

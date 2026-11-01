@@ -43,11 +43,7 @@ static PoseTableEntry pose_table_ceil[17];
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[14];
 #else
-#if VERSION <= VERSION_DEMO_US
-static PoseTableEntry pose_table_turn[14];
-#else
 static PoseTableEntry pose_table_turn[16];
-#endif
 #endif
 static BattleDataEntry data_table[4];
 static BattleDataEntry data_table_ceil[14];
@@ -63,11 +59,7 @@ static EvtWord init_event[12];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord init_event2[142];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord init_event2[142];
-#else
 static EvtWord init_event2[148];
-#endif
 #endif
 static EvtWord dmg_avoid_counter_thorn_head_event[61];
 static EvtWord damage_event[10];
@@ -79,29 +71,17 @@ static EvtWord damage_event_ceil[49];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord counter_damage_event_ceil[70];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord counter_damage_event_ceil[70];
-#else
 static EvtWord counter_damage_event_ceil[76];
 #endif
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord ceil_fall_ready_event[157];
-#else
 #if VERSION <= VERSION_DEMO_US
 static EvtWord ceil_fall_ready_event[157];
 #else
 static EvtWord ceil_fall_ready_event[163];
 #endif
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event_ceil[420];
-#else
 #if VERSION <= VERSION_DEMO_US
 static EvtWord attack_event_ceil[420];
 #else
 static EvtWord attack_event_ceil[426];
-#endif
 #endif
 static EvtWord wait_event_ceil[6];
 
@@ -240,11 +220,7 @@ static BattleWeapon weapon_patamet_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
-#if VERSION <= VERSION_DEMO_US
-    COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
-#else
     COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
-#endif
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -287,11 +263,7 @@ static StatusVulnerability regist_pata = {60, 90, 75, 100, 75, 100, 0, 75, 100, 
  * otherwise Sleep 75, Stop 90, Dizzy 75, Confuse 75, Freeze 75, Tiny 90, Attack Down 90, Defense Down 95,
  * Allergic 75, Fright 60, Gale Force 30, Slow 75 and instant KO 95.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist_pata = {60, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 65, 100, 75, 100, 100, 95};
-#else
 static StatusVulnerability regist_pata = {75, 90, 75, 100, 75, 100, 0, 75, 100, 90, 100, 90, 100, 95, 75, 60, 30, 100, 75, 100, 100, 95};
-#endif
 #endif
 
 /**
@@ -620,24 +592,6 @@ static PoseTableEntry pose_table_ceil[] = {
  * Pose table of the R. Parabuzzy flipped onto its back: maps its battle pose types (stay, walk, hurt,
  * dead, talk and so on) to animation names, 16 entries such as TMT_Y_2, TMT_S_3, TMT_Q_2, TMT_A_1.
  */
-#if VERSION <= VERSION_DEMO_US
-static PoseTableEntry pose_table_turn[] = {
-    {1, "TMT_Y_2"},
-    {2, "TMT_Y_2"},
-    {9, "TMT_Y_2"},
-    {5, "TMT_S_3"},
-    {4, "TMT_S_3"},
-    {3, "TMT_S_3"},
-    {BTL_POSE_NORMAL, "TMT_S_3"},
-    {29, "TMT_Q_2"},
-    {30, "TMT_Q_2"},
-    {31, "TMT_A_1"},
-    {BTL_POSE_DAMAGE, "TMT_S_3"},
-{POSE_TYPE_DANGER, "TMT_S_3"},
-    {POSE_TYPE_PERIL, "TMT_S_3"},
-    {POSE_TYPE_ACTION, "TMT_S_3"},
-};
-#else
 static PoseTableEntry pose_table_turn[] = {
     {1, "TMT_Y_2"},
     {2, "TMT_Y_2"},
@@ -658,7 +612,6 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_PERIL, "TMT_S_3"},
     {POSE_TYPE_ACTION, "TMT_S_3"},
 };
-#endif
 
 /**
  * Event table of the R. Parabuzzy: maps event tags to the scripts that react to them (dmg_turn_event
@@ -753,11 +706,7 @@ static BattleWeapon weapon_met_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
-#if VERSION <= VERSION_DEMO_US
-    COUNTER_RESIST_ALL, // counterResistFlags
-#else
     COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
-#endif
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -832,11 +781,7 @@ static BattleWeapon weapon_met_ceil_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
-#if VERSION <= VERSION_DEMO_US
-    COUNTER_RESIST_ALL, // counterResistFlags
-#else
     COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
-#endif
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -887,11 +832,7 @@ static StatusVulnerability regist = {60, 90, 75, 100, 75, 100, 0, 75, 100, 75, 1
  * otherwise Sleep 75, Stop 90, Dizzy 75, Confuse 75, Freeze 75, Tiny 90, Attack Down 90, Defense Down 95,
  * Allergic 75, Fright 60, Gale Force 30, Slow 75 and instant KO 95.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {60, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 65, 100, 75, 100, 100, 95};
-#else
 static StatusVulnerability regist = {75, 90, 75, 100, 75, 100, 0, 75, 100, 90, 100, 90, 100, 95, 75, 60, 30, 100, 75, 100, 100, 95};
-#endif
 #endif
 
 /**
@@ -920,47 +861,6 @@ EVT_END()
  * on the ceiling (1) the ceiling pose and data tables at height 130 with the ceiling scripts
  * and the fall script. Both set the run and walk sounds and clear the flipped-over count.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Installs the handlers for the spiked unit's current form, chosen by unit work 0:
- * on the ground (0) its normal wait, attack, damage and confusion scripts;
- * on the ceiling (1) the ceiling pose and data tables at height 130 with the ceiling scripts
- * and the fall script. Both set the run and walk sounds and clear the flipped-over count.
- */
-static EVT_BEGIN(init_event2)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_CRIMSON_PATATOGEMET_ON_CEILING, LW(15))
-    IF_INT_EQUAL(LW(15), 0)
-        CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
-        CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
-        CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
-        CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
-        CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kIsShelled)
-        CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-    ELSE
-        CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
-        CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_ceil))
-        CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_ceil))
-        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-        SET_VALUE(LW(1), 130)
-        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_ceil))
-        CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_ceil))
-        CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event_ceil))
-        CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event_ceil))
-        CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, PTR(ceil_fall_ready_event))
-        CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -50, 0)
-        CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, -50, 0)
-END_IF
-    CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_ENM_MET_MOVE1L"), STRING("SFX_ENM_MET_MOVE1R"), 0, 3, 3)
-    CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_ENM_MET_MOVE1L"), STRING("SFX_ENM_MET_MOVE1R"), 0, 6, 6)
-    CALL(btlevtcmd_SetOverTurnCount, UNIT_ID_SELF, 0)
-    RETURN
-EVT_END()
-#else
 /**
  * Installs the handlers for the spiked unit's current form, chosen by unit work 0:
  * on the ground (0) its normal wait, attack, damage and confusion scripts;
@@ -1003,7 +903,6 @@ static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_SetOverTurnCount, UNIT_ID_SELF, 0)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Spike spark shown when an attacker is hurt by (or avoids) the spiked head:
@@ -1297,31 +1196,6 @@ EVT_END()
  * leaves the ceiling state (ground pose and data tables, hit offsets, home position,
  * init_event2 for the ground form) and then applies the counter damage.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Counter-damage handler on the ceiling for the spiked unit:
- * leaves the ceiling state (ground pose and data tables, hit offsets, home position,
- * init_event2 for the ground form) and then applies the counter damage.
- */
-static EVT_BEGIN(counter_damage_event_ceil)
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-    CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CRIMSON_PATATOGEMET_ON_CEILING, 0)
-    CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-    CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
-    CALL_CHILD(init_event2)
-    SET_VALUE(LW(10), -2)
-    SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
-    CALL_CHILD(subsetevt_counter_damage)
-    RETURN
-EVT_END()
-#else
 /**
  * Counter-damage handler on the ceiling for the spiked unit:
  * leaves the ceiling state (ground pose and data tables, hit offsets, home position,
@@ -1348,7 +1222,6 @@ static EVT_BEGIN(counter_damage_event_ceil)
     CALL_CHILD(subsetevt_counter_damage)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Makes the ceiling spiked unit fall: plays the fall sound, drops it to the ground with the landing sound,
@@ -1356,47 +1229,6 @@ EVT_END()
  * then leaves it lying flipped over (turned tables, flipped-over count 1) after two bounces,
  * with its spike counter turned off.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Makes the ceiling spiked unit fall: plays the fall sound, drops it to the ground with the landing sound,
- * swaps to the ground tables and runs init_event2,
- * then leaves it lying flipped over (turned tables, flipped-over count 1) after two bounces,
- * with its spike counter turned off.
- */
-static EVT_BEGIN(ceil_fall_ready_event)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_FALL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_SetJumpSpeed, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.19921875f))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 20, LW(2), 15, -1)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEMET_LANDING1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_turn))
-    CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CRIMSON_PATATOGEMET_ON_CEILING, 0)
-    CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-    CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-CALL_CHILD(init_event2)
-    SET_VALUE(LW(10), -2)
-    SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
-    CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))
-    CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_turn))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_ACTION)
-    CALL(btlevtcmd_OnStatusFlag, LW(10), UNIT_STATUS_FLAG_FLIPPED)
-    CALL(btlevtcmd_SetOverTurnCount, LW(10), 1)
-    CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(1.0f))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 5, LW(2), 18, -1)
-    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 5, LW(2), 12, -1)
-    CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 5, LW(2))
-    CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterTopSpiky)
-    RETURN
-EVT_END()
-#else
 /**
  * Makes the ceiling spiked unit fall: plays the fall sound, drops it to the ground with the landing sound,
  * swaps to the ground tables and runs init_event2,
@@ -1439,7 +1271,6 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterTopSpiky)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Attack script on the ceiling for the spiked unit:
@@ -1448,126 +1279,6 @@ EVT_END()
  * then jumps back down, restores the ground form (init_event2) and walks home.
  */
 // Hanging from the ceiling, the R. Parabuzzy first checks whether to use a held item.
-#if VERSION <= VERSION_DEMO_US
-static EVT_BEGIN(attack_event_ceil)
-    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        // It picks a target; with none, it ends the turn (or flusters when confused).
-        CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
-    ELSE
-        CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(LW(0))
-            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-            RETURN
-        END_IF
-        CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
-        CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_met_ceil_attack))
-        CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_met_ceil_attack), LW(3), LW(4))
-    END_IF
-    IF_INT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(subsetevt_confuse_flustered)
-            RETURN
-        END_IF
-        GOTO(99)
-    END_IF
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(7), LW(8), LW(9))
-    CALL(evt_btl_camera_set_mode, 0, 8)
-    CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
-    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
-    CALL(evt_btl_camera_set_zoom, 0, 250)
-    CALL(evt_btl_camera_nomove_y_onoff, 0, 1)
-    CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_met_ceil_attack))
-    // The attack is declared and paid for.
-    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
-    CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_met_ceil_attack))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
-    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-    WAIT_MS(100)
-    // It slides along the ceiling until it is above the target.
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
-    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(10), LW(11), LW(12))
-    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(11), LW(12), 60, -1, 1)
-    // It lets go and drops with a falling sound.
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
-    WAIT_MS(250)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MET_FALL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_SetJumpSpeed, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.19921875f))
-    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 20, LW(2), 15, -1)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEMET_LANDING1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(evt_btl_camera_set_mode, 0, 0)
-    // The damage check decides between a miss and a hit.
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_met_ceil_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
-        GOTO(90)
-        CASE_END
-        CASE_EQUAL(3)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
-        GOTO(90)
-        CASE_END
-        CASE_EQUAL(6)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
-        GOTO(90)
-        CASE_EQUAL(2)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
-        GOTO(90)
-        CASE_EQUAL(1)
-        GOTO(91)
-        CASE_END
-        CASE_DEFAULT
-        GOTO(98)
-        CASE_END
-    END_SWITCH
-    // On a miss it lands beside the target.
-    LABEL(90)
-    GOTO(98)
-    // On a hit it lands on the target (guard check and damage).
-    LABEL(91)
-    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_met_ceil_attack))
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_met_ceil_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    GOTO(98)
-    LABEL(98)
-    WAIT_FRAMES(60)
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
-    // It sways while getting back on its feet, then goes back to its ground form.
-    CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-    CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CRIMSON_PATATOGEMET_ON_CEILING, 0)
-    CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-    CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
-    CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(3.0f), FLOAT(0.19921875f))
-    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 25)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MET_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 20, -1)
-    CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.5f), FLOAT(0.19921875f))
-    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 25)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MET_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 20, -1)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
-    CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(7), 0, LW(9))
-    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(7), 0, LW(9), 0, -1, 0)
-    CALL_CHILD(init_event2)
-    LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
-    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-    RETURN
-EVT_END()
-#else
 static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1690,7 +1401,6 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-#endif
 
 /** Idle script for the ceiling form: sets the standard waiting pose from the unit's pose table. */
 static EVT_BEGIN(wait_event_ceil)

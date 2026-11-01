@@ -64,16 +64,8 @@ static EvtWord damage_event[10];
 static EvtWord dead_event[183];
 static EvtWord blow_dead_event[98];
 #else
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[183];
-#else
 static EvtWord dead_event[189];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord blow_dead_event[98];
-#else
 static EvtWord blow_dead_event[104];
-#endif
 #endif
 static EvtWord battle_end_event[7];
 static EvtWord unison_phase_event[120];
@@ -172,19 +164,11 @@ BattleUnitKind unit_churantalar = {
     0,
     1,
     1,
-#if VERSION <= VERSION_DEMO_US
-    38,
-    0,
-    1,
-    70,
-    4,
-#else
     34,
     1,
     3,
     70,
     1,
-#endif
     50,
     9999,
     46,
@@ -264,11 +248,7 @@ static StatusVulnerability regist = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70,
  * otherwise Sleep 70, Stop 70, Dizzy 30, Confuse 70, Freeze 70, Tiny 80, Attack Down 80, Defense Down 85,
  * Allergic 70, Fright 80, Gale Force 30, Slow 70 and instant KO 30.
  */
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 80, 30, 100, 70, 100, 100, 30};
-#else
 static StatusVulnerability regist = {70, 70, 30, 100, 70, 100, 100, 70, 100, 80, 100, 80, 100, 85, 70, 80, 30, 100, 70, 100, 100, 30};
-#endif
 #endif
 
 /**
@@ -677,60 +657,6 @@ EVT_END()
  * hands the coins and experience to the battle and shows the star points, then tilts it for 30 frames,
  * hides its parts and kills the unit (moving it off screen from the JP release on).
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Death script of the Arantula (LW(10) is the dying unit):
- * spins it for 48 frames with the defeat sound, bursts it with an explosion effect,
- * hands the coins and experience to the battle and shows the star points, then tilts it for 30 frames,
- * hides its parts and kills the unit (moving it off screen from the JP release on).
- */
-static EVT_BEGIN(dead_event)
-    SET_VALUE(LW(0), 48)
-    CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    LABEL(10)
-    WAIT_FRAMES(1)
-    CALL(btlevtcmd_AddRotate, LW(10), 0, -15, 0)
-    SUBTRACT(LW(0), 1)
-    IF_INT_GREATER(LW(0), 0)
-        GOTO(10)
-    END_IF
-    CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
-    CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-    ADD(LW(2), 10)
-    CALL(evt_eff64, STRING(""), STRING("expbom_n64"), LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(btlevtcmd_GetCoin, LW(10), LW(0))
-    CALL(btlevtcmd_StoreCoin, LW(0))
-    CALL(btlevtcmd_GetExp, LW(10), LW(0))
-    CALL(btlevtcmd_StoreExp, LW(0))
-    CALL(btlevtcmd_GetPos, LW(10), LW(3), LW(1), LW(2))
-    ADD(LW(2), 10)
-    ADD(LW(1), 30)
-    CALL(_add_star_point_disp_offset, LW(10), LW(3), LW(1), LW(2))
-    CALL(evt_eff, STRING(""), STRING("star_point"), 0, LW(3), LW(1), LW(2), LW(0), 0, 0, 0, 0, 0, 0, 0)
-    IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        LOOP(LW(0))
-        END_LOOP
-    END_IF
-    CALL(btlevtcmd_SetRotateOffset, LW(10), 0, 0, 0)
-    SET_VALUE(LW(0), 30)
-    LABEL(20)
-    WAIT_FRAMES(1)
-    CALL(btlevtcmd_AddRotate, LW(10), 3, 0, 0)
-    SUBTRACT(LW(0), 1)
-    IF_INT_GREATER(LW(0), 0)
-        GOTO(20)
-    END_IF
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_NO_SHADOW)
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_NOT_TARGETABLE)
-    CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
-    CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
-    CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
-CALL(btlevtcmd_KillUnit, LW(10), 1)
-    RETURN
-EVT_END()
-#else
 /**
  * Death script of the Arantula (LW(10) is the dying unit):
  * spins it for 48 frames with the defeat sound, bursts it with an explosion effect,
@@ -786,47 +712,12 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Death script for when the Arantula is blown away:
  * plays the breath sound, spins it while it flies up and off the stage, then stores its coins and experience,
  * hides its parts and kills the unit (moving it off screen from the JP release on).
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Death script for when the Arantula is blown away:
- * plays the breath sound, spins it while it flies up and off the stage, then stores its coins and experience,
- * hides its parts and kills the unit (moving it off screen from the JP release on).
- */
-static EVT_BEGIN(blow_dead_event)
-    CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
-    CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), BTL_POSE_DAMAGE)
-    BEGIN_SIBLING_EVENT
-        LABEL(0)
-        CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 20, 0)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(2.0f))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetStageSize, LW(0), EVT_NULLPTR, EVT_NULLPTR)
-    ADD(LW(1), 40)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, 2, 0, -1)
-    CALL(btlevtcmd_GetCoin, LW(10), LW(0))
-    CALL(btlevtcmd_StoreCoin, LW(0))
-    CALL(btlevtcmd_GetExp, LW(10), LW(0))
-    CALL(btlevtcmd_StoreExp, LW(0))
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, PART_ATTR_NOT_TARGETABLE)
-    CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
-    CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
-    CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
-CALL(btlevtcmd_KillUnit, LW(10), 1)
-    RETURN
-EVT_END()
-#else
 /**
  * Death script for when the Arantula is blown away:
  * plays the breath sound, spins it while it flies up and off the stage, then stores its coins and experience,
@@ -862,7 +753,6 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
-#endif
 
 /** Battle-end script: sets unit work 1 (the yarn length) to 254 so the thread starts to shorten. */
 static EVT_BEGIN(battle_end_event)
@@ -1214,19 +1104,6 @@ static EVT_BEGIN(piders_attack_common_event1)
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
 #endif
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
-    ELSE
-        CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 40, 0)
-        ELSE
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 30, 0)
-        END_IF
-    END_IF
-#endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, 4, 0, 110, 5)
     LOOP(5)
@@ -1321,18 +1198,6 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
-#endif
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
-    ELSE
-        CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 40, 0)
-        ELSE
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 30, 0)
-        END_IF
-    END_IF
 #endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_ROTATION, LW(0))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
