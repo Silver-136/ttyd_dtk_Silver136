@@ -714,7 +714,7 @@ EVT_BEGIN(hei_10_init_evt)
         IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG1_06_01_GOLD_FUZZY)
                 CALL(evt_npc_set_position, STRING("ゴールドチョロボン"), 0, -15, 0)
-                CALL(evt_npc_change_fbat_mode, 1)
+                CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
                 SPAWN_EVENT(PTR(evt_golden))
             END_IF
         END_IF

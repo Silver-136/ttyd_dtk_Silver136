@@ -40,6 +40,7 @@
 #include "npc_event.h"
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
+#include "driver/npcdrv.h"
 GXColor HSV2RGB(GXColor hsv);
 extern EvtWord testnpc_move_event[];
 
@@ -159,7 +160,7 @@ EVT_BEGIN(tst_npc_init_evt)
     CALL(evt_npc_change_interrupt, STRING("NPC_01"), 8, PTR(tst_npc_talk_evt))
     CALL(evt_npc_reaction_flag_onoff, 1, STRING("NPC_01"), 2)
     CALL(evt_npc_flag_onoff, 1, STRING("NPC_01"), NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     SPAWN_EVENT(tst_npc_env_evt)
     RETURN
 EVT_END()

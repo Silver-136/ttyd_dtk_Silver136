@@ -29,6 +29,7 @@
 #include "evt/evt_sub.h"
 #include "mri.h"
 #include "data_tables.h"
+#include "driver/npcdrv.h"
 
 typedef struct Mri02Switch {
     f32 base;
@@ -473,7 +474,7 @@ EVT_BEGIN(mri_02_init_evt)
             CALL(evt_puni_dokan_onoff, STRING("dokan2"), 1)
         END_INLINE_EVENT
     END_IF
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     SET_VALUE(LW(0), STRING("S_sui_l_02"))
     SET_RAW_VALUE(LW(1), GW(0))
     SET_VALUE(LW(2), 9)

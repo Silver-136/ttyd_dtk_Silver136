@@ -394,6 +394,18 @@ typedef enum BattleFirstAttack {
     FIRST_ATTACK_ENEMY = 9,         // and above: the enemy strikes first
 } BattleFirstAttack;
 
+// FieldBattleData.mode (fbatChangeMode, evt_npc_change_fbat_mode): what the field NPC driver does each frame. 6 is
+// read like BATTLE (evt_npc.c) and handled in npcMain as no work, but nothing sets it.
+enum {
+    FBAT_MODE_OFF = 0,
+    FBAT_MODE_FIELD = 1,          // normal field play; hits and talk are checked
+    FBAT_MODE_TALK = 2,           // A pressed at talkTarget; fbatTalkMode
+    FBAT_MODE_REACTION_TALK = 3,  // fbatTalkMode, entered from an NPC's reaction
+    FBAT_MODE_BATTLE = 5,         // hit an enemy; fbatBattleMode
+    FBAT_MODE_EVENT = 7,          // events and menus own the field: no checks
+    FBAT_MODE_EVENT_MOBJ_ACTIVE = 8, // like EVENT, but mobjdrv keeps its objects running
+};
+
 typedef struct FieldBattleInfo {
     u32 mode; //0x0, unused
     BattleUnitType party; //0x4

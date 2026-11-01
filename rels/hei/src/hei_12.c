@@ -100,7 +100,7 @@ static EVT_BEGIN(evt_chorobon)
             CALL(evt_npc_flag_onoff, 1, STRING("チョロボン"), NPC_FLAG_ENEMY)
             CALL(evt_npc_flag_onoff, 0, STRING("チョロボン"), NPC_FLAG_NO_HIT)
         END_INLINE_EVENT
-        CALL(evt_npc_change_fbat_mode, 1)
+        CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     END_IF
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
@@ -126,9 +126,9 @@ EVT_BEGIN(hei_12_init_evt)
         CALL(evt_npc_restart_regular_event, STRING("チョロボン"))
         CALL(evt_npc_set_position, STRING("チョロボン"), 0, 400, 0)
         CALL(evt_npc_flag_onoff, 0, STRING("チョロボン"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
-        CALL(evt_npc_change_fbat_mode, 7)
+        CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     ELSE
-        CALL(evt_npc_change_fbat_mode, 1)
+        CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
 #if VERSION > VERSION_DEMO_US
         CALL(evt_npc_check, STRING("チョロボン"), LW(0))
         IF_INT_EQUAL(LW(0), 1)

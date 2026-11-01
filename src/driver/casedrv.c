@@ -122,7 +122,7 @@ void caseMain(void) {
     btn = mario->buttonTrg;
 #if VERSION <= VERSION_DEMO_US
     if ((u32)marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
-        ((fbatMode = fbatGetPointer()->mode) == 0 || fbatMode == 1) && marioCaseEventValidChk()) {
+        ((fbatMode = fbatGetPointer()->mode) == 0 || fbatMode == FBAT_MODE_FIELD) && marioCaseEventValidChk()) {
 #else
     if (marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
         !fbatPreventMarioEventChk() && marioCaseEventValidChk()) {

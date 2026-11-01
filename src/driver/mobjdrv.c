@@ -740,13 +740,13 @@ void mobjMain(void) {
             continue;
         }
 #if VERSION <= VERSION_DEMO_US
-        if (!(gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)))) {
+        if (!(gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > FBAT_MODE_FIELD && fbat != FBAT_MODE_EVENT_MOBJ_ACTIVE)))) {
 #else
         // retail (US on) reads inBattle again; `gp->inBattle != 0 ||` is always false here
 #if VERSION >= VERSION_US
-        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
+        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > FBAT_MODE_FIELD && fbat != FBAT_MODE_EVENT_MOBJ_ACTIVE)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
 #else
-        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8))) {
+        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > FBAT_MODE_FIELD && fbat != FBAT_MODE_EVENT_MOBJ_ACTIVE))) {
 #endif
             goto afterHit;
         }

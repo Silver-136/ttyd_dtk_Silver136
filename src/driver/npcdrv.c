@@ -501,7 +501,7 @@ void npcInit(void) {
     data = __memAlloc(HEAP_DEFAULT, sizeof(FieldBattleData));
     gp->fbatData = data;
     memset(gp->fbatData, 0, sizeof(FieldBattleData));
-    data->mode = 0;
+    data->mode = FBAT_MODE_OFF;
     npcMainCount = 0;
 }
 
@@ -514,7 +514,7 @@ void npcReset(BOOL inBattle) {
     memset(wp->entries, 0, sizeof(NpcEntry) * wp->total);
     wp->count = 0;
     if (!inBattle) {
-        gp->fbatData->mode = 0;
+        gp->fbatData->mode = FBAT_MODE_OFF;
     }
     npcMainCount = 0;
 }
@@ -1239,14 +1239,14 @@ void npcMain(void) {
             }
         }
         switch (fbat->mode) {
-            case 1:
+            case FBAT_MODE_FIELD:
                 npcKoopaModeMain();
                 break;
-            case 2:
-            case 3:
+            case FBAT_MODE_TALK:
+            case FBAT_MODE_REACTION_TALK:
                 fbatTalkMode();
                 break;
-            case 5:
+            case FBAT_MODE_BATTLE:
                 fbatBattleMode();
                 break;
             case 6:
@@ -1854,10 +1854,10 @@ static inline f32 fbat_camAngle(void) {
  */
 static inline BOOL fbat_setHit(NpcEntry* npc) {
     FieldBattleData* d = gp->fbatData;
-    if (d->mode != 1) {
+    if (d->mode != FBAT_MODE_FIELD) {
         return FALSE;
     }
-    d->mode = 5;
+    d->mode = FBAT_MODE_BATTLE;
     d->subState = 0;
     d->npc = npc;
     d->target = npc;
@@ -1902,7 +1902,7 @@ void fbatEncountCheck(void) {
     data = gp->fbatData;
     kind = (u32*)&data->hitKind;
     npc = fbatHitCheck(FBAT_CHECK_ENEMY | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_SPIN_HAMMER | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_TOUCH | FBAT_CHECK_CURRENT, kind);
-    if (npc && (data->mode == 1)) {
+    if (npc && (data->mode == FBAT_MODE_FIELD)) {
         AnimationPose *pose;
         f32 rel;
         f32 ang;
@@ -2111,10 +2111,10 @@ void fbatEncountCheck(void) {
         if (wp->talkTarget && (keyGetButtonTrg(0) & PAD_BUTTON_A)) {
             npc = wp->talkTarget;
             data = gp->fbatData;
-            if (data->mode != 1) {
+            if (data->mode != FBAT_MODE_FIELD) {
                 return;
             }
-            data->mode = 2;
+            data->mode = FBAT_MODE_TALK;
             data->subState = 0;
             data->npc = npc;
             npc->fbatHitKind = 0;
@@ -2122,18 +2122,18 @@ void fbatEncountCheck(void) {
         }
     }
     data = gp->fbatData;
-    if (data->mode == 1) {
+    if (data->mode == FBAT_MODE_FIELD) {
         u32 *kind = (u32*)&data->hitKind;
 #if VERSION <= VERSION_DEMO_US
         npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
 #else
         npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
 #endif
-        if (npc && (data->mode == 1)) {
+        if (npc && (data->mode == FBAT_MODE_FIELD)) {
             u32 k = *kind;
             FieldBattleData *d = gp->fbatData;
-            if (d->mode == 1) {
-                d->mode = 3;
+            if (d->mode == FBAT_MODE_FIELD) {
+                d->mode = FBAT_MODE_REACTION_TALK;
                 d->subState = 0;
                 d->npc = npc;
                 npc->fbatHitKind = k;
@@ -2175,7 +2175,7 @@ void fbatTalkMode(void) {
             marioKeyOff();
             partyKeyOff();
             switch (data->mode) {
-                case 3:
+                case FBAT_MODE_REACTION_TALK:
                     evt = evtEntry(npc->deadEvent, 0, 0);
                     evt->wNpcEventType = NPC_EVENT_TALK;
                     break;
@@ -2204,7 +2204,7 @@ void fbatTalkMode(void) {
                 marioKeyOn();
                 partyKeyOn();
                 marioChgStayMotion();
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 npcGetWorkPtrInline()->talkTarget = NULL;
             }
             break;
@@ -2298,19 +2298,19 @@ void fbatBattleMode(void) {
     switch (data->subState) {
         case 0:
             if (dbg_battleskip == 1) {
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 break;
             }
             if (!cur->battleInfo.groupSetup) {
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 break;
             }
             if (gp->systemLevelFlags & SYSTEM_LEVEL_NO_FIELD_BATTLE) {
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 break;
             }
             if (!cur->deadEvent) {
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 break;
             }
 #if VERSION <= VERSION_DEMO_US
@@ -2457,7 +2457,7 @@ void fbatBattleMode(void) {
 #endif
                     }
                 }
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 if (res == BATTLE_RESULT_WIN || res == BATTLE_RESULT_WIN_FIELD) {
                     mult = 1;
                     if (BattleInformationGetResult(info4) == BATTLE_RESULT_WIN) {
@@ -3751,7 +3751,7 @@ void npcKoopaModeEncountCheck(void) {
     wp = npcGetWorkPtrInline();
     total = wp->total;
 
-    if (data->mode == 1) {
+    if (data->mode == FBAT_MODE_FIELD) {
         entry = wp->entries;
         for (i = 0; i < total; i++, entry++) {
             if (entry && entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_2D && !(entry->statusFlags & NPC_STATUS_DEAD)) {

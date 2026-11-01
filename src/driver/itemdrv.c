@@ -285,7 +285,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    if (fbatMode != 0 && fbatMode != 1)
+    if (fbatMode != FBAT_MODE_OFF && fbatMode != FBAT_MODE_FIELD)
         return FALSE;
 #else
     if (fbatPreventMarioEventChk()) return FALSE;
@@ -362,7 +362,7 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    if (fbatMode != 0 && fbatMode != 1)
+    if (fbatMode != FBAT_MODE_OFF && fbatMode != FBAT_MODE_FIELD)
         return FALSE;
     return TRUE;
 #else

@@ -32,6 +32,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_hit.h"
 #include "system.h"
+#include "driver/npcdrv.h"
 
 //.sbss, NOTE: all are reversed because of -inline deferred
 s32 BeroEXEC;
@@ -1296,7 +1297,7 @@ EVT_BEGIN(bero_case_init_check)
         SET_VALUE(LW(0), 1)
         RETURN
     END_IF
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
@@ -1319,7 +1320,7 @@ EVT_BEGIN(bero_case_init_check)
     SET_VALUE(LW(15), 0)
     CALL_CHILD(LW(11))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_npc_change_fbat_mode, 1)
+        CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
         CALL(evt_npc_start_for_event)
         CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
         CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
@@ -1615,7 +1616,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
     END_IF
 
     // Field enemies resume and the exits are live again.
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
     CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
@@ -1957,7 +1958,7 @@ EVT_BEGIN(evt_bero_info_run)
         IF_BITS_CLEAR(LW(0), BERO_EXEC_KEEP_MOVING)
             CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MARIO_MOVING)
         END_IF
-        CALL(evt_npc_change_fbat_mode, 1)
+        CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
         CALL(evt_npc_start_for_event)
         CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
         CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
@@ -2093,7 +2094,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_bero_mario_enter)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     CALL_CHILD(LW(7))
     IF_INT_EQUAL(LW(0), 1)
@@ -2126,7 +2127,7 @@ EVT_BEGIN(evt_bero_mario_enter)
         CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MARIO_MOVING)
     END_IF
     LABEL(100)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     CALL_CHILD(PTR(bero_case_entry))
     CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)

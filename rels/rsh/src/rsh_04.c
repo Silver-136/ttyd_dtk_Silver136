@@ -1989,7 +1989,7 @@ EVT_END()
 static USER_FUNC(mario_flag) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
-    if (fbatGetPointer()->mode == 2 || winGhostDiaryChk()) {
+    if (fbatGetPointer()->mode == FBAT_MODE_TALK || winGhostDiaryChk()) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);

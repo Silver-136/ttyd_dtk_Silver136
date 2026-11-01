@@ -10,6 +10,7 @@
 #include "party/party_motion.h"
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
+#include "driver/npcdrv.h"
 
 
 static EvtWord door02_close[22];
@@ -123,7 +124,7 @@ EVT_BEGIN(gon_10_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON3"))
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -460, 1010, -145, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 6, -400, 1010, -146, 0, 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)

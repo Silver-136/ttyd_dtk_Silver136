@@ -690,7 +690,7 @@ EVT_BEGIN(mri_05_init_evt)
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG2_25_01_PEACH_CRUMP_X_NAUTS)
         CALL(evt_npc_check_delete, STRING("軍団ザコ"))
     END_IF
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     SET_VALUE(LW(0), PTR(ueki_access_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     SWITCH(GSW_STORY_PROGRESS)

@@ -507,7 +507,7 @@ EVT_BEGIN(nokotaro_party_lecture)
     END_INLINE_EVENT
     CALL(x_flag_wait, 0, 0)
 #endif
-    CALL(evt_npc_change_fbat_mode, 8)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT_MOBJ_ACTIVE)
     SET_VALUE(LW(8), 2)
     LOOP(LW(8))
         SWITCH(LW(8))
@@ -573,7 +573,7 @@ EVT_BEGIN(nokotaro_party_lecture)
 
     // The camera and Koops are restored and the lecture ends with a last tip.
     CALL(evt_cam_letter_box_disable, 0)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(x_flag_set, 0, 1)
     BEGIN_INLINE_EVENT
         CALL(evt_party_stop, 0)

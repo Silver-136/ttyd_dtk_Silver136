@@ -501,28 +501,28 @@ next:
                 }
                 part->poseState = 0;
                 if (part->animFlags & PART_ANIM_PERA) {
-                    part->poseType = 0;
+                    part->poseType = PART_LOOK_NONE;
                 } else {
-                    part->poseType = 1;
+                    part->poseType = PART_LOOK_NORMAL;
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
-                        part->poseType = 7;
+                        part->poseType = PART_LOOK_XLU;
                         xlu = 1;
                     }
                 }
                 if (!(part->animFlags & PART_ANIM_EVENT_POSE) || (part->animFlags & PART_ANIM_DAMAGE_POSE) || (part->animFlags & PART_ANIM_COMMAND_POSE)) {
-                    part->poseType = 1;
+                    part->poseType = PART_LOOK_NORMAL;
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
-                        part->poseType = 7;
+                        part->poseType = PART_LOOK_XLU;
                         xlu = 1;
                     }
                     if (BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
-                        part->poseType = 4;
+                        part->poseType = PART_LOOK_DODGY;
                         xlu = 1;
                     }
                 }
                 if (xlu && (part->attributes & kNoTranslucentLook)) {
                     xlu = 0;
-                    part->poseType = 0;
+                    part->poseType = PART_LOOK_NONE;
                 }
                 if (!(part->animFlags & PART_ANIM_PERA)) {
                     if (xlu && !(part->animFlags & PART_ANIM_XLU)) {
@@ -1067,7 +1067,7 @@ void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL damagePose)
 /** Plays a paper effect animation (pera) on a part, for flattened and similar effects, with the plain draw type. */
 void btlDispChangePeraAnime(BattleUnitPart* part, const char* name) {
     part->animFlags |= PART_ANIM_PERA;
-    part->poseType = 0;
+    part->poseType = PART_LOOK_NONE;
     animPoseSetEffectAnim(part->poseId, name, 1);
 }
 
@@ -1148,16 +1148,16 @@ f32 getFloatDispOffset(BattleUnitPart* part) {
  */
 void statusPoseControl(BattleUnitPart* part) {
     switch (part->poseType) {
-        case 0:
+        case PART_LOOK_NONE:
             break;
-        case 2:
-        case 3:
-        case 7:
+        case PART_LOOK_PM_C_UNUSED:
+        case PART_LOOK_PM_F_UNUSED:
+        case PART_LOOK_XLU:
             _pose_one_pattern(part);
             break;
-        case 4:
-        case 5:
-        case 6:
+        case PART_LOOK_DODGY:
+        case PART_LOOK_PM_C2_UNUSED:
+        case PART_LOOK_PM_F2_UNUSED:
             _pose_two_pattern(part);
             break;
         default:
@@ -1190,15 +1190,15 @@ void _pose_one_pattern(BattleUnitPart* part) {
     case 0:
         part->poseState = 1;
         switch (part->poseType) {
-            case 2:
+            case PART_LOOK_PM_C_UNUSED:
                 animPoseSetEffect(part->poseId, "p_b_st", 1);
                 animPoseSetEffectAnim(part->poseId, "PM_C_1A", 1);
                 break;
-            case 3:
+            case PART_LOOK_PM_F_UNUSED:
                 animPoseSetEffect(part->poseId, "p_b_st", 1);
                 animPoseSetEffectAnim(part->poseId, "PM_F_1A", 1);
                 break;
-            case 7:
+            case PART_LOOK_XLU:
                 animPoseSetEffect(part->poseId, "p_b_st", 1);
                 animPoseSetEffectAnim(part->poseId, "PM_Y_1A", 1);
                 break;
@@ -1217,17 +1217,17 @@ void _pose_two_pattern(BattleUnitPart* part) {
         case 0:
             part->poseState = 1;
             switch (part->poseType) {
-                case 4:
+                case PART_LOOK_DODGY:
                     animPoseSetEffect(part->poseId, "p_b_st", 1);
                     animPoseSetEffectAnim(part->poseId, "PM_Y_1B", 1);
                     part->poseTimer = sysMsec2Frame(2200);
                     break;
-                case 5:
+                case PART_LOOK_PM_C2_UNUSED:
                     animPoseSetEffect(part->poseId, "p_b_st", 1);
                     animPoseSetEffectAnim(part->poseId, "PM_C_1A", 1);
                     part->poseTimer = (irand(4) + 6) * sysMsec2Frame(2200);
                     break;
-                case 6:
+                case PART_LOOK_PM_F2_UNUSED:
                     animPoseSetEffect(part->poseId, "p_b_st", 1);
                     animPoseSetEffectAnim(part->poseId, "PM_F_2", 1);
                     part->poseTimer = (irand(4) + 7) * 22;
@@ -1236,14 +1236,14 @@ void _pose_two_pattern(BattleUnitPart* part) {
             break;
         case 1:
             switch (part->poseType) {
-                case 4:
+                case PART_LOOK_DODGY:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         animPoseSetEffectAnim(part->poseId, "PM_Y_1B", 1);
                         part->poseTimer = sysMsec2Frame(2200);
                     }
                     break;
-                case 5:
+                case PART_LOOK_PM_C2_UNUSED:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         part->poseState = 2;
@@ -1251,7 +1251,7 @@ void _pose_two_pattern(BattleUnitPart* part) {
                         part->poseTimer = 22;
                     }
                     break;
-                case 6:
+                case PART_LOOK_PM_F2_UNUSED:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         part->poseState = 2;
@@ -1263,21 +1263,21 @@ void _pose_two_pattern(BattleUnitPart* part) {
             break;
         case 2:
             switch (part->poseType) {
-                case 4:
+                case PART_LOOK_DODGY:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         part->poseState = 0;
                         _pose_two_pattern(part);
                     }
                     break;
-                case 5:
+                case PART_LOOK_PM_C2_UNUSED:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         part->poseState = 0;
                         _pose_two_pattern(part);
                     }
                     break;
-                case 6:
+                case PART_LOOK_PM_F2_UNUSED:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         part->poseState = 0;

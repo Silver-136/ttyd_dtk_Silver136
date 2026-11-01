@@ -245,7 +245,7 @@ static EVT_BEGIN(hashira_evt)
     END_IF
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_set_link, STRING("シンエモン1"), STRING("シンエモン2"))
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_mario_key_onoff, 1)
     IF_INT_EQUAL(LW(2), 0)
         IF_INT_EQUAL(GF(1), 1)

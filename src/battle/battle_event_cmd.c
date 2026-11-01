@@ -5793,9 +5793,9 @@ USER_FUNC(btlevtcmd_AnimeChangePoseDirect) {
     part->animFlags &= ~PART_ANIM_COMMAND_POSE;
     part->animFlags &= ~PART_ANIM_BURNT;
     animPoseSetAnim(part->poseId, name, TRUE);
-    part->poseType = 1;
+    part->poseType = PART_LOOK_NORMAL;
     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
-        part->poseType = 7;
+        part->poseType = PART_LOOK_XLU;
     }
     return EVT_RETURN_DONE;
 }

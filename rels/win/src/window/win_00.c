@@ -317,7 +317,7 @@ EVT_BEGIN(witchtrio_momeru)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
 
     // Mario, his partner and Punio walk in and spot the Sirens.
@@ -528,7 +528,7 @@ EVT_BEGIN(witchtrio_momeru)
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     RETURN
 EVT_END()
@@ -576,7 +576,7 @@ EVT_BEGIN(witchtrio_picture)
     CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_HIT | NPC_FLAG_VIVIAN_TYPE | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
 
     // Vivian protests that Beldam had the sketch all along; Beldam tells her to study it instead.
@@ -696,7 +696,7 @@ EVT_BEGIN(mario_vs_witchtrio)
     END_LOOP
 
     // Everyone stops; Mario and his party face west as the Sirens notice them.
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -842,7 +842,7 @@ EVT_END()
 
 EVT_BEGIN(get_necklace)
     CALL(item_check_necklace_exist)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT
@@ -874,7 +874,7 @@ EVT_BEGIN(get_necklace)
     END_IF
     CALL(evt_msg_print, 0, STRING("stg2_win_e08_03"), 0, STRING("extparty"))
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     RETURN
 EVT_END()
@@ -1035,7 +1035,7 @@ EVT_BEGIN(witchtrio_lose)
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     RETURN
 EVT_END()

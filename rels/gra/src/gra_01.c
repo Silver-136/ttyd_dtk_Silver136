@@ -16,6 +16,7 @@
 #include "evt/evt_mobj.h"
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
+#include "driver/npcdrv.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -90,7 +91,7 @@ EVT_BEGIN(gra_01_after_ranpel2)
     CALL(evt_party_set_homing_dist, 0, FLOAT(50.0f))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     RETURN
 EVT_END()
 

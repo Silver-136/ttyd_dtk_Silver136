@@ -256,7 +256,7 @@ void winMain(void) {
                 } else {
                     npcStopForEvent();
                 }
-                fbatChangeMode(7);
+                fbatChangeMode(FBAT_MODE_EVENT);
 #if VERSION <= VERSION_DEMO_US
                 marioCtrlOff2();
 #else
@@ -373,7 +373,7 @@ void winMain(void) {
                 }
 #endif
                 partyCtrlOn();
-                fbatChangeMode(1);
+                fbatChangeMode(FBAT_MODE_FIELD);
                 psndClearFlag(PSND_FLAG_MUTE_SFX);
                 statusWinForceUpdate();
                 if (!(wp->flags & WINDOW_FLAG_LECTURE)) {

@@ -31,6 +31,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "system.h"
 #include "evt/evt_bero.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(mario_set_dir);
 static void callback(s32 type, void** work);
@@ -825,7 +826,7 @@ EVT_BEGIN(hei_07_init_evt)
         CALL_CHILD(PTR(bero_case_switch_on))
         CALL(evt_map_playanim, STRING("anm_sekizou"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -120, 60, -75, 0, 0)
     RETURN
 EVT_END()
