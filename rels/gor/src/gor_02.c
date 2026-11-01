@@ -6155,9 +6155,6 @@ EVT_BEGIN(epigraphy_map_after_stage1)
     CALL(evt_mapobj_rotate, 1, STRING("S_open_book_r"), 0, 0, 180)
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-
-    // The partner and Frankly talk about the light that shone on Mario;
-    // Frankly offers to show the special move outside.
     CALL(evt_fade_entry, 1, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
@@ -6170,8 +6167,6 @@ EVT_BEGIN(epigraphy_map_after_stage1)
     CALL(evt_msg_print_party, STRING("mac_1_008"))
     CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-
-    // He learns that Princess Peach sent the map and had visited him.
     CALL(evt_msg_print, 0, STRING("mac_1_009"), 0, STRING("クリハカセ"))
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -6221,6 +6216,8 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(2000)
+
+    // A caption narrates the visit; the screen irises out and back in on the inside of the house.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_2_002_01"), 0, 0)
     CALL(evt_fade_entry, 2, 500, 0, 0, 0)
@@ -6233,6 +6230,8 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
     CALL_CHILD(PTR(book_close))
+
+    // Frankly and the partner study the map; the camera moves in as he works out the next Crystal Star.
     CALL(evt_msg_print, 0, STRING("mac_2_002_02"), 0, STRING("クリハカセ"))
     CALL(evt_msg_print_party, STRING("mac_2_002_03"))
     CALL(evt_cam3d_evt_set, -140, 70, 4, -140, 32, -218, 500, EASING_SINE_IN_OUT)
@@ -6337,6 +6336,8 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(2000)
+
+    // A caption narrates the visit; the screen irises out and back in on the inside of the house.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_3_001_01"), 0, 0)
     CALL(evt_fade_entry, 2, 500, 0, 0, 0)
@@ -6350,6 +6351,8 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     CALL(evt_fade_entry, 1, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
+
+    // Frankly and the partner study the map and he starts to decipher it.
     CALL(evt_msg_print, 0, STRING("mac_3_001_02"), 0, STRING("クリハカセ"))
     WAIT_MS(250)
     CALL(evt_msg_print_party, STRING("mac_3_001_03"))
@@ -6372,6 +6375,8 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     CALL(evt_msg_print_party, STRING("mac_3_003"))
     CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
     WAIT_MS(750)
+
+    // Frankly goes to fetch a book from his shelf and puts it on the table.
     CALL(evt_msg_print, 0, STRING("mac_3_004"), 0, STRING("クリハカセ"))
     BEGIN_INLINE_EVENT
         CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 500, EASING_SINE_IN_OUT)
@@ -6386,6 +6391,9 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     WAIT_MS(500)
     CALL_CHILD(PTR(book_open))
     WAIT_MS(500)
+
+    // He gets an idea and explains where the next Crystal Star lies;
+    // if the Twilight Town pipe has not been found yet he adds a hint.
     CALL(evt_npc_move_position, STRING("クリハカセ"), -145, -225, 0, FLOAT(60.0f), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クリハカセ"), 0, 0, 0, 0, 0, 0, 0, 30)
     WAIT_MS(500)
@@ -6396,6 +6404,8 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     ELSE
         CALL(evt_msg_print_party, STRING("mac_3_007"))
         CALL(evt_msg_print, 0, STRING("mac_3_009"), 0, STRING("クリハカセ"))
+
+        // The partner comments; Frankly stares in surprise before answering.
         WAIT_MS(1500)
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クリハカセ"), 0, 0, 0, 0, 0, 0, 0, 60)
         WAIT_MS(1000)
@@ -6607,8 +6617,6 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     WAIT_MS(500)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)
     WAIT_MS(200)
-
-    // The partner and Frankly wish them luck; Frankly stays behind in town.
     CALL(evt_npc_move_position, STRING("クリハカセ"), -135, -225, 0, FLOAT(60.0f), 0)
     WAIT_MS(500)
     CALL(evt_mapobj_get_position, STRING("S_open_book"), LW(0), LW(1), LW(2))
@@ -6986,8 +6994,6 @@ EVT_END()
  */
 static EVT_BEGIN(epilogue_evt_sub)
     WAIT_MS(2000)
-
-    // A caption narrates the visit; the screen irises out and back in on the inside of the house.
     LOOP(0)
         CALL(evt_npc_move_position, STRING("クリスチーヌ"), -170, -225, 0, 60, 0)
         CALL(evt_npc_set_ry, STRING("クリハカセ"), 270)
@@ -7026,8 +7032,6 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_fade_end_wait)
     CALL(evt_msg_print, 0, STRING("ep_36"), 0, 0)
     WAIT_MS(1000)
-
-    // Frankly and the partner study the map and he starts to decipher it.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 900, FADE_IN_BLACK, 900)

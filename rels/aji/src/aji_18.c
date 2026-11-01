@@ -336,8 +336,9 @@ static USER_FUNC(sysflag) {
  * STG7_16_FACTORY_DOOR on), attaches evt_machine to each empty slot
  * and locks the exit e_bero (key_lock_koujyou) before that point and between Lord Crump's defeat
  * and STG7_25_00_1_BOWSER_POSHLEY_SANCTUM.
- * In that last stretch, entering from e_bero puts a partner back with Mario if he has none,
- * heals Mario and the partners, and starts evt_koopa_after.
+ * In that last stretch, entering from e_bero puts a partner back with Mario if he has none
+ * and starts evt_koopa_after. US and PAL heal Mario and the partners on each such entry;
+ * JP and the demos heal them only in the missing-partner branch.
  */
 EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
@@ -417,6 +418,9 @@ EVT_BEGIN(aji_18_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
+
+    // In that stretch, entering from the east door restores a missing partner, heals (where differs by version,
+    // below) and starts evt_koopa_after.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
         CALL(evt_bero_get_entername, LW(0))
@@ -429,7 +433,7 @@ EVT_BEGIN(aji_18_init_evt)
             END_IF
 #endif
 
-                // US recovery is outside the missing-partner branch; the other version keeps it inside.
+            // US recovery is outside the missing-partner branch; the other version keeps it inside.
             CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
 #if VERSION >= VERSION_US

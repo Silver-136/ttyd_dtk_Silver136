@@ -1731,7 +1731,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
     CALL(evt_npc_move_position, STRING("マフィアボス"), -290, -140, 0, FLOAT(80.0f), 0)
     CALL(evt_npc_move_position, STRING("マフィアボス"), -290, -400, 0, FLOAT(80.0f), 0)
 
-    // Guess: Don Pianta reappears in the casino downstairs as its boss.
+    // His NPC is moved out of the scene (y -1000) and his casino NPC (マフィアボスカジノ) is placed instead.
     CALL(evt_npc_set_position, STRING("マフィアボス"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("マフィアボスカジノ"), -270, 0, -450)
     CALL(evt_npc_set_ry, STRING("マフィアボスカジノ"), 180)

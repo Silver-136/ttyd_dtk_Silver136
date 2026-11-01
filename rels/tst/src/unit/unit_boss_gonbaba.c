@@ -1368,10 +1368,9 @@ EVT_BEGIN(gonbaba_damage_sub_event)
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_WaitAttackEnd)
 #endif
+    // When the cricket sound finishes her off for the first or second time she complains about the awful chirping.
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
-
-    // She yells for Mario to wait.
     CALL(evt_btl_camera_set_prilimit, 1)
     CALL(evt_btl_camera_wait_move_end)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
@@ -1793,8 +1792,6 @@ EVT_BEGIN(firebreath_attack_event)
     // The flame travels toward the target before the damage check.
     WAIT_FRAMES(LW(12))
     SET_VALUE(LW(10), 0)
-
-    // She says she gives up and offers 1,000 coins in apology, a yes/no choice.
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_gonbaba_firebreath_attack), 256, LW(5))
     SWITCH(LW(5))
@@ -1824,9 +1821,6 @@ EVT_BEGIN(firebreath_attack_event)
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_gonbaba_firebreath_attack))
     END_IF
-
-    // If he refuses all three offers, he shakes his head once more, she complains that he is not very
-    // trusting and the bite is skipped.
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_gonbaba_firebreath_attack), 256, LW(5))
     GOTO(97)
     LABEL(97)
@@ -1834,8 +1828,6 @@ EVT_BEGIN(firebreath_attack_event)
     IF_INT_NOT_EQUAL(LW(3), -1)
         // Each target in turn dodges or takes the burn.
         WAIT_FRAMES(20)
-
-        // She admits things are not looking good and says she had better do something.
         ADD(LW(10), 1)
         GOTO(10)
     END_IF

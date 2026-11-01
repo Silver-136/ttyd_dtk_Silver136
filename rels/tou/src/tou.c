@@ -3078,6 +3078,7 @@ EVT_BEGIN(evt_michel_8)
     CALL(evt_npc_move_position, STRING("ポグ"), -70, -120, 0, FLOAT(80.0f), 1)
     WAIT_MS(1000)
 #endif
+    // Swoop uses the terminal and Grubba books his first match over the monitor.
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_34"), 0, STRING("キノシコワ"))
     CALL(evt_npc_get_position, STRING("ポグ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("ポグ"), LW(0), LW(1), LW(2), 500, 30)
@@ -3126,8 +3127,6 @@ EVT_BEGIN(evt_michel_8)
             BREAK_LOOP
         END_IF
     END_LOOP
-
-// Jolene shows Swoop his dressing room and the match terminal, and Mario steps aside.
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_set_position, STRING("ガードマン"), 0, 0, -170)
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -120, 0, FLOAT(80.0f), 1)
@@ -3198,8 +3197,6 @@ EVT_BEGIN(evt_michel_8)
         CALL(evt_npc_set_position, STRING("ポグ"), 0, -1000, 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
-
-    // Swoop uses the terminal and Grubba books his first match over the monitor.
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -120, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -200, 0, FLOAT(80.0f), 1)
@@ -3251,8 +3248,6 @@ EVT_BEGIN(evt_mail_1)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_MAIL_RECEPTION2"))
     SPAWN_EVENT_GET_ID(PTR(evt_sub_mail_vibration), LW(10))
     WAIT_MS(500)
-
-    // Jolene explains how fights work, then Swoop introduces himself.
     CALL(evt_msg_print_party, STRING("stg3_tou_297_03"))
     LOOP(0)
         IS_EVENT_RUNNING(LW(11), LW(12))

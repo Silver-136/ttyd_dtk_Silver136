@@ -2077,8 +2077,6 @@ EVT_BEGIN(rival_nakama)
         END_INLINE_EVENT
         ADD(LW(10), 1)
     END_LOOP
-
-    // The Puni Elder bars the way; Crump scoffs and calls her an old geezer.
     CALL(evt_puni_all_movestop, 0)
     WAIT_MS(700)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
@@ -2120,8 +2118,6 @@ EVT_BEGIN(elder_kaisetsu)
         CALL(evt_msg_print, 0, STRING("stg2_mri_e15_19"), 0, STRING("プニ族長老"))
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
-
-    // The Elder's back gives out as she tries to stand up to him.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_get_mov_spd, LW(10))
     SET_FLOAT_VALUE(LW(11), LW(10))
@@ -2485,6 +2481,8 @@ EVT_BEGIN(boss_battle)
             BREAK_LOOP
         END_IF
     END_LOOP
+
+    // The Puni Elder bars the way; Crump scoffs and calls her an old geezer.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e24_00"), 0, STRING("プニ族長老"))
     CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("第三勢力幹部"), LW(0), LW(1), LW(2), 225, 30)
@@ -2537,6 +2535,8 @@ EVT_BEGIN(boss_battle)
         SET_FLOAT_VALUE(LW(0), FLOAT(0.39941406f))
         CALL(evt_npc_set_scale, STRING("第三勢力幹部"), LW(0), LW(0), LW(0))
     END_INLINE_EVENT
+
+    // The Elder's back gives out as she tries to stand up to him.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e24_02"), 0, STRING("プニ族長老"))
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, FLOAT(3.0f), FLOAT(1.0f), 200)

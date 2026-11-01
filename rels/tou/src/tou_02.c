@@ -981,7 +981,6 @@ EVT_END()
 EVT_BEGIN(talk_kinopiko)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        // Before Gonzales debuts the son is a fan of Prince Mush.
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_07_01"), 0, 0)
         CASE_LESS(STG3_32_BOSS_BATTLE)
         CALL(evt_tou_get_ranking, LW(0))
@@ -1702,9 +1701,8 @@ ExtTexInfo ext_fan_data[] = {
 };
 
 /**
- * Init callback of the lobby fan crowd (extdrv sprites): allocates FanWork and one Fan per pose, gives each fan
- * a random facing, a random Toad, Toadette or Lakitu walk animation and a random spot within 100 of the centre,
- * and starts the crowd noise SFX_STG3_AUDIENCE_FAN1, keeping its full volume.
+ * Initializes FanWork and one Fan per extdrv pose with a random facing and one of the three walk animations.
+ * X and Z are sampled independently with randf(-100, 100). Starts SFX_STG3_AUDIENCE_FAN1 and stores its initial volume.
  */
 #if VERSION <= VERSION_DEMO_US
 static void ext_fan_init(void) {
@@ -1774,11 +1772,12 @@ void fan_disp(CameraId camera, void* param) {
 #pragma opt_propagation off
 static Vec fan_zero;
 /**
- * Per-frame callback of the fan crowd: the fans press toward the target (Mario when GF(10) is set, otherwise the
- * champion, with Mario also in the crowd), push each other apart and bounce off walls; a fan that Mario's hammer
- * hits (check_hammer 1) flies off in an arc, one caught in Flurrie's gust (2) drifts away, and both then vanish;
- * the crowd noise follows the target and its volume the share of fans left (count).
- * The demos and the releases have different bodies.
+ * Updates the crowd toward Mario when GF(10) is set, otherwise チャンピョン, with repulsion between walking fans.
+ * check_hammer results 1 and 2 start the arc and drift states, then hide the sprite.
+ * Crowd sound follows the target; volume is scaled by the walking-fan count.
+ * Demos: walking fans are clamped to Z = -190..190.
+ * Retail: hidden actor anchors join the repulsion, walking fans reflect velocity on a hit query and are also
+ * position-clamped, and the count excludes flagged anchors.
  */
 #if VERSION <= VERSION_DEMO_US
 static void ext_fan_main(void) {
@@ -2308,8 +2307,8 @@ void ext_fan_dispent(void) {
 
 #pragma opt_propagation off
 /**
- * Checks whether a fan is knocked away, only while Mario is on the ground: returns 1 when his hammer swing (more
- * than 10 frames in) lands within 35 of the fan 35 in front of him,
+ * Checks whether a fan is knocked away while Mario's Y is at most zero: returns 1 during hammer motion after
+ * more than 10 callback updates, when the fan is within 35 of the point 35 units ahead,
  * or his spin hammer (submotion 0x14) is within 65;
  * 2 when Flurrie's gust reaches within 30 of it; 0 otherwise. In JP and later, the fan standing in for Mario or
  * the champion (flags bit 1) is never hit.

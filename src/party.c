@@ -1573,6 +1573,7 @@ s32 partyGoodbyeMain(PartyEntry* party) {
 static inline void partyChgRunM(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
 }
+
 /**
  * Puts the partner in the pipe with Mario (run mode 10):
  * she takes Mario's position facing backwards and turns into the spinning pipe paper,

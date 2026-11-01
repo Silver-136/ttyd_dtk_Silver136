@@ -236,8 +236,8 @@ static EVT_BEGIN(first_evt)
 EVT_END()
 
 /**
- * Case script on the shut west door w_bero (from STG7_25_THE_LAST_MAIL on):
- * freezes Mario and shows the "door won't open" text stg7_aji_64.
+ * Case script on the shut west door w_bero (STG7_25_THE_LAST_MAIL through STG8_END_AFTER_THE_BATTLE):
+ * disables Mario's input and shows the "door won't open" text stg7_aji_64.
  */
 static EVT_BEGIN(evt_door_msg)
     CALL(evt_mario_key_onoff, 0)

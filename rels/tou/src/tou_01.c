@@ -701,7 +701,8 @@ static ShopperData35 shopper_data = {
 };
 
 /**
- * Talk script of the hot dog vendor (ホットドッグ): he offers a Hot Dog on the house (stg3_tou_13 and a yes/no choice)
+ * Talk script of the hot dog vendor (ホットドッグ): he offers a Hot Dog for 10 coins (stg3_tou_13, or stg3_tou_13_01
+ * with Yoshi active, and a yes/no choice)
  * and adds it to the pouch, or tells Mario to sell it if the inventory is full.
  */
 // Charge only after the item was successfully added to the pouch.
@@ -900,7 +901,7 @@ EVT_END()
 
 /**
  * Talk script of the blimp operator: offers a ride back to Rogueport (stg3_tou_00 with yes/no);
- * on yes Mario shows the Blimp Ticket and the scene continues, on no he stays (stg3_tou_01).
+ * on yes Mario shows the Blimp Ticket (stg3_tou_01) and the scene continues, on no he stays (stg3_tou_02).
  */
 EVT_BEGIN(talk_hikuu)
     CALL(evt_msg_print, 0, STRING("stg3_tou_00"), 0, 0)
@@ -1736,7 +1737,7 @@ static EVT_BEGIN(init_sarary)
 EVT_END()
 
 /**
- * Menu helper: asks "pick a number" (irai_24_010/011) on two pages to return 1 to 10 in LW(0) (Trouble Center
+ * Menu helper: asks "pick a number" (irai_24_010/011) on two pages to return a digit 0 to 9 in LW(0) (Trouble Center
  * job 24).
  */
 // The sixth option switches pages; the other five options select digits 0..4 or 5..9.
@@ -3633,6 +3634,8 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_sak_kaidan"), 1, 1)
         CALL(evt_hitobj_onoff, STRING("a_hasira"), 1, 0)
     END_IF
+
+    // Register Hot Dog sales before the egg story only above rank 15, or from STG3_12_THE_MINI_YOSHI_EGG on.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 15)
@@ -3912,6 +3915,8 @@ EVT_BEGIN(tou_01_init_evt)
             CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
         END_IF
     END_IF
+
+    // After the Peach interlude, restore a missing partner and heal in that branch, then run the return scene.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)

@@ -656,8 +656,6 @@ EVT_END()
 /**
  * Script for one platform of up_down_tbl: binds the hit area to the map object
  * and moves it between two heights over the row's time.
- * In the JP and later releases the platform A_ugoku_2 only starts
- * after something is standing on it (GF(1) is set once its movement value passes a small threshold).
  */
 EVT_BEGIN(move_up_down)
     // The hit area is tied to the platform and the row's heights are scaled for smooth movement.
@@ -1190,7 +1188,7 @@ USER_FUNC(hit_group_chk) {
 /**
  * Script function that keeps the camera following Mario's height:
  * when Mario is in background mode, the camera's Y-follow is off
- * and he is on the ground (in the JP and later releases), it turns Y-follow back on. Blocks forever.
+ * and (in JP and later releases) Mario's airTimer is zero, it turns Y-follow back on. Blocks forever.
  */
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(bg_cam_chk) {

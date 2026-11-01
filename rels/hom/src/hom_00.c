@@ -613,8 +613,6 @@ EVT_BEGIN(evt_train_nidome)
     CALL(evt_npc_move_position, STRING("駅員2"), -800, 80, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_reverse_ry, STRING("駅員2"))
     WAIT_MS(500)
-
-    // Doopliss says his piece and hops away across the platform.
     CALL(evt_npc_reverse_ry, STRING("駅員2"))
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -778,6 +776,8 @@ EVT_BEGIN(evt_hom_touchaku)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -780, 194, 481, -780, 125, 87, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+
+    // Doopliss says his piece and hops away across the platform.
     CALL(evt_msg_print, 0, STRING("stg6_hom_01_02"), 0, STRING("ランペル"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -780, 259, 776, -780, 137, 87, 500, EASING_SINE_IN_OUT)

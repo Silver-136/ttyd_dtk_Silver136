@@ -2032,8 +2032,6 @@ EVT_END()
  */
 EVT_BEGIN(peach_evt_ele_2)
     SET_VALUE(LW(5), LW(0))
-
-    // Without the second Elevator Key the elevator only asks for it.
     SET_VALUE(LW(9), LW(1))
 
     // Peach is locked out of control; she says the elevator doesn't work until the story reaches the right

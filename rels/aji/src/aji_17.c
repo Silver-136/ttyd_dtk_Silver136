@@ -1690,7 +1690,7 @@ EVT_END()
 
 /**
  * Peach and TEC in chapter 2: places dummy and hologram NPCs of Peach (ダミー, ホログラム, ホログラム2),
- * plays peach_aji_76 to 77, sets the story progress to STG2_25_02_PEACH_SHALL_WE_DANCE
+ * plays peach_aji_76 through peach_aji_102, sets the story progress to STG2_25_02_PEACH_SHALL_WE_DANCE
  * and changes map to hei_00.
  */
 static EVT_BEGIN(peach_evt_stg2)
@@ -2534,7 +2534,8 @@ EVT_END()
 /**
  * Peach's chapter 5 scene with TEC (peach_aji_206 to 217): TEC asks her to sneak into Grodus's room
  * for a data disk it cannot reach over the network (peach_aji_213 to 215 run under the TEC fade),
- * and sends her back to the elevator. The map animation moza runs only while TEC speaks (its screen).
+ * and sends her back to the elevator. The map animation moza is paused for peach_aji_213 to 215;
+ * other messages with a zero speaker argument are bracketed by moza replay/pause calls.
  * The story progress then becomes STG5_44_PEACH_TECS_REQUEST_2 and control returns to the player.
  */
 static EVT_BEGIN(peach_evt_stg5)
@@ -3257,6 +3258,15 @@ EVT_BEGIN(tec_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of aji_17, TEC's room: starts the camera map-object rotations and, for Peach,
+ * the scene of her current story point (peach_evt_stg1 at STG1_18_01, stg2 at STG2_25_01,
+ * stg3 at STG3_33, stg3_1 at 33_03, stg4, stg5, stg5_1 at STG5_46,
+ * stg6 with the Grodus lights at STG6_55).
+ * For Mario, at STG7_25_00_1_BOWSER_POSHLEY_SANCTUM the first visit restores HP and starts evt_last
+ * and the second runs evt_last2; later it starts the emergency lights and, after the final battle,
+ * the TEC terminal talk.
+ */
 EVT_BEGIN(aji_17_init_evt)
     SET_VALUE(LW(0), STRING("S_camera_1"))
     SET_VALUE(LW(1), -30)

@@ -839,8 +839,6 @@ static EVT_BEGIN(evt_sensyu)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-
-        // Jolene and Grubba talk about Mario's promotion to the majors.
         CALL(evt_mario_set_dir, 270, 300, 0)
         CALL(evt_party_set_dir, 0, 270, 300)
     END_INLINE_EVENT
@@ -1055,6 +1053,8 @@ static EVT_BEGIN(evt_1st_leagu)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+
+    // Jolene and Grubba talk about Mario's promotion to the majors.
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("ガンス"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_287"), 0, STRING("キノシコワ"))
     WAIT_MS(300)

@@ -1515,8 +1515,6 @@ EVT_BEGIN(starmaniac_talk)
 #endif
         RETURN
     END_IF
-
-    // He asks if Mario wants to trade; "No way!" sends him off with a farewell.
     CALL(evt_msg_continue)
     GOTO(0)
 #if VERSION > VERSION_DEMO_US
@@ -1531,8 +1529,6 @@ EVT_BEGIN(johoyaketi_talk)
         SET_VALUE(GSWF_TIK_00_WONKY_FIRST_TALK_DONE, 1)
         RETURN
     END_IF
-
-    // Mario picks which badge to trade for from the list; backing out earns a "LAME!" and ends the talk.
     CALL(johoya_keti_newjoho_check, LW(1))
     IF_INT_EQUAL(LW(1), 0)
         CALL(johoya_keti_oldspeak_check, LW(0))
@@ -1547,8 +1543,6 @@ EVT_BEGIN(johoyaketi_talk)
             CALL(johoya_keti_oldspeak_setreadflag)
             CALL(evt_msg_print_add, 0, STRING("johoyaketi_07"))
         END_IF
-
-    // Otherwise he offers another trade: accepting loops back to the badge list, declining ends the talk.
     ELSE
         SUBTRACT(LW(1), 1)
         CALL(evt_sub_random, LW(1), LW(0))

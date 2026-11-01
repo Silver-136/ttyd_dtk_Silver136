@@ -152,7 +152,7 @@ void msgInit(void) {
     msgLoad("global", 1);
 }
 
-/** the demo loads the text into a smart heap block and points a missing file at an empty text */
+/** Loads the selected message file into the map or default heap and builds its lookup table. */
 #if VERSION <= VERSION_DEMO_US
 /** The text of a loaded message file (the demo keeps it in a smart heap block). */
 static inline const char* msgEntryText(MessageEntry* entry) {

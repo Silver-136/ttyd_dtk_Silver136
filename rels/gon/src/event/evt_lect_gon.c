@@ -794,12 +794,12 @@ EVT_BEGIN(slit_majin_lecture)
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_continue)
 #endif
+        // No: the genie scolds him and the lesson repeats.
         IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
             CALL(evt_msg_print, 0, STRING("stg1_gon_12_16"), 0, STRING("ペラ魔人"))
 #else
-            // No: the genie scolds him and the lesson repeats.
             CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_16"))
 #endif
         ELSE

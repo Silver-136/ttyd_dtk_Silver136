@@ -599,8 +599,6 @@ EVT_BEGIN(plane_majin_lecture)
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)
     END_SIBLING_EVENT
-
-    // The demon reveals his trick, laughs at Mario and curses him in flashes of light.
     WAIT_FRAMES(1)
     CALL(lecture_button_set_pos, 0, FLOAT(-200.0f), FLOAT(-25.0f), FLOAT(0.0f))
     BEGIN_INLINE_EVENT
@@ -630,6 +628,8 @@ EVT_BEGIN(plane_majin_lecture)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+
+    // The demon reveals his trick, laughs at Mario and curses him in flashes of light.
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_1"))
     WAIT_MS(200)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)

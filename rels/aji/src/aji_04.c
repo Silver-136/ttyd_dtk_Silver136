@@ -513,9 +513,9 @@ EVT_END()
  * on yes it moves Mario onto the quiz set (BGM_EVT_QUIZ1/2)
  * and asks questions read from kuizu_data (map animation, question text, choice text, correct choice),
  * turning its head and flapping its mouth with every text.
- * Wrong answers earn a scolding and an offer to stop;
- * right answers are counted in LW(14) and after the fifth the statue turns around,
- * the quiz ends and STG7_13_QUIZ_CLEARED is set.
+ * Wrong answers (counted in LW(15)) earn a scolding and an offer to stop; right answers are counted in LW(14).
+ * Five right or three wrong answers end the loop: both exits create the elevator key and set
+ * STG7_13_QUIZ_CLEARED, and after the fifth right answer the statue turns around.
  */
 EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mario_key_onoff, 0)
@@ -581,6 +581,8 @@ EVT_BEGIN(kuizu_sekizou)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, 0, 83, 591, 0, 100, 91, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+
+    // Count questions, correct answers, and wrong answers separately.
     SET_VALUE(LW(13), 0)
     SET_VALUE(LW(14), 0)
     SET_VALUE(LW(15), 0)
@@ -648,6 +650,8 @@ EVT_BEGIN(kuizu_sekizou)
         CALL(evt_msg_continue)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
         ADD(LW(13), 1)
+
+        // A right answer earns a fanfare; the statue reacts to the first, fourth and fifth correct answers.
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, 11)
         WAIT_MS(500)
@@ -746,8 +750,6 @@ SPAWN_EVENT(quiz_ng)
             SWITCH(LW(15))
                 CASE_EQUAL(1)
                 SPAWN_EVENT(PTR(sekizou_talk))
-
-// If Mario bails out, the statue scolds him and lets him go.
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_msg_print, 0, STRING("stg7_aji_26"), 0, 0)
                 CASE_EQUAL(2)
@@ -757,8 +759,6 @@ SPAWN_EVENT(quiz_ng)
                 CALL(evt_msg_print, 0, STRING("stg7_aji_26"), PTR(kuti_callback), 0)
                 CASE_EQUAL(2)
                 SPAWN_EVENT(PTR(sekizou_talk))
-
-                // If he takes the challenge, the quiz set appears and the quiz music starts.
                 CALL(evt_msg_print, 0, STRING("stg7_aji_27"), PTR(kuti_callback), 0)
 #endif
                 SET_VALUE(LF(1), 1)
@@ -876,8 +876,6 @@ BEGIN_INLINE_EVENT
                 CALL(evt_npc_set_position, STRING("バリアーン１"), 0, -1000, 0)
                 CALL(evt_npc_set_position, STRING("バリアーン２"), 0, -1000, 0)
                 WAIT_MS(1000)
-
-                // Count questions, correct answers, and wrong answers separately.
                 CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 2300, EASING_SINE_IN_OUT)
                 WAIT_MS(300)
                 SET_VALUE(LW(0), 1080)
@@ -886,8 +884,6 @@ BEGIN_INLINE_EVENT
                 CALL_CHILD(PTR(sekizou_kaiten))
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
-
-// The statue asks "You sure about that?" and Mario confirms or chooses again.
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_msg_print, 0, STRING("stg7_aji_31"), 0, 0)
 BREAK_LOOP
@@ -1013,7 +1009,6 @@ EVT_BEGIN(aji_04_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
         CALL_CHILD(PTR(sekizou_init))
     ELSE
-        // A wrong answer sounds a buzzer and the statue gloats; the third wrong answer ends the quiz.
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

@@ -539,6 +539,7 @@ static EVT_BEGIN(marco_talk)
 #if VERSION > VERSION_DEMO_US
         CALL(evt_party_run, 1)
 #endif
+        // Flavio stammers an excuse and paces nervously.
         CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
         LOOP(3)
             SET_VALUE(LW(0), 0)
@@ -717,7 +718,6 @@ EVT_END()
 static EVT_BEGIN(suifu_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
-        // Flavio asks what Mario has found.
         CALL(evt_msg_print, 0, STRING("stg5_muj_22_2"), 0, STRING("me"))
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_18_BOBBERY_RESCUE_2)
         CALL(evt_msg_print, 0, STRING("stg5_muj_32_03"), 0, STRING("me"))
@@ -1642,6 +1642,8 @@ EVT_BEGIN(nakamaware_event)
     CALL(evt_mario_normalize)
     CALL(evt_npc_set_position, STRING("水夫A"), -220, 0, 0)
     CALL(evt_npc_move_position, STRING("水夫A"), -330, 0, 0, FLOAT(120.0f), 0)
+
+    // Sailor A begs the captain to stop Flavio and the rough sailor, who are about to fight.
     CALL(evt_msg_print, 0, STRING("stg5_muj_05"), 0, STRING("水夫A"))
     CALL(evt_mario_mov_pos2, -385, 0, FLOAT(120.0f))
     BEGIN_INLINE_EVENT
@@ -1653,6 +1655,8 @@ EVT_BEGIN(nakamaware_event)
     CALL(evt_mario_mov_pos2, -247, 26, FLOAT(120.0f))
     CALL(evt_mario_mov_pos2, -170, 174, FLOAT(120.0f))
     WAIT_MS(1000)
+
+    // Flavio and the rough sailor trade insults about who was the coward.
     CALL(evt_msg_print, 0, STRING("stg5_muj_06"), 0, STRING("マルコ"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_07"), 0, STRING("ガラの悪い水夫"))
     CALL(evt_npc_get_position, STRING("マルコ"), LW(0), LW(1), LW(2))
@@ -1683,6 +1687,8 @@ EVT_BEGIN(nakamaware_event)
     CALL(evt_npc_set_ry, STRING("マルコ"), 90)
     CALL(evt_npc_move_position, STRING("マルコ"), 98, 166, 0, FLOAT(100.0f), 0)
     WAIT_MS(1000)
+
+    // Flavio shrieks that the ghosts are here and the sailors cower.
     CALL(evt_msg_print, 0, STRING("stg5_muj_12"), 0, STRING("マルコ"))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1755,6 +1761,8 @@ EVT_BEGIN(nakamaware_event)
     WAIT_MS(3200)
     CALL(evt_cam3d_evt_set, -100, 136, 714, -100, 40, 172, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+
+    // Flavio pushes Mario to the front.
     CALL(evt_msg_print, 0, STRING("stg5_muj_14"), 0, STRING("マルコ"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2103,6 +2111,8 @@ static EVT_BEGIN(sekai_yami_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(1000)
+
+    // Someone screams as the darkness spreads.
     CALL(evt_msg_print, 0, STRING("stg8_dark_06"), 0, 0)
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
@@ -2225,6 +2235,8 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_INSTANT_TURN)
+
+    // The sailors cheer the fighter on: don't give up, thump them.
     CALL(evt_msg_print, 0, STRING("stg8_las_148_38"), 0, STRING("水夫D"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_39"), 0, STRING("ボロ水夫A"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_40"), 0, STRING("ボロ水夫B"))
@@ -2239,6 +2251,8 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_43"), 0, STRING("ボロ水夫A"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_44"), 0, STRING("ボロ水夫B"))
     CALL(evt_npc_jump_position_nohit, STRING("ガラの悪い水夫"), LW(0), LW(1), LW(2), 300, 10)
+
+    // The cheering grows louder.
     CALL(evt_msg_print, 0, STRING("stg8_las_148_45"), 0, STRING("ガラの悪い水夫"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_46"), 0, STRING("水夫D"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_47"), 0, STRING("ボロ水夫A"))
@@ -2381,7 +2395,6 @@ EVT_BEGIN(muj_01_init_evt)
         END_IF
     END_IF
     IF_INT_EQUAL(LF(0), 0)
-        // Flavio inspects the item he is offered.
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ3"))
     END_IF

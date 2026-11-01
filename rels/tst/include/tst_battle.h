@@ -17,11 +17,7 @@ typedef struct TstBattleUnit {
 #if VERSION <= VERSION_DEMO_US
     u8 pad_000[0x304];
 #else
-#if VERSION <= VERSION_DEMO_US
-    u8 pad_000[0x304]; // 0x0, as the JP BattleUnit
-#else
     u8 pad_000[0x308]; // 0x0, as BattleUnit without slideReturnEventId
-#endif
 #endif
     ItemType heldItem;                      // 0x308 (JP demo 0x304)
     ItemDropData* dropTable;                // 0x30C (JP demo 0x308)

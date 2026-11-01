@@ -1168,8 +1168,6 @@ EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg7_031"), 0, STRING("ババ"))
     CALL(evt_cam3d_evt_set, -65, 83, -504, -65, 47, -852, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
-
-    // Pennington accuses them of theft.
     CALL(evt_npc_set_autotalkpose, STRING("パタクリ"), STRING("PTK_S_3"), STRING("PTK_T_2"))
     CALL(evt_msg_print, 0, STRING("kpa_stg7_032"), 0, STRING("パタクリ"))
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("S_1"), STRING("T_1"))
@@ -1179,8 +1177,6 @@ EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg7_033"), 0, STRING("mario"))
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     WAIT_MS(300)
-
-    // A Paragoomba crashes in to report that Mario has the seven Crystal Stars.
     CALL(evt_msg_print, 0, STRING("kpa_stg7_034"), 0, STRING("ババ"))
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_4"), STRING("KPA_T_3"))
     CALL(evt_msg_print, 0, STRING("kpa_stg7_035"), 0, STRING("mario"))

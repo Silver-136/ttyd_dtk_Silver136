@@ -90,7 +90,7 @@ void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
     tpl_loaded = TRUE;
 }
 
-/** the demo loads msgWindow.tpl synchronously */
+/** Loads msgWindow.tpl from the archive, or starts an asynchronous DVD read. */
 void windowTexSetup(void) {
     DVDEntry* entry;
     u32 size;

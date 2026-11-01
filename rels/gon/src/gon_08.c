@@ -40,7 +40,6 @@ static EvtWord init_0[37];
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
-// Nokkos greets Mario.
 #if VERSION <= VERSION_DEMO_US
 static EvtWord main_0[489];
 #else
@@ -520,6 +519,7 @@ EVT_BEGIN(nokkosu_talk)
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT
 #else
+    // Nokkos greets Mario.
     CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
 #endif
 

@@ -66,8 +66,8 @@ static seq_e3_work work;
 //.sdata
 static seq_e3_work* wp = &work;
 /**
- * The four scenarios of the trade-show menu: the story progress each one starts at and where its box sits
- * on screen, one box in each corner.
+ * The three scenarios of the trade-show menu: the story progress each one starts at and where its box sits
+ * on screen.
  */
 #if VERSION >= VERSION_US
 seq_e3_entry e3_tbl[4] = {
@@ -197,7 +197,7 @@ void seq_e3Init(SequenceWork* seq) {
 #if VERSION == VERSION_DEMO_JP
     wp->handle = fileAllocf(FILE_TYPE_TPL, "%s/monthry.tpl", getMarioStDvdRoot());
 #else
-s32 type = gp->inBattle != 0;
+    s32 type = gp->inBattle != 0;
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -266,12 +266,6 @@ void seq_e3Exit(SequenceWork* seq) {
     psndStopAllFadeOut();
 }
 
-/**
- * Kiosk menu state machine: press A/Start page-flips from the title to the scenario boxes;
- * the stick picks a scenario (B or 2 min idle flips back);
- * A sets story progress to just before the scenario's e3_tbl entry, runs the story init events up to it,
- * sets partners, a 20 HP/FP/BP loadout and items, and starts its map.
- */
 void seq_e3Main(SequenceWork* seq) {
     CameraEntry* camera;
     s32 prevId;
@@ -638,7 +632,7 @@ typedef enum E3Texture {
 #if VERSION <= VERSION_DEMO_US
 static void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
-    Mtx poseMtx;
+        Mtx poseMtx;
     Mtx poseScale;
 #else
 void e3Disp(CameraId cameraId, void* param) {

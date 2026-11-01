@@ -1774,14 +1774,10 @@ EVT_BEGIN(last_evt_3)
         CALL(evt_fade_entry, FADE_IN_BLACK, 0, 0, 0, 0)
         WAIT_MS(100)
         WAIT_MS(500)
-
-        // She puts Grodus in his place and strikes him down; his light effects vanish.
         CALL(evt_msg_print, 0, STRING("stg8_las_138"), 0, STRING("ブラックピーチ"))
 #if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
             WAIT_MS(500)
-
-            // She notices Mario and his partner and offers Mario the choice of refusing her or serving her.
             CALL(all_hikari_onoff, 1)
         END_INLINE_EVENT
 #endif
@@ -1797,8 +1793,6 @@ EVT_BEGIN(last_evt_3)
         CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)
     END_IF
     WAIT_MS(500)
-
-// If Mario agrees to serve her, the world is swallowed by darkness (the bad ending message).
 #if VERSION < VERSION_US
     CALL(evt_npc_delete, STRING("にせマリオ"))
 #endif
@@ -2581,8 +2575,6 @@ EVT_BEGIN(last_evt_3_2)
     WAIT_FRAMES(1)
     WAIT_MS(500)
     CALL(evt_msg_pri, 20)
-
-    // The Shadow Queen is shaken by the voices and the light that surrounds Mario.
     CALL(evt_msg_print_party, STRING("stg8_las_157"))
     CALL(evt_cam3d_evt_set, 0, 150, 347, 200, 150, 0, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -2876,6 +2868,8 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), NPC_FLAG_INSTANT_TURN)
+
+    // Beldam, Marilyn and Doopliss speak their last words; the partners answer.
     CALL(evt_msg_print, 0, STRING("stg8_las_173"), 0, STRING("マジョリン"))
     CALL(evt_npc_majo_disp_off, STRING("マジョリン"))
     WAIT_MS(300)
@@ -2924,8 +2918,6 @@ EVT_BEGIN(last_evt_4)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos, -35, 0, 2800)
     END_INLINE_EVENT
-
-    // Professor Frankly walks in and congratulates them.
     WAIT_MS(250)
     CALL(evt_cam3d_evt_set, 0, 87, 258, 0, 40, -13, 750, EASING_SINE_IN_OUT)
     CALL(evt_party_move_pos, 0, -10, -40, 800)

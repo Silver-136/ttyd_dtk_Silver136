@@ -253,9 +253,9 @@ static s32 item_list[] = {
 
 /**
  * Case script of the disk console (a_disksys): Peach says she has nothing to put in (peach_aji_244_01)
- * until she has the Data Disk; otherwise she picks the disk from the item menu,
- * the monitor lights up and plays the disk (BGM_FF_PEACH_DISCSET1, peach_aji_247 and 248),
- * which sets GSWF_AJI11_PEACH5_DISK_READ and attaches peach_evt_tana2 to the shelf.
+ * while GSWF_AJI_11_DATA_DISK_TAKEN is clear; otherwise she picks the disk from the item menu and,
+ * unless cancelled, the monitor lights up and plays the disk (BGM_FF_PEACH_DISCSET1, peach_aji_247 and 248),
+ * which sets GSWF_AJI_11_DATA_DISK_PLAYED and attaches peach_evt_tana2 to the shelf.
  */
 EVT_BEGIN(peach_evt_disksys)
     CALL(evt_mario_key_onoff, 0)

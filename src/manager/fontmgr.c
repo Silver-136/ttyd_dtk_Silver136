@@ -124,22 +124,16 @@ void fontmgrInit(void) {
 }
 
 /**
- * Loads the font for the current language (US and PAL by gp->language, the US demo the US font,
- * JP and the JP demo the Japanese one). Called from the logo sequence; does nothing once a font is loaded.
+ * Loads the font selected by gp->language in the US and PAL releases, index 1 in the US demo,
+ * and index 0 in JP and the JP demo. Does nothing once a font is loaded.
  */
 void fontmgrTexSetup(void) {
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
-    JUTFontSetup(0);
-#else
+#if VERSION == VERSION_DEMO_US
     JUTFontSetup(1);
-#endif
-#else
-#if VERSION >= VERSION_US
+#elif VERSION >= VERSION_US
     JUTFontSetup(gp->language);
 #else
     JUTFontSetup(0);
-#endif
 #endif
 }
 

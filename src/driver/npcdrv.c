@@ -1776,15 +1776,12 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     s32 j;
     char buf[4][128];
     s8* p;
-
-    // US: the announcement may span up to four lines
 #else
     f32 width;
     f32 shakeX;
     f32 shakeY;
 #endif
 
-    // US: the announcement may span up to four lines
     message = msgSearch(firstStrike->msg_tag);
     x = firstStrike->x;
     y = firstStrike->y;

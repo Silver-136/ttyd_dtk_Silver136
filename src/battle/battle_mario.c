@@ -3587,11 +3587,6 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
 
-/**
- * Tornado Jump badge attack: a stomp on the chosen enemy,
- * then on a successful second command Mario spins into a tornado (_tatsumaki_effect) that hits every airborne
- * enemy with badgeWeapon_TatsumakiJumpInvolved.
- */
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
@@ -3604,6 +3599,11 @@ EVT_BEGIN(marioAttackEvent_DokanJump)
     RETURN
 EVT_END()
 #endif
+/**
+ * Tornado Jump badge attack: a stomp on the chosen enemy,
+ * then on a successful second command Mario spins into a tornado (_tatsumaki_effect) that hits every airborne
+ * enemy with badgeWeapon_TatsumakiJumpInvolved.
+ */
 EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     // Target the selected enemy: the attack is declared, the badge's FP cost paid, Merlee's attack charm used
     // if due, and the stomp's Action Command set up.
@@ -4703,11 +4703,6 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     RETURN
 EVT_END()
 
-/**
- * Shared hammer attack: walk up to the front enemy, wind up with the hold-and-release command, swing and return.
- * Also runs as Mario's first strike (battle flag 2) with marioDefaultWeapon_Hammer.
- * LW(12) is the weapon and LW(14) picks the badge variant of the swing.
- */
 #if VERSION <= VERSION_DEMO_US
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     SET_VALUE(LW(14), 0)
@@ -4731,6 +4726,11 @@ EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     RETURN
 EVT_END()
 #endif
+/**
+ * Shared hammer attack: walk up to the front enemy, wind up with the hold-and-release command, swing and return.
+ * Also runs as Mario's first strike (battle flag 2) with marioDefaultWeapon_Hammer.
+ * LW(12) is the weapon and LW(14) picks the badge variant of the swing.
+ */
 EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     // On a First Strike Mario starts at his home spot facing the target; on a normal turn the attack is declared,
     // FP are paid and Merlee's charm is checked.

@@ -2138,9 +2138,6 @@ EVT_BEGIN(usu01_crowHI_talk_event)
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
-                // Before the name guessing, crow F says the Mario with the mayor is really the
-                // villain and crow G adds that only a soul locked under Creepy Steeple knows
-                // his name (stg4_usu_137 to 140).
                 // Before the name guessing, crow H tells crow I that her oldest, Ronnie,
                 // is taking his SATs (stg4_usu_143) and crow I is impressed (144).
                 CALL(evt_msg_print, 0, STRING("stg4_usu_143"), 0, STRING("カラスＨ"))
@@ -2277,16 +2274,14 @@ EVT_BEGIN(usu01_crowJ_talk_event)
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
-                // Before the name guessing, crow H tells crow I that her oldest, Ronnie,
-                // is taking his SATs (stg4_usu_143) and crow I is impressed (144).
+                // Before the name guessing, crow J laments that the twilit world is
+                // full of pain (stg4_usu_147).
                 CALL(evt_msg_print, 0, STRING("stg4_usu_147"), 0, STRING("カラスＪ"))
                 CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-                // Later, crow H says he is even going to a test prep center (145) and crow I thinks about a
-                // college fund for little Billy (146).
+                // Later it finds small sparks of hope in the gloom (stg4_usu_148),
+                // then (after Franklys's house) decides to go on an epic journey (148_1 and 148_1_1).
                 CALL(evt_msg_print, 0, STRING("stg4_usu_148"), 0, STRING("カラスＪ"))
                 CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-                // After Franklys's house, crow H laments that Ronnie did poorly on his SATs (146_1) and crow
-                // I consoles her (146_2); the last lines follow the ending.
                 CALL(evt_msg_print, 0, STRING("stg4_usu_148_1"), 0, STRING("カラスＪ"))
                 CASE_DEFAULT
                 CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_1"), 0, STRING("カラスＪ"))

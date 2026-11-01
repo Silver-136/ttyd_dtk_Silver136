@@ -3350,8 +3350,6 @@ EVT_BEGIN(dai3_beat_back)
     IF_INT_EQUAL(LW(0), 0)
     ELSE
         CALL(evt_seq_wait, SEQ_GAME)
-
-    // Lord Crump gloats that he has ammunition to spare as the X-Naut ship starts to fire.
     END_IF
     SET_FLOAT_VALUE(GW(7), GW(1))
     SPAWN_EVENT_GET_ID(PTR(nameraka_rotate), LW(9))
@@ -3385,8 +3383,6 @@ EVT_BEGIN(dai3_beat_back)
     CALL_CHILD(PTR(evt_memcard_save))
 #endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-
-    // Cortez's ghost ship appears and he scolds the X-Nauts for firing without his permission.
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_sfx_all_stop)
     CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_MARIO_A1, 0, FADE_STORY_MARIO_A3, 0)
@@ -3679,18 +3675,16 @@ EVT_BEGIN(leave_island)
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, 660, 267, -170, 660, 190, -603, 0, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+
+    // Cortez thanks Mario and the sailors talk about going home.
     CALL(evt_msg_print, 0, STRING("stg5_muj_133"), 0, STRING("コルテス"))
     CALL(evt_cam3d_evt_set, 775, 133, -36, 775, 45, -550, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-
-    // Flavio tells Mario to cross over and duel Lord Crump.
     CALL(evt_npc_set_ry, STRING("マルコ"), 90)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg5_muj_134"), 0, STRING("マルコ"))
     CALL(evt_cam3d_evt_set, 750, 151, -218, 750, 55, -759, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-
-    // Cortez thanks Mario and the sailors talk about going home.
     CALL(evt_msg_print, 0, STRING("stg5_muj_135"), 0, STRING("水夫A"))
     CALL(evt_cam3d_evt_set, 787, 151, -218, 787, 55, -759, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)

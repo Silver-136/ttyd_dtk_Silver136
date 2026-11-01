@@ -2228,6 +2228,8 @@ EVT_BEGIN(senteresa_evt)
     CALL(evt_npc_set_position, STRING("アトミックテレサ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_flag_onoff, 1, STRING("中央テレサ"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 0, STRING("アトミックテレサ"), NPC_FLAG_NO_DRAW)
+
+    // The Atomic Boo speaks, startling Mario, then floats toward him shaking the camera.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg4_jin_62"), 0, STRING("アトミックテレサ"))
     CALL(evt_cam3d_evt_off, 400, EASING_SINE_IN_OUT)

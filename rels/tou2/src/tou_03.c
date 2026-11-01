@@ -1542,7 +1542,7 @@ EVT_BEGIN(npc_entry)
 EVT_END()
 
 /**
- * Ambush played after a won match at rank 7 until the second mail is read:
+ * Ambush called after a won match at rank 7 while GSWF_TOU_RANK_7_MAIL_DONE is clear:
  * two Iron Cleft-type fighters ("Ran") burst in, Grubba comments,
  * a gong rings and a battle starts (battle setup 10); afterwards Grubba reacts to whether Mario won or lost.
  */
@@ -2289,7 +2289,7 @@ EVT_END()
 /**
  * First-time opening against the Goomba Bros.
  * (fighter 19): Grubba announces the match, Mario and partner walk in through the west door
- * and hop down the steps, and the lead Goomba Bro. jumps in from the crowd with a spin attack.
+ * and hop up the steps, and the lead Goomba Bro. jumps from its ring position while rotating.
  */
 EVT_BEGIN(evt_kurikuri_opening)
     CALL(evt_mario_key_onoff, 0)
@@ -2399,7 +2399,7 @@ EVT_END()
 
 /**
  * First-time victory scene against the Goomba Bros.:
- * the defeated Goombas lie dazed, Mario strikes his victory pose,
+ * the defeated Goombas lie dazed, Mario is set to M_S_1, the partner strikes its victory pose (evt_kime_pose),
  * Grubba asks a yes/no question and confetti and crowd cheers close the scene.
  */
 EVT_BEGIN(evt_kurikuri_win)
@@ -2743,8 +2743,9 @@ EVT_BEGIN(evt_shinemon_win)
 EVT_END()
 
 /**
- * Scene after losing to the Iron Clefts: the announcer names the winners,
- * confetti falls and the two Iron Clefts gloat.
+ * Scene after losing to the Iron Clefts: confetti falls,
+ * the announcer prints stg3_tou_118_61 (or PAL's stg3_tou_re_118_61),
+ * then the fighters print stg3_tou_274 and stg3_tou_274_01.
  */
 EVT_BEGIN(evt_shinemon_lose)
     CALL_CHILD(PTR(evt_damage_pose))
@@ -2794,7 +2795,7 @@ EVT_END()
  * First-time opening of the title match against Rawk Hawk:
  * his belt effect is attached, the crowd and Grubba hype the match,
  * the audience reacts (the speech bubbles come from spots in the stands), the party comments,
- * and Rawk Hawk enters.
+ * and Mario and the partner enter while Rawk Hawk is already in the ring.
  */
 EVT_BEGIN(evt_champ_opening)
     CALL(evt_mario_key_onoff, 0)
@@ -4937,6 +4938,7 @@ static EVT_BEGIN(evt_boss)
 #endif
     WAIT_MS(300)
 #endif
+    // The music-box theme plays and Jolene runs in, thanks Mario and admits she sent him the mysterious emails.
     SET_VALUE(GF(10), 1)
     CALL(evt_cam3d_evt_set, -130, 140, 385, -130, 105, -11, 700, EASING_SINE_IN_OUT)
     WAIT_MS(700)
@@ -5108,8 +5110,6 @@ static EVT_BEGIN(evt_boss)
                 BREAK_LOOP
             END_IF
         END_LOOP
-
-// Mario walks up to Grubba, who starts his theme and scolds the snoops; the ground starts to rumble.
 #if VERSION >= VERSION_US
         CALL(evt_npc_flag_onoff, 1, STRING("キノシチョフ"), NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_set_rotate, STRING("キノシチョフ"), FLOAT(0.0f), FLOAT(0.0f), FLOAT(0.0f))
@@ -5162,17 +5162,11 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_05"), 0, STRING("\203L\203m\203V\203`\203\207\203t"))
 #endif
     WAIT_MS(300)
-
-    // In a white flash Grubba becomes Macho Grubba and shouts his new name; Mario and the partner react.
     CALL(evt_cam3d_evt_set, -75, 133, 339, -75, 85, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-
-    // Macho Grubba threatens to snack on their energy and the boss battle starts.
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_06"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
-
-    // The music-box theme plays and Jolene runs in, thanks Mario and admits she sent him the mysterious emails.
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("キノシコワ"), 75, 75, 0, FLOAT(100.0f), 1)
 #else

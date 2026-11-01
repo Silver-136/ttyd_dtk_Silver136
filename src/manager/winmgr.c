@@ -682,16 +682,6 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
     }
 }
 
-/**
- * Opens a selection list (list, title and help windows) and fills it by type:
- * 0 key items, 1/3/4 items (use, sell, store), 2 badges, 5 stored items, 6/7 partners to rank up,
- * 8 partner to rank down, 9/10 HP/FP/BP to raise or lower,
- * 11-16 shop stock (badge shop, sell badges, Star Piece badges, bargains, the Pit's trader, Pianta Parlor),
- * 17/18 the informant's lists; a negative type is a -1-terminated item id list.
- * Rows flagged 3 are greyed and refused.
- * newItem is shown first, above a divider (the item being picked up when the bag is full).
- * Free with winMgrSelectDelete.
- */
 WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
     s32 n;
     WinMgrDesc* desc;
@@ -1878,7 +1868,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
 #endif
-    WinMgrEntry* ent = entry;
+        WinMgrEntry* ent = entry;
     WinMgrSelect* sel = ent->param;
     u32 left, top, wd, ht;
     GXColor black = {0x00, 0x00, 0x00, 0xFF};

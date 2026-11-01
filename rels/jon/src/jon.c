@@ -1910,8 +1910,6 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
         RETURN
     END_IF
-
-    // Not enough coins for the chosen item: the trader says so and the list comes back.
     CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("100kai_item_07"), 0, STRING("me"))
 #else
@@ -1920,9 +1918,6 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print_add, 0, STRING("100kai_item_06"))
         RETURN
     END_IF
-
-    // The trader names the item and its price and asks Mario to confirm (the English text swaps the order of
-    // name and price for some languages).
     CALL(evt_msg_print_add, 0, STRING("100kai_item_07"))
 #endif
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
@@ -1930,8 +1925,6 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print_add, 0, STRING("100kai_item_08"))
         RETURN
     END_IF
-
-    // Take the price in coins, thank Mario and offer the list again.
     CALL(evt_msg_continue)
     GOTO(0)
     RETURN

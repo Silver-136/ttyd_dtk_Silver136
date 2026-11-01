@@ -545,6 +545,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     END_IF
 
     // Mario picks the stat to raise and the stat to lower, and confirms the trade.
+    // Mario picks the partner to rank up and the partner to rank down, and confirms the trade.
     CALL(evt_msg_continue)
     CALL(evt_win_coin_on, 0, LW(12))
     LOOP(0)
@@ -579,8 +580,6 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_IF
         CALL(evt_msg_continue)
     END_LOOP
-
-    // Mario poses, the music comes back and the new HP, FP and BP are set; Chet Rippo says if badges came off.
     // Mario pays 39 coins, the partner losing a rank is brought out and Chet Rippo starts his chant.
     CALL(evt_pouch_get_coin, LW(0))
     SUBTRACT(LW(0), 39)
@@ -594,8 +593,6 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, LW(1))
     END_IF
-
-    // Mario picks the partner to rank up and the partner to rank down, and confirms the trade.
     CALL(evt_msg_print_add, 0, STRING("powerdown_11"))
     CALL(bgScrollControll, 0)
     CALL(evt_mario_goodbye_party, 0)

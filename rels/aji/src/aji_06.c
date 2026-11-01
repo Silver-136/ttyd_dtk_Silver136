@@ -1158,7 +1158,7 @@ s32 peach_evt_bika_move_data[] = {
  * "yuka" run forward or backward to match; each stop waits up to 3 seconds for a pour, scored by the slot
  * scripts in GW(13).
  * Then TEC asks for the heating to be stopped after 30 seconds (peach_aji_230_01): stopping it with A_sui6
- * between 25 and 35 seconds adds 1 more.
+ * strictly between 25 and 35 seconds adds 1 more.
  * A score of at least 9 plays kusuri_color_seiko; anything less
  * kusuri_color_sippai.
  */
@@ -1976,6 +1976,8 @@ EVT_BEGIN(aji_06_init_evt)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
         SPAWN_EVENT(PTR(peach_evt_stg5))
     END_IF
+
+    // Entering at this story point sets Peach's scale to zero.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_45_PEACH_POTION_PUZZLE)
         CALL(evt_mario_set_mode, 1)
         CALL(evt_mario_kill_party, 0)
