@@ -3175,31 +3175,31 @@ USER_FUNC(_nozzle_turn) {
     if (event->userWork[3] < 30) {
         event->userWork[3]++;
         switch (sw->nozzleDir[index]) {
-            case 1:
+            case NOZZLE_DIR_PLUS_45:
                 from = 45.0f;
                 break;
-            case 2:
+            case NOZZLE_DIR_CENTER:
                 from = 0.0f;
                 break;
-            case 3:
+            case NOZZLE_DIR_MINUS_45:
                 from = -45.0f;
                 break;
-            case 0:
+            case NOZZLE_DIR_RAISED:
             default:
                 from = 0.0f;
                 break;
         }
         switch (sw->nozzleNextDir[index]) {
-            case 1:
+            case NOZZLE_DIR_PLUS_45:
                 to = 45.0f;
                 break;
-            case 2:
+            case NOZZLE_DIR_CENTER:
                 to = 0.0f;
                 break;
-            case 3:
+            case NOZZLE_DIR_MINUS_45:
                 to = -45.0f;
                 break;
-            case 0:
+            case NOZZLE_DIR_RAISED:
             default:
                 to = 0.0f;
                 break;
@@ -3461,11 +3461,11 @@ USER_FUNC(_nozzle_work_wait) {
 /** Spray angle in degrees for a nozzle's direction: -45 for 1, -135 for 3, -90 for 2 or upright. */
 f32 _get_nozzle_dir(s32 index) {
     switch (_battleWorkPointer->stageObjectWork.nozzleDir[index]) {
-        case 1:
+        case NOZZLE_DIR_PLUS_45:
             return -45.0f;
-        case 3:
+        case NOZZLE_DIR_MINUS_45:
             return -135.0f;
-        case 2:
+        case NOZZLE_DIR_CENTER:
         default:
             return -90.0f;
     }
@@ -3707,29 +3707,29 @@ s32 _get_nozzle_attack_index(u8 index) {
     switch (index) {
         case 0:
             switch (sw->nozzleDir[index]) {
-                case 1:
+                case NOZZLE_DIR_PLUS_45:
                     return -1;
-                case 2:
+                case NOZZLE_DIR_CENTER:
                     return 0;
-                case 3:
+                case NOZZLE_DIR_MINUS_45:
                     return 1;
             }
         case 2:
             switch (sw->nozzleDir[index]) {
-                case 1:
+                case NOZZLE_DIR_PLUS_45:
                     return 0;
-                case 2:
+                case NOZZLE_DIR_CENTER:
                     return 1;
-                case 3:
+                case NOZZLE_DIR_MINUS_45:
                     return -1;
             }
         case 1:
             switch (sw->nozzleDir[index]) {
-                case 1:
+                case NOZZLE_DIR_PLUS_45:
                     return 0;
-                case 2:
+                case NOZZLE_DIR_CENTER:
                     return -1;
-                case 3:
+                case NOZZLE_DIR_MINUS_45:
                     return 1;
             }
     }

@@ -60,6 +60,15 @@ typedef enum StageFallObjectType {
     STAGE_FALL_STAGE_LIGHT = 8,
 } StageFallObjectType;
 
+// BattleStageObjectWork.nozzleDir/nozzleNextDir; the index picked from BattleStageNozzleData.dirRate.
+// Yaw while turning in the turn event: 1 +45, 2 0, 3 -45; 0 is the raised nozzle (no jet).
+typedef enum BattleNozzleDir {
+    NOZZLE_DIR_RAISED = 0,
+    NOZZLE_DIR_PLUS_45 = 1,
+    NOZZLE_DIR_CENTER = 2,
+    NOZZLE_DIR_MINUS_45 = 3,
+} BattleNozzleDir;
+
 // Stage nozzle jets (BattleStageNozzleData.typeRate/weapons index; nozzleType)
 typedef enum StageNozzleType {
     STAGE_NOZZLE_FOG = 0,
@@ -102,8 +111,8 @@ typedef struct BattleStageObjectWork {
     BattleStageFallObjectData* fallObjectData; //0x38
     BattleWeapon* nozzleWeapons[2]; //0x3C
     BattleWeapon nozzleWeaponWork[2]; //0x44
-    u8 nozzleDir[3]; //0x1C4
-    u8 nozzleNextDir[3]; //0x1C7
+    u8 nozzleDir[3]; //0x1C4, BattleNozzleDir
+    u8 nozzleNextDir[3]; //0x1C7, BattleNozzleDir
     s8 nozzleType; //0x1CA
     s32 nozzleTurnEvtId[3]; //0x1CC
     s32 nozzleWorkEvtId; //0x1D8
