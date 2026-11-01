@@ -33,6 +33,16 @@ typedef struct EffTimestampN64Work {
     s32 delay[10];      // 0x14C
 } EffTimestampN64Work;
 
+/** Size in percent of the ten pieces, repeating every four pieces. */
+static u8 scale_data[4] = {120, 80, 40, 60};
+
+/**
+ * Red, green and blue of each piece: the pieces run through the rainbow from red through green
+ * and blue back to red (only the first ten entries are used).
+ */
+static u8 colr[17] = {255, 255, 255, 198, 138, 130, 130, 130, 130, 130, 175, 215, 250, 255, 255, 255, 255};
+static u8 colg[17] = {130, 130, 130, 130, 130, 165, 213, 255, 255, 255, 255, 255, 255, 225, 198, 159, 130};
+static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130, 130, 130, 130, 130, 130};
 /**
  * Layout of the ten pieces, three numbers each: X and Y offset from the centre
  * and the frames before it fades in.
@@ -41,16 +51,6 @@ static s32 pos_data[30] = {
     -50, -70, 5,  80, -90, 20, 20, -50, 45,  -80, 30,  10,  30,  0,   35,
     120, -30, 50, 10, 50,  30, 100, 30, 15,  40,  100, 40,  140, 90,  25,
 };
-
-/** Size in percent of the ten pieces, repeating every four pieces. */
-static u8 scale_data[4] = {120, 80, 40, 60};
-/**
- * Red, green and blue of each piece: the pieces run through the rainbow from red through green
- * and blue back to red (only the first ten entries are used).
- */
-static u8 colr[17] = {255, 255, 255, 198, 138, 130, 130, 130, 130, 130, 175, 215, 250, 255, 255, 255, 255};
-static u8 colg[17] = {130, 130, 130, 130, 130, 165, 213, 255, 255, 255, 255, 255, 255, 225, 198, 159, 130};
-static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130, 130, 130, 130, 130, 130};
 
 void effTimestampMain(EffectEntry* effect);
 void effTimestampDisp(CameraId cameraId, EffectEntry* effect);

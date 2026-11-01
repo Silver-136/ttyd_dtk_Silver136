@@ -47,14 +47,14 @@ typedef struct EffSparkWork {
 
 /** Length in frames of one spark cycle: 24 for type 0, 12 for type 1. */
 static s32 max_seq_num[2] = { 24, 12 };
-/** Spark alpha per frame of a type 0 cycle, fully opaque after the first frame. */
-static u8 a_data[24] = { 0xFA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 /** Spark size per frame of a type 0 cycle: full size briefly, then shrinking away. */
 static f32 scale_data[24] = {
     0.9f, 1.0f, 1.0f, 0.9f, 0.85f, 0.8f, 0.75f, 0.7f, 0.65f, 0.6f, 0.55f, 0.5f,
     0.45f, 0.4f, 0.35f, 0.3f, 0.25f, 0.2f, 0.15f, 0.1f, 0.05f, 0.03f, 0.02f, 0.01f,
 };
+/** Spark alpha per frame of a type 0 cycle, fully opaque after the first frame. */
+static u8 a_data[24] = { 0xFA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 /** Spark size per frame of the shorter type 1 cycle. */
 static f32 scale_data2[12] = { 0.9f, 1.0f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f };
 /** Spark alpha per frame of the type 1 cycle. */

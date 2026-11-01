@@ -31,20 +31,6 @@ static f32 scale_data[] = {
     0.45f, 0.4f, 0.35f, 0.3f, 0.25f, 0.2f, 0.15f, 0.1f, 0.05f, 0.03f, 0.02f, 0.01f,
 };
 
-/** Flare size at each step of the 12-step sequence (type 1): pops to full size, then shrinks to zero. */
-static f32 scale_data2[] = {
-    0.9f, 1.0f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f,
-    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-};
-
-/** Camera-facing 16x16 quad each flare is drawn with. */
-static effN64Vtx size16x16_tex32x32_vtx[] = {
-    {-8, -8, 0, 0, 0, 0, 0, 0, 255},
-    {8, -8, 0, 1024, 0, 0, 0, 0, 255},
-    {8, 8, 0, 1024, 1024, 0, 0, 0, 255},
-    {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
-};
-
 /** Length in steps of the flare sequence for type 0 (24) and type 1 (12). */
 static s32 max_seq_num[] = {24, 12};
 
@@ -54,10 +40,24 @@ static u8 a_data[] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
+/** Flare size at each step of the 12-step sequence (type 1): pops to full size, then shrinks to zero. */
+static f32 scale_data2[] = {
+    0.9f, 1.0f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+};
+
 /** Flare alpha at each step of the type 1 sequence: opaque for 12 steps, invisible after. */
 static u8 a_data2[] = {
     0xFA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+/** Camera-facing 16x16 quad each flare is drawn with. */
+static effN64Vtx size16x16_tex32x32_vtx[] = {
+    {-8, -8, 0, 0, 0, 0, 0, 0, 255},
+    {8, -8, 0, 1024, 0, 0, 0, 0, 255},
+    {8, 8, 0, 1024, 1024, 0, 0, 0, 255},
+    {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
 void effAkariPoseMain(EffectEntry* effect);

@@ -16,6 +16,22 @@
 void effSnowDustMain(EffectEntry* effect);
 void effSnowDustDisp(CameraId cameraId, EffectEntry* effect);
 
+/** Size of a pulsing puff (types 2 and 3) or a type 5 sparkle over its 30-step cycle: three quick swells. */
+static u8 scale_data[] = {
+    2, 4, 8, 13, 15, 13, 9, 6, 4, 3, 2, 4, 8, 13, 15, 13, 9, 6, 4, 3, 2, 4, 8, 13, 15, 13, 9, 6, 4, 3,
+};
+
+/** Size of a type 4 sparkle over its 30-step cycle: a quick flare that then shrinks steadily away. */
+static u8 scale_data2[] = {
+    40, 90, 81, 72, 65, 59, 53, 47, 43, 38, 34, 31, 28, 25, 22, 20, 18, 16, 15, 13, 12, 10, 9, 8, 7, 7, 6, 5, 5, 4,
+};
+
+/** Alpha of a drifting snowflake (types 0 and 1) over its 30-step cycle: fades in, holds, fades out. */
+static u8 a_data[] = {
+    200, 250, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 250, 200
+};
+
 /** 8x8 quad drawn for each type 1 snowflake. */
 effN64Vtx size8x8_tex64x64_vtx[] = {
     {-4, -4, 0, 0, 0, 0, 0, 0, 255},
@@ -55,22 +71,6 @@ static effN64Vtx size32x32_tex32x32_vtx[5] = {
     {32, 0, 0, 1024, 1024, 255, 255, 255, 0},
     {0, 32, 0, 0, 1024, 255, 255, 255, 0},
     {0, 0, 0, 0, 0, 255, 255, 255, 255},
-};
-
-/** Size of a pulsing puff (types 2 and 3) or a type 5 sparkle over its 30-step cycle: three quick swells. */
-static u8 scale_data[] = {
-    2, 4, 8, 13, 15, 13, 9, 6, 4, 3, 2, 4, 8, 13, 15, 13, 9, 6, 4, 3, 2, 4, 8, 13, 15, 13, 9, 6, 4, 3,
-};
-
-/** Size of a type 4 sparkle over its 30-step cycle: a quick flare that then shrinks steadily away. */
-static u8 scale_data2[] = {
-    40, 90, 81, 72, 65, 59, 53, 47, 43, 38, 34, 31, 28, 25, 22, 20, 18, 16, 15, 13, 12, 10, 9, 8, 7, 7, 6, 5, 5, 4,
-};
-
-/** Alpha of a drifting snowflake (types 0 and 1) over its 30-step cycle: fades in, holds, fades out. */
-static u8 a_data[] = {
-    200, 250, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 250, 200
 };
 
 /**

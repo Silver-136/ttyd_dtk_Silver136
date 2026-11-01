@@ -30,6 +30,9 @@ void gareki_dl(s32 type);
 void effGarekiMain(EffectEntry* effect);
 void effGarekiDisp(CameraId cameraId, EffectEntry* effect);
 
+/** Sideways speed of each of the eight rubble pieces when the chunk breaks. */
+static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
+
 /** Starting (x, y) offset of each of the eight rubble pieces from the chunk's centre. */
 static f32 trans_data[] = {-5.0f, -4.0f, -3.0f, -2.0f, 2.0f, -3.0f, 5.0f, -4.0f, -4.0f, 2.0f, -1.0f, 4.0f, 3.0f, 2.0f, 5.0f, 4.0f};
 
@@ -96,9 +99,6 @@ static effN64Vtx stg__s_v[] = {
     {1, 2, 0, 1024, 3072, 255, 255, 255, 255},
     {1, -4, 0, 1024, 2304, 255, 255, 255, 255},
 };
-
-/** Sideways speed of each of the eight rubble pieces when the chunk breaks. */
-static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
 
 /**
  * Spawns a falling rubble chunk (gareki = rubble) at (x, y, z) that drops until it reaches groundY,

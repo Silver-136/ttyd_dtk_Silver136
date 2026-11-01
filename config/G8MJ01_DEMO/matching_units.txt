@@ -216,6 +216,7 @@ MarioSt/effect/eff_irekaeru
 MarioSt/effect/eff_itemget
 MarioSt/effect/eff_kemuri
 MarioSt/effect/eff_kemutest
+MarioSt/effect/eff_kiss
 MarioSt/effect/eff_las_mon
 MarioSt/effect/eff_laser
 MarioSt/effect/eff_machinegun
@@ -248,6 +249,7 @@ MarioSt/effect/eff_scanning
 MarioSt/effect/eff_sheep
 MarioSt/effect/eff_sleep
 MarioSt/effect/eff_small_star
+MarioSt/effect/eff_spark
 MarioSt/effect/eff_spirit
 MarioSt/effect/eff_stardust
 MarioSt/effect/eff_starpoint
@@ -260,6 +262,7 @@ MarioSt/effect/eff_treasure_map
 MarioSt/effect/eff_updown
 MarioSt/effect/eff_uranoko
 MarioSt/effect/n64/eff_akari_charge_n64
+MarioSt/effect/n64/eff_akari_pose_n64
 MarioSt/effect/n64/eff_akari_sflush_n64
 MarioSt/effect/n64/eff_balloon_heiho_n64
 MarioSt/effect/n64/eff_balloon_n64
@@ -272,8 +275,10 @@ MarioSt/effect/n64/eff_bush_n64
 MarioSt/effect/n64/eff_butterfly_n64
 MarioSt/effect/n64/eff_cloud_n64
 MarioSt/effect/n64/eff_coin_n64
+MarioSt/effect/n64/eff_confetti_n64
 MarioSt/effect/n64/eff_cool_leaf_n64
 MarioSt/effect/n64/eff_crystal_n64
+MarioSt/effect/n64/eff_dogabon_attack_n64
 MarioSt/effect/n64/eff_expbom_n64
 MarioSt/effect/n64/eff_explosion_n64
 MarioSt/effect/n64/eff_fall_leaf_n64
@@ -289,6 +294,7 @@ MarioSt/effect/n64/eff_guruguru_n64
 MarioSt/effect/n64/eff_hagetaka_flush_n64
 MarioSt/effect/n64/eff_hit_n64
 MarioSt/effect/n64/eff_hokori_n64
+MarioSt/effect/n64/eff_horao_spell_n64
 MarioSt/effect/n64/eff_ice_n64
 MarioSt/effect/n64/eff_kameki_tornade_n64
 MarioSt/effect/n64/eff_kemuri10_n64
@@ -316,14 +322,18 @@ MarioSt/effect/n64/eff_opuku_wgun_n64
 MarioSt/effect/n64/eff_opuku_wprotect_n64
 MarioSt/effect/n64/eff_packn_bfire_n64
 MarioSt/effect/n64/eff_pikkyolo_n64
+MarioSt/effect/n64/eff_pokopi_pcharge_n64
 MarioSt/effect/n64/eff_pokopi_pipo_n64
 MarioSt/effect/n64/eff_pokopi_thunder_n64
+MarioSt/effect/n64/eff_pturn_n64
+MarioSt/effect/n64/eff_recover_heart_n64
 MarioSt/effect/n64/eff_release_n64
 MarioSt/effect/n64/eff_ripple_n64
 MarioSt/effect/n64/eff_rothammer_fail_n64
 MarioSt/effect/n64/eff_rothammer_success_n64
 MarioSt/effect/n64/eff_rubble_n64
 MarioSt/effect/n64/eff_shock_n64
+MarioSt/effect/n64/eff_snow_dust_n64
 MarioSt/effect/n64/eff_snow_n64
 MarioSt/effect/n64/eff_snowfall_n64
 MarioSt/effect/n64/eff_snowman_n64
