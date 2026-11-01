@@ -37,11 +37,11 @@ static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32*
  * with several equipped, each swing moves on to the next one worn.
  */
 s32 se_data[] = {
-    ITEM_ATTACK_FX_R, 357,
-    ITEM_ATTACK_FX_B, 359,
-    ITEM_ATTACK_FX_G, 358,
-    ITEM_ATTACK_FX_Y, 360,
-    ITEM_ATTACK_FX_P, 361,
+    ITEM_ATTACK_FX_R, PSND_SFX_MARIO_HAMMER_PIKKYO_R1,
+    ITEM_ATTACK_FX_B, PSND_SFX_MARIO_HAMMER_PIKKYO_B1,
+    ITEM_ATTACK_FX_G, PSND_SFX_MARIO_HAMMER_PIKKYO_G1,
+    ITEM_ATTACK_FX_Y, PSND_SFX_MARIO_HAMMER_PIKKYO_Y1,
+    ITEM_ATTACK_FX_P, PSND_SFX_MARIO_HAMMER_PIKKYO_P1,
 };
 
 /** Light camera shake when a level-1 (plain Hammer) swing hits something solid. */
@@ -205,16 +205,16 @@ void mot_hammer(void) {
         }
         {
             MarioWork* m = marioGetPtr();
-            snd = 0x15B;
+            snd = PSND_SFX_MARIO_HAMMER_FURU1;
             switch (pouchGetHammerLv()) {
             case 1:
-                snd = 0x15B;
+                snd = PSND_SFX_MARIO_HAMMER_FURU1;
                 break;
             case 2:
-                snd = 0x15C;
+                snd = PSND_SFX_MARIO_HAMMER_FURU2;
                 break;
             case 3:
-                snd = 0x15D;
+                snd = PSND_SFX_MARIO_HAMMER_FURU3;
                 break;
             }
             psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
@@ -324,7 +324,7 @@ void mot_hammer(void) {
 #endif
         {
             MarioWork* m = marioGetPtr();
-            snd = 0x161;
+            snd = PSND_SFX_MARIO_HAMMER_WOOD_DON1;
             switch (pouchGetHammerLv()) {
             case 1:
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON1), &m->position);

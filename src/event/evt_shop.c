@@ -1067,7 +1067,7 @@ USER_FUNC(disp_list) {
         winMgrOpen(event->userdata[1]);
         winMgrOpen(event->userdata[2]);
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn(SFX_NAME_WORD(0x12));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
 #else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
 #endif
@@ -1077,7 +1077,7 @@ USER_FUNC(disp_list) {
         winMgrCloseAutoDelete(event->userdata[1]);
         winMgrCloseAutoDelete(event->userdata[2]);
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn(SFX_NAME_WORD(0x13));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
 #else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
 #endif

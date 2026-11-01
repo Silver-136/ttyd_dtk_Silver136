@@ -782,17 +782,17 @@ void marioLandOn(void) {
     if (stand) {
         attr = hitGetAttr(stand);
         if (attr & HIT_ATTR_SHALLOW_WATER) {
-            sfx = 0x150;
+            sfx = PSND_SFX_MARIO_LANDING2;
         } else if (attr & HIT_ATTR_WOOD) {
-            sfx = 0x151;
+            sfx = PSND_SFX_MARIO_LANDING3;
         } else if (attr & HIT_ATTR_SNOW) {
-            sfx = 0x152;
+            sfx = PSND_SFX_MARIO_LANDING4;
         } else if (attr & HIT_ATTR_GRASS) {
-            sfx = 0x153;
+            sfx = PSND_SFX_MARIO_LANDING5;
         } else if (attr & 0x400000) {
-            sfx = 0x154;
+            sfx = PSND_SFX_MARIO_LANDING6;
         } else {
-            sfx = 0x14f;
+            sfx = PSND_SFX_MARIO_LANDING1;
         }
         psndSFXOn_3D(SFX_NAME_WORD(sfx), &pos);
     }

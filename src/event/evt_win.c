@@ -801,7 +801,7 @@ USER_FUNC(unitwin_window_select_func) {
         wp->cursor -= 1.0f;
     }
     if (prev != (s32)wp->cursor) {
-        psndSFXOn((const char*)5);
+        psndSFXOn((const char*)PSND_SFX_CURSOR_MOVE1);
     }
     if (wp->cursor >= wp->count) {
         wp->cursor = 0.0f;
@@ -897,7 +897,7 @@ USER_FUNC(unitwin_window_select_func) {
             return EVT_RETURN_YIELD;
         case 18:
             statusWinForceOff();
-            psndSFXOn((const char*)0x12);
+            psndSFXOn((const char*)PSND_SFX_CURSOR_OK1);
             j = wp->cursor;
             sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
             jdt->curIndex = j;
@@ -1143,7 +1143,7 @@ USER_FUNC(unitwin_window_select_func) {
         }
     } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
         statusWinForceOff();
-        psndSFXOn((const char*)0x13);
+        psndSFXOn((const char*)PSND_SFX_CURSOR_CANCEL1);
         event->lwData[0] = 0;
         wp->mode = 0;
         return EVT_RETURN_YIELD;

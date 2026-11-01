@@ -86,7 +86,7 @@ MsgIcon msgIcon[] = {
 /** Sound effects of the message windows by window type: the sound when it opens, then the one when it closes. */
 #if VERSION > VERSION_DEMO_US
 s32 msgWindowOpen_SE_Data[] = {
-    0x16, 0x17, 0x1A, 0x1B, 0x20, 0x21, 0x1C, 0x1D,
+    PSND_SFX_WINDOW_NORMAL_OPEN1, PSND_SFX_WINDOW_NORMAL_CLOSE1, PSND_SFX_WINDOW_WHISPER_OPEN1, PSND_SFX_WINDOW_WHISPER_CLOSE1, PSND_SFX_WINDOW_SIGNBOARD_OPEN1, PSND_SFX_WINDOW_SIGNBOARD_CLOSE1, PSND_SFX_WINDOW_SYSTEM_OPEN1, PSND_SFX_WINDOW_SYSTEM_CLOSE1,
     0x20, 0x21, 0x1C, 0x1D, 0x18, 0x19, 0x22, 0x23,
     0x24, 0x25, 0x26, 0x27, 0x1E, 0x1F, -1, -1
 };

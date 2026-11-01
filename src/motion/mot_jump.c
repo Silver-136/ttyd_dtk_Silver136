@@ -352,15 +352,15 @@ static inline void jumpSfx(MarioWork* mario) {
     s32 r = irand(10000);
     s32 id;
     if (r < 2000) {
-        id = 0x9D;
+        id = PSND_SFX_VOICE_MARIO_FLD_JUMP1;
     } else if (r < 4000) {
-        id = 0x9E;
+        id = PSND_SFX_VOICE_MARIO_FLD_JUMP2;
     } else if (r < 6000) {
         id = PSND_SFX_VOICE_MARIO_FLD_JUMP3;
     } else if (r < 8000) {
-        id = 0xA0;
+        id = PSND_SFX_VOICE_MARIO_FLD_JUMP4;
     } else {
-        id = 0xA1;
+        id = PSND_SFX_VOICE_MARIO_FLD_JUMP5;
     }
     psndSFXOn_3D(SFX_NAME_WORD(id), &mario->position);
 }

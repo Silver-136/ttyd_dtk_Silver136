@@ -891,7 +891,7 @@ static s32 mobj_rideswitch_orange(MapObjectEntry* mobj) {
         case 0:
             if (mobj->flags & MOBJ_FLAG_HIT) {
                 mobjRunEvent(mobj, (s32*)mobj->event);
-                psndSFXOn_3D((const char*)0x1d7, &mobj->position);
+                psndSFXOn_3D((const char*)PSND_SFX_MOBJ_RIDE_SWITCH_ON5, &mobj->position);
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
                 mobj->state = 1;
             }
@@ -959,7 +959,7 @@ static s32 mobj_rideswitch_green(MapObjectEntry* mobj) {
         case 0:
             if (mobj->flags & MOBJ_FLAG_HIT) {
                 mobjRunEvent(mobj, (s32*)mobj->event);
-                psndSFXOn_3D((const char*)0x1d5, &mobj->position);
+                psndSFXOn_3D((const char*)PSND_SFX_MOBJ_RIDE_SWITCH_ON3, &mobj->position);
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
                 mobj->state = 1;
             }
@@ -984,7 +984,7 @@ static s32 mobj_rideswitch_green(MapObjectEntry* mobj) {
                 if (!(mobj->flags & MOBJ_FLAG_HIT)) {
                     mobj->state = 3;
                     animPoseSetAnim(mobj->poseId, "A_2", 1);
-                    psndSFXOn_3D((const char*)0x1d6, &mobj->position);
+                    psndSFXOn_3D((const char*)PSND_SFX_MOBJ_RIDE_SWITCH_ON4, &mobj->position);
                 } else {
                     mobj->flags &= ~MOBJ_FLAG_HIT;
                 }
@@ -2838,7 +2838,7 @@ static s32 mobj_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
         case 0:
             if (mobj->flags & MOBJ_FLAG_HIT) {
-                psndSFXOn_3D((const char*)0x1b7, &mobj->position);
+                psndSFXOn_3D((const char*)PSND_SFX_MOBJ_BLOCK_UNBREAK1, &mobj->position);
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
                 mobj->flags &= ~MOBJ_FLAG_HIT;
                 mobj->state++;
@@ -3484,9 +3484,9 @@ s32 mobj_breaking_floor(MapObjectEntry* mobj) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
 #if VERSION <= VERSION_DEMO_US
-            psndSFXOn_3D(SFX_NAME_WORD(0x1E8), &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BREAK_FLOOR1), &mobj->position);
 #else
-            psndSFXOn_3D(SFX_NAME_WORD(0x1E8 | PSND_SFX_KEEP), &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BREAK_FLOOR1 | PSND_SFX_KEEP), &mobj->position);
 #endif
             animPoseSetAnim(mobj->poseId, "A_1", 1);
             if ((u32)mobj->event != 0U) {
@@ -3879,7 +3879,7 @@ static s32 mobj_trap_floor(MapObjectEntry* mobj) {
             if (mobj->flags & MOBJ_FLAG_HIT) {
                 evtSetValue(NULL, mobj->flagVar, 1);
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
-                psndSFXOn_3D((const char*)0x1f1, &mobj->position);
+                psndSFXOn_3D((const char*)PSND_SFX_MOBJ_FLOOR_TRAP1, &mobj->position);
                 mobj->state++;
             }
             break;
@@ -3997,7 +3997,7 @@ static s32 mobj_breaking_rock(MapObjectEntry* mobj) {
             img->animName = "A_1";
             img->animTime = animTimeGetTime(type);
             imgSetShadow(img, 2);
-            psndSFXOn_3D((const char*)0x1cc, &mobj->position);
+            psndSFXOn_3D((const char*)PSND_SFX_MOBJ_WALL_BREAK1, &mobj->position);
             mobj->state++;
             break;
         case 2:

@@ -406,7 +406,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_flag_onoff, 1, 768)
 #else
-    CALL(evt_snd_sfxon_3d, 131230, LW(0), LW(1), LW(2), 0)
+    CALL(evt_snd_sfxon_3d, PSND_SFX_VOICE_MARIO_FLD_JUMP2 | PSND_SFX_BYPASS_MUTE, LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL | MARIO_FLAG_WALLS_DISABLED)
 #endif
     CALL(get_bed, LW(0), LW(1), LW(2))
@@ -428,9 +428,9 @@ EVT_BEGIN(kinopio_house_talk_evt)
         WAIT_MS(200)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP2"), LW(0), LW(1), LW(2), 0)
 #else
-        CALL(evt_snd_sfxon_3d, 132026, LW(0), LW(1), LW(2), 0)
+        CALL(evt_snd_sfxon_3d, PSND_SFX_OFF_MARIO_SLEEP1 | PSND_SFX_BYPASS_MUTE, LW(0), LW(1), LW(2), 0)
         WAIT_MS(200)
-        CALL(evt_snd_sfxon_3d, 132027, LW(0), LW(1), LW(2), 0)
+        CALL(evt_snd_sfxon_3d, PSND_SFX_OFF_MARIO_SLEEP2 | PSND_SFX_BYPASS_MUTE, LW(0), LW(1), LW(2), 0)
 #endif
     END_INLINE_EVENT
 

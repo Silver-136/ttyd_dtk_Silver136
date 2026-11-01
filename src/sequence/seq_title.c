@@ -282,7 +282,7 @@ void titleMain(SequenceWork* work) {
                 wp2->fadeAlpha = 1.0f;
             }
             if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
-                psndSFXOn((const char*)0x12);
+                psndSFXOn((const char*)PSND_SFX_CURSOR_OK1);
                 wp2->state = 10;
             } else if (++wp2->idle > VERSION_PICK(60, gp->framerate) * 20 - VERSION_PICK(60, gp->framerate)) {
                 wp2->state = 20;

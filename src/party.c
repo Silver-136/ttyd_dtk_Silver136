@@ -1347,7 +1347,7 @@ s32 partyHelloMain(PartyEntry* party) {
         case 0: {
                 f32 x, y, z, h, dy;
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn_3D((const char*)0x920, &party->position);
+                psndSFXOn_3D((const char*)PSND_SFX_PARTY_OUT1, &party->position);
 #endif
                 x = ((MarioWork*)mario)->position.x;
                 y = ((MarioWork*)mario)->position.y;

@@ -2543,7 +2543,7 @@ void winSortMain(WindowWork* wp) {
         }
     } else if (rep & DEMO_STICK_DOWN) {
 #if VERSION == VERSION_EU
-        psndSFXOn(SFX_NAME_WORD(0x20005));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
         wp->sortRev = 0;
 #else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));

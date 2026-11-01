@@ -356,14 +356,14 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
         }
         if (party->footstepTimer >= b) {
             party->footstepTimer = 0;
-            psndSFXOn_3D((const char*)0x60D, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_STG5_MARCO_MOVE1R, &party->position);
         } else if (party->footstepTimer == a) {
-            psndSFXOn_3D((const char*)0x60C, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_STG5_MARCO_MOVE1L, &party->position);
         }
     } else if (party->currentMemberId == PARTY_MEMBER_EGG) {
         if (party->footstepTimer >= 15) {
             party->footstepTimer = 0;
-            psndSFXOn_3D((const char*)0x942, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_PARTY_YOSH_EGG1, &party->position);
         }
     } else if (party->currentMemberId == PARTY_MEMBER_PUNIO) {
         if (arg == 0) {
@@ -375,14 +375,14 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
         }
         if (party->footstepTimer >= b) {
             party->footstepTimer = 0;
-            psndSFXOn_3D((const char*)0x3FF, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_STG0_PUNI_MOVE1, &party->position);
         } else if (party->footstepTimer == a) {
-            psndSFXOn_3D((const char*)0x3FF, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_STG0_PUNI_MOVE1, &party->position);
         }
     } else if (party->moveKind == 1) {
         if (party->footstepTimer >= (!arg ? 40 : 20)) {
             party->footstepTimer = 0;
-            psndSFXOn_3D((const char*)0x926, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_PARTY_MOVE2, &party->position);
         }
     } else {
         if (arg == 0) {
@@ -394,9 +394,9 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
         }
         if (party->footstepTimer >= b) {
             party->footstepTimer = 0;
-            psndSFXOn_3D((const char*)0x925, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_PARTY_MOVE1R, &party->position);
         } else if (party->footstepTimer == a) {
-            psndSFXOn_3D((const char*)0x924, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_PARTY_MOVE1L, &party->position);
         }
     }
 }
@@ -3994,7 +3994,7 @@ void party_motion_jump(PartyEntry* party) {
             partyChgPoseId(party, PARTY_POSE_JUMP);
             party->flags |= PARTY_FLAG_IS_JUMPING;
             party->flags &= ~PARTY_FLAG_IS_GROUNDED;
-            psndSFXOn_3D((const char*)0x927, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_PARTY_JUMP1, &party->position);
             party->motionStep = 10;
             break;
         case 10:
@@ -4024,7 +4024,7 @@ void party_motion_jump(PartyEntry* party) {
                 party->position.y = gy;
                 party->hitobjStandOn = hit;
                 if (hit) {
-                    psndSFXOn_3D((const char*)0x928, &party->position);
+                    psndSFXOn_3D((const char*)PSND_SFX_PARTY_LANDING1, &party->position);
                     party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
                     party->flags |= PARTY_FLAG_IS_GROUNDED;
                     party->velY = 0.0f;
@@ -4077,7 +4077,7 @@ void party_motion_jump2(PartyEntry* party) {
         partyChgPoseId(party, PARTY_POSE_JUMP);
         party->flags |= PARTY_FLAG_IS_JUMPING;
         party->flags &= ~PARTY_FLAG_IS_GROUNDED;
-        psndSFXOn_3D((const char*)0x927, &party->position);
+        psndSFXOn_3D((const char*)PSND_SFX_PARTY_JUMP1, &party->position);
         party->motionStep = 0;
     }
     switch (party->motionStep) {
@@ -4106,7 +4106,7 @@ void party_motion_jump2(PartyEntry* party) {
                 party->position.y = pos.y;
                 party->hitobjStandOn = hit;
                 if (hit) {
-                    psndSFXOn_3D((const char*)0x928, &party->position);
+                    psndSFXOn_3D((const char*)PSND_SFX_PARTY_LANDING1, &party->position);
                     party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
                     party->flags |= PARTY_FLAG_IS_GROUNDED;
                     party->velY = 0.0f;
@@ -4398,7 +4398,7 @@ s32 party_motion_fall(PartyEntry* party) {
         } else {
             partyChgMot(party, PARTY_MOTION_WALK);
         }
-        psndSFXOn_3D((const char*)0x928, &party->position);
+        psndSFXOn_3D((const char*)PSND_SFX_PARTY_LANDING1, &party->position);
         return 3;
     }
     if (hit) {
@@ -4412,7 +4412,7 @@ s32 party_motion_fall(PartyEntry* party) {
         } else {
             partyChgMot(party, PARTY_MOTION_WALK);
         }
-        psndSFXOn_3D((const char*)0x928, &party->position);
+        psndSFXOn_3D((const char*)PSND_SFX_PARTY_LANDING1, &party->position);
         partyClearFootmark();
         return 3;
     }

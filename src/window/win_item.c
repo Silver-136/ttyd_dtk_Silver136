@@ -421,7 +421,7 @@ s32 winItemMain(WindowWork* w) {
 #if VERSION <= VERSION_DEMO_US
             }
         } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20013));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
 #else
                 w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
                 w->helpX = w->helpTgtX;
@@ -473,7 +473,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.mailLines += 7;
             }
         } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20013));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
 #else
             w->item.mailLine = 0;
             if (mail->flags & MAIL_FLAG_PICTURE) {
@@ -611,7 +611,7 @@ s32 winItemMain(WindowWork* w) {
         } else if (w->buttonTrg & PAD_BUTTON_A) {
             mp = marioGetPtr();
 #if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20012));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             if (mp->currMotionId != MARIO_MOTION_SHIP && mp->currMotionId != MARIO_MOTION_PLANE &&
                 ((w->item.useTarget < 2 && !marioBgmodeChk()) || (w->item.useTarget < 1 && marioBgmodeChk()))) {
 #else
@@ -677,7 +677,7 @@ s32 winItemMain(WindowWork* w) {
             }
             if (old != w->item.useTarget) {
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn(SFX_NAME_WORD(0x20005));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #endif
@@ -690,7 +690,7 @@ s32 winItemMain(WindowWork* w) {
             }
             if (old != w->item.useTarget) {
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn(SFX_NAME_WORD(0x20005));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #endif

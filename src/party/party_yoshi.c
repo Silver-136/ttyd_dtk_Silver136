@@ -576,7 +576,7 @@ void yoshi_use(PartyEntry* party) {
     switch (party->useMotionId) {
         case 10:
 #if VERSION <= VERSION_DEMO_US
-            psndSFXOn_3D((const char*)0x93F, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_PARTY_YOSH_RIDE1, &party->position);
             case 11:
             partyChgPose(party, "PYS_H_1");
             marioChgMot(MARIO_MOTION_YOSHI);
@@ -792,7 +792,7 @@ void yoshi_use(PartyEntry* party) {
             mario->mot.yoshi.bobSpeed = sin(3.141592653589793f * YOSHI_WORK(party)->angle / 180.0f);
             mario->mot.yoshi.bobOfs = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-            party->yoshiPsndSFXId = psndSFXOn_3D((const char*)0x941, &party->position);
+            party->yoshiPsndSFXId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_YOSH_JUMP1, &party->position);
 #else
             mario->mot.yoshi.baseY = party->position.y;
             party->yoshiPsndSFXId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_JUMP1), &party->position);

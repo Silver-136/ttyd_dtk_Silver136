@@ -540,7 +540,7 @@ void bomhei_use_main(PartyEntry* party) {
     switch (party->useMotionId) {
     case 20:
 #if VERSION <= VERSION_DEMO_US
-        party->work.bomhei.reserved_17C = psndSFXOn_3D((const char*)0x939, &party->playerPtr->position);
+        party->work.bomhei.reserved_17C = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_THROW1, &party->playerPtr->position);
 #else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_THROW1), &party->playerPtr->position);
 #endif
@@ -631,7 +631,7 @@ void bomhei_use_main(PartyEntry* party) {
         if (BOMHEI_WORK(party)->timer == (s16)sysMsec2Frame(2500)) {
             BOMHEI_WORK(party)->flags |= 2;
 #if VERSION <= VERSION_DEMO_US
-            party->work.bomhei.sfxId = psndSFXOn_3D((const char*)0x93C, &party->playerPtr->position);
+            party->work.bomhei.sfxId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_FUSE1, &party->playerPtr->position);
 #else
             if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
                 party->work.bomhei.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE1), &party->playerPtr->position);
@@ -686,7 +686,7 @@ void bomhei_use_main(PartyEntry* party) {
             party->work.bomhei.sfxId = -1;
         }
 #if VERSION <= VERSION_DEMO_US
-        party->work.bomhei.sfxId2 = psndSFXOn_3D((const char*)0x93D, &party->playerPtr->position);
+        party->work.bomhei.sfxId2 = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_FUSE2, &party->playerPtr->position);
 #else
         if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
             party->work.bomhei.sfxId2 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE2), &party->playerPtr->position);
@@ -739,7 +739,7 @@ void bomhei_use_main(PartyEntry* party) {
             evtEntryType(quake_evt, 0, 0, 0);
         }
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((const char*)0x93B, &party->position);
+        psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_BOMB1, &party->position);
         eff = effSandarsEntry(pouchGetPartyAttackLv((PartyId)3), party->position.x,
 #else
         eff = effSandarsEntry(pouchGetPartyAttackLv(PARTNER_BOBBERY), party->position.x,

@@ -800,7 +800,7 @@ EVT_BEGIN(evt_diary_read)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_APPEAR1"), LW(0), LW(1), LW(2), 0)
 #else
-    CALL(evt_snd_sfxon_3d, 132773, LW(0), LW(1), LW(2), 0)
+    CALL(evt_snd_sfxon_3d, PSND_SFX_STG6_GHOST_APPEAR1 | PSND_SFX_BYPASS_MUTE, LW(0), LW(1), LW(2), 0)
 #endif
     WAIT_MS(200)
     CALL(evt_mario_set_pose, STRING("M_I_O"))
@@ -814,7 +814,7 @@ EVT_BEGIN(evt_diary_read)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_SHAKE1"), LW(0), LW(1), LW(2), LW(3))
 #else
-    CALL(evt_snd_sfxon, 132770, LW(3))
+    CALL(evt_snd_sfxon, PSND_SFX_STG6_GHOST_SHAKE1 | PSND_SFX_BYPASS_MUTE, LW(3))
 #endif
     BEGIN_INLINE_EVENT
         CALL(cam_r)
