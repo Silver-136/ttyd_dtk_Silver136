@@ -1399,9 +1399,9 @@ static USER_FUNC(make_list) {
 
     if (tmp == NULL) {
         tmp = _mapAlloc(0x400);
-}
-sprintf(tmp, "<select %d %d %d %d>", 0, 7, 300, 140);
-for (i = 0; i < 7; i++) {
+    }
+    sprintf(tmp, "<select %d %d %d %d>", 0, 7, 300, 140);
+    for (i = 0; i < 7; i++) {
         strcat(tmp, "\n");
         strcat(tmp, msgSearch(list[i]));
     }

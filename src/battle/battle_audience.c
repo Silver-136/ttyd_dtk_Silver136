@@ -572,7 +572,7 @@ u8 BattleAudience_CheckReaction(void) {
     return FALSE;
 }
 #if VERSION <= VERSION_DEMO_US
-return FALSE;
+    return FALSE;
 }
 #endif
 

@@ -1552,7 +1552,7 @@ USER_FUNC(party_color) {
     return EVT_RETURN_DONE;
 }
 #elif VERSION == VERSION_DEMO_US
-else {
+    else {
         evtSetValue(event, args[0], 0);
     }
     return EVT_RETURN_DONE;

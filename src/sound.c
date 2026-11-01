@@ -2082,8 +2082,8 @@ s16* dst;
                 entry->curBuf = 1 - entry->curBuf;
                 src8 = entry->loadBuffer[entry->curBuf];
             }
-entry->pos++;
-if (entry->pos >= stream->loopEnd) {
+            entry->pos++;
+            if (entry->pos >= stream->loopEnd) {
                 entry->pos = stream->loopStart;
                 if (!(stream->flags & SOUND_STREAM_FLAG_LOOP)) {
                     stream->flags |= SOUND_STREAM_FLAG_END;
@@ -2119,8 +2119,8 @@ if (entry->pos >= stream->loopEnd) {
                 entry->curBuf = 1 - entry->curBuf;
                 src8b = entry->loadBuffer[entry->curBuf];
             }
-entry->pos++;
-if (entry->pos >= stream->loopEnd) {
+            entry->pos++;
+            if (entry->pos >= stream->loopEnd) {
                 entry->pos = stream->loopStart;
                 if (!(stream->flags & SOUND_STREAM_FLAG_LOOP)) {
                     stream->flags |= SOUND_STREAM_FLAG_END;

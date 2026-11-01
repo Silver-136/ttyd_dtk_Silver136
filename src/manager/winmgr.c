@@ -872,11 +872,11 @@ sel->items[sel->numItems++].id = id;
                             cnt++;
                         }
                     }
-}
-if (cnt == 2) {
+                }
+                if (cnt == 2) {
                     sel->items[i].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                 }
-}
+            }
             sel->numItems = 3;
             break;
         case 10:
@@ -2090,9 +2090,9 @@ s32 i;
                 ofs = ofs + 0.0f;
             }
             winFontInit();
-winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+            winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                        *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), select_party_name(sel->items[i].id));
-if (sel->items[i].flags & SELECT_ITEM_GRAY) {
+            if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 winIconGrayInit();
             } else {
                 winIconInit();

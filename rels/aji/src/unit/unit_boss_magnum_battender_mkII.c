@@ -792,8 +792,8 @@ USER_FUNC(aud_suikomi) {
 #endif
 }
 #if VERSION <= VERSION_DEMO_US
-psndSFXOff(screamId);
-return EVT_RETURN_DONE;
+    psndSFXOff(screamId);
+    return EVT_RETURN_DONE;
 }
 #endif
 

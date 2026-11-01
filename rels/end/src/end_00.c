@@ -812,8 +812,8 @@ actor->state++;
         if (actor->angle > actor->limit) {
                 animPoseRelease(actor->poseId);
                 _mapFree(actor);
-end_wp->npcLoadRequest++;
-return 2;
+                end_wp->npcLoadRequest++;
+                return 2;
             }
             break;
     }

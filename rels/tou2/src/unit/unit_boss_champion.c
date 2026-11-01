@@ -1852,10 +1852,10 @@ EVT_BEGIN(roof_shake_attack_event)
     IF_INT_EQUAL(LW(5), 2)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
     END_IF
-LABEL(90)
-END_LOOP
-WAIT_FRAMES(32)
-CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    LABEL(90)
+    END_LOOP
+    WAIT_FRAMES(32)
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
 #endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_PARTNER, 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

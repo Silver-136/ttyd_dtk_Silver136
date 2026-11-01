@@ -2029,8 +2029,8 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
         if (hit) {
             f32 r = marioHitNrmAngle(&outNrm);
             if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-f32 lim = (mario->flags & MARIO_FLAG_PAPER_MODE) ? 75.0f : 50.0f;
-if (r <= 180.0f - lim && r >= lim) {
+                f32 lim = (mario->flags & MARIO_FLAG_PAPER_MODE) ? 75.0f : 50.0f;
+                if (r <= 180.0f - lim && r >= lim) {
                     hit = NULL;
                 }
             }
