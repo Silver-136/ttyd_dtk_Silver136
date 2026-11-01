@@ -1406,9 +1406,9 @@ void itemseq_GetItem(ItemEntry* entry) {
             {
                 s32 id = entry->itemId;
                 if (id >= BADGE_MIN && id < BADGE_MAX) {
-                    wp->select = winMgrSelectEntry(2, id, 1);
+                    wp->select = winMgrSelectEntry(SELECT_TYPE_BADGE, id, 1);
                 } else {
-                    wp->select = winMgrSelectEntry(1, id, 1);
+                    wp->select = winMgrSelectEntry(SELECT_TYPE_ITEM, id, 1);
                 }
             }
             break;

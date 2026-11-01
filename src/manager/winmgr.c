@@ -737,7 +737,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
     sel->cursorY = desc->y - 54;
 
     switch (m = sel->type) {
-        case 0:
+        case SELECT_TYPE_KEY_ITEM:
             sel->items = __memAlloc(HEAP_DEFAULT, (MAX_KEY_ITEMS + 1) * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, (MAX_KEY_ITEMS + 1) * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
@@ -747,6 +747,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             for (i = 0; i < MAX_KEY_ITEMS; i++) {
                 id = (u16)pouchKeyItem(i);
                 if (id) {
+                    // BUG: retail's menu_skip_list has 18 entries (the demos' 19), so this also reads the u16 after it.
                     for (j = 0; j < 19; j++) {
                         if (id == menu_skip_list[j]) {
                             break;
@@ -758,9 +759,9 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 }
             }
             break;
-        case 1:
-        case 3:
-        case 4:
+        case SELECT_TYPE_ITEM:
+        case SELECT_TYPE_ITEM_SELL:
+        case SELECT_TYPE_ITEM_STORE:
             sel->items = __memAlloc(HEAP_DEFAULT, (MAX_HELD_ITEMS + 1) * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, (MAX_HELD_ITEMS + 1) * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
@@ -774,8 +775,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 }
             }
             break;
-        case 2:
-        case 12:
+        case SELECT_TYPE_BADGE:
+        case SELECT_TYPE_BADGE_SELL:
             sel->items = __memAlloc(HEAP_DEFAULT, (MAX_BADGES + 1) * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, (MAX_BADGES + 1) * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
@@ -786,7 +787,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 id = (u16)pouchHaveBadge(i);
                 if (id) {
 #if VERSION >= VERSION_US
-                    if (sel->type == 12 && id == pouchEquipBadge(i)) {
+                    if (sel->type == SELECT_TYPE_BADGE_SELL && id == pouchEquipBadge(i)) {
                         sel->items[sel->numItems].flags |= SELECT_ITEM_EQUIPPED;
                     }
 #endif
@@ -794,7 +795,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 }
             }
             break;
-        case 5:
+        case SELECT_TYPE_ITEM_RETRIEVE:
             sel->items = __memAlloc(HEAP_DEFAULT, (MAX_STORED_ITEMS + 1) * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, (MAX_STORED_ITEMS + 1) * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
@@ -808,8 +809,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 }
             }
             break;
-        case 6:
-        case 7: {
+        case SELECT_TYPE_PARTY_RANK_UP:
+        case SELECT_TYPE_PARTY_SWAP_RANK_UP: {
             sel->items = __memAlloc(HEAP_DEFAULT, 7 * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, 7 * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
@@ -830,7 +831,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             }
             break;
         }
-        case 8: {
+        case SELECT_TYPE_PARTY_SWAP_RANK_DOWN: {
             sel->items = __memAlloc(HEAP_DEFAULT, 7 * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, 7 * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
@@ -845,7 +846,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             }
             break;
         }
-        case 9:
+        case SELECT_TYPE_STAT_SWAP_UP:
             mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
             mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
             mario_status_point_table[2] = &pouchGetPtr()->maximumBP;
@@ -881,7 +882,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             }
             sel->numItems = 3;
             break;
-        case 10:
+        case SELECT_TYPE_STAT_SWAP_DOWN:
             mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
             mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
             mario_status_point_table[2] = &pouchGetPtr()->maximumBP;
@@ -898,7 +899,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 }
             }
             break;
-        case 11:
+        case SELECT_TYPE_BADGE_BUY:
             sel->items = __memAlloc(HEAP_DEFAULT, BADGE_COUNT * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, BADGE_COUNT * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
@@ -912,7 +913,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_type);
 #endif
             break;
-        case 13:
+        case SELECT_TYPE_BADGE_STAR_PIECE:
             m = getBadgeStarmaniacTableMaxCount();
             sel->items = __memAlloc(HEAP_DEFAULT, m * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, m * sizeof(WinMgrSelectItem));
@@ -925,7 +926,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 }
             }
             break;
-        case 14:
+        case SELECT_TYPE_BADGE_CHARLIETON:
             sel->items = __memAlloc(HEAP_DEFAULT, 0x10);
             memset(sel->items, 0, 0x10);
 #else
@@ -938,7 +939,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             }
             qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_starpiece);
             break;
-        case 14:
+        case SELECT_TYPE_BADGE_CHARLIETON:
             sel->items = __memAlloc(HEAP_DEFAULT, 4 * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, 4 * sizeof(WinMgrSelectItem));
 #endif
@@ -950,7 +951,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 }
             }
             break;
-        case 15:
+        case SELECT_TYPE_BADGE_CHARLIETON_PIT:
             m = getBadgeBottakuru100TableMaxCount();
             sel->items = __memAlloc(HEAP_DEFAULT, m * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, m * sizeof(WinMgrSelectItem));
@@ -959,7 +960,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 sel->items[sel->numItems++].id = badge_bottakuru100_table[i];
             }
             break;
-        case 16:
+        case SELECT_TYPE_BADGE_PIANTA_TOKEN:
             m = getBadgeBteresaTableMaxCount();
             sel->items = __memAlloc(HEAP_DEFAULT, m * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, m * sizeof(WinMgrSelectItem));
@@ -973,9 +974,9 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_bteresa);
 #endif
             break;
-        case 17:
-        case 18:
-            if (m == 17) {
+        case SELECT_TYPE_INFORMANT_PERFECT:
+        case SELECT_TYPE_INFORMANT_LUIGI:
+            if (m == SELECT_TYPE_INFORMANT_PERFECT) {
                 tbl = jdt->readFlags.perfectRead;
             } else {
                 tbl = jdt->readFlags.luigiRead;
@@ -1103,8 +1104,8 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
         }
         id = sel->items[sel->cursor].id;
         switch (sel->type) {
-            case 6:
-            case 7:
+            case SELECT_TYPE_PARTY_RANK_UP:
+            case SELECT_TYPE_PARTY_SWAP_RANK_UP:
                 evt->lwData[1] = party_id_table[id];
                 switch (id) {
                     case 0:
@@ -1131,7 +1132,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 }
                 evt->lwData[3] = (EvtWord)name;
                 break;
-            case 8:
+            case SELECT_TYPE_PARTY_SWAP_RANK_DOWN:
                 evt->lwData[2] = party_id_table[id];
 #if VERSION <= VERSION_DEMO_US
                 name = select_party_name(id);
@@ -1162,7 +1163,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
 #endif
                 evt->lwData[4] = (EvtWord)name;
                 break;
-            case 9:
+            case SELECT_TYPE_STAT_SWAP_UP:
                 evt->lwData[1] = id;
                 evt->lwData[2] = (EvtWord)MARIO_STATUS_NAME(id);
                 evt->lwData[5] = *mario_status_point_table[0];
@@ -1170,18 +1171,18 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 evt->lwData[7] = *mario_status_point_table[2];
                 evt->lwData[5 + id] += mario_status_henka_table[id];
                 break;
-            case 10:
+            case SELECT_TYPE_STAT_SWAP_DOWN:
                 evt->lwData[1] = id;
                 evt->lwData[3] = (EvtWord)MARIO_STATUS_NAME(id);
                 evt->lwData[5 + id] -= mario_status_henka_table[id];
                 break;
-            case 11:
+            case SELECT_TYPE_BADGE_BUY:
                 evt->lwData[1] = id;
                 evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
                 evt->lwData[3] = itemDataTable[id].buy_price;
                 evt->lwData[4] = itemDataTable[id].bp_cost;
                 break;
-            case 12:
+            case SELECT_TYPE_BADGE_SELL:
                 evt->lwData[1] = id;
                 evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
                 evt->lwData[3] = itemDataTable[id].sell_price;
@@ -1189,31 +1190,31 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 evt->lwData[4] = sel->cursor;
 #endif
                 break;
-            case 13:
+            case SELECT_TYPE_BADGE_STAR_PIECE:
                 evt->lwData[1] = id;
                 evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
                 evt->lwData[3] = itemDataTable[id].star_piece_price;
                 evt->lwData[4] = itemDataTable[id].bp_cost;
                 break;
-            case 14:
+            case SELECT_TYPE_BADGE_CHARLIETON:
                 evt->lwData[1] = id;
                 evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
                 evt->lwData[3] = (itemDataTable[id].buy_price * 12) / 10;
                 evt->lwData[4] = itemDataTable[id].bp_cost;
                 break;
-            case 15:
+            case SELECT_TYPE_BADGE_CHARLIETON_PIT:
                 evt->lwData[1] = id;
                 evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
                 evt->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[id].buy_price) / 10;
                 evt->lwData[4] = itemDataTable[id].bp_cost;
                 break;
-            case 16:
+            case SELECT_TYPE_BADGE_PIANTA_TOKEN:
                 evt->lwData[1] = id;
                 evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
                 evt->lwData[3] = (itemDataTable[id].buy_price * 2 + 2) / 3;
                 evt->lwData[4] = itemDataTable[id].bp_cost;
                 break;
-            case 17:
+            case SELECT_TYPE_INFORMANT_PERFECT:
                 sprintf(jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
                 sprintf(buf, "jperfect_title_%04d", jdt->info[id].storyId);
                 jdt->curIndex = id;
@@ -1227,7 +1228,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                     evt->lwData[4] = jdt->info[id].cost;
                 }
                 break;
-            case 18:
+            case SELECT_TYPE_INFORMANT_LUIGI:
                 sprintf(jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
                 jdt->curIndex = id;
                 evt->lwData[1] = (EvtWord)jdt->infoEnd;
@@ -1457,28 +1458,28 @@ void select_disp(WinMgrEntry* entry) {
 #endif
             show = FALSE;
             switch (sel->type) {
-                case 11:
+                case SELECT_TYPE_BADGE_BUY:
                     price = item->buy_price;
                     show = TRUE;
                     break;
-                case 3:
-                case 12:
+                case SELECT_TYPE_ITEM_SELL:
+                case SELECT_TYPE_BADGE_SELL:
                     price = item->sell_price;
                     show = TRUE;
                     break;
-                case 13:
+                case SELECT_TYPE_BADGE_STAR_PIECE:
                     price = item->star_piece_price;
                     show = TRUE;
                     break;
-                case 14:
+                case SELECT_TYPE_BADGE_CHARLIETON:
                     price = item->buy_price * 12 / 10;
                     show = TRUE;
                     break;
-                case 15:
+                case SELECT_TYPE_BADGE_CHARLIETON_PIT:
                     price = item->buy_price * (evtGetValue(NULL, GSW_PIT_FLOOR) + 11) / 10;
                     show = TRUE;
                     break;
-                case 16:
+                case SELECT_TYPE_BADGE_PIANTA_TOKEN:
                     price = (item->buy_price * 2 + 2) / 3;
                     show = TRUE;
                     break;
@@ -1516,21 +1517,21 @@ void select_disp(WinMgrEntry* entry) {
         GXSetScissor(left, top, wd, ht);
         switch (sel->type) {
 #if VERSION > VERSION_DEMO_US
-            case 2:
+            case SELECT_TYPE_BADGE:
 #endif
-            case 11:
-            case 12:
-            case 13:
+            case SELECT_TYPE_BADGE_BUY:
+            case SELECT_TYPE_BADGE_SELL:
+            case SELECT_TYPE_BADGE_STAR_PIECE:
                 msg = msgSearch("msg_window_title_2");
                 break;
 #if VERSION > VERSION_DEMO_US
-            case 14:
+            case SELECT_TYPE_BADGE_CHARLIETON:
                 msg = msgSearch("msg_window_title_3");
                 break;
-            case 16:
+            case SELECT_TYPE_BADGE_PIANTA_TOKEN:
                 msg = msgSearch("msg_window_title_4");
                 break;
-            case 17:
+            case SELECT_TYPE_INFORMANT_PERFECT:
                 msg = msgSearch("msg_window_title_5");
                 break;
 #endif
@@ -1552,15 +1553,15 @@ void select_disp(WinMgrEntry* entry) {
         winFontSetEdge((Vec){entry->x + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
         switch (sel->type) {
-            case 3:
-            case 11:
-            case 12:
+            case SELECT_TYPE_ITEM_SELL:
+            case SELECT_TYPE_BADGE_BUY:
+            case SELECT_TYPE_BADGE_SELL:
 #if VERSION <= VERSION_DEMO_US
-            case 15:
-            case 17:
+            case SELECT_TYPE_BADGE_CHARLIETON_PIT:
+            case SELECT_TYPE_INFORMANT_PERFECT:
 #else
-            case 14:
-            case 15:
+            case SELECT_TYPE_BADGE_CHARLIETON:
+            case SELECT_TYPE_BADGE_CHARLIETON_PIT:
 #endif
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
@@ -1568,14 +1569,14 @@ void select_disp(WinMgrEntry* entry) {
                 iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
                 iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
                 break;
-            case 13:
+            case SELECT_TYPE_BADGE_STAR_PIECE:
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
                 iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
                 iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_STAR_PIECE, 0.6f);
                 break;
-            case 16:
+            case SELECT_TYPE_BADGE_PIANTA_TOKEN:
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
@@ -1814,10 +1815,10 @@ void select_disp_mario(WinMgrEntry* entry) {
                 continue;
             }
             switch (sel->type) {
-                case 9:
+                case SELECT_TYPE_STAT_SWAP_UP:
                     sprintf(buf, "%3d", *mario_status_point_table[id] + mario_status_henka_table[id]);
                     break;
-                case 10:
+                case SELECT_TYPE_STAT_SWAP_DOWN:
                 default:
                     sprintf(buf, "%3d", *mario_status_point_table[id] - mario_status_henka_table[id]);
                     break;
@@ -1923,7 +1924,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
             winFontSet((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
 #endif
             info->initEndPos[info->tagEndPos] = save;
-            if (sel->type == 17 && !(sel->items[i].flags & SELECT_ITEM_GRAY)) {
+            if (sel->type == SELECT_TYPE_INFORMANT_PERFECT && !(sel->items[i].flags & SELECT_ITEM_GRAY)) {
                 sprintf(buf, "%3d", info->cost);
                 winFontInit();
                 col = &black;
@@ -1942,10 +1943,10 @@ void select_disp_luigi(WinMgrEntry* entry) {
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_DISP_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
 #else
         switch (sel->type) {
-            case 17:
+            case SELECT_TYPE_INFORMANT_PERFECT:
                 msg = msgSearch("msg_window_title_5");
                 break;
-            case 18:
+            case SELECT_TYPE_INFORMANT_LUIGI:
             default:
                 msg = msgSearch("msg_window_title_6");
                 break;
@@ -1964,7 +1965,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
         winFontSetEdge((Vec){ent->x + w, ent->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
         switch (sel->type) {
-            case 17:
+            case SELECT_TYPE_INFORMANT_PERFECT:
                 PSMTXTrans(mtx, ent->x + 268, ent->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
@@ -1993,42 +1994,42 @@ void select_disp2(WinMgrEntry* entry) {
 
     msg = msgSearch("msg_window_select_1");
     switch (sel->type) {
-        case 3:
-        case 12:
+        case SELECT_TYPE_ITEM_SELL:
+        case SELECT_TYPE_BADGE_SELL:
             msg = msgSearch("msg_window_select_2");
             break;
-        case 4:
+        case SELECT_TYPE_ITEM_STORE:
             msg = msgSearch("msg_window_select_3");
             break;
-        case 5:
+        case SELECT_TYPE_ITEM_RETRIEVE:
             msg = msgSearch("msg_window_select_4");
             break;
-        case 6:
-        case 7:
+        case SELECT_TYPE_PARTY_RANK_UP:
+        case SELECT_TYPE_PARTY_SWAP_RANK_UP:
             msg = msgSearch("msg_window_select_11");
             break;
-        case 8:
+        case SELECT_TYPE_PARTY_SWAP_RANK_DOWN:
             msg = msgSearch("msg_window_select_12");
             break;
-        case 9:
+        case SELECT_TYPE_STAT_SWAP_UP:
             msg = msgSearch("msg_window_select_9");
             break;
-        case 10:
+        case SELECT_TYPE_STAT_SWAP_DOWN:
             msg = msgSearch("msg_window_select_9_1");
             break;
-        case 11:
-        case 14:
-        case 15:
+        case SELECT_TYPE_BADGE_BUY:
+        case SELECT_TYPE_BADGE_CHARLIETON:
+        case SELECT_TYPE_BADGE_CHARLIETON_PIT:
             msg = msgSearch("msg_window_select_6");
             break;
-        case 13:
-        case 16:
+        case SELECT_TYPE_BADGE_STAR_PIECE:
+        case SELECT_TYPE_BADGE_PIANTA_TOKEN:
             msg = msgSearch("msg_window_select_10");
             break;
-        case 17:
+        case SELECT_TYPE_INFORMANT_PERFECT:
             msg = msgSearch("msg_window_select_8");
             break;
-        case 18:
+        case SELECT_TYPE_INFORMANT_LUIGI:
             msg = msgSearch("msg_window_select_7");
             break;
     }
@@ -2091,7 +2092,7 @@ void select_disp3_party(WinMgrEntry* entry) {
         } else {
             help = "help";
         }
-        if (sel->type == 6 || sel->type == 7) {
+        if (sel->type == SELECT_TYPE_PARTY_RANK_UP || sel->type == SELECT_TYPE_PARTY_SWAP_RANK_UP) {
             lank = "lankup";
         } else {
             lank = "lankdown";
@@ -2125,11 +2126,11 @@ void select_disp3_mario(WinMgrEntry* entry) {
             help = "help";
         }
         switch (sel->type) {
-            case 9:
+            case SELECT_TYPE_STAT_SWAP_UP:
                 sprintf(buf, "%s_levelup%s", help, mario_status_labelname_table[sel->items[sel->cursor].id]);
                 break;
             default:
-            case 10:
+            case SELECT_TYPE_STAT_SWAP_DOWN:
                 sprintf(buf, "%s_leveldown%s", help, mario_status_labelname_table[sel->items[sel->cursor].id]);
                 break;
         }

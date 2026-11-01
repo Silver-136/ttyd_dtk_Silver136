@@ -2,6 +2,7 @@
 #pragma once
 
 #include "evt/evt_cmd.h"
+#include "manager/winmgr.h"
 
 USER_FUNC(evt_win_coin_off);
 USER_FUNC(evt_win_coin_on);

@@ -76,10 +76,34 @@ typedef struct WinMgrSelectItem {
     u16 id; //0x2
 } WinMgrSelectItem;
 
+// WinMgrSelect.type: which list winMgrSelectEntry fills, what winMgrSelectOther returns.
+// A negative value is not one of these: it is a pointer to a -1-terminated item id list.
+typedef enum WinMgrSelectType {
+    SELECT_TYPE_KEY_ITEM = 0,              // pouchKeyItem without menu_skip_list
+    SELECT_TYPE_ITEM = 1,                  // pouchHaveItem
+    SELECT_TYPE_BADGE = 2,                 // pouchHaveBadge
+    SELECT_TYPE_ITEM_SELL = 3,             // pouchHaveItem, sell_price column (evt_shop)
+    SELECT_TYPE_ITEM_STORE = 4,            // pouchHaveItem to put away (evt_shop)
+    SELECT_TYPE_ITEM_RETRIEVE = 5,         // pouchKeepItem (evt_shop)
+    SELECT_TYPE_PARTY_RANK_UP = 6,         // partners; rank limit by GSWF_GOR_UP_ARROW_USED (gor_02)
+    SELECT_TYPE_PARTY_SWAP_RANK_UP = 7,    // the same list, first step of the tik_11 swap
+    SELECT_TYPE_PARTY_SWAP_RANK_DOWN = 8,  // partners other than GW(1), rank 0 refused (tik_11)
+    SELECT_TYPE_STAT_SWAP_UP = 9,          // HP/FP/BP to raise (tik_11)
+    SELECT_TYPE_STAT_SWAP_DOWN = 10,       // the stats other than GW(1), to lower (tik_11)
+    SELECT_TYPE_BADGE_BUY = 11,            // bargain_table, buy_price (gor_01)
+    SELECT_TYPE_BADGE_SELL = 12,           // pouchHaveBadge, sell_price (gor_01)
+    SELECT_TYPE_BADGE_STAR_PIECE = 13,     // starmaniac_table, star_piece_price (tik_00)
+    SELECT_TYPE_BADGE_CHARLIETON = 14,     // badge_bottakuru_table, buy_price * 12 / 10 (gor_01)
+    SELECT_TYPE_BADGE_CHARLIETON_PIT = 15, // badge_bottakuru100_table, price by GSW_PIT_FLOOR (jon)
+    SELECT_TYPE_BADGE_PIANTA_TOKEN = 16,   // bteresa_table, Pianta token icon (gor_03)
+    SELECT_TYPE_INFORMANT_PERFECT = 17,    // jperfect_title entries, perfectRead (gor_02)
+    SELECT_TYPE_INFORMANT_LUIGI = 18,      // Luigi's entries, luigiRead (gor)
+} WinMgrSelectType;
+
 typedef struct WinMgrSelect {
     u16 flags; //0x0, WinMgrSelectFlags
     u16 pad_2; //0x2
-    s32 type; //0x4
+    s32 type; //0x4, WinMgrSelectType or an item list pointer
     s32 state; //0x8
     s32 cursor; //0xC
     s32 scrollTop; //0x10

@@ -1823,7 +1823,7 @@ EVT_BEGIN(talk_gyousyou)
     // Show the coin window and the list of goods; closing it ends the sale with a goodbye.
     LABEL(0)
     CALL(evt_win_coin_on, 0, LW(12))
-    CALL(evt_win_other_select, 15)
+    CALL(evt_win_other_select, SELECT_TYPE_BADGE_CHARLIETON_PIT)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print, 0, STRING("100kai_item_10"), 0, STRING("me"))

@@ -510,7 +510,7 @@ static EVT_BEGIN(sell_evt)
     CALL(evt_win_coin_on, 0, LW(8))
     LABEL(0)
 #endif
-    CALL(evt_win_other_select, 12)
+    CALL(evt_win_other_select, SELECT_TYPE_BADGE_SELL)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
 #if VERSION <= VERSION_DEMO_US
@@ -619,7 +619,7 @@ EVT_BEGIN(zaiko_buy_evt)
     CALL(evt_win_coin_on, 0, LW(8))
     LABEL(0)
 #endif
-    CALL(evt_win_other_select, 11)
+    CALL(evt_win_other_select, SELECT_TYPE_BADGE_BUY)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
 #if VERSION <= VERSION_DEMO_US
@@ -2315,7 +2315,7 @@ EVT_BEGIN(bottakuru_talk)
     // the list.
     LABEL(0)
     CALL(evt_win_coin_on, 0, LW(12))
-    CALL(evt_win_other_select, 14)
+    CALL(evt_win_other_select, SELECT_TYPE_BADGE_CHARLIETON)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print, 0, STRING("bottakuru_14"), 0, STRING("me"))

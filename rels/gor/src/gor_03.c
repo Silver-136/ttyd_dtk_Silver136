@@ -2704,7 +2704,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
 
     // Mario picks a prize from the list.
     CALL(yuugijou_set_yupflag, 1)
-    CALL(evt_win_other_select, 16)
+    CALL(evt_win_other_select, SELECT_TYPE_BADGE_PIANTA_TOKEN)
     CALL(yuugijou_set_yupflag, 0)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_74"), 0, STRING("me"))

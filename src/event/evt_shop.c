@@ -539,9 +539,9 @@ static EVT_BEGIN(sell_evt)
     LABEL(0)
     CALL(item_data_db_arrange)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, 3, LW(1))
+    CALL(evt_win_item_select, SELECT_TYPE_ITEM_SELL, LW(1))
 #else
-    CALL(evt_win_item_select, 1, 3, LW(1), LW(4))
+    CALL(evt_win_item_select, 1, SELECT_TYPE_ITEM_SELL, LW(1), LW(4))
 #endif
     CALL(item_data_db_restore)
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
@@ -629,7 +629,7 @@ EVT_BEGIN(keep_evt)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
     LABEL(0)
-    CALL(evt_win_item_select, 4, LW(1))
+    CALL(evt_win_item_select, SELECT_TYPE_ITEM_STORE, LW(1))
 #else
 #if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
@@ -644,7 +644,7 @@ EVT_BEGIN(keep_evt)
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
 #endif
     LABEL(0)
-    CALL(evt_win_item_select, 1, 4, LW(1), LW(4))
+    CALL(evt_win_item_select, 1, SELECT_TYPE_ITEM_STORE, LW(1), LW(4))
 #endif
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(get_msg, LW(10), 22, LW(14))
@@ -704,9 +704,9 @@ EVT_BEGIN(unkeep_evt)
     CALL(evt_msg_print_add, 0, LW(14))
     LABEL(0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, 5, LW(1))
+    CALL(evt_win_item_select, SELECT_TYPE_ITEM_RETRIEVE, LW(1))
 #else
-    CALL(evt_win_item_select, 1, 5, LW(1), LW(4))
+    CALL(evt_win_item_select, 1, SELECT_TYPE_ITEM_RETRIEVE, LW(1), LW(4))
 #endif
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(get_msg, LW(10), 22, LW(14))
