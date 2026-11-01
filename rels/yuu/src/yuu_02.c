@@ -341,7 +341,6 @@ static USER_FUNC(fall_rtn) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
     BOOL exists = FALSE;
     RollWork* data = wp->data;
-    const char* sfx;
     s32 total;
     s32 i;
     s32 t;
@@ -467,15 +466,13 @@ static USER_FUNC(fall_rtn) {
             sub->scale = 1.0f;
         }
     }
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfx = (0, "SFX_EVT_GAME_MONTE_COUNT1"); /* comma expr: string address into its own saved reg */
     for (i = 0; i < monte_p->num; i++) {
         m = &monte_p[i];
         switch (m->state) {
             case 0:
                 if (get_monte_check(&m->sub.pos, &marioGetPtr()->position) == TRUE) {
                     data->monteCount++;
-                    psndSFXOn_3D(sfx, &marioGetPtr()->position);
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_COUNT1"), &marioGetPtr()->position);
                     m->hidden = 1;
                     m->state = 1;
                 }

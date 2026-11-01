@@ -372,7 +372,6 @@ static inline void escape_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z
  */
 static void ext_main(void) {
     MarioWork* mario = marioGetPtr();
-    const char* sfx;
     s32 i;
     ExtdrvPose* pose;
     Chorobon* chb;
@@ -386,8 +385,6 @@ static void ext_main(void) {
 
     pose = extGetPosePtr();
     chb = wp->chb;
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfx = (0, "SFX_STG1_CHORO_ESCAPE1");
     for (i = 0; i < wp->count; i++, pose++, chb++) {
         switch (chb->state) {
             case 0: {
@@ -418,7 +415,7 @@ static void ext_main(void) {
                     escape_r(pose, chb, x, y, z);
                     if (rand() % 150 == 0) {
                         pos = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
-                        psndSFXOn_3D(sfx, &pos);
+                        psndSFXOn_3D(SFX_NAME_WORD("SFX_STG1_CHORO_ESCAPE1"), &pos);
                     }
                 } else {
                     chb->state = 99;

@@ -1193,8 +1193,6 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd);
  * Returns 1 once the action is decided, after _btlcmd_SetAttackEvent has stored its script in the unit.
  */
 s32 BattleCommandInput(BattleWork* work) {
-    const char* sfxA;
-    const char* sfxB;
     BattleUnit* unit;
     BattleCommand* cmd;
     s32 loop;
@@ -1221,13 +1219,9 @@ s32 BattleCommandInput(BattleWork* work) {
         BattleAcHelpSetDispType(0);
     }
     _commandRestoreRec();
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfxA = (0, "SFX_BTL_CURSOR_MOVE2");
     loop = 1;
     while (loop) {
         loop = 0;
-        // FAKE: sfxB is a second copy of sfxA for the left-move sound; using sfxA there changes the object
-        sfxB = sfxA;
     again:
         switch (state = cmd->state) {
         case 0:
@@ -1357,7 +1351,7 @@ s32 BattleCommandInput(BattleWork* work) {
                         targets->currentTarget = 0;
                     }
                     if (targets->numTargets >= 2) {
-                        psndSFXOn(sfxA);
+                        psndSFXOn(SFX_NAME_WORD("SFX_BTL_CURSOR_MOVE2"));
                     }
                 }
                 if (BattlePadCheckRepeat(BATTLE_PAD_STICK_LEFT)) {
@@ -1366,7 +1360,7 @@ s32 BattleCommandInput(BattleWork* work) {
                         targets->currentTarget = targets->numTargets - 1;
                     }
                     if (targets->numTargets >= 2) {
-                        psndSFXOn(sfxB);
+                        psndSFXOn(SFX_NAME_WORD("SFX_BTL_CURSOR_MOVE2"));
                     }
                 }
             }

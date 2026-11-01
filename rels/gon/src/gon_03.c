@@ -853,15 +853,10 @@ static void senkaron_ext_init(void) {
  */
 static void senkaron_ext_main(void) {
     MarioWork* mario;
-    const char* sfxLand;
-    const char* sfxFly;
-    const char* sfxFly2;
     s32 n;
     s32 i;
     ExtdrvPose* pose;
     s32 r;
-    f32 range;
-    f32 near;
     f32 scale;
     f32 dist;
 
@@ -878,14 +873,6 @@ static void senkaron_ext_main(void) {
         marioHammerFrame = 0;
     }
     n = extGetPoseNum();
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfxLand = (0, "SFX_STG1_HONE_LANDING1");
-    range = 1.5f * (6.0f * scale);
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfxFly = (0, "SFX_STG1_HONE_FLY1");
-    near = 3.0f * scale;
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfxFly2 = (0, "SFX_STG1_HONE_FLY1");
     for (i = n - 1; i >= 0; i--, pose++) {
         switch (senkaron[i].state) {
             case 0:
@@ -910,7 +897,7 @@ static void senkaron_ext_main(void) {
                         pos.x = (*pose->mtx)[0][3];
                         pos.y = (*pose->mtx)[1][3];
                         pos.z = (*pose->mtx)[2][3];
-                        psndSFXOn_3D(sfxLand, &pos);
+                        psndSFXOn_3D(SFX_NAME_WORD("SFX_STG1_HONE_LANDING1"), &pos);
                     }
                 }
                 break;
@@ -940,7 +927,7 @@ static void senkaron_ext_main(void) {
                 if (mario->currMotionId == MARIO_MOTION_HAMMER && marioHammerFrame == 10 &&
                     (*pose->mtx)[2][3] > mario->position.z - 80.0f && (*pose->mtx)[2][3] < 80.0f + mario->position.z) {
                     if (mario->directionView > 0.0f && mario->directionView < 180.0f) {
-                        if ((*pose->mtx)[0][3] > mario->position.x && (*pose->mtx)[0][3] < mario->position.x + range) {
+                        if ((*pose->mtx)[0][3] > mario->position.x && (*pose->mtx)[0][3] < mario->position.x + 1.5f * (6.0f * scale)) {
                             f32 dx;
                             f32 dz;
 
@@ -956,11 +943,11 @@ static void senkaron_ext_main(void) {
                                 pos.x = (*pose->mtx)[0][3];
                                 pos.y = (*pose->mtx)[1][3];
                                 pos.z = (*pose->mtx)[2][3];
-                                psndSFXOn_3D(sfxFly, &pos);
+                                psndSFXOn_3D(SFX_NAME_WORD("SFX_STG1_HONE_FLY1"), &pos);
                             }
                         }
                     } else {
-                        if ((*pose->mtx)[0][3] < mario->position.x && (*pose->mtx)[0][3] > mario->position.x - range) {
+                        if ((*pose->mtx)[0][3] < mario->position.x && (*pose->mtx)[0][3] > mario->position.x - 1.5f * (6.0f * scale)) {
                             f32 dx;
                             f32 dz;
 
@@ -976,12 +963,12 @@ static void senkaron_ext_main(void) {
                                 pos.x = (*pose->mtx)[0][3];
                                 pos.y = (*pose->mtx)[1][3];
                                 pos.z = (*pose->mtx)[2][3];
-                                psndSFXOn_3D(sfxFly2, &pos);
+                                psndSFXOn_3D(SFX_NAME_WORD("SFX_STG1_HONE_FLY1"), &pos);
                             }
                         }
                     }
                 }
-                if ((*pose->mtx)[0][3] > mario->position.x + scale - 10.0f && (*pose->mtx)[0][3] < mario->position.x + near &&
+                if ((*pose->mtx)[0][3] > mario->position.x + scale - 10.0f && (*pose->mtx)[0][3] < mario->position.x + 3.0f * scale &&
                     (*pose->mtx)[2][3] > mario->position.z - 20.0f && (*pose->mtx)[2][3] < 20.0f + mario->position.z) {
                     marioPushedFlag = 1;
                 }

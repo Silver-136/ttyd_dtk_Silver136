@@ -6280,9 +6280,6 @@ EVT_END()
 
 static USER_FUNC(fall_rtn) {
     Vec pos;
-    const char* sfx1;
-    const char* sfx2;
-    const char* sfx3;
     SlotWork* data;
     s32 i;
     s32 done = 0;
@@ -6320,12 +6317,6 @@ static USER_FUNC(fall_rtn) {
             monte_p[i].wait = ((rand() % 700 + 100) * 60) / 1000;
         }
     }
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfx1 = (0, "SFX_EVT_GAME_MONTE_LEAPED1");
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfx2 = (0, "SFX_EVT_GAME_MONTE_COUNT1");
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfx3 = (0, "SFX_EVT_GAME_MONTE_COUNT1");
     for (i = 0; i < monte_p->owner->monteCount; i++) {
         GMonte* m = &monte_p[i];
         switch (m->state) {
@@ -6341,7 +6332,7 @@ static USER_FUNC(fall_rtn) {
                 m->vel.y -= 0.81666666f;
                 if (m->sub.pos.y <= 0.0f) {
                     m->sub.pos.y = 0.0f;
-                    psndSFXOn_3D(sfx1, &m->sub.pos);
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_LEAPED1"), &m->sub.pos);
                     if (__fabs(m->vel.y) <= 4.0) {
                         m->state++;
                         m->timer = 300;
@@ -6353,7 +6344,7 @@ static USER_FUNC(fall_rtn) {
                     }
                 }
                 if (get_monte_check(&m->sub.pos, &marioGetPtr()->position) == TRUE) {
-                    psndSFXOn_3D(sfx2, &m->sub.pos);
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_COUNT1"), &m->sub.pos);
 #if VERSION <= VERSION_DEMO_US
                     if (yuwp->tokens < 0x7FFFFFFF) {
 #else
@@ -6381,7 +6372,7 @@ static USER_FUNC(fall_rtn) {
                 pos = m->sub.pos;
                 pos.y = 0.0f;
                 if (get_monte_check(&pos, &marioGetPtr()->position) == TRUE) {
-                    psndSFXOn_3D(sfx3, &m->sub.pos);
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_COUNT1"), &m->sub.pos);
 #if VERSION <= VERSION_DEMO_US
                     if (yuwp->tokens < 0x7FFFFFFF) {
 #else
@@ -6642,7 +6633,6 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
     GoryuuWork* wp = (GoryuuWork*)event->lwData[0];
     SlotWork* data = wp->data;
     s32 r;
-    const char* sfx;
     s32 dir;
     s32 i;
     s32 j;
@@ -6713,8 +6703,6 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                     }
                 }
             }
-            // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-            sfx = (0, "SFX_EVT_GAME_SLOT_STOP1");
             count = 0;
             for (j = 0; j < 3; j++) {
                 if (data->state[j] == 0) {
@@ -6755,7 +6743,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                     } else {
                         data->stopCount[j] = irand(2);
                     }
-                    psndSFXOn(sfx);
+                    psndSFXOn(SFX_NAME_WORD("SFX_EVT_GAME_SLOT_STOP1"));
                 }
                 count += slot_rotate_sub(wp, data, j);
             }

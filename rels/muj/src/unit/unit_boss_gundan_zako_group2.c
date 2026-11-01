@@ -636,19 +636,11 @@ void zakogun_ext_main2(void) {
     ZakoGun* zako;
     f32 x, y, z;
     Mtx m;
-    const char* se1;
-    const char* se2;
-    const char* se3;
 
     if (unit == NULL) {
         return;
     }
     body = BattleSearchObjectPtr("if_body");
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    se1 = (0, "SFX_BOSS_TEAM_3RD_ATTACK2");
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    se2 = (0, "SFX_BOSS_TEAM_3RD_MOVE_CAILING2");
-    se3 = "SFX_BOSS_TEAM_3RD_ATTACK2";
     for (i = 0; i < 25; i++, pose++) {
         zako = &zakogun[i];
         pose->texId = zako->poseBase + zako->poseCount / zako->poseDiv;
@@ -714,7 +706,7 @@ void zakogun_ext_main2(void) {
                 zako->target.y = y + work->count * 2.0f;
                 zako->state = 35;
                 zakogun_set_pose(zako, 0x2C, 1, 1);
-                psndSFXOn(se1);
+                psndSFXOn(SFX_NAME_WORD("SFX_BOSS_TEAM_3RD_ATTACK2"));
             case 35:
                 zako->pos.x += zako->vel.x;
                 zako->pos.y += zako->vel.y;
@@ -765,7 +757,7 @@ void zakogun_ext_main2(void) {
                     zako->pos.z = zako->home.z;
                     zakogun_set_pose(zako, 0x25, 4, 6);
                     if (i == 0) {
-                        psndSFXOn(se2);
+                        psndSFXOn(SFX_NAME_WORD("SFX_BOSS_TEAM_3RD_MOVE_CAILING2"));
                     }
                 }
                 break;
@@ -830,7 +822,7 @@ void zakogun_ext_main2(void) {
                 if (zako->timer <= 0) {
                     zako->state = 83;
                     zako->vel.y = 0.0f;
-                    psndSFXOn(se3);
+                    psndSFXOn(SFX_NAME_WORD("SFX_BOSS_TEAM_3RD_ATTACK2"));
                 }
                 break;
             case 83:

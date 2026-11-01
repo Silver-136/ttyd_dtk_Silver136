@@ -72,12 +72,9 @@ static inline void shotRecord(BattleActions* ac, ShotWork* sw) {
  * Without a press for 360 frames it throws by itself, and the command fails if the last throw was such.
  */
 s32 battleAcMain_Shot(BattleWork* work) {
-    const char* sfx;
     BattleActions* ac;
     ShotWork* sw;
     s32 loop;
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfx = (0, "SFX_AC_CURSOR_MOVE1");
     ac = &work->actionCommands;
     sw = (ShotWork*)ac->work;
     do {
@@ -117,7 +114,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
             case 100:
                 sw->timer = 360;
                 ac->acState = 1000;
-                sw->sfxId = psndSFXOn(sfx);
+                sw->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_AC_CURSOR_MOVE1"));
             case 1000:
                 if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
                     f32 range;

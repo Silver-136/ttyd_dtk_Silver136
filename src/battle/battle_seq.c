@@ -672,7 +672,6 @@ USER_FUNC(_set_effect_luck) {
     f32 y;
     BattleWeapon* pw;
     f32 x;
-    const char* sfx;
     BattleUnit* unit;
     BattleUnitPart* part;
     NiceEffectWork* effect;
@@ -682,8 +681,6 @@ USER_FUNC(_set_effect_luck) {
     pw = (0, &weapon);
     pz = (0, &z);
     py = (0, &y);
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    sfx = (0, "SFX_SYSTEM_LUCKY1");
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && unit->badgesEquipped.LuckyStart && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
@@ -724,7 +721,7 @@ USER_FUNC(_set_effect_luck) {
             part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
             BattleSetStatusDamageFromWeapon(BattleGetSystemPtr(wp), unit, part, pw, DAMAGE_RESULT_FINAL_HIT);
             BtlUnit_GetPos(unit, &x, py, pz);
-            psndSFXOn(sfx);
+            psndSFXOn(SFX_NAME_WORD("SFX_SYSTEM_LUCKY1"));
             // FAKE: block-local EffectEntry* temporary; assigning effNiceEntry(...)->userdata directly changes the object
             {
                 EffectEntry* e = effNiceEntry(NICE_EFFECT_LUCKY, x - 45.0f, 60.0f + y, z);
