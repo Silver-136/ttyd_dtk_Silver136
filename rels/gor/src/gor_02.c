@@ -1589,7 +1589,7 @@ EVT_BEGIN(powerupya_init)
         IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
             CALL(evt_npc_set_position, STRING("パワーアップ屋"), -320, 0, -10)
             SET_VALUE(LW(0), PTR(&door_data_01))
-            CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
             IF_INT_NOT_EQUAL(LW(1), 0)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
             END_IF
@@ -2194,10 +2194,10 @@ EVT_BEGIN(tozokudan2_house_door)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_06_naka"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), PTR(&door_data_06))
     SPAWN_EVENT(PTR(door_open_se))
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
@@ -2213,13 +2213,13 @@ EVT_BEGIN(tozokudan2_house_door)
         END_INLINE_EVENT
     END_IF
     WAIT_MS(500)
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
             SPAWN_EVENT(PTR(door_close_se))
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
@@ -3646,7 +3646,7 @@ EVT_BEGIN(evt_door_02_close)
     END_IF
     LABEL(100)
     WAIT_MS(500)
-    CALL(evt_door_param, LW(0), 5, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_OUT_POS, LW(1), LW(2), LW(3))
     CALL(evt_mario_party_door_move, LW(1), LW(3), FLOAT(135.0f))
     RETURN
 EVT_END()
@@ -3682,14 +3682,14 @@ static DoorParam door_data_02 = {
  * evt_door_open (outside) when Mario presses A in front of the door.
  */
 EVT_BEGIN(evt_door_02_entry)
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 8)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_close), 0)
@@ -3900,14 +3900,14 @@ EVT_END()
  * and evt_door_sanders_open in front of the door's two spots.
  */
 static EVT_BEGIN(evt_door_03_entry)
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_sanders_close), 0)
@@ -4009,7 +4009,7 @@ EVT_BEGIN(evt_door_03_roll_open)
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     RETURN
@@ -4064,7 +4064,7 @@ static DoorParam door_data_03_roll = {
  * registers the stand-on case event (evt_door_03_caseopen) that opens it when Mario steps on the spot in front.
  */
 EVT_BEGIN(evt_door_03_roll_entry)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     RETURN
@@ -7180,14 +7180,14 @@ EVT_BEGIN(gor_02_init_evt)
         ELSE
         CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc_01))
     END_IF
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_close), 0)

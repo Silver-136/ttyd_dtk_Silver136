@@ -1216,32 +1216,32 @@ EVT_BEGIN(muj_00_door_open)
     END_IF
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_door_param, LW(0), 7, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_OPEN_CLOSE_EVTS, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         SET_VALUE(LF(0), 0)
         SPAWN_EVENT(LW(1))
     END_IF
-    CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_OUTSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_door_save_mapflag, LW(1))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_CLIP)
     END_IF
     BEGIN_INLINE_EVENT
-        CALL(evt_door_param, LW(0), 10, LW(1), LW(2), LW(3))
+        CALL(evt_door_param, LW(0), DOOR_PARAM_IN_POS_FROM_MARIO, LW(1), LW(2), LW(3))
         CALL(evt_mario_get_pos, 0, LW(4), LW(5), LW(6))
         ADD(LW(5), 2)
         CALL(evt_cam3d_evt_set_xyz, LW(1), LW(5), LW(3), 0, 150, EASING_SINE_IN_OUT)
     END_INLINE_EVENT
-    CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_OUTSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -1255,10 +1255,10 @@ EVT_BEGIN(muj_00_door_open)
         SPAWN_EVENT(PTR(door_dark))
     END_IF
     SPAWN_EVENT(PTR(door_open_se))
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
@@ -1273,7 +1273,7 @@ EVT_BEGIN(muj_00_door_open)
         END_INLINE_EVENT
     END_IF
     WAIT_MS(500)
-    CALL(evt_door_param, LW(0), 10, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_IN_POS_FROM_MARIO, LW(1), LW(2), LW(3))
     CALL(evt_mario_party_door_move, LW(1), LW(3), FLOAT(135.0f))
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_party_move_behind_mario, 0)
@@ -1410,7 +1410,7 @@ static DoorParam yado_data = {
 
 /** Registers muj_00_door_open and muj_00_door_close as the door cases for the first custom door of the map. */
 EVT_BEGIN(evt_door_entry_custom00)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 17)
         CALL(evt_run_case_evt, CASE_FRONT, 1, LW(2), 0, PTR(muj_00_door_close), 0)
@@ -1424,7 +1424,7 @@ EVT_END()
 
 /** Registers muj_00_door_open and muj_00_door_close as the door cases for the second custom door of the map. */
 EVT_BEGIN(evt_door_entry_custom01)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 19)
         CALL(evt_run_case_evt, CASE_FRONT, 1, LW(2), 0, PTR(muj_00_door_close), 0)

@@ -4341,7 +4341,7 @@ DoorParam door_data_01_1 = {
  * door_data_01_1 when the clerk unlocks the back door.
  */
 EVT_BEGIN(evt_door_01_entry)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_close), 0)
@@ -4822,7 +4822,7 @@ static EVT_BEGIN(evt_door_03_open)
     END_INLINE_EVENT
     CALL(evt_mario_jump_pos, 183, 20, -394, 500, 0, -1000)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero_n"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION > VERSION_DEMO_US
@@ -4875,7 +4875,7 @@ static DoorParam door_data_03_roll = {
  * and binds the drawer's collision A_i03_tan_hiki to its map object S_i03_tan_hiki so it moves with it.
  */
 static EVT_BEGIN(evt_door_03_entry)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     CALL(evt_hit_bind_mapobj, STRING("A_i03_tan_hiki"), STRING("S_i03_tan_hiki"))
@@ -4978,7 +4978,7 @@ static EVT_BEGIN(evt_door_04_close)
     CALL(evt_mario_mov_pos2, LW(10), -400, FLOAT(60.0f))
     CALL(evt_mario_wait_landon)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(2), 0, PTR(evt_door_04_caseclose), 0)
 #if VERSION > VERSION_DEMO_US
@@ -5016,7 +5016,7 @@ DoorParam door_data_04_roll = {
  * and installs evt_door_04_caseclose as the front-of-door case event.
  */
 static EVT_BEGIN(evt_door_04_entry)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(2), 0, PTR(evt_door_04_caseclose), 0)
     RETURN
@@ -6190,14 +6190,14 @@ EVT_BEGIN(monte_evt_door_close)
 EVT_END()
 
 EVT_BEGIN(monte_evt_door_entry)
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(monte_evt_door_close), 0)
@@ -6206,7 +6206,7 @@ EVT_BEGIN(monte_evt_door_entry)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(3), 0, PTR(evt_door_open), 0)
     END_IF
-    CALL(evt_door_param, LW(0), 9, LW(1))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_FLAGS, LW(1))
     IF_BITS_SET(LW(1), 1)
     END_IF
     RETURN
