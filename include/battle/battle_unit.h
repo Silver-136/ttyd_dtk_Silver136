@@ -654,7 +654,7 @@ typedef struct BtlPartPoseSound {
     u8 flag;                 // 0x14
 } BtlPartPoseSound;
 
-// BattleUnitPart.poseType (not a BattlePoseType): the paper look applied through animPoseSetEffect "p_b_st". Only
+// BattleUnitPart.look: the paper look applied through animPoseSetEffect "p_b_st". Only
 // NONE, NORMAL, DODGY and XLU are ever set; the others are named by the effect animation battle_disp.c plays for them.
 enum {
     PART_LOOK_NONE = 0,
@@ -748,7 +748,7 @@ typedef struct BattleWorkUnitPart {
     f32 animSpeed2;                                        // 0x20C, init 1.0
     void (*dispCallback)(struct BattleWorkUnitPart*, s32); // 0x210, called before (0) and after (1) drawing
     u8 poseState;                                          // 0x214
-    u8 poseType;                                           // 0x215
+    u8 look;                                               // 0x215
     u16 poseTimer;                                         // 0x216
     GXColor drawColor;                                     // 0x218, material colour set per frame from dispColor
     BattleWorkUnitPartBlur blurWork;                       // 0x21C

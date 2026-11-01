@@ -194,7 +194,7 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
         part->poseName[0] = 0;
         part->animSpeed = 1.0f;
         part->animSpeed2 = 1.0f;
-        part->poseType = 0;
+        part->look = PART_LOOK_NONE;
         part->poseState = 0;
         part->handle = -1;
         part->partName = part->kindPartParams->partName;

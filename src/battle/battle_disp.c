@@ -501,28 +501,28 @@ next:
                 }
                 part->poseState = 0;
                 if (part->animFlags & PART_ANIM_PERA) {
-                    part->poseType = PART_LOOK_NONE;
+                    part->look = PART_LOOK_NONE;
                 } else {
-                    part->poseType = PART_LOOK_NORMAL;
+                    part->look = PART_LOOK_NORMAL;
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
-                        part->poseType = PART_LOOK_XLU;
+                        part->look = PART_LOOK_XLU;
                         xlu = 1;
                     }
                 }
                 if (!(part->animFlags & PART_ANIM_EVENT_POSE) || (part->animFlags & PART_ANIM_DAMAGE_POSE) || (part->animFlags & PART_ANIM_COMMAND_POSE)) {
-                    part->poseType = PART_LOOK_NORMAL;
+                    part->look = PART_LOOK_NORMAL;
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
-                        part->poseType = PART_LOOK_XLU;
+                        part->look = PART_LOOK_XLU;
                         xlu = 1;
                     }
                     if (BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
-                        part->poseType = PART_LOOK_DODGY;
+                        part->look = PART_LOOK_DODGY;
                         xlu = 1;
                     }
                 }
                 if (xlu && (part->attributes & kNoTranslucentLook)) {
                     xlu = 0;
-                    part->poseType = PART_LOOK_NONE;
+                    part->look = PART_LOOK_NONE;
                 }
                 if (!(part->animFlags & PART_ANIM_PERA)) {
                     if (xlu && !(part->animFlags & PART_ANIM_XLU)) {
@@ -1067,7 +1067,7 @@ void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL damagePose)
 /** Plays a paper effect animation (pera) on a part, for flattened and similar effects, with the plain draw type. */
 void btlDispChangePeraAnime(BattleUnitPart* part, const char* name) {
     part->animFlags |= PART_ANIM_PERA;
-    part->poseType = PART_LOOK_NONE;
+    part->look = PART_LOOK_NONE;
     animPoseSetEffectAnim(part->poseId, name, 1);
 }
 
@@ -1147,7 +1147,7 @@ f32 getFloatDispOffset(BattleUnitPart* part) {
  * one-shot effects for types 2, 3 and 7, cycling effects for 4 to 6, default (no effect) otherwise.
  */
 void statusPoseControl(BattleUnitPart* part) {
-    switch (part->poseType) {
+    switch (part->look) {
         case PART_LOOK_NONE:
             break;
         case PART_LOOK_PM_C_UNUSED:
@@ -1189,7 +1189,7 @@ void _pose_one_pattern(BattleUnitPart* part) {
     switch (part->poseState) {
     case 0:
         part->poseState = 1;
-        switch (part->poseType) {
+        switch (part->look) {
             case PART_LOOK_PM_C_UNUSED:
                 animPoseSetEffect(part->poseId, "p_b_st", 1);
                 animPoseSetEffectAnim(part->poseId, "PM_C_1A", 1);
@@ -1216,7 +1216,7 @@ void _pose_two_pattern(BattleUnitPart* part) {
     switch (part->poseState) {
         case 0:
             part->poseState = 1;
-            switch (part->poseType) {
+            switch (part->look) {
                 case PART_LOOK_DODGY:
                     animPoseSetEffect(part->poseId, "p_b_st", 1);
                     animPoseSetEffectAnim(part->poseId, "PM_Y_1B", 1);
@@ -1235,7 +1235,7 @@ void _pose_two_pattern(BattleUnitPart* part) {
             }
             break;
         case 1:
-            switch (part->poseType) {
+            switch (part->look) {
                 case PART_LOOK_DODGY:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
@@ -1262,7 +1262,7 @@ void _pose_two_pattern(BattleUnitPart* part) {
             }
             break;
         case 2:
-            switch (part->poseType) {
+            switch (part->look) {
                 case PART_LOOK_DODGY:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {

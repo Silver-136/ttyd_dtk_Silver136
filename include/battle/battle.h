@@ -142,7 +142,7 @@ enum {
     ST_CHG_MSG_OTHER = 4,
 };
 
-// BattleAlliance.allianceId holds the side's clear condition bits (BattleSeq checks them for clearConditionMet).
+// BattleAlliance.clearFlags: BattleSeq checks them for clearConditionMet.
 enum {
     ALLIANCE_CLEAR_NONE = 0,
     ALLIANCE_CLEAR_ALL_OUT = 1,    // every unit of the side is out
@@ -182,7 +182,7 @@ typedef struct BattleAnnounce {
 } BattleAnnounce;
 
 struct BattleAlliance {
-    u16 allianceId;     // 0x0
+    u16 clearFlags;     // 0x0
     s8 attackDirection; // 0x2
     // pad 1 byte
     BOOL clearConditionMet; // 0x4
