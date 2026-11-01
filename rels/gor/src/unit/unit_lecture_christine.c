@@ -266,7 +266,7 @@ EVT_BEGIN(lecture_christine_ac_counter_damage_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 7)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, 8)
-        ELSE
+    ELSE
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 7)
     END_IF
     RETURN

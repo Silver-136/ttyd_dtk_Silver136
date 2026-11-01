@@ -483,10 +483,10 @@ EVT_BEGIN(namiyoke_se)
                 // Initial sound position repeats X as Z; later updates use the stored Z.
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_MINIGAME_WAVE1"), LW(3), LW(4), LW(3), LW(13))
                 SET_VALUE(LW(12), 1)
-                ELSE
+            ELSE
                 CALL(evt_snd_sfx_pos, LW(13), LW(3), LW(4), LW(5))
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LW(12), 1)
                 CALL(evt_snd_sfxoff, LW(13))
                 SET_VALUE(LW(12), 0)

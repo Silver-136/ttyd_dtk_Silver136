@@ -459,7 +459,7 @@ EVT_BEGIN(clouda_irai)
     CALL(evt_msg_continue)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_14"), 0, STRING("extparty"))
-        ELSE
+    ELSE
         BEGIN_INLINE_EVENT
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1"), LW(0), LW(1), LW(2), 0)
@@ -559,13 +559,13 @@ EVT_BEGIN(mario_move_wait)
                     IF_INT_GREATER_OR_EQUAL(LW(6), 2)
                         BREAK_LOOP
                     END_IF
-                    ELSE
+                ELSE
                     SET_VALUE(LW(6), 0)
                 END_IF
-                ELSE
+            ELSE
                 SET_VALUE(LW(6), 0)
             END_IF
-            ELSE
+        ELSE
             SET_VALUE(LW(6), 0)
         END_IF
     END_LOOP
@@ -1101,7 +1101,7 @@ EVT_BEGIN(touch_door)
         CALL(evt_mario_check_key_item, ITEM_NECKLACE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL_CHILD(PTR(clouda_irai_ato))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(clouda_nakama))
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_exit_case_evt)
@@ -1529,7 +1529,7 @@ EVT_BEGIN(win_04_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_02_SEALED_ENTRANCE_2)
         SPAWN_EVENT(PTR(cloud_toujou))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 

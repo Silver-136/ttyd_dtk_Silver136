@@ -273,7 +273,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1_init)
             ADD_FLOAT(LW(5), FLOAT(225.0f))
             CALL(evt_mobj_set_y_position, STRING("mobj_fltbl01"), LW(5))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("mobj_fltbl01"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(225.0f))
@@ -523,13 +523,13 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
         IF_INT_EQUAL(1, 0)
             IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
                 SET_VALUE(LW(10), 0)
-                ELSE
+            ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
                 SET_VALUE(LW(10), 1)
-                ELSE
+            ELSE
                 SET_VALUE(LW(10), 0)
             END_IF
         END_IF
@@ -539,7 +539,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             ADD_FLOAT(LW(3), FLOAT(225.0f))
             SET_FLOAT_VALUE(LW(8), FLOAT(0.0f))
             SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
-            ELSE
+        ELSE
             CALL(evt_mobj_get_y_position, STRING("mobj_fltbl01"), LW(2))
             SET_FLOAT_VALUE(LW(3), LW(2))
             SUBTRACT_FLOAT(LW(3), FLOAT(225.0f))
@@ -590,14 +590,14 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             SET_VALUE(LF(1), 0)
             IF_INT_EQUAL(LF(0), 1)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_MOVE1"), LW(12), LW(13), LW(14), LW(15))
-                ELSE
+            ELSE
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_MOVE1"), LW(12), LW(13), LW(14), LW(15))
             END_IF
-            ELSE
+        ELSE
             SET_VALUE(LF(1), 1)
             IF_INT_EQUAL(LF(0), 1)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
-                ELSE
+            ELSE
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
             END_IF
         END_IF
@@ -615,7 +615,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
                 IF_STR_EQUAL(LW(6), STRING("mobj_fltbl01"))
                     GOTO(1)
                 END_IF
-                ELSE
+            ELSE
                 CALL(evt_mario_get_name_hitobj_head, LW(6))
                 IF_STR_EQUAL(LW(6), STRING("MOBJ_mobj_fltbl01"))
                     GOTO(1)
@@ -635,7 +635,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
                 SET_FLOAT_VALUE(LW(10), 0)
                 IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
                     SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 1)
-                    ELSE
+                ELSE
                     SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw01"))
@@ -653,7 +653,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
                     SET_FLOAT_VALUE(LW(4), LW(3))
                     SET_VALUE(LF(0), 1)
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_LESS_OR_EQUAL(LW(4), LW(3))
                     SET_FLOAT_VALUE(LW(4), LW(3))
                     SET_VALUE(LF(0), 1)
@@ -716,12 +716,12 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
         // The block's saved up/down state is flipped.
         IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 1)
-            ELSE
+        ELSE
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
         END_IF
         // Dead code: IF_INT_NOT_EQUAL(1, 0) is always true, so this branch (the switch just resetting after a
         // short wait) never runs.
-        ELSE
+    ELSE
         CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw01"))
         SET_VALUE(LW(0), 0)
         LOOP(0)
@@ -751,7 +751,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2_init)
             ADD_FLOAT(LW(5), FLOAT(200.0f))
             CALL(evt_mobj_set_y_position, STRING("mobj_fltbl02"), LW(5))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("mobj_fltbl02"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(200.0f))
@@ -997,13 +997,13 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
         IF_INT_EQUAL(0, 0)
             IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
                 SET_VALUE(LW(10), 0)
-                ELSE
+            ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
                 SET_VALUE(LW(10), 1)
-                ELSE
+            ELSE
                 SET_VALUE(LW(10), 0)
             END_IF
         END_IF
@@ -1013,7 +1013,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             ADD_FLOAT(LW(3), FLOAT(200.0f))
             SET_FLOAT_VALUE(LW(8), FLOAT(0.0f))
             SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
-            ELSE
+        ELSE
             CALL(evt_mobj_get_y_position, STRING("mobj_fltbl02"), LW(2))
             SET_FLOAT_VALUE(LW(3), LW(2))
             SUBTRACT_FLOAT(LW(3), FLOAT(200.0f))
@@ -1064,14 +1064,14 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             SET_VALUE(LF(1), 0)
             IF_INT_EQUAL(LF(0), 1)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_MOVE1"), LW(12), LW(13), LW(14), LW(15))
-                ELSE
+            ELSE
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_MOVE1"), LW(12), LW(13), LW(14), LW(15))
             END_IF
-            ELSE
+        ELSE
             SET_VALUE(LF(1), 1)
             IF_INT_EQUAL(LF(0), 1)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
-                ELSE
+            ELSE
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
             END_IF
         END_IF
@@ -1089,7 +1089,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
                 IF_STR_EQUAL(LW(6), STRING("mobj_fltbl02"))
                     GOTO(1)
                 END_IF
-                ELSE
+            ELSE
                 CALL(evt_mario_get_name_hitobj_head, LW(6))
                 IF_STR_EQUAL(LW(6), STRING("MOBJ_mobj_fltbl02"))
                     GOTO(1)
@@ -1109,7 +1109,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
                 SET_FLOAT_VALUE(LW(10), 0)
                 IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
                     SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 1)
-                    ELSE
+                ELSE
                     SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw02"))
@@ -1127,7 +1127,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
                     SET_FLOAT_VALUE(LW(4), LW(3))
                     SET_VALUE(LF(0), 1)
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_LESS_OR_EQUAL(LW(4), LW(3))
                     SET_FLOAT_VALUE(LW(4), LW(3))
                     SET_VALUE(LF(0), 1)
@@ -1190,11 +1190,11 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
         // The block's saved up/down state is flipped.
         IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 1)
-            ELSE
+        ELSE
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
         END_IF
         // Big block A is not broken yet: the block stays put and the switch resets after a short wait.
-        ELSE
+    ELSE
         CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw02"))
         SET_VALUE(LW(0), 0)
         LOOP(0)
@@ -1247,7 +1247,7 @@ EVT_BEGIN(evt_kaidan_pera_anime)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_01"), 0, 0)
         CALL(evt_snd_sfxon, STRING("SFX_STG1_PERA_STEP1"), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_set_offscreen, 0, STRING("neta_02"), STRING("offscreen"))
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 608, 480)
@@ -1265,7 +1265,7 @@ EVT_BEGIN(evt_kaidan_pera_anime)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_02"), 0, 1)
         SET_INT_READ_ADDR(PTR(kemuri_pos1))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_01"), 0, 1)
         SET_INT_READ_ADDR(PTR(kemuri_pos2))
@@ -1290,7 +1290,7 @@ EVT_BEGIN(evt_kaidan_pera_init)
     IF_INT_EQUAL(GSWF_GON_04_PAPER_STAIRS_FLIPPED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_02"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_01"), 0, 0)
     END_IF
@@ -1316,7 +1316,7 @@ EVT_BEGIN(evt_kaidan_pera)
             IF_INT_GREATER_OR_EQUAL(LW(10), LW(13))
                 SET_VALUE(LW(8), LW(10))
                 SET_VALUE(LW(9), LW(13))
-                ELSE
+            ELSE
                 SET_VALUE(LW(8), LW(13))
                 SET_VALUE(LW(9), LW(10))
             END_IF
@@ -1325,7 +1325,7 @@ EVT_BEGIN(evt_kaidan_pera)
                 BREAK_LOOP
             END_IF
         END_LOOP
-        ELSE
+    ELSE
         WAIT_MS(300)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_12_PAPER_STAIRS)
@@ -1353,7 +1353,7 @@ EVT_BEGIN(evt_kaidan_pera)
     WAIT_MS(1000)
     IF_INT_EQUAL(GSWF_GON_04_PAPER_STAIRS_FLIPPED, 0)
         SET_VALUE(GSWF_GON_04_PAPER_STAIRS_FLIPPED, 1)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_GON_04_PAPER_STAIRS_FLIPPED, 0)
     END_IF
     BEGIN_INLINE_EVENT
@@ -1394,7 +1394,7 @@ EVT_BEGIN(evt_hashi_pera)
     END_LOOP
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_cam3d_evt_set, 280, 1000, 450, 280, 900, -140, 300, EASING_SINE_IN_OUT)
-        ELSE
+    ELSE
         CALL(evt_cam3d_evt_set, 0, 1000, 450, 0, 900, -140, 300, EASING_SINE_IN_OUT)
     END_IF
     WAIT_MS(500)
@@ -1404,7 +1404,7 @@ EVT_BEGIN(evt_hashi_pera)
     CALL(evt_offscreen_entry, STRING("offscreen2"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mapobj_set_offscreen, 1, STRING("tuuro_02"), STRING("offscreen2"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_set_offscreen, 1, STRING("tuuro_01"), STRING("offscreen2"))
     END_IF
     CALL(evt_offscreen_get_boundingbox, STRING("offscreen2"), LW(10), LW(11), LW(12), LW(13))
@@ -1421,7 +1421,7 @@ EVT_BEGIN(evt_hashi_pera)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("tuuro_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_02"), 0, 1)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("tuuro_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_01"), 0, 1)
     END_IF
@@ -1437,7 +1437,7 @@ EVT_BEGIN(evt_hashi_pera)
     CALL(evt_img_release, STRING("capture_img"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mapobj_clear_offscreen, 1, STRING("tuuro_02"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_clear_offscreen, 1, STRING("tuuro_01"))
     END_IF
     CALL(evt_offscreen_delete, STRING("offscreen2"))

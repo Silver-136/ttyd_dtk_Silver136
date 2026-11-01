@@ -564,12 +564,12 @@ EVT_BEGIN(gra_06_init_evt)
         SET_VALUE(LW(0), STRING("n_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         SPAWN_EVENT(PTR(teresa_oidasare_evt))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)
             CALL_CHILD(PTR(bero_case_entry))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(evt_bero_info_run))
         END_IF
     END_IF
@@ -580,7 +580,7 @@ EVT_BEGIN(gra_06_init_evt)
     IF_INT_EQUAL(GSWF_GRA_06_GATE_OPENED, 0)
         CALL(evt_hitobj_onoff, STRING("A_Mon"), 1, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_saku01"), 0, PTR(gra_06_saku_open), 0)
-        ELSE
+    ELSE
         CALL(evt_hit_bind_mapobj, STRING("A_mon_L"), STRING("mon_L"))
         CALL(evt_hit_bind_mapobj, STRING("A_mon_R"), STRING("mon_R"))
         CALL(evt_mapobj_rotate, 0, STRING("mon_L"), 0, 90, 0)
@@ -592,7 +592,7 @@ EVT_BEGIN(gra_06_init_evt)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)
         SPAWN_EVENT(PTR(first_gra06jin))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
     END_IF

@@ -3325,7 +3325,6 @@ void puniModeRecover(PuniData* p) {
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
 #if VERSION <= VERSION_DEMO_US
 /** The demo's puni main loop calls this directly with the sound name; every version reaches it through puniModeDead. */
-// The demo's puni main loop calls this directly with the sound name.
 static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
     switch (p->modeStep) {
         case 0:

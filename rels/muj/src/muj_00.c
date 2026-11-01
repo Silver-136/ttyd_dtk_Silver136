@@ -1230,7 +1230,7 @@ static EVT_BEGIN(korutesu_talk)
             CALL(evt_msg_print_add, 0, STRING("hune_02"))
             SET_VALUE(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
             CALL_CHILD(PTR(muj_gor_ship_start))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("hune_01"))
         END_IF
     END_SWITCH
@@ -1358,7 +1358,7 @@ EVT_BEGIN(koburon_talk)
     IF_INT_EQUAL(GSWF_MUJ_WHACKA_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("koburon_01"), 0, STRING("me"))
         SET_VALUE(GSWF_MUJ_WHACKA_FIRST_TALK_DONE, 1)
-        ELSE
+    ELSE
         SWITCH(GSW_MUJ_WHACKA_HIT_COUNT)
             CASE_EQUAL(0)
             CALL(evt_msg_print, 0, STRING("koburon_02"), 0, STRING("me"))
@@ -3377,7 +3377,7 @@ EVT_BEGIN(nameraka_rotate)
                 IF_FLOAT_LESS_OR_EQUAL(GW(1), GW(7))
                     SET_FLOAT_VALUE(GW(1), GW(7))
                 END_IF
-                ELSE
+            ELSE
                 SET_FLOAT_VALUE(LW(0), GW(1))
                 ADD_FLOAT(LW(0), FLOAT(1.0f))
                 SET_FLOAT_VALUE(GW(1), LW(0))
@@ -3564,7 +3564,7 @@ EVT_BEGIN(dai3_beat_back)
     SET_VALUE(GW(1), 273)
     SET_VALUE(GW(4), 215)
     IF_INT_EQUAL(LW(0), 0)
-        ELSE
+    ELSE
         CALL(evt_seq_wait, SEQ_GAME)
     END_IF
     SET_FLOAT_VALUE(GW(7), GW(1))
@@ -4542,9 +4542,9 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hasi"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_01"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_00"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_00"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 1)
 #if VERSION >= VERSION_US
         SPAWN_EVENT(PTR(leave_island))
@@ -4556,9 +4556,9 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hasi"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_01"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_00"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_00"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 1)
 #if VERSION >= VERSION_US
         CALL_CHILD(PTR(muj_gor_ship))

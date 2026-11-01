@@ -69,6 +69,7 @@
 void suifu100taikikan_seq01(NanNPC* npc);
 void suifu100taikikan_seq00(NanNPC* npc);
 #include "cam_kaiten.h"
+#include <dolphin/pad.h>
 static u8* _ap;
 static s32* itemsel_table_ram;
 static KaitenParam* ckp0;
@@ -531,7 +532,7 @@ EVT_BEGIN(mony_peton_talk)
     IF_INT_GREATER(LW(0), LW(3))
         CALL(evt_npc_set_ry, STRING("モニー"), 270)
         CALL(evt_npc_get_position, STRING("モニー"), LW(0), LW(1), LW(2))
-        ELSE
+    ELSE
         CALL(evt_npc_get_position, STRING("ピートン"), LW(0), LW(1), LW(2))
     END_IF
     CALL(evt_cam3d_evt_set, LW(0), 115, 562, LW(0), 55, 217, 300, EASING_SINE_IN_OUT)
@@ -541,7 +542,7 @@ EVT_BEGIN(mony_peton_talk)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("mac_2_084"))
         SET_VALUE(GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("mac_2_086"))
         SET_VALUE(GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, 0)
     END_IF
@@ -564,7 +565,7 @@ static EVT_BEGIN(mony_talk)
         CASE_EQUAL(STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, 0)
             CALL(evt_msg_print, 0, STRING("mac_2_087"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("mac_2_085"), 0, STRING("me"))
         END_IF
     END_SWITCH
@@ -615,7 +616,7 @@ static EVT_BEGIN(peton_talk)
         CASE_EQUAL(STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, 0)
             CALL(evt_msg_print, 0, STRING("mac_2_087_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("mac_2_085_01"), 0, STRING("me"))
         END_IF
     END_SWITCH
@@ -1379,7 +1380,7 @@ EVT_BEGIN(suifubomb_a_talk)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_06_001"), 0, STRING("me"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_06_002"), 0, STRING("me"))
             CALL(make_itemsel_table, LW(11))
             IF_INT_EQUAL(LW(11), 0)
@@ -1573,7 +1574,7 @@ static EVT_BEGIN(sanders_init)
         CALL(evt_npc_change_interrupt, STRING("サンダース"), 6, PTR(sanders_talk))
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_37_TO_THE_PORT)
             CALL(evt_npc_set_position, STRING("サンダース"), 100, 50, 80)
-            ELSE
+        ELSE
             CALL(evt_npc_set_position, STRING("サンダース"), 0, -1000, 0)
         END_IF
     END_SWITCH
@@ -1613,7 +1614,7 @@ static EVT_BEGIN(korutesu_talk)
         SET_VALUE(GSWF_GOR_SAILING_TO_KEELHAUL, 1)
         SET_VALUE(GF(13), 1)
         CALL_CHILD(PTR(gor_muj_ship_start))
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("gor_00_026"))
     END_IF
     RETURN
@@ -1944,7 +1945,7 @@ EVT_BEGIN(mokorim_talk)
             CALL(evt_msg_print, 0, STRING("salari_before_002"), 0, 0)
             CALL(evt_mario_set_pose, STRING("M_I_Z"))
             WAIT_MS(500)
-            ELSE
+        ELSE
             // Later visits: Lumpy repeats his dream of striking oil.
             CALL(evt_msg_print, 0, STRING("salari_before_003"), 0, 0)
             CALL(evt_mario_set_pose, STRING("M_I_Z"))
@@ -1971,17 +1972,17 @@ EVT_BEGIN(mokorim_talk)
                 ADD(GSW_GOR_LUMPY_INVESTMENT_COUNT, 1)
                 IF_INT_EQUAL(GSW_GOR_LUMPY_INVESTMENT_COUNT, 3)
                     CALL(evt_msg_print, 0, STRING("salari_before_007"), 0, 0)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("salari_before_006"), 0, 0)
                 END_IF
                 CALL(evt_pouch_add_coin, -100)
                 CALL(unitwincoin_wait)
-                ELSE
+            ELSE
                 // Mario cannot afford it.
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_msg_print_add, 0, STRING("salari_before_009"))
             END_IF
-            ELSE
+        ELSE
             // Mario refuses.
             CALL(evt_msg_continue)
             CALL(evt_mario_set_pose, STRING("M_N_B"))
@@ -2048,12 +2049,12 @@ EVT_BEGIN(mokorim_talk)
                 CALL(unitwincoin_disp_onoff, 0)
                 CALL(evt_unitwin_free)
                 CALL(evt_msg_print, 0, STRING("salari_after_004"), 0, 0)
-                ELSE
+            ELSE
                 // Mario never invested: Lumpy just tells his story.
                 CALL(evt_msg_print, 0, STRING("salari_after_005"), 0, 0)
             END_IF
             CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-            ELSE
+        ELSE
             // Repeat visits: Lumpy offers to read from his oil-hunt journal.
             CALL(evt_msg_print, 0, STRING("salari_after_006"), 0, 0)
             CALL(evt_msg_select, 0, STRING("salari_after_006_1"))
@@ -2084,12 +2085,12 @@ EVT_BEGIN(mokorim_talk)
                     CALL(evt_msg_print, 0, STRING("salari_after_016"), 0, 0)
                     CALL(evt_msg_select, 0, STRING("salari_after_017"))
                     IF_INT_EQUAL(LW(0), 0)
-                        ELSE
+                    ELSE
                         CALL(evt_msg_print_add, 0, STRING("salari_after_018"))
                         BREAK_LOOP
                     END_IF
                 END_LOOP
-                ELSE
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("salari_after_018"))
             END_IF
         END_IF
@@ -2440,7 +2441,7 @@ EVT_BEGIN(ship_a_wakka_animation)
                 IF_INT_GREATER_OR_EQUAL(LW(0), FLOAT(10.0f))
                     SET_FLOAT_VALUE(LW(0), FLOAT(10.0f))
                 END_IF
-                ELSE
+            ELSE
                 SUBTRACT_FLOAT(LW(0), FLOAT(0.06933594f))
                 IF_INT_LESS_OR_EQUAL(LW(0), FLOAT(0.0f))
                     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
@@ -2469,7 +2470,7 @@ EVT_BEGIN(ship_a_entotsu_animation)
                 IF_INT_GREATER_OR_EQUAL(LW(0), FLOAT(10.0f))
                     SET_FLOAT_VALUE(LW(0), FLOAT(10.0f))
                 END_IF
-                ELSE
+            ELSE
                 SUBTRACT_FLOAT(LW(0), FLOAT(0.06933594f))
                 IF_INT_LESS_OR_EQUAL(LW(0), FLOAT(0.0f))
                     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
@@ -2498,7 +2499,7 @@ EVT_BEGIN(ship_a_neji_animation)
                 IF_INT_GREATER_OR_EQUAL(LW(0), FLOAT(10.0f))
                     SET_FLOAT_VALUE(LW(0), FLOAT(10.0f))
                 END_IF
-                ELSE
+            ELSE
                 SUBTRACT_FLOAT(LW(0), FLOAT(0.06933594f))
                 IF_INT_LESS_OR_EQUAL(LW(0), FLOAT(0.0f))
                     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
@@ -3646,7 +3647,7 @@ EVT_BEGIN(shukko_event_move_ship)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_c_hikinami"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(alpha_set_func, 0)
     SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 100, 6000)
@@ -5715,7 +5716,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -6066,7 +6067,7 @@ EVT_BEGIN(gor_muj_ship_start)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_c_hikinami"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(alpha_set_func, 0)
     CALL(evt_map_set_playrate, STRING("hiki_nami"), FLOAT(1.0f))
     // Mario, the partners and Cortez shrink out of sight as they board.
@@ -6164,7 +6165,7 @@ EVT_BEGIN(tsumini)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ni_03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ni_03"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ni_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ni_01"), 1, 0)
     END_IF
@@ -6180,14 +6181,14 @@ EVT_BEGIN(tsumini)
                 SET_VALUE(GF(12), 1)
             END_IF
             SET_VALUE(LF(0), GF(12))
-            ELSE
+        ELSE
             SET_VALUE(LF(0), 0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             IF_INT_GREATER_OR_EQUAL(LW(0), -100)
                 IF_INT_GREATER_OR_EQUAL(LW(2), -70)
                     SET_VALUE(LF(0), 1)
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_GREATER_OR_EQUAL(LW(2), -280)
                     SET_VALUE(LF(0), 1)
                 END_IF
@@ -6208,7 +6209,7 @@ EVT_BEGIN(tsumini)
                 CASE_DEFAULT
                 CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_DRAW)
             END_SWITCH
-            ELSE
+        ELSE
             CALL(funeflag_load)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
@@ -7360,7 +7361,7 @@ EVT_BEGIN(gor_00_init_evt)
         CASE_BETWEEN(STG0_00_PROLOGUE, STG0_03_TO_ROGUEPORT)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-            ELSE
+        ELSE
             CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
         END_IF
         CALL(evt_snd_bgm_scope, 0, 1)
@@ -7378,7 +7379,7 @@ EVT_BEGIN(gor_00_init_evt)
             CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_ENDING2"), 800)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(8))
             CALL(evt_snd_envoff, PSND_FADEOUT)
-            ELSE
+        ELSE
             CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_ENDING2"), 800)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
         END_IF
@@ -7503,7 +7504,7 @@ EVT_BEGIN(gor_00_init_evt)
         IF_STR_EQUAL(LW(0), STRING("epilogue2"))
             CALL_CHILD(PTR(epilogue_npc_entry2))
             SPAWN_EVENT(PTR(epilogue_evt2))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(epilogue_npc_entry))
             SPAWN_EVENT(PTR(epilogue_evt))
         END_IF
@@ -7521,7 +7522,7 @@ EVT_BEGIN(gor_00_init_evt)
                     SET_VALUE(GSWF_GOR_00_PLACE_BY_SHIP, 0)
                     CALL(evt_mario_set_pos, 190, 15, 225)
                     CALL(evt_party_set_pos, 0, 225, 15, 220)
-                    ELSE
+                ELSE
                     IF_INT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
                         SET_VALUE(GSWF_MUJ_SAILING_TO_ROGUEPORT, 0)
                         SET_VALUE(GSWF_MUJ_ARRIVED_BY_SHIP_UNUSED, 0)

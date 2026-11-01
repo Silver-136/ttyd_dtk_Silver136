@@ -360,7 +360,7 @@ EVT_BEGIN(_battle_event)
     CALL(evt_sub_random, 1, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(_act_clauda_press_attack))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(_act_clauda_breath_attack))
     END_IF
     CALL(btlevtcmd_AnimeChangePose, LW(5), LW(6), STRING("PWD_A_7"))

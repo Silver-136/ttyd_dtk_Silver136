@@ -556,7 +556,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         CALL_CHILD(PTR(bikkuri_event))
         GOTO(99)
-        ELSE
+    ELSE
         SET_VALUE(LW(1), 50)
         ADD(LW(1), 50)
         SUBTRACT(LW(1), 1)

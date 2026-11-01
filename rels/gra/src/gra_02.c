@@ -218,7 +218,7 @@ EVT_BEGIN(gra_02_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_05_STRAW_TEPEE)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_wara"), STRING("polySurface981_q023"), PTR(gra02_straw_blow_evt))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_wara"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("polySurface981_q023"), 0, 0)
     END_IF

@@ -447,7 +447,7 @@ static EVT_BEGIN(barrier_event)
     CALL(btlevtcmd_CheckPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterIcy, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(eff_ice_barrier, UNIT_ID_SELF)
-        ELSE
+    ELSE
         CALL(eff_ice_barrier_end, UNIT_ID_SELF)
     END_IF
     GOTO(0)

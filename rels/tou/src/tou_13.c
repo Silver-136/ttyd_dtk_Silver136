@@ -68,7 +68,7 @@ static EVT_BEGIN(evt_dakuto)
     CALL_CHILD(PTR(bero_case_switch_on))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_04_AIR_DUCT_EXIT)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_30_04_AIR_DUCT_EXIT)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_TOU_13_DUCT_EXIT_REOPENED, 1)
     END_IF
     CALL(evt_exit_case_evt)
@@ -184,7 +184,7 @@ EVT_BEGIN(tou_13_init_evt)
         CASE_DEFAULT
         IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
             SET_VALUE(LF(0), 0)
-            ELSE
+        ELSE
             SET_VALUE(LF(0), 1)
         END_IF
     END_SWITCH
@@ -192,7 +192,7 @@ EVT_BEGIN(tou_13_init_evt)
         CALL(evt_run_case_evt, CASE_HAMMER_2, 1, STRING("deguti"), 0, PTR(evt_dakuto), 0)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
-        ELSE
+    ELSE
         CALL(evt_hitobj_onoff, STRING("deguti"), 1, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

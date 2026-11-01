@@ -337,7 +337,7 @@ EVT_BEGIN(puni_soguu_3)
     CALL(evt_msg_select, 0, STRING("mac_1_014_yesno"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("mac_1_019"))
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("mac_1_015"))
         CALL(evt_mario_set_dir, 90, 300, 0)
         CALL(evt_msg_print_party, STRING("mac_1_016"))
@@ -518,7 +518,6 @@ EVT_END()
  * then the guide Puni joins as the second partner (mac_1_031): his NPC is removed and he follows Mario.
  * Sets story progress STG1_35_PUNI_JOINS.
  */
-// Replace the guide NPC with the extra partner only after Mario reaches the open passage.
 EVT_BEGIN(puni_nakama)
     LOOP(0)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_34_PUNIS_SECRET_PASSAGE)
@@ -566,7 +565,7 @@ EVT_BEGIN(tik03_switch_evt)
         CALL_CHILD(PTR(anm_para_snd))
         WAIT_MS(800)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_map_playanim, STRING("anm_rapa"), MAP_ANIM_PLAY_ONCE, 0)
         SET_VALUE(GSWF_TIK_03_SECRET_PASSAGE_OPEN, 0)
@@ -600,10 +599,10 @@ EVT_BEGIN(tik_03_init_evt)
     END_IF
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG1_33_A_PUNI_PLEA_FOR_HELP)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_TIK_03_SECRET_PASSAGE_OPEN, 0)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_para_d"), 1, 0)

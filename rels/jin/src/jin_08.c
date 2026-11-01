@@ -25,6 +25,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include <dolphin/pad.h>
 
 
 static EvtWord e_close[12];
@@ -274,11 +275,11 @@ EVT_BEGIN(oumu_check)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 6)
             SET_VALUE(LF(1), 1)
-            ELSE
+        ELSE
             CALL(evt_party_get_status, 6, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 2)
                 SET_VALUE(LF(1), 1)
-                ELSE
+            ELSE
                 SET_VALUE(LF(1), 0)
             END_IF
         END_IF
@@ -288,7 +289,7 @@ EVT_BEGIN(oumu_check)
                     CALL(evt_mario_balloon_tenten)
                     SET_VALUE(LF(0), 1)
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_EQUAL(LF(0), 1)
                     CALL(evt_mario_balloon_off)
                     SET_VALUE(LF(0), 0)
@@ -296,7 +297,7 @@ EVT_BEGIN(oumu_check)
             END_IF
             IF_INT_EQUAL(LF(0), 1)
                 CALL(evt_key_get_buttontrg, 0, LW(0))
-                IF_BITS_SET(LW(0), 256)
+                IF_BITS_SET(LW(0), PAD_BUTTON_A)
                     CALL(evt_mario_balloon_off)
                     SET_VALUE(LF(0), 0)
                     CALL(evt_mario_key_onoff, 0)
@@ -304,7 +305,7 @@ EVT_BEGIN(oumu_check)
                     CALL(evt_mario_key_onoff, 1)
                 END_IF
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LF(0), 1)
                 CALL(evt_mario_balloon_off)
                 SET_VALUE(LF(0), 0)
@@ -437,20 +438,20 @@ EVT_BEGIN(jin_08_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_13_04_THE_LETTER_P)
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 90, 0, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isu"), 0, PTR(evt_open), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 0, 0, 0)
     END_IF
     IF_INT_EQUAL(GSWF_JIN_08_STEEPLE_KEY_TAKEN, 0)
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa2"), 0, 0, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_hoko2"), 0, PTR(evt_open_kagi), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa2"), -90, 0, 0)
     END_IF
     CALL(evt_mobj_lock, STRING("mobj_lock00"), 23, 195, 10, 25, 270, PTR(lock_item_check), PTR(evt_unlock), GSWF_JIN_08_DOOR_UNLOCKED)
     IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
         SET_VALUE(LW(0), STRING("e_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_on))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), STRING("e_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF

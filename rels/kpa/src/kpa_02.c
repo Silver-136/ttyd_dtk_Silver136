@@ -73,7 +73,7 @@ static EVT_BEGIN(kpa_fall)
     END_LOOP
     IF_INT_EQUAL(LF(0), 0)
         CALL_CHILD(PTR(kpa_fall_sub))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(kpa_dead))
     END_IF
     RETURN
@@ -93,7 +93,7 @@ static EVT_BEGIN(kpa_goal)
     IF_BITS_SET(LW(0), GW_FLAG_E3)
         CALL(evt_cam_letter_box_disable, 0)
         CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)
-        ELSE
+    ELSE
         BEGIN_INLINE_EVENT
             WAIT_MS(300)
             CALL(evt_cam_letter_box_disable, 0)

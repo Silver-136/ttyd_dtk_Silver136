@@ -133,7 +133,7 @@ EVT_BEGIN(moo_07_init_evt)
     CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
     IF_INT_EQUAL(GSWF_MOO_07_ROCK_07_BLOWN, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_07"), 0, PTR(rock_evt0), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_iwa_07"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_07"), 1, 0)
     END_IF

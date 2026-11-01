@@ -1024,13 +1024,13 @@ EVT_BEGIN(las_09_init_evt)
     IF_INT_EQUAL(GSWF_LAS_09_CHAIN_CHOMP_1_BLOWN_UP, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_wan1"), 0, PTR(bomb_wanwan1_evt), 0)
     ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wan3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_wan1"), 0, 0)
     END_IF
     IF_INT_EQUAL(GSWF_LAS_09_CHAIN_CHOMP_2_BLOWN_UP, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_wan2"), 0, PTR(bomb_wanwan2_evt), 0)
     ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wan1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_wan2"), 0, 0)
     END_IF
     CALL(evt_mobj_switch_blue, 2, STRING("switch1"), -540, 10, -1300, PTR(switch_1_evt), GSWF_LAS_09_SWITCH_1_PRESSED)
@@ -1050,7 +1050,7 @@ EVT_BEGIN(las_09_init_evt)
     ELSE
         CALL(evt_hitobj_attr_onoff, 0, 0, STRING("Ship_Change1"), HIT_ATTR_SHIP_PANEL2)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_den"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_den"), MAP_OBJ_FLAG_CLIP)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL_CHILD(PTR(majyorin_evt_npc_entry))
         CALL(evt_bero_get_entername, LW(0))

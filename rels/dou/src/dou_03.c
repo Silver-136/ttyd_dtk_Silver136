@@ -187,7 +187,7 @@ EVT_BEGIN(watergate_handle_init)
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("s_bero"), HIT_ATTR_SHIP_ONLY)
         CALL(evt_hitobj_onoff, STRING("A_reba"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("mon_up"), MAP_ANIM_PLAY_ONCE, 0)
     END_IF
     RETURN
@@ -360,7 +360,7 @@ EVT_BEGIN(watergate_handle)
         CALL(evt_hitobj_attr_onoff, 1, 1, STRING("s_bero"), HIT_ATTR_SHIP_ONLY)
         SET_VALUE(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
         CALL(evt_mario_key_onoff, 1)
-        ELSE
+    ELSE
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg5_dou_03_after"), 0, 0)
@@ -516,7 +516,7 @@ EVT_BEGIN(dou_03_init_evt)
         SET_VALUE(LW(1), 0)
         SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main1), LW(10))
         SET_VALUE(GW(11), LW(10))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru"), 1, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_bin"), MAP_OBJ_FLAG_HIDDEN)

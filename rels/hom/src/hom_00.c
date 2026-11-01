@@ -196,7 +196,7 @@ EVT_BEGIN(evt_carry_up_bridge)
     IF_INT_EQUAL(GSWF_HOM_DRAWBRIDGE_PROBLEM_EXPLAINED, 0)
         SET_VALUE(GSWF_HOM_DRAWBRIDGE_PROBLEM_EXPLAINED, 1)
         CALL(evt_msg_print, 0, STRING("stg6_hom_05"), 0, STRING("me"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg6_hom_10"), 0, STRING("me"))
     END_IF
     CALL(evt_msg_select, 0, STRING("stg6_hom_10_yn"))
@@ -207,7 +207,7 @@ EVT_BEGIN(evt_carry_up_bridge)
         CALL(evt_item_get_item_end_wait, STRING("a"))
         CALL(evt_msg_print, 0, STRING("stg6_hom_08"), 0, STRING("me"))
         SET_VALUE(GSW_STORY_PROGRESS, STG6_28_STATION_KEY_OBTAINED)
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("stg6_hom_09"))
     END_IF
     RETURN
@@ -574,7 +574,7 @@ EVT_BEGIN(evt_train_nidome)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
     END_IF
     // Mario freezes and the train door slides open.
     CALL(evt_mario_key_onoff, 0)
@@ -641,7 +641,7 @@ EVT_BEGIN(evt_train_nidome)
             CALL(evt_npc_set_ry, STRING("駅員2"), 90)
         END_INLINE_EVENT
         SPAWN_EVENT(PTR(hom_10_evt_resha_start))
-        ELSE
+    ELSE
         BEGIN_INLINE_EVENT
             WAIT_MS(6000)
             CALL(evt_npc_set_ry, STRING("駅員2"), 270)
@@ -656,7 +656,7 @@ EVT_BEGIN(evt_train_nidome)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(GSW_HOM_TRAIN_LEG, 1)
-        ELSE
+    ELSE
         SET_VALUE(GSW_HOM_TRAIN_LEG, 3)
     END_IF
     CALL(evt_bero_mapchange, STRING("rsh_02_c"), STRING("nidome_start"))
@@ -844,7 +844,7 @@ EVT_BEGIN(hom_00_init_evt)
     // Late in the story the crossing barrier is shown in its open position.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
         CALL(evt_map_playanim, STRING("shadanki"), MAP_ANIM_PLAY_AT_END, 0)
-        END_IF
+    END_IF
     // The sun's heat haze and glare, and the station clock hands.
     CALL(evt_map_set_tevcallback, 2, PTR(sun_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sun"), MAP_OBJ_TEV_CALLBACK(2))
@@ -921,7 +921,7 @@ EVT_BEGIN(hom_00_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL_CHILD(PTR(hom_10_evt_resha_left))
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)

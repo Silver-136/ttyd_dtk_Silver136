@@ -381,19 +381,19 @@ EVT_BEGIN(nokopapa_talk)
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
         IF_INT_EQUAL(LW(0), 2)
             CALL(evt_msg_print, 0, STRING("stg1_nok_79"), 0, 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg1_nok_80"), 0, 0)
         END_IF
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
         IF_INT_EQUAL(LW(0), 2)
             CALL(evt_msg_print, 0, STRING("stg1_nok_81"), 0, 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg1_nok_82"), 0, 0)
         END_IF
         CASE_LESS(STG8_END_AFTER_THE_BATTLE)
         IF_INT_EQUAL(LW(0), 2)
             CALL(evt_msg_print, 0, STRING("stg1_nok_83"), 0, 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg1_nok_84"), 0, 0)
         END_IF
         CASE_DEFAULT
@@ -411,7 +411,7 @@ EVT_BEGIN(nokonoko_K_talk)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_14_00"), 0, 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_14_01"), 0, 0)
         END_IF
         RETURN
@@ -527,7 +527,7 @@ EVT_BEGIN(boss_noko_talk)
         CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
         IF_INT_EQUAL(LW(1), 0)
             SET_VALUE(LW(1), 10)
-            ELSE
+        ELSE
             SET_VALUE(LW(1), 20)
         END_IF
         IF_INT_LESS(LW(0), LW(1))
@@ -535,7 +535,7 @@ EVT_BEGIN(boss_noko_talk)
             CALL(evt_item_entry, STRING("item_irai"), ITEM_TURTLEY_LEAF, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("item_irai"))
             SET_VALUE(GSWF_NOK_01_LISTEN_TO_ME_TURTLEY_LEAF, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("irai_08_003_1"))
             CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
             CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -559,9 +559,9 @@ EVT_BEGIN(boss_noko_talk)
     END_IF
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
-                ELSE
+            ELSE
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                     // Request 17: the mayor takes the Routing Slip from Mario.
                     CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
@@ -579,7 +579,7 @@ EVT_BEGIN(boss_noko_talk)
                         SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
                     END_IF
                     RETURN
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("irai_17_02"), 0, 0)
                     RETURN
                 END_IF
@@ -1162,7 +1162,7 @@ EVT_BEGIN(nokotarou_tabidachi)
         SET_VALUE(LW(1), 1)
         SET_VALUE(LW(2), STRING("ノコタロウ"))
         SET_VALUE(LW(3), STRING("クリスチーヌ"))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 1)
         SET_VALUE(LW(1), 2)
         SET_VALUE(LW(2), STRING("クリスチーヌ"))
@@ -1295,8 +1295,8 @@ static EVT_BEGIN(sekai_yami_evt)
     END_LOOP
     WAIT_MS(2000)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ノコノコG"), 1)
     CALL(anim_tevcallback, STRING("ノコノコH"), 1)
     CALL(anim_tevcallback, STRING("ノコノコI"), 1)
@@ -1358,8 +1358,8 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_position, STRING("ノコノコK"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("門番ノコノコ"), 0, -1000, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("村長"), 1)
     CALL(anim_tevcallback, STRING("ノコタロウ父"), 1)
     CALL(anim_tevcallback, STRING("ノコリン"), 1)
@@ -1367,7 +1367,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(evt_cam3d_evt_set, 562, 320, 474, 0, 100, -50, 0, EASING_SINE_IN_OUT)
     CALL(starstone_entry, STRING("starstone"), 0, 450, -50, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasi"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hasi"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     SET_VALUE(GW(0), 450)
@@ -1452,7 +1452,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_switch_init)
     IF_INT_EQUAL(GSWF_TIK_16_NOK_PIPE_RAISED, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokan"), 1, 0)
     END_IF
     RETURN
@@ -1741,7 +1741,7 @@ EVT_BEGIN(nok_01_init_evt)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
         END_IF
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_NOK1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK2"))
     END_IF

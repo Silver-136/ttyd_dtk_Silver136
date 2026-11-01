@@ -4690,7 +4690,6 @@ static USER_FUNC(vivian_comeback) {
 
 #if VERSION >= VERSION_US
 /** US only: restore the moves of the unit for this turn. */
-// US only: restore the moves of the unit for this turn.
 USER_FUNC(boss_rampell_las_sync_max_moves) {
     BattleUnit* unit;
     s32 id = evtGetValue(event, event->args[0]);

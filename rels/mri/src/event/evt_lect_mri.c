@@ -688,7 +688,7 @@ EVT_BEGIN(boots_lv2_juyoitem_lecture)
                     ADD(LW(7), 1)
                     CALL(x_flag_set, 1, 2)
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_EQUAL(LW(7), 1)
                     IF_INT_NOT_EQUAL(LW(3), MARIO_MOTION_HIP_2)
                         BREAK_LOOP
@@ -724,7 +724,7 @@ EVT_BEGIN(boots_lv2_juyoitem_lecture)
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_1"), STRING("T_1"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("lecture_s_boots_10"))
-            ELSE
+        ELSE
             BREAK_LOOP
         END_IF
     END_LOOP

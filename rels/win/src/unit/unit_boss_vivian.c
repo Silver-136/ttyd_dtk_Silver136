@@ -567,7 +567,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_LESS(LW(0), 70)
             SET_VALUE(LW(9), PTR(&weapon_vivian_kagenuke_attack1))
             CALL_CHILD(PTR(kagenuke_attack_event))
-            ELSE
+        ELSE
             SET_VALUE(LW(9), PTR(&weapon_vivian_flame_attack1))
             CALL_CHILD(PTR(flame_attack_event))
         END_IF

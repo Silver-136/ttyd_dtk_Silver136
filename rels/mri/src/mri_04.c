@@ -543,7 +543,7 @@ EVT_BEGIN(mri_04_init_evt)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -155, 0, 35, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_mri_04), GSWF_MRI_04_ULTRA_SHROOM_CHEST)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_RIVAL_ARRIVAL)
         CALL(evt_mobj_itembox, STRING("mobj_box01"), -105, 0, 70, MOBJ_ITEMBOX_NORMAL, 0, 0, 0)
-        ELSE
+    ELSE
         CALL(evt_mobj_itembox, STRING("mobj_box01"), -105, 0, 70, MOBJ_ITEMBOX_NORMAL, 0, 0, 1)
     END_IF
     CALL(evt_map_playanim, STRING("mizu_01"), MAP_ANIM_PLAY_LOOP, 0)

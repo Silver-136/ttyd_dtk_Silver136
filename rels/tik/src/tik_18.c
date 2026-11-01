@@ -135,14 +135,14 @@ EVT_BEGIN(tik_18_init_evt)
     IF_INT_EQUAL(GSWF_TIK_18_WALL_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("s_win_1"), STRING("a_win_1"), PTR(tik_18_cloud_evt))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_win_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_win_1"), 1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         CALL(evt_npc_check_delete, STRING("カメック"))
         CALL(evt_npc_check_delete, STRING("トゲノコ"))
-        ELSE
+    ELSE
         CALL(evt_npc_check_delete, STRING("ハンニャー１"))
         CALL(evt_npc_check_delete, STRING("ハンニャー２"))
     END_IF

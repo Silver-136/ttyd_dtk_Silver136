@@ -717,7 +717,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     CALL(unitwin_setmariolevel, LW(5), LW(6), LW(7), LW(8))
     IF_INT_NOT_EQUAL(LW(8), 0)
         CALL(evt_msg_print, 0, STRING("powerdown_10"), 0, STRING("me"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("powerdown_13"), 0, STRING("me"))
     END_IF
     RETURN
@@ -1357,11 +1357,11 @@ EVT_BEGIN(powerdownya_table_talk)
 #endif
         SET_VALUE(GSWF_TIK_11_CHET_RIPPO_FIRST_TALK_DONE, 1)
         SET_VALUE(GSWF_TIK_11_CHET_RIPPO_GREETED_VISIT, 1)
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_TIK_11_CHET_RIPPO_GREETED_VISIT, 0)
             CALL(evt_msg_print, 0, STRING("powerdown_00_01"), 0, STRING("me"))
             SET_VALUE(GSWF_TIK_11_CHET_RIPPO_GREETED_VISIT, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("powerdown_01"), 0, STRING("me"))
         END_IF
     END_IF
@@ -1372,7 +1372,7 @@ EVT_BEGIN(powerdownya_table_talk)
     END_IF
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(powerdownya_mario_level_rtn))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(powerdownya_party_lank_rtn))
     END_IF
     LABEL(0)

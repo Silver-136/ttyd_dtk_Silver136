@@ -364,7 +364,7 @@ static EVT_BEGIN(yuka_move)
         SUBTRACT_FLOAT(LW(0), LW(11))
         IF_INT_EQUAL(GSWF_MRI_02_PUNI_ORB_PLACED, 1)
             CALL(setPuniWeight, LW(0))
-            ELSE
+        ELSE
             CALL(setPuniWeight, 0)
         END_IF
         IF_INT_NOT_EQUAL(GW(0), LW(12))
@@ -381,7 +381,7 @@ static EVT_BEGIN(punipuni_ball00_init)
     IF_INT_EQUAL(GSWF_MRI_02_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 0, 30, -68)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_target_set_position, LW(11), 0, 0, -8)
@@ -410,7 +410,7 @@ static EVT_BEGIN(punipuni_ball00)
         SET_VALUE(GSWF_MRI_02_PUNI_ORB_PLACED, 1)
         WAIT_MS(500)
         SET_VALUE(GF(15), 0)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_MRI_02_PUNI_ORB_PLACED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))

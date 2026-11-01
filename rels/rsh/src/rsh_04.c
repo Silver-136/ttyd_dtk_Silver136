@@ -836,7 +836,7 @@ static EVT_BEGIN(init_syashou)
         CASE_DEFAULT
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             CALL(evt_npc_set_position, STRING("車掌"), -400, 0, -100)
-            ELSE
+        ELSE
             CALL(evt_npc_set_position, STRING("車掌"), 0, -1000, 0)
         END_IF
     END_SWITCH
@@ -973,7 +973,7 @@ static EVT_BEGIN(talk_syashou)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_13"), 0, 0)
             ELSE
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
-                END_IF
+            END_IF
         END_IF
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
@@ -1014,7 +1014,7 @@ static EVT_BEGIN(talk_syashou)
             // Ticket and autograph hints.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_07"), 0, 0)
             SET_VALUE(LSWF_RSH_04_CONDUCTOR_TALK_TOGGLE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_08"), 0, 0)
             SET_VALUE(LSWF_RSH_04_CONDUCTOR_TALK_TOGGLE, 0)
         END_IF
@@ -1034,14 +1034,14 @@ static EVT_BEGIN(talk_syashou)
             SET_VALUE(GSWF_RSH_CONDUCTOR_BLANKET_TALK_DONE, 1)
             // The night talk: he asks Mario to help.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_111"), 0, 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_114"), 0, 0)
         END_IF
         CALL(evt_msg_select, 0, STRING("stg6_rsh_114_yn"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_112"))
             SET_VALUE(GSW_STORY_PROGRESS, STG6_13_TALK_TO_THE_CONDUCTOR)
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_113"))
         END_IF
         CASE_LESS(STG6_15_GHOST_REQUEST)
@@ -1064,7 +1064,7 @@ static EVT_BEGIN(talk_syashou)
             CALL(evt_mario_get_dispdir, LW(3))
             IF_INT_LESS(LW(3), 90)
                 ADD(LW(0), -18)
-                ELSE
+            ELSE
                 ADD(LW(0), 18)
             END_IF
             ADD(LW(1), 18)
@@ -1089,7 +1089,7 @@ static EVT_BEGIN(talk_syashou)
         IF_INT_EQUAL(LSWF_RSH_04_CONDUCTOR_DAY2_TOGGLE, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_158"), 0, 0)
             SET_VALUE(LSWF_RSH_04_CONDUCTOR_DAY2_TOGGLE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_159"), 0, 0)
             SET_VALUE(LSWF_RSH_04_CONDUCTOR_DAY2_TOGGLE, 0)
         END_IF
@@ -1107,13 +1107,13 @@ static EVT_BEGIN(talk_syashou)
                 RETURN
             END_IF
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_09"), 0, 0)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_13"), 0, 0)
-                ELSE
+            ELSE
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_c_09_1"), 0, 0)
                 END_IF
             END_IF
@@ -1191,7 +1191,7 @@ static EVT_BEGIN(talk_sarary)
         CASE_LESS(STG6_19_GIVE_BLANKET)
         IF_INT_EQUAL(GSWF_RSH_PENNINGTON_GHOST_TALK_DONE, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_79_01"), 0, 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_125"), 0, 0)
         END_IF
         CASE_LESS(STG6_20_END_OF_DAY_1)
@@ -1248,7 +1248,7 @@ EVT_BEGIN(talk_papa_mama)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("stg6_rsh_92"))
         SET_VALUE(GSW_STORY_PROGRESS, STG6_09_BUBS_REQUEST)
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("stg6_rsh_93"))
         SET_VALUE(GSW_STORY_PROGRESS, STG6_07_SYLVIA)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_08_BUB)
@@ -1512,14 +1512,14 @@ static EVT_BEGIN(talk_konari)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_08_BUB)
             // He asks Mario for an autograph.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_91"), 0, 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_94"), 0, 0)
         END_IF
         CALL(evt_msg_select, 0, STRING("stg6_rsh_94_yn"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_92"))
             SET_VALUE(GSW_STORY_PROGRESS, STG6_09_BUBS_REQUEST)
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_93"))
         END_IF
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -1530,7 +1530,7 @@ static EVT_BEGIN(talk_konari)
             IF_INT_EQUAL(GSWF_RSH_BUB_HINT_GIVEN, 0)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_95"), 0, 0)
                 SET_VALUE(GSWF_RSH_BUB_HINT_GIVEN, 1)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_95_01"), 0, 0)
                 SET_VALUE(GSWF_RSH_BUB_HINT_REPEATED, 1)
                 IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD, 1)
@@ -1539,22 +1539,22 @@ static EVT_BEGIN(talk_konari)
                     END_IF
                 END_IF
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_96"), 0, 0)
             CALL(evt_win_item_select, 0, PTR(item_tbl3), LW(1), 0)
             IF_INT_EQUAL(LW(1), -1)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_101"), 0, 0)
-                ELSE
+            ELSE
                 IF_INT_NOT_EQUAL(LW(1), ITEM_AUTOGRAPH)
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_100"), 0, 0)
-                    ELSE
+                ELSE
 #if VERSION >= VERSION_US
                     CALL(evt_mario_adjust_dir)
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     CALL(evt_mario_get_dispdir, LW(3))
                     IF_INT_LESS(LW(3), 90)
                         ADD(LW(0), -18)
-                        ELSE
+                    ELSE
                         ADD(LW(0), 18)
                     END_IF
                     ADD(LW(1), 18)
@@ -1915,7 +1915,7 @@ EVT_BEGIN(evt_narikin_room)
                         SPAWN_EVENT_GET_ID(PTR(talk_mama_repeat), GW(15))
                     END_SWITCH
                 END_IF
-                ELSE
+            ELSE
                 CALL(mario_flag, LW(0))
                 IF_INT_EQUAL(LW(0), 1)
                     SET_VALUE(LF(0), 0)
@@ -1925,7 +1925,7 @@ EVT_BEGIN(evt_narikin_room)
                     CALL(evt_msg_close, STRING("stg6_rsh_85_02"))
                 END_IF
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LF(0), 1)
                 SET_VALUE(LF(0), 0)
                 SWITCH(GSW_STORY_PROGRESS)
@@ -1956,7 +1956,7 @@ EVT_BEGIN(evt_powan_room)
                         SPAWN_EVENT_GET_ID(PTR(talk_powan_repeat), GW(15))
                     END_SWITCH
                 END_IF
-                ELSE
+            ELSE
                 CALL(mario_flag, LW(0))
                 IF_INT_EQUAL(LW(0), 1)
                     SET_VALUE(LF(0), 0)
@@ -1966,7 +1966,7 @@ EVT_BEGIN(evt_powan_room)
                     CALL(evt_msg_close, STRING("stg6_rsh_165_02"))
                 END_IF
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LF(0), 1)
                 SET_VALUE(LF(0), 0)
                 SWITCH(GSW_STORY_PROGRESS)
@@ -2108,7 +2108,7 @@ EVT_BEGIN(rsh_04_b_init_evt)
         SET_VALUE(LW(0), PTR(bero_data_b))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
-        ELSE
+    ELSE
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
         SET_VALUE(LW(0), PTR(bero_data_b))
         CALL(evt_bero_get_info)
@@ -2141,7 +2141,7 @@ EVT_BEGIN(rsh_04_c_init_evt)
         SET_VALUE(LW(0), PTR(bero_data_c))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
-        ELSE
+    ELSE
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
         SET_VALUE(LW(0), PTR(bero_data_c))
         CALL(evt_bero_get_info)
@@ -2304,7 +2304,7 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
                     CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_saboten"), MAP_ANIM_PLAY_LOOP, 0)
-                    ELSE
+                ELSE
                     CALL(evt_map_playanim, STRING("rt_hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("rt_hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("rt_hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -2326,7 +2326,7 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
@@ -2336,7 +2336,7 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
-            ELSE
+        ELSE
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_04_a"))
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
@@ -2358,7 +2358,7 @@ EVT_END()
 EVT_BEGIN(rsh_04_a_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_a))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data_a_return))
     END_IF
     CALL(evt_bero_get_info)
@@ -2373,7 +2373,7 @@ EVT_END()
 EVT_BEGIN(rsh_04_b_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_b))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data_b_return))
     END_IF
     CALL(evt_bero_get_info)
@@ -2388,7 +2388,7 @@ EVT_END()
 EVT_BEGIN(rsh_04_c_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_c))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data_c_return))
     END_IF
     CALL(evt_bero_get_info)

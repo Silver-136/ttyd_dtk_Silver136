@@ -559,7 +559,7 @@ EVT_BEGIN(gra_05_init_evt)
         CALL(evt_hit_bind_mapobj, STRING("A_futa"), STRING("S_futa"))
         CALL(evt_mapobj_trans, 1, STRING("S_futa"), 0, FLOAT(0.099609375f), 0)
         CALL(evt_hit_bind_update, STRING("A_futa"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF

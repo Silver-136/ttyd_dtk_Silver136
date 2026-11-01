@@ -272,7 +272,7 @@ EVT_BEGIN(las_23_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_paipu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("jav_01"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("jav_02"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         SET_VALUE(LW(0), STRING("w_bero"))

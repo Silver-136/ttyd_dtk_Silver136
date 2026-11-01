@@ -571,14 +571,14 @@ static EVT_BEGIN(elder_talk)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_EMERGENCY_SHROOM), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_10_00"), 0, STRING("me"))
         END_IF
         RETURN
     END_IF
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
@@ -595,11 +595,11 @@ static EVT_BEGIN(elder_talk)
                     SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 END_IF
                 RETURN
-                ELSE
+            ELSE
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                     CALL(evt_msg_print, 0, STRING("irai_17_02"), 0, 0)
                     RETURN
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("irai_17_03"), 0, 0)
                     RETURN
                 END_IF
@@ -610,7 +610,7 @@ static EVT_BEGIN(elder_talk)
         CASE_BETWEEN(STG2_15_11_PUNIES, STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF_MRI_01_ELDER_TIP_SEEN, 0)
             CALL(evt_msg_print, 0, STRING("stg2_mri_e15_28"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(elder_talk_sub))
         END_IF
         CASE_BETWEEN(STG2_26_PRAISE_FROM_THE_PUNI, STG8_END_AFTER_THE_BATTLE)
@@ -807,10 +807,10 @@ static EVT_BEGIN(sister_talk)
             CALL(evt_item_get_item, STRING("puniko_item"))
             CALL(evt_msg_print, 0, STRING("stg2_mri_re_015"), 0, STRING("me"))
             SET_VALUE(GSWF_MRI_PETUNI_GAME_WON_THIS_VISIT, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg2_mri_re_013"), 0, STRING("me"))
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("stg2_mri_re_016"))
         SPAWN_EVENT(PTR(sister_jump))
     END_IF
@@ -2852,7 +2852,7 @@ EVT_BEGIN(boss_battle_win)
         ADD(LW(13), LW(14))
         IF_INT_EQUAL(LW(14), 0)
             SET_VALUE(LW(14), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(14), 0)
         END_IF
         CALL(evt_puni_set_position, LW(10), LW(11), 0, LW(13))
@@ -2871,7 +2871,7 @@ EVT_BEGIN(boss_battle_win)
         ADD(LW(13), LW(14))
         IF_INT_EQUAL(LW(14), 0)
             SET_VALUE(LW(14), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(14), 0)
         END_IF
         CALL(evt_puni_set_position, LW(10), LW(11), 0, LW(13))
@@ -2890,7 +2890,7 @@ EVT_BEGIN(boss_battle_win)
         ADD(LW(13), LW(14))
         IF_INT_EQUAL(LW(14), 0)
             SET_VALUE(LW(14), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(14), 0)
         END_IF
         CALL(evt_puni_set_position, LW(10), LW(11), 0, LW(13))
@@ -2909,7 +2909,7 @@ EVT_BEGIN(boss_battle_win)
         ADD(LW(13), LW(14))
         IF_INT_EQUAL(LW(14), 0)
             SET_VALUE(LW(14), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(14), 0)
         END_IF
         CALL(evt_puni_set_position, LW(10), LW(11), 0, LW(13))
@@ -2928,7 +2928,7 @@ EVT_BEGIN(boss_battle_win)
         ADD(LW(13), LW(14))
         IF_INT_EQUAL(LW(14), 0)
             SET_VALUE(LW(14), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(14), 0)
         END_IF
         CALL(evt_puni_set_position, LW(10), LW(11), 0, LW(13))
@@ -3290,7 +3290,7 @@ static EVT_BEGIN(door_switch_init)
     IF_INT_EQUAL(GSWF_MRI_05_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("doalight01"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     RETURN
@@ -3362,7 +3362,7 @@ EVT_BEGIN(evt_ueki_03)
             SET_VALUE(GSWF_MRI_01_BOWSER_PLANT_SCENE_SEEN, 1)
             CALL(evt_mario_key_onoff, 1)
         END_IF
-        ELSE
+    ELSE
         CALL(evt_item_delete_check, STRING("item_ueki_03"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_item_entry, STRING("item_ueki_03"), ITEM_COIN, -240, 0, -20, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_01_COIN_PLANT, 0)
@@ -3531,7 +3531,7 @@ EVT_BEGIN(mri_01_koopa_second_evt)
         CALL(evt_mario_set_dir, 90, 0, 0)
         CALL(evt_npc_set_ry, STRING("プニ族長老"), 270)
         SET_VALUE(LF(0), 0)
-        ELSE
+    ELSE
         CALL(evt_mario_set_dir, 270, 0, 0)
         CALL(evt_npc_set_ry, STRING("プニ族長老"), 90)
         SET_VALUE(LF(0), 1)
@@ -3540,7 +3540,7 @@ EVT_BEGIN(mri_01_koopa_second_evt)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LF(0), 0)
             SET_VALUE(LW(0), 178)
-            ELSE
+        ELSE
             SET_VALUE(LW(0), 338)
         END_IF
         CALL(evt_mario_jump_pos, LW(0), 0, LW(2), 200, 1, -1000)
@@ -3843,7 +3843,7 @@ EVT_BEGIN(mri_01_init_evt)
             CALL(evt_mario_set_dir, 90, 0, 0)
             CALL(evt_npc_set_position, STRING("ババ"), -355, 0, 30)
             CALL(evt_npc_set_ry, STRING("ババ"), 90)
-            ELSE
+        ELSE
             CALL(evt_mario_set_pos, 226, 0, 48)
             CALL(evt_mario_set_dir, 90, 0, 0)
             BEGIN_INLINE_EVENT

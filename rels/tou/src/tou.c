@@ -1240,7 +1240,7 @@ EVT_BEGIN(evt_close)
         SET_VALUE(LW(3), LW(8))
         SET_VALUE(LW(4), LW(9))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_open), 0)
-        ELSE
+    ELSE
 #if VERSION > VERSION_DEMO_US
         CALL(evt_mario_key_onoff, 0)
 #endif
@@ -1534,18 +1534,18 @@ EVT_BEGIN(evt_tou_monitor_init)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("tou_10"))
         CALL(evt_map_set_tevcallback, 1, PTR(monitor_tev))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gamen"), MAP_OBJ_TEV_CALLBACK(1))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("gamen"), MAP_OBJ_FLAG_DISPLAY_LIST)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gamen"), MAP_OBJ_TEV_CALLBACK(1))
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("gamen"), MAP_OBJ_FLAG_DISPLAY_LIST)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tou_08"))
         CALL(evt_map_set_tevcallback, 1, PTR(monitor_tev))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gamenn"), MAP_OBJ_TEV_CALLBACK(1))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("gamenn"), MAP_OBJ_FLAG_DISPLAY_LIST)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gamenn"), MAP_OBJ_TEV_CALLBACK(1))
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("gamenn"), MAP_OBJ_FLAG_DISPLAY_LIST)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tou_07"))
         CALL(evt_map_set_tevcallback, 1, PTR(monitor_tev))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gamenn"), MAP_OBJ_TEV_CALLBACK(1))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("gamenn"), MAP_OBJ_FLAG_DISPLAY_LIST)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gamenn"), MAP_OBJ_TEV_CALLBACK(1))
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("gamenn"), MAP_OBJ_FLAG_DISPLAY_LIST)
     END_IF
     RETURN
 EVT_END()
@@ -1759,7 +1759,7 @@ EVT_BEGIN(evt_tamago_byebye)
             SET_VALUE(LW(3), 400)
             SPAWN_EVENT(PTR(evt_tamago_scale))
             CALL(evt_npc_jump_position_nohit, STRING("たまご"), -30, 20, 30, 400, 50)
-            ELSE
+        ELSE
             SET_VALUE(LW(3), 400)
             SPAWN_EVENT(PTR(evt_tamago_scale))
             CALL(evt_npc_jump_position_nohit, STRING("たまご"), -80, 20, 15, 400, 50)
@@ -2187,15 +2187,15 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
             IF_INT_EQUAL(LW(3), 10)
                 IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
                     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(3), LW(1))
-                    ELSE
+                ELSE
                         CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-                        END_IF
+                END_IF
             ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-                END_IF
+            END_IF
         ELSE
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
-            END_IF
+        END_IF
     END_IF
     // Major league: the same announcement; booking Rawk Hawk for the first time reserves the title match.
     IF_INT_EQUAL(LF(1), 1)
@@ -2210,13 +2210,13 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(1))
             ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-                END_IF
+            END_IF
         ELSE
             IF_INT_EQUAL(LW(3), 0)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361_01"), 0, STRING("キノシコワ"), LW(1))
             ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
-                END_IF
+            END_IF
         END_IF
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
             IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
@@ -2234,9 +2234,9 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-            ELSE
+        ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
-                END_IF
+        END_IF
     END_IF
     // The special condition for this match is read out and stored for the battle.
     CALL(evt_tou_get_rule_info, GSW_GLITZ_PIT_OPPONENT, LW(10), LW(13), LW(14), LW(15))
@@ -2570,7 +2570,7 @@ EVT_BEGIN(evt_tou_match_make_default)
             CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
             IF_INT_LESS(LW(0), LW(3))
                 CALL(evt_mario_set_dir, 270, 300, 0)
-                ELSE
+            ELSE
                 CALL(evt_mario_set_dir, 90, 300, 0)
             END_IF
             CALL(evt_msg_print_party, STRING("stg3_tou_106_03"))
@@ -2589,7 +2589,7 @@ EVT_BEGIN(evt_tou_match_make_default)
             CALL(evt_tou_get_rule_msg2, GSW_GLITZ_PIT_CONDITION, LW(2))
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
             CALL(evt_msg_print_add_insert, 0, LW(12), LW(0), LW(2))
-            ELSE
+        ELSE
             CALL(evt_msg_continue)
             CALL_CHILD(PTR(evt_tou_match_make_default_sub))
         END_IF
@@ -3652,7 +3652,7 @@ EVT_BEGIN(evt_mail_1)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -3705,7 +3705,7 @@ EVT_BEGIN(evt_mail_2)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -3793,7 +3793,7 @@ EVT_BEGIN(evt_eat_cake)
         CALL(evt_party_flg_onoff, 0, 16777216, 0)
 #endif
         CALL(evt_exit_case_evt)
-        ELSE
+    ELSE
         CALL(evt_msg_print_party, STRING("stg3_tou_298"))
     END_IF
     CALL(evt_party_run, 0)
@@ -3861,7 +3861,7 @@ EVT_BEGIN(evt_mail_3)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -3913,7 +3913,7 @@ EVT_BEGIN(evt_mail_4)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -3965,7 +3965,7 @@ EVT_BEGIN(evt_mail_5)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -4025,7 +4025,7 @@ EVT_BEGIN(evt_tamago_hello2)
     CALL(evt_mario_get_exparty, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         CALL(evt_party_set_pos, 1, LW(0), LW(1), LW(2))
-        ELSE
+    ELSE
         CALL(evt_mario_set_party_pos, 1, 8, LW(0), LW(1), LW(2))
     END_IF
     CALL(evt_party_run, 1)
@@ -4040,7 +4040,7 @@ EVT_BEGIN(evt_tou_ranking_msg)
     IF_INT_LESS(LW(0), GSW_GLITZ_PIT_RANK_BEFORE_MATCH)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg3_rank_05"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add_insert, 0, STRING("stg3_rank_01"), LW(0))
         END_IF
         RETURN
@@ -4056,7 +4056,7 @@ EVT_BEGIN(evt_tou_ranking_msg)
     CALL(evt_tou_get_fighter_rank, GSW_GLITZ_PIT_LAST_OPPONENT, LW(1))
     IF_INT_LESS(LW(0), LW(1))
         CALL(evt_msg_print_add_insert, 0, STRING("stg3_rank_03"), LW(0))
-        ELSE
+    ELSE
         CALL(evt_msg_print_add_insert, 0, STRING("stg3_rank_02"), LW(0))
     END_IF
     RETURN
@@ -4557,7 +4557,7 @@ EVT_BEGIN(evt_tou_match_after_default)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_DESTRUCTORS_JOINED, 0)
             SET_VALUE(GSWF_GLITZ_PIT_DESTRUCTORS_JOINED, 1)
             CALL_CHILD(evt_mail_4)
-            END_IF
+        END_IF
         CASE_EQUAL(2)
         CASE_EQUAL(1)
         IF_INT_EQUAL(GSWF_TOU_RANK_1_MAIL_DONE, 0)
@@ -4603,7 +4603,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 0)
                 CALL(evt_npc_flag_onoff, 0, STRING("ウラノコ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
                 CALL(evt_npc_set_anim, STRING("ウラノコ"), STRING("NKT_K_2"))
-                ELSE
+            ELSE
                 WAIT_MS(100)
             END_IF
         END_IF
@@ -4642,7 +4642,7 @@ EVT_BEGIN(evt_tou_match_after_default)
         CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
         CALL(evt_mario_set_dir, 270, 0, 0)
         CALL(evt_party_set_dir, 0, 270, 0)
-        ELSE
+    ELSE
         CALL(evt_mario_set_pos, -90, 0, -95)
         CALL(evt_party_set_pos, 0, -120, 0, -105)
         CALL(evt_npc_set_position, STRING("キノシコワ"), -55, 0, -95)
@@ -4658,7 +4658,7 @@ EVT_BEGIN(evt_tou_match_after_default)
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT, 1)
         CALL(fight_money, LW(0), 1, LW(10))
-        ELSE
+    ELSE
         CALL(fight_money, LW(0), 0, LW(10))
     END_IF
     SET_VALUE(LF(10), 0)
@@ -4701,7 +4701,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(600)
             CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
             SET_VALUE(LF(10), 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg3_tou_179_00"), 0, STRING("キノシコワ"))
             WAIT_MS(300)
             CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("A_1"))
@@ -4879,7 +4879,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(600)
             CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
             SET_VALUE(LF(13), 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg3_tou_181_00"), 0, STRING("キノシコワ"))
             WAIT_MS(300)
             CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("A_1"))
@@ -4972,7 +4972,7 @@ EVT_BEGIN(evt_tou_match_after_default)
                 WAIT_MS(300)
                 IF_INT_EQUAL(GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT, 1)
                     CALL(evt_msg_print_party, STRING("stg3_tou_306"))
-                    ELSE
+                ELSE
                     CALL(evt_msg_print_party, STRING("stg3_tou_307"))
                 END_IF
                 CALL(evt_pouch_party_join, 1)
@@ -4980,7 +4980,7 @@ EVT_BEGIN(evt_tou_match_after_default)
                 CALL(evt_pouch_party_join, 5)
                 CALL(evt_pouch_party_join, 4)
                 CALL(evt_party_run, 0)
-                ELSE
+            ELSE
                 CALL(evt_npc_flag_onoff, 0, STRING("ウラノコ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
                 CALL(evt_npc_set_anim, STRING("ウラノコ"), STRING("NKT_K_2"))
                 CALL(evt_mario_set_dir, 270, 300, 0)
@@ -5039,7 +5039,7 @@ EVT_BEGIN(evt_tou_match_after_default)
         IF_INT_EQUAL(LW(0), 0)
             IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL_CHILD(PTR(evt_tou_chibi_yoshi))
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(evt_michel_9))
             END_IF
             SET_VALUE(LF(0), 1)

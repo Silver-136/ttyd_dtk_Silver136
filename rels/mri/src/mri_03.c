@@ -160,7 +160,7 @@ EVT_BEGIN(jail_alpha_mario_check)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(2), -81)
             SET_VALUE(GW(2), 80)
-            ELSE
+        ELSE
             SET_VALUE(GW(2), 255)
         END_IF
         WAIT_FRAMES(1)
@@ -177,11 +177,11 @@ EVT_END()
 EVT_BEGIN(jail_alpha)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_l_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_r_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_r_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_r_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_l_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_l_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_r_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_r_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_r_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_map_blend_set_flag, 1, STRING("mario"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("party"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("プニ族長老"), 2048)
@@ -222,7 +222,7 @@ EVT_BEGIN(jail_alpha)
                 END_IF
             END_IF
             CALL(evt_map_set_blend, 0, 255, 255, 255, LW(10))
-            ELSE
+        ELSE
             IF_INT_LESS(GW(3), LW(10))
                 ADD(LW(10), -5)
                 IF_INT_GREATER(GW(3), LW(10))
@@ -522,7 +522,7 @@ EVT_END()
 static EVT_BEGIN(elder_talk)
     IF_INT_EQUAL(GSWF_MRI_03_RED_JAIL_UNLOCKED, 0)
         CALL(evt_msg_print, 0, STRING("stg2_mri_e14_13"), 0, STRING("me"))
-        ELSE
+    ELSE
     END_IF
     RETURN
 EVT_END()
@@ -940,11 +940,11 @@ EVT_END()
 EVT_BEGIN(bluejail_alpha)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_l_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_r_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_r_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_r_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_l_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_l_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_r_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_r_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_r_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_map_blend_set_flag, 1, STRING("mario"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("party"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("プニ族長老"), 2048)
@@ -1448,7 +1448,7 @@ EVT_BEGIN(guide_sister)
     IF_INT_EQUAL(GSWF_MRI_JABBLE_JOINED, 0)
         // The Punies in the jail join Mario's party and the new total is announced.
         CALL(evt_msg_print, 0, STRING("stg2_mri_e20_16"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg2_mri_e20_16_1"), 0, 0)
     END_IF
     SET_VALUE(GSW_STORY_PROGRESS, STG2_20_PUNIO_PETUNI)
@@ -1699,7 +1699,7 @@ EVT_BEGIN(mri_03_init_evt)
     IF_INT_EQUAL(GSWF_MRI_03_RED_JAIL_UNLOCKED, 1)
         IF_INT_EQUAL(GSWF_MRI_03_RED_JAIL_OPENED, 1)
             SPAWN_EVENT(PTR(evt_opendoor00))
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(evt_unlock00_01))
         END_IF
     END_IF
@@ -1707,7 +1707,7 @@ EVT_BEGIN(mri_03_init_evt)
     IF_INT_EQUAL(GSWF_MRI_03_BLUE_JAIL_UNLOCKED, 1)
         IF_INT_EQUAL(GSWF_MRI_03_BLUE_JAIL_OPENED, 1)
             SPAWN_EVENT(PTR(evt_opendoor01))
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(evt_unlock01))
         END_IF
     END_IF

@@ -1023,7 +1023,7 @@ EVT_BEGIN(rsh_00_init_evt)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_00_c"))
         CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF_STARPIECE_81)
-        ELSE
+    ELSE
         CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF_STARPIECE_81)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)

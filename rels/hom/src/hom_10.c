@@ -310,7 +310,7 @@ EVT_BEGIN(hom_10_evt_resha_start)
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2"), 0)
-            ELSE
+        ELSE
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2_2"), 0)
         END_IF
     END_IF
@@ -614,7 +614,7 @@ EVT_BEGIN(hom_10_evt_resha_stop)
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             SPAWN_EVENT(PTR(stop_1))
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(stop_2))
         END_IF
     END_IF
@@ -721,20 +721,20 @@ EVT_BEGIN(hom_10_evt_resha_right)
     CALL_CHILD(PTR(hom_10_evt_resha_sub))
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_06_a"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_8"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_6"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_7"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_8"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_6"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_7"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()
 
 EVT_BEGIN(hom_10_evt_resha_left)
     CALL_CHILD(PTR(hom_10_evt_resha_sub))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -753,14 +753,14 @@ EVT_BEGIN(hom_10_init_evt)
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
 #if VERSION > VERSION_DEMO_US
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
 #endif
-        ELSE
+    ELSE
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
         SET_VALUE(LW(0), 0)

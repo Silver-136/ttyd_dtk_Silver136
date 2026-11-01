@@ -1024,7 +1024,7 @@ EVT_BEGIN(maffiaboss_ticket_check)
         CALL(evt_npc_get_position, STRING("マフィアボス"), LW(10), LW(11), LW(12))
         IF_INT_LESS_OR_EQUAL(LW(2), LW(12))
             CALL(evt_mario_set_dir, 90, 200, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_set_dir, 270, 200, 0)
         END_IF
     END_INLINE_EVENT
@@ -1033,7 +1033,7 @@ EVT_BEGIN(maffiaboss_ticket_check)
         CALL(evt_npc_get_position, STRING("マフィアボス"), LW(10), LW(11), LW(12))
         IF_INT_LESS_OR_EQUAL(LW(2), LW(12))
             CALL(evt_party_set_dir, 0, 90, 200)
-            ELSE
+        ELSE
             CALL(evt_party_set_dir, 0, 270, 200)
         END_IF
     END_INLINE_EVENT
@@ -1060,7 +1060,7 @@ EVT_BEGIN(maffiaboss_ticket_check)
 #else
         CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), NPC_FLAG_NO_WALL_COLLISION)
 #endif
-        ELSE
+    ELSE
         // Mario is on top of the desk or talked to him first: the ticket is handed over from where he stands.
         CALL_CHILD(PTR(maffiaboss_ticket_put))
         CALL(evt_msg_print, 0, STRING("mac_2_118"), 0, STRING("マフィアボス"))
@@ -1288,7 +1288,7 @@ EVT_BEGIN(maffiaboss_airship_ticket)
         CALL(evt_cam3d_evt_set, -683, 289, -160, -189, 215, -160, 0, EASING_SINE_IN_OUT)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("mac_2_090"), 0, STRING("マフィアボス"))
-        ELSE
+    ELSE
         // Mario refuses to tell, and Don Pianta threatens him.
         CALL(evt_msg_print, 0, STRING("mac_2_091"), 0, STRING("マフィアボス"))
     END_IF
@@ -1545,7 +1545,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
             CALL(evt_mario_mov_pos2, -245, -185, FLOAT(60.0f))
             CALL(evt_mario_set_dir, 90, 200, 0)
         END_INLINE_EVENT
-        ELSE
+    ELSE
         DEBUG_PUT_MSG(STRING("ベッドの横から"))
         BEGIN_INLINE_EVENT
             CALL(evt_mario_mov_pos2, -245, -197, FLOAT(60.0f))
@@ -1938,7 +1938,7 @@ EVT_BEGIN(maffia1_talk)
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
             CALL(evt_msg_print, 0, STRING("mac_2_070"), 0, STRING("me"))
-            ELSE
+        ELSE
 #if VERSION >= VERSION_US
             CALL(evt_msg_print, 0, STRING(VERSION_PICK("mac_2_116_buka", "mac_2_116_buka1")), 0, STRING("me"))
 #else
@@ -2152,10 +2152,10 @@ EVT_BEGIN(peton_talk_common)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_19_00"), 0, STRING("ピートン"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_19_01"), 0, STRING("ピートン"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("irai_19_02"), 0, STRING("ピートン"))
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
@@ -2416,7 +2416,7 @@ EVT_BEGIN(exchange_return_sub)
     SET_VALUE(LW(0), 48)
     IF_INT_EQUAL(LW(11), 0)
         CALL_CHILD(PTR(bteresa_n_fadein))
-        ELSE
+    ELSE
         BEGIN_INLINE_EVENT
             CALL_CHILD(PTR(bteresa_n_fadein))
         END_INLINE_EVENT
@@ -2516,7 +2516,7 @@ EVT_BEGIN(exchange_keep_sub)
             CALL(evt_npc_set_ry, STRING("バニーテレサ"), LW(9))
             SET_VALUE(LW(0), 1)
             CALL_CHILD(PTR(bteresa_n_fadein))
-            ELSE
+        ELSE
             CALL(yuugijou_montemedal_keep)
         END_IF
     END_IF
@@ -2528,7 +2528,7 @@ EVT_BEGIN(gor_03_dokan_init_evt)
     CALL(evt_hit_bind_mapobj, STRING("A_dokan_l_02"), STRING("S_dokan_1"))
     IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         CALL(evt_mapobj_trans, 1, STRING("S_dokan_1"), 0, 0, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_trans, 1, STRING("S_dokan_1"), 0, -31, 0)
         CALL(evt_mapobj_trans, 1, STRING("S_dokan_1_kage"), 0, -1000, 0)
     END_IF
@@ -2617,7 +2617,7 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
             CALL(evt_msg_print_add, 0, STRING("bunny_teresa_48"))
 #endif
             RETURN
-            ELSE
+        ELSE
             IF_INT_EQUAL(LW(0), 2)
                 // Mario asked how the game works: Teresa explains the one he picked.
                 CALL(evt_msg_continue)
@@ -2631,7 +2631,7 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
                     CASE_EQUAL(3)
                     CALL(evt_msg_print, 0, STRING("bunny_teresa_41"), 0, STRING("me"))
                 END_SWITCH
-                ELSE
+            ELSE
                 BREAK_LOOP
             END_IF
         END_IF
@@ -2954,7 +2954,7 @@ EVT_BEGIN(bteresa_table_talk)
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(11), 0)
             CALL_CHILD(PTR(exchange_return_sub))
-            ELSE
+        ELSE
             CALL(yuugijou_montemedal_return)
         END_IF
     END_IF
@@ -3017,7 +3017,7 @@ EVT_BEGIN(bteresa_table_talk)
         END_IF
         SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
         SET_VALUE(LW(14), 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(14), 0)
         IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
             SET_VALUE(LW(14), 1)
@@ -3038,14 +3038,14 @@ EVT_BEGIN(bteresa_table_talk)
             IF_INT_EQUAL(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 0)
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_00"), 0, STRING("me"))
                 SET_VALUE(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 1)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_01"), 0, STRING("me"))
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("bunny_teresa_01_1"), 0, STRING("me"))
         END_IF
         SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("bunny_teresa_02"), 0, STRING("me"))
     END_IF
     // Menu: Mario chooses a minigame, the prize exchange, or leaves.
@@ -3062,28 +3062,28 @@ EVT_BEGIN(bteresa_table_talk)
                 IF_INT_EQUAL(LW(0), 0)
                     BREAK_LOOP
                 END_IF
-                ELSE
+            ELSE
                 ADD(LW(0), 1)
             END_IF
             IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
                 IF_INT_EQUAL(LW(0), 1)
                     BREAK_LOOP
                 END_IF
-                ELSE
+            ELSE
                 ADD(LW(0), 1)
             END_IF
             IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
                 IF_INT_EQUAL(LW(0), 2)
                     BREAK_LOOP
                 END_IF
-                ELSE
+            ELSE
                 ADD(LW(0), 1)
             END_IF
             IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
                 IF_INT_EQUAL(LW(0), 3)
                     BREAK_LOOP
                 END_IF
-                ELSE
+            ELSE
                 ADD(LW(0), 1)
             END_IF
             BREAK_LOOP
@@ -3102,7 +3102,7 @@ EVT_BEGIN(bteresa_table_talk)
 #else
         CALL_CHILD(PTR(bteresa_talk_sub_keihin))
 #endif
-        ELSE
+    ELSE
         CALL_CHILD(PTR(bteresa_talk_sub_minigame))
     END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -3184,7 +3184,7 @@ EVT_BEGIN(kyaku1_talk)
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_msg_print, 0, STRING("kyaku1_00_00"), 0, STRING("me"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("kyaku1_00"), 0, STRING("me"))
     END_IF
     RETURN
@@ -3216,7 +3216,7 @@ EVT_BEGIN(kyaku4_talk)
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_msg_print, 0, STRING("kyaku4_00_00"), 0, STRING("me"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("kyaku4_00"), 0, STRING("me"))
     END_IF
     RETURN
@@ -3336,7 +3336,7 @@ EVT_BEGIN(slot_set)
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(11), 2)
             CALL_CHILD(PTR(exchange_return_sub))
-            ELSE
+        ELSE
             CALL(yuugijou_montemedal_return)
         END_IF
     END_IF
@@ -3621,11 +3621,11 @@ EVT_BEGIN(exchange_set)
             SET_VALUE(LW(11), 1)
             CALL_CHILD(PTR(exchange_return_sub))
             SET_VALUE(LW(0), 0)
-            ELSE
+        ELSE
             CALL(yuugijou_montemedal_return)
             SET_VALUE(LW(0), 0)
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 0)
     END_IF
     IF_INT_EQUAL(LW(0), 0)
@@ -3649,7 +3649,7 @@ EVT_BEGIN(exchange_set)
         CALL(evt_msg_print_insert, 0, STRING("exchange_mess_00"), 0, 0, LW(1), LW(2))
 #endif
         SET_VALUE(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("exchange_mess_01"), 0, 0)
     END_IF
     // Price menu: Mario picks how many medals to buy with coins.
@@ -4815,7 +4815,7 @@ EVT_BEGIN(evt_door_02_1_open)
             CALL(evt_snd_bgmoff, PSND_PAUSE)
             CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
             CALL(evt_snd_envoff, PSND_PAUSE)
-            ELSE
+        ELSE
             CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
             CALL(evt_snd_envoff, PSND_PAUSE)
         END_IF
@@ -5238,7 +5238,7 @@ EVT_BEGIN(wall_bomb_init)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_ana"), 1, 0)
     END_IF
@@ -5270,12 +5270,12 @@ static EVT_BEGIN(wall_bomb)
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_ana_before"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -5422,7 +5422,7 @@ EVT_BEGIN(uraguchi_check)
     END_IF
     IF_INT_EQUAL(GW(10), 0)
         SET_VALUE(GW(10), LW(0))
-        ELSE
+    ELSE
         IF_INT_EQUAL(GW(11), 0)
             SET_VALUE(GW(11), LW(0))
         END_IF
@@ -5624,7 +5624,7 @@ EVT_BEGIN(yuureturn_rtn)
     WAIT_MS(500)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_17"), 0, STRING("バニーテレサ"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("bunny_teresa_17_1"), 0, STRING("バニーテレサ"))
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -5743,7 +5743,7 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
                 IF_INT_LESS(LW(0), 10)
                     CALL(unitwincoin_disp_onoff, 0)
                     CALL(evt_msg_print_add, 0, STRING("kuji_bomb_022_1"))
-                    ELSE
+                ELSE
                     CALL(evt_pouch_add_coin, -10)
                     CALL(unitwincoin_wait)
                     CALL(unitwincoin_disp_onoff, 0)
@@ -5755,16 +5755,16 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
                     CALL(evt_item_get_item_end_wait, STRING("kuzi"))
                     CALL(evt_msg_print, 0, STRING("kuji_bomb_006"), 0, STRING("グルメボム兵"))
                 END_IF
-                ELSE
+            ELSE
                 CALL(unitwincoin_disp_onoff, 0)
                 CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_4"), STRING("T_4"))
                 CALL(evt_msg_print_add, 0, STRING("kuji_bomb_007"))
             END_IF
-            ELSE
+        ELSE
             CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_4"), STRING("T_4"))
             CALL(evt_msg_print_add, 0, STRING("kuji_bomb_007"))
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("kuji_bomb_008"), 0, STRING("グルメボム兵"))
         LABEL(0)
         CALL(evt_msg_select, 0, STRING("kuji_bomb_009"))
@@ -5780,7 +5780,7 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
                     IF_INT_LESS(LW(0), 10)
                         CALL(unitwincoin_disp_onoff, 0)
                         CALL(evt_msg_print_add, 0, STRING("kuji_bomb_022_1"))
-                        ELSE
+                    ELSE
                         CALL(evt_pouch_add_coin, -10)
                         CALL(unitwincoin_wait)
                         CALL(unitwincoin_disp_onoff, 0)
@@ -5792,12 +5792,12 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
                         CALL(evt_item_get_item_end_wait, STRING("kuzi"))
                         CALL(evt_msg_print, 0, STRING("kuji_bomb_014"), 0, STRING("グルメボム兵"))
                     END_IF
-                    ELSE
+                ELSE
                     CALL(unitwincoin_disp_onoff, 0)
                     CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_4"), STRING("T_4"))
                     CALL(evt_msg_print_add, 0, STRING("kuji_bomb_022"))
                 END_IF
-                ELSE
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("kuji_bomb_015"))
                 CALL(unitwincoin_disp_onoff, 1)
                 CALL(evt_msg_select, 0, STRING("kuji_bomb_016"))
@@ -5806,7 +5806,7 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
                     IF_INT_LESS(LW(0), 100)
                         CALL(unitwincoin_disp_onoff, 0)
                         CALL(evt_msg_print_add, 0, STRING("kuji_bomb_022_1"))
-                        ELSE
+                    ELSE
                         CALL(evt_pouch_add_coin, -100)
                         CALL(unitwincoin_wait)
                         CALL(unitwincoin_disp_onoff, 0)
@@ -5819,7 +5819,7 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
                         CALL(evt_item_get_item_end_wait, STRING("kuzi"))
                         CALL(evt_msg_print, 0, STRING("kuji_bomb_019"), 0, STRING("グルメボム兵"))
                     END_IF
-                    ELSE
+                ELSE
                     CALL(unitwincoin_disp_onoff, 0)
                     CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_4"), STRING("T_4"))
                     CALL(evt_msg_print_add, 0, STRING("kuji_bomb_022"))
@@ -5850,13 +5850,13 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     CALL(evt_lottery_flag, LW(0))
     IF_BITS_SET(LW(0), LOTTERY_FLAG_NEW_DAY)
         SET_VALUE(LW(0), 0)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 1)
     END_IF
 #if VERSION > VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_LOTTERY_RESET_EXPLAINED, 1)
         SET_VALUE(LW(0), 1)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_GOR_LOTTERY_RESET_EXPLAINED, 1)
     END_IF
 #endif
@@ -5866,13 +5866,13 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
         CALL(evt_lottery_flag, LW(0))
         IF_BITS_SET(LW(0), LOTTERY_FLAG_REBOUGHT)
             SET_VALUE(LW(0), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(0), 0)
         END_IF
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("kuji_bomb_061"), 0, STRING("グルメボム兵"))
             GOTO(0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("kuji_bomb_062"), 0, STRING("グルメボム兵"))
             GOTO(99)
         END_IF
@@ -5892,17 +5892,17 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     CALL(evt_msg_select, 0, STRING("kuji_bomb_042"))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(10)
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("kuji_bomb_043"))
         CALL(evt_msg_select, 0, STRING("kuji_bomb_044"))
         IF_INT_EQUAL(LW(0), 0)
             GOTO(10)
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("kuji_bomb_045"))
             CALL(evt_msg_select, 0, STRING("kuji_bomb_046"))
             IF_INT_EQUAL(LW(0), 0)
                 GOTO(10)
-                ELSE
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("kuji_bomb_047"))
                 CALL(evt_msg_select, 0, STRING("kuji_bomb_048"))
                 IF_INT_EQUAL(LW(0), 0)
@@ -5915,7 +5915,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
                         IF_INT_LESS(LW(0), 500)
                             CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_4"), STRING("T_4"))
                             CALL(evt_msg_print_add, 0, STRING("kuji_bomb_062_1"))
-                            ELSE
+                        ELSE
                             CALL(evt_pouch_add_coin, -500)
                             CALL(unitwincoin_wait)
                             CALL(unitwincoin_disp_onoff, 0)
@@ -5931,11 +5931,11 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
                             CALL(evt_item_get_item_end_wait, STRING("kuzi"))
                             CALL(evt_msg_print, 0, STRING("kuji_bomb_053"), 0, STRING("グルメボム兵"))
                         END_IF
-                        ELSE
+                    ELSE
                         CALL(unitwincoin_disp_onoff, 0)
                         CALL(evt_msg_print_add, 0, STRING("kuji_bomb_054"))
                     END_IF
-                    ELSE
+                ELSE
                     GOTO(10)
                 END_IF
             END_IF
@@ -6047,12 +6047,12 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     CALL(evt_msg_select, 0, STRING("kuji_bomb_057"))
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(10)
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("kuji_bomb_058"))
         CALL(evt_msg_select, 0, STRING("kuji_bomb_059"))
         IF_INT_NOT_EQUAL(LW(0), 0)
             GOTO(10)
-            ELSE
+        ELSE
             CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_1"), STRING("T_1"))
             CALL(evt_msg_print_add, 0, STRING("kuji_bomb_060"))
             GOTO(0)
@@ -6368,7 +6368,7 @@ EVT_BEGIN(kuzi_bomb_talk)
     CALL(evt_lottery, 0, LW(0), LW(1))
     IF_BITS_SET(LW(0), LOTTERY_FLAG_CLOCK_ERROR)
         CALL_CHILD(PTR(kuzi_bomb_talk_husei))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(kuzi_bomb_talk_normal))
     END_IF
     RETURN
@@ -6382,7 +6382,7 @@ EVT_BEGIN(kuzi_keiziban_entry)
     CALL(evt_lottery, 1, LW(0), LW(1))
     IF_BITS_SET(LW(0), LOTTERY_FLAG_CLOCK_ERROR)
         CALL_CHILD(PTR(kuzi_keiziban_husei))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(kuzi_keiziban_normal))
     END_IF
 #if VERSION > VERSION_DEMO_US
@@ -6470,7 +6470,7 @@ EVT_END()
 EVT_BEGIN(monte_evt_door_entry)
     CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
@@ -6549,28 +6549,28 @@ EVT_BEGIN(gor_03_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 250, 60, -510, 0, GSWF_SHINE_02, 90)
     CALL(evt_mobj_powerupblk, STRING("pblk2"), -563, 0, -150, 0, GSWF_SHINE_03, 90)
     // The hedges: all are hidden, then the ones matching the current chapter are shown.
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG3_32_BOSS_BATTLE)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG5_43_X_NAUTS_RETREAT)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
         CASE_DEFAULT
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     // The parlor machines, ranking board, Pianta Changer and lottery board get their triggers.
     SPAWN_EVENT_GET_ID(PTR(desk_talk_check), GW(15))
@@ -6600,7 +6600,7 @@ EVT_BEGIN(gor_03_init_evt)
     SPAWN_EVENT(evt_sub_mail_event)
     // The lottery board trigger is registered.
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kuzi"), 0, PTR(kuzi_keiziban_entry), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02"), MAP_OBJ_FLAG_CLIP)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
         SPAWN_EVENT(maffiaboss_maffiaboss)
     END_IF
@@ -6622,7 +6622,7 @@ EVT_BEGIN(gor_03_init_evt)
         CASE_DEFAULT
         CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("A_i02_f2_set00C"), 0, PTR(peton_desk_talk), 0)
     END_SWITCH
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kabe"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kabe"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 #else
@@ -6705,28 +6705,28 @@ EVT_BEGIN(gor_03_init_evt)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -200, 0, 125, STRING("S_ground_A"), 125, GSWF_STARPIECE_12)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 250, 60, -510, 0, GSWF_SHINE_02, 90)
     CALL(evt_mobj_powerupblk, STRING("pblk2"), -563, 0, -150, 0, GSWF_SHINE_03, 90)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG3_32_BOSS_BATTLE)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG5_43_X_NAUTS_RETREAT)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
         CASE_DEFAULT
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     SPAWN_EVENT_GET_ID(PTR(desk_talk_check), GW(15))
     CALL_CHILD(PTR(debug_event_mode))
@@ -6752,57 +6752,57 @@ EVT_BEGIN(gor_03_init_evt)
 #if VERSION >= VERSION_US
     SPAWN_EVENT(evt_sub_mail_event)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kuzi"), 0, PTR(kuzi_keiziban_entry), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("J_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("E_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("Sp_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i02_f1_hon07"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("E_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("Sp_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("F_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("Sp_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("I_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_f1_hon07"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("F_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("Sp_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("I_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_sub_get_language, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("J_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i02_f1_hon07"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("J_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i02_f1_hon07"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("E_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("E_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("E_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("E_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(2)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("D_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("D_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("D_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("D_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(3)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("F_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("F_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("F_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("F_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(4)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("Sp_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("Sp_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("Sp_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("Sp_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(5)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("I_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("I_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_i02_f1_kan"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
     CALL(evt_sub_get_language, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("J_sro_light01"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("J_sro_light02"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("E_sro_light01"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("E_sro_light02"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("J_sro_light01"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("J_sro_light02"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_sro_light01"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_sro_light02"), MAP_OBJ_FLAG_DISABLED)
         CASE_DEFAULT
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("J_sro_light01"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("J_sro_light02"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("E_sro_light01"), MAP_OBJ_FLAG_DISABLED)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("E_sro_light02"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_sro_light01"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_sro_light02"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("E_sro_light01"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("E_sro_light02"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
 #else
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kuzi"), 0, PTR(kuzi_keiziban_entry), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02"), MAP_OBJ_FLAG_CLIP)
 #endif
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
         SPAWN_EVENT(PTR(maffiaboss_maffiaboss))
@@ -6824,7 +6824,7 @@ EVT_BEGIN(gor_03_init_evt)
         CASE_DEFAULT
         CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("A_i02_f2_set00C"), 0, PTR(peton_desk_talk), 0)
     END_SWITCH
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kabe"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kabe"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 #endif

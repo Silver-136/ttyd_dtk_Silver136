@@ -105,7 +105,7 @@ static EVT_BEGIN(door_switch_init)
     IF_INT_EQUAL(GSWF_MRI_15_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     RETURN
@@ -121,7 +121,7 @@ static EVT_BEGIN(door_switch)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
         CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_ONCE, 0)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_MRI_15_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))

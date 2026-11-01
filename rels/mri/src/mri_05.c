@@ -265,7 +265,7 @@ static EVT_BEGIN(door_switch_init)
     IF_INT_EQUAL(GSWF_MRI_05_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("doalight"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     RETURN
@@ -281,7 +281,7 @@ static EVT_BEGIN(door_switch)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
         CALL(evt_map_playanim, STRING("doalight"), MAP_ANIM_PLAY_ONCE, 0)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_MRI_05_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
@@ -327,7 +327,7 @@ static EVT_BEGIN(punipuni_ball00_init)
     IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_1, 1)
         CALL(evt_item_set_position, LW(10), -150, -109, -37)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari_01"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_target_set_position, LW(11), -150, -139, 20)
@@ -352,7 +352,7 @@ static EVT_BEGIN(punipuni_ball00)
         CALL(evt_item_set_position, LW(10), -150, -109, -37)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_sui_hikari_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemset))
-        ELSE
+    ELSE
         SET_VALUE(GSWF_MRI_05_PUNI_ORB_PLACED_1, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
@@ -372,7 +372,7 @@ EVT_BEGIN(punipuni_ball01_init)
     IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_2, 1)
         CALL(evt_item_set_position, LW(10), 150, -109, -37)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari_02"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_target_set_position, LW(11), 150, -139, 20)
@@ -421,7 +421,7 @@ EVT_BEGIN(punipuni_ball01)
         CALL(evt_item_set_position, LW(10), 150, -109, -37)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_sui_hikari_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemset))
-        ELSE
+    ELSE
         SET_VALUE(GSWF_MRI_05_PUNI_ORB_PLACED_2, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
@@ -451,13 +451,13 @@ EVT_BEGIN(mario_shabon_check)
         CALL(evt_mario_get_name_hitobj_ride, LW(0))
         IF_STR_EQUAL(LW(0), STRING("A_syabon_yuka"))
             SET_VALUE(LW(1), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(1), 0)
         END_IF
         CALL(evt_mario_get_state, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             SET_VALUE(LW(2), 0)
-            ELSE
+        ELSE
             ADD(LW(2), 1)
         END_IF
         IF_INT_EQUAL(LW(1), 1)

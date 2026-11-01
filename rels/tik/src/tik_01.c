@@ -66,7 +66,6 @@ EVT_END()
  * During the badge tutorial (STG0_17_BADGE_TUTORIAL up to the Blooper battle),
  * if he has no badge equipped yet, it plays lecture_badge_after_00_evt. Returns 0 in LW(0).
  */
-// Remind Mario to equip a badge only between the badge tutorial and the Blooper battle.
 EVT_BEGIN(dokan_2_in_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_17_BADGE_TUTORIAL)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG0_19_BLOOPER_BATTLE)
@@ -485,7 +484,7 @@ EVT_BEGIN(wall_bomb00)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -527,7 +526,7 @@ EVT_BEGIN(wall_bomb01)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -627,7 +626,7 @@ EVT_BEGIN(tik_01_init_evt)
     SET_VALUE(GSWF_TIK_01_VISITED, 1)
     IF_INT_EQUAL(GSWF_TIK_01_ENTERED, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_TIK1"), 3000)
         SET_VALUE(GSWF_TIK_01_ENTERED, 1)
     END_IF
@@ -648,7 +647,7 @@ EVT_BEGIN(tik_01_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dom_kabe_2"), 1, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_dom_kabe_1"), 0, PTR(wall_bomb00), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dom_kabe_1"), 1, 0)
     END_IF
@@ -658,7 +657,7 @@ EVT_BEGIN(tik_01_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("e_bero_2"), 4)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("e_bero_2"), 0, PTR(wall_bomb01), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 540, 125, -100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_TIK_01_DEFEND_PLUS_P_CHEST)
@@ -687,7 +686,7 @@ EVT_BEGIN(tik_01_init_evt)
     END_IF
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG0_10_01_FRANKLYS_TUTORIAL)
         SPAWN_EVENT(PTR(gorotuki_sanninngumi))
-        ELSE
+    ELSE
         CALL(evt_hitobj_onoff, STRING("a_rec"), 1, 0)
     END_IF
     RETURN

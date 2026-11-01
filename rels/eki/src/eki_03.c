@@ -375,20 +375,20 @@ EVT_BEGIN(eki_03_init_evt)
     CALL(evt_cloud_init)
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_1_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_1"), STRING("a_kami_1"), PTR(evt_poster_1))
-        ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_kami_1"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_2_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_2"), STRING("a_kami_2"), PTR(evt_poster_2))
-        ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_3_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_3"), STRING("a_kami_3"), PTR(evt_poster_3))
-        ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_3"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_3"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_kami_3"), 1, 0)
     END_IF
     // The posters in the middle of the room (4 to 9), with the same handling.
@@ -455,7 +455,7 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kami_9"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
-        END_IF
+    END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_13_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_13"), STRING("a_kami_10"), PTR(evt_poster_13))
     ELSE
@@ -519,70 +519,70 @@ EVT_BEGIN(eki_03_init_evt)
     CALL(evt_cloud_init)
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_1_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_0"), STRING("a_kami_1"), PTR(evt_poster_1))
-        ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_0"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_0"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_1"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_2_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_17"), STRING("a_kami_2"), PTR(evt_poster_2))
-        ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_17"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_17"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_3_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_16"), STRING("a_kami_3"), PTR(evt_poster_3))
-        ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_16"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_16"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_3"), 1, 0)
     END_IF
     // The posters in the middle of the room (4 to 9), with the same handling.
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_4_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_4"), STRING("a_kami_4"), PTR(evt_poster_4))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_4"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_5_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_5"), STRING("a_kami_12"), PTR(evt_poster_5))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_6_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_6"), STRING("a_kami_11"), PTR(evt_poster_6))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_6"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_7_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_7"), STRING("a_kami_11"), PTR(evt_poster_7))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_7"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_8_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_8"), STRING("a_kami_12"), PTR(evt_poster_8))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_8"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_9_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_9"), STRING("a_kami_12"), PTR(evt_poster_9))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_9"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
     END_IF
     // Posters 10 to 13 also open up extra hit areas once blown away.
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_10_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_10"), STRING("a_kami_10"), PTR(evt_poster_10))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_10"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_13"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_11_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_11"), STRING("a_kami_10"), PTR(evt_poster_11))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_11"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_14"), 1, 0)
@@ -592,7 +592,7 @@ EVT_BEGIN(eki_03_init_evt)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_12_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_12"), STRING("a_kami_10"), PTR(evt_poster_12))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_12"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_8"), 1, 0)
@@ -601,20 +601,20 @@ EVT_BEGIN(eki_03_init_evt)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_13_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_13"), STRING("a_kami_10"), PTR(evt_poster_13))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_13"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_14_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_14"), STRING("a_kami_11"), PTR(evt_poster_14))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_14"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF
     // Poster 15; then the wall behind the posters is closed until all are gone.
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_15_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_15"), STRING("a_kami_11"), PTR(evt_poster_15))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_15"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF

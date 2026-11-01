@@ -36,6 +36,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
+#include <dolphin/pad.h>
 
 void gans_msg_callback(s32 type, void** work);
 
@@ -488,7 +489,7 @@ static EVT_BEGIN(talk_gans)
     CALL(evt_msg_select, 0, STRING("stg3_tou_52_yn"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("stg3_tou_53"))
-        ELSE
+    ELSE
         CALL(evt_msg_continue)
         CALL(evt_fade_entry, FADE_OUT_BLACK, 500, 0, 0, 0)
         WAIT_MS(500)
@@ -557,19 +558,19 @@ static EVT_BEGIN(talk_kinoshikowa)
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_13_03_b"), 0, 0)
                     SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("irai_13_04"), 0, 0)
                 END_IF
                 SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
-                ELSE
+            ELSE
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_13_00"), 0, 0)
                     SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("irai_13_02"), 0, 0)
                 END_IF
             END_IF
-            ELSE
+        ELSE
             // With the trunks gone from his pack she thanks him, pays 30 coins and the job is finished;
             // while he still carries any she complains about the smell.
             IF_INT_EQUAL(LW(0), 0)
@@ -584,7 +585,7 @@ static EVT_BEGIN(talk_kinoshikowa)
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_HELP_WANTED), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("irai_13_04"), 0, 0)
             END_IF
         END_IF
@@ -600,7 +601,7 @@ static EVT_BEGIN(talk_kinoshikowa)
             CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
             WAIT_MS(200)
             CALL(evt_msg_print, 0, STRING("irai_23_03"), 0, 0)
-            ELSE
+        ELSE
             // Otherwise she promises to return it soon, gives in when Mario insists,
             // hurries to the back of the office with the camera following her and fetches it.
             CALL(evt_msg_print, 0, STRING("irai_23_00"), 0, 0)
@@ -622,7 +623,7 @@ static EVT_BEGIN(talk_kinoshikowa)
                 SET_VALUE(LF(0), 0)
                 CALL(evt_npc_move_position, STRING("me"), 120, -70, 0, 80, 0)
                 CALL(evt_npc_move_position, STRING("me"), 30, -70, 0, 80, 0)
-                ELSE
+            ELSE
                 SET_VALUE(LF(0), 1)
                 CALL(evt_npc_move_position, STRING("me"), 120, 65, 0, 80, 0)
                 CALL(evt_npc_move_position, STRING("me"), 30, 60, 0, 80, 0)
@@ -634,7 +635,7 @@ static EVT_BEGIN(talk_kinoshikowa)
                 CALL(evt_npc_move_position, STRING("me"), 30, -70, 0, 80, 0)
                 CALL(evt_npc_move_position, STRING("me"), 127, -70, 0, 80, 0)
                 CALL(evt_npc_move_position, STRING("me"), 127, 0, 0, 80, 0)
-                ELSE
+            ELSE
                 CALL(evt_npc_move_position, STRING("me"), 30, 60, 0, 80, 0)
                 CALL(evt_npc_move_position, STRING("me"), 127, 65, 0, 80, 0)
                 CALL(evt_npc_move_position, STRING("me"), 127, 10, 0, 80, 0)
@@ -917,7 +918,7 @@ EVT_BEGIN(evt_sensyu2)
         CALL(evt_msg_print_add, 0, STRING("stg3_tou_53"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_p_tukue"), 0, PTR(talk_gans), 0)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
-        ELSE
+    ELSE
         CALL(evt_msg_continue)
         CALL(evt_msg_print, 0, STRING("stg3_tou_55"), 0, 0)
         WAIT_MS(300)
@@ -1116,7 +1117,6 @@ EVT_END()
  * the panel closes, the partner sums up (326) and the story advances to STG3_20_12_JOLENES_SECRET.
  * On later visits Mario just looks until A is pressed.
  */
-// The first peek runs the story scene; later peeks keep the capture open until A is pressed.
 EVT_BEGIN(evt_nozoki)
     // Mario freezes in place; the first time, Grubba and Jolene are placed in the office below.
     CALL(evt_mario_key_onoff, 0)
@@ -1310,11 +1310,11 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_msg_print_party, STRING("stg3_tou_326"))
         WAIT_MS(300)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_20_12_JOLENES_SECRET)
-        ELSE
+    ELSE
         // On later visits Mario just looks down into the office until A is pressed, then the panel closes.
         LOOP(0)
             CALL(evt_key_get_buttontrg, 0, LW(0))
-            IF_BITS_SET(LW(0), 256)
+            IF_BITS_SET(LW(0), PAD_BUTTON_A)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -1450,7 +1450,7 @@ EVT_BEGIN(tou_05_init_evt)
     IF_STR_EQUAL(LW(0), STRING("fall"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_Y"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kuro_Y"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -1469,7 +1469,7 @@ EVT_BEGIN(tou_05_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_p_tukue"), 0, PTR(talk_gans), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_12_JOLENES_SECRET)
@@ -1504,7 +1504,7 @@ EVT_BEGIN(tou_05_init_evt)
         SET_VALUE(LW(0), 1)
         IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 0)
             SPAWN_EVENT(PTR(evt_sensyu))
-            ELSE
+        ELSE
             SET_VALUE(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 0)
             SPAWN_EVENT(PTR(evt_sensyu2))
         END_IF
@@ -1514,13 +1514,13 @@ EVT_BEGIN(tou_05_init_evt)
         CALL(evt_snd_envoff, PSND_FADEOUT)
         SET_VALUE(LW(0), 1)
         SPAWN_EVENT(PTR(evt_1st_leagu))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
-        ELSE
+    ELSE
         IF_INT_EQUAL(LW(0), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
@@ -1556,7 +1556,7 @@ EVT_BEGIN(tou_05_init_evt)
         CASE_DEFAULT
         IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
             SET_VALUE(LF(0), 0)
-            ELSE
+        ELSE
             SET_VALUE(LF(0), 1)
         END_IF
     END_SWITCH
@@ -1564,7 +1564,7 @@ EVT_BEGIN(tou_05_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikikau_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikikau_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_haikikan"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikikau_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikikau_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

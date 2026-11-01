@@ -43,6 +43,7 @@
 #include "driver/seqdrv.h"
 #include "map/sharin.h"
 #include "map/sharin.h"
+#include <dolphin/pad.h>
 
 static USER_FUNC(ramp_r);
 static USER_FUNC(kpa_hikousen_yure);
@@ -372,7 +373,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2"), 0)
-            ELSE
+        ELSE
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2_2"), 0)
         END_IF
     END_IF
@@ -669,7 +670,7 @@ static EVT_BEGIN(hom_10_evt_resha_stop)
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             SPAWN_EVENT(PTR(stop_1))
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(stop_2))
         END_IF
     END_IF
@@ -823,7 +824,7 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
 #endif
-        ELSE
+    ELSE
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
         SET_VALUE(LW(0), 0)
@@ -1085,7 +1086,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -1240,7 +1241,7 @@ EVT_BEGIN(hikosenkakari_talk)
         CALL(evt_pouch_check_item, ITEM_BLIMP_TICKET, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("hikou_05"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_party_stop, 0)
             CALL(evt_party_stop, 1)
             CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1249,7 +1250,7 @@ EVT_BEGIN(hikosenkakari_talk)
             CALL(evt_mario_get_dispdir, LW(10))
             IF_INT_GREATER_OR_EQUAL(LW(10), 180)
                 ADD(LW(0), 15)
-                ELSE
+            ELSE
                 SUBTRACT(LW(0), 15)
             END_IF
             ADD(LW(1), 20)
@@ -1288,7 +1289,7 @@ EVT_BEGIN(hikosenkakari_talk)
             CALL(evt_party_run, 0)
             CALL(evt_party_run, 1)
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("hikou_03"))
     END_IF
     RETURN
@@ -1334,14 +1335,14 @@ EVT_BEGIN(ekiin_talk)
         CALL(evt_pouch_check_item, ITEM_TRAIN_TICKET, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("train_05"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
             CALL(evt_mario_set_pose, STRING("M_C_3"))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_mario_get_dispdir, LW(10))
             IF_INT_GREATER_OR_EQUAL(LW(10), 180)
                 ADD(LW(0), 10)
-                ELSE
+            ELSE
                 SUBTRACT(LW(0), 10)
             END_IF
             ADD(LW(1), 20)
@@ -1360,14 +1361,14 @@ EVT_BEGIN(ekiin_talk)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             IF_INT_GREATER_OR_EQUAL(LW(0), -350)
                 CALL(evt_npc_move_position, STRING("me"), -390, 80, 0, FLOAT(120.0f), 0)
-                ELSE
+            ELSE
                 CALL(evt_npc_move_position, STRING("me"), -320, 80, 0, FLOAT(120.0f), 0)
             END_IF
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
             CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
             CALL_CHILD(PTR(evt_train))
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("train_02"))
     END_IF
     RETURN
@@ -1651,7 +1652,7 @@ EVT_BEGIN(evt_hikousen)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_00_WELCOME_TO_GLITZVILLE)
             WAIT_MS(4000)
             CALL(evt_bero_mapchange, STRING("tou_20"), STRING("start"))
-            ELSE
+        ELSE
             WAIT_MS(10000)
             CALL(evt_bero_mapchange, STRING("tou_00"), 0)
         END_IF
@@ -1710,7 +1711,7 @@ static EVT_BEGIN(evt_wing)
                     WAIT_FRAMES(1)
                 END_LOOP
             END_LOOP
-            ELSE
+        ELSE
             CALL(evt_sub_intpl_init, EASING_SINE_OUT, -10, 10, 30)
             LOOP(31)
                 CALL(evt_sub_intpl_get_value)
@@ -1744,9 +1745,9 @@ EVT_BEGIN(evt_hikousen_return)
     CALL(evt_mario_kill_party, 0)
     CALL(evt_mario_kill_party, 1)
     WAIT_FRAMES(1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hako_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hako_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, 446, 181, 658, 446, 86, -117, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_snd_sfxon, STRING("SFX_STG3_AIR_SHIP_DRIVE5"), 0)
@@ -1815,7 +1816,7 @@ EVT_BEGIN(evt_hikousen_return)
     CALL(evt_img_alloc_capture, STRING("img"), 1, STRING("ofs"), 1, 0, 0, 0, 0)
     CALL(evt_img_clear_virtual_point, STRING("img"))
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hikousen"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hikousen"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_sfxon, STRING("SFX_STG3_AIR_SHIP_REVERSE1"), 0)
     CALL(evt_img_onoff, STRING("img"), 1)
     CALL(evt_img_wait_animend, STRING("img"))
@@ -1824,28 +1825,28 @@ EVT_BEGIN(evt_hikousen_return)
     CALL(evt_offscreen_delete, STRING("ofs"))
     CALL(evt_paper_delete, STRING("OFF_d_kaiten"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("hikousen"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hikousen"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hikousen"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_rotate, 1, STRING("hikousen"), 0, 0, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("gondora_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hako_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bou_10"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bou_9"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bou_7"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bou_8"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("h_bou_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("h_bou_4"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hako_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("gondora_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hako_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bou_10"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bou_9"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bou_7"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bou_8"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("h_bou_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("h_bou_4"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hako_1"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("h_bou_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("h_bou_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("h_bou_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("h_bou_4"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(700)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bou_7"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bou_8"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bou_7"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bou_8"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(700)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bou_9"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bou_10"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bou_9"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bou_10"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
@@ -2258,10 +2259,10 @@ EVT_BEGIN(gor_04_init_evt)
     IF_STR_EQUAL(LW(0), STRING("hikousen_return"))
         SPAWN_EVENT(evt_hikousen_return)
     ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hako_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hako_1"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bero"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_bero_get_entername, LW(0))
     // Entering through the train door means this is the return trip, and the train is at Rogueport.
     IF_STR_EQUAL(LW(0), STRING("n_bero"))
@@ -2314,8 +2315,8 @@ EVT_BEGIN(gor_04_init_evt)
             CALL(evt_party_run, 0)
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-            END_IF
-            END_IF
+        END_IF
+    END_IF
     // The mail event runs in the background.
     SPAWN_EVENT(evt_sub_mail_event)
     RETURN
@@ -2359,10 +2360,10 @@ EVT_BEGIN(gor_04_init_evt)
     IF_STR_EQUAL(LW(0), STRING("hikousen_return"))
         SPAWN_EVENT(PTR(evt_hikousen_return))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hako_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hako_1"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bero"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("n_bero"))
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
@@ -2421,7 +2422,7 @@ EVT_BEGIN(gor_04_init_evt)
 #endif
     END_IF
     SPAWN_EVENT(PTR(evt_sub_mail_event))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 #endif

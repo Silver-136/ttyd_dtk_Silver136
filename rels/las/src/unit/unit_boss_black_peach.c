@@ -1150,7 +1150,6 @@ f32 hair_offset[] = {
 };
 
 /** inline helper for pose_init: defined here so its Vec template lands at this .rodata position */
-// inline helper for pose_init: defined here so its Vec template lands at this .rodata position
 inline void hand_light_init(void) {
     Mtx mtx;
     u8* light = lightGetPaperCraft();
@@ -5920,7 +5919,6 @@ USER_FUNC(change_pose) {
 }
 
 /** same body as pose_main; hand_main inlines it (register/stack order only match this way) */
-// same body as pose_main; hand_main inlines it (register/stack order only match this way)
 inline void hand_pose_inl(void) {
     ExtdrvPose* pose;
     HandElem* elem;

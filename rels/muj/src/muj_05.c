@@ -313,7 +313,7 @@ static EVT_BEGIN(sanders_talk)
         CALL(evt_pouch_check_item, ITEM_CHUCKOLA_COLA, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_34_03"), 0, STRING("me"))
-            ELSE
+        ELSE
 #if VERSION <= VERSION_DEMO_US
             CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
 #else
@@ -336,7 +336,7 @@ static EVT_BEGIN(sanders_talk)
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
             WAIT_MS(1000)
             SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_48"), 0, STRING("me"))
             BEGIN_INLINE_EVENT
                 SET_VALUE(LW(0), 32000)
@@ -422,13 +422,13 @@ static EVT_BEGIN(marco_talk)
                     CALL(evt_item_flag_on, STRING("jewel"), ITEM_FLAG_NO_TOUCH_GET)
                     CALL(evt_item_get_item, STRING("jewel"))
                 END_SWITCH
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg5_muj_93_05"), 0, STRING("マルコ"))
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(GW(12), 0)
                 CALL(evt_msg_print, 0, STRING("stg5_muj_93_06"), 0, STRING("マルコ"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg5_muj_93_07"), 0, STRING("マルコ"))
                 SET_VALUE(GW(12), 0)
             END_IF
@@ -629,7 +629,7 @@ EVT_BEGIN(sanders_kyushutsu_sub)
             WAIT_MS(500)
             CALL(evt_mario_set_dir, 90, 200, 0)
         END_INLINE_EVENT
-        ELSE
+    ELSE
         CALL(evt_npc_set_ry, STRING("サンダース"), 90)
         CALL(evt_npc_set_position, STRING("サンダース"), -150, 200, 23)
         BEGIN_INLINE_EVENT
@@ -724,7 +724,7 @@ EVT_BEGIN(sanders_kyushutsu)
         SET_VALUE(LW(0), STRING("エルモス２"))
         SPAWN_EVENT_GET_ID(PTR(erumosu_guruguru), GW(1))
         SPAWN_EVENT_GET_ID(PTR(erumosu_guruguru_dir), GW(3))
-        ELSE
+    ELSE
         CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_ki_02_01"), 0, PTR(sanders_kyushutsu_sub), 0)
     END_IF
     RETURN
@@ -1210,7 +1210,7 @@ static EVT_BEGIN(bombwall_bomb)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dokuro_iwa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokuro_iwa"), 1, 0)
         CALL(evt_img_wait_animend, STRING("capture_img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dokuro_iwa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokuro_iwa"), 1, 0)
     END_IF
@@ -1337,7 +1337,7 @@ EVT_BEGIN(dokuroiwa_init)
     IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         CALL(evt_mapobj_scale, 1, STRING("S_hige_iwa02_me"), 1, 0, 1)
         CALL(evt_mapobj_scale, 1, STRING("S_hige_iwa03_me"), 1, 0, 1)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SET_VALUE(GW(10), 0)
@@ -1349,7 +1349,7 @@ EVT_BEGIN(dokuroiwa_init)
     IF_INT_EQUAL(GSWF_MUJ_05_SKULL_ROCK_OPENED, 0)
         CALL_CHILD(PTR(case_event_entry))
         CALL(evt_run_case_evt, CASE_NOT_STAND_ON, 1, STRING("A_iwa_atari"), 0, PTR(iwa02_nonride_a), 0)
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("S-dkr_iwa"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_hitobj_onoff, STRING("A_dkr_iwa_futa"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_dkr_iwa_futa02"), 1, 1)

@@ -467,7 +467,7 @@ EVT_BEGIN(moamoa_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
-        ELSE
+    ELSE
         SET_VALUE(LW(1), 1)
     END_IF
     CALL(evt_btl_camera_set_moveto, 0, 83, 144, 512, 83, 109, 0, LW(1), 11)
@@ -486,7 +486,7 @@ static EVT_BEGIN(mario_party_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
-        ELSE
+    ELSE
         SET_VALUE(LW(1), 1)
     END_IF
     CALL(evt_btl_camera_set_moveto, 0, -120, 58, 257, -120, 40, 0, LW(1), 11)
@@ -830,7 +830,7 @@ static EVT_BEGIN(phase_event)
                             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_UNIT_WORK_MOUTH_FORM, LW(1))
                             IF_INT_NOT_EQUAL(LW(1), 1)
                                 CALL_CHILD(PTR(moamoa_tentacl_on))
-                                ELSE
+                            ELSE
                                 CALL_CHILD(PTR(moamoa_mouth_on))
                             END_IF
                             CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)

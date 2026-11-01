@@ -147,7 +147,7 @@ EvtWord mri_puni_jump_se[15];
 EVT_BEGIN(evt_mri_door_open_pure)
     IF_INT_EQUAL(LW(9), 0)
         SET_VALUE(LW(2), -5)
-        ELSE
+    ELSE
         SET_VALUE(LW(2), 5)
     END_IF
     BEGIN_INLINE_EVENT
@@ -201,7 +201,7 @@ EVT_END()
 EVT_BEGIN(evt_mri_door_close_pure)
     IF_INT_EQUAL(LW(9), 0)
         SET_VALUE(LW(2), -5)
-        ELSE
+    ELSE
         SET_VALUE(LW(2), 5)
     END_IF
     CALL(evt_mapobj_trans, 1, LW(10), LW(2), 0, -60)
@@ -498,7 +498,7 @@ EVT_BEGIN(mri_hikari_color)
                 CALL(evt_mapobj_get_position, LW(0), LW(4), LW(5), LW(6))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_PUNISWITCH_RIDE1"), LW(4), LW(5), LW(6), 0)
             END_IF
-            ELSE
+        ELSE
             IF_INT_LESS_OR_EQUAL(LW(11), LW(2))
                 CALL(evt_mapobj_get_position, LW(0), LW(4), LW(5), LW(6))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_PUNISWITCH_RIDE1"), LW(4), LW(5), LW(6), 0)
@@ -699,7 +699,7 @@ EVT_BEGIN(mri_guide_goryu)
     ADD(LW(2), -10)
     IF_INT_LESS_OR_EQUAL(LW(0), 180)
         ADD(LW(0), -10)
-        ELSE
+    ELSE
         ADD(LW(0), 10)
     END_IF
     CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))

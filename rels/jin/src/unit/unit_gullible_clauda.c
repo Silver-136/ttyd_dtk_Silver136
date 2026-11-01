@@ -219,7 +219,6 @@ EVT_END()
  * or is already down) she only plays the collapse pose, waiting for GW(19) to reach 2 first.
  * She is then removed from the battle and GW(20) is set to 2 so the fake Mario's phase script knows she is gone.
  */
-// Return home and wait for the attack to finish before the GW(19)-selected defeat sequence.
 static EVT_BEGIN(dead_event_clauda)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(4), LW(5))

@@ -327,7 +327,6 @@ EVT_END()
  * falls to the floor and turns into unit kind 73 (UNIT_SPIKE_TOP).
  * If it took more than 1 HP damage it also flips over through dmg_turn_event.
  */
-// Wing loss installs the grounded tables and changes the unit kind to Spike Top.
 static EVT_BEGIN(dmg_fall_event_pata)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -351,7 +350,7 @@ static EVT_BEGIN(dmg_fall_event_pata)
         CALL_CHILD(PTR(init_event))
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
         RETURN
-        ELSE
+    ELSE
         CALL_CHILD(PTR(init_event))
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
         CALL_CHILD(PTR(dmg_turn_event))
@@ -756,7 +755,7 @@ static EVT_BEGIN(init_event2)
         CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kIsShelled)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-        ELSE
+    ELSE
         CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)

@@ -358,7 +358,7 @@ EVT_BEGIN(imgstart)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("ERE"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_offscreen, STRING("店員女"), STRING("offscreen"))
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), STRING("offscreen"))
     CALL(evt_npc_flag_onoff, 1, STRING("店員女"), NPC_FLAG_NO_DRAW)
@@ -396,7 +396,7 @@ EVT_BEGIN(imgend)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("ERE"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_offscreen, STRING("店員女"), STRING("offscreen"))
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), STRING("offscreen"))
     CALL(evt_npc_flag_onoff, 1, STRING("店員女"), NPC_FLAG_NO_DRAW)
@@ -437,7 +437,7 @@ EVT_BEGIN(evt_up)
     // The ride up: the elevator doors slide open.
     CALL(evt_mario_key_onoff, 0)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
@@ -1083,7 +1083,7 @@ EVT_BEGIN(evt_roten)
         CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
         IF_INT_EQUAL(LW(1), 0)
             SET_VALUE(LW(1), 10)
-            ELSE
+        ELSE
             SET_VALUE(LW(1), 20)
         END_IF
         IF_INT_LESS(LW(0), LW(1))
@@ -1097,15 +1097,15 @@ EVT_BEGIN(evt_roten)
                 CALL(evt_item_entry, STRING("rp"), ITEM_FRESH_PASTA, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                 CALL(evt_item_get_item, STRING("rp"))
                 CALL(evt_item_get_item_end_wait, STRING("rp"))
-                ELSE
+            ELSE
                 CALL(unitwincoin_disp_onoff, 0)
                 CALL(evt_msg_print_add, 0, STRING("stg7_pik_shop_03"))
             END_IF
-            ELSE
+        ELSE
             CALL(unitwincoin_disp_onoff, 0)
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_shop_04"))
         END_IF
-        ELSE
+    ELSE
         CALL(unitwincoin_disp_onoff, 0)
         CALL(evt_msg_print_add, 0, STRING("stg7_pik_shop_05"))
     END_IF

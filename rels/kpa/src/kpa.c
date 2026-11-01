@@ -86,7 +86,7 @@ EVT_BEGIN(kpa_init)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("kpa_replay"))
         SET_VALUE(GSW_KPA_TIME_LEFT, 180)
-        ELSE
+    ELSE
         IF_STR_NOT_EQUAL(LW(0), STRING("kpa_next_map"))
             SET_VALUE(GSW_KPA_TRY_COUNT, 1)
             SET_VALUE(GSW_KPA_TIME_LEFT, 180)
@@ -323,13 +323,13 @@ EVT_BEGIN(kpa_dead)
     CALL(evt_sub_get_mapname, LW(15))
     IF_STR_EQUAL(LW(15), STRING("kpa_03"))
         SET_VALUE(LW(5), 150)
-        ELSE
+    ELSE
         SET_VALUE(LW(5), 155)
     END_IF
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(1), 0)
             SET_FLOAT_VALUE(LF(0), 0)
-            ELSE
+        ELSE
             SET_FLOAT_VALUE(LF(0), 1)
         END_IF
         ADD_FLOAT(LW(0), LW(1))
@@ -425,7 +425,7 @@ USER_FUNC(kpa_set_scale) {
 EVT_BEGIN(kpa_bgm_change)
     IF_INT_GREATER(GSW_KPA_TIME_LEFT, 30)
         SET_VALUE(LW(2), 0)
-        ELSE
+    ELSE
         SET_VALUE(LW(2), 1)
     END_IF
     SET_VALUE(LW(3), -1)
@@ -434,11 +434,11 @@ EVT_BEGIN(kpa_bgm_change)
     IF_INT_GREATER(GSW_KPA_TIME_LEFT, 30)
         SET_VALUE(LW(3), 0)
         ADD(LW(3), LSW_KPA_FIELD_BGM)
-        ELSE
+    ELSE
         IF_INT_EQUAL(LW(2), 0)
             SET_VALUE(LW(3), 3)
             ADD(LW(3), LSW_KPA_FIELD_BGM)
-            ELSE
+        ELSE
             SET_VALUE(LW(3), 6)
         END_IF
     END_IF

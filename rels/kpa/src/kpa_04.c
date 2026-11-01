@@ -53,7 +53,7 @@ static EVT_BEGIN(kpa_fall)
     END_LOOP
     IF_INT_EQUAL(LF(0), 0)
         CALL_CHILD(PTR(kpa_fall_sub))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(kpa_dead))
     END_IF
     RETURN

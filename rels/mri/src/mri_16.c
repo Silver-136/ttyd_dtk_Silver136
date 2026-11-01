@@ -350,7 +350,7 @@ EVT_BEGIN(switch_up_down)
     SET_FLOAT_VALUE(LW(2), FLOAT(0.0f))
     IF_INT_EQUAL(GSWF_MRI_16_WATER_SWITCH_PRESSED, 0)
         CALL(evt_mobj_get_y_position, STRING("mobj00"), LW(3))
-        ELSE
+    ELSE
         SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))
     END_IF
     SET_FLOAT_VALUE(LW(4), LW(3))
@@ -475,7 +475,7 @@ EVT_BEGIN(mri_16_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_f1_rak_mkusa04"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_f1_rak_mkusa05"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_mkusa_06"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_f1_kaidan"), 1, 0)

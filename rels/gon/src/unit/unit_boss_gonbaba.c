@@ -1684,7 +1684,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_sub_random, 99, LW(0))
         IF_INT_LESS(LW(0), 50)
             CALL_CHILD(PTR(fumituke_attack_event))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(firebreath_attack_event))
         END_IF
     END_SWITCH

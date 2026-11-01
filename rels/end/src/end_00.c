@@ -1431,7 +1431,7 @@ EVT_BEGIN(end_image_main_evt)
             SPAWN_EVENT_GET_ID(PTR(end_image_blend_loop), LW(10))
             LOOP(0)
                 CALL(evt_key_get_buttontrg, 0, LW(0))
-                IF_BITS_SET(LW(0), 4352)
+                IF_BITS_SET(LW(0), PAD_BUTTON_A | PAD_BUTTON_START)
                     BREAK_LOOP
                 END_IF
                 WAIT_FRAMES(1)

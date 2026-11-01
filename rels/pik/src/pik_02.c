@@ -348,7 +348,7 @@ static EVT_BEGIN(talk_powan)
         IF_INT_EQUAL(LSWF_PIK_02_PENNINGTON_TALK_TOGGLE, 0)
             SET_VALUE(LSWF_PIK_02_PENNINGTON_TALK_TOGGLE, 1)
             CALL(evt_msg_print, 0, STRING("stg6_pik_22"), 0, STRING("me"))
-            ELSE
+        ELSE
             SET_VALUE(LSWF_PIK_02_PENNINGTON_TALK_TOGGLE, 0)
             CALL(evt_msg_print, 0, STRING("stg6_pik_23"), 0, STRING("me"))
         END_IF
@@ -1594,12 +1594,12 @@ EVT_BEGIN(pik_02_init_evt)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK2"))
         CALL(evt_snd_set_rev_mode, 2)
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_EVT_KUPPA1"))
         CALL(evt_snd_bgm_scope, 0, 1)
         CALL(evt_snd_envoff, PSND_FADE_OUT)
         CALL(evt_snd_set_rev_mode, 2)
-        END_IF
+    END_IF
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_hit_bind_mapobj, STRING("a_ka_ten"), STRING("ka_ten"))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_52_THE_HIDDEN_PIPE)
@@ -1655,7 +1655,7 @@ EVT_BEGIN(pik_02_init_evt)
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(bero_case_entry))
         CALL_CHILD(PTR(haikei_off))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
@@ -1671,7 +1671,7 @@ EVT_BEGIN(pik_02_init_evt)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), -300, 330, -975, PTR(evt_sw), 0)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
-        ELSE
+    ELSE
         CALL(evt_mapobj_trans, 1, STRING("ka_ten"), 0, 150, 0)
         CALL(evt_hit_bind_update, STRING("a_ka_ten"))
     END_IF

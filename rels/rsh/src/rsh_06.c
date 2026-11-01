@@ -50,6 +50,7 @@
 #include "moamoa.h"
 #include "map/sharin.h"
 #include "map/sharin.h"
+#include <dolphin/pad.h>
 
 static MoamoaWork* wp;
 static f32 randf(f32 min, f32 max);
@@ -1780,7 +1781,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
         // The engine sounds start and the wheel speeds ramp up to the left (outbound).
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2"), 0)
-            ELSE
+        ELSE
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2_2"), 0)
         END_IF
     END_IF
@@ -2070,7 +2071,7 @@ static EVT_BEGIN(hom_10_evt_resha_stop)
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             SPAWN_EVENT(PTR(stop_1))
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(stop_2))
         END_IF
     END_IF
@@ -2161,10 +2162,10 @@ static EVT_BEGIN(hom_10_evt_resha_right)
     CALL_CHILD(PTR(hom_10_evt_resha_sub))
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_06_a"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_8"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_6"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_7"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_8"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_6"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_7"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()
@@ -2172,10 +2173,10 @@ EVT_END()
 /** Train facing left: runs hom_10_evt_resha_sub and hides the front cars (train_1, train_6) and their couplings. */
 static EVT_BEGIN(hom_10_evt_resha_left)
     CALL_CHILD(PTR(hom_10_evt_resha_sub))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -2199,14 +2200,14 @@ static EVT_BEGIN(hom_10_init_evt)
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
 #if VERSION > VERSION_DEMO_US
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
 #endif
-        ELSE
+    ELSE
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
         SET_VALUE(LW(0), 0)
@@ -2322,10 +2323,10 @@ EVT_BEGIN(evt_great_moamoa)
     CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_NO_HIT)
     // The swarm gathers and merges into the giant Smorg.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_244"), 0, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group339"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group340"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group341"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("senro"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group339"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group340"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group341"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("senro"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_position, STRING("base"), 10, 190, 0)
     CALL(evt_npc_pera_onoff, STRING("base"), 0)
     CALL(evt_npc_set_anim, STRING("base"), STRING("Z_1"))
@@ -2352,11 +2353,11 @@ EVT_BEGIN(evt_great_moamoa)
     CALL(evt_moamoa_fusion)
     CALL(evt_snd_sfxoff, GW(2))
     CALL(evt_snd_sfxon, STRING("SFX_STG6_MOAMOA_VOICE2"), GW(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group166"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group339"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group340"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group341"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("senro"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group166"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group339"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group340"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group341"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("senro"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(2000)
     CALL(evt_moamoa_kind_onoff, 1, 0)
     BEGIN_INLINE_EVENT
@@ -2549,7 +2550,7 @@ EVT_BEGIN(moamoa_debug)
         SET_VALUE(LW(0), 0)
         LOOP(0)
             CALL(evt_key_get_buttontrg, 0, LW(10))
-            IF_BITS_SET(LW(10), 256)
+            IF_BITS_SET(LW(10), PAD_BUTTON_A)
                 ADD(LW(0), 1)
                 MODULO(LW(0), 8)
                 SET_VALUE(LW(1), LW(0))
@@ -2627,7 +2628,7 @@ EVT_BEGIN(rsh_06_init_evt_nidome)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
@@ -2637,7 +2638,7 @@ EVT_BEGIN(rsh_06_init_evt_nidome)
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
-            ELSE
+        ELSE
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))
         END_IF

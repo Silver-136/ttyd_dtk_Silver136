@@ -151,7 +151,7 @@ EVT_BEGIN(grass_open_2)
     IF_INT_EQUAL(GF(0), 0)
         CALL(evt_map_playanim, STRING("anm_tana"), MAP_ANIM_PLAY_ONCE, 0)
         SET_VALUE(GF(0), 1)
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("anm_nata"), MAP_ANIM_PLAY_ONCE, 0)
         SET_VALUE(GF(0), 0)
     END_IF

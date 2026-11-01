@@ -976,14 +976,14 @@ static EVT_BEGIN(attack_event)
     END_LOOP
     IF_INT_EQUAL(LW(0), 4)
         CALL_CHILD(PTR(wawawa_attack_event))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 70)
         ADD(LW(0), 30)
         SUBTRACT(LW(0), 1)
         CALL(evt_sub_random, LW(0), LW(1))
         IF_INT_LESS(LW(1), 70)
             CALL_CHILD(PTR(wakka_attack_event))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(recovery_event))
         END_IF
     END_IF
@@ -1113,7 +1113,7 @@ static EVT_BEGIN(wakka_attack_common_event_hit)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
-        ELSE
+    ELSE
         CALL(btlevtcmd_SetPartsBlur, UNIT_ID_SELF, LW(15), 255, 255, 255, 255, 255, 255, 255, 100, 0)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
     END_IF
@@ -1144,7 +1144,7 @@ static EVT_BEGIN(wakka_attack_common_event_hit)
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(15), 0, 4, 0)
         CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8), 0, MOVE_SOUND_FROM_TABLE)
-        ELSE
+    ELSE
         CALL(btlevtcmd_SetPartsScale, UNIT_ID_SELF, LW(15), 1, 0, 1)
         BEGIN_SIBLING_EVENT
             LOOP(0)
@@ -1209,7 +1209,7 @@ static EVT_BEGIN(damage_check_event_sub)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     IF_INT_EQUAL(LW(10), 1)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     END_IF
     GOTO(98)
@@ -1517,7 +1517,7 @@ static EVT_BEGIN(wawawa_attack_event_sub_last)
         WAIT_FRAMES(20)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
-        ELSE
+    ELSE
         SET_VALUE(LW(9), PTR(&weapon_wawawa_attack))
         SET_VALUE(LW(10), 1)
         CALL_CHILD(PTR(damage_check_event_sub))

@@ -522,7 +522,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(guard_cancel_event))
         GOTO(99)
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, 0)
@@ -532,7 +532,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_get_turn, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_DrawLots, LW(0), 3, 40, 40, 20)
-            ELSE
+        ELSE
             CALL(btlevtcmd_DrawLots, LW(0), 3, 40, 40, 6)
         END_IF
         SWITCH(LW(0))

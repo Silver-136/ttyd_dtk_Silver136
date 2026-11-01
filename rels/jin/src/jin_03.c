@@ -261,11 +261,11 @@ EVT_BEGIN(jin_03_init_evt)
     IF_INT_EQUAL(LSW_JIN_STAIRCASE_POS, 0)
         SPAWN_EVENT(PTR(jin_03_kaidan_temae_kesu))
         SPAWN_EVENT(PTR(jin_03_kaidan_oku_kesu))
-        ELSE
+    ELSE
         IF_INT_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
             SPAWN_EVENT(PTR(jin_03_kaidan_naka_kesu))
             SPAWN_EVENT(PTR(jin_03_kaidan_oku_kesu))
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(jin_03_kaidan_temae_kesu))
             SPAWN_EVENT(PTR(jin_03_kaidan_naka_kesu))
         END_IF

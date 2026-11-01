@@ -835,7 +835,7 @@ EVT_BEGIN(all_party_lecture)
     IF_INT_NOT_EQUAL(LW(9), 1)
         IF_INT_NOT_EQUAL(LW(9), 5)
             CALL(evt_mario_goodbye_party, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_kill_party, 0)
         END_IF
         WAIT_MS(500)
@@ -845,7 +845,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_pouch_party_join, LW(9))
         CALL(evt_mario_set_party_pos, 0, LW(9), LW(0), LW(1), LW(2))
         CALL(set_dir, LW(3))
-        ELSE
+    ELSE
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
     // The joining jingle plays over the item-get backdrop with this partner's "has joined your party!" line.
@@ -1110,7 +1110,7 @@ EVT_BEGIN(roll_majin_lecture)
                     DELETE_EVENT(LW(11))
                     SPAWN_EVENT_GET_ID(PTR(roll_majin_lecture_sub02), LW(11))
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_EQUAL(LW(7), 1)
                     CALL(lect_push_r_check, LW(7))
                     IF_INT_EQUAL(LW(7), 0)
@@ -1155,7 +1155,7 @@ EVT_BEGIN(roll_majin_lecture)
 #else
             CALL(evt_msg_print_add, 0, STRING("stg4_usu_majin3_20"))
 #endif
-            ELSE
+        ELSE
             BREAK_LOOP
         END_IF
     END_LOOP

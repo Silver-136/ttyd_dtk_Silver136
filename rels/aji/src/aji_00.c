@@ -280,7 +280,7 @@ static NpcSetupInfo npcEnt[] = {
 EVT_BEGIN(aji_00_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_08_ELITE_X_NAUTS)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))

@@ -334,7 +334,6 @@ static USER_FUNC(lecture_button_set_seq) {
  * Script helper: reads a lecture button's sequence number into args[1].
  * The name says icon id but it returns the sequence number.
  */
-// Despite its name, this helper returns the prompt sequence state, not the icon ID.
 static USER_FUNC(lecture_button_get_icon_id) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -527,7 +526,7 @@ EVT_BEGIN(all_party_lecture)
     IF_INT_NOT_EQUAL(LW(9), 1)
         IF_INT_NOT_EQUAL(LW(9), 5)
             CALL(evt_mario_goodbye_party, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_kill_party, 0)
         END_IF
         WAIT_MS(500)
@@ -537,7 +536,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_pouch_party_join, LW(9))
         CALL(evt_mario_set_party_pos, 0, LW(9), LW(0), LW(1), LW(2))
         CALL(set_dir, LW(3))
-        ELSE
+    ELSE
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
     // The joining fanfare plays over an "itemget" backdrop with this partner's "joined your party!" message

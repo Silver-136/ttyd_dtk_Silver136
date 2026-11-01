@@ -342,7 +342,6 @@ static USER_FUNC(lecture_button_set_seq) {
  * Script helper. Stores the current state (seq) of button args[0] into args[1].
  * Despite the name it does not return the icon id.
  */
-// Return the button sequence state, not the displayed icon ID.
 static USER_FUNC(lecture_button_get_icon_id) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);

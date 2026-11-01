@@ -732,7 +732,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_GREATER(LW(0), 20)
             CALL_CHILD(PTR(stamp_attack_event))
             GOTO(99)
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_LAUNCHED, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL_CHILD(PTR(arm_bunri_event))
@@ -747,12 +747,12 @@ static EVT_BEGIN(attack_event)
             IF_INT_LESS(LW(1), LW(0))
                 CALL_CHILD(PTR(stamp_attack_event))
                 GOTO(99)
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(arm_bunri_event))
                 GOTO(99)
             END_IF
         END_IF
-        ELSE
+    ELSE
         CALL_CHILD(PTR(shake_attack_event))
         GOTO(99)
     END_IF

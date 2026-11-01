@@ -283,7 +283,7 @@ EVT_BEGIN(eki_01_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dann"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_oritatami"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("anm_kaidan"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dann"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
@@ -297,37 +297,37 @@ EVT_BEGIN(eki_01_init_evt)
     CALL(evt_cloud_init)
     IF_INT_EQUAL(GSWF_EKI_01_PAPER_1_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_1"), STRING("a_kami_1"), PTR(evt_kami_1))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_1"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_01_PAPER_2_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_2"), STRING("a_kami_2"), PTR(evt_kami_2))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_01_PAPER_3_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_3"), STRING("a_kami_3"), PTR(evt_kami_3))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_3"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_01_PAPER_4_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_4"), STRING("a_kami_4"), PTR(evt_kami_4))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_4"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_01_PAPER_5_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_5"), STRING("a_kami_5"), PTR(evt_kami_5))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_01_PAPER_6_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_6"), STRING("a_kami_6"), PTR(evt_kami_6))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_6"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_6"), 1, 0)
     END_IF

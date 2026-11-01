@@ -567,12 +567,12 @@ EVT_BEGIN(macho_gance_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
-        ELSE
+    ELSE
         SET_VALUE(LW(1), 1)
     END_IF
     IF_INT_LESS_OR_EQUAL(LW(2), FLOAT(10.0f))
         CALL(evt_btl_camera_set_moveto, 0, 83, 124, 512, 83, 89, 0, LW(1), 11)
-        ELSE
+    ELSE
         CALL(evt_btl_camera_set_moveto, 0, 71, 159, 609, 71, 118, 0, LW(1), 11)
     END_IF
     IF_INT_EQUAL(LW(0), 1)
@@ -590,7 +590,7 @@ EVT_BEGIN(macho_gance_blur_zoom)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 48)
         SET_VALUE(LW(2), 800)
-        ELSE
+    ELSE
         SET_VALUE(LW(1), 1)
         SET_VALUE(LW(2), 16)
     END_IF
@@ -612,7 +612,7 @@ static EVT_BEGIN(mario_party_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
-        ELSE
+    ELSE
         SET_VALUE(LW(1), 1)
     END_IF
     CALL(evt_btl_camera_set_moveto, 0, -111, 67, 275, -111, 49, 0, LW(1), 11)
@@ -1050,7 +1050,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_gance_macho_speed))
         CALL_CHILD(PTR(gance_macho_speed_attack_event))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, LW(2))
         IF_INT_LESS(LW(2), 2)
             IF_INT_LESS_OR_EQUAL(LW(1), 1)
@@ -1066,11 +1066,11 @@ static EVT_BEGIN(attack_event)
                     SET_VALUE(LW(9), PTR(&weapon_gance_footwork))
                     CALL_CHILD(PTR(gance_footwork_attack_event))
                 END_SWITCH
-                ELSE
+            ELSE
                 SET_VALUE(LW(9), PTR(&weapon_gance_attack))
                 CALL_CHILD(PTR(gance_attack_attack_event))
             END_IF
-            ELSE
+        ELSE
             IF_INT_LESS_OR_EQUAL(LW(1), 1)
                 CALL(btlevtcmd_DrawLots, LW(0), 4, 25, 20, 10, 10)
                 SWITCH(LW(0))
@@ -1087,7 +1087,7 @@ static EVT_BEGIN(attack_event)
                     SET_VALUE(LW(9), PTR(&weapon_gance_posing))
                     CALL_CHILD(PTR(gance_posing_attack_event))
                 END_SWITCH
-                ELSE
+            ELSE
                 CALL(btlevtcmd_DrawLots, LW(0), 2, 10, 10)
                 SWITCH(LW(0))
                     CASE_EQUAL(0)

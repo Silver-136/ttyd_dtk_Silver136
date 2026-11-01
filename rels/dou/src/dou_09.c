@@ -532,7 +532,7 @@ static EVT_BEGIN(bombwall_bomb)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ki"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ki1"), 1, 0)
         CALL(evt_img_wait_animend, STRING("capture_img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ki"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ki1"), 1, 0)
     END_IF
@@ -556,7 +556,7 @@ static EVT_BEGIN(bombwall_init)
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("w_bero"), HIT_ATTR_NPC_ONLY)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_ki1"), 0, PTR(bombwall_bomb), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ki"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ki1"), 1, 0)
     END_IF
@@ -581,7 +581,7 @@ EVT_BEGIN(dou_09_init_evt)
     CALL(evt_map_playanim, STRING("moku"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("mon_b"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("mon_a"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))

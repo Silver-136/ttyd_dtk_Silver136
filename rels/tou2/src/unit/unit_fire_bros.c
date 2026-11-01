@@ -425,7 +425,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         CALL_CHILD(PTR(nagemakuri_attack_event))
         GOTO(99)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 70)
         ADD(LW(0), 30)
         SUBTRACT(LW(0), 1)
@@ -510,7 +510,7 @@ static EVT_BEGIN(damage_check_sub)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(6))
     IF_INT_EQUAL(LW(7), 1)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), DAMAGE_RESULT_FINAL_HIT, LW(5))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), 0, LW(5))
     END_IF
     LABEL(99)
@@ -536,7 +536,7 @@ static EVT_BEGIN(damage_check_last)
         CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 2, PARTS_WORK_HIT, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             SET_VALUE(LW(0), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(0), 0)
         END_IF
         GOTO(10)
@@ -569,7 +569,7 @@ static EVT_BEGIN(damage_check_last)
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(6))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), DAMAGE_RESULT_FINAL_HIT, LW(5))
-        ELSE
+    ELSE
         SET_VALUE(LW(7), 1)
         CALL_CHILD(PTR(damage_check_sub))
     END_IF
@@ -756,7 +756,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_fire_bros_attack))
         CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_fire_bros_attack), LW(3), LW(4))

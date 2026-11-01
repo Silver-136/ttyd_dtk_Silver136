@@ -325,7 +325,7 @@ EVT_BEGIN(tou_11_init_evt)
     IF_INT_EQUAL(GSWF_TOU_11_POSTER_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("pos_1"), STRING("a_pos_1"), PTR(evt_postar))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("pos_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_pos_1"), 1, 0)
     END_IF

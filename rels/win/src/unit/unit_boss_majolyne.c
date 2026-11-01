@@ -866,7 +866,7 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(4), LW(13))
             CALL_CHILD(PTR(powder_attack_event))
             GOTO(90)
-            ELSE
+        ELSE
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
             CALL_CHILD(PTR(blizzard_attack_event))
@@ -994,7 +994,7 @@ static EVT_BEGIN(blizzard_attack_event)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(5), 0)
         CALL(evt_eff, 0, STRING("ibuki"), 0, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
-        ELSE
+    ELSE
         CALL(evt_eff, 0, STRING("ibuki"), 1, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
     END_IF
     WAIT_FRAMES(150)

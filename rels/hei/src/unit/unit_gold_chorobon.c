@@ -249,7 +249,6 @@ static PoseSoundTiming pose_sound_timing_table[] = {
  * then jumps in steps of LW(8) units toward x=LW(5) (height LW(6), depth LW(7)), squashing between hops,
  * and finishes with the attack jump onto the target with its attack sound.
  */
-// Hop toward LW(5..7), limiting intermediate X steps to LW(8); the final hop uses the exact destination.
 EVT_BEGIN(gold_chorobon_rabbit_move)
     LOOP(2)
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)

@@ -195,7 +195,7 @@ EVT_BEGIN(kami_check)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_22_DOCUMENT)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
@@ -224,7 +224,7 @@ EVT_BEGIN(kami_offscreen_check)
     IF_STR_EQUAL(LW(10), STRING("rsh_01_a"))
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_22_DOCUMENT)
             CALL(evt_mapobj_clear_offscreen, 0, STRING("yuka_3"))
-            ELSE
+        ELSE
             CALL(evt_mapobj_clear_offscreen, 0, STRING("yuka_3_kami"))
         END_IF
     END_IF
@@ -260,7 +260,6 @@ EVT_END()
  * Hides the room and its backdrop and wires evt_rsh_door_open to the outside hit
  * and evt_rsh_door_close to the inside hit.
  */
-// Door record: room model, room background, door model, outside hit, open animation, inside hit, close animation.
 EVT_BEGIN(evt_rsh_door_entry)
     SET_INT_READ_ADDR(LW(0))
     READ_INT(LW(1))
@@ -431,7 +430,7 @@ EVT_BEGIN(evt_rsh_door_open)
                 CALL(evt_img_wait_animend, STRING("capture_img"))
                 CALL(evt_mario_key_onoff, 1)
             END_SWITCH
-            END_IF
+        END_IF
     END_IF
     SET_VALUE(LF(0), 0)
     CALL(evt_sub_get_mapname, LW(10))
@@ -1129,7 +1128,7 @@ EVT_BEGIN(evt_rsh_rnd_npc_3_5_talk)
     CALL(evt_msg_select, 0, STRING("stg6_rsh_c_29_sel"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("stg6_rsh_c_29_01"))
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("stg6_rsh_c_29_02"))
     END_IF
     RETURN
@@ -1252,10 +1251,10 @@ EVT_BEGIN(evt_rsh_rnd_npc_4_8_talk)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_c_42_01"))
             SET_VALUE(GSWF_RSH_TRAVELER_SECRETS_HEARD, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_c_42_02"))
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_42_03"), 0, STRING("me"))
     END_IF
     RETURN
@@ -1310,7 +1309,7 @@ EVT_BEGIN(evt_rsh_rnd_npc_5_3_talk)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_c_47_03"))
         END_SWITCH
         SET_VALUE(GSWF_RSH_QUIZ_PASSENGER_DONE, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_47_04"), 0, STRING("me"))
     END_IF
     RETURN
@@ -1788,7 +1787,6 @@ USER_FUNC(evt_rsh_get_rnd_npc_data) {
  * Returns the candidate table entry for a room (0 = rsh_01, 1 = rsh_03, 2 = rsh_04), passenger group and index;
  * unknown room/group falls back to the first rsh_01 candidate.
  */
-// Unknown room/group falls back to the first passenger; valid groups rely on a valid index.
 RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index) {
     RshRndNpc* data = NULL;
 

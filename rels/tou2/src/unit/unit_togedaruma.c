@@ -558,7 +558,7 @@ static EVT_BEGIN(wait_event)
     END_IF
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterPreemptiveFrontSpiky)
-        ELSE
+    ELSE
         CALL(btlevtcmd_OnPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterPreemptiveFrontSpiky)
     END_IF
     WAIT_FRAMES(1)

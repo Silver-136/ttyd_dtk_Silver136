@@ -39,6 +39,7 @@
 #include "icon_ids.h"
 #include "yuu.h"
 #include "driver/seqdrv.h"
+#include <dolphin/pad.h>
 
 typedef struct RyushiWork {
     s32 flag;
@@ -720,9 +721,9 @@ EVT_BEGIN(minigame04_start)
             IF_INT_EQUAL(LW(9), 0)
                 CALL(evt_seq_wait, SEQ_GAME)
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL(evt_key_get_buttontrg, 0, LW(9))
-                IF_BITS_SET(LW(9), 768)
+                IF_BITS_SET(LW(9), PAD_BUTTON_A | PAD_BUTTON_B)
                     DELETE_EVENT(LW(8))
                     CALL(evt_seq_wait, SEQ_GAME)
                     CALL_CHILD(PTR(minigame04_start_cam_cancel))

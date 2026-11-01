@@ -648,7 +648,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
                     DELETE_EVENT(LW(11))
                     SPAWN_EVENT_GET_ID(PTR(boots_lv3_juyoitem_lecture_sub02), LW(11))
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_EQUAL(LW(7), 1)
                     CALL(lect_push_a_check, LW(7))
                     IF_INT_EQUAL(LW(7), 0)
@@ -707,7 +707,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_1"), STRING("T_1"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("lecture_u_boots_12"))
-            ELSE
+        ELSE
             BREAK_LOOP
         END_IF
     END_LOOP

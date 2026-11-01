@@ -912,10 +912,10 @@ EVT_BEGIN(elv_unlock2)
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_pouch_remove_item, LW(0), LW(1))
         SET_VALUE(LW(0), 2)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi4"), 0, PTR(ele_2), 0)
@@ -2066,7 +2066,7 @@ static EVT_BEGIN(evt_elv_init)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi1"), 0, PTR(elv_unlock1), 0)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -2085,13 +2085,13 @@ static EVT_BEGIN(evt_elv_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi4"), 0, PTR(elv_unlock2), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), 2)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi4"), 0, PTR(ele_2), 0)
         SET_VALUE(LW(0), 3)
@@ -2206,7 +2206,7 @@ EVT_BEGIN(evt_key_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights3_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights3_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights4_r"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     RETURN
 EVT_END()
@@ -2259,12 +2259,12 @@ EVT_BEGIN(evt_aikotoba)
         CALL_CHILD(PTR(bero_case_switch_on))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights5_r"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights5_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights5_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_exit_case_evt)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg7_aji_69"), 0, 0)
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -2632,19 +2632,19 @@ EVT_BEGIN(peach_evt_ele_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
 #else
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
 #endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
 #else
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
 #endif
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -2660,12 +2660,12 @@ EVT_BEGIN(peach_evt_ele_init)
             SET_VALUE(LW(1), 0)
             CALL(evt_run_case_evt, CASE_FRONT, 1, STRING("A_e2_6_door1"), 0, PTR(peach_evt_ele_2), 0)
             CALL(evt_run_case_evt, CASE_FRONT, 1, STRING("A_e2_6_door2"), 0, PTR(peach_evt_ele_2), 0)
-            ELSE
+        ELSE
             SET_VALUE(LW(0), 4)
             SET_VALUE(LW(1), 1)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi6"), 0, PTR(peach_evt_ele_2), 0)
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 4)
         SET_VALUE(LW(1), 1)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi6"), 0, PTR(peach_evt_ele_2), 0)
@@ -2698,7 +2698,7 @@ EVT_BEGIN(peach_evt_key_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero_4"), 0, PTR(peach_evt_door_stop), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -2712,9 +2712,9 @@ EVT_BEGIN(peach_evt_key_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights4_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero_1"), 0, PTR(peach_evt_door_stop), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights4_r"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
@@ -3043,10 +3043,10 @@ EVT_BEGIN(aji_01_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights5_m"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights5_r"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights5_r"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SPAWN_EVENT(PTR(evt_emergency))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
@@ -3070,7 +3070,7 @@ EVT_BEGIN(aji_01_init_evt)
         CALL(evt_npc_check_delete, STRING("軍団ザコ６"))
         CALL(evt_npc_check_delete, STRING("軍団ザコ７"))
         CALL(evt_npc_check_delete, STRING("バリアーンＺ"))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
         CALL_CHILD(PTR(evt_elv_init))

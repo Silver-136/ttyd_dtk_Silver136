@@ -125,13 +125,13 @@ EVT_BEGIN(peach_evt_syawa_main)
     CALL(peach_chk_aftershower, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_1"), STRING("P_T_1"))
-        ELSE
+    ELSE
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_2"), STRING("P_T_2"))
     END_IF
     // She comments on the shower (peach_aji_35, or 35_1 when she has already showered).
     IF_INT_EQUAL(GSWF_AJI_15_PEACH_SHOWER_EXAMINED, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_35"), 0, STRING("mario"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("peach_aji_35_1"), 0, STRING("mario"))
     END_IF
     CALL(evt_cam3d_evt_set, -30, 130, 336, -30, 68, -58, 1400, EASING_SINE_IN_OUT)
@@ -371,8 +371,8 @@ EVT_BEGIN(peach_evt_syawa_main)
 EVT_END()
 
 EVT_BEGIN(peach_evt_syawa_init)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("p_fuku"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("taoru"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_fuku"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taoru"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_scale, 1, STRING("S_syawa"), 0, 1, 1)
     CALL(evt_map_playanim, STRING("syawa"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mario_get_mode, LW(0))
@@ -380,7 +380,7 @@ EVT_BEGIN(peach_evt_syawa_init)
         RETURN
     END_IF
     CALL(evt_mario_kill_party, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("taoru"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("taoru"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("taoru"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, STRING("taoru"), LW(0), LW(1))
     WAIT_MS(LW(1))

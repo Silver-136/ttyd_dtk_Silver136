@@ -189,7 +189,7 @@ EVT_BEGIN(heya_tenura_onoff)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_tenura"), MAP_OBJ_FLAG_HIDDEN)
                 SET_VALUE(LW(0), 1)
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_heya"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tenura"), MAP_OBJ_FLAG_HIDDEN)

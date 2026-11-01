@@ -680,7 +680,7 @@ EVT_BEGIN(mri_11_init_evt)
         SET_VALUE(LW(7), -200)
         SET_VALUE(LW(8), 0)
         SET_VALUE(LW(9), 30)
-        ELSE
+    ELSE
         SET_VALUE(LW(6), 0)
         SET_VALUE(LW(7), 0)
         SET_VALUE(LW(8), 0)
@@ -717,7 +717,7 @@ EVT_BEGIN(mri_11_init_evt)
     SPAWN_EVENT(PTR(mri_waterfall_effect))
     IF_INT_EQUAL(GSWF_MRI_11_JABBI_SQUAD_INTRO_SEEN, 0)
         SPAWN_EVENT(PTR(puni_vs_toge))
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_MRI_11_JABBI_SQUAD_DEFEATED, 0)
             SPAWN_EVENT(PTR(puni_vs_toge_init))
         END_IF

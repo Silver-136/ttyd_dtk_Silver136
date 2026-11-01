@@ -37,6 +37,7 @@
 #include "tou.h"
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
+#include <dolphin/pad.h>
 
 USER_FUNC(mario_recovery);
 static USER_FUNC(paper_off);
@@ -430,7 +431,7 @@ static EVT_BEGIN(evt_champion)
     // Mario waits for A to be pressed, then the mail arrives with a rumble.
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -568,7 +569,7 @@ static EVT_BEGIN(evt_dakuto)
     CALL(evt_hitobj_onoff, STRING("win_kabe"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_01_AIR_DUCT_ENTRANCE)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_30_01_AIR_DUCT_ENTRANCE)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_TOU_07_VENT_REOPENED, 1)
     END_IF
     CALL(evt_exit_case_evt)
@@ -827,7 +828,7 @@ EVT_BEGIN(evt_tou_bed)
         CALL(evt_fade_end_wait)
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_pouch_mario_recovery)
-            ELSE
+        ELSE
             CALL(mario_recovery)
         END_IF
         CALL(evt_pouch_all_party_recovery)
@@ -931,7 +932,7 @@ EVT_BEGIN(tou_07_init_evt)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("e_2"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("e_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -943,7 +944,7 @@ EVT_BEGIN(tou_07_init_evt)
         CASE_DEFAULT
         IF_INT_EQUAL(GSWF_TOU_07_VENT_REOPENED, 0)
             SET_VALUE(LF(0), 0)
-            ELSE
+        ELSE
             SET_VALUE(LF(0), 1)
         END_IF
     END_SWITCH
@@ -951,7 +952,7 @@ EVT_BEGIN(tou_07_init_evt)
         CALL(evt_run_case_evt, CASE_HAMMER_2, 1, STRING("win_kabe"), 0, PTR(evt_dakuto), 0)
         CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("win_kabe"), 0, PTR(evt_dakuto2), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("win_kabe"), 0, PTR(evt_dakuto2), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kankikuti"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("win_kabe"), 1, 0)
     END_IF
@@ -983,7 +984,7 @@ EVT_BEGIN(tou_07_init_evt)
         END_IF
         IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
             SPAWN_EVENT(PTR(evt_champion_re))
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(evt_tou_match_after_default))
         END_IF
         RETURN
@@ -999,7 +1000,7 @@ EVT_BEGIN(tou_07_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
-        ELSE
+    ELSE
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_20_MAJORS_10TH_PLACE)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))

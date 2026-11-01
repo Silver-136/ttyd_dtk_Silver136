@@ -112,7 +112,7 @@ static EVT_BEGIN(door_custom)
                 SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
                 CALL_CHILD(LW(9))
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL_CHILD(LW(9))
             END_IF
         END_LOOP
@@ -831,7 +831,7 @@ EVT_BEGIN(muj_12_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ9"))
     END_IF

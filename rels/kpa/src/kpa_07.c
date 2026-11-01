@@ -290,7 +290,7 @@ EVT_BEGIN(kpa_07_evt)
             END_IF
             IF_INT_EQUAL(GF(0), 0)
                 WAIT_FRAMES(1)
-                ELSE
+            ELSE
                 ADD(LW(3), 4)
                 CALL(set_starstone_pos, STRING("nise"), LW(0), LW(1), LW(3))
                 WAIT_MS(50)
@@ -336,7 +336,7 @@ EVT_BEGIN(kpa_07_evt)
                 MULTIPLY_FLOAT(LW(4), FLOAT(-0.5f))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_STONE_HIT1"), LW(0), LW(1), LW(2), 0)
             END_IF
-            ELSE
+        ELSE
             IF_INT_LESS_OR_EQUAL(LW(1), 10)
                 BREAK_LOOP
             END_IF

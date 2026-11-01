@@ -474,7 +474,7 @@ static EVT_BEGIN(_koura_rotate_start)
             IF_INT_GREATER(LW(0), LW(10))
                 SET_VALUE(LW(0), LW(10))
             END_IF
-            ELSE
+        ELSE
             SUBTRACT(LW(0), 1)
             IF_INT_LESS(LW(0), LW(10))
                 SET_VALUE(LW(0), LW(10))

@@ -1042,7 +1042,7 @@ static EVT_BEGIN(damage_event)
         IF_INT_NOT_EQUAL(LW(0), 4)
             CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_1))
             CALL_CHILD(PTR(btldefaultevt_Damage))
-            ELSE
+        ELSE
             CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_1_hone))
             CALL_CHILD(PTR(btldefaultevt_Damage))
         END_IF
@@ -2080,16 +2080,16 @@ EVT_BEGIN(cortez_reset_pose_table)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_upper_normal))
-                ELSE
+            ELSE
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_upper_charge))
             END_IF
             CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 2, PTR(&defence_mode2_upper_rib_close))
             CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 2, PTR(&defence_attr_mode2_upper_rib_close))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_upper_normal_counter))
-                ELSE
+            ELSE
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_upper_charge_counter))
             END_IF
             CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 2, PTR(&defence_mode2_upper_rib_open))
@@ -2111,16 +2111,16 @@ EVT_BEGIN(cortez_reset_pose_table)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_middle_normal))
-                ELSE
+            ELSE
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_middle_charge))
             END_IF
             CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 2, PTR(&defence_mode2_middle_rib_close))
             CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 2, PTR(&defence_attr_mode2_middle_rib_close))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_middle_normal_counter))
-                ELSE
+            ELSE
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_middle_charge_counter))
             END_IF
             CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 2, PTR(&defence_mode2_middle_rib_open))
@@ -2142,16 +2142,16 @@ EVT_BEGIN(cortez_reset_pose_table)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_lower_normal))
-                ELSE
+            ELSE
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_lower_charge))
             END_IF
             CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 2, PTR(&defence_mode2_lower_rib_close))
             CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 2, PTR(&defence_attr_mode2_lower_rib_close))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_lower_normal_counter))
-                ELSE
+            ELSE
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_2_lower_charge_counter))
             END_IF
             CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 2, PTR(&defence_mode2_lower_rib_open))

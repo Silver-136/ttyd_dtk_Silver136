@@ -198,7 +198,7 @@ static EVT_BEGIN(init_0)
             ADD_FLOAT(LW(5), FLOAT(600.0f))
             CALL(evt_mobj_set_y_position, STRING("blk_0"), LW(5))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("blk_0"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(600.0f))
@@ -448,13 +448,13 @@ static EVT_BEGIN(main_0)
         IF_INT_EQUAL(0, 0)
             IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
                 SET_VALUE(LW(10), 0)
-                ELSE
+            ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
                 SET_VALUE(LW(10), 1)
-                ELSE
+            ELSE
                 SET_VALUE(LW(10), 0)
             END_IF
         END_IF
@@ -465,7 +465,7 @@ static EVT_BEGIN(main_0)
             ADD_FLOAT(LW(3), FLOAT(600.0f))
             SET_FLOAT_VALUE(LW(8), FLOAT(0.0f))
             SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
-            ELSE
+        ELSE
             CALL(evt_mobj_get_y_position, STRING("blk_0"), LW(2))
             SET_FLOAT_VALUE(LW(3), LW(2))
             SUBTRACT_FLOAT(LW(3), FLOAT(600.0f))
@@ -515,14 +515,14 @@ static EVT_BEGIN(main_0)
             SET_VALUE(LF(1), 0)
             IF_INT_EQUAL(LF(0), 1)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_MOVE1"), LW(12), LW(13), LW(14), LW(15))
-                ELSE
+            ELSE
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_MOVE1"), LW(12), LW(13), LW(14), LW(15))
             END_IF
-            ELSE
+        ELSE
             SET_VALUE(LF(1), 1)
             IF_INT_EQUAL(LF(0), 1)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
-                ELSE
+            ELSE
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
             END_IF
         END_IF
@@ -540,7 +540,7 @@ static EVT_BEGIN(main_0)
                 IF_STR_EQUAL(LW(6), STRING("blk_0"))
                     GOTO(1)
                 END_IF
-                ELSE
+            ELSE
                 CALL(evt_mario_get_name_hitobj_head, LW(6))
                 IF_STR_EQUAL(LW(6), STRING("MOBJ_blk_0"))
                     GOTO(1)
@@ -562,7 +562,7 @@ static EVT_BEGIN(main_0)
                 SET_FLOAT_VALUE(LW(10), 0)
                 IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
                     SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 1)
-                    ELSE
+                ELSE
                     SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("sw_0"))
@@ -580,7 +580,7 @@ static EVT_BEGIN(main_0)
                     SET_FLOAT_VALUE(LW(4), LW(3))
                     SET_VALUE(LF(0), 1)
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_LESS_OR_EQUAL(LW(4), LW(3))
                     SET_FLOAT_VALUE(LW(4), LW(3))
                     SET_VALUE(LF(0), 1)
@@ -644,10 +644,10 @@ static EVT_BEGIN(main_0)
         // Remember the block's new position for the next press.
         IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
             SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 1)
-            ELSE
+        ELSE
             SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
         END_IF
-        ELSE
+    ELSE
         // Unused: cancel the switch and wait a few frames.
         CALL(evt_mobj_exec_cancel, STRING("sw_0"))
         SET_VALUE(LW(0), 0)
@@ -805,7 +805,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(3), LW(0))
         CALL(evt_npc_set_ry, STRING("me"), 90)
-        ELSE
+    ELSE
         CALL(evt_npc_set_ry, STRING("me"), 270)
     END_IF
     WAIT_FRAMES(1)

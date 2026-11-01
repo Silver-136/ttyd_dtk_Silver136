@@ -1443,7 +1443,7 @@ EVT_BEGIN(puni_set)
         CALL(evt_sub_random, 1, LW(5))
         IF_INT_EQUAL(LW(5), 0)
             SET_VALUE(LW(5), 90)
-            ELSE
+        ELSE
             SET_VALUE(LW(5), 270)
         END_IF
         CALL(evt_puni_init_puni, LW(0), 30, LW(2), 0, LW(3), 0)
@@ -1509,7 +1509,7 @@ EVT_BEGIN(sekai_yami_puni)
         CALL(evt_puni_get_dir, LW(0), LW(1))
         IF_INT_LESS(LW(1), 180)
             CALL(evt_puni_set_dir, LW(0), 270)
-            ELSE
+        ELSE
             CALL(evt_puni_set_dir, LW(0), 90)
         END_IF
         WAIT_MS(500)
@@ -1554,8 +1554,8 @@ static EVT_BEGIN(sekai_yami_evt)
     END_LOOP
     WAIT_MS(2000)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ライバル"), 1)
     CALL(anim_tevcallback, STRING("ガイド"), 1)
     CALL(anim_tevcallback, STRING("ガイド妹"), 1)
@@ -1594,7 +1594,7 @@ static EVT_BEGIN(sekai_yami_evt)
                 BREAK_LOOP
             END_IF
         END_LOOP
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
 #endif
     CALL(evt_snd_sfxon, STRING("SFX_STG8_WORLD_DARK1"), 0)
@@ -1650,11 +1650,11 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_position, STRING("ライバル"), -100, 0, 225)
     CALL(evt_npc_set_ry, STRING("ライバル"), 270)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
 #endif
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ライバル"), 1)
     CALL(anim_tevcallback, STRING("ガイド"), 1)
     CALL(anim_tevcallback, STRING("ガイド妹"), 1)
@@ -1806,7 +1806,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_switch_init)
     IF_INT_EQUAL(GSWF_TIK_16_MRI_PIPE_RAISED, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokan"), 1, 0)
     END_IF
     RETURN
@@ -1856,7 +1856,7 @@ EVT_BEGIN(mri_00_init_evt)
             CALL(evt_party_run, 0)
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-            END_IF
+        END_IF
 SPAWN_EVENT(mario_see_you)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
@@ -1864,7 +1864,7 @@ BEGIN_INLINE_EVENT
                 CALL(evt_puni_wait_systemmode, 2)
                 SPAWN_EVENT(mario_see_you_init)
             END_INLINE_EVENT
-        END_IF
+    END_IF
         CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kawa_sibu_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kawa_01"), MAP_ANIM_PLAY_LOOP, 0)

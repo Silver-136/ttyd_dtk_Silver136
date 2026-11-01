@@ -297,7 +297,7 @@ EVT_BEGIN(nokonoko_F_talk)
             // Bub-ulber introduces himself and asks Mario to bring him something to eat.
             CALL(evt_msg_print, 0, STRING("irai_15_001"), 0, 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             // He asks whether Mario has brought something; Mario picks an item.
             CALL(evt_msg_print, 0, STRING("irai_15_002"), 0, 0)
             SET_VALUE(LF(0), 0)
@@ -309,7 +309,7 @@ EVT_BEGIN(nokonoko_F_talk)
 #else
                 CALL(evt_win_item_select, 0, 1, LW(0), 0)
 #endif
-                ELSE
+            ELSE
                 SET_VALUE(LW(0), -1)
                 SET_VALUE(LF(0), 1)
             END_IF
@@ -320,18 +320,18 @@ EVT_BEGIN(nokonoko_F_talk)
                         // A Hot Dog: Bub-ulber is delighted, then asks for a Mousse Cake.
                         CALL(evt_msg_print, 0, STRING("irai_15_003"), 0, 0)
                         SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
-                        ELSE
+                    ELSE
                         CALL(evt_msg_print, 0, STRING("irai_15_004"), 0, 0)
                         SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
                     END_IF
-                    ELSE
+                ELSE
                     IF_INT_EQUAL(LF(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_15_008"), 0, 0)
-                        ELSE
+                    ELSE
                         CALL(evt_msg_print_add, 0, STRING("irai_15_008"))
                     END_IF
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_EQUAL(LW(0), 206)
                     CALL(evt_pouch_remove_item, ITEM_MOUSSE_CAKE, LW(0))
                     // A Mousse Cake: he pays Mario with a Dried Bouquet.
@@ -345,10 +345,10 @@ EVT_BEGIN(nokonoko_F_talk)
                     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_THE_FOOD_I_WANT), 1)
                     // The request is recorded as solved and the play time is saved.
                     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
-                    ELSE
+                ELSE
                     IF_INT_EQUAL(LF(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_15_009"), 0, 0)
-                        ELSE
+                    ELSE
                         CALL(evt_msg_print_add, 0, STRING("irai_15_009"))
                     END_IF
                 END_IF
@@ -371,7 +371,7 @@ EVT_BEGIN(nokonoko_F_talk)
 #else
                 CALL(evt_win_item_select, 0, 1, LW(0), 0)
 #endif
-                ELSE
+            ELSE
                 SET_VALUE(LW(0), -1)
                 SET_VALUE(LF(0), 1)
             END_IF
@@ -382,14 +382,14 @@ EVT_BEGIN(nokonoko_F_talk)
                 CALL(evt_item_get_item, STRING("df"))
                 CALL(evt_item_get_item_end_wait, STRING("df"))
                 CALL(evt_msg_print, 0, STRING("irai_15_015"), 0, 0)
-                ELSE
+            ELSE
                 IF_INT_EQUAL(LF(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_15_016"), 0, 0)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print_add, 0, STRING("irai_15_016"))
                 END_IF
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("irai_15_016"))
         END_IF
         RETURN
@@ -476,14 +476,14 @@ static EVT_BEGIN(kizayarou_talk)
             CALL(evt_msg_print, 0, STRING("stg1_nok_13"), 0, STRING("party"))
             CALL(evt_party_cont_onoff, 0, 1)
             SET_VALUE(LSWF_NOK_00_KIZAYAROU_TALKED, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg1_nok_14"), 0, 0)
             CALL(evt_party_set_dir_npc, 0, STRING("me"))
             CALL(evt_party_cont_onoff, 0, 0)
             CALL(evt_msg_print, 0, STRING("stg1_nok_15"), 0, STRING("party"))
             CALL(evt_party_cont_onoff, 0, 1)
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_16"), 0, 0)
     END_IF
     RETURN
@@ -1208,7 +1208,7 @@ EVT_BEGIN(nok_00_init_evt)
         CALL(evt_mario_set_mode, 2)
         CALL_CHILD(PTR(nok_00_koopa_npc_entry))
         SPAWN_EVENT(PTR(nok_00_koopa_evt))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_NOK1"))
@@ -1216,7 +1216,7 @@ EVT_BEGIN(nok_00_init_evt)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01A_PETALBURG_1ST_TIME)
             SPAWN_EVENT(PTR(bero_case_entry))
             SPAWN_EVENT(PTR(first_time_camera))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(evt_bero_info_run))
         END_IF
     END_IF

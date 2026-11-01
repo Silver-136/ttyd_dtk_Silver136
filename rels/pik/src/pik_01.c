@@ -379,10 +379,10 @@ EVT_BEGIN(miyageya_talk)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_msg_print, 0, STRING("irai_27_001_1"), 0, 0)
                 SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("irai_27_002"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_npc_flag_onoff, 1, STRING("土産屋"), NPC_FLAG_NO_HIT)
             CALL(evt_cam3d_evt_set, -545, 90, 530, -290, 55, 285, 800, EASING_SINE_IN_OUT)
             BEGIN_INLINE_EVENT
@@ -421,7 +421,7 @@ EVT_BEGIN(miyageya_talk)
             CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(4))
             IF_INT_EQUAL(LW(4), 0)
                 SET_VALUE(LW(4), 10)
-                ELSE
+            ELSE
                 SET_VALUE(LW(4), 20)
             END_IF
             IF_INT_LESS(LW(3), LW(4))
@@ -433,7 +433,7 @@ EVT_BEGIN(miyageya_talk)
                 SET_VALUE(GSWF_PIK_01_CHOCO_CAKE, 1)
                 CALL(evt_npc_move_position, STRING("土産屋"), LW(0), LW(2), 0, 50, 0)
                 CALL(evt_npc_flag_onoff, 0, STRING("土産屋"), NPC_FLAG_NO_HIT)
-                ELSE
+            ELSE
                 WAIT_MS(500)
                 CALL(evt_npc_move_position, STRING("土産屋"), LW(0), LW(2), 0, 80, 0)
                 CALL(evt_npc_flag_onoff, 0, STRING("土産屋"), NPC_FLAG_NO_HIT)
@@ -497,7 +497,7 @@ EVT_BEGIN(miyageya_talk)
             CALL(evt_msg_print, 0, STRING("kpa_stg7_004"), 0, STRING("me"))
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
             SET_VALUE(LSWF_PIK_01_SOUVENIR_NPC_SCREAMED, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("kpa_stg7_004_1"), 0, STRING("me"))
         END_IF
         CASE_DEFAULT
@@ -505,13 +505,13 @@ EVT_BEGIN(miyageya_talk)
         IF_INT_EQUAL(LW(0), 0)
             IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
                 CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03"), 0, STRING("me"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_0"), 0, STRING("me"))
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 0)
                 CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_1"), 0, STRING("me"))
-                ELSE
+            ELSE
                 CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
                 CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 200, 10)
                 CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_2"), 0, STRING("me"))
@@ -573,7 +573,7 @@ EVT_BEGIN(konarikin_talk)
                 SET_VALUE(GSW_TROUBLE_WORK(0), LW(0))
                 CALL(evt_msg_print_add, 0, STRING("irai_29_01"))
                 SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-                ELSE
+            ELSE
                 CALL(evt_pouch_check_item, ITEM_PRESENT, LW(0))
                 IF_INT_GREATER(LW(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_29_11"), 0, 0)
@@ -598,7 +598,7 @@ EVT_BEGIN(konarikin_talk)
                             CALL(evt_item_get_item, STRING("pre"))
                             CALL(evt_item_get_item_end_wait, STRING("pre"))
                         END_IF
-                        ELSE
+                    ELSE
                         CALL(evt_msg_print, 0, STRING("irai_29_02"), 0, 0)
                     END_IF
                     CASE_EQUAL(1)
@@ -617,7 +617,7 @@ EVT_BEGIN(konarikin_talk)
                             CALL(evt_item_get_item, STRING("pre"))
                             CALL(evt_item_get_item_end_wait, STRING("pre"))
                         END_IF
-                        ELSE
+                    ELSE
                         CALL(evt_msg_print, 0, STRING("irai_29_03"), 0, 0)
                     END_IF
                     CASE_EQUAL(2)
@@ -636,12 +636,12 @@ EVT_BEGIN(konarikin_talk)
                             CALL(evt_item_get_item, STRING("pre"))
                             CALL(evt_item_get_item_end_wait, STRING("pre"))
                         END_IF
-                        ELSE
+                    ELSE
                         CALL(evt_msg_print, 0, STRING("irai_29_04"), 0, 0)
                     END_IF
                 END_SWITCH
             END_IF
-            ELSE
+        ELSE
             // On the second visit Mario is paid 3 coins.
             CALL(evt_msg_print, 0, STRING("irai_29_12"), 0, 0)
             CALL(evt_mario_set_pose, STRING("M_N_2"))
@@ -1048,7 +1048,7 @@ EVT_BEGIN(koopa_door_evt)
     END_IF
     IF_INT_LESS(LW(6), 180)
         CALL(evt_mario_set_dir, 270, 300, 0)
-        ELSE
+    ELSE
         CALL(evt_mario_set_dir, 90, 300, 0)
     END_IF
     WAIT_MS(300)
@@ -1100,7 +1100,7 @@ EVT_BEGIN(koopa_door_evt)
             SET_FLOAT_VALUE(LW(0), FLOAT(180.0f))
             CALL_CHILD(PTR(n_door_open))
             BREAK_LOOP
-            ELSE
+        ELSE
             CALL_CHILD(PTR(n_door_open))
         END_IF
     END_LOOP
@@ -1582,7 +1582,7 @@ EVT_BEGIN(pik_01_init_evt)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK1_1"))
         END_IF
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
         CALL(evt_snd_bgm_scope, 0, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("ENV_STG6_PIK1_1"))
@@ -1654,7 +1654,7 @@ EVT_BEGIN(pik_01_init_evt)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_harigami"), 0, PTR(evt_powan), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("kami"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(LF(0), 1)

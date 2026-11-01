@@ -157,7 +157,7 @@ EVT_BEGIN(mony_peton_setup)
         SUBTRACT(LW(0), 55)
         CALL(evt_npc_set_ry, STRING("ピートン"), 90)
         CALL(evt_npc_move_position, STRING("ピートン"), LW(0), LW(2), 0, FLOAT(120.0f), 0)
-        ELSE
+    ELSE
         CALL(evt_npc_get_position, STRING("ピートン"), LW(0), LW(1), LW(2))
         BEGIN_INLINE_EVENT
             ADD(LW(0), -40)
@@ -276,7 +276,7 @@ EVT_BEGIN(lost_wedding_ring)
     CALL(evt_pouch_check_item, ITEM_WEDDING_RING, LW(10))
     IF_INT_EQUAL(LW(10), 0)
         CALL(evt_msg_print_party, STRING("stg5_muj_185"))
-        ELSE
+    ELSE
         CALL(evt_msg_print_party, STRING("stg5_muj_185_01"))
     END_IF
     BEGIN_INLINE_EVENT
@@ -288,7 +288,7 @@ EVT_BEGIN(lost_wedding_ring)
     IF_INT_EQUAL(LW(10), 0)
         CALL(evt_npc_set_ry, STRING("ピートン"), 270)
         CALL(evt_npc_move_position, STRING("ピートン"), 400, -40, 0, FLOAT(120.0f), 0)
-        ELSE
+    ELSE
         CALL(evt_npc_set_ry, STRING("モニー"), 90)
         CALL(evt_npc_move_position, STRING("モニー"), 500, -40, 0, FLOAT(120.0f), 0)
     END_IF
@@ -463,7 +463,7 @@ static EVT_BEGIN(mony_talk)
         CALL_CHILD(PTR(wedding_ring_consign))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_192"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_194"), 0, STRING("me"))
             SET_VALUE(LW(10), 0)
             CALL_CHILD(PTR(find_wedding_ring))
@@ -510,7 +510,7 @@ static EVT_BEGIN(peton_talk)
         CALL_CHILD(PTR(wedding_ring_consign))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_193"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_195"), 0, STRING("me"))
             SET_VALUE(LW(10), 1)
             CALL_CHILD(PTR(find_wedding_ring))

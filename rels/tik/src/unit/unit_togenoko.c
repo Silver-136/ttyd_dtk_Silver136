@@ -597,7 +597,7 @@ static EVT_BEGIN(attack_event)
             GOTO(99)
         END_IF
         GOTO(99)
-        ELSE
+    ELSE
         // A Koopatrol that is not guarding checks its state: one that is bothered by a status mostly uses its
         // shell attack, otherwise it may use an item.
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
@@ -636,7 +636,7 @@ static EVT_BEGIN(attack_event)
                 IF_INT_EQUAL(LW(3), -1)
                     GOTO(10)
                 END_IF
-                ELSE
+            ELSE
                 GOTO(9)
             END_IF
         END_LOOP
@@ -650,7 +650,7 @@ static EVT_BEGIN(attack_event)
                 IF_INT_EQUAL(LW(3), -1)
                     GOTO(10)
                 END_IF
-                ELSE
+            ELSE
                 GOTO(11)
             END_IF
         END_LOOP

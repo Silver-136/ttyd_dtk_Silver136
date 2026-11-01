@@ -41,14 +41,14 @@ EVT_BEGIN(evt_win_door_open_pure)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_mapobj_get_position, LW(8), LW(10), LW(11), LW(12))
             CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_WOOD3"), LW(10), LW(11), LW(12), 0)
-            ELSE
+        ELSE
             CALL(evt_mapobj_get_position, LW(8), LW(10), LW(11), LW(12))
             CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_WOOD2"), LW(10), LW(11), LW(12), 0)
         END_IF
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -70, LW(1))
-        ELSE
+    ELSE
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -70, 0, LW(1))
     END_IF
     LOOP(0)
@@ -92,7 +92,7 @@ EVT_BEGIN(evt_win_door_close_pure)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 70, 0, LW(1))
-        ELSE
+    ELSE
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 70, LW(1))
     END_IF
     LOOP(0)

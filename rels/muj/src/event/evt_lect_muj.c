@@ -525,7 +525,7 @@ EVT_BEGIN(all_party_lecture)
     IF_INT_NOT_EQUAL(LW(9), 1)
         IF_INT_NOT_EQUAL(LW(9), 5)
             CALL(evt_mario_goodbye_party, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_kill_party, 0)
         END_IF
         WAIT_MS(500)
@@ -536,7 +536,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_pouch_party_join, LW(9))
         CALL(evt_mario_set_party_pos, 0, LW(9), LW(0), LW(1), LW(2))
         CALL(set_dir, LW(3))
-        ELSE
+    ELSE
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
     CALL(evt_party_set_camid, 0, 7)

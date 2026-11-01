@@ -341,7 +341,7 @@ static EVT_BEGIN(damage_check_sub)
     END_IF
     IF_INT_EQUAL(LW(7), 1)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), DAMAGE_RESULT_FINAL_HIT, LW(5))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), 0, LW(5))
     END_IF
     SET_VALUE(LW(0), 1)
@@ -369,7 +369,7 @@ static EVT_BEGIN(damage_check_last)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, 1)
         END_IF
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), DAMAGE_RESULT_FINAL_HIT, LW(5))
-        ELSE
+    ELSE
         SET_VALUE(LW(7), 1)
         CALL_CHILD(PTR(damage_check_sub))
     END_IF
@@ -516,7 +516,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_boomerang_bros_attack))
         CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_boomerang_bros_attack), LW(3), LW(4))

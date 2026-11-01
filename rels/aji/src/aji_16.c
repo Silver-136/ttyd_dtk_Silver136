@@ -484,7 +484,7 @@ EVT_BEGIN(aji_16_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
         IF_INT_EQUAL(GSWF_AJI_16_PEACH_STG2_SCENE_SEEN, 0)
             SPAWN_EVENT(PTR(peach_evt_stg2))
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(peach_evt_stg2_1))
         END_IF
     END_IF
@@ -518,7 +518,7 @@ EVT_BEGIN(aji_16_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         CALL(evt_mario_kill_party, 0)
         CALL(evt_mario_set_mode, 1)
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF

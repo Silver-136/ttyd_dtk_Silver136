@@ -466,7 +466,7 @@ EVT_BEGIN(uranaisi_starpiece_evt)
 #else
         CALL(evt_win_coin_off, LW(12))
 #endif
-        ELSE
+    ELSE
         SUBTRACT(LW(0), 1)
         CALL(evt_sub_random, LW(0), LW(0))
         CALL(uranaisi_starpiece_makelabel, LW(0), LW(0))
@@ -506,7 +506,7 @@ EVT_BEGIN(uranaisi_supercoin_evt)
 #else
         CALL(evt_win_coin_off, LW(12))
 #endif
-        ELSE
+    ELSE
         SUBTRACT(LW(0), 1)
         CALL(evt_sub_random, LW(0), LW(0))
         CALL(uranaisi_supercoin_makelabel, LW(0), LW(0))
@@ -1007,7 +1007,7 @@ EVT_BEGIN(uranai_main)
                 DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
                 IF_INT_EQUAL(LF(0), 0)
                     CALL(evt_mapobj_trans, 1, LW(9), LW(8), 0, LW(0))
-                    ELSE
+                ELSE
                     CALL(evt_mapobj_trans, 1, LW(9), LW(8), LW(0), 0)
                 END_IF
                 WAIT_FRAMES(1)
@@ -1057,7 +1057,7 @@ EVT_BEGIN(uranai_main)
             CALL(evt_mapobj_trans, 1, LW(2), LW(8), -100, 0)
             IF_FLOAT_LESS(LW(0), LW(6))
                 CALL(evt_mapobj_rotate, 1, LW(2), LW(6), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_mapobj_rotate, 1, LW(2), LW(0), 0, 0)
             END_IF
             CALL(evt_mapobj_trans, 1, LW(2), LW(8), 100, 0)
@@ -1083,7 +1083,7 @@ EVT_BEGIN(uranai_main)
             IF_INT_EQUAL(LW(9), 4)
                 CALL(evt_snd_sfxon, STRING("SFX_EVT_FORTUNE_CARD_MOVE4"), 0)
                 CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 500, 1000)
-                ELSE
+            ELSE
                 CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, -3000, 1000)
             END_IF
             LOOP(0)
@@ -1472,7 +1472,7 @@ EVT_BEGIN(starmaniac_talk)
     IF_INT_EQUAL(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("starmaniac_00"), 0, STRING("me"))
         SET_VALUE(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("starmaniac_01"), 0, STRING("me"))
     END_IF
     // He asks if Mario wants to trade; "No way!" sends him off with a farewell.
@@ -1513,7 +1513,7 @@ EVT_BEGIN(starmaniac_talk)
 #else
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(3), LW(2), LW(4))
-        ELSE
+    ELSE
         CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(2), LW(3), LW(4))
     END_IF
 #endif
@@ -1577,7 +1577,7 @@ EVT_BEGIN(johoyaketi_talk)
         CALL(johoya_keti_oldspeak_check, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("johoyaketi_08"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("johoyaketi_06"), 0, STRING("me"))
             SUBTRACT(LW(0), 1)
             CALL(evt_sub_random, LW(0), LW(0))
@@ -1586,7 +1586,7 @@ EVT_BEGIN(johoyaketi_talk)
             CALL(johoya_keti_oldspeak_setreadflag)
             CALL(evt_msg_print_add, 0, STRING("johoyaketi_07"))
         END_IF
-        ELSE
+    ELSE
         SUBTRACT(LW(1), 1)
         CALL(evt_sub_random, LW(1), LW(0))
         CALL(johoya_keti_newjoho_makelabel, LW(0), LW(2), LW(3), LW(4), LW(5))
@@ -1619,12 +1619,12 @@ EVT_BEGIN(johoyaketi_talk)
             CALL(evt_msg_print_add, 0, LW(2))
             CALL(johoya_keti_newjoho_setreadflag)
             CALL(evt_msg_print_add, 0, STRING("johoyaketi_07"))
-            ELSE
+        ELSE
             CALL(evt_win_coin_off, LW(12))
             CALL(johoya_keti_oldspeak_check, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print_add, 0, STRING("johoyaketi_04"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("johoyaketi_05"))
                 SUBTRACT(LW(0), 1)
                 CALL(evt_sub_random, LW(0), LW(0))
@@ -1996,7 +1996,7 @@ EVT_END()
 EVT_BEGIN(evt_wall_01_00)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
-            ELSE
+        ELSE
             WAIT_MS(300)
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_1_1"), LW(0), LW(1), LW(2))
@@ -2004,7 +2004,7 @@ EVT_BEGIN(evt_wall_01_00)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         WAIT_MS(300)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
@@ -2024,7 +2024,7 @@ EVT_BEGIN(evt_wall_01_01)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
             WAIT_MS(100)
-            ELSE
+        ELSE
             WAIT_MS(200)
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_1_2"), LW(0), LW(1), LW(2))
@@ -2033,7 +2033,7 @@ EVT_BEGIN(evt_wall_01_01)
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(100)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         WAIT_MS(200)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
@@ -2053,7 +2053,7 @@ EVT_BEGIN(evt_wall_01_02)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
             WAIT_MS(200)
-            ELSE
+        ELSE
             WAIT_MS(100)
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_1_3"), LW(0), LW(1), LW(2))
@@ -2062,7 +2062,7 @@ EVT_BEGIN(evt_wall_01_02)
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(200)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         WAIT_MS(100)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
@@ -2176,7 +2176,7 @@ EVT_END()
 EVT_BEGIN(evt_wall_02_00)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
-            ELSE
+        ELSE
             WAIT_MS(300)
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_2_1"), LW(0), LW(1), LW(2))
@@ -2184,7 +2184,7 @@ EVT_BEGIN(evt_wall_02_00)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         WAIT_MS(300)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
@@ -2204,7 +2204,7 @@ EVT_BEGIN(evt_wall_02_01)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
             WAIT_MS(100)
-            ELSE
+        ELSE
             WAIT_MS(200)
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_2_2"), LW(0), LW(1), LW(2))
@@ -2213,7 +2213,7 @@ EVT_BEGIN(evt_wall_02_01)
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(100)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         WAIT_MS(200)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
@@ -2233,7 +2233,7 @@ EVT_BEGIN(evt_wall_02_02)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
             WAIT_MS(200)
-            ELSE
+        ELSE
             WAIT_MS(100)
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_2_3"), LW(0), LW(1), LW(2))
@@ -2242,7 +2242,7 @@ EVT_BEGIN(evt_wall_02_02)
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(200)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         WAIT_MS(100)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
@@ -2262,7 +2262,7 @@ EVT_BEGIN(evt_wall_02_03)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
             WAIT_MS(300)
-            ELSE
+        ELSE
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_2_4"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(0), LW(1), LW(2), 0)
@@ -2270,7 +2270,7 @@ EVT_BEGIN(evt_wall_02_03)
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(300)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
@@ -2352,7 +2352,7 @@ EVT_END()
 EVT_BEGIN(evt_wall_03_00)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
-            ELSE
+        ELSE
             WAIT_MS(300)
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_3_1"), LW(0), LW(1), LW(2))
@@ -2360,7 +2360,7 @@ EVT_BEGIN(evt_wall_03_00)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         WAIT_MS(300)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
@@ -2380,7 +2380,7 @@ EVT_BEGIN(evt_wall_03_01)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
             WAIT_MS(100)
-            ELSE
+        ELSE
             WAIT_MS(200)
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_3_2"), LW(0), LW(1), LW(2))
@@ -2389,7 +2389,7 @@ EVT_BEGIN(evt_wall_03_01)
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(100)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         WAIT_MS(200)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
@@ -2409,7 +2409,7 @@ EVT_BEGIN(evt_wall_03_02)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
             WAIT_MS(200)
-            ELSE
+        ELSE
             WAIT_MS(100)
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_3_3"), LW(0), LW(1), LW(2))
@@ -2418,7 +2418,7 @@ EVT_BEGIN(evt_wall_03_02)
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(200)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         WAIT_MS(100)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
@@ -2438,7 +2438,7 @@ EVT_BEGIN(evt_wall_03_03)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
             WAIT_MS(300)
-            ELSE
+        ELSE
         END_IF
         CALL(evt_mapobj_get_position, STRING("ie_3_4"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(0), LW(1), LW(2), 0)
@@ -2446,7 +2446,7 @@ EVT_BEGIN(evt_wall_03_03)
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(300)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-        ELSE
+    ELSE
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
@@ -2571,13 +2571,13 @@ EVT_BEGIN(evt_open_04_open)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(GW(10), 0)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         CASE_LESS(STG9_02_RETURN_TO_ROGUEPORT)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -2585,21 +2585,21 @@ EVT_BEGIN(evt_open_04_open)
 #endif
         IF_INT_EQUAL(GW(10), 0)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
 #if VERSION > VERSION_DEMO_US
         CASE_DEFAULT
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_EQUAL(GW(10), 0)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
 #endif
             ELSE
 #if VERSION <= VERSION_DEMO_US
@@ -2614,9 +2614,9 @@ EVT_BEGIN(evt_open_04_open)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
 #else
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
 #endif
         END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -2718,7 +2718,7 @@ EVT_END()
 static EVT_BEGIN(evt_door_04_entry)
     CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
@@ -2745,7 +2745,7 @@ EVT_BEGIN(tensou_return)
     CALL(evt_map_playanim, STRING("anm_wa-p"), MAP_ANIM_PLAY_LOOP, 0)
     BEGIN_INLINE_EVENT
         LOOP(10)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
@@ -2806,7 +2806,7 @@ EVT_BEGIN(tensou_return)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_color, 1, STRING("wa_pu"), 255, 255, 255, 255)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
@@ -3169,7 +3169,7 @@ EVT_BEGIN(hashira_bomb_sub)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_mae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_go"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_mae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_go"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -3193,7 +3193,7 @@ EVT_BEGIN(hashira_bomb)
         CALL(evt_hitobj_onoff, STRING("a_bom_go"), 1, 0)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_bom_mae"), 0, PTR(hashira_bomb_sub), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_mae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_bom_mae"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("ro_ru"), 1, 0)
@@ -3292,7 +3292,7 @@ EVT_BEGIN(tik_00_init_evt)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK2"))
-            ELSE
+        ELSE
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envoff, PSND_FADEOUT)
         END_IF

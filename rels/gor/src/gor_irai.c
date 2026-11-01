@@ -351,7 +351,7 @@ EVT_BEGIN(gor_irai_lecture)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("irai_03"))
         SET_VALUE(GSWF_TROUBLE_BOARD_EXPLAINED, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("irai_02"))
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -401,7 +401,7 @@ EVT_BEGIN(gor_irai_main)
         SPAWN_EVENT(LW(1))
         SET_VALUE(GSW_TROUBLE_ACCEPTED, LW(11))
         DEBUG_PUT_REG(GSW_TROUBLE_ACCEPTED)
-        ELSE
+    ELSE
         CALL(evt_msg_continue)
         GOTO(10)
     END_IF
@@ -468,7 +468,7 @@ EVT_BEGIN(gor_irai_tenshu_main)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 150, 12, -156)
         CALL(evt_msg_print, 0, STRING("irai_06"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 150, 12, -156)
         // A request is active: he asks what Mario wants to know (about the trouble, cancel it, or what the
         // place is).
@@ -505,11 +505,11 @@ EVT_BEGIN(gor_irai_tenshu_main)
                     ADD(LW(0), -1)
                     READ_INT_INDEXED(LW(1), LW(0))
                     SPAWN_EVENT(LW(1))
-                    ELSE
+                ELSE
                     // Not enough coins: the request stays.
                     CALL(evt_msg_print_add, 0, STRING("irai_11"))
                 END_IF
-                ELSE
+            ELSE
                 // Mario declined to cancel.
                 CALL(evt_msg_print_add, 0, STRING("irai_12"))
             END_IF

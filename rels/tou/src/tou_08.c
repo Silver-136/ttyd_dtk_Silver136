@@ -36,6 +36,7 @@
 #include "evt/evt_npc.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
+#include <dolphin/pad.h>
 
 static USER_FUNC(get_yoshi_color);
 USER_FUNC(icon_off);
@@ -226,14 +227,14 @@ EVT_BEGIN(talk_togenoko)
             CASE_EQUAL(1)
             CALL(evt_msg_print, 0, STRING("stg3_npc_08_01_13"), 0, 0)
         END_SWITCH
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_040"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_041_1"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_041"), 0, 0)
         END_IF
     END_IF
@@ -279,14 +280,14 @@ EVT_BEGIN(talk_togemet)
             CASE_EQUAL(1)
             CALL(evt_msg_print, 0, STRING("stg3_npc_08_02_13"), 0, 0)
         END_SWITCH
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_045"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_046_1"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_046"), 0, 0)
         END_IF
     END_IF
@@ -332,14 +333,14 @@ EVT_BEGIN(talk_hammerbros)
             CASE_EQUAL(1)
             CALL(evt_msg_print, 0, STRING("stg3_npc_08_03_13"), 0, 0)
         END_SWITCH
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_050"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_051_1"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_051"), 0, 0)
         END_IF
     END_IF
@@ -384,14 +385,14 @@ static EVT_BEGIN(talk_uranoko)
             CASE_EQUAL(1)
             CALL(evt_msg_print, 0, STRING("stg3_npc_08_04_12"), 0, 0)
         END_SWITCH
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_055"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_056_1"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_056"), 0, 0)
         END_IF
     END_IF
@@ -505,7 +506,7 @@ EVT_BEGIN(evt_1st_sub)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     IF_STR_EQUAL(LW(8), STRING("キノシコワ"))
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
-        ELSE
+    ELSE
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 260, 500)
     END_IF
     LOOP(0)
@@ -524,7 +525,7 @@ EVT_BEGIN(evt_1st_sub)
     SPAWN_EVENT(PTR(bero_close_door_play_se))
     IF_STR_EQUAL(LW(8), STRING("キノシコワ"))
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
-        ELSE
+    ELSE
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 260, 0, 500)
     END_IF
     LOOP(0)
@@ -737,7 +738,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -1261,7 +1262,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("cake_tukue"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("cake_tukue"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 100, 337, 0, 45, -9, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -1351,7 +1352,7 @@ EVT_BEGIN(tou_08_init_evt)
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -120, 12, -135, ITEM_TYPE_STILL, GSWF_TOU_08_ICE_STORM, 0)
     CALL_CHILD(evt_tou_locker_init)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(init_hammerbros)
     CALL(evt_npc_change_interrupt, STRING("ハンマーブロス"), 6, PTR(talk_hammerbros))
@@ -1359,7 +1360,7 @@ EVT_BEGIN(tou_08_init_evt)
     CALL(evt_npc_change_interrupt, STRING("トゲメット"), 6, PTR(talk_togemet))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
     CALL_CHILD(evt_tou_monitor_init)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_2"), 0, PTR(evt_toile_door), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_3"), 0, PTR(evt_toile_door2), 0)
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
@@ -1376,7 +1377,7 @@ EVT_BEGIN(tou_08_init_evt)
             SPAWN_EVENT(evt_champion_win)
         ELSE
 SPAWN_EVENT(evt_tou_match_after_default)
-END_IF
+        END_IF
         RETURN
     END_IF
     // Music: Grubba's theme and his tour on the first visit, else the music for the story stage.
@@ -1462,7 +1463,7 @@ EVT_BEGIN(tou_08_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -240, 0, -90, ITEM_TYPE_STILL, GSWF_TOU_08_ICE_STORM, 0)
     CALL_CHILD(PTR(evt_tou_locker_init))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(init_hammerbros))
     CALL(evt_npc_change_interrupt, STRING("ハンマーブロス"), 6, PTR(talk_hammerbros))
@@ -1470,7 +1471,7 @@ EVT_BEGIN(tou_08_init_evt)
     CALL(evt_npc_change_interrupt, STRING("トゲメット"), 6, PTR(talk_togemet))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
     CALL_CHILD(PTR(evt_tou_monitor_init))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_2"), 0, PTR(evt_toile_door), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_3"), 0, PTR(evt_toile_door2), 0)
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
@@ -1484,7 +1485,7 @@ EVT_BEGIN(tou_08_init_evt)
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
             SPAWN_EVENT(PTR(evt_champion_win))
-            ELSE
+        ELSE
 #if VERSION >= VERSION_US
             SPAWN_EVENT(PTR(evt_match_after_stop_npcs))
 #else
@@ -1514,7 +1515,7 @@ EVT_BEGIN(tou_08_init_evt)
             IF_INT_NOT_EQUAL(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-                ELSE
+            ELSE
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

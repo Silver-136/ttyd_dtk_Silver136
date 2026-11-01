@@ -1257,7 +1257,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_GREATER(LW(0), 63)
             CALL_CHILD(PTR(drill_attack_event))
             GOTO(99)
-            ELSE
+        ELSE
             // After that the first thing it does is split its arms off into two fists (arm_bunri_event).
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_LAUNCHED, LW(0))
             IF_INT_EQUAL(LW(0), 0)
@@ -1276,11 +1276,11 @@ static EVT_BEGIN(attack_event)
                 IF_INT_LESS(LW(1), LW(0))
                     CALL_CHILD(PTR(drill_attack_event))
                     GOTO(99)
-                    ELSE
+                ELSE
                     CALL_CHILD(PTR(arm_bunri_event))
                     GOTO(99)
                 END_IF
-                ELSE
+            ELSE
                 // 35 HP or less: the audience attack comes first if it is unused and there are 20 audience
                 // members; then drill 40, separation 40, audience attack 25.
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, LW(0))
@@ -1319,13 +1319,13 @@ static EVT_BEGIN(attack_event)
                 GOTO(10)
             END_IF
         END_IF
-        ELSE
+    ELSE
         // Fists out: above 35 HP it throws the boomerang.
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_GREATER(LW(0), 35)
             CALL_CHILD(PTR(boomerang_attack_event))
             GOTO(99)
-            ELSE
+        ELSE
             // 35 HP or less: the audience attack first if unused, then boomerang 75 or audience attack 20.
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, LW(0))
             IF_INT_EQUAL(LW(0), 0)

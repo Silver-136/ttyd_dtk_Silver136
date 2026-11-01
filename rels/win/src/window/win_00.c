@@ -157,7 +157,7 @@ static EVT_BEGIN(fabio_talk)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_28_001"), 0, STRING("me"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_28_002"), 0, STRING("me"))
         END_IF
     END_IF
@@ -830,7 +830,7 @@ EVT_BEGIN(get_necklace)
         CALL(evt_party_get_pos, 1, LW(10), LW(11), LW(12))
         IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
             CALL(evt_mario_set_dir, 90, 200, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_set_dir, 270, 200, 0)
         END_IF
     END_INLINE_EVENT
@@ -840,7 +840,7 @@ EVT_BEGIN(get_necklace)
         CALL(evt_party_get_pos, 1, LW(10), LW(11), LW(12))
         IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
             CALL(evt_party_set_dir, 0, 90, 200)
-            ELSE
+        ELSE
             CALL(evt_party_set_dir, 0, 270, 200)
         END_IF
     END_INLINE_EVENT
@@ -848,7 +848,7 @@ EVT_BEGIN(get_necklace)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
         CALL(evt_party_set_dir, 1, 90, 200)
-        ELSE
+    ELSE
         CALL(evt_party_set_dir, 1, 270, 200)
     END_IF
     CALL(evt_msg_print, 0, STRING("stg2_win_e08_03"), 0, STRING("extparty"))
@@ -1066,7 +1066,7 @@ EVT_BEGIN(iri_28_enemy_all_dead)
         CALL(evt_npc_move_position, STRING("ファビオ"), 780, 0, 0, 150, 0)
         CALL(evt_npc_move_position, STRING("ファビオ"), 950, 0, 0, 150, 0)
         CALL(evt_npc_set_position, STRING("ファビオ"), 0, -1000, 0)
-        ELSE
+    ELSE
         ADD(LW(0), 300)
         CALL(evt_npc_move_position, STRING("ファビオ"), LW(0), LW(2), 0, 150, 0)
         CALL(evt_npc_set_position, STRING("ファビオ"), 0, -1000, 0)
@@ -1105,7 +1105,7 @@ EVT_BEGIN(iri_28_init)
 #else
             CALL(evt_npc_change_interrupt, STRING("パックン１"), 8, PTR(iri_28_enemy_dead))
 #endif
-            ELSE
+        ELSE
             ADD(GSW_TROUBLE_WORK(0), 1)
         END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -1119,7 +1119,7 @@ EVT_BEGIN(iri_28_init)
 #else
             CALL(evt_npc_change_interrupt, STRING("シンエモン"), 8, PTR(iri_28_enemy_dead))
 #endif
-            ELSE
+        ELSE
             ADD(GSW_TROUBLE_WORK(0), 1)
         END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -1133,7 +1133,7 @@ EVT_BEGIN(iri_28_init)
 #else
             CALL(evt_npc_change_interrupt, STRING("パックン２"), 8, PTR(iri_28_enemy_dead))
 #endif
-            ELSE
+        ELSE
             ADD(GSW_TROUBLE_WORK(0), 1)
         END_IF
     END_IF

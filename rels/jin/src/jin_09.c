@@ -108,7 +108,7 @@ EVT_BEGIN(jin_09_init_evt)
             CALL(evt_mario_key_onoff, 1)
         END_INLINE_EVENT
         SET_VALUE(LW(0), 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 0)
     END_IF
     BEGIN_INLINE_EVENT

@@ -594,7 +594,7 @@ EVT_BEGIN(actend_event)
                     CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_NO_COMMAND)
                     GOTO(99)
                 END_IF
-                ELSE
+            ELSE
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, UNIT_WORK_AC_FAILURES, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
                     // Bad result: the audience feels cheated and shrinks; Frankly scolds the miss.

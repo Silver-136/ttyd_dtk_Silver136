@@ -1469,8 +1469,8 @@ EVT_BEGIN(evt_bridge2)
     CALL(evt_map_playanim, STRING("anm_ori"), MAP_ANIM_PLAY_AT_END, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ori"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_ere_1"), MAP_ANIM_PLAY_AT_END, 0)
     CALL(evt_mario_set_pos, -210, 60, 0)
@@ -1515,8 +1515,8 @@ static EVT_BEGIN(evt_origami)
     CALL(evt_map_playanim, STRING("anm_ori"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ori"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("kaidann_A"), 1, 1)
     CALL(evt_map_checkanim, STRING("anm_ori"), LW(0), LW(1))
 #if VERSION <= VERSION_DEMO_US
@@ -1674,7 +1674,7 @@ s32 img_set_color(EventEntry* event, BOOL isFirstCall) {
 EVT_BEGIN(evt_elv_rumble)
     IF_INT_EQUAL(GF(0), 0)
         CALL(evt_map_checkanim, STRING("anm_ere_1"), LW(0), LW(1))
-        ELSE
+    ELSE
         CALL(evt_map_checkanim, STRING("anm_ere_2"), LW(0), LW(1))
     END_IF
     SUBTRACT(LW(1), 500)
@@ -2137,7 +2137,7 @@ EVT_BEGIN(eki_00_init_evt)
     CALL(evt_bero_get_info)
     IF_INT_EQUAL(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 0)
         CALL_CHILD(PTR(evt_bero_info_run))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(bero_case_entry))
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
@@ -2145,7 +2145,7 @@ EVT_BEGIN(eki_00_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_37_ELEVATOR_KEY)
         CALL_CHILD(PTR(evt_elv_init))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_suitti"), 0, PTR(evt_elv), 0)
-        ELSE
+    ELSE
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_suitti"), 0, PTR(evt_elv_nomsg), 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)

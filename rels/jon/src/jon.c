@@ -273,12 +273,12 @@ EVT_BEGIN(jon_init_evt)
                         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
                             CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
                             CALL(evt_set_case_wrk, LW(1), 15, LW(0))
-                            END_IF
-                    END_IF
+                        END_IF
+                        END_IF
                     ELSE
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-                        END_IF
+                    END_IF
             ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
@@ -1337,7 +1337,7 @@ EVT_BEGIN(enemy_setup)
         ADD(LW(3), 80)
         CALL(evt_sub_random, 200, LW(4))
         ADD(LW(4), -100)
-        ELSE
+    ELSE
         CALL(evt_sub_random, 50, LW(3))
         ADD(LW(3), -130)
         CALL(evt_sub_random, 200, LW(4))
@@ -1663,7 +1663,7 @@ EVT_BEGIN(enemy_setup)
         ADD(LW(0), 1)
         IF_INT_NOT_EQUAL(LW(0), 100)
             SPAWN_EVENT(PTR(dokan_open))
-            ELSE
+        ELSE
             SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
         END_IF
         SPAWN_EVENT(PTR(iri_12_enemy_dead_event))
@@ -1938,9 +1938,9 @@ EVT_BEGIN(talk_gyousyou)
     // name and price for some languages).
     IF_INT_GREATER_OR_EQUAL(LW(1), 240)
         CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
-        ELSE
+    ELSE
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
-            END_IF
+    END_IF
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_win_coin_off, LW(12))
@@ -3097,13 +3097,13 @@ static EVT_BEGIN(iri_12_makkino_talk)
             SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
             CALL(evt_npc_change_interrupt, STRING("マッキノ"), 6, 0)
             SPAWN_EVENT(PTR(iri_12_makkino_move_dokan_side))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_12_010"), 0, STRING("マッキノ"))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             CALL(evt_msg_print, 0, STRING("irai_12_007"), 0, STRING("マッキノ"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_12_009"), 0, STRING("マッキノ"))
         END_IF
     END_IF
@@ -3127,7 +3127,7 @@ EVT_BEGIN(iri_12_makkino_fall)
     CALL(evt_npc_check, STRING("敵"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(iri_12_makkino_move_dokan_side))
-        ELSE
+    ELSE
         CALL(evt_npc_move_position, STRING("マッキノ"), -55, 109, 0, 120, 4)
         CALL(evt_npc_check, STRING("敵"), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -3158,12 +3158,12 @@ EVT_BEGIN(iri_12_makkino_fall_return)
         IF_INT_EQUAL(GSWF_PIT_BONETAIL_DEFEATED, 1)
             SPAWN_EVENT(PTR(iri_12_makkino_return_b100))
             SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
-            ELSE
+        ELSE
             CALL(evt_npc_change_interrupt, STRING("マッキノ"), 1, PTR(iri_12_makkino_buruburu))
             CALL(evt_npc_restart_regular_event, STRING("マッキノ"))
             CALL(evt_mario_key_onoff, 1)
         END_IF
-        ELSE
+    ELSE
         CALL_CHILD(PTR(iri_12_makkino_return))
         SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
         CALL(evt_mario_key_onoff, 1)
@@ -3186,7 +3186,7 @@ EVT_BEGIN(iri_12_init_fall)
     MODULO(LW(0), 10)
     IF_INT_EQUAL(LW(0), 0)
         SPAWN_EVENT(PTR(iri_12_makkino_fall_return))
-        ELSE
+    ELSE
         SPAWN_EVENT(PTR(iri_12_makkino_fall))
     END_IF
     RETURN
@@ -3205,7 +3205,7 @@ static EVT_BEGIN(iri_12_init)
                 CALL(evt_npc_change_interrupt, STRING("マッキノ"), 6, PTR(iri_12_makkino_talk))
                 CALL(evt_npc_set_anim, STRING("マッキノ"), STRING("D_2"))
                 CALL(evt_npc_set_balloontype, STRING("マッキノ"), 0)
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(iri_12_init_fall))
             END_IF
             CASE_DEFAULT
@@ -3262,15 +3262,15 @@ EVT_BEGIN(evt_iri_30_bomb_rakugaki)
         WAIT_FRAMES(1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_clear_virtual_point, STRING("img"))
         CALL(evt_img_onoff, STRING("img"), 1)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_wait_animend, STRING("img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_img_release, STRING("img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_rakugaki"))

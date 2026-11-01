@@ -84,7 +84,7 @@ static EVT_BEGIN(evt_majin)
             CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
             IF_INT_LESS_OR_EQUAL(LW(3), LW(0))
                 CALL(evt_mario_set_dir, 90, 200, 0)
-                ELSE
+            ELSE
                 CALL(evt_mario_set_dir, 270, 200, 0)
             END_IF
         END_INLINE_EVENT
@@ -143,7 +143,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_mobj_exec_cancel, STRING("box"))
         SET_VALUE(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 1)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-        ELSE
+    ELSE
         // Later visits without the Black Key: the voice just pleads for it.
         CALL(evt_pouch_check_item, ITEM_BLACK_KEY_0x21, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -152,7 +152,7 @@ static EVT_BEGIN(evt_majin)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
             CALL(evt_msg_print, 0, STRING("mac_majin_09"), PTR(majin_callback), 0)
             CALL(evt_mobj_exec_cancel, STRING("box"))
-            ELSE
+        ELSE
             // With the key, Mario picks it from his items; backing out makes the voice beg him to hurry.
             CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
             ADD(LW(1), 30)
@@ -169,13 +169,13 @@ static EVT_BEGIN(evt_majin)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
                 CALL(evt_msg_print, 0, STRING("mac_majin_11"), PTR(majin_callback), 0)
                 CALL(evt_mobj_exec_cancel, STRING("box"))
-                ELSE
+            ELSE
                 // Mario and the partners step back, the key is used up and the voice laughs as the chest opens.
                 BEGIN_INLINE_EVENT
                     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
                     IF_INT_LESS_OR_EQUAL(LW(3), LW(0))
                         CALL(evt_mario_set_dir, 90, 200, 0)
-                        ELSE
+                    ELSE
                         CALL(evt_mario_set_dir, 270, 200, 0)
                     END_IF
                 END_INLINE_EVENT

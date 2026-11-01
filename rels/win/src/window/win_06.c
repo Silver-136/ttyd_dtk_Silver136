@@ -194,7 +194,7 @@ EVT_BEGIN(win_06_init_evt)
             CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG2_WIN1"), 2000)
             CALL(evt_snd_bgm_scope, 0, 1)
         END_INLINE_EVENT
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_WIN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
     END_IF

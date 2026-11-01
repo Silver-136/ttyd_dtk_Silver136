@@ -313,7 +313,7 @@ EVT_BEGIN(mario_and_party_sleep)
                 CALL(evt_mario_get_pos, 0, LW(4), LW(5), LW(6))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_YAWN1"), LW(4), LW(5), LW(6), 0)
                 CALL(evt_mario_set_pose, STRING("M_I_5"))
-                ELSE
+            ELSE
                 SET_VALUE(LF(0), 0)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
             END_IF

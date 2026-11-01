@@ -162,7 +162,7 @@ EVT_BEGIN(peramajin_before)
             CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
             IF_INT_LESS_OR_EQUAL(LW(3), LW(0))
                 CALL(evt_mario_set_dir, 90, 200, 0)
-                ELSE
+            ELSE
                 CALL(evt_mario_set_dir, 270, 200, 0)
             END_IF
         END_INLINE_EVENT
@@ -202,7 +202,7 @@ EVT_BEGIN(peramajin_before)
             CALL(evt_party_move_pos2, 0, LW(3), LW(5), FLOAT(80.0f))
             IF_INT_LESS_OR_EQUAL(LW(3), LW(0))
                 CALL(evt_party_set_dir, 0, 90, -1)
-                ELSE
+            ELSE
                 CALL(evt_party_set_dir, 0, 270, -1)
             END_IF
         END_INLINE_EVENT
@@ -228,7 +228,7 @@ EVT_BEGIN(peramajin_before)
         CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
         IF_INT_LESS_OR_EQUAL(LW(3), LW(0))
             CALL(evt_mario_set_dir, 90, 200, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_set_dir, 270, 200, 0)
         END_IF
     END_INLINE_EVENT

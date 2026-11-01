@@ -320,7 +320,6 @@ EVT_END()
  * A flipped Cleft's turn: counts the flip timer down, and when it reaches 0 restores its normal defense, poses,
  * height and spiky-top counter and hops back upright.
  */
-// A flipped attack turn decrements the counter; restore upright data only when it reaches zero.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)

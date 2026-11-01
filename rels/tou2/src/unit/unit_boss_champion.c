@@ -755,7 +755,7 @@ static EVT_BEGIN(entry_event)
             WAIT_FRAMES(37)
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_435_02"), 0, -2)
             WAIT_MS(200)
-            ELSE
+        ELSE
             // On later attempts Rawk Hawk gives a shorter greeting.
             WAIT_FRAMES(60)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
@@ -770,11 +770,11 @@ static EVT_BEGIN(entry_event)
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_436_01"), 0, -2)
             WAIT_MS(200)
         END_IF
-        ELSE
+    ELSE
         // After the return to Rogueport this is the rematch: Rawk Hawk has new lines,
         // depending on whether Mario has already won it back.
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-            ELSE
+        ELSE
             SET_VALUE(GSWF_TOU_RAWK_HAWK_67_HP_TALK, 0)
             DEBUG_PUT_MSG(STRING("チャンピオン　再挑戦"))
             DEBUG_PUT_REG(GSWF_TOU_RAWK_HAWK_34_HP_TALK)
@@ -791,7 +791,7 @@ static EVT_BEGIN(entry_event)
                 WAIT_FRAMES(37)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_re_123"), 0, -2)
                 WAIT_MS(200)
-                ELSE
+            ELSE
                 WAIT_FRAMES(60)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
                 WAIT_FRAMES(60)
@@ -1129,7 +1129,7 @@ static EVT_BEGIN(attack_event)
                 SET_VALUE(LW(9), PTR(&weapon_champion_roof_shake_attack))
                 CALL_CHILD(PTR(roof_shake_attack_event))
             END_SWITCH
-            ELSE
+        ELSE
             // Hanging from the ceiling, he picks among the Foot Stamp, his healing move and the Roof Shake.
             CALL(btlevtcmd_DrawLots, LW(0), 3, 10, 20, 20)
             SWITCH(LW(0))

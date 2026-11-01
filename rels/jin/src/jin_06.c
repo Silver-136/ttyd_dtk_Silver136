@@ -155,7 +155,7 @@ EVT_BEGIN(jin_06_init_evt)
             CALL(evt_cam_letter_box_disable, 0)
         END_INLINE_EVENT
         SET_VALUE(LW(0), 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 0)
     END_IF
     BEGIN_INLINE_EVENT
@@ -181,7 +181,7 @@ EVT_BEGIN(jin_06_init_evt)
     IF_INT_EQUAL(GSWF_JIN_06_WALL_PANEL_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("mekure"), STRING("a_mekure"), PTR(jin_06_wall_open_evt))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("mekure"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_mekure"), 0, 0)
     END_IF

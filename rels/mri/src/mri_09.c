@@ -561,7 +561,7 @@ EVT_BEGIN(get_blue_jail_key)
         CALL(evt_npc_get_position, STRING("ガイドsp"), LW(10), LW(11), LW(12))
         IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
             CALL(evt_mario_set_dir, 90, 200, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_set_dir, 270, 200, 0)
         END_IF
     END_INLINE_EVENT
@@ -569,7 +569,7 @@ EVT_BEGIN(get_blue_jail_key)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
         CALL(evt_npc_set_ry, STRING("ガイドsp"), 90)
-        ELSE
+    ELSE
         CALL(evt_npc_set_ry, STRING("ガイドsp"), 270)
     END_IF
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00"), 0, STRING("ガイドsp"))

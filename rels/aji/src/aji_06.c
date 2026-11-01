@@ -194,7 +194,7 @@ static EVT_BEGIN(bero_peach_evt)
         CALL(evt_msg_print, 0, STRING("peach_aji_226"), 0, 0)
         SET_VALUE(LSWF_AJI_06_PEACH_MSG_OPEN, 0)
         SET_VALUE(LW(0), 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 0)
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -369,12 +369,12 @@ EVT_BEGIN(peach_evt_kusuri_select)
 #else
         CALL(evt_win_item_select, 0, PTR(kusuri_list), LW(1), 0)
 #endif
-        ELSE
+    ELSE
         SET_VALUE(LW(1), -1)
     END_IF
     IF_INT_NOT_EQUAL(LW(1), -1)
         CALL(kusuri_list_get_no, LW(1), LW(0))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 0)
     END_IF
     RETURN
@@ -435,7 +435,7 @@ EVT_BEGIN(peach_evt_check_all_kusuri_set)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui1"), 0, PTR(peach_evt_tyogo_entry), GW(5))
             SET_VALUE(LW(0), STRING("S_pato1"))
             SPAWN_EVENT_GET_ID(PTR(peach_evt_pato_on), GW(0))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("peach_aji_228"))
             SET_VALUE(LSWF_AJI_06_MIX_START_OFFERED, 0)
         END_IF
@@ -565,12 +565,12 @@ EVT_BEGIN(peach_evt_kaihei1)
             CALL_CHILD(PTR(peach_evt_check_all_kusuri_set))
             CALL(evt_map_set_flush_onoff, 0, 1, STRING("S_mizu1"))
             CALL(evt_map_set_flush_color, 0, STRING("S_mizu1"), 255, 0, 0, 255)
-            ELSE
+        ELSE
             SET_VALUE(LW(0), LSW_AJI_06_SLOT_1_POTION)
             CALL_CHILD(PTR(peach_evt_pick_kusuri))
             SET_VALUE(LSW_AJI_06_SLOT_1_POTION, 0)
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LF(0), 0)
         IF_INT_EQUAL(GW(12), 0)
             IF_INT_EQUAL(LSWF_AJI_06_DISPENSE_WINDOW_OPEN, 1)
@@ -579,7 +579,7 @@ EVT_BEGIN(peach_evt_kaihei1)
                 IF_INT_EQUAL(LW(0), 1)
                     ADD(GW(13), 1)
                     SET_VALUE(LF(0), 1)
-                    ELSE
+                ELSE
                     SUBTRACT(GW(13), 1)
                 END_IF
             END_IF
@@ -638,12 +638,12 @@ EVT_BEGIN(peach_evt_kaihei2)
             SUBTRACT(LW(0), 1)
             POKE_INT(LW(0), PTR(&g_Kusuri2_No))
             CALL_CHILD(PTR(peach_evt_check_all_kusuri_set))
-            ELSE
+        ELSE
             SET_VALUE(LW(0), LSW_AJI_06_SLOT_2_POTION)
             CALL_CHILD(PTR(peach_evt_pick_kusuri))
             SET_VALUE(LSW_AJI_06_SLOT_2_POTION, 0)
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LF(0), 0)
         IF_INT_EQUAL(GW(12), 1)
             IF_INT_EQUAL(LSWF_AJI_06_DISPENSE_WINDOW_OPEN, 1)
@@ -652,7 +652,7 @@ EVT_BEGIN(peach_evt_kaihei2)
                 IF_INT_EQUAL(LW(0), 1)
                     ADD(GW(13), 1)
                     SET_VALUE(LF(0), 1)
-                    ELSE
+                ELSE
                     SUBTRACT(GW(13), 1)
                 END_IF
             END_IF
@@ -711,12 +711,12 @@ EVT_BEGIN(peach_evt_kaihei3)
             SUBTRACT(LW(0), 1)
             POKE_INT(LW(0), PTR(&g_Kusuri3_No))
             CALL_CHILD(PTR(peach_evt_check_all_kusuri_set))
-            ELSE
+        ELSE
             SET_VALUE(LW(0), LSW_AJI_06_SLOT_3_POTION)
             CALL_CHILD(PTR(peach_evt_pick_kusuri))
             SET_VALUE(LSW_AJI_06_SLOT_3_POTION, 0)
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LF(0), 0)
         IF_INT_EQUAL(GW(12), 2)
             IF_INT_EQUAL(LSWF_AJI_06_DISPENSE_WINDOW_OPEN, 1)
@@ -725,7 +725,7 @@ EVT_BEGIN(peach_evt_kaihei3)
                 IF_INT_EQUAL(LW(0), 1)
                     ADD(GW(13), 1)
                     SET_VALUE(LF(0), 1)
-                    ELSE
+                ELSE
                     SUBTRACT(GW(13), 1)
                 END_IF
             END_IF
@@ -784,12 +784,12 @@ EVT_BEGIN(peach_evt_kaihei4)
             SUBTRACT(LW(0), 1)
             POKE_INT(LW(0), PTR(&g_Kusuri4_No))
             CALL_CHILD(PTR(peach_evt_check_all_kusuri_set))
-            ELSE
+        ELSE
             SET_VALUE(LW(0), LSW_AJI_06_SLOT_4_POTION)
             CALL_CHILD(PTR(peach_evt_pick_kusuri))
             SET_VALUE(LSW_AJI_06_SLOT_4_POTION, 0)
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LF(0), 0)
         IF_INT_EQUAL(GW(12), 3)
             IF_INT_EQUAL(LSWF_AJI_06_DISPENSE_WINDOW_OPEN, 1)
@@ -798,7 +798,7 @@ EVT_BEGIN(peach_evt_kaihei4)
                 IF_INT_EQUAL(LW(0), 1)
                     ADD(GW(13), 1)
                     SET_VALUE(LF(0), 1)
-                    ELSE
+                ELSE
                     SUBTRACT(GW(13), 1)
                 END_IF
             END_IF
@@ -1020,7 +1020,7 @@ EVT_BEGIN(peach_evt_kusuri_nomu)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui5"), 0, PTR(peach_evt_kaihei4), GW(9))
         SET_VALUE(LW(0), STRING("S_pato1"))
         SPAWN_EVENT_GET_ID(PTR(peach_evt_pato_on), GW(0))
-        ELSE
+    ELSE
         // The right potion: the music fades and Peach becomes invisible.
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         WAIT_MS(300)
@@ -1190,7 +1190,7 @@ EVT_BEGIN(peach_evt_tyogo_sub)
         END_INLINE_EVENT
         IF_INT_EQUAL(LW(5), 0)
             CALL(evt_map_replayanim, 0, STRING("yuka"))
-            ELSE
+        ELSE
             BEGIN_INLINE_EVENT
                 CALL(yuka_anim_reverse_play)
             END_INLINE_EVENT
@@ -1206,7 +1206,7 @@ EVT_BEGIN(peach_evt_tyogo_sub)
         END_IF
         IF_INT_EQUAL(LW(5), 0)
             CALL(evt_map_pauseanim, 0, STRING("yuka"))
-            ELSE
+        ELSE
             CALL(yuka_anim_reverse_end)
             WAIT_FRAMES(1)
         END_IF
@@ -1290,12 +1290,12 @@ EVT_BEGIN(peach_evt_tyogo_sub)
         IF_INT_LESS(LW(1), 35000)
             DEBUG_PUT_MSG(STRING("ほどよい　かねつじかん"))
             ADD(GW(13), 1)
-            ELSE
+        ELSE
             DEBUG_PUT_MSG(STRING("かねつしすぎ"))
             DIVIDE(LW(1), 1000)
             DEBUG_PUT_REG(LW(1))
         END_IF
-        ELSE
+    ELSE
         DEBUG_PUT_MSG(STRING("かねつぶそく"))
         DIVIDE(LW(1), 1000)
         DEBUG_PUT_REG(LW(1))
@@ -1303,7 +1303,7 @@ EVT_BEGIN(peach_evt_tyogo_sub)
     // A perfect score turns the beaker the right colour; anything less turns it the wrong colour.
     IF_INT_GREATER_OR_EQUAL(GW(13), 9)
         SPAWN_EVENT_GET_ID(PTR(kusuri_color_seiko), GW(2))
-        ELSE
+    ELSE
         SPAWN_EVENT_GET_ID(PTR(kusuri_color_sippai), GW(2))
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -1466,7 +1466,7 @@ EVT_BEGIN(peach_evt_tyogo)
     SET_VALUE(LSWF_AJI_06_MIXING_RUNNING, 0)
     IF_INT_EQUAL(GW(13), 9)
         SET_VALUE(LSWF_AJI_06_MIX_CORRECT, 1)
-        ELSE
+    ELSE
         SET_VALUE(LSWF_AJI_06_MIX_CORRECT, 0)
     END_IF
     CALL(evt_mario_key_onoff, 0)
@@ -1484,7 +1484,7 @@ EVT_BEGIN(peach_evt_tyogo)
         CALL(evt_del_case_evt, 0, GW(7))
         CALL(evt_del_case_evt, 0, GW(8))
         CALL(evt_del_case_evt, 0, GW(9))
-        ELSE
+    ELSE
         // If not, the machine is emptied and reopened for another try.
         CALL(evt_msg_print_add, 0, STRING("peach_aji_231_01"))
         CALL(evt_mapobj_scale, 0, STRING("S_naka"), 0, 0, 0)
@@ -1674,7 +1674,7 @@ static EVT_BEGIN(peach_evt_stg5)
             WAIT_MS(300)
             CALL(evt_mario_set_dir, 90, 200, 0)
             WAIT_MS(300)
-            ELSE
+        ELSE
             CALL(evt_mario_set_dir, 90, 200, 0)
             WAIT_MS(300)
             CALL(evt_mario_set_dir, 270, 200, 0)
@@ -1728,7 +1728,7 @@ EVT_BEGIN(peach_evt_tadashii_kusuri)
         WAIT_MS(300)
         CALL(evt_mario_set_dir, 90, 200, 0)
         WAIT_MS(300)
-        ELSE
+    ELSE
         CALL(evt_mario_set_dir, 90, 200, 0)
         WAIT_MS(300)
         CALL(evt_mario_set_dir, 270, 200, 0)
@@ -1748,7 +1748,7 @@ EVT_BEGIN(peach_evt_door)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(GSWF_AJI_06_RIGHT_POTION_CHOSEN, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_255_01"), 0, 0)
-        ELSE
+    ELSE
         SET_VALUE(LW(1), 0)
         SPAWN_EVENT(PTR(bero_open_door_play_se))
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
@@ -1996,7 +1996,7 @@ EVT_BEGIN(aji_06_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
     END_IF

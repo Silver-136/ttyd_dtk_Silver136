@@ -131,7 +131,7 @@ static EVT_BEGIN(push_evt)
         CALL(evt_mapobj_get_position, STRING("saku"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_GRID_MOVE1"), LW(0), LW(1), LW(2), GW(3))
         SET_VALUE(GF(0), 1)
-        ELSE
+    ELSE
         CALL(evt_mapobj_get_position, STRING("saku"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfx_pos, GW(3), LW(0), LW(1), LW(2))
     END_IF
@@ -140,7 +140,7 @@ static EVT_BEGIN(push_evt)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
     IF_INT_LESS(LW(3), LW(0))
         SET_FLOAT_VALUE(LW(10), FLOAT(0.5f))
-        ELSE
+    ELSE
         SET_FLOAT_VALUE(LW(10), FLOAT(-1.0f))
     END_IF
     ADD_FLOAT(GW(10), LW(10))
@@ -246,7 +246,7 @@ EVT_BEGIN(unpush_evt)
                 CALL(evt_snd_sfxoff, GW(3))
                 SET_VALUE(GF(0), 0)
             END_IF
-            ELSE
+        ELSE
             SUBTRACT_FLOAT(GW(10), FLOAT(0.5f))
             IF_FLOAT_LESS(GW(10), FLOAT(0.0f))
                 SET_FLOAT_VALUE(GW(10), FLOAT(0.0f))
@@ -254,7 +254,7 @@ EVT_BEGIN(unpush_evt)
                     CALL(evt_snd_sfxoff, GW(3))
                     SET_VALUE(GF(0), 0)
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_EQUAL(GF(0), 0)
                     CALL(evt_mapobj_get_position, STRING("saku"), LW(0), LW(1), LW(2))
                     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_GRID_MOVE1"), LW(0), LW(1), LW(2), GW(3))
@@ -287,7 +287,7 @@ EVT_BEGIN(vivi_chk)
                 MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
             END_IF
             IF_FLOAT_LESS(LW(0), FLOAT(25.0f))
-                ELSE
+            ELSE
             END_IF
         END_IF
         WAIT_FRAMES(1)

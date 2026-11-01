@@ -24,6 +24,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 #include "party.h"
+#include <dolphin/pad.h>
 
 
 EvtWord evt_dokan1_message[52];
@@ -300,7 +301,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -326,7 +327,7 @@ static EVT_BEGIN(peach_mail)
 #else
         CALL(evt_cam3d_evt_set, -184, 86, LW(3), -184, 38, LW(4), 1000, EASING_SINE_IN_OUT)
 #endif
-        ELSE
+    ELSE
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_cam3d_evt_set, 184, 86, 262, 184, 38, -5, 1000, EASING_SINE_IN_OUT)
 #else
@@ -343,7 +344,7 @@ static EVT_BEGIN(peach_mail)
     WAIT_MS(500)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_mario_set_dir, 90, 300, 0)
-        ELSE
+    ELSE
         CALL(evt_mario_set_dir, 270, 300, 0)
     END_IF
     CALL(evt_msg_print, 0, STRING("stg2_mri_01"), 0, 0)

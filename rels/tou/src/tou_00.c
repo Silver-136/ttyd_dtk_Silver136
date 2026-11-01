@@ -28,6 +28,7 @@
 #include "driver/effdrv.h"
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
+#include <dolphin/pad.h>
 
 USER_FUNC(kemuri_move);
 static USER_FUNC(kpa_hikousen_yure);
@@ -149,7 +150,7 @@ static EVT_BEGIN(evt_wing)
                     WAIT_FRAMES(1)
                 END_LOOP
             END_LOOP
-            ELSE
+        ELSE
             CALL(evt_sub_intpl_init, EASING_SINE_OUT, -10, 10, 30)
             LOOP(31)
                 CALL(evt_sub_intpl_get_value)
@@ -510,7 +511,7 @@ EVT_BEGIN(tou_00_koopa_evt)
             END_IF
             IF_INT_EQUAL(LF(0), 0)
                 MULTIPLY_FLOAT(LW(6), FLOAT(1.0f))
-                ELSE
+            ELSE
                 MULTIPLY_FLOAT(LW(6), FLOAT(5.0f))
             END_IF
             ADD_FLOAT(LW(6), LW(3))
@@ -523,7 +524,7 @@ EVT_BEGIN(tou_00_koopa_evt)
             END_IF
             IF_INT_EQUAL(LF(0), 0)
                 ADD_FLOAT(LW(5), FLOAT(2.0f))
-                ELSE
+            ELSE
                 ADD_FLOAT(LW(5), FLOAT(6.0f))
             END_IF
             IF_INT_GREATER_OR_EQUAL(LW(5), FLOAT(360.0f))
@@ -653,7 +654,7 @@ EVT_BEGIN(evt_skip)
     WAIT_MS(1100)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_BITS_SET(LW(0), 768)
+        IF_BITS_SET(LW(0), PAD_BUTTON_A | PAD_BUTTON_B)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -663,7 +664,7 @@ EVT_BEGIN(evt_skip)
     IF_STR_EQUAL(LW(0), STRING("modoru"))
         SET_VALUE(GSWF_TOU_BLIMP_TO_ROGUEPORT_UNUSED, 1)
         CALL(evt_bero_mapchange, STRING("gor_04"), STRING("hikousen_return"))
-        ELSE
+    ELSE
         CALL(evt_bero_mapchange, STRING("tou_01"), 0)
     END_IF
     RETURN
@@ -697,7 +698,7 @@ EVT_BEGIN(tou_00_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("modoru"))
         SPAWN_EVENT(PTR(evt_to_gor))
-        ELSE
+    ELSE
         SPAWN_EVENT(PTR(evt_to_tou))
     END_IF
     SPAWN_EVENT(PTR(evt_tou_balloon))

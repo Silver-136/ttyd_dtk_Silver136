@@ -317,7 +317,7 @@ static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         SET_VALUE(LW(15), 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(15), 0)
     END_IF
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(14))
@@ -912,7 +912,7 @@ static EVT_BEGIN(hit_check_event)
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(zakogun_set_target_id, LW(3))
         GOTO(10)
-        ELSE
+    ELSE
         CALL(zakogun_set_target_id, -1)
     END_IF
     LABEL(99)

@@ -493,7 +493,7 @@ static EVT_BEGIN(door_switch_init)
     IF_INT_EQUAL(GSWF_MRI_15_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     RETURN
@@ -593,10 +593,10 @@ static EVT_BEGIN(puni_lose)
         CALL(evt_puni_count, 0, LW(0))
         IF_INT_EQUAL(GSWF_MRI_11_JABBI_BATTLE_LOST, 0)
             CALL(evt_msg_print, 0, STRING("stg2_mri_e17_03"), 0, STRING("ガイドsp"))
-            ELSE
+        ELSE
             IF_INT_LESS_OR_EQUAL(LW(0), 11)
                 CALL(evt_msg_print, 0, STRING("stg2_mri_e17_03_01"), 0, STRING("ガイドsp"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg2_mri_e17_03"), 0, STRING("ガイドsp"))
             END_IF
         END_IF
@@ -739,7 +739,7 @@ EVT_BEGIN(mri_06_init_evt)
     IF_INT_EQUAL(GSWF_MRI_06_FAKE_WALL_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_nisekabe"), STRING("A_nisekabe"), PTR(cloud_wind_event))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_nisekabe"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_nisekabe"), 1, 0)
     END_IF

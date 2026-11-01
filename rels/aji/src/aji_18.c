@@ -221,7 +221,7 @@ EVT_BEGIN(evt_machine)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
             CALL(evt_exit_case_evt)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
         END_IF
         CASE_EQUAL(ITEM_CARD_KEY_0x1E)
@@ -233,7 +233,7 @@ EVT_BEGIN(evt_machine)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
             CALL(evt_exit_case_evt)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
         END_IF
         CASE_EQUAL(ITEM_CARD_KEY_0x1F)
@@ -245,7 +245,7 @@ EVT_BEGIN(evt_machine)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
             CALL(evt_exit_case_evt)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
         END_IF
         CASE_DEFAULT
@@ -437,7 +437,7 @@ EVT_BEGIN(aji_18_init_evt)
                 CALL(evt_party_run, 0)
                 CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
-                END_IF
+            END_IF
 SPAWN_EVENT(evt_koopa_after)
         END_IF
     END_SWITCH

@@ -316,7 +316,7 @@ static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         SET_VALUE(LW(15), 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(15), 0)
     END_IF
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(14))
@@ -1327,7 +1327,7 @@ EVT_BEGIN(hit_check_event_sub)
     IF_INT_EQUAL(LW(15), 1)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     END_IF
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_group2_attack))

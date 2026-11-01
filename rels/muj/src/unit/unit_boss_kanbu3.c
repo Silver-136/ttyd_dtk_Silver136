@@ -425,7 +425,7 @@ static EVT_BEGIN(damage_event)
                     WAIT_FRAMES(90)
                     GOTO(10)
                 END_IF
-                ELSE
+            ELSE
                 GOTO(10)
             END_IF
             // He waves his arms (C_2) while the group runs off.
@@ -778,18 +778,18 @@ static EVT_BEGIN(attack_event)
             CALL_CHILD(PTR(call_event))
             IF_INT_EQUAL(LW(0), 1)
                 GOTO(99)
-                ELSE
+            ELSE
                 GOTO(10)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_sub_random, 99, LW(1))
             IF_INT_LESS(LW(1), 50)
                 CALL_CHILD(PTR(guard_cancel_event))
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(no_event))
             END_IF
         END_IF
-        ELSE
+    ELSE
         // The random range ends at 49, so this branch always chooses the normal attack.
         SET_VALUE(LW(0), 50)
         ADD(LW(0), 0)
@@ -951,7 +951,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))

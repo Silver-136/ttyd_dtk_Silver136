@@ -132,7 +132,7 @@ static EVT_BEGIN(punipuni_ball00_init)
     IF_INT_EQUAL(GSWF_MRI_12_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 5, 30, -95)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_target_set_position, LW(11), 5, 0, -65)
@@ -155,7 +155,7 @@ static EVT_BEGIN(punipuni_ball00)
         CALL(evt_item_set_position, LW(10), 5, 30, -95)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemset))
-        ELSE
+    ELSE
         SET_VALUE(GSWF_MRI_12_PUNI_ORB_PLACED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))

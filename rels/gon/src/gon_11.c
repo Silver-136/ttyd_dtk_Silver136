@@ -601,7 +601,7 @@ EVT_BEGIN(gonbaba_event)
                 MULTIPLY_FLOAT(LW(3), FLOAT(-0.69921875f))
                 SET_FLOAT_VALUE(LW(1), FLOAT(10.0f))
                 SET_VALUE(LF(0), 1)
-                ELSE
+            ELSE
                 CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_STARSTONE_JUMP1"), LW(0), LW(1), LW(2), 0)
                 BREAK_LOOP
             END_IF
@@ -1106,11 +1106,11 @@ static EVT_BEGIN(iri_16_init)
             CALL(evt_iri_16_cloud_init)
             CALL(evt_iri_16_cloud_ent, PTR(&capturemap), STRING("A_kura"), PTR(iri_16_cloud_evt))
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kura"), 0, PTR(iri_16_touch_evt), 0)
-            ELSE
+        ELSE
             CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
             CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(iri_16_box_evt), GSWF_TROUBLE_WORK(2))
         END_IF
-        ELSE
+    ELSE
         CALL(evt_hitobj_onoff, STRING("A_taka"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
     END_IF
@@ -1146,7 +1146,7 @@ EVT_BEGIN(gon_11_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
         CALL(evt_npc_set_position, STRING("ゴンババ"), 0, -1000, 0)
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_npc_flag_onoff, 1, STRING("ゴンババ"), NPC_FLAG_NO_VIEW_CORRECTION)
         CALL(evt_npc_set_scale, STRING("ゴンババ"), FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(1.2998047f))
         SPAWN_EVENT(PTR(gonbaba_event))

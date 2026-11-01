@@ -37,6 +37,7 @@
 #include "yuu.h"
 #include "driver/seqdrv.h"
 #include "icon_ids.h"
+#include <dolphin/pad.h>
 
 typedef struct HikokiWork {
     u32 flags;
@@ -484,7 +485,7 @@ EVT_BEGIN(minigame01_start)
                 BREAK_LOOP
             ELSE
                 CALL(evt_key_get_buttontrg, 0, LW(9))
-                IF_BITS_SET(LW(9), 768)
+                IF_BITS_SET(LW(9), PAD_BUTTON_A | PAD_BUTTON_B)
                     DELETE_EVENT(LW(8))
                     CALL(evt_seq_wait, SEQ_GAME)
                     CALL_CHILD(minigame01_start_cam_cancel)
@@ -1043,9 +1044,9 @@ EVT_BEGIN(minigame01_start)
             IF_INT_EQUAL(LW(9), 0)
                 CALL(evt_seq_wait, SEQ_GAME)
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL(evt_key_get_buttontrg, 0, LW(9))
-                IF_BITS_SET(LW(9), 768)
+                IF_BITS_SET(LW(9), PAD_BUTTON_A | PAD_BUTTON_B)
                     DELETE_EVENT(LW(8))
                     CALL(evt_seq_wait, SEQ_GAME)
                     CALL_CHILD(PTR(minigame01_start_cam_cancel))
@@ -1201,15 +1202,15 @@ EVT_BEGIN(minigame01_end)
         WAIT_MS(3800)
         CALL(evt_mario_set_pose, STRING("M_D_2"))
         WAIT_MS(200)
-        ELSE
+    ELSE
         CALL(eff_call_minigame, 1, 0, 0, 500)
         WAIT_MS(500)
         IF_INT_LESS(LW(1), 1)
             CALL(evt_mario_set_pose, STRING("M_X_1"))
-            ELSE
+        ELSE
             IF_INT_GREATER(LW(1), 1)
                 CALL(evt_mario_set_pose, STRING("M_V_2"))
-                ELSE
+            ELSE
                 CALL(evt_mario_set_pose, STRING("M_I_1"))
             END_IF
         END_IF
@@ -1235,7 +1236,7 @@ EVT_BEGIN(minigame01_end)
     CALL(yuugijou_get_montemedal, LW(0))
     IF_INT_LESS(LW(0), LW(1))
         SET_VALUE(LW(0), 1)
-        ELSE
+    ELSE
         CALL(evt_msg_select, 0, STRING("sysyuu_00_00"))
     END_IF
     // Quitting sends Mario back through the pipe to gor_03.

@@ -365,11 +365,11 @@ static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HOLD, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(btldefaultevt_Damage))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetDamage, LW(10), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             SET_VALUE(LW(15), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(15), 0)
         END_IF
         // A hit that did damage, or left instant KO, sleep, dizzy, confusion, electric, freeze or stop, knocks the egg out of its hands.
@@ -406,7 +406,7 @@ static EVT_BEGIN(damage_event)
             CALL(btlevtcmd_AnimeSetPoseTable, LW(10), 1, PTR(pose_table))
             CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
             CALL_CHILD(PTR(btldefaultevt_Damage))
-            ELSE
+        ELSE
             // Hits where the attacker was hurt by spikes, or that were lucky, dodged or guarded, leave the egg alone.
             CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
             IF_INT_EQUAL(LW(0), DAMAGE_CODE_STATUS_ONLY)
@@ -555,7 +555,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
         CALL(btlevtcmd_DrawLots, LW(0), 2, 40, 90)
-        ELSE
+    ELSE
         CALL(btlevtcmd_DrawLots, LW(0), 2, 40, 70)
     END_IF
     SWITCH(LW(0))
@@ -574,7 +574,7 @@ static EVT_BEGIN(attack_event)
                     CALL_CHILD(PTR(friend_event))
                     GOTO(99)
                 END_IF
-                ELSE
+            ELSE
                 GOTO(9)
             END_IF
         END_LOOP
@@ -590,7 +590,7 @@ static EVT_BEGIN(attack_event)
                     CALL_CHILD(PTR(friend_event))
                     GOTO(99)
                 END_IF
-                ELSE
+            ELSE
                 GOTO(10)
             END_IF
         END_LOOP
@@ -605,7 +605,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
         CALL(btlevtcmd_DrawLots, LW(0), 3, 30, 30, 30)
-        ELSE
+    ELSE
         CALL(btlevtcmd_DrawLots, LW(0), 3, 30, 30, 10)
     END_IF
     SWITCH(LW(0))

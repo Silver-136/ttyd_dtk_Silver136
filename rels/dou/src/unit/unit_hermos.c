@@ -440,7 +440,7 @@ static EVT_BEGIN(damage_fire_explosion_event)
                 WAIT_MS(500)
                 GOTO(99)
             END_IF
-            ELSE
+        ELSE
             BREAK_LOOP
         END_IF
     END_LOOP
@@ -455,7 +455,7 @@ static EVT_BEGIN(damage_fire_explosion_event)
                 WAIT_MS(500)
                 GOTO(99)
             END_IF
-            ELSE
+        ELSE
             BREAK_LOOP
         END_IF
     END_LOOP

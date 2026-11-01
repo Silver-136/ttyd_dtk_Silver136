@@ -34,6 +34,7 @@
 #include "evt/evt_npc.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
+#include <dolphin/pad.h>
 
 static USER_FUNC(getYoshiColor);
 USER_FUNC(vivian_away);
@@ -383,7 +384,7 @@ EVT_BEGIN(irekawatta_mario)
     // Mario presses A to continue and the Steeple music returns.
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_BITS_SET(LW(0), 256)
+        IF_BITS_SET(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)

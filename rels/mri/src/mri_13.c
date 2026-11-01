@@ -146,16 +146,16 @@ static EVT_BEGIN(punipuni_ball00_init)
     IF_INT_EQUAL(GSWF_MRI_13_PUNI_ORB_PLACED, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG2_21_06_WATER_SWITCH)
             CALL(evt_item_set_position, LW(10), -55, 30, 0)
-            ELSE
+        ELSE
             CALL(evt_item_set_position, LW(10), -55, -279, 0)
         END_IF
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG2_21_06_WATER_SWITCH)
         CALL(evt_target_set_position, LW(11), -55, 0, 50)
-        ELSE
+    ELSE
         CALL(evt_target_set_position, LW(11), -55, -309, 50)
     END_IF
     RETURN
@@ -177,14 +177,14 @@ static EVT_BEGIN(punipuni_ball00)
         SET_VALUE(GSWF_MRI_13_PUNI_ORB_PLACED, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG2_21_06_WATER_SWITCH)
             CALL(evt_item_set_position, LW(10), -55, 30, 0)
-            ELSE
+        ELSE
             CALL(evt_item_set_position, LW(10), -55, -279, 0)
         END_IF
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(0), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(0), 0)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_MRI_13_PUNI_ORB_PLACED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
@@ -240,7 +240,7 @@ EVT_BEGIN(yuka_slot)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_04"), LW(12), 0, 0)
         IF_INT_GREATER_OR_EQUAL(GW(0), 10)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         IF_INT_NOT_EQUAL(GW(0), LW(13))
@@ -365,7 +365,7 @@ static EVT_BEGIN(yuka_check)
                                     END_IF
                                 END_IF
                             END_IF
-                            ELSE
+                        ELSE
                             IF_INT_GREATER_OR_EQUAL(LW(1), -329)
                                 IF_INT_LESS_OR_EQUAL(LW(1), -289)
                                     CALL(evt_sub_area_check, 0, -50, 60, 50, LW(0), LW(2), LW(15))
@@ -610,7 +610,7 @@ EVT_BEGIN(mri_13_init_evt)
         SPAWN_EVENT_GET_ID(PTR(yuka_check), GW(2))
         SPAWN_EVENT(PTR(yuka_event))
         CALL(evt_puni_set_hamari, -250, 0, 60, 2, -2, -306, -312)
-        ELSE
+    ELSE
         SPAWN_EVENT(PTR(yuka_init))
         SPAWN_EVENT(PTR(yuka_check))
         CALL(evt_puni_set_hamari, -180, -310, 60, 2, -2, -306, -312)

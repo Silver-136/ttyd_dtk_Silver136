@@ -561,10 +561,10 @@ EVT_BEGIN(gesso_arm_damage_pose_event)
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), UNIT_BLOOPER_RIGHT_TENTACLE)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_ARM_WORK_BODY, LW(3))
-        ELSE
+    ELSE
         IF_INT_EQUAL(LW(0), UNIT_BLOOPER_LEFT_TENTACLE)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_ARM_WORK_BODY, LW(3))
-            ELSE
+        ELSE
             RETURN
         END_IF
     END_IF

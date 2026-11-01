@@ -70,7 +70,6 @@ static s32 fontlenpitch(const char* str, s32 pitch) {
 
 #if VERSION >= VERSION_US
 /** US: centered in [x, x + width], squeezed to fit width. */
-// US: centered in [x, x + width], squeezed to fit width.
 static inline void yuuDrawCenter(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;
@@ -93,7 +92,6 @@ static inline void yuuDrawCenter(f32 x, f32 y, f32 scale, const char* msg, s32 w
 
 #if VERSION >= VERSION_US
 /** US: left-aligned at x, squeezed to fit width. */
-// US: left-aligned at x, squeezed to fit width.
 static inline void yuuDrawLeft(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;
@@ -156,7 +154,6 @@ void yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 width
 
 #if VERSION >= VERSION_US
 /** US: centered text, squeezed to fit width. */
-// US: centered text, squeezed to fit width.
 void yuuranking_draw_msg_fit_center(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;
@@ -177,7 +174,6 @@ void yuuranking_draw_msg_fit_center(f32 x, f32 y, f32 scale, const char* msg, s3
 }
 
 /** US: right-aligned text, squeezed to fit width. */
-// US: right-aligned text, squeezed to fit width.
 void yuuranking_draw_msg_fit_right(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;

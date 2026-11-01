@@ -3489,7 +3489,7 @@ EVT_BEGIN(stg_08_1_init_sub_event)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi3"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi3"), MAP_OBJ_FLAG_HIDDEN)
 #endif
     CALL(check_battle_end)
     CALL(evt_eff_softdelete, STRING("_hi1"))
@@ -3515,7 +3515,7 @@ EVT_BEGIN(stg_08_6_init_sub_event)
     END_SIBLING_EVENT
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi3"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi3"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi4"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi5"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi6"), MAP_OBJ_FLAG_HIDDEN)

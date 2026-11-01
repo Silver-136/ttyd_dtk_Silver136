@@ -571,7 +571,7 @@ static EVT_BEGIN(sell_evt)
 #else
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_insert, 0, STRING("badgeshop_08"), 0, STRING("バッジ店員"), LW(3), LW(2))
-        ELSE
+    ELSE
         CALL(evt_msg_print_insert, 0, STRING("badgeshop_08"), 0, STRING("バッジ店員"), LW(2), LW(3))
     END_IF
 #endif
@@ -683,7 +683,7 @@ EVT_BEGIN(zaiko_buy_evt)
         CALL(badgeshop_special_cnt, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("badgeshop_37"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("badgeshop_40"))
         END_IF
         RETURN
@@ -710,7 +710,7 @@ EVT_BEGIN(zaiko_buy_evt)
 #else
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_insert, 0, STRING("badgeshop_00"), 0, STRING("バッジ店員"), LW(3), LW(2), LW(4))
-        ELSE
+    ELSE
         CALL(evt_msg_print_insert, 0, STRING("badgeshop_00"), 0, STRING("バッジ店員"), LW(2), LW(3), LW(4))
     END_IF
 #endif
@@ -778,10 +778,10 @@ static EVT_BEGIN(buy_evt)
             CALL(evt_badgeShop_throw_get_kind_cnt, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print_add, 0, STRING("badgeshop_37"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("badgeshop_39"))
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("badgeshop_05"))
         END_IF
 #endif
@@ -1308,7 +1308,7 @@ EVT_BEGIN(nancy_init_check)
         END_IF
         SUBTRACT(LW(10), 30)
         CALL(evt_npc_set_ry, STRING("me"), 90)
-        ELSE
+    ELSE
         LABEL(100)
         ADD(LW(10), 30)
         CALL(evt_npc_set_ry, STRING("me"), 270)
@@ -1322,7 +1322,7 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     IF_INT_LESS(LW(0), LW(10))
         CALL(evt_npc_set_ry, STRING("me"), 90)
-        ELSE
+    ELSE
         CALL(evt_npc_set_ry, STRING("me"), 270)
     END_IF
     WAIT_MS(300)
@@ -1386,14 +1386,14 @@ EVT_BEGIN(nancy_init)
             CALL(evt_npc_set_ry, STRING("me"), 270)
             CALL(evt_npc_set_position, STRING("me"), -500, 0, 75)
             SPAWN_EVENT(PTR(nancy_init_check))
-            ELSE
+        ELSE
             CALL(evt_npc_set_ry, STRING("me"), 90)
             CALL(evt_npc_set_position, STRING("me"), -573, 0, 56)
         END_IF
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("w_bero"), 8388612)
-        ELSE
+    ELSE
         CALL(evt_npc_set_ry, STRING("me"), 270)
         CALL(evt_npc_set_position, STRING("me"), -405, 10, -100)
     END_IF
@@ -1444,7 +1444,7 @@ EVT_BEGIN(nancy_regl)
             CALL(urouro_init_func, STRING("me"), -500, 75, FLOAT(50.0f), FLOAT(45.0f), 0)
             CALL(urouro_main_func, STRING("me"))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
             CALL(nancy_block_init_func)
             LOOP(0)
@@ -1550,7 +1550,7 @@ EVT_BEGIN(nancy_talk)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             WAIT_MS(200)
             CALL(evt_msg_print, 0, STRING("gor_01_009"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_npc_get_reglid, STRING("me"), LW(10))
             DELETE_EVENT(LW(10))
             WAIT_MS(500)
@@ -1590,7 +1590,7 @@ EVT_BEGIN(nancy_talk)
             SET_VALUE(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 1)
             CALL(evt_door_set_param, GW(6), 0, PTR(&door_data_01_npc))
         END_IF
-        ELSE
+    ELSE
         CALL_CHILD(PTR(cooking_evt))
     END_IF
     RETURN
@@ -1642,7 +1642,7 @@ static EVT_BEGIN(marco_talk)
             // Flavio introduces himself as a trader and asks Mario what he longs for in life; the answer only
             // changes his reply.
             CALL(evt_msg_print, 0, STRING("mac_4_007"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("mac_4_008"), 0, STRING("me"))
         END_IF
         CALL(evt_msg_select, 0, STRING("mac_4_007_select"))
@@ -2014,7 +2014,7 @@ EVT_BEGIN(shoptender_init)
             CALL(evt_npc_set_position, STRING("me"), -75, 0, -30)
             CALL(evt_npc_set_ry, STRING("me"), 90)
         END_IF
-        ELSE
+    ELSE
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_IF
     RETURN
@@ -2028,7 +2028,7 @@ EVT_BEGIN(shoptender_talk)
             CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
             IF_INT_LESS(LW(0), 1)
                 CALL(evt_msg_print, 0, STRING("gor_01_015"), 0, STRING("me"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("gor_01_015_01"), 0, STRING("me"))
             END_IF
             RETURN
@@ -2069,12 +2069,12 @@ EVT_BEGIN(shoptender_talk)
             CALL(evt_msg_print, 0, STRING("gor_01_013_01"), 0, STRING("me"))
             IF_INT_LESS(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
                 SET_VALUE(GSWF_GOR_CONTACT_LENS_ORDERED_EARLY, 1)
-                ELSE
+            ELSE
                 SET_VALUE(GSWF_GOR_CONTACT_LENS_ORDERED_LATE, 1)
             END_IF
             CALL(evt_sub_save_playtime, GSW_GOR_CONTACT_LENS_ORDER_TIME)
         END_IF
-        ELSE
+    ELSE
         DEBUG_PUT_MSG(STRING("店員TALK３"))
         SWITCH(GSW_STORY_PROGRESS)
             CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -2203,7 +2203,7 @@ EVT_BEGIN(kuribo1_talk)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_04_001"), 0, STRING("me"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_04_002"), 0, STRING("me"))
         END_IF
         RETURN
@@ -2287,10 +2287,10 @@ EVT_BEGIN(kuribo3_talk)
                 CALL(evt_item_flag_on, STRING("irai_item"), ITEM_FLAG_NO_TOUCH)
                 CALL(evt_item_get_item, STRING("irai_item"))
                 SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("irai_02_01"), 0, STRING("me"))
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_02_02"), 0, STRING("me"))
             CALL(evt_sub_get_coin, 20)
             SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
@@ -2411,7 +2411,7 @@ EVT_BEGIN(chusan1_naguru)
         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
         SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_HIT_ME_PLEASE), 1)
         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("irai_05_016"), 0, STRING("チューさん１"))
         SET_VALUE(GF(9), 1)
         SPAWN_EVENT(PTR(chusan1_naguru))
@@ -2444,7 +2444,7 @@ EVT_BEGIN(chusan1_talk)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_05_001"), 0, STRING("me"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_05_002"), 0, STRING("me"))
         END_IF
         CALL(evt_msg_print, 0, STRING("irai_05_003"), 0, STRING("me"))
@@ -3079,14 +3079,14 @@ EVT_BEGIN(thief_talk)
                     WAIT_MS(2000)
                     CALL(evt_StatusClose)
                 END_INLINE_EVENT
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("mac_0_065_02"), 0, STRING("me"))
             END_IF
             SET_VALUE(GSWF_GOR_THIEF_FOUND_IN_HIDEOUT, 1)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_GOR_THIEF_HIDEOUT_LEFT, 0)
                 CALL(evt_msg_print, 0, STRING("mac_0_065_03"), 0, STRING("me"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("mac_0_065_04"), 0, STRING("me"))
             END_IF
         END_IF
@@ -3777,7 +3777,7 @@ EVT_BEGIN(evt_badge_dummy)
 #else
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_insert, 0, STRING("badgeshop_00"), 0, STRING("バッジ店員"), LW(13), LW(11), LW(14))
-        ELSE
+    ELSE
         CALL(evt_msg_print_insert, 0, STRING("badgeshop_00"), 0, STRING("バッジ店員"), LW(11), LW(13), LW(14))
     END_IF
 #endif
@@ -3988,13 +3988,13 @@ EVT_BEGIN(house03_f1f2_fade)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER_OR_EQUAL(LW(1), 100)
             SET_VALUE(GW(10), 2)
-            ELSE
+        ELSE
             SET_VALUE(GW(10), 1)
         END_IF
         IF_INT_EQUAL(GW(10), 1)
             SET_VALUE(GW(14), 1)
             SET_VALUE(GW(15), -1)
-            ELSE
+        ELSE
             SET_VALUE(GW(14), -1)
             SET_VALUE(GW(15), 1)
         END_IF
@@ -4101,7 +4101,7 @@ EVT_BEGIN(house03_suiteki)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER(LW(1), 100)
             CALL(evt_snd_sfx_vol, LW(3), 127)
-            ELSE
+        ELSE
             CALL(evt_snd_sfx_vol, LW(3), 30)
         END_IF
     END_LOOP
@@ -4126,7 +4126,7 @@ EVT_BEGIN(marco_hitorigoto)
                     CALL(evt_msg_close, STRING("mac_4_004"))
                 END_IF
                 SET_VALUE(LSWF_GOR_01_FLAVIO_SONG_BUBBLE_ON, 0)
-                ELSE
+            ELSE
                 SET_VALUE(LSWF_GOR_01_FLAVIO_SONG_BUBBLE_ON, 1)
             END_IF
             WAIT_FRAMES(1)
@@ -4644,10 +4644,10 @@ EVT_BEGIN(gor_01_shop_setup)
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 0)
             CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
-            ELSE
+        ELSE
             CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list2), PTR(&shopper_data), PTR(trade_list))
         END_IF
-        ELSE
+    ELSE
         CALL(evt_pouch_check_item, ITEM_SUPER_LUIGI1, LW(1))
         CALL(evt_pouch_check_item, ITEM_SUPER_LUIGI2, LW(2))
         CALL(evt_pouch_check_item, ITEM_SUPER_LUIGI3, LW(3))
@@ -4685,7 +4685,7 @@ EVT_BEGIN(gor_01_shop_setup)
         END_IF
         IF_INT_GREATER_OR_EQUAL(LW(12), LW(11))
             SET_VALUE(LW(10), PTR(goods_list))
-            ELSE
+        ELSE
             SWITCH(LW(12))
                 CASE_EQUAL(0)
                 SET_VALUE(LW(10), PTR(goods_luigi1))
@@ -5326,12 +5326,12 @@ EVT_BEGIN(keijiban_omote_joho)
     IF_INT_EQUAL(LW(0), 1)
         CALL(keijiban_joho_makelabel, 0, LW(1))
         CALL(evt_msg_print, 0, LW(1), 0, 0)
-        ELSE
+    ELSE
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_osreport, 0, LW(1))
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("<plate>\nゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"), 0, 0)
             CALL(evt_msg_print_add_insert, MSG_PRINT_DIRECT_TEXT, STRING("げんざいの　イベントばんごうは\n『%s』\nです\n<key>"), LW(1))
-            ELSE
+        ELSE
             CALL(evt_osreport, 0, LW(1))
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("<plate>\nゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"), 0, 0)
             SET_VALUE(LW(2), 0)
@@ -5358,12 +5358,12 @@ EVT_BEGIN(keijiban_ura_joho)
     IF_INT_EQUAL(LW(0), 1)
         CALL(keijiban_joho_makelabel, 0, LW(1))
         CALL(evt_msg_print, 0, LW(1), 0, 0)
-        ELSE
+    ELSE
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_osreport, 0, LW(1))
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("<plate>\nゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"), 0, 0)
             CALL(evt_msg_print_add_insert, MSG_PRINT_DIRECT_TEXT, STRING("げんざいの　イベントばんごうは\n『%s』\nです\n<key>"), LW(1))
-            ELSE
+        ELSE
             CALL(evt_osreport, 0, LW(1))
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("<plate>\nゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"), 0, 0)
             SET_VALUE(LW(2), 0)
@@ -5386,11 +5386,11 @@ EVT_BEGIN(gate_disp)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER(LW(2), -100)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_gai_kabe_k"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_gai_kabe_k_01"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_gai_kabe_k"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_gai_kabe_k_01"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_gai_kabe_k"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_gai_kabe_k_01"), MAP_OBJ_FLAG_HIDDEN)
+        ELSE
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_gai_kabe_k"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_gai_kabe_k_01"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
@@ -5409,7 +5409,7 @@ static EVT_BEGIN(gor_goki1_urouro)
         CALL(evt_sub_get_dir, LW(4), LW(5), LW(0), LW(1), LW(3))
         IF_INT_GREATER(LW(3), 180)
             SET_VALUE(LW(6), 0)
-            ELSE
+        ELSE
             SET_VALUE(LW(6), 180)
         END_IF
         CALL(evt_goki_sub_intpl_init, 13, LW(4), LW(0), LW(5), LW(1), 50)
@@ -5444,7 +5444,7 @@ static EVT_BEGIN(gor_goki2_urouro)
         CALL(evt_sub_get_dir, LW(4), LW(5), LW(0), LW(1), LW(3))
         IF_INT_GREATER(LW(3), 180)
             SET_VALUE(LW(6), 0)
-            ELSE
+        ELSE
             SET_VALUE(LW(6), 180)
         END_IF
         CALL(evt_goki_sub_intpl_init, 13, LW(4), LW(0), LW(5), LW(1), 50)
@@ -5926,7 +5926,7 @@ EVT_BEGIN(iri_09_tentyo_talk)
         CALL(evt_msg_print, 0, STRING("irai_09_001"), 0, STRING("店長"))
         SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
         SET_VALUE(LW(0), -1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("irai_09_002"), 0, STRING("店長"))
         CALL(evt_pouch_check_item, ITEM_COURAGE_SHELL, LW(0))
         IF_INT_GREATER(LW(0), 0)
@@ -5960,10 +5960,10 @@ EVT_BEGIN(iri_09_tentyo_talk)
             IF_INT_LESS(GSW_TROUBLE_WORK(0), 5)
                 IF_INT_EQUAL(LF(0), 0)
                     CALL(evt_msg_print_add, 0, STRING("irai_09_006_1"))
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("irai_09_006_1"), 0, STRING("店長"))
                 END_IF
-                ELSE
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("irai_09_004"))
                 CALL(evt_item_entry, STRING("uk"), ITEM_ULTRA_SHROOM, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                 CALL(evt_item_get_item, STRING("uk"))
@@ -5975,7 +5975,7 @@ EVT_BEGIN(iri_09_tentyo_talk)
                 SET_VALUE(LW(0), -1)
                 RETURN
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("irai_09_008"))
         END_IF
         SET_VALUE(LW(0), -100)
@@ -6177,11 +6177,11 @@ EVT_BEGIN(iri_16_tyutyu_talk)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_16_00"), 0, STRING("チュチュリーナ"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                 // Mario has not found it yet: she repeats her request.
                 CALL(evt_msg_print, 0, STRING("irai_16_01"), 0, STRING("チュチュリーナ"))
-                ELSE
+            ELSE
                 // Mario has the item: he and the partner walk up to her.
                 CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT)
                 CALL(evt_party_stop, 0)
@@ -6218,7 +6218,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                         CALL(evt_item_get_item, STRING("mb"))
                         CALL(evt_item_get_item_end_wait, STRING("mb"))
                         SET_VALUE(GSWF_GOR_01_MS_MOWZ_ATTACK_FX_B, 1)
-                        ELSE
+                    ELSE
                         // Badge list full: she hops over the rooftops and leaves the badge on the ground for
                         // Mario to pick up later.
                         CALL(evt_msg_print_add, 0, STRING("irai_16_05_1"))
@@ -6544,7 +6544,7 @@ EVT_BEGIN(dai_disp)
         END_IF
         IF_INT_EQUAL(LF(0), 0)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dai"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         WAIT_FRAMES(1)
@@ -8263,7 +8263,7 @@ EVT_BEGIN(cooking_evt)
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
                 CALL(evt_msg_continue)
                 CALL(evt_win_item_select, PTR(iri_18_item_tbl), LW(0))
-                ELSE
+            ELSE
                 SET_VALUE(LW(0), -1)
                 SET_VALUE(LF(0), 1)
             END_IF
@@ -8439,7 +8439,7 @@ EVT_BEGIN(cooking_evt)
                     GOTO(2)
                 END_IF
                 SET_VALUE(LW(15), LW(0))
-                ELSE
+            ELSE
                 SET_VALUE(LF(0), 1)
             END_IF
         END_IF
@@ -8450,14 +8450,14 @@ EVT_BEGIN(cooking_evt)
         CALL(get_item_name, LW(14), LW(0))
         IF_INT_EQUAL(LF(0), 0)
             CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_012"), 0, STRING("ナンシー"), LW(0))
-            ELSE
+        ELSE
                 CALL(evt_msg_print_add_insert, 0, STRING("gor_01_cook_012"), LW(0))
-                END_IF
+        END_IF
     ELSE
         CALL(get_item_name, LW(14), LW(0))
         CALL(get_item_name, LW(15), LW(1))
         CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_013"), 0, STRING("ナンシー"), LW(0), LW(1))
-        END_IF
+    END_IF
     CALL(evt_msg_select, 0, STRING("gor_01_select"))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(4)
@@ -8475,7 +8475,7 @@ EVT_BEGIN(cooking_evt)
         CALL(cook_chk2, LW(14), LW(15), LW(2))
         CALL(evt_pouch_remove_item, LW(14), LW(3))
         CALL(evt_pouch_remove_item, LW(15), LW(3))
-        END_IF
+    END_IF
     IF_INT_EQUAL(LW(2), 0)
         SET_VALUE(LW(2), ITEM_MISTAKE)
     END_IF

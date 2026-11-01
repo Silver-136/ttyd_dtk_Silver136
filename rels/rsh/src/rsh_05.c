@@ -1618,7 +1618,7 @@ EVT_BEGIN(evt_moamoa_help)
         CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_TALK_POSE)
         IF_STR_EQUAL(LW(0), STRING("\x8e\xd4\x8f\xb6"))
             CALL(evt_msg_print, 0, STRING("stg6_rsh_249_00"), 0, LW(0))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_249_01"), 0, LW(0))
         END_IF
         CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_TALK_POSE)
@@ -1634,7 +1634,7 @@ EVT_BEGIN(evt_moamoa_help)
     CALL(evt_sub_random, 1000, LW(4))
     IF_INT_LESS(LW(4), 500)
         SET_VALUE(LW(4), 90)
-        ELSE
+    ELSE
         SET_VALUE(LW(4), 270)
     END_IF
 #endif
@@ -1660,7 +1660,7 @@ EVT_BEGIN(evt_moamoa_help)
     CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_NO_HIT)
     IF_STR_EQUAL(LW(10), STRING("\x8e\xd4\x8f\xb6"))
         CALL(evt_npc_set_anim, LW(10), STRING("O_1"))
-        ELSE
+    ELSE
         CALL(evt_npc_set_anim, LW(10), STRING("P_1"))
     END_IF
     RETURN
@@ -1809,7 +1809,7 @@ EVT_END()
 static EVT_BEGIN(talk_syashou)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_249_01_01"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_242"), 0, 0)
     END_IF
     RETURN
@@ -1839,7 +1839,7 @@ EVT_END()
 static EVT_BEGIN(talk_waitless)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_249_01_02"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_243"), 0, 0)
     END_IF
     RETURN
@@ -2051,7 +2051,7 @@ static EVT_BEGIN(evt_access2)
         CALL(evt_item_entry, STRING("a"), ITEM_POWER_PUNCH, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("a"))
         CALL(evt_mario_key_onoff, 1)
-        ELSE
+    ELSE
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_279"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
@@ -2180,7 +2180,7 @@ EVT_BEGIN(rsh_05_init_evt_nidome)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
@@ -2190,7 +2190,7 @@ EVT_BEGIN(rsh_05_init_evt_nidome)
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
-            ELSE
+        ELSE
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
         END_IF

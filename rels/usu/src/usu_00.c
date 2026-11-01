@@ -454,7 +454,7 @@ EVT_BEGIN(villagerD_talk)
         IF_INT_EQUAL(GSWF_MRI_GENERAL_WHITE_HINT_HEARD, 1)
             SET_VALUE(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 1)
             CALL(evt_msg_print, 0, STRING("stg7_usu_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg4_usu_40"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
@@ -614,13 +614,13 @@ EVT_BEGIN(village_chief_talk)
             CALL(evt_item_get_item, STRING("kairanban"))
             CALL(evt_item_get_item_end_wait, STRING("kairanban"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_17_01"), 0, 0)
-                ELSE
+            ELSE
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                     CALL(evt_msg_print, 0, STRING("irai_17_02"), 0, 0)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("irai_17_03"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
                     CALL(evt_win_item_select, PTR(iri_15_item_tbl), LW(0))
@@ -653,7 +653,7 @@ EVT_BEGIN(village_chief_talk)
             SET_VALUE(GSWF_USU_00_MAYOR_SHADOW_TALK_DONE, 1)
             CALL(evt_msg_print, 0, STRING("stg4_usu_24"), 0, STRING("me"))
             CALL(evt_set_dir_to_target, STRING("me"), STRING("にせマリオ"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg4_usu_25"), 0, STRING("me"))
             CALL(evt_set_dir_to_target, STRING("me"), STRING("にせマリオ"))
         END_IF
@@ -1533,7 +1533,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
         CALL(evt_msg_print, 0, STRING("stg4_usu_114"), 0, STRING("ビビアン"))
         CALL(evt_mario_set_pose, STRING("M_N_1"))
         WAIT_MS(1000)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg4_usu_115"), 0, STRING("ビビアン"))
         CALL(evt_mario_set_pose, STRING("M_N_2"))
         WAIT_MS(500)
@@ -1748,7 +1748,7 @@ EVT_BEGIN(usu00_crowAB_talk_event)
                 CALL_CHILD(cam_down)
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_party_cont_onoff, 0, 1)
-                END_IF
+            END_IF
         END_IF
     END_IF
     // When Vivian is the partner in party status 2 (Guess: hiding Mario in her shadow), the crows talk for real:
@@ -1819,7 +1819,7 @@ EVT_BEGIN(usu00_crowAB_talk_event)
     CALL(evt_mario_get_mode, LW(7))
     IF_INT_EQUAL(LW(7), 2)
         SET_VALUE(LW(8), 60)
-        ELSE
+    ELSE
         SET_VALUE(LW(8), 20)
     END_IF
     CALL(evt_sub_area_check, 1, LW(3), LW(5), LW(8), LW(0), LW(2), LW(6))
@@ -1847,7 +1847,7 @@ EVT_BEGIN(usu00_crowAB_talk_event)
             CALL(evt_mario_balloon_tenten)
             SET_VALUE(LW(15), 1)
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(LW(15), 1)
             CALL(evt_mario_balloon_off)
             SET_VALUE(LW(15), 0)
@@ -1869,7 +1869,7 @@ EVT_BEGIN(usu00_crowAB_talk_event)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
                 IF_INT_EQUAL(LW(7), 2)
                     CALL(evt_msg_print, 0, STRING("kpa_stg5_009_7_1"), 0, STRING("カラスＢ"))
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("stg4_jin_152"), 0, STRING("カラスＢ"))
                 END_IF
                 CALL_CHILD(PTR(cam_down))
@@ -1982,7 +1982,7 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
                 CALL_CHILD(cam_down)
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_party_cont_onoff, 0, 1)
-                END_IF
+            END_IF
         END_IF
     END_IF
     // When Vivian is the partner in party status 2 (Guess: hiding Mario in her shadow), the crows talk for real:
@@ -2076,7 +2076,7 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
             CALL(evt_mario_balloon_tenten)
             SET_VALUE(LW(15), 1)
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(LW(15), 1)
             CALL(evt_mario_balloon_off)
             SET_VALUE(LW(15), 0)
@@ -2099,7 +2099,7 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
                 CALL(evt_mario_get_mode, LW(7))
                 IF_INT_EQUAL(LW(7), 2)
                     CALL(evt_msg_print, 0, STRING("kpa_stg5_009_7_2"), 0, STRING("カラスＤ"))
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("stg4_jin_152"), 0, STRING("カラスＤ"))
                 END_IF
                 CALL_CHILD(PTR(cam_down))
@@ -2357,7 +2357,7 @@ static EVT_BEGIN(evt_wall_2)
         SET_FLOAT_VALUE(LW(4), LW(0))
         MULTIPLY_FLOAT(LW(4), FLOAT(0.5f))
         CALL(evt_mapobj_rotate, 1, STRING("ie2_kai4"), LW(4), 0, 0)
-        ELSE
+    ELSE
         SET_FLOAT_VALUE(LW(4), LW(0))
         MULTIPLY_FLOAT(LW(4), FLOAT(0.5f))
         CALL(evt_mapobj_rotate, 1, STRING("ie2_kai4"), LW(4), 0, 0)
@@ -2816,7 +2816,7 @@ EVT_BEGIN(usu_00_touch_ichikorori_ball)
         SET_VALUE(LW(5), 325)
         IF_INT_LESS(LW(2), LW(5))
             ADD(LW(5), 20)
-            ELSE
+        ELSE
             ADD(LW(5), -20)
         END_IF
         CALL(evt_sub_get_dir, LW(0), LW(2), LW(3), LW(5), LW(6))
@@ -3326,7 +3326,7 @@ EVT_BEGIN(usu_00_koopa_second_evt)
     CALL(evt_sub_get_dir, LW(0), LW(2), LW(3), LW(5), LW(6))
     IF_INT_LESS(LW(6), 180)
         SET_VALUE(LW(7), 90)
-        ELSE
+    ELSE
         SET_VALUE(LW(7), 270)
     END_IF
     CALL(evt_npc_set_ry, STRING("カンブー"), LW(7))
@@ -3334,7 +3334,7 @@ EVT_BEGIN(usu_00_koopa_second_evt)
     CALL(evt_npc_get_position, STRING("カンブー"), LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(0), 75)
         CALL(evt_npc_set_ry, STRING("カンブー"), 90)
-        ELSE
+    ELSE
         CALL(evt_npc_set_ry, STRING("カンブー"), 270)
     END_IF
     WAIT_FRAMES(1)
@@ -3386,7 +3386,7 @@ EVT_BEGIN(usu_00_koopa_second_evt)
     CALL(evt_npc_get_dir, STRING("カンブー"), LW(3))
     IF_INT_LESS(LW(3), 180)
         ADD(LW(0), 10)
-        ELSE
+    ELSE
         SUBTRACT(LW(0), 10)
     END_IF
     ADD(LW(1), 45)
@@ -3567,7 +3567,7 @@ EVT_BEGIN(usu_00_koopa_second_evt)
                 MULTIPLY_FLOAT(LW(12), FLOAT(10.0f))
                 IF_INT_LESS_OR_EQUAL(LW(12), 2)
                     BREAK_LOOP
-                    ELSE
+                ELSE
                     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_ITIKORO_JUMP1"), LW(2), LW(3), GW(2), 0)
                 END_IF
             END_IF
@@ -4169,7 +4169,7 @@ static EVT_BEGIN(evt_after_peach)
     CALL(evt_msg_select, 0, STRING("stg4_usu_153_select"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("stg4_usu_154"))
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("stg4_usu_155"))
     END_IF
     CALL(evt_cam3d_evt_set, -110, 105, 275, -110, 45, -67, 1000, EASING_SINE_IN_OUT)
@@ -4400,7 +4400,7 @@ EVT_BEGIN(usu_00_init_evt)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(bero_case_switch_off)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bero"), MAP_OBJ_FLAG_HIDDEN)
-        END_IF
+    END_IF
     // Save block, Star Piece, NPCs, house doors (Bowser gets locked-out scripts) and the inn.
     IF_INT_EQUAL(GF(1), 0)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 365, 60, -50, 0, 0)
@@ -4521,7 +4521,7 @@ EVT_BEGIN(usu_00_init_evt)
             CALL(evt_party_run, 0)
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-            END_IF
+        END_IF
             CALL(evt_party_stop, 0)
         CALL(evt_party_set_pos, 0, -130, 0, -60)
         SPAWN_EVENT(evt_after_peach)

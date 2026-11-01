@@ -283,7 +283,7 @@ EVT_BEGIN(gra_04_init_evt)
         CALL(evt_cloud_ent, 1, PTR(&fukitobashi_tbl), STRING("A_futa"), PTR(gra_04_tree_open_evt))
         CALL(evt_cloud_set_cap_size, 256, 256)
         CALL(evt_hitobj_onoff, STRING("w_bero_1"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF

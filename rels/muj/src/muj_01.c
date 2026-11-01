@@ -215,7 +215,7 @@ static EVT_BEGIN(garawaru_talk)
         IF_INT_NOT_EQUAL(LW(0), 3)
             // With Bobbery in the party, he greets the captain and spots Bobbery.
             CALL(evt_msg_print, 0, STRING("stg5_muj_71_05"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_71_04"), 0, STRING("me"))
         END_IF
         CASE_BETWEEN(STG5_18_02_FLAVIOS_FAVOR_2, STG5_18_03_MARCOS_JEWEL)
@@ -223,14 +223,14 @@ static EVT_BEGIN(garawaru_talk)
         IF_INT_NOT_EQUAL(LW(0), 3)
             // He grows suspicious of the skull rock.
             CALL(evt_msg_print, 0, STRING("stg5_muj_90_02"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_90_02_01"), 0, STRING("me"))
         END_IF
         CASE_BETWEEN(STG5_19_GEMS_AND_JINGLES, STG5_34_KICKED_OFF)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 3)
             CALL(evt_msg_print, 0, STRING("stg5_muj_90_13"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_90_132_01"), 0, STRING("me"))
         END_IF
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
@@ -238,21 +238,21 @@ static EVT_BEGIN(garawaru_talk)
         IF_INT_NOT_EQUAL(LW(0), 3)
             // After the departure, he reacts to the Piantas' commotion.
             CALL(evt_msg_print, 0, STRING("stg5_muj_149"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_1492_01"), 0, STRING("me"))
         END_IF
         CASE_BETWEEN(STG5_62_AN_ILL_DON_PIANTA, STG5_64_LOST_WEDDING_RING)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 3)
             CALL(evt_msg_print, 0, STRING("stg5_muj_150"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_1502_01"), 0, STRING("me"))
         END_IF
         CASE_EQUAL(STG5_64_01_WEDDING_RING_DELIVERY)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 3)
             CALL(evt_msg_print, 0, STRING("stg5_muj_151"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_1512_01"), 0, STRING("me"))
         END_IF
         CASE_BETWEEN(STG5_65_TRAIN_TICKET, STG7_20_LORD_CRUMP_DEFEATED)
@@ -269,14 +269,14 @@ static EVT_BEGIN(garawaru_talk)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 3)
                 CALL(evt_msg_print, 0, STRING("stg5_muj_152"), 0, STRING("me"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg5_muj_1522_01"), 0, STRING("me"))
             END_IF
-            ELSE
+        ELSE
             CALL(evt_mario_get_party, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 3)
                 CALL(evt_msg_print, 0, STRING("stg7_muj_01"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg7_muj_012_01"), 0, 0)
             END_IF
         END_IF
@@ -285,14 +285,14 @@ static EVT_BEGIN(garawaru_talk)
         IF_INT_NOT_EQUAL(LW(0), 3)
             // Late in the game, he remarks that the camp is quiet but dull.
             CALL(evt_msg_print, 0, STRING("stg5_muj_153"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_1532_01"), 0, STRING("me"))
         END_IF
         CASE_DEFAULT
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 3)
             CALL(evt_msg_print, 0, STRING("stg5_muj_153_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_153_01_san"), 0, STRING("me"))
         END_IF
     END_SWITCH
@@ -612,7 +612,7 @@ static EVT_BEGIN(marco_talk)
             // Flavio brushes off talk of the admiral and tells Mario to hurry.
             CALL(evt_msg_print, 0, STRING("stg5_muj_31"), 0, STRING("me"))
             SET_VALUE(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_32"), 0, STRING("me"))
         END_IF
         CASE_EQUAL(STG5_15_RUNAWAY_SAILORS)
@@ -637,7 +637,7 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(120.0f))
             CALL(evt_mario_set_dir, 90, 200, 0)
             CALL(evt_party_move_behind_mario, 0)
-            ELSE
+        ELSE
             ADD(LW(10), 30)
             CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(120.0f))
             CALL(evt_mario_set_dir, 270, 200, 0)
@@ -662,7 +662,7 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_mario_get_reqdir, LW(6))
         IF_FLOAT_EQUAL(LW(6), FLOAT(0.0f))
             ADD(LW(3), -20)
-            ELSE
+        ELSE
             ADD(LW(3), 20)
         END_IF
         CALL(evt_item_entry, STRING("watasu"), LW(0), LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
@@ -745,7 +745,7 @@ static EVT_BEGIN(marco_talk)
         BEGIN_INLINE_EVENT
             IF_INT_EQUAL(LW(0), 3)
                 CALL(evt_party_move_pos2, 0, 0, 170, FLOAT(120.0f))
-                ELSE
+            ELSE
                 CALL(evt_party_move_pos2, 0, 20, 170, FLOAT(120.0f))
             END_IF
             CALL(evt_party_set_dir, 0, 270, -1)
@@ -756,13 +756,13 @@ static EVT_BEGIN(marco_talk)
         WAIT_WHILE(GF(0))
         IF_INT_EQUAL(LF(10), 0)
             CALL(evt_msg_print_party, STRING("stg5_muj_72"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_72_bom"), 0, STRING("extparty"))
         END_IF
         CALL(evt_msg_print, 0, STRING("stg5_muj_79"), 0, STRING("me"))
         IF_INT_EQUAL(LF(10), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_80"), 0, STRING("party"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_80"), 0, STRING("extparty"))
         END_IF
         CALL(evt_set_dir_to_target, STRING("ガラの悪い水夫"), STRING("me"))
@@ -775,7 +775,7 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_msg_print, 0, STRING("stg5_muj_82"), 0, STRING("me"))
         IF_INT_EQUAL(LF(10), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_83"), 0, STRING("party"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_83"), 0, STRING("extparty"))
         END_IF
         CALL(evt_party_run, 1)
@@ -827,7 +827,7 @@ static EVT_BEGIN(marco_talk)
 #if VERSION >= VERSION_US
         IF_INT_EQUAL(LF(10), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("party"))
-            ELSE
+        ELSE
             CALL(evt_party_stop, 1)
             CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("extparty"))
             CALL(evt_party_run, 1)
@@ -895,7 +895,7 @@ static EVT_BEGIN(megane_talk)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_EQUAL(LW(0), 3)
             CALL(evt_msg_print, 0, STRING("stg5_muj_71_02"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_71_03"), 0, STRING("me"))
         END_IF
         CASE_BETWEEN(STG5_18_02_FLAVIOS_FAVOR_2, STG5_18_03_MARCOS_JEWEL)
@@ -931,7 +931,7 @@ static EVT_BEGIN(odoodo_talk)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_EQUAL(LW(0), 3)
             CALL(evt_msg_print, 0, STRING("stg5_muj_71_00"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_71_01"), 0, STRING("me"))
         END_IF
         CASE_BETWEEN(STG5_18_02_FLAVIOS_FAVOR_2, STG5_18_03_MARCOS_JEWEL)
@@ -1485,7 +1485,7 @@ EVT_BEGIN(muj_00_door_open)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 1)
@@ -1774,7 +1774,7 @@ EVT_BEGIN(kyoshu_event)
     CALL(evt_msg_select, 0, STRING("stg5_muj_16_yesno"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("stg5_muj_17"))
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("stg5_muj_18"))
         BEGIN_INLINE_EVENT
             LOOP(3)
@@ -1969,7 +1969,7 @@ EVT_BEGIN(nakamaware_event)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 5)
         CALL(evt_party_set_pos, 0, -180, -3, 265)
-        ELSE
+    ELSE
         CALL(evt_party_set_pos, 0, -180, -3, 300)
     END_IF
     CALL(evt_party_set_dir, 0, 90, -1)
@@ -2666,7 +2666,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_chk_join_party, LW(0), 7)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_bero_mapchange, STRING("gor_01"), STRING(""))
-        ELSE
+    ELSE
         CALL(evt_bero_mapchange, STRING("pik_04"), STRING(""))
     END_IF
     RETURN

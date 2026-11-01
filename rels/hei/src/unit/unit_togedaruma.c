@@ -367,7 +367,6 @@ EVT_END()
  * rolls it forward upright with SFX_ENM_TOGEDA_MOVE6 and a hop and sets it back on the ground;
  * while still flipped it just goes back to waiting.
  */
-// Count down on flipped attack turns, restoring upright defense and pose instead of attacking when it reaches zero.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)

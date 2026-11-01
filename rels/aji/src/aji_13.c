@@ -754,7 +754,7 @@ EVT_BEGIN(move_up_down)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
-        ELSE
+    ELSE
         SET_VALUE(LW(3), 0)
     END_IF
     // Each cycle the platform glides from its first height to its second over the row's time, then pauses.
@@ -783,7 +783,7 @@ EVT_BEGIN(move_up_down)
         IF_INT_NOT_EQUAL(LW(3), 0)
             IF_INT_EQUAL(GF(1), 0)
                 SET_VALUE(LW(8), LW(4))
-                ELSE
+            ELSE
 #if VERSION >= VERSION_US
                 MULTIPLY_FLOAT(LW(0), FLOAT(100.0f))
 #endif
@@ -797,7 +797,7 @@ EVT_BEGIN(move_up_down)
                 SET_VALUE(GF(1), 0)
                 WAIT_MS(1000)
             END_LOOP
-            ELSE
+        ELSE
             WAIT_MS(300)
         END_IF
         LOOP(0)
@@ -1033,7 +1033,7 @@ static EVT_BEGIN(evt_hari)
         IF_INT_EQUAL(LF(0), 0)
             MULTIPLY(LW(3), -1)
             SET_VALUE(LF(0), 1)
-            ELSE
+        ELSE
             SET_VALUE(LF(0), 0)
         END_IF
         CALL(evt_sub_random, 1500, LW(9))

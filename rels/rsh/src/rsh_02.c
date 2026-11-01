@@ -387,7 +387,7 @@ static EVT_BEGIN(talk_gurume)
         IF_INT_EQUAL(LSWF_RSH_02_GOURMET_TALK_TOGGLE, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_54_01"), 0, 0)
             SET_VALUE(LSWF_RSH_02_GOURMET_TALK_TOGGLE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_55"), 0, 0)
             SET_VALUE(LSWF_RSH_02_GOURMET_TALK_TOGGLE, 0)
         END_IF
@@ -395,7 +395,7 @@ static EVT_BEGIN(talk_gurume)
         IF_INT_EQUAL(LSWF_RSH_02_GOURMET_TALK_TOGGLE, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_63"), 0, 0)
             SET_VALUE(LSWF_RSH_02_GOURMET_TALK_TOGGLE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_64"), 0, 0)
             SET_VALUE(LSWF_RSH_02_GOURMET_TALK_TOGGLE, 0)
         END_IF
@@ -403,10 +403,10 @@ static EVT_BEGIN(talk_gurume)
         IF_INT_EQUAL(GSWF_RSH_GOURMET_NOISE_TALK_DONE, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_117"), 0, 0)
             SET_VALUE(GSWF_RSH_GOURMET_NOISE_TALK_DONE, 1)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_RSH_NOISY_ROOM_CHECKED, 1)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_117_01"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_117"), 0, 0)
             END_IF
         END_IF
@@ -418,7 +418,7 @@ static EVT_BEGIN(talk_gurume)
         IF_INT_EQUAL(LSWF_RSH_02_GOURMET_DAY2_TALKED, 0)
             SET_VALUE(LSWF_RSH_02_GOURMET_DAY2_TALKED, 1)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_161"), 0, 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_162"), 0, 0)
         END_IF
         CASE_LESS(STG6_44_END_OF_DAY_2)
@@ -468,7 +468,7 @@ EVT_BEGIN(init_yuurei)
                         IF_INT_GREATER(LW(0), 240)
                             BREAK_LOOP
                         END_IF
-                        ELSE
+                    ELSE
                         SET_VALUE(LW(0), 0)
                     END_IF
                 END_IF
@@ -489,7 +489,7 @@ EVT_BEGIN(init_yuurei)
             END_IF
             CALL(evt_npc_change_interrupt, STRING("ゆうれい"), 6, PTR(talk_yuurei))
             SET_VALUE(GSWF_RSH_GHOST_APPEARED, 1)
-            ELSE
+        ELSE
             CALL(evt_npc_set_position, STRING("ゆうれい"), 30, 0, -175)
             CALL(evt_npc_change_interrupt, STRING("ゆうれい"), 6, PTR(talk_yuurei))
         END_IF
@@ -582,7 +582,7 @@ EVT_BEGIN(talk_yuurei)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_14_GHOST_T)
             // She introduces herself and asks Mario a favour.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_118"), PTR(yuurei_callback), 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_119"), PTR(yuurei_callback), 0)
         END_IF
         CALL(evt_msg_select, 0, STRING("stg6_rsh_119_yn"))
@@ -592,7 +592,7 @@ EVT_BEGIN(talk_yuurei)
             SET_VALUE(LW(15), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_120"))
             SET_VALUE(GSW_STORY_PROGRESS, STG6_15_GHOST_REQUEST)
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_121"))
         END_IF
         CASE_LESS(STG6_17_GHOST_DIARY)
@@ -698,7 +698,7 @@ EVT_BEGIN(talk_yuurei)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_139"), 0, 0)
             CALL(evt_pouch_remove_item, ITEM_RAGGED_DIARY, LW(0))
             SET_VALUE(GSW_STORY_PROGRESS, STG6_18_BLANKET_EXCHANGE)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_140"), 0, 0)
         END_IF
         CASE_LESS(STG6_19_GIVE_BLANKET)
@@ -1437,7 +1437,7 @@ EVT_BEGIN(evt_toron_appear)
             IF_INT_GREATER(LW(0), 300)
                 BREAK_LOOP
             END_IF
-            ELSE
+        ELSE
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -1477,7 +1477,7 @@ EVT_BEGIN(evt_toron_appear)
         IF_INT_EQUAL(LF(0), 1)
             GOTO(100)
         END_IF
-        ELSE
+    ELSE
         CALL(evt_npc_pera_onoff, STRING("トロン"), 0)
         CALL(evt_npc_set_rotate, STRING("トロン"), 180, 180, 90)
         CALL(evt_npc_set_position, STRING("トロン"), -300, 2, -220)
@@ -1579,7 +1579,7 @@ static EVT_BEGIN(evt_daiji_kami)
     CALL(evt_party_get_pos, 0, LW(1), LW(2), LW(3))
     IF_INT_LESS(LW(0), LW(1))
         CALL(evt_mario_set_dir, 90, 300, 0)
-        ELSE
+    ELSE
         CALL(evt_mario_set_dir, 270, 300, 0)
     END_IF
 #if VERSION == VERSION_EU
@@ -1638,7 +1638,7 @@ static EVT_BEGIN(evt_access2)
         CALL(evt_item_entry, STRING("a"), ITEM_DRIED_SHROOM, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("a"))
         CALL(evt_item_get_item_end_wait, STRING("a"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_267"), 0, 0)
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -1796,7 +1796,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
         SET_VALUE(LW(0), PTR(bero_data_a))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
-        ELSE
+    ELSE
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
         SET_VALUE(LW(0), PTR(bero_data_a))
         CALL(evt_bero_get_info)
@@ -1809,12 +1809,12 @@ EVT_BEGIN(rsh_02_a_init_evt)
         CALL(evt_cam_shift_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_LESS(STG6_00_START)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_00_START)
@@ -1970,19 +1970,19 @@ EVT_BEGIN(rsh_02_b_init_evt)
         SET_VALUE(LW(0), PTR(bero_data_b))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
-        ELSE
+    ELSE
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
         SET_VALUE(LW(0), PTR(bero_data_b))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(bero_case_entry))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_set_pos, -170, 0, -130)
         CALL(evt_cam_road_reset)
@@ -1997,12 +1997,12 @@ EVT_BEGIN(rsh_02_b_init_evt)
         CALL(evt_cam_road_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_party_set_breed_pose, 0, 1)
     RETURN
@@ -2036,12 +2036,12 @@ EVT_BEGIN(rsh_02_c_init_evt)
         CALL(evt_cam_road_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
         BEGIN_INLINE_EVENT
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_seq_wait, SEQ_GAME)
@@ -2070,7 +2070,7 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
                     CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_saboten"), MAP_ANIM_PLAY_LOOP, 0)
-                    ELSE
+                ELSE
                     CALL(evt_map_playanim, STRING("rt_hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("rt_hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("rt_hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -2105,12 +2105,12 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
@@ -2120,7 +2120,7 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
                 CALL(evt_snd_envoff, PSND_FADEOUT)
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
-                ELSE
+            ELSE
                 CALL(evt_sub_get_mapname, LW(0))
                 IF_STR_EQUAL(LW(0), STRING("rsh_02_a"))
                     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
@@ -2182,12 +2182,12 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
         CALL(evt_cam_shift_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_bero_get_entername, LW(0))
@@ -2201,14 +2201,14 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                     // Waking up on the way sends the train on to Poshley Heights or Rogueport.
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_c_03"), 0, 0)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_c_05"), 0, 0)
                 END_IF
                 WAIT_MS(2000)
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                     CALL(evt_fade_set_mapchange_type, 1, 2, 500, 1, 500)
                     CALL(evt_bero_mapchange, STRING("pik_00"), STRING("resha"))
-                    ELSE
+                ELSE
                     CALL(evt_bero_mapchange, STRING("gor_04"), STRING("resha_return"))
                 END_IF
             END_INLINE_EVENT
@@ -2241,7 +2241,7 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
                 CALL(evt_party_run, 0)
             END_INLINE_EVENT
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data_a))
         CALL(evt_bero_get_info)
         // Otherwise the normal doors are used.
@@ -2279,12 +2279,12 @@ EVT_BEGIN(rsh_02_b_init_evt_nidome)
         CALL(evt_cam_shift_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("nidome"))
             BEGIN_INLINE_EVENT
@@ -2301,7 +2301,7 @@ EVT_BEGIN(rsh_02_b_init_evt_nidome)
                 WAIT_MS(300)
                 CALL(evt_bero_mapchange, STRING("hom_00"), STRING("nidome"))
             END_INLINE_EVENT
-            ELSE
+        ELSE
             BEGIN_INLINE_EVENT
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_party_stop, 0)
@@ -2313,7 +2313,7 @@ EVT_BEGIN(rsh_02_b_init_evt_nidome)
                 CALL(evt_bero_mapchange, STRING("hom_00"), STRING("n_bero_1"))
             END_INLINE_EVENT
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data_b))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
@@ -2347,13 +2347,13 @@ EVT_BEGIN(rsh_02_c_init_evt_nidome)
         CALL(evt_cam_shift_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data_c))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
@@ -2402,7 +2402,7 @@ EVT_BEGIN(evt_nidome_bed)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 1)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             SET_VALUE(GSW_HOM_TRAIN_LEG, 1)
-            ELSE
+        ELSE
             SET_VALUE(GSW_HOM_TRAIN_LEG, 3)
         END_IF
         CALL(evt_bero_mapchange, STRING("hom_10"), 0)

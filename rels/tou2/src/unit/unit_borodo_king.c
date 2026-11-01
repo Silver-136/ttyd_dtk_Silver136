@@ -390,7 +390,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-        ELSE
+    ELSE
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_item_have))
     END_IF
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -437,7 +437,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_sub_random, LW(1), LW(0))
     IF_INT_LESS(LW(0), 75)
         CALL_CHILD(PTR(_borodo_normal_attack))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(_borodo_steal_attack))
     END_IF
     RETURN
@@ -797,7 +797,7 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-        ELSE
+    ELSE
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_item_have))
     END_IF
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)

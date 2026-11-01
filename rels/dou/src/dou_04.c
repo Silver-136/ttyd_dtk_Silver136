@@ -255,7 +255,7 @@ EVT_BEGIN(lift_event_00)
         CALL(evt_mapobj_get_position, STRING("s04_m_hako_b"), LW(10), LW(11), LW(12))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_STEP_DOWN1"), LW(10), LW(11), LW(12), 0)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0009765625f), 150)
-        ELSE
+    ELSE
         SET_FLOAT_VALUE(LW(0), LW(3))
         LOOP(0)
             CALL(evt_mapobj_trans, 1, STRING("s04_m_hako_b"), 0, LW(0), 0)
@@ -337,7 +337,7 @@ EVT_BEGIN(lift_event_01)
             END_IF
         END_LOOP
         CALL(evt_snd_sfxoff, LW(9))
-        ELSE
+    ELSE
         CALL(evt_mapobj_get_position, STRING("s04_m_ita_b"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_STEP_FALL1"), LW(0), LW(1), LW(2), LW(9))
         SET_FLOAT_VALUE(LW(0), LW(3))
@@ -391,7 +391,7 @@ EVT_BEGIN(lift_main_00)
         IF_INT_EQUAL(LF(10), 0)
             SET_VALUE(LW(0), 0)
             SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))
-            ELSE
+        ELSE
             SET_VALUE(LW(0), 0)
             SET_FLOAT_VALUE(LW(3), LW(4))
         END_IF
@@ -400,7 +400,7 @@ EVT_BEGIN(lift_main_00)
         IF_INT_EQUAL(LF(10), 0)
             SET_VALUE(LW(0), 1)
             SET_FLOAT_VALUE(LW(3), FLOAT(-180.0f))
-            ELSE
+        ELSE
             SET_VALUE(LW(0), 1)
             SET_FLOAT_VALUE(LW(3), LW(4))
         END_IF
@@ -421,7 +421,7 @@ EVT_BEGIN(lift_main_01)
         IF_INT_EQUAL(LF(10), 0)
             SET_VALUE(LW(0), 0)
             SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))
-            ELSE
+        ELSE
             SET_VALUE(LW(0), 0)
             SET_FLOAT_VALUE(LW(3), LW(4))
         END_IF
@@ -430,7 +430,7 @@ EVT_BEGIN(lift_main_01)
         IF_INT_EQUAL(LF(10), 0)
             SET_VALUE(LW(0), 1)
             SET_FLOAT_VALUE(LW(3), FLOAT(128.0f))
-            ELSE
+        ELSE
             SET_VALUE(LW(0), 1)
             SET_FLOAT_VALUE(LW(3), LW(4))
         END_IF
@@ -488,7 +488,7 @@ EVT_BEGIN(kuribo_talk)
             // First talk: he thanks Mario for taking the request and says he feels lonely on the island.
             CALL(evt_msg_print, 0, STRING("irai_21_001"), 0, 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             // Later talks: if Goombella is the partner, she is the cute girl he has been waiting for.
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 1)
@@ -627,14 +627,14 @@ EVT_BEGIN(kuribo_talk)
                 CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
                 IF_INT_EQUAL(LW(1), 0)
                     SET_VALUE(LW(1), HELD_ITEM_COUNT_BASE)
-                    ELSE
+                ELSE
                     SET_VALUE(LW(1), MAX_HELD_ITEMS)
                 END_IF
                 IF_INT_LESS(LW(0), LW(1))
                     CALL(evt_msg_continue)
                     CALL(evt_item_get_item, STRING("ff"))
                     CALL(evt_item_get_item_end_wait, STRING("ff"))
-                    ELSE
+                ELSE
                     CALL(evt_msg_print_add, 0, STRING("irai_21_011_1"))
                     CALL(evt_party_set_dir, 0, 270, 300)
                     WAIT_MS(300)
@@ -651,7 +651,7 @@ EVT_BEGIN(kuribo_talk)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                 // Any other partner: the Goomba turns them down with a line specific to that partner (Koops,
                 // Flurrie, Yoshi, Vivian, Bobbery, Ms. Mowz) and the partner replies.
-                ELSE
+            ELSE
                 LOOP(0)
                     CALL(evt_mario_party_use_check, LW(1))
                     IF_INT_EQUAL(LW(1), 0)
@@ -699,7 +699,7 @@ EVT_BEGIN(kuribo_talk)
                     CALL(evt_party_get_pos, 0, LW(5), LW(6), LW(7))
                     IF_INT_GREATER_OR_EQUAL(LW(2), LW(5))
                         CALL(evt_mario_set_dir, 270, 200, 0)
-                        ELSE
+                    ELSE
                         CALL(evt_mario_set_dir, 90, 200, 0)
                     END_IF
                 END_INLINE_EVENT

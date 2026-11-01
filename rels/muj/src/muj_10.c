@@ -205,7 +205,7 @@ static EVT_BEGIN(door_custom)
                 SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
                 CALL_CHILD(LW(9))
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL_CHILD(LW(9))
             END_IF
         END_LOOP
@@ -853,7 +853,7 @@ EVT_BEGIN(muj_10_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
 SPAWN_EVENT(senin_event)
-END_IF
+    END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

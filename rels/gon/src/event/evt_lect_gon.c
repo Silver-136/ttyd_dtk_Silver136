@@ -343,7 +343,6 @@ static USER_FUNC(lecture_button_set_seq) {
  * Script helper: reads the sequence step of lecture button args[0] into args[1] (despite the name it does not
  * return the icon id).
  */
-// Despite its name, this query returns the sequence state, not the icon ID.
 static USER_FUNC(lecture_button_get_icon_id) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -723,7 +722,7 @@ EVT_BEGIN(slit_majin_lecture)
                         ADD(LW(7), 1)
                         SET_VALUE(LW(11), 0)
                     END_IF
-                    ELSE
+                ELSE
                     IF_INT_EQUAL(LW(7), 1)
                         IF_INT_EQUAL(LW(3), 0)
                             SET_VALUE(LW(11), 0)
@@ -768,7 +767,7 @@ EVT_BEGIN(slit_majin_lecture)
             // If Mario failed to hold paper mode, the genie scolds him and he tries again.
             IF_INT_EQUAL(LW(11), 1)
                 BREAK_LOOP
-                ELSE
+            ELSE
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_msg_continue)
 #endif
@@ -796,7 +795,7 @@ EVT_BEGIN(slit_majin_lecture)
 #else
             CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_16"))
 #endif
-            ELSE
+        ELSE
             BREAK_LOOP
         END_IF
     END_LOOP

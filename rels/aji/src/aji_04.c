@@ -375,7 +375,7 @@ EVT_BEGIN(offscreen_to_kuizu)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_aka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ao"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_set_pos, -90, 20, -10)
     CALL(evt_mario_set_dir, 90, 0, 0)
@@ -418,7 +418,7 @@ static EVT_BEGIN(offscreen_to_normal)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_aji_04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kuizu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_set_pos, -90, 0, -10)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_cont_onoff, 1)
@@ -447,8 +447,8 @@ EVT_BEGIN(UNK_0x00022a90)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 150)
     CALL(evt_eff, 0, STRING("confetti"), 3, LW(0), LW(1), LW(2), 160, 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_seikai"), MAP_ANIM_PLAY_LOOP, 0)
     WAIT_MS(1800)
     RETURN
@@ -491,8 +491,8 @@ EVT_END()
  */
 #if VERSION > VERSION_DEMO_US
 EVT_BEGIN(UNK_0x00022be8)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_fuseikai"), MAP_ANIM_PLAY_ONCE, 0)
     WAIT_MS(1500)
     RETURN
@@ -661,9 +661,9 @@ EVT_BEGIN(kuizu_sekizou)
 SPAWN_EVENT(quiz_ok)
 IF_INT_EQUAL(LW(14), 4)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_GOOD_SOUND2"), 0)
-            ELSE
+ELSE
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_GOOD_SOUND1"), 0)
-            END_IF
+END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_ao"), MAP_OBJ_FLAG_HIDDEN)
 ADD(LW(14), 1)
@@ -702,14 +702,14 @@ ADD(LW(14), 1)
                 CALL(evt_msg_print, 0, STRING("stg7_aji_25"), 0, 0)
 BREAK_LOOP
             END_SWITCH
-            ELSE
+        ELSE
 SPAWN_EVENT(quiz_ng)
 IF_INT_EQUAL(LW(15), 2)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND2"), 0)
-            ELSE
+ELSE
                 // A wrong answer sounds a buzzer and the statue gloats; the third wrong answer ends the quiz.
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND1"), 0)
-            END_IF
+END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_aka"), MAP_OBJ_FLAG_HIDDEN)
 ADD(LW(15), 1)
@@ -785,7 +785,7 @@ BEGIN_INLINE_EVENT
                 CALL(evt_msg_print, 0, STRING("stg7_aji_31"), 0, 0)
 BREAK_LOOP
             END_SWITCH
-            END_IF
+        END_IF
         CALL(evt_cam3d_evt_set, 0, 83, 591, 0, 100, 91, 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
@@ -908,7 +908,7 @@ EVT_BEGIN(kuizu_sekizou)
             IF_INT_EQUAL(LW(0), LW(12))
                 SET_VALUE(LF(0), 1)
                 DEBUG_PUT_MSG(STRING("せいかい"))
-                ELSE
+            ELSE
                 SET_VALUE(LF(0), 0)
                 DEBUG_PUT_MSG(STRING("ふせいかい"))
             END_IF
@@ -928,11 +928,11 @@ EVT_BEGIN(kuizu_sekizou)
                 IF_INT_EQUAL(LW(0), 0)
                     SET_VALUE(LF(1), 0)
                     BREAK_LOOP
-                    ELSE
+                ELSE
                     SPAWN_EVENT(PTR(sekizou_talk))
                     CALL(evt_msg_print_add, 0, STRING("stg7_aji_21"))
                 END_IF
-                ELSE
+            ELSE
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -946,7 +946,7 @@ EVT_BEGIN(kuizu_sekizou)
         IF_INT_EQUAL(LF(0), 1)
             IF_INT_EQUAL(LW(14), 4)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_GOOD_SOUND2"), 0)
-                ELSE
+            ELSE
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_GOOD_SOUND1"), 0)
             END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
@@ -992,10 +992,10 @@ EVT_BEGIN(kuizu_sekizou)
                 BREAK_LOOP
             END_SWITCH
             CALL_CHILD(PTR(quiz_ok))
-            ELSE
+        ELSE
             IF_INT_EQUAL(LW(15), 2)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND2"), 0)
-                ELSE
+            ELSE
                 // A wrong answer sounds a buzzer and the statue gloats; the third wrong answer ends the quiz.
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND1"), 0)
             END_IF
@@ -1157,7 +1157,7 @@ EVT_BEGIN(sekizou_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_trans, 1, STRING("S_kuizu"), 0, -1000, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kuizu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_sekizou_1_a"), 0, PTR(kuizu_sekizou), 0)
@@ -1228,7 +1228,7 @@ EVT_BEGIN(aji_04_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
         CALL_CHILD(PTR(sekizou_init))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

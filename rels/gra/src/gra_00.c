@@ -288,7 +288,7 @@ EVT_BEGIN(name_seikai)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
     IF_INT_LESS(LW(0), LW(3))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_NM_SURPRISED1"), LW(0), LW(1), LW(2), 0)
-        ELSE
+    ELSE
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_NM_SURPRISED1_2"), LW(0), LW(1), LW(2), 0)
     END_IF
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
@@ -298,7 +298,7 @@ EVT_BEGIN(name_seikai)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
     IF_INT_LESS(LW(0), LW(3))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_NM_SURPRISED1_2"), LW(0), LW(1), LW(2), 0)
-        ELSE
+    ELSE
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_NM_SURPRISED1"), LW(0), LW(1), LW(2), 0)
     END_IF
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))

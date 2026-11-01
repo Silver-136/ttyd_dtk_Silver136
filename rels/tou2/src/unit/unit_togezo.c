@@ -491,7 +491,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(guard_cancel_event))
         GOTO(99)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 50)
         ADD(LW(0), 50)
         SUBTRACT(LW(0), 1)

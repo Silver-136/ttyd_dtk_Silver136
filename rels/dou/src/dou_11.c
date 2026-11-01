@@ -1015,7 +1015,7 @@ EVT_BEGIN(ukishima_check)
     IF_INT_NOT_EQUAL(LW(0), 2)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
-        ELSE
+    ELSE
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
@@ -1279,12 +1279,12 @@ EVT_BEGIN(torinoko_suifu_pukapuka)
                 CALL(evt_nannpc_get_position, LW(0), LW(1), LW(2), LW(3))
                 IF_INT_LESS_OR_EQUAL(LW(3), 0)
                     SET_FLOAT_VALUE(LW(1), FLOAT(39.0f))
-                    ELSE
+                ELSE
                     SET_FLOAT_VALUE(LW(1), FLOAT(26.0f))
                 END_IF
                 ADD_FLOAT(LW(1), LW(10))
                 CALL(evt_nannpc_set_shadow_position, LW(0), LW(1))
-                ELSE
+            ELSE
                 CALL(evt_nannpc_get_position, LW(0), LW(1), LW(2), LW(3))
                 CALL(evt_nannpc_set_shadow_position, LW(0), LW(2))
             END_IF
@@ -1726,12 +1726,12 @@ static EVT_BEGIN(bombwall_bomb)
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_ana_before"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -1822,7 +1822,7 @@ EVT_BEGIN(bombwall_suifuout_secheck)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KINOPIO_MOVE1"), LW(0), LW(1), LW(2), LW(13))
                 SET_VALUE(LW(12), 1)
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LW(12), 1)
                 CALL(evt_snd_sfxoff, LW(13))
                 SET_VALUE(LW(12), 0)
@@ -1844,10 +1844,10 @@ EVT_BEGIN(bombwall_suifuout)
     IF_INT_EQUAL(LW(2), 50)
         IF_INT_GREATER_OR_EQUAL(LW(1), 710)
             GOTO(10)
-            ELSE
+        ELSE
             GOTO(20)
         END_IF
-        ELSE
+    ELSE
         GOTO(30)
     END_IF
     LABEL(10)
@@ -1909,7 +1909,7 @@ EVT_BEGIN(bombwall_after)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS_OR_EQUAL(LW(0), 780)
         CALL(evt_mario_set_dir, 90, 200, 0)
-        ELSE
+    ELSE
         CALL(evt_mario_set_dir, 270, 200, 0)
     END_IF
     // The camera shows the platform; Sailor C hops through the hole first and thanks Mario.

@@ -279,7 +279,7 @@ static EVT_BEGIN(evt_majin)
             CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
             IF_INT_LESS_OR_EQUAL(LW(3), LW(0))
                 CALL(evt_mario_set_dir, 90, 200, 0)
-                ELSE
+            ELSE
                 CALL(evt_mario_set_dir, 270, 200, 0)
             END_IF
         END_INLINE_EVENT
@@ -331,7 +331,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_mobj_exec_cancel, STRING("box"))
         SET_VALUE(GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE, 1)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-        ELSE
+    ELSE
         // Later visits: without the Black Key the chest reminds Mario to find it.
         CALL(evt_pouch_check_item, ITEM_BLACK_KEY_0x22, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -340,7 +340,7 @@ static EVT_BEGIN(evt_majin)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
             CALL(evt_msg_print, 0, STRING("stg1_gon_12_08"), PTR(majin_callback), 0)
             CALL(evt_mobj_exec_cancel, STRING("box"))
-            ELSE
+        ELSE
             // Mario carries the Black Key: the chest greets him.
             CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
             ADD(LW(1), 30)
@@ -350,7 +350,7 @@ static EVT_BEGIN(evt_majin)
                 CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
                 IF_INT_LESS_OR_EQUAL(LW(3), LW(0))
                     CALL(evt_mario_set_dir, 90, 200, 0)
-                    ELSE
+                ELSE
                     CALL(evt_mario_set_dir, 270, 200, 0)
                 END_IF
             END_INLINE_EVENT
@@ -366,7 +366,7 @@ static EVT_BEGIN(evt_majin)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
                 CALL(evt_msg_print, 0, STRING("stg1_gon_12_10"), PTR(majin_callback), 0)
                 CALL(evt_mobj_exec_cancel, STRING("box"))
-                ELSE
+            ELSE
                 // Mario hands over the Black Key and the partner steps aside; the chest cackles as the curse is
                 // set up.
                 BEGIN_INLINE_EVENT
@@ -488,7 +488,7 @@ EVT_BEGIN(gon_06_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_13_A_SUSPICIOUS_ROOM)
         SPAWN_EVENT(PTR(bero_case_entry))
         SPAWN_EVENT(PTR(tsuritenjo_event))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(evt_bero_info_run))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_GON1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))

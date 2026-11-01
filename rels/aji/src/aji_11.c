@@ -126,16 +126,16 @@ EVT_BEGIN(peach_evt_bero)
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_msg_print, 0, STRING("peach_aji_249_01"), 0, 0)
                 CALL(evt_mario_key_onoff, 1)
-                ELSE
+            ELSE
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_msg_print, 0, STRING("peach_aji_250"), 0, 0)
                 CALL(evt_mario_key_onoff, 1)
             END_IF
             SET_VALUE(LW(0), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(0), 0)
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 0)
     END_IF
     RETURN
@@ -356,10 +356,10 @@ static EVT_BEGIN(peach_evt_stg5)
         IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_TAKEN, 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana"), 0, PTR(peach_evt_tana1), 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_PLAYED, 0)
                 CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
-                ELSE
+            ELSE
                 CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana"), 0, PTR(peach_evt_tana2), 0)
             END_IF
         END_IF

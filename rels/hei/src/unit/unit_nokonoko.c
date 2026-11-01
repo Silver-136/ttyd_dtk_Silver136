@@ -285,7 +285,6 @@ EVT_END()
  * while above 0 it shows the struggling pose NKT_S_3 and keeps waiting,
  * and at 0 it restores the normal defence and pose tables and hit offset with SFX_ENM_INSIDE2 and a hop.
  */
-// Flipped attack turns count down from two; the recovery turn restores defense, pose, and hit offset instead of attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)

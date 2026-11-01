@@ -120,7 +120,7 @@ EVT_BEGIN(evt_anim2)
             MODULO(LW(0), 360)
             IF_INT_EQUAL(GF(0), 0)
                 MULTIPLY_FLOAT(LW(1), FLOAT(50.0f))
-                ELSE
+            ELSE
                 MULTIPLY_FLOAT(LW(1), FLOAT(40.0f))
             END_IF
             SET_FLOAT_VALUE(GW(3), LW(1))
@@ -133,7 +133,7 @@ EVT_BEGIN(evt_anim2)
     LOOP(0)
         IF_INT_EQUAL(LW(3), 1)
             CALL(evt_sub_spline_get_value, GW(0), GW(1), GW(2), LW(3))
-            ELSE
+        ELSE
         END_IF
         SET_FLOAT_VALUE(LW(4), GW(1))
         ADD_FLOAT(LW(4), GW(3))
@@ -191,7 +191,7 @@ EVT_BEGIN(tou_20_init_evt)
     IF_STR_EQUAL(LW(0), STRING("start"))
         CALL(evt_cam3d_evt_set, -3020, 129, -6, -212, 722, 807, 0, EASING_SINE_IN_OUT)
         SPAWN_EVENT(PTR(evt_anim))
-        ELSE
+    ELSE
         CALL(evt_cam3d_evt_set, -700, 866, 4657, -700, 38, -60, 0, EASING_SINE_IN_OUT)
         SPAWN_EVENT(PTR(evt_anim2))
     END_IF

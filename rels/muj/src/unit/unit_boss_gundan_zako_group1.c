@@ -375,7 +375,7 @@ static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         SET_VALUE(LW(15), 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(15), 0)
     END_IF
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(14))
@@ -427,7 +427,7 @@ EVT_BEGIN(damage_event_kaiten_hammer)
         WAIT_FRAMES(80)
         CALL(zakogun_damage_pose_cancel)
         CALL(zakogun_end_sukima)
-        ELSE
+    ELSE
         WAIT_FRAMES(80)
     END_IF
     RETURN

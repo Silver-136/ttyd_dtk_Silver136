@@ -429,7 +429,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2"), 0)
-            ELSE
+        ELSE
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2_2"), 0)
         END_IF
     END_IF
@@ -729,7 +729,7 @@ static EVT_BEGIN(hom_10_evt_resha_stop)
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             SPAWN_EVENT(PTR(stop_1))
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(stop_2))
         END_IF
     END_IF
@@ -883,7 +883,7 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
 #endif
-        ELSE
+    ELSE
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
         SET_VALUE(LW(0), 0)
@@ -977,7 +977,7 @@ EVT_BEGIN(evt_pik_yajirushi)
     CALL(evt_sub_random, 100, LW(0))
     IF_INT_LESS(LW(0), 90)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -20, 20, 1000)
-        ELSE
+    ELSE
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -20, 380, 1000)
     END_IF
     LABEL(20)
@@ -1110,7 +1110,7 @@ EVT_BEGIN(talk_ekiin)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
         CALL(evt_msg_print, 0, STRING("stg6_pik_00"), 0, 0)
         RETURN
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             CALL(evt_msg_print, 0, STRING("train_06"), 0, 0)
             RETURN
@@ -1122,14 +1122,14 @@ EVT_BEGIN(talk_ekiin)
             CALL(evt_pouch_check_item, ITEM_TRAIN_TICKET, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, 0, STRING("train_05"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_mario_set_pose, STRING("M_C_3"))
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_mario_get_dispdir, LW(3))
                 IF_INT_LESS(LW(3), 180)
                     ADD(LW(0), -20)
                     ADD(LW(1), 15)
-                    ELSE
+                ELSE
                     ADD(LW(0), 20)
                     ADD(LW(1), 15)
                 END_IF
@@ -1151,7 +1151,7 @@ EVT_BEGIN(talk_ekiin)
                 CALL_CHILD(PTR(evt_train))
 #endif
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("train_02"))
         END_IF
     END_IF
@@ -1195,7 +1195,7 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
         CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg7_pik_04"), 0, STRING("ナリキンパパ"))
-        ELSE
+    ELSE
         CALL(zoom, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
         CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
@@ -1214,21 +1214,21 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
         CALL(evt_pouch_get_coin, LW(0))
         IF_INT_LESS(LW(0), 1)
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_09"))
         END_IF
         CASE_EQUAL(2)
         CALL(evt_pouch_get_coin, LW(0))
         IF_INT_LESS(LW(0), 64)
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_10"))
         END_IF
         CASE_EQUAL(3)
         CALL(evt_pouch_get_coin, LW(0))
         IF_INT_LESS(LW(0), 1)
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_11"))
             CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
             IF_INT_EQUAL(LW(0), 1)
@@ -1374,7 +1374,7 @@ static EVT_BEGIN(talk_papa)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
             CALL_CHILD(PTR(talk_papa_taihou_kyoka))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg7_pik_19_01"), 0, 0)
         END_IF
         CASE_DEFAULT
@@ -1441,7 +1441,7 @@ static EVT_BEGIN(talk_mama)
                     IF_INT_EQUAL(LF(0), 1)
                         IF_INT_LESS_OR_EQUAL(LW(2), LW(5))
                             SET_VALUE(LW(6), 0)
-                            ELSE
+                        ELSE
                             SET_VALUE(LW(6), 180)
                         END_IF
                         SET_VALUE(LW(7), LW(0))
@@ -1491,11 +1491,11 @@ static EVT_BEGIN(talk_mama)
                     SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 END_IF
                 RETURN
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("irai_29_18_2"), 0, 0)
                 RETURN
             END_IF
-            ELSE
+        ELSE
             // She thanks Mario and the request moves on.
             CALL(evt_msg_print, 0, STRING("irai_29_18"), 0, 0)
             RETURN
@@ -1511,10 +1511,10 @@ static EVT_BEGIN(talk_mama)
         IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
             IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
                 CALL(evt_msg_print, 0, STRING("stg7_pik_21_1"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg7_pik_20"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg7_pik_21"), 0, 0)
         END_IF
         CASE_DEFAULT
@@ -1551,10 +1551,10 @@ static EVT_BEGIN(talk_konari)
         IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
             IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
                 CALL(evt_msg_print, 0, STRING("stg7_pik_23_1"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg7_pik_22"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg7_pik_23"), 0, 0)
         END_IF
         CASE_DEFAULT
@@ -1588,7 +1588,7 @@ static EVT_BEGIN(talk_madam_ring_return)
         CALL(evt_msg_print, 0, STRING("stg6_pik_04_08"), 0, STRING("マダム"))
         CALL(evt_pouch_remove_item, ITEM_GOLD_RING, LW(0))
         SET_VALUE(GSWF_PIK_MADAM_GOLD_RING_RETURNED, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg6_pik_04_10"), 0, STRING("マダム"))
     END_IF
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -1621,7 +1621,7 @@ static EVT_BEGIN(talk_madam)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_I_MUST_HAVE_THAT_BOOK), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_23_00"), 0, 0)
         END_IF
         RETURN
@@ -1631,14 +1631,14 @@ static EVT_BEGIN(talk_madam)
         IF_INT_EQUAL(GSWF_RSH_MADAM_RING_REQUEST_HEARD, 0)
             SET_VALUE(GSWF_RSH_MADAM_RING_REQUEST_HEARD, 1)
             CALL(evt_msg_print, 0, STRING("stg6_pik_04_01"), 0, 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_pik_04_04"), 0, 0)
         END_IF
         CALL(evt_msg_select, 0, STRING("stg6_pik_04_05"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_pik_04_02"))
             SET_VALUE(GSWF_RSH_MADAM_RING_REQUEST_ACCEPTED, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_pik_04_03"))
         END_IF
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -1655,10 +1655,10 @@ static EVT_BEGIN(talk_madam)
         CASE_DEFAULT
         IF_INT_EQUAL(GSWF_PIK_MADAM_GOLD_RING_RETURNED, 0)
             CALL(evt_msg_print, 0, STRING("stg6_pik_04"), 0, 0)
-            ELSE
+        ELSE
             IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
                 CALL(evt_msg_print, 0, STRING("stg7_pik_clear_01"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg7_pik_clear_01_1"), 0, 0)
             END_IF
         END_IF
@@ -1941,7 +1941,7 @@ EVT_BEGIN(evt_rot_door_sub)
             SET_VALUE(LF(0), 1)
             CALL(evt_snd_sfxon, STRING("SFX_DOOR_OPEN_TURN1"), LW(10))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(LF(0), 1)
             SET_VALUE(LF(0), 0)
             CALL(evt_snd_sfxoff, LW(10))
@@ -2042,12 +2042,12 @@ EVT_BEGIN(evt_seacret)
     CALL(evt_img_onoff, STRING("img"), 1)
     CALL(img_flag)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("e"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_1_sakai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_set_offscreen, 1, STRING("e"), STRING("ofs"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("ie_1_sakai"), STRING("ofs"))
 #else
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("naka_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("naka_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_set_offscreen, 1, STRING("naka_1"), STRING("ofs"))
 #endif
     WAIT_FRAMES(1)
@@ -2126,9 +2126,9 @@ EVT_BEGIN(pik_00_init_evt)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
                 ELSE
                 CALL_CHILD(PTR(hom_10_evt_resha_left))
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
             END_IF
         END_IF
         IF_STR_EQUAL(LW(0), STRING("se_bero"))
@@ -2136,7 +2136,7 @@ EVT_BEGIN(pik_00_init_evt)
             CALL_CHILD(PTR(hom_10_evt_resha_left))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         CALL(evt_sub_get_system_flag, LW(0))
         IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
@@ -2146,9 +2146,9 @@ EVT_BEGIN(pik_00_init_evt)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
                 ELSE
                 CALL_CHILD(PTR(hom_10_evt_resha_left))
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
             END_IF
         END_IF
         CALL(evt_sub_get_system_flag, LW(0))
@@ -2157,7 +2157,7 @@ EVT_BEGIN(pik_00_init_evt)
             CALL_CHILD(PTR(hom_10_evt_resha_left))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
     END_IF
     SET_INT_READ_ADDR(PTR(&name_tbl))

@@ -91,7 +91,7 @@ EVT_BEGIN(rsh_08_a_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
@@ -101,7 +101,7 @@ EVT_BEGIN(rsh_08_a_init_evt)
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
-            ELSE
+        ELSE
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
         END_IF

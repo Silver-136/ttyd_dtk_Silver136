@@ -641,7 +641,7 @@ IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(9), PTR(&weapon_mahorn_all_attack_magic))
         CALL_CHILD(all_attack_magic_event)
         GOTO(99)
-    END_IF
+END_IF
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(9), PTR(&weapon_mahorn_dekadeka_magic))

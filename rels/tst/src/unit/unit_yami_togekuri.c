@@ -302,7 +302,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
             CALL(get_attacker, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_06"), 0, -6)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_07"), 0, -6)
             END_IF
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_KURIBOO_WORK_TOGEKURI_TALK_DONE, 1)

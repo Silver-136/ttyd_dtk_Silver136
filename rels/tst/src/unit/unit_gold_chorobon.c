@@ -437,10 +437,10 @@ static EVT_BEGIN(damage_event)
                         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))
                         CALL(btlevtcmd_KillUnit, LW(3), 0)
                         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, 1)
-                        END_IF
+                    END_IF
+                END_IF
             END_IF
         END_IF
-    END_IF
     CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_CALLED, LW(0))
     IF_INT_EQUAL(LW(0), 0)

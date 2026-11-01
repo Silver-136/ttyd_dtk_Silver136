@@ -427,7 +427,7 @@ static EVT_BEGIN(phase_event)
                 CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
                 RETURN
-                ELSE
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("mac_0_b_t2_020"))
                 CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
                 CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_INTERRUPT_STOP)

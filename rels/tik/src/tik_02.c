@@ -810,7 +810,7 @@ static EVT_BEGIN(wall_bomb)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -863,7 +863,7 @@ EVT_BEGIN(tik_02_init_evt)
         SET_VALUE(LW(0), STRING("w_bwro_2"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("w_bwro_2"), 0, PTR(wall_bomb), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 350, 60, 100, 0, GSWF_SHINE_06, 0)
@@ -877,7 +877,7 @@ EVT_BEGIN(tik_02_init_evt)
         CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("s_dokan_1"))
         CALL(evt_mapobj_trans, 0, STRING("s_dokan_1"), 0, -30, 0)
         CALL(evt_hit_bind_update, STRING("a_dokan_1"))
-        ELSE
+    ELSE
         SET_VALUE(LW(4), STRING("ugo_yuka_1"))
         SET_VALUE(LW(5), STRING("a_ugo_yuka_1"))
 #if VERSION >= VERSION_US

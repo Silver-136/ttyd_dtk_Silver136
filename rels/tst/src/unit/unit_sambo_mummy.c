@@ -674,10 +674,10 @@ static EVT_BEGIN(damage_event_bodylost)
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(15))
                 WAIT_FRAMES(30)
             END_IF
-            ELSE
+        ELSE
             CALL_CHILD(PTR(subsetevt_nodamage_motion))
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LW(12), LW(11))
         CALL(btlevtcmd_GetUnitWork, LW(10), UNIT_WORK_BODY_COUNT, LW(0))
         SUBTRACT(LW(0), 1)
@@ -922,10 +922,10 @@ static EVT_BEGIN(damage_swallow_body)
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(15))
                 WAIT_FRAMES(30)
             END_IF
-            ELSE
+        ELSE
             CALL_CHILD(PTR(subsetevt_nodamage_motion))
         END_IF
-        ELSE
+    ELSE
         WAIT_FRAMES(3)
         SET_VALUE(LW(12), LW(11))
         CALL(btlevtcmd_GetUnitWork, LW(10), UNIT_WORK_BODY_COUNT, LW(0))

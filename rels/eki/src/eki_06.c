@@ -434,7 +434,7 @@ EVT_BEGIN(eki_06_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oku_3"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_34_3_BLUE_BLOCKS)
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("anm_hako"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_hitobj_onoff, STRING("a_hako"), 1, 0)
     END_IF

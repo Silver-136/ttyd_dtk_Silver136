@@ -30,7 +30,7 @@ static EVT_BEGIN(check_roll)
     CALL(evt_mario_get_motion, LW(0))
     IF_INT_EQUAL(LW(0), 22)
         SET_VALUE(LW(0), 0)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 1)
     END_IF
     RETURN

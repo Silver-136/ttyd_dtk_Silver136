@@ -349,7 +349,7 @@ static EVT_BEGIN(talk_toron)
         IF_INT_EQUAL(GSWF_RSH_ZIP_TOAD_FIRST_TALK_DONE, 0)
             SET_VALUE(GSWF_RSH_ZIP_TOAD_FIRST_TALK_DONE, 1)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_09"), 0, 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_10"), 0, 0)
         END_IF
         CASE_LESS(STG6_09_BUBS_REQUEST)
@@ -409,7 +409,7 @@ static EVT_BEGIN(talk_madam_ring_return)
         CALL(evt_sub_get_coin, 30)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_202"), 0, STRING("マダム"))
         CALL(evt_pouch_remove_item, ITEM_GOLD_RING, LW(0))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_201_2"), 0, STRING("マダム"))
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
@@ -430,14 +430,14 @@ static EVT_BEGIN(talk_madam)
             IF_INT_EQUAL(GSWF_RSH_MADAM_RING_REQUEST_HEARD, 0)
                 SET_VALUE(GSWF_RSH_MADAM_RING_REQUEST_HEARD, 1)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_80"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_83"), 0, 0)
             END_IF
             CALL(evt_msg_select, 0, STRING("stg6_rsh_83_yn"))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print_add, 0, STRING("stg6_rsh_81"))
                 SET_VALUE(GSWF_RSH_MADAM_RING_REQUEST_ACCEPTED, 1)
-                ELSE
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("stg6_rsh_82"))
             END_IF
             SWITCH(GSW_STORY_PROGRESS)
@@ -474,13 +474,13 @@ static EVT_BEGIN(talk_madam)
             SET_VALUE(GSWF_RSH_MADAM_POSHLEY_TALK_DONE, 1)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_204"), 0, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_205"), 0, 0)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_205"), 0, 0)
         END_IF
         CALL(evt_msg_select, 0, STRING("stg6_rsh_205_01"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_206"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_207"))
         END_IF
         CALL(evt_msg_print, 0, STRING("stg6_rsh_208"), 0, 0)
@@ -607,7 +607,6 @@ EVT_END()
  * each says a line (stg6_rsh_248 to 252), then the story advances to STG6_49_00_TRAIN_ARRIVAL
  * and the map changes to pik_00 with an iris fade.
  */
-// Finish the arrival scene, advance the story, then transfer to Poshley Heights with an area fade.
 EVT_BEGIN(evt_pikary_arrival)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -100, 0, 0)
     CALL(evt_npc_set_position, STRING("車掌"), 0, 0, 0)
@@ -798,7 +797,7 @@ EVT_BEGIN(rsh_01_a_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_kami"), 0, PTR(evt_daiji_kami), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -1090,7 +1089,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
                     CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_saboten"), MAP_ANIM_PLAY_LOOP, 0)
-                    ELSE
+                ELSE
                     CALL(evt_map_playanim, STRING("rt_hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("rt_hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("rt_hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1126,7 +1125,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
@@ -1136,7 +1135,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
-            ELSE
+        ELSE
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_01_a"))
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
@@ -1167,7 +1166,7 @@ EVT_END()
 EVT_BEGIN(rsh_01_a_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_a))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data_a_return))
     END_IF
     CALL(evt_bero_get_info)
@@ -1194,7 +1193,7 @@ EVT_END()
 EVT_BEGIN(rsh_01_b_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_b))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data_b_return))
     END_IF
     CALL(evt_bero_get_info)
@@ -1214,7 +1213,7 @@ EVT_END()
 EVT_BEGIN(rsh_01_c_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_c))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data_c_return))
     END_IF
     CALL(evt_bero_get_info)

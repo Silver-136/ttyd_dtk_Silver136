@@ -378,7 +378,7 @@ static EVT_BEGIN(init_event2)
         CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kIsShelled)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-        ELSE
+    ELSE
         CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)

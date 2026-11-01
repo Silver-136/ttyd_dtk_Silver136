@@ -487,7 +487,7 @@ static EVT_BEGIN(check_roll)
     CALL(evt_mario_get_motion, LW(0))
     IF_INT_EQUAL(LW(0), MARIO_MOTION_ROLL)
         SET_VALUE(LW(0), 0)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 1)
     END_IF
     RETURN
@@ -552,7 +552,7 @@ EVT_BEGIN(door_teresa_n)
         CALL(evt_mario_set_dir, 90, 0, 0)
         SET_VALUE(LW(6), -20)
         SET_VALUE(LW(7), 90)
-        ELSE
+    ELSE
         CALL(evt_npc_set_ry, STRING("奥扉テレサ"), 90)
         CALL(evt_mario_set_dir, 270, 0, 0)
         SET_VALUE(LW(6), 20)
@@ -561,7 +561,7 @@ EVT_BEGIN(door_teresa_n)
     CALL_CHILD(PTR(teresa_n_fadein))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_02_BOO_BOX)
         CALL(evt_msg_print, 0, STRING("stg4_jin_49"), 0, STRING("奥扉テレサ"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg4_jin_51"), 0, STRING("奥扉テレサ"))
     END_IF
     SPAWN_EVENT_GET_ID(PTR(teresa_n_fadeout), GW(0))
@@ -627,7 +627,7 @@ EVT_BEGIN(door_teresa_s)
         CALL(evt_mario_set_dir, 90, 0, 0)
         SET_VALUE(LW(6), -30)
         SET_VALUE(LW(7), 90)
-        ELSE
+    ELSE
         CALL(evt_npc_set_ry, STRING("手前扉テレサ"), 90)
         CALL(evt_mario_set_dir, 270, 0, 0)
         SET_VALUE(LW(6), 20)
@@ -636,7 +636,7 @@ EVT_BEGIN(door_teresa_s)
     CALL_CHILD(PTR(teresa_s_fadein))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_02_BOO_BOX)
         CALL(evt_msg_print, 0, STRING("stg4_jin_50"), 0, STRING("手前扉テレサ"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg4_jin_52"), 0, STRING("手前扉テレサ"))
     END_IF
     SPAWN_EVENT_GET_ID(PTR(teresa_s_fadeout), GW(1))
@@ -884,7 +884,7 @@ static EVT_BEGIN(push_evt)
     DIVIDE(LW(0), 2)
     IF_INT_LESS(GW(10), 40)
         MULTIPLY(LW(0), 1)
-        ELSE
+    ELSE
         MULTIPLY(LW(0), 2)
         BEGIN_INLINE_EVENT
             CALL(evt_sub_random, 100, LW(0))
@@ -935,7 +935,7 @@ static EVT_BEGIN(push_evt)
                 END_INLINE_EVENT
                 CALL(evt_mario_set_pose, STRING("M_N_7"))
             END_IF
-            ELSE
+        ELSE
             CALL(evt_mario_set_pos, LW(0), LW(3), LW(4))
         END_IF
         WAIT_FRAMES(1)
@@ -1381,8 +1381,6 @@ static ExtTexInfo senteresa_ext_entry_data[] = {
  * (senteresa_syugo, the Atomic Boo forming), 30 blown away (senteresa_huttobu), 80 lifting Mario
  * (senteresa_turiageru).
  */
-// Swarm states: 0 delay, 1 fade in, 2 barrier, 3 stagger, 4 orbit, 5 approach,
-// 6 attached, 9 gesture, 10 knocked away, 20..22 gather, 30 disperse, 80 lift, 99 inactive.
 static void senteresa_ext_main(void) {
     ExtdrvPose* pose = extGetPosePtr();
     MarioWork* mp = marioGetPtr();
@@ -2373,7 +2371,7 @@ EVT_BEGIN(jin_00_init_evt)
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
         SPAWN_EVENT(PTR(first_jin00))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
@@ -2416,7 +2414,7 @@ EVT_BEGIN(jin_00_init_evt)
         SET_VALUE(GW(10), 0)
         CALL(evt_run_case_evt, CASE_PUSH, 1, STRING("A_dai"), 0, PTR(push_evt), 0)
         CALL(evt_run_case_evt, CASE_NOT_PUSH, 1, STRING("A_dai"), 0, PTR(nopush_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_trans, 1, STRING("oki01"), FLOAT(50.0f), 0, 0)
         CALL(evt_hit_bind_update, STRING("a_oki01"))
         CALL(evt_hitobj_onoff, STRING("a_futa"), 0, 0)

@@ -341,7 +341,6 @@ static USER_FUNC(lecture_button_set_seq) {
 }
 
 /** Script helper: reads the sequence number (not the icon id, despite the name) of button args[0] into args[1]. */
-// Despite its name, this helper returns the prompt sequence state, not the icon ID.
 static USER_FUNC(lecture_button_get_icon_id) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -657,7 +656,7 @@ EVT_BEGIN(ship_majin_lecture)
             SET_FLOAT_VALUE(LW(0), FLOAT(-270.0f))
             CALL(dai_moveti_set, LW(0), LW(2), LW(3))
             BREAK_LOOP
-            ELSE
+        ELSE
             CALL(dai_moveti_set, LW(0), LW(2), LW(3))
         END_IF
         WAIT_FRAMES(1)
@@ -897,7 +896,7 @@ EVT_BEGIN(ship_majin_lecture)
 #else
             CALL(evt_msg_print_add, 0, STRING("stg1_gon_majin4_17"))
 #endif
-            ELSE
+        ELSE
             CALL(x_flag_set, 0, 2)
             WAIT_FRAMES(2)
             BREAK_LOOP
@@ -916,7 +915,7 @@ EVT_BEGIN(ship_majin_lecture)
                 CALL(dai_moveti_set, LW(0), LW(2), LW(3))
                 CALL(x_flag_set, 0, 2)
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL(dai_moveti_set, LW(0), LW(2), LW(3))
             END_IF
             WAIT_FRAMES(1)

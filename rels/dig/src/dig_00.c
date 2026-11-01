@@ -29,6 +29,7 @@
 #include "evt/evt_npc.h"
 #include "stdlib.h"
 #include "driver/seqdrv.h"
+#include <dolphin/pad.h>
 
 void FontDrawString(f32 x, f32 y, const char* str);
 typedef struct DigAnim {
@@ -306,7 +307,7 @@ EVT_BEGIN(evt_action_1_2)
     IF_INT_LESS(LW(0), 500)
         CALL(evt_npc_set_ry, LW(10), 90)
         CALL(evt_npc_flag_onoff, 1, LW(10), NPC_FLAG_INSTANT_TURN)
-        ELSE
+    ELSE
         CALL(evt_npc_set_ry, LW(10), 270)
         CALL(evt_npc_flag_onoff, 1, LW(10), NPC_FLAG_INSTANT_TURN)
     END_IF
@@ -330,7 +331,7 @@ EVT_BEGIN(evt_action_1_2)
         WAIT_MS(500)
         CALL(evt_npc_reverse_ry, LW(5))
         WAIT_MS(500)
-        ELSE
+    ELSE
         WAIT_MS(1000)
     END_IF
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(9), 0, 400)
@@ -400,7 +401,7 @@ EVT_BEGIN(evt_action_walk)
     IF_INT_GREATER(LW(1), 500)
         CALL(evt_npc_set_position, LW(10), -400, LW(0), 0)
         CALL(evt_npc_move_position, LW(10), 400, LW(0), 0, FLOAT(80.0f), 1)
-        ELSE
+    ELSE
         CALL(evt_npc_set_position, LW(10), 400, LW(0), 0)
         CALL(evt_npc_move_position, LW(10), -400, LW(0), 0, FLOAT(80.0f), 1)
     END_IF
@@ -441,7 +442,7 @@ EVT_BEGIN(evt_action)
         IF_BITS_SET(LW(2), 32)
             IF_INT_NOT_EQUAL(LW(3), 0)
                 SPAWN_EVENT(LW(3))
-                ELSE
+            ELSE
                 CALL(evt_npc_delete, LW(10))
             END_IF
             GOTO(0)
@@ -482,7 +483,7 @@ EVT_BEGIN(dig_00_init_evt)
         CALL(evt_fade_end_wait)
         LOOP(0)
             CALL(evt_key_get_buttontrg, 0, LW(0))
-            IF_BITS_SET(LW(0), 4352)
+            IF_BITS_SET(LW(0), PAD_BUTTON_A | PAD_BUTTON_START)
                 SET_VALUE(GF(0), 1)
             END_IF
             IF_INT_EQUAL(GF(0), 1)

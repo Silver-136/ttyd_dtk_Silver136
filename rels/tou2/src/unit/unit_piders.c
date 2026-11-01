@@ -827,7 +827,7 @@ static EVT_BEGIN(unison_phase_event)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL_CHILD(PTR(move_kuuchu_event))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(move_kuutei_event))
         END_IF
         GOTO(99)
@@ -839,25 +839,25 @@ static EVT_BEGIN(unison_phase_event)
         IF_INT_EQUAL(LW(13), 0)
             CALL_CHILD(PTR(move_kuuchu_event))
             GOTO(99)
-            ELSE
+        ELSE
             CALL_CHILD(PTR(move_kuutei_event))
             GOTO(99)
         END_IF
-        ELSE
+    ELSE
         MODULO(LW(14), 2)
         IF_INT_EQUAL(LW(14), 1)
             IF_INT_EQUAL(LW(13), 0)
                 CALL_CHILD(PTR(move_kuuchu_event))
                 GOTO(99)
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(move_kuutei_event))
                 GOTO(99)
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LW(13), 0)
                 CALL_CHILD(PTR(move_kuutei_event))
                 GOTO(99)
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(move_kuuchu_event))
                 GOTO(99)
             END_IF
@@ -961,7 +961,7 @@ static EVT_BEGIN(damage_check_event_sub)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     IF_INT_EQUAL(LW(8), 1)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(0))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(0))
     END_IF
     GOTO(99)
@@ -1125,7 +1125,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(99)
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1273,7 +1273,7 @@ static EVT_BEGIN(renzoku_attack_event_sub_last)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), kNoShadow)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(0))
-        ELSE
+    ELSE
         SET_VALUE(LW(8), 1)
         SET_VALUE(LW(10), 0)
         CALL_CHILD(PTR(damage_check_event_sub))

@@ -559,7 +559,7 @@ EVT_BEGIN(kaidan_event)
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     IF_INT_LESS(LW(0), 0)
                         CALL(evt_mario_set_dir, 90, 0, 0)
-                        ELSE
+                    ELSE
                         CALL(evt_mario_set_dir, 270, 0, 0)
                     END_IF
                     WAIT_MS(800)
@@ -2129,7 +2129,7 @@ EVT_BEGIN(evt_mapwrite)
         BEGIN_INLINE_EVENT
             CALL(evt_mario_set_dir, 90, 200, 0)
         END_INLINE_EVENT
-        ELSE
+    ELSE
         CALL(evt_mario_set_pose, STRING("M_I_N"))
         CALL(evt_cam3d_evt_set, 0, 102, 300, 0, 110, -250, 2000, EASING_SINE_IN_OUT)
     END_IF
@@ -2249,7 +2249,7 @@ EVT_BEGIN(evt_mapwrite)
     CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
     IF_INT_EQUAL(GW(15), 0)
         CALL(evt_item_move_3d_position, STRING("item00"), LW(0), 115, LW(2), 14000, EASING_SINE_IN_OUT)
-        ELSE
+    ELSE
         CALL(evt_item_move_3d_position, STRING("item00"), LW(0), 115, LW(2), 9333, EASING_SINE_IN_OUT)
     END_IF
     CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))

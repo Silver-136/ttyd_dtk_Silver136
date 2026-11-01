@@ -215,7 +215,7 @@ static EVT_BEGIN(talk_brots)
         CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
         IF_INT_LESS(LW(0), LW(3))
             CALL(evt_party_set_dir, 0, 270, 200)
-            ELSE
+        ELSE
             CALL(evt_party_set_dir, 0, 90, 200)
         END_IF
         CALL(evt_npc_flag_onoff, 1, STRING("ブロッツ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -225,7 +225,7 @@ static EVT_BEGIN(talk_brots)
         CALL(evt_msg_print_party, STRING("stg3_tou_307_13"))
         SET_VALUE(GSWF_TOU_12_BANDY_ANDY_WARNING_HEARD, 1)
         CALL(evt_party_cont_onoff, 0, 1)
-        ELSE
+    ELSE
         CALL(evt_npc_flag_onoff, 0, STRING("ブロッツ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_set_anim, STRING("ブロッツ"), STRING("S_1"))
         CALL(evt_msg_print, 0, STRING("stg3_tou_307_14"), 0, 0)
@@ -313,7 +313,7 @@ EVT_BEGIN(tou_12_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
-        ELSE
+    ELSE
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
@@ -349,7 +349,7 @@ EVT_BEGIN(tou_12_init_evt)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("anm_hae"), MAP_ANIM_PLAY_LOOP, 0)
         BEGIN_INLINE_EVENT
             LOOP(0)

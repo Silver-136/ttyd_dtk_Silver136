@@ -38,6 +38,7 @@
 #include "evt/evt_movefloor.h"
 #include "yuu.h"
 #include "driver/seqdrv.h"
+#include <dolphin/pad.h>
 
 typedef struct FuneWork {
     u32 flags;
@@ -280,9 +281,9 @@ EVT_BEGIN(minigame02_start)
             IF_INT_EQUAL(LW(9), 0)
                 CALL(evt_seq_wait, SEQ_GAME)
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL(evt_key_get_buttontrg, 0, LW(9))
-                IF_BITS_SET(LW(9), 768)
+                IF_BITS_SET(LW(9), PAD_BUTTON_A | PAD_BUTTON_B)
                     DELETE_EVENT(LW(8))
                     CALL(evt_seq_wait, SEQ_GAME)
                     CALL_CHILD(PTR(minigame02_start_cam_cancel))
@@ -325,7 +326,7 @@ EVT_BEGIN(minigame02_end)
     IF_INT_LESS(LW(0), 0)
         CALL(eff_call_minigame, 2, 0, 0, 500)
         WAIT_MS(4000)
-        ELSE
+    ELSE
         CALL(eff_call_minigame, 1, 0, 0, 500)
         WAIT_MS(4000)
     END_IF
@@ -347,7 +348,7 @@ EVT_BEGIN(minigame02_end)
     CALL(yuugijou_get_montemedal, LW(0))
     IF_INT_LESS(LW(0), LW(1))
         SET_VALUE(LW(0), 1)
-        ELSE
+    ELSE
         CALL(evt_msg_select, 0, STRING("sysyuu_01_00"))
     END_IF
     IF_INT_NOT_EQUAL(LW(0), 0)

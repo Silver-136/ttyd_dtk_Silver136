@@ -132,7 +132,7 @@ EVT_BEGIN(gra_01_init_evt)
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         CALL_CHILD(PTR(evt_bero_info_run))
-        ELSE
+    ELSE
         SPAWN_EVENT(PTR(gra_01_after_ranpel2))
     END_IF
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))

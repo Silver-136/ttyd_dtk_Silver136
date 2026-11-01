@@ -242,7 +242,7 @@ EVT_BEGIN(majinaisi_table_talk)
             ADD_FLOAT(LW(1), LW(3))
             IF_INT_GREATER(LW(3), LW(2))
                 ADD_FLOAT(LW(3), LW(4))
-                ELSE
+            ELSE
                 SET_FLOAT_VALUE(LW(3), LW(2))
             END_IF
             CASE_DEFAULT
@@ -383,7 +383,7 @@ EVT_BEGIN(majinaisi_direct_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HEARTFUL_CAKE_RECIPE)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_14_00"), 0, 0)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_14_01"), 0, 0)
                 CALL(evt_mario_set_pose, STRING("M_I_2"))
@@ -391,7 +391,7 @@ EVT_BEGIN(majinaisi_direct_talk)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_msg_print, 0, STRING("irai_14_02"), 0, 0)
                 SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
-                ELSE
+            ELSE
                 CALL(evt_pouch_check_item, ITEM_CAKE_MIX, LW(0))
                 IF_INT_GREATER(LW(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_14_04"), 0, 0)
@@ -408,7 +408,7 @@ EVT_BEGIN(majinaisi_direct_talk)
                         SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_HEARTFUL_CAKE_RECIPE), 1)
                         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                     END_IF
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("irai_14_03"), 0, 0)
                 END_IF
             END_IF

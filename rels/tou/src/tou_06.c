@@ -40,6 +40,7 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
+#include <dolphin/pad.h>
 
 s32* tbl;
 
@@ -428,7 +429,7 @@ EVT_BEGIN(evt_chuchu)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -521,7 +522,7 @@ EVT_BEGIN(iri_13_init)
         END_IF
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_item_entry, LW(6), ITEM_BATTLE_TRUNKS, LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, PTR(iri_13_pants_00_evt))
-            ELSE
+        ELSE
             CALL(evt_item_entry, LW(6), ITEM_BATTLE_TRUNKS, LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
         END_IF
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
@@ -694,7 +695,7 @@ EVT_BEGIN(tou_06_init_evt)
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_party_cont_onoff, 0, 1)
         END_INLINE_EVENT
-        END_IF
+    END_IF
     // The flies over the garbage and, from JP on, Trouble Center job 13.
     CALL(evt_map_playanim, STRING("anm_hae"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_sub_get_system_flag, LW(0))
@@ -741,7 +742,7 @@ EVT_BEGIN(tou_06_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_09_BLOWING_CONTAINERS)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("kontena"), STRING("a_kon_H"), PTR(evt_kontena))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kontena"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kon_H"), 1, 0)
     END_IF
@@ -750,7 +751,7 @@ EVT_BEGIN(tou_06_init_evt)
             CALL(evt_cloud_init)
         END_IF
         CALL(evt_cloud_ent, 1, PTR(&cloud_kontena2_list), STRING("a_kon_N"), PTR(evt_kontena2))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kontena_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -882,11 +883,11 @@ EVT_BEGIN(tou_06_init_evt)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_08_MS_MOWZ)
         SPAWN_EVENT(PTR(evt_chuchu))
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envoff, PSND_FADEOUT)
-            ELSE
+        ELSE
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))

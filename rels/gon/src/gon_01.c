@@ -436,7 +436,7 @@ EVT_BEGIN(gon_01_init_evt)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         SPAWN_EVENT(PTR(honenoko_oidasare_evt))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))

@@ -130,7 +130,7 @@ static EVT_BEGIN(evt_box)
         WAIT_MS(150)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(150)
     END_LOOP
     CALL(evt_mario_key_onoff, 1)
@@ -197,12 +197,12 @@ EVT_BEGIN(aji_05_init_evt)
     IF_INT_EQUAL(GSWF_AJI_05_LIT_FLOOR_DONE, 0)
         CALL_CHILD(PTR(hikaru_yuka_init))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL_CHILD(PTR(hikaru_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), HIT_ATTR_TOGE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -75, 60, -125, ITEM_SLEEPY_SHEEP, 0, GSWF_AJI_05_SLEEPY_SHEEP_BLOCK, 0)
     SPAWN_EVENT(PTR(evt_emergency))

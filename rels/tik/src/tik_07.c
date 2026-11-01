@@ -25,6 +25,7 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include <dolphin/pad.h>
 
 
 EvtWord bero_00_open_door[12];
@@ -269,7 +270,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -427,7 +428,7 @@ EVT_BEGIN(tik_07_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         CALL(evt_npc_check_delete, STRING("トゲノコ"))
         CALL(evt_npc_check_delete, STRING("ハンマーブロス"))
-        ELSE
+    ELSE
         CALL(evt_npc_check_delete, STRING("ハンニャー１"))
         CALL(evt_npc_check_delete, STRING("ハンニャー２"))
     END_IF

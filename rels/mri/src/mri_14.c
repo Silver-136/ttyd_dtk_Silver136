@@ -1003,7 +1003,7 @@ static EVT_BEGIN(yuka_move)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_04"), LW(12), 0, 0)
         IF_INT_GREATER_OR_EQUAL(GW(0), 10)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         WAIT_FRAMES(1)
@@ -1083,7 +1083,7 @@ static EVT_BEGIN(punipuni_ball00_init)
     IF_INT_EQUAL(GSWF_MRI_14_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 0, 30, -100)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_target_set_position, LW(11), 0, 0, 0)
@@ -1118,7 +1118,7 @@ static EVT_BEGIN(punipuni_ball00)
             RETURN
         END_IF
 #endif
-        ELSE
+    ELSE
         SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
@@ -1145,7 +1145,7 @@ EVT_BEGIN(mri_14_init_evt)
     SET_VALUE(LW(9), 0)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG2_21_06_WATER_SWITCH)
         CALL_CHILD(PTR(mri_puni_init))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(mri_puni_init_none))
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))

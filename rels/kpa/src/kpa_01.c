@@ -940,7 +940,7 @@ EVT_BEGIN(hammer_AB_talk_evt)
         SET_VALUE(GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE, 1)
         CALL(evt_npc_flag_onoff, 0, STRING("ハンマーＡ"), NPC_FLAG_NO_TALK_TURN)
         CALL(evt_npc_flag_onoff, 0, STRING("ハンマーＢ"), NPC_FLAG_NO_TALK_TURN)
-        ELSE
+    ELSE
         CALL(evt_set_dir_to_target, STRING("ハンマーＡ"), STRING("mario"))
         CALL(evt_set_dir_to_target, STRING("ハンマーＢ"), STRING("mario"))
         WAIT_FRAMES(1)

@@ -454,19 +454,19 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INVISIBLE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(13), 0)
-        ELSE
+    ELSE
         SET_VALUE(LW(13), 1)
     END_IF
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CONFUSE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), 0)
-        ELSE
+    ELSE
         CALL(teresa_check_trans, UNIT_ID_SELF, LW(14))
     END_IF
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CONFUSE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(15), 0)
-        ELSE
+    ELSE
         CALL(teresa_check_move, LW(15))
     END_IF
     SET_VALUE(LW(0), 0)

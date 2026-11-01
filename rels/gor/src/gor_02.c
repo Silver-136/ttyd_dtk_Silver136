@@ -67,6 +67,7 @@
 #include "data_tables.h"
 #include "pmario_sound.h"
 #include "driver/seqdrv.h"
+#include <dolphin/pad.h>
 
 typedef struct MonosiriFollow {
     s32 seq;
@@ -995,7 +996,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
     CALL(evt_eff_softdelete, STRING("aaax"))
     IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     WAIT_MS(500)
@@ -1136,7 +1137,7 @@ EVT_BEGIN(powerupya_party_rtn)
         IF_INT_NOT_EQUAL(LW(1), LW(8))
             CALL(evt_mario_goodbye_party, 0)
             CALL(evt_mario_hello_party, 0, LW(1))
-            END_IF
+        END_IF
         CALL(evt_msg_print, 0, STRING("powerup_02"), 0, STRING("me"))
         CALL(evt_msg_select, 0, STRING("powerup_03"))
         CALL(evt_msg_continue)
@@ -1232,12 +1233,12 @@ EVT_BEGIN(powerupya_party_rtn)
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, 0, STRING("powerup_13"), 0, STRING("me"))
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("powerup_15"), 0, STRING("me"))
                 CALL(evt_msg_select, 0, STRING("powerup_03"))
                 IF_INT_EQUAL(LW(0), 0)
                     CALL(evt_msg_continue)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print_add, 0, STRING("powerup_13_02"))
                     BREAK_LOOP
                 END_IF
@@ -1302,7 +1303,7 @@ EVT_END()
  * This talk event has the name that retail gives to its door animation.
  */
 EVT_BEGIN(powerupya_direct_talk)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_01_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_01_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, STRING("S_ie_01_doa"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 104, 500)
@@ -1326,7 +1327,7 @@ EVT_BEGIN(powerupya_direct_talk)
     END_LOOP
     CALL(evt_mapobj_get_position, STRING("S_ie_01_doa"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_01_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_01_naka"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 #endif
@@ -1374,7 +1375,7 @@ EVT_BEGIN(powerupya_mario_move)
     IF_INT_LESS_OR_EQUAL(LW(2), -210)
         CALL(evt_mario_mov_pos2, -360, -270, FLOAT(120.0f))
         CALL(evt_mario_mov_pos2, -404, -220, FLOAT(120.0f))
-        ELSE
+    ELSE
         CALL(evt_mario_mov_pos2, -360, -160, FLOAT(120.0f))
         CALL(evt_mario_mov_pos2, -395, -160, FLOAT(120.0f))
     END_IF
@@ -1398,7 +1399,7 @@ EVT_BEGIN(powerupya_party_move)
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS_OR_EQUAL(LW(2), -210)
         CALL(evt_party_move_pos2, 0, -360, -270, FLOAT(120.0f))
-        ELSE
+    ELSE
         CALL(evt_party_move_pos2, 0, -360, -160, FLOAT(120.0f))
     END_IF
     CALL(evt_party_move_pos2, 0, -425, -186, FLOAT(120.0f))
@@ -1656,14 +1657,14 @@ EVT_BEGIN(powerupya_talk)
             SET_VALUE(LW(0), PTR(&door_data_01))
             CALL_CHILD(PTR(evt_door_entry))
             SET_VALUE(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 1)
-            ELSE
+        ELSE
             CALL(evt_pouch_check_item, ITEM_UP_ARROW, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(evt_win_item_select, 0, PTR(powerupya_item_tbl), LW(0), 0)
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     CALL_CHILD(PTR(powerupya_orb_use))
                 END_IF
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("powerup_ev_03"), 0, STRING("me"))
             END_IF
         END_IF
@@ -1681,7 +1682,7 @@ EVT_END()
 EVT_BEGIN(mapball_init)
     IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
@@ -1726,7 +1727,7 @@ EVT_BEGIN(johoyaperfect_talk)
     IF_INT_EQUAL(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("johoyaperfect_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 1)
-        END_IF
+    END_IF
         CALL(johoya_data_alloc, STRING("jperfect_code"))
         CALL(evt_win_coin_on, 0, LW(12))
         CALL(evt_win_other_select, 17)
@@ -1763,7 +1764,7 @@ EVT_BEGIN(johoyaperfect_talk)
             ELSE
                 CALL(evt_win_coin_off, LW(12))
                 CALL(evt_msg_print_add, 0, STRING("johoyaperfect_04"))
-                END_IF
+            END_IF
         END_IF
         CALL(johoya_data_free)
         RETURN
@@ -1781,7 +1782,7 @@ EVT_BEGIN(johoyaperfect_talk)
     IF_INT_EQUAL(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("johoyaperfect_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("johoyaperfect_00_01"), 0, STRING("me"))
     END_IF
     LOOP(0)
@@ -1799,7 +1800,7 @@ EVT_BEGIN(johoyaperfect_talk)
             CALL(evt_msg_print_insert, 0, STRING("johoyaperfect_06"), 0, STRING("me"), LW(3), LW(2))
             CALL(evt_msg_print_add, 0, LW(1))
             CALL(evt_msg_print_add, 0, STRING("johoyaperfect_07"))
-            ELSE
+        ELSE
 #if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
@@ -1829,7 +1830,7 @@ EVT_BEGIN(johoyaperfect_talk)
                 CALL(evt_msg_print_add, 0, LW(1))
                 CALL(johoya_perfect_newjoho_setreadflag)
                 CALL(evt_msg_print_add, 0, STRING("johoyaperfect_07"))
-                ELSE
+            ELSE
                 CALL(evt_win_coin_off, LW(12))
                 CALL(evt_msg_print_add, 0, STRING("johoyaperfect_04"))
                 CALL(johoya_data_free)
@@ -1861,7 +1862,7 @@ static EVT_BEGIN(kurihakase_init)
         CASE_EQUAL(STG0_10_01_FRANKLYS_TUTORIAL)
         IF_INT_EQUAL(GSWF_GOR_02_TUTORIAL_PIPE_TAKEN, 0)
             CALL(evt_npc_set_position, STRING("me"), -220, 0, 305)
-            ELSE
+        ELSE
             CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         END_IF
         CASE_BETWEEN(STG0_10_01_FRANKLYS_TUTORIAL, STG0_14_FRONT_OF_THE_PEDESTAL)
@@ -2043,7 +2044,7 @@ EVT_BEGIN(oyabun_talk)
             // Before the Pianta Parlor story step: a first line, then a repeat line on later visits.
             CALL(evt_msg_print, 0, STRING("gor_02_000"), 0, STRING("me"))
             SET_VALUE(GSWF_GOR_ISHNAIL_FIRST_TALK_DONE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_02_001"), 0, STRING("me"))
         END_IF
         CASE_EQUAL(STG2_41_FRANKLYS_HOUSE_STG_2)
@@ -2073,7 +2074,7 @@ EVT_BEGIN(oyabun_talk)
             WAIT_MS(800)
             CALL(evt_msg_print, 0, STRING("mac_2_015"), 0, STRING("me"))
             SET_VALUE(GSWF_GOR_ISHNAIL_DON_PIANTA_TALK_DONE, 1)
-            ELSE
+        ELSE
             CALL(evt_snd_envoff, PSND_PAUSE)
             CALL(evt_msg_print, 0, STRING("mac_2_016"), 0, STRING("me"))
         END_IF
@@ -2098,7 +2099,7 @@ EVT_BEGIN(oyabun_talk)
                     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
                     CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
                     RETURN
-                    ELSE
+                ELSE
                     CALL(evt_msg_continue)
                     CALL(evt_sub_status_gauge_force_open)
                     WAIT_MS(300)
@@ -2116,14 +2117,14 @@ EVT_BEGIN(oyabun_talk)
                     CALL(evt_msg_print, 0, STRING("mac_2_019"), 0, STRING("me"))
                     GOTO(38)
                 END_IF
-                ELSE
+            ELSE
                 // Mario changes his mind or dithers: the boss throws him out.
                 CALL(evt_msg_print_add, 0, STRING("mac_2_021"))
                 CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
                 CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
                 RETURN
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("mac_2_022"))
             CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
             CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
@@ -2140,7 +2141,7 @@ EVT_BEGIN(oyabun_talk)
             CALL(evt_msg_continue)
             CALL(evt_mario_set_pose, STRING("M_N_2"))
             WAIT_MS(800)
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("mac_2_039"))
         END_IF
         SET_VALUE(GSWF_GOR_ISHNAIL_PASSWORD_TOLD, 1)
@@ -2177,7 +2178,7 @@ EVT_BEGIN(tozokudan1_init)
         CALL(evt_hitobj_onoff, STRING("A_center_kabe_atr"), 1, 0)
         CALL(evt_npc_set_position, STRING("me"), -153, 0, -459)
         CALL(evt_npc_set_ry, STRING("me"), 90)
-        ELSE
+    ELSE
         CALL(evt_npc_set_position, STRING("me"), -82, 0, 134)
     END_IF
     SET_VALUE(GW(10), 0)
@@ -2193,7 +2194,7 @@ EVT_BEGIN(tozokudan1_talk)
         IF_INT_EQUAL(GSWF_GOR_GATEKEEPER_FIRST_TALK_DONE, 0)
             CALL(evt_msg_print, 0, STRING("gor_02_004"), 0, STRING("me"))
             SET_VALUE(GSWF_GOR_GATEKEEPER_FIRST_TALK_DONE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_02_005"), 0, STRING("me"))
         END_IF
         CALL(evt_msg_select, 0, STRING("gor_02_005_select"))
@@ -2236,12 +2237,12 @@ EVT_BEGIN(tozokudan1_talk)
                 CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
                 CALL(evt_npc_set_position, STRING("me"), -153, 0, -459)
                 SET_VALUE(GSWF_GOR_GATEKEEPER_DEFEATED, 1)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("gor_02_008_00"), 0, STRING("me"))
             END_IF
             CALL(evt_mario_key_onoff, 1)
         END_SWITCH
-        ELSE
+    ELSE
         SWITCH(GSW_STORY_PROGRESS)
             CASE_LESS(STG1_17_FATHER_SON_REUNITED)
             CALL(evt_msg_print, 0, STRING("gor_02_010"), 0, STRING("me"))
@@ -2388,7 +2389,7 @@ EVT_BEGIN(mario_yokeru)
                     END_INLINE_EVENT
                     CALL(evt_mario_mov_pos, 415, LW(2), 300)
                     CALL(evt_mario_set_dir, 90, 200, 0)
-                    ELSE
+                ELSE
                     BEGIN_INLINE_EVENT
                         ADD(LW(2), 15)
                         CALL(evt_party_move_pos, 0, 480, LW(2), 300)
@@ -2492,11 +2493,11 @@ EVT_BEGIN(tozokudan2_talk)
                 CALL_CHILD(PTR(evt_unlock_npc))
             END_IF
             RETURN
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_01_00"), 0, STRING("me"))
                 SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("irai_01_01"), 0, STRING("me"))
             END_IF
         END_IF
@@ -2536,7 +2537,7 @@ EVT_BEGIN(tozokudan3_talk)
     IF_INT_EQUAL(GSWF_GOR_TROUBLE_CENTER_BACKWAY_TALK, 0)
         CALL(evt_msg_print, 0, STRING("irai_oku_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_TROUBLE_CENTER_BACKWAY_TALK, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("irai_oku_01"), 0, STRING("me"))
     END_IF
     RETURN
@@ -2577,7 +2578,7 @@ static EVT_BEGIN(sanders_init)
         CASE_LESS(STG4_36_BOBBERYS_DECISION)
         IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
             CALL(evt_npc_set_position, STRING("me"), 0, 0, -50)
-            ELSE
+        ELSE
             CALL(evt_npc_set_position, STRING("me"), 50, 0, -30)
         END_IF
     END_SWITCH
@@ -2604,7 +2605,7 @@ static EVT_BEGIN(sanders_talk)
             CALL(evt_msg_print, 0, STRING("mac_4_050"), 0, STRING("me"))
             CALL_CHILD(PTR(sanders_open_door))
             SET_VALUE(GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD, 1)
-            ELSE
+        ELSE
             // Later visits: Mario and the partner press him about being the Admiral
             // and about a navigator job; he refuses ("no means no").
             CALL(evt_party_stop, 0)
@@ -2839,7 +2840,7 @@ EVT_BEGIN(kuribo4_talk)
                         CALL(evt_msg_print, 0, STRING("irai_13_003"), 0, 0)
                     END_LOOP
                     SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
-                    ELSE
+                ELSE
                     LOOP(0)
                         CALL(iri_13_update_item_tbl, LW(1), LW(0))
                         IF_INT_EQUAL(LW(0), 0)
@@ -2938,7 +2939,7 @@ EVT_BEGIN(roten3_talk)
         CALL(evt_msg_select, 0, STRING("irai_03_00_s"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("irai_03_02"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("irai_03_01"))
             RETURN
         END_IF
@@ -3217,7 +3218,7 @@ EVT_BEGIN(kuragarisan_write_name)
     IF_INT_EQUAL(LW(0), PARTY_MEMBER_YOSHI)
         CALL(evt_pouch_get_yoshiname, LW(1))
         CALL(evt_msg_print_insert, 0, STRING("mac_3_017_yos"), 0, STRING("party"), LW(1))
-        ELSE
+    ELSE
         CALL(evt_msg_print_party, STRING("mac_3_017"))
     END_IF
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
@@ -3270,7 +3271,7 @@ EVT_BEGIN(kuragarisan_talk)
         CASE_EQUAL(STG3_51_FRANKLYS_HOUSE_STG_3)
         IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
             CALL(evt_msg_print, 0, STRING("gor_02_034_03"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(kuragarisan_write_name))
         END_IF
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
@@ -4530,7 +4531,7 @@ EVT_END()
 EVT_BEGIN(evt_wall_06_00)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
-            ELSE
+        ELSE
             WAIT_MS(200)
         END_IF
         CALL(evt_mapobj_get_position, STRING("S_i06mB"), LW(0), LW(1), LW(2))
@@ -4538,7 +4539,7 @@ EVT_BEGIN(evt_wall_06_00)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, -180, 500)
-        ELSE
+    ELSE
         WAIT_MS(200)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, -180, 0, 500)
     END_IF
@@ -4566,7 +4567,7 @@ EVT_BEGIN(evt_wall_06_01)
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(100)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, -180, 500)
-        ELSE
+    ELSE
         WAIT_MS(100)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, -180, 0, 500)
     END_IF
@@ -4589,7 +4590,7 @@ EVT_BEGIN(evt_wall_06_02)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 0)
             WAIT_MS(200)
-            ELSE
+        ELSE
         END_IF
         CALL(evt_mapobj_get_position, STRING("S_i06oB"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(0), LW(1), LW(2), 0)
@@ -4597,7 +4598,7 @@ EVT_BEGIN(evt_wall_06_02)
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(200)
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, -180, 500)
-        ELSE
+    ELSE
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, -180, 0, 500)
     END_IF
     LOOP(0)
@@ -5795,7 +5796,7 @@ EVT_BEGIN(kurihakase_wall_remove)
         SET_VALUE(LW(3), LW(2))
         MULTIPLY(LW(3), 48)
         DIVIDE(LW(3), 64)
-        ELSE
+    ELSE
         SET_VALUE(LW(3), LW(2))
         MULTIPLY(LW(3), 64)
         DIVIDE(LW(3), 48)
@@ -6022,7 +6023,7 @@ EVT_BEGIN(kurihakase_lecture_badge)
     CALL(evt_msg_print_add, 0, STRING("mac_0_121_04"))
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_BITS_SET(LW(0), 4096)
+        IF_BITS_SET(LW(0), PAD_BUTTON_START)
             CALL(evt_msg_continue)
             BREAK_LOOP
         END_IF
@@ -7029,7 +7030,7 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     WAIT_FRAMES(1)
     IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
         CALL(evt_msg_print_party, STRING("mac_3_006"))
-        ELSE
+    ELSE
         CALL(evt_msg_print_party, STRING("mac_3_007"))
         CALL(evt_msg_print, 0, STRING("mac_3_009"), 0, STRING("クリハカセ"))
         // The partner comments; Frankly stares in surprise before answering.
@@ -7564,7 +7565,7 @@ EVT_BEGIN(kurihakase_after3minutes)
         CALL(evt_msg_print_party, STRING("mac_6_012"))
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("mac_6_013"), 0, STRING("クリハカセ"))
-        ELSE
+    ELSE
         WAIT_MS(500)
         CALL(evt_msg_print_party, STRING("mac_6_012_01"))
         WAIT_MS(500)
@@ -7628,7 +7629,7 @@ static EVT_BEGIN(gor_goki1_urouro)
         CALL(evt_sub_get_dir, LW(4), LW(5), LW(0), LW(1), LW(3))
         IF_INT_LESS(LW(3), 180)
             SET_VALUE(LW(6), 270)
-            ELSE
+        ELSE
             SET_VALUE(LW(6), 90)
         END_IF
         CALL(evt_goki_sub_intpl_init, 13, LW(4), LW(0), LW(5), LW(1), 50)
@@ -7664,7 +7665,7 @@ static EVT_BEGIN(gor_goki2_urouro)
         CALL(evt_sub_get_dir, LW(4), LW(5), LW(0), LW(1), LW(3))
         IF_INT_GREATER(LW(3), 180)
             SET_VALUE(LW(6), 0)
-            ELSE
+        ELSE
             SET_VALUE(LW(6), 180)
         END_IF
         CALL(evt_goki_sub_intpl_init, 13, LW(4), LW(0), LW(5), LW(1), 50)
@@ -7928,7 +7929,7 @@ EVT_END()
 EVT_BEGIN(dearu_event)
     IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
         SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 1)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
     END_IF
     RETURN
@@ -7943,7 +7944,7 @@ EVT_BEGIN(front_wall_keshi)
         CALL(camera_front_check, LF(0))
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_gai_kabe_mae"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_gai_kabe_mae"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         WAIT_FRAMES(1)

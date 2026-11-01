@@ -296,7 +296,6 @@ static inline void setChanMatColor(GXColor init, s32 c) {
 #if VERSION >= VERSION_US
 
 /** US: draws the chapter subtitle once, flat, and copies it into a texture that display_func bends */
-// US: draws the chapter subtitle once, flat, and copies it into a texture that display_func bends
 void sys_01_msg_tex_capture_func(CameraId cameraId, void* param) {
     SysWork* wp = param;
     CameraEntry* camera = camGetPtr(cameraId);
@@ -1586,7 +1585,6 @@ USER_FUNC(init) {
 
 #if VERSION >= VERSION_US
 /** US: waits until every title letter has finished spinning in */
-// US: waits until every title letter has finished spinning in
 USER_FUNC(sys_01_start_end_wait) {
     SysWork* wp = g_wp;
     s32 i;

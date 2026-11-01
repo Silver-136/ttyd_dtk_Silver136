@@ -666,7 +666,7 @@ static EVT_BEGIN(init_event2)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_sky))
-            ELSE
+        ELSE
             CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_sky_bunsin))
         END_IF
         CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kFloating)
@@ -746,7 +746,7 @@ static EVT_BEGIN(damage_event)
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, 1)
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LW(0), -2)
         CALL_CHILD(PTR(bunsin_kill_event))
         RETURN
@@ -1014,11 +1014,11 @@ static EVT_BEGIN(attack_event)
                 GOTO(10)
             END_IF
             GOTO(99)
-            ELSE
+        ELSE
             CALL_CHILD(PTR(bunsin_magic_event))
             GOTO(99)
         END_IF
-        ELSE
+    ELSE
         // Clones are out: the real one shoots its attack spell (a confused one is flustered).
         CALL(kamec_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -1030,7 +1030,7 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(9), PTR(&weapon_kamec_attack_magic))
             CALL_CHILD(PTR(attack_magic_event))
             GOTO(99)
-            ELSE
+        ELSE
             // Otherwise it picks a spell at random: the attack spell most often, or else the Huge,
             // defence-up, Electric, Invisible and heal spells,
             // trying again when no ally needs the chosen one.
@@ -1093,7 +1093,7 @@ static EVT_BEGIN(attack_event)
                     GOTO(20)
                 END_IF
                 GOTO(99)
-                ELSE
+            ELSE
                 SET_VALUE(LW(9), PTR(&weapon_kamec_all_recover_magic))
                 CALL_CHILD(PTR(all_recover_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
@@ -1382,10 +1382,10 @@ static EVT_BEGIN(magic_common_event1)
         CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
         IF_INT_NOT_EQUAL(LW(3), LW(13))
             CALL_CHILD(PTR(ground_magic_common_event1))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(ground_magic_common_event2))
         END_IF
-        ELSE
+    ELSE
         CALL_CHILD(PTR(sky_magic_common_event))
     END_IF
     RETURN
@@ -1400,7 +1400,7 @@ static EVT_BEGIN(magic_common_event2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(ground_magic_common_event2))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(sky_magic_common_event))
     END_IF
     RETURN

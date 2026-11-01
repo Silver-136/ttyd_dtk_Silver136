@@ -715,7 +715,7 @@ EVT_BEGIN(mri_08_init_evt)
         SET_VALUE(LW(7), 180)
         SET_VALUE(LW(8), 0)
         SET_VALUE(LW(9), 30)
-        ELSE
+    ELSE
         SET_VALUE(LW(6), 0)
         SET_VALUE(LW(7), 0)
         SET_VALUE(LW(8), 0)
@@ -753,7 +753,7 @@ EVT_BEGIN(mri_08_init_evt)
     SET_VALUE(GW(1), 0)
     IF_INT_EQUAL(GSWF_MRI_08_JABBI_SQUAD_INTRO_SEEN, 0)
         SPAWN_EVENT(PTR(puni_vs_toge))
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_MRI_08_JABBI_SQUAD_DEFEATED, 0)
             SPAWN_EVENT(PTR(puni_vs_toge_init))
         END_IF

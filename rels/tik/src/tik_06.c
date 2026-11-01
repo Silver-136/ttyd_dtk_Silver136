@@ -210,10 +210,10 @@ EVT_BEGIN(iri_12_kino_talk)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                 CALL(evt_msg_print, 0, STRING("irai_12_001_1"), 0, 0)
                 SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("irai_12_001_2"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             SET_VALUE(LW(0), 0)
             CALL_CHILD(PTR(iri_12_kino_makkino_talk))
         END_IF
@@ -243,7 +243,7 @@ static EVT_BEGIN(iri_12_init)
         CALL(evt_npc_set_position, STRING("キーノ"), 60, 0, -70)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
             CALL(evt_npc_set_ry, STRING("キーノ"), 270)
-            ELSE
+        ELSE
             CALL(evt_npc_set_ry, STRING("キーノ"), 90)
         END_IF
         CALL(evt_npc_flag_onoff, 1, STRING("キーノ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)

@@ -381,7 +381,7 @@ EVT_BEGIN(nonride_waterfall)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS_OR_EQUAL(LW(2), -700)
         SET_VALUE(GW(0), -4)
-        ELSE
+    ELSE
         SET_VALUE(GW(0), 4)
     END_IF
     RETURN
@@ -408,7 +408,7 @@ EVT_BEGIN(dou_05_init_evt)
     IF_INT_EQUAL(GSWF_DOU_05_DOOR_UNLOCKED, 1)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF

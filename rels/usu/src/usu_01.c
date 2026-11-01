@@ -468,7 +468,7 @@ EVT_BEGIN(shop_woman_talk)
             WAIT_MS(600)
             CALL(evt_msg_print, 0, STRING("stg4_usu_55"), 0, STRING("me"))
             SET_VALUE(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg4_usu_56"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG4_04_STORAGE_ROOM_UNLOCKED)
@@ -885,11 +885,11 @@ EVT_BEGIN(aunt_talk)
             CALL(evt_snd_env_lpf, 0, 0)
 #endif
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 // Mario hasn't met Podley yet: she repeats the request (irai_20_004).
                 CALL(evt_msg_print, 0, STRING("irai_20_004"), 0, STRING("me"))
-                ELSE
+            ELSE
                 // Mario has met Podley: he and his partner walk up to the aunt and the
                 // three children gather round.
                 CALL(evt_npc_flag_onoff, 1, STRING("おばさん"), NPC_FLAG_NO_HIT)
@@ -916,7 +916,7 @@ EVT_BEGIN(aunt_talk)
                 CALL(evt_msg_select, 0, STRING("irai_20_006"))
                 IF_INT_EQUAL(LW(0), 0)
                     CALL(evt_msg_print_add, 0, STRING("irai_20_007"))
-                    ELSE
+                ELSE
                     CALL(evt_msg_continue)
                     CALL(evt_mario_set_pose, STRING("M_I_2"))
                     WAIT_MS(1200)
@@ -940,7 +940,7 @@ EVT_BEGIN(aunt_talk)
                 CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
                 IF_INT_EQUAL(LW(1), 0)
                     SET_VALUE(LW(1), HELD_ITEM_COUNT_BASE)
-                    ELSE
+                ELSE
                     SET_VALUE(LW(1), MAX_HELD_ITEMS)
                 END_IF
                 IF_INT_LESS(LW(0), LW(1))
@@ -949,7 +949,7 @@ EVT_BEGIN(aunt_talk)
                     CALL(evt_item_get_item, STRING("sd"))
                     CALL(evt_item_get_item_end_wait, STRING("sd"))
                     SET_VALUE(GSWF_USU_01_METEOR_MEAL, 1)
-                    ELSE
+                ELSE
                     // Items full: she leaves the Meteor Meal on the ground for him (irai_20_012_1).
                     CALL(evt_msg_print_add, 0, STRING("irai_20_012_1"))
                     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -1015,10 +1015,10 @@ EVT_BEGIN(aunt_talk)
                         IF_INT_EQUAL(LW(2), 1)
                             CALL(evt_pouch_remove_item, LW(1), LW(2))
                             BREAK_LOOP
-                            ELSE
+                        ELSE
                             CALL(evt_msg_print, 0, STRING("stg4_usu_67"), 0, 0)
                         END_IF
-                        ELSE
+                    ELSE
                         BREAK_LOOP
                     END_IF
                     WAIT_FRAMES(1)
@@ -1030,10 +1030,10 @@ EVT_BEGIN(aunt_talk)
                     CALL(evt_item_get_item, STRING("orei"))
                     CALL(evt_item_get_item_end_wait, STRING("orei"))
                     CALL(evt_msg_print, 0, STRING("stg4_usu_69"), 0, STRING("me"))
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("stg4_usu_70"), 0, STRING("me"))
                 END_IF
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg4_usu_70"), 0, STRING("me"))
             END_IF
             // The temple bell tolls and she turns into a pig in a puff of smoke;
@@ -1065,7 +1065,7 @@ EVT_BEGIN(aunt_talk)
                 CALL(evt_msg_print, 0, STRING("stg4_usu_73"), 0, STRING("子供Ｃ"))
             END_INLINE_EVENT
             SET_VALUE(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
-            ELSE
+        ELSE
             // As a pig she only oinks (stg4_usu_73_01).
             CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
@@ -1097,7 +1097,7 @@ EVT_BEGIN(childA_talk)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
             CALL(evt_msg_print, 0, STRING("stg4_usu_74"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(childABC_talk_01))
         END_IF
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
@@ -1122,7 +1122,7 @@ EVT_BEGIN(childB_talk)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
             CALL(evt_msg_print, 0, STRING("stg4_usu_75"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(childABC_talk_01))
         END_IF
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
@@ -1147,7 +1147,7 @@ EVT_BEGIN(childC_talk)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
             CALL(evt_msg_print, 0, STRING("stg4_usu_76"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(childABC_talk_01))
         END_IF
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
@@ -1746,7 +1746,7 @@ EVT_BEGIN(village_chief_change_pig_event)
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     IF_INT_LESS(LW(0), LW(3))
         CALL(evt_mario_set_dir, 90, 100, 0)
-        ELSE
+    ELSE
         CALL(evt_mario_set_dir, 270, 100, 0)
     END_IF
     ADD(LW(0), LW(3))
@@ -1777,7 +1777,7 @@ EVT_BEGIN(evt_mon_open)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg4_usu_45_02"), 0, STRING("門番"))
         CALL(evt_mario_key_onoff, 1)
-        ELSE
+    ELSE
         CALL(evt_cam_letter_box_disable, 1)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_monato"), MAP_OBJ_FLAG_HIDDEN)
@@ -1894,7 +1894,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
                 CALL_CHILD(cam_down)
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_party_cont_onoff, 0, 1)
-                END_IF
+            END_IF
         END_IF
     END_IF
     // The crows only speak when Vivian is the partner and Mario hides in her shadow.
@@ -2022,7 +2022,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
             CALL(evt_mario_balloon_tenten)
             SET_VALUE(LW(15), 1)
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(LW(15), 1)
             CALL(evt_mario_balloon_off)
             SET_VALUE(LW(15), 0)
@@ -2289,7 +2289,7 @@ EVT_BEGIN(usu01_crowHI_talk_event)
             CALL(evt_mario_balloon_tenten)
             SET_VALUE(LW(15), 1)
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(LW(15), 1)
             CALL(evt_mario_balloon_off)
             SET_VALUE(LW(15), 0)
@@ -2515,7 +2515,7 @@ EVT_BEGIN(usu01_crowJ_talk_event)
             CALL(evt_mario_balloon_tenten)
             SET_VALUE(LW(15), 1)
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(LW(15), 1)
             CALL(evt_mario_balloon_off)
             SET_VALUE(LW(15), 0)
@@ -2779,7 +2779,7 @@ EVT_BEGIN(loop_msg)
                     CALL(evt_msg_close, LW(1))
                 END_IF
                 SET_INT_INDEXED(LW(2), 0)
-                ELSE
+            ELSE
                 SET_INT_INDEXED(LW(2), 1)
             END_IF
             WAIT_FRAMES(1)
@@ -3376,7 +3376,7 @@ EVT_BEGIN(usu01_gusun)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG4_10_DOOPLISS_BATTLE)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 37, 30, -244)
                 CALL(evt_msg_print, 0, STRING("stg4_usu_51"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 37, 30, -244)
                 CALL(evt_msg_print, 0, STRING("stg4_usu_61_1"), 0, 0)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 37, 30, -244)
@@ -3501,7 +3501,7 @@ static EVT_BEGIN(lock_item_check)
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
             CALL(evt_set_dir_to_target, STRING("お店の奥さん"), STRING("mario"))
             CALL(evt_msg_print, 0, STRING("stg4_usu_57"), 0, STRING("お店の奥さん"))
@@ -3678,7 +3678,7 @@ static EVT_BEGIN(evt_majin)
         // The chest is left alone and the first talk is recorded.
         CALL(evt_mobj_exec_cancel, STRING("pera_box"))
         SET_VALUE(GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE, 1)
-        ELSE
+    ELSE
         // Later visits: without the Black Key the voice just begs Mario to find it (majin3_08).
         CALL(evt_pouch_check_item, ITEM_BLACK_KEY_0x23, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -3689,7 +3689,7 @@ static EVT_BEGIN(evt_majin)
             CALL(evt_mobj_exec_cancel, STRING("pera_box"))
             // With the Black Key the voice is overjoyed (majin3_09) and Mario may pick the key from the item
             // menu; declining draws a shocked "No way!" (majin3_10).
-            ELSE
+        ELSE
             CALL(evt_mobj_get_position, STRING("pera_box"), LW(0), LW(1), LW(2))
             ADD(LW(1), 30)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -3705,7 +3705,7 @@ static EVT_BEGIN(evt_majin)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_10"), PTR(majin_callback), 0)
                 CALL(evt_mobj_exec_cancel, STRING("pera_box"))
-                ELSE
+            ELSE
                 // Giving the key uses it up, and the demon cackles that Mario is a fool (majin3_11).
                 CALL(evt_pouch_remove_item, ITEM_BLACK_KEY_0x23, LW(0))
                 CALL(evt_mobj_get_position, STRING("pera_box"), LW(0), LW(1), LW(2))
@@ -3857,7 +3857,7 @@ EVT_BEGIN(tree_onoff)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
                 SET_VALUE(LF(0), 0)
             END_IF
-            ELSE
+        ELSE
             IF_INT_EQUAL(LF(0), 0)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(10), MAP_OBJ_FLAG_HIDDEN)
                 SET_VALUE(LF(0), 1)
@@ -3972,7 +3972,7 @@ EVT_BEGIN(usu_01_init_evt)
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_04_STORAGE_ROOM_UNLOCKED)
         CALL(evt_mobj_lock, STRING("usu_00_lock"), ITEM_SHOP_KEY, FLOAT(-263.5f), FLOAT(10.099609f), FLOAT(-432.0498f), 135, PTR(lock_item_check), PTR(unlock), GSWF_USU_01_STOREROOM_UNLOCKED)
-        ELSE
+    ELSE
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_usu01_ie2_door3"), 0, PTR(evt_ie2_door2_1), 0)
     END_IF
     // Register the doors of the three houses.
@@ -3994,7 +3994,7 @@ EVT_BEGIN(usu_01_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_04_STORAGE_ROOM_UNLOCKED)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG4_10_DOOPLISS_BATTLE)
             CALL(set_fook_evt, PTR(&shopper_data), PTR(shopper_talk1))
-            ELSE
+        ELSE
             IF_INT_LESS(GSW_STORY_PROGRESS, STG4_15_03_THE_RUBY_STAR)
                 CALL(set_fook_evt, PTR(&shopper_data), PTR(shopper_talk2))
             END_IF
@@ -4015,7 +4015,7 @@ EVT_BEGIN(usu_01_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_mon"), 0, PTR(evt_mon_open), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_monato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_mon02"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_mon01"), 0, 50, 0)
         CALL(evt_mapobj_rotate, 1, STRING("S_mon02"), 0, -85, 0)
         CALL(evt_hitobj_onoff, STRING("A_mon"), 1, 0)

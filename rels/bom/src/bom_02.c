@@ -557,7 +557,7 @@ static EVT_BEGIN(talk_soncho)
                 WAIT_MS(800)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_msg_print, 0, STRING("stg7_bom_21"), 0, STRING("me"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg7_bom_21_01"), 0, STRING("me"))
 #if VERSION > VERSION_DEMO_US
                 CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
@@ -573,7 +573,7 @@ static EVT_BEGIN(talk_soncho)
             WAIT_MS(300)
             CALL(evt_msg_print, 0, STRING("stg7_bom_23"), 0, STRING("me"))
             CALL(evt_party_run, 0)
-            ELSE
+        ELSE
             BEGIN_INLINE_EVENT
                 CALL(evt_party_move_pos, 0, 50, 280, 500)
                 CALL(evt_party_set_dir_npc, 0, STRING("me"))
@@ -589,7 +589,7 @@ static EVT_BEGIN(talk_soncho)
                 WAIT_MS(800)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_msg_print, 0, STRING("stg7_bom_21"), 0, STRING("me"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg7_bom_21_01"), 0, STRING("me"))
             END_IF
             CALL(evt_party_stop, 0)
@@ -651,7 +651,7 @@ static EVT_BEGIN(talk_soncho)
             CALL(evt_msg_select, 0, STRING("stg7_bom_34_yn"))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print_add, 0, STRING("stg7_bom_38"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("stg7_bom_37"))
             END_IF
             CASE_EQUAL(1)
@@ -662,7 +662,7 @@ static EVT_BEGIN(talk_soncho)
             IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 0)
                 IF_INT_EQUAL(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 0)
                     CALL(evt_msg_print, 0, STRING("stg7_bom_38_02"), 0, STRING("me"))
-                    ELSE
+                ELSE
                     // Once both are found, White's wandering scene runs.
                     CALL_CHILD(PTR(urotuku_white))
                 END_IF
@@ -908,7 +908,7 @@ static EVT_BEGIN(talk_murabito_h)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_I_CANT_SPEAK), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_26_00"), 0, 0)
         END_IF
         RETURN
@@ -982,7 +982,7 @@ static EVT_BEGIN(init_white)
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(5), 1)
                     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_TALK_TURN)
                     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-                    ELSE
+                ELSE
                     CALL(evt_npc_set_anim, STRING("ホワイト"), STRING("N_1"))
                     CALL(evt_npc_set_width, STRING("ホワイト"), 10)
                     CALL(evt_npc_change_interrupt, STRING("ホワイト"), 6, 0)

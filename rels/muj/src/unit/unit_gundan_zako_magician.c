@@ -558,7 +558,7 @@ static EVT_BEGIN(attack_event)
     CALL(kanbu_get_id, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(10)
-        ELSE
+    ELSE
         GOTO(20)
     END_IF
     // Without Crump: a weighted roll picks fire bottle 20, hunyahunya bottle 10, a dodgy potion for itself 10
@@ -896,7 +896,7 @@ static EVT_BEGIN(fire_bottle_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))

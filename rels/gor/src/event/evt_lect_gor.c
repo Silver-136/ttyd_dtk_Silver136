@@ -664,7 +664,7 @@ EVT_BEGIN(all_party_lecture)
     IF_INT_NOT_EQUAL(LW(9), 1)
         IF_INT_NOT_EQUAL(LW(9), 5)
             CALL(evt_mario_goodbye_party, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_kill_party, 0)
         END_IF
         WAIT_MS(500)
@@ -674,7 +674,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_pouch_party_join, LW(9))
         CALL(evt_mario_set_party_pos, 0, LW(9), LW(0), LW(1), LW(2))
         CALL(set_dir, LW(3))
-        ELSE
+    ELSE
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
     // The party-join fanfare starts and the partner is shown in a bright item-get style effect.
@@ -970,7 +970,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
                 IF_INT_EQUAL(LW(3), 19)
                     ADD(LW(12), 1)
                 END_IF
-                ELSE
+            ELSE
                 IF_INT_EQUAL(LW(12), 1)
                     IF_INT_NOT_EQUAL(LW(3), 19)
                         CALL(x_flag_set, 1, 2)
@@ -993,7 +993,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
                         SPAWN_EVENT_GET_ID(PTR(hammer_lv3_juyoitem_lecture_sub01), LW(11))
                     END_IF
                 END_SWITCH
-                ELSE
+            ELSE
                 IF_INT_LESS_OR_EQUAL(LW(7), 1)
                     SET_VALUE(LW(7), 2)
                     CALL(lecture_button_set_seq, 0, 3)
@@ -1032,7 +1032,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_1"), STRING("T_1"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("lecture_u_hammer_10"))
-            ELSE
+        ELSE
             BREAK_LOOP
         END_IF
     END_LOOP

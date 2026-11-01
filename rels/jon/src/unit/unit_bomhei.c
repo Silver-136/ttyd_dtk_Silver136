@@ -524,7 +524,7 @@ static EVT_BEGIN(damage_event_spark)
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(15), 1)
         CALL_CHILD(PTR(bomb_event))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(btldefaultevt_Damage))
     END_IF
     RETURN

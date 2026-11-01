@@ -311,7 +311,7 @@ EVT_BEGIN(tegami_event)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg1_gon_09_00_01"), 0, STRING("party"))
         // Mario says no: Koops agrees it is wrong to read someone else's letter and they leave it.
-        ELSE
+    ELSE
         CALL(evt_mario_set_pose, STRING("M_N_B"))
         WAIT_MS(1000)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -677,7 +677,7 @@ EVT_BEGIN(leaderkaron_init_event)
         CALL(evt_npc_set_anim, STRING("リーダー"), STRING("KRN_Z_2"))
         CALL(evt_npc_set_ry, STRING("リーダー"), 270)
         CALL(evt_npc_flag_onoff, 1, STRING("リーダー"), NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_VIEW_CORRECTION)
-        ELSE
+    ELSE
         CALL(evt_npc_set_position, STRING("リーダー"), 0, -1000, 0)
     END_IF
     SET_VALUE(GW(0), 0)

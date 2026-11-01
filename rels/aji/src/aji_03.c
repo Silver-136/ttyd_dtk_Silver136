@@ -32,6 +32,7 @@
 #include "icon_ids.h"
 #include "evt/evt_bero.h"
 #include "aji.h"
+#include <dolphin/pad.h>
 
 void icon_disp(CameraId camera, void* param);
 
@@ -200,7 +201,7 @@ static EVT_BEGIN(evt_hari)
         IF_INT_EQUAL(LF(0), 0)
             MULTIPLY(LW(3), -1)
             SET_VALUE(LF(0), 1)
-            ELSE
+        ELSE
             SET_VALUE(LF(0), 0)
         END_IF
         CALL(evt_sub_random, 1500, LW(9))
@@ -469,7 +470,7 @@ EVT_BEGIN(ufo_main)
         IF_INT_EQUAL(LW(0), 1)
             CALL_CHILD(PTR(hand_success))
             SET_VALUE(LF(0), 1)
-            ELSE
+        ELSE
             CALL_CHILD(PTR(hand_success))
             SET_VALUE(LF(0), 0)
         END_IF
@@ -550,7 +551,7 @@ EVT_BEGIN(ufo_main)
             END_INLINE_EVENT
             // The claw opens and is ready for the next try.
             CALL_CHILD(PTR(hand_release))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(hand_release))
         END_IF
         SET_VALUE(GF(12), 0)
@@ -618,7 +619,7 @@ EVT_BEGIN(evt_zenmai)
     LOOP(0)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
             CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 36000, 2000)
-            ELSE
+        ELSE
             CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 36000, 1000)
         END_IF
         LABEL(0)
@@ -705,7 +706,7 @@ EVT_BEGIN(evt_ufo_sousaban)
 #endif
     LOOP(0)
         CALL(evt_key_get_button, 0, LW(0))
-        IF_BITS_SET(LW(0), 256)
+        IF_BITS_SET(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -716,8 +717,8 @@ EVT_BEGIN(evt_ufo_sousaban)
     SET_VALUE(GF(10), 1)
     LOOP(0)
         CALL(evt_key_get_button, 0, LW(0))
-        IF_BITS_SET(LW(0), 256)
-            ELSE
+        IF_BITS_SET(LW(0), PAD_BUTTON_A)
+        ELSE
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -738,7 +739,7 @@ EVT_BEGIN(evt_ufo_sousaban)
 #endif
     LOOP(0)
         CALL(evt_key_get_button, 0, LW(0))
-        IF_BITS_SET(LW(0), 512)
+        IF_BITS_SET(LW(0), PAD_BUTTON_B)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -749,8 +750,8 @@ EVT_BEGIN(evt_ufo_sousaban)
     SET_VALUE(GF(11), 1)
     LOOP(0)
         CALL(evt_key_get_button, 0, LW(0))
-        IF_BITS_SET(LW(0), 512)
-            ELSE
+        IF_BITS_SET(LW(0), PAD_BUTTON_B)
+        ELSE
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -816,10 +817,10 @@ static EVT_BEGIN(evt_sw)
         SPAWN_EVENT(PTR(evt_kaitentou))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_1_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_2_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("meta_3_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("meta_1_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("meta_2_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_3_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_1_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_2_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(8), -1)
         SET_VALUE(LW(9), -1)
         SET_VALUE(LW(10), STRING("S_hari01"))
@@ -889,7 +890,7 @@ EVT_BEGIN(evt_sw0)
         SPAWN_EVENT(PTR(evt_hari))
         CALL_CHILD(PTR(evt_sw))
         CALL(evt_exit_case_evt)
-        ELSE
+    ELSE
         CALL_CHILD(PTR(evt_sw_reinit))
     END_IF
     RETURN
@@ -917,7 +918,7 @@ EVT_BEGIN(evt_sw1)
         SPAWN_EVENT(PTR(evt_hari))
         CALL_CHILD(PTR(evt_sw))
         CALL(evt_exit_case_evt)
-        ELSE
+    ELSE
         CALL_CHILD(PTR(evt_sw_reinit))
     END_IF
     RETURN
@@ -945,7 +946,7 @@ EVT_BEGIN(evt_sw2)
         SPAWN_EVENT(PTR(evt_hari))
         CALL_CHILD(PTR(evt_sw))
         CALL(evt_exit_case_evt)
-        ELSE
+    ELSE
         CALL_CHILD(PTR(evt_sw_reinit))
     END_IF
     RETURN
@@ -1046,7 +1047,7 @@ EVT_BEGIN(aji_03_init_evt)
     IF_INT_EQUAL(GSWF_AJI_03_COG_PLACED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_tanadoor_1"), 0, PTR(evt_haguruma), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_zenmais_ari"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_zenmais_nashi"), MAP_OBJ_FLAG_HIDDEN)
         SPAWN_EVENT(PTR(evt_zenmai))
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
@@ -1075,7 +1076,7 @@ EVT_BEGIN(aji_03_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_2_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_3_2"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_2_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_3_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -1123,11 +1124,11 @@ EVT_BEGIN(aji_03_init_evt)
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_1_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_2_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("meta_3_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("meta_1_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("meta_2_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_3_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_1_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_2_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_1_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_2_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_3_1"), MAP_OBJ_FLAG_HIDDEN)

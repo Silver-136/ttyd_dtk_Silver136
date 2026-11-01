@@ -534,7 +534,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("BSA_S_2"))
         WAIT_FRAMES(1)
         CALL(btlevtcmd_AddPos, UNIT_ID_SELF, 0, 30, 0)
-        ELSE
+    ELSE
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("BSA_S_1"))
         WAIT_FRAMES(1)
     END_IF

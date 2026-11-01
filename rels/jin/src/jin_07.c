@@ -159,7 +159,7 @@ static EVT_BEGIN(check_roll)
     CALL(evt_mario_get_motion, LW(0))
     IF_INT_EQUAL(LW(0), MARIO_MOTION_ROLL)
         SET_VALUE(LW(0), 0)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 1)
     END_IF
     RETURN
@@ -349,7 +349,6 @@ void computePosHermite(ExtdrvPose* pose, Teresa* ter) {
  * then flies along its Hermite curve (t grows 0.015 per frame) and stops at the end;
  * when all 200 have finished the swarm effect is reset.
  */
-// Release each Boo after its delay, count completed paths, and reset the renderer when all 200 finish.
 static void senteresa_ext_main(void) {
     ExtdrvPose* pose = extGetPosePtr();
     s32 n;
@@ -709,7 +708,7 @@ EVT_BEGIN(jin_07_init_evt)
     IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
         SET_VALUE(LW(0), STRING("w_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_on))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), STRING("w_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
@@ -719,7 +718,7 @@ EVT_BEGIN(jin_07_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_02_BOO_BOX)
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 95, 0, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_hako"), 0, PTR(evt_teresa_box_open), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 5, 0, 0)
     END_IF
     CALL(evt_map_replace_mapobj, STRING("honou01"), 0)

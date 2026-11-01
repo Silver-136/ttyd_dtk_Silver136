@@ -250,7 +250,7 @@ EVT_BEGIN(puni_soguu_2)
     ADD(LW(0), 35)
     IF_INT_LESS_OR_EQUAL(LW(2), -110)
         ADD(LW(2), 10)
-        ELSE
+    ELSE
         ADD(LW(2), -10)
     END_IF
     CALL(evt_party_stop, 0)
@@ -297,7 +297,7 @@ EVT_BEGIN(plane_tobashi_check)
     IF_INT_EQUAL(GSWF_TIK_04_PLANE_HINT_SEEN, 0)
         CALL(evt_msg_print, 0, STRING("mac_0_094_01"), 0, STRING("extparty"))
         SET_VALUE(GSWF_TIK_04_PLANE_HINT_SEEN, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("mac_0_094_01_1"), 0, STRING("extparty"))
     END_IF
     CALL(evt_party_run, 1)

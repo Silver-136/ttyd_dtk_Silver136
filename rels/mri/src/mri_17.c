@@ -701,7 +701,7 @@ static EVT_BEGIN(punipuni_ball00)
         SET_VALUE(GF(15), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(15), 0)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_MRI_17_PUNI_ORB_PLACED, 0)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF

@@ -93,7 +93,7 @@ static EVT_BEGIN(kpa_fall)
         END_SWITCH
         CALL(evt_eff, STRING(""), STRING("splash"), 2, LW(0), LW(1), LW(2), LW(3), 0, 0, 0, 0, 0, 0, 0)
         CALL_CHILD(PTR(kpa_fall_sub))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(kpa_dead))
     END_IF
     RETURN
