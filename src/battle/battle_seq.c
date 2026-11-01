@@ -197,22 +197,22 @@ EVT_END()
 void BattleSequenceManager(void) {
     BattleWork* wp = _battleWorkPointer;
     switch (BattleGetSeq(wp, SEQ_UNKNOWN)) {
-        case 0:
+        case BATTLE_STAGE_INIT:
             btlseqInit(wp);
             BattleCheckAllPinchStatus(wp, TRUE);
             break;
-        case 1:
+        case BATTLE_STAGE_FIRST_ACT:
             BattleCheckAllPinchStatus(wp, FALSE);
             btlseqFirstAct(wp);
             break;
-        case 2:
+        case BATTLE_STAGE_TURN:
             BattleCheckAllPinchStatus(wp, FALSE);
             btlseqTurn(wp);
             break;
-        case 3:
+        case BATTLE_STAGE_END:
             btlseqEnd(wp);
             break;
-        case 4:
+        case BATTLE_STAGE_DONE:
             break;
     }
 }
@@ -310,10 +310,10 @@ void btlseqInit(BattleWork* wp) {
     PartyEntry* party;
 
     switch (BattleGetSeq(wp, SEQ_INIT)) {
-        case 0x1000000: // falls through
-            BattleSetSeq(wp, SEQ_INIT, 0x1000001);
+        case SEQ_INIT_START: // falls through
+            BattleSetSeq(wp, SEQ_INIT, SEQ_INIT_UNIT_SETUP);
 
-        case 0x1000001:
+        case SEQ_INIT_UNIT_SETUP:
             mario = marioGetPtr();
             mario->dispFlags |= MARIO_DISP_FLAG_HIDE;
             party = partyGetPtr(marioGetPartyId());
@@ -321,32 +321,32 @@ void btlseqInit(BattleWork* wp) {
                 party->flags2 |= PARTY_DISP_FLAG_HIDE;
             }
             Btl_UnitSetup(wp);
-            BattleSetSeq(wp, SEQ_INIT, 0x1000002);
+            BattleSetSeq(wp, SEQ_INIT, SEQ_INIT_UNIT_INIT_WAIT);
             break;
 
-        case 0x1000002:
+        case SEQ_INIT_UNIT_INIT_WAIT:
             if (BattleCheckEndUnitInitEvent(wp)) {
-                BattleSetSeq(wp, SEQ_INIT, 0x1000003);
+                BattleSetSeq(wp, SEQ_INIT, SEQ_INIT_LOAD_ANIMS);
             }
             break;
 
-        case 0x1000003:
+        case SEQ_INIT_LOAD_ANIMS:
             if (animEffectAsync("p_b_st", 1) &&
                 animEffectAsync("p_jyabara", 1) &&
                 animEffectAsync("p_kaiten_h", 1) &&
                 effNiceAsync(1)) {
-                BattleSetSeq(wp, SEQ_INIT, 0x1000004);
+                BattleSetSeq(wp, SEQ_INIT, SEQ_INIT_PAUSE);
             }
             break;
 
-        case 0x1000004:
-            BattleSetSeq(wp, SEQ_INIT, 0x1000005);
+        case SEQ_INIT_PAUSE:
+            BattleSetSeq(wp, SEQ_INIT, SEQ_INIT_FINISH);
             break;
 
-        case 0x1000005:
+        case SEQ_INIT_FINISH:
             BattleStatusWindowEventOn();
             BattleStatusWindowSystemOn();
-            BattleSetSeq(wp, SEQ_UNKNOWN, 1);
+            BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_FIRST_ACT);
             BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000000);
             break;
     }
@@ -521,8 +521,8 @@ void btlseqFirstAct(BattleWork* wp) {
         case 0x2000003:
             if (BattleCheckConcluded(wp)) {
                 BattleAudience_PerAct();
-                BattleSetSeq(wp, SEQ_UNKNOWN, 3);
-                BattleSetSeq(wp, SEQ_END, 0x7000000);
+                BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_END);
+                BattleSetSeq(wp, SEQ_END, SEQ_END_START);
                 break;
             }
             BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000004);
@@ -649,7 +649,7 @@ void btlseqFirstAct(BattleWork* wp) {
 
         case 0x200000E:
             wp->flags &= ~BATTLE_FLAG_FIRST_ATTACK;
-            BattleSetSeq(wp, SEQ_UNKNOWN, 2);
+            BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_TURN);
             BattleSetSeq(wp, SEQ_TURN, 0x3000000);
             break;
     }
@@ -862,8 +862,8 @@ void btlseqTurn(BattleWork* wp) {
             BattleIncSeq(wp, SEQ_TURN);
 #else
             if (BattleCheckConcluded(wp)) {
-                BattleSetSeq(wp, SEQ_UNKNOWN, 3);
-                BattleSetSeq(wp, SEQ_END, 0x7000000);
+                BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_END);
+                BattleSetSeq(wp, SEQ_END, SEQ_END_START);
             } else {
                 BattleIncSeq(wp, SEQ_TURN);
             }
@@ -1614,8 +1614,8 @@ void btlseqTurn(BattleWork* wp) {
                     BattleIncSeq(wp, SEQ_TURN);
 #else
                     if (BattleCheckConcluded(wp)) {
-                        BattleSetSeq(wp, SEQ_UNKNOWN, 3);
-                        BattleSetSeq(wp, SEQ_END, 0x7000000);
+                        BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_END);
+                        BattleSetSeq(wp, SEQ_END, SEQ_END_START);
                     } else {
                         BattleIncSeq(wp, SEQ_TURN);
                     }
@@ -2016,8 +2016,8 @@ void btlseqMove(BattleWork* wp) {
                     break;
                 }
                 if (BattleCheckConcluded(wp)) {
-                    BattleSetSeq(wp, SEQ_UNKNOWN, 3);
-                    BattleSetSeq(wp, SEQ_END, 0x7000000);
+                    BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_END);
+                    BattleSetSeq(wp, SEQ_END, SEQ_END_START);
                 } else {
                     BattleSetSeq(wp, SEQ_MOVE, 0x5000006);
                     loop = TRUE;
@@ -2105,8 +2105,8 @@ void btlseqMove(BattleWork* wp) {
                 break;
             case 0x500000A:
                 if (BattleCheckConcluded(wp)) {
-                    BattleSetSeq(wp, SEQ_UNKNOWN, 3);
-                    BattleSetSeq(wp, SEQ_END, 0x7000000);
+                    BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_END);
+                    BattleSetSeq(wp, SEQ_END, SEQ_END_START);
                     break;
                 }
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {

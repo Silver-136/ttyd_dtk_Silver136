@@ -134,7 +134,7 @@ void mot_stay(void) {
         if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
             if (pouchGetHP() == 0) {
                 marioChgPose("M_I_S");
-                psndSFXOn_3D((char*)0x173, &mario->position);
+                psndSFXOn_3D((char*)PSND_SFX_MARIO_FURAFURA1, &mario->position);
             } else if (lowHP() && marioChkKey()) {
                 mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
                 marioChgPose("M_S_3");

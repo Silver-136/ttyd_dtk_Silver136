@@ -1220,7 +1220,7 @@ void mot_slit(void) {
             }
         }
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((char*)0x178, &m->position);
+        psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_SLIT2, &m->position);
     case 0x65:
         m->mot.slit.resumeState = m->slitState;
 #else
@@ -1329,7 +1329,7 @@ void mot_slit(void) {
             m->directionView = toMovedirSimple(m->displayDirection);
         }
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((char*)0x178, &m->position);
+        psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_SLIT2, &m->position);
     case 0x6f:
         m->mot.slit.resumeState = m->slitState;
 #else
@@ -1385,7 +1385,7 @@ void mot_slit(void) {
             m->directionView = toMovedirSimple(m->displayDirection);
         }
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((char*)0x178, &m->position);
+        psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_SLIT2, &m->position);
     case 0x79:
         m->mot.slit.resumeState = m->slitState;
 #else

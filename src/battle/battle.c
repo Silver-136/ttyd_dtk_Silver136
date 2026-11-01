@@ -84,8 +84,8 @@ void BattleInit(FieldBattleInfo* info) {
     BattleAfterReactionQueueInit();
     BattleStatusChangeMsgWorkInit();
     btlDispInit();
-    BattleSetSeq(wp, SEQ_UNKNOWN, 0);
-    BattleSetSeq(wp, SEQ_INIT, 0x1000000);
+    BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_INIT);
+    BattleSetSeq(wp, SEQ_INIT, SEQ_INIT_START);
     wp->seqEndWork = NULL;
     wp->commandMenu.flags = 0;
     wp->commandMenu.cursor[0].absPos = 0;
@@ -139,14 +139,14 @@ BOOL BattleMain(void) {
     BattleBreakSlot_Main();
     btlDispMain();
 
-    if (BattleGetSeq(wp, SEQ_UNKNOWN) == 4) {
+    if (BattleGetSeq(wp, SEQ_UNKNOWN) == BATTLE_STAGE_DONE) {
         return FALSE;
     }
 
-    if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT) && BattleGetSeq(wp, SEQ_UNKNOWN) == 2) {
+    if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT) && BattleGetSeq(wp, SEQ_UNKNOWN) == BATTLE_STAGE_TURN) {
         wp->flags |= (BATTLE_FLAG_INTERRUPT_STOP | BATTLE_FLAG_DEMO_TIMEOUT);
-        BattleSetSeq(wp, SEQ_UNKNOWN, 3);
-        BattleSetSeq(wp, SEQ_END, 0x7000000);
+        BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_END);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_START);
         return TRUE;
     }
 

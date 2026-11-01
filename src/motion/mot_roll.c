@@ -737,7 +737,7 @@ void mot_roll(void) {
         marioChgPaper("PM_R_1C");
         marioPaperLightOff();
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((char*)0x17a, &mario->position);
+        psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_ROLL2, &mario->position);
 #else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL2), &mario->position);
 #endif
@@ -924,7 +924,7 @@ void mot_roll(void) {
                 m->flags |= MARIO_FLAG_IS_JUMPING;
                 m->airTimer = 1;
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn_3D((char*)0x17c, &marioGetPtr()->position);
+                psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_JUMP1, &marioGetPtr()->position);
 #else
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_JUMP1), &marioGetPtr()->position);
                 mario->hitobjJumpFrom = mario->hitobjStandOn;
@@ -1230,7 +1230,7 @@ void mot_roll(void) {
         MarioWork* m = marioGetPtr();
 #if VERSION <= VERSION_DEMO_US
         if ((u32)m->mot.roll.sfxId == (u32)-1) {
-            m->mot.roll.sfxId = (s32)psndSFXOn_3D((char*)0x17b, &m->position);
+            m->mot.roll.sfxId = (s32)psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_MOVE1, &m->position);
 #else
 #if VERSION >= VERSION_US
         if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId == (u32)-1) {
