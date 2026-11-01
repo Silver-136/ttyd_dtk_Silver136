@@ -1357,7 +1357,7 @@ static USER_FUNC(display) {
 SysChar* chr;
     s32 type = evtGetValue(event, event->args[0]);
     s32 i;
-if (isFirstCall) {
+    if (isFirstCall) {
         wp = _mapAlloc(sizeof(SysWork));
         event->userdatap[0] = wp;
         memset(wp, 0, sizeof(SysWork));
@@ -1368,9 +1368,9 @@ if (isFirstCall) {
             wp->count++;
         }
         for (i = 0; i < wp->count; i++) {
-wp->chars[i].x = 36.0f * i - (f32)((wp->count - 1) * 36) / 2;
+            wp->chars[i].x = 36.0f * i - (f32)((wp->count - 1) * 36) / 2;
             wp->chars[i].y = 40.0f;
-wp->chars[i].z = 0.0f;
+            wp->chars[i].z = 0.0f;
             wp->chars[i].rot = 90.0f;
             wp->chars[i].timer = i * 20 + 1;
             wp->chars[i].state = 0;
@@ -1381,7 +1381,7 @@ wp->chars[i].z = 0.0f;
     g_wp = wp;
     switch (wp->state) {
         case 0:
-if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]) != 0U) {
+        if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]) != 0U) {
                 wp->file = fileAllocf(FILE_TYPE_TPL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]);
 wp->state++;
             }
@@ -1412,7 +1412,7 @@ wp->state++;
                                 wp->angle -= 360.0f;
                             }
                             wp->alpha += 0x30;
-if (wp->alpha > 10000) {
+                            if (wp->alpha > 10000) {
                                 wp->alpha = 10000;
                             }
 }
@@ -1424,7 +1424,7 @@ if (wp->alpha > 10000) {
             break;
     }
     if (wp->state != 0) {
-dispEntry(CAMERA_3D_EFFECTA, 0.0f, 2, display_func, wp);
+        dispEntry(CAMERA_3D_EFFECTA, 0.0f, 2, display_func, wp);
     }
     return EVT_RETURN_BLOCK;
 }

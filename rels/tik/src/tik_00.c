@@ -1255,7 +1255,7 @@ EVT_BEGIN(uranaisi_table_talk)
         // cancelling ends the talk.
 #if VERSION <= VERSION_DEMO_US
         SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 1)
-CALL(evt_unitwin_alloc)
+        CALL(evt_unitwin_alloc)
     CALL(unitwincoin_disp_onoff, 1)
 #else
         SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 1)
@@ -1389,7 +1389,7 @@ EVT_BEGIN(starmaniac_talk)
         CALL(evt_msg_print, 0, STRING("starmaniac_02"), 0, STRING("me"))
         RETURN
     END_IF
-IF_INT_EQUAL(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 0)
+    IF_INT_EQUAL(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("starmaniac_00"), 0, STRING("me"))
         SET_VALUE(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 1)
     ELSE
@@ -1399,13 +1399,13 @@ IF_INT_EQUAL(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 0)
     CALL(evt_msg_select, 0, STRING("starmaniac_03"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_05"))
-RETURN
+        RETURN
     END_IF
     // Mario has no Star Pieces: Dazzle accuses him of trying to swindle him and ends the talk.
     CALL(evt_pouch_get_starpiece, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_06"))
-RETURN
+        RETURN
     END_IF
     // Mario picks which badge to trade for from the list; backing out earns a "LAME!" and ends the talk.
     CALL(evt_msg_print_add, 0, STRING("starmaniac_07"))
@@ -1415,10 +1415,10 @@ RETURN
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print, 0, STRING("starmaniac_08"), 0, STRING("me"))
-RETURN
+        RETURN
     END_IF
-CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(2), LW(3), LW(4))
-CALL(evt_msg_select, 0, STRING("starmaniac_10"))
+    CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(2), LW(3), LW(4))
+    CALL(evt_msg_select, 0, STRING("starmaniac_10"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print_add, 0, STRING("starmaniac_11"))
@@ -1430,7 +1430,7 @@ CALL(evt_msg_select, 0, STRING("starmaniac_10"))
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print_add, 0, STRING("starmaniac_15"))
-RETURN
+        RETURN
     END_IF
     CALL(evt_badgeShop_starmaniac_dec, LW(1))
     MULTIPLY(LW(3), -1)
@@ -1442,23 +1442,23 @@ RETURN
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
-RETURN
+        RETURN
     END_IF
     CALL(evt_pouch_get_starpiece, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
-RETURN
+        RETURN
     END_IF
     // Otherwise he offers another trade: accepting loops back to the badge list, declining ends the talk.
     CALL(evt_msg_print_add, 0, STRING("starmaniac_13"))
     CALL(evt_msg_select, 0, STRING("starmaniac_10"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_14"))
-RETURN
+        RETURN
     END_IF
     CALL(evt_msg_continue)
     GOTO(0)
-RETURN
+    RETURN
 EVT_END()
 #else
 EVT_BEGIN(starmaniac_talk)
@@ -2621,7 +2621,7 @@ EVT_BEGIN(evt_open_04_open)
         END_IF
 #if VERSION <= VERSION_DEMO_US
     END_IF
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     END_SWITCH

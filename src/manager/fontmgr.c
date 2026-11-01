@@ -128,7 +128,7 @@ void fontmgrInit(void) {
  * JP and the JP demo the Japanese one). Called from the logo sequence; does nothing once a font is loaded.
  */
 void fontmgrTexSetup(void) {
-JUTFontSetup(0);
+    JUTFontSetup(0);
 }
 #elif VERSION == VERSION_DEMO_US
 /**
@@ -136,7 +136,7 @@ JUTFontSetup(0);
  * JP and the JP demo the Japanese one). Called from the logo sequence; does nothing once a font is loaded.
  */
 void fontmgrTexSetup(void) {
-JUTFontSetup(1);
+    JUTFontSetup(1);
 }
 #else
 /**

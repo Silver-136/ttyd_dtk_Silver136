@@ -901,8 +901,8 @@ EVT_BEGIN(talk_kino5)
             CASE_GREATER(0)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 4)
-CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10), LW(10))
-ELSE
+                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10), LW(10))
+                ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05"), 0, 0, LW(10))
             END_IF
             CASE_DEFAULT
@@ -947,11 +947,11 @@ ELSE
                     ELSE
                         CALL(evt_msg_print, 0, STRING("stg3_npc_re_031"), 0, 0)
                     END_IF
-WAIT_MS(300)
+                    WAIT_MS(300)
                     CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
                     WAIT_MS(600)
                     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
-ELSE
+                    ELSE
                     CALL(evt_mario_get_party, LW(0))
                     IF_INT_EQUAL(LW(0), 4)
                         CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_1_yos"), 0, 0)
@@ -1175,8 +1175,8 @@ EVT_END()
 EVT_BEGIN(init_chu)
 #if VERSION <= VERSION_DEMO_US
     SWITCH(GSW_STORY_PROGRESS)
-CASE_LESS(STG3_20_08_MS_MOWZ)
-CALL(evt_npc_set_position, STRING("me"), 245, 0, 125)
+        CASE_LESS(STG3_20_08_MS_MOWZ)
+            CALL(evt_npc_set_position, STRING("me"), 245, 0, 125)
 #else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_20_05_MAJORS_4TH_PL)
@@ -2355,7 +2355,7 @@ EVT_BEGIN(evt_momikucha)
     CALL(evt_npc_set_position, STRING("fan"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("fan2"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("fan3"), 0, -1000, 0)
-CALL(evt_ext_entry, 250, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
+    CALL(evt_ext_entry, 250, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
 #else
     CALL(evt_npc_entry, STRING(("fan")), STRING(("c_kinopio")))
     CALL(evt_npc_entry, STRING(("fan2")), STRING(("c_kinopiko")))

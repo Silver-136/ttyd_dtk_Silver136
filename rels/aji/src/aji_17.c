@@ -3277,10 +3277,10 @@ EVT_BEGIN(aji_17_init_evt)
             IF_INT_EQUAL(LW(15), 0)
                 CALL(evt_mario_set_party, 0, 1)
                 CALL(evt_party_run, 0)
-CALL(evt_pouch_mario_recovery)
+                CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
             END_IF
-SET_VALUE(GSWF_AJI_17_LAST_SCENE_SEEN, 1)
+            SET_VALUE(GSWF_AJI_17_LAST_SCENE_SEEN, 1)
             SPAWN_EVENT(evt_last)
         ELSE
             SPAWN_EVENT(evt_last2)
@@ -3322,7 +3322,7 @@ SET_VALUE(GSWF_AJI_17_LAST_SCENE_SEEN, 1)
         CALL(evt_map_pauseanim, 0, STRING("moza"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)
     END_IF
-RETURN
+    RETURN
 EVT_END()
 #else
 EVT_BEGIN(aji_17_init_evt)

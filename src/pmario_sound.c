@@ -10417,7 +10417,7 @@ BOOL psndBGMOn(u32 flags, char* bgm_name) {
 #if VERSION <= VERSION_DEMO_US
 /** Starts BGM bgm_name with flags and fade-in time (psndBGMOn_f_d; US and PAL fade the previous BGM out in 750 ms). */
 BOOL psndBGMOn_f(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
-return psndBGMOn_f_d(flags, bgm_name, fadetime, unused);
+    return psndBGMOn_f_d(flags, bgm_name, fadetime, unused);
 #else
 /** Starts BGM bgm_name with flags and fade-in time (psndBGMOn_f_d; US and PAL fade the previous BGM out in 750 ms). */
 BOOL psndBGMOn_f(u32 flags, const char* bgm_name, u32 fadetime, s32 unused) {
@@ -12412,7 +12412,7 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
         }
 
     } else if (flags & PSND_PAUSE) {
-fade->state = PSND_FADE_STATE_PAUSED;
+        fade->state = PSND_FADE_STATE_PAUSED;
         fade->time = fadetime / PSND_FRAME_MS;
         fade->timeMax = fade->time;
 } else if (flags & PSND_SILENT) {

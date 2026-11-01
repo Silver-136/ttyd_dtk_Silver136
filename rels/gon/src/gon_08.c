@@ -224,7 +224,7 @@ EVT_END()
  * it reverses and the switch is cancelled.
  */
 static EVT_BEGIN(main_0)
-CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
+    CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
         // The block rises if it is down and falls if it is up (remembered in a room flag).
         SET_VALUE(LW(10), 0)
@@ -262,7 +262,7 @@ BEGIN_SIBLING_EVENT
             CALL(evt_sub_rumble_onoff, 1, 0)
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
-WAIT_FRAMES(10)
+            WAIT_FRAMES(10)
             CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
             LABEL(0)
             CALL(evt_sub_intpl_get_value)
@@ -271,8 +271,8 @@ WAIT_FRAMES(10)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-END_SIBLING_EVENT
-WAIT_MS(500)
+            END_SIBLING_EVENT
+            WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("blk_0"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("blk_0"), LW(11))
         SET_VALUE(LF(0), 0)
@@ -396,7 +396,7 @@ BEGIN_SIBLING_EVENT
                 CALL(evt_sub_rumble_onoff, 1, 0)
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
-CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
+                CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 LABEL(2)
                 CALL(evt_sub_intpl_get_value)
                 DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -404,8 +404,8 @@ CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-END_SIBLING_EVENT
-WAIT_MS(1000)
+                END_SIBLING_EVENT
+                WAIT_MS(1000)
         END_IF
         // Remember the block's new position for the next press.
         IF_INT_EQUAL(LSWF(3), 0)
@@ -723,23 +723,23 @@ EVT_END()
 EVT_BEGIN(nokkosu_talk)
     // Nokkos is made intangible so he can move freely.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
-CALL(evt_mario_get_party, LW(0))
+    CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
+    CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 2)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, 2)
     END_IF
-CALL(evt_msg_print, 0, STRING("irai_07_01"), 0, STRING("party"))
-CALL(evt_msg_print, 0, STRING("irai_07_02"), 0, STRING("me"))
+    CALL(evt_msg_print, 0, STRING("irai_07_01"), 0, STRING("party"))
+    CALL(evt_msg_print, 0, STRING("irai_07_02"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("irai_07_03"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("irai_07_04"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("irai_07_05"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("irai_07_06"), 0, STRING("me"))
-CALL(evt_item_entry, STRING("irai_item"), ITEM_SPECIAL_CARD, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
+    CALL(evt_item_entry, STRING("irai_item"), ITEM_SPECIAL_CARD, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("irai_item"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_get_item, STRING("irai_item"))
     CALL(evt_msg_print, 0, STRING("irai_07_07"), 0, STRING("me"))
-CALL(evt_npc_jump_position_nohit, STRING("me"), -66, 100, -112, 800, 220)
+    CALL(evt_npc_jump_position_nohit, STRING("me"), -66, 100, -112, 800, 220)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     // The time is recorded and the request is marked solved.
     CALL(evt_sub_save_playtime, GSW_GON_TRY_TO_FIND_ME_DONE_TIME_UNUSED)

@@ -242,7 +242,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
-CASE_DEFAULT
+        CASE_DEFAULT
         CALL_CHILD(setup_normal)
         CALL(evt_npc_check, STRING("敵"), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 1)
@@ -251,7 +251,7 @@ CASE_DEFAULT
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
-END_SWITCH
+        END_SWITCH
     // Trouble Center job 12 is set up on every floor map.
     CALL_CHILD(iri_12_init)
     CALL(evt_sub_get_mapname, LW(0))
@@ -260,7 +260,7 @@ END_SWITCH
     IF_STR_EQUAL(LW(0), STRING("jon_04"))
         IF_INT_EQUAL(GSW_PIT_FLOOR, 49)
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 0)
-SET_VALUE(LF(0), 0)
+                SET_VALUE(LF(0), 0)
                     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
                             SET_VALUE(LF(0), 1)
@@ -269,16 +269,16 @@ SET_VALUE(LF(0), 0)
                     IF_INT_EQUAL(LF(0), 0)
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
-IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
+                        IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
-CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
+                            CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
                             CALL(evt_set_case_wrk, LW(1), 15, LW(0))
-END_IF
+                            END_IF
                     END_IF
-ELSE
+                    ELSE
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-END_IF
+                        END_IF
             ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
@@ -1937,10 +1937,10 @@ EVT_BEGIN(talk_gyousyou)
     // The trader names the item and its price and asks Mario to confirm (the English text swaps the order of
     // name and price for some languages).
     IF_INT_GREATER_OR_EQUAL(LW(1), 240)
-CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
-ELSE
-CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
-END_IF
+        CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
+        ELSE
+            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
+            END_IF
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_win_coin_off, LW(12))
@@ -1964,15 +1964,15 @@ END_IF
     CALL(evt_win_coin_wait, LW(12))
     WAIT_MS(200)
     CALL(evt_win_coin_off, LW(12))
-CALL(evt_msg_continue)
-CALL(evt_pouch_get_coin, LW(0))
+    CALL(evt_msg_continue)
+    CALL(evt_pouch_get_coin, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
-RETURN
+        CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
+        RETURN
     END_IF
-CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
+    CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("100kai_item_07"), 0, STRING("me"))
-CALL(evt_msg_select, 0, STRING("100kai_item_00"))
+    CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("100kai_item_08"))
         RETURN
@@ -2203,10 +2203,10 @@ EVT_END()
  * Spawned from enemy_setup.
  */
 EVT_BEGIN(dokan_open)
-WAIT_MS(1000)
+    WAIT_MS(1000)
     CALL(evt_mario_key_onoff, 0)
-CALL(evt_cam_letter_box_wait)
-WAIT_MS(500)
+    CALL(evt_cam_letter_box_wait)
+    WAIT_MS(500)
     SET_VALUE(LW(2), STRING("a_dokan_1"))
     SET_VALUE(LW(3), STRING("dokan_1_s"))
     CALL(evt_mapobj_get_position, LW(3), LW(7), LW(8), LW(9))

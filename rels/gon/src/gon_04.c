@@ -299,7 +299,7 @@ EVT_END()
  * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
  */
 EVT_BEGIN(evt_gon_04flowblock_updown1)
-CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
+    CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
         // Decide the direction from the saved state (only the ELSE arm below can run): with LSWF(6) clear the
         // block is high and sinks 225 units, with it set the block is low and rises.
@@ -337,7 +337,7 @@ BEGIN_SIBLING_EVENT
             CALL(evt_sub_rumble_onoff, 1, 0)
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
-WAIT_FRAMES(10)
+            WAIT_FRAMES(10)
             CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
             LABEL(0)
             CALL(evt_sub_intpl_get_value)
@@ -346,8 +346,8 @@ WAIT_FRAMES(10)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-END_SIBLING_EVENT
-WAIT_MS(500)
+            END_SIBLING_EVENT
+            WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("mobj_fltbl01"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("mobj_fltbl01"), LW(11))
         SET_VALUE(LF(0), 0)
@@ -469,7 +469,7 @@ BEGIN_SIBLING_EVENT
                 CALL(evt_sub_rumble_onoff, 1, 0)
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
-CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
+                CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 LABEL(2)
                 CALL(evt_sub_intpl_get_value)
                 DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -477,8 +477,8 @@ CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-END_SIBLING_EVENT
-WAIT_MS(1000)
+                END_SIBLING_EVENT
+                WAIT_MS(1000)
         END_IF
         // The block's saved up/down state is flipped.
         IF_INT_EQUAL(LSWF(6), 0)
@@ -774,7 +774,7 @@ EVT_END()
  * and camera shake, and flips the state flag LSWF(7).
  */
 EVT_BEGIN(evt_gon_04flowblock_updown2)
-CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
+    CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(GSWF_GON_04_LV1_BIG_BLOCK_BROKEN, 0)
         // The block only moves once big block A in this room has been broken.
         // Decide the direction from the saved state: a low block will rise 200 units, a raised one will sink
@@ -813,7 +813,7 @@ BEGIN_SIBLING_EVENT
             CALL(evt_sub_rumble_onoff, 1, 0)
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
-WAIT_FRAMES(10)
+            WAIT_FRAMES(10)
             CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
             LABEL(0)
             CALL(evt_sub_intpl_get_value)
@@ -822,8 +822,8 @@ WAIT_FRAMES(10)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-END_SIBLING_EVENT
-WAIT_MS(500)
+            END_SIBLING_EVENT
+            WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("mobj_fltbl02"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("mobj_fltbl02"), LW(11))
         SET_VALUE(LF(0), 0)
@@ -945,7 +945,7 @@ BEGIN_SIBLING_EVENT
                 CALL(evt_sub_rumble_onoff, 1, 0)
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
-CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
+                CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 LABEL(2)
                 CALL(evt_sub_intpl_get_value)
                 DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -953,8 +953,8 @@ CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-END_SIBLING_EVENT
-WAIT_MS(1000)
+                END_SIBLING_EVENT
+                WAIT_MS(1000)
         END_IF
         // The block's saved up/down state is flipped.
         IF_INT_EQUAL(LSWF(7), 0)

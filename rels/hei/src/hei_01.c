@@ -1055,7 +1055,7 @@ EVT_BEGIN(hei_01_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI2"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
-RETURN
+    RETURN
 EVT_END()
 #else
 EVT_BEGIN(hei_01_init_evt)

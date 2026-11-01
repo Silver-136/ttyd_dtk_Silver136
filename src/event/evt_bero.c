@@ -1449,8 +1449,8 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(bero_case_exec_door)
-CALL_CHILD(bero_case_init_check)
-IF_INT_EQUAL(LW(0), 1)
+    CALL_CHILD(bero_case_init_check)
+    IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
@@ -1463,7 +1463,7 @@ IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_set_force_dir, LW(0))
         CALL(evt_mario_wait_landon)
         CALL(evt_bero_mario_go_wait)
-CALL(bero_get_position_normal, 0, FLOAT(150.0f))
+        CALL(bero_get_position_normal, 0, FLOAT(150.0f))
 PEEK_FLOAT(LW(10), PTR(&BeroEX))
         PEEK_FLOAT(LW(12), PTR(&BeroEZ))
         CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(150.0f))

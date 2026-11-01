@@ -3865,16 +3865,16 @@ Vec pos;
 
     switch (p->modeStep) {
         case 0:
-psndSFXOn_3D(sfx, &p->pos);
-if (p->effect != NULL) {
+        psndSFXOn_3D(sfx, &p->pos);
+        if (p->effect != NULL) {
                 effDelete(p->effect);
                 p->effect = NULL;
             }
             pos = p->pos;
             pos.y += 15.0f;
             pos.z += 3.0f;
-p->effect = effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
-p->timer = 20;
+            p->effect = effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
+            p->timer = 20;
             p->anim = 9;
             p->animTime = 0;
             p->flags |= PUNI_FLAG_OWN_ANIM_TIME;

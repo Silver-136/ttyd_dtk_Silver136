@@ -624,12 +624,12 @@ void marioFBattlePost(void) {
     MarioWork* wp = mp;
 
     wp->flags &= ~MARIO_FLAG_PRE_BATTLE_PHYSICS;
-if (wp->currMotionId == MARIO_MOTION_YOSHI) {
+    if (wp->currMotionId == MARIO_MOTION_YOSHI) {
         marioYoshiForceCancel();
     }
-partyCtrlOn();
-if (wp->currMotionId == MARIO_MOTION_HAMMER) {
-marioChgMot(MARIO_MOTION_STAY);
+    partyCtrlOn();
+    if (wp->currMotionId == MARIO_MOTION_HAMMER) {
+        marioChgMot(MARIO_MOTION_STAY);
     }
 }
 #else

@@ -942,8 +942,8 @@ EVT_BEGIN(nancy_init_check)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
         SET_VALUE(LW(3), 0)
-IF_INT_GREATER(LW(10), -575)
-IF_INT_LESS(LW(10), -400)
+        IF_INT_GREATER(LW(10), -575)
+            IF_INT_LESS(LW(10), -400)
                 IF_INT_GREATER(LW(11), -10)
                     IF_INT_LESS(LW(11), 5)
                         IF_INT_GREATER(LW(12), 0)
@@ -1022,7 +1022,7 @@ IF_INT_LESS(LW(10), -400)
     // Control returns to Mario, who is expected to stay put; the script waits until he takes a step or one
     // second passes.
     CALL(evt_mario_key_onoff, 1)
-SET_VALUE(GF(0), 1)
+    SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         SET_VALUE(GF(0), 0)
@@ -1052,7 +1052,7 @@ SET_VALUE(GF(0), 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_mario_wait_landon)
-CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     // Mario steps on the lens: it breaks with a squish.
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_LENS_BREAK1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -1134,9 +1134,9 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_restart_regular_event, STRING("me"))
     CALL(evt_npc_change_interrupt, STRING("me"), 6, PTR(nancy_talk))
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
-CALL(evt_party_run, 0)
+    CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
-CALL(evt_mario_key_onoff, 1)
+    CALL(evt_mario_key_onoff, 1)
     // Story flag set: the gate to the west side is now blocked.
     SET_VALUE(GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE, 1)
     RETURN
@@ -1479,8 +1479,8 @@ EVT_BEGIN(nancy_talk)
         CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("gor_01_008"), 0, STRING("me"))
-CALL(evt_win_item_select, PTR(item_tbl_nancy), LW(1))
-IF_INT_EQUAL(LW(1), -1)
+            CALL(evt_win_item_select, PTR(item_tbl_nancy), LW(1))
+            IF_INT_EQUAL(LW(1), -1)
                 SET_VALUE(LW(0), 0)
             END_IF
         END_IF
@@ -1513,8 +1513,8 @@ IF_INT_EQUAL(LW(1), -1)
             WAIT_MS(500)
             CALL(evt_npc_move_position, STRING("me"), -370, -30, 0, FLOAT(80.0f), 0)
             WAIT_WHILE(GF(0))
-CALL(evt_npc_set_position, STRING("me"), -455, 10, -170)
-CALL(evt_npc_set_ry, STRING("me"), 270)
+            CALL(evt_npc_set_position, STRING("me"), -455, 10, -170)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
             SET_VALUE(LW(0), STRING("w_bero"))
             CALL_CHILD(bero_case_switch_on)
@@ -6049,8 +6049,8 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                 CALL(evt_npc_wait_pera, STRING("チュチュリーナ"))
                 // She asks for the item; Mario picks it from the item menu.
                 CALL(evt_msg_print, 0, STRING("irai_16_02"), 0, STRING("チュチュリーナ"))
-CALL(evt_win_item_select, PTR(iri_16_item_tbl), LW(0))
-IF_INT_NOT_EQUAL(LW(0), -1)
+                CALL(evt_win_item_select, PTR(iri_16_item_tbl), LW(0))
+                IF_INT_NOT_EQUAL(LW(0), -1)
                     // Mario hands it over and Ms. Mowz is overjoyed.
                     CALL(evt_pouch_remove_item, ITEM_ATTACK_FX_B_KEY_ITEM, LW(0))
                     CALL(evt_msg_print, 0, STRING("irai_16_03"), 0, STRING("チュチュリーナ"))
@@ -6136,8 +6136,8 @@ IF_INT_NOT_EQUAL(LW(0), -1)
                     CALL(evt_mario_set_pose, STRING("M_S_1"))
                     CALL(evt_npc_move_position, STRING("チュチュリーナ"), LW(0), LW(2), 0, 40, 0)
                     WAIT_MS(1000)
-CALL(evt_cam3d_evt_set, -525, 290, 230, -525, 225, -140, 800, EASING_SINE_IN_OUT)
-WAIT_MS(800)
+                    CALL(evt_cam3d_evt_set, -525, 290, 230, -525, 225, -140, 800, EASING_SINE_IN_OUT)
+                    WAIT_MS(800)
                     // Ms. Mowz joins the party and the partner lecture plays.
                     SET_VALUE(LW(8), STRING("チュチュリーナ"))
                     SET_VALUE(LW(9), PARTY_MEMBER_MS_MOWZ)
@@ -6667,7 +6667,7 @@ EVT_BEGIN(gor_01_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
         CALL(evt_item_entry, STRING("\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
         CALL(evt_item_flag_on, STRING("\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 2)
-CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
     END_IF
     // Open the building doors, depending on story progress and whether the lens was delivered.
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
@@ -6726,7 +6726,7 @@ CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), 
     CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         IF_INT_EQUAL(GSWF_GOR_01_ULTRA_HAMMER_CHEST_FELL, 0)
-CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 146, -20, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
+            CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 146, -20, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
 SPAWN_EVENT(ultrahammer_check)
         ELSE
             CALL(evt_mobj_itembox, STRING("mobj_box00"), 275, 0, 75, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
@@ -6735,7 +6735,7 @@ SPAWN_EVENT(ultrahammer_check)
     // Map object culling for the fence, stage and houses.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_saku"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai"), MAP_OBJ_FLAG_CLIP)
-CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f1A"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f1A"), MAP_OBJ_FLAG_CLIP)
     // Chapter 6: Bowser arrives and the Bowser interlude starts.
     IF_INT_EQUAL(LF(0), 1)
         CALL(evt_mario_kill_party, 0)
@@ -8220,7 +8220,7 @@ s32 iri_18_item_tbl[] = {
 EVT_BEGIN(cooking_evt)
     // Controls are locked while Mario and his partners walk up to Zess T.'s stove.
     CALL(evt_mario_key_onoff, 0)
-SET_VALUE(LW(14), 0)
+    SET_VALUE(LW(14), 0)
     SET_VALUE(LW(15), 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ナンシー"), NPC_FLAG_NO_HIT)
     // The partners and Mario line up in front of her and face her.
@@ -8262,8 +8262,8 @@ SET_VALUE(LW(14), 0)
             CALL(evt_pouch_check_item, ITEM_COOKBOOK, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
                 CALL(evt_msg_continue)
-CALL(evt_win_item_select, PTR(iri_18_item_tbl), LW(0))
-ELSE
+                CALL(evt_win_item_select, PTR(iri_18_item_tbl), LW(0))
+                ELSE
                 SET_VALUE(LW(0), -1)
                 SET_VALUE(LF(0), 1)
             END_IF
@@ -8389,16 +8389,16 @@ ELSE
     IF_INT_EQUAL(LW(0), 1)
         GOTO(0)
     END_IF
-CALL(make_item_tbl, LW(14), LW(0))
-IF_INT_EQUAL(LW(0), 0)
+    CALL(make_item_tbl, LW(14), LW(0))
+    IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("gor_01_cook_005"))
         GOTO(5)
     END_IF
     // She asks for an ingredient; Mario picks it from his pouch (backing out asks again).
     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_007"))
     LABEL(1)
-CALL(evt_win_item_select, PTR(item_tbl), LW(0))
-IF_INT_EQUAL(LW(0), -1)
+    CALL(evt_win_item_select, PTR(item_tbl), LW(0))
+    IF_INT_EQUAL(LW(0), -1)
         CALL(evt_msg_print, 0, STRING("gor_01_cook_008"), 0, STRING("ナンシー"))
         CALL(evt_msg_select, 0, STRING("gor_01_select"))
         SWITCH(LW(0))
@@ -8410,18 +8410,18 @@ IF_INT_EQUAL(LW(0), -1)
         END_SWITCH
     END_IF
     SET_VALUE(LW(14), LW(0))
-SET_VALUE(LF(0), 0)
+    SET_VALUE(LF(0), 0)
     // With the Cookbook recipes unlocked, Mario may add a second ingredient.
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
-CALL(make_item_tbl, LW(14), LW(0))
-IF_INT_NOT_EQUAL(LW(0), 0)
+        CALL(make_item_tbl, LW(14), LW(0))
+        IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("gor_01_cook_009"), 0, STRING("ナンシー"))
             CALL(evt_msg_select, 0, STRING("gor_01_select"))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_continue)
                 LABEL(2)
-CALL(evt_win_item_select, PTR(item_tbl), LW(0))
-IF_INT_EQUAL(LW(0), -1)
+                CALL(evt_win_item_select, PTR(item_tbl), LW(0))
+                IF_INT_EQUAL(LW(0), -1)
                     CALL(evt_msg_print, 0, STRING("gor_01_cook_010"), 0, STRING("ナンシー"))
                     CALL(evt_msg_select, 0, STRING("gor_01_cook_select"))
                     SWITCH(LW(0))
@@ -8429,7 +8429,7 @@ IF_INT_EQUAL(LW(0), -1)
                         SET_VALUE(LF(0), 1)
                         GOTO(3)
                         CASE_EQUAL(1)
-GOTO(2)
+                            GOTO(2)
                         CASE_EQUAL(2)
                         GOTO(0)
                     END_SWITCH
@@ -8439,7 +8439,7 @@ GOTO(2)
                     GOTO(2)
                 END_IF
                 SET_VALUE(LW(15), LW(0))
-ELSE
+                ELSE
                 SET_VALUE(LF(0), 1)
             END_IF
         END_IF
@@ -8449,15 +8449,15 @@ ELSE
     IF_INT_EQUAL(LW(15), 0)
         CALL(get_item_name, LW(14), LW(0))
         IF_INT_EQUAL(LF(0), 0)
-CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_012"), 0, STRING("ナンシー"), LW(0))
-ELSE
-CALL(evt_msg_print_add_insert, 0, STRING("gor_01_cook_012"), LW(0))
-END_IF
+            CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_012"), 0, STRING("ナンシー"), LW(0))
+            ELSE
+                CALL(evt_msg_print_add_insert, 0, STRING("gor_01_cook_012"), LW(0))
+                END_IF
     ELSE
         CALL(get_item_name, LW(14), LW(0))
         CALL(get_item_name, LW(15), LW(1))
-CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_013"), 0, STRING("ナンシー"), LW(0), LW(1))
-END_IF
+        CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_013"), 0, STRING("ナンシー"), LW(0), LW(1))
+        END_IF
     CALL(evt_msg_select, 0, STRING("gor_01_select"))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(4)
@@ -8465,17 +8465,17 @@ END_IF
     // The ingredients leave the pouch and the dish is worked out from the recipe.
     IF_INT_EQUAL(LW(15), 0)
         CALL(cook_chk, LW(14), LW(0), LW(1))
-CALL(evt_pouch_remove_item, LW(14), LW(3))
-IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
+        CALL(evt_pouch_remove_item, LW(14), LW(3))
+        IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
             SET_VALUE(LW(2), LW(1))
         ELSE
             SET_VALUE(LW(2), LW(0))
         END_IF
     ELSE
         CALL(cook_chk2, LW(14), LW(15), LW(2))
-CALL(evt_pouch_remove_item, LW(14), LW(3))
+        CALL(evt_pouch_remove_item, LW(14), LW(3))
         CALL(evt_pouch_remove_item, LW(15), LW(3))
-END_IF
+        END_IF
     IF_INT_EQUAL(LW(2), 0)
         SET_VALUE(LW(2), ITEM_MISTAKE)
     END_IF

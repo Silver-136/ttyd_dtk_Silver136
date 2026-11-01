@@ -830,7 +830,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_STORY_PROGRESS, STG7_01_FAHR_OUTPOST_1ST_VISIT)
-SET_VALUE(LW(0), STRING("w_bero"))
+    SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(bero_case_switch_on)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG7_01_FAHR_OUTPOST_1ST_VISIT)
@@ -2301,11 +2301,11 @@ static EVT_BEGIN(init_white)
             RETURN
         END_IF
     END_IF
-END_IF
-IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 1)
+    END_IF
+    IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 1)
     CALL(evt_npc_set_position, STRING(("me")), 50, 0, -100)
-END_IF
-RETURN
+    END_IF
+    RETURN
 EVT_END()
 
 /**

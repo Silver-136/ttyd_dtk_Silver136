@@ -83,9 +83,9 @@ static inline s32 MAX0(s32 x) {
  * The demo has its own records; US/PAL keep eight record rows, JP four.
  */
 void yuugijou_init(void) {
-yuwp = &yuugijouwork;
+    yuwp = &yuugijouwork;
     memset(yuwp, 0, sizeof(PiantaParlorWork));
-yuwp->recordOn[0][0] = 1;
+    yuwp->recordOn[0][0] = 1;
     yuwp->recordOn[0][1] = 1;
     yuwp->recordOn[0][2] = 1;
     yuwp->recordOn[0][3] = 1;

@@ -740,7 +740,7 @@ USER_FUNC(evt_end_credit_npc_main) {
     inBattle = gp->inBattle != 0;
     if (R_credits_npc_info[id].evt != NULL) {
         evtEntry(R_credits_npc_info[id].evt, 0, 0);
-return 2;
+        return 2;
     }
     if (isFirstCall) {
         actor = _mapAlloc(sizeof(CreditActor));
@@ -753,20 +753,20 @@ return 2;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
             case 1:
-actor->angle = 160.0f;
+            actor->angle = 160.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
             case 2:
                 actor->angle = 250.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
-case 3:
+                case 3:
 default:
                 actor->angle = 70.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
         }
-event->userdatap[0] = actor;
+        event->userdatap[0] = actor;
     }
     actor = event->userdatap[0];
     switch (actor->pos) {
@@ -776,7 +776,7 @@ event->userdatap[0] = actor;
             r = 100.0f;
             break;
         case 1:
-x = -304.0f;
+        x = -304.0f;
             y = 240.0f;
             r = 100.0f;
             break;
@@ -785,7 +785,7 @@ x = -304.0f;
             y = -240.0f;
             r = 100.0f;
             break;
-case 3:
+            case 3:
 default:
             x = 304.0f;
             y = 240.0f;
@@ -797,7 +797,7 @@ default:
     }
     switch (actor->state) {
         case 0:
-EXIGetType(0, 2, &type);
+        EXIGetType(0, 2, &type);
             if (type != EXI_IS_VIEWER) {
                 actor->poseId = animPoseEntry(R_credits_npc_info[id].agb, inBattle);
                 animPoseSetAnim(actor->poseId, R_credits_npc_info[id].anim, 1);
@@ -808,8 +808,8 @@ EXIGetType(0, 2, &type);
 actor->state++;
             break;
         case 1:
-actor->angle += 0.15f;
-if (actor->angle > actor->limit) {
+        actor->angle += 0.15f;
+        if (actor->angle > actor->limit) {
                 animPoseRelease(actor->poseId);
                 _mapFree(actor);
 end_wp->npcLoadRequest++;
@@ -824,7 +824,7 @@ return 2;
     PSMTXConcat(m2, m1, actor->mtx);
     PSMTXScale(m3, 1.0f, 1.0f, 0.01f);
     PSMTXConcat(actor->mtx, m3, actor->mtx);
-animPoseMain(actor->poseId);
+    animPoseMain(actor->poseId);
     dispEntry(CAMERA_3D, 0.0f, 1, end_credit_npc_disp, actor);
     return 0;
 }
@@ -1480,12 +1480,12 @@ EVT_BEGIN(end_return_title_evt)
     SET_VALUE(GF(10), 1)
     CALL(evt_end_font_restore)
     SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
-SET_VALUE(LF(10), 0)
+    SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 21)
-CALL_CHILD(evt_memcard_save)
-CALL(end_bgm_wait_stop)
+    CALL_CHILD(evt_memcard_save)
+    CALL(end_bgm_wait_stop)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
-CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 2000, -1, -1)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 2000, -1, -1)
     CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
     RETURN
 EVT_END()
@@ -2013,24 +2013,24 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
     switch (end_wp->pos) {
         case 0:
             x = -274;
-y = -20;
-break;
+            y = -20;
+            break;
         case 1:
             x = 274;
             y = 250;
             break;
         case 2:
             x = 274;
-y = -20;
-break;
+            y = -20;
+            break;
         case 3:
             x = -274;
             y = 250;
             break;
         case 4:
             x = 0;
-y = -80;
-break;
+            y = -80;
+            break;
     }
     switch (state) {
         case 0:
@@ -2044,14 +2044,14 @@ break;
                     } else if (x > 0) {
                         wx = x - 0.8f * FontGetMessageWidth(msg);
                     }
-sprintf(buf1, "<clear><wait %d><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", 0, wx - 62, wy, msg);
-end_wp->win1[i] = msgWindow_Entry(buf1, 0, 0);
+                    sprintf(buf1, "<clear><wait %d><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", 0, wx - 62, wy, msg);
+                    end_wp->win1[i] = msgWindow_Entry(buf1, 0, 0);
                 }
             }
             for (i = 0; i < 3; i++) {
                 if (end_staff_roll_msg_tbl[idx].msg2[i] != NULL) {
                     msg2 = msgSearch(end_staff_roll_msg_tbl[idx].msg2[i]);
-wx2 = x + 8;
+                    wx2 = x + 8;
                     wy2 = y - i * 24 - 50;
                     if (x == 0) {
                         wx2 -= FontGetMessageWidth(msg2) / 2;
@@ -2059,7 +2059,7 @@ wx2 = x + 8;
                         wx2 -= FontGetMessageWidth(msg2);
                     }
                     sprintf(buf2, "<clear><wait %d><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0>%s</speed></col><wait 5200></dkey><once_stop>", 0, wx2 - 62, wy2, msg2);
-end_wp->win2[i] = msgWindow_Entry(buf2, 0, 0);
+                    end_wp->win2[i] = msgWindow_Entry(buf2, 0, 0);
                 } else {
                     end_wp->win2[i] = -1;
                 }
@@ -2090,7 +2090,7 @@ end_wp->win2[i] = msgWindow_Entry(buf2, 0, 0);
             break;
         case 2:
             n = idx + 1;
-if (n < ARRAY_SIZE(end_staff_roll_msg_tbl)) {
+            if (n < ARRAY_SIZE(end_staff_roll_msg_tbl)) {
                 for (i = 0; i < 3; i++) {
                     if (end_staff_roll_msg_tbl[n].msg1[i] != NULL) {
                         break;
@@ -2116,13 +2116,13 @@ if (n < ARRAY_SIZE(end_staff_roll_msg_tbl)) {
                 state += 2;
             }
             break;
-case 3:
+            case 3:
             if (evtGetValue(event, GW(10)) == 0) {
                 state = 0;
                 idx++;
             }
             break;
-case 4:
+            case 4:
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                 evtSetValue(event, GW(10), 2);
                 state++;
@@ -2322,16 +2322,16 @@ USER_FUNC(evt_end_staff_roll_init) {
     s32 i;
 
     if (isFirstCall) {
-end_wp->npcLoadNum = 0;
+        end_wp->npcLoadNum = 0;
         end_wp->npcLoadRequest = 0;
         end_wp->tpl = NULL;
         end_wp->alpha = 0;
-end_wp->pos = 0;
+        end_wp->pos = 0;
         psndSetFlag(PSND_FLAG_NO_SFX);
-gp->language = 1;
+        gp->language = 1;
         JUTFont_Free();
         JUTFontSetup(1);
-msgLoad("global", 1);
+        msgLoad("global", 1);
 }
     if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/ending.tpl", getMarioStDvdRoot()) == 0) {
         return 0;
@@ -2339,13 +2339,13 @@ msgLoad("global", 1);
     if (end_wp->tpl == NULL) {
         end_wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/ending.tpl", getMarioStDvdRoot());
     }
-end_wp->npcLoadNum = 10;
+    end_wp->npcLoadNum = 10;
     for (i = 0; i < end_wp->npcLoadNum; i++) {
-if (!animGroupBaseAsync(R_credits_npc_info[i].agb, inBattle, NULL)) {
+        if (!animGroupBaseAsync(R_credits_npc_info[i].agb, inBattle, NULL)) {
             return 0;
         }
     }
-for (i = 0; i < end_wp->npcLoadNum; i++) {
+    for (i = 0; i < end_wp->npcLoadNum; i++) {
 }
     return 2;
 }
@@ -2400,10 +2400,10 @@ USER_FUNC(evt_end_staff_roll_init) {
 void end_staff_roll_exit(void) {
     fileFree(end_wp->tpl);
     psndClearFlag(PSND_FLAG_NO_SFX);
-gp->language = 0;
+    gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
-msgLoad("global", 1);
+    msgLoad("global", 1);
 }
 #else
 /**
@@ -2433,11 +2433,11 @@ void end_staff_roll_exit(void) {
  * restores Japanese text where the credits switched it, or turns the sound effects back on.
  */
 USER_FUNC(evt_end_font_restore) {
-gp->language = 0;
+    gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
-msgLoad("global", 1);
-return 2;
+    msgLoad("global", 1);
+    return 2;
 }
 #else
 /**

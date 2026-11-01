@@ -822,7 +822,7 @@ void kpaSwimMove(void) {
     }
     mario->moveDist = moveSpeed;
 #if VERSION <= VERSION_DEMO_US
-movePos(&mario->position.x, &mario->position.z, mario->baseSpeed, mario->directionView);
+    movePos(&mario->position.x, &mario->position.z, mario->baseSpeed, mario->directionView);
 #endif
 }
 
@@ -904,7 +904,7 @@ void kpa_swim(void) {
                 if (v < 0.0f) {
                     mario->currSubMotionId = 0x28;
                 }
-mario->jumpVelocityY += 0.02f * (-2.0f - mario->jumpVelocityY);
+                mario->jumpVelocityY += 0.02f * (-2.0f - mario->jumpVelocityY);
                 mario->jumpAccelerationY = 0.0f;
                 mario->jumpJerkY = 0.0f;
                 mario->jumpSnapY = 0.0f;
@@ -1033,8 +1033,8 @@ mario->jumpVelocityY += 0.02f * (-2.0f - mario->jumpVelocityY);
             mario->currSubMotionId = 0x29;
             mario->multiTimer = 0x18;
         case 0x29:
-if (mario->buttonTrg & PAD_BUTTON_A) {
-mario->currSubMotionId = 20;
+        if (mario->buttonTrg & PAD_BUTTON_A) {
+            mario->currSubMotionId = 20;
             } else {
                 mario->multiTimer = (s32)mario->multiTimer - 1;
                 if ((s32)mario->multiTimer <= 0) {

@@ -190,11 +190,11 @@ void titleInit(SequenceWork* work) {
 static void titleMain(SequenceWork* work) {
     switch (wp2->state) {
         case 0:
-if (psndBGMStartCheck(0) != 0U) {
-if (seqGetPrevSeq() == SEQ_LOAD) {
+        if (psndBGMStartCheck(0) != 0U) {
+            if (seqGetPrevSeq() == SEQ_LOAD) {
                     fadeEntry(FADE_CURTAIN_SIDES_A2_TOP, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     fadeEntry(FADE_CURTAIN_CENTER_Z2_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
-wp2->timer = 0;
+                    wp2->timer = 0;
                 } else if (seqGetPrevSeq() == SEQ_GAME_OVER) {
                     fadeEntry(FADE_OUT_WHITE_3D, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     fadeEntry(FADE_CURTAIN_CENTER_A1_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
@@ -203,7 +203,7 @@ wp2->timer = 0;
                     fadeEntry(FADE_OUT_WHITE_3D, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     fadeEntry(FADE_CURTAIN_ENTER_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     fadeSetNarrowFast();
-wp2->timer = 38;
+                    wp2->timer = 38;
 }
                 wp2->state++;
             }
@@ -222,7 +222,7 @@ wp2->timer = 38;
                 } else {
                     wp2->topPosY = TITLE_TOP_Y;
                     wp2->bottomPosY = -170.0f;
-wp2->state = 3;
+                    wp2->state = 3;
                 }
             }
             break;
@@ -247,17 +247,17 @@ wp2->state++;
             }
             break;
         case 3:
-wp2->fadeAlpha += 0.1f;
+        wp2->fadeAlpha += 0.1f;
                 if (wp2->fadeAlpha > 1.0f) {
                     wp2->fadeAlpha = 1.0f;
                 }
                 if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
-psndSFXOn((const char*)0x12);
-wp2->state = 10;
+                    psndSFXOn((const char*)0x12);
+                    wp2->state = 10;
                 } else if (++wp2->idle > VERSION_PICK(60, gp->framerate) * 20 - VERSION_PICK(60, gp->framerate)) {
                     wp2->state = 20;
                 }
-break;
+                break;
         case 10:
             fadeEntry(FADE_CURTAIN_SIDES_A1_TOP, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             wp2->state++;
@@ -275,8 +275,8 @@ break;
             break;
         case 20:
             fadeEntry(FADE_CURTAIN_LEAVE_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
-fadeEntry(FADE_OUT_WHITE, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
-psndBGMOff_f_d(PSND_FADEOUT, 1000, 0);
+            fadeEntry(FADE_OUT_WHITE, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
+            psndBGMOff_f_d(PSND_FADEOUT, 1000, 0);
             wp2->counter = 0;
             wp2->state++;
             break;
@@ -293,8 +293,8 @@ psndBGMOff_f_d(PSND_FADEOUT, 1000, 0);
             }
             if (fadeIsFinish()) {
                 fadeReset(1);
-gp->areaFadeInType = FADE_OUT_WHITE;
-gp->areaFadeInDuration = 0;
+                gp->areaFadeInType = FADE_OUT_WHITE;
+                gp->areaFadeInDuration = 0;
                 seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
             }
             break;
@@ -535,7 +535,7 @@ static void disp2(CameraId cameraId, void* param) {
     f32 vp[GX_VIEWPORT_SZ];
     s32 alpha;
     f32 s;
-saved = *camGetPtr(cameraId);
+    saved = *camGetPtr(cameraId);
     *camGetPtr(cameraId) = *cam;
     GXGetProjectionv(proj);
     GXGetViewportv(vp);
@@ -543,17 +543,17 @@ saved = *camGetPtr(cameraId);
     GXSetViewport(cam->viewport[0], cam->viewport[1], cam->viewport[2],
                   cam->viewport[3], cam->viewport[4], cam->viewport[5]);
     winTexInit(*wp2->texture->data);
-winTexSet(5, (Vec){wp2->topPosX, wp2->topPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    winTexSet(5, (Vec){wp2->topPosX, wp2->topPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     winTexSet(6, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-s = (f32)sin((f32)gp->retraceCount / 30.0f);
-alpha = (s32)(wp2->fadeAlpha * (459.0f * s));
+    s = (f32)sin((f32)gp->retraceCount / 30.0f);
+    alpha = (s32)(wp2->fadeAlpha * (459.0f * s));
     if (alpha < 0) {
         alpha = 0;
     }
     if (alpha > 255) {
         alpha = 255;
     }
-pressStartGX(alpha, 0.0f, -110.0f);
+    pressStartGX(alpha, 0.0f, -110.0f);
 *camGetPtr(cameraId) = saved;
     GXSetProjectionv(proj);
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
@@ -632,10 +632,10 @@ void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
     Mtx mtx, scaleMtx;
-TEXGetGXTexObjFromPalette(*wp2->texture->data, &startText, 8);
+    TEXGetGXTexObjFromPalette(*wp2->texture->data, &startText, 8);
     GXLoadTexObj(&startText, GX_TEXMAP0);
     TEXGetGXTexObjFromPalette(*wp2->texture->data, &gradient, 9);
-GXLoadTexObj(&gradient, GX_TEXMAP1);
+    GXLoadTexObj(&gradient, GX_TEXMAP1);
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -653,8 +653,8 @@ GXLoadTexObj(&gradient, GX_TEXMAP1);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
     MTXScale(scaleMtx, 1.0f, 1.0f, 1.0f);
-MTXTrans(mtx, (f32)gp->retraceCount / -200.0f, 0.0f, 0.0f);
-MTXConcat(scaleMtx, mtx, mtx);
+    MTXTrans(mtx, (f32)gp->retraceCount / -200.0f, 0.0f, 0.0f);
+    MTXConcat(scaleMtx, mtx, mtx);
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);

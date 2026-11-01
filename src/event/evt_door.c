@@ -899,7 +899,7 @@ EVT_BEGIN(evt_door_open_bom_01)
     CALL(door_dark_flag, LW(0), 1)
     // The door swings open with its sound.
     SPAWN_EVENT(door_open_se)
-CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
             CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))

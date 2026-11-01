@@ -427,8 +427,8 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_EQUAL(LW(5), 5)
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
-MULTIPLY(LW(6), 40)
-CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+        MULTIPLY(LW(6), 40)
+        CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
@@ -733,8 +733,8 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_EQUAL(LW(5), 5)
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
-MULTIPLY(LW(6), 40)
-CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+        MULTIPLY(LW(6), 40)
+        CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
@@ -1126,8 +1126,8 @@ static USER_FUNC(_steal_item) {
         }
         if (num > 0) {
             evtSetValue(event, itemVar, ITEM_COIN);
-evtSetValue(event, iconVar, 394);
-evtSetValue(event, numVar, num);
+            evtSetValue(event, iconVar, 394);
+            evtSetValue(event, numVar, num);
             TST_BATTLE_UNIT(unit)->heldItem = ITEM_COIN;
             TST_BATTLE_UNIT(unit)->stolenCoins = num;
             pouchSetCoin(coins - num);
@@ -1151,7 +1151,7 @@ evtSetValue(event, numVar, num);
             s32 j;
 
             r -= count;
-for (j = 0; j < 200; j++) {
+            for (j = 0; j < 200; j++) {
                 if (pouch->badges[j] != 0) {
                     if (--r < 0) {
                         item = pouch->badges[j];
@@ -1161,7 +1161,7 @@ for (j = 0; j < 200; j++) {
             }
         } else {
             s32 k;
-for (k = 0; k < MAX_HELD_ITEMS; k++) {
+            for (k = 0; k < MAX_HELD_ITEMS; k++) {
                 if (pouch->heldItems[k] != 0) {
                     if (--r < 0) {
                         item = pouch->heldItems[k];
@@ -1171,8 +1171,8 @@ for (k = 0; k < MAX_HELD_ITEMS; k++) {
             }
         }
         if (item != 0) {
-if (!pouchRemoveItem(item)) {
-return EVT_RETURN_DONE;
+            if (!pouchRemoveItem(item)) {
+                return EVT_RETURN_DONE;
             }
             TST_BATTLE_UNIT(unit)->heldItem = item;
             if (item >= 240 && item < 339) {

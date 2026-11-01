@@ -4070,7 +4070,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
                 IF_INT_LESS(LW(1), 90)
                     IF_INT_GREATER_OR_EQUAL(LW(0), 90)
                         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_N_7"))
-END_IF
+                        END_IF
                 END_IF
                 SET_VALUE(LW(1), LW(0))
                 WAIT_FRAMES(1)
@@ -4138,8 +4138,8 @@ END_IF
                 GOTO(59)
             END_IF
             IF_INT_EQUAL(LW(3), LW(6))
-GOTO(59)
-END_IF
+                GOTO(59)
+                END_IF
             CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT, LW(5))
             SWITCH(LW(5))
                 CASE_EQUAL(2)
@@ -4154,9 +4154,9 @@ END_IF
                 IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
                     CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
                     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
-CALL(btlevtcmd_GetResultPrizeLv, LW(3), 1, LW(6))
+                    CALL(btlevtcmd_GetResultPrizeLv, LW(3), 1, LW(6))
                     CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
-ELSE
+                    ELSE
                     CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT, LW(5))
                 END_IF
                 CASE_DEFAULT
@@ -4220,7 +4220,7 @@ ELSE
     // Stylish: Mario rolls back to his place spinning (from the US version on the first Stylish is also
     // counted). A second press there ends in a confetti pose; a mistimed one plays the miss sound.
     LABEL(80)
-CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, LW(7))
     SET_VALUE(LW(8), LW(7))
@@ -5664,12 +5664,12 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     // apply and the first Stylish window opens.
     CALL(btlevtcmd_StopAC)
     CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-CALL(evt_btl_camera_shake_h, 0, LW(0), 0, 10, 13)
+    CALL(evt_btl_camera_shake_h, 0, LW(0), 0, 10, 13)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 60, 0)
-CALL(btlevtcmd_ACRGetResult, LW(15), LW(13))
+    CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 60, 0)
+    CALL(btlevtcmd_ACRGetResult, LW(15), LW(13))
     IF_INT_EQUAL(LW(15), 1)
-CALL(evt_audience_acrobat_notry)
+        CALL(evt_audience_acrobat_notry)
         SET_VALUE(LW(0), 60)
         SUBTRACT(LW(0), LW(13))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -5682,8 +5682,8 @@ CALL(evt_audience_acrobat_notry)
         END_IF
         WAIT_FRAMES(10)
         GOTO(95)
-END_IF
-IF_INT_NOT_EQUAL(LW(15), 0)
+        END_IF
+        IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
@@ -6742,14 +6742,14 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     SWITCH(LW(0))
         CASE_EQUAL(2)
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING2"), 0)
-SET_VALUE(LW(2), STRING("M_H_13"))
-CASE_EQUAL(1)
+        SET_VALUE(LW(2), STRING("M_H_13"))
+        CASE_EQUAL(1)
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING1"), 0)
-SET_VALUE(LW(2), STRING("M_H_15"))
-CASE_DEFAULT
+        SET_VALUE(LW(2), STRING("M_H_15"))
+        CASE_DEFAULT
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING3"), 0)
-SET_VALUE(LW(2), STRING("M_H_14"))
-END_SWITCH
+        SET_VALUE(LW(2), STRING("M_H_14"))
+        END_SWITCH
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(2))
     CALL(evt_snd_sfxon, STRING("SFX_MARIO_ATTACK_ULTRAQUAKE1"), 0)
     WAIT_FRAMES(10)
@@ -6858,7 +6858,7 @@ END_SWITCH
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_voice, UNIT_ID_SELF, 1)
-CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 20, 0)
+        CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 20, 0)
         LOOP(60)
             CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 0, 12)
             WAIT_FRAMES(1)

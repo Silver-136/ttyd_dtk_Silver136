@@ -720,11 +720,11 @@ USER_FUNC(evt_unitwin_select_func) {
         }
 #if VERSION <= VERSION_DEMO_US
     break;
-case 17:
-case 18:
+    case 17:
+    case 18:
     wp->count = jdt->count;
     break;
-case 13:
+    case 13:
     wp->count = 0;
     for (k = 0; k < 99; k++) {
         if ((s16)badgeShop_get(bdsw->starmaniac_table, k + 0xF0) > 0) {
@@ -740,7 +740,7 @@ case 13:
     }
 #if VERSION <= VERSION_DEMO_US
     break;
-case 14:
+    case 14:
     wp->count = 0;
     for (k = 0; k < 0x152; k++) {
         if ((s16)badgeShop_get(bdsw->bottakuru_table, k + 1) > 0) {
@@ -748,13 +748,13 @@ case 14:
         }
     }
     break;
-case 15:
+    case 15:
     wp->count = 0;
     for (k = 0; badge_bottakuru100_table[k] != 0; k++) {
         wp->count++;
     }
     break;
-case 16:
+    case 16:
     wp->count = 0;
     for (k = 0; k < 0x152; k++) {
         if ((s16)badgeShop_get(bdsw->bteresa_table, k + 1) > 0) {
@@ -762,7 +762,7 @@ case 16:
         }
     }
     break;
-case 4:
+    case 4:
     wp->count = 0;
     for (k = 0; k < 32; k++) {
         if (pouchKeepItem(k)) {
@@ -770,8 +770,8 @@ case 4:
         }
     }
     break;
-case 5:
-case 6:
+    case 5:
+    case 6:
     wp->count = 0;
     for (k = 0; (id = party_id_table[k]) != 0; k++) {
         if (partyChkJoin(id)) {
@@ -779,7 +779,7 @@ case 6:
         }
     }
     break;
-case 7:
+    case 7:
     wp->skipEntry = event->lwData[1];
     wp->count = 0;
     for (k = 0; (id = party_id_table[k]) != 0; k++) {
@@ -788,11 +788,11 @@ case 7:
         }
     }
     break;
-case 8:
-case 9:
+    case 8:
+    case 9:
     wp->count = 3;
     break;
-case 10:
+    case 10:
     wp->skipEntry = event->lwData[1];
     wp->count = 2;
     break;
@@ -800,30 +800,30 @@ case 10:
 
     prev = wp->cursor;
     if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
-wp->cursor += 1.0f;
+        wp->cursor += 1.0f;
     }
     if (keyGetDirRep(0) & DEMO_STICK_UP) {
-wp->cursor -= 1.0f;
+        wp->cursor -= 1.0f;
     }
     if (prev != (s32)wp->cursor) {
-psndSFXOn((const char*)5);
+        psndSFXOn((const char*)5);
     }
     if (wp->cursor >= wp->count) {
-wp->cursor = 0.0f;
-wp->scrollTop = 0.0f;
+        wp->cursor = 0.0f;
+        wp->scrollTop = 0.0f;
     }
     if (wp->cursor < 0.0f) {
-wp->cursor = wp->count - 1;
-if ((t = wp->count - 8) > 0) {
+        wp->cursor = wp->count - 1;
+        if ((t = wp->count - 8) > 0) {
     wp->scrollTop = t;
 }
     }
     if (prev < wp->cursor) {
-if (wp->cursor > 5.0f && wp->scrollTop < wp->count - 8) {
+        if (wp->cursor > 5.0f && wp->scrollTop < wp->count - 8) {
     wp->scrollTop += 1.0f;
 }
     } else if (prev > wp->cursor) {
-if (wp->cursor - wp->scrollTop < 3.0f && wp->scrollTop > 0.0f) {
+        if (wp->cursor - wp->scrollTop < 3.0f && wp->scrollTop > 0.0f) {
     wp->scrollTop -= 1.0f;
 }
     }
@@ -832,8 +832,8 @@ if (wp->cursor - wp->scrollTop < 3.0f && wp->scrollTop > 0.0f) {
     wp->cursorY += ((60.0f - 24.0f * (wp->cursor - wp->scrollTop)) - wp->cursorY) / 6.0f;
 
     if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-n = 0;
-switch (wp->mode) {
+        n = 0;
+        switch (wp->mode) {
     case 2:
     case 3:
         statusWinForceOff();
@@ -1106,7 +1106,7 @@ switch (wp->mode) {
     }
     wp->mode = 0;
     return EVT_RETURN_YIELD;
-case 9:
+    case 9:
     pouchGetPtr();
     for (i = 0; i < wp->count; i++) {
         if (n == wp->cursor) {
@@ -1138,7 +1138,7 @@ case 9:
     }
     wp->mode = 0;
     return EVT_RETURN_YIELD;
-case 10:
+    case 10:
     pouchGetPtr();
     for (i = 0; i < 3; i++) {
         if (i != wp->skipEntry) {

@@ -272,8 +272,8 @@ void seq_e3Init(SequenceWork* seq) {
     wp->scenario = 0;
     wp->poseRotY = 270.0f;
     OSCreateAlarm(&wp->alarm);
-OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
-wp->initTime = OSGetTime();
+    OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
+    wp->initTime = OSGetTime();
     gp->flags &= ~GW_FLAG_NO_ENTRANCE;
     gp->flags |= GW_FLAG_NO_SAVE_BLOCK;
     gp->flags |= GW_FLAG_E3;
@@ -303,13 +303,13 @@ s32 type = gp->inBattle != 0;
     }
     wp->animEvt = evtEntry(e3_pose_evt, 0, 0);
     wp->handle = fileAllocf(FILE_TYPE_TPL, "%s/e3.tpl", getMarioStDvdRoot());
-wp->curScreen = 0;
+    wp->curScreen = 0;
     wp->nextScreen = 0;
     wp->scenario = 0;
     wp->poseRotY = 270.0f;
-OSCancelAlarm(&wp->alarm);
+    OSCancelAlarm(&wp->alarm);
     wp->initTime = 0;
-gp->flags &= ~GW_FLAG_NO_ENTRANCE;
+    gp->flags &= ~GW_FLAG_NO_ENTRANCE;
     gp->flags |= GW_FLAG_NO_SAVE_BLOCK;
     gp->flags |= GW_FLAG_E3;
     gp->flags &= ~GW_FLAG_E3_TIMEOUT;
@@ -371,7 +371,7 @@ s32 i;
         animPoseRelease(wp->poseIds[i]);
     }
     evtDelete(wp->animEvt);
-fileFree(wp->handle);
+    fileFree(wp->handle);
     psndStopAllFadeOut();
 }
 #else
@@ -444,7 +444,7 @@ void seq_e3Main(SequenceWork* seq) {
             break;
 
         case 4: {
-prev = wp->scenario;
+            prev = wp->scenario;
             stickX = keyGetStickX(0);
             stickY = keyGetStickY(0);
             switch (wp->scenario) {
@@ -473,7 +473,7 @@ prev = wp->scenario;
                     }
                     break;
             }
-if (prev != wp->scenario) {
+            if (prev != wp->scenario) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_B || OSTicksToSeconds(OSGetTime() - none_key) > 120) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
@@ -574,7 +574,7 @@ if (prev != wp->scenario) {
             }
 
             if (wp->scenario == 0) {
-seqSetSeq(SEQ_MAP_CHANGE, "hei_00", "dokan_2");
+                seqSetSeq(SEQ_MAP_CHANGE, "hei_00", "dokan_2");
             } else {
                 seqSetSeq(SEQ_MAP_CHANGE, found[foundIdx].mapName, found[foundIdx].beroName);
             }
@@ -592,7 +592,7 @@ seqSetSeq(SEQ_MAP_CHANGE, "hei_00", "dokan_2");
                 pouchGetPtr()->partyData[i].currentHP = 20;
                 pouchGetPtr()->partyData[i].HPLevel = 1;
             }
-for (i = 0; i < 2; i++) {
+            for (i = 0; i < 2; i++) {
                 pouchGetItem(ITEM_THUNDER_RAGE);
                 pouchGetItem(ITEM_SHOOTING_STAR);
                 pouchGetItem(ITEM_FIRE_FLOWER);
@@ -600,11 +600,11 @@ for (i = 0; i < 2; i++) {
             }
 pouchGetPtr()->availableBP = 20;
             pouchGetPtr()->maximumBP = 20;
-pouchGetItem(ITEM_POWER_BOUNCE);
+            pouchGetItem(ITEM_POWER_BOUNCE);
             pouchGetItem(ITEM_POWER_SMASH);
             pouchEquipBadgeID(ITEM_POWER_BOUNCE);
             pouchEquipBadgeID(ITEM_POWER_SMASH);
-pouchReviseMarioParam();
+            pouchReviseMarioParam();
             pouchRevisePartyParam();
             statusWinForceUpdate();
         } break;
@@ -672,7 +672,7 @@ void seq_e3Main(SequenceWork* seq) {
             break;
 
         case 4: {
-prev = wp->scenario;
+            prev = wp->scenario;
             stickX = keyGetStickX(0);
             stickY = keyGetStickY(0);
             switch (wp->scenario) {
@@ -701,7 +701,7 @@ prev = wp->scenario;
                     }
                     break;
             }
-if (prev != wp->scenario) {
+            if (prev != wp->scenario) {
                 psndSFXOn((void*)5);
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_B || OSTicksToSeconds(OSGetTime() - none_key) > 120) {
                 psndSFXOn((char*)19);
@@ -799,10 +799,10 @@ if (prev != wp->scenario) {
             if (found[foundIdx].partners[1]) {
                 marioPartyEntry(found[foundIdx].partners[1]);
             }
-if (wp->scenario == 0) {
+            if (wp->scenario == 0) {
                 seqSetSeq(SEQ_MAP_CHANGE, "hei_00", "dokan_2");
             } else {
-seqSetSeq(SEQ_MAP_CHANGE, found[foundIdx].mapName, found[foundIdx].beroName);
+                seqSetSeq(SEQ_MAP_CHANGE, found[foundIdx].mapName, found[foundIdx].beroName);
             }
 
             memset(pouchGetPtr()->heldItems, 0, sizeof(s16) * MAX_HELD_ITEMS);
@@ -818,7 +818,7 @@ seqSetSeq(SEQ_MAP_CHANGE, found[foundIdx].mapName, found[foundIdx].beroName);
                 pouchGetPtr()->partyData[i].currentHP = 20;
                 pouchGetPtr()->partyData[i].HPLevel = 1;
             }
-for (i = 0; i < 2; i++) {
+            for (i = 0; i < 2; i++) {
                     pouchGetItem(ITEM_THUNDER_RAGE);
                     pouchGetItem(ITEM_SHOOTING_STAR);
                     pouchGetItem(ITEM_FIRE_FLOWER);
@@ -826,14 +826,14 @@ for (i = 0; i < 2; i++) {
                 }
 pouchGetPtr()->availableBP = 20;
             pouchGetPtr()->maximumBP = 20;
-pouchGetItem(ITEM_POWER_BOUNCE);
+            pouchGetItem(ITEM_POWER_BOUNCE);
                 pouchGetItem(ITEM_POWER_SMASH);
                 pouchEquipBadgeID(ITEM_POWER_BOUNCE);
                 pouchEquipBadgeID(ITEM_POWER_SMASH);
-pouchReviseMarioParam();
+                pouchReviseMarioParam();
             pouchRevisePartyParam();
             statusWinForceUpdate();
-OSCreateAlarm(&wp->alarm);
+            OSCreateAlarm(&wp->alarm);
             OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
             wp->initTime = OSGetTime();
 } break;
@@ -1149,8 +1149,8 @@ s32 active;
                   camera->viewport[4], camera->viewport[5]);
 
     if (active == 0) {
-alpha = (s32)((f32)sin((f64)((f32)gp->retraceCount / 30.0f)) * 459.0f);
-if (alpha < 0) {
+        alpha = (s32)((f32)sin((f64)((f32)gp->retraceCount / 30.0f)) * 459.0f);
+        if (alpha < 0) {
                 alpha = 0;
             }
             if (alpha > 255) {
@@ -1158,18 +1158,18 @@ if (alpha < 0) {
             }
 
             winTexInit(*wp->handle->data);
-winTexSet(MODE_11, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-pressStartGX(alpha, 0.0f, -110.0f);
+            winTexSet(MODE_11, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            pressStartGX(alpha, 0.0f, -110.0f);
 } else {
-winTexInit(*wp->handle->data);
+    winTexInit(*wp->handle->data);
         for (row = 0, py = -304; row < 40; row++, py += 16) {
             for (col = 0, px = 0; col < 32; col++, px += 16) {
                 winTexSet(MODE_5, (Vec){(f32)py, (f32)(240 - px), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                           (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             }
         }
-for (i = 0; i < 3; i++) {
-winTexInit(*wp->handle->data);
+        for (i = 0; i < 3; i++) {
+            winTexInit(*wp->handle->data);
 
             if (i == wp->scenario) {
                 // Shadow Box
@@ -1582,10 +1582,10 @@ void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
     Mtx mtx, scale;
-TEXGetGXTexObjFromPalette(*wp->handle->data, &startText, 3);
-GXLoadTexObj(&startText, GX_TEXMAP0);
-TEXGetGXTexObjFromPalette(*wp->handle->data, &gradient, 4);
-GXLoadTexObj(&gradient, GX_TEXMAP1);
+    TEXGetGXTexObjFromPalette(*wp->handle->data, &startText, 3);
+    GXLoadTexObj(&startText, GX_TEXMAP0);
+    TEXGetGXTexObjFromPalette(*wp->handle->data, &gradient, 4);
+    GXLoadTexObj(&gradient, GX_TEXMAP1);
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

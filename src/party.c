@@ -1176,7 +1176,7 @@ void driveParty(PartyEntry* party) {
 #endif
                 break;
 #if VERSION <= VERSION_DEMO_US
-if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+                if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
                 party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
                 partyChgPoseId(party, 1);
                 party->flags &= ~PARTY_FLAG_IS_BEING_USED;
@@ -1659,7 +1659,7 @@ s32 partyDokanInit(PartyEntry* party) {
     party->displayDirection = mario->displayDirection;
     party->moveDir = mario->moveDirection;
     party->position = mario->position;
-return 0;
+    return 0;
 }
 #else
 /**
@@ -1856,7 +1856,7 @@ s32 partyDokanMain(PartyEntry* party) {
             party->targetDir = mario->directionView;
             party->moveDir = mario->directionView;
             partyPaperOff(party);
-party->flags2 &= ~PARTY_DISP_FLAG_NO_FLIP;
+            party->flags2 &= ~PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             animPoseSetMaterialLightFlagOn(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
             party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
@@ -1870,7 +1870,7 @@ party->flags2 &= ~PARTY_DISP_FLAG_NO_FLIP;
             if (party->currentSlotId == 1) {
                 party->position.z += -4.0f;
             }
-break;
+            break;
     }
     return 0;
 }
@@ -2463,7 +2463,7 @@ void partyRideMain(PartyEntry* party) {
                 }
 #if VERSION <= VERSION_DEMO_US
                 (((PartyEntry*)party)->moveFrames) = 0;
-party->moveDir = ((MarioWork*)mario)->moveDirection;
+                party->moveDir = ((MarioWork*)mario)->moveDirection;
                 party->targetDir = ((MarioWork*)mario)->directionView;
 #else
                 ((PartyEntry*)party)->moveFrames = 0;
@@ -3078,8 +3078,8 @@ static void party_damage_return(PartyEntry* party) {
             }
             party->motionStep = 10;
         case 10:
-partyChgPoseId(party, 9);
-party->moveFrames = sysMsec2Frame(200);
+        partyChgPoseId(party, 9);
+        party->moveFrames = sysMsec2Frame(200);
             party->motionStep = 11;
         case 11:
             if (--party->moveFrames > 0) {
@@ -3099,7 +3099,7 @@ party->moveFrames = sysMsec2Frame(200);
             }
             break;
         case 20:
-if (mario->currMotionId == MARIO_MOTION_DAMAGE) {
+        if (mario->currMotionId == MARIO_MOTION_DAMAGE) {
                 if (!marioWaitDamageReturnFall()) {
                     break;
                 }
@@ -3131,7 +3131,7 @@ if (mario->currMotionId == MARIO_MOTION_DAMAGE) {
                 party->flags &= ~PARTY_FLAG_FORCE_FALL;
             }
         }
-partyMove(party);
+        partyMove(party);
             if (party->velY <= -6.0f) {
                 party->accelY = 0.0f;
                 party->velY = -6.0f;
@@ -3142,7 +3142,7 @@ partyMove(party);
                 party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
             }
             if (party->hitobjStandOn && !((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
-party->motionStep = 23;
+                party->motionStep = 23;
                 party->moveFrames = 30;
             }
             break;

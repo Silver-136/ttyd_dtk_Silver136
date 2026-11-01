@@ -2034,8 +2034,8 @@ USER_FUNC(evt_npc_wait_battle_end) {
     if (party) {
         partyCtrlOn();
     }
-psndClearFlag(PSND_FLAG_BATTLE_START);
-return EVT_RETURN_DONE;
+    psndClearFlag(PSND_FLAG_BATTLE_START);
+    return EVT_RETURN_DONE;
 }
 #else
 /**

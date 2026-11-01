@@ -370,7 +370,7 @@ EVT_BEGIN(evt_hiki_open)
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
 #if VERSION <= VERSION_DEMO_US
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
-CALL(evt_mario_key_onoff, 0)
+            CALL(evt_mario_key_onoff, 0)
 #else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #endif

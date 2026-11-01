@@ -340,7 +340,7 @@ static EVT_BEGIN(counter_damage_event)
 #if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_DivePartsPosition, LW(10), 1, LW(2), LW(3), LW(4), 5, 0, EASING_LINEAR, 0, -1)
     WAIT_FRAMES(30)
-CALL(btlevtcmd_SetPartsFallAccel, LW(10), 1, FLOAT(1.0f))
+    CALL(btlevtcmd_SetPartsFallAccel, LW(10), 1, FLOAT(1.0f))
     CALL(btlevtcmd_GetPartsPos, LW(10), 1, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_TransStageFloorPosition, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(2), 30)

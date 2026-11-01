@@ -1159,8 +1159,8 @@ f32 h;
             party->position.x = pos.x;
             party->position.z = pos.z;
         } else {
-marioChkWallAround(&pos, spd, dir, party->width, party->height);
-party->position.x = pos.x;
+            marioChkWallAround(&pos, spd, dir, party->width, party->height);
+            party->position.x = pos.x;
             party->position.z = pos.z;
         }
     } else {
@@ -1186,8 +1186,8 @@ party->position.x = pos.x;
     hit = NULL;
     if (!(party->flags & PARTY_FLAG_FORCE_FALL) && party->velY <= 0.0f) {
         v = __fabsf(party->velY);
-hit = _partySearchGround(party, &pos.y, &depth, v, v);
-if (hit) {
+        hit = _partySearchGround(party, &pos.y, &depth, v, v);
+        if (hit) {
             if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
                 party->hitobjStandOn = hit;
                 party->flags &= ~PARTY_FLAG_IS_GROUNDED;
@@ -1201,8 +1201,8 @@ if (hit) {
                 party->velY += party->accelY;
                 return 2;
             }
-if (depth != 0.0f) {
-hit = NULL;
+            if (depth != 0.0f) {
+                hit = NULL;
             } else {
                 party->position.y = pos.y;
             }
@@ -1682,14 +1682,14 @@ void partyWalkInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
     party->flags |= PARTY_FLAG_IS_GROUNDED;
-partyClearFootmark();
+    partyClearFootmark();
     party->moveArg = 0;
     party->reserved_44 = 0x10;
     party->homingDist = 50.0f;
     party->reserved_3E = 0;
     party->accelY = 1.8f;
     party->velY = 0.0f;
-if (!(mario->flags & MARIO_FLAG_PARTY_WALK_DISABLED)) {
+    if (!(mario->flags & MARIO_FLAG_PARTY_WALK_DISABLED)) {
         partyChgPoseId(party, 1);
         partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
         partyChgMot(party, PARTY_MOTION_STAY);

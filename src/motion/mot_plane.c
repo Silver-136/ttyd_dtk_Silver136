@@ -45,14 +45,14 @@ f32 planeData[41] = {
  * at the position in LW(0..2) while Mario folds into the plane on take-off.
  */
 EVT_BEGIN(sound_evt)
-CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)
-WAIT_FRAMES(12)
-CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)
-WAIT_FRAMES(12)
-CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)
-WAIT_FRAMES(12)
-CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)
-RETURN
+    CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)
+    WAIT_FRAMES(12)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)
+    WAIT_FRAMES(12)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)
+    WAIT_FRAMES(12)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)
+    RETURN
 EVT_END()
 
 static inline void planeSetSpd(f32 targetZ, f32 rate, f32 zoom) {
@@ -363,11 +363,11 @@ void mot_plane(void) {
             mp->camShiftTargetY = -70.0f;
             break;
     }
-if (mp->position.y < 100.0f) {
+    if (mp->position.y < 100.0f) {
         mp->camShiftTargetY = __fabsf(planeData[38]);
     }
-flyMain();
-if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
+    flyMain();
+    if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
         MarioWork* m = marioGetPtr();
         if ((u16)m->currMotionId == MARIO_MOTION_PLANE && (s32)m->currSubMotionId >= 12 && (s32)m->currSubMotionId < 20) {
             m->currSubMotionId = 50;
@@ -375,7 +375,7 @@ if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
         }
         return;
     }
-if ((s32)mp->currSubMotionId == 20 || (s32)mp->currSubMotionId == 30) {
+    if ((s32)mp->currSubMotionId == 20 || (s32)mp->currSubMotionId == 30) {
         camFollowYOff();
         mp->camShiftTargetY = 0.0f;
         mp->camShiftTargetX = 0.0f;
@@ -511,10 +511,10 @@ if ((s32)mp->currSubMotionId == 20 || (s32)mp->currSubMotionId == 30) {
                 mp->camShiftTargetY = 0.0f;
                 marioChgMot(MARIO_MOTION_STAY);
             }
-break;
+            break;
         case 70: {
             Vec p;
-p = mp->position;
+            p = mp->position;
             marioSetSplash(0, &p);
             mp->multiTimer = 16;
             mp->currSubMotionId = 71;

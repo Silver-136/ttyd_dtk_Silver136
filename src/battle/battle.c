@@ -75,8 +75,8 @@ BOOL battleSeqEndCheck(void) {
  */
 void BattleInit(FieldBattleInfo* info) {
     BattleWork* wp;
-wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
-memset(_battleWorkPointer, 0, sizeof(BattleWork));
+    wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
+    memset(_battleWorkPointer, 0, sizeof(BattleWork));
     wp->curtainSfxId = -1;
     wp->lectureUnitId = -1;
     wp->fbatInfo = info;
@@ -247,8 +247,8 @@ void BattleEnd(void) {
     if (subMenu) {
         BattleFree(subMenu);
     }
-BattleFree(wp);
-_battleWorkPointer = NULL;
+    BattleFree(wp);
+    _battleWorkPointer = NULL;
 }
 #else
 /**

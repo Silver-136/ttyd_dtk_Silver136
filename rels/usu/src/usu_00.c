@@ -1619,7 +1619,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     SET_VALUE(LW(9), PARTY_MEMBER_VIVIAN)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(all_party_lecture)
-CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG4_USU1"))
+    CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG4_USU1"))
 #else
     CALL_CHILD(PTR(all_party_lecture))
 #endif
@@ -1716,7 +1716,7 @@ EVT_BEGIN(usu00_crowAB_talk_event)
         SET_VALUE(LW(8), 20)
     END_IF
     CALL(evt_sub_area_check, 1, LW(3), LW(5), LW(8), LW(0), LW(2), LW(6))
-IF_INT_EQUAL(LW(6), 1)
+    IF_INT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_balloon_tenten)
             SET_VALUE(LW(15), 1)
@@ -1737,7 +1737,7 @@ IF_INT_EQUAL(LW(6), 1)
                 SET_VALUE(LW(15), 0)
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_party_cont_onoff, 0, 0)
-CALL_CHILD(cam_up)
+                CALL_CHILD(cam_up)
                 CALL(evt_npc_get_position, STRING("カラスＢ"), LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
                 IF_INT_EQUAL(LW(7), 2)
@@ -1748,7 +1748,7 @@ CALL_CHILD(cam_up)
                 CALL_CHILD(cam_down)
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_party_cont_onoff, 0, 1)
-END_IF
+                END_IF
         END_IF
     END_IF
     // When Vivian is the partner in party status 2 (Guess: hiding Mario in her shadow), the crows talk for real:
@@ -1769,7 +1769,7 @@ END_IF
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
-CALL_CHILD(cam_up)
+            CALL_CHILD(cam_up)
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＢ"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
@@ -1792,7 +1792,7 @@ CALL_CHILD(cam_up)
             CALL_CHILD(cam_down)
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_party_cont_onoff, 0, 1)
-SET_VALUE(GW(0), 1)
+            SET_VALUE(GW(0), 1)
         END_IF
     END_IF
     WAIT_FRAMES(1)
@@ -1946,7 +1946,7 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＤ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 60, LW(0), LW(2), LW(6))
-IF_INT_LESS_OR_EQUAL(LW(2), -250)
+    IF_INT_LESS_OR_EQUAL(LW(2), -250)
         SET_VALUE(LW(6), 0)
     END_IF
     IF_INT_EQUAL(LW(6), 1)
@@ -1970,7 +1970,7 @@ IF_INT_LESS_OR_EQUAL(LW(2), -250)
                 SET_VALUE(LW(15), 0)
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_party_cont_onoff, 0, 0)
-CALL_CHILD(cam_up)
+                CALL_CHILD(cam_up)
                 CALL(evt_npc_get_position, STRING("カラスＤ"), LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
                 CALL(evt_mario_get_mode, LW(7))
@@ -1982,7 +1982,7 @@ CALL_CHILD(cam_up)
                 CALL_CHILD(cam_down)
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_party_cont_onoff, 0, 1)
-END_IF
+                END_IF
         END_IF
     END_IF
     // When Vivian is the partner in party status 2 (Guess: hiding Mario in her shadow), the crows talk for real:
@@ -2003,7 +2003,7 @@ END_IF
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
-CALL_CHILD(cam_up)
+            CALL_CHILD(cam_up)
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＤ"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
@@ -2028,7 +2028,7 @@ CALL_CHILD(cam_up)
             CALL_CHILD(cam_down)
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_party_cont_onoff, 0, 1)
-SET_VALUE(GW(1), 1)
+            SET_VALUE(GW(1), 1)
         END_IF
     END_IF
     WAIT_FRAMES(1)
@@ -3847,13 +3847,13 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_cam3d_evt_set, 0, 80, 687, 0, 70, -13, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-LOOP(2)
-CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
+    LOOP(2)
+        CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
         CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
         WAIT_MS(100)
         CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
-WAIT_MS(100)
-END_LOOP
+        WAIT_MS(100)
+        END_LOOP
     // The villagers turn about in panic and the crows fly off.
     SET_VALUE(LW(0), STRING("村人Ａ"))
     SPAWN_EVENT(sekai_yami_npc)
@@ -3891,8 +3891,8 @@ END_LOOP
     SPAWN_EVENT(sekai_yami_shake)
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING("stg8_dark_05"), 0, 0)
-WAIT_MS(3000)
-CALL(evt_snd_sfxoff, LW(0))
+    WAIT_MS(3000)
+    CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("muj_01"), STRING("sekai_yami2"))
     RETURN
@@ -4400,7 +4400,7 @@ EVT_BEGIN(usu_00_init_evt)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(bero_case_switch_off)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bero"), MAP_OBJ_FLAG_HIDDEN)
-END_IF
+        END_IF
     // Save block, Star Piece, NPCs, house doors (Bowser gets locked-out scripts) and the inn.
     IF_INT_EQUAL(GF(1), 0)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 365, 60, -50, 0, 0)
@@ -4519,10 +4519,10 @@ END_IF
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
-CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-END_IF
-CALL(evt_party_stop, 0)
+            END_IF
+            CALL(evt_party_stop, 0)
         CALL(evt_party_set_pos, 0, -130, 0, -60)
         SPAWN_EVENT(evt_after_peach)
     END_IF

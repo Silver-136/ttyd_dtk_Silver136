@@ -1,7 +1,7 @@
 # Cleanup backlog
 
-Everything left to clean up, in one place. Both builds (US G8ME01, JP G8MJ01) must stay byte-identical to the
-retail game through every step; nothing here changes behaviour. Per-function detail for the fakes lives in
+Everything left to clean up, in one place. All five builds (US, JP, PAL, US demo, JP demo) must stay byte-identical
+to the original games through every step; US retail is the priority for readability; nothing here changes behaviour. Per-function detail for the fakes lives in
 [FAKES.md](FAKES.md); invented names are listed in [NAME_PROVENANCE.md](NAME_PROVENANCE.md). Counts are from
 2026-10-25 (game code unless marked; the "at adoption" column is the LLCOOLT tree at `85ac972b`).
 
@@ -175,3 +175,13 @@ never copied in). What the raw counts above mean for the libraries:
   GD, SYN, GXSave/GXVerif*, perf, demo, MCC, extra OS/CARD/SI/VI files, a MusyX test main, ...). They
   came with the SDK reconstruction the tree imported; their "needed to match" lines were never checked
   against our game. Keep or delete is open (user).
+
+## 8. After the three new versions (PAL, US demo, JP demo; 2026-11-01)
+
+- Version tests in game code rose from about 2,700 lines to about 9,800 even after 4,040 no-effect demo guards were removed
+  (`demo_collapse.py`). Most that are left are real demo differences; a block with `==` tests or inside a header was not tried.
+- Demo text is imported: `if (x) return` forms, old local names and Ghidra-like shapes sit inside demo branches. Tidy
+  where it helps the US reader; demo-only tricks do not count as debt.
+- `src/manager/cardmgr_demo.inc` holds the demo view of a whole file (about 1,430 lines); per-function guards might be smaller.
+- Tables kept once in `.inc` files for demo data order (`eff_ice_face`, `battle_audience_*`, `battle_monosiri_*`).
+- A few column-0 statements remain inside guarded or macro text; guard indentation elsewhere was normalised by tool.

@@ -228,8 +228,8 @@ void statusWinMain(void) {
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN_REQ;
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ;
     }
-wp->timer += one;
-if (wp->timer >= wp->duration) {
+    wp->timer += one;
+    if (wp->timer >= wp->duration) {
         wp->timer = wp->duration;
         wp->t = wp->tEnd;
         if (wp->t == 0.0f) {

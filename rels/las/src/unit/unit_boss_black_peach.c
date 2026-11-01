@@ -2960,13 +2960,13 @@ EVT_END()
 /** Event script: the queen's line when she is about to die (stg8_las_168). */
 EVT_BEGIN(queen_dead_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, 0)
-CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_MS(250)
-CALL(evt_msg_print, 2, STRING("stg8_las_168"), 0, UNIT_ID_SELF)
+    CALL(evt_msg_print, 2, STRING("stg8_las_168"), 0, UNIT_ID_SELF)
     WAIT_MS(300)
-CALL(btlevtcmd_StatusWindowOnOff, 1)
-WAIT_MS(1000)
-RETURN
+    CALL(btlevtcmd_StatusWindowOnOff, 1)
+    WAIT_MS(1000)
+    RETURN
 EVT_END()
 #endif
 /**
@@ -3710,8 +3710,8 @@ EVT_BEGIN(queen_attack_event)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
             CALL_CHILD(queen_attack_black_energy)
             CASE_EQUAL(3)
-CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 30, 30, 30)
-SWITCH(LW(0))
+                CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 30, 30, 30)
+                SWITCH(LW(0))
                 CASE_EQUAL(0)
                 CALL_CHILD(queen_attack_black_thunder)
                 CASE_EQUAL(1)
@@ -3736,8 +3736,8 @@ SWITCH(LW(0))
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
         CALL_CHILD(queen_attack_black_wave)
         CASE_EQUAL(3)
-CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 50, 30, 30, 30)
-CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEFENSE_UP, LW(1))
+            CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 50, 30, 30, 30)
+            CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEFENSE_UP, LW(1))
         IF_INT_EQUAL(LW(1), 1)
             IF_INT_EQUAL(LW(0), 1)
                 SET_VALUE(LW(0), 0)
@@ -4510,7 +4510,7 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_BOSS_QWENH_HAND_APPEAR1"), LW(0), LW(1), LW(2), 0)
 BEGIN_INLINE_EVENT
-CALL(queen_hand_small_drag_1_evt)
+    CALL(queen_hand_small_drag_1_evt)
     END_INLINE_EVENT
     CALL(evt_eff, STRING("m_h_s1_"), STRING("mist2"), 0, -100, 15, 0, 100, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("m_h_s2_"), STRING("mist2"), 0, -100, 15, 0, 100, 0, -1, 0, 0, 0, 0, 0)
@@ -4558,9 +4558,9 @@ CALL(queen_hand_small_drag_1_evt)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_dark_drag_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
     WAIT_MS(750)
-CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
     WAIT_MS(750)
-CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
     WAIT_MS(750)
     CALL(evt_eff_softdelete, STRING("m_h_s1_"))
     CALL(evt_eff_softdelete, STRING("m_h_s2_"))
@@ -4570,7 +4570,7 @@ CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_d
     CALL(btlevtcmd_SetScale, LW(3), 1, 1, 1)
     CALL(battle_evt_majo_disp_on, LW(3), LW(4), LW(0), LW(1), LW(2), 0)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
-CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_MS(750)
     LABEL(95)
     // Wrap up the attack.
@@ -4580,10 +4580,10 @@ CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_d
     CALL(evt_eff, STRING("m_h_s2"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("m_h_s3"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
 BEGIN_INLINE_EVENT
-CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HAND_APPEAR1_2"), 0)
-CALL(queen_hand_small_drag_3_evt)
-END_INLINE_EVENT
-RETURN
+    CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HAND_APPEAR1_2"), 0)
+    CALL(queen_hand_small_drag_3_evt)
+    END_INLINE_EVENT
+    RETURN
 EVT_END()
 #else
 /**
@@ -4729,7 +4729,7 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(evt_eff_softdelete, STRING("m_h_s3"))
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HANDS_MOVE1"), 0)
 BEGIN_INLINE_EVENT
-CALL(queen_hand_small_1000hand_1_evt)
+    CALL(queen_hand_small_1000hand_1_evt)
     END_INLINE_EVENT
     WAIT_MS(400)
     // Find out whether the attack will connect or miss.
@@ -4777,11 +4777,11 @@ CALL(queen_hand_small_1000hand_1_evt)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_1000hand_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
     WAIT_MS(500)
-CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
     WAIT_MS(500)
-CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
     WAIT_MS(500)
-CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_MS(500)
     WAIT_MS(1000)
     GOTO(98)
@@ -4796,7 +4796,7 @@ BEGIN_INLINE_EVENT
         CALL(queen_hand_small_1000hand_2_evt)
     END_INLINE_EVENT
     WAIT_MS(1000)
-RETURN
+    RETURN
 EVT_END()
 #else
 EVT_BEGIN(queen_hand_small_1000hand_attack)

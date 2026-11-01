@@ -917,8 +917,8 @@ s32 i;
     entry = &data->entries[data->charCount];
     flags = 0;
     maxScale = 0.0f;
-scale = 1.0f;
-if (window->type < 0) {
+    scale = 1.0f;
+    if (window->type < 0) {
         window->type = WINDOW_TYPE_NORMAL;
     }
     time = data->parseTime;
@@ -959,15 +959,15 @@ if (window->type < 0) {
                 y = 0;
             }
         }
-check = *((const u8*)msg);
-if (_ismbblead((u8)check)) {
-glyph = kanjiSearch(*((const u16*)msg));
-ww = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
+        check = *((const u8*)msg);
+        if (_ismbblead((u8)check)) {
+            glyph = kanjiSearch(*((const u16*)msg));
+            ww = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
             entry->glyph = glyph;
             entry->x = x;
             entry->y = y - (s16)(10.0f * scale);
             entry->scale = scale;
-entry->value = flags;
+            entry->value = flags;
             if ((*((const u16*)msg)) == 0x8145) {
                 entry->value |= MSG_CHAR_VOICE;
             } else if (((*((const u16*)msg)) != 0x8140) && ((*((const u16*)msg)) != 0x8151)) {
@@ -976,10 +976,10 @@ entry->value = flags;
             if ((flags & MSG_CHAR_DYNAMIC) != 0) {
                 entry->rot = fv;
             }
-if (maxScale < scale) {
+            if (maxScale < scale) {
                 maxScale = scale;
             }
-entry->time = time;
+            entry->time = time;
             x += ww;
             msg += 2;
             time += step;
@@ -991,14 +991,14 @@ entry->time = time;
             case 0:
                 entry->glyph = MSG_GLYPH_END;
                 entry->time = time;
-data->parseTime = time;
+                data->parseTime = time;
                 data->parseX = x;
                 data->parseY = y;
                 data->parsePage = savedPage;
                 data->parseScroll = savedScroll;
                 return;
             case '\n':
-entry->glyph = MSG_GLYPH_NEWLINE;
+            entry->glyph = MSG_GLYPH_NEWLINE;
                 entry->time = time;
                 x = 0;
                 if (0.0f == maxScale) {
@@ -1059,7 +1059,7 @@ continue;
                 } else if (strcmp(tag, "pos") == 0) {
                     sscanf(args, "%d%d", &posX, &posY);
                     x = posX;
-if (posY != 999) {
+                    if (posY != 999) {
                         y = topY - posY;
                     }
                     savedScroll = -posY;
@@ -1189,52 +1189,52 @@ if (posY != 999) {
                 } else if (strcmp(tag, "nowinse") == 0) {
                     window->flags |= WINDOW_FLAG_NOWINSE;
 } else if (strcmp(tag, "icon") == 0) {
-isHM = FALSE;
-if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
+    isHM = FALSE;
+    if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
                         sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &iconOffX, &iconY, &iconAdvance);
                     } else {
                         sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
-if (strcmp(name, "HM") == 0) {
+                        if (strcmp(name, "HM") == 0) {
                             isHM = TRUE;
                         }
-iconId = msgIconStr2ID(name);
+                        iconId = msgIconStr2ID(name);
                         if (iconId < 0) {
                             iconId = 0;
                         }
                     }
-if (!isHM)
+                    if (!isHM)
 {
                         entry->value = iconId;
                         // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
                         ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
                         entry->glyph = MSG_GLYPH_ICON;
                         entry->x = (x + ((0.5f * iw) * iconScale)) + iconOffX;
-x += 0x28;
-entry->y = y - (ih * iconScale);
+                        x += 0x28;
+                        entry->y = y - (ih * iconScale);
                         entry->iconY = iconY;
                         entry->scale = iconScale;
                         entry->time = time;
                         entry++;
-time += step;
+                        time += step;
                         data->charCount++;
                     }
-else {
-glyph = kanjiSearch(0x94B5);
+                    else {
+                        glyph = kanjiSearch(0x94B5);
                         iw = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
                         entry->glyph = glyph;
                         entry->x = x;
                         entry->y = y - (s16)(10.0f * scale);
                         entry->scale = scale;
-entry->value = flags;
+                        entry->value = flags;
                         entry->value |= MSG_CHAR_TALK;
                         if (flags & MSG_CHAR_DYNAMIC) {
 
                             entry->rot = fv;
                         }
-if (maxScale < scale) {
+                        if (maxScale < scale) {
                             maxScale = scale;
                         }
-entry->time = time;
+                        entry->time = time;
                         entry++;
                         x += iw;
                         time += step;
@@ -1293,12 +1293,12 @@ entry->time = time;
                     // does it instead and its pointer-IV init in the preheader keeps the dead j/i steps alive, as in the target (FAKES.md)
                     for (k = 0; k < half; k++) {
                         glyph = kanjiSearch(*(u16*)&tag[(u32)j]);
-total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
-j += 2;
+                        total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
+                        j += 2;
                     }
-total = (u16)total - (0.55f * (4.0f * scale));
+                    total = (u16)total - (0.55f * (4.0f * scale));
                     rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
-yx[0] = y;
+                    yx[0] = y;
                     ys[0] = y;
                     fp[0] = flags & MSG_CHAR_DYNAMIC;
                     fx[0] = flags & MSG_CHAR_DYNAMIC;
@@ -1317,12 +1317,12 @@ yx[0] = y;
                             }
                         }
                         glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
-wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
-entry->glyph = glyph;
+                        wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
+                        entry->glyph = glyph;
                         entry->x = rubyX;
                         entry->y = ys[0];
-entry->scale = 0.55f * scale;
-entry->value = flags;
+                        entry->scale = 0.55f * scale;
+                        entry->value = flags;
                         if (fp[0]) {
                             entry->rot = fv;
                         }
@@ -1346,22 +1346,22 @@ entry->value = flags;
                 } else {
                     glyphD = hankakuSearch(check);
                 }
-wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
+                wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
                 entry->glyph = glyphD;
                 entry->x = x;
                 entry->y = y - (s16)(10.0f * scale);
                 entry->scale = scale;
-entry->value = flags;
+                entry->value = flags;
                 if ((*((const s8*)msg)) != ' ') {
                     entry->value |= MSG_CHAR_TALK;
                 }
                 if (flags & MSG_CHAR_DYNAMIC) {
                     entry->rot = fv;
                 }
-if (maxScale < scale) {
+                if (maxScale < scale) {
                     maxScale = scale;
                 }
-entry->time = time;
+                entry->time = time;
                 x += wwD;
                 msg++;
                 time += step;
@@ -1460,8 +1460,8 @@ s32 i;
     entry = &data->entries[data->charCount];
     flags = 0;
     maxScale = 0.0f;
-scale = 1.0f;
-if (window->type < 0) {
+    scale = 1.0f;
+    if (window->type < 0) {
         window->type = WINDOW_TYPE_NORMAL;
     }
     time = data->parseTime;
@@ -1502,15 +1502,15 @@ if (window->type < 0) {
                 y = 0;
             }
         }
-check = *((const u8*)msg);
-if (_ismbblead((u8)check)) {
-glyph = kanjiSearch(*((const u16*)msg));
-ww = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
+        check = *((const u8*)msg);
+        if (_ismbblead((u8)check)) {
+            glyph = kanjiSearch(*((const u16*)msg));
+            ww = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
             entry->glyph = glyph;
             entry->x = x;
             entry->y = y - (s16)(10.0f * scale);
             entry->scale = scale;
-entry->value = flags;
+            entry->value = flags;
             if ((*((const u16*)msg)) == 0x8145) {
                 entry->value |= MSG_CHAR_VOICE;
             } else if (((*((const u16*)msg)) != 0x8140) && ((*((const u16*)msg)) != 0x8151)) {
@@ -1519,10 +1519,10 @@ entry->value = flags;
             if ((flags & MSG_CHAR_DYNAMIC) != 0) {
                 entry->rot = fv;
             }
-if (maxScale < scale) {
+            if (maxScale < scale) {
                 maxScale = scale;
             }
-entry->time = time;
+            entry->time = time;
             x += ww;
             msg += 2;
             time += step;
@@ -1534,14 +1534,14 @@ entry->time = time;
             case 0:
                 entry->glyph = MSG_GLYPH_END;
                 entry->time = time;
-data->parseTime = time;
+                data->parseTime = time;
                 data->parseX = x;
                 data->parseY = y;
                 data->parsePage = savedPage;
                 data->parseScroll = savedScroll;
                 return;
             case '\n':
-entry->glyph = MSG_GLYPH_NEWLINE;
+            entry->glyph = MSG_GLYPH_NEWLINE;
                 entry->time = time;
                 x = 0;
                 if (0.0f == maxScale) {
@@ -1602,7 +1602,7 @@ continue;
                 } else if (strcmp(tag, "pos") == 0) {
                     sscanf(args, "%d%d", &posX, &posY);
                     x = posX;
-if (posY != 999) {
+                    if (posY != 999) {
                         y = topY - posY;
                     }
                     savedScroll = -posY;
@@ -1732,11 +1732,11 @@ if (posY != 999) {
                 } else if (strcmp(tag, "nowinse") == 0) {
                     window->flags |= WINDOW_FLAG_NOWINSE;
 } else if (strcmp(tag, "icon") == 0) {
-if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
+    if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
                         sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &iconOffX, &iconY, &iconAdvance);
                     } else {
                         sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
-iconId = msgIconStr2ID(name);
+                        iconId = msgIconStr2ID(name);
                         if (iconId < 0) {
                             iconId = 0;
                         }
@@ -1747,13 +1747,13 @@ iconId = msgIconStr2ID(name);
                         ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
                         entry->glyph = MSG_GLYPH_ICON;
                         entry->x = (x + ((0.5f * iw) * iconScale)) + iconOffX;
-x += 0x28;
-entry->y = y - (ih * iconScale);
+                        x += 0x28;
+                        entry->y = y - (ih * iconScale);
                         entry->iconY = iconY;
                         entry->scale = iconScale;
                         entry->time = time;
                         entry++;
-time += step;
+                        time += step;
                         data->charCount++;
                     }
 } else if (strcmp(tag, "anim") == 0) {
@@ -1809,12 +1809,12 @@ time += step;
                     // does it instead and its pointer-IV init in the preheader keeps the dead j/i steps alive, as in the target (FAKES.md)
                     for (k = 0; k < half; k++) {
                         glyph = kanjiSearch(*(u16*)&tag[(u32)j]);
-total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
-j += 2;
+                        total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
+                        j += 2;
                     }
-total = (u16)total - (0.55f * (4.0f * scale));
+                    total = (u16)total - (0.55f * (4.0f * scale));
                     rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
-yx[0] = y;
+                    yx[0] = y;
                     ys[0] = y;
                     fp[0] = flags & MSG_CHAR_DYNAMIC;
                     fx[0] = flags & MSG_CHAR_DYNAMIC;
@@ -1833,12 +1833,12 @@ yx[0] = y;
                             }
                         }
                         glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
-wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
-entry->glyph = glyph;
+                        wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
+                        entry->glyph = glyph;
                         entry->x = rubyX;
                         entry->y = ys[0];
-entry->scale = 0.55f * scale;
-entry->value = flags;
+                        entry->scale = 0.55f * scale;
+                        entry->value = flags;
                         if (fp[0]) {
                             entry->rot = fv;
                         }
@@ -1862,22 +1862,22 @@ entry->value = flags;
                 } else {
                     glyphD = hankakuSearch(check);
                 }
-wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
+                wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
                 entry->glyph = glyphD;
                 entry->x = x;
                 entry->y = y - (s16)(10.0f * scale);
                 entry->scale = scale;
-entry->value = flags;
+                entry->value = flags;
                 if ((*((const s8*)msg)) != ' ') {
                     entry->value |= MSG_CHAR_TALK;
                 }
                 if (flags & MSG_CHAR_DYNAMIC) {
                     entry->rot = fv;
                 }
-if (maxScale < scale) {
+                if (maxScale < scale) {
                     maxScale = scale;
                 }
-entry->time = time;
+                entry->time = time;
                 x += wwD;
                 msg++;
                 time += step;

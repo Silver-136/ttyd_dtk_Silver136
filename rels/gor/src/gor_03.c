@@ -1899,9 +1899,9 @@ EVT_BEGIN(maffia1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_02"), 0, STRING("me"))
-CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
+        CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
         CALL(evt_msg_print, 0, STRING("mac_2_070"), 0, STRING("me"))
-CASE_BETWEEN(STG2_46_BLIMP_TICKET, STG2_END_TO_GLITZVILLE)
+        CASE_BETWEEN(STG2_46_BLIMP_TICKET, STG2_END_TO_GLITZVILLE)
         CALL(evt_msg_print, 0, STRING("mac_2_121"), 0, STRING("me"))
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
         CALL_CHILD(maffiaboss_nekomu00)
@@ -2456,8 +2456,8 @@ EVT_BEGIN(exchange_keep_sub)
             SET_VALUE(LW(0), 48)
             CALL_CHILD(bteresa_n_fadein)
             CALL(yuugijou_get_montemedal, LW(1))
-CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_91"), 0, 0, LW(1))
-CALL(yuugijou_montemedal_keep)
+            CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_91"), 0, 0, LW(1))
+            CALL(yuugijou_montemedal_keep)
             SET_VALUE(LW(0), 48)
             CALL_CHILD(bteresa_n_fadeout)
             CALL(evt_npc_set_position, STRING("バニーテレサ"), LW(6), LW(7), LW(10))
@@ -3260,8 +3260,8 @@ EVT_BEGIN(slot_set)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-CALL(evt_party_stop, 0)
-CALL(yuugijou_get_takeoutflag, LW(0))
+    CALL(evt_party_stop, 0)
+    CALL(yuugijou_get_takeoutflag, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(yuugijou_get_montemedal_keep, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -3271,7 +3271,7 @@ CALL(yuugijou_get_takeoutflag, LW(0))
             CALL(yuugijou_montemedal_return)
         END_IF
     END_IF
-SWITCH(LW(8))
+    SWITCH(LW(8))
         CASE_EQUAL(0)
         CALL(evt_cam3d_evt_set, FLOAT(-393.8994f), FLOAT(113.09961f), FLOAT(-235.0f), FLOAT(-197.0f), FLOAT(78.69922f), FLOAT(-235.0f), 600, EASING_SINE_IN_OUT)
         WAIT_MS(600)
@@ -3307,8 +3307,8 @@ SWITCH(LW(8))
     LABEL(0)
     CALL(evt_cam3d_evt_off, 600, EASING_SINE_IN_OUT)
     WAIT_MS(600)
-CALL(evt_party_run, 0)
-CALL(evt_mario_key_onoff, 1)
+    CALL(evt_party_run, 0)
+    CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 #else
@@ -3530,8 +3530,8 @@ EVT_END()
 EVT_BEGIN(exchange_set)
     // Mario stops at the Pianta Changer's counter.
     CALL(evt_mario_key_onoff, 0)
-CALL(evt_party_stop, 0)
-CALL(yuugijou_get_takeoutflag, LW(0))
+    CALL(evt_party_stop, 0)
+    CALL(yuugijou_get_takeoutflag, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(yuugijou_get_montemedal_keep, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -3554,15 +3554,15 @@ CALL(yuugijou_get_takeoutflag, LW(0))
     // The Pianta Changer greets Mario, explaining the rates the first time.
     IF_INT_EQUAL(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 0)
         CALL(exchange_ryokin_medal, 0, LW(1), LW(2))
-CALL(evt_msg_print_insert, 0, STRING("exchange_mess_00"), 0, 0, LW(1), LW(2))
-SET_VALUE(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 1)
+        CALL(evt_msg_print_insert, 0, STRING("exchange_mess_00"), 0, 0, LW(1), LW(2))
+        SET_VALUE(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 1)
     ELSE
         CALL(evt_msg_print, 0, STRING("exchange_mess_01"), 0, 0)
     END_IF
     // Price menu: Mario picks how many medals to buy with coins.
     CALL(evt_exchange_msg_alloc)
-CALL(evt_unitwin_alloc)
-CALL(unitwincoin_disp_onoff, 1)
+    CALL(evt_unitwin_alloc)
+    CALL(unitwincoin_disp_onoff, 1)
     SET_VALUE(LW(0), 0)
     LOOP(0)
         CALL(evt_exchange_msg_set, LW(0), STRING("exchange_mess_02"), LW(1))
@@ -3599,8 +3599,8 @@ CALL(unitwincoin_disp_onoff, 1)
     // Mario leaves the counter and the camera returns.
     CALL(evt_cam3d_evt_off, 600, EASING_SINE_IN_OUT)
     WAIT_MS(600)
-CALL(evt_party_run, 0)
-CALL(evt_mario_key_onoff, 1)
+    CALL(evt_party_run, 0)
+    CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 #else
@@ -4465,7 +4465,7 @@ EVT_END()
  * Shine Sprite block "pblk2".
  */
 EVT_BEGIN(evt_door_01_1_open)
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mobj_check, STRING("pblk2"), LW(0))
@@ -4481,7 +4481,7 @@ EVT_END()
  * again.
  */
 EVT_BEGIN(evt_door_01_1_close)
-CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -6138,7 +6138,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
         SET_VALUE(LW(0), 1)
     END_IF
     IF_INT_EQUAL(LW(0), 0)
-CALL(evt_lottery_flag, LW(1))
+        CALL(evt_lottery_flag, LW(1))
         SET_VALUE(LW(0), 4)
         IF_BITS_SET(LW(1), LOTTERY_FLAG_MATCH1)
             SET_VALUE(LW(0), 3)
@@ -6153,8 +6153,8 @@ CALL(evt_lottery_flag, LW(1))
             SET_VALUE(LW(0), 0)
         END_IF
         IF_INT_NOT_EQUAL(LW(0), 4)
-CALL(evt_mario_set_dir, 270, 300, 0)
-CALL(evt_cam3d_evt_set, -150, 120, 890, -150, 50, 470, 800, EASING_SINE_IN_OUT)
+            CALL(evt_mario_set_dir, 270, 300, 0)
+            CALL(evt_cam3d_evt_set, -150, 120, 890, -150, 50, 470, 800, EASING_SINE_IN_OUT)
             WAIT_MS(800)
             IF_INT_LESS_OR_EQUAL(LW(0), 1)
                 CALL(evt_npc_flag_onoff, 0, STRING("グルメボム兵"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -6185,14 +6185,14 @@ CALL(evt_cam3d_evt_set, -150, 120, 890, -150, 50, 470, 800, EASING_SINE_IN_OUT)
             END_SWITCH
             CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_2"), STRING("T_2"))
             CALL(evt_msg_print, 0, LW(1), 0, STRING("グルメボム兵"))
-CALL(evt_mario_set_pose, LW(2))
+            CALL(evt_mario_set_pose, LW(2))
             WAIT_MS(800)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-CALL(kuzi_get_keihin, LW(0), LW(1))
-SET_VALUE(LW(2), LW(0))
+            CALL(kuzi_get_keihin, LW(0), LW(1))
+            SET_VALUE(LW(2), LW(0))
             ADD(LW(2), 1)
             CALL(evt_msg_print_insert, 0, STRING("kuji_bomb_028"), 0, STRING("グルメボム兵"), LW(2))
-CALL(evt_mario_mov_pos2, -120, 480, 60)
+            CALL(evt_mario_mov_pos2, -120, 480, 60)
             CALL(evt_item_entry, STRING("keihin"), LW(1), 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("keihin"))
             CALL(evt_item_get_item_end_wait, STRING("keihin"))
@@ -6492,9 +6492,9 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(gor_03_init_evt)
-CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR4"))
-IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
+    IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         CALL(evt_mario_normalize)
     END_IF
     // The minigame pipe, the exits, the townsfolk and Luigi are set up.
@@ -6601,7 +6601,7 @@ IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
     // The lottery board trigger is registered.
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kuzi"), 0, PTR(kuzi_keiziban_entry), 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02"), MAP_OBJ_FLAG_CLIP)
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
         SPAWN_EVENT(maffiaboss_maffiaboss)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_45_DAUGHTER_LOCATED)
@@ -7749,8 +7749,8 @@ USER_FUNC(kuzi_get_keihin) {
         case 0:
 #if VERSION <= VERSION_DEMO_US
             if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
-item = ITEM_MUSHROOM;
-evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
+                item = ITEM_MUSHROOM;
+                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
 #else
             if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
                 item = ITEM_POWER_PLUS;
@@ -7763,8 +7763,8 @@ evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
         case 1:
 #if VERSION <= VERSION_DEMO_US
             if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
-item = ITEM_MUSHROOM;
-evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN, 1);
+                item = ITEM_MUSHROOM;
+                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN, 1);
 #else
             if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
                 item = ITEM_LUCKY_DAY;

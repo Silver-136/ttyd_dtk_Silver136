@@ -609,7 +609,7 @@ EVT_END()
  * and the partners return.
  */
 EVT_BEGIN(evt_tou_bed)
-CALL(evt_mario_key_onoff, 0)
+    CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
     SET_VALUE(LF(2), 0)
@@ -676,7 +676,7 @@ CALL(evt_mario_key_onoff, 0)
             WAIT_MS(200)
             CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP2"), LW(0), LW(1), LW(2), 0)
         END_INLINE_EVENT
-CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GO_SLEEPING1"))
         CALL(evt_fade_entry, 4, 1000, 0, 0, 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -730,7 +730,7 @@ CALL(evt_snd_bgmoff, PSND_PAUSE)
         WAIT_FRAMES(1)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
+        CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
     END_IF
     // Control returns to the player.
     CALL(evt_party_run, 0)

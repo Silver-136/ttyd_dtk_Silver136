@@ -157,18 +157,18 @@ const char* area_name;
             gp->mapFadeInDuration = 300;
             gp->areaFadeInType = FADE_OUT_BLACK;
             gp->areaFadeInDuration = 300;
-if (!newarea) {
+            if (!newarea) {
                 gp->didAreaChange = FALSE;
             } else {
                 gp->didAreaChange = TRUE;
             }
-area_name = getAreaName();
+            area_name = getAreaName();
             fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
             mapPreLoad(_next_map);
 work->state++;
             break;
         case 1:
-if (fadeIsFinish()) {
+        if (fadeIsFinish()) {
                 if (gp->relocationBase) {
                     ((void (*)(void))((OSModuleHeader*)gp->relocationBase)->epilog)();
                     OSUnlink(gp->relocationBase);
@@ -181,7 +181,7 @@ if (fadeIsFinish()) {
                 psndMapChange();
                 work->state++;
             }
-break;
+            break;
         case 2:
             if (strcmp(_next_map, "title") == 0) {
                 strcpy(gp->currentAreaName + 0x10, gp->currentMapName);
@@ -242,7 +242,7 @@ break;
                     psndClearFlag(PSND_FLAG_BGM_WAIT_1);
                 }
                 setupDataBase(_next_area, _next_map);
-evtCode = mapDataPtr(_next_map)->eventAddr;
+                evtCode = mapDataPtr(_next_map)->eventAddr;
                 if (evtCode) {
                     gp->mapEventId = evtEntry(evtCode, 0, 0)->eventId;
                 } else {
@@ -279,10 +279,10 @@ evtCode = mapDataPtr(_next_map)->eventAddr;
             MarioWork* mario;
             PartyEntry* party;
             PartyEntry* extraParty;
-if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "sys", 3)) {
+            if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "sys", 3)) {
 {
                     LangTbl lang = lang_tbl;
-fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
+                    fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 }
 animGroupBaseAsync("p_jyabara", 0, 0);
                 animGroupBaseAsync("p_kaiten_h", 0, 0);
@@ -311,7 +311,7 @@ animGroupBaseAsync("p_jyabara", 0, 0);
                             extraParty->position.x += -30.0f * (f32)cos(camGetPtr(CAMERA_3D)->viewYaw);
                             extraParty->position.z += 30.0f * (f32)sin(camGetPtr(CAMERA_3D)->viewYaw);
                         }
-if (!strcmp(gp->currentMapName, "dou_05") && party) {
+                        if (!strcmp(gp->currentMapName, "dou_05") && party) {
                             party->position = mario->position;
                             party->position.x -= 30.0f;
                             if (extraParty) {
@@ -319,7 +319,7 @@ if (!strcmp(gp->currentMapName, "dou_05") && party) {
                                 extraParty->position.x -= 30.0f;
                             }
                         }
-marioKeyOff();
+                        marioKeyOff();
                         evtEntryType(key_off, 0, 0, 0);
                         break;
                     default:

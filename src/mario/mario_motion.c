@@ -200,7 +200,7 @@ void marioChgMoveMotion(void) {
         mario_plane_cancel();
         return;
     }
-if (mario->currMotionId == MARIO_MOTION_YOSHI) {
+    if (mario->currMotionId == MARIO_MOTION_YOSHI) {
         return;
     }
     if (!mario->baseSpeed) {
@@ -780,8 +780,8 @@ void marioFall(void) {
         mot_fall_roll();
         return;
     }
-rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
-spd = marioGetFallSpd();
+    rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
+    spd = marioGetFallSpd();
     hit = marioChkLandon(&y, spd);
     if (hit) {
         mario->hitobjStandOn = hit;
@@ -790,8 +790,8 @@ spd = marioGetFallSpd();
             mario->position.y += spd;
         } else {
             mario->position.y = y;
-if (marioPriCheckJabara() && a != -1 && rub >= 0) {
-marioChgMot(MARIO_MOTION_JABARA);
+            if (marioPriCheckJabara() && a != -1 && rub >= 0) {
+                marioChgMot(MARIO_MOTION_JABARA);
                 return;
             }
         }
@@ -999,16 +999,16 @@ void marioLandOn(void) {
             return;
         }
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-marioChgMotSub(MARIO_MOTION_STAY, FALSE);
-return;
+            marioChgMotSub(MARIO_MOTION_STAY, FALSE);
+            return;
         }
         if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
             motSlitCancel();
         }
         return;
     }
-if (mario->controlStickSensitivity > 0.0f && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-if (mario->characterId == CHARACTER_BOWSER) {
+    if (mario->controlStickSensitivity > 0.0f && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+        if (mario->characterId == CHARACTER_BOWSER) {
             if (kpaFireAttackCheck()) {
                 marioChgMot(MARIO_MOTION_STAY);
             } else {
@@ -1039,8 +1039,8 @@ marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after land
         return;
     }
     if (flags & MARIO_FLAG_PAPER_MODE) {
-marioChgMotSub(MARIO_MOTION_STAY, FALSE);
-return;
+        marioChgMotSub(MARIO_MOTION_STAY, FALSE);
+        return;
     }
     if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
         motSlitCancel();
@@ -1256,8 +1256,8 @@ void mot_talk(void) {
         if (fbat != NULL) {
             marioChgPose(((NpcEntry*)fbat)->checkPose);
         }
-if (!strcmp(mario->animName, "M_I_2")) {
-mario->multiTimer = 60;
+        if (!strcmp(mario->animName, "M_I_2")) {
+            mario->multiTimer = 60;
             mario->currSubMotionId = 10;
         }
     }

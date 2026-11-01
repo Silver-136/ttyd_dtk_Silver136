@@ -133,9 +133,9 @@ void seq_logoInit(SequenceWork* work) {
  */
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
-wp->texture = fileAllocf(4, "%s/monthry.tpl", getMarioStDvdRoot());
-wp->progressive = FALSE;
-VIConfigure(&sRMObjHReso);
+    wp->texture = fileAllocf(4, "%s/monthry.tpl", getMarioStDvdRoot());
+    wp->progressive = FALSE;
+    VIConfigure(&sRMObjHReso);
     VIFlush();
     VIWaitForRetrace();
 }
@@ -152,7 +152,7 @@ void seq_logoExit(SequenceWork* work) {
     effTexSetup();
     marioPoseInit();
     fileFree(wp->texture);
-gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+    gp->flags |= GW_FLAG_VIDEO_MODE_SET;
 }
 #elif VERSION == VERSION_DEMO_US
 /**
@@ -161,14 +161,14 @@ gp->flags |= GW_FLAG_VIDEO_MODE_SET;
  */
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
-wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
-wp->progressive = FALSE;
-work->state = 0;
+    wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
+    wp->progressive = FALSE;
+    work->state = 0;
     logoAsyncFirst();
-VIConfigure(&sRMObjHReso);
+    VIConfigure(&sRMObjHReso);
     VIFlush();
     VIWaitForRetrace();
-animGroupBaseAsync("c_pkr", 0, NULL);
+    animGroupBaseAsync("c_pkr", 0, NULL);
     animGroupBaseAsync("c_pnk", 0, NULL);
     animGroupBaseAsync("c_windy", 0, NULL);
     animGroupBaseAsync("OFF_d_meku", 0, NULL);
@@ -188,7 +188,7 @@ void seq_logoExit(SequenceWork* work) {
     effTexSetup();
     marioPoseInit();
     fileFree(wp->texture);
-gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+    gp->flags |= GW_FLAG_VIDEO_MODE_SET;
 }
 #else
 /**

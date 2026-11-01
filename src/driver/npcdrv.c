@@ -766,7 +766,7 @@ void npcMain(void) {
     Vec dv2;
 
     npcwork = gp->inBattle ? &work.battle : &work.field;
-kpaSfx = "SFX_KUPPA_3RD_WATER_FALL1";
+    kpaSfx = "SFX_KUPPA_3RD_WATER_FALL1";
 
     npcMainCount++;
 
@@ -850,7 +850,7 @@ kpaSfx = "SFX_KUPPA_3RD_WATER_FALL1";
                                 entry->position.x += mx;
                                 entry->position.z += mz;
                             } else {
-entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
+                                entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
                                                                  &entry->moveDir, mx, mz);
 }
                             entry->moveOffset.x = 0.0f;
@@ -974,10 +974,10 @@ entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
                             f32 dx, dy, dz;
                             int trig;
                             Vec dv;
-dx = m->position.x - entry->position.x;
+                            dx = m->position.x - entry->position.x;
                             dz = m->position.z - entry->position.z;
                             dy = m->position.y - entry->position.y;
-dist = dx * dx + dz * dz;
+                            dist = dx * dx + dz * dz;
                             sqrtf(dist);
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv);
                             dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
@@ -992,7 +992,7 @@ dist = dx * dx + dz * dz;
                                     dist = sqrtf(dist);
                                     if (dist > 0.25f * entry->searchRange) {
                                         if (dist > entry->searchRange) {
-trig = 0;
+                                            trig = 0;
                                             goto done14;
                                         } else if ((angleToMario = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, angleToMario))) >
                                                    0.5f * entry->searchAngle) {
@@ -2675,15 +2675,15 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
     NpcBattleInfo* b = &npc->battleInfo;
 s32 i;
     s32 z;
-i = 0;
+    i = 0;
     z = 0;
     if (i != 0) {
         z = 1;
     }
     do {
         if (b->recoveredItems[i]) {
-itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL, npc->position.x, npc->position.y, npc->position.z);
-b->recoveredItems[i] = z;
+            itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL, npc->position.x, npc->position.y, npc->position.z);
+            b->recoveredItems[i] = z;
         }
         i++;
     } while (i < 8);
@@ -4472,8 +4472,8 @@ void npcGetBackItemEntry(NpcEntry* npc) {
 
     for (i = 0; i < 8; i++) {
         if (info->recoveredItems[i]) {
-itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL, npc->position.x, npc->position.y, npc->position.z);
-info->recoveredItems[i] = 0;
+            itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL, npc->position.x, npc->position.y, npc->position.z);
+            info->recoveredItems[i] = 0;
         }
     }
 }

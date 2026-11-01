@@ -857,11 +857,11 @@ EVT_BEGIN(aji_09_init_evt)
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_party_cont_onoff, 1, 1)
             CALL(evt_mario_wait_landon)
-CALL(evt_mario_key_onoff, 1)
+            CALL(evt_mario_key_onoff, 1)
             CALL(evt_cam_letter_box_disable, 0)
         END_INLINE_EVENT
     END_IF
-IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
         CALL(evt_item_entry, STRING("item_00"), ITEM_REPEL_CAPE, -180, 12, -135, ITEM_TYPE_STILL, GSWF(4213), 0)
     END_IF
 SPAWN_EVENT(evt_emergency)
@@ -877,7 +877,7 @@ SPAWN_EVENT(evt_emergency)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
-RETURN
+    RETURN
 EVT_END()
 #else
 EVT_BEGIN(aji_09_init_evt)

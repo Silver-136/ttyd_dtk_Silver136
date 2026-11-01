@@ -5412,11 +5412,11 @@ EffectEntry* entry;
 
     type = evtGetValue(event, args[0]);
     scale = 0.75f;
-pos.x = (f32)evtGetValue(event, args[1]);
+    pos.x = (f32)evtGetValue(event, args[1]);
     pos.y = (f32)evtGetValue(event, args[2]);
     pos.z = (f32)evtGetValue(event, args[3]);
     switch (type) {
-case 0:
+        case 0:
             scale *= 0.3f;
             name = "SFX_SYSTEM_NICE_25PERCENT1";
             w = 90.0f;

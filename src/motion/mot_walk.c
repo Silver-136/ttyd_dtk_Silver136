@@ -341,8 +341,8 @@ void mot_dash(void) {
             player->baseSpeed = marioGetDashSpd();
         }
     }
-if (strcmp(player->animName, "M_I_Y") == 0 || player->wMotionTimer > 0xA) {
-marioChgMot(MARIO_MOTION_STAY);
+    if (strcmp(player->animName, "M_I_Y") == 0 || player->wMotionTimer > 0xA) {
+        marioChgMot(MARIO_MOTION_STAY);
         return;
     }
     if (player->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) {
@@ -368,8 +368,8 @@ marioChgMot(MARIO_MOTION_STAY);
         if (!(player->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             stickDir1 = player->wStickDir1;
             stickDir2 = player->wStickDir2;
-if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1) {
-marioChgMot(MARIO_MOTION_WALK);
+            if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1) {
+                marioChgMot(MARIO_MOTION_WALK);
                 return;
             }
             player->directionView = player->controlStickAngle;

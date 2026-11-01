@@ -725,8 +725,8 @@ EVT_BEGIN(nokorin_talk)
 #else
     CALL(evt_msg_print, 0, STRING("stg1_nok_78_01"), 0, 0)
 #endif
-END_SWITCH
-RETURN
+    END_SWITCH
+    RETURN
 EVT_END()
 
 /**

@@ -2240,7 +2240,7 @@ static EVT_BEGIN(cortez_damage_sub_event)
             END_IF
         END_IF
     END_IF
-END_IF
+    END_IF
 LABEL(99)
 RETURN
 EVT_END()

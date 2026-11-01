@@ -1914,7 +1914,7 @@ EVT_BEGIN(aji_06_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
     END_IF
-SET_VALUE(LW(0), PTR(bero_entry_data))
+    SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_bero_get_entername, LW(0))
@@ -1934,7 +1934,7 @@ SET_VALUE(LW(0), PTR(bero_entry_data))
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_party_cont_onoff, 1, 1)
             CALL(evt_mario_wait_landon)
-CALL(evt_mario_key_onoff, 1)
+            CALL(evt_mario_key_onoff, 1)
             CALL(evt_cam_letter_box_disable, 0)
         END_INLINE_EVENT
     END_IF

@@ -332,7 +332,7 @@ void nokonoko_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
         case 0:
-partyClearJumpPara(party);
+        partyClearJumpPara(party);
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             partyChgPose(party, "PNK_K_2");
@@ -357,7 +357,7 @@ partyClearJumpPara(party);
             mario->baseSpeed = 0.0f;
             break;
         case 1:
-party->displayDirection = revise360(45.0f + party->displayDirection);
+        party->displayDirection = revise360(45.0f + party->displayDirection);
             party->position.x += (party->moveTarget.x - party->position.x) / (f32)party->moveFrames;
             party->position.y += (party->moveTarget.y - party->position.y) / (f32)party->moveFrames;
             party->position.z += (party->moveTarget.z - party->position.z) / (f32)party->moveFrames;
@@ -371,7 +371,7 @@ party->displayDirection = revise360(45.0f + party->displayDirection);
             party->useMotionId = 2;
             partyChgPose(party, "PNK_A_1");
         case 2:
-if (mario->hitobjStandOn == NULL) {
+        if (mario->hitobjStandOn == NULL) {
                 break;
             }
             marioChgMot(MARIO_MOTION_JUMP);
@@ -459,9 +459,9 @@ if (mario->hitobjStandOn == NULL) {
             }
             NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); noko_se_off(); break;)
             if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
-if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL ||
+                if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL ||
                     (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
-nokonoko_finish(party);
+                        nokonoko_finish(party);
                     noko_se_off();
                     break;
                 }
@@ -510,8 +510,8 @@ nokonoko_finish(party);
         case 52:
             if (ccwall(party, 1) != NULL) {
                 partyGetMoveDirSpd(party, &dir, &spd);
-marioChkWallAround(&party->position, spd, dir, party->width, party->height);
-party->useMotionId = 70;
+                marioChkWallAround(&party->position, spd, dir, party->width, party->height);
+                party->useMotionId = 70;
                 psndSFXOn_3D((const char*)0x92c, &party->position);
                 noko_star(party, 1);
                 return;

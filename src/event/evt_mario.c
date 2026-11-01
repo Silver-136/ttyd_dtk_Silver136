@@ -310,10 +310,10 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             party = partyGetPtr(marioGetPartyId());
             if (party) {
                 party->position = mp->position;
-party->scale.x = mp->scale.x;
+                party->scale.x = mp->scale.x;
                 party->scale.y = mp->scale.y;
                 party->scale.z = mp->scale.z;
-party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
+                party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
                 party->rot = (Vec){0.0f, 0.0f, 0.0f};
                 party->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
                 party->rotOfsY = mp->rotOfs.y;
@@ -323,10 +323,10 @@ party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
                 party->position = mp->position;
-party->scale.x = mp->scale.x;
+                party->scale.x = mp->scale.x;
                 party->scale.y = mp->scale.y;
                 party->scale.z = mp->scale.z;
-party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
+                party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
                 party->rot = (Vec){0.0f, 0.0f, 0.0f};
                 party->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
                 party->rotOfsY = mp->rotOfs.y;
@@ -336,7 +336,7 @@ party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
             ret = 2;
             break;
         case 10:
-mp->mot.dokan.rotSpeed += 1.0f;
+        mp->mot.dokan.rotSpeed += 1.0f;
             if (mp->mot.dokan.rotSpeed > 30.0f) {
                 mp->mot.dokan.rotSpeed = 30.0f;
             }
@@ -971,7 +971,7 @@ USER_FUNC(evt_mario_normalize) {
 BOOL off;
 
     if (isFirstCall) {
-event->userdata[1] = 0;
+        event->userdata[1] = 0;
         off = !marioChkCtrl();
         if (off) {
             event->userdata[1] = 1;
@@ -989,7 +989,7 @@ event->userdata[1] = 0;
         }
         event->userdata[0] = 0;
     }
-switch (event->userdata[0]) {
+    switch (event->userdata[0]) {
         case 0:
             ret = 0;
             if (mp->currMotionId == MARIO_MOTION_ROLL) {
@@ -1073,7 +1073,7 @@ switch (event->userdata[0]) {
             break;
     }
     if (ret == 2) {
-if (event->userdata[1]) {
+        if (event->userdata[1]) {
             marioCtrlOff();
             partyCtrlOff();
         }

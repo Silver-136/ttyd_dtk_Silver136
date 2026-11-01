@@ -1747,14 +1747,14 @@ MarioWork* mario = marioGetPtr();
             h += 5.0f;
             mario->hitobjHead = marioSearchHead_jabara(&pos, &h, &hj, 0.0f);
             if (!mario->hitobjHead) {
-mario->hitobjHead = marioSearchHead(&pos, &h, d);
+                mario->hitobjHead = marioSearchHead(&pos, &h, d);
 }
         }
     } else if (mario->flags & MARIO_FLAG_TUBE_MODE) {
         pos = mario->position;
         mario->hitobjHead = marioSearchHead_roll(&pos, &h, 40.0f);
     } else {
-pos = mario->position;
+        pos = mario->position;
         h = mario->wPlayerCollisionBox.y;
         d = (mario->flags & MARIO_FLAG_IS_JUMPING) ? mario->jumpVelocityY : 10.0f;
         if (mario->characterId == CHARACTER_BOWSER) {
@@ -1779,7 +1779,7 @@ pos = mario->position;
         pos.y = (s32)(10.0f * (pos.y - marioGetHeightInl()) + 0.5f) / 10.0f - 1.0f;
         if (!(mario->flags & MARIO_FLAG_IS_FALLING) && pos.y < mario->lastGroundPos.y) {
             pos.y = mario->lastGroundPos.y;
-if (!(mario->flags & MARIO_FLAG_TUBE_MODE) && mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_VIVIAN && mario->characterId != CHARACTER_BOWSER) {
+            if (!(mario->flags & MARIO_FLAG_TUBE_MODE) && mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_VIVIAN && mario->characterId != CHARACTER_BOWSER) {
                 if (mario->baseSpeed == 0.0f) {
                     marioChgStayMotion();
                 } else {
@@ -2050,7 +2050,7 @@ if (r <= 180.0f - lim && r >= lim) {
         } else {
             if (hit) {
                 outPos.y = (s32)(100.0f * outPos.y + hh) / 100.0f;
-if (pos->y + a >= outPos.y) {
+                if (pos->y + a >= outPos.y) {
                     pos->y = outPos.y;
                     *((f32*)vp) = 0.0f;
                     return hit;
@@ -2357,19 +2357,19 @@ void marioCheckWall(f32 dx, f32 dz) {
         } else {
             mario->frontWallDist = h;
             mario->hitobjWall = hit;
-if (++mario->wallPushTimer >= 20) {
+            if (++mario->wallPushTimer >= 20) {
                 mario->wallPushTimer = 20;
                 if (!(hitGetAttr(hit) & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                     mario->hitobjPush = hit;
                 }
             }
-mario->position = pos;
+            mario->position = pos;
         }
     } else {
         mario->position = pos;
     }
-marioChkWallAround(&mario->position, dx, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
-dou10_yoko_yari(&mario->frontWallDist);
+    marioChkWallAround(&mario->position, dx, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
+    dou10_yoko_yari(&mario->frontWallDist);
 }
 #else
 /**
@@ -2737,10 +2737,10 @@ static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
     MarioWork* mario;
 
     mario = marioGetPtr();
-if (mario->characterId == 2 && (mario->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)) {
+    if (mario->characterId == 2 && (mario->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)) {
         return kpaSearchWallFront(pos, h, dx, dz);
     }
-if (vivianGetStatus() == 2) {
+    if (vivianGetStatus() == 2) {
         return NULL;
     }
     sincosf(&s, &c, dz);
@@ -2751,7 +2751,7 @@ if (vivianGetStatus() == 2) {
         return NULL;
     }
     count = 2;
-if (mario->characterId == CHARACTER_BOWSER) {
+    if (mario->characterId == CHARACTER_BOWSER) {
         heights[0] = 0.75f * mario->wPlayerCollisionBox.y;
         heights[1] = 11.0f;
     } else if (mario->currMotionId == MARIO_MOTION_YOSHI) {
@@ -2768,7 +2768,7 @@ if (mario->characterId == CHARACTER_BOWSER) {
         heights[0] = 12.0f;
         heights[1] = 11.0f;
     }
-half = 0.5f * w;
+    half = 0.5f * w;
     best = NULL;
     range = half + dx;
     bestDist = range;
@@ -3556,7 +3556,7 @@ void marioCheckWallShip(f32 dx, f32 dz) {
     mario->position = pos;
 #if VERSION <= VERSION_DEMO_US
     tmp = pos;
-marioChkWallAround(&mario->position, dx, dz, mario->wPlayerCollisionBox.z, 4.0f);
+    marioChkWallAround(&mario->position, dx, dz, mario->wPlayerCollisionBox.z, 4.0f);
 #else
     marioChkWallAround(&mario->position, 0, dx, dz, mario->wPlayerCollisionBox.z, 4.0f);
 #endif

@@ -2,6 +2,8 @@
 
 ## Matching
 
+All five versions build every unit from C and hash byte-identical to the originals: G8ME01 (US, 30 files), G8MJ01 (JP, 32), G8MP01 (PAL, 33), G8ME01_DEMO (US demo, 7), G8MJ01_DEMO (JP demo, 33). The tables below are from the JP and US retail builds.
+
 One row per commit window, at most 3 per day. Figures come from an objdiff-cli report on each window's final tree. Rows from 2026-10-10 to 2026-10-22 are the Japanese release (G8MJ01); the last row is the US release (G8ME01).
 
 | Window | Code matched | Fully linked | Data matched | Functions | Files matched | Linked this window |

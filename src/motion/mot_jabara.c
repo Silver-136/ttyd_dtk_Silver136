@@ -455,7 +455,7 @@ void mot_jabara(void) {
         }
 #if VERSION <= VERSION_DEMO_US
         if ((f32)hitY < mario->lastGroundPos.y) {
-allPartyRideOff();
+            allPartyRideOff();
 #else
         if (hitY < mario->lastGroundPos.y) {
 #endif

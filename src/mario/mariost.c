@@ -237,18 +237,18 @@ void marioStInit(void) {
         }
     }
     DEMOEnableGPHangWorkaround(5);
-DEMOPadInit();
-DVDSetAutoFatalMessaging(TRUE);
-GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
+    DEMOPadInit();
+    DVDSetAutoFatalMessaging(TRUE);
+    GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
     __GXSetIndirectMask(0);
     memset(gp, 0, sizeof(GlobalWork));
     gp->fbWidth = DEMOGetRenderModeObj()->fbWidth;
     gp->efbHeight = DEMOGetRenderModeObj()->efbHeight;
-if (OSIsRestart()) {
+    if (OSIsRestart()) {
         gp->flags |= GW_FLAG_VIDEO_MODE_SET;
     }
     gp->flags |= GW_FLAG_E3;
-gp->rumbleEnabled = 1;
+    gp->rumbleEnabled = 1;
     gp->soundMode = 0;
 
     gp->retraceLocalTime = 0;
@@ -271,14 +271,14 @@ gp->rumbleEnabled = 1;
     gp->areaFadeOutDuration = 300;
     gp->areaFadeInType = FADE_OUT_BLACK;
     gp->areaFadeInDuration = 300;
-gp->language = LANGUAGE_JP;
-gp->framerate = 60;
-gp->systemLevelFlags = 0;
+    gp->language = LANGUAGE_JP;
+    gp->framerate = 60;
+    gp->systemLevelFlags = 0;
     badgeShop_init(); // Badge Shop
     yuugijou_init();  // Pianta Parlor
     johoya_init();
-gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
-VISetPostRetraceCallback(viPostCallback);
+    gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
+    VISetPostRetraceCallback(viPostCallback);
     romFontInit();
     OSCreateThread(&DvdCheckThread, gcDvdCheckThread, NULL, stack + sizeof(stack), sizeof(stack), 16, OS_THREAD_ATTR_DETACH);
     DvdCheckTreadOn = TRUE;
@@ -328,7 +328,7 @@ VISetPostRetraceCallback(viPostCallback);
     } else {
         SoundSetOutputMode(1);
     }
-none_key = OSGetTime();
+    none_key = OSGetTime();
 }
 #elif VERSION == VERSION_DEMO_US
 /**
@@ -354,18 +354,18 @@ void marioStInit(void) {
         }
     }
     DEMOEnableGPHangWorkaround(5);
-DEMOPadInit();
-DVDSetAutoFatalMessaging(TRUE);
-GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
+    DEMOPadInit();
+    DVDSetAutoFatalMessaging(TRUE);
+    GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
     __GXSetIndirectMask(0);
     memset(gp, 0, sizeof(GlobalWork));
     gp->fbWidth = DEMOGetRenderModeObj()->fbWidth;
     gp->efbHeight = DEMOGetRenderModeObj()->efbHeight;
-if (OSIsRestart()) {
+    if (OSIsRestart()) {
         gp->flags |= GW_FLAG_VIDEO_MODE_SET;
     }
     gp->flags |= GW_FLAG_E3;
-gp->rumbleEnabled = 1;
+    gp->rumbleEnabled = 1;
     gp->soundMode = 0;
 
     gp->retraceLocalTime = 0;
@@ -388,14 +388,14 @@ gp->rumbleEnabled = 1;
     gp->areaFadeOutDuration = 300;
     gp->areaFadeInType = FADE_OUT_BLACK;
     gp->areaFadeInDuration = 300;
-gp->language = LANGUAGE_US;
-gp->framerate = 60;
-gp->systemLevelFlags = 0;
+    gp->language = LANGUAGE_US;
+    gp->framerate = 60;
+    gp->systemLevelFlags = 0;
     badgeShop_init(); // Badge Shop
     yuugijou_init();  // Pianta Parlor
     johoya_init();
-gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
-VISetPostRetraceCallback(viPostCallback);
+    gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
+    VISetPostRetraceCallback(viPostCallback);
     romFontInit();
     OSCreateThread(&DvdCheckThread, gcDvdCheckThread, NULL, stack + sizeof(stack), sizeof(stack), 16, OS_THREAD_ATTR_DETACH);
     DvdCheckTreadOn = TRUE;
@@ -445,7 +445,7 @@ VISetPostRetraceCallback(viPostCallback);
     } else {
         SoundSetOutputMode(1);
     }
-none_key = OSGetTime();
+    none_key = OSGetTime();
 }
 #else
 /**
@@ -671,7 +671,7 @@ void marioStMain(void) {
                 break;
         }
         if (i >= 4) {
-if (OSTicksToSeconds(OSGetTime() - none_key) > 60) {
+            if (OSTicksToSeconds(OSGetTime() - none_key) > 60) {
                 if (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE) {
                     gp->flags |= GW_FLAG_E3_TIMEOUT;
 } else {
@@ -743,10 +743,10 @@ void marioStMain(void) {
                 break;
         }
         if (i >= 4) {
-if (OSTicksToSeconds(OSGetTime() - none_key) > 60) {
+            if (OSTicksToSeconds(OSGetTime() - none_key) > 60) {
                 if (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE) {
                     gp->flags |= GW_FLAG_E3_TIMEOUT;
-none_key = OSGetTime();
+                    none_key = OSGetTime();
 } else {
                     gp->resetType = 1;
                 }
@@ -906,7 +906,7 @@ static void viPostCallback(u32 retraceCount) {
     if (gp->retraceLocalTime > (OS_TIMER_CLOCK * (OSTime)359999999)) {
         gp->retraceLocalTime = (OS_TIMER_CLOCK * (OSTime)359999999);
     }
-if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
+    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
         gp->systemLv3Time += gp->retraceDeltaTime;
     }
     if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV2)) {
@@ -924,7 +924,7 @@ if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
             gp->renderFieldTime += gp->retraceDeltaTime;
         }
     }
-gp->retraceTime = time;
+    gp->retraceTime = time;
     gp->retraceCount = retraceCount;
     if (battleDisableHResetCheck()) {
         gp->resetButtonDown = FALSE;
@@ -1078,22 +1078,22 @@ const char* message;
         msgId = 0;
         switch (DVDGetDriveStatus()) {
             case DVD_STATE_COVER_OPEN:
-msgId = 5;
-gp->dvdError = TRUE;
+            msgId = 5;
+            gp->dvdError = TRUE;
                 break;
             case DVD_STATE_NO_DISK:
-msgId = 6;
-gp->dvdError = TRUE;
+            msgId = 6;
+            gp->dvdError = TRUE;
                 break;
             case DVD_STATE_WRONG_DISK:
-msgId = 6;
-gp->dvdError = TRUE;
+            msgId = 6;
+            gp->dvdError = TRUE;
                 break;
             case DVD_STATE_RETRY:
-msgId = 7;
-gp->dvdError = TRUE;
+            msgId = 7;
+            gp->dvdError = TRUE;
                 break;
-case DVD_STATE_FATAL_ERROR:
+                case DVD_STATE_FATAL_ERROR:
                 break;
 default:
                 gp->dvdError = FALSE;
@@ -1101,14 +1101,14 @@ default:
             case DVD_STATE_BUSY:
                 break;
         }
-if (gp->dvdError) {
+        if (gp->dvdError) {
             SoundOpenCover();
         } else {
             SoundCloseCover();
         }
-if (gp->dvdError) {
-DEMOBeforeRender();
-if (msgId) {
+        if (gp->dvdError) {
+            DEMOBeforeRender();
+            if (msgId) {
                 message = romFontGetMessage(msgId);
                 width = 0.8f * romFontGetWidth(message);
                 MTXPerspective(mtx, 25.0f, 1.2666667f, 1.0f, 10000.0f);
@@ -1116,7 +1116,7 @@ if (msgId) {
                 xpos = -width / 2.0f;
                 romFontPrintGX(xpos, 0.0f, 0.8f, &(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, message);
             }
-DEMODoneRender();
+            DEMODoneRender();
             makeKey();
             gcResetCheck();
         }
@@ -1312,7 +1312,7 @@ static inline void gcResetCheck(void) {
     u32 code;
 
     if (gp->resetType) {
-VISetBlack(TRUE);
+        VISetBlack(TRUE);
         VIFlush();
         VIWaitForRetrace();
         VIWaitForRetrace();
@@ -1353,8 +1353,8 @@ static inline void gcResetCheck(void) {
     u32 code;
 
     if (gp->resetType) {
-OSReport("\x83\x8A\x83\x5A\x83\x62\x83\x67\x8F\x88\x97\x9D\x8A\x4A\x8E\x6E\n");
-VISetBlack(TRUE);
+        OSReport("\x83\x8A\x83\x5A\x83\x62\x83\x67\x8F\x88\x97\x9D\x8A\x4A\x8E\x6E\n");
+        VISetBlack(TRUE);
         VIFlush();
         VIWaitForRetrace();
         VIWaitForRetrace();

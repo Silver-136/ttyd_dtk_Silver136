@@ -1471,7 +1471,7 @@ static void ext_moamoa_main(void) {
     mario->floorMove.z = 0.0f;
 #if VERSION <= VERSION_DEMO_US
     if (!(wp->flags & 0x18)) {
-mario->position.x -= cnt / 20.0f;
+        mario->position.x -= cnt / 20.0f;
 #else
     if (!(wp->flags & (MOAMOA_WORK_FLAG_NO_PUSH | MOAMOA_WORK_FLAG_PARTY_IN_USE))) {
         mario->floorMove.x = ( -cnt ) / 20.0f;

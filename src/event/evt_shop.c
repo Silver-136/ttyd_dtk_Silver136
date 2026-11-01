@@ -175,12 +175,12 @@ static EVT_BEGIN(buy_evt)
     CALL(get_value, LW(10), LW(11), LW(12), LW(13))
     CALL(get_msg, LW(10), 0, LW(14))
     CALL(evt_sub_get_language, LW(0))
-IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
+    IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(13), LW(11))
         ELSE
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
     END_IF
-CALL(get_msg, LW(10), 24, LW(14))
+    CALL(get_msg, LW(10), 24, LW(14))
     CALL(evt_msg_select, 0, LW(14))
     IF_INT_EQUAL(LW(0), 1)
         CALL(get_msg, LW(10), 22, LW(14))
@@ -218,8 +218,8 @@ CALL(get_msg, LW(10), 24, LW(14))
     WAIT_MS(200)
     CALL(evt_win_coin_off, LW(8))
     CALL(point_disp_onoff, 0)
-CALL(evt_msg_continue)
-CALL(evt_sub_get_system_flag, LW(0))
+    CALL(evt_msg_continue)
+    CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
         IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
             SET_VALUE(GSWF_ITEM_TUTORIAL_SEEN, 1)
@@ -238,8 +238,8 @@ CALL(evt_sub_get_system_flag, LW(0))
         CALL(get_shop_point, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 300)
             CALL(get_msg, LW(10), 26, LW(14))
-CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
-ELSE
+            CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
+            ELSE
             CALL(get_msg, LW(10), 34, LW(14))
             CALL(evt_msg_print, 0, LW(14), 0, LW(9))
             CALL(evt_win_coin_on, 0, LW(8))
@@ -1450,7 +1450,7 @@ USER_FUNC(evt_shop_setup) {
         wp->win[i] = winMgrEntry(&window_desc[i]);
     }
     wp->sel = -1;
-return EVT_RETURN_DONE;
+    return EVT_RETURN_DONE;
 }
 #else
 /**

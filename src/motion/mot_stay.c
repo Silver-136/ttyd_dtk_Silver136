@@ -95,7 +95,7 @@ void mot_stay(void) {
         peach_stay();
         return;
     }
-if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_HAS_INPUT_JUMP | MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING);
         marioClearJumpPara();
@@ -103,14 +103,14 @@ if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->airTimer = 0;
         mario->multiTimer = 0;
         mario->currSubMotionId = 0;
-mario->lastGroundPos = mario->position;
+        mario->lastGroundPos = mario->position;
         mario->stay.jabaraWait = 0;
         mario->stay.holdTimer = 0;
         mario->stay.deepSleepTimer = 0;
         mario->idleKeyTimer = 0;
         marioSoundInit();
         marioResetCamFollowRate();
-if (mario->flags & MARIO_FLAG_PAPER_MODE) {
+        if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                 motSlitContinue();
             } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
                 marioChgMot2(MARIO_MOTION_SLIT);
@@ -130,12 +130,12 @@ if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             } else {
                 marioChgPoseTime("M_U_2", 10);
             }
-if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+            if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             mario->baseSpeed = 0.0f;
         }
         mario->flags &= ~MARIO_FLAG_IS_PUSHING;
     }
-frames = sysMsec2Frame(1000);
+    frames = sysMsec2Frame(1000);
     if (++mario->idleKeyTimer > frames && !(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && marioChkKey()) {
         if (lowHP()) {
             if (strcmp(mario->animName, "M_S_3") != 0) {
@@ -151,7 +151,7 @@ frames = sysMsec2Frame(1000);
         }
     }
     if (strcmp(mario->animName, "M_S_3") == 0 && marioChkKey()) {
-m = marioGetPtr();
+        m = marioGetPtr();
         m->idleTimer = m->idleTimer + 1;
         if (m->idleTimer > 240) {
             m->idleTimer = 0;
@@ -172,10 +172,10 @@ m = marioGetPtr();
     if (!newMot && marioChkItemMotion()) {
         return;
     }
-if (mario->buttonHold & PAD_BUTTON_B) {
+    if (mario->buttonHold & PAD_BUTTON_B) {
         return;
     }
-if (marioSlitAbilityChk() && marioSlitButton() == 1) {
+    if (marioSlitAbilityChk() && marioSlitButton() == 1) {
         marioChgMot(MARIO_MOTION_SLIT);
         return;
     }
@@ -188,7 +188,7 @@ if (marioSlitAbilityChk() && marioSlitButton() == 1) {
     }
     marioChkJump();
     marioChkTransform();
-held = FALSE;
+    held = FALSE;
     if (mario->buttonHold & PAD_BUTTON_A) {
         mario->stay.holdTimer = mario->stay.holdTimer + 1;
     } else {
@@ -202,7 +202,7 @@ held = FALSE;
         }
     }
     if (mario->wMotionTimer == 0 && mario->controlStickSensitivity > 0.0f && held == FALSE) {
-if ((s8)mario->wStickDir1 * (s8)mario->wStickDir1 + (s8)mario->wStickDir2 * (s8)mario->wStickDir2 > 0xBD1) {
+        if ((s8)mario->wStickDir1 * (s8)mario->wStickDir1 + (s8)mario->wStickDir2 * (s8)mario->wStickDir2 > 0xBD1) {
             if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
                 marioChgMot(MARIO_MOTION_DASH);
             } else {
@@ -245,9 +245,9 @@ if ((s8)mario->wStickDir1 * (s8)mario->wStickDir1 + (s8)mario->wStickDir2 * (s8)
             break;
         case 3:
             if ((s32)--mario->multiTimer < 0) {
-marioChgEvtPose("M_N_5A");
+                marioChgEvtPose("M_N_5A");
                 mario->multiTimer = 0;
-mario->currSubMotionId = 4;
+                mario->currSubMotionId = 4;
                 mario->stay.deepSleepTimer = 0;
                 m = marioGetPtr();
                 m->soundId[0] = psndSFXOn_3D((char*)0xE4, &m->position);
@@ -257,8 +257,8 @@ mario->currSubMotionId = 4;
             if (++mario->stay.deepSleepTimer >= sysMsec2Frame(10000)) {
                 mario->stay.deepSleepTimer = sysMsec2Frame(10000);
             }
-if ((s32)++mario->multiTimer >= 140) {
-mario->multiTimer = 0;
+            if ((s32)++mario->multiTimer >= 140) {
+                mario->multiTimer = 0;
                 m = marioGetPtr();
                 m->soundId[0] = psndSFXOn_3D((char*)0xE4, &m->position);
             }

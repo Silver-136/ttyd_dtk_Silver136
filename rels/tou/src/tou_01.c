@@ -2889,7 +2889,7 @@ EVT_BEGIN(evt_gondora2)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
-CALL(rankingReset)
+            CALL(rankingReset)
 #else
     CALL_CHILD(PTR(evt_gondora_mon))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -3670,8 +3670,8 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_mapobj_trans, 1, STRING("gondora"), 0, 300, 0)
     CALL(evt_hit_bind_update, STRING("a_gondora"))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora"), MAP_OBJ_FLAG_HIDDEN)
-CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 615, 160, -10, 0, 0)
-CALL(evt_sub_get_system_flag, LW(0))
+    CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 615, 160, -10, 0, 0)
+    CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
@@ -3749,9 +3749,9 @@ CALL(evt_sub_get_system_flag, LW(0))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, PARTNER_GOOMBELLA)
             CALL(evt_party_run, 0)
-CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-END_IF
+            END_IF
 SPAWN_EVENT(evt_peach_after)
     END_IF
     // Chapter 8 scenes: the darkness over Glitzville, or everyone's voices.

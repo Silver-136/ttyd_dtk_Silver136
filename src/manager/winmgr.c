@@ -907,7 +907,7 @@ if (cnt == 2) {
                     sel->items[sel->numItems++].id = i + BADGE_MIN;
                 }
             }
-break;
+            break;
         case 13:
             m = getBadgeStarmaniacTableMaxCount();
             sel->items = __memAlloc(HEAP_DEFAULT, m * 4);
@@ -919,7 +919,7 @@ break;
 sel->items[sel->numItems++].id = i + BADGE_MIN;
                 }
             }
-break;
+            break;
         case 14:
             sel->items = __memAlloc(HEAP_DEFAULT, 0x10);
             memset(sel->items, 0, 0x10);
@@ -950,7 +950,7 @@ break;
                     sel->items[sel->numItems++].id = i + 1;
                 }
             }
-break;
+            break;
         case 17:
         case 18:
             if (m == 17) {
@@ -1718,12 +1718,12 @@ static void select_disp(WinMgrEntry* entry) {
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
             }
-winIconInit();
-winIconSet(item->icon_id, (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, iconcol);
+            winIconInit();
+            winIconSet(item->icon_id, (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, iconcol);
             winFontInit();
 winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                        black, msgSearch(item->name));
-show = FALSE;
+                       show = FALSE;
             switch (sel->type) {
                 case 11:
                     price = item->buy_price;
@@ -1755,7 +1755,7 @@ show = FALSE;
                 continue;
             }
             sprintf(buf, "%d", price);
-tw = FontGetMessageWidth(buf);
+            tw = FontGetMessageWidth(buf);
             winFontInit();
             winFontSet((Vec){entry->x + entry->width - 10 - tw, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                        black, buf);
@@ -1768,7 +1768,7 @@ tw = FontGetMessageWidth(buf);
         }
         GXSetScissor(left, top, wd, ht);
         switch (sel->type) {
-case 11:
+            case 11:
             case 12:
             case 13:
                 msg = msgSearch("msg_window_title_2");
@@ -1777,16 +1777,16 @@ default:
                 msg = msgSearch("msg_window_title_1");
                 break;
         }
-w = (entry->width - FontGetMessageWidth(msg)) / 2;
+        w = (entry->width - FontGetMessageWidth(msg)) / 2;
         winFontInit();
         winFontSetEdge((Vec){entry->x + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
-switch (sel->type) {
+        switch (sel->type) {
             case 3:
             case 11:
             case 12:
-case 15:
+            case 15:
             case 17:
-PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
+            PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
                 iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
@@ -2073,7 +2073,7 @@ s32 i;
     const char* msg;
     u16 w;
     f32 ofs;
-tmp = white;
+    tmp = white;
     iconcol = tmp;
 
     if (!(wp->entries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
@@ -2099,21 +2099,21 @@ if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 winIconInit();
             }
             winIconSet(iconid_conv(party_icon_table[sel->items[i].id]), (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
-winIconInit();
+            winIconInit();
             for (j = 0; j < pouch->partyData[party_id_table[sel->items[i].id]].techLevel; j++) {
-winIconSet(ICON_ITEM_SHINE_SPRITE, (Vec){entry->x + 253 + j * 27, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
+                winIconSet(ICON_ITEM_SHINE_SPRITE, (Vec){entry->x + 253 + j * 27, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
             }
         }
         GXSetScissor(left, top, wd, ht);
         msg = msgSearch("msg_window_title_7");
-w = (120 - FontGetMessageWidth(msg)) / 2;
+        w = (120 - FontGetMessageWidth(msg)) / 2;
         winFontInit();
         winFontSetEdge((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
-msg = msgSearch("msg_window_title_8");
-w = (85 - FontGetMessageWidth(msg)) / 2;
+        msg = msgSearch("msg_window_title_8");
+        w = (85 - FontGetMessageWidth(msg)) / 2;
         winFontInit();
         winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
-iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_DISP_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_DISP_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
                 iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
@@ -2402,8 +2402,8 @@ WinMgrEntry* ent = entry;
             } else {
                 col = &black;
             }
-winFontSet((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
-info->initEndPos[info->tagEndPos] = save;
+            winFontSet((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
+            info->initEndPos[info->tagEndPos] = save;
             if (sel->type == 17 && !(sel->items[i].flags & SELECT_ITEM_GRAY)) {
                 sprintf(buf, "%3d", info->cost);
                 winFontInit();
@@ -2415,11 +2415,11 @@ info->initEndPos[info->tagEndPos] = save;
             }
         }
         GXSetScissor(left, top, wd, ht);
-msg = msgSearch("msg_window_title_6");
-w = (ent->width - FontGetMessageWidth(msg)) / 2;
+        msg = msgSearch("msg_window_title_6");
+        w = (ent->width - FontGetMessageWidth(msg)) / 2;
         winFontInit();
         winFontSetEdge((Vec){ent->x + w, ent->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
-iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_DISP_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_DISP_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
                 iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);

@@ -612,7 +612,7 @@ static EVT_BEGIN(attack_event_spark)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 10)
 #if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, 0, 0)
 #else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
 #endif

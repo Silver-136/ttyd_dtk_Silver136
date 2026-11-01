@@ -327,7 +327,7 @@ EVT_BEGIN(peramajin_after)
     WAIT_FRAMES(1)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(ship_majin_lecture_init)
-CALL_CHILD(ship_majin_lecture)
+    CALL_CHILD(ship_majin_lecture)
 #else
     CALL_CHILD(PTR(ship_majin_lecture_init))
     CALL(evt_party_run, 0)

@@ -616,7 +616,7 @@ int i;
         gp->triggerLeft[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerLeft;
         gp->triggerRight[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerRight;
     }
-gp->keyDataValid = 1;
+    gp->keyDataValid = 1;
 }
 #else
 /**
@@ -1171,7 +1171,7 @@ f32 systemStrippedPool2(s32 x) {
  */
 void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     f[0] = 1.0f;
-str[0] = "LINEAR";
+    str[0] = "LINEAR";
     str[1] = "ACCEL";
     str[2] = "DOUBLE_ACCEL";
     str[3] = "TRIPLE_ACCEL";
@@ -1184,7 +1184,7 @@ str[0] = "LINEAR";
     str[10] = "BOUND";
     str[11] = "SIN_ACCEL";
     str[12] = "SIN_DECEL";
-f[1] = sqrtf(x);
+    f[1] = sqrtf(x);
     str[10] = "[%8s:% 4d] %s";
     d[0] = 1.5;
     d[1] = 2.5;

@@ -1521,7 +1521,7 @@ EVT_END()
  * and Jolene says Security is here to escort him (75). Control then returns to Mario.
  */
 static EVT_BEGIN(evt_gardman)
-SET_VALUE(LW(0), 0)
+    SET_VALUE(LW(0), 0)
     LOOP(0)
         ADD(LW(0), 1)
         WAIT_FRAMES(1)
@@ -1543,9 +1543,9 @@ SET_VALUE(LW(0), 0)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-CALL(evt_mario_key_onoff, 0)
+    CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)
-WAIT_FRAMES(1)
+    WAIT_FRAMES(1)
 BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

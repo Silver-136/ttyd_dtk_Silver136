@@ -931,12 +931,12 @@ static void nameEntDisp(CameraId cameraId, void* param) {
     for (j = 0; j < 9; j++) {
         for (n = 0; n < NAMEENT_COLS; n++) {
             if (wp->charTable[j * NAMEENT_COLS + n]) {
-FontDrawString((f32)(n * 24 - 190 + (n / 5) * 30), (f32)(112 - j * 28), wp->charTable[j * NAMEENT_COLS + n]);
+                FontDrawString((f32)(n * 24 - 190 + (n / 5) * 30), (f32)(112 - j * 28), wp->charTable[j * NAMEENT_COLS + n]);
 }
         }
     }
-for (j = 0; j < 4; j++) {
-if (wp->cursorX >= 10 && wp->cursorY - 4 == j) {
+    for (j = 0; j < 4; j++) {
+        if (wp->cursorX >= 10 && wp->cursorY - 4 == j) {
             winTexInit(*wp->tplFile->data);
             winTexSet(VERSION_PICK(0x33, 0x37), (Vec){160.0f, (f32)(-20 - j * 34), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 0x40});
             winTexInit_x2(*wp->tplFile->data);
@@ -952,8 +952,8 @@ if (wp->cursorX >= 10 && wp->cursorY - 4 == j) {
     FontDrawStart();
     for (n = 0; n < 8; n++) {
         memset(buf, 0, sizeof(buf));
-strncpy(buf, &wp->name[n * 2], 2);
-if (strlen(buf)) {
+        strncpy(buf, &wp->name[n * 2], 2);
+        if (strlen(buf)) {
             FontDrawString((28.0f - FontGetMessageWidth(buf)) / 2.0f + (f32)(n * 32 - 120), 171.0f, buf);
         }
     }

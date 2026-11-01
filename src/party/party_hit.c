@@ -917,8 +917,8 @@ HitEntry* hit;
     Vec p, nrm;
 
     sincosf(&sn, &cs, ang);
-d = 0.5f * party->width + dist;
-hh = 0.75f * partyGetHeight(party);
+    d = 0.5f * party->width + dist;
+    hh = 0.75f * partyGetHeight(party);
     p = party->position;
     p.y += hh;
     {
@@ -928,7 +928,7 @@ hh = 0.75f * partyGetHeight(party);
         dir.z = cs;
         hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
         if (hit) {
-partyWallSlide(pos, nrm, dist, sn, cs);
+            partyWallSlide(pos, nrm, dist, sn, cs);
             return hit;
         }
         dy = 11.0f;
@@ -936,17 +936,17 @@ partyWallSlide(pos, nrm, dist, sn, cs);
             dy = 1.0f;
         }
         p = party->position;
-d = 0.5f * party->width + dist;
-p.y += dy;
+        d = 0.5f * party->width + dist;
+        p.y += dy;
         hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
         if (hit) {
             if (partyNrmTo(&nrm) >= 45.0f) {
-partyWallSlide(pos, nrm, dist, sn, cs);
+                partyWallSlide(pos, nrm, dist, sn, cs);
                 return hit;
             }
         }
     }
-pos->x += dist * sn;
+    pos->x += dist * sn;
     pos->z += dist * cs;
     return NULL;
 }

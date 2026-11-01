@@ -366,8 +366,8 @@ void effTexSetupN64(void) {
     wp->effTextureLoaded = FALSE;
     wp->effTexture = (TEXPalette*)arcOpen("effect_n64.tpl", 0, 0);
     if (wp->effTexture == NULL) {
-sprintf(path, "%s/eff/jp/effect_n64.tpl", getMarioStDvdRoot());
-entry = DVDMgrOpen(path, 2, 0);
+        sprintf(path, "%s/eff/jp/effect_n64.tpl", getMarioStDvdRoot());
+        entry = DVDMgrOpen(path, 2, 0);
         length = OSRoundUp32B(DVDMgrGetLength(entry));
         wp->effTexture = (TEXPalette*)__memAlloc(HEAP_DEFAULT, length);
         entry->info.cb.userData = entry;

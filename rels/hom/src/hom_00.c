@@ -826,11 +826,11 @@ EVT_END()
 EVT_BEGIN(hom_00_init_evt)
     // NPCs, music, ambience, the save block and the recovery block.
     SET_VALUE(GF(15), 0)
-CALL(evt_npc_setup, PTR(npc_data))
-CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
+    CALL(evt_npc_setup, PTR(npc_data))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI1"))
-CALL(evt_mobj_save_blk, STRING("mobj_save"), -175, 140, -170, 0, 0)
+    CALL(evt_mobj_save_blk, STRING("mobj_save"), -175, 140, -170, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 15, -125, 140, -170, 0, 0)
     // The train is placed on the correct side of the platform.
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
@@ -843,8 +843,8 @@ CALL(evt_mobj_save_blk, STRING("mobj_save"), -175, 140, -170, 0, 0)
     END_IF
     // Late in the story the crossing barrier is shown in its open position.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
-CALL(evt_map_playanim, STRING("shadanki"), MAP_ANIM_PLAY_AT_END, 0)
-END_IF
+        CALL(evt_map_playanim, STRING("shadanki"), MAP_ANIM_PLAY_AT_END, 0)
+        END_IF
     // The sun's heat haze and glare, and the station clock hands.
     CALL(evt_map_set_tevcallback, 2, PTR(sun_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sun"), MAP_OBJ_TEV_CALLBACK(2))
@@ -899,7 +899,7 @@ END_IF
         CALL(evt_map_playanim, STRING("n_1_door_open"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     SPAWN_EVENT(evt_sub_mail_event)
-RETURN
+    RETURN
 EVT_END()
 #else
 EVT_BEGIN(hom_00_init_evt)

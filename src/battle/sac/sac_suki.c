@@ -715,7 +715,7 @@ void _disp_2D(s32 side, s32 idx) {
 /** 3D draw callback; draws nothing (the demo only fetches the work). */
 static void disp_3D(CameraId cam, void* param) {
 #if VERSION <= VERSION_DEMO_US
-get_ptr();
+    get_ptr();
 #endif
 }
 

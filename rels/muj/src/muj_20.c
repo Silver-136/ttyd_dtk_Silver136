@@ -2121,7 +2121,7 @@ static void draw(CameraId camera, void* param) {
     f32 viewport[6];
     f32 projection[7];
     CameraEntry* cam;
-GXGetViewportv(viewport);
+    GXGetViewportv(viewport);
     GXGetProjectionv(projection);
     cam = camGetPtr(CAMERA_2D);
     GXSetProjection(camGetPtr(CAMERA_2D)->projection, cam->projType);
@@ -2129,7 +2129,7 @@ GXGetViewportv(viewport);
     cam = camGetPtr(CAMERA_2D);
     *camGetCurPtr() = *cam;
     winTexInit(*(TEXPalette**)wp->tpl->data);
-winTexSet(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
+    winTexSet(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
     // the demo blinks PRESS START under the logo once the ship has arrived (GF(0))
     if (evtGetValue(NULL, GF(0))) {
         f32 s = (f32)sin((f32)gp->retraceCount / 15.0f);
@@ -2477,7 +2477,7 @@ static USER_FUNC(logo) {
         event->userdatap[0] = wp;
     }
     wp = event->userdatap[0];
-switch (wp->state) {
+    switch (wp->state) {
         case 0:
             wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
             wp->alpha = 0;
@@ -2494,8 +2494,8 @@ switch (wp->state) {
             }
             break;
         case 2:
-if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START))) {
-wp->counter = 0;
+        if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START))) {
+            wp->counter = 0;
                 wp->state++;
                 evtSetValue(event, GF(1), 1);
             }

@@ -449,7 +449,7 @@ void BattleAudience_PerAct(void) {
 #if VERSION <= VERSION_DEMO_US
     if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL)
         return;
-audience->stylishTotal += audience->numStylishCommandsThisAttack;
+        audience->stylishTotal += audience->numStylishCommandsThisAttack;
     if (audience->stylishTotal > 100) {
         audience->stylishTotal = 100;
     }
@@ -1746,7 +1746,7 @@ BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems) {
         return FALSE;
     if (audience_kind[member->type].itemTable->type == 0)
         return FALSE;
-if (!(u8)BattleAudience_GetExist(index))
+        if (!(u8)BattleAudience_GetExist(index))
         return FALSE;
 #else
     if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL) return FALSE;
@@ -4904,7 +4904,7 @@ void BattleAudience_Case_ActionCommandGood(BattleWeapon* weapon) {
     }
     audience->flags |= AUDIENCE_FLAG_AC_GOOD;
 #if VERSION <= VERSION_DEMO_US
-audience->flags &= ~AUDIENCE_FLAG_STYLISH_MISSED;
+    audience->flags &= ~AUDIENCE_FLAG_STYLISH_MISSED;
 #endif
 }
 
@@ -4998,7 +4998,7 @@ void BattleAudience_Case_AcrobatBad(void) {
     }
     audience->flags |= AUDIENCE_FLAG_ACROBAT_BAD;
 #if VERSION <= VERSION_DEMO_US
-audience->flags |= AUDIENCE_FLAG_STYLISH_MISSED;
+    audience->flags |= AUDIENCE_FLAG_STYLISH_MISSED;
 #endif
 }
 

@@ -749,8 +749,8 @@ void mobjMain(void) {
         if (!(entry->flags & MOBJ_FLAG_ACTIVE)) {
             continue;
         }
-if (!(gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)))) {
-if (entry->flags & MOBJ_FLAG_UPDATE_MTX) {
+        if (!(gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)))) {
+            if (entry->flags & MOBJ_FLAG_UPDATE_MTX) {
                 if (mobjCheckItemboxOpen(entry) == 2) {
                     mobjCalcMtx2(entry);
                 } else {
@@ -763,10 +763,10 @@ if (entry->flags & MOBJ_FLAG_UPDATE_MTX) {
                     entry->position.y += entry->velocity.y;
                     entry->velocity.y -= entry->gravity;
                 } else {
-dist = 1.0f + (f32)__fabs(entry->velocity.y);
+                    dist = 1.0f + (f32)__fabs(entry->velocity.y);
                     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
                                        10.0f + entry->position.y, entry->position.z, 0.0f, -10.0f, 0.0f) != NULL) {
-entry->position.y = hy;
+                                           entry->position.y = hy;
                         entry->velocity.y = (-0.5f * entry->bounce) * entry->velocity.y;
                         if (__fabs(entry->velocity.y) <= 2.0) {
                             entry->velocity.y = 0.0f;
@@ -807,9 +807,9 @@ entry->position.y = hy;
                         hit = 1;
                         goto hitDone;
                     }
-if ((entry->flags & MOBJ_FLAG_HIT_A_BUTTON) && mario->hitobjFront == hitPtr &&
+                    if ((entry->flags & MOBJ_FLAG_HIT_A_BUTTON) && mario->hitobjFront == hitPtr &&
                         (mario->buttonTrg & PAD_BUTTON_A) && !partyFlag) {
-entry->hitFlag = MOBJ_FLAG_HIT_A_BUTTON;
+                            entry->hitFlag = MOBJ_FLAG_HIT_A_BUTTON;
                         hit = 1;
                         goto hitDone;
                     }
@@ -885,7 +885,7 @@ entry->hitFlag = MOBJ_FLAG_HIT_A_BUTTON;
             if ((u32)marioStGetSystemLevel() != 0) {
                 entry->flags &= ~MOBJ_FLAG_HIT;
             }
-if (entry->mainFunc != NULL) {
+            if (entry->mainFunc != NULL) {
                 if (entry->mainFunc(entry) == -1) {
                     continue;
                 }

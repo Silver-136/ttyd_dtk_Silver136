@@ -242,17 +242,17 @@ BOOL itemGetCheck(ItemEntry* entry) {
         return FALSE;
     if (entry->flags2 & ITEM_FLAG2_SUNK)
         return FALSE;
-if (marioStGetSystemLevel() != 0)
+        if (marioStGetSystemLevel() != 0)
         return FALSE;
     if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))
         return FALSE;
-if (gp->mapEventId)
+        if (gp->mapEventId)
         return FALSE;
     if (seqGetSeq() != SEQ_GAME)
         return FALSE;
     if (mario->currMotionId == MARIO_MOTION_SHIP)
         return FALSE;
-if (vivianGetStatus())
+        if (vivianGetStatus())
         return FALSE;
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE)
         return FALSE;
@@ -332,7 +332,7 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
         return FALSE;
     if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))
         return FALSE;
-if (gp->mapEventId)
+        if (gp->mapEventId)
         return FALSE;
     if (seqGetSeq() != SEQ_GAME)
         return FALSE;
@@ -639,12 +639,12 @@ BOOL isGswf, isLswf;
             break;
         }
     }
-for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
+    for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
+        if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
             break;
         }
     }
-if (i >= wp->count) {
+    if (i >= wp->count) {
         entry = wp->entries;
         if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_COIN && entry->flags & ITEM_FLAG_REPLACEABLE) {
             itemDelete(entry->name);
@@ -661,7 +661,7 @@ if (i >= wp->count) {
                 }
             }
         }
-if (entry == NULL) {
+        if (entry == NULL) {
             return NULL;
         }
     }
@@ -700,7 +700,7 @@ if (entry == NULL) {
             entry->effect = effStarStoneEntry(entry->itemId - ITEM_DIAMOND_STAR, x, 16.0f + y, z, 1.0f);
             break;
         default:
-iconEntry(entry->name, itemDataTable[itemId].icon_id);
+        iconEntry(entry->name, itemDataTable[itemId].icon_id);
             {
                 char* nm = entry->name;
                 iconSetPos(nm, x, y, z);
@@ -751,7 +751,7 @@ iconEntry(entry->name, itemDataTable[itemId].icon_id);
             itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
             entry->flags |= ITEM_FLAG_REPLACEABLE;
             break;
-case ITEM_TYPE_DROP:
+            case ITEM_TYPE_DROP:
             entry->flags2 |= ITEM_FLAG2_TIMER_WAIT_LAND;
             entry->timer = 8000;
             itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
@@ -1131,7 +1131,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
 #if VERSION <= VERSION_DEMO_US
         if (!(entry->flags & ITEM_FLAG_ACTIVE))
             continue;
-if (entry->flags & ITEM_FLAG_NO_TOUCH)
+            if (entry->flags & ITEM_FLAG_NO_TOUCH)
             continue;
         if (entry->flags2 & ITEM_FLAG2_CARRIED)
             continue;
@@ -2137,7 +2137,7 @@ static void itemseq_Bound(ItemEntry* entry) {
                 }
                 entry->flags2 |= ITEM_FLAG2_RELEASED;
                 entry->flags2 &= ~ITEM_FLAG2_CARRIED;
-break;
+                break;
             }
             if (dy >= 0.0f) {
                 hit = NULL;

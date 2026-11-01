@@ -291,7 +291,7 @@ void seq_battleMain(SequenceWork* work) {
  * timeout; states 10/11 end a debug battle).
  */
 void seq_battleMain(SequenceWork* work) {
-switch (work->state) {
+    switch (work->state) {
         case 0: {
             GXColor color = {0, 0, 0, 255};
             fadeEntry(FADE_CURTAIN_UP_DOWN_A1, 1000, color);
@@ -311,7 +311,7 @@ switch (work->state) {
                 work->state++;
             }
             break;
-case 2:
+            case 2:
             battle_init();
             work->state++;
         case 3: {
@@ -334,8 +334,8 @@ Vec pos;
             psndSetPosDirListener(&pos, camGetPtr(CAMERA_3D)->viewYaw);
             break;
         }
-case 4:
-if (++work->counter > 30) {
+        case 4:
+        if (++work->counter > 30) {
                 // A non-NULL map name tells seq_gameOver to skip its iris fade (the battle has already
                 // faded out); seq_game does not read it.
                 if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT)) {
@@ -372,9 +372,9 @@ FieldBattleInfo* info;
 
     fbat = fbatGetPointer();
     npc = fbat->target;
-stage = npc->battleInfo.stageData;
-pouch = pouchGetPtr();
-if (debug_battle_flag == 0) {
+    stage = npc->battleInfo.stageData;
+    pouch = pouchGetPtr();
+    if (debug_battle_flag == 0) {
         marioCtrlOff();
         partyCtrlOff();
         marioGetPtr()->flags &= ~MARIO_FLAG_ACTIVE;
@@ -400,7 +400,7 @@ if (debug_battle_flag == 0) {
         map2 = mapDataPtr(stage->specificStageDataDir);
     }
     bmapLoad(map->mapName, stage->specificStageDataDir);
-camSetMode(CAMERA_3D, 2);
+    camSetMode(CAMERA_3D, 2);
     if (gp->debugBattle) {
         const char* msg = DbgBtlSel_GetMsgDataPtr();
         if (msg) {
@@ -409,20 +409,20 @@ camSetMode(CAMERA_3D, 2);
             msgLoad(gon11, 0);
         }
     }
-memClear(HEAP_BATTLE);
+    memClear(HEAP_BATTLE);
     smartAutoFree(2);
-_battleWorkPointer = NULL;
+    _battleWorkPointer = NULL;
     animPoseBattleInit();
     npcReleaseFiledNpc();
     gp->inBattle = 1;
     evtmgrReInit();
-if (map && map->eventAddr) {
+    if (map && map->eventAddr) {
         evtEntry(map->eventAddr, 0, 0);
     }
     if (map2 && map2->eventAddr) {
         evtEntry(map2->eventAddr, 0, 0);
     }
-psndSetFlag(PSND_FLAG_BATTLE_START);
+    psndSetFlag(PSND_FLAG_BATTLE_START);
     info = &fbat->info;
     BattleInformationInit(info);
     BattleInformationSetMode(info, 0);
@@ -578,7 +578,7 @@ static void battle_exit(void) {
     Mtx mtx;
 
     BattleEnd();
-itemReInit();
+    itemReInit();
     iconReInit();
     extReset();
     bmapUnLoad();
@@ -596,15 +596,15 @@ itemReInit();
     evtmgrReInit();
     npcRecoveryFiledNpc();
     gp->inBattle = 0;
-memClear(HEAP_BATTLE);
-evtStartAll(4);
+    memClear(HEAP_BATTLE);
+    evtStartAll(4);
     if (debug_battle_flag == 0) {
         marioCtrlOn();
         partyCtrlOn();
         marioGetPtr()->flags |= MARIO_FLAG_ACTIVE;
     }
-psndClearFlag(PSND_FLAG_BATTLE_START);
-psndClearFlag(PSND_FLAG_MUTE_SFX);
+    psndClearFlag(PSND_FLAG_BATTLE_START);
+    psndClearFlag(PSND_FLAG_MUTE_SFX);
     light = lightGetPaperCraft();
     {
         Vec v = {-200.0f, 100.0f, 100.0f};
@@ -612,8 +612,8 @@ psndClearFlag(PSND_FLAG_MUTE_SFX);
     }
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
     PSMTXMultVec(mtx, &light->position, &light->position);
-if ((evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_24_BOSS_BATTLE) && evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
-psndBGMOn(PSND_CONTINUE | PSND_FADEIN, NULL);
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_24_BOSS_BATTLE) && evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
+        psndBGMOn(PSND_CONTINUE | PSND_FADEIN, NULL);
         psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
     }
 }

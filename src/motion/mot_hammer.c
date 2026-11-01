@@ -46,18 +46,18 @@ s32 se_data[] = {
 
 /** Light camera shake when a level-1 (plain Hammer) swing hits something solid. */
 EVT_BEGIN(lv1quake_evt)
-CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 90)
-RETURN
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 90)
+    RETURN
 EVT_END()
 
 EVT_BEGIN(lv2quake_evt)
-CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 110)
-RETURN
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 110)
+    RETURN
 EVT_END()
 
 EVT_BEGIN(lv3quake_evt)
-CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.029296875f), 140)
-RETURN
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.029296875f), 140)
+    RETURN
 EVT_END()
 
 inline BOOL chkRevDir(f32 angle) {
@@ -737,10 +737,10 @@ void mot_ham2_post(void) {
         m->camShiftRate.z = 0.01f;
     }
     marioPaperOff();
-marioPaperLightOn();
-mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+    marioPaperLightOn();
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+    mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
     marioAdjustMoveDir();
 }
 #else

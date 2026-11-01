@@ -288,7 +288,7 @@ void mot_hip(void) {
             }
 #if VERSION <= VERSION_DEMO_US
             psndSFXOn_3D((char*)0x159, &mario->position);
-evtEntry(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0);
+            evtEntry(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0);
 #else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIO_DROP2), &mario->position);
             evtEntryType(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0, 0);
@@ -361,11 +361,11 @@ s32 chkground(void) {
         mario->jumpPeakAirTime = 0;
         mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-camFollowYOn();
-attr = hitGetAttr(hit);
+        camFollowYOn();
+        attr = hitGetAttr(hit);
         if (attr & HIT_ATTR_WATER_HAZARD) {
             set_damage_root_ypos(mario->position.y);
-marioChgMot(MARIO_MOTION_DAMAGE);
+            marioChgMot(MARIO_MOTION_DAMAGE);
             return 1;
         }
         if (attr & (HIT_ATTR_TOGE | 0x400)) {

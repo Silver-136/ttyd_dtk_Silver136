@@ -712,7 +712,7 @@ void mot_roll(void) {
         memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
         {
             MarioWork* t = marioGetPtr();
-t->mot.roll.sfxId = -1;
+            t->mot.roll.sfxId = -1;
 }
         mario->currSubMotionId = 0;
     }
@@ -723,8 +723,8 @@ t->mot.roll.sfxId = -1;
             s32 z1;
             camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
             marioAdjustMoveDir();
-mario->hammerDir = 0;
-marioGetRubInit();
+            mario->hammerDir = 0;
+            marioGetRubInit();
             mario->flags |= MARIO_FLAG_TUBE_MODE;
             mario->rollFlags = 0x10;
             mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
@@ -775,7 +775,7 @@ marioGetRubInit();
                 mario->dispOfs.y = 1.0f;
             }
             if (--mario->multiTimer <= 0) {
-v31 = mario->displayDirection;
+                v31 = mario->displayDirection;
                 if (v31 < 90.0f || v31 > 270.0f) {
                     mario->hammerDir = 1;
                     mario->directionView = revise360(270.0f - mario->targetYaw);
@@ -785,7 +785,7 @@ v31 = mario->displayDirection;
                     mario->directionView = revise360(90.0f - mario->targetYaw);
                     mario->moveDirection = 90.0f;
                 }
-mario->currSubMotionId = 0x1e;
+                mario->currSubMotionId = 0x1e;
                 marioChgPose("M_I_U");
                 marioChgPaper("PM_R_1B");
                 camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
@@ -850,10 +850,10 @@ mario->currSubMotionId = 0x1e;
                 }
                 marioSetSpec();
                 mario->rollFlags = 0;
-mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
+                mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
                 mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
                 mario->rot = (Vec){0.0f, 0.0f, 0.0f};
-mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+                mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
                 mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
                 mario->flags &= ~MARIO_FLAG_TUBE_MODE;
                 marioPaperOff();
@@ -881,7 +881,7 @@ mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         roll_upstairs();
         return;
     }
-if (!(mario->mot.roll.flags & ROLL_FLAG_FIX) && (mario->buttonTrg & PAD_BUTTON_B)) {
+    if (!(mario->mot.roll.flags & ROLL_FLAG_FIX) && (mario->buttonTrg & PAD_BUTTON_B)) {
         if (!(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING)) {
             mario->currSubMotionId = 0x14;
             camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
@@ -889,7 +889,7 @@ if (!(mario->mot.roll.flags & ROLL_FLAG_FIX) && (mario->buttonTrg & PAD_BUTTON_B
             mario->buttonTrg |= PAD_BUTTON_A;
         }
     }
-v26 = mario->tubeScaleY;
+    v26 = mario->tubeScaleY;
     if (marioGetPtr()->motRoll->squashTrigger) {
         s32 z = 0;
         s32 one;
@@ -936,10 +936,10 @@ v26 = mario->tubeScaleY;
             break;
     }
     mario->tubeScaleY = v26;
-if (mario->airTimer == 0) {
+    if (mario->airTimer == 0) {
         camFollowYOn();
     }
-if (!mario->hitobjStandOn && mario->hitobjFront && !marioChkBero(mario->hitobjFront)) {
+    if (!mario->hitobjStandOn && mario->hitobjFront && !marioChkBero(mario->hitobjFront)) {
         v26 = marioGetPtr()->motRoll->spdX;
         v27 = marioGetPtr()->motRoll->spdZ;
         v26 += 0.2f * -v26;
@@ -954,7 +954,7 @@ if (!mario->hitobjStandOn && mario->hitobjFront && !marioChkBero(mario->hitobjFr
         marioGetPtr()->motRoll->spdZ = v27;
     }
     if (mario->hitobjStandOn) {
-if (mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
+        if (mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
             {
 MarioWork* m = marioGetPtr();
                 camFollowYOff();
@@ -981,7 +981,7 @@ MarioWork* m = marioGetPtr();
             mario->flags |= MARIO_FLAG_IS_FALLING;
         }
     }
-v29 = marioGetPtr()->motRoll->spdX;
+    v29 = marioGetPtr()->motRoll->spdX;
     v28 = marioGetPtr()->motRoll->spdZ;
     nx = 0.0f;
     nz = 0.0f;
@@ -1057,7 +1057,7 @@ v29 = marioGetPtr()->motRoll->spdX;
             nz = nz * (f32)cos(3.1415927f * ((MarioWork*)mario)->directionView / 180.0f);
         }
     }
-if (mario->hitobjFront && !mario->wStickDir1 && !mario->wStickDir2 && !marioChkBero(mario->hitobjFront)) {
+    if (mario->hitobjFront && !mario->wStickDir1 && !mario->wStickDir2 && !marioChkBero(mario->hitobjFront)) {
         v29 = 0.6f * -v29 + v29;
         v28 = 0.6f * -v28 + v28;
         if (__fabsf(v29) < 0.1f) {
@@ -1205,13 +1205,13 @@ if (mario->hitobjFront && !mario->wStickDir1 && !mario->wStickDir2 && !marioChkB
     }
     if (mario->baseSpeed) {
         MarioWork* m = marioGetPtr();
-if ((u32)m->mot.roll.sfxId == (u32)-1) {
+        if ((u32)m->mot.roll.sfxId == (u32)-1) {
             m->mot.roll.sfxId = (s32)psndSFXOn_3D((char*)0x17b, &m->position);
             m->mot.roll.flags |= ROLL_FLAG_SFX_UNUSED;
         }
 } else {
         MarioWork* m = marioGetPtr();
-if ((u32)m->mot.roll.sfxId != (u32)-1U) {
+        if ((u32)m->mot.roll.sfxId != (u32)-1U) {
             psndSFXOff(m->mot.roll.sfxId);
             m->mot.roll.sfxId = -1;
         }
@@ -1246,11 +1246,11 @@ if ((u32)m->mot.roll.sfxId != (u32)-1U) {
     if (mario->wStickDir1 || mario->wStickDir2) {
         mario->mot.roll.flags |= ROLL_FLAG_STICK_UNUSED;
     }
-if (!(mario->mot.roll.flags & ROLL_FLAG_FIX) && (mario->buttonTrg & PAD_BUTTON_B) && !(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING) && mario->hitobjStandOn) {
+    if (!(mario->mot.roll.flags & ROLL_FLAG_FIX) && (mario->buttonTrg & PAD_BUTTON_B) && !(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING) && mario->hitobjStandOn) {
         mario->currSubMotionId = 0x14;
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
     }
-if (mario->baseSpeed) {
+    if (mario->baseSpeed) {
         MarioWork* m = marioGetPtr();
         m->camShiftTargetZ = 0.0f;
         m->camShiftRate.z = 0.004f;

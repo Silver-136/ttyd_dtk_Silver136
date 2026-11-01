@@ -356,8 +356,8 @@ EVT_BEGIN(gon_12_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -117, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get00), GSWF_GON_12_CASTLE_KEY_CHEST)
-CALL(evt_mobj_itembox, STRING("mobj_box01"), -56, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get01), GSWF_GON_12_MUSHROOM_CHEST)
-CALL(evt_mobj_itembox, STRING("mobj_box02"), -175, 0, 50, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get02), GSWF_GON_12_HONEY_SYRUP_CHEST)
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), -56, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get01), GSWF_GON_12_MUSHROOM_CHEST)
+    CALL(evt_mobj_itembox, STRING("mobj_box02"), -175, 0, 50, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get02), GSWF_GON_12_HONEY_SYRUP_CHEST)
 #else
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -117, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get00), GSWF_GON_12_CASTLE_KEY_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -56, 0, -25, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get01), GSWF_GON_12_MUSHROOM_CHEST)

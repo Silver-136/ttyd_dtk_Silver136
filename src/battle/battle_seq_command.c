@@ -2948,7 +2948,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     if (unit->currentKind != UNIT_MARIO && (unit->currentKind < TYPE_PARTNER_MIN || unit->currentKind >= TYPE_PARTNER_MAX)) {
         return subsetevt_confuse_flustered;
     }
-_btlcmd_MakeActClassTable(wp);
+    _btlcmd_MakeActClassTable(wp);
     {
         u8 cnt;
         u8 i;
@@ -3052,11 +3052,11 @@ _btlcmd_MakeActClassTable(wp);
                     return btldefaultevt_Wait;
                 case 3:
                     return btldefaultevt_Escape;
-case 1:
+                    case 1:
                     return badgeWeapon_Charge.attackEvtScript;
                 case 2:
                     return badgeWeapon_SuperCharge.attackEvtScript;
-case 8:
+                    case 8:
                     return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
                 case 0: {
                     u8 cnt;
@@ -3072,7 +3072,7 @@ case 8:
                     if (cnt) {
                         cursor->absPos = list[irand(cnt)];
                     } else {
-return subsetevt_confuse_flustered;
+                        return subsetevt_confuse_flustered;
 }
                 }
                     if (!cmd->party[cursor->absPos].enabled) {

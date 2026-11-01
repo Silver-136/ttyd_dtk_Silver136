@@ -376,7 +376,7 @@ static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 i
             obj->flags |= MAP_OBJ_FLAG_CHAR_SHADOW;
         }
     } else {
-OSPanic("mapdrv.c", 0x2c1, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
+        OSPanic("mapdrv.c", 0x2c1, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
 }
     if (joint->partCount) {
         PSVECAdd(&joint->bboxMin, &joint->bboxMax, &obj->center);
@@ -2204,9 +2204,9 @@ void mapMain(void) {
     Mtx scale;
     f32 v[9];
     f32 cv[5];
-for (i = 0; i < wp->entries[0].count; i++) {
+    for (i = 0; i < wp->entries[0].count; i++) {
         entry = &wp->entries[i];
-changed = FALSE;
+        changed = FALSE;
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
             MapAnimJointList* jl = anim->anim->jointAnims;
@@ -2233,8 +2233,8 @@ changed = FALSE;
             }
             if (!(anim->flags & MAP_ANIM_FLAG_PAUSE)) {
                 ms = OSTicksToMilliseconds(t);
-cur = gp->framerate * (f32)(u64)(ms - anim->startTime) / 1000.0f;
-if (cur < anim->time) {
+                cur = gp->framerate * (f32)(u64)(ms - anim->startTime) / 1000.0f;
+                if (cur < anim->time) {
                     anim->time = anim->time - (anim->time - cur);
                 } else {
                     anim->time = anim->time + anim->rate * (cur - anim->time);

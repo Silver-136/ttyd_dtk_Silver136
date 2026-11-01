@@ -220,9 +220,9 @@ static EVT_BEGIN(out_evt)
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(150.0f))
     END_INLINE_EVENT
-END_IF
-CALL(evt_mario_get_party, LW(0))
-IF_INT_NOT_EQUAL(LW(0), 0)
+    END_IF
+    CALL(evt_mario_get_party, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 0)
     SET_VALUE(LF(1), 1)
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_hit_get_position, STRING("ana_1"), LW(0), LW(1), LW(2))

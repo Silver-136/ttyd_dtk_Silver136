@@ -1196,7 +1196,7 @@ EVT_BEGIN(ele_1)
         SET_VALUE(LW(0), LW(5))
         CALL_CHILD(ele1_door_close)
         SET_VALUE(GW(0), LW(5))
-CALL(evt_party_run, 0)
+        CALL(evt_party_run, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
@@ -1258,7 +1258,7 @@ ADD(LW(0), 1000)
         CALL_CHILD(ele1_door_close)
     END_INLINE_EVENT
     SET_VALUE(GW(0), LW(8))
-CALL(evt_party_run, 0)
+    CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1750,7 +1750,7 @@ EVT_BEGIN(ele_2)
         SET_VALUE(LW(0), LW(5))
         CALL_CHILD(ele2_door_close)
         SET_VALUE(GW(1), LW(5))
-CALL(evt_party_run, 0)
+        CALL(evt_party_run, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
@@ -1812,7 +1812,7 @@ ADD(LW(0), -998)
         CALL_CHILD(ele2_door_close)
     END_INLINE_EVENT
     SET_VALUE(GW(1), LW(8))
-CALL(evt_party_run, 0)
+    CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

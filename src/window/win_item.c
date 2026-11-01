@@ -346,7 +346,7 @@ s32 winItemMain(WindowWork* w) {
                         w->item.state = 100;
                         w->item.bookTgtX = -170.0f;
                         w->item.bookTgtY = 160.0f;
-book = luigi_book_list[c - ITEM_SUPER_LUIGI1];
+                        book = luigi_book_list[c - ITEM_SUPER_LUIGI1];
                         w->item.bookIdx = c - ITEM_SUPER_LUIGI1;
                         w->item.bookPage = 0;
                         for (w->item.bookPages = 0; book[w->item.bookPages] != NULL; w->item.bookPages++) {
@@ -444,7 +444,7 @@ book = luigi_book_list[c - ITEM_SUPER_LUIGI1];
             } else if (w->buttonTrg & PAD_BUTTON_START) {
                 w->item.bookTgtX = 320.0f;
                 w->item.bookTgtY = -240.0f;
-return -2;
+                return -2;
             }
             w->helpTgtX = -170.0f;
             w->helpTgtY = 150.0f;
@@ -460,7 +460,7 @@ return -2;
                 mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
                 FontGetMessageWidthLine(msgSearch(mail->body), &w->item.mailLines);
                 w->item.mailLines++;
-w->item.mailLines += 7;
+                w->item.mailLines += 7;
                 w->item.mailLine = 0;
                 if (mail->flags & MAIL_FLAG_PICTURE) {
                     w->item.mailLines += 7;
@@ -529,9 +529,9 @@ w->item.mailLines += 7;
         case 201:
             mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
             if (mail->flags & MAIL_FLAG_PICTURE) {
-w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
-if (w->mailRes) {
-w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
+                w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
+                if (w->mailRes) {
+                    w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
 w->item.state++;
                 }
             } else {
@@ -546,7 +546,7 @@ w->item.state++;
                         w->item.mailLine--;
                     }
                 } else if (keyGetDirRep(0) & DEMO_SUBSTICK_DOWN) {
-if (w->item.mailLine + 8 < w->item.mailLines) {
+                    if (w->item.mailLine + 8 < w->item.mailLines) {
 w->item.mailLine++;
                     }
                 }
@@ -577,14 +577,14 @@ w->item.mailLine++;
                 winMgrClose(w->useWin[1]);
             } else if (w->buttonTrg & PAD_BUTTON_A) {
                 mp = marioGetPtr();
-psndSFXOn(SFX_NAME_WORD(0x20012));
+                psndSFXOn(SFX_NAME_WORD(0x20012));
                 if (mp->currMotionId != MARIO_MOTION_SHIP && mp->currMotionId != MARIO_MOTION_PLANE &&
                     ((w->item.useTarget < 2 && !marioBgmodeChk()) || (w->item.useTarget < 1 && marioBgmodeChk()))) {
                     winMgrClose(w->useWin[0]);
                     winMgrClose(w->useWin[1]);
                     return -2;
                 }
-party = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
+                party = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
                 k = 0;
                 for (i = 0; i < 7; i++) {
                     if (party == winPartyDt[i].partyId) {
@@ -592,7 +592,7 @@ party = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0
                     }
                 }
                 for (i = 0; i < 7; i++) {
-if (party != winPartyDt[i].partyId) {
+                    if (party != winPartyDt[i].partyId) {
 list[k++] = &winPartyDt[i];
                     }
                 }
@@ -1325,7 +1325,7 @@ const char* name;
             }
         }
         for (i = 0; i < 7; i++) {
-if (party != winPartyDt[i].partyId) {
+            if (party != winPartyDt[i].partyId) {
 list[n++] = &winPartyDt[i];
             }
         }
@@ -1365,14 +1365,14 @@ list[n++] = &winPartyDt[i];
                 winFontInit();
                 winFontSet((Vec){entry->x + 50, entry->y - 8 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch("name_mario"));
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
-winFontSetR((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetHP());
-winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-winFontSet((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxHP());
-winFontInit();
+                winFontSetR((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetHP());
+                winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
+                winFontSet((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxHP());
+                winFontInit();
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_FP_NAME);
-winFontSetR((Vec){entry->x + 245, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetFP());
-winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxFP());
+                winFontSetR((Vec){entry->x + 245, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetFP());
+                winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
+                winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxFP());
 } else {
                 name = list[i - 1]->partyId != PARTNER_YOSHI ? msgSearch(list[i - 1]->name) : pouchGetYoshiName();
                 if (w->item.blink % 20 > 15 && i == w->item.useTarget) {
@@ -1389,11 +1389,11 @@ winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 
                 }
                 winIconSet(list[i - 1]->iconId, (Vec){entry->x + 30, yoff + (entry->y - 20 - i * 28), 0.0f}, (Vec){0.65f, 0.65f, 0.65f}, white3);
                 winFontInit();
-winFontSet((Vec){entry->x + 50, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, name);
-winFontSet((Vec){entry->x + 220, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
-winFontSetR((Vec){entry->x + 245, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);
-winFontSetR((Vec){entry->x + 267, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-winFontSet((Vec){entry->x + 310, (yoff + (entry->y - 8 - i * 28)) - 2.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].maximumHP);
+                winFontSet((Vec){entry->x + 50, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, name);
+                winFontSet((Vec){entry->x + 220, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
+                winFontSetR((Vec){entry->x + 245, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);
+                winFontSetR((Vec){entry->x + 267, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
+                winFontSet((Vec){entry->x + 310, (yoff + (entry->y - 8 - i * 28)) - 2.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].maximumHP);
 }
         }
         if (w->party.count > 1) {

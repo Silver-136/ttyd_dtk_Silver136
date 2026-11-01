@@ -510,8 +510,8 @@ BattleWork* wp = _battleWorkPointer;
         FontDrawColor(fc);
     }
     PSMTXTrans(trn, -104.0f, 22.0f, 0.0f);
-PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
-PSMTXConcat(m, trn, out);
+    PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
+    PSMTXConcat(m, trn, out);
     PSMTXConcat(out, scl, out);
     FontDrawStringMtx(out, name);
     if (cost != 0) {
@@ -585,7 +585,7 @@ PSMTXConcat(m, trn, out);
         PSMTXConcat(out, scl, out);
         FontDrawStringMtx(out, msgSearch("btl_cost_disp_AP"));
     }
-if (party != NULL) {
+    if (party != NULL) {
         BattleCommandParty* entry = (BattleCommandParty*)(((u8*)party) + ((i + ((s32)menu->scrollPos)) * 0x18));
         s32 n;
         s32 hp;
@@ -2047,8 +2047,8 @@ void DrawWeaponWin(void) {
         }
     }
     DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
-DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL);
-v = (Vec){-60.0f, 35.0f, 0.0f};
+    DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL);
+    v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
     if (weapon) {
         if (weapon->itemId) {
@@ -2313,8 +2313,8 @@ void DrawChangePartyWin(void) {
         }
     }
     DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
-DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, items);
-v = (Vec){-60.0f, 35.0f, 0.0f};
+    DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, items);
+    v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
     if (items[cursor->absPos].help) {
         DrawMenuHelpWin(items[cursor->absPos].help, x, y);

@@ -892,8 +892,8 @@ static void btlseqTurn(BattleWork* wp) {
             if (!BattleWaitAllActiveEvtEnd(wp)) {
                 break;
             }
-BattleIncSeq(wp, SEQ_TURN);
-break;
+            BattleIncSeq(wp, SEQ_TURN);
+            break;
 
         case 0x3000012:
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
@@ -1471,7 +1471,7 @@ break;
                     ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_SLOW);
                     sfx |= ret;
                     if (ret) {
-evt = evtEntry(subsetevt_status_recovery, 10, 0);
+                        evt = evtEntry(subsetevt_status_recovery, 10, 0);
                         if (evt) {
                             unit->attackEventId = evt->eventId;
                             evt->unitId = unit->unitId;
@@ -1631,8 +1631,8 @@ evt = evtEntry(subsetevt_status_recovery, 10, 0);
                     if (!BattleWaitAllActiveEvtEnd(wp)) {
                         break;
                     }
-BattleIncSeq(wp, SEQ_TURN);
-break;
+                    BattleIncSeq(wp, SEQ_TURN);
+                    break;
             }
 
             break;
@@ -1730,8 +1730,8 @@ break;
                             unit->currentHp = unit->maxHp;
                         }
                         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &heartX, &heartY, &heartZ);
-heartY += BtlUnit_GetHeight(unit);
-effRecoveryEntry(0, n, heartX, heartY, heartZ);
+                        heartY += BtlUnit_GetHeight(unit);
+                        effRecoveryEntry(0, n, heartX, heartY, heartZ);
                         evt = evtEntry(subsetevt_happy_heart, 10, 0);
                         if (evt) {
                             unit->attackEventId = evt->eventId;
@@ -1772,8 +1772,8 @@ effRecoveryEntry(0, n, heartX, heartY, heartZ);
                     if (n > 0) {
                         BtlUnit_RecoverFp(unit, n);
                         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &flowerX, &flowerY, &flowerZ);
-flowerY += BtlUnit_GetHeight(unit);
-effRecoveryEntry(1, n, flowerX, flowerY, flowerZ);
+                        flowerY += BtlUnit_GetHeight(unit);
+                        effRecoveryEntry(1, n, flowerX, flowerY, flowerZ);
                         evt = evtEntry(subsetevt_happy_flower, 10, 0);
                         if (evt) {
                             unit->attackEventId = evt->eventId;
@@ -1822,19 +1822,19 @@ effRecoveryEntry(1, n, flowerX, flowerY, flowerZ);
             break;
 
         case 0x3000046:
-if (wp->commandDisabled[3]) {
+        if (wp->commandDisabled[3]) {
                 wp->commandDisabled[3]--;
             }
-BattleIncSeq(wp, SEQ_TURN);
+            BattleIncSeq(wp, SEQ_TURN);
             BattleIncSeq(wp, SEQ_TURN);
             btlseqTurn(wp);
             break;
 
         case 0x3000048:
-if (wp->commandDisabled[4]) {
+        if (wp->commandDisabled[4]) {
                 wp->commandDisabled[4]--;
             }
-BattleIncSeq(wp, SEQ_TURN);
+            BattleIncSeq(wp, SEQ_TURN);
             BattleIncSeq(wp, SEQ_TURN);
             btlseqTurn(wp);
             break;

@@ -1839,7 +1839,7 @@ EVT_BEGIN(evt_elv_down)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
         CALL(evt_del_case_evt, 0, GW(10))
     END_IF
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
         CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
 #else
     END_SWITCH
@@ -2061,7 +2061,7 @@ EVT_BEGIN(evt_elv)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_38_RIDE_THE_ELEVATOR)
-CALL(evt_win_item_select, PTR(item_tbl), LW(1))
+        CALL(evt_win_item_select, PTR(item_tbl), LW(1))
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_38_RIDE_THE_ELEVATOR)
         CALL(evt_win_item_select, 0, PTR(item_tbl), LW(1), 0)

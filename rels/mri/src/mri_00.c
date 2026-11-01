@@ -1854,18 +1854,18 @@ EVT_BEGIN(mri_00_init_evt)
         IF_INT_EQUAL(LW(15), PARTY_MEMBER_NONE)
             CALL(evt_mario_set_party, 0, PARTY_MEMBER_GOOMBELLA)
             CALL(evt_party_run, 0)
-CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-END_IF
+            END_IF
 SPAWN_EVENT(mario_see_you)
     END_IF
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
 BEGIN_INLINE_EVENT
                 CALL(evt_puni_wait_systemmode, 2)
                 SPAWN_EVENT(mario_see_you_init)
             END_INLINE_EVENT
         END_IF
-CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
+        CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kawa_sibu_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kawa_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kawa_02"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1952,7 +1952,7 @@ CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
             SPAWN_EVENT(minnnanokoe_evt)
         END_IF
     END_IF
-RETURN
+    RETURN
 EVT_END()
 #else
 /**

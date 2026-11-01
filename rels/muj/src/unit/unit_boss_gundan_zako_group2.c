@@ -704,8 +704,8 @@ void zakogun_ext_main2(void) {
                 BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
                 zako->vel.x = rand() / 32767.0f - 0.5f;
                 zako->vel.y = 0.0f;
-zako->vel.z = 0.2f;
-zako->target.y = y + work->count * 2.0f;
+                zako->vel.z = 0.2f;
+                zako->target.y = y + work->count * 2.0f;
                 zako->state = 35;
                 zakogun_set_pose(zako, 0x2C, 1, 1);
                 psndSFXOn(se1);
@@ -763,8 +763,8 @@ zako->target.y = y + work->count * 2.0f;
                 }
                 break;
             case 50:
-BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-zako->rot.y = 0.0f;
+            BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
+            zako->rot.y = 0.0f;
                 zako->start = zako->pos;
                 zako->target.x = zako->pos.x - 30.0f;
                 if (zako->target.x < zako->home.x) {

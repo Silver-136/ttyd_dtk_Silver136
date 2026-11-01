@@ -265,7 +265,7 @@ void romFontMake(void);
  * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
  */
 const char* romFontGetMessage(s32 msg) {
-if (wp->language != 0 && (u32)gp->language == 0) {
+    if (wp->language != 0 && (u32)gp->language == 0) {
         return msg_tbl[1][msg];
     }
     return msg_tbl[gp->language][msg];

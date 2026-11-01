@@ -438,13 +438,13 @@ EVT_BEGIN(evt_shorui_funshitu)
             CALL(evt_party_set_dir_npc, 0, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
         END_IF
     END_INLINE_EVENT
-CALL(evt_mario_mov_pos, 260, -135, 500)
+    CALL(evt_mario_mov_pos, 260, -135, 500)
     CALL(evt_mario_set_dir_npc, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
     CALL(evt_set_dir_to_target, STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), STRING("mario"))
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
-CALL(evt_npc_status_onoff, 1, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_STATUS_FACE_MOVE_DIR)
-CALL(evt_msg_print, 0, STRING("stg6_rsh_167"), 0, 0)
-CALL(evt_set_dir_to_target, STRING("me"), STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
+    CALL(evt_npc_status_onoff, 1, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_167"), 0, 0)
+    CALL(evt_set_dir_to_target, STRING("me"), STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
     WAIT_MS(500)
     CALL(evt_mario_set_dir_npc, STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
     // The salaryman answers while Pennington presses him.
@@ -697,8 +697,8 @@ EVT_BEGIN(evt_daijisouna_kami)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-CALL(evt_party_move_pos, 0, 245, -160, 500)
-CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
+            CALL(evt_party_move_pos, 0, 245, -160, 500)
+            CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
         END_IF
     END_INLINE_EVENT
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
@@ -708,8 +708,8 @@ CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_172"), 0, STRING("me"))
-CALL(evt_win_item_select, PTR(item_tbl), LW(1))
-IF_INT_EQUAL(LW(1), -1)
+    CALL(evt_win_item_select, PTR(item_tbl), LW(1))
+    IF_INT_EQUAL(LW(1), -1)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_173_2"), 0, STRING("me"))
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         RETURN
@@ -930,9 +930,9 @@ static EVT_BEGIN(talk_syashou)
         CASE_LESS(STG6_19_GIVE_BLANKET)
         // The Blanket exchange: he takes the Blanket and gives a Mushroom.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_142"), 0, 0)
-CALL(evt_win_item_select, PTR(item_tbl2), LW(1))
-IF_INT_NOT_EQUAL(LW(1), -1)
-CALL(evt_msg_print, 0, STRING("stg6_rsh_143"), 0, 0)
+        CALL(evt_win_item_select, PTR(item_tbl2), LW(1))
+        IF_INT_NOT_EQUAL(LW(1), -1)
+            CALL(evt_msg_print, 0, STRING("stg6_rsh_143"), 0, 0)
             CALL(evt_item_entry, STRING("orei"), ITEM_MUSHROOM, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("orei"))
             CALL(evt_item_get_item_end_wait, STRING("orei"))
@@ -969,8 +969,8 @@ CALL(evt_msg_print, 0, STRING("stg6_rsh_143"), 0, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_13"), 0, 0)
             ELSE
-CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
-END_IF
+                CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
+                END_IF
         END_IF
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
@@ -1464,14 +1464,14 @@ static EVT_BEGIN(talk_konari)
             END_IF
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_96"), 0, 0)
-CALL(evt_win_item_select, PTR(item_tbl3), LW(1))
-IF_INT_EQUAL(LW(1), -1)
+            CALL(evt_win_item_select, PTR(item_tbl3), LW(1))
+            IF_INT_EQUAL(LW(1), -1)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_101"), 0, 0)
             ELSE
                 IF_INT_NOT_EQUAL(LW(1), ITEM_AUTOGRAPH)
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_100"), 0, 0)
                 ELSE
-CALL(evt_msg_print, 0, STRING("stg6_rsh_97"), 0, 0)
+                    CALL(evt_msg_print, 0, STRING("stg6_rsh_97"), 0, 0)
                     // He pays Mario with a Shine Sprite.
                     CALL(evt_item_entry, STRING("orei"), ITEM_SHINE_SPRITE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("orei"))

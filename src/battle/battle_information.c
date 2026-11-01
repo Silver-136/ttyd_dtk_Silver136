@@ -148,9 +148,9 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
     random = group->randomItemWeight;
     none = group->noItemWeight;
     type = 0;
-n = pouchEquipCheckBadge(ITEM_ITEM_HOG);
+    n = pouchEquipCheckBadge(ITEM_ITEM_HOG);
     if (n >= 1) {
-held *= n * 2 + 2;
+        held *= n * 2 + 2;
         random *= n * 2 + 2;
 }
     r = irand(random + held + none);
@@ -201,11 +201,11 @@ held *= n * 2 + 2;
                     setup->itemDropped = ITEM_NULL;
                 }
             }
-else if (pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
+            else if (pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
                 hog = item_hog_table;
                 setup->itemDropped = hog.items[irand(20)];
             }
-break;
+            break;
     }
 }
 #else

@@ -3568,7 +3568,7 @@ USER_FUNC(hi_fire_main) {
  * in JP and later the flames follow the torch objects through hi_fire_main, and all are removed at battle end.
  */
 EVT_BEGIN(stg_08_6_init_sub_event)
-CALL(evt_mapobj_get_position, STRING("hi1"), LW(0), LW(1), LW(2))
+    CALL(evt_mapobj_get_position, STRING("hi1"), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("__hi1"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
     CALL(evt_mapobj_get_position, STRING("hi2"), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("__hi2"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
@@ -3580,14 +3580,14 @@ CALL(evt_mapobj_get_position, STRING("hi1"), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("__hi5"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
     CALL(evt_mapobj_get_position, STRING("hi6"), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("__hi6"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-CALL(check_battle_end)
-CALL(evt_eff_softdelete, STRING("__hi1"))
+    CALL(check_battle_end)
+    CALL(evt_eff_softdelete, STRING("__hi1"))
     CALL(evt_eff_softdelete, STRING("__hi2"))
     CALL(evt_eff_softdelete, STRING("__hi3"))
     CALL(evt_eff_softdelete, STRING("__hi4"))
     CALL(evt_eff_softdelete, STRING("__hi5"))
     CALL(evt_eff_softdelete, STRING("__hi6"))
-RETURN
+    RETURN
 EVT_END()
 #endif
 USER_FUNC(check_battle_end) {

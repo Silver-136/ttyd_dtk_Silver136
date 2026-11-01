@@ -1210,7 +1210,7 @@ void scissor_disp_control(CameraId camera, void* param) {
         GXPosition3f32(pts[i * 2 + 2], pts[i * 2 + 3], 0.0f);
     }
 #if VERSION <= VERSION_DEMO_US
-wp = _battleWorkPointer;
+    wp = _battleWorkPointer;
     GXSetChanMatColor(4, (GXColor){0xFF, 0x00, 0x00, 0xFF});
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);

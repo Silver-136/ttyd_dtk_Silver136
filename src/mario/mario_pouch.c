@@ -788,7 +788,7 @@ void pouchSortItem(s32 mode) {
     BOOL swap;
     s16 t2, t1;
     PouchData* pp[1];
-pp[0] = mpp;
+    pp[0] = mpp;
     if ((u32)mode <= 1 || mode == 7 || mode == 8) {
         n = 0;
         for (j = 0; j < MAX_HELD_ITEMS; j++) {
@@ -829,7 +829,7 @@ pp[0] = mpp;
             qqsort(keys, n, 2, comp_kind_r);
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }
-if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
+    if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
             i = 0;
             for (n = 0; n < MAX_BADGES; n++) {
                 if (pp[0]->badges[n] != 0) {
@@ -870,7 +870,7 @@ if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
                         if (ca < cb)
                             swap = TRUE;
                     }
-if (swap) {
+                    if (swap) {
                         t1 = badges[n];
                         t2 = equipped[n];
                         badges[n] = badges[j];
@@ -879,7 +879,7 @@ if (swap) {
                         equipped[j] = t2;
                     }
                 }
-memcpy(pp[0]->badges, badges, sizeof(badges));
+                memcpy(pp[0]->badges, badges, sizeof(badges));
                 memcpy(pp[0]->equippedBadges, equipped, sizeof(equipped));
             }
 }

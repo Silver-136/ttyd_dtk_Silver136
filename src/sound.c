@@ -122,10 +122,10 @@ void SoundInit(void) {
     sndAuxCallbackPrepareDelay(&dly);
     sndSetAuxProcessingCallbacks(0, sndAuxCallbackReverbHI, &revH, 0xFF, 0, sndAuxCallbackChorus, &cho, 0xFF, 0);
     sndVolume(0x7F, 0, 0xFF);
-sound.outputMode = SND_OUTPUTMODE_STEREO;
+    sound.outputMode = SND_OUTPUTMODE_STEREO;
     sndOutputMode(SND_OUTPUTMODE_STEREO);
-sound.callback = AIRegisterDMACallback(SoundAIDMACallback);
-sound.sampleBank = 0;
+    sound.callback = AIRegisterDMACallback(SoundAIDMACallback);
+    sound.sampleBank = 0;
     sound.sampleIndex = 0;
     sound.fadeIn = 10;
     sound.fadeOut = 500;
@@ -1757,7 +1757,7 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
             if (entry) {
 #if VERSION <= VERSION_DEMO_US
                 if (result >= 0) {
-SoundIntOff();
+                    SoundIntOff();
 #else
                 if (result < 0) {
                     goto end;
@@ -2016,11 +2016,11 @@ s16* dst;
     s32 j;
     u8* src8;
     u8* src8b;
-len2 = p_l2;
+    len2 = p_l2;
     buffer1 = p_b1;
     buffer2 = p_b2;
     stream = &sound.streams[(u8)user];
-stream->samplePos = 0;
+    stream->samplePos = 0;
     if ((stream->flags & (SOUND_STREAM_FLAG_MUTE | SOUND_STREAM_FLAG_END | SOUND_STREAM_FLAG_PAUSE)) || sound.coverState) {
         if (!(stream->flags & SOUND_STREAM_FLAG_ADPCM)) {
             for (; len1 != 0; len1--) {
@@ -2060,7 +2060,7 @@ stream->samplePos = 0;
         src8 = src8 + entry->srcPos;
         n = ((len1 + 13) / 14) * 8;
         while (n != 0) {
-if (stream->flags & SOUND_STREAM_FLAG_END) {
+            if (stream->flags & SOUND_STREAM_FLAG_END) {
                 *(u8*)dst = 0;
                 dst = (s16*)((u8*)dst + 1);
                 n--;
@@ -2070,7 +2070,7 @@ if (stream->flags & SOUND_STREAM_FLAG_END) {
             dst = (s16*)((u8*)dst + 1);
             n--;
             entry->srcPos++;
-if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
+            if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
                 if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
                     entry->pos -= entry->srcPos;
                     entry->srcPos = 0;
@@ -2097,7 +2097,7 @@ if (entry->pos >= stream->loopEnd) {
         dst = buffer2;
         n = ((len2 + 13) / 14) * 8;
         while (n != 0) {
-if (stream->flags & SOUND_STREAM_FLAG_END) {
+            if (stream->flags & SOUND_STREAM_FLAG_END) {
                 *(u8*)dst = 0;
                 dst = (s16*)((u8*)dst + 1);
                 n--;
@@ -2107,7 +2107,7 @@ if (stream->flags & SOUND_STREAM_FLAG_END) {
             dst = (s16*)((u8*)dst + 1);
             n--;
             entry->srcPos++;
-if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
+            if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
                 if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
                     entry->pos -= entry->srcPos;
                     entry->srcPos = 0;

@@ -132,7 +132,7 @@ void BattleAudienceCtrlProcessKinopio(s32 index) {
         BattleAudienceCtrlProcessKinopioEat(index, front);
         break;
 #if VERSION <= VERSION_DEMO_US
-case 21:
+        case 21:
             BattleAudienceCtrlProcessKinopioNoGravity(index, front);
             break;
         case 22:

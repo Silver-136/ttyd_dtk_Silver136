@@ -674,7 +674,7 @@ EVT_BEGIN(move_up_down)
     END_IF
     MULTIPLY(LW(7), 100)
     MULTIPLY(LW(8), 100)
-LOOP(0)
+    LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(7), LW(8), LW(9))
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -683,12 +683,12 @@ LOOP(0)
         IF_INT_NOT_EQUAL(LW(5), 0)
             CALL(evt_hit_bind_update, LW(5))
         END_IF
-WAIT_FRAMES(1)
+        WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(0)
         END_IF
-WAIT_MS(300)
-LOOP(0)
+        WAIT_MS(300)
+        LOOP(0)
             IF_INT_EQUAL(GF(0), 0)
                 BREAK_LOOP
             END_IF
@@ -707,7 +707,7 @@ LOOP(0)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(1)
         END_IF
-WAIT_MS(300)
+        WAIT_MS(300)
         LOOP(0)
             IF_INT_EQUAL(GF(0), 0)
                 BREAK_LOOP
@@ -1212,7 +1212,7 @@ EVT_BEGIN(aji_13_init_evt)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, 300, 60, 100, 0, 0)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF_AJI_13_ULTRA_SHROOM, 0)
-IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
 #else
     CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF_AJI_13_ULTRA_SHROOM, 0)
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5996094f))

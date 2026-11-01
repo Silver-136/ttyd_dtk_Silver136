@@ -1184,7 +1184,7 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_set_position, STRING("hako"), -125, 0, 450)
     CALL(evt_npc_flag_onoff, 1, STRING("hako"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_pera_onoff, STRING("hako"), 0)
-CALL(evt_npc_entry, STRING("\x83\x8D\x83\x65\x83\x93\x82\x50"), STRING("c_roten"))
+    CALL(evt_npc_entry, STRING("\x83\x8D\x83\x65\x83\x93\x82\x50"), STRING("c_roten"))
     CALL(evt_npc_set_tribe, STRING("\x83\x8D\x83\x65\x83\x93\x82\x50"), STRING("\x83\x8D\x83\x65\x83\x93"))
     CALL(evt_npc_flag_onoff, 1, STRING("\x83\x8D\x83\x65\x83\x93\x82\x50"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_status_onoff, 1, STRING("\x83\x8D\x83\x65\x83\x93\x82\x50"), NPC_STATUS_FACE_MOVE_DIR)
@@ -1223,7 +1223,7 @@ CALL(evt_npc_entry, STRING("\x83\x8D\x83\x65\x83\x93\x82\x50"), STRING("c_roten"
     BEGIN_INLINE_EVENT
         CALL(evt_sub_animgroup_async, STRING("OFF_d_maku_center"))
     END_INLINE_EVENT
-RETURN
+    RETURN
 EVT_END_PAD()
 #else
 /**

@@ -326,7 +326,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     f32 d;
     f32 x = w->menu[n].x;
     f32 y = w->menu[n].y;
-winBgGX(w, 3, x, y);
+    winBgGX(w, 3, x, y);
     winKirinukiGX(w, 0, x - 100.0f, 20.0f + (120.0f + y), 365.0f, 210.0f);
     a = 105.0f + y;
     c = (x - 190.0f) - 4.0f;
@@ -345,11 +345,11 @@ winBgGX(w, 3, x, y);
     }
     winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - ((pouch->maximumBP + 9) / 10)) * 13);
     winFontInit();
-winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "\202a\202o");
-winFontSet((Vec){x - 175.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->maximumBP);
-winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - ((pouch->maximumBP + 9) / 10)) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
-winFontSet((Vec){x - 145.0f, ((20.0f + (y - 102.0f)) - 18.0f) + (10 - ((pouch->maximumBP + 9) / 10)) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->availableBP);
-winTexInit((TEXPalette*)*w->res->data);
+    winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "\202a\202o");
+    winFontSet((Vec){x - 175.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->maximumBP);
+    winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - ((pouch->maximumBP + 9) / 10)) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
+    winFontSet((Vec){x - 145.0f, ((20.0f + (y - 102.0f)) - 18.0f) + (10 - ((pouch->maximumBP + 9) / 10)) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->availableBP);
+    winTexInit((TEXPalette*)*w->res->data);
     d = 28.0f + y;
     for (i = 0; i < pouch->availableBP; i++) {
         winTexSet(0x1C, (Vec){(x - 242.0f) + (i % 10) * 13, (20.0f + (d - (i / 10) * 13)) - 18.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
@@ -453,11 +453,11 @@ char buf[64];
     f32 scroll;
     f32 width;
     s32 tw;
-colA = (GXColor){255, 255, 255, 255};
+    colA = (GXColor){255, 255, 255, 255};
     colB = (GXColor){0, 0, 0, 255};
     colU = colA;
     colD = colB;
-if (w->badge.tab == 0) {
+    if (w->badge.tab == 0) {
         cnt = pouchGetHaveBadgeCnt();
     } else {
         cnt = w->badge.count;
@@ -483,7 +483,7 @@ if (w->badge.tab == 0) {
         }
         if (equipped) {
             winTexInit((TEXPalette*)*w->res->data);
-winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){44.0f, 1.0f, 1.0f}, colA);
+            winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){44.0f, 1.0f, 1.0f}, colA);
 }
 winIconInit();
         winIconSet(itemDataTable[badge].icon_id, (Vec){xo - 75.0f, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.54f, 0.54f, 0.54f}, colA);
@@ -492,7 +492,7 @@ winIconInit();
         winFontSet((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, item->id);
         cost = &item->bp_cost;
         winFontSet((Vec){130.0f + xo, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, "%d", *cost);
-winTexInit((TEXPalette*)*w->res->data);
+        winTexInit((TEXPalette*)*w->res->data);
         for (j = 0; j < *cost; j++) {
             {
                 s32 t;
@@ -503,7 +503,7 @@ winTexInit((TEXPalette*)*w->res->data);
     GXSetScissor(0, 0, 0x260, 0x1E0);
     {
         f32 ax;
-if (w->badge.page[w->badge.tab] > 0) {
+        if (w->badge.page[w->badge.tab] > 0) {
             winTexInit((TEXPalette*)*w->res->data);
             ax = 250.0f + xo;
             winTexSet(0x17, (Vec){ax, 20.0f + (18.0f + (110.0f + yo)), 0.0f}, (Vec){-1.0f, -1.0f, -1.0f}, colU);

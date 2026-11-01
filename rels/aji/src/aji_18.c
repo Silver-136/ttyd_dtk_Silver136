@@ -354,7 +354,7 @@ EVT_BEGIN(aji_18_init_evt)
     // The fortress music and ambience start and the exits are set up.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-SET_VALUE(LW(0), PTR(bero_entry_data))
+    SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
     // From the factory-door story point on, all three card-key slots count as filled; each slot shows green
@@ -435,9 +435,9 @@ SET_VALUE(LW(0), PTR(bero_entry_data))
             IF_INT_EQUAL(LW(15), 0)
                 CALL(evt_mario_set_party, 0, 1)
                 CALL(evt_party_run, 0)
-CALL(evt_pouch_mario_recovery)
+                CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
-END_IF
+                END_IF
 SPAWN_EVENT(evt_koopa_after)
         END_IF
     END_SWITCH

@@ -434,7 +434,7 @@ WinSortEnt tmp;
     w->log.stoneAlphaTgt = w->log.stoneAlpha = 0.0f;
 
     w->log.badge.num = 0;
-for (i = BADGE_MIN; i < BADGE_MAX; i++) {
+    for (i = BADGE_MIN; i < BADGE_MAX; i++) {
         if (itemDataTable[i].type_sort_order != -1) {
             w->log.badgeIds[w->log.badge.num++] = i - BADGE_MIN;
 }
@@ -449,7 +449,7 @@ for (i = BADGE_MIN; i < BADGE_MAX; i++) {
     w->log.badge.iconY = w->log.badge.iconTy = -300.0f;
 
     w->log.recipe.num = 0;
-for (i = ITEM_SHROOM_FRY; i < ITEM_MAX; i++) {
+    for (i = ITEM_SHROOM_FRY; i < ITEM_MAX; i++) {
         if (itemDataTable[i].type_sort_order != -1) {
             w->log.recipeIds[w->log.recipe.num++] = i - ITEM_SHROOM_FRY;
 }
@@ -872,10 +872,10 @@ s32 winLogMain(WindowWork* w) {
             winMsgEntry(w, 0, w->log.menu[w->log.cursor].msg, 0);
             break;
         case 10:
-if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U)
+        if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U)
                 break;
-if (!w->mapRes) {
-w->mapRes = fileAllocf(FILE_TYPE_TPL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName());
+                if (!w->mapRes) {
+                    w->mapRes = fileAllocf(FILE_TYPE_TPL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName());
 }
             if (w->log.pose == -1) {
                 if (w->flags & WINDOW_FLAG_8BIT) {
@@ -940,10 +940,10 @@ w->mapRes = fileAllocf(FILE_TYPE_TPL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winG
             by = 120.0f + w->log.scrollY;
             for (k = 0; k < 0x5D; k++) {
                 t = &tubuDt[k];
-if (swByteGet(0) < t->id)
+                if (swByteGet(0) < t->id)
                     break;
                 {
-if (t->big) {
+                    if (t->big) {
                         f32 d = distABf(bx + t->x, by + t->y, x, y);
                         if (min > d) {
                             min = d;
@@ -1890,18 +1890,18 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             PSMTXRotRad(m2, 'y', 0.017453292f * (51.42857f * i - w->log.stoneAngle));
             PSMTXMultVec(m2, &v, &v);
             PSMTXMultVec(m1, &v, &v);
-wk = w->log.eff[i]->userdata;
+            wk = w->log.eff[i]->userdata;
             wk->position.x = v.x + (x + w->log.stoneWinX);
             wk = w->log.eff[i]->userdata;
             wk->position.y = 20.0f + (v.y + (y + w->log.stoneWinY));
             wk = w->log.eff[i]->userdata;
             wk->position.z = v.z;
-winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
+            winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
 }
 }
     if (w->log.badge.x < 320.0f && w->log.badge.y > -240.0f) {
         winHakoGX(w, 0, x + w->log.badge.x, y + w->log.badge.y);
-winTexInit(*w->res->data);
+        winTexInit(*w->res->data);
         winTexSet(0x95, (Vec){x + w->log.badge.iconX, y + w->log.badge.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         if (swGet(w->log.badgeIds[w->log.badge.cursor] + GSWF_BADGE_FOUND_BASE)) {
             winIconInit();
@@ -1910,7 +1910,7 @@ winTexInit(*w->res->data);
     }
     if (w->log.recipe.x < 320.0f && w->log.recipe.y > -240.0f) {
         winHakoGX(w, 1, x + w->log.recipe.x, y + w->log.recipe.y);
-winTexInit(*w->res->data);
+        winTexInit(*w->res->data);
         winTexSet(0x96, (Vec){x + w->log.recipe.iconX, y + w->log.recipe.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         if (swGet(0x41 + w->log.recipeIds[w->log.recipe.cursor])) {
             winIconInit();
@@ -2252,10 +2252,10 @@ static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
     winKirinukiGX(w, 0, x - 110.0f, y - 160.0f, 100.0f, 50.0f);
     msg = msgSearch("msg_menu_monosiri_kazu");
     tw = 0.75f * FontGetMessageWidth(msg);
-winFontInit();
-winFontSet((Vec){(x - 108.0f) + (100 - tw) / 2, y - 166.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k1, msg);
+    winFontInit();
+    winFontSet((Vec){(x - 108.0f) + (100 - tw) / 2, y - 166.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k1, msg);
     sprintf(buf, "%d\201^%d", w->log.enemyKnown, w->log.enemyNum);
-tw = 0.75f * FontGetMessageWidth(buf);
+    tw = 0.75f * FontGetMessageWidth(buf);
     winFontSet((Vec){(x - 108.0f) + (100 - tw) / 2, y - 184.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k1, buf);
     winFontInit();
     for (i = 0; i < 16; i++) {
@@ -2269,7 +2269,7 @@ tw = 0.75f * FontGetMessageWidth(buf);
                 name = msgSearch(te->enemyTag);
             }
         } else {
-name = "\201H\201H\201H";
+            name = "\201H\201H\201H";
 }
 sprintf(num, "%d\201D", enemy_monoshiri_sort_table[id]);
         winFontSet((Vec){((24.0f + x) - 5.0f) + (i / 8) * 216, (y - 16.0f) - (i % 8) * 24, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k2, num);
@@ -2433,15 +2433,15 @@ GXTexObj tex;
         case 0:
             if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U)
                 break;
-if (fileAsyncf(FILE_TYPE_RAW, NULL, WIN_DIR "jp/mono.dat", getMarioStDvdRoot()) == 0U)
+                if (fileAsyncf(FILE_TYPE_RAW, NULL, WIN_DIR "jp/mono.dat", getMarioStDvdRoot()) == 0U)
                 break;
-m->file1 = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
-m->file2 = fileAllocf(FILE_TYPE_RAW, WIN_DIR "jp/mono.dat", getMarioStDvdRoot());
+                m->file1 = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
+                m->file2 = fileAllocf(FILE_TYPE_RAW, WIN_DIR "jp/mono.dat", getMarioStDvdRoot());
 m->state++;
 m->alpha = 0;
             m->pose1 = -1;
             m->pose2 = -1;
-TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
+            TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
             m->smart = smartAlloc(GXGetTexBufferSize(GXGetTexObjWidth(&tex), GXGetTexObjHeight(&tex), GX_TF_RGB5A3, GX_FALSE, 0), 0);
             break;
         case 1:
@@ -2853,15 +2853,15 @@ static void monosiri_disp(CameraId camera, void* param) {
             GXPosition3f32(x1 + qw, y1, 0.0f);
             GXTexCoord2f32(1.0f, 0.0f);
         }
-id = m->id;
+        id = m->id;
         te = battleGetUnitMonosiriPtr(id);
         sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
-w = 0.75f * FontGetMessageWidth(buf);
+        w = 0.75f * FontGetMessageWidth(buf);
         winFontInit();
         winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 180.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
-sprintf(buf, "%s\201@%s", msgSearch("menu_monosiri_derutokoro"), msgSearch(te->locationTag));
-w = 0.75f * FontGetMessageWidth(buf);
-winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 210.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
+        sprintf(buf, "%s\201@%s", msgSearch("menu_monosiri_derutokoro"), msgSearch(te->locationTag));
+        w = 0.75f * FontGetMessageWidth(buf);
+        winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 210.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
 }
 }
 #else

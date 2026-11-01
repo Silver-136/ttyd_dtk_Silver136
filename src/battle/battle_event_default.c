@@ -660,7 +660,7 @@ EVT_BEGIN(btldefaultevt_Wait)
 EVT_END()
 /** Action that ends a tutorial battle turn: runs the lecture unit's data-table event 70 (69 in the demos). */
 EVT_BEGIN(btldefaultevt_LectureEnd)
-CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, 69)
+    CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, 69)
     RETURN
 EVT_END()
 #endif

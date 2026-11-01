@@ -403,7 +403,7 @@ u32 trg;
                         break;
                     case 7:
                         SFX(PSND_SFX_CURSOR_OK1);
-wp->state = 0x64;
+                        wp->state = 0x64;
                         break;
                     case 8:
                         SFX(PSND_SFX_CURSOR_OK1);
@@ -451,7 +451,7 @@ wp->state = 0x64;
             break;
         case 0x16:
             fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
-psndBGMOff_f_d(PSND_FADEOUT, 3000, 0);
+            psndBGMOff_f_d(PSND_FADEOUT, 3000, 0);
 wp->state++;
             break;
         case 0x17:
@@ -501,7 +501,7 @@ wp->state++;
                 } else {
                     strcpy((char*)gp->playerName, nameEntGetName());
                     gp->lastSlot = wp->slot;
-if (code == 0) {
+                    if (code == 0) {
                         gp->saveSlot = wp->slot;
                         wp->evt = evtEntryType(evt_memcard_save, 0, 0, 0);
                         wp->evt->lwData[0] = 0x17;
@@ -527,9 +527,9 @@ if (code == 0) {
             break;
         case 0x23:
             if (!evtCheckID(wp->evt->eventId)) {
-stg0_00_init();
-gp->saveSlot = wp->slot;
-marioPartyKill();
+                stg0_00_init();
+                gp->saveSlot = wp->slot;
+                marioPartyKill();
 {
     MarioWork* m = marioGetPtr();
     m->prevPartyMemberId[0] = 0;
@@ -586,7 +586,7 @@ seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
             break;
         case 0x2a:
             if (!evtCheckID(wp->evt->eventId)) {
-wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
+                wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                 wp->slot = 4;
                 wp->state = 1;
 }
@@ -672,13 +672,13 @@ wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
             break;
         case 0x35:
             if (!evtCheckID(wp->evt->eventId)) {
-wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
+                wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                 wp->slot = 5;
                 wp->state = 1;
 }
             break;
         case 0x64:
-wp->flags |= LOAD_FLAG_DIM;
+        wp->flags |= LOAD_FLAG_DIM;
             if (dir & DEMO_STICK_UP) {
                 wp->soundModeSel--;
                 SFX(PSND_SFX_CURSOR_MOVE1);
@@ -722,7 +722,7 @@ wp->flags |= LOAD_FLAG_DIM;
             wp->tx = -74.0f;
             wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
             break;
-case 0xc8:
+            case 0xc8:
             wp->flags |= LOAD_FLAG_DIM;
             if (dir & DEMO_STICK_UP) {
                 wp->rumbleOffSel--;
@@ -761,7 +761,7 @@ case 0xc8:
         f32 s = 2.0f * (f32)sin(gp->retraceCount / 8.0f);
         wp->x += __fabsf(s);
     }
-dispEntry(CAMERA_2D, 1000.0f, 0, loadDraw, NULL);
+    dispEntry(CAMERA_2D, 1000.0f, 0, loadDraw, NULL);
     return FALSE;
 }
 #else
@@ -1341,7 +1341,7 @@ f32 y;
     if (wp->state >= 0x20 && wp->state < 0x28) {
         return;
     }
-GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
     GXSetZCompLoc(GX_FALSE);
     GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
@@ -1372,8 +1372,8 @@ GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
         if (i == wp->slot) {
             col = white;
         }
-if (wp->state == 0x29 && (i == wp->copyFrom || i == wp->copyTo)) {
-col = white;
+        if (wp->state == 0x29 && (i == wp->copyFrom || i == wp->copyTo)) {
+            col = white;
         }
         if (i == 4 && (wp->flags & LOAD_FLAG_NO_DELETE)) {
             col = dark;
@@ -1405,7 +1405,7 @@ col = white;
     FontDrawStart();
     {
         const char* msg = wp->msg;
-FontDrawString(-FontGetMessageWidth(msg) / 2, 192.0f, msg);
+        FontDrawString(-FontGetMessageWidth(msg) / 2, 192.0f, msg);
 }
 
     for (i = 0; i < 4; i++, win1++) {
@@ -1419,15 +1419,15 @@ const char* str;
         u64 hours;
         s32 mins;
         char* name = (char*)save->data.global.playerName;
-FontDrawStart();
+        FontDrawStart();
         FontDrawColor((GXColor){192, 192, 192, 255});
         if (i == wp->slot) {
             FontDrawColor((GXColor){255, 255, 255, 255});
         }
         FontDrawScale(0.6f);
         FontDrawEdge();
-sprintf(buf, "データ%d", i + 1);
-FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
+        sprintf(buf, "データ%d", i + 1);
+        FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
         FontDrawEdgeOff();
         FontDrawScale(1.0f);
         FontDrawColor((GXColor){32, 32, 32, 255});
@@ -1435,19 +1435,19 @@ FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
             FontDrawColor((GXColor){0, 0, 0, 255});
         }
         if (flags & CARD_SAVE_FLAG_NO_VALID_COPY) {
-str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
+            str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
 } else if (flags & CARD_SAVE_FLAG_ERASED) {
-str = "\203j\203\205\201[\203Q\201[\203\200";
-FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
+    str = "\203j\203\205\201[\203Q\201[\203\200";
+    FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
         } else if (gsw0 == 0) {
-str = "\202\315\202\266\202\337\202\251\202\347";
-FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
+            str = "\202\315\202\266\202\337\202\251\202\347";
+            FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
             if (strlen(name) != 0) {
                 FontDrawString(win1->x - FontGetMessageWidth(name) / 2, 70.0f + win1->y, name);
             }
         } else {
-w = FontGetMessageWidth("\x82\x57\x82\x57");
+            w = FontGetMessageWidth("\x82\x57\x82\x57");
             sec = OSTicksToSeconds(time);
             hours = (u64)sec / 3600;
             mins = ((u64)sec % 3600) / 60;

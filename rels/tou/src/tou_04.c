@@ -1398,7 +1398,7 @@ static USER_FUNC(make_list) {
     s32 i;
 
     if (tmp == NULL) {
-tmp = _mapAlloc(0x400);
+        tmp = _mapAlloc(0x400);
 }
 sprintf(tmp, "<select %d %d %d %d>", 0, 7, 300, 140);
 for (i = 0; i < 7; i++) {
@@ -2546,12 +2546,12 @@ EVT_BEGIN(tou_04_init_evt)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -2633,7 +2633,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ADD(LW(2), 1)
     END_LOOP
     SWITCH(GSW_STORY_PROGRESS)
-CASE_LESS(STG3_04_GONZALES_IS_BORN)
+        CASE_LESS(STG3_04_GONZALES_IS_BORN)
         SET_VALUE(LW(0), 5)
         CALL_CHILD(bero_case_switch_on)
         CASE_DEFAULT
@@ -2683,9 +2683,9 @@ CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL_CHILD(bero_case_switch_off)
         SET_VALUE(LW(0), 8)
         CALL_CHILD(bero_case_switch_off)
-CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
-END_IF
+        END_IF
     // After Grubba's plans, the guard's office door stays shut unless Mario was called back by Jolene.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
@@ -2697,9 +2697,9 @@ END_IF
                 CALL_CHILD(bero_case_switch_on)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
-SET_VALUE(LW(0), 5)
+                SET_VALUE(LW(0), 5)
                 CALL_CHILD(bero_case_switch_on)
-END_IF
+                END_IF
         END_IF
     END_IF
     // Housekeeping: a poisoned partner is removed, and a pending match sends the partner away.

@@ -302,8 +302,8 @@ static EVT_BEGIN(twink_event)
     MULTIPLY_FLOAT(LW(1), LW(3))
     ADD(LW(2), 15)
     CALL(evt_eff64, STRING(""), STRING("stardust_n64"), 2, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-END_IF
-GOTO(0)
+    END_IF
+    GOTO(0)
 LABEL(99)
 RETURN
 EVT_END()

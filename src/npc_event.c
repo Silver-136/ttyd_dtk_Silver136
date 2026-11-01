@@ -1813,11 +1813,11 @@ EVT_BEGIN(chorobon_move_event)
     CALL(evt_sub_random, 3, LW(4))
     ADD(LW(4), 2)
     LOOP(LW(4))
-CALL(evt_sub_random, 360, LW(3))
+        CALL(evt_sub_random, 360, LW(3))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), 50)
-CALL(evt_npc_jump_position, STRING("me"), LW(0), -10000, LW(2), 300, 0, FLOAT(30.0f), 0)
-END_LOOP
+        CALL(evt_npc_jump_position, STRING("me"), LW(0), -10000, LW(2), 300, 0, FLOAT(30.0f), 0)
+        END_LOOP
     CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(3))
     CALL(evt_npc_set_ry, STRING("me"), LW(3))
     CALL(evt_sub_random, 500, LW(4))
@@ -2959,12 +2959,12 @@ USER_FUNC(kamec_fire_magic_delete) {
  * the full game finds it by the Magikoopa's name and lets it run out.
  */
 static USER_FUNC(kamec_fire_magic_delete) {
-effSoftDelete((EffectEntry*)evtGetValue(event, event->args[0]));
-return EVT_RETURN_DONE;
+    effSoftDelete((EffectEntry*)evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
 }
 /** Lost event of Yux: hovers through its standing poses for 2 s and resumes. */
 EVT_BEGIN(barriern_lost_event)
-CALL(evt_npc_set_anim, STRING("me"), STRING("S_3"))
+    CALL(evt_npc_set_anim, STRING("me"), STRING("S_3"))
     WAIT_FRAMES(60)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     WAIT_FRAMES(60)

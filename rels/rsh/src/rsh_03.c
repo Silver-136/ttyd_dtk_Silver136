@@ -457,8 +457,8 @@ EVT_BEGIN(talk_cook)
         END_IF
         RETURN
         LABEL(0)
-CALL(evt_win_item_select, LW(0), LW(1))
-SWITCH(LW(1))
+        CALL(evt_win_item_select, LW(0), LW(1))
+        SWITCH(LW(1))
             CASE_EQUAL(ITEM_GOLDEN_LEAF)
             // The Golden Leaf, Mystic Egg and Keel Mango are taken one at a time.
             CALL(evt_pouch_remove_item, ITEM_GOLDEN_LEAF, LW(0))
@@ -527,8 +527,8 @@ SWITCH(LW(1))
         CALL(evt_msg_print, 0, STRING("stg6_rsh_212"), 0, 0)
         CASE_LESS(STG6_44_END_OF_DAY_2)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_219"), 0, 0)
-CALL(evt_msg_print_party, STRING("stg6_rsh_219_2"))
-CASE_LESS(STG6_57_A_MAIL_FROM_PEACH)
+        CALL(evt_msg_print_party, STRING("stg6_rsh_219_2"))
+        CASE_LESS(STG6_57_A_MAIL_FROM_PEACH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_257"), 0, 0)
         CASE_LESS(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_12"), 0, 0)
@@ -694,20 +694,20 @@ EVT_BEGIN(talk_waitless_pias_return)
     CALL(evt_npc_get_reglid, STRING("ウェイトレス"), LW(10))
     DELETE_EVENT(LW(10))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_195"), 0, STRING("ウェイトレス"))
-CALL(evt_win_item_select, PTR(item_tbl_waitless), LW(1))
-IF_INT_NOT_EQUAL(LW(1), -1)
-CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_4"))
+    CALL(evt_win_item_select, PTR(item_tbl_waitless), LW(1))
+    IF_INT_NOT_EQUAL(LW(1), -1)
+        CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_4"))
         CALL(evt_msg_print, 0, STRING("stg6_rsh_196"), 0, STRING("ウェイトレス"))
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_1"))
-CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+        CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
         SET_VALUE(GSWF_STARPIECE_84, 1)
-CALL(evt_msg_print, 0, STRING("stg6_rsh_197"), 0, STRING("ウェイトレス"))
-CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_197"), 0, STRING("ウェイトレス"))
+        CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
         WAIT_MS(500)
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
-CALL(evt_pouch_remove_item, ITEM_SHELL_EARRINGS, LW(0))
+        CALL(evt_pouch_remove_item, ITEM_SHELL_EARRINGS, LW(0))
     ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_196_2"), 0, STRING("ウェイトレス"))
     END_IF
@@ -1598,7 +1598,7 @@ EVT_BEGIN(evt_shop_close)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_OUT1"), LW(0), LW(1), LW(2), 0)
-END_INLINE_EVENT
+        END_INLINE_EVENT
     CALL(evt_img_clear_virtual_point, STRING("capture_img"))
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_2"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
@@ -1614,10 +1614,10 @@ END_INLINE_EVENT
     CALL(evt_sub_get_mapname, LW(10))
     IF_STR_EQUAL(LW(10), STRING("rsh_03_c"))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shop_close_yuka1"), MAP_OBJ_FLAG_HIDDEN)
-CALL(evt_mapobj_flag_onoff, 1, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
-CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shop_close_sc"), MAP_OBJ_FLAG_HIDDEN)
-END_IF
-CALL(evt_sub_get_mapname, LW(10))
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shop_close_sc"), MAP_OBJ_FLAG_HIDDEN)
+        END_IF
+        CALL(evt_sub_get_mapname, LW(10))
     IF_STR_EQUAL(LW(10), STRING("rsh_03_a"))
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG6_01_THE_CONDUCTOR, STG6_20_END_OF_DAY_1)
@@ -2216,8 +2216,8 @@ EVT_BEGIN(rsh_03_init_evt_nidome)
     ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_03_a"))
@@ -2233,7 +2233,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         END_IF
     END_IF
     CALL_CHILD(evt_rsh_03_rnd_npc_entry)
-RETURN
+    RETURN
 EVT_END()
 #else
 /**

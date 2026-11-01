@@ -911,8 +911,8 @@ static EVT_BEGIN(evt_train)
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW_HOM_TRAIN_LEG, 0)
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 0)
-SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-IF_INT_LESS(GSW_STORY_PROGRESS, STG6_00_START)
+    SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_00_START)
 #else
     SET_VALUE(GSW_HOM_TRAIN_LEG, 0)
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 0)
@@ -1036,7 +1036,7 @@ EVT_BEGIN(evt_train2)
     // Until Mario reads it, Peach's mail scene plays.
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
+    SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
     // Until Mario reads it, Peach's mail scene plays.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_57_A_MAIL_FROM_PEACH)
         SPAWN_EVENT(peach_mail)
@@ -2267,7 +2267,7 @@ EVT_BEGIN(gor_04_init_evt)
     IF_STR_EQUAL(LW(0), STRING("n_bero"))
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
         SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
+        SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
     ELSE
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
     END_IF
@@ -2312,13 +2312,13 @@ SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
-CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-END_IF
-END_IF
+            END_IF
+            END_IF
     // The mail event runs in the background.
     SPAWN_EVENT(evt_sub_mail_event)
-RETURN
+    RETURN
 EVT_END()
 #else
 /**

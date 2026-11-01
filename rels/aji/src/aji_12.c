@@ -297,18 +297,18 @@ s32 i;
     for (i = 0; i < 50; i++) {
         hitGrpAttrOn((const char*)hit_list[i], 0x800);
     }
-if (mario->hitobjUnder == NULL) {
-mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
+    if (mario->hitobjUnder == NULL) {
+        mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
         hitGrpAttrOff("A_hikaru_01", 0x800);
         event->userdata[2] = 0;
 } else if (strncmp(hitGetName(mario->hitobjUnder), "A_hikaru_", strlen("A_hikaru_")) != 0) {
-mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
         hitGrpAttrOff("A_hikaru_01", 0x800);
         event->userdata[2] = 0;
 } else if (strcmp(hitGetName(mario->hitobjUnder), "A_hikaru_01") == 0 && event->userdata[2] == 0) {
-event->userdata[2] = 1;
+    event->userdata[2] = 1;
         event->userdata[0] = 0;
         event->userdata[1] = 0;
     }

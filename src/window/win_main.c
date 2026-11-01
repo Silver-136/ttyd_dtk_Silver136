@@ -160,7 +160,7 @@ static const WinLangTbl winLangTbl;
 void winMain(void) {
     MarioWork* mario;
     s32 i;
-mario = marioGetPtr();
+    mario = marioGetPtr();
     if (!(wp->flags & WINDOW_FLAG_OPEN_DISABLE) && seqGetSeq() == SEQ_GAME && !seqCheckSeq()) {
         wp->buttonTrg = keyGetButtonTrg(0);
         wp->buttonRep = keyGetButtonRep(0);
@@ -221,7 +221,7 @@ mario = marioGetPtr();
                         if (keyGetButton(0) & PAD_TRIGGER_Z) {
                             break;
                         }
-if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA))) {
+                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA))) {
                             wp->menuSel = 1;
                         } else if (wp->buttonTrg & PAD_BUTTON_UP) {
                             wp->menuSel = 2;
@@ -247,8 +247,8 @@ camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
                     npcStopForEvent();
                 }
                 fbatChangeMode(7);
-marioCtrlOff2();
-partyCtrlOff();
+                marioCtrlOff2();
+                partyCtrlOff();
                 psndSetFlag(PSND_FLAG_MUTE_SFX);
                 if (mario->characterId == CHARACTER_BOWSER) {
                     kpaPauseSE2();
@@ -261,7 +261,7 @@ partyCtrlOff();
                 for (i = 0; i < 4; i++) {
                     padRumbleHardOff(i);
                 }
-fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/mail.tpl", getMarioStDvdRoot());
+                fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/mail.tpl", getMarioStDvdRoot());
 {
 const char* name = winGetMapTplName();
                     fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), name);
@@ -315,8 +315,8 @@ const char* name = winGetMapTplName();
 
             case WIN_MENU_CLOSE:
                 camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
-marioCtrlOn2();
-partyCtrlOn();
+                marioCtrlOn2();
+                partyCtrlOn();
                 fbatChangeMode(1);
                 psndClearFlag(PSND_FLAG_MUTE_SFX);
                 statusWinForceUpdate();
@@ -375,7 +375,7 @@ WindowPartyDt* p;
                         list[n++] = base;
                     }
                 }
-wp->currentEvent = evtEntryType(evt_item_use, 0, 0, 0);
+                wp->currentEvent = evtEntryType(evt_item_use, 0, 0, 0);
                 wp->currentEvent->lwData[10] = wp->item.useItem;
                 wp->currentEvent->lwData[11] = wp->item.useTarget == 0 ? 0 : list[wp->item.useTarget - 1]->partyId;
                 psndClearFlag(PSND_FLAG_MUTE_SFX);
@@ -1103,8 +1103,8 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(lecture_step_wait, 2)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_02"), 0, 0)
-CALL(lecture_step_wait, 5)
-CALL(evt_msg_continue)
+    CALL(lecture_step_wait, 5)
+    CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_03"), 0, 0)
     CALL(lecture_step_wait, 6)
     CALL(evt_msg_continue)
@@ -1120,8 +1120,8 @@ CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_07"), 0, 0)
     CALL(lecture_step_wait, 10)
     CALL(evt_msg_continue)
-WAIT_MS(500)
-RETURN
+    WAIT_MS(500)
+    RETURN
 EVT_END()
 #elif VERSION == VERSION_DEMO_US
 /**
@@ -1138,8 +1138,8 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(lecture_step_wait, 2)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_02"), 0, 0)
-CALL(lecture_step_wait, 5)
-CALL(evt_msg_continue)
+    CALL(lecture_step_wait, 5)
+    CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_03"), 0, 0)
     CALL(lecture_step_wait, 6)
     CALL(evt_msg_continue)
@@ -1155,8 +1155,8 @@ CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_07"), 0, 0)
     CALL(lecture_step_wait, 10)
     CALL(evt_msg_continue)
-WAIT_MS(500)
-RETURN
+    WAIT_MS(500)
+    RETURN
 OPCODE_END_SCRIPT,
     0 // US and the US demo: a trailing zero word in the object (the JP gap_05 data word)
 };
@@ -1229,7 +1229,7 @@ static USER_FUNC(itemUseFunc) {
     PartyEntry* party;
     MarioWork* mario;
     ItemData* item;
-item = &itemDataTable[event->lwData[10]];
+    item = &itemDataTable[event->lwData[10]];
     mario = marioGetPtr();
     party = partyGetPtr(0);
     if (isFirstCall) {
@@ -1281,7 +1281,7 @@ item = &itemDataTable[event->lwData[10]];
                 cnt = 300;
                 break;
             }
-effRecoveryEntry(0, item->hp_restored, party->position.x, party->position.y + party->height, party->position.z);
+            effRecoveryEntry(0, item->hp_restored, party->position.x, party->position.y + party->height, party->position.z);
 cnt++;
             break;
         case 230:
@@ -1365,7 +1365,7 @@ cnt++;
                 cnt = 300;
                 break;
             }
-effRecoveryEntry(0, item->hp_restored, party->position.x, party->position.y + party->height, party->position.z);
+            effRecoveryEntry(0, item->hp_restored, party->position.x, party->position.y + party->height, party->position.z);
 cnt++;
             break;
         case 230:
@@ -1718,13 +1718,13 @@ char buf[0x400];
 Mtx trans;
     Mtx scl;
     va_list args;
-va_start(args, fmt);
+    va_start(args, fmt);
     vsprintf(buf, fmt, args);
-PSMTXTrans(trans, pos.x, pos.y, pos.z);
+    PSMTXTrans(trans, pos.x, pos.y, pos.z);
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
-FontDrawMessageMtx(trans, buf);
+    FontDrawMessageMtx(trans, buf);
 }
 #elif VERSION == VERSION_DEMO_US
 #else
@@ -1789,16 +1789,16 @@ char buf[0x400];
 Mtx trans;
     Mtx scl;
     va_list args;
-va_start(args, fmt);
+    va_start(args, fmt);
     vsprintf(buf, fmt, args);
     {
         s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
         PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
     }
-PSMTXScale(scl, scale.x, scale.y, scale.z);
+    PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
-FontDrawStringMtx(trans, buf);
+    FontDrawStringMtx(trans, buf);
 }
 #elif VERSION == VERSION_DEMO_US
 #else
@@ -1894,14 +1894,14 @@ char buf[0x400];
 Mtx trans;
     Mtx scl;
     va_list args;
-va_start(args, fmt);
+    va_start(args, fmt);
     vsprintf(buf, fmt, args);
-PSMTXTrans(trans, pos.x, pos.y, pos.z);
+    PSMTXTrans(trans, pos.x, pos.y, pos.z);
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
     FontDrawEdge();
-FontDrawStringMtx(trans, buf);
+    FontDrawStringMtx(trans, buf);
     FontDrawEdgeOff();
 }
 #elif VERSION == VERSION_DEMO_US
@@ -2003,7 +2003,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     do {
         vsprintf(buf, fmt, args);
     }
-while (0);
+    while (0);
     {
         s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
         PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
@@ -2548,7 +2548,7 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
         GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     }
-else {
+    else {
         GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
         GXSetZCompLoc(GX_FALSE);
         GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
@@ -2589,7 +2589,7 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
         GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     }
-else {
+    else {
         GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
         GXSetZCompLoc(GX_FALSE);
         GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
@@ -2786,10 +2786,10 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     Mtx m;
     GXTexObj obj;
     f32 sy;
-if (iconId == ICON_115) {
+    if (iconId == ICON_115) {
         iconId = ICON_114;
     }
-iconGetTexObj(&obj, iconId);
+    iconGetTexObj(&obj, iconId);
     GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&obj, GX_TEXMAP0);
     if (color.a != 0xFF) {
@@ -2887,7 +2887,7 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
 #if VERSION == VERSION_DEMO_JP
 static USER_FUNC(lecture_step_wait) {
     s32 n = evtGetValue(event, event->args[0]);
-if (wp->lectureStep < n) {
+    if (wp->lectureStep < n) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -2956,7 +2956,7 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
         GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     }
-else {
+    else {
         GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
         GXSetZCompLoc(GX_FALSE);
         GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
@@ -3022,7 +3022,7 @@ USER_FUNC(lecture_key_mask_off) {
  */
 static void winLectureKeyMask(void) {
     if (wp->flags & WINDOW_FLAG_LECTURE) {
-switch (wp->lectureStep) {
+        switch (wp->lectureStep) {
             case 0:
             case 1:
                 wp->buttonTrg = 0;
@@ -3082,7 +3082,7 @@ switch (wp->lectureStep) {
  */
 static void winLectureKeyMask(void) {
     if (wp->flags & WINDOW_FLAG_LECTURE) {
-switch (wp->lectureStep) {
+        switch (wp->lectureStep) {
             case 0:
             case 1:
                 wp->buttonTrg = 0;
@@ -3202,7 +3202,7 @@ void winLectureKeyMask(void) {
  */
 void winLectureOn(void) {
     wp->flags |= WINDOW_FLAG_LECTURE;
-wp->lectureStep = 0;
+    wp->lectureStep = 0;
     wp->lectureEvent = evtEntry(evt_lecture_msg, 0, 0);
 }
 #elif VERSION == VERSION_DEMO_US

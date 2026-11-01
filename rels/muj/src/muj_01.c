@@ -396,8 +396,8 @@ static EVT_BEGIN(marco_talk)
             CALL(delete_itemsel_table)
             RETURN
         END_IF
-CALL(evt_win_item_select, LW(10), LW(0))
-CALL(delete_itemsel_table)
+        CALL(evt_win_item_select, LW(10), LW(0))
+        CALL(delete_itemsel_table)
         IF_INT_EQUAL(LW(0), -1)
             RETURN
         END_IF
@@ -473,17 +473,17 @@ CALL(delete_itemsel_table)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_cam3d_evt_set, -60, 95, 491, -60, 35, 146, 500, EASING_SINE_IN_OUT)
-CALL(evt_party_stop, 0)
-CALL(evt_mario_get_party, LW(0))
+        CALL(evt_party_stop, 0)
+        CALL(evt_mario_get_party, LW(0))
         SET_VALUE(LF(10), 0)
         IF_INT_NOT_EQUAL(LW(0), 3)
             SET_VALUE(LF(10), 1)
             CALL(evt_mario_hello_exparty_pos, 15, -25, 0, 210)
         END_IF
-SET_VALUE(GF(0), 1)
+        SET_VALUE(GF(0), 1)
         BEGIN_INLINE_EVENT
-CALL(evt_party_move_pos2, 0, 0, 170, FLOAT(120.0f))
-CALL(evt_party_set_dir, 0, 270, -1)
+            CALL(evt_party_move_pos2, 0, 0, 170, FLOAT(120.0f))
+            CALL(evt_party_set_dir, 0, 270, -1)
             SET_VALUE(GF(0), 0)
         END_INLINE_EVENT
         // Bobbery rejoins and Flavio welcomes him back.
@@ -513,7 +513,7 @@ CALL(evt_party_set_dir, 0, 270, -1)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_83"), 0, STRING("extparty"))
         END_IF
-CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
+        CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
         LOOP(3)
             SET_VALUE(LW(0), 0)
             SET_VALUE(LW(1), 180)
@@ -557,8 +557,8 @@ CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
             CALL(evt_msg_print, 0, STRING("stg5_muj_88_01"), 0, 0)
         END_INLINE_EVENT
         WAIT_MS(3000)
-CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("me"))
-LOOP(3)
+        CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("me"))
+        LOOP(3)
             SET_VALUE(LW(0), 0)
             SET_VALUE(LW(1), 180)
             CALL_CHILD(marco_kyorokyoro)
@@ -2350,17 +2350,17 @@ static EVT_BEGIN(sekai_yami_evt)
     // Someone screams as the darkness spreads.
     CALL(evt_msg_print, 0, STRING("stg8_dark_06"), 0, 0)
     BEGIN_INLINE_EVENT
-WAIT_MS(1000)
+        WAIT_MS(1000)
         LOOP(2)
-CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
+            CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
             CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
             WAIT_MS(100)
             CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
-WAIT_MS(100)
-END_LOOP
+            WAIT_MS(100)
+            END_LOOP
     END_INLINE_EVENT
-WAIT_MS(3000)
-CALL(evt_snd_sfxoff, LW(0))
+    WAIT_MS(3000)
+    CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     // Fade out and continue the scene at pik_01.
     CALL(evt_bero_mapchange, STRING("pik_01"), STRING("sekai_yami2"))
