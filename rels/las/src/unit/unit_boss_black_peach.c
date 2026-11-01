@@ -1,6 +1,6 @@
+#include "version.h"
 #include "eff/n64/eff_shock_n64.h"
 #include "eff/n64/eff_pokopi_thunder_n64.h"
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"

@@ -1,6 +1,7 @@
 // Fade driver: screen transitions (iris, spot and colour fades, curtains, pipe and page-flip animations,
 // story-book frames) and the tec/soft-focus/white-out overlays.
 
+#include "version.h"
 #include "driver/fadedrv.h"
 #include "driver/animdrv.h"
 #include "driver/arcdrv.h"
@@ -16,7 +17,6 @@
 #include "system.h"
 #include <dolphin/dvd.h>
 #include <string.h>
-#include "version.h"
 #include "libc_decls.h"
 #include "evt/evt_img.h"
 #include "driver/mapdrv.h"

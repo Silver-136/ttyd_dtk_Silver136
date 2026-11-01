@@ -1,5 +1,6 @@
 // Acrobat timing window: a short timed-press prompt and its result, used during Mario and partner attacks.
 
+#include "version.h"
 #include "battle/battle_acrobat.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_unit.h"
@@ -36,7 +37,6 @@ s32 BattleAcrobatStart(BattleWork* work, s32 unitId, s32 windowStartFrame,
  * Returns EVT_RETURN_BLOCK while still waiting, EVT_RETURN_YIELD once decided.
  */
 s32 BattleAcrobatMain(BattleWork* work) {
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
     BattleActions* manager;
 #endif

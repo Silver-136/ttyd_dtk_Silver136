@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -510,7 +511,6 @@ BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 {50.0f, 0.0f, -10.0f},
 #else

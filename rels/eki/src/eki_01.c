@@ -1,5 +1,6 @@
 // eki_01 (駅, Riverside Station): central hub: paper-fold (origami) switch, stairs, a key lock and six paper panels; doors to eki_00, eki_02 and eki_03.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_window.h"
@@ -27,7 +28,6 @@ static EvtWord n_open[12];
 static BeroEntry bero_data[4];
 static EvtWord evt_origami[129];
 static s32 key_tbl[2];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_chk[21];
 #else

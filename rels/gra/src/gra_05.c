@@ -1,5 +1,6 @@
 // gra_05 (ウスグラの道, Twilight Trail): the woods with the breaking floor, between gra_04 and gra_06.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -26,7 +27,6 @@ USER_FUNC(camera_curve_on);
 USER_FUNC(evt_kagemario_init);
 
 EvtWord gra_05_in_01[5];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gra_05_out_01[];
 #else

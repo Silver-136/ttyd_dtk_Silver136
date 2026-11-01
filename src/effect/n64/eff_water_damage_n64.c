@@ -1,5 +1,6 @@
 // Paper Mario 64 effect: water damage: a splash of water droplets and mist at a point.
 
+#include "version.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -52,7 +53,6 @@ effN64Vtx size8x8_tex16x16_2_vtx[] = {
     {-3, 5, 0, 0, 512, 0, 0, 0, 255},
 };
 
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 u32 water_damage_tex[32] __attribute__((aligned(32))) = {
     0x78A31427, 0x572B0B52, 0x5167133A, 0x7FDF7F2F, 0x653E32A7, 0xF5FFFF8B, 0x32670486, 0x8BFFD55E,

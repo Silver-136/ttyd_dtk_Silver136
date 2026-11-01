@@ -1,5 +1,6 @@
 // Battle unit data for the tree stage object (unit_object_tree).
 
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_stage_object.h"
 #include "battle/battle_sub.h"
@@ -15,7 +16,6 @@ USER_FUNC(_turn_tree);
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[25];
 static EvtWord damage_event[14];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static s32 _data[34];
 #else

@@ -1,4 +1,5 @@
 // Battle unit Dark Boo (`purple_teresa`): tst.rel's copy of rels/jon/src/unit/unit_purple_teresa.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -46,7 +47,6 @@ static EvtWord wait_event[6];
 /**
  * Unit definition of the Dark Boo: its HP, level, sizes, sounds, status vulnerability, parts and init script.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_purple_teresa = {
     106,

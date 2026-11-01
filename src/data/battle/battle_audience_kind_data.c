@@ -1,5 +1,6 @@
 // Audience data: the item and animation tables for each kind of audience member.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_pouch.h"
@@ -34,7 +35,6 @@ s32* audience_anim_kuriboo[19];
 s32* audience_anim_pakkun[19];
 s32* audience_anim_luigi[19];
 BattleAudienceItemKind audience_item_kinopio[12];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
 BattleAudienceItemKind audience_item_heiho[17];

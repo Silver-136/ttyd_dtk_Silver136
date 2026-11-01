@@ -1,6 +1,7 @@
 // tik_06 (埋没した都市, Rogueport Sewers): the entrance to the Pit of 100 Trials (jon_00), with residents and trouble 12
 // (irai_12).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_cmd.h"
@@ -31,7 +32,6 @@ static EvtWord iri_12_makkino_talk[7];
 static EvtWord iri_12_init[85];
 static EvtWord evt_kanban[16];
 static EvtWord evt_kanban2[45];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_06_init_evt[];
 #else

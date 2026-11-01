@@ -1,6 +1,7 @@
 // las_09 (ラストダンジョン, Palace of Shadow): the Shadow Sirens (Beldam, Marilyn) and Doopliss (Rampell) cutscene and
 // battle, and the two Chain Chomp statues (bomb_wanwan) that are bombed open.
 
+#include "version.h"
 #include "eff/n64/eff_guruguru_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -45,7 +46,6 @@ static EvtWord n_door_close[22];
 static EvtWord n_door_open[22];
 static BeroEntry bero_entry_data[8];
 static HitDamageReturn dmgRetPoint[58];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord first_evt[208];
 #else

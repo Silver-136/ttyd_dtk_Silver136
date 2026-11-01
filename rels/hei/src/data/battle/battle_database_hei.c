@@ -1,5 +1,6 @@
 // Petal Meadows (hei) battle setups: enemy groups, battle stages and the field-battle tables for the area's maps.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"
@@ -99,7 +100,6 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_06_02_off[2];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_06_03_off[3];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_07_01_off[2];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_08_01_off[2];
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 NpcBattleSelect R_btlgrpsel_hei_btlno_hei_08_02_off[2];
 #endif

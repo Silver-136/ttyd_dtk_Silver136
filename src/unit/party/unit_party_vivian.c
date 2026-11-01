@@ -1,10 +1,10 @@
 // Battle unit data and scripts for Vivian as a partner.
 
+#include "version.h"
 #include "unit/party/unit_party_vivian.h"
 #include "evt/evt_audience.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_snd.h"
-#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_stage.h"

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "driver/hitdrv.h"
 
 HitEntry* kpaChkHitobjRide(void);
@@ -15,7 +16,6 @@ typedef enum KpaEnemyHit {
     KPA_ENEMY_HIT_BOWSER = 4,  // it hurts Bowser
 } KpaEnemyHit;
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz);
 #endif

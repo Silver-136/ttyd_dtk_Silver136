@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/types.h>
 
 #define MAX_KEY_ITEMS 121
@@ -484,7 +485,6 @@ s32 pouchGetJumpLv(void);
 s32 pouchGetHammerLv(void);
 s32 pouchGetPartyAttackLv(PartyId partyId);
 BOOL pouchAddKeepItem(s32 id);
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BOOL pouchRemoveKeepItem(s32 id);
 #else

@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -39,7 +40,6 @@ static EvtWord damage_event[322];
 static EvtWord unison_phase_event[139];
 static EvtWord avoid_counter_thorn_head_event[61];
 static EvtWord dmg_first_attack_pos_event[19];
-#include "version.h"
 static EvtWord attack_event[221];
 static EvtWord normal_attack_event[585];
 static EvtWord friend_event[263];

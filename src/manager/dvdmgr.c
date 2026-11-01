@@ -1,6 +1,7 @@
 /* "dvdmgr" - DVD File Manager
  * Easy file handling for loading data from the disc, instead of having to call DVD functions directly and handle errors.
  */
+#include "version.h"
 #include "manager/dvdmgr.h"
 
 #define DVD_PRIORITY_CHUNK_BYTES 0x40000
@@ -48,7 +49,6 @@ void DVDMgrDelete(void) {
     }
 }
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static s32 compare(const void* a, const void* b) {
 #else

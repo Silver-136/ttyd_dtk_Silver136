@@ -283,7 +283,7 @@ EVT_BEGIN(dai3_kanbu)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_22_LORD_CRUMP_APPEARS)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    CALL(evt_fade_set_mapchange_type, 0, 2, 500, FADE_NUM(9), 500)
+    CALL(evt_fade_set_mapchange_type, 0, 2, 500, FADE_IN_BLACK, 500)
     CALL(evt_bero_mapchange, STRING("mri_14"), STRING("w_bero"))
     RETURN
 EVT_END()

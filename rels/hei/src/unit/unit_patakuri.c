@@ -1,5 +1,6 @@
 // Paragoomba (patakuri): battle unit used in Petal Meadows.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -102,7 +103,6 @@ static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Paragoomba's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_patakuri = {100, 120, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 150, 100, 100, 100, 100, 150};
 #else

@@ -1,6 +1,7 @@
 // muj_11 (無人島, Keelhaul Key): the passage between muj_10 and Cortez's lair, with its warning
 // event (warning_event).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -21,7 +22,6 @@ static EvtWord e_close[12];
 static EvtWord e_open[12];
 static BeroEntry bero_entry_data[3];
 EvtWord warning_event[38];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord muj_11_init_evt[];
 #else

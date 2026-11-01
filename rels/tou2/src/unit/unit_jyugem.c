@@ -1,5 +1,6 @@
 // unit_jyugem: Lakitu, battle unit.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -122,7 +123,6 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Damage-type reactions of the Lakitu: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {80, 90, 100, 100, 80, 100, 100, 70, 100, 80, 100, 80, 100, 80, 80, 90, 100, 100, 80, 100, 100, 95};
 #else

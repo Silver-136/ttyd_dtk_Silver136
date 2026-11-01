@@ -1,4 +1,5 @@
 // Battle unit Gold Fuzzy (`gold_chorobon`): tst.rel's copy of rels/hei/src/unit/unit_gold_chorobon.c.
+#include "version.h"
 #include "unit/chorogun_tst.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -15,7 +16,6 @@
 #include "battle/battle_sub.h"
 #include "evt/evt_msg.h"
 #include "tst.h"
-#include "version.h"
 
 // Unit work slots of the Gold Fuzzy (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {

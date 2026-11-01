@@ -1,5 +1,6 @@
 // Battle database of Twilight Trail (gra.rel): stage data, enemy groups and the encounter tables of its maps.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"
@@ -108,7 +109,6 @@ BattleStageObjectData gra_btlobject_data[] = {
     {"kusa_3", 2, 1, {-77.0f, 0.0f, 77.0f}, 20, 40, {0}},
     {"kusa_4", 2, 1, {-155.0f, 0.0f, 71.0f}, 30, 30, {0}},
     {"kusamura_mae", 2, 1, {0.0f, 0.0f, 72.0f}, 0, 60, {0}},
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 {"kusamura_usiro", 2, 1, {0.0f, 0.0f, -70.0f}, 10, 50, {0}},
 #else

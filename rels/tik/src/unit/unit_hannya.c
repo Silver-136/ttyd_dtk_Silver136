@@ -1,5 +1,6 @@
 // Rogueport Sewers (tik) battle unit: Spania (hannya): its parts, defence/status tables, and attack events.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -92,7 +93,6 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  * extra prone to stop, poison, electric shock, burn, growing huge, attack up, defence up, fright, gale force,
  * speed up and instant kill; resists most other statuses.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {90, 110, 90, 150, 90, 150, 150, 90, 150, 90, 150, 90, 150, 90, 90, 110, 110, 150, 90, 0, 0, 150};
 #else

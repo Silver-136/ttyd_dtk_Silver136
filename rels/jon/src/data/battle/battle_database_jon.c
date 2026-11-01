@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"
@@ -9718,7 +9719,6 @@ NpcSetupBattleInfo btlsetup_jon_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_jon_btlno_jon_100_zonbaba_off, // select
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY,
 #else

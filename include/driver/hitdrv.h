@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/mtx.h>
 #include "driver/mapdrv.h"
 
@@ -69,7 +70,6 @@ typedef enum HitEntryFlags {
     HIT_FLAG_MAPOBJ_BIND = (1 << 5), // 0x20
     HIT_FLAG_MTX_DIRTY = (1 << 6),  // 0x40
     HIT_FLAG_DELETED = (1 << 7),    // 0x80
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
     HIT_FLAG_NO_GEOMETRY = (1 << 15), // 0x8000, an object without triangles (partCount 0); the checks skip it
 #endif

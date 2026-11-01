@@ -1,5 +1,6 @@
 // las_26 (ラストダンジョン, Palace of Shadow): Gloomtail (ボンババ) and the bomb wall.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -40,7 +41,6 @@ static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[3];
 static EvtWord box_evt[30];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord bonbaba_evt[];
 #else
@@ -477,7 +477,7 @@ CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, -58, 200, -280, 60, 0, 0, 0
     END_LOOP
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg8_dark_09"), 0, STRING("クリハカセ"))
-    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(10), 300, FADE_NUM(16), 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_WHITE, 300)
     CALL(evt_bero_mapchange, STRING("las_29"), STRING("sekai_yami2"))
     RETURN
 EVT_END()

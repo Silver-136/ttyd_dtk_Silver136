@@ -1,6 +1,7 @@
 // gon_00 (ゴンババ, Hooktail Castle): entrance area reached from Petal Meadows (hei_00).
 // Has a save block, a recovery block and a blue jump pad; doors lead on to gon_01.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -13,7 +14,6 @@
 
 static BeroEntry bero_entry_data[4];
 static BeroEntry e3_bero[2];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gon_00_init_evt[];
 #else

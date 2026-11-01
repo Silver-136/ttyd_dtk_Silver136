@@ -1,6 +1,7 @@
 // Map setup data: loads the per-map setup file and spawns the field enemies it lists (position, AI and
 // territory, battle setup), keeping the defeated-enemy records.
 
+#include "version.h"
 #include "database.h"
 #include "driver/arcdrv.h"
 #include "manager/evtmgr.h"
@@ -28,7 +29,6 @@ void setupDataLoad(const char* mapName) {
     u32 filesize;
 
     ptr = NULL;
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 sprintf(path, "%s/setup/%s/setup.xml", getMarioStDvdRoot(), mapName);
 if (strcmp(mapName, "muj_20") || evtGetValue(NULL, (s32)0xF5DE0180) != STG0_02_MARIOS_HOUSE) {

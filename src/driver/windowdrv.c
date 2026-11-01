@@ -1,6 +1,7 @@
 // Window driver: the window list and the drawing of window frames, speech bubbles with their tails
 // and the system windows, from the window frame textures.
 
+#include "version.h"
 #include "driver/windowdrv.h"
 #include "dolphin/os.h"
 #include "driver/arcdrv.h"
@@ -52,7 +53,6 @@ void windowInit(void) {
     w[5].userdata = NULL;
     w[6].flags = 0;
     w[6].userdata = NULL;
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
     winTpl = NULL;
     tpl_loaded = FALSE;

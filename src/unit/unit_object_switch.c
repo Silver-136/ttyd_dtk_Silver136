@@ -1,5 +1,6 @@
 // Battle unit data for the switch stage object (unit_object_switch).
 
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_event_default.h"
@@ -161,7 +162,6 @@ EVT_END()
  */
 static s32 _data[] = {
     -5, 0, 15, 0, -15, 0, 14, 0, -13, 0, 12, 0, -11, 0, 10, 0, -9, 0,
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 8, 0, -7, 0, 6, 0, -6, 0, 5, 0, -4, 0, 2, 0, -2, 0,
 #else

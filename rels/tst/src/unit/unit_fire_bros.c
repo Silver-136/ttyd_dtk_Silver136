@@ -1,4 +1,5 @@
 // Battle unit Fire Bro (`fire_bros`): tst.rel's copy of rels/tou2/src/unit/unit_fire_bros.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -162,7 +163,6 @@ BattleUnitKind unit_fire_bros = {
     data_table,
 };
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 /**
  * Defence of the Fire Bro: 1 against normal, ice, explosion and electric hits;

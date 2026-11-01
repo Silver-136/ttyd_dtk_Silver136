@@ -1,5 +1,6 @@
 // unit_lecture_frankli_sac: Professor Frankly in the special-action-command (star power) tutorial battle.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "statuswindow.h"
@@ -50,7 +51,6 @@ static PoseTableEntry pose_table[5];
 static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[1];
 EvtWord _test_event[20];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord stop_wait_event[];
 #else

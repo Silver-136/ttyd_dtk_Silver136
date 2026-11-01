@@ -1,4 +1,5 @@
 // Battle unit Moon Cleft (`sinemon`): tst.rel's copy of rels/hei/src/unit/unit_sinemon.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -30,7 +31,6 @@ static EvtWord wait_event[6];
 /**
  * Unit definition of the Moon Cleft: its HP, level, sizes, sounds, status vulnerability, parts and init script.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_sinemon = {
     114, // unitType

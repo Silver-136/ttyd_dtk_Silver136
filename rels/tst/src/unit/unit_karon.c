@@ -1,5 +1,6 @@
 // Pit of 100 Trials battle unit: the Dry Bones (`karon`): parts, stats, poses and AI scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
@@ -61,7 +62,6 @@ BattleUnitKind unit_karon = {
     30, // level
     0, // bonusExp
     2, // bonusCoin
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 100,
 #else

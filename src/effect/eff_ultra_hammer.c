@@ -1,6 +1,7 @@
 // Ultra Hammer effect: three stacked ring models (wakka: ring) with a scrolling texture that scroll in turn;
 // it ends after `counter` frames (0 or less: until removed).
 
+#include "version.h"
 #include "eff/eff_ultra_hammer.h"
 #include "driver/dispdrv.h"
 #include "memory.h"
@@ -11,7 +12,6 @@
 #include <dolphin/os.h>
 #include <dolphin/vi.h>
 #include <string.h>
-#include "version.h"
 
 u8 wakka_dl_0_0[];
 u8 wakka_dl_0_1[];

@@ -1,6 +1,7 @@
 // Camera driver: the fixed set of cameras (offscreen, shadow, background, 3D, 2D, fade...), their
 // projection and view matrices, and the per-frame camera update.
 
+#include "version.h"
 #include "driver/camdrv.h"
 #include "driver/mapdrv.h"
 #include "driver/seqdrv.h"
@@ -668,7 +669,6 @@ void cam3dImgMain(CameraEntry* camera) {
     MTXPerspective(camera->projection, camera->fovY, camera->aspect, camera->near, camera->far);
 }
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void camEffMain(CameraEntry* camera) {
 #else

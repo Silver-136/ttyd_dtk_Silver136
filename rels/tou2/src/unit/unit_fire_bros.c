@@ -1,5 +1,6 @@
 // unit_fire_bros: Fire Bro, battle unit.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_camera.h"
@@ -164,7 +165,6 @@ BattleUnitKind unit_fire_bros = {
  * Defence of the Fire Bro: 1 against normal, ice, explosion and electric hits;
  * immune to fire (defence 99 cancels the hit).
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
 #else

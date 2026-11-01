@@ -1,5 +1,6 @@
 // Battle unit Goomba (クリボー): moo.rel's copy.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -117,7 +118,6 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Goomba: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
 #else

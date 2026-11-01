@@ -1,6 +1,7 @@
 // win_04 (ウィンディん家周辺, Flurrie's house in Boggly Woods): the red-walled main room of Flurrie's house, with its
 // chandelier and mirror ball; exits west to win_03 and east through Flurrie's door to her bedroom win_05.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/animdrv.h"
 #include "evt/evt_window.h"
@@ -77,7 +78,6 @@ static EvtWord out_w_bero[12];
 BeroEntry bero_witchtrio[1];
 static BeroEntry bero_entry_data[3];
 EvtWord meet_clouda[76];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord meet_clouda2[];
 #else
@@ -644,7 +644,7 @@ USER_FUNC(fade_alpha) {
     s32 b = evtGetValue(event, args[2]);
     s32 a = evtGetValue(event, args[3]);
 
-    fadeEntry(FADE_NUM(13), 0, (GXColor){r, g, b, a});
+    fadeEntry(FADE_COVER_BLACK_2D, 0, (GXColor){r, g, b, a});
     return EVT_RETURN_DONE;
 }
 

@@ -1,6 +1,7 @@
 // Rogueport Sewers (tik) battle unit: Professor Frankly (frankli) in his lecture battle: its parts, defence/status
 // tables, and the lecture events.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_cmd.h"
@@ -25,7 +26,6 @@ static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[53];
 static EvtWord entry_event[29];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord phase_event[148];
 #else

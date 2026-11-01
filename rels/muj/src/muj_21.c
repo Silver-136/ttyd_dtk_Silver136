@@ -1,6 +1,7 @@
 // muj_21 (無人島, Keelhaul Key): an ending scene on the ship at dawn with Peach and Mario
 // (BGM_ENDING5, ep_27 to ep_30), sailing back to Rogueport (gor_12).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_funemizu.h"
 #include "evt/evt_cmd.h"
@@ -35,7 +36,6 @@ EvtWord peach_init[12];
 static NpcSetupInfo npcEnt[2];
 EvtWord fune_yure[42];
 static EvtWord epilogue_evt[344];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord muj_21_init_evt[];
 #else

@@ -1,5 +1,6 @@
 // Script commands for Mario's pouch: coins, star pieces, items, badges, HP/FP, partners and mail.
 
+#include "version.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_party.h"
 #include "mario/mario_pouch.h"
@@ -63,7 +64,6 @@ USER_FUNC(evt_pouch_remove_item) {
  * and re-clamps stats; args[2] gets 0 on success or -1 if that slot holds something else.
  */
 // Descriptive name (not in the symbol maps).
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 USER_FUNC(evt_pouch_remove_item_index) {
     EvtWord* args = event->args;

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/mtx.h>
 
 typedef struct StatusValue {
@@ -16,7 +17,6 @@ typedef struct StatusValue {
     s16 coins;      // 0x10
     s16 ap;         // 0x12
     s16 maxAp;      // 0x14
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
     s16 lastParty;  // 0x16, the partner shown while Mario is in bg mode
 #else

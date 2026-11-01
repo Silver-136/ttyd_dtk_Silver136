@@ -1,4 +1,5 @@
 // Battle unit Green Fuzzy (`green_chorobon`): tst.rel's copy of rels/muj/src/unit/unit_green_chorobon.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -14,7 +15,6 @@
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_sub.h"
-#include "version.h"
 
 static USER_FUNC(chorobon_copy_status);
 

@@ -496,9 +496,9 @@ EVT_BEGIN(evt_memcard_delete)
 #endif
     END_IF
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_fade_entry, FADE_NUM(24), 0, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_CURTAIN_SIDES_A1_3D, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
-    CALL(evt_fade_entry, FADE_NUM(26), 0, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_CURTAIN_SIDES_Z1_3D, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_msg_continue)
     CALL(evt_seq_load_keep_msg_window)
@@ -556,9 +556,9 @@ EVT_BEGIN(evt_memcard_copy)
         END_IF
     END_IF
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_fade_entry, FADE_NUM(24), 0, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_CURTAIN_SIDES_A1_3D, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
-    CALL(evt_fade_entry, FADE_NUM(26), 0, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_CURTAIN_SIDES_Z1_3D, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_msg_continue)
     CALL(evt_seq_load_keep_msg_window)

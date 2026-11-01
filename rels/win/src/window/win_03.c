@@ -1,5 +1,6 @@
 // win_03 (ウィンディん家周辺, Boggly Woods): the path between win_02 and Flurrie's house (win_04), with two Piranha Plants.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -38,7 +39,6 @@ EvtWord clouda_house_out[19];
 EvtWord cloud_out[12];
 EvtWord cloud_in[12];
 static BeroEntry bero_entry_data[5];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord lookat_house[];
 #else

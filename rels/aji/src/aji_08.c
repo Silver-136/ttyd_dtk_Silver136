@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_map.h"
@@ -30,7 +31,6 @@ EvtWord evt_slit1[15];
 EvtWord evt_slit2[15];
 static BeroEntry bero_entry_data[5];
 EvtWord heya_tenura_onoff[68];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_08_init_evt[];
 #else

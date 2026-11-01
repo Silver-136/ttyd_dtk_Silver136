@@ -1,6 +1,7 @@
 // las_14 (ラストダンジョン, Palace of Shadow): a riddle room off las_10: the cloud puzzle solved with Flurrie (cloud
 // map capture).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -77,7 +78,6 @@ static EvtWord evt_cloud_main_evt[4];
 static EvtWord cloud_evt[35];
 EvtWord touch_evt[2];
 static EvtWord hint_plate[14];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_14_init_evt[];
 #else

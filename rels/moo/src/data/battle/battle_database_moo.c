@@ -1,5 +1,6 @@
 // Battle database of the Moon (moo.rel): stage data, enemy groups and the encounter tables of its maps.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -500,7 +501,6 @@ BattleUnitSetup btlparty_moo_moo_02_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 {70.0f, 40.0f, 0.0f},
 #else

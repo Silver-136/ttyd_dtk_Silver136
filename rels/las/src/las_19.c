@@ -1,5 +1,6 @@
 // las_19 (ラストダンジョン, Palace of Shadow): the passage between the riddle tower and the inner palace.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -34,7 +35,6 @@ EvtWord change_map_evt[359];
 static EvtWord switch1_evt[13];
 static EvtWord switch2_evt[13];
 static EvtWord cloud_evt[5];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_19_init_evt[];
 #else

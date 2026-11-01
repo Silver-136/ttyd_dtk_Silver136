@@ -1,5 +1,6 @@
 // Pokey (sambo): enemy battle unit data and scripts, Riverside Station's copy (the Pokey Mummy is in unit_sambo_mummy.c).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -109,7 +110,6 @@ static BattleUnitDefense defence = {0};
 /** Elemental reactions of the Pokey: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {90, 80, 80, 100, 90, 100, 100, 50, 100, 90, 100, 90, 100, 90, 90, 100, 90, 100, 90, 100, 100, 100};
 #else

@@ -1,7 +1,7 @@
+#include "version.h"
 #include "gxsub.h"
 
 //.sdata
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #include "driver/camdrv.h"
 f32 queen_uv[4]

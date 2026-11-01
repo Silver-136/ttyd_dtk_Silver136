@@ -1,6 +1,7 @@
 // dou_01 (洞窟, Pirate's Grotto): passage between dou_00 and dou_02 with two blue jump pads.
 // Plays a Cortez (korutesu) cutscene on first entry (story 243 to 244).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -16,7 +17,6 @@
 
 
 static BeroEntry bero_entry_data[3];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord korutesu_event[71];
 #else

@@ -1,4 +1,5 @@
 // Battle unit Fuzzy Horde (`chorobon_gundan`): tst.rel's copy of rels/hei/src/unit/unit_chorobon_gundan.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -20,7 +21,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "unit/chorogun_tst.h"
 #include "battle/battle_sub.h"
-#include "version.h"
 #include "evt/evt_ext.h"
 #include "evt/evt_npc.h"
 #include "libc_decls.h"

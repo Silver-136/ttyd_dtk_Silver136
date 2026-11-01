@@ -1,4 +1,5 @@
 // Battle unit Swooper (`basabasa`): tst.rel's copy of rels/jin/src/unit/unit_basabasa.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -25,7 +26,6 @@ static BattleUnitKindPart parts[1];
 static StatusVulnerability regist;
 static BattleWeapon weapon_basabasa_attack;
 static PoseSoundTiming pose_sound_timing_table[9];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord init_event[72];
 #else

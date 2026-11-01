@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -38,7 +39,6 @@ static BattleWeapon weapon_wanwan_attack;
 static EvtWord init_event[41];
 static EvtWord chain_event[23];
 static EvtWord damage_event[33];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord counter_damage_event[115];
 #else

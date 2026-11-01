@@ -1,5 +1,6 @@
 // las_22 (ラストダンジョン, Palace of Shadow): the room with the turntable (kaitendai).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -37,7 +38,6 @@ EvtWord kaitendai_evt[312];
 static EvtWord dai_evt[13];
 static s32 key_tbl[2];
 static EvtWord key_evt[5];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord key_check_evt[21];
 #else

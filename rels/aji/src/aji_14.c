@@ -1,6 +1,7 @@
 // aji_14 (敵のアジト, X-Naut Fortress): the Magnus von Grapple 2.0 boss room (evt_boss2), leading on to the
 // Moon (moo_04).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -30,7 +31,6 @@
 
 USER_FUNC(waku);
 
-#include "version.h"
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
@@ -383,7 +383,7 @@ CALL(evt_party_stop, 0)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     // After the fight a cry of "Grodus!" is heard and the scene whites out to the Moon.
     CALL(evt_msg_print, 0, STRING("stg7_aji_42"), 0, STRING("ロボット"))
-    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(17), 900, FADE_NUM(16), 900)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 900, FADE_IN_WHITE, 900)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_snd_sfxoff, LW(10))

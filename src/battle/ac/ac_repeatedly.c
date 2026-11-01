@@ -1,7 +1,7 @@
 // Action command: mash a button repeatedly (ac_repeatedly) to fill a gauge within the time limit.
 
-#include "battle/ac/ac_table.h"
 #include "version.h"
+#include "battle/ac/ac_table.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"

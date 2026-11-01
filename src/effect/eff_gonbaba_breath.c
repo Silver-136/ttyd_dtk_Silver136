@@ -2,6 +2,7 @@
 // 3 cold, 4 confusion, 5 sleep, 6 mini, 7 Bowser); each type 0-7 also spawns its companion layer as type + 10.
 // Particles drift out along a yaw. Used by Hooktail, Bonetail and Bowser.
 
+#include "version.h"
 #include "eff/eff_gonbaba_breath.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -12,7 +13,6 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <stdlib.h>
-#include "version.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "poly_trig.h"

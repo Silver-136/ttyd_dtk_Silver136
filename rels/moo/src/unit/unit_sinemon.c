@@ -1,5 +1,6 @@
 // Battle unit Moon Cleft (ツキノシンエモン): moo.rel's copy.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -99,7 +100,6 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
  */
 static BattleUnitDefense defence_turn = {0};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {30, 70, 30, 100, 30, 100, 0, 50, 100, 50, 100, 50, 100, 60, 60, 30, 10, 100, 60, 100, 100, 95};
 #else

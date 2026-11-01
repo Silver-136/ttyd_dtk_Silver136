@@ -1,6 +1,7 @@
 // Paper Mario 64 effect: hagetaka flash, a 10-frame green twinkle that grows and then shrinks over its last 4
 // frames; itemdrv spawns it at random around coins and Pianta tokens.
 
+#include "version.h"
 #include "eff/n64/eff_hagetaka_flush_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -24,7 +25,6 @@ typedef struct EffHagetakaFlushN64Work {
 } EffHagetakaFlushN64Work;
 
 /** Camera-facing 16x16 twinkle sprite. */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static u8 color_rotation_data[] = {
     0xFF, 0xFF, 0x52, 0xFF, 0xFF, 0x52, 0xB5, 0x94,

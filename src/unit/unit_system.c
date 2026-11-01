@@ -1,5 +1,6 @@
 // Battle unit data for the invisible system unit (unit_system) that runs battle-wide scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_cmd.h"
@@ -26,7 +27,6 @@ static BattleUnitKindPart parts[] = {
  * It has no HP gauge, locked HP and is ignored when checking for a cleared battle;
  * it exists to run battle-wide scripts.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 #endif

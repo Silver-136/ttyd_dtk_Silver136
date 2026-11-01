@@ -1,6 +1,7 @@
 // jin_05 (ダイム寺院, Creepy Steeple): treasure room with chests holding Cookbook and Ice Smash, a Star Piece and a
 // power-up block; door to jin_00.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -19,7 +20,6 @@ USER_FUNC(evt_kagemario_init);
 static EvtWord check_roll[16];
 static BeroEntry bero_entry_data[2];
 EvtWord item_box_00[34];
-#include "version.h"
 static EvtWord mobj_box01[34];
 EvtWord jin_05_init_evt[63];
 

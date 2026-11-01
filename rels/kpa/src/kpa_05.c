@@ -1,5 +1,6 @@
 // kpa_05 (クッパ編, Bowser's interludes): the third side-scrolling stage, over lava; continues in kpa_06.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -102,7 +103,6 @@ static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_koopa_get_level, GSW_KPA_BOWSER_LEVEL)
 #else

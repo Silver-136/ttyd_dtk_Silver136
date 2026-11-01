@@ -1,4 +1,5 @@
 // Battle unit Putrid Piranha (`poison_pakkun`): tst.rel's copy of rels/muj/src/unit/unit_poison_pakkun.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "tst_battle.h"
 #include "evt/evt_cmd.h"
@@ -18,7 +19,6 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
 #include "system.h"
-#include "version.h"
 
 static USER_FUNC(shadow_scale_memory);
 static USER_FUNC(shadow_scale_return);

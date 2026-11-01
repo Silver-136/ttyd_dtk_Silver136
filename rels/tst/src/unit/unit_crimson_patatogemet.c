@@ -1,5 +1,6 @@
 // R. Parabuzzy (`crimson_patatogemet`, unit kind 174): a variant of tst's unit_patatogemet.c with its own kind, name and
 // stats. Its English name, R. Parabuzzy, is shared with the spikeless one in unit_crimson_patamet.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"
 #include "evt/evt_cmd.h"
@@ -39,7 +40,6 @@ static EvtWord attack_event_pata[339];
 static EvtWord wait_event_pata[6];
 static PoseTableEntry pose_table[17];
 static PoseTableEntry pose_table_ceil[17];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[14];
 #else

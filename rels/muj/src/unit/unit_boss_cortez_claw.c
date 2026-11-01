@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -22,7 +23,6 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 BattleWeapon weapon_cortez_claw_float_attack;
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table[4];
 #else

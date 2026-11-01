@@ -10,6 +10,7 @@ s16 IconBinEntry[6][numEntries] (?, width override? height override? numImages, 
 2 extra bytes for some reason
 */
 
+#include "version.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
@@ -32,7 +33,6 @@ typedef struct IconBinary {
 
 // flags, 1 = in use, 0x10 = 2D, 0x1000 = animated(?), 0x2000 = ?(something to do with bin)
 
-#include "version.h"
 
 // IconEntry.flags (iconFlagOn/iconFlagOff)
 typedef enum IconFlags {

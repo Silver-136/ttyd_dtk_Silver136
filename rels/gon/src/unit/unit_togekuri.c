@@ -1,5 +1,6 @@
 // Spiky Goomba (togekuri): battle unit used in Hooktail Castle.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -121,7 +122,6 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Spiky Goomba's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
 #else

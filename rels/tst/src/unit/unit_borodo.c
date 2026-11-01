@@ -1,6 +1,7 @@
 // tst.rel's version of rels/jon/src/unit/unit_borodo.c (Bandit), an earlier one: the item theft is written
 // differently, with debug prints (sysDebugReport) and an assert, and the older BattleUnit layout (tst_battle.h).
 // The JP demo's copy has none of the debug prints or the assert.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"
 #include "evt/evt_cmd.h"
@@ -25,7 +26,6 @@
 #include "driver/msgdrv.h"
 #include "tst_battle.h"
 #include "tst_debug.h"
-#include "version.h"
 
 static USER_FUNC(_steal_item);
 

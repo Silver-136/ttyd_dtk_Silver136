@@ -1,6 +1,7 @@
 // Script commands for the information seller (johoya): the rumour tables and message labels
 // by story progress.
 
+#include "version.h"
 #include "evt/evt_johoya.h"
 #include "driver/msgdrv.h"
 #include <string.h>
@@ -114,7 +115,6 @@ USER_FUNC(johoya_keti_newjoho_check) {
 
 USER_FUNC(johoya_keti_newjoho_makelabel) {
     EvtWord* args = event->args;
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
     char tmp[64];
     const char* msg;

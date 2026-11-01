@@ -1,5 +1,6 @@
 // las_17 (ラストダンジョン, Palace of Shadow): a riddle room off las_10: the four enemy battles.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -32,7 +33,6 @@ static EvtWord switch_evt[46];
 EvtWord enemy1_dead_evt[11];
 EvtWord enemy2_dead_evt[11];
 EvtWord enemy3_dead_evt[11];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord enemy4_dead_evt[];
 #else

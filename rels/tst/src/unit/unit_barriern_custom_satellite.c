@@ -1,4 +1,5 @@
 // Battle unit Mini-X-Yux (`barriern_custom_satellite`): tst.rel's copy of rels/aji/src/unit/unit_barriern_custom_satellite.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -10,7 +11,6 @@
 #include "battle/battle_event_cmd.h"
 #include "evt/evt_sub.h"
 #include "tst.h"
-#include "version.h"
 
 // Unit work slots of the Mini-X-Yux (btlevtcmd_Get/SetUnitWork); the X-Yux that spawns it fills both.
 enum {

@@ -1,6 +1,7 @@
 // hei_13 (平原, Petal Meadows): field linking hei_00 and hei_01 with pipes.
 // Horsetail item, a Close Call block, bricks and a Happy Heart.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -24,7 +25,6 @@
 static BeroEntry bero_entry_data[5];
 static TreeAccess ki_data[2];
 EvtWord evt_anm_kan[59];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord hei_13_init_evt[];
 #else

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/types.h>
 #include "evt/evt_cmd.h"
 
@@ -49,7 +50,6 @@ s32 badgeShop_SpecialCheck(void);
 extern s32 badge_bottakuru100_table[];
 extern s32 badge_bottakuru_table[];
 extern BadgeShopWork* bdsw;
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 USER_FUNC(evt_badgeShop_getBargainKind);
 #endif

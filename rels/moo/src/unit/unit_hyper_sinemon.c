@@ -1,5 +1,6 @@
 // Battle unit Hyper Cleft (ハイパーシンエモン): moo.rel's copy.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -82,7 +83,6 @@ static BattleUnitKind unit_hyper_sinemon = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 #else

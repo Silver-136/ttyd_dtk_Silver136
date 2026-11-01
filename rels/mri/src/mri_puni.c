@@ -1,7 +1,7 @@
+#include "version.h"
 #include "eff/eff_fukidashi.h"
 #include "evt/evt_story.h"
 #include "eff/eff_puniballoon.h"
-#include "version.h"
 #include "mri_puni.h"
 #include "party.h"
 #include "mario/mario_party.h"

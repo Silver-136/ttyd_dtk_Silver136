@@ -1,5 +1,6 @@
 // Paper Mario 64 effect: a snowman that drops in, then hops along a preset path kicking up snow dust and vapor.
 
+#include "version.h"
 #include "eff/eff_n64.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -43,7 +44,6 @@ static u8 jump2_hscale_data[] = {100, 90, 82, 76, 72, 70, 70, 70, 70, 70, 70, 70
 /** Turn in degrees over the long spinning hop: two sways back and forth before it leaves the ground. */
 static s8 jump2_ry_data[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 10, 16, 22, 28, 33, 38, 40, 41, 41, 40, 38, 33, 28, 22, 16, 10, 5, 1, 1, 5, 10, 16, 22, 28, 33, 38, 40, 41, 41, 40, 38, 33, 28, 22, 16, 10, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 typedef struct SnowmanJumpStep {
     s16 x;

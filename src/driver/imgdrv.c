@@ -2,6 +2,7 @@
  * Images for event scripts: screen captures (imgCapture) drawn as planes or projections (imgDisp,
  * imgDisp_ProjPlane).
  */
+#include "version.h"
 #include "driver/imgdrv.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -89,7 +90,6 @@ static void zFill(void) {
 }
 
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void imgDisp(CameraId camId, void* param) {
 #else

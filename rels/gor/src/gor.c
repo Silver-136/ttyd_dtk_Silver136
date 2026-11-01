@@ -1,6 +1,7 @@
 // gor.rel (ゴロツキタウン, Rogueport): shared code and the REL prolog/epilog.
 // Registers the init events of gor_00..gor_04 and gor_10..gor_12.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_window.h"
@@ -28,7 +29,6 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 static s32 gor_inemuri_snd_id;
 #endif

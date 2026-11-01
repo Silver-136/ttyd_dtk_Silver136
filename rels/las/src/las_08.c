@@ -1,5 +1,6 @@
 // las_08 (ラストダンジョン, Palace of Shadow): the looping corridor (mugen kairou) with the torches.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_torch.h"
@@ -39,7 +40,6 @@ EvtWord hikari_anim[52];
 EvtWord taimatu_evt[18];
 s32 mugen_kairou_list[7];
 EvtWord mugen_kairou_init[96];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_08_init_evt[];
 #else

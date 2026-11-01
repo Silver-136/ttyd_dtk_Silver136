@@ -1,5 +1,6 @@
 // Pit of 100 Trials battle unit: the Spiny (`togezo`): parts, stats, poses and AI scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -32,7 +33,6 @@ static BattleUnitDefense defence_guard;
 static BattleUnitDefenseAttr defence_attr_guard;
 static StatusVulnerability regist_guard;
 static PoseTableEntry pose_table[15];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[12];
 #else

@@ -1,6 +1,7 @@
 // Rogueport Sewers (tik, chika: underground): the paper demon's (peramajin) lecture on the plane power
 // (plane_majin_lecture).
 
+#include "version.h"
 #include "icon_ids.h"
 #include "eff/eff_fukidashi.h"
 #include "eff/eff_itemget.h"
@@ -96,7 +97,6 @@ static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord plane_majin_lecture_init[73];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord plane_majin_lecture[];
 #else

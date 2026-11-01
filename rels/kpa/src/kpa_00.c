@@ -194,7 +194,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     CALL_CHILD(PTR(evt_memcard_save))
 #endif
     CALL(evt_mario_set_mode, 0)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(59), 0, FADE_NUM(58), 0)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_BOWSER_A1, 0, FADE_STORY_BOWSER_A3, 0)
     // The scene ends in Petalburg (nok_01).
     CALL(evt_bero_mapchange, STRING("nok_01"), STRING("nokotarou"))
     RETURN

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "version.h"
 #include "dolphin/gx/GXStruct.h"
 
 BOOL THPSimpleInit(s32 audioSystem);
@@ -15,7 +16,6 @@ BOOL THPSimpleLoadStop(void);
 s32 THPSimpleDecode(s32 audioTrack);
 s32 THPSimpleDrawCurrentFrame(GXRenderModeObj* rmode, u32 x, u32 y, u32 polygonW, u32 polygonH);
 u32 THPSimpleGetTotalFrame(void);
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BOOL THPSimpleSetVolume(s32 vol, s32 time);
 #include "driver/seqdrv.h"

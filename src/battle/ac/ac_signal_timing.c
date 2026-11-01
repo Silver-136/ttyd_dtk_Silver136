@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/ac/ac_table.h"
 #include "battle/battle_disp.h"
 #include "battle/battle.h"
@@ -11,7 +12,6 @@
 #include "system.h"
 #include <string.h>
 #include "icon_ids.h"
-#include "version.h"
 
 
 typedef struct SignalTimingWork {

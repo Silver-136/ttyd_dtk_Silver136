@@ -1,5 +1,6 @@
 /* Mahon = Wizzerd */
 
+#include "version.h"
 #include "eff/eff_mahorn2.h"
 #include "eff/eff_hit.h"
 #include "driver/camdrv.h"
@@ -9,7 +10,6 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <string.h>
-#include "version.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 

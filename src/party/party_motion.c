@@ -1,6 +1,7 @@
 // Partner motions: following Mario (behind/beside/homing), jumping, falling, staying, slit, roll, damage and
 // flying partners' height.
 
+#include "version.h"
 #include "mot/mot_slit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr.h"
@@ -11,7 +12,6 @@
 #include <dolphin/mtx.h>
 #include "mario/mariost.h"
 #include <string.h>
-#include "version.h"
 #include "libc_decls.h"
 #include "sfx_name_word.h"
 #include "mario/mario_party.h"

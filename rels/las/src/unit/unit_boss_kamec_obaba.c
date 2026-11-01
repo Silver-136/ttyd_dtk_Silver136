@@ -1,3 +1,4 @@
+#include "version.h"
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_magic1_n64.h"
@@ -359,7 +360,6 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {40, 40, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else

@@ -1,5 +1,6 @@
 // las_28 (ラストダンジョン, Palace of Shadow): Sir Grodus (シュリョー) and then Bowser and Kammy Koopa.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_shuryolight.h"
 #include "eff/n64/eff_guruguru_n64.h"
@@ -35,7 +36,6 @@
 #include "las.h"
 #include "driver/seqdrv.h"
 
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 static char name[8];
 #endif

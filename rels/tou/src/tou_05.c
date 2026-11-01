@@ -1,6 +1,7 @@
 // tou_05 (闘技場, Glitz Pit): Grubba's (ガンス) office: match registration and reset, first-league scenes.
 // Connects tou_04, tou_06 (storage) and tou_13.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_cmd.h"
@@ -45,7 +46,6 @@ static EvtWord n_door_close[12];
 EvtWord n_bero_match_reset[14];
 #endif
 static BeroEntry bero_data[3];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_takurami[];
 #else

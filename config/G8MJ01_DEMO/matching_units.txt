@@ -424,7 +424,6 @@ MarioSt/mario/mario_motion
 MarioSt/mario/mario_party
 MarioSt/mario/mario_pouch
 MarioSt/mario/mariost
-MarioSt/memory
 MarioSt/motion/mot_damage
 MarioSt/motion/mot_dokan
 MarioSt/motion/mot_hammer
@@ -498,7 +497,6 @@ MarioSt/os/OSTime
 MarioSt/os/__ppc_eabi_init
 MarioSt/os/__start
 MarioSt/pad/Pad
-MarioSt/pad/Padclamp
 MarioSt/parse
 MarioSt/party/party_chuchu
 MarioSt/party/party_hit

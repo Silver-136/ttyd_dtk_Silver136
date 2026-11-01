@@ -1,5 +1,6 @@
 // Mario's damage motions: knock-back, falling in water, spikes (toge) and the return to the last safe spot.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"
@@ -127,7 +128,6 @@ void mot_damage(void) {
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
         if (mario->jumpVelocityY == 0.0f) {
             mario->jumpVelocityY = -6.0f;

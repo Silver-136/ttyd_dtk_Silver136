@@ -1,5 +1,6 @@
 // unit_gundan_zako: X-Naut (rank-and-file grunt), battle unit.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -90,7 +91,6 @@ static BattleUnitDefense defence = {0};
 /** Defence attributes of the X-Naut's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {80, 90, 80, 100, 90, 100, 100, 80, 100, 85, 100, 85, 100, 80, 80, 100, 90, 100, 80, 100, 100, 95};
 #else

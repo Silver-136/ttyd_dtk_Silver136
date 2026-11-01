@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/mtx.h>
 #include "party.h"
 
@@ -35,7 +36,6 @@ f32 cloudGetBreathDir(void);
 struct HitEntry* cloudGetHitBreathout(s32 which); // 0 front, 1 down, 2-3 the two sweep hits
 
 void cloud_exit(PartyEntry* party);
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 void cloud_hover_init(PartyEntry* party);
 #endif

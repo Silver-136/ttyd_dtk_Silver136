@@ -1,8 +1,8 @@
 // hei_07 (平原, Petal Meadows): Shhwonk Fortress quiz room between hei_06 and hei_10 (stone statue, sekizou).
 // Questions with right/wrong answer animations; finishing sets story 31 and opens a pipe to hei_10. Has a save block.
 
-#include "data_tables.h"
 #include "version.h"
+#include "data_tables.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/msgdrv.h"

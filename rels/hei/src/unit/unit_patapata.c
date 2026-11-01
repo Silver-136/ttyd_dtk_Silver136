@@ -1,5 +1,6 @@
 // Koopa Paratroopa (patapata): battle unit used in Petal Meadows (it turns into a Koopa Troopa when its wings are lost).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -32,7 +33,6 @@ static EvtWord dmg_fall_event[189];
 static EvtWord patapata_dmg_first_attack_pos[19];
 static EvtWord attack_event_patapata[541];
 static PoseTableEntry pose_table[18];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[15];
 #else

@@ -1,6 +1,7 @@
 // gon_03 (ゴンババ, Hooktail Castle): hall between gon_02 and gon_04 with a bone-enemy leader fight and the Richard NPC (story 38, 39, 46).
 // Castle Key (0x0C) item and a spinning floor.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -63,7 +64,6 @@ static USER_FUNC(senkaronFlagOffMesPushing);
 static USER_FUNC(senkaronFlagOnMesPushing);
 static USER_FUNC(senkaronGetMarioPushedFlag);
 static USER_FUNC(senkaronToEscape);
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 USER_FUNC(leader_touch_check);
 #endif
@@ -546,7 +546,7 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 ADD(LW(1), 50)
                 CALL(evt_fade_set_spot_pos, LW(0), LW(1), LW(2))
-                CALL(evt_fade_set_mapchange_type, 0, 4, 500, FADE_NUM(9), 300)
+                CALL(evt_fade_set_mapchange_type, 0, 4, 500, FADE_IN_BLACK, 300)
                 CALL(evt_bero_mapchange, STRING("gon_01"), STRING("e_bero"))
             END_IF
         END_LOOP

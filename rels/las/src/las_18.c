@@ -1,5 +1,6 @@
 // las_18 (ラストダンジョン, Palace of Shadow): a riddle room off las_10: the switch only Vivian reaches.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -37,7 +38,6 @@ static EvtWord box_evt[30];
 EvtWord vivian_check[92];
 static EvtWord switch_evt[48];
 static EvtWord hint_plate[14];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_18_init_evt[];
 #else

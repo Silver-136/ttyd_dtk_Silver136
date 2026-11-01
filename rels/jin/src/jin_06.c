@@ -1,5 +1,6 @@
 // jin_06 (ダイム寺院, Creepy Steeple): room with a Flower Saver chest, a jump stand and a peel-away wall; doors to jin_07.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -28,7 +29,6 @@ static EvtWord w_open[12];
 static BeroEntry bero_entry_data[2];
 EvtWord jin_06_wall_open_evt[5];
 EvtWord jin_06_jumpstand[53];
-#include "version.h"
 static EvtWord mobj_box00[34];
 EvtWord jin_06_init_evt[165];
 

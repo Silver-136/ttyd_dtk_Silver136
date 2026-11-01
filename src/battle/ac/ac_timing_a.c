@@ -1,6 +1,7 @@
 // Action command: press A in time with the timing gauge (ac_timing_a); the standard attack timing prompt.
 
 #pragma defer_codegen off
+#include "version.h"
 #include "battle/ac/ac_timing_a.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
@@ -91,7 +92,6 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     switch (work->actionCommands.acState) {
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
             // no break: case 100 sets iconX to 30.0f, so the icon does not slide in
 #endif

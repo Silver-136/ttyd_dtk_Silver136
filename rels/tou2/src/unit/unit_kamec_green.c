@@ -1,5 +1,6 @@
 // unit_kamec_green: Green Magikoopa with its clone (bunsin), battle unit.
 
+#include "version.h"
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_magic1_n64.h"
@@ -94,7 +95,6 @@ static EvtWord trans_magic_event[7];
 static EvtWord recover_magic_event[142];
 static EvtWord all_recover_magic_event[180];
 static EvtWord bunsin_magic_event[160];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord spawn_event[62];
 #else

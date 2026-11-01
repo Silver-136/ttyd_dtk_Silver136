@@ -1,6 +1,7 @@
 // win_00 (ウィンディん家周辺, Boggly Woods): the clearing in the middle of the woods, where the Shadow Sirens (Beldam, Marilyn,
 // Vivian) stop Mario; paths to win_01 and win_06.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_story.h"
@@ -50,7 +51,6 @@ static EvtWord kizayarou_talk[8];
 static EvtWord kizayarou_init[38];
 static NpcSetupInfo npcEnt[5];
 static BeroEntry bero_entry_data[3];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord witchtrio_momeru[];
 #else

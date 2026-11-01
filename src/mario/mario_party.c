@@ -1,6 +1,7 @@
 // Mario's side of the partners: which partner is out, calling them (entry/hello/goodbye/kill), the partner
 // button, and partner join/leave, HP and level helpers.
 
+#include "version.h"
 #include "mario/mario_party.h"
 #include "mario/mario_pouch.h"
 #include "mario/mario.h"
@@ -35,7 +36,6 @@ static inline void marioPartyKillSlot1(void) {
  * Airborne, field-battle locks, slits, an airborne Goombella or a busy Yoshi block or cancel it.
  * Always returns 0; marioUsePartyMain later fires the ability.
  */
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();

@@ -1,6 +1,7 @@
 // Water splash: columns and droplets rising and falling around a point; types 0-4 vary the shape and size,
 // type 3 also adds a water-damage effect.
 
+#include "version.h"
 #include "eff/eff_splash.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -316,7 +317,6 @@ void effSplashMain(EffectEntry* effect) {
  * Projects the splash position to the screen and reads the frame buffer pixel there for the water tint (the
  * retail build then overrides it with the map colour from eff_funemizu).
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
 #else

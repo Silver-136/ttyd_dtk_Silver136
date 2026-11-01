@@ -1,5 +1,6 @@
 // Pennington (`powan`): a tst-only test unit, a c_kinopio rider (part 1) on a c_gazigazi body (parts 2 and 3). After each won
 // battle the field battle's post-battle event respawns it, four times in all, with a new line each time.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -514,7 +515,6 @@ static USER_FUNC(powan_set_post_battle_event) {
 }
 
 /** args: unit id, part id. Keeps the part on the "pPlane1" joint of the unit's body animation. */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(powan_rider_follow) {
     EvtWord* args = event->args;

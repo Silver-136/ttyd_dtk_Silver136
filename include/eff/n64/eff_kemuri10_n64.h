@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "driver/effdrv.h"
 #include "dolphin/types.h"
 #include <dolphin/mtx.h>
@@ -21,7 +22,6 @@ typedef struct EffKemuri10N64Work {
     u8 r, g, b;     // 0x64
     u8 r2, g2, b2;  // 0x67
     u8 pad_6a[2];   // 0x6A
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
     s32 camera;     // 0x6C
 #endif

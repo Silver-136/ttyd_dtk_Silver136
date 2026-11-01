@@ -1,3 +1,4 @@
+#include "version.h"
 #include "icon_ids.h"
 #include "evt/evt_window.h"
 #include "eff/eff_mario_balloon.h"
@@ -108,7 +109,6 @@ static USER_FUNC(x_flag_wait);
 static USER_FUNC(x_flag_add);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord christine_party_lecture_init[];
 #else

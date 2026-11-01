@@ -1,6 +1,7 @@
 // Bowser (koopa) as the player in the Super Mario Bros. style side-scrolling interludes: work, level, camera,
 // fire attack and jump parameters.
 
+#include "version.h"
 #include "eff/eff_gonbaba_breath.h"
 #include "mario/mario.h"
 #include "koopa.h"
@@ -320,7 +321,6 @@ void kpaMain(void) {
  * horizontal movement limited by his dash speed and walls, jumping and falling, floors and ceilings,
  * then the shared player effects, balloon and camera.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void kpa2DMain(void) {
 #else

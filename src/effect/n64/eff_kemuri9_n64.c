@@ -1,5 +1,6 @@
 // Paper Mario 64 smoke effect 9 (kemuri: smoke): a set of puffs spreading to an end radius over a given life.
 
+#include "version.h"
 #include "eff/n64/eff_kemuri9_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -25,7 +26,6 @@ typedef struct EffKemuri9N64Work {
     s32 timer;       // 0x24
     s32 counter;     // 0x28
     s32 life;        // 0x2C
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 f32 anim;
 #else

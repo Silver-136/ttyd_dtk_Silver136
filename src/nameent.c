@@ -1,5 +1,6 @@
 // Name entry screen: the kana/latin character grid used to name a save file or Yoshi.
 
+#include "version.h"
 #include "nameent.h"
 #include "system.h"
 #include "driver/dispdrv.h"
@@ -11,7 +12,6 @@
 #include "manager/fontmgr.h"
 #include "win/win_main.h"
 #include "mario/mariost.h"
-#include "version.h"
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>

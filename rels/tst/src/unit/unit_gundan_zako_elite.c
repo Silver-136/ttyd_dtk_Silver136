@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -45,7 +46,6 @@ BattleUnitKind unit_gundan_zako_elite = {
     0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 3,
 #else

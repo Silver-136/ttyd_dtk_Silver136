@@ -1,4 +1,5 @@
 // Battle unit Bombshell Bill Blaster (`super_killer_cannon`): tst.rel's copy of rels/las/src/unit/unit_super_killer_cannon.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -51,7 +52,6 @@ static USER_FUNC(killer_copy_status) {
  * Unit definition of the B. Bill Blaster: its HP, level, sizes, sounds, status vulnerability,
  * parts and init script.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_super_killer_cannon = {
     125,

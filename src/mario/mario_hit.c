@@ -1,6 +1,7 @@
 // Mario's collision: ground, walls, ceiling and landing checks (marioChkLandon, marioChkOverhead,
 // marioChkWallAround), slopes, steps and the hit objects he stands on or pushes.
 
+#include "version.h"
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
 #include "driver/mobjdrv.h"
@@ -12,7 +13,6 @@
 #include <dolphin/types.h>
 #include <string.h>
 #include <dolphin/mtx.h>
-#include "version.h"
 #include "mario/mario_cam.h"
 #include "mario/mario_party.h"
 #include "mario/mario_balloon.h"

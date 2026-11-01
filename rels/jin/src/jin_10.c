@@ -1,6 +1,7 @@
 // jin_10 (ダイム寺院, Creepy Steeple): room with a sliding gate and a block with the Tornado Jump badge;
 // doors to jin_09 and jin_11.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_hit.h"
@@ -28,7 +29,6 @@ USER_FUNC(set_pos);
 static EvtWord door_close[12];
 static EvtWord door_open[12];
 static BeroEntry bero_entry_data[3];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord push_evt[126];
 #else

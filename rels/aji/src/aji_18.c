@@ -328,7 +328,7 @@ EVT_END()
 static USER_FUNC(sysflag) {
     if (gp->flags & GW_FLAG_SAVE_LOADED) {
         gp->flags &= ~GW_FLAG_SAVE_LOADED;
-        fadeEntry(FADE_NUM(0x1C), 0, (GXColor){0, 0, 0, 0});
+        fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 0});
     }
     return EVT_RETURN_DONE;
 }

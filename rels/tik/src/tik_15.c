@@ -1,6 +1,7 @@
 // tik_15 (埋没した都市, Rogueport Sewers): the large junction with pipes to tik_01 and tik_04 and exits to tik_16, tik_20 and
 // tik_21; Goombas, Paragoombas, Spiky Goombas, a Hammer Bro and a Magikoopa.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -17,7 +18,6 @@
 
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[13];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_15_init_evt[];
 #else

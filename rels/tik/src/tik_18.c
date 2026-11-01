@@ -1,6 +1,7 @@
 // tik_18 (埋没した都市, Rogueport Sewers): the passage between tik_06, tik_07 and tik_17, with a cloud event
 // (tik_18_cloud_evt); a Magikoopa, a Koopatrol and Spanias.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -20,7 +21,6 @@
 static BeroEntry bero_entry_data[5];
 EvtWord tik_18_cloud_evt[5];
 static HitDamageReturn hitDmgRetPoints[13];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_18_init_evt[];
 #else

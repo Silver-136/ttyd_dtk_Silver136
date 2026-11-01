@@ -1,6 +1,7 @@
 // gor_01 (ゴロツキタウン, Rogueport): central plaza. Badge shop, Zess T. ("nancy" in the code) and her cooking,
 // star-stone scenes. Hub between the harbor and the east and west sides.
 
+#include "version.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_story.h"
 #include "evt/evt_urouro.h"
@@ -8,7 +9,6 @@
 #include "evt/evt_window.h"
 #include "kpa_act.h"
 #include "eff/eff_mahojin.h"
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_badgeshop.h"

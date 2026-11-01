@@ -1,5 +1,6 @@
 // unit_lecture_frankli: Professor Frankly in the action-command tutorial battle.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -31,7 +32,6 @@ static EvtWord damage_event[10];
 static EvtWord phase_event[681];
 static EvtWord attack_event[5];
 static EvtWord wait_event[6];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord lecAttackEvent_Jump[];
 #else

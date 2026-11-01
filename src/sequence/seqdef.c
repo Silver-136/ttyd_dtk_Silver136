@@ -1,5 +1,6 @@
 // Sequence table: the init, main and exit functions of every game sequence.
 
+#include "version.h"
 #include "driver/seqdrv.h"
 #include "evt/evt_snd.h"
 #include "seq/seq_logo.h"
@@ -12,7 +13,6 @@
 #include "seq/seq_battle.h"
 
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #include "seq/seq_demo.h"
 SequenceCallback seq_data[9][3] = {

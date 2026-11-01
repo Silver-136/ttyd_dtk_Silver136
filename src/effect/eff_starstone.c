@@ -1,6 +1,7 @@
 // Crystal Star effect ("star stone", types 0-6 for the seven stars): spins with a shine sound, sparkles and dust;
 // setting state 1 drops it, and the stars drawn by effStarStoneDisp_2 split in two when they land.
 
+#include "version.h"
 #include "eff/n64/eff_snow_dust_n64.h"
 #include "eff/eff_starstone.h"
 #include "driver/camdrv.h"
@@ -378,7 +379,6 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
  * States 1-5 are the drop: it falls under gravity, bounces on the ground (jump sound, puffs),
  * then the halves separate and tilt.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void effStarStoneMain(EffectEntry* effect) {
 #else

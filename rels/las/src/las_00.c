@@ -1,5 +1,6 @@
 // las_00 (ラストダンジョン, Palace of Shadow): the gate outside the palace, reached from the Thousand-Year Door (tik_05).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -28,7 +29,6 @@ static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord first_evt[182];
 #else

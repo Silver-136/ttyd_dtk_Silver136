@@ -1,3 +1,4 @@
+#include "version.h"
 #include "system.h"
 #include "las.h"
 #include "battle/battle_unit.h"
@@ -100,7 +101,6 @@ BattleUnitKind unit_boss_batten_satellite = {
     9, // pbSoftCap
     16, // width
     16, // height
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
     0,
     8,

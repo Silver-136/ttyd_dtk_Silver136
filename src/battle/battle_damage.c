@@ -1,8 +1,8 @@
 // Battle damage: computes damage, defense, status effects, counterattacks and the resulting hit events.
 
+#include "version.h"
 #include "eff/eff_nice.h"
 #include "eff/n64/eff_vapor_n64.h"
-#include "version.h"
 #include "mario/mario_pouch.h"
 #include "battle/battle_status_effect.h"
 #include "battle/battle_ac.h"

@@ -1,5 +1,6 @@
 // gra_04 (ウスグラの道, Twilight Trail): the woods between gra_03 and gra_05.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -19,7 +20,6 @@
 #include "pmario_sound.h"
 
 USER_FUNC(evt_kagemario_init);
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 USER_FUNC(roll_release_check);
 #endif

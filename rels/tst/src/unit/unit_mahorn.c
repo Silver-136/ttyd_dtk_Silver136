@@ -1,4 +1,5 @@
 // Battle unit Wizzerd (`mahorn`): tst.rel's copy of rels/jon/src/unit/unit_mahorn.c.
+#include "version.h"
 #include "eff/eff_mahorn2.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -68,7 +69,6 @@ static EvtWord recover_magic_event[96];
 static EvtWord wait_event[386];
 
 /** Unit definition of the Wizzerd: 10 HP, level 30, 5 parts, with its sounds, init script and data table. */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_mahorn = {
     161,

@@ -1214,7 +1214,7 @@ EVT_BEGIN(sys_01_init_evt)
     CALL(evt_party_set_pos, 0, 0, 0, 0)
     CALL(evt_cam3d_evt_set, 0, 0, 500, 0, 0, 0, 0, EASING_SINE_IN_OUT)
     CALL(bg)
-    CALL(evt_fade_entry, FADE_NUM(32), 0, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_CURTAIN_CENTER_Z1_3D, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), 0)
@@ -1249,8 +1249,8 @@ EVT_BEGIN(sys_01_init_evt)
         CALL(display, LW(0))
     END_INLINE_EVENT
     WAIT_MS(3000)
-    CALL(evt_fade_set_mapchange_type, 0, FADE_NUM(17), 1800, FADE_NUM(16), 1800)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(17), 1800, FADE_NUM(16), 1800)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_WHITE, 1800, FADE_IN_WHITE, 1800)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 1800, FADE_IN_WHITE, 1800)
     SPAWN_EVENT(PTR(evt_start))
     RETURN
 EVT_END()
@@ -1272,7 +1272,7 @@ EVT_BEGIN(evt_start)
             END_IF
         END_IF
     END_IF
-    CALL(evt_fade_entry, FADE_NUM(35), 0, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_CURTAIN_CENTER_A1, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(start)
 #if VERSION >= VERSION_US
@@ -1288,8 +1288,8 @@ EVT_BEGIN(evt_start)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_fade_set_mapchange_type, 0, FADE_NUM(19), 500, FADE_NUM(18), 500)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(19), 500, FADE_NUM(18), 500)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_WHITE_2D, 500, FADE_IN_WHITE_2D, 500)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE_2D, 500, FADE_IN_WHITE_2D, 500)
     CALL(evt_bero_get_entername, LW(1))
     IF_STR_EQUAL(LW(1), STRING("prologue"))
         SET_VALUE(LW(0), 0)

@@ -1,5 +1,6 @@
 // Boat water (funemizu: boat water): ripples and splash spray around a boat, tinted with a per-map water colour.
 
+#include "version.h"
 #include "eff/eff_funemizu.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -23,7 +24,6 @@ typedef struct ColorEntry {
 } ColorEntry;
 
 /** Water tint used when the current map has no entry in funemizu_color_tbl: plain white. */
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 static const GXColor funemizu_default_color = {0xFF, 0xFF, 0xFF, 0xFF};
 #endif

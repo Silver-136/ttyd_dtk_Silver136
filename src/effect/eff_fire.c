@@ -1,6 +1,7 @@
 // Flame (Fire): a flickering flame with smoke puffs; types 0-8 pick the look, types 5-7 also throw sparks.
 // Used for burning units and fire attacks.
 
+#include "version.h"
 #include "eff/eff_fire.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -44,7 +45,6 @@ FireScaleKey scale1[] = {
  * Eight vertex colours of the layered flame for the spark-throwing types: orange fire (type 5), blue (6)
  * and green (7). Read by effFireDisp3.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 FireScaleKey scale2[] = {
     { 0, 1.0f },

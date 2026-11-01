@@ -1,5 +1,6 @@
 // Movie sequence: plays the opening THP movie (simple THP player).
 
+#include "version.h"
 #include "seq/seq_demo.h"
 #include "dolphin/ai.h"
 #include "dolphin/dvd.h"
@@ -132,7 +133,6 @@ static u16 VolumeTable[] = {
 // clang-format on
 
 //.bss
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #include "manager/filemgr.h"
 typedef struct SeqDemoWork {

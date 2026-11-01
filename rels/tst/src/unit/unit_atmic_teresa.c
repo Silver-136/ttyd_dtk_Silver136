@@ -1,4 +1,5 @@
 // Battle unit Atomic Boo (`atmic_teresa`): tst.rel's copy of rels/jin/src/unit/unit_atmic_teresa.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"
 #include "evt/evt_cmd.h"
@@ -25,7 +26,6 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_sub.h"
 #include "system.h"
-#include "version.h"
 #include "libc_decls.h"
 
 // Unit work slots of the Atomic Boo (btlevtcmd_SetUnitWork / GetUnitWork)

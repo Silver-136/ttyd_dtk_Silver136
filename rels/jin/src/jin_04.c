@@ -1,6 +1,7 @@
 // jin_04 (ダイム寺院, Creepy Steeple): Doopliss (Rampell) boss room: Doopliss and fake-Mario scenes and battles,
 // Goombella, Koops, Flurrie and Yoshi cutscenes, Ruby Star; door to jin_00.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_pouch.h"
 #include "evt/evt_cmd.h"
@@ -45,7 +46,6 @@ static BeroEntry bero_entry_data[2];
 EvtWord ranperu_toujou[338];
 EvtWord starstone_jump_se[15];
 EvtWord irekawatta_mario_init[67];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord irekawatta_mario[];
 #else

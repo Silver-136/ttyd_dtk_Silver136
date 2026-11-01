@@ -1,8 +1,8 @@
 #pragma once
 
+#include "version.h"
 #include <dolphin/types.h>
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern f32 queen_uv[];
 #include <dolphin/gx.h>

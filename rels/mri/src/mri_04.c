@@ -1,6 +1,7 @@
 // mri_04 (巨木の中, The Great Tree): the room where Ms. Mowz (chuchurina) appears and fights an X-Naut, with
 // the little Jabbi (chibitoge), planters and item boxes.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -39,7 +40,6 @@ static BeroEntry bero_entry_data[2];
 static EvtWord chibitoge_init[21];
 static EvtWord chibitoge_talk[111];
 static NpcSetupInfo npcEnt[2];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord chuchurina_sogu[812];
 #else

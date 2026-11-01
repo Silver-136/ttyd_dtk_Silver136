@@ -1,5 +1,6 @@
 // jin_02 (ダイム寺院, Creepy Steeple): side room with a red switch and a camera shake event; doors to jin_00 and jin_03.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -24,7 +25,6 @@ EvtWord n1_close[12];
 EvtWord n1_open[12];
 static BeroEntry bero_entry_data[3];
 static EvtWord cam_shake[62];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_kaidan_temae[];
 #else

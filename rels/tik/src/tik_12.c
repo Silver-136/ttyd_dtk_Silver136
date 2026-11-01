@@ -1,6 +1,7 @@
 // tik_12 (埋没した都市, Rogueport Sewers): the charm-caster's (majinaishi) house: her charm cube (majinai_BOX) and trouble 14
 // (irai_14).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/animdrv.h"
 #include "evt/evt_story.h"
@@ -37,7 +38,6 @@ static USER_FUNC(setmertn);
 s32 majinaisi_ryokin_kaisu_tbl[6];
 static BeroEntry bero_entry_data[2];
 EvtWord suisyou_kirakira[30];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord majinaisi_table_talk[];
 #else

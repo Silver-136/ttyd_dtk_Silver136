@@ -1,5 +1,6 @@
 // las_27 (ラストダンジョン, Palace of Shadow): the hall before the throne rooms.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -13,7 +14,6 @@
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
 
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 static char name[8];
 #endif

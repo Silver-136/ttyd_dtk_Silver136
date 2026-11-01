@@ -1,6 +1,7 @@
 // muj_05 (無人島, Keelhaul Key): the skull rock: Admiral Bobbery joins (sanders_nakama), the gem
 // eyes and the skull rock's opening into Pirate's Grotto (dou_00).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -47,7 +48,6 @@ USER_FUNC(evt_dokuroiwa_command_set);
 
 EvtWord sanders_rotate[28];
 EvtWord sanders_nakama_sub[13];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord sanders_nakama[];
 #else

@@ -1,5 +1,6 @@
 // Action command: air gauge (ac_air_gauge); press A repeatedly to fill a gauge that constantly drains.
 
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"
@@ -42,7 +43,6 @@ GaugeKey _table_4[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0
 GaugeKey _table_5[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_6[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #define GAUGE_TABLE_DEMO {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}}
 typedef struct AirPw {

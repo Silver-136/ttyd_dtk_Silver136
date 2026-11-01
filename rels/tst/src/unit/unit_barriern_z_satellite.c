@@ -1,4 +1,5 @@
 // Battle unit Mini-Z-Yux (`barriern_z_satellite`): tst.rel's copy of rels/aji/src/unit/unit_barriern_z_satellite.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -10,7 +11,6 @@
 #include "battle/battle_event_cmd.h"
 #include "evt/evt_sub.h"
 #include "tst.h"
-#include "version.h"
 
 // Unit work slots of a Mini-Yux (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {

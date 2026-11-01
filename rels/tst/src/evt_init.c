@@ -1,6 +1,7 @@
 // The init events of the tst maps, plus a test that draws a polygon with the stick and fills it through the GLU
 // tessellator (glu/). The tst_nakayama map runs the test. The Japanese demo has no test (the tess code and the
 // tst_nakayama events came after it), but the GLU units are still linked into its tst.rel.
+#include "version.h"
 #include "driver/itemdrv.h"
 #include "system.h"
 #include "pmario_sound.h"
@@ -39,7 +40,6 @@
 #include "npc_event.h"
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
-#include "version.h"
 GXColor HSV2RGB(GXColor hsv);
 extern EvtWord testnpc_move_event[];
 

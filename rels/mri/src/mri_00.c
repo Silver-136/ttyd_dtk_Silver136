@@ -1676,7 +1676,7 @@ static EVT_BEGIN(sekai_yami_evt)
 #if VERSION <= VERSION_DEMO_US
     // The screen fades out and the game moves on to tou_01.
 #endif
-    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(10), 300, FADE_NUM(9), 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("tou_01"), STRING("sekai_yami1"))
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1861,7 +1861,7 @@ static EVT_BEGIN(minnnanokoe_evt)
         END_LOOP
     END_SIBLING_EVENT
     WAIT_MS(4000)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(10), 300, FADE_NUM(9), 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("tou_01"), STRING("minnnanokoe"))
     RETURN
 EVT_END()
@@ -1877,7 +1877,7 @@ EVT_END()
 static USER_FUNC(sysflag) {
     if (gp->flags & GW_FLAG_SAVE_LOADED) {
         gp->flags &= ~GW_FLAG_SAVE_LOADED;
-        fadeEntry(FADE_NUM(0x1C), 0, (GXColor){0, 0, 0, 0});
+        fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 0});
     }
     return EVT_RETURN_DONE;
 }

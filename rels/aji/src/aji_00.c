@@ -1,6 +1,7 @@
 // aji_00 (敵のアジト, X-Naut Fortress): the corridor between aji_19 and the elevator hall, where two X-Naut
 // underlings (teshita) are met.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -25,7 +26,6 @@
 #include "mario/mario.h"
 
 
-#include "version.h"
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];

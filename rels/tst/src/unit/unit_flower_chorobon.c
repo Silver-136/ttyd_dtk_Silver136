@@ -1,4 +1,5 @@
 // Battle unit Flower Fuzzy (`flower_chorobon`): tst.rel's copy of rels/jon/src/unit/unit_flower_chorobon.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -11,7 +12,6 @@
 #include "data_tables.h"
 #include "battle/battle_sub.h"
 #include "evt/evt_sub.h"
-#include "version.h"
 
 BattleUnitKind unit_flower_chorobon;
 static BattleUnitDefense defence;

@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/ac/ac_table.h"
 #include "icon_ids.h"
 #include "battle/battle.h"
@@ -10,7 +11,6 @@
 #include "pmario_sound.h"
 #include "system.h"
 #include <string.h>
-#include "version.h"
 
 
 typedef struct GT2Work {

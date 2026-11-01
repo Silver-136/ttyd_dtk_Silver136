@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -80,7 +81,6 @@ BattleUnitKind unit_hyper_sinemon = {
     data_table, // dataTable
 };
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 #else

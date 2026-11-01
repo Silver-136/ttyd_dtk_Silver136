@@ -1,4 +1,5 @@
 // Battle unit Red Bones (`red_honenoko`): tst.rel's copy of rels/gon/src/unit/unit_red_honenoko.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"
 #include "evt/evt_cmd.h"
@@ -48,7 +49,6 @@ static EvtWord wait_event[6];
  * Unit definition of the Red Bones: 5 HP and level 14, with its sizes, damage sounds, status vulnerability,
  * parts and init script.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_red_honenoko = {
     22,

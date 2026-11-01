@@ -1,3 +1,4 @@
+#include "version.h"
 #include "icon_ids.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
@@ -150,7 +151,6 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
             ac->outputParams[0] = (s32)(g->gauge * (f32)ac->params[3] / 100.0f);
             if (ac->outputParams[0] >= ac->params[3]) {
                 ac->outputParams[0] = ac->params[3] - 1;
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
             }
             if (!(ac->acFlags & AC_POWER_GAUGE_LV2_FLAG_NO_FULL_BONUS_UNUSED)) {

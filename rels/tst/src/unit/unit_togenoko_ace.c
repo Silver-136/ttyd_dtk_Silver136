@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -86,7 +87,6 @@ BattleUnitKind unit_togenoko_ace = {
     1, // dangerHP
     1, // perilHP
     30, // level
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 0,
 #else

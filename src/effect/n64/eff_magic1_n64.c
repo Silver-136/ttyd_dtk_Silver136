@@ -1,5 +1,6 @@
 // Paper Mario 64 magic effect 1: pulsing colour glow moving from a point toward a target.
 
+#include "version.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -71,7 +72,6 @@ EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, 
  * Moves the bolt along its velocity (the burst slows and fades); a bolt reaching the end spawns the burst there.
  * From JP on, it only draws while the system level is nonzero.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void effMagic1Main(EffectEntry* effect) {
 #else

@@ -1,6 +1,7 @@
 // tou_09 (闘技場, Glitz Pit): the second major-league locker room; exits to tou_04 and, behind the lockers,
 // the hidden room tou_11; the shut-in "tojikome" scene.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -29,7 +30,6 @@ static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];
 EvtWord evt_in[68];
 static BeroEntry bero_data[4];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_toile[161];
 #else

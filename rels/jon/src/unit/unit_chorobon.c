@@ -1,5 +1,6 @@
 // Pit of 100 Trials battle unit: the Fuzzy (`chorobon`): parts, stats, poses and AI scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -88,7 +89,6 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element response of the Fuzzy: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {100, 100, 90, 100, 90, 100, 100, 75, 100, 80, 100, 80, 100, 75, 75, 95, 95, 100, 75, 100, 100, 100};
 #else

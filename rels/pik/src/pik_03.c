@@ -1,5 +1,6 @@
 // pik_03 (ピカリーヒルズ, Poshley Sanctum): the hidden inner room of the sanctum.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -27,7 +28,6 @@
 EvtWord bero_in[45];
 EvtWord bero_out[53];
 static BeroEntry bero_data[2];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_daiza[21];
 #else

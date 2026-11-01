@@ -1,6 +1,7 @@
 // mri_16 (巨木の中, The Great Tree): the water room: the mechanism that drains the water (water_shikake) and
 // the rising bars (bar_shikake), with an item box.
 
+#include "version.h"
 #include "mri_puni.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -35,7 +36,6 @@ static USER_FUNC(ss_set);
 static BeroEntry bero_entry_data[7];
 static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord water_shikake[];
 #else

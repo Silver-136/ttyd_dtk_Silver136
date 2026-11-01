@@ -1,5 +1,6 @@
 // Battle drawing helpers: 2D and textured-quad drawing, pose lookup and unit item display.
 
+#include "version.h"
 #include "battle/battle_disp.h"
 #include "battle/battle.h"
 #include "battle/battle_menu_disp.h"
@@ -33,7 +34,6 @@
 // Statuses that select the unit's pose, in priority order (_GetStatusPoseType)
 s32 _status_pose_table[] = {
     STATUS_INSTANT_KILL,
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
     STATUS_SLEEP,
 #endif

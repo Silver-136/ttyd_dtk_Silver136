@@ -1,4 +1,5 @@
 // Battle unit Pokey (`sambo`): tst.rel's copy of rels/eki/src/unit/unit_sambo.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"
 #include "evt/evt_cmd.h"
@@ -110,7 +111,6 @@ static BattleUnitDefense defence = {0};
 /** Element modifiers of the Pokey: none, no element is special to it. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 /** Status vulnerability of the Pokey in the demo builds: resists most statuses. */
 static StatusVulnerability regist = {90, 80, 90, 100, 90, 100, 100, 50, 100, 90, 100, 90, 100, 90, 90, 100, 90, 100, 90, 100, 100, 100};

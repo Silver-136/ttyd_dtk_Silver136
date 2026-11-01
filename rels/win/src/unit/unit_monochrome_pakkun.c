@@ -1,5 +1,6 @@
 // Battle unit Pale Piranha (パックンフラワー): win.rel's copy.
 
+#include "version.h"
 #include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -103,7 +104,6 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element attributes of the Pale Piranha: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {100, 100, 80, 100, 95, 100, 100, 100, 100, 90, 100, 90, 100, 90, 90, 40, 60, 100, 90, 100, 100, 95};
 #else

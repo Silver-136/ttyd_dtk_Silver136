@@ -1,5 +1,6 @@
 // Riverside Station (eki) key-item lecture: when Ultra Boots are picked up, Kinopiko gives the Ultra Boots tutorial (all_juyoitem_lecture_rel).
 
+#include "version.h"
 #include "icon_ids.h"
 #include "evt/evt_window.h"
 #include "eff/eff_fukidashi.h"
@@ -99,7 +100,6 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 EvtWord boots_lv3_juyoitem_lecture_init[104];
 EvtWord boots_lv3_juyoitem_lecture_sub01[29];
 EvtWord boots_lv3_juyoitem_lecture_sub02[78];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord boots_lv3_juyoitem_lecture[];
 #else

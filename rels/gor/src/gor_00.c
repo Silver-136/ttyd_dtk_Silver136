@@ -5674,7 +5674,7 @@ EVT_BEGIN(gor_00_koopa_evt)
     SET_VALUE(LW(0), 12)
     CALL_CHILD(PTR(SAVE_EVT))
     CALL(evt_mario_set_mode, 0)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(59), 0, FADE_NUM(58), 0)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_BOWSER_A1, 0, FADE_STORY_BOWSER_A3, 0)
     CALL(evt_bero_mapchange, STRING("usu_00"), 0)
     RETURN
 EVT_END()

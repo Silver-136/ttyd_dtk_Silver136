@@ -1,4 +1,5 @@
 // Battle unit Boo (`teresa`): tst.rel's copy of rels/jin/src/unit/unit_teresa.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -204,7 +205,6 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element modifiers of the Boo: none, no element is special to it. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 /** Status vulnerability of the Boo in the demo builds: immune to poison; resists most other statuses. */
 static StatusVulnerability regist = {50, 50, 90, 0, 50, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 50, 95, 100, 10, 100, 100, 10};

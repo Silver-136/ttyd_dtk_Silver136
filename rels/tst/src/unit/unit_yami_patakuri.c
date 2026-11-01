@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -55,7 +56,6 @@ BattleUnitKind unit_yami_patakuri = {
     1, // perilHP
     12, // level
     0, // bonusExp
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 1,
 #else

@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "unit/unit_chorobon_gundan.h"
 #include "evt/evt_cmd.h"
@@ -37,7 +38,6 @@ static PoseSoundTiming pose_sound_timing_table[4];
 EvtWord gold_chorobon_rabbit_move[123];
 BattleUnitSetup entry_chorogun;
 EvtWord call_chorogun_event[67];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord escape_chorogun_event[];
 #else

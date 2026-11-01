@@ -1,4 +1,5 @@
 // TTYD's own version of the SDK's DEMOInit, set up with the game's memory manager
+#include "version.h"
 #include "sdk/DEMOInit.h"
 #include "memory.h"
 #include <dolphin/dvd.h>
@@ -89,7 +90,6 @@ static void __DEMOInitGX(void) {
     GXSetDispCopyGamma(GX_GM_1_0);
 }
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static inline void __DEMOInitRenderMode(GXRenderModeObj* mode) {
 #else

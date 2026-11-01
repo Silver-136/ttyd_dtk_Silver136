@@ -1,6 +1,7 @@
 // gon_07 (ゴンババ, Hooktail Castle): room beyond gon_06 with a treasure chest holding the Black Key (0x22) (story 43).
 // Has a danger-music sequence and a door to gon_13.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -274,7 +275,6 @@ static EVT_BEGIN(bomb_wall_evt)
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("S_ana"), STRING("ofs"))
     CALL(evt_offscreen_get_boundingbox2, STRING("ofs"), LW(0), LW(1), LW(2), LW(3))
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
     // Skip the capture animation only when both bounding-box dimensions are zero.
 #endif

@@ -1,5 +1,6 @@
 // Star-power special move Power Lift (sac_muki): the cursor game that raises Mario's attack and defense.
 
+#include "version.h"
 #include "eff/eff_starstone.h"
 #include "battle/battle.h"
 #include "eff/n64/eff_stamp_n64.h"
@@ -17,7 +18,6 @@
 #include <dolphin/mtx.h>
 #include <string.h>
 #include "icon_ids.h"
-#include "version.h"
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_camera.h"
 #include "battle/sac/sac_common.h"

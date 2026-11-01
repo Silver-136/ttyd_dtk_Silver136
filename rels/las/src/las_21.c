@@ -1,5 +1,6 @@
 // las_21 (ラストダンジョン, Palace of Shadow): the room of floating blocks (floatblk).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -36,7 +37,6 @@ static BeroEntry w_bero_mapchg[1];
 EvtWord floatblk_stop_se[47];
 EvtWord floatblk_shake[27];
 EvtWord floatblk_evt[336];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord floatblk21_1_evt[];
 #else

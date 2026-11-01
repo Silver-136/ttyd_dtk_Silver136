@@ -1,5 +1,6 @@
 // aji_05 (敵のアジト, X-Naut Fortress): an electrified floor-panel room (hikaru_yuka).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
@@ -31,7 +32,6 @@ static USER_FUNC(ride_chk);
 static USER_FUNC(thunder_main);
 static USER_FUNC(loop_onoff);
 
-#include "version.h"
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[2];

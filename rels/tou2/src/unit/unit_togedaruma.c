@@ -1,5 +1,6 @@
 // unit_togedaruma: Bristle (`togedaruma`), battle unit.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -101,7 +102,6 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
  */
 static BattleUnitDefense defence_turn = {0};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {50, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 70, 70, 50, 75, 100, 70, 100, 100, 95};
 #else

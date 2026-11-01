@@ -1,11 +1,11 @@
 // pik_00 (ピカリーヒルズ, Poshley Heights): the station where the Excess Express ends, with the rich families' villas; chapter
 // 7's cannon permit is given here.
 
+#include "version.h"
 #include "driver/msgdrv.h"
 #include "evt/evt_story.h"
 #include "evt/evt_window.h"
 #include "memory.h"
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "statuswindow.h"

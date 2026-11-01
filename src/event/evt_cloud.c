@@ -1,6 +1,7 @@
 // Script commands for animated cloud overlays: an image drawn through an offscreen target over a
 // map group, with its own hit object and end event.
 
+#include "version.h"
 #include "driver/camdrv.h"
 #include "driver/animdrv.h"
 #include "driver/hitdrv.h"
@@ -72,7 +73,6 @@ static USER_FUNC(evt_cloud_main) {
     if (party == NULL) {
         return EVT_RETURN_BLOCK;
     }
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
         return EVT_RETURN_BLOCK;

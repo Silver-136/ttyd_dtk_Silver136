@@ -1,4 +1,5 @@
 // Battle unit Yux (`barriern`): tst.rel's copy of rels/aji/src/unit/unit_barriern.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"
 #include "evt/evt_cmd.h"
@@ -20,7 +21,6 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
 #include "tst.h"
-#include "version.h"
 #include "unit/unit_barriern.h"
 #include "system.h"
 #include "driver/mapdrv.h"

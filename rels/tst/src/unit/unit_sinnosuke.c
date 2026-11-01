@@ -1,4 +1,5 @@
 // Battle unit Bald Cleft (`sinnosuke`): tst.rel's copy of rels/hei/src/unit/unit_sinnosuke.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -107,7 +108,6 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 /** Defence of the Bald Cleft while it is flipped on its back: none, every hit does its full damage. */
 static BattleUnitDefense defence_turn = {0};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 /**
  * Status vulnerability of the Bald Cleft in the demo builds: immune to burn; resists most other statuses.

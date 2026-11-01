@@ -2,6 +2,7 @@
 // keyframes and draws the animation poses of Mario, the partners, NPCs and items. Many helpers here
 // are inlined into their callers.
 
+#include "version.h"
 #include "driver/animdrv.h"
 #include <dolphin/os/OSFastCast.h>
 #include "driver/dispdrv.h"
@@ -222,7 +223,6 @@ u8 _vivihimoData[3][0x400] ATTRIBUTE_ALIGN(32) = {
     0x3F, 0x80, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00,
 };
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 s32 vivihimoTailGroupNo[4] ATTRIBUTE_ALIGN(32) = {0, 2, -1, -1};
 void* vivihimoData[4] = {

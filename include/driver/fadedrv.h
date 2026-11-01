@@ -10,15 +10,6 @@
 
 typedef void (*OffscreenCallback)(CameraId cameraId, void* param);
 
-// A fade type written as a retail number: the demo has no FADE_IN_SPOT2 pair (5, 6), so its later types are 2 lower.
-#if VERSION <= VERSION_DEMO_US
-#define FADE_NUM(n) ((n) >= 7 ? (n) - 2 : (n))
-#else
-#define FADE_NUM(n) (n)
-#endif
-
-#if VERSION <= VERSION_DEMO_US
-// Fade types of the demo (names from LLCOOLT's tree): it has no FADE_IN_SPOT2/FADE_OUT_SPOT2.
 typedef enum FadeType {
     FADE_NONE = 0,
     FADE_IN_IRIS = 1,
@@ -27,6 +18,10 @@ typedef enum FadeType {
     FADE_OUT_SPOT = 4,
     FADE_IN_SPOT_3D = 5,
     FADE_OUT_SPOT_3D = 6,
+#if VERSION >= VERSION_JP
+    FADE_IN_SPOT2 = 7,  // fadeEntry turns it into FADE_IN_SPOT
+    FADE_OUT_SPOT2 = 8, // fadeEntry turns it into FADE_OUT_SPOT
+#endif
     FADE_IN_BLACK,
     FADE_OUT_BLACK,
     FADE_IN_BLACK_2D,
@@ -90,30 +85,6 @@ typedef enum FadeType {
     MARIO_HEAD_FADE_IN = FADE_PAGE_FLIP_Z1_OFFSCREEN,
     MARIO_HEAD_FADE_OUT = FADE_PAGE_FLIP_A1_OFFSCREEN,
 } FadeType;
-#else
-typedef enum FadeType {
-    FADE_IN_BLACK = 9,
-    FADE_OUT_BLACK = 10,
-
-
-
-
-
-
-    FADE_OUT_WHITE = 17,
-    FADE_IN_WHITE2 = 18,
-    FADE_CURTAIN_UP_DOWN_A1 = 22, // OFF_d_maku_up_down, animation A_1
-
-
-
-
-
-    TITLE_SCREEN_CURTAIN_LEAVE_GRADUAL2 = 39,
-
-    MARIO_HEAD_FADE_IN = 52,
-    MARIO_HEAD_FADE_OUT = 53,
-} FadeType;
-#endif
 
 // FadeEntry.flags (fadeEntry, fadeMain, disp_maku)
 typedef enum FadeFlags {
@@ -198,69 +169,6 @@ void fadeSetNarrowFast(void);
 
 #if VERSION >= VERSION_US
 extern const f32 float_1_8041f770;
-// Names from LLCOOLT's tree.
-enum {
-    FADE_NONE = 0,
-    FADE_IN_IRIS = 1,
-    FADE_IN_BLACK_2D = 10,
-    FADE_OUT_BLACK_2D = 11,
-    FADE_COVER_BLACK_2D = 12,
-    FADE_IN_BLACK_3D = 13,
-    FADE_OUT_BLACK_3D = 14,
-    FADE_IN_WHITE = 15,
-    FADE_IN_WHITE_2D = 17,
-    FADE_OUT_WHITE_2D = 18,
-    FADE_IN_WHITE_3D = 19,
-    FADE_OUT_IRIS = 2,
-    FADE_OUT_WHITE_3D = 20,
-    FADE_CURTAIN_VERTICAL_A2 = 22,
-    FADE_CURTAIN_SIDES_A1_3D = 23,
-    FADE_CURTAIN_SIDES_A2_3D = 24,
-    FADE_CURTAIN_SIDES_Z1_3D = 25,
-    FADE_CURTAIN_SIDES_A1 = 26,
-    FADE_CURTAIN_SIDES_A2 = 27,
-    FADE_CURTAIN_CENTER_A1_3D = 28,
-    FADE_CURTAIN_CENTER_A2_3D = 29,
-    FADE_IN_SPOT = 3,
-    FADE_CURTAIN_CENTER_Z2_3D = 30,
-    FADE_CURTAIN_CENTER_Z1_3D = 31,
-    FADE_CURTAIN_LEAVE_3D = 32,
-    FADE_CURTAIN_ENTER_3D = 33,
-    FADE_CURTAIN_CENTER_A1 = 34,
-    FADE_CURTAIN_CENTER_A2 = 35,
-    FADE_CURTAIN_CENTER_Z2 = 36,
-    FADE_CURTAIN_CENTER_Z1 = 37,
-    FADE_CURTAIN_LEAVE = 38,
-    FADE_CURTAIN_ENTER = 39,
-    FADE_OUT_SPOT = 4,
-    FADE_PIPE_UP_A1 = 40,
-    FADE_PIPE_UP_A2 = 41,
-    FADE_PIPE_DOWN_A1 = 42,
-    FADE_PIPE_DOWN_A2 = 43,
-    FADE_PIPE_LEFT_A1 = 44,
-    FADE_PIPE_LEFT_A2 = 45,
-    FADE_PIPE_RIGHT_A1 = 46,
-    FADE_PIPE_RIGHT_A2 = 47,
-    FADE_PAGE_FLIP_Z1 = 48,
-    FADE_PAGE_FLIP_A1 = 49,
-    FADE_IN_SPOT_3D = 5,
-    FADE_PAGE_FLIP_FOUR = 50,
-    FADE_PAGE_FLIP_Z1_OFFSCREEN = 51,
-    FADE_PAGE_FLIP_A1_OFFSCREEN = 52,
-    FADE_STORY_MARIO_A3 = 53,
-    FADE_STORY_MARIO_A1 = 54,
-    FADE_STORY_PEACH_A3 = 55,
-    FADE_STORY_PEACH_A1 = 56,
-    FADE_STORY_BOWSER_A3 = 57,
-    FADE_STORY_BOWSER_A1 = 58,
-    FADE_STORY_MARIO_A2 = 59,
-    FADE_OUT_SPOT_3D = 6,
-    FADE_STORY_PEACH_A2 = 60,
-    FADE_STORY_BOWSER_A2 = 61,
-    FADE_CURTAIN_SIDES_A1_TOP = 62,
-    FADE_CURTAIN_SIDES_A2_TOP = 63,
-    FADE_OUT_SPOT2 = 8,
-};
 
 #endif
 void fadeSetAnimVirtualPos(f32 x, f32 y, f32 z);

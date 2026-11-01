@@ -1,6 +1,7 @@
 // jin_07 (ダイム寺院, Creepy Steeple): Boo (teresa) room with flames and a treasure chest, and a Star Piece;
 // doors to jin_06 and jin_08.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
@@ -78,7 +79,6 @@ static EvtWord evt_unlock[7];
 static NpcSetupInfo npcEnt[2];
 static ExtTexInfo senteresa_ext_entry_data[5];
 EvtWord evt_teresa_box_open[576];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord jin_07_init_evt[];
 #else

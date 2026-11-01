@@ -1,5 +1,6 @@
 // aji_02 (敵のアジト, X-Naut Fortress): an electrified floor-panel room (hikaru_yuka).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -38,7 +39,6 @@ static USER_FUNC(ride_chk);
 static USER_FUNC(thunder_main);
 static USER_FUNC(loop_onoff);
 
-#include "version.h"
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
@@ -261,7 +261,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1500)
-    CALL(evt_fade_set_mapchange_type, 0, FADE_NUM(12), 100, FADE_NUM(11), 100)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK_2D, 100, FADE_IN_BLACK_2D, 100)
     CALL(evt_bero_mapchange, STRING("aji_16"), STRING("peach_evt_stg1"))
     RETURN
 EVT_END()

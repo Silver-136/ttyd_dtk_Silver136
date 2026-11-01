@@ -1,12 +1,12 @@
 // Battle unit data and scripts for Yoshi as a partner.
 
+#include "version.h"
 #include "data_tables.h"
 #include "battle/battle_attack_audience.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "unit/party/unit_party_yoshi.h"
-#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_stage.h"

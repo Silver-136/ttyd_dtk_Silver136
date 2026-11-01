@@ -1,5 +1,6 @@
 // las_04 (ラストダンジョン, Palace of Shadow): the hall with the fire bars (firebar) and the coin they drop.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_pouch.h"
@@ -89,7 +90,6 @@ EvtWord firebar_coin[68];
 FirebarSetup firebardesc[7];
 EvtWord firebar_evt[102];
 static HitDamageReturn dmgRetPoint[4];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_04_init_evt[];
 #else

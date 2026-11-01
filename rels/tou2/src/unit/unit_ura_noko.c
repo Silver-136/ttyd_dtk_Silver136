@@ -1,5 +1,6 @@
 // unit_ura_noko: Shady Koopa, battle unit.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/effdrv.h"
@@ -134,7 +135,6 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "NKT_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "NKT_D_1"},
     {POSE_TYPE_DAMAGE, "NKT_D_1"},
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
     {POSE_TYPE_RUN, "NKT_R_1"},
     {POSE_TYPE_WALK, "NKT_W_1"},

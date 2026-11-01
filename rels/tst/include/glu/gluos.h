@@ -5,8 +5,8 @@
  * MSL's assert off), each failing one calling the game's __assert (system.c, PAL only) with the bare file name. The
  * Japanese demo's copy has them off. */
 
-#include "dolphin/types.h"
 #include "version.h"
+#include "dolphin/types.h"
 
 BOOL __assert(const char* filename, s32 line, const char* assertion);
 

@@ -1,5 +1,6 @@
 // Paper Mario 64 effect: explosion bomb, ten fragments flung out in preset directions that slow down.
 
+#include "version.h"
 #include "eff/n64/eff_expbom_n64.h"
 #include "driver/dispdrv.h"
 #include "memory.h"
@@ -71,7 +72,6 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     data = __memAlloc(HEAP_EFFECT, sizeof(effExpBomData) * 10);
     effect->userdata = data;
     effect->callback = effExpBomMain;
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 for (i = 0; i < effect->count; i++, data++) {
 #else

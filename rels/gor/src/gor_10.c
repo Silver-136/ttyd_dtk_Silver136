@@ -1,5 +1,6 @@
 // gor_10 (ゴロツキタウン, Rogueport): prologue scenes (the letter and Mario waking up), leading to pro_04 and then gor_00.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_snd.h"
@@ -168,7 +169,6 @@ static USER_FUNC(depth) {
     return EVT_RETURN_BLOCK;
 }
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tegami_init_evt[];
 #else
@@ -222,7 +222,7 @@ CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
         CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("<diary><nowinse><once_stop>"), 0, 0)
         CALL(evt_msg_print_add, 0, STRING("pro_04"))
         CALL(evt_cam_letter_box_camid, 10)
-        CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(17), 800, FADE_NUM(16), 800)
+        CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 800, FADE_IN_WHITE, 800)
         CALL(evt_bero_mapchange, STRING("aaa_00"), STRING("prologue2"))
     END_INLINE_EVENT
     RETURN

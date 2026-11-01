@@ -1,5 +1,6 @@
 // Default battle events: standard guard, escape, damage and badge-effect scripts shared by all units.
 
+#include "version.h"
 #include "eff/eff_fire.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle.h"
@@ -55,7 +56,6 @@ EvtWord btldefaultevt_avoid_counter_event[34];
 EvtWord btldefaultevt_ProtectPartner[10];
 EvtWord btldefaultevt_Dummy[2];
 EvtWord btldefaultevt_Wait[5];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord btldefaultevt_LectureEnd[];
 #else

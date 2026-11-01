@@ -1,6 +1,7 @@
 // Tattle (monosiri) data: per-unit-type tattle messages and the groups of unit types that share a tattle flag
 
 enum { TATTLE_SAVE_FLAG_BASE = 0x117A };
+#include "version.h"
 #include "battle/battle_monosiri.h"
 #include "battle/battle_unit.h"
 #include "driver/swdrv.h"
@@ -286,7 +287,6 @@ BattleUnitType same_tbl_moamoa[] = {
     UNIT_SMORG_MIASMA_TENTACLE_C,
     UNIT_SMORG_MIASMA_TENTACLE_B,
     UNIT_SMORG_MIASMA_TENTACLE_A,
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
     UNIT_SMORG_MIASMA_CLAW,
 #endif

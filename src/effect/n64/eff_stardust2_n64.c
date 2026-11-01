@@ -1,5 +1,6 @@
 // Paper Mario 64 effect: `count` colored sparkle stars scatter from a point with the given velocity (stardust).
 
+#include "version.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -176,7 +177,6 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
  * it pops in, then falls (type 5 from the start), type 4 also circling the Y axis 12 degrees per frame;
  * the effect ends when every sparkle is done. Each sparkle cycles through 8 shapes; drawn on the work's camera.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void effStardust2Main(EffectEntry* effect) {
 #else

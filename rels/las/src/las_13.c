@@ -1,5 +1,6 @@
 // las_13 (ラストダンジョン, Palace of Shadow): a riddle room off las_10: the switch and the small star.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -32,7 +33,6 @@ EvtWord switch_check[114];
 static EvtWord switch1_evt[11];
 static EvtWord switch2_evt[15];
 static EvtWord hint_plate[14];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_13_init_evt[];
 #else

@@ -1,6 +1,7 @@
 // gon_06 (ゴンババ, Hooktail Castle): room with a chest opened by the Black Key (0x22) that gives the Paper Curse.
 // Paper genie (peramajin) scene (story 43 to 45), Attack FX R item, Dry Bones-type enemies.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -42,7 +43,6 @@ static EvtWord door02_close[12];
 static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
 EvtWord evt_ori_open[130];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tsuritenjo_event[];
 #else

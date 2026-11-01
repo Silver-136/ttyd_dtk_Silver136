@@ -1,6 +1,7 @@
 // Emote bubble (Fukidashi: speech balloon) above Mario, a partner or an NPC; types pick the mark or icon shown,
 // with a sound for the surprise and question marks.
 
+#include "version.h"
 #include "eff/eff_fukidashi.h"
 #include "driver/camdrv.h"
 #include "evt/evt_word.h"
@@ -65,7 +66,6 @@ s8 anim_data_bikkuri_2[] = { 0, 0, 1, 2, 3, 5, 4, 5, -17, -1};
 s8 anim_data_hatena_2[] = { 0, 0, 2, 1, 3, 2, 3, -16, -1};
 s8 anim_data_tenten_2[] = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, -32, -1};
 s8* anim_data_table_2[] = { anim_data_bikkuri_2, anim_data_hatena_2, anim_data_bikkuri_2, anim_data_loop, anim_data_tenten_2, anim_data_moja, anim_data_loop };
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 u8 moja_model_color0_tbl[] ATTRIBUTE_ALIGN(32) = {0x22, 0x4E, 0xB7, 0xFF};
 #else

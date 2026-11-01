@@ -2,9 +2,9 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/types.h>
 #include <dolphin/mtx.h>
-#include "version.h"
 
 /* mot_plane's work: MarioWork.motPlane (the 0x288 union). Allocated 0x48 by mot_plane's
  * trigger block, freed by mot_plane_post / on landing. Same on JP and US. */

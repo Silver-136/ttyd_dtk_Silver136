@@ -1,6 +1,7 @@
 // tik_05 (埋没した都市, Rogueport Sewers): the Thousand-Year Door room: the pedestal for the Crystal Stars (starstone, the
 // mahojin circle), the door opening scenes, and the shattering (tiz_broken) and crystal effects.
 
+#include "version.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_pouch.h"
 #include "eff/n64/eff_crystal_n64.h"
@@ -9,7 +10,6 @@
 #include "eff/eff_mahojin.h"
 #include "eff/eff_treasure_map.h"
 #include "eff/eff_itemget.h"
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -1857,12 +1857,12 @@ EVT_BEGIN(evt_mapwrite)
     CALL(evt_eff, 0, STRING("laser"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
     WAIT_MS(500)
-    CALL(evt_fade_entry, FADE_NUM(21), 150, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_WHITE_3D, 150, 0, 0, 0)
     CALL(evt_fade_end_wait)
-    CALL(evt_fade_entry, FADE_NUM(20), 150, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_WHITE_3D, 150, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(200)
-    CALL(evt_fade_entry, FADE_NUM(21), 3200, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_WHITE_3D, 3200, 0, 0, 0)
     CALL(evt_fade_end_wait)
 CALL(evt_paper_entry, STRING("OFF_d_tizu_tex"))
     CALL(evt_img_entry, STRING("img"))
@@ -2015,7 +2015,7 @@ WAIT_MS(500)
         CALL(evt_snd_sfxon, STRING("SFX_EVT_MAP_KAKAGERU1_2"), 0)
         CASE_END
     END_SWITCH
-CALL(evt_fade_entry, FADE_NUM(20), 1000, 0, 0, 0)
+CALL(evt_fade_entry, FADE_IN_WHITE_3D, 1000, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_eff, 0, STRING("indirect"), 0, LW(0), LW(1), LW(2), 120, 0, 0, 0, 0, 0, 0, 0)
@@ -2229,12 +2229,12 @@ EVT_BEGIN(evt_mapwrite)
     CALL(evt_eff, 0, STRING("laser"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
     WAIT_MS(500)
-    CALL(evt_fade_entry, FADE_NUM(21), 150, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_WHITE_3D, 150, 0, 0, 0)
     CALL(evt_fade_end_wait)
-    CALL(evt_fade_entry, FADE_NUM(20), 150, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_WHITE_3D, 150, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(200)
-    CALL(evt_fade_entry, FADE_NUM(21), 3200, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_WHITE_3D, 3200, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(map_disp_onoff, 0)
     WAIT_FRAMES(1)
@@ -2402,7 +2402,7 @@ EVT_BEGIN(evt_mapwrite)
     END_SWITCH
     CALL(map_disp_onoff, 1)
     WAIT_FRAMES(1)
-    CALL(evt_fade_entry, FADE_NUM(20), 1000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_WHITE_3D, 1000, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_eff, 0, STRING("indirect"), 0, LW(0), LW(1), LW(2), 120, 0, 0, 0, 0, 0, 0, 0)
@@ -2484,7 +2484,7 @@ EVT_BEGIN(fake_fade)
     WAIT_MS(1200)
     CALL(evt_fade_entry, 2, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(10), 0, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 0, 1, 500)
     RETURN
 EVT_END()
 
@@ -2668,7 +2668,7 @@ EVT_BEGIN(mahojin_event)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 1000)
     CALL(evt_fade_entry, 2, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(10), 0, 1, 500)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 0, 1, 500)
     SET_VALUE(GSW_STORY_PROGRESS, STG0_15_THE_PEDESTAL)
     CALL(evt_bero_mapchange, STRING("gor_02"), 0)
     RETURN

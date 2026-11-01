@@ -1,5 +1,6 @@
 // Battle unit data for the Bob-omb bomb (unit_bomzou) and its explosion weapon, used by Bobbery.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -27,7 +28,6 @@ static EvtWord init_event[70];
 static EvtWord phase_event[67];
 static EvtWord wait_event[57];
 EvtWord end_battle_evt[19];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord explosion_event[172];
 #else

@@ -1,4 +1,5 @@
 // Battle unit Hooktail (`boss_gonbaba`): tst.rel's copy of rels/gon/src/unit/unit_boss_gonbaba.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"
 #include "evt/evt_cmd.h"
@@ -22,7 +23,6 @@
 #include "evt/evt_snd.h"
 #include "battle/battle_database_common.h"
 #include "evt/evt_sub.h"
-#include "version.h"
 #include "driver/lightdrv.h"
 #include "eff/n64/eff_kemuri9_n64.h"
 

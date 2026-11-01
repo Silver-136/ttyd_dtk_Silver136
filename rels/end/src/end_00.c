@@ -1479,7 +1479,7 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(end_return_title_evt)
-    CALL(evt_fade_entry, FADE_NUM(12), 2000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_BLACK_2D, 2000, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1500)
     SET_VALUE(GF(10), 1)
@@ -1496,7 +1496,7 @@ CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 2000, -1, -1)
 EVT_END()
 #else
 EVT_BEGIN(end_return_title_evt)
-    CALL(evt_fade_entry, FADE_NUM(12), 2000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_BLACK_2D, 2000, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1500)
     SET_VALUE(GF(10), 1)

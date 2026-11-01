@@ -1,6 +1,7 @@
 // aji_10 (敵のアジト, X-Naut Fortress): Sir Grodus's (shuryo) room with the monitor: Peach's scenes with
 // Grodus, Lord Crump and the Shadow Sirens.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_shuryolight.h"
@@ -48,7 +49,6 @@ static USER_FUNC(peach_set_pose);
 static USER_FUNC(viewport);
 
 
-#include "version.h"
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
@@ -806,7 +806,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_fade_tec_onoff, 1, 1)
     WAIT_MS(1000)
     WAIT_MS(1000)
-    CALL(evt_fade_set_mapchange_type, 0, FADE_NUM(12), 100, FADE_NUM(11), 100)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK_2D, 100, FADE_IN_BLACK_2D, 100)
     // The scene fades out and the game returns to the central hall.
     CALL(evt_bero_mapchange, STRING("aji_01"), STRING("peach_evt_stg1"))
     RETURN

@@ -1,6 +1,7 @@
 // mri_07 (巨木の中, The Great Tree): the Puni shop and the Puni information seller, with the little Jabbi
 // (chibitoge) and a recovery block.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -25,7 +26,6 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord chibitoge_nakama[];
 #else

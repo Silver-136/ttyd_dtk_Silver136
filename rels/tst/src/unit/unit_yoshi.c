@@ -1,10 +1,10 @@
 // tst's copy of Yoshi's partner unit (src/unit/party/unit_party_yoshi.c), an earlier version: built with deferred
 // inlining (functions emit in reverse order), older weapon icon and sweat texture ids, the older BattleUnit layout
 // (tst_battle.h), and seven extra helpers for a brake-slide normal attack that no script here uses.
+#include "version.h"
 #include "driver/camdrv.h"
 #include "data_tables.h"
 #include "party/party_motion.h"
-#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_stage.h"

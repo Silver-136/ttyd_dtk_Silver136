@@ -1,5 +1,6 @@
 // Palace of Shadow battle unit: the Dull Bones (`honenoko`): parts, stats, poses and AI scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
@@ -119,7 +120,6 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Defence attributes of the Dull Bones: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 60, 50, 0, 50, 100, 100, 90, 100, 90, 100, 90, 100, 90, 90, 10, 90, 100, 90, 100, 100, 50};
 #else

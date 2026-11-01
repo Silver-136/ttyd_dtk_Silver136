@@ -1,6 +1,7 @@
 // dou_03 (洞窟, Pirate's Grotto): hub room with the water gate that the Gate Handle operates (story 248).
 // Drifting barrels and bottles; doors to dou_04, dou_05, dou_09 and dou_12.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -37,7 +38,6 @@ EvtWord watergate_geer_large[20];
 EvtWord nagare_taru[38];
 EvtWord nagare_taru_se[45];
 EvtWord nagare_bin[33];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord watergate_handle[];
 #else

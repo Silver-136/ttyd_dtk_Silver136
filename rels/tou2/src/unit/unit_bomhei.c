@@ -1,5 +1,6 @@
 // unit_bomhei: Bob-omb, battle unit.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -33,7 +34,6 @@ static EvtWord bomb_event[106];
 static EvtWord init_event[42];
 static EvtWord damage_event[58];
 static EvtWord change_spark_event[70];
-#include "version.h"
 static EvtWord attack_event[440];
 static EvtWord wait_event[6];
 static EvtWord damage_event_spark[25];

@@ -1,4 +1,5 @@
 // Battle unit Pider (`piders`): tst.rel's copy of rels/jon/src/unit/unit_piders.c.
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"
 #include "tst_battle.h"
@@ -59,7 +60,6 @@ static EvtWord dmg_first_attack_pos[19];
 static EvtWord yarn_event[44];
 static EvtWord entry_event[48];
 static EvtWord damage_event[10];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[183];
 static EvtWord blow_dead_event[98];

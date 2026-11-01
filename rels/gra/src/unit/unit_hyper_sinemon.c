@@ -1,5 +1,6 @@
 // Battle unit Hyper Cleft (ハイパーシンエモン): gra.rel's copy.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -86,7 +87,6 @@ BattleUnitKind unit_hyper_sinemon = {
 };
 
 /** Defence of the Hyper Cleft's body per damage type: 3 against every damage type. */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 #else

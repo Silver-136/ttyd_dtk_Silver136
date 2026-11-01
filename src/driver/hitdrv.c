@@ -1,6 +1,7 @@
 // Hit (collision) driver: builds the collision objects from the map joints and answers the ray and
 // sphere checks against them.
 
+#include "version.h"
 #include "driver/hitdrv.h"
 #include "addr_word.h"
 #include "hwaccess.h"
@@ -17,7 +18,6 @@ s32 hitCalcVtxPosition(HitEntry* hit);
 void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
 
 s32 unk_8041840C;
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 HitEntry* hitActiveListTop; // head of the active hit list (descriptive name, see docs/NAME_PROVENANCE.md)
 #endif

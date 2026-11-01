@@ -1,5 +1,6 @@
 // bom.rel (ボム村, Fahr Outpost): registers bom_00..bom_04 and the battle database; puffs of breath in the cold.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_mist.h"
@@ -68,7 +69,6 @@ void _prolog(void) {
  * No puffs while Mario is in certain states (marioChkSts 4, 8, 0x10), and from the JP release on,
  * none while vivianGetStatus() returns 2 (Vivian's shadow state). Simulates visible breath in the cold.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(bress) {
 #else

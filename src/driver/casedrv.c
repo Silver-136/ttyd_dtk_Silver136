@@ -1,6 +1,7 @@
 // Case driver: "cases" run an event script when Mario touches, jumps on, stands on or hammers a
 // named hit object (or when a custom condition function says so).
 
+#include "version.h"
 #include "driver/casedrv.h"
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"
@@ -99,7 +100,6 @@ void caseMain(void) {
     HitEntry* push;
     HitEntry* hammer;
     HitEntry* head;
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 s32 fbatMode;
 #endif

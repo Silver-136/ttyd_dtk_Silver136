@@ -1,6 +1,7 @@
 // hei_08 (平原, Petal Meadows): Shhwonk Fortress room off hei_09 where a Fuzzy (chorobon) jumps in and fights Mario.
 // Holds the Moon Stone item.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_map.h"
@@ -25,7 +26,6 @@ extern s32 hei_test_water_tev[];
 
 static BeroEntry bero_entry_data[2];
 static EvtWord evt_chorobon[136];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord hei_08_init_evt[];
 #else

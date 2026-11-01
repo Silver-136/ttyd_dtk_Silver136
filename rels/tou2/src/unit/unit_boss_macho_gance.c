@@ -1,5 +1,6 @@
 // unit_boss_macho_gance: Macho Grubba, boss, battle unit.
 
+#include "version.h"
 #include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -47,7 +48,6 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_furafura[18];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static BattleDataEntry data_table[2];
 #else

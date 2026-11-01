@@ -1,5 +1,6 @@
 // tst.rel battle setups: the BTLNO_TEST_* enemy groups and the test stages (bti_01..bti_04), plus the
 // background-set wave offset user function that moves stage object "B".
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -1926,7 +1927,6 @@ BattleGroupSetup btlgrp_test_nakayama = {
 };
 
 /** Enemy lineup of test battle BTLNO_TEST_BARRIERN: Z-Yux, X-Yux. */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitSetup btlparty_test_barriern[] = {
     {

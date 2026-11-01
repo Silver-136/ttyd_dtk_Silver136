@@ -1,6 +1,7 @@
 // rsh_01 (列車, Excess Express): car joining the driver's cab (rsh_00) and rsh_02: Toron, Madam, conductor, cook and
 // waitress NPCs; doors to Rogueport (gor_04), Riverside (hom_00) and Poshley Heights (pik_00) stations.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_window.h"
@@ -41,7 +42,6 @@ static EvtWord init_toron[70];
 static EvtWord talk_toron[63];
 static EvtWord init_madam[52];
 static s32 item_tbl_madam[2];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_madam_ring_return[65];
 #else

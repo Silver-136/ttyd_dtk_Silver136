@@ -1,6 +1,7 @@
 // gon_11 (ゴンババ, Hooktail Castle): Hooktail's (Gonbaba's) lair: cutscenes, the Hooktail boss fight (story 55, 56) and the Diamond Star.
 // Also a chest that gives an Attack FX item.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_cmd.h"
@@ -67,7 +68,6 @@ typedef struct CloudWork {
     f32 lastFrame;
 } CloudWork;
 static CloudWork* cloud;
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static s8 cloud_once_flag;
 #else

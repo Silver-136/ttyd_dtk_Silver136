@@ -1,5 +1,6 @@
 // las_03 (ラストダンジョン, Palace of Shadow): the hall with the spike traps (toge).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -33,7 +34,6 @@ static HitDamageReturn dmgRetPoint[3];
 const char* toge_data[18];
 EvtWord toge_evt_sub[121];
 EvtWord toge_evt[86];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_03_init_evt[];
 #else

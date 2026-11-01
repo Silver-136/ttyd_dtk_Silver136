@@ -1,6 +1,7 @@
 // tik_04 (埋没した都市, Rogueport Sewers): the plane panel (plane_tobashi_check), the paper stairs (kaidan_pera), the switch
 // and the black key, and a meeting with the guide Puni.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -28,7 +29,6 @@
 #include "driver/itemdrv.h"
 
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static BeroEntry bero_entry_data[8];
 #else

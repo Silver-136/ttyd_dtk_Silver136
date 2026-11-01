@@ -1,6 +1,7 @@
 // las_10 (ラストダンジョン, Palace of Shadow): the riddle tower hub: the doors and keys (kagi) to the eight rooms las_11
 // to las_18.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -59,7 +60,6 @@ const char* kabe_list_2[8];
 const char* kabe_list_3[8];
 EvtWord las_10_temae_kabe[12];
 static EvtWord first_evt[182];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tenkyugi_evt[];
 #else

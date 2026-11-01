@@ -1,5 +1,6 @@
 // tou_12 (闘技場, Glitz Pit): the back room reached from the storage room tou_06.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -26,7 +27,6 @@ static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];
 static BeroEntry bero_data[2];
 static EvtWord evt_kinoshikowa[111];
-#include "version.h"
 static EvtWord evt_block_broken[57];
 static EvtWord init_michel[22];
 EvtWord init_michel_dummy[12];

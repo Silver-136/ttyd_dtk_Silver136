@@ -1,5 +1,6 @@
 // Nozzle effect (nozle): a nozzle model drawn from display-list data, placed and rotated by the caller for a set life.
 
+#include "version.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -361,7 +362,6 @@ static u8 nozle_4_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0
  * Width and height percentages per frame as a type 0 or 2 nozzle grows in; read backwards from its
  * remaining life as it shrinks away at the end.
  */
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}
 , {80, 100}, {79, 99}, {77, 97}, {75, 94}, {73, 91}, {70, 87}, {66, 83}, {62, 78}, {58, 73}, {54, 67}, {49, 61}, {44, 55}, {39, 49}, {34, 42}, {29, 36}, {24, 29}, {19, 23}, {14, 17}, {9, 11}, {5, 6}, {0, 0}, {0, 0}

@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "unit/unit_chorobon_gundan.h"
 #include "evt/evt_cmd.h"
@@ -88,7 +89,6 @@ BattleWeapon weapon_chorobon_gundan_attack;
 EvtWord chorogun_dead_reward[73];
 #endif
 static EvtWord init_event[26];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord damage_event[80];
 #else

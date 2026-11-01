@@ -1,5 +1,6 @@
 // aji_15 (敵のアジト, X-Naut Fortress): the shower room where Peach takes a shower (peach_evt_syawa_main).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -31,7 +32,6 @@ static BeroEntry bero_entry_data[2];
 EvtWord peach_evt_yuge[43];
 EvtWord peach_evt_syawa_main[798];
 EvtWord peach_evt_syawa_init[63];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_15_init_evt[];
 #else

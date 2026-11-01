@@ -1,3 +1,4 @@
+#include "version.h"
 #include "icon_ids.h"
 #include "eff/eff_mario_balloon.h"
 #include "eff/eff_fukidashi.h"
@@ -90,7 +91,6 @@ static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord sanders_party_lecture_init[48];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord sanders_party_lecture[];
 #else

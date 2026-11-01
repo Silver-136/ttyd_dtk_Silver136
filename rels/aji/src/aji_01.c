@@ -2244,7 +2244,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1500)
-    CALL(evt_fade_set_mapchange_type, 0, FADE_NUM(12), 100, FADE_NUM(11), 100)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK_2D, 100, FADE_IN_BLACK_2D, 100)
     CALL(evt_bero_mapchange, STRING("aji_02"), STRING("peach_evt_stg1"))
     RETURN
 EVT_END()

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "memory.h"
@@ -48,7 +49,6 @@ typedef struct ShadowEntry {
     f32 volume; //0x1C
     f32 decay; //0x20
     f32 decay2; //0x24
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
     u8 alpha; //0x28
     u8 pad_29[3]; //0x29

@@ -1,6 +1,7 @@
 // eki_00 (駅, Riverside Station): entrance room with a lift, bridge, paper-fold event and a Smorg (moamoa) cutscene
 // Close Call P item; doors to eki_01 and the platform (hom_00).
 
+#include "version.h"
 #include "driver/imgdrv.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -168,7 +169,6 @@ static EvtWord e_door_open[12];
 static EvtWord s_door_close[22];
 static EvtWord s_door_open[22];
 static BeroEntry bero_data[3];
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_bridge[];
 #else

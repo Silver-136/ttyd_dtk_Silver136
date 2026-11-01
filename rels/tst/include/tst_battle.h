@@ -1,10 +1,10 @@
 // Views of BattleUnit and BattleWork at the older layout offsets the tst REL was built against.
 #pragma once
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_stage_object.h"
-#include "version.h"
 
 struct BattleWeapon;
 

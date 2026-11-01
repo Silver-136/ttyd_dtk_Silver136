@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "driver/effdrv.h"
 #include "dolphin/types.h"
 #include <dolphin/mtx.h>
@@ -21,7 +22,6 @@ typedef struct RecoveryWork {
     u32 tick;        // 0x34
     struct MayaAnim* anim; // 0x38
     s32 delay;       // 0x3c
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
     f32 baseY;       // 0x40
 #endif

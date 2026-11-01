@@ -93,7 +93,7 @@ void effLaserMain(EffectEntry* effect) {
             break;
         case 2:
             if (fadeIsFinish()) {
-                fadeEntry(FADE_NUM(16), 100, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                fadeEntry(FADE_IN_WHITE, 100, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                 animPoseSetAnim(work->poseId, "A_1", TRUE);
                 animPoseSetLocalTimeRate(work->poseId, 0.5f);
                 work->state++;

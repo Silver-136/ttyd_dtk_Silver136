@@ -1,7 +1,7 @@
 // tou_00 (闘技場, Glitzville): the blimp landing outside the arena; exits to tou_01 and back to gor_04.
 
-#include "eff/n64/eff_kemuri12_n64.h"
 #include "version.h"
+#include "eff/n64/eff_kemuri12_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

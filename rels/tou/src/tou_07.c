@@ -285,7 +285,7 @@ static EVT_BEGIN(evt_sensyu)
     END_LOOP
     CALL(evt_msg_print, 0, STRING("stg3_tou_49"), 0, STRING("ガンス"))
     WAIT_MS(300)
-    CALL(evt_fade_set_mapchange_type, 0, FADE_NUM(49), 0, FADE_NUM(50), 0)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_PAGE_FLIP_Z1, 0, FADE_PAGE_FLIP_A1, 0)
     CALL(evt_bero_mapchange, STRING("tou_08"), 0)
     RETURN
 EVT_END()

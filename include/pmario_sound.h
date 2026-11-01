@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/mtx.h>
 
 /* typedef union SoundData {
@@ -29,7 +30,6 @@ typedef enum SoundEffectFlags {
     SFX_FLAG_SONG = (1 << 30),   // 0x40000000, played as a song (SoundSong*)
     SFX_FLAG_STREAM = (1 << 31)  // 0x80000000, a streamed .stm sound (SoundSS*, streamName)
 } SoundEffectFlags;
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #define SFX_EFFECT(fxId) (SFX_FLAG_EFX | (fxId))
 #define SFX_SONG(group, song) (SFX_FLAG_SONG | ((group) << 16) | ((song) << 8) | (song))

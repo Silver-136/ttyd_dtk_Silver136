@@ -1,5 +1,6 @@
 // Pit of 100 Trials battle unit: the Bob-omb (`bomhei`): parts, stats, poses and AI scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -29,7 +30,6 @@ static BattleUnitKindPart parts[1];
 static StatusVulnerability regist;
 static BattleWeapon weapon_bomhei_attack;
 static BattleWeapon weapon_bomhei_bomb;
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord bomb_event[102];
 #else

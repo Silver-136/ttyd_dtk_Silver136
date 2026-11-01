@@ -1,5 +1,6 @@
 // Paper Mario 64 effect: a star that streaks across the screen toward a target point, leaving a trail of 8 copies.
 
+#include "version.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -152,7 +153,6 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
     return effect;
 }
 
-#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void effSstarMain(EffectEntry* effect) {
 #else

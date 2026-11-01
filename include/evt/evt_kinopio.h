@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "evt/evt_cmd.h"
 #include "dolphin/types.h"
 
@@ -9,7 +10,6 @@ USER_FUNC(evt_kinopio_setup);
 extern EvtWord kinopio_house_talk_evt[];
 
 extern EvtWord evt_50[];
-#include "version.h"
 #if VERSION > VERSION_DEMO_US
 USER_FUNC(cameraman_on);
 #endif
