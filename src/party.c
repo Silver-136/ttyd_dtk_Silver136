@@ -1765,8 +1765,8 @@ s32 partyDokanMain(PartyEntry* party) {
             break;
         case 100:
             switch (party->dirKind) {
-                case 0:
-                case 1:
+                case DOKAN_TATE_DOWNIN:
+                case DOKAN_TATE_UPIN:
                     partyChgPaper(party, "PM_D_1B");
                     party->moveFrames = 18;
                     party->motionStep = 101;
@@ -1775,13 +1775,13 @@ s32 partyDokanMain(PartyEntry* party) {
                     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
                     animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
                     break;
-                case 4:
+                case DOKAN_YOKO_IN:
                     party->rot.x = 0.0f;
                     party->flags2 &= ~PARTY_DISP_FLAG_NO_FLIP;
                     party->displayDirectionTarget = party->displayDirection;
 #else
                     break;
-                case 4:
+                case DOKAN_YOKO_IN:
 #endif
                     partyChgPaper(party, "PM_D_1B");
                     party->moveFrames = 18;
@@ -1791,8 +1791,8 @@ s32 partyDokanMain(PartyEntry* party) {
             break;
         case 101:
             switch (party->dirKind) {
-                case 0:
-                case 1:
+                case DOKAN_TATE_DOWNIN:
+                case DOKAN_TATE_UPIN:
 #if VERSION >= VERSION_US
                     party->position.z -= 0.2f;
 #else
@@ -1829,7 +1829,7 @@ s32 partyDokanMain(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
             party->trailPos = party->position;
             partyChgRunMode(party, PARTY_RUN_WAIT);
-            if ((s8)party->dirKind == 4) {
+            if ((s8)party->dirKind == DOKAN_YOKO_IN) {
                 party->position.z += -4.0f;
             }
             if (party->currentSlotId == 1) {
@@ -1845,7 +1845,7 @@ s32 partyDokanMain(PartyEntry* party) {
             if (partyGetPtr(marioGetExtraPartyId())) {
                 n++;
             }
-            if (party->dirKind == 4) {
+            if (party->dirKind == DOKAN_YOKO_IN) {
                 if (n == 1) {
                     party->position.z += -4.0f;
                 } else if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
@@ -1856,7 +1856,7 @@ s32 partyDokanMain(PartyEntry* party) {
                     party->position.x += -1.5f;
                 }
             }
-            if (party->dirKind == 1) {
+            if (party->dirKind == DOKAN_TATE_UPIN) {
                 if (n == 1) {
                     party->position.z += -4.0f;
                 } else if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {

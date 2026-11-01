@@ -7,6 +7,17 @@
 // Squared control stick magnitude (55 * 55) that separates walking from dashing.
 #define STICK_DASH_MIN_SQ 3025
 
+// MarioWork.dokanType, the argument of evt_mario_paper_pose_dokan: spellings from the game's own name table there.
+// IN comes into the room out of the pipe, OUT leaves through it; TATE vertical, YOKO sideways.
+typedef enum DokanType {
+    DOKAN_TATE_DOWNIN = 0,
+    DOKAN_TATE_UPIN = 1,
+    DOKAN_TATE_DOWNOUT = 2,
+    DOKAN_TATE_UPOUT = 3,
+    DOKAN_YOKO_IN = 4,
+    DOKAN_YOKO_OUT = 5,
+} DokanType;
+
 #pragma enumsalwaysint off
 typedef enum MarioMotion {
     MARIO_MOTION_STAY,         // 0x0

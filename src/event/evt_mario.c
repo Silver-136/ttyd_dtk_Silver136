@@ -164,7 +164,7 @@ USER_FUNC(evt_mario_dokan_prepare) {
     s32 type;
     mp->flags |= MARIO_FLAG_FLOORS_DISABLED;
     type = evtGetValue(event, args[0]);
-    if (type == 4) {
+    if (type == DOKAN_YOKO_IN) {
         mp->scale = (Vec){0.0f, 0.0f, 0.0f};
         mp->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         party = partyGetPtr(marioGetPartyId());
@@ -183,7 +183,7 @@ USER_FUNC(evt_mario_dokan_prepare) {
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
             party->flags |= PARTY_FLAG_FORCE_FALL;
         }
-    } else if (type == 5) {
+    } else if (type == DOKAN_YOKO_OUT) {
         mp->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         partyShadowOff(partyGetPtr(marioGetPartyId()));
         partyShadowOff(partyGetPtr(marioGetExtraPartyId()));
@@ -222,12 +222,12 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
 #endif
         } else {
             switch (type) {
-                case 4:
-                case 5:
+                case DOKAN_YOKO_IN:
+                case DOKAN_YOKO_OUT:
                     event->userdata[1] = 20;
                     ret = 2;
                     break;
-                case 1:
+                case DOKAN_TATE_UPIN:
                     if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
                         marioUpdateCamPos();
                         camFollowYOn();
@@ -239,18 +239,18 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
                     }
                     event->userdata[1] = 0;
                     break;
-                case 0:
+                case DOKAN_TATE_DOWNIN:
                     event->userdata[1] = 2;
                     break;
-                case 2:
+                case DOKAN_TATE_DOWNOUT:
                     event->userdata[1] = 10;
                     break;
-                case 3:
+                case DOKAN_TATE_UPOUT:
                     event->userdata[1] = 10;
                     break;
             }
         }
-        if (type == 2 || type == 3) {
+        if (type == DOKAN_TATE_DOWNOUT || type == DOKAN_TATE_UPOUT) {
             marioSlitForceCancel();
             marioRollForceCancel();
             partyShadowOff(partyGetPtr(marioGetPartyId()));
@@ -269,7 +269,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
                 camFollowYOff();
             }
-        } else if (type == 5) {
+        } else if (type == DOKAN_YOKO_OUT) {
             partyGoodbye(marioGetPartyId());
             partyGoodbye(marioGetExtraPartyId());
         }

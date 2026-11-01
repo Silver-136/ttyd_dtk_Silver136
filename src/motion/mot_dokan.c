@@ -129,11 +129,11 @@ void mot_dokan(void) {
         mario->multiTimer = 0;
         mario->airTimer = 0;
         mario->baseSpeed = 0.0f;
-        if (mario->dokanType == 2) {
+        if (mario->dokanType == DOKAN_TATE_DOWNOUT) {
             mario->currSubMotionId = 10;
-        } else if (mario->dokanType == 3) {
+        } else if (mario->dokanType == DOKAN_TATE_UPOUT) {
             mario->currSubMotionId = 10;
-        } else if (mario->dokanType == 1) {
+        } else if (mario->dokanType == DOKAN_TATE_UPIN) {
             marioPaperOn("p_dokan_y");
             marioChgPaper("PM_D_1A");
             marioChgPose("M_Z_1");
@@ -149,10 +149,10 @@ void mot_dokan(void) {
                 mario->scale = v;
             }
             _partyEntry(1);
-        } else if (mario->dokanType == 0) {
+        } else if (mario->dokanType == DOKAN_TATE_DOWNIN) {
             _partyEntry(0);
             mario->currSubMotionId = 30;
-        } else if (mario->dokanType == 5) {
+        } else if (mario->dokanType == DOKAN_YOKO_OUT) {
             mario->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
             party = partyGetPtr(0);
             if (party != NULL) {
@@ -187,7 +187,7 @@ void mot_dokan(void) {
             mario->mot.dokan.rotSpeed = 30.0f;
             mario->multiTimer = 20;
             mario->currSubMotionId = 0;
-        } else if (mario->dokanType == 4) {
+        } else if (mario->dokanType == DOKAN_YOKO_IN) {
             {
                 Vec v0 = {0.0f, 0.0f, 0.0f};
                 mario->scale = v0;
@@ -323,9 +323,9 @@ void mot_dokan(void) {
         mario->camTarget.y = mario->position.y;
         break;
     case 100:
-        if (mario->dokanType == 1) {
+        if (mario->dokanType == DOKAN_TATE_UPIN) {
             mario->currSubMotionId = 110;
-        } else if (mario->dokanType == 4) {
+        } else if (mario->dokanType == DOKAN_YOKO_IN) {
             marioUpdateCamPos();
             mario->rot.x = 0.0f;
             marioChgPaper("PM_D_1B");
@@ -333,9 +333,9 @@ void mot_dokan(void) {
             mario->currSubMotionId = 102;
             partyDokanEnd(marioGetPartyId(), mario->dokanType);
             partyDokanEnd(marioGetExtraPartyId(), mario->dokanType);
-        } else if (mario->dokanType == 1) {
+        } else if (mario->dokanType == DOKAN_TATE_UPIN) {
             mario->currSubMotionId = 101;
-        } else if (mario->dokanType == 0) {
+        } else if (mario->dokanType == DOKAN_TATE_DOWNIN) {
             marioUpdateCamPos();
             mario->currSubMotionId = 101;
         } else {
@@ -380,7 +380,7 @@ void mot_dokan(void) {
         mario->displayDirectionTarget = mario->displayDirection;
         mario->directionView = toMovedirSimple(mario->displayDirection);
         mario->moveDirection = mario->directionView;
-        if (mario->dokanType == 4) {
+        if (mario->dokanType == DOKAN_YOKO_IN) {
             camFollowYOn();
             mario->camTarget.y = mario->position.y;
         }
