@@ -284,12 +284,12 @@ USER_FUNC(sac_enemy_slide_return) {
 
 /** Switches the action-command help display to the special-move style (type 2), which hides the audience window. */
 USER_FUNC(sac_ac_help_on) {
-    BattleAcHelpSetDispType(2);
+    BattleAcHelpSetDispType(AC_HELP_DISP_ON);
     return EVT_RETURN_DONE;
 }
 
 /** Restores the normal action-command help display (type 0) and shows the audience window again. */
 USER_FUNC(sac_ac_help_off) {
-    BattleAcHelpSetDispType(0);
+    BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
     return EVT_RETURN_DONE;
 }

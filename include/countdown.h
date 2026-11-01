@@ -12,6 +12,13 @@ typedef enum CountdownFlags {
     COUNTDOWN_FLAG_STOPPED = (1 << 3),  // 0x8, time does not advance (countDownStop)
 } CountdownFlags;
 
+// CountdownWork.state
+enum {
+    COUNTDOWN_STATE_SLIDE_IN = 0,
+    COUNTDOWN_STATE_RUN = 1,
+    COUNTDOWN_STATE_SLIDE_OUT = 2,  // countDownEnd
+};
+
 typedef struct CountdownWork {
     u16 flags; //0x0, CountdownFlags
     u8 pad_2[0x8 - 0x2]; //0x2

@@ -1195,7 +1195,7 @@ USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all) {
 /** Script: shows the escape action command's help text. */
 USER_FUNC(_set_escape_ac_hlp_msg) {
     BattleAcHelpSetHelp("msg_ac_escape");
-    BattleAcHelpSetDispType(2);
+    BattleAcHelpSetDispType(AC_HELP_DISP_ON);
     return EVT_RETURN_DONE;
 }
 

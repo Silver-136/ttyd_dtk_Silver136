@@ -1849,7 +1849,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             BattleFogForceStop();
         }
         BattleActionCommandStop(wp);
-        BattleAcHelpSetDispType(0);
+        BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
         BattleDamageDirect(UNIT_ID_SYSTEM, attacker, NULL, cw.count, 0, cw.msg, 0, 1);
         if (cw.hitEvent) {
             target->damagePattern = ATTACKPATTERN_NULL;

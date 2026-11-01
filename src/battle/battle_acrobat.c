@@ -24,7 +24,7 @@ s32 BattleAcrobatStart(BattleWork* work, s32 unitId, s32 windowStartFrame,
     work->stylishWindowEnd = windowEndFrame;
     work->stylishEndFrame = endFrame;
     work->stylishUnitId = unitId;
-    work->stylishResult = 0;
+    work->stylishResult = STYLISH_RESULT_NONE;
     work->stylishEarlyFrames = earlyFrames;
     return 0;
 }
@@ -45,11 +45,11 @@ s32 BattleAcrobatMain(BattleWork* work) {
     doSimplified = FALSE;
     work->stylishCurFrame++;
     if (!unit) {
-        work->stylishResult = 1;
+        work->stylishResult = STYLISH_RESULT_NO_PRESS;
         return EVT_RETURN_YIELD;
     }
     if (unit->tokenFlags & kConfusedAction) {
-        work->stylishResult = 1;
+        work->stylishResult = STYLISH_RESULT_NO_PRESS;
         return EVT_RETURN_YIELD;
     }
     if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
@@ -69,25 +69,25 @@ s32 BattleAcrobatMain(BattleWork* work) {
     if (work->stylishCurFrame <= 1 && work->stylishEarlyFrames > 0) {
         for (i = 0; i < work->stylishEarlyFrames; ++i) {
             if (BattlePadCheckRecordTrigger(i, PAD_BUTTON_A)) {
-                work->stylishResult = -1;
+                work->stylishResult = STYLISH_RESULT_EARLY;
                 return EVT_RETURN_YIELD;
             }
         }
     }
     if (BattlePadCheckTrigger(PAD_BUTTON_A) || doSimplified) {
         if (work->stylishCurFrame <= work->stylishWindowStart) {
-            work->stylishResult = -1;
+            work->stylishResult = STYLISH_RESULT_EARLY;
             return EVT_RETURN_YIELD;
         }
         if (work->stylishCurFrame <= work->stylishWindowEnd) {
-            work->stylishResult = 2;
+            work->stylishResult = STYLISH_RESULT_SUCCESS;
             return EVT_RETURN_YIELD;
         }
-        work->stylishResult = -2;
+        work->stylishResult = STYLISH_RESULT_LATE;
         return EVT_RETURN_YIELD;
     }
     if (work->stylishCurFrame >= work->stylishEndFrame) {
-        work->stylishResult = 1;
+        work->stylishResult = STYLISH_RESULT_NO_PRESS;
         return EVT_RETURN_YIELD;
     }
     return EVT_RETURN_BLOCK;

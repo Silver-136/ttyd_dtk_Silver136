@@ -489,7 +489,7 @@ void fileGarbageDataAdrSet(void* data, s32 type) {
  * A file still being read from disc only gets its DVD read target moved.
  */
 void fileGarbageMoveMem(void* data, FileEntry* file) {
-    if (file->state == 3) {
+    if (file->state == FILE_STATE_PRELOADED) {
         if (!file->entry) {
             fileGarbageDataAdrClear(file);
         }
@@ -498,7 +498,7 @@ void fileGarbageMoveMem(void* data, FileEntry* file) {
     }
     memmove(data, ((smartEntry*)file->data)->address, ((smartEntry*)file->data)->size);
     *file->data = data;
-    if (file->state == 3) {
+    if (file->state == FILE_STATE_PRELOADED) {
         if (file->entry) {
             file->entry->address = data;
         } else {
@@ -524,7 +524,7 @@ void _fileGarbage(BOOL agePreloadedEntries) {
 
     if (agePreloadedEntries == 0) {
         for (f = afp->firstused; f; f = f->next) {
-            if (f->state == 3) {
+            if (f->state == FILE_STATE_PRELOADED) {
                 if (f->entry) {
                     if (OSGetCurrentThread() == &dvdmgr_thread) {
                         f->entry->status = DVDMGR_CLOSED;
@@ -534,12 +534,12 @@ void _fileGarbage(BOOL agePreloadedEntries) {
                         }
                     }
                 }
-                f->state = 2;
+                f->state = FILE_STATE_RELEASED;
             }
         }
     } else if (agePreloadedEntries == 1) {
         for (f = afp->firstused; f; f = f->next) {
-            if (f->state == 3) {
+            if (f->state == FILE_STATE_PRELOADED) {
                 if (f->entry) {
                     if (OSGetCurrentThread() == &dvdmgr_thread) {
                         continue;
@@ -550,7 +550,7 @@ void _fileGarbage(BOOL agePreloadedEntries) {
                 } else {
                     f->references--;
                     if (f->references <= -2) {
-                        f->state = 2;
+                        f->state = FILE_STATE_RELEASED;
                     }
                 }
             }
@@ -561,8 +561,8 @@ void _fileGarbage(BOOL agePreloadedEntries) {
     first = NULL;
     for (f = afp->firstused; f; f = next) {
         next = f->next;
-        if (f->state == 2) {
-            f->state = 0;
+        if (f->state == FILE_STATE_RELEASED) {
+            f->state = FILE_STATE_FREE;
             if (&f->dataSlot != f->data) {
                 smartFree((smartEntry*)f->data);
             }
@@ -629,11 +629,11 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
             while (search->entry) {
             }
 #endif
-            if (search->state == 3) {
-                search->state = 1;
+            if (search->state == FILE_STATE_PRELOADED) {
+                search->state = FILE_STATE_LOADED;
                 search->references = 0;
-            } else if (search->state == 2) {
-                search->state = 1;
+            } else if (search->state == FILE_STATE_RELEASED) {
+                search->state = FILE_STATE_LOADED;
             }
             search->references++;
             return search;
@@ -679,7 +679,7 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
         fileGarbageDataAdrSet(handle, type);
     }
     if (handle) {
-        newentry->state = 1;
+        newentry->state = FILE_STATE_LOADED;
         newentry->data = &newentry->dataSlot;
         *newentry->data = handle;
         newentry->references = 1;
@@ -706,7 +706,7 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
         DVDMgrRead(entry, smart->address, test, 0);
         DVDMgrClose(entry);
         newentry->data = &smart->address;
-        newentry->state = 1;
+        newentry->state = FILE_STATE_LOADED;
         newentry->references = 1;
         newentry->type = type;
         newentry->next = NULL;
@@ -735,10 +735,10 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
 void fileFree(FileEntry* handle) {
     if (handle) {
         if (handle->data) {
-            if (handle->state == 1) {
+            if (handle->state == FILE_STATE_LOADED) {
                 handle->references--;
                 if (!handle->references) {
-                    handle->state = 2;
+                    handle->state = FILE_STATE_RELEASED;
                 }
             }
         }
@@ -762,7 +762,7 @@ void dvdReadDoneCallBack(s32 error, DVDFileInfo* info) {
     entry = f->entry;
     if (error == DVD_RESULT_CANCELED) {
         f->entry = NULL;
-        f->state = 2;
+        f->state = FILE_STATE_RELEASED;
         f->type = FILE_TYPE_CANCELED;
         DVDMgrClose(entry);
     } else {
@@ -796,11 +796,11 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
             if (search->entry) {
                 return 0;
             }
-            if (search->state == 3) {
+            if (search->state == FILE_STATE_PRELOADED) {
                 return (s32)search;
             }
-            if (search->state == 2) {
-                search->state = 3;
+            if (search->state == FILE_STATE_RELEASED) {
+                search->state = FILE_STATE_PRELOADED;
             }
             return (s32)search;
         }
@@ -848,7 +848,7 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
     }
 
     if (handle) {
-        newentry->state = 3;
+        newentry->state = FILE_STATE_PRELOADED;
         newentry->data = &newentry->dataSlot;
         *newentry->data = handle;
         newentry->references = 0;
@@ -886,7 +886,7 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
         smart = smartAlloc(test, 0);
         smart->file = newentry;
         newentry->data = &smart->address;
-        newentry->state = 3;
+        newentry->state = FILE_STATE_PRELOADED;
         newentry->references = 0;
         newentry->type = type;
         newentry->next = NULL;

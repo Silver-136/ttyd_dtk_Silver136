@@ -18,6 +18,14 @@ typedef enum FileType {
     FILE_TYPE_CANCELED = 11,        // the DVD read was canceled (dvdReadDoneCallBack)
 } FileType;
 
+// FileEntry.state
+enum {
+    FILE_STATE_FREE = 0,
+    FILE_STATE_LOADED = 1,     // loaded and referenced (fileAlloc)
+    FILE_STATE_RELEASED = 2,   // to be freed by _fileGarbage
+    FILE_STATE_PRELOADED = 3,  // loaded by fileAsync without a reference
+};
+
 typedef struct FileEntry {
     u8 state; //0x0
     s8 type; //0x1, FileType

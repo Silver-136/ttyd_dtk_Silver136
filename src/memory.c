@@ -684,7 +684,7 @@ void smartGarbage(void) {
         addr = entry->address;
         if (addr != ptr) {
             if (entry->file) {
-                if (entry->file->state == 3 && entry->file->entry && OSGetCurrentThread() != &dvdmgr_thread) {
+                if (entry->file->state == FILE_STATE_PRELOADED && entry->file->entry && OSGetCurrentThread() != &dvdmgr_thread) {
                     if (prev) {
                         prev->spaceAfter = addr - ptr;
                     } else {

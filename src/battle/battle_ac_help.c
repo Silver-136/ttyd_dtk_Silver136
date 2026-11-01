@@ -61,7 +61,7 @@ void _ac_help_disp(CameraId cameraId, void* param) {
     // FAKE: spare pointer to acHelpMsg; msgSearch(wp->acHelpMsg) changes the object
     const char **help = &wp->acHelpMsg;
     alpha = 0xFF;
-    if (wp->acHelpDispType == 1) {
+    if (wp->acHelpDispType == AC_HELP_DISP_XLU) {
         alpha = 0x80;
     }
     msgs[0] = msgSearch(*help);

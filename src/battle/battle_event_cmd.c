@@ -5221,7 +5221,7 @@ USER_FUNC(btlevtcmd_StartAC) {
     s32 help = evtGetValue(event, event->args[0]);
     BattleActionCommandStart(wp);
     if (help && !(wp->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
-        BattleAcHelpSetDispType(2);
+        BattleAcHelpSetDispType(AC_HELP_DISP_ON);
     }
     return EVT_RETURN_DONE;
 }
@@ -5229,7 +5229,7 @@ USER_FUNC(btlevtcmd_StartAC) {
 /** Script: stops the action command and hides its help text. */
 USER_FUNC(btlevtcmd_StopAC) {
     BattleActionCommandStop(_battleWorkPointer);
-    BattleAcHelpSetDispType(0);
+    BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
     return EVT_RETURN_DONE;
 }
 
@@ -5243,7 +5243,7 @@ USER_FUNC(btlevtcmd_ResultAC) {
     if (wp->actionCommands.result & AC_RESULT_RUNNING) {
         return EVT_RETURN_BLOCK;
     }
-    BattleAcHelpSetDispType(0);
+    BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
     return EVT_RETURN_DONE;
 }
 
@@ -5655,7 +5655,7 @@ USER_FUNC(btlevtcmd_ac_timing_get_success_frame) {
 USER_FUNC(btlevtcmd_ACHelpSet) {
     BattleWeapon* weapon = (BattleWeapon*)evtGetValue(event, event->args[0]);
     BattleAcHelpSetHelp(weapon->acHelpMsg);
-    BattleAcHelpSetDispType(2);
+    BattleAcHelpSetDispType(AC_HELP_DISP_ON);
     return EVT_RETURN_DONE;
 }
 

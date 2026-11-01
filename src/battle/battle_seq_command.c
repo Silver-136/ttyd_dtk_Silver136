@@ -1213,7 +1213,7 @@ s32 BattleCommandInput(BattleWork* work) {
     }
     _btlcmd_GetCursorPtr(cmd, 14, &cursor);
     if (_check_present_item()) {
-        BattleAcHelpSetDispType(0);
+        BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
     }
     _commandRestoreRec();
     loop = 1;
@@ -1320,7 +1320,7 @@ s32 BattleCommandInput(BattleWork* work) {
         case 10:
             _btlcmd_GetCursorPtr(cmd, cmd->actType, &cursor);
             BattleAcHelpSetHelp(cmd->weapon[cursor->absPos].weapon->acHelpMsg);
-            BattleAcHelpSetDispType(1);
+            BattleAcHelpSetDispType(AC_HELP_DISP_XLU);
             cmd->state = 11;
             break;
         case 11:
@@ -1366,7 +1366,7 @@ s32 BattleCommandInput(BattleWork* work) {
                 BattleCommandDisplay_TargetSelectMenuEnd(wp);
                 cmd->state = 6;
                 wp->flags &= ~BATTLE_FLAG_ACT_DECIDED_UNUSED;
-                BattleAcHelpSetDispType(0);
+                BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
                 BtlUnit_SetCommandAnimPose(unit);
                 if ((cmd->actType == 0 && (wp->flags & BATTLE_FLAG_JUMP_NO_SUBMENU)) ||
                     (cmd->actType == 1 && (wp->flags & BATTLE_FLAG_HAMMER_NO_SUBMENU))) {
@@ -1393,12 +1393,12 @@ s32 BattleCommandInput(BattleWork* work) {
                         break;
                     }
                 }
-                BattleAcHelpSetDispType(2);
+                BattleAcHelpSetDispType(AC_HELP_DISP_ON);
             }
             if (BattleCommandAttackAudienceCheck()) {
                 wp->commandMenu.attackAudience = 1;
                 BattleCommandDisplay_TargetSelectMenuEnd(wp);
-                BattleAcHelpSetDispType(0);
+                BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
             }
             break;
         case 14:
@@ -2931,7 +2931,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     if (unit->moveState == MOVE_STATE_QUICK_CHANGE) {
         unit->moveState = MOVE_STATE_NORMAL;
     }
-    BattleAcHelpSetDispType(0);
+    BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
     if (unit->alliance) {
         return subsetevt_confuse_flustered;
     }
