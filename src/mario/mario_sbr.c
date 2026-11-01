@@ -521,7 +521,7 @@ void marioGetStick(f32* dir, f32* mag) {
         return;
     }
     x = mario->wStickDir1;
-    y = ((mario->flags & MARIO_FLAG_BG_MODE) || kpaGetStageViewType() == 0) ? 0 : -mario->wStickDir2;
+    y = ((mario->flags & MARIO_FLAG_BG_MODE) || kpaGetStageViewType() == KPA_VIEW_SIDE) ? 0 : -mario->wStickDir2;
     if (yoshiGetStatus() == YOSHI_STATUS_FLUTTER) {
         y = 0;
     }

@@ -174,7 +174,7 @@ void marioSetCharMode(s32 mode) {
     if (mode == CHARACTER_BOWSER) {
         kpaPreInit();
         marioCharPoseRelease(wp);
-        wp->paperAnimGroupId[0] = animPoseEntry(kpaGetStageViewType() == 1 ? "c_koopa" : "c_koopa2", 2);
+        wp->paperAnimGroupId[0] = animPoseEntry(kpaGetStageViewType() == KPA_VIEW_3D ? "c_koopa" : "c_koopa2", 2);
         wp->characterId = CHARACTER_BOWSER;
         npcSetMarioAutoTalkPose("KPA_S_1", "KPA_T_1");
         kpaSetLevel(1);

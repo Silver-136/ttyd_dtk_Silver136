@@ -2858,7 +2858,7 @@ BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h) {
 
     n = 8;
     hitAny = FALSE;
-    if (kpaGetStageViewType() == 0) {
+    if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
         n = 2;
     }
     step = 360.0f / n;

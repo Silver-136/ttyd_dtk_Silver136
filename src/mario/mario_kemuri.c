@@ -259,7 +259,7 @@ void kemuri(void) {
     } else if (--ct <= 0) {
         f32 scale, dist;
         sincosf(&s, &c, 6.2831855f * reviseAngle(-mario->directionView) / 360.0f);
-        sincosf(&s, &c, toMovedirSimple(180.0f + (kpaGetStageViewType() == 0 ? mario->displayDirectionTarget : mario->displayDirection)));
+        sincosf(&s, &c, toMovedirSimple(180.0f + (kpaGetStageViewType() == KPA_VIEW_SIDE ? mario->displayDirectionTarget : mario->displayDirection)));
         switch (kpaGetLevel()) {
         case 0:
             ct = 4;

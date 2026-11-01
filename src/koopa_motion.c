@@ -58,7 +58,7 @@ static inline void kpa_hip_launch(MarioWork* mario) {
  */
 static inline s32 kpa_stay_chk(void) {
     MarioWork* mario = marioGetPtr();
-    if (kpaGetStageViewType() == 1) {
+    if (kpaGetStageViewType() == KPA_VIEW_3D) {
         return 0;
     }
     if (!(mario->buttonTrg & PAD_BUTTON_A)) {
@@ -217,7 +217,7 @@ void kpa_stay(void) {
                 } else {
                     spd = mario->baseSpeed;
                 }
-                if (kpaGetStageViewType() == 0) {
+                if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
                     mario->baseSpeed = spd;
                     if (mario->baseSpeed > 0.0f) {
                         marioChgMot(MARIO_MOTION_WALK);
@@ -243,7 +243,7 @@ void kpa_walk(void) {
         m->currSubMotionId = 0;
         m->multiTimer = 0;
 #if VERSION <= VERSION_DEMO_US
-        if (kpaGetStageViewType() == 0) {
+        if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
             if (m->controlStickSensitivity) {
                 kpaChgPose("KPA_W_1", "KPA2_W_1");
             } else if (!(m->kpaWork->flags & KPA_WORK_FLAG_WEARY)) {
@@ -296,7 +296,7 @@ void kpa_walk(void) {
             m->multiTimer++;
         }
         if (m->forceMoveTimer == 0) {
-            if (kpaGetStageViewType() == 0) {
+            if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
                 m->baseSpeed = kpaStickSpd(0);
             } else {
                 MarioWork* mm = marioGetPtr();
@@ -307,7 +307,7 @@ void kpa_walk(void) {
                 m->baseSpeed = sp;
             }
         }
-        if (kpaGetStageViewType() == 0) {
+        if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
             if (!m->baseSpeed && !(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
                 marioChgMot(MARIO_MOTION_STAY);
                 return;
@@ -320,7 +320,7 @@ void kpa_walk(void) {
         }
         if (!marioKeyOffChk()) {
             marioCamZoomOffReq();
-            if (kpaGetStageViewType() == 1) {
+            if (kpaGetStageViewType() == KPA_VIEW_3D) {
                 m->directionView = m->controlStickAngle;
             }
             if (m->wStickDir1 * m->wStickDir1 + m->wStickDir2 * m->wStickDir2 > 3025) {
@@ -367,7 +367,7 @@ void kpa_dash(void) {
             m->multiTimer++;
         }
         if (m->forceMoveTimer == 0) {
-            if (kpaGetStageViewType() == 0) {
+            if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
                 m->baseSpeed = kpaStickSpd(1);
             } else {
                 MarioWork* mm = marioGetPtr();
@@ -378,7 +378,7 @@ void kpa_dash(void) {
                 m->baseSpeed = sp;
             }
         }
-        if (kpaGetStageViewType() == 0) {
+        if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
             if (!m->baseSpeed && !(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
                 marioChgMot(MARIO_MOTION_STAY);
                 return;
@@ -391,7 +391,7 @@ void kpa_dash(void) {
         }
         if (!marioKeyOffChk()) {
             marioCamZoomOffReq();
-            if (kpaGetStageViewType() == 1) {
+            if (kpaGetStageViewType() == KPA_VIEW_3D) {
                 m->directionView = m->controlStickAngle;
             }
             if (m->wStickDir1 * m->wStickDir1 + m->wStickDir2 * m->wStickDir2 <= 3025) {

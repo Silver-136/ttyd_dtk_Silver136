@@ -15,6 +15,12 @@ s32 kpaGetAttackMode(void);
 f32 kpaGetBaseScale(s32 lv);
 s32 kpaGetBodyStatus(void);
 s32 kpaGetStageType(void);
+// kpaGetStageViewType
+enum {
+    KPA_VIEW_SIDE = 0,  // side-scrolling stages kpa_02 to kpa_06
+    KPA_VIEW_3D = 1,
+};
+
 s32 kpaGetStageViewType(void);
 f32 kpaGetWidth(s32 lv);
 void kpaMSetMutekiTimer(void);
