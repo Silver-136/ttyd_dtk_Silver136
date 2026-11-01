@@ -981,12 +981,15 @@ void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
             }
             break;
     }
+// FAKE: the linker strips this function from the demos; their pool keeps its strings but not its numbers
+#if VERSION > VERSION_DEMO_US
     width = FontGetMessageWidthLine(msg, &lines);
     lines++;
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, (zero - width / 2) - 20.0f, -145.0f + (lines - 1) * 29, width + 40, lines * 29 + 1, 10.0f);
     FontDrawStart_alpha(0xFF);
     y = -148.0f;
     FontDrawMessage(zero - width / 2, (s32)y + (lines - 1) * 29, msg);
+#endif
 }
 
 /**
@@ -1108,11 +1111,7 @@ EVT_BEGIN(_curtain_close_event)
         CALL(evt_batstage_set_stg_dark_base, 80, 30, 0)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_fade_entry, FADE_CURTAIN_VERTICAL_A1, 1000, 0, 0, 0) // demo fade types are 2 lower
-#else
         CALL(evt_fade_entry, FADE_CURTAIN_SIDES_A1_3D, 1000, 0, 0, 0)
-#endif
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
         CALL(evt_fade_end_wait)
@@ -1252,7 +1251,7 @@ EVT_BEGIN(_curtain_close_event)
         CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
         CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_fade_entry, FADE_CURTAIN_VERTICAL_A2, 1000, 0, 0, 0) // demo fade types are 2 lower
+        CALL(evt_fade_entry, FADE_CURTAIN_SIDES_A2_3D, 1000, 0, 0, 0)
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, LW(0))
 #else

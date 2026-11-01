@@ -2291,7 +2291,11 @@ void sort_7_1_func(WindowWork* wp) {
 static inline u32 getMonosiriPlace(const char* place) {
     static char* tbl[] = {
         "nara", "gor", "tik", "shiga", "hei", "nok", "stn", "gon", "win", "hou", "mri", "tou", "usu",
+#if VERSION <= VERSION_DEMO_US
+        "gra", "jin", "muj", "dou", "rsh", "hom", "eki", "pik", "sin", "bom", "moo", "aji", "las",
+#else
         "gra", "jin", "muj", "dou", "hom", "eki", "rsh", "pik", "sin", "bom", "moo", "aji", "las",
+#endif
     };
     char buf[64];
     u32 i;

@@ -35,9 +35,8 @@ VERSIONS = [
     "G8ME01_DEMO",  # 3
     "G8MJ01_DEMO",  # 4
 ]
-# Versions being brought up: a unit links from C only when config/<version>/matching_units.txt lists it, every other
-# unit links the original object, so the whole-output hashes stay checkable at every step.
-BRINGUP_VERSIONS = ("G8MP01", "G8ME01_DEMO", "G8MJ01_DEMO")
+# Versions added after JP and US.
+LATER_VERSIONS = ("G8MP01", "G8ME01_DEMO", "G8MJ01_DEMO")
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -1308,6 +1307,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSContext.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSError.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSExec.c"),
+            Object(MatchingFor("G8ME01_DEMO", "G8MJ01_DEMO"), "os/OSFatal.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSFont.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSInterrupt.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSLink.c", extra_cflags=["-inline noauto"]),
@@ -2287,14 +2287,11 @@ for lib in config.libs:
         elif obj.name in MATH_PCH_DEMO:
             obj.options["extra_cflags"] = [*obj.options["extra_cflags"], "-prefix msl_math.mch"]
 
-if config.version in BRINGUP_VERSIONS:
-    # one objdiff unit name per line (MarioSt/battle/battle_sub, kpa/kpa_01), written by unit_report.py
-    bringup_list = Path("config") / config.version / "matching_units.txt"
-    bringup = set(bringup_list.read_text(encoding="utf-8").split()) if bringup_list.exists() else set()
+if config.version in LATER_VERSIONS:
+    # The MatchingFor lists above name the first two versions; these link every unit of theirs from C too.
     for lib in config.libs:
         for obj in lib.get("objects", []):
-            stem = str(Path(obj.name).with_suffix("").as_posix())
-            obj.completed = bool({f"{lib['lib']}/{stem}", f"MarioSt/{stem}", f"MarioSt/{lib['lib']}/{stem}"} & bringup)
+            obj.completed = True
 
 # Optional extra categories for progress tracking
 # Adjust as desired for your project

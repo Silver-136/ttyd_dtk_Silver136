@@ -33,6 +33,9 @@
 #include "assets/_mariost_icon_tex.inc"
 #include "assets/_mariost_icon_tlut.inc"
 #include "assets/_mariost_banner_tex.inc"
+#if VERSION <= VERSION_DEMO_US
+#include "../src/manager/cardmgr_demo.inc"
+#else
 const char cardFileName[] = "mariost_save_file";
 #if VERSION >= VERSION_US
 #if VERSION == VERSION_EU
@@ -1659,3 +1662,4 @@ static void memcard_close(void) {
     wp->result = result;
     wp->flags &= ~CARD_FLAG_BUSY;
 }
+#endif

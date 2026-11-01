@@ -1280,7 +1280,11 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
  * and nothing more once a fade-in has finished.
  */
 void disp_texture(CameraId camId, void* param) {
+#if VERSION <= VERSION_DEMO_US
+    static u8 i4tex[1] ATTRIBUTE_ALIGN(32) = {0xFF};
+#else
     static u8 i4tex[1] = {0xFF};
+#endif
     FadeWork* work;
     CameraEntry* camera;
     f32 scale;

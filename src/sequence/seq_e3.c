@@ -1106,8 +1106,8 @@ winTexSet(MODE_11, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0
 pressStartGX(alpha, 0.0f, -110.0f);
 } else {
 winTexInit(*wp->handle->data);
-        for (col = 0, py = -304; col < 40; col++, py += 16) {
-            for (row = 0, px = 0; row < 32; row++, px += 16) {
+        for (row = 0, py = -304; row < 40; row++, py += 16) {
+            for (col = 0, px = 0; col < 32; col++, px += 16) {
                 winTexSet(MODE_5, (Vec){(f32)py, (f32)(240 - px), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                           (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             }

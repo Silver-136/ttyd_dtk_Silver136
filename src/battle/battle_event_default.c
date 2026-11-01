@@ -46,12 +46,20 @@ EvtWord btldefaultevt_ChangeParty[174];
 EvtWord btldefaultevt_BiribiriMove[29];
 EvtWord btldefaultevt_guard_move[85];
 EvtWord btldefaultevt_guard_return[98];
+#if VERSION <= VERSION_DEMO_US
+EvtWord btldefaultevt_Appeal[114];
+#else
 EvtWord btldefaultevt_Appeal[145];
+#endif
 EvtWord _Defence_core[81];
 EvtWord btldefaultevt_Escape[657];
 EvtWord btldefaultevt_Confuse[19];
 EvtWord btldefaultevt_CantMoveZeroGravity[44];
+#if VERSION <= VERSION_DEMO_US
+EvtWord btldefaultevt_SuitoruBadgeEffect[100];
+#else
 EvtWord btldefaultevt_SuitoruBadgeEffect[122];
+#endif
 EvtWord btldefaultevt_avoid_counter_event[34];
 EvtWord btldefaultevt_ProtectPartner[10];
 EvtWord btldefaultevt_Dummy[2];

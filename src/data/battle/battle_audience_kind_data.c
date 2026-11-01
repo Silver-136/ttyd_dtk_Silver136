@@ -227,461 +227,14 @@ BattleAudienceItemKind audience_item_heavy_bomb[1];
 BattleAudienceItemKind audience_item_kuriboo[3];
 BattleAudienceItemKind audience_item_pakkun[1];
 
-/** Toad audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_kinopio_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(8, 4), AUD_FRAME(9, 4), AUD_FRAME(10, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** X-Naut audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_daisan_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(24, 4), AUD_FRAME(25, 4), AUD_FRAME(26, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Boo audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_teresa_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(40, 4), AUD_FRAME(41, 4), AUD_FRAME(42, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Hammer Bro audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_hammer_bros_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(58, 4), AUD_FRAME(59, 4), AUD_FRAME(60, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Dull Bones audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_honenoko_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(74, 4), AUD_FRAME(75, 4), AUD_FRAME(76, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Shy Guy audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_heiho_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(90, 4), AUD_FRAME(91, 4), AUD_FRAME(92, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Crazee Dayzee audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_pansy_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(108, 4), AUD_FRAME(109, 4), AUD_FRAME(110, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Puni audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_puni_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(126, 4), AUD_FRAME(127, 4), AUD_FRAME(128, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Koopa audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_nokonoko_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(142, 4), AUD_FRAME(143, 4), AUD_FRAME(144, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Bulky Bob-omb audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_heavy_bomb_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(159, 4), AUD_FRAME(160, 4), AUD_FRAME(161, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Goomba audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_kuriboo_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(179, 4), AUD_FRAME(180, 4), AUD_FRAME(181, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Piranha Plant audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_pakkun_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(195, 4), AUD_FRAME(196, 4), AUD_FRAME(197, 4), AUD_GOTO(0), AUD_END,
-};
-
-/** Luigi audience member facing the camera: walking to its seat or out of the stands (slot 7). */
-s32 audience_luigi_run_front[] = {
-    AUD_LABEL(0), AUD_FRAME(8, 4), AUD_FRAME(9, 4), AUD_FRAME(10, 4), AUD_GOTO(0), AUD_END,
-};
-
-s32* audience_anim_kinopio[] = {
-    audience_kinopio_wait_front,
-    audience_kinopio_wait_back,
-    audience_kinopio_jump_front,
-    audience_kinopio_jump_back,
-    audience_kinopio_raise_back,
-    audience_kinopio_itemon_back,
-    audience_kinopio_itemthrow_back,
-    audience_kinopio_run_front,
-    audience_kinopio_tumble_front,
-    audience_kinopio_damage_front,
-    audience_kinopio_sleep_front,
-    audience_kinopio_sleep_back,
-    audience_kinopio_confuse_front,
-    audience_kinopio_confuse_back,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s32* audience_anim_daisan[] = {
-    audience_daisan_wait_front,
-    audience_daisan_wait_back,
-    audience_daisan_jump_front,
-    audience_daisan_jump_back,
-    audience_daisan_raise_back,
-    audience_daisan_itemon_back,
-    audience_daisan_itemthrow_back,
-    audience_daisan_run_front,
-    audience_daisan_tumble_front,
-    audience_daisan_damage_front,
-    audience_daisan_sleep_front,
-    audience_daisan_sleep_back,
-    audience_daisan_confuse_front,
-    audience_daisan_confuse_back,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s32* audience_anim_teresa[] = {
-    audience_teresa_wait_front,
-    audience_teresa_wait_back,
-    audience_teresa_jump_front,
-    audience_teresa_jump_back,
-    audience_teresa_raise_back,
-    audience_teresa_itemon_back,
-    audience_teresa_itemthrow_back,
-    audience_teresa_run_front,
-    audience_teresa_tumble_front,
-    audience_teresa_damage_front,
-    audience_teresa_sleep_front,
-    audience_teresa_sleep_back,
-    audience_teresa_confuse_front,
-    audience_teresa_confuse_back,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s32* audience_anim_hammer_bros[] = {
-    audience_hammer_bros_wait_front,
-    audience_hammer_bros_wait_back,
-    audience_hammer_bros_jump_front,
-    audience_hammer_bros_jump_back,
-    audience_hammer_bros_raise_back,
-    audience_hammer_bros_itemon_back,
-    audience_hammer_bros_itemthrow_back,
-    audience_hammer_bros_run_front,
-    audience_hammer_bros_tumble_front,
-    audience_hammer_bros_damage_front,
-    audience_hammer_bros_sleep_front,
-    audience_hammer_bros_sleep_back,
-    audience_hammer_bros_confuse_front,
-    audience_hammer_bros_confuse_back,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s32* audience_anim_honenoko[] = {
-    audience_honenoko_wait_front,
-    audience_honenoko_wait_back,
-    audience_honenoko_jump_front,
-    audience_honenoko_jump_back,
-    audience_honenoko_raise_back,
-    audience_honenoko_itemon_back,
-    audience_honenoko_itemthrow_back,
-    audience_honenoko_run_front,
-    audience_honenoko_tumble_front,
-    audience_honenoko_damage_front,
-    audience_honenoko_sleep_front,
-    audience_honenoko_sleep_back,
-    audience_honenoko_confuse_front,
-    audience_honenoko_confuse_back,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s32* audience_anim_heiho[] = {
-    audience_heiho_wait_front,
-    audience_heiho_wait_back,
-    audience_heiho_jump_front,
-    audience_heiho_jump_back,
-    audience_heiho_raise_back,
-    audience_heiho_itemon_back,
-    audience_heiho_itemthrow_back,
-    audience_heiho_run_front,
-    audience_heiho_tumble_front,
-    audience_heiho_damage_front,
-    audience_heiho_sleep_front,
-    audience_heiho_sleep_back,
-    audience_heiho_confuse_front,
-    audience_heiho_confuse_back,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s32* audience_anim_pansy[] = {
-    audience_pansy_wait_front,
-    audience_pansy_wait_back,
-    audience_pansy_jump_front,
-    audience_pansy_jump_back,
-    audience_pansy_raise_back,
-    audience_pansy_itemon_back,
-    audience_pansy_itemthrow_back,
-    audience_pansy_run_front,
-    audience_pansy_tumble_front,
-    audience_pansy_damage_front,
-    audience_pansy_sleep_front,
-    audience_pansy_sleep_back,
-    audience_pansy_confuse_front,
-    audience_pansy_confuse_back,
-    audience_pansy_sing_front,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s32* audience_anim_puni[] = {
-    audience_puni_wait_front,
-    audience_puni_wait_back,
-    audience_puni_jump_front,
-    audience_puni_jump_back,
-    audience_puni_raise_back,
-    audience_puni_itemon_back,
-    audience_puni_itemthrow_back,
-    audience_puni_run_front,
-    audience_puni_tumble_front,
-    audience_puni_damage_front,
-    audience_puni_sleep_front,
-    audience_puni_sleep_back,
-    audience_puni_confuse_front,
-    audience_puni_confuse_back,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s32* audience_anim_nokonoko[] = {
-    audience_nokonoko_wait_front,
-    audience_nokonoko_wait_back,
-    audience_nokonoko_jump_front,
-    audience_nokonoko_jump_back,
-    audience_nokonoko_raise_back,
-    audience_nokonoko_itemon_back,
-    audience_nokonoko_itemthrow_back,
-    audience_nokonoko_run_front,
-    audience_nokonoko_tumble_front,
-    audience_nokonoko_damage_front,
-    audience_nokonoko_sleep_front,
-    audience_nokonoko_sleep_back,
-    audience_nokonoko_confuse_front,
-    audience_nokonoko_confuse_back,
-    NULL,
-    audience_nokonoko_shell_back,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s32* audience_anim_heavy_bomb[] = {
-    audience_heavy_bomb_wait_front,
-    audience_heavy_bomb_wait_back,
-    audience_heavy_bomb_jump_front,
-    audience_heavy_bomb_jump_back,
-    audience_heavy_bomb_raise_back,
-    audience_heavy_bomb_itemon_back,
-    audience_heavy_bomb_itemthrow_back,
-    audience_heavy_bomb_run_front,
-    audience_heavy_bomb_tumble_front,
-    audience_heavy_bomb_damage_front,
-    audience_heavy_bomb_sleep_front,
-    audience_heavy_bomb_sleep_back,
-    audience_heavy_bomb_confuse_front,
-    audience_heavy_bomb_confuse_back,
-    NULL,
-    NULL,
-    audience_heavy_bomb_ignite_front,
-    audience_heavy_bomb_ignite_back,
-    NULL,
-};
-
-s32* audience_anim_kuriboo[] = {
-    audience_kuriboo_wait_front,
-    audience_kuriboo_wait_back,
-    audience_kuriboo_jump_front,
-    audience_kuriboo_jump_back,
-    audience_kuriboo_raise_back,
-    audience_kuriboo_itemon_back,
-    audience_kuriboo_itemthrow_back,
-    audience_kuriboo_run_front,
-    audience_kuriboo_tumble_front,
-    audience_kuriboo_damage_front,
-    audience_kuriboo_sleep_front,
-    audience_kuriboo_sleep_back,
-    audience_kuriboo_confuse_front,
-    audience_kuriboo_confuse_back,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s32* audience_anim_pakkun[] = {
-    audience_pakkun_wait_front,
-    audience_pakkun_wait_back,
-    audience_pakkun_jump_front,
-    audience_pakkun_jump_back,
-    audience_pakkun_raise_back,
-    audience_pakkun_itemon_back,
-    audience_pakkun_itemthrow_back,
-    audience_pakkun_run_front,
-    audience_pakkun_tumble_front,
-    audience_pakkun_damage_front,
-    audience_pakkun_sleep_front,
-    audience_pakkun_sleep_back,
-    audience_pakkun_confuse_front,
-    audience_pakkun_confuse_back,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    audience_pakkun_eat_front,
-};
-
-s32* audience_anim_luigi[] = {
-    audience_luigi_wait_front,
-    audience_luigi_wait_back,
-    audience_luigi_jump_front,
-    audience_luigi_jump_back,
-    audience_luigi_raise_back,
-    audience_luigi_itemon_back,
-    audience_luigi_itemthrow_back,
-    audience_luigi_run_front,
-    audience_luigi_tumble_front,
-    audience_luigi_damage_front,
-    audience_luigi_sleep_front,
-    audience_luigi_sleep_back,
-    audience_luigi_confuse_front,
-    audience_luigi_confuse_back,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-/**
- * Items a Toad in the audience can throw, with relative weights (the {0, 0} row ends each table):
- * healing items, mostly Mushrooms, and a few attack items.
- */
-BattleAudienceItemKind audience_item_kinopio[] = {
-    {ITEM_COIN, 10},
-    {ITEM_HEART, 10},
-    {ITEM_FLOWER, 10},
-    {ITEM_MUSHROOM, 50},
-    {ITEM_SUPER_SHROOM, 10},
-    {ITEM_ULTRA_SHROOM, 1},
-    {ITEM_LIFE_SHROOM, 5},
-    {ITEM_HONEY_SYRUP, 10},
-    {ITEM_FIRE_FLOWER, 10},
-    {ITEM_THUNDER_RAGE, 5},
-    {ITEM_SHOOTING_STAR, 5},
-    {0, 0},
-};
-
-BattleAudienceItemKind audience_item_heiho[] = {
-    {ITEM_ICE_STORM, 10},
-    {ITEM_EARTH_QUAKE, 10},
-    {ITEM_VOLT_SHROOM, 10},
-    {ITEM_SLEEPY_SHEEP, 10},
-    {ITEM_DIZZY_DIAL, 10},
-    {ITEM_RUIN_POWDER, 10},
-    {ITEM_POWER_PUNCH, 10},
-    {ITEM_STOPWATCH, 10},
-#if VERSION <= VERSION_DEMO_US
-    {ITEM_TRADE_OFF, 10},
+#if VERSION > VERSION_DEMO_US
+#include "../src/data/battle/battle_audience_run_front.inc"
+#include "../src/data/battle/battle_audience_anim.inc"
+#define AUD_ITEM_GROUP 1
+#include "../src/data/battle/battle_audience_item.inc"
+#undef AUD_ITEM_GROUP
+#include "../src/data/battle/battle_audience_kind.inc"
 #endif
-    {ITEM_MINI_MR_MINI, 10},
-    {ITEM_MR_SOFTENER, 10},
-    {ITEM_POINT_SWAP, 10},
-    {ITEM_FRIGHT_MASK, 10},
-    {ITEM_MYSTERY, 10},
-    {ITEM_HP_DRAIN_ITEM, 10},
-    {ITEM_AUDIENCE_ROCK, 30},
-    {ITEM_AUDIENCE_CAN, 30},
-    {0, 0},
-};
-
-/** Items a Puni in the audience can throw: coins, hearts, flowers and mostly healing or slowing items. */
-BattleAudienceItemKind audience_item_puni[] = {
-    {ITEM_COIN, 10},
-    {ITEM_HEART, 10},
-    {ITEM_FLOWER, 10},
-    {ITEM_DRIED_SHROOM, 30},
-    {ITEM_HONEY_SYRUP, 20},
-    {ITEM_MAPLE_SYRUP, 5},
-    {ITEM_JAMMIN_JELLY, 1},
-    {ITEM_TASTY_TONIC, 10},
-    {ITEM_SLOW_SHROOM, 10},
-    {ITEM_GRADUAL_SYRUP, 10},
-    {0, 0},
-};
-
-/** Items a Koopa in the audience can throw: coins, hearts, flowers, Courage Shell, POW Block, or junk. */
-BattleAudienceItemKind audience_item_nokonoko[] = {
-    {ITEM_COIN, 10},
-    {ITEM_HEART, 10},
-    {ITEM_FLOWER, 10},
-    {ITEM_COURAGE_SHELL, 10},
-    {ITEM_POW_BLOCK, 10},
-    {ITEM_AUDIENCE_ROCK, 10},
-    {ITEM_AUDIENCE_CAN, 10},
-    {0, 0},
-};
-
-/** Items Luigi throws from the audience: coins, hearts, flowers and good healing items, or a rock. */
-BattleAudienceItemKind audience_item_luigi[] = {
-    {ITEM_COIN, 10},
-    {ITEM_HEART, 10},
-    {ITEM_FLOWER, 10},
-    {ITEM_MUSHROOM, 10},
-    {ITEM_SUPER_SHROOM, 10},
-    {ITEM_ULTRA_SHROOM, 10},
-    {ITEM_HONEY_SYRUP, 10},
-    {ITEM_MAPLE_SYRUP, 10},
-    {ITEM_JAMMIN_JELLY, 10},
-    {ITEM_SHOOTING_STAR, 10},
-    {ITEM_AUDIENCE_ROCK, 10},
-    {0, 0},
-};
-
-/**
- * Every audience kind, indexed by member type (0 Toad .. 12 Luigi):
- * its animations and thrown items, where thrown items appear, its star power weight and its sprite scale.
- */
-BattleAudienceKind audience_kind[] = {
-    {0, audience_anim_kinopio, audience_item_kinopio, 10.0f, 25.0f, 3.0f, 1.0f, 1.0f},
-    {0, audience_anim_daisan, audience_item_daisan, 10.0f, 25.0f, 1.0f, 1.0f, 1.0f},
-    {0, audience_anim_teresa, audience_item_teresa, 0.0f, 30.0f, 1.0f, 1.0f, 1.0f},
-    {0, audience_anim_hammer_bros, audience_item_hammer_bros, 10.0f, 20.0f, 1.0f, 1.0f, 1.0f},
-    {0, audience_anim_honenoko, audience_item_honenoko, 10.0f, 25.0f, 0.0f, 1.0f, 1.0f},
-    {0, audience_anim_heiho, audience_item_heiho, 10.0f, 25.0f, 1.0f, 1.0f, 1.0f},
-    {0, audience_anim_pansy, audience_item_pansy, 10.0f, 10.0f, 1.0f, 1.0f, 1.0f},
-    {0, audience_anim_puni, audience_item_puni, 10.0f, 20.0f, 1.0f, 1.0f, 1.0f},
-    {0, audience_anim_nokonoko, audience_item_nokonoko, 10.0f, 25.0f, 1.0f, 1.0f, 1.0f},
-    {AUDIENCE_KIND_WIDE, audience_anim_heavy_bomb, audience_item_heavy_bomb, 0.0f, 50.0f, 1.0f, 1.5f, 1.5f},
-    {0, audience_anim_kuriboo, audience_item_kuriboo, 10.0f, 25.0f, 1.0f, 1.0f, 1.0f},
-    {0, audience_anim_pakkun, audience_item_pakkun, 0.0f, 20.0f, 1.0f, 1.0f, 1.0f},
-    {0, audience_anim_luigi, audience_item_luigi, 0.0f, 40.0f, 1.0f, 1.2f, 1.2f},
-};
 
 /** Toad audience member facing the camera: idle loop (slot 0). */
 s32 audience_kinopio_wait_front[] = {
@@ -717,6 +270,12 @@ s32 audience_kinopio_itemon_back[] = {
 s32 audience_kinopio_itemthrow_back[] = {
     AUD_FRAME(7, 32), AUD_END,
 };
+
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 1
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
 
 /** Toad audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_kinopio_tumble_front[] = {
@@ -783,6 +342,12 @@ s32 audience_daisan_itemthrow_back[] = {
     AUD_FRAME(23, 32), AUD_END,
 };
 
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 2
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
+
 /** X-Naut audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_daisan_tumble_front[] = {
     AUD_LABEL(0), AUD_FRAME(27, 8), AUD_GOTO(0), AUD_END,
@@ -847,6 +412,12 @@ s32 audience_teresa_itemon_back[] = {
 s32 audience_teresa_itemthrow_back[] = {
     AUD_FRAME(39, 32), AUD_END,
 };
+
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 3
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
 
 /** Boo audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_teresa_tumble_front[] = {
@@ -913,6 +484,12 @@ s32 audience_hammer_bros_itemthrow_back[] = {
     AUD_FRAME(57, 32), AUD_END,
 };
 
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 4
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
+
 /** Hammer Bro audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_hammer_bros_tumble_front[] = {
     AUD_LABEL(0), AUD_FRAME(61, 8), AUD_GOTO(0), AUD_END,
@@ -977,6 +554,12 @@ s32 audience_honenoko_itemon_back[] = {
 s32 audience_honenoko_itemthrow_back[] = {
     AUD_FRAME(73, 32), AUD_END,
 };
+
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 5
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
 
 /** Dull Bones audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_honenoko_tumble_front[] = {
@@ -1043,6 +626,12 @@ s32 audience_heiho_itemthrow_back[] = {
     AUD_FRAME(89, 32), AUD_END,
 };
 
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 6
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
+
 /** Shy Guy audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_heiho_tumble_front[] = {
     AUD_LABEL(0), AUD_FRAME(93, 8), AUD_GOTO(0), AUD_END,
@@ -1107,6 +696,12 @@ s32 audience_pansy_itemon_back[] = {
 s32 audience_pansy_itemthrow_back[] = {
     AUD_FRAME(107, 32), AUD_END,
 };
+
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 7
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
 
 /** Crazee Dayzee audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_pansy_tumble_front[] = {
@@ -1178,6 +773,12 @@ s32 audience_puni_itemthrow_back[] = {
     AUD_FRAME(125, 32), AUD_END,
 };
 
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 8
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
+
 /** Puni audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_puni_tumble_front[] = {
     AUD_LABEL(0), AUD_FRAME(129, 8), AUD_GOTO(0), AUD_END,
@@ -1242,6 +843,12 @@ s32 audience_nokonoko_itemon_back[] = {
 s32 audience_nokonoko_itemthrow_back[] = {
     AUD_FRAME(141, 32), AUD_END,
 };
+
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 9
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
 
 /** Koopa audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_nokonoko_tumble_front[] = {
@@ -1312,6 +919,12 @@ s32 audience_heavy_bomb_itemon_back[] = {
 s32 audience_heavy_bomb_itemthrow_back[] = {
     AUD_FRAME(158, 32), AUD_END,
 };
+
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 10
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
 
 /** Bulky Bob-omb audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_heavy_bomb_tumble_front[] = {
@@ -1388,6 +1001,12 @@ s32 audience_kuriboo_itemthrow_back[] = {
     AUD_FRAME(178, 32), AUD_END,
 };
 
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 11
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
+
 /** Goomba audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_kuriboo_tumble_front[] = {
     AUD_LABEL(0), AUD_FRAME(182, 8), AUD_GOTO(0), AUD_END,
@@ -1452,6 +1071,12 @@ s32 audience_pakkun_itemon_back[] = {
 s32 audience_pakkun_itemthrow_back[] = {
     AUD_FRAME(194, 32), AUD_END,
 };
+
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 12
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
 
 /** Piranha Plant audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_pakkun_tumble_front[] = {
@@ -1523,6 +1148,12 @@ s32 audience_luigi_itemthrow_back[] = {
     AUD_FRAME(7, 32), AUD_END,
 };
 
+#if VERSION <= VERSION_DEMO_US
+#define AUD_RUN_FRONT 13
+#include "../src/data/battle/battle_audience_run_front.inc"
+#undef AUD_RUN_FRONT
+#endif
+
 /** Luigi audience member facing the camera: knocked-over loop (slot 8). */
 s32 audience_luigi_tumble_front[] = {
     AUD_LABEL(0), AUD_FRAME(11, 8), AUD_GOTO(0), AUD_END,
@@ -1553,56 +1184,12 @@ s32 audience_luigi_confuse_back[] = {
     AUD_LABEL(0), AUD_FRAME(15, 8), AUD_GOTO(0), AUD_END,
 };
 
-/** Items an X-Naut in the audience can throw: only junk (a rock or a can) that damages Mario. */
-BattleAudienceItemKind audience_item_daisan[] = {
-    {ITEM_AUDIENCE_ROCK, 10},
-    {ITEM_AUDIENCE_CAN, 10},
-    {0, 0},
-};
-
-/** Items a Boo in the audience can throw: Repel Cape, Boo's Sheet, Spite Pouch, or junk. */
-BattleAudienceItemKind audience_item_teresa[] = {
-    {ITEM_REPEL_CAPE, 10},
-    {ITEM_BOOS_SHEET, 20},
-    {ITEM_SPITE_POUCH, 10},
-    {ITEM_AUDIENCE_ROCK, 10},
-    {ITEM_AUDIENCE_CAN, 10},
-    {0, 0},
-};
-
-/** Items a Hammer Bro in the audience can throw: only a hammer that damages Mario. */
-BattleAudienceItemKind audience_item_hammer_bros[] = {
-    {ITEM_AUDIENCE_HAMMER, 10},
-    {0, 0},
-};
-
-/** Items a Dull Bones in the audience can throw: a bone, a rock or a can, all junk that damages Mario. */
-BattleAudienceItemKind audience_item_honenoko[] = {
-    {ITEM_AUDIENCE_BONE, 10},
-    {ITEM_AUDIENCE_ROCK, 10},
-    {ITEM_AUDIENCE_CAN, 10},
-    {0, 0},
-};
-
-/** Items a Crazee Dayzee in the audience can throw: none (empty table). */
-BattleAudienceItemKind audience_item_pansy[] = {
-    {0, 0},
-};
-
-/** Items a Bulky Bob-omb in the audience can throw: none (empty table). */
-BattleAudienceItemKind audience_item_heavy_bomb[] = {
-    {0, 0},
-};
-
-/** Items a Goomba in the audience can throw: only junk (a rock or a can) that damages Mario. */
-BattleAudienceItemKind audience_item_kuriboo[] = {
-    {ITEM_AUDIENCE_ROCK, 20},
-    {ITEM_AUDIENCE_CAN, 20},
-    {0, 0},
-};
-
-/** Items a Piranha Plant in the audience can throw: none (empty table). */
-BattleAudienceItemKind audience_item_pakkun[] = {
-    {0, 0},
-};
-
+#if VERSION > VERSION_DEMO_US
+#define AUD_ITEM_GROUP 2
+#include "../src/data/battle/battle_audience_item.inc"
+#undef AUD_ITEM_GROUP
+#else
+#include "../src/data/battle/battle_audience_anim.inc"
+#include "../src/data/battle/battle_audience_item.inc"
+#include "../src/data/battle/battle_audience_kind.inc"
+#endif

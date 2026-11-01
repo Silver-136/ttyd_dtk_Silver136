@@ -1,5 +1,6 @@
 // Ice block (Ice): appears for the given duration, then shrinks away dripping smoke puffs; used for the frozen status.
 
+#include "version.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -159,6 +160,12 @@ MayaHermitKey ice_effHermit_1[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 1
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 2 (top-left quarter, left triangle): still until the ice breaks at frame 99,
  * then it flies down and left, spinning a full turn about Z, and shrinks away.
@@ -198,6 +205,12 @@ MayaHermitKey ice_effHermit_2[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 2
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 3 (top-left quarter, bottom triangle): still until the ice breaks at frame 99,
  * then it flies up and left, spinning a full turn about Y, and shrinks away.
@@ -237,6 +250,12 @@ MayaHermitKey ice_effHermit_3[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 3
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 4 (top-left quarter, right triangle): still until the ice breaks at frame 99,
  * then it flies up and left, spinning a full turn about X, and shrinks away.
@@ -276,6 +295,12 @@ MayaHermitKey ice_effHermit_4[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 4
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 5 (top-right quarter, top triangle): still until the ice breaks at frame 99,
  * then it flies to the right, spinning a full turn about X, and shrinks away.
@@ -315,6 +340,12 @@ MayaHermitKey ice_effHermit_5[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 5
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 6 (top-right quarter, left triangle): still until the ice breaks at frame 99,
  * then it flies up and right, spinning a full turn about Z, and shrinks away.
@@ -354,6 +385,12 @@ MayaHermitKey ice_effHermit_6[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 6
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 7 (top-right quarter, bottom triangle): still until the ice breaks at frame 99,
  * then it flies to the right, spinning a full turn about Y, and shrinks away.
@@ -393,6 +430,12 @@ MayaHermitKey ice_effHermit_7[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 7
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 8 (top-right quarter, right triangle): still until the ice breaks at frame 99,
  * then it flies up and right, spinning a full turn about X, and shrinks away.
@@ -432,6 +475,12 @@ MayaHermitKey ice_effHermit_8[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 8
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 9 (bottom-left quarter, top triangle): still until the ice breaks at frame 99,
  * then it flies down and left, spinning a full turn about Z, and shrinks away.
@@ -471,6 +520,12 @@ MayaHermitKey ice_effHermit_9[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 9
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 10 (bottom-left quarter, left triangle): still until the ice breaks at frame 99,
  * then it flies down and left, spinning a full turn about X, and shrinks away.
@@ -510,6 +565,12 @@ MayaHermitKey ice_effHermit_10[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 10
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 11 (bottom-left quarter, bottom triangle): still until the ice breaks at frame 99,
  * then it flies down, spinning a full turn about Y, and shrinks away.
@@ -549,6 +610,12 @@ MayaHermitKey ice_effHermit_11[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 11
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 12 (bottom-left quarter, right triangle): still until the ice breaks at frame 99,
  * then it flies down, spinning a full turn about X, and shrinks away.
@@ -588,6 +655,12 @@ MayaHermitKey ice_effHermit_12[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 12
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 13 (bottom-right quarter, top triangle): still until the ice breaks at frame 99,
  * then it flies down and right, spinning a full turn about Z, and shrinks away.
@@ -627,6 +700,12 @@ MayaHermitKey ice_effHermit_13[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 13
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 14 (bottom-right quarter, left triangle): still until the ice breaks at frame 99,
  * then it flies down and right, spinning a full turn about Y, and shrinks away.
@@ -666,6 +745,12 @@ MayaHermitKey ice_effHermit_14[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 14
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 15 (bottom-right quarter, bottom triangle): still until the ice breaks at frame 99,
  * then it flies up and right, spinning a full turn about X, and shrinks away.
@@ -705,6 +790,12 @@ MayaHermitKey ice_effHermit_15[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 15
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of ice shard 16 (bottom-right quarter, right triangle): still until the ice breaks at frame 99,
  * then it flies up, spinning a full turn about X, and shrinks away.
@@ -744,6 +835,12 @@ MayaHermitKey ice_effHermit_16[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 16
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /**
  * Keyframes of the block's translucent frost overlay, just in front of the shards: shown until the ice
  * breaks at frame 99, then gone.
@@ -783,6 +880,12 @@ MayaHermitKey ice_effHermit_17[] = {
         },
     },
 };
+#if VERSION <= VERSION_DEMO_US
+#define ICE_FACE 17
+#include "../src/effect/eff_ice_face.inc"
+#undef ICE_FACE
+#endif
+
 /** Joints of the ice block animation: the root, the 16 face shards and the frost overlay. */
 MayaPoly ice_effAnimRST[] = {
     {8, ice_effHermit_0, 0, NULL},
@@ -804,143 +907,9 @@ MayaPoly ice_effAnimRST[] = {
     {3, ice_effHermit_16, 1, &ice_effFaceDt_pPlane16},
     {3, ice_effHermit_17, 1, &ice_effFaceDt_pPlane17},
 };
-/** Ice shard 1: the top triangle of the block face's top-left quarter, with texture coordinates. */
-s16 ice_effFace_pPlane1_0[] = {
-    3, // vertex count
-    -1280, 1280, 0, 0, 0,
-    -640, 640, 0, 128, 128,
-    0, 1280, 0, 256, 0,
-};
-s16* ice_effFaceDt_pPlane1 = ice_effFace_pPlane1_0;
-/** Ice shard 2: the left triangle of the block face's top-left quarter, with texture coordinates. */
-s16 ice_effFace_pPlane2_0[] = {
-    3, // vertex count
-    -1280, 0, 0, 0, 256,
-    -640, 640, 0, 128, 128,
-    -1280, 1280, 0, 0, 0,
-};
-s16* ice_effFaceDt_pPlane2 = ice_effFace_pPlane2_0;
-/** Ice shard 3: the bottom triangle of the block face's top-left quarter, with texture coordinates. */
-s16 ice_effFace_pPlane3_0[] = {
-    3, // vertex count
-    -1280, 0, 0, 0, 256,
-    0, 0, 0, 256, 256,
-    -640, 640, 0, 128, 128,
-};
-s16* ice_effFaceDt_pPlane3 = ice_effFace_pPlane3_0;
-/** Ice shard 4: the right triangle of the block face's top-left quarter, with texture coordinates. */
-s16 ice_effFace_pPlane4_0[] = {
-    3, // vertex count
-    0, 1280, 0, 256, 0,
-    -640, 640, 0, 128, 128,
-    0, 0, 0, 256, 256,
-};
-s16* ice_effFaceDt_pPlane4 = ice_effFace_pPlane4_0;
-/** Ice shard 5: the top triangle of the block face's top-right quarter, with texture coordinates. */
-s16 ice_effFace_pPlane5_0[] = {
-    3, // vertex count
-    0, 1280, 0, 256, 0,
-    640, 640, 0, 384, 128,
-    1280, 1280, 0, 512, 0,
-};
-s16* ice_effFaceDt_pPlane5 = ice_effFace_pPlane5_0;
-/** Ice shard 6: the left triangle of the block face's top-right quarter, with texture coordinates. */
-s16 ice_effFace_pPlane6_0[] = {
-    3, // vertex count
-    0, 0, 0, 256, 256,
-    640, 640, 0, 384, 128,
-    0, 1280, 0, 256, 0,
-};
-s16* ice_effFaceDt_pPlane6 = ice_effFace_pPlane6_0;
-/** Ice shard 7: the bottom triangle of the block face's top-right quarter, with texture coordinates. */
-s16 ice_effFace_pPlane7_0[] = {
-    3, // vertex count
-    0, 0, 0, 256, 256,
-    1280, 0, 0, 512, 256,
-    640, 640, 0, 384, 128,
-};
-s16* ice_effFaceDt_pPlane7 = ice_effFace_pPlane7_0;
-/** Ice shard 8: the right triangle of the block face's top-right quarter, with texture coordinates. */
-s16 ice_effFace_pPlane8_0[] = {
-    3, // vertex count
-    640, 640, 0, 384, 128,
-    1280, 0, 0, 512, 256,
-    1280, 1280, 0, 512, 0,
-};
-s16* ice_effFaceDt_pPlane8 = ice_effFace_pPlane8_0;
-/** Ice shard 9: the top triangle of the block face's bottom-left quarter, with texture coordinates. */
-s16 ice_effFace_pPlane9_0[] = {
-    3, // vertex count
-    -640, -640, 0, 128, 384,
-    0, 0, 0, 256, 256,
-    -1280, 0, 0, 0, 256,
-};
-s16* ice_effFaceDt_pPlane9 = ice_effFace_pPlane9_0;
-/** Ice shard 10: the left triangle of the block face's bottom-left quarter, with texture coordinates. */
-s16 ice_effFace_pPlane10_0[] = {
-    3, // vertex count
-    -1280, -1280, 0, 0, 512,
-    -640, -640, 0, 128, 384,
-    -1280, 0, 0, 0, 256,
-};
-s16* ice_effFaceDt_pPlane10 = ice_effFace_pPlane10_0;
-/** Ice shard 11: the bottom triangle of the block face's bottom-left quarter, with texture coordinates. */
-s16 ice_effFace_pPlane11_0[] = {
-    3, // vertex count
-    -1280, -1280, 0, 0, 512,
-    0, -1280, 0, 256, 512,
-    -640, -640, 0, 128, 384,
-};
-s16* ice_effFaceDt_pPlane11 = ice_effFace_pPlane11_0;
-/** Ice shard 12: the right triangle of the block face's bottom-left quarter, with texture coordinates. */
-s16 ice_effFace_pPlane12_0[] = {
-    3, // vertex count
-    -640, -640, 0, 128, 384,
-    0, -1280, 0, 256, 512,
-    0, 0, 0, 256, 256,
-};
-s16* ice_effFaceDt_pPlane12 = ice_effFace_pPlane12_0;
-/** Ice shard 13: the top triangle of the block face's bottom-right quarter, with texture coordinates. */
-s16 ice_effFace_pPlane13_0[] = {
-    3, // vertex count
-    0, 0, 0, 256, 256,
-    640, -640, 0, 384, 384,
-    1280, 0, 0, 512, 256,
-};
-s16* ice_effFaceDt_pPlane13 = ice_effFace_pPlane13_0;
-/** Ice shard 14: the left triangle of the block face's bottom-right quarter, with texture coordinates. */
-s16 ice_effFace_pPlane14_0[] = {
-    3, // vertex count
-    0, -1280, 0, 256, 512,
-    640, -640, 0, 384, 384,
-    0, 0, 0, 256, 256,
-};
-s16* ice_effFaceDt_pPlane14 = ice_effFace_pPlane14_0;
-/** Ice shard 15: the bottom triangle of the block face's bottom-right quarter, with texture coordinates. */
-s16 ice_effFace_pPlane15_0[] = {
-    3, // vertex count
-    0, -1280, 0, 256, 512,
-    1280, -1280, 0, 512, 512,
-    640, -640, 0, 384, 384,
-};
-s16* ice_effFaceDt_pPlane15 = ice_effFace_pPlane15_0;
-/** Ice shard 16: the right triangle of the block face's bottom-right quarter, with texture coordinates. */
-s16 ice_effFace_pPlane16_0[] = {
-    3, // vertex count
-    1280, 0, 0, 512, 256,
-    640, -640, 0, 384, 384,
-    1280, -1280, 0, 512, 512,
-};
-s16* ice_effFaceDt_pPlane16 = ice_effFace_pPlane16_0;
-/** The frost overlay: one square covering the whole block face, corners with texture coordinates. */
-s16 ice_effFace_pPlane17_0[] = {
-    4, // vertex count
-    -1280, -1280, 0, 0, 512,
-    1280, -1280, 0, 512, 512,
-    1280, 1280, 0, 512, 0,
-    -1280, 1280, 0, 0, 0,
-};
-s16* ice_effFaceDt_pPlane17 = ice_effFace_pPlane17_0;
+#if VERSION > VERSION_DEMO_US
+#include "../src/effect/eff_ice_face.inc"
+#endif
 /** Joint list of the ice block animation. */
 MayaKeyList ice_effAnimRSTDt = {18, ice_effAnimRST};
 /**

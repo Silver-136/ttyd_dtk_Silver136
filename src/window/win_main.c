@@ -1655,7 +1655,7 @@ BOOL winGhostDiaryChk(void) {
 
 #if VERSION == VERSION_DEMO_JP
 const char* winMainStrippedTpl(void) {
-    return "%s/w/%s/win.tpl";
+    return WIN_DIR "%s/win.tpl";
 }
 #elif VERSION == VERSION_DEMO_US
     return seqGetSeq() == SEQ_GAME_OVER;
