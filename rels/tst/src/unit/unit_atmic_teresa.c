@@ -179,8 +179,8 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_WALK, "W_1"},
     {POSE_TYPE_DANGER, "X_1"},
     {POSE_TYPE_PERIL, "X_1"},
-    {BTL_POSE_TALK, "T_1"},
-    {BTL_POSE_STAY_DEFAULT, "S_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 /** Pose table of the Atomic Boo while it covers its face with its hands. */
@@ -200,8 +200,8 @@ PoseTableEntry pose_table_kaokakusi[] = {
     {POSE_TYPE_WALK, "A_1"},
     {POSE_TYPE_DANGER, "A_1"},
     {POSE_TYPE_PERIL, "A_1"},
-    {BTL_POSE_TALK, "T_1"},
-    {BTL_POSE_STAY_DEFAULT, "A_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "A_1"},
 };
 
 /**

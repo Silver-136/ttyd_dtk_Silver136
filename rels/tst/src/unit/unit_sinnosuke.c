@@ -182,8 +182,8 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_RUN, "SIS_R_1"},
     {POSE_TYPE_DANGER, "SIS_I_1"},
     {POSE_TYPE_PERIL, "SIS_I_1"},
-    {BTL_POSE_TALK, "SIS_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "SIS_S_1"},
+    {POSE_TYPE_TALK, "SIS_T_1"},
+    {POSE_TYPE_ACTION, "SIS_S_1"},
 };
 
 /**
@@ -204,8 +204,8 @@ static PoseTableEntry pose_table_turn[] = {
     {BTL_POSE_DAMAGE, "SIS_D_2"},
     {POSE_TYPE_DANGER, "SIS_K_2"},
     {POSE_TYPE_PERIL, "SIS_K_2"},
-    {BTL_POSE_TALK, "SIS_D_2"},
-    {BTL_POSE_STAY_DEFAULT, "SIS_D_2"},
+    {POSE_TYPE_TALK, "SIS_D_2"},
+    {POSE_TYPE_ACTION, "SIS_D_2"},
 };
 
 /**

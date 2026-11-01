@@ -107,8 +107,8 @@ static PoseTableEntry pose_table[] = {
     {39, "EM_D_1"},
     {42, "EM_R_1"},
     {40, "EM_W_1"},
-    {BTL_POSE_TALK, "EM_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "EM_S_1"},
+    {POSE_TYPE_TALK, "EM_T_1"},
+    {POSE_TYPE_ACTION, "EM_S_1"},
 };
 
 /** Data table of the `master` placeholder unit: no events. */

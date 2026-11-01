@@ -117,7 +117,7 @@ static PoseTableEntry pose_table[] = {
     {50, "KIL_A_1"},
     {POSE_TYPE_WALK, "KIL_W_1"},
     {POSE_TYPE_RUN, "KIL_R_1"},
-    {BTL_POSE_STAY_DEFAULT, "KIL_S_1"},
+    {POSE_TYPE_ACTION, "KIL_S_1"},
 };
 
 /** Data table of the `kohatty` helper unit: event 48 does nothing (btldefaultevt_Dummy). */

@@ -51,7 +51,7 @@ static PoseTableEntry pose_table[] = {
     {31, "NKT_S_1"},
     {BTL_POSE_DAMAGE, "NKT_D_1"},
     {POSE_TYPE_WALK, "NKT_W_1"},
-    {BTL_POSE_STAY_DEFAULT, "NKT_W_1"},
+    {POSE_TYPE_ACTION, "NKT_W_1"},
 };
 
 /**
@@ -64,7 +64,7 @@ static PoseTableEntry pose_table_turn[] = {
     {30, "NKT_Q_1B"},
     {31, "NKT_S_1"},
     {BTL_POSE_DAMAGE, "NKT_B_1"},
-    {BTL_POSE_STAY_DEFAULT, "NKT_B_1"},
+    {POSE_TYPE_ACTION, "NKT_B_1"},
 };
 
 /** Data table of the test unit `test`: reaction scripts for being flipped over. */

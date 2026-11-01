@@ -158,8 +158,8 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_RUN, "MET_R_1"},
     {POSE_TYPE_DANGER, "MET_X_1"},
     {POSE_TYPE_PERIL, "MET_X_1"},
-    {BTL_POSE_TALK, "MET_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "MET_S_1"},
+    {POSE_TYPE_TALK, "MET_T_1"},
+    {POSE_TYPE_ACTION, "MET_S_1"},
 };
 
 /**
@@ -183,8 +183,8 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_RUN, "SMT_R_1"},
     {POSE_TYPE_DANGER, "SMT_X_1"},
     {POSE_TYPE_PERIL, "SMT_X_1"},
-    {BTL_POSE_TALK, "SMT_S_1"},
-    {BTL_POSE_STAY_DEFAULT, "SMT_S_1"},
+    {POSE_TYPE_TALK, "SMT_S_1"},
+    {POSE_TYPE_ACTION, "SMT_S_1"},
 };
 
 /**
@@ -209,8 +209,8 @@ static PoseTableEntry pose_table_turn[] = {
 #endif
     {POSE_TYPE_DANGER, "MET_X_2"},
     {POSE_TYPE_PERIL, "MET_X_2"},
-    {BTL_POSE_TALK, "MET_S_2"},
-    {BTL_POSE_STAY_DEFAULT, "MET_S_2"},
+    {POSE_TYPE_TALK, "MET_S_2"},
+    {POSE_TYPE_ACTION, "MET_S_2"},
 };
 
 /**
@@ -479,7 +479,7 @@ static EVT_BEGIN(wakeup_event)
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr))
     CALL(btlevtcmd_OffStatusFlag, LW(10), UNIT_STATUS_FLAG_FLIPPED)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_ACTION)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_INSIDE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(1.0f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -613,7 +613,7 @@ static EVT_BEGIN(attack_event)
     WAIT_MS(250)
     CALL(evt_snd_sfxoff, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CRIMSON_MET_SPIN_DONE, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MET_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(10.0f), FLOAT(0.39941406f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -740,7 +740,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_turn))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_ACTION)
     CALL(btlevtcmd_OnStatusFlag, LW(10), UNIT_STATUS_FLAG_FLIPPED)
     CALL(btlevtcmd_SetOverTurnCount, LW(10), 1)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(1.0f))
@@ -869,7 +869,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
 #endif
     // It hops home and returns to waiting.
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 25)

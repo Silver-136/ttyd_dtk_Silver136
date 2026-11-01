@@ -108,7 +108,7 @@ static PoseTableEntry pose_table[] = {
     {BTL_POSE_NORMAL, "KUR_S_1"},
     {31, "KUR_S_1"},
     {BTL_POSE_DAMAGE, "KUR_D_1"},
-    {BTL_POSE_STAY_DEFAULT, "KUR_S_1"},
+    {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
 /**

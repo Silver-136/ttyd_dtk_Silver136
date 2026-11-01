@@ -176,8 +176,8 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_WALK, "BSA_W_1"},
     {POSE_TYPE_DANGER, "BSA_X_1"},
     {POSE_TYPE_PERIL, "BSA_X_1"},
-    {BTL_POSE_TALK, "BSA_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "BSA_S_1"},
+    {POSE_TYPE_TALK, "BSA_T_1"},
+    {POSE_TYPE_ACTION, "BSA_S_1"},
 };
 
 /**
@@ -201,8 +201,8 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_WALK, "BSA_S_1"},
     {POSE_TYPE_DANGER, "BSA_X_2"},
     {POSE_TYPE_PERIL, "BSA_X_2"},
-    {BTL_POSE_TALK, "BSA_T_2"},
-    {BTL_POSE_STAY_DEFAULT, "BSA_S_2"},
+    {POSE_TYPE_TALK, "BSA_T_2"},
+    {POSE_TYPE_ACTION, "BSA_S_2"},
 };
 
 /**

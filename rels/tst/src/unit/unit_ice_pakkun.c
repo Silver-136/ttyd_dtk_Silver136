@@ -234,8 +234,8 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_RUN, "PKF_S_1"},
     {POSE_TYPE_DANGER, "PKF_X_1"},
     {POSE_TYPE_PERIL, "PKF_X_1"},
-    {BTL_POSE_TALK, "PKF_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "PKF_S_1"},
+    {POSE_TYPE_TALK, "PKF_T_1"},
+    {POSE_TYPE_ACTION, "PKF_S_1"},
 };
 
 /**
@@ -259,8 +259,8 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_RUN, "PKF_S_3"},
     {POSE_TYPE_DANGER, "PKF_X_2"},
     {POSE_TYPE_PERIL, "PKF_X_2"},
-    {BTL_POSE_TALK, "PKF_S_3"},
-    {BTL_POSE_STAY_DEFAULT, "PKF_S_3"},
+    {POSE_TYPE_TALK, "PKF_S_3"},
+    {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
 /**

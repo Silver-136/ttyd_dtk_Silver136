@@ -107,7 +107,7 @@ static PoseTableEntry pose_table[] = {
     {28, "KUR_S_1"},
     {31, "KUR_S_1"},
     {39, "KUR_D_1"},
-    {BTL_POSE_STAY_DEFAULT, "KUR_S_1"},
+    {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
 /** Data table of the `mecha_kame` placeholder unit: no events. */

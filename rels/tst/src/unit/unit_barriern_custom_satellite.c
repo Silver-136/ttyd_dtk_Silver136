@@ -169,7 +169,7 @@ static PoseTableEntry pose_table[] = {
     {40, "W_2"},
     {56, "X_2"},
     {57, "X_2"},
-    {BTL_POSE_STAY_DEFAULT, "S_2"},
+    {POSE_TYPE_ACTION, "S_2"},
 };
 
 /**

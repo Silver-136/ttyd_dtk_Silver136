@@ -205,8 +205,8 @@ static PoseTableEntry pose_table[] = {
     {56, "X_1"},
     {57, "X_1"},
 #endif
-    {BTL_POSE_TALK, "T_1"},
-    {BTL_POSE_STAY_DEFAULT, "S_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 /**
@@ -235,8 +235,8 @@ static PoseTableEntry pose_table_item_have[] = {
     {42, "R_2"},
     {41, "R_2"},
     {40, "W_2"},
-    {BTL_POSE_TALK, "S_2"},
-    {BTL_POSE_STAY_DEFAULT, "S_2"},
+    {POSE_TYPE_TALK, "S_2"},
+    {POSE_TYPE_ACTION, "S_2"},
 };
 
 /**

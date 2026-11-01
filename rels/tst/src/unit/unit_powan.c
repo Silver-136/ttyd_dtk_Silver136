@@ -136,7 +136,7 @@ static PoseTableEntry pose_table_kinopio[] = {
     {31, "KNP_S_1"},
     {BTL_POSE_DAMAGE, "KNP_O_1"},
     {POSE_TYPE_RUN, "KNP_R_1"},
-    {BTL_POSE_STAY_DEFAULT, "KNP_S_1"},
+    {POSE_TYPE_ACTION, "KNP_S_1"},
 };
 
 /**
@@ -146,7 +146,7 @@ static PoseTableEntry pose_table_gazigazi[] = {
     {BTL_POSE_NORMAL, "GAZ_S_1"},
     {31, "GAZ_A_1"},
     {BTL_POSE_DAMAGE, "GAZ_A_1"},
-    {BTL_POSE_STAY_DEFAULT, "GAZ_S_1"},
+    {POSE_TYPE_ACTION, "GAZ_S_1"},
 };
 
 /** Data table of Pennington: reaction scripts for being defeated. */
@@ -539,9 +539,9 @@ static USER_FUNC(powan_rider_follow) {
         y = -1000.0f;
         z = 0.0f;
     } else {
-        x = ((Vec*)pose->worldPositions->address)[idx].x;
-        y = ((Vec*)pose->worldPositions->address)[idx].y;
-        z = ((Vec*)pose->worldPositions->address)[idx].z;
+        x = (*(Vec**)pose->worldPositions)[idx].x; // FAKE: smartEntry viewed as its address word; ->address with a cast loads differently
+        y = (*(Vec**)pose->worldPositions)[idx].y;
+        z = (*(Vec**)pose->worldPositions)[idx].z;
     }
     BtlUnit_SetPartsPos(part, x, y, z);
 #if VERSION >= VERSION_JP // the demos do not print the position

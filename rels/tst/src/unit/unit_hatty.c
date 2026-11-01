@@ -131,7 +131,7 @@ static PoseTableEntry pose_table[] = {
     {28, "PTK_S_1"},
     {31, "PTK_S_1"},
     {39, "PTK_D_1"},
-    {BTL_POSE_STAY_DEFAULT, "PTK_S_1"},
+    {POSE_TYPE_ACTION, "PTK_S_1"},
 };
 
 /**
@@ -395,7 +395,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_FaceDirectionSub, LW(3), LW(0), 50)
     SUBTRACT(LW(1), 10)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, 1, 0, -1)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
     GOTO(98)
     // On a hit the damage is dealt and hatty flies back home.

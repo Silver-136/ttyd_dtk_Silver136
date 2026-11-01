@@ -332,10 +332,10 @@ static PoseTableEntry pose_table[] = {
     {3, "GNB_X_1"},
 #endif
     {BTL_POSE_NORMAL, "GNB_S_3"},
-    {BTL_POSE_TALK, "GNB_T_3"},
+    {POSE_TYPE_TALK, "GNB_T_3"},
     {31, "GNB_S_3"},
     {BTL_POSE_DAMAGE, "GNB_D_1"},
-    {BTL_POSE_STAY_DEFAULT, "GNB_S_3"},
+    {POSE_TYPE_ACTION, "GNB_S_3"},
 };
 
 /**
@@ -351,10 +351,10 @@ static PoseTableEntry pose_table_weak[] = {
     {3, "GNB_X_1"},
 #endif
     {BTL_POSE_NORMAL, "GNB_S_4"},
-    {BTL_POSE_TALK, "GNB_T_4"},
+    {POSE_TYPE_TALK, "GNB_T_4"},
     {31, "GNB_S_4"},
     {BTL_POSE_DAMAGE, "GNB_V_1"},
-    {BTL_POSE_STAY_DEFAULT, "GNB_S_4"},
+    {POSE_TYPE_ACTION, "GNB_S_4"},
 };
 
 /**
@@ -1017,7 +1017,7 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, LW(3), STRING("M_I_Y"))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(4))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(4), BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(4), POSE_TYPE_ACTION)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_reset_turn)
     CALL(evt_btl_camera_set_prilimit, 0)

@@ -152,8 +152,8 @@ static PoseTableEntry pose_table[] = {
     {42, "TGD_S_4"},
     {56, "TGD_X_1"},
     {57, "TGD_X_1"},
-    {BTL_POSE_TALK, "TGD_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "TGD_S_4"},
+    {POSE_TYPE_TALK, "TGD_T_1"},
+    {POSE_TYPE_ACTION, "TGD_S_4"},
 };
 
 /**
@@ -174,8 +174,8 @@ static PoseTableEntry pose_table_turn[] = {
     {39, "TGD_D_2"},
     {56, "TGD_X_2"},
     {57, "TGD_X_2"},
-    {BTL_POSE_TALK, "TGD_S_5"},
-    {BTL_POSE_STAY_DEFAULT, "TGD_S_5"},
+    {POSE_TYPE_TALK, "TGD_S_5"},
+    {POSE_TYPE_ACTION, "TGD_S_5"},
 };
 
 /**
