@@ -1,4 +1,4 @@
-// hei_13 (平原, Petal Meadows): field linking hei_00 and hei_01 with pipes.
+// hei_13 (平原, Petal Meadows): field between hei_00 and hei_01, with a pipe pair inside the room.
 // Horsetail item, a Close Call block, bricks and a Happy Heart.
 
 #include "version.h"
@@ -27,7 +27,10 @@ static TreeAccess ki_data[2];
 EvtWord evt_anm_kan[59];
 EvtWord hei_13_init_evt[110];
 
-/** Doors of this room: the west exit (w_bero) to hei_00 and the east exit (e_bero) to hei_01. */
+/**
+ * Doors of this room: the west exit (w_bero) to hei_00, the east exit (e_bero) to hei_01
+ * and the pipe pair a_dokan_1 and a_dokan_2 inside this room.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -112,7 +115,7 @@ EVT_BEGIN(evt_anm_kan)
             SET_VALUE(GF(0), 1)
             WAIT_MS(200)
             CALL(evt_item_entry, STRING("item_tukushi"), ITEM_HORSETAIL, 565, 15, -65, ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, 0)
-            ELSE
+        ELSE
             ADD(GSW_HEI_13_HAMMER_HIT_COUNT, 1)
             IF_INT_EQUAL(GSW_HEI_13_HAMMER_HIT_COUNT, 10)
                 SET_VALUE(GF(0), 1)
@@ -128,7 +131,7 @@ EVT_END()
 
 /**
  * Petal Meadows hei_13 map init: resets the can counter, adds the Close Call badge block,
- * a brick that hides a coin, a Happy Heart (not in the kiosk demo), a brick with ten coins and the tree rewards,
+ * a plain brick that returns every visit, a Happy Heart above it (not in the kiosk demo), a brick with ten coins and the tree,
  * and enables the can hit script outside the kiosk demo.
  */
 EVT_BEGIN(hei_13_init_evt)

@@ -11,7 +11,7 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-extern s32 hei_test_water_tev[];
+void hei_test_water_tev(MapTevCallbackInfo* info);
 
 static BeroEntry bero_entry_data[3];
 EvtWord hei_11_init_evt[44];

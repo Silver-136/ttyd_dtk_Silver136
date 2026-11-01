@@ -22,7 +22,7 @@
 
 static USER_FUNC(npc_dead);
 static USER_FUNC(npc_set_me);
-extern s32 hei_test_water_tev[];
+void hei_test_water_tev(MapTevCallbackInfo* info);
 
 static BeroEntry bero_entry_data[2];
 static EvtWord evt_chorobon[136];
@@ -55,8 +55,7 @@ static BeroEntry bero_entry_data[] = {
 
 /** Script helper: makes the Fuzzy (Chorobon) NPC the owner of the running event, so its script commands act on it. */
 static USER_FUNC(npc_set_me) {
-    // チョロボン
-    event->ownerNPC = npcNameToPtr("\x83\x60\x83\x87\x83\x8D\x83\x7B\x83\x93");
+    event->ownerNPC = npcNameToPtr("チョロボン");
     return EVT_RETURN_DONE;
 }
 
@@ -64,8 +63,8 @@ static USER_FUNC(npc_set_me) {
  * The Fuzzy ambush at the Sun Stone: sets GSWF_HEI_SUN_STONE_TAKEN,
  * then a Fuzzy (チョロボン) drops in on Mario with SFX_STG1_CHORO_FALL1 and Mario is startled.
  * Battle starts (interrupt chorobon_move_event);
- * if Mario flees, the Fuzzy is removed with the common dead event,
- * otherwise the enemy flags are restored and field battle mode is switched on.
+ * if Mario wins, the Fuzzy group is removed with the common dead event,
+ * otherwise (he fled, for example) the enemy flags are restored and field battle mode is switched on.
  */
 static EVT_BEGIN(evt_chorobon)
     SET_VALUE(GSWF_HEI_SUN_STONE_TAKEN, 1)
@@ -96,7 +95,7 @@ static EVT_BEGIN(evt_chorobon)
         CALL(npc_set_me)
         CALL(npc_dead)
         CALL_CHILD(PTR(enemy_common_dead_event))
-        ELSE
+    ELSE
         BEGIN_INLINE_EVENT
             CALL(evt_npc_flag_onoff, 1, STRING("チョロボン"), NPC_FLAG_ENEMY)
             CALL(evt_npc_flag_onoff, 0, STRING("チョロボン"), NPC_FLAG_NO_HIT)
@@ -128,7 +127,7 @@ EVT_BEGIN(hei_12_init_evt)
         CALL(evt_npc_set_position, STRING("チョロボン"), 0, 400, 0)
         CALL(evt_npc_flag_onoff, 0, STRING("チョロボン"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
         CALL(evt_npc_change_fbat_mode, 7)
-        ELSE
+    ELSE
         CALL(evt_npc_change_fbat_mode, 1)
 #if VERSION > VERSION_DEMO_US
         CALL(evt_npc_check, STRING("チョロボン"), LW(0))
@@ -153,8 +152,7 @@ EVT_END()
 
 /** Script helper: removes the whole Fuzzy (Chorobon) group from the map after the fight. */
 static USER_FUNC(npc_dead) {
-    // チョロボン
-    npcGroupDead(npcNameToPtr("\x83\x60\x83\x87\x83\x8D\x83\x7B\x83\x93"), FALSE);
+    npcGroupDead(npcNameToPtr("チョロボン"), FALSE);
     return EVT_RETURN_DONE;
 }
 

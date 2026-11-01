@@ -1,4 +1,4 @@
-// Koopa Paratroopa (patapata): battle unit used in Petal Meadows (it turns into a Koopa Troopa when its wings are lost).
+// Koopa Paratroopa (patapata): battle unit linked into hei.rel, no formation of this module uses it (it turns into a Koopa Troopa when its wings are lost).
 
 #include "version.h"
 #include "battle/battle_unit.h"

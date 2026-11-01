@@ -177,8 +177,8 @@ static PoseTableEntry pose_table_turn[] = {
 
 /**
  * Event table of the Bristle:
- * its reaction to being flipped over, the counter for an attacker hurt by its spikes,
- * the counter for an attacker hurt by its spikes, nothing special on a First Strike.
+ * its reaction to being flipped over, the spark events for an attacker hurt by its top spikes
+ * and by its front spikes (two entries), nothing special on a First Strike.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -243,7 +243,7 @@ EVT_END()
 
 /**
  * Spark effect (toge_flush) shown above the Bristle when an attack on its spiked top is turned away:
- * it waits 30 frames and places the flash at a height that depends on whether the unit has status 10 or 11,
+ * it waits 30 frames and places the flash at a height that depends on whether the unit is Huge or Tiny,
  * then waits another 60 frames.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
@@ -270,7 +270,7 @@ EVT_END()
 /**
  * Same as the head version but for an attack on the Bristle's front:
  * it plays SFX_ENM_TOGEDA_MOVE1 and a jump pose sequence (TGD_J_1 and J_2,
- * or J_3 and J_4 when status 17 is set), then places the toge_flush spark by status 10 or 11.
+ * or J_3 and J_4 when flipped), then places the toge_flush spark by Huge or Tiny.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_front_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEDA_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -531,11 +531,9 @@ EVT_END()
 
 /**
  * Wait (idle) event of the Bristle: shows the idle pose from the pose table,
- * then every frame turns counter attribute 2 (pre-emptive front spikes) of part 1 off
- * while any of statuses 1 to 5
- * or 9 (Sleep, Stop, Dizzy, Poison, Confuse, Freeze) is active and on otherwise.
+ * then every frame turns kCounterPreemptiveFrontSpiky of part 1 off
+ * while Sleep, Stop, Dizzy, Poison, Confuse or Freeze is active and on otherwise.
  */
-// Each frame, disable only the preemptive front-spike counter while any of these six statuses is active.
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     LABEL(0)
@@ -566,7 +564,7 @@ static EVT_BEGIN(wait_event)
     END_IF
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterPreemptiveFrontSpiky)
-        ELSE
+    ELSE
         CALL(btlevtcmd_OnPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterPreemptiveFrontSpiky)
     END_IF
     WAIT_FRAMES(1)

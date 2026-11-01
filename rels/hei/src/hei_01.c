@@ -29,6 +29,7 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
+#include "dolphin/pad.h"
 #include "party.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_damage.h"
@@ -88,7 +89,10 @@ EVT_BEGIN(bero_out_event)
     RETURN
 EVT_END()
 
-/** Doors of this room: the west exit (w_bero) to hei_13 and the east exit (e_bero) to nok_00 (Petalburg). */
+/**
+ * Doors of this room: the west exit (w_bero) to hei_13, the east exit (e_bero) to nok_00 (Petalburg)
+ * and the pipe pair dokan_h and dokan inside this room (kusa_dokan enables it).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -194,7 +198,7 @@ static KusaAccess kusa_data[] = {
 
 /**
  * Case script for the grass patch a_kusa_1: Mario hits it, the grass shakes and a pipe rises out of it;
- * sets GSWF_HEI01_BUSH_PIPE_REVEALED and enables the "dokan" exit.
+ * sets GSWF_HEI_01_BUSH_PIPE_REVEALED and enables the "dokan" exit.
  */
 EVT_BEGIN(kusa_dokan)
     CALL(evt_mario_key_onoff, 0)
@@ -363,21 +367,21 @@ EVT_BEGIN(nokotaro_get)
 EVT_END()
 
 /**
- * Koops asks Mario to join: a yes/no question; yes calls nokotaro_get,
- * no leads to a second yes/no prompt and then to the same join.
+ * Koops asks Mario to join: a two-way question; the first answer calls nokotaro_get,
+ * the second leads to another prompt whose first answer ends with stg1_hei_11 and whose second calls nokotaro_get.
  */
 EVT_BEGIN(nokotaro_kanyu)
     CALL(evt_msg_select, 0, STRING("stg1_hei_12_yesno1"))
     CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(nokotaro_get))
-        ELSE
+    ELSE
         CALL(evt_msg_print_add, 0, STRING("stg1_hei_10"))
         CALL(evt_msg_select, 0, STRING("stg1_hei_12_yesno2"))
         CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg1_hei_11"))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(nokotaro_get))
         END_IF
     END_IF
@@ -482,8 +486,8 @@ EVT_BEGIN(nokotarou_reg)
 EVT_END()
 
 /**
- * Talk script for Koops while he waits here: runs the join prompts (nokotaro_kanyu) with Mario frozen,
- * then lets him go if he already joined.
+ * Talk script for Koops while he waits here: runs the join prompts (nokotaro_kanyu) with Mario frozen;
+ * afterwards field battles resume if he joined, otherwise the partner starts following Mario again.
  */
 EVT_BEGIN(nokotarou_talk_2)
     CALL(evt_mario_key_onoff, 0)
@@ -494,7 +498,7 @@ EVT_BEGIN(nokotarou_talk_2)
     CALL(evt_npc_start_for_event)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_07_KOOPS_JOINS)
         CALL(evt_npc_change_fbat_mode, 1)
-        ELSE
+    ELSE
         CALL(evt_party_run, 0)
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -508,8 +512,8 @@ static EVT_BEGIN(nokotarou_talk)
 EVT_END()
 
 /**
- * Spin script for Nokorin (the rolling shell enemy NPC):
- * plays its rolling sound, stops the walk animation and rotates it 30 degrees per frame.
+ * Spin script for Koopie Koo (ノコリン): plays her rolling sound, stops the walk animation and leaves an event
+ * rotating her 30 degrees per frame; a second later she takes pose A_1 and the sound stops.
  */
 EVT_BEGIN(nokorin_pose)
     CALL(evt_npc_get_position, STRING("ノコリン"), LW(0), LW(1), LW(2))
@@ -537,7 +541,7 @@ EVT_END()
  * Koopie Koo (ノコリン) scene once Koops has joined (STG1_07_KOOPS_JOINS): she comes over and tries to talk
  * Koops out of fighting Hooktail (stg1_hei_12_01 to 06); when he insists she rams Mario and Koops twice in her
  * shell, knocking them down ("FINE! IGNORE ME!", stg1_hei_12_07 and 08), and Koops promises to come back
- * stronger (stg1_hei_12_09). Skipped once GSWF_HEI01_KOOPIE_KOO_FAREWELL is set.
+ * stronger (stg1_hei_12_09). Skipped once GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN is set.
  */
 EVT_BEGIN(evt_nokorin)
     // Skipped once Koopie Koo has said her farewell.
@@ -588,7 +592,7 @@ EVT_BEGIN(evt_nokorin)
     IF_INT_LESS(LW(0), LW(3))
         CALL(evt_mario_set_pos, 370, 0, 0)
         CALL(evt_party_set_pos, 0, 400, 0, 0)
-        ELSE
+    ELSE
         CALL(evt_mario_set_pos, 400, 0, 0)
         CALL(evt_party_set_pos, 0, 370, 0, 0)
     END_IF
@@ -779,7 +783,7 @@ EVT_BEGIN(evt_nokorin)
     IF_INT_LESS_OR_EQUAL(LW(3), LW(0))
         CALL(evt_mario_set_dir, 90, 300, 0)
         CALL(evt_party_set_dir, 0, 270, 300)
-        ELSE
+    ELSE
         CALL(evt_mario_set_dir, 270, 300, 0)
         CALL(evt_party_set_dir, 0, 90, 300)
     END_IF
@@ -831,8 +835,8 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /**
- * Guess: damage-return spots for the map objects mod_00 and mod_01, registered with
- * evt_hit_damage_return_set; both sit far below the field.
+ * Damage-return table for the hit groups mod_00 and mod_01 (evt_hit_damage_return_set):
+ * y -1000 means Mario is put back at the group's own position.
  */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_00", {0.0f, -1000.0f, 0.0f}},
@@ -842,7 +846,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 /**
  * Cutscene spawned by the map init at STG1_20_KOOPS_LEAVES:
- * once Mario walks west of x = 200 the mail jingle plays and the screen vibrates,
+ * once Mario walks west of x = 200 the mail jingle plays and the controller rumbles,
  * the partner comes to him and comments (stg1_gon_44);
  * after he presses A the mail is read (stg1_gon_44_01 to 47) and control returns.
  */
@@ -896,7 +900,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -986,7 +990,7 @@ EVT_BEGIN(hei_01_init_evt)
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     IF_INT_EQUAL(GSWF_HEI_01_BUSH_PIPE_REVEALED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kusa_1"), 0, PTR(kusa_dokan), 0)
-        ELSE
+    ELSE
         CALL(evt_hitobj_onoff, STRING("a_kusa_1"), 0, 0)
         CALL(evt_map_playanim, STRING("anm_kusa_1"), MAP_ANIM_PLAY_AT_END, 0)
         SET_VALUE(LW(0), STRING("dokan"))
@@ -1073,7 +1077,7 @@ EVT_BEGIN(hei_01_init_evt)
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     IF_INT_EQUAL(GSWF_HEI_01_BUSH_PIPE_REVEALED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kusa_1"), 0, PTR(kusa_dokan), 0)
-        ELSE
+    ELSE
         CALL(evt_hitobj_onoff, STRING("a_kusa_1"), 0, 0)
         CALL(evt_map_playanim, STRING("anm_kusa_1"), MAP_ANIM_PLAY_AT_END, 0)
         SET_VALUE(LW(0), STRING("dokan"))
@@ -1106,8 +1110,8 @@ EVT_END()
 #endif
 
 /**
- * Script helper: turns Mario's partner to face the direction given by args[0] (270 or 90 degrees depending on
- * whether it is past 180).
+ * Script helper: sets the display direction of partner slot 0 to 0 when args[0] is past 180, otherwise to 180.
+ * No script in this file calls it.
  */
 static USER_FUNC(set_dir) {
     s32 dir = evtGetValue(event, event->args[0]);

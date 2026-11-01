@@ -1,5 +1,5 @@
 // hei_03 (平原, Petal Meadows): first gate room (hei_02 to hei_04).
-// Two Shinnosuke enemies guard a gate (mon) that opens (story 29).
+// Two Shinnosuke enemies guard a gate (mon) that opens (story progress STG1_04_BALD_CLEFT).
 
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -82,8 +82,8 @@ static EVT_BEGIN(dead_evt2)
 EVT_END()
 
 /**
- * The two Shinnosuke guards of the gate (Goomba enemies that stand beside the pillars); defeating either
- * marks both as beaten.
+ * The two Bald Clefts (シンノスケ, battle BTLNO_HEI_03_01, using the Goomba field events) that sit on the gate's
+ * pillars; defeating either marks both as beaten.
  */
 static NpcSetupInfo npcEnt[] = {
     {
@@ -189,7 +189,7 @@ static EVT_BEGIN(hashira_evt_sub)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_SINNOSUKE_JUMP1"), LW(10), LW(11), LW(12), 0)
     IF_INT_LESS(LW(10), 0)
         ADD(LW(10), 50)
-        ELSE
+    ELSE
         SUBTRACT(LW(10), 50)
     END_IF
     CALL(evt_npc_jump_position_nohit, LW(0), LW(10), 0, 100, 700, 30)
@@ -200,11 +200,11 @@ static EVT_BEGIN(hashira_evt_sub)
 EVT_END()
 
 /**
- * Case script run when Mario hits pillar a_hasira_1 or a_hasira_2 (LW(0) is the guard on it, LW(1) the other):
- * the pillar shakes with a quake while the camera looks at it, the guard jumps down (hashira_evt_sub),
+ * Case script run when Mario presses A at pillar a_hasira_1 or a_hasira_2 (LW(0) is the guard on it, LW(1) the
+ * other, LW(2) the pillar's index): the guard shakes with a quake while the camera looks at it, it jumps down (hashira_evt_sub),
  * the other guard too unless it was already beaten,
  * then both guards are set up as linked enemies (evt_npc_setup, evt_npc_set_link)
- * and the battle mode is switched on. Removes the case event of the pillar that was used.
+ * and the battle mode is switched on. Removes the other pillar's case event and the gate's talk case.
  */
 static EVT_BEGIN(hashira_evt)
     CALL(evt_mario_key_onoff, 0)
@@ -226,7 +226,7 @@ static EVT_BEGIN(hashira_evt)
             SET_VALUE(LW(0), LW(1))
             SPAWN_EVENT(PTR(hashira_evt_sub))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 0)
             SET_VALUE(LW(0), LW(1))
             SPAWN_EVENT(PTR(hashira_evt_sub))
@@ -246,7 +246,7 @@ static EVT_BEGIN(hashira_evt)
         IF_INT_EQUAL(GF(1), 1)
             CALL(evt_del_case_evt, 0, GW(1))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(GF(0), 1)
             CALL(evt_del_case_evt, 0, GW(0))
         END_IF
@@ -256,7 +256,7 @@ static EVT_BEGIN(hashira_evt)
     RETURN
 EVT_END()
 
-/** Talk script for the closed gate (a_mon): Goombella remarks that the gate will not open (stg1_hei_15). */
+/** Talk script for the closed gate (a_mon): the partner remarks that the gate will not open (stg1_hei_15). */
 EVT_BEGIN(mon_msg)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg1_hei_15"), 0, STRING("party"))
@@ -316,7 +316,7 @@ EVT_BEGIN(hei_03_init_evt)
             CALL_CHILD(PTR(door_open))
         END_INLINE_EVENT
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_mon"), 0, PTR(mon_msg), GW(10))
-        ELSE
+    ELSE
         CALL(evt_hitobj_onoff, STRING("a_mon"), 0, 0)
         CALL(evt_map_playanim, STRING("anm_mon"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF

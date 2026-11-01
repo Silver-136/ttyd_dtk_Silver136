@@ -1,6 +1,6 @@
 // hei_10 (平原, Petal Meadows): Shhwonk Fortress central room linking hei_07, hei_09 and hei_11.
 // The Gold Fuzzy (gold_chorobon) and its Fuzzy swarm appear here; Multibounce block.
-// Deferred code generation for this unit (removal tested: function order and code differ).
+// Deferred code generation for this unit.
 
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
@@ -141,13 +141,12 @@ static inline f32 chb_cos(f32 x) {
 
 static void ext_disp(CameraId camera, void* param);
 
-s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall);
 static void ext_dispent(void);
 static void ext_main(void);
 static void ext_shadow_disp(CameraId camera, void* param);
 static void ext_init(void);
-extern s32 hei_test_water_tev[];
+void hei_test_water_tev(MapTevCallbackInfo* info);
 
 static BeroEntry bero_entry_data[4];
 static ExtTexInfo ext_data[21];
@@ -221,7 +220,7 @@ static void ext_disp(CameraId camera, void* param) {
  */
 static BeroEntry bero_entry_data[] = {
     {
-        ("w_bero"), // hitName
+        "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
         BERO_POS_AUTO, // centerPosition
@@ -231,13 +230,13 @@ static BeroEntry bero_entry_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "hei_09", // nextMapName
-        ("e_bero"), // nextBeroName
+        "e_bero", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
     },
     {
-        ("e_bero"), // hitName
+        "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
         BERO_POS_AUTO, // centerPosition
@@ -247,13 +246,13 @@ static BeroEntry bero_entry_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "hei_11", // nextMapName
-        ("w_bero"), // nextBeroName
+        "w_bero", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
     },
     {
-        ("dokan"), // hitName
+        "dokan", // hitName
         2, // type
         0, // sfxId
         BERO_DIR_W, // directionId
@@ -264,7 +263,7 @@ static BeroEntry bero_entry_data[] = {
         10, // caseType
         NULL, // exitEvent
         "hei_07", // nextMapName
-        ("dokan"), // nextBeroName
+        "dokan", // nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
@@ -277,26 +276,26 @@ static BeroEntry bero_entry_data[] = {
  * Fuzzy of the room's effect.
  */
 static ExtTexInfo ext_data[] = {
-    {("c_chorobon"), ("CBN_W_1"), 0.0f},
-    {("c_chorobon"), ("CBN_W_1"), 2.0f},
-    {("c_chorobon"), ("CBN_W_1"), 4.0f},
-    {("c_chorobon"), ("CBN_W_1"), 6.0f},
-    {("c_chorobon"), ("CBN_W_1"), 8.0f},
-    {("c_chorobon"), ("CBN_W_1"), 10.0f},
-    {("c_chorobon"), ("CBN_W_1"), 12.0f},
-    {("c_chorobon"), ("CBN_W_1"), 14.0f},
-    {("c_chorobon"), ("CBN_W_1"), 16.0f},
-    {("c_chorobon"), ("CBN_W_1"), 18.0f},
-    {("c_chorobon"), ("CBN_W_1"), 20.0f},
-    {("c_chorobon"), ("CBN_W_1"), 22.0f},
-    {("c_chorobon"), ("CBN_W_1"), 24.0f},
-    {("c_chorobon"), ("CBN_W_1"), 26.0f},
-    {("c_chorobon"), ("CBN_W_1"), 28.0f},
-    {("c_chorobon"), ("CBN_W_1"), 30.0f},
-    {("c_chorobon"), ("CBN_W_1"), 32.0f},
-    {("c_chorobon"), ("CBN_W_1"), 34.0f},
-    {("c_chorobon"), ("CBN_W_1"), 36.0f},
-    {("c_chorobon"), ("CBN_W_1"), 38.0f},
+    {"c_chorobon", "CBN_W_1", 0.0f},
+    {"c_chorobon", "CBN_W_1", 2.0f},
+    {"c_chorobon", "CBN_W_1", 4.0f},
+    {"c_chorobon", "CBN_W_1", 6.0f},
+    {"c_chorobon", "CBN_W_1", 8.0f},
+    {"c_chorobon", "CBN_W_1", 10.0f},
+    {"c_chorobon", "CBN_W_1", 12.0f},
+    {"c_chorobon", "CBN_W_1", 14.0f},
+    {"c_chorobon", "CBN_W_1", 16.0f},
+    {"c_chorobon", "CBN_W_1", 18.0f},
+    {"c_chorobon", "CBN_W_1", 20.0f},
+    {"c_chorobon", "CBN_W_1", 22.0f},
+    {"c_chorobon", "CBN_W_1", 24.0f},
+    {"c_chorobon", "CBN_W_1", 26.0f},
+    {"c_chorobon", "CBN_W_1", 28.0f},
+    {"c_chorobon", "CBN_W_1", 30.0f},
+    {"c_chorobon", "CBN_W_1", 32.0f},
+    {"c_chorobon", "CBN_W_1", 34.0f},
+    {"c_chorobon", "CBN_W_1", 36.0f},
+    {"c_chorobon", "CBN_W_1", 38.0f},
     {0},
 };
 
@@ -582,7 +581,7 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
 /** Script helper: blocks until the Gold Fuzzy's current animation has reached the frame given by args[0]. */
 s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall) {
     f32 frame = evtGetFloat(event, *event->args);
-    NpcEntry* npc = npcNameToPtr("\203S\201[\203\213\203h\203`\203\207\203\215\203\173\203\223");
+    NpcEntry* npc = npcNameToPtr("ゴールドチョロボン");
 
     if (animPoseGetAnimPosePtr(npc->poseId)->localFrame < frame) {
         return EVT_RETURN_BLOCK;
@@ -592,7 +591,7 @@ s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall) {
 
 /** Script helper: blocks until the Gold Fuzzy's animation has completed another loop. */
 s32 wait_anim_end(EventEntry* event, BOOL isFirstCall) {
-    NpcEntry* npc = npcNameToPtr("\203S\201[\203\213\203h\203`\203\207\203\215\203\173\203\223");
+    NpcEntry* npc = npcNameToPtr("ゴールドチョロボン");
 
     if (isFirstCall) {
         event->lwData[15] = animPoseGetLoopTimes(npc->poseId);
@@ -610,14 +609,14 @@ s32 wait_anim_end(EventEntry* event, BOOL isFirstCall) {
 EVT_BEGIN(golden_se)
     LOOP(0)
         CALL(wait_anim_frame, 35)
-        CALL(evt_npc_get_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING(("SFX_STG1_CHORO_MOVE1")), LW(0), LW(1), LW(2), 0)
+        CALL(evt_npc_get_position, STRING("ゴールドチョロボン"), LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_CHORO_MOVE1"), LW(0), LW(1), LW(2), 0)
         CALL(wait_anim_frame, 50)
-        CALL(evt_npc_get_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING(("SFX_STG1_CHORO_G_WAIT2")), LW(0), LW(1), LW(2), 0)
+        CALL(evt_npc_get_position, STRING("ゴールドチョロボン"), LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_CHORO_G_WAIT2"), LW(0), LW(1), LW(2), 0)
         CALL(wait_anim_frame, 95)
-        CALL(evt_npc_get_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING(("SFX_STG1_CHORO_G_WAIT1")), LW(0), LW(1), LW(2), 0)
+        CALL(evt_npc_get_position, STRING("ゴールドチョロボン"), LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_CHORO_G_WAIT1"), LW(0), LW(1), LW(2), 0)
         CALL(wait_anim_end)
     END_LOOP
     RETURN
@@ -626,78 +625,78 @@ EVT_END()
 /**
  * Gold Fuzzy cutscene (after both stones have been taken):
  * the Gold Fuzzy appears and hops toward Mario, Mario is startled, the Gold Fuzzy battle starts,
- * and afterwards it splits into a swarm of Fuzzies that scatter and flee off screen.
+ * and afterwards a swarm of Fuzzies (ext poses) appears and flees while it hops away.
  * Sets the story to "Gold Fuzzy".
  */
 EVT_BEGIN(evt_golden)
-    CALL(evt_npc_entry, STRING(("dummy")), STRING(("c_chorobon")))
-    CALL(evt_npc_set_position, STRING(("dummy")), 0, -1000, 0)
+    CALL(evt_npc_entry, STRING("dummy"), STRING("c_chorobon"))
+    CALL(evt_npc_set_position, STRING("dummy"), 0, -1000, 0)
     SPAWN_EVENT_GET_ID(PTR(golden_se), LW(15))
     WAIT_FRAMES(10)
     CALL(evt_mario_wait_movable)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_FIND1_3")), LW(0), LW(1), LW(2), 0)
-    CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(("eff0")), 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(("eff1")), 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("eff0"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING("eff1"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 0, 58, 227, 0, 5, -68, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING(("stg1_hei_42")), 0, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")))
+    CALL(evt_msg_print, 0, STRING("stg1_hei_42"), 0, STRING("ゴールドチョロボン"))
     WAIT_MS(300)
     CALL(evt_cam3d_event_from_road, 0, -15, 0, 0, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     DELETE_EVENT(LW(15))
-    CALL(evt_npc_set_anim, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), STRING(("CBN_W_1")))
+    CALL(evt_npc_set_anim, STRING("ゴールドチョロボン"), STRING("CBN_W_1"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    DIVIDE_FLOAT(LW(0), FLOAT((4.0f)))
-    SET_FLOAT_VALUE(LW(3), FLOAT((0.0f)))
-    CALL(evt_npc_flag_onoff, 1, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
+    DIVIDE_FLOAT(LW(0), FLOAT(4.0f))
+    SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))
+    CALL(evt_npc_flag_onoff, 1, STRING("ゴールドチョロボン"), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
     LOOP(3)
         ADD_FLOAT(LW(3), LW(0))
-        CALL(evt_snd_sfxon_3d, STRING(("SFX_STG1_CHORO_MOVE1")), LW(3), LW(1), LW(2), 0)
-        CALL(evt_npc_jump_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(3), LW(1), LW(2), 300, 0, FLOAT(30.0f), 0)
+        CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_CHORO_MOVE1"), LW(3), LW(1), LW(2), 0)
+        CALL(evt_npc_jump_position, STRING("ゴールドチョロボン"), LW(3), LW(1), LW(2), 300, 0, FLOAT(30.0f), 0)
     END_LOOP
-    CALL(evt_npc_flag_onoff, 1, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("ゴールドチョロボン"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_INTANGIBLE)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 30)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_SURPRISED2_2")), LW(0), LW(1), LW(2), 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-    CALL(evt_mario_set_pose, STRING(("M_N_7")))
+    CALL(evt_mario_set_pose, STRING("M_N_7"))
     WAIT_MS(500)
-    CALL(evt_npc_get_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(3), LW(4), LW(5))
-    CALL(evt_snd_sfxon_3d, STRING(("SFX_STG1_CHORO_MOVE1")), LW(3), LW(4), LW(5), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
-    CALL(npc_jump, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(0), LW(1), LW(2), FLOAT(3.5f), FLOAT((2.0f)), 0)
-    CALL(evt_npc_battle_start, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")))
+    CALL(evt_npc_get_position, STRING("ゴールドチョロボン"), LW(3), LW(4), LW(5))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_CHORO_MOVE1"), LW(3), LW(4), LW(5), 0)
+    CALL(evt_npc_flag_onoff, 0, STRING("ゴールドチョロボン"), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
+    CALL(npc_jump, STRING("ゴールドチョロボン"), LW(0), LW(1), LW(2), FLOAT(3.5f), FLOAT(2.0f), 0)
+    CALL(evt_npc_battle_start, STRING("ゴールドチョロボン"))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-    CALL(evt_mario_set_pose, STRING(("M_S_1")))
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_STG1_TORIDE1")))
-    CALL(evt_npc_set_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), 0, -15, 0)
+    CALL(evt_mario_set_pose, STRING("M_S_1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_TORIDE1"))
+    CALL(evt_npc_set_position, STRING("ゴールドチョロボン"), 0, -15, 0)
     CALL(evt_ext_entry, 500, PTR(ext_data), PTR(ext_init), PTR(ext_main), PTR(ext_dispent))
-    CALL(evt_msg_print, 0, STRING(("stg1_hei_44")), 0, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")))
+    CALL(evt_msg_print, 0, STRING("stg1_hei_44"), 0, STRING("ゴールドチョロボン"))
     WAIT_MS(300)
     CALL(evt_chorobon_escape)
-    CALL(evt_npc_set_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), 0, -1000, 0)
+    CALL(evt_npc_set_position, STRING("ゴールドチョロボン"), 0, -1000, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_06_01_GOLD_FUZZY)
     CALL(evt_mario_key_onoff, 1)
     BEGIN_INLINE_EVENT
-        SET_FLOAT_VALUE(LW(0), FLOAT((0.0f)))
-        SET_FLOAT_VALUE(LW(1), FLOAT((0.0f)))
+        SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
+        SET_FLOAT_VALUE(LW(1), FLOAT(0.0f))
         SET_FLOAT_VALUE(LW(2), FLOAT(500.0f))
         DIVIDE_FLOAT(LW(2), FLOAT(40.0f))
-        SET_FLOAT_VALUE(LW(3), FLOAT((0.0f)))
-        CALL(evt_npc_flag_onoff, 0, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
+        SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))
+        CALL(evt_npc_flag_onoff, 0, STRING("ゴールドチョロボン"), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
         LOOP(40)
             ADD_FLOAT(LW(3), LW(2))
-            CALL(npc_jump, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(0), LW(1), LW(3), FLOAT(0.7998047f), FLOAT((1.0f)), 0)
+            CALL(npc_jump, STRING("ゴールドチョロボン"), LW(0), LW(1), LW(3), FLOAT(0.7998047f), FLOAT(1.0f), 0)
         END_LOOP
-        CALL(evt_npc_set_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), 0, -1000, 0)
+        CALL(evt_npc_set_position, STRING("ゴールドチョロボン"), 0, -1000, 0)
     END_INLINE_EVENT
     CALL(evt_chorobon_wait)
     RETURN
@@ -713,24 +712,24 @@ EVT_BEGIN(hei_10_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_STG1_TORIDE1")))
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING(("ENV_STG1_HEI3")))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_TORIDE1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI3"))
     CALL(evt_snd_set_rev_mode, 1)
-    CALL(evt_mobj_badgeblk, STRING(("m")), 100, 46, -75, ITEM_MULTIBOUNCE, 0, GSWF_HEI_10_MULTIBOUNCE_BADGE_BLOCK, 1)
-    CALL(evt_npc_set_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), 0, -1000, 0)
+    CALL(evt_mobj_badgeblk, STRING("m"), 100, 46, -75, ITEM_MULTIBOUNCE, 0, GSWF_HEI_10_MULTIBOUNCE_BADGE_BLOCK, 1)
+    CALL(evt_npc_set_position, STRING("ゴールドチョロボン"), 0, -1000, 0)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
         IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG1_06_01_GOLD_FUZZY)
-                CALL(evt_npc_set_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), 0, -15, 0)
+                CALL(evt_npc_set_position, STRING("ゴールドチョロボン"), 0, -15, 0)
                 CALL(evt_npc_change_fbat_mode, 1)
                 SPAWN_EVENT(PTR(evt_golden))
             END_IF
         END_IF
     END_IF
-    CALL(evt_map_playanim, STRING(("mizu")), 1, 0)
+    CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("mizu")), 16777216)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("mizu")), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("mizu"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("mizu"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 

@@ -1,4 +1,4 @@
-// Moon Cleft (sinemon): battle unit used in Petal Meadows.
+// Moon Cleft (sinemon): battle unit linked into hei.rel; no formation of this module uses it.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -255,8 +255,8 @@ EVT_END()
 
 /**
  * Spark effect (toge_flush) shown when an attack on the Moon Cleft's spiked head is turned away:
- * it waits 30 frames, then places the flash above the head at a height that depends on whether the unit has
- * status 10 or 11.
+ * it waits 30 frames, then places the flash above the head at a height that depends on whether the unit is
+ * Huge or Tiny.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

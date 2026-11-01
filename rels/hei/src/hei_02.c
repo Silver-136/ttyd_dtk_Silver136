@@ -92,7 +92,7 @@ static EVT_BEGIN(evt_kusa_1)
 EVT_END()
 
 /**
- * Grass patches Mario can hit on this field (a_kusa_1 to a_kusa_13 and on); the first one runs an event when
+ * Grass patches Mario can hit on this field (a_kusa_1 to a_kusa_14 and a_ku_15); the first one runs an event when
  * cut.
  */
 static KusaAccess kusa_data[] = {
@@ -116,7 +116,7 @@ static KusaAccess kusa_data[] = {
 
 /**
  * Petal Meadows hei_02 map init: registers the exits, field music, the tree and grass rewards, wheat animation,
- * the POW Block item block and the drifting grass clouds.
+ * the POW Block item block and the grass patches kusa_1 to kusa_13 as pieces Flurrie can blow away (evt_cloud_ent).
  */
 EVT_BEGIN(hei_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))

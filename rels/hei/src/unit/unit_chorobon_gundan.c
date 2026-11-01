@@ -314,7 +314,7 @@ static EVT_BEGIN(damage_event)
         CALL(chorogun_get_alive_num, LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), 50)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
-            ELSE
+        ELSE
             CALL(chorogun_escape)
         END_IF
         ADD(LW(0), 1)
@@ -419,12 +419,12 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_gundan_attack))
         IF_INT_EQUAL(LW(14), LW(15))
             CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
-            ELSE
+        ELSE
             CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), 0, LW(5))
         END_IF
         IF_INT_EQUAL(LW(5), 21)
             CALL(chorogun_counterd, LW(6))
-            ELSE
+        ELSE
             CALL(chorogun_bound_target, LW(6))
         END_IF
         ADD(LW(14), 1)

@@ -121,7 +121,7 @@ static USER_FUNC(proj_on) {
     animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_PROJ_TEX);
     animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_PROJ_TEX);
     animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[2], MAP_OBJ_FLAG_PROJ_TEX);
-    animPoseSetMaterialFlagOn(partyGetPtr(marioGetPartyId())->paperAnimGroup, 0x400);
+    animPoseSetMaterialFlagOn(partyGetPtr(marioGetPartyId())->paperAnimGroup, MAP_OBJ_FLAG_PROJ_TEX);
     return EVT_RETURN_DONE;
 }
 
@@ -133,15 +133,14 @@ static USER_FUNC(proj_off) {
     animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_PROJ_TEX);
     animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_PROJ_TEX);
     animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[2], MAP_OBJ_FLAG_PROJ_TEX);
-    animPoseSetMaterialFlagOff(partyGetPtr(marioGetPartyId())->paperAnimGroup, 0x400);
+    animPoseSetMaterialFlagOff(partyGetPtr(marioGetPartyId())->paperAnimGroup, MAP_OBJ_FLAG_PROJ_TEX);
     return EVT_RETURN_DONE;
 }
 
 /**
  * Display callback for the Hooktail shadow: renders the hidden shadow NPC (Hooktail, seen from straight above)
- * into a 608x480 texture that the map then projects onto the ground.
+ * into a 608x480 texture that the map then projects onto the ground, then restores the caller's view and GX state.
  */
-// Render the shadow actor into the projection texture, then restore the caller's view and GX state.
 void make_gonbaba_projection(CameraId camera, void* param) {
     GonbabaProj* wp = param;
     CameraEntry saved;
@@ -165,7 +164,7 @@ void make_gonbaba_projection(CameraId camera, void* param) {
     GXSetProjection(proj, GX_PERSPECTIVE);
     C_MTXLookAt(view, &(Vec){0.0f, 190.0f, 0.0f}, &(Vec){0.0f, 0.0f, -1.0f}, &(Vec){0.0f, 0.0f, 0.0f});
     saved = *camGetCurPtr();
-    npc = npcNameToPtr("\203S\203\223\203o\203o\211e");
+    npc = npcNameToPtr("ゴンババ影");
     PSMTXCopy(view, camGetCurPtr()->view);
     PSMTXIdentity(mtx);
     animPoseDrawMtx(npc->poseId, mtx, 1, 0.0f, 2.0f);
@@ -184,11 +183,9 @@ void make_gonbaba_projection(CameraId camera, void* param) {
 }
 
 /**
- * Script helper: allocates the shadow texture (stored in the event's userdata)
- * and registers make_gonbaba_projection as a shadow-camera draw callback;
- * blocks for the rest of the event's life.
+ * Script helper: every frame until the event is deleted, allocates the shadow texture
+ * and registers make_gonbaba_projection as a shadow-camera draw callback (the work struct is allocated once).
  */
-// Keep registering the shadow capture while this blocking event remains alive.
 USER_FUNC(make_gonbaba_projection_evt) {
     GonbabaProj* wp;
 
@@ -466,9 +463,9 @@ EVT_BEGIN(gonbaba_evt)
         GOTO(1)
     END_IF
     CALL(evt_mario_get_party, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 1)
+    IF_INT_NOT_EQUAL(LW(0), PARTY_MEMBER_GOOMBELLA)
         CALL(evt_mario_goodbye_party, 0)
-        CALL(evt_mario_hello_party, 0, 1)
+        CALL(evt_mario_hello_party, 0, PARTY_MEMBER_GOOMBELLA)
     END_IF
     // Mario freezes and Hooktail's roar echoes from off-screen; Mario and his partner react.
     CALL(evt_mario_key_onoff, 0)
@@ -498,7 +495,7 @@ EVT_BEGIN(gonbaba_evt)
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     IF_INT_LESS(LW(0), LW(3))
         CALL(evt_party_set_dir, 0, 270, 200)
-        ELSE
+    ELSE
         CALL(evt_party_set_dir, 0, 90, 200)
     END_IF
     CALL(evt_party_stop, 0)
@@ -611,7 +608,8 @@ EVT_END()
 
 /**
  * Doors of this room: the east exit (e_bero) to hei_13, the back exit (a_usiro_bero) to gon_00 (Hooktail
- * Castle) and the pipe (a_h_dokan) to tik_02 (Rogueport Sewers).
+ * Castle), the pipe pair a_h_dokan and dokan inside this room (dokan_evt enables it)
+ * and the pipe dokan_2 to tik_02 (Rogueport Sewers).
  */
 static BeroEntry bero_entry_data[] = {
     {
@@ -697,7 +695,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-/** Doors of this room: the pipe (dokan_2) to hei_00. */
+/** Replaces the dokan_2 exit in the kiosk demo (GW_FLAG_E3): the pipe leads back to itself in hei_00. */
 static BeroEntry e3_bero[] = {
     {
         "dokan_2", // hitName
@@ -720,7 +718,7 @@ static BeroEntry e3_bero[] = {
 };
 
 /**
- * Ramps the camera shake up from 0 to 0.010 over 30 steps (the rumble when the hidden pipe starts to rise),
+ * Ramps the camera shake up from 0 to 0.010 over 30 steps (the rumble before the rock isi_0 breaks in dokan_evt),
  * then ends with a minimal shake.
  */
 static EVT_BEGIN(cam_shake)
@@ -849,6 +847,11 @@ EVT_BEGIN(moji_msg)
     RETURN
 EVT_END()
 
+/**
+ * Run after a stone is placed: once both are in, Mario and the partner step aside, the ground quakes, the pillars
+ * spin apart 80 units each carrying their stones (isi_3 with the Moon Stone, isi_4 with the Sun Stone)
+ * and the tablet s_moji fades in with its talk script moji_msg.
+ */
 static EVT_BEGIN(switch_evt)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
         RETURN
@@ -862,7 +865,7 @@ static EVT_BEGIN(switch_evt)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS(LW(2), 0)
             ADD(LW(2), -50)
-            ELSE
+        ELSE
             ADD(LW(2), 50)
         END_IF
         CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(80.0f))
@@ -872,7 +875,7 @@ static EVT_BEGIN(switch_evt)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS(LW(2), 0)
             ADD(LW(2), -50)
-            ELSE
+        ELSE
             ADD(LW(2), 50)
         END_IF
         CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(80.0f))
@@ -916,7 +919,7 @@ static EVT_BEGIN(switch_evt)
     CALL(evt_hit_bind_update, STRING("a_isi_4"))
     CALL(evt_cam3d_evt_set, 146, 127, 328, 146, 75, 33, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_moji"), 1, 1)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_moji"), 0, PTR(moji_msg), 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG1ROCK_FONT_APPEAR1"), 0)
@@ -937,6 +940,10 @@ static EVT_BEGIN(switch_evt)
     RETURN
 EVT_END()
 
+/**
+ * Timer-switch event: with a quake, the rock isi_0 and the tablet are captured to a paper image that plays A_1 with
+ * the rock sounds, the pipe h_dokan rises, the "dokan" exit is enabled and the story becomes STG1_08_OPENING_THE_PATH.
+ */
 static EVT_BEGIN(dokan_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -952,7 +959,7 @@ static EVT_BEGIN(dokan_evt)
                     CALL(evt_party_move_pos, 0, 90, 0, 500)
                     CALL(evt_party_set_dir, 0, 90, 300)
                 END_IF
-                ELSE
+            ELSE
                 CALL(evt_mario_set_dir, 270, 300, 0)
                 IF_INT_LESS(LW(0), 200)
                     CALL(evt_party_move_pos, 0, 200, 0, 500)
@@ -1007,8 +1014,8 @@ static EVT_BEGIN(dokan_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_SUCCESS1"))
     END_INLINE_EVENT
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("isi_0"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("isi_0"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(evt_img_free_capture, STRING("img"), 0)
     CALL(evt_img_free_capture, STRING("img"), 1)
@@ -1018,7 +1025,7 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_mapobj_get_position, STRING("h_dokan"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mapobj_trans, 0, STRING("h_dokan"), 0, -20, 0)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, -20, 0, 60)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
@@ -1031,11 +1038,11 @@ static EVT_BEGIN(dokan_evt)
     WAIT_MS(500)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("isi_0"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_moji"))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("isi_0"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("isi_0"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_isi_0"), 0, 0)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_moji"), 0, 0)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), STRING("dokan"))
     CALL_CHILD(PTR(bero_case_switch_on))
     SET_VALUE(GSW_STORY_PROGRESS, STG1_08_OPENING_THE_PATH)
@@ -1062,8 +1069,8 @@ USER_FUNC(hei_00_mario_keyoff_check) {
 #endif
 
 /**
- * Map-init script: if the Sun Stone has already been placed, hides its empty socket and shows the stone model,
- * shifting the second stone into position when the Moon Stone is placed as well.
+ * Map-init script: if the Sun Stone has already been placed, hides its empty socket and shows the stone model;
+ * when the Moon Stone is placed as well, its pillar (isi_4, with collision) and the stone stand 80 units to the left.
  */
 EVT_BEGIN(setting_sun_stone)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 1)
@@ -1116,8 +1123,8 @@ EVT_BEGIN(sun_stone_set_event)
 EVT_END()
 
 /**
- * Map-init script: if the Moon Stone has already been placed, hides its empty socket and shows the stone model,
- * shifting the second stone into position when the Sun Stone is placed as well.
+ * Map-init script: if the Moon Stone has already been placed, hides its empty socket and shows the stone model;
+ * when the Sun Stone is placed as well, its pillar (isi_3, with collision) and the stone stand 80 units to the right.
  */
 EVT_BEGIN(setting_moon_stone)
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 1)
@@ -1200,7 +1207,7 @@ static TreeAccess ki_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
-/** NPC of the room: Hooktail (Gonbaba), who appears in the flyover cutscene. */
+/** NPC set up by this table: ババ, Kammy Koopa in the Bowser interlude (hei_00_koopa_evt). */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ババ"*/"\x83\x6F\x83\x6F", // name
@@ -1381,7 +1388,7 @@ EVT_BEGIN(hei_00_init_evt)
         SET_VALUE(GSWF_HEI_MOON_STONE_TAKEN, 1)
         SET_VALUE(GSWF_HEI_SUN_STONE_PLACED, 1)
         SET_VALUE(GSWF_HEI_MOON_STONE_PLACED, 1)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_trans, 0, STRING("h_dokan"), 0, -20, 0)
     END_IF
@@ -1405,7 +1412,7 @@ EVT_BEGIN(hei_00_init_evt)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
         IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isi_4"), 0, PTR(sun_stone_set_event), 0)
-            ELSE
+        ELSE
             CALL_CHILD(PTR(setting_sun_stone))
         END_IF
     END_IF
@@ -1413,7 +1420,7 @@ EVT_BEGIN(hei_00_init_evt)
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
         IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isi_3"), 0, PTR(moon_stone_set_event), 0)
-            ELSE
+        ELSE
             CALL_CHILD(PTR(setting_moon_stone))
         END_IF
     END_IF

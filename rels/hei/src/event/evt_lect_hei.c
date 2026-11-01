@@ -45,7 +45,7 @@ static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
 /**
- * Moves the 3D camera by the offset ofs in one step (0 frames, curve 11),
+ * Moves the 3D camera by the offset ofs in one step (duration 0),
  * keeping the current position as its preset; used to shift the camera 2016 units above or below the scene.
  */
 static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
@@ -119,7 +119,7 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 static USER_FUNC(lect_mario_ido_sum) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
-    s32 frames = evtGetValue(event, args[0]);
+    s32 durationMs = evtGetValue(event, args[0]);
     s32 elapsed;
 
     if (isFirstCall) {
@@ -129,13 +129,13 @@ static USER_FUNC(lect_mario_ido_sum) {
         evtSetFloat(event, LW(2), mario->position.z);
     }
     elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
-    if (elapsed > frames) {
-        elapsed = frames;
+    if (elapsed > durationMs) {
+        elapsed = durationMs;
     }
-    mario->position.x = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
-    mario->position.y = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
-    mario->position.z = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
-    if (elapsed >= frames) {
+    mario->position.x = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
+    mario->position.y = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
+    mario->position.z = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
+    if (elapsed >= durationMs) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -273,7 +273,7 @@ static USER_FUNC(lecture_button_rtn) {
                 }
                 break;
             case 4:
-                btn->flags |= 1;
+                btn->flags |= LECT_BUTTON_FLAG_HIDDEN;
                 done++;
                 break;
         }
@@ -339,7 +339,6 @@ static USER_FUNC(lecture_button_set_seq) {
  * Script helper: reads a lecture button's sequence number into args[1].
  * The name says icon id but it returns the sequence number.
  */
-// Despite its name, this query returns the sequence state, not the icon ID.
 static USER_FUNC(lecture_button_get_icon_id) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -550,7 +549,7 @@ EVT_BEGIN(nokotaro_party_lecture)
                 SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))
                 CALL(evt_mobj_set_position, LW(1), LW(2), LW(3), LW(4))
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL(evt_mobj_set_position, LW(1), LW(2), LW(3), LW(4))
             END_IF
             WAIT_FRAMES(1)
@@ -600,7 +599,7 @@ EVT_END()
 
 /**
  * Sub-event of the partner lecture: holds the current music
- * and plays the get-partner jingle on channel 1 for two seconds.
+ * and plays the get-partner jingle in slot 1 for two seconds.
  */
 static EVT_BEGIN(all_party_lecture_otosub)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -622,7 +621,7 @@ EVT_BEGIN(all_party_lecture)
     IF_INT_NOT_EQUAL(LW(9), 1)
         IF_INT_NOT_EQUAL(LW(9), 5)
             CALL(evt_mario_goodbye_party, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_kill_party, 0)
         END_IF
         WAIT_MS(500)
@@ -632,7 +631,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_pouch_party_join, LW(9))
         CALL(evt_mario_set_party_pos, 0, LW(9), LW(0), LW(1), LW(2))
         CALL(set_dir, LW(3))
-        ELSE
+    ELSE
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
     // The partner-join jingle plays, an "itemget" backdrop appears and the lecture message for that partner

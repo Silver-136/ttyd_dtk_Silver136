@@ -1,5 +1,5 @@
 // hei_07 (平原, Petal Meadows): Shhwonk Fortress quiz room between hei_06 and hei_10 (stone statue, sekizou).
-// Questions with right/wrong answer animations; finishing sets story 31 and opens a pipe to hei_10. Has a save block.
+// Questions with right/wrong answer animations; finishing sets story progress STG1_06_QUIZ and opens a pipe to hei_10. Has a save block.
 
 #include "version.h"
 #include "data_tables.h"
@@ -177,10 +177,9 @@ EVT_BEGIN(sekizou_move)
 EVT_END()
 
 /**
- * Plays the map animation named in LW(0) and, for the two statue-rotation animations, plays the quake sound;
- * used while the statue rotates and nods.
+ * Plays the map animation named in LW(0) and waits for its full length; for the two statue-rotation animations,
+ * a parallel event plays the quake sound near the end.
  */
-// Wait for the full animation; a parallel event schedules the rotation sound near its end.
 EVT_BEGIN(animation_wait)
     CALL(evt_map_playanim, LW(0), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, LW(0), LW(1), LW(2))
@@ -224,8 +223,8 @@ static EVT_BEGIN(shake_evt)
 EVT_END()
 
 /**
- * Right-answer reaction: confetti above Mario, the right-answer lights come on,
- * the wrong-answer lights go off and the "anm_seikai" animation starts.
+ * Right-answer reaction: confetti above Mario, the lights stay in their idle state (dennshoku shown, dennshoku_2
+ * hidden) and the "anm_seikai" animation starts.
  */
 EVT_BEGIN(seikai_anime)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -246,7 +245,7 @@ EVT_BEGIN(seikai_anime_stop)
     RETURN
 EVT_END()
 
-/** Wrong-answer reaction: the wrong-answer lights come on and the "anm_fuseikai" animation starts. */
+/** Wrong-answer reaction: the lights switch to dennshoku_2 and the "anm_fuseikai" animation starts. */
 EVT_BEGIN(fuseikai_anime)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -264,8 +263,8 @@ EVT_BEGIN(fuseikai_anime_stop)
 EVT_END()
 
 /**
- * Sound-only script for the statue sinking: plays SFX_OFF1_PUZZLE1 at a long list of irregular delays to make a
- * grinding sound.
+ * Sound-only script for the paper transition into the quiz room (offscreen_to_quiz):
+ * plays SFX_OFF1_PUZZLE1 at a long list of irregular delays.
  */
 static EVT_BEGIN(evt_down_snd)
     WAIT_MS(100)
@@ -313,7 +312,7 @@ static EVT_BEGIN(evt_down_snd)
     RETURN
 EVT_END()
 
-/** Sound for one step of the statue rising: SFX_OFF1_PUZZLE_MOVE1, then SFX_OFF1_PUZZLE2 366 ms later. */
+/** One step of the transition back (evt_up_snd__): SFX_OFF1_PUZZLE_MOVE1, then SFX_OFF1_PUZZLE2 366 ms later. */
 static EVT_BEGIN(evt_up_snd_)
     CALL(evt_snd_sfxon, STRING("SFX_OFF1_PUZZLE_MOVE1"), 0)
     WAIT_MS(366)
@@ -322,8 +321,8 @@ static EVT_BEGIN(evt_up_snd_)
 EVT_END()
 
 /**
- * Sound-only script for the statue rising: waits through a list of irregular delays
- * and spawns evt_up_snd_ at the matching beats.
+ * Sound-only script for the paper transition back to the normal room (offscreen_to_normal):
+ * waits through a list of irregular delays and spawns evt_up_snd_ at the matching beats.
  */
 static EVT_BEGIN(evt_up_snd__)
     WAIT_MS(16)
@@ -367,8 +366,9 @@ static EVT_BEGIN(evt_up_snd__)
 EVT_END()
 
 /**
- * Sets up the quiz screen: registers the OFF_d_pazu paper object,
- * captures the offscreen picture of the quiz board and shows it as a paper-animated image.
+ * Goes from the room to the quiz: captures the screen into a paper image (OFF_d_pazu),
+ * swaps the room to its quiz state (hei_07_2), puts Mario and the partner in their quiz places
+ * and plays the image's paper animation A_1 over the new room with the transition sounds.
  */
 EVT_BEGIN(offscreen_to_quiz)
     CALL(evt_paper_entry, STRING("OFF_d_pazu"))
@@ -381,7 +381,7 @@ EVT_BEGIN(offscreen_to_quiz)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hei_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hei_07_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_set_pos, -85, 20, 0)
     CALL(mario_set_dir, 90, 0)
@@ -402,7 +402,7 @@ EVT_END()
  * Finishes the paper transition of the quiz room:
  * after one second the mouth animation anm_kuti_1 plays,
  * the map hei_07 is captured to a paper image that unfolds (animation A_2) with the rising sounds,
- * then the room is swapped to its second state (hei_07_2),
+ * then the room is swapped back to its normal state (hei_07 shown, hei_07_2 hidden),
  * Mario is put back on the ground and control returns to him and his partner.
  */
 static EVT_BEGIN(offscreen_to_normal)
@@ -452,8 +452,9 @@ QuizEntry quiz_data[] = {
 /**
  * Case script for the stone statue (a_sekizou_1):
  * the statue wakes up with a quake and speaks to Mario (stg1_hei_20), offers the quiz as a yes/no choice,
- * and on yes runs the quiz questions with the right/wrong animations until the quiz is won;
- * on no it goes back to sleep. Winning sets the story to "Quiz" and opens the statue's base.
+ * and on yes runs the quiz questions with the right/wrong animations until five right or three wrong answers;
+ * on no it goes back to sleep. Five right, or three wrong and the fight against four Clefts that follows,
+ * move the statue's base and set the story to STG1_06_QUIZ.
  */
 EVT_BEGIN(a_sekizou_1)
     // Mario freezes and the music stops.
@@ -494,7 +495,7 @@ EVT_BEGIN(a_sekizou_1)
         END_IF
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_snd_sfxoff, GW(10))
-        ELSE
+    ELSE
         CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 1000, EASING_SINE_IN_OUT)
         BEGIN_INLINE_EVENT
             WAIT_MS(200)
@@ -511,7 +512,7 @@ EVT_BEGIN(a_sekizou_1)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
     IF_INT_EQUAL(GW(0), 0)
         CALL(evt_msg_print, 0, STRING("stg1_hei_20"), PTR(callback), 0)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg1_hei_20_01"), PTR(callback), 0)
     END_IF
     SET_VALUE(GW(0), 1)
@@ -606,12 +607,12 @@ EVT_BEGIN(a_sekizou_1)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
         CALL(evt_msg_continue)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-        // A right answer plays a jingle and the statue howls; the fifth right answer ends the quiz, the
+        // A right answer plays a jingle and the right-answer animation; the fifth ends the quiz, the
         // statue moves aside and the story advances.
         IF_INT_EQUAL(LF(1), 1)
             IF_INT_EQUAL(LW(12), 4)
                 CALL(evt_snd_sfxon, STRING("SFX_GOOD_SOUND2"), 0)
-                ELSE
+            ELSE
                 CALL(evt_snd_sfxon, STRING("SFX_GOOD_SOUND1"), 0)
             END_IF
             CALL_CHILD(PTR(seikai_anime))
@@ -662,12 +663,12 @@ EVT_BEGIN(a_sekizou_1)
                 RETURN
             END_SWITCH
             CALL_CHILD(PTR(seikai_anime_stop))
+        ELSE
             // A wrong answer plays a buzzer; the third wrong answer summons four Clefts that attack, and after
             // the fight the statue moves aside as well.
-            ELSE
             IF_INT_EQUAL(LW(13), 2)
                 CALL(evt_snd_sfxon, STRING("SFX_BAD_SOUND2"), 0)
-                ELSE
+            ELSE
                 CALL(evt_snd_sfxon, STRING("SFX_BAD_SOUND1"), 0)
             END_IF
             CALL_CHILD(PTR(fuseikai_anime))
@@ -799,19 +800,19 @@ EVT_BEGIN(hei_07_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("dokan"))
         CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI4"))
     CALL(evt_snd_set_rev_mode, 1)
     CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mapobj_trans, 1, STRING("hei_07_2"), 0, -1000, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hei_07_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hei_07_2"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_06_QUIZ)
         CALL(evt_hitobj_onoff, STRING("a_sekizou_2"), 0, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_sekizou_1_a"), 0, PTR(a_sekizou_1), 0)
         SET_VALUE(GW(0), 0)
-        ELSE
+    ELSE
         CALL(evt_hitobj_onoff, STRING("a_sekizou_2"), 0, 1)
         CALL(evt_hitobj_onoff, STRING("a_sekizou_1_a"), 0, 0)
         CALL(evt_hitobj_onoff, STRING("a_sekizou_1_b"), 0, 0)

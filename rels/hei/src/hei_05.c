@@ -1,5 +1,5 @@
 // hei_05 (平原, Petal Meadows): second gate room (hei_04 to hei_06).
-// Two Shinemon enemies guard a gate (mon) that opens (story 30).
+// Two enemies named シンエモン (they fight as Bristles) guard a gate (mon) that opens (story progress STG1_05_BRISTLE).
 
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -81,8 +81,8 @@ static EVT_BEGIN(dead_evt2)
 EVT_END()
 
 /**
- * The two Shinemon guards of the second gate (Goomba enemies that stand beside the pillars); defeating
- * either marks both as beaten.
+ * The two guards of the second gate, named シンエモン but fighting as Bristles (battle BTLNO_HEI_05_01, using the
+ * Goomba field events), that sit on the pillars; defeating either marks both as beaten.
  */
 static NpcSetupInfo npcEnt[] = {
     {
@@ -195,7 +195,7 @@ static EVT_BEGIN(hashira_evt_sub)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_TOGEDA_JUMP1"), LW(10), LW(11), LW(12), 0)
     IF_INT_LESS(LW(10), 0)
         ADD(LW(10), 50)
-        ELSE
+    ELSE
         SUBTRACT(LW(10), 50)
     END_IF
     CALL(evt_npc_jump_position_nohit, LW(0), LW(10), 0, 100, 700, 30)
@@ -205,13 +205,11 @@ static EVT_BEGIN(hashira_evt_sub)
 EVT_END()
 
 /**
- * Case script run when Mario hits a pillar of the second gate (LW(0) is the guard on it, LW(1) the other):
- * the pillar shakes with a quake (SFX_STG1_QUAKE6) while the camera looks at it,
+ * Case script run when Mario presses A at a pillar of the second gate (LW(0) is the guard on it, LW(1) the other):
+ * the guard shakes with a quake (SFX_STG1_QUAKE6) while the camera looks at it,
  * the guard jumps down (hashira_evt_sub), the other guard too unless it was already beaten,
  * then both guards are set up as linked enemies and the battle mode is switched on.
- * The original tests hei_03's pillar-defeated flags rather than this map's own.
  */
-// The optional second-enemy wakeup checks HEI_03 flags here, not this room's HEI_05 defeat flags.
 static EVT_BEGIN(hashira_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_get_position, LW(0), LW(10), LW(11), LW(12))
@@ -233,7 +231,7 @@ static EVT_BEGIN(hashira_evt)
             SET_VALUE(LW(0), LW(1))
             SPAWN_EVENT(PTR(hashira_evt_sub))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 0)
             SET_VALUE(LW(0), LW(1))
             SPAWN_EVENT(PTR(hashira_evt_sub))
@@ -253,7 +251,7 @@ static EVT_BEGIN(hashira_evt)
         IF_INT_EQUAL(GF(1), 1)
             CALL(evt_del_case_evt, 0, GW(1))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(GF(0), 1)
             CALL(evt_del_case_evt, 0, GW(0))
         END_IF
@@ -263,9 +261,9 @@ static EVT_BEGIN(hashira_evt)
 EVT_END()
 
 /**
- * Petal Meadows hei_05 map init: puts the two Shinemon enemies on their pillars until the "Bristle" story step
+ * Petal Meadows hei_05 map init: puts the two guards on their pillars until the "Bristle" story step
  * and until each has been defeated, opens the gate when both are beaten (or at once later in the story),
- * sets the cave music and reverb.
+ * sets the silenced field music, the ambience and reverb.
  */
 EVT_BEGIN(hei_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -311,7 +309,7 @@ EVT_BEGIN(hei_05_init_evt)
             END_IF
             CALL_CHILD(PTR(door_open))
         END_INLINE_EVENT
-        ELSE
+    ELSE
         CALL(evt_hitobj_onoff, STRING("a_mon"), 0, 0)
         CALL(evt_map_playanim, STRING("anm_mon"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
