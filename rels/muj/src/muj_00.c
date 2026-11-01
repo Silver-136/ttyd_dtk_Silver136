@@ -3042,14 +3042,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
         CALL_CHILD(PTR(iwapera_offscreen_end))
         WAIT_MS(4000)
         SPAWN_EVENT_GET_ID(PTR(cam_dai3_vs_kaizoku), LW(10))
-#if VERSION <= VERSION_DEMO_US
-        WAIT_MS(9500)
-        DELETE_EVENT(LW(10))
-        CALL(evt_cam3d_evt_set, -205, 528, 672, -205, 108, -278, 0, EASING_SINE_IN_OUT)
-        WAIT_MS(1400)
-        CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, EASING_SINE_IN_OUT)
-        WAIT_MS(200)
-#else
 #if VERSION == VERSION_EU
         CALL(evt_sub_get_framerate, LW(0))
         IF_INT_EQUAL(LW(0), 60)
@@ -3069,7 +3061,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
             CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, 11)
             WAIT_MS(240)
         END_IF
-#endif
 #endif
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
@@ -3368,14 +3359,10 @@ EVT_BEGIN(dai3_beat_back)
     WAIT_MS(1500)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 24)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_memcard_save)
-#else
 #if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
     CALL_CHILD(PTR(evt_memcard_save))
-#endif
 #endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)

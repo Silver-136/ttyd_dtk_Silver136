@@ -1468,9 +1468,6 @@ EVT_BEGIN(bero_case_exec_door)
         CALL(evt_mario_set_force_dir, LW(0))
         CALL(evt_mario_wait_landon)
         CALL(evt_bero_mario_go_wait)
-#if VERSION <= VERSION_DEMO_US
-        CALL(bero_get_position_normal, 0, FLOAT(150.0f))
-#else
 #if VERSION == VERSION_EU
         CALL(evt_sub_get_mapname, LW(10))
         IF_STR_EQUAL(LW(10), STRING("tou_04"))
@@ -1480,7 +1477,6 @@ EVT_BEGIN(bero_case_exec_door)
         END_IF
 #else
         CALL(bero_get_position_normal, 0, FLOAT(150.0f))
-#endif
 #endif
         PEEK_FLOAT(LW(10), PTR(&BeroEX))
         PEEK_FLOAT(LW(12), PTR(&BeroEZ))

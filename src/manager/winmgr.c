@@ -753,13 +753,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
 
     switch (m = sel->type) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x1E8);
-            memset(sel->items, 0, 0x1E8);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, (MAX_KEY_ITEMS + 1) * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, (MAX_KEY_ITEMS + 1) * sizeof(WinMgrSelectItem));
-#endif
             sel->numItems = 0;
             if (newItem) {
                 sel->items[sel->numItems++].id = newItem;
@@ -781,13 +776,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
         case 1:
         case 3:
         case 4:
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x54);
-            memset(sel->items, 0, 0x54);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, (MAX_HELD_ITEMS + 1) * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, (MAX_HELD_ITEMS + 1) * sizeof(WinMgrSelectItem));
-#endif
             sel->numItems = 0;
             if (newItem) {
                 sel->items[sel->numItems++].id = newItem;
@@ -801,13 +791,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         case 2:
         case 12:
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x324);
-            memset(sel->items, 0, 0x324);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, (MAX_BADGES + 1) * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, (MAX_BADGES + 1) * sizeof(WinMgrSelectItem));
-#endif
             sel->numItems = 0;
             if (newItem) {
                 sel->items[sel->numItems++].id = newItem;
@@ -815,25 +800,18 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             for (i = 0; i < MAX_BADGES; i++) {
                 id = (u16)pouchHaveBadge(i);
                 if (id) {
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
                     if (sel->type == 12 && id == pouchEquipBadge(i)) {
                         sel->items[sel->numItems].flags |= SELECT_ITEM_EQUIPPED;
                     }
-#endif
 #endif
                     sel->items[sel->numItems++].id = id;
                 }
             }
             break;
         case 5:
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x84);
-            memset(sel->items, 0, 0x84);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, (MAX_STORED_ITEMS + 1) * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, (MAX_STORED_ITEMS + 1) * sizeof(WinMgrSelectItem));
-#endif
             sel->numItems = 0;
             if (newItem) {
                 sel->items[sel->numItems++].id = newItem;
@@ -847,13 +825,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         case 6:
         case 7: {
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x1C);
-            memset(sel->items, 0, 0x1C);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, 7 * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, 7 * sizeof(WinMgrSelectItem));
-#endif
             sel->numItems = 0;
             for (i = 0; party_id_table[i] != 0; i++) {
                 if (partyChkJoin(party_id_table[i])) {
@@ -873,13 +846,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         }
         case 8: {
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x1C);
-            memset(sel->items, 0, 0x1C);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, 7 * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, 7 * sizeof(WinMgrSelectItem));
-#endif
             sel->numItems = 0;
             for (i = 0; party_id_table[i] != 0; i++) {
                 if (partyChkJoin(party_id_table[i]) && party_id_table[i] != evtGetValue(NULL, GW(1))) {
@@ -896,13 +864,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
             mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
             mario_status_point_table[2] = &pouchGetPtr()->maximumBP;
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, 0xC);
-            memset(sel->items, 0, 0xC);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, 3 * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, 3 * sizeof(WinMgrSelectItem));
-#endif
             for (i = 0; i < 3; i++) {
                 sel->items[i].id = i;
                 cnt = 0;
@@ -937,13 +900,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
             mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
             mario_status_point_table[2] = &pouchGetPtr()->maximumBP;
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, 8);
-            memset(sel->items, 0, 8);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, 2 * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, 2 * sizeof(WinMgrSelectItem));
-#endif
             sel->numItems = 0;
             for (i = 0; i < 3; i++) {
                 if (i != evtGetValue(NULL, GW(1))) {
@@ -956,13 +914,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             }
             break;
         case 11:
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x18C);
-            memset(sel->items, 0, 0x18C);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, BADGE_COUNT * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, BADGE_COUNT * sizeof(WinMgrSelectItem));
-#endif
             sel->numItems = 0;
             for (i = 0; i < BADGE_COUNT; i++) {
                 m = (s16)badgeShop_get(bdsw->bargain_table, i + BADGE_MIN);
@@ -976,13 +929,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         case 13:
             m = getBadgeStarmaniacTableMaxCount();
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, m * 4);
-            memset(sel->items, 0, m * 4);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, m * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, m * sizeof(WinMgrSelectItem));
-#endif
             sel->numItems = 0;
             for (i = 0; i < BADGE_COUNT; i++) {
                 m = (s16)badgeShop_get(bdsw->starmaniac_table, i + BADGE_MIN);
@@ -1019,13 +967,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         case 15:
             m = getBadgeBottakuru100TableMaxCount();
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, m * 4);
-            memset(sel->items, 0, m * 4);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, m * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, m * sizeof(WinMgrSelectItem));
-#endif
             sel->numItems = 0;
             for (i = 0; i < m; i++) {
                 sel->items[sel->numItems++].id = badge_bottakuru100_table[i];
@@ -1033,25 +976,16 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         case 16:
             m = getBadgeBteresaTableMaxCount();
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, m * 4);
-            memset(sel->items, 0, m * 4);
-            sel->numItems = 0;
-            for (i = 0; i < 338; i++) {
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, m * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, m * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             for (i = 0; i < BADGE_MAX - KEY_ITEM_MIN; i++) {
-#endif
                 if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
                     sel->items[sel->numItems++].id = i + 1;
                 }
             }
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_bteresa);
-#endif
 #endif
             break;
         case 17:
@@ -1062,13 +996,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 tbl = jdt->readFlags.luigiRead;
             }
             sel->numItems = jdt->count;
-#if VERSION <= VERSION_DEMO_US
-            sel->items = __memAlloc(HEAP_DEFAULT, (sel->numItems + 1) * 4);
-            memset(sel->items, 0, (sel->numItems + 1) * 4);
-#else
             sel->items = __memAlloc(HEAP_DEFAULT, (sel->numItems + 1) * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, (sel->numItems + 1) * sizeof(WinMgrSelectItem));
-#endif
             for (i = 0; i < sel->numItems; i++) {
                 sel->items[i].id = i;
                 if (johoya_get(tbl, jdt->info[i].storyId)) {
@@ -1084,13 +1013,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 count = 0;
                 while (list[count++] != -1) {
                 }
-#if VERSION <= VERSION_DEMO_US
-                sel->items = __memAlloc(HEAP_DEFAULT, (count + 1) * 4);
-                memset(sel->items, 0, (count + 1) * 4);
-#else
                 sel->items = __memAlloc(HEAP_DEFAULT, (count + 1) * sizeof(WinMgrSelectItem));
                 memset(sel->items, 0, (count + 1) * sizeof(WinMgrSelectItem));
-#endif
                 sel->numItems = 0;
                 if (newItem) {
                     sel->items[sel->numItems++].id = newItem;
@@ -1472,15 +1396,6 @@ void select_main(WinMgrEntry* entry) {
  * a currency icon above the price column (one for 13, another for 16), the hand cursor and scroll arrows.
  * From US on, worn badges in the sell list get a mark.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Draws an item or badge list: icon, name and (for the sell and shop types) price per row,
- * the divider under a new item, the title by type,
- * a currency icon above the price column (one for 13, another for 16), the hand cursor and scroll arrows.
- * From US on, worn badges in the sell list get a mark.
- */
-static void select_disp(WinMgrEntry* entry) {
-#else
 /**
  * Draws an item or badge list: icon, name and (for the sell and shop types) price per row,
  * the divider under a new item, the title by type,
@@ -1488,7 +1403,6 @@ static void select_disp(WinMgrEntry* entry) {
  * From US on, worn badges in the sell list get a mark.
  */
 void select_disp(WinMgrEntry* entry) {
-#endif
     WinMgrSelect* sel = entry->param;
     u32 left, top, wd, ht;
     GXColor black = {0x00, 0x00, 0x00, 0xFF};
@@ -1646,11 +1560,6 @@ winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)),
                 msg = msgSearch("msg_window_title_1");
                 break;
         }
-#if VERSION <= VERSION_DEMO_US
-        w = (entry->width - FontGetMessageWidth(msg)) / 2;
-        winFontInit();
-        winFontSetEdge((Vec){entry->x + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
-#else
 #if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
         if (tw > 120.0f) {
@@ -1663,7 +1572,6 @@ winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)),
         w = (entry->width - FontGetMessageWidth(msg)) / 2;
         winFontInit();
         winFontSetEdge((Vec){entry->x + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
-#endif
 #endif
         switch (sel->type) {
             case 3:
@@ -1697,11 +1605,7 @@ winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)),
                 iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_PIANTA_TOKEN, 0.6f);
                 break;
         }
-#if VERSION <= VERSION_DEMO_US
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_DISP_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
-#else
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
-#endif
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
                 iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
@@ -1834,16 +1738,6 @@ void select_disp_party(WinMgrEntry* entry) {
         }
         GXSetScissor(left, top, wd, ht);
         msg = msgSearch("msg_window_title_7");
-#if VERSION <= VERSION_DEMO_US
-        w = (120 - FontGetMessageWidth(msg)) / 2;
-        winFontInit();
-        winFontSetEdge((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
-        msg = msgSearch("msg_window_title_8");
-        w = (85 - FontGetMessageWidth(msg)) / 2;
-        winFontInit();
-        winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_DISP_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
-#else
 #if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
         if (tw > 100.0f) {
@@ -1872,7 +1766,6 @@ void select_disp_party(WinMgrEntry* entry) {
         winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
-#endif
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
                 iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
@@ -2015,13 +1908,6 @@ void select_disp_mario(WinMgrEntry* entry) {
  * Draws the informant lists: each entry's title cut at its tag end, read ones in grey,
  * and for type 17 the price of unread entries with a coin icon. Despite the name it serves both 17 and 18.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Draws the informant lists: each entry's title cut at its tag end, read ones in grey,
- * and for type 17 the price of unread entries with a coin icon. Despite the name it serves both 17 and 18.
- */
-static void select_disp_luigi(WinMgrEntry* entry) {
-#else
 /**
  * Draws the informant lists: each entry's title cut at its tag end, read ones in grey,
  * and for type 17 the price of unread entries with a coin icon. Despite the name it serves both 17 and 18.
@@ -2029,7 +1915,6 @@ static void select_disp_luigi(WinMgrEntry* entry) {
 void select_disp_luigi(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
-#endif
 #endif
     WinMgrEntry* ent = entry;
     WinMgrSelect* sel = ent->param;
@@ -2068,14 +1953,10 @@ void select_disp_luigi(WinMgrEntry* entry) {
             } else {
                 col = &black;
             }
-#if VERSION <= VERSION_DEMO_US
-            winFontSet((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
-#else
 #if VERSION >= VERSION_US
             winFontSetWidth((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, 200.0f, info->initEndPos);
 #else
             winFontSet((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
-#endif
 #endif
             info->initEndPos[info->tagEndPos] = save;
             if (sel->type == 17 && !(sel->items[i].flags & SELECT_ITEM_GRAY)) {

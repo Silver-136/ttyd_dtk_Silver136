@@ -1925,11 +1925,9 @@ static EVT_BEGIN(evt_gardman)
         END_IF
         CALL(evt_mario_normalize)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
-#endif
 #endif
         CALL(evt_mario_set_pose, STRING("M_N_7"))
         CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_NO_HIT)
@@ -2032,14 +2030,12 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
     IF_STR_EQUAL(LW(0), STRING("tou_07"))
         SET_VALUE(LF(2), 1)
     END_IF
-#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
     SET_VALUE(LF(3), 0)
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), 3)
         SET_VALUE(LF(3), 1) // French: the two inserted values are swapped
     END_IF
-#endif
 #endif
     CALL(evt_party_stop, 0)
     WAIT_FRAMES(1)
@@ -2073,17 +2069,6 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             IF_INT_EQUAL(LW(3), 10)
                 IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
-#if VERSION <= VERSION_DEMO_US
-                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(3), LW(1))
-                ELSE
-                        CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-                END_IF
-            ELSE
-                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-            END_IF
-        ELSE
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
-#else
 #if VERSION == VERSION_EU
                     IF_INT_EQUAL(LF(3), 0)
 #endif
@@ -2127,7 +2112,6 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(1), LW(3))
             END_IF
 #endif
-#endif
         END_IF
     END_IF
     IF_INT_EQUAL(LF(1), 1)
@@ -2141,9 +2125,6 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
             IF_INT_EQUAL(LW(3), 0)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(1))
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-#else
 #if VERSION == VERSION_EU
                 IF_INT_EQUAL(LF(3), 0)
 #endif
@@ -2153,15 +2134,11 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
                     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(1), LW(3))
                 END_IF
 #endif
-#endif
             END_IF
             ELSE
             IF_INT_EQUAL(LW(3), 0)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361_01"), 0, STRING("キノシコワ"), LW(1))
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
-#else
 #if VERSION == VERSION_EU
                 IF_INT_EQUAL(LF(3), 0)
 #endif
@@ -2170,7 +2147,6 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
                 ELSE
                     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(1), LW(3))
                 END_IF
-#endif
 #endif
             END_IF
         END_IF
@@ -2188,11 +2164,6 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-        ELSE
-                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
-#else
 #if VERSION == VERSION_EU
             IF_INT_EQUAL(LF(3), 0)
 #endif
@@ -2209,7 +2180,6 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
             ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(1), LW(3))
             END_IF
-#endif
 #endif
         END_IF
     END_IF
@@ -3126,16 +3096,11 @@ EVT_BEGIN(evt_michel_8)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_36"), 0, STRING("キノシコワ"))
     CALL(evt_npc_get_position, STRING("ポグ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("ポグ"), LW(0), LW(1), LW(2), 500, 30)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_93_37"), 0, STRING("キノシコワ"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print_add, 0, STRING("stg3_tou_93_37"))
 #else
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_37"), 0, STRING("キノシコワ"))
-#endif
 #endif
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
@@ -3815,9 +3780,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_114_01"), 0, STRING("キノシコワ"), LW(10))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
@@ -3829,7 +3791,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_114_01"), 0, STRING("キノシコワ"), LW(10))
-#endif
 #endif
             CALL_CHILD(PTR(evt_tou_ranking_msg))
             CALL(evt_pouch_add_coin, LW(10))
@@ -3853,9 +3814,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_179_01"), 0, STRING("キノシコワ"), LW(10))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
@@ -3867,7 +3825,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_179_01"), 0, STRING("キノシコワ"), LW(10))
-#endif
 #endif
             CALL_CHILD(PTR(evt_tou_ranking_msg))
             CALL(evt_pouch_add_coin, LW(10))
@@ -3895,9 +3852,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_365_01"), 0, STRING("キノシコワ"), LW(10))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
@@ -3909,7 +3863,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_365_01"), 0, STRING("キノシコワ"), LW(10))
-#endif
 #endif
             CALL_CHILD(PTR(evt_tou_ranking_msg))
             CALL(evt_pouch_add_coin, LW(10))
@@ -3934,9 +3887,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_365_03_01"), 0, STRING("キノシコワ"), LW(10))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
@@ -3948,7 +3898,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_365_03_01"), 0, STRING("キノシコワ"), LW(10))
-#endif
 #endif
             CALL_CHILD(PTR(evt_tou_ranking_msg))
             CALL(evt_pouch_add_coin, LW(10))
@@ -3972,9 +3921,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_180_01"), 0, STRING("キノシコワ"), LW(10))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
@@ -3986,7 +3932,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_180_01"), 0, STRING("キノシコワ"), LW(10))
-#endif
 #endif
             CALL_CHILD(PTR(evt_tou_ranking_msg))
             CALL(evt_pouch_add_coin, LW(10))
@@ -4013,9 +3958,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_365_04_01"), 0, STRING("キノシコワ"), LW(10))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
@@ -4027,7 +3969,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_365_04_01"), 0, STRING("キノシコワ"), LW(10))
-#endif
 #endif
             CALL_CHILD(PTR(evt_tou_ranking_msg))
             CALL(evt_pouch_add_coin, LW(10))
@@ -4051,9 +3992,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_181_01"), 0, STRING("キノシコワ"), LW(10))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
@@ -4065,7 +4003,6 @@ EVT_BEGIN(evt_tou_match_after_default)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_181_01"), 0, STRING("キノシコワ"), LW(10))
-#endif
 #endif
             CALL_CHILD(PTR(evt_tou_ranking_msg))
             CALL(evt_pouch_add_coin, LW(10))

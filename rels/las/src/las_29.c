@@ -1472,26 +1472,13 @@ EVT_BEGIN(last_evt_3)
     CALL(evt_mapobj_trans, 0, STRING("S_hakahuta"), 60, -40, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_o_hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, 33, 47, 226, 133, 57, -2, 0, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LSWF(10), 1)
-#else
     SET_VALUE(LSWF_LAS_29_MAP_LIT_WHITE, 1)
-#endif
     CALL(evt_map_set_tevcallback, 1, PTR(map_color_tev))
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL_CHILD(PTR(flush_on))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kabekesu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LSWF(10), 0)
-    WAIT_MS(100)
-    CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
-    SET_VALUE(LSWF(10), 1)
-    WAIT_MS(100)
-    SET_VALUE(LSWF(10), 0)
-    WAIT_MS(100)
-#else
     SET_VALUE(LSWF_LAS_29_MAP_LIT_WHITE, 0)
 #if VERSION >= VERSION_US
     WAIT_MS(300)
@@ -1503,19 +1490,14 @@ EVT_BEGIN(last_evt_3)
     SET_VALUE(LSWF_LAS_29_MAP_LIT_WHITE, 0)
     WAIT_MS(100)
 #endif
-#endif
     CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
     CALL(evt_fade_entry, FADE_OUT_WHITE, 1, 255, 255, 255)
     CALL(evt_map_blend_off, 0)
     CALL_CHILD(PTR(flush_off))
-#if VERSION <= VERSION_DEMO_US
-    WAIT_MS(100)
-#else
 #if VERSION >= VERSION_US
     WAIT_MS(200)
 #else
     WAIT_MS(100)
-#endif
 #endif
     CALL(evt_fade_entry, FADE_IN_WHITE, 2000, 255, 255, 255)
     CALL(evt_fade_end_wait)
@@ -1779,18 +1761,11 @@ EVT_BEGIN(last_evt_3)
         WAIT_MS(800)
         CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
         WAIT_MS(100)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mario_cont_onoff, 0)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_mario_set_pos, 0, -1000, 0)
-        CALL(evt_npc_set_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
-#else
 #if VERSION < VERSION_US
         CALL(evt_mario_cont_onoff, 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_mario_set_pos, 0, -1000, 0)
         CALL(evt_npc_set_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
-#endif
 #endif
         CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 0, 0, 0)
         WAIT_MS(100)
@@ -1798,13 +1773,11 @@ EVT_BEGIN(last_evt_3)
         WAIT_MS(100)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg8_las_138"), 0, STRING("ブラックピーチ"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
             WAIT_MS(500)
             CALL(all_hikari_onoff, 1)
         END_INLINE_EVENT
-#endif
 #endif
         CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 255, 0, 1000)
         LABEL(1)
@@ -1818,12 +1791,8 @@ EVT_BEGIN(last_evt_3)
         CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)
     END_IF
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_delete, STRING("にせマリオ"))
-#else
 #if VERSION < VERSION_US
     CALL(evt_npc_delete, STRING("にせマリオ"))
-#endif
 #endif
     CALL(evt_msg_print, 0, STRING("stg8_las_140"), 0, STRING("ブラックピーチ"))
     CALL(rou_hikari_front_onoff, 1, 1)
@@ -2174,28 +2143,24 @@ EVT_BEGIN(last_evt_3_2)
     SET_VALUE(LW(0), 0)
     SET_VALUE(GW(1), 0)
     SET_VALUE(GF(1), 0)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     SET_VALUE(GW(6), 0)
 #endif
     // BUG: textbox limit. Every message here opens a window (msgWindow_Entry), and there are only
     // 7 window slots; windowEntry returns -1 when all are in use and msgWindow_Entry does not check it.
     // This opens ten, 200 ms apart, so it always runs past the limit while the earlier ones are open.
-#endif
     LOOP(10)
         CALL(make_koe_label, LW(0), LW(1))
         CALL(make_koe_pos, LW(2), LW(3), LW(4))
         BEGIN_INLINE_EVENT
             ADD(GW(1), 1)
             CALL(evt_msg_toge, 16777219, LW(2), LW(3), LW(4))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             CALL(evt_msg_pri, GW(6))
             ADD(GW(6), 1)
             IF_INT_EQUAL(GW(6), 10)
                 SET_VALUE(GW(6), 0)
             END_IF
-#endif
 #endif
             CALL(evt_msg_print, 0, LW(1), 0, 0)
             SUBTRACT(GW(1), 1)
@@ -2737,14 +2702,10 @@ EVT_BEGIN(last_evt_4)
     SET_VALUE(GF(0), 1)
     CALL(evt_snd_sfxoff, LW(15))
     LOOP(2)
-#if VERSION <= VERSION_DEMO_US
-        WAIT_MS(150)
-#else
 #if VERSION >= VERSION_US
         WAIT_MS(450)
 #else
         WAIT_MS(150)
-#endif
 #endif
         CALL(evt_snd_sfxon, STRING("SFX_STG8_QUEEN_DIE2"), 0)
         CALL(evt_fade_entry, FADE_OUT_WHITE, 1, 255, 255, 255)

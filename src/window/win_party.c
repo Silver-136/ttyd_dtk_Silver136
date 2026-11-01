@@ -409,15 +409,8 @@ f32 costX;
     s32 id;
     const char* name;
     PouchPartyData* pd;
-#if VERSION <= VERSION_DEMO_US
-    white0 = winPartyWhiteC;
     white = winPartyWhiteC;
     white2 = winPartyWhiteC;
-    black0 = winPartyBlackC;
-#else
-    white = winPartyWhiteC;
-    white2 = winPartyWhiteC;
-#endif
     black = winPartyBlackC;
     black2 = winPartyBlackC;
     x = wp->menu[idx].x;
@@ -451,19 +444,11 @@ f32 costX;
             winTexInit(*wp->res->data);
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
             GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-#if VERSION <= VERSION_DEMO_US
-            winTexSet(0xAF, (Vec){tx, (fy = by - ((f32)(i * 32))) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, cols[i]);
-            winFontInit();
-            winFontSet((Vec){bx - (w1 / 2.0f), 12.0f + fy, 0.0f}, (Vec){scale, scale, scale}, black2, msgSearch(msgs[i]));
-            if (i < 1) {
-                winFontSet((Vec){bx - (w2 / 2.0f), 21.0f + fy, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, red[i], msgSearch(msgs2[i]));
-#else
             winTexSet(0xAF, (Vec){tx, (fy = by - (f32)(i * 32)) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, cols[i]);
             winFontInit();
             winFontSet((Vec){bx - w1 / 2.0f, 12.0f + fy, 0.0f}, (Vec){scale, scale, scale}, black2, msgSearch(msgs[i]));
             if (i < 1) {
                 winFontSet((Vec){bx - w2 / 2.0f, 21.0f + fy, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, red[i], msgSearch(msgs2[i]));
-#endif
             }
         }
     }
@@ -502,19 +487,10 @@ f32 costX;
         Mtx rx;
         Mtx ry;
         PSMTXRotRad(rx, 'x', 0.5235988f);
-#if VERSION <= VERSION_DEMO_US
-        PSMTXRotRad(ry, 'y', 0.017453292f * (((360.0f / wp->party.count) * i) - wp->party.angle));
-        PSMTXMultVec(ry, &v, &v);
-        PSMTXMultVec(rx, &v, &v);
-        kp = &(GXColor){0x00, 0x00, 0x00, 0x80};
-        // FAKE: the colour goes by address with the floats first (the by-value call rebuilds the literal each pass and evaluates the scale first)
-        ((void (*)(WindowWork*, f32, f32, f32, f32, GXColor*))winKageGX)(wp, (x - 140.0f) + v.x, 20.0f + (y + v.y), v.z, (i == wp->party.cursor) ? (0.8f) : (0.6f), kp);
-#else
         PSMTXRotRad(ry, 'y', 0.017453292f * (360.0f / wp->party.count * i - wp->party.angle));
         PSMTXMultVec(ry, &v, &v);
         PSMTXMultVec(rx, &v, &v);
         winKageGX(wp, (x - 140.0f) + v.x, 20.0f + (y + v.y), v.z, (i == wp->party.cursor) ? 0.8f : 0.6f, (GXColor){0x00, 0x00, 0x00, 0x80});
-#endif
     }
 
     for (i = 0; i < wp->party.count; i++) {
@@ -525,20 +501,12 @@ f32 costX;
         Vec vp;
         Mtx ry;
         pose = wp->party.poseIds[i];
-#if VERSION <= VERSION_DEMO_US
-        if (pose == (-1)) {
-#else
         if (pose == -1) {
-#endif
             continue;
         }
         anim = animPoseGetAnimDataPtr(pose);
         PSMTXRotRad(rx, 'x', 0.5235988f);
-#if VERSION <= VERSION_DEMO_US
-        PSMTXRotRad(ry, 'y', 0.017453292f * (((360.0f / wp->party.count) * i) - wp->party.angle));
-#else
         PSMTXRotRad(ry, 'y', 0.017453292f * (360.0f / wp->party.count * i - wp->party.angle));
-#endif
         PSMTXMultVec(ry, &v, &v);
         PSMTXMultVec(rx, &v, &v);
         if (i == wp->party.cursor) {

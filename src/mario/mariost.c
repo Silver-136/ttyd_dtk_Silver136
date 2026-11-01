@@ -1086,50 +1086,34 @@ void* gcDvdCheckThread(void* param) {
         msgId = 0;
         switch (DVDGetDriveStatus()) {
             case DVD_STATE_COVER_OPEN:
-#if VERSION <= VERSION_DEMO_US
-                msgId = 5;
-#else
 #if VERSION >= VERSION_US
                 msgId = 10;
 #else
                 msgId = 5;
 #endif
-#endif
                 gp->dvdError = TRUE;
                 break;
             case DVD_STATE_NO_DISK:
-#if VERSION <= VERSION_DEMO_US
-                msgId = 6;
-#else
 #if VERSION >= VERSION_US
                 msgId = 11;
 #else
                 msgId = 6;
-#endif
 #endif
                 gp->dvdError = TRUE;
                 break;
             case DVD_STATE_WRONG_DISK:
-#if VERSION <= VERSION_DEMO_US
-                msgId = 6;
-#else
 #if VERSION >= VERSION_US
                 msgId = 11;
 #else
                 msgId = 6;
 #endif
-#endif
                 gp->dvdError = TRUE;
                 break;
             case DVD_STATE_RETRY:
-#if VERSION <= VERSION_DEMO_US
-                msgId = 7;
-#else
 #if VERSION >= VERSION_US
                 msgId = 12;
 #else
                 msgId = 7;
-#endif
 #endif
                 gp->dvdError = TRUE;
                 break;
@@ -1149,7 +1133,6 @@ void* gcDvdCheckThread(void* param) {
             case DVD_STATE_BUSY:
                 break;
         }
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         if (DVDGetDriveStatus() != prevStatus) {
             prevStatus = DVDGetDriveStatus();
@@ -1161,7 +1144,6 @@ void* gcDvdCheckThread(void* param) {
                 stableCount = 100;
             }
         }
-#endif
 #endif
         if (gp->dvdError) {
             SoundOpenCover();

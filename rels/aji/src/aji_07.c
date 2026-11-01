@@ -363,7 +363,6 @@ EVT_BEGIN(aji_07_init_evt)
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_party_cont_onoff, 1, 1)
             CALL(evt_mario_wait_landon)
-#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
             LOOP(30)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -377,7 +376,6 @@ EVT_BEGIN(aji_07_init_evt)
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
-#endif
 #endif
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_cam_letter_box_disable, 0)

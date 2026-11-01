@@ -207,10 +207,8 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
     s32 type = evtGetValue(event, args[0]);
     PartyEntry* party;
     s32 ret;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     f32 s, c;
-#endif
 #endif
     {
         static const char names[] = "DOKAN_TATE_DOWNIN\0\0\0DOKAN_TATE_UPIN\0DOKAN_TATE_DOWNOUT\0\0DOKAN_TATE_UPOUT\0\0\0\0DOKAN_YOKO_IN\0\0\0DOKAN_YOKO_OUT\0";
@@ -224,10 +222,8 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             mp->rot = (Vec){0.0f, 0.0f, 0.0f};
             mp->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
             mp->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             mp->dispOfs2 = (Vec){0.0f, 0.0f, 0.0f};
-#endif
 #endif
         } else {
             switch (type) {
@@ -240,12 +236,10 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
                     if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
                         marioUpdateCamPos();
                         camFollowYOn();
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
                         sincosf(&s, &c, mp->targetYaw);
                         mp->dispOfs2.x = -0.4f * s;
                         mp->dispOfs2.z = -0.4f * c;
-#endif
 #endif
                     }
                     event->userdata[1] = 0;
@@ -360,12 +354,6 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             ret = 2;
             break;
         case 10:
-#if VERSION <= VERSION_DEMO_US
-            mp->mot.dokan.rotSpeed += 1.0f;
-                if (mp->mot.dokan.rotSpeed > 30.0f) {
-                    mp->mot.dokan.rotSpeed = 30.0f;
-                }
-#else
 #if VERSION >= VERSION_US
             mp->mot.dokan.rotSpeed = 30.0f;
 #else
@@ -373,7 +361,6 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             if (mp->mot.dokan.rotSpeed > 30.0f) {
                 mp->mot.dokan.rotSpeed = 30.0f;
             }
-#endif
 #endif
             event->userdata[0]++;
             if (event->userdata[0] > 10) {
@@ -1159,10 +1146,8 @@ USER_FUNC(evt_mario_party_door_move) {
     s32 ret;
     f32 sx, sy, sz;
     f32 dist;
-#if VERSION > VERSION_DEMO_US
     f32 cam;
 
-#endif
     if (isFirstCall) {
         party = partyGetPtr(marioGetPartyId());
         if (party) {
@@ -1306,7 +1291,6 @@ USER_FUNC(evt_mario_party_door_move) {
                 party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
                 party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
             }
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             event->userdata[0] = 8;
             event->userdata[1] = 1;
@@ -1315,7 +1299,6 @@ USER_FUNC(evt_mario_party_door_move) {
             if (--event->userdata[1] > 0) {
                 break;
             }
-#endif
 #endif
             ret = 2;
             break;

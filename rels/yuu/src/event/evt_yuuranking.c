@@ -213,10 +213,8 @@ EVT_END()
  * highlighting the new entry in red.
  */
 static void evt_yuuranking_disp_func(CameraId camera, void* param) {
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     const char* head;
-#endif
 #endif
     YuuRankingWork* wp = param;
     const char* titles[4] = {"menu_title_minigame1", "menu_title_minigame4", "menu_title_minigame3", "menu_title_minigame2"};
@@ -247,10 +245,8 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
     s32 rmin;
     s32 rsec;
     s32 i;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     s32 fr;
-#endif
 #endif
     f32 ofs;
     s32 ix;
@@ -329,14 +325,10 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                 } else {
                     FontDrawColor((GXColor){0xFF, 0x3F, 0x3F, 0xFF});
                     sprintf(buf, msgSearch("menu_error_minigame1"));
-#if VERSION <= VERSION_DEMO_US
-                    FontDrawStringPitch(wp->x + (150.4f - fontlenpitch(buf, 18)), 56.0f + wp->y, 18.0f, buf);
-#else
 #if VERSION >= VERSION_US
                     yuuDrawRight(150.4f, 56.0f + wp->y, 1.0f, buf, 140, wp);
 #else
                     FontDrawStringPitch(wp->x + (150.4f - fontlenpitch(buf, 18)), 56.0f + wp->y, 18.0f, buf);
-#endif
 #endif
                 }
                 break;

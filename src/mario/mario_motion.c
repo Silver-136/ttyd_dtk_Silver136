@@ -87,14 +87,10 @@ MarioMotTblEntry marioMotTbl[] = {
     {mot_walk, NULL, NULL},
     {mot_dash, NULL, NULL},
     {mot_jump, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
-    {mot_jumpNpc, NULL, NULL},
-#else
 #if VERSION >= VERSION_US
     {mot_jumpNpc, NULL, mot_jumpNpc_post},
 #else
     {mot_jumpNpc, NULL, NULL},
-#endif
 #endif
     {mot_jumpSw, NULL, NULL},
     {mot_jumpStand, NULL, NULL},
@@ -716,9 +712,6 @@ void marioFall(void) {
         mot_fall_roll();
         return;
     }
-#if VERSION <= VERSION_DEMO_US
-    rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
-#else
 #if VERSION >= VERSION_US
     if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK)) {
         rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
@@ -728,7 +721,6 @@ void marioFall(void) {
     }
 #else
     rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
-#endif
 #endif
     spd = marioGetFallSpd();
     hit = marioChkLandon(&y, spd);
@@ -832,11 +824,7 @@ void marioLandOn(void) {
         } else {
             sfx = 0x14f;
         }
-#if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((const char*)sfx, &pos);
-#else
         psndSFXOn_3D(SFX_NAME_WORD(sfx), &pos);
-#endif
     }
     if (mario->flags & MARIO_FLAG_TUBE_MODE) {
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING);
@@ -1050,25 +1038,6 @@ void mot_talk(void) {
         if (fbat != NULL) {
             marioChgPose(((NpcEntry*)fbat)->checkPose);
         }
-#if VERSION <= VERSION_DEMO_US
-        if (!strcmp(mario->animName, "M_I_2")) {
-            mario->multiTimer = 60;
-            mario->currSubMotionId = 10;
-        }
-    }
-    switch (mario->currSubMotionId) {
-        case 0:
-            return;
-        case 10:
-            if (--mario->multiTimer > 0) {
-                break;
-            }
-            marioChgPose("M_S_1");
-            mario->currSubMotionId = 11;
-            break;
-    }
-}
-#else
 #if VERSION == VERSION_EU
         if (!strcmp(mario->animName, "M_I_3")) {
 #else
@@ -1090,7 +1059,6 @@ void mot_talk(void) {
             break;
     }
 }
-#endif
 
 /** Item pickup motion: stops Mario and shows the item-up pose M_I_U until the item code changes the motion. */
 void mot_getItem(void) {

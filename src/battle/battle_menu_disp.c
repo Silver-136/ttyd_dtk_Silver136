@@ -461,11 +461,7 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
     s32 n;
 
     cam = camGetPtr(CAMERA_2D);
-#if VERSION <= VERSION_DEMO_US
-    frac = menu->scrollPos - ((s32)menu->scrollPos);
-#else
     frac = menu->scrollPos - (s32)menu->scrollPos;
-#endif
     alpha = 0xFF;
     if (i == 0) {
         alpha = 255.0f * (1.0f - frac);
@@ -473,11 +469,7 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
     if (i == 6) {
         alpha = 255.0f * frac;
     }
-#if VERSION <= VERSION_DEMO_US
-    j = ((s32)menu->scrollPos) + i;
-#else
     j = (s32)menu->scrollPos + i;
-#endif
     if (j == cursor->absPos) {
         r = seleItemCoordCol.r;
         g = seleItemCoordCol.g;
@@ -487,11 +479,7 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
         b = 0xFF;
         g = 0xFF;
         r = 0xFF;
-#if VERSION <= VERSION_DEMO_US
-        a = (144.0f * ((u8)alpha)) / 255.0f;
-#else
         a = 144.0f * alpha / 255.0f;
-#endif
     }
     btlDispGXInit2D();
     PSMTXConcat(cam->view, m, out);
@@ -507,11 +495,7 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
     PSMTXScale(scl, 0.5f, 0.5f, 1.0f);
     PSMTXConcat(m, trn, out);
     PSMTXConcat(out, scl, out);
-#if VERSION <= VERSION_DEMO_US
-    if (!((u16)icon)) {
-#else
     if (!(u16)icon) {
-#endif
         icon = ICON_ITEM_COIN;
     }
     if (enabled == 1) {

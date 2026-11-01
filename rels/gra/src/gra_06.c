@@ -353,13 +353,11 @@ EVT_BEGIN(teresa_oidasare_evt)
     CALL(evt_cam3d_event_from_road, 65, 60, -115, 0, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
     // They fall and land hard, with the camera shaking.
-#endif
     CALL(evt_mario_set_pose, STRING("M_D_1"))
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
@@ -432,17 +430,12 @@ EVT_BEGIN(teresa_oidasare_evt)
     END_SWITCH
     // Control returns and the Steeple door is switched on again.
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_party_cont_onoff, 0, 1)
-#else
 #if VERSION < VERSION_US
     CALL(evt_mario_cont_onoff, 1)
 #endif
     CALL(evt_party_cont_onoff, 0, 1)
 #if VERSION >= VERSION_US
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-#endif
 #endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)

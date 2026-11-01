@@ -11793,15 +11793,6 @@ void psndENVMain(void) {
     f32 ang, r, a2;
     s32 rr;
     PaperSoundEnv* ent;
-#if VERSION <= VERSION_DEMO_US
-    if ((psnd.flags & PSND_FLAG_LETTER_BOX) && !(psnd.flags & PSND_FLAG_LETTER_BOX_OFF))
-        lim = 80;
-    if (seqGetSeq() != SEQ_MAP_CHANGE && (gp->retraceCount & 1)) {
-        if (psnd.envVolume < lim)
-            psnd.envVolume++;
-        if (psnd.envVolume > lim)
-            psnd.envVolume--;
-#else
 
     if ((psnd.flags & PSND_FLAG_LETTER_BOX) && !(psnd.flags & PSND_FLAG_LETTER_BOX_OFF)) {
         lim = 80;
@@ -11813,31 +11804,20 @@ void psndENVMain(void) {
         if (psnd.envVolume > lim) {
             psnd.envVolume--;
         }
-#endif
     }
     for (i = 0; i < 16; i++) {
         e = &psenv[i];
-#if VERSION <= VERSION_DEMO_US
-        if (e->id == 0)
-            continue;
-#else
         if (e->id == 0) {
             continue;
         }
-#endif
         switch (e->type) {
         case 0:
             switch (e->state) {
             case 0:
                 e->timer = e->timer - 1;
-#if VERSION <= VERSION_DEMO_US
-                if (e->timer == 0)
-                    e->state++;
-#else
                 if (e->timer == 0) {
                     e->state++;
                 }
-#endif
                 break;
             case 1:
                 e->position.x = 0.0f;
@@ -11850,28 +11830,13 @@ void psndENVMain(void) {
                 e->position.x += r * (f32)sin(a2);
                 e->position.z -= r * (f32)cos(a2);
                 {
-#if VERSION <= VERSION_DEMO_US
-                    u8 vol;
-
-                    psndENVVolume(e, &psnd, &vol);
-                    e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_LISTENER_OFFSET), vol, 0xff, 0, &e->position, 0, e->dist, 0);
-#else
                     u8 vv = psndEnvVolume(e, &psnd);
                     e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_LISTENER_OFFSET), vv, 0xff,
                                          0, &e->position, 0, e->dist, 0);
-#endif
                 }
                 e->state++;
                 break;
             case 2:
-#if VERSION <= VERSION_DEMO_US
-                if (e->sfx != 0xFFFFFFFF) {
-                    PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
-                    if (s->channel != 0xFFFFFFFF || (s->flags & PSFX_FLAG_START))
-                        break;
-                }
-                psndENVRestart(e);
-#else
                 if (e->sfx != -1) {
                     PaperSoundEffect* s = &pssfx[e->sfx & 0xff];
                     if (s->channel != -1 || (s->flags & PSFX_FLAG_START)) {
@@ -11879,25 +11844,16 @@ void psndENVMain(void) {
                     }
                 }
                 psndEnvDone(e);
-#endif
                 break;
             }
             break;
         case 1:
             switch (e->state) {
-#if VERSION <= VERSION_DEMO_US
-            case 0: {
-                u8 vol;
-
-                psndENVVolume(e, &psnd, &vol);
-                e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vol, 0xff, 0, &e->position, 0, e->dist, 0);
-#else
             case 0:
                 {
                     u8 vv = psndEnvVolume(e, &psnd);
                     e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff,
                                          0, &e->position, 0, e->dist, 0);
-#endif
                 }
                 e->state++;
                 break;
@@ -11927,16 +11883,6 @@ void psndENVMain(void) {
             switch (e->state) {
             case 0:
                 e->timer = e->timer - 1;
-#if VERSION <= VERSION_DEMO_US
-                if (e->timer == 0)
-                    e->state++;
-                break;
-            case 1: {
-                u8 vol;
-
-                psndENVVolume(e, &psnd, &vol);
-                e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vol, 0xff, 0, &e->position, 0, e->dist, 0);
-#else
                 if (e->timer == 0) {
                     e->state++;
                 }
@@ -11946,19 +11892,10 @@ void psndENVMain(void) {
                     u8 vv = psndEnvVolume(e, &psnd);
                     e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff,
                                          0, &e->position, 0, e->dist, 0);
-#endif
                 }
                 e->state++;
                 break;
             case 2:
-#if VERSION <= VERSION_DEMO_US
-                if (e->sfx != 0xFFFFFFFF) {
-                    PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
-                    if (s->channel != 0xFFFFFFFF || (s->flags & PSFX_FLAG_START))
-                        break;
-                }
-                psndENVRestart(e);
-#else
                 if (e->sfx != -1) {
                     PaperSoundEffect* s = &pssfx[e->sfx & 0xff];
                     if (s->channel != -1 || (s->flags & PSFX_FLAG_START)) {
@@ -11966,25 +11903,16 @@ void psndENVMain(void) {
                     }
                 }
                 psndEnvDone(e);
-#endif
                 break;
             }
             break;
         case 3:
             switch (e->state) {
-#if VERSION <= VERSION_DEMO_US
-            case 0: {
-                u8 vol;
-
-                psndENVVolume(e, &psnd, &vol);
-                e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_AT_LISTENER), vol, 0xff, 0, &e->position, 0, e->dist, 0);
-#else
             case 0:
                 {
                     u8 vv = psndEnvVolume(e, &psnd);
                     e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_AT_LISTENER), vv, 0xff,
                                          0, &e->position, 0, e->dist, 0);
-#endif
                 }
                 e->state++;
                 break;
@@ -12391,11 +12319,6 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
         fade->dipTimeMax = fadetime / PSND_FRAME_MS;
         fade->dipTime = fade->dipTimeMax;
         fade->dipPercent = silent;
-#if VERSION <= VERSION_DEMO_US
-        } else {
-        psndENV_stop(*(&psnd.envId[flags & 0xF]));
-        *(&psnd.envId[flags & 0xF]) = 0;
-#else
 #if VERSION >= VERSION_US
         if (flags & PSND_QUICK) {
             fade->dipTime = (fade->dipTimeMax * fade->dipPercent) / 100;
@@ -12404,7 +12327,6 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
     } else {
         psndENV_stop(psnd.envId[flags & 0xF]);
         psnd.envId[flags & 0xF] = 0;
-#endif
     }
     return TRUE;
 }

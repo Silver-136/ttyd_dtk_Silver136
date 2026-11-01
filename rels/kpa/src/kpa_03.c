@@ -129,10 +129,8 @@ EVT_END()
  */
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
-#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
     CALL(kpa_cancel_attack_mode)
-#endif
 #endif
     BEGIN_INLINE_EVENT
         WAIT_MS(600)

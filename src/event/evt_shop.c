@@ -183,13 +183,6 @@ static EVT_BEGIN(buy_evt)
     CALL(get_value, LW(10), LW(11), LW(12), LW(13))
     CALL(get_msg, LW(10), 0, LW(14))
     CALL(evt_sub_get_language, LW(0))
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
-        CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(13), LW(11))
-        ELSE
-        CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
-    END_IF
-#else
 #if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(LANGUAGE_JP)
@@ -207,7 +200,6 @@ static EVT_BEGIN(buy_evt)
     END_IF
 #endif
     // Mario decides: "no", too few coins or a full item bag each end the purchase with the shopkeeper's line.
-#endif
     CALL(get_msg, LW(10), 24, LW(14))
     CALL(evt_msg_select, 0, LW(14))
     IF_INT_EQUAL(LW(0), 1)
@@ -246,9 +238,6 @@ static EVT_BEGIN(buy_evt)
     WAIT_MS(200)
     CALL(evt_win_coin_off, LW(8))
     CALL(point_disp_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_continue)
-#else
 #if VERSION >= VERSION_US
     CALL(get_msg, LW(10), 11, LW(14))
     CALL(evt_msg_print_add, 0, LW(14))
@@ -256,7 +245,6 @@ static EVT_BEGIN(buy_evt)
     CALL(evt_msg_continue)
 #endif
     // The first item ever bought brings up the item tutorial, except on kiosk units.
-#endif
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
         IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
@@ -274,9 +262,6 @@ static EVT_BEGIN(buy_evt)
         CALL(get_shop_point, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 300)
             CALL(get_msg, LW(10), 26, LW(14))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
@@ -289,7 +274,6 @@ static EVT_BEGIN(buy_evt)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
-#endif
 #endif
             ELSE
             CALL(get_msg, LW(10), 34, LW(14))
@@ -565,13 +549,6 @@ static EVT_BEGIN(sell_evt)
     CALL(item_data_db_restore)
     CALL(get_msg, LW(10), 8, LW(14))
     CALL(evt_sub_get_language, LW(0))
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
-        CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(3), LW(2))
-    ELSE
-        CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
-    END_IF
-#else
 #if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(LANGUAGE_JP)
@@ -587,7 +564,6 @@ static EVT_BEGIN(sell_evt)
         ELSE
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
     END_IF
-#endif
 #endif
     CALL(get_msg, LW(10), 24, LW(14))
     CALL(evt_msg_select, 0, LW(14))

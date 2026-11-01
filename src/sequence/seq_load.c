@@ -1003,12 +1003,6 @@ void loadDraw(CameraId camera, void* param) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-#if VERSION <= VERSION_DEMO_US
-    // FAKE: win1 reused as a cam alias before its win_dt web, so the win_dt web becomes a lifetime-split temp
-    // (addi straight into win1's register, loop 1 iterates a copy) as in the target
-    win1 = (WinDt*)cam;
-    GXLoadPosMtxImm(((CameraEntry*)win1)->view, GX_PNMTX0);
-#else
 #if VERSION >= VERSION_US
     GXLoadPosMtxImm(cam->view, GX_PNMTX0);
 #else
@@ -1017,20 +1011,15 @@ void loadDraw(CameraId camera, void* param) {
     win1 = (WinDt*)cam;
     GXLoadPosMtxImm(((CameraEntry*)win1)->view, GX_PNMTX0);
 #endif
-#endif
     GXSetCurrentMtx(GX_PNMTX0);
     loadDrawBg(0x35, -304.0f, 240.0f, -272.0f, -240.0f);
     loadDrawBg(0x34, -272.0f, 240.0f, 272.0f, -240.0f);
     loadDrawBg(0x36, 272.0f, 240.0f, 304.0f, -240.0f);
 
-#if VERSION <= VERSION_DEMO_US
-    win1 = win_dt;
-#else
 #if VERSION >= VERSION_US
     win1[0] = win_dt;
 #else
     win1 = win_dt;
-#endif
 #endif
     for (i = 0; i < 9; i++) {
         GXColor col = gray;

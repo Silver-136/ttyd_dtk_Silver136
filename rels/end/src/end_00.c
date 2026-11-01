@@ -802,16 +802,6 @@ USER_FUNC(evt_end_credit_npc_main) {
     }
     switch (actor->state) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
-            EXIGetType(0, 2, &type);
-                if (type != EXI_IS_VIEWER) {
-                    actor->poseId = animPoseEntry(R_credits_npc_info[id].agb, inBattle);
-                    animPoseSetAnim(actor->poseId, R_credits_npc_info[id].anim, 1);
-                } else {
-                    actor->poseId = animPoseEntry("a_mario", inBattle);
-                    animPoseSetAnim(actor->poseId, "M_W_1", 1);
-                }
-#else
 #if VERSION >= VERSION_US
             actor->poseId = animPoseEntry(R_credits_npc_info[id].agb, inBattle);
             animPoseSetAnim(actor->poseId, R_credits_npc_info[id].anim, 1);
@@ -825,18 +815,13 @@ USER_FUNC(evt_end_credit_npc_main) {
                 animPoseSetAnim(actor->poseId, "M_W_1", 1);
             }
 #endif
-#endif
             actor->state++;
             break;
         case 1:
-#if VERSION <= VERSION_DEMO_US
-            actor->angle += 0.15f;
-#else
 #if VERSION >= VERSION_US
             actor->angle += 9.0f / gp->framerate;
 #else
             actor->angle += 0.15f;
-#endif
 #endif
             if (actor->angle > actor->limit) {
                 animPoseRelease(actor->poseId);
@@ -1030,18 +1015,14 @@ void end_image_disp(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(cameraId);
     s32 id = evtGetValue(NULL, GW(11));
     s32 pos = evtGetValue(NULL, GW(12));
-#if VERSION > VERSION_DEMO_US
     Vec camPos;
     Vec up;
     Vec target;
-#endif
     GXTexObj obj;
     Mtx mtx;
     Mtx scale;
-#if VERSION > VERSION_DEMO_US
     Mtx lookAt;
 
-#endif
     if (end_wp->tpl == NULL) {
         return;
     }

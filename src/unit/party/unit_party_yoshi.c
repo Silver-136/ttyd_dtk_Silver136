@@ -406,14 +406,10 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyYoshiAttack_NormalAttack, // attackEvtScript
-#if VERSION <= VERSION_DEMO_US
-    {0, 10, 10, 100, 10, 5, 5, 5, 5, 5, 0, 0},
-#else
 #if VERSION >= VERSION_US
     {0, 10, 10, 100, 10, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 10, 10, 100, 10, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
-#endif
 #endif
 };
 

@@ -998,11 +998,9 @@ EVT_BEGIN(nancy_init_check)
     // Control returns to Mario, who is expected to stay put; the script waits until he takes a step or one
     // second passes.
     CALL(evt_mario_key_onoff, 1)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
-#endif
 #endif
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
@@ -1127,14 +1125,9 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_npc_restart_regular_event, STRING("me"))
     CALL(evt_npc_change_interrupt, STRING("me"), 6, PTR(nancy_talk))
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_party_run, 0)
-    CALL(evt_party_run, 1)
-#else
 #if VERSION < VERSION_US
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
-#endif
 #endif
     CALL(evt_mario_key_onoff, 1)
     // Story flag set: the gate to the west side is now blocked.
@@ -1285,26 +1278,18 @@ EVT_BEGIN(nancy_talk)
             WAIT_MS(500)
             CALL(evt_npc_move_position, STRING("me"), -370, -30, 0, FLOAT(80.0f), 0)
             WAIT_WHILE(GF(0))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_npc_set_position, STRING("me"), -455, 10, -170)
-#else
 #if VERSION >= VERSION_US
             CALL(evt_npc_set_position, STRING("me"), -405, 10, -100)
 #else
             CALL(evt_npc_set_position, STRING("me"), -455, 10, -170)
 #endif
-#endif
             CALL(evt_npc_set_ry, STRING("me"), 270)
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
             SET_VALUE(LW(0), STRING("w_bero"))
-#if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(bero_case_switch_on)
-#else
 #if VERSION >= VERSION_US
             CALL_CHILD(bero_case_switch_on)
 #else
             CALL_CHILD(PTR(bero_case_switch_on))
-#endif
 #endif
             CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero"), 8388612)
             SET_VALUE(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 1)
@@ -5729,27 +5714,19 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                     CALL(evt_mario_set_pose, STRING("M_S_1"))
                     CALL(evt_npc_move_position, STRING("チュチュリーナ"), LW(0), LW(2), 0, 40, 0)
                     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-                    CALL(evt_cam3d_evt_set, -525, 290, 230, -525, 225, -140, 800, EASING_SINE_IN_OUT)
-#else
 #if VERSION >= VERSION_US
                     CALL(evt_cam3d_evt_set, -516, 290, 230, -516, 225, -140, 800, EASING_SINE_IN_OUT)
 #else
                     CALL(evt_cam3d_evt_set, -525, 290, 230, -525, 225, -140, 800, EASING_SINE_IN_OUT)
 #endif
-#endif
                     WAIT_MS(800)
                     // Ms. Mowz joins the party and the partner lecture plays.
                     SET_VALUE(LW(8), STRING("チュチュリーナ"))
                     SET_VALUE(LW(9), PARTY_MEMBER_MS_MOWZ)
-#if VERSION <= VERSION_DEMO_US
-                    CALL_CHILD(all_party_lecture)
-#else
 #if VERSION >= VERSION_US
                     CALL_CHILD(all_party_lecture)
 #else
                     CALL_CHILD(PTR(all_party_lecture))
-#endif
 #endif
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ELUSIVE_BADGE), 1)
@@ -6198,10 +6175,8 @@ EVT_BEGIN(gor_01_init_evt)
     // Map object culling for the fence, stage and houses.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_saku"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai"), MAP_OBJ_FLAG_CLIP)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     SPAWN_EVENT(dai_disp)
-#endif
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f1A"), MAP_OBJ_FLAG_CLIP)
     // Chapter 6: Bowser arrives and the Bowser interlude starts.
@@ -7353,11 +7328,7 @@ EVT_BEGIN(cooking_evt)
         CALL(evt_msg_print_add, 0, STRING("gor_01_cook_001"))
         SET_VALUE(GSWF_GOR_ZESS_T_COOKING_INTRO_DONE, 1)
         ELSE
-#if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(LSWF(1), 0)
-#else
         IF_INT_EQUAL(LSWF_GOR_01_ZESS_T_GREETED, 0)
-#endif
             SET_VALUE(LF(0), 0)
             IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
@@ -7383,11 +7354,7 @@ EVT_BEGIN(cooking_evt)
             END_IF
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LSWF(1), 1)
-#else
     SET_VALUE(LSWF_GOR_01_ZESS_T_GREETED, 1)
-#endif
     CALL(evt_msg_select, 0, STRING("gor_01_select"))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(0)
@@ -7477,11 +7444,6 @@ EVT_BEGIN(cooking_evt)
     IF_INT_EQUAL(LW(15), 0)
         CALL(get_item_name, LW(14), LW(0))
         IF_INT_EQUAL(LF(0), 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_012"), 0, STRING("ナンシー"), LW(0))
-        ELSE
-                CALL(evt_msg_print_add_insert, 0, STRING("gor_01_cook_012"), LW(0))
-#else
 #if VERSION == VERSION_EU
             CALL(evt_msg_fmt_str, 0, LW(2), STRING("gor_01_cook_012"), LW(0))
             CALL(evt_msg_print, 1, LW(2), 0, STRING("ナンシー"))
@@ -7493,21 +7455,16 @@ EVT_BEGIN(cooking_evt)
             ELSE
             CALL(evt_msg_print_add_insert, 0, STRING("gor_01_cook_012"), LW(0))
 #endif
-#endif
         END_IF
         ELSE
         CALL(get_item_name, LW(14), LW(0))
         CALL(get_item_name, LW(15), LW(1))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_013"), 0, STRING("ナンシー"), LW(0), LW(1))
-#else
 #if VERSION == VERSION_EU
         CALL(evt_msg_fmt_str, 0, LW(2), STRING("gor_01_cook_013"), LW(0))
         CALL(evt_msg_fmt_str, 1, LW(2), LW(2), LW(1))
         CALL(evt_msg_print, 1, LW(2), 0, STRING("ナンシー"))
 #else
         CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_013"), 0, STRING("ナンシー"), LW(0), LW(1))
-#endif
 #endif
     END_IF
     CALL(evt_msg_select, 0, STRING("gor_01_select"))

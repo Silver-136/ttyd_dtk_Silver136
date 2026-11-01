@@ -186,21 +186,13 @@ void statusWinMain(void) {
                     if (!statusWinCheck()) {
                         statusWinOpen();
                         wp->forceTimer = gp->framerate * 10;
-#if VERSION <= VERSION_DEMO_US
-                        psndSFXOn((const char*)0x2A);
-#else
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
-#endif
                         wp->flags |= STATUS_WINDOW_FLAG_MENU_ICONS;
                     } else {
                         statusWinClose();
                         wp->forceTimer = gp->framerate * 10;
                         wp->forcedClose = 1;
-#if VERSION <= VERSION_DEMO_US
-                        psndSFXOn((const char*)0x2B);
-#else
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
-#endif
                     }
                 }
                 if (valueCheck()) {
@@ -239,14 +231,10 @@ void statusWinMain(void) {
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN_REQ;
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ;
     }
-#if VERSION <= VERSION_DEMO_US
-    wp->timer += one;
-#else
 #if VERSION >= VERSION_US
     wp->timer += 60.0f / gp->framerate;
 #else
     wp->timer += one;
-#endif
 #endif
     if (wp->timer >= wp->duration) {
         wp->timer = wp->duration;

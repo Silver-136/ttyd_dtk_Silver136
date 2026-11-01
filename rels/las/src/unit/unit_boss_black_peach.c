@@ -4432,14 +4432,10 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_BOSS_QWENH_HAND_APPEAR1"), LW(0), LW(1), LW(2), 0)
-#if VERSION <= VERSION_DEMO_US
-    BEGIN_INLINE_EVENT
-#else
 #if VERSION == VERSION_EU
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
 #else
     BEGIN_INLINE_EVENT
-#endif
 #endif
         CALL(queen_hand_small_drag_1_evt)
     END_INLINE_EVENT
@@ -4543,14 +4539,10 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_1000hand_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(subsetevt_confuse_flustered)
-#else
 #if VERSION >= VERSION_US
         CALL_CHILD(subsetevt_confuse_flustered)
 #else
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
-#endif
 #endif
         RETURN
     END_IF
@@ -4562,14 +4554,10 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(evt_eff_softdelete, STRING("m_h_s2"))
     CALL(evt_eff_softdelete, STRING("m_h_s3"))
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HANDS_MOVE1"), 0)
-#if VERSION <= VERSION_DEMO_US
-    BEGIN_INLINE_EVENT
-#else
 #if VERSION >= VERSION_US
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
 #else
     BEGIN_INLINE_EVENT
-#endif
 #endif
         CALL(queen_hand_small_1000hand_1_evt)
     END_INLINE_EVENT

@@ -352,14 +352,10 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#if VERSION <= VERSION_DEMO_US
-    0,
-#else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
-#endif
 #endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier

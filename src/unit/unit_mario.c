@@ -716,11 +716,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
     MULTIPLY(LW(8), -1)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(8), LW(1), LW(2), 0, -1, 0)
-#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(8), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-#endif
     WAIT_FRAMES(20)
     // He reappears at the edge of the audience area; the camera homes in on the chosen audience member and he walks up.
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
@@ -730,20 +726,12 @@ EVT_BEGIN(btlataudevtMarioHammer)
     MULTIPLY(LW(6), LW(5))
     MULTIPLY(LW(6), -1)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(6), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_btl_camera_set_mode, 0, 13)
-#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_AUDIENCE)
-#endif
     CALL(evt_btl_camera_set_homing_unit_audience, 0, UNIT_ID_SELF, 1, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 100)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-#endif
     CALL(evt_btl_camera_set_zoom, 0, 200)
     // Wind-up: picks the swing poses for his hammer upgrade level and raises the hammer with its hold sound.
     CALL(_get_mario_hammer_lv, LW(0))
@@ -805,11 +793,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND1"), 0)
     END_SWITCH
     CALL(_attack_aud, LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_btl_camera_set_mode, 0, 3)
-#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-#endif
     CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
     // The camera returns to the stage view after a pause while Mario heads back.
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))

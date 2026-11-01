@@ -400,21 +400,6 @@ void mot_roll_post(void) {
     m->camShiftRate.z = 0.004f;
     {
         f32 d = revise360(mario->directionView - mario->targetYaw);
-#if VERSION <= VERSION_DEMO_US
-        do {
-            if (d >= 180.0f) {
-                mario->displayDirection = 0.0f;
-                mario->displayDirectionTarget = 0.0f;
-                mario->moveDirection = 270.0f;
-                mario->directionView = 270.0f;
-            } else {
-                mario->displayDirection = 180.0f;
-                mario->displayDirectionTarget = 180.0f;
-                mario->moveDirection = 90.0f;
-                mario->directionView = 90.0f;
-            }
-        } while (0);
-#else
         if (d >= 180.0f) {
             mario->displayDirection = 0.0f;
             mario->displayDirectionTarget = 0.0f;
@@ -426,7 +411,6 @@ void mot_roll_post(void) {
             mario->moveDirection = 90.0f;
             mario->directionView = 90.0f;
         }
-#endif
     }
     marioSetSpec();
     mario->rollFlags = 0;
@@ -441,12 +425,7 @@ void mot_roll_post(void) {
     marioChgPose("M_S_1");
     if (marioGetPtr()->motStruct) {
         __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
-#if VERSION <= VERSION_DEMO_US
-        mario = 0;
-        marioGetPtr()->motStruct = (void*)mario;
-#else
         marioGetPtr()->motStruct = NULL;
-#endif
     }
     allPartyRideOff();
 }
@@ -486,13 +465,7 @@ void marioRollForceCancel(void) {
                 mario->displayDirection = 0.0f;
                 mario->displayDirectionTarget = 0.0f;
                 mario->moveDirection = 270.0f;
-#if VERSION <= VERSION_DEMO_US
-                do {
-                    mario->directionView = 270.0f;
-                } while (0);
-#else
                 mario->directionView = 270.0f;
-#endif
             } else {
                 mario->displayDirection = 180.0f;
                 mario->displayDirectionTarget = 180.0f;
@@ -513,12 +486,7 @@ void marioRollForceCancel(void) {
         marioChgPose("M_S_1");
         if (marioGetPtr()->motStruct) {
             __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
-#if VERSION <= VERSION_DEMO_US
-            mario = 0;
-            marioGetPtr()->motStruct = (void*)mario;
-#else
             marioGetPtr()->motStruct = NULL;
-#endif
         }
         allPartyRideOff();
         marioChgMotSub(MARIO_MOTION_STAY, 0);
@@ -651,16 +619,12 @@ void mot_roll(void) {
         memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
         {
             MarioWork* t = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-            t->mot.roll.sfxId = -1;
-#else
 #if VERSION >= VERSION_US
             if (marioGetPtr()->motStruct) {
                 marioGetPtr()->motRoll->sfxId = -1;
             }
 #else
             t->mot.roll.sfxId = -1;
-#endif
 #endif
         }
         mario->currSubMotionId = 0;
@@ -696,18 +660,10 @@ void mot_roll(void) {
         marioChgPaper("PM_R_1A");
         mario->multiTimer = 0x41;
         m = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-        v28 = 0.0f;
-#endif
         m->wPlayerCollisionBox.x = 14.8f;
         m->wPlayerCollisionBox.y = 14.8f;
         m->baseDashSpeed = rollData[0];
-#if VERSION <= VERSION_DEMO_US
-        marioGetPtr()->motRoll->spdX = v28;
-        v27 = 0.0f;
-#else
         marioGetPtr()->motRoll->spdX = 0.0f;
-#endif
         marioGetPtr()->motRoll->spdZ = 0.0f;
         m->rotOfs.x = -6.0f;
         m->rotOfs.y = 6.0f;
@@ -725,20 +681,11 @@ void mot_roll(void) {
         m->camShiftTargetZ = 0.4f;
         m->camShiftRate.z = 0.01f;
         m->camZoom = 2.0f;
-#if VERSION <= VERSION_DEMO_US
-        ((MarioWork*)m)->camZoomOfs = rollOfs;
-        marioGetPtr()->motRoll->squashTrigger = z0;
-        z1 = 0;
-        marioGetPtr()->motRoll->squashState = 0;
-        psndSFXOn_3D((char*)0x179, &mario->position);
-        psndSFXOn_3D((char*)0x9f, &mario->position);
-#else
         m->camZoomOfs = rollOfs;
         marioGetPtr()->motRoll->squashTrigger = 0;
         marioGetPtr()->motRoll->squashState = 0;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL1), &mario->position);
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_FLD_JUMP3), &mario->position);
-#endif
         mario->currSubMotionId = 1;
         break;
     }

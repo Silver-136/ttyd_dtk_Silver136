@@ -1148,14 +1148,8 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, 7)
-    // Camera on her as she turns to Mario; in JP and later he turns to face her if he can move.
-    CALL(evt_btl_camera_set_mode, 0, 7)
-#else
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
-#endif
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -1251,11 +1245,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     END_IF
     CALL(btlevtcmd_GetResultAC, LW(6))
     CALL(btlevtcmd_StopAC)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
-#else
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
-#endif
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
@@ -1313,22 +1303,12 @@ EVT_BEGIN(partyChristineAttack_Kiss)
         CALL(evt_audience_acrobat_notry)
         WAIT_FRAMES(20)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // On success the "Mario can move again" message shows.
-    IF_BITS_SET(LW(6), 2)
-#else
     IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
-#endif
         CALL(btlevtcmd_AnnounceMessage, 0, 0, 0, STRING("msg_st_chg_mario_quick"), 60)
         ELSE
         WAIT_MS(500)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // Camera back to normal and audience AP; in JP and later Mario goes back to idle and she walks home.
-    CALL(evt_btl_camera_set_mode, 0, 0)
-#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-#endif
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)

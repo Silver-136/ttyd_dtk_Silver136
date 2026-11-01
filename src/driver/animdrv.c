@@ -1683,29 +1683,15 @@ void animPoseMain(s32 poseId) {
     if (pose->flags & ANIM_POSE_FLAG_PERA) {
         CameraEntry* cam = camGetPtr(CAMERA_3D);
         f = 57.29579f * (f32)atan2(-(cam->cameraAt.x - cam->cameraPos.x), -(cam->cameraAt.z - cam->cameraPos.z));
-#if VERSION <= VERSION_DEMO_US
-        while (f < -360.0f)
-#else
         while (f < -360.0f) {
-#endif
             f += 360.0f;
-#if VERSION <= VERSION_DEMO_US
-        while (f >= 360.0f)
-#else
         }
         while (f >= 360.0f) {
-#endif
             f -= 360.0f;
-#if VERSION <= VERSION_DEMO_US
-        if (f < 0.0f)
-#else
         }
         if (f < 0.0f) {
-#endif
             f += 360.0f;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         f -= pose->rotationY;
 #if VERSION <= VERSION_DEMO_US
         while (f < -360.0f)

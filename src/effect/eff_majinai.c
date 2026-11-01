@@ -87,11 +87,7 @@ void effMajinaiMain(EffectEntry* effect) {
             if (!animGroupBaseAsync("MOBJ_EFF_majinai", inBattle, NULL)) {
                 return;
             }
-#if VERSION <= VERSION_DEMO_US
-            work->poseId = animPoseEntry("MOBJ_EFF_majinai", (u32)inBattle);
-#else
             work->poseId = animPoseEntry("MOBJ_EFF_majinai", inBattle);
-#endif
             animPoseSetAnim(work->poseId, "A_1", TRUE);
             work->state++;
             break;

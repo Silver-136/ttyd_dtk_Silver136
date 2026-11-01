@@ -453,19 +453,12 @@ void winLogInit(WindowWork* w) {
     w->log.stoneAlphaTgt = w->log.stoneAlpha = 0.0f;
 
     w->log.badge.num = 0;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     w->log.badge.page = 0;
-#endif
 #endif
     for (i = BADGE_MIN; i < BADGE_MAX; i++) {
         if (itemDataTable[i].type_sort_order != -1) {
             w->log.badgeIds[w->log.badge.num++] = i - BADGE_MIN;
-#if VERSION <= VERSION_DEMO_US
-            }
-                }
-                qqsort(w->log.badgeIds, w->log.badge.num, sizeof(s16), (QSortCompare)compare_func5_2);
-#else
 #if VERSION >= VERSION_US
             if (swGet(i - BADGE_MIN + GSWF_BADGE_FOUND_BASE)) {
                 w->log.badge.page++;
@@ -474,7 +467,6 @@ void winLogInit(WindowWork* w) {
         }
     }
     qqsort(w->log.badgeIds, w->log.badge.num, 2, (QSortCompare)compare_func5_2);
-#endif
     w->log.badge.cursor = 0;
     w->log.badge.x = w->log.badge.tx = 320.0f;
     w->log.badge.y = w->log.badge.ty = -240.0f;
@@ -484,19 +476,12 @@ void winLogInit(WindowWork* w) {
     w->log.badge.iconY = w->log.badge.iconTy = -300.0f;
 
     w->log.recipe.num = 0;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     w->log.recipe.page = 0;
-#endif
 #endif
     for (i = ITEM_SHROOM_FRY; i < ITEM_MAX; i++) {
         if (itemDataTable[i].type_sort_order != -1) {
             w->log.recipeIds[w->log.recipe.num++] = i - ITEM_SHROOM_FRY;
-#if VERSION <= VERSION_DEMO_US
-            }
-                }
-                qqsort(w->log.recipeIds, w->log.recipe.num, sizeof(s16), (QSortCompare)compare_func6_2);
-#else
 #if VERSION >= VERSION_US
             if (swGet(i - ITEM_SHROOM_FRY + 0x41)) {
                 w->log.recipe.page++;
@@ -505,7 +490,6 @@ void winLogInit(WindowWork* w) {
         }
     }
     qqsort(w->log.recipeIds, w->log.recipe.num, 2, (QSortCompare)compare_func6_2);
-#endif
     w->log.recipe.cursor = 0;
     w->log.recipe.x = w->log.recipe.tx = 320.0f;
     w->log.recipe.y = w->log.recipe.ty = -240.0f;
@@ -658,11 +642,7 @@ s32 winLogMain(WindowWork* w) {
     switch (w->log.state) {
     case 0:
         if (w->buttonTrg & PAD_BUTTON_B) {
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20013));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#endif
             return -1;
         }
         if (w->buttonTrg & PAD_BUTTON_START) {
@@ -671,27 +651,13 @@ s32 winLogMain(WindowWork* w) {
         if (w->dirRep & DEMO_STICK_DOWN) {
             old = w->log.cursor;
             w->log.cursor++;
-#if VERSION <= VERSION_DEMO_US
-            if (w->log.cursor >= w->log.count)
-                w->log.cursor = 0;
-            if (old != w->log.cursor)
-                psndSFXOn(SFX_NAME_WORD(0x20005));
-#else
             if (w->log.cursor >= w->log.count) w->log.cursor = 0;
             if (old != w->log.cursor) psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->dirRep & DEMO_STICK_UP) {
             old = w->log.cursor;
             w->log.cursor--;
-#if VERSION <= VERSION_DEMO_US
-            if (w->log.cursor < 0)
-                w->log.cursor = w->log.count - 1;
-            if (old != w->log.cursor)
-                psndSFXOn(SFX_NAME_WORD(0x20005));
-#else
             if (w->log.cursor < 0) w->log.cursor = w->log.count - 1;
             if (old != w->log.cursor) psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->buttonTrg & PAD_BUTTON_A) {
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 30;
@@ -721,11 +687,7 @@ s32 winLogMain(WindowWork* w) {
             case 4:
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20012));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-#endif
         }
         w->helpTgtX = -128.0f;
         w->helpTgtY = 8.0f + (45.0f * w->log.count / 2.0f - 45.0f * w->log.cursor);
@@ -789,17 +751,10 @@ s32 winLogMain(WindowWork* w) {
                 w->log.pose = animPoseEntry(model, 0);
                 animPoseSetAnim(w->log.pose, "M_W_1", 1);
             }
-#if VERSION <= VERSION_DEMO_US
-            animPoseSetMaterialFlagOn(w->log.pose, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
-        }
-        if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20013));
-#else
             animPoseSetMaterialFlagOn(w->log.pose, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
         }
         if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#endif
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 40;
             }
@@ -841,12 +796,7 @@ s32 winLogMain(WindowWork* w) {
         if (min < 50.0f) {
             sprintf(name, "menu_monosiri_%s", tubuDt[sel].map);
             sprintf(help, "menu_map_%s", tubuDt[sel].map);
-#if VERSION <= VERSION_DEMO_US
-            if (w->log.mapSel != sel)
-                psndSFXOn(SFX_NAME_WORD(0x20035));
-#else
             if (w->log.mapSel != sel) psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
             w->log.mapSel = sel;
             winMsgEntry(w, 0, help, name);
         } else {
@@ -896,11 +846,7 @@ s32 winLogMain(WindowWork* w) {
         break;
     case 11:
         if (w->buttonTrg & PAD_BUTTON_B) {
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20013));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#endif
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 40;
             }
@@ -910,24 +856,6 @@ s32 winLogMain(WindowWork* w) {
             w->log.stoneAlphaTgt = 0.0f;
         } else if (w->dirRep & DEMO_STICK_LEFT) {
             w->log.stoneSel--;
-#if VERSION <= VERSION_DEMO_US
-            while (w->log.stoneSel < 0)
-                w->log.stoneSel += 7;
-            w->log.stoneAngleTgt = 51.42857f * w->log.stoneSel;
-            while (w->log.stoneAngle < w->log.stoneAngleTgt)
-                w->log.stoneAngle += 360.0f;
-            psndSFXOn(SFX_NAME_WORD(0x209D6));
-            psndSFXOn(SFX_NAME_WORD(0x20037));
-        } else if (w->dirRep & DEMO_STICK_RIGHT) {
-            w->log.stoneSel++;
-            while (w->log.stoneSel > 6)
-                w->log.stoneSel -= 7;
-            w->log.stoneAngleTgt = 51.42857f * w->log.stoneSel;
-            while (w->log.stoneAngle > w->log.stoneAngleTgt)
-                w->log.stoneAngle -= 360.0f;
-            psndSFXOn(SFX_NAME_WORD(0x209D6));
-            psndSFXOn(SFX_NAME_WORD(0x20037));
-#else
             while (w->log.stoneSel < 0) w->log.stoneSel += 7;
             w->log.stoneAngleTgt = 51.42857f * w->log.stoneSel;
             while (w->log.stoneAngle < w->log.stoneAngleTgt) w->log.stoneAngle += 360.0f;
@@ -940,7 +868,6 @@ s32 winLogMain(WindowWork* w) {
             while (w->log.stoneAngle > w->log.stoneAngleTgt) w->log.stoneAngle -= 360.0f;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SSTONE_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
@@ -954,11 +881,7 @@ s32 winLogMain(WindowWork* w) {
     case 12:
         pages = (w->log.badge.num + 27) / 28;
         if (w->buttonTrg & PAD_BUTTON_B) {
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20013));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#endif
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 40;
             }
@@ -970,26 +893,6 @@ s32 winLogMain(WindowWork* w) {
             w->log.badge.iconTy = -300.0f;
         } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->log.badge.idx--;
-#if VERSION <= VERSION_DEMO_US
-            if (w->log.badge.idx < 0)
-                w->log.badge.idx = 0;
-            w->log.badge.cursor = w->log.badge.idx * 28;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonRep & PAD_TRIGGER_R) {
-            w->log.badge.idx++;
-            if (w->log.badge.idx >= pages)
-                w->log.badge.idx = pages - 1;
-            w->log.badge.cursor = w->log.badge.idx * 28;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & DEMO_STICK_RIGHT) {
-            if (w->log.badge.cursor % 7 < 6 && w->log.badge.cursor + 1 < w->log.badge.num)
-                w->log.badge.cursor++;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & DEMO_STICK_LEFT) {
-            if (w->log.badge.cursor % 7 > 0)
-                w->log.badge.cursor--;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-#else
             if (w->log.badge.idx < 0) w->log.badge.idx = 0;
             w->log.badge.cursor = w->log.badge.idx * 28;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
@@ -1004,17 +907,12 @@ s32 winLogMain(WindowWork* w) {
         } else if (w->dirRep & DEMO_STICK_LEFT) {
             if (w->log.badge.cursor % 7 > 0) w->log.badge.cursor--;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->dirRep & DEMO_STICK_UP) {
             if ((s32)(w->log.badge.cursor - 7) >= 0 && w->log.badge.cursor - 7 < w->log.badge.num) {
                 w->log.badge.cursor -= 7;
             }
             w->log.badge.idx = w->log.badge.cursor / 28;
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->dirRep & DEMO_STICK_DOWN) {
             if ((s32)(w->log.badge.cursor + 7) >= 0 && w->log.badge.cursor + 7 < w->log.badge.num) {
                 w->log.badge.cursor += 7;
@@ -1022,19 +920,11 @@ s32 winLogMain(WindowWork* w) {
                 w->log.badge.cursor = w->log.badge.num - 1;
             }
             w->log.badge.idx = w->log.badge.cursor / 28;
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 4, -310.0f, 150.0f);
             w->savedState = w->log.state;
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20012));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-#endif
             w->log.state = 1000;
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
@@ -1050,11 +940,7 @@ s32 winLogMain(WindowWork* w) {
     case 13:
         pages = (w->log.recipe.num + 27) / 28;
         if (w->buttonTrg & PAD_BUTTON_B) {
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20013));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#endif
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 40;
             }
@@ -1066,26 +952,6 @@ s32 winLogMain(WindowWork* w) {
             w->log.recipe.iconTy = -300.0f;
         } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->log.recipe.idx--;
-#if VERSION <= VERSION_DEMO_US
-            if (w->log.recipe.idx < 0)
-                w->log.recipe.idx = 0;
-            w->log.recipe.cursor = w->log.recipe.idx * 28;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonRep & PAD_TRIGGER_R) {
-            w->log.recipe.idx++;
-            if (w->log.recipe.idx >= pages)
-                w->log.recipe.idx = pages - 1;
-            w->log.recipe.cursor = w->log.recipe.idx * 28;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & DEMO_STICK_RIGHT) {
-            if (w->log.recipe.cursor % 7 < 6 && w->log.recipe.cursor + 1 < w->log.recipe.num)
-                w->log.recipe.cursor++;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & DEMO_STICK_LEFT) {
-            if (w->log.recipe.cursor % 7 > 0)
-                w->log.recipe.cursor--;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-#else
             if (w->log.recipe.idx < 0) w->log.recipe.idx = 0;
             w->log.recipe.cursor = w->log.recipe.idx * 28;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
@@ -1100,17 +966,12 @@ s32 winLogMain(WindowWork* w) {
         } else if (w->dirRep & DEMO_STICK_LEFT) {
             if (w->log.recipe.cursor % 7 > 0) w->log.recipe.cursor--;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->dirRep & DEMO_STICK_UP) {
             if ((s32)(w->log.recipe.cursor - 7) >= 0 && w->log.recipe.cursor - 7 < w->log.recipe.num) {
                 w->log.recipe.cursor -= 7;
             }
             w->log.recipe.idx = w->log.recipe.cursor / 28;
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->dirRep & DEMO_STICK_DOWN) {
             if ((s32)(w->log.recipe.cursor + 7) >= 0 && w->log.recipe.cursor + 7 < w->log.recipe.num) {
                 w->log.recipe.cursor += 7;
@@ -1118,30 +979,18 @@ s32 winLogMain(WindowWork* w) {
                 w->log.recipe.cursor = w->log.recipe.num - 1;
             }
             w->log.recipe.idx = w->log.recipe.cursor / 28;
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 5, -310.0f, 150.0f);
             w->savedState = w->log.state;
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20012));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-#endif
             w->log.state = 1000;
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         w->helpTgtX = w->log.recipe.cursor % 28 % 7 * 56 - 140;
         w->helpTgtY = 90 - w->log.recipe.cursor % 28 / 7 * 56;
-#if VERSION <= VERSION_DEMO_US
-        if (swGet(0x41 + w->log.recipeIds[w->log.recipe.cursor])) {
-#else
         if (swGet(w->log.recipeIds[w->log.recipe.cursor] + 0x41)) {
-#endif
             winMsgEntry(w, -2, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].menu_description, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].name);
         } else {
             winMsgEntry(w, -2, "msg_menu_stone_none_help", "msg_menu_stone_none_name");
@@ -1150,11 +999,7 @@ s32 winLogMain(WindowWork* w) {
     case 14:
         pages = (w->log.enemyNum + 15) / 16;
         if (w->buttonTrg & PAD_BUTTON_B) {
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20013));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#endif
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 40;
             }
@@ -1164,18 +1009,6 @@ s32 winLogMain(WindowWork* w) {
             w->log.enemyTy = -240.0f;
         } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->log.enemyPage--;
-#if VERSION <= VERSION_DEMO_US
-            if (w->log.enemyPage < 0)
-                w->log.enemyPage = 0;
-            w->log.enemySel = w->log.enemyPage * 16;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonRep & PAD_TRIGGER_R) {
-            w->log.enemyPage++;
-            if (w->log.enemyPage >= pages)
-                w->log.enemyPage = pages - 1;
-            w->log.enemySel = w->log.enemyPage * 16;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-#else
             if (w->log.enemyPage < 0) w->log.enemyPage = 0;
             w->log.enemySel = w->log.enemyPage * 16;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
@@ -1184,73 +1017,43 @@ s32 winLogMain(WindowWork* w) {
             if (w->log.enemyPage >= pages) w->log.enemyPage = pages - 1;
             w->log.enemySel = w->log.enemyPage * 16;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->dirRep & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
             if (w->log.enemySel % 16 < 8) {
                 w->log.enemySel += 8;
             } else {
                 w->log.enemySel -= 8;
             }
-#if VERSION <= VERSION_DEMO_US
-            if (w->log.enemySel >= w->log.enemyNum)
-                w->log.enemySel = w->log.enemyNum - 1;
-            if (w->log.enemySel < 0)
-                w->log.enemySel = 0;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-#else
             if (w->log.enemySel >= w->log.enemyNum) w->log.enemySel = w->log.enemyNum - 1;
             if (w->log.enemySel < 0) w->log.enemySel = 0;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->dirRep & DEMO_STICK_UP) {
             if (w->log.enemySel % 8 == 0) {
                 w->log.enemySel -= 9;
             } else {
                 w->log.enemySel -= 1;
             }
-#if VERSION <= VERSION_DEMO_US
-            if (w->log.enemySel < 0)
-                w->log.enemySel = 0;
-            w->log.enemyPage = w->log.enemySel / 16;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-#else
             if (w->log.enemySel < 0) w->log.enemySel = 0;
             w->log.enemyPage = w->log.enemySel / 16;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#endif
         } else if (w->dirRep & DEMO_STICK_DOWN) {
             if (w->log.enemySel % 8 == 7) {
                 w->log.enemySel += 9;
             } else {
                 w->log.enemySel += 1;
             }
-#if VERSION <= VERSION_DEMO_US
-            if (w->log.enemySel >= w->log.enemyNum)
-                w->log.enemySel = w->log.enemyNum - 1;
-            w->log.enemyPage = w->log.enemySel / 16;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonTrg & PAD_BUTTON_A) {
-            if (swGet(w->log.enemy[w->log.enemySel].id + GSWF_TATTLE_BASE)) {
-                psndSFXOn(SFX_NAME_WORD(0x20012));
-#else
             if (w->log.enemySel >= w->log.enemyNum) w->log.enemySel = w->log.enemyNum - 1;
             w->log.enemyPage = w->log.enemySel / 16;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->buttonTrg & PAD_BUTTON_A) {
             if (swGet(w->log.enemy[w->log.enemySel].id + GSWF_TATTLE_BASE)) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-#endif
                 w->log.state = 21;
                 w->log.mono = monosiriInit(w->log.enemy[w->log.enemySel].id, -60.0f, 150.0f);
             }
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 6, -310.0f, 150.0f);
             w->savedState = w->log.state;
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20012));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-#endif
             w->log.state = 1001;
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
@@ -1265,11 +1068,7 @@ s32 winLogMain(WindowWork* w) {
         break;
     case 21:
         if (w->buttonTrg & PAD_BUTTON_B) {
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20013));
-#else
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#endif
             w->log.state = 22;
             monosiriClose(w->log.mono);
         } else if (w->buttonTrg & PAD_BUTTON_START) {
@@ -1396,9 +1195,6 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y);
 void winLogDisp(CameraId cam, void* param, s32 idx) {
     static const GXColor kW = {0xFF, 0xFF, 0xFF, 0xFF};
     WindowWork* w = param;
-#if VERSION <= VERSION_DEMO_US
-    GXColor c1;
-#endif
     GXColor c3;
     GXColor c2;
     Mtx m1;
@@ -1407,10 +1203,6 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
     f32 y;
     s32 i;
     EffStarStoneWork* wk;
-#if VERSION <= VERSION_DEMO_US
-
-    c1 = kW;
-#endif
     c2 = kW;
     c3 = kW;
     x = w->menu[idx].x;
@@ -1450,7 +1242,6 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
     }
     if (w->log.badge.x < 320.0f && w->log.badge.y > -240.0f) {
         winHakoGX(w, 0, x + w->log.badge.x, y + w->log.badge.y);
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         {
             GXColor black;
@@ -1466,7 +1257,6 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
                        (Vec){0.75f, 0.75f, 0.75f}, black, buf);
         }
 #endif
-#endif
         winTexInit(*w->res->data);
         winTexSet(0x95, (Vec){x + w->log.badge.iconX, y + w->log.badge.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         if (swGet(w->log.badgeIds[w->log.badge.cursor] + GSWF_BADGE_FOUND_BASE)) {
@@ -1476,11 +1266,6 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
     }
     if (w->log.recipe.x < 320.0f && w->log.recipe.y > -240.0f) {
         winHakoGX(w, 1, x + w->log.recipe.x, y + w->log.recipe.y);
-#if VERSION <= VERSION_DEMO_US
-        winTexInit(*w->res->data);
-        winTexSet(0x96, (Vec){x + w->log.recipe.iconX, y + w->log.recipe.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
-        if (swGet(0x41 + w->log.recipeIds[w->log.recipe.cursor])) {
-#else
 #if VERSION >= VERSION_US
         {
             GXColor black;
@@ -1499,7 +1284,6 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
         winTexInit(*w->res->data);
         winTexSet(0x96, (Vec){x + w->log.recipe.iconX, y + w->log.recipe.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         if (swGet(w->log.recipeIds[w->log.recipe.cursor] + 0x41)) {
-#endif
             winIconInit();
             winIconSet(itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].icon_id, (Vec){x + w->log.recipe.iconX, (y + w->log.recipe.iconY) - 10.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         }
@@ -1720,9 +1504,7 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
     char buf[256];
     char num[32];
     s32 i;
-#if VERSION > VERSION_DEMO_US
     s32 id;
-#endif
     u16 tw;
     const char* msg;
     const char* name;
@@ -1736,11 +1518,6 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
     winKirinukiGX(w, 0, x - 110.0f, y - 160.0f, 100.0f, 50.0f);
     msg = msgSearch("msg_menu_monosiri_kazu");
     tw = 0.75f * FontGetMessageWidth(msg);
-#if VERSION <= VERSION_DEMO_US
-    winFontInit();
-    winFontSet((Vec){(x - 108.0f) + (100 - tw) / 2, y - 166.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k1, msg);
-    sprintf(buf, "%d\201^%d", w->log.enemyKnown, w->log.enemyNum);
-#else
 #if VERSION >= VERSION_US
     if (tw > 80.0f) {
         tw = tw * (80.0f / tw);
@@ -1753,7 +1530,6 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
 #else
     winFontSet((Vec){(x - 108.0f) + (100 - tw) / 2, y - 166.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k1, msg);
     sprintf(buf, "%d\201^%d", w->log.enemyKnown, w->log.enemyNum);
-#endif
 #endif
     tw = 0.75f * FontGetMessageWidth(buf);
     winFontSet((Vec){(x - 108.0f) + (100 - tw) / 2, y - 184.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k1, buf);
@@ -1783,13 +1559,6 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
                 name = msgSearch(te->enemyTag);
             }
         } else {
-#if VERSION <= VERSION_DEMO_US
-            name = "\201H\201H\201H";
-}
-sprintf(num, "%d\201D", enemy_monoshiri_sort_table[id]);
-        winFontSet((Vec){((24.0f + x) - 5.0f) + (i / 8) * 216, (y - 16.0f) - (i % 8) * 24, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k2, num);
-        winFontSet((Vec){(56.0f + x) + (i / 8) * 216, (y - 16.0f) - (i % 8) * 24, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k2, name);
-#else
 #if VERSION >= VERSION_US
             name = (u32)gp->language != LANGUAGE_JP ? "???" : "\201H\201H\201H";
 #else
@@ -1804,7 +1573,6 @@ sprintf(num, "%d\201D", enemy_monoshiri_sort_table[id]);
         sprintf(num, "%d\201D", enemy_monoshiri_sort_table[id]);
         winFontSet((Vec){((24.0f + x) - 5.0f) + (i / 8) * 216, (y - 16.0f) - (i % 8) * 24, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k2, num);
         winFontSet((Vec){(56.0f + x) + (i / 8) * 216, (y - 16.0f) - (i % 8) * 24, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k2, name);
-#endif
 #endif
     }
     if (w->log.enemyPage > 0) {
@@ -2180,9 +1948,6 @@ void monosiri_disp(CameraId camera, void* param) {
     f32 y;
     f32 s;
     f32 w;
-#if VERSION <= VERSION_DEMO_US
-    f32 xx;
-#endif
     s32 mtx;
     s32 i;
     s32 id;

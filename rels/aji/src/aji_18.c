@@ -432,18 +432,6 @@ EVT_BEGIN(aji_18_init_evt)
             IF_INT_EQUAL(LW(15), 0)
                 CALL(evt_mario_set_party, 0, 1)
                 CALL(evt_party_run, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_pouch_mario_recovery)
-            CALL(evt_pouch_all_party_recovery)
-        END_IF
-SPAWN_EVENT(evt_koopa_after)
-    END_IF
-END_SWITCH
-// The emergency lights start.
-SPAWN_EVENT(evt_emergency)
-RETURN
-EVT_END()
-#else
 #if VERSION >= VERSION_US
             END_IF
 #endif
@@ -462,5 +450,4 @@ EVT_END()
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()
-#endif
 

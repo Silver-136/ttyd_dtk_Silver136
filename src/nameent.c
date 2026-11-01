@@ -901,9 +901,6 @@ void nameEntDisp(CameraId cameraId, void* param) {
     GXColor white;
     GXColor whiteInit = {0xFF, 0xFF, 0xFF, 0xFF};
     const char* str;
-#if VERSION <= VERSION_DEMO_US
-    s32 k;
-#endif
     s32 n;
     s32 j;
     s32 i;
@@ -915,9 +912,6 @@ void nameEntDisp(CameraId cameraId, void* param) {
     const char* ok;
     const char* yes;
     const char* no;
-#if VERSION <= VERSION_DEMO_US
-    u16 width;
-#endif
     f32 w;
 
     // FAKE: opaque white copied through whiteInit, white and white2; one initialized local changes the object
@@ -950,61 +944,6 @@ void nameEntDisp(CameraId cameraId, void* param) {
             }
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    for (j = 0; j < 4; j++) {
-        if (wp->cursorX >= 10 && wp->cursorY - 4 == j) {
-            winTexInit(*wp->tplFile->data);
-            winTexSet(VERSION_PICK(0x33, 0x37), (Vec){160.0f, (f32)(-20 - j * 34), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 0x40});
-            winTexInit_x2(*wp->tplFile->data);
-            winTexSet_x2(j + 0x25, VERSION_PICK(0x33, 0x37), (Vec){154.0f, (f32)(-14 - j * 34), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2);
-        } else {
-            winTexInit_x2(*wp->tplFile->data);
-            winTexSet_x2(j + 0x25, VERSION_PICK(0x33, 0x37), (Vec){160.0f, (f32)(-20 - j * 34), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2);
-        }
-    }
-    winTexInit(*wp->tplFile->data);
-    winTexSet(0x24, (Vec){2.0f + wp->caretX, wp->caretY - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 0x80});
-    winTexSet(0x24, (Vec){wp->caretX, wp->caretY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-    FontDrawStart();
-    for (n = 0; n < 8; n++) {
-        memset(buf, 0, sizeof(buf));
-        strncpy(buf, &wp->name[n * 2], 2);
-        if (strlen(buf)) {
-            FontDrawString((28.0f - FontGetMessageWidth(buf)) / 2.0f + (f32)(n * 32 - 120), 171.0f, buf);
-        }
-    }
-    str = msg_tbl[wp->type];
-    w = FontGetMessageWidth(msgSearch(str));
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -250.0f, -160.0f, 500.0f, 40.0f, 20.0f);
-    FontDrawStart();
-    FontDrawString((240.0f - w) / 2.0f + -120.0f, -168.0f, msgSearch(str));
-    nameMaskGX(wp->maskAlpha);
-    if (wp->state == 100) {
-        ok = msgSearch("msg_nameent_ok");
-        yes = msgSearch("msg_nameent_yes");
-        no = msgSearch("msg_nameent_no");
-        if (wp->type == 4) {
-            ok = msgSearch("msg_nameent_ok_01");
-        }
-        nameWinGX(-180.0f, 130.0f, 360.0f, 100.0f, *wp->tplFile->data, 1);
-        nameWinGX(-80.0f, 10.0f, 160.0f, 120.0f, *wp->tplFile->data, 1);
-        FontDrawStart();
-        FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        FontDrawEdge();
-        FontDrawString(-(f32)FontGetMessageWidth(ok) / 2.0f, 110.0f, ok);
-        FontDrawString(-(f32)FontGetMessageWidth(wp->name) / 2.0f, 70.0f, wp->name);
-        FontDrawString(-(f32)FontGetMessageWidth(no) / 2.0f, -20.0f, yes);
-        FontDrawString(-(f32)FontGetMessageWidth(no) / 2.0f, -60.0f, no);
-        FontDrawEdgeOff();
-    }
-    winTexInit(*wp->tplFile->data);
-    winTexSet(0, (Vec){2.0f + wp->x1, wp->y1 - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 0x80});
-    winTexSet(0, (Vec){wp->x1, wp->y1, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-    *camGetCurPtr() = saved;
-    GXSetProjectionv(proj);
-    GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
-}
-#else
 #if VERSION >= VERSION_US
     for (j = (u32)gp->language == LANGUAGE_JP ? 0 : 2; j < 4; j++) {
 #else
@@ -1071,7 +1010,6 @@ void nameEntDisp(CameraId cameraId, void* param) {
     GXSetProjectionv(proj);
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
-#endif
 
 /**
  * Draws the screen background from name.tpl: a 32-pixel strip on each side (textures 0x22 and 0x23)

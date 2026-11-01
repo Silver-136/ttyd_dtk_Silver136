@@ -495,13 +495,8 @@ EVT_BEGIN(talk_cook)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_01_THE_CONDUCTOR)
-#if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(LSWF(5), 0)
-            SET_VALUE(LSWF(5), 1)
-#else
         IF_INT_EQUAL(LSWF_RSH_03_CHEF_FIRST_TALKED, 0)
             SET_VALUE(LSWF_RSH_03_CHEF_FIRST_TALKED, 1)
-#endif
             CALL(evt_msg_print, 0, STRING("stg6_rsh_04"), 0, 0)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_05"), 0, 0)
@@ -521,13 +516,8 @@ EVT_BEGIN(talk_cook)
         CASE_LESS(STG6_20_END_OF_DAY_1)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_147_07"), 0, 0)
         CASE_LESS(STG6_27_RIVERSIDE_STATION)
-#if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(LSWF(6), 0)
-            SET_VALUE(LSWF(6), 1)
-#else
         IF_INT_EQUAL(LSWF_RSH_03_CHEF_DAY2_TALKED, 0)
             SET_VALUE(LSWF_RSH_03_CHEF_DAY2_TALKED, 1)
-#endif
             CALL(evt_msg_print, 0, STRING("stg6_rsh_156"), 0, 0)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_157"), 0, 0)
@@ -536,9 +526,6 @@ EVT_BEGIN(talk_cook)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_212"), 0, 0)
         CASE_LESS(STG6_44_END_OF_DAY_2)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_219"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print_party, STRING("stg6_rsh_219_2"))
-#else
 #if VERSION == VERSION_EU
         CALL(evt_party_stop, 0)
         WAIT_MS(300)
@@ -546,7 +533,6 @@ EVT_BEGIN(talk_cook)
         CALL(evt_party_run, 0)
 #else
         CALL(evt_msg_print_party, STRING("stg6_rsh_219_2"))
-#endif
 #endif
         CASE_LESS(STG6_57_A_MAIL_FROM_PEACH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_257"), 0, 0)
@@ -610,22 +596,14 @@ EVT_BEGIN(talk_waitless_pias_return)
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_4"))
         CALL(evt_msg_print, 0, STRING("stg6_rsh_196"), 0, STRING("ウェイトレス"))
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_1"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
         WAIT_MS(500)
-#endif
 #endif
         CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
         SET_VALUE(GSWF_STARPIECE_84, 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("stg6_rsh_197"), 0, STRING("ウェイトレス"))
-        CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
-        WAIT_MS(500)
-        CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
-#else
 #if VERSION >= VERSION_US
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
 #endif
@@ -634,7 +612,6 @@ EVT_BEGIN(talk_waitless_pias_return)
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
         WAIT_MS(500)
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
-#endif
 #endif
         CALL(evt_pouch_remove_item, ITEM_SHELL_EARRINGS, LW(0))
     ELSE
@@ -1489,11 +1466,6 @@ EVT_BEGIN(evt_shop_close)
     CALL(evt_sub_get_mapname, LW(10))
     IF_STR_EQUAL(LW(10), STRING("rsh_03_c"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shop_close_yuka1"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shop_close_sc"), MAP_OBJ_FLAG_HIDDEN)
-    END_IF
-#else
 #if VERSION >= VERSION_US
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shop_close_sc"), MAP_OBJ_FLAG_HIDDEN)
 #endif
@@ -1528,7 +1500,6 @@ EVT_BEGIN(evt_shop_close)
         CASE_EQUAL(5)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_open"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
-#endif
 #endif
     CALL(evt_sub_get_mapname, LW(10))
     IF_STR_EQUAL(LW(10), STRING("rsh_03_a"))

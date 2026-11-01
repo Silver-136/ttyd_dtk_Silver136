@@ -38,14 +38,10 @@ NpcTribeInfo npcTribe[] = {
     {"店員男", "c_gshop_m", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"店員女", "c_gshop_w", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"バッジ屋店員", "c_tyusan_t", "CHU_S_1", "CHU_Z_1", "CHU_S_1", "CHU_T_1", "CHU_W_1", "CHU_R_1", "CHU_S_1", "CHU_S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
-#if VERSION <= VERSION_DEMO_US
-    {"バニーテレサ", "c_bteresa", "BTS_S_1", "BTS_Z_1", "BTS_S_1", "BTS_T_1", "BTS_W_1", "BTS_R_1", "BTS_Z_1", "BTS_Z_1", 25.0f, 38.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_TELESA_MOVE1", NULL, 0, NULL, NULL},
-#else
 #if VERSION >= VERSION_US
     {"バニーテレサ", "c_bteresa2", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 25.0f, 38.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_TELESA_MOVE1", NULL, 0, NULL, NULL},
 #else
     {"バニーテレサ", "c_bteresa", "BTS_S_1", "BTS_Z_1", "BTS_S_1", "BTS_T_1", "BTS_W_1", "BTS_R_1", "BTS_Z_1", "BTS_Z_1", 25.0f, 38.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_TELESA_MOVE1", NULL, 0, NULL, NULL},
-#endif
 #endif
     {"キザ野郎", "c_kiza", "Z_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 45.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KIZA_MOVE1L", "SFX_FLD_NPC_KIZA_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"ノコタロウ", "c_pnk", "PNK_S_1", "PNK_Z_1", "PNK_S_1", "PNK_T_1", "PNK_W_1", "PNK_R_1", "PNK_S_1", "PNK_S_1", 30.0f, 35.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_PARTY_MOVE1L", "SFX_FLD_NPC_PARTY_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
@@ -163,14 +159,10 @@ NpcTribeInfo npcTribe[] = {
     {"ウスグラ店おじさん", "c_f_oji", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_STG4_MOVE1L", "SFX_FLD_NPC_STG4_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"ウスグラ店おばさん", "c_f_oba", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_STG4_MOVE1L", "SFX_FLD_NPC_STG4_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"にせマリオ", "c_mario", "EM_S_1", "EM_Z_1", "EM_S_1", "EM_T_1", "EM_W_1", "EM_R_1", "EM_D_1", "EM_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_STG4_LANPEL_M_MOVE1L", "SFX_STG4_LANPEL_M_MOVE1R", 10000, "SFX_STG4_LANPEL_M_JUMP1", "STG4_LANPEL_M_LANDING1"},
-#if VERSION <= VERSION_DEMO_US
-    {"にせマリオ２", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_2", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#else
 #if VERSION == VERSION_EU
     {"にせマリオ２", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_3", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
 #else
     {"にせマリオ２", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_2", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#endif
 #endif
     {"カラス", "c_f_karas", "S_1", "Z_1", "S_1", "T_1", "A_1", "A_1", "A_1", "A_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {"テレサ", "c_teresa", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_TELESA_MOVE1", NULL, 0, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
@@ -255,14 +247,10 @@ NpcTribeInfo npcTribe[] = {
     {"カメックババ（地上）", "c_kamek_be", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 70.0f, "SFX_KUPPA_KAMEBABA_MOVE1L", "SFX_KUPPA_KAMEBABA_MOVE1R", 12000, "SFX_KUPPA_KAMEBABA_JUMP1", "SFX_KUPPA_KAMEBABA_LANDING1"},
     {"カメックババ（息切れ）", "c_kamek_be", "I_1", "Z_1", "I_1", "T_3", "I_2", "I_2", "I_1", "I_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 70.0f, "SFX_KUPPA_KAMEBABA_MOVE1L", "SFX_KUPPA_KAMEBABA_MOVE1R", 12000, "SFX_KUPPA_KAMEBABA_JUMP1", "SFX_KUPPA_KAMEBABA_LANDING1"},
     {"カメックババ（風船）", "c_kamek_be", "S_3", "Z_3", "S_3", "T_11", "W_3", "W_3", "S_3", "S_3", 30.0f, 50.0f, 0.0f, 0.0f, 0.0f, 70.0f, NULL, NULL, 0, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
-    {"カメック", "c_kamek", "KMK_S_1", "KMK_Z_1", "KMK_S_1", "KMK_T_1", "KMK_W_1", "KMK_R_1", "KMK_S_1", "KMK_S_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
-#else
 #if VERSION >= VERSION_US
     {"カメック", "c_kamek", "KMK_S_1", "KMK_Z_1", "KMK_S_1", "KMK_T_1", "KMK_W_1", "KMK_R_1", "KMK_D_1", "KMK_K_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
 #else
     {"カメック", "c_kamek", "KMK_S_1", "KMK_Z_1", "KMK_S_1", "KMK_T_1", "KMK_W_1", "KMK_R_1", "KMK_S_1", "KMK_S_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
-#endif
 #endif
     {"飛行船クッパ", "c_hkoopa", "HKPA_S_1", "HKPA_Z_1", "HKPA_S_1", "HKPA_T_1", "HKPA_W_1", "HKPA_R_1", "HKPA_S_1", "HKPA_S_1", 40.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {"パタクリNPC", "c_kuribo", "PTK_S_1", "PTK_Z_2", "PTK_S_1", "PTK_T_1", "PTK_W_1", "PTK_R_1", "PTK_D_1", "PTK_D_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_PATAKURI_MOVE1", "SFX_FLD_ENM_PATAKURI_MOVE1", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
@@ -402,14 +390,10 @@ NpcTribeInfo npcTribe[] = {
     {"カメック白空", "c_kamek_w", "KMW_S_2", "KMW_Z_2", "KMW_S_2", "KMW_T_2", "KMW_W_2", "KMW_R_2", "KMW_D_2", "KMW_K_2", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {"カメック緑空", "c_kamek_g", "KMG_S_2", "KMG_Z_2", "KMG_S_2", "KMG_T_2", "KMG_W_2", "KMG_R_2", "KMG_D_2", "KMG_K_2", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {"カメック青空", "c_kamek", "KMK_S_2", "KMK_Z_2", "KMK_S_2", "KMK_T_2", "KMK_W_2", "KMK_R_2", "KMK_D_2", "KMK_K_2", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
-    {"ダイジェストマリオ", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_2", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#else
 #if VERSION == VERSION_EU
     {"ダイジェストマリオ", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_3", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
 #else
     {"ダイジェストマリオ", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_2", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#endif
 #endif
     {"ダイジェストピーチ", "c_peach", "P_S_1", "P_Z_1", "P_S_1", "P_T_1", "P_W_1", "P_R_1", "P_S_1", "P_S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {"ダイジェストピーチ２", "c_peach", "P_S_2", "P_Z_2", "P_S_2", "P_T_2", "P_W_2", "P_R_2", "P_S_2", "P_S_2", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},

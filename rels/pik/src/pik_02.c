@@ -1197,14 +1197,10 @@ EVT_BEGIN(pik_02_koopa_evt)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 20)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_memcard_save)
-#else
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_memcard_save_wrapper)
 #else
     CALL_CHILD(PTR(evt_memcard_save))
-#endif
 #endif
     CALL(evt_mario_set_mode, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
@@ -1302,10 +1298,8 @@ EVT_BEGIN(pik_02_init_evt)
         SPAWN_EVENT(PTR(pik_02_koopa_evt))
     END_IF
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_jav"), MAP_OBJ_FLAG_CLIP)
-#endif
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("saku_2"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_cam_letter_box_disable, 0)

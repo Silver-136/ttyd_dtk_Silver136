@@ -168,21 +168,13 @@ static EVT_BEGIN(main_0)
         // The block rises if it is down and falls if it is up (remembered in a room flag).
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(1, 0)
-#if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(LSWF(1), 0)
-#else
             IF_INT_EQUAL(LSWF_GON_09_FLOAT_BLOCK_MOVED, 0)
-#endif
                 SET_VALUE(LW(10), 0)
             ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
         ELSE
-#if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(LSWF(1), 0)
-#else
             IF_INT_EQUAL(LSWF_GON_09_FLOAT_BLOCK_MOVED, 0)
-#endif
                 SET_VALUE(LW(10), 1)
             ELSE
                 SET_VALUE(LW(10), 0)
@@ -202,15 +194,6 @@ static EVT_BEGIN(main_0)
             SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
             SET_FLOAT_VALUE(LW(9), 0)
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        BEGIN_SIBLING_EVENT
-            WAIT_FRAMES(10)
-            CALL(evt_sub_rumble_onoff, 0, 0)
-            WAIT_MS(300)
-            CALL(evt_sub_rumble_onoff, 1, 0)
-        END_SIBLING_EVENT
-        BEGIN_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
 #else
@@ -222,7 +205,6 @@ static EVT_BEGIN(main_0)
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
 #endif
-#endif
             WAIT_FRAMES(10)
             CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
             LABEL(0)
@@ -232,16 +214,12 @@ static EVT_BEGIN(main_0)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-#if VERSION <= VERSION_DEMO_US
-        END_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
         END_INLINE_EVENT
 #else
         END_SIBLING_EVENT
 #endif
         // After the camera shake, the block starts to float and its movement sound plays.
-#endif
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("blk_0"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("blk_0"), LW(11))
@@ -303,17 +281,10 @@ static EVT_BEGIN(main_0)
                 SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
                 SET_FLOAT_VALUE(LW(8), 0)
                 SET_FLOAT_VALUE(LW(10), 0)
-#if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(LSWF(1), 0)
-                    SET_VALUE(LSWF(1), 1)
-                ELSE
-                    SET_VALUE(LSWF(1), 0)
-#else
                 IF_INT_EQUAL(LSWF_GON_09_FLOAT_BLOCK_MOVED, 0)
                     SET_VALUE(LSWF_GON_09_FLOAT_BLOCK_MOVED, 1)
                 ELSE
                     SET_VALUE(LSWF_GON_09_FLOAT_BLOCK_MOVED, 0)
-#endif
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("sw_0"))
             END_IF
@@ -366,14 +337,6 @@ static EVT_BEGIN(main_0)
         END_INLINE_EVENT
         // A block that came down shakes the camera again and the scene waits a moment.
         IF_INT_EQUAL(LW(10), 1)
-#if VERSION <= VERSION_DEMO_US
-            BEGIN_SIBLING_EVENT
-                CALL(evt_sub_rumble_onoff, 0, 0)
-                WAIT_MS(300)
-                CALL(evt_sub_rumble_onoff, 1, 0)
-            END_SIBLING_EVENT
-            BEGIN_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
             BEGIN_INLINE_EVENT
 #else
@@ -384,7 +347,6 @@ static EVT_BEGIN(main_0)
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
 #endif
-#endif
                 CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 LABEL(2)
                 CALL(evt_sub_intpl_get_value)
@@ -393,16 +355,6 @@ static EVT_BEGIN(main_0)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-#if VERSION <= VERSION_DEMO_US
-            END_SIBLING_EVENT
-            WAIT_MS(1000)
-    END_IF
-    // Remember the block's new position for the next press.
-    IF_INT_EQUAL(LSWF(1), 0)
-        SET_VALUE(LSWF(1), 1)
-    ELSE
-        SET_VALUE(LSWF(1), 0)
-#else
 #if VERSION >= VERSION_US
             END_INLINE_EVENT
 #else
@@ -415,7 +367,6 @@ static EVT_BEGIN(main_0)
             SET_VALUE(LSWF_GON_09_FLOAT_BLOCK_MOVED, 1)
         ELSE
             SET_VALUE(LSWF_GON_09_FLOAT_BLOCK_MOVED, 0)
-#endif
         END_IF
     ELSE
         // Unused: cancel the switch and wait a few frames.

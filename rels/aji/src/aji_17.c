@@ -3179,14 +3179,10 @@ EVT_BEGIN(aji_17_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_PEACH_GRODUS_X_NAUT)
         CALL(evt_npc_setup, PTR(npcEnt))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_shuryolight_init, STRING("シュリョー"))
-#else
 #if VERSION >= VERSION_US
         CALL(evt_shuryolight_init, STRING("シュリョー"))
 #else
         CALL(evt_shuryolight_init, STRING("\203V\203\205\203\212\203\207\201["))
-#endif
 #endif
         CALL(evt_shuryolight_run_evt, PTR(shuryolight_pow_normal), PTR(shuryolight_head_normal), PTR(shuryolight_tue_normal))
         SPAWN_EVENT(PTR(peach_evt_stg6))

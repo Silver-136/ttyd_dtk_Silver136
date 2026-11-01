@@ -306,9 +306,6 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
         }
         switch (joint->drawMode->blendType) {
             case 0: {
-#if VERSION <= VERSION_DEMO_US
-                MapFileJoint* j = obj->joints;
-#endif
                 s32 k, n2 = 0, n1 = 0;
                 for (i = 0; i < obj->joints->partCount; i++) {
                     u8 t = obj->joints->parts[i].material->blendMode;
@@ -339,19 +336,12 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
             case 1: {
                 // FAKE: spare temporary m; the conditional expression of cases 2 and 3 changes the object
                 u8 m = 0;
-#if VERSION <= VERSION_DEMO_US
-                if (obj->flags & MAP_OBJ_FLAG_BACKGROUND)
-                    m = 3;
-                obj->blendMode = m;
-            } break;
-#else
                 if (obj->flags & MAP_OBJ_FLAG_BACKGROUND) {
                     m = 3;
                 }
                 obj->blendMode = m;
                 break;
             }
-#endif
             case 2:
                 obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? 4 : 1;
                 break;
@@ -898,16 +888,10 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     char str2[128];
     char str3[128];
     DVDEntry* dvd;
-#if VERSION <= VERSION_DEMO_US
-    u8* data;
-    MapHeader* header;
-
-#else
     MapWork* wo; // FAKE: alias of wp; the chunk-table stores go through it to keep the original address reloads
     MapHeader* header;
 
     wo = wp;
-#endif
     error_flag = FALSE;
     error_count = 0;
     strncpy(wp->entries[group].name, map, sizeof(wp->entries[group].name));
@@ -944,37 +928,19 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     mapLoadHeader_(wp, group);
     header = &wp->entries[group].header;
     info = (MapFileInfo*)mapSearchChunk(header, "information");
-#if VERSION <= VERSION_DEMO_US
-    wp->entries[group].textureTable = mapSearchChunk(header, "texture_table");
-    wp->entries[group].lightTable = mapSearchChunk(header, "light_table");
-    wp->entries[group].fogTable = mapSearchChunk(header, "fog_table");
-    wp->entries[group].materialNameTable = mapSearchChunk(header, "material_name_table");
-    wp->entries[group].vcdTable = mapSearchChunk(header, "vcd_table");
-#else
     wo->entries[group].textureTable = mapSearchChunk(header, "texture_table");
     wo->entries[group].lightTable = mapSearchChunk(header, "light_table");
     wo->entries[group].fogTable = mapSearchChunk(header, "fog_table");
     wo->entries[group].materialNameTable = mapSearchChunk(header, "material_name_table");
     wo->entries[group].vcdTable = mapSearchChunk(header, "vcd_table");
-#endif
     {
         MapFileJoint* mapJoint = mapSearchDmdJoint(info->joint, info->mapName);
         MapFileJoint* hitJoint = mapSearchDmdJoint(info->joint, info->hitName);
         Mtx scale;
-#if VERSION <= VERSION_DEMO_US
-        u32 n;
-        u32* animTbl;
-        MapEntry* e2;
-        MapWork* w;
-#endif
         if (strcmp(info->version, "ver1.02") == 0) {
             wp->entries[group].flags |= MAP_ENTRY_VER_1_02;
         } else {
-#if VERSION <= VERSION_DEMO_US
-            wp->entries[group].flags &= 0x7FFF;
-#else
             wp->entries[group].flags &= ~MAP_ENTRY_VER_1_02;
-#endif
         }
         PSMTXScale(scale, 10.0f, 10.0f, 10.0f);
         wp->entries[group].rootMapObj = mapEntry(mapJoint, scale, group);
@@ -1005,15 +971,6 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         }
         mapResetPaperAmbColor();
         mapResetPaperCraftAmbColor();
-#if VERSION <= VERSION_DEMO_US
-        if (wp->entries[group].fogTable != NULL) {
-            wp->entries[group].fogEnable = wp->entries[group].fogTable->enable;
-            wp->entries[group].fogType = wp->entries[group].fogTable->type;
-            wp->entries[group].fogStart = wp->entries[group].fogTable->start;
-            wp->entries[group].fogEnd = wp->entries[group].fogTable->end;
-            wp->entries[group].fogColor = wp->entries[group].fogTable->color;
-            if (wp->entries[group].fogEnable != 0) {
-#else
         if ((&wo->entries[group])->fogTable != NULL) {
             wo->entries[group].fogEnable = (&wo->entries[group])->fogTable->enable;
             wp->entries[group].fogType = (&wo->entries[group])->fogTable->type;
@@ -1021,15 +978,10 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             wp->entries[group].fogEnd = (&wo->entries[group])->fogTable->end;
             wp->entries[group].fogColor = (&wo->entries[group])->fogTable->color;
             if (wo->entries[group].fogEnable != 0) {
-#endif
                 wp->entries[group].flags |= MAP_ENTRY_FOG;
             }
         } else {
-#if VERSION <= VERSION_DEMO_US
-            wp->entries[group].fogEnable = 0;
-#else
             wo->entries[group].fogEnable = 0;
-#endif
             wp->entries[group].fogType = 0;
             wp->entries[group].fogStart = 0.0f;
             wp->entries[group].fogEnd = 0.0f;
@@ -1979,16 +1931,7 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
  * light and light colour tracks, then recalculates the changed object matrices.
  */
 void mapMain(void) {
-#if VERSION <= VERSION_DEMO_US
-    int i_, j_;
-    MapEntry* e_;
-    MapWork* w_;
     MapObject* o;
-    MapObject* o_;
-    s32 c, n;
-#else
-    MapObject* o;
-#endif
     f32 cur;
     MapWork* wp = &mapWork[activeGroup];
     MapEntry* entry;
@@ -2037,14 +1980,10 @@ void mapMain(void) {
             }
             if (!(anim->flags & MAP_ANIM_FLAG_PAUSE)) {
                 ms = OSTicksToMilliseconds(t);
-#if VERSION <= VERSION_DEMO_US
-                cur = gp->framerate * (f32)(u64)(ms - anim->startTime) / 1000.0f;
-#else
 #if VERSION == VERSION_EU
                 cur = 60.0f * (f32)(u64)(ms - anim->startTime) / 1000.0f;
 #else
                 cur = gp->framerate * (f32)(u64)(ms - anim->startTime) / 1000.0f;
-#endif
 #endif
                 if (cur < anim->time) {
                     anim->time = anim->time - (anim->time - cur);
@@ -2077,11 +2016,7 @@ void mapMain(void) {
                 for (k = 0; k < jl->count; k++) {
                     o = mapGetMapObj((const char*)jl->items[k]->name);
                     if (o) {
-#if VERSION <= VERSION_DEMO_US
-                        mapCalcAnimMatrix(o->animMtx, o->localMtx, anim, (MapAnimJoint*)jl->items[k]);
-#else
                         mapCalcAnimMatrix(o->animMtx, o->localMtx, anim, jl->items[k]);
-#endif
                         changed = TRUE;
                         o->flags |= MAP_OBJ_FLAG_ANIM_MTX;
                         o->flags |= MAP_OBJ_FLAG_MTX_DIRTY;
@@ -2106,11 +2041,7 @@ void mapMain(void) {
                 for (k = 0; k < ll->count; k++) {
                     LightEntry* lp = lightNameToPtr((const char*)ll->items[k]->name);
                     if (lp) {
-#if VERSION <= VERSION_DEMO_US
-                        mapMainLight_ll(anim, lp, (MapAnimLightData*)ll->items[k], v);
-#else
                         mapMainLight_ll(anim, lp, ll->items[k], v);
-#endif
                     }
                 }
             }
@@ -2118,11 +2049,7 @@ void mapMain(void) {
                 for (k = 0; k < lc->count; k++) {
                     LightEntry* lp = lightNameToPtr((const char*)lc->items[k]->name);
                     if (lp) {
-#if VERSION <= VERSION_DEMO_US
-                        mapMainLight_lc(anim, lp, (MapAnimLightData2*)lc->items[k], cv);
-#else
                         mapMainLight_lc(anim, lp, lc->items[k], cv);
-#endif
                     }
                 }
             }

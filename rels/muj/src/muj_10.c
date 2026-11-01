@@ -774,15 +774,11 @@ EVT_BEGIN(muj_10_init_evt)
         SPAWN_EVENT(oidasare_event)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-#if VERSION <= VERSION_DEMO_US
-        SPAWN_EVENT(senin_event)
-#else
 #if VERSION >= VERSION_US
         CALL_CHILD(PTR(senin_event))
         SPAWN_EVENT(PTR(korutesu_appear_event))
 #else
         SPAWN_EVENT(senin_event)
-#endif
 #endif
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
@@ -814,14 +810,10 @@ EVT_BEGIN(muj_10_init_evt)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(dai3_shurai_after)
-#else
 #if VERSION >= VERSION_US
             SPAWN_EVENT(PTR(dai3_shurai_after))
 #else
             SPAWN_EVENT(dai3_shurai_after)
-#endif
 #endif
         END_IF
     END_IF

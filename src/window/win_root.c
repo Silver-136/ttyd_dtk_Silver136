@@ -2043,10 +2043,8 @@ void sort_5_2_func(WindowWork* wp) {
  */
 void sort_5_3_func(WindowWork* wp) {
     if (!wp->sortRev) {
-#if VERSION > VERSION_DEMO_US
         ItemData* db;
         ItemData* da;
-#endif
         s16 a;
         s16 b;
         s32 i;
@@ -2083,10 +2081,8 @@ void sort_5_3_func(WindowWork* wp) {
             }
         }
     } else {
-#if VERSION > VERSION_DEMO_US
         ItemData* db;
         ItemData* da;
-#endif
         s16 a;
         s16 b;
         s32 i;
@@ -2853,26 +2849,6 @@ void winMailDisp(WindowWork* wp) {
                 kind = wp->item.mail[i].kind;
                 mail = mailGetPtr(id);
                 {
-#if VERSION <= VERSION_DEMO_US
-                GXColor black = {0x00, 0x00, 0x00, 0xFF};
-                if (mail->flags & MAIL_FLAG_PEACH) {
-                    col = (GXColor){0xD7, 0xAC, 0xBC, 0xFF};
-                } else if (mail->flags & MAIL_FLAG_TROUBLE) {
-                    col = (GXColor){0xD3, 0xD7, 0xAC, 0xFF};
-                } else if (mail->flags & MAIL_FLAG_INFO) {
-                    col = (GXColor){0xAC, 0xC2, 0xD7, 0xFF};
-                } else {
-                    col = (GXColor){0xE1, 0xE1, 0xE1, 0xFF};
-                }
-                winTexInit((TEXPalette*)*wp->res->data);
-                winTexSet(0x77, (Vec){4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-                white = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-                winTexSet((u32)((s32)pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-                winTexSet(0x65 + (kind + 1) / 10, (Vec){2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-                winTexSet(0x65 + (kind + 1) % 10, (Vec){2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-                winFontInit();
-                winFontSetLabel((Vec){120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, mail->name);
-#else
                 GXColor black = { 0x00, 0x00, 0x00, 0xFF };
                 if (mail->flags & MAIL_FLAG_PEACH) {
                     col = (GXColor){ 0xD7, 0xAC, 0xBC, 0xFF };
@@ -2895,7 +2871,6 @@ void winMailDisp(WindowWork* wp) {
                 winFontSetWidth((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
 #else
                 winFontSetLabel((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
-#endif
 #endif
                 }
             }

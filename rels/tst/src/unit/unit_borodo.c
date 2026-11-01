@@ -795,10 +795,8 @@ static USER_FUNC(_steal_item) {
             s32 j;
 
             r -= count;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_JP
             sysDebugReport("unit_borodo_main.c", 673, "%d個目のバッジを盗みます\n", r + 1);
-#endif
 #endif
             for (j = 0; j < 200; j++) {
                 if (pouch->badges[j] != 0) {
@@ -810,11 +808,9 @@ static USER_FUNC(_steal_item) {
             }
         } else {
             s32 k;
-#if VERSION > VERSION_DEMO_US
 
 #if VERSION >= VERSION_JP
             sysDebugReport("unit_borodo_main.c", 686, "%d個目のアイテムを盗みます\n", r + 1);
-#endif
 #endif
             for (k = 0; k < MAX_HELD_ITEMS; k++) {
                 if (pouch->heldItems[k] != 0) {
@@ -826,16 +822,12 @@ static USER_FUNC(_steal_item) {
             }
         }
         if (item != 0) {
-#if VERSION <= VERSION_DEMO_US
-            if (!pouchRemoveItem(item)) {
-#else
 #if VERSION >= VERSION_JP
             sysDebugReport("unit_borodo_main.c", 701, "%sを盗みました\n", msgSearch(itemDataTable[item].name));
 #endif
             if (!pouchRemoveItem(item)) {
 #if VERSION >= VERSION_JP
                 __assert2("unit_borodo_main.c", 703, "0", "持ってるはずのないアイテムを盗んだ");
-#endif
 #endif
                 return EVT_RETURN_DONE;
             }

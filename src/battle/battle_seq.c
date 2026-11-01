@@ -1070,9 +1070,6 @@ void btlseqTurn(BattleWork* wp) {
 
             if (sfx) {
                 psndSFXOn("SFX_REST_CONDITION1");
-#if VERSION <= VERSION_DEMO_US
-            dummy_label_899231:;
-#endif
             }
             if (!found) {
                 BattleIncSeq(wp, SEQ_TURN);
@@ -1092,11 +1089,7 @@ void btlseqTurn(BattleWork* wp) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (BtlUnit_CheckRecoveryStatus(unit, STATUS_FREEZE)) {
                         if (!BtlUnit_CheckShadowGuard(unit)) {
-#if VERSION <= VERSION_DEMO_US
-                            BattleDamageDirect(-5, unit, (void*)0, 1, 0, 0x11A, 0, 1);
-#else
                             BattleDamageDirect(-5, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_ICE, 0, 1);
-#endif
                         }
                         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
                         pos.y += BtlUnit_GetHeight(unit);
@@ -1561,11 +1554,7 @@ void btlseqTurn(BattleWork* wp) {
                     BtlUnit_GetStatus(unit, STATUS_POISON, &turns, &strength);
                     if ((strength > 0) && (!BtlUnit_CheckShadowGuard(unit))) {
                         found = 1;
-#if VERSION <= VERSION_DEMO_US
-                        BattleDamageDirect(-5, unit, (void*)0, strength, 0, 0x117, 0, 1);
-#else
                         BattleDamageDirect(-5, unit, NULL, strength, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_NORMAL, 0, 1);
-#endif
                     }
                 }
             }
@@ -1842,11 +1831,6 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000046:
-#if VERSION <= VERSION_DEMO_US
-            if (wp->commandDisabled[3]) {
-                    wp->commandDisabled[3]--;
-                }
-#else
 #if VERSION >= VERSION_US
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
@@ -1859,18 +1843,12 @@ void btlseqTurn(BattleWork* wp) {
                 wp->commandDisabled[3]--;
             }
 #endif
-#endif
             BattleIncSeq(wp, SEQ_TURN);
             BattleIncSeq(wp, SEQ_TURN);
             btlseqTurn(wp);
             break;
 
         case 0x3000048:
-#if VERSION <= VERSION_DEMO_US
-            if (wp->commandDisabled[4]) {
-                    wp->commandDisabled[4]--;
-                }
-#else
 #if VERSION >= VERSION_US
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
@@ -1882,7 +1860,6 @@ void btlseqTurn(BattleWork* wp) {
             if (wp->commandDisabled[4]) {
                 wp->commandDisabled[4]--;
             }
-#endif
 #endif
             BattleIncSeq(wp, SEQ_TURN);
             BattleIncSeq(wp, SEQ_TURN);

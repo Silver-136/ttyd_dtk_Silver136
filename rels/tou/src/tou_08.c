@@ -902,7 +902,6 @@ EVT_END()
 
 EVT_BEGIN(evt_champion_win)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_npc_check, STRING("ハンマーブロス"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -912,7 +911,6 @@ EVT_BEGIN(evt_champion_win)
             DELETE_EVENT(LW(0))
         END_INLINE_EVENT
     END_IF
-#endif
 #endif
     CALL(evt_mario_set_pos, -90, 0, -95)
     CALL(evt_party_set_pos, 0, -120, 0, -105)
@@ -1304,14 +1302,10 @@ EVT_BEGIN(tou_08_init_evt)
             SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
             SPAWN_EVENT(PTR(evt_champion_win))
         ELSE
-#if VERSION <= VERSION_DEMO_US
-            SPAWN_EVENT(evt_tou_match_after_default)
-#else
 #if VERSION >= VERSION_US
             SPAWN_EVENT(PTR(evt_match_after_stop_npcs))
 #else
             SPAWN_EVENT(PTR(evt_tou_match_after_default))
-#endif
 #endif
         END_IF
         RETURN

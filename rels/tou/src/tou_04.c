@@ -2652,14 +2652,9 @@ EVT_BEGIN(tou_04_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         SET_VALUE(LW(0), 8)
         CALL_CHILD(PTR(bero_case_switch_off))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
-#else
 #if VERSION < VERSION_US
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
-#endif
 #endif
     END_IF
     // After Grubba's plans, the guard's office door stays shut unless Mario was called back by Jolene.

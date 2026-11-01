@@ -680,15 +680,6 @@ EVT_BEGIN(tou_06_init_evt)
         BEGIN_INLINE_EVENT
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_cont_onoff, 1)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_mario_wait_landon)
-            CALL(evt_mario_key_onoff, 1)
-            CALL(evt_mario_cam_on)
-            END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, SEQ_GAME)
-            CALL(evt_party_cont_onoff, 0, 1)
-#else
 #if VERSION == VERSION_EU
             CALL(evt_party_cont_onoff, 0, 1)
 #endif
@@ -716,7 +707,6 @@ EVT_BEGIN(tou_06_init_evt)
         BEGIN_INLINE_EVENT
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_party_cont_onoff, 0, 1)
-#endif
 #endif
         END_INLINE_EVENT
     END_IF

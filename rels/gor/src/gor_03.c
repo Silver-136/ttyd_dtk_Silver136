@@ -3120,13 +3120,11 @@ EVT_BEGIN(slot_set)
             CALL(yuugijou_montemedal_return)
         END_IF
     END_IF
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     BEGIN_SIBLING_EVENT
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_move_pos2, 0, -225, LW(2), FLOAT(60.0f))
     END_SIBLING_EVENT
-#endif
 #endif
     SWITCH(LW(8))
         CASE_EQUAL(0)
@@ -3340,9 +3338,6 @@ EVT_BEGIN(exchange_set)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, FLOAT(-147.0f), FLOAT(82.19922f), FLOAT(-307.8994f))
     IF_INT_EQUAL(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 0)
         CALL(exchange_ryokin_medal, 0, LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print_insert, 0, STRING("exchange_mess_00"), 0, 0, LW(1), LW(2))
-#else
 #if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
@@ -3353,7 +3348,6 @@ EVT_BEGIN(exchange_set)
         END_SWITCH
 #else
         CALL(evt_msg_print_insert, 0, STRING("exchange_mess_00"), 0, 0, LW(1), LW(2))
-#endif
 #endif
         SET_VALUE(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 1)
     ELSE
@@ -6107,14 +6101,10 @@ EVT_BEGIN(gor_03_init_evt)
     CALL_CHILD(PTR(gor_03_dokan_init_evt))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_bero_info_run)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
 #endif
     CALL(evt_hitobj_attr_onoff, 1, 0, STRING("s_bero"), 4)
     CALL_CHILD(PTR(luigi_npcEnt))
@@ -6141,11 +6131,6 @@ EVT_BEGIN(gor_03_init_evt)
     SET_VALUE(LW(0), PTR(&door_data_02_0r))
     CALL_CHILD(PTR(monte_evt_door_entry))
     SET_VALUE(LW(0), PTR(&door_data_02_1))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_entry)
-    SET_VALUE(LW(0), PTR(&door_data_03))
-    CALL_CHILD(evt_door_entry)
-#else
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_03))
@@ -6154,19 +6139,14 @@ EVT_BEGIN(gor_03_init_evt)
     CALL_CHILD(PTR(evt_door_entry))
     SET_VALUE(LW(0), PTR(&door_data_03))
     CALL_CHILD(PTR(evt_door_entry))
-#endif
 #endif
     SET_VALUE(LW(0), PTR(&door_data_03_roll))
     CALL_CHILD(PTR(evt_door_03_entry))
     SET_VALUE(LW(0), PTR(&door_data_04))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_door_entry)
-#else
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_door_entry)
 #else
     CALL_CHILD(PTR(evt_door_entry))
-#endif
 #endif
     SET_VALUE(LW(0), PTR(&door_data_04_roll))
     CALL_CHILD(PTR(evt_door_04_entry))
@@ -6226,7 +6206,6 @@ EVT_BEGIN(gor_03_init_evt)
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kuzi"), 0, PTR(kuzi_keiziban_entry), 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02"), MAP_OBJ_FLAG_CLIP)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_i02_f1_kanD"), MAP_OBJ_FLAG_DISABLED)
@@ -6274,7 +6253,6 @@ EVT_BEGIN(gor_03_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("E_sro_light01"), MAP_OBJ_FLAG_DISABLED)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("E_sro_light02"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
-#endif
 #endif
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
         SPAWN_EVENT(PTR(maffiaboss_maffiaboss))

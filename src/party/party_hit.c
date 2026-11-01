@@ -874,18 +874,13 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     f32 sn, cs;
     f32 d, dy, hh;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     f32 w, maxD;
-#endif
 #endif
     HitEntry* hit;
     Vec p, nrm;
 
     sincosf(&sn, &cs, ang);
-#if VERSION <= VERSION_DEMO_US
-    d = 0.5f * party->width + dist;
-#else
 #if VERSION >= VERSION_US
     // US: with flag 0x1000 set the partner checks walls with a width of 6
     w = party->width;
@@ -895,7 +890,6 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     d = maxD = 0.5f * w + dist;
 #else
     d = 0.5f * party->width + dist;
-#endif
 #endif
     hh = 0.75f * partyGetHeight(party);
     p = party->position;
@@ -918,14 +912,10 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
             dy = 1.0f;
         }
         p = party->position;
-#if VERSION <= VERSION_DEMO_US
-        d = 0.5f * party->width + dist;
-#else
 #if VERSION >= VERSION_US
         d = maxD;
 #else
         d = 0.5f * party->width + dist;
-#endif
 #endif
         p.y += dy;
         hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);

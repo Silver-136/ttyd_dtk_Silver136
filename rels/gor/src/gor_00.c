@@ -1344,23 +1344,15 @@ EVT_BEGIN(suifubomb_a_talk)
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
         CALL(evt_msg_print, 0, STRING("gor_00_01_06"), 0, STRING("me"))
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-#else
 #if VERSION < VERSION_US
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-#endif
 #endif
         CALL(evt_msg_print, 0, STRING("gor_00_01_07"), 0, STRING("me"))
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(1000)
         CALL(evt_msg_print, 0, STRING("gor_00_01_07_01"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-#else
 #if VERSION < VERSION_US
         CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-#endif
 #endif
         CASE_LESS(STG4_33_MEET_BOBBERY)
         CALL(evt_msg_print, 0, STRING("gor_00_01_08"), 0, STRING("me"))
@@ -1786,15 +1778,11 @@ EVT_BEGIN(mokorim_talk)
                     CASE_EQUAL(1)
                     SET_VALUE(LW(0), 300)
                     CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
-                    SET_VALUE(LW(0), 500)
-#else
                     // The two-investment payout is 600 coins in US and 500 in JP.
 #if VERSION >= VERSION_US
                     SET_VALUE(LW(0), 600)
 #else
                     SET_VALUE(LW(0), 500)
-#endif
 #endif
                     CASE_EQUAL(3)
                     SET_VALUE(LW(0), 999)
@@ -4587,10 +4575,8 @@ EVT_BEGIN(gorotsuki_kikan)
     // set up.
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
     CALL(evt_party_stop, 0)
-#endif
 #endif
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_cont_onoff, 1)
@@ -4723,9 +4709,6 @@ EVT_BEGIN(gorotsuki_kikan)
     CALL(evt_cam3d_evt_set, 205, 127, 628, 205, 71, 184, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print_party, STRING("mac_5_000_10"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#else
 #if VERSION == VERSION_EU
     CALL(evt_cam3d_evt_off, 500, 11)
     CALL(evt_party_run, 0)
@@ -4733,7 +4716,6 @@ EVT_BEGIN(gorotsuki_kikan)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 #endif
     // Return control and start the Peach mail scene.
-#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)
     SPAWN_EVENT(PTR(peach_mail))
@@ -6771,11 +6753,7 @@ EVT_BEGIN(gor_00_init_evt)
         END_IF
         CASE_EQUAL(STG5_58_FAIR_WINDS)
         CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7) | PSND_QUICK)
-#else
         CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(7))
-#endif
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
         CASE_DEFAULT
         IF_INT_NOT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
@@ -6787,15 +6765,11 @@ EVT_BEGIN(gor_00_init_evt)
     // Set up the doors, NPCs, ships and the save block.
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_bero_info_run)
-#else
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_bero_info_run)
     SET_VALUE(GF(15), 1)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
-#endif
 #endif
     CALL_CHILD(PTR(luigi_npcEnt))
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -6818,14 +6792,10 @@ EVT_BEGIN(gor_00_init_evt)
     CALL(evt_map_playanim, STRING("hiki_nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_paper_entry, STRING("OFF_d_kaiten"))
     CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_gazigazi_entry)
-#else
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_gazigazi_entry)
 #else
     CALL_CHILD(PTR(evt_gazigazi_entry))
-#endif
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
@@ -6865,28 +6835,20 @@ EVT_BEGIN(gor_00_init_evt)
         CASE_EQUAL(STG0_04_GOOMBELLA_ASSAULTED)
         CALL_CHILD(PTR(enter_gorotsuki_town_init))
         CALL_CHILD(PTR(christine_osoware_setup))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)
-#else
 #if VERSION >= VERSION_US
         CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
 #else
         CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)
-#endif
 #endif
         CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
         SET_VALUE(LW(0), 1)
         SPAWN_EVENT(PTR(gundan1000tai_beforebattle))
         CASE_EQUAL(STG0_05_1000_X_NAUTS_BEFORE)
         CALL_CHILD(PTR(enter_gorotsuki_town_init))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)
-#else
 #if VERSION >= VERSION_US
         CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
 #else
         CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)
-#endif
 #endif
         CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
         SET_VALUE(LW(0), 1)

@@ -1217,10 +1217,6 @@ EVT_BEGIN(dmo_00_init_evt)
         SET_TYPE(0)
         CALL(demo_draw)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(demo_evt)
-    SPAWN_EVENT(koushukei_dai)
-#else
 #if VERSION >= VERSION_US
     SPAWN_EVENT(PTR(demo_evt))
     SPAWN_EVENT(PTR(koushukei_dai))
@@ -1228,14 +1224,9 @@ EVT_BEGIN(dmo_00_init_evt)
     SPAWN_EVENT(demo_evt)
     SPAWN_EVENT(koushukei_dai)
 #endif
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_sub_animgroup_async, STRING("OFF_d_maku_center"))
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    RETURN
-EVT_END_PAD()
-#else
 #if VERSION >= VERSION_US
     CALL(evt_fade_set_mapchange_type, 1, -1, -1, -1, 900)
     RETURN
@@ -1243,7 +1234,6 @@ EVT_END()
 #else
     RETURN
 EVT_END_PAD()
-#endif
 #endif
 
 

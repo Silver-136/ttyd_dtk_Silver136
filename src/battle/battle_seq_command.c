@@ -2947,13 +2947,11 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     if (unit->currentKind != UNIT_MARIO && (unit->currentKind < TYPE_PARTNER_MIN || unit->currentKind >= TYPE_PARTNER_MAX)) {
         return subsetevt_confuse_flustered;
     }
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     if (cmd->dipMode) {
         unit->moveState = 0;
         cmd->dipMode = 0;
     }
-#endif
 #endif
     _btlcmd_MakeActClassTable(wp);
     {
@@ -2993,11 +2991,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         cnt = 0;
         for (i = 0; i < cursor->count; i++) {
             weapon = cmd->weapon[i].weapon;
-#if VERSION <= VERSION_DEMO_US
-            if (cmd->weapon[i].enabled && ((u32)weapon->special & SPECIAL_CONFUSED_ACTION) &&
-#else
             if (cmd->weapon[i].enabled && (weapon->special & SPECIAL_CONFUSED_ACTION) &&
-#endif
                 !(weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) && (weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
                 list[cnt++] = i;
             }
@@ -3014,11 +3008,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         }
         _btlcmd_SelectWeaponDecide(wp, cmd->actType, cursor->absPos);
         weapon = cmd->weapon[cursor->absPos].weapon;
-#if VERSION <= VERSION_DEMO_US
-        if (!((u32)weapon->special & SPECIAL_CONFUSED_ACTION)) {
-#else
         if (!(weapon->special & SPECIAL_CONFUSED_ACTION)) {
-#endif
             return subsetevt_confuse_flustered;
         }
         if ((weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) || !(weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
@@ -3055,11 +3045,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
             return subsetevt_confuse_flustered;
         }
         cmd->operationType = cmd->operation[cursor->absPos].type;
-#if VERSION <= VERSION_DEMO_US
-        switch ((u32)cmd->operationType) {
-#else
         switch (cmd->operationType) {
-#endif
         case 6:
             if (unit->currentKind == UNIT_MARIO) {
                 return btldefaultevt_Defend;

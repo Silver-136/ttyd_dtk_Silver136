@@ -691,23 +691,12 @@ void mobjMain(void) {
     Vec camPos;
     f32 nz, ny, nx, dist, hz, hy, hx;
 
-#if VERSION <= VERSION_DEMO_US
-    {
-        MapObjectWork* w = mobjGetWork();
-        wp = (MapObjectWork*)w;
-    }
-#else
     wp = mobjGetWork();
-#endif
     count = wp->count;
     entry = wp->entries;
     mario = marioGetPtr();
     party = partyGetPtr(marioGetPartyId());
-#if VERSION <= VERSION_DEMO_US
-    fbat = *(s16*)fbatGetPointer();
-#else
     fbat = fbatGetPointer()->mode;
-#endif
     hitJump = NULL;
     partyFlag = 0;
     if (party != NULL && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
@@ -805,17 +794,10 @@ void mobjMain(void) {
         if (!(entry->flags & MOBJ_FLAG_HIT)) {
             hit = 0;
             hitPtr = entry->hitObj[0].hitObject;
-#if VERSION <= VERSION_DEMO_US
-            if ((s32)(u8)mario->characterId != CHARACTER_BOWSER) {
-                // The first hit kind that applies wins. The goto is kept: the hammer and partner checks
-                // fall through to the next kind when their inner test fails, and no if/else-if form of
-                // that gives the same code (the partner blocks merge or re-test the flag).
-#else
             if (mario->characterId != CHARACTER_BOWSER) {
                 // The first hit kind that applies wins. The goto is kept: the hammer and partner checks
                 // fall through to the next kind when their inner test fails, and no if/else-if form of
                 // that gives the same code (the partner blocks merge or re-test the flag).
-#endif
                 if ((entry->flags & MOBJ_FLAG_HIT_HAMMER) && mario->hitobjHammer == hitPtr) {
                     if (marioGetPtr()->position.y <= 5.0f + entry->position.y) {
                         entry->hitFlag = MOBJ_FLAG_HIT_HAMMER;
@@ -853,11 +835,7 @@ void mobjMain(void) {
                         entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
                         hit = 1;
                         goto hitDone;
-#if VERSION <= VERSION_DEMO_US
-                    } else if (party->hitobjAction != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
-#else
                     } else if (party->hitobjAction != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
-#endif
                         if (PSVECDistance(&party->position, &entry->position) <
                             entry->hitObj[0].hitObject->radius + party->width) {
                             entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
@@ -866,11 +844,7 @@ void mobjMain(void) {
                         }
                     }
                 }
-#if VERSION <= VERSION_DEMO_US
-                if ((entry->flags & MOBJ_FLAG_HIT_BOBBERY) && party != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
-#else
                 if ((entry->flags & MOBJ_FLAG_HIT_BOBBERY) && party != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
-#endif
                     if (party->hitobjAction == hitPtr) {
                         entry->hitFlag = MOBJ_FLAG_HIT_BOBBERY;
                         hit = 1;
@@ -907,15 +881,6 @@ void mobjMain(void) {
                 if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_BODY_LV3) && kpaGetHitobj() == hitPtr && kpaGetLevel() == 3) {
                     entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_BODY_LV3;
                     hit = 1;
-#if VERSION <= VERSION_DEMO_US
-                    } else if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_FLAME) && kpaGetHitFlame() == hitPtr) {
-                        entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_FLAME;
-                        hit = 1;
-                    } else if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_FRONT) && mario->hitobjFront == hitPtr) {
-                        entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_FRONT;
-                        hit = 1;
-                    } else if ((entry->flags & MOBJ_FLAG_HIT_STAND) && mario->hitobjStandOn == hitPtr) {
-#else
                     goto hitDone;
                 }
                 if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_FLAME) && kpaGetHitFlame() == hitPtr) {
@@ -929,7 +894,6 @@ void mobjMain(void) {
                     goto hitDone;
                 }
                 if ((entry->flags & MOBJ_FLAG_HIT_STAND) && mario->hitobjStandOn == hitPtr) {
-#endif
                     entry->hitFlag = MOBJ_FLAG_HIT_STAND;
                     hit = 1;
                 }
@@ -1380,15 +1344,9 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     pos = _pos;
 
     for (i = 0; i < entryCount; i++, entry++) {
-#if VERSION <= VERSION_DEMO_US
-        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0)
-#else
         if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0) {
-#endif
             continue;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
 
         animName = names;
         while (*animName != NULL) {

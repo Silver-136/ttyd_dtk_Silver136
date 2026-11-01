@@ -1134,10 +1134,8 @@ EVT_BEGIN(powerupya_party_rtn)
         IF_INT_NOT_EQUAL(LW(1), LW(8))
             CALL(evt_mario_goodbye_party, 0)
             CALL(evt_mario_hello_party, 0, LW(1))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             CALL(evt_party_stop, 0)
-#endif
 #endif
         END_IF
         CALL(evt_msg_print, 0, STRING("powerup_02"), 0, STRING("me"))
@@ -3771,32 +3769,24 @@ static EVT_BEGIN(evt_door_03_close)
             CALL(evt_party_move_pos2, 0, LW(0), LW(2), 60)
             CALL(evt_party_set_dir, 0, 270, -1)
             CALL(evt_mario_set_dir, 90, 300, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_party, STRING("mac_4_058"))
-#else
 #if VERSION == VERSION_EU
             CALL(evt_party_stop, 0)
             CALL(evt_msg_print_party, STRING("mac_4_058"))
             CALL(evt_party_run, 0)
 #else
             CALL(evt_msg_print_party, STRING("mac_4_058"))
-#endif
 #endif
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_THINK1_2"), LW(0), LW(1), LW(2), 0)
             CALL(evt_mario_set_pose, STRING("M_I_Z"))
             WAIT_MS(1000)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print_party, STRING("mac_4_059"))
-#else
 #if VERSION == VERSION_EU
             CALL(evt_party_stop, 0)
             CALL(evt_msg_print_party, STRING("mac_4_059"))
             CALL(evt_party_run, 0)
 #else
             CALL(evt_msg_print_party, STRING("mac_4_059"))
-#endif
 #endif
             SET_VALUE(GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE, 1)
             CALL(evt_mario_key_onoff, 1)
@@ -6092,9 +6082,6 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF_GOR_FRANKLY_FIRST_MAP_READ, 1)
-#else
 #if VERSION == VERSION_EU
     SET_VALUE(GSWF_GOR_FRANKLY_FIRST_MAP_READ, 1)
 #endif
@@ -6104,7 +6091,6 @@ EVT_BEGIN(epigraphy_map)
 #endif
 #if VERSION != VERSION_EU
     SET_VALUE(GSWF_GOR_FRANKLY_FIRST_MAP_READ, 1)
-#endif
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG0_16_FRANKLYS_HOUSE)
     RETURN
@@ -6179,11 +6165,9 @@ EVT_BEGIN(epigraphy_map_after_stage1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
-#endif
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG1_31_FRANKLYS_HOUSE_STG_1)
     RETURN
@@ -6296,11 +6280,9 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     // The Rogueport theme and ambience resume.
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
-#endif
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
     RETURN
@@ -6402,11 +6384,9 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     // The Rogueport theme and ambience resume.
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
-#endif
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG3_51_FRANKLYS_HOUSE_STG_3)
     RETURN
@@ -6493,11 +6473,9 @@ EVT_BEGIN(epigraphy_map_after_stage4)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
-#endif
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG4_31_FRANKLYS_HOUSE_STG_4)
     RETURN
@@ -6570,11 +6548,9 @@ EVT_BEGIN(epigraphy_map_after_stage5)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
-#endif
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG5_61_FRANKLYS_HOUSE_STG_5)
     RETURN
@@ -6706,14 +6682,10 @@ EVT_BEGIN(kurihakase_after3minutes)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#endif
 #endif
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN

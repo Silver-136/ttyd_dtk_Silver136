@@ -277,10 +277,8 @@ static USER_FUNC(mario_chk) {
     s32 n;
     char name[256];
     MarioWork* mario = marioGetPtr();
-#if VERSION > VERSION_DEMO_US
     PartyEntry* party;
     HitEntry* hit;
-#endif
     s32 i;
     s32 j;
 
@@ -360,7 +358,6 @@ static USER_FUNC(mario_chk) {
     mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "A_hikaru_%02d", n);
     hitGrpAttrOff(name, 0x800);
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     // This version exposes a third route entry; the other version exposes two.
     j++;
@@ -374,7 +371,6 @@ static USER_FUNC(mario_chk) {
     mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "A_hikaru_%02d", n);
     hitGrpAttrOff(name, 0x800);
-#endif
 #endif
     event->userdata[1]++;
     // The strict threshold advances after 21 or 61 calls, depending on whether the start was entered.

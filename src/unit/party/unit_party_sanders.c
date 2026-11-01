@@ -636,17 +636,10 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, 7)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
-    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-    CALL(evt_btl_camera_set_mode, 0, 11)
-#else
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
-#endif
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -679,11 +672,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         SET_VALUE(LW(1), 6)
     END_SWITCH
     CALL(btlevtcmd_AcSetParamAll, 2, LW(0), LW(1), 0, 100, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_AcSetFlag, 15)
-#else
     CALL(btlevtcmd_AcSetFlag, AC_POWER_GAUGE_FLAG_FILL_WHILE_HELD | AC_POWER_GAUGE_FLAG_PLAIN_GAUGE | AC_POWER_GAUGE_FLAG_SHOW_ZONE_LAMP | AC_POWER_GAUGE_FLAG_LAMP_SHIFT_LEFT)
-#endif
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 15, 1, 0)
     WAIT_FRAMES(22)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
@@ -706,21 +695,13 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 20)
         CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_ATTACK1"), 0, 0, -1, -1, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -2, 1)
-#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_KEEP, 1)
-#endif
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 20)
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5f))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, -1)
-#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
-#endif
         CALL(btlevtcmd_StopAC)
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), 0)
@@ -739,11 +720,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(5))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_ATTACK1"), 0, 0, -1, -1, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 60, -2, 1)
-#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 60, MOVE_SOUND_KEEP, 1)
-#endif
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     // He walks up to the enemy with his fuse sizzling while the camera zooms in, then glows for a second.
@@ -755,11 +732,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_ATTACK1"), 0, 0, -1, -1, 0, 0)
     ADD(LW(2), 5)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 90, -2, 1)
-#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 90, MOVE_SOUND_KEEP, 1)
-#endif
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 300)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK2"), LW(14))
@@ -799,15 +772,6 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     // A miss: the enemy plays its dodge reaction.
     IF_INT_NOT_EQUAL(LW(5), 1)
         IF_INT_EQUAL(LW(5), 3)
-#if VERSION <= VERSION_DEMO_US
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
-        END_IF
-        IF_INT_EQUAL(LW(5), 6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
-        END_IF
-        IF_INT_EQUAL(LW(5), 2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
-#else
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
         IF_INT_EQUAL(LW(5), 6)
@@ -815,17 +779,12 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         END_IF
         IF_INT_EQUAL(LW(5), 2)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-#endif
         END_IF
         GOTO(90)
     END_IF
     // The hit: a successful command adds the rating effect (Nice, Good...) and the higher damage.
     CALL(btlevtcmd_GetResultAC, LW(6))
-#if VERSION <= VERSION_DEMO_US
-    IF_BITS_SET(LW(6), 2)
-#else
     IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
-#endif
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -839,11 +798,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     LABEL(90)
     CALL(btlevtcmd_StopAC)
     LABEL(92)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_btl_camera_set_mode, 0, 0)
-#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-#endif
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("J_1A"))
     BEGIN_SIBLING_EVENT
@@ -853,11 +808,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, -1)
-#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, MOVE_SOUND_FROM_TABLE)
-#endif
     END_SIBLING_EVENT
     WAIT_FRAMES(60)
     DELETE_EVENT(LW(15))
@@ -867,19 +818,11 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     DIVIDE(LW(6), 2)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.25f))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
-#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, -1)
-#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
-#endif
     END_SIBLING_EVENT
     // Stylish: pressing A as he lands makes him stretch and squash for the audience; otherwise he lands in a heap.
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 15)
@@ -890,33 +833,21 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_sub_intpl_init_float, 11, FLOAT(1.0f), FLOAT(0.5996094f), 8)
-#else
             CALL(evt_sub_intpl_init_float, EASING_SINE_IN_OUT, FLOAT(1.0f), FLOAT(0.5996094f), 8)
-#endif
             LOOP(8)
                 CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                 CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(0), LW(5), LW(2))
                 WAIT_FRAMES(1)
             END_LOOP
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_sub_intpl_init_float, 11, FLOAT(0.5996094f), FLOAT(1.1992188f), 8)
-#else
             CALL(evt_sub_intpl_init_float, EASING_SINE_IN_OUT, FLOAT(0.5996094f), FLOAT(1.1992188f), 8)
-#endif
             LOOP(8)
                 CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                 CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(0), LW(5), LW(2))
                 WAIT_FRAMES(1)
             END_LOOP
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_sub_intpl_init_float, 11, FLOAT(1.1992188f), FLOAT(1.0f), 6)
-#else
             CALL(evt_sub_intpl_init_float, EASING_SINE_IN_OUT, FLOAT(1.1992188f), FLOAT(1.0f), 6)
-#endif
             LOOP(6)
                 CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                 CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -925,33 +856,21 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
             END_LOOP
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_sub_intpl_init_float, 11, FLOAT(1.0f), FLOAT(1.5f), 8)
-#else
             CALL(evt_sub_intpl_init_float, EASING_SINE_IN_OUT, FLOAT(1.0f), FLOAT(1.5f), 8)
-#endif
             LOOP(8)
                 CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                 CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(5), LW(1), LW(2))
                 WAIT_FRAMES(1)
             END_LOOP
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_sub_intpl_init_float, 11, FLOAT(1.5f), FLOAT(0.5996094f), 8)
-#else
             CALL(evt_sub_intpl_init_float, EASING_SINE_IN_OUT, FLOAT(1.5f), FLOAT(0.5996094f), 8)
-#endif
             LOOP(8)
                 CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                 CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(5), LW(1), LW(2))
                 WAIT_FRAMES(1)
             END_LOOP
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_sub_intpl_init_float, 11, FLOAT(0.5996094f), FLOAT(1.0f), 6)
-#else
             CALL(evt_sub_intpl_init_float, EASING_SINE_IN_OUT, FLOAT(0.5996094f), FLOAT(1.0f), 6)
-#endif
             LOOP(6)
                 CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                 CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -971,21 +890,11 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
     LABEL(95)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_btl_camera_set_mode, 0, 0)
-#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-#endif
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-    LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
-    CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
-#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -993,7 +902,6 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
 #else
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
-#endif
 #endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

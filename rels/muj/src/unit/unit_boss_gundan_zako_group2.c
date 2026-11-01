@@ -770,9 +770,6 @@ void zakogun_ext_main2(void) {
                 }
                 break;
             case 50:
-#if VERSION <= VERSION_DEMO_US
-            BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-#else
 #if VERSION >= VERSION_US
             {
                 BattleUnit* tgt = BattleGetUnitPtr(wp, work->targetId);
@@ -787,7 +784,6 @@ void zakogun_ext_main2(void) {
             }
 #else
                 BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-#endif
 #endif
                 zako->rot.y = 0.0f;
                 zako->start = zako->pos;

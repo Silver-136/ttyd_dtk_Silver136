@@ -82,9 +82,7 @@ static inline s32 MAX0(s32 x) {
  * The demo has its own records; US/PAL keep eight record rows, JP four.
  */
 void yuugijou_init(void) {
-#if VERSION > VERSION_DEMO_US
     s32 t;
-#endif
     yuwp = &yuugijouwork;
     memset(yuwp, 0, sizeof(PiantaParlorWork));
 
@@ -381,21 +379,11 @@ void monteCountDisp(void) {
             y = y / 10;
             if (y == 0) {
                 s32 sg;
-#if VERSION <= VERSION_DEMO_US
-                if ((s32)yuwp->tokens > (s32)yuwp->dispTokens)
-#else
                 if ((s32)yuwp->tokens > (s32)yuwp->dispTokens) {
-#endif
                     sg = 1;
-#if VERSION <= VERSION_DEMO_US
-                else
-#else
                 } else {
-#endif
                     sg = -1;
-#if VERSION > VERSION_DEMO_US
                 }
-#endif
                 y = sg;
             }
             yuwp->dispTokens += y;

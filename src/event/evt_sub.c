@@ -513,24 +513,16 @@ EVT_BEGIN(evt_sub_starstone)
     IF_INT_EQUAL(LF(8), 0)
         CALL(evt_mario_set_pose, STRING("M_N_3"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // Fade back in; the camera closes in while the star spirals up around him, spinning,
-    // until it hovers overhead.
-    CALL(evt_fade_entry, FADE_IN_BLACK, 300, 255, 255, 255)
-#else
 #if VERSION < VERSION_US
     CALL(evt_fade_entry, FADE_IN_BLACK, 300, 255, 255, 255)
-#endif
 #endif
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GET_STARSTONE1"))
     CALL(bgm_start_wait)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     // Fade back in; the camera closes in while the star spirals up around him, spinning,
     // until it hovers overhead.
     CALL(evt_fade_entry, FADE_IN_BLACK, 300, 255, 255, 255)
-#endif
 #endif
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
@@ -541,29 +533,6 @@ EVT_BEGIN(evt_sub_starstone)
     SET_VALUE(LW(7), LW(1))
     SET_FLOAT_VALUE(LW(8), FLOAT(35.0f))
     SET_FLOAT_VALUE(LW(9), LW(3))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 0, 3600, 170)
-    LOOP(171)
-        CALL(evt_sub_intpl_get_value)
-        IF_INT_EQUAL(LF(8), 1)
-            CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
-        ELSE
-            CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
-        END_IF
-        CALL(evt_sub_get_sincos, LW(0), LW(5), LW(6))
-        MULTIPLY_FLOAT(LW(5), LW(8))
-        MULTIPLY_FLOAT(LW(6), LW(8))
-        ADD_FLOAT(LW(5), LW(2))
-        ADD_FLOAT(LW(6), LW(4))
-        CALL(evt_item_set_position, LW(7), LW(5), LW(9), LW(6))
-        CALL(stone_ry, LW(7), LW(0))
-        SUBTRACT_FLOAT(LW(8), FLOAT(0.205078125f))
-        ADD_FLOAT(LW(9), FLOAT(0.2822265625f))
-        WAIT_FRAMES(1)
-    END_LOOP
-    // Mario cheers and holds the star high in a burst of light, and the chapter's "You got a Crystal Star!"
-    // message shows.
-#else
 #if VERSION >= VERSION_US
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 0, 3600, 2833)
     LOOP(0)
@@ -611,7 +580,6 @@ EVT_BEGIN(evt_sub_starstone)
 #endif
     // Mario cheers and holds the star high in a burst of light, and the chapter's "You got a Crystal Star!"
     // message shows.
-#endif
     IF_INT_NOT_EQUAL(LF(8), 1)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAPPY1"), LW(0), LW(1), LW(2), 0)
@@ -762,11 +730,6 @@ EVT_BEGIN(evt_sub_starstone)
         SET_VALUE(LW(0), 22)
     END_IF
     SET_VALUE(LF(10), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_memcard_save)
-    // Move on: Peach's interlude (aji_10) after chapters 1-3, then usu_00, muj_12, pik_03 and pik_01 after
-    // chapters 4-7. The Doopliss scene instead fades back in where it is.
-#else
 #if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
@@ -774,7 +737,6 @@ EVT_BEGIN(evt_sub_starstone)
 #endif
     // Move on: Peach's interlude (aji_10) after chapters 1-3, then usu_00, muj_12, pik_03 and pik_01 after
     // chapters 4-7. The Doopliss scene instead fades back in where it is.
-#endif
     CALL(evt_mario_init_camid)
     CALL(evt_party_init_camid, 0)
     CALL(evt_party_init_camid, 1)

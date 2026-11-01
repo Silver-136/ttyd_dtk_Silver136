@@ -613,13 +613,11 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     ItemWork* wp = itemGetWork();
     int i;
     ItemEntry* entry;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     // FAKE: e/base and the explicit coin/flower search loops (the heart search uses the helper) steer register
     // numbering: the search pointer must be a named local and the entries base a named web.
     ItemEntry* e;
     ItemEntry* base;
-#endif
 #endif
     BOOL isGswf, isLswf;
     char itemName[8];
@@ -1406,51 +1404,31 @@ void itemseq_GetItem(ItemEntry* entry) {
                 switch (bgm) {
                     case 0:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-#if VERSION <= VERSION_DEMO_US
-                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-#else
                             psndBGMOff(0x3800);
-#endif
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_STARPIECE1");
                         break;
                     case 1:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-#if VERSION <= VERSION_DEMO_US
-                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-#else
                             psndBGMOff(0x3800);
-#endif
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_KEYITEM1");
                         break;
                     case 2:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-#if VERSION <= VERSION_DEMO_US
-                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-#else
                             psndBGMOff(0x3800);
-#endif
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_BADGE1");
                         break;
                     case 3:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-#if VERSION <= VERSION_DEMO_US
-                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-#else
                             psndBGMOff(0x3800);
-#endif
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_IMPORTANT_ITEM1");
                         break;
                     default:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-#if VERSION <= VERSION_DEMO_US
-                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-#else
                             psndBGMOff(0x3800);
-#endif
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
                         break;
@@ -1501,11 +1479,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             if (!(entry->flags & ITEM_FLAG_NO_GET_BGM) && !(entry->flags & ITEM_FLAG_GET_BGM_ENDED)) {
                 if (psndBGMChk(1)) {
                     entry->flags |= ITEM_FLAG_GET_BGM_ENDED;
-#if VERSION <= VERSION_DEMO_US
-                    psndBGMOff(PSND_FADE_OUT | PSND_SLOT(1));
-#else
                     psndBGMOff(0x201);
-#endif
                     if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                         psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                     }
@@ -1522,11 +1496,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 winMgrCloseAutoDelete(entry->winId[1]);
             }
             if (!(entry->flags & ITEM_FLAG_NO_GET_BGM) && !(entry->flags & ITEM_FLAG_GET_BGM_ENDED)) {
-#if VERSION <= VERSION_DEMO_US
-                psndBGMOff(PSND_FADE_OUT | PSND_SLOT(1));
-#else
                 psndBGMOff(0x201);
-#endif
                 if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                     psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 }
@@ -1600,11 +1570,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             effSoftDelete(wp->effect);
             marioSetCamId(CAMERA_3D);
-#if VERSION <= VERSION_DEMO_US
-            iconFlagOff(entry->name, 0x40);
-#else
             iconFlagOff(entry->name, ICON_FLAG_CAM_EFFECT_A);
-#endif
             itemGetEnd(entry);
             itemDelete(entry->name);
             break;
@@ -1827,12 +1793,10 @@ void itemseq_Bound(ItemEntry* entry) {
                                 }
                                 break;
                         }
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
                         if (!strcmp(gp->currentMapName, "aji_03")) {
                             entry->direction = irand(90);
                         }
-#endif
 #endif
                     } else {
                         entry->direction = _move_dir;
@@ -1874,12 +1838,7 @@ void itemseq_Bound(ItemEntry* entry) {
             t1 = OSTicksToMicroseconds(entry->airTime) / 1000000.0f;
             t2 = OSTicksToMicroseconds(entry->airTime + delta) / 1000000.0f;
             dx = dt * (entry->speed * (f32)sin(6.2831855f * entry->direction / 360.0f));
-#if VERSION <= VERSION_DEMO_US
-            dz = (f32)cos(6.2831855f * entry->direction / 360.0f);
-            dz = dt * (entry->speed * -dz);
-#else
             { f32 c = (f32)cos(6.2831855f * entry->direction / 360.0f); dz = dt * (entry->speed * -c); } // FAKE: cos result in a local
-#endif
             if (entry->flags2 & ITEM_FLAG2_NO_Z_MOVE) {
                 dz = 0.0f;
             }
@@ -1921,26 +1880,16 @@ void itemseq_Bound(ItemEntry* entry) {
                         x = entry->position.x;
                         y = 20.0f + entry->position.y;
                         z = entry->position.z;
-#if VERSION <= VERSION_DEMO_US
-                        hitDist = 20.0 + fabs(dy);
-                        if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
-#else
                         { f64 d = __fabs(dy); hitDist = 20.0 + d; }
                         if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
-#endif
                             entry->position.y = hitY - 20.0f - 4.0f;
                             r = h;
                         } else {
                             x = entry->position.x;
                             y = entry->position.y;
                             z = entry->position.z;
-#if VERSION <= VERSION_DEMO_US
-                            hitDist = 20.0 + fabs(dy);
-                            if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
-#else
                             { f64 d = __fabs(dy); hitDist = 20.0 + d; }
                             if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
-#endif
                                 entry->position.y = hitY - 20.0f;
                                 r = h;
                             } else {
@@ -1990,11 +1939,7 @@ void itemseq_Bound(ItemEntry* entry) {
                 f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
                 HitEntry* h;
                 f32 x = entry->position.x, y = 20.0f + entry->position.y, z = entry->position.z;
-#if VERSION <= VERSION_DEMO_US
-                hitDist = 20.0 + fabs(dy);
-#else
                 { f64 d = __fabs(dy); hitDist = 20.0 + d; }
-#endif
                 h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f);
                 if (h) {
                     entry->position.y = hitY;
@@ -2012,11 +1957,7 @@ void itemseq_Bound(ItemEntry* entry) {
                         sndPos.x = entry->position.x;
                         sndPos.y = entry->position.y;
                         sndPos.z = entry->position.z;
-#if VERSION <= VERSION_DEMO_US
-                        psndSFXOn_3D((const char*)0x194, &sndPos);
-#else
                         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_WATER1), &sndPos);
-#endif
                     }
                     effSplashEntry(0, entry->position.x, entry->position.y, entry->position.z, 0.7f);
                     entry->flags |= ITEM_FLAG_NO_TOUCH_GET;
@@ -2080,11 +2021,7 @@ void itemseq_Bound(ItemEntry* entry) {
                         v = entry->velocityY * dt + (-980.0f * entry->gravityScale) * ((t2 + dt) * (t2 + dt) - t2sq);
                         entry->velocityY = 0.7f * (entry->bounceFactor * (-v / dt));
                     }
-#if VERSION <= VERSION_DEMO_US
-                    peak = fabs(0.5f * (entry->velocityY / (-980.0f * entry->gravityScale)));
-#else
                     { f64 d = __fabs(0.5f * (entry->velocityY / (-980.0f * entry->gravityScale))); peak = d; } // FAKE: fabs result in an f64 local
-#endif
                     height = entry->velocityY * peak + peak * ((-980.0f * entry->gravityScale) * peak);
                     if (!isFloor && height <= 8.0f) {
                         itemModeChange(entry, ITEM_MODE_GROUND);

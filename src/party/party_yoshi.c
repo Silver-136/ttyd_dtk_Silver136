@@ -442,10 +442,8 @@ void yoshi_use(PartyEntry* party) {
     PartyEntry* extra;
     f32 dir;
     f32 spd;
-#if VERSION > VERSION_DEMO_US
     HitEntry* hit;
     s32 attr;
-#endif
     f32 angle;
     f32 speed;
     f32 ox;
@@ -676,11 +674,7 @@ void yoshi_use(PartyEntry* party) {
                 partyChgPose(party, "PYS_R_2");
                 YOSHI_WORK(party)->count++;
                 if (YOSHI_WORK(party)->count % 10 == 0) {
-#if VERSION <= VERSION_DEMO_US
-                    psndSFXOn_3D((const char*)0x940, &party->position);
-#else
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_MOVE1), &party->position);
-#endif
                 }
             } else {
                 if (strcmp(party->animName, "PYS_S_2")) {
@@ -739,10 +733,8 @@ void yoshi_use(PartyEntry* party) {
             }
             yoshiAddFloorMove(party);
             partyChkGnd(party);
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             movePos(&party->position.x, &party->position.z, mario->hitobjFront ? -0.1f : 0.1f, toMovedir(mario->displayDirection));
-#endif
 #endif
             if (party->useStruct) {
                 __memFree(HEAP_DEFAULT, party->useStruct);

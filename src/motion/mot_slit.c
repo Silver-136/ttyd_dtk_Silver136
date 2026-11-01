@@ -801,11 +801,7 @@ void mot_slit(void) {
         }
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-#if VERSION <= VERSION_DEMO_US
-        m->dispFlags &= CLR_DISP;
-#else
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
-#endif
         marioPaperOff();
         m->flags &= ~MARIO_FLAG_PAPER_MODE;
         return;
@@ -816,19 +812,10 @@ void mot_slit(void) {
         m->mot.slit.counter = 0;
         m->slitState = 2;
         m->mot.slit.lastY = m->position.y;
-#if VERSION <= VERSION_DEMO_US
-        if (m->baseSpeed >= m->baseDashSpeed) {
-#else
         if (SPEEDCHK_COND(m)) {
-#endif
             slitSpeedDown(m);
         }
         marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((char*)0x177, &m->position);
-        break;
-    case 2:
-#else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT1), &m->position);
         break;
     case 2:
@@ -837,18 +824,15 @@ void mot_slit(void) {
             break;
         }
 #endif
-#endif
         if (!m->controlStickSensitivity) {
             m->baseSpeed = 0.0f;
             marioChgPose("M_S_1");
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         } else {
             if (SPEEDCHK_COND(m)) {
                 slitSpeedDown(m);
             }
             m->directionView = m->controlStickAngle;
-#endif
 #endif
         }
         if (--m->slitTimer <= 0) {

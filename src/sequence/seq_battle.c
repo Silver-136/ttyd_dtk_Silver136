@@ -419,16 +419,11 @@ BOOL battle_init(void) {
             msgLoad(gon11, 0);
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    memClear(HEAP_BATTLE);
-    smartAutoFree(2);
-#else
 #if VERSION >= VERSION_US
     battleMapAlloc();
 #else
     memClear(HEAP_BATTLE);
     smartAutoFree(2);
-#endif
 #endif
     _battleWorkPointer = NULL;
     animPoseBattleInit();
@@ -524,11 +519,9 @@ void battle_exit(void) {
     Mtx mtx;
 
     BattleEnd();
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     battleMapFree();
     smartAutoFree(2);
-#endif
 #endif
     itemReInit();
     iconReInit();
@@ -548,12 +541,8 @@ void battle_exit(void) {
     evtmgrReInit();
     npcRecoveryFiledNpc();
     gp->inBattle = 0;
-#if VERSION <= VERSION_DEMO_US
-    memClear(HEAP_BATTLE);
-#else
 #if VERSION < VERSION_US
     memClear(HEAP_BATTLE);
-#endif
 #endif
     evtStartAll(4);
     if (debug_battle_flag == 0) {

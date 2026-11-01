@@ -345,7 +345,6 @@ EVT_END()
 EVT_BEGIN(escape_chorogun_event)
     WAIT_MS(2000)
     CALL(get_gold_chorobon_id, LW(4))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), -1)
@@ -358,7 +357,6 @@ EVT_BEGIN(escape_chorogun_event)
     CALL(btlevtcmd_SetUnitWork, LW(4), UNIT_WORK_CHOROGUN_GONE, 1)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(10))
     CALL_CHILD(chorogun_dead_reward)
-#endif
 #endif
     CALL(chorogun_escape_all)
     WAIT_MS(1000)
@@ -458,10 +456,8 @@ static EVT_BEGIN(damage_event)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 7)
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_JP
                 CALL(btlevtcmd_WaitAttackEnd)
-#endif
 #endif
                 CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_chorogun), 0)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))

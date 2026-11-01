@@ -831,9 +831,6 @@ BEGIN_INLINE_EVENT
                 END_INLINE_EVENT
                 WAIT_MS(300)
                 BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-                    CALL(evt_npc_jump_position_nohit, STRING("バリアーン２"), 50, 20, 50, 300, 0)
-#else
 #if VERSION >= VERSION_US
                     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 200, 20, 300)
                     LOOP(0)
@@ -846,7 +843,6 @@ BEGIN_INLINE_EVENT
                     END_LOOP
 #else
                     CALL(evt_npc_jump_position_nohit, STRING("バリアーン２"), 50, 20, 50, 300, 0)
-#endif
 #endif
                     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
                 END_INLINE_EVENT

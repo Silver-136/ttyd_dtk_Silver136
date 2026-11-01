@@ -1327,16 +1327,12 @@ EVT_BEGIN(evt_toron_appear)
         CALL(evt_npc_pera_onoff, STRING("トロン"), 0)
         CALL(evt_npc_set_rotate, STRING("トロン"), 180, 180, 90)
         CALL(evt_npc_set_position, STRING("トロン"), -300, 2, -220)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
-#else
 #if VERSION >= VERSION_US
         CALL(evt_npc_set_ry, STRING("トロン"), 90)
 #endif
         CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
 #if VERSION >= VERSION_US
         ADD(LW(1), 2)
-#endif
 #endif
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRON_APPEAR1"), LW(0), LW(1), LW(2), 0)
         SET_FLOAT_VALUE(LW(3), FLOAT(0.5f))
@@ -1375,14 +1371,12 @@ EVT_BEGIN(evt_toron_appear)
     CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
     CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
     CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     IF_INT_GREATER(LW(10), -200)
         SET_VALUE(LW(0), -260)
     END_IF
     SET_VALUE(LW(1), 2)
-#endif
 #endif
     CALL(evt_npc_jump_position_nohit, STRING("トロン"), LW(0), LW(1), LW(2), 300, 20)
     WAIT_FRAMES(1)

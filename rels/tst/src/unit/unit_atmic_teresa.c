@@ -281,14 +281,10 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#if VERSION <= VERSION_DEMO_US
-    0,
-#else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
-#endif
 #endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
@@ -335,14 +331,10 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#if VERSION <= VERSION_DEMO_US
-    0,
-#else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
-#endif
 #endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier

@@ -212,15 +212,6 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
                     setup->itemDropped = ITEM_NULL;
                 }
             }
-#if VERSION <= VERSION_DEMO_US
-            else if (pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
-                hog = item_hog_table;
-                setup->itemDropped = hog.items[irand(20)];
-            }
-            break;
-    }
-}
-#else
 #if VERSION < VERSION_US
             else if (pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
                 hog = item_hog_table;
@@ -236,4 +227,3 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
     }
 #endif
 }
-#endif

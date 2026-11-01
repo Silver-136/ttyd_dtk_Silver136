@@ -1544,11 +1544,6 @@ EVT_BEGIN(evt_random_battle)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_position, STRING("乱"), 370, 0, 210)
-    CALL(evt_npc_set_position, STRING("乱２"), 390, 0, 235)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_403"), 0, STRING("乱"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_position, STRING("乱"), 370, 0, 210)
     CALL(evt_npc_set_position, STRING("乱２"), 390, 0, 235)
@@ -1558,18 +1553,10 @@ EVT_BEGIN(evt_random_battle)
     CALL(evt_npc_set_position, STRING("\227\220\202Q"), 390, 0, 235)
     CALL(evt_msg_print, 0, STRING("stg3_tou_403"), 0, STRING("\227\220"))
 #endif
-#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 300, 134, 732, 300, 38, 190, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_move_position, STRING("乱２"), 290, 235, 0, FLOAT(80.0f), 1)
-        CALL(evt_npc_jump_position_nohit, STRING("乱２"), 200, 60, 192, 500, 30)
-    END_INLINE_EVENT
-    CALL(evt_npc_move_position, STRING("乱"), 270, 210, 0, FLOAT(80.0f), 1)
-    CALL(evt_npc_jump_position_nohit, STRING("乱"), 180, 60, 167, 500, 30)
-#else
 #if VERSION >= VERSION_US
         CALL(evt_npc_move_position, STRING("乱２"), 290, 235, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_jump_position_nohit, STRING("乱２"), 200, 60, 192, 500, 30)
@@ -1583,17 +1570,10 @@ EVT_BEGIN(evt_random_battle)
     CALL(evt_npc_move_position, STRING("\227\220"), 270, 210, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_jump_position_nohit, STRING("\227\220"), 180, 60, 167, 500, 30)
 #endif
-#endif
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_I_Y"))
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_move_position, STRING("乱２"), 75, 75, 0, FLOAT(80.0f), 1)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("乱"), 55, 50, 0, FLOAT(80.0f), 1)
-#else
 #if VERSION >= VERSION_US
         CALL(evt_npc_move_position, STRING("乱２"), 75, 75, 0, FLOAT(80.0f), 1)
     END_INLINE_EVENT
@@ -1604,7 +1584,6 @@ EVT_BEGIN(evt_random_battle)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("\227\220"), 55, 50, 0, FLOAT(80.0f), 1)
-#endif
 #endif
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
@@ -1619,26 +1598,18 @@ EVT_BEGIN(evt_random_battle)
     END_LOOP
     CALL(evt_cam3d_evt_set, 0, 130, 62, 0, 115, -22, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_403_01"), 0, STRING("ガンス"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_403_01"), 0, STRING("ガンス"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_403_01"), 0, STRING("\203K\203\223\203X"))
 #endif
-#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 40, 155, 320, 40, 96, -8, 0, EASING_LINEAR)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_404"), 0, STRING("乱"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_404"), 0, STRING("乱"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_404"), 0, STRING("\227\220"))
-#endif
 #endif
     WAIT_MS(300)
     CALL(evt_snd_sfxon, STRING("SFX_STG3_GONG1"), 0)
@@ -2900,11 +2871,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_shinemon_lose)
     CALL_CHILD(PTR(evt_damage_pose))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_get_position, STRING("敵１"), LW(0), LW(1), LW(2))
-#else
     CALL(evt_npc_get_position, STRING("\223G\202P"), LW(0), LW(1), LW(2))
-#endif
     ADD(LW(1), 100)
     CALL(evt_eff, STRING(""), STRING("confetti"), 3, LW(0), LW(1), LW(2), 300, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG3_WIN_AUDIENCE1"), 0)
@@ -3522,15 +3489,9 @@ EVT_BEGIN(evt_default_opening)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LW(0), STRING("ガンス"))
-    ELSE
-        SET_VALUE(LW(0), STRING("キノシコワ"))
-#else
         SET_VALUE(LW(0), STRING("\203K\203\223\203X"))
         ELSE
         SET_VALUE(LW(0), STRING("\203L\203m\203V\203R\203\217"))
-#endif
     END_IF
     CALL(evt_npc_status_onoff, 1, LW(0), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_position, LW(0), 0, 60, -130)
@@ -3539,27 +3500,6 @@ EVT_BEGIN(evt_default_opening)
     CALL(evt_tou_get_fighter_num, GSW_GLITZ_PIT_OPPONENT, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_set_position, STRING("敵１"), 350, 0, 0)
-        CASE_EQUAL(2)
-        CALL(evt_npc_set_position, STRING("敵１"), 350, 0, 0)
-        CALL(evt_npc_set_position, STRING("敵２"), 390, 0, 25)
-        CASE_EQUAL(3)
-        CALL(evt_npc_set_position, STRING("敵１"), 350, 0, 0)
-        CALL(evt_npc_set_position, STRING("敵２"), 390, 0, 25)
-        CALL(evt_npc_set_position, STRING("敵３"), 370, 0, -25)
-        CASE_EQUAL(4)
-        CALL(evt_npc_set_position, STRING("敵１"), 350, 0, 0)
-        CALL(evt_npc_set_position, STRING("敵２"), 390, 0, 25)
-        CALL(evt_npc_set_position, STRING("敵３"), 370, 0, -25)
-        CALL(evt_npc_set_position, STRING("敵４"), 410, 0, 0)
-        CASE_EQUAL(5)
-        CALL(evt_npc_set_position, STRING("敵１"), 350, 0, 0)
-        CALL(evt_npc_set_position, STRING("敵２"), 390, 0, 25)
-        CALL(evt_npc_set_position, STRING("敵３"), 370, 0, -25)
-        CALL(evt_npc_set_position, STRING("敵４"), 410, 0, 0)
-        CALL(evt_npc_set_position, STRING("敵５"), 430, 0, -25)
-#else
         CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
         CASE_EQUAL(2)
         CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
@@ -3579,20 +3519,13 @@ EVT_BEGIN(evt_default_opening)
         CALL(evt_npc_set_position, STRING("\223G\202R"), 370, 0, -25)
         CALL(evt_npc_set_position, STRING("\223G\202S"), 410, 0, 0)
         CALL(evt_npc_set_position, STRING("\223G\202T"), 430, 0, -25)
-#endif
     END_SWITCH
     CALL(evt_cam3d_evt_set, 0, 585, 1310, 0, 400, -145, 0, EASING_SINE_IN_OUT)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_npc_set_tribe, STRING("敵１"), STRING("ブレッドハートベルト"))
-            BEGIN_INLINE_EVENT
-                CALL(tou_champion_belt, STRING("敵１"))
-#else
             CALL(evt_npc_set_tribe, STRING("\223G\202P"), STRING("\203u\203\214\203b\203h\203n\201[\203g\203x\203\213\203g"))
             BEGIN_INLINE_EVENT
                 CALL(tou_champion_belt, STRING("\223G\202P"))
-#endif
             END_INLINE_EVENT
         END_IF
     END_IF
@@ -3639,17 +3572,6 @@ EVT_BEGIN(evt_default_opening)
             END_IF
             SWITCH(LW(4))
                 CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
-                SET_VALUE(LW(0), STRING("敵１"))
-                CASE_EQUAL(1)
-                SET_VALUE(LW(0), STRING("敵２"))
-                CASE_EQUAL(2)
-                SET_VALUE(LW(0), STRING("敵３"))
-                CASE_EQUAL(3)
-                SET_VALUE(LW(0), STRING("敵４"))
-                CASE_EQUAL(4)
-                SET_VALUE(LW(0), STRING("敵５"))
-#else
                 SET_VALUE(LW(0), STRING("\223G\202P"))
                 CASE_EQUAL(1)
                 SET_VALUE(LW(0), STRING("\223G\202Q"))
@@ -3659,7 +3581,6 @@ EVT_BEGIN(evt_default_opening)
                 SET_VALUE(LW(0), STRING("\223G\202S"))
                 CASE_EQUAL(4)
                 SET_VALUE(LW(0), STRING("\223G\202T"))
-#endif
             END_SWITCH
             SET_VALUE(LW(1), LW(4))
             SET_VALUE(LW(2), LW(3))
@@ -3684,15 +3605,9 @@ EVT_BEGIN(evt_default_opening)
     CALL(evt_tou_get_fighter_name2, GSW_GLITZ_PIT_OPPONENT, LW(2))
     IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-#if VERSION <= VERSION_DEMO_US
-            SET_VALUE(LW(0), STRING("ガンス"))
-        ELSE
-            SET_VALUE(LW(0), STRING("キノシコワ"))
-#else
             SET_VALUE(LW(0), STRING("\203K\203\223\203X"))
             ELSE
             SET_VALUE(LW(0), STRING("\203L\203m\203V\203R\203\217"))
-#endif
         END_IF
         CALL(evt_tou_get_ranking, LW(1))
         SWITCH(LW(1))
@@ -3712,28 +3627,17 @@ EVT_BEGIN(evt_default_opening)
         CALL(evt_msg_print, 0, LW(1), 0, LW(0))
         ELSE
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-#if VERSION <= VERSION_DEMO_US
-            SET_VALUE(LW(3), STRING("ガンス"))
-#else
             SET_VALUE(LW(3), STRING("\203K\203\223\203X"))
-#endif
             SET_VALUE(LW(4), STRING("stg3_tou_115"))
             SET_VALUE(LW(5), STRING("stg3_tou_116_20"))
             ELSE
-#if VERSION <= VERSION_DEMO_US
-            SET_VALUE(LW(3), STRING("キノシコワ"))
-#else
             SET_VALUE(LW(3), STRING("\203L\203m\203V\203R\203\217"))
-#endif
             SET_VALUE(LW(4), STRING("stg3_tou_re_147"))
             SET_VALUE(LW(5), STRING("stg3_tou_re_149"))
         END_IF
         CALL(evt_msg_print, 0, LW(4), 0, LW(3))
         CALL(evt_msg_print_add_insert, 0, LW(5), LW(2), LW(0))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, EASING_LINEAR)
-#else
 #if VERSION == VERSION_EU
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 5)
@@ -3745,7 +3649,6 @@ EVT_BEGIN(evt_default_opening)
     ELSE
         CALL(evt_cam3d_evt_set, -65, 163, 335, -65, 115, -8, 0, 0)
     END_IF
-#endif
 #endif
     WAIT_FRAMES(1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -3761,11 +3664,7 @@ EVT_BEGIN(evt_default_opening)
             END_IF
             WAIT_MS(300)
             ELSE
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print, 0, STRING("stg3_tou_305"), 0, STRING("ガンス"))
-#else
             CALL(evt_msg_print, 0, STRING("stg3_tou_305"), 0, STRING("\203K\203\223\203X"))
-#endif
         END_IF
         ELSE
         CALL(evt_party_stop, 0)
@@ -3806,28 +3705,10 @@ EVT_BEGIN(evt_default_opening)
         END_SWITCH
     END_SWITCH
     WAIT_MS(300)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, LW(0), 0, STRING("敵１"))
-#else
     CALL(evt_msg_print, 0, LW(0), 0, STRING("\223G\202P"))
-#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 150, 141, 0, 100, -154, 0, EASING_SINE_IN_OUT)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LW(0), STRING("ガンス"))
-        SET_VALUE(LW(1), STRING("stg3_tou_116_20_01"))
-        CALL(evt_npc_set_anim, STRING("ガンス"), STRING("M_1"))
-        WAIT_MS(200)
-        CALL(evt_npc_set_anim, STRING("ガンス"), STRING("M_2"))
-        CALL(evt_npc_set_autotalkpose, STRING("ガンス"), STRING("M_2"), STRING("M_3"))
-    ELSE
-        SET_VALUE(LW(0), STRING("キノシコワ"))
-        SET_VALUE(LW(1), STRING("stg3_tou_re_150"))
-        CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("A_2"))
-        WAIT_MS(200)
-        CALL(evt_npc_set_autotalkpose, STRING("キノシコワ"), STRING("S_3"), STRING("T_3"))
-#else
         SET_VALUE(LW(0), STRING("\203K\203\223\203X"))
         SET_VALUE(LW(1), STRING("stg3_tou_116_20_01"))
         CALL(evt_npc_set_anim, STRING("\203K\203\223\203X"), STRING("M_1"))
@@ -3840,7 +3721,6 @@ EVT_BEGIN(evt_default_opening)
         CALL(evt_npc_set_anim, STRING("\203L\203m\203V\203R\203\217"), STRING("A_2"))
         WAIT_MS(200)
         CALL(evt_npc_set_autotalkpose, STRING("\203L\203m\203V\203R\203\217"), STRING("S_3"), STRING("T_3"))
-#endif
     END_IF
     CALL(evt_msg_print, 0, LW(1), 0, LW(0))
     WAIT_MS(300)
@@ -4024,28 +3904,6 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_status_onoff, 1, STRING("ガンス"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_set_position, STRING("ガンス"), 0, 60, 0)
-    CALL(evt_npc_set_ry, STRING("ガンス"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_cam3d_evt_set, 0, 281, 1310, 0, 95, -145, 0, EASING_SINE_IN_OUT)
-    CALL(evt_npc_set_tribe, STRING("敵１"), STRING("ブレッドハートベルト"))
-    BEGIN_INLINE_EVENT
-        CALL(tou_champion_belt, STRING("敵１"))
-    END_INLINE_EVENT
-    CALL(evt_seq_wait, SEQ_GAME)
-    WAIT_MS(2000)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_cam3d_evt_set, 0, 155, 327, 0, 96, -8, 0, EASING_LINEAR)
-    WAIT_FRAMES(1)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_411"), 0, STRING("ガンス"))
-    CALL(evt_npc_set_ry, STRING("ガンス"), 90)
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_412"), 0, STRING("ガンス"))
-    // The east door opens and Rawk Hawk marches into the ring while the crowd cheers him.
-    CALL(evt_npc_set_position, STRING("敵１"), 550, 0, 0)
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_status_onoff, 1, STRING("ガンス"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_position, STRING("ガンス"), 0, 60, 0)
@@ -4089,7 +3947,6 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_msg_print, 0, STRING("stg3_tou_412"), 0, STRING("\203K\203\223\203X"))
     CALL(evt_npc_set_position, STRING("\223G\202P"), 550, 0, 0)
 #endif
-#endif
     SET_FLOAT_VALUE(LW(0), FLOAT(-180.0f))
     CALL_CHILD(PTR(e_door_open))
     CALL(evt_cam3d_evt_set, 475, 134, 533, 475, 38, -8, 0, EASING_LINEAR)
@@ -4107,15 +3964,6 @@ static EVT_BEGIN(evt_champion)
     END_INLINE_EVENT
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_move_position, STRING("敵１"), 450, 0, 0, FLOAT(60.0f), 1)
-        WAIT_MS(1000)
-        CALL(evt_npc_move_position, STRING("敵１"), 310, 0, 0, FLOAT(60.0f), 1)
-        CALL(evt_npc_jump_position_nohit, STRING("敵１"), 280, 20, 0, 500, 30)
-        CALL(evt_npc_jump_position_nohit, STRING("敵１"), 245, 40, 0, 500, 30)
-        CALL(evt_npc_jump_position_nohit, STRING("敵１"), 215, 60, 0, 500, 30)
-        CALL(evt_npc_move_position, STRING("敵１"), 80, 0, 0, FLOAT(60.0f), 1)
-#else
 #if VERSION >= VERSION_US
         CALL(evt_npc_move_position, STRING("敵１"), 450, 0, 0, FLOAT(60.0f), 1)
         WAIT_MS(1000)
@@ -4132,7 +3980,6 @@ static EVT_BEGIN(evt_champion)
         CALL(evt_npc_jump_position_nohit, STRING("\223G\202P"), 245, 40, 0, 500, 30)
         CALL(evt_npc_jump_position_nohit, STRING("\223G\202P"), 215, 60, 0, 500, 30)
         CALL(evt_npc_move_position, STRING("\223G\202P"), 80, 0, 0, FLOAT(60.0f), 1)
-#endif
 #endif
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
@@ -4166,17 +4013,6 @@ static EVT_BEGIN(evt_champion)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    // Grubba interviews Rawk Hawk, who brags that there is only one champ and blows a raspberry at the challenger.
-    CALL(evt_npc_move_position, STRING("ガンス"), 20, -20, 0, FLOAT(70.0f), 1)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_414"), 0, STRING("ガンス"))
-    WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_415"), 0, STRING("敵１"))
-    WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_416"), 0, STRING("ガンス"))
-    WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_417"), 0, STRING("敵１"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_move_position, STRING("ガンス"), 20, -20, 0, FLOAT(70.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_414"), 0, STRING("ガンス"))
@@ -4195,7 +4031,6 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_msg_print, 0, STRING("stg3_tou_416"), 0, STRING("\203K\203\223\203X"))
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_417"), 0, STRING("\223G\202P"))
-#endif
 #endif
     WAIT_MS(300)
     WAIT_MS(1000)
@@ -4856,14 +4691,10 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_dir, 0, 90, 200)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE2"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_463"), 0, STRING("ガンス"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_463"), 0, STRING("ガンス"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_463"), 0, STRING("\203K\203\223\203X"))
-#endif
 #endif
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
@@ -4898,13 +4729,6 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_mario_set_dir, 90, 200, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("butai_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("butai_1"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_map_playanim, STRING("tyuubu"), 1, 0)
-    CALL(evt_map_playanim, STRING("guruguru"), 1, 0)
-    CALL(evt_map_playanim, STRING("hakkou"), 1, 0)
-    CALL(evt_map_playanim, STRING("souti"), 0, 0)
-    CALL(evt_map_playanim, STRING("comp"), 1, 0)
-#else
 #if VERSION >= VERSION_US
     CALL(evt_map_playanim, STRING("tyuubu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("guruguru"), MAP_ANIM_PLAY_LOOP, 0)
@@ -4917,7 +4741,6 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_map_playanim, STRING("hakkou"), 1, 0)
     CALL(evt_map_playanim, STRING("souti"), 0, 0)
     CALL(evt_map_playanim, STRING("comp"), 1, 0)
-#endif
 #endif
     WAIT_FRAMES(1)
     BEGIN_INLINE_EVENT
@@ -4947,14 +4770,10 @@ static EVT_BEGIN(evt_boss)
             END_LOOP
         END_INLINE_EVENT
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), NPC_FLAG_AUTO_MOVE_ANIM)
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), NPC_FLAG_AUTO_MOVE_ANIM)
 #else
     CALL(evt_npc_flag_onoff, 0, STRING("\203K\203\223\203X"), NPC_FLAG_AUTO_MOVE_ANIM)
-#endif
 #endif
     LOOP(0)
         CALL(evt_map_checkanim, STRING("souti"), LW(0), LW(1))
@@ -4990,14 +4809,10 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 155, 288, 0, 105, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_465"), 0, STRING("ガンス"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_465"), 0, STRING("ガンス"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_465"), 0, STRING("\203K\203\223\203X"))
-#endif
 #endif
     WAIT_MS(300)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -5013,15 +4828,6 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 155, 288, 0, 105, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_466"), 0, STRING("ガンス"))
-    // Grubba powers up: the machine whirs faster, the screen shakes and he swells.
-    SET_VALUE(GF(0), 0)
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_set_anim, STRING("ガンス"), STRING("P_1"))
-        WAIT_MS(333)
-        CALL(evt_npc_set_anim, STRING("ガンス"), STRING("P_2"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_466"), 0, STRING("ガンス"))
     // Grubba powers up: the machine whirs faster, the screen shakes and he swells.
@@ -5037,7 +4843,6 @@ static EVT_BEGIN(evt_boss)
         CALL(evt_npc_set_anim, STRING("\203K\203\223\203X"), STRING("P_1"))
         WAIT_MS(333)
         CALL(evt_npc_set_anim, STRING("\203K\203\223\203X"), STRING("P_2"))
-#endif
 #endif
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
@@ -5100,11 +4905,6 @@ static EVT_BEGIN(evt_boss)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_get_position, STRING("ガンス"), LW(10), LW(11), LW(12))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_GANSU_BIG1"), LW(10), LW(11), LW(12), 0)
-    CALL(evt_npc_set_anim, STRING("ガンス"), STRING("H_1"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_get_position, STRING("ガンス"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_GANSU_BIG1"), LW(10), LW(11), LW(12), 0)
@@ -5114,20 +4914,15 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_GANSU_BIG1"), LW(10), LW(11), LW(12), 0)
     CALL(evt_npc_set_anim, STRING("\203K\203\223\203X"), STRING("H_1"))
 #endif
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 100, 200, 300)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_npc_set_scale, STRING("ガンス"), LW(0), LW(0), LW(0))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_npc_set_scale, STRING("ガンス"), LW(0), LW(0), LW(0))
 #else
             CALL(evt_npc_set_scale, STRING("\203K\203\223\203X"), LW(0), LW(0), LW(0))
-#endif
 #endif
             WAIT_FRAMES(1)
             IF_INT_EQUAL(LW(1), 0)
@@ -5196,23 +4991,14 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 170, 385, 0, 135, -11, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_468"), 0, STRING("マッチョガンス"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_468"), 0, STRING("マッチョガンス"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_468"), 0, STRING("\203}\203b\203`\203\207\203K\203\223\203X"))
 #endif
-#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 210, 852, 0, 135, -12, 1000, EASING_SINE_IN_OUT)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_battle_info, STRING("マッチョガンス"), 23)
-    CALL(evt_npc_battle_start, STRING("マッチョガンス"))
-    CALL(evt_npc_wait_battle_end)
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_battle_info, STRING("マッチョガンス"), 23)
     CALL(evt_npc_battle_start, STRING("マッチョガンス"))
@@ -5223,7 +5009,6 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_npc_set_battle_info, STRING("\203}\203b\203`\203\207\203K\203\223\203X"), 23)
     CALL(evt_npc_battle_start, STRING("\203}\203b\203`\203\207\203K\203\223\203X"))
     CALL(evt_npc_wait_battle_end)
-#endif
 #endif
     CALL(evt_snd_sfxon, STRING("SFX_STG3_ABSORB_DEVICE2"), LW(15))
     CALL(evt_snd_sfx_vol, LW(15), 38)
@@ -5274,11 +5059,6 @@ static EVT_BEGIN(evt_boss)
         WAIT_MS(4000)
         CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_EVT_ORGEL1"), 3000)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_position, STRING("キノシコワ"), -325, 0, 0)
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_01"), 0, STRING("キノシコワ"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_position, STRING("キノシコワ"), -325, 0, 0)
     CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
@@ -5287,7 +5067,6 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_npc_set_position, STRING("\203L\203m\203V\203R\203\217"), -325, 0, 0)
     CALL(evt_npc_status_onoff, 1, STRING("\203L\203m\203V\203R\203\217"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_01"), 0, STRING("\203L\203m\203V\203R\203\217"))
-#endif
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
@@ -5301,14 +5080,10 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, -320, 95, 287, -320, 40, -8, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     WAIT_MS(333)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_02"), 0, STRING("キノシコワ"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_02"), 0, STRING("キノシコワ"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_02"), 0, STRING("\203L\203m\203V\203R\203\217"))
-#endif
 #endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -160, 150, 288, -160, 100, -8, 0, EASING_SINE_IN_OUT)
@@ -5317,27 +5092,19 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, -200, 222, 682, -200, 100, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(333)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_04"), 0, STRING("キノシコワ"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_04"), 0, STRING("キノシコワ"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_04"), 0, STRING("\203L\203m\203V\203R\203\217"))
 #endif
-#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -320, 95, 287, -320, 40, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(333)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_05"), 0, STRING("キノシコワ"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_05"), 0, STRING("キノシコワ"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_05"), 0, STRING("\203L\203m\203V\203R\203\217"))
-#endif
 #endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -160, 150, 288, -160, 100, -8, 0, EASING_SINE_IN_OUT)
@@ -5347,16 +5114,6 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, -320, 95, 287, -320, 40, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(333)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_07"), 0, STRING("キノシコワ"))
-    WAIT_MS(300)
-    CALL(evt_cam3d_evt_set, -25, 197, 574, -25, 105, -8, 3000, EASING_SINE_IN_OUT)
-    CALL(evt_npc_move_position, STRING("キノシコワ"), -280, 20, 0, FLOAT(60.0f), 1)
-    CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -250, 20, 20, 500, 30)
-    CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -215, 40, 20, 500, 30)
-    CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -185, 60, 20, 500, 30)
-    CALL(evt_npc_move_position, STRING("キノシコワ"), -135, 80, 0, FLOAT(60.0f), 1)
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
@@ -5376,23 +5133,12 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_npc_jump_position_nohit, STRING("\203L\203m\203V\203R\203\217"), -185, 60, 20, 500, 30)
     CALL(evt_npc_move_position, STRING("\203L\203m\203V\203R\203\217"), -135, 80, 0, FLOAT(60.0f), 1)
 #endif
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 90, 300, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 90, 300)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_move_position, STRING("キノシコワ"), -50, 75, 0, FLOAT(60.0f), 1)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_01"), 0, STRING("キノシコワ"))
-    WAIT_MS(300)
-    WAIT_MS(333)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_02"), 0, STRING("ガンス"))
-    WAIT_MS(300)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_03"), 0, STRING("キノシコワ"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_move_position, STRING("キノシコワ"), -50, 75, 0, FLOAT(60.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_01"), 0, STRING("キノシコワ"))
@@ -5411,7 +5157,6 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(300)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_03"), 0, STRING("\203L\203m\203V\203R\203\217"))
-#endif
 #endif
     WAIT_MS(300)
     // Light pours from the machine and Prince Mush is released from it, spinning back to full size.
@@ -5449,13 +5194,6 @@ static EVT_BEGIN(evt_boss)
     ADD_FLOAT(LW(1), FLOAT(40.0f))
     CALL(evt_eff64, STRING("eff_1"), STRING("pokopi_pcharge_n64"), 4, LW(0), LW(1), LW(2), FLOAT(1.0f), 180, 0, 0, 0, 0, 0, 0)
     WAIT_MS(2000)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_scale, STRING("キノシチョフ"), FLOAT(0.0f), FLOAT(0.0f), FLOAT(0.0f))
-    CALL(evt_mapobj_get_position, STRING("kaiten_souti"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_set_position, STRING("キノシチョフ"), LW(0), LW(1), LW(2))
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 0, STRING("キノシチョフ"), NPC_FLAG_AUTO_MOVE_ANIM)
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_scale, STRING("キノシチョフ"), FLOAT(0.0f), FLOAT(0.0f), FLOAT(0.0f))
     CALL(evt_mapobj_get_position, STRING("kaiten_souti"), LW(0), LW(1), LW(2))
@@ -5469,28 +5207,19 @@ static EVT_BEGIN(evt_boss)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_flag_onoff, 0, STRING("\203L\203m\203V\203`\203\207\203t"), NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
-#endif
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 1800, 3000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_npc_set_rotate, STRING("キノシチョフ"), FLOAT(0.0f), LW(0), FLOAT(0.0f))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_npc_set_rotate, STRING("キノシチョフ"), FLOAT(0.0f), LW(0), FLOAT(0.0f))
 #else
             CALL(evt_npc_set_rotate, STRING("\203L\203m\203V\203`\203\207\203t"), FLOAT(0.0f), LW(0), FLOAT(0.0f))
-#endif
 #endif
             WAIT_FRAMES(1)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
         END_LOOP
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_flag_onoff, 1, STRING("キノシチョフ"), NPC_FLAG_AUTO_MOVE_ANIM)
-        CALL(evt_npc_set_rotate, STRING("キノシチョフ"), FLOAT(0.0f), FLOAT(0.0f), FLOAT(0.0f))
-#else
 #if VERSION >= VERSION_US
         CALL(evt_npc_flag_onoff, 1, STRING("キノシチョフ"), NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_set_rotate, STRING("キノシチョフ"), FLOAT(0.0f), FLOAT(0.0f), FLOAT(0.0f))
@@ -5498,21 +5227,16 @@ static EVT_BEGIN(evt_boss)
         CALL(evt_npc_flag_onoff, 1, STRING("\203L\203m\203V\203`\203\207\203t"), NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_set_rotate, STRING("\203L\203m\203V\203`\203\207\203t"), FLOAT(0.0f), FLOAT(0.0f), FLOAT(0.0f))
 #endif
-#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 100, 300)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_npc_set_scale, STRING("キノシチョフ"), LW(0), LW(0), LW(0))
-#else
 #if VERSION >= VERSION_US
             CALL(evt_npc_set_scale, STRING("キノシチョフ"), LW(0), LW(0), LW(0))
 #else
             CALL(evt_npc_set_scale, STRING("\203L\203m\203V\203`\203\207\203t"), LW(0), LW(0), LW(0))
-#endif
 #endif
             WAIT_FRAMES(1)
             IF_INT_EQUAL(LW(1), 0)
@@ -5520,14 +5244,10 @@ static EVT_BEGIN(evt_boss)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_jump_position_nohit, STRING("キノシチョフ"), 100, 60, 75, 800, 170)
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_jump_position_nohit, STRING("キノシチョフ"), 100, 60, 75, 800, 170)
 #else
     CALL(evt_npc_jump_position_nohit, STRING("\203L\203m\203V\203`\203\207\203t"), 100, 60, 75, 800, 170)
-#endif
 #endif
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), 127)
@@ -5545,24 +5265,14 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(400)
     CALL(evt_cam3d_evt_set, 100, 133, 339, 100, 85, -8, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_05"), 0, STRING("キノシチョフ"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_05"), 0, STRING("キノシチョフ"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_05"), 0, STRING("\203L\203m\203V\203`\203\207\203t"))
 #endif
-#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -75, 133, 339, -75, 85, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_06"), 0, STRING("キノシコワ"))
-    WAIT_MS(300)
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("キノシコワ"), 75, 75, 0, FLOAT(100.0f), 1)
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_06"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
@@ -5574,17 +5284,10 @@ static EVT_BEGIN(evt_boss)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("\203L\203m\203V\203R\203\217"), 75, 75, 0, FLOAT(100.0f), 1)
 #endif
-#endif
     END_INLINE_EVENT
     WAIT_MS(200)
     CALL(evt_cam3d_evt_set, 88, 133, 339, 88, 85, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_set_dir_to_target, STRING("キノシチョフ"), STRING("キノシコワ"))
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_07"), 0, STRING("キノシチョフ"))
-    WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_08"), 0, STRING("キノシコワ"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_set_dir_to_target, STRING("キノシチョフ"), STRING("キノシコワ"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_07"), 0, STRING("キノシチョフ"))
@@ -5596,7 +5299,6 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07_08"), 0, STRING("\203L\203m\203V\203R\203\217"))
 #endif
-#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -160, 150, 288, -160, 100, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -5606,12 +5308,6 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, 0, 356, 1016, 25, 180, 32, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_move_position, STRING("キノシコワ"), 75, 75, 0, FLOAT(60.0f), 1)
-    WAIT_MS(333)
-    CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_08"), 0, STRING("キノシコワ"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_move_position, STRING("キノシコワ"), 75, 75, 0, FLOAT(60.0f), 1)
     WAIT_MS(333)
@@ -5623,18 +5319,13 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_set_dir_to_target, STRING("\203L\203m\203V\203R\203\217"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_08"), 0, STRING("\203L\203m\203V\203R\203\217"))
 #endif
-#endif
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(15))
     CALL(evt_snd_sfxon, STRING("SFX_STG3_STARSTONE_ROUND2"), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("A_1"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("A_1"))
 #else
     CALL(evt_npc_set_anim, STRING("\203L\203m\203V\203R\203\217"), STRING("A_1"))
-#endif
 #endif
     WAIT_MS(500)
     CALL(evt_map_pauseanim, 0, STRING("comp"))
@@ -5668,14 +5359,10 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, 88, 133, 339, 88, 85, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_473_10"), 0, STRING("キノシコワ"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_10"), 0, STRING("キノシコワ"))
 #else
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_10"), 0, STRING("\203L\203m\203V\203R\203\217"))
-#endif
 #endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -160, 150, 288, -160, 100, -8, 0, EASING_SINE_IN_OUT)

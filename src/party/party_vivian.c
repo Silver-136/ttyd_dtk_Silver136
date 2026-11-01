@@ -107,11 +107,7 @@ void mot_vivian(void) {
  * otherwise, while Veil is in use, it sets vivian_cancel_req so vivian_use starts rising out.
  */
 void mot_vivian_post(void) {
-#if VERSION <= VERSION_DEMO_US
-    PartyEntry* party = (PartyEntry*)partyGetPtr(marioGetPartyId());
-#else
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-#endif
     MarioWork* mario = marioGetPtr();
 
     if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
@@ -137,11 +133,7 @@ void mot_vivian_post(void) {
                 party->dispOfs = zero2;
             }
             partyChgRunMode(party, 2);
-#if VERSION <= VERSION_DEMO_US
-            party->moveMode = 0;
-#else
             party->moveMode = PARTY_MOVE_MODE_STAY;
-#endif
             partyChgPoseId(party, 1);
             partyVivianTailStart(party);
         }
@@ -157,14 +149,8 @@ cancel:
     vivian_cancel_req = 1;
 }
 
-#if VERSION <= VERSION_DEMO_US
-/** Party table init for Vivian: 24 wide by 35 tall, flying follower, base shadow size 10, tail shown and no ripple. */
-void vivian_init(PartyEntry* party) {
-    party->memberKind = PARTY_MEMBER_VIVIAN;
-#else
 void vivian_init_801809C0(PartyEntry* party) {
     party->memberKind = 6;
-#endif
     party->moveKind = 1;
     party->height = 35.0f;
     party->width = 24.0f;
@@ -186,11 +172,7 @@ void vivian_init_801809C0(PartyEntry* party) {
  * checks).
  */
 s32 vivianGetStatus(void) {
-#if VERSION <= VERSION_DEMO_US
-    PartyEntry* party = (PartyEntry*)partyGetPtr(marioGetPartyId());
-#else
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-#endif
     u8 st;
 
     if (party == NULL) {
@@ -510,11 +492,7 @@ void vivian_use(PartyEntry* party) {
         }
         rip = effRippleEntry(1, party->playerPtr->position.x, 1.5f + party->playerPtr->position.y, party->playerPtr->position.z);
         party->work.vivian.rippleEffect = rip;
-#if VERSION <= VERSION_DEMO_US
-        if (party->camId != 4) {
-#else
         if (party->camId != CAMERA_3D) {
-#endif
             effRippleSetCamId(rip, party->camId);
         }
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1_2), &party->position);
@@ -733,18 +711,12 @@ void vivian_use(PartyEntry* party) {
             party->work.vivian.shadowSize = 10.0f;
             party->dispOfs.y = 0.0f;
             partyChgRunMode(party, 2);
-#if VERSION <= VERSION_DEMO_US
-            party->moveMode = 0;
-#else
             party->moveMode = PARTY_MOVE_MODE_STAY;
-#endif
             partyChgPoseId(party, 1);
             party->flags &= ~PARTY_FLAG_IS_EVT_USE;
         }
         break;
     }
 }
-#if VERSION > VERSION_DEMO_US
 
 #pragma explicit_zero_data reset
-#endif

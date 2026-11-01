@@ -898,9 +898,6 @@ EVT_BEGIN(talk_kino5)
             CASE_GREATER(0)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 4)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10), LW(10))
-#else
 #if VERSION == VERSION_EU
                 CALL(evt_sub_get_language, LW(0))
                 SWITCH(LW(0))
@@ -917,7 +914,6 @@ EVT_BEGIN(talk_kino5)
 #endif
 #if VERSION == VERSION_EU
                 END_SWITCH
-#endif
 #endif
             ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05"), 0, 0, LW(10))

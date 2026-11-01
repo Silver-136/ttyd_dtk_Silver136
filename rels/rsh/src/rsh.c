@@ -444,7 +444,6 @@ EVT_BEGIN(evt_rsh_door_open)
                 CALL(evt_img_wait_animend, STRING("capture_img"))
                 CALL(evt_mario_key_onoff, 1)
             END_SWITCH
-#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
                 CALL(evt_npc_check, STRING("トロン"), LW(10))
@@ -452,7 +451,6 @@ EVT_BEGIN(evt_rsh_door_open)
                     CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_INTANGIBLE)
                 END_IF
             END_IF
-#endif
 #endif
         END_IF
     END_IF
@@ -473,9 +471,6 @@ EVT_BEGIN(evt_rsh_door_open)
                 SET_VALUE(GSWF_RSH_NOISY_ROOM_CHECKED, 1)
             END_IF
             IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(0))
-#else
                 CALL(evt_snd_bgmoff, PSND_SILENT)
 #if VERSION == VERSION_EU
             END_IF
@@ -484,7 +479,6 @@ EVT_BEGIN(evt_rsh_door_open)
                 IF_INT_EQUAL(LW(10), 1)
                     CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_INTANGIBLE)
                 END_IF
-#endif
 #endif
             END_IF
             SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 1)

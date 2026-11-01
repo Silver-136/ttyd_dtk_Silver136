@@ -580,14 +580,10 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#if VERSION <= VERSION_DEMO_US
-    2,
-#else
 #if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
-#endif
 #endif
     5, // reserved_19
     100, // bingoSlotChance
@@ -596,11 +592,7 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
@@ -624,14 +616,10 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
     partyVivianAttack_CharmKissAttack, // attackEvtScript
-#if VERSION <= VERSION_DEMO_US
-    {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0},
-#else
 #if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0}, // stageEffectRates
-#endif
 #endif
 };
 
@@ -675,11 +663,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AcSetParamAll, 1, 1, 40, 1, 2, 0, 3, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_AcSetFlag, 23)
-#else
     CALL(btlevtcmd_AcSetFlag, AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS | AC_SIGNAL_TIMING_FLAG_HIDE_UPCOMING_BUTTONS | AC_SIGNAL_TIMING_FLAG_HIDE_HIT_COUNT | AC_SIGNAL_TIMING_FLAG_END_ON_HIT)
-#endif
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 18, 1, 0)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_VIVIAN_ATTACK1"), 0)
     CALL(battle_evt_majo_disp_off, UNIT_ID_SELF, 1, 0, 0)
@@ -729,11 +713,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     CALL(_get_move_frame, LW(0), LW(1), LW(2), LW(6), LW(7), LW(8), FLOAT(4.0f), LW(6))
     IF_INT_GREATER_OR_EQUAL(LW(6), 1)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_VIVIAN_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, 0, EASING_CUBIC_OUT, 0, -1)
-#else
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, 0, EASING_CUBIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
-#endif
     END_IF
     // A pre-emptive spiky enemy hurts her first.
     LABEL(9)
@@ -804,27 +784,17 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A1_1"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, 0, EASING_CUBIC_OUT, 0, -1)
-#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, 0, EASING_CUBIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
-#endif
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHADOW_TAIL_WORK_HOLD, 0)
     CALL(battle_evt_majo_disp_off, UNIT_ID_SELF, 1, 0, 0)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_CUBIC_OUT, 0, -1)
-    BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 20, 29, 29, 0)
-#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_CUBIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     BEGIN_SIBLING_EVENT
 #if VERSION >= VERSION_US
         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 14, 29, 29, 0)
 #else
         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 20, 29, 29, 0)
-#endif
 #endif
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

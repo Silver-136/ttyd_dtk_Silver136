@@ -44,12 +44,8 @@ s32 size_table[HEAP_COUNT][2] = {
     {1, 0xD90},  // 0x364000, 3472 KiB (3.39 MiB)
     {1, 0xE0},   // 0x38000, 224 KiB
     {1, 0x80},   // 0x20000, 128 KiB
-#if VERSION <= VERSION_DEMO_US
-    {1, 0x100}, //0x40000, 256 KiB
-#else
 #if VERSION < VERSION_US
     {1, 0x100},  // 0x40000, 256 KiB: the battle heap
-#endif
 #endif
     {0, 0x64}    // the smart heap: 100 % of what is left
 };

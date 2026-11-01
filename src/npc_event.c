@@ -1818,22 +1818,16 @@ EVT_BEGIN(chorobon_move_event)
     CALL(evt_sub_random, 3, LW(4))
     ADD(LW(4), 2)
     LOOP(LW(4))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         WAIT_FRAMES(1)
-#endif
 #endif
         CALL(evt_sub_random, 360, LW(3))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), 50)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_jump_position, STRING("me"), LW(0), -10000, LW(2), 300, 0, FLOAT(30.0f), 0)
-#else
 #if VERSION >= VERSION_US
         CALL(evt_npc_jump_position, STRING("me"), LW(0), LW(1), LW(2), 300, 0, FLOAT(30.0f), 0)
 #else
         CALL(evt_npc_jump_position, STRING("me"), LW(0), -10000, LW(2), 300, 0, FLOAT(30.0f), 0)
-#endif
 #endif
     END_LOOP
     CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(3))

@@ -285,12 +285,8 @@ f32 cloudGetBreathDist(void) {
         return breathDist;
     }
 
-#if VERSION <= VERSION_DEMO_US
-    if ((party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0) || party->useMotionId < CLOUD_USE_BREATH_INIT) {
-#else
     if (party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0 ||
         party->useMotionId < CLOUD_USE_BREATH_INIT) {
-#endif
         breathDist = 0.0f;
     } else {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
@@ -354,23 +350,13 @@ void cloud_hover_main(PartyEntry* party) {
  * The first frame after a run-mode change sets up the fly movement and the bob.
  */
 void cloud_move(PartyEntry* party) {
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     f32 a;
 
 #endif
-#endif
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyMoveFlyInit(party, 1);
-#if VERSION <= VERSION_DEMO_US
-        cloud_hover_init(party);
-    }
-    partyFlyMain(party);
-    cloud_hover_main(party);
-    if (party->moveMode != PARTY_MOVE_MODE_BEHIND_MARIO) {
-        party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
-#else
 #if VERSION >= VERSION_US
         party->work.cloud.hoverAngle = 0.0f;
         party->work.cloud.hoverSpeed = 4.25f;
@@ -390,7 +376,6 @@ void cloud_move(PartyEntry* party) {
     cloud_hover_main(party);
     if (party->moveMode != PARTY_MOVE_MODE_BEHIND_MARIO) {
         party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
-#endif
 #endif
     }
 }
@@ -412,10 +397,8 @@ void cloud_init(PartyEntry* party) {
     party->work.cloud.breathEffect = NULL;
     party->work.cloud.hoverAngleBits = 0;
     party->work.cloud.hoverSpeedBits = 0;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     party->work.cloud.lockAnims = 0;
-#endif
 #endif
     party->useStruct = NULL;
     party->work.cloud.breathEffect = NULL;
@@ -562,10 +545,8 @@ void _cloud_use(PartyEntry* party) {
             break;
         }
         partyChgPose(party, "PWD_A_6");
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         if (mario->currMotionId == MARIO_MOTION_CLOUD)
-#endif
 #endif
         marioChgPose("M_A_2B");
         party->useMotionId = CLOUD_USE_BREATHING;
@@ -855,17 +836,8 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
         height = 8.0f;
     } else if (kind == 1) {
         height = 20.0f;
-#if VERSION <= VERSION_DEMO_US
-    } else {
-        if (kind == 2) {
-            height = 40.0f;
-        }
-        do {
-        } while (0);
-#else
     } else if (kind == 2) {
         height = 40.0f;
-#endif
     }
     if (cl->breathDist >= cl->breathDistMax) {
         cl->breathDist = cl->breathDistMax;
@@ -1004,11 +976,7 @@ void cloudGetAt(Vec* position) {
         return;
     }
 
-#if VERSION <= VERSION_DEMO_US
-    if ((mario->dispFlags & (MARIO_DISP_FLAG_HIDE << 20)) == 0) {
-#else
     if ((mario->dispFlags & MARIO_DISP_FLAG_ZOOM) == 0) {
-#endif
         CameraEntry* camera = camGetPtr(CAMERA_3D);
 
         if (camera->stateA == 0) {

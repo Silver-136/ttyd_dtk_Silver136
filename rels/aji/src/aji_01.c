@@ -1235,11 +1235,9 @@ EVT_BEGIN(ele_1)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_trans, 1, STRING("ere1_m"), 0, LW(0), 0)
     CALL(evt_hit_bind_update, STRING("A_ere1_m"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_get_position, STRING("ere1_m"), LW(2), LW(3), LW(4))
     CALL(evt_snd_sfx_pos, LW(9), LW(2), LW(3), LW(4))
-#endif
 #endif
     ADD(LW(0), 1000)
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
@@ -1574,13 +1572,11 @@ EVT_BEGIN(ele_2)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_trans, 1, STRING("ere2_m"), 0, LW(0), 0)
     CALL(evt_hit_bind_update, STRING("A_ere2_m"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_get_position, STRING("ere2_m"), LW(2), LW(3), LW(4))
     CALL(evt_snd_sfx_pos, LW(9), LW(2), LW(3), LW(4))
 #endif
     // This ride uses a different rider-height offset from Peach's -999 path.
-#endif
     ADD(LW(0), -998)
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_mario_set_pos, LW(2), LW(0), LW(4))

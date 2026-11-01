@@ -204,22 +204,16 @@ EVT_END()
  * US keeps separate 60Hz and 50Hz tables.
  */
 static void evt_yuuranking_disp_func(CameraId camera, void* param) {
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     const char* head;
-#endif
 #endif
     YuuRankingWork* wp = param;
     const char* titles[4] = {"menu_title_minigame1", "menu_title_minigame4", "menu_title_minigame3", "menu_title_minigame2"};
     const char* scoreTitles[4] = {"menu_title_score", "menu_title_score", "menu_title_score", "menu_title_score"};
-#if VERSION <= VERSION_DEMO_US
-    const char* ranks[6] = {"　１", "　２", "　３", "　４", "　５", "menu_subtitle2_rankgai"};
-#else
 #if VERSION >= VERSION_US
     const char* ranks[2][6] = {{"　１", "　２", "　３", "　４", "　５", "menu_subtitle2_rankgai"}, {VERSION_PICK("1", " 1"), VERSION_PICK("2", " 2"), VERSION_PICK("3", " 3"), VERSION_PICK("4", " 4"), VERSION_PICK("5", " 5"), "menu_subtitle2_rankgai"}};
 #else
     const char* ranks[6] = {"　１", "　２", "　３", "　４", "　５", "menu_subtitle2_rankgai"};
-#endif
 #endif
     char buf[32];
     const char* str;
@@ -238,20 +232,14 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
     s32 rmin;
     s32 rsec;
     s32 i;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     s32 fr;
-#endif
 #endif
     f32 ofs;
     s32 ix;
     s32 iy;
     Mtx mtx;
     f32 scale;
-#if VERSION <= VERSION_DEMO_US
-    const char* msg;
-
-#endif
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -196.0f + wp->x, 112.0f + wp->y, 392.0f, 224.0f, 20.0f);
     switch (wp->mode) {
         case 0:
@@ -323,14 +311,10 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                 } else {
                     FontDrawColor((GXColor){0xFF, 0x3F, 0x3F, 0xFF});
                     sprintf(buf, msgSearch("menu_error_minigame1"));
-#if VERSION <= VERSION_DEMO_US
-                    FontDrawStringPitch(wp->x + (150.4f - fontlenpitch(buf, 18)), 56.0f + wp->y, 18.0f, buf);
-#else
 #if VERSION >= VERSION_US
                     yuuDrawRight(150.4f, 56.0f + wp->y, 1.0f, buf, 140, wp);
 #else
                     FontDrawStringPitch(wp->x + (150.4f - fontlenpitch(buf, 18)), 56.0f + wp->y, 18.0f, buf);
-#endif
 #endif
                 }
                 break;

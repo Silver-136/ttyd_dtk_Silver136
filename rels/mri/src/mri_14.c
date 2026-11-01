@@ -524,23 +524,13 @@ EVT_BEGIN(time_bomb)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 300)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.005859375f), FLOAT(0.0f), 300)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0068359375f), FLOAT(0.0f), 300)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(flash2_and_wait)
-#else
 #if VERSION < VERSION_US
     SPAWN_EVENT(PTR(flash2_and_wait))
-#endif
 #endif
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0078125f), FLOAT(0.0f), 300)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0087890625f), FLOAT(0.0f), 300)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(flash2_and_wait)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
-    SPAWN_EVENT(flash_and_wait)
-#else
 #if VERSION < VERSION_US
     SPAWN_EVENT(PTR(flash2_and_wait))
 #endif
@@ -548,7 +538,6 @@ EVT_BEGIN(time_bomb)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
 #if VERSION < VERSION_US
     SPAWN_EVENT(PTR(flash_and_wait))
-#endif
 #endif
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)

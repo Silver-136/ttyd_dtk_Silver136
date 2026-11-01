@@ -1693,9 +1693,7 @@ f32 marioChkOverhead(void) {
         pos = mario->position;
         mario->hitobjHead = marioSearchHead_roll(&pos, &h, 40.0f);
     } else {
-#if VERSION > VERSION_DEMO_US
         f32 d;
-#endif
         pos = mario->position;
         h = mario->wPlayerCollisionBox.y;
         d = (mario->flags & MARIO_FLAG_IS_JUMPING) ? mario->jumpVelocityY : 10.0f;
@@ -1751,11 +1749,7 @@ f32 marioChkOverhead(void) {
             }
         }
         if (mario->currMotionId == MARIO_MOTION_JUMP || mario->currMotionId == MARIO_MOTION_JUMP_STAND) {
-#if VERSION <= VERSION_DEMO_US
-            psndSFXOn_3D((const char*)0x156, &mario->position);
-#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HEAD1), &mario->position);
-#endif
             marioClearJumpPara();
             mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
             if (mario->characterId != CHARACTER_BOWSER) {
@@ -1851,30 +1845,17 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
     f32 x, z;
     HitEntry* hit;
     s32 i;
-#if VERSION <= VERSION_DEMO_US
-    void* vp;
     MarioWork* mario = marioGetPtr();
-    vp = (void*)h;
-#else
-    MarioWork* mario = marioGetPtr();
-#endif
     if (mario->baseSpeed) {
         hh = mario->directionView;
     } else {
         hh = toMovedir(mario->displayDirection);
     }
     marioSearchHeadOfs(mario, hh, &sx, &sz);
-#if VERSION <= VERSION_DEMO_US
-    a = *((f32*)vp);
-    hh = 0.5f * a;
-    top = a + dd;
-    *((f32*)vp) = -1.0f;
-#else
     a = *h;
     hh = 0.5f * a;
     top = a + dd;
     *h = -1.0f;
-#endif
     for (i = 0; i < 5; i++) {
         if (i == 0) {
             z = x = 0.0f;
@@ -1921,30 +1902,15 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
                 outPos.y = outPos.y - 0.05f * a;
                 if (pos->y + a >= outPos.y) {
                     pos->y = outPos.y;
-#if VERSION <= VERSION_DEMO_US
-                    *((f32*)vp) = 0.0f;
-                    return hit;
-                }
-                *((f32*)vp) = outPos.y - pos->y - a;
-#else
                     *h = 0.0f;
                     return hit;
                 }
                 *h = outPos.y - pos->y - a;
-#endif
                 return NULL;
             }
         } else {
             if (hit) {
                 outPos.y = (s32)(100.0f * outPos.y + hh) / 100.0f;
-#if VERSION <= VERSION_DEMO_US
-                if (pos->y + a >= outPos.y) {
-                    pos->y = outPos.y;
-                    *((f32*)vp) = 0.0f;
-                    return hit;
-                }
-                *((f32*)vp) = outPos.y - pos->y - a;
-#else
 #if VERSION >= VERSION_US
                 if (mario->jumpVelocityY < -10.0f) {
                     *h = outPos.y - pos->y - a;
@@ -1957,7 +1923,6 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
                     return hit;
                 }
                 *h = outPos.y - pos->y - a;
-#endif
                 return NULL;
             }
         }
@@ -2539,11 +2504,7 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
         heights[0] = 0.75f * marioGetHeightInl();
         heights[1] = 11.0f;
     } else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-#if VERSION <= VERSION_DEMO_US
-        heights[0] = 27.75f;
-#else
         heights[0] = VERSION_PICK(27.75f, 26.640001f);
-#endif
         heights[1] = 11.0f;
         if (mario->airTimer) {
             count = 3;

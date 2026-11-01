@@ -342,9 +342,6 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
             WAIT_MS(240)
             CONTINUE_LOOP
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print_insert, 0, STRING("powerdown_06"), 0, STRING("me"), LW(2), LW(3), 39)
-#else
 #if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
@@ -356,7 +353,6 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_06"), 39)
             CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(2), LW(3))
         END_SWITCH
-#endif
 #endif
         CALL(evt_msg_select, 0, STRING("powerdown_09"))
         IF_INT_EQUAL(LW(0), 0)
@@ -572,9 +568,6 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
             WAIT_MS(240)
             CONTINUE_LOOP
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print_insert, 0, STRING("powerdown_08"), 0, STRING("me"), LW(3), LW(4), 39)
-#else
 #if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
@@ -586,7 +579,6 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_08"), 39)
             CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(3), LW(4))
         END_SWITCH
-#endif
 #endif
         CALL(evt_msg_select, 0, STRING("powerdown_09"))
         IF_INT_EQUAL(LW(0), 0)
@@ -611,12 +603,10 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     CALL(bgScrollControll, 0)
     CALL(evt_mario_goodbye_party, 0)
     CALL(evt_mario_hello_party, 0, LW(2))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_party_stop, 0)
 #endif
     // The house walls fold open and the camera pulls back over the light (power-down music from JP on).
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -20, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(5))

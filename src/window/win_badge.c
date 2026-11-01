@@ -325,12 +325,10 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     f32 d;
     f32 x = w->menu[n].x;
     f32 y = w->menu[n].y;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     f32 tw;
 #endif
 
-#endif
     winBgGX(w, 3, x, y);
     winKirinukiGX(w, 0, x - 100.0f, 20.0f + (120.0f + y), 365.0f, 210.0f);
     a = 105.0f + y;
@@ -416,9 +414,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     GXColor colD;
     char buf[64];
     s32 cnt;
-#if VERSION > VERSION_DEMO_US
     s32 rowOff;
-#endif
     s32 i;
     s32 badge;
     s32 equipped;

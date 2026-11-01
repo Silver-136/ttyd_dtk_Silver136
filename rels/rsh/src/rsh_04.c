@@ -440,10 +440,8 @@ EVT_BEGIN(evt_shorui_funshitu)
             CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
         END_IF
     END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
-#endif
 #endif
     CALL(evt_mario_mov_pos, 260, -135, 500)
     CALL(evt_mario_set_dir_npc, STRING("ポワン探偵"))
@@ -536,14 +534,8 @@ EVT_BEGIN(evt_shorui_funshitu)
     DELETE_EVENT(LW(10))
     DELETE_EVENT(LW(11))
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), -2147483648)
-    CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), -2147483648)
-    // The story advances.
-#else
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
-#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG6_22_DOCUMENT)
     RETURN
 EVT_END()
@@ -571,14 +563,10 @@ EVT_BEGIN(evt_daijisouna_kami)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_move_pos, 0, 245, -160, 500)
-#else
 #if VERSION >= VERSION_US
             CALL(evt_party_move_pos, 0, 275, -160, 500)
 #else
             CALL(evt_party_move_pos, 0, 245, -160, 500)
-#endif
 #endif
             CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
         END_IF
@@ -703,21 +691,12 @@ static EVT_BEGIN(talk_syashou)
         CALL(evt_npc_set_position, STRING("ポワン探偵"), 0, -1000, 0)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
-#if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(LSWF(9), 0)
-            CALL(evt_msg_print, 0, STRING("stg6_rsh_07"), 0, 0)
-            SET_VALUE(LSWF(9), 1)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg6_rsh_08"), 0, 0)
-            SET_VALUE(LSWF(9), 0)
-#else
         IF_INT_EQUAL(LSWF_RSH_04_CONDUCTOR_TALK_TOGGLE, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_07"), 0, 0)
             SET_VALUE(LSWF_RSH_04_CONDUCTOR_TALK_TOGGLE, 1)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_08"), 0, 0)
             SET_VALUE(LSWF_RSH_04_CONDUCTOR_TALK_TOGGLE, 0)
-#endif
         END_IF
         CASE_LESS(STG6_09_BUBS_REQUEST)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_84_01"), 0, 0)
@@ -788,21 +767,12 @@ static EVT_BEGIN(talk_syashou)
         CASE_LESS(STG6_20_END_OF_DAY_1)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_145"), 0, 0)
         CASE_LESS(STG6_27_RIVERSIDE_STATION)
-#if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(LSWF(10), 0)
-            CALL(evt_msg_print, 0, STRING("stg6_rsh_158"), 0, 0)
-            SET_VALUE(LSWF(10), 1)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg6_rsh_159"), 0, 0)
-            SET_VALUE(LSWF(10), 0)
-#else
         IF_INT_EQUAL(LSWF_RSH_04_CONDUCTOR_DAY2_TOGGLE, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_158"), 0, 0)
             SET_VALUE(LSWF_RSH_04_CONDUCTOR_DAY2_TOGGLE, 1)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_159"), 0, 0)
             SET_VALUE(LSWF_RSH_04_CONDUCTOR_DAY2_TOGGLE, 0)
-#endif
         END_IF
         CASE_LESS(STG6_43_CONDUCTOR_APPEARS)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_213"), 0, 0)
@@ -1159,7 +1129,6 @@ static EVT_BEGIN(talk_konari)
                 IF_INT_NOT_EQUAL(LW(1), ITEM_AUTOGRAPH)
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_100"), 0, 0)
                 ELSE
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
                     CALL(evt_mario_adjust_dir)
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1175,7 +1144,6 @@ static EVT_BEGIN(talk_konari)
                     WAIT_MS(1000)
                     CALL(evt_mario_set_pose, STRING("M_S_1"))
                     CALL(evt_item_delete, STRING("sign"))
-#endif
 #endif
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_97"), 0, 0)
                     // He pays Mario with a Shine Sprite.

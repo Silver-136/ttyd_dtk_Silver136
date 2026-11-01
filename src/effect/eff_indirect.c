@@ -129,14 +129,10 @@ void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
     switch (type) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
-            effGetTexObj(0x86, &texObj);
-#else
 #if VERSION >= VERSION_US
             effGetTexObj(0x6A, &texObj);
 #else
             effGetTexObj(0x86, &texObj);
-#endif
 #endif
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             break;

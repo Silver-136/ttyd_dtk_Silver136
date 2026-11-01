@@ -256,22 +256,14 @@ void titleMain(SequenceWork* work) {
             break;
         case 2:
             wp2->topPosX = 0.0f;
-#if VERSION <= VERSION_DEMO_US
-            wp2->topPosY = intplGetValue(EASING_BOUNCE_SHRINKING, 300.0f, TITLE_TOP_Y, wp2->counter, VERSION_PICK(60, gp->framerate));
-#else
             wp2->topPosY = intplGetValue(EASING_BOUNCE_SHRINKING, 300.0f, TITLE_TOP_Y, wp2->counter, TITLE_FRAMES_PER_SEC);
-#endif
             wp2->timer--;
             if (wp2->timer == 0) {
                 if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                     sound.streams[psbgm[0].streamId].flags &= ~SOUND_STREAM_FLAG_PAUSE;
                 }
                 if (seqGetPrevSeq() == SEQ_GAME_OVER) {
-#if VERSION <= VERSION_DEMO_US
-                    psndSFXOn((const char*)0xAB8);
-#else
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CLAUD_ATTACK2));
-#endif
                 }
             }
             wp2->bottomPosX = 0.0f;
@@ -352,19 +344,11 @@ void titleMain(SequenceWork* work) {
             wp2->state++;
             break;
         case 21:
-#if VERSION <= VERSION_DEMO_US
-            wp2->topPosY = intplGetValue(EASING_SINE_IN_OUT, TITLE_TOP_Y, 400.0f, wp2->counter, VERSION_PICK(60, gp->framerate));
-            wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -170.0f, -400.0f, wp2->counter, VERSION_PICK(60, gp->framerate));
-            wp2->counter++;
-            if (wp2->counter > VERSION_PICK(60, gp->framerate)) {
-                wp2->counter = VERSION_PICK(60, gp->framerate);
-#else
             wp2->topPosY = intplGetValue(EASING_SINE_IN_OUT, TITLE_TOP_Y, 400.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
             wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -170.0f, -400.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {
                 wp2->counter = TITLE_FRAMES_PER_SEC;
-#endif
             }
             wp2->fadeAlpha -= 0.1f;
             if (wp2->fadeAlpha < 0.0f) {
@@ -484,7 +468,6 @@ void disp2(CameraId cameraId, void* param) {
     f32 vp[GX_VIEWPORT_SZ];
     s32 alpha;
     f32 s;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
 #if VERSION == VERSION_EU
     s32 tbl[6] = {19, 19, 20, 21, 22, 23};
@@ -493,7 +476,6 @@ void disp2(CameraId cameraId, void* param) {
 #endif
 #endif
 
-#endif
     saved = *camGetPtr(cameraId);
     *camGetPtr(cameraId) = *cam;
     GXGetProjectionv(proj);
@@ -554,11 +536,6 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
     Mtx mtx, scaleMtx;
-#if VERSION <= VERSION_DEMO_US
-    TEXGetGXTexObjFromPalette(*wp2->texture->data, &startText, 8);
-    GXLoadTexObj(&startText, GX_TEXMAP0);
-    TEXGetGXTexObjFromPalette(*wp2->texture->data, &gradient, 9);
-#else
 
 #if VERSION >= VERSION_US
 #if VERSION == VERSION_EU
@@ -572,7 +549,6 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
     TEXGetGXTexObjFromPalette(*wp2->texture->data, &startText, 8);
     GXLoadTexObj(&startText, GX_TEXMAP0);
     TEXGetGXTexObjFromPalette(*wp2->texture->data, &gradient, 9);
-#endif
 #endif
     GXLoadTexObj(&gradient, GX_TEXMAP1);
     GXSetNumTevStages(2);

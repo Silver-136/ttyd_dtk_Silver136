@@ -276,9 +276,6 @@ void mot_walk(void) {
  * with the pushing pose against pushable objects.
  */
 void mot_dash(void) {
-#if VERSION <= VERSION_DEMO_US
-    f32 dashSpeed;
-#endif
     u32 trigFlags;
     BOOL pushCaseActive;
     s32 seInterval;
@@ -374,22 +371,6 @@ void mot_dash(void) {
         if (!(player->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             stickDir1 = player->wStickDir1;
             stickDir2 = player->wStickDir2;
-#if VERSION <= VERSION_DEMO_US
-            if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1) {
-                marioChgMot(MARIO_MOTION_WALK);
-                return;
-            }
-            player->directionView = player->controlStickAngle;
-            if ((player->flags & MARIO_FLAG_IS_PUSHING) && !marioChkPushAnime()) {
-                marioChgPose("M_O_1");
-            }
-            if (!player->controlStickSensitivity) {
-                marioChgMot(MARIO_MOTION_STAY);
-            }
-        }
-    }
-}
-#else
 #if VERSION >= VERSION_US
             if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1 || pouchEquipCheckBadge(ITEM_SLOW_GO)) {
 #else
@@ -408,4 +389,3 @@ void mot_dash(void) {
         }
     }
 }
-#endif

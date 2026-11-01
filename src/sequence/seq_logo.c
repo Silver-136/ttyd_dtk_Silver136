@@ -329,25 +329,14 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#if VERSION <= VERSION_DEMO_US
-        case 3:
-#else
 #if VERSION >= VERSION_US
         case 11:
 #else
         case 3:
 #endif
-#endif
             if (fadeIsFinish()) {
                 fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
-#if VERSION <= VERSION_DEMO_US
-                wp->logoId = 1;
-            }
-            break;
-
-        case 4:
-#else
 #if VERSION >= VERSION_US
                 wp->page = 3;
 #else
@@ -361,21 +350,16 @@ void seq_logoMain(SequenceWork* work) {
 #else
         case 4:
 #endif
-#endif
             if (fadeIsFinish()) {
                 work->state++;
                 time = gp->renderTime;
             }
             break;
 
-#if VERSION <= VERSION_DEMO_US
-        case 5:
-#else
 #if VERSION >= VERSION_US
         case 13:
 #else
         case 5:
-#endif
 #endif
             if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
                 fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
@@ -383,25 +367,14 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#if VERSION <= VERSION_DEMO_US
-        case 6:
-#else
 #if VERSION >= VERSION_US
         case 14:
 #else
         case 6:
 #endif
-#endif
             if (fadeIsFinish()) {
                 fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
-#if VERSION <= VERSION_DEMO_US
-                wp->logoId = 2;
-            }
-            break;
-
-        case 7:
-#else
 #if VERSION >= VERSION_US
                 wp->page = 4;
 #else
@@ -415,21 +388,16 @@ void seq_logoMain(SequenceWork* work) {
 #else
         case 7:
 #endif
-#endif
             if (fadeIsFinish()) {
                 work->state++;
                 time = gp->renderTime;
             }
             break;
 
-#if VERSION <= VERSION_DEMO_US
-        case 8:
-#else
 #if VERSION >= VERSION_US
         case 16:
 #else
         case 8:
-#endif
 #endif
             if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
                 fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
@@ -438,14 +406,10 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#if VERSION <= VERSION_DEMO_US
-        case 9:
-#else
 #if VERSION >= VERSION_US
         case 17:
 #else
         case 9:
-#endif
 #endif
             if (keyGetButtonTrg(0) & (PAD_BUTTON_START | PAD_BUTTON_A)) {
                 wp->skipStory = TRUE;
@@ -538,14 +502,10 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#if VERSION <= VERSION_DEMO_US
-        case 11:
-#else
 #if VERSION >= VERSION_US
         case 19:
 #else
         case 11:
-#endif
 #endif
             if (fadeIsFinish()) {
                 seqSetSeq(SEQ_TITLE, NULL, NULL);
@@ -553,13 +513,6 @@ void seq_logoMain(SequenceWork* work) {
             break;
     }
 
-#if VERSION <= VERSION_DEMO_US
-    if (work->state < 10) {
-        dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, NULL);
-        dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
-    }
-}
-#else
 #if VERSION >= VERSION_US
     if (work->state >= 2 && work->state < 4) {
         dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
@@ -573,7 +526,6 @@ void seq_logoMain(SequenceWork* work) {
 #endif
     }
 }
-#endif
 
 
 /** param is unused */

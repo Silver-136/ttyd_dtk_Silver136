@@ -3879,14 +3879,10 @@ void puniModeWonder(PuniData* p) {
             pos = p->pos;
             pos.y += 15.0f;
             pos.z += 3.0f;
-#if VERSION <= VERSION_DEMO_US
-            p->effect = effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
-#else
 #if VERSION >= VERSION_US
             effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
 #else
             p->effect = effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
-#endif
 #endif
             p->timer = 20;
             p->anim = 9;

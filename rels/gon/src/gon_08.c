@@ -232,21 +232,13 @@ static EVT_BEGIN(main_0)
         // The block rises if it is down and falls if it is up (remembered in a room flag).
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(0, 0)
-#if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(LSWF(3), 0)
-#else
             IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
-#endif
                 SET_VALUE(LW(10), 0)
             ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
         ELSE
-#if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(LSWF(3), 0)
-#else
             IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
-#endif
                 SET_VALUE(LW(10), 1)
             ELSE
                 SET_VALUE(LW(10), 0)
@@ -266,15 +258,6 @@ static EVT_BEGIN(main_0)
             SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
             SET_FLOAT_VALUE(LW(9), 0)
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        BEGIN_SIBLING_EVENT
-            WAIT_FRAMES(10)
-            CALL(evt_sub_rumble_onoff, 0, 0)
-            WAIT_MS(300)
-            CALL(evt_sub_rumble_onoff, 1, 0)
-        END_SIBLING_EVENT
-        BEGIN_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
 #else
@@ -286,7 +269,6 @@ static EVT_BEGIN(main_0)
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
 #endif
-#endif
             WAIT_FRAMES(10)
             CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
             LABEL(0)
@@ -296,16 +278,12 @@ static EVT_BEGIN(main_0)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-#if VERSION <= VERSION_DEMO_US
-        END_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
         END_INLINE_EVENT
 #else
         END_SIBLING_EVENT
 #endif
         // After the camera shake, the block starts to float and its movement sound plays.
-#endif
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("blk_0"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("blk_0"), LW(11))
@@ -368,17 +346,10 @@ static EVT_BEGIN(main_0)
                 SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
                 SET_FLOAT_VALUE(LW(8), 0)
                 SET_FLOAT_VALUE(LW(10), 0)
-#if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(LSWF(3), 0)
-                    SET_VALUE(LSWF(3), 1)
-                ELSE
-                    SET_VALUE(LSWF(3), 0)
-#else
                 IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
                     SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 1)
                 ELSE
                     SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
-#endif
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("sw_0"))
             END_IF
@@ -431,14 +402,6 @@ static EVT_BEGIN(main_0)
         END_INLINE_EVENT
         // A block that came down shakes the camera again and the scene waits a moment.
         IF_INT_EQUAL(LW(10), 1)
-#if VERSION <= VERSION_DEMO_US
-            BEGIN_SIBLING_EVENT
-                CALL(evt_sub_rumble_onoff, 0, 0)
-                WAIT_MS(300)
-                CALL(evt_sub_rumble_onoff, 1, 0)
-            END_SIBLING_EVENT
-            BEGIN_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
             BEGIN_INLINE_EVENT
 #else
@@ -449,7 +412,6 @@ static EVT_BEGIN(main_0)
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
 #endif
-#endif
                 CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 LABEL(2)
                 CALL(evt_sub_intpl_get_value)
@@ -458,16 +420,6 @@ static EVT_BEGIN(main_0)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-#if VERSION <= VERSION_DEMO_US
-            END_SIBLING_EVENT
-            WAIT_MS(1000)
-    END_IF
-    // Remember the block's new position for the next press.
-    IF_INT_EQUAL(LSWF(3), 0)
-        SET_VALUE(LSWF(3), 1)
-    ELSE
-        SET_VALUE(LSWF(3), 0)
-#else
 #if VERSION >= VERSION_US
             END_INLINE_EVENT
 #else
@@ -480,7 +432,6 @@ static EVT_BEGIN(main_0)
             SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 1)
         ELSE
             SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
-#endif
         END_IF
     ELSE
         // Unused: cancel the switch and wait a few frames.
@@ -601,9 +552,6 @@ EVT_BEGIN(nokkosu_talk)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, 2)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("irai_07_01"), 0, STRING("party"))
-#else
 #if VERSION >= VERSION_US
     CALL(evt_party_stop, 0)
 #endif
@@ -619,32 +567,27 @@ EVT_BEGIN(nokkosu_talk)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("me"))
 #endif
-#endif
     CALL(evt_msg_print, 0, STRING("irai_07_02"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("irai_07_03"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("irai_07_04"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("irai_07_05"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("irai_07_06"), 0, STRING("me"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("me"))
     CALL(evt_party_run, 0)
 #endif
-#endif
     CALL(evt_item_entry, STRING("irai_item"), ITEM_SPECIAL_CARD, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("irai_item"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_get_item, STRING("irai_item"))
     CALL(evt_msg_print, 0, STRING("irai_07_07"), 0, STRING("me"))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_ry, STRING("me"), 90)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("me"))
 #endif
     // Nokkos jumps down off the ledge and out of sight.
-#endif
     CALL(evt_npc_jump_position_nohit, STRING("me"), -66, 100, -112, 800, 220)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     // The time is recorded and the request is marked solved.

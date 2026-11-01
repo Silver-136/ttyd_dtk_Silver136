@@ -1209,11 +1209,6 @@ USER_FUNC(tiz_broken) {
                     }
                 }
                 if (dx || dy) {
-#if VERSION <= VERSION_DEMO_US
-                    len = sqrtf(dx * dx + dy * dy);
-                    nx = dx / len;
-                    ny = dy / len;
-#else
 #if VERSION >= VERSION_US
                     // FAKE: sqrtf(dx * dx + dy * dy) expanded by hand with the
                     // value and Newton guess in function-scope locals (sq, guess);
@@ -1238,7 +1233,6 @@ USER_FUNC(tiz_broken) {
                     nx = inv;
                     ny = dy / len;
 #endif
-#endif
                 } else {
                     nx = ny = len = 0.0f;
                 }
@@ -1252,12 +1246,6 @@ USER_FUNC(tiz_broken) {
                 p->vel.x = -nx * param_tbl[1];
                 p->vel.y = -ny * param_tbl[1];
                 p->vel.z = 10.0f;
-#if VERSION <= VERSION_DEMO_US
-                angle = 6.2831855f * angleABf(0.0f, 0.0f, dx, dy) / 360.0f;
-                inv = param_tbl[3];
-                p->gx = inv * polySinf(angle);
-                p->gy = inv * -polyCosf(angle);
-#else
 #if VERSION >= VERSION_US
                 p->vel.x *= 60.0f / gp->framerate;
                 p->vel.y *= 60.0f / gp->framerate;
@@ -1276,7 +1264,6 @@ USER_FUNC(tiz_broken) {
 #if VERSION >= VERSION_US
                 p->gx *= 60.0f / gp->framerate;
                 p->gy *= 60.0f / gp->framerate;
-#endif
 #endif
                 p++;
             }
@@ -1319,11 +1306,7 @@ USER_FUNC(tiz_broken) {
         smartFree(broken_wp->pieces);
         return EVT_RETURN_DONE;
     }
-#if VERSION <= VERSION_DEMO_US
-    dispEntry((CameraId)8, 0.0f, 0, tiz_broken_draw, NULL);
-#else
     dispEntry(CAMERA_2D, 0.0f, 0, tiz_broken_draw, NULL);
-#endif
     return EVT_RETURN_BLOCK;
 }
 #pragma opt_propagation reset
@@ -1943,18 +1926,6 @@ EVT_BEGIN(evt_mapwrite)
     CALL(evt_npc_set_position, STRING("tiz_obj"), LW(5), LW(6), LW(7))
     CALL(evt_npc_set_scale, STRING("tiz_obj"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.5f))
     CALL(evt_npc_set_camid, STRING("tiz_obj"), 7)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 1000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        CALL(evt_npc_set_color, STRING("tiz_obj"), 255, 255, 255, LW(0))
-        CALL(evt_npc_set_anim, STRING("tiz_obj"), STRING("A_1"))
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-#else
 #if VERSION == VERSION_EU
     CALL(evt_npc_set_anim, STRING("tiz_obj"), STRING("A_1"))
 #else
@@ -1968,7 +1939,6 @@ EVT_BEGIN(evt_mapwrite)
             BREAK_LOOP
         END_IF
     END_LOOP
-#endif
 #endif
     CALL(evt_snd_sfxon__, LW(9), 0)
     CALL(evt_npc_wait_anim, STRING("tiz_obj"), FLOAT(1.0f))
@@ -2607,10 +2577,8 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)
-#endif
 #endif
     CALL(evt_mario_mov_pos2, 0, -250, FLOAT(120.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)

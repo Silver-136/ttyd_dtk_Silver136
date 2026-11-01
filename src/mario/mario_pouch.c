@@ -784,7 +784,6 @@ void pouchSortItem(s32 mode) {
     BOOL swap;
     s16 t2, t1;
     PouchData* pp[1];
-#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
     char keyA[0x80];
     s16 bj;
@@ -804,7 +803,6 @@ void pouchSortItem(s32 mode) {
     s32 cb;
 #endif
 
-#endif
     pp[0] = mpp;
     if ((u32)mode <= 1 || mode == 7 || mode == 8) {
         n = 0;
@@ -816,16 +814,6 @@ void pouchSortItem(s32 mode) {
         for (k = n; k < MAX_HELD_ITEMS; k++) {
             items[k] = 0;
         }
-#if VERSION <= VERSION_DEMO_US
-        if (mode == 0)
-            qqsort(items, n, 2, comp_aiueo);
-        else if (mode == 1)
-            qqsort(items, n, 2, (QSortCompare)comp_kind);
-        else if (mode == 7)
-            qqsort(items, n, 2, comp_aiueo_r);
-        else if (mode == 8)
-            qqsort(items, n, 2, (QSortCompare)comp_kind_r);
-#else
         if (mode == 0) {
             qqsort(items, n, sizeof(s16), comp_aiueo);
         } else if (mode == 1) {
@@ -835,7 +823,6 @@ void pouchSortItem(s32 mode) {
         } else if (mode == 8) {
             qqsort(items, n, sizeof(s16), (QSortCompare)comp_kind_r);
         }
-#endif
         memcpy(pp[0]->heldItems, items, sizeof(items));
     }
     if ((u32)(mode - 2) <= 1 || mode == 9 || mode == 10) {
@@ -848,16 +835,6 @@ void pouchSortItem(s32 mode) {
         for (k = n; k < MAX_KEY_ITEMS; k++) {
             keys[k] = 0;
         }
-#if VERSION <= VERSION_DEMO_US
-        if (mode == 2)
-            qqsort(keys, n, 2, comp_aiueo);
-        else if (mode == 3)
-            qqsort(keys, n, 2, (QSortCompare)comp_kind);
-        else if (mode == 9)
-            qqsort(keys, n, 2, comp_aiueo_r);
-        else if (mode == 10)
-            qqsort(keys, n, 2, (QSortCompare)comp_kind_r);
-#else
         if (mode == 2) {
             qqsort(keys, n, sizeof(s16), comp_aiueo);
         } else if (mode == 3) {
@@ -867,7 +844,6 @@ void pouchSortItem(s32 mode) {
         } else if (mode == 10) {
             qqsort(keys, n, sizeof(s16), (QSortCompare)comp_kind_r);
         }
-#endif
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }
     // PAL sorts badge names by the pouchHiraToKata key

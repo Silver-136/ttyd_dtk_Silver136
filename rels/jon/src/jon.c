@@ -204,17 +204,10 @@ EVT_BEGIN(jon_init_evt)
             SET_VALUE(GSW_PIT_FLOOR, 99)
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    // Remember the deepest floor reached, then set up the signboard, the mover, the trader and the enemies of
-    // this floor.
-    SET_VALUE(LSW(0), GSW_PIT_FLOOR)
-    SET_VALUE(LW(0), LSW(0))
-#else
     // Remember the deepest floor reached, then set up the signboard, the mover, the trader and the enemies of
     // this floor.
     SET_VALUE(LSW_JON_PIT_FLOOR, GSW_PIT_FLOOR)
     SET_VALUE(LW(0), LSW_JON_PIT_FLOOR)
-#endif
     ADD(LW(0), 1)
     IF_INT_GREATER(LW(0), GSW_JON_DEEPEST_LEVEL)
         SET_VALUE(GSW_JON_DEEPEST_LEVEL, LW(0))
@@ -283,26 +276,6 @@ EVT_BEGIN(jon_init_evt)
     IF_STR_EQUAL(LW(0), STRING("jon_04"))
         IF_INT_EQUAL(GSW_PIT_FLOOR, 49)
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 0)
-#if VERSION <= VERSION_DEMO_US
-                SET_VALUE(LF(0), 0)
-                    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
-                        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
-                            SET_VALUE(LF(0), 1)
-                        END_IF
-                    END_IF
-                    IF_INT_EQUAL(LF(0), 0)
-                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
-                        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
-                        IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
-                        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
-                            CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
-                            CALL(evt_set_case_wrk, LW(1), 15, LW(0))
-                        END_IF
-                        END_IF
-                    ELSE
-                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
-                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-#else
 #if VERSION >= VERSION_US
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
@@ -333,7 +306,6 @@ EVT_BEGIN(jon_init_evt)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION >= VERSION_US
                     END_IF
-#endif
 #endif
                 END_IF
                 ELSE

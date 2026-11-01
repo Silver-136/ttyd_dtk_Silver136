@@ -249,13 +249,8 @@ void mot_plane(void) {
     mp = marioGetPtr();
     if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-#if VERSION <= VERSION_DEMO_US
-        mp->motStruct = __memAlloc(HEAP_DEFAULT, 0x48);
-        memset(mp->motStruct, 0, 0x48);
-#else
         mp->motStruct = __memAlloc(HEAP_DEFAULT, sizeof(MotPlaneWork));
         memset(mp->motStruct, 0, sizeof(MotPlaneWork));
-#endif
         {
             MarioWork* m2 = marioGetPtr();
             m2->motPlane->sfxId = -1;
@@ -276,13 +271,8 @@ void mot_plane(void) {
         mp->mot.plane.groundY = 0.0f;
         // bit 4 of the take-off panel is HIT_ATTR_PLANE_PANEL_R -> MOT_PLANE_FLAG_RIGHT
         mp->motPlane->flags = (hitGetAttr(mp->hitobjJumpFrom) >> 4) & 1;
-#if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((const char*)0x17d, &mp->position);
-        psndSFXOn_3D((const char*)0xaf, &mp->position);
-#else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE_JUMP1), &mp->position);
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_5), &mp->position);
-#endif
     case 1:
         marioMakeJumpPara();
         planeRoll1(mp, 0.125f, 30.0f);
@@ -307,15 +297,9 @@ void mot_plane(void) {
             animPoseSetLocalTime(mp->paperPoseId, 0.0f);
             animPoseSetLocalTime(mp->paperAnimGroupId[marioAnimeId()], 0.0f);
             evt = evtEntry(sound_evt, 0, 0);
-#if VERSION <= VERSION_DEMO_US
-            evt->lwData[0] = (s32)(1024.0f * mp->position.x) + -230000000;
-            evt->lwData[1] = (s32)(1024.0f * mp->position.y) + -230000000;
-            evt->lwData[2] = (s32)(1024.0f * mp->position.z) + -230000000;
-#else
             evt->lwData[0] = FLOAT(mp->position.x);
             evt->lwData[1] = FLOAT(mp->position.y);
             evt->lwData[2] = FLOAT(mp->position.z);
-#endif
         }
         if (mp->jumpVelocityY > 0.0f) {
             mp->position.y += mp->jumpVelocityY;
@@ -345,11 +329,7 @@ void mot_plane(void) {
         break;
     case 3:
         if (--mp->multiTimer > 0) {
-#if VERSION <= VERSION_DEMO_US
-            if ((s32)mp->multiTimer == 40) {
-#else
             if (mp->multiTimer == 40) {
-#endif
                 allPartyRidePlane();
             }
             break;
@@ -424,15 +404,9 @@ void mot_plane(void) {
         planeSfxOff();
         planeReset();
         allPartyRideOff2();
-#if VERSION <= VERSION_DEMO_US
-        if ((s32)mp->currSubMotionId == 20) {
-            marioChgMot(MARIO_MOTION_JUMP);
-        } else if ((s32)mp->currSubMotionId == 30) {
-#else
         if (mp->currSubMotionId == 20) {
             marioChgMot(MARIO_MOTION_JUMP);
         } else if (mp->currSubMotionId == 30) {
-#endif
             marioChgMot(MARIO_MOTION_STAY);
         }
     }
@@ -499,11 +473,7 @@ void mot_plane(void) {
         mp->jumpVelocityY *= 0.5f;
         marioChgPose("M_J_1B");
         mp->currSubMotionId = 80;
-#if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((const char*)0x180, &mp->position);
-#else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE3), &mp->position);
-#endif
         allPartyRideOff2();
     case 80:
         planeRoll2(mp, 0.3f, 28.0f);
@@ -523,11 +493,7 @@ void mot_plane(void) {
         }
         break;
     case 90:
-#if VERSION <= VERSION_DEMO_US
-        if ((s32)mp->multiTimer > 0) {
-#else
         if (mp->multiTimer > 0) {
-#endif
             planeRoll2(mp, 0.3f, 28.0f);
             mp->displayDirection = revise360(mp->displayDirection + mp->mot.plane.turnSpeed);
             if (--mp->multiTimer <= 0) {
@@ -565,10 +531,8 @@ void mot_plane(void) {
             mp->camShiftTargetY = 0.0f;
             marioChgMot(MARIO_MOTION_STAY);
         }
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         marioChkWallAround(&mp->position, 0, 0.0f, 0.0f, mp->wPlayerCollisionBox.z, mp->wPlayerCollisionBox.y);
-#endif
 #endif
         break;
     case 70: {

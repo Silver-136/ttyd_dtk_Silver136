@@ -74,14 +74,10 @@ BattleUnitKind unit_boss_zonbaba = {
     100,
     0,
     50,
-#if VERSION <= VERSION_DEMO_US
-    7,
-#else
 #if VERSION >= VERSION_US
     5,
 #else
     7,
-#endif
 #endif
     230,
     170,

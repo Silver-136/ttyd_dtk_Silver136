@@ -2118,7 +2118,6 @@ static void draw(CameraId camera, void* param) {
     f32 viewport[6];
     f32 projection[7];
     CameraEntry* cam;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     // US: logo texture per language (indexed by gp->language)
 #if VERSION == VERSION_EU
@@ -2128,7 +2127,6 @@ static void draw(CameraId camera, void* param) {
 #endif
 #endif
 
-#endif
     GXGetViewportv(viewport);
     GXGetProjectionv(projection);
     cam = camGetPtr(CAMERA_2D);
@@ -2471,14 +2469,10 @@ USER_FUNC(logo) {
         case 1:
             if (wp->counter < VERSION_PICK(180, FPS_FRAMES(180))) {
                 wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 255.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
-#if VERSION <= VERSION_DEMO_US
-                wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
-#else
 #if VERSION >= VERSION_US
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, FPS_FRAMES(180));
 #else
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, 180);
-#endif
 #endif
             } else if (gp->retraceCount % 15 == 0) {
                 wp->state++;
@@ -2498,14 +2492,10 @@ USER_FUNC(logo) {
         case 3:
             if (wp->counter < VERSION_PICK(120, FPS_FRAMES(120))) {
                 wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 255.0f, 0.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
-#if VERSION <= VERSION_DEMO_US
-                wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
-#else
 #if VERSION >= VERSION_US
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, FPS_FRAMES(120));
 #else
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, 120);
-#endif
 #endif
             } else {
                 wp->state++;

@@ -794,7 +794,6 @@ EVT_BEGIN(yuu_01_init_evt)
     // The game is set up and the audience appears.
     SPAWN_EVENT(PTR(minigame02_main))
     CALL_CHILD(PTR(evt_yuunpc_minigame2))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_mon"), MAP_OBJ_FLAG_DISABLED)
@@ -817,7 +816,6 @@ EVT_BEGIN(yuu_01_init_evt)
         CASE_EQUAL(5)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_mon"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
-#endif
 #endif
     RETURN
 EVT_END()

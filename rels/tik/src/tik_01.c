@@ -600,11 +600,6 @@ EVT_BEGIN(tik_01_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -455, 135, -60, 0, 0)
     SET_VALUE(LW(0), STRING("ugo_yuka_1"))
     SET_VALUE(LW(1), STRING("a_ugo_yuka_1"))
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LW(2), 0)
-    SET_VALUE(LW(3), 85)
-    SET_VALUE(LW(4), 2000)
-#else
 #if VERSION >= VERSION_US
     SET_VALUE(LW(2), -15)
     SET_VALUE(LW(3), 103)
@@ -613,7 +608,6 @@ EVT_BEGIN(tik_01_init_evt)
     SET_VALUE(LW(2), 0)
     SET_VALUE(LW(3), 85)
     SET_VALUE(LW(4), 2000)
-#endif
 #endif
     SET_VALUE(LW(5), 500)
     SET_VALUE(LW(6), 0)

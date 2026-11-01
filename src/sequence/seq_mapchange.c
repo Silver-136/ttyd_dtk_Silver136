@@ -268,25 +268,15 @@ void seq_mapChangeMain(SequenceWork* work) {
     case 3:
         if (setupDataCheck()) {
             if (psndGetFlag() & PSND_FLAG_BGM_WAIT_0) {
-#if VERSION <= VERSION_DEMO_US
-                if (psndBGMPlayTime(0) < 3000)
-                    break;
-#else
                 if (psndBGMPlayTime(0) < 3000) {
                     break;
                 }
-#endif
                 psndClearFlag(PSND_FLAG_BGM_WAIT_0);
             }
             if (psndGetFlag() & PSND_FLAG_BGM_WAIT_1) {
-#if VERSION <= VERSION_DEMO_US
-                if (psndBGMPlayTime(1) < 3000)
-                    break;
-#else
                 if (psndBGMPlayTime(1) < 3000) {
                     break;
                 }
-#endif
                 psndClearFlag(PSND_FLAG_BGM_WAIT_1);
             }
             setupDataBase(_next_area, _next_map);
@@ -319,11 +309,7 @@ void seq_mapChangeMain(SequenceWork* work) {
     case 6:
         if (!(camGetPtr(CAMERA_2D)->flags & CAMERA_FLAG_LETTER_BOX_OFF) && !(bero_get_BeroEXEC() & 1) &&
             (!marioChkKey() || !marioChkCtrl())) {
-#if VERSION <= VERSION_DEMO_US
-            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX | CAMERA_FLAG_LETTER_BOX_INSTANT;
-#else
             camGetPtr(CAMERA_2D)->flags |= (CAMERA_FLAG_LETTER_BOX | CAMERA_FLAG_LETTER_BOX_INSTANT);
-#endif
         }
         if (npcWaitAllInitEvtEnd()) {
             npcExecAllReglEvt();

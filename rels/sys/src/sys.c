@@ -1374,10 +1374,6 @@ USER_FUNC(display) {
             wp->count++;
         }
         for (i = 0; i < wp->count; i++) {
-#if VERSION <= VERSION_DEMO_US
-            wp->chars[i].x = 36.0f * i - (f32)((wp->count - 1) * 36) / 2;
-            wp->chars[i].y = 40.0f;
-#else
 #if VERSION >= VERSION_US
             // US: letters are laid out by width (gaps marked -2 are half width), centred on the title
             f32 left = 0.0f;
@@ -1412,7 +1408,6 @@ USER_FUNC(display) {
 #else
             wp->chars[i].x = 36.0f * i - (f32)((wp->count - 1) * 36) / 2;
             wp->chars[i].y = 40.0f;
-#endif
 #endif
             wp->chars[i].z = 0.0f;
             wp->chars[i].rot = 90.0f;
@@ -1461,11 +1456,6 @@ USER_FUNC(display) {
                                 wp->angle -= 360.0f;
                             }
                             wp->alpha += 0x30;
-#if VERSION <= VERSION_DEMO_US
-                            if (wp->alpha > 10000) {
-                                wp->alpha = 10000;
-                            }
-#else
 #if VERSION >= VERSION_US
                             if (wp->alpha > 0x4000) {
                                 wp->alpha = 0x4000;
@@ -1474,7 +1464,6 @@ USER_FUNC(display) {
                             if (wp->alpha > 10000) {
                                 wp->alpha = 10000;
                             }
-#endif
 #endif
                         }
                         break;
@@ -1485,10 +1474,8 @@ USER_FUNC(display) {
             break;
     }
     if (wp->state != 0) {
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         dispEntry(CAMERA_3D, 0.0f, 2, sys_01_msg_tex_capture_func, wp);
-#endif
 #endif
         dispEntry(CAMERA_3D_EFFECTA, 0.0f, 2, display_func, wp);
     }

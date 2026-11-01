@@ -570,9 +570,6 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_88_01"), 0, 0)
         END_INLINE_EVENT
         WAIT_MS(3000)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("me"))
-#else
 #if VERSION >= VERSION_US
         IF_INT_EQUAL(LF(10), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("party"))
@@ -583,7 +580,6 @@ static EVT_BEGIN(marco_talk)
         END_IF
 #else
         CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("me"))
-#endif
 #endif
         LOOP(3)
             SET_VALUE(LW(0), 0)

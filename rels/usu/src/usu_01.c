@@ -1846,7 +1846,6 @@ EVT_BEGIN(usu01_crowFG_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＦ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 20, LW(0), LW(2), LW(6))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
@@ -1867,7 +1866,6 @@ EVT_BEGIN(usu01_crowFG_talk_event)
     END_IF
 #endif
     // Show the "..." balloon over Mario while he is in range and hide it when he leaves.
-#endif
     IF_INT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_balloon_tenten)
@@ -2013,7 +2011,6 @@ EVT_BEGIN(usu01_crowHI_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＨ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 80, LW(0), LW(2), LW(6))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
@@ -2034,7 +2031,6 @@ EVT_BEGIN(usu01_crowHI_talk_event)
     END_IF
 #endif
     // Show the "..." balloon over Mario while he is in range and hide it when he leaves.
-#endif
     IF_INT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_balloon_tenten)
@@ -2139,7 +2135,6 @@ EVT_BEGIN(usu01_crowJ_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＪ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 20, LW(0), LW(2), LW(6))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
@@ -2160,7 +2155,6 @@ EVT_BEGIN(usu01_crowJ_talk_event)
     END_IF
 #endif
     // Show the "..." balloon over Mario while he is in range and hide it when he leaves.
-#endif
     IF_INT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_balloon_tenten)

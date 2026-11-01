@@ -159,12 +159,10 @@ static const WinLangTbl winLangTbl;
 void winMain(void) {
     MarioWork* mario;
     s32 i;
-#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
     WindowPartyDt* list[7];
 #endif
 
-#endif
     mario = marioGetPtr();
     if (!(wp->flags & WINDOW_FLAG_OPEN_DISABLE) && seqGetSeq() == SEQ_GAME && !seqCheckSeq()) {
         wp->buttonTrg = keyGetButtonTrg(0);
@@ -344,11 +342,7 @@ const char* name = winGetMapTplName();
             }
 
             case WIN_MENU_ROOT:
-#if VERSION <= VERSION_DEMO_US
-                if (!marioGetPtr()->characterId) {
-#else
                 if (marioGetPtr()->characterId == CHARACTER_MARIO) {
-#endif
                     switch (winRootMain(wp)) {
                         case -1:
                             wp->menuState++;
@@ -425,11 +419,6 @@ const char* name = winGetMapTplName();
                 break;
 
             case WIN_MENU_ITEM_USE: {
-#if VERSION <= VERSION_DEMO_US
-                WindowPartyDt* list[7];
-                WindowPartyDt* p;
-                                WindowPartyDt* base;
-#else
 #if VERSION != VERSION_EU
 #if VERSION >= VERSION_US
                 WindowPartyDt* list[11]; /* FAKE */ // US frame is 96 bytes; only 7 entries used
@@ -439,79 +428,10 @@ const char* name = winGetMapTplName();
                 WindowPartyDt* p;
                 WindowPartyDt* base;
 #endif
-#endif
                 s32 partyId;
                 s32 n;
 
                 partyId = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
-#if VERSION <= VERSION_DEMO_US
-                base = winPartyDt;
-                n = 0;
-                for (i = 0, p = base; i < 7; i++, p++) {
-                    if (partyId == p->partyId) {
-                        list[n++] = p;
-                    }
-                }
-                for (i = 0; i < 7; i++, base++) {
-                    if (partyId != base->partyId) {
-                        list[n++] = base;
-                    }
-                }
-                wp->currentEvent = evtEntryType(evt_item_use, 0, 0, 0);
-                wp->currentEvent->lwData[10] = wp->item.useItem;
-                wp->currentEvent->lwData[11] = wp->item.useTarget == 0 ? 0 : list[wp->item.useTarget - 1]->partyId;
-                psndClearFlag(PSND_FLAG_MUTE_SFX);
-                wp->menuState++;
-                pouchRemoveItemIndex(wp->item.useItem, wp->item.useIdx);
-                break;
-            }
-
-            case WIN_MENU_ITEM_USE_WAIT:
-                if (!evtCheckID(wp->currentEvent->eventId)) {
-                    wp->menuState = WIN_MENU_CLOSE;
-                }
-                break;
-
-            case WIN_MENU_DIARY:
-                wp->currentEvent = evtEntryType(evt_diary_read, 0, 0, 0);
-                wp->menuState++;
-                break;
-
-            case WIN_MENU_DIARY_WAIT:
-                if (!evtCheckID(wp->currentEvent->eventId)) {
-                    wp->menuState = WIN_MENU_CLOSE;
-                }
-                break;
-
-            case WIN_MENU_YUU:
-                evtYuuWindow();
-                wp->menuState++;
-                break;
-
-            case WIN_MENU_YUU_WAIT:
-                if (evtYuuWindowEndChk()) {
-                    wp->menuState = WIN_MENU_CLOSE;
-                }
-                break;
-        }
-
-        if (wp->menuState == WIN_MENU_ROOT) {
-            switch (marioGetPtr()->characterId) {
-                case CHARACTER_MARIO:
-                    if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
-                        dispEntry(CAMERA_2D, 250.0f, 0, winDisp, NULL);
-                    } else {
-                        dispEntry(CAMERA_2D, 500.0f, 0, winDisp, NULL);
-                    }
-                    break;
-                case CHARACTER_BOWSER:
-                    dispEntry(CAMERA_2D, 250.0f, 0, winDispKoopa, NULL);
-                    break;
-            }
-        }
-    }
-}
-#else
 #if VERSION == VERSION_EU
                 n = 0;
                 for (i = 0; i < 7; i++) {
@@ -592,7 +512,6 @@ const char* name = winGetMapTplName();
         }
     }
 }
-#endif
 
 /** 2D draw callback for Mario's pause menu: draws all the menu windows through winRootDisp. */
 void winDisp(CameraId camId, void* param) {

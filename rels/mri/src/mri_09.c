@@ -215,10 +215,8 @@ EVT_END()
 EVT_BEGIN(wall_roll)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_party_cloud_lock_animations_on_off, 0, 1)
-#endif
 #endif
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -286,10 +284,8 @@ EVT_BEGIN(wall_roll)
     CALL(evt_mobj_delete, STRING("slot03"))
     WAIT_MS(500)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_party_cloud_lock_animations_on_off, 0, 0)
-#endif
 #endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -557,10 +553,8 @@ EVT_BEGIN(mri_09_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_21_01_MYSTERY_PILLAR)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 0)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         SPAWN_EVENT(slot_event)
-#endif
 #endif
         CASE_EQUAL(STG2_21_01_MYSTERY_PILLAR)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 0)

@@ -168,10 +168,6 @@ void msgLoad(const char* filename, s32 index) {
     MsgLookupEntry* lookup;
     const char* msgptr;
     int i;
-#if VERSION <= VERSION_DEMO_US
-    DVDEntry* dvd;
-    s32 msgcount;
-#else
 #if VERSION >= VERSION_US
     s32 msgcount;
     DVDEntry* dvd;
@@ -180,7 +176,6 @@ void msgLoad(const char* filename, s32 index) {
 #else
     DVDEntry* dvd;
     s32 msgcount;
-#endif
 #endif
     u32 ofs;
     char filepath[64];

@@ -1702,7 +1702,6 @@ EVT_BEGIN(usu00_crowAB_talk_event)
         SET_VALUE(LW(8), 20)
     END_IF
     CALL(evt_sub_area_check, 1, LW(3), LW(5), LW(8), LW(0), LW(2), LW(6))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
@@ -1721,7 +1720,6 @@ EVT_BEGIN(usu00_crowAB_talk_event)
             END_IF
         END_IF
     END_IF
-#endif
 #endif
     IF_INT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(15), 0)
@@ -1833,7 +1831,6 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＤ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 60, LW(0), LW(2), LW(6))
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
@@ -1852,7 +1849,6 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
             END_IF
         END_IF
     END_IF
-#endif
 #endif
     IF_INT_LESS_OR_EQUAL(LW(2), -250)
         SET_VALUE(LW(6), 0)
@@ -4291,38 +4287,6 @@ EVT_BEGIN(usu_00_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_pouch_mario_recovery)
-        CALL(evt_pouch_all_party_recovery)
-    END_IF
-        CALL(evt_party_stop, 0)
-    CALL(evt_party_set_pos, 0, -130, 0, -60)
-    SPAWN_EVENT(evt_after_peach)
-END_IF
-// Chapter 8: the world going dark and the townsfolk's voices cheering Mario.
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-    CALL(evt_bero_get_entername, LW(0))
-    IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
-        CALL_CHILD(sekai_yami_npc_init)
-        SPAWN_EVENT(sekai_yami_evt)
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-        CALL_CHILD(minnnanokoe_npc_entry)
-        SPAWN_EVENT(minnnanokoe_evt)
-    END_IF
-END_IF
-// Epilogue scene, then the NPC hide/show loop.
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-    CALL(evt_mario_kill_party, 0)
-    CALL_CHILD(epilogue_npc_entry)
-    SPAWN_EVENT(epilogue_evt)
-END_IF
-BEGIN_INLINE_EVENT
-    CALL(npc_process)
-END_INLINE_EVENT
-RETURN
-EVT_END()
-#else
 #if VERSION >= VERSION_US
         END_IF
 #endif
@@ -4359,5 +4323,4 @@ EVT_END()
     END_INLINE_EVENT
     RETURN
 EVT_END()
-#endif
 

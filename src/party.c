@@ -1238,15 +1238,9 @@ void driveParty(PartyEntry* party) {
             partyDokanMain(party);
             break;
         case 11:
-#if VERSION <= VERSION_DEMO_US
-            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF))
-#else
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
-#endif
                 break;
-#if VERSION > VERSION_DEMO_US
             }
-#endif
             if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
                 party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
                 party->motionStep = 0;
@@ -1613,7 +1607,6 @@ static inline void partyChgRunM(PartyEntry* party) {
  */
 s32 partyDokanInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
-#if VERSION > VERSION_DEMO_US
 
 #if VERSION >= VERSION_US
     party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
@@ -1621,16 +1614,11 @@ s32 partyDokanInit(PartyEntry* party) {
     party->moveDir = mario->moveDirection;
     party->position = mario->position;
 #endif
-#endif
     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     switch (mario->dokanType) {
         case 2:
         case 3:
             partyPaperOn(party, "p_dokan_y");
-#if VERSION <= VERSION_DEMO_US
-            party->spinSpeed = 30.0f;
-            party->motionStep = 0;
-#else
 #if VERSION >= VERSION_US
             partyChgPaper(party, "PM_D_1A");
             partyChgPoseId(party, 0);
@@ -1643,16 +1631,9 @@ s32 partyDokanInit(PartyEntry* party) {
             party->spinSpeed = 30.0f;
             party->motionStep = 0;
 #endif
-#endif
             break;
         case 0:
             party->scale = (Vec){0.0f, 0.0f, 0.0f};
-#if VERSION <= VERSION_DEMO_US
-            case 1:
-                partyPaperOn(party, "p_dokan_y");
-                party->spinSpeed = 30.0f;
-                party->motionStep = 0;
-#else
 #if VERSION >= VERSION_US
             party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -1674,15 +1655,12 @@ s32 partyDokanInit(PartyEntry* party) {
             party->spinSpeed = 30.0f;
             party->motionStep = 0;
 #endif
-#endif
             break;
         case 5:
             partyPaperOn(party, "p_dokan_x");
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             partyChgPaper(party, "PM_D_1A");
             partyChgPoseId(party, 0);
-#endif
 #endif
             party->spinSpeed = 26.0f;
             party->motionStep = 10;
@@ -1791,25 +1769,15 @@ s32 partyDokanInit(PartyEntry* party) {
 s32 partyDokanMain(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     s32 n;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     f32 s;
     f32 c;
 #endif
 
-#endif
     switch (party->motionStep) {
         case 0:
             party->position = mario->position;
             party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
-#if VERSION <= VERSION_DEMO_US
-            party->scale.x += 0.05f;
-            if (party->scale.x >= 1.0f) {
-                party->scale.x = 1.0f;
-            }
-            party->scale.y = party->scale.x;
-            party->scale.z = party->scale.x;
-#else
 #if VERSION < VERSION_US
             party->scale.x += 0.05f;
             if (party->scale.x >= 1.0f) {
@@ -1818,17 +1786,14 @@ s32 partyDokanMain(PartyEntry* party) {
             party->scale.y = party->scale.x;
             party->scale.z = party->scale.x;
 #endif
-#endif
             break;
         case 10:
             party->rot.x += party->spinSpeed;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             party->position = mario->position;
             sincosf(&s, &c, mario->targetYaw);
             party->position.x = mario->position.x + -5.0f * s;
             party->position.z = mario->position.z + 5.0f * c;
-#endif
 #endif
             break;
         case 100:
@@ -1838,10 +1803,6 @@ s32 partyDokanMain(PartyEntry* party) {
                     partyChgPaper(party, "PM_D_1B");
                     party->moveFrames = 18;
                     party->motionStep = 101;
-#if VERSION <= VERSION_DEMO_US
-                    break;
-                case 4:
-#else
 #if VERSION >= VERSION_US
                     party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
                     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -1855,7 +1816,6 @@ s32 partyDokanMain(PartyEntry* party) {
                     break;
                 case 4:
 #endif
-#endif
                     partyChgPaper(party, "PM_D_1B");
                     party->moveFrames = 18;
                     party->motionStep = 101;
@@ -1866,14 +1826,10 @@ s32 partyDokanMain(PartyEntry* party) {
             switch (party->dirKind) {
                 case 0:
                 case 1:
-#if VERSION <= VERSION_DEMO_US
-                    party->position.z += -0.2f;
-#else
 #if VERSION >= VERSION_US
                     party->position.z -= 0.2f;
 #else
                     party->position.z += -0.2f;
-#endif
 #endif
                     break;
             }

@@ -721,47 +721,6 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
  * Then on-screen culling, draw, shadow, blur and offscreen registration.
  * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
  */
-#if VERSION <= VERSION_DEMO_US
-/** ok = whether Mario can trigger an encounter now (no event, in the game sequence, not on the boat, Vivian not hiding him). */
-#define NPC_CHKMARIO(ok)                                             \
-    do {                                                             \
-        m = marioGetPtr();                                           \
-        if (m->flags & (MARIO_FLAG_IS_8_BIT | MARIO_FLAG_BG_MODE)) { \
-            ok = 0;                                                  \
-            break;                                                   \
-        }                                                            \
-        if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) { \
-            ok = 0;                                                  \
-            break;                                                   \
-        }                                                            \
-        if (gp->mapEventId != 0) {                                   \
-            ok = 0;                                                  \
-            break;                                                   \
-        }                                                            \
-        if (seqGetSeq() != SEQ_GAME) {                               \
-            ok = 0;                                                  \
-            break;                                                   \
-        }                                                            \
-        if (m->currMotionId == MARIO_MOTION_SHIP) {                  \
-            ok = 0;                                                  \
-            break;                                                   \
-        }                                                            \
-        if (vivianGetStatus() != 0 && vivianGetStatus() != 1) {      \
-            ok = 0;                                                  \
-        } else {                                                     \
-            ok = 1;                                                  \
-        }                                                            \
-    } while (0)
-/**
- * Per-frame NPC update (from mariost.c).
- * For each live NPC: timers, wall-checked movement, gravity, pushing Mario aside,
- * walk/run/stay animations from its speed, half speed in the low part of kpa_03;
- * then the event interrupts: blown by Flurrie (8), left its territory (4),
- * lost Mario while chasing (2) or spotted him (1), handed to npcCheckInterrupt.
- * Then on-screen culling, draw, shadow, blur and offscreen registration.
- * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
- */
-#endif
 void npcMain(void) {
     const char* kpaSfx;
     NpcWork* npcwork;
@@ -800,11 +759,7 @@ void npcMain(void) {
             }
 
             if (entry->wFbatHitCheckRelated) {
-#if VERSION <= VERSION_DEMO_US
-                entry->wFbatHitCheckRelated = entry->wFbatHitCheckRelated - 1;
-#else
                 entry->wFbatHitCheckRelated--;
-#endif
             }
 
             if (entry->statusFlags & NPC_STATUS_UPDATE) {
@@ -866,16 +821,11 @@ void npcMain(void) {
                                 entry->position.x += mx;
                                 entry->position.z += mz;
                             } else {
-#if VERSION <= VERSION_DEMO_US
-                                entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
-                                                                 &entry->moveDir, mx, mz);
-#else
 #if VERSION >= VERSION_US
                                 npcMoveSide(entry, mx, mz);
 #else
                                 entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
                                                                         &entry->moveDir, mx, mz);
-#endif
 #endif
                             }
                             entry->moveOffset.x = 0.0f;
@@ -971,9 +921,6 @@ void npcMain(void) {
                             trig = 0;
                             {
                                 s32 marioFindable;
-#if VERSION <= VERSION_DEMO_US
-                                NPC_CHKMARIO(marioFindable);
-#else
                                 do {
                                     m = marioGetPtr();
                                     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
@@ -1002,7 +949,6 @@ void npcMain(void) {
                                         marioFindable = 1;
                                     }
                                 } while (0);
-#endif
                                 if (!marioFindable) {
                                     trig = 1;
                                 } else {
@@ -1031,18 +977,12 @@ void npcMain(void) {
                             f32 dx, dy, dz;
                             int trig;
                             Vec dv;
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
                             f32 sd;
-#endif
 #endif
                             dx = m->position.x - entry->position.x;
                             dz = m->position.z - entry->position.z;
                             dy = m->position.y - entry->position.y;
-#if VERSION <= VERSION_DEMO_US
-                            dist = dx * dx + dz * dz;
-                            sqrtf(dist);
-#else
 #if VERSION >= VERSION_US
                             // US: in the Bowser levels the search range shrinks with kpaGetLevel()
                             dist = sqrtf(dx * dx + dz * dz);
@@ -1059,15 +999,11 @@ void npcMain(void) {
                             // FAKE: discarded sqrtf call; removing it changes the object
                             sqrtf(dist);
 #endif
-#endif
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv);
                             dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
                             trig = 1;
                             {
                                 s32 marioFindable;
-#if VERSION <= VERSION_DEMO_US
-                                NPC_CHKMARIO(marioFindable);
-#else
                                 do {
                                     m = marioGetPtr();
                                     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
@@ -1096,7 +1032,6 @@ void npcMain(void) {
                                         marioFindable = 1;
                                     }
                                 } while (0);
-#endif
                                 if (!marioFindable) {
                                     trig = 0;
                                 } else {
@@ -3017,25 +2952,12 @@ void* fbatHitCheck(u32 flags, void* result) {
                     dz = mario->position.z - npc->position.z;
                     dx = mario->position.x - (*(f32*)&((NpcEntry*)npc)->position.x);
                     dist = sqrtf(dx * dx + dz * dz);
-#if VERSION <= VERSION_DEMO_US
-                    if (dist > 0.5f * (mario->wPlayerCollisionBox.x + (*(f32*)&((NpcEntry*)npc)->width)))
-                        continue;
-                    if (dist >= res.dist)
-                        continue;
-                    // FAKE: `(*(T*)&...)` reads, as above (FAKES.md, fbatHitCheck)
-                    if (noJump && !((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_STOPPED) && mario->mutekiTimer <= 0) {
-                        if ((*(s32*)&((NpcEntry*)npc)->attackMode) == 0 ||
-                            (evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId)) ? evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId))->wNpcEventType == 5 : 0)) {
-                            if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)
-                                continue;
-#else
                     if (dist > 0.5f * (mario->wPlayerCollisionBox.x + (*(f32*)&((NpcEntry*)npc)->width))) continue;
                     if (dist >= res.dist) continue;
                     if (noJump && !((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_STOPPED) && mario->mutekiTimer <= 0) {
                         if ((*(s32*)&((NpcEntry*)npc)->attackMode) == 0 ||
                             (evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId)) ? evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId))->wNpcEventType == NPC_EVENT_BLOW : 0)) {
                             if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue;
-#endif
                             res.kind = FBAT_HIT_TOUCH;
                             hit = npc;
                             res.dist = dist;
@@ -3162,17 +3084,9 @@ void* fbatHitCheck(u32 flags, void* result) {
                 angle = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-#if VERSION <= VERSION_DEMO_US
-                    FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 2)
-                    if (!_npcHitCheckHammerAllMotion(npc, &dist, r, angle))
-                        continue;
-                    if (dist >= res.dist)
-                        continue;
-#else
                     CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 2)
                     if (!_npcHitCheckHammerAllMotion(npc, &dist, r, angle)) continue;
                     if (dist >= res.dist) continue;
-#endif
                     res.dist = dist;
                     hit = npc;
                     res.kind = FBAT_HIT_HAMMER;
@@ -3248,17 +3162,9 @@ void* fbatHitCheck(u32 flags, void* result) {
                 angle2 = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-#if VERSION <= VERSION_DEMO_US
-                    FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 2)
-                    if (!_npcHitCheckHammerAllMotion(npc, &dist, r2, angle2))
-                        continue;
-                    if (dist >= res.dist)
-                        continue;
-#else
                     CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 2)
                     if (!_npcHitCheckHammerAllMotion(npc, &dist, r2, angle2)) continue;
                     if (dist >= res.dist) continue;
-#endif
                     res.dist = dist;
                     hit = npc;
                     {
@@ -3281,35 +3187,12 @@ void* fbatHitCheck(u32 flags, void* result) {
         party = partyGetPtr(marioGetPartyId());
         while (hit == NULL) {
             u32 b;
-#if VERSION <= VERSION_DEMO_US
-            f32 x, y, z, radius;
-            if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0)
-                break;
-            if (!fbat_canHit(npc))
-                break;
-#else
             f32 x, y, z, r;
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
             if (!fbat_canHit(npc)) break;
-#endif
             b = flags & FBAT_CHECK_CURRENT;
             if (b) {
                 s32 st;
-#if VERSION <= VERSION_DEMO_US
-                if (party == NULL)
-                    break;
-                if (party->memberKind != 2)
-                    break;
-                if (!(party->flags & PARTY_FLAG_IS_BEING_USED))
-                    break;
-                st = nokonokoGetStatus(party);
-                if (st < 2 || st > 5)
-                    break;
-            }
-            if (!b)
-                break;
-            radius = 0.5f * party->width;
-#else
                 if (party == NULL) break;
                 if (party->memberKind != PARTY_MEMBER_KOOPS) break;
                 if (!(party->flags & PARTY_FLAG_IS_BEING_USED)) break;
@@ -3318,23 +3201,14 @@ void* fbatHitCheck(u32 flags, void* result) {
             }
             if (!b) break;
             r = 0.5f * party->width;
-#endif
             y = 0.5f * party->height + party->position.y;
             x = party->position.x;
             z = party->position.z;
             npc = wp->entries;
             for (i = 0; i < total; i++, npc++) {
-#if VERSION <= VERSION_DEMO_US
-                FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 4)
-                if (!_npcHitCheckSphere(npc, &dist, x, y, z, radius))
-                    continue;
-                if (dist >= res.dist)
-                    continue;
-#else
                 CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 4)
                 if (!_npcHitCheckSphere(npc, &dist, x, y, z, r)) continue;
                 if (dist >= res.dist) continue;
-#endif
                 res.dist = dist;
                 hit = npc;
                 res.kind = FBAT_HIT_SHELL;
@@ -3348,44 +3222,19 @@ void* fbatHitCheck(u32 flags, void* result) {
     if (flags & FBAT_CHECK_BOMB) {
         party = partyGetPtr(marioGetPartyId());
         while (hit == NULL) {
-#if VERSION <= VERSION_DEMO_US
-            if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0)
-                break;
-            if (!fbat_canHit(npc))
-                break;
-            if (!(flags & FBAT_CHECK_CURRENT))
-                break;
-            if (party == NULL)
-                break;
-            if (party->memberKind != 3)
-                break;
-            // FAKE: `(*(T*)&...)` reads, as above (FAKES.md, fbatHitCheck)
-            if (!(*(u8*)&((FieldBattleData*)gp->fbatData)->sandersBombTrigger))
-                break;
-#else
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
             if (!fbat_canHit(npc)) break;
             if (!(flags & FBAT_CHECK_CURRENT)) break;
             if (party == NULL) break;
             if (party->memberKind != PARTY_MEMBER_BOBBERY) break;
             if (!(*(u8*)&((FieldBattleData*)gp->fbatData)->sandersBombTrigger)) break;
-#endif
             npc = wp->entries;
             flags &= FBAT_CHECK_ENEMY;
             for (i = 0; i < total; i++, npc++) {
-#if VERSION <= VERSION_DEMO_US
-                FH_NPC_FILTER(flags, 8)
-                if (!_npcHitCheckSphere(npc, &dist, party->position.x, 0.5f * party->height + party->position.y,
-                                        party->position.z, 30.0f))
-                    continue;
-                if (dist >= res.dist)
-                    continue;
-#else
                 CONTINUE_IF_NPC_NOT_HITTABLE(flags, 8)
                 if (!_npcHitCheckSphere(npc, &dist, party->position.x, 0.5f * party->height + party->position.y,
                                         party->position.z, 30.0f)) continue;
                 if (dist >= res.dist) continue;
-#endif
                 res.dist = dist;
                 hit = npc;
                 res.kind = FBAT_HIT_BOMB;

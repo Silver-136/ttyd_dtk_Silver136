@@ -125,48 +125,17 @@ BattleUnitKind unit_super_mahorn = {
     9999, // pbSoftCap
     48, // width
     44, // height
-#if VERSION <= VERSION_DEMO_US
-    0,
-    44,
-    0.0f,
-    22.0f,
-    0.0f,
-    0,
-    -9,
-#else
     {0, 44}, // hitOffset
     {0.0f, 22.0f, 0.0f}, // centerOffset
     {0, -9}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {24.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
-#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
-    0.0f,
-    24.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    24.0f,
-    0.0f,
-    0.0f,
-    16.0f,
-    28.6f,
-    10.0f,
-    0.0f,
-    22.0f,
-    0.0f,
-#else
     {24.0f, 0.0f, 0.0f}, // bintaHitOffset
     {16.0f, 28.6f, 10.0f}, // kissHitOffset
     {0.0f, 22.0f, 0.0f}, // cutBaseOffset
-#endif
     48.0f, // cutWidth
     44.0f, // cutHeight
     0, // turnOrder
@@ -363,14 +332,10 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#if VERSION <= VERSION_DEMO_US
-    0,
-#else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
-#endif
 #endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier

@@ -308,21 +308,13 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
         // block is high and sinks 225 units, with it set the block is low and rises.
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(1, 0)
-#if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(LSWF(6), 0)
-#else
             IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
-#endif
                 SET_VALUE(LW(10), 0)
             ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
         ELSE
-#if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(LSWF(6), 0)
-#else
             IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
-#endif
                 SET_VALUE(LW(10), 1)
             ELSE
                 SET_VALUE(LW(10), 0)
@@ -341,15 +333,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
             SET_FLOAT_VALUE(LW(9), 0)
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        BEGIN_SIBLING_EVENT
-            WAIT_FRAMES(10)
-            CALL(evt_sub_rumble_onoff, 0, 0)
-            WAIT_MS(300)
-            CALL(evt_sub_rumble_onoff, 1, 0)
-        END_SIBLING_EVENT
-        BEGIN_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
 #else
@@ -361,7 +344,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
 #endif
-#endif
             WAIT_FRAMES(10)
             CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
             LABEL(0)
@@ -371,9 +353,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-#if VERSION <= VERSION_DEMO_US
-        END_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
         END_INLINE_EVENT
 #else
@@ -381,7 +360,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
 #endif
         // The camera shakes and the block starts to move, with a heavy or light floating-block sound depending
         // on its size.
-#endif
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("mobj_fltbl01"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("mobj_fltbl01"), LW(11))
@@ -442,17 +420,10 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
                 SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
                 SET_FLOAT_VALUE(LW(8), 0)
                 SET_FLOAT_VALUE(LW(10), 0)
-#if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(LSWF(6), 0)
-                    SET_VALUE(LSWF(6), 1)
-                ELSE
-                    SET_VALUE(LSWF(6), 0)
-#else
                 IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
                     SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 1)
                 ELSE
                     SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
-#endif
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw01"))
             END_IF
@@ -504,14 +475,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             END_IF
         END_INLINE_EVENT
         IF_INT_EQUAL(LW(10), 1)
-#if VERSION <= VERSION_DEMO_US
-            BEGIN_SIBLING_EVENT
-                CALL(evt_sub_rumble_onoff, 0, 0)
-                WAIT_MS(300)
-                CALL(evt_sub_rumble_onoff, 1, 0)
-            END_SIBLING_EVENT
-            BEGIN_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
             BEGIN_INLINE_EVENT
 #else
@@ -522,7 +485,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
 #endif
-#endif
                 CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 LABEL(2)
                 CALL(evt_sub_intpl_get_value)
@@ -531,16 +493,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-#if VERSION <= VERSION_DEMO_US
-            END_SIBLING_EVENT
-            WAIT_MS(1000)
-    END_IF
-    // The block's saved up/down state is flipped.
-    IF_INT_EQUAL(LSWF(6), 0)
-        SET_VALUE(LSWF(6), 1)
-    ELSE
-        SET_VALUE(LSWF(6), 0)
-#else
 #if VERSION >= VERSION_US
             END_INLINE_EVENT
 #else
@@ -553,7 +505,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 1)
         ELSE
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
-#endif
         END_IF
         // Dead code: IF_INT_NOT_EQUAL(1, 0) is always true, so this branch (the switch just resetting after a
         // short wait) never runs.
@@ -619,21 +570,13 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
         // back.
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(0, 0)
-#if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(LSWF(7), 0)
-#else
             IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
-#endif
                 SET_VALUE(LW(10), 0)
             ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
         ELSE
-#if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(LSWF(7), 0)
-#else
             IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
-#endif
                 SET_VALUE(LW(10), 1)
             ELSE
                 SET_VALUE(LW(10), 0)
@@ -652,15 +595,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
             SET_FLOAT_VALUE(LW(9), 0)
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        BEGIN_SIBLING_EVENT
-            WAIT_FRAMES(10)
-            CALL(evt_sub_rumble_onoff, 0, 0)
-            WAIT_MS(300)
-            CALL(evt_sub_rumble_onoff, 1, 0)
-        END_SIBLING_EVENT
-        BEGIN_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
 #else
@@ -672,7 +606,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
 #endif
-#endif
             WAIT_FRAMES(10)
             CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
             LABEL(0)
@@ -682,9 +615,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-#if VERSION <= VERSION_DEMO_US
-        END_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
         END_INLINE_EVENT
 #else
@@ -692,7 +622,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
 #endif
         // The camera shakes and the block starts to move, with a heavy or light floating-block sound depending
         // on its size.
-#endif
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("mobj_fltbl02"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("mobj_fltbl02"), LW(11))
@@ -753,17 +682,10 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
                 SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
                 SET_FLOAT_VALUE(LW(8), 0)
                 SET_FLOAT_VALUE(LW(10), 0)
-#if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(LSWF(7), 0)
-                    SET_VALUE(LSWF(7), 1)
-                ELSE
-                    SET_VALUE(LSWF(7), 0)
-#else
                 IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
                     SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 1)
                 ELSE
                     SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
-#endif
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw02"))
             END_IF
@@ -815,14 +737,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             END_IF
         END_INLINE_EVENT
         IF_INT_EQUAL(LW(10), 1)
-#if VERSION <= VERSION_DEMO_US
-            BEGIN_SIBLING_EVENT
-                CALL(evt_sub_rumble_onoff, 0, 0)
-                WAIT_MS(300)
-                CALL(evt_sub_rumble_onoff, 1, 0)
-            END_SIBLING_EVENT
-            BEGIN_SIBLING_EVENT
-#else
 #if VERSION >= VERSION_US
             BEGIN_INLINE_EVENT
 #else
@@ -833,7 +747,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
 #endif
-#endif
                 CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 LABEL(2)
                 CALL(evt_sub_intpl_get_value)
@@ -842,16 +755,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-#if VERSION <= VERSION_DEMO_US
-            END_SIBLING_EVENT
-            WAIT_MS(1000)
-    END_IF
-    // The block's saved up/down state is flipped.
-    IF_INT_EQUAL(LSWF(7), 0)
-        SET_VALUE(LSWF(7), 1)
-    ELSE
-        SET_VALUE(LSWF(7), 0)
-#else
 #if VERSION >= VERSION_US
             END_INLINE_EVENT
 #else
@@ -864,7 +767,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 1)
         ELSE
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
-#endif
         END_IF
         // Big block A is not broken yet: the block stays put and the switch resets after a short wait.
     ELSE

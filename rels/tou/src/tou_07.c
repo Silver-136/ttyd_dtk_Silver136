@@ -603,7 +603,6 @@ EVT_END()
  * and the partners return.
  */
 EVT_BEGIN(evt_tou_bed)
-#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(tou_07_mario_keyoff_check, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -611,7 +610,6 @@ EVT_BEGIN(evt_tou_bed)
     END_IF
 #endif
     // Work out which Glitz Pit room's bed this is, since the camera and bed spot differ per room.
-#endif
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
@@ -645,13 +643,8 @@ EVT_BEGIN(evt_tou_bed)
             CALL(evt_cam3d_evt_set, -75, 160, 266, 155, 65, -10, 0, EASING_SINE_IN_OUT)
         END_IF
         WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-        // Mario hops into the bed.
-        CALL(evt_mario_flag_onoff, 1, 768)
-#else
         // Mario hops into the bed.
         CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL)
-#endif
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP5"), LW(0), LW(1), LW(2), 0)
@@ -703,11 +696,7 @@ EVT_BEGIN(evt_tou_bed)
         DELETE_EVENT(LW(10))
         CALL(paper_off)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mario_flag_onoff, 0, 768)
-#else
         CALL(evt_mario_flag_onoff, 0, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL)
-#endif
         IF_INT_EQUAL(LF(0), 1)
             IF_INT_NOT_EQUAL(LW(12), 0)
                 CALL(evt_mario_set_party_pos, 0, LW(12), 75, 37, 100)
