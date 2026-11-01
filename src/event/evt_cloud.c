@@ -22,6 +22,10 @@
 #include "driver/mapdrv.h"
 #include "evt/evt_img.h"
 
+// CloudWork.flags
+#define CLOUD_FLAG_IN_USE 1     // slot taken (evt_cloud_ent)
+#define CLOUD_FLAG_GROUP_LIST 2 // groupNames holds a NULL-terminated list of names
+
 typedef struct CloudWork {
     u16 flags; // 0x0
     s32 state; // 0x4
@@ -105,7 +109,7 @@ static USER_FUNC(evt_cloud_main) {
             cloud_once_flag = 1;
             animPaperPoseEntry(wp->animName, group);
             offscreenEntry(wp->offscreenName);
-            if (!(wp->flags & 2)) {
+            if (!(wp->flags & CLOUD_FLAG_GROUP_LIST)) {
                 mapGrpSetOffScreen(wp->groupName, wp->offscreenName);
             } else {
                 char** p = wp->groupNames;
@@ -248,7 +252,7 @@ static USER_FUNC(evt_cloud_main) {
             break;
         case 99:
             img = imgNameToPtr(wp->imgName, group);
-            if (!(wp->flags & 2)) {
+            if (!(wp->flags & CLOUD_FLAG_GROUP_LIST)) {
                 mapGrpClearOffScreen(wp->groupName);
             } else {
                 char** p = wp->groupNames;
@@ -302,7 +306,7 @@ USER_FUNC(evt_cloud_ent) {
     endEvt = (void*)evtGetValue(event, args[3]);
 
     for (i = 0; i < 16; i++) {
-        if (!(cloud[i].flags & 1)) {
+        if (!(cloud[i].flags & CLOUD_FLAG_IN_USE)) {
             break;
         }
     }
@@ -310,7 +314,7 @@ USER_FUNC(evt_cloud_ent) {
         return EVT_RETURN_DONE;
     }
     wp = &cloud[i];
-    wp->flags |= 1;
+    wp->flags |= CLOUD_FLAG_IN_USE;
     strncpy(wp->animName, "P_oof_cloud_1", sizeof(wp->animName));
     if (multi == 0) {
         strncpy(wp->groupName, groupName, sizeof(wp->groupName));
@@ -330,7 +334,7 @@ USER_FUNC(evt_cloud_ent) {
     cloud_p = wp;
     if (multi != 0) {
         wp->groupNames = (char**)groupName;
-        wp->flags |= 2;
+        wp->flags |= CLOUD_FLAG_GROUP_LIST;
     }
     return EVT_RETURN_DONE;
 }

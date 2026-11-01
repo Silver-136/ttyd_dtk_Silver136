@@ -21,6 +21,10 @@
 #include "evt/evt_movefloor.h"
 
 
+// MovingFloor.flags
+#define MOVING_FLOOR_NO_STOP_TIME 1 // moving_floor_get_stmsec returns 0
+#define MOVING_FLOOR_PAUSE 2        // read by moving_floor_get_pause; nothing in this file sets it
+
 typedef struct MovingFloor {
     u32 flags;       // 0x0
     s32 kind;        // 0x4
@@ -138,7 +142,7 @@ USER_FUNC(evt_moving_floor_alloc) {
     w->kind = event->lwData[12];
     switch (w->mode) {
         case 0:
-            w->flags &= ~1;
+            w->flags &= ~MOVING_FLOOR_NO_STOP_TIME;
             w->idx = 0;
             w->scale = 1.0f;
             w->a[0] = event->lwData[2];
@@ -192,7 +196,7 @@ USER_FUNC(evt_moving_floor_alloc) {
             w->turn = event->lwData[11];
             break;
         case 5:
-            w->flags &= ~1;
+            w->flags &= ~MOVING_FLOOR_NO_STOP_TIME;
             w->idx = 0;
             w->scale = 1.0f;
             w->a[0] = event->lwData[2];
@@ -264,56 +268,56 @@ USER_FUNC(evt_moving_floor_init) {
                 case 0:
                     dir = 1;
                     t = 0.5f;
-                    w->flags &= ~1;
+                    w->flags &= ~MOVING_FLOOR_NO_STOP_TIME;
                     w->idx = 0;
                     w->scale = 1.0f;
                     break;
                 case 1:
                     dir = 0;
                     t = 0.0f;
-                    w->flags |= 1;
+                    w->flags |= MOVING_FLOOR_NO_STOP_TIME;
                     w->idx = 0;
                     w->scale = 0.5f;
                     break;
                 case 2:
                     dir = 1;
                     t = 0.5f;
-                    w->flags &= ~1;
+                    w->flags &= ~MOVING_FLOOR_NO_STOP_TIME;
                     w->idx = 2;
                     w->scale = 1.0f;
                     break;
                 case 3:
                     dir = 0;
                     t = 0.0f;
-                    w->flags |= 1;
+                    w->flags |= MOVING_FLOOR_NO_STOP_TIME;
                     w->idx = 2;
                     w->scale = 0.5f;
                     break;
                 case 4:
                     dir = 0;
                     t = 0.5f;
-                    w->flags &= ~1;
+                    w->flags &= ~MOVING_FLOOR_NO_STOP_TIME;
                     w->idx = 0;
                     w->scale = 1.0f;
                     break;
                 case 5:
                     dir = 1;
                     t = 0.0f;
-                    w->flags |= 1;
+                    w->flags |= MOVING_FLOOR_NO_STOP_TIME;
                     w->idx = 0;
                     w->scale = 0.5f;
                     break;
                 case 6:
                     dir = 0;
                     t = 0.5f;
-                    w->flags &= ~1;
+                    w->flags &= ~MOVING_FLOOR_NO_STOP_TIME;
                     w->idx = 2;
                     w->scale = 1.0f;
                     break;
                 case 7:
                     dir = 1;
                     t = 0.0f;
-                    w->flags |= 1;
+                    w->flags |= MOVING_FLOOR_NO_STOP_TIME;
                     w->idx = 2;
                     w->scale = 0.5f;
                     break;
@@ -422,7 +426,7 @@ USER_FUNC(moving_floor_get_end) {
 USER_FUNC(moving_floor_get_pause) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
-    if (w->flags & 2) {
+    if (w->flags & MOVING_FLOOR_PAUSE) {
         evtSetValue(event, args[1], 1);
     } else {
         evtSetValue(event, args[1], 0);
@@ -493,7 +497,7 @@ USER_FUNC(moving_floor_getf_now_bpoint) {
 USER_FUNC(moving_floor_get_stmsec) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
-    if (w->flags & 1) {
+    if (w->flags & MOVING_FLOOR_NO_STOP_TIME) {
         evtSetValue(event, args[1], 0);
     } else {
 #if VERSION == VERSION_EU
