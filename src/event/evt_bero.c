@@ -194,32 +194,38 @@ void bero_clear_Offset(void) {
     BeroOZ = 0.0f;
 }
 
+/** Finds hit object `name` in the entrance table; *index (optional) is its position, or that of the end marker. */
+static inline void bero_search_name(BeroEntry** table, const char* name, s32* index) {
+    BeroEntry** entry;
+    const char* hitName;
+
+    if (index != NULL) {
+        *index = 0;
+    }
+    entry = table;
+    while (1) {
+        hitName = (*entry)->hitName;
+        if (!hitName || !strcmp(hitName, name)) {
+            break;
+        }
+        entry++;
+        if (index != NULL) {
+            (*index)++;
+        }
+    }
+}
+
 /**
  * Turns an entrance reference into its table index:
  * values 0-15 are already indices, anything else is taken as a hit object name and looked up in BeroINFOARR.
  */
-// FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 s32 bero_id_filter(EvtWord id) {
-    BeroEntry** temp, **table = BeroINFOARR;
+    BeroEntry** table = BeroINFOARR;
     s32 newId = id;
-    const char *string, *test;
 
     if (id < 0 || id >= 16) {
-        test = (const char*)id;
-        if (&newId != NULL) {
-            newId = 0;
-        }
-        temp = table;
-        while (1) {
-            string = (*temp)->hitName;
-            if (!string || !strcmp(string, test)) {
-                break;
-            }
-            temp++;
-            if (&newId != NULL) {
-                newId++;
-            }
-        }
+        const char* name = (const char*)id;
+        bero_search_name(table, name, &newId);
     }
     return newId;
 }
@@ -1068,30 +1074,14 @@ USER_FUNC(bero_set_disp_position_pipe) {
  * Marks entrance args[0] (index or name) as registered in BeroSW;
  * LW(0) = 1 if it already was (so the caller skips a double registration), LW(1) = its index.
  */
-// FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 USER_FUNC(evt_bero_switch_on) {
     BeroEntry** table = BeroINFOARR;
     EvtWord* args = event->args;
-    BeroEntry** temp;
     EvtWord id = evtGetValue(event, *args++);
     s32 newId = id;
-    const char *string, *test;
     if (id < 0 || id >= 16) {
-        test = (const char*)id;
-        if (&newId != NULL) {
-            newId = 0;
-        }
-        temp = table;
-        while (1) {
-            string = (*temp)->hitName;
-            if (!string || !strcmp(string, test)) {
-                break;
-            }
-            temp++;
-            if (&newId != NULL) {
-                newId++;
-            }
-        }
+        const char* name = (const char*)id;
+        bero_search_name(table, name, &newId);
     }
     if (BeroSW[newId] == 1) {
         event->lwData[0] = 1;
@@ -1104,30 +1094,14 @@ USER_FUNC(evt_bero_switch_on) {
 }
 
 /** Marks entrance args[0] (index or name) as unregistered; LW(0) = 1 if it already was, LW(1) = its index. */
-// FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 USER_FUNC(evt_bero_switch_off) {
     BeroEntry** table = BeroINFOARR;
     EvtWord* args = event->args;
-    BeroEntry** temp;
     EvtWord id = evtGetValue(event, *args++);
     s32 newId = id;
-    const char *string, *test;
     if (id < 0 || id >= 16) {
-        test = (const char*)id;
-        if (&newId != NULL) {
-            newId = 0;
-        }
-        temp = table;
-        while (1) {
-            string = (*temp)->hitName;
-            if (!string || !strcmp(string, test)) {
-                break;
-            }
-            temp++;
-            if (&newId != NULL) {
-                newId++;
-            }
-        }
+        const char* name = (const char*)id;
+        bero_search_name(table, name, &newId);
     }
     if (BeroSW[newId] != 1) {
         event->lwData[0] = 1;
@@ -1140,30 +1114,14 @@ USER_FUNC(evt_bero_switch_off) {
 }
 
 /** Puts the index of entrance args[0] (index or hit name) into LW(1). */
-// FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 USER_FUNC(evt_bero_get_number) {
     BeroEntry** table = BeroINFOARR;
     EvtWord* args = event->args;
-    BeroEntry** temp;
     EvtWord id = evtGetValue(event, *args++);
     s32 newId = id;
-    const char *string, *test;
     if (id < 0 || id >= 16) {
-        test = (const char*)id;
-        if (&newId != NULL) {
-            newId = 0;
-        }
-        temp = table;
-        while (1) {
-            string = (*temp)->hitName;
-            if (!string || !strcmp(string, test)) {
-                break;
-            }
-            temp++;
-            if (&newId != NULL) {
-                newId++;
-            }
-        }
+        const char* name = (const char*)id;
+        bero_search_name(table, name, &newId);
     }
     event->lwData[1] = newId;
     return EVT_RETURN_DONE;
@@ -1256,29 +1214,14 @@ USER_FUNC(evt_bero_move_mario_speed) {
 }
 
 /** Replaces entrance args[0] (index or hit name) in BeroINFOARR with the BeroEntry pointer args[1]. */
-// FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 USER_FUNC(evt_bero_overwrite) {
-    BeroEntry** temp, **table = BeroINFOARR;
+    BeroEntry** table = BeroINFOARR;
     EvtWord* args = event->args;
     EvtWord id = evtGetValue(event, args[0]);
     s32 newId = id;
-    const char *string, *test;
     if (id < 0 || id >= 16) {
-        test = (const char*)id;
-        if (&newId != NULL) {
-            newId = 0;
-        }
-        temp = table;
-        while (1) {
-            string = (*temp)->hitName;
-            if (!string || !strcmp(string, test)) {
-                break;
-            }
-            temp++;
-            if (&newId != NULL) {
-                newId++;
-            }
-        }
+        const char* name = (const char*)id;
+        bero_search_name(table, name, &newId);
     }
     BeroINFOARR[newId] = (BeroEntry*)evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;

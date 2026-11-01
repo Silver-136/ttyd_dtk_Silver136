@@ -466,14 +466,9 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_mario.c | evt_mario_set_motion | function-pointer cast passes the s32 without narrowing to MarioMotion; marioChgMot(evtGetValue(...)) changes the object | see comment |
 | Both | src/event/evt_mario.c | evt_koopa_fire | s32 -> f32 -> s32 round trip; assigning sysMsec2Frame directly changes the object | see comment |
 | Both | src/event/evt_batstage.c | evt_batstage_light_set_player_on | unused zeroed array; removing it changes the object | see comment |
-| Both | src/event/evt_bero.c | bero_id_filter | `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object | see comment |
 | Both | src/event/evt_bero.c | bero_get_kind | dead test (kind is 20000 in this case); removing it changes the object | see comment |
 | Both | src/event/evt_bero.c | bero_get_position_normal | two-step product; `deg = (angle * 360.0f) * 0.125f` changes the object | see comment |
-| Both | src/event/evt_bero.c | evt_bero_switch_on | `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object | see comment |
-| Both | src/event/evt_bero.c | evt_bero_switch_off | `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object | see comment |
-| Both | src/event/evt_bero.c | evt_bero_get_number | `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object | see comment |
 | Both | src/event/evt_bero.c | evt_bero_move_mario_speed | spare temporary for BeroSX; using BeroSX directly changes the object | see comment |
-| Both | src/event/evt_bero.c | evt_bero_overwrite | `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object | see comment |
 | Both | src/event/evt_cam.c | evt_cam3d_evt_set_at | unused zero Vec expression; removing it changes the object | see comment |
 | Both | src/event/evt_cam.c | evt_cam3d_evt_set_rel | unused zero Vec expressions; removing them changes the object | see comment |
 | Both | src/event/evt_case.c | _caseEntry | spare pointer to setup; using setup directly changes the object | see comment |
