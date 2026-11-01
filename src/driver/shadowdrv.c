@@ -853,36 +853,18 @@ void cylinderShadowDraw(CameraId cameraId, void* param) {
 
     view = camGetCurPtr()->view;
     for (i = 0; i < cswp->numEntries; i++, entry++) {
-#if VERSION <= VERSION_DEMO_US
-        if (!entry->size)
-#else
         if (!entry->size) {
-#endif
             continue;
-#if VERSION <= VERSION_DEMO_US
-        if (entry->mode != 2)
-#else
         }
         if (entry->mode != 2) {
-#endif
             continue;
-#if VERSION <= VERSION_DEMO_US
-        if (!(entry->flags & SHADOW_ENTRY_PLACED))
-#else
         }
         if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
-#endif
             continue;
-#if VERSION <= VERSION_DEMO_US
-        if (entry->camId != cameraId)
-#else
         }
         if (entry->camId != cameraId) {
-#endif
             continue;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         if (cameraId == CAMERA_OFFSCREEN2) {
             sysWaitDrawSync();
             GXClearBoundingBox();

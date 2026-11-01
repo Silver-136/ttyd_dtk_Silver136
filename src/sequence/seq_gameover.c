@@ -358,9 +358,6 @@ void seq_gameOverMain(SequenceWork* work) {
             mapLoad("sys_00");
             camera = camGetPtr(CAMERA_3D);
             mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-            {
-#endif
             camera->marioPos.x = 0.0f;
             camera->marioPos.y = 0.01f;
             camera->marioPos.z = 0.0f;
@@ -369,9 +366,6 @@ void seq_gameOverMain(SequenceWork* work) {
             camera->marioAt.z = camera->marioPos.z;
             mario->position = (Vec){0.0f, 0.0f, 0.0f};
             mario->camTarget = mario->position;
-#if VERSION <= VERSION_DEMO_US
-            }
-#endif
             camRoadReset();
             camShiftReset();
             work->state++;

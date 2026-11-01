@@ -94,81 +94,33 @@ USER_FUNC(pre_kurio_use) {
         }
         mobj = mobjHitObjPtrToPtr(hit);
         if (!strcmp(mobj->animName, "MOBJ_Lv1Block")) {
-#if VERSION <= VERSION_DEMO_US
-            if (pouchGetHammerLv() < 1)
-#else
             if (pouchGetHammerLv() < 1) {
-#endif
                 msg = "obj_hlp_block_y_0";
-#if VERSION <= VERSION_DEMO_US
-            else
-#else
             } else {
-#endif
                 msg = "obj_hlp_block_y_1";
-#if VERSION > VERSION_DEMO_US
             }
-#endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBlock")) {
-#if VERSION <= VERSION_DEMO_US
-            if (pouchGetHammerLv() < 1)
-#else
             if (pouchGetHammerLv() < 1) {
-#endif
                 msg = "obj_hlp_block_y_0";
-#if VERSION <= VERSION_DEMO_US
-            else
-#else
             } else {
-#endif
                 msg = "obj_hlp_block_y_1";
-#if VERSION > VERSION_DEMO_US
             }
-#endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBigBlock")) {
-#if VERSION <= VERSION_DEMO_US
-            if (pouchGetHammerLv() < 1)
-#else
             if (pouchGetHammerLv() < 1) {
-#endif
                 msg = "obj_hlp_block_y_0";
-#if VERSION <= VERSION_DEMO_US
-            else if (pouchGetHammerLv() < 2)
-#else
             } else if (pouchGetHammerLv() < 2) {
-#endif
                 msg = "obj_hlp_block_y_2";
-#if VERSION <= VERSION_DEMO_US
-            else
-#else
             } else {
-#endif
                 msg = "obj_hlp_block_y_3";
-#if VERSION > VERSION_DEMO_US
             }
-#endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv2Block") || !strcmp(mobj->animName, "MOBJ_Lv2BigBlock")) {
-#if VERSION <= VERSION_DEMO_US
-            if (pouchGetHammerLv() < 1)
-#else
             if (pouchGetHammerLv() < 1) {
-#endif
                 msg = "obj_hlp_block_s_0";
-#if VERSION <= VERSION_DEMO_US
-            else if (pouchGetHammerLv() < 3)
-#else
             } else if (pouchGetHammerLv() < 3) {
-#endif
                 msg = "obj_hlp_block_s_1";
-#if VERSION <= VERSION_DEMO_US
-            else
-#else
             } else {
-#endif
                 msg = "obj_hlp_block_s_2";
-#if VERSION > VERSION_DEMO_US
             }
-#endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv2BigBigBlock")) {
             if (pouchGetHammerLv() < 1) {
                 msg = "obj_hlp_block_s_0";

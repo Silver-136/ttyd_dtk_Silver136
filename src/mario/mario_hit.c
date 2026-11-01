@@ -3114,15 +3114,9 @@ void marioCheckWallShip(f32 dx, f32 dz) {
                 mario->wallPushTimer = 20;
                 attr = hitGetAttr(hit);
                 r = !(attr & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
-#if VERSION <= VERSION_DEMO_US
-                if (r)
-#else
                 if (r) {
-#endif
                     mario->hitobjPush = hit;
-#if VERSION > VERSION_DEMO_US
                 }
-#endif
             }
         }
         mario->position = pos;

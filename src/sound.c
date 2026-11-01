@@ -2235,16 +2235,10 @@ void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
             }
         }
         if (stream->count == 2) {
-#if VERSION <= VERSION_DEMO_US
-            {
-#endif
             u8* p = (u8*)stream->entries[1].buffer;
             u32 n;
             for (n = size; n != 0; n--) {
                 *p++ = 0;
-#if VERSION <= VERSION_DEMO_US
-                }
-#endif
             }
         }
         pan = 0;

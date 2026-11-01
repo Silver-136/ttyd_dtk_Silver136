@@ -904,9 +904,6 @@ BOOL chkCollision(f32* outY) {
     mario = marioGetPtr();
     sincosf(&s0, &c0, 90.0f + mario->motPlane->pitch);
     sincosf(&s1, &c1, mario->motPlane->yaw);
-#if VERSION <= VERSION_DEMO_US
-    {
-#endif
     x = mario->rotOfs.x + (mario->position.x + mario->dispOfs.x);
     y = mario->rotOfs.y + (mario->position.y + mario->dispOfs.y);
     z = mario->rotOfs.z + (mario->position.z + mario->dispOfs.z);
@@ -931,9 +928,6 @@ BOOL chkCollision(f32* outY) {
     y += planeData[39] * (s0 * c2);
     z += planeData[39] * (c0 * c1) - planeData[39] * (s2 * s1);
     v2 = (Vec){x, y, z};
-#if VERSION <= VERSION_DEMO_US
-    }
-#endif
     mario->motPlane->frontPos = v2;
     x = mario->motPlane->frontPos.x - 10.0f * s1;
     y = mario->motPlane->frontPos.y;

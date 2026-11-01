@@ -1403,22 +1403,12 @@ void marioCtrlOff2Main(void) {
     MarioMotion mot = wp->currMotionId;
     f32 y;
 
-#if VERSION <= VERSION_DEMO_US
-    if (mot == MARIO_MOTION_PLANE)
-#else
     if (mot == MARIO_MOTION_PLANE) {
-#endif
         return;
-#if VERSION <= VERSION_DEMO_US
-    if (mot == MARIO_MOTION_SHIP)
-#else
     }
     if (mot == MARIO_MOTION_SHIP) {
-#endif
         return;
-#if VERSION > VERSION_DEMO_US
     }
-#endif
     if (mot == MARIO_MOTION_DAMAGE || mot == MARIO_MOTION_DAMAGE_TOGE || mot == MARIO_MOTION_BOTTOMLESS ||
         mot == MARIO_MOTION_JABARA || mot == MARIO_MOTION_YOSHI ||
 #if VERSION <= VERSION_DEMO_US

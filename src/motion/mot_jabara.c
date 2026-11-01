@@ -484,15 +484,9 @@ void mot_jabara(void) {
             mario->currSubMotionId = 0x46;
             mario->multiTimer = 10;
             mario->mot.jabara.floorY = (s32)(hitY + mario->wPlayerCollisionBox.y);
-#if VERSION <= VERSION_DEMO_US
-            {
-#endif
             mario->position.z = (s32)((100.0f * jabaraHitPosZ(mario->hitobjHead) + 0.5f) / 100.0f);
             mario->position.y = (f32)mario->mot.jabara.floorY - mario->wPlayerCollisionBox.y - 3.5f;
             mario->rotOfs.y = 9.0f + mario->wPlayerCollisionBox.y;
-#if VERSION <= VERSION_DEMO_US
-            }
-#endif
             marioPaperOff();
             camFollowYOn();
             mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
