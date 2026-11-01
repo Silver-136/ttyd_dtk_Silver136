@@ -1476,8 +1476,8 @@ s32 puniPositionCheck(PuniData* p) {
         return 1;
     }
     pos = p->pos;
-    dir = puni_fall_dir;
     pos.y += 1.0f;
+    dir = puni_fall_dir;
     dist = 3.0f;
     if (hitCheckFilter(NULL, &hit.x, &hit.y, &hit.z, &dist, &nrm.x, &nrm.y, &nrm.z, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z) == NULL) {
         return 2;
@@ -5626,7 +5626,9 @@ void puni_puni_main(void) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
-                    puniModeDeadSfx(p, "SFX_STG2_FIGHT_TOGE3");
+                    // FAKE: the (u32) round trip keeps the name out of constant propagation, so its address is hoisted into a saved
+                    // register before the loop as in the demo.
+                    puniModeDeadSfx(p, (const char*)(u32)"SFX_STG2_FIGHT_TOGE3");
                     break;
                 case PUNI_MODE_WIND:
                     p->flags &= ~PUNI_FLAG_STRAY;

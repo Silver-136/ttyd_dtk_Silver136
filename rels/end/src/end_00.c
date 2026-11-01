@@ -2274,7 +2274,7 @@ gp->language = 1;
         JUTFontSetup(1);
 msgLoad("global", 1);
 }
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/ending.tpl", getMarioStDvdRoot()) == 0) {
+    if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/ending.tpl", getMarioStDvdRoot()) == 0) {
         return 0;
     }
     if (end_wp->tpl == NULL) {

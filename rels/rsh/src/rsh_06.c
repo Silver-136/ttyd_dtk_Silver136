@@ -1561,7 +1561,7 @@ if (mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOT
             if ((*pose->mtx)[0][3] > 100.0f) {
                 { // FAKE: hand-inlined randf(0.0f, 5.0f) (same rand() call, same r*5+0 then +c), so the constant is reloaded after the call as in the target
 #if VERSION <= VERSION_DEMO_US
-                    f32 rnd = rand() / 32767.0f;
+                    f32 r = rand() / 32767.0f;
 #else
                     f32 k;
                     f32 r = rand() / 32767.0f;
@@ -1572,7 +1572,7 @@ if (mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOT
             if ((*pose->mtx)[0][3] < -1870.0f) {
                 {
 #if VERSION <= VERSION_DEMO_US
-                    f32 rnd = rand() / 32767.0f;
+                    f32 r = rand() / 32767.0f;
 #else
                     f32 k;
                     f32 r = rand() / 32767.0f;
@@ -1584,7 +1584,7 @@ if (mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOT
                 if ((*pose->mtx)[2][3] > 45.0f) {
                     {
 #if VERSION <= VERSION_DEMO_US
-                        f32 rnd = rand() / 32767.0f;
+                        f32 r = rand() / 32767.0f;
 #else
                         f32 k;
                         f32 r = rand() / 32767.0f;
@@ -1595,7 +1595,7 @@ if (mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOT
                 if ((*pose->mtx)[2][3] < -45.0f) {
                     {
 #if VERSION <= VERSION_DEMO_US
-                        f32 rnd = rand() / 32767.0f;
+                        f32 r = rand() / 32767.0f;
 #else
                         f32 k;
                         f32 r = rand() / 32767.0f;

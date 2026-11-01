@@ -1137,7 +1137,7 @@ GXInitTexObj(&tex, broken_wp->tex->address, 608, 480, GX_TF_RGBA8, GX_CLAMP, GX_
  */
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(tiz_broken) {
-s32 x;
+    s32 x;
     s32 y;
     f32 inv;
     s32 done = 0;
@@ -1154,8 +1154,8 @@ s32 x;
 
     if (isFirstCall) {
         memset(broken_wp, 0, sizeof(BrokenWork));
-broken_wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), 1);
-broken_wp->pieces = smartAlloc(sizeof(BrokenPiece) * 31 * 39, 1);
+        broken_wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), 1);
+        broken_wp->pieces = smartAlloc(sizeof(BrokenPiece) * 31 * 39, 1);
         broken_wp->copied = 0;
         p = broken_wp->pieces->address;
         for (y = 0; y < 30; y++) {
@@ -1176,10 +1176,10 @@ broken_wp->pieces = smartAlloc(sizeof(BrokenPiece) * 31 * 39, 1);
                     }
                 }
                 if (dx || dy) {
-len = sqrtf(dx * dx + dy * dy);
+                    len = sqrtf(dx * dx + dy * dy);
                     nx = dx / len;
                     ny = dy / len;
-} else {
+                } else {
                     nx = ny = len = 0.0f;
                 }
                 p->state = 0;
@@ -1192,11 +1192,11 @@ len = sqrtf(dx * dx + dy * dy);
                 p->vel.x = -nx * param_tbl[1];
                 p->vel.y = -ny * param_tbl[1];
                 p->vel.z = 10.0f;
-angle = 6.2831855f * angleABf(0.0f, 0.0f, dx, dy) / 360.0f;
-                nx = param_tbl[3];
-                p->gx = nx * polySinf(angle);
-                p->gy = nx * -polyCosf(angle);
-p++;
+                angle = 6.2831855f * angleABf(0.0f, 0.0f, dx, dy) / 360.0f;
+                inv = param_tbl[3];
+                p->gx = inv * polySinf(angle);
+                p->gy = inv * -polyCosf(angle);
+                p++;
             }
             p++;
         }

@@ -1574,6 +1574,7 @@ config.libs = [
         [
             Object(MatchingFor("G8MJ01", "G8ME01"), "end.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "end_00.c", extra_cflags=["-inline auto,deferred"]),
+            Object(MatchingFor("G8MJ01_DEMO"), "end_module.c", extra_cflags=["-inline auto,deferred"]),
         ]
     ),
     Rel(

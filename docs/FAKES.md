@@ -606,3 +606,4 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | rels/muj/src/muj_12.c | muj_item_move_3d_position | reuse the expired first-call parameter; direct elapsed arguments change the object. | see comment |
 | Both | rels/win/src/window/win_00.c | win_item_move_3d_position | elapsed is copied into isFirstCall; using elapsed directly changes the object. | see comment |
 | PAL | rels/tst/src/unit/unit_powan.c | powan_rider_follow | worldPositions read as `*(Vec**)` instead of `(Vec*)...->address` (register choice) | natural form with the typed smartEntry address |
+| Demos | rels/mri/src/mri_puni.c | puni_puni_main | `(const char*)(u32)` round trip on one sound name, so its address is hoisted into a saved register before the loop | plain literal: one register less, stack frame 16 bytes smaller |
