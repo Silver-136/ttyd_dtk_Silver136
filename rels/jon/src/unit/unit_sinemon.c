@@ -94,7 +94,7 @@ static BattleUnitDefense defence = {{5, 99, 5, 5, 5}};
 /**
  * Damage modifiers of the Moon Cleft per element (normal, fire, ice, explosion, electric): fire: immune.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Defence of the Moon Cleft while flipped over against each element (normal, fire, ice, explosion,

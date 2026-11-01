@@ -242,7 +242,7 @@ BattleUnitKind unit_kamec_bunsin = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element reactions of the Magikoopa: no special reaction to any element. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Status vulnerability of the Magikoopa (percent chance to take each status): resists most statuses. */
 #if VERSION <= VERSION_DEMO_US
@@ -923,7 +923,7 @@ EVT_END()
  * it switches to the clone data table, fades, falls with SFX_ENM_FALL1 and lands. Guess.
  */
 static EVT_BEGIN(dmg_fall_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kFloating)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kIsWinged)
@@ -1588,7 +1588,7 @@ static EVT_BEGIN(attack_magic_event)
             CALL(btlevtcmd_AnimeChangePoseType, LW(9), 1, POSE_TYPE_NEUTRAL)
         END_IF
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
@@ -1678,7 +1678,7 @@ static EVT_BEGIN(support_magic_event)
     WAIT_FRAMES(30)
     LABEL(99)
     SET_VALUE(LW(0), 1)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1750,7 +1750,7 @@ static EVT_BEGIN(recover_magic_event)
     WAIT_FRAMES(40)
     LABEL(99)
     SET_VALUE(LW(0), 1)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

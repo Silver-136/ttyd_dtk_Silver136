@@ -98,7 +98,7 @@ BattleUnitKind unit_patakuri = {
 static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 
 /** Elemental reactions of the Paragoomba: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_patakuri_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_patakuri = {100, 120, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 150, 100, 100, 100, 100, 150};
@@ -255,7 +255,7 @@ EVT_END()
  */
 // Losing wings installs the grounded Goomba part/data tables, then reinitializes its events.
 static EVT_BEGIN(dmg_fall_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_OffAttribute, LW(10), kFloating)
     CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kIsWinged)
@@ -414,7 +414,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_LINEAR, 0, MOVE_SOUND_KEEP)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -593,7 +593,7 @@ static USER_FUNC(krb_get_dir) {
 
 /** Damage event of the Goomba: runs the default damage reaction (btldefaultevt_Damage) for itself. */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -758,7 +758,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_KEEP, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

@@ -5,6 +5,7 @@
 #include "driver/itemdrv.h"
 #include "eff/eff_itemget.h"
 #include "driver/swdrv.h"
+#include "icon_ids.h"
 #include <dolphin/pad.h>
 #include "driver/icondrv.h"
 #include "driver/windowdrv.h"
@@ -1313,13 +1314,9 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             if (entry->itemId == ITEM_WEDDING_RING) {
 #if VERSION <= VERSION_DEMO_US
-                iconChange(entry->name, 0x114);
+                iconChange(entry->name, ICON_114);
 #else
-#if VERSION >= VERSION_US
-                iconChange(entry->name, 0x11B);
-#else
-                iconChange(entry->name, 0x114);
-#endif
+                iconChange(entry->name, ICON_114);
             }
             if (!entry->effect) {
                 iconNameToPtr(entry->name)->uflags |= ICON_FLAG_ITEM_NO_MAP_BLEND;
@@ -1383,15 +1380,11 @@ void itemseq_GetItem(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
             iconFlagOff(entry->name, 0x40);
             if (entry->itemId == ITEM_WEDDING_RING) {
-                iconChange(entry->name, 0x115);
+                iconChange(entry->name, ICON_115);
 #else
             iconFlagOff(entry->name, ICON_FLAG_CAM_EFFECT_A);
             if (entry->itemId == ITEM_WEDDING_RING) {
-#if VERSION >= VERSION_US
-                iconChange(entry->name, 0x11C);
-#else
-                iconChange(entry->name, 0x115);
-#endif
+                iconChange(entry->name, ICON_115);
             }
             if (!entry->effect) {
                 iconNameToPtr(entry->name)->uflags &= ~ICON_FLAG_ITEM_NO_MAP_BLEND;

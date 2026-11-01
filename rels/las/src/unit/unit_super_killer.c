@@ -84,7 +84,7 @@ BattleUnitKind unit_super_killer = {
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 /** Defence attributes of the Bombshell Bill: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 0, 100, 0, 40, 150, 100, 65, 100, 65, 100, 65, 100, 65, 65, 0, 90, 100, 65, 100, 100, 90};

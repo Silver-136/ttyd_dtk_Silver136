@@ -133,7 +133,7 @@ BattleUnitKind unit_super_killer_cannon = {
 static BattleUnitDefense defence = {{4, 4, 4, 4, 4}};
 
 /** Element modifiers of the B. Bill Blaster: none, no element is special to it. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 /**
@@ -228,7 +228,7 @@ EVT_END()
 
 /** Hit reaction: just the default btldefaultevt_Damage for the main part. */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN

@@ -133,7 +133,7 @@ BattleUnitKind unit_gundan_zako_magician = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Elemental reactions of the X-Naut PhD: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {70, 80, 70, 100, 80, 100, 100, 70, 100, 75, 100, 75, 100, 70, 70, 90, 80, 100, 70, 100, 100, 95};
@@ -782,7 +782,7 @@ static EVT_BEGIN(attack_common_event2)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(30)
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
@@ -860,7 +860,7 @@ static EVT_BEGIN(attack_common_event3)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(30)
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
@@ -1052,7 +1052,7 @@ static EVT_BEGIN(minimini_bottle_event)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(60)
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
@@ -1094,7 +1094,7 @@ static EVT_BEGIN(one_recover_event)
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1147,7 +1147,7 @@ static EVT_BEGIN(all_recover_event)
     WAIT_FRAMES(90)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

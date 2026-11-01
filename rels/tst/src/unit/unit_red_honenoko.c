@@ -123,7 +123,7 @@ BattleUnitKind unit_red_honenoko = {
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Element modifiers of the Red Bones: none, no element is special to it. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 /**
@@ -258,7 +258,7 @@ EVT_END()
  * and runs the shared default damage reaction (btldefaultevt_Damage).
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -271,7 +271,7 @@ EVT_END()
  * takes its back item and kills it (kill mode 0 if the damage code says it was blown away, otherwise 2).
  */
 static EVT_BEGIN(dead_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     LABEL(10)
@@ -335,7 +335,7 @@ static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REWARD_GIVEN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REWARD_GIVEN, 1)
-        SET_VALUE(LW(10), -2)
+        SET_VALUE(LW(10), UNIT_ID_SELF)
         CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         ADD(LW(2), 10)

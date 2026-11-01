@@ -21,6 +21,7 @@
 #include "eff/eff_hit.h"
 #include "eff/eff_miss_star.h"
 #include "eff/n64/eff_kemuri12_n64.h"
+#include "battle/battle_sub.h"
 #include <string.h>
 #include "battle/battle_mario.h"
 #include "system.h"
@@ -47,7 +48,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     BattleUnit* attacker;
     Vec pos;
 
-    if (unitId != -5) {
+    if (unitId != UNIT_ID_SYSTEM) {
         attacker = BattleGetUnitPtr(wp, unitId);
     } else {
         attacker = NULL;
@@ -118,7 +119,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                     }
                 }
             }
-            if (unitId != -5 && attacker && attacker->badgesEquipped.MegaRush &&
+            if (unitId != UNIT_ID_SYSTEM && attacker && attacker->badgesEquipped.MegaRush &&
                 attacker->currentHp <= attacker->kindParams->perilHP) {
                 f32 x2, y2, z2;
                 BtlUnit_GetHitPos(target, part, &x2, &y2, &z2);
@@ -1673,7 +1674,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 if (attacker->hitEventCode) {
                     BattleRunHitEventDirect(attacker, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, attacker->hitEventCode);
                 } else {
-                    BattleDamageDirect(-5, attacker, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, 0, 1);
+                    BattleDamageDirect(UNIT_ID_SYSTEM, attacker, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, 0, 1);
                 }
                 return -1;
             case 1:
@@ -1681,7 +1682,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 flags |= DAMAGE_RESULT_FINAL_HIT;
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
                 BattleDamageDirect(attacker->unitId, target, part, 0, 0, result, weapon->damagePattern, 0);
-                BattleDamageDirect(-5, attacker, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, 0, 1);
+                BattleDamageDirect(UNIT_ID_SYSTEM, attacker, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, 0, 1);
                 return -1;
         }
     }
@@ -1849,7 +1850,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         }
         BattleActionCommandStop(wp);
         BattleAcHelpSetDispType(0);
-        BattleDamageDirect(-5, attacker, NULL, cw.count, 0, cw.msg, 0, 1);
+        BattleDamageDirect(UNIT_ID_SYSTEM, attacker, NULL, cw.count, 0, cw.msg, 0, 1);
         if (cw.hitEvent) {
             target->damagePattern = ATTACKPATTERN_NULL;
             BattleRunHitEvent(target, cw.hitEvent);

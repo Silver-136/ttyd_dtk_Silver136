@@ -92,7 +92,7 @@ static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 /**
  * Defence attributes of the Bald Cleft's body: fire (takes no damage); every other type is dealt normally.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Defence of the Bald Cleft's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
@@ -247,7 +247,7 @@ static EVT_BEGIN(damage_event)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 5, MOVE_SOUND_FROM_TABLE)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -278,7 +278,7 @@ EVT_END()
  * sets the over-turn count to 2 (SFX_ENM_INSIDE1), hops and rests on his back at y = 5.
  */
 static EVT_BEGIN(dmg_turn_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_turn))
@@ -306,7 +306,7 @@ EVT_END()
  */
 // Flipped attack turns count down from two; the recovery turn restores the upright state instead of attacking.
 static EVT_BEGIN(wakeup_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetOverTurnCount, LW(10), LW(0))
     SUBTRACT(LW(0), 1)

@@ -171,7 +171,7 @@ BattleUnitKind unit_fire_bros = {
 static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
 
 /** Element reactions of Fire Bro: fire immune; the other elements hit normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of Fire Bro (the demos), as the percent chance a status takes hold:
@@ -188,7 +188,7 @@ static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 80, 100, 80,
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Element reactions of Fire Bro: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of Fire Bro (the final versions), as the percent chance a status takes hold:
@@ -384,7 +384,7 @@ EVT_END()
  * (LW(10) = -2, LW(11) = 1).
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN

@@ -43,6 +43,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_audience.h"
 #include "eff/eff_pointget.h"
+#include "icon_ids.h"
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
@@ -53,12 +54,6 @@
 #include "battle/battle_actrecord.h"
 #include "battle/battle_camera.h"
 #include "battle/battle_seq.h"
-
-#if VERSION >= VERSION_US
-#define EXP_ICON 0x194
-#else
-#define EXP_ICON 0x18C
-#endif
 
 void FontDrawString(f32 x, f32 y, const char* msg);
 
@@ -912,7 +907,7 @@ void _MarioExpDisp(CameraId camId, void* param) {
         // FAKE: windowDispGX_Waku_col called through a float-first cast; the plain call changes the object
         ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(180.0f, -160.0f, width, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 
-        iconDispGx(&pos, ICON_FLAG_2D, EXP_ICON, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_STAR_POINT, 1.0f);
         FontDrawStart();
         FontDrawString(225.0f, -163.0f, buf);
     }
@@ -940,7 +935,7 @@ void _LvupParamConfirmDisp(CameraId camId, void* param) {
     pos.x = -40.0f;
     pos.y = -50 - (*cursorPtr) * 25;
     pos.z = 0.0f;
-    iconDispGx(&pos, ICON_FLAG_2D, EXP_ICON, 1.0f);
+    iconDispGx(&pos, ICON_FLAG_2D, ICON_STAR_POINT, 1.0f);
 }
 
 /** The demo has this function but never calls it (the linker strips it; its strings stay). */
@@ -999,7 +994,7 @@ void _GetExpIcon_Init(BattleSeqEndWork* work) {
 
     for (i = 0; i < 10; i++) {
         sprintf(name, "_Bgsp%d", i);
-        iconEntry2D(name, EXP_ICON);
+        iconEntry2D(name, ICON_STAR_POINT);
         work->icons[i] = iconNameToPtr(name);
         iconSetScale(name, 0.9f);
         iconFlagOn(name, ICON_FLAG_HIDDEN);
@@ -1011,7 +1006,7 @@ void _GetExpIcon_Init(BattleSeqEndWork* work) {
     }
     for (i = 10; i < 19; i++) {
         sprintf(name, "_Bgsp%d", i);
-        iconEntry2D(name, EXP_ICON);
+        iconEntry2D(name, ICON_STAR_POINT);
         work->icons[i] = iconNameToPtr(name);
         iconSetScale(name, 0.45f);
         iconFlagOn(name, ICON_FLAG_HIDDEN);
@@ -1974,11 +1969,9 @@ s32 _keta_get(s32 n) {
 
 #if VERSION >= VERSION_US
 #define LVOBJ_TEX2 0x31
-#define LVOBJ_ICON 0x16B
 #define LVOBJ_TEX(n, tbl) (tbl[gp->language])
 #else
 #define LVOBJ_TEX2 0x24
-#define LVOBJ_ICON 0x163
 #define LVOBJ_TEX(n, tbl) (0x27 + (n))
 #endif
 #define LVOBJ_PLANE(o, n, tbl)                                                         \
@@ -2069,7 +2062,7 @@ void _lvup_select_object_disp(CameraId camId, void* param) {
                     PSMTXTrans(m3, pos3.x, pos3.y, pos3.z);
                     PSMTXScale(ms, -0.6f, 0.6f, 1.0f);
                     PSMTXConcat(m3, ms, m3);
-                    iconDispGxCol(m3, 0, LVOBJ_ICON, obj->color);
+                    iconDispGxCol(m3, 0, ICON_ARROW, obj->color);
                 }
             } else if (obj->paramDisp == 2 || obj->paramDisp == 5) {
                 pos2 = obj->pos;

@@ -269,7 +269,7 @@ static BattleWeapon weapon_borodo_attack = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element response of the Bandit: none, every attack type is treated normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {90, 90, 80, 100, 90, 100, 100, 70, 100, 90, 100, 90, 100, 90, 90, 95, 80, 100, 90, 100, 100, 95};

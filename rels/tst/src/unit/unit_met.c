@@ -310,7 +310,7 @@ static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
  * Defence attributes of the Buzzy Beetle's body: fire (takes no damage), explosion (takes no damage);
  * every other type is dealt normally.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
 /** Defence of the Buzzy Beetle's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
@@ -425,7 +425,7 @@ EVT_END()
 
 /** Damage script of the Buzzy Beetle: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -437,7 +437,7 @@ EVT_END()
  * plays pose type 39 with SFX_ENM_INSIDE1 and bounces twice on the spot.
  */
 static EVT_BEGIN(dmg_turn_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))
@@ -462,7 +462,7 @@ EVT_END()
  */
 // Restore normal defense once the predecremented overturn counter reaches zero.
 static EVT_BEGIN(wakeup_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetOverTurnCount, LW(10), LW(0))
     SUBTRACT(LW(0), 1)
@@ -654,7 +654,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -671,7 +671,7 @@ EVT_END()
  * code), the unit still has the ceiling attribute set and it falls via ceil_fall_ready_event.
  */
 static EVT_BEGIN(damage_event_ceil)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -713,7 +713,7 @@ static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
     CALL_CHILD(PTR(init_event2))
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(PTR(subsetevt_counter_damage))
@@ -746,7 +746,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
 #endif
     CALL_CHILD(init_event2)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))
@@ -908,7 +908,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(7), 0, LW(9), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL_CHILD(init_event2)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

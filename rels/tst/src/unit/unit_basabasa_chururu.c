@@ -124,7 +124,7 @@ BattleUnitKind unit_basabasa_chururu = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element reactions of Swoopula: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Attack data of Swoopula's basabasa drain attack biribiri counterd attack: no damage, 100% accuracy. */
 static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
@@ -394,7 +394,7 @@ EVT_END()
  * and LW(11) = 1.
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -407,7 +407,7 @@ EVT_END()
  * and glides down to its home position over 60 frames.
  */
 static EVT_BEGIN(damage_event_ceil)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -433,7 +433,7 @@ EVT_END()
  */
 static EVT_BEGIN(counter_damage_event)
     CALL_CHILD(ceil_sky_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(subsetevt_counter_damage)
@@ -446,7 +446,7 @@ EVT_END()
  * and glides to its home position over 60 frames.
  */
 static EVT_BEGIN(ceil_fall_ready_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     CALL_CHILD(ceil_sky_event)

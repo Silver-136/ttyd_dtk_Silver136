@@ -4161,7 +4161,7 @@ USER_FUNC(btlevtcmd_DamageDirect) {
     damage = evtGetValue(event, args[2]);
     result = args[3];
     pattern = evtGetValue(event, args[4]);
-    BattleDamageDirect(-5, unit, part, damage, 0, result, pattern, evtGetValue(event, args[5]));
+    BattleDamageDirect(UNIT_ID_SYSTEM, unit, part, damage, 0, result, pattern, evtGetValue(event, args[5]));
     return EVT_RETURN_DONE;
 }
 

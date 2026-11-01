@@ -174,7 +174,7 @@ BattleUnitKind unit_barriern_z = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of the Z-Yux: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Parts of the Z-Yux: 11 parts (model c_baria_z). */
 static BattleUnitKindPart parts[] = {
@@ -567,7 +567,7 @@ EVT_END()
 /** Damage event of the Z-Yux: resets its body color to white and runs the default damage handling. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -1283,7 +1283,7 @@ static EVT_BEGIN(wakka_attack_event)
         CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, LW(0), 0)
     END_LOOP
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1453,7 +1453,7 @@ static EVT_BEGIN(wawawa_attack_event)
         END_LOOP
     END_LOOP
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

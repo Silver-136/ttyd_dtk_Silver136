@@ -279,7 +279,7 @@ static BattleWeapon weapon_met_ceil_attack = {
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
 /** Damage-type reactions of the Red Spike Top: immune to fire and explosion. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
 /**
  * Defense of the Red Spike Top against normal, fire, ice, explosion and electric attacks while it is

@@ -94,7 +94,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
  * Damage modifiers of the Amazy Dayzee per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {95, 10, 10, 100, 10, 100, 100, 10, 100, 10, 100, 10, 100, 10, 10, 100, 80, 100, 10, 100, 100, 10};

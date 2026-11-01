@@ -117,7 +117,7 @@ BattleUnitKind unit_togenoko = {
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 /** Element reactions of the Koopatrol: no special reaction to any element. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Status vulnerability of the Koopatrol (percent chance to take each status): resists most statuses. */
 #if VERSION <= VERSION_DEMO_US
@@ -194,7 +194,7 @@ static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
  * Element reactions of the Koopatrol (guarding): normal: no damage, fire: no damage, ice: no damage, explosion:
  * no damage, electric: no damage.
  */
-static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
+static BattleUnitDefenseAttr defence_attr_guard = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /**
  * Status vulnerability of the Koopatrol (guarding) (percent chance to take each status):
@@ -497,7 +497,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
 EVT_END()
 
 static EVT_BEGIN(dmg_turn_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetHitOffset, LW(10), LW(11), 0, -20, 0)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
@@ -527,7 +527,7 @@ EVT_END()
 
 // Recovery consumes this attack opportunity, including the turn that restores the standing stance.
 static EVT_BEGIN(wakeup_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetOverTurnCount, LW(10), LW(0))
     SUBTRACT(LW(0), 1)
@@ -846,7 +846,7 @@ static EVT_BEGIN(normal_attack_event)
 
     // It settles at home.
     LABEL(98)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     WAIT_MS(500)
     RETURN
 EVT_END()
@@ -1003,7 +1003,7 @@ static EVT_BEGIN(shell_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
     WAIT_FRAMES(3)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1049,7 +1049,7 @@ EVT_END()
  * offset.
  */
 static EVT_BEGIN(guard_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(10)
@@ -1088,7 +1088,7 @@ EVT_END()
  * status, pose and data tables, clears unit work 0 and resets its hit offset.
  */
 static EVT_BEGIN(guard_cancel_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(10)

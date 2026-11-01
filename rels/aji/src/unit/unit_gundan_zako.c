@@ -89,7 +89,7 @@ BattleUnitKind unit_gundan_zako = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Elemental reactions of the X-Naut: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {80, 90, 80, 100, 90, 100, 100, 80, 100, 85, 100, 85, 100, 80, 80, 100, 90, 100, 80, 100, 100, 95};

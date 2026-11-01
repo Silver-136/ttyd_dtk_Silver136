@@ -93,7 +93,7 @@ BattleUnitKind unit_kurokumorn = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Elemental reactions of the Ruff Puff: is healed by electric attacks. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 3}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_ABSORB}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {80, 80, 90, 100, 70, 0, 100, 70, 100, 70, 100, 70, 100, 70, 70, 70, 90, 100, 70, 100, 100, 95};
@@ -401,7 +401,7 @@ static EVT_BEGIN(thunder_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     WAIT_MS(250)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -666,7 +666,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_MS(250)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

@@ -132,7 +132,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  * Element response of the Phantom Ember: it takes extra damage from ice and explosions and is healed by
  * fire.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 3, 1, 1, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_ABSORB, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {40, 80, 65, 25, 65, 100, 0, 40, 100, 65, 100, 65, 100, 65, 65, 40, 80, 100, 65, 100, 100, 90};

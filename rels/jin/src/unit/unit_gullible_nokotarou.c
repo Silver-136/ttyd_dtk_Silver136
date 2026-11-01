@@ -178,7 +178,7 @@ static BattleWeapon enemyWeapon_NokotarouShubibinAttack = {
 static BattleUnitDefense defence_nokotarou = {{1, 1, 1, 1, 1}};
 
 /** Defence attributes of the Koops double's body: none, so every damage type is dealt normally. */
-static BattleUnitDefenseAttr defence_attr_nokotarou = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_nokotarou = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Defence of the Koops double's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn_nokotarou = {0};
@@ -238,7 +238,7 @@ static BattleUnitKindPart parts_nokotarou[] = {
  * plays the PNK_D_1 pose with SFX_ENM_INSIDE1 and bounces twice on the spot.
  */
 static EVT_BEGIN(dmg_turn_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn_nokotarou))
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_nokotarou_turn))
@@ -260,7 +260,7 @@ EVT_END()
  */
 // Spend each overturned action decrementing the counter; restore defense and poses only at zero.
 static EVT_BEGIN(wakeup_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetOverTurnCount, LW(10), LW(0))
     SUBTRACT(LW(0), 1)
@@ -314,7 +314,7 @@ static EVT_BEGIN(damage_event_nokotarou)
         SET_VALUE(GW(20), 1)
     END_IF
     CALL_CHILD(PTR(_koura_rotate_stop))
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -343,7 +343,7 @@ static EVT_BEGIN(dead_event_nokotarou)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -644,7 +644,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -759,7 +759,7 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

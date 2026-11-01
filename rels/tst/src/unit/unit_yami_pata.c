@@ -156,7 +156,7 @@ static BattleUnitDefense defence_patapata = {{2, 2, 2, 2, 2}};
  * Damage modifiers of the flying Dark Paratroopa per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_patapata_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_patapata = {75, 80, 100, 100, 75, 100, 100, 75, 100, 75, 100, 75, 100, 75, 70, 80, 100, 100, 75, 100, 100, 70};

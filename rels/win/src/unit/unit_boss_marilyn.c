@@ -109,7 +109,7 @@ BattleUnitKind unit_boss_marilyn = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element attributes of Marilyn: none, so every element does its normal damage. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {80, 80, 80, 100, 80, 100, 100, 40, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
@@ -361,7 +361,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -514,7 +514,7 @@ static EVT_BEGIN(attack_event)
         END_SWITCH
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

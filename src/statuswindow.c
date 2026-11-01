@@ -61,10 +61,10 @@ u16 gauge_wakka[16] = { ICON_SP_ORB_PART_0, ICON_SP_ORB_PART_1, ICON_SP_ORB_PART
                         ICON_SP_ORB_PART_8, ICON_SP_ORB_PART_9, ICON_SP_ORB_PART_10, ICON_SP_ORB_PART_11, ICON_SP_ORB_PART_12, ICON_SP_ORB_PART_13, ICON_SP_ORB_PART_14, ICON_SP_ORB_PART_15 };
 #if VERSION >= VERSION_US
                         // US: pause-menu icons per language
-                        s16 party_icon_tbl[6] = { 0x215, 0x22B, 0x22C, 0x22D, 0x22E, 0x22F };
-                        s16 gear_icon_tbl[6] = { 0x216, 0x230, 0x231, 0x232, 0x233, 0x234 };
-                        s16 badge_icon_tbl[6] = { 0x217, 0x235, 0x236, 0x235, 0x237, 0x238 };
-                        s16 journal_icon_tbl[6] = { 0x218, 0x239, 0x239, 0x239, 0x23A, 0x23B };
+                        s16 party_icon_tbl[6] = { ICON_MENU_PARTY, 0x22B, 0x22C, 0x22D, 0x22E, 0x22F };
+                        s16 gear_icon_tbl[6] = { ICON_MENU_GEAR, 0x230, 0x231, 0x232, 0x233, 0x234 };
+                        s16 badge_icon_tbl[6] = { ICON_MENU_BADGES, 0x235, 0x236, 0x235, 0x237, 0x238 };
+                        s16 journal_icon_tbl[6] = { ICON_MENU_JOURNAL, 0x239, 0x239, 0x239, 0x23A, 0x23B };
 #endif
 
 

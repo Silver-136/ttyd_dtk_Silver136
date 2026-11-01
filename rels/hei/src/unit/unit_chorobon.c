@@ -90,7 +90,7 @@ BattleUnitKind unit_chorobon = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of the Fuzzy's body: none, so every damage type is dealt normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {100, 100, 90, 100, 90, 100, 100, 75, 100, 80, 100, 80, 100, 75, 75, 95, 95, 100, 75, 100, 100, 100};
@@ -332,7 +332,7 @@ EVT_END()
 
 /** Damage event of the Fuzzy: runs the default damage handling. */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -347,7 +347,7 @@ EVT_END()
 // Skip the home-hop only for a lethal counter result without revival.
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(PTR(subsetevt_counter_damage))

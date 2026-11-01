@@ -111,7 +111,7 @@ BattleUnitKind unit_barriern_z_satellite = {
 
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Parts of the Mini-Z-Yux: part 1 is its body and parts 2 to 6 are the five ghost rings drawn as afterimages

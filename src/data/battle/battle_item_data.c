@@ -458,7 +458,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_CookingItem = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    0, NULL, // itemId..description
+    ITEM_NULL, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, 0, 0.0f, 0, 0, 0, 0, // baseFpCost..reserved_1B
     NULL, // hpDamageFn
@@ -4209,7 +4209,7 @@ BattleWeapon ItemWeaponData_FutarideForever = {
 BattleWeapon ItemWeaponData_FireCandy = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    228, // itemId
+    ITEM_FIRE_POP, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed

@@ -1112,7 +1112,7 @@ USER_FUNC(_backfire) {
     event->userdata[1]++;
     if (event->userdata[1] >= 60) {
         effDelete(event->userdatap[0]);
-        BattleDamageDirect(-5, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_FIRE, 0, 1);
+        BattleDamageDirect(UNIT_ID_SYSTEM, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_FIRE, 0, 1);
         self = BattleTransID(event, event->unitId);
         if (self != id) {
             return EVT_RETURN_DONE;

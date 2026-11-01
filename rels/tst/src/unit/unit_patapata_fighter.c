@@ -152,7 +152,7 @@ static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
  * Defense of the KP Paratroopa against normal, fire, ice, explosion and electric attacks in its winged
  * form: none, so it takes full damage from every element.
  */
-static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_patapata_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_patapata = {85, 90, 110, 100, 85, 100, 100, 85, 100, 85, 100, 85, 100, 85, 85, 90, 110, 100, 90, 100, 100, 100};

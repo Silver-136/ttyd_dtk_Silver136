@@ -410,7 +410,7 @@ static EVT_BEGIN(thunder_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     WAIT_MS(250)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -673,7 +673,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_MS(250)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

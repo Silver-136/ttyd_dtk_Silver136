@@ -244,7 +244,7 @@ BattleUnitDefense defence_mode1 = {{1, 1, 1, 1, 1}};
  * Defence attributes of Cortez's bone pile and its flying bones (parts 3 to 19): none,
  * every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode1 = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr defence_attr_mode1 = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Defence of Cortez's head (part 1) in his second form, upper stance: 1 against every kind of hit. */
 BattleUnitDefense defence_mode2_upper_head = {{1, 1, 1, 1, 1}};
@@ -265,7 +265,7 @@ BattleUnitDefense defence_mode2_upper_rib_open = {0};
  * Defence attributes of Cortez's rib cage (part 2) with the ribs open in his second form, upper stance:
  * every kind of hit does one extra damage.
  */
-BattleUnitDefenseAttr defence_attr_mode2_upper_rib_open = {{1, 1, 1, 1, 1}};
+BattleUnitDefenseAttr defence_attr_mode2_upper_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs closed in his second form, upper stance: 3
@@ -277,7 +277,7 @@ BattleUnitDefense defence_mode2_upper_rib_close = {{3, 3, 3, 3, 3}};
  * Defence attributes of Cortez's rib cage (part 2) with the ribs closed in his second form, upper stance:
  * none, every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode2_upper_rib_close = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr defence_attr_mode2_upper_rib_close = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Defence of Cortez's head (part 1) in his second form, middle stance: 1 against every kind of hit. */
 BattleUnitDefense defence_mode2_middle_head = {{1, 1, 1, 1, 1}};
@@ -298,7 +298,7 @@ BattleUnitDefense defence_mode2_middle_rib_open = {0};
  * Defence attributes of Cortez's rib cage (part 2) with the ribs open in his second form, middle stance:
  * every kind of hit does one extra damage.
  */
-BattleUnitDefenseAttr defence_attr_mode2_middle_rib_open = {{1, 1, 1, 1, 1}};
+BattleUnitDefenseAttr defence_attr_mode2_middle_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs closed in his second form, middle stance: 3
@@ -331,7 +331,7 @@ BattleUnitDefense defence_mode2_lower_rib_open = {0};
  * Defence attributes of Cortez's rib cage (part 2) with the ribs open in his second form, lower stance:
  * every kind of hit does one extra damage.
  */
-BattleUnitDefenseAttr defence_attr_mode2_lower_rib_open = {{1, 1, 1, 1, 1}};
+BattleUnitDefenseAttr defence_attr_mode2_lower_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs closed in his second form, lower stance: 3
@@ -355,7 +355,7 @@ BattleUnitDefenseAttr defence_attr_mode3 = {0};
 BattleUnitDefense defence_honeduka = {{1, 1, 1, 1, 1}};
 
 /** Defence attributes of Cortez's body in his first form (part 1): none, every element hits it normally. */
-BattleUnitDefenseAttr defence_honeduka_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr defence_honeduka_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Weapon of Cortez (normal front attack): targets one unit for 4 damage; used by at1_normal_attack. */
 BattleWeapon weapon_cortez_normal_front_attack = {

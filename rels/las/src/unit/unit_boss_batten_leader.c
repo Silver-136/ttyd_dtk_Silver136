@@ -586,13 +586,13 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
  * Damage modifiers of Grodus per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Damage modifiers of Grodus while invincible per element (normal, fire, ice, explosion, electric): normal:
  * immune, fire: immune, ice: immune, explosion: immune, electric: immune.
  */
-BattleUnitDefenseAttr defence_attr_muteki = {{2, 2, 2, 2, 2}};
+BattleUnitDefenseAttr defence_attr_muteki = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {30, 30, 30, 100, 30, 100, 100, 30, 100, 50, 100, 50, 100, 30, 30, 0, 0, 100, 30, 100, 100, 1};

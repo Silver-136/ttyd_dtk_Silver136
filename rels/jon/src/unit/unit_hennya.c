@@ -83,7 +83,7 @@ BattleUnitKind unit_hennya = {
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 /** Element response of the Spunia: none, every attack type is treated normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {70, 90, 70, 150, 70, 150, 150, 70, 150, 70, 150, 70, 150, 70, 70, 90, 90, 150, 70, 0, 0, 30};

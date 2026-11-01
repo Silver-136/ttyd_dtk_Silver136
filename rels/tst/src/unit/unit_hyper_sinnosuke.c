@@ -99,7 +99,7 @@ static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 static BattleUnitDefense defence_turn = {0};
 
 /** Damage-type reactions of the Hyper Bald Cleft: immune to fire. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {30, 80, 40, 100, 40, 100, 0, 60, 100, 60, 100, 60, 100, 70, 70, 40, 20, 100, 70, 100, 100, 95};

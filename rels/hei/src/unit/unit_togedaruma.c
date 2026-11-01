@@ -94,7 +94,7 @@ BattleUnitKind unit_togedaruma = {
 static BattleUnitDefense defence = {{4, 99, 4, 4, 4}};
 
 /** Defence attributes of the Bristle's body: fire (takes no damage); every other type is dealt normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Defence of the Bristle's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
@@ -311,7 +311,7 @@ EVT_END()
 
 /** Damage event of the Bristle: runs the default damage handling. */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -325,7 +325,7 @@ EVT_END()
  */
 // Refresh the flipped countdown to two; only a newly flipped unit plays the initial rotation.
 static EVT_BEGIN(dmg_turn_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_turn))
@@ -368,7 +368,7 @@ EVT_END()
  * while still flipped it just goes back to waiting.
  */
 static EVT_BEGIN(wakeup_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetOverTurnCount, LW(10), LW(0))
     SUBTRACT(LW(0), 1)

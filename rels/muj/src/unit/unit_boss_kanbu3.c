@@ -133,7 +133,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefense defence_guard = {{2, 2, 2, 2, 2}};
 
 /** Defence attributes of Lord Crump: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {80, 70, 60, 100, 60, 100, 100, 60, 100, 60, 100, 60, 100, 50, 60, 0, 0, 100, 60, 100, 0, 0};

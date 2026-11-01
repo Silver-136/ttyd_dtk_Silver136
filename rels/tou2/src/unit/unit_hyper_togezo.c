@@ -114,7 +114,7 @@ BattleUnitKind unit_hyper_togezo = {
 static BattleUnitDefense defence = {{4, 4, 4, 4, 4}};
 
 /** Damage-type reactions of the Sky-Blue Spiny: none, so every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {70, 70, 60, 100, 70, 100, 100, 60, 100, 70, 100, 70, 100, 70, 70, 80, 60, 100, 70, 100, 100, 50};
@@ -196,7 +196,7 @@ static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
  * Damage-type reactions of the Sky-Blue Spiny while it is curled up guarding: immune to normal, fire, ice,
  * explosion and electric.
  */
-static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
+static BattleUnitDefenseAttr defence_attr_guard = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /**
  * Status vulnerability of the Sky-Blue Spiny while it is curled up guarding, as the percent chance each

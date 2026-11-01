@@ -94,7 +94,7 @@ BattleUnitKind unit_basabasa = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of the Swooper's body: none, so every damage type is dealt normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Stand-in weapon for the damage check when the Swooper's drain attack runs into a counter from its target (no damage of its own).
@@ -368,7 +368,7 @@ EVT_END()
 
 /** Damage event of the Swooper: runs the default damage handling. */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -381,7 +381,7 @@ EVT_END()
  */
 // Leave the ceiling after nonzero damage, unless zero HP without revival ends this damage path.
 static EVT_BEGIN(damage_event_ceil)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -407,7 +407,7 @@ EVT_END()
  */
 static EVT_BEGIN(counter_damage_event)
     CALL_CHILD(PTR(ceil_sky_event))
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(PTR(subsetevt_counter_damage))
@@ -419,7 +419,7 @@ EVT_END()
  * runs the default damage handling, then drops it to its flying position (ceil_sky_event) and dives down.
  */
 static EVT_BEGIN(ceil_fall_ready_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL_CHILD(PTR(ceil_sky_event))

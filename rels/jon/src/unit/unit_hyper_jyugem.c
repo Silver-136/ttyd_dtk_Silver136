@@ -101,7 +101,7 @@ BattleUnitKind unit_hyper_jyugem = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element response of the Dark Lakitu: none, every attack type is treated normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {60, 70, 80, 100, 60, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 70, 80, 100, 60, 100, 100, 50};

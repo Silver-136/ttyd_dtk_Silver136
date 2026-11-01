@@ -126,7 +126,7 @@ BattleUnitKind unit_gold_chorobon = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element reactions of Gold Fuzzy: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of Gold Fuzzy, as the percent chance a status takes hold:
@@ -390,7 +390,7 @@ EVT_END()
  * or less (but not 0) it spawns the Fuzzy horde (entry_chorogun) with call_chorogun_event.
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
 #if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, LW(0))
@@ -459,7 +459,7 @@ EVT_END()
  */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(subsetevt_counter_damage)

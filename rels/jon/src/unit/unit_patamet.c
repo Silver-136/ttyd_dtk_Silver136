@@ -160,7 +160,7 @@ static BattleWeapon weapon_patamet_attack = {
 static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 
 /** Element response of the Parabuzzy, flying form: it is immune to fire and explosions. */
-static BattleUnitDefenseAttr defence_attr_pata = {{0, 2, 0, 2, 0}};
+static BattleUnitDefenseAttr defence_attr_pata = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_pata = {75, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 95, 100, 75, 100, 100, 95};
@@ -608,7 +608,7 @@ static BattleWeapon weapon_met_ceil_attack = {
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
 /** Element response of the Parabuzzy: it is immune to fire and explosions. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
 /** Damage reduction of the Parabuzzy, flipped on its back: none, every attack type does full damage. */
 static BattleUnitDefense defence_turn = {0};

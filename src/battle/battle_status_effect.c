@@ -9,6 +9,8 @@
 #include "battle/battle_pad.h"
 #include "driver/dispdrv.h"
 #include "driver/msgdrv.h"
+#include "battle/battle_sub.h"
+#include "icon_ids.h"
 #include <stdio.h>
 #include <string.h>
 #include "driver/icondrv.h"
@@ -64,30 +66,30 @@ s8 _st_pri_data[] = {
 };
 #endif
 StChgMsgData _st_chg_msg_data[] = {
-    { 4, "\202\307\202\255", "msg_st_chg_poison", "msg_st_chg_poison" },
-    { 16, "\203`\203\203\201[\203W", "msg_st_chg_charge", "msg_st_chg_charge3" },
-    { 1, "\202\313\202\336\202\350", "msg_st_chg_sleep", "msg_st_chg_sleep" },
-    { 2, "\203X\203g\203b\203v", "msg_st_chg_stan", "msg_st_chg_stan" },
-    { 3, "\203O\203\213\203O\203\213", "msg_st_chg_guruguru", "msg_st_chg_guruguru" },
-    { 5, "\202\261\202\361\202\347\202\361", "msg_st_chg_confusion", "msg_st_chg_confusion" },
-    { 6, "\203r\203\212\203r\203\212", "msg_st_chg_biribiri", "msg_st_chg_biribiri" },
-    { 7, "\203\210\203P\203\210\203P", "msg_st_chg_dodge", "msg_st_chg_dodge" },
-    { 8, "\202\320\202\276\202\351\202\334", "msg_st_chg_fire", "msg_st_chg_fire" },
-    { 9, "\202\261\202\250\202\350\202\303\202\257", "msg_st_chg_freeze", "msg_st_chg_freeze" },
-    { 10, "\203f\203J\203f\203J", "msg_st_chg_big", "msg_st_chg_big" },
-    { 11, "\203~\203j\203~\203j", "msg_st_chg_small", "msg_st_chg_small" },
-    { 12, "\202\302\202\346\202\302\202\346", "msg_st_chg_tuyotuyo", "msg_st_chg_tuyotuyo" },
-    { 13, "\202\346\202\355\202\346\202\355", "msg_st_chg_yowayowa", "msg_st_chg_yowayowa" },
-    { 14, "\203J\203`\203J\203`", "msg_st_chg_hard", "msg_st_chg_hard" },
-    { 15, "\203t\203j\203\203\203t\203j\203\203", "msg_st_chg_soft", "msg_st_chg_soft" },
-    { 0, "\203A\203\214\203\213\203M\201[", "msg_st_chg_allergy", "msg_st_chg_allergy" },
-    { 18, "\202\306\202\244\202\337\202\242", "msg_st_chg_trans", "msg_st_chg_trans" },
-    { 19, "\202\315\202\342\202\242", "msg_st_chg_quick", "msg_st_chg_quick" },
-    { 20, "\202\314\202\353\202\242", "msg_st_chg_slow", "msg_st_chg_slow" },
-    { 21, "\202\265\202\251\202\246\202\265", "msg_st_chg_counter", "msg_st_chg_counter" },
-    { 22, "\203{\203\200\203J\203E\203\223\203^\201[", "msg_st_chg_bombcounter", "msg_st_chg_bombcounter" },
-    { 23, "\202\266\202\355\202\266\202\355\202g\202o", "msg_st_chg_reg_hp", "msg_st_chg_reg_hp" },
-    { 24, "\202\266\202\355\202\266\202\355\202e\202o", "msg_st_chg_reg_fp", "msg_st_chg_reg_fp" },
+    { STATUS_POISON, "\202\307\202\255", "msg_st_chg_poison", "msg_st_chg_poison" },
+    { STATUS_CHARGE, "\203`\203\203\201[\203W", "msg_st_chg_charge", "msg_st_chg_charge3" },
+    { STATUS_SLEEP, "\202\313\202\336\202\350", "msg_st_chg_sleep", "msg_st_chg_sleep" },
+    { STATUS_STOP, "\203X\203g\203b\203v", "msg_st_chg_stan", "msg_st_chg_stan" },
+    { STATUS_DIZZY, "\203O\203\213\203O\203\213", "msg_st_chg_guruguru", "msg_st_chg_guruguru" },
+    { STATUS_CONFUSE, "\202\261\202\361\202\347\202\361", "msg_st_chg_confusion", "msg_st_chg_confusion" },
+    { STATUS_ELECTRIC, "\203r\203\212\203r\203\212", "msg_st_chg_biribiri", "msg_st_chg_biribiri" },
+    { STATUS_DODGY, "\203\210\203P\203\210\203P", "msg_st_chg_dodge", "msg_st_chg_dodge" },
+    { STATUS_BURN, "\202\320\202\276\202\351\202\334", "msg_st_chg_fire", "msg_st_chg_fire" },
+    { STATUS_FREEZE, "\202\261\202\250\202\350\202\303\202\257", "msg_st_chg_freeze", "msg_st_chg_freeze" },
+    { STATUS_HUGE, "\203f\203J\203f\203J", "msg_st_chg_big", "msg_st_chg_big" },
+    { STATUS_TINY, "\203~\203j\203~\203j", "msg_st_chg_small", "msg_st_chg_small" },
+    { STATUS_ATTACK_UP, "\202\302\202\346\202\302\202\346", "msg_st_chg_tuyotuyo", "msg_st_chg_tuyotuyo" },
+    { STATUS_ATTACK_DOWN, "\202\346\202\355\202\346\202\355", "msg_st_chg_yowayowa", "msg_st_chg_yowayowa" },
+    { STATUS_DEFENSE_UP, "\203J\203`\203J\203`", "msg_st_chg_hard", "msg_st_chg_hard" },
+    { STATUS_DEFENSE_DOWN, "\203t\203j\203\203\203t\203j\203\203", "msg_st_chg_soft", "msg_st_chg_soft" },
+    { STATUS_ALLERGIC, "\203A\203\214\203\213\203M\201[", "msg_st_chg_allergy", "msg_st_chg_allergy" },
+    { STATUS_INVISIBLE, "\202\306\202\244\202\337\202\242", "msg_st_chg_trans", "msg_st_chg_trans" },
+    { STATUS_FAST, "\202\315\202\342\202\242", "msg_st_chg_quick", "msg_st_chg_quick" },
+    { STATUS_SLOW, "\202\314\202\353\202\242", "msg_st_chg_slow", "msg_st_chg_slow" },
+    { STATUS_PAYBACK, "\202\265\202\251\202\246\202\265", "msg_st_chg_counter", "msg_st_chg_counter" },
+    { STATUS_HOLD_FAST, "\203{\203\200\203J\203E\203\223\203^\201[", "msg_st_chg_bombcounter", "msg_st_chg_bombcounter" },
+    { STATUS_HP_REGEN, "\202\266\202\355\202\266\202\355\202g\202o", "msg_st_chg_reg_hp", "msg_st_chg_reg_hp" },
+    { STATUS_FP_REGEN, "\202\266\202\355\202\266\202\355\202e\202o", "msg_st_chg_reg_fp", "msg_st_chg_reg_fp" },
     { -1, "", "", "" },
 };
 
@@ -351,11 +353,7 @@ void BSE_Kagegakure(BattleUnit* unit) {
     if (on) {
         if (unit->kageIcon == NULL) {
             sprintf(name, "_biK_%02x", unit->unitId);
-#if VERSION >= VERSION_US
-            iconEntry(name, 0xA1);
-#else
-            iconEntry(name, 0x99);
-#endif
+            iconEntry(name, ICON_099);
             unit->kageIcon = iconNameToPtr(name);
         }
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);
@@ -431,7 +429,7 @@ BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
             unit->burnDamageFlameEff = NULL;
             unit->burnDamageFlameState = 0;
             if (!BtlUnit_CheckShadowGuard(unit)) {
-                BattleDamageDirect(-5, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_FIRE, 0, 1);
+                BattleDamageDirect(UNIT_ID_SYSTEM, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_FIRE, 0, 1);
             }
             // fall through
         case 0:

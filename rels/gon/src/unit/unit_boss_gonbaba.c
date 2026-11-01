@@ -306,7 +306,7 @@ BattleUnitKind unit_boss_gonbaba = {
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Elemental reactions of Hooktail: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {10, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 100, 0, 100, 0, 0, 100, 0, 0, 0, 0};
@@ -1279,7 +1279,7 @@ USER_FUNC(_wait_damage_event_end) {
 
 /** Damage event of Hooktail: runs the default damage reaction (btldefaultevt_Damage) for herself. */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN

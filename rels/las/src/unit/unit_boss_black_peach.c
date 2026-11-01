@@ -352,7 +352,7 @@ BattleUnitDefense peach_defence = {{0, 0, 0, 0, 0}};
  * Damage modifiers of the Shadow Queen (possessing Peach) per element (normal, fire, ice, explosion,
  * electric): none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr peach_defence_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr peach_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 StatusVulnerability peach_regist = {30, 30, 30, 100, 30, 100, 50, 0, 100, 50, 100, 50, 100, 30, 30, 0, 0, 100, 30, 100, 100, 0};
@@ -1031,7 +1031,7 @@ BattleUnitDefense queen_defence = {{1, 1, 1, 1, 1}};
  * Damage modifiers of the Shadow Queen per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_defence_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr queen_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 StatusVulnerability queen_regist = {30, 30, 30, 100, 30, 100, 50, 0, 100, 0, 100, 0, 100, 30, 30, 0, 0, 100, 30, 0, 0, 0};
@@ -1072,7 +1072,7 @@ BattleUnitDefense queen_muteki_defence = {{99, 99, 99, 99, 99}};
  * Damage modifiers of the Shadow Queen while she is invincible per element (normal, fire, ice, explosion,
  * electric): normal: immune, fire: immune, ice: immune, explosion: immune, electric: immune.
  */
-BattleUnitDefenseAttr queen_muteki_defence_attr = {{2, 2, 2, 2, 2}};
+BattleUnitDefenseAttr queen_muteki_defence_attr = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /**
  * Status vulnerability of the Shadow Queen while she is invincible:
@@ -1258,7 +1258,7 @@ BattleUnitDefense queen_hand_1_defence = {{0, 0, 0, 0, 0}};
  * Damage modifiers of the Shadow Queen's first big hand per element (normal, fire, ice, explosion,
  * electric): none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_hand_1_defence_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr queen_hand_1_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 StatusVulnerability queen_hand_1_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
@@ -1408,7 +1408,7 @@ BattleUnitDefense queen_hand_2_defence = {{0, 0, 0, 0, 0}};
  * Damage modifiers of the Shadow Queen's second big hand per element (normal, fire, ice, explosion,
  * electric): none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_hand_2_defence_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr queen_hand_2_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 StatusVulnerability queen_hand_2_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
@@ -1558,7 +1558,7 @@ BattleUnitDefense queen_hand_small_defence = {{0, 0, 0, 0, 0}};
  * Damage modifiers of the Shadow Queen's small hand per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_hand_small_defence_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr queen_hand_small_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 StatusVulnerability queen_hand_small_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};

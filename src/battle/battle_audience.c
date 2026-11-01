@@ -123,7 +123,7 @@ void BattleAudienceNoiseMain(void);
 BattleWeapon weapon_data_akikan = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    236, // itemId
+    ITEM_AUDIENCE_CAN, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
@@ -156,7 +156,7 @@ BattleWeapon weapon_data_akikan = {
 BattleWeapon weapon_data_brick = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    237, // itemId
+    ITEM_AUDIENCE_ROCK, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
@@ -189,7 +189,7 @@ BattleWeapon weapon_data_brick = {
 BattleWeapon weapon_data_bone = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    238, // itemId
+    ITEM_AUDIENCE_BONE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
@@ -222,7 +222,7 @@ BattleWeapon weapon_data_bone = {
 BattleWeapon weapon_data_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    239, // itemId
+    ITEM_AUDIENCE_HAMMER, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost

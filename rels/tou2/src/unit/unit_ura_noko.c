@@ -159,7 +159,7 @@ static BattleDataEntry data_table[] = {
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Damage-type reactions of the Shady Koopa: none, so every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Defense of the Shady Koopa against normal, fire, ice, explosion and electric attacks while it is flipped

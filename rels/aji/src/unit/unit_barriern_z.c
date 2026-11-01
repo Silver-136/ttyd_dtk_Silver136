@@ -172,7 +172,7 @@ BattleUnitKind unit_barriern_z = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Elemental reactions of the Z-Yux: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Parts of the Z-Yux: part 1 is its body, parts 2 to 6 are the five ghost rings drawn as afterimages while it
@@ -1329,7 +1329,7 @@ static EVT_BEGIN(wakka_attack_event)
         CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, LW(0), 0)
     END_LOOP
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1499,7 +1499,7 @@ static EVT_BEGIN(wawawa_attack_event)
         END_LOOP
     END_LOOP
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

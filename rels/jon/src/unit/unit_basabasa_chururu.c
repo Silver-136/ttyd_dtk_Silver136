@@ -92,7 +92,7 @@ BattleUnitKind unit_basabasa_chururu = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element response of the Swoopula: none, every attack type is treated normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Attack data for the Swoopula's stand-in for a bite the target counters (electrified or Hold Fast): no

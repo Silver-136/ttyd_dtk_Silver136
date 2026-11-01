@@ -42,7 +42,7 @@ static EvtWord dead_event[6];
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** The bomb has no elemental defence. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** The bomb has no status vulnerabilities (all zero). */
 #if VERSION > VERSION_DEMO_US
@@ -272,7 +272,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -433,7 +433,7 @@ static BattleDataEntry data_table[] = {
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 #if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN

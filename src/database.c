@@ -37,7 +37,7 @@ void setupDataLoad(const char* mapName) {
     ptr = NULL;
 #if VERSION <= VERSION_DEMO_US
     sprintf(path, "%s/setup/%s/setup.xml", getMarioStDvdRoot(), mapName);
-    if (strcmp(mapName, "muj_20") || evtGetValue(NULL, (s32)0xF5DE0180) != STG0_02_MARIOS_HOUSE) {
+    if (strcmp(mapName, "muj_20") || evtGetValue(NULL, GSW_STORY_PROGRESS) != STG0_02_MARIOS_HOUSE) {
 #else
     sprintf(path, "%s/m/%s/s", getMarioStDvdRoot(), mapName);
     if (strcmp(mapName, "muj_20") || evtGetValue(NULL, GSW_STORY_PROGRESS) != STG0_02_MARIOS_HOUSE) {

@@ -596,7 +596,7 @@ void btlseqFirstAct(BattleWork* wp) {
             } while (++k < 64);
             if (flag) {
                 evt = evtEntry(nanika_luck_event, 10, 0);
-                evt->unitId = -5;
+                evt->unitId = UNIT_ID_SYSTEM;
                 wp->luckEventId = evt->eventId;
                 *(s64*)&wp->announce.stChg.maskHi |= -1;
                 BattleStatusChangeMsgAdjust(wp);
@@ -1075,7 +1075,7 @@ void btlseqTurn(BattleWork* wp) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (BtlUnit_CheckRecoveryStatus(unit, STATUS_FREEZE)) {
                         if (!BtlUnit_CheckShadowGuard(unit)) {
-                            BattleDamageDirect(-5, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_ICE, 0, 1);
+                            BattleDamageDirect(UNIT_ID_SYSTEM, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_ICE, 0, 1);
                         }
                         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
                         pos.y += BtlUnit_GetHeight(unit);
@@ -1540,7 +1540,7 @@ void btlseqTurn(BattleWork* wp) {
                     BtlUnit_GetStatus(unit, STATUS_POISON, &turns, &strength);
                     if ((strength > 0) && (!BtlUnit_CheckShadowGuard(unit))) {
                         found = 1;
-                        BattleDamageDirect(-5, unit, NULL, strength, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_NORMAL, 0, 1);
+                        BattleDamageDirect(UNIT_ID_SYSTEM, unit, NULL, strength, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_NORMAL, 0, 1);
                     }
                 }
             }

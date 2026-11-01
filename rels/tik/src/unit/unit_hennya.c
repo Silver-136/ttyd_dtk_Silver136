@@ -86,7 +86,7 @@ BattleUnitKind unit_hennya = {
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 /** Element reactions of the Spunia: no special reaction to any element. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of the Spunia (percent chance to take each status): immune to dodgy and invisibility;

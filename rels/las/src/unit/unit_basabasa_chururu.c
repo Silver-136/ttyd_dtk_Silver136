@@ -101,7 +101,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  * Damage modifiers of the Swoopula per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Weapon of the Swoopula's bite when the target is electrified or held fast, which drains nothing. */
 static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {

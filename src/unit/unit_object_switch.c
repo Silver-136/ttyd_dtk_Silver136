@@ -74,7 +74,7 @@ BattleUnitKind unit_object_switch = {
  * The switch takes no damage reduction and has no elemental defence; every hit just triggers its wobble.
  */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 /** The switch has no status vulnerabilities (all zero). */
 static StatusVulnerability regist = {0};
 

@@ -97,7 +97,7 @@ BattleUnitKind unit_green_chorobon = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of the Green Fuzzy: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {90, 90, 80, 100, 80, 100, 100, 65, 100, 70, 100, 70, 100, 65, 65, 85, 85, 100, 65, 100, 100, 95};

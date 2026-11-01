@@ -126,7 +126,7 @@ static BattleWeapon enemyWeapon_ClaudaNormalAttack = {
 static BattleUnitDefense defence_clauda = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of the Flurrie double's body: none, so every damage type is dealt normally. */
-static BattleUnitDefenseAttr defence_attr_clauda = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_clauda = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_clauda = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
@@ -204,7 +204,7 @@ EVT_BEGIN(damage_event_clauda)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(20), 1)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN

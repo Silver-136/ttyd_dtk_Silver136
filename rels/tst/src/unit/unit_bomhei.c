@@ -106,7 +106,7 @@ BattleUnitKind unit_bomhei = {
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Element response of the Bob-omb: none, every attack type is treated normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Pose table of the Bob-omb: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {

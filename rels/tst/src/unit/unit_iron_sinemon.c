@@ -114,7 +114,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  * Damage-type reactions of the Iron Cleft: immune to normal, fire, ice, explosion and electric unless the
  * attack pierces.
  */
-static BattleUnitDefenseAttr defence_attr = {{4, 4, 4, 4, 4}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP}};
 
 /**
  * Defense of the Iron Cleft against normal, fire, ice, explosion and electric attacks while it is flipped

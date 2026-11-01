@@ -2392,11 +2392,11 @@ static BOOL animSetMaterial_ChangeTexture(AnimationPoseData* data, AnimPoseShape
 }
 
 #if VERSION > VERSION_DEMO_US
-static s32 tbl[4] = { 2, 1, 3, 0 }; // shape cullMode -> GXCullMode: GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE
+static s32 tbl[4] = { GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE }; // shape cullMode -> GXCullMode: GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE
 #else
 /** Sets GX culling for a shape's cull mode; the demo map has one static local table both draw functions read. */
 static inline void animSetCullMode(s32 cullMode) {
-    static s32 tbl[4] = { 2, 1, 3, 0 };
+    static s32 tbl[4] = { GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE };
     GXSetCullMode(tbl[cullMode]);
 }
 #endif

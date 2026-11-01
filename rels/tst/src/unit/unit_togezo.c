@@ -117,7 +117,7 @@ static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
  * Damage modifiers of the Spiny per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {90, 90, 90, 100, 90, 100, 100, 80, 100, 90, 100, 90, 100, 90, 90, 100, 80, 100, 90, 100, 100, 100};
@@ -199,7 +199,7 @@ static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
  * Damage modifiers of the Spiny while guarding per element (normal, fire, ice, explosion, electric): normal:
  * immune, fire: immune, ice: immune, explosion: immune, electric: immune.
  */
-static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
+static BattleUnitDefenseAttr defence_attr_guard = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /**
  * Status vulnerability of the Spiny while guarding:

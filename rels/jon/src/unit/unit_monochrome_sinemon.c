@@ -89,7 +89,7 @@ BattleUnitKind unit_monochrome_sinemon = {
 static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 
 /** Element response of the Cleft: it is immune to fire. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Damage reduction of the Cleft, flipped on its back: none, every attack type does full damage. */
 static BattleUnitDefense defence_turn = {0};

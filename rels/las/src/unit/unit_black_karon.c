@@ -114,7 +114,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
  * Damage modifiers of the Dark Bones per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 85, 40, 0, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 50, 100, 40, 100, 100, 85};

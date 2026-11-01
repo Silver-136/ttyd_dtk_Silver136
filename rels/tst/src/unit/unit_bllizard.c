@@ -152,7 +152,7 @@ BattleUnitKind unit_bllizard = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Elemental reactions of the Ice Puff: takes 1 extra damage from fire attacks; is healed by ice attacks. */
-static BattleUnitDefenseAttr defence_attr = {{0, 1, 3, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_ABSORB, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {50, 70, 70, 100, 60, 0, 100, 0, 100, 60, 100, 60, 100, 70, 60, 70, 80, 100, 60, 100, 100, 95};

@@ -169,7 +169,7 @@ BattleUnitKind unit_hammer_bros = {
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Element reactions of the Hammer Bro: no special reaction to any element. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Status vulnerability of the Hammer Bro (percent chance to take each status): resists most statuses. */
 #if VERSION <= VERSION_DEMO_US
@@ -655,7 +655,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_FRAMES(60)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -703,7 +703,7 @@ static EVT_BEGIN(renzoku_attack_event)
     LABEL(98)
     WAIT_MS(1500)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -800,7 +800,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
     LABEL(98)
     WAIT_MS(1500)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

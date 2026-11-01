@@ -397,12 +397,12 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
         attr = hitGetAttr(party->hitobjStandOn);
 #else
     hit = party->hitobjFront;
-    if (hit != NULL && (hitGetAttr(hit) & 0xC00)) {
+    if (hit != NULL && (hitGetAttr(hit) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         party->useMotionId = 60;
         return TRUE;
     }
     hit = party->hitobjHead;
-    if (hit != NULL && (hitGetAttr(hit) & 0xC00)) {
+    if (hit != NULL && (hitGetAttr(hit) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         party->useMotionId = 60;
         return TRUE;
     }

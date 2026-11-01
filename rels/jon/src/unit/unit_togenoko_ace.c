@@ -139,7 +139,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
  * Damage modifiers of the Dark Koopatrol per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {60, 60, 50, 100, 50, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 50, 50, 100, 50, 100, 100, 95};
@@ -221,7 +221,7 @@ static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
  * Damage modifiers of the Dark Koopatrol while guarding per element (normal, fire, ice, explosion,
  * electric): normal: immune, fire: immune, ice: immune, explosion: immune, electric: immune.
  */
-static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
+static BattleUnitDefenseAttr defence_attr_guard = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /**
  * Status vulnerability of the Dark Koopatrol while guarding:

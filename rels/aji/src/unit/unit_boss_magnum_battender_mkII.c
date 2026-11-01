@@ -237,7 +237,7 @@ BattleUnitKind unit_boss_magnum_battender_mkII = {
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 /** Elemental reactions of Magnus von Grapple 2.0: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 40, 40, 0, 40, 0, 100, 20, 0, 0, 100, 0, 100, 40, 40, 0, 0, 100, 30, 0, 0, 0};
@@ -1052,7 +1052,7 @@ EVT_END()
  * zooms the camera on it and speaks stg7_aji_41_06.
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_CheckDamagePattern, UNIT_ID_SELF, ATTACKPATTERN_PRESS, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1145,7 +1145,7 @@ static EVT_BEGIN(dead_event)
         END_IF
 #endif
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))
     CALL(btlevtcmd_StoreCoin, LW(0))
@@ -1348,7 +1348,7 @@ static EVT_BEGIN(attack_event)
     LABEL(99)
 
     // The facing is reset and it goes back to waiting.
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -2110,7 +2110,7 @@ static BattleUnitDefense defence_r = {{0, 0, 0, 0, 0}};
 /**
  * Elemental reactions of the X-Punch fist of Magnus von Grapple 2.0: none, every element hurts it normally.
  */
-static BattleUnitDefenseAttr defence_attr_r = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_r = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_r = {0, 70, 70, 70, 70, 70, 100, 70, 0, 0, 100, 0, 100, 70, 70, 0, 90, 100, 70, 0, 0, 0};
@@ -2308,7 +2308,7 @@ static EVT_BEGIN(arm_event_end)
 EVT_END()
 
 static EVT_BEGIN(damage_event_r)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))

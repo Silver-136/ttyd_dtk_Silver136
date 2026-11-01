@@ -128,7 +128,7 @@ static BattleWeapon enemyWeapon_YoshiNormalAttack = {
 static BattleUnitDefense defence_yoshi = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of the Yoshi double's body: none, so every damage type is dealt normally. */
-static BattleUnitDefenseAttr defence_attr_yoshi = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_yoshi = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_yoshi = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
@@ -203,7 +203,7 @@ EVT_BEGIN(damage_event_yoshi)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(20), 1)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN

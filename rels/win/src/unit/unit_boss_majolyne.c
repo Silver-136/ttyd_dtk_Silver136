@@ -122,7 +122,7 @@ BattleUnitKind unit_boss_majolyne = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element attributes of Beldam: none, so every element does its normal damage. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {70, 80, 70, 100, 70, 100, 100, 50, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
@@ -477,7 +477,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -732,7 +732,7 @@ static EVT_BEGIN(phase_event)
                         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("btl_majo3_05"), 0, GW(9))
                         WAIT_MS(200)
                     END_IF
-                    CALL(btlevtcmd_ResetFaceDirection, -2)
+                    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
                     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -762,7 +762,7 @@ static EVT_BEGIN(phase_event)
                         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("btl_majo3_07"), 0, GW(10))
                         WAIT_MS(200)
                     END_IF
-                    CALL(btlevtcmd_ResetFaceDirection, -2)
+                    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
                     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -880,7 +880,7 @@ static EVT_BEGIN(attack_event)
         END_IF
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1128,7 +1128,7 @@ static EVT_BEGIN(powder_attack_event)
     LABEL(99)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(250)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

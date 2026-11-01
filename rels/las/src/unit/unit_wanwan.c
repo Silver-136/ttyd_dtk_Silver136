@@ -152,7 +152,7 @@ BattleUnitKind unit_wanwan = {
 static BattleUnitDefense defence = {{5, 99, 99, 5, 5}};
 
 /** Defence attributes of the Chain-Chomp: immune to fire hits; immune to ice hits. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 2, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 65, 65, 100, 65, 100, 100, 65, 100, 65, 100, 65, 100, 65, 65, 45, 30, 100, 65, 100, 100, 90};

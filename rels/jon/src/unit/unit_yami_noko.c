@@ -162,7 +162,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
  * Damage modifiers of the Dark Koopa per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Defence of the Dark Koopa while flipped over against each element (normal, fire, ice, explosion,

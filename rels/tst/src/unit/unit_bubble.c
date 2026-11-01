@@ -138,7 +138,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  * Elemental reactions of the Lava Bubble: takes 1 extra damage from ice and explosion attacks; is healed by
  * fire attacks.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 3, 1, 1, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_ABSORB, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {50, 90, 75, 25, 75, 100, 0, 50, 100, 75, 100, 75, 100, 75, 75, 50, 90, 100, 75, 100, 100, 95};
@@ -588,7 +588,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     WAIT_MS(400)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -750,7 +750,7 @@ static EVT_BEGIN(fire_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(400)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -910,7 +910,7 @@ static EVT_BEGIN(all_fire_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(400)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

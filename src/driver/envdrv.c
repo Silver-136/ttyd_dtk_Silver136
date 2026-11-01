@@ -268,7 +268,7 @@ void envMain(void) {
 }
 
 /** Texture matrix slots (GX_TEXMTX0 to 9) by index, for the environment textures and depth of field. */
-static const s32 texmtx_tbl[] = {30, 33, 36, 39, 42, 45, 48, 51, 54, 57};
+static const s32 texmtx_tbl[] = {GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4, GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9};
 
 static inline f32 env_sin(f32 x) {
     f32 a = 0.00761f;

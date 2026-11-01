@@ -3971,7 +3971,7 @@ EVT_BEGIN(evt_door_03_roll_open)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set_xyz, 65, 10, -55, 0, 150, EASING_SINE_IN_OUT)
     WAIT_MS(150)
-    CALL(evt_cam_ctrl_onoff, 4, 0)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     CALL(evt_hitobj_onoff, STRING("A_i03_rol"), 1, 1)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4006,7 +4006,7 @@ EVT_BEGIN(evt_door_03_roll_open)
 #endif
         CALL(evt_msg_print, 0, STRING("mac_4_049"), 0, STRING("サンダース"))
     END_IF
-    CALL(evt_cam_ctrl_onoff, 4, 1)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))

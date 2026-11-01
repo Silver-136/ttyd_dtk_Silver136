@@ -43,6 +43,7 @@
 #include "driver/seqdrv.h"
 #include "map/sharin.h"
 #include "map/sharin.h"
+#include "driver/camdrv.h"
 #include <dolphin/pad.h>
 
 static USER_FUNC(ramp_r);
@@ -1635,7 +1636,7 @@ static NpcSetupInfo npcEnt[] = {
 EVT_BEGIN(evt_hikousen)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_AIRSHIP1"))
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_cam_ctrl_onoff, 4, 0)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bou_10"), MAP_OBJ_FLAG_HIDDEN)

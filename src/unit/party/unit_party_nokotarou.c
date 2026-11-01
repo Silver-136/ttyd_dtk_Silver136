@@ -2031,7 +2031,7 @@ EVT_END()
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Koops's element reactions: none special, every element hits him normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Koops's defence while flipped on his back (dmg_turn_event): 0. */
 static BattleUnitDefense defence_turn = {0};

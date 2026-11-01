@@ -734,7 +734,7 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
 BattleWeapon badgeWeapon_TugitugiJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    241, // itemId
+    ITEM_MULTIBOUNCE, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -776,7 +776,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
 BattleWeapon badgeWeapon_GatsunJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    240, // itemId
+    ITEM_POWER_JUMP, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -814,7 +814,7 @@ BattleWeapon badgeWeapon_GatsunJump = {
 BattleWeapon badgeWeapon_DokanJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    332, // itemId
+    ITEM_MEGA_JUMP, // itemId
     NULL, // description
     100, // baseAccuracy
     6, // baseFpCost
@@ -852,7 +852,7 @@ BattleWeapon badgeWeapon_DokanJump = {
 BattleWeapon badgeWeapon_RenzokuJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    242, // itemId
+    ITEM_POWER_BOUNCE, // itemId
     NULL, // description
     100, // baseAccuracy
     3, // baseFpCost
@@ -894,7 +894,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
 BattleWeapon badgeWeapon_TatsumakiJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    243, // itemId
+    ITEM_TORNADO_JUMP, // itemId
     NULL, // description
     100, // baseAccuracy
     3, // baseFpCost
@@ -968,7 +968,7 @@ BattleWeapon badgeWeapon_TatsumakiJumpInvolved = {
 BattleWeapon badgeWeapon_MiniminiFumi = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    244, // itemId
+    ITEM_SHRINK_STOMP, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1016,7 +1016,7 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
 BattleWeapon badgeWeapon_NemuraseFumi = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    245, // itemId
+    ITEM_SLEEPY_STOMP, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1063,7 +1063,7 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
 BattleWeapon badgeWeapon_FunyafunyaJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    246, // itemId
+    ITEM_SOFT_STOMP, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1113,7 +1113,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
 BattleWeapon badgeWeapon_GatsunHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    247, // itemId
+    ITEM_POWER_SMASH, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1151,7 +1151,7 @@ BattleWeapon badgeWeapon_GatsunHammer = {
 BattleWeapon badgeWeapon_DokanHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    333, // itemId
+    ITEM_MEGA_SMASH, // itemId
     NULL, // description
     100, // baseAccuracy
     6, // baseFpCost
@@ -1192,7 +1192,7 @@ BattleWeapon badgeWeapon_DokanHammer = {
 BattleWeapon badgeWeapon_JishinHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    248, // itemId
+    ITEM_QUAKE_HAMMER, // itemId
     NULL, // description
     100, // baseAccuracy
     3, // baseFpCost
@@ -1234,7 +1234,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
 BattleWeapon badgeWeapon_UltraJishinHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    334, // itemId
+    ITEM_MEGA_QUAKE, // itemId
     "msg_ultra_attack", // description
     100, // baseAccuracy
     7, // baseFpCost
@@ -1272,7 +1272,7 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
 BattleWeapon badgeWeapon_HammerNageru = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    249, // itemId
+    ITEM_HAMMER_THROW, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1309,7 +1309,7 @@ BattleWeapon badgeWeapon_HammerNageru = {
 BattleWeapon badgeWeapon_TsuranukiNaguri = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    250, // itemId
+    ITEM_PIERCING_BLOW, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1350,7 +1350,7 @@ BattleWeapon badgeWeapon_TsuranukiNaguri = {
 BattleWeapon badgeWeapon_ConfuseHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    251, // itemId
+    ITEM_HEAD_RATTLE, // itemId
     NULL, // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1402,7 +1402,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
 BattleWeapon badgeWeapon_FireNaguri = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    252, // itemId
+    ITEM_FIRE_DRIVE, // itemId
     NULL, // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1472,7 +1472,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
 BattleWeapon badgeWeapon_FireNaguriFailed = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    252, // itemId
+    ITEM_FIRE_DRIVE, // itemId
     NULL, // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1538,7 +1538,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
 BattleWeapon badgeWeapon_IceNaguri = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    253, // itemId
+    ITEM_ICE_SMASH, // itemId
     NULL, // description
     100, // baseAccuracy
     3, // baseFpCost
@@ -1588,7 +1588,7 @@ BattleWeapon badgeWeapon_Charge = {
     "btl_wn_mario_normal_charge", // name
     ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
-    256, // itemId
+    ITEM_CHARGE, // itemId
     "btl_hlp_cmd_operation_charge", // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1632,7 +1632,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     "btl_wn_mario_normal_charge", // name
     ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
-    257, // itemId
+    ITEM_CHARGE_P, // itemId
     "btl_hlp_cmd_operation_charge", // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1676,7 +1676,7 @@ BattleWeapon badgeWeapon_SuperCharge = {
     "btl_wn_mario_super_charge", // name
     ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
-    337, // itemId
+    ITEM_SUPER_CHARGE, // itemId
     "btl_hlp_cmd_operation_super_charge", // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1716,7 +1716,7 @@ BattleWeapon badgeWeapon_SuperChargeP = {
     "btl_wn_mario_super_charge", // name
     ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
-    338, // itemId
+    ITEM_SUPER_CHARGE_P, // itemId
     "btl_hlp_cmd_operation_super_charge", // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1759,7 +1759,7 @@ BattleWeapon badgeWeapon_2KaiItem = {
     "btl_wn_2kai_item", // name
     0, // icon
     {0}, // pad_06
-    254, // itemId
+    ITEM_DOUBLE_DIP, // itemId
     NULL, // description
     100, // baseAccuracy
     4, // baseFpCost
@@ -1791,7 +1791,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
     "btl_wn_3kai_item", // name
     0, // icon
     {0}, // pad_06
-    329, // itemId
+    ITEM_TRIPLE_DIP, // itemId
     NULL, // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1830,7 +1830,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
 BattleWeapon badgeWeapon_DefenceCommand = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    335, // itemId
+    ITEM_UNUSED_DEFEND_BADGE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, 0.0f, 0, 0, 0, 0, // baseFpCost..reserved_1B
@@ -1869,7 +1869,7 @@ BattleWeapon badgeWeapon_DefenceCommand = {
 BattleWeapon badgeWeapon_DefenceCommandP = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    336, // itemId
+    ITEM_UNUSED_DEFEND_BADGE_P, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, 0.0f, 0, 0, 0, 0, // baseFpCost..reserved_1B

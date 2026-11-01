@@ -192,7 +192,7 @@ BattleUnitKind unit_boss_magnum_battender = {
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Defence attributes of Magnus: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 50, 50, 0, 50, 0, 100, 30, 0, 0, 100, 0, 100, 50, 50, 0, 0, 100, 40, 0, 0, 0};
@@ -639,7 +639,7 @@ static EVT_BEGIN(dead_event)
             END_INLINE_EVENT
         END_IF
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
 #else
     END_IF
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -1196,7 +1196,7 @@ BattleUnitKind unit_boss_rocket_punch = {
 static BattleUnitDefense defence_r = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of Magnus' rocket fist: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr_r = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_r = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_r = {0, 80, 80, 80, 80, 80, 100, 80, 0, 0, 100, 0, 100, 80, 80, 0, 110, 100, 80, 0, 0, 0};

@@ -198,7 +198,7 @@ static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
  * Element reactions of Red Parabuzzy in its winged state: fire immune and explosion immune;
  * the other elements hit normally.
  */
-static BattleUnitDefenseAttr defence_attr_pata = {{0, 2, 0, 2, 0}};
+static BattleUnitDefenseAttr defence_attr_pata = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 /**
@@ -298,7 +298,7 @@ EVT_END()
  * (LW(10) = -2, LW(11) = 1).
  */
 static EVT_BEGIN(damage_event_pata)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -310,7 +310,7 @@ EVT_END()
  * then runs init_event; if it took more than one point of damage it also flips over (dmg_turn_event).
  */
 static EVT_BEGIN(dmg_fall_event_pata)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_OffAttribute, LW(10), UNIT_ATTR_FLOATING)
     CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kIsWinged)
@@ -667,7 +667,7 @@ static BattleWeapon weapon_met_ceil_attack = {
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
 /** Element reactions of Red Parabuzzy: fire immune and explosion immune; the other elements hit normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
 /**
  * Defence of Red Parabuzzy flipped onto its back per element (normal, fire, ice, explosion, electric),
@@ -676,7 +676,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
 static BattleUnitDefense defence_turn = {{0, 0, 0, 0, 0}};
 
 /** Element reactions of Red Parabuzzy flipped onto its back: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr_turn = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_turn = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 /**
@@ -765,7 +765,7 @@ EVT_END()
  * (LW(10) = -2, LW(11) = 1).
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -777,7 +777,7 @@ EVT_END()
  * plays the shell sound, and drops it to the ground in two bounces.
  */
 static EVT_BEGIN(dmg_turn_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))
@@ -800,7 +800,7 @@ EVT_END()
  * plays the wake-up sound and hops back to the ground; otherwise it keeps lying flipped and waits.
  */
 static EVT_BEGIN(wakeup_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetOverTurnCount, LW(10), LW(0))
     SUBTRACT(LW(0), 1)
@@ -1005,7 +1005,7 @@ EVT_END()
  * revive (0x800) it runs ceil_fall_ready_event when it took damage while still on the ceiling, so it falls.
  */
 static EVT_BEGIN(damage_event_ceil)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -1045,7 +1045,7 @@ static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
     CALL_CHILD(init_event2)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(subsetevt_counter_damage)
@@ -1077,7 +1077,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
 #endif
     CALL_CHILD(init_event2)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))

@@ -149,7 +149,7 @@ BattleUnitKind unit_boss_zonbaba = {
 static BattleUnitDefense defence = {{2, 2, 2, 2, 0}};
 
 /** Element response of Bonetail: none, every attack type is treated normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of Bonetail (percent, 0 is immune): immune to sleep, stop, dizzy, confuse, freeze,
