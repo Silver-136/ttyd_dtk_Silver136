@@ -547,7 +547,7 @@ void smartFree(smartEntry* entry) {
         wp->tail->next = entry;
         entry->prev = wp->tail;
     }
-    entry->reserved_C = 0;
+    entry->inUse = 0;
     entry->next = NULL;
     entry->size = 0;
     entry->spaceAfter = 0;
@@ -603,7 +603,7 @@ smartEntry* smartAlloc(u32 size, u8 type) {
         sz += 32 - (sz & 31);
     }
 
-    entry->reserved_C = 1;
+    entry->inUse = 1;
     entry->type = type;
     entry->size = sz;
     entry->file = NULL;

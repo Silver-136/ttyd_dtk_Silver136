@@ -852,9 +852,9 @@ s32 animPaperPoseGetId(const char* animName, s32 group) {
 
 /**
  * Attaches the shared paper pose animName (from the pose's group, or the shared group) to pose poseId as its
- * paper overlay; NULL detaches it. someflag turns on caching of the overlay's screen rectangle.
+ * paper overlay; NULL detaches it. paperGroup turns on caching of the overlay's screen rectangle.
  */
-void animPoseSetPaperAnimGroup(s32 poseId, const char* animName, BOOL someflag) {
+void animPoseSetPaperAnimGroup(s32 poseId, const char* animName, BOOL paperGroup) {
     AnimationPose* pose = animPoseGetAnimPosePtr(poseId);
 
     if (!animName) {
@@ -868,7 +868,7 @@ void animPoseSetPaperAnimGroup(s32 poseId, const char* animName, BOOL someflag) 
     }
     pose->paperAnimIdx = -1;
     pose->localTimeInit = animTimeGetTime(pose->type);
-    if (someflag) {
+    if (paperGroup) {
         pose->flags |= ANIM_POSE_FLAG_PAPER_GROUP;
         pose->flags |= ANIM_POSE_FLAG_PAPER_ANIM_CHANGED;
     } else {
@@ -919,16 +919,16 @@ inline s32 animEffectPoseEntry(const char* animName, s32 group) {
 /**
  * Gives pose poseId its own paper overlay loaded from animName (e.g. a status or transformation effect),
  * releasing the previous one; NULL removes it.
- * Does nothing if that overlay is already attached with the same someflag (screen rectangle caching).
+ * Does nothing if that overlay is already attached with the same paperGroup (screen rectangle caching).
  */
-void animPoseSetEffect(s32 poseId, const char* animName, BOOL someflag) {
+void animPoseSetEffect(s32 poseId, const char* animName, BOOL paperGroup) {
     AnimationPose* paper;
     AnimationPose* pose = animPoseGetAnimPosePtr(poseId);
 
     if (pose->paperId != -1) {
         // FAKE: the paper pose's file entry found by byte offset (files + fileId * 16); animPoseGetBaseData(animPoseGetAnimPosePtr(pose->paperId)) changes the object
         if (animName && !strcmp((*(AnimationPoseData**)(((AnimationPoseFile*)((u8*)wp->files + animPoseGetAnimPosePtr(pose->paperId)->fileId * 16))->handle->data))->fileName, animName) &&
-            (s32)((pose->flags >> 1) & 1) == someflag) {
+            (s32)((pose->flags >> 1) & 1) == paperGroup) {
             return;
         }
         paper = &wp->poses[pose->paperId];
@@ -946,7 +946,7 @@ void animPoseSetEffect(s32 poseId, const char* animName, BOOL someflag) {
     pose->paperId = animEffectPoseEntry(animName, pose->type);
     pose->paperAnimIdx = -1;
     pose->localTimeInit = animTimeGetTime(pose->type);
-    if (someflag) {
+    if (paperGroup) {
         pose->flags |= ANIM_POSE_FLAG_PAPER_GROUP;
         pose->flags |= ANIM_POSE_FLAG_PAPER_ANIM_CHANGED;
     } else {

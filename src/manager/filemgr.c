@@ -512,17 +512,17 @@ void fileGarbageMoveMem(void* data, FileEntry* file) {
 /**
  * Releases cached files so their entries and memory can be reused;
  * memory.c and the allocators call it when they run out.
- * Mode 1 ages preloaded files (state 3) and drops them after two passes;
- * mode 0 drops every preloaded file at once, waiting out reads in flight.
+ * With agePreloadedEntries 1, ages preloaded files (state 3) and drops them after two passes;
+ * with 0, drops every preloaded file at once, waiting out reads in flight.
  * Then all released files (state 2) are freed and their entries returned to the free list.
  */
-void _fileGarbage(BOOL mode) {
+void _fileGarbage(BOOL agePreloadedEntries) {
     FileEntry* f;
     FileEntry* prev;
     FileEntry* first;
     FileEntry* next;
 
-    if (mode == 0) {
+    if (agePreloadedEntries == 0) {
         for (f = afp->firstused; f; f = f->next) {
             if (f->state == 3) {
                 if (f->entry) {
@@ -537,7 +537,7 @@ void _fileGarbage(BOOL mode) {
                 f->state = 2;
             }
         }
-    } else if (mode == 1) {
+    } else if (agePreloadedEntries == 1) {
         for (f = afp->firstused; f; f = f->next) {
             if (f->state == 3) {
                 if (f->entry) {

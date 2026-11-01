@@ -1219,7 +1219,7 @@ void BtlUnit_GetTalkTogePos(s32 unitId, f32* x, f32* y, f32* z);
 void BtlUnit_HpGaugeMain(BattleUnit* unit);
 void BtlUnit_LoadSeMode(s32 mode, s32 kind, BtlPoseSoundTable* table, BecSndWork* work);
 void BtlUnit_SetCommandAnimPose(BattleUnit* unit);
-void BtlUnit_SetSeMode(BecSndWork* work, const char* name0, const char* name1, s16 c, s16 e, s16 unused, s16 a, s16 b);
+void BtlUnit_SetSeMode(BecSndWork* work, const char* name0, const char* name1, s16 delay, s16 period, s16 unused, s16 a, s16 b);
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
 s32 BtlUnit_EnemyItemCanUseCheck(s32 item);
 void BtlUnit_SetTotalHitDamage(BattleUnit* unit, s16 damage);

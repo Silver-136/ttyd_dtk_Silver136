@@ -4477,6 +4477,7 @@ void mapGrpSetOffScreen(const char* name, const char* offscreen) {
     MapObject* obj = mapGetMapObj(name);
     s32 id = offscreenNameToId(offscreen);
 
+    // Requires name to resolve to a map object.
     _setOffScrnId(obj, id, FALSE);
 }
 
@@ -4493,6 +4494,7 @@ void mapObjClearOffScreen(const char* name) {
 void mapGrpClearOffScreen(const char* name) {
     MapObject* obj = mapGetMapObj(name);
 
+    // Requires name to resolve to a map object.
     _setOffScrnId(obj, -1, FALSE);
 }
 

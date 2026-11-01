@@ -61,7 +61,8 @@ typedef struct BattleCommandMultiItem {
     const char* name;  // 0x4
     const char* help;  // 0x8
     u16 icon;          // 0xC
-    u8 padE[2];        // 0xE
+    u8 dipMode;        // 0xE, copied to BattleCommand.dipMode when picked (1 item, 2 Double, 3 Triple Dip)
+    u8 padF;           // 0xF
     s32 cost;          // 0x10
     s32 disableReason; // 0x14
 } BattleCommandMultiItem;

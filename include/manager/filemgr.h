@@ -43,7 +43,7 @@ typedef struct FileManagerWork {
 
 void fileInit(void);
 void fileGarbageMoveMem(void* data, FileEntry* file);
-void _fileGarbage(BOOL a1);
+void _fileGarbage(BOOL agePreloadedEntries);
 FileEntry* fileAllocf(s32 type, const char* format, ...);
 FileEntry* fileAlloc(const char* filename, s32 type);
 void fileFree(FileEntry* handle);

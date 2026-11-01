@@ -418,7 +418,7 @@ typedef struct FieldBattleData {
     s32 hitKind;                 // 0x10, FbatHitKind
     s32 firstAttackParam;        // 0x14, BattleFirstAttack of an enemy first strike (0x10 from tou_03 _firstattack_setting)
     u8 pad_18[0x1C - 0x18];      // 0x18, never accessed
-    u32 firstAttackFlags;        // 0x1C, bit 1 cleared by tou_03 _firstattack_setting, not read in C
+    u32 firstAttackFlags;        // 0x1C, bit 0: seq_battle starts with FIRST_ATTACK_NONE; tou_03 _firstattack_setting clears it
     FieldBattleInfo info;        // 0x20
     void* postBattleEvent;       // 0x3C, evt run after a won battle (battle_seq_end)
     s32 postBattleEventId;       // 0x40

@@ -376,7 +376,7 @@ void BattleStatusWindowAPRecoveryOff(void);
 void BattleStatusWindowEventOn(void);
 void BattleStatusWindowSystemOff(void);
 void BattleStatusWindowSystemOn(void);
-void BattleAfterReactionEntry(s32 a, s32 b);
+void BattleAfterReactionEntry(s32 unitId, s32 tag);
 BOOL BattleAfterReactionMain(void);
 void BattleStatusWindowAPRecoveryOn(void);
 void BattleStatusWindowEventOff(void);

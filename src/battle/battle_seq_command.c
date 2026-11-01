@@ -957,7 +957,7 @@ void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
         return;
     }
     _btlcmd_GetCursorPtr(cmd, 3, &cursor);
-    cmd->multiItem[0].padE[0] = 1;
+    cmd->multiItem[0].dipMode = 1;
     cmd->multiItem[0].enabled = 1;
     cmd->multiItem[0].name = msgSearch("btl_cmd_act_item");
     cmd->multiItem[0].icon = ICON_BTL_CMD_ITEM;
@@ -965,7 +965,7 @@ void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
     cmd->multiItem[0].cost = 0;
     num = 1;
     if (unit->badgesEquipped.DoubleDip) {
-        cmd->multiItem[num].padE[0] = 2;
+        cmd->multiItem[num].dipMode = 2;
         if (unit->currentKind == UNIT_MARIO) {
             cmd->multiItem[num].enabled = BtlUnit_CheckWeaponCost(unit, &badgeWeapon_2KaiItem);
             cmd->multiItem[num].name = msgSearch(itemDataTable[ITEM_DOUBLE_DIP].name);
@@ -987,7 +987,7 @@ void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
         num++;
     }
     if (unit->badgesEquipped.TripleDip) {
-        cmd->multiItem[num].padE[0] = 3;
+        cmd->multiItem[num].dipMode = 3;
         if (unit->currentKind == UNIT_MARIO) {
             cmd->multiItem[num].enabled = BtlUnit_CheckWeaponCost(unit, &badgeWeapon_3KaiItem);
             cmd->multiItem[num].name = msgSearch(itemDataTable[ITEM_TRIPLE_DIP].name);
@@ -2161,7 +2161,7 @@ s32 BattleCommandDisplay_MultiItemMenuMain(BattleWork* wp) {
         if (BattlePadCheckTrigger(PAD_BUTTON_A) || wp->commandMenu.attackAudience) {
             if (cmd->multiItem[cursor->absPos].enabled) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_OK1));
-                cmd->dipMode = cmd->multiItem[cursor->absPos].padE[0];
+                cmd->dipMode = cmd->multiItem[cursor->absPos].dipMode;
                 cmd->state = 5;
                 BattleCommandDisplay_MultiItemMenuEnd(wp);
                 ret = 1;

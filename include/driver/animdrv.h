@@ -384,9 +384,9 @@ void animPoseSetStartTime(s32 poseId, OSTime startTime);
 void animPoseSetAnim(s32 poseId, const char* animName, BOOL reset);
 
 s32 animPaperPoseGetId(const char* animName, s32 group);
-void animPoseSetPaperAnimGroup(s32 poseId, const char* animName, BOOL someflag);
+void animPoseSetPaperAnimGroup(s32 poseId, const char* animName, BOOL paperGroup);
 void animPoseSetPaperAnim(s32 poseId, const char* animName, BOOL reset);
-void animPoseSetEffect(s32 poseId, const char* animName, BOOL someflag);
+void animPoseSetEffect(s32 poseId, const char* animName, BOOL paperGroup);
 void animPoseSetEffectAnim(s32 poseId, const char* animName, BOOL reset);
 
 AnimTableEntry* animPoseGetCurrentAnim(s32 poseId);

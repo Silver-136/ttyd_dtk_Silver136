@@ -2677,6 +2677,7 @@ static inline void partyJumpFrontMove(PartyEntry* party) {
     Vec v;
     HitEntry* hit;
     if (party->flags & PARTY_FLAG_DISABLE_FRONT_WALL_CHK) {
+        // v is uninitialized here and the result is dropped: the partner does not move this frame.
         movePos(&v.x, &v.z, party->moveSpeed, party->targetDir);
         return;
     }
@@ -4029,6 +4030,7 @@ static inline void partyJumpFrontMove(PartyEntry* party) {
     Vec v;
     HitEntry* hit;
     if (party->flags & PARTY_FLAG_DISABLE_FRONT_WALL_CHK) {
+        // v is uninitialized here and the result is dropped: the partner does not move this frame.
         movePos(&v.x, &v.z, party->moveSpeed, party->targetDir);
         return;
     }

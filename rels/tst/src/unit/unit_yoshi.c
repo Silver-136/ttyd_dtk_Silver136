@@ -47,7 +47,7 @@ typedef struct YoshiGundanWork {
     s32 state;
     YoshiGundanPart parts[256];
     s32 reserved_3004; // 0x3004, never accessed
-    f32 timer;
+    f32 meanX; // sum of the parts' x, then the mean (/ 256)
 } YoshiGundanWork;
 
 // FAKE: _btlYoshiDisp calls btlDispTexPlane through this float-first prototype so the float arguments are evaluated
@@ -3274,7 +3274,7 @@ USER_FUNC(_wait_yoshig_run) {
     if (w == NULL) {
         return EVT_RETURN_BLOCK;
     }
-    if (w->timer <= 0.0f) {
+    if (w->meanX <= 0.0f) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -3323,7 +3323,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
             TST_BATTLE_UNIT(unit)->countersetWeapon = (BattleWeapon*)w;
             memset(w, 0, sizeof(YoshiGundanWork));
             w->state = 0;
-            w->timer = 0.0f;
+            w->meanX = 0.0f;
             event->userdata[0] = 0;
             {
                 Vec tmp;
@@ -3337,7 +3337,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
             case 0:
                 w->state++;
             case 1:
-                w->timer = 0.0f;
+                w->meanX = 0.0f;
                 allDone = TRUE;
                 for (i = 0; i < 256; i++) {
                     p = &w->parts[i];
@@ -3352,7 +3352,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
                     if (_gundan_part_update(p, i)) {
                         allDone = FALSE;
                     }
-                    w->timer += p->x;
+                    w->meanX += p->x;
                 }
                 if (event->userdata[0] > 0) {
                     event->userdata[0]--;
@@ -3362,8 +3362,8 @@ USER_FUNC(_gundan_yoshi_run_effect) {
                     sc = 1.0f + 0.05f * (f32)irand(20);
                     effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
 }
-                w->timer *= 0.00390625f;
-                pos.x = w->timer;
+                w->meanX *= 0.00390625f;
+                pos.x = w->meanX;
                 pos.y = 0.0f;
                 pos.z = 0.0f;
                 psndSFX_pos(event->userdata[1], &pos);
@@ -3405,7 +3405,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
             TST_BATTLE_UNIT(unit)->countersetWeapon = (BattleWeapon*)w;
             memset(w, 0, sizeof(YoshiGundanWork));
             w->state = 0;
-            w->timer = 0.0f;
+            w->meanX = 0.0f;
             event->userdata[0] = 0;
             {
                 Vec tmp;
@@ -3419,7 +3419,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
             case 0:
                 w->state++;
             case 1:
-                w->timer = 0.0f;
+                w->meanX = 0.0f;
                 allDone = TRUE;
                 for (i = 0; i < 256; i++) {
                     p = &w->parts[i];
@@ -3434,7 +3434,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
                     if (_gundan_part_update(p, i)) {
                         allDone = FALSE;
                     }
-                    w->timer += p->x;
+                    w->meanX += p->x;
                 }
                 if (event->userdata[0] > 0) {
                     event->userdata[0]--;
@@ -3444,8 +3444,8 @@ USER_FUNC(_gundan_yoshi_run_effect) {
                     sc = 1.0f + 0.05f * (f32)irand(20);
                     effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(15), 65.0f, sc);
                 }
-                w->timer *= 0.00390625f;
-                pos.x = w->timer;
+                w->meanX *= 0.00390625f;
+                pos.x = w->meanX;
                 pos.y = 0.0f;
                 pos.z = 0.0f;
                 psndSFX_pos(event->userdata[1], &pos);
