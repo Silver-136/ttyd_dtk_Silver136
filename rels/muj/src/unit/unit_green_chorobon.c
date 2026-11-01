@@ -556,20 +556,20 @@ static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_drain_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -599,10 +599,10 @@ static EVT_BEGIN(drain_attack_event)
     LABEL(91)
     SET_VALUE(LF(0), 0)
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_drain_attack), 256, LW(5))
-    IF_INT_EQUAL(LW(5), 17)
+    IF_INT_EQUAL(LW(5), CHECK_COUNTER_HOLD_FAST)
         SET_VALUE(LF(0), 1)
     END_IF
-    IF_INT_EQUAL(LW(5), 14)
+    IF_INT_EQUAL(LW(5), CHECK_COUNTER_ELECTRIFIED)
         SET_VALUE(LF(0), 1)
     END_IF
 

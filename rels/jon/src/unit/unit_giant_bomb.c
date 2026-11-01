@@ -18,6 +18,7 @@
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
+#include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_FUSE_LIT 0     // 1 once attack_event has lit the fuse (with BATTLE_UNIT_FLAG_FUSE_LIT_UNUSED); freeze damage puts it out; _fire_point_callback draws the flame only while set
@@ -831,7 +832,7 @@ static EVT_BEGIN(explosion_event)
     SET_VALUE(LW(10), 0)
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_heavy_bomb_super_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 1)
+    IF_INT_EQUAL(LW(5), PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_heavy_bomb_super_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))

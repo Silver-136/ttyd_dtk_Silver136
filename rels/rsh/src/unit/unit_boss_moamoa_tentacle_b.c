@@ -514,7 +514,7 @@ static EVT_BEGIN(evt_attack)
     // The swat's hit is checked: a target that dodges is missed, otherwise it takes the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_moamoa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_moamoa_attack))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_moamoa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_EQUAL(4)

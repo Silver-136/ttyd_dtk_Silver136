@@ -24,6 +24,7 @@
 #include "evt/evt_ext.h"
 #include "evt/evt_npc.h"
 #include "libc_decls.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots (btlevtcmd_SetUnitWork / GetUnitWork)
 enum {
@@ -374,20 +375,20 @@ static EVT_BEGIN(attack_event)
     // The swarm flies in toward the target; the damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -421,7 +422,7 @@ static EVT_BEGIN(attack_event)
         ELSE
             CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), 0, LW(5))
         END_IF
-        IF_INT_EQUAL(LW(5), 21)
+        IF_INT_EQUAL(LW(5), CHECK_DAMAGE_SUPERGUARDED)
             CALL(chorogun_counterd, LW(6))
         ELSE
             CALL(chorogun_bound_target, LW(6))

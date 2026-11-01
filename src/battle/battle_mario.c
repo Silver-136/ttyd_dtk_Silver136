@@ -2360,12 +2360,12 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(4)
-        CASE_OR_EQUAL(6)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -2417,14 +2417,14 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     END_IF
 
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -2650,12 +2650,12 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(4)
-        CASE_OR_EQUAL(6)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -2692,14 +2692,14 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6), 0, MOVE_SOUND_FROM_TABLE)
 
         // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-        IF_INT_NOT_EQUAL(LW(5), 1)
-            IF_INT_EQUAL(LW(5), 3)
+        IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+            IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             END_IF
-            IF_INT_EQUAL(LW(5), 6)
+            IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             END_IF
-            IF_INT_EQUAL(LW(5), 2)
+            IF_INT_EQUAL(LW(5), PRECHECK_MISS)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
             END_IF
             CALL(btlevtcmd_StopAC)
@@ -3139,14 +3139,14 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
 
     // A dodge or miss: the enemy plays its dodge, Mario tumbles off, falls flat and gets up.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -3433,12 +3433,12 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -3474,14 +3474,14 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6), 0, MOVE_SOUND_FROM_TABLE)
 
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -3646,12 +3646,12 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -3666,14 +3666,14 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6), 0, MOVE_SOUND_FROM_TABLE)
 
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -3962,14 +3962,14 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
             END_IF
             CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT, LW(5))
             SWITCH(LW(5))
-                CASE_EQUAL(2)
+                CASE_EQUAL(PRECHECK_MISS)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-                CASE_EQUAL(3)
+                CASE_EQUAL(PRECHECK_LUCKY)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-                CASE_EQUAL(6)
+                CASE_EQUAL(PRECHECK_DODGY)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-                CASE_EQUAL(4)
-                CASE_EQUAL(1)
+                CASE_EQUAL(PRECHECK_INTANGIBLE)
+                CASE_EQUAL(PRECHECK_HIT)
                 CALL(btlevtcmd_GetResultAC, LW(0))
                 IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
                     CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
@@ -4226,12 +4226,12 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -4301,14 +4301,14 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
     END_IF
 
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -4484,12 +4484,12 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     // Each stomp starts here (label 10); the game first checks whether it will land.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -4575,14 +4575,14 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     END_SWITCH
 
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -4847,7 +4847,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_EQUAL(LW(6), 5)
+    IF_INT_EQUAL(LW(6), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_StopAC)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
@@ -4958,14 +4958,14 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     END_IF
 
     // If the attack misses, the target plays its dodge reaction and no damage is dealt.
-    IF_INT_NOT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(6), 3)
+    IF_INT_NOT_EQUAL(LW(6), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         GOTO(90)
@@ -5265,7 +5265,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(evt_btl_camera_set_zoom, 0, 350)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(7))
-    IF_INT_EQUAL(LW(7), 5)
+    IF_INT_EQUAL(LW(7), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_StopAC)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
@@ -5326,14 +5326,14 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
 
     // If the attack misses, the target plays its dodge reaction and no damage is dealt.
-    IF_INT_NOT_EQUAL(LW(7), 1)
-        IF_INT_EQUAL(LW(7), 3)
+    IF_INT_NOT_EQUAL(LW(7), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(7), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(7), 6)
+        IF_INT_EQUAL(LW(7), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(7), 2)
+        IF_INT_EQUAL(LW(7), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         GOTO(90)
@@ -5396,7 +5396,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
         END_SIBLING_EVENT
 
         // If the swing did not connect, Mario spins to a stop and stands for a moment.
-        IF_INT_NOT_EQUAL(LW(7), 1)
+        IF_INT_NOT_EQUAL(LW(7), PRECHECK_HIT)
             WAIT_FRAMES(50)
             DELETE_EVENT(LW(9))
             BEGIN_SIBLING_EVENT
@@ -5441,7 +5441,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     ELSE
         // Super Hammer: a missed swing spins to a stop as above; on a hit a whirlwind rises and the Stylish window
         // opens.
-        IF_INT_NOT_EQUAL(LW(7), 1)
+        IF_INT_NOT_EQUAL(LW(7), PRECHECK_HIT)
             CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(0))
             MULTIPLY(LW(0), 36)
             BEGIN_SIBLING_EVENT_GET_ID(LW(9))
@@ -5532,7 +5532,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     IF_BITS_CLEAR(LW(6), AC_RESULT_SUCCESS)
         GOTO(99)
     END_IF
-    IF_INT_NOT_EQUAL(LW(7), 1)
+    IF_INT_NOT_EQUAL(LW(7), PRECHECK_HIT)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_CheckToken, LW(3), kKnockedAway, LW(0))
@@ -5785,7 +5785,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     END_IF
     LABEL(51)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_EQUAL(LW(6), 1)
+    IF_INT_EQUAL(LW(6), PRECHECK_HIT)
         CALL(btlevtcmd_DamageDirect, LW(3), LW(4), 0, 0, 2, 0)
         BEGIN_INLINE_EVENT
             WAIT_FRAMES(42)
@@ -5796,13 +5796,13 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
             END_IF
         END_INLINE_EVENT
     ELSE
-        IF_INT_EQUAL(LW(6), 3)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
     END_IF
@@ -5825,7 +5825,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 17, 17, 0)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
     SWITCH(LW(6))
-        CASE_GREATER_OR_EQUAL(2)
+        CASE_GREATER_OR_EQUAL(PRECHECK_MISS)
         CASE_DEFAULT
         CALL(evt_audience_acrobat_notry)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
@@ -6087,7 +6087,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     END_IF
     LABEL(51)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_EQUAL(LW(6), 1)
+    IF_INT_EQUAL(LW(6), PRECHECK_HIT)
         CALL(btlevtcmd_DamageDirect, LW(3), LW(4), 0, 0, 2, 0)
         BEGIN_INLINE_EVENT
             WAIT_FRAMES(42)
@@ -6098,13 +6098,13 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
             END_IF
         END_INLINE_EVENT
     ELSE
-        IF_INT_EQUAL(LW(6), 3)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
     END_IF
@@ -6226,7 +6226,7 @@ EVT_BEGIN(marioAttackEvent_HammerNageru)
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 0)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
     SWITCH(LW(6))
-        CASE_GREATER_OR_EQUAL(2)
+        CASE_GREATER_OR_EQUAL(PRECHECK_MISS)
         CASE_DEFAULT
         CALL(evt_audience_acrobat_notry)
         WAIT_MS(1000)
@@ -6668,7 +6668,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri_object)
     // The enemy it reaches takes the hit (more after a successful Action Command) and the pillars get smaller;
     // enemies that avoid it play their dodge reaction.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_EQUAL(LW(6), 1)
+    IF_INT_EQUAL(LW(6), PRECHECK_HIT)
         CALL(btlevtcmd_GetResultAC, LW(0))
         IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
             CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
@@ -6679,13 +6679,13 @@ EVT_BEGIN(marioAttackEvent_FireNaguri_object)
             SUBTRACT(LW(13), 1)
         END_IF
     ELSE
-        IF_INT_EQUAL(LW(6), 3)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
     END_IF

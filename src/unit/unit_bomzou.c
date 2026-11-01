@@ -13,6 +13,7 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_sub.h"
 #include "battle/unit_work.h"
+#include "battle/battle_damage.h"
 
 
 static BattleUnitDefense defence;
@@ -401,7 +402,7 @@ static EVT_BEGIN(explosion_event)
         GOTO(80)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_bomzou_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 1)
+    IF_INT_EQUAL(LW(5), PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_bomzou_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     LABEL(80)

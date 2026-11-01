@@ -439,7 +439,7 @@ static EVT_BEGIN(evt_attack)
     LOOP(0)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_moamoa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
         SWITCH(LW(5))
-            CASE_EQUAL(1)
+            CASE_EQUAL(PRECHECK_HIT)
             IF_INT_EQUAL(LW(10), 0)
                 CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_moamoa_attack))
             END_IF

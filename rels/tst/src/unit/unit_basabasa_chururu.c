@@ -11,6 +11,7 @@
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
 #include "battle/battle_sub.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots of the Swoopula.
 enum {
@@ -529,20 +530,20 @@ static EVT_BEGIN(attack_event)
     // The damage check decides between a miss (it sails past) and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_basabasa_attack), 256, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -564,10 +565,10 @@ static EVT_BEGIN(attack_event)
     // On a hit, it checks whether the target would counter the bite (Electrified or Hold Fast); if so, the counter damage is dealt instead and nothing is drained.
     SET_VALUE(LF(0), 0)
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_basabasa_attack), 256, LW(5))
-    IF_INT_EQUAL(LW(5), 17)
+    IF_INT_EQUAL(LW(5), CHECK_COUNTER_HOLD_FAST)
         SET_VALUE(LF(0), 1)
     END_IF
-    IF_INT_EQUAL(LW(5), 14)
+    IF_INT_EQUAL(LW(5), CHECK_COUNTER_ELECTRIFIED)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)

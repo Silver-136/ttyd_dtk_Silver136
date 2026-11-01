@@ -2490,14 +2490,14 @@ EVT_BEGIN(_object_turn_event_core)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(4)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
@@ -2620,14 +2620,14 @@ EVT_BEGIN(_nozzle_work_event_core)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(4)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
@@ -2647,14 +2647,14 @@ EVT_BEGIN(_nozzle_work_event_core)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(4)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
@@ -4042,7 +4042,7 @@ USER_FUNC(_object_fall_attack) {
                     flags |= DAMAGE_RESULT_NO_EVADE;
                 }
                 e->preCheck = BattlePreCheckDamage(BattleGetSystemPtr(wp), BattleGetUnitPtr(wp, e->unitId), BattleGetUnitPartsPtr(e->unitId, e->partId), weapon, flags);
-                if (e->preCheck == 1 && !e->noAc) {
+                if (e->preCheck == PRECHECK_HIT && !e->noAc) {
                     delay = irand(0);
                     for (k2 = 0; k2 < i; k2++) {
                         o2 = &w->entries[k2];
@@ -4108,10 +4108,10 @@ USER_FUNC(_object_fall_attack) {
                 dir = 270.0f;
             }
             switch (e3->preCheck) {
-                case 2:
-                case 3:
-                case 4:
-                case 6:
+                case PRECHECK_MISS:
+                case PRECHECK_LUCKY:
+                case PRECHECK_INTANGIBLE:
+                case PRECHECK_DODGY:
                     hit.y = pos.y;
                     break;
             }
@@ -4209,10 +4209,10 @@ USER_FUNC(_object_fall_attack) {
                     }
                     psndSFXOff(e3->sfxId);
                     switch (e3->preCheck) {
-                        case 2:
-                        case 3:
-                        case 4:
-                        case 6:
+                        case PRECHECK_MISS:
+                        case PRECHECK_LUCKY:
+                        case PRECHECK_INTANGIBLE:
+                        case PRECHECK_DODGY:
                             switch (e3->type) {
                                 case STAGE_FALL_WATER:
                                     break;
@@ -4222,7 +4222,7 @@ USER_FUNC(_object_fall_attack) {
                                     break;
                             }
                             break;
-                        case 1:
+                        case PRECHECK_HIT:
                             switch (e3->type) {
                                 case STAGE_FALL_BASIN:
                                 case STAGE_FALL_BUCKET:
@@ -4257,11 +4257,11 @@ USER_FUNC(_object_fall_attack) {
                             tg = &targets2.targets[targets2.targetIndices[targets2.currentTarget]];
                             unit2 = BattleGetUnitPtr(wp, tg->unitIdx);
                             switch (BattlePreCheckDamage(BattleGetSystemPtr(wp), unit2, BattleGetUnitPartsPtr(tg->unitIdx, tg->partIdx), weapon3, DAMAGE_RESULT_FINAL_HIT)) {
-                                case 2:
-                                case 4:
+                                case PRECHECK_MISS:
+                                case PRECHECK_INTANGIBLE:
                                     break;
 
-                                case 3: {
+                                case PRECHECK_LUCKY: {
                                     EffectEntry* eff;
                                     BtlUnit_GetPos(unit2, &p.x, &p.y, &p.z);
                                     if (p.y < 85.0f) {
@@ -4277,12 +4277,12 @@ USER_FUNC(_object_fall_attack) {
                                     break;
                                 }
 
-                                case 6:
+                                case PRECHECK_DODGY:
                                     unit2->damagePattern = 0;
                                     BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_DODGY);
                                     break;
 
-                                case 1:
+                                case PRECHECK_HIT:
                                     if (BtlUnit_GetACPossibility(unit2) && acCount <= 0) {
                                         BattleActionCommandCheckDefence(unit2, weapon3);
                                         acCount++;
