@@ -206,12 +206,12 @@ static inline int chuchu_findTreasure2(PartyEntry* cpp, f32 range, Vec* bestPos)
 }
 #endif
 
+#if VERSION <= VERSION_DEMO_US
 /**
  * The demo stops at the first item or block in range and has no buried treasure table.
  * Script helper: looks for an item and then a block from mobj_list within 150 units of Mario, then anywhere;
  * sets LW0 to map_exist_near / map_exist_far / map_no_exist and LW1 to 2 / 1 / 0, and turns Ms. Mowz to face it.
  */
-#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(set_msg) {
     int pass;
     PartyEntry* cp = partyGetPtr(marioGetPartyId());

@@ -356,10 +356,10 @@ s32 marioRollCancel(void) {
 #if VERSION <= VERSION_DEMO_US
     if (!(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING)) {
         ret = 1;
-    mario->currSubMotionId = 0x14;
-    camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-}
-return ret;
+        mario->currSubMotionId = 0x14;
+        camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
+    }
+    return ret;
 }
 #else
     mario->currSubMotionId = 0x14;
@@ -937,9 +937,9 @@ void mot_roll(void) {
         }
         marioUpdateCamCollision(mario->position);
 #if VERSION <= VERSION_DEMO_US
-        } else {
-            mario->airTimer++;
-            mario->airTimer--;
+    } else {
+        mario->airTimer++;
+        mario->airTimer--;
 #else
         mario->airTimer = 0;
 #endif

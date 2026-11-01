@@ -1895,26 +1895,26 @@ void ext_fan_main(void) {
         }
     }
 #else
-        for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-            if (fan->state == 0) {
-                s32 j;
-                Fan* other;
-                f32 d;
+    for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
+        if (fan->state == 0) {
+            s32 j;
+            Fan* other;
+            f32 d;
 
-                for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
-                    if (other->state == 0 && fan != other && (d = PSVECSquareDistance(&fan->pos, &other->pos)) < 900.0f) {
-                        PSVECSubtract(&fan->pos, &other->pos, &dir);
-                        if (d == 0.0f) {
-                            dir.x = d = 1.0f;
-                        }
-                        dir.y = 0.0f;
-                        PSVECScale(&dir, &dir, 8.0f * (1.0f / d));
-                        PSVECAdd(&fan->vel, &dir, &fan->vel);
-                        PSVECSubtract(&other->vel, &dir, &other->vel);
+            for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
+                if (other->state == 0 && fan != other && (d = PSVECSquareDistance(&fan->pos, &other->pos)) < 900.0f) {
+                    PSVECSubtract(&fan->pos, &other->pos, &dir);
+                    if (d == 0.0f) {
+                        dir.x = d = 1.0f;
                     }
+                    dir.y = 0.0f;
+                    PSVECScale(&dir, &dir, 8.0f * (1.0f / d));
+                    PSVECAdd(&fan->vel, &dir, &fan->vel);
+                    PSVECSubtract(&other->vel, &dir, &other->vel);
                 }
             }
         }
+    }
 #endif
     {
         f32 angle;
@@ -2027,7 +2027,7 @@ void ext_fan_main(void) {
                         lfan->pos.z = h;
                     }
                     break;
-                }
+                    }
                 case 10:
                     lfan->pos.y += lfan->param.x;
                     lfan->param.x -= lfan->param.z;
@@ -2070,60 +2070,60 @@ void ext_fan_main(void) {
         }
     }
 #else
-        pose = extGetPosePtr();
-        fan = fan_wp->fans;
-        for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
-            f32 angle;
+    pose = extGetPosePtr();
+    fan = fan_wp->fans;
+    for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
+        f32 angle;
 
-            switch (fan->state) {
-                case 0:
-                    PSVECAdd(&fan->pos, &fan->vel, &fan->pos);
-                    PSVECScale(&fan->vel, &fan->vel, 0.6f);
-                    if (fan->pos.z < -190.0f) {
-                        fan->pos.z = -190.0f;
-                    }
-                    if (fan->pos.z > 190.0f) {
-                        fan->pos.z = 190.0f;
-                    }
-                    break;
-                case 10:
-                    fan->pos.y += fan->param.x;
-                    fan->param.x -= fan->param.z;
-                    angle = angleABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
-                    angle = 6.2831855f * angle / 360.0f;
-                    fan->pos.x += fan->param.y * polySinf(angle);
-                    fan->pos.z += fan->param.y * -polyCosf(angle);
-                    if (--fan->timer < 0) {
-                        fan->state = 100;
-                    }
-                    break;
-                case 20:
-                    if (--fan->timer > 0) {
-                        fan->target.x += fan->param.x;
-                        fan->target.y += fan->param.y;
-                        fan->target.z += fan->param.z;
-                        fan->pos.x += fan->target.x;
-                        fan->pos.y += fan->target.y;
-                        fan->pos.z += fan->target.z;
-                    } else {
-                        fan->state = 100;
-                    }
-                    break;
-                case 100:
-                    pose->flags &= ~3;
-                    fan->state++;
-                    break;
-                case 101:
-                    break;
-            }
-            if (fan->state != 0) {
-                fan_wp->count--;
-            }
-            (*pose->mtx)[0][3] = fan->pos.x;
-            (*pose->mtx)[1][3] = fan->pos.y;
-            (*pose->mtx)[2][3] = fan->pos.z;
-            pose->dir = angleABf(target.x, target.z, fan->pos.x, fan->pos.z);
+        switch (fan->state) {
+            case 0:
+                PSVECAdd(&fan->pos, &fan->vel, &fan->pos);
+                PSVECScale(&fan->vel, &fan->vel, 0.6f);
+                if (fan->pos.z < -190.0f) {
+                    fan->pos.z = -190.0f;
+                }
+                if (fan->pos.z > 190.0f) {
+                    fan->pos.z = 190.0f;
+                }
+                break;
+            case 10:
+                fan->pos.y += fan->param.x;
+                fan->param.x -= fan->param.z;
+                angle = angleABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
+                angle = 6.2831855f * angle / 360.0f;
+                fan->pos.x += fan->param.y * polySinf(angle);
+                fan->pos.z += fan->param.y * -polyCosf(angle);
+                if (--fan->timer < 0) {
+                    fan->state = 100;
+                }
+                break;
+            case 20:
+                if (--fan->timer > 0) {
+                    fan->target.x += fan->param.x;
+                    fan->target.y += fan->param.y;
+                    fan->target.z += fan->param.z;
+                    fan->pos.x += fan->target.x;
+                    fan->pos.y += fan->target.y;
+                    fan->pos.z += fan->target.z;
+                } else {
+                    fan->state = 100;
+                }
+                break;
+            case 100:
+                pose->flags &= ~3;
+                fan->state++;
+                break;
+            case 101:
+                break;
         }
+        if (fan->state != 0) {
+            fan_wp->count--;
+        }
+        (*pose->mtx)[0][3] = fan->pos.x;
+        (*pose->mtx)[1][3] = fan->pos.y;
+        (*pose->mtx)[2][3] = fan->pos.z;
+        pose->dir = angleABf(target.x, target.z, fan->pos.x, fan->pos.z);
+    }
     pose_main();
 #endif
     psndSFX_pos(fan_wp->sfxId, &target);

@@ -173,8 +173,8 @@ void effExpBomDisp(CameraId camId, void* param) {
     PSMTXConcat(camera->view, base, base);
 #if VERSION <= VERSION_DEMO_US
     for (i = 0; i < ((EffectEntry*)param)->count; i++, data++) {
-    if (data->lifeLeft < 0 || data->startDelay >= 0)
-            continue;
+        if (data->lifeLeft < 0 || data->startDelay >= 0)
+                continue;
         n = data->lifeLeft;
         if (n > 16)
             n = 16;

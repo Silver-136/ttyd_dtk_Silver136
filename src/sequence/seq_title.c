@@ -280,15 +280,15 @@ void titleMain(SequenceWork* work) {
         case 3:
 #if VERSION <= VERSION_DEMO_US
             wp2->fadeAlpha += 0.1f;
-                    if (wp2->fadeAlpha > 1.0f) {
-                        wp2->fadeAlpha = 1.0f;
-                    }
-                    if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
-                        psndSFXOn((const char*)0x12);
-                        wp2->state = 10;
-                    } else if (++wp2->idle > VERSION_PICK(60, gp->framerate) * 20 - VERSION_PICK(60, gp->framerate)) {
-                        wp2->state = 20;
-                    }
+            if (wp2->fadeAlpha > 1.0f) {
+                wp2->fadeAlpha = 1.0f;
+            }
+            if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
+                psndSFXOn((const char*)0x12);
+                wp2->state = 10;
+            } else if (++wp2->idle > VERSION_PICK(60, gp->framerate) * 20 - VERSION_PICK(60, gp->framerate)) {
+                wp2->state = 20;
+            }
 #else
 #if VERSION >= VERSION_US
             wp2->counter++;

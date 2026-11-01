@@ -1262,7 +1262,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
             if (unit->chargeStrength < 0) {
                 unit->chargeStrength = 0;
 #if VERSION <= VERSION_DEMO_US
-                } else if (unit->chargeStrength > 99) {
+            } else if (unit->chargeStrength > 99) {
 #else
                 return FALSE;
             }
@@ -1280,7 +1280,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
                 return FALSE;
             }
 #else
-                unit->allergicTurns = turns;
+            unit->allergicTurns = turns;
 #endif
             break;
         case STATUS_FLIPPED:
@@ -1298,7 +1298,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
                 return FALSE;
             }
 #else
-                unit->paybackTurns = turns;
+            unit->paybackTurns = turns;
 #endif
             break;
         case STATUS_HOLD_FAST:

@@ -2390,7 +2390,7 @@ void btlseqAct(BattleWork* wp) {
                                 unit->tokenFlags &= ~kHasRallyWinkStatus;
                             }
 #else
-                                unit->activeTurns = 0;
+                            unit->activeTurns = 0;
 #endif
                             if (!BtlUnit_GetBelong(unit) && unit->attackPhase == BATTLE_PHASE_PLAYER &&
                                 !BattlePhaseEndCheck() && !(wp->flags & BATTLE_FLAG_RESET_TURN)) {

@@ -849,7 +849,7 @@ void mot_ship(void) {
         } else {
 #if VERSION <= VERSION_DEMO_US
             if (m->displayDirection <= -540.0f) {
-                    m->displayDirection = -540.0f;
+                m->displayDirection = -540.0f;
 #else
             if (m->displayDirection <= -360.0f) {
                 m->displayDirection = -360.0f;

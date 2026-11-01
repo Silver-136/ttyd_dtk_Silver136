@@ -994,29 +994,29 @@ void kpaFireMain(void) {
                     void* hit;
 #if VERSION <= VERSION_DEMO_US
                     sc = 7.0f * w->scale;
-                        PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
-                        PSMTXScale(mb0, sc, sc, sc);
-                        PSMTXConcat(m80, mb0, m80);
-                        PSMTXConcat(m20, m80, m80);
-                        zero = *(Vec*)vec3_802fc920;
-                        PSMTXMultVec(m80, &zero, &out);
-                        hit = kpaFlameHitCheck(out.x, out.y, out.z, sc * base);
-                        if (hit) {
-                            mario->kpaWork->flameHit = hit;
-                            break;
-                        }
+                    PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
+                    PSMTXScale(mb0, sc, sc, sc);
+                    PSMTXConcat(m80, mb0, m80);
+                    PSMTXConcat(m20, m80, m80);
+                    zero = *(Vec*)vec3_802fc920;
+                    PSMTXMultVec(m80, &zero, &out);
+                    hit = kpaFlameHitCheck(out.x, out.y, out.z, sc * base);
+                    if (hit) {
+                        mario->kpaWork->flameHit = hit;
+                        break;
                     }
                 }
             }
         }
+    }
     {
-    if (kpaFireAttackCheck() == 0) {
-        if (fireefp) {
-            effSoftDelete(fireefp);
-            fireefp = NULL;
+        if (kpaFireAttackCheck() == 0) {
+            if (fireefp) {
+                effSoftDelete(fireefp);
+                fireefp = NULL;
+            }
         }
     }
-}
 }
 #else
                     ballScale = 7.0f * w->scale;

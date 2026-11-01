@@ -216,7 +216,7 @@ void effStardust2Main(EffectEntry* effect) {
             w->velocity.z += -0.02f;
 #if VERSION <= VERSION_DEMO_US
             if (frame - 1 < 14) {
-                    s = 0.01f * (f32)speed_data[frame - 1];
+                s = 0.01f * (f32)speed_data[frame - 1];
 #else
             idx = frame - 1;
             if (idx < 14) {
@@ -256,7 +256,7 @@ void effStardust2Main(EffectEntry* effect) {
             w->color = (frame + i + i) & 7;
 #if VERSION <= VERSION_DEMO_US
             if (frame - 1 < 14) {
-                    w->scale = 0.01f * (f32)scale_data[frame - 1];
+                w->scale = 0.01f * (f32)scale_data[frame - 1];
 #else
             idx = frame - 1;
             if (idx < 14) {
@@ -283,7 +283,7 @@ void effStardust2Main(EffectEntry* effect) {
             frame = w->frame;
 #if VERSION <= VERSION_DEMO_US
             if (frame - 1 < 14) {
-                    w->scale = 0.01f * (f32)scale_data[frame - 1];
+                w->scale = 0.01f * (f32)scale_data[frame - 1];
 #else
             idx = frame - 1;
             if (idx < 14) {

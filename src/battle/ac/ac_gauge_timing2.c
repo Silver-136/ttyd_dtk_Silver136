@@ -118,7 +118,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
 #if VERSION <= VERSION_DEMO_US
             if (gw->frame > gw->totalFrames)
             {
-                            if (((s32)work->actionCommands.outputParams[0]) > 0) {
+                if (((s32)work->actionCommands.outputParams[0]) > 0) {
 #else
             allDone = 1;
             for (i = 0; i < work->actionCommands.params[2]; i++) {

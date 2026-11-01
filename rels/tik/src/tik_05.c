@@ -1476,15 +1476,15 @@ USER_FUNC(cam_mahojin_kaiten_main) {
             cur = total;
         }
 #if VERSION > VERSION_DEMO_US
-    }}
-    elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
-    if (elapsed > msec) {
-        elapsed = msec;
-    }
-    event->lwData[14] = sysMsec2Frame(elapsed);
+}}
+elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
+if (elapsed > msec) {
+    elapsed = msec;
+}
+event->lwData[14] = sysMsec2Frame(elapsed);
 #else
     }
-    }
+}
 event->lwData[14]++;
 #endif
     if (frames == event->lwData[14]) {

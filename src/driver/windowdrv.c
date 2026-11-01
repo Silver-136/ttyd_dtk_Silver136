@@ -129,15 +129,15 @@ void windowLoadTpl(const char* name) {
     arcOpen(name, (void**)&winTpl, &size);
     if (winTpl) {
         UnpackTexPalette(winTpl);
-        } else {
-            sprintf(path, "%s/%s", getMarioStDvdRoot(), name);
-            entry = DVDMgrOpen(path, 2, 0);
-            if (entry) {
-                len = OSRoundUp32B(DVDMgrGetLength(entry));
-                winTpl = __memAlloc(HEAP_DEFAULT, len);
-                DVDMgrRead(entry, winTpl, len, 0);
-                DVDMgrClose(entry);
-                UnpackTexPalette(winTpl);
+    } else {
+        sprintf(path, "%s/%s", getMarioStDvdRoot(), name);
+        entry = DVDMgrOpen(path, 2, 0);
+        if (entry) {
+            len = OSRoundUp32B(DVDMgrGetLength(entry));
+            winTpl = __memAlloc(HEAP_DEFAULT, len);
+            DVDMgrRead(entry, winTpl, len, 0);
+            DVDMgrClose(entry);
+            UnpackTexPalette(winTpl);
 #endif
         }
     }

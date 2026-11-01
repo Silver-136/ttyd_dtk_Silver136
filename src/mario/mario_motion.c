@@ -247,8 +247,8 @@ void marioChgJumpStandMotion(f32 v) {
     if (marioChkSts(MARIO_STS_ROLL)) {
         mario->mot.jump.standHeight = v;
 #if VERSION <= VERSION_DEMO_US
-        } else
-    if (mario->currMotionId == MARIO_MOTION_YOSHI) {
+    } else
+if (mario->currMotionId == MARIO_MOTION_YOSHI) {
 #else
         effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
         marioChgMot(MARIO_MOTION_JUMP_STAND);

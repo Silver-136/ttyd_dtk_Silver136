@@ -213,7 +213,7 @@ void effSstarMain(EffectEntry* effect) {
         }
     } else if (w->position.y < -300.0f) {
 #else
-        if (mario->position.y - w->position.y > 300.0f) {
+    if (mario->position.y - w->position.y > 300.0f) {
 #endif
         w->life = -1;
     }

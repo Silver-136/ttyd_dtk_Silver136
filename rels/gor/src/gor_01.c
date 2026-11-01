@@ -6955,11 +6955,11 @@ USER_FUNC(make_item_tbl) {
             item = pouchHaveItem(i);
             if (item != 0) {
 #else
-            item = pouchHaveItem(i);
-            if (item != 0) {
-                if (skip == item) {
-                    skip = 0;
-                } else {
+        item = pouchHaveItem(i);
+        if (item != 0) {
+            if (skip == item) {
+                skip = 0;
+            } else {
 #endif
                 item_tbl[n] = item;
                 n++;

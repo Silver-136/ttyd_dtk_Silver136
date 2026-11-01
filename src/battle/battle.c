@@ -271,7 +271,7 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
             BtlUnit_EquipItem(enemy, EQUIP_RESET, setup->heldItems[i]);
         }
 #else
-            enemy->heldItem = heldItem;
+        enemy->heldItem = heldItem;
 #endif
         enemy->dropTable = setup->itemDropLists[i];
         enemy->currentHp = enemy->maxHp;

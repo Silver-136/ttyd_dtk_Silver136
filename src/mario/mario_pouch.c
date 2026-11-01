@@ -684,8 +684,8 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
 #endif
 }
 
-/** The demo compares the item names as they are, without the kana conversion. */
 #if VERSION <= VERSION_DEMO_US
+/** The demo compares the item names as they are, without the kana conversion. */
 static s32 comp_aiueo(const void* a, const void* b) {
 #else
 s32 comp_aiueo(const void* a, const void* b) {
@@ -896,7 +896,7 @@ void pouchSortItem(s32 mode) {
                 } else if (mode == 12) {
                     if (a->type_sort_order < b->type_sort_order)
                         swap = TRUE;
-} else if (mode == 6) {
+                } else if (mode == 6) {
                     if (ca > cb)
                         swap = TRUE;
                 } else if (mode == 13) {
@@ -915,7 +915,7 @@ void pouchSortItem(s32 mode) {
             memcpy(pp[0]->badges, badges, sizeof(badges));
             memcpy(pp[0]->equippedBadges, equipped, sizeof(equipped));
         }
-}
+    }
 }
 #else
 #if VERSION == VERSION_EU
@@ -1257,8 +1257,8 @@ BOOL pouchAddKeepItem(s32 id) {
     for (i = 0; i < MAX_STORED_ITEMS; i++) {
         if (mpp->storedItems[i] == 0) {
             break;
-            }
         }
+    }
     if (i < MAX_STORED_ITEMS) {
         mpp->storedItems[i] = id;
         return TRUE;

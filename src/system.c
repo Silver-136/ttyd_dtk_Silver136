@@ -566,7 +566,7 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
 void makeKey(void) {
 #if VERSION <= VERSION_DEMO_US
     s32 delay;
-u32 button;
+    u32 button;
     u32 dirs;
 #else
     u16 button;

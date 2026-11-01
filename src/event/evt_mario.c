@@ -1398,7 +1398,7 @@ USER_FUNC(evt_mario_party_bero_move) {
             if (party) {
 #if VERSION <= VERSION_DEMO_US
                 partyMoveBehindMario3(party, 0, revise360(mp->targetYaw + ((mp->displayDirectionTarget >= 90.0f && mp->displayDirectionTarget <= 270.0f) ? 200.0f : 160.0f)));
-                }
+            }
 #else
                 partyMoveBehindMario3(party, 0,
                     party->moveKind == 0

@@ -247,10 +247,10 @@ void kpa_walk(void) {
             if (m->controlStickSensitivity) {
                 kpaChgPose("KPA_W_1", "KPA2_W_1");
             } else if (!(m->kpaWork->flags & KPA_WORK_FLAG_WEARY)) {
-            kpaChgPose("KPA_W_1", "KPA2_W_1");
-        } else {
-            kpaChgPose("KPA_W_2", "KPA2_W_1");
-        }
+                kpaChgPose("KPA_W_1", "KPA2_W_1");
+            } else {
+                kpaChgPose("KPA_W_2", "KPA2_W_1");
+            }
         } else {
             kpaChgPose("KPA_W_1", "KPA2_W_1");
         }
@@ -459,7 +459,7 @@ void kpa_fall(void) {
         if (mario->currMotionId != MARIO_MOTION_FALL_2) {
 #if VERSION <= VERSION_DEMO_US
             if ((s32)(u8)mario->characterId == CHARACTER_BOWSER) {
-                    kpaChgPose("KPA_J_1B", "KPA2_J_1B");
+                kpaChgPose("KPA_J_1B", "KPA2_J_1B");
 #else
             if (mario->characterId == CHARACTER_BOWSER) {
                 if (!kpaFireAttackCheck()) {
@@ -1029,9 +1029,9 @@ void kpa_swim(void) {
 #if VERSION <= VERSION_DEMO_US
         if (mario->buttonTrg & PAD_BUTTON_A) {
             mario->currSubMotionId = 20;
-            } else {
-                mario->multiTimer = (s32)mario->multiTimer - 1;
-                if ((s32)mario->multiTimer <= 0) {
+        } else {
+            mario->multiTimer = (s32)mario->multiTimer - 1;
+            if ((s32)mario->multiTimer <= 0) {
 #else
         if ((mario->buttonTrg & PAD_BUTTON_A) && !kpaFireAttackCheck()) {
             mario->currSubMotionId = 20;

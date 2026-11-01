@@ -270,52 +270,52 @@ void mot_hammer(void) {
         if (!(mario->dispFlags & MARIO_DISP_FLAG_REAR_POSE)) {
             efType = -1;
             switch (mario->mot.hammer.hitKind) {
-            case 7:
-                movePos(&px, &pz, 16.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
-                ez = 53.0f;
-                efType = 0x16;
-                break;
-            case 0:
-            case 6:
-                movePos(&px, &pz, 25.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
-                ez = -3.0f;
-                efType = 0x15;
-                break;
-            case 5:
-                movePos(&px, &pz, 31.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
-                ez = 5.0f;
-                efType = 0x15;
-                break;
-            case 4:
-                movePos(&px, &pz, 30.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
-                ez = 30.0f;
-                efType = 0x16;
-                break;
+                case 7:
+                    movePos(&px, &pz, 16.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
+                    ez = 53.0f;
+                    efType = 0x16;
+                    break;
+                case 0:
+                case 6:
+                    movePos(&px, &pz, 25.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
+                    ez = -3.0f;
+                    efType = 0x15;
+                    break;
+                case 5:
+                    movePos(&px, &pz, 31.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
+                    ez = 5.0f;
+                    efType = 0x15;
+                    break;
+                case 4:
+                    movePos(&px, &pz, 30.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
+                    ez = 30.0f;
+                    efType = 0x16;
+                    break;
             }
         } else {
             efType = -1;
             switch (mario->mot.hammer.hitKind) {
-            case 7:
-                movePos(&px, &pz, 16.0f, toMovedir2(mario->displayDirectionTarget, -2.0f));
-                ez = 53.0f;
-                efType = 0x16;
-                break;
-            case 0:
-            case 6:
-                movePos(&px, &pz, 30.0f, toMovedir2(mario->displayDirectionTarget, -6.0f));
-                ez = -3.0f;
-                efType = 0x15;
-                break;
-            case 5:
-                movePos(&px, &pz, 36.0f, toMovedir2(mario->displayDirectionTarget, -6.0f));
-                ez = 20.0f;
-                efType = 0x16;
-                break;
-            case 4:
-                movePos(&px, &pz, 37.0f, toMovedir2(mario->displayDirectionTarget, -6.0f));
-                ez = 28.0f;
-                efType = 0x16;
-                break;
+                case 7:
+                    movePos(&px, &pz, 16.0f, toMovedir2(mario->displayDirectionTarget, -2.0f));
+                    ez = 53.0f;
+                    efType = 0x16;
+                    break;
+                case 0:
+                case 6:
+                    movePos(&px, &pz, 30.0f, toMovedir2(mario->displayDirectionTarget, -6.0f));
+                    ez = -3.0f;
+                    efType = 0x15;
+                    break;
+                case 5:
+                    movePos(&px, &pz, 36.0f, toMovedir2(mario->displayDirectionTarget, -6.0f));
+                    ez = 20.0f;
+                    efType = 0x16;
+                    break;
+                case 4:
+                    movePos(&px, &pz, 37.0f, toMovedir2(mario->displayDirectionTarget, -6.0f));
+                    ez = 28.0f;
+                    efType = 0x16;
+                    break;
             }
         }
         if (efType > 0) {

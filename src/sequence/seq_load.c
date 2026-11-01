@@ -235,10 +235,10 @@ void seq_loadMain(SequenceWork* seq) {
 #if VERSION <= VERSION_DEMO_US
                     } else if (gp->soundMode == 0) {
                         SoundSetOutputMode(1);
-                            wp->soundMode = 1;
-                        } else {
-                            SoundSetOutputMode(2);
-                            wp->soundMode = 2;
+                        wp->soundMode = 1;
+                    } else {
+                        SoundSetOutputMode(2);
+                        wp->soundMode = 2;
 #else
                     } else {
                         SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
@@ -564,15 +564,15 @@ void loadMain(SequenceWork* seq) {
                 stg0_00_init();
                 gp->saveSlot = wp->slot;
                 marioPartyKill();
-{
-    MarioWork* m = marioGetPtr();
-    m->prevPartyMemberId[0] = 0;
-    m->prevPartyMemberId[1] = 0;
-}
-gp->areaFadeInType = FADE_NONE;
-gp->areaFadeOutType = FADE_CURTAIN_SIDES_A2_3D;
-swInit();
-swByteSet(0, STG0_00_PROLOGUE);
+                {
+                    MarioWork* m = marioGetPtr();
+                    m->prevPartyMemberId[0] = 0;
+                    m->prevPartyMemberId[1] = 0;
+                }
+                gp->areaFadeInType = FADE_NONE;
+                gp->areaFadeOutType = FADE_CURTAIN_SIDES_A2_3D;
+                swInit();
+                swByteSet(0, STG0_00_PROLOGUE);
 #endif
                 seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
             }
@@ -796,11 +796,11 @@ swByteSet(0, STG0_00_PROLOGUE);
                 wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
 #if VERSION <= VERSION_DEMO_US
-                } else if (trg & PAD_BUTTON_B) {
-                    SFX(PSND_SFX_CURSOR_CANCEL1);
-                    wp->soundModeSel = wp->soundMode;
-                    wp->flags &= ~LOAD_FLAG_DIM;
-                    wp->state = 1;
+            } else if (trg & PAD_BUTTON_B) {
+                SFX(PSND_SFX_CURSOR_CANCEL1);
+                wp->soundModeSel = wp->soundMode;
+                wp->flags &= ~LOAD_FLAG_DIM;
+                wp->state = 1;
 #else
                 break;
             } else if (trg & PAD_BUTTON_B) {
@@ -934,13 +934,13 @@ void loadDraw(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_US
     char buf[0x20];
     Mtx m;
-        Mtx s;
+    Mtx s;
     f32 y;
-        f32 w;
-        u64 sec;
-        WinDt* win1;
-        s32 i;
-        s32 j;
+    f32 w;
+    u64 sec;
+    WinDt* win1;
+    s32 i;
+    s32 j;
 #else
     f32 vp[GX_VIEWPORT_SZ];
     f32 proj[GX_PROJECTION_SZ];
@@ -954,7 +954,7 @@ void loadDraw(CameraId camera, void* param) {
     u64 sec;
 #if VERSION >= VERSION_US
     WinDt* win1[1]; // FAKE: one-element array, so IRO turns win1 into an @ temp: the address of win_dt is computed into
-                    // win1 itself and loop 1 walks a copy of it (the addi r30 / mr r24,r30 direction of the target)
+    // win1 itself and loop 1 walks a copy of it (the addi r30 / mr r24,r30 direction of the target)
     s32 i;
 #else
     WinDt* win1;
@@ -1080,16 +1080,16 @@ void loadDraw(CameraId camera, void* param) {
         const char* msg = wp->msg;
 #if VERSION <= VERSION_DEMO_US
         FontDrawString(-FontGetMessageWidth(msg) / 2, 192.0f, msg);
-}
+    }
 
     for (i = 0; i < 4; i++, win1++) {
         CardSaveSlot* save = &cardGetFilePtr()->saves[i];
-u16 flags = save->data.flags;
+        u16 flags = save->data.flags;
         s16 level = save->data.pouch.level;
         OSTime time = save->data.global.retraceLocalTime;
         u16 stars = save->data.pouch.starPowersObtained;
         s32 gsw0 = save->data.global.gSW0;
-const char* str;
+        const char* str;
         u64 hours;
         s32 mins;
         char* name = (char*)save->data.global.playerName;
@@ -1163,9 +1163,9 @@ const char* str;
 #if VERSION <= VERSION_DEMO_US
             str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
-} else if (flags & CARD_SAVE_FLAG_ERASED) {
-    str = "\203j\203\205\201[\203Q\201[\203\200";
-    FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
+        } else if (flags & CARD_SAVE_FLAG_ERASED) {
+            str = "\203j\203\205\201[\203Q\201[\203\200";
+            FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
         } else if (gsw0 == 0) {
             str = "\202\315\202\266\202\337\202\251\202\347";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);

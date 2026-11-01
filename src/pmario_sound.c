@@ -9772,8 +9772,8 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         }
         if ((s32)bgm_name == PSND_BGM_STG2_MRI2) {
             bgm_name = (char*)PSND_BGM_EVT_DANGER4;
-    }
-    if ((s32)bgm_name == PSND_BGM_ZAKO_BATTLE1) {
+        }
+        if ((s32)bgm_name == PSND_BGM_ZAKO_BATTLE1) {
             return 0;
         }
         if ((s32)bgm_name == PSND_BGM_KOBOSS_BATTLE1) {
@@ -9843,7 +9843,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         PaperSoundBGM *b0;
         if (id == PSND_BGM_BOSS_STG8_KOOPA) {
 #else
-        }
+    }
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4) {
         if ((s32)bgm_name == PSND_BGM_BOSS_STG8_KOOPA) {
 #endif
@@ -9857,13 +9857,13 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         if ((s32)bgm_name == 0 && b0->listId == PSND_BGM_EVT_KUPPA2 && !(flags & PSND_CONTINUE)) {
             return 0;
         }
+    }
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG7_25_00_1_BOWSER_POSHLEY_SANCTUM && evtGetValue(NULL, GSW_STORY_PROGRESS) <= STG8_END_AFTER_THE_BATTLE) || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG9_02_RETURN_TO_ROGUEPORT) {
+        if ((s32)bgm_name == 0x68) {
+            bgm_name = (char*)0x67;
         }
-        if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG7_25_00_1_BOWSER_POSHLEY_SANCTUM && evtGetValue(NULL, GSW_STORY_PROGRESS) <= STG8_END_AFTER_THE_BATTLE) || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG9_02_RETURN_TO_ROGUEPORT) {
-            if ((s32)bgm_name == 0x68) {
-                bgm_name = (char*)0x67;
-            }
-            if ((s32)bgm_name == 0xCD) {
-                bgm_name = (char*)0x67;
+        if ((s32)bgm_name == 0xCD) {
+            bgm_name = (char*)0x67;
         }
     }
     if ((s32)bgm_name == PSND_BGM_BATTLE_WIN1 || (s32)bgm_name == PSND_BGM_BATTLE_WIN2) {
@@ -10102,10 +10102,10 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 force) {
     }
 #if VERSION <= VERSION_DEMO_US
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE && bgm->listId == PSND_BGM_EVT_DANGER4) {
-            return FALSE;
-        }
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4 && psbgm[0].listId == PSND_BGM_EVT_KUPPA2 && bgm->listId != PSND_BGM_BATTLE_WIN3) {
-                return FALSE;
+        return FALSE;
+    }
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4 && psbgm[0].listId == PSND_BGM_EVT_KUPPA2 && bgm->listId != PSND_BGM_BATTLE_WIN3) {
+        return FALSE;
 #else
     if (!force) {
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE && bgm->listId == PSND_BGM_EVT_DANGER4) {
@@ -11251,11 +11251,11 @@ void psndENVMain(void) {
                 }
             }
 #if VERSION <= VERSION_DEMO_US
-        if (psnd.envLpf[i] < psnd.envFreq[i])
-            psnd.envLpf[i] += 100;
-        if (psnd.envLpf[i] > psnd.envFreq[i]) {
-            psnd.envLpf[i] -= 1000;
             if (psnd.envLpf[i] < psnd.envFreq[i])
+                psnd.envLpf[i] += 100;
+            if (psnd.envLpf[i] > psnd.envFreq[i]) {
+                psnd.envLpf[i] -= 1000;
+                if (psnd.envLpf[i] < psnd.envFreq[i])
 #else
         }
         if (psnd.envLpf[i] < psnd.envFreq[i]) {

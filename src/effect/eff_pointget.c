@@ -159,8 +159,8 @@ void effPointGetMain(EffectEntry* effect) {
     dispEntry(CAMERA_2D, dispCalcZ(&position), 2, (DispCallback)effPointGetDisp, effect);
 }
 
-/** The demo draws the point count as three fixed digit cells (leading zeros skipped) after the header. */
 #if VERSION <= VERSION_DEMO_US
+/** The demo draws the point count as three fixed digit cells (leading zeros skipped) after the header. */
 static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
 #else
 void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {

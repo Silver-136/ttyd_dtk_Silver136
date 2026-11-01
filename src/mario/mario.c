@@ -233,23 +233,23 @@ void marioSetCharMode(s32 mode) {
         }
     }
 #else
-        if (wp->currMotionId == MARIO_MOTION_PLANE) {
-            marioForcePlaneAnime();
-            return;
-        } else if (wp->currMotionId == MARIO_MOTION_SHIP) {
-            marioForceShipAnime();
-            return;
-        } else if (wp->currMotionId == MARIO_MOTION_ROLL) {
-            marioForceRollAnime();
-            return;
-        } else if (wp->currMotionId == MARIO_MOTION_SLIT) {
-            marioForceSlitAnime();
-            return;
-        } else if (wp->currMotionId == MARIO_MOTION_YOSHI) {
-            marioChgPose("M_Y_2");
-            marioChgPose("M_Y_1");
-            return;
-        }
+    if (wp->currMotionId == MARIO_MOTION_PLANE) {
+        marioForcePlaneAnime();
+        return;
+    } else if (wp->currMotionId == MARIO_MOTION_SHIP) {
+        marioForceShipAnime();
+        return;
+    } else if (wp->currMotionId == MARIO_MOTION_ROLL) {
+        marioForceRollAnime();
+        return;
+    } else if (wp->currMotionId == MARIO_MOTION_SLIT) {
+        marioForceSlitAnime();
+        return;
+    } else if (wp->currMotionId == MARIO_MOTION_YOSHI) {
+        marioChgPose("M_Y_2");
+        marioChgPose("M_Y_1");
+        return;
+    }
 #endif
     if (wp->currMotionId != MARIO_MOTION_PLANE && wp->currMotionId != MARIO_MOTION_SHIP && wp->currMotionId != MARIO_MOTION_JABARA) {
         marioSetSpec();
@@ -616,7 +616,7 @@ void marioFBattlePrepare(void) {
         wp->flags |= MARIO_FLAG_PRE_BATTLE_PHYSICS;
     }
 #else
-        wp->flags |= MARIO_FLAG_PRE_BATTLE_PHYSICS;
+    wp->flags |= MARIO_FLAG_PRE_BATTLE_PHYSICS;
 #endif
     partyUsePost(partyGetPtr(marioGetPartyId()));
     partyCtrlOff();
@@ -1196,7 +1196,7 @@ void marioMain(void) {
         }
     }
 #else
-        marioColorChk();
+    marioColorChk();
 #endif
     marioSetDirEventMain();
 #if VERSION > VERSION_DEMO_US
@@ -1526,8 +1526,8 @@ void marioMove(void) {
                 camFollowYOn();
             }
 #else
-            if (wp->controlStickSensitivity && !(wp->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
-                camFollowYOff();
+        if (wp->controlStickSensitivity && !(wp->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
+            camFollowYOff();
 #endif
         }
         if (wp->currMotionId == MARIO_MOTION_WALK || wp->currMotionId == MARIO_MOTION_DASH) {
@@ -2455,7 +2455,7 @@ void marioDisp(CameraId camId, void* param) {
     f32 angle;
 #if VERSION <= VERSION_DEMO_US
     f32 angle2;
-f32 yofs = 0.0f;
+    f32 yofs = 0.0f;
 #endif
     scale = marioGetScale();
     MTXScale(mtx, wp->scale.x * scale, wp->scale.y * scale, wp->scale.z * scale);

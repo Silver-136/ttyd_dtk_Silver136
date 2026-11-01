@@ -60,11 +60,11 @@ u16 gauge_back[8] = { ICON_SP_ORB_1, ICON_SP_ORB_2, ICON_SP_ORB_3, ICON_SP_ORB_4
 u16 gauge_wakka[16] = { ICON_SP_ORB_PART_0, ICON_SP_ORB_PART_1, ICON_SP_ORB_PART_2, ICON_SP_ORB_PART_3, ICON_SP_ORB_PART_4, ICON_SP_ORB_PART_5, ICON_SP_ORB_PART_6, ICON_SP_ORB_PART_7,
                         ICON_SP_ORB_PART_8, ICON_SP_ORB_PART_9, ICON_SP_ORB_PART_10, ICON_SP_ORB_PART_11, ICON_SP_ORB_PART_12, ICON_SP_ORB_PART_13, ICON_SP_ORB_PART_14, ICON_SP_ORB_PART_15 };
 #if VERSION >= VERSION_US
-// US: pause-menu icons per language
-s16 party_icon_tbl[6] = { 0x215, 0x22B, 0x22C, 0x22D, 0x22E, 0x22F };
-s16 gear_icon_tbl[6] = { 0x216, 0x230, 0x231, 0x232, 0x233, 0x234 };
-s16 badge_icon_tbl[6] = { 0x217, 0x235, 0x236, 0x235, 0x237, 0x238 };
-s16 journal_icon_tbl[6] = { 0x218, 0x239, 0x239, 0x239, 0x23A, 0x23B };
+                        // US: pause-menu icons per language
+                        s16 party_icon_tbl[6] = { 0x215, 0x22B, 0x22C, 0x22D, 0x22E, 0x22F };
+                        s16 gear_icon_tbl[6] = { 0x216, 0x230, 0x231, 0x232, 0x233, 0x234 };
+                        s16 badge_icon_tbl[6] = { 0x217, 0x235, 0x236, 0x235, 0x237, 0x238 };
+                        s16 journal_icon_tbl[6] = { 0x218, 0x239, 0x239, 0x239, 0x23A, 0x23B };
 #endif
 
 
@@ -425,7 +425,7 @@ void statusWinDisp(CameraId camId, void* param) {
         numDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
     }
 #if VERSION <= VERSION_DEMO_US
-    }
+}
 #else
     if (wp->flags & STATUS_WINDOW_FLAG_MENU_ICONS && !gp->inBattle) {
         y2 = -180.0f + (wp->openY - wp->y);
@@ -500,16 +500,16 @@ void statusGetValue(StatusValue* values) {
 #if VERSION <= VERSION_DEMO_US
         if (!marioBgmodeChk()) {
             values->party = marioGetParty();
-        values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
-        values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
-    if (values->party) {
-        wp->cur.lastParty = values->party;
-    }
-} else {
-    values->party = wp->cur.lastParty;
-    values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
-    values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
-}
+            values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
+            values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
+            if (values->party) {
+                wp->cur.lastParty = values->party;
+            }
+        } else {
+            values->party = wp->cur.lastParty;
+            values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
+            values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
+        }
 #else
         values->party = !marioBgmodeChk() ? (s16)marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
         values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;

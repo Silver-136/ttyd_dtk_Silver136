@@ -382,7 +382,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     GXColor black0;
     GXColor* kp;
     f32 scale;
-f32 costX;
+    f32 costX;
 #else
     f32 scale;
 #endif

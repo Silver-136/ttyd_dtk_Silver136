@@ -210,7 +210,7 @@ void mot_walk(void) {
             player->currSubMotionId = 0;
         }
 #else
-            player->currSubMotionId = 0;
+        player->currSubMotionId = 0;
 #endif
         player->multiTimer = 0;
     }

@@ -1267,7 +1267,7 @@ void animPoseMain(s32 poseId) {
                         ((Vec*)pos)->x += s * (f32)delta->x;
                         ((Vec*)pos)->y += s * (f32)delta->y;
                         ((Vec*)pos)->z += s * (f32)delta->z;
-                }
+                    }
                 }
                 {
                     AnimVtxDelta* delta;
@@ -1280,7 +1280,7 @@ void animPoseMain(s32 poseId) {
                         ((Vec*)nrm)->x += s * (f32)delta->x;
                         ((Vec*)nrm)->y += s * (f32)delta->y;
                         ((Vec*)nrm)->z += s * (f32)delta->z;
-                }
+                    }
                 }
                 {
                     AnimVisDelta* delta;
@@ -1291,7 +1291,7 @@ void animPoseMain(s32 poseId) {
                     for (j = 0; j < n; j++, delta++) {
                         v += delta->step;
                         v[0] += delta->add;
-                }
+                    }
                 }
                 {
                     AnimNodeDelta* delta;
@@ -1302,7 +1302,7 @@ void animPoseMain(s32 poseId) {
                     for (j = 0; j < n; j++, delta++) {
                         node += delta->step * 4;
                         *(f32*)node += s * (f32)delta->value;
-                }
+                    }
                 }
                 {
                     u8* tex;
@@ -1338,61 +1338,61 @@ void animPoseMain(s32 poseId) {
             s = 0.0625f;
             for (; kf < kfEnd; kf++) {
                 { AnimVtxDelta* d; AnimVtxDelta* e;
-                v = (u8*)pose->bufferVtxPos;
-                d = &anim->vtxPosDeltas[kf->vtxPosStart];
-                e = d + kf->vtxPosCount;
-                for (; d < e; d++) {
-                    v += d->step * sizeof(Vec);
-                    x = __OSs8tof32(&d->x);
-                    y = __OSs8tof32(&d->y);
-                    z = __OSs8tof32(&d->z);
-                    ((Vec*)v)->x += s * x;
-                    ((Vec*)v)->y += s * y;
-                    ((Vec*)v)->z += s * z;
-                }
+                    v = (u8*)pose->bufferVtxPos;
+                    d = &anim->vtxPosDeltas[kf->vtxPosStart];
+                    e = d + kf->vtxPosCount;
+                    for (; d < e; d++) {
+                        v += d->step * sizeof(Vec);
+                        x = __OSs8tof32(&d->x);
+                        y = __OSs8tof32(&d->y);
+                        z = __OSs8tof32(&d->z);
+                        ((Vec*)v)->x += s * x;
+                        ((Vec*)v)->y += s * y;
+                        ((Vec*)v)->z += s * z;
+                    }
                 }
                 { AnimVtxDelta* d; AnimVtxDelta* e;
-                v = (u8*)pose->bufferVtxNrm;
-                d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
-                e = d + kf->vtxNrmCount;
-                for (; d < e; d++) {
-                    v += d->step * sizeof(Vec);
-                    x = __OSs8tof32(&d->x);
-                    y = __OSs8tof32(&d->y);
-                    z = __OSs8tof32(&d->z);
-                    ((Vec*)v)->x += s * x;
-                    ((Vec*)v)->y += s * y;
-                    ((Vec*)v)->z += s * z;
-                }
+                    v = (u8*)pose->bufferVtxNrm;
+                    d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
+                    e = d + kf->vtxNrmCount;
+                    for (; d < e; d++) {
+                        v += d->step * sizeof(Vec);
+                        x = __OSs8tof32(&d->x);
+                        y = __OSs8tof32(&d->y);
+                        z = __OSs8tof32(&d->z);
+                        ((Vec*)v)->x += s * x;
+                        ((Vec*)v)->y += s * y;
+                        ((Vec*)v)->z += s * z;
+                    }
                 }
                 { AnimVisDelta* d; AnimVisDelta* e; s8* v;
-                v = pose->bufferGroupVisibility;
-                d = &anim->visDeltas[kf->visStart];
-                e = d + kf->visCount;
-                for (; d < e; d++) {
-                    v += d->step;
-                    v[0] += d->add;
-                }
+                    v = pose->bufferGroupVisibility;
+                    d = &anim->visDeltas[kf->visStart];
+                    e = d + kf->visCount;
+                    for (; d < e; d++) {
+                        v += d->step;
+                        v[0] += d->add;
+                    }
                 }
                 { AnimNodeDelta* d; AnimNodeDelta* e;
-                v = (u8*)pose->bufferNode;
-                d = &anim->nodeDeltas[kf->nodeStart];
-                e = d + kf->nodeCount;
-                for (; d < e; d++) {
-                    v += d->step * 4;
-                    x = __OSs8tof32(&d->value);
-                    *(f32*)v += s * x;
-                }
+                    v = (u8*)pose->bufferNode;
+                    d = &anim->nodeDeltas[kf->nodeStart];
+                    e = d + kf->nodeCount;
+                    for (; d < e; d++) {
+                        v += d->step * 4;
+                        x = __OSs8tof32(&d->value);
+                        *(f32*)v += s * x;
+                    }
                 }
                 { AnimTexDelta* d; AnimTexDelta* e;
-                v = (u8*)pose->bufferTexAnimEntries;
-                d = &anim->texDeltas[kf->texStart];
-                e = d + kf->texCount;
-                for (; d < e; d++) {
-                    v += d->step * sizeof(AnimTexMtx);
-                    v[0] += d->bindAdd;
-                    ((AnimTexMtx*)v)->transS += d->transS;
-                    ((AnimTexMtx*)v)->transT += d->transT;
+                    v = (u8*)pose->bufferTexAnimEntries;
+                    d = &anim->texDeltas[kf->texStart];
+                    e = d + kf->texCount;
+                    for (; d < e; d++) {
+                        v += d->step * sizeof(AnimTexMtx);
+                        v[0] += d->bindAdd;
+                        ((AnimTexMtx*)v)->transS += d->transS;
+                        ((AnimTexMtx*)v)->transT += d->transT;
 #endif
                 }
                 }
@@ -1415,7 +1415,7 @@ void animPoseMain(s32 poseId) {
                         ((Vec*)pos)->x += s * (f32)delta->x;
                         ((Vec*)pos)->y += s * (f32)delta->y;
                         ((Vec*)pos)->z += s * (f32)delta->z;
-                }
+                    }
                 }
                 {
                     AnimVtxDelta* delta;
@@ -1428,7 +1428,7 @@ void animPoseMain(s32 poseId) {
                         ((Vec*)nrm)->x += s * (f32)delta->x;
                         ((Vec*)nrm)->y += s * (f32)delta->y;
                         ((Vec*)nrm)->z += s * (f32)delta->z;
-                }
+                    }
                 }
                 {
                     AnimVisDelta* delta;
@@ -1439,7 +1439,7 @@ void animPoseMain(s32 poseId) {
                     for (j = 0; j < n; j++, delta++) {
                         v += delta->step;
                         v[0] += delta->add;
-                }
+                    }
                 }
                 {
                     AnimNodeDelta* delta;
@@ -1450,7 +1450,7 @@ void animPoseMain(s32 poseId) {
                     for (j = 0; j < n; j++, delta++) {
                         node += delta->step * 4;
                         *(f32*)node += s * (f32)delta->value;
-                }
+                    }
                 }
                 {
                     u8* tex;
@@ -1465,61 +1465,61 @@ void animPoseMain(s32 poseId) {
 #else
             for (; kf < kfEnd; kf++) {
                 { AnimVtxDelta* d; AnimVtxDelta* e;
-                v = (u8*)pose->bufferVtxPos;
-                d = &anim->vtxPosDeltas[kf->vtxPosStart];
-                e = d + kf->vtxPosCount;
-                for (; d < e; d++) {
-                    v += d->step * sizeof(Vec);
-                    x = __OSs8tof32(&d->x);
-                    y = __OSs8tof32(&d->y);
-                    z = __OSs8tof32(&d->z);
-                    ((Vec*)v)->x += s * x;
-                    ((Vec*)v)->y += s * y;
-                    ((Vec*)v)->z += s * z;
-                }
+                    v = (u8*)pose->bufferVtxPos;
+                    d = &anim->vtxPosDeltas[kf->vtxPosStart];
+                    e = d + kf->vtxPosCount;
+                    for (; d < e; d++) {
+                        v += d->step * sizeof(Vec);
+                        x = __OSs8tof32(&d->x);
+                        y = __OSs8tof32(&d->y);
+                        z = __OSs8tof32(&d->z);
+                        ((Vec*)v)->x += s * x;
+                        ((Vec*)v)->y += s * y;
+                        ((Vec*)v)->z += s * z;
+                    }
                 }
                 { AnimVtxDelta* d; AnimVtxDelta* e;
-                v = (u8*)pose->bufferVtxNrm;
-                d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
-                e = d + kf->vtxNrmCount;
-                for (; d < e; d++) {
-                    v += d->step * sizeof(Vec);
-                    x = __OSs8tof32(&d->x);
-                    y = __OSs8tof32(&d->y);
-                    z = __OSs8tof32(&d->z);
-                    ((Vec*)v)->x += s * x;
-                    ((Vec*)v)->y += s * y;
-                    ((Vec*)v)->z += s * z;
-                }
+                    v = (u8*)pose->bufferVtxNrm;
+                    d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
+                    e = d + kf->vtxNrmCount;
+                    for (; d < e; d++) {
+                        v += d->step * sizeof(Vec);
+                        x = __OSs8tof32(&d->x);
+                        y = __OSs8tof32(&d->y);
+                        z = __OSs8tof32(&d->z);
+                        ((Vec*)v)->x += s * x;
+                        ((Vec*)v)->y += s * y;
+                        ((Vec*)v)->z += s * z;
+                    }
                 }
                 { AnimVisDelta* d; AnimVisDelta* e; s8* v;
-                v = pose->bufferGroupVisibility;
-                d = &anim->visDeltas[kf->visStart];
-                e = d + kf->visCount;
-                for (; d < e; d++) {
-                    v += d->step;
-                    v[0] += d->add;
-                }
+                    v = pose->bufferGroupVisibility;
+                    d = &anim->visDeltas[kf->visStart];
+                    e = d + kf->visCount;
+                    for (; d < e; d++) {
+                        v += d->step;
+                        v[0] += d->add;
+                    }
                 }
                 { AnimNodeDelta* d; AnimNodeDelta* e;
-                v = (u8*)pose->bufferNode;
-                d = &anim->nodeDeltas[kf->nodeStart];
-                e = d + kf->nodeCount;
-                for (; d < e; d++) {
-                    v += d->step * 4;
-                    x = __OSs8tof32(&d->value);
-                    *(f32*)v += s * x;
-                }
+                    v = (u8*)pose->bufferNode;
+                    d = &anim->nodeDeltas[kf->nodeStart];
+                    e = d + kf->nodeCount;
+                    for (; d < e; d++) {
+                        v += d->step * 4;
+                        x = __OSs8tof32(&d->value);
+                        *(f32*)v += s * x;
+                    }
                 }
                 { AnimTexDelta* d; AnimTexDelta* e;
-                v = (u8*)pose->bufferTexAnimEntries;
-                d = &anim->texDeltas[kf->texStart];
-                e = d + kf->texCount;
-                for (; d < e; d++) {
-                    v += d->step * sizeof(AnimTexMtx);
-                    v[0] += d->bindAdd;
-                    ((AnimTexMtx*)v)->transS += d->transS;
-                    ((AnimTexMtx*)v)->transT += d->transT;
+                    v = (u8*)pose->bufferTexAnimEntries;
+                    d = &anim->texDeltas[kf->texStart];
+                    e = d + kf->texCount;
+                    for (; d < e; d++) {
+                        v += d->step * sizeof(AnimTexMtx);
+                        v[0] += d->bindAdd;
+                        ((AnimTexMtx*)v)->transS += d->transS;
+                        ((AnimTexMtx*)v)->transT += d->transT;
 #endif
                 }
                 }
@@ -1553,52 +1553,52 @@ void animPoseMain(s32 poseId) {
         kf = &anim->keyframes[nextFrame];
 #if VERSION > VERSION_DEMO_US
         { AnimVtxDelta* d; AnimVtxDelta* e;
-        s = 0.0625f * t;
-        v = grpA;
-        d = &anim->vtxPosDeltas[kf->vtxPosStart];
-        e = d + kf->vtxPosCount;
-        p = (u8*)pose->bufferVtxPos;
-        if (nA != 0) {
-            memcpy_as4(grpA, p, nA * sizeof(Vec));
-        }
-        for (; d < e; d++) {
-            v += d->step * sizeof(Vec);
-            x = __OSs8tof32(&d->x);
-            y = __OSs8tof32(&d->y);
-            z = __OSs8tof32(&d->z);
-            ((Vec*)v)->x += x * s;
-            ((Vec*)v)->y += y * s;
-            ((Vec*)v)->z += z * s;
-        }
+            s = 0.0625f * t;
+            v = grpA;
+            d = &anim->vtxPosDeltas[kf->vtxPosStart];
+            e = d + kf->vtxPosCount;
+            p = (u8*)pose->bufferVtxPos;
+            if (nA != 0) {
+                memcpy_as4(grpA, p, nA * sizeof(Vec));
+            }
+            for (; d < e; d++) {
+                v += d->step * sizeof(Vec);
+                x = __OSs8tof32(&d->x);
+                y = __OSs8tof32(&d->y);
+                z = __OSs8tof32(&d->z);
+                ((Vec*)v)->x += x * s;
+                ((Vec*)v)->y += y * s;
+                ((Vec*)v)->z += z * s;
+            }
         }
         { AnimVtxDelta* d; AnimVtxDelta* e; u8* v;
-        v = grpB;
-        d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
-        e = d + kf->vtxNrmCount;
-        p = (u8*)pose->bufferVtxNrm;
-        if (nB != 0) {
-            memcpy_as4(grpB, p, nB * sizeof(Vec));
-        }
-        for (; d < e; d++) {
-            v += d->step * sizeof(Vec);
-            x = __OSs8tof32(&d->x);
-            y = __OSs8tof32(&d->y);
-            z = __OSs8tof32(&d->z);
-            ((Vec*)v)->x += x * s;
-            ((Vec*)v)->y += y * s;
-            ((Vec*)v)->z += z * s;
-        }
+            v = grpB;
+            d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
+            e = d + kf->vtxNrmCount;
+            p = (u8*)pose->bufferVtxNrm;
+            if (nB != 0) {
+                memcpy_as4(grpB, p, nB * sizeof(Vec));
+            }
+            for (; d < e; d++) {
+                v += d->step * sizeof(Vec);
+                x = __OSs8tof32(&d->x);
+                y = __OSs8tof32(&d->y);
+                z = __OSs8tof32(&d->z);
+                ((Vec*)v)->x += x * s;
+                ((Vec*)v)->y += y * s;
+                ((Vec*)v)->z += z * s;
+            }
         }
         { AnimNodeDelta* d; AnimNodeDelta* e; u8* v;
-        d = &anim->nodeDeltas[kf->nodeStart];
-        e = d + kf->nodeCount;
-        dt = anim->keyframes[nextFrame].time - anim->keyframes[frame].time;
-        p = (u8*)pose->bufferNode;
-        v = (u8*)pose->nodes;
-        if (nD != 0) {
-            memcpy_as4(v, p, nD * 4);
-        }
-        for (; d < e; d++) {
+            d = &anim->nodeDeltas[kf->nodeStart];
+            e = d + kf->nodeCount;
+            dt = anim->keyframes[nextFrame].time - anim->keyframes[frame].time;
+            p = (u8*)pose->bufferNode;
+            v = (u8*)pose->nodes;
+            if (nD != 0) {
+                memcpy_as4(v, p, nD * 4);
+            }
+            for (; d < e; d++) {
 #else
         s = 0.0625f * t;
         v = grpA;
@@ -1625,13 +1625,13 @@ void animPoseMain(s32 poseId) {
             ((Vec*)v)->z += (f32)d->z * s;
         }
         {AnimNodeDelta* d;
-        d = &anim->nodeDeltas[kf->nodeStart];
-        v = (u8*)pose->bufferNode;
-        dt = anim->keyframes[nextFrame].time - anim->keyframes[frame].time;
-        n = kf->nodeCount;
-        apmCopyTo((u8*)pose->nodes, v, nD, 4);
-        v = (u8*)pose->nodes;
-        for (j = 0; j < n; j++, d++) {
+            d = &anim->nodeDeltas[kf->nodeStart];
+            v = (u8*)pose->bufferNode;
+            dt = anim->keyframes[nextFrame].time - anim->keyframes[frame].time;
+            n = kf->nodeCount;
+            apmCopyTo((u8*)pose->nodes, v, nD, 4);
+            v = (u8*)pose->nodes;
+            for (j = 0; j < n; j++, d++) {
 #endif
             b = d->tangentEnd;
             v += d->step * 4;
@@ -2209,53 +2209,53 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
 #if VERSION <= VERSION_DEMO_US
     {
 
-    // r22); j is a one-element array (an IRO temp, so j colours r20 and texMtx r21), and the dead gz guard keeps k = 0 from
-    // being propagated into j, giving the target's li r22,0 / mr r20,r22 (the guard leaves no code after RA)
-    s32 gz;
-    s32 texMtx;
-    f32 scaleS;
-    f32 scaleT;
-    f32 transS;
-    f32 transT;
-    Mtx m;
-    AnimTexMtx* anim;
-    f32 rotate;
-    Mtx tmp;
-    s32 j[1];
-    s32 k;
-    k = 0;
-    // FAKE: dead int guard (no code after RA) keeps the three copies from being propagated away
-    gz = 0;
-    if (gz != 0) {
+        // r22); j is a one-element array (an IRO temp, so j colours r20 and texMtx r21), and the dead gz guard keeps k = 0 from
+        // being propagated into j, giving the target's li r22,0 / mr r20,r22 (the guard leaves no code after RA)
+        s32 gz;
+        s32 texMtx;
+        f32 scaleS;
+        f32 scaleT;
+        f32 transS;
+        f32 transT;
+        Mtx m;
+        AnimTexMtx* anim;
+        f32 rotate;
+        Mtx tmp;
+        s32 j[1];
+        s32 k;
         k = 0;
-    }
-    for (j[0] = k; k < texCount; k++, j[0] += 3) {
-        anim = &animEntries[texIdRemap[(u32)((texCount - k) - 1)]];
-        scaleS = anim->scaleS;
-        scaleT = anim->scaleT;
-        transS = anim->transS;
-        transT = anim->transT;
-        rotate = anim->rotate;
-        if (scaleS == 1.0f && scaleT == 1.0f && transS == 0.0f && transT == 0.0f && rotate == 0.0f) {
-            GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), GX_IDENTITY, (GXBool)0, GX_PTIDENTITY);
-                continue;
+        // FAKE: dead int guard (no code after RA) keeps the three copies from being propagated away
+        gz = 0;
+        if (gz != 0) {
+            k = 0;
         }
-        PSMTXIdentity(m);
-        PSMTXTrans(tmp, 0.5f, 0.5f, 0.0f);
-        PSMTXConcat(m, tmp, m);
-        PSMTXRotRad(tmp, 'z', 0.017453292f * (-rotate));
-        PSMTXConcat(m, tmp, m);
-        PSMTXTrans(tmp, -0.5f, -0.5f, 0.0f);
-        PSMTXConcat(m, tmp, m);
-        PSMTXTrans(tmp, transS, (1.0f - transT) - scaleT, 0.0f);
-        PSMTXConcat(m, tmp, m);
-        PSMTXScale(tmp, scaleS, scaleT, 0.0f);
-        PSMTXConcat(m, tmp, m);
-        texMtx = GX_TEXMTX0 + j[0];
-        GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), texMtx, (GXBool)0, GX_PTIDENTITY);
-        GXLoadTexMtxImm(m, texMtx, GX_MTX2x4);
+        for (j[0] = k; k < texCount; k++, j[0] += 3) {
+            anim = &animEntries[texIdRemap[(u32)((texCount - k) - 1)]];
+            scaleS = anim->scaleS;
+            scaleT = anim->scaleT;
+            transS = anim->transS;
+            transT = anim->transT;
+            rotate = anim->rotate;
+            if (scaleS == 1.0f && scaleT == 1.0f && transS == 0.0f && transT == 0.0f && rotate == 0.0f) {
+                GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), GX_IDENTITY, (GXBool)0, GX_PTIDENTITY);
+                continue;
+            }
+            PSMTXIdentity(m);
+            PSMTXTrans(tmp, 0.5f, 0.5f, 0.0f);
+            PSMTXConcat(m, tmp, m);
+            PSMTXRotRad(tmp, 'z', 0.017453292f * (-rotate));
+            PSMTXConcat(m, tmp, m);
+            PSMTXTrans(tmp, -0.5f, -0.5f, 0.0f);
+            PSMTXConcat(m, tmp, m);
+            PSMTXTrans(tmp, transS, (1.0f - transT) - scaleT, 0.0f);
+            PSMTXConcat(m, tmp, m);
+            PSMTXScale(tmp, scaleS, scaleT, 0.0f);
+            PSMTXConcat(m, tmp, m);
+            texMtx = GX_TEXMTX0 + j[0];
+            GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), texMtx, (GXBool)0, GX_PTIDENTITY);
+            GXLoadTexMtxImm(m, texMtx, GX_MTX2x4);
+        }
     }
-}
 }
 #else
     // FAKE: dead int guard (no code after RA) keeps the three copies from being propagated away

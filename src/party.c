@@ -879,8 +879,8 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
 #if VERSION <= VERSION_DEMO_US
     if (party->runMode != 9 && party->runMode != 3) {
         party->prevRunMode = party->runMode;
-            }
-            if (party->runMode == 4) {
+    }
+    if (party->runMode == 4) {
 #else
     switch (prev) {
         case 11:
@@ -931,8 +931,8 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
 
 #pragma dont_inline on
 #else
-            }
-            partyUsePost(party);
+        }
+        partyUsePost(party);
     }
 #endif
 
@@ -1153,7 +1153,7 @@ void driveParty(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF))
                 break;
-                if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+            if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
                 party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
                 partyChgPoseId(party, 1);
                 party->flags &= ~PARTY_FLAG_IS_BEING_USED;
@@ -1413,9 +1413,9 @@ s32 partyHelloMain(PartyEntry* party) {
                 ((PartyEntry*)party)->moveFrames = 0;
 #if VERSION <= VERSION_DEMO_US
                 party->moveDir = ((MarioWork*)mario)->moveDirection;
-                            party->targetDir = ((MarioWork*)mario)->directionView;
-                            party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
-                            party->displayDirection = ((MarioWork*)mario)->displayDirection;
+                party->targetDir = ((MarioWork*)mario)->directionView;
+                party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
+                party->displayDirection = ((MarioWork*)mario)->displayDirection;
 #else
                 if (party->displayDirectionTarget >= 90.0f && party->displayDirectionTarget <= 270.0f) {
                     party->moveDir = partyToMovedir(party, 180.0f);
@@ -2199,7 +2199,7 @@ void partyRideMain(PartyEntry* party) {
                 partyChgPoseId(party, 1);
 #if VERSION <= VERSION_DEMO_US
                 party->velY = 0.0f;
-                            party->scale = (Vec){0.0f, 0.0f, 0.0f};
+                party->scale = (Vec){0.0f, 0.0f, 0.0f};
 #else
                 party->flags2 |= PARTY_DISP_FLAG_HIDE;
 #endif
@@ -2983,11 +2983,11 @@ void party_damage_return(PartyEntry* party) {
         case 22:
 #if VERSION <= VERSION_DEMO_US
             {
-            f32 sx, sy, sz;
-            marioGetScreenPos(party->position, &sx, &sy, &sz);
-            if (sy > 240.0f) {
-                party->flags &= ~PARTY_FLAG_FORCE_FALL;
-            }
+                f32 sx, sy, sz;
+                marioGetScreenPos(party->position, &sx, &sy, &sz);
+                if (sy > 240.0f) {
+                    party->flags &= ~PARTY_FLAG_FORCE_FALL;
+                }
 #else
             marioGetScreenPos(party->position, &x, &y, &z);
             if (y > 240.0f) {

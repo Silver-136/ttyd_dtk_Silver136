@@ -2945,7 +2945,7 @@ static USER_FUNC(_wave_offset) {
 #if VERSION >= VERSION_JP
     if (!pObject) {
         __assert2("battle_bgset_test.c", 102, "pObject",
-                  /*"制御しようとする背景セットBの%sは存在しない"*/
+        /*"制御しようとする背景セットBの%sは存在しない"*/
                   "制御しようとする背景セッ"
                   "トBの%sは存在しない",
                   name);

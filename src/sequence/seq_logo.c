@@ -853,13 +853,13 @@ void progDisp(CameraId camId, void* param) {
                     gp->triggerLeft[0] ||
                     gp->triggerRight[0]) {
 #if VERSION < VERSION_US
-                    wp->lastInputTime = OSGetTime();
-                } else {
-                    if (OSTicksToSeconds(OSGetTime() - wp->lastInputTime) > 10) {
+                        wp->lastInputTime = OSGetTime();
+                    } else {
+                        if (OSTicksToSeconds(OSGetTime() - wp->lastInputTime) > 10) {
 #else
-                    wp->lastInput = OSGetTime();
-                } else {
-                    if (OSTicksToSeconds(OSGetTime() - wp->lastInput) > 10) {
+                        wp->lastInput = OSGetTime();
+                    } else {
+                        if (OSTicksToSeconds(OSGetTime() - wp->lastInput) > 10) {
 #endif
                         button = PAD_BUTTON_A;
                     }
@@ -921,9 +921,9 @@ void progDisp(CameraId camId, void* param) {
                     msg);
 
 #if VERSION == VERSION_EU
-                msg = romFontGetMessage(6);
+                    msg = romFontGetMessage(6);
 #else
-                msg = romFontGetMessage(1);
+                    msg = romFontGetMessage(1);
 #endif
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(
@@ -934,9 +934,9 @@ void progDisp(CameraId camId, void* param) {
                     msg);
 
 #if VERSION == VERSION_EU
-                msg = romFontGetMessage(7);
+                    msg = romFontGetMessage(7);
 #else
-                msg = romFontGetMessage(2);
+                    msg = romFontGetMessage(2);
 #endif
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(

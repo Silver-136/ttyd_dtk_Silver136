@@ -1564,7 +1564,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         partyGetReadId2(id, &t);
     } while (++i <= 10);
     t = marioGetPtr()->position;
-found:
+    found:
     p2 = party->position;
     if (partyGetTargetDist3D(id, &p2) >= lim) {
         party->moveSpeed = spd;
@@ -2018,13 +2018,13 @@ found:
             return;
         }
 #if VERSION <= VERSION_DEMO_US
-        }
-        party->hitobjStandOn = hit;
-        if (!hit) {
-            partyChgMot(party, 3);
-            party->gravity = -1.0f;
-        } else {
-            if (hitGetAttr(hit) & HIT_ATTR_SHALLOW_WATER) {
+    }
+    party->hitobjStandOn = hit;
+    if (!hit) {
+        partyChgMot(party, 3);
+        party->gravity = -1.0f;
+    } else {
+        if (hitGetAttr(hit) & HIT_ATTR_SHALLOW_WATER) {
 #else
         if (attr & HIT_ATTR_SHALLOW_WATER) {
 #endif
@@ -2033,11 +2033,11 @@ found:
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         }
 #if VERSION <= VERSION_DEMO_US
-    if (hitGetAttr(hit) & HIT_ATTR_DAMAGE_RETURN) {
-        party->damageHit = hit;
+        if (hitGetAttr(hit) & HIT_ATTR_DAMAGE_RETURN) {
+            party->damageHit = hit;
+        }
     }
-}
-party->position.y = v.y;
+    party->position.y = v.y;
 #else
     }
 #endif
@@ -3779,7 +3779,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
         partyClearFootmark();
     }
 #else
-        partyClearFootmark();
+    partyClearFootmark();
 #endif
     m2 = party->playerPtr;
     i = 0;
@@ -3824,7 +3824,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
                     y = hitPos.y;
                 }
 #else
-                    y = hitPos.y;
+                y = hitPos.y;
 #endif
             } else {
                 y = m2->position.y;

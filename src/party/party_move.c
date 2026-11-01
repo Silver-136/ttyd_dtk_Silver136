@@ -263,12 +263,12 @@ f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
 #if VERSION <= VERSION_DEMO_US
     partyTargetPos(other, far, &pos);
     return angleABf(x, z, pos.x, pos.z);
-    }
+}
 
 /**
- * Demo: horizontal distance from (x, z) to what trail id chases (Mario, or the slot 0 partner for trail 1;
- * Mario while Koops's nokonokoGetStatus is 3).
- */
+* Demo: horizontal distance from (x, z) to what trail id chases (Mario, or the slot 0 partner for trail 1;
+* Mario while Koops's nokonokoGetStatus is 3).
+*/
 f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
     MarioWork* mario;
     PartyEntry* other;
@@ -311,7 +311,7 @@ f32 partyGetTargetDist3D(s32 id, Vec* p) {
 #if VERSION <= VERSION_DEMO_US
     partyTargetPos(other, far, &pos);
     return distABf(x, z, pos.x, pos.z);
-    }
+}
 
 /** Demo: 3D distance from p to what trail id chases, picked as in partyGetTargetDir. */
 f32 partyGetTargetDist3D(s32 id, Vec* p) {
@@ -354,7 +354,7 @@ f32 partyGetTargetDistY(s32 id, f32 y) {
 #if VERSION <= VERSION_DEMO_US
     partyTargetPos(other, far, &pos);
     return PSVECDistance(&pos, p);
-    }
+}
 #else
     if (other && !far) {
         getTargetPos(id, &pos);
@@ -407,7 +407,7 @@ f32 partyGetTargetMovespd(s32 id) {
 #if VERSION <= VERSION_DEMO_US
     partyTargetPos(other, far, &pos);
     return __fabsf(pos.y - y);
-    }
+}
 #else
     if (other && !far) {
         return other->moveSpeed;
@@ -478,11 +478,11 @@ void partyNextReadId(s32 id) {
     }
 }
 #else
-        readId[id]++;
-        if (readId[id] >= 80) {
-            readId[id] = 0;
-        }
+    readId[id]++;
+    if (readId[id] >= 80) {
+        readId[id] = 0;
     }
+}
 #endif
 
 /** Copies the position of the footmark at trail id's read position into x, y, z. */
@@ -676,7 +676,7 @@ void partyRecordFootmark(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
         if (other) {
             if (nokonokoGetStatus(other) == 3) {
-            far = TRUE;
+                far = TRUE;
             }
 #else
         if (other && (nokonokoGetStatus(other) == 3 ||
@@ -1353,7 +1353,7 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
 #if VERSION <= VERSION_DEMO_US
             if (p) {
                 if (nokonokoGetStatus(p) == 3) {
-                far = TRUE;
+                    far = TRUE;
                 }
 #else
             if (p && (nokonokoGetStatus(p) == 3 ||
@@ -1412,7 +1412,7 @@ s32 partyMarioHosei(PartyEntry* party) {
 #endif
         ky = kx;
 #if VERSION <= VERSION_DEMO_US
-    kz = kx;
+        kz = kx;
 #else
     }
     if (mario->flags & MARIO_FLAG_IS_PUSHING) {
@@ -1865,7 +1865,7 @@ void partyMoveFlyInit(PartyEntry* party, s32 arg) {
         partyClearFootmark2();
     }
 #else
-        partyClearFootmark();
+    partyClearFootmark();
 #endif
     if (party->moveMode == PARTY_MOVE_MODE_BEHIND_MARIO) {
         party->homingDist = 50.0f;

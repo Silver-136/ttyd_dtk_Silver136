@@ -652,11 +652,11 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
             }
         }
 #else
-                if (rank_wp->entries[i].flags & RANK_PLAYER) {
-                    break;
-                }
-                rank++;
+            if (rank_wp->entries[i].flags & RANK_PLAYER) {
+                break;
             }
+            rank++;
+        }
         rank = i;
 #endif
         if (rank > 10) {
@@ -708,11 +708,11 @@ static USER_FUNC(evt_tou_get_rule_info) {
             }
         }
 #else
-                if (rank_wp->entries[i].flags & RANK_PLAYER) {
-                    break;
-                }
-                rank++;
+            if (rank_wp->entries[i].flags & RANK_PLAYER) {
+                break;
             }
+            rank++;
+        }
         rank = i;
 #endif
         if (rank > 10) {

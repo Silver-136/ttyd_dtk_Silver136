@@ -341,43 +341,43 @@ void monteCountDisp(void) {
         return;
     {
         {
-    c1 = (GXColor){255, 255, 255, 153};
-    windowDispGX_Waku_col(0, c1, -288.0f, (f32)(y + 0x2C), 200.0f, 44.0f, 16.0f);
-    PSMTXTrans(mtx, -260.0f, (f32)(y + 2), 0.0f);
-    c2 = (GXColor){255, 255, 255, 255};
-    iconDispGxCol(mtx, ICON_FLAG_2D, ICON_ITEM_PIANTA_TOKEN, c2);
-    PSMTXTrans(mtx, -230.0f, (f32)(y + 2), 0.0f);
-    c3 = (GXColor){255, 255, 255, 255};
-    iconDispGxCol(mtx, ICON_FLAG_2D, ICON_TIMES, c3);
-    PSMTXTrans(mtx, -128.0f, (f32)(y + 2), 0.0f);
-    c4 = (GXColor){255, 255, 255, 255};
-    iconNumberDispGx(mtx, yuwp->dispTokens, 0, c4);
-    yuwp->dispTick++;
-    if ((yuwp->dispTick & 3) == 0) {
-        y = yuwp->tokens - yuwp->dispTokens;
-        yuwp->dispTick = 0;
-        if (monte_snd_flag == 0 && y != 0) {
-            psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
-            monte_snd_flag = 8;
-        }
-        monte_snd_flag = 0;
-        if (y != 0) {
-            y = y / 10;
-            if (y == 0) {
-                s32 sg;
-                if ((s32)yuwp->tokens > (s32)yuwp->dispTokens) {
-                    sg = 1;
-                } else {
-                    sg = -1;
+            c1 = (GXColor){255, 255, 255, 153};
+            windowDispGX_Waku_col(0, c1, -288.0f, (f32)(y + 0x2C), 200.0f, 44.0f, 16.0f);
+            PSMTXTrans(mtx, -260.0f, (f32)(y + 2), 0.0f);
+            c2 = (GXColor){255, 255, 255, 255};
+            iconDispGxCol(mtx, ICON_FLAG_2D, ICON_ITEM_PIANTA_TOKEN, c2);
+            PSMTXTrans(mtx, -230.0f, (f32)(y + 2), 0.0f);
+            c3 = (GXColor){255, 255, 255, 255};
+            iconDispGxCol(mtx, ICON_FLAG_2D, ICON_TIMES, c3);
+            PSMTXTrans(mtx, -128.0f, (f32)(y + 2), 0.0f);
+            c4 = (GXColor){255, 255, 255, 255};
+            iconNumberDispGx(mtx, yuwp->dispTokens, 0, c4);
+            yuwp->dispTick++;
+            if ((yuwp->dispTick & 3) == 0) {
+                y = yuwp->tokens - yuwp->dispTokens;
+                yuwp->dispTick = 0;
+                if (monte_snd_flag == 0 && y != 0) {
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
+                    monte_snd_flag = 8;
                 }
-                y = sg;
+                monte_snd_flag = 0;
+                if (y != 0) {
+                    y = y / 10;
+                    if (y == 0) {
+                        s32 sg;
+                        if ((s32)yuwp->tokens > (s32)yuwp->dispTokens) {
+                            sg = 1;
+                        } else {
+                            sg = -1;
+                        }
+                        y = sg;
+                    }
+                    yuwp->dispTokens += y;
+                }
             }
-            yuwp->dispTokens += y;
+            monte_snd_flag = 0;
         }
     }
-    monte_snd_flag = 0;
-    }
-}
 }
 #else
     if (flags & PARLOR_FLAG_COUNTER_HIGH) {

@@ -971,7 +971,7 @@ static void callback(s32 type, void** work) {
     }
 }
 #else
-    }
+}
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_aji_00000ed0, JP aji .text+0xE0C. See docs/NAME_PROVENANCE.md.

@@ -64,9 +64,9 @@ typedef struct IconBinData {
     }
 
 #if VERSION >= VERSION_US
-// US: language-specific variants of icons 0x49 and 0x67 (indexed by gp->language)
-u16 icon_049_lang_tbl[6] = {0x49, 0x4A, 0x4B, 0x4C, 0x49, 0x4D};
-u16 icon_067_lang_tbl[6] = {0x67, 0x68, 0x69, 0x6A, 0x67, 0x6B};
+    // US: language-specific variants of icons 0x49 and 0x67 (indexed by gp->language)
+    u16 icon_049_lang_tbl[6] = {0x49, 0x4A, 0x4B, 0x4C, 0x49, 0x4D};
+    u16 icon_067_lang_tbl[6] = {0x67, 0x68, 0x69, 0x6A, 0x67, 0x6B};
 #endif
 
 /**
@@ -316,9 +316,9 @@ void iconEntry(const char* name, u16 iconId) {
     }
 }
 #else
-            entry->uflags |= ICON_FLAG_NO_MAP_BLEND;
-        }
+        entry->uflags |= ICON_FLAG_NO_MAP_BLEND;
     }
+}
 #endif
 
 /** Creates a named icon showing iconId drawn with the 2D (screen) camera. */

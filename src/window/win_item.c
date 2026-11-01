@@ -419,9 +419,9 @@ s32 winItemMain(WindowWork* w) {
                 w->item.bookTgtX = 320.0f;
                 w->item.bookTgtY = -240.0f;
 #if VERSION <= VERSION_DEMO_US
-                }
-                            } else if (w->buttonTrg & PAD_BUTTON_B) {
-                                psndSFXOn(SFX_NAME_WORD(0x20013));
+            }
+        } else if (w->buttonTrg & PAD_BUTTON_B) {
+            psndSFXOn(SFX_NAME_WORD(0x20013));
 #else
                 w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
                 w->helpX = w->helpTgtX;
@@ -473,7 +473,7 @@ s32 winItemMain(WindowWork* w) {
             if (mail->flags & MAIL_FLAG_PICTURE) {
                 w->item.mailLines += 7;
             }
-} else if (w->buttonTrg & PAD_BUTTON_B) {
+        } else if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
 #else
             w->item.mailLine = 0;
@@ -645,7 +645,7 @@ s32 winItemMain(WindowWork* w) {
             }
             for (i = 0; i < 7; i++) {
 #if VERSION <= VERSION_DEMO_US
-                    if (party != winPartyDt[i].partyId) {
+                if (party != winPartyDt[i].partyId) {
 #else
 #if VERSION == VERSION_EU
                     if (party != winPartyDt[i].partyId && (pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_JOINED) &&

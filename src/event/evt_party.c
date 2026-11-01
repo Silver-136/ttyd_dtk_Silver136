@@ -588,9 +588,9 @@ USER_FUNC(evt_party_jump_pos) {
         {
 #if VERSION <= VERSION_DEMO_US
             f32 groundY, dropDepth;
-                HitEntry* hit = _partySearchGround(
-                    p, &groundY, &dropDepth, __fabsf(ff), __fabsf(ff));
-                if (hit != NULL && p->position.y + ff <= groundY) {
+            HitEntry* hit = _partySearchGround(
+                p, &groundY, &dropDepth, __fabsf(ff), __fabsf(ff));
+            if (hit != NULL && p->position.y + ff <= groundY) {
 #else
             HitEntry* hit = partySearchGround(p, __fabsf(ff), __fabsf(ff));
             if (hit != NULL && p->position.y + ff <= p->groundY) {

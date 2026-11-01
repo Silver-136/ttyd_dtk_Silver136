@@ -370,8 +370,8 @@ USER_FUNC(evt_unitwin_alloc) {
         wp->evt->lwData[0] = (EvtWord)wp;
     }
 #else
-        wp->evt = evtEntry(main_evt, 0, 0);
-        wp->evt->lwData[0] = (EvtWord)wp;
+    wp->evt = evtEntry(main_evt, 0, 0);
+    wp->evt->lwData[0] = (EvtWord)wp;
 #endif
     mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
     mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
@@ -413,8 +413,8 @@ USER_FUNC(evt_unitwin_free) {
         entry = caseIdToPtr(wp->caseId[i]);
         if (evtCheckID(entry->evtId)) {
             evtDeleteID(entry->evtId);
-    }
-    caseDelete(wp->caseId[i]);
+        }
+        caseDelete(wp->caseId[i]);
 #else
     }
     if (wp->flags & UNITWIN_FLAG_WINMGR) {

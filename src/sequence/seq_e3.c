@@ -534,17 +534,17 @@ void seq_e3Main(SequenceWork* seq) {
             }
 #if VERSION <= VERSION_DEMO_US
             for (i = 0; i < 2; i++) {
-                    pouchGetItem(ITEM_THUNDER_RAGE);
-                    pouchGetItem(ITEM_SHOOTING_STAR);
-                    pouchGetItem(ITEM_FIRE_FLOWER);
-                    pouchGetItem(ITEM_POW_BLOCK);
-                }
-pouchGetPtr()->availableBP = 20;
+                pouchGetItem(ITEM_THUNDER_RAGE);
+                pouchGetItem(ITEM_SHOOTING_STAR);
+                pouchGetItem(ITEM_FIRE_FLOWER);
+                pouchGetItem(ITEM_POW_BLOCK);
+            }
+            pouchGetPtr()->availableBP = 20;
             pouchGetPtr()->maximumBP = 20;
             pouchGetItem(ITEM_POWER_BOUNCE);
-                pouchGetItem(ITEM_POWER_SMASH);
-                pouchEquipBadgeID(ITEM_POWER_BOUNCE);
-                pouchEquipBadgeID(ITEM_POWER_SMASH);
+            pouchGetItem(ITEM_POWER_SMASH);
+            pouchEquipBadgeID(ITEM_POWER_BOUNCE);
+            pouchEquipBadgeID(ITEM_POWER_SMASH);
 #else
 #if VERSION == VERSION_EU
             if (wp->scenario != 0) {
@@ -569,10 +569,10 @@ pouchGetPtr()->availableBP = 20;
             pouchGetPtr()->maximumBP = 20;
 #if VERSION == VERSION_EU
             if (wp->scenario != 0) {
-            pouchGetItem(ITEM_POWER_BOUNCE);
-            pouchGetItem(ITEM_POWER_SMASH);
-            pouchEquipBadgeID(ITEM_POWER_BOUNCE);
-            pouchEquipBadgeID(ITEM_POWER_SMASH);
+                pouchGetItem(ITEM_POWER_BOUNCE);
+                pouchGetItem(ITEM_POWER_SMASH);
+                pouchEquipBadgeID(ITEM_POWER_BOUNCE);
+                pouchEquipBadgeID(ITEM_POWER_SMASH);
             }
 #else
             pouchGetItem(ITEM_POWER_BOUNCE);
@@ -903,8 +903,8 @@ void e3Disp(CameraId cameraId, void* param) {
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-            // Top-Right
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+                      // Top-Right
+                      winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #endif
                       (Vec){ (wp->curX - 110.0f) + (f32)inset, (90.0f + wp->curY) - (f32)inset, 0.0f },
                       (Vec){ -1.0f, 1.0f, 1.0f },
@@ -918,8 +918,8 @@ void e3Disp(CameraId cameraId, void* param) {
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-            // Bottom-Left
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+                      // Bottom-Left
+                      winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #endif
                       (Vec){ (110.0f + wp->curX) + (f32)inset, (wp->curY - 90.0f) - (f32)inset, 0.0f },
                       (Vec){ 1.0f, -1.0f, 1.0f },
@@ -933,8 +933,8 @@ void e3Disp(CameraId cameraId, void* param) {
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-            // Bottom-Right
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+                      // Bottom-Right
+                      winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #endif
                       (Vec){ (wp->curX - 110.0f) + (f32)inset, (wp->curY - 90.0f) - (f32)inset, 0.0f },
                       (Vec){ -1.0f, -1.0f, 1.0f },

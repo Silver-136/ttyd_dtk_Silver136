@@ -103,15 +103,15 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
 #else
     n = 1;
     switch (type) {
-    case 0:
-        n = 9;
-        break;
-    case 1:
-        n = 7;
-        break;
-    case 2:
-        n = 7;
-        break;
+        case 0:
+            n = 9;
+            break;
+        case 1:
+            n = 7;
+            break;
+        case 2:
+            n = 7;
+            break;
     }
 #endif
     effect->type = "miniGame";
@@ -521,15 +521,15 @@ void effMiniGameDisp(CameraId cameraId, EffectEntry* effect) {
             texId = type_tbl[type][gp->language].tbl[(i - 1) * 2 + (1 - s)];
 #else
             switch (type) {
-            case 0:
-                texId = start_tbl[(i - 1) * 2 + (1 - s)];
-                break;
-            case 1:
-                texId = finish_tbl[(i - 1) * 2 + (1 - s)];
-                break;
-            case 2:
-                texId = retire_tbl[(i - 1) * 2 + (1 - s)];
-                break;
+                case 0:
+                    texId = start_tbl[(i - 1) * 2 + (1 - s)];
+                    break;
+                case 1:
+                    texId = finish_tbl[(i - 1) * 2 + (1 - s)];
+                    break;
+                case 2:
+                    texId = retire_tbl[(i - 1) * 2 + (1 - s)];
+                    break;
             }
 #endif
             effGetTexObj(texId, &tex);

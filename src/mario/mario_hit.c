@@ -1136,95 +1136,95 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     spd += 0.01f;
     best = -10000.0f;
     {
-    Vec dir = {0.0f, -1.0f, 0.0f};
-    Vec outPos;
-    Vec outNrm;
-    f32 x, z;
-    y0 = mario->position.y;
-    x0 = mario->position.x;
-    z0 = mario->position.z;
-    if (__fabsf(mario->groundSlope) < 0.01f) {
-        lim = 2.0f;
-        i = 0;
-        end = 4;
-    } else {
-        lim = 10.0f;
-        i = 4;
-        end = 7;
-    }
-    for (; i < end; i++) {
-        switch (i) {
-        case 0:
-            z = x = 0.0f;
-            break;
-        case 1:
-            a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-            x = 8.6399994f * (f32)sin(a);
-            sn = (f32)cos(a);
-            z = 8.6399994f * -sn;
-            break;
-        case 2:
-            a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-            x = 8.6399994f * (f32)sin(a);
-            sn = (f32)cos(a);
-            z = 8.6399994f * -sn;
-            break;
-        case 3:
-            z = x = 0.0f;
-            movePos(&x, &z, 3.0f, mario->directionView);
-            break;
-        case 4:
-            z = x = 0.0f;
-            break;
-        case 5:
-            a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-            x = 8.6399994f * (f32)sin(a);
-            sn = (f32)cos(a);
-            z = 8.6399994f * -sn;
-            movePos(&x, &z, 3.0f, mario->directionView);
-            break;
-        case 6:
-            a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-            x = 8.6399994f * (f32)sin(a);
-            sn = (f32)cos(a);
-            z = 8.6399994f * -sn;
-            movePos(&x, &z, 3.0f, mario->directionView);
-            break;
+        Vec dir = {0.0f, -1.0f, 0.0f};
+        Vec outPos;
+        Vec outNrm;
+        f32 x, z;
+        y0 = mario->position.y;
+        x0 = mario->position.x;
+        z0 = mario->position.z;
+        if (__fabsf(mario->groundSlope) < 0.01f) {
+            lim = 2.0f;
+            i = 0;
+            end = 4;
+        } else {
+            lim = 10.0f;
+            i = 4;
+            end = 7;
         }
-        {
-            Vec v = {0.0f, 0.0f, 0.0f};
-            v.x = x0 + x;
-            v.y = y0 + hh;
-            v.z = z0 + z;
-            dist = hh + spd;
-            hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
-        }
-        if (hit) {
-            r = marioHitNrmAnglePtr(&outNrm);
-            if (r <= 105.0f && r >= 75.0f) {
-                continue;
+        for (; i < end; i++) {
+            switch (i) {
+                case 0:
+                    z = x = 0.0f;
+                    break;
+                case 1:
+                    a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
+                    x = 8.6399994f * (f32)sin(a);
+                    sn = (f32)cos(a);
+                    z = 8.6399994f * -sn;
+                    break;
+                case 2:
+                    a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
+                    x = 8.6399994f * (f32)sin(a);
+                    sn = (f32)cos(a);
+                    z = 8.6399994f * -sn;
+                    break;
+                case 3:
+                    z = x = 0.0f;
+                    movePos(&x, &z, 3.0f, mario->directionView);
+                    break;
+                case 4:
+                    z = x = 0.0f;
+                    break;
+                case 5:
+                    a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
+                    x = 8.6399994f * (f32)sin(a);
+                    sn = (f32)cos(a);
+                    z = 8.6399994f * -sn;
+                    movePos(&x, &z, 3.0f, mario->directionView);
+                    break;
+                case 6:
+                    a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
+                    x = 8.6399994f * (f32)sin(a);
+                    sn = (f32)cos(a);
+                    z = 8.6399994f * -sn;
+                    movePos(&x, &z, 3.0f, mario->directionView);
+                    break;
             }
-            mario->groundSlope = r;
-            if (outPos.y < y0 && __fabsf(outPos.y - y0) >= lim) {
-                if (__fabsf(outPos.y - y0) > __fabsf(h)) {
-                    *b = __fabsf(y0 - outPos.y);
-                    *c = angleABf(x0, z0, outPos.x, outPos.z);
-                } else if (outPos.y > best) {
+            {
+                Vec v = {0.0f, 0.0f, 0.0f};
+                v.x = x0 + x;
+                v.y = y0 + hh;
+                v.z = z0 + z;
+                dist = hh + spd;
+                hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
+            }
+            if (hit) {
+                r = marioHitNrmAnglePtr(&outNrm);
+                if (r <= 105.0f && r >= 75.0f) {
+                    continue;
+                }
+                mario->groundSlope = r;
+                if (outPos.y < y0 && __fabsf(outPos.y - y0) >= lim) {
+                    if (__fabsf(outPos.y - y0) > __fabsf(h)) {
+                        *b = __fabsf(y0 - outPos.y);
+                        *c = angleABf(x0, z0, outPos.x, outPos.z);
+                    } else if (outPos.y > best) {
+                        *y = outPos.y;
+                        best = outPos.y;
+                        *b = 0.0f;
+                        *c = angleABf(x0, z0, outPos.x, outPos.z);
+                        found = hit;
+                    }
+                } else if (__fabsf(outPos.y - y0) <= 11.0f && outPos.y > best) {
                     *y = outPos.y;
                     best = outPos.y;
                     *b = 0.0f;
                     *c = angleABf(x0, z0, outPos.x, outPos.z);
                     found = hit;
                 }
-            } else if (__fabsf(outPos.y - y0) <= 11.0f && outPos.y > best) {
-                *y = outPos.y;
-                best = outPos.y;
-                *b = 0.0f;
-                *c = angleABf(x0, z0, outPos.x, outPos.z);
-                found = hit;
             }
         }
-    }
     }
     if (found) {
         return found;
@@ -1561,37 +1561,37 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
     x0 = mario->position.x;
     z0 = mario->position.z;
     {
-    dir = (Vec){0.0f, -1.0f, 0.0f};
-    for (i = 0; i < 5; i++) {
-        if (i == 0) {
-            z = x = 0.0f;
-        } else if (i == 1) {
-            x = sx;
-            z = sz;
-        } else if (i == 2) {
-            x = -sz;
-            z = sz;
-        } else if (i == 3) {
-            x = sz;
-            z = nsx;
-        } else if (i == 4) {
-            x = nsx;
-            z = -sz;
-        }
-        {
-            Vec v = {0.0f, 0.0f, 0.0f};
-            v.x = x0 + x;
-            v.y = pyl;
-            v.z = z0 + z;
-            dist = d1;
-            hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
-        }
-        if (hit) {
-            mario->groundSlope = marioHitNrmAnglePtr(&outNrm);
-            if (__fabsf((s32)(100.0f * ((pyl - outPos.y) - dist) + 0.5f) / 100.0f) < 0.1f) {
-                *y = outPos.y;
-                return hit;
+        dir = (Vec){0.0f, -1.0f, 0.0f};
+        for (i = 0; i < 5; i++) {
+            if (i == 0) {
+                z = x = 0.0f;
+            } else if (i == 1) {
+                x = sx;
+                z = sz;
+            } else if (i == 2) {
+                x = -sz;
+                z = sz;
+            } else if (i == 3) {
+                x = sz;
+                z = nsx;
+            } else if (i == 4) {
+                x = nsx;
+                z = -sz;
             }
+            {
+                Vec v = {0.0f, 0.0f, 0.0f};
+                v.x = x0 + x;
+                v.y = pyl;
+                v.z = z0 + z;
+                dist = d1;
+                hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
+            }
+            if (hit) {
+                mario->groundSlope = marioHitNrmAnglePtr(&outNrm);
+                if (__fabsf((s32)(100.0f * ((pyl - outPos.y) - dist) + 0.5f) / 100.0f) < 0.1f) {
+                    *y = outPos.y;
+                    return hit;
+                }
 #endif
         }
     }
@@ -1707,7 +1707,7 @@ f32 marioChkOverhead(void) {
                 if (mario->baseSpeed == 0.0f) {
                     marioChgStayMotion();
                 } else {
-((BOOL (*)(s32))marioChgMot)(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
+                    ((BOOL (*)(s32))marioChgMot)(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
 #else
             if (!(mario->flags & MARIO_FLAG_TUBE_MODE) && mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_PLANE &&
                 mario->currMotionId != MARIO_MOTION_VIVIAN && mario->characterId != CHARACTER_BOWSER && !marioChkSlitEnd()) {
@@ -2835,8 +2835,8 @@ static inline void wallCopy(Vec* out, Vec* in) {
     *out = t;
 }
 
-/** The demo has no mode argument: the push is always limited to 1/8 of the width. */
 #if VERSION <= VERSION_DEMO_US
+/** The demo has no mode argument: the push is always limited to 1/8 of the width. */
 BOOL marioChkWallAround(Vec* pos, f32 unused, f32 dir, f32 w, f32 h) {
 #else
 BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h) {

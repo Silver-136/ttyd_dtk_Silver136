@@ -154,21 +154,21 @@ USER_FUNC(evt_lottery) {
                     } while (lot->todayNum == lot->number || lot->number % 1000 == lot->todayNum % 1000 ||
                         lot->number % 100 == lot->todayNum % 100 || lot->number % 10 == lot->todayNum % 10);
 #else
-                        lot->todayNum = lot->number % 1000 + rand() % 10 * 1000;
+                    lot->todayNum = lot->number % 1000 + rand() % 10 * 1000;
                     lot->flags |= LOTTERY_FLAG_MATCH3;
                 } else if (day == lot->days[2]) {
-                        lot->todayNum = lot->number % 100 + rand() % 100 * 100;
+                    lot->todayNum = lot->number % 100 + rand() % 100 * 100;
                     lot->flags |= LOTTERY_FLAG_MATCH2;
                 } else if (day == lot->days[3]) {
-                        lot->todayNum = lot->number % 10 + rand() % 1000 * 10;
+                    lot->todayNum = lot->number % 10 + rand() % 1000 * 10;
                     lot->flags |= LOTTERY_FLAG_MATCH1;
                 } else {
                     for (;;) {
                         lot->todayNum = rand() % 10000;
-                    if (lot->todayNum != lot->number) {
-                        break;
+                        if (lot->todayNum != lot->number) {
+                            break;
+                        }
                     }
-                }
 #endif
                 }
             } else {
@@ -181,7 +181,7 @@ USER_FUNC(evt_lottery) {
         lot->todayNum = -1;
 #if VERSION <= VERSION_DEMO_US
         if (idx == 1) {
-        lot->lastTime = now;
+            lot->lastTime = now;
         }
     }
 

@@ -362,7 +362,7 @@ s32 chkground(void) {
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
 #if VERSION == VERSION_EU
         if (!marioBgmodeChk()) {
-        camFollowYOn();
+            camFollowYOn();
         }
 #else
         camFollowYOn();

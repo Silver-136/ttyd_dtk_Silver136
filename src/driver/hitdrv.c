@@ -212,10 +212,10 @@ static void hitPreCheck(void) {
             hit->flags |= HIT_FLAG_NO_GEOMETRY;
             if (hit->joint->partCount != 0) {
                 hit->flags &= ~HIT_FLAG_NO_GEOMETRY;
-                }
             }
         }
     }
+}
 #else
             if (hit->joint->partCount != 0 && !(hit->flags & (HIT_FLAG_OFF | HIT_FLAG_DELETED))) {
                 if (prev == NULL) {
@@ -887,91 +887,91 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                     continue;
                 }
                 if (hit->joint->drawMode->cullMode == 1) {
-                        query->singleSided = 1;
-                    } else {
-                        query->singleSided = 0;
-                    }
-                    vector = hit->vectors;
-                    for (k = 0; k < hit->vectorCount; k++, vector++) {
-                        if (query->singleSided == 0 || !(PSVECDotProduct(&vector->normal, &query->targetDir) >= 0.0f)) {
-                            if (tempfunc(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
-                                minDist = query->targetDistance;
-                                hitIdx = j;
-                                mapIdx = i;
-                                distance = minDist;
-                                position = query->hitPos;
-                                hitNormalTmp = query->hitNormal;
-                            }
-                        }
-                    }
-                }
-            }
-            } else if (query->targetDir.y == 0.0f) {
-                for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
-                    for (j = 0, hit2 = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit2++) {
-                        if (hit2->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
-                            continue;
-        }
-    if (callback != NULL && !callback(query, hit2)) {
-        continue;
-    }
-    if (PSVECDistance(&endPos, &hit2->centerWorld) > reach + hit2->radius) {
-        continue;
-    }
-    if (hit2->joint->drawMode->cullMode == 1) {
-                            query->singleSided = 1;
-                        } else {
-                            query->singleSided = 0;
-                        }
-                        vector2 = hit2->vectors;
-                        for (k = 0; k < hit2->vectorCount; k++, vector2++) {
-                            if (query->singleSided == 0 || !(PSVECDotProduct(&vector2->normal, &query->targetDir) >= 0.0f)) {
-                                if (checkTriVec_xz(query, vector2) && (minDist < 0.0f || minDist > query->targetDistance)) {
-                                    minDist = query->targetDistance;
-                                    hitIdx = j;
-                                    mapIdx = i;
-                                    distance = minDist;
-                                    position = query->hitPos;
-                                    hitNormalTmp = query->hitNormal;
-                                }
-                            }
-                        }
-                    }
-                }
+                    query->singleSided = 1;
                 } else {
-                    for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
-                        for (j = 0, hit3 = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit3++) {
-                            if (hit3->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
-                                continue;
-            }
-        if (callback != NULL && !callback(query, hit3)) {
-            continue;
-        }
-        if (PSVECDistance(&endPos, &hit3->centerWorld) > reach + hit3->radius) {
-            continue;
-        }
-        if (hit3->joint->drawMode->cullMode == 1) {
-                            query->singleSided = 1;
-                        } else {
-                            query->singleSided = 0;
-                        }
-                        vector3 = hit3->vectors;
-                        for (k = 0; k < hit3->vectorCount; k++, vector3++) {
-                            if (query->singleSided == 0 || !(PSVECDotProduct(&vector3->normal, &query->targetDir) >= 0.0f)) {
-                                if (tempfunc3(query, vector3) && (minDist < 0.0f || minDist > query->targetDistance)) {
-                                    minDist = query->targetDistance;
-                                    hitIdx = j;
-                                    mapIdx = i;
-                                    distance = minDist;
-                                    position = query->hitPos;
-                                    hitNormalTmp = query->hitNormal;
-                                }
-                            }
+                    query->singleSided = 0;
+                }
+                vector = hit->vectors;
+                for (k = 0; k < hit->vectorCount; k++, vector++) {
+                    if (query->singleSided == 0 || !(PSVECDotProduct(&vector->normal, &query->targetDir) >= 0.0f)) {
+                        if (tempfunc(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                            minDist = query->targetDistance;
+                            hitIdx = j;
+                            mapIdx = i;
+                            distance = minDist;
+                            position = query->hitPos;
+                            hitNormalTmp = query->hitNormal;
                         }
                     }
                 }
             }
-        if (hitIdx < 0) {
+        }
+    } else if (query->targetDir.y == 0.0f) {
+        for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
+            for (j = 0, hit2 = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit2++) {
+                if (hit2->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
+                    continue;
+                }
+                if (callback != NULL && !callback(query, hit2)) {
+                    continue;
+                }
+                if (PSVECDistance(&endPos, &hit2->centerWorld) > reach + hit2->radius) {
+                    continue;
+                }
+                if (hit2->joint->drawMode->cullMode == 1) {
+                    query->singleSided = 1;
+                } else {
+                    query->singleSided = 0;
+                }
+                vector2 = hit2->vectors;
+                for (k = 0; k < hit2->vectorCount; k++, vector2++) {
+                    if (query->singleSided == 0 || !(PSVECDotProduct(&vector2->normal, &query->targetDir) >= 0.0f)) {
+                        if (checkTriVec_xz(query, vector2) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                            minDist = query->targetDistance;
+                            hitIdx = j;
+                            mapIdx = i;
+                            distance = minDist;
+                            position = query->hitPos;
+                            hitNormalTmp = query->hitNormal;
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
+            for (j = 0, hit3 = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit3++) {
+                if (hit3->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
+                    continue;
+                }
+                if (callback != NULL && !callback(query, hit3)) {
+                    continue;
+                }
+                if (PSVECDistance(&endPos, &hit3->centerWorld) > reach + hit3->radius) {
+                    continue;
+                }
+                if (hit3->joint->drawMode->cullMode == 1) {
+                    query->singleSided = 1;
+                } else {
+                    query->singleSided = 0;
+                }
+                vector3 = hit3->vectors;
+                for (k = 0; k < hit3->vectorCount; k++, vector3++) {
+                    if (query->singleSided == 0 || !(PSVECDotProduct(&vector3->normal, &query->targetDir) >= 0.0f)) {
+                        if (tempfunc3(query, vector3) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                            minDist = query->targetDistance;
+                            hitIdx = j;
+                            mapIdx = i;
+                            distance = minDist;
+                            position = query->hitPos;
+                            hitNormalTmp = query->hitNormal;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (hitIdx < 0) {
 #else
     entry = hitActiveListTop;
     if (query->targetDir.y == 0.0f) {
@@ -1055,7 +1055,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
             goto any_direction;
         }
     } else {
-    any_direction:
+        any_direction:
         while (entry != NULL) {
             if (callback == NULL || callback(query, entry)) {
                 if (!(PSVECDistance(&endPos, &entry->centerWorld) > (reach + entry->radius))) {

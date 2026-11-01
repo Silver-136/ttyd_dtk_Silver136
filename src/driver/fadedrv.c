@@ -606,15 +606,15 @@ void fadeMain(void) {
                             entry->state++;
                         }
 #else
-                                entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
-                            entry->progress = entry->elapsed / entry->duration;
-                            entry->progress = 1.0f - entry->progress;
-                            entry->rotation += 10.0f;
-                            if (entry->progress < 0.0f) {
-                                entry->progress = 0.0f;
-                                entry->flags |= FADE_FLAG_DONE;
-                                entry->state++;
-                            }
+                        entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
+                        entry->progress = entry->elapsed / entry->duration;
+                        entry->progress = 1.0f - entry->progress;
+                        entry->rotation += 10.0f;
+                        if (entry->progress < 0.0f) {
+                            entry->progress = 0.0f;
+                            entry->flags |= FADE_FLAG_DONE;
+                            entry->state++;
+                        }
 #endif
                         break;
                 }
@@ -648,14 +648,14 @@ void fadeMain(void) {
                             entry->state++;
                         }
 #else
-                            entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
-                            entry->progress = entry->elapsed / entry->duration;
-                            entry->rotation -= 10.0f;
-                            if (entry->progress > 1.0f) {
-                                entry->progress = 1.0f;
-                                entry->flags |= FADE_FLAG_DONE;
-                                entry->state++;
-                            }
+                        entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
+                        entry->progress = entry->elapsed / entry->duration;
+                        entry->rotation -= 10.0f;
+                        if (entry->progress > 1.0f) {
+                            entry->progress = 1.0f;
+                            entry->flags |= FADE_FLAG_DONE;
+                            entry->state++;
+                        }
 #endif
                         break;
                 }

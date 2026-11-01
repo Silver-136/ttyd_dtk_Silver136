@@ -212,10 +212,10 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
     const char* ranks[6] = {"　１", "　２", "　３", "　４", "　５", "menu_subtitle2_rankgai"};
     char buf[32];
     const u8* rk;
-        const char* title;
+    const char* title;
     s32 min;
-        s32 sec;
-        s32 score;
+    s32 sec;
+    s32 score;
 #else
 #if VERSION >= VERSION_US
     const char* ranks[2][6] = {{"　１", "　２", "　３", "　４", "　５", "menu_subtitle2_rankgai"}, {VERSION_PICK("1", " 1"), VERSION_PICK("2", " 2"), VERSION_PICK("3", " 3"), VERSION_PICK("4", " 4"), VERSION_PICK("5", " 5"), "menu_subtitle2_rankgai"}};
@@ -628,7 +628,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_US
             switch (wp->type) {
                 case 0:
-                rscore = RANKING_ROW(yuwp->recordScore)[wp->type][i];
+                    rscore = RANKING_ROW(yuwp->recordScore)[wp->type][i];
                     if (rscore >= 0) {
                         sprintf(buf, "%3d%s%02d", RANKING_ROW(yuwp->recordScore)[wp->type][i] / 1000, msgSearch("menu_decimal_point"), (rscore % 1000) / 10);
 #else
@@ -673,11 +673,11 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                 case 2:
 #if VERSION <= VERSION_DEMO_US
                     rscore = RANKING_ROW(yuwp->recordScore)[wp->type][i];
-                        if (rscore >= 0) {
-                            rsec = rscore / 1000;
-                            rmin = rsec / 60;
-                            rsec = rsec % 60;
-                            sprintf(buf, "%1d%s%02d%s%02d", rmin, msgSearch("menu_colon"), rsec, msgSearch("menu_colon"), (rscore % 1000) / 10);
+                    if (rscore >= 0) {
+                        rsec = rscore / 1000;
+                        rmin = rsec / 60;
+                        rsec = rsec % 60;
+                        sprintf(buf, "%1d%s%02d%s%02d", rmin, msgSearch("menu_colon"), rsec, msgSearch("menu_colon"), (rscore % 1000) / 10);
 #else
 #if VERSION >= VERSION_US
                     if (RANKING_ROW(yuwp->recordScore)[wp->type][i] >= 0) {
@@ -964,9 +964,9 @@ static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
             ret = ((max - score) * 15) / max;
             break;
 #if VERSION > VERSION_DEMO_US
-    }
-    if (ret < 0) {
-        ret = 0;
+        }
+        if (ret < 0) {
+            ret = 0;
 #endif
     }
     ret += bonus;

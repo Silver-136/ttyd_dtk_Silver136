@@ -309,32 +309,32 @@ void bomhei_use(PartyEntry* party) {
             }
         }
 #else
-        bomhei_use_main(party);
-        if ((party->useMotionId >= 30 && party->useMotionId <= 32) ||
-            (party->useMotionId >= 50 && party->useMotionId <= 51) || party->useMotionId == 60) {
-            partyChkGnd(party);
-            if (party->flags & PARTY_FLAG_IS_GROUNDED) {
-                partyChgMot(party, PARTY_MOTION_STAY);
-                party->velY = 0.0f;
-            }
-            if (strcmp(gp->currentMapName, "muj_05") == 0 && party->hitobjStandOn != NULL &&
-                strcmp(hitGetName(party->hitobjStandOn), "A_dokuro_bero") == 0) {
-                party->targetDir = angleABf(party->position.x, party->position.z, 638.0f, 12.5f);
-                party->moveDir = party->targetDir;
-            }
+    bomhei_use_main(party);
+    if ((party->useMotionId >= 30 && party->useMotionId <= 32) ||
+        (party->useMotionId >= 50 && party->useMotionId <= 51) || party->useMotionId == 60) {
+        partyChkGnd(party);
+        if (party->flags & PARTY_FLAG_IS_GROUNDED) {
+            partyChgMot(party, PARTY_MOTION_STAY);
+            party->velY = 0.0f;
         }
-        if (party->flags & PARTY_FLAG_IS_BEING_USED) {
-            mario = party->playerPtr;
+        if (strcmp(gp->currentMapName, "muj_05") == 0 && party->hitobjStandOn != NULL &&
+            strcmp(hitGetName(party->hitobjStandOn), "A_dokuro_bero") == 0) {
+            party->targetDir = angleABf(party->position.x, party->position.z, 638.0f, 12.5f);
+            party->moveDir = party->targetDir;
+        }
+    }
+    if (party->flags & PARTY_FLAG_IS_BEING_USED) {
+        mario = party->playerPtr;
 #endif
         if (party->work.bomhei.state != 0x66) {
             if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
                 party->work.bomhei.state = 0x66;
 #if VERSION <= VERSION_DEMO_US
-                } else {
-            mario_controll(party);
+            } else {
+                mario_controll(party);
+            }
         }
     }
-}
 }
 #else
                 return;
@@ -386,14 +386,14 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
     if (party->hitobjFront != NULL) {
         if (hitGetAttr(party->hitobjFront) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
-        party->useMotionId = 60;
-        return TRUE;
-    }
+            party->useMotionId = 60;
+            return TRUE;
+        }
     } else if (party->hitobjHead != NULL) {
         if (hitGetAttr(party->hitobjHead) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
-        party->useMotionId = 60;
-        return TRUE;
-    }
+            party->useMotionId = 60;
+            return TRUE;
+        }
     } else if (party->hitobjStandOn != NULL) {
         attr = hitGetAttr(party->hitobjStandOn);
 #else
@@ -414,7 +414,7 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
         if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
             party->useMotionId = 60;
 #if VERSION <= VERSION_DEMO_US
-            } else if (attr & HIT_ATTR_WATER_HAZARD) {
+        } else if (attr & HIT_ATTR_WATER_HAZARD) {
 #else
             return TRUE;
         }

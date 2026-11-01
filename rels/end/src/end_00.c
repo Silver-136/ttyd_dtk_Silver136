@@ -750,9 +750,9 @@ USER_FUNC(evt_end_credit_npc_main) {
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
 #if VERSION > VERSION_DEMO_US
-        }
-        if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
-            animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
+            }
+            if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
+                animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
 #endif
         }
         event->userdatap[0] = actor;
@@ -1921,23 +1921,23 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                     }
                 }
 #if VERSION <= VERSION_DEMO_US
-            if (i < 3) {
-                for (i = 0; i < 3; i++) {
-                    if (end_wp->win1[i] != -1) {
-                        msgWindow_Continue(end_wp->win1[i]);
+                if (i < 3) {
+                    for (i = 0; i < 3; i++) {
+                        if (end_wp->win1[i] != -1) {
+                            msgWindow_Continue(end_wp->win1[i]);
+                        }
                     }
                 }
-            }
-            for (i = 0; i < 3; i++) {
-                if (end_wp->win2[i] != -1) {
-                    msgWindow_Continue(end_wp->win2[i]);
+                for (i = 0; i < 3; i++) {
+                    if (end_wp->win2[i] != -1) {
+                        msgWindow_Continue(end_wp->win2[i]);
+                    }
                 }
-            }
-            evtSetValue(event, GW(10), 2);
-            state++;
-        } else {
-            // the last entry stays up, with BGM_EVT_PEACH1 (BGM id 0xCD), until A is pressed
-            psndBGMOn(PSND_FADE_OUT, (char*)0xCD);
+                evtSetValue(event, GW(10), 2);
+                state++;
+            } else {
+                // the last entry stays up, with BGM_EVT_PEACH1 (BGM id 0xCD), until A is pressed
+                psndBGMOn(PSND_FADE_OUT, (char*)0xCD);
 #else
             } else {
                 i = 0;

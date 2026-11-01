@@ -83,7 +83,7 @@ f32 marioGetCamFollowRate(void) {
 void marioPreCamera(void) {
 #if VERSION <= VERSION_DEMO_US
     marioGetPtr()->targetYaw = revise360((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
-    }
+}
 #else
     f32 roundingFactor;
     if (camGetPtr(CAMERA_3D)->viewYaw >= 0.0f) {

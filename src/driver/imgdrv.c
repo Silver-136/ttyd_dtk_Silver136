@@ -185,17 +185,17 @@ void imgDisp(CameraId camId, void* param) {
     }
 #if VERSION <= VERSION_DEMO_US
     {
-    if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
-        fl = entry->shadows[first].rect.left;
-        ft = entry->shadows[first].rect.top;
-        rectW = entry->shadows[first].rect.width;
-        rectH = entry->shadows[first].rect.height;
-    } else {
-        fl = entry->shadows[first].x;
-        ft = entry->shadows[first].y;
-        rectW = entry->width;
-        rectH = entry->height;
-    }
+        if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
+            fl = entry->shadows[first].rect.left;
+            ft = entry->shadows[first].rect.top;
+            rectW = entry->shadows[first].rect.width;
+            rectH = entry->shadows[first].rect.height;
+        } else {
+            fl = entry->shadows[first].x;
+            ft = entry->shadows[first].y;
+            rectW = entry->width;
+            rectH = entry->height;
+        }
     }
     PSMTXTrans(m3, 64.0f * ((entry->offsetX + fl) / (f32)DEMOGetRenderModeObj()->fbWidth), 48.0f * (-(entry->offsetY + ft) / (f32)DEMOGetRenderModeObj()->efbHeight), zoff);
 #else
@@ -225,7 +225,7 @@ void imgDisp(CameraId camId, void* param) {
     animSetPaperTexMtx(NULL, NULL, NULL);
 #if VERSION <= VERSION_DEMO_US
     sysWaitDrawSync();
-    }
+}
 #else
     e2 = wp->entries;
     for (i = 0; i < wp->count; i++, e2++) {

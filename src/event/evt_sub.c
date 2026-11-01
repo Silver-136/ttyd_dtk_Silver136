@@ -2112,9 +2112,9 @@ USER_FUNC(evt_sub_get_coin) {
     case 0:
 #if VERSION <= VERSION_DEMO_US
         iconEntry2D("iraiCoin", ICON_ITEM_COIN);
-            getScreenPoint(&b, &scr);
-            iconSetPos("iraiCoin", scr.x, scr.y, scr.z);
-            iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN);
+        getScreenPoint(&b, &scr);
+        iconSetPos("iraiCoin", scr.x, scr.y, scr.z);
+        iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN);
 #else
         iconEntry("iraiCoin", ICON_ITEM_COIN);
         iconSetPos("iraiCoin", b.x, b.y, b.z);

@@ -621,7 +621,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_US
             switch (wp->type) {
                 case 0:
-                rscore = RANKING_ROW(yuwp->recordScore)[wp->type][i];
+                    rscore = RANKING_ROW(yuwp->recordScore)[wp->type][i];
                     if (rscore >= 0) {
                         sprintf(buf, "%3d%s%02d", RANKING_ROW(yuwp->recordScore)[wp->type][i] / 1000, msgSearch("menu_decimal_point"), (rscore % 1000) / 10);
 #else
@@ -666,11 +666,11 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                 case 2:
 #if VERSION <= VERSION_DEMO_US
                     rscore = RANKING_ROW(yuwp->recordScore)[wp->type][i];
-                        if (rscore >= 0) {
-                            rsec = rscore / 1000;
-                            rmin = rsec / 60;
-                            rsec = rsec % 60;
-                            sprintf(buf, "%1d%s%02d%s%02d", rmin, msgSearch("menu_colon"), rsec, msgSearch("menu_colon"), (rscore % 1000) / 10);
+                    if (rscore >= 0) {
+                        rsec = rscore / 1000;
+                        rmin = rsec / 60;
+                        rsec = rsec % 60;
+                        sprintf(buf, "%1d%s%02d%s%02d", rmin, msgSearch("menu_colon"), rsec, msgSearch("menu_colon"), (rscore % 1000) / 10);
 #else
 #if VERSION >= VERSION_US
                     if (RANKING_ROW(yuwp->recordScore)[wp->type][i] >= 0) {

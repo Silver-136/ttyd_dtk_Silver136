@@ -325,14 +325,14 @@ const char* winZenkakuStr(s32 n) {
 #if VERSION <= VERSION_DEMO_US
     const char* tbl[10] = {"０", "１", "２", "３", "４",
                            "５", "６", "７", "８", "９"};
-    static char tmp2[0x100];
-    char buf[0x100];
-    u32 i;
-    sprintf(buf, "%d", n);
-    strcpy(tmp2, "");
-    for (i = 0; i < strlen(buf); i++) {
-        strcat(tmp2, tbl[(s8)buf[i] - '0']);
-    }
+        static char tmp2[0x100];
+        char buf[0x100];
+        u32 i;
+        sprintf(buf, "%d", n);
+        strcpy(tmp2, "");
+        for (i = 0; i < strlen(buf); i++) {
+            strcat(tmp2, tbl[(s8)buf[i] - '0']);
+        }
 #else
 #if VERSION >= VERSION_US
     static char tmp2[0x100];
@@ -624,7 +624,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         GXColor cols[3] = {{0xCB, 0x8C, 0xA2, 0xFE}, {0xCB, 0xBE, 0x89, 0xFE}, {0x94, 0xB9, 0xC7, 0xFE}};
         GXColor reds[3] = {{0xA7, 0x3C, 0x3C, 0xFF}, {0x37, 0x69, 0x1E, 0xFF}, {0x0F, 0x21, 0x7A, 0xFF}};
 #if VERSION >= VERSION_US
-// Descriptive name (not in the symbol maps).
+        // Descriptive name (not in the symbol maps).
         const char* const stat_name_tbl[7][3] = {
             {"ＨＰ", "ＦＰ", "ＢＰ"},
             {"HP", "FP", "BP"},

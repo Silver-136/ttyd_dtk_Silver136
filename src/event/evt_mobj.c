@@ -120,10 +120,10 @@ extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u
 
 /** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
 #if VERSION > VERSION_DEMO_US
-EVT_BEGIN(kpa_powerup_evt)
-    CALL(kpa_powerup, LW(0), LW(1), LW(2))
-    RETURN
-EVT_END()
+                            EVT_BEGIN(kpa_powerup_evt)
+                                CALL(kpa_powerup, LW(0), LW(1), LW(2))
+                                RETURN
+                            EVT_END()
 #endif
 /** Event that runs fire_func with LW(0)-LW(3) to spawn a fire effect for Bowser's stage objects. */
 #if VERSION > VERSION_DEMO_US

@@ -405,7 +405,7 @@ void winLogInit(WindowWork* w) {
         area = "tik";
     if (!strcmp(gp->currentMapName, "gra_06"))
         area = "jin";
-{
+    {
         for (k = 0; k < 93; k++) {
             if (!area || !strcmp(area, tubuDt[k].map))
                 break;
@@ -679,8 +679,8 @@ s32 winLogMain(WindowWork* w) {
 #if VERSION <= VERSION_DEMO_US
         if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U)
                 break;
-                if (!w->mapRes) {
-                    w->mapRes = fileAllocf(FILE_TYPE_TPL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName());
+        if (!w->mapRes) {
+            w->mapRes = fileAllocf(FILE_TYPE_TPL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName());
 #else
 #if VERSION >= VERSION_US
         if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName()) == 0U) break;
@@ -1208,7 +1208,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             wk = w->log.eff[i]->userdata;
             wk->position.z = v.z;
 #if VERSION <= VERSION_DEMO_US
-        winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
+            winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
 #else
         }
         for (i = 0; i < 7; i++) {
@@ -1494,7 +1494,7 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
         if (w->log.enemyPage * 16 + i >= w->log.enemyNum)
             break;
         if (swGet(id + GSWF_TATTLE_BASE)) {
-{
+            {
 #else
         id = w->log.enemy[w->log.enemyPage * 16 + i].id;
         te = battleGetUnitMonosiriPtr(id);
@@ -1588,21 +1588,21 @@ void monosiriMain(MonosiriWork* m) {
 #if VERSION <= VERSION_DEMO_US
     const char* lang[2] = {"jp", "us"};
     GXTexObj tex;
-        TattleEntry* t;
-        if (!m)
-            return;
-        switch (m->state) {
-            case 0:
-                if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U)
-                    break;
-                    if (fileAsyncf(FILE_TYPE_RAW, NULL, WIN_DIR "jp/mono.dat", getMarioStDvdRoot()) == 0U)
-                    break;
-                    m->file1 = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
-                    m->file2 = fileAllocf(FILE_TYPE_RAW, WIN_DIR "jp/mono.dat", getMarioStDvdRoot());
-    m->state++;
-    m->alpha = 0;
-                m->pose1 = -1;
-                m->pose2 = -1;
+    TattleEntry* t;
+    if (!m)
+        return;
+    switch (m->state) {
+        case 0:
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U)
+                break;
+            if (fileAsyncf(FILE_TYPE_RAW, NULL, WIN_DIR "jp/mono.dat", getMarioStDvdRoot()) == 0U)
+            break;
+            m->file1 = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
+            m->file2 = fileAllocf(FILE_TYPE_RAW, WIN_DIR "jp/mono.dat", getMarioStDvdRoot());
+            m->state++;
+            m->alpha = 0;
+            m->pose1 = -1;
+            m->pose2 = -1;
 #else
     const char* lang[VERSION_PICK(2, 6)] = {
         "jp", "us",
@@ -1715,7 +1715,7 @@ void monosiriExit(MonosiriWork* m) {
             m->smart = NULL;
         }
 #else
-            smartFree(m->smart);
+        smartFree(m->smart);
 #endif
         _mapFree(m);
     }
@@ -1903,7 +1903,7 @@ void monosiri_disp(CameraId camera, void* param) {
 
     x = m->curX;
     y = m->curY;
-{
+    {
 #else
     x = m->curX;
     y = m->curY;

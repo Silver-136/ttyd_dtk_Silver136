@@ -4766,9 +4766,9 @@ USER_FUNC(_naniga_okorukana_check) {
                 break;
         }
     }
-end:
+    end:
 #else
-        }
+    }
 #endif
     if (effNameToPtr("effNaniga")) {
         return EVT_RETURN_BLOCK;

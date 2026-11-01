@@ -1188,16 +1188,16 @@ void winBookGX(WindowWork* w, s32 a, f32 x, f32 y) {
         winFontSetLabel((Vec){220.0f + lx, y - 14.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, (GXColor){0x00, 0x00, 0x00, 0xFF},
                         luigi_book_list[w->item.bookIdx][w->item.bookPage * 2 + 1]);
 #if VERSION > VERSION_DEMO_US
-        pose = ((MessageWork*)msgGetWork())->poseId;
-        anim = animPoseGetAnimDataPtr(pose);
-        if (w->item.bookPage < w->item.bookPages - 1) {
-            animPoseSetAnim(pose, "HOS_C_1", 0);
-        } else {
-            animPoseSetAnim(pose, "HOS_E_1", 0);
-        }
-        animPoseSetLocalTime(pose, gp->retraceCount % (s32)anim->loopInfo->end);
-        animPoseMain(pose);
-        animPoseDraw(pose, 425.0f + x, y - 275.0f, 0.0f, 180.0f, 5.0f, 2);
+                        pose = ((MessageWork*)msgGetWork())->poseId;
+                        anim = animPoseGetAnimDataPtr(pose);
+                        if (w->item.bookPage < w->item.bookPages - 1) {
+                            animPoseSetAnim(pose, "HOS_C_1", 0);
+                        } else {
+                            animPoseSetAnim(pose, "HOS_E_1", 0);
+                        }
+                        animPoseSetLocalTime(pose, gp->retraceCount % (s32)anim->loopInfo->end);
+                        animPoseMain(pose);
+                        animPoseDraw(pose, 425.0f + x, y - 275.0f, 0.0f, 180.0f, 5.0f, 2);
 #endif
     }
 }
@@ -2897,9 +2897,9 @@ void winMailDisp(WindowWork* wp) {
             if (mail->flags & MAIL_FLAG_PICTURE) {
                 winTexInit((TEXPalette*)*wp->mailRes->data);
                 winTexSet(mail->icon, (Vec){210.0f + wp->item.mailX, (wp->item.mailY - (f32)((wp->item.mailLines - 3) * 21)) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-}
+            }
             GXSetScissor(0, 0, 0x260, 0x1E0);
-{
+            {
 #else
 #if VERSION >= VERSION_US
             winFontSetWidth((Vec){ 80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, (GXColor){ 0x00, 0x00, 0x00, 0xFF }, 280.0f, msgSearch(mail->body));

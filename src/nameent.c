@@ -337,8 +337,8 @@ void nameEntMain(void) {
     }
 }
 
-/** The demo has no cursor travel check, no all-blank name check and no default partner name. */
 #if VERSION <= VERSION_DEMO_US
+/** The demo has no cursor travel check, no all-blank name check and no default partner name. */
 static s32 nameMain(void) {
     s32 off;
     s32 idx;

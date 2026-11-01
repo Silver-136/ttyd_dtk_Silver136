@@ -766,10 +766,10 @@ void yoshi_use(PartyEntry* party) {
         case 20:
 #if VERSION <= VERSION_DEMO_US
             if (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) {
-                    YOSHI_WORK(party)->dir = 1;
-                } else {
-                    YOSHI_WORK(party)->dir = -1;
-                }
+                YOSHI_WORK(party)->dir = 1;
+            } else {
+                YOSHI_WORK(party)->dir = -1;
+            }
 #else
 #if VERSION >= VERSION_US
             YOSHI_WORK(party)->dir = (party->displayDirectionTarget >= 90.0f && party->displayDirectionTarget <= 270.0f) ? 1 : -1;
@@ -846,7 +846,7 @@ void yoshi_use(PartyEntry* party) {
             if (party->flags & PARTY_FLAG_IS_EVT_USE) {
 #if VERSION <= VERSION_DEMO_US
                 party->moveSpeed = evt_yoshi_spd;
-} else {
+            } else {
                 getStick(party, &angle, &speed);
                 yoshiFlyMove(party, &angle);
 #else
@@ -890,8 +890,8 @@ void yoshi_use(PartyEntry* party) {
                         party->moveSpeed = 0.0f;
                         party->useMotionId = 52;
 #if VERSION <= VERSION_DEMO_US
-                    break; // the demo only breaks out here in the evt mode
-                }
+                        break; // the demo only breaks out here in the evt mode
+                    }
 #else
                     }
                     break;
@@ -1035,7 +1035,7 @@ void yoshi_use(PartyEntry* party) {
             if (party->flags & PARTY_FLAG_IS_EVT_USE) {
 #if VERSION <= VERSION_DEMO_US
                 party->moveSpeed = evt_yoshi_spd;
-} else {
+            } else {
                 getStick(party, &angle, &speed);
                 yoshiFlyMove(party, &angle);
 #else
@@ -1148,8 +1148,8 @@ void yoshi_use(PartyEntry* party) {
     marioUpdateCamCollision(party->position);
 }
 
-/** The demo version works the fly angle in the caller's variable (passed by pointer). */
 #if VERSION <= VERSION_DEMO_US
+/** The demo version works the fly angle in the caller's variable (passed by pointer). */
 void yoshiFlyMove(PartyEntry* party, f32* angle) {
 #else
 void yoshiFlyMove(PartyEntry* party) {
@@ -1277,8 +1277,8 @@ void inertia(PartyEntry* party) {
     mario->mot.yoshi.velZ = vz;
 }
 
-/** The demo searches 11 up into locals and has the older landing and step code. */
 #if VERSION <= VERSION_DEMO_US
+/** The demo searches 11 up into locals and has the older landing and step code. */
 static void searchGround(PartyEntry* party) {
 #else
 void searchGround(PartyEntry* party) {
@@ -1379,7 +1379,7 @@ void searchGround(PartyEntry* party) {
                 if (party->moveSpeed) {
 #if VERSION <= VERSION_DEMO_US
                     party->useMotionId = 40;
-                        return;
+                    return;
 #else
                     if (chgMotion(party, 40)) {
                         return;
@@ -1419,8 +1419,8 @@ void searchGround(PartyEntry* party) {
     }
 }
 
-/** The demo searches into locals, always records the hit object, and stops the flutter sound on landing. */
 #if VERSION <= VERSION_DEMO_US
+/** The demo searches into locals, always records the hit object, and stops the flutter sound on landing. */
 static void searchGround2(PartyEntry* party) {
 #else
 void searchGround2(PartyEntry* party) {
@@ -1436,8 +1436,8 @@ void searchGround2(PartyEntry* party) {
     if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
         hit = _partySearchGround(party, &ground.y, &depth, 11.0f, 0.0f);
     }
-        L_sweatEntry(party, hit);
-        if (hit == NULL) {
+    L_sweatEntry(party, hit);
+    if (hit == NULL) {
         return;
     }
     if (party->yoshiPsndSFXId != -1) {
@@ -1569,7 +1569,7 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir) {
             yoshi_damageToge(party);
         }
 #if VERSION <= VERSION_DEMO_US
-    return;
+        return;
 #endif
     } else {
         hit = dou10_yoko_yari2(&work2);

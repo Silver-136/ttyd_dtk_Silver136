@@ -273,7 +273,7 @@ void effNiceMain(EffectEntry* effect) {
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
 #if VERSION >= VERSION_US
-            }
+        }
 #else
             break;
         }

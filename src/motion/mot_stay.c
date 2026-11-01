@@ -127,25 +127,25 @@ void mot_stay(void) {
         marioResetCamFollowRate();
 #if VERSION <= VERSION_DEMO_US
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-                motSlitContinue();
-            } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
-                marioChgMot2(MARIO_MOTION_SLIT);
-                motSlitCancel();
+            motSlitContinue();
+        } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
+            marioChgMot2(MARIO_MOTION_SLIT);
+            motSlitCancel();
+        }
+        if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
+            if (pouchGetHP() == 0) {
+                marioChgPose("M_I_S");
+                psndSFXOn_3D((char*)0x173, &mario->position);
+            } else if (lowHP() && marioChkKey()) {
+                mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
+                marioChgPose("M_S_3");
+                mario->idleTimer = 0;
+            } else if (strcmp(mario->animName, "M_I_Y") != 0) {
+                marioChgPose("M_S_1");
             }
-            if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
-                if (pouchGetHP() == 0) {
-                    marioChgPose("M_I_S");
-                    psndSFXOn_3D((char*)0x173, &mario->position);
-                } else if (lowHP() && marioChkKey()) {
-                    mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
-                    marioChgPose("M_S_3");
-                    mario->idleTimer = 0;
-                } else if (strcmp(mario->animName, "M_I_Y") != 0) {
-                    marioChgPose("M_S_1");
-                }
-            } else {
-                marioChgPoseTime("M_U_2", 10);
-            }
+        } else {
+            marioChgPoseTime("M_U_2", 10);
+        }
 #else
         if (mario->flags & MARIO_FLAG_IS_8_BIT) {
             marioChgPose("M_S_1");
@@ -408,15 +408,15 @@ void mot_stay_post(void) {
     }
 }
 #else
-        mario = marioGetPtr();
-        if (mario->soundId[0] != (u32)-1) {
-            psndSFXOff(mario->soundId[0]);
-            mario->soundId[0] = -1;
-        }
-        mario = marioGetPtr();
-        if (mario->soundId[1] != (u32)-1) {
-            psndSFXOff(mario->soundId[1]);
-            mario->soundId[1] = -1;
-        }
-        }
+    mario = marioGetPtr();
+    if (mario->soundId[0] != (u32)-1) {
+        psndSFXOff(mario->soundId[0]);
+        mario->soundId[0] = -1;
+    }
+    mario = marioGetPtr();
+    if (mario->soundId[1] != (u32)-1) {
+        psndSFXOff(mario->soundId[1]);
+        mario->soundId[1] = -1;
+    }
+}
 #endif

@@ -285,8 +285,8 @@ void winMain(void) {
                 }
 #if VERSION <= VERSION_DEMO_US
                 fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/mail.tpl", getMarioStDvdRoot());
-{
-const char* name = winGetMapTplName();
+                {
+                    const char* name = winGetMapTplName();
                     fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), name);
 #else
 #if VERSION >= VERSION_US

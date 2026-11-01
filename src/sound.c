@@ -328,7 +328,7 @@ BOOL SoundLoadDVD2(const char* path) {
     }
 #if VERSION <= VERSION_DEMO_US
     root = getMarioStDvdRoot();
-        sprintf(_ssGetStr(), "%s/%s%s", root, path, ".pool");
+    sprintf(_ssGetStr(), "%s/%s%s", root, path, ".pool");
     entry = DVDMgrOpen(_ssGetStr(), 2, 0);
 #else
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".pool");
@@ -810,9 +810,9 @@ void SoundSetOutputMode(SND_OUTPUTMODE mode) {
     }
 }
 #else
-        sound.outputMode = mode;
-        sndOutputMode(mode);
-    }
+    sound.outputMode = mode;
+    sndOutputMode(mode);
+}
 #endif
 
 /** Called when the disc cover opens: mutes sound until it is closed. */
@@ -1448,7 +1448,7 @@ static inline u32 _ssCalcLen(SoundStreamEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
         if (entry->offset + 2 * SS_LOAD_BUFFER_SIZE > entry->size) {
             len -= (SS_LOAD_BUFFER_SIZE - (entry->size - (entry->offset + SS_LOAD_BUFFER_SIZE))) / 2;
-                len += 0x20 - (len % 0x20);
+            len += 0x20 - (len % 0x20);
 #else
         for (i = 2; i < 6; i++) {
             if (entry->offset + i * SS_LOAD_BUFFER_SIZE > entry->size) {
@@ -1561,34 +1561,34 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #if VERSION <= VERSION_DEMO_US
                 if (result >= 0) {
                     SoundIntOff();
-                entry->offset += entry->requestLength;
-                entry->loadedLen[1 - entry->curBuf] = entry->requestLength;
-                entry->loaded = 1;
-                if (entry->offset >= entry->size) {
-                    entry->offset = entry->loopStart;
-                    if (stream->flags & SOUND_STREAM_FLAG_LOOP) {
-                        if (ch == 0) {
-                            stream->flags &= ~SOUND_STREAM_FLAG_READ_L;
+                    entry->offset += entry->requestLength;
+                    entry->loadedLen[1 - entry->curBuf] = entry->requestLength;
+                    entry->loaded = 1;
+                    if (entry->offset >= entry->size) {
+                        entry->offset = entry->loopStart;
+                        if (stream->flags & SOUND_STREAM_FLAG_LOOP) {
+                            if (ch == 0) {
+                                stream->flags &= ~SOUND_STREAM_FLAG_READ_L;
+                            } else {
+                                stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
+                            }
                         } else {
-                            stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
+                            stream->flags |= SOUND_STREAM_FLAG_READ_END;
                         }
+                    } else if (ch == 0) {
+                        stream->flags &= ~SOUND_STREAM_FLAG_READ_L;
                     } else {
-                        stream->flags |= SOUND_STREAM_FLAG_READ_END;
+                        stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
                     }
-                } else if (ch == 0) {
-                    stream->flags &= ~SOUND_STREAM_FLAG_READ_L;
-                } else {
-                    stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
-                }
-                SoundIntOn();
-                if (stream->count == 2) {
-                    if (sound.coverState == 2 && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
+                    SoundIntOn();
+                    if (stream->count == 2) {
+                        if (sound.coverState == 2 && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
+                            sound.coverState = 0;
+                        }
+                    } else if (sound.coverState == 2 && stream->entries[0].loaded == 1) {
                         sound.coverState = 0;
                     }
-                } else if (sound.coverState == 2 && stream->entries[0].loaded == 1) {
-                    sound.coverState = 0;
-                }
-                continue;
+                    continue;
                 }
                 return;
 #else
@@ -1672,7 +1672,7 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
         }
     }
 #if VERSION > VERSION_DEMO_US
-end:
+    end:
     SoundIntOn();
 #endif
 }
@@ -1921,7 +1921,7 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
                 n--;
                 continue;
             }
-*(u8*)dst = *(src8++);
+            *(u8*)dst = *(src8++);
             dst = (s16*)((u8*)dst + 1);
             n--;
             entry->srcPos++;
@@ -1973,7 +1973,7 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
                 n--;
                 continue;
             }
-*(u8*)dst = *(src8b++);
+            *(u8*)dst = *(src8b++);
             dst = (s16*)((u8*)dst + 1);
             n--;
             entry->srcPos++;
@@ -2105,7 +2105,7 @@ void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
     int i;
 #if VERSION <= VERSION_DEMO_US
     const char* path;
-const char* paths[1];
+    const char* paths[1];
 #else
     const char* paths[2]; // FAKE: alias array for the root and path strings; the plain _ssGetStr()/getMarioStDvdRoot() form changes the object
 #endif
@@ -2138,7 +2138,7 @@ const char* paths[1];
 #if VERSION <= VERSION_DEMO_US
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), name, ".stm");
     paths[0] = _ssGetStr();
-        path = paths[0];
+    path = paths[0];
     if (!(stream->entries[0].dvd = DVDMgrOpen(path, 0, 0))) {
 #else
     paths[1] = getMarioStDvdRoot();

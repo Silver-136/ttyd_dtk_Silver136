@@ -345,8 +345,8 @@ void mot_jabara(void) {
         hitY = marioChkOverheadJabara(&overheadHit, &overheadDist);
 #if VERSION <= VERSION_DEMO_US
         if (mario->hitobjHead != NULL) {
-                mario->position.y = hitY;
-            }
+            mario->position.y = hitY;
+        }
 #endif
         if (marioGetRub(PAD_BUTTON_A, &rubDir, &rubCount, &rubMag) == 1) {
             mario->hammerChargeTimer++;

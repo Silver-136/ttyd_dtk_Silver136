@@ -1433,8 +1433,8 @@ void select_disp(WinMgrEntry* entry) {
             winIconInit();
             winIconSet(item->icon_id, (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, iconcol);
             winFontInit();
-winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                       black, msgSearch(item->name));
+            winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+                                   black, msgSearch(item->name));
 #else
 #if VERSION >= VERSION_US
             if (sel->items[i].flags & SELECT_ITEM_EQUIPPED) {
@@ -2125,7 +2125,7 @@ void select_disp3_mario(WinMgrEntry* entry) {
                 help = "helperr";
             }
 #else
-                help = "helperr";
+            help = "helperr";
 #endif
         } else {
             help = "help";

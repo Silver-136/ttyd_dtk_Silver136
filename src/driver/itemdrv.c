@@ -100,9 +100,9 @@ WinMgrDesc itemdrv_window_desc[4] = {
 inline void itemCheckBadge(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
     if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX && !(entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP)) {
-                pouchArriveBadge(entry->itemId);
-            }
-        }
+        pouchArriveBadge(entry->itemId);
+    }
+}
 #else
     if (!gp->inBattle) {
         if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX) {
@@ -237,18 +237,18 @@ BOOL itemGetCheck(ItemEntry* entry) {
         return FALSE;
     if (entry->flags2 & ITEM_FLAG2_SUNK)
         return FALSE;
-        if (marioStGetSystemLevel() != 0)
-        return FALSE;
+    if (marioStGetSystemLevel() != 0)
+    return FALSE;
     if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))
         return FALSE;
-        if (gp->mapEventId)
-        return FALSE;
+    if (gp->mapEventId)
+    return FALSE;
     if (seqGetSeq() != SEQ_GAME)
         return FALSE;
     if (mario->currMotionId == MARIO_MOTION_SHIP)
         return FALSE;
-        if (vivianGetStatus())
-        return FALSE;
+    if (vivianGetStatus())
+    return FALSE;
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE)
         return FALSE;
     if (nokonoko_holdItem())
@@ -325,8 +325,8 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
         return FALSE;
     if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))
         return FALSE;
-        if (gp->mapEventId)
-        return FALSE;
+    if (gp->mapEventId)
+    return FALSE;
     if (seqGetSeq() != SEQ_GAME)
         return FALSE;
     if (mario->currMotionId == MARIO_MOTION_SHIP)
@@ -757,10 +757,10 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     default:
 #if VERSION <= VERSION_DEMO_US
         iconEntry(entry->name, itemDataTable[itemId].icon_id);
-            {
-                char* nm = entry->name;
-                iconSetPos(nm, x, y, z);
-            }
+        {
+            char* nm = entry->name;
+            iconSetPos(nm, x, y, z);
+        }
 #else
         entry->effect = NULL;
         iconEntry(entry->name, itemDataTable[itemId].icon_id);
@@ -965,8 +965,8 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
 #if VERSION <= VERSION_DEMO_US
         if (!(entry->flags & ITEM_FLAG_ACTIVE))
             continue;
-            if (entry->flags & ITEM_FLAG_NO_TOUCH)
-            continue;
+        if (entry->flags & ITEM_FLAG_NO_TOUCH)
+        continue;
         if (entry->flags2 & ITEM_FLAG2_CARRIED)
             continue;
         if (entry->mode == ITEM_MODE_GET)
@@ -1140,12 +1140,12 @@ void winFullDisp(WinMgrEntry* win) {
     }
 }
 
+#if VERSION <= VERSION_DEMO_US
 /**
  * The demo's item-get sequence: no retail sub-states 2 (control off) and 8 (motion abort),
  * so retail 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
  * and the icon flags are 0x40/0x100 where retail has 0x100/0x200.
  */
-#if VERSION <= VERSION_DEMO_US
 static void itemseq_GetItem(ItemEntry* entry) {
 #else
 void itemseq_GetItem(ItemEntry* entry) {

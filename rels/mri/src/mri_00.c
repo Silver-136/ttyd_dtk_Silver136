@@ -949,12 +949,12 @@ static USER_FUNC(evt_cloud_main) {
     }
 #if VERSION <= VERSION_DEMO_US
     if (party->currentMemberId != 5) {
-            return EVT_RETURN_BLOCK;
-        }
+        return EVT_RETURN_BLOCK;
+    }
     hit0 = (HitEntry*)cloudGetHitBreathout(0);
-        hit1 = (HitEntry*)cloudGetHitBreathout(1);
-        hit2 = (HitEntry*)cloudGetHitBreathout(2);
-        hit3 = (HitEntry*)cloudGetHitBreathout(3);
+    hit1 = (HitEntry*)cloudGetHitBreathout(1);
+    hit2 = (HitEntry*)cloudGetHitBreathout(2);
+    hit3 = (HitEntry*)cloudGetHitBreathout(3);
 #else
     hit0 = cloudGetHitBreathout(0);
     hit1 = cloudGetHitBreathout(1);

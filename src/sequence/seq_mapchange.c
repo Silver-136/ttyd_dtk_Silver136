@@ -138,8 +138,8 @@ void seq_mapChangeMain(SequenceWork* work) {
 #if VERSION <= VERSION_DEMO_US
     BOOL newarea = strcmp(_next_area, gp->currentAreaName) ? TRUE : FALSE;
     const char* area_name;
-        EvtWord* evtCode;
-        FileEntry* fres;
+    EvtWord* evtCode;
+    FileEntry* fres;
 #else
     BOOL newarea = strcmp(_next_area, gp->currentAreaName) != 0;
     const char* area_name;
@@ -186,16 +186,16 @@ void seq_mapChangeMain(SequenceWork* work) {
     case 1:
 #if VERSION <= VERSION_DEMO_US
         if (fadeIsFinish()) {
-                if (gp->relocationBase) {
-                    ((void (*)(void))((OSModuleHeader*)gp->relocationBase)->epilog)();
-                    OSUnlink(gp->relocationBase);
-                    if (gp->relocationBase != gp->mapAlloc) {
-                        _mapFree(gp->relocationBase);
-                    }
-                    gp->relocationBase = NULL;
+            if (gp->relocationBase) {
+                ((void (*)(void))((OSModuleHeader*)gp->relocationBase)->epilog)();
+                OSUnlink(gp->relocationBase);
+                if (gp->relocationBase != gp->mapAlloc) {
+                    _mapFree(gp->relocationBase);
                 }
-                _unload(gp->currentMapName, _next_map, _next_bero);
-                psndMapChange();
+                gp->relocationBase = NULL;
+            }
+            _unload(gp->currentMapName, _next_map, _next_bero);
+            psndMapChange();
 #else
         psndSFXAllOff();
         if (fadeIsFinish()) {
@@ -322,10 +322,10 @@ void seq_mapChangeMain(SequenceWork* work) {
         PartyEntry* extraParty;
 #if VERSION <= VERSION_DEMO_US
         if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "sys", 3)) {
-{
+            {
                 LangTbl lang = lang_tbl;
                 fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
-}
+            }
 #else
         if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "end", 3) &&
             strncmp(_next_map, "sys", 3) && strncmp(_next_map, "gor_10", 6)) {

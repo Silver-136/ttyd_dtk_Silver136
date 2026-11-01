@@ -590,8 +590,8 @@ void evtMsgFmtStr(char* buf, const char* name) {
         } else if (strstr(name, "<NPLdie>") != NULL) {
             form = 5;
 #if VERSION == VERSION_EU
-            } else if (strstr(name, "<PL") != NULL) {
-                form = 6;
+        } else if (strstr(name, "<PL") != NULL) {
+            form = 6;
 #endif
         }
         if ((marker = strstr(buf, "<Einen>")) != NULL) {
@@ -637,13 +637,13 @@ void evtMsgFmtStr(char* buf, const char* name) {
             strcat(tmp, name);
             strcat(tmp, marker + 12);
 #if VERSION == VERSION_EU
-            } else if ((marker = strstr(buf, "<einem_ITEM>")) != NULL) {
-                len = strlen(buf) - strlen(marker);
-                strncpy(tmp, buf, len);
-                tmp[len] = 0;
-                strcat(tmp, msg_de_article_dat_tbl[form]);
-                strcat(tmp, name);
-                strcat(tmp, marker + 12);
+        } else if ((marker = strstr(buf, "<einem_ITEM>")) != NULL) {
+            len = strlen(buf) - strlen(marker);
+            strncpy(tmp, buf, len);
+            tmp[len] = 0;
+            strcat(tmp, msg_de_article_dat_tbl[form]);
+            strcat(tmp, name);
+            strcat(tmp, marker + 12);
 #endif
         } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
@@ -662,8 +662,8 @@ void evtMsgFmtStr(char* buf, const char* name) {
         } else if (strstr(name, "<PLles>") != NULL) {
             form = 2;
 #if VERSION == VERSION_EU
-            } else if (strstr(name, "<PLdes>") != NULL) {
-                form = 3;
+        } else if (strstr(name, "<PLdes>") != NULL) {
+            form = 3;
 #endif
         }
         if ((marker = strstr(buf, "<un>")) != NULL) {

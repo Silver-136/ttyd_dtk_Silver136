@@ -281,9 +281,9 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_US
     void* buffer;
     s32 i;
-        s32 alpha;
-        s32 ix;
-        s32 iy;
+    s32 alpha;
+    s32 ix;
+    s32 iy;
     s32 dx, dy;
 #endif
     cam = camGetPtr(cameraId);

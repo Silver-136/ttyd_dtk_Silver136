@@ -1202,8 +1202,8 @@ static void make_header(void) {
             break;
         case 1:
         case 6:
-    strcpy(metadata->data.fileName, cardGameTitle);
-    sprintf(metadata->data.dateString, cardDateFormat, td.mon + 1, td.mday);
+            strcpy(metadata->data.fileName, cardGameTitle);
+            sprintf(metadata->data.dateString, cardDateFormat, td.mon + 1, td.mday);
             break;
         case 2:
             strcpy(metadata->data.fileName, cardGameTitle);

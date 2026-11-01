@@ -466,8 +466,8 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
             winTexInit((TEXPalette*)*w->res->data);
 #if VERSION <= VERSION_DEMO_US
             winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){44.0f, 1.0f, 1.0f}, colA);
-}
-winIconInit();
+        }
+        winIconInit();
         winIconSet(itemDataTable[badge].icon_id, (Vec){xo - 75.0f, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.54f, 0.54f, 0.54f}, colA);
         item = &itemDataTable[badge];
         winFontInit();
