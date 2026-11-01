@@ -935,11 +935,10 @@ void btlUnitItemDisp2(CameraId camId, BattleUnit* unit) {
     BattleWork* wp = _battleWorkPointer;
     s32 kind = unit->currentKind;
 
-    // FAKE: goto chain; the single condition changes the object
-    if (kind >= UNIT_GOOMBA && kind < UNIT_UNUSED_TREE) goto disp;
-    if (kind >= UNIT_MARIO && kind < TYPE_PARTNER_MIN) goto disp;
-    if (kind < TYPE_PARTNER_MIN || kind >= TYPE_PARTNER_MAX) return;
-disp:
+    if (!((kind >= UNIT_GOOMBA && kind < UNIT_UNUSED_TREE) || (kind >= UNIT_MARIO && kind < TYPE_PARTNER_MIN) ||
+          (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX))) {
+        return;
+    }
     if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) {
         btlUnitItemDisp(camId, unit);
     } else {

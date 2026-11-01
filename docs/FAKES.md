@@ -256,13 +256,12 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_audience.c | BattleAudienceItemCtrlProcess | s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceDispAudience | block-local degrees-to-radians temporary (shadows s32 k); the constant written directly changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceDispApSrc | star holds the BattleAudience pointer until the loop; a separate BattleAudience* variable changes the object | see comment |
-| Both | src/battle/battle_audience.c | BattleAudience_GetPPAudienceNum_Sub | one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object | see comment |
+| Both | src/battle/battle_audience.c | BattleAudience_GetPPAudienceNum_Sub | one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object | see comment; tried 2026-11-01: switch with one case: cmpwi + beq, target is cmplwi + blt + bgt |
 | Both | src/battle/battle_audience.c | BattleAudienceJoy_Sub | no-op (s32) cast; `a + b` changes the object | see comment |
 | Both | src/battle/battle_break_slot.c | BattleBreakSlot_Init | i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object | see comment |
 | Both | src/battle/battle_break_slot.c | BattleBreakSlotDispReel | i is set before the reel pointer; `for (i = 0; ...)` changes the object | see comment |
 | Both | src/battle/battle_detect.c | BattleGetFirstAttackUnit | tmp holds the getter result across the swap; assigning it directly changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes | see comment |
-| Both | src/battle/battle_disp.c | btlUnitItemDisp2 | goto chain; the single condition changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlUnitStolenItemDisp | float-first cast of iconDispGx; the plain call changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlDispAnimeSpeed | unused constant local kept by a per-function opt_dead_assignments off; without them the object changes | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_GetRGB | args is reused to hold the blue index; indexB = args[4] changes the object | see comment |
@@ -289,7 +288,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_seq_command.c | _btlcmd_SelectWeaponDecide | (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object | BattleSamplingEnemy with s32 belong (7 units change) |
 | Both | src/battle/battle_seq_command.c | BattleCommandDisplay_WeaponMultiItemCancelCheckDisp | called through a cast that puts the float arguments first; the plain call changes the object | see comment |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SetAttackEvent | compares the pointers as signed integers (cmpw); the plain pointer compare changes the object | see comment |
-| Both | src/battle/battle_seq_end.c | btlseqEnd | dead `i >= STATUS_INVALID` test; `if (i < STATUS_FRIGHT)` changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | _MarioExpDisp | windowDispGX_Waku_col called through a float-first cast; the plain call changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
 | US | src/battle/battle_seq_end.c | _draw_select_one_to_upgrade_text | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
@@ -336,7 +334,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/animdrv.c | animGroupBaseAsync | (u32) cast (unsigned compare); plain model == 0 changes the object | u32 model local; fileAsyncf returning u32 |
 | Both | src/driver/arcdrv.c | arcOpen | info used through the pointer infop; passing &info directly changes the object | see comment |
 | Both | src/driver/camdrv.c | camMain | dead zero store (every field is set below); removing it changes the object | see comment |
-| Both | src/driver/camdrv.c | camLetterBox | `party &&` repeats the null test; dropping it changes the object | see comment |
+| Both | src/driver/camdrv.c | camLetterBox | `party &&` repeats the null test; dropping it changes the object | see comment; tried 2026-11-01: inline partyIsBeingUsed(party) in !party || !used: materializes the bool, longer |
 | Both | src/driver/envdrv.c | envGlare | texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call changes the object | see comment |
 | Both | src/driver/envdrv.c | envWaterParent | one-use inline helper for obj->parent; writing it out changes the object | see comment |
 | Both | src/driver/fadedrv.c | fadeEntry | types 3-5 are tested as one unsigned compare, (u32)(type - 3) <= 2; type >= 3 && type <= 5 changes the object | see comment |
@@ -470,15 +468,15 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_npc.c | evt_npc_jump_position_nohit | no-op (s32) casts on the s32 elapsed; the plain arguments change the object | see comment |
 | Both | src/event/evt_npc.c | evt_npc_flag_onoff | no-op (u32) cast; the plain form changes the object | u32 mask local |
 | Both | src/event/evt_npc.c | evt_npc_status_onoff | no-op (u32) cast; the plain form changes the object | plain ~mask |
-| Both | src/event/evt_party.c | evt_party_move_pos | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment |
-| Both | src/event/evt_party.c | evt_party_move_pos2 | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment |
+| Both | src/event/evt_party.c | evt_party_move_pos | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
+| Both | src/event/evt_party.c | evt_party_move_pos2 | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the constant pool; removing it changes the object | see comment |
 | Both | src/event/evt_shop.c | evt_shop_setup | block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object | see comment |
 | Both | src/event/evt_shop.c | evt_shop_main_func | the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() // !marioChkKey() changes the object | see comment |
 | Both | src/event/evt_sub.c | evt_sub_animgroup_async | redundant test (r is nonzero here); returning EVT_RETURN_DONE directly changes the object | see comment |
 | Both | src/manager/cardmgr.c | cardBufReset | extra volatile flags read (unused destination local removed); dropping the read changes the object | see comment |
 | Both | src/manager/cardmgr.c | memcard_probe | self-assignment with no effect; without it the object changes | see comment |
-| Both | src/manager/cardmgr.c | make_data | i is never -1 here; the plain save = &cardGetFilePtr()->saves[i] changes the object | see comment |
+| Both | src/manager/cardmgr.c | make_data | i is never -1 here; the plain save = &cardGetFilePtr()->saves[i] changes the object | see comment; tried 2026-11-01: slot-or-write-buffer inline shared with cardErase (whole-body, getter with returns, with local, ternary, swapped declarations): cardErase matches, make_data swaps r30/r31 (offset and save) |
 | Both | src/manager/evtmgr_cmd.c | evtGetValue | result stored back into index; return (mask & data) != 0 changes the object | see comment |
 | Both | src/manager/filemgr.c | fileGarbageDataAdrSet | no-op (u16) cast on the u16 counter; the plain comparison changes the object | int i without the cast |
 | Both | src/manager/fontmgr.c | fontDrawPairXI | spare s16 copies of the s16 parameters (and a no-op cast); using x and y directly changes the object | see comment |
@@ -490,7 +488,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/manager/winmgr.c | select_disp | white copied through a spare tmp; iconcol = white changes the object | see comment |
 | Both | src/manager/winmgr.c | select_disp_party | white copied through a spare tmp; iconcol = white changes the object | see comment |
 | Both | src/manager/winmgr.c | select_disp_mario | white copied through a spare tmp; iconcol = white changes the object | see comment |
-| Both | src/event/evt_win.c | evt_unitwin_select_func | `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() // !marioChkKey() changes the object | see comment |
+| Both | src/event/evt_win.c | evt_unitwin_select_func | `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() // !marioChkKey() changes the object | see comment; tried 2026-11-01: shared inline marioNoCtrl/NoKey (return !x, local, ternary): the materialized cntlzw is lost |
 | Both | src/mario/mario.c | N_marioChkUseParty | (u16) cast on the u32 buttonNew (all tested bits are in the low half); the plain test changes the object | see comment |
 | Both | src/mario/mario.c | marioReInit | spare copy t of paperPoseId; testing poseId directly changes the object | see comment |
 | Both | src/mario/mario.c | marioMain | spare copy drop of pos; passing &pos changes the object | see comment |
@@ -551,7 +549,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | JP | src/window/win_mario.c | winZenkakuStr | (s8) cast on a digit character; without it the object changes | see comment |
 | JP | src/window/win_mario.c | winZenkakuStrPad | (s8) cast on a digit character; without it the object changes | see comment |
 | Both | src/window/win_root.c | winRootStrippedPool | stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool. Removing it changes the object. | see comment |
-| Both | src/window/win_root.c | winRootDisp | hand-written unsigned range test for the closing states 10 and 11; state == 10 // state == 11 changes the object | see comment |
+| Both | src/window/win_root.c | winRootDisp | hand-written unsigned range test for the closing states 10 and 11; state == 10 // state == 11 changes the object | see comment; tried 2026-11-01: if (i > 0) switch (state) with case 10/11: longer, range subtract lost |
 | Both | src/window/win_root.c | winMsgDisp | the != 0 test is redundant; wp->msgItem > 0 alone changes the object | see comment |
 | Both | src/window/win_root.c | sort_4_3_func | re-indexes itemDataTable instead of using db (same pointer); db->... changes the object | see comment |
 | Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object | see comment |

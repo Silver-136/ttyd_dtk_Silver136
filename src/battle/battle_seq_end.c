@@ -316,10 +316,15 @@ void btlseqEnd(BattleWork* wp) {
         }
         BattleConsumeReserveItem();
         for (i = 0; i < STATUS_INVALID; i++) {
-            // FAKE: dead `i >= STATUS_INVALID` test; `if (i < STATUS_FRIGHT)` changes the object
-            if (i >= STATUS_INVALID || i < STATUS_FRIGHT) {
-                if (party) BtlUnit_SetStatus(party, i, 0, 0);
-                BtlUnit_SetStatus(mario, i, 0, 0);
+            switch (i) {
+                case STATUS_FRIGHT:
+                case STATUS_GALE_FORCE:
+                case STATUS_INSTANT_KILL:
+                    break;
+                default:
+                    if (party) BtlUnit_SetStatus(party, i, 0, 0);
+                    BtlUnit_SetStatus(mario, i, 0, 0);
+                    break;
             }
         }
         if ((u32)mario->attributeFlags & kVeiled) {
