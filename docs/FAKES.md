@@ -536,8 +536,8 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/party/party_vivian.c | marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
 | Both | src/party/party_vivian.c | mot_vivian_post | the store is reached by a goto past the return; writing it here changes the object | see comment |
 | Both | src/party/party_vivian.c | vivian_use | stores NULL into an already NULL rippleEffect; dropping the store changes the object | see comment |
-| Both | src/sequence/seq_battle.c | loadTpl | unreferenced word in neither symbol map; removing it changes the object | fileAsyncf returning u32 |
-| Both | src/sequence/seq_battle.c | seq_battleMain | wait flag and goto check; a plain break while still waiting changes the object | fileAsyncf returning u32 |
+| Both | src/sequence/seq_battle.c | loadTpl | unreferenced word in neither symbol map; removing it changes the object | see comment |
+| Both | src/sequence/seq_battle.c | seq_battleMain | wait flag and goto check; a plain break while still waiting changes the object | see comment |
 | Both | src/sequence/seq_e3.c | seq_e3Main | a second loop counter; reusing the function's i changes the object | see comment |
 | Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object in the JP demo only (retail versions stay the same without it) | see comment |
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
