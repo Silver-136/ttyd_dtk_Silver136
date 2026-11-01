@@ -1654,7 +1654,7 @@ void BattleAudienceCtrlProcess(void) {
 
     i = 0;
     member = BattleAudienceGetPtr(0);
-    for (; i < 200; i++, member++) {
+    for (; i < AUDIENCE_MEMBER_MAX; i++, member++) {
         if (member->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL) {
             member->hopY += member->hopSpeed;
             member->hopSpeed += member->hopAccel;
@@ -1696,7 +1696,7 @@ void BattleAudienceCtrlProcess(void) {
                 chance = 60;
             }
             if (irand(chance) == 0) {
-                for (i = 0; i < 200; i++) {
+                for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                     order[i] = i;
                 }
                 for (i = 0; i < 1000; i++) {
@@ -1706,7 +1706,7 @@ void BattleAudienceCtrlProcess(void) {
                     order[a] = order[b];
                     order[b] = t;
                 }
-                for (i = 0; i < 200; i++) {
+                for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                     if (BattleAudienceItemOn(order[i], ITEM_NULL, 1) == TRUE) {
                         audience->itemThrowCount++;
                         return;
@@ -2315,7 +2315,7 @@ BOOL BattleAudienceApSrcEntry(void) {
     count = 0;
     i = 0;
     BattleAudienceGetPtr(0);
-    for (; i < 200; i++) {
+    for (; i < AUDIENCE_MEMBER_MAX; i++) {
         if ((u8)BattleAudience_GetExist(i) == 1) {
             list[count++] = i;
         }
@@ -2432,7 +2432,7 @@ void BattleAudienceAnimProcess(void) {
     BattleAudienceBaseGetPtr();
     i = 0;
     m = BattleAudienceGetPtr(0);
-    for (; i < 200; i++, m++) {
+    for (; i < AUDIENCE_MEMBER_MAX; i++, m++) {
         if (!(m->flags & AUDIENCE_MEMBER_FLAG_USED)) continue;
         if (!(m->flags & AUDIENCE_MEMBER_FLAG_DISP)) continue;
         pc = m->animPc;
@@ -2570,7 +2570,7 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
     m = BattleAudienceGetPtr(0);
     hw = 20.0f;
     nhw = -hw;
-    for (; i < 200; i++, m++) {
+    for (; i < AUDIENCE_MEMBER_MAX; i++, m++) {
         if (dispGetCurWork()->renderMode != DISP_MODE_XLU) {
             if (m->colorA != 0xFF) continue;
         } else {
@@ -3860,7 +3860,7 @@ s32 BattleAudienceAddAudienceNum(s32 num) {
     } else {
         for (i = 0; i > num; i--) {
             count = 0;
-            for (j = 0; j < 200; j++) {
+            for (j = 0; j < AUDIENCE_MEMBER_MAX; j++) {
                 if ((u8)BattleAudience_GetEscapeChangeOK(j)) {
                     list[count++] = j;
                 }
@@ -4403,7 +4403,7 @@ void BattleAudienceSoundWhistleKind(s32 kind) {
     BattleAudienceSound* sound;
 
     count = 0;
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if (BattleAudience_GetWaiting(i) == TRUE) {
             list[count] = i;
             count++;
@@ -4879,7 +4879,7 @@ void BattleAudience_Case_ActionCommandGood(BattleWeapon* weapon) {
 #if VERSION <= VERSION_DEMO_US
     audience->numStylishCommandsThisAttack = 1;
 #endif
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if (BattleAudience_GetWaiting(i) == TRUE) {
             count++;
         }
@@ -4905,7 +4905,7 @@ void BattleAudience_Case_ActionCommandBad(BattleWeapon* weapon) {
     s32 count = 0;
     s32 i;
 
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if (BattleAudience_GetWaiting(i) == TRUE) {
             count++;
         }
@@ -4941,7 +4941,7 @@ void BattleAudience_Case_AcrobatGood(void) {
     s32 count = 0;
     s32 i;
 
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if (BattleAudience_GetWaiting(i) == TRUE) {
             count++;
         }
@@ -4973,7 +4973,7 @@ void BattleAudience_Case_AcrobatBad(void) {
     s32 count = 0;
     s32 i;
 
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if (BattleAudience_GetWaiting(i) == TRUE) {
             count++;
         }
@@ -5253,7 +5253,7 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
             if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != AUDIENCE_STATUS_INTRUDE) {
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
             }
-            for (i = 0; i < 200; i++) {
+            for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 if ((u8)BattleAudience_GetEscapeChangeOK(i)) {
                     BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_ESCAPE);
                     audience->targetAudienceCount -= 1.0f;

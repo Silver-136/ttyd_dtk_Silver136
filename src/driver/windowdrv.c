@@ -42,7 +42,7 @@ static inline void fogOff(void) {
 void windowInit(void) {
     WindowEntry* w;
 
-    w = WinObjects = __memAlloc(HEAP_DEFAULT, sizeof(WindowEntry) * 7);
+    w = WinObjects = __memAlloc(HEAP_DEFAULT, sizeof(WindowEntry) * WINDOW_MAX);
     w[0].flags = 0;
     w[0].userdata = NULL;
     w[1].flags = 0;
@@ -167,7 +167,7 @@ s32 windowEntry(u16 priority) {
     int i;
 
     entry = WinObjects;
-    for (i = 0; i < 7; i++, entry++) {
+    for (i = 0; i < WINDOW_MAX; i++, entry++) {
         if (!(entry->flags & WINDOW_FLAG_ACTIVE)) {
             memset(entry, 0, sizeof(WindowEntry));
             entry->flags = WINDOW_FLAG_ACTIVE;
@@ -211,7 +211,7 @@ void windowMain(void) {
     int i;
 
     entry = WinObjects;
-    for (i = 0; i < 7; i++, entry++) {
+    for (i = 0; i < WINDOW_MAX; i++, entry++) {
         if (entry->flags & WINDOW_FLAG_ACTIVE) {
             if (entry->main) {
                 entry->main(entry);

@@ -121,7 +121,7 @@ static USER_FUNC(_steal_item) {
 
         count = 0;
 #endif
-        for (i = 0; i < 200; i++) {
+        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
             if (pouch->badges[i] != 0) {
                 count++;
             }
@@ -134,7 +134,7 @@ static USER_FUNC(_steal_item) {
             s32 j;
 
             r -= held;
-            for (j = 0; j < 200; j++) {
+            for (j = 0; j < AUDIENCE_MEMBER_MAX; j++) {
                 if (pouch->badges[j] != 0) {
                     if (--r < 0) {
                         item = pouch->badges[j];

@@ -7,6 +7,8 @@
 #include "memory.h"
 #include "sdk/texPalette.h"
 
+#define WINDOW_MAX 7
+
 typedef struct WindowEntry WindowEntry;
 
 typedef enum WindowType {

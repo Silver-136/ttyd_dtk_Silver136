@@ -376,7 +376,7 @@ USER_FUNC(bakuGameMain) {
             w->flags |= 1;
         }
         flag = 0;
-        for (i = 0; i < 200; i++) {
+        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
             if (bakuGameAudienceCanThrowPos(i) == 1 && BattleAudience_GetWaiting(i) == 1) {
                 flag = 1;
             }

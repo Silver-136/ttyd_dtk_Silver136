@@ -38,6 +38,9 @@ typedef ShadowWork DepthShadowWork;
 typedef ShadowWork ProjShadowWork;
 
 // ShadowEntry.mode: which pass of shadowCharShadowDisp draws the character shadow.
+// Character shadows per frame; shadowEntry and shadowEntryMode do not check it.
+#define SHADOW_ENTRY_MAX 64
+
 typedef enum ShadowMode {
     SHADOW_MODE_POLYGON = 0,     // flat polygon on the ground
     SHADOW_MODE_TEXTURE = 1,     // textured

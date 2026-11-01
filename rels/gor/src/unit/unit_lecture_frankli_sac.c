@@ -224,7 +224,7 @@ static USER_FUNC(lecture_init) {
 
     slot->flags |= 1;
     aud->flags |= AUDIENCE_FLAG_EVENT_CTRL;
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         BattleAudience_Delete(i);
     }
     for (i = 0; i < 11; i++) {

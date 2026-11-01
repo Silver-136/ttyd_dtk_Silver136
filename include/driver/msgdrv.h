@@ -19,6 +19,21 @@ typedef enum MsgCharFlags {
 } MsgCharFlags;
 #define MSG_CHAR_SEL_ROW(n) (0x100 << (n))
 
+// WindowEntry.state of a message window (msgWindow_Main, msgWindow_Clear_Main).
+enum {
+    MSG_WIN_STATE_PRINT = 1,
+    MSG_WIN_STATE_WAIT_TAG = 2,    // stopped at <o>
+    MSG_WIN_STATE_KEY_WAIT = 3,
+    MSG_WIN_STATE_SELECT_DONE = 4,
+    MSG_WIN_STATE_OPEN = 5,
+    MSG_WIN_STATE_FADE_IN = 6,
+    MSG_WIN_STATE_CLOSE = 7,
+    MSG_WIN_STATE_FADE_OUT = 8,
+    MSG_WIN_STATE_REVIEW_UP = 9,   // Z review: earlier pages
+    MSG_WIN_STATE_REVIEW_DOWN = 10,
+    MSG_WIN_STATE_REVIEW_KEY_WAIT = 11,
+};
+
 typedef struct MsgChar {
     union {
         u32 value; //0x0

@@ -189,6 +189,8 @@ typedef struct BattleAudienceStar {
     u8 pad_5D[0x60 - 0x5D];
 } BattleAudienceStar;
 
+#define AUDIENCE_MEMBER_MAX 200
+
 // BattleAudience_SetAnim ids: index into BattleAudienceMember.animTable (battle_audience_kind_data). Kinds fill only
 // the rows they use.
 typedef enum AudienceAnim {

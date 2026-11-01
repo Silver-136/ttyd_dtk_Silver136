@@ -1863,7 +1863,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     window = windowGetPointer(id);
     window->main = msgWindow_Main;
     window->delete = msgWindow_Delete;
-    window->state = 5;
+    window->state = MSG_WIN_STATE_OPEN;
     window->type = -1;
     window->flags |= WINDOW_FLAG_BUSY;
     // BUG: the copy gets strlen(msg) bytes, so strcpy writes the terminator one byte past the requested size
@@ -1964,7 +1964,7 @@ void msgWindow_Add(char* msg, s32 id) {
 
     ((MsgWinData*)smart->address)->lastUpdateTime = gp->renderTime;
     msgAnalize(smart, msg);
-    window->state = 1;
+    window->state = MSG_WIN_STATE_PRINT;
     window->flags |= WINDOW_FLAG_BUSY;
 }
 
@@ -1973,7 +1973,7 @@ void msgWindow_Continue(s32 id) {
     WindowEntry* window = windowGetPointer(id);
     MsgWinData* data;
 
-    window->state = 1;
+    window->state = MSG_WIN_STATE_PRINT;
     window->flags |= WINDOW_FLAG_BUSY;
     data = window->userdata->address;
     data->lastUpdateTime = gp->renderTime;
@@ -1984,7 +1984,7 @@ void msgWindow_Repeat(s32 id) {
     WindowEntry* window = windowGetPointer(id);
     MsgWinData* data;
 
-    window->state = 1;
+    window->state = MSG_WIN_STATE_PRINT;
     window->flags |= WINDOW_FLAG_BUSY;
     data = window->userdata->address;
     data->lastUpdateTime = gp->renderTime;
@@ -2001,12 +2001,12 @@ void msgWindow_ForceClose(const char* name) {
     MsgWinData* data;
     s32 i;
 
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < WINDOW_MAX; i++) {
         window = windowGetPointer(i);
         if (window->flags && window->state && window->userdata &&
             ((MsgWinData*)window->userdata->address)->tag &&
             !strcmp(((MsgWinData*)window->userdata->address)->tag, name)) {
-            window->state = 7;
+            window->state = MSG_WIN_STATE_CLOSE;
             data = window->userdata->address;
             if (data->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(data->unitId);
@@ -2075,7 +2075,7 @@ void msgWindow_Main(WindowEntry* window) {
     }
 
     switch (window->state) {
-    case 5:
+    case MSG_WIN_STATE_OPEN:
         if (!(window->flags & WINDOW_FLAG_NOWINSE)) {
             se = msgWindowOpen_SE_Data[window->type * 2];
             if (se >= 0) {
@@ -2083,19 +2083,19 @@ void msgWindow_Main(WindowEntry* window) {
             }
         }
         window->timestamp = gp->renderTime;
-        window->state = 6;
+        window->state = MSG_WIN_STATE_FADE_IN;
         // fall through
-    case 6:
+    case MSG_WIN_STATE_FADE_IN:
         window->flags |= WINDOW_FLAG_BUSY;
         window->alpha = OSTicksToMilliseconds(gp->renderTime - window->timestamp) * 255 / 200;
         if (window->alpha > 255) {
             window->alpha = 255;
-            window->state = 1;
+            window->state = MSG_WIN_STATE_PRINT;
             data->openTime = gp->renderTime;
             data->lastUpdateTime = gp->renderTime;
         }
         break;
-    case 7:
+    case MSG_WIN_STATE_CLOSE:
         if (!(window->flags & WINDOW_FLAG_NOWINSE)) {
             se = msgWindowOpen_SE_Data[window->type * 2 + 1];
             if (se >= 0) {
@@ -2103,9 +2103,9 @@ void msgWindow_Main(WindowEntry* window) {
             }
         }
         window->timestamp = gp->renderTime;
-        window->state = 8;
+        window->state = MSG_WIN_STATE_FADE_OUT;
         // fall through
-    case 8:
+    case MSG_WIN_STATE_FADE_OUT:
         if (window->alpha == 0) {
             windowDelete(window);
             return;
@@ -2115,18 +2115,18 @@ void msgWindow_Main(WindowEntry* window) {
             window->alpha = 0;
         }
         break;
-    case 1:
+    case MSG_WIN_STATE_PRINT:
         switch (msgMain(window->userdata)) {
         case 0:
-            window->state = 7;
+            window->state = MSG_WIN_STATE_CLOSE;
             if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
             } else {
                 npcSetStayPose(WIN_DATA(window)->speakerName);
             }
             break;
-        case 1:
-            window->state = 2;
+        case MSG_WIN_STATE_PRINT:
+            window->state = MSG_WIN_STATE_WAIT_TAG;
             window->flags &= ~WINDOW_FLAG_BUSY;
             if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
@@ -2134,21 +2134,21 @@ void msgWindow_Main(WindowEntry* window) {
                 npcSetStayPose(WIN_DATA(window)->speakerName);
             }
             break;
-        case 2:
-            window->state = 3;
+        case MSG_WIN_STATE_WAIT_TAG:
+            window->state = MSG_WIN_STATE_KEY_WAIT;
             break;
-        case 3:
+        case MSG_WIN_STATE_KEY_WAIT:
             break;
         }
         break;
-    case 3:
+    case MSG_WIN_STATE_KEY_WAIT:
         target = PAD_BUTTON_A;
         if (WIN_DATA(window)->flags & MSG_WIN_FLAG_KEY_X) {
             target = PAD_BUTTON_A | PAD_BUTTON_X;
         }
         trg = keyGetButtonTrg(0);
         if (trg & (target | PAD_BUTTON_B)) {
-            window->state = 1;
+            window->state = MSG_WIN_STATE_PRINT;
             data->pageState = 2;
             if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                 if (!(data->flags & MSG_WIN_FLAG_NO_SKIP)) {
@@ -2163,25 +2163,25 @@ void msgWindow_Main(WindowEntry* window) {
             data->page = data->pageCount - 1;
             // FAKE: unsigned compare of the BOOL result; `if (msgWinPrevPage(window))` changes the object
             if (msgWinPrevPage(window) != 0U) {
-                window->state = 9;
+                window->state = MSG_WIN_STATE_REVIEW_UP;
                 window->timestamp = gp->renderTime;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
                 data->flags |= MSG_WIN_FLAG_REVIEW;
             }
         }
         break;
-    case 9:
+    case MSG_WIN_STATE_REVIEW_UP:
         target = data->pageY[data->page];
         if (data->scrollPos >= target) {
             data->scrollPos = data->scrollPos - 0.6f * OSTicksToMilliseconds(gp->renderTime - window->timestamp);
             window->timestamp = gp->renderTime;
             if (data->scrollPos <= target) {
                 data->scrollPos = target;
-                window->state = 11;
+                window->state = MSG_WIN_STATE_REVIEW_KEY_WAIT;
             }
         }
         break;
-    case 10:
+    case MSG_WIN_STATE_REVIEW_DOWN:
         target = data->pageY[data->page];
         if (data->scrollPos <= target) {
             data->scrollPos = data->scrollPos + 0.6f * OSTicksToMilliseconds(gp->renderTime - window->timestamp);
@@ -2189,22 +2189,22 @@ void msgWindow_Main(WindowEntry* window) {
             if (data->scrollPos >= target) {
                 data->scrollPos = target;
                 if (data->page == data->pageCount - 1) {
-                    window->state = 3;
+                    window->state = MSG_WIN_STATE_KEY_WAIT;
                     data->flags &= ~MSG_WIN_FLAG_REVIEW;
                 } else {
-                    window->state = 11;
+                    window->state = MSG_WIN_STATE_REVIEW_KEY_WAIT;
                 }
             }
         }
         break;
-    case 11:
+    case MSG_WIN_STATE_REVIEW_KEY_WAIT:
         target = PAD_BUTTON_A;
         if (WIN_DATA(window)->flags & MSG_WIN_FLAG_KEY_X) {
             target = PAD_BUTTON_A | PAD_BUTTON_X;
         }
         trg = keyGetButtonTrg(0);
         if (trg & target) {
-            window->state = 10;
+            window->state = MSG_WIN_STATE_REVIEW_DOWN;
             window->timestamp = gp->renderTime;
             msgWinNextPage(window);
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
@@ -2213,7 +2213,7 @@ void msgWindow_Main(WindowEntry* window) {
         else // US: one key per frame
 #endif
         if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-            window->state = 10;
+            window->state = MSG_WIN_STATE_REVIEW_DOWN;
             window->timestamp = gp->renderTime;
             data->page = data->pageCount - 1;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
@@ -2222,7 +2222,7 @@ void msgWindow_Main(WindowEntry* window) {
         else // US: one key per frame
 #endif
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
-            window->state = 9;
+            window->state = MSG_WIN_STATE_REVIEW_UP;
             window->timestamp = gp->renderTime;
             // FAKE: unsigned compare of the BOOL result; `if (msgWinPrevPage(window))` changes the object
             if (msgWinPrevPage(window) != 0U) {
@@ -2243,14 +2243,14 @@ void msgWindow_Clear_Main(WindowEntry* window) {
     MsgWinData* data = WIN_DATA(window);
 
     switch (window->state) {
-    case 5:
-        window->state = 1;
+    case MSG_WIN_STATE_OPEN:
+        window->state = MSG_WIN_STATE_PRINT;
         window->timestamp = gp->renderTime;
         data->openTime = gp->renderTime;
         data->lastUpdateTime = gp->renderTime;
         // fall through
-    case 1:
-    case 6:
+    case MSG_WIN_STATE_PRINT:
+    case MSG_WIN_STATE_FADE_IN:
         window->flags |= WINDOW_FLAG_BUSY;
         if (window->alpha < 255) {
             window->alpha = OSTicksToMilliseconds(gp->renderTime - window->timestamp) * 255 / 200;
@@ -2258,10 +2258,10 @@ void msgWindow_Clear_Main(WindowEntry* window) {
                 window->alpha = 255;
             }
         }
-        if (window->state != 2) {
+        if (window->state != MSG_WIN_STATE_WAIT_TAG) {
             switch (msgMain(window->userdata)) {
             case 0:
-                window->state = 7;
+                window->state = MSG_WIN_STATE_CLOSE;
                 window->timestamp = gp->renderTime;
                 if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                     BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
@@ -2270,7 +2270,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
                 }
                 break;
             case 1:
-                window->state = 2;
+                window->state = MSG_WIN_STATE_WAIT_TAG;
                 window->flags &= ~WINDOW_FLAG_BUSY;
                 if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                     BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
@@ -2279,14 +2279,14 @@ void msgWindow_Clear_Main(WindowEntry* window) {
                 }
                 break;
             case 2:
-                window->state = 3;
+                window->state = MSG_WIN_STATE_KEY_WAIT;
                 break;
             case 3:
                 break;
             }
         }
         break;
-    case 7:
+    case MSG_WIN_STATE_CLOSE:
         if (window->alpha == 0) {
             windowDelete(window);
             return;
@@ -2428,14 +2428,14 @@ void selectWindow_Main(WindowEntry* window) {
 
     msgMain(window->userdata);
     switch (window->state) {
-    case 5:
+    case MSG_WIN_STATE_OPEN:
         window->alpha += 25;
         if (window->alpha > 255) {
             window->alpha = 255;
-            window->state = 1;
+            window->state = MSG_WIN_STATE_PRINT;
         }
         break;
-    case 1:
+    case MSG_WIN_STATE_PRINT:
         prev = data->sel;
         if ((keyGetButtonTrg(0) & PAD_BUTTON_UP) || (keyGetDirTrg(0) & DEMO_STICK_UP)) {
             data->sel--;
@@ -2466,23 +2466,23 @@ void selectWindow_Main(WindowEntry* window) {
                 break;
             case -2:
                 data->sel = -1;
-                window->state = 7;
+                window->state = MSG_WIN_STATE_CLOSE;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 break;
             default:
                 data->sel = data->cancel;
-                window->state = 7;
+                window->state = MSG_WIN_STATE_CLOSE;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 break;
             }
         } else if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-            window->state = 7;
+            window->state = MSG_WIN_STATE_CLOSE;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
         }
         break;
-    case 7:
+    case MSG_WIN_STATE_CLOSE:
         if (window->alpha == 0) {
-            window->state = 4;
+            window->state = MSG_WIN_STATE_SELECT_DONE;
             window->flags &= ~WINDOW_FLAG_BUSY;
             return;
         }
@@ -2491,7 +2491,7 @@ void selectWindow_Main(WindowEntry* window) {
             window->alpha = 0;
         }
         break;
-    case 4:
+    case MSG_WIN_STATE_SELECT_DONE:
         return;
     }
     dispEntry(CAMERA_2D, 400.0f - window->priority, DISP_MODE_OPAQUE, selectWindow_Disp, window);

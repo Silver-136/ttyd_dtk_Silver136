@@ -771,7 +771,7 @@ static USER_FUNC(_steal_item) {
         item = 0;
         count = 0;
 
-        for (i = 0; i < 200; i++) {
+        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
             if (pouch->badges[i] != 0) {
                 count++;
             }
@@ -787,7 +787,7 @@ static USER_FUNC(_steal_item) {
 #if VERSION >= VERSION_JP
             sysDebugReport("unit_borodo_main.c", 673, "%d個目のバッジを盗みます\n", r + 1);
 #endif
-            for (j = 0; j < 200; j++) {
+            for (j = 0; j < AUDIENCE_MEMBER_MAX; j++) {
                 if (pouch->badges[j] != 0) {
                     if (--r < 0) {
                         item = pouch->badges[j];

@@ -720,7 +720,7 @@ USER_FUNC(aud_suikomi) {
             BattleFree(list);
         }
         list = BattleAlloc(sizeof(s32) * 20);
-        for (i = 0; i < 200; i++) {
+        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
             if ((u8)BattleAudience_GetExist(i) == TRUE) {
                 ids[n] = i;
                 n++;
@@ -750,7 +750,7 @@ USER_FUNC(aud_suikomi) {
     }
     BtlUnit_GetPos(BattleGetUnitPtr(_battleWorkPointer, id), &x2, &y2, &z2);
     y2 += 5.0f;
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         for (j = 0; j < 20; j++) {
             if (i == list[j]) {
                 mem = BattleAudienceGetPtr(i);
