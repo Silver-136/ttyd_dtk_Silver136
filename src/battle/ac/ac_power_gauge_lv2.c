@@ -43,13 +43,8 @@ static void actionCommandDisp(f32 x, f32 y);
  */
 s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-#if VERSION <= VERSION_DEMO_US
-    PGLv2Work* g = AC_WORK(ac);
-    BattleACDispParams* disp = AC_DISP(ac);
-#else
     PGLv2Work* g = (PGLv2Work*)ac->work;
     BattleACDispParams* disp = &ac->disp;
-#endif
     s32 diff = BattleActionCommandGetDifficulty(work);
     s32 flag = 0;
     s32 pressed;
@@ -59,11 +54,7 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
     }
     switch (ac->acState) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
-            memset(disp, 0, 0x2C);
-#else
             memset(disp, 0, sizeof(BattleACDispParams));
-#endif
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
@@ -92,11 +83,7 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
         case 99:
             break;
         case 100:
-#if VERSION <= VERSION_DEMO_US
-            if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && ((u32)ac->acUnit->tokenFlags & kConfusedAction)) {
-#else
             if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
-#endif
                 if (irand(100) >= 0) {
                     ac->setupParam = 30;
                     ac->outputParams[0] = 0;
@@ -112,11 +99,7 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
         case 1000:
             g->timer++;
             if (g->timer > g->maxFrames) {
-#if VERSION <= VERSION_DEMO_US
-                if ((s32)ac->outputParams[0] < ac->params[4]) {
-#else
                 if (ac->outputParams[0] < ac->params[4]) {
-#endif
                     ac->result = 0;
                     ac->result &= ~AC_RESULT_SUCCESS;
                 } else {
@@ -165,11 +148,7 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
             }
             BattleAcGaugeSeUpdate(g->gauge);
             ac->outputParams[0] = (s32)(g->gauge * (f32)ac->params[3] / 100.0f);
-#if VERSION <= VERSION_DEMO_US
-            if ((s32)ac->outputParams[0] >= ac->params[3]) {
-#else
             if (ac->outputParams[0] >= ac->params[3]) {
-#endif
                 ac->outputParams[0] = ac->params[3] - 1;
 #if VERSION > VERSION_DEMO_US
             }
@@ -183,11 +162,7 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
         case 1001:
             ac->setupParam--;
             if (ac->setupParam < 0) {
-#if VERSION <= VERSION_DEMO_US
-                if ((s32)ac->outputParams[0] >= ac->params[4]) {
-#else
                 if (ac->outputParams[0] >= ac->params[4]) {
-#endif
                     ac->result = AC_RESULT_SUCCESS;
                     ac->resultCount++;
                 } else {

@@ -2454,7 +2454,7 @@ EVT_END()
 
 EVT_BEGIN(bottakuru_init)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG2_25_AFTER_THE_BOSS_BATTLE)
+IF_INT_LESS(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
 #endif
@@ -3838,7 +3838,7 @@ USER_FUNC(maffia_kemuri) {
 
 /**
  * Debug helper: with args[0] equal to 0, returns in args[1] a pointer to a string describing the current story
- * progress (search_evt_moji of GSW(GSW_STORY_PROGRESS)).
+ * progress (search_evt_moji of GSW_STORY_PROGRESS).
  */
 static USER_FUNC(evt_osreport) {
     EvtWord* args = event->args;
@@ -6483,11 +6483,11 @@ EVT_BEGIN(gor_01_init_evt)
     // Work out which special scene this visit belongs to: Bowser's visit in Chapter 6 or the darkness scenes in
     // Chapter 8.
     SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_55_01_PEACH_TEC_DELETED)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_01_PEACH_TEC_DELETED)
         CALL(evt_mario_set_mode, 2)
         SET_VALUE(LF(0), 1)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
             SET_VALUE(LF(1), 1)
@@ -6497,7 +6497,7 @@ EVT_BEGIN(gor_01_init_evt)
         END_IF
     END_IF
     // Choose the music and ambience: darkness themes, Bowser's theme, or the plaza theme.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR1"))
     ELSE
         IF_INT_EQUAL(LF(0), 0)
@@ -6528,10 +6528,10 @@ EVT_BEGIN(gor_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG0_06_1000_X_NAUTS_AFTER)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_06_1000_X_NAUTS_AFTER)
         CALL_CHILD(christine_nakama_init)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG0_07_GOOMBELLA_JOINS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
         IF_INT_EQUAL(GSWF_GOR_01_SAVE_REMINDER_DONE, 0)
             SPAWN_EVENT(christine_nakama_after)
         END_IF
@@ -6539,13 +6539,13 @@ EVT_BEGIN(gor_01_init_evt)
     // The ordered contact lens arrives once the story has moved on or enough time has passed.
     IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 0)
         IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ORDERED_EARLY, 1)
-            IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_17_FATHER_SON_REUNITED)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
                 SET_VALUE(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
             END_IF
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 0)
-        IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_17_FATHER_SON_REUNITED)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
             SET_VALUE(LW(0), GSWF_GOR_CONTACT_LENS_ORDERED_EARLY)
             ADD(LW(0), GSWF_GOR_CONTACT_LENS_ORDERED_LATE)
             IF_INT_NOT_EQUAL(LW(0), 0)
@@ -6574,7 +6574,7 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 550, 0, -150, ITEM_TYPE_STILL, GSWF_STARPIECE_04, 0)
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -565, 162, -160, ITEM_TYPE_STILL, GSWF_STARPIECE_05, 0)
     // Until Flavio's talk the Skull Gem lies on the ground.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG4_32_CHATTING_WITH_FLAVIO)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
         CALL(evt_item_entry, STRING("\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
         CALL(evt_item_flag_on, STRING("\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 2)
 CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
@@ -6589,13 +6589,13 @@ CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), 
     SET_VALUE(LW(0), GW(6))
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_02_f1))
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG4_32_CHATTING_WITH_FLAVIO)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
         IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
             SET_VALUE(LW(0), PTR(&door_data_02_f1_01))
         END_IF
     END_IF
     CALL_CHILD(evt_door_entry)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG0_16_FRANKLYS_HOUSE)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG0_16_FRANKLYS_HOUSE)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie_02_f2_doa01"), 0, PTR(evt_door_02_f2_junbityu), 0)
     ELSE
         SET_VALUE(LW(0), PTR(&door_data_02_f2))
@@ -6662,7 +6662,7 @@ CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f1A"), MAP_OBJ_FLAG
         END_IF
     END_IF
     // After the final battle: the epilogue scene starts.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mario_kill_party, 0)
         CALL_CHILD(epilogue_npc_entry)
         SPAWN_EVENT(epilogue_evt)
@@ -8213,7 +8213,7 @@ ELSE
         // reached Chapter 4.
         IF_INT_EQUAL(LSWF(1), 0)
             SET_VALUE(LF(0), 0)
-            IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
                     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 0)
                         SET_VALUE(LF(0), 1)

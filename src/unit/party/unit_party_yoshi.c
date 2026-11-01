@@ -34,9 +34,7 @@
 #include "battle/battle_damage.h"
 
 typedef struct YoshiGundanPart YoshiGundanPart;
-#if VERSION <= VERSION_DEMO_US
-static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
-#else
+#if VERSION > VERSION_DEMO_US
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
 #endif
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
@@ -59,6 +57,9 @@ typedef struct YoshiGundanWork {
     s32 pad3004;
     f32 timer;
 } YoshiGundanWork;
+#if VERSION <= VERSION_DEMO_US
+static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
+#endif
 
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_sweat_n64.h"
@@ -2615,7 +2616,7 @@ void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
 #endif
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;
 #if VERSION <= VERSION_DEMO_US
-        ((BtlDispTexPlaneFloatsFirstFn)btlDispTexPlane)(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255, 255, 255, 255}, 0);
+        btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255, 255, 255, 255}, 0);
 #else
     btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
 #endif

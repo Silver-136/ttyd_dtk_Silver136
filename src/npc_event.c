@@ -830,12 +830,12 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(enemy_common_flag_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_HAS_BATTLE_INFO | NPC_FLAG_NO_AUTO_UPDATE | NPC_FLAG_JUMPING | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_STOP_FOR_EVENT | NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_JUMPING | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
 EVT_BEGIN(testnpc_move_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_AUTO_UPDATE | NPC_FLAG_JUMPING | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_JUMPING | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     CALL(evt_sub_random, 360, LW(3))
     LABEL(0)
@@ -961,7 +961,7 @@ EVT_END()
  */
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(patakuri_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_AUTO_UPDATE | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -1329,7 +1329,7 @@ EVT_END()
  */
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(patapata_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_AUTO_UPDATE | NPC_FLAG_WALL_BOUNCE | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_WALL_BOUNCE | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -1660,7 +1660,7 @@ EVT_END()
 /** Move event of Parabuzzies: same bobbing flight as the Paragoomba's. */
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(patamet_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_AUTO_UPDATE | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -1767,7 +1767,7 @@ EVT_END()
  */
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(chorobon_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_AUTO_UPDATE | NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -2323,7 +2323,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(sambo_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_AUTO_UPDATE | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR)
     RETURN
 EVT_END()
 #endif
@@ -3331,7 +3331,7 @@ EVT_BEGIN(basabasa_dead_event)
     RETURN
 EVT_END()
 EVT_BEGIN(basabasa2_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_AUTO_UPDATE | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -3422,7 +3422,7 @@ EVT_BEGIN(basabasa2_dead_event)
     RETURN
 EVT_END()
 EVT_BEGIN(teresa_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_AUTO_UPDATE | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -3527,7 +3527,7 @@ EVT_BEGIN(teresa_dead_event)
     RETURN
 EVT_END()
 EVT_BEGIN(bubble_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_AUTO_UPDATE | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()

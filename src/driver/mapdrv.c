@@ -1042,7 +1042,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
                     lflags = light->lflags;
                 }
                 lcolor = light->color;
-                ((LightEntryArgOrderFn)lightEntry)(light->name, type, &pos, &light->rotation, &lcolor, light->spotAngle, light->attenAngle, light->attenType, lflags);
+                lightEntry(light->name, type, &pos, &light->rotation, &lcolor, light->spotAngle, light->attenAngle, light->attenType, lflags);
             }
         }
         mapResetPaperAmbColor();
@@ -1387,7 +1387,7 @@ void mapLoad(const char* map) {
  */
 #if VERSION <= VERSION_DEMO_US
 BOOL mapPreLoad(const char* map) {
-    FileEntry* file = fileAsyncf(0, NULL, "%s/b/%s", getMarioStDvdRoot(), map);
+    FileEntry* file = (FileEntry*)fileAsyncf(0, NULL, "%s/b/%s", getMarioStDvdRoot(), map);
 #else
 void bmapUnLoad(void) {
     MapEntry* entry2;
@@ -1561,10 +1561,10 @@ BOOL bmapPreLoad(const char* map, const char* map2) {
     FileEntry* file2 = NULL;
 
     if (map != NULL) {
-        file = fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map);
+        file = (FileEntry*)fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map);
     }
     if (map2 != NULL) {
-        file2 = fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map2);
+        file2 = (FileEntry*)fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map2);
     }
     if (file == NULL) {
         return FALSE;
@@ -2082,7 +2082,7 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
  */
 #if VERSION <= VERSION_DEMO_US
 void mapMain(void) {
-    int i_, j;
+    int i_, j_;
     MapEntry* e_;
     MapWork* w_;
     MapObject* o;
@@ -2864,21 +2864,21 @@ void mapDisp(void) {
             }
             if (obj->flags & MAP_OBJ_FLAG_SCREEN_RECT) {
 #if VERSION <= VERSION_DEMO_US
-                dispEntry((CameraId)1, 5000.0f, 3, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox), obj);
+                dispEntry((CameraId)1, 5000.0f, 3, (!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox), obj);
 #else
                 dispEntry(CAMERA_OFFSCREEN2, 5000.0f, 3, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox, obj);
 #endif
             }
             if (obj->flags & MAP_OBJ_FLAG_OFFSCREEN) {
 #if VERSION <= VERSION_DEMO_US
-                dispEntry((CameraId)1, z, mode, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off), obj);
+                dispEntry((CameraId)1, z, mode, (!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off), obj);
 #else
                 dispEntry(CAMERA_OFFSCREEN2, z, mode, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off, obj);
 #endif
             }
             if (!(obj->flags & MAP_OBJ_FLAG_HIDDEN)) {
 #if VERSION <= VERSION_DEMO_US
-                dispEntry(obj->cameraId, z, mode, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp), obj);
+                dispEntry(obj->cameraId, z, mode, (!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp), obj);
 #else
                 dispEntry(obj->cameraId, z, mode, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp, obj);
 #endif

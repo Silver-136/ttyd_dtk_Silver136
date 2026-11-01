@@ -1349,7 +1349,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
             case 7:
                 evt->lwData[1] = party_id_table[id];
 #if VERSION <= VERSION_DEMO_US
-                name = party_name_table_rtn(id);
+                name = select_party_name(id);
 #else
                 switch (id) {
                     case 0:
@@ -1380,7 +1380,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
             case 8:
                 evt->lwData[2] = party_id_table[id];
 #if VERSION <= VERSION_DEMO_US
-                name = party_name_table_rtn(id);
+                name = select_party_name(id);
 #else
                 switch (id) {
                     case 0:

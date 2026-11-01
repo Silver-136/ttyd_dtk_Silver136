@@ -165,11 +165,7 @@ psndSFXOn_3D((const char*)0x945, &party->position);
         return EVT_RETURN_BLOCK;
     }
     if (party) {
-#if VERSION <= VERSION_DEMO_US
-        ((EffFukidashiEntryRetVoidptrS32Fn)effFukidashiEntry)(6, 0, -2, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
-#else
         effFukidashiEntry(6, 0, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
-#endif
     }
     return EVT_RETURN_DONE;
 }
@@ -211,66 +207,83 @@ static inline int chuchu_findTreasure2(PartyEntry* cpp, f32 range, Vec* bestPos)
 
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(set_msg) {
-#else
-USER_FUNC(set_msg) {
-    MapObjectEntry* mobj;
-    ItemEntry* item;
-    int found;
-    MarioWork* player;
-#endif
     int pass;
-#if VERSION <= VERSION_DEMO_US
-    PartyEntry* cp = (PartyEntry*)partyGetPtr(marioGetPartyId());
-    MarioWork* player = cp->player;
+    PartyEntry* cp = partyGetPtr(marioGetPartyId());
+    MarioWork* player = cp->playerPtr;
     PartyEntry* party = (PartyEntry*)cp;
     ItemEntry* item;
     MapObjectEntry* mobj;
-#else
-    int type;
-    PartyEntry* cp = partyGetPtr(marioGetPartyId());
-#endif
     f32 range;
-#if VERSION > VERSION_DEMO_US
-    f32 minDist;
-    f32 angle;
-    Vec bestPos;
-    Vec tmp;
-    Vec ip;
-#endif
 
-#if VERSION > VERSION_DEMO_US
-    player = cp->playerPtr;
-#endif
     event->lwData[0] = 0;
     event->lwData[1] = 0;
-    if (!cp) {
+    if (!party) {
         return EVT_RETURN_DONE;
     }
-#if VERSION <= VERSION_DEMO_US
-#endif
     for (pass = 0; pass < 2; pass++) {
         if (pass == 0) {
             range = 150.0f;
         } else {
             range = 10000.0f;
         }
-#if VERSION > VERSION_DEMO_US
-        type = -1;
-#endif
         item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
-#if VERSION > VERSION_DEMO_US
-        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
-        found = chuchu_findTreasure2(cp, range, &bestPos);
-
-        minDist = 10000.0f;
-#endif
         if (item) {
-#if VERSION <= VERSION_DEMO_US
             event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
             event->lwData[1] = (pass == 0) + 1;
             cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, item->position.x, item->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
             cp->moveDir = partyToMovedir(party, cp->displayDirectionTarget);
+            cp->targetDir = cp->moveDir;
+            return EVT_RETURN_DONE;
+        }
+        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
+        if (mobj) {
+            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
+            event->lwData[1] = (pass == 0) + 1;
+            cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, mobj->position.x, mobj->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
+            cp->moveDir = partyToMovedir(party, cp->displayDirectionTarget);
+            cp->targetDir = cp->moveDir;
+            return EVT_RETURN_DONE;
+        }
+    }
+    event->lwData[0] = (EvtWord) "map_no_exist";
+    event->lwData[1] = 0;
+    return EVT_RETURN_DONE;
+}
 #else
+USER_FUNC(set_msg) {
+    MapObjectEntry* mobj;
+    ItemEntry* item;
+    int found;
+    MarioWork* player;
+    int pass;
+    int type;
+    PartyEntry* cp = partyGetPtr(marioGetPartyId());
+    f32 range;
+    f32 minDist;
+    f32 angle;
+    Vec bestPos;
+    Vec tmp;
+    Vec ip;
+
+    player = cp->playerPtr;
+    event->lwData[0] = 0;
+    event->lwData[1] = 0;
+    if (!cp) {
+        return EVT_RETURN_DONE;
+    }
+    for (pass = 0; pass < 2; pass++) {
+        if (pass == 0) {
+            range = 150.0f;
+        } else {
+            range = 10000.0f;
+        }
+        type = -1;
+        item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
+        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
+        found = chuchu_findTreasure2(cp, range, &bestPos);
+
+        minDist = 10000.0f;
+        if (item) {
             ip = vecA;
             ip.x = item->position.x;
             ip.y = item->position.y;
@@ -311,29 +324,11 @@ USER_FUNC(set_msg) {
         }
         cp->displayDirectionTarget = (angle <= 180.0f) ? 180.0f : 0.0f;
         cp->moveDir = partyToMovedir(cp, cp->displayDirectionTarget);
-#endif
         cp->targetDir = cp->moveDir;
-#if VERSION > VERSION_DEMO_US
     } else {
         event->lwData[0] = (EvtWord)"map_no_exist";
         event->lwData[1] = 0;
     }
-#endif
-    return EVT_RETURN_DONE;
-}
-#if VERSION <= VERSION_DEMO_US
-        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
-        if (mobj) {
-            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
-            event->lwData[1] = (pass == 0) + 1;
-            cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, mobj->position.x, mobj->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
-            cp->moveDir = partyToMovedir(cp, cp->displayDirectionTarget);
-            cp->targetDir = cp->moveDir;
-            return EVT_RETURN_DONE;
-        }
-    }
-    event->lwData[0] = (EvtWord) "map_no_exist";
-    event->lwData[1] = 0;
     return EVT_RETURN_DONE;
 }
 #endif
@@ -387,41 +382,24 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
  * a Kururin floor item or a block from mobj_list);
  * party_motion.c and party_move.c play her sniffing pose while it is TRUE.
  */
+#if VERSION <= VERSION_DEMO_US
 BOOL chuchu_searchObject(void) {
-#if VERSION <= VERSION_DEMO_US
     char** name;
-    PartyEntry* cp = (PartyEntry*)partyGetPtr(marioGetPartyId());
-    MapObjectEntry* mobj;
-    MarioWork* mario = cp->player;
-#else
     PartyEntry* cp = partyGetPtr(marioGetPartyId());
-    MarioWork* player = cp->playerPtr;
-#endif
+    MapObjectEntry* mobj;
+    MarioWork* mario = cp->playerPtr;
 
-#if VERSION <= VERSION_DEMO_US
     if (itemNearDistCheck(mario->position.x, mario->position.y, mario->position.z, 150.0f)) {
-#else
-    if (itemNearDistCheck(player->position.x, player->position.y, player->position.z, 150.0f)) {
-#endif
         return TRUE;
     }
-#if VERSION <= VERSION_DEMO_US
     mobj = mobjNearDistCheck(mario->position.x, mario->position.y, mario->position.z, 150.0f);
     if (mobj) {
         if (mobjCheckItemboxOpen(mobj) == 1) {
-#else
-    if (mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, 150.0f, mobj_list)) {
-#endif
-        return TRUE;
-    }
-#if VERSION <= VERSION_DEMO_US
+            return TRUE;
+        }
         if (mobjCheckKururingFloorItem(mobj) == 2) {
             return TRUE;
-#else
-    return chuchu_findTreasure(cp, 150.0f) != 0;
-#endif
-}
-#if VERSION <= VERSION_DEMO_US
+        }
         for (name = mobj_list; *name != NULL; name++) {
             if (strcmp(mobj->animName, *name) == 0) {
                 return TRUE;
@@ -429,6 +407,19 @@ BOOL chuchu_searchObject(void) {
         }
     }
     return FALSE;
+}
+#else
+BOOL chuchu_searchObject(void) {
+    PartyEntry* cp = partyGetPtr(marioGetPartyId());
+    MarioWork* player = cp->playerPtr;
+
+    if (itemNearDistCheck(player->position.x, player->position.y, player->position.z, 150.0f)) {
+        return TRUE;
+    }
+    if (mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, 150.0f, mobj_list)) {
+        return TRUE;
+    }
+    return chuchu_findTreasure(cp, 150.0f) != 0;
 }
 #endif
 

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/dvd.h>
 #include "dolphin/os/OSThread.h"
 
@@ -13,6 +14,9 @@ typedef enum DVDFlags {
     DVDMGR_READING = (1 << 0),
     DVDMGR_FINISHED = (1 << 1),
     DVDMGR_CLOSED = (1 << 3),
+#if VERSION <= VERSION_DEMO_US
+    DVDMGR_OPEN_FAILED = (1 << 4), // dvdMgrOpen: DVDOpen failed (the entry is cleared right after)
+#endif
     DVDMGR_UNK_ERROR1 = (1 << 5),
     DVDMGR_UNK_ERROR2 = (1 << 7),
     DVDMGR_INUSE = (1 << 15)

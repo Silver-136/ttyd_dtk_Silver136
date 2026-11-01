@@ -473,7 +473,7 @@ CALL(evt_party_set_dir_npc, 0, STRING("チュチュリーナ"))
     CALL(evt_pouch_receive_mail, 12)
     CALL(evt_pouch_open_mail, 12)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_08_MS_MOWZ)
+    SET_VALUE(GSW_STORY_PROGRESS, STG3_20_08_MS_MOWZ)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_08_MS_MOWZ)
 #endif
@@ -601,7 +601,7 @@ EVT_BEGIN(tou_06_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("ana"), 0, PTR(evt_ana), 0)
     // The first container until Flurrie blows it away, then the second, labelled container.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_09_BLOWING_CONTAINERS)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_09_BLOWING_CONTAINERS)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("kontena"), STRING("a_kon_H"), PTR(evt_kontena))
     ELSE
@@ -609,7 +609,7 @@ EVT_BEGIN(tou_06_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kon_H"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_TOU_06_CONTAINER_2_BLOWN_AWAY, 0)
-        IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_20_09_BLOWING_CONTAINERS)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_20_09_BLOWING_CONTAINERS)
             CALL(evt_cloud_init)
         END_IF
         CALL(evt_cloud_ent, 1, PTR(&cloud_kontena2_list), STRING("a_kon_N"), PTR(evt_kontena2))
@@ -662,7 +662,7 @@ EVT_BEGIN(tou_06_init_evt)
         CALL(evt_mobj_flag_onoff, 0, STRING("h"), MOBJ_FLAG_GRAVITY)
     END_IF
     // Until the stairway appears: the blue switch, the hidden stairs and their paper-unfold image.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_10_HIDDEN_STAIRWAY)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_10_HIDDEN_STAIRWAY)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), -165, 0, -115, PTR(evt_kaidan), GSWF_TOU_06_SWITCH_PRESSED)
         CALL(evt_mobj_flag_onoff, 0, STRING("sw"), MOBJ_FLAG_GRAVITY)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kaidan"), MAP_OBJ_FLAG_HIDDEN)
@@ -673,11 +673,11 @@ EVT_BEGIN(tou_06_init_evt)
         CALL(evt_img_onoff, STRING("img"), 0)
     END_IF
     // The huge block on the upper floor until it is broken, and the door lock until the key is used.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_11_HOLE_IN_THE_FLOOR)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_11_HOLE_IN_THE_FLOOR)
         CALL(evt_mobj_lv_blk, STRING("aa"), -450, 200, 55, PTR(evt_block_broken), GSWF_TOU_06_BIG_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
         CALL(evt_mobj_flag_onoff, 0, STRING("aa"), MOBJ_FLAG_GRAVITY)
     END_IF
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_15_UNLOCKING_THE_DOOR)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_15_UNLOCKING_THE_DOOR)
         CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x13, 95, 210, 50, -80, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_06_DOOR_UNLOCKED)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(bero_case_switch_off)
@@ -717,14 +717,14 @@ CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_08_MS_MOWZ)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_08_MS_MOWZ)
         SPAWN_EVENT(evt_chuchu)
     ELSE
-        IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
-            SWITCH(GSW(GSW_STORY_PROGRESS))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))

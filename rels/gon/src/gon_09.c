@@ -32,7 +32,11 @@ static EvtWord init_0[37];
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord main_0[489];
+#else
 static EvtWord main_0[491];
+#endif
 #endif
 EvtWord gon_09_init_evt[239];
 

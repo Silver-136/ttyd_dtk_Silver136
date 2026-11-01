@@ -576,15 +576,15 @@ EVT_BEGIN(talk_yuurei)
     // The ghost's music plays and her quest begins.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_STG5_GHOST1"))
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
         CASE_LESS(STG6_15_GHOST_REQUEST)
         SET_VALUE(LW(13), 0)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_14_GHOST_T)
-            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_14_GHOST_T)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG6_14_GHOST_T)
+            SET_VALUE(GSW_STORY_PROGRESS, STG6_14_GHOST_T)
 #else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_14_GHOST_T)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_14_GHOST_T)
@@ -601,7 +601,7 @@ EVT_BEGIN(talk_yuurei)
             SET_VALUE(LW(15), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_120"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_15_GHOST_REQUEST)
+            SET_VALUE(GSW_STORY_PROGRESS, STG6_15_GHOST_REQUEST)
 #else
             SET_VALUE(GSW_STORY_PROGRESS, STG6_15_GHOST_REQUEST)
 #endif
@@ -723,7 +723,7 @@ CALL(evt_win_item_select, PTR(item_tbl2), LW(1))
             CALL(evt_msg_print, 0, STRING("stg6_rsh_139"), 0, 0)
             CALL(evt_pouch_remove_item, ITEM_RAGGED_DIARY, LW(0))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_18_BLANKET_EXCHANGE)
+            SET_VALUE(GSW_STORY_PROGRESS, STG6_18_BLANKET_EXCHANGE)
 #else
             SET_VALUE(GSW_STORY_PROGRESS, STG6_18_BLANKET_EXCHANGE)
 #endif
@@ -1170,7 +1170,7 @@ EVT_BEGIN(evt_toron_catch)
     CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK, 2000, FADE_IN_BLACK, 2000)
     // The story advances and the map changes to rsh_02_b.
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_26_ZIP_TOAD_CAUGHT)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_26_ZIP_TOAD_CAUGHT)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG6_26_ZIP_TOAD_CAUGHT)
 #endif
@@ -1278,7 +1278,7 @@ CALL(evt_win_item_select, PTR(item_tbl), LW(1))
     CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_ENEMY)
     CALL(evt_pouch_remove_item, ITEM_VITAL_PAPER, LW(0))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_26_ZIP_TOAD_CAUGHT)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_26_ZIP_TOAD_CAUGHT)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG6_26_ZIP_TOAD_CAUGHT)
 #endif
@@ -1304,7 +1304,7 @@ EVT_BEGIN(evt_toron_appear)
     CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
     WAIT_FRAMES(1)
     // Wait until Mario has found the clue and hides in the shadows with Vivian.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_24_02_ANOTHER_CLUE)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_24_02_ANOTHER_CLUE)
         GOTO(100)
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1427,7 +1427,7 @@ CALL(evt_npc_jump_position_nohit, STRING("トロン"), LW(0), LW(1), LW(2), 300,
     CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
     CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_NO_HIT)
     // The chase music starts and the catch begins.
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_25_ZIP_TOAD_APPEARS)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
     CALL(evt_del_case_evt, 0, GW(11))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_EGG1"))
     SPAWN_EVENT(evt_toron_catch)
@@ -1704,7 +1704,7 @@ EVT_END()
  */
 EVT_BEGIN(rsh_02_init_evt)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1743,8 +1743,8 @@ EVT_BEGIN(rsh_02_init_evt)
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_3"), 0, PTR(evt_nabe), 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_01_THE_CONDUCTOR)
-        IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_25_ZIP_TOAD_APPEARS)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
+        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
@@ -1763,7 +1763,7 @@ CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF_SHINE_34, 0)
 #endif
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -365, 60, -175, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif

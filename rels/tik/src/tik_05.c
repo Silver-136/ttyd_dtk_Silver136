@@ -3507,7 +3507,7 @@ SPAWN_EVENT(mahojin_se_event)
     // Mario jumps down, the open Door becomes the way to the Palace of Shadow, and the music returns.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 300, 0, -1000)
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_52_THE_PEDESTAL)
+    SET_VALUE(GSW_STORY_PROGRESS, STG7_52_THE_PEDESTAL)
     CALL(evt_party_run, 0)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     CALL(evt_mario_adjust_dir)

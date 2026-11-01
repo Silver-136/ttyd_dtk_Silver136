@@ -221,14 +221,14 @@ s32 winMarioMain(WindowWork* w) {
                     w->mario.mode = 1;
                     w->mario.specialCursor = 0;
 #if VERSION <= VERSION_DEMO_US
-                    psndSFXOn((PSND_SFX_CURSOR_OK1 |PSND_SFX_BYPASS_MUTE)0x20012);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
 #else
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
 #endif
                 }
             } else if (w->buttonTrg & PAD_BUTTON_B) {
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn((PSND_SFX_CURSOR_CANCEL1 |PSND_SFX_BYPASS_MUTE)0x20013);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
 animPoseSetAnim(w->mario.poseId, (w->flags & WINDOW_FLAG_8BIT) ? "S_1" : "M_S_1", 0);
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
@@ -306,7 +306,7 @@ animPoseSetAnim(w->mario.poseId, (w->flags & WINDOW_FLAG_8BIT) ? "S_1" : "M_S_1"
                     w->mario.specialCursor = w->mario.specialCount - 1;
                 }
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn((PSND_SFX_CURSOR_MOVE1 |PSND_SFX_BYPASS_MUTE)0x20005);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #endif
@@ -316,14 +316,14 @@ animPoseSetAnim(w->mario.poseId, (w->flags & WINDOW_FLAG_8BIT) ? "S_1" : "M_S_1"
                     w->mario.specialCursor = 0;
                 }
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn((PSND_SFX_CURSOR_MOVE1 |PSND_SFX_BYPASS_MUTE)0x20005);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #endif
             } else if (w->buttonTrg & PAD_BUTTON_B) {
                 w->mario.mode = 0;
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn((PSND_SFX_CURSOR_CANCEL1 |PSND_SFX_BYPASS_MUTE)0x20013);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
 #endif
@@ -673,7 +673,7 @@ animPoseGetAnimPosePtr(w->mario.poseId);
     anim = animPoseGetAnimDataPtr(w->mario.poseId);
 animPoseSetLocalTime(w->mario.poseId, (f32)(gp->retraceCount % (s32)anim->loopInfo[2]));
 animPoseMain(w->mario.poseId);
-    winKageGX(w, (GXColor){0x00, 0x00, 0x00, 0x80}, x - 150.0f, y, 0.0f, 1.0f);
+    winKageGX(w, x - 150.0f, y, 0.0f, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
     PSMTXTrans(mtx, x - 150.0f, y, 0.0f);
     winZClear();
     animPoseDrawMtx(w->mario.poseId, mtx, 2, 0.0f, 5.0f);

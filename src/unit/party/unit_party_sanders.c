@@ -56,7 +56,11 @@ BattleWeapon partyWeapon_SandersTimeBombSet;
 BattleWeapon partyWeapon_SandersCounterSet;
 BattleWeapon partyWeapon_SandersSuperBombAttack;
 EvtWord partySandersAttack_FirstAttack[321];
+#if VERSION <= VERSION_DEMO_US
+EvtWord partySandersAttack_NormalAttack[946];
+#else
 EvtWord partySandersAttack_NormalAttack[970];
+#endif
 #if VERSION >= VERSION_US
 EvtWord partySandersAttack_SuperBombAttack[1118];
 #else
@@ -155,7 +159,9 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {UNIT_DATA_WIN_REACTION_EVENT, party_win_reaction},
     {UNIT_DATA_ATTACK_READY_EVENT, subset_attack_ready_jump_event},
+#if VERSION > VERSION_DEMO_US
     {UNIT_DATA_BATTLE_END_HIDE_EVENT, sanders_battle_end_event},
+#endif
     {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
     {0, NULL},
 };
@@ -583,6 +589,276 @@ EVT_END()
  * Bobbery's Bomb: he walks up to the enemy, lights his fuse during the action command and explodes on it,
  * damaging the target, then walks back home.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(partySandersAttack_NormalAttack)
+    // Pick the target, pay the cost and aim the camera at Bobbery and the enemy.
+    CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
+    CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+    IF_INT_EQUAL(LW(3), -1)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
+    CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
+    CALL(btlevtcmd_WaitGuardMove)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
+    CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, 7)
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    CALL(evt_btl_camera_set_mode, 0, 11)
+    CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    CALL(evt_btl_camera_set_zoom, 0, 200)
+    // Action command (hold A, release when the light comes on): the timing window shrinks at higher difficulty.
+    CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
+    CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_AcGetDifficulty, LW(0))
+    SUBTRACT(LW(0), 3)
+    SWITCH(LW(0))
+        CASE_LESS_OR_EQUAL(-3)
+        SET_VALUE(LW(0), 120)
+        SET_VALUE(LW(1), 60)
+        CASE_EQUAL(-2)
+        SET_VALUE(LW(0), 120)
+        SET_VALUE(LW(1), 45)
+        CASE_EQUAL(-1)
+        SET_VALUE(LW(0), 120)
+        SET_VALUE(LW(1), 30)
+        CASE_EQUAL(0)
+        SET_VALUE(LW(0), 120)
+        SET_VALUE(LW(1), 25)
+        CASE_EQUAL(1)
+        SET_VALUE(LW(0), 120)
+        SET_VALUE(LW(1), 20)
+        CASE_EQUAL(2)
+        SET_VALUE(LW(0), 120)
+        SET_VALUE(LW(1), 12)
+        CASE_DEFAULT
+        SET_VALUE(LW(0), 120)
+        SET_VALUE(LW(1), 6)
+    END_SWITCH
+    CALL(btlevtcmd_AcSetParamAll, 2, LW(0), LW(1), 0, 100, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
+    CALL(btlevtcmd_AcSetFlag, 15)
+    CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 15, 1, 0)
+    WAIT_FRAMES(22)
+    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+        SET_VALUE(LW(0), 5)
+        LOOP(LW(0))
+            CALL(btlevtcmd_AcGetOutputParam, 0, LW(1))
+            IF_INT_EQUAL(LW(1), 0)
+                SET_VALUE(LW(0), 5)
+            ELSE
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_StartAC, 1)
+    CALL(btlevtcmd_WaitEventEnd, LW(15))
+    // The command went wrong: his fuse fizzles, he topples over and the move ends without an explosion.
+    CALL(btlevtcmd_AcGetOutputParam, 0, LW(1))
+    IF_INT_EQUAL(LW(1), 2)
+        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 20)
+        CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_ATTACK1"), 0, 0, -1, -1, 0, 0)
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -2, 1)
+        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 20)
+        CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5f))
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, -1)
+        CALL(btlevtcmd_StopAC)
+        CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
+        CALL(btlevtcmd_AudienceDeclareACResult, LW(0), 0)
+        WAIT_FRAMES(60)
+        CALL(evt_audience_ap_recovery)
+        CALL(btlevtcmd_InviteApInfoReport)
+        GOTO(95)
+    END_IF
+    // A pre-emptive spiky enemy: he walks into its spikes first and is hurt.
+    CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    IF_INT_EQUAL(LW(5), 5)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_2"))
+        CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(5))
+        MULTIPLY_FLOAT(LW(5), 35)
+        CALL(_get_bomb_hit_position, UNIT_ID_SELF, LW(3), LW(4), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(5))
+        CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_ATTACK1"), 0, 0, -1, -1, 0, 0)
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 60, -2, 1)
+        CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    END_IF
+    // He walks up to the enemy with his fuse sizzling while the camera zooms in, then glows for a second.
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_2"))
+    CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
+    MULTIPLY_FLOAT(LW(6), 20)
+    CALL(_get_bomb_hit_position, UNIT_ID_SELF, LW(3), LW(4), LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
+    CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_ATTACK1"), 0, 0, -1, -1, 0, 0)
+    ADD(LW(2), 5)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 90, -2, 1)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    CALL(evt_btl_camera_set_zoom, 0, 300)
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK2"), LW(14))
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
+    WAIT_FRAMES(60)
+    SWITCH(LW(5))
+        CASE_OR_EQUAL(2)
+        CASE_OR_EQUAL(3)
+        CASE_OR_EQUAL(6)
+        CASE_OR_EQUAL(4)
+        CASE_END
+        CASE_EQUAL(1)
+        CASE_DEFAULT
+        WAIT_MS(1000)
+    END_SWITCH
+    // He explodes (a bigger blast for a successful command in retail), the camera shakes and stage fog clears.
+    CALL(btlevtcmd_ResultAC)
+    CALL(evt_snd_sfxoff, LW(14))
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK3"), 0)
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(6))
+    DIVIDE(LW(6), 2)
+    ADD(LW(1), LW(6))
+    CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
+    CALL(btlevtcmd_StageDispellFog)
+    // A miss: the enemy plays its dodge reaction.
+    IF_INT_NOT_EQUAL(LW(5), 1)
+        IF_INT_EQUAL(LW(5), 3)
+            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        END_IF
+        IF_INT_EQUAL(LW(5), 6)
+            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        END_IF
+        IF_INT_EQUAL(LW(5), 2)
+            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        END_IF
+        GOTO(90)
+    END_IF
+    // The hit: a successful command adds the rating effect (Nice, Good...) and the higher damage.
+    CALL(btlevtcmd_GetResultAC, LW(6))
+    IF_BITS_SET(LW(6), 2)
+        CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
+        CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
+        CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
+    ELSE
+        CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
+        CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
+    END_IF
+    // The blast throws him off the top of the screen and he falls back down to his home spot.
+    LABEL(90)
+    CALL(btlevtcmd_StopAC)
+    LABEL(92)
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("J_1A"))
+    BEGIN_SIBLING_EVENT
+        WAIT_FRAMES(30)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("J_1B"))
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, -1)
+    END_SIBLING_EVENT
+    WAIT_FRAMES(60)
+    DELETE_EVENT(LW(15))
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
+    CALL(btlevtcmd_GetStageSize, EVT_NULLPTR, LW(8), EVT_NULLPTR)
+    ADD(LW(6), LW(8))
+    DIVIDE(LW(6), 2)
+    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
+    CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.25f))
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+    CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, -1)
+    END_SIBLING_EVENT
+    // Stylish: pressing A as he lands makes him stretch and squash for the audience; otherwise he lands in a heap.
+    CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 15)
+    CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
+    CALL(btlevtcmd_WaitEventEnd, LW(15))
+    IF_INT_GREATER_OR_EQUAL(LW(6), 2)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("Y_1"))
+        CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
+        CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
+        BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+            CALL(evt_sub_intpl_init_float, 11, FLOAT(1.0f), FLOAT(0.5996094f), 8)
+            LOOP(8)
+                CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
+                CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(0), LW(5), LW(2))
+                WAIT_FRAMES(1)
+            END_LOOP
+            CALL(evt_sub_intpl_init_float, 11, FLOAT(0.5996094f), FLOAT(1.1992188f), 8)
+            LOOP(8)
+                CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
+                CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(0), LW(5), LW(2))
+                WAIT_FRAMES(1)
+            END_LOOP
+            CALL(evt_sub_intpl_init_float, 11, FLOAT(1.1992188f), FLOAT(1.0f), 6)
+            LOOP(6)
+                CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
+                CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(0), LW(5), LW(2))
+                WAIT_FRAMES(1)
+            END_LOOP
+        END_SIBLING_EVENT
+        BEGIN_SIBLING_EVENT
+            CALL(evt_sub_intpl_init_float, 11, FLOAT(1.0f), FLOAT(1.5f), 8)
+            LOOP(8)
+                CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
+                CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(5), LW(1), LW(2))
+                WAIT_FRAMES(1)
+            END_LOOP
+            CALL(evt_sub_intpl_init_float, 11, FLOAT(1.5f), FLOAT(0.5996094f), 8)
+            LOOP(8)
+                CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
+                CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(5), LW(1), LW(2))
+                WAIT_FRAMES(1)
+            END_LOOP
+            CALL(evt_sub_intpl_init_float, 11, FLOAT(0.5996094f), FLOAT(1.0f), 6)
+            LOOP(6)
+                CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
+                CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(5), LW(1), LW(2))
+                WAIT_FRAMES(1)
+            END_LOOP
+        END_SIBLING_EVENT
+        CALL(btlevtcmd_WaitEventEnd, LW(15))
+        WAIT_FRAMES(40)
+    ELSE
+        CALL(evt_audience_acrobat_notry)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        WAIT_FRAMES(40)
+    END_IF
+    // The audience refills Star Power, then he walks back home.
+    CALL(evt_audience_ap_recovery)
+    CALL(btlevtcmd_InviteApInfoReport)
+    LABEL(95)
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+    LABEL(99)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+    CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(partySandersAttack_NormalAttack)
     // Pick the target, pay the cost and aim the camera at Bobbery and the enemy.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -860,6 +1136,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Bobbery's Bob-ombast: he charges a huge explosion with the action command and blasts every enemy at once,

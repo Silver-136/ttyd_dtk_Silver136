@@ -366,13 +366,13 @@ void noiseDisp(CameraId cameraId, void* param) {
 
 EVT_BEGIN(evt_emergency)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_25_THE_LAST_MAIL)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
 #else
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
 #endif
         LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_25_THE_LAST_MAIL)
+            IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
 #else
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
 #endif
@@ -3241,29 +3241,29 @@ EVT_BEGIN(aji_17_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("polySurface1168_q00065"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_scale, 0, STRING("ren2"), 5, 5, 1)
     // Peach's scenes: each story point from chapter 1 to chapter 6 starts its own conversation with TEC.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_18_01_PEACH_AN_OPEN_DOOR)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_18_01_PEACH_AN_OPEN_DOOR)
         SPAWN_EVENT(peach_evt_stg1)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_25_01_PEACH_CRUMP_X_NAUTS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_01_PEACH_CRUMP_X_NAUTS)
         SPAWN_EVENT(peach_evt_stg2)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_33_PEACH_THE_SECRET_WEAPON)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_PEACH_THE_SECRET_WEAPON)
         SPAWN_EVENT(peach_evt_stg3)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_33_03_PEACH_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_03_PEACH_GRODUS)
         SPAWN_EVENT(peach_evt_stg3_1)
         CALL(evt_mario_kill_party, 0)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_04_SHADOW_SIRENS_DOOPLISS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_04_SHADOW_SIRENS_DOOPLISS)
         SPAWN_EVENT(peach_evt_stg4)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_43_X_NAUTS_RETREAT)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         SPAWN_EVENT(peach_evt_stg5)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_46_PEACH_DISK_SEARCH)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)
         SPAWN_EVENT(peach_evt_stg5_1)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_55_PEACH_GRODUS_X_NAUT)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_PEACH_GRODUS_X_NAUT)
         CALL(evt_npc_setup, PTR(npcEnt))
         CALL(evt_shuryolight_init, STRING("シュリョー"))
         CALL(evt_shuryolight_run_evt, PTR(shuryolight_pow_normal), PTR(shuryolight_head_normal), PTR(shuryolight_tue_normal))
@@ -3271,7 +3271,7 @@ EVT_BEGIN(aji_17_init_evt)
     END_IF
     // Mario's visits: at the story point after the Moon, the first visit restores HP and FP and plays TEC's
     // farewell (evt_last); the second plays the aftermath (evt_last2).
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
         IF_INT_EQUAL(GSWF_AJI_17_LAST_SCENE_SEEN, 0)
             CALL(evt_mario_get_party, LW(15))
             IF_INT_EQUAL(LW(15), 0)
@@ -3294,7 +3294,7 @@ SET_VALUE(GSWF_AJI_17_LAST_SCENE_SEEN, 1)
     SPAWN_EVENT(evt_emergency)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG1_18_01_PEACH_AN_OPEN_DOOR)
         CASE_EQUAL(STG3_33_03_PEACH_GRODUS)
         CASE_EQUAL(STG4_15_04_SHADOW_SIRENS_DOOPLISS)
@@ -3311,7 +3311,7 @@ SET_VALUE(GSWF_AJI_17_LAST_SCENE_SEEN, 1)
     END_IF
     // After the final battle the room's machine runs again and the keyboard can be used to talk to TEC
     // (tec_talk).
-    IF_INT_GREATER(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+    IF_INT_GREATER(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kurai"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kikai"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_map_playanim, STRING("kika_1"), 1, 0)

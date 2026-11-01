@@ -210,11 +210,7 @@ void seq_loadMain(SequenceWork* seq) {
             break;
         case 2:
             if (evtCheckID(wp->evt->eventId) == 0) {
-#if VERSION <= VERSION_DEMO_US
-                if (evtGetValue(NULL, (0)0xFAA2B580) != 1) {
-#else
                 if (evtGetValue(NULL, GF(0)) != 1) {
-#endif
                     seqSetSeq(SEQ_TITLE, NULL, NULL);
                 } else {
                     wp->evt = NULL;
@@ -306,7 +302,7 @@ u32 trg;
     }
     wp->cardCode = code;
     for (i = 0; i < 4; i++) {
-        flags = cardGetFilePtr(i);
+        flags = cardGetFilePtr()->saves[i].data.flags;
         if (!(flags & CARD_SAVE_FLAG_ERASED) || (flags & CARD_SAVE_FLAG_NO_VALID_COPY)) {
             break;
         }
@@ -318,7 +314,7 @@ u32 trg;
     }
     wp->flags &= ~LOAD_FLAG_NO_COPY;
     for (i = 0; i < 4; i++) {
-        flags = cardGetFilePtr(i);
+        flags = cardGetFilePtr()->saves[i].data.flags;
         if (!(flags & CARD_SAVE_FLAG_ERASED) && !(flags & CARD_SAVE_FLAG_NO_VALID_COPY)) {
             break;
         }
@@ -342,7 +338,7 @@ u32 trg;
             } else if (dir & DEMO_STICK_RIGHT) {
                 wp->slot = win_dt[prev].next[3];
             } else if (trg & PAD_BUTTON_A) {
-                flags = cardGetFilePtr(wp->slot);
+                flags = cardGetFilePtr()->saves[wp->slot].data.flags;
                 switch (wp->slot) {
                     case 0:
                     case 1:
@@ -361,7 +357,7 @@ u32 trg;
                     case 4:
                         if (!(wp->flags & LOAD_FLAG_NO_DELETE)) {
                             for (i = 0; i < 4; i++) {
-                                flags = cardGetFilePtr(i);
+                                flags = cardGetFilePtr()->saves[i].data.flags;
                                 if (!(flags & CARD_SAVE_FLAG_ERASED) || (flags & CARD_SAVE_FLAG_NO_VALID_COPY)) {
                                     break;
                                 }
@@ -378,7 +374,7 @@ u32 trg;
                     case 5:
                         if (!(wp->flags & LOAD_FLAG_NO_COPY)) {
                             for (i = 0; i < 4; i++) {
-                                flags = cardGetFilePtr(i);
+                                flags = cardGetFilePtr()->saves[i].data.flags;
                                 if (!(flags & CARD_SAVE_FLAG_NO_VALID_COPY) && !(flags & CARD_SAVE_FLAG_ERASED)) {
                                     break;
                                 }
@@ -437,7 +433,7 @@ wp->state = 0x64;
         case 0x15:
             if (!evtCheckID(wp->evt->eventId)) {
                 wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
-                if (evtGetValue(NULL, (0)0xFD050F80) == 1) {
+                if (evtGetValue(NULL, GW(0)) == 1) {
                     wp->state++;
                 } else {
                     wp->state = 1;
@@ -528,7 +524,7 @@ seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
                 wp->slot = win_dt2[prev].next[3];
             } else if (trg & PAD_BUTTON_A) {
                 if (prev < 4) {
-                    flags = cardGetFilePtr(wp->slot);
+                    flags = cardGetFilePtr()->saves[wp->slot].data.flags;
                     if ((flags & CARD_SAVE_FLAG_NO_VALID_COPY) || !(flags & CARD_SAVE_FLAG_ERASED)) {
                         SFX(PSND_SFX_CURSOR_OK1);
                         wp->state++;
@@ -577,7 +573,7 @@ wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                 wp->slot = win_dt2[prev].next[3];
             } else if (trg & PAD_BUTTON_A) {
                 if (prev < 4) {
-                    flags = cardGetFilePtr(wp->slot);
+                    flags = cardGetFilePtr()->saves[wp->slot].data.flags;
                     if (!(flags & CARD_SAVE_FLAG_NO_VALID_COPY) && !(flags & CARD_SAVE_FLAG_ERASED)) {
                         wp->state = 0x33;
                         wp->copyFrom = wp->slot;

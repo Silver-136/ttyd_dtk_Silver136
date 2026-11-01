@@ -402,11 +402,7 @@ s32 _getHammerIconId(void) {
  * In the tutorial the basic Jump or Hammer is swapped for the lecture unit's weapon.
  * Then marks which entries are usable.
  */
-#if VERSION <= VERSION_DEMO_US
-static s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
-#else
 s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
-#endif
     s32 top;
     BattleUnit* unit;
     BattleCommand* cmd;
@@ -421,47 +417,6 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
     s16* items;
     void (*func)(BattleCommand*, s32*);
     static BattleWeapon defaultWeapon_Dummy_NoItem = {
-#if VERSION <= VERSION_DEMO_US
-        "btl_wn_dummy_noitem", 0, {0}, 0, "msg_dummy_noitem", 100, 0, 0, 0, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x01000160, 0x20000002, 0, 0, 3, 2, NULL, 0, 0, 0x80002000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* counterResist, targetWeight, sleep..confuse */
-        0,
-        0,
-        0,
-        0, /* electric, dodgy */
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0, /* burn..payback */
-        0,
-        0,
-        0, /* holdFast, invisible */
-        0,
-        0,
-        0,
-        0,
-        {0},
-        NULL,
-        {0, 0, 0, 100}};
-#else
         "btl_wn_dummy_noitem", 0, {0}, 0, "msg_dummy_noitem", 100, 0, 0, 0, 0.0f, 0, 0, 0, 0,
         NULL, {0}, NULL, {0}, 0x01000160, 0x20000002, 0, 0, 3, 2, NULL, 0,
         0, 0x80002000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* counterResist, targetWeight, sleep..confuse */
@@ -470,7 +425,6 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
         0, 0, 0, /* holdFast, invisible */
         0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100}
     };
-#endif
 
     unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     cmd = &wp->commandMenu;
@@ -496,7 +450,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 }
                 if (wp->flags & (BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_FREE) && wp->lectureUnitId != -1) {
 #if VERSION <= VERSION_DEMO_US
-cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x43);
+                    cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x43);
 #else
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_JUMP_WEAPON);
 #endif
@@ -547,7 +501,7 @@ cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId
                 }
                 if (wp->flags & (BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_FREE) && wp->lectureUnitId != -1) {
 #if VERSION <= VERSION_DEMO_US
-cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x44);
+                    cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x44);
 #else
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_HAMMER_WEAPON);
 #endif
@@ -715,16 +669,10 @@ cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId
         cursor->absPos = cursor->count - 1;
     }
     while (cursor->count < cursor->relPos + BATTLE_COMMAND_VISIBLE_WEAPON_ROWS) {
-#if VERSION <= VERSION_DEMO_US
-        if ((top = cursor->relPos) <= 0)
-#else
         // FAKE: top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object
         if ((top = cursor->relPos) <= 0) {
-#endif
             break;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         cursor->relPos--;
     }
     _btlcmd_UpdateSelectWeaponTable(wp, type);
@@ -815,11 +763,7 @@ s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon*
     return targets.numTargets;
 }
 
-#if VERSION <= VERSION_DEMO_US
-static void _btlcmd_MakeOperationTable(BattleWork* wp) {
-#else
 void _btlcmd_MakeOperationTable(BattleWork* wp) {
-#endif
     PouchData* pouch;
     NpcBattleInfo* info;
     BattleUnit* unit;
@@ -1539,7 +1483,7 @@ void BattleCommandDisplay(BattleWork* wp) {
     if (cmd != NULL) {
         SelectedItemCoordinateColorUpDate();
 #if VERSION <= VERSION_DEMO_US
-dispEntry(CAMERA_2D, 501.0f, 0, BattleDrawEnemyHP, wp);
+        dispEntry(CAMERA_2D, 501.0f, 0, BattleDrawEnemyHP, wp);
 #else
         dispEntry(CAMERA_2D, 902.0f, 0, BattleDrawEnemyHP, wp);
 #endif
@@ -2547,11 +2491,7 @@ s32 _check_weapon_type_attack(BattleWeapon* weapon);
  * which with Quick Change keeps the turn); the Y position swap;
  * the audience attack (X) and audience item scripts; and the tutorial end. A cancelled Double Dip just waits.
  */
-#if VERSION <= VERSION_DEMO_US
-static void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
-#else
 void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
-#endif
     BattleWork* wp = _battleWorkPointer;
     u32 type = cmd->actType;
     BattleCursor* cursor;
@@ -2565,11 +2505,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     }
     switch (type) {
     case 5:
-#if VERSION <= VERSION_DEMO_US
-            switch ((u32)cmd->operationType) {
-#else
         switch (cmd->operationType) {
-#endif
         case 6:
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
@@ -2607,7 +2543,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 1:
 #if VERSION <= VERSION_DEMO_US
-                    unit->attackEventCode = WEVT(&badgeWeapon_Charge);
+                    unit->attackEventCode = badgeWeapon_Charge.attackEvtScript;
 #endif
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
@@ -2624,7 +2560,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 2:
 #if VERSION <= VERSION_DEMO_US
-                    unit->attackEventCode = WEVT(&badgeWeapon_SuperCharge);
+                    unit->attackEventCode = badgeWeapon_SuperCharge.attackEvtScript;
 #endif
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
@@ -2673,11 +2609,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     case 6:
         _btlcmd_GetCursorPtr(cmd, type, &cursor);
         weapon = cmd->weapon[cursor->absPos].weapon;
-#if VERSION <= VERSION_DEMO_US
-            unit->attackEventCode = WEVT(weapon);
-#else
         unit->attackEventCode = weapon->attackEvtScript;
-#endif
         unit->attackEventFlags = 0;
         if (!unit->attackEventCode) {
             unit->attackEventCode = btldefaultevt_Wait;
@@ -2691,7 +2623,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 4:
 #if VERSION <= VERSION_DEMO_US
-if (weapon->hpDamageFn) {
+            if (weapon->hpDamageFn) {
 #else
             if (_check_weapon_type_attack(weapon)) {
 #endif
@@ -2814,36 +2746,20 @@ BattleWeapon* BattleGetSelectWeapon(BattleWork* wp) {
  * any other item closes the menus and forces the audience-item action (actType 12) and returns 1.
  * Returns 0 otherwise.
  */
-#if VERSION <= VERSION_DEMO_US
-static s32 _check_present_item(void) {
-#else
 s32 _check_present_item(void) {
-#endif
     BattleWork* wp = _battleWorkPointer;
     s32 item = BattleAudience_GetPresentItemNo();
     s32 id;
     BattleUnit* unit;
     Vec pos;
 
-#if VERSION <= VERSION_DEMO_US
-    if (item >= ITEM_TYPE_MAX)
-#else
     if (item >= ITEM_TYPE_MAX) {
-#endif
         return 0;
-#if VERSION > VERSION_DEMO_US
     }
-#endif
     id = BattleAudience_GetPresentTargetUnitId();
-#if VERSION <= VERSION_DEMO_US
-    if (id < -1 || id >= BATTLE_COMMAND_UNIT_CAPACITY)
-#else
     if (id < -1 || id >= BATTLE_COMMAND_UNIT_CAPACITY) {
-#endif
         return 0;
-#if VERSION > VERSION_DEMO_US
     }
-#endif
     unit = BattleGetUnitPtr(wp, id);
     switch (item) {
     case ITEM_NULL:
@@ -2852,7 +2768,7 @@ s32 _check_present_item(void) {
         BtlUnit_RecoverHp(unit, 1);
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
 #if VERSION <= VERSION_DEMO_US
-pos.y += BtlUnit_GetHeight(unit);
+        pos.y += BtlUnit_GetHeight(unit);
 #else
         pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
 #endif
@@ -2863,7 +2779,7 @@ pos.y += BtlUnit_GetHeight(unit);
         BtlUnit_RecoverFp(unit, 1);
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
 #if VERSION <= VERSION_DEMO_US
-pos.y += BtlUnit_GetHeight(unit);
+        pos.y += BtlUnit_GetHeight(unit);
 #else
         pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
 #endif
@@ -2871,15 +2787,9 @@ pos.y += BtlUnit_GetHeight(unit);
         BattleAudience_SetPresentItemNo(0);
         return 0;
     default:
-#if VERSION <= VERSION_DEMO_US
-            if (item < 0 || item >= ITEM_TYPE_MAX)
-#else
         if (item < 0 || item >= ITEM_TYPE_MAX) {
-#endif
             return 0;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         wp->commandMenu.attackAudience = 1;
         if (wp->commandMenu.state == 12 || wp->commandMenu.state == 13) {
             wp->commandMenu.attackAudience = 2;
@@ -3067,7 +2977,7 @@ _btlcmd_MakeActClassTable(wp);
             }
             wp->weaponTargets.currentTarget = irand(wp->weaponTargets.numTargets);
             wp->flags |= BATTLE_FLAG_ACT_DECIDED_UNUSED;
-            return WEVT(weapon);
+            return weapon->attackEvtScript;
         case 5:
             _btlcmd_MakeOperationTable(wp);
             {
@@ -3106,9 +3016,9 @@ _btlcmd_MakeActClassTable(wp);
                 case 3:
                     return btldefaultevt_Escape;
 case 1:
-                    return WEVT(&badgeWeapon_Charge);
+                    return badgeWeapon_Charge.attackEvtScript;
                 case 2:
-                    return WEVT(&badgeWeapon_SuperCharge);
+                    return badgeWeapon_SuperCharge.attackEvtScript;
 case 8:
                     return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
                 case 0: {

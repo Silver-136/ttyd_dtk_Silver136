@@ -408,11 +408,7 @@ void psndSFX_pit(s32 id, s32 pitch);
  * cheers the audience by its size and slashes a line across the screen, which splits the screen pieces.
  * A failed round or the fifth cut ends the game.
  */
-#if VERSION <= VERSION_DEMO_US
-static USER_FUNC(zubastar_main) {
-#else
 USER_FUNC(zubastar_main) {
-#endif
     ZubaStarWork* w = GetZubaStarPtr();
     Vec pts[4] = {{0.0f, 240.0f, 0.0f}, {304.0f, 240.0f, 0.0f}, {304.0f, -240.0f, 0.0f}, {0.0f, -240.0f, 0.0f}};
     s32 audience = BattleAudience_GetAudienceNum();
@@ -434,32 +430,16 @@ USER_FUNC(zubastar_main) {
     case 5:
         w->phase = 6;
         w->phaseCount = 0;
-#if VERSION <= VERSION_DEMO_US
-            if (w->gaugeState == 0)
-#else
         if (w->gaugeState == 0) {
-#endif
             w->gaugeState = 5;
-#if VERSION <= VERSION_DEMO_US
-            if (w->gaugeState == 15)
-#else
         }
         if (w->gaugeState == 15) {
-#endif
             w->gaugeState = 16;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
     case 6:
-#if VERSION <= VERSION_DEMO_US
-            if (w->cursor.timer == 10 && w->gaugeState == 10)
-#else
         if (w->cursor.timer == 10 && w->gaugeState == 10) {
-#endif
             w->phase = 10;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         break;
     case 10:
         w->phase = 11;
@@ -483,15 +463,9 @@ USER_FUNC(zubastar_main) {
             psndSFXOff(w->sfx);
             break;
         }
-#if VERSION <= VERSION_DEMO_US
-            if (keyGetButtonTrg(0) & PAD_BUTTON_A)
-#else
         if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-#endif
             w->gaugeV = 2.8f;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         break;
     case 15:
         w->gaugeState = 20;
@@ -549,9 +523,7 @@ USER_FUNC(zubastar_main) {
         top[0] = bot[0] = -96.0f;
         i = 0;
         n = 1;
-#if VERSION > VERSION_DEMO_US
         // BUG: reads 17 entries of lines[16]; the extra entry overlaps capture, whose value is never 5
-#endif
         for (; i < 17; i++) {
             ZSLine* l = &w->lines[i];
             if (l->state == 5) {
@@ -566,8 +538,8 @@ USER_FUNC(zubastar_main) {
             }
         }
 #if VERSION <= VERSION_DEMO_US
-top[n] = 364.0f;
-            bot[n] = 304.0f;
+        top[n] = 364.0f;
+        bot[n] = 304.0f;
 #else
         top[n] = 344.0f;
         bot[n] = 264.0f;
@@ -608,9 +580,7 @@ top[n] = 364.0f;
         } else {
             w->lend.x = f;
         }
-#if VERSION > VERSION_DEMO_US
         // BUG: bi is the widest gap along the bottom edge (dbot), but the point is taken from top[] and dtop[]
-#endif
         f = top[bi] + dtop[bi] * rand() / 32767.0f;
         if (-240.0f == w->lstart.y) {
             w->lstart.x = f;
@@ -635,15 +605,9 @@ top[n] = 364.0f;
         w->phase = 31;
         w->cursor.timer = 15;
     case 31:
-#if VERSION <= VERSION_DEMO_US
-            if (w->cursor.timer == 20)
-#else
         if (w->cursor.timer == 20) {
-#endif
             w->phase = 35;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         break;
     case 33:
         if (w->level >= 5) {
@@ -667,15 +631,9 @@ top[n] = 364.0f;
         break;
     case 38:
         w->phaseCount--;
-#if VERSION <= VERSION_DEMO_US
-            if (w->phaseCount <= 0)
-#else
         if (w->phaseCount <= 0) {
-#endif
             w->phase = 40;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         break;
     case 40:
         for (i = 0; i < 16; i++) {
@@ -695,15 +653,9 @@ top[n] = 364.0f;
         w->cursor.pos.x = 0.0f;
         w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.f4, 15);
         w->cursor.pos.z = 0.0f;
-#if VERSION <= VERSION_DEMO_US
-            if (w->cursor.f4 >= 15)
-#else
         if (w->cursor.f4 >= 15) {
-#endif
             w->cursor.timer = 10;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         break;
     case 10:
         w->cursor.pos = (Vec){0.0f, 300.0f, 0.0f};
@@ -716,15 +668,9 @@ top[n] = 364.0f;
         w->cursor.pos.x = 0.0f;
         w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.f4, 15);
         w->cursor.pos.z = 0.0f;
-#if VERSION <= VERSION_DEMO_US
-            if (w->cursor.f4 >= 15)
-#else
         if (w->cursor.f4 >= 15) {
-#endif
             w->cursor.timer = 20;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         break;
     case 25:
         w->cursor.timer = 26;
@@ -755,8 +701,9 @@ top[n] = 364.0f;
             w->cursor.timer = 27;
             w->cursor.f4 = 0;
 #if VERSION <= VERSION_DEMO_US
-fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                btl_camera_shake_h(0, 5.0f, 0.0f, 30, 0);
+            // The demo flashes the screen from here (15 = FADE_OUT_WHITE: demo fade types are 2 lower).
+            fadeEntry(15, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            btl_camera_shake_h(0, 5.0f, 0.0f, 30, 0);
 #else
             btl_camera_shake_h(0, 8.0f, 0.0f, 30, 0);
 #endif
@@ -764,20 +711,14 @@ fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         break;
     case 27:
         w->cursor.f4++;
-#if VERSION <= VERSION_DEMO_US
-            if (w->cursor.f4 >= 5)
-#else
         if (w->cursor.f4 >= 5) {
-#endif
             w->cursor.timer = 28;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         break;
     case 28:
         w->cursor.timer = 30;
 #if VERSION <= VERSION_DEMO_US
-fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        fadeEntry(14, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}); // 14 = FADE_IN_WHITE in the demo
 #endif
     case 30:
         w->cursor.pos = (Vec){0.0f, -1000.0f, 0.0f};
@@ -805,77 +746,37 @@ fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     case 6:
         w->gaugeTimer++;
         w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 50.0f, w->gaugeTimer, 30);
-#if VERSION <= VERSION_DEMO_US
-            if (w->gaugeTimer >= 30)
-#else
         if (w->gaugeTimer >= 30) {
-#endif
             w->gaugeState = 10;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         break;
     case 10:
         w->gauge += w->gaugeV;
         w->gauge += w->gaugeAcc;
-#if VERSION <= VERSION_DEMO_US
-            if (w->gauge > 100.0f)
-#else
         if (w->gauge > 100.0f) {
-#endif
             w->gauge = 100.0f;
-#if VERSION <= VERSION_DEMO_US
-            if (w->gauge < 0.0f)
-#else
         }
         if (w->gauge < 0.0f) {
-#endif
             w->gauge = 0.0f;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         w->gaugeV -= 0.25f;
-#if VERSION <= VERSION_DEMO_US
-            if (w->gaugeV < 0.0f)
-#else
         if (w->gaugeV < 0.0f) {
-#endif
             w->gaugeV = 0.0f;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         w->gaugeBlink++;
-#if VERSION <= VERSION_DEMO_US
-            if (w->gaugeBlink >= 8)
-#else
         if (w->gaugeBlink >= 8) {
-#endif
             w->gaugeBlink = 0;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         if (w->gauge <= 0.0f) {
             w->gauge = 0.0f;
-#if VERSION <= VERSION_DEMO_US
-                if (psndSFXChk(w->sfx) == 0)
-#else
             if (psndSFXChk(w->sfx) == 0) {
-#endif
                 psndSFXOff(w->sfx);
             }
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         if (w->gauge > 0.0f) {
-#if VERSION <= VERSION_DEMO_US
-                if (psndSFXChk(w->sfx) == -1)
-#else
             if (psndSFXChk(w->sfx) == -1) {
-#endif
                 w->sfx = psndSFXOn("SFX_BTL_SAC_ZUBA_STAR1");
-#if VERSION > VERSION_DEMO_US
             }
-#endif
         }
         if (psndSFXChk(w->sfx) == 0) {
             psndSFX_pit(w->sfx, 683.0f * w->level + 4096.0f * w->gauge / 100.0f);
@@ -888,15 +789,9 @@ fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         w->gaugeBlink = 0;
         w->gaugeTimer++;
         w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
-#if VERSION <= VERSION_DEMO_US
-            if (w->gaugeTimer >= 30)
-#else
         if (w->gaugeTimer >= 30) {
-#endif
             w->gaugeTimer = 30;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         break;
     case 16:
         w->gaugeState = 6;
@@ -912,15 +807,9 @@ fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     case 21:
         w->gaugeTimer++;
         w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
-#if VERSION <= VERSION_DEMO_US
-            if (w->gaugeTimer >= 30)
-#else
         if (w->gaugeTimer >= 30) {
-#endif
             w->gaugeTimer = 30;
-#if VERSION > VERSION_DEMO_US
         }
-#endif
         break;
     }
     for (i = 0; i < 16; i++) {
@@ -930,23 +819,13 @@ fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             break;
         case 5:
             l->timer++;
-#if VERSION <= VERSION_DEMO_US
-                if (l->timer > 60)
-#else
             if (l->timer > 60) {
-#endif
                 l->timer = 0;
-#if VERSION > VERSION_DEMO_US
             }
-#endif
             break;
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    dispEntry((CameraId)CAMERA_2D, 900.0f, 1, zubastar_disp2D, NULL);
-#else
     dispEntry(CAMERA_2D, 900.0f, 1, zubastar_disp2D, NULL);
-#endif
     return 0;
 }
 

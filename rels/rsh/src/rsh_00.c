@@ -859,7 +859,7 @@ EVT_END()
  */
 static EVT_BEGIN(talk_unten)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -909,7 +909,7 @@ CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_ANIM)
         CALL(evt_npc_set_anim, STRING("me"), STRING("T_1"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, 0)
-SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_11_OBTAIN_AUTOGRAPH)
+SET_VALUE(GSW_STORY_PROGRESS, STG6_11_OBTAIN_AUTOGRAPH)
 CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_ANIM)
 #else
         CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, STRING("me"))

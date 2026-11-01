@@ -339,12 +339,12 @@ winBgGX(w, 3, x, y);
             winTexSet_x2(i + 0x1A, 0xB4, (Vec){x - 190.0f, VERSION_PICK(20.0f, 25.0f) + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x80, 0x80, 0x80, 0xFF});
         }
     }
-    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - Q) * 13);
+    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - ((pouch->maximumBP + 9) / 10)) * 13);
     winFontInit();
 winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "\202a\202o");
 winFontSet((Vec){x - 175.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->maximumBP);
-winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - Q) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
-winFontSet((Vec){x - 145.0f, ((20.0f + (y - 102.0f)) - 18.0f) + (10 - Q) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->availableBP);
+winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - ((pouch->maximumBP + 9) / 10)) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
+winFontSet((Vec){x - 145.0f, ((20.0f + (y - 102.0f)) - 18.0f) + (10 - ((pouch->maximumBP + 9) / 10)) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->availableBP);
 winTexInit((TEXPalette*)*w->res->data);
     d = 28.0f + y;
     for (i = 0; i < pouch->availableBP; i++) {
@@ -454,13 +454,13 @@ if (w->badge.tab == 0) {
         if (w->badge.tab == 0) {
             badge = pouchHaveBadge(i);
         } else {
-            badge = p0->badge.list[0].id;
+            badge = w->badge.list[i].id;
         }
         scroll = w->badge.scroll[w->badge.tab];
         if (w->badge.tab == 0) {
             equipped = pouchEquipCheckBadgeIndex(i);
         } else {
-            equipped = p0->badge.list[0].equipped;
+            equipped = w->badge.list[i].equipped;
         }
         if ((scroll + ((yo + 110.0f) - (f32)(i * 23))) > 240.0f) {
             continue;

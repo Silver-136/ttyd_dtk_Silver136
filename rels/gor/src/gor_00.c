@@ -686,7 +686,7 @@ EVT_END()
 
 static EVT_BEGIN(marco_talk)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -769,7 +769,7 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         CALL(evt_party_run, 0)
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG4_33_MEET_BOBBERY)
+        SET_VALUE(GSW_STORY_PROGRESS, STG4_33_MEET_BOBBERY)
         // Reminder to bring Bobbery, with an extra line if Bobbery has already refused.
 #else
         SET_VALUE(GSW_STORY_PROGRESS, STG4_33_MEET_BOBBERY)
@@ -1343,7 +1343,7 @@ CALL(delete_itemsel_table)
         END_IF
         RETURN
     END_IF
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
         CALL(evt_msg_print, 0, STRING("gor_00_01_01"), 0, STRING("me"))
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
@@ -1632,7 +1632,7 @@ EVT_END()
  */
 EVT_BEGIN(tentyou_init)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1664,7 +1664,7 @@ EVT_END()
  */
 EVT_BEGIN(tenin_init)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1754,7 +1754,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(mokorim_talk)
     SET_VALUE(LF(15), 0)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_15_THE_PEDESTAL, STG3_END_TO_STAGE_4)
         // Lumpy has already received three investments: he only thanks Mario.
         IF_INT_EQUAL(GSW_GOR_LUMPY_INVESTMENT_COUNT, 3)
@@ -2918,7 +2918,7 @@ BEGIN_INLINE_EVENT
         CALL(evt_telop_entry, 0)
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG0_03_TO_ROGUEPORT)
+    SET_VALUE(GSW_STORY_PROGRESS, STG0_03_TO_ROGUEPORT)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG0_03_TO_ROGUEPORT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
@@ -3178,7 +3178,7 @@ EVT_BEGIN(gundan1000tai_beforebattle)
     CALL(evt_npc_set_position, STRING("第三勢力部下Ｂ"), 130, 15, -330)
     CALL(evt_npc_set_ry, STRING("第三勢力部下Ｂ"), 270)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG0_05_1000_X_NAUTS_BEFORE)
+    SET_VALUE(GSW_STORY_PROGRESS, STG0_05_1000_X_NAUTS_BEFORE)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG0_05_1000_X_NAUTS_BEFORE)
 #endif
@@ -4898,7 +4898,7 @@ CALL(evt_mario_cont_onoff, 0)
             BREAK_LOOP
         END_IF
     END_LOOP
-SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_59_ROGUEPORT_DOCK)
+SET_VALUE(GSW_STORY_PROGRESS, STG5_59_ROGUEPORT_DOCK)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_ry, STRING("水夫Ａ"), 270)
         CALL(evt_npc_move_position, STRING("水夫Ａ"), -146, 218, 0, FLOAT(240.0f), 0)
@@ -5174,7 +5174,7 @@ EVT_BEGIN(into_gor_ship)
     CALL(evt_party_set_dir, 1, 90, 0)
     CALL(evt_npc_set_ry, STRING("コルテス"), 270)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_64_02_F_F_SAIL_OFF)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
 #endif
@@ -5231,7 +5231,7 @@ EVT_BEGIN(into_gor_ship)
     CALL(evt_party_cont_onoff, 1, 1)
     // If the couple is aboard, Frankie and Francesca get off the ship.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_64_02_F_F_SAIL_OFF)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
 CALL_CHILD(mony_peton_event)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
@@ -5295,7 +5295,7 @@ EVT_BEGIN(mony_run_away)
         CALL(evt_npc_move_position, STRING("ピートン"), 0, -570, 0, FLOAT(180.0f), 0)
         CALL(evt_npc_set_position, STRING("ピートン"), 0, -1000, 0)
     END_INLINE_EVENT
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_64_03_F_F_ARRIVE)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
 #endif
     RETURN
 EVT_END()
@@ -7110,7 +7110,7 @@ BEGIN_INLINE_EVENT
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("mac_8_02"), 0, STRING("party"))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG9_02_RETURN_TO_ROGUEPORT)
+    SET_VALUE(GSW_STORY_PROGRESS, STG9_02_RETURN_TO_ROGUEPORT)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG9_02_RETURN_TO_ROGUEPORT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
@@ -7144,10 +7144,10 @@ EVT_BEGIN(gor_00_init_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_light_bind_mapobj, STRING("pointLight4"), STRING("S_fune_b"), 0)
     END_INLINE_EVENT
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         // Choose the background music and ambient sound for the current story stage.
         CASE_BETWEEN(STG0_00_PROLOGUE, STG0_03_TO_ROGUEPORT)
-        IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG0_02_MARIOS_HOUSE)
+        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
         ELSE
             CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
@@ -7187,7 +7187,7 @@ CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
     CALL_CHILD(evt_bero_info_run)
 CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_setup, PTR(npcEnt))
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_64_02_F_F_SAIL_OFF)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
         CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
         CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
     END_IF
@@ -7198,7 +7198,7 @@ CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_entry, STRING("船ダミー"), STRING("c_suifu_b"))
     CALL(evt_npc_flag_onoff, 1, STRING("船ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_WALL_COLLISION)
     CALL_CHILD(borodo2_init)
-    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_07_BOWSER_ACTION_STAGE)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG4_15_07_BOWSER_ACTION_STAGE)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), -275, 75, 100, 0, 0)
     END_IF
     CALL(evt_map_playanim, STRING("nami"), MAP_ANIM_PLAY_LOOP, 0)
@@ -7222,19 +7222,19 @@ CALL_CHILD(luigi_npcEnt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -390, 15, -65, ITEM_TYPE_STILL, GSWF_STARPIECE_00, 0)
     // Start the harbor background task, the Peach mail event and the Frankie and Francesca reaction when their
     // stage is reached.
-    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         SPAWN_EVENT(tsumini)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_59_ROGUEPORT_DOCK)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_59_ROGUEPORT_DOCK)
         SPAWN_EVENT(peach_mail)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_45_DAUGHTER_LOCATED)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_REMARK_DONE, 0)
             CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("A_oku_yuka_01"), 0, PTR(mony_peton_after), 0)
         END_IF
     END_IF
     // Start the story scene that belongs to the current stage.
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_03_TO_ROGUEPORT)
         CALL_CHILD(enter_gorotsuki_town_init)
         SPAWN_EVENT(enter_gorotsuki_town)
@@ -7290,9 +7290,9 @@ SPAWN_EVENT(gorotsuki_kikan)
         SPAWN_EVENT(return_gorotsuki_town)
     END_SWITCH
     // Late in the game, handle a ship arriving at the dock.
-    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
-        IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG9_01_END_CREDITS)
-            IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_58_FAIR_WINDS)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
+        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_58_FAIR_WINDS)
                 CALL_CHILD(gor_muj_ship_init)
                 IF_INT_EQUAL(GSWF_GOR_00_PLACE_BY_SHIP, 1)
                     SET_VALUE(GSWF_GOR_00_PLACE_BY_SHIP, 0)

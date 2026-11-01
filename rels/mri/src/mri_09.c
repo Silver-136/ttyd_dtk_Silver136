@@ -44,10 +44,14 @@ EvtWord wall_roll_sub[96];
 #if VERSION >= VERSION_US
 EvtWord wall_roll[272];
 #else
+#if VERSION <= VERSION_DEMO_US
+EvtWord wall_roll[262];
+#else
 EvtWord wall_roll[264];
 #endif
+#endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord breakyuka_init[];
+static EvtWord breakyuka_init[11];
 #else
 static EvtWord breakyuka_init[17];
 #endif
@@ -62,7 +66,11 @@ EvtWord get_blue_jail_key[143];
 #if VERSION >= VERSION_US
 EvtWord mri_09_init_evt[230];
 #else
+#if VERSION <= VERSION_DEMO_US
+EvtWord mri_09_init_evt[216];
+#else
 EvtWord mri_09_init_evt[228];
+#endif
 #endif
 
 /** Exit of mri_09: west road w_bero to mri_03. */
@@ -265,7 +273,7 @@ CALL(evt_puni_all_fall_check)
     CALL(evt_mobj_delete, STRING("slot02"))
     CALL(evt_mobj_delete, STRING("slot03"))
     WAIT_MS(500)
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_21_02_MATCHING_THE_PATTERNS)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
 CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -590,7 +598,7 @@ EVT_BEGIN(mri_09_init_evt)
     SPAWN_EVENT(puni_piders_check)
     SET_VALUE(LW(0), PTR(ueki_access_data))
     CALL_CHILD(evt_sub_kusa_access_entry)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
@@ -603,7 +611,7 @@ EVT_BEGIN(mri_09_init_evt)
     CALL(evt_map_playanim, STRING("mizu_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("awa_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("awa_02"), MAP_ANIM_PLAY_LOOP, 0)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_21_01_MYSTERY_PILLAR)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 0)
 CASE_EQUAL(STG2_21_01_MYSTERY_PILLAR)

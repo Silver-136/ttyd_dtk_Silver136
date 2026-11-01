@@ -11435,7 +11435,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     // register: a separate id local coalesces with i and colours r28, not r27)
     bgm_name = (char*)i;
     fade = &psbgm[flags & 0xF].fade;
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG2_20_PUNIO_PETUNI && (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG2_21_BUBBLES_2 || evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG2_21_04_ESCAPE)) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_20_PUNIO_PETUNI && (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_21_BUBBLES_2 || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_21_04_ESCAPE)) {
         if (strcmp(gp->currentMapName, "mri_00") && i == PSND_BGM_STG2_MRI1) {
             bgm_name = (char*)PSND_BGM_STG2_MRI2;
 #else
@@ -11448,7 +11448,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG5_40_TRUE_IDENTITY && evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG5_42_PIRATES_VS_X_NAUTS) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG5_40_TRUE_IDENTITY && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG5_42_PIRATES_VS_X_NAUTS) {
         if ((s32)bgm_name == PSND_BGM_STG5_MUJ1 || (s32)bgm_name == PSND_BGM_STG5_DOU1) {
             bgm_name = (char*)PSND_BGM_EVT_DANGER4;
 #else
@@ -11463,7 +11463,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG2_24_BOSS_BATTLE) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE) {
         if ((s32)bgm_name == PSND_BGM_STG2_MRI1) {
             bgm_name = (char*)PSND_BGM_EVT_DANGER4;
 #else
@@ -11527,7 +11527,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
 #endif
         }
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG4_00_WELCOME_TO_STAGE_4) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4) {
         if ((s32)bgm_name == PSND_BGM_BOSS_STG8_KOOPA) {
 #else
     }
@@ -11554,7 +11554,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         }
 #if VERSION <= VERSION_DEMO_US
     }
-    if ((evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG7_25_00_1_BOWSER_POSHLEY_SANCTUM && evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) <= STG8_END_AFTER_THE_BATTLE) || evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG9_02_RETURN_TO_ROGUEPORT) {
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG7_25_00_1_BOWSER_POSHLEY_SANCTUM && evtGetValue(NULL, GSW_STORY_PROGRESS) <= STG8_END_AFTER_THE_BATTLE) || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG9_02_RETURN_TO_ROGUEPORT) {
         if ((s32)bgm_name == 0x68) {
             bgm_name = (char*)0x67;
         }
@@ -11800,7 +11800,7 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 force) {
         return FALSE;
     }
 #if VERSION <= VERSION_DEMO_US
-if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG2_24_BOSS_BATTLE && bgm->listId == PSND_BGM_EVT_DANGER4) {
+if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE && bgm->listId == PSND_BGM_EVT_DANGER4) {
 #else
     if (!force) {
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE && bgm->listId == PSND_BGM_EVT_DANGER4) {
@@ -11808,7 +11808,7 @@ if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG2_23_TIME_BOMB_ACTIVATED &&
             return FALSE;
         }
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG4_00_WELCOME_TO_STAGE_4 && psbgm[0].listId == PSND_BGM_EVT_KUPPA2 && bgm->listId != PSND_BGM_BATTLE_WIN3) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4 && psbgm[0].listId == PSND_BGM_EVT_KUPPA2 && bgm->listId != PSND_BGM_BATTLE_WIN3) {
 #else
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4 && psbgm[0].listId == PSND_BGM_EVT_KUPPA2) {
             if (bgm->listId != PSND_BGM_BATTLE_WIN3) {
@@ -12211,7 +12211,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOn
         return -1;
     }
 #if VERSION <= VERSION_DEMO_US
-if ((evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) <= STG0_02_MARIOS_HOUSE) && (sid == 0x365)) {
+if ((evtGetValue(NULL, GSW_STORY_PROGRESS) <= STG0_02_MARIOS_HOUSE) && (sid == 0x365)) {
 #else
     if ((((sid == 0x5B) || (sid == 0x8CA)) || (((u32) (sid - 0x1BE)) <= 1)) || (sid == PSND_SFX_COIN_GET1)) {
         if (psnd.sfxCooldown) {
@@ -12619,9 +12619,7 @@ static void psndENVMain(void) {
                         e->position.x += r * (f32)sin(a2);
                         e->position.z -= r * (f32)cos(a2);
                         {
-                            u8 vv=
-
-                            psndEnvVolume(e, &psnd, &vol);
+                            u8 vv = psndEnvVolume(e, &psnd);
                             e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_LISTENER_OFFSET), vv, 0xff, 0, &e->position, 0, e->dist, 0);
                         }
                         e->state++;
@@ -12639,9 +12637,7 @@ static void psndENVMain(void) {
             case 1:
                 switch (e->state) {
                     case 0: {
-                        u8 vv=
-
-                        psndEnvVolume(e, &psnd, &vol);
+                        u8 vv = psndEnvVolume(e, &psnd);
                         e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff, 0, &e->position, 0, e->dist, 0);
                     }
                         e->state++;
@@ -12665,9 +12661,7 @@ break;
                             e->state++;
                         break;
                     case 1: {
-                        u8 vv=
-
-                        psndEnvVolume(e, &psnd, &vol);
+                        u8 vv = psndEnvVolume(e, &psnd);
                         e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff, 0, &e->position, 0, e->dist, 0);
                     }
                         e->state++;
@@ -12685,9 +12679,7 @@ break;
             case 3:
                 switch (e->state) {
                     case 0: {
-                        u8 vv=
-
-                        psndEnvVolume(e, &psnd, &vol);
+                        u8 vv = psndEnvVolume(e, &psnd);
                         e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_AT_LISTENER), vv, 0xff, 0, &e->position, 0, e->dist, 0);
                     }
                         e->state++;
@@ -12749,12 +12741,12 @@ break;
                     }
                 }
                 if (psnd.fade[i].state == 4 && psnd.fade[i].timeMax > 0)
-                    {psnd.fade[i].timeMax)--;
+                    psnd.fade[i].timeMax--;
                 if (psnd.fade[i].dipState == 8 && psnd.fade[i].dipTime > psnd.fade[i].dipTimeMax * psnd.fade[i].dipPercent / 100)
-                    {psnd.fade[i].dipTime)--;
+                    psnd.fade[i].dipTime--;
                 if (psnd.fade[i].dipState == 0x10) {
                     if (psnd.fade[i].dipTime < psnd.fade[i].dipTimeMax)
-                        {psnd.fade[i].dipTime)++;
+                        psnd.fade[i].dipTime++;
                     else
                         psnd.fade[i].dipState = 0;
                 }

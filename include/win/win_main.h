@@ -9,6 +9,11 @@
 #include "manager/filemgr.h"
 #include "memory.h"
 
+#if VERSION <= VERSION_DEMO_US
+// Directory of the window files on the disc in the demo (format prefix "%s/" is the DVD root).
+#define WIN_DIR "%s/window/"
+#endif
+
 // Pause menu work (winGetPtr): one block shared by win_main, win_root and the five pause windows.
 // 0x000-0x188 is the menu itself (input, tabs, help text, sort menu); each window keeps its own
 // state in its sub-struct after that, in tab order. Windows also read each other's state

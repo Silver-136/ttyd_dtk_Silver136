@@ -122,8 +122,8 @@ USER_FUNC(evt_pouch_check_item) {
 }
 
 #if VERSION <= VERSION_DEMO_US
-GETTER(evt_pouch_get_max_ap, RAW_GET(pouchGetMaxAP))
-SETTER(evt_pouch_set_ap, RAW_SET(pouchSetAP))
+GETTER(evt_pouch_get_max_ap, pouchGetMaxAP)
+SETTER(evt_pouch_set_ap, pouchSetAP)
 #else
 GETTER(evt_pouch_get_hp, pouchGetHP)
 SETTER(evt_pouch_set_hp, pouchSetHP)

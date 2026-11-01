@@ -155,6 +155,11 @@ void msgInit(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+/** The text of a loaded message file (the demo keeps it in a smart heap block). */
+static inline const char* msgEntryText(MessageEntry* entry) {
+    return entry->address->address;
+}
+
 void msgLoad(const char* filename, s32 index) {
     MessageEntry* entry;
     const char* str;
@@ -217,7 +222,7 @@ void msgLoad(const char* filename, s32 index) {
             ofs += strlen(str) + 1;
             str += strlen(str) + 1;
         }
-        msgSortDvdData = msgEntryText(entry);
+        msgSortDvdData = (void*)msgEntryText(entry);
         qsort(entry->lookup->address, entry->count, sizeof(MsgLookupEntry), msg_compare);
     }
 }
@@ -1001,12 +1006,12 @@ msg++;
                 maxScale = 0.0f;
                 if (data->flags & MSG_WIN_FLAG_SELECT) {
                     flags &= ~MSG_CHAR_SEL_ROW_MASK;
-                    flags |= MSG_CHAR_OPTION_0 << data->numSel;
+                    flags |= MSG_CHAR_SEL_ROW(data->numSel);
                     data->numSel++;
 }
 continue;
             case '<':
-                next = msgGetCommand(msg + 1, tag, args);
+                next = msgGetCommand((char*)msg + 1, tag, args);
                 msg = next;
                 /* FAKE: dead int guard (COLOURING W): msg is redefined in the arm while next is still live
                    (the later newline test on next), so msg/next interfere and the target copy mr r21,r15 survives */
@@ -1159,7 +1164,7 @@ if (posY != 999) {
                     data->flags |= MSG_WIN_FLAG_SELECT;
                     // BUG: five %hd for four pointers; a fifth number in the tag would be written through a stray argument
                     sscanf(args, "%hd%hd%hd%hd%hd", &sel0, &sel1, &data->selWidth, &data->selY);
-                    flags |= MSG_CHAR_OPTION_0;
+                    flags |= MSG_CHAR_SEL_ROW(0);
                     data->defSel = sel0;
                     data->cancel = sel1;
                     data->numSel = 1;
@@ -1539,12 +1544,12 @@ msg++;
                 maxScale = 0.0f;
                 if (data->flags & MSG_WIN_FLAG_SELECT) {
                     flags &= ~MSG_CHAR_SEL_ROW_MASK;
-                    flags |= MSG_CHAR_OPTION_0 << data->numSel;
+                    flags |= MSG_CHAR_SEL_ROW(data->numSel);
                     data->numSel++;
 }
 continue;
             case '<':
-                next = msgGetCommand(msg + 1, tag, args);
+                next = msgGetCommand((char*)msg + 1, tag, args);
                 msg = next;
                 /* FAKE: dead int guard (COLOURING W): msg is redefined in the arm while next is still live
                    (the later newline test on next), so msg/next interfere and the target copy mr r21,r15 survives */
@@ -1697,7 +1702,7 @@ if (posY != 999) {
                     data->flags |= MSG_WIN_FLAG_SELECT;
                     // BUG: five %hd for four pointers; a fifth number in the tag would be written through a stray argument
                     sscanf(args, "%hd%hd%hd%hd%hd", &sel0, &sel1, &data->selWidth, &data->selY);
-                    flags |= MSG_CHAR_OPTION_0;
+                    flags |= MSG_CHAR_SEL_ROW(0);
                     data->defSel = sel0;
                     data->cancel = sel1;
                     data->numSel = 1;

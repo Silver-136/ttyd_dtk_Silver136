@@ -322,7 +322,7 @@ CALL(evt_mario_normalize)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG4_08_STEEPLE_DEMO_EXT)
+    SET_VALUE(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)

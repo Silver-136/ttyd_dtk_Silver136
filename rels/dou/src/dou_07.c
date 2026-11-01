@@ -155,7 +155,7 @@ EVT_END()
 EVT_BEGIN(peramajin_before)
     // The Ember has already appeared (Black Key stage): the chest now wants the key.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_21_GROTTO_KEY)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
 #endif
@@ -284,7 +284,7 @@ CALL(evt_win_item_select, PTR(key_tbl), LW(10))
 #endif
     CALL(evt_mobj_exec_cancel, STRING("mobj_box00"))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_21_GROTTO_KEY)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
 #endif
@@ -385,7 +385,7 @@ CALL_CHILD(ship_majin_lecture)
 #endif
     CALL(evt_msg_print_party, STRING("stg1_gon_majin4_19"))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_21_01_BOAT_MOD_OBTAINED)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_21_01_BOAT_MOD_OBTAINED)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_21_01_BOAT_MOD_OBTAINED)
 #endif

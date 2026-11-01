@@ -62,7 +62,7 @@ static EvtWord punipuni_ball00_init[34];
 static EvtWord punipuni_ball00[45];
 static EvtWord breakyuka_init[11];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord breakyuka_main[];
+static EvtWord breakyuka_main[135];
 #else
 static EvtWord breakyuka_main[131];
 #endif
@@ -561,7 +561,7 @@ CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_TALK_POSE | NPC_FLAG_A
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_21_BUBBLES_2)
+SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
 #else
     CALL(evt_puni_set_mode, 1, PUNI_MODE_TRAP)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
@@ -762,7 +762,7 @@ CALL(evt_puni_flag_onoff, LW(10), 1, 0xA00000)
         END_IF
     END_LOOP
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_21_04_ESCAPE)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_04_ESCAPE)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_04_ESCAPE)
 #endif
@@ -809,7 +809,7 @@ EVT_BEGIN(switch_event)
 #endif
     CALL(evt_msg_print_party, STRING("stg2_mri_e18_00_10"))
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_21_01_MYSTERY_PILLAR)
+SET_VALUE(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
 #else
     CALL(evt_party_run, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
@@ -861,7 +861,7 @@ EVT_BEGIN(mri_17_init_evt)
     SET_VALUE(LW(0), PTR(ueki_access_data))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_sub_kusa_access_entry)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     SWITCH(GSW_STORY_PROGRESS)
@@ -884,7 +884,7 @@ EVT_BEGIN(mri_17_init_evt)
 #if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(breakyuka_init)
     CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, -35, 1, PTR(breakyuka_main), GSWF_MRI_17_BREAKING_FLOOR_BROKEN)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG2_21_01_MYSTERY_PILLAR)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
 #else
     SPAWN_EVENT(PTR(breakyuka_init))
     CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, -35, 1, PTR(breakyuka_main), GSWF_MRI_17_BREAKING_FLOOR_BROKEN)
@@ -894,7 +894,7 @@ EVT_BEGIN(mri_17_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF_STARPIECE_50, 0)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF_STARPIECE_50, 0)
     SWITCH(GSW_STORY_PROGRESS)

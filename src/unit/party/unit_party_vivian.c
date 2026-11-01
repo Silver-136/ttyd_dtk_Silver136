@@ -74,7 +74,11 @@ BattleWeapon partyWeapon_VivianNormalAttack;
 BattleWeapon partyWeapon_VivianShadowGuard;
 BattleWeapon partyWeapon_VivianMagicalPowder;
 BattleWeapon partyWeapon_VivianCharmKissAttack;
+#if VERSION <= VERSION_DEMO_US
+EvtWord partyVivianAttack_NormalAttack[610];
+#else
 EvtWord partyVivianAttack_NormalAttack[581];
+#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord partyVivianAttack_ShadowGuard[];
 #else

@@ -3730,7 +3730,7 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
     if (isFirstCall) {
         event->userdata[0] = time;
 #if VERSION <= VERSION_DEMO_US
-event->userdatap[1] = itemEntry(x, y, z, NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, 0);
+        event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
         itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
 #else
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
@@ -3782,11 +3782,7 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
                 pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit);
             }
         }
-#if VERSION <= VERSION_DEMO_US
-event->userdatap[1] = itemEntry(pos.x, pos.y, pos.z, NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, 0);
-#else
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, pos.x, pos.y, pos.z);
-#endif
         effItemGetEntry(10, pos.x, 12.0f + pos.y, pos.z - 5.0f);
 #if VERSION <= VERSION_DEMO_US
         itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
@@ -4446,7 +4442,7 @@ USER_FUNC(btlevtcmd_GetConfuseActEvent) {
         evt = BattleSetConfuseAct(_battleWorkPointer, unit);
         i++;
 #if VERSION <= VERSION_DEMO_US
-if (i > 10) {
+        if (i > 10) {
 #else
         if (i > 20) {
 #endif

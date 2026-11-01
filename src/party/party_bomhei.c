@@ -26,8 +26,11 @@
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
 #include "evt/evt_cam.h"
+#if VERSION <= VERSION_DEMO_US
+#include "party/party_bomhei.h"
+#endif
 
-#if VERSION >= VERSION_US
+#if VERSION != VERSION_JP
 // US has no local duplicate: this is the global bomhei_init
 #define bomhei_init_800BFBB0 bomhei_init
 #endif
@@ -633,13 +636,7 @@ if (BOMHEI_WORK(party)->timer > 0) {
             psndSFXOff(party->work.bomhei.sfxId);
             party->work.bomhei.sfxId = -1;
         }
-#if VERSION <= VERSION_DEMO_US
-            // FAKE: the Vec goes by value (a pointer to a stack copy, which is what the real `Vec*` receives);
-            // passing &party->position changes the frame of this function and its inlined callers
-            ((MarioSetSplashByValueFn)marioSetSplash)(0, party->position);
-#else
         marioSetSplash(0, party->position);
-#endif
         BOMHEI_WORK(party)->flags |= 8;
         BOMHEI_WORK(party)->timer = (s16)(sysMsec2Frame(500) + 30);
         BOMHEI_WORK(party)->flags |= 2;
@@ -786,7 +783,7 @@ f32 groundY, dropDepth;
             party->flags &= ~PARTY_FLAG_FORCE_FALL;
         }
 #if VERSION <= VERSION_DEMO_US
-hit = partySearchGround(party, &groundY, &dropDepth, 11.0f, party->velY);
+hit = _partySearchGround(party, &groundY, &dropDepth, 11.0f, party->velY);
 #else
         hit = partySearchGround(party, 11.0f, party->velY);
 #endif

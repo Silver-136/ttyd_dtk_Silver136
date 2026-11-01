@@ -185,10 +185,10 @@ break;
                 seqSetSeq(SEQ_TITLE, NULL, NULL);
             } else {
                 area_name = getAreaName();
-                fres = fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
+                fres = (FileEntry*)fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
                 if (fres == 0) {
                     fok = FALSE;
-                } else if (fileAsyncMissing(fres)) {
+                } else if ((s32)fres == -1) {
                     fok = TRUE;
                 } else {
                     fok = TRUE;

@@ -460,14 +460,14 @@ for (i = ITEM_SHROOM_FRY; i < ITEM_MAX; i++) {
         t = battleGetUnitMonosiriPtr(i);
         if (!t->tattleLogTag)
             continue;
-        if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG8_07_BELDAM_CONFRONTATION) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG8_07_BELDAM_CONFRONTATION) {
             if (i == UNIT_BELDAM_CHAPTER8 || i == UNIT_MARILYN_CHAPTER8 || i == UNIT_DOOPLISS_CHAPTER8)
                 continue;
         } else {
             if (i == UNIT_BELDAM_CHAPTER2 || i == UNIT_MARILYN_CHAPTER2 || i == UNIT_DOOPLISS_CHAPTER4_FIGHT1)
                 continue;
         }
-        if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG8_15_GRODUS) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG8_15_GRODUS) {
             if (i == UNIT_BOWSER_CHAPTER8)
                 continue;
         } else {
@@ -1858,7 +1858,7 @@ wk = w->log.eff[i]->userdata;
             wk->position.y = 20.0f + (v.y + (y + w->log.stoneWinY));
             wk = w->log.eff[i]->userdata;
             wk->position.z = v.z;
-winKageGX(w, (GXColor){0x00, 0x00, 0x00, 0x80}, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f);
+winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
 }
 }
     if (w->log.badge.x < 320.0f && w->log.badge.y > -240.0f) {

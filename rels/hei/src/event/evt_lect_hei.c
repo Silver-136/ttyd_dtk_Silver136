@@ -519,8 +519,8 @@ CALL(x_flag_set, 0, 1)
         CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
         ADD(LW(2), -70)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF(GSWF_HEI_KOOPS_LECTURE_SWITCH), 0)
-        CALL(evt_mobj_switch_blue, 0, LW(1), LW(2), LW(3), LW(4), 0, GSWF(GSWF_HEI_KOOPS_LECTURE_SWITCH))
+SET_VALUE(GSWF_HEI_KOOPS_LECTURE_SWITCH, 0)
+        CALL(evt_mobj_switch_blue, 0, LW(1), LW(2), LW(3), LW(4), 0, GSWF_HEI_KOOPS_LECTURE_SWITCH)
 #else
         ADD(LW(3), 100)
         SET_VALUE(GSWF_HEI_KOOPS_LECTURE_SWITCH, 0)

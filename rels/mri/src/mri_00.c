@@ -96,11 +96,7 @@ static f32 spline_dt[24];
 EvtWord seal_bigtree[213];
 EvtWord seal_bigtree2[143];
 static EvtWord guide_init[72];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord guide_talk[];
-#else
 static EvtWord guide_talk[29];
-#endif
 static EvtWord rival_init[21];
 static EvtWord rival_talk[8];
 static EvtWord chibitoge_init[25];
@@ -140,12 +136,12 @@ EvtWord puni_set[59];
 static EvtWord sekai_yami_npc[59];
 EvtWord sekai_yami_puni[70];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord sekai_yami_evt[];
+static EvtWord sekai_yami_evt[286];
 #else
 static EvtWord sekai_yami_evt[322];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord minnnanokoe_evt[];
+static EvtWord minnnanokoe_evt[614];
 #else
 static EvtWord minnnanokoe_evt[620];
 #endif
@@ -153,7 +149,11 @@ static EvtWord evt_switch_init[17];
 #if VERSION >= VERSION_US
 EvtWord mri_00_init_evt[377];
 #else
+#if VERSION <= VERSION_DEMO_US
+EvtWord mri_00_init_evt[291];
+#else
 EvtWord mri_00_init_evt[296];
+#endif
 #endif
 
 /**
@@ -431,7 +431,7 @@ EVT_END()
  */
 static EVT_BEGIN(guide_talk)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_03_THE_GREAT_TREE)
@@ -1359,7 +1359,7 @@ EVT_BEGIN(mario_see_you)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_26_PRAISE_FROM_THE_PUNI)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
@@ -1916,7 +1916,7 @@ EVT_BEGIN(mri_00_init_evt)
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_cam_road_reset)
     // After Bowser's Petalburg scene and the boss, set up the Punies' thank-you scenes (mario_see_you).
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_25_05_BOWSER_PETALBURG)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_05_BOWSER_PETALBURG)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), PARTY_MEMBER_NONE)
             CALL(evt_mario_set_party, 0, PARTY_MEMBER_GOOMBELLA)
@@ -1926,7 +1926,7 @@ CALL(evt_pouch_mario_recovery)
 END_IF
 SPAWN_EVENT(mario_see_you)
     END_IF
-IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STORY_STG2_26_PRAISE_FROM_THE_PUNI)
+IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
 BEGIN_INLINE_EVENT
                 CALL(evt_puni_wait_systemmode, 2)
                 SPAWN_EVENT(mario_see_you_init)
@@ -1950,7 +1950,7 @@ CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
     SPAWN_EVENT(mri_waterfall_effect)
     SET_VALUE(LF(0), 0)
     // Chapter 8 music: the witch theme or the voices theme, depending on which door Mario came through.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
@@ -1964,7 +1964,7 @@ CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
         END_IF
     END_IF
     IF_INT_EQUAL(LF(0), 0)
-        IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_02_TO_THE_GREAT_TREE)
+        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG2_02_TO_THE_GREAT_TREE)
             // Chapter 2 music and ambience for the Great Tree.
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
@@ -1979,8 +1979,8 @@ CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
     // The FP Plus badge sits on the ground until Mario picks it up.
     CALL(evt_item_entry, STRING("i"), ITEM_FP_PLUS, 528, 0, 110, ITEM_TYPE_GROUND, GSWF_MRI_00_FP_PLUS, 0)
     CALL(evt_npc_setup, PTR(npcEnt))
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_10_SECRET_ENTRANCE_REVEALED)
-        IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_25_AFTER_THE_BOSS_BATTLE)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_10_SECRET_ENTRANCE_REVEALED)
+        IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
             IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 1)
                 // While Punio follows Mario, the three dancer Punies dance in the yard.
                 CALL_CHILD(odoriko_1_init)
@@ -1989,7 +1989,7 @@ CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
             END_IF
         END_IF
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_02_TO_THE_GREAT_TREE)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_02_TO_THE_GREAT_TREE)
         // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
         // capture waits for Flurrie's gust.
         // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
@@ -1998,7 +1998,7 @@ CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
         // capture waits for Flurrie's gust.
         SPAWN_EVENT(first_bigtree)
     END_IF
-    IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_09_FLURRIE_JOINS)
+    IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_09_FLURRIE_JOINS)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_non"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mri_cloud_init)
         CALL(evt_mri_cloud_ent, PTR(&capturemap), STRING("A_kaze"), PTR(open_bigtree))
@@ -2009,7 +2009,7 @@ CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kesu"), MAP_OBJ_FLAG_HIDDEN)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
             // In chapter 8 the dark-world scene or the voices scene runs, depending on the entrance.

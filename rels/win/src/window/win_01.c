@@ -356,7 +356,7 @@ CALL(evt_cam3d_evt_set, 184, 86, 262, 184, 38, -5, 1000, EASING_SINE_IN_OUT)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
     // The story advances and the letter is added to the mail list and opened.
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_27_A_MAIL_FROM_PEACH)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_27_A_MAIL_FROM_PEACH)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_27_A_MAIL_FROM_PEACH)
 #endif

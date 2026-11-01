@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "mario/mario.h"
 #include <dolphin/types.h>
 
@@ -73,6 +74,9 @@ typedef enum PartyFlags {
     PARTY_FLAG_CONTINUE_FOLLOW_MARKER = (1 << 15), // 0x8000, set by partyReInit for mode 6; partyChgMoveMode clears it if the old mode is 6; no explicit reader found
     PARTY_FLAG_IS_RIDING_PLANE = (1 << 16),
     PARTY_FLAG_IS_RIDING_SHIP = (1 << 17),
+#if VERSION <= VERSION_DEMO_US
+    PARTY_FLAG_IS_RIDING_JABARA = (1 << 18),
+#endif
     PARTY_FLAG_IS_BEHIND_MARIO = (1 << 19),
     PARTY_FLAG_SLEEP_ON = (1 << 22),
     PARTY_FLAG_BG_MODE = (1 << 23),

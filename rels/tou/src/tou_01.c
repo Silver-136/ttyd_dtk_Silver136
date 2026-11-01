@@ -1632,7 +1632,7 @@ EVT_END()
  */
 EVT_BEGIN(init_bijyo)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -2283,7 +2283,7 @@ EVT_BEGIN(evt_uron)
     CALL(evt_party_run, 0)
     CALL(evt_snd_bgm_scope, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_00_WELCOME_TO_GLITZVILLE)
+    SET_VALUE(GSW_STORY_PROGRESS, STG3_00_WELCOME_TO_GLITZVILLE)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_00_WELCOME_TO_GLITZVILLE)
 #endif
@@ -2623,7 +2623,7 @@ EVT_BEGIN(evt_tamago_move)
     CALL(evt_msg_print, 0, STRING("stg3_tou_244"), 0, STRING("ホットドッグ"))
     WAIT_MS(300)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_11_RUNAWAY_EGG)
+    SET_VALUE(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
 #endif
@@ -2685,7 +2685,7 @@ SPAWN_EVENT(evt_tamago_move)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_10_MINORS_5TH_PL_EGG)
+    SET_VALUE(GSW_STORY_PROGRESS, STG3_10_MINORS_5TH_PL_EGG)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_10_MINORS_5TH_PL_EGG)
 #endif
@@ -2711,7 +2711,7 @@ EVT_BEGIN(talk_tamago)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAND_UP1_1"), LW(0), LW(1), LW(2), 0)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
+    SET_VALUE(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
 #endif
@@ -2961,7 +2961,7 @@ EVT_BEGIN(evt_gondora)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1500)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_00_WELCOME_TO_GLITZVILLE)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_00_WELCOME_TO_GLITZVILLE)
         CALL_CHILD(evt_uron)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_00_WELCOME_TO_GLITZVILLE)
@@ -3033,7 +3033,7 @@ EVT_BEGIN(evt_gondora2)
     SET_VALUE(LW(1), 0)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_gondora_mon)
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
 CALL(rankingReset)
@@ -3164,7 +3164,7 @@ EVT_BEGIN(evt_peach_after)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
 #else
     CALL(evt_npc_set_position, STRING("美女"), 0, -1000, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -3746,7 +3746,7 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_item_entry, STRING("item_05"), ITEM_INN_COUPON, 450, 10, -90, ITEM_TYPE_STILL, GSWF_TOU_01_INN_COUPON, 0)
     // The NPCs are left out when Mario arrives for the chapter 8 scenes.
     SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
             SET_VALUE(LF(0), 1)
@@ -3781,7 +3781,7 @@ EVT_BEGIN(tou_01_init_evt)
     SPAWN_EVENT(evt_kanban)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_telbox"), 0, PTR(evt_telbox), 0)
     // The Storage Key lies on the plaza during Rawk Hawk's warning.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_20_06_RAWK_HAWKS_WARNING)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_06_RAWK_HAWKS_WARNING)
         CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x12, -745, 20, 435, ITEM_TYPE_STILL, -1, PTR(evt_key))
     END_IF
     // The item shop, the airship's shadow and the airship landing spot.
@@ -3807,14 +3807,14 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_hasira"), 1, 0)
     END_IF
     // The hot dog counter sells Hot Dogs, except while the runaway egg story is under way.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_11_RUNAWAY_EGG)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 15)
         ELSE
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
         END_IF
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
     END_IF
     // The blimp gondola starts raised and hidden.
@@ -3841,7 +3841,7 @@ CALL(evt_sub_get_system_flag, LW(0))
     END_IF
     // Music: the chapter 8 themes, the egg tune while the egg story runs, or the plaza theme.
     SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH1"))
@@ -3857,7 +3857,7 @@ CALL(evt_sub_get_system_flag, LW(0))
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 15)
-            SWITCH(GSW(GSW_STORY_PROGRESS))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG3_10_MINORS_5TH_PL_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_EGG1"))
                 CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -3896,7 +3896,7 @@ CALL(evt_sub_get_system_flag, LW(0))
         END_IF
     END_IF
     // After the Peach interlude the party is healed and Mario and the partner come back into the plaza.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_33_06_BOWSER_TREASURE)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, PARTNER_GOOMBELLA)
@@ -3907,7 +3907,7 @@ END_IF
 SPAWN_EVENT(evt_peach_after)
     END_IF
     // Chapter 8 scenes: the darkness over Glitzville, or everyone's voices.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
             CALL_CHILD(sekai_yami_npc_init)

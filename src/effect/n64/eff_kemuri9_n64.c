@@ -102,12 +102,21 @@ work->anim = 0.0f;
 #endif
     p = work + 1;
     for (i = 1; i < count + 1; i++, p++) {
+#if VERSION <= VERSION_DEMO_US
+        p->position.x = 0.0f;
+        p->position.y = 0.0f;
+        p->position.z = 0.0f;
+        ang = 6.2831855f * (angle + (f32)((i - 1) * 360 / count)) / 360.0f;
+        p->dirX = sin(ang);
+        p->velY = 0.0f;
+#else
         p->position.x = zero;
         p->position.y = zero;
         p->position.z = zero;
         ang = twoPi * (angle + (f32)((i - 1) * 360 / count)) / 360.0f;
         p->dirX = sin(ang);
         p->velY = zero;
+#endif
         p->dirZ = cos(ang);
     }
     return effect;
@@ -130,7 +139,7 @@ void effKemuri9Main(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
 #if VERSION <= VERSION_DEMO_US
-work->anim = 8.0f * (f32)work->counter / (f32)work->lifetime;
+work->anim = 8.0f * (f32)work->counter / (f32)work->life;
 #else
     {
         s32 cur = (s32)(16.0f * (f32)work->frame / (f32)work->frameMax);

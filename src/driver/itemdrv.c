@@ -605,7 +605,7 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
-ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt) {
+ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt, f32 x, f32 y, f32 z) {
     ItemWork* wp = itemGetWork();
     int i;
     ItemEntry* entry;
@@ -678,7 +678,7 @@ if (entry == NULL) {
     entry->position.z = z;
     entry->itemId = itemId;
     entry->type = type;
-    entry->evtCode = (EvtWord)pickupEvt;
+    entry->evtCode = pickupEvt;
     entry->flags |= ITEM_FLAG_ACTIVE;
     entry->scale = 1.0f;
     entry->alpha = 0xFF;
@@ -2043,7 +2043,7 @@ static void itemseq_Bound(ItemEntry* entry) {
             t2 = OSTicksToMicroseconds(entry->airTime + delta) / 1000000.0f;
             dx = dt * (entry->speed * (f32)sin(6.2831855f * entry->direction / 360.0f));
             dz = (f32)cos(6.2831855f * entry->direction / 360.0f);
-            dz = dt * (entry->speed * -c);
+            dz = dt * (entry->speed * -dz);
             if (entry->flags2 & ITEM_FLAG2_NO_Z_MOVE) {
                 dz = 0.0f;
             }

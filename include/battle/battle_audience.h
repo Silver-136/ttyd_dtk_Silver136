@@ -217,6 +217,29 @@ typedef struct BattleAudienceWindow {
 
 // BattleAudience.flags: 0x10..0x1000 are set by one BattleAudience_Case_* each and read by BattleAudience_PerAct.
 // 0x1, 0x2 (set, never read), 0x4 and 0x4000 (Hooktail only) are not named.
+#if VERSION <= VERSION_DEMO_US
+// The demos have one more flag (STYLISH_MISSED, 0x400), so the later bits are one higher.
+typedef enum BattleAudienceFlags {
+    AUDIENCE_FLAG_SP_GAINED = (1 << 1),
+    AUDIENCE_FLAG_PHASE_REACTION = (1 << 3),
+    AUDIENCE_FLAG_AC_GOOD = (1 << 4),
+    AUDIENCE_FLAG_AC_BAD = (1 << 5),
+    AUDIENCE_FLAG_GUARD_GOOD = (1 << 6),
+    AUDIENCE_FLAG_GUARD_BAD = (1 << 7),
+    AUDIENCE_FLAG_ACROBAT_GOOD = (1 << 8),
+    AUDIENCE_FLAG_ACROBAT_BAD = (1 << 9),
+    AUDIENCE_FLAG_STYLISH_MISSED = (1 << 10),      // the last stylish try missed
+    AUDIENCE_FLAG_ENEMY_DAMAGE = (1 << 11),
+    AUDIENCE_FLAG_ENEMY_NO_DAMAGE = (1 << 12),
+    AUDIENCE_FLAG_KILL_ENEMY = (1 << 13),
+    AUDIENCE_FLAG_NOISE_ON = (1 << 14),
+    AUDIENCE_FLAG_NO_AUDIENCE_EVENTS = (1 << 15),
+    AUDIENCE_FLAG_PUNI_ESCAPE = (1 << 16),
+    AUDIENCE_FLAG_PREV_COMMAND_INPUT = (1 << 17),
+    AUDIENCE_FLAG_NO_DISP = (1 << 18),
+    AUDIENCE_FLAG_EVENT_CTRL = (1 << 19),
+} BattleAudienceFlags;
+#else
 typedef enum BattleAudienceFlags {
     AUDIENCE_FLAG_PHASE_REACTION = (1 << 3),       // 0x8
     AUDIENCE_FLAG_AC_GOOD = (1 << 4),              // 0x10
@@ -236,6 +259,7 @@ typedef enum BattleAudienceFlags {
     AUDIENCE_FLAG_SP_GAINED = (1 << 1),            // 0x2, set when star power was gained; tested and cleared in battle_audience.c
     AUDIENCE_FLAG_NO_AUDIENCE_EVENTS = (1 << 14),  // 0x4000, audience events leave the crowd as it is (Hooktail)
 } BattleAudienceFlags;
+#endif
 
 typedef struct BattleAudience {
     s32 flags;                         // 0x0, BattleAudienceFlags

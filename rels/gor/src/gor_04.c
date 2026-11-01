@@ -920,7 +920,7 @@ SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
     CALL(evt_cam3d_evt_set, 410, 90, 571, 410, 90, 121, 2000, EASING_SINE_OUT)
     WAIT_MS(9500)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
@@ -939,7 +939,7 @@ SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
     SET_VALUE(GSW_HOM_TRAIN_LEG, 0)
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 0)
 SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_00_START)
+IF_INT_LESS(GSW_STORY_PROGRESS, STG6_00_START)
 #else
     SET_VALUE(GSW_HOM_TRAIN_LEG, 0)
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 0)
@@ -1031,8 +1031,8 @@ EVT_BEGIN(evt_train2)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     // Story progress moves to Rogueport Station if it was earlier.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
-        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
+        SET_VALUE(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
@@ -1070,7 +1070,7 @@ EVT_BEGIN(evt_train2)
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
     // Until Mario reads it, Peach's mail scene plays.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_57_A_MAIL_FROM_PEACH)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_57_A_MAIL_FROM_PEACH)
         SPAWN_EVENT(peach_mail)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_57_A_MAIL_FROM_PEACH)
@@ -2248,7 +2248,7 @@ EVT_END()
 EVT_BEGIN(gor_04_init_evt)
     // Pick the music: Bowser's tune during the Bowser interlude, otherwise the Rogueport tune (unless Mario
     // arrived by blimp).
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
         CALL(evt_snd_bgm_scope, 0, 1)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
@@ -2267,7 +2267,7 @@ EVT_BEGIN(gor_04_init_evt)
     CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_setup, PTR(npcEnt))
     // A save block is placed, except during the Bowser interlude.
-    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 140, 60, 85, 0, 0)
     END_IF
     // The spinning panel with a Star Piece, and another Star Piece on the floor, are placed.
@@ -2316,11 +2316,11 @@ SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
         END_IF
     END_IF
     // After the train ride, Peach's mail scene begins.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SPAWN_EVENT(peach_mail)
     END_IF
     // Bowser interlude: Bowser is the player character, Kammy's broom is placed, and her story scene starts.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_mario_set_mode, 2)
         CALL(evt_mario_kill_party, 0)
         CALL(evt_npc_entry, STRING("houki"), STRING("c_kamek_be"))
@@ -2330,7 +2330,7 @@ SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
         SPAWN_EVENT(gor_04_koopa_evt)
     END_IF
     // At this story stage Mario and his partners are fully healed.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_55_04_BOWSER_RAWK_HAWK)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)

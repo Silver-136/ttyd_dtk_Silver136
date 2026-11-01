@@ -1095,12 +1095,12 @@ trig = 0;
             switch (firstStrike->type) {
                 case 2:
                     (firstStrike->timer)++;
-                    if (firstStrike->timer < 20) {
-                        firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 20);
-                    } else if (firstStrike->timer < 80) {
+                    if (firstStrike->timer < 30) {
+                        firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 30);
+                    } else if (firstStrike->timer < 150) {
                         firstStrike->x = 0.0f;
-                    } else if (firstStrike->timer < ANNOUNCE_HOLD_END + ANNOUNCE_SLIDE) {
-                        firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 80, 20);
+                    } else if (firstStrike->timer < 180) {
+                        firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 150, 30);
                     } else {
                         firstStrike->hitKind = 0;
                         break;
@@ -2670,7 +2670,7 @@ i = 0;
     }
     do {
         if (b->recoveredItems[i]) {
-itemEntry(npc->position.x, npc->position.y, npc->position.z, NULL, b->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, 0);
+itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL, npc->position.x, npc->position.y, npc->position.z);
 b->recoveredItems[i] = z;
         }
         i++;
@@ -3049,6 +3049,27 @@ typedef struct FbatHitResult {
 NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
 
+#if VERSION <= VERSION_DEMO_US
+/** Position of Mario's hammer head at frame f (0-10) of the swing; angle is the swing direction, r the reach. */
+static inline void npcHammerPos(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z) {
+    MarioWork* mario = marioGetPtr();
+    f32 s1, c1, s2, c2;
+    s32 tbl[11] = {0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101};
+
+    if (f < 0.0f) {
+        f = 0.0f;
+    }
+    if (f >= 11.0f) {
+        f = 10.0f;
+    }
+    sincosf(&s1, &c1, angle);
+    sincosf(&s2, &c2, tbl[(s32)f]);
+    *x = mario->position.x + s2 * (s1 * r);
+    *z = mario->position.z + s2 * (c1 * r);
+    *y = mario->position.y + r * c2;
+}
+#endif
+
 /**
  * Whether Mario can hit or touch NPCs now: not during map events, outside SEQ_GAME, on the boat,
  * while Vivian hides him, while he is hurt, or while the given NPC is in its post-battle hit cooldown.
@@ -3324,7 +3345,7 @@ void* fbatHitCheck(u32 flags, void* result) {
 #endif
                 f = v;
 #if VERSION <= VERSION_DEMO_US
-                npcHammerPos(f, reach, angle, &x, &y, &z);
+                npcHammerPos(f, r, angle, &x, &y, &z);
 #else
                 m = marioGetPtr();
                 {
@@ -3341,7 +3362,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
 #if VERSION <= VERSION_DEMO_US
-                    FH_NPC_FILTER2(flags & FBAT_CHECK_ENEMY, 2)
+                    CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 2)
                     if (!_npcHitCheckSphere(npc, &dist, x, y, z, 12.0f))
                         continue;
                     if (dist >= res.dist)
@@ -4233,7 +4254,7 @@ void npcGetBackItemEntry(NpcEntry* npc) {
 
     for (i = 0; i < 8; i++) {
         if (info->recoveredItems[i]) {
-itemEntry(npc->position.x, npc->position.y, npc->position.z, NULL, info->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, 0);
+itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL, npc->position.x, npc->position.y, npc->position.z);
 info->recoveredItems[i] = 0;
         }
     }

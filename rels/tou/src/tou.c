@@ -320,7 +320,7 @@ static void rankingInit(void) {
 
     memset(rank_wp, 0, sizeof(RankWork));
 #if VERSION <= VERSION_DEMO_US
-    rank_wp->num = evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG3_34_RETURN_TO_ROGUEPORT ? 23 : 21;
+    rank_wp->num = evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? 23 : 21;
 #else
     rank_wp->num = evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? 23 : 21;
 #endif
@@ -354,7 +354,7 @@ static void rankingInit(void) {
     }
     swSet(GSWF_TOU_RANKING_SAVED); // GSWF_GLITZ_PIT_RANKING_SAVED
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG3_34_RETURN_TO_ROGUEPORT) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
 #else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
 #endif
@@ -387,7 +387,7 @@ static void rankingInit(void) {
 #endif
         }
 #if VERSION <= VERSION_DEMO_US
-if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG3_20_06_RAWK_HAWKS_WARNING) {
+if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
 #else
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_JOINED)) {
 #endif
@@ -738,7 +738,7 @@ static USER_FUNC(evt_tou_get_rule_info) {
     s32 rank;
 
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG3_34_RETURN_TO_ROGUEPORT) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
 for (i = 0; i < rank_wp->count; i++) {
             if (rank_wp->entries[i].flags & 4) {
                 break;
@@ -793,7 +793,7 @@ USER_FUNC(evt_tou_get_rule_msg2) {
     s32 rank;
 
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG3_34_RETURN_TO_ROGUEPORT) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
 for (i = 0; i < rank_wp->count; i++) {
             if (rank_wp->entries[i].flags & 4) {
                 break;
@@ -2147,7 +2147,7 @@ CALL(evt_party_stop, 0)
         SET_VALUE(GSW_GLITZ_PIT_OPPONENT, LW(0))
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             IF_INT_EQUAL(LW(3), 10)
                 IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(3), LW(1))
@@ -2169,7 +2169,7 @@ END_IF
         SET_VALUE(GSW_GLITZ_PIT_OPPONENT, LW(0))
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             IF_INT_EQUAL(LW(3), 0)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(1))
             ELSE
@@ -2196,7 +2196,7 @@ END_IF
         SET_VALUE(GSW_GLITZ_PIT_OPPONENT, LW(0))
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
 ELSE
 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
@@ -2229,7 +2229,7 @@ CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     // The guard comes to fetch Mario; booking King K's match plays his good-luck scene the first time.
     SPAWN_EVENT(evt_gardman)
     SET_VALUE(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 18)
             IF_INT_EQUAL(GSWF_TOU_KING_K_PREMATCH_TALK_SEEN, 0)
                 SET_VALUE(GSWF_TOU_KING_K_PREMATCH_TALK_SEEN, 1)
@@ -2490,7 +2490,7 @@ EVT_BEGIN(evt_tou_match_make_default)
         SET_VALUE(LF(10), 0)
         SET_VALUE(LF(11), 0)
 #if VERSION <= VERSION_DEMO_US
-        SWITCH(GSW(GSW_STORY_PROGRESS))
+        SWITCH(GSW_STORY_PROGRESS)
 #else
         SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -4094,8 +4094,8 @@ EVT_BEGIN(evt_tou_match_after_default)
             CALL(evt_party_cont_onoff, 1, 0)
         END_IF
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_MAJORS_10TH_PLACE)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_MAJORS_10TH_PLACE)
             IF_INT_EQUAL(LF(0), 0)
                 CALL(chk, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
@@ -4442,7 +4442,7 @@ CALL_CHILD(evt_tou_ranking_msg)
     IF_INT_EQUAL(LF(10), 1)
         CALL(evt_mario_set_dir, 270, 300, 0)
         CALL(evt_msg_print_party, STRING("stg3_tou_114"))
-        IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             SET_VALUE(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 1)
         END_IF
     END_IF
@@ -4466,7 +4466,7 @@ CALL_CHILD(evt_tou_ranking_msg)
     IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
         CALL(chk, LW(0))
         IF_INT_EQUAL(LW(0), 0)
-            IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL_CHILD(evt_tou_chibi_yoshi)
             ELSE
                 CALL_CHILD(evt_michel_9)
@@ -4474,7 +4474,7 @@ CALL_CHILD(evt_tou_ranking_msg)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
         IF_INT_EQUAL(LF(0), 0)
             CALL(chk, LW(0))
             IF_INT_EQUAL(LW(0), 0)

@@ -476,17 +476,9 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXTransApply(mF, mH, 1.0f, -1.0f, 0.0f);
                 GXLoadPosMtxImm(mH, GX_PNMTX0);
                 if (work->type == 0) {
-#if VERSION <= VERSION_DEMO_US
-                    fukidashiQuad(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f)
-#else
                     fukidashiQuad(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f);
-#endif
                 } else {
-#if VERSION <= VERSION_DEMO_US
-                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f)
-#else
                     fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f);
-#endif
                 }
                 if (pass == 0) {
                     GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0, 0, alphaB });
@@ -495,17 +487,9 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 }
                 GXLoadPosMtxImm(mF, GX_PNMTX0);
                 if (work->type == 0) {
-#if VERSION <= VERSION_DEMO_US
-                    fukidashiQuad(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f)
-#else
                     fukidashiQuad(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f);
-#endif
                 } else {
-#if VERSION <= VERSION_DEMO_US
-                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f)
-#else
                     fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f);
-#endif
                 }
                 break;
             case 2:
@@ -610,11 +594,7 @@ for (j = 0, sp = moja_model_dl_0_size_tbl, dp = moja_model_dl_0_tbl; j < 21; j++
                 for (i = 0; i < work->animVal; i++) {
                     PSMTXTransApply(mF, mH, 5.0f * i + -5.0f, 0.0f, 0.0f);
                     GXLoadPosMtxImm(mH, GX_PNMTX0);
-#if VERSION <= VERSION_DEMO_US
-                    fukidashiQuad(-3.0f, 3.0f, 3.0f, -3.0f, 1.0f, 1.0f)
-#else
                     fukidashiQuad(-3.0f, 3.0f, 3.0f, -3.0f, 1.0f, 1.0f);
-#endif
                 }
                 break;
             case 5:
@@ -632,11 +612,7 @@ for (j = 0, sp = moja_model_dl_0_size_tbl, dp = moja_model_dl_0_tbl; j < 21; j++
                 GXLoadTexMtxImm(mD, GX_TEXMTX0, GX_MTX2x4);
                 GXSetTevColor(GX_TEVREG0, (GXColor){ 0, 0, 0, alphaB });
                 GXLoadPosMtxImm(mF, GX_PNMTX0);
-#if VERSION <= VERSION_DEMO_US
-                fukidashiQuad(-7.0f, 7.0f, 7.0f, -7.0f, 1.0f, 1.0f)
-#else
                 fukidashiQuad(-7.0f, 7.0f, 7.0f, -7.0f, 1.0f, 1.0f);
-#endif
                 break;
             case 6: {
                 f32* p;
@@ -662,11 +638,7 @@ for (j = 0, sp = moja_model_dl_0_size_tbl, dp = moja_model_dl_0_tbl; j < 21; j++
                     PSMTXTransApply(mF, mH, 1.0f, -1.0f, 0.0f);
                     PSMTXConcat(mH, mA, mH);
                     GXLoadPosMtxImm(mH, GX_PNMTX0);
-#if VERSION <= VERSION_DEMO_US
-                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f)
-#else
                     fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f);
-#endif
                     if (pass == 0) {
                         GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0xCD, 0x28, alphaB });
                     } else {
@@ -674,11 +646,7 @@ for (j = 0, sp = moja_model_dl_0_size_tbl, dp = moja_model_dl_0_tbl; j < 21; j++
                     }
                     PSMTXConcat(mF, mA, mH);
                     GXLoadPosMtxImm(mH, GX_PNMTX0);
-#if VERSION <= VERSION_DEMO_US
-                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f)
-#else
                     fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f);
-#endif
                 }
                 break;
             }

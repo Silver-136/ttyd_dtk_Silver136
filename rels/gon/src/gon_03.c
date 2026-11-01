@@ -80,7 +80,7 @@ static BeroEntry bero_entry_data[3];
 const char* nokotaro_pose[2];
 EvtWord tegami_event[305];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord senkaron_event[];
+static EvtWord senkaron_event[583];
 #else
 static EvtWord senkaron_event[579];
 #endif
@@ -331,7 +331,7 @@ EVT_END()
 static EVT_BEGIN(senkaron_event)
     // Only before the Dry Bones leader fight has happened: the swarm is set up and the music stops.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_11_1000_DRY_BONES)
+    IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG1_11_1000_DRY_BONES)
 #else
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG1_11_1000_DRY_BONES)
 #endif
@@ -564,7 +564,7 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon, STRING("SFX_STG1_HONE_ESCAPE1"), 0)
 #if VERSION <= VERSION_DEMO_US
         SPAWN_EVENT(senkaron_escape_event)
-        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_11_1000_DRY_BONES)
+        SET_VALUE(GSW_STORY_PROGRESS, STG1_11_1000_DRY_BONES)
 #else
         SPAWN_EVENT(PTR(senkaron_escape_event))
         SET_VALUE(GSW_STORY_PROGRESS, STG1_11_1000_DRY_BONES)

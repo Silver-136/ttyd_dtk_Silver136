@@ -282,10 +282,10 @@ void seq_logoMain(SequenceWork* work) {
         case 10:
             VISetBlack(FALSE);
             VIWaitForRetrace();
-            ret = logoAsyncFirst();
+            ret = (FileEntry*)logoAsyncFirst();
             if (ret == 0U) {
                 ok = 0;
-            } else if (fileAsyncMissing(ret)) {
+            } else if ((s32)ret == -1) {
                 ok = 1;
             } else {
                 ok = 1;

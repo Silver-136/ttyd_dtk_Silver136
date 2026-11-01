@@ -29,6 +29,10 @@ typedef enum SoundEffectFlags {
     SFX_FLAG_SONG = (1 << 30),   // 0x40000000, played as a song (SoundSong*)
     SFX_FLAG_STREAM = (1 << 31)  // 0x80000000, a streamed .stm sound (SoundSS*, streamName)
 } SoundEffectFlags;
+#if VERSION <= VERSION_DEMO_US
+#define SFX_EFFECT(fxId) (SFX_FLAG_EFX | (fxId))
+#define SFX_SONG(group, song) (SFX_FLAG_SONG | ((group) << 16) | ((song) << 8) | (song))
+#endif
 
 // sound effect table entry; __psndSFXOn looks names up here
 typedef struct SoundEffectEntry {
@@ -226,9 +230,17 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5);
 BOOL psndENV_LPF(s32 id, u16 freq);
 u32 psndBGMChkSilent(s32 id);
 BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6);
+#if VERSION <= VERSION_DEMO_US
+BOOL psndBGMOn_f(u32 flags, char* bgm_name, u32 fadetime, s32 unused);
+#else
 BOOL psndBGMOn_f(u32 r3, const char* bgm_name, u32 fadetime, s32 r6);
+#endif
 BOOL psndENVOn(u32 flags, const char* name);
+#if VERSION <= VERSION_DEMO_US
+BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused);
+#else
 BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);
+#endif
 
 // Names from LLCOOLT's tree.
 enum {

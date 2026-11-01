@@ -425,7 +425,7 @@ CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
         CALL(evt_msg_print, 0, STRING("stg6_rsh_201_2"), 0, STRING("マダム"))
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -732,7 +732,7 @@ EVT_END()
  */
 EVT_BEGIN(rsh_01_init_evt)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -760,7 +760,7 @@ EVT_BEGIN(rsh_01_init_evt)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_rsh_door_entry)
     CALL_CHILD(evt_access_entry)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     CALL_CHILD(PTR(evt_rsh_door_entry))
     CALL_CHILD(PTR(evt_access_entry))
@@ -782,7 +782,7 @@ EVT_BEGIN(rsh_01_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
     END_SWITCH
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif

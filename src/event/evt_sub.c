@@ -1531,7 +1531,7 @@ EVT_BEGIN(mail_evt_usu_01)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 300, -2000, 300, 2000, LW(5))
-IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_04_01_PAPER_MAGE_TUBE_MOD)
+IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
 #else
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 110, -2000, 110, 2000, LW(5))
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
@@ -2428,11 +2428,7 @@ iconEntry2D("iraiCoin", ICON_ITEM_COIN);
         event->userdata[0] = 1;
         return EVT_RETURN_BLOCK;
     case 1:
-#if VERSION <= VERSION_DEMO_US
-            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000)) > event->userdata[2]) {
-#else
         if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
-#endif
             iconFlagOff("iraiCoin", ICON_FLAG_HIDDEN);
             work[1] = 1;
             event->userdata[2] = 500;
@@ -2441,11 +2437,7 @@ iconEntry2D("iraiCoin", ICON_ITEM_COIN);
         }
         return EVT_RETURN_BLOCK;
     case 2:
-#if VERSION <= VERSION_DEMO_US
-            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000)) > event->userdata[2]) {
-#else
         if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
-#endif
             event->userdata[0] = 10;
         }
         return EVT_RETURN_BLOCK;

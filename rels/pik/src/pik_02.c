@@ -790,7 +790,7 @@ EVT_BEGIN(evt_garnet)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
     // The story advances.
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_51_3_SURPRISE_GUESTS)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
@@ -1177,7 +1177,7 @@ CALL(evt_cam3d_evt_set, 0, 150, -338, 0, 40, -1130, 7000, EASING_LINEAR)
     WAIT_MS(800)
     CALL(evt_msg_print, 0, STRING("kpa_stg7_036"), 0, STRING("ポワン探偵"))
     // The story advances and the game is saved.
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
+    SET_VALUE(GSW_STORY_PROGRESS, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_fade_entry, 6, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
@@ -1547,7 +1547,7 @@ EVT_END()
  */
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(pik_02_init_evt)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_51_3_SURPRISE_GUESTS)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
         SET_VALUE(LW(0), PTR(bero_data))
         CALL(evt_bero_get_info)
         CALL_CHILD(bero_case_entry)
@@ -1557,7 +1557,7 @@ EVT_BEGIN(pik_02_init_evt)
         CALL(evt_bero_get_info)
         CALL_CHILD(evt_bero_info_run)
     END_IF
-    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK2"))
         CALL(evt_snd_set_rev_mode, 2)
@@ -1569,7 +1569,7 @@ ELSE
 END_IF
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_hit_bind_mapobj, STRING("a_ka_ten"), STRING("ka_ten"))
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_52_THE_HIDDEN_PIPE)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_52_THE_HIDDEN_PIPE)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), -300, 330, -975, PTR(evt_sw), 0)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(bero_case_switch_off)
@@ -1583,10 +1583,10 @@ END_IF
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("dai_a"), 0, PTR(evt_daiza), 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door_1"), MAP_OBJ_FLAG_CLIP)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_51_3_SURPRISE_GUESTS)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
         SPAWN_EVENT(evt_garnet)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_54_WELCOME_BACK)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
         BEGIN_INLINE_EVENT
             CALL(evt_bero_exec_wait, 65536)
             CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
@@ -1598,7 +1598,7 @@ END_IF
         END_INLINE_EVENT
     END_IF
     CALL_CHILD(nise_starstone_init)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
         CALL(evt_mario_set_mode, 2)
         CALL(evt_mario_kill_party, 0)
         SPAWN_EVENT(pik_02_koopa_evt)

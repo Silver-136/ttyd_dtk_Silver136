@@ -529,11 +529,7 @@ void marioChkGnd(void) {
             }
         } else {
             if (mario->characterId == CHARACTER_BOWSER) {
-#if VERSION <= VERSION_DEMO_US
-                hit = kpaSearchGround(&y, &b, &c, 11.0f);
-#else
                 hit = kpaSearchGround(11.0f, &y, &b, &c);
-#endif
             } else {
                 hit = marioSearchGround(&y, &b, &c, 11.0f, mario->jumpVelocityY);
             }
@@ -1596,7 +1592,7 @@ pos = mario->position;
         h = mario->wPlayerCollisionBox.y;
         d = (mario->flags & MARIO_FLAG_IS_JUMPING) ? mario->jumpVelocityY : 10.0f;
         if (mario->characterId == CHARACTER_BOWSER) {
-            mario->hitobjHead = kpaSearchHead(&pos, &h, d);
+            mario->hitobjHead = kpaSearchHead(d, &pos, &h);
         } else {
             mario->hitobjHead = marioSearchHead(&pos, &h, d);
         }

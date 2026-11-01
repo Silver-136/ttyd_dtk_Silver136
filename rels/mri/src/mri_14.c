@@ -59,7 +59,11 @@ static EvtWord punipuni_mario_halt[33];
 #if VERSION >= VERSION_US
 EvtWord time_bomb[931];
 #else
+#if VERSION <= VERSION_DEMO_US
+EvtWord time_bomb[938];
+#else
 EvtWord time_bomb[937];
+#endif
 #endif
 EvtWord bomb_check[14];
 static EvtWord yuka_move[96];
@@ -67,7 +71,7 @@ static EvtWord yuka_check[116];
 static KusaAccess ueki_access_data[7];
 static EvtWord punipuni_ball00_init[35];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord punipuni_ball00[];
+static EvtWord punipuni_ball00[70];
 #else
 static EvtWord punipuni_ball00[57];
 #endif
@@ -703,7 +707,7 @@ WAIT_MS(200)
             BREAK_LOOP
         END_IF
     END_LOOP
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_23_TIME_BOMB_ACTIVATED)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_23_TIME_BOMB_ACTIVATED)
 CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1102,7 +1106,7 @@ static EVT_BEGIN(punipuni_ball00)
 #endif
         SET_VALUE(GF(15), 0)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_22_LORD_CRUMP_APPEARS)
+IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_22_LORD_CRUMP_APPEARS)
             CALL(evt_mario_key_onoff, 1)
             SET_VALUE(GF(10), 1)
             SPAWN_EVENT(punipuni_mario_halt)

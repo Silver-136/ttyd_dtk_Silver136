@@ -180,11 +180,7 @@ void mot_hammer(void) {
             mario->mot.hammer.dir = hamDir(mario);
         }
         if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
-#if VERSION <= VERSION_DEMO_US
-            s32 ok = chkBlock((HamMobj*)mobjHitObjPtrToPtr(hit));
-#else
             s32 ok = chkBlock(mobjHitObjPtrToPtr(hit));
-#endif
             if (ok) {
                 kind = 0;
             }

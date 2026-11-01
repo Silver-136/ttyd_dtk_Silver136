@@ -72,11 +72,7 @@ extern EvtWord gonbaba_damage_sub_event[];
 EvtWord gonbaba_damage_sub_event[574];
 #endif
 static EvtWord dead_event[283];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord init_event[];
-#else
 static EvtWord init_event[160];
-#endif
 static EvtWord phase_event[2];
 static EvtWord attack_event[56];
 static EvtWord fumituke_attack_event[386];

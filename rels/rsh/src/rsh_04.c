@@ -512,7 +512,7 @@ CALL(evt_set_dir_to_target, STRING("me"), STRING("\x83\x54\x83\x89\x83\x8A\x81\x
     CALL(evt_npc_flag_onoff, 0, STRING("\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), -2147483648)
     CALL(evt_npc_flag_onoff, 0, STRING("\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), -2147483648)
     // The story advances.
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_22_DOCUMENT)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_22_DOCUMENT)
     RETURN
 EVT_END()
 #else
@@ -715,7 +715,7 @@ IF_INT_EQUAL(LW(1), -1)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_177_00"), 0, STRING("me"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_24_A_VITAL_CLUE)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_24_A_VITAL_CLUE)
     RETURN
 EVT_END()
 #else
@@ -825,11 +825,11 @@ static s32 item_tbl2[] = {
  */
 #if VERSION <= VERSION_DEMO_US
 static EVT_BEGIN(talk_syashou)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_12_GIVE_AUTOGRAPH, STG6_18_BLANKET_EXCHANGE)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     END_SWITCH
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_01_THE_CONDUCTOR)
         // His first greeting.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_06"), 0, 0)
@@ -842,7 +842,7 @@ static EVT_BEGIN(talk_syashou)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_06_01"), 0, 0)
         CALL(evt_npc_set_position, STRING("サラリーマン"), 0, -1000, 0)
         CALL(evt_npc_set_position, STRING("ポワン探偵"), 0, -1000, 0)
-        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_01_THE_CONDUCTOR)
+        SET_VALUE(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(LSWF(9), 0)
             // Ticket and autograph hints.
@@ -859,8 +859,8 @@ static EVT_BEGIN(talk_syashou)
         SET_VALUE(GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD, 1)
         CALL_CHILD(evt_rsh_konarikin_irai_party_talk)
         IF_INT_EQUAL(GSWF_RSH_BUB_HINT_REPEATED, 1)
-            IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_10_THE_CONDUCTOR_ZIP_TOAD)
-                SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_10_THE_CONDUCTOR_ZIP_TOAD)
+            IF_INT_LESS(GSW_STORY_PROGRESS, STG6_10_THE_CONDUCTOR_ZIP_TOAD)
+                SET_VALUE(GSW_STORY_PROGRESS, STG6_10_THE_CONDUCTOR_ZIP_TOAD)
             END_IF
         END_IF
         CASE_LESS(STG6_13_TALK_TO_THE_CONDUCTOR)
@@ -874,7 +874,7 @@ static EVT_BEGIN(talk_syashou)
         CALL(evt_msg_select, 0, STRING("stg6_rsh_114_yn"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_112"))
-            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_13_TALK_TO_THE_CONDUCTOR)
+            SET_VALUE(GSW_STORY_PROGRESS, STG6_13_TALK_TO_THE_CONDUCTOR)
         ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_113"))
         END_IF
@@ -898,7 +898,7 @@ CALL(evt_msg_print, 0, STRING("stg6_rsh_143"), 0, 0)
             CALL(evt_item_get_item_end_wait, STRING("orei"))
             // Lines for day 2, day 3 and the return trip.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_145"), 0, 0)
-            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_19_GIVE_BLANKET)
+            SET_VALUE(GSW_STORY_PROGRESS, STG6_19_GIVE_BLANKET)
             CALL(evt_pouch_remove_item, ITEM_BLANKET, LW(0))
         END_IF
         CASE_LESS(STG6_20_END_OF_DAY_1)
@@ -933,7 +933,7 @@ CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
 END_IF
         END_IF
     END_SWITCH
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_12_GIVE_AUTOGRAPH, STG6_19_GIVE_BLANKET)
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     END_SWITCH
@@ -1376,7 +1376,7 @@ s32 item_tbl3[] = {
 
 #if VERSION <= VERSION_DEMO_US
 static EVT_BEGIN(talk_konari)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
         // Early on, Little Narikin's lines follow the story.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_17"), 0, 0)
@@ -1384,8 +1384,8 @@ static EVT_BEGIN(talk_konari)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_90"), 0, 0)
         CASE_LESS(STG6_09_BUBS_REQUEST)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_08_BUB)
-            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_08_BUB)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG6_08_BUB)
+            SET_VALUE(GSW_STORY_PROGRESS, STG6_08_BUB)
             // He asks Mario for an autograph.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_91"), 0, 0)
         ELSE
@@ -1394,7 +1394,7 @@ static EVT_BEGIN(talk_konari)
         CALL(evt_msg_select, 0, STRING("stg6_rsh_94_yn"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_92"))
-            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_09_BUBS_REQUEST)
+            SET_VALUE(GSW_STORY_PROGRESS, STG6_09_BUBS_REQUEST)
         ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_93"))
         END_IF
@@ -1410,8 +1410,8 @@ static EVT_BEGIN(talk_konari)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_95_01"), 0, 0)
                 SET_VALUE(GSWF_RSH_BUB_HINT_REPEATED, 1)
                 IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD, 1)
-                    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_10_THE_CONDUCTOR_ZIP_TOAD)
-                        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_10_THE_CONDUCTOR_ZIP_TOAD)
+                    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_10_THE_CONDUCTOR_ZIP_TOAD)
+                        SET_VALUE(GSW_STORY_PROGRESS, STG6_10_THE_CONDUCTOR_ZIP_TOAD)
                     END_IF
                 END_IF
             END_IF
@@ -1431,7 +1431,7 @@ CALL(evt_msg_print, 0, STRING("stg6_rsh_97"), 0, 0)
                     CALL(evt_item_get_item_end_wait, STRING("orei"))
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_99"), 0, 0)
                     CALL(evt_pouch_remove_item, ITEM_AUTOGRAPH, LW(0))
-                    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_12_GIVE_AUTOGRAPH)
+                    SET_VALUE(GSW_STORY_PROGRESS, STG6_12_GIVE_AUTOGRAPH)
                     SET_VALUE(GSWF_SHINE_35, 1)
                 END_IF
             END_IF
@@ -2152,7 +2152,7 @@ EVT_BEGIN(rsh_04_c_init_evt)
     SET_VALUE(LW(0), PTR(&window_tbl))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_rsh_window)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_17_GHOST_DIARY)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_17_GHOST_DIARY)
 #else
     CALL_CHILD(PTR(evt_rsh_window))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_17_GHOST_DIARY)

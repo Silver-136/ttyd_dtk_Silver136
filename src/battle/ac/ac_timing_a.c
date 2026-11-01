@@ -86,15 +86,9 @@ void battleAcDelete_TimingA(BattleWork* work) {
  */
 void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
-#if VERSION <= VERSION_DEMO_US
-    BattleACDispParams* disp = &work->actionCommands;
-    BattleACDispParams* disp = &ac->disp;
-    switch (work->acState) {
-#else
     BattleACDispParams* disp = &work->actionCommands.disp;
     int iconSlot;
     switch (work->actionCommands.acState) {
-#endif
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
 #if VERSION > VERSION_DEMO_US
@@ -113,7 +107,7 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
         case 1001:
             if (disp->slideTimer >= 40) {
 #if VERSION <= VERSION_DEMO_US
-                disp->iconX = intplGetValue(iconSlot, 30.0f, -300.0f, disp,iconSlot) - 40, 20);
+                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
 #else
                 iconSlot = 4; // FAKE: register-held index; also read uninitialized on the else path below. Literal 4 / slot = 4 at decl both differ
                 disp->iconX = intplGetValue(iconSlot, 30.0f, -300.0f, AC_SLIDE_TIMER_AT(disp, iconSlot) - 40, 20);
@@ -123,7 +117,7 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
             }
             actionCommandDisp(disp->iconX, disp->iconY);
 #if VERSION <= VERSION_DEMO_US
-            if (disp,iconSlot) < 60) {
+            if (disp->slideTimer < 60) {
 #else
             if (AC_SLIDE_TIMER_AT(disp, iconSlot) < 60) {
 #endif

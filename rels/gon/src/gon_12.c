@@ -33,7 +33,7 @@ static EvtWord door_close[12];
 static EvtWord door_open[12];
 static BeroEntry bero_entry_data[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord chuchurina_sogu[];
+static EvtWord chuchurina_sogu[598];
 #else
 static EvtWord chuchurina_sogu[610];
 #endif
@@ -126,7 +126,7 @@ static USER_FUNC(evt_chuchu_back_loop) {
 static EVT_BEGIN(chuchurina_sogu)
     // Ms. Mowz is only met once; after that she is removed from the room.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_15_MS_MOWZ_W_GOOMBELLA)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
 #endif
@@ -159,7 +159,7 @@ static EVT_BEGIN(chuchurina_sogu)
 #endif
     CALL(evt_party_stop, 0)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_15_MS_MOWZ_W_GOOMBELLA)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
 #endif
@@ -362,7 +362,7 @@ EVT_BEGIN(gon_12_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_15_MS_MOWZ_W_GOOMBELLA)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
         CALL_CHILD(evt_bero_info_run)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
@@ -376,7 +376,7 @@ EVT_BEGIN(gon_12_init_evt)
     CALL(evt_npc_change_fbat_mode, 1)
 #if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(chuchurina_sogu)
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_15_01_KEY_3)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_01_KEY_3)
         SET_VALUE(GSWF_GON_12_CASTLE_KEY_CHEST, 1)
 #else
     SPAWN_EVENT(PTR(chuchurina_sogu))

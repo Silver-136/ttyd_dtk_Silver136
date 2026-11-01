@@ -1,5 +1,6 @@
 #pragma once
 
+#include "version.h"
 #include "dolphin/gx/GXStruct.h"
 #include "driver/camdrv.h"
 #include "driver/hitdrv.h"
@@ -113,6 +114,9 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z);
 void mobjKoopaOn(void);
 s32 mobjCheckItemboxOpen(MapObjectEntry* entry);
 BOOL mobjGetHint(MapObjectEntry* entry);
+#if VERSION <= VERSION_DEMO_US
+MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude);
+#endif
 MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char** names);
 #if VERSION <= VERSION_DEMO_US
 int mobjCheckKururingFloorItem(MapObjectEntry* entry);

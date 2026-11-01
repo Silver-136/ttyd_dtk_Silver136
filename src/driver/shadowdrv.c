@@ -320,7 +320,7 @@ static inline void shadowSetupPolygon(void) {
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
 #if VERSION <= VERSION_DEMO_US
-    GXSetChanMatColor(GX_COLOR0A0, cswp->color);
+    GXSetChanMatColor(GX_COLOR0A0, cswp->base.color);
 #else
     GXSetChanMatColor(GX_COLOR0A0, cswp->base.color);
 #endif

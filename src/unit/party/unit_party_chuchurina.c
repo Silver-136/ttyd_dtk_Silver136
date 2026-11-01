@@ -55,10 +55,22 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast;
 BattleWeapon partyWeapon_ChuchurinaMadowaseAttack;
 BattleWeapon partyWeapon_ChuchurinaItemSteal;
 BattleWeapon partyWeapon_ChuchurinaKiss;
+#if VERSION <= VERSION_DEMO_US
+EvtWord partyChuchurinaAttack_NormalAttack[1578];
+#else
 EvtWord partyChuchurinaAttack_NormalAttack[1590];
+#endif
+#if VERSION <= VERSION_DEMO_US
+EvtWord partyChuchurinaAttack_MadowaseAttack[2030];
+#else
 EvtWord partyChuchurinaAttack_MadowaseAttack[2020];
+#endif
 EvtWord partyChuchurinaAttack_ItemSteal[VERSION_PICK(788, 961)];
+#if VERSION <= VERSION_DEMO_US
+EvtWord partyChuchurinaAttack_Kiss[490];
+#else
 EvtWord partyChuchurinaAttack_Kiss[568];
+#endif
 EvtWord chuchurina_appeal_event[86];
 static EvtWord party_win_reaction[18];
 static EvtWord attack_audience_event[VERSION_PICK(204, 205)];
@@ -549,6 +561,539 @@ BattleWeapon partyWeapon_ChuchurinaKiss = {
  * and forth, one hit per successful action command press, the last slap using the final-hit weapon;
  * then returns home.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
+    // Find the chosen enemy and pay for the move; with no target, skip to the end.
+    CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
+    CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+    IF_INT_EQUAL(LW(3), -1)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
+    CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
+    CALL(btlevtcmd_WaitGuardMove)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
+    CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, 7)
+    // Camera follows her and the target.
+    CALL(evt_btl_camera_set_mode, 0, 11)
+    CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    CALL(evt_btl_camera_set_zoom, 0, 200)
+    // Against an enemy with pre-emptive front spikes (pre-check result 5) she first walks up in front of it,
+    // and the damage check there pricks her on the spikes.
+    CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    IF_INT_EQUAL(LW(5), 5)
+        CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
+        MULTIPLY_FLOAT(LW(6), 40)
+        CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
+        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+        CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+        CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+        CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    END_IF
+    // She walks to the slap point beside the enemy and faces it.
+    CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(5))
+    MULTIPLY_FLOAT(LW(5), 12)
+    CALL(_get_binta_hit_position, UNIT_ID_SELF, LW(3), LW(4), LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(5))
+    CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
+    ADD(LW(2), 5)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    // Camera closes in; she winds up while the left-right stick gauge command is set up from the difficulty
+    // and her rank.
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    CALL(evt_btl_camera_set_zoom, 0, 350)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A1_1"))
+    BEGIN_SIBLING_EVENT_GET_ID(LW(0))
+        CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
+        CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
+        CALL(btlevtcmd_AcGetDifficulty, LW(0))
+        SUBTRACT(LW(0), 3)
+        SWITCH(LW(0))
+            CASE_LESS_OR_EQUAL(-3)
+            SET_VALUE(LW(1), 25)
+            SET_VALUE(LW(2), 30)
+            CASE_EQUAL(-2)
+            SET_VALUE(LW(1), 20)
+            SET_VALUE(LW(2), 30)
+            CASE_EQUAL(-1)
+            SET_VALUE(LW(1), 17)
+            SET_VALUE(LW(2), 30)
+            CASE_EQUAL(0)
+            SET_VALUE(LW(1), 15)
+            SET_VALUE(LW(2), 30)
+            CASE_EQUAL(1)
+            SET_VALUE(LW(1), 14)
+            SET_VALUE(LW(2), 30)
+            CASE_EQUAL(2)
+            SET_VALUE(LW(1), 13)
+            SET_VALUE(LW(2), 30)
+            CASE_DEFAULT
+            SET_VALUE(LW(1), 12)
+            SET_VALUE(LW(2), 30)
+        END_SWITCH
+        CALL(btlevtcmd_GetPartyTechLv, UNIT_ID_SELF, LW(0))
+        SWITCH(LW(0))
+            CASE_EQUAL(2)
+            CALL(btlevtcmd_AcSetParamAll, 14, 210, 178, LW(1), LW(2), 34, 35, EVT_NULLPTR)
+            CALL(btlevtcmd_AcSetGaugeParam, 34, 68, 100, 100)
+            CALL(btlevtcmd_AcSetFlag, 64)
+            CASE_EQUAL(1)
+            CALL(btlevtcmd_AcSetParamAll, 14, 210, 178, LW(1), LW(2), 50, 51, EVT_NULLPTR)
+            CALL(btlevtcmd_AcSetGaugeParam, 34, 68, 100, 100)
+            CALL(btlevtcmd_AcSetFlag, 64)
+            CASE_DEFAULT
+            CALL(btlevtcmd_AcSetParamAll, 14, 210, 178, LW(1), LW(2), 100, 100, EVT_NULLPTR)
+            CALL(btlevtcmd_AcSetGaugeParam, 100, 100, 100, 100)
+            CALL(btlevtcmd_AcSetFlag, 64)
+        END_SWITCH
+        CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
+        WAIT_FRAMES(1)
+        CALL(btlevtcmd_StartAC, 1)
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_WaitEventEnd, LW(0))
+    // While the command runs she pulses and turns redder as the gauge fills.
+    BEGIN_SIBLING_EVENT_GET_ID(LW(14))
+        SET_VALUE(LW(6), 0)
+        SET_VALUE(LW(5), 5)
+        LOOP(LW(5))
+            ADD(LW(6), 1)
+            SET_VALUE(LW(0), LW(6))
+            DIVIDE(LW(0), 2)
+            MODULO(LW(0), 2)
+            IF_INT_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0498047f), FLOAT(1.0498047f), FLOAT(1.0f))
+            ELSE
+                CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
+            END_IF
+            WAIT_FRAMES(1)
+            SET_VALUE(LW(5), 5)
+        END_LOOP
+    END_SIBLING_EVENT
+    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+        SET_VALUE(LW(5), 5)
+        LOOP(LW(5))
+            CALL(btlevtcmd_AcGetOutputParam, 1, LW(0))
+            SET_VALUE(LW(1), 255)
+            SET_VALUE(LW(2), 190)
+            MULTIPLY(LW(2), LW(0))
+            DIVIDE(LW(2), 100)
+            SUBTRACT(LW(1), LW(2))
+            CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, LW(1), LW(1))
+            WAIT_FRAMES(1)
+            SET_VALUE(LW(5), 5)
+        END_LOOP
+    END_SIBLING_EVENT
+    // Command over: the number of slaps comes from her rank (2, 3 or 4).
+    CALL(btlevtcmd_ResultAC)
+    DELETE_EVENT(LW(14))
+    DELETE_EVENT(LW(15))
+    CALL(btlevtcmd_GetPartyTechLv, UNIT_ID_SELF, LW(0))
+    SWITCH(LW(0))
+        CASE_EQUAL(2)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, 4)
+        CASE_EQUAL(1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, 3)
+        CASE_DEFAULT
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, 2)
+    END_SWITCH
+    // She leans back to wind up the first slap.
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    CALL(evt_btl_camera_set_zoom, 0, 300)
+    CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
+    BEGIN_SIBLING_EVENT_GET_ID(LW(14))
+        SET_VALUE(LW(8), -75)
+        CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
+        IF_INT_GREATER_OR_EQUAL(LW(0), 180)
+            SUBTRACT(LW(0), 360)
+        END_IF
+        CALL(evt_sub_intpl_init, 5, LW(0), LW(8), 8)
+        LOOP(8)
+            CALL(evt_sub_intpl_get_value)
+            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+            WAIT_FRAMES(1)
+        END_LOOP
+        SET_VALUE(LW(8), -60)
+        SET_VALUE(LW(9), -75)
+        CALL(evt_sub_intpl_init, 11, LW(9), LW(8), 4)
+        LOOP(4)
+            CALL(evt_sub_intpl_get_value)
+            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_WaitEventEnd, LW(14))
+    // Each slap starts here: check whether the enemy can be slapped.
+    SET_VALUE(LW(13), 18)
+    SET_VALUE(LW(10), 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_EVENT_ID, 0)
+    LABEL(10)
+    ADD(LW(10), 1)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A1_2"))
+    IF_INT_GREATER_OR_EQUAL(LW(10), 2)
+        CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
+    ELSE
+        CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    END_IF
+    SWITCH(LW(5))
+        CASE_OR_EQUAL(2)
+        CASE_OR_EQUAL(3)
+        CASE_OR_EQUAL(6)
+        CASE_OR_EQUAL(4)
+        CASE_END
+        CASE_EQUAL(1)
+        CASE_DEFAULT
+        WAIT_MS(1000)
+    END_SWITCH
+    // She cannot hit it: the enemy's dodge or counter plays, she spins round, looks dejected and goes home.
+    IF_INT_NOT_EQUAL(LW(5), 1)
+        DELETE_EVENT(LW(14))
+        SET_VALUE(LW(14), 0)
+        CALL(btlevtcmd_StopAC)
+        IF_INT_EQUAL(LW(5), 3)
+            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        END_IF
+        IF_INT_EQUAL(LW(5), 6)
+            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        END_IF
+        IF_INT_EQUAL(LW(5), 2)
+            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        END_IF
+        LOOP(20)
+            CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 18, 0)
+            WAIT_FRAMES(1)
+        END_LOOP
+        LOOP(36)
+            CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 10, 0)
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A2_4"))
+        WAIT_FRAMES(52)
+        CALL(evt_audience_ap_recovery)
+        CALL(btlevtcmd_InviteApInfoReport)
+        GOTO(95)
+    END_IF
+    // Slaps alternate right and left; the last slap, or one after a failed command, uses the final-slap weapon.
+    SET_VALUE(LW(0), LW(10))
+    MODULO(LW(0), 2)
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackRight))
+    ELSE
+        SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackLeft))
+    END_IF
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_EVENT_ID, LW(15))
+    IF_INT_NOT_EQUAL(LW(15), 0)
+        DELETE_EVENT(LW(15))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_EVENT_ID, 0)
+    END_IF
+    IF_INT_NOT_EQUAL(LW(14), 0)
+        DELETE_EVENT(LW(14))
+        SET_VALUE(LW(14), 0)
+    END_IF
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
+    IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
+        GOTO(20)
+    ELSE
+        CALL(btlevtcmd_GetResultAC, LW(6))
+        IF_BITS_CLEAR(LW(6), 2)
+            GOTO(20)
+        END_IF
+    END_IF
+    GOTO(21)
+    LABEL(20)
+    IF_INT_EQUAL(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackLeft))
+        SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackLeftLast))
+    ELSE
+        SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackRightLast))
+    END_IF
+    // If the enemy would counter this slap, she straightens up, the slap lands and the script ends here.
+    LABEL(21)
+    CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
+    SWITCH(LW(0))
+        CASE_OR_EQUAL(7)
+        CASE_OR_EQUAL(8)
+        CASE_OR_EQUAL(9)
+        CASE_OR_EQUAL(10)
+        CASE_OR_EQUAL(11)
+        CASE_OR_EQUAL(12)
+        CASE_OR_EQUAL(13)
+        CASE_OR_EQUAL(14)
+        CASE_OR_EQUAL(15)
+        CASE_OR_EQUAL(16)
+        CASE_OR_EQUAL(17)
+        BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+            SET_VALUE(LW(7), LW(13))
+            CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
+            // BUG: this IF has no END_IF; END_SIBLING_EVENT below comes first (the missing end-if in Love Slap).
+            IF_INT_GREATER_OR_EQUAL(LW(0), 180)
+                SUBTRACT(LW(0), 360)
+                CALL(evt_sub_intpl_init, 11, LW(0), 0, 4)
+                LOOP(4)
+                    CALL(evt_sub_intpl_get_value)
+                    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(0))
+                    WAIT_FRAMES(1)
+                    IF_INT_EQUAL(LW(1), 1)
+                        BREAK_LOOP
+                    END_IF
+                END_LOOP
+                CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+            END_SIBLING_EVENT
+            CALL(btlevtcmd_WaitEventEnd, LW(15))
+            CALL(btlevtcmd_GetResultAC, LW(6))
+            IF_BITS_SET(LW(6), 2)
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
+            ELSE
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+            END_IF
+            RETURN
+            CASE_END
+        END_SWITCH
+        // The slap lands: a screen shake, a slap sound (a heavier one for the last slap) and the damage.
+        CALL(evt_btl_camera_shake_h, 0, 2, 0, 12, 13)
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
+        IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
+            CALL(evt_snd_sfxon, STRING("SFX_BTL_CHUCHURINA_ATTACK3"), 0)
+            IF_BITS_SET(LW(6), 2)
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
+            ELSE
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+            END_IF
+        ELSE
+            SET_VALUE(LW(0), LW(10))
+            AND(LW(0), 1)
+            IF_INT_EQUAL(LW(0), 0)
+                CALL(evt_snd_sfxon, STRING("SFX_BTL_CHUCHURINA_ATTACK2"), 0)
+            ELSE
+                CALL(evt_snd_sfxon, STRING("SFX_BTL_CHUCHURINA_ATTACK1"), 0)
+            END_IF
+            IF_BITS_SET(LW(6), 2)
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_AC_SUCCESS, LW(5))
+            ELSE
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+            END_IF
+        END_IF
+        // Rating for this slap: the success effect and the audience's reaction.
+        CALL(btlevtcmd_GetResultAC, LW(6))
+        IF_BITS_SET(LW(6), 2)
+            CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
+            SUBTRACT(LW(0), 2)
+            IF_INT_GREATER_OR_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(0), LW(11))
+                CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_ACSuccessEffect, LW(11), LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(11))
+            ELSE
+                CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
+            END_IF
+        ELSE
+            CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
+        END_IF
+        // Good command: she swings back for the next slap, or spins round between slaps from the third slap on.
+        IF_BITS_SET(LW(6), 2)
+            SWITCH(LW(10))
+                CASE_LESS_OR_EQUAL(2)
+                BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+                    SET_VALUE(LW(7), LW(13))
+                    IF_INT_GREATER_OR_EQUAL(LW(7), 0)
+                        SET_VALUE(LW(8), 75)
+                    ELSE
+                        SET_VALUE(LW(8), -75)
+                    END_IF
+                    CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
+                    IF_INT_GREATER_OR_EQUAL(LW(0), 180)
+                        SUBTRACT(LW(0), 360)
+                    END_IF
+                    CALL(evt_sub_intpl_init, 5, LW(0), LW(8), 14)
+                    LOOP(14)
+                        CALL(evt_sub_intpl_get_value)
+                        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
+                    IF_INT_LESS(LW(10), LW(0))
+                        SET_VALUE(LW(7), LW(13))
+                        IF_INT_GREATER_OR_EQUAL(LW(7), 0)
+                            SET_VALUE(LW(8), 75)
+                            SET_VALUE(LW(9), 75)
+                        ELSE
+                            SET_VALUE(LW(8), -75)
+                            SET_VALUE(LW(9), -75)
+                        END_IF
+                        CALL(evt_sub_intpl_init, 11, LW(9), LW(8), 6)
+                        LOOP(6)
+                            CALL(evt_sub_intpl_get_value)
+                            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+                            WAIT_FRAMES(1)
+                        END_LOOP
+                    ELSE
+                        SET_VALUE(LW(7), LW(13))
+                        IF_INT_GREATER_OR_EQUAL(LW(7), 0)
+                            SET_VALUE(LW(8), 0)
+                            SET_VALUE(LW(9), 75)
+                        ELSE
+                            SET_VALUE(LW(8), 0)
+                            SET_VALUE(LW(9), -75)
+                        END_IF
+                        CALL(evt_sub_intpl_init, 11, LW(9), LW(8), 12)
+                        LOOP(12)
+                            CALL(evt_sub_intpl_get_value)
+                            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+                            WAIT_FRAMES(1)
+                        END_LOOP
+                    END_IF
+                END_SIBLING_EVENT
+                CALL(btlevtcmd_WaitEventEnd, LW(15))
+                CASE_DEFAULT
+                BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+                    CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(8), EVT_NULLPTR)
+                    SET_VALUE(LW(7), 360)
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
+                    IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
+                        SET_VALUE(LW(0), LW(8))
+                        IF_INT_GREATER_OR_EQUAL(LW(8), 180)
+                            SUBTRACT(LW(0), 360)
+                        END_IF
+                        IF_INT_GREATER_OR_EQUAL(LW(13), 0)
+                            SUBTRACT(LW(7), LW(0))
+                        ELSE
+                            ADD(LW(7), LW(0))
+                        END_IF
+                    ELSE
+                        ADD(LW(7), 60)
+                        SET_VALUE(LW(0), LW(8))
+                        IF_INT_GREATER_OR_EQUAL(LW(8), 180)
+                            SUBTRACT(LW(0), 360)
+                        END_IF
+                        IF_INT_GREATER_OR_EQUAL(LW(13), 0)
+                            SUBTRACT(LW(7), LW(0))
+                        ELSE
+                            ADD(LW(7), LW(0))
+                        END_IF
+                    END_IF
+                    IF_INT_LESS(LW(13), 0)
+                        MULTIPLY(LW(7), -1)
+                    END_IF
+                    CALL(evt_sub_intpl_init, 5, 0, LW(7), 20)
+                    LOOP(20)
+                        CALL(evt_sub_intpl_get_value)
+                        ADD(LW(0), LW(8))
+                        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                END_SIBLING_EVENT
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_EVENT_ID, LW(15))
+                WAIT_FRAMES(10)
+            END_SWITCH
+        ELSE
+            // Failed command: she spins twice, staggers dizzily and the move ends.
+            BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+                CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(8), EVT_NULLPTR)
+                SET_VALUE(LW(7), 720)
+                IF_INT_GREATER_OR_EQUAL(LW(10), 1)
+                    SET_VALUE(LW(0), LW(8))
+                    IF_INT_GREATER_OR_EQUAL(LW(8), 180)
+                        SUBTRACT(LW(0), 360)
+                    END_IF
+                    SUBTRACT(LW(7), LW(0))
+                END_IF
+                IF_INT_LESS(LW(13), 0)
+                    MULTIPLY(LW(7), -1)
+                END_IF
+                CALL(evt_sub_intpl_init, 0, 0, LW(7), 60)
+                LOOP(60)
+                    CALL(evt_sub_intpl_get_value)
+                    ADD(LW(0), LW(8))
+                    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+                    WAIT_FRAMES(1)
+                END_LOOP
+            END_SIBLING_EVENT
+            CALL(btlevtcmd_WaitEventEnd, LW(15))
+            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_X_1"))
+            WAIT_FRAMES(60)
+            CALL(btlevtcmd_StopAC)
+            CALL(evt_audience_ap_recovery)
+            CALL(btlevtcmd_InviteApInfoReport)
+            GOTO(95)
+        END_IF
+        // Next slap from the other side while slaps remain.
+        MULTIPLY(LW(13), -1)
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
+        IF_INT_LESS(LW(10), LW(0))
+            GOTO(10)
+        END_IF
+        // After the last slap: audience AP and a pleased pose.
+        LABEL(90)
+        CALL(btlevtcmd_StopAC)
+        CALL(evt_audience_ap_recovery)
+        CALL(btlevtcmd_InviteApInfoReport)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A1_3"))
+        WAIT_FRAMES(40)
+        // She runs home; after a good command a stylish window near the end of the run lets her hop with a pose.
+        LABEL(95)
+        CALL(evt_btl_camera_set_mode, 0, 0)
+        CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+        CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+        CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
+        CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, LW(14))
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
+        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+            CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(14), -1, 0)
+        END_SIBLING_EVENT
+        SET_VALUE(LW(11), LW(14))
+        SUBTRACT(LW(11), 11)
+        SUBTRACT(LW(14), 1)
+        IF_INT_GREATER(LW(14), LW(11))
+            SET_VALUE(LW(13), LW(14))
+            SUBTRACT(LW(13), 10)
+            IF_BITS_SET(LW(6), 2)
+                CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, LW(13), LW(14), 0)
+                CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
+                IF_INT_GREATER_OR_EQUAL(LW(6), 2)
+                    DELETE_EVENT(LW(15))
+                    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                    CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5f))
+                    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
+                    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_O_1"))
+                    CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
+                    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+                    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
+                    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
+                    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+                    CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                ELSE
+                    CALL(btlevtcmd_WaitEventEnd, LW(15))
+                END_IF
+            ELSE
+                CALL(btlevtcmd_WaitEventEnd, LW(15))
+            END_IF
+        ELSE
+            CALL(btlevtcmd_WaitEventEnd, LW(15))
+        END_IF
+        // End of the move: face forward, apply the HP and FP drain badges, back to idle.
+        LABEL(99)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+        CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+        RETURN
+EVT_END()
+#else
 EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     // Find the chosen enemy and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -1085,11 +1630,451 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
 EVT_END()
+#endif
 
 /**
  * Ms. Mowz's Tease: she teases the enemies, and the action command result sets the dizzy chance of a copy of the
  * weapon (_make_madowase_weapon) that is then applied to each target; misses make the target dodge.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
+    // Declare the move on all enemies and pay for it; with no target, skip to the end.
+    CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+    IF_INT_EQUAL(LW(3), -1)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
+    CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
+    CALL(btlevtcmd_WaitGuardMove)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
+    CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, 7)
+    // Set up the hold-and-release gauge command from the difficulty.
+    CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
+    CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_AcSetFlag, 41)
+    CALL(btlevtcmd_AcGetDifficulty, LW(0))
+    SUBTRACT(LW(0), 3)
+    SWITCH(LW(0))
+        CASE_LESS_OR_EQUAL(-3)
+        SET_VALUE(LW(0), 3)
+        SET_VALUE(LW(1), 50)
+        CASE_EQUAL(-2)
+        SET_VALUE(LW(0), 4)
+        SET_VALUE(LW(1), 80)
+        CASE_EQUAL(-1)
+        SET_VALUE(LW(0), 5)
+        SET_VALUE(LW(1), 100)
+        CASE_EQUAL(0)
+        SET_VALUE(LW(0), 7)
+        SET_VALUE(LW(1), 100)
+        CASE_EQUAL(1)
+        SET_VALUE(LW(0), 8)
+        SET_VALUE(LW(1), 110)
+        CALL(btlevtcmd_AcSetFlag, 49)
+        CASE_EQUAL(2)
+        SET_VALUE(LW(0), 10)
+        SET_VALUE(LW(1), 120)
+        CALL(btlevtcmd_AcSetFlag, 49)
+        CASE_DEFAULT
+        SET_VALUE(LW(0), 12)
+        SET_VALUE(LW(1), 130)
+        CALL(btlevtcmd_AcSetFlag, 49)
+    END_SWITCH
+    CALL(btlevtcmd_AcSetParamAll, 1, 240, 178, LW(0), LW(1), 100, 1, EVT_NULLPTR)
+    CALL(btlevtcmd_AcSetGaugeParam, 100, 100, 100, 100)
+    CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
+    // Camera pulls back over her and the gauge command runs.
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
+    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_moveto, 1, LW(0), 73, 400, LW(0), 43, 0, 40, 5)
+    WAIT_FRAMES(22)
+    CALL(btlevtcmd_StartAC, 1)
+    CALL(btlevtcmd_ResultAC)
+    CALL(btlevtcmd_StopAC)
+    // She spins on the spot.
+    WAIT_FRAMES(20)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_I_1"))
+    LOOP(40)
+        CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 36, 0)
+        WAIT_FRAMES(1)
+    END_LOOP
+    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+    // Footsteps for her and her three copies switch to the teasing sounds.
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A4_1"))
+    CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 15, 13)
+    CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
+    CALL(btlevtcmd_SetDiveSound, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
+    CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_CONFUSE_JUMP1"), STRING("SFX_BTL_CHURINA_CONFUSE_LANDING1"))
+    CALL(btlevtcmd_SetPartsWalkSound, UNIT_ID_SELF, 2, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 15, 13)
+    CALL(btlevtcmd_SetPartsRunSound, UNIT_ID_SELF, 2, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
+    CALL(btlevtcmd_SetPartsDiveSound, UNIT_ID_SELF, 2, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
+    CALL(btlevtcmd_SetPartsJumpSound, UNIT_ID_SELF, 2, STRING("SFX_BTL_CHURINA_CONFUSE_JUMP1"), STRING("SFX_BTL_CHURINA_CONFUSE_LANDING1"))
+    CALL(btlevtcmd_SetPartsWalkSound, UNIT_ID_SELF, 3, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 15, 13)
+    CALL(btlevtcmd_SetPartsRunSound, UNIT_ID_SELF, 3, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
+    CALL(btlevtcmd_SetPartsDiveSound, UNIT_ID_SELF, 3, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
+    CALL(btlevtcmd_SetPartsJumpSound, UNIT_ID_SELF, 3, STRING("SFX_BTL_CHURINA_CONFUSE_JUMP1"), STRING("SFX_BTL_CHURINA_CONFUSE_LANDING1"))
+    CALL(btlevtcmd_SetPartsWalkSound, UNIT_ID_SELF, 4, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 15, 13)
+    CALL(btlevtcmd_SetPartsRunSound, UNIT_ID_SELF, 4, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
+    CALL(btlevtcmd_SetPartsDiveSound, UNIT_ID_SELF, 4, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
+    CALL(btlevtcmd_SetPartsJumpSound, UNIT_ID_SELF, 4, STRING("SFX_BTL_CHURINA_CONFUSE_JUMP1"), STRING("SFX_BTL_CHURINA_CONFUSE_LANDING1"))
+    // Three copies of her pop out of puffs of smoke around her and drop to the floor.
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    ADD(LW(1), 40)
+    SUBTRACT(LW(2), 20)
+    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 20)
+    CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 180, 0)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PCH_A3_1"))
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_CONFUSE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    BEGIN_SIBLING_EVENT
+        WAIT_FRAMES(30)
+        CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, 2, FLOAT(0.2998047f))
+        CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_FallPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 25)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, 0)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 2, POSE_TYPE_NEUTRAL)
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    ADD(LW(1), 20)
+    SUBTRACT(LW(2), 10)
+    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 10)
+    CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 3, 0, 0, 0)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("PCH_A3_2"))
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
+    BEGIN_SIBLING_EVENT
+        WAIT_FRAMES(30)
+        CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, 3, FLOAT(0.2998047f))
+        CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_FallPartsPosition, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2), 25)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 3, 0, 0, 0)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 3, POSE_TYPE_NEUTRAL)
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    ADD(LW(1), 30)
+    ADD(LW(2), 10)
+    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), -10)
+    CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 4, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 4, 0, 180, 0)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("PCH_A3_3"))
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 4, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+    CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
+    BEGIN_SIBLING_EVENT
+        WAIT_FRAMES(30)
+        CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, 4, FLOAT(0.2998047f))
+        CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 4, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_FallPartsPosition, UNIT_ID_SELF, 4, LW(0), LW(1), LW(2), 25)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 4, 0, 0, 0)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 4, POSE_TYPE_NEUTRAL)
+    END_SIBLING_EVENT
+    // All four of them blur, and the camera pans forward with them.
+    WAIT_FRAMES(85)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART1_RUNNING, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_RUNNING, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART3_RUNNING, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART4_RUNNING, 1)
+    CALL(btlevtcmd_SetPartsBlur, UNIT_ID_SELF, 1, 255, 255, 255, 255, 100, 100, 100, 50, 1)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kMotionBlur)
+    CALL(btlevtcmd_SetPartsBlur, UNIT_ID_SELF, 2, 255, 255, 255, 255, 100, 100, 100, 50, 1)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kMotionBlur)
+    CALL(btlevtcmd_SetPartsBlur, UNIT_ID_SELF, 3, 255, 255, 255, 255, 100, 100, 100, 50, 1)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kMotionBlur)
+    CALL(btlevtcmd_SetPartsBlur, UNIT_ID_SELF, 4, 255, 255, 255, 255, 100, 100, 100, 50, 1)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, kMotionBlur)
+    BEGIN_SIBLING_EVENT
+        WAIT_FRAMES(40)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
+        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_GetStageSize, LW(5), EVT_NULLPTR, EVT_NULLPTR)
+        DIVIDE(LW(5), 3)
+        SET_VALUE(LW(0), 0)
+        CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), LW(5))
+        CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), FLOAT(3.0f), LW(7))
+        CALL(evt_btl_camera_set_mode, 0, 3)
+        CALL(evt_btl_camera_set_moveto, 1, LW(0), 90, 500, LW(0), 60, 0, LW(7), 0)
+    END_SIBLING_EVENT
+    // She dashes forward and zigzags back and forth, then vanishes in a puff.
+    BEGIN_SIBLING_EVENT
+        CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
+        WAIT_FRAMES(40)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
+        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_GetStageSize, LW(5), EVT_NULLPTR, EVT_NULLPTR)
+        DIVIDE(LW(5), 3)
+        SET_VALUE(LW(0), 0)
+        CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), LW(5))
+        CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, 2, 0, -1)
+        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        ADD(LW(0), 40)
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+        SUBTRACT(LW(0), 60)
+        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 180, 0)
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+        ADD(LW(0), 40)
+        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+        SUBTRACT(LW(0), 60)
+        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 180, 0)
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+        ADD(LW(0), 40)
+        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+        CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kMotionBlur)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART1_RUNNING, 0)
+    END_SIBLING_EVENT
+    // Each copy dashes forward and zigzags in its own pattern, then vanishes in a puff.
+    BEGIN_SIBLING_EVENT
+        SET_VALUE(LW(6), 2)
+        CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, LW(6), FLOAT(0.69921875f))
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(6), POSE_TYPE_RUN)
+        CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_GetStageSize, LW(5), EVT_NULLPTR, EVT_NULLPTR)
+        DIVIDE(LW(5), 3)
+        SET_VALUE(LW(0), 0)
+        CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), LW(5))
+        CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, LW(6), FLOAT(3.0f))
+        CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 0, 0, 2, 0, -1)
+        CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2))
+        ADD(LW(0), 60)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 25, -1)
+        SUBTRACT(LW(0), 90)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 25, -1)
+        ADD(LW(0), 60)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 0, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 25, -1)
+        SUBTRACT(LW(0), 90)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 25, -1)
+        SUBTRACT(LW(0), 30)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 25, -1)
+        ADD(LW(0), 30)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 0, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 25, -1)
+        CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kMotionBlur)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_RUNNING, 0)
+    END_SIBLING_EVENT
+    BEGIN_SIBLING_EVENT
+        SET_VALUE(LW(6), 3)
+        CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, LW(6), FLOAT(0.69921875f))
+        WAIT_FRAMES(20)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(6), POSE_TYPE_RUN)
+        CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_GetStageSize, LW(5), EVT_NULLPTR, EVT_NULLPTR)
+        DIVIDE(LW(5), 3)
+        SET_VALUE(LW(0), 0)
+        CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), LW(5))
+        CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, LW(6), FLOAT(3.0f))
+        CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 0, 0, 2, 0, -1)
+        CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2))
+        SUBTRACT(LW(0), 80)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 25, -1)
+        ADD(LW(0), 160)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 0, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 40, -1)
+        SUBTRACT(LW(0), 40)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 15, -1)
+        SUBTRACT(LW(0), 60)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 20, -1)
+        ADD(LW(0), 20)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 0, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 20, -1)
+        CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kMotionBlur)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART3_RUNNING, 0)
+    END_SIBLING_EVENT
+    BEGIN_SIBLING_EVENT
+        SET_VALUE(LW(6), 4)
+        CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, LW(6), FLOAT(0.69921875f))
+        WAIT_FRAMES(60)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(6), POSE_TYPE_RUN)
+        CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_GetStageSize, LW(5), EVT_NULLPTR, EVT_NULLPTR)
+        DIVIDE(LW(5), 3)
+        SET_VALUE(LW(0), 0)
+        CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), LW(5))
+        CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, LW(6), FLOAT(3.0f))
+        CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 0, 0, 2, 0, -1)
+        CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2))
+        ADD(LW(0), 30)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 10, -1)
+        ADD(LW(0), 30)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 0, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 10, -1)
+        SUBTRACT(LW(0), 30)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 10, -1)
+        SUBTRACT(LW(0), 30)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 10, -1)
+        SUBTRACT(LW(0), 30)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 10, -1)
+        SUBTRACT(LW(0), 30)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 10, -1)
+        ADD(LW(0), 30)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 0, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 10, -1)
+        SUBTRACT(LW(0), 30)
+        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, LW(6), 0, 180, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(6), LW(0), LW(1), LW(2), 10, -1)
+        CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 4, kMotionBlur)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART4_RUNNING, 0)
+    END_SIBLING_EVENT
+    // Wait until all four have finished.
+    LABEL(9)
+    SET_VALUE(LW(0), 0)
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART1_RUNNING, LW(1))
+    ADD(LW(0), LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_RUNNING, LW(1))
+    ADD(LW(0), LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART3_RUNNING, LW(1))
+    ADD(LW(0), LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART4_RUNNING, LW(1))
+    ADD(LW(0), LW(1))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        WAIT_FRAMES(1)
+        GOTO(9)
+    END_IF
+    // For each enemy: if it can be reached, apply a copy of the weapon with the dizzy chance from the gauge;
+    // otherwise its dodge plays.
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_CHURINA_CONFUSE1"), 0)
+    SET_VALUE(LW(10), 0)
+    SET_VALUE(LW(15), 0)
+    LABEL(10)
+    CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
+    IF_INT_NOT_EQUAL(LW(6), 1)
+        IF_INT_EQUAL(LW(6), 3)
+            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        END_IF
+        IF_INT_EQUAL(LW(6), 6)
+            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        END_IF
+        IF_INT_EQUAL(LW(6), 2)
+            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        END_IF
+        GOTO(50)
+    END_IF
+    CALL(btlevtcmd_AcGetOutputParam, 1, LW(0))
+    CALL(_make_madowase_weapon, LW(12), LW(0))
+    CALL(btlevtcmd_GetResultAC, LW(0))
+    IF_BITS_SET(LW(0), 2)
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
+        CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
+        CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+        IF_INT_GREATER_OR_EQUAL(LW(6), 0)
+            CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
+            ADD(LW(15), 1)
+            CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
+        END_IF
+    ELSE
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    END_IF
+    // Next enemy.
+    LABEL(50)
+    CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
+    IF_INT_NOT_EQUAL(LW(3), -1)
+        ADD(LW(10), 1)
+        GOTO(10)
+    END_IF
+    // Nothing was hit: the audience is let down.
+    IF_INT_EQUAL(LW(15), 0)
+        CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
+    END_IF
+    // Camera back to normal; she leaps back spinning, with a stylish window during the leap.
+    LABEL(80)
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_B_1"))
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 80)
+    CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.14941406f))
+    BEGIN_SIBLING_EVENT
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_CONFUSE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 5, 0)
+        CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
+        MULTIPLY(LW(5), 9)
+        LOOP(40)
+            CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 0, LW(5))
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
+        MULTIPLY(LW(5), 36)
+        LOOP(20)
+            CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 0, LW(5))
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+    END_SIBLING_EVENT
+    BEGIN_SIBLING_EVENT
+        CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 45, 59, 59, 0)
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -1)
+    CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
+    // Stylish hit: a cheerful pose and she dashes home; otherwise (before JP, a dizzy pose first) she runs home.
+    SWITCH(LW(6))
+        CASE_GREATER_OR_EQUAL(2)
+        CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_Y_1"))
+        CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+        WAIT_MS(300)
+        CALL(evt_audience_ap_recovery)
+        CALL(btlevtcmd_InviteApInfoReport)
+        CALL(evt_btl_camera_set_mode, 0, 0)
+        CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
+        CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 180, 0)
+        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, 2, 0, -1)
+        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+        CASE_DEFAULT
+        CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 0, 0, 0, 0)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_D_3"))
+        CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+        WAIT_MS(300)
+        CALL(evt_audience_ap_recovery)
+        CALL(btlevtcmd_InviteApInfoReport)
+        CALL(evt_btl_camera_set_mode, 0, 0)
+        CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_R_2"))
+        CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 180, 0)
+        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, 2, 0, -1)
+        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+    END_SWITCH
+    // End of the move: apply the HP and FP drain badges and restore her normal footstep sounds.
+    LABEL(99)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+    CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
+    CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 15, 13)
+    CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 7, 7)
+    CALL(btlevtcmd_SetDiveSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 7, 7)
+    CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), STRING("SFX_PARTY_BATTLE_LANDING1"))
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1529,6 +2514,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
 EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     // Declare the move and pay for it; with no target, skip to the end.
@@ -1819,6 +2805,154 @@ EVT_END()
  * Ms. Mowz's Smooch: she kisses Mario, healing him by an amount the action command builds up,
  * with the recovery effect, then returns home.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(partyChuchurinaAttack_Kiss)
+    // Find the chosen ally and pay for the move; with no target, skip to the end.
+    CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+    IF_INT_EQUAL(LW(3), -1)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
+    CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
+    CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, 7)
+    // Camera on her as she turns to the ally; in JP and later the ally turns to face her if it can move.
+    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, UNIT_ID_SELF)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    CALL(evt_btl_camera_set_zoom, 0, 250)
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), LW(3))
+        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+        CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    END_IF
+    // Set up the alternate-A-and-B gauge command from the difficulty.
+    CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
+    CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_AcGetDifficulty, LW(0))
+    SUBTRACT(LW(0), 3)
+    SWITCH(LW(0))
+        CASE_LESS_OR_EQUAL(-3)
+        SET_VALUE(LW(0), 300)
+        SET_VALUE(LW(1), 20)
+        SET_VALUE(LW(2), 20)
+        CASE_EQUAL(-2)
+        SET_VALUE(LW(0), 270)
+        SET_VALUE(LW(1), 18)
+        SET_VALUE(LW(2), 22)
+        CASE_EQUAL(-1)
+        SET_VALUE(LW(0), 240)
+        SET_VALUE(LW(1), 17)
+        SET_VALUE(LW(2), 24)
+        CASE_EQUAL(0)
+        SET_VALUE(LW(0), 210)
+        SET_VALUE(LW(1), 16)
+        SET_VALUE(LW(2), 25)
+        CASE_EQUAL(1)
+        SET_VALUE(LW(0), 195)
+        SET_VALUE(LW(1), 14)
+        SET_VALUE(LW(2), 26)
+        CASE_EQUAL(2)
+        SET_VALUE(LW(0), 180)
+        SET_VALUE(LW(1), 13)
+        SET_VALUE(LW(2), 27)
+        CASE_DEFAULT
+        SET_VALUE(LW(0), 150)
+        SET_VALUE(LW(1), 12)
+        SET_VALUE(LW(2), 30)
+    END_SWITCH
+    CALL(btlevtcmd_AcSetParamAll, 11, LW(0), 178, LW(1), LW(2), 12, 37, EVT_NULLPTR)
+    CALL(btlevtcmd_AcSetGaugeParam, 36, 72, 100, 100)
+    CALL(btlevtcmd_AcSetFlag, 64)
+    // The command runs while she walks up to the ally.
+    CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
+    WAIT_FRAMES(22)
+    CALL(btlevtcmd_StartAC, 1)
+    BEGIN_SIBLING_EVENT
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+        CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 20)
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 235, -1, 0)
+        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+        CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    END_SIBLING_EVENT
+    // Rating from the gauge level, which is also the HP she restores.
+    CALL(btlevtcmd_ResultAC)
+    CALL(btlevtcmd_AcGetOutputParam, 2, LW(5))
+    SWITCH(LW(5))
+        CASE_GREATER_OR_EQUAL(10)
+        SET_VALUE(LW(5), 2)
+        CASE_GREATER_OR_EQUAL(7)
+        SET_VALUE(LW(5), 1)
+        CASE_GREATER_OR_EQUAL(4)
+        SET_VALUE(LW(5), 0)
+        CASE_DEFAULT
+        SET_VALUE(LW(5), -1)
+    END_SWITCH
+    IF_INT_GREATER_OR_EQUAL(LW(5), 0)
+        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_GetResultPrizeLv, UNIT_ID_SYSTEM, LW(5), LW(6))
+        CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
+    ELSE
+        CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
+    END_IF
+    // She kisses the ally; in JP and later it blushes when the command went well.
+    CALL(btlevtcmd_GetResultAC, LW(6))
+    CALL(btlevtcmd_StopAC)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    CALL(evt_btl_camera_set_zoom, 0, 350)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_K_1"))
+    WAIT_FRAMES(6)
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 25)
+    ADD(LW(1), 40)
+    CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(6))
+    MULTIPLY(LW(6), -45)
+    CALL(evt_eff, STRING(""), STRING("kiss"), 0, LW(0), LW(1), LW(2), LW(6), 0, 0, 0, 0, 0, 0, 0)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_KISS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    // Hearts rise from the ally, and two seconds later it regains HP by the gauge level.
+    WAIT_FRAMES(40)
+    CALL(btlevtcmd_GetPartsPos, LW(3), LW(4), LW(12), LW(13), LW(14))
+    CALL(btlevtcmd_GetHeight, LW(3), LW(5))
+    CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
+    MULTIPLY_FLOAT(LW(5), LW(6))
+    ADD(LW(13), LW(5))
+    CALL(btlevtcmd_AcGetOutputParam, 2, LW(5))
+    CALL(evt_eff, STRING("eff"), STRING("recovery"), 0, LW(12), LW(13), LW(14), LW(5), 0, 0, 0, 0, 0, 0, 0)
+    BEGIN_INLINE_EVENT_GET_ID(LW(15))
+        WAIT_FRAMES(120)
+        CALL(btlevtcmd_RecoverHp, LW(3), LW(4), LW(5))
+    END_INLINE_EVENT
+    // Stylish window after the kiss.
+    CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 20)
+    CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
+    SWITCH(LW(6))
+        CASE_GREATER_OR_EQUAL(2)
+        CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
+        CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_Y_1"))
+        CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
+        WAIT_MS(300)
+        CASE_DEFAULT
+        CALL(evt_audience_acrobat_notry)
+    END_SWITCH
+    // Camera back to normal and audience AP; in JP and later the ally goes back to idle; she runs home.
+    CALL(btlevtcmd_WaitEventEnd, LW(15))
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    CALL(evt_audience_ap_recovery)
+    CALL(btlevtcmd_InviteApInfoReport)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(partyChuchurinaAttack_Kiss)
     // Find the chosen ally and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1987,6 +3121,7 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Ms. Mowz's Appeal (data tag 5): appeal sound and pose, the audience is fired up,

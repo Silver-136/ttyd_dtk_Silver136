@@ -349,9 +349,9 @@ void kpa2DMain(void) {
     {
         MarioWork* m2 = marioGetPtr();
 #if VERSION <= VERSION_DEMO_US
-        if (mp(m2)->mutekiTimer > 0) {
-            if (--mp(m2)->mutekiTimer <= 0) {
-                mp(m2)->mutekiTimer = 0;
+        if (m2->kpaWork->mutekiTimer > 0) {
+            if (--m2->kpaWork->mutekiTimer <= 0) {
+                m2->kpaWork->mutekiTimer = 0;
 #else
         if (m2->kpaWork->mutekiTimer > 0) {
             if (--m2->kpaWork->mutekiTimer <= 0) {
@@ -942,7 +942,7 @@ void kpaFireMain(void) {
     f32 f30;
     f32 headScale;
 #if VERSION <= VERSION_DEMO_US
-    mp(mario)->flameHit = NULL;
+    mario->kpaWork->flameHit = NULL;
     flag = 0;
     if (fireefp && (f32)flag == 0.0f) {
 #else
@@ -1027,7 +1027,7 @@ void kpaFireMain(void) {
 #endif
                         if (hit) {
 #if VERSION <= VERSION_DEMO_US
-                        mp(mario)->flameHit = hit;
+                        mario->kpaWork->flameHit = hit;
 #else
                             mario->kpaWork->flameHit = hit;
 #endif

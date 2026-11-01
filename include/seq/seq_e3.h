@@ -1,5 +1,6 @@
 #pragma once
 
+#include "version.h"
 #include <dolphin/os.h>
 #include "driver/seqdrv.h"
 #include "manager/filemgr.h"
@@ -15,11 +16,16 @@ typedef struct seq_e3_work {
     f32 dstY;          // 0x1C
     OSAlarm alarm;     // 0x20
     OSTime initTime;   // 0x48
+#if VERSION <= VERSION_DEMO_US
+    s32 poseIds[4];    // 0x50, the four characters on the title screen
+    struct EventEntry* animEvt; // 0x60, event that animates them
+#else
     u32 pad_50;        // 0x50, never accessed
     u32 pad_54;        // 0x54, never accessed
     u32 pad_58;        // 0x58, never accessed
     u32 pad_5C;        // 0x5C, never accessed
     u32 pad_60;        // 0x60, never accessed
+#endif
     f32 poseRotY;   // 0x64, set to 270.0f in seq_e3Init, never read
 } seq_e3_work;
 

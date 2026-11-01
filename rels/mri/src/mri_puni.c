@@ -3305,6 +3305,28 @@ void puniModeRecover(PuniData* p) {
 }
 
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
+#if VERSION <= VERSION_DEMO_US
+// The demo's puni main loop calls this directly with the sound name.
+static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
+    switch (p->modeStep) {
+        case 0:
+            psndSFXOn_3D(sfx, &p->pos);
+            {
+                Vec v = {0.0f, 0.0f, 0.0f};
+                p->vel = v;
+            }
+            p->anim = 4;
+            p->modeStep = 1;
+            break;
+        case 1:
+            break;
+    }
+}
+
+void puniModeDead(PuniData* p) {
+    puniModeDeadSfx(p, "SFX_STG2_FIGHT_TOGE3");
+}
+#else
 void puniModeDead(PuniData* p) {
     switch (p->modeStep) {
         case 0:
@@ -3320,6 +3342,7 @@ void puniModeDead(PuniData* p) {
             break;
     }
 }
+#endif
 
 /**
  * Moves a Puni blown by the wind and handles what it hits:
@@ -5603,7 +5626,7 @@ void puni_puni_main(void) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
-                    puniModeDead(p, (const char*)(u32) "SFX_STG2_FIGHT_TOGE3");
+                    puniModeDeadSfx(p, "SFX_STG2_FIGHT_TOGE3");
                     break;
                 case PUNI_MODE_WIND:
                     p->flags &= ~PUNI_FLAG_STRAY;

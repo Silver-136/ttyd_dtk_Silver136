@@ -85,12 +85,17 @@ BOOL g_bFirstSmartAlloc;
 #else
 u32 count;
 #define COUNT (*(u16*)&count)
-#if VERSION <= VERSION_DEMO_US
-#define SMART_HEAP HEAP_DEFAULT
-#else
 #define MAPBASE_PARAM
-#endif
 #define MAPBASE mapalloc_base_ptr
+#endif
+
+#if VERSION <= VERSION_DEMO_US
+// demo: the smart heap is a fixed 7 MiB block taken from the default heap
+#define SMART_ALLOC_HEAP HEAP_DEFAULT
+#define SMART_HEAP_SIZE 0x700000
+#else
+#define SMART_ALLOC_HEAP SMART_HEAP
+#define SMART_HEAP_SIZE ((u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32)
 #endif
 
 //local prototypes
@@ -401,8 +406,8 @@ void smartInit(void) {
     void* ptr;
     int i;
 
-    size = (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32;
-    ptr = OSAllocFromHeap(heapHandle[SMART_HEAP], size);
+    size = SMART_HEAP_SIZE;
+    ptr = OSAllocFromHeap(heapHandle[SMART_ALLOC_HEAP], size);
     if (ptr) {
         memset(ptr, 0, size);
         DCFlushRange(ptr, size);
@@ -410,8 +415,8 @@ void smartInit(void) {
     wp->ptr = ptr;
     wp->allocHead = NULL;
     wp->allocTail = NULL;
-    wp->bytesLeft = (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32;
-    memset(wp->ptr, 0, (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32);
+    wp->bytesLeft = SMART_HEAP_SIZE;
+    memset(wp->ptr, 0, SMART_HEAP_SIZE);
     memset(wp->work, 0, sizeof(wp->work));
     e = wp->work;
     for (i = 0; i < (s32)(sizeof(wp->work) / sizeof(wp->work[0])); i++, e++) {
@@ -433,8 +438,8 @@ void smartReInit(void) {
 
     wp->allocHead = NULL;
     wp->allocTail = NULL;
-    wp->bytesLeft = (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32;
-    memset(wp->ptr, 0, (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32);
+    wp->bytesLeft = SMART_HEAP_SIZE;
+    memset(wp->ptr, 0, SMART_HEAP_SIZE);
     memset(wp->work, 0, sizeof(wp->work));
     e = wp->work;
     for (i = 0; i < (s32)(sizeof(wp->work) / sizeof(wp->work[0])); i++, e++) {
@@ -586,7 +591,7 @@ smartEntry* smartAlloc(u32 size, u8 type) {
         }
         wp->allocHead = entry;
         if (!entry->next) {
-            entry->spaceAfter = ((u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32) + (u8*)wp->ptr - (u8*)entry->address - entry->size;
+            entry->spaceAfter = SMART_HEAP_SIZE + (u8*)wp->ptr - (u8*)entry->address - entry->size;
             wp->allocTail = entry;
         }
         return entry;
@@ -654,7 +659,7 @@ void smartGarbage(void) {
     if (wp->allocHead) {
         wp->bytesLeft = 0;
     } else {
-        wp->bytesLeft = (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32;
+        wp->bytesLeft = SMART_HEAP_SIZE;
     }
     prev = NULL;
     ptr = wp->ptr;
@@ -683,9 +688,9 @@ void smartGarbage(void) {
     }
     entry = wp->allocTail;
     if (entry) {
-        entry->spaceAfter = ((u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32) + (u8*)wp->ptr - (u8*)entry->address - entry->size;
+        entry->spaceAfter = SMART_HEAP_SIZE + (u8*)wp->ptr - (u8*)entry->address - entry->size;
     }
-    DCFlushRange(wp->ptr, (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32);
+    DCFlushRange(wp->ptr, SMART_HEAP_SIZE);
 }
 
 /**

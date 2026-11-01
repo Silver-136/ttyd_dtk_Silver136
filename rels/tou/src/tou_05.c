@@ -346,7 +346,7 @@ EVT_BEGIN(evt_takurami)
     // The story moves on to Grubba's plans, the office door's entrance is switched on
     // and control returns to Mario.
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+    SET_VALUE(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #endif
@@ -412,7 +412,7 @@ EVT_BEGIN(evt_hiki_open)
 #endif
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 CALL(evt_mario_key_onoff, 0)
 #else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
@@ -466,7 +466,7 @@ CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 100, 30)
     // The special drawer plays the discovery scene of Grubba's secret paper.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
             CALL_CHILD(evt_takurami)
 #else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
@@ -1515,7 +1515,7 @@ EVT_BEGIN(tou_05_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_30_04_AIR_DUCT_EXIT)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_30_04_AIR_DUCT_EXIT)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_30_04_AIR_DUCT_EXIT)
 #endif
@@ -1532,7 +1532,7 @@ EVT_BEGIN(tou_05_init_evt)
     // and the vent peek is set up.
     CALL(evt_npc_setup, PTR(npcEnt))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_03_GRUBBA)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
 #endif
@@ -1541,7 +1541,7 @@ EVT_BEGIN(tou_05_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_12_JOLENES_SECRET)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_12_JOLENES_SECRET)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_12_JOLENES_SECRET)
 #endif
@@ -1573,7 +1573,7 @@ EVT_BEGIN(tou_05_init_evt)
     END_IF
     SET_VALUE(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_03_GRUBBA)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
 #endif
@@ -1613,7 +1613,7 @@ EVT_BEGIN(tou_05_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     // Choose the music and ambience for the story point.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #endif
@@ -1622,7 +1622,7 @@ EVT_BEGIN(tou_05_init_evt)
         ELSE
         IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-            SWITCH(GSW(GSW_STORY_PROGRESS))
+            SWITCH(GSW_STORY_PROGRESS)
 #else
             SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1652,7 +1652,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     END_IF
     // Show the open or closed air duct, depending on whether the way out has been used.
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1682,7 +1682,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #if VERSION <= VERSION_DEMO_US
     // After the return to Rogueport, a visitor who has not yet re-entered the league gets Jolene's re-entry
     // talk.
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
 #endif

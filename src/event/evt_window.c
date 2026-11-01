@@ -21,6 +21,9 @@
 #include "nameent.h"
 #include "statuswindow.h"
 #include "icon_ids.h"
+#if VERSION <= VERSION_DEMO_US
+#include "mario/mariost.h"
+#endif
 
 typedef struct CoinWin {
     s32 id;    // 0x0
@@ -319,15 +322,15 @@ static void coin_disp(WinMgrEntry* entry) {
     case COIN_WINDOW_COINS:
         target = pouchGetCoin();
 #if VERSION <= VERSION_DEMO_US
-            icon = 0x18B + EW_ICON_OFS;
+        icon = 0x18B;
 #else
         icon = ICON_ITEM_COIN;
 #endif
         break;
     case COIN_WINDOW_SHINE_SPRITES:
 #if VERSION <= VERSION_DEMO_US
-            target = RAW_GET(pouchGetSuperCoin)();
-            icon = 0x102 + EW_ICON_OFS;
+        target = pouchGetSuperCoin();
+        icon = 0x102;
 #else
         target = pouchGetSuperCoin();
         icon = ICON_ITEM_SHINE_SPRITE;
@@ -335,8 +338,8 @@ static void coin_disp(WinMgrEntry* entry) {
         break;
     case COIN_WINDOW_STAR_PIECES:
 #if VERSION <= VERSION_DEMO_US
-            target = RAW_GET(pouchGetStarPiece)();
-            icon = 0x18D + EW_ICON_OFS;
+        target = pouchGetStarPiece();
+        icon = 0x18D;
 #else
         target = pouchGetStarPiece();
         icon = ICON_ITEM_STAR_PIECE;
@@ -349,7 +352,7 @@ static void coin_disp(WinMgrEntry* entry) {
     iconDispGx2(pos, ICON_FLAG_2D, icon);
     PSMTXTrans(pos, -192.0f, -113.0f, 0.0f);
 #if VERSION <= VERSION_DEMO_US
-    iconDispGx2(pos, ICON_FLAG_2D, 0x1D6 + EW_ICON_OFS);
+    iconDispGx2(pos, ICON_FLAG_2D, 0x1D6);
 #else
     iconDispGx2(pos, ICON_FLAG_2D, ICON_TIMES);
 #endif
@@ -371,7 +374,7 @@ static void coin_disp(WinMgrEntry* entry) {
         w->timer++;
         w->timer = w->timer % 1200;
 #if VERSION <= VERSION_DEMO_US
-if (__abs(target - w->coins) == 1 || gp->retraceCount % 6 == 0) {
+        if (__abs(target - w->coins) == 1 || gp->retraceCount % 6 == 0) {
             psndSFXOn("SFX_COUNT_COIN1");
 #else
         if (coinwin_se_wait == 0) {
@@ -383,11 +386,9 @@ if (__abs(target - w->coins) == 1 || gp->retraceCount % 6 == 0) {
 #if VERSION > VERSION_DEMO_US
     if (coinwin_se_wait > 0) {
         coinwin_se_wait--;
-#endif
     }
-#if VERSION > VERSION_DEMO_US
-}
 #endif
+}
 
 /**
  * Opens the counter window of type args[0] (0 coins, 1 Shine Sprites, 2 Star Pieces) at the top left,

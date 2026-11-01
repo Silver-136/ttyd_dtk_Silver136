@@ -1244,7 +1244,7 @@ EVT_BEGIN(maffiaboss_maffiaboss)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 #if VERSION <= VERSION_DEMO_US
     // Story progress: the search for Don Pianta's daughter begins.
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_44_FINDING_DON_PIANTA)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_44_FINDING_DON_PIANTA)
     SET_VALUE(LSWF(3), 0)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_44_FINDING_DON_PIANTA)
@@ -1735,7 +1735,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
     // Story progress: the Train Ticket has been obtained.
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_65_TRAIN_TICKET)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
 #endif
@@ -1905,7 +1905,7 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(maffia1_talk)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_02"), 0, STRING("me"))
 CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
@@ -2002,7 +2002,7 @@ EVT_END()
 /** Talk event of the second henchman: the same structure as the first one's, with his own messages. */
 EVT_BEGIN(maffia2_talk)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -2171,7 +2171,7 @@ s32 iri_19_item_tbl[] = {
 
 EVT_BEGIN(peton_talk_common)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER(GSW(GSW_STORY_PROGRESS), STG5_65_TRAIN_TICKET)
+    IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
         SET_VALUE(LSWF(3), 1)
 #else
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
@@ -2212,7 +2212,7 @@ CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
                     CALL(evt_npc_move_position, STRING("ピートン"), -20, 478, 0, 150, 0)
                     CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_NO_HIT)
 #if VERSION <= VERSION_DEMO_US
-                    SWITCH(GSW(GSW_STORY_PROGRESS))
+                    SWITCH(GSW_STORY_PROGRESS)
 #else
                     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -2239,7 +2239,7 @@ CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -2257,7 +2257,7 @@ CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
         CALL(evt_msg_print, 0, STRING("gor_03_05_04"), 0, STRING("ピートン"))
     END_SWITCH
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER(GSW(GSW_STORY_PROGRESS), STG5_65_TRAIN_TICKET)
+    IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
         SET_VALUE(LSWF(3), 0)
 #else
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
@@ -3185,7 +3185,7 @@ CALL(evt_party_stop, 0)
     // Teresa greets Mario: a first greeting, a repeat greeting, or the epilogue greeting.
 #if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG9_00_EPILOGUE)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
             IF_INT_EQUAL(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 0)
 #else
     IF_INT_EQUAL(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
@@ -3939,7 +3939,7 @@ EVT_END()
 static EVT_BEGIN(kinopiko_b_talk)
     CALL(evt_mario_get_party, LW(0))
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -4935,7 +4935,7 @@ EVT_BEGIN(evt_door_02_1_open)
     BEGIN_INLINE_EVENT
         WAIT_MS(1600)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_64_03_F_F_ARRIVE)
+        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
 #else
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
 #endif
@@ -4948,7 +4948,7 @@ EVT_BEGIN(evt_door_02_1_open)
         END_IF
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -4958,7 +4958,7 @@ EVT_BEGIN(evt_door_02_1_open)
         CASE_LESS(STG5_65_TRAIN_TICKET)
         CALL(evt_npc_set_anim, STRING("マフィアボス"), STRING("S_2"))
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_64_03_F_F_ARRIVE)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
 #else
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
 #endif
@@ -4992,7 +4992,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_door_02_1_close)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_64_03_F_F_ARRIVE)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
 #else
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
         IF_INT_EQUAL(GF(5), 0)
@@ -5698,7 +5698,7 @@ EVT_BEGIN(majorin_nusumigiki)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
     // Story progress: Beldam has found out about Poshley Heights.
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_66_BELDAM_FINDS_OUT)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_66_BELDAM_FINDS_OUT)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_66_BELDAM_FINDS_OUT)
 #endif
@@ -5744,7 +5744,7 @@ EVT_BEGIN(yuureturn_rtn)
 #endif
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG9_00_EPILOGUE)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
 #endif
@@ -6691,7 +6691,7 @@ IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
     CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_setup, PTR(npcEnt))
     // From the Excess Express trip on, Francesca and Frankie wear their rings.
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_64_03_F_F_ARRIVE, STG5_66_BELDAM_FINDS_OUT)
         CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
         CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
@@ -6737,7 +6737,7 @@ IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -6776,7 +6776,7 @@ IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         SPAWN_EVENT(yuureturn_rtn)
     END_IF
     // After chapter 3, when Mario returns to Rogueport, the message from Peach arrives.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SPAWN_EVENT(peach_mail)
     END_IF
     // The shop clerk and casino staff bob about, and the mail event is started.
@@ -6786,16 +6786,16 @@ IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
     // The lottery board trigger is registered.
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kuzi"), 0, PTR(kuzi_keiziban_entry), 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02"), MAP_OBJ_FLAG_CLIP)
-IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_41_FRANKLYS_HOUSE_STG_2)
+IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
         SPAWN_EVENT(maffiaboss_maffiaboss)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_45_DAUGHTER_LOCATED)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
             SPAWN_EVENT(maffiaboss_airship_ticket)
         END_IF
     END_IF
     // Talk triggers for the desk and bed in the Pianta syndicate office, by story stage.
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG5_58_FAIR_WINDS)
         CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("A_i02_f2_set00C"), 0, PTR(maffiaboss_desk_talk), 0)
         CASE_LESS(STG5_65_TRAIN_TICKET)

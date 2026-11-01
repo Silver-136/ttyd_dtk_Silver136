@@ -123,8 +123,14 @@ const char e3_anim_str10[] = "PWD_A_7";
 #endif
 
 // Forward Declarations
+#if VERSION == VERSION_DEMO_US
+static void e3Disp(CameraId cameraId, void* param);
+static void e3DispOffscreen(CameraId cameraId, void* param);
+static void e3DispShadow(f32 x, f32 y, f32 z);
+#else
 void e3Disp(CameraId cameraId, void* param);
 void e3DispOffscreen(CameraId cameraId, void* param);
+#endif
 #if VERSION >= VERSION_US
 static
 #endif
@@ -1172,20 +1178,28 @@ step = (i == wp->scenario) ? 0 : 10;
                   viewportBackup[5]);
 }
 #elif VERSION == VERSION_DEMO_US
+// Texture ids in the demo's monthly TPL.
+typedef enum E3Texture {
+    E3_TEX_BOX = 1,
+    E3_TEX_TILE = 4,
+    E3_TEX_CURSOR0 = 5,
+    E3_TEX_CURSOR1 = 6,
+} E3Texture;
+
 static void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
-Mtx poseMtx;
+    Mtx poseMtx;
     Mtx poseScale;
-Mtx mtx;
+    Mtx mtx;
     Mtx mtxScale;
     f32 projBackup[GX_PROJECTION_SZ];
     f32 viewportBackup[GX_VIEWPORT_SZ];
     CameraEntry camBackup;
-char* keys[3];
-s32 active;
+    char* keys[3];
+    s32 active;
     s32 alpha;
     s32 i;
-    s32 dy, x;
+    s32 px, py;
     s32 row, col;
     s32 inset, pass, step;
     f32 t, dx, dy;
@@ -1207,7 +1221,8 @@ s32 active;
                   camera->viewport[4], camera->viewport[5]);
 
     if (active == 0) {
-mode = (s32)((f32)sin(e3BlinkTime()) * 459.0f);
+        // Title screen: background tiles, the four characters and the title textures
+        mode = (s32)((f32)sin(e3BlinkTime()) * 459.0f);
         if (mode < 0) {
             mode = 0;
         }
@@ -1241,32 +1256,35 @@ mode = (s32)((f32)sin(e3BlinkTime()) * 459.0f);
         winTexSet(0, (Vec){0.0f, 90.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFE});
         winTexSet(7, (Vec){0.0f, -20.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, mode});
         winTexSet(10, (Vec){0.0f, -170.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-} else {
-winTexInit(*wp->handle->data);
-        for (col = 0, x = -304; col < 40; col++, x += 16) {
-            for (dy = 0, row = 0; px < 32; px++, row += 16) {
-                winTexSet(MODE_5, (Vec){(f32)x, (f32)(240 - row), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+    } else {
+        // Tiled background fill (40 x 32 quads)
+        // Same fill as below; the US demo compiles it with the counters held in these variables.
+        winTexInit(*wp->handle->data);
+        for (col = 0, py = -304; col < 40; col++, py += 16) {
+            for (px = 0, row = 0; px < 32; px++, row += 16) {
+                winTexSet(E3_TEX_TILE, (Vec){(f32)py, (f32)(240 - row), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                           (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             }
         }
-for (i = 0; i < 3; i++) {
-winTexInit(*wp->handle->data);
+
+        for (i = 0; i < 3; i++) {
+            winTexInit(*wp->handle->data);
 
             if (i == wp->scenario) {
                 // Shadow Box
-                winTexSet(i + (u32)MODE_8, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
+                winTexSet(i + (u32)E3_TEX_BOX, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
                           (Vec){0.35f, 0.35f, 0.35f}, (GXColor){0x00, 0x00, 0x00, 0x40});
                 // Content Box
-                winTexSet(i + MODE_8, (Vec){e3_tbl[i].x, e3_tbl[i].y, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
+                winTexSet(i + E3_TEX_BOX, (Vec){e3_tbl[i].x, e3_tbl[i].y, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
                           (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             } else {
-                winTexSet(i + MODE_8, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
+                winTexSet(i + E3_TEX_BOX, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
                           (GXColor){0x80, 0x80, 0x80, 0xFF});
             }
 
             {
-char* keys[3] = {"menu_monosiri_hei", "menu_monosiri_gon", "menu_monosiri_win"};
-step = (i == wp->scenario) ? 0 : 10;
+                char* keys[3] = {"menu_monosiri_hei", "menu_monosiri_gon", "menu_monosiri_win"};
+                step = (i == wp->scenario) ? 0 : 10;
 
                 windowDispGX_Waku_col(0, (GXColor){0x4A, 0x56, 0xB5, 0xFF}, (((f32)step + e3_tbl[i].x) - 100.0f),
                                       ((e3_tbl[i].y - (f32)step) - 60.0f), 200.0f, 40.0f, 20.0f);
@@ -1286,22 +1304,22 @@ step = (i == wp->scenario) ? 0 : 10;
         winTexInit(*wp->handle->data);
         for (pass = 1, inset = 5; pass >= 0; pass--, inset -= 5) {
             // Top-Left
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+            winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
                       (Vec){(110.0f + wp->curX) + (f32)inset, (90.0f + wp->curY) - (f32)inset, 0.0f},
                       (Vec){1.0f, 1.0f, 1.0f},
                       (pass != 0) ? (GXColor){0x00, 0x00, 0x00, 0x40} : (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             // Top-Right
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+            winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
                       (Vec){(wp->curX - 110.0f) + (f32)inset, (90.0f + wp->curY) - (f32)inset, 0.0f},
                       (Vec){-1.0f, 1.0f, 1.0f},
                       (pass != 0) ? (GXColor){0x00, 0x00, 0x00, 0x40} : (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             // Bottom-Left
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+            winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
                       (Vec){(110.0f + wp->curX) + (f32)inset, (wp->curY - 90.0f) - (f32)inset, 0.0f},
                       (Vec){1.0f, -1.0f, 1.0f},
                       (pass != 0) ? (GXColor){0x00, 0x00, 0x00, 0x40} : (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             // Bottom-Right
-            winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
+            winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
                       (Vec){(wp->curX - 110.0f) + (f32)inset, (wp->curY - 90.0f) - (f32)inset, 0.0f},
                       (Vec){-1.0f, -1.0f, 1.0f},
                       (pass != 0) ? (GXColor){0x00, 0x00, 0x00, 0x40} : (GXColor){0xFF, 0xFF, 0xFF, 0xFF});

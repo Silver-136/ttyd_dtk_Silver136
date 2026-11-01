@@ -838,7 +838,7 @@ CALL(evt_mobj_save_blk, STRING("mobj_save"), -175, 140, -170, 0, 0)
         CALL_CHILD(hom_10_evt_resha_left)
     END_IF
     // Late in the story the crossing barrier is shown in its open position.
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_54_WELCOME_BACK)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
 CALL(evt_map_playanim, STRING("shadanki"), MAP_ANIM_PLAY_AT_END, 0)
 END_IF
     // The sun's heat haze and glare, and the station clock hands.
@@ -865,14 +865,14 @@ END_IF
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_27_RIVERSIDE_STATION)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_27_RIVERSIDE_STATION)
         SPAWN_EVENT(evt_hom_touchaku)
     END_IF
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome"))
         SPAWN_EVENT(evt_hom_touchaku_nidome)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_55_PEACH_GRODUS_X_NAUT)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_55_PEACH_GRODUS_X_NAUT)
         SET_VALUE(LW(0), STRING("n_bero_1"))
         CALL_CHILD(bero_case_switch_off)
         CALL(evt_bero_overwrite, STRING("n_bero_1"), PTR(bero_data_nidome))
@@ -880,16 +880,16 @@ END_IF
         CALL_CHILD(bero_case_switch_on)
     END_IF
     // The station door stays locked until the Station Key has been used.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_29_STATION_DOOR_UNLOCKED)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_29_STATION_DOOR_UNLOCKED)
         CALL(evt_mobj_lock, STRING("lock"), 24, -260, 90, -190, 0, PTR(evt_chk), PTR(evt_lock), GSWF_HOM_00_STATION_DOOR_LOCK)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(bero_case_switch_off)
     END_IF
     // From the drawbridge-down step on, the bridge is lowered and the train door can be used.
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_42_DRAWBRIDGE_DOWN)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_42_DRAWBRIDGE_DOWN)
         CALL(evt_map_playanim, STRING("hasi"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_42_DRAWBRIDGE_DOWN)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_42_DRAWBRIDGE_DOWN)
         CALL(evt_hitobj_attr_onoff, 0, 1, STRING("n_bero_1"), HIT_ATTR_BERO)
         CALL(evt_run_case_evt, CASE_FRONT, 1, STRING("n_bero_1"), 0, PTR(evt_train), 0)
         CALL(evt_map_playanim, STRING("n_1_door_open"), MAP_ANIM_PLAY_AT_END, 0)

@@ -1156,17 +1156,9 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
             NULL, // fpDamageFn
             {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-            TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
             TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
             TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-            ELEMENT_NORMAL, 10, // element..damagePattern
-#else
             ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
             3, // acLevel
             2, // reserved_6F
             NULL, // acHelpMsg
@@ -1197,28 +1189,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1241,28 +1220,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1285,28 +1251,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 1, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_DAMAGE_SURPRISE, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1329,28 +1282,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1373,28 +1313,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                100, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1417,33 +1344,20 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                100, 0, 100, 0, 100, 0, 100, // sleepChance..poisonChance
-#else
                 0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
 #if VERSION <= VERSION_DEMO_US
--99, 0, 0, 0, 0, 0, 0, 0,
+                -99, 0, 0, 0, 0, 0, 0, 0,
 #else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
 #endif
@@ -1465,28 +1379,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 100, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1509,28 +1410,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1553,28 +1441,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 25, 3, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1600,17 +1475,9 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
             NULL, // fpDamageFn
             {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-            TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
             TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
             TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-            ELEMENT_NORMAL, 10, // element..damagePattern
-#else
             ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
             3, // acLevel
             2, // reserved_6F
             NULL, // acHelpMsg
@@ -1641,28 +1508,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1685,28 +1539,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1729,28 +1570,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 1, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_DAMAGE_SURPRISE, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1773,28 +1601,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1817,28 +1632,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                100, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1861,33 +1663,20 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                100, 0, 100, 0, 100, 0, 100, // sleepChance..poisonChance
-#else
                 0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
 #if VERSION <= VERSION_DEMO_US
--99, 0, 0, 0, 0, 0, 0, 0,
+                -99, 0, 0, 0, 0, 0, 0, 0,
 #else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
 #endif
@@ -1909,28 +1698,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 100, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1953,28 +1729,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1997,28 +1760,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 25, 3, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2044,17 +1794,9 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
             NULL, // fpDamageFn
             {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-            TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
             TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
             TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-            ELEMENT_NORMAL, 10, // element..damagePattern
-#else
             ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
             3, // acLevel
             2, // reserved_6F
             NULL, // acHelpMsg
@@ -2085,28 +1827,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2129,28 +1858,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2173,28 +1889,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 1, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_DAMAGE_SURPRISE, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2217,28 +1920,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2261,28 +1951,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                100, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2305,33 +1982,20 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                100, 0, 100, 0, 100, 0, 100, // sleepChance..poisonChance
-#else
                 0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
 #if VERSION <= VERSION_DEMO_US
--99, 0, 0, 0, 0, 0, 0, 0,
+                -99, 0, 0, 0, 0, 0, 0, 0,
 #else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
 #endif
@@ -2353,28 +2017,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 100, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2397,28 +2048,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2441,28 +2079,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 25, 3, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2488,17 +2113,9 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
             NULL, // fpDamageFn
             {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-            TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
             TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
             TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-            ELEMENT_NORMAL, 10, // element..damagePattern
-#else
             ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
             3, // acLevel
             2, // reserved_6F
             NULL, // acHelpMsg
@@ -2529,28 +2146,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2573,28 +2177,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2617,28 +2208,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 1, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_DAMAGE_SURPRISE, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2661,28 +2239,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 50, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2705,28 +2270,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                100, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 100, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2749,33 +2301,20 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 0, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                100, 0, 100, 0, 100, 0, 100, // sleepChance..poisonChance
-#else
                 0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
 #if VERSION <= VERSION_DEMO_US
--99, 0, 0, 0, 0, 0, 0, 0,
+                -99, 0, 0, 0, 0, 0, 0, 0,
 #else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
 #endif
@@ -2797,28 +2336,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 100, 3, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2841,28 +2367,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-#else
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 50, 3, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2885,28 +2398,15 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
                 NULL, // fpDamageFn
                 {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
-                TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-#else
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-#endif
                 TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-#if VERSION <= VERSION_DEMO_US
-                ELEMENT_NORMAL, 10, // element..damagePattern
-#else
                 ELEMENT_NORMAL, ATTACKPATTERN_PRESS, // element..damagePattern
-#endif
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-#if VERSION <= VERSION_DEMO_US
-                TARGET_WEIGHT_RANDOM, // targetWeightFlags
-                0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonChance
-#else
                 0x80000000, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
-#endif
                 0, 0, 0, 0, 25, 3, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -3734,11 +3234,7 @@ USER_FUNC(_fall_frame_wait) {
     return EVT_RETURN_YIELD;
 }
 
-#if VERSION <= VERSION_DEMO_US
-static USER_FUNC(_fall_frame_wait_unit_ready) {
-#else
 USER_FUNC(_fall_frame_wait_unit_ready) {
-#endif
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     EventEntry* evt;
@@ -3748,7 +3244,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
         for (i = 0; i < 64; i++) {
             unit = BattleGetUnitPtr(wp, i);
 #if VERSION <= VERSION_DEMO_US
-if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && unit->ceilFallEventCode) {
+            if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && unit->ceilFallEventCode) {
 #else
             if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->ceilFallEventCode) {
 #endif
@@ -3756,9 +3252,7 @@ if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && unit->ceilFallEventCode)
                 if (evt) {
                     evt->unitId = unit->unitId;
                 }
-#if VERSION > VERSION_DEMO_US
                 // Read outside the if (evt) block above (evtEntry never returns NULL; a full pool gives the one-past entry).
-#endif
                 unit->ceilFallEventId = evt->eventId;
             }
         }
@@ -4341,11 +3835,7 @@ typedef struct FallObjectWork {
  * at a random audience member, then waits for the effect to land and deals the damage (guard check, dodges,
  * Superguard and lucky reactions). Returns 1 in args[0] if it fell on the audience.
  */
-#if VERSION <= VERSION_DEMO_US
-USER_FUNC ( _object_fall_attack(EventEntry* event, BOOL isFirstCall) {
-#else
 USER_FUNC(_object_fall_attack) {
-#endif
     BattleWork* wp = _battleWorkPointer;
     BattleStageFallObjectData* fd = wp->stageObjectWork.fallObjectData;
     const char* sfxNormal;
@@ -4385,8 +3875,6 @@ USER_FUNC(_object_fall_attack) {
     Vec p;
     s32 unitId;
     s32 partId;
-#if VERSION <= VERSION_DEMO_US
-#endif
     if (isFirstCall) {
         w = BattleAlloc(sizeof(FallObjectWork));
         event->userdatap[0] = w;
@@ -4406,11 +3894,7 @@ USER_FUNC(_object_fall_attack) {
             e = &w->entries[i];
             e->index = i;
             for (j = 0; j < 3; j++) {
-#if VERSION <= VERSION_DEMO_US
-                if (w->prevTypes[j] == (-1)) {
-#else
                 if (w->prevTypes[j] == -1) {
-#endif
                     break;
                 }
             }
@@ -4444,13 +3928,8 @@ USER_FUNC(_object_fall_attack) {
             }
             weapon = &e->weapon.weapon;
             e->kind = 0;
-#if VERSION <= VERSION_DEMO_US
-            if (((pouchGetPtr()->starPowersObtained && (!(BattleAudienceBaseGetPtr()->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS))) && (e->type != 6)) && (e->type != 7)) {
-                if (((u32)wp->debug.flags & BATTLE_DEBUG_FORCE_FALL_ON_AUDIENCE) || (irand(100) < 10)) {
-#else
             if (pouchGetPtr()->starPowersObtained && !(BattleAudienceBaseGetPtr()->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS) && e->type != STAGE_FALL_BOWSER_STATUE && e->type != STAGE_FALL_METEOR) {
                 if ((wp->debug.flags & BATTLE_DEBUG_FORCE_FALL_ON_AUDIENCE) || irand(100) < 10) {
-#endif
                     e->kind = 1;
                     e->partId = -1;
                     e->unitId = BattleAudience_HaitiRandForFallObject();
@@ -4471,16 +3950,10 @@ USER_FUNC(_object_fall_attack) {
                 e->noAc = 1;
                 for (k = i; k >= 0; k--) {
                     o = &w->entries[k];
-#if VERSION <= VERSION_DEMO_US
-                    if (((e != o) && (o->kind == 0)) && (e->unitId == o->unitId)) {
-#else
                     if (e != o && o->kind == 0 && e->unitId == o->unitId) {
-#endif
                         o->noAc = 0;
                     }
                 }
-#if VERSION <= VERSION_DEMO_US
-#endif
             }
         }
 
@@ -4500,11 +3973,7 @@ USER_FUNC(_object_fall_attack) {
                     flags |= DAMAGE_RESULT_NO_EVADE;
                 }
                 e->preCheck = BattlePreCheckDamage(BattleGetSystemPtr(wp), BattleGetUnitPtr(wp, e->unitId), BattleGetUnitPartsPtr(e->unitId, e->partId), weapon, flags);
-#if VERSION <= VERSION_DEMO_US
-                if ((e->preCheck == 1) && (!e->noAc)) {
-#else
                 if (e->preCheck == 1 && !e->noAc) {
-#endif
                     delay = irand(0);
                     for (k2 = 0; k2 < i; k2++) {
                         o2 = &w->entries[k2];
@@ -4516,13 +3985,9 @@ USER_FUNC(_object_fall_attack) {
                             }
                         }
                     }
-#if VERSION <= VERSION_DEMO_US
-#endif
                 }
             }
         }
-#if VERSION <= VERSION_DEMO_US
-#endif
     }
     sfxTub2 = (0, "SFX_BTL_STAGE_DAMAGE_TUB1"); // FAKE: comma expr makes the literal an early @ temp (same pointer)
     sfxNormal = "SFX_BTL_STAGE_DAMAGE_NORMAL1";
@@ -4533,11 +3998,7 @@ USER_FUNC(_object_fall_attack) {
     done = TRUE;
     for (i = 0; i < w->count; i++) {
         e3 = &w->entries[i];
-#if VERSION <= VERSION_DEMO_US
-        if (e3->index == (-1)) {
-#else
         if (e3->index == -1) {
-#endif
             continue;
         }
         acCount = 0;
@@ -4546,11 +4007,7 @@ USER_FUNC(_object_fall_attack) {
             unit = BattleGetUnitPtr(wp, e3->unitId);
             part = BattleGetUnitPartsPtr(e3->unitId, e3->partId);
         }
-#if VERSION <= VERSION_DEMO_US
-        if ((e3->effect == ((void*)0)) || (e3->delay > 0)) {
-#else
         if (e3->effect == NULL || e3->delay > 0) {
-#endif
             e3->delay--;
             if (e3->delay > 0) {
                 continue;
@@ -4574,8 +4031,6 @@ USER_FUNC(_object_fall_attack) {
                     hit = (Vec){0.0f, 0.0f, 0.0f};
                     width = 0.0f;
                     break;
-#if VERSION <= VERSION_DEMO_US
-#endif
             }
 
             pos = hit;
@@ -4587,14 +4042,8 @@ USER_FUNC(_object_fall_attack) {
             }
             switch (e3->preCheck) {
                 case 2:
-#if VERSION <= VERSION_DEMO_US
-#endif
                 case 3:
-#if VERSION <= VERSION_DEMO_US
-#endif
                 case 4:
-#if VERSION <= VERSION_DEMO_US
-#endif
                 case 6:
                     hit.y = pos.y;
                     break;
@@ -4621,7 +4070,7 @@ USER_FUNC(_object_fall_attack) {
 
                 case STAGE_FALL_FORK:
 #if VERSION <= VERSION_DEMO_US
-e3->effect = effFallEntry(2, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);
+                    e3->effect = effFallEntry(2, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);
 #else
                     e3->effect = effFallEntry(2, pos.x, pos.y, 5.0f + pos.z, width, hit.y - pos.y, dir, 1, 90);
 #endif
@@ -4638,13 +4087,13 @@ e3->effect = effFallEntry(2, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 
                 case STAGE_FALL_BOWSER_STATUE:
                     if (BtlUnit_GetBelong(unit) == 0) {
 #if VERSION <= VERSION_DEMO_US
-e3->effect = effFallEntry(6, -300.0f, pos.y, pos.z, 0.0f, 0.0f, dir, 1, 180);
+                        e3->effect = effFallEntry(6, -300.0f, pos.y, pos.z, 0.0f, 0.0f, dir, 1, 180);
 #else
                         e3->effect = effFallEntry(6, -300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
 #endif
                     } else {
 #if VERSION <= VERSION_DEMO_US
-e3->effect = effFallEntry(6, 300.0f, pos.y, pos.z, 0.0f, 0.0f, dir, 1, 180);
+                        e3->effect = effFallEntry(6, 300.0f, pos.y, pos.z, 0.0f, 0.0f, dir, 1, 180);
 #else
                         e3->effect = effFallEntry(6, 300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
 #endif
@@ -4653,21 +4102,15 @@ e3->effect = effFallEntry(6, 300.0f, pos.y, pos.z, 0.0f, 0.0f, dir, 1, 180);
 
                 case STAGE_FALL_METEOR:
 #if VERSION <= VERSION_DEMO_US
-e3->effect = effFallEntry(7, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 180);
+                    e3->effect = effFallEntry(7, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 180);
 #else
                     e3->effect = effFallEntry(7, pos.x, pos.y, 5.0f + pos.z, width, hit.y - pos.y, dir, 1, 180);
 #endif
                     break;
-#if VERSION <= VERSION_DEMO_US
-#endif
             }
 
         } else {
-#if VERSION <= VERSION_DEMO_US
-            if ((e3->effect != ((void*)0)) && (!effFallCheckHit(e3->effect))) {
-#else
             if (e3->effect != NULL && !effFallCheckHit(e3->effect)) {
-#endif
                 continue;
             }
             weapon3 = &e3->weapon.weapon;
@@ -4680,8 +4123,6 @@ e3->effect = effFallEntry(7, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 
                         break;
 
                     case STAGE_FALL_BASIN:
-#if VERSION <= VERSION_DEMO_US
-#endif
                     case STAGE_FALL_BUCKET:
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
                         break;
@@ -4689,8 +4130,6 @@ e3->effect = effFallEntry(7, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 
                     default:
                         psndSFXOn_3D(sfxNormal, &sfxPos);
                         break;
-#if VERSION <= VERSION_DEMO_US
-#endif
                 }
 
             } else {
@@ -4704,55 +4143,33 @@ e3->effect = effFallEntry(7, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 
                     psndSFXOff(e3->sfxId);
                     switch (e3->preCheck) {
                         case 2:
-#if VERSION <= VERSION_DEMO_US
-#endif
                         case 3:
-#if VERSION <= VERSION_DEMO_US
-#endif
                         case 4:
-#if VERSION <= VERSION_DEMO_US
-#endif
                         case 6:
                             switch (e3->type) {
                                 case STAGE_FALL_WATER:
                                     break;
-#if VERSION <= VERSION_DEMO_US
-#endif
                                 case STAGE_FALL_BASIN:
-#if VERSION <= VERSION_DEMO_US
-#endif
                                 case STAGE_FALL_BUCKET:
                                     psndSFXOn_3D(sfxTub2, &sfxPos);
                                     break;
                             }
-#if VERSION <= VERSION_DEMO_US
-#endif
                             break;
-#if VERSION <= VERSION_DEMO_US
-#endif
                         case 1:
                             switch (e3->type) {
                                 case STAGE_FALL_BASIN:
-#if VERSION <= VERSION_DEMO_US
-#endif
                                 case STAGE_FALL_BUCKET:
                                     psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
                                     break;
-#if VERSION <= VERSION_DEMO_US
-#endif
                                 case STAGE_FALL_WATER:
 #if VERSION > VERSION_DEMO_US
                                     psndSFXOn_3D(sfxRest, &sfxPos);
 #endif
                                     break;
-#if VERSION <= VERSION_DEMO_US
-#endif
                                 default:
                                     psndSFXOn_3D(sfxNormal, &sfxPos);
                                     break;
                             }
-#if VERSION <= VERSION_DEMO_US
-#endif
                             if (BtlUnit_GetACPossibility(unit)) {
                                 BattleActionCommandCheckDefence(unit, weapon3);
                             }
@@ -4774,8 +4191,6 @@ e3->effect = effFallEntry(7, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 
                             unit2 = BattleGetUnitPtr(wp, tg->unitIdx);
                             switch (BattlePreCheckDamage(BattleGetSystemPtr(wp), unit2, BattleGetUnitPartsPtr(tg->unitIdx, tg->partIdx), weapon3, DAMAGE_RESULT_FINAL_HIT)) {
                                 case 2:
-#if VERSION <= VERSION_DEMO_US
-#endif
                                 case 4:
                                     break;
 
@@ -4791,42 +4206,26 @@ e3->effect = effFallEntry(7, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 
                                     eff = effNiceEntry(NICE_EFFECT_LUCKY, p.x, p.y, p.z);
                                     ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
                                     unit2->damagePattern = 0;
-#if VERSION <= VERSION_DEMO_US
-                                    BattleRunHitEvent(unit2, 0x126);
-#else
                                     BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_LUCKY);
-#endif
                                     break;
                                 }
 
                                 case 6:
                                     unit2->damagePattern = 0;
-#if VERSION <= VERSION_DEMO_US
-                                    BattleRunHitEvent(unit2, 0x127);
-#else
                                     BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_DODGY);
-#endif
                                     break;
 
                                 case 1:
-#if VERSION <= VERSION_DEMO_US
-                                    if (BtlUnit_GetACPossibility(unit2) && (acCount <= 0)) {
-#else
                                     if (BtlUnit_GetACPossibility(unit2) && acCount <= 0) {
-#endif
                                         BattleActionCommandCheckDefence(unit2, weapon3);
                                         acCount++;
                                     }
                                     BattleCheckDamage(BattleGetSystemPtr(wp), unit2, BattleGetUnitPartsPtr(tg->unitIdx, tg->partIdx), weapon3, DAMAGE_RESULT_FINAL_HIT);
                                     break;
-#if VERSION <= VERSION_DEMO_US
-#endif
                             }
 
                             targets2.currentTarget++;
                         }
-#if VERSION <= VERSION_DEMO_US
-#endif
                     }
                 }
             }

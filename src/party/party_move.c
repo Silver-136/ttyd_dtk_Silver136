@@ -506,7 +506,7 @@ void partyClearFootmark(void) {
         a->pos = mpos;
         b->pos = ppos;
         a->flag = 0;
-        b->flags = 0;
+        b->flag = 0;
         a++;
         b++;
 #else
@@ -558,7 +558,7 @@ void partyClearFootmark2(void) {
         a->pos = pos;
         b->pos = pos;
         a->flag = 0;
-        b->flags = 0;
+        b->flag = 0;
         a++;
         b++;
 #else
@@ -1080,7 +1080,7 @@ party->position.x = pos.x;
     if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
         pos2 = party->position;
         h = party->height;
-        hit = ((PartySearchHeadRetHitentryptrFn)partySearchHead)(party, &pos2, &h, party->displayDirection);
+        hit = partySearchHead(party, &pos2, &h, party->displayDirection);
         if (hit) {
             party->hitobjHead = hit;
         }
@@ -1097,7 +1097,7 @@ party->position.x = pos.x;
     hit = NULL;
     if (!(party->flags & PARTY_FLAG_FORCE_FALL) && party->velY <= 0.0f) {
         v = __fabsf(party->velY);
-hit = partySearchGround(party, &pos.y, &depth, v, v);
+hit = _partySearchGround(party, &pos.y, &depth, v, v);
 if (hit) {
             if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
                 party->hitobjStandOn = hit;
@@ -1359,7 +1359,7 @@ f32 depth;
     party->position.x = pos.x;
     party->position.z = pos.z;
 #if VERSION <= VERSION_DEMO_US
-hit = partySearchGround(party, &pos.y, &depth, 10.0f, 10.0f);
+hit = _partySearchGround(party, &pos.y, &depth, 10.0f, 10.0f);
 #else
     hit = partySearchGround(party, 10.0f, 10.0f);
     pos.y = party->groundY;
@@ -1613,7 +1613,9 @@ void partyMoveWalk(PartyEntry* party) {
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         partyWalkInit(party);
     }
+#if VERSION > VERSION_DEMO_US
     partyChkUpdSpd(party);
+#endif
     partyWalkMain(party);
 }
 
@@ -1621,16 +1623,6 @@ void partyMoveWalk(PartyEntry* party) {
  * One walking frame: lays this frame's footmark (Mario for the slot 0 entry; the other entry for slot 1,
  * or Mario when it is Bobbery in use, Koops's status 3 or far away) and runs the move mode.
  */
-#if VERSION <= VERSION_DEMO_US
-void partyMoveWalk(PartyEntry* party) {
-    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
-        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
-        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-        partyWalkInit(party);
-    }
-partyWalkMain(party);
-}
-#endif
 void partyWalkMain(PartyEntry* party) {
     PartyEntry* other;
     u32 flags = 0;
@@ -1852,7 +1844,7 @@ f32 gy;
             }
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
 #if VERSION <= VERSION_DEMO_US
-hit = partySearchGround(party, &gy, &depth, 10.0f, 10.0f);
+hit = _partySearchGround(party, &gy, &depth, 10.0f, 10.0f);
             if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
 #else
             hit = partySearchGround(party, 10.0f, 10.0f);

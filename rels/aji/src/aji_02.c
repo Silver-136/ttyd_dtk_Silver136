@@ -276,7 +276,7 @@ EVT_END()
 EVT_BEGIN(aji_02_init_evt)
     CALL(evt_bero_get_entername, LW(0))
 #if VERSION <= VERSION_DEMO_US
-IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_00_START)
+IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
 #else
     CALL(evt_snd_set_rev_mode, 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
@@ -312,7 +312,7 @@ IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_00_START)
     CALL(evt_cam_road_reset)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_09_ELEVATOR_KEY_A_LIT_FLOOR)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_09_ELEVATOR_KEY_A_LIT_FLOOR)
         SPAWN_EVENT(hikaru_yuka_init)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_09_ELEVATOR_KEY_A_LIT_FLOOR)
@@ -401,7 +401,7 @@ if (strcmp(mario->hitobjUnder->joint->name, hitName) == 0) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(event, GSW(GSW_STORY_PROGRESS)) >= STG7_09_ELEVATOR_KEY_A_LIT_FLOOR) {
+    if (evtGetValue(event, GSW_STORY_PROGRESS) >= STG7_09_ELEVATOR_KEY_A_LIT_FLOOR) {
 #else
     if (evtGetValue(event, GSW_STORY_PROGRESS) >= STG7_09_ELEVATOR_KEY_A_LIT_FLOOR) {
 #endif

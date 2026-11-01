@@ -274,7 +274,7 @@ static NpcSetupInfo npcEnt[] = {
  */
 EVT_BEGIN(aji_00_init_evt)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_08_ELITE_X_NAUTS)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_08_ELITE_X_NAUTS)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_08_ELITE_X_NAUTS)
 #endif
@@ -290,7 +290,7 @@ EVT_BEGIN(aji_00_init_evt)
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_08_ELITE_X_NAUTS)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_08_ELITE_X_NAUTS)
         SPAWN_EVENT(first_evt)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -310,7 +310,7 @@ EVT_BEGIN(aji_00_init_evt)
     CALL(evt_map_playanim, STRING("hosi_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_03"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
         // Replace the west exit with a message throughout this story interval.

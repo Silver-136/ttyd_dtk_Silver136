@@ -163,7 +163,7 @@ f32 ang;
         if (marioChkInScreen((s32)sx, (s32)sy)) {
             break;
         }
-ang = angleABf(p->position.x, p->position.z, ((MarioWork*)mw)->position.x, ((MarioWork*)mw)->position.z);
+        ang = angleABf(p->position.x, p->position.z, mario->position.x, mario->position.z);
         movePos(&p->position.x, &p->position.z, 1.0f, ang);
         h = 100.0f;
         from = p->position;
@@ -171,7 +171,7 @@ ang = angleABf(p->position.x, p->position.z, ((MarioWork*)mw)->position.x, ((Mar
         if (partyHitCheck(p, &from, &dir, &out1, &out2, &h) != NULL) {
             p->position.y = out1.y;
         } else {
-            p->position.y = ((MarioWork*)mw)->position.y;
+            p->position.y = mario->position.y;
         }
     }
     return EVT_RETURN_DONE;
@@ -617,7 +617,7 @@ dy += 0.5f * p->height;
         {
 #if VERSION <= VERSION_DEMO_US
 f32 groundY, dropDepth;
-                HitEntry* hit = partySearchGround(
+                HitEntry* hit = _partySearchGround(
                     p, &groundY, &dropDepth, __fabsf(ff), __fabsf(ff));
                 if (hit != NULL && p->position.y + ff <= groundY) {
 #else

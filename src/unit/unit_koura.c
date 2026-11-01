@@ -21,14 +21,10 @@ PoseTableEntry pose_table_crack_lv2[5];
 static BattleUnitKindPart parts[2];
 static EvtWord init_event[46];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[];
-#else
 static EvtWord phase_event[22];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[];
+static EvtWord phase_event[22];
 #else
 static EvtWord phase_event[38];
 #endif

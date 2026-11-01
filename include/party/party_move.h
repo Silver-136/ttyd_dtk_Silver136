@@ -1,5 +1,6 @@
 #pragma once
 
+#include "version.h"
 #include "party.h"
 #include "dolphin/types.h"
 #include <dolphin/mtx.h>
@@ -7,6 +8,9 @@
 struct HitEntry;
 
 // Footmark.flag bits, set by partyRecordFootmark from the leader it follows
+#if VERSION <= VERSION_DEMO_US
+#define PARTY_FOOTMARK_DEMO_ARG_SLIT 2 // demo: partyPutFootmark's argument bit for FOOTMARK_FLAG_SLIT
+#endif
 #define FOOTMARK_FLAG_JUMP 1  // the leader was jumping
 #define FOOTMARK_FLAG_SLIT 4  // Mario was passing through a slit (marioChkSlitThrouh)
 

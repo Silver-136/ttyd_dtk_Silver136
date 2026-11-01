@@ -16,7 +16,11 @@ typedef struct StatusValue {
     s16 coins;      // 0x10
     s16 ap;         // 0x12
     s16 maxAp;      // 0x14
+#if VERSION <= VERSION_DEMO_US
+    s16 lastParty;  // 0x16, the partner shown while Mario is in bg mode
+#else
     s16 pad16;      // 0x16
+#endif
 } StatusValue;
 
 // StatusWindowWork.flags (statusWinOpen/Close, statusWinForce*, statusWinDisp*)

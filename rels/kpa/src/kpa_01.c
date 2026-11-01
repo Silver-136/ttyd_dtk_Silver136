@@ -306,7 +306,7 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     WAIT_MS(100)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_001"), 0, STRING("トゲノコＡ"))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_19_01_BOWSER_BOWSER_CASTLE)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_19_01_BOWSER_BOWSER_CASTLE)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_19_01_BOWSER_BOWSER_CASTLE)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
@@ -1199,7 +1199,7 @@ EVT_BEGIN(kpa_01_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_zou_3"), 0, PTR(douzou_3_touch_evt), 0)
     CALL_CHILD(shan_init)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif

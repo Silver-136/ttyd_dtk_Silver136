@@ -4,6 +4,7 @@
 
 #include <dolphin/types.h>
 #include <dolphin/mtx.h>
+#include "version.h"
 
 /* mot_plane's work: MarioWork.motPlane (the 0x288 union). Allocated 0x48 by mot_plane's
  * trigger block, freed by mot_plane_post / on landing. Same on JP and US. */
@@ -30,11 +31,11 @@ typedef struct MotPlaneWork {
 
 void marioForcePlaneAnime(void);
 s32 marioGetPlaneStatus(void);
-#if VERSION <= VERSION_DEMO_US
-void marioPlaneGetFlyingDir(void);
-#else
 s32 marioPlaneGetFlyingDir(void);
-#endif
 void mot_plane(void);
 void mot_plane_post(void);
+#if VERSION <= VERSION_DEMO_US
+void mario_plane_cancel(void);
+#else
 BOOL mario_plane_cancel(void);
+#endif

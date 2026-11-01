@@ -1352,7 +1352,7 @@ EVT_END()
 EVT_BEGIN(npc_entry)
 #if VERSION <= VERSION_DEMO_US
     // Before the intro cutscene: Rawk Hawk and the Dark Koopatrol he is about to beat.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_01_ARENA_INTRO_1F)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
         CALL(evt_npc_entry, PTR("チャンピョン"), PTR("c_bred_h"))
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
@@ -1379,7 +1379,7 @@ EVT_BEGIN(npc_entry)
 #endif
     SET_VALUE(LF(0), 0)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -2284,8 +2284,8 @@ EVT_BEGIN(evt_match)
 CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_FF_ENV_TOU1"))
 SWITCH(GSW_GLITZ_PIT_OPPONENT)
         CASE_EQUAL(19)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN), 0)
-            SET_VALUE(GSWF(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN), 1)
+        IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 0)
+            SET_VALUE(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 1)
             CALL_CHILD(evt_kurikuri_opening)
         ELSE
             CALL_CHILD(evt_default_opening)
@@ -2300,7 +2300,7 @@ SWITCH(GSW_GLITZ_PIT_OPPONENT)
         CASE_EQUAL(0)
         IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
             SET_VALUE(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 1)
-            IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+            IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                 CALL_CHILD(evt_champ_opening)
             ELSE
                 CALL_CHILD(evt_champ_opening_re)
@@ -2332,7 +2332,7 @@ CALL(evt_npc_get_battle_rule_keep_result, LW(0))
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_battle_result, LW(0))
     BEGIN_INLINE_EVENT
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             CALL(evt_npc_set_stay_anim, STRING("ガンス"))
             CALL(evt_npc_set_autotalkpose, STRING("ガンス"), STRING("S_2"), STRING("T_2"))
         ELSE
@@ -2374,11 +2374,11 @@ CALL(evt_npc_get_battle_rule_keep_result, LW(0))
         // Update the ranking; a win at rank 7 or rank 5 can set off the Iron Clefts' or Bowser's ambush.
         CALL(evt_tou_get_ranking, LW(10))
         CALL(evt_tou_set_ranking_win_lose, 0, GSW_GLITZ_PIT_OPPONENT)
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
-            IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_30_A_NEW_CHAMPION)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
                 CALL(evt_tou_get_ranking, LW(10))
             ELSE
-                IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_20_MAJORS_10TH_PLACE)
+                IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_20_MAJORS_10TH_PLACE)
 CALL(evt_tou_get_ranking, LW(10))
 END_IF
             END_IF
@@ -2423,10 +2423,10 @@ END_IF
     END_IF
     // The first match moves the story on. Fade out to the locker room that fits Mario's rank:
     // the champion's room, the major-league room (ranks 1 to 10) or the minor-league room.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_06_1ST_MATCH)
-        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_06_1ST_MATCH)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
+        SET_VALUE(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
     END_IF
     CALL(evt_fade_set_mapchange_type, 0, 2, 300, 1, 300)
@@ -3318,7 +3318,7 @@ EVT_BEGIN(evt_shinemon_lose)
     ADD(LW(1), 100)
     CALL(evt_eff, STRING(""), STRING("confetti"), 3, LW(0), LW(1), LW(2), 300, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG3_WIN_AUDIENCE1"), 0)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LW(2), STRING("ガンス"))
     ELSE
         SET_VALUE(LW(2), STRING("キノシコワ"))
@@ -4179,7 +4179,7 @@ EVT_BEGIN(evt_default_opening)
     // The announcer waits in the ring; Mario and the partner wait at the west steps, the opponents at the east.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LW(0), STRING("ガンス"))
     ELSE
         SET_VALUE(LW(0), STRING("キノシコワ"))
@@ -4213,7 +4213,7 @@ EVT_BEGIN(evt_default_opening)
     END_SWITCH
     CALL(evt_cam3d_evt_set, 0, 585, 1310, 0, 400, -145, 0, EASING_SINE_IN_OUT)
     // While Rawk Hawk is still champion he wears his belt.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_30_A_NEW_CHAMPION)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
             CALL(evt_npc_set_tribe, STRING("敵１"), STRING("ブレッドハートベルト"))
             BEGIN_INLINE_EVENT
@@ -4281,7 +4281,7 @@ CALL(evt_cam3d_evt_set, 0, 127, 105, 0, 95, -145, 0, EASING_LINEAR)
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     CALL(evt_tou_get_fighter_name2, GSW_GLITZ_PIT_OPPONENT, LW(2))
     IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             SET_VALUE(LW(0), STRING("ガンス"))
         ELSE
             SET_VALUE(LW(0), STRING("キノシコワ"))
@@ -4289,13 +4289,13 @@ CALL(evt_cam3d_evt_set, 0, 127, 105, 0, 95, -145, 0, EASING_LINEAR)
         CALL(evt_tou_get_ranking, LW(1))
         SWITCH(LW(1))
             CASE_EQUAL(0)
-            IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+            IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                 SET_VALUE(LW(1), STRING("stg3_tou_378"))
             ELSE
                 SET_VALUE(LW(1), STRING("stg3_tou_re_266"))
             END_IF
             CASE_EQUAL(1)
-            IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+            IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                 SET_VALUE(LW(1), STRING("stg3_tou_377"))
             ELSE
                 SET_VALUE(LW(1), STRING("stg3_tou_re_265"))
@@ -4303,7 +4303,7 @@ CALL(evt_cam3d_evt_set, 0, 127, 105, 0, 95, -145, 0, EASING_LINEAR)
         END_SWITCH
         CALL(evt_msg_print, 0, LW(1), 0, LW(0))
     ELSE
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             SET_VALUE(LW(3), STRING("ガンス"))
             SET_VALUE(LW(4), STRING("stg3_tou_115"))
             SET_VALUE(LW(5), STRING("stg3_tou_116_20"))
@@ -4317,7 +4317,7 @@ CALL(evt_cam3d_evt_set, 0, 127, 105, 0, 95, -145, 0, EASING_LINEAR)
     END_IF
 CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, EASING_LINEAR)
 WAIT_FRAMES(1)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_party_stop, 0)
@@ -4351,7 +4351,7 @@ WAIT_FRAMES(1)
     CALL(evt_tou_get_fighter_battle_msg, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     SWITCH(GSW_GLITZ_PIT_OPPONENT)
         CASE_EQUAL(10)
-        SWITCH(GSW(GSW_STORY_PROGRESS))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_20_MAJORS_10TH_PLACE, STG3_34_RETURN_TO_ROGUEPORT)
             SET_VALUE(LW(0), STRING("stg3_tou_118_37"))
             CASE_GREATER_OR_EQUAL(STG3_34_RETURN_TO_ROGUEPORT)
@@ -4360,7 +4360,7 @@ WAIT_FRAMES(1)
             END_IF
         END_SWITCH
         CASE_EQUAL(0)
-        SWITCH(GSW(GSW_STORY_PROGRESS))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
             IF_INT_EQUAL(LW(2), 1)
                 SET_VALUE(LW(0), STRING("stg3_tou_400_00"))
@@ -4376,7 +4376,7 @@ WAIT_FRAMES(1)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 150, 141, 0, 100, -154, 0, EASING_SINE_IN_OUT)
     // The announcer calls the start of the battle and the gong rings.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LW(0), STRING("ガンス"))
         SET_VALUE(LW(1), STRING("stg3_tou_116_20_01"))
         CALL(evt_npc_set_anim, STRING("ガンス"), STRING("M_1"))
@@ -6198,7 +6198,7 @@ SET_VALUE(GF(10), 1)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
 CALL(evt_cam3d_evt_set, 0, 200, 584, 0, 100, -8, 2000, EASING_SINE_IN_OUT)
     CALL(evt_mario_mov_pos2, 0, 75, FLOAT(60.0f))
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_32_BOSS_BATTLE)
+    SET_VALUE(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
     SET_VALUE(LW(0), 3)
     SET_VALUE(LW(1), STRING("stone"))
 CALL_CHILD(evt_sub_starstone)
@@ -7078,7 +7078,7 @@ EVT_END()
 EVT_BEGIN(evt_watch_match)
     // Grubba (or later the announcer) stands at the edge of the ring to watch.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_npc_set_position, STRING("ガンス"), 0, 60, -130)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)

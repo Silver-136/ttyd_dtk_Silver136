@@ -44,11 +44,7 @@ EvtWord bar_shikake[7];
 EvtWord bar_shikake_up[7];
 EvtWord switch_up_down[106];
 static HitDamageReturn hitDmgRetPoints[5];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box00[];
-#else
 static EvtWord mobj_box00[34];
-#endif
 EvtWord mri_16_init_evt[282];
 
 /**

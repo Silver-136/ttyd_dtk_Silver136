@@ -67,7 +67,7 @@ EvtWord evt_nokorin[869];
 static NpcSetupInfo npcEnt[3];
 static HitDamageReturn hitDmgRetPoints[3];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord peach_mail[];
+static EvtWord peach_mail[250];
 #else
 static EvtWord peach_mail[287];
 #endif
@@ -76,7 +76,11 @@ extern EvtWord christine_hei_01[];
 #else
 EvtWord christine_hei_01[46];
 #endif
+#if VERSION <= VERSION_DEMO_US
+EvtWord hei_01_init_evt[138];
+#else
 EvtWord hei_01_init_evt[148];
+#endif
 
 /** Exit event for the map's exits: just returns 0 in LW(0) so the exit proceeds. */
 EVT_BEGIN(bero_out_event)
@@ -932,7 +936,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
     // The story advances to "A Mail from Peach" and the letter is added to Mario's mailbox.
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_21_A_MAIL_FROM_PEACH)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_21_A_MAIL_FROM_PEACH)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_21_A_MAIL_FROM_PEACH)
 #endif
@@ -1044,7 +1048,7 @@ EVT_BEGIN(hei_01_init_evt)
         CALL_CHILD(bero_case_switch_on)
     END_IF
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG1_01_THE_FLIP_BRIDGE)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hasi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 0)
         SET_VALUE(GW(0), 0)
@@ -1054,7 +1058,7 @@ EVT_BEGIN(hei_01_init_evt)
     SPAWN_EVENT(evt_nokorin)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(evt_gazigazi_entry)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_20_KOOPS_LEAVES)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
         SPAWN_EVENT(peach_mail)
     END_IF
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))

@@ -18,6 +18,10 @@
 #include "party/party_motion.h"
 #include "driver/mapdrv.h"
 
+#if VERSION <= VERSION_DEMO_US
+#define SLIT_FLAG_RESUME 0x10 // mot.slit.flags: resumeState holds the state motSlitContinue2 returns to
+#endif
+
 
 BOOL marioCreviceWallChk(const Vec* p);
 

@@ -641,7 +641,7 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
     s32 rank;
 
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG3_34_RETURN_TO_ROGUEPORT) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
 #else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank = 0;
@@ -700,7 +700,7 @@ static USER_FUNC(evt_tou_get_rule_info) {
     s32 rank;
 
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG3_34_RETURN_TO_ROGUEPORT) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
 #else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank = 0;
@@ -1272,7 +1272,7 @@ static void rankingInit(void) {
     memset(rank_wp, 0, sizeof(RankData));
     // We need to handle the excluded entries if we're doing rematches
 #if VERSION <= VERSION_DEMO_US
-    temp = evtGetValue(NULL, GSW(GSW_STORY_PROGRESS));
+    temp = evtGetValue(NULL, GSW_STORY_PROGRESS);
 #else
     temp = evtGetValue(NULL, GSW_STORY_PROGRESS);
 #endif
@@ -1307,7 +1307,7 @@ static void rankingInit(void) {
 
     // Set up the initial run-through
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG3_34_RETURN_TO_ROGUEPORT) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
 #else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
 #endif
@@ -1345,7 +1345,7 @@ static void rankingInit(void) {
 #endif
         }
 #if VERSION <= VERSION_DEMO_US
-if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG3_20_06_RAWK_HAWKS_WARNING) {
+if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
 #else
 
         // If we're past this point in the story, Bandy Andy got "retired" and The Destructors were added.

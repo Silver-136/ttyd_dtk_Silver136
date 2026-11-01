@@ -481,14 +481,10 @@ allPartyRideOff();
             }
             camFollowYOn();
             marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-jabTail();
-                marioChgMotSub(MARIO_MOTION_STAY, 0);
-                jabTail();
-#else
+#if VERSION > VERSION_DEMO_US
             allPartyRideOff();
-            jabTail(TRUE);
 #endif
+            jabTail(TRUE);
             return;
         }
         mario->position.y = hitY;
@@ -548,14 +544,10 @@ allPartyRideOff();
         jabaraLand(hitY, land);
         camFollowYOn();
         marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-jabTail();
-            marioChgMotSub(MARIO_MOTION_STAY, 0);
-            jabTail();
-#else
+#if VERSION > VERSION_DEMO_US
         allPartyRideOff();
-        jabTail(TRUE);
 #endif
+        jabTail(TRUE);
         return;
     }
     }
@@ -580,11 +572,7 @@ psndSFXOn_3D(SFX_NAME_WORD(0x188), &mario->position);
         mario->currSubMotionId = 0x29;
         break;
     case 0x29:
-#if VERSION <= VERSION_DEMO_US
-            ANIM_STEP(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame);
-#else
         ANIM_STEP();
-#endif
         mario->mot.jabara.animFrame++;
         if (mario->mot.jabara.animFrame >= 8) {
             mario->mot.jabara.animFrame = 8;
@@ -599,11 +587,7 @@ psndSFXOn_3D(SFX_NAME_WORD(0x188), &mario->position);
         if (mario->dispOfs.y >= 0.0f) {
             mario->dispOfs.y = 0.0f;
         }
-#if VERSION <= VERSION_DEMO_US
-            ANIM_STEP(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame);
-#else
         ANIM_STEP();
-#endif
         if (++mario->mot.jabara.animFrame >= 0x10) {
             mario->mot.jabara.animFrame = 0x10;
             marioChgPaper("PM_J_1G");
@@ -625,11 +609,7 @@ psndSFXOn_3D(SFX_NAME_WORD(0x188), &mario->position);
     case 0x32: {
         BOOL changed;
         f32 step;
-#if VERSION <= VERSION_DEMO_US
-            ANIM_STEP(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame);
-#else
         ANIM_STEP();
-#endif
         changed = FALSE;
         if (mario->mot.jabara.animFrame >= 0x23 && mario->mot.jabara.animFrame <= 0x62) {
             step = (180.0f == mario->displayDirectionTarget) ? 0.6f : -0.6f;
@@ -696,12 +676,8 @@ psndSFXOn_3D(SFX_NAME_WORD(0x188), &mario->position);
                         }
                         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
                         marioGetPtr();
-jabTail();
-                        marioChgMotSub(MARIO_MOTION_STAY, 0);
-                        jabTail();
-#else
-                    jabTail(TRUE);
 #endif
+                    jabTail(TRUE);
                     return;
                 }
             } else {
@@ -716,11 +692,7 @@ jabTail();
         break;
     }
     case 0x34:
-#if VERSION <= VERSION_DEMO_US
-            ANIM_STEP(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame);
-#else
         ANIM_STEP();
-#endif
         if (--mario->multiTimer <= 0) {
             mario->currSubMotionId = 0x3c;
         }
@@ -735,13 +707,12 @@ jabTail();
         mario->hitobjJumpFrom = mario->hitobjStandOn;
         mario->hitobjStandOn = NULL;
         mario->baseSpeed = 0.0f;
-#if VERSION <= VERSION_DEMO_US
-jabTail();
-            jabTail();
-allPartyRideOff();
-#else
+#if VERSION > VERSION_DEMO_US
         mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
+#endif
         jabTail(FALSE);
+#if VERSION <= VERSION_DEMO_US
+        allPartyRideOff();
 #endif
         marioPaperOff();
         camFollowYOff();
@@ -794,21 +765,13 @@ allPartyRideOff();
 #endif
             mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-jabTail();
-                    marioChgMotSub(MARIO_MOTION_STAY, 0);
-                    jabTail();
-#else
+#if VERSION > VERSION_DEMO_US
             allPartyRideOff();
-            jabTail(TRUE);
 #endif
+            jabTail(TRUE);
             return;
         } else {
-#if VERSION <= VERSION_DEMO_US
-                    ANIM_STEP(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame);
-#else
             ANIM_STEP();
-#endif
             v68 = mario->position;
             headRange = 10.0f + mario->wPlayerCollisionBox.y;
             rr = 1.0f;

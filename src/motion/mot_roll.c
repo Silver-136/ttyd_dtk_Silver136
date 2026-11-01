@@ -707,11 +707,11 @@ marioGetRubInit();
             marioChgPaper("PM_R_1A");
             mario->multiTimer = 0x41;
             m = marioGetPtr();
-            velZ = 0.0f;
+            v28 = 0.0f;
             m->wPlayerCollisionBox.x = 14.8f;
             m->wPlayerCollisionBox.y = 14.8f;
             m->baseDashSpeed = rollData[0];
-            marioGetPtr()->motRoll->spdX = velZ;
+            marioGetPtr()->motRoll->spdX = v28;
             v27 = 0.0f;
             marioGetPtr()->motRoll->spdZ = 0.0f;
             m->rotOfs.x = -6.0f;
@@ -748,8 +748,8 @@ marioGetRubInit();
                 mario->dispOfs.y = 1.0f;
             }
             if (--mario->multiTimer <= 0) {
-angle = mario->displayDirection;
-                if (angle < 90.0f || angle > 270.0f) {
+v31 = mario->displayDirection;
+                if (v31 < 90.0f || v31 > 270.0f) {
                     mario->hammerDir = 1;
                     mario->directionView = revise360(270.0f - mario->targetYaw);
                     mario->moveDirection = 270.0f;
@@ -892,7 +892,7 @@ v26 = mario->tubeScaleY;
                 v26 = 0.4f * (0.35f - v26) + v26;
                 if (v26 <= 0.4f) {
                     s32 t = 3;
-                    tmp = 0.4f;
+                    v26 = 0.4f;
                     marioGetPtr()->motRoll->squashState = 3;
                 }
             }
@@ -979,7 +979,7 @@ v29 = marioGetPtr()->motRoll->spdX;
     }
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) && !(mario->mot.roll.flags & ROLL_FLAG_NO_SLOPE_UNUSED)) {
         v31 = angleABf(0.0f, 0.0f, v29, -v28);
-        if (((MarioWork*)mario)->groundRot.z > 0.05f) {
+        if (((MarioWork*)mario)->groundRot.z > 0.0f) {
             v26 = (v31 > 180.0f) ? rollData[5] : rollData[6];
             {
                 f32 t = (f32)sin(3.1415927f * ((MarioWork*)mario)->groundRot.z / 180.0f);
@@ -989,7 +989,7 @@ v29 = marioGetPtr()->motRoll->spdX;
             if (nx <= -100.0f) {
                 nx = -100.0f;
             }
-        } else if (mario->groundRot.z < ROLL_TILT_NEG) {
+        } else if (mario->groundRot.z < 0.0f) {
             v26 = (v31 < 180.0f) ? rollData[5] : rollData[6];
             {
                 f32 t = (f32)sin(3.1415927f * mario->groundRot.z / 180.0f);
@@ -1000,7 +1000,7 @@ v29 = marioGetPtr()->motRoll->spdX;
                 nx = 100.0f;
             }
         }
-        if (((MarioWork*)mario)->groundRot.x > 0.05f) {
+        if (((MarioWork*)mario)->groundRot.x > 0.0f) {
             v26 = (v31 > 180.0f) ? rollData[5] : rollData[6];
             {
                 f32 t = (f32)sin(3.1415927f * ((MarioWork*)mario)->groundRot.x / 180.0f);
@@ -1010,7 +1010,7 @@ v29 = marioGetPtr()->motRoll->spdX;
             if (nz <= -100.0f) {
                 nz = -100.0f;
             }
-        } else if (mario->groundRot.x < ROLL_TILT_NEG) {
+        } else if (mario->groundRot.x < 0.0f) {
             v26 = (v31 < 180.0f) ? rollData[5] : rollData[6];
             {
                 f32 t = (f32)sin(3.1415927f * mario->groundRot.x / 180.0f);

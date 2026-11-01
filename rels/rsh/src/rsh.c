@@ -369,7 +369,7 @@ CALL(evt_hitobj_attr_onoff, 0, 0, LW(4), 8388608)
         // Entering cabin 5 at the blanket stage makes Mario's partner remark that they should leave
         // everything to the conductor.
         IF_STR_EQUAL(LW(1), STRING("heya_5"))
-            SWITCH(GSW(GSW_STORY_PROGRESS))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_EQUAL(STG6_19_GIVE_BLANKET)
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_img_wait_animend, STRING("capture_img"))
@@ -699,7 +699,7 @@ EVT_BEGIN(evt_rsh_door_close)
     BEGIN_INLINE_EVENT
         // Leaving a cabin at certain stages starts a scripted map change to rsh_04.
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_06_PENNINGTONS_ASSISTANT)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
 #else
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
 #endif
@@ -717,7 +717,7 @@ EVT_BEGIN(evt_rsh_door_close)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_12_GIVE_AUTOGRAPH)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_12_GIVE_AUTOGRAPH)
 #else
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_12_GIVE_AUTOGRAPH)
 #endif
@@ -735,7 +735,7 @@ EVT_BEGIN(evt_rsh_door_close)
     END_INLINE_EVENT
     // In rsh_02_c the ghost's voice is heard once as Mario leaves.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_15_GHOST_REQUEST)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_15_GHOST_REQUEST)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_15_GHOST_REQUEST)
 #endif
@@ -757,7 +757,7 @@ EVT_BEGIN(evt_rsh_door_close)
         IF_STR_EQUAL(LW(10), STRING("rsh_02_a"))
             IF_STR_EQUAL(LW(1), STRING("heya_5"))
 #if VERSION <= VERSION_DEMO_US
-                SWITCH(GSW(GSW_STORY_PROGRESS))
+                SWITCH(GSW_STORY_PROGRESS)
 #else
                 SWITCH(GSW_STORY_PROGRESS)
 #endif

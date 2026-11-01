@@ -19,11 +19,7 @@ static USER_FUNC(kpa_get_level);
 static EvtWord kpa_act_stg3_mobj[118];
 EvtWord kpa_act_stg3_item[79];
 static EvtWord kpa_fall[92];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord jumpstand_evt[];
-#else
 static EvtWord jumpstand_evt[60];
-#endif
 static NpcSetupInfo npcEnt[1];
 EvtWord kpa_05_init_evt[44];
 

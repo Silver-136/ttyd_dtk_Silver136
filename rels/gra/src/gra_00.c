@@ -672,7 +672,7 @@ EVT_BEGIN(gra_00_init_evt)
         CALL(evt_item_entry, STRING("majin_key"), ITEM_BLACK_KEY_0x23, -258, 0, -85, ITEM_TYPE_STILL, -1, PTR(evt_majin_key))
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif

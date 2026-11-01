@@ -1856,7 +1856,7 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_change_interrupt, STRING("ウェイトレス"), 6, PTR(talk_waitless))
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_47_ESCAPING_THE_SMORGS)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
 #else
     CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
     SET_VALUE(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
@@ -1872,7 +1872,7 @@ EVT_END()
 
 static EVT_BEGIN(init_syashou)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif

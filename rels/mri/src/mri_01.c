@@ -77,7 +77,7 @@ EvtWord elder_talk_sub[376];
 s32 irai_item_tbl[2];
 static s32 iri_17_item_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord elder_talk[];
+static EvtWord elder_talk[173];
 #else
 static EvtWord elder_talk[177];
 #endif
@@ -199,26 +199,27 @@ USER_FUNC(elder_talk_sub_punicheck) {
     for (i = 1; i < 103; i++) {
         puniGetPunidat();
 #if VERSION <= VERSION_DEMO_US
-        puniswGetindex(LSW(0), i - 1, &puni, &pos);
-        if (puni != 0 && puni != punigp->floor) {
+        puniswGetindex(LSW_MRI_PUNI_RECORDS, i - 1, &puni, (s32*)&pos);
+        if (puni != 0 && puni != punigp[0x328 / 4]) {
             others++;
         } else {
+            puniswTrapGetindex(i, &trap);
+            if (trap != 0) {
+                traps++;
+            }
+        }
 #else
         if (i == 1 && swGet(0xB14)) { // GSWF_MRI_PUNIO_WAITING_AT_JAIL
             continue;
         }
         puniswGetindex(LSW_MRI_PUNI_RECORDS, i - 1, &puni, c);
-#endif
         puniswTrapGetindex(i, &trap);
         if (trap != 0) {
             traps++;
-#if VERSION <= VERSION_DEMO_US
-            }
-#else
         } else if (puni != 0 && puni != punigp[0x328 / 4]) {
             others++;
-#endif
         }
+#endif
     }
     result = 1;
 #if VERSION <= VERSION_DEMO_US
@@ -612,7 +613,7 @@ CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -657,7 +658,7 @@ EVT_END()
  */
 EVT_BEGIN(puni_1_talk)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
 IF_INT_EQUAL(GSWF_TOU_GENERAL_WHITE_HINT_HEARD, 0)
 #else
@@ -1217,7 +1218,7 @@ EVT_BEGIN(bigtree_firstbattle)
     CALL(evt_npc_wait_battle_end)
     CALL(evt_mario_key_onoff, 1)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_11_X_NAUT_BATTLE)
+SET_VALUE(GSW_STORY_PROGRESS, STG2_11_X_NAUT_BATTLE)
 #else
     CALL(evt_party_run, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_11_X_NAUT_BATTLE)
@@ -3303,7 +3304,7 @@ ADD(LW(0), -40)
     CALL(evt_mario_mov_pos, -50, 60, 500)
     // The story advances and the Emerald Star is held up for the Star Stone sequence.
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_25_AFTER_THE_BOSS_BATTLE)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
 #endif

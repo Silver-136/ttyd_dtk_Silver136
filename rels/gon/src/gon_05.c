@@ -40,13 +40,21 @@ static EvtWord init_0[37];
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord main_0[489];
+#else
 static EvtWord main_0[491];
+#endif
 #endif
 EvtWord init_1[37];
 #if VERSION >= VERSION_US
 EvtWord main_1[465];
 #else
+#if VERSION <= VERSION_DEMO_US
+EvtWord main_1[489];
+#else
 EvtWord main_1[491];
+#endif
 #endif
 s32 key_tbl00[2];
 #if VERSION <= VERSION_DEMO_US

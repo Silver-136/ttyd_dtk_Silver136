@@ -642,7 +642,7 @@ CALL(evt_win_item_select, PTR(iri_15_item_tbl), LW(0))
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1480,7 +1480,7 @@ EVT_BEGIN(usu00_vivian_cry_event)
     CALL(evt_msg_print, 0, STRING("stg4_usu_108"), 0, STRING("ビビアン"))
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG4_12_VIVIAN)
+    SET_VALUE(GSW_STORY_PROGRESS, STG4_12_VIVIAN)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG4_12_VIVIAN)
 #endif
@@ -1654,7 +1654,7 @@ CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG4_USU1"))
 #endif
     WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG4_13_VIVIAN_JOINS)
+    SET_VALUE(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
     SET_VALUE(GSWF_JIN_TRADING_PLACES_ACTIVE, 0)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
@@ -1786,14 +1786,14 @@ END_IF
     IF_INT_EQUAL(LW(15), 1)
         CALL(evt_mario_balloon_off)
         SET_VALUE(LW(15), 0)
-        IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_13_VIVIAN_JOINS)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
 CALL_CHILD(cam_up)
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＢ"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-            SWITCH(GSW(GSW_STORY_PROGRESS))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
                 CALL(evt_msg_print, 0, STRING("stg4_usu_125"), 0, STRING("カラスＡ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_126"), 0, STRING("カラスＢ"))
@@ -2014,14 +2014,14 @@ END_IF
     IF_INT_EQUAL(LW(15), 1)
         CALL(evt_mario_balloon_off)
         SET_VALUE(LW(15), 0)
-        IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_13_VIVIAN_JOINS)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
 CALL_CHILD(cam_up)
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＤ"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-            SWITCH(GSW(GSW_STORY_PROGRESS))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
                 CALL(evt_msg_print, 0, STRING("stg4_usu_131"), 0, STRING("カラスＣ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_132"), 0, STRING("カラスＤ"))
@@ -4176,7 +4176,7 @@ static EVT_BEGIN(evt_after_peach)
     CALL(evt_msg_print, 0, STRING("stg4_usu_157"), 0, STRING("村長"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG4_16_LEAVING_TWILIGHT_TOWN)
+    SET_VALUE(GSW_STORY_PROGRESS, STG4_16_LEAVING_TWILIGHT_TOWN)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG4_16_LEAVING_TWILIGHT_TOWN)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
@@ -4328,8 +4328,8 @@ EVT_END()
 EVT_BEGIN(usu_00_init_evt)
     // In Bowser's interlude (from Peach's talk with TEC to Bowser's town visit) Mario is Bowser; GF(1) marks it.
     SET_VALUE(GF(1), 0)
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_47_PEACH_TEC_TALK)
-        IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_48_BOWSER_TWILIGHT_TOWN)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_47_PEACH_TEC_TALK)
+        IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_48_BOWSER_TWILIGHT_TOWN)
             CALL(evt_mario_set_mode, 2)
             SET_VALUE(GF(1), 1)
         END_IF
@@ -4337,7 +4337,7 @@ EVT_BEGIN(usu_00_init_evt)
     // Music: the Shadow Sirens' theme while Mario has lost his name, chapter 8 voices or silence in the darkness
     // scenes, otherwise the town theme.
     IF_INT_EQUAL(GF(1), 0)
-        SWITCH(GSW(GSW_STORY_PROGRESS))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG4_10_02_TRADING_PLACES, STG4_11_SUPERBOMBBOMB_LOST)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -4365,7 +4365,7 @@ EVT_BEGIN(usu_00_init_evt)
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
             END_IF
             CASE_DEFAULT
-            IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+            IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
             END_IF
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
@@ -4428,13 +4428,13 @@ END_IF
     CALL_CHILD(usu_00_tree_init)
     // Story scenes: the chapter 4 arrival, the pig Mayor, Mario's talk with the Mayor while a shadow, the Shadow
     // Sirens, Vivian crying, the lost Super Bombomb in bush 7 and Doopliss found again.
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
         SPAWN_EVENT(usu00_stage4_coming_event)
         CASE_BETWEEN(STG4_01_00_GATEKEEPER_CONVERSATION, STG4_01_00_GATEKEEPER_CONVERSATION)
         SPAWN_EVENT(chief_pig_event)
     END_SWITCH
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_11_02_WAITING_DOOPLISS, STG4_13_04_THE_LETTER_P)
         CALL_CHILD(chief_mario_talk_init)
         SPAWN_EVENT(chief_mario_talk)
@@ -4444,13 +4444,13 @@ END_IF
         CALL_CHILD(usu00_3witch_init)
         SPAWN_EVENT(usu00_3witch_event)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_11_02_WAITING_DOOPLISS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_11_02_WAITING_DOOPLISS)
         SPAWN_EVENT(usu00_vivian_cry_event)
     END_IF
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG4_12_01_SUPERBOMBBOMB_FOUND)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_12_01_SUPERBOMBBOMB_FOUND)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kusa_07"), 0, PTR(usu_00_touch_ichikorori_ball), 0)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_03_THE_RUBY_STAR)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_03_THE_RUBY_STAR)
         CALL_CHILD(usu00_3witch_init)
         SPAWN_EVENT(gra00_2witch_find_ranpel_event)
     END_IF
@@ -4461,8 +4461,8 @@ END_IF
     SET_VALUE(GW(1), 0)
     SPAWN_EVENT(usu00_crowAB_talk_event)
     SPAWN_EVENT(usu00_crowCDE_talk_event)
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_10_DOOPLISS_BATTLE)
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG4_15_02_BACK_TO_NORMAL)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_10_DOOPLISS_BATTLE)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG4_15_02_BACK_TO_NORMAL)
             SET_VALUE(LW(0), STRING("dokan_1"))
             CALL_CHILD(bero_case_switch_off)
             CALL(evt_bero_overwrite, STRING("dokan_1"), PTR(bero_oshimodo))
@@ -4476,14 +4476,14 @@ END_IF
         END_INLINE_EVENT
     END_IF
     // Bowser's interlude: Crump's arrival and Bowser's two scenes with Kammy.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_47_PEACH_TEC_TALK)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_47_PEACH_TEC_TALK)
         CALL(evt_npc_change_interrupt, STRING("カンブー"), 1, PTR(kanbu_regl))
         CALL(evt_npc_restart_regular_event, STRING("カンブー"))
         CALL(evt_mario_kill_party, 0)
         SPAWN_EVENT(usu_00_koopa_first_evt)
         CALL(evt_cam_road_reset)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_48_BOWSER_TWILIGHT_TOWN)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_48_BOWSER_TWILIGHT_TOWN)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("player"))
             CALL(evt_npc_change_interrupt, STRING("カンブー"), 1, PTR(kanbu_regl))
@@ -4504,7 +4504,7 @@ END_IF
         CALL(evt_cam_road_reset)
     END_IF
     // After the Peach and Bowser interludes the party is healed and the Mayor's farewell scene plays.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_08_BOWSER_ROGUEPORT_DOCK)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_08_BOWSER_ROGUEPORT_DOCK)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
@@ -4517,7 +4517,7 @@ CALL(evt_party_stop, 0)
         SPAWN_EVENT(evt_after_peach)
     END_IF
     // Chapter 8: the world going dark and the townsfolk's voices cheering Mario.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
             CALL_CHILD(sekai_yami_npc_init)
@@ -4529,7 +4529,7 @@ CALL(evt_party_stop, 0)
         END_IF
     END_IF
     // Epilogue scene, then the NPC hide/show loop.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mario_kill_party, 0)
         CALL_CHILD(epilogue_npc_entry)
         SPAWN_EVENT(epilogue_evt)

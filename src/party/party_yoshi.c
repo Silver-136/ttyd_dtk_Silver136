@@ -1759,7 +1759,7 @@ void searchGround(PartyEntry* party) {
             range = 1.0f;
         }
 #if VERSION <= VERSION_DEMO_US
-        hit = partySearchGround(party, &ground.y, &depth, 11.0f, range);
+        hit = _partySearchGround(party, &ground.y, &depth, 11.0f, range);
 #else
         hit = partySearchGround(party, range, range);
         groundY = party->groundY;
@@ -1886,7 +1886,7 @@ void searchGround2(PartyEntry* party) {
 
     if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
 #if VERSION <= VERSION_DEMO_US
-        hit = partySearchGround(party, &ground.y, &depth, 11.0f, 0.0f);
+        hit = _partySearchGround(party, &ground.y, &depth, 11.0f, 0.0f);
 #else
         hit = partySearchGround(party, 11.0f, 0.0f);
 #endif

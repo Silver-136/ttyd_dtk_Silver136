@@ -1151,7 +1151,7 @@ void animPoseMain(s32 poseId) {
         grpB = (u8*)pose->vtxArrayNrm;
     }
 #if VERSION <= VERSION_DEMO_US
-    if ( pose->paperId;
+    paperId = pose->paperId;
     if (paperId != -1 && !(animPoseGetAnimPosePtr(paperId)->typeFlags & ANIM_POSE_TYPE_PAPER)) {
         animPoseMain(paperId);
 #else
@@ -2091,7 +2091,7 @@ void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *
     // FAKE: texCount/texIdRemap/pTexEntries copied into locals (kept as separate webs by the dead guard before loop 2); the incoming
 #if VERSION <= VERSION_DEMO_US
     PSMTXTrans(trans, node->translation.x, node->translation.y, node->translation.z);
-    PSMTXScale(scale, node->scale.x, node->scale.y, node->scale.z);
+    PSMTXScale(scale, node->mScale.x, node->mScale.y, node->mScale.z);
     if (0.0f != node->scaleCenter.x || 0.0f != node->scaleCenter.y || 0.0f != node->scaleCenter.z) {
         PSMTXTrans(sc2, -node->scaleCenter.x, -node->scaleCenter.y, -node->scaleCenter.z);
         PSMTXTrans(sc1, node->scaleCenter.x, node->scaleCenter.y, node->scaleCenter.z);
@@ -2138,7 +2138,7 @@ static void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 s
     } else {
         PSMTXScale(iscale, 1.0f, 1.0f, 1.0f);
     }
-    PSMTXScale(scale, node->scale.x, node->scale.y, node->scale.z);
+    PSMTXScale(scale, node->mScale.x, node->mScale.y, node->mScale.z);
     PSMTXIdentity(rot);
     if (node->rot2.z) {
         PSMTXRotRad(tmp, 'z', 0.017453292f * node->rot2.z);
@@ -2313,7 +2313,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
     gz = 0;
     if (gz != 0) {
 #if VERSION <= VERSION_DEMO_US
-            k = NULL;
+            k = 0;
 #else
         texCount = 0;
         texIdRemap = NULL;
@@ -2956,14 +2956,14 @@ void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 ble
             pos.y = (*g_modeling_mtx)[1][3];
             pos.z = (*g_modeling_mtx)[2][3];
 #if VERSION <= VERSION_DEMO_US
-            (*wp->curPose->worldPositions)[groupId] = pos;
+            ((Vec*)wp->curPose->worldPositions->address)[groupId] = pos;
 #else
             ((Vec*)wp->curPose->worldPositions->address)[groupId] = pos;
 #endif
         }
         if (wp->curPose->flags & ANIM_POSE_FLAG_WORLD_MATRIX_EVAL) {
 #if VERSION <= VERSION_DEMO_US
-            PSMTXCopy(*g_modeling_mtx, (*wp->curPose->worldMatrices)[groupId]);
+            PSMTXCopy(*g_modeling_mtx, ((Mtx*)wp->curPose->worldMatrices->address)[groupId]);
 #else
             PSMTXCopy(*g_modeling_mtx, ((Mtx*)wp->curPose->worldMatrices->address)[groupId]);
 #endif

@@ -119,21 +119,9 @@ EvtWord e3_talk[12];
 static EvtWord epilogue_npc_entry[31];
 static EvtWord epilogue_evt_sub[194];
 static EvtWord epilogue_evt[148];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord evt_kusa_4[];
-#else
 static EvtWord evt_kusa_4[25];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord evt_kusa_5[];
-#else
 static EvtWord evt_kusa_5[25];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord evt_kusa_6[];
-#else
 static EvtWord evt_kusa_6[25];
-#endif
 static KusaAccess kusa_data[4];
 EvtWord nok_01_init_evt[337];
 
@@ -612,7 +600,7 @@ CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
     END_IF
     // With no request pending, his talk follows the story.
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -624,8 +612,8 @@ CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
 #endif
         CASE_LESS(STG1_08_OPENING_THE_PATH)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_HEI_SUN_STONE_TAKEN), 1)
-            IF_INT_EQUAL(GSWF(GSWF_HEI_MOON_STONE_TAKEN), 1)
+        IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
+            IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
 #else
         IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
             IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
@@ -1220,7 +1208,7 @@ EVT_BEGIN(nokotarou_tabidachi)
     CALL(evt_npc_set_position, LW(3), 0, -1000, 0)
     CALL(evt_npc_delete, LW(3))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_20_KOOPS_LEAVES)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
 #endif

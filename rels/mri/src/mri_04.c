@@ -40,7 +40,7 @@ static EvtWord chibitoge_init[21];
 static EvtWord chibitoge_talk[111];
 static NpcSetupInfo npcEnt[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord chuchurina_sogu[];
+static EvtWord chuchurina_sogu[812];
 #else
 static EvtWord chuchurina_sogu[814];
 #endif
@@ -382,7 +382,7 @@ CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 68, -120
     CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     // The story advances and Mario regains control.
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_13_MS_MOWZ)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_13_MS_MOWZ)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_13_MS_MOWZ)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)

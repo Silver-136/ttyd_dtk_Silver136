@@ -109,11 +109,18 @@ void partyPaperLightOff(PartyEntry* party) {
     animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
 }
 
+// a partner is in a pinch at this HP or below
+#if VERSION <= VERSION_DEMO_US
+#define PARTY_PINCH_HP 1
+#else
+#define PARTY_PINCH_HP 5
+#endif
+
 static inline BOOL partyIsPinch(PartyEntry* party) {
     BOOL pinch = FALSE;
 
     if (party->currentMemberId < MAIN_PARTY_MEMBER_MAX) {
-        if (partyGetHp(party->currentMemberId) <= 5) {
+        if (partyGetHp(party->currentMemberId) <= PARTY_PINCH_HP) {
             pinch = TRUE;
         }
     }
@@ -134,7 +141,7 @@ static inline const char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index
     }
     pinch = FALSE;
     if (party->currentMemberId < MAIN_PARTY_MEMBER_MAX) {
-        if (partyGetHp(party->currentMemberId) <= 5) {
+        if (partyGetHp(party->currentMemberId) <= PARTY_PINCH_HP) {
             pinch = TRUE;
         }
     }
@@ -335,7 +342,7 @@ s32 partyEntryPos(s32 memberId, f32 x, f32 y, f32 z) {
     index = 1;
     if (!(party->flags2 & PARTY_DISP_FLAG_POSE_LOCK)) {
         lowHp = FALSE;
-        if (party->currentMemberId < MAIN_PARTY_MEMBER_MAX && partyGetHp(party->currentMemberId) <= 5) {
+        if (party->currentMemberId < MAIN_PARTY_MEMBER_MAX && partyGetHp(party->currentMemberId) <= PARTY_PINCH_HP) {
             lowHp = TRUE;
         }
         if (lowHp == TRUE) {
@@ -375,12 +382,7 @@ BOOL partyGoodbye(s32 id) {
  */
 s32 partyKill(s32 id) {
     PartyEntry* party;
-#if VERSION <= VERSION_DEMO_US
-    MarioWork* mario;
-    PartyEntry* other;
-#else
     MarioWork* player;
-#endif
 
     party = partyGetPtr(id);
     if (party == NULL) {
@@ -389,7 +391,7 @@ s32 partyKill(s32 id) {
     player = party->playerPtr;
     party_dp = &partyDataTbl[partyGetPtr(player->currPartySlotId[id])->currentMemberId];
 #if VERSION <= VERSION_DEMO_US
-if (party_dp->exit_func) {
+    if (party_dp->exit_func) {
 #else
     if (party_dp->exit_func && party->runMode != PARTY_RUN_RIDE) {
 #endif
@@ -1564,7 +1566,7 @@ s32 partyGoodbyeMain(PartyEntry* party) {
             break;
         case 10:
 #if VERSION <= VERSION_DEMO_US
-psndSFXOn_3D((PSND_SFX_PARTY_IN1 |PSND_SFX_BYPASS_MUTE)0x91F, &party->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_IN1), &party->position);
 #else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_IN1 | PSND_SFX_BYPASS_MUTE), &mario->position);
 #endif
@@ -2339,11 +2341,7 @@ void partyRideMain(PartyEntry* party) {
             }
 
         case 10:
-#if VERSION <= VERSION_DEMO_US
-            party->position = *((MarioWork*)(mario + 0x8C));
-#else
             party->position = ((MarioWork*)mario)->position;
-#endif
             party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
             party->moveDir = toMovedir(party->displayDirectionTarget);
             break;

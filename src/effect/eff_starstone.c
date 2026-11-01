@@ -485,14 +485,14 @@ void effStarStoneMain(EffectEntry* effect) {
             w->half1OffsetX += (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
             w->half1OffsetZ += (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
 #if VERSION <= VERSION_DEMO_US
-                w->tiltZ += (90.0f - w->tiltZ) / 10.0f;
+                w->rot.z += (90.0f - w->rot.z) / 10.0f;
 #else
             w->rot.z += (90.0f - w->rot.z) / 10.0f;
 #endif
         }
         if (w->state > 3) {
 #if VERSION <= VERSION_DEMO_US
-                w->spinY += (-90.0f - w->spinY) / 10.0f;
+                w->rot.x += (-90.0f - w->rot.x) / 10.0f;
 #else
             w->rot.x += (-90.0f - w->rot.x) / 10.0f;
 #endif
@@ -614,7 +614,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
     PSMTXConcat(m, s, m);
 #if VERSION <= VERSION_DEMO_US
-    PSMTXRotRad(r, 'y', MTXDegToRad(w->rotY));
+    PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
 #else
     PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
 #endif
@@ -642,7 +642,7 @@ for (i = 0, size = diamond_1_dl_0_size_tbl, list = diamond_1_dl_0_tbl; i < sizeo
 #endif
     }
 #if VERSION <= VERSION_DEMO_US
-starStoneSetVtx(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
+VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
 {
             u8* sz;
             u8** dl;
@@ -663,13 +663,13 @@ starStoneSetVtx(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_
                 GXCallDisplayList(*dl, *sz << 5);
             }
         }
-starStoneSetVtx(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
+VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
 {
             u8* sz;
             u8** dl;
             u32 n;
 
-            for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(w) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
+            for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(diamond_7_dl_1_tbl) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
                 GXCallDisplayList(*dl, *sz << 5);
             }
         }
@@ -698,7 +698,7 @@ starStoneSetVtx(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7
     PSMTXScale(s, w->scale, w->scale, w->scale);
     PSMTXConcat(m, s, m);
 #if VERSION <= VERSION_DEMO_US
-    PSMTXRotRad(r, 'y', MTXDegToRad(w->rotY));
+    PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
 #else
     PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
 #endif

@@ -1239,13 +1239,13 @@ item = &itemDataTable[event->lwData[10]];
         case 0:
             statusWinForceOpen();
             if (event->lwData[11] == 0) {
-                ((PouchSetHPS32Fn)pouchSetHP)(pouchGetHP() + item->hp_restored);
-                ((PouchSetFPS32Fn)pouchSetFP)(pouchGetFP() + item->fp_restored);
-                ((PouchSetAPS32Fn)pouchSetAP)(pouchGetAP() + item->sp_restored);
+                pouchSetHP(pouchGetHP() + item->hp_restored);
+                pouchSetFP(pouchGetFP() + item->fp_restored);
+                pouchSetAP(pouchGetAP() + item->sp_restored);
             } else {
                 pouchSetPartyHP(event->lwData[11], pouchGetPartyHP(event->lwData[11]) + item->hp_restored);
-                ((PouchSetFPS32Fn)pouchSetFP)(pouchGetFP() + item->fp_restored);
-                ((PouchSetAPS32Fn)pouchSetAP)(pouchGetAP() + item->sp_restored);
+                pouchSetFP(pouchGetFP() + item->fp_restored);
+                pouchSetAP(pouchGetAP() + item->sp_restored);
             }
             cnt++;
             break;
@@ -1323,13 +1323,13 @@ cnt++;
         case 0:
             statusWinForceOpen();
             if (event->lwData[11] == 0) {
-                ((PouchSetHPS32Fn)pouchSetHP)(pouchGetHP() + item->hp_restored);
-                ((PouchSetFPS32Fn)pouchSetFP)(pouchGetFP() + item->fp_restored);
-                ((PouchSetAPS32Fn)pouchSetAP)(pouchGetAP() + item->sp_restored);
+                pouchSetHP(pouchGetHP() + item->hp_restored);
+                pouchSetFP(pouchGetFP() + item->fp_restored);
+                pouchSetAP(pouchGetAP() + item->sp_restored);
             } else {
                 pouchSetPartyHP(event->lwData[11], pouchGetPartyHP(event->lwData[11]) + item->hp_restored);
-                ((PouchSetFPS32Fn)pouchSetFP)(pouchGetFP() + item->fp_restored);
-                ((PouchSetAPS32Fn)pouchSetAP)(pouchGetAP() + item->sp_restored);
+                pouchSetFP(pouchGetFP() + item->fp_restored);
+                pouchSetAP(pouchGetAP() + item->sp_restored);
             }
             cnt++;
             break;

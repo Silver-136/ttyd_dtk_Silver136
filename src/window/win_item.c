@@ -201,6 +201,8 @@ void winItemInit(WindowWork* w) {
     winMgrSetPriority(w->useWin[1], -100);
 #if VERSION >= VERSION_US
     fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+#elif VERSION <= VERSION_DEMO_US
+    fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
 #else
     fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
@@ -513,9 +515,9 @@ w->item.mailLines += 7;
         case 201:
             mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
             if (mail->flags & MAIL_FLAG_PICTURE) {
-w->mailRes = fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
 if (w->mailRes) {
-w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
 w->item.state++;
                 }
             } else {
@@ -581,7 +583,7 @@ list[k++] = &winPartyDt[i];
                     }
                 }
                 if (w->item.useTarget < 1) {
-                    ((PouchSetHPS32Fn)pouchSetHP)(pouchGetHP() + itemDataTable[w->item.useItem].hp_restored);
+                    pouchSetHP(pouchGetHP() + itemDataTable[w->item.useItem].hp_restored);
 } else {
                     party = list[w->item.useTarget - 1]->partyId;
                     pouchSetPartyHP(party, pouchGetPartyHP(party) + itemDataTable[w->item.useItem].hp_restored);
@@ -1338,12 +1340,12 @@ list[n++] = &winPartyDt[i];
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
 winFontSetR((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetHP());
 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-winFontSet((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", ((PouchGetMaxHPRetS32Fn)pouchGetMaxHP)());
+winFontSet((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxHP());
 winFontInit();
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_FP_NAME);
 winFontSetR((Vec){entry->x + 245, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetFP());
 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", ((PouchGetMaxFPRetS32Fn)pouchGetMaxFP)());
+winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxFP());
 } else {
                 name = list[i - 1]->partyId != PARTNER_YOSHI ? msgSearch(list[i - 1]->name) : pouchGetYoshiName();
                 if (w->item.blink % 20 > 15 && i == w->item.useTarget) {

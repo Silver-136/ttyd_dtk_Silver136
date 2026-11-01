@@ -400,7 +400,7 @@ if (mario->hitobjStandOn == NULL) {
                                    party->camId);
             }
             party->moveDistance += party->moveSpeed;
-            if(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); break;)
+            NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); break;)
             if (ccwall(party, 0) != NULL) {
                 party->useMotionId = 50;
                 psndSFXOn_3D((const char*)0x92c, &party->position);
@@ -454,7 +454,7 @@ if (mario->hitobjStandOn == NULL) {
                 noko_se_off();
                 break;
             }
-            if(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); noko_se_off(); break;)
+            NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); noko_se_off(); break;)
             if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
 if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL ||
                     (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
@@ -646,7 +646,7 @@ party->useMotionId = 70;
             if (party->moveSpeed >= 18.0f) {
                 party->moveSpeed = 18.0f;
             }
-            if(party, psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1);)
+            NOKO_PICK_UP_NEAR_ITEM(party, psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1);)
             hit = ccwall(party, 1);
             if (hit != NULL) {
                 if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
@@ -665,7 +665,7 @@ party->useMotionId = 70;
         case 82:
             noko_spin(party);
             party->moveSpeed += 0.35f * (-1.0f - party->moveSpeed);
-            if(party, psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1);)
+            NOKO_PICK_UP_NEAR_ITEM(party, psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1);)
             if (ccwall(party, 1) != NULL) {
                 party->useMotionId = 100;
                 break;

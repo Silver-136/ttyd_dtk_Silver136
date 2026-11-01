@@ -1799,7 +1799,7 @@ USER_FUNC(evt_shop_main_func) {
     }
     if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&
 #if VERSION <= VERSION_DEMO_US
-        evtGetValue(event, GSW(GSW_STORY_PROGRESS)) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW(GSW_STORY_PROGRESS)) < STG6_48_SMORG_MIASMA &&
+        evtGetValue(event, GSW_STORY_PROGRESS) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW_STORY_PROGRESS) < STG6_48_SMORG_MIASMA &&
         !evtGetValue(event, GSWF_RSH_03_SHOP_CLERK_REVIVED)) {
 #else
         evtGetValue(event, GSW_STORY_PROGRESS) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW_STORY_PROGRESS) < STG6_48_SMORG_MIASMA &&

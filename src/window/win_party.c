@@ -472,7 +472,7 @@ winZClear();
         PSMTXMultVec(rx, &v, &v);
         kp = &(GXColor){0x00, 0x00, 0x00, 0x80};
         // FAKE: the colour goes by address with the floats first (the by-value call rebuilds the literal each pass and evaluates the scale first)
-        ((void (*)(WindowWork*, f32, f32, f32, f32, GXColor*))winKageGX)(wp, (x - 140.0f) + v.x, 20.0f + (y + v.y), v.z, (i == wp->party.cursor) ? (GXColor) : (0.6f), kp);
+        ((void (*)(WindowWork*, f32, f32, f32, f32, GXColor*))winKageGX)(wp, (x - 140.0f) + v.x, 20.0f + (y + v.y), v.z, (i == wp->party.cursor) ? (0.8f) : (0.6f), kp);
     }
 
     for (i = 0; i < wp->party.count; i++) {

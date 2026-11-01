@@ -417,7 +417,7 @@ void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const ch
             PSMTXTrans(m, 100.0f, 35.0f - 24.0f * i + ofs, 0.0f);
             PSMTXConcat(m, a[i], out[i]);
 #if VERSION <= VERSION_DEMO_US
-DrawSubIconSub(menu, i, out[i], enabled[i], icons[i], names[i], costs[i], p34[i], party);
+            DrawSubIconSub(menu, i, out[i], enabled[i], icons[i], names[i], costs[i], p34[i], party);
 #else
             DrawSubIconSub(menu, i, out[i], enabled[i], icons[i], names[i], costs[i], p34[i], party, y);
 #endif
@@ -583,7 +583,7 @@ PSMTXConcat(m, trn, out);
         FontDrawStringMtx(out, msgSearch("btl_cost_disp_AP"));
     }
 if (party != NULL) {
-        BattleCommandParty* entry = (s16*)(((u8*)party) + ((i + ((s32)menu->scrollPos)) * 0x18));
+        BattleCommandParty* entry = (BattleCommandParty*)(((u8*)party) + ((i + ((s32)menu->scrollPos)) * 0x18));
         s32 n;
         s32 hp;
         s32 maxhp;
@@ -2179,11 +2179,7 @@ void DrawOperationWin(void) {
     f32 x;
     f32 y;
     BattleWork* wp = _battleWorkPointer;
-#if VERSION <= VERSION_DEMO_US
-    BattleSubMenu* menu = WP_SUBMENU(wp);
-#else
     BattleSubMenu* menu = wp->commandMenu.subMenu;
-#endif
     BattleCursor* cursor = menu->cursor;
     BattleCommandOperation* items;
     s32 i;
@@ -2196,10 +2192,8 @@ void DrawOperationWin(void) {
         idx = (s32)menu->scrollPos + i;
         if (idx < cursor->count) {
             enabled[i] = items[idx].enabled;
-#if VERSION > VERSION_DEMO_US
             // BUG: tests row i of the list instead of row idx, so once the list scrolls the coin fallback follows the
             // wrong entry (retail code).
-#endif
             if (items[i].icon) {
                 icons[i] = items[idx].icon;
             } else {
@@ -2207,7 +2201,7 @@ void DrawOperationWin(void) {
             }
             names[i] = items[idx].name;
 #if VERSION <= VERSION_DEMO_US
-costs[i] = items->cost;
+            costs[i] = items->cost;
 #else
             costs[i] = items[idx].cost;
 #endif
@@ -2216,7 +2210,7 @@ costs[i] = items->cost;
     }
     DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
 #if VERSION <= VERSION_DEMO_US
-DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL);
+    DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL);
 #else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL, 0);
 #endif
@@ -2276,7 +2270,7 @@ void DrawChangePartyWin(void) {
     f32 x;
     f32 y;
     BattleWork* wp = _battleWorkPointer;
-    BattleSubMenu* menu = WP_SUBMENU(wp);
+    BattleSubMenu* menu = wp->commandMenu.subMenu;
     BattleCursor* cursor = menu->cursor;
     BattleCommandParty* items;
     s32 i;
@@ -2407,11 +2401,7 @@ void DrawMultiItemWin(void) {
     f32 x;
     f32 y;
     BattleWork* wp = _battleWorkPointer;
-#if VERSION <= VERSION_DEMO_US
-    BattleSubMenu* menu = WP_SUBMENU(wp);
-#else
     BattleSubMenu* menu = wp->commandMenu.subMenu;
-#endif
     BattleCursor* cursor = menu->cursor;
     BattleCommandMultiItem* items;
     s32 i;
@@ -2436,7 +2426,7 @@ void DrawMultiItemWin(void) {
     }
     DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
 #if VERSION <= VERSION_DEMO_US
-DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL);
+    DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL);
 #else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL, 0);
 #endif

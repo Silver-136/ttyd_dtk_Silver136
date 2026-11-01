@@ -13,7 +13,7 @@
 #include "party/party_yoshi.h"
 #include "party/party_vivian.h"
 
-#if VERSION >= VERSION_US
+#if VERSION != VERSION_JP
 // US has no local duplicates of these: use the global functions
 #define bomhei_init_800BFBB0 bomhei_init
 #define kuribo_init_800C23B4 kuribo_init

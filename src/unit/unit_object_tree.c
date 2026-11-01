@@ -122,7 +122,11 @@ static s32 _data[] = {
     -13, 0, 12, 0, -11, 0, 10, 0,
     -9, 0, 8, 0, -7, 0, 6, 0,
     -6, 0, 5, 0, -4, 0, 2, 0,
+#if VERSION <= VERSION_DEMO_US
+    -2, 0,
+#else
     -2, 0, 0,
+#endif
 };
 
 /** The tree takes no damage reduction; every hit just triggers its shake and tip-over. */

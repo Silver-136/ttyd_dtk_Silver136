@@ -40,11 +40,15 @@ static EvtWord init_0[37];
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord main_0[489];
+#else
 static EvtWord main_0[491];
+#endif
 #endif
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_chk[];
+static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
@@ -53,7 +57,11 @@ EvtWord nokkosu_init[16];
 #if VERSION >= VERSION_US
 EvtWord nokkosu_talk[226];
 #else
+#if VERSION <= VERSION_DEMO_US
+EvtWord nokkosu_talk[115];
+#else
 EvtWord nokkosu_talk[157];
+#endif
 #endif
 static NpcSetupInfo npcEnt[2];
 EvtWord gon_08_init_evt[220];

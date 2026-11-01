@@ -784,7 +784,7 @@ SET_VALUE(LW(0), 360)
     CALL_CHILD(sekizou_kaiten2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_13_QUIZ_CLEARED)
+    SET_VALUE(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -1193,7 +1193,7 @@ EVT_BEGIN(aji_04_init_evt)
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_13_QUIZ_CLEARED)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
         CALL_CHILD(sekizou_init)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -1205,7 +1205,7 @@ EVT_BEGIN(aji_04_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_13_QUIZ_CLEARED)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
 #endif

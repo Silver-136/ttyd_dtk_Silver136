@@ -3066,8 +3066,8 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
         }
         marioKeyOff();
 #if VERSION <= VERSION_DEMO_US
-gp->systemLevelFlags |= SYSTEM_LEVEL_FLAG_STOP_LV0 | SYSTEM_LEVEL_FLAG_STOP_LV1;
-            psndSFXOn_3D((PSND_SFX_MOBJ_BLOCK_POWER_SHINE1 |PSND_SFX_BYPASS_MUTE)0x201c0, &mobj->position);
+        gp->systemLevelFlags |= SYSTEM_LEVEL_STOP_LV0 | SYSTEM_LEVEL_STOP_LV1;
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_POWER_SHINE1 | PSND_SFX_BYPASS_MUTE), &mobj->position);
 #else
         if (!strcmp(gp->currentMapName, "dou_02")) {
             marioCtrlOff();
@@ -3493,7 +3493,7 @@ s32 mobj_breaking_floor(MapObjectEntry* mobj) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
 #if VERSION <= VERSION_DEMO_US
-psndSFXOn_3D((0x1E8 |PSND_SFX_KEEP)0x1e8, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(0x1E8 | PSND_SFX_KEEP), &mobj->position);
 #else
             psndSFXOn_3D(SFX_NAME_WORD(0x1E8 | PSND_SFX_KEEP), &mobj->position);
 #endif

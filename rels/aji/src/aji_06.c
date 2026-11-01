@@ -1916,7 +1916,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(aji_06_init_evt)
     // Peach's visits get her own music; later visits use the fortress music and ambience.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_00_START)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     ELSE
@@ -1951,25 +1951,25 @@ CALL(evt_mario_key_onoff, 1)
     SPAWN_EVENT(evt_emergency)
     SPAWN_EVENT(kikai_init)
     // The magician underling is removed once Lord Crump has been beaten.
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
     END_IF
     // Chapter 5: Peach takes over, her partner is dismissed and TEC's request scene starts.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_44_PEACH_TECS_REQUEST_2)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
         CALL(evt_mario_set_mode, 1)
         CALL(evt_mario_kill_party, 0)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
         SPAWN_EVENT(peach_evt_stg5)
     END_IF
     // Potion puzzle: Peach is invisible from now on.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_45_PEACH_POTION_PUZZLE)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_45_PEACH_POTION_PUZZLE)
         CALL(evt_mario_set_mode, 1)
         CALL(evt_mario_kill_party, 0)
         CALL(peach_evt_toumei_onoff, 1)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
     END_IF
     // Disk search: Peach is still invisible and the next scene starts.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_46_PEACH_DISK_SEARCH)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)
         CALL(evt_mario_set_mode, 1)
         CALL(evt_mario_kill_party, 0)
         CALL(peach_evt_toumei_onoff, 1)

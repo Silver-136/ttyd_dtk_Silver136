@@ -74,14 +74,10 @@ BattleWeapon weapon_chorobon_gundan_attack;
 EvtWord chorogun_dead_reward[73];
 static EvtWord init_event[26];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event[];
-#else
 static EvtWord damage_event[80];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event[];
+static EvtWord damage_event[80];
 #else
 static EvtWord damage_event[59];
 #endif
@@ -188,8 +184,8 @@ BattleUnitKind unit_chorobon_gundan = {
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
 #if VERSION <= VERSION_DEMO_US
-kUnitLeader | kUnitNoSpin | kUnitNoHpGauge,
-&regist,
+    kUnitLeader | kUnitNoSpin | kUnitNoHpGauge, // attributeFlags
+    &regist.v, // statusVulnerability
 #else
     kUnitLeader | kUnitNoSpin, // attributeFlags
     &regist.v, // statusVulnerability
@@ -332,7 +328,7 @@ static EVT_BEGIN(damage_event)
         GOTO(99)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_CHOROBON_GUNDAN_FEW_LEFT, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_btl_camera_set_mode, 0, 0)
         CALL(chorogun_escape)

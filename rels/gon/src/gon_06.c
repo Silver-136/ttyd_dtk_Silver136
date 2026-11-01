@@ -49,12 +49,12 @@ EvtWord tsuritenjo_event[143];
 #endif
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_majin[];
+static EvtWord evt_majin[404];
 #else
 static EvtWord evt_majin[409];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_majin2[];
+static EvtWord evt_majin2[243];
 #else
 static EvtWord evt_majin2[241];
 #endif
@@ -235,7 +235,7 @@ EVT_BEGIN(tsuritenjo_event)
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_13_01_50_SECONDS_TO_ESCAPE)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_13_01_50_SECONDS_TO_ESCAPE)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_13_01_50_SECONDS_TO_ESCAPE)
 #endif
@@ -489,7 +489,7 @@ CALL(evt_mario_normalize)
     CALL(evt_img_release, STRING("img"))
     CALL(evt_paper_delete, STRING("OFF_d_kusya"))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_13_01_01_PAPER_MAGE_2)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_13_01_01_PAPER_MAGE_2)
     SET_VALUE(GSWF_GON_06_BLACK_CHEST_OPENED, 1)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_13_01_01_PAPER_MAGE_2)

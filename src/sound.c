@@ -509,8 +509,8 @@ const char* root;
     }
 #if VERSION <= VERSION_DEMO_US
 root = getMarioStDvdRoot();
-    sprintf(str, "%s/%s%s", root, path, ".pool");
-entry = DVDMgrOpen(str, 2, 0);
+    sprintf(_ssGetStr(), "%s/%s%s", root, path, ".pool");
+entry = DVDMgrOpen(_ssGetStr(), 2, 0);
 #else
 
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".pool");
@@ -543,8 +543,8 @@ entry = DVDMgrOpen(str, 2, 0);
     sound.poolData[sound.dataId] = pointer;
 
 #if VERSION <= VERSION_DEMO_US
-    sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".proj");
-    entry = DVDMgrOpen(str, 2, 0);
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".proj");
+    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
 #else
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".proj");
     entry = DVDMgrOpen(_ssGetStr(), 2, 0);
@@ -574,8 +574,8 @@ entry = DVDMgrOpen(str, 2, 0);
     sound.projData[sound.dataId] = pointer;
 
 #if VERSION <= VERSION_DEMO_US
-    sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".sdir");
-    entry = DVDMgrOpen(str, 2, 0);
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".sdir");
+    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
 #else
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".sdir");
     entry = DVDMgrOpen(_ssGetStr(), 2, 0);
@@ -605,8 +605,8 @@ entry = DVDMgrOpen(str, 2, 0);
     sound.sdirData[sound.dataId] = pointer;
 
 #if VERSION <= VERSION_DEMO_US
-    sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".samp");
-    strcpy(sound.filepath, str);
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".samp");
+    strcpy(sound.filepath, _ssGetStr());
 #else
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".samp");
     strcpy(sound.filepath, _ssGetStr());
@@ -2457,8 +2457,8 @@ const char* paths[1];
         stream->flags |= SOUND_STREAM_FLAG_ARAM;
     }
 #if VERSION <= VERSION_DEMO_US
-sprintf(str, "%s/%s%s", getMarioStDvdRoot(), name, ".stm");
-paths[0] = str;
+sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), name, ".stm");
+paths[0] = _ssGetStr();
     path = paths[0];
 if (!(stream->entries[0].dvd = DVDMgrOpen(path, 0, 0))) {
 #else

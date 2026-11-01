@@ -543,7 +543,7 @@ static EVT_BEGIN(talk_soncho)
 #if VERSION <= VERSION_DEMO_US
     // The mayor's lines depend on the story: peaceful day talk before the cannon plot, then the first
     // conversation, then reminders.
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -646,7 +646,7 @@ static EVT_BEGIN(talk_soncho)
             // The mayor tells Mario to come back once he has found them; the story advances.
             CALL(evt_msg_print, 0, STRING("stg7_bom_33"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_02_MAYOR_BOB)
+            SET_VALUE(GSW_STORY_PROGRESS, STG7_02_MAYOR_BOB)
 #else
             SET_VALUE(GSW_STORY_PROGRESS, STG7_02_MAYOR_BOB)
 #endif
@@ -967,7 +967,7 @@ CALL(evt_win_item_select, PTR(iri_26_item_tbl), LW(0))
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1963,7 +1963,7 @@ EVT_BEGIN(bom_02_init_evt)
 #endif
     SET_VALUE(LF(0), 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
 #endif
@@ -1992,7 +1992,7 @@ EVT_BEGIN(bom_02_init_evt)
 #endif
     CALL(evt_npc_setup, PTR(npcEnt))
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -2058,7 +2058,7 @@ EVT_BEGIN(bom_02_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -300, 65, 10, 0, 0)
     // Chapter 8 finale: entering as sekai_yami2 or minnnanokoe starts the matching cutscene.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
 #endif

@@ -496,7 +496,7 @@ CALL(evt_party_move_pos2, 0, 60, -100, FLOAT(60.0f))
     CALL(evt_pouch_receive_mail, 43)
     CALL(evt_pouch_open_mail, 43)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_30_A_NEW_CHAMPION)
+    SET_VALUE(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
 #endif
@@ -971,8 +971,8 @@ EVT_BEGIN(tou_07_init_evt)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_30_A_NEW_CHAMPION)
-                SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_30_A_NEW_CHAMPION)
+            IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
+                SET_VALUE(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
 #else
             IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
                 SET_VALUE(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
@@ -992,7 +992,7 @@ EVT_BEGIN(tou_07_init_evt)
 #if VERSION <= VERSION_DEMO_US
     // Pick between the closed air duct (hammer the wall to open it) and the open duct entrance,
     // depending on the story.
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1026,7 +1026,7 @@ EVT_BEGIN(tou_07_init_evt)
     // Back from a match: choose the music, then run the title ceremony or champion scene that fits the story.
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
         SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
-        SWITCH(GSW(GSW_STORY_PROGRESS))
+        SWITCH(GSW_STORY_PROGRESS)
 #else
     CALL_CHILD(PTR(evt_tou_monitor_init))
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
@@ -1054,7 +1054,7 @@ EVT_BEGIN(tou_07_init_evt)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         END_SWITCH
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_30_A_NEW_CHAMPION)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
             SPAWN_EVENT(evt_champion)
 #else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
@@ -1063,7 +1063,7 @@ EVT_BEGIN(tou_07_init_evt)
             RETURN
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             SPAWN_EVENT(evt_tou_match_after_default)
 #else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -1104,7 +1104,7 @@ EVT_BEGIN(tou_07_init_evt)
     END_IF
     // Choose the music and ambience for the story point.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #endif
@@ -1112,7 +1112,7 @@ EVT_BEGIN(tou_07_init_evt)
         CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        SWITCH(GSW(GSW_STORY_PROGRESS))
+        SWITCH(GSW_STORY_PROGRESS)
 #else
         SWITCH(GSW_STORY_PROGRESS)
 #endif

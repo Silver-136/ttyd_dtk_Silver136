@@ -82,7 +82,7 @@ EvtWord moji_msg[22];
 #endif
 static EvtWord switch_evt[303];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord dokan_evt[];
+static EvtWord dokan_evt[335];
 #else
 static EvtWord dokan_evt[345];
 #endif
@@ -1055,7 +1055,7 @@ CALL(evt_img_clear_virtual_point, STRING("img"))
     SET_VALUE(LW(0), STRING("dokan"))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(bero_case_switch_on)
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_08_OPENING_THE_PATH)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_08_OPENING_THE_PATH)
 #else
     CALL_CHILD(PTR(bero_case_switch_on))
     SET_VALUE(GSW_STORY_PROGRESS, STG1_08_OPENING_THE_PATH)

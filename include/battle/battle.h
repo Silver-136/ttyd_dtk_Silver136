@@ -330,7 +330,9 @@ extern BattleWork* _battleWorkPointer;
 void battleMain(void);
 
 void battle_exit(void);
+#if VERSION > VERSION_DEMO_US
 BOOL battle_init(void);
+#endif
 void BattleAfterReactionQueueInit(void);
 
 BattleUnit* BattleGetPartnerPtr(BattleWork* work, BattleUnit* unit);

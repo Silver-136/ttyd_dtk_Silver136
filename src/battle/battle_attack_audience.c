@@ -200,11 +200,7 @@ void _get_item_announce_disp(CameraId cameraId, void* param) {
  * Script helper: shows the caught item floating above the target unit
  * and the "Got <item>!" window for 90 frames, then removes the item entity.
  */
-#if VERSION <= VERSION_DEMO_US
-static s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
-#else
 s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
-#endif
     BattleWork* wp = _battleWorkPointer;
     s32 item = BattleAudience_GetPresentItemNo();
 
@@ -217,8 +213,8 @@ s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
 
         BtlUnit_GetPos(unit, &x, &y, &z);
 #if VERSION <= VERSION_DEMO_US
-y = y + (f32)(BtlUnit_GetHeight(unit) + 10);
-        event->userdatap[1] = itemEntry(x, y, z, NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, 0);
+        y = y + (f32)(BtlUnit_GetHeight(unit) + 10);
+        event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
 #else
         y = y + (unit->sizeMultiplier * (f32)BtlUnit_GetHeight(unit) + 8.0f);
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);

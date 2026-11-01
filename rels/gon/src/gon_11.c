@@ -668,8 +668,8 @@ EVT_BEGIN(gonbaba_event)
     WAIT_MS(2000)
     // Hooktail is defeated, father and son are reunited: the story advances and the Diamond Star is awarded.
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_16_HOOKTAIL)
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_17_FATHER_SON_REUNITED)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
 CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
@@ -841,7 +841,7 @@ static void _mapclsofs_all(CloudWork* wp) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(evt_cloud_main) {
     CloudWork* wp = (CloudWork*)event->lwData[0];
-    s32 group = gp->inBattle != 0;
+    s32 inBattle = gp->inBattle != 0;
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
 #else
@@ -869,14 +869,18 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     if (isFirstCall) {
         return 0;
     }
-    if (ptmp == NULL) {
 #if VERSION <= VERSION_DEMO_US
+    if (party == NULL) {
         return EVT_RETURN_BLOCK;
     }
-if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
-#endif
+    if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
+        return EVT_RETURN_BLOCK;
+    }
+#else
+    if (ptmp == NULL) {
         return 0;
     }
+#endif
 #if VERSION <= VERSION_DEMO_US
 hit0 = (HitEntry*)cloudGetHitBreathout(0);
     hit1 = (HitEntry*)cloudGetHitBreathout(1);
@@ -1210,7 +1214,7 @@ EVT_BEGIN(gon_11_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1223,7 +1227,7 @@ EVT_BEGIN(gon_11_init_evt)
 #endif
     END_SWITCH
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1238,7 +1242,7 @@ EVT_BEGIN(gon_11_init_evt)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_npc_flag_onoff, 1, STRING("ゴンババ"), NPC_FLAG_NO_HIT)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_16_HOOKTAIL)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
 #endif

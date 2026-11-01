@@ -33,6 +33,13 @@
 #include "driver/mobjdrv.h"
 #include "driver/mapdrv.h"
 #include "seq/seq_battle.h"
+#if VERSION <= VERSION_DEMO_US
+#include "data/mapdata.h"
+#endif
+
+#if VERSION <= VERSION_DEMO_US
+static void battle_init(void);
+#endif
 
 s32 debug_battle_flag;
 // FAKE: unreferenced word in neither symbol map; removing it changes the object
@@ -548,7 +555,7 @@ psndClearFlag(PSND_FLAG_MUTE_SFX);
     }
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
     PSMTXMultVec(mtx, &light->position, &light->position);
-if ((evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG2_24_BOSS_BATTLE) && evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
+if ((evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_24_BOSS_BATTLE) && evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
 psndBGMOn(PSND_CONTINUE | PSND_FADEIN, NULL);
         psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
     }

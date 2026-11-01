@@ -287,7 +287,7 @@ EVT_END()
 // Stop the stored barrel/bottle bobbing events before their downstream translation.
 EVT_BEGIN(watergate_handle)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG5_22_FLOODGATE_HANDLE)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
 #endif
@@ -375,7 +375,7 @@ CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
 #endif
         CALL(evt_hitobj_attr_onoff, 1, 1, STRING("s_bero"), HIT_ATTR_SHIP_ONLY)
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_22_FLOODGATE_HANDLE)
+        SET_VALUE(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
 #else
         SET_VALUE(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
 #endif

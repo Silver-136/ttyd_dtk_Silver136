@@ -1433,7 +1433,7 @@ CALL(evt_win_item_select, PTR(daiza_key_tbl), LW(0))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(kagi_8_syutugen)
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG8_05_STAR_KEY_SLOT)
+    SET_VALUE(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
 #else
     CALL_CHILD(PTR(kagi_8_syutugen))
     SET_VALUE(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
@@ -1452,7 +1452,7 @@ EVT_END()
 EVT_BEGIN(las_10_init_evt)
     // Music: the second Palace theme, depending on how Mario arrived.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_05_STAR_KEY_SLOT)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
 #endif
@@ -1493,7 +1493,7 @@ EVT_BEGIN(las_10_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_05_STAR_KEY_SLOT)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
 #endif
@@ -1506,7 +1506,7 @@ EVT_BEGIN(las_10_init_evt)
     // Set up the eight key stands and, after the last key, the globe cutscene (tenkyugi_evt) when coming from
     // the tower and its return version (tenkyugi_evt2) when coming back from las_19.
     SPAWN_EVENT(kagi_8_init)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_05_STAR_KEY_SLOT)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
 #else
     SPAWN_EVENT(PTR(kagi_8_init))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
@@ -1536,7 +1536,7 @@ EVT_BEGIN(las_10_init_evt)
     END_IF
     // Once the planets are moving, the globe keeps turning with its sound.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_06_MOVING_PLANETS)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
 #endif

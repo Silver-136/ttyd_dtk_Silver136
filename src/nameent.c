@@ -341,22 +341,22 @@ static s32 nameMain(void) {
                         switch (wp->cursorY) {
                             case 4:
                                 wp->charTable = hiragana_tbl;
-                                psndSFXOn((PSND_SFX_FILE_FONT_CHANGE1 |PSND_SFX_BYPASS_MUTE)0x2000C);
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_FONT_CHANGE1 | PSND_SFX_BYPASS_MUTE));
                                 break;
                             case 5:
                                 wp->charTable = katakana_tbl;
-                                psndSFXOn((PSND_SFX_FILE_FONT_CHANGE1 |PSND_SFX_BYPASS_MUTE)0x2000C);
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_FONT_CHANGE1 | PSND_SFX_BYPASS_MUTE));
                                 break;
                             case 6:
                                 if (wp->nameLen > 0) {
                                     wp->nameLen--;
-                                    psndSFXOn((PSND_SFX_FILE_MOJI_DELETE1 |PSND_SFX_BYPASS_MUTE)0x2000B);
+                                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1 | PSND_SFX_BYPASS_MUTE));
                                 }
                                 break;
                             case 7:
                                 wp->confirmSel = 1;
                                 wp->state = 100;
-                                psndSFXOn((PSND_SFX_CURSOR_OK1 |PSND_SFX_BYPASS_MUTE)0x20012);
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                                 break;
                         }
                     } else if (wp->nameLen < 8) {

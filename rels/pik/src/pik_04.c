@@ -1338,7 +1338,7 @@ EVT_BEGIN(pik_04_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("front_"), 0, PTR(kinopio_house_talk_evt), 0)
     CALL(evt_kinopio_setup, PTR(&kino_dt))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
 #endif

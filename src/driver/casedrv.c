@@ -346,7 +346,7 @@ if ((u32)marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
                 break;
             case CASE_FUNC:
 #if VERSION <= VERSION_DEMO_US
-                    if (entry->activeFunc != NULL && entry->activeFunc(entry)) {
+                    if (entry->activeFunc != NULL && ((s32 (*)(CaseEntry*))entry->activeFunc)(entry)) {
                         SET_HIT(entry);
 #else
                 if (entry->activeFunc != NULL && ((s32 (*)(CaseEntry*))entry->activeFunc)(entry)) {
@@ -368,7 +368,7 @@ if ((u32)marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
 #endif
                 if (entry->evtId == 0) {
 #if VERSION <= VERSION_DEMO_US
-                    evt = ((EvtEntryS32PriorityFn)evtEntry)(entry->evtCode, entry->priority, EVENT_START_IMMEDIATE);
+                    evt = evtEntry(entry->evtCode, entry->priority, EVENT_START_IMMEDIATE);
 #else
                     evt = evtEntry(entry->evtCode, entry->priority, EVENT_START_IMMEDIATE);
 #endif

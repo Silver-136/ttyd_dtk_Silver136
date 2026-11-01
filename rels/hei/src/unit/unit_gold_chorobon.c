@@ -44,14 +44,10 @@ EvtWord escape_chorogun_event[50];
 #endif
 static EvtWord init_event[43];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event[];
-#else
 static EvtWord damage_event[108];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event[];
+static EvtWord damage_event[108];
 #else
 static EvtWord damage_event[131];
 #endif

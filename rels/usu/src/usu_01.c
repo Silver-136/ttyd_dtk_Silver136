@@ -1007,7 +1007,7 @@ CALL_CHILD(iri_20_aunt_to_house)
     END_IF
     // No trouble active: her words depend on how far the story has gone.
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1950,14 +1950,14 @@ END_IF
     IF_INT_EQUAL(LW(15), 1)
         CALL(evt_mario_balloon_off)
         SET_VALUE(LW(15), 0)
-        IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_13_VIVIAN_JOINS)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
 CALL_CHILD(cam_up)
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＦ"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-            SWITCH(GSW(GSW_STORY_PROGRESS))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
                 // Before the name guessing, crow F says the Mario with the mayor is really the
                 // villain and crow G adds that only a soul locked under Creepy Steeple knows
@@ -2233,14 +2233,14 @@ IF_INT_EQUAL(LW(6), 1)
     IF_INT_EQUAL(LW(15), 1)
         CALL(evt_mario_balloon_off)
         SET_VALUE(LW(15), 0)
-        IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_13_VIVIAN_JOINS)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
 CALL_CHILD(cam_up)
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＨ"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-            SWITCH(GSW(GSW_STORY_PROGRESS))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
                 // Before the name guessing, crow H tells crow I that her oldest, Ronnie,
                 // is taking his SATs (stg4_usu_143) and crow I is impressed (144).
@@ -2449,14 +2449,14 @@ IF_INT_EQUAL(LW(6), 1)
     IF_INT_EQUAL(LW(15), 1)
         CALL(evt_mario_balloon_off)
         SET_VALUE(LW(15), 0)
-        IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_13_VIVIAN_JOINS)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
 CALL_CHILD(cam_up)
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＪ"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-            SWITCH(GSW(GSW_STORY_PROGRESS))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
                 // Before the name guessing, crow J laments that the twilit world is
                 // full of pain (stg4_usu_147).
@@ -3810,7 +3810,7 @@ CALL(evt_mario_normalize)
     CALL(evt_img_release, STRING("img"))
     CALL(evt_paper_delete, STRING("OFF_d_kusya"))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG4_04_01_PAPER_MAGE_TUBE_MOD)
+    SET_VALUE(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
     SET_VALUE(GSWF_USU_01_BLACK_CHEST_OPENED, 1)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)

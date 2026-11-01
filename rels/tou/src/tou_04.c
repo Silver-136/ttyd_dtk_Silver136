@@ -972,7 +972,7 @@ EVT_BEGIN(talk_g_4)
     // Before the match with Grubba is arranged, the guard lets Mario through the first time he asks to become
     // a fighter.
 #if VERSION <= VERSION_DEMO_US
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SWITCH(GSW_STORY_PROGRESS)
 #endif
@@ -1360,7 +1360,7 @@ EVT_END()
 
 static EVT_BEGIN(init_brots)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_DESTRUCTORS_JOINED, 0)
@@ -2533,12 +2533,12 @@ EVT_BEGIN(tou_04_init_evt)
     END_IF
     // Choose the music and ambience for the story point: quiet while Grubba's plans unfold,
     // the league theme for most of the story and the ring-side theme otherwise.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
     ELSE
         IF_INT_EQUAL(LW(1), 0)
-            SWITCH(GSW(GSW_STORY_PROGRESS))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
@@ -2627,7 +2627,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CALL_CHILD(bero_case_switch_off)
         ADD(LW(2), 1)
     END_LOOP
-    SWITCH(GSW(GSW_STORY_PROGRESS))
+    SWITCH(GSW_STORY_PROGRESS)
 CASE_LESS(STG3_04_GONZALES_IS_BORN)
         SET_VALUE(LW(0), 5)
         CALL_CHILD(bero_case_switch_on)
@@ -2651,15 +2651,15 @@ CASE_LESS(STG3_04_GONZALES_IS_BORN)
     CALL_CHILD(bero_case_switch_on)
     SET_VALUE(LW(0), 8)
     CALL_CHILD(bero_case_switch_on)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_20_02_BACK_TO_THE_MINORS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_02_BACK_TO_THE_MINORS)
         SET_VALUE(LW(0), STRING("s_bero_7"))
         CALL_CHILD(bero_case_switch_on)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_20_03_THE_YELLOW_BLOCK)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_03_THE_YELLOW_BLOCK)
         SET_VALUE(LW(0), STRING("s_bero_7"))
         CALL_CHILD(bero_case_switch_on)
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
         IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
             SET_VALUE(LW(0), 10)
             CALL_CHILD(bero_case_switch_on)
@@ -2671,7 +2671,7 @@ CASE_LESS(STG3_04_GONZALES_IS_BORN)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         SET_VALUE(LW(0), 10)
         CALL_CHILD(bero_case_switch_on)
         SET_VALUE(LW(0), 0)
@@ -2682,7 +2682,7 @@ CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
 END_IF
     // After Grubba's plans, the guard's office door stays shut unless Mario was called back by Jolene.
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(LW(0), 5)
             CALL_CHILD(bero_case_switch_on)
@@ -2711,7 +2711,7 @@ END_IF
     END_IF
     // The storage room is locked until Mario has the key;
     // when he is a top-eleven fighter the storage-room talk starts.
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
         CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x12, 0, 10, -550, 0, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_04_STORAGE_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("s_bero_4"))
         CALL_CHILD(bero_case_switch_off)
@@ -2723,17 +2723,17 @@ END_IF
         IF_INT_NOT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
             CALL(evt_tou_get_ranking, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 11)
-                IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
+                IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
                     SPAWN_EVENT(evt_souko_talk)
                 END_IF
             END_IF
         END_IF
     END_IF
     // Rawk Hawk's escape scene and the rematch return from the ring play at their story points.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_20_05_MAJORS_4TH_PL)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_05_MAJORS_4TH_PL)
         SPAWN_EVENT(evt_bred_nigeru)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("s_bero_7"))
             CALL(evt_tou_get_ranking, LW(1))

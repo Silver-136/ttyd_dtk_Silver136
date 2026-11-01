@@ -329,7 +329,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_msg_print_party, STRING("stg8_las_50"))
 #if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(syuryo_evt)
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG8_14_01_QUEENS_CHAMBER)
+    SET_VALUE(GSW_STORY_PROGRESS, STG8_14_01_QUEENS_CHAMBER)
     CALL_CHILD(bero_case_entry)
 #else
     SPAWN_EVENT(PTR(syuryo_evt))
@@ -1466,7 +1466,7 @@ CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0
     CALL(evt_npc_change_interrupt, STRING("ババ"), 6, PTR(baba_talk))
 #if VERSION <= VERSION_DEMO_US
     // The story advances and Mario regains control.
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    SET_VALUE(GSW_STORY_PROGRESS, STG8_15_GRODUS)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG8_15_GRODUS)
 #endif
@@ -1505,7 +1505,7 @@ EVT_END()
 EVT_BEGIN(las_28_init_evt)
 #if VERSION <= VERSION_DEMO_US
     // Music by story step: danger music before the Grodus scene, silence after it.
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
 #endif
@@ -1527,7 +1527,7 @@ CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_14_LOCK)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_14_LOCK)
         // Register the doors, then set up Grodus's light effects and the throne parts for the current story
         // step.
         CALL_CHILD(evt_bero_info_run)
@@ -1544,7 +1544,7 @@ CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
 #endif
     CALL(evt_hit_bind_mapobj, STRING("A_gyoku"), STRING("S_gyoku"))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
 #endif
@@ -1560,7 +1560,7 @@ CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
     CALL(evt_hitobj_onoff, STRING("A_gare"), 1, 0)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(shan_init)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_14_LOCK)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_14_LOCK)
         // First entry (the room was just locked): the opening cutscene plays.
         SPAWN_EVENT(first_evt)
 #else
@@ -1572,7 +1572,7 @@ CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
 #if VERSION <= VERSION_DEMO_US
     // Resuming after the Grodus fight: either Bowser's scene (koopa_evt) with Mario and his partner placed in
     // front of Grodus, or Grodus's own scene (syuryo_evt).
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_14_01_QUEENS_CHAMBER)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_14_01_QUEENS_CHAMBER)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_14_01_QUEENS_CHAMBER)
 #endif

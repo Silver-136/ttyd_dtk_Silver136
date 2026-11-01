@@ -50,6 +50,9 @@
 #include "data_tables.h"
 #endif
 #include <dolphin/pad.h>
+#if VERSION <= VERSION_DEMO_US
+#include "demo/DEMOPad.h"
+#endif
 
 
 void FontDrawString(f32 x, f32 y, const char* str);

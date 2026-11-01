@@ -331,7 +331,7 @@ void cloud_use(PartyEntry* party) {
         party->useStruct = __memAlloc(HEAP_DEFAULT, sizeof(PartyCloud));
         memset(party->useStruct, 0, sizeof(PartyCloud));
         CLOUD_WORK(party)->sfxId = -1;
-        CW(party)->reserved_0 = 100.0f;
+        CLOUD_WORK(party)->reserved_0 = 100.0f;
         CLOUD_WORK(party)->breathDistMax = 120.0f;
         CLOUD_WORK(party)->sweep[0].angle = 0.0f;
         CLOUD_WORK(party)->sweep[0].reverse = 0;
@@ -448,9 +448,9 @@ void cloud_use(PartyEntry* party) {
             } else if (--CLOUD_WORK(party)->autoTimer > 0) {
                 break;
             }
-            if ((u32)CW(party)->sfxId != 0xFFFFFFFF) {
-                psndSFXOff(CW(party)->sfxId);
-                CW(party)->sfxId = -1;
+            if ((u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+                psndSFXOff(CLOUD_WORK(party)->sfxId);
+                CLOUD_WORK(party)->sfxId = -1;
             }
             CLOUD_WORK(party)->hitFront = NULL;
             CLOUD_WORK(party)->hitDown = NULL;
@@ -523,9 +523,9 @@ void cloud_exit(PartyEntry* party) {
         party->work.cloud.breathEffect = NULL;
     }
     if (party->useStruct != NULL) {
-        if ((u32)CW(party)->sfxId != 0xFFFFFFFF) {
-            psndSFXOff(CW(party)->sfxId);
-            CW(party)->sfxId = -1;
+        if ((u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+            psndSFXOff(CLOUD_WORK(party)->sfxId);
+            CLOUD_WORK(party)->sfxId = -1;
         }
         __memFree(HEAP_DEFAULT, party->useStruct);
         party->useStruct = NULL;

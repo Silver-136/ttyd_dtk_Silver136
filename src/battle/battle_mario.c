@@ -569,7 +569,7 @@ BattleWeapon marioWeapon_KaitenHammerInvolved = {
     NULL, // fpDamageFn
     {0}, // fpDamageWork
 #if VERSION <= VERSION_DEMO_US
-TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST,
 #else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -659,7 +659,7 @@ BattleWeapon marioWeapon_UltraHammerInvolved = {
     NULL, // fpDamageFn
     {0}, // fpDamageWork
 #if VERSION <= VERSION_DEMO_US
-TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST,
 #else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1823,7 +1823,7 @@ BattleWeapon badgeWeapon_Charge = {
     "btl_hlp_cmd_operation_charge", // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
-0,
+    0,
 #else
     1, // baseFpCost
 #endif
@@ -1867,7 +1867,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     "btl_hlp_cmd_operation_charge", // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
-0,
+    0,
 #else
     1, // baseFpCost
 #endif
@@ -2026,7 +2026,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
     NULL, // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
-10,
+    10,
 #else
     8, // baseFpCost
 #endif
@@ -2166,7 +2166,7 @@ BattleWeapon marioWeapon_BakuGame = {
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
 #if VERSION <= VERSION_DEMO_US
-0, // stopChance
+    0, // stopChance
     0,
 #else
     100, // stopChance
@@ -2460,7 +2460,7 @@ BattleWeapon marioWeapon_Suki = {
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, // atkChangeTime..allergicTime
 #if VERSION <= VERSION_DEMO_US
-0,
+    0,
 #else
     100, // ohkoChance
 #endif
@@ -5365,7 +5365,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
             GOTO(99)
         END_IF
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
-        CALL(evt_btl_camera_set_homing_unit, 0, LW(3), BTL_UNIT_NONE)
+        CALL(evt_btl_camera_set_homing_unit, 0, LW(3), -1)
         CALL(evt_btl_camera_set_zoom, 0, 300)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

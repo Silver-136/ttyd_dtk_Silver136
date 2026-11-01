@@ -262,26 +262,15 @@ static inline HitEntry* partyHitCheckGnd(PartyEntry* party, Vec* pos, Vec* dir, 
     outNrm->z = query.hitNormal.z;
     return hit;
 }
-#endif
+
+/* partyChkGnd's ground search: writes the party's own groundY/dropDepth */
 HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     HitEntry* hit;
-#if VERSION > VERSION_DEMO_US
-    HitEntry* best;
-#endif
     s32 i;
-#if VERSION <= VERSION_DEMO_US
     f32 nsx, probeY, nsz, len, sx, sz, px, baseY, pz, ox, oz, gy, rad, d;
-#else
-    f32 probeY, nsz, nsx, len, bestY, sx, sz, px, baseY, pz, gy, ox, oz, rad, d;
-#endif
     Vec pos;
     Vec dir;
-#if VERSION <= VERSION_DEMO_US
     Vec outNrm;
-#else
-    Vec outPos, outNrm;
-    f32 dist;
-#endif
 
     if (party->flags & PARTY_FLAG_FORCE_FALL) {
         return NULL;
@@ -293,15 +282,7 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     party->groundSlope = 0.0f;
     range = __fabsf(range);
     range += 0.1f;
-#if VERSION > VERSION_DEMO_US
-    if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI) {
-        d = 5.0f;
-    } else {
-#endif
-        d = 0.75f * partyGetHeight(party);
-#if VERSION > VERSION_DEMO_US
-    }
-#endif
+    d = 0.75f * partyGetHeight(party);
     party->groundY = party->position.y;
     party->dropDepth = -1.0f;
     if (party->moveSpeed) {
@@ -311,17 +292,9 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     }
     rad = 3.1415927f * rad / 180.0f;
     nsz = (f32)sin(rad);
-#if VERSION <= VERSION_DEMO_US
     sx = 0.5f * ((party->width - 0.05f) * nsz);
-#else
-    sx = 0.375f * (party->width * nsz);
-#endif
     nsz = (f32)cos(rad);
-#if VERSION <= VERSION_DEMO_US
     sz = 0.5f * ((party->width - 0.05f) * -nsz);
-#else
-    sz = 0.375f * (party->width * -nsz);
-#endif
     nsx = -sx;
     nsz = -sz;
     baseY = party->position.y;
@@ -331,14 +304,8 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
         Vec d0 = {0.0f, -1.0f, 0.0f};
         dir = d0;
     }
-#if VERSION > VERSION_DEMO_US
-    best = NULL;
-#endif
     px = party->position.x;
     pz = party->position.z;
-#if VERSION > VERSION_DEMO_US
-    bestY = -10000.0f;
-#endif
     for (i = 0; i < 5; i++) {
         if (i == 0) {
             ox = 0.0f;
@@ -359,13 +326,7 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
         pos.x = px + ox;
         pos.y = probeY;
         pos.z = pz + oz;
-#if VERSION <= VERSION_DEMO_US
         hit = partyHitCheckGnd(party, &pos, &dir, len, &gy, &outNrm);
-#else
-        dist = len;
-        hit = partyHitCheckInl(party, &pos, &dir, &outPos, &outNrm, &dist);
-        gy = outPos.y;
-#endif
         if (hit) {
             if (partyNrmSet(party, outNrm) >= 50.0f) {
                 hit = NULL;
@@ -376,43 +337,24 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
             if (gy < baseY && __fabsf(gy - baseY) >= 2.0f) {
                 if (__fabsf(gy - baseY) > __fabsf(depth)) {
                     party->dropDepth = __fabsf(baseY - gy);
-#if VERSION <= VERSION_DEMO_US
                 } else {
                     party->groundY = gy;
                     party->dropDepth = 0.0f;
                     return hit;
-#else
-                } else if (gy > bestY) {
-                    bestY = gy;
-                    best = hit;
-#endif
                 }
             } else if (__fabsf(gy - baseY) <= 11.0f) {
-#if VERSION <= VERSION_DEMO_US
                 party->groundY = gy;
                 party->dropDepth = 0.0f;
                 return hit;
-#else
-                if (gy > bestY) {
-                    bestY = gy;
-                    best = hit;
-#endif
-                }
             }
         }
-#if VERSION > VERSION_DEMO_US
     }
-    if (best) {
-        party->groundY = bestY;
-        party->dropDepth = 0.0f;
-        return best;
-    }
-#endif
     return NULL;
 }
 
-#if VERSION <= VERSION_DEMO_US
-HitEntry* partySearchGround(PartyEntry* party, f32* outY, f32* outDepth, f32 range, f32 depth) {
+/* the demo's ground search reports the floor height and drop depth through out-pointers and takes the first
+   acceptable probe instead of the highest one */
+HitEntry* _partySearchGround(PartyEntry* party, f32* outY, f32* outDepth, f32 range, f32 depth) {
     HitEntry* hit;
     s32 i;
     f32 nsx, probeY, nsz, len, sx, sz, px, baseY, pz, ox, oz, gy, rad, d;
@@ -499,7 +441,111 @@ HitEntry* partySearchGround(PartyEntry* party, f32* outY, f32* outDepth, f32 ran
     }
     return NULL;
 }
+#else
+HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
+    HitEntry* hit;
+    HitEntry* best;
+    s32 i;
+    f32 probeY, nsz, nsx, len, bestY, sx, sz, px, baseY, pz, gy, ox, oz, rad, d;
+    Vec pos;
+    Vec dir;
+    Vec outPos, outNrm;
+    f32 dist;
+
+    if (party->flags & PARTY_FLAG_FORCE_FALL) {
+        return NULL;
+    }
+    {
+        Vec zero = {0.0f, 0.0f, 0.0f};
+        party->groundRot = zero;
+    }
+    party->groundSlope = 0.0f;
+    range = __fabsf(range);
+    range += 0.1f;
+    if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI) {
+        d = 5.0f;
+    } else {
+        d = 0.75f * partyGetHeight(party);
+    }
+    party->groundY = party->position.y;
+    party->dropDepth = -1.0f;
+    if (party->moveSpeed) {
+        rad = party->targetDir;
+    } else {
+        rad = partyToMovedir(party, party->displayDirection);
+    }
+    rad = 3.1415927f * rad / 180.0f;
+    nsz = (f32)sin(rad);
+    sx = 0.375f * (party->width * nsz);
+    nsz = (f32)cos(rad);
+    sz = 0.375f * (party->width * -nsz);
+    nsx = -sx;
+    nsz = -sz;
+    baseY = party->position.y;
+    probeY = baseY + d;
+    len = d + range;
+    {
+        Vec d0 = {0.0f, -1.0f, 0.0f};
+        dir = d0;
+    }
+    best = NULL;
+    px = party->position.x;
+    pz = party->position.z;
+    bestY = -10000.0f;
+    for (i = 0; i < 5; i++) {
+        if (i == 0) {
+            ox = 0.0f;
+            oz = 0.0f;
+        } else if (i == 1) {
+            ox = sx;
+            oz = sz;
+        } else if (i == 2) {
+            ox = nsz;
+            oz = sx;
+        } else if (i == 3) {
+            ox = sz;
+            oz = nsx;
+        } else if (i == 4) {
+            ox = nsx;
+            oz = nsz;
+        }
+        pos.x = px + ox;
+        pos.y = probeY;
+        pos.z = pz + oz;
+        dist = len;
+        hit = partyHitCheckInl(party, &pos, &dir, &outPos, &outNrm, &dist);
+        gy = outPos.y;
+        if (hit) {
+            if (partyNrmSet(party, outNrm) >= 50.0f) {
+                hit = NULL;
+            }
+        }
+        if (hit) {
+            party->groundSlope = partyNrmSet(party, outNrm);
+            if (gy < baseY && __fabsf(gy - baseY) >= 2.0f) {
+                if (__fabsf(gy - baseY) > __fabsf(depth)) {
+                    party->dropDepth = __fabsf(baseY - gy);
+                } else if (gy > bestY) {
+                    bestY = gy;
+                    best = hit;
+                }
+            } else if (__fabsf(gy - baseY) <= 11.0f) {
+                if (gy > bestY) {
+                    bestY = gy;
+                    best = hit;
+                }
+            }
+        }
+    }
+    if (best) {
+        party->groundY = bestY;
+        party->dropDepth = 0.0f;
+        return best;
+    }
+    return NULL;
+}
 #endif
+
 HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDist, f32* outAng) {
     HitEntry* hit;
     f32 dx, sn, cs, h, ang, ox, oy, oz, gy;

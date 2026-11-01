@@ -34,11 +34,7 @@ EvtWord out_func[14];
 static BeroEntry bero_entry_data[3];
 static EvtWord shake_evt[150];
 static EvtWord item_evt[268];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord bomb_wall_evt[];
-#else
 static EvtWord bomb_wall_evt[179];
-#endif
 EvtWord gon_07_init_evt[86];
 
 /**

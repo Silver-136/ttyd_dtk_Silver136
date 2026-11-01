@@ -622,7 +622,7 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
             }
 #if VERSION <= VERSION_DEMO_US
             }
-            SETUP(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
+            nozleVtxSetup(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
             {
 #else
             nozleVtxSetup(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
@@ -636,11 +636,6 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
             break;
         case 2:
             nozleVtxSetup(GX_INDEX16, 7, 14, nozle_3_vertex_tbl, nozle_3_normal_tbl, nozle_3_color0_tbl, nozle_3_texcoord0_tbl, nozle_3_texcoord1_tbl);
-#if VERSION <= VERSION_DEMO_US
-            for(17, sz5= nozle_3_dl_1_size_tbl, sz5, dl5);
-            SETUP(GX_INDEX16, 7, 14, nozle_3_vertex_tbl, nozle_3_normal_tbl, nozle_3_color0_tbl, nozle_3_texcoord0_tbl, nozle_3_texcoord1_tbl);
-            for(17, sz3= nozle_3_dl_0_size_tbl, sz3, dl3);
-#else
             for (k = 0, sz5 = nozle_3_dl_1_size_tbl, dl5 = nozle_3_dl_1_tbl; k < 17; k++, sz5++, dl5++) {
                 GXCallDisplayList(*dl5, *sz5 * 32);
             }
@@ -648,7 +643,6 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
             for (k = 0, sz3 = nozle_3_dl_0_size_tbl, dl3 = nozle_3_dl_0_tbl; k < 17; k++, sz3++, dl3++) {
                 GXCallDisplayList(*dl3, *sz3 * 32);
             }
-#endif
             break;
         case 3:
             GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
@@ -665,13 +659,9 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(d, c, c);
                 GXLoadPosMtxImm(c, GX_PNMTX0);
                 nozleVtxSetup(GX_INDEX8, 6, 13, nozle_4_vertex_tbl, nozle_4_normal_tbl, nozle_4_color0_tbl, nozle_4_texcoord0_tbl, nozle_4_texcoord1_tbl);
-#if VERSION <= VERSION_DEMO_US
-                for(8, sz4= nozle_4_dl_0_size_tbl, sz4, dl4);
-#else
                 for (k = 0, sz4 = nozle_4_dl_0_size_tbl, dl4 = nozle_4_dl_0_tbl; k < 8; k++, sz4++, dl4++) {
                     GXCallDisplayList(*dl4, *sz4 * 32);
                 }
-#endif
             }
             break;
     }

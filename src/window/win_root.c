@@ -241,9 +241,11 @@ s32 winRootMain(WindowWork* w) {
             w->active = 12;
             w->tabSel = 0;
         }
+#if VERSION > VERSION_DEMO_US
         w->texBuf = smartAlloc(GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0), 1);
         w->texBufValid = 0;
         dispEntry(CAMERA_2D, 1000.0f, 0, (DispCallback)winRootBgCaptureDisp, w);
+#endif
         break;
     case 10:
         if (w->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_START)) {
@@ -367,16 +369,20 @@ s32 winRootMain(WindowWork* w) {
             w->menu[i].state = 10;
         }
         w->msgState = 10;
+#if VERSION > VERSION_DEMO_US
         mapDispOn();
         camDispOn(CAMERA_3D);
+#endif
         w->active++;
         break;
     default:
+#if VERSION > VERSION_DEMO_US
         if (w->texBuf) {
             smartFree(w->texBuf);
             w->texBuf = NULL;
             w->texBufValid = 0;
         }
+#endif
         w->active++;
         if (w->active > 50) {
             winMarioExit(w);
@@ -424,7 +430,9 @@ s32 winRootMain(WindowWork* w) {
     w->helpX += __fabs(2.0f * (f32)sin(gp->retraceCount / 8.0f));
     w->sortPosX += (w->sortTgtX - w->sortPosX) / WR_FSTEP(4.0f);
     w->sortPosY += (w->sortTgtY - w->sortPosY) / WR_FSTEP(4.0f);
+#if VERSION > VERSION_DEMO_US
     dispEntry(CAMERA_2D, 1000.0f, 0, (DispCallback)winRootBgDrawDisp, w);
+#endif
     return 0;
 }
 
@@ -1604,16 +1612,6 @@ WinSortData sort_6[] = {
     {NULL, NULL},
 };
 /** Sort options of the Tattle Log: by number, by where the enemy appears most, or by name. */
-#if VERSION <= VERSION_DEMO_US
-static void sort_4_3_func(WindowWork* wp) {
-    pouchSortItem(!wp->sortRev ? 4 : 11);
-    pouchSortItem(!wp->sortRev ? 6 : 13);
-    wp->sortRev = 1 - wp->sortRev;
-    winMakeEquipList(wp);
-    wp->badge.sel[1] = 0;
-    wp->badge.page[1] = wp->badge.sel[1] / 8;
-}
-#endif
 WinSortData sort_7[] = {
     {"msg_menu_sort_number", sort_7_1_func},
     {"msg_menu_sort_place", sort_7_2_func},
@@ -1708,7 +1706,11 @@ void sort_3_3_func(WindowWork* wp) {
 
     pouchGetHaveBadgeCnt();
     pouchHaveBadge(sel);
+#if VERSION <= VERSION_DEMO_US
+    pouchSortItem(!wp->sortRev ? 4 : 11);
+#else
     pouchSortItem(!wp->sortRev ? 6 : 13);
+#endif
     pouchSortItem(!wp->sortRev ? 6 : 13);
     wp->sortRev = 1 - wp->sortRev;
     winMakeEquipList(wp);
@@ -1716,6 +1718,35 @@ void sort_3_3_func(WindowWork* wp) {
     wp->badge.page[0] = wp->badge.sel[0] / 8;
 }
 
+#if VERSION <= VERSION_DEMO_US
+/** The demo sorts the equipped list through the pouch, like the owned list. */
+static void sort_4_1_func(WindowWork* wp) {
+    pouchSortItem(!wp->sortRev ? 4 : 11);
+    wp->sortRev = 1 - wp->sortRev;
+    winMakeEquipList(wp);
+    wp->badge.sel[1] = 0;
+    wp->badge.page[1] = wp->badge.sel[1] / 8;
+}
+
+/** Equipped badges by type, through the pouch (modes 5/12). */
+static void sort_4_2_func(WindowWork* wp) {
+    pouchSortItem(!wp->sortRev ? 5 : 12);
+    wp->sortRev = 1 - wp->sortRev;
+    winMakeEquipList(wp);
+    wp->badge.sel[1] = 0;
+    wp->badge.page[1] = wp->badge.sel[1] / 8;
+}
+
+/** Equipped badges by name, then by BP cost, through the pouch. */
+static void sort_4_3_func(WindowWork* wp) {
+    pouchSortItem(!wp->sortRev ? 4 : 11);
+    pouchSortItem(!wp->sortRev ? 6 : 13);
+    wp->sortRev = 1 - wp->sortRev;
+    winMakeEquipList(wp);
+    wp->badge.sel[1] = 0;
+    wp->badge.page[1] = wp->badge.sel[1] / 8;
+}
+#else
 /**
  * qqsort compare for the equipped badge list (WinBadgeEnt) by name;
  * names go through pouchHiraToKata so hiragana and katakana sort together.
@@ -1851,6 +1882,8 @@ void sort_4_3_func(WindowWork* wp) {
     wp->badge.sel[1] = 0;
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
+
+#endif
 
 /** Journal badge log by name, retail: names folded to katakana first. */
 s32 compare_func5_1(const void* a, const void* b) {

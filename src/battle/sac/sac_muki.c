@@ -398,11 +398,7 @@ effHitEntry(0, 0x20, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
                     if ((s32)w->atkBoost > (s32)prev) {
                         w->t24 = 60;
                         psndSFXOn("SFX_BTL_SAC_BODY6");
-#if VERSION <= VERSION_DEMO_US
-                                sacMukiAudienceCall(num)
-#else
                         sacMukiAudienceCall(num);
-#endif
                     }
                     psndSFXOn("SFX_BTL_SAC_BODY4");
                     break;
@@ -415,11 +411,7 @@ effHitEntry(0, 0x20, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
                     if ((s32)w->defBoost > (s32)prev) {
                         w->t28 = 60;
                         psndSFXOn("SFX_BTL_SAC_BODY6");
-#if VERSION <= VERSION_DEMO_US
-                                sacMukiAudienceCall(num)
-#else
                         sacMukiAudienceCall(num);
-#endif
                     }
                     psndSFXOn("SFX_BTL_SAC_BODY4");
                     break;

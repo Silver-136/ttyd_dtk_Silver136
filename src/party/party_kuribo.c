@@ -17,7 +17,7 @@
 #include "system.h"
 #include "dolphin/mtx.h"
 
-#if VERSION >= VERSION_US
+#if VERSION != VERSION_JP
 // US has no local duplicate: this is the global kuribo_init
 #define kuribo_init_800C23B4 kuribo_init
 #endif
