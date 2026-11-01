@@ -307,7 +307,7 @@ EVT_BEGIN(meet_clouda2)
         ADD(LW(0), 50)
         IF_INT_LESS(LW(2), 0)
             ADD(LW(2), 50)
-            ELSE
+        ELSE
             SUBTRACT(LW(2), 50)
         END_IF
         CALL(evt_party_move_pos2, 0, 130, LW(2), FLOAT(120.0f))
@@ -320,7 +320,7 @@ EVT_BEGIN(meet_clouda2)
     ADD(LW(0), 50)
     IF_INT_LESS(LW(2), 0)
         ADD(LW(2), 50)
-        ELSE
+    ELSE
         SUBTRACT(LW(2), 50)
     END_IF
 #if VERSION <= VERSION_DEMO_US

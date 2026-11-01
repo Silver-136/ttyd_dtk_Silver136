@@ -698,12 +698,12 @@ static EVT_BEGIN(talk_murabito_e)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_30_001"), 0, 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("irai_30_002"), 0, 0)
 #if VERSION < VERSION_US
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print_add, 0, STRING("irai_30_003"))
-                ELSE
+            ELSE
                 CALL(evt_msg_continue)
 #else
                 CALL(evt_msg_print_add, 0, STRING("irai_30_003"))
@@ -712,7 +712,7 @@ static EVT_BEGIN(talk_murabito_e)
             SET_VALUE(LF(0), 0)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                 SET_VALUE(LF(0), 1)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("irai_30_002"), 0, 0)
                 CALL(evt_msg_continue)
             END_IF
@@ -750,7 +750,7 @@ static EVT_BEGIN(talk_murabito_e)
                 CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
                 IF_INT_EQUAL(LW(1), 0)
                     SET_VALUE(LW(1), 10)
-                    ELSE
+                ELSE
                     SET_VALUE(LW(1), 20)
                 END_IF
                 IF_INT_LESS(LW(0), LW(1))
@@ -761,7 +761,7 @@ static EVT_BEGIN(talk_murabito_e)
                     CALL(evt_item_get_item, STRING("sr"))
                     CALL(evt_item_get_item_end_wait, STRING("sr"))
                     SET_VALUE(GSWF_BOM_02_SNOW_BUNNY, 1)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print_add, 0, STRING("irai_30_005_1"))
                     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
                     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)

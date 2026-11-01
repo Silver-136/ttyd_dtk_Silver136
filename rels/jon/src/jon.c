@@ -230,7 +230,7 @@ EVT_BEGIN(jon_init_evt)
         CASE_EQUAL(0)
         IF_INT_EQUAL(LW(2), 10)
             CALL_CHILD(PTR(setup_boss))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(setup_return))
             CALL(evt_mobj_floatswitch_blue, 0, STRING("sw"), -75, 60, 0, PTR(dokan_open2), 0)
         END_IF
@@ -285,7 +285,7 @@ EVT_BEGIN(jon_init_evt)
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-                    ELSE
+                ELSE
 #endif
                 SET_VALUE(LF(0), 0)
                 IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
@@ -326,7 +326,7 @@ EVT_BEGIN(jon_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_100DN1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_set_rev_mode, 1)
-        ELSE
+    ELSE
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_DAN1"))
         CALL(evt_snd_set_rev_mode, 2)
@@ -1867,14 +1867,14 @@ EVT_BEGIN(talk_gyousyou)
 #else
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2), LW(4))
-            ELSE
+        ELSE
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
         END_IF
         ELSE
         CALL(evt_sub_get_language, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2))
-            ELSE
+        ELSE
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
         END_IF
 #endif
@@ -1893,7 +1893,7 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_win_coin_off, LW(12))
         IF_INT_GREATER_OR_EQUAL(LW(1), 240)
             CALL(evt_msg_print_add, 0, STRING("100kai_item_09"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("100kai_item_09"))
         END_IF
         RETURN

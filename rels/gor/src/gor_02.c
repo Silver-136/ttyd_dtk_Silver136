@@ -1184,18 +1184,18 @@ EVT_BEGIN(powerupya_table_talk)
         CALL(evt_msg_print, 0, STRING("powerup_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_MERLON_FIRST_TALK_DONE, 1)
         SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 0)
             CALL(evt_msg_print, 0, STRING("powerup_00_01"), 0, STRING("me"))
             SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("powerup_00_02"), 0, STRING("me"))
         END_IF
     END_IF
     CALL(evt_pouch_get_supercoin, LW(2))
     IF_INT_LESS(LW(2), 3)
         CALL(evt_msg_print_add, 0, STRING("powerup_01"))
-        ELSE
+    ELSE
         CALL(evt_msg_continue)
         CALL_CHILD(PTR(powerupya_party_rtn))
     END_IF
@@ -1315,7 +1315,7 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(get_mario_dir_target, LW(6))
     IF_FLOAT_EQUAL(LW(6), FLOAT(0.0f))
         ADD(LW(3), -20)
-        ELSE
+    ELSE
         ADD(LW(3), 20)
     END_IF
     CALL(evt_item_entry, STRING("watasu"), ITEM_UP_ARROW, LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
@@ -1393,7 +1393,7 @@ EVT_BEGIN(powerupya_orb_use)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(0), -365)
             CALL(evt_mario_set_dir, 90, 200, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_set_dir, 270, 200, 0)
         END_IF
     END_INLINE_EVENT
@@ -1401,7 +1401,7 @@ EVT_BEGIN(powerupya_orb_use)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(0), -365)
             CALL(evt_party_set_dir, 0, 90, 200)
-            ELSE
+        ELSE
             CALL(evt_party_set_dir, 0, 270, 200)
         END_IF
     END_INLINE_EVENT
@@ -1471,7 +1471,7 @@ EVT_BEGIN(powerupya_direct_talk)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     SET_VALUE(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 1)
-            ELSE
+        ELSE
             CALL(evt_pouch_check_item, ITEM_UP_ARROW, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, FUKIDASHI_AT_MARIO, STRING("powerup_ev_04"), 0, STRING("me"))
@@ -1794,7 +1794,7 @@ static EVT_BEGIN(kurihakase_talk)
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
         IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
             CALL(evt_msg_print, 0, STRING("gor_02_019"), 0, STRING("me"))
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 0)
                 // After the Twilight Town trip: the partner speaks up, Frankly stares in surprise,
                 // then answers.
@@ -1807,7 +1807,7 @@ static EVT_BEGIN(kurihakase_talk)
                 CALL(evt_msg_print, 0, STRING("mac_3_010"), 0, STRING("me"))
                 SET_VALUE(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 1)
                 CALL(evt_party_run, 0)
-                ELSE
+            ELSE
                 // Later Chapter 3 lines.
                 CALL(evt_msg_print, 0, STRING("gor_02_020"), 0, STRING("me"))
             END_IF
@@ -1857,7 +1857,7 @@ static EVT_BEGIN(kurihakase_talk)
                 CASE_BETWEEN(150000, 179999)
                 CALL(evt_msg_print, 0, STRING("mac_6_006_06"), 0, STRING("クリハカセ"))
             END_SWITCH
-            ELSE
+        ELSE
             // Chapter 7: the screen goes to letterbox and a timer event starts.
             CALL(evt_cam_letter_box_disable, 1)
             CALL(evt_cam_letter_box_onoff, 1, 0)
@@ -1873,7 +1873,7 @@ static EVT_BEGIN(kurihakase_talk)
             CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, 0, STRING("gor_02_026_01"), 0, STRING("me"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("gor_02_026"), 0, STRING("me"))
             END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -1900,7 +1900,7 @@ static EVT_BEGIN(kurihakase_talk)
             CALL(evt_msg_print, 0, STRING("gor_02_029_02"), 0, STRING("me"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             SET_VALUE(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_02_029_03"), 0, STRING("me"))
         END_IF
     END_SWITCH
@@ -7123,7 +7123,7 @@ EVT_BEGIN(gor_02_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_58_FAIR_WINDS)
         SPAWN_EVENT(PTR(dearu_event))
-        ELSE
+    ELSE
         SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
     END_IF
 
@@ -7177,7 +7177,7 @@ EVT_BEGIN(gor_02_init_evt)
     SET_VALUE(LW(0), GW(11))
     IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
         CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc))
-        ELSE
+    ELSE
         CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc_01))
     END_IF
     CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
@@ -7198,13 +7198,13 @@ EVT_BEGIN(gor_02_init_evt)
     END_IF
     IF_INT_EQUAL(GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED, 0)
         CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_HOUSE_KEY, 446, 18, 50, 0, PTR(evt_chk), PTR(evt_unlock), GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(&door_data_06))
         CALL(evt_door_data_copy, LW(0), LW(1))
         SET_VALUE(LW(0), LW(1))
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_NEED_A_KEY), 0)
             CALL(evt_door_set_param, LW(0), 0, PTR(&door_data_06_npc))
-            ELSE
+        ELSE
             CALL(evt_door_set_param, LW(0), 0, PTR(&door_data_06_npc_01))
         END_IF
         CALL_CHILD(PTR(evt_door_entry))
@@ -7258,14 +7258,14 @@ EVT_BEGIN(gor_02_init_evt)
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     IF_INT_EQUAL(LW(0), CLOUD_STATE_WAIT_BREATH)
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i04_ura_01B"), MAP_OBJ_FLAG_HIDDEN)
-                        ELSE
+                    ELSE
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i04_ura_01B"), MAP_OBJ_FLAG_HIDDEN)
                     END_IF
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
         END_INLINE_EVENT
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(&door_data_04_ura))
         CALL_CHILD(PTR(evt_door_entry))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i04_kabe_msk"), MAP_OBJ_FLAG_HIDDEN)

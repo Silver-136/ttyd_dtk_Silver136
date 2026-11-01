@@ -362,7 +362,7 @@ EVT_BEGIN(uranaisi_next_evt)
         IF_INT_EQUAL(LW(0), 1)
             CALL(uranaisi_next_makelabel, 0, LW(1))
             CALL(evt_msg_print, 0, LW(1), 0, STRING("me"))
-            ELSE
+        ELSE
             IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_unitwin_alloc)
@@ -1242,7 +1242,7 @@ EVT_BEGIN(uranaisi_table_talk)
                 IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
                     CALL(evt_msg_print, 0, STRING("uranaisi_01"), 0, STRING("me"))
                     SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 1)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("uranaisi_19"), 0, STRING("me"))
                 END_IF
             END_IF
@@ -2528,7 +2528,7 @@ EVT_BEGIN(evt_open_04_open)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
@@ -2541,7 +2541,7 @@ EVT_BEGIN(evt_open_04_open)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
@@ -3015,7 +3015,7 @@ EVT_BEGIN(tensou_sw_event)
         SPAWN_EVENT(PTR(tensou_anim_event))
         CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
         CALL(evt_exit_case_evt)
-        ELSE
+    ELSE
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
@@ -3023,7 +3023,7 @@ EVT_BEGIN(tensou_sw_event)
             SPAWN_EVENT(PTR(tensou_anim_event))
             CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
             CALL(evt_exit_case_evt)
-            ELSE
+        ELSE
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
             CALL(evt_msg_print, 0, STRING("stg7_tik_01_01"), 0, 0)

@@ -2892,7 +2892,7 @@ EVT_BEGIN(dou_11_init_evt)
     CALL(evt_map_entry_airport_harbor, 0, STRING("S_hikou"), STRING("A_hikou"))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_30_SHIPWRECKED_SAILORS)
         CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints_1st))
-        ELSE
+    ELSE
         CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     END_IF
     CALL_CHILD(PTR(evt_gazigazi_entry))

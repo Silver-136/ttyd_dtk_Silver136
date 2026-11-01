@@ -980,7 +980,7 @@ EVT_BEGIN(bero_play_enter_anime)
                     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
                     CALL_CHILD(LW(9))
                     BREAK_LOOP
-                    ELSE
+                ELSE
                     CALL_CHILD(LW(9))
                 END_IF
             END_LOOP
@@ -1002,7 +1002,7 @@ EVT_BEGIN(bero_play_out_anime)
                 WAIT_MS(LW(9))
                 CALL(evt_bero_mario_go)
             END_INLINE_EVENT
-            ELSE
+        ELSE
             BEGIN_INLINE_EVENT
                 WAIT_MS(500)
                 CALL(evt_bero_mario_go)
@@ -1039,7 +1039,7 @@ EVT_BEGIN(bero_play_out_anime)
                     SET_FLOAT_VALUE(LW(0), FLOAT(180.0f))
                     CALL_CHILD(LW(9))
                     BREAK_LOOP
-                    ELSE
+                ELSE
                     CALL_CHILD(LW(9))
                 END_IF
             END_LOOP
@@ -1485,7 +1485,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
             AND_RAW(LW(0), BERO_TYPE_BG_MODE)
             IF_INT_EQUAL(LW(0), 0)
                 SET_VALUE(LF(0), 0)
-                ELSE
+            ELSE
                 SET_VALUE(LF(0), 1)
             END_IF
             CALL(evt_bero_get_number, LW(14))
@@ -1495,7 +1495,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
             AND_RAW(LW(0), BERO_TYPE_BG_MODE)
             IF_INT_EQUAL(LW(0), 0)
                 SET_VALUE(LF(1), 0)
-                ELSE
+            ELSE
                 SET_VALUE(LF(1), 1)
             END_IF
             SET_VALUE(LF(2), 0)
@@ -1551,7 +1551,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         AND_RAW(LW(0), BERO_TYPE_BG_MODE)
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LF(0), 0)
-            ELSE
+        ELSE
             SET_VALUE(LF(0), 1)
         END_IF
         WAIT_MS(500)
@@ -1562,7 +1562,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         AND_RAW(LW(0), BERO_TYPE_BG_MODE)
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LF(1), 0)
-            ELSE
+        ELSE
             SET_VALUE(LF(1), 1)
         END_IF
         CALL(evt_bero_disppos_load)
@@ -1581,7 +1581,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         WAIT_MS(500)
         IF_INT_NOT_EQUAL(LF(1), 0)
             CALL(evt_mario_bgmode_on)
-            ELSE
+        ELSE
             CALL(evt_mario_bgmode_off)
         END_IF
         PEEK_FLOAT(LW(0), PTR(&BeroEX))
@@ -1603,14 +1603,14 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 
         // With a destination map (the pipe exit never spawns this case) he just takes the entrance's layer.
-        ELSE
+    ELSE
         CALL(evt_bero_disppos_load)
         CALL(evt_mario_paper_pose_off)
         SET_VALUE(LW(0), LW(4))
         AND_RAW(LW(0), BERO_TYPE_BG_MODE)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_mario_bgmode_on)
-            ELSE
+        ELSE
             CALL(evt_mario_bgmode_off)
         END_IF
     END_IF
@@ -1806,7 +1806,7 @@ EVT_BEGIN(bero_case_switch_off)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_bero_case_id_load, LW(1), LW(15))
         CALL(evt_del_case_evt, 0, LW(15))
-        ELSE
+    ELSE
         DEBUG_PUT_MSG(STRING("ベロの出て行くデータの二重削除防止をしています"))
 #else
     IF_INT_EQUAL(LW(0), 0)
@@ -1814,7 +1814,7 @@ EVT_BEGIN(bero_case_switch_off)
         CALL(evt_bero_case_id_load, LW(1), LW(15))
         CALL(evt_del_case_evt, 0, LW(15))
         CALL(evt_hitobj_attr_onoff, 0, 0, LW(3), HIT_ATTR_BERO)
-        ELSE
+    ELSE
         DEBUG_PUT_MSG(STRING("\203x\203\215\202\314\215\355\217\234\227\\\226\361\202\340\202\265\202\255\202\315\203x\203\215\202\314\217o\202\304\215s\202\255\203f\201[\203^\202\314\223\361\217d\215\355\217\234\226h\216~\202\305\202\267"))
 #endif
     END_IF
@@ -1982,7 +1982,7 @@ EVT_BEGIN(evt_bero_info_run)
         CALL(evt_mario_kill_party, 0)
         CALL(evt_mario_kill_party, 1)
         CALL(evt_mario_cam_y_off)
-        ELSE
+    ELSE
         DEBUG_PUT_MSG(STRING("\225\201\222\312\202\311\223\374\202\351\202\306\202\253\202\314\203}\203\212\203I\202\314\217\211\212\372\217\210\227\235"))
         CALL(evt_mario_bgmode_off)
         SET_VALUE(LW(0), LW(4))
@@ -1990,7 +1990,7 @@ EVT_BEGIN(evt_bero_info_run)
         IF_INT_EQUAL(LW(0), BERO_TYPE_PIPE)
             CALL(evt_mario_set_prev_party_dokan, 0)
             CALL(evt_mario_set_prev_party_dokan, 1)
-            ELSE
+        ELSE
             CALL(evt_mario_set_prev_party, 0)
             CALL(evt_mario_set_prev_party, 1)
         END_IF

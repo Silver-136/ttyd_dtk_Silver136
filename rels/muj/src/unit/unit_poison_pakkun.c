@@ -250,7 +250,7 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(9), PTR(&weapon_poison_pakkun_attack))
         CALL_CHILD(PTR(normal_attack_event))
         GOTO(99)
-        ELSE
+    ELSE
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(LW(0))

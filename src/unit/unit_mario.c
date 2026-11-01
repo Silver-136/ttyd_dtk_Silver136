@@ -633,7 +633,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(evt_sub_random, 1, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(btlataudevtMarioJump))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(btlataudevtMarioHammer))
     END_IF
     RETURN

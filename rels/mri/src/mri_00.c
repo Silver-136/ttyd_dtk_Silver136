@@ -1920,7 +1920,7 @@ EVT_BEGIN(mri_00_init_evt)
             // Chapter 2 music and ambience for the Great Tree.
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
-            ELSE
+        ELSE
             BEGIN_INLINE_EVENT
                 WAIT_MS(2000)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
@@ -1957,7 +1957,7 @@ EVT_BEGIN(mri_00_init_evt)
         CALL(evt_mri_cloud_ent, PTR(&capturemap), STRING("A_kaze"), PTR(open_bigtree))
         SET_VALUE(LW(0), STRING("ne_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

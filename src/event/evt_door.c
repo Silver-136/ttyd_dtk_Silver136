@@ -365,7 +365,7 @@ EVT_BEGIN(in_houseanim)
                     WAIT_MS(166)
                     CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(2), LW(3), LW(4), 0)
                 END_LOOP
-                ELSE
+            ELSE
                 CALL(door_group, LW(10), LW(0))
                 CALL(evt_mapobj_get_position, LW(0), LW(2), LW(3), LW(4))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_OPEN1"), LW(2), LW(3), LW(4), 0)
@@ -1077,7 +1077,7 @@ EVT_BEGIN(evt_door_close)
     BEGIN_INLINE_EVENT
         IF_BITS_CLEAR(LW(15), DOOR_OPT_POS_FROM_MARIO)
             CALL(evt_door_param, LW(0), DOOR_PARAM_OUT_POS, LW(1), LW(2), LW(3))
-            ELSE
+        ELSE
             CALL(evt_door_param, LW(0), DOOR_PARAM_OUT_POS_FROM_MARIO, LW(1), LW(2), LW(3))
         END_IF
         CALL(evt_mario_get_pos, 0, LW(4), LW(5), LW(6))
@@ -1151,7 +1151,7 @@ EVT_BEGIN(evt_door_close)
     WAIT_MS(500)
     IF_BITS_CLEAR(LW(15), DOOR_OPT_POS_FROM_MARIO)
         CALL(evt_door_param, LW(0), DOOR_PARAM_OUT_POS, LW(1), LW(2), LW(3))
-        ELSE
+    ELSE
         CALL(evt_door_param, LW(0), DOOR_PARAM_OUT_POS_FROM_MARIO, LW(1), LW(2), LW(3))
     END_IF
     IF_BITS_CLEAR(LW(15), DOOR_OPT_NO_MARIO_MOVE)

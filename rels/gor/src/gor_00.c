@@ -781,7 +781,7 @@ static EVT_BEGIN(marco_talk)
         CASE_EQUAL(STG4_33_MEET_BOBBERY)
         IF_INT_EQUAL(GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD, 0)
             CALL(evt_msg_print, 0, STRING("mac_4_045"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("mac_4_045_01"), 0, STRING("me"))
         END_IF
 

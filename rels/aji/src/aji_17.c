@@ -3370,7 +3370,7 @@ EVT_BEGIN(aji_17_init_evt)
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_kill_party, 0)
-        ELSE
+    ELSE
         // As Mario, the fortress music and ambience play; as Peach, her partner is removed.
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))

@@ -478,7 +478,7 @@ static EVT_BEGIN(senkaron_event)
                         IF_INT_EQUAL(LW(7), 0)
                             CALL(evt_mario_set_pose, STRING("M_S_1"))
                         END_IF
-                        ELSE
+                    ELSE
                         SET_VALUE(LW(7), 0)
                     END_IF
                 END_IF
@@ -526,7 +526,7 @@ static EVT_BEGIN(senkaron_event)
                 SET_VALUE(GSWF_GON_03_PUSHED_OUT_PENDING, 1)
                 IF_INT_EQUAL(GSWF_GON_03_PUSHED_OUT_ONCE, 0)
                     SET_VALUE(GSWF_GON_03_PUSHED_OUT_ONCE, 1)
-                    ELSE
+                ELSE
                     SET_VALUE(GSWF_GON_03_PUSHED_OUT_AGAIN, 1)
                 END_IF
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

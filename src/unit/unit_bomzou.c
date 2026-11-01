@@ -302,7 +302,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("B_2"))
             WAIT_FRAMES(36)
             CALL_CHILD(PTR(explosion_event))
-            ELSE
+        ELSE
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         END_IF
     END_IF

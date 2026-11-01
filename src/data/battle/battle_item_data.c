@@ -202,7 +202,7 @@ EVT_BEGIN(ItemEvent_Automatic_Target)
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(8))
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(8))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(8), LW(10), LW(11))
@@ -274,7 +274,7 @@ EVT_BEGIN(ItemEvent_Recovery)
     CALL(btlevtcmd_CheckCommandUnit, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(8))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(8), LW(10), LW(11))
@@ -347,13 +347,13 @@ EVT_BEGIN(ItemEvent_GetTarget)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -386,7 +386,7 @@ EVT_BEGIN(ItemEvent_Support_Sub_Effect)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -439,7 +439,7 @@ EVT_BEGIN(ItemEvent_Support_RefreshEffect)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -1002,7 +1002,7 @@ EVT_BEGIN(ItemEvent_Fire_Flower_Core)
                 WAIT_FRAMES(5)
             END_LOOP
         END_SIBLING_EVENT
-        ELSE
+    ELSE
         CALL(evt_eff64, STRING(""), STRING("fireflower_n64"), 1, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(45)
@@ -1110,13 +1110,13 @@ EVT_BEGIN(ItemEvent_Kaminari_Core)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -1153,7 +1153,7 @@ EVT_BEGIN(ItemEvent_Kaminari_Core)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -1525,13 +1525,13 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -1547,7 +1547,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     ADD(LW(2), 20)
     IF_INT_GREATER_OR_EQUAL(LW(5), 0)
         CALL(evt_eff, 0, STRING("ibuki"), 0, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
-        ELSE
+    ELSE
         CALL(evt_eff, 0, STRING("ibuki"), 1, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
     END_IF
     WAIT_MS(500)
@@ -1574,7 +1574,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -1690,13 +1690,13 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -1722,7 +1722,7 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -1806,13 +1806,13 @@ EVT_BEGIN(ItemEvent_Teresano_Fuku)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -1836,7 +1836,7 @@ EVT_BEGIN(ItemEvent_Teresano_Fuku)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -2066,7 +2066,7 @@ EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(evt_eff, 0, STRING("sheep"), 0, LW(0), LW(1), 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         ADD(LW(2), 15)
         CALL(evt_eff, 0, STRING("sheep"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -2432,13 +2432,13 @@ EVT_BEGIN(ItemEvent_Suitooru)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -2471,7 +2471,7 @@ EVT_BEGIN(ItemEvent_Suitooru)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -3342,7 +3342,7 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
     CALL(btlevtcmd_CheckCommandUnit, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(8))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(8), LW(10), LW(11))
@@ -3375,10 +3375,10 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
         CALL(evt_sub_random, 100, LW(0))
         IF_INT_LESS(LW(0), 40)
             SET_VALUE(LW(8), PTR(&ItemWeaponData_FirstLovePuddingBiribiri))
-            ELSE
+        ELSE
             IF_INT_LESS(LW(0), 80)
                 SET_VALUE(LW(8), PTR(&ItemWeaponData_FirstLovePuddingTrans))
-                ELSE
+            ELSE
                 SET_VALUE(LW(8), PTR(&ItemWeaponData_FirstLovePuddingSleep))
             END_IF
         END_IF
@@ -3386,10 +3386,10 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
         CALL(evt_sub_random, 100, LW(0))
         IF_INT_LESS(LW(0), 40)
             SET_VALUE(LW(8), PTR(&ItemWeaponData_PeachTaltBiribiri))
-            ELSE
+        ELSE
             IF_INT_LESS(LW(0), 80)
                 SET_VALUE(LW(8), PTR(&ItemWeaponData_PeachTaltDodge))
-                ELSE
+            ELSE
                 SET_VALUE(LW(8), PTR(&ItemWeaponData_PeachTaltSleep))
             END_IF
         END_IF
@@ -4288,13 +4288,13 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -4315,12 +4315,12 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHitPos, LW(10), LW(11), LW(5), LW(6), LW(7))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetFriendBelong, LW(10), LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
             SET_VALUE(LW(5), -120)
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
             SET_VALUE(LW(5), 100)
         END_IF
@@ -4371,7 +4371,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -4545,7 +4545,7 @@ EVT_BEGIN(ItemEvent_Poison_Kinoko)
     CALL(evt_sub_random, 100, LW(0))
     IF_INT_LESS(LW(0), 80)
         CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(ItemEvent_GetTarget))
         CALL(evt_btl_camera_set_homing_unit, 0, LW(10), -1)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)

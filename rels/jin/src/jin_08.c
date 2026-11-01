@@ -250,7 +250,7 @@ EVT_BEGIN(oumu_juyo_talk)
         CALL(evt_msg_print, 0, STRING("stg4_jin_43"), 0, STRING("オウム"))
         SET_VALUE(GSWF_JIN_08_PARROT_SECRET_HEARD, 1)
         SET_VALUE(LSWF_JIN_PARROT_SCENE_PENDING, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg4_jin_44"), 0, STRING("オウム"))
     END_IF
     CALL(evt_mario_key_onoff, 1)

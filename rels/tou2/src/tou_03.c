@@ -2108,14 +2108,14 @@ EVT_BEGIN(evt_match)
         IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 0)
             SET_VALUE(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 1)
             CALL_CHILD(PTR(evt_kurikuri_opening))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(evt_default_opening))
         END_IF
         CASE_EQUAL(10)
         IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
             SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 1)
             CALL_CHILD(PTR(evt_shinemon_opening))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(evt_default_opening))
         END_IF
         CASE_EQUAL(0)
@@ -2123,10 +2123,10 @@ EVT_BEGIN(evt_match)
             SET_VALUE(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 1)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                 CALL_CHILD(PTR(evt_champ_opening))
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(evt_champ_opening_re))
             END_IF
-            ELSE
+        ELSE
             CALL_CHILD(PTR(evt_default_opening))
         END_IF
         CASE_DEFAULT
@@ -2200,7 +2200,7 @@ EVT_BEGIN(evt_match)
             IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 0)
                 SET_VALUE(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 1)
                 CALL_CHILD(PTR(evt_kurikuri_win))
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(evt_default_win))
             END_IF
             CASE_EQUAL(10)
@@ -2208,7 +2208,7 @@ EVT_BEGIN(evt_match)
             IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN, 0)
                 SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN, 1)
                 CALL_CHILD(PTR(evt_shinemon_win))
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(evt_default_win))
             END_IF
             CASE_EQUAL(0)
@@ -2216,7 +2216,7 @@ EVT_BEGIN(evt_match)
             IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_FIRST_WIN, 0)
                 SET_VALUE(GSWF_TOU_RAWK_HAWK_FIRST_WIN, 1)
                 CALL_CHILD(PTR(evt_champ_win))
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(evt_default_win))
             END_IF
             CASE_DEFAULT
@@ -2230,7 +2230,7 @@ EVT_BEGIN(evt_match)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
                 CALL(evt_tou_get_ranking, LW(10))
-                ELSE
+            ELSE
                 IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_20_MAJORS_10TH_PLACE)
 #if VERSION <= VERSION_DEMO_US
                     CALL(evt_tou_get_ranking, LW(10))
@@ -2493,7 +2493,7 @@ EVT_BEGIN(evt_kurikuri_lose)
     CALL(evt_snd_sfxon, STRING("SFX_STG3_WIN_AUDIENCE1"), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LW(2), STRING("\203K\203\223\203X"))
-        ELSE
+    ELSE
         SET_VALUE(LW(2), STRING("\203L\203m\203V\203R\203\217"))
     END_IF
     CALL(evt_npc_set_position, LW(2), 33, 60, -83)
@@ -3348,20 +3348,20 @@ EVT_BEGIN(evt_champ_lose)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
             SET_VALUE(LW(0), STRING("stg3_tou_437"))
-            ELSE
+        ELSE
             IF_INT_EQUAL(LW(1), 0)
                 SET_VALUE(LW(0), STRING("stg3_tou_400_03"))
-                ELSE
+            ELSE
                 SET_VALUE(LW(0), STRING("stg3_tou_400_01"))
             END_IF
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
             SET_VALUE(LW(0), STRING("stg3_tou_re_132"))
-            ELSE
+        ELSE
             IF_INT_EQUAL(LW(1), 0)
                 SET_VALUE(LW(0), STRING("stg3_tou_re_290"))
-                ELSE
+            ELSE
                 SET_VALUE(LW(0), STRING("stg3_tou_re_288"))
             END_IF
         END_IF
@@ -3384,7 +3384,7 @@ EVT_BEGIN(evt_default_opening)
     CALL(evt_party_stop, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LW(0), STRING("\203K\203\223\203X"))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), STRING("\203L\203m\203V\203R\203\217"))
     END_IF
     CALL(evt_npc_status_onoff, 1, LW(0), NPC_STATUS_FACE_MOVE_DIR)
@@ -3506,7 +3506,7 @@ EVT_BEGIN(evt_default_opening)
     IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             SET_VALUE(LW(0), STRING("\203K\203\223\203X"))
-            ELSE
+        ELSE
             SET_VALUE(LW(0), STRING("\203L\203m\203V\203R\203\217"))
         END_IF
         CALL(evt_tou_get_ranking, LW(1))
@@ -3514,23 +3514,23 @@ EVT_BEGIN(evt_default_opening)
             CASE_EQUAL(0)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                 SET_VALUE(LW(1), STRING("stg3_tou_378"))
-                ELSE
+            ELSE
                 SET_VALUE(LW(1), STRING("stg3_tou_re_266"))
             END_IF
             CASE_EQUAL(1)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                 SET_VALUE(LW(1), STRING("stg3_tou_377"))
-                ELSE
+            ELSE
                 SET_VALUE(LW(1), STRING("stg3_tou_re_265"))
             END_IF
         END_SWITCH
         CALL(evt_msg_print, 0, LW(1), 0, LW(0))
-        ELSE
+    ELSE
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             SET_VALUE(LW(3), STRING("\203K\203\223\203X"))
             SET_VALUE(LW(4), STRING("stg3_tou_115"))
             SET_VALUE(LW(5), STRING("stg3_tou_116_20"))
-            ELSE
+        ELSE
             SET_VALUE(LW(3), STRING("\203L\203m\203V\203R\203\217"))
             SET_VALUE(LW(4), STRING("stg3_tou_re_147"))
             SET_VALUE(LW(5), STRING("stg3_tou_re_149"))
@@ -3557,14 +3557,14 @@ EVT_BEGIN(evt_default_opening)
             CALL(evt_sub_random, 1000, LW(0))
             IF_INT_LESS(LW(0), 500)
                 CALL(evt_msg_print_party, STRING("stg3_tou_117_00"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print_party, STRING("stg3_tou_117_01"))
             END_IF
             WAIT_MS(300)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg3_tou_305"), 0, STRING("\203K\203\223\203X"))
         END_IF
-        ELSE
+    ELSE
         CALL(evt_party_stop, 0)
         WAIT_MS(300)
         CALL(evt_msg_print_party, STRING("stg3_tou_re_151"))
@@ -3617,7 +3617,7 @@ EVT_BEGIN(evt_default_opening)
         WAIT_MS(200)
         CALL(evt_npc_set_anim, STRING("\203K\203\223\203X"), STRING("M_2"))
         CALL(evt_npc_set_autotalkpose, STRING("\203K\203\223\203X"), STRING("M_2"), STRING("M_3"))
-        ELSE
+    ELSE
         SET_VALUE(LW(0), STRING("\203L\203m\203V\203R\203\217"))
         SET_VALUE(LW(1), STRING("stg3_tou_re_150"))
         CALL(evt_npc_set_anim, STRING("\203L\203m\203V\203R\203\217"), STRING("A_2"))
@@ -3723,12 +3723,12 @@ EVT_BEGIN(evt_default_win)
             CALL(evt_sub_random, 1000, LW(0))
             IF_INT_LESS(LW(0), 500)
                 CALL(evt_msg_print_party, STRING("stg3_tou_117_02"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print_party, STRING("stg3_tou_117_03"))
             END_IF
             WAIT_MS(300)
         END_IF
-        ELSE
+    ELSE
         CALL(evt_party_stop, 0)
         WAIT_MS(300)
         CALL(evt_msg_print_party, STRING("stg3_tou_re_153"))
@@ -5335,7 +5335,7 @@ EVT_BEGIN(evt_watch_match)
     // Grubba (or later the announcer) stands at the edge of the ring to watch.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_npc_set_position, STRING("\203K\203\223\203X"), 0, 60, -130)
-        ELSE
+    ELSE
 #if VERSION <= VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
             CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 60, -130)
@@ -5400,7 +5400,7 @@ EVT_BEGIN(evt_watch_match)
                     CALL(evt_npc_move_position, STRING("\221I\216\3502"), -120, 0, 800, 0, 0)
                     CALL(evt_eff, 0, STRING("hit"), 0, -130, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
                     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), -130, 80, 0, 0)
-                    ELSE
+                ELSE
                     BEGIN_INLINE_EVENT_GET_ID(LW(12))
                         CALL(evt_npc_move_position, STRING("\221I\216\3501"), 120, 0, 800, 0, 0)
                     END_INLINE_EVENT
@@ -5868,7 +5868,7 @@ EVT_BEGIN(tou_03_init_evt)
                 IF_INT_EQUAL(GSWF_TOU_03_TITLE_MATCH_INTRO_SEEN, 0)
                     CALL(evt_snd_bgmoff, PSND_FADEOUT)
                     SPAWN_EVENT(PTR(evt_champion))
-                    ELSE
+                ELSE
                     SPAWN_EVENT(PTR(evt_champion2))
                 END_IF
                 RETURN
@@ -5885,7 +5885,7 @@ EVT_BEGIN(tou_03_init_evt)
         CALL(evt_tou_get_ranking, LW(0))
         SET_VALUE(GSW_GLITZ_PIT_RANK_BEFORE_MATCH, LW(0))
         SPAWN_EVENT(PTR(evt_match))
-        ELSE
+    ELSE
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_01_ARENA_INTRO_1F, STG3_30_04_AIR_DUCT_EXIT)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))

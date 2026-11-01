@@ -2221,7 +2221,7 @@ static EVT_BEGIN(cortez_damage_sub_event)
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 2)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(1)
@@ -2232,7 +2232,7 @@ static EVT_BEGIN(cortez_damage_sub_event)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3D_3"))
-                ELSE
+            ELSE
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3D3_1"))
             END_IF
         END_SWITCH

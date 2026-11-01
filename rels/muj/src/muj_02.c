@@ -674,7 +674,7 @@ EVT_BEGIN(muj_02_init_evt)
 #if VERSION >= VERSION_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         SET_VALUE(LW(0), PTR(tree_tbl_treeb_evt))
-        ELSE
+    ELSE
 #endif
     SET_VALUE(LW(0), PTR(tree_tbl))
 #if VERSION >= VERSION_US

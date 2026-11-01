@@ -856,7 +856,7 @@ static EVT_BEGIN(talk_unten)
             // His greeting alternates and early lines mention Pennington's assistant.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_00"), 0, 0)
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_01"), 0, 0)
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 0)
         END_IF
@@ -905,7 +905,7 @@ static EVT_BEGIN(talk_unten)
         IF_INT_EQUAL(LSWF_RSH_00_ENGINEER_DAY2_TALKED, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_152"), 0, 0)
             SET_VALUE(LSWF_RSH_00_ENGINEER_DAY2_TALKED, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_153"), 0, 0)
         END_IF
         CASE_LESS(STG6_43_CONDUCTOR_APPEARS)
@@ -930,7 +930,7 @@ static EVT_BEGIN(talk_unten)
         END_IF
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_07"), 0, 0)
-            ELSE
+        ELSE
 #if VERSION > VERSION_DEMO_US
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 #endif
@@ -1130,7 +1130,7 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
                     CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_saboten"), MAP_ANIM_PLAY_LOOP, 0)
-                    ELSE
+                ELSE
                     CALL(evt_map_playanim, STRING("rt_hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("rt_hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("rt_hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1144,7 +1144,7 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_00_c"))
         CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF_STARPIECE_81)
-        ELSE
+    ELSE
         CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF_STARPIECE_81)
     END_IF
     CALL_CHILD(PTR(evt_access_entry))

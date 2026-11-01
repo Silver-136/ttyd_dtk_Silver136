@@ -835,7 +835,7 @@ EVT_BEGIN(minigame04_end)
     IF_INT_GREATER_OR_EQUAL(LW(0), 701)
         CALL(eff_call_minigame, 2, 0, 0, 500)
         WAIT_MS(4000)
-        ELSE
+    ELSE
         CALL(eff_call_minigame, 1, 0, 0, 500)
         WAIT_MS(4000)
     END_IF
@@ -861,7 +861,7 @@ EVT_BEGIN(minigame04_end)
     CALL(yuugijou_get_montemedal, LW(0))
     IF_INT_LESS(LW(0), LW(1))
         SET_VALUE(LW(0), 1)
-        ELSE
+    ELSE
         CALL(evt_msg_select, 0, STRING("sysyuu_03_00"))
     END_IF
 

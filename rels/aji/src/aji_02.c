@@ -283,7 +283,7 @@ EVT_BEGIN(aji_02_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     END_IF
@@ -307,7 +307,7 @@ EVT_BEGIN(aji_02_init_evt)
         SPAWN_EVENT(PTR(hikaru_yuka_init))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_FRAMES(1)
-        ELSE
+    ELSE
         CALL_CHILD(PTR(hikaru_off))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)

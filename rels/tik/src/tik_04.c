@@ -415,7 +415,7 @@ EVT_BEGIN(tik_04_init_evt)
     IF_INT_EQUAL(GSWF_TIK_04_WALL_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("win_1"), STRING("a_win_1"), PTR(tik04_wall_blow_evt))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("win_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_win_1"), 1, 0)
     END_IF
@@ -428,7 +428,7 @@ EVT_BEGIN(tik_04_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_nise"), 1, 1)
         CALL(evt_mobj_switch_blue, 0, STRING("mobj_switch00"), 275, 0, 100, PTR(tik_04_switch_evt), GSWF_TIK_04_STAIRS_SWITCH_PRESSED)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_6"), 1, 1)
     END_IF
@@ -448,7 +448,7 @@ EVT_BEGIN(tik_04_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         CALL(evt_npc_check_delete, STRING("カメック"))
         CALL(evt_npc_check_delete, STRING("トゲノコ"))
-        ELSE
+    ELSE
         CALL(evt_npc_check_delete, STRING("ヒンニャー１"))
         CALL(evt_npc_check_delete, STRING("ヒンニャー２"))
     END_IF

@@ -3647,7 +3647,7 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(evt_mobj_tornadoswitch_blue, 0, STRING("dummy_sw"), 735, 10, 455, PTR(evt_dummy_sw), GSWF_TOU_01_TORNADO_SWITCH_PRESSED)
         SET_VALUE(GF(10), 0)
         SPAWN_EVENT(PTR(evt_kanban2))
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("anm_kan"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("neon_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("neon_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -3660,7 +3660,7 @@ EVT_BEGIN(tou_01_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 15)
-            ELSE
+        ELSE
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
         END_IF
     END_IF
@@ -3873,13 +3873,13 @@ EVT_BEGIN(tou_01_init_evt)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
-        ELSE
+    ELSE
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_NOT_EQUAL(LW(0), STRING("a_door_mon"))
             IF_INT_EQUAL(LF(0), 0)
                 SPAWN_EVENT(PTR(evt_gondora))
             END_IF
-            ELSE
+        ELSE
             CALL(evt_cam_road_reset)
         END_IF
     END_IF
@@ -3934,7 +3934,7 @@ EVT_BEGIN(tou_01_init_evt)
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU1"))
                 CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
             END_SWITCH
-            ELSE
+        ELSE
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_URN1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU1"))
             CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)

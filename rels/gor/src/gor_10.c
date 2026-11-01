@@ -448,7 +448,7 @@ EVT_BEGIN(gor_10_init_evt)
 #endif
     IF_INT_LESS(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
         CALL_CHILD(PTR(tegami_init_evt))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(mezame_init_evt))
     END_IF
     RETURN

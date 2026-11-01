@@ -4100,7 +4100,7 @@ EVT_BEGIN(usu_00_init_evt)
             END_IF
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
         END_SWITCH
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
     END_IF
@@ -4163,7 +4163,7 @@ EVT_BEGIN(usu_00_init_evt)
         CALL_CHILD(PTR(evt_door_entry))
         SET_VALUE(LW(0), PTR(&door_3))
         CALL_CHILD(PTR(evt_door_entry))
-        ELSE
+    ELSE
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie1door"), 0, PTR(door_ie1_koopa_evt), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie2door"), 0, PTR(door_ie2_koopa_evt), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie3door"), 0, PTR(door_ie3_koopa_evt), 0)
@@ -4248,7 +4248,7 @@ EVT_BEGIN(usu_00_init_evt)
             CALL(evt_mario_set_pos, 0, 0, 50)
             CALL(evt_mario_set_dir, 90, 0, 0)
             CALL(evt_npc_set_position, STRING("ババ"), -100, 25, 100)
-            ELSE
+        ELSE
             CALL(evt_mario_set_pos, 30, 0, 180)
             CALL(evt_mario_set_dir, 90, 0, 0)
             CALL(evt_npc_set_position, STRING("ババ"), -100, 25, 100)

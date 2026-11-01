@@ -693,7 +693,7 @@ EVT_BEGIN(s_bero_out)
                 SET_FLOAT_VALUE(LW(0), FLOAT(180.0f))
                 CALL_CHILD(PTR(s_door_open))
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(s_door_open))
             END_IF
         END_LOOP
@@ -708,7 +708,7 @@ EVT_BEGIN(s_bero_out)
         WAIT_MS(1000)
         CALL(evt_fade_set_mapchange_type, 0, 0, 0, FADE_IN_BLACK, 300)
         CALL(evt_bero_mapchange, STRING("aji_17"), STRING("w_bero"))
-        ELSE
+    ELSE
 #if VERSION < VERSION_US
         CALL(evt_mario_key_onoff, 0)
 #endif

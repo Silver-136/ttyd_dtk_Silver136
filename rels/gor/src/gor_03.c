@@ -2748,14 +2748,14 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
 #else
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(3), LW(2), LW(4))
-            ELSE
+        ELSE
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(2), LW(3), LW(4))
         END_IF
         ELSE
         CALL(evt_sub_get_language, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_66"), 0, STRING("me"), LW(3), LW(2))
-            ELSE
+        ELSE
         END_IF
         CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_66"), 0, STRING("me"), LW(2), LW(3))
 #endif
@@ -2772,7 +2772,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     IF_INT_EQUAL(LW(0), -1)
         IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
             CALL(evt_msg_print_add, 0, STRING("bunny_teresa_72"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("bunny_teresa_73"))
         END_IF
         GOTO(0)
@@ -3597,7 +3597,7 @@ static EVT_BEGIN(kinopiko_b_talk)
 #if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_072_01"), 0, STRING("me"))
-            ELSE
+        ELSE
 #endif
             CALL(evt_msg_print, 0, STRING("gor_03_072"), 0, STRING("me"))
 #if VERSION > VERSION_DEMO_US
@@ -3606,43 +3606,43 @@ static EVT_BEGIN(kinopiko_b_talk)
         CASE_LESS(STG3_32_BOSS_BATTLE)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_073_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_073"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_074_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_074"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG5_43_X_NAUTS_RETREAT)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_075_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_075"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG6_54_WELCOME_BACK)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_076_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_076"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_077_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_077"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_078_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_078"), 0, STRING("me"))
         END_IF
         CASE_DEFAULT
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_079_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_079"), 0, STRING("me"))
         END_IF
     END_SWITCH
@@ -5942,7 +5942,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
     CALL(evt_lottery_flag, LW(0))
     IF_BITS_SET(LW(0), LOTTERY_FLAG_NEW_DAY)
         SET_VALUE(LW(0), 0)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 1)
     END_IF
     IF_INT_EQUAL(LW(0), 0)
@@ -6056,7 +6056,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
                 CALL(evt_item_get_item, STRING("kuzi"))
                 CALL(evt_item_get_item_end_wait, STRING("kuzi"))
                 CALL(evt_msg_print, 0, STRING("kuji_bomb_032"), 0, STRING("グルメボム兵"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("kuji_bomb_029"), 0, STRING("グルメボム兵"))
             END_IF
             CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
@@ -6220,7 +6220,7 @@ EVT_BEGIN(gor_03_init_evt)
     IF_INT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR4"))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF

@@ -2282,7 +2282,7 @@ EVT_BEGIN(bottakuru_talk)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("bottakuru_16"), 0, STRING("me"))
         RETURN
-        ELSE
+    ELSE
         CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("bottakuru_03"), 0, STRING("me"))
@@ -2295,10 +2295,10 @@ EVT_BEGIN(bottakuru_talk)
     IF_INT_EQUAL(GSWF_GOR_CHARLIETON_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("bottakuru_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_CHARLIETON_FIRST_TALK_DONE, 1)
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
             CALL(evt_msg_print, 0, STRING("bottakuru_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("bottakuru_02"), 0, STRING("me"))
         END_IF
     END_IF
@@ -2358,14 +2358,14 @@ EVT_BEGIN(bottakuru_talk)
 #else
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(3), LW(2), LW(4))
-            ELSE
+        ELSE
             CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(2), LW(3), LW(4))
         END_IF
         ELSE
         CALL(evt_sub_get_language, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_insert, 0, STRING("bottakuru_06"), 0, STRING("me"), LW(3), LW(2))
-            ELSE
+        ELSE
             CALL(evt_msg_print_insert, 0, STRING("bottakuru_06"), 0, STRING("me"), LW(2), LW(3))
         END_IF
 #endif
@@ -2386,7 +2386,7 @@ EVT_BEGIN(bottakuru_talk)
         CALL(evt_win_coin_off, LW(12))
         IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
             CALL(evt_msg_print_add, 0, STRING("bottakuru_12"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("bottakuru_13"))
         END_IF
         RETURN
@@ -2413,7 +2413,7 @@ EVT_BEGIN(bottakuru_talk)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("bottakuru_15"))
         RETURN
-        ELSE
+    ELSE
         CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("bottakuru_09"))
@@ -7286,7 +7286,7 @@ EVT_BEGIN(cooking_evt)
             CALL(evt_msg_print, 0, STRING("irai_18_001"), 0, STRING("ナンシー"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             CALL(evt_msg_print_add, 0, STRING("irai_18_008_1"))
-            ELSE
+        ELSE
             // Later: she asks whether he found the book, and Mario can show it in the item menu.
             CALL(evt_msg_print, 0, STRING("irai_18_002"), 0, STRING("ナンシー"))
             SET_VALUE(LF(0), 0)
@@ -7310,7 +7310,7 @@ EVT_BEGIN(cooking_evt)
                 CALL(evt_npc_get_position, STRING("ナンシー"), LW(3), LW(4), LW(5))
                 IF_INT_LESS(LW(0), LW(3))
                     ADD(LW(0), 20)
-                    ELSE
+                ELSE
                     SUBTRACT(LW(0), 20)
                 END_IF
                 ADD(LW(1), 20)
@@ -7337,7 +7337,7 @@ EVT_BEGIN(cooking_evt)
                     IF_INT_GREATER_OR_EQUAL(LW(0), 10)
                         SET_VALUE(LF(0), 1)
                     END_IF
-                    ELSE
+                ELSE
                     IF_INT_GREATER_OR_EQUAL(LW(0), 20)
                         SET_VALUE(LF(0), 1)
                     END_IF
@@ -7350,7 +7350,7 @@ EVT_BEGIN(cooking_evt)
                     CALL(evt_item_get_item, STRING("hk"))
                     CALL(evt_item_get_item_end_wait, STRING("hk"))
                     SET_VALUE(GSWF_GOR_01_ZESS_T_HONEY_SHROOM, 1)
-                    ELSE
+                ELSE
                     // Pouch full: she leaves the Honey Shroom on the ground for him to pick up.
                     CALL(evt_msg_print_add, 0, STRING("irai_18_006_1"))
                     CALL(evt_npc_set_ry, STRING("ナンシー"), 270)
@@ -7372,11 +7372,11 @@ EVT_BEGIN(cooking_evt)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                 CALL(evt_mario_key_onoff, 1)
                 RETURN
-                ELSE
+            ELSE
                 // Mario came without the book: she tells him where to look and the visit ends.
                 IF_INT_EQUAL(LF(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_18_008"), 0, STRING("ナンシー"))
-                    ELSE
+                ELSE
                     CALL(evt_msg_print_add, 0, STRING("irai_18_008"))
                 END_IF
                 CALL(evt_msg_print_add, 0, STRING("irai_18_008_1"))
@@ -7393,7 +7393,7 @@ EVT_BEGIN(cooking_evt)
         END_IF
         CALL(evt_msg_print_add, 0, STRING("gor_01_cook_001"))
         SET_VALUE(GSWF_GOR_ZESS_T_COOKING_INTRO_DONE, 1)
-        ELSE
+    ELSE
         // Later visits: she asks if Mario wants her to cook, with a hint about the Cookbook once the story has
         // reached Chapter 4.
         IF_INT_EQUAL(LSWF_GOR_01_ZESS_T_GREETED, 0)
@@ -7408,16 +7408,16 @@ EVT_BEGIN(cooking_evt)
             IF_INT_EQUAL(LF(0), 0)
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
                     CALL(evt_msg_print, 0, STRING("gor_01_cook_002"), 0, STRING("ナンシー"))
-                    ELSE
+                ELSE
                     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_002"))
                 END_IF
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_003"), 0, STRING("ナンシー"))
             END_IF
-            ELSE
+        ELSE
             IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_004"), 0, STRING("ナンシー"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("gor_01_cook_004"))
             END_IF
         END_IF
@@ -7560,7 +7560,7 @@ EVT_BEGIN(cooking_evt)
 #endif
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
             SET_VALUE(LW(2), LW(1))
-            ELSE
+        ELSE
             SET_VALUE(LW(2), LW(0))
         END_IF
         ELSE

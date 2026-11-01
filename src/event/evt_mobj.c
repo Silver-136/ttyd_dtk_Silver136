@@ -5444,7 +5444,7 @@ EVT_BEGIN(kpa_move_to_toride)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("kpa_06"))
         CALL(evt_mapobj_get_position, STRING("toride"), LW(0), LW(1), LW(2))
-        ELSE
+    ELSE
         CALL(evt_mapobj_get_position, STRING("toride_"), LW(0), LW(1), LW(2))
     END_IF
     CALL(kpa_get_level, LW(6))

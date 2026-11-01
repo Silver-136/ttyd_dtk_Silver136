@@ -372,7 +372,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_266"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_267"))
             END_IF
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)

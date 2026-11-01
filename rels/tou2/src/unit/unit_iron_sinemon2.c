@@ -366,7 +366,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_266"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_267"))
             END_IF
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -382,7 +382,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_SetTalkPoseType, LW(0), POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, LW(0), POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_269"), 0, LW(0))
-                ELSE
+            ELSE
                 CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_270"), 0, -2)

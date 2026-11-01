@@ -477,7 +477,7 @@ EVT_BEGIN(evt_sub_starstone)
     // Crystal Star fanfare starts.
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
-        ELSE
+    ELSE
         CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     END_IF
     CALL(evt_sub_get_sincos, 0, LW(5), LW(6))
@@ -505,7 +505,7 @@ EVT_BEGIN(evt_sub_starstone)
 #endif
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
-        ELSE
+    ELSE
         CALL(evt_cam3d_evt_set_rel, 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
     END_IF
     CALL(evt_snd_sfxon_3d, STRING("SFX_SE2_EVT_STARSTONE_GET1"), LW(5), LW(3), LW(6), 0)
@@ -523,7 +523,7 @@ EVT_BEGIN(evt_sub_starstone)
 #endif
         IF_INT_EQUAL(LF(8), 1)
             CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
-            ELSE
+        ELSE
             CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
         END_IF
         CALL(evt_sub_get_sincos, LW(0), LW(5), LW(6))
@@ -546,7 +546,7 @@ EVT_BEGIN(evt_sub_starstone)
     END_LOOP
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
-        ELSE
+    ELSE
         CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     END_IF
     ADD(LW(3), 48)
@@ -566,7 +566,7 @@ EVT_BEGIN(evt_sub_starstone)
     END_IF
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_npc_set_anim, STRING("にせマリオ"), STRING("EM_I_1"))
-        ELSE
+    ELSE
         CALL(evt_mario_set_pose, STRING("M_P_2"))
     END_IF
     CALL(evt_item_get_position, LW(7), LW(0), LW(1), LW(2))
@@ -840,7 +840,7 @@ EVT_BEGIN(mail_evt)
     IF_INT_EQUAL(GSWF_MAIL_TUTORIAL_SEEN, 0)
         SET_VALUE(GSWF_MAIL_TUTORIAL_SEEN, 1)
         CALL(evt_msg_print, 0, STRING("mail_first_hit"), 0, 0)
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_MAIL_TUTORIAL_REPEAT_OFF, 0)
             CALL(evt_msg_print, 0, STRING("mail_first_hit"), 0, 0)
         END_IF

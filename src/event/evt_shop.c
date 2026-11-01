@@ -182,7 +182,7 @@ static EVT_BEGIN(buy_evt)
 #else
     IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(13), LW(11))
-        ELSE
+    ELSE
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
     END_IF
 #endif
@@ -404,7 +404,7 @@ EVT_BEGIN(shopper_talk_evt)
             END_IF
             IF_INT_EQUAL(LF(10), 0)
                 CALL(evt_msg_print, 0, LW(14), 0, 0)
-                ELSE
+            ELSE
                 SET_VALUE(LF(10), 0)
                 CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
                 CALL(evt_msg_print_add, 0, LW(14))
@@ -418,7 +418,7 @@ EVT_BEGIN(shopper_talk_evt)
             CALL(get_msg, LW(10), 29, LW(14))
             IF_INT_EQUAL(LF(10), 0)
                 CALL(evt_msg_print, 0, LW(14), 0, 0)
-                ELSE
+            ELSE
                 SET_VALUE(LF(10), 0)
                 CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
                 CALL(evt_msg_print_add, 0, LW(14))
@@ -504,7 +504,7 @@ EVT_BEGIN(first_shopping_evt)
     CALL(get_msg, LW(10), 30, LW(14))
     IF_INT_EQUAL(LF(10), 0)
         CALL(evt_msg_print, 0, LW(14), 0, LW(9))
-        ELSE
+    ELSE
         SET_VALUE(LF(10), 0)
         CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
         CALL(evt_msg_print_add, 0, LW(14))
@@ -517,7 +517,7 @@ EVT_BEGIN(first_shopping_evt)
         IF_INT_EQUAL(LW(0), 0)
             CALL(get_msg, LW(10), 32, LW(14))
             CALL(evt_msg_print_add, 0, LW(14))
-            ELSE
+        ELSE
             CALL(get_msg, LW(10), 33, LW(14))
             CALL(evt_msg_print_add, 0, LW(14))
             RETURN
@@ -567,7 +567,7 @@ static EVT_BEGIN(sell_evt)
 #else
     IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(3), LW(2))
-        ELSE
+    ELSE
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
     END_IF
 #endif

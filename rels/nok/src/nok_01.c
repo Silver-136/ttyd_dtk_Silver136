@@ -651,7 +651,7 @@ EVT_BEGIN(nokorin_talk)
             WAIT_MS(300)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             CALL(evt_msg_print, 0, STRING("stg1_nok_64_01"), 0, 0)
-            ELSE
+        ELSE
             // She confides her worries about her boyfriend Koops.
             CALL(evt_msg_print, 0, STRING("stg1_nok_65"), 0, 0)
             IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_CONFESSION_SEEN, 0)
@@ -677,14 +677,14 @@ EVT_BEGIN(nokorin_talk)
                 CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
                 CALL(evt_npc_move_position, STRING("me"), -85, -300, 0, FLOAT(60.0f), 1)
                 CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg1_nok_70"), 0, 0)
             END_IF
-            ELSE
+        ELSE
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 2)
                 CALL(evt_msg_print, 0, STRING("stg1_nok_69"), 0, 0)
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("stg1_nok_70"), 0, 0)
             END_IF
         END_IF
@@ -694,21 +694,21 @@ EVT_BEGIN(nokorin_talk)
     IF_INT_EQUAL(LW(0), 2)
         // Chapter 2 on: she cheers Koops on and asks Mario to look after him.
         CALL(evt_msg_print, 0, STRING("stg1_nok_71"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_72"), 0, 0)
     END_IF
     CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         CALL(evt_msg_print, 0, STRING("stg1_nok_73"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_74"), 0, 0)
     END_IF
     CASE_LESS(STG7_00_START)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         CALL(evt_msg_print, 0, STRING("stg1_nok_75"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_76"), 0, 0)
     END_IF
     CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
@@ -716,7 +716,7 @@ EVT_BEGIN(nokorin_talk)
     IF_INT_EQUAL(LW(0), 2)
         // The late game: she wonders whether Koops has changed.
         CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)
     END_IF
     CASE_DEFAULT
@@ -724,7 +724,7 @@ EVT_BEGIN(nokorin_talk)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)
     END_IF
 #else
