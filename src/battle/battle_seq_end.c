@@ -81,16 +81,6 @@ typedef enum SeqEndDispFlags {
 
 void _GetExpIcon_Init(BattleSeqEndWork* work);
 
-typedef struct SeqEndUnitSetup {
-    u8* kind;                 // 0x0
-    u8 setupRest[0x30 - 0x4]; // 0x4
-} SeqEndUnitSetup;
-
-typedef struct SeqEndGroup {
-    s32 count;              // 0x0
-    SeqEndUnitSetup* units; // 0x4
-} SeqEndGroup;
-
 
 void _GetExpIcon_Main(BattleWork* wp);
 void _LvupParamConfirmDisp(CameraId camId, void* param);

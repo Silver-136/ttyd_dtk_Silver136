@@ -4,7 +4,6 @@
 #include "party/party_motion.h"
 #include "evt/evt_cmd.h"
 
-#include "battle/battle_unit.h"
 #include "manager/evtmgr_cmd.h"
 #include "system.h"
 #include "stdlib.h"

@@ -2338,10 +2338,10 @@ EVT_BEGIN(gor_04_init_evt)
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
     END_IF
-END_IF
+    END_IF
 
 // The mail event runs in the background.
-SPAWN_EVENT(evt_sub_mail_event)
+    SPAWN_EVENT(evt_sub_mail_event)
 #else
 #if VERSION >= VERSION_US
         END_IF

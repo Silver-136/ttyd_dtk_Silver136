@@ -197,7 +197,7 @@ void seq_logoMain(SequenceWork* work) {
             if (fadeIsFinish() && !wp->progressive) {
                 work->state++;
                 time = gp->renderTime;
-}
+            }
             break;
 
         case 2:

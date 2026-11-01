@@ -237,7 +237,7 @@ EVT_BEGIN(evt_gameover)
         CALL(evt_mapobj_trans, 1, STRING("e4"), 0, 200, 0)
         CALL(evt_mapobj_trans, 1, STRING("g1"), 0, 200, 0)
         CALL(evt_mapobj_trans, 1, STRING("o289"), 0, 200, 0)
-        ELSE
+    ELSE
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("f"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("i"), MAP_OBJ_FLAG_HIDDEN)
@@ -269,7 +269,7 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), LANGUAGE_SP)
         CALL_CHILD(fall_gameover_es)
-        ELSE
+    ELSE
 #endif
     CALL_CHILD(fall_gameover)
 #if VERSION >= VERSION_US

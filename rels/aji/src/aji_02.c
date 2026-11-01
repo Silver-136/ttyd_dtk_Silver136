@@ -465,7 +465,7 @@ USER_FUNC(all_flag_off) {
         sprintf(name, "nashi_%02d", i);
         mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "A_hikaru_%02d", i);
-        hitGrpAttrOff(name, 0x800);
+        hitGrpAttrOff(name, HIT_ATTR_TOGE);
     }
     return EVT_RETURN_DONE;
 }
@@ -490,7 +490,7 @@ USER_FUNC(hikaru_on_func) {
                 sprintf(name, "nashi_%02d", i);
                 mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
                 sprintf(name, "A_hikaru_%02d", i);
-                hitGrpAttrOff(name, 0x800);
+                hitGrpAttrOff(name, HIT_ATTR_TOGE);
                 break;
             }
         }
@@ -500,7 +500,7 @@ USER_FUNC(hikaru_on_func) {
             sprintf(name, "nashi_%02d", i);
             mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "A_hikaru_%02d", i);
-            hitGrpAttrOn(name, 0x800);
+            hitGrpAttrOn(name, HIT_ATTR_TOGE);
         }
     }
     return EVT_RETURN_DONE;

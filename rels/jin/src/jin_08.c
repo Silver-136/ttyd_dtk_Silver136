@@ -455,7 +455,7 @@ EVT_BEGIN(jin_08_init_evt)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("mobj_box01"), 80, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_JIN_08_POWER_PLUS_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -80, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_JIN_08_MR_SOFTENER_CHEST)
-SPAWN_EVENT(oumu_check)
+    SPAWN_EVENT(oumu_check)
 #else
     CALL(evt_mobj_itembox, STRING("mobj_box01"), 60, 0, -65, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_JIN_08_POWER_PLUS_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -65, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_JIN_08_MR_SOFTENER_CHEST)

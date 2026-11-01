@@ -25,7 +25,6 @@
 #include "evt/evt_bero.h"
 #include "driver/seqdrv.h"
 
-BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 
 static USER_FUNC(mario_chk);

@@ -1854,9 +1854,9 @@ EVT_BEGIN(mri_00_init_evt)
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
     END_IF
-SPAWN_EVENT(mario_see_you)
-END_IF
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
+        SPAWN_EVENT(mario_see_you)
+    END_IF
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
 #else
 #if VERSION >= VERSION_US
         END_IF

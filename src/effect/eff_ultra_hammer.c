@@ -177,12 +177,12 @@ s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
     28672, 0, // 40
     28672, 8192, // 41
 #if VERSION <= VERSION_DEMO_US
-0, 0,
-0, 0,
-0, 0,
-0, 0,
-0, 0,
-0, 0,
+    0, 0,
+    0, 0,
+    0, 0,
+    0, 0,
+    0, 0,
+    0, 0,
 };
 
 /** The ring model's 20 display lists, drawn with wakka_dl_0_size_tbl. */
@@ -190,7 +190,7 @@ s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
 // Texture scroll offsets: -3.5 / 24 * i for i = 0..24
 
 s8 wakka_normal_tbl[] ATTRIBUTE_ALIGN(32) = {
-0, 61, 16,
+    0, 61, 16,
 #else
 };
 

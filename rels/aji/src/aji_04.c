@@ -656,7 +656,7 @@ EVT_BEGIN(kuizu_sekizou)
         CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, 11)
         WAIT_MS(500)
         IF_INT_EQUAL(LF(0), 1)
-SPAWN_EVENT(quiz_ok)
+            SPAWN_EVENT(quiz_ok)
 #else
         IF_INT_EQUAL(LF(0), 1)
 #endif
@@ -720,10 +720,10 @@ SPAWN_EVENT(quiz_ok)
                 SPAWN_EVENT(PTR(sekizou_talk))
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_msg_print, 0, STRING("stg7_aji_25"), 0, 0)
-BREAK_LOOP
+                BREAK_LOOP
             END_SWITCH
         ELSE
-SPAWN_EVENT(quiz_ng)
+            SPAWN_EVENT(quiz_ng)
 #else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_25"), PTR(kuti_callback), 0)
                 BREAK_LOOP
@@ -785,8 +785,8 @@ SPAWN_EVENT(quiz_ng)
                 CALL(evt_msg_print, 0, STRING("stg7_aji_29"), 0, 0)
                 CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 250, -50)
                 CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 250, 50)
-BEGIN_INLINE_EVENT
-    CALL(evt_npc_jump_position_nohit, STRING("バリアーン１"), 50, 20, -50, 300, 0)
+                BEGIN_INLINE_EVENT
+                    CALL(evt_npc_jump_position_nohit, STRING("バリアーン１"), 50, 20, -50, 300, 0)
 #else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_29"), PTR(kuti_callback), 0)
 #if VERSION >= VERSION_US
@@ -886,7 +886,7 @@ BEGIN_INLINE_EVENT
                 SPAWN_EVENT(PTR(sekizou_talk))
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_msg_print, 0, STRING("stg7_aji_31"), 0, 0)
-BREAK_LOOP
+                BREAK_LOOP
             END_SWITCH
 #else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_31"), PTR(kuti_callback), 0)

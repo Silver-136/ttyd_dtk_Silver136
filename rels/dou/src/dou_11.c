@@ -2935,7 +2935,7 @@ EVT_BEGIN(dou_11_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_DOU_11_SWITCH_2_PRESSED, 1)
-SPAWN_EVENT(pukapuka_watari_init02)
+        SPAWN_EVENT(pukapuka_watari_init02)
 #else
     IF_INT_GREATER_OR_EQUAL(LW(0), 2)
         SPAWN_EVENT(PTR(pukapuka_watari_init02))

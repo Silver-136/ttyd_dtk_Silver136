@@ -120,9 +120,6 @@ static void e3DispShadow(f32 x, f32 y, f32 z);
 void e3Disp(CameraId cameraId, void* param);
 void e3DispOffscreen(CameraId cameraId, void* param);
 #endif
-#if VERSION >= VERSION_US
-static
-#endif
 #if VERSION <= VERSION_DEMO_US
 /** Sets every character to the given column of anim_tbl. */
 #if VERSION != VERSION_DEMO_JP
@@ -183,7 +180,12 @@ EVT_BEGIN(e3_pose_evt)
     RETURN
 EVT_END()
 #endif
+
+#if VERSION >= VERSION_US
+static void alarm_handler(OSAlarm* alarm, OSContext* context) {
+#else
 void alarm_handler(OSAlarm* alarm, OSContext* context) {
+#endif
     gp->flags |= GW_FLAG_E3_TIMEOUT;
 }
 
@@ -548,12 +550,12 @@ void seq_e3Main(SequenceWork* seq) {
 #else
 #if VERSION == VERSION_EU
             if (wp->scenario != 0) {
-            for (i = 0; i < 2; i++) {
-                pouchGetItem(ITEM_THUNDER_RAGE);
-                pouchGetItem(ITEM_SHOOTING_STAR);
-                pouchGetItem(ITEM_FIRE_FLOWER);
-                pouchGetItem(ITEM_POW_BLOCK);
-            }
+                for (i = 0; i < 2; i++) {
+                    pouchGetItem(ITEM_THUNDER_RAGE);
+                    pouchGetItem(ITEM_SHOOTING_STAR);
+                    pouchGetItem(ITEM_FIRE_FLOWER);
+                    pouchGetItem(ITEM_POW_BLOCK);
+                }
 
             }
 #else
@@ -597,7 +599,7 @@ void seq_e3Main(SequenceWork* seq) {
             OSCreateAlarm(&wp->alarm);
             OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
             wp->initTime = OSGetTime();
-} break;
+        } break;
     }
 
     {
@@ -638,7 +640,7 @@ typedef enum E3Texture {
 #if VERSION <= VERSION_DEMO_US
 static void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
-        Mtx poseMtx;
+    Mtx poseMtx;
     Mtx poseScale;
 #else
 void e3Disp(CameraId cameraId, void* param) {
@@ -694,9 +696,9 @@ void e3Disp(CameraId cameraId, void* param) {
             alpha = 255;
         }
 
-            winTexInit(*wp->handle->data);
-            winTexSet(MODE_11, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            pressStartGX(alpha, 0.0f, -110.0f);
+        winTexInit(*wp->handle->data);
+        winTexSet(MODE_11, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        pressStartGX(alpha, 0.0f, -110.0f);
     } else {
         winTexInit(*wp->handle->data);
         for (row = 0, py = -304; row < 40; row++, py += 16) {
@@ -800,7 +802,7 @@ void e3Disp(CameraId cameraId, void* param) {
 #endif
         pressStartGX(alpha, 0.0f, -110.0f);
 #if VERSION == VERSION_EU
-    }
+        }
 #endif
     } else {
         // Tiled background: 40 columns x 32 rows of 16-unit tiles, from x = -304 and down from y = 240

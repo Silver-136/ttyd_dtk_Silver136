@@ -920,12 +920,12 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 if (m - badgeShop_ThrowCheck(i + BADGE_MIN) > 0) {
 #if VERSION <= VERSION_DEMO_US
                     sel->items[sel->numItems++].id = i + BADGE_MIN;
-                                    }
-                                }
-                                break;
-                            case 14:
-                                sel->items = __memAlloc(HEAP_DEFAULT, 0x10);
-                                memset(sel->items, 0, 0x10);
+                }
+            }
+            break;
+        case 14:
+            sel->items = __memAlloc(HEAP_DEFAULT, 0x10);
+            memset(sel->items, 0, 0x10);
 #else
                     sel->items[sel->numItems].id = i + BADGE_MIN;
                     if (itemDataTable[i + BADGE_MIN].star_piece_price > pouchGetStarPiece()) {
@@ -1878,7 +1878,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
 #endif
-        WinMgrEntry* ent = entry;
+    WinMgrEntry* ent = entry;
     WinMgrSelect* sel = ent->param;
     u32 left, top, wd, ht;
     GXColor black = {0x00, 0x00, 0x00, 0xFF};

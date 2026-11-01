@@ -5010,7 +5010,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
         END_IF
         WAIT_FRAMES(10)
         GOTO(95)
-        END_IF
+    END_IF
 #else
 #if VERSION >= VERSION_US
     IF_INT_GREATER_OR_EQUAL(LW(0), 10)

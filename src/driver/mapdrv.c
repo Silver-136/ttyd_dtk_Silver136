@@ -1236,28 +1236,28 @@ void bmapUnLoad(void) {
             j = 0;
         }
     }
-        wp2 = mapWork;
-        activeGroup = j;
-        for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
+    wp2 = mapWork;
+    activeGroup = j;
+    for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
 
-            // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
-            if (entry3->datAram) {
-                entry3->dat = _mapAllocTail(entry3->datSize);
-                entry3->tpl = _mapAllocTail(entry3->tplSize);
-                aramMgrToMram(entry3->datAram, entry3->dat);
-                aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
-                entry3->datAram = NULL;
-                MAPENT_TPLARAM(entry3) = NULL;
-            } else {
-                entry3->arcData = _mapAllocTail(entry3->arcSize);
-                aramMgrToMram(entry3->arcAram, entry3->arcData);
-                entry3->arcAram = NULL;
-            }
-            makeDisplayList(j);
+        // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
+        if (entry3->datAram) {
+            entry3->dat = _mapAllocTail(entry3->datSize);
+            entry3->tpl = _mapAllocTail(entry3->tplSize);
+            aramMgrToMram(entry3->datAram, entry3->dat);
+            aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
+            entry3->datAram = NULL;
+            MAPENT_TPLARAM(entry3) = NULL;
+        } else {
+            entry3->arcData = _mapAllocTail(entry3->arcSize);
+            aramMgrToMram(entry3->arcAram, entry3->arcData);
+            entry3->arcAram = NULL;
         }
-        if (wp2->entries->arcData) {
-            arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
-        }
+        makeDisplayList(j);
+    }
+    if (wp2->entries->arcData) {
+        arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
+    }
 }
 #else
     wp = mapWork;
@@ -3862,7 +3862,7 @@ void mapObjFlagOff(const char* name, u32 flags) {
  */
 #if VERSION <= VERSION_DEMO_US
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
-        obj->flags |= flags;
+    obj->flags |= flags;
 #else
 void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {

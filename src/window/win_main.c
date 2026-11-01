@@ -1324,13 +1324,7 @@ void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
         FontDrawColor(color);
         FontDrawMessageMtx(trans, msgSearch(msg));
     }
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
 }
-#endif
-#else
-}
-#endif
 
 #if VERSION < VERSION_US
 #if VERSION == VERSION_DEMO_JP
@@ -1345,9 +1339,16 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
     FontDrawStringVecPitch(&pos, buf, pitch);
 }
 #elif VERSION == VERSION_DEMO_US
-}
 void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
+    va_list args;
+
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+    FontDrawColor(color);
+    FontDrawScaleVec(scale);
+    ((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
+}
 #else
 void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
@@ -1362,17 +1363,6 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
 #endif
 #endif
 
-#if VERSION <= VERSION_DEMO_US
-#if VERSION != VERSION_DEMO_JP
-va_list args;
-va_start(args, fmt);
-vsprintf(buf, fmt, args);
-FontDrawColor(color);
-FontDrawScaleVec(scale);
-((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
-}
-#endif
-#endif
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 void winTexInit(TEXPalette* texture) {
     winTexTpl = texture;

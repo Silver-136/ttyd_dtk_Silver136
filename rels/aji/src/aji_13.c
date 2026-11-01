@@ -42,7 +42,6 @@
 #include "mario/mario_pouch.h"
 
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
-BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 #if VERSION >= VERSION_US
 #include "memory.h"
 #endif
