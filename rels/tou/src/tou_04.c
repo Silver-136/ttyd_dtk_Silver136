@@ -35,8 +35,8 @@
 #include "manager/evtmgr_cmd.h"
 #include "manager/fontmgr.h"
 #include "driver/seqdrv.h"
+#include "tou.h"
 
-USER_FUNC(evt_tou_get_ranking);
 USER_FUNC(kemuri_stop);
 static USER_FUNC(make_list);
 USER_FUNC(memoryRY);

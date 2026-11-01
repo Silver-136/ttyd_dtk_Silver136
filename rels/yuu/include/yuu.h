@@ -118,3 +118,4 @@ USER_FUNC(yuu_atai_pop);
 USER_FUNC(yuu_atai_push);
 USER_FUNC(yuuminigame_get_dataadr);
 USER_FUNC(yuuminigame_set_dataadr);
+USER_FUNC(yuuranking_get_monte);

@@ -69,7 +69,6 @@ USER_FUNC(add_vy);
 USER_FUNC(all_hikari_change_kuro);
 USER_FUNC(all_hikari_onoff);
 USER_FUNC(b_peach_thunder);
-USER_FUNC(evt_shuryolight_delete);
 USER_FUNC(hikari_change);
 USER_FUNC(hikari_onoff);
 USER_FUNC(hikari_se);

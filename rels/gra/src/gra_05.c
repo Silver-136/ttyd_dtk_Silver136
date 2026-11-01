@@ -24,7 +24,6 @@
 
 USER_FUNC(camera_curve_off);
 USER_FUNC(camera_curve_on);
-USER_FUNC(evt_kagemario_init);
 
 EvtWord gra_05_in_01[5];
 #if VERSION <= VERSION_DEMO_US

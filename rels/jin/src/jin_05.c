@@ -15,7 +15,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_kagemario_init);
 
 static EvtWord check_roll[16];
 static BeroEntry bero_entry_data[2];

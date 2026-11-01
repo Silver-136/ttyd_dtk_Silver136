@@ -41,7 +41,6 @@ static char name[8];
 #endif
 
 static USER_FUNC(eff_guruguru);
-USER_FUNC(evt_shuryolight_run_head_evt);
 static USER_FUNC(make_name);
 USER_FUNC(syuryo_baria);
 USER_FUNC(syuryo_baria_recalc_pos);

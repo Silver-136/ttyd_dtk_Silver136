@@ -13,7 +13,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_kagemario_init);
 
 static EvtWord n_close[12];
 static EvtWord n_open[12];

@@ -38,7 +38,6 @@
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_tou_get_ranking);
 USER_FUNC(mario_recovery);
 static USER_FUNC(paper_off);
 static USER_FUNC(paper_on);

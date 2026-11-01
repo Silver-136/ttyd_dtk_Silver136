@@ -19,7 +19,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_kagemario_init);
 USER_FUNC(roll_release_check);
 
 static EvtWord in_evt[5];

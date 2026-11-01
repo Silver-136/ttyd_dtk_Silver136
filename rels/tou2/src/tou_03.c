@@ -39,13 +39,7 @@
 #include "driver/extdrv.h"
 #include "driver/seqdrv.h"
 #include "evt/evt_eff.h"
-#if VERSION >= VERSION_US
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_balloon_off);
-USER_FUNC(evt_mario_balloon_tenten);
-USER_FUNC(evt_mario_get_name_hitobj_front);
-USER_FUNC(evt_mario_party_use_check);
-#endif
+#include "evt/evt_mario.h"
 #if VERSION >= VERSION_US
 #endif
 #undef GXSetTexCoordGen

@@ -56,7 +56,6 @@ s32 g_nNumOutBox[1];
 f32 randf(f32 min, f32 max);
 static inline f32 cosf(f32 x) { return cos(x); }
 
-USER_FUNC(evt_kagemario_init);
 USER_FUNC(senteresa_okure_move);
 USER_FUNC(senteresa_okure_move_init);
 USER_FUNC(senteresa_get_position);

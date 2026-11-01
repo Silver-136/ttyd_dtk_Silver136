@@ -29,7 +29,6 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
-USER_FUNC(evt_kagemario_init);
 #if VERSION >= VERSION_US
 #endif
 

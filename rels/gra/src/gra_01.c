@@ -17,7 +17,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_kagemario_init);
 
 static BeroEntry bero_entry_data[3];
 EvtWord gra_01_after_ranpel2[94];

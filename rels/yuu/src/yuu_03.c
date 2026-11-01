@@ -76,7 +76,6 @@ USER_FUNC(yuuminigame4_opening_chk);
 USER_FUNC(yuuminigame4_opening_on_off);
 USER_FUNC(yuuminigame4_set_phase);
 USER_FUNC(yuunpc_go);
-USER_FUNC(yuuranking_get_monte);
 USER_FUNC(evt_ryushi_init);
 static USER_FUNC(evt_nomal_cange);
 USER_FUNC(evt_slit_cancel);

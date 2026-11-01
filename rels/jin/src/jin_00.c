@@ -76,7 +76,6 @@ static void computePos(Teresa* ter, Vec* out);
 static void senteresa_ext_disp(CameraId camera, void* param);
 static inline f32 cosf(f32 x) { return cos(x); }
 
-USER_FUNC(evt_kagemario_init);
 USER_FUNC(get_npc_color);
 USER_FUNC(teresa_eff);
 USER_FUNC(senteresa_mario_spd);

@@ -37,10 +37,8 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_tou_get_ranking);
 static USER_FUNC(get_yoshi_color);
 USER_FUNC(icon_off);
-USER_FUNC(tou_champion_belt);
 USER_FUNC(tou_08_belt_camid);
 
 static EvtWord evt_toile[42];

@@ -17,7 +17,6 @@
 #include "system.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_kagemario_init);
 
 static EvtWord n2_close[12];
 static EvtWord n2_open[12];

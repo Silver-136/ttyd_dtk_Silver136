@@ -21,7 +21,6 @@
 #include "evt/evt_bero.h"
 #include "jin.h"
 
-USER_FUNC(evt_kagemario_init);
 static USER_FUNC(get_pos);
 USER_FUNC(get_width);
 USER_FUNC(set_pos);

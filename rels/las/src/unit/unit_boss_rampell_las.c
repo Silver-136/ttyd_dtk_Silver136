@@ -40,7 +40,6 @@
 #define UNIT_WORK_TAIL_EVENT_ID 14      // id of the vivian_shadow_tail_event spawned for the Vivian form (0 = none); mutate_event deletes it
 
 USER_FUNC(mario_shadow_guard_check);
-USER_FUNC(yoshi_original_color_anim_set);
 static USER_FUNC(_krb_get_dir);
 static USER_FUNC(vivian_comeback);
 static USER_FUNC(eff_scanning);

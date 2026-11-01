@@ -29,6 +29,8 @@ extern BattleUnitKind unit_met;
 extern BattleUnitKind unit_teresa;
 extern BattleUnitKind unit_togemet;
 USER_FUNC(evt_jin_vivian_pose_set);
+USER_FUNC(evt_kagemario_change);
+USER_FUNC(evt_kagemario_init);
 
 // Area-local saved values (JIN; swReInit clears them on every area change), named from the area's
 // scripts

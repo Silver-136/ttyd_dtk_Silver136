@@ -14,7 +14,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-USER_FUNC(yoshi_original_color_anim_set);
 
 BattleUnitKind unit_gullible_yoshi;
 static BattleWeapon enemyWeapon_YoshiNormalAttack;

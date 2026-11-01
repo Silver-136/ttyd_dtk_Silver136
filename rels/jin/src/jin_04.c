@@ -35,8 +35,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_kagemario_change);
-USER_FUNC(evt_kagemario_init);
 static USER_FUNC(getYoshiColor);
 USER_FUNC(vivian_away);
 

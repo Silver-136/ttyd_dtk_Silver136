@@ -22,7 +22,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_kagemario_init);
 
 static EvtWord w_close[12];
 static EvtWord w_open[12];

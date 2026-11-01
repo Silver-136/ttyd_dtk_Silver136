@@ -50,3 +50,7 @@ USER_FUNC(onoff);
 USER_FUNC(tou_mario_free_wait);
 USER_FUNC(tou_mario_keyoff_check);
 USER_FUNC(tou_mario_talk_end_wait);
+USER_FUNC(evt_tou_get_fighter_info);
+USER_FUNC(evt_tou_get_ranking);
+USER_FUNC(evt_tou_get_rule_msg2);
+USER_FUNC(tou_champion_belt);

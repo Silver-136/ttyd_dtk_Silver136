@@ -16,7 +16,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_kagemario_init);
 
 static BeroEntry bero_entry_data[2];
 EvtWord jin_09_jumpstand[21];

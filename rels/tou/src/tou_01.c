@@ -68,7 +68,6 @@ static USER_FUNC(anim_tevcallback_mobj);
 static USER_FUNC(delete_npc_regl_evt);
 USER_FUNC(eff_sleep_off);
 USER_FUNC(eff_sleep_on);
-USER_FUNC(evt_tou_get_ranking);
 USER_FUNC(make_shadow);
 static USER_FUNC(mario_chk);
 static USER_FUNC(proj_mtx);

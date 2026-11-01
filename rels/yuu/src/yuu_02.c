@@ -78,7 +78,6 @@ USER_FUNC(yuuminigame3_opening_on_off);
 USER_FUNC(yuuminigame3_roll_fix_off);
 USER_FUNC(yuuminigame3_roll_fix_on);
 USER_FUNC(yuuminigame3_set_phase);
-USER_FUNC(yuuranking_get_monte);
 BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, RollWork* data);
 USER_FUNC(yuu_02_icon_monte_onoff);
 

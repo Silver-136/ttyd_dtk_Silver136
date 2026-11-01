@@ -41,9 +41,6 @@
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_tou_get_fighter_info);
-USER_FUNC(evt_tou_get_ranking);
-USER_FUNC(evt_tou_get_rule_msg2);
 static USER_FUNC(getYoshiColor);
 USER_FUNC(name_check);
 USER_FUNC(setYoshiColor);

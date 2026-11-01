@@ -38,7 +38,6 @@
 
 static USER_FUNC(cam_r);
 USER_FUNC(camera_yure);
-USER_FUNC(evt_kagemario_init);
 static USER_FUNC(zoom);
 
 EvtWord evt_yabure_on[56];

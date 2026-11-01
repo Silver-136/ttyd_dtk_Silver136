@@ -11,7 +11,6 @@
 #include "evt/evt_map.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_kagemario_init);
 
 EvtWord jin_11_ana[12];
 static EvtWord s_close[12];

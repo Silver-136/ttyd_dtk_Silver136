@@ -23,7 +23,6 @@
 #include "evt/evt_npc.h"
 
 static USER_FUNC(booboo_main);
-USER_FUNC(evt_kagemario_init);
 
 EvtWord shopmaster_pig_init[14];
 EvtWord shopmaster_talk[33];

@@ -40,16 +40,16 @@ static USER_FUNC(_get_mario_hammer_lv);
 #include "pmario_sound.h"
 #include "battle/battle_database_common.h"
 #include "icon_ids.h"
+#include "battle/battle_message.h"
 
 USER_FUNC(_battle_majinai_effect);
 USER_FUNC(_majinai_powerup_check);
-USER_FUNC(btlevtcmd_AnnounceMessage);
 USER_FUNC(_paper_light_off);
 USER_FUNC(_fire_wave);
 USER_FUNC(_mario_fire_ball_controll);
+USER_FUNC(mario_get_renzoku_count_max);
 USER_FUNC(_kaiten_hammer_acrobat_rotate);
 USER_FUNC(_hammer_star_effect);
-USER_FUNC(mario_get_renzoku_count_max);
 USER_FUNC(_record_renzoku_count);
 USER_FUNC(_tatsumaki_effect);
 USER_FUNC(_wait_jyabara_hit_iron_frame);

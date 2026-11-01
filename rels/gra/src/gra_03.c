@@ -9,7 +9,6 @@
 #include "evt/evt_mobj.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_kagemario_init);
 
 static BeroEntry bero_entry_data[3];
 EvtWord gra_03_init_evt[41];

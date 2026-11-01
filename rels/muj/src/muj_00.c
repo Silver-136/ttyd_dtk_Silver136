@@ -93,7 +93,6 @@ static USER_FUNC(alpha_set_func);
  * Declaration of the PAL-only helper in evt_sub.c that writes gp->framerate (50 or 60) to its script
  * argument.
  */
-USER_FUNC(evt_sub_get_framerate); // evt_sub.c (PAL only): writes gp->framerate (50 or 60) to arg 0
 #endif
 USER_FUNC(cam_test_func);
 USER_FUNC(cam_test_init_func);

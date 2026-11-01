@@ -68,7 +68,6 @@ USER_FUNC(yuu_00_cam_shift_reset);
 USER_FUNC(yuuminigame1_opening_chk);
 USER_FUNC(yuuminigame1_opening_on_off);
 USER_FUNC(yuuminigame1_set_phase);
-USER_FUNC(yuuranking_get_monte);
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data);
 
 static MonteTable montetable[4];
