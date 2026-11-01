@@ -7256,7 +7256,7 @@ EVT_BEGIN(gor_02_init_evt)
                 END_IF
                 CALL(evt_cloud_get_mode, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), -1)
-                    IF_INT_EQUAL(LW(0), 0)
+                    IF_INT_EQUAL(LW(0), CLOUD_STATE_WAIT_BREATH)
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i04_ura_01B"), MAP_OBJ_FLAG_HIDDEN)
                         ELSE
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i04_ura_01B"), MAP_OBJ_FLAG_HIDDEN)

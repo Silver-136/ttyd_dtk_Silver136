@@ -7,6 +7,7 @@
 #include "driver/hitdrv.h"
 #include "driver/imgdrv.h"
 #include "driver/offscreendrv.h"
+#include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario.h"
 #include "mario/mariost.h"
@@ -87,7 +88,7 @@ static USER_FUNC(evt_cloud_main) {
     hit2 = cloudGetHitBreathout(2);
     hit3 = cloudGetHitBreathout(3);
     switch (wp->state) {
-        case 0:
+        case CLOUD_STATE_WAIT_BREATH:
             if (cloud_once_flag == 1) {
                 break;
             }
@@ -97,7 +98,7 @@ static USER_FUNC(evt_cloud_main) {
             }
             wp->counter = 0;
             break;
-        case 1:
+        case CLOUD_STATE_LOAD_POSE:
             if (mario->displayDirectionTarget > 90.0f && mario->displayDirectionTarget <= 270.0f) {
                 strcpy(wp->animName, "P_oof_cloud_2");
             } else {
@@ -120,7 +121,7 @@ static USER_FUNC(evt_cloud_main) {
             }
             wp->state++;
             break;
-        case 2: {
+        case CLOUD_STATE_CAPTURE: {
             s32 x, y;
             s32 w, h;
             u16 uw, uh;
@@ -189,7 +190,7 @@ static USER_FUNC(evt_cloud_main) {
             wp->state++;
             break;
         }
-        case 3:
+        case CLOUD_STATE_SHOW:
             img = imgNameToPtr(wp->imgName, group);
             img->flags &= ~IMAGE_FLAG_HIDE;
             img->animName = "A_1";
@@ -199,20 +200,20 @@ static USER_FUNC(evt_cloud_main) {
             wp->state++;
             wp->lastFrame = 0.0f;
             break;
-        case 4:
+        case CLOUD_STATE_BLOWING:
             img = imgNameToPtr(wp->imgName, group);
             if (wp->lastFrame == 0.0f || wp->lastFrame + 1.0f < img->loopTimes) {
                 psndSFXOn_3D("SFX_OFF_CLAUD_WIND2", &mario->position);
                 wp->lastFrame = img->loopTimes;
             }
             if (mario->currMotionId != MARIO_MOTION_CLOUD) {
-                wp->state = 10;
+                wp->state = CLOUD_STATE_RESTORE;
                 break;
             }
             hit = hitNameToPtr(wp->hitName);
             if (hit0 != hit && hit1 != hit && hit2 != hit && hit3 != hit) {
                 if (wp->timer == 0) {
-                    wp->state = 10;
+                    wp->state = CLOUD_STATE_RESTORE;
                 } else {
                     wp->timer--;
                     wp->counter += 2;
@@ -221,15 +222,15 @@ static USER_FUNC(evt_cloud_main) {
                 wp->timer = 30;
                 wp->counter += 2;
                 if (wp->counter > wp->limit) {
-                    wp->state = 20;
+                    wp->state = CLOUD_STATE_BLOWN_AWAY;
                 }
             }
             break;
-        case 10:
+        case CLOUD_STATE_RESTORE:
             mapGrpFlagOff(wp->groupName, MAP_OBJ_FLAG_HIDDEN);
-            wp->state = 99;
+            wp->state = CLOUD_STATE_RELEASE;
             break;
-        case 20:
+        case CLOUD_STATE_BLOWN_AWAY:
             psndSFXOn_3D("SFX_OFF_CLAUD_WIND3", &mario->position);
             if (wp->endEvt != NULL) {
                 evtEntry(wp->endEvt, 0, 0);
@@ -241,16 +242,16 @@ static USER_FUNC(evt_cloud_main) {
             wp->timer = 60;
             wp->state++;
             break;
-        case 21:
+        case CLOUD_STATE_BLOWN_AWAY_WAIT:
             if (wp->timer != 0) {
                 wp->timer--;
                 break;
             }
             wp->timer = 30;
             wp->counter += 2;
-            wp->state = 99;
+            wp->state = CLOUD_STATE_RELEASE;
             break;
-        case 99:
+        case CLOUD_STATE_RELEASE:
             img = imgNameToPtr(wp->imgName, group);
             if (!(wp->flags & CLOUD_FLAG_GROUP_LIST)) {
                 mapGrpClearOffScreen(wp->groupName);
@@ -267,7 +268,7 @@ static USER_FUNC(evt_cloud_main) {
             imgRelease(img, group);
             offscreenDelete(wp->offscreenName);
             cloud_once_flag = 0;
-            wp->state = 0;
+            wp->state = CLOUD_STATE_WAIT_BREATH;
             break;
     }
     return EVT_RETURN_BLOCK;
@@ -325,7 +326,7 @@ USER_FUNC(evt_cloud_ent) {
     wp->endEvt = endEvt;
     wp->limit = 180;
     wp->counter = 0;
-    wp->state = 0;
+    wp->state = CLOUD_STATE_WAIT_BREATH;
     wp->timer = 0;
     wp->w = 0;
     wp->h = 0;
