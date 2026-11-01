@@ -21,6 +21,22 @@ typedef struct SklWork {
 
 
 
+// BattleActions.params of this command
+enum {
+    STICK_KEEP_PARAM_LIGHTS = 0,    // lights to hold through
+    STICK_KEEP_PARAM_INTERVAL = 1,  // frames per light
+    STICK_KEEP_PARAM_PAUSE = 2,     // nonzero pauses the command
+    STICK_KEEP_PARAM_PAUSED = 3,    // pause display while PARAM_PAUSE is set
+    STICK_KEEP_PARAM_LAST_SIGNAL = 4, // 1 once the last signal sound played
+};
+
+// outputParams[2]
+enum {
+    STICK_KEEP_RESULT_EARLY = 1,   // let go early
+    STICK_KEEP_RESULT_LATE = 2,    // held too long
+    STICK_KEEP_RESULT_SUCCESS = 3,
+};
+
 /**
  * Frames allowed to let go of the stick after the last light, by difficulty (80 at the easiest down to 5).
  * Used by Mario's hammer attacks and Frankly's battle lesson.
@@ -53,19 +69,19 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
     if (work->actionCommands.acUnit->badgesEquipped.AutoCommand) {
         autoCommand = 1;
     }
-    work->actionCommands.params[3] = 0;
+    work->actionCommands.params[STICK_KEEP_PARAM_PAUSED] = 0;
     if (work->actionCommands.acState != AC_STATE_INIT) {
-        if (work->actionCommands.params[2] != 0) {
-            work->actionCommands.params[3] = 1;
+        if (work->actionCommands.params[STICK_KEEP_PARAM_PAUSE] != 0) {
+            work->actionCommands.params[STICK_KEEP_PARAM_PAUSED] = 1;
         } else {
-            work->actionCommands.params[3] = 0;
+            work->actionCommands.params[STICK_KEEP_PARAM_PAUSED] = 0;
         }
     }
     sfx[0] = "SFX_AC_PI1";
     sfx[1] = "SFX_AC_PONE1";
     do {
         loop = 0;
-        if (work->actionCommands.params[3] != 0) {
+        if (work->actionCommands.params[STICK_KEEP_PARAM_PAUSED] != 0) {
             break;
         }
         switch (work->actionCommands.acState) {
@@ -77,9 +93,9 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 disp->iconY = 0.0f;
                 disp->slideTimer = 20;
                 work->actionCommands.outputParams[0] = 0;
-                work->actionCommands.params[2] = 0;
-                work->actionCommands.params[3] = 0;
-                work->actionCommands.params[4] = 0;
+                work->actionCommands.params[STICK_KEEP_PARAM_PAUSE] = 0;
+                work->actionCommands.params[STICK_KEEP_PARAM_PAUSED] = 0;
+                work->actionCommands.params[STICK_KEEP_PARAM_LAST_SIGNAL] = 0;
                 work->actionCommands.outputParams[2] = 0;
                 for (i = 0; i < 12; i++) {
                     cw->sfx[i] = -1;
@@ -134,10 +150,10 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 if (cw->timer < 0) {
                     cw->idx++;
                     work->actionCommands.outputParams[1]++;
-                    if (cw->idx >= work->actionCommands.params[0] + 2) {
+                    if (cw->idx >= work->actionCommands.params[STICK_KEEP_PARAM_LIGHTS] + 2) {
                         work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         work->actionCommands.acState = AC_STATE_RUN + 3;
-                        work->actionCommands.outputParams[2] = 2;
+                        work->actionCommands.outputParams[2] = STICK_KEEP_RESULT_LATE;
                         if (work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL) {
                             work->actionCommands.result |= AC_RESULT_SUCCESS;
                             work->actionCommands.result &= ~AC_RESULT_RUNNING;
@@ -146,34 +162,34 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         break;
                     }
                     j = cw->idx - 2;
-                    if (j < work->actionCommands.params[0] - 1) {
+                    if (j < work->actionCommands.params[STICK_KEEP_PARAM_LIGHTS] - 1) {
                         if (cw->sfx[j] == -1) {
                             cw->sfx[j] = psndSFXOn(sfx[0]);
                         }
                     } else {
                         if (cw->sfx[j] == -1) {
                             cw->sfx[j] = psndSFXOn(sfx[1]);
-                            work->actionCommands.params[4] = 1;
+                            work->actionCommands.params[STICK_KEEP_PARAM_LAST_SIGNAL] = 1;
                         }
                     }
-                    cw->timer = work->actionCommands.params[1];
+                    cw->timer = work->actionCommands.params[STICK_KEEP_PARAM_INTERVAL];
                 } else {
                     if (BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) && autoCommand == 0) {
                         break;
                     }
                     ok = 0;
-                    if (cw->idx != work->actionCommands.params[0] + 1) {
+                    if (cw->idx != work->actionCommands.params[STICK_KEEP_PARAM_LIGHTS] + 1) {
                         if (!(work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
-                            work->actionCommands.outputParams[2] = 1;
+                            work->actionCommands.outputParams[2] = STICK_KEEP_RESULT_EARLY;
                         }
                     } else {
-                        diff = work->actionCommands.params[1] - cw->timer;
+                        diff = work->actionCommands.params[STICK_KEEP_PARAM_INTERVAL] - cw->timer;
                         if (diff > ac_stickkeepleft_ok_frame[BattleActionCommandGetDifficulty(work)]) {
                             if (!(work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
-                                work->actionCommands.outputParams[2] = 1;
+                                work->actionCommands.outputParams[2] = STICK_KEEP_RESULT_EARLY;
                             }
                         } else {
-                            work->actionCommands.outputParams[2] = 3;
+                            work->actionCommands.outputParams[2] = STICK_KEEP_RESULT_SUCCESS;
                             ok = 1;
                         }
                     }
@@ -252,7 +268,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
             disp->iconStep = -1;
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
-            if (work->actionCommands.params[3] == 0 && disp->slideTimer > 0) {
+            if (work->actionCommands.params[STICK_KEEP_PARAM_PAUSED] == 0 && disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
             break;
@@ -260,7 +276,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
             disp->iconStep = cw->idx - 1;
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
-            if (work->actionCommands.params[3] == 0 && disp->slideTimer > 0) {
+            if (work->actionCommands.params[STICK_KEEP_PARAM_PAUSED] == 0 && disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
             break;
@@ -277,7 +293,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
                 disp->iconX = 30.0f;
             }
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
-            if (work->actionCommands.params[3] == 0 && disp->slideTimer < 60) {
+            if (work->actionCommands.params[STICK_KEEP_PARAM_PAUSED] == 0 && disp->slideTimer < 60) {
                 disp->slideTimer++;
             }
             break;

@@ -62,7 +62,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleActions* ac = &work->actionCommands;
     s32* blinkTimer = &ac->disp.blinkTimer;
     camGetPtr(CAMERA_2D);
-    if (((TimingAWork*)ac->work)->flags & 1) {
+    if (((TimingAWork*)ac->work)->flags & AC_TIMING_A_ICON_PRESSED) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 50.0f + y;
@@ -160,7 +160,7 @@ s32 battleAcResult_TimingA(BattleWork* work) {
     }
     work->actionCommands.result = 0;
     if (work->flags & BATTLE_FLAG_LECTURE_JUMP) {
-        work->actionCommands.outputParams[0] = 3;
+        work->actionCommands.outputParams[0] = AC_TIMING_A_RESULT_SUCCESS;
         work->actionCommands.result = AC_RESULT_SUCCESS;
         work->actionCommands.resultCount++;
         return work->actionCommands.result;
@@ -171,7 +171,7 @@ s32 battleAcResult_TimingA(BattleWork* work) {
         }
     }
     if (count >= 2) {
-        work->actionCommands.outputParams[0] = 1;
+        work->actionCommands.outputParams[0] = AC_TIMING_A_RESULT_TOO_EARLY;
         return work->actionCommands.result;
     }
     for (i = 0; i < successFrame; i++) {
@@ -181,13 +181,13 @@ s32 battleAcResult_TimingA(BattleWork* work) {
     }
     if (i >= successFrame) {
         if (count > 0) {
-            work->actionCommands.outputParams[0] = 1;
+            work->actionCommands.outputParams[0] = AC_TIMING_A_RESULT_TOO_EARLY;
         } else {
-            work->actionCommands.outputParams[0] = 2;
+            work->actionCommands.outputParams[0] = AC_TIMING_A_RESULT_NO_PRESS;
         }
         return work->actionCommands.result;
     }
-    work->actionCommands.outputParams[0] = 3;
+    work->actionCommands.outputParams[0] = AC_TIMING_A_RESULT_SUCCESS;
     work->actionCommands.result = AC_RESULT_SUCCESS;
     work->actionCommands.resultCount++;
     return work->actionCommands.result;
@@ -203,7 +203,7 @@ s32 battleAcTimingA_GetSuccessFrame(BattleWork* work) {
     TimingAEntry* e = _ac_timing_a_timing_tbl[diff];
     s32 ret = e->value;
     s32 count = work->actionCommands.resultCount;
-    if (((TimingAWork*)work->actionCommands.work)->flags & 2) {
+    if (((TimingAWork*)work->actionCommands.work)->flags & AC_TIMING_A_WINDOW_BY_COUNT) {
         if (count >= 100000) {
             return 0;
         }
@@ -236,7 +236,7 @@ s32 battleAcMain_TimingA(BattleWork* work) {
             disp->slideTimer = 20;
             work->actionCommands.acState = AC_STATE_WAIT_START;
             // FAKE: flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object
-            ((TimingAWork*)work->actionCommands.work)->flags &= ~1;
+            ((TimingAWork*)work->actionCommands.work)->flags &= ~AC_TIMING_A_ICON_PRESSED;
             work->actionCommands.outputParams[0] = 0;
             break;
         case AC_STATE_START:
