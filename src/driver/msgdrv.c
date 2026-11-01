@@ -798,1058 +798,11 @@ u16 hankakuSearch(char c);
  * text and Japanese ruby, <col>, <shake>, <wave>, <icon>, <k> key waits, <p> pages, <select>, speeds and waits,
  * word wrap and scrolling. Called when a window opens and for each added message.
  */
-#if VERSION == VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_US
 void msgAnalize(smartEntry* smart, const char* msg) {
-    u16 glyphD;
-    s32 wwD;
-    s32 wwR;
-    s32 kR;
-    s16 topY;
-    s16 savedPage;
-    s16 savedScroll;
-
-    MsgWinData* data;
-    /* FAKE: nn, fp, fx, ys and yx are one-element arrays (IRO scalarizes them into @ temps). nn is the ruby index copy
-       of i. fp/fx both hold flags & 1 and ys/yx both hold y for the second ruby loop; a dead guard at the loop top
-       redefines fp and ys (never runs), and fx/yx are re-copied from fp/ys before time is cleared. Same values; the fx copy
-       merges only in the second colouring round and the y pair fixes the preheader order, which gives the target
-       register order (FAKES.md) */
-    s32 nn[1];
-    /* FAKE: zz, z3 and z4 are write-only scratch; the kR init reads them back as 0 + 1 + 2 - 3 = 0. Their three constant
-       loads only exist before register allocation and fill scheduler slots, so the loop-2 counter init lands after the
-       rubyW truncation (FAKES.md) */
-    s32 zz[1];
-    s32 z3[1];
-    s32 z4[1];
-    u32 fp[1];
-    u32 fx[1];
-    s32 ys[1];
-    s32 yx[1];
-    WindowEntry* window;
-    MsgChar* entry;
-    s32 check;
-    u16 glyph;
-    s16 x;
-    s16 y; // s16 in the original: extsh before every int->float use (0x20b0, 0x2b98) and after <pos> (0x23b0)
-    s16 rubyX;
-    s32 time;
-    u32 flags;
-    char tag[0x80];
-    char args[0x80];
-    char name[0x20];
-    char anim1[0x20];
-    char anim2[0x20];
-    char paper[0x20];
-    char paper2[0x20];
-    s32 step;
-f32 scale;
-f32 fv;
-    s32 posX;
-    // FAKE: int, not s32 (same width/sign; changes colouring)
-    int posY;
-    s32 waitTime;
-    s32 iconId;
-    s32 iconOffX;
-    s32 iconY;
-    MsgWinData* data2;
-    s32 iconAdvance;
-    f32 iconScale;
-    s32 animX;
-    // FAKE: int, not s32 (same width/sign; changes colouring)
-    int animY;
-    s32 animFlip;
-    f32 animScale;
-    s32 paperTime;
-    s16 winX;
-    s16 winY;
-    s16 winWidth;
-    s16 winHeight;
-    s16 sel0;
-    s16 sel1;
-    u16 iw;
-    u16 ih;
-    f32 maxScale;
-    const char* next;
-    BOOL isHM;
-    s32 i;
-    s32 j;
-    s32 k;
-    s32 half;
-    s32 total;
-    s32 ww;
-
-    data = smart->address;
-    window = data->window;
-    entry = &data->entries[data->charCount];
-    flags = 0;
-    maxScale = 0.0f;
-    scale = 1.0f;
-    if (window->type < 0) {
-        window->type = WINDOW_TYPE_NORMAL;
-    }
-    time = data->parseTime;
-    topY = 0;
-    savedPage = data->parsePage;
-    x = data->parseX;
-    savedScroll = data->parseScroll;
-    y = data->parseY;
-    step = data->parseSpeed;
-    switch (window->type) {
-        case WINDOW_TYPE_SYSTEM:
-        case WINDOW_TYPE_TEC:
-            switch (window->type) {
-                case WINDOW_TYPE_SYSTEM: {
-                    static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
-                    entry->value = *((const u32*)(&c));
-                    break;
-                }
-                case WINDOW_TYPE_TEC: {
-                    static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
-                    entry->value = *((const u32*)(&c));
-                    break;
-                }
-            }
-            entry->glyph = MSG_GLYPH_COLOR;
-            entry->time = time;
-            entry++;
-            data->charCount++;
-            break;
-        default:
-            break;
-    }
-
-    while (TRUE) {
-{
-            s32 gz = 0;
-            if (gz != 0) {
-                y = 0;
-            }
-        }
-        check = *((const u8*)msg);
-        if (_ismbblead((u8)check)) {
-            glyph = kanjiSearch(*((const u16*)msg));
-            ww = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
-            entry->glyph = glyph;
-            entry->x = x;
-            entry->y = y - (s16)(10.0f * scale);
-            entry->scale = scale;
-            entry->value = flags;
-            if ((*((const u16*)msg)) == 0x8145) {
-                entry->value |= MSG_CHAR_VOICE;
-            } else if (((*((const u16*)msg)) != 0x8140) && ((*((const u16*)msg)) != 0x8151)) {
-                entry->value |= MSG_CHAR_TALK;
-            }
-            if ((flags & MSG_CHAR_DYNAMIC) != 0) {
-                entry->rot = fv;
-            }
-            if (maxScale < scale) {
-                maxScale = scale;
-            }
-            entry->time = time;
-            x += ww;
-            msg += 2;
-            time += step;
-            entry++;
-            data->charCount++;
-            continue;
-        }
-        switch ((s8)check) {
-            case 0:
-                entry->glyph = MSG_GLYPH_END;
-                entry->time = time;
-                data->parseTime = time;
-                data->parseX = x;
-                data->parseY = y;
-                data->parsePage = savedPage;
-                data->parseScroll = savedScroll;
-                return;
-            case '\n':
-            entry->glyph = MSG_GLYPH_NEWLINE;
-                entry->time = time;
-                x = 0;
-                if (0.0f == maxScale) {
-                    maxScale = 1.0f;
-                }
-                y -= 32.0f * maxScale;
-                savedScroll -= 32.0f * maxScale;
-msg++;
-                entry++;
-                time += step;
-                data->charCount++;
-                maxScale = 0.0f;
-                if (data->flags & MSG_WIN_FLAG_SELECT) {
-                    flags &= ~MSG_CHAR_SEL_ROW_MASK;
-                    flags |= MSG_CHAR_SEL_ROW(data->numSel);
-                    data->numSel++;
-}
-continue;
-            case '<':
-                next = msgGetCommand((char*)msg + 1, tag, args);
-                msg = next;
-                /* FAKE: dead int guard (COLOURING W): msg is redefined in the arm while next is still live
-                   (the later newline test on next), so msg/next interfere and the target copy mr r21,r15 survives */
-                {
-                    s32 gz = 0;
-                    if (gz != 0) {
-                        msg++;
-                    }
-                }
-                if ((strcmp(tag, "k") == 0) || (strcmp(tag, "key") == 0)) {
-                    entry->glyph = MSG_GLYPH_KEY;
-                    entry->x = savedPage;
-                    entry->time = time;
-                    time += 100;
-                    entry++;
-                    data->charCount++;
-                    savedPage++;
-                } else if (strcmp(tag, "keyxon") == 0) {
-                    data->flags |= MSG_WIN_FLAG_KEY_X;
-                } else if ((strcmp(tag, "p") == 0) || (strcmp(tag, "scrl_auto") == 0)) {
-                    if (savedScroll != 0) {
-                        entry->glyph = MSG_GLYPH_SCROLL;
-                        entry->y = savedScroll - 3;
-                        topY = y - 6;
-                        y -= 3;
-                        entry->time = time;
-                        time += 0x32;
-                        entry++;
-                        savedScroll = 0;
-                        data->charCount++;
-                    }
-                } else if ((strcmp(tag, "o") == 0) || (strcmp(tag, "once_stop") == 0)) {
-                    entry->glyph = MSG_GLYPH_ONCE_STOP;
-                    entry->time = time;
-                    time += 0x32;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "pos") == 0) {
-                    sscanf(args, "%d%d", &posX, &posY);
-                    x = posX;
-                    if (posY != 999) {
-                        y = topY - posY;
-                    }
-                    savedScroll = -posY;
-} else if (strcmp(tag, "scale") == 0) {
-                    sscanf(args, "%f", &scale);
-                } else if (strcmp(tag, "/scale") == 0) {
-                    scale = 1.0f;
-} else if (strcmp(tag, "wait") == 0) {
-                    sscanf(args, "%d", &waitTime);
-                    time += waitTime;
-                } else if (strcmp(tag, "speed") == 0) {
-                    sscanf(args, "%d", &step);
-                } else if (strcmp(tag, "/speed") == 0) {
-                    step = data->parseSpeed;
-                } else if (strcmp(tag, "dynamic") == 0) {
-                    sscanf(args, "%f", &fv); // a <dynamic> tag without a number would leave dynScale unset
-                    flags |= MSG_CHAR_DYNAMIC;
-                } else if (strcmp(tag, "/dynamic") == 0) {
-                    flags &= ~MSG_CHAR_DYNAMIC;
-                } else if (strcmp(tag, "shake") == 0) {
-                    flags |= MSG_CHAR_SHAKE;
-                } else if (strcmp(tag, "/shake") == 0) {
-                    flags &= ~MSG_CHAR_SHAKE;
-                } else if (strcmp(tag, "wave") == 0) {
-                    flags |= MSG_CHAR_WAVE;
-                } else if (strcmp(tag, "/wave") == 0) {
-                    flags &= ~MSG_CHAR_WAVE;
-                } else if (strcmp(tag, "col") == 0) {
-                    sscanf(args, "%x", &entry->value);
-                    entry->glyph = MSG_GLYPH_COLOR;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "/col") == 0) {
-                    entry->value = 0xFF;
-                    entry->glyph = MSG_GLYPH_COLOR;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "noise") == 0) {
-                    entry->value = 1;
-                    entry->glyph = MSG_GLYPH_NOISE;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "/noise") == 0) {
-                    entry->value = 0;
-                    entry->glyph = MSG_GLYPH_NOISE;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "dkey") == 0) {
-                    entry->value = 1;
-                    entry->glyph = MSG_GLYPH_DKEY;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "/dkey") == 0) {
-                    entry->value = 0;
-                    entry->glyph = MSG_GLYPH_DKEY;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "plate") == 0) {
-                    window->type = WINDOW_TYPE_PLATE;
-                    step = 0;
-                    data->parseSpeed = 0;
-                } else if (strcmp(tag, "system") == 0) {
-                    static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
-                    window->type = WINDOW_TYPE_SYSTEM;
-                    entry->value = *((const u32*)(&c));
-                    entry->glyph = MSG_GLYPH_COLOR;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "tec") == 0) {
-                    static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
-                    window->type = WINDOW_TYPE_TEC;
-                    entry->value = *((const u32*)(&c));
-                    entry->glyph = MSG_GLYPH_COLOR;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "majo") == 0) {
-                    window->type = WINDOW_TYPE_MAJO;
-                } else if (strcmp(tag, "diary") == 0) {
-                    window->type = WINDOW_TYPE_DIARY;
-                } else if (strcmp(tag, "housou") == 0) {
-                    window->type = WINDOW_TYPE_HOUSOU;
-                } else if (strcmp(tag, "boss") == 0) {
-                    window->type = WINDOW_TYPE_BOSS;
-                } else if (strcmp(tag, "kanban") == 0) {
-                    window->type = WINDOW_TYPE_KANBAN;
-                    step = 0;
-                    data->parseSpeed = 0;
-                } else if (strcmp(tag, "small") == 0) {
-                    window->type = WINDOW_TYPE_SMALL;
-                    data->flags |= MSG_WIN_FLAG_SMALL;
-                } else if (strcmp(tag, "clear") == 0) {
-                    window->type = WINDOW_TYPE_CLEAR;
-                } else if (strcmp(tag, "wpos") == 0) {
-                    sscanf(args, "%hd%hd%hd%hd", &winX, &winY, &winWidth, &winHeight);
-                    window->flags |= WINDOW_FLAG_WPOS;
-                    window->x = winX;
-                    window->y = winY;
-                    window->width = winWidth;
-                    window->height = winHeight;
-                } else if (strcmp(tag, "select") == 0) {
-                    window->type = WINDOW_TYPE_SELECT;
-                    data->flags |= MSG_WIN_FLAG_SELECT;
-                    // BUG: five %hd for four pointers; a fifth number in the tag would be written through a stray argument
-                    sscanf(args, "%hd%hd%hd%hd%hd", &sel0, &sel1, &data->selWidth, &data->selY);
-                    flags |= MSG_CHAR_SEL_ROW(0);
-                    data->defSel = sel0;
-                    data->cancel = sel1;
-                    data->numSel = 1;
-                    step = 0;
-                } else if (strcmp(tag, "se") == 0) {
-                    sscanf(args, "%d", &entry->value);
-                    entry->glyph = MSG_GLYPH_SE;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "vol") == 0) {
-                    sscanf(args, "%d", &entry->value);
-                    entry->glyph = MSG_GLYPH_VOL;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "nowinse") == 0) {
-                    window->flags |= WINDOW_FLAG_NOWINSE;
-                } else if (strcmp(tag, "icon") == 0) {
-                    isHM = FALSE;
-                    if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
-                        sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &iconOffX, &iconY, &iconAdvance);
-                    } else {
-                        sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
-                        if (strcmp(name, "HM") == 0) {
-                            isHM = TRUE;
-                        }
-                        iconId = msgIconStr2ID(name);
-                        if (iconId < 0) {
-                            iconId = 0;
-                        }
-                    }
-                    if (!isHM)
-                    {
-                        entry->value = iconId;
-                        // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
-                        ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
-                        entry->glyph = MSG_GLYPH_ICON;
-                        entry->x = (x + ((0.5f * iw) * iconScale)) + iconOffX;
-                        x += 0x28;
-                        entry->y = y - (ih * iconScale);
-                        entry->iconY = iconY;
-                        entry->scale = iconScale;
-                        entry->time = time;
-                        entry++;
-                        time += step;
-                        data->charCount++;
-                    }
-                    else {
-                        glyph = kanjiSearch(0x94B5);
-                        iw = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
-                        entry->glyph = glyph;
-                        entry->x = x;
-                        entry->y = y - (s16)(10.0f * scale);
-                        entry->scale = scale;
-                        entry->value = flags;
-                        entry->value |= MSG_CHAR_TALK;
-                        if (flags & MSG_CHAR_DYNAMIC) {
-
-                            entry->rot = fv;
-                        }
-                        if (maxScale < scale) {
-                            maxScale = scale;
-                        }
-                        entry->time = time;
-                        entry++;
-                        x += iw;
-                        time += step;
-                        data->charCount++;
-                    }
-} else if (strcmp(tag, "anim") == 0) {
-                    sscanf(args, "%s%s%d%d%f%d", anim1, anim2, &animX, &animY, &animScale, &animFlip);
-                    entry->value = animPoseEntry(anim1, 2);
-                    animPoseSetAnim(entry->value, anim2, 1);
-                    animPoseSetMaterialFlagOn(entry->value, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
-                    animPoseSetMaterialFlagOff(entry->value, MAP_OBJ_FLAG_COLOR);
-                    /* FAKE: one-trip loop (j is dead here); it enables the backend array-to-register pass that removes the zz/z3/z4 stores */
-                    for (j = 0; j < 1; j++) {
-                        animPoseSetGXFunc(msgw->poseId, msgDispKeyWait_render, 0);
-                    }
-                    entry->glyph = MSG_GLYPH_ANIM;
-                    entry->x = animX;
-                    entry->y = topY - animY;
-                    entry->scale = animScale;
-                    entry->rot = (animFlip == 0) ? (0.0f) : (180.0f);
-                    entry++;
-                    time += step;
-                    data->charCount++;
-                } else if (strcmp(tag, "paper") == 0) {
-                    sscanf(args, "%s%d", paper, &paperTime);
-                    entry->npc = (strcmp(paper, "me") != 0) ? npcNameToPtr(paper) : NULL;
-                    entry->glyph = MSG_GLYPH_PAPER;
-                    entry->time = paperTime;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "/paper") == 0) {
-                    sscanf(args, "%s", paper2);
-                    entry->npc = (strcmp(paper2, "me") != 0) ? npcNameToPtr(paper2) : NULL;
-                    entry->glyph = MSG_GLYPH_PAPER_END;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "r") == 0) {
-                    data2 = data;
-                    if (data->window->type != WINDOW_TYPE_SMALL) {
-                        rubyX = x; // a <R...> tag without an <r> before it would read rubyX unset
-                    }
-                } else if ((((s8*)tag)[0] == 'R') || ((((s8*)tag)[0] == '/') && (((u32)((s8*)tag)[0]) == 0x2F72))) {
-                    // BUG: the closing test compares one character with '/r' (0x2F72, a two-character constant), so it
-                    // is always false and only <R...> tags are handled here
-                    i = 1;
-                    if (((s8*)tag)[0] != 'R') {
-                        i = 2;
-                    }
-                    if (data->window->type == WINDOW_TYPE_SMALL) {
-                        continue;
-                    }
-                    half = ((s32)strlen(tag + i)) / 2;
-                    total = 0;
-                    j = i;
-                    // FAKE: (u32) index casts here and in the second loop stop the IR optimizer from strength-reducing tag[j]/tag[i]; the backend
-                    // does it instead and its pointer-IV init in the preheader keeps the dead j/i steps alive, as in the target (FAKES.md)
-                    for (k = 0; k < half; k++) {
-                        glyph = kanjiSearch(*(u16*)&tag[(u32)j]);
-                        total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
-                        j += 2;
-                    }
-                    total = (u16)total - (0.55f * (4.0f * scale));
-                    rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
-                    yx[0] = y;
-                    ys[0] = y;
-                    fp[0] = flags & MSG_CHAR_DYNAMIC;
-                    fx[0] = flags & MSG_CHAR_DYNAMIC;
-                    nn[0] = i;
-                    *(int*)zz = 0;
-                    *(int*)z3 = 1;
-                    *(int*)z4 = 2;
-                    for (kR = zz[0] + z3[0] + z4[0] - 3; kR < half; kR++) {
-                        // FAKE: dead guard (never runs) redefining fp and ys at the ruby loop top; without it the whole
-                        // function colours differently and gains an instruction (FAKES.md)
-                        {
-                            s32 gz = 0;
-                            if (gz != 0) {
-                                fp[0] = fx[0];
-                                ys[0] = yx[0] + ys[0];
-                            }
-                        }
-                        glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
-                        wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
-                        entry->glyph = glyph;
-                        entry->x = rubyX;
-                        entry->y = ys[0];
-                        entry->scale = 0.55f * scale;
-                        entry->value = flags;
-                        if (fp[0]) {
-                            entry->rot = fv;
-                        }
-                        fx[0] = fp[0];
-                        yx[0] = ys[0];
-                        entry->time = 0;
-                        rubyX += wwR;
-                        entry++;
-                        data->charCount++;
-                        nn[0] += 2;
-                    }
-                    continue;
-                }
-                if ((*((const s8*)next)) == '\n') {
-                    msg++;
-                }
-                continue;
-            default:
-                if ((((gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
-                    glyphD = kanjiSearch((u16)(check + 0x821F));
-                } else {
-                    glyphD = hankakuSearch(check);
-                }
-                wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
-                entry->glyph = glyphD;
-                entry->x = x;
-                entry->y = y - (s16)(10.0f * scale);
-                entry->scale = scale;
-                entry->value = flags;
-                if ((*((const s8*)msg)) != ' ') {
-                    entry->value |= MSG_CHAR_TALK;
-                }
-                if (flags & MSG_CHAR_DYNAMIC) {
-                    entry->rot = fv;
-                }
-                if (maxScale < scale) {
-                    maxScale = scale;
-                }
-                entry->time = time;
-                x += wwD;
-                msg++;
-                time += step;
-                entry++;
-                data->charCount++;
-                continue;
-        }
-    }
-}
-#elif VERSION == VERSION_DEMO_US
-void msgAnalize(smartEntry* smart, const char* msg) {
-    u16 glyphD;
-    s32 wwD;
-    s32 wwR;
-    s32 kR;
-    s16 topY;
-    s16 savedPage;
-    s16 savedScroll;
-
-    MsgWinData* data;
-    /* FAKE: nn, fp, fx, ys and yx are one-element arrays (IRO scalarizes them into @ temps). nn is the ruby index copy
-       of i. fp/fx both hold flags & 1 and ys/yx both hold y for the second ruby loop; a dead guard at the loop top
-       redefines fp and ys (never runs), and fx/yx are re-copied from fp/ys before time is cleared. Same values; the fx copy
-       merges only in the second colouring round and the y pair fixes the preheader order, which gives the target
-       register order (FAKES.md) */
-    s32 nn[1];
-    /* FAKE: zz, z3 and z4 are write-only scratch; the kR init reads them back as 0 + 1 + 2 - 3 = 0. Their three constant
-       loads only exist before register allocation and fill scheduler slots, so the loop-2 counter init lands after the
-       rubyW truncation (FAKES.md) */
-    s32 zz[1];
-    s32 z3[1];
-    s32 z4[1];
-    u32 fp[1];
-    u32 fx[1];
-    s32 ys[1];
-    s32 yx[1];
-    WindowEntry* window;
-    MsgChar* entry;
-    s32 check;
-    u16 glyph;
-    s16 x;
-    s16 y; // s16 in the original: extsh before every int->float use (0x20b0, 0x2b98) and after <pos> (0x23b0)
-    s16 rubyX;
-    s32 time;
-    u32 flags;
-    char tag[0x80];
-    char args[0x80];
-    char name[0x20];
-    char anim1[0x20];
-    char anim2[0x20];
-    char paper[0x20];
-    char paper2[0x20];
-    s32 step;
-f32 scale;
-f32 fv;
-    s32 posX;
-    // FAKE: int, not s32 (same width/sign; changes colouring)
-    int posY;
-    s32 waitTime;
-    s32 iconId;
-    s32 iconOffX;
-    s32 iconY;
-    MsgWinData* data2;
-    s32 iconAdvance;
-    f32 iconScale;
-    s32 animX;
-    // FAKE: int, not s32 (same width/sign; changes colouring)
-    int animY;
-    s32 animFlip;
-    f32 animScale;
-    s32 paperTime;
-    s16 winX;
-    s16 winY;
-    s16 winWidth;
-    s16 winHeight;
-    s16 sel0;
-    s16 sel1;
-    u16 iw;
-    u16 ih;
-    f32 maxScale;
-    const char* next;
-    s32 i;
-    s32 j;
-    s32 k;
-    s32 half;
-    s32 total;
-    s32 ww;
-
-    data = smart->address;
-    window = data->window;
-    entry = &data->entries[data->charCount];
-    flags = 0;
-    maxScale = 0.0f;
-    scale = 1.0f;
-    if (window->type < 0) {
-        window->type = WINDOW_TYPE_NORMAL;
-    }
-    time = data->parseTime;
-    topY = 0;
-    savedPage = data->parsePage;
-    x = data->parseX;
-    savedScroll = data->parseScroll;
-    y = data->parseY;
-    step = data->parseSpeed;
-    switch (window->type) {
-        case WINDOW_TYPE_SYSTEM:
-        case WINDOW_TYPE_TEC:
-            switch (window->type) {
-                case WINDOW_TYPE_SYSTEM: {
-                    static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
-                    entry->value = *((const u32*)(&c));
-                    break;
-                }
-                case WINDOW_TYPE_TEC: {
-                    static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
-                    entry->value = *((const u32*)(&c));
-                    break;
-                }
-            }
-            entry->glyph = MSG_GLYPH_COLOR;
-            entry->time = time;
-            entry++;
-            data->charCount++;
-            break;
-        default:
-            break;
-    }
-
-    while (TRUE) {
-{
-            s32 gz = 0;
-            if (gz != 0) {
-                y = 0;
-            }
-        }
-        check = *((const u8*)msg);
-        if (_ismbblead((u8)check)) {
-            glyph = kanjiSearch(*((const u16*)msg));
-            ww = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
-            entry->glyph = glyph;
-            entry->x = x;
-            entry->y = y - (s16)(10.0f * scale);
-            entry->scale = scale;
-            entry->value = flags;
-            if ((*((const u16*)msg)) == 0x8145) {
-                entry->value |= MSG_CHAR_VOICE;
-            } else if (((*((const u16*)msg)) != 0x8140) && ((*((const u16*)msg)) != 0x8151)) {
-                entry->value |= MSG_CHAR_TALK;
-            }
-            if ((flags & MSG_CHAR_DYNAMIC) != 0) {
-                entry->rot = fv;
-            }
-            if (maxScale < scale) {
-                maxScale = scale;
-            }
-            entry->time = time;
-            x += ww;
-            msg += 2;
-            time += step;
-            entry++;
-            data->charCount++;
-            continue;
-        }
-        switch ((s8)check) {
-            case 0:
-                entry->glyph = MSG_GLYPH_END;
-                entry->time = time;
-                data->parseTime = time;
-                data->parseX = x;
-                data->parseY = y;
-                data->parsePage = savedPage;
-                data->parseScroll = savedScroll;
-                return;
-            case '\n':
-            entry->glyph = MSG_GLYPH_NEWLINE;
-                entry->time = time;
-                x = 0;
-                if (0.0f == maxScale) {
-                    maxScale = 1.0f;
-                }
-                y -= 32.0f * maxScale;
-                savedScroll -= 32.0f * maxScale;
-msg++;
-                entry++;
-                time += step;
-                data->charCount++;
-                maxScale = 0.0f;
-                if (data->flags & MSG_WIN_FLAG_SELECT) {
-                    flags &= ~MSG_CHAR_SEL_ROW_MASK;
-                    flags |= MSG_CHAR_SEL_ROW(data->numSel);
-                    data->numSel++;
-}
-continue;
-            case '<':
-                next = msgGetCommand((char*)msg + 1, tag, args);
-                msg = next;
-                /* FAKE: dead int guard (COLOURING W): msg is redefined in the arm while next is still live
-                   (the later newline test on next), so msg/next interfere and the target copy mr r21,r15 survives */
-                {
-                    s32 gz = 0;
-                    if (gz != 0) {
-                        msg++;
-                    }
-                }
-                if ((strcmp(tag, "k") == 0) || (strcmp(tag, "key") == 0)) {
-                    entry->glyph = MSG_GLYPH_KEY;
-                    entry->x = savedPage;
-                    entry->time = time;
-                    time += 100;
-                    entry++;
-                    data->charCount++;
-                    savedPage++;
-                } else if (strcmp(tag, "keyxon") == 0) {
-                    data->flags |= MSG_WIN_FLAG_KEY_X;
-                } else if ((strcmp(tag, "p") == 0) || (strcmp(tag, "scrl_auto") == 0)) {
-                    if (savedScroll != 0) {
-                        entry->glyph = MSG_GLYPH_SCROLL;
-                        entry->y = savedScroll - 3;
-                        topY = y - 6;
-                        y -= 3;
-                        entry->time = time;
-                        time += 0x32;
-                        entry++;
-                        savedScroll = 0;
-                        data->charCount++;
-                    }
-                } else if ((strcmp(tag, "o") == 0) || (strcmp(tag, "once_stop") == 0)) {
-                    entry->glyph = MSG_GLYPH_ONCE_STOP;
-                    entry->time = time;
-                    time += 0x32;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "pos") == 0) {
-                    sscanf(args, "%d%d", &posX, &posY);
-                    x = posX;
-                    if (posY != 999) {
-                        y = topY - posY;
-                    }
-                    savedScroll = -posY;
-} else if (strcmp(tag, "scale") == 0) {
-                    sscanf(args, "%f", &scale);
-                } else if (strcmp(tag, "/scale") == 0) {
-                    scale = 1.0f;
-} else if (strcmp(tag, "wait") == 0) {
-                    sscanf(args, "%d", &waitTime);
-                    time += waitTime;
-                } else if (strcmp(tag, "speed") == 0) {
-                    sscanf(args, "%d", &step);
-                } else if (strcmp(tag, "/speed") == 0) {
-                    step = data->parseSpeed;
-                } else if (strcmp(tag, "dynamic") == 0) {
-                    sscanf(args, "%f", &fv); // a <dynamic> tag without a number would leave dynScale unset
-                    flags |= MSG_CHAR_DYNAMIC;
-                } else if (strcmp(tag, "/dynamic") == 0) {
-                    flags &= ~MSG_CHAR_DYNAMIC;
-                } else if (strcmp(tag, "shake") == 0) {
-                    flags |= MSG_CHAR_SHAKE;
-                } else if (strcmp(tag, "/shake") == 0) {
-                    flags &= ~MSG_CHAR_SHAKE;
-                } else if (strcmp(tag, "wave") == 0) {
-                    flags |= MSG_CHAR_WAVE;
-                } else if (strcmp(tag, "/wave") == 0) {
-                    flags &= ~MSG_CHAR_WAVE;
-                } else if (strcmp(tag, "col") == 0) {
-                    sscanf(args, "%x", &entry->value);
-                    entry->glyph = MSG_GLYPH_COLOR;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "/col") == 0) {
-                    entry->value = 0xFF;
-                    entry->glyph = MSG_GLYPH_COLOR;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "noise") == 0) {
-                    entry->value = 1;
-                    entry->glyph = MSG_GLYPH_NOISE;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "/noise") == 0) {
-                    entry->value = 0;
-                    entry->glyph = MSG_GLYPH_NOISE;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "dkey") == 0) {
-                    entry->value = 1;
-                    entry->glyph = MSG_GLYPH_DKEY;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "/dkey") == 0) {
-                    entry->value = 0;
-                    entry->glyph = MSG_GLYPH_DKEY;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "plate") == 0) {
-                    window->type = WINDOW_TYPE_PLATE;
-                    step = 0;
-                    data->parseSpeed = 0;
-                } else if (strcmp(tag, "system") == 0) {
-                    static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
-                    window->type = WINDOW_TYPE_SYSTEM;
-                    entry->value = *((const u32*)(&c));
-                    entry->glyph = MSG_GLYPH_COLOR;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "tec") == 0) {
-                    static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
-                    window->type = WINDOW_TYPE_TEC;
-                    entry->value = *((const u32*)(&c));
-                    entry->glyph = MSG_GLYPH_COLOR;
-                    entry->time = time;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "majo") == 0) {
-                    window->type = WINDOW_TYPE_MAJO;
-                } else if (strcmp(tag, "diary") == 0) {
-                    window->type = WINDOW_TYPE_DIARY;
-                } else if (strcmp(tag, "housou") == 0) {
-                    window->type = WINDOW_TYPE_HOUSOU;
-                } else if (strcmp(tag, "boss") == 0) {
-                    window->type = WINDOW_TYPE_BOSS;
-                } else if (strcmp(tag, "kanban") == 0) {
-                    window->type = WINDOW_TYPE_KANBAN;
-                    step = 0;
-                    data->parseSpeed = 0;
-                } else if (strcmp(tag, "small") == 0) {
-                    window->type = WINDOW_TYPE_SMALL;
-                    data->flags |= MSG_WIN_FLAG_SMALL;
-                } else if (strcmp(tag, "clear") == 0) {
-                    window->type = WINDOW_TYPE_CLEAR;
-                } else if (strcmp(tag, "wpos") == 0) {
-                    sscanf(args, "%hd%hd%hd%hd", &winX, &winY, &winWidth, &winHeight);
-                    window->flags |= WINDOW_FLAG_WPOS;
-                    window->x = winX;
-                    window->y = winY;
-                    window->width = winWidth;
-                    window->height = winHeight;
-                } else if (strcmp(tag, "select") == 0) {
-                    window->type = WINDOW_TYPE_SELECT;
-                    data->flags |= MSG_WIN_FLAG_SELECT;
-                    // BUG: five %hd for four pointers; a fifth number in the tag would be written through a stray argument
-                    sscanf(args, "%hd%hd%hd%hd%hd", &sel0, &sel1, &data->selWidth, &data->selY);
-                    flags |= MSG_CHAR_SEL_ROW(0);
-                    data->defSel = sel0;
-                    data->cancel = sel1;
-                    data->numSel = 1;
-                    step = 0;
-                } else if (strcmp(tag, "se") == 0) {
-                    sscanf(args, "%d", &entry->value);
-                    entry->glyph = MSG_GLYPH_SE;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "vol") == 0) {
-                    sscanf(args, "%d", &entry->value);
-                    entry->glyph = MSG_GLYPH_VOL;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "nowinse") == 0) {
-                    window->flags |= WINDOW_FLAG_NOWINSE;
-                } else if (strcmp(tag, "icon") == 0) {
-                    if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
-                        sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &iconOffX, &iconY, &iconAdvance);
-                    } else {
-                        sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
-                        iconId = msgIconStr2ID(name);
-                        if (iconId < 0) {
-                            iconId = 0;
-                        }
-                    }
-{
-                        entry->value = iconId;
-                        // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
-                        ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
-                        entry->glyph = MSG_GLYPH_ICON;
-                        entry->x = (x + ((0.5f * iw) * iconScale)) + iconOffX;
-                        x += 0x28;
-                        entry->y = y - (ih * iconScale);
-                        entry->iconY = iconY;
-                        entry->scale = iconScale;
-                        entry->time = time;
-                        entry++;
-                        time += step;
-                        data->charCount++;
-                    }
-} else if (strcmp(tag, "anim") == 0) {
-                    sscanf(args, "%s%s%d%d%f%d", anim1, anim2, &animX, &animY, &animScale, &animFlip);
-                    entry->value = animPoseEntry(anim1, 2);
-                    animPoseSetAnim(entry->value, anim2, 1);
-                    animPoseSetMaterialFlagOn(entry->value, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
-                    animPoseSetMaterialFlagOff(entry->value, MAP_OBJ_FLAG_COLOR);
-                    /* FAKE: one-trip loop (j is dead here); it enables the backend array-to-register pass that removes the zz/z3/z4 stores */
-                    for (j = 0; j < 1; j++) {
-                        animPoseSetGXFunc(msgw->poseId, msgDispKeyWait_render, 0);
-                    }
-                    entry->glyph = MSG_GLYPH_ANIM;
-                    entry->x = animX;
-                    entry->y = topY - animY;
-                    entry->scale = animScale;
-                    entry->rot = (animFlip == 0) ? (0.0f) : (180.0f);
-                    entry++;
-                    time += step;
-                    data->charCount++;
-                } else if (strcmp(tag, "paper") == 0) {
-                    sscanf(args, "%s%d", paper, &paperTime);
-                    entry->npc = (strcmp(paper, "me") != 0) ? npcNameToPtr(paper) : NULL;
-                    entry->glyph = MSG_GLYPH_PAPER;
-                    entry->time = paperTime;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "/paper") == 0) {
-                    sscanf(args, "%s", paper2);
-                    entry->npc = (strcmp(paper2, "me") != 0) ? npcNameToPtr(paper2) : NULL;
-                    entry->glyph = MSG_GLYPH_PAPER_END;
-                    entry++;
-                    data->charCount++;
-                } else if (strcmp(tag, "r") == 0) {
-                    data2 = data;
-                    if (data->window->type != WINDOW_TYPE_SMALL) {
-                        rubyX = x; // a <R...> tag without an <r> before it would read rubyX unset
-                    }
-                } else if ((((s8*)tag)[0] == 'R') || ((((s8*)tag)[0] == '/') && (((u32)((s8*)tag)[0]) == 0x2F72))) {
-                    // BUG: the closing test compares one character with '/r' (0x2F72, a two-character constant), so it
-                    // is always false and only <R...> tags are handled here
-                    i = 1;
-                    if (((s8*)tag)[0] != 'R') {
-                        i = 2;
-                    }
-                    if (data->window->type == WINDOW_TYPE_SMALL) {
-                        continue;
-                    }
-                    half = ((s32)strlen(tag + i)) / 2;
-                    total = 0;
-                    j = i;
-                    // FAKE: (u32) index casts here and in the second loop stop the IR optimizer from strength-reducing tag[j]/tag[i]; the backend
-                    // does it instead and its pointer-IV init in the preheader keeps the dead j/i steps alive, as in the target (FAKES.md)
-                    for (k = 0; k < half; k++) {
-                        glyph = kanjiSearch(*(u16*)&tag[(u32)j]);
-                        total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
-                        j += 2;
-                    }
-                    total = (u16)total - (0.55f * (4.0f * scale));
-                    rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
-                    yx[0] = y;
-                    ys[0] = y;
-                    fp[0] = flags & MSG_CHAR_DYNAMIC;
-                    fx[0] = flags & MSG_CHAR_DYNAMIC;
-                    nn[0] = i;
-                    *(int*)zz = 0;
-                    *(int*)z3 = 1;
-                    *(int*)z4 = 2;
-                    for (kR = zz[0] + z3[0] + z4[0] - 3; kR < half; kR++) {
-                        // FAKE: dead guard (never runs) redefining fp and ys at the ruby loop top; without it the whole
-                        // function colours differently and gains an instruction (FAKES.md)
-                        {
-                            s32 gz = 0;
-                            if (gz != 0) {
-                                fp[0] = fx[0];
-                                ys[0] = yx[0] + ys[0];
-                            }
-                        }
-                        glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
-                        wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
-                        entry->glyph = glyph;
-                        entry->x = rubyX;
-                        entry->y = ys[0];
-                        entry->scale = 0.55f * scale;
-                        entry->value = flags;
-                        if (fp[0]) {
-                            entry->rot = fv;
-                        }
-                        fx[0] = fp[0];
-                        yx[0] = ys[0];
-                        entry->time = 0;
-                        rubyX += wwR;
-                        entry++;
-                        data->charCount++;
-                        nn[0] += 2;
-                    }
-                    continue;
-                }
-                if ((*((const s8*)next)) == '\n') {
-                    msg++;
-                }
-                continue;
-            default:
-                if ((((gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
-                    glyphD = kanjiSearch((u16)(check + 0x821F));
-                } else {
-                    glyphD = hankakuSearch(check);
-                }
-                wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
-                entry->glyph = glyphD;
-                entry->x = x;
-                entry->y = y - (s16)(10.0f * scale);
-                entry->scale = scale;
-                entry->value = flags;
-                if ((*((const s8*)msg)) != ' ') {
-                    entry->value |= MSG_CHAR_TALK;
-                }
-                if (flags & MSG_CHAR_DYNAMIC) {
-                    entry->rot = fv;
-                }
-                if (maxScale < scale) {
-                    maxScale = scale;
-                }
-                entry->time = time;
-                x += wwD;
-                msg++;
-                time += step;
-                entry++;
-                data->charCount++;
-                continue;
-        }
-    }
-}
 #else
 void msgAnalize(smartEntry* smart, char* msg) {
+#endif
     u16 glyphD;
     s32 wwD;
     s32 wwR;
@@ -1892,6 +845,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
     char paper[0x20];
     char paper2[0x20];
     s32 step;
+#if VERSION <= VERSION_DEMO_US
+f32 scale;
+#else
 #if VERSION >= VERSION_US
     Vec scale; // US: x and y scale apart (<scaleX>)
     u32 maxW; // US: widest line so far, becomes the window width
@@ -1901,8 +857,10 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #if VERSION == VERSION_EU
     s32 centerStart; // PAL: first character of the open <center> span
 #endif
+#endif
     f32 fv;
     s32 posX;
+    // FAKE: int, not s32 (same width/sign; changes colouring)
     int posY;
     s32 waitTime;
     s32 iconId;
@@ -1912,6 +870,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     s32 iconAdvance;
     f32 iconScale;
     s32 animX;
+    // FAKE: int, not s32 (same width/sign; changes colouring)
     int animY;
     s32 animFlip;
     f32 animScale;
@@ -1925,8 +884,15 @@ void msgAnalize(smartEntry* smart, char* msg) {
     u16 iw;
     u16 ih;
     f32 maxScale;
+#if VERSION <= VERSION_DEMO_US
+    const char* next;
+#if VERSION == VERSION_DEMO_JP
+    BOOL isHM;
+#endif
+#else
     char* next;
     BOOL isHM;
+#endif
     s32 i;
     s32 j;
     s32 k;
@@ -1939,6 +905,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
     entry = &data->entries[data->charCount];
     flags = 0;
     maxScale = 0.0f;
+#if VERSION <= VERSION_DEMO_US
+    scale = 1.0f;
+#else
 #if VERSION >= VERSION_US
     {
         Vec one = {1.0f, 1.0f, 1.0f};
@@ -1950,6 +919,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
 #else
     scale = 1.0f;
+#endif
 #endif
     if (window->type < 0) {
         window->type = WINDOW_TYPE_NORMAL;
@@ -1967,12 +937,20 @@ void msgAnalize(smartEntry* smart, char* msg) {
         switch (window->type) {
         case WINDOW_TYPE_SYSTEM: {
             static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
+#if VERSION <= VERSION_DEMO_US
+                    entry->value = *((const u32*)(&c));
+#else
             entry->value = *(u32*)&c;
+#endif
             break;
         }
         case WINDOW_TYPE_TEC: {
             static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
+#if VERSION <= VERSION_DEMO_US
+                    entry->value = *((const u32*)(&c));
+#else
             entry->value = *(u32*)&c;
+#endif
             break;
         }
         }
@@ -1986,6 +964,34 @@ void msgAnalize(smartEntry* smart, char* msg) {
     }
 
     while (TRUE) {
+#if VERSION <= VERSION_DEMO_US
+{
+            s32 gz = 0;
+            if (gz != 0) {
+                y = 0;
+            }
+        }
+        check = *((const u8*)msg);
+        if (_ismbblead((u8)check)) {
+            glyph = kanjiSearch(*((const u16*)msg));
+            ww = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
+            entry->glyph = glyph;
+            entry->x = x;
+            entry->y = y - (s16)(10.0f * scale);
+            entry->scale = scale;
+            entry->value = flags;
+            if ((*((const u16*)msg)) == 0x8145) {
+                entry->value |= MSG_CHAR_VOICE;
+            } else if (((*((const u16*)msg)) != 0x8140) && ((*((const u16*)msg)) != 0x8151)) {
+                entry->value |= MSG_CHAR_TALK;
+            }
+            if ((flags & MSG_CHAR_DYNAMIC) != 0) {
+                entry->rot = fv;
+            }
+            if (maxScale < scale) {
+                maxScale = scale;
+            }
+#else
         check = *(u8*)msg;
 #if VERSION >= VERSION_US
         if (_ismbblead((s8)check)) {
@@ -2027,6 +1033,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 maxScale = scale;
             }
 #endif
+#endif
             entry->time = time;
             x += ww;
             msg += 2;
@@ -2039,6 +1046,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
         case 0:
             entry->glyph = MSG_GLYPH_END;
             entry->time = time;
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             if (data->selWidth == 0) {
                 if (maxW < x) {
@@ -2046,6 +1054,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
                 data->selWidth = maxW + 80;
             }
+#endif
 #endif
             data->parseTime = time;
             data->parseX = x;
@@ -2056,12 +1065,20 @@ void msgAnalize(smartEntry* smart, char* msg) {
         case '\n':
             entry->glyph = MSG_GLYPH_NEWLINE;
             entry->time = time;
+#if VERSION <= VERSION_DEMO_US
+                x = 0;
+#else
 #if VERSION < VERSION_US
             x = 0;
+#endif
 #endif
             if (0.0f == maxScale) {
                 maxScale = 1.0f;
             }
+#if VERSION <= VERSION_DEMO_US
+                y -= 32.0f * maxScale;
+                savedScroll -= 32.0f * maxScale;
+#else
 #if VERSION >= VERSION_US
             if (data->flags & MSG_WIN_FLAG_SMALL) {
                 // US: tighter line spacing
@@ -2075,6 +1092,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             y -= 32.0f * maxScale;
             savedScroll -= 32.0f * maxScale;
 #endif
+#endif
             msg++;
             entry++;
             time += step;
@@ -2084,6 +1102,12 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 flags &= ~MSG_CHAR_SEL_ROW_MASK;
                 flags |= MSG_CHAR_SEL_ROW(data->numSel);
                 data->numSel++;
+#if VERSION <= VERSION_DEMO_US
+}
+continue;
+            case '<':
+                next = msgGetCommand((char*)msg + 1, tag, args);
+#else
 #if VERSION >= VERSION_US
                 if (data->selWidth == 0) {
                     if (maxW < x) {
@@ -2098,6 +1122,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             continue;
         case '<':
             next = msgGetCommand(msg + 1, tag, args);
+#endif
             msg = next;
             /* FAKE: dead int guard (COLOURING W): msg is redefined in the arm while next is still live
                (the later newline test on next), so msg/next interfere and the target copy mr r21,r15 survives */
@@ -2107,7 +1132,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     msg++;
                 }
             }
+#if VERSION <= VERSION_DEMO_US
+                if ((strcmp(tag, "k") == 0) || (strcmp(tag, "key") == 0)) {
+#else
             if (strcmp(tag, "k") == 0 || strcmp(tag, "key") == 0) {
+#endif
                 entry->glyph = MSG_GLYPH_KEY;
                 entry->x = savedPage;
                 entry->time = time;
@@ -2117,7 +1146,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 savedPage++;
             } else if (strcmp(tag, "keyxon") == 0) {
                 data->flags |= MSG_WIN_FLAG_KEY_X;
+#if VERSION <= VERSION_DEMO_US
+                } else if ((strcmp(tag, "p") == 0) || (strcmp(tag, "scrl_auto") == 0)) {
+#else
             } else if (strcmp(tag, "p") == 0 || strcmp(tag, "scrl_auto") == 0) {
+#endif
                 if (savedScroll != 0) {
                     entry->glyph = MSG_GLYPH_SCROLL;
                     entry->y = savedScroll - 3;
@@ -2129,7 +1162,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     savedScroll = 0;
                     data->charCount++;
                 }
+#if VERSION <= VERSION_DEMO_US
+                } else if ((strcmp(tag, "o") == 0) || (strcmp(tag, "once_stop") == 0)) {
+#else
             } else if (strcmp(tag, "o") == 0 || strcmp(tag, "once_stop") == 0) {
+#endif
                 entry->glyph = MSG_GLYPH_ONCE_STOP;
                 entry->time = time;
                 time += 0x32;
@@ -2140,6 +1177,14 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 x = posX;
                 if (posY != 999) {
                     y = topY - posY;
+#if VERSION <= VERSION_DEMO_US
+                    }
+                    savedScroll = -posY;
+} else if (strcmp(tag, "scale") == 0) {
+                    sscanf(args, "%f", &scale);
+                } else if (strcmp(tag, "/scale") == 0) {
+                    scale = 1.0f;
+#else
 #if VERSION >= VERSION_US
                     savedScroll = -posY;
                 }
@@ -2163,6 +1208,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 sscanf(args, "%f", &scale);
             } else if (strcmp(tag, "/scale") == 0) {
                 scale = 1.0f;
+#endif
 #endif
             } else if (strcmp(tag, "wait") == 0) {
                 sscanf(args, "%d", &waitTime);
@@ -2226,7 +1272,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "system") == 0) {
                 static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
                 window->type = WINDOW_TYPE_SYSTEM;
+#if VERSION <= VERSION_DEMO_US
+                    entry->value = *((const u32*)(&c));
+#else
                 entry->value = *(u32*)&c;
+#endif
                 entry->glyph = MSG_GLYPH_COLOR;
                 entry->time = time;
                 entry++;
@@ -2234,7 +1284,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "tec") == 0) {
                 static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
                 window->type = WINDOW_TYPE_TEC;
+#if VERSION <= VERSION_DEMO_US
+                    entry->value = *((const u32*)(&c));
+#else
                 entry->value = *(u32*)&c;
+#endif
                 entry->glyph = MSG_GLYPH_COLOR;
                 entry->time = time;
                 entry++;
@@ -2266,6 +1320,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "select") == 0) {
                 window->type = WINDOW_TYPE_SELECT;
                 data->flags |= MSG_WIN_FLAG_SELECT;
+                // BUG: five %hd for four pointers; a fifth number in the tag would be written through a stray argument
                 sscanf(args, "%hd%hd%hd%hd%hd", &sel0, &sel1, &data->selWidth, &data->selY);
                 flags |= MSG_CHAR_SEL_ROW(0);
                 data->defSel = sel0;
@@ -2284,6 +1339,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 data->charCount++;
             } else if (strcmp(tag, "nowinse") == 0) {
                 window->flags |= WINDOW_FLAG_NOWINSE;
+#if VERSION <= VERSION_DEMO_US
+                } else if (strcmp(tag, "icon") == 0) {
+#if VERSION == VERSION_DEMO_JP
+                    isHM = FALSE;
+#endif
+                    if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
+#else
 #if VERSION == VERSION_EU
             } else if (strcmp(tag, "center") == 0) {
                 centerStart = data->charCount;
@@ -2300,17 +1362,39 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "icon") == 0) {
                 isHM = FALSE;
                 if ((s8)args[0] >= '0' && (s8)args[0] <= '9') {
+#endif
                     sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &iconOffX, &iconY, &iconAdvance);
                 } else {
                     sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+                        if (strcmp(name, "HM") == 0) {
+                            isHM = TRUE;
+                        }
+#endif
+#else
                     if (strcmp(name, "HM") == 0) {
                         isHM = TRUE;
                     }
+#endif
                     iconId = msgIconStr2ID(name);
                     if (iconId < 0) {
                         iconId = 0;
                     }
                 }
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+                    if (!isHM)
+#endif
+{
+                        entry->value = iconId;
+                        // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
+                        ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
+                        entry->glyph = MSG_GLYPH_ICON;
+                        entry->x = (x + ((0.5f * iw) * iconScale)) + iconOffX;
+                        x += 0x28;
+                        entry->y = y - (ih * iconScale);
+#else
                 if (!isHM) {
                     entry->value = iconId;
                     iconGetWidthHight(&iw, &ih, (u16)iconId);
@@ -2320,10 +1404,37 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     x += 0x28;
 #endif
                     entry->y = y - ih * iconScale;
+#endif
                     entry->iconY = iconY;
                     entry->scale = iconScale;
                     entry->time = time;
                     entry++;
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+                        time += step;
+                        data->charCount++;
+                    }
+                    else {
+                        glyph = kanjiSearch(0x94B5);
+                        iw = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
+                        entry->glyph = glyph;
+                        entry->x = x;
+                        entry->y = y - (s16)(10.0f * scale);
+                        entry->scale = scale;
+                        entry->value = flags;
+                        entry->value |= MSG_CHAR_TALK;
+                        if (flags & MSG_CHAR_DYNAMIC) {
+
+                            entry->rot = fv;
+                        }
+                        if (maxScale < scale) {
+                            maxScale = scale;
+                        }
+                        entry->time = time;
+                        entry++;
+                        x += iw;
+#endif
+#else
 #if VERSION >= VERSION_US
                     x += iconAdvance + 0x28;
 #endif
@@ -2368,6 +1479,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     entry->time = time;
                     entry++;
                     x += iw;
+#endif
                     time += step;
                     data->charCount++;
                 }
@@ -2375,7 +1487,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 sscanf(args, "%s%s%d%d%f%d", anim1, anim2, &animX, &animY, &animScale, &animFlip);
                 entry->value = animPoseEntry(anim1, 2);
                 animPoseSetAnim(entry->value, anim2, 1);
+#if VERSION <= VERSION_DEMO_US
+                    animPoseSetMaterialFlagOn(entry->value, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
+#else
                 animPoseSetMaterialFlagOn(entry->value, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
+#endif
                 animPoseSetMaterialFlagOff(entry->value, MAP_OBJ_FLAG_COLOR);
                 /* FAKE: one-trip loop (j is dead here); it enables the backend array-to-register pass that removes the zz/z3/z4 stores */
                 for (j = 0; j < 1; j++) {
@@ -2385,7 +1501,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry->x = animX;
                 entry->y = topY - animY;
                 entry->scale = animScale;
+#if VERSION <= VERSION_DEMO_US
+                    entry->rot = (animFlip == 0) ? (0.0f) : (180.0f);
+#else
                 entry->rot = (animFlip == 0) ? 0.0f : 180.0f;
+#endif
                 entry++;
                 time += step;
                 data->charCount++;
@@ -2403,12 +1523,21 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "r") == 0) {
+#if VERSION <= VERSION_DEMO_US
+                    data2 = data;
+#endif
                 if (data->window->type != WINDOW_TYPE_SMALL) {
                     rubyX = x;
                 }
+#if VERSION <= VERSION_DEMO_US
+                } else if ((((s8*)tag)[0] == 'R') || ((((s8*)tag)[0] == '/') && (((u32)((s8*)tag)[0]) == 0x2F72))) {
+                    // BUG: the closing test compares one character with '/r' (0x2F72, a two-character constant), so it
+                    // is always false and only <R...> tags are handled here
+#else
             } else if (((s8*)tag)[0] == 'R' || (((s8*)tag)[0] == '/' && (u32)((s8*)tag)[0] == 0x2F72)) {
                 // BUG: the second test compares one byte with 0x2F72 ("/r" as a halfword), so it is never true:
                 // only R tags get here and i is always 1
+#endif
                 i = 1;
                 if (((s8*)tag)[0] != 'R') {
                     i = 2;
@@ -2423,6 +1552,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 // does it instead and its pointer-IV init in the preheader keeps the dead j/i steps alive, as in the target (FAKES.md)
                 for (k = 0; k < half; k++) {
                     glyph = kanjiSearch(*(u16*)&tag[(u32)j]);
+#if VERSION <= VERSION_DEMO_US
+                        total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
+                        j += 2;
+                    }
+                    total = (u16)total - (0.55f * (4.0f * scale));
+                    rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
+#else
 #if VERSION >= VERSION_US
                     // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
                     total += (s32)(0.55f * (scale.y * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
@@ -2440,6 +1576,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
 #endif
                 /* second loop open-coded: kR is its counter and glyph its glyph (split webs, numbered as in the target) */
+#endif
                 yx[0] = y;
                 ys[0] = y;
                 fp[0] = flags & MSG_CHAR_DYNAMIC;
@@ -2449,6 +1586,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 *(int*)z3 = 1;
                 *(int*)z4 = 2;
                 for (kR = zz[0] + z3[0] + z4[0] - 3; kR < half; kR++) {
+                    // FAKE: dead guard (never runs) redefining fp and ys at the ruby loop top; without it the whole
+                    // function colours differently and gains an instruction (FAKES.md)
                     {
                         s32 gz = 0;
                         if (gz != 0) {
@@ -2457,6 +1596,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
                         }
                     }
                     glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
+#if VERSION <= VERSION_DEMO_US
+                        wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
+#else
 #if VERSION >= VERSION_US
                     // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
                     wwR = 0.55f * (scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
@@ -2464,13 +1606,18 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
                     wwR = 0.55f * (scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
 #endif
+#endif
                     entry->glyph = glyph;
                     entry->x = rubyX;
                     entry->y = ys[0];
+#if VERSION <= VERSION_DEMO_US
+                        entry->scale = 0.55f * scale;
+#else
 #if VERSION >= VERSION_US
                     entry->scale = 0.55f * scale.x;
 #else
                     entry->scale = 0.55f * scale;
+#endif
 #endif
                     entry->value = flags;
                     if (fp[0]) {
@@ -2486,17 +1633,34 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
                 continue;
             }
+#if VERSION <= VERSION_DEMO_US
+                if ((*((const s8*)next)) == '\n') {
+#else
             if (*(s8*)next == '\n') {
+#endif
                 msg++;
             }
             continue;
         default:
+#if VERSION <= VERSION_DEMO_US
+                if ((((gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
+#else
             if (gp->language == LANGUAGE_JP && (s8)check >= '0' && (s8)check <= '9') {
                 // full-width digit: '0' + 0x821F is Shift-JIS 0x824F, the full-width zero
+#endif
                 glyphD = kanjiSearch((u16)(check + 0x821F));
             } else {
                 glyphD = hankakuSearch(check);
             }
+#if VERSION <= VERSION_DEMO_US
+                wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
+                entry->glyph = glyphD;
+                entry->x = x;
+                entry->y = y - (s16)(10.0f * scale);
+                entry->scale = scale;
+                entry->value = flags;
+                if ((*((const s8*)msg)) != ' ') {
+#else
 #if VERSION >= VERSION_US
             // FAKE: (u16)(glyphD + 0) re-truncates the argument; kanjiGetWidth(glyphD) changes the object
             wwD = scale.x * (f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2);
@@ -2514,11 +1678,17 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
             entry->value = flags;
             if (*(s8*)msg != ' ') {
+#endif
                 entry->value |= MSG_CHAR_TALK;
             }
             if (flags & MSG_CHAR_DYNAMIC) {
                 entry->rot = fv;
             }
+#if VERSION <= VERSION_DEMO_US
+                if (maxScale < scale) {
+                    maxScale = scale;
+                }
+#else
 #if VERSION >= VERSION_US
             if (maxScale < scale.y) {
                 maxScale = scale.y;
@@ -2527,6 +1697,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             if (maxScale < scale) {
                 maxScale = scale;
             }
+#endif
 #endif
             entry->time = time;
             x += wwD;
@@ -2538,7 +1709,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
         }
     }
 }
-#endif
 #pragma opt_lifetimes reset
 
 /** Returns the message driver's work (loaded files and the key-wait star pose). */
