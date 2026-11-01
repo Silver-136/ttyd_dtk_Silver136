@@ -848,7 +848,7 @@ s32 winLogMain(WindowWork* w) {
             winMsgEntry(w, 0, w->log.menu[w->log.cursor].msg, 0);
             break;
         case 10:
-if (!fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName()))
+if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U)
                 break;
 if (!w->mapRes) {
 w->mapRes = fileAllocf(FILE_TYPE_TPL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName());
@@ -1150,7 +1150,7 @@ if (t->big) {
             }
             w->helpTgtX = w->log.recipe.cursor % 28 % 7 * 56 - 140;
             w->helpTgtY = 90 - w->log.recipe.cursor % 28 / 7 * 56;
-            if (swGet(WIN_RECIPE_COOKED_SW(w->log.recipeIds[w->log.recipe.cursor]))) {
+            if (swGet(0x41 + w->log.recipeIds[w->log.recipe.cursor])) {
                 winMsgEntry(w, -2, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].menu_description, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].name);
             } else {
                 winMsgEntry(w, -2, "msg_menu_stone_none_help", "msg_menu_stone_none_name");
@@ -1874,7 +1874,7 @@ winTexInit(*w->res->data);
         winHakoGX(w, 1, x + w->log.recipe.x, y + w->log.recipe.y);
 winTexInit(*w->res->data);
         winTexSet(0x96, (Vec){x + w->log.recipe.iconX, y + w->log.recipe.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
-        if (swGet(WIN_RECIPE_COOKED_SW(w->log.recipeIds[w->log.recipe.cursor]))) {
+        if (swGet(0x41 + w->log.recipeIds[w->log.recipe.cursor])) {
             winIconInit();
             winIconSet(itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].icon_id, (Vec){x + w->log.recipe.iconX, (y + w->log.recipe.iconY) - 10.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         }
@@ -2376,9 +2376,9 @@ GXTexObj tex;
         return;
     switch (m->state) {
         case 0:
-            if (!fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]))
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U)
                 break;
-if (!fileAsyncf(FILE_TYPE_RAW, NULL, WIN_DIR "jp/mono.dat", getMarioStDvdRoot()))
+if (fileAsyncf(FILE_TYPE_RAW, NULL, WIN_DIR "jp/mono.dat", getMarioStDvdRoot()) == 0U)
                 break;
 m->file1 = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
 m->file2 = fileAllocf(FILE_TYPE_RAW, WIN_DIR "jp/mono.dat", getMarioStDvdRoot());

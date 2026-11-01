@@ -42,15 +42,31 @@ int select_comp_bteresa(void* a, void* b);
 #endif
 
 void select_main(WinMgrEntry* entry);
+#if VERSION <= VERSION_DEMO_US
+static void select_disp(WinMgrEntry* entry);
+#else
 void select_disp(WinMgrEntry* entry);
+#endif
+#if VERSION <= VERSION_DEMO_US
+static void select_disp_party(WinMgrEntry* entry);
+#else
 void select_disp_party(WinMgrEntry* entry);
+#endif
 void select_disp_mario(WinMgrEntry* entry);
+#if VERSION <= VERSION_DEMO_US
+static void select_disp_luigi(WinMgrEntry* entry);
+#else
 void select_disp_luigi(WinMgrEntry* entry);
+#endif
 void select_disp2(WinMgrEntry* entry);
 void select_main3(WinMgrEntry* entry);
 void select_disp3(WinMgrEntry* entry);
 void select_disp3_party(WinMgrEntry* entry);
+#if VERSION <= VERSION_DEMO_US
+static void select_disp3_mario(WinMgrEntry* entry);
+#else
 void select_disp3_mario(WinMgrEntry* entry);
+#endif
 void winMgrSeq(WinMgrEntry* entry);
 int select_comp_type(void* a, void* b);
 int select_comp_starpiece(void* a, void* b);
@@ -172,6 +188,12 @@ static const char name_party5[12];
 static const char name_party2[12];
 static const char name_party6[12];
 
+#if VERSION <= VERSION_DEMO_US
+// The demos keep these two as real functions at the end of the file.
+static const char* party_name_table_rtn(s32 id);
+static s32 iconid_conv(s32 icon);
+#define select_party_name party_name_table_rtn
+#else
 static inline const char* select_party_name(u16 id) {
     const char* name;
     switch (id) {
@@ -199,6 +221,7 @@ static inline const char* select_party_name(u16 id) {
     }
     return name;
 }
+#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_80239b2c, JP 0x80239B2C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
@@ -1643,7 +1666,6 @@ static void select_disp(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     u32 left, top, wd, ht;
     GXColor black = {0x00, 0x00, 0x00, 0xFF};
-    GXColor gray = {0xA0, 0xA0, 0xA0, 0xFF};
     GXColor tmp;
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
     GXColor iconcol;
@@ -1970,6 +1992,7 @@ void select_disp(WinMgrEntry* entry) {
 }
 #endif
 
+#if VERSION > VERSION_DEMO_US
 static inline s32 select_party_icon(u16 id) {
     s32 icon = party_icon_table[id];
     if (icon == ICON_PARTY_YOSHI) {
@@ -2000,6 +2023,7 @@ static inline s32 select_party_icon(u16 id) {
     }
     return icon;
 }
+#endif
 
 /**
  * Draws the partner list of the rank-up and rank-swap menus:
@@ -2046,7 +2070,7 @@ if (sel->items[i].flags & SELECT_ITEM_GRAY) {
             } else {
                 winIconInit();
             }
-            winIconSet(select_party_icon(party_icon_table[sel->items[i].id]), (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
+            winIconSet(iconid_conv(party_icon_table[sel->items[i].id]), (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
 winIconInit();
             for (j = 0; j < pouch->partyData[party_id_table[sel->items[i].id]].techLevel; j++) {
 winIconSet(ICON_ITEM_SHINE_SPRITE, (Vec){entry->x + 253 + j * 27, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
@@ -2639,3 +2663,65 @@ static const char name_party4[] = "name_party4";
 static const char name_party5[] = "name_party5";
 static const char name_party2[] = "name_party2";
 static const char name_party6[] = "name_party6";
+
+#if VERSION <= VERSION_DEMO_US
+/** Swaps Yoshi's portrait icon for the one in the colour he hatched with; other icons pass through. */
+static s32 iconid_conv(s32 icon) {
+    if (icon == ICON_PARTY_YOSHI) {
+        switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+            case 0:
+                icon = ICON_PARTY_YOSHI;
+                break;
+            case 1:
+                icon = ICON_PARTY_YOSHI_1;
+                break;
+            case 2:
+                icon = ICON_PARTY_YOSHI_2;
+                break;
+            case 3:
+                icon = ICON_PARTY_YOSHI_3;
+                break;
+            case 4:
+                icon = ICON_PARTY_YOSHI_4;
+                break;
+            case 5:
+                icon = ICON_PARTY_YOSHI_5;
+                break;
+            case 6:
+            default:
+                icon = ICON_PARTY_YOSHI_6;
+                break;
+        }
+    }
+    return icon;
+}
+
+/** A partner's display name by party_id_table index (Yoshi's is the name the player gave him). */
+static const char* party_name_table_rtn(s32 id) {
+    const char* name;
+    switch (id) {
+        case 0:
+            name = msgSearch(name_party0);
+            break;
+        case 1:
+            name = msgSearch(name_party1);
+            break;
+        case 2:
+            name = msgSearch(name_party4);
+            break;
+        case 3:
+            name = pouchGetYoshiName();
+            break;
+        case 4:
+            name = msgSearch(name_party5);
+            break;
+        case 5:
+            name = msgSearch(name_party2);
+            break;
+        case 6:
+            name = msgSearch(name_party6);
+            break;
+    }
+    return name;
+}
+#endif

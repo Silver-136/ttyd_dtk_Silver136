@@ -178,8 +178,13 @@ static inline BOOL loadStart(void);
 
 #else
 static inline BOOL loadStart(void) {
+#if VERSION <= VERSION_DEMO_US
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/window/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
+        wp->file = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/name.tpl", getMarioStDvdRoot());
+#else
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
         wp->file = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/name.tpl", getMarioStDvdRoot());
+#endif
         return TRUE;
     }
     return FALSE;
@@ -500,6 +505,17 @@ if (code == 0) {
                     } else {
                         // demo: the new-game setup runs once the name is in, or after the first save
                         stg0_00_init();
+                        gp->saveSlot = wp->slot;
+                        marioPartyKill();
+                        {
+                            MarioWork* m = marioGetPtr();
+                            m->prevPartyMemberId[0] = 0;
+                            m->prevPartyMemberId[1] = 0;
+                        }
+                        gp->areaFadeInType = FADE_NONE;
+                        gp->areaFadeOutType = FADE_CURTAIN_SIDES_A2_3D;
+                        swInit();
+                        swByteSet(0, STG0_00_PROLOGUE);
                         seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
                     }
 }
@@ -508,6 +524,17 @@ if (code == 0) {
         case 0x23:
             if (!evtCheckID(wp->evt->eventId)) {
 stg0_00_init();
+gp->saveSlot = wp->slot;
+marioPartyKill();
+{
+    MarioWork* m = marioGetPtr();
+    m->prevPartyMemberId[0] = 0;
+    m->prevPartyMemberId[1] = 0;
+}
+gp->areaFadeInType = FADE_NONE;
+gp->areaFadeOutType = FADE_CURTAIN_SIDES_A2_3D;
+swInit();
+swByteSet(0, STG0_00_PROLOGUE);
 seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
             }
             break;
@@ -2118,7 +2145,6 @@ gp->areaFadeInType = FADE_STORY_MARIO_A2;
             break;
         case 23:
             stg0_00_init();
-#if VERSION > VERSION_DEMO_US
             gp->saveSlot = wp->slot;
             marioPartyKill();
             {
@@ -2126,11 +2152,10 @@ gp->areaFadeInType = FADE_STORY_MARIO_A2;
                 m->prevPartyMemberId[0] = 0;
                 m->prevPartyMemberId[1] = 0;
             }
-            gp->areaFadeInType = 0;
-            gp->areaFadeOutType = 25;
+            gp->areaFadeInType = FADE_NONE;
+            gp->areaFadeOutType = FADE_CURTAIN_SIDES_A2_3D;
             swInit();
             swByteSet(0, STG0_00_PROLOGUE);
-#endif
             seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
             break;
         case 24:

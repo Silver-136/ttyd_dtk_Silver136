@@ -1157,8 +1157,8 @@ if (posY != 999) {
                     window->flags |= WINDOW_FLAG_WPOS;
                     window->x = winX;
                     window->y = winY;
-                    window->height = winWidth;
-                    window->width = winHeight;
+                    window->width = winWidth;
+                    window->height = winHeight;
                 } else if (strcmp(tag, "select") == 0) {
                     window->type = WINDOW_TYPE_SELECT;
                     data->flags |= MSG_WIN_FLAG_SELECT;
@@ -1695,8 +1695,8 @@ if (posY != 999) {
                     window->flags |= WINDOW_FLAG_WPOS;
                     window->x = winX;
                     window->y = winY;
-                    window->height = winWidth;
-                    window->width = winHeight;
+                    window->width = winWidth;
+                    window->height = winHeight;
                 } else if (strcmp(tag, "select") == 0) {
                     window->type = WINDOW_TYPE_SELECT;
                     data->flags |= MSG_WIN_FLAG_SELECT;

@@ -972,7 +972,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     char str2[128];
     char str3[128];
     DVDEntry* dvd;
-    MapWork* wo;
+    u8* data;
     MapHeader* header;
 
     error_flag = FALSE;
@@ -1011,11 +1011,11 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     mapLoadHeader_(wp, group);
     header = &wp->entries[group].header;
     info = (MapFileInfo*)mapSearchChunk(header, "information");
-    wo->entries[group].textureTable = mapSearchChunk(header, "texture_table");
-    wo->entries[group].lightTable = mapSearchChunk(header, "light_table");
-    wo->entries[group].fogTable = mapSearchChunk(header, "fog_table");
-    wo->entries[group].materialNameTable = mapSearchChunk(header, "material_name_table");
-    wo->entries[group].vcdTable = mapSearchChunk(header, "vcd_table");
+    wp->entries[group].textureTable = mapSearchChunk(header, "texture_table");
+    wp->entries[group].lightTable = mapSearchChunk(header, "light_table");
+    wp->entries[group].fogTable = mapSearchChunk(header, "fog_table");
+    wp->entries[group].materialNameTable = mapSearchChunk(header, "material_name_table");
+    wp->entries[group].vcdTable = mapSearchChunk(header, "vcd_table");
     {
         MapFileJoint* mapJoint = mapSearchDmdJoint(info->joint, info->mapName);
         MapFileJoint* hitJoint = mapSearchDmdJoint(info->joint, info->hitName);
@@ -1059,16 +1059,16 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         mapResetPaperAmbColor();
         mapResetPaperCraftAmbColor();
         if (wp->entries[group].fogTable != NULL) {
-            wo->entries[group].fogEnable = wp->entries[group].fogTable->enable;
+            wp->entries[group].fogEnable = wp->entries[group].fogTable->enable;
             wp->entries[group].fogType = wp->entries[group].fogTable->type;
             wp->entries[group].fogStart = wp->entries[group].fogTable->start;
             wp->entries[group].fogEnd = wp->entries[group].fogTable->end;
             wp->entries[group].fogColor = wp->entries[group].fogTable->color;
-            if (wo->entries[group].fogEnable != 0) {
+            if (wp->entries[group].fogEnable != 0) {
                 wp->entries[group].flags |= MAP_ENTRY_FOG;
             }
         } else {
-            wo->entries[group].fogEnable = 0;
+            wp->entries[group].fogEnable = 0;
             wp->entries[group].fogType = 0;
             wp->entries[group].fogStart = 0.0f;
             wp->entries[group].fogEnd = 0.0f;
@@ -2036,6 +2036,30 @@ static inline void mapMainLight_lc(MapAnim* anim, LightEntry* lp, MapAnimLightDa
     }
 }
 
+#if VERSION <= VERSION_DEMO_US
+static inline MapMaterial* mapMainFindTbl_(const char* name) {
+    int j;
+    int i;
+
+    MapEntry* entry;
+    MapWork* wp;
+    MapMaterialName* mat;
+    wp = mapGetWork();
+    for (i = 0; i < wp->entries[0].count; i++) {
+        entry = &wp->entries[i];
+        if (!entry->materialNameTable) {
+            return NULL;
+        }
+        for (j = 0; j < entry->materialNameTable->count; j++) {
+            mat = &entry->materialNameTable->entries[j];
+            if (!strcmp(mat->name, name)) {
+                return mat->data;
+            }
+        }
+    }
+    return NULL;
+}
+#else
 static inline MapMaterial* mapMainFindTbl_(const char* name) {
     MapEntry* entry;
     MapWork* wp;
@@ -2058,6 +2082,7 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
     }
     return NULL;
 }
+#endif
 
 // A macro, not an inline function: as a function mapMain changes (together with mapMainAlpha).
 #define mapMainMat(a_, i_, b_, x_)           \

@@ -131,7 +131,11 @@ s32 unitwin_coin_se_wait;
 static UnitWinWork* _wp;
 
 USER_FUNC(evt_unitwin_main_func);
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(evt_unitwin_select_func);
+#else
 USER_FUNC(evt_unitwin_select_func);
+#endif
 void evt_unitwin_disp_func(CameraId cameraId, void* param);
 
 #if VERSION > VERSION_DEMO_US
@@ -1153,7 +1157,6 @@ USER_FUNC(evt_unitwin_main_func) {
     return EVT_RETURN_BLOCK;
 }
 
-#if VERSION > VERSION_DEMO_US
 static inline s32 unitwin_party_icon(s32 icon) {
     if (icon == ICON_PARTY_YOSHI) {
         switch (pouchGetPartyColor(PARTNER_YOSHI)) {
@@ -1183,7 +1186,6 @@ static inline s32 unitwin_party_icon(s32 icon) {
     }
     return icon;
 }
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 #define ICONGX2 ((void (*)(Vec*, u16, f32, u16))iconDispGx)

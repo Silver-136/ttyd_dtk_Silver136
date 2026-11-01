@@ -1523,9 +1523,28 @@ void disp_maku(CameraId camId, void* param) {
             }
     }
     switch (entry->type) {
-        case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C:
-        case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x23:
-        case 0x24: case 0x25: case 0x26: case 0x27: case 0x28: case 0x33: case 0x3F: case 0x40:
+        case FADE_CURTAIN_VERTICAL_A1:
+        case FADE_CURTAIN_VERTICAL_A2:
+        case FADE_CURTAIN_SIDES_A1_3D:
+        case FADE_CURTAIN_SIDES_A2_3D:
+        case FADE_CURTAIN_SIDES_Z1_3D:
+        case FADE_CURTAIN_SIDES_A1:
+        case FADE_CURTAIN_SIDES_A2:
+        case FADE_CURTAIN_CENTER_A1_3D:
+        case FADE_CURTAIN_CENTER_A2_3D:
+        case FADE_CURTAIN_CENTER_Z2_3D:
+        case FADE_CURTAIN_CENTER_Z1_3D:
+        case FADE_CURTAIN_LEAVE_3D:
+        case FADE_CURTAIN_ENTER_3D:
+        case FADE_CURTAIN_CENTER_A1:
+        case FADE_CURTAIN_CENTER_A2:
+        case FADE_CURTAIN_CENTER_Z2:
+        case FADE_CURTAIN_CENTER_Z1:
+        case FADE_CURTAIN_LEAVE:
+        case FADE_CURTAIN_ENTER:
+        case FADE_PAGE_FLIP_FOUR:
+        case FADE_CURTAIN_SIDES_A1_TOP:
+        case FADE_CURTAIN_SIDES_A2_TOP:
             break;
         default:
             return;

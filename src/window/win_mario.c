@@ -690,7 +690,7 @@ numX = rowB - 270.0f;
             char sbuf[0x20];
 
             winFontSetLabel((Vec){x, (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, superActionTable[i]->name);
-            sprintf(sbuf, "%d", superActionTable[i]->baseSpCost);
+            sprintf(sbuf, "%d", (u8)superActionTable[i]->baseSpCost);
             winFontSet((Vec){numX, (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, sbuf);
             winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "\x82\x72\x82\x6F");
         }

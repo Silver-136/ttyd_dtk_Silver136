@@ -33,7 +33,9 @@ double fmod(double x, double y);
 double pow(double x, double y);
 
 #ifdef __MWERKS__
-#define fabs(x) __fabs(x)
+extern inline double fabs(double x) {
+    return __fabs(x);
+}
 #define fabsf(x) __fabsf(x)
 #else
 double fabs(double x);

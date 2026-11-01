@@ -2229,7 +2229,7 @@ break;
                         v = entry->velocityY * dt + (-980.0f * entry->gravityScale) * ((t2 + dt) * (t2 + dt) - t2sq);
                         entry->velocityY = 0.7f * (entry->bounceFactor * (-v / dt));
                     }
-                    peak = __fabs(0.5f * (entry->velocityY / (-980.0f * entry->gravityScale)));
+                    peak = fabs(0.5f * (entry->velocityY / (-980.0f * entry->gravityScale)));
                     height = entry->velocityY * peak + peak * ((-980.0f * entry->gravityScale) * peak);
                     if (!isFloor && height <= 8.0f) {
                         itemModeChange(entry, ITEM_MODE_GROUND);

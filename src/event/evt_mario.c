@@ -32,7 +32,11 @@
 #include "mot/mot_plane.h"
 #include "eff/eff_kemuri.h"
 
+#if VERSION <= VERSION_DEMO_US
+void marioSetForceMove(f32 dir, s32 frames, f32 spd);
+#else
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
+#endif
 
 #define HITOBJ(n, field)                       \
     USER_FUNC(evt_mario_get_name_hitobj_##n) { \
@@ -774,7 +778,11 @@ USER_FUNC(evt_mario_set_dir) {
         event->userdata[2] = 0;
         event->userdataf[1] = mp->displayDirection;
         if (dir > 270.0f) {
+#if VERSION <= VERSION_DEMO_US
+            dir -= evt_mario_full_turn;
+#else
             dir -= 360.0f;
+#endif
         }
     }
     if (event->userdata[2] == 1) {
@@ -785,7 +793,11 @@ USER_FUNC(evt_mario_set_dir) {
     if (frames > 0) {
         target = revise360(270.0f - dir);
         if (target > 270.0f) {
+#if VERSION <= VERSION_DEMO_US
+            target -= evt_mario_full_turn;
+#else
             target -= 360.0f;
+#endif
         }
         target = (target - event->userdataf[1]) * ((f32)event->userdata[0] / (f32)frames);
         mp->displayDirection = revise360(event->userdataf[1] + target);
@@ -845,7 +857,11 @@ USER_FUNC(evt_mario_set_dir_npc) {
     }
     camAngle = camGetPtr(CAMERA_3D)->viewYaw;
     angle = revise360(angleABf(mp->position.x, mp->position.z, npc->position.x, npc->position.z) - camAngle);
+#if VERSION <= VERSION_DEMO_US
+    mp->displayDirectionTarget = angle < evt_mario_half_turn ? evt_mario_half_turn : 0.0f;
+#else
     mp->displayDirectionTarget = angle < 180.0f ? 180.0f : 0.0f;
+#endif
     mp->moveDirection = toMovedirSimple(mp->displayDirectionTarget);
     mp->directionView = mp->moveDirection;
     return EVT_RETURN_DONE;
@@ -1273,7 +1289,11 @@ USER_FUNC(evt_mario_mov_pos) {
         } else {
             spd = distABf(mp->position.x, mp->position.z, x, z) / event->userdata[0];
         }
+#if VERSION <= VERSION_DEMO_US
+        ((void (*)(s32, f32, f32))marioSetForceMove)(event->userdata[0], mp->directionView, spd); // FAKE: argument order of the retail private prototype, needed for register use
+#else
         marioSetForceMove(event->userdata[0], mp->directionView, spd);
+#endif
     }
     if (--event->userdata[0] < 0) {
         return EVT_RETURN_YIELD;
@@ -1299,7 +1319,11 @@ USER_FUNC(evt_mario_mov_pos2) {
             spd *= 0.4f;
         }
         spd /= (f32)gp->framerate;
+#if VERSION <= VERSION_DEMO_US
+        marioSetForceMove(mp->directionView, 1.0f / spd + dist / spd, spd);
+#else
         marioSetForceMove(1.0f / spd + dist / spd, mp->directionView, spd);
+#endif
     }
     if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
         return EVT_RETURN_BLOCK;

@@ -953,6 +953,220 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
 }
 #endif
 
+typedef struct LandonRay {
+    Vec pos;
+    Vec dir;
+} LandonRay;
+
+/** marioHitNrmAngle for marioLandonChk_old: sets groundRot from the normal and returns the slope in degrees. */
+static inline f32 landonNrmAngle(f32 nx, f32 ny, f32 nz) {
+    MarioWork* mario = marioGetPtr();
+    f32 y100 = 100.0f * ny;
+    mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nz, y100) - 180.0f) + 0.5f) / 100.0f;
+    mario->groundRot.y = 0.0f;
+    mario->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nx, y100) - 180.0f) + 0.5f) / 100.0f;
+    return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
+}
+
+/** marioHitCheckVecInl taking the ray as a LandonRay (position and direction), for the landing checks. */
+static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm, f32* dist) {
+    HitCheckQuery query;
+    HitEntry* hit;
+    f32 rf;
+
+    query.targetPos = ray->pos;
+    query.targetDir = ray->dir;
+    query.targetDistance = *dist;
+    if (marioGetPtr()->currMotionId == MARIO_MOTION_VIVIAN) {
+        hit = hitCheckVecFilter(&query, chkfilterVecVivian);
+    } else if (marioGetPtr()->flags & MARIO_FLAG_TUBE_MODE) {
+        hit = hitCheckVecFilter(&query, chkfilterVecRoll);
+    } else {
+        hit = hitCheckVecFilter(&query, chkfilterVec);
+    }
+    if (!hit) {
+        return NULL;
+    }
+    if (query.targetDistance >= 0.0f) {
+        rf = 0.5f;
+    } else {
+        rf = -0.5f;
+    }
+    *dist = (s32)((1000.0f * query.targetDistance) + rf) / 1000.0f;
+    if (outPos) {
+        *outPos = query.hitPos;
+        if (outPos->x >= 0.0f) {
+            rf = 0.5f;
+        } else {
+            rf = -0.5f;
+        }
+        outPos->x = (s32)((1000.0f * outPos->x) + rf) / 1000.0f;
+        if (outPos->y >= 0.0f) {
+            rf = 0.5f;
+        } else {
+            rf = -0.5f;
+        }
+        outPos->y = (s32)((1000.0f * outPos->y) + rf) / 1000.0f;
+        if (outPos->z >= 0.0f) {
+            rf = 0.5f;
+        } else {
+            rf = -0.5f;
+        }
+        outPos->z = (s32)((1000.0f * outPos->z) + rf) / 1000.0f;
+    }
+    if (outNrm) {
+        *outNrm = query.hitNormal;
+    }
+    return hit;
+}
+
+#if VERSION <= VERSION_DEMO_US
+HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
+    LandonRay ray;
+    Vec nrm;
+    Vec hp;
+    f32 dist;
+    f32 lim, hh, x0, y0, z0, a;
+    f32 ox, oy, oz, nx, ny, nz;
+    f32 x, z;
+    f32 sn;
+    s32 end;
+    f32 rz, rx;
+    s32 i;
+    HitEntry* hit;
+    MarioWork* mario = marioGetPtr();
+    mario->groundRot.x = 0.0f;
+    mario->groundRot.y = 0.0f;
+    mario->groundRot.z = 0.0f;
+    if (mario->flags & MARIO_FLAG_FORCE_WALL) {
+        *y = mario->position.y;
+        return NULL;
+    }
+    if (mario->flags & MARIO_FLAG_FLOORS_DISABLED) {
+        *y = mario->position.y;
+        return NULL;
+    }
+    spd = __fabsf(spd);
+    spd += 0.01f;
+    hh = mario->wPlayerCollisionBox.y;
+    if (mario->groundSlope) {
+        lim = 10.0f;
+    } else {
+        lim = 2.0f;
+    }
+    *y = mario->position.y;
+    *b = -1.0f;
+    y0 = mario->position.y;
+    x0 = mario->position.x;
+    z0 = mario->position.z;
+    if (mario->groundSlope) {
+        end = 3;
+    } else {
+        end = 6;
+    }
+    if (mario->groundSlope) {
+        i = 0;
+    } else {
+        i = 3;
+    }
+    for (; i < end; i++) {
+        dist = hh + spd;
+        switch (i) {
+            case 0:
+                z = x = 0.0f;
+                break;
+            case 1:
+                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
+                x = 9.0f * (f32)sin(a);
+                sn = (f32)cos(a);
+                z = 9.0f * -sn;
+                break;
+            case 2:
+                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
+                x = 9.0f * (f32)sin(a);
+                sn = (f32)cos(a);
+                z = 9.0f * -sn;
+                break;
+            case 3:
+                z = x = 0.0f;
+                break;
+            case 4:
+                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
+                x = 9.0f * (f32)sin(a);
+                sn = (f32)cos(a);
+                z = 9.0f * -sn;
+                movePos(&x, &z, 3.0f, mario->directionView);
+                break;
+            case 5:
+                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
+                x = 9.0f * (f32)sin(a);
+                sn = (f32)cos(a);
+                z = 9.0f * -sn;
+                movePos(&x, &z, 3.0f, mario->directionView);
+                break;
+            case 6:
+                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
+                x = 9.0f * (f32)sin(a);
+                sn = (f32)cos(a);
+                z = 9.0f * -sn;
+                movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
+                break;
+            case 7:
+                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
+                x = 9.0f * (f32)sin(a);
+                sn = (f32)cos(a);
+                z = 9.0f * -sn;
+                movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
+                break;
+        }
+        // FAKE: the dead guard keeps rx/rz their own webs, so x and z load before the volatile template copy
+        // (rz declared before rx so the loads colour f1/f0 as in the demo)
+        rx = x;
+        rz = z;
+        {
+            s32 gz = 0;
+            if (gz != 0) {
+                rx = 0.0f;
+                rz = 0.0f;
+            }
+        }
+        ray = *(volatile LandonRay*)&zv0; // FAKE: same 24-byte template copy as marioLandonChk_old
+        ray.pos.x = x0 + rx;
+        ray.pos.y = y0 + hh;
+        ray.pos.z = z0 + rz;
+        ray.dir.x = 0.0f;
+        ray.dir.y = -1.0f;
+        ray.dir.z = 0.0f;
+        hit = landonHitCheck(&ray, &hp, &nrm, &dist);
+        ox = hp.x;
+        oy = hp.y;
+        oz = hp.z;
+        nx = nrm.x;
+        ny = nrm.y;
+        nz = nrm.z;
+        if (hit) {
+            mario->groundSlope = marioHitNrmAngleXYZ(nx, ny, nz);
+            if (oy < y0 && __fabsf(oy - y0) >= lim) {
+                if (__fabsf(oy - y0) > __fabsf(h)) {
+                    *b = __fabsf(y0 - oy);
+                    *c = angleABf(x0, z0, ox, oz);
+                } else {
+                    *y = oy;
+                    *b = 0.0f;
+                    *c = angleABf(x0, z0, ox, oz);
+                    return hit;
+                }
+            } else if (__fabsf(oy - y0) <= 11.0f) {
+                *y = oy;
+                *b = 0.0f;
+                *c = angleABf(x0, z0, ox, oz);
+                return hit;
+            }
+        }
+    }
+    return NULL;
+}
+#else
 HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     f32 dist;
     f32 lim, best, hh, x0, y0, z0, a, r;
@@ -1076,6 +1290,7 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     }
     return NULL;
 }
+#endif
 
 /**
  * Hurts Mario on spikes (toge): if the wall in front (within half his width),
@@ -1130,73 +1345,6 @@ HitEntry* marioChkLandon(f32* a, f32 d) {
         ret = marioLandonChk_old(a, d);
     }
     return ret;
-}
-
-typedef struct LandonRay {
-    Vec pos;
-    Vec dir;
-} LandonRay;
-
-/** marioHitNrmAngle for marioLandonChk_old: sets groundRot from the normal and returns the slope in degrees. */
-static inline f32 landonNrmAngle(f32 nx, f32 ny, f32 nz) {
-    MarioWork* mario = marioGetPtr();
-    f32 y100 = 100.0f * ny;
-    mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nz, y100) - 180.0f) + 0.5f) / 100.0f;
-    mario->groundRot.y = 0.0f;
-    mario->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nx, y100) - 180.0f) + 0.5f) / 100.0f;
-    return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
-}
-
-/** marioHitCheckVecInl taking the ray as a LandonRay (position and direction), for the landing checks. */
-static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm, f32* dist) {
-    HitCheckQuery query;
-    HitEntry* hit;
-    f32 rf;
-
-    query.targetPos = ray->pos;
-    query.targetDir = ray->dir;
-    query.targetDistance = *dist;
-    if (marioGetPtr()->currMotionId == MARIO_MOTION_VIVIAN) {
-        hit = hitCheckVecFilter(&query, chkfilterVecVivian);
-    } else if (marioGetPtr()->flags & MARIO_FLAG_TUBE_MODE) {
-        hit = hitCheckVecFilter(&query, chkfilterVecRoll);
-    } else {
-        hit = hitCheckVecFilter(&query, chkfilterVec);
-    }
-    if (!hit) {
-        return NULL;
-    }
-    if (query.targetDistance >= 0.0f) {
-        rf = 0.5f;
-    } else {
-        rf = -0.5f;
-    }
-    *dist = (s32)((1000.0f * query.targetDistance) + rf) / 1000.0f;
-    if (outPos) {
-        *outPos = query.hitPos;
-        if (outPos->x >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
-        outPos->x = (s32)((1000.0f * outPos->x) + rf) / 1000.0f;
-        if (outPos->y >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
-        outPos->y = (s32)((1000.0f * outPos->y) + rf) / 1000.0f;
-        if (outPos->z >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
-        outPos->z = (s32)((1000.0f * outPos->z) + rf) / 1000.0f;
-    }
-    if (outNrm) {
-        *outNrm = query.hitNormal;
-    }
-    return hit;
 }
 
 HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
