@@ -1,5 +1,6 @@
 // las_30 (ラストダンジョン, Palace of Shadow): the stairs between las_28 and las_29.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -134,7 +135,11 @@ static EVT_BEGIN(rousoku_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(7.0f))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.5f), 1000, 0, 0, 0, 0, 0, 0)
+#else
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.5f), 1000, 0, 0, 0, 0, 0, 0)
+#endif
         ADD(LW(0), 1)
     END_LOOP
     RETURN
@@ -171,27 +176,55 @@ EVT_END()
  */
 EVT_BEGIN(las_30_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     ELSE
+#else
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+    ELSE
+#endif
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+#endif
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     END_IF
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 1150, 60, -125, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_recovery_blk, STRING("r_blk"), 1, -1050, 860, -75, 0, 0)
+#else
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 10, -1050, 860, -75, 0, 0)
+#endif
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_LAS_30_ULTRA_SHROOM_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 1050, 0, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_LAS_30_JAMMIN_JELLY_CHEST)
     CALL_CHILD(rousoku_init)
+#if VERSION <= VERSION_DEMO_US
+    RETURN
+EVT_END()
+#else
     RETURN
 EVT_END_PAD()
+#endif
 
 /** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
 static USER_FUNC(make_name) {
+#if VERSION <= VERSION_DEMO_US
     EvtWord* args = event->args;
+    // The demo builds the name in a stack buffer, which is gone by the time the script uses the name.
+    char name[8];
+#else
+    EvtWord* args = event->args;
+#endif
 
     sprintf(name, "hi%d", evtGetValue(event, args[0]));
     evtSetValue(event, args[1], (EvtWord)name);

@@ -1,6 +1,7 @@
 // mri_17 (巨木の中, The Great Tree): the cage trap (trap_event) that Lord Crump and his X-Nauts spring on the
 // Punies, the guide Puni, his sister and the rival; also a strange statue and a switch.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -284,6 +285,9 @@ EVT_BEGIN(trap_main)
 EVT_END()
 
 // Consume one x/z pair for every Puni index, including those not trapped.
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(wana_kemuri)
+#else
 EVT_BEGIN(trap_restore)
     CALL(evt_puni_wait_systemmode, 2)
     SET_VALUE(LW(10), 1)
@@ -308,6 +312,7 @@ EVT_END()
 
 /** Dust puffs along the base of the trap cage at eight fixed positions when it drops. */
 EVT_BEGIN(wana_kemuri)
+#endif
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, -18, 25, 76, FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, 5, 10, 70, FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, 23, 23, 77, FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
@@ -409,11 +414,18 @@ EVT_BEGIN(trap_event)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(mri_guide_goryu)
+#endif
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
+#else
     CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
+#endif
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
     SET_VALUE(LW(0), STRING("ガイド"))
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
@@ -530,9 +542,16 @@ EVT_BEGIN(trap_event)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00_05"), 0, STRING("ガイド"))
     CALL(evt_npc_get_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_TRAP)
+    // The story advances and Mario regains control; later the partner and Punio urge him to think of a plan.
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_21_BUBBLES_2)
+#else
     CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))
     CALL(evt_puni_set_mode, 1, PUNI_MODE_TRAP)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
+#endif
     SET_VALUE(GF(1), 0)
     CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -550,10 +569,14 @@ EVT_BEGIN(trap_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print_party, STRING("stg2_mri_e18_00_09"))
+#else
     CALL(evt_msg_print_party, STRING("stg2_mri_e18_00_09"))
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
+#endif
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00_12"), 0, STRING("ガイド"))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -714,7 +737,12 @@ static EVT_BEGIN(breakyuka_main)
         CALL(evt_puni_get_trap_index, LW(10), LW(12))
         IF_INT_EQUAL(LW(12), 1)
             CALL(evt_puni_set_mode, LW(10), PUNI_MODE_HAGURE)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_puni_flag_onoff, LW(10), 1, 0xA00000)
+            CALL(evt_puni_set_trap_index, LW(10), 0)
+#else
             CALL(evt_puni_flag_onoff, LW(10), 1, 2097152)
+#endif
         END_IF
         ADD(LW(10), 1)
         IF_INT_EQUAL(LW(10), 103)
@@ -760,9 +788,13 @@ EVT_BEGIN(switch_event)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0146484375f), FLOAT(0.0f), 1000)
     CALL(evt_snd_sfxoff, LW(10))
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print_party, STRING("stg2_mri_e18_00_10"))
+#else
     CALL(evt_party_stop, 0)
     CALL(evt_msg_print_party, STRING("stg2_mri_e18_00_10"))
     CALL(evt_party_run, 0)
+#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -827,7 +859,11 @@ EVT_BEGIN(mri_17_init_evt)
         SPAWN_EVENT(PTR(trap_main))
         CASE_BETWEEN(STG2_21_04_ESCAPE, STG2_21_06_WATER_SWITCH)
         SPAWN_EVENT(PTR(trap_restore))
+#if VERSION <= VERSION_DEMO_US
+        CASE_GREATER_OR_EQUAL(STG2_21_03_SUPER_BOOTS)
+#else
         CASE_GREATER_OR_EQUAL(STG2_21_04_ESCAPE)
+#endif
     END_SWITCH
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_saku_mae"), MAP_OBJ_FLAG_CLIP)
     RETURN

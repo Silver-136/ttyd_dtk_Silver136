@@ -1,6 +1,7 @@
 // las_10 (ラストダンジョン, Palace of Shadow): the riddle tower hub: the doors and keys (kagi) to the eight rooms las_11
 // to las_18.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -666,8 +667,13 @@ EVT_BEGIN(tenkyugi_evt)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     // Mario is startled as the tower shakes again.
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff_fukidashi, 0, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, 3, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#endif
     WAIT_MS(1500)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 270, 100, 0)
@@ -770,7 +776,11 @@ EVT_BEGIN(kagi1_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -801,7 +811,11 @@ EVT_BEGIN(kagi2_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -832,7 +846,11 @@ EVT_BEGIN(kagi3_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -863,7 +881,11 @@ EVT_BEGIN(kagi4_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -894,7 +916,11 @@ EVT_BEGIN(kagi5_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -925,7 +951,11 @@ EVT_BEGIN(kagi6_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -956,7 +986,11 @@ EVT_BEGIN(kagi7_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -987,7 +1021,11 @@ EVT_BEGIN(kagi8_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -1274,7 +1312,11 @@ EVT_BEGIN(daiza_evt)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_win_item_select, PTR(daiza_key_tbl), LW(0))
+#else
     CALL(evt_win_item_select, 0, PTR(daiza_key_tbl), LW(0), 0)
+#endif
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -1301,17 +1343,31 @@ EVT_BEGIN(las_10_init_evt)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("ret_chgmap_evt"))
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
             CALL(evt_snd_set_rev_mode, 2)
         ELSE
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
+#else
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
             CALL(evt_snd_set_rev_mode, 2)
+        ELSE
+#endif
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
+#else
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
+            CALL(evt_snd_set_rev_mode, 2)
+#endif
         END_IF
     ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
+#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
         CALL(evt_snd_set_rev_mode, 2)
+#endif
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

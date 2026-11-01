@@ -1,6 +1,7 @@
 // gon_01 (ゴンババ, Hooktail Castle): castle gate courtyard between gon_00 and gon_02.
 // Plays the gate cutscene (story 35 and 37) and has an HP Plus item.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -370,6 +371,8 @@ EVT_BEGIN(gon_01_GATEEVENT_evt)
     CALL(evt_mario_mov_pos2, -300, 0, FLOAT(120.0f))
     CALL(evt_party_stop, 0)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print_party, STRING("E3_stg1_gon_00"))
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
@@ -378,6 +381,16 @@ EVT_BEGIN(gon_01_GATEEVENT_evt)
         CALL(evt_msg_print, 0, STRING("stg1_gon_01"), 0, STRING("party"))
     END_SWITCH
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+#else
+    CALL(evt_mario_get_party, LW(0))
+    SWITCH(LW(0))
+        CASE_EQUAL(1)
+        CALL(evt_msg_print, 0, STRING("stg1_gon_00"), 0, STRING("party"))
+        CASE_EQUAL(2)
+        CALL(evt_msg_print, 0, STRING("stg1_gon_01"), 0, STRING("party"))
+    END_SWITCH
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+#endif
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)

@@ -49,7 +49,11 @@ static EvtWord damage_event[10];
 static EvtWord dead_event[74];
 static EvtWord phase_event[106];
 static EvtWord attack_event[24];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord ogg_attack_event[481];
+#else
 static EvtWord ogg_attack_event[491];
+#endif
 static EvtWord wait_event[6];
 static BattleUnitDefense defence_fmario;
 static BattleUnitDefenseAttr defence_attr_fmario;
@@ -635,9 +639,13 @@ static EVT_BEGIN(ogg_attack_event)
     // Hit: the claws land for the weapon damage, then he bounces off the target.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 256, LW(5))
+#else
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(1.0f))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(2.0f))
+#endif
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 15, 0)
         CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 135, 0, 20)
@@ -818,7 +826,11 @@ static BattleWeapon weapon_masao_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION, // special
+#if VERSION <= VERSION_DEMO_US
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
+#else
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
+#endif
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -892,7 +904,11 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION, // special
+#if VERSION <= VERSION_DEMO_US
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
+#else
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
+#endif
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

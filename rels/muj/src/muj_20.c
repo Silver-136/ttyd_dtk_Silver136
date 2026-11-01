@@ -123,7 +123,11 @@ EvtWord elmos_a_kakushuku[63];
 EvtWord elmos_a_kaku[13];
 EvtWord elmos_a_shuku[13];
 static ExtTexInfo ext_entry_data[21];
+#if VERSION <= VERSION_DEMO_US
+static s16 elmos_animtbl[21];
+#else
 static s16 elmos_animtbl[22];
+#endif
 static EvtWord nannpc_mode_setup[35];
 s32 mist_pos[91];
 EvtWord mist_setup[45];
@@ -962,7 +966,11 @@ static ExtTexInfo ext_entry_data[] = {
 static s16 elmos_animtbl[] = {
     0, 1, 2, 3, 4, 5, 6, 7,
     8, 9, 10, 11, 12, 13, 14, 15,
+#if VERSION <= VERSION_DEMO_US
+    16, 17, 18, 19, -1,
+#else
     16, 17, 18, 19, -1, 0,
+#endif
 };
 
 /**
@@ -1971,11 +1979,20 @@ EVT_BEGIN(anm_yure)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
+#else
             CALL(fune_curve_pos)
             CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), LW(7), LW(8), LW(9))
+#endif
             CALL(evt_mapobj_rotate, 1, STRING("S_fune_m"), 0, 180, LW(0))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_sfx_pos, GW(4), GW(0), GW(1), GW(2))
+            CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), GW(0), GW(1), GW(2))
+#else
             CALL(evt_snd_sfx_pos, GW(4), LW(7), LW(8), LW(9))
             CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), LW(7), LW(8), LW(9))
+#endif
             WAIT_FRAMES(1)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
@@ -1985,11 +2002,20 @@ EVT_BEGIN(anm_yure)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
+#else
             CALL(fune_curve_pos)
             CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), LW(7), LW(8), LW(9))
+#endif
             CALL(evt_mapobj_rotate, 1, STRING("S_fune_m"), 0, 180, LW(0))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_sfx_pos, GW(4), GW(0), GW(1), GW(2))
+            CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), GW(0), GW(1), GW(2))
+#else
             CALL(evt_snd_sfx_pos, GW(4), LW(7), LW(8), LW(9))
             CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), LW(7), LW(8), LW(9))
+#endif
             WAIT_FRAMES(1)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
@@ -2092,17 +2118,35 @@ static void draw(CameraId camera, void* param) {
 #else
     winTexSetNearest(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
 #endif
+#if VERSION <= VERSION_DEMO_US
+    if (evtGetValue(NULL, GF(0))) {
+        f32 s = (f32)sin((f32)gp->retraceCount / 15.0f);
+        s32 alpha = (s32)(1.5f * wp->alpha * s);
+
+        if (alpha < 0) {
+            alpha = 0;
+        }
+        if (alpha > 255) {
+            alpha = 255;
+        }
+        pressStartGX(wp, alpha, 0.0f, -100.0f);
+    }
+#endif
     *camGetCurPtr() = saved;
     GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
     GXSetProjectionv(projection);
 }
 
 static EVT_BEGIN(evt_prologue)
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(4000)
+#else
     WAIT_MS(500)
     // The opening title scene: music starts and the logo appears.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_OPENING1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_OPN_MUJ1"))
     WAIT_MS(3500)
+#endif
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
     SET_VALUE(GF(2), 0)
@@ -2321,14 +2365,24 @@ EVT_BEGIN(muj_20_init_evt)
     END_IF
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("prologue"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_OPENING1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_OPN_MUJ1"))
+        CALL(evt_cam3d_evt_set, 0, 367, 2093, 0, 343, -115, 0, 11)
+#else
         CALL(evt_cam3d_evt_set, 0, 367, 2093, 0, 343, -115, 0, EASING_SINE_IN_OUT)
+#endif
         CALL(evt_mario_cont_onoff, 0)
         CALL(evt_party_cont_onoff, 0, 0)
         CALL(evt_mario_set_pos, 0, -1000, 0)
         CALL(evt_party_set_pos, 0, 0, -1000, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_map_playanim, STRING("yoru_hiru"), 2, 0)
+#else
         CALL(evt_map_playanim, STRING("yoru_hiru"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mapobj_trans, 1, STRING("S_hai03_sun"), 0, -260, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_umi_l_siro_b"), MAP_OBJ_FLAG_HIDDEN)
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fune_m"), MAP_OBJ_FLAG_HIDDEN)
@@ -2395,7 +2449,11 @@ USER_FUNC(logo) {
             }
             break;
         case 2:
+#if VERSION <= VERSION_DEMO_US
+            if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START))) {
+#else
             if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_START))) {
+#endif
                 wp->counter = 0;
                 wp->state++;
                 evtSetValue(event, GF(1), 1);

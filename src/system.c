@@ -562,9 +562,19 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
  * and stick directions, the analogue sticks and triggers,
  * and applies rumble changes to the motors when rumble is enabled.
  */
+#if VERSION <= VERSION_DEMO_US
+void makeKey(void) {
+    int delay;
+    // The demo keeps button/dirs in 32-bit locals: with no u16 masks to fold, the global optimiser's constant
+    // propagation changes nothing in makeKey, so its dead-li deletion never runs and loop 2's count register
+    // is colour-coalesced with i's zero (the demo's loop-2 register assignment).
+    u32 button;
+    u32 dirs;
+#else
 void makeKey(void) {
     u16 button;
     u16 dirs;
+#endif
     int i;
 
     DEMOPadRead();
@@ -605,6 +615,10 @@ void makeKey(void) {
         gp->substickX[i] = GET_DEMO_PAD_STATUS(i)->pst.substickX;
         gp->substickY[i] = GET_DEMO_PAD_STATUS(i)->pst.substickY;
         gp->triggerLeft[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerLeft;
+#if VERSION <= VERSION_DEMO_US
+        gp->triggerRight[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerRight;
+    }
+#else
         gp->triggerRight[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerRight;
     }
 
@@ -652,6 +666,7 @@ void makeKey(void) {
             }
         }
     }
+#endif
     gp->keyDataValid = 1;
 }
 
@@ -1098,6 +1113,20 @@ f32 systemStrippedPool2(s32 x) {
 void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     f[0] = 1.0f;
     str[0] = "LINEAR";
+#if VERSION <= VERSION_DEMO_US
+    str[1] = "ACCEL";
+    str[2] = "DOUBLE_ACCEL";
+    str[3] = "TRIPLE_ACCEL";
+    str[4] = "DECEL";
+    str[5] = "DOUBLE_DECEL";
+    str[6] = "TRIPLE_DECEL";
+    str[7] = "GEMINI";
+    str[8] = "BURURUN";
+    str[9] = "BURURUN_DECEL";
+    str[10] = "BOUND";
+    str[11] = "SIN_ACCEL";
+    str[12] = "SIN_DECEL";
+#else
     str[1] = "DOUBLE_ACCEL";
     str[2] = "TRIPLE_ACCEL";
     str[3] = "DOUBLE_DECEL";
@@ -1107,6 +1136,7 @@ void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     str[7] = "BURURUN_DECEL";
     str[8] = "SIN_ACCEL";
     str[9] = "SIN_DECEL";
+#endif
     f[1] = sqrtf(x);
     str[10] = "[%8s:% 4d] %s";
 #if VERSION >= VERSION_US

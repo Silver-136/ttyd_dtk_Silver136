@@ -771,11 +771,20 @@ void btlseqEnd(BattleWork* wp) {
         FieldBattleData* fb;
         NpcEntry* p;
         BattleSetSeq(wp, SEQ_END, 0x700001D);
+#if VERSION <= VERSION_DEMO_US
+            BattleAudienceSoundSetVolAll(0, 30);
+            fb = fbatGetPointer();
+            p = fb->target;
+            if (p)
+                p->interruptFlags |= NPC_INTERRUPT_NO_FIND;
+            break;
+#else
         BattleAudienceSoundSetVolAll(0, 30);
         fb = fbatGetPointer();
         p = fb->target;
         if (p) p->interruptFlags |= NPC_INTERRUPT_NO_FIND;
         break;
+#endif
     }
     case 0x700001D: {
         fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
@@ -878,10 +887,14 @@ void btlseqEnd_DispMain(CameraId camId, void* param) {
             dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, _lvup_select_object_disp, wp);
         }
         if (work->flags & SEQEND_DISP_LVUP_CONFIRM_UNUSED) {
+#if VERSION <= VERSION_DEMO_US
+            dispEntry(camId, 900.0f, 1, _LvupParamConfirmDisp, wp);
+#else
             dispEntry(camId, 900.0f, 1, _LvupParamConfirmDisp, wp);
         }
         if (work->flags & SEQEND_DISP_LVUP_HELP) {
             dispEntry(camId, 900.0f, 1, _LvupParamHelpMsgDisp, wp);
+#endif
         }
     }
 }
@@ -1235,10 +1248,18 @@ EVT_BEGIN(_curtain_close_event)
         CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
         CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
         CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_fade_entry, FADE_CURTAIN_SIDES_A2_3D, 1000, 0, 0, 0)
+#else
         CALL(evt_batstage_set_aud_dark, 0, 60, 0)
         CALL(evt_fade_entry, 25, 1000, 0, 0, 0)
+#endif
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_fade_set_anim_virtual_pos, 0, 0, LW(0))
+#else
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
+#endif
         CALL(evt_fade_end_wait)
 #if VERSION >= VERSION_US
     END_INLINE_EVENT
@@ -1499,7 +1520,12 @@ USER_FUNC(_disable_enemy_unit_disp) {
         kind = unit->currentKind;
         if (kind == UNIT_SYSTEM) continue;
         if (kind == UNIT_MARIO) continue;
+#if VERSION <= VERSION_DEMO_US
+        if (unitKindParams >= TYPE_PARTNER_MIN && unitKindParams < TYPE_PARTNER_MAX && unit->alliance == 0)
+            continue;
+#else
         if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX && unit->alliance == ALLIANCE_PLAYER && kind != UNIT_BOBBERY) continue;
+#endif
         data = BtlUnit_GetData(unit, UNIT_DATA_BATTLE_END_HIDE_EVENT);
         if (data) {
             evt = evtEntry(data, 10, 0);

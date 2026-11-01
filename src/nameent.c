@@ -322,6 +322,10 @@ void nameEntMain(void) {
 }
 
 s32 nameMain(void) {
+#if VERSION <= VERSION_DEMO_US
+    s32 off;
+    s32 idx;
+#else
     s32 len;
     s32 j;
     s32 off;
@@ -329,6 +333,7 @@ s32 nameMain(void) {
     f32 dist;
 
     dist = distABf(wp->x2, wp->y2, wp->x1, wp->y1);
+#endif
     switch (wp->state) {
         case 0:
             if ((wp->flags & NAMEENT_FLAG_INPUT_ON) && gp->debugFlag == 0) {
@@ -443,8 +448,12 @@ s32 nameMain(void) {
 #endif
                         wp->nameLen++;
                         if (wp->nameLen >= 8) {
+#if VERSION <= VERSION_DEMO_US
+                            wp->cursorX = 10;
+#else
                             wp->nameLen = 7;
                             wp->cursorX = 10;
+#endif
                             wp->cursorY = 7;
                         }
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_SET1));
@@ -576,8 +585,12 @@ s32 nameMain(void) {
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1));
                     }
 #endif
+#if VERSION <= VERSION_DEMO_US
+                } else if (keyGetDirRep(0) & DEMO_STICK_LEFT) {
+#else
                 } else if (keyGetDirRep(0) & DEMO_STICK_LEFT) {
                     if (dist < 10.0f) {
+#endif
                         wp->cursorX--;
                         if (wp->cursorY > NAME_LANG_PICK(3, 5)) {
                             if (wp->cursorX < 0) {
@@ -590,9 +603,13 @@ s32 nameMain(void) {
                             wp->cursorX = 13;
                         }
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
+#if VERSION <= VERSION_DEMO_US
+                } else if (keyGetDirRep(0) & DEMO_STICK_RIGHT) {
+#else
                     }
                 } else if (keyGetDirRep(0) & DEMO_STICK_RIGHT) {
                     if (dist < 10.0f) {
+#endif
                         wp->cursorX++;
                         if (wp->cursorY > NAME_LANG_PICK(3, 5)) {
                             if (wp->cursorX >= 10 && wp->cursorY > 7) {
@@ -605,10 +622,19 @@ s32 nameMain(void) {
                             wp->cursorX = 0;
                         }
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
+#if VERSION <= VERSION_DEMO_US
+                } else if (keyGetDirRep(0) & DEMO_STICK_UP) {
+#else
                     }
                 } else if (keyGetDirRep(0) & DEMO_STICK_UP) {
                     if (dist < 10.0f) {
+#endif
                         wp->cursorY--;
+#if VERSION <= VERSION_DEMO_US
+                    if (wp->cursorY < 0) {
+                        wp->cursorY = wp->cursorX > 9 ? 7 : 8;
+                    }
+#else
                         if (wp->cursorY < 0) {
                             if (wp->cursorX > 9) {
                                 wp->cursorY = 7;
@@ -617,10 +643,15 @@ s32 nameMain(void) {
                                 wp->cursorY = 8;
                             }
                         }
+#endif
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
+#if VERSION <= VERSION_DEMO_US
+                } else if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
+#else
                     }
                 } else if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
                     if (dist < 10.0f) {
+#endif
                         wp->cursorY++;
                         if (wp->cursorX > 9) {
                             if (wp->cursorY >= NAME_LANG_PICK(4, 6)) {
@@ -632,9 +663,14 @@ s32 nameMain(void) {
                         } else if (wp->cursorY >= 9) {
                             wp->cursorY = 0;
                         }
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn((const char*)5);
+                }
+#else
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                     }
                 }
+#endif
             }
             idx = wp->cursorX;
 #if VERSION >= VERSION_US
@@ -738,7 +774,11 @@ void nameEntDisp(CameraId cameraId, void* param) {
     for (j = 0; j < 9; j++) {
         for (n = 0; n < NAMEENT_COLS; n++) {
             if (wp->charTable[j * NAMEENT_COLS + n]) {
+#if VERSION <= VERSION_DEMO_US
+                FontDrawString((f32)(n * 24 - 190 + (n / 5) * 30), (f32)(112 - j * 28), wp->charTable[j * NAMEENT_COLS + n]);
+#else
                 FontDrawString((f32)(n * 24 - 190 + (n / 5) * 30 + (24 - FontGetMessageWidth(wp->charTable[j * NAMEENT_COLS + n])) / 2), (f32)(112 - j * 28), wp->charTable[j * NAMEENT_COLS + n]);
+#endif
             }
         }
     }

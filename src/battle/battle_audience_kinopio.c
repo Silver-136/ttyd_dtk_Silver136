@@ -1,5 +1,6 @@
 // Battle audience control for the Toad (kinopio) members: jumping, entering, singing and status behaviors.
 
+#include "version.h"
 #include "battle/battle_audience.h"
 #include "battle/battle_audience.h"
 #include "battle/battle.h"
@@ -117,7 +118,17 @@ void BattleAudienceCtrlProcessKinopio(s32 index) {
         BattleAudienceCtrlProcessKinopioFire(index, front);
         break;
     case AUDIENCE_STATUS_EAT:
+#if VERSION <= VERSION_DEMO_US
+            BattleAudienceCtrlProcessKinopioEat(index, front);
+            break;
+        case 21:
+            BattleAudienceCtrlProcessKinopioNoGravity(index, front);
+            break;
+        case 22:
+            BattleAudienceCtrlProcessKinopioAudBall(index, front);
+#else
         BattleAudienceCtrlProcessKinopioEat(index, front);
+#endif
         break;
     }
     m->position.x += m->velocity.x;
@@ -1516,4 +1527,8 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
         }
         break;
     }
+#if VERSION <= VERSION_DEMO_US
 }
+#else
+}
+#endif

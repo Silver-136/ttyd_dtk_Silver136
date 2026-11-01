@@ -1,6 +1,7 @@
 // aji_14 (敵のアジト, X-Naut Fortress): the Magnus von Grapple 2.0 boss room (evt_boss2), leading on to the
 // Moon (moo_04).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -40,7 +41,11 @@ static NpcSetupInfo npcEnt[3];
 EvtWord aji_14_init_evt[71];
 
 static EVT_BEGIN(w_door_close)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -48,7 +53,11 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -199,10 +208,16 @@ static EVT_BEGIN(evt_boss)
     // He says he has been waiting for Mario and lured him here with the Crystal Star (stg7_aji_37 to 39).
     CALL(evt_msg_print, 0, STRING("stg7_aji_37"), 0, STRING("幹部"))
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_cam3d_evt_set, -435, 40, 287, -435, 40, -13, 0, 11)
+    WAIT_FRAMES(1)
+    CALL(evt_party_stop, 0)
+#else
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_pos, 0, -460, 0, 15)
     CALL(evt_cam3d_evt_set, -435, 40, 287, -435, 40, -13, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+#endif
     WAIT_MS(300)
     CALL(evt_msg_print_party, STRING("stg7_aji_37_01"))
     WAIT_MS(300)
@@ -257,11 +272,15 @@ static EVT_BEGIN(evt_boss)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 165, 183, 285, 281, 193, -98, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_aji_41"), 0, STRING("ロボット"))
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     // Crump brags that his machine is raw horsepower; the robot walks in, jumps and lands with a shake of the
     // camera.
     CALL(evt_msg_print, 0, STRING("stg7_aji_41"), 0, STRING("ロボット"))
     CALL(evt_npc_flag_onoff, 0, STRING("ロボット"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+#endif
     CALL(evt_cam3d_evt_set, 250, 124, 545, 250, 140, -105, 300, EASING_SINE_IN_OUT)
     WAIT_MS(300)
     WAIT_MS(2000)
@@ -300,8 +319,12 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, -50, 475, 1104, -50, 35, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#else
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envoff, PSND_FADEOUT)
+#endif
     // The fight against Magnus von Grapple 2.0 begins.
     CALL(evt_npc_set_battle_info, STRING("ロボット"), 5)
     CALL(evt_npc_battle_start, STRING("ロボット"))
@@ -447,6 +470,10 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 EVT_BEGIN(aji_14_init_evt)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
+#else
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("tuzuki"))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
@@ -456,6 +483,7 @@ EVT_BEGIN(aji_14_init_evt)
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))

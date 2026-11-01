@@ -138,6 +138,16 @@ EVT_BEGIN(subsetevt_dead)
                     ADD(LW(1), 40)
                     CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 90)
                 END_SIBLING_EVENT
+#if VERSION <= VERSION_DEMO_US
+                WAIT_FRAMES(90)
+                // In the retail releases the partner's event 67 also runs (Koops uses it to stand upright).
+                CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 67)
+                IF_INT_NOT_EQUAL(LW(0), 0)
+                    CALL(btlevtcmd_RunDataEventChild, LW(10), 67)
+                END_IF
+                // The partner gets back up with 10 HP, the recovery sparkle shows and it hops back to idle.
+                CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
+#else
                 WAIT_FRAMES(90)
                 // In the retail releases the partner's event 67 also runs (Koops uses it to stand upright).
                 CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_REVIVE_EVENT)
@@ -146,6 +156,7 @@ EVT_BEGIN(subsetevt_dead)
                 END_IF
                 // The partner gets back up with 10 HP, the recovery sparkle shows and it hops back to idle.
                 CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
+#endif
                 CALL(btlevtcmd_SetHp, LW(10), 0)
                 CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
                 CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -682,12 +693,16 @@ EVT_BEGIN(subsetevt_damage)
         RETURN
         ELSE
         // In the retail releases a no-damage last hit fades the HP gauge out.
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
+#else
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(_set_hp_gauge_fade_flag, LW(10))
         END_IF
         // No damage: a normal hit still shows the hurt pose; anything else plays the miss sound.
         CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
+#endif
         SWITCH(LW(0))
             CASE_EQUAL(DAMAGE_CODE_NORMAL)
             CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
@@ -776,6 +791,16 @@ EVT_BEGIN(subsetevt_counter_damage)
     SWITCH(LW(0))
         CASE_EQUAL(DAMAGE_CODE_COUNTER_TOP_SPIKY)
         CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(14), 36)
+        CASE_EQUAL(46)
+        CALL(btlevtcmd_GetUnitKind, LW(10), LW(2))
+        IF_INT_EQUAL(LW(2), UNIT_MARIO)
+            CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_VOICE_MARIO_DAMAGED1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        END_IF
+        SET_VALUE(LW(14), 29)
+        CASE_OR_EQUAL(46)
+#else
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
         CASE_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
         CALL(btlevtcmd_GetUnitKind, LW(10), LW(2))
@@ -783,6 +808,7 @@ EVT_BEGIN(subsetevt_counter_damage)
             CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_VOICE_MARIO_DAMAGED1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         END_IF
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE_FIRE)
+#endif
         CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_EXPLOSIVE)
         CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE)
         CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_HOLD_FAST)
@@ -809,7 +835,17 @@ EVT_BEGIN(subsetevt_counter_damage)
     CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(2), 15)
     CALL(btlevtcmd_JumpPosition, LW(10), LW(2), LW(3), LW(4), 10, MOVE_SOUND_FROM_TABLE)
     WAIT_FRAMES(30)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    RETURN
+EVT_END()
+
+/** Plays the miss sound for an attack that did nothing. */
+EVT_BEGIN(subsetevt_nodamage_motion)
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS2"), 0)
+#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+#endif
     RETURN
 EVT_END()
 
@@ -857,14 +893,23 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
             WAIT_FRAMES(1)
             GOTO(10)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_RunDataEventChild, LW(10), 59)
+#else
         CALL(btlevtcmd_GetHp, LW(10), LW(0))
         IF_INT_GREATER(LW(0), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_KOURA_OPEN_EVENT)
+#endif
             CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    CALL(btlevtcmd_SortPhaseMoveTable)
+#else
         END_IF
     END_IF
     CALL(btlevtcmd_SortPhaseMoveTable)
+#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     RETURN
@@ -876,6 +921,13 @@ EVT_END()
  */
 EVT_BEGIN(subsetevt_happy_heart)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), 60, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 60)
+    END_IF
+    WAIT_FRAMES(120)
+#else
     CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_HEART, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
@@ -890,6 +942,7 @@ EVT_BEGIN(subsetevt_happy_heart)
         END_IF
     END_IF
     WAIT_FRAMES(60)
+#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -897,6 +950,37 @@ EVT_END()
 /** Happy Flower badge regeneration: like subsetevt_happy_heart for FP. */
 EVT_BEGIN(subsetevt_happy_flower)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), 61, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 61)
+    END_IF
+    WAIT_FRAMES(120)
+    CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), 63, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
+        IF_INT_EQUAL(LW(0), 0)
+            CALL(btlevtcmd_CheckStatus, LW(3), STATUS_SLEEP, LW(0))
+            IF_INT_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_CheckStatus, LW(3), STATUS_STOP, LW(0))
+                IF_INT_EQUAL(LW(0), 0)
+                    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 63)
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+    WAIT_FRAMES(60)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+
+/**
+ * Pause after the HP Regen status heals a unit at turn start:
+ * 120 frames in the demos, 60 in retail (defined below).
+ */
+EVT_BEGIN(subsetevt_regeneration)
+    WAIT_FRAMES(120)
+#else
     CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_FLOWER, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
@@ -912,6 +996,7 @@ EVT_BEGIN(subsetevt_happy_flower)
     END_IF
     WAIT_FRAMES(60)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+#endif
     RETURN
 EVT_END()
 
@@ -1163,7 +1248,18 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(2), 20)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(_check_through_pos, LW(10), LW(2), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(LW(2), 0)
+        SET_VALUE(LW(1), LW(0))
+#else
+    IF_INT_EQUAL(LW(2), 0)
+        IS_EVENT_RUNNING(LW(5), LW(6))
+        IF_INT_EQUAL(LW(6), 1)
+            SET_VALUE(LW(1), LW(0))
+#endif
+            WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+        GOTO(32)
         IS_EVENT_RUNNING(LW(5), LW(6))
         IF_INT_EQUAL(LW(6), 1)
             SET_VALUE(LW(1), LW(0))
@@ -1171,6 +1267,11 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
             GOTO(32)
         END_IF
     END_IF
+#else
+            GOTO(32)
+        END_IF
+    END_IF
+#endif
     CALL(btlevtcmd_PreCheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(2)
@@ -1295,8 +1396,12 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
         GOTO(0)
     END_IF
     // The next enemy in line is the target; with none, the unit lands with two hops.
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
+#else
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     DEBUG_PUT_REG(LW(3))
+#endif
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -1523,6 +1628,9 @@ EVT_BEGIN(subsetevt_status_recovery)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(subset_attack_ready_jump_event)
+#else
 EVT_BEGIN(subsetevt_check_target_movable)
     CALL(btlevtcmd_CheckStatus, LW(3), STATUS_INSTANT_KILL, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1563,6 +1671,7 @@ EVT_END()
 
 /** Empty data-table event 7 (attack ready) for partners that have nothing to do there. */
 EVT_BEGIN(subset_attack_ready_jump_event)
+#endif
     RETURN
 EVT_END()
 
@@ -1618,6 +1727,10 @@ USER_FUNC(_add_star_point_disp_offset) {
     z += unit->kindParams->starPointDispOffset.z;
     evtSetValue(event, xi, x);
     evtSetValue(event, yi, y);
+#if VERSION <= VERSION_DEMO_US
+    evtSetValue(event, zi, z);
+    return EVT_RETURN_DONE;
+#else
     evtSetValue(event, zi, z);
     return EVT_RETURN_DONE;
 }
@@ -1634,6 +1747,7 @@ USER_FUNC(_set_hp_gauge_fade_flag) {
         unit->hpGauge.flags |= HP_GAUGE_FLAG_TIMED;
     }
     return EVT_RETURN_DONE;
+#endif
 }
 
 /**

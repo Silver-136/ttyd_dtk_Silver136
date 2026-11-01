@@ -1,5 +1,6 @@
 // unit_kamec_white: White Magikoopa with its clone (bunsin), battle unit.
 
+#include "version.h"
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_magic1_n64.h"
@@ -94,7 +95,11 @@ static EvtWord trans_magic_event[7];
 static EvtWord recover_magic_event[142];
 static EvtWord all_recover_magic_event[180];
 static EvtWord bunsin_magic_event[160];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord spawn_event[62];
+#else
 static EvtWord spawn_event[66];
+#endif
 static EvtWord wait_event[55];
 
 /**
@@ -241,6 +246,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Damage-type reactions of the White Magikoopa: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 70, 60, 100, 60, 100, 100, 60, 100, 50, 100, 50, 100, 50, 50, 40, 70, 100, 60, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     70, // sleep
     75, // stop
@@ -265,6 +273,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Status vulnerability of the White Magikoopa for its clones: immune to every status effect. */
 static StatusVulnerability regist_bunsin = {0};
@@ -389,7 +398,11 @@ static BattleWeapon weapon_kamec_attack_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
+#if VERSION <= VERSION_DEMO_US
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY, // special
+#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
+#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2033,8 +2046,12 @@ static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
     CALL(kamec_copy_status, LW(13), LW(3))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_BUNSIN, 1)
+#else
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
     CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_BUNSIN, 1)
+#endif
     CALL(btlevtcmd_SetEventAttack, LW(3), PTR(attack_event))
     CALL(btlevtcmd_SetRegistStatus, LW(3), PTR(&regist_bunsin))
     CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kClone)

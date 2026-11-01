@@ -1,5 +1,6 @@
 // unit_kurikuri: Goomba Bros. (`kurikuri`), the Goomba pair of a Glitz Pit match (with Koopa messages), battle unit.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
@@ -39,8 +40,13 @@ static EvtWord wait_event[6];
  * and event data table.
  */
 BattleUnitKind unit_kurikuri = {
+#if VERSION <= VERSION_DEMO_US
+    36,
+    "btl_un_kurikuri",
+#else
     UNIT_GOOMBA_GLITZVILLE, // unitType
     "btl_un_kuriboo", // name
+#endif
     2, // maxHp
     0, // maxFp
     1, // dangerHP

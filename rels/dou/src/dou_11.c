@@ -1104,10 +1104,15 @@ EVT_END()
  * At map load: hides the first pair of barrels (S_taru_n01, n02) and their hit areas
  * until the first island switch has been pressed.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ukishima_init1)
+    IF_INT_EQUAL(GSWF(GSWF_DOU11_ISLAND_SWITCH_A_PRESSED), 0)
+#else
 EVT_BEGIN(ukishima_init1)
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
     ADD(LW(0), GSWF_DOU_11_SWITCH_2_PRESSED)
     IF_INT_LESS(LW(0), 1)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n01"), 1, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n02"), MAP_OBJ_FLAG_HIDDEN)
@@ -1126,7 +1131,12 @@ EVT_BEGIN(ukishima_part1)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, 280, 174, 527, 280, 79, -14, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_DOU11_ISLAND_SWITCH_A_PRESSED), 1)
     SET_VALUE(LW(2), STRING("S_taru_n01"))
+#else
+    SET_VALUE(LW(2), STRING("S_taru_n01"))
+#endif
     SET_VALUE(LW(3), STRING("A_taru_n01"))
     SPAWN_EVENT(PTR(ukishima_apper))
     BEGIN_INLINE_EVENT
@@ -1143,10 +1153,15 @@ EVT_BEGIN(ukishima_part1)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ukishima_init2)
+    IF_INT_EQUAL(GSWF(GSWF_DOU11_ISLAND_SWITCH_B_PRESSED), 0)
+#else
 EVT_BEGIN(ukishima_init2)
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
     ADD(LW(0), GSWF_DOU_11_SWITCH_2_PRESSED)
     IF_INT_LESS(LW(0), 2)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n03"), 1, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n04"), MAP_OBJ_FLAG_HIDDEN)
@@ -1164,7 +1179,12 @@ EVT_BEGIN(ukishima_part2)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, 525, 174, 527, 525, 79, -14, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_DOU11_ISLAND_SWITCH_B_PRESSED), 1)
     SET_VALUE(LW(2), STRING("S_taru_n03"))
+#else
+    SET_VALUE(LW(2), STRING("S_taru_n03"))
+#endif
     SET_VALUE(LW(3), STRING("A_taru_n03"))
     SPAWN_EVENT(PTR(ukishima_apper))
     BEGIN_INLINE_EVENT
@@ -1573,8 +1593,13 @@ EVT_END()
  */
 EVT_BEGIN(escapeway_event)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_normalize)
+    CALL(evt_bero_exec_wait, 65536)
+#else
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_normalize)
+#endif
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg5_dou_17_01"), 0, STRING("水夫D"))
     BEGIN_INLINE_EVENT
@@ -1597,6 +1622,43 @@ EVT_BEGIN(escapeway_event)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_35_ESCAPE_ROUTE)
     CALL(evt_mario_key_onoff, 1)
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+
+/**
+ * After the wall is blown open: Sailor C is made intangible and Mario
+ * and the partner are walked to their places at (730, -120) and (712, -126) to watch. JP and later only.
+ */
+EVT_BEGIN(bombwall_escape_move)
+    CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    BEGIN_INLINE_EVENT
+        CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
+        IF_INT_LESS(LW(1), 100)
+            RETURN
+        END_IF
+        CALL(evt_party_stop, 0)
+        CALL(evt_party_move_pos2, 0, 712, -126, FLOAT(120.0f))
+        CALL(evt_party_set_dir, 0, 90, 200)
+        CALL(evt_party_run, 0)
+    END_INLINE_EVENT
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    IF_INT_LESS(LW(1), 100)
+        RETURN
+    END_IF
+    CALL(evt_mario_mov_pos2, 730, -120, FLOAT(120.0f))
+    CALL(evt_mario_set_dir, 90, 200, 0)
+    RETURN
+EVT_END()
+
+/**
+ * Case script run when Bobbery bombs the cracked wall at n_bero in the grotto's big room:
+ * breaks the wall, starts the sailors' escape (bombwall_escape_move and bombwall_after),
+ * enables the n_bero exit and sets the story progress to STG5_36_HOLE_IN_THE_WALL.
+ */
+static EVT_BEGIN(bombwall_bomb)
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_mario_normalize)
+#else
 EVT_END()
 
 EVT_BEGIN(bombwall_escape_move)
@@ -1627,6 +1689,7 @@ EVT_END()
  */
 static EVT_BEGIN(bombwall_bomb)
     CALL(evt_mario_key_onoff, 0)
+#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mapobj_get_position, STRING("S_ana_before"), LW(0), LW(1), LW(2))
@@ -2777,11 +2840,21 @@ EVT_BEGIN(dou_11_init_evt)
             SPAWN_EVENT(PTR(watarikiri_suifu_init))
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_switch_blue, 2, STRING("mobj01"), -220, 120, -450, PTR(ukishima_part1), GSWF(GSWF_DOU11_ISLAND_SWITCH_A_PRESSED))
+    CALL(evt_mobj_switch_blue, 2, STRING("mobj01"), -220, 120, -450, PTR(ukishima_switch1_evt), GSWF(GSWF_DOU11_ISLAND_SWITCH_A_PRESSED))
+    CALL(evt_mobj_switch_blue, 2, STRING("mobj02"), 80, 120, -450, PTR(ukishima_part2), GSWF(GSWF_DOU11_ISLAND_SWITCH_B_PRESSED))
+#else
     CALL(evt_mobj_switch_blue, 2, STRING("mobj01"), -220, 120, -450, PTR(ukishima_switch1_evt), GSWF_DOU_11_SWITCH_1_PRESSED)
     CALL(evt_mobj_switch_blue, 2, STRING("mobj02"), 80, 120, -450, PTR(ukishima_switch2_evt), GSWF_DOU_11_SWITCH_2_PRESSED)
     SPAWN_EVENT(PTR(ukishima_init1))
+#endif
     SPAWN_EVENT(PTR(ukishima_init2))
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STORY_STG5_32_CORTEZS_WARNING)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n03"), 1, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n04"), MAP_OBJ_FLAG_HIDDEN)
@@ -2823,13 +2896,24 @@ EVT_BEGIN(dou_11_init_evt)
     SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main16), LW(10))
     SET_VALUE(LW(0), STRING("S_bin04"))
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main17), LW(10))
+    // Islands already raised by pressed switches are put in place.
+    IF_INT_EQUAL(GSWF(GSWF_DOU11_ISLAND_SWITCH_A_PRESSED), 1)
+#else
     SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main17), LW(10))
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
     ADD(LW(0), GSWF_DOU_11_SWITCH_2_PRESSED)
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
+#endif
         SPAWN_EVENT(PTR(pukapuka_watari_init01))
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_DOU11_ISLAND_SWITCH_B_PRESSED), 1)
+#else
     END_IF
     IF_INT_GREATER_OR_EQUAL(LW(0), 2)
+#endif
         SPAWN_EVENT(PTR(pukapuka_watari_init02))
     END_IF
     // Ship-change platform; after Cortez attacks, dust shaking starts.

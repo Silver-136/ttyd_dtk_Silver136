@@ -147,9 +147,15 @@ static BattleWeapon weapon = {
     "msg_sac_3", // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
+#if VERSION <= VERSION_DEMO_US
+    0, 0, 0, // targetWeightFlags..sleepTime
+    0, // stopChance
+    0, // stopTime
+#else
     0, 0, 0, // targetWeightFlags..sleepTime
     100, // stopChance
     1, // stopTime
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
     0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
     0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeTime..defChangeStrength
@@ -525,11 +531,21 @@ state_end:
         w->hstate = 2;
         w->hflag = -1;
         w->texIdx = 0x5A;
+#if VERSION <= VERSION_DEMO_US
+            w->hpos = (Vec){300.0f, 0.0f, 100.0f};
+#else
         w->hpos = (Vec){125.0f, 0.0f, 100.0f};
+#endif
         w->hfrom = w->hpos;
+#if VERSION <= VERSION_DEMO_US
+            w->hto = (Vec){125.0f, 0.0f, -30.0f};
+            w->hpos.y = 0.0f;
+            w->hto.z = 100.0f;
+#else
         w->hpos.x = 300.0f;
         w->hfrom.x = 300.0f;
         w->hto = (Vec){125.0f, 0.0f, 100.0f};
+#endif
         w->htimer = 0;
         w->hsteps = 30;
     case 2:
@@ -688,6 +704,19 @@ state_end:
         w->frame = 0;
         w->c0 = 70.0f;
     case 11:
+#if VERSION <= VERSION_DEMO_US
+            if (w->holder == 2 && !(w->flags & 2)) {
+                w->c0 = 70.0f;
+            } else if (w->frame < 14) {
+                w->c0 -= 0.7f;
+            } else if (w->frame < 28) {
+                w->c0 += 0.7f;
+            }
+            w->frame++;
+            if (w->frame >= 28) {
+                w->frame = 0;
+            }
+#endif
         for (i = 0; i < 3; i++) {
             b = &w->btn[i];
             if (b->hp <= 0.0f) {
@@ -800,7 +829,11 @@ state_end:
                     if (u != NULL && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
                         u->alliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u)) {
                         if (w->frame == 0) {
+#if VERSION <= VERSION_DEMO_US
+                                    BtlUnit_SetBodyAnimType(u, 0x3F);
+#else
                             BtlUnit_SetBodyAnimType(u, POSE_TYPE_TALK);
+#endif
                         }
                         if (w->frame == 26) {
                             btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));
@@ -911,8 +944,13 @@ state_end:
         case 1:
             w->to = (Vec){125.0f, 0.0f, -30.0f};
             if (w->flags & 1) {
+#if VERSION <= VERSION_DEMO_US
+                        w->to = w->hpos;
+                        w->to.y = 30.0f + w->hpos.y;
+#else
                 w->to = (Vec){125.0f, 0.0f, 100.0f};
                 w->to.y += 30.0f;
+#endif
             }
             bakuGameEnemySurprise();
             break;

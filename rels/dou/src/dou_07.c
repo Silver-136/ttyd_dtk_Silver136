@@ -174,7 +174,11 @@ EVT_BEGIN(peramajin_before)
         // Mario has the key: the chest asks him to pick it from the item menu.
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_09"), PTR(majin_callback), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, PTR(key_tbl), LW(10))
+#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(10), 0)
+#endif
         // Mario cancels the menu: the chest sulks and stays shut.
         IF_INT_EQUAL(LW(10), -1)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -198,8 +202,12 @@ EVT_BEGIN(peramajin_before)
             END_IF
         END_INLINE_EVENT
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_11"), PTR(majin_callback), 0)
+#else
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_11"), PTR(majin_callback), 0)
         CALL(evt_mario_set_pose, STRING("M_I_N"))
+#endif
         CALL(evt_cam3d_evt_set, -33, 92, 412, -33, 36, 92, 500, EASING_SINE_IN_OUT)
         CALL(evt_pouch_remove_item, ITEM_BLACK_KEY_0x24, LW(10))
         CALL(evt_party_run, 0)
@@ -270,7 +278,12 @@ EVT_END()
 EVT_BEGIN(peramajin_after)
     // The chest has opened: Mario receives the Boat Curse and the music changes.
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
+#else
+    CALL(evt_party_stop, 0)
+#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_pouch_add_item, ITEM_BOAT_CURSE, LW(0))
     CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -311,10 +324,16 @@ EVT_BEGIN(peramajin_after)
     CALL(lect_cam_save)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(ship_majin_lecture_init)
+    CALL(evt_party_run, 0)
+    CALL_CHILD(ship_majin_lecture)
+#else
     CALL_CHILD(PTR(ship_majin_lecture_init))
     CALL(evt_party_run, 0)
     CALL_CHILD(PTR(ship_majin_lecture))
     CALL(evt_party_stop, 0)
+#endif
     // Mario flickers while the lecture ends and he returns to his spot.
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
@@ -343,10 +362,14 @@ EVT_BEGIN(peramajin_after)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_PERAMAJIN_GOOUT2"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     CALL(evt_img_release, STRING("img"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_paper_delete, STRING("OFF_d_kusya"))
+#else
     CALL(evt_paper_delete, STRING("OFF_d_kusya"))
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
+#endif
     CALL(evt_msg_print_party, STRING("stg1_gon_majin4_19"))
     SET_VALUE(GSW_STORY_PROGRESS, STG5_21_01_BOAT_MOD_OBTAINED)
     CALL(evt_party_run, 0)

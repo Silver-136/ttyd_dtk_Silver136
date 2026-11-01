@@ -1,6 +1,7 @@
 // muj_11 (無人島, Keelhaul Key): the passage between muj_10 and Cortez's lair, with its warning
 // event (warning_event).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -139,6 +140,10 @@ EVT_BEGIN(muj_11_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_31_FOUR_EYES)
         SPAWN_EVENT(PTR(warning_event))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, 0, 60, -20, 0, 0)
+    CALL(evt_mobj_save_blk, STRING("s_blk"), 50, 60, -20, 0, 0)
+#endif
     RETURN
 EVT_END()
 

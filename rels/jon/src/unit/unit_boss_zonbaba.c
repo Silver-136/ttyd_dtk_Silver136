@@ -28,8 +28,14 @@ BattleUnitKind unit_boss_zonbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table[7];
+static PoseTableEntry pose_table[9];
+static PoseTableEntry pose_table_weak[7];
+#else
 static PoseTableEntry pose_table[9];
 static PoseTableEntry pose_table_weak[9];
+#endif
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[2];
 BattleWeapon weapon_zonbaba_fumituke_attack;
@@ -93,8 +99,13 @@ BattleUnitKind unit_boss_zonbaba = {
     0.0f,
 #endif
     0.0f,
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    250.0f,
+#else
     0.0f,
     20.0f,
+#endif
     0.0f,
     250.0f,
     0.0f,
@@ -170,9 +181,13 @@ static StatusVulnerability regist = {
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
+#if VERSION <= VERSION_DEMO_US
+    {POSE_TYPE_NORMAL, "GNB_S_3"},
+#else
     {POSE_TYPE_DIZZY, "GNB_X_1"},
     {POSE_TYPE_STOP, "GNB_Z_1"},
     {POSE_TYPE_NORMAL, "GNB_S_3"},
+#endif
     {POSE_TYPE_TALK, "GNB_T_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_3"},
     {POSE_TYPE_DAMAGE, "GNB_D_1"},
@@ -182,9 +197,13 @@ static PoseTableEntry pose_table[] = {
 /** Pose table of Bonetail, weakened: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_weak[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
+#if VERSION <= VERSION_DEMO_US
+    {5, "GNB_X_1"},
+#else
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
     {POSE_TYPE_DIZZY, "GNB_X_1"},
     {POSE_TYPE_STOP, "GNB_N_1"},
+#endif
     {POSE_TYPE_NORMAL, "GNB_S_4"},
     {POSE_TYPE_TALK, "GNB_T_4"},
     {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_4"},
@@ -1118,7 +1137,11 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_DrawLots, LW(0), 6, 30, 15, 10, 10, 10, 10)
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 6, 25, 20, 10, 10, 10, 10)
+#endif
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_zonbaba_fumituke_attack))
@@ -1149,7 +1172,11 @@ static EVT_BEGIN(attack_event)
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(1), 20)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_DrawLots, LW(0), 7, 30, 15, 10, 10, 10, 10, LW(1))
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 7, 25, 20, 10, 10, 10, 10, LW(1))
+#endif
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_zonbaba_fumituke_attack))
@@ -1183,7 +1210,11 @@ static EVT_BEGIN(attack_event)
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(1), 50)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_DrawLots, LW(0), 7, 30, 15, 10, 10, 10, 10, LW(1))
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 7, 25, 20, 10, 10, 10, 10, LW(1))
+#endif
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_zonbaba_fumituke_attack))

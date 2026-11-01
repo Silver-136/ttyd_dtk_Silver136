@@ -45,6 +45,9 @@ typedef struct CubeMesh {
 typedef struct CubeJoint {
     MapFileJoint joint;
     MapFileJointPart part;
+#if VERSION <= VERSION_DEMO_US
+} CubeJoint;
+#else
 } CubeJoint;
 
 /** Draw mode of the built-in collision cube (culling flag set), shared by the cube, head and front hit joints. */
@@ -52,6 +55,7 @@ CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
 
 /** Draw mode of the second part of a two-part object's collision (the MOBJ~ part). */
 CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
+#endif
 
 // cube vertex positions (cubeDVP) and normals (cubeDVN), listed in cubeDDT
 
@@ -262,6 +266,9 @@ u32 cubeDN[1230] = {
 CubeMesh cubeDP = {0, {0}, 0, 6, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820], &cubeDN[1025]}};
 
 /** Joint of the solid cube collision (type 0) that mobjHitEntry copies into a block's hit object. */
+#if VERSION <= VERSION_DEMO_US
+CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
+#endif
 CubeJoint cubeDJ = {
     {NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
      {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &cubeMSJ.mode, 1},
@@ -289,6 +296,9 @@ CubeJoint frontDJ = {
 };
 
 /** Mesh of a two-part object's second hit part: the five faces other than the front one. */
+#if VERSION <= VERSION_DEMO_US
+CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
+#endif
 CubeMesh front2DP = {0, {0}, 0, 5, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820]}};
 
 /** Joint of a two-part object's second hit part (type 2), copied in by mobjHitEntry. */
@@ -496,9 +506,15 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
             strcpy(entry->hitObj[0].name, "MOBJ_");
             strcat(entry->hitObj[0].name, entry->name);
             *(char**)(entry->hitObj[0].jointData + 8) = entry->hitObj[0].name;
+#if VERSION <= VERSION_DEMO_US
             entry->hitObj[0].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[0].jointData + 8), mtx);
             entry->hitObj[0].hitObject->mobj = entry;
             break;
+#else
+            entry->hitObj[0].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[0].jointData + 8), mtx);
+            entry->hitObj[0].hitObject->mobj = entry;
+            break;
+#endif
         case 1:
             PSVECAdd(&entry->position, &entry->translation, &position);
             {
@@ -517,8 +533,12 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
             strcpy(entry->hitObj[0].name, "MOBJ_");
             strcat(entry->hitObj[0].name, entry->name);
             *(char**)(entry->hitObj[0].jointData + 8) = entry->hitObj[0].name;
+#if VERSION <= VERSION_DEMO_US
+            entry->hitObj[0].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[0].jointData + 8), mtx);
+#else
             entry->hitObj[0].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[0].jointData + 8), mtx);
             entry->hitObj[0].hitObject->mobj = entry;
+#endif
             break;
         case 2:
             PSVECAdd(&entry->position, &entry->translation, &position);
@@ -538,14 +558,24 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
             strcpy(entry->hitObj[0].name, "MOBJ_");
             strcat(entry->hitObj[0].name, entry->name);
             *(char**)(entry->hitObj[0].jointData + 8) = entry->hitObj[0].name;
+#if VERSION <= VERSION_DEMO_US
             entry->hitObj[0].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[0].jointData + 8), mtx);
             entry->hitObj[0].hitObject->mobj = entry;
             memcpy(entry->hitObj[1].jointData + 8, &front2DJ, sizeof(CubeJoint));
+#else
+            entry->hitObj[0].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[0].jointData + 8), mtx);
+            entry->hitObj[0].hitObject->mobj = entry;
+            memcpy(entry->hitObj[1].jointData + 8, &front2DJ, sizeof(CubeJoint));
+#endif
             strcpy(entry->hitObj[1].name, "MOBJ~");
             strcat(entry->hitObj[1].name, entry->name);
             *(char**)(entry->hitObj[1].jointData + 8) = entry->hitObj[1].name;
+#if VERSION <= VERSION_DEMO_US
+            entry->hitObj[1].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[1].jointData + 8), mtx);
+#else
             entry->hitObj[1].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[1].jointData + 8), mtx);
             entry->hitObj[1].hitObject->mobj = entry;
+#endif
             break;
     }
 }
@@ -742,9 +772,17 @@ void mobjMain(void) {
                 entry->position.y += entry->velocity.y;
                 entry->velocity.y -= entry->gravity;
             } else {
+#if VERSION <= VERSION_DEMO_US
+                    dist = 1.0f + (f32)__fabs(entry->velocity.y);
+#else
                 dist = 10.0f + (1.0f + (f32)__fabs(entry->velocity.y));
+#endif
                 if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
+#if VERSION <= VERSION_DEMO_US
+                                       10.0f + entry->position.y, entry->position.z, 0.0f, -10.0f, 0.0f) != NULL) {
+#else
                                    10.0f + entry->position.y, entry->position.z, 0.0f, -1.0f, 0.0f) != NULL) {
+#endif
                     entry->position.y = hy;
                     entry->velocity.y = (-0.5f * entry->bounce) * entry->velocity.y;
                     if (__fabs(entry->velocity.y) <= 2.0) {
@@ -786,7 +824,11 @@ void mobjMain(void) {
                     hit = 1;
                     goto hitDone;
                 }
+#if VERSION <= VERSION_DEMO_US
+                    if ((entry->flags & MOBJ_FLAG_HIT_A_BUTTON) && mario->hitobjFront == hitPtr &&
+#else
                 if (marioFrontActionValidChk() && (entry->flags & MOBJ_FLAG_HIT_A_BUTTON) && mario->hitobjFront == hitPtr &&
+#endif
                     (mario->buttonTrg & PAD_BUTTON_A) && !partyFlag) {
                     entry->hitFlag = MOBJ_FLAG_HIT_A_BUTTON;
                     hit = 1;
@@ -869,6 +911,10 @@ void mobjMain(void) {
             entry->flags &= ~MOBJ_FLAG_HIT;
         }
         if (marioStGetSystemLevel() != 0) {
+#if VERSION <= VERSION_DEMO_US
+                entry->flags &= ~MOBJ_FLAG_HIT;
+            }
+#else
             entry->flags &= ~MOBJ_FLAG_HIT;
         }
         {
@@ -877,6 +923,7 @@ void mobjMain(void) {
                 entry->flags &= ~MOBJ_FLAG_HIT;
             }
         }
+#endif
         if (entry->mainFunc != NULL) {
             if (entry->mainFunc(entry) == -1) {
                 continue;
@@ -980,11 +1027,33 @@ MapObjectEntry* mobjNameToPtrNoAssert(const char* name) {
 }
 
 MapObjectEntry* mobjHitObjPtrToPtr(HitEntry* hitObj) {
+#if VERSION <= VERSION_DEMO_US
+    int i;
+    s32 entryCount;
+    MapObjectEntry* entry;
+    MapObjectWork* wp = mobjGetWork();
+
+    entryCount = wp->count;
+    entry = wp->entries;
+    for (i = 0; i < entryCount; i++, entry++) {
+#endif
+#if VERSION <= VERSION_DEMO_US
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) && hitObj == entry->hitObj[0].hitObject) {
+            break;
+#else
     if (hitObj->attributes & HIT_ATTR_MOBJ) {
         return hitObj->mobj;
+#endif
     }
 
+#if VERSION <= VERSION_DEMO_US
+    }
+#endif
+#if VERSION <= VERSION_DEMO_US
+    return entry;
+#else
     return NULL;
+#endif
 }
 
 /**
@@ -1078,11 +1147,19 @@ void mobjCalcMtx2(MapObjectEntry* entry) {
     }
 }
 
+#if VERSION <= VERSION_DEMO_US
+BOOL mobjGetHint(MapObjectEntry* entry) {
+    if (entry == NULL) {
+        return 0;
+    }
+    return (entry->flags & MOBJ_FLAG_HINT) != 0;
+#else
 BOOL mobjGetHint(MapObjectEntry* entry) {
     if (entry == NULL) {
         return FALSE;
     }
     return (entry->flags >> 5) & 1; // MOBJ_FLAG_SHOW_HINT, normalized to BOOL
+#endif
 }
 
 /** Returns TRUE while any map object is busy (MOBJ_FLAG_BUSY); the pause menu does not open then. */
@@ -1132,6 +1209,55 @@ s32 mobjCheckItemboxOpen(MapObjectEntry* entry) {
 }
 
 
+#if VERSION <= VERSION_DEMO_US
+void mobjStrippedFallPool(MapObjectEntry* entry) {
+    entry->velocity.y = 0.0f;
+    entry->position.y = 1.0f;
+    entry->position.x = 10.0f;
+    entry->position.z = -10.0f;
+    entry->velocity.x = -0.5f;
+    if (__fabs(entry->velocity.y) <= 2.0) {
+        entry->velocity.z = 0.0f;
+    }
+}
+
+/** demo only: the nearest active mobj within minMagnitude of (x, y, z) */
+MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude) {
+    int entryCount;
+    Vec pos;
+    Vec dist;
+    Vec _pos;
+    MapObjectEntry* entry;
+    MapObjectWork* wp = mobjGetWork();
+    MapObjectEntry* ret;
+    int i;
+    float mag;
+
+    entryCount = wp->count;
+    entry = wp->entries;
+    ret = NULL;
+
+    _pos = (Vec){0.0f, 0.0f, 0.0f};
+    _pos.x = x;
+    _pos.y = y;
+    _pos.z = z;
+    pos = _pos;
+
+    for (i = 0; i < entryCount; i++, entry++) {
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0)
+            continue;
+
+        VECSubtract(&entry->position, &pos, &dist);
+        mag = VECMag(&dist);
+        if (mag < minMagnitude) {
+            minMagnitude = mag;
+            ret = entry;
+        }
+    }
+
+    return ret;
+}
+#endif
 MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char** names) {
     int entryCount;
     Vec pos;
@@ -1147,10 +1273,14 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
 
     entryCount = wp->count;
     entry = wp->entries;
+#if VERSION <= VERSION_DEMO_US
+    ret = NULL;
+#else
     ret = NULL;
 
     // FAKE: unusedVec is never read and the position goes through the zeroed copy _pos; setting pos.x/y/z directly changes the object
     unusedVec = (Vec){ 0.0f, 0.0f, 0.0f };
+#endif
     _pos = (Vec){ 0.0f, 0.0f, 0.0f };
     _pos.x = x;
     _pos.y = y;

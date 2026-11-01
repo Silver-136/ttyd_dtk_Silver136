@@ -1,5 +1,6 @@
 // las_04 (ラストダンジョン, Palace of Shadow): the hall with the fire bars (firebar) and the coin they drop.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_pouch.h"
@@ -610,6 +611,14 @@ USER_FUNC(firebar_entry) {
     FirebarSetup* setup = (FirebarSetup*)evtGetValue(event, event->args[0]);
     FirebarWork* wp;
     FirebarBall* ball;
+#if VERSION <= VERSION_DEMO_US
+    MarioWork* mario;
+    FirebarBall* balls;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 i;
+#else
     MarioWork* mario;
     FirebarBall* balls;
     f32 x;
@@ -618,6 +627,7 @@ USER_FUNC(firebar_entry) {
     s32 i;
     s32 j;
     s32 n;
+#endif
 
     if (isFirstCall) {
         wp = _mapAlloc(sizeof(FirebarWork));
@@ -667,6 +677,9 @@ USER_FUNC(firebar_entry) {
     if (wp->flags & 8) {
         if (psndSFXChk(wp->sfxId) == 0) {
             psndSFXOff(wp->sfxId);
+#if VERSION <= VERSION_DEMO_US
+            wp->sfxId = -1;
+#else
             wp->sfxId = -1;
         }
         balls = wp->balls;
@@ -676,6 +689,7 @@ USER_FUNC(firebar_entry) {
             y = 10.0f + balls[n].pos.y;
             z = balls[n].pos.z + (rand() % 5 + 3);
             effKemuTestEntry(0, x, y, z, 1.0f);
+#endif
         }
         ball = wp->balls;
         for (i = 0; i < wp->count; i++, ball++) {
@@ -828,9 +842,15 @@ static HitDamageReturn dmgRetPoint[] = {
  */
 EVT_BEGIN(las_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS2"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
+#else
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS2"))
+    CALL(evt_snd_set_rev_mode, 2)
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+#endif
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))

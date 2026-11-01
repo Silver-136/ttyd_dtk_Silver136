@@ -81,8 +81,17 @@ seq_e3_entry e3_tbl[3] = {
 };
 #endif
 #if VERSION < VERSION_US
+#if VERSION <= VERSION_DEMO_US
+char* anim_tbl[4 * 4] = {
+    "b_mario", "M_W_1", "M_S_1", "M_N_8",
+    "c_pkr", "PKR_W_1", "PKR_S_1", "PKR_A_2A",
+    "c_pnk", "PNK_W_1", "PNK_S_1", "PNK_O_1",
+    "c_windy", "PWD_W_1", "PWD_S_1", "PWD_A_7",
+};
+#else
 char* anim_tbl[] = { "b_mario", "PKR_W_1", "PKR_S_1", "PKR_A_2A", "PNK_W_1", "PNK_S_1",
                      "PNK_O_1", "c_windy", "PWD_W_1", "PWD_S_1",  "PWD_A_7" };
+#endif
 #endif
 
 #if VERSION >= VERSION_US
@@ -403,7 +412,13 @@ void seq_e3Main(SequenceWork* seq) {
 }
 
 void e3Disp(CameraId cameraId, void* param) {
+#if VERSION <= VERSION_DEMO_US
     CameraEntry* camera = camGetPtr(CAMERA_2D);
+    Mtx poseMtx;
+    Mtx poseScale;
+#else
+    CameraEntry* camera = camGetPtr(CAMERA_2D);
+#endif
     Mtx mtx;
     Mtx mtxScale;
     f32 projBackup[GX_PROJECTION_SZ];

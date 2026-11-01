@@ -1,6 +1,7 @@
 // tik_03 (埋没した都市, Rogueport Sewers): where Mario meets the guide Puni (puni_soguu_3), who joins him (puni_nakama), and
 // the switch that opens the way to Boggly Woods (win_06).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -27,7 +28,11 @@
 
 EvtWord bero_05_custom_in[30];
 EvtWord bero_05_custom_out[12];
+#if VERSION <= VERSION_DEMO_US
+static BeroEntry bero_entry_data[6];
+#else
 static BeroEntry bero_entry_data[3];
+#endif
 static BeroEntry bero_entry_data2[2];
 static EvtWord guide_init[48];
 static EvtWord guide_talk[11];
@@ -78,7 +83,59 @@ static BeroEntry bero_entry_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "tik_04", // nextMapName
+#if VERSION <= VERSION_DEMO_US
         "n_bero_1", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
+    {
+        "s_bero_2", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_04", // nextMapName
+        "n_bero_2", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
+    {
+        "s_bero_3", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_04", // nextMapName
+        "n_bero_3", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
+    {
+        "s_bero_4", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_04", // nextMapName
+        "n_bero_4", // nextBeroName
+#else
+        "n_bero_1", // nextBeroName
+#endif
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg

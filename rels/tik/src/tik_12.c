@@ -1,6 +1,7 @@
 // tik_12 (埋没した都市, Rogueport Sewers): the charm-caster's (majinaishi) house: her charm cube (majinai_BOX) and trouble 14
 // (irai_14).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/animdrv.h"
 #include "evt/evt_story.h"
@@ -113,7 +114,11 @@ EVT_BEGIN(majinaisi_table_talk)
     END_IF
     // She shows Mario's coins and the three prices; he can back out, or be turned away if he is short of coins.
     CALL(evt_msg_print_add, 0, STRING("majinaisi_04"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_unitwin_alloc)
+#else
     CALL(evt_unitwin_alloc, 0)
+#endif
     CALL(unitwincoin_disp_onoff, 1)
     CALL(evt_msg_select, 0, STRING("majinaisi_05"))
     IF_INT_EQUAL(LW(0), 3)
@@ -382,7 +387,11 @@ EVT_BEGIN(majinaisi_direct_talk)
                 CALL(evt_pouch_check_item, ITEM_CAKE_MIX, LW(0))
                 IF_INT_GREATER(LW(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_14_04"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+                    CALL(evt_win_item_select, PTR(iri_14_item_tbl), LW(0))
+#else
                     CALL(evt_win_item_select, 0, PTR(iri_14_item_tbl), LW(0), 0)
+#endif
                     IF_INT_NOT_EQUAL(LW(0), -1)
                         CALL(evt_pouch_remove_item, ITEM_CAKE_MIX, LW(0))
                         CALL(evt_msg_print, 0, STRING("irai_14_05"), 0, 0)

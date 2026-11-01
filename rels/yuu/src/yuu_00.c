@@ -96,9 +96,15 @@ EvtWord yuu_00_init_evt[11];
 #endif
 
 static MonteTable montetable[] = {
+#if VERSION <= VERSION_DEMO_US
+    {-1200.0f, -800.0f, 450.0f, 400.0f, 2},
+    {-800.0f, -300.0f, 400.0f, 300.0f, 2},
+    {-300.0f, 200.0f, 300.0f, 150.0f, 1},
+#else
     {-1200.0f, -800.0f, 450.0f, 200.0f, 2},
     {-800.0f, -300.0f, 300.0f, 100.0f, 2},
     {-300.0f, 200.0f, 200.0f, 100.0f, 1},
+#endif
     {0},
 };
 
@@ -336,12 +342,24 @@ EVT_BEGIN(minigame01_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1230.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(-1230.0f), FLOAT(160.0f), FLOAT(-10.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.0f), FLOAT(160.0f), FLOAT(-10.0f), 4000, 0)
+#else
     CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.0f), FLOAT(160.0f), FLOAT(-10.0f), 6000, EASING_LINEAR)
+#endif
     WAIT_MS(1000)
     CALL(evt_yuutitle_alloc, 0, 0, STRING("menu_title_minigame1"))
-    WAIT_MS(3000)
-    CALL(evt_yuutitle_free)
+#if VERSION <= VERSION_DEMO_US
     WAIT_MS(2000)
+#else
+    WAIT_MS(3000)
+#endif
+    CALL(evt_yuutitle_free)
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(1000)
+#else
+    WAIT_MS(2000)
+#endif
     RETURN
 EVT_END()
 
@@ -910,17 +928,31 @@ EVT_BEGIN(minigame01_start)
     WAIT_MS(3000)
     // Mario becomes a paper airplane, the controls come back and the coin counter appears.
     CALL(evt_change_plane)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_key_onoff, 1)
+#else
     CALL(evt_cam_letter_box_onoff, 0, 0)
     CALL(evt_cam_letter_box_disable, 1)
+#endif
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_yuucounter_alloc, 0, 70, 0, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
+#else
+    CALL(evt_yuucounter_alloc, 0, 70, 0, 0)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+#endif
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(minigame01_end)
+#else
 EVT_BEGIN(minigame01_end)
     CALL(evt_cam_letter_box_onoff, 1, 0)
     CALL(evt_cam_letter_box_disable, 0)
+#endif
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)
 #if VERSION >= VERSION_US
     CALL(yuu_atai_push, LW(0))
@@ -1009,9 +1041,15 @@ EVT_BEGIN(minigame01_end)
     CALL(evt_fade_out, 1000)
     CALL(re_fall_rtn)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(yuu_00_kaijo_init2)
+    CALL(yuu_00_cam_shift_reset)
+    WAIT_MS(500)
+#else
     CALL_CHILD(PTR(yuu_00_kaijo_init2))
     CALL(yuu_00_cam_shift_reset)
     WAIT_MS(500)
+#endif
     CALL_CHILD(PTR(light_sub_event))
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE1"), GW(10))
     CALL(evt_fade_in, 1000)
@@ -1103,6 +1141,21 @@ EVT_BEGIN(yuu_00_init_evt)
     END_SWITCH
 #endif
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+
+/** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
+USER_FUNC(yuu_00_cam_shift_reset) {
+    camShiftReset();
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Names of the floor areas below the course for yuuminigame1_gamerule;
+ * landing on one scores -5 (02, 05), -10 (03), -15 (06) or -20 (04).
+ */
+static const char yuu00_gnd_02[] = "A_ground_02";
+#else
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00004250, JP yuu .text+0x4184. See docs/NAME_PROVENANCE.md.
@@ -1116,6 +1169,7 @@ USER_FUNC(yuu_00_cam_shift_reset) {
  * landing on one scores -5 (02, 05), -10 (03), -15 (06) or -20 (04).
  */
 static const char yuu00_gnd_02[] = "A_ground_02";
+#endif
 static const char yuu00_gnd_05[] = "A_ground_05";
 static const char yuu00_gnd_03[] = "A_ground_03";
 static const char yuu00_gnd_06[] = "A_ground_06";

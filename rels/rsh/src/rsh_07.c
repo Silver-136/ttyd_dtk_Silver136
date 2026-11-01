@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -104,11 +105,21 @@ EVT_END()
 
 static EVT_BEGIN(talk_unten)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
+    ELSE
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
+    END_IF
+    RETURN
+#else
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
     END_IF
     RETURN
+#endif
 EVT_END()
 
 /** NPCs of the small room: the driver. */
@@ -180,7 +191,11 @@ EVT_BEGIN(rsh_07_init_evt)
         ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+#else
             CALL(evt_snd_envoff, PSND_FADEOUT)
+#endif
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE
             CALL(evt_sub_get_mapname, LW(0))

@@ -1,5 +1,6 @@
 // kpa_05 (クッパ編, Bowser's interludes): the third side-scrolling stage, over lava; continues in kpa_06.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -118,7 +119,11 @@ static EVT_BEGIN(jumpstand_evt)
     CALL(evt_mobj_get_position, STRING("me"), LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), LW(1))
     ADD(LW(3), 800)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), LW(3), LW(2), 2000, 1)
+#else
     CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), LW(3), LW(2), 4000, 3)
+#endif
     RETURN
 EVT_END()
 

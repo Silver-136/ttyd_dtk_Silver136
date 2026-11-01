@@ -1,6 +1,7 @@
 // Keelhaul Key (muj) battle unit: the Bone Pile (honeduka) of the Cortez fight: its parts, defence/status tables, and
 // events.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -158,7 +159,11 @@ EVT_END()
 
 EVT_BEGIN(honeduka_damage_sub_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OWNER, LW(3))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_RunDataEventChild, LW(3), 70)
+#else
     CALL(btlevtcmd_RunDataEventChild, LW(3), UNIT_DATA_WEAPON_BREAK_EVENT)
+#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

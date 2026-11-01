@@ -1,5 +1,6 @@
 // unit_hyper_togezo: Sky-Blue Spiny, battle unit.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -248,9 +249,13 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGZ_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "TGZ_S_1"},
     {POSE_TYPE_DAMAGE, "TGZ_D_3"},
+#if VERSION <= VERSION_DEMO_US
+    {POSE_TYPE_ACTION, "TGZ_S_2"},
+#else
     {POSE_TYPE_WALK, "TGZ_W_1"},
     {POSE_TYPE_RUN, "TGZ_R_1"},
     {POSE_TYPE_ACTION, "TGZ_S_2"},
+#endif
 };
 
 static PoseTableEntry pose_table_guard[] = {

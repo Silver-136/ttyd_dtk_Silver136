@@ -845,6 +845,9 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+#else
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     CALL(evt_sub_get_dist, LW(0), LW(2), LW(3), LW(5), LW(10))
@@ -854,6 +857,7 @@ static EVT_BEGIN(peach_mail)
         CALL(evt_party_set_dir, 0, 270, 0)
     END_IF
     CALL(evt_snd_bgmoff, PSND_PAUSE)
+#endif
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_MAIL_RECEPTION1"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
@@ -928,8 +932,13 @@ EVT_END()
 
 EVT_BEGIN(christine_hei_01)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_party_stop, 0)
+    CALL(evt_bero_exec_wait, 65536)
+#else
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_party_stop, 0)
+#endif
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_normalize)
     WAIT_MS(500)

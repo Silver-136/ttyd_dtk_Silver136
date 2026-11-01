@@ -158,7 +158,11 @@ typedef struct BattleAnnounce {
 #if VERSION >= VERSION_US
     char text[0x100];                 // 0x14 (US 4 shorter)
 #else
+#if VERSION <= VERSION_DEMO_US
+    char text[0x100]; // 0x14 (4 shorter than JP)
+#else
     char text[0x104];                 // 0x14
+#endif
 #endif
     StChgWork stChg;                 // 0x118, status-change message queue (battle_status_effect)
 } BattleAnnounce;

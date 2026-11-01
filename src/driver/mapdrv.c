@@ -36,9 +36,15 @@ GXColor paperCraft_ambient;
 GXTexObj projTexObj;
 void* projTexImgRef;
 Mtx projMtx;
+#if VERSION <= VERSION_DEMO_US
 BOOL __mapdrv_make_dl;
 BOOL disableMapDraw;
 s32 error_count;
+#else
+BOOL __mapdrv_make_dl;
+BOOL disableMapDraw;
+s32 error_count;
+#endif
 BOOL error_flag;
 MapObject* current_mp;
 BOOL mapClipOffFlag;
@@ -82,6 +88,9 @@ void mapErrorEntry(s32 type, const char* name) {
 
 /** Root directory of the map data on the disc, always "." (cam_road.c builds its file path from it). */
 const char* getMapDataDvdRoot(void) {
+#if VERSION <= VERSION_DEMO_US
+    return ".";
+#else
     return ".";
 }
 
@@ -94,6 +103,7 @@ void mapDispOff(void) {
 // Descriptive name (not in the symbol maps).
 void mapDispOn(void) {
     disableMapDraw = FALSE;
+#endif
 }
 
 /** The MapWork of the active group: index 0 is the field map, 1 the battle stage. */
@@ -352,7 +362,11 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 #if VERSION == VERSION_EU
         OSPanic("mapdrv.c", 0x2e8, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
 #else
+#if VERSION <= VERSION_DEMO_US
+        OSPanic("mapdrv.c", 0x2c1, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
+#else
         OSPanic("mapdrv.c", 0x2e5, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
+#endif
 #endif
     }
     if (joint->partCount) {
@@ -436,12 +450,21 @@ void makeDisplayList(BOOL group) {
     __mapdrv_make_dl = TRUE;
     total = 0;
     for (pass = 0; pass < 2; pass++) {
+#if VERSION <= VERSION_DEMO_US
+        obj = e->objects;
+        for (k = 0; k < 8; k++) {
+            obj->displayList[k] = NULL;
+            obj->displayListSize[k] = 0;
+        }
+        for (i = 0; i < wo->entries[group].numJoints; i++, obj++) {
+#else
         obj = e->objects;
         for (k = 0; k < 8; k++) {
             obj->displayList[k] = NULL;
             obj->displayListSize[k] = 0;
         }
         for (i = 0; i < wp->entries[group].numJoints; i++, obj++) {
+#endif
             if (obj->joints->partCount < 1 || obj->joints->partCount > 8) {
                 continue;
             }
@@ -963,9 +986,15 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             }
             o->flags |= MAP_OBJ_FLAG_DISPLAY_LIST;
         }
+#if VERSION <= VERSION_DEMO_US
     }
     disableMapDraw = FALSE;
 }
+#else
+    }
+    disableMapDraw = FALSE;
+}
+#endif
 
 /**
  * Frees the field map and everything built from it:
@@ -976,9 +1005,13 @@ void mapUnLoad(void) {
     MapEntry* entry2;
     MapEntry* entry;
     int i;
+#if VERSION <= VERSION_DEMO_US
+    MapWork* wo;
+#else
     MapWork* wp;
 
     sysWaitDrawSync();
+#endif
     entry = mapWork->entries;
     wp = mapWork;
     activeGroup = i = 0;
@@ -998,9 +1031,15 @@ void mapUnLoad(void) {
             entry->dispListBuf = NULL;
             entry->dispListSize = 0;
         }
+#if VERSION <= VERSION_DEMO_US
     }
     disableMapDraw = FALSE;
     hitReInit();
+#else
+    }
+    disableMapDraw = FALSE;
+    hitReInit();
+#endif
     lightReInit();
     envReInit();
     camUnLoadRoad(CAMERA_3D);
@@ -1030,20 +1069,99 @@ void mapUnLoad(void) {
 }
 
 BOOL mapPreLoad(const char* map) {
+#if VERSION <= VERSION_DEMO_US
+    FileEntry* file = fileAsyncf(0, NULL, "%s/b/%s", getMarioStDvdRoot(), map);
+
+    if (file == NULL) {
+        return FALSE;
+    }
+    if ((s32)file == -1) {
+        return TRUE;
+    }
+#endif
     return TRUE;
 }
 
 void mapLoad(const char* map) {
+#if VERSION <= VERSION_DEMO_US
+    char path[256];
+#endif
+#if VERSION <= VERSION_DEMO_US
+    MapWork* wo;
+    FileEntry* file;
+    u32 size;
+    MapFileMesh* arc;
+    u32 header;
+#else
     MapWork* wp;
     // FAKE: wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object
     MapWork* wp2;
 
     sysWaitDrawSync();
     wp2 = wp = mapWork;
+#endif
     activeGroup = 0;
+#if VERSION <= VERSION_DEMO_US
+    memset(wo = mapWork, 0, sizeof(MapWork));
+#else
     memset(wp2, 0, sizeof(MapWork));
+#endif
+#if VERSION <= VERSION_DEMO_US
+    sprintf(path, "%s/b/%s", getMarioStDvdRoot(), map);
+    file = fileAlloc(path, 0);
+    if (file != NULL) {
+        header = *(u32*)*file->wo;
+        size = ((header & 0xFF) << 16) | (header & 0xFF00) | ((header >> 16) & 0xFF);
+        arc = _mapAllocTail(size);
+        LZ77Decode(*file->wo, arc);
+        arcEntry(1, arc, size);
+        DCFlushRange(arc, size);
+        GXInvalidateVtxCache();
+        GXInvalidateTexAll();
+        wo->entries[0].arcData = arc;
+        wo->entries[0].arcSize = size;
+        fileFree(file);
+    }
+#endif
     _mapLoad(wp, 0, map);
     wp->entries[0].count = 1;
+#if VERSION <= VERSION_DEMO_US
+}
+/** retail maps are loaded whole by mapLoad, so there is nothing to start early */
+BOOL mapPreLoad(const char* map) {
+    return TRUE;
+}
+
+/**
+ * Loads the field map map into MapWork slot 0 as its only entry, after waiting for the GPU to finish drawing;
+ * called by seq_mapchange.
+ */
+MapFileMesh mapLoad(const char* map) {
+    MapWork* wo;
+
+    MapWork* wp2;
+    sysWaitDrawSync();
+    wp2 = wo = mapWork;
+    activeGroup = 0;
+
+    memset(wp2, 0, sizeof(MapWork));
+    _mapLoad(wo, 0, map);
+    wo->entries[0].count = 1;
+}
+
+// Frees the battle map (group 1) and brings the field map (group 0) back from ARAM. The demo reloads the field map
+// with its own locals and declaration order: either version's locals in the other version change the registers.
+// FAKE: opt_common_subs off for this function only. With CSE on, `wo = mapWork` (last loop) becomes a CSE temp created
+// before the lifetime-split temps, so wo's register lands above i's. With it off, the second web of the reused `wo` is a
+// split temp; split temps are created in order of the variables' first reference (i before wo before entry), which gives
+// the target's i r31 / wo r30 / entry r29. Code is otherwise identical (mwregdump, phase 5).
+#pragma opt_common_subs off
+/**
+ * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
+ * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
+ */
+MapFileMesh bmapUnLoad(MapFileMesh) {
+#else
 }
 
 // FAKE: opt_common_subs off for this function only. With CSE on, `wp = mapWork` (last loop) becomes a CSE temp created
@@ -1056,12 +1174,29 @@ void mapLoad(const char* map) {
  * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
  */
 void bmapUnLoad(void) {
+#endif
+#if VERSION <= VERSION_DEMO_US
+    MapWork* wp2;
+#endif
+#if VERSION <= VERSION_DEMO_US
+    MapEntry* entry3;
+    int j;
+    MapWork* wo;
+#else
     MapEntry* entry2;
+#endif
     MapEntry* entry;
+#if VERSION <= VERSION_DEMO_US
+    MapEntry* entry2;
+#endif
+#if VERSION <= VERSION_DEMO_US
+    int i;
+#else
     int i;
     MapWork* wp;
 
     sysWaitDrawSync();
+#endif
     i = 0;
     wp = &mapWork[1];
     activeGroup = 1;
@@ -1081,9 +1216,15 @@ void bmapUnLoad(void) {
             entry->dispListBuf = NULL;
             entry->dispListSize = 0;
         }
+#if VERSION <= VERSION_DEMO_US
     }
     disableMapDraw = FALSE;
     hitReInit();
+#else
+    }
+    disableMapDraw = FALSE;
+    hitReInit();
+#endif
     lightReInit();
     envReInit();
     entry2 = wp->entries;
@@ -1108,6 +1249,33 @@ void bmapUnLoad(void) {
     }
     arcDelete(1);
     arcDelete(2);
+#if VERSION <= VERSION_DEMO_US
+    memset(wo, 0, sizeof(MapWork));
+    j = 0;
+    // FAKE: a dead guard between j = 0 and the mapWork load keeps the target's li-before-lwz order (docs/FAKES.md).
+    {
+        s32 gz = 0;
+        if (gz != 0) {
+            j = 0;
+        }
+    }
+    wp2 = mapWork;
+    activeGroup = j;
+    for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
+
+        // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wo itself)
+        if (entry3->datAram) {
+            entry3->dat = _mapAllocTail(entry3->datSize);
+            entry3->tpl = _mapAllocTail(entry3->tplSize);
+            aramMgrToMram(entry3->datAram, entry3->dat);
+            aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
+            entry3->datAram = NULL;
+            MAPENT_TPLARAM(entry3) = NULL;
+        } else {
+            entry3->arcData = _mapAllocTail(entry3->arcSize);
+            aramMgrToMram(entry3->arcAram, entry3->arcData);
+            entry3->arcAram = NULL;
+#else
     memset(wp, 0, sizeof(MapWork));
     wp = mapWork;
     activeGroup = 0;
@@ -1124,22 +1292,79 @@ void bmapUnLoad(void) {
             entry->arcData = _mapAllocTail(entry->arcSize);
             aramMgrToMram(entry->arcAram, entry->arcData);
             entry->arcAram = NULL;
+#endif
         }
+#if VERSION <= VERSION_DEMO_US
+        makeDisplayList(j);
+#else
         makeDisplayList(i);
+#endif
     }
+#if VERSION <= VERSION_DEMO_US
+    if (wp2->entries->arcData) {
+        arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
+#else
     if (wp->entries->arcData) {
         arcEntry(1, wp->entries->arcData, wp->entries->arcSize);
+#endif
     }
+#if VERSION <= VERSION_DEMO_US
+}
+#pragma opt_common_subs reset
+
+/**
+ * Demo only: starts the async read of the battle map archives arc_d/<map>.arc;
+ * TRUE once both requested files are available.
+ */
+BOOL bmapPreLoad(const char* map, const char* map2) {
+    FileEntry* file = NULL;
+    FileEntry* file2 = NULL;
+
+    if (map != NULL) {
+        file = fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map);
+    }
+    if (map2 != NULL) {
+        file2 = fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map2);
+    }
+    if (file == NULL) {
+        return FALSE;
+    }
+    return file2 != NULL;
+}
+
+/**
+ * Called by seq_battle at battle start: parks the field map's files in ARAM,
+ * then loads the battle stage map into MapWork slot 1 as entry 0 and, if given,
+ * the stage-specific map map2 as entry 1. The demo reads and unpacks both archives itself.
+ */
+MapFileMesh bmapLoad(const char* map, const char* map2) {
+#else
 }
 #pragma opt_common_subs reset
 
 void bmapLoad(const char* map, const char* map2) {
+#endif
+#if VERSION <= VERSION_DEMO_US
+    char path[256];
+#endif
     MapWork* wp;
     MapEntry* entry;
     MapEntry* e;
+#if VERSION <= VERSION_DEMO_US
+    int i;
+    FileEntry* file;
+    u32 size;
+    MapFileMesh* arc;
+    u32 header;
+    u32 size2;
+    FileEntry* file2;
+    MapFileMesh* arc2;
+    u32 header2;
+#else
     int i;
 
     sysWaitDrawSync();
+#endif
     activeGroup = 0;
     wp = mapGetWork();
     for (i = 0; i < wp->entries[0].count; i++) {
@@ -1174,6 +1399,42 @@ void bmapLoad(const char* map, const char* map2) {
     wp = (0, &mapWork[1]);
     activeGroup = 1;
     memset(wp, 0, sizeof(MapWork));
+#if VERSION <= VERSION_DEMO_US
+    if (map != NULL) {
+        sprintf(path, "%s/b/%s", getMarioStDvdRoot(), map);
+        file = fileAlloc(path, 0);
+        if (file != NULL) {
+            header = *(u32*)*file->wo;
+            size = ((header & 0xFF) << 16) | (header & 0xFF00) | ((header >> 16) & 0xFF);
+            arc = _mapAllocTail(size);
+            LZ77Decode(*file->wo, arc);
+            arcEntry(1, arc, size);
+            DCFlushRange(arc, size);
+            GXInvalidateVtxCache();
+            GXInvalidateTexAll();
+            wo->entries[0].arcData = arc;
+            wo->entries[0].arcSize = size;
+            fileFree(file);
+        }
+    }
+    if (map2 != NULL) {
+        sprintf(path, "%s/b/%s", getMarioStDvdRoot(), map2);
+        file2 = fileAlloc(path, 0);
+        if (file2 != NULL) {
+            header2 = *(u32*)*file2->wo;
+            size2 = ((header2 & 0xFF) << 16) | (header2 & 0xFF00) | ((header2 >> 16) & 0xFF);
+            arc2 = _mapAllocTail(size2);
+            LZ77Decode(*file2->wo, arc2);
+            arcEntry(2, arc2, size2);
+            DCFlushRange(arc2, size2);
+            GXInvalidateVtxCache();
+            GXInvalidateTexAll();
+            wo->entries[1].arcData = arc2;
+            wo->entries[1].arcSize = size2;
+            fileFree(file2);
+        }
+    }
+#endif
     _mapLoad(wp, 0, map);
     wp->entries[0].count = 1;
     if (map2) {
@@ -1599,10 +1860,19 @@ void mapMain(void) {
     char abuf[0x100];
     Mtx scale;
     f32 v[9];
+#if VERSION <= VERSION_DEMO_US
+    f32 cv[5];
+
+    for (i = 0; i < wo->entries[0].count; i++) {
+#else
     f32 cv[5];
 
     entry = wp->entries;
     for (i = 0; i < wp->entries[0].count; entry++, i++) {
+#endif
+#if VERSION <= VERSION_DEMO_US
+        entry = &wo->entries[i];
+#endif
         changed = FALSE;
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
@@ -2071,12 +2341,21 @@ void mapDisp(void) {
     f32 z;
     s32 mode;
     MapFileJoint* joint;
+#if VERSION <= VERSION_DEMO_US
+    BOOL clipped;
+
+    if (disableMapDraw) {
+        return;
+    }
+    entry = wo->entries;
+#else
     BOOL clipped;
 
     if (disableMapDraw) {
         return;
     }
     entry = wp->entries;
+#endif
     for (i = 0; i < wp->entries[0].count; entry++, i++) {
         if (entry->rootMapObj != NULL) {
             PSMTXScale(scale, 10.0f, 10.0f, 10.0f);
@@ -3585,11 +3864,20 @@ void mapObjFlagOn(const char* name, u32 flags) {
         error_count++;
         error_count %= 32;
         return;
+#if VERSION <= VERSION_DEMO_US
+    }
+    obj->flags |= flags;
+    if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
+        obj->flags |= flags;
+    }
+}
+#else
     }
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
         obj->flags |= flags;
     }
 }
+#endif
 
 void mapObjFlagOff(const char* name, u32 flags) {
     MapObject* obj = mapGetMapObj(name);
@@ -3603,6 +3891,20 @@ void mapObjFlagOff(const char* name, u32 flags) {
         return;
     }
     obj->flags &= ~flags;
+#if VERSION <= VERSION_DEMO_US
+}
+
+/**
+ * Sets flags on obj and its whole subtree, and its later siblings when doNext;
+ * retail versions skip the display-list flag on objects without a display list.
+ */
+MapFileJoint MapFileMesh mapFlgOn(inline* obj, u32 flags, BOOL doNext) {
+    obj->flags |= flags;
+    if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
+        obj->flags |= flags;
+    }
+    if (obj->child) {
+#else
 }
 
 /**
@@ -3614,6 +3916,7 @@ void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
         obj->flags |= flags;
     }
     if (obj->child) {
+#endif
         mapFlgOn(obj->child, flags, TRUE);
     }
     if (doNext && obj->next) {
@@ -4170,7 +4473,11 @@ static void mapStrippedPool(const char** str, f32* val) {
     val[1] = 0.0f;
     val[2] = 0.5f;
     val[3] = 2.0f;
+#if VERSION <= VERSION_DEMO_US
+    str[1] = "%s/map/%s/map.dat";
+#else
     str[1] = "%s/m/%s/d";
+#endif
     str[2] = "information";
     str[3] = "ver1.01";
     str[4] = "ver1.02";

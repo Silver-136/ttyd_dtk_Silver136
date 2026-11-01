@@ -289,8 +289,12 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     WAIT_MS(500)
     WAIT_MS(100)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_001"), 0, STRING("トゲノコＡ"))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_19_01_BOWSER_BOWSER_CASTLE)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_19_01_BOWSER_BOWSER_CASTLE)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)
     RETURN
@@ -781,11 +785,19 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(10)
         END_IF
+#if VERSION <= VERSION_DEMO_US
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_npc_kamek_kemuri2, STRING("ババ"), 1500, 1)
     END_INLINE_EVENT
     SET_VALUE(GF(0), 0)
+#else
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_npc_kamek_kemuri2, STRING("ババ"), 1500, 1)
+    END_INLINE_EVENT
+    SET_VALUE(GF(0), 0)
+#endif
     BEGIN_INLINE_EVENT
         LOOP(0)
             IF_INT_EQUAL(GF(0), 1)
@@ -1173,8 +1185,13 @@ EVT_BEGIN(kpa_01_init_evt)
             END_INLINE_EVENT
         END_IF
     END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+    RETURN
+EVT_END()
+#else
     RETURN
 EVT_END_PAD()
+#endif
 
 /**
  * Script helper: args[0] = number, returns "hi_<number>" in args[1],

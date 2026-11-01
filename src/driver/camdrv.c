@@ -1,6 +1,7 @@
 // Camera driver: the fixed set of cameras (offscreen, shadow, background, 3D, 2D, fade...), their
 // projection and view matrices, and the per-frame camera update.
 
+#include "version.h"
 #include "driver/camdrv.h"
 #include "driver/mapdrv.h"
 #include "driver/seqdrv.h"
@@ -675,9 +676,15 @@ void camEffMain(CameraEntry* camera) {
     camera->cameraUp = camera3D->cameraUp;
     camera->cameraAt = camera3D->cameraAt;
     camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);
+#if VERSION <= VERSION_DEMO_US
     camera->viewYaw = angleABf(camera->cameraPos.x, camera->cameraPos.z, camera->cameraAt.x, camera->cameraAt.z);
     MTXPerspective(camera->projection, camera->fovY, camera->aspect, camera->near, camera->far);
 }
+#else
+    camera->viewYaw = angleABf(camera->cameraPos.x, camera->cameraPos.z, camera->cameraAt.x, camera->cameraAt.z);
+    MTXPerspective(camera->projection, camera->fovY, camera->aspect, camera->near, camera->far);
+}
+#endif
 
 /**
  * Sets a camera's update mode (for the 3D camera: 1 field with a camera road, 2 battle, 3 field without one);

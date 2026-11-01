@@ -1,6 +1,7 @@
 // las_09 (ラストダンジョン, Palace of Shadow): the Shadow Sirens (Beldam, Marilyn) and Doopliss (Rampell) cutscene and
 // battle, and the two Chain Chomp statues (bomb_wanwan) that are bombed open.
 
+#include "version.h"
 #include "eff/n64/eff_guruguru_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -406,8 +407,12 @@ static EVT_BEGIN(first_evt)
     CALL(evt_party_run, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
     CALL_CHILD(PTR(bero_case_entry))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_cam3d_evt_off, 500, 11)
+#else
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -992,9 +997,15 @@ EVT_END()
 
 EVT_BEGIN(las_09_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS3"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
+#else
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS3"))
+    CALL(evt_snd_set_rev_mode, 2)
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+#endif
     CALL(evt_bero_get_info)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_02_FOLLOW_THE_LIT_TORCHES)
         CALL_CHILD(PTR(evt_bero_info_run))

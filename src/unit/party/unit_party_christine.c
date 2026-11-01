@@ -96,7 +96,19 @@ PoseTableEntry pose_table_christine_stay[] = {
     {POSE_TYPE_ZERO_GRAVITY, "PKR_X_1"},
     {POSE_TYPE_AVOID_COUNTER, "PKR_A_1"},
     {POSE_TYPE_DEFEND, "PKR_G_1"},
+#if VERSION <= VERSION_DEMO_US
     {POSE_TYPE_ACTION, "PKR_S_1"},
+};
+
+// demo only: not referenced by the demo's own data
+PoseTableEntry pose_table_dictionary_page[] = {
+    {POSE_TYPE_NORMAL, "ZYO_Z_1"},
+    {31, "ZYO_Z_1"},
+    {POSE_TYPE_DAMAGE, "ZYO_Z_1"},
+    {POSE_TYPE_ACTION, "ZYO_Z_1"},
+#else
+    {POSE_TYPE_ACTION, "PKR_S_1"},
+#endif
 };
 
 /**
@@ -1116,26 +1128,54 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     SUBTRACT(LW(0), 3)
     SWITCH(LW(0))
         CASE_LESS_OR_EQUAL(-3)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 30)
+        SET_VALUE(LW(1), 10)
+#else
         SET_VALUE(LW(0), 27)
         SET_VALUE(LW(1), 20)
+#endif
         CASE_EQUAL(-2)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 27)
+        SET_VALUE(LW(1), 27)
+#else
         SET_VALUE(LW(0), 25)
         SET_VALUE(LW(1), 28)
+#endif
         CASE_EQUAL(-1)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 25)
+#else
         SET_VALUE(LW(0), 23)
+#endif
         SET_VALUE(LW(1), 30)
         CASE_EQUAL(0)
         SET_VALUE(LW(0), 23)
         SET_VALUE(LW(1), 30)
         CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 20)
+#else
         SET_VALUE(LW(0), 23)
+#endif
         SET_VALUE(LW(1), 30)
         CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 20)
+        SET_VALUE(LW(1), 32)
+#else
         SET_VALUE(LW(0), 23)
         SET_VALUE(LW(1), 30)
+#endif
         CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 20)
+        SET_VALUE(LW(1), 35)
+#else
         SET_VALUE(LW(0), 23)
         SET_VALUE(LW(1), 32)
+#endif
     END_SWITCH
     CALL(btlevtcmd_AcSetParamAll, 16, 220, 70, 0, 0, LW(0), LW(1), 0)
     CALL(btlevtcmd_AcSetFlag, 0)
@@ -1176,12 +1216,21 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     MULTIPLY(LW(14), 45)
     CALL(evt_eff, STRING(""), STRING("kiss"), 1, LW(0), LW(1), LW(2), LW(14), 0, 0, 0, 0, 0, 0, 0)
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
+#if VERSION <= VERSION_DEMO_US
+        IF_BITS_SET(LW(6), 2)
+            CALL_CHILD(subsetevt_check_target_movable)
+            IF_INT_NOT_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_KISSED_CHRISTINE)
+            END_IF
+            CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+#else
         IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
             CALL_CHILD(subsetevt_check_target_movable)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_KISSED_CHRISTINE)
             END_IF
             CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+#endif
             ADD(LW(2), 15)
             CALL(btlevtcmd_GetHeight, LW(3), LW(15))
             CALL(btlevtcmd_GetStatusMg, LW(3), LW(14))
@@ -1575,6 +1624,9 @@ USER_FUNC(_set_hustle) {
         if (unit->movesRemaining <= 0) {
             unit->movesRemaining++;
             unit->moveState = 0;
+#if VERSION <= VERSION_DEMO_US
+            unit->activeTurns = 0;
+            unit->moveColorLv = 0xFF;
             unit->moveColorLv = 0xFF;
             if (unit->maxMovesThisTurn <= 0) {
                 unit->maxMovesThisTurn = 1;
@@ -1583,6 +1635,16 @@ USER_FUNC(_set_hustle) {
                 }
             }
         } else {
+#else
+            unit->moveColorLv = 0xFF;
+            if (unit->maxMovesThisTurn <= 0) {
+                unit->maxMovesThisTurn = 1;
+                if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
+                    unit->tokenFlags |= kHasRallyWinkStatus;
+                }
+            }
+        } else {
+#endif
             BtlUnit_OnStatusFlag(unit, UNIT_STATUS_FLAG_HUSTLE);
         }
     }

@@ -1,5 +1,6 @@
 // Paper Mario 64 effect: a star that streaks across the screen toward a target point, leaving a trail of 8 copies.
 
+#include "version.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -193,11 +194,15 @@ void effSstarMain(EffectEntry* effect) {
             w->rotZ = angleABf(0.0f, 0.0f, -w->velocity.y, w->screenVelX);
         }
     }
+#if VERSION <= VERSION_DEMO_US
+    if (mario->position.y - w->position.y > 300.0f) {
+#else
     if (gp->inBattle == 0) {
         if (mario->position.y - w->position.y > 300.0f) {
             w->life = -1;
         }
     } else if (w->position.y < -300.0f) {
+#endif
         w->life = -1;
     }
     w->position.x += w->velocity.x;

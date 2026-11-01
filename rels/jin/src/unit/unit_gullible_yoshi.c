@@ -1,5 +1,6 @@
 // Yoshi partner unit for the Doopliss fight in Creepy Steeple (placed off screen in the battle setup).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -24,9 +25,17 @@ static BattleDataEntry data_table_yoshi[2];
 static BattleUnitKindPart parts_yoshi[1];
 static EvtWord init_event_yoshi[24];
 EvtWord damage_event_yoshi[22];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_yoshi[156];
+#else
 static EvtWord dead_event_yoshi[177];
+#endif
 static EvtWord attack_event_yoshi[748];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event_yoshi[6];
+#else
 static EvtWord wait_event_yoshi[7];
+#endif
 
 /**
  * Unit kind of the Yoshi double:
@@ -230,26 +239,42 @@ static EVT_BEGIN(dead_event_yoshi)
         CALL(evt_btl_camera_set_moveto, 0, 130, 58, 228, 130, 38, -20, 30, 11)
         WAIT_FRAMES(37)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_yos"), 0, -2)
+#if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         WAIT_MS(500)
+#else
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        WAIT_MS(500)
+#endif
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 0, 90, 58, 228, 90, 38, -20, 30, 11)
         WAIT_FRAMES(37)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_04"), 0, GW(16))
         WAIT_MS(200)
         CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         LOOP(0)
+#else
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        LOOP(0)
+#endif
             IF_INT_EQUAL(GW(19), 2)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
         CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
+#else
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     END_SWITCH
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)
     SET_VALUE(GW(20), 2)
@@ -472,6 +497,11 @@ EVT_END()
 /** Wait script: plays Yoshi's idle pose from his pose table. */
 static EVT_BEGIN(wait_event_yoshi)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
+#if VERSION <= VERSION_DEMO_US
+    RETURN
+EVT_END()
+#else
     RETURN
 EVT_END_PAD()
+#endif
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "version.h"
 #include "driver/seqdrv.h"
 #include "manager/filemgr.h"
 #include <dolphin/types.h>
@@ -15,10 +16,17 @@ typedef struct TitleWork {
     f32 fadeAlpha; //0x1C, 0..1, +/-0.1 per frame
     s32 counter; //0x20
     s32 timer; //0x24
+#if VERSION <= VERSION_DEMO_US
+    s32 idle;             // 0x28
+    s32 frame; // 0x2C
+    s32 debug; // 0x30
+} TitleWork;
+#else
     s32 idle; //0x28
     s32 frame; //0x2C
     s32 debug; //0x30
 } TitleWork;
+#endif
 
 const char* DbgBtlSel_GetMsgDataPtr(void);
 s32 getDebugMode(void);

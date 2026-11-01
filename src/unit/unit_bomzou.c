@@ -1,5 +1,6 @@
 // Battle unit data for the Bob-omb bomb (unit_bomzou) and its explosion weapon, used by Bobbery.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -329,8 +330,13 @@ static EVT_BEGIN(explosion_event)
     END_IF
     LABEL(99)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
+#if VERSION <= VERSION_DEMO_US
+    RETURN
+EVT_END()
+#else
     RETURN
 EVT_END_PAD()
+#endif
 
 /**
  * Data table events: knocked out (49) queues the blast, tag 53 is the blast itself,

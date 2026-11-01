@@ -123,6 +123,11 @@ void cardBufReset(void) {
     wp->op = CARD_OP_IDLE;
     wp->result = CARD_RESULT_NOCARD;
     wp->flags = 0;
+#if VERSION <= VERSION_DEMO_US
+    if (flags & CARD_FLAG_INSERT_WATCH) {
+        wp->flags |= CARD_FLAG_INSERT_WATCH;
+    }
+#endif
 }
 
 /**
@@ -152,6 +157,43 @@ void cardInit(void) {
     wp->result = CARD_RESULT_NOCARD;
     wp->flags = 0;
     CARDInit();
+#if VERSION <= VERSION_DEMO_US
+}
+
+/**
+ * Starts watching slot A for a card being inserted or removed (memcard_watch_start);
+ * also keeps cardIsExec busy for 10 frames while the probe settles. Not in the demo.
+ */
+void cardInsertWatchStart(void) {
+    wp->prevInserted = wp->chan;
+    wp->busyFrames = 10;
+    wp->flags |= CARD_FLAG_INSERT_WATCH;
+}
+
+/** Stops the insert watch and clears its changed flag. */
+void cardInsertWatchEnd(void) {
+    wp->flags &= ~CARD_FLAG_INSERT_WATCH;
+    wp->flags &= ~(CARD_FLAG_INSERT_WATCH | CARD_FLAG_INSERT_CHANGED);
+}
+
+/** TRUE once a card was inserted or removed in slot A since cardInsertWatchStart; the file select scripts poll it. */
+BOOL cardInsertChanged(void) {
+    if (wp->flags & CARD_FLAG_INSERT_WATCH && wp->flags & CARD_FLAG_INSERT_CHANGED) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/**
+ * TRUE while a card operation is running or a card call is in flight (or the insert watch is settling).
+ * Scripts wait on it, and mariost.c waits for it before a reset so a save is never cut off.
+ */
+BOOL cardIsExec(void) {
+    if (wp == NULL) {
+        return FALSE;
+    }
+    if (wp->flags & CARD_FLAG_EXEC) {
+#else
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_800b0ed0, JP 0x800B0ED0. See docs/NAME_PROVENANCE.md.
@@ -186,6 +228,7 @@ BOOL cardIsExec(void) {
         return FALSE;
     }
     if (wp->flags & CARD_FLAG_EXEC) {
+#endif
         return TRUE;
     }
     if (wp->flags & CARD_FLAG_BUSY) {
@@ -338,7 +381,12 @@ void cardCopy2Main(s32 slot) {
     void* savedFbatData;
     s32 savedSoundMode;
     s32 savedRumble;
+#if VERSION <= VERSION_DEMO_US
     s32 savedLastSlot;
+    u32 progressive;
+#else
+    s32 savedLastSlot;
+#endif
 #endif
 
 #if VERSION == VERSION_EU
@@ -364,12 +412,16 @@ void cardCopy2Main(s32 slot) {
     memcpy(bdsw, &save->data.badgeShop, sizeof(BadgeShopWork));
     memcpy(yuwp, &save->data.parlor, sizeof(PiantaParlorWork));
     memcpy(&_jdt.readFlags, &save->data.informant, sizeof(InformantUnknown));
+#if VERSION <= VERSION_DEMO_US
+    gp->resetType = 0;
+#else
     gp->resetType = 0;
     gp->resetButtonDown = 0;
 #if VERSION >= VERSION_US
     gp->softResetWait = 0;
 #endif
     gp->dvdError = 0;
+#endif
     gp->retraceTime = OSGetTime();
     strcpy(gp->currentAreaName, "123");
     gp->relocationBase = NULL;
@@ -467,12 +519,16 @@ void cardWrite(s32 slot) {
         gp->saveCount++;
         gp->flags &= ~GW_FLAG_SAVE_LOADED;
         gp->flags &= ~GW_FLAG_NO_ENTRANCE;
+#if VERSION <= VERSION_DEMO_US
+        gp->resetType = 0;
+#else
         gp->resetType = 0;
 #if VERSION >= VERSION_US
         gp->resetButtonDown = 0;
         gp->softResetWait = 0;
 #endif
         gp->dvdError = 0;
+#endif
         memcpy(&save->data.global, gp, sizeof(GlobalWork));
         memcpy(&save->data.pouch, pouchGetPtr(), sizeof(PouchData));
         memcpy(save->data.deadInfo, fbatGetPointer()->deadInfo, sizeof(save->data.deadInfo));

@@ -251,9 +251,15 @@ EVT_BEGIN(las_23_init_evt)
     ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     END_IF
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
+#else
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+    CALL(evt_snd_set_rev_mode, 2)
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+#endif
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)

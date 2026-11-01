@@ -783,7 +783,11 @@ L_8025F0C8:
 L_8025F0D8:
     addi r1, r1, 0x10
     blr
+#if defined(VERSION_G8ME01_DEMO) || defined(VERSION_G8MJ01_DEMO)
 }
+#else
+}
+#endif
 
 #ifdef VERSION_G8MP01
 /* PAL only: setjmp and longjmp of the Metrowerks runtime, in assembly as in the original source. They

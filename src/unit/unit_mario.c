@@ -28,7 +28,11 @@ USER_FUNC(_get_local_frame);
 static USER_FUNC(_mario_makkuro_set);
 USER_FUNC(_mario_super_emblem_anim_set);
 
+#if VERSION <= VERSION_DEMO_US
+PoseTableEntry pose_table_mario_stay[32];
+#else
 PoseTableEntry pose_table_mario_stay[34];
+#endif
 BattleDataEntry data_table_mario[10];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -643,11 +647,19 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CASE_EQUAL(2)
         SET_VALUE(LW(0), STRING("M_H_5A"))
         SET_VALUE(LW(1), STRING("M_H_5B"))
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(2), STRING("M_H_15"))
+#else
         SET_VALUE(LW(2), STRING("M_H_14"))
+#endif
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("M_H_9A"))
         SET_VALUE(LW(1), STRING("M_H_9B"))
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(2), STRING("M_H_14"))
+#else
         SET_VALUE(LW(2), STRING("M_H_15"))
+#endif
         CASE_DEFAULT
         SET_VALUE(LW(0), STRING("M_H_1A"))
         SET_VALUE(LW(1), STRING("M_H_1B"))
@@ -698,9 +710,13 @@ EVT_BEGIN(btlataudevtMarioHammer)
         WAIT_MS(1000)
     END_SIBLING_EVENT
     // Follow-through pose, then he runs back through the audience area, reappears at the stage edge and walks home.
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(30)
+#else
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_H_16"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+#endif
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
@@ -711,7 +727,11 @@ EVT_BEGIN(btlataudevtMarioHammer)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(8), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_WaitEventEnd, LW(15))
+#else
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#endif
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

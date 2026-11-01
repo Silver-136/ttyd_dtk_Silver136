@@ -1,5 +1,6 @@
 // pik_03 (ピカリーヒルズ, Poshley Sanctum): the hidden inner room of the sanctum.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -104,10 +105,17 @@ static EVT_BEGIN(evt_daiza)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
     CALL(evt_npc_stop_for_event)
     SET_VALUE(LW(0), 6)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LW(1), STRING("star"))
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL_CHILD(evt_sub_starstone)
+#else
     SET_VALUE(LW(1), STRING("star"))
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL_CHILD(PTR(evt_sub_starstone))
+#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

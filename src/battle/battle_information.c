@@ -145,8 +145,13 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
     }
     n = pouchEquipCheckBadge(ITEM_ITEM_HOG);
     if (n >= 1) {
+#if VERSION <= VERSION_DEMO_US
+        held *= n * 2 + 2;
+        random *= n * 2 + 2;
+#else
         held *= n + 1;
         random *= n + 1;
+#endif
     }
     r = irand(random + held + none);
     if ((r -= random) < 0) {

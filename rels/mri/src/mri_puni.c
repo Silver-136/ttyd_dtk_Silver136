@@ -1645,6 +1645,9 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
 
 void puniMoveDecel(PuniData* p) {
     Vec start;
+#if VERSION <= VERSION_DEMO_US
+    Vec dir;
+#else
     Vec dir;
     Vec s2;
     Vec d2;
@@ -1656,6 +1659,7 @@ void puniMoveDecel(PuniData* p) {
     f32 d;
     f32 c3, c2, c1;
     f32 b3, b2, b1;
+#endif
     f32 dist = PSVECMag(&p->vel);
     if (!dist) {
         return;
@@ -1673,6 +1677,12 @@ void puniMoveDecel(PuniData* p) {
     }
     start = p->pos;
     start.y += 1.0f;
+#if VERSION <= VERSION_DEMO_US
+    PSVECNormalize(&p->vel, &dir);
+    if (puniMoveAtari(p, b, dir, 1, dist)) {
+        PSVECScale(&p->vel, &p->vel, 0.6f);
+    }
+#else
     PSVECNormalize(&p->vel, &dir);
     s2 = start;
     d2 = dir;
@@ -1706,16 +1716,25 @@ void puniMoveDecel(PuniData* p) {
             }
         }
     }
+#endif
     if (p->hitMove != NULL || p->hitCheck != NULL) {
         p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
+#if VERSION <= VERSION_DEMO_US
+    } else {
+        p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
+#else
     } else {
         PSVECScale(&p->vel, &p->vel, 0.6f);
         p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
+#endif
     }
 }
 
 void puniMoveLimitedNormal(PuniData* p) {
     Vec start;
+#if VERSION <= VERSION_DEMO_US
+    Vec dir;
+#else
     Vec dir;
     Vec s2;
     Vec d2;
@@ -1726,6 +1745,7 @@ void puniMoveLimitedNormal(PuniData* p) {
     f32 d;
     f32 c3, c2, c1;
     f32 b3, b2, b1;
+#endif
     f32 dist = PSVECMag(&p->vel);
     if (!dist) {
         return;
@@ -1736,6 +1756,11 @@ void puniMoveLimitedNormal(PuniData* p) {
     }
     start = p->pos;
     start.y += 1.0f;
+#if VERSION <= VERSION_DEMO_US
+    PSVECNormalize(&p->vel, &dir);
+    puniMoveAtari(p, b, dir, 1, dist);
+    if (p->hitMove != NULL || p->hitCheck != NULL) {
+#else
     PSVECNormalize(&p->vel, &dir);
     d2 = dir;
     s2 = start;
@@ -1766,6 +1791,7 @@ void puniMoveLimitedNormal(PuniData* p) {
         }
     }
     if (p->hitMove != NULL || p->hitCheck != NULL) {
+#endif
         p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
     } else {
         p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
@@ -1774,6 +1800,10 @@ void puniMoveLimitedNormal(PuniData* p) {
 
 void puniMoveNormal(PuniData* p) {
     Vec start;
+#if VERSION <= VERSION_DEMO_US
+    Vec dir;
+    f32 dist = PSVECMag(&p->vel);
+#else
     Vec dir;
     Vec s2;
     Vec d2;
@@ -1786,11 +1816,16 @@ void puniMoveNormal(PuniData* p) {
     f32 c3, c2, c1;
     f32 b3, b2, b1;
     f32 dist = PSVECMag(&p->vel);
+#endif
     if (!dist) {
         return;
     }
     start = p->pos;
     start.y += 1.0f;
+#if VERSION <= VERSION_DEMO_US
+    PSVECNormalize(&p->vel, &dir);
+    puniMoveAtari(p, b, dir, 1, dist);
+#else
     PSVECNormalize(&p->vel, &dir);
     s2 = start;
     d2 = dir;
@@ -1812,6 +1847,7 @@ void puniMoveNormal(PuniData* p) {
         PSVECNormalize(&hit, &hit);
         C_VECReflect(&d2, &hit, &refl);
         PSVECScale(&refl, &p->vel, dist);
+#endif
         { f32 dp = PSVECDotProduct(&d2, &hit); PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f); }
         PSVECAdd(&p->pos, &hit, &p->pos);
         PSVECSubtract(&p->pos, &old, &diff);
@@ -2732,10 +2768,14 @@ void puniModeMass(PuniData* p) {
     }
     a = gp->retraceCount & 0xF;
     b = *(s16*)( &p->index ) & 0xF;
+#if VERSION <= VERSION_DEMO_US
+    if (a == b && p->breathPower > 10.0f) {
+#else
     if (Punigp->floor == 18) {
         a = b;
     }
     if (a == b && p->breathPower > 10.0f) {
+#endif
         PuniDokuritsu(p);
         p->target = Punigp->marioPuni;
         p->mode = PUNI_MODE_WIND;
@@ -3460,8 +3500,13 @@ void puniModeWind(PuniData* p) {
  * a Puni that falls out of the world is put back at the recovery position.
  */
 void puniModeFall(PuniData* p) {
+#if VERSION <= VERSION_DEMO_US
+    Vec dir;
+    Vec b;
+#else
     Vec start;
     Vec dir;
+#endif
     f32 mag;
     PuniTarget* t = Punigp->targets;
     HitEntry* h0;
@@ -3480,12 +3525,22 @@ void puniModeFall(PuniData* p) {
         break;
     case 1:
         p->vel.x = 0.0f;
+#if VERSION <= VERSION_DEMO_US
+            p->vel.y -= 0.45f;
+            PSVECNormalize(&p->vel, &dir);
+            {
+                Vec v = {0.0f, -1.0f, 0.0f};
+                dir = v;
+            }
+            mag = PSVECMag(&p->vel);
+#else
         p->vel.y -= 0.45f;
         {
             Vec v = {0.0f, -1.0f, 0.0f};
             dir = v;
         }
         mag = PSVECMag(&p->vel);
+#endif
         start = p->pos;
         puniMoveAtari(p, start, dir, 0, mag);
         h0 = p->hitMove;
@@ -3723,14 +3778,29 @@ void puniModeUpdraft(PuniData *p) {
             p->dispOfs.x = 0.0f;
         }
     }
+#if VERSION <= VERSION_DEMO_US
+}
+
+/**
+ * The demo's puni main loop calls puniModeWonderSfx directly with the sound name.
+ * Sharing it with the releases (as puniModeDead is) moves puniModeMain's stack slots there,
+ * so the releases keep the plain function.
+ */
+static inline void puniModeWonderSfx(PuniData* p, const char* sfx) {
+#else
 }
 
 void puniModeWonder(PuniData* p) {
+#endif
     Vec pos;
 
     switch (p->modeStep) {
         case 0:
+#if VERSION <= VERSION_DEMO_US
+            psndSFXOn_3D(sfx, &p->a);
+#else
             psndSFXOn_3D("SFX_STG2_SOAPBALL_BREAK1", &p->pos);
+#endif
             if (p->effect != NULL) {
                 effDelete(p->effect);
                 p->effect = NULL;
@@ -3758,6 +3828,13 @@ void puniModeWonder(PuniData* p) {
             }
             break;
     }
+#if VERSION <= VERSION_DEMO_US
+}
+
+/** Wonder mode (demo build): calls puniModeWonderSfx with the bubble-pop sound. */
+static void puniModeWonder(PuniData* p) {
+    puniModeWonderSfx(p, "SFX_STG2_SOAPBALL_BREAK1");
+#endif
 }
 
 static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
@@ -4982,6 +5059,10 @@ void puniOption(void) {
 
     for (p = Punidat; p < Punidat + PUNI_DATA_MAX; p++) {
         p->flags &= ~PUNI_FLAG_NEAR;
+#if VERSION <= VERSION_DEMO_US
+    }
+    for (p = Punidat; p < Punidat + PUNI_DATA_MAX; p++) {
+#endif
         if (!(p->flags & PUNI_FLAG_ACTIVE) || !(p->flags & PUNI_FLAG_COLLIDE)) {
             continue;
         }
@@ -5286,10 +5367,20 @@ void puni_puni_main(void) {
     t = Punigp->marioPuni;
     t->pos = mario->position;
     puniMapFindbuff(t->pos);
+#if VERSION <= VERSION_DEMO_US
+    puniModeALLCheck();
+    for (i = 0, p = Punidat + 1; i < 210; i++, p++) {
+        p->modeHistIdx++;
+        p->modeHistIdx &= 0x7F;
+        p->modeHist[p->modeHistIdx] = p->mode;
+    }
+    for (i = 1, p = Punidat + 1; i < PUNI_DATA_MAX; i++, p++) {
+#else
     puniModeALLCheck();
     if (Punigp->flags & PUNI_WORK_FLAG_BATTLE_FLOOR) {
 
         for (i = 1, p = Punidat + 1; i < PUNI_DATA_MAX; i++, p++) {
+#endif
             PSVECSubtract(&p->pos, &p->prevPos, &diff);
             p->moveDist = PSVECMag(&diff);
             if (!(p->flags & PUNI_FLAG_ACTIVE)) continue;
@@ -5297,10 +5388,15 @@ void puni_puni_main(void) {
             p->flags2 &= ~PUNI_FLAG2_CROSSING_LEDGE;
             p->attacked = 0;
             puniParaRecover(p);
+#if VERSION <= VERSION_DEMO_US
+    }
+    for (k = 0; k < 2; k++) {
+#else
         }
     }
     if (Punigp->flags & PUNI_WORK_FLAG_BATTLE_FLOOR) {
         for (k = 0; k < 2; k++) {
+#endif
 
             for (i = 1, p = Punidat + 1; i < PUNI_DATA_MAX; i++, p++) {
                 if (!(p->flags & PUNI_FLAG_ACTIVE)) continue;
@@ -5356,10 +5452,143 @@ void puni_puni_main(void) {
                             }
                         }
                     }
+#if VERSION <= VERSION_DEMO_US
+            }
+            switch (p->mode) {
+                case PUNI_MODE_IDLE:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeNormal(p);
+#else
                 }
                 puniModeMain(p);
+#endif
+#if VERSION <= VERSION_DEMO_US
+                    break;
+                case PUNI_MODE_JOIN:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeParentpre(p);
+                    break;
+                case PUNI_MODE_PARENT:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeParent(p);
+                    break;
+                case PUNI_MODE_SEARCH:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeSearch(p);
+                    break;
+                case PUNI_MODE_MASS:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModeMass(p);
+                    break;
+                case PUNI_MODE_AWAYJUMP:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModeAwayjump(p);
+                    break;
+                case PUNI_MODE_AWAY:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModeAway(p);
+                    break;
+                case PUNI_MODE_ATTACK:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeAttack(p);
+                    break;
+                case PUNI_MODE_DAMAGE:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeDamage(p);
+                    break;
+                case PUNI_MODE_PIYORI:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModePiyori(p);
+                    break;
+                case PUNI_MODE_ESCAPE:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeEscape(p);
+                    break;
+                case PUNI_MODE_RECOVER:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeRecover(p);
+                    break;
+                case PUNI_MODE_DEAD:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    // FAKE: the (u32) round trip keeps the name out of constant propagation, so the address is
+                    // hoisted into a saved register before the loop as in the demo (no runtime effect).
+                    puniModeDead(p, (const char*)(u32) "SFX_STG2_FIGHT_TOGE3");
+                    break;
+                case PUNI_MODE_WIND:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeWind(p);
+                    break;
+                case PUNI_MODE_STOP:
+                    break;
+                case PUNI_MODE_CHECKPOS:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModeCheckPos(p);
+                    break;
+                case PUNI_MODE_HAGURE:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModeHagure(p);
+                    break;
+                case PUNI_MODE_PREUPDRAFT:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModePreupdraft(p);
+                    break;
+                case PUNI_MODE_UPDRAFT:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModeUpdraft(p);
+                    break;
+                case PUNI_MODE_WONDER:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    // FAKE: same (u32) round trip as PUNI_MODE_DEAD.
+                    puniModeWonderSfx(p, (const char*)(u32) "SFX_STG2_SOAPBALL_BREAK1");
+                    break;
+                case PUNI_MODE_FUNBARI:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModeFunbari(p);
+                    break;
+                case PUNI_MODE_WATER:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModeWater(p);
+                    break;
+                case PUNI_MODE_FALL:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModeFall(p);
+                    break;
+                case PUNI_MODE_DODAI:
+                    p->flags |= PUNI_FLAG_STRAY;
+                    puniModeDodai(p);
+                    break;
+                case PUNI_MODE_TRAP:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeTrap(p);
+                    break;
+                case PUNI_MODE_ENTER:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeEnter(p);
+                    break;
+                case PUNI_MODE_EXIT:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeExit(p);
+                    break;
+                case PUNI_MODE_DOKAN:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeDokan(p);
+                    break;
+                case PUNI_MODE_POINT:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModePoint(p);
+                    break;
+                case PUNI_MODE_FUNC:
+                    p->flags &= ~PUNI_FLAG_STRAY;
+                    puniModeCustom(p);
+                    break;
+            }
+#endif
             }
         }
+#if VERSION <= VERSION_DEMO_US
+    puniOption();
+    {
+#else
         puniOption();
     } else {
 
@@ -5410,6 +5639,7 @@ void puni_puni_main(void) {
         puniCollideAll();
     }
     if (Punigp->flags & PUNI_WORK_FLAG_BATTLE_FLOOR) {
+#endif
         s32 ii;
         PuniData* q;
         PunidrvPose* ps;
@@ -5418,6 +5648,25 @@ void puni_puni_main(void) {
         for (ii = 1, q = Punidat + 1; ii < PUNI_DATA_MAX; ii++, ps++, q++) {
             if (q->flags & PUNI_FLAG_ACTIVE) {
                 if (!(q->flags & PUNI_FLAG_MOVE_STOP)) {
+#if VERSION <= VERSION_DEMO_US
+                    q->prevPos = q->a;
+                    switch (q->mode) {
+                        case PUNI_MODE_IDLE:
+                        case PUNI_MODE_JOIN:
+                        case PUNI_MODE_PARENT:
+                        case PUNI_MODE_SEARCH:
+                        case PUNI_MODE_ATTACK:
+                        case PUNI_MODE_ESCAPE:
+                        case PUNI_MODE_PIYORI:
+                        case PUNI_MODE_STOP:
+                        case PUNI_MODE_HAGURE:
+                        case PUNI_MODE_DODAI:
+                        case PUNI_MODE_ENTER:
+                        case PUNI_MODE_EXIT:
+                        case PUNI_MODE_POINT:
+                            puniMoveDecel(q);
+                            puniSetYPosition(q);
+#else
                     q->prevPos = q->pos;
                     puniMoveMain(q);
                 }
@@ -5435,6 +5684,32 @@ void puni_puni_main(void) {
                 if (!(q->flags & PUNI_FLAG_MOVE_STOP)) {
                     q->prevPos = q->pos;
                     puniMoveMain(q);
+#endif
+#if VERSION <= VERSION_DEMO_US
+                            break;
+                        case PUNI_MODE_MASS:
+                            puniMoveLimitedNormal(q);
+                            puniSetYPosition(q);
+                            break;
+                        case PUNI_MODE_DAMAGE:
+                            puniMoveNormal(q);
+                            puniSetYPosition(q);
+                            break;
+                        case PUNI_MODE_FUNC:
+                            puniMoveCustom(q);
+                            puniSetYPosition(q);
+                            break;
+                        case PUNI_MODE_AWAYJUMP:
+                        case PUNI_MODE_AWAY:
+                        case PUNI_MODE_WIND:
+                            puniSetYPosition(q);
+                            break;
+                        case PUNI_MODE_TRAP:
+                            puniMoveDecel(q);
+                            puniSetYPosition(q);
+                            break;
+                    }
+#endif
                 }
                 puniAnimation(q, ps);
             }
@@ -5925,11 +6200,16 @@ USER_FUNC(evt_puni_setup) {
             case 9:
                 Punigp->flags |= PUNI_WORK_FLAG_PIPE_DOWN;
                 break;
+#if VERSION <= VERSION_DEMO_US
+        }
+    }
+#else
         }
     }
     if (Punigp->floor == 9 || Punigp->floor == 12) {
         Punigp->flags |= PUNI_WORK_FLAG_BATTLE_FLOOR;
     }
+#endif
     if (swByteGet(GSW_MRI_PUNI_CUR_MAP) == 1) { // GSW_MRI_PUNI_ROOM
         return EVT_RETURN_DONE;
     }
@@ -6967,7 +7247,11 @@ USER_FUNC(evt_puni_landon_check) {
     count = 0;
     for (i = start; i < end; i++) {
         p = &Punidat[i];
+#if VERSION <= VERSION_DEMO_US
+        if ((p->flags & PUNI_FLAG_ACTIVE) && p->a.y != y) {
+#else
         if ((p->flags & PUNI_FLAG_ACTIVE) && p->pos.y > y) {
+#endif
             count++;
         }
     }
@@ -7213,9 +7497,17 @@ void puniCountDisp(CameraId unused, void* param) {
     c2.a = c2.a * Punigp->puniCounterAlpha / 255;
     c3.a = c3.a * Punigp->puniCounterAlpha / 255;
     PSMTXTrans(m, -160.0f, -180.0f, 0.0f);
+#if VERSION <= VERSION_DEMO_US
+    iconDispGxCol(m, 4, VERSION_PICK(0x203, 0x20A), c1);
+#else
     iconDispGxCol(m, 0x10, VERSION_PICK(0x203, 0x20A), c1);
+#endif
     PSMTXTrans(m, -232.0f, -178.0f, 0.0f);
+#if VERSION <= VERSION_DEMO_US
+    iconDispGxCol(m, 4, VERSION_PICK(0x204, 0x20B), c2);
+#else
     iconDispGxCol(m, 0x10, VERSION_PICK(0x204, 0x20B), c2);
+#endif
     PSMTXTrans(m, -160.0f, -178.0f, 0.0f);
     if (Punigp->showRemaining) {
         if (gp->retraceCount & 0x10) {
@@ -7225,7 +7517,11 @@ void puniCountDisp(CameraId unused, void* param) {
         iconNumberDispGx(m, num2, FALSE, c3);
     }
     PSMTXTrans(m, -140.0f, -178.0f, 0.0f);
+#if VERSION <= VERSION_DEMO_US
+    iconDispGxCol(m, 4, VERSION_PICK(0x1D8, 0x1E0), c3);
+#else
     iconDispGxCol(m, 0x10, VERSION_PICK(0x1D8, 0x1E0), c3);
+#endif
     PSMTXTrans(m, -90.0f, -178.0f, 0.0f);
     iconNumberDispGx(m, num1, TRUE, c3);
 }

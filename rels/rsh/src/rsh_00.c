@@ -864,7 +864,13 @@ static EVT_BEGIN(talk_unten)
         CASE_LESS(STG6_10_THE_CONDUCTOR_ZIP_TOAD)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
         CASE_LESS(STG6_11_OBTAIN_AUTOGRAPH)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_ANIM)
+        // He signs the autograph and gives it to Mario.
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_108"), 0, 0)
+#else
         CALL(evt_msg_print, 0, STRING("stg6_rsh_108"), 0, STRING("me"))
+#endif
         CALL(evt_npc_set_anim, STRING("me"), STRING("A_1"))
         WAIT_MS(500)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -877,8 +883,15 @@ static EVT_BEGIN(talk_unten)
         CALL(evt_item_get_item, STRING("sign"))
         CALL(evt_item_get_item_end_wait, STRING("sign"))
         CALL(evt_npc_set_anim, STRING("me"), STRING("T_1"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, 0)
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, STRING("me"))
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_11_OBTAIN_AUTOGRAPH)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_ANIM)
+#else
         CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, STRING("me"))
         SET_VALUE(GSW_STORY_PROGRESS, STG6_11_OBTAIN_AUTOGRAPH)
+#endif
         CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
         // Hints for each later stage of the train mystery.
@@ -916,11 +929,21 @@ static EVT_BEGIN(talk_unten)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_07"), 0, 0)
             ELSE
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
+            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+                CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
+            END_IF
+        END_IF
+#else
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
             END_IF
         END_IF
+#endif
     END_SWITCH
     RETURN
 EVT_END()
@@ -1131,11 +1154,23 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(70))
+        // The demo checks the Rogueport arrival in its own IF after the Poshley one and restarts the ambient sound;
+        // the releases test it in the ELSE and stop the ambient sound.
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+#else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
+#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+#else
             CALL(evt_snd_envoff, PSND_FADEOUT)
+#endif
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE
             CALL(evt_sub_get_mapname, LW(0))
@@ -1148,9 +1183,14 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_00_c"))
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH2"))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
+        END_IF
+#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
             END_IF
         END_IF
+#endif
     END_IF
     RETURN
 EVT_END()

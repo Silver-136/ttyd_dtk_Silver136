@@ -27,7 +27,11 @@ BattleUnitKind unit_boss_bunbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table[7];
+#else
 static PoseTableEntry pose_table[9];
+#endif
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[2];
 BattleWeapon weapon_bunbaba_fumituke_attack;
@@ -90,8 +94,13 @@ BattleUnitKind unit_boss_bunbaba = {
     0.0f,
 #endif
     0.0f,
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    250.0f,
+#else
     0.0f,
     20.0f,
+#endif
     0.0f,
     250.0f,
     0.0f,
@@ -165,9 +174,13 @@ static StatusVulnerability regist = {
 /** Pose table of Gloomtail: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
+#if VERSION <= VERSION_DEMO_US
+    {5, "GNB_X_1"},
+#else
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
     {POSE_TYPE_DIZZY, "GNB_X_1"},
     {POSE_TYPE_STOP, "GNB_D2_1"},
+#endif
     {POSE_TYPE_NORMAL, "GNB_S_3"},
     {POSE_TYPE_TALK, "GNB_T_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_3"},
@@ -1023,7 +1036,11 @@ EVT_BEGIN(mega_attack_event)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(1750)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_BREATH_FIRE1"), EVT_NULLPTR, 0, -300, 0, 0, EVT_NULLPTR)
+#else
         CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_MEGABREATH1"), EVT_NULLPTR, 0, -300, 0, 0, EVT_NULLPTR)
+#endif
         ADD(LW(11), 45)
         SUBTRACT(LW(8), 10)
         CALL(evt_eff, 0, STRING("gonbaba_breath"), 2, LW(6), LW(7), LW(8), FLOAT(3.0f), LW(11), 0, 0, 0, 0, 0, 0)
@@ -1125,7 +1142,11 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(9), PTR(&weapon_bunbaba_eq_attack))
         CALL_CHILD(PTR(eq_attack_event))
         CASE_EQUAL(3)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_DrawLots, LW(0), 4, 10, 10, 20, 10)
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 4, 10, 10, 20, 15)
+#endif
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_fumituke_attack))

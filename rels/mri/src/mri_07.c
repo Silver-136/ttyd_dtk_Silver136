@@ -1,6 +1,7 @@
 // mri_07 (巨木の中, The Great Tree): the Puni shop and the Puni information seller, with the little Jabbi
 // (chibitoge) and a recovery block.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -60,7 +61,11 @@ static ShopItem goods_list[] = {
 
 /** What the clerk buys from Mario and at what price (the trade-in list of the shop). */
 static ShopDb trade_list[] = {
+#if VERSION <= VERSION_DEMO_US
+    {ITEM_HP_DRAIN_BADGE, 5, 0},
+#else
     {ITEM_HP_DRAIN_ITEM, 5, 0},
+#endif
     {ITEM_ICE_STORM, 7, 0},
     {ITEM_MYSTERY, 1, 0},
     {ITEM_MINI_MR_MINI, 4, 0},
@@ -100,8 +105,12 @@ EVT_BEGIN(chibitoge_nakama)
     WAIT_MS(200)
     CALL(evt_msg_print, 0, STRING("stg2_mri_f01_01"), 0, STRING("プニ店員"))
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    WAIT_FRAMES(1)
+#else
     WAIT_FRAMES(1)
     CALL(evt_party_stop, 0)
+#endif
     CALL(evt_msg_print_party, STRING("stg2_mri_f01_02"))
     CALL(evt_msg_select, 0, STRING("stg2_mri_f01_yesno"))
     CALL(evt_msg_continue)
@@ -144,8 +153,12 @@ EVT_BEGIN(chibitoge_nakama)
     END_IF
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 0, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_TALK_ANIM)
+#else
     CALL(evt_npc_flag_onoff, 0, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_party_run, 0)
+#endif
     RETURN
 EVT_END()
 

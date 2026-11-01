@@ -1,5 +1,6 @@
 // The field camera that follows Mario: target, zoom and shift per motion (walk, jump, slit, plane, cloud ride).
 
+#include "version.h"
 #include "mario/mario_cam.h"
 #include "driver/camdrv.h"
 #include "evt/evt_cam.h"
@@ -74,6 +75,10 @@ f32 marioGetCamFollowRate(void) {
     return marioGetPtr()->camFollowRate;
 }
 
+#if VERSION <= VERSION_DEMO_US
+void marioPreCamera(void) {
+    marioGetPtr()->targetYaw = revise360((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
+#else
 void marioPreCamera(void) {
     f32 roundingFactor;
     if (camGetPtr(CAMERA_3D)->viewYaw >= 0.0f) {
@@ -82,6 +87,7 @@ void marioPreCamera(void) {
         roundingFactor = -0.5f;
     }
     marioGetPtr()->targetYaw = revise360((s32)((1000.0f * camGetPtr(CAMERA_3D)->viewYaw) + roundingFactor) / 1000.0f);
+#endif
 }
 
 /**

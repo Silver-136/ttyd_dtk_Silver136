@@ -677,7 +677,11 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(hip_attack_event))
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
         CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_DrawLots, LW(0), 4, 20, 30, 0, 30)
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 4, 20, 20, 0, 40)
+#endif
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_koopa_hip_attack))

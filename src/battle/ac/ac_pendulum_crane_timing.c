@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_disp.h"
@@ -36,8 +37,12 @@ typedef struct PendulumWork {
     s32 vel;      // 0x38
     s32 flag;     // 0x3C
     s32 rate;     // 0x40
+#if VERSION <= VERSION_DEMO_US
+    s32 sfxId;   // 0x44
+#else
     s32 sfxId;    // 0x44
     s32 zone;     // 0x48
+#endif
     s32 endTimer; // 0x4C
 } PendulumWork;
 
@@ -69,8 +74,12 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
     f32 dir2;
     PADStatus* pad;
     f32 accel;
+#if VERSION <= VERSION_DEMO_US
+    f32 mag;
+#else
     f32 mag;
     s32 zone;
+#endif
     s32 rate;
 
     ac = &work->actionCommands;
@@ -93,8 +102,12 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             cw->angle = 0.0f;
             cw->cur = work->actionCommands.params[PENDULUM_PARAM_PERIOD];
             cw->vel = 0;
+#if VERSION <= VERSION_DEMO_US
+            cw->force = 3.0f;
+#else
             cw->force = 3.0f;
             cw->zone = -1;
+#endif
             cw->button = PAD_BUTTON_A;
             work->actionCommands.outputParams[0] = 0;
             work->actionCommands.outputParams[1] = _get_angle_hp(50);
@@ -169,6 +182,12 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             rate = _get_angle_rate(cw->angle);
             work->actionCommands.outputParams[1] = _get_angle_hp(rate);
             cw->rate = rate;
+#if VERSION <= VERSION_DEMO_US
+            rate = _get_angle_rate(cw->angle);
+            // The demo ticks only at the exact ends of the gauge.
+            if (rate == 0 || rate == 100) {
+                psndSFXOn("SFX_AC_GAUGE_MOVE1");
+#else
             rate = _get_angle_rate(cw->angle);
             zone = -1;
             if (rate <= 5) {
@@ -179,6 +198,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             if (zone != -1 && zone != cw->zone) {
                 psndSFXOn("SFX_AC_GAUGE_MOVE1");
                 cw->zone = zone;
+#endif
             }
             inRange = FALSE;
             if (autoCommand && work->actionCommands.outputParams[1] >= _get_angle_hp(50)) {

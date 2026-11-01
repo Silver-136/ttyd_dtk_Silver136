@@ -1,5 +1,6 @@
 // unit_boss_macho_gance: Macho Grubba, boss, battle unit.
 
+#include "version.h"
 #include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -47,7 +48,11 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_furafura[18];
+#if VERSION <= VERSION_DEMO_US
+static BattleDataEntry data_table[2];
+#else
 static BattleDataEntry data_table[15];
+#endif
 static BattleUnitKindPart parts[1];
 BattleWeapon weapon_gance_macho_speed;
 BattleWeapon weapon_gance_build_up;
@@ -65,8 +70,12 @@ static EvtWord entry_event[62];
 static EvtWord damage_event[97];
 EvtWord base_size_change[99];
 static EvtWord phase_event[482];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[64];
+#else
 static EvtWord dead_event[64];
 EvtWord macho_gance_damage_event[238];
+#endif
 static EvtWord attack_event[151];
 EvtWord gance_macho_speed_attack_event[119];
 EvtWord gance_build_up_attack_event[119];
@@ -88,8 +97,13 @@ BattleUnitKind unit_boss_macho_gance = {
     60, // maxHp
     0, // maxFp
     1, // dangerHP
+#if VERSION <= VERSION_DEMO_US
+    1,
+    70,
+#else
     1, // perilHP
     71, // level
+#endif
     0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
@@ -212,6 +226,9 @@ static PoseTableEntry pose_table_furafura[] = {
  * its damage reaction and being defeated.
  */
 static BattleDataEntry data_table[] = {
+#if VERSION <= VERSION_DEMO_US
+    {49, dead_event},
+#else
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, macho_gance_damage_event},
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, macho_gance_damage_event},
@@ -226,6 +243,7 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_ELECTRIFIED_EVENT, macho_gance_damage_event},
     {UNIT_DATA_COUNTER_PAYBACK_EVENT, macho_gance_damage_event},
     {UNIT_DATA_COUNTER_HOLD_FAST_EVENT, macho_gance_damage_event},
+#endif
     {0, NULL},
 };
 
@@ -812,7 +830,11 @@ static EVT_BEGIN(phase_event)
             LOOP(LW(5))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(0.0f), FLOAT(180.0f), LW(6))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(1.0f), FLOAT(1.1494141f), LW(7))
+#if VERSION <= VERSION_DEMO_US
+                CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
+#else
                 CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), 1)
+#endif
                 ADD(LW(6), LW(1))
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(6), 0)
                 WAIT_FRAMES(1)
@@ -826,7 +848,11 @@ static EVT_BEGIN(phase_event)
             LOOP(LW(5))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(0.0f), FLOAT(-180.0f), LW(6))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(1.1494141f), FLOAT(1.2998047f), LW(7))
+#if VERSION <= VERSION_DEMO_US
+                CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
+#else
                 CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), 1)
+#endif
                 ADD(LW(6), LW(1))
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(6), 0)
                 WAIT_FRAMES(1)

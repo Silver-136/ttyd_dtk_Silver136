@@ -122,7 +122,11 @@ static const char* luigi_book_5[] = {
  */
 const char** luigi_book_list[] = {luigi_book_1, luigi_book_2, luigi_book_3, luigi_book_4, luigi_book_5};
 
+#if VERSION <= VERSION_DEMO_US
+u16 menu_skip_list[] = {1, 9, 10, 11, 6, 7, 8, 5, 3, 2, 4, 0x32, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78};
+#else
 u16 menu_skip_list[] = {9, 10, 11, 6, 7, 8, 5, 3, 2, 4, 0x32, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78};
+#endif
 
 
 /**
@@ -318,9 +322,15 @@ s32 winItemMain(WindowWork* w) {
                 if ((u32)(c - ITEM_SUPER_LUIGI1) <= ITEM_SUPER_LUIGI4 - ITEM_SUPER_LUIGI1 || c == ITEM_SUPER_LUIGI5) {
                     w->item.state = 100;
                     w->item.bookTgtX = -170.0f;
+#if VERSION <= VERSION_DEMO_US
+                        w->item.bookTgtY = 160.0f;
+                        w->flags |= WINDOW_FLAG_BOOK_OPEN;
+                        book = luigi_book_list[c - ITEM_SUPER_LUIGI1];
+#else
                     w->item.bookTgtY = 160.0f;
                     w->flags |= WINDOW_FLAG_BOOK_OPEN;
                     book = luigi_book_list[c - ITEM_SUPER_LUIGI1];
+#endif
                     w->item.bookIdx = c - ITEM_SUPER_LUIGI1;
                     w->item.bookPage = 0;
                     for (w->item.bookPages = 0; book[w->item.bookPages] != NULL; w->item.bookPages++) {
@@ -404,11 +414,19 @@ s32 winItemMain(WindowWork* w) {
                 w->item.bookPage = w->item.bookPages - 1;
                 w->item.state = 10;
                 w->item.bookTgtX = 320.0f;
+#if VERSION <= VERSION_DEMO_US
+                    w->item.bookTgtY = -240.0f;
+                    w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
+                    w->helpX = w->helpTgtX;
+                    w->helpY = w->helpTgtY;
+                }
+#else
                 w->item.bookTgtY = -240.0f;
                 w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
                 w->helpX = w->helpTgtX;
                 w->helpY = w->helpTgtY;
             }
+#endif
         } else if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
             w->item.bookPage--;
@@ -416,17 +434,29 @@ s32 winItemMain(WindowWork* w) {
                 w->item.bookPage = 0;
                 w->item.state = 10;
                 w->item.bookTgtX = 320.0f;
+#if VERSION <= VERSION_DEMO_US
+                    w->item.bookTgtY = -240.0f;
+                    w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
+                    w->helpX = w->helpTgtX;
+                    w->helpY = w->helpTgtY;
+                }
+#else
                 w->item.bookTgtY = -240.0f;
                 w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
                 w->helpX = w->helpTgtX;
                 w->helpY = w->helpTgtY;
             }
+#endif
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             w->item.bookTgtX = 320.0f;
+#if VERSION <= VERSION_DEMO_US
+                w->item.bookTgtY = -240.0f;
+#else
             w->item.bookTgtY = -240.0f;
             w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
             w->helpX = w->helpTgtX;
             w->helpY = w->helpTgtY;
+#endif
             return -2;
         }
         w->helpTgtX = -170.0f;
@@ -444,9 +474,18 @@ s32 winItemMain(WindowWork* w) {
             mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
             FontGetMessageWidthLine(msgSearch(mail->body), &w->item.mailLines);
             w->item.mailLines++;
+#if VERSION <= VERSION_DEMO_US
+                w->item.mailLines += 7;
+                w->item.mailLine = 0;
+#else
             w->item.mailLine = 0;
+#endif
             if (mail->flags & MAIL_FLAG_PICTURE) {
+#if VERSION <= VERSION_DEMO_US
+                    w->item.mailLines += 7;
+#else
                 w->item.mailLines += 10;
+#endif
             }
         } else if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
@@ -537,7 +576,11 @@ s32 winItemMain(WindowWork* w) {
                     w->item.mailLine--;
                 }
             } else if (keyGetDirRep(0) & DEMO_SUBSTICK_DOWN) {
+#if VERSION <= VERSION_DEMO_US
+                    if (w->item.mailLine + 8 < w->item.mailLines) {
+#else
                 if (w->item.mailLine + 6 < w->item.mailLines) {
+#endif
                     w->item.mailLine++;
                 }
             }
@@ -567,6 +610,12 @@ s32 winItemMain(WindowWork* w) {
             winMgrClose(w->useWin[0]);
             winMgrClose(w->useWin[1]);
         } else if (w->buttonTrg & PAD_BUTTON_A) {
+#if VERSION <= VERSION_DEMO_US
+                mp = marioGetPtr();
+                psndSFXOn(SFX_NAME_WORD(0x20012));
+                if (mp->currMotionId != MARIO_MOTION_SHIP && mp->currMotionId != MARIO_MOTION_PLANE &&
+                    ((w->item.useTarget < 2 && !marioBgmodeChk()) || (w->item.useTarget < 1 && marioBgmodeChk()))) {
+#else
             mp = marioGetPtr();
             ok = 0;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
@@ -583,6 +632,7 @@ s32 winItemMain(WindowWork* w) {
                 ok = 1;
             }
             if (!ok) {
+#endif
                 winMgrClose(w->useWin[0]);
                 winMgrClose(w->useWin[1]);
                 return -2;
@@ -856,7 +906,11 @@ void itemUseDisp(WinMgrEntry* entry) {
     GXColor white2;
     GXColor white3;
     GXColor white = {255, 255, 255, 255};
+#if VERSION <= VERSION_DEMO_US
+    WindowPartyDt* list[9];
+#else
     WindowPartyDt* list[11];
+#endif
     const char* name;
     s32 party;
     s32 n;
@@ -965,7 +1019,11 @@ void itemUseDisp(WinMgrEntry* entry) {
                 }
                 winIconSet(list[i - 1]->iconId, (Vec){entry->x + 30, yoff + (entry->y - 20 - i * 28), 0.0f}, (Vec){0.65f, 0.65f, 0.65f}, white3);
                 winFontInit();
+#if VERSION <= VERSION_DEMO_US
+                winFontSet((Vec){entry->x + 50, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, name);
+#else
                 winFontSet((Vec){entry->x + 50, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){FontGetMessageWidth(name) < 160.0f ? 1.0f : 160.0f / FontGetMessageWidth(name), 1.0f, 1.0f}, black, name);
+#endif
                 winFontSet((Vec){entry->x + 220, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
 #if VERSION == VERSION_EU
                 winFontSetRWidth((Vec){entry->x + 245, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, 30.0f, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);

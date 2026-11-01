@@ -1,6 +1,7 @@
 // jin_10 (ダイム寺院, Creepy Steeple): room with a sliding gate and a block with the Tornado Jump badge;
 // doors to jin_09 and jin_11.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_hit.h"
@@ -141,16 +142,26 @@ static EVT_BEGIN(push_evt)
     END_IF
     ADD_FLOAT(GW(10), LW(10))
     IF_FLOAT_GREATER_OR_EQUAL(GW(10), FLOAT(265.0f))
+#if VERSION <= VERSION_DEMO_US
         SET_FLOAT_VALUE(GW(10), FLOAT(265.0f))
         SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
         IF_INT_EQUAL(GF(0), 1)
+#else
+        SET_FLOAT_VALUE(GW(10), FLOAT(265.0f))
+        SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
+        IF_INT_EQUAL(GF(0), 1)
+#endif
             CALL(evt_snd_sfxoff, GW(3))
             SET_VALUE(GF(0), 0)
         END_IF
     END_IF
     IF_FLOAT_LESS_OR_EQUAL(GW(10), FLOAT(0.0f))
+#if VERSION <= VERSION_DEMO_US
+        SET_FLOAT_VALUE(GW(10), FLOAT(0.0f))
+#else
         SET_FLOAT_VALUE(GW(10), FLOAT(0.0f))
         SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
+#endif
         IF_INT_EQUAL(GF(0), 1)
             CALL(evt_snd_sfxoff, GW(3))
             SET_VALUE(GF(0), 0)

@@ -104,6 +104,20 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             pressed = 0;
             if (BattlePadCheckTrigger(gw->button)) {
                 pressed = 1;
+#if VERSION <= VERSION_DEMO_US
+            }
+            if (gw->frame > gw->totalFrames)
+            allDone = 1;
+            for (i = 0; i < work->actionCommands.params[2]; i++) {
+                if (!gw->state[i]) {
+                    allDone = 0;
+                    break;
+                }
+            }
+
+            if ((gw->frame > gw->totalFrames) && allDone)
+            {
+#else
             }
             allDone = 1;
             for (i = 0; i < work->actionCommands.params[2]; i++) {
@@ -114,6 +128,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             }
 
             if ((gw->frame > gw->totalFrames) && allDone) {
+#endif
                 if (work->actionCommands.outputParams[0] > 0) {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.resultCount++;
@@ -165,28 +180,48 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             }
             if (pressed || doAuto) {
                 sfxNg = "SFX_AC_COMMAND_NG1";
+#if VERSION <= VERSION_DEMO_US
+                sfxOk = "SFX_AC_COMMAND_OK1";
+                // Two copies: the releases stop at the first target a press hits (found); the demos test every target.
+                for (i4 = 0; i4 < work->actionCommands.params[2]; i4++) {
+                    if (!gw->state[i4]) {
+#else
                 sfxOk = "SFX_AC_COMMAND_OK1";
                 found = 0;
                 for (i4 = 0; i4 < work->actionCommands.params[2]; i4++) {
                     if ((!gw->state[i4]) && (!found)) {
+#endif
                         f64 d = __fabs(gw->cursor - gw->targets[i4]);
                         if (d <= 6.0) {
                             if ((!doAuto) && gw->flag[i4]) {
                                 gw->state[i4] = -1;
+#if VERSION <= VERSION_DEMO_US
+                                psndSFXOn(sfxNg);
+                            } else {
+#else
                                 psndSFXOn(sfxNg);
                                 found = 1;
                             } else {
+#endif
                                 gw->state[i4] = 1;
                                 work->actionCommands.outputParams[0]++;
+#if VERSION <= VERSION_DEMO_US
+                                psndSFXOn(sfxOk);
+#else
                                 psndSFXOn(sfxOk);
                                 found = 1;
+#endif
                             }
                         } else if (d < __fabs(gw->targets[1] - gw->targets[0])) {
                             gw->flag[i4] = 1;
                             if (i4 == (work->actionCommands.params[2] - 1)) {
                                 gw->state[i4] = -1;
+#if VERSION <= VERSION_DEMO_US
+                                psndSFXOn(sfxNg);
+#else
                                 psndSFXOn(sfxNg);
                                 found = 1;
+#endif
                             }
                         }
                     }

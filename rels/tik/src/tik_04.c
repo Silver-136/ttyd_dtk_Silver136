@@ -1,6 +1,7 @@
 // tik_04 (埋没した都市, Rogueport Sewers): the plane panel (plane_tobashi_check), the paper stairs (kaidan_pera), the switch
 // and the black key, and a meeting with the guide Puni.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -28,7 +29,11 @@
 #include "driver/itemdrv.h"
 
 
+#if VERSION <= VERSION_DEMO_US
+static BeroEntry bero_entry_data[8];
+#else
 static BeroEntry bero_entry_data[5];
+#endif
 static EvtWord puni_walk_se[20];
 EvtWord puni_soguu_1[102];
 EvtWord puni_soguu_2[146];
@@ -67,7 +72,59 @@ static BeroEntry bero_entry_data[] = {
         -1, // caseType
         NULL, // exitEvent
         "tik_03", // nextMapName
+#if VERSION <= VERSION_DEMO_US
         "s_bero_1", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
+    {
+        "n_bero_2", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_03", // nextMapName
+        "s_bero_2", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
+    {
+        "n_bero_3", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_03", // nextMapName
+        "s_bero_3", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
+    {
+        "n_bero_4", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_03", // nextMapName
+        "s_bero_4", // nextBeroName
+#else
+        "s_bero_1", // nextBeroName
+#endif
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
@@ -321,7 +378,11 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_HAPPY_HEART_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)
@@ -380,7 +441,11 @@ EVT_BEGIN(tik_04_init_evt)
         CALL(evt_mobj_flag_onoff, 1, STRING("block"), MOBJ_FLAG_NO_CULL)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 310, 0, -25, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_TIK_04_HAPPY_HEART_P_CHEST)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_brick, STRING("mobj_box01"), -345, 60, 130, ITEM_PRETTY_LUCKY, 12, 0, GSWF(GSWF_TIK04_PRETTY_LUCKY_BLOCK_HIT))
+#else
     CALL(evt_mobj_brick, STRING("mobj_box01"), -150, 60, 130, ITEM_PRETTY_LUCKY, MOBJ_BRICK_HIDDEN_BADGE, 0, GSWF_TIK_04_PRETTY_LUCKY_HIDDEN_BLOCK)
+#endif
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -460, 25, -100, ITEM_TYPE_STILL, GSWF_STARPIECE_24, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         CALL(evt_npc_check_delete, STRING("カメック"))

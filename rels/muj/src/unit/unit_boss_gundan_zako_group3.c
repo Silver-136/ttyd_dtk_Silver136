@@ -88,7 +88,11 @@ BattleWeapon weapon_gundan_zako_group3_attack;
 static EvtWord init_event[21];
 static EvtWord damage_event[129];
 static EvtWord dead_event[136];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event[260];
+#else
 static EvtWord attack_event[287];
+#endif
 static EvtWord hit_check_event[119];
 static EvtWord wait_event[6];
 
@@ -404,36 +408,62 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+#if VERSION <= VERSION_DEMO_US
+    CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
+    // The releases bring the leader along only while it can act; the demo always does.
+    CALL(btlevtcmd_CheckActStatus, LW(5), LW(12))
+    IF_INT_NOT_EQUAL(LW(12), 0)
+        CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
+        BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+#else
     CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
     CALL(btlevtcmd_CheckActStatus, LW(5), LW(12))
     IF_INT_NOT_EQUAL(LW(12), 0)
         CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+#endif
             WAIT_FRAMES(10)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("W_1"))
             CALL(btlevtcmd_GetPos, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_FaceDirectionSub, LW(5), LW(0), 50)
             CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE, 0)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
+#if VERSION <= VERSION_DEMO_US
         END_SIBLING_EVENT
     END_IF
     BEGIN_SIBLING_EVENT
+#else
+        END_SIBLING_EVENT
+    END_IF
+    BEGIN_SIBLING_EVENT
+#endif
         WAIT_FRAMES(32)
         CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ADHERE1"), 0)
     END_SIBLING_EVENT
+#if VERSION <= VERSION_DEMO_US
+    CALL(zakogun_attack3_1)
+#else
     CALL(zakogun_attack3_1)
     IF_INT_NOT_EQUAL(LW(12), 0)
+#endif
         DELETE_EVENT(LW(15))
         CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("A_1A"))
         CALL(btlevtcmd_snd_se, LW(5), STRING("SFX_BOSS_KANBU_JUMP1"), EVT_NULLPTR, 0, LW(13))
         CALL(btlevtcmd_JumpSetting, LW(5), 0, FLOAT(6.0f), FLOAT(0.2998047f))
         CALL(btlevtcmd_JumpPosition, LW(5), 0, 100, 0, 0, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_sfxoff, LW(13))
+    END_IF
+    CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+    CALL(zakogun_set_target_id, LW(3))
+#else
         CALL(evt_snd_sfxoff, LW(13))
     END_IF
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(zakogun_set_target_id, LW(3))
     IF_INT_NOT_EQUAL(LW(12), 0)
+#endif
         BEGIN_SIBLING_EVENT_GET_ID(LW(14))
             CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("R_2"))
@@ -441,18 +471,31 @@ static EVT_BEGIN(attack_event)
                 CALL(zakogun_kanbu_on_ball)
                 WAIT_FRAMES(1)
             END_LOOP
+#if VERSION <= VERSION_DEMO_US
         END_SIBLING_EVENT
     END_IF
     BEGIN_SIBLING_EVENT
+#else
+        END_SIBLING_EVENT
+    END_IF
+    BEGIN_SIBLING_EVENT
+#endif
         CALL_CHILD(hit_check_event)
     END_SIBLING_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ROUND1"), LW(13))
+#if VERSION <= VERSION_DEMO_US
+    CALL(zakogun_attack3_2, LW(13))
+    IF_INT_NOT_EQUAL(LW(12), 0)
+        DELETE_EVENT(LW(14))
+        DELETE_EVENT(LW(15))
+#else
     CALL(zakogun_attack3_2, LW(13))
     IF_INT_NOT_EQUAL(LW(12), 0)
         DELETE_EVENT(LW(14))
         DELETE_EVENT(LW(15))
     END_IF
     IF_INT_NOT_EQUAL(LW(12), 0)
+#endif
         BEGIN_INLINE_EVENT
             CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("A_1A"))
@@ -467,9 +510,15 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
             CALL(btlevtcmd_ResetFaceDirection, LW(5))
+#if VERSION <= VERSION_DEMO_US
         END_INLINE_EVENT
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ADHERE2"), 0)
+#else
+        END_INLINE_EVENT
+    END_IF
+    CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ADHERE2"), 0)
+#endif
     CALL(zakogun_attack3_3)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

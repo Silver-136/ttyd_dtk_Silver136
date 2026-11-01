@@ -1,6 +1,7 @@
 // hei_12 (平原, Petal Meadows): Shhwonk Fortress room at the end of the passage from hei_11 where a Fuzzy (chorobon) jumps in and fights Mario.
 // Holds the Sun Stone item.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_map.h"
@@ -124,12 +125,21 @@ EVT_BEGIN(hei_12_init_evt)
         CALL(evt_npc_flag_onoff, 0, STRING("チョロボン"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
         CALL(evt_npc_change_fbat_mode, 7)
         ELSE
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_npc_change_fbat_mode, 1)
         CALL(evt_npc_check, STRING("チョロボン"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_npc_set_battle_info, STRING("チョロボン"), 23)
         END_IF
     END_IF
+#else
+        CALL(evt_npc_change_fbat_mode, 1)
+        CALL(evt_npc_check, STRING("チョロボン"), LW(0))
+        IF_INT_EQUAL(LW(0), 1)
+            CALL(evt_npc_set_battle_info, STRING("チョロボン"), 23)
+        END_IF
+    END_IF
+#endif
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
         CALL(evt_item_entry, STRING("sun_st"), ITEM_SUN_STONE, 0, 0, 0, ITEM_TYPE_GROUND, -1, PTR(evt_chorobon))
     END_IF

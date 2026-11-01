@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"
@@ -568,7 +569,11 @@ BattleUnitSetup btlparty_mri_mri_18_03[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
+#if VERSION <= VERSION_DEMO_US
+        {50.0f, 40.0f, -10.0f}, // position
+#else
         {0.0f, 40.0f, -20.0f}, // position
+#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern, // itemDropTable
@@ -578,7 +583,11 @@ BattleUnitSetup btlparty_mri_mri_18_03[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
+#if VERSION <= VERSION_DEMO_US
+        {90.0f, 40.0f, 0.0f}, // position
+#else
         {75.0f, 40.0f, 0.0f}, // position
+#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern, // itemDropTable
@@ -588,7 +597,11 @@ BattleUnitSetup btlparty_mri_mri_18_03[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
+#if VERSION <= VERSION_DEMO_US
+        {130.0f, 40.0f, 10.0f}, // position
+#else
         {150.0f, 40.0f, 20.0f}, // position
+#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern, // itemDropTable
@@ -768,7 +781,11 @@ BattleUnitSetup btlparty_mri_mri_20_03[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
+#if VERSION <= VERSION_DEMO_US
+        {50.0f, 40.0f, -10.0f}, // position
+#else
         {10.0f, 40.0f, -20.0f}, // position
+#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern, // itemDropTable

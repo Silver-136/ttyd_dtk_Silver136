@@ -811,7 +811,11 @@ s32 key_table00[] = {
 EVT_BEGIN(evt_check00)
     CALL(evt_pouch_check_item, ITEM_RED_KEY, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, PTR(key_table00), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(key_table00), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -889,7 +893,11 @@ s32 key_table01[] = {
 EVT_BEGIN(evt_check01)
     CALL(evt_win_item_maketable, PTR(key_table01), LW(10))
     IF_INT_NOT_EQUAL(LW(10), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(10), LW(0))
+#else
         CALL(evt_win_item_select, 0, LW(10), LW(0), 0)
+#endif
         SWITCH(LW(0))
             CASE_EQUAL(ITEM_BLUE_KEY)
             CASE_EQUAL(ITEM_RED_KEY)
@@ -1456,14 +1464,32 @@ EVT_END()
 EVT_BEGIN(toraware_elder)
     // Mario enters the prison; Punio and the Punies find the Elder locked in her cell.
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_bero_exec_wait, 65536)
+#else
     CALL(evt_puni_wait_systemmode, 2)
     CALL(evt_bero_exec_wait, 65536)
+#endif
     WAIT_WHILE(GF(0))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 270, 200, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 270, 200)
+#if VERSION <= VERSION_DEMO_US
+    END_INLINE_EVENT
+    CALL_CHILD(mri_guide_hagure_check)
+    IF_INT_NOT_EQUAL(LW(1), 0)
+        CALL(evt_puni_set_lsw_index, LSW(0), 0, 0, 0, 0, 0)
+        CALL(evt_puni_set_trap_index, 1, 0)
+        CALL(evt_puni_init_puni, 1, 30, 0, -1000, 0, 0)
+        CALL(evt_puni_flag_onoff, 1, 1, 65536)
+        CALL(evt_puni_set_position, 1, 240, 0, 0)
+        CALL(evt_puni_move_position, 1, 240, 40, FLOAT(120.0f))
+        CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
+    END_IF
+    CALL(evt_puni_flag_onoff, 1, 0, 262144)
+#else
     END_INLINE_EVENT
     CALL_CHILD(PTR(mri_guide_hagure_check))
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -1476,6 +1502,7 @@ EVT_BEGIN(toraware_elder)
         CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     END_IF
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
+#endif
     CALL(evt_puni_set_anim, 1, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_ry, STRING("ガイドsp"), 270)

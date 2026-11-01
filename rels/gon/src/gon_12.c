@@ -1,6 +1,7 @@
 // gon_12 (ゴンババ, Hooktail Castle): side room off gon_08 where Ms. Mowz (chuchurina) is met (story 50, 51).
 // Chests with Castle Key (0x0F), Mushroom and Honey Syrup; a power-up block.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -136,8 +137,12 @@ static EVT_BEGIN(chuchurina_sogu)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, 160, 15, FLOAT(150.0f))
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_mov_pos2, 130, 0, FLOAT(150.0f))
+#else
     CALL(evt_mario_mov_pos2, 130, 0, FLOAT(150.0f))
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     // The story advances: Mario has met Ms. Mowz.
     CALL(evt_party_stop, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
@@ -346,7 +351,11 @@ EVT_BEGIN(gon_12_init_evt)
         SET_VALUE(GSWF_GON_12_CASTLE_KEY_CHEST, 1)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -117, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get00), GSWF_GON_12_CASTLE_KEY_CHEST)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), -56, 0, -75, 0, 0, PTR(item_get01), GSWF(GSWF_GON12_MUSHROOM_CHEST_OPENED))
+#else
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -56, 0, -25, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get01), GSWF_GON_12_MUSHROOM_CHEST)
+#endif
     CALL(evt_mobj_itembox, STRING("mobj_box02"), -175, 0, 50, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get02), GSWF_GON_12_HONEY_SYRUP_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box03"), -150, 0, 20, MOBJ_ITEMBOX_NORMAL, 0, 0, 1)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -150, 60, -25, 0, GSWF_SHINE_15, 0)

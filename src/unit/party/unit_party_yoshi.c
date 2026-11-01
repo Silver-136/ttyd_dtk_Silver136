@@ -31,10 +31,19 @@
 #include "evt/evt_audience.h"
 #include "evt/evt_env.h"
 #include "evt/evt_sub.h"
+#if VERSION <= VERSION_DEMO_US
+#include "battle/battle_attack_audience.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_snd.h"
+
+#include "unit/party/unit_party_yoshi.h"
+static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
+#else
 #include "battle/battle_damage.h"
 
 typedef struct YoshiGundanPart YoshiGundanPart;
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
+#endif
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
@@ -120,6 +129,9 @@ u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4)));
  * the hurt poses, walking and running, low HP, the failed Run Away tumble, talking, item use,
  * the command menu wait, the Appeal, zero gravity, the Defend stance and plain standing.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+#endif
 PoseTableEntry pose_table_yoshi_stay[] = {
     {POSE_TYPE_FREEZE, "PYS_D_5"},
     {POSE_TYPE_STOP, "PYS_D_5"},
@@ -153,6 +165,9 @@ PoseTableEntry pose_table_yoshi_stay[] = {
  * Strike (nothing), the victory pose, an empty step run after a move's cost is paid (7) and the spin when he
  * superguards an attack (47).
  */
+#if VERSION <= VERSION_DEMO_US
+static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
+#else
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_APPEAL_EVENT, yoshi_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
@@ -166,6 +181,7 @@ static BattleDataEntry data_table[] = {
 
 /** Yoshi's defence (shared by his egg parts): 0 against every element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
+#endif
 
 /** Yoshi's defence attributes: normal (0) against every element, no weakness or immunity. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
@@ -217,7 +233,27 @@ PoseTableEntry pose_table_egg_p[] = {
     {POSE_TYPE_NORMAL, "CHU_C_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "CHU_C_3"},
     {POSE_TYPE_DAMAGE, "CHU_C_3"},
+#if VERSION <= VERSION_DEMO_US
     {POSE_TYPE_ACTION, "CHU_C_3"},
+};
+
+/**
+ * Yoshi's data events: Appeal, the audience attack reaction, his move list (tag 1, __makeTechMenuFunc), First
+ * Strike (nothing), the victory pose, an empty step run after a move's cost is paid (7) and the spin when he
+ * superguards an attack (47).
+ */
+static BattleDataEntry data_table[] = {
+    {5, yoshi_appeal_event},
+    {6, attack_audience_event},
+    {1, __makeTechMenuFunc},
+    {48, btldefaultevt_Dummy},
+    {64, party_win_reaction},
+    {7, subset_attack_ready_jump_event},
+    {47, btldefaultevt_avoid_counter_event},
+    {0, NULL},
+#else
+    {POSE_TYPE_ACTION, "CHU_C_3"},
+#endif
 };
 
 /**
@@ -564,7 +600,11 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#if VERSION <= VERSION_DEMO_US
+    TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+#else
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_RECOIL | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+#endif
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -1774,7 +1814,11 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
         SET_VALUE(LW(1), 14)
         SET_VALUE(LW(2), 30)
     END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_AcSetParamAll, 15, LW(0), 178, LW(1), LW(2), 17, 18, EVT_NULLPTR)
+#else
     CALL(btlevtcmd_AcSetParamAll, 15, LW(0), 178, LW(1), LW(2), 20, 61, EVT_NULLPTR)
+#endif
     CALL(btlevtcmd_AcSetGaugeParam, 60, 80, 100, 100)
     CALL(btlevtcmd_AcSetFlag, AC_REPEATEDLY_LV_FLAG_MIN_LEVEL_1)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
@@ -1790,15 +1834,23 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     CALL(btlevtcmd_StartAC, 1)
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_11"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#else
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(6))
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(0))
     MULTIPLY_FLOAT(LW(6), LW(0))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), LW(6))
+#endif
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
     MULTIPLY(LW(5), 30)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff, STRING(""), STRING("kiss"), 3, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
+#else
     CALL(evt_eff, 0, STRING("kiss"), 3, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_ENM_TOGENOKO_CALL1"), LW(0), LW(1), LW(2), 0)
+#endif
     // Stylish chance as he calls.
     CALL(btlevtcmd_ftof, 33, LW(0))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
@@ -2018,12 +2070,16 @@ static EVT_BEGIN(attack_audience_event)
 EVT_END()
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(attack_event)
+#else
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
+#endif
     RETURN
 EVT_END()
 
@@ -2468,7 +2524,11 @@ USER_FUNC(_gundan_yoshi_run_effect) {
             f32 sc;
             p = &w->parts[irand(256)];
             sc = 1.0f + 0.05f * (f32)irand(20);
+#if VERSION <= VERSION_DEMO_US
+                    effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
+#else
             effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(15), 65.0f, sc);
+#endif
         }
         w->timer *= 0.00390625f;
         pos.x = w->timer;
@@ -2484,24 +2544,52 @@ USER_FUNC(_gundan_yoshi_run_effect) {
         BattleFree(unit->countersetWeapon);
         unit->countersetWeapon = NULL;
         return EVT_RETURN_DONE;
+#if VERSION <= VERSION_DEMO_US
+        }
+        // The demo draws every Yoshi from one display callback.
+        dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)_btlYoshiDisp, w);
+        for (i = 0; i < 256; i++) {
+            dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(2, 1), (DispCallback)_btlYoshiDisp, &w->parts[i]);
+        }
+    } while (0);
+#else
     }
     for (i = 0; i < 256; i++) {
         // Every runner is sorted with the depth of p left by the loop above; the callback data still selects each runner.
         dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(2, 1), (DispCallback)_btlYoshiDisp, &w->parts[i]);
     }
     } while (0);
+#endif
     return EVT_RETURN_BLOCK;
+#if VERSION <= VERSION_DEMO_US
+}
+/**
+ * Display callback that draws the Stampede Yoshis as textured planes,
+ * animated from _yoshig_tpl_no_tbl and flipped by run direction.
+ * The US demo draws all 256 in one call; later releases register one call per Yoshi.
+ */
+static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
+    YoshiGundanPart* p;
+    s32 i;
+    f32 s;
+    for (i = 0; i < 256; i++) {
+        p = &w->parts[i];
+#else
 }
 
 /** Draws one Stampede Yoshi (later releases). */
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
     f32 s;
+#endif
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;
     btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
 }
 
 // FAKE: stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool (as
 // kpaStrippedPool does in koopa.c); removing it changes the object
+#if VERSION <= VERSION_DEMO_US
+}
+#endif
 void yoshiStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }

@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -514,8 +515,12 @@ EVT_BEGIN(aji_16_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_hitobj_onoff, STRING("A_door1_1"), 1, 0)
+#else
     CALL(evt_snd_set_rev_mode, 1)
     CALL(evt_hitobj_onoff, STRING("A_door1_1"), 1, 0)
+#endif
     CALL(evt_hitobj_onoff, STRING("A_door1_2"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_door2_1"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_door2_2"), 1, 0)

@@ -383,7 +383,11 @@ static EVT_BEGIN(marco_talk)
             CALL(delete_itemsel_table)
             RETURN
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(10), LW(0))
+#else
         CALL(evt_win_item_select, 0, LW(10), LW(0), 0)
+#endif
         CALL(delete_itemsel_table)
         IF_INT_EQUAL(LW(0), -1)
             RETURN
@@ -461,16 +465,33 @@ static EVT_BEGIN(marco_talk)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_cam3d_evt_set, -60, 95, 491, -60, 35, 146, 500, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_party_stop, 0)
+#else
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
         CALL(evt_mario_mov_pos2, -34, 162, FLOAT(120.0f))
         CALL(evt_mario_set_dir, 270, 200, 0)
         CALL(evt_npc_set_ry_lr, STRING("me"), 1)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
+#endif
         CALL(evt_mario_get_party, LW(0))
         SET_VALUE(LF(10), 0)
         IF_INT_NOT_EQUAL(LW(0), 3)
             SET_VALUE(LF(10), 1)
             CALL(evt_mario_hello_exparty_pos, 15, -25, 0, 210)
+#if VERSION <= VERSION_DEMO_US
+        END_IF
+        CALL(evt_party_stop, 0)
+        CALL(evt_party_stop, 1)
+        SET_VALUE(GF(0), 1)
+        BEGIN_INLINE_EVENT
+            IF_INT_EQUAL(LW(0), 3)
+                CALL(evt_party_move_pos2, 0, 0, 170, FLOAT(120.0f))
+            ELSE
+                CALL(evt_party_move_pos2, 0, 20, 170, FLOAT(120.0f))
+            END_IF
+            CALL(evt_party_set_dir, 0, 270, -1)
+#else
         END_IF
         CALL(evt_party_stop, 0)
         CALL(evt_party_stop, 1)
@@ -482,6 +503,7 @@ static EVT_BEGIN(marco_talk)
                 CALL(evt_party_move_pos2, 0, 20, 170, FLOAT(120.0f))
             END_IF
             CALL(evt_party_set_dir, 0, 270, -1)
+#endif
             SET_VALUE(GF(0), 0)
         END_INLINE_EVENT
         // Bobbery rejoins and Flavio welcomes him back.
@@ -510,10 +532,17 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_83"), 0, STRING("party"))
             ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_83"), 0, STRING("extparty"))
+#if VERSION <= VERSION_DEMO_US
         END_IF
         CALL(evt_party_run, 1)
         // Flavio stammers an excuse and paces nervously.
         CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
+#else
+        END_IF
+        CALL(evt_party_run, 1)
+        // Flavio stammers an excuse and paces nervously.
+        CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
+#endif
         LOOP(3)
             SET_VALUE(LW(0), 0)
             SET_VALUE(LW(1), 180)
@@ -1247,7 +1276,13 @@ EVT_BEGIN(muj_00_door_open)
     WAIT_MS(500)
     CALL(evt_door_param, LW(0), 10, LW(1), LW(2), LW(3))
     CALL(evt_mario_party_door_move, LW(1), LW(3), FLOAT(135.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_party_move_behind_mario, 0)
+    CALL(evt_party_move_behind_mario, 1)
+    CALL(evt_cam3d_evt_xyz_off, 0, 11)
+#else
     CALL(evt_cam3d_evt_xyz_off, 0, EASING_SINE_IN_OUT)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
     RETURN
@@ -1461,7 +1496,11 @@ static KinopioData kino_dt = {
     0, // breakfastItem
     {0}, // breakfastPos
     10, // ryoukin
+#if VERSION <= VERSION_DEMO_US
+    {399.0f, 16.0f, -185.0f}, // bed
+#else
     {403.0f, 17.0f, -182.0f}, // bed
+#endif
     {355.0f, 0.0f, -155.0f}, // bedside
     {213.0f, 122.0f, -97.0f, 341.0f, 45.0f, -178.0f}, // cam
     -30.0f, // bedDeg
@@ -2071,7 +2110,11 @@ static EVT_BEGIN(sekai_yami_evt)
         WAIT_MS(100)
         LOOP(1)
 #else
+#if VERSION <= VERSION_DEMO_US
+        WAIT_MS(1000)
+#else
         WAIT_MS(500)
+#endif
         LOOP(2)
 #endif
             // The screen flashes white several times.
@@ -2089,7 +2132,11 @@ static EVT_BEGIN(sekai_yami_evt)
 #if VERSION >= VERSION_US
     WAIT_MS(1200)
 #else
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(3000)
+#else
     WAIT_MS(1000)
+#endif
 #endif
     CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)

@@ -623,19 +623,43 @@ EVT_BEGIN(partyClaudaAttack_BreathAttack)
     SUBTRACT(LW(1), 3)
     SWITCH(LW(1))
         CASE_LESS_OR_EQUAL(-3)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 420)
+#else
         SET_VALUE(LW(0), 300)
+#endif
         CASE_EQUAL(-2)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 360)
+#else
         SET_VALUE(LW(0), 300)
+#endif
         CASE_EQUAL(-1)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 320)
+#else
         SET_VALUE(LW(0), 300)
+#endif
         CASE_EQUAL(0)
         SET_VALUE(LW(0), 300)
         CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 270)
+#else
         SET_VALUE(LW(0), 300)
+#endif
         CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 240)
+#else
         SET_VALUE(LW(0), 300)
+#endif
         CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 180)
+#else
         SET_VALUE(LW(0), 300)
+#endif
     END_SWITCH
     CALL(btlevtcmd_AcGetDifficulty, LW(1))
     CALL(btlevtcmd_AcSetParamAll, 1, LW(0), 4, 40, 60, 80, 100, LW(1))
@@ -807,45 +831,101 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
             SET_VALUE(LW(0), 70)
             SET_VALUE(LW(1), 2)
             CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 65)
+            SET_VALUE(LW(1), 3)
+#else
             SET_VALUE(LW(0), 66)
             SET_VALUE(LW(1), 2)
+#endif
             CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 60)
+            SET_VALUE(LW(1), 3)
+#else
             SET_VALUE(LW(0), 62)
             SET_VALUE(LW(1), 2)
+#endif
             CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 50)
+            SET_VALUE(LW(1), 4)
+#else
             SET_VALUE(LW(0), 58)
             SET_VALUE(LW(1), 2)
+#endif
         END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 6, 3, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
+        CALL(btlevtcmd_AcSetGaugeParam, 51, 68, 85, 100)
+#else
         CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 5, 3, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
         CALL(btlevtcmd_AcSetGaugeParam, 60, 80, 100, 100)
+#endif
         CASE_DEFAULT
         CALL(btlevtcmd_AcGetDifficulty, LW(0))
         SUBTRACT(LW(0), 3)
         SWITCH(LW(0))
             CASE_LESS_OR_EQUAL(-3)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 80)
+#else
             SET_VALUE(LW(0), 120)
+#endif
             SET_VALUE(LW(1), 0)
             CASE_EQUAL(-2)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 70)
+#else
             SET_VALUE(LW(0), 100)
+#endif
             SET_VALUE(LW(1), 0)
             CASE_EQUAL(-1)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 60)
+#else
             SET_VALUE(LW(0), 80)
+#endif
             SET_VALUE(LW(1), 1)
             CASE_EQUAL(0)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 50)
+#else
             SET_VALUE(LW(0), 70)
+#endif
             SET_VALUE(LW(1), 2)
             CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 45)
+            SET_VALUE(LW(1), 3)
+#else
             SET_VALUE(LW(0), 66)
             SET_VALUE(LW(1), 2)
+#endif
             CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 40)
+            SET_VALUE(LW(1), 3)
+#else
             SET_VALUE(LW(0), 62)
             SET_VALUE(LW(1), 2)
+#endif
             CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 35)
+            SET_VALUE(LW(1), 4)
+#else
             SET_VALUE(LW(0), 58)
             SET_VALUE(LW(1), 2)
+#endif
         END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 4, 2, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
+        CALL(btlevtcmd_AcSetGaugeParam, 25, 50, 75, 100)
+#else
         CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 3, 2, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
         CALL(btlevtcmd_AcSetGaugeParam, 34, 68, 100, 100)
+#endif
     END_SWITCH
     CALL(btlevtcmd_AcSetFlag, 0)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 17, 1, 60)

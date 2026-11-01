@@ -1496,8 +1496,37 @@ EVT_END()
  * and Jolene says Security is here to escort him (75). Control then returns to Mario.
  */
 static EVT_BEGIN(evt_gardman)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LW(0), 0)
+    LOOP(0)
+        ADD(LW(0), 1)
+        WAIT_FRAMES(1)
+#endif
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mario_wait_movable)
+#else
     CALL(tou_10_mario_free_wait)
+#endif
     // Take control once Mario has landed and finished talking.
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_GREATER(LW(0), 240)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    LOOP(0)
+        CALL(evt_mario_get_motion, LW(0))
+        IF_INT_EQUAL(LW(0), 0)
+            BREAK_LOOP
+        END_IF
+        IF_INT_EQUAL(LW(0), 1)
+            BREAK_LOOP
+        END_IF
+        IF_INT_EQUAL(LW(0), 2)
+            BREAK_LOOP
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)
 #if VERSION >= VERSION_US
@@ -1619,12 +1648,21 @@ EVT_END()
  * the prompt (stg3_tou_103) asks whether to change the match,
  * and the chosen opponent and rule are announced (stg3_tou_104_01).
  */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(evt_match_make)
     CALL(tou_10_mario_keyoff_check, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
     CALL(evt_hit_get_position, STRING("M_make"), LW(10), LW(11), LW(12))
+#else
+EVT_BEGIN(evt_match_make)
+    CALL(tou_10_mario_keyoff_check, LW(0))
+    IF_INT_EQUAL(LW(0), 1)
+        RETURN
+    END_IF
+    CALL(evt_hit_get_position, STRING("M_make"), LW(10), LW(11), LW(12))
+#endif
     CALL(evt_snd_sfxon_3d, STRING("SFX_TOUROKU_COM1"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT
@@ -1818,11 +1856,19 @@ EVT_BEGIN(tou_10_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+#endif
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+#endif
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))

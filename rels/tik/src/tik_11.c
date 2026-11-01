@@ -49,9 +49,13 @@ static USER_FUNC(enzan_set_i_f);
 static USER_FUNC(enzan_cam_turn_keisan);
 static USER_FUNC(wariai_enzan_0f);
 static USER_FUNC(wariai_enzan_0);
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(wariai_enzan_1);
+#else
 static USER_FUNC(wariai_enzan_1);
 
 EvtWord powerdownya_face_left[16];
+#endif
 #if VERSION >= VERSION_US
 EvtWord powerdownya_mario_level_rtn[639];
 #else
@@ -274,6 +278,9 @@ static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(powerdownya_mario_level_rtn)
+#else
 EVT_BEGIN(powerdownya_face_left)
     LOOP(0)
         CALL(evt_party_set_dir_pos, 0, -9, 0)
@@ -292,10 +299,15 @@ EVT_END()
  * (powerdown_10) when that happened, else that it is finished (powerdown_13).
  */
 EVT_BEGIN(powerdownya_mario_level_rtn)
+#endif
     // Chet Rippo turns Mario away if he cannot pay 39 coins.
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("powerdown_04"), 0, STRING("me"))
+#else
         CALL(evt_msg_print_add, 0, STRING("powerdown_04"))
+#endif
         RETURN
     END_IF
     // Mario picks the stat to raise and the stat to lower, and confirms the trade.
@@ -340,8 +352,12 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     CALL(evt_win_coin_wait, LW(12))
     WAIT_MS(500)
     CALL(evt_win_coin_off, LW(12))
+#if VERSION <= VERSION_DEMO_US
+    CALL(enzan_lw_save)
+#else
     CALL(enzan_lw_save)
     SPAWN_EVENT_GET_ID(PTR(powerdownya_face_left), GW(1))
+#endif
     CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
     CALL(evt_msg_print_add, 0, STRING("powerdown_11"))
     CALL(bgScrollControll, 0)
@@ -483,9 +499,15 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     CALL(evt_mario_set_pose, STRING("M_V_2"))
     WAIT_MS(1500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     DELETE_EVENT(GW(1))
     CALL(enzan_lw_load)
+#else
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
+    DELETE_EVENT(GW(1))
+    CALL(enzan_lw_load)
+#endif
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(unitwin_setmariolevel, LW(5), LW(6), LW(7), LW(8))
@@ -501,12 +523,16 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins (or, from JP on, if no partner can lose a rank).
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print_add, 0, STRING("powerdown_04"))
+#else
         CALL(evt_msg_print_add, 0, STRING("powerdown_04"))
         RETURN
     END_IF
     CALL(evt_win_party_lankdown_chk, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("powerdown_07"))
+#endif
         RETURN
     END_IF
     // Mario picks the partner to rank up and the partner to rank down, and confirms the trade.
@@ -575,13 +601,21 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_IF
     END_LOOP
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -9, 49, 0, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
+#else
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_POWERDOWN1"))
     CALL(bgm_start_wait)
     CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -9, 49, 0, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
+#endif
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
+#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
     SPAWN_EVENT_GET_ID(PTR(powerdownya_face_left), GW(1))
+#endif
     CALL(evt_msg_print, 0, STRING("powerdown_12"), 0, STRING("me"))
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 255, 0, 1200)
@@ -654,9 +688,15 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
             CASE_EQUAL(PARTY_MEMBER_MS_MOWZ)
             CALL(evt_party_set_pose, 0, STRING("PCH_I_1"))
         END_SWITCH
+#if VERSION <= VERSION_DEMO_US
         WAIT_MS(500)
         DELETE_EVENT(GW(1))
         CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
+#else
+        WAIT_MS(500)
+        DELETE_EVENT(GW(1))
+        CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
+#endif
         CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
         CALL(effect_stardust, 4, LW(3), LW(4), LW(5), FLOAT(50.0f), FLOAT(50.0f), 14, 60)
         CALL(evt_party_get_dispdir, 0, LW(9))
@@ -676,9 +716,13 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         CALL(evt_party_flg_onoff, 0, 33554432, 0)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, LW(1))
+#if VERSION <= VERSION_DEMO_US
+        WAIT_MS(500)
+#else
         WAIT_MS(500)
         CALL(evt_party_stop, 0)
         SPAWN_EVENT_GET_ID(PTR(powerdownya_face_left), GW(1))
+#endif
         CALL(evt_mario_get_party, LW(1))
         SWITCH(LW(1))
             CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
@@ -792,11 +836,18 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     END_SWITCH
     WAIT_MS(1500)
     CALL(evt_party_set_breed_pose, 0, 1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
+    DELETE_EVENT(GW(1))
+    // The music comes back and the two partners' ranks change by one each.
+    CALL(enzan_lw_load)
+#else
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     DELETE_EVENT(GW(1))
     CALL(enzan_lw_load)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+#endif
     CALL(unitwin_getpartylank, LW(1), LW(0))
     ADD(LW(0), 1)
     CALL(unitwin_setpartylank, LW(1), LW(0))

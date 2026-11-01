@@ -1,5 +1,6 @@
 // Battle unit data for the invisible system unit (unit_system) that runs battle-wide scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_cmd.h"
@@ -18,7 +19,11 @@ static EvtWord wait_event[2];
 
 /** The system unit's single part: hidden, untargetable and without a shadow, so it never appears on stage. */
 static BattleUnitKindPart parts[] = {
+#if VERSION <= VERSION_DEMO_US
     {1, "btl_un_system", NULL, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, 0, NULL},
+#else
+    {1, "btl_un_system", NULL, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, 0, NULL},
+#endif
 };
 
 /**

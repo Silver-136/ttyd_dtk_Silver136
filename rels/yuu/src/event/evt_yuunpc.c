@@ -1,3 +1,4 @@
+#include "version.h"
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -172,7 +173,11 @@ f32 yuusintbl[] = {
     0.999391019f, 0.999848008f,
 };
 
+#if VERSION <= VERSION_DEMO_US
+signed char hitdata[] = "000000000000000000000000001617181911121314151122231102030405060607080910000000000000000000020304050606060611000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000747474747474744949242400000000000000000000000000000000000000000000000000□□□□□□□□□□□□□□□□□■□□□□□□□■□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□■□□□□□□□■□□□□■■□□□□□□□□□□□□□□□□□■■■■■□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□■□□■□□□□■■□□□□□□□□□□□□□□□□□■■■■■□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□■□□■□□□□■■□□□□□□□□□□□□□□□□□■■■■■□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□■□□□□■□□□□□□□■■□□□□□□□□□□□□□□□□□■■■■■□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□■□□□□■□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□■□□□□□□□□□□□□□□□□□□";
+#else
 signed char hitdata[] = "000000000000000000000000001617181911121314151122231102030405060607080910000000000000000000242526272828282828000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000747474747474744949242400000000000000000000000000000000000000000000000000\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\240\201\240\201\240\201\240\201\241\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\240\201\240\201\241\201\240\201\240\201\240\201\240\201\241\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\241\201\241\201\241\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\240\201\240\201\241\201\240\201\240\201\240\201\240\201\241\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\241\201\241\201\241\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\240\201\240\201\240\201\240\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\241\201\240\201\240\201\240\201\240\201\241\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240\201\240";
+#endif
 
 /**
  * Sprite poses of the Plane Mode audience: standing Toadette, Roten, Lakitu and Toad (c_kinopiko, c_roten,
@@ -1102,11 +1107,19 @@ void errper_set_rtn(YuuNpc* npc) {
         case 1:
         case 3:
         case 5:
+#if VERSION <= VERSION_DEMO_US
+            npc->errper = -0.2f + 2.0f * (0.2f * (rand() / 32767.0f));
+#else
             npc->errper = -0.25f + 2.0f * (0.25f * (rand() / 32767.0f));
+#endif
             break;
         case -1:
         case 6:
+#if VERSION <= VERSION_DEMO_US
+            npc->errper = -0.15f + 2.0f * (0.15f * (rand() / 32767.0f));
+#else
             npc->errper = -0.25f + 2.0f * (0.25f * (rand() / 32767.0f));
+#endif
             break;
         default:
             npc->errper = -0.1f + 2.0f * (0.1f * (rand() / 32767.0f));
@@ -1213,7 +1226,11 @@ void ext_yuunpc_minigame4_init_sub(void) {
                 s = irand(3);
             } while (yuunpc_wp->slot[s] != -1);
             do {
+#if VERSION <= VERSION_DEMO_US
+                v = irand(700) + 300;
+#else
                 v = irand(700) + 200;
+#endif
             } while (yuunpc_wp->slot[(s + 1) % 3] == v || yuunpc_wp->slot[(s + 2) % 3] == v);
             yuunpc_wp->slot[s] = v;
         }
@@ -1223,7 +1240,11 @@ void ext_yuunpc_minigame4_init_sub(void) {
     for (i = 0; i < yuunpc_wp->numNpc; i++, ext++, npc++) {
         npc->poseId = yuunpc_wp->numPoses;
         npc->id = i;
+#if VERSION <= VERSION_DEMO_US
+        if (i < 300) {
+#else
         if (i < 200) {
+#endif
             s32 row;
             f32 z;
             s16 id;
@@ -1233,7 +1254,11 @@ void ext_yuunpc_minigame4_init_sub(void) {
             ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
             PSMTXIdentity(*ext->mtx);
             z = 30.0f + (60.0f * (i % 4) + -750.0f);
+#if VERSION <= VERSION_DEMO_US
+            (*ext->mtx)[0][3] = 13.333333f * row - 500.0f;
+#else
             (*ext->mtx)[0][3] = 20.0f * row - 500.0f;
+#endif
             (*ext->mtx)[1][3] = ytbl[(s32)((z - -750.0f) / 60.0f)];
             (*ext->mtx)[2][3] = z + ztbl[row % 8];
             ext->dir = irand(2) * 180 + 90;
@@ -1266,7 +1291,11 @@ void ext_yuunpc_minigame4_init_sub(void) {
             s32 j2;
 
             npc->flags |= YUUNPC_FLAG_RUNNER;
+#if VERSION <= VERSION_DEMO_US
+            m = i - 300;
+#else
             m = i - 200;
+#endif
             cols = sqrtf(700.0f);
             row = m / cols;
             col = m % cols;
@@ -1482,6 +1511,15 @@ void yuunpc_pose_minigame4_main(void) {
     f32 right;
     f32 camX = camGetPtr(CAMERA_3D)->cameraAt.x;
     f32 y, z, x;
+#if VERSION <= VERSION_DEMO_US
+    YuuNpc* npc;
+    s32 c28;
+    s32 c27;
+    s32 c26;
+    SlitWork* mg;
+    s16 h;
+    s32 kind;
+#else
     YuuNpc* npc;
     s32 c28;
     s32 c27;
@@ -1490,6 +1528,7 @@ void yuunpc_pose_minigame4_main(void) {
     s32 kind;
     s16 h;
     s16 k;
+#endif
     f32 px;
     f32 off;
     f32 w;
@@ -1501,9 +1540,13 @@ void yuunpc_pose_minigame4_main(void) {
     s32 mode;
     s32 cnt;
     s32 n;
+#if VERSION <= VERSION_DEMO_US
+    u32 t;
+#else
     u32 t;
 
     c28 = c27 = c26 = 0;
+#endif
     ext = extGetPosePtr();
     npc = yuunpc_wp->npcs;
     right = 500.0f + camX;
@@ -1539,7 +1582,11 @@ void yuunpc_pose_minigame4_main(void) {
                     }
                 }
             }
+#if VERSION <= VERSION_DEMO_US
+            if (irand(150) == 0) {
+#else
             if (irand(100) == 0) {
+#endif
                 if (irand(101) <= 80) {
                     ext->dir = angleABf(camX, 0.0f, x, z);
                 } else {
@@ -1592,10 +1639,16 @@ void yuunpc_pose_minigame4_main(void) {
                 break;
             }
             if (npc->motion != 3 && npc->motion != 4) {
+#if VERSION <= VERSION_DEMO_US
+                px = npc->pos.x;
+                kind = 1;
+                h = yuunpc_hitY_get(px);
+#else
                 px = npc->pos.x;
                 kind = 1;
                 h = yuunpc_hitY_get(px);
                 k = h;
+#endif
                 switch (h) {
                 case 0:
                 case 1:
@@ -1611,6 +1664,9 @@ void yuunpc_pose_minigame4_main(void) {
                         }
                     }
                     break;
+#if VERSION <= VERSION_DEMO_US
+                    case 2:
+#else
                 case 24:
                 case 25:
                 case 26:
@@ -1619,19 +1675,33 @@ void yuunpc_pose_minigame4_main(void) {
                     kind = 2;
                     k -= 22;
                 case 2:
+#endif
                 case 3:
                 case 4:
                 case 5:
                 case 6:
+#if VERSION <= VERSION_DEMO_US
+                        if (h == 6) {
+#else
                     if (k == 6) {
+#endif
                         off = 0.0f;
                     } else {
+#if VERSION <= VERSION_DEMO_US
+                            off = (3 - (h - 2)) * 50.0f;
+#else
                         off = (3 - (k - 2)) * 50.0f;
+#endif
                     }
                     npc->dest.x = yuunpc_snap(px + off);
                     {
+#if VERSION <= VERSION_DEMO_US
+                            f32 sp = ((npc->id % 101 - 50) / 50.0f) * 10.0f;
+                            npc->dest.z = npc->pos.z >= 0.0f ? 125.0f + sp : -125.0f + sp;
+#else
                         f32 sp = ((npc->id % 101 - 50) / 50.0f) * (50.0f * (kind - 1) / 2.0f + 10.0f);
                         npc->dest.z = npc->pos.z >= 0.0f ? 150.0f - 50.0f * kind / 2.0f + sp : -150.0f + 50.0f * kind / 2.0f + sp;
+#endif
                     }
                     npc->dest.y = npc->pos.y;
                     break;
@@ -1727,11 +1797,19 @@ void yuunpc_pose_minigame4_main(void) {
                     case 18:
                     case 20:
                     case 21:
+#if VERSION <= VERSION_DEMO_US
+                            case 22:
+                            case 24:
+                            case 25:
+                            case 26:
+                                if (npc->pos.z >= -150.0f && npc->pos.z < 150.0f + w) {
+#else
                     case 22:
                     case 24:
                     case 25:
                     case 26:
                         if (npc->pos.z >= -150.0f && npc->pos.z < 150.0f + w) {
+#endif
                             d = 150.0f + w - npc->pos.z;
                         } else {
                             d = 0.0f;
@@ -1742,12 +1820,23 @@ void yuunpc_pose_minigame4_main(void) {
                         d = 0.0f;
                         break;
                     case 5:
+#if VERSION <= VERSION_DEMO_US
+                            case 6:
+                            case 27:
+                            case 28:
+                                z = npc->pos.z;
+#else
                     case 6:
                     case 27:
                     case 28:
                         z = npc->pos.z;
+#endif
                         if (z >= -150.0f && z < 150.0f) {
+#if VERSION <= VERSION_DEMO_US
+                                    f32 tt = 50.0f;
+#else
                             f32 tt = 50.0f * kind;
+#endif
                             f32 a = -150.0f + tt + w;
                             if (z >= a && z < 150.0f - tt) {
                                 d = 0.0f;
@@ -1782,11 +1871,19 @@ void yuunpc_pose_minigame4_main(void) {
                     case 18:
                     case 20:
                     case 21:
+#if VERSION <= VERSION_DEMO_US
+                            case 22:
+                            case 24:
+                            case 25:
+                            case 26:
+                                if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
+#else
                     case 22:
                     case 24:
                     case 25:
                     case 26:
                         if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
+#endif
                             d = -(-150.0f + w) + npc->pos.z;
                         } else {
                             d = 0.0f;
@@ -1797,15 +1894,30 @@ void yuunpc_pose_minigame4_main(void) {
                         d = 0.0f;
                         break;
                     case 5:
+#if VERSION <= VERSION_DEMO_US
+                            case 6:
+                            case 27:
+                            case 28:
+                            {
+#else
                     case 6:
                     case 27:
                     case 28: {
+#endif
                                                 if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
+#if VERSION <= VERSION_DEMO_US
+                                    f32 tt = 50.0f;
+#else
                             f32 tt = 50.0f * kind;
+#endif
                             if (npc->pos.z >= -150.0f + tt && npc->pos.z < 150.0f - tt + w) {
                                 d = 0.0f;
                             } else if (npc->pos.z > 0.0f) {
+#if VERSION <= VERSION_DEMO_US
+                                        d = -(100.0f + w) + npc->pos.z;
+#else
                                 d = npc->pos.z - (150.0f - tt + w);
+#endif
                             } else {
                                 d = -(-150.0f + w) + npc->pos.z;
                             }
@@ -1817,11 +1929,19 @@ void yuunpc_pose_minigame4_main(void) {
                     }
                     break;
                 }
+#if VERSION <= VERSION_DEMO_US
+                d -= 20.0f;
+#else
                 d -= 17.0f;
+#endif
                 if (d < 0.0f) {
                     d = 0.0f;
                 }
+#if VERSION <= VERSION_DEMO_US
+                cnt = d / 1.6666666f;
+#else
                 cnt = d / 0.0f;
+#endif
                 switch (npc->flags & YUUNPC_TURN_MASK) {
                 case 0:
                     if (mg->state == 0) {
@@ -1848,7 +1968,11 @@ void yuunpc_pose_minigame4_main(void) {
                         if (cnt < 30) {
                             n = 0;
                         } else {
+#if VERSION <= VERSION_DEMO_US
+                                n = (d - 50.0f) / 3.3333333f;
+#else
                             n = d / 2.9166667f;
+#endif
                         }
                     }
                     if (!(yuunpc_wp->flags & YUUNPC_WP_FLAG_WAIT) && npc->goal.x > npc->pos.x && n <= 0) {
@@ -1869,7 +1993,11 @@ void yuunpc_pose_minigame4_main(void) {
                         n = 0;
                     } else {
                         cnt = 30;
+#if VERSION <= VERSION_DEMO_US
+                            n = (d - 50.0f) / 3.3333333f;
+#else
                         n = d / 2.9166667f;
+#endif
                     }
                     if (npc->goal.x == npc->pos.x || mg->state == 0 || ((mg->state == 4 || mg->state == 8) && cnt + n >= mg->timer)) {
                         npc->flags &= ~YUUNPC_TURN_AWAY;
@@ -1917,10 +2045,18 @@ void yuunpc_pose_minigame4_main(void) {
                         break;
                     case YUUNPC_TURN_AWAY:
                     case YUUNPC_TURN_BACK:
+#if VERSION <= VERSION_DEMO_US
+                                dz = 1.6666666f;
+#else
                         dz = 0.0f;
+#endif
                         break;
                     case 0:
+#if VERSION <= VERSION_DEMO_US
+                                dz = 3.3333333f;
+#else
                         dz = 2.9166667f;
+#endif
                         break;
                     }
                     break;
@@ -1933,10 +2069,18 @@ void yuunpc_pose_minigame4_main(void) {
                         break;
                     case YUUNPC_TURN_AWAY:
                     case YUUNPC_TURN_BACK:
+#if VERSION <= VERSION_DEMO_US
+                                dz = -1.6666666f;
+#else
                         dz = -0.0f;
+#endif
                         break;
                     case 0:
+#if VERSION <= VERSION_DEMO_US
+                                dz = -3.3333333f;
+#else
                         dz = -2.9166667f;
+#endif
                         break;
                     }
                     break;
@@ -2025,19 +2169,41 @@ void yuunpc_pose_minigame4_main(void) {
                                 yuunpc_run(npc);
                             }
                         }
+#if VERSION <= VERSION_DEMO_US
+                        }
+                        // The releases play the step sound only once every 64 frame, offset per NPC
+                        t = gp->retraceCount;
+#else
                     }
                     if (!(c28 & 0x3f)) {
                         t = gp->retraceCount + i;
+#endif
                         if (!(t & 0xf)) {
                             if (t & 0x10) {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
                             } else {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
                             }
+#if VERSION <= VERSION_DEMO_US
+                        }
+                        if (!(c28 & 0x3f)) {
+                            t = gp->retraceCount + i;
+                            if (!(t & 0xf)) {
+                                if (t & 0x10) {
+                                    psndSFXOn_3D((const char*)0x8de, &npc->pos);
+                                } else {
+                                    psndSFXOn_3D((const char*)0x8df, &npc->pos);
+                                }
+                            }
+                        }
+                        c28++;
+                        break;
+#else
                         }
                     }
                     c28++;
                     break;
+#endif
                 case 2:
                     if (goalincheck(npc) == -1) {
                         yuunpc_stop(npc);
@@ -2089,19 +2255,41 @@ void yuunpc_pose_minigame4_main(void) {
                                 yuunpc_walk(npc);
                             }
                         }
+#if VERSION <= VERSION_DEMO_US
+                        }
+                        // The releases play the step sound only once every 64 frame, offset per NPC
+                        t = gp->retraceCount;
+#else
                     }
                     if (!(c27 & 0x3f)) {
                         t = gp->retraceCount + i;
+#endif
                         if (!(t & 7)) {
                             if (t & 8) {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
                             } else {
                                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
                             }
+#if VERSION <= VERSION_DEMO_US
+                        }
+                        if (!(c27 & 0x3f)) {
+                            t = gp->retraceCount + i;
+                            if (!(t & 7)) {
+                                if (t & 8) {
+                                    psndSFXOn_3D((const char*)0x8de, &npc->pos);
+                                } else {
+                                    psndSFXOn_3D((const char*)0x8df, &npc->pos);
+                                }
+                            }
+                        }
+                        c27++;
+                        break;
+#else
                         }
                     }
                     c27++;
                     break;
+#endif
                 case 3:
                 case 4:
                     break;
@@ -2263,7 +2451,11 @@ EVT_BEGIN(evt_yuunpc_minigame4)
     CALL(evt_npc_flag_onoff, 1, STRING("yuusp0"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("yuusp1"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("yuusp2"), NPC_FLAG_NO_HIT)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_ext_entry, 1000, PTR(ext_yuunpc_minigame4_data), PTR(ext_yuunpc_minigame4_init), PTR(ext_yuunpc_minigame4_main), PTR(ext_yuunpc_dispent))
+#else
     CALL(evt_ext_entry, 900, PTR(ext_yuunpc_minigame4_data), PTR(ext_yuunpc_minigame4_init), PTR(ext_yuunpc_minigame4_main), PTR(ext_yuunpc_dispent))
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_npc_delete, STRING("yuunpc0"))

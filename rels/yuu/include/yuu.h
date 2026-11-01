@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "dolphin/mtx.h"
 #include "manager/evtmgr.h"
@@ -47,8 +48,12 @@ typedef struct SlitWork {
     s32 timer;
     f32 rot1;
     f32 rot2;
+#if VERSION <= VERSION_DEMO_US
+    s32 monteCount;
+#else
     s32 monteCount;
     EventEntry* viewEvent;
+#endif
 } SlitWork;
 
 extern EvtWord evt_yuunpc_minigame1[];

@@ -378,7 +378,12 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     GXColor white;
     GXColor black;
     f32 scale;
+#if VERSION <= VERSION_DEMO_US
+    f32 costX; // x of the FP cost column
     f32 tx;
+#else
+    f32 tx;
+#endif
     f32 bx;
     f32 fy;
     f32 by;
@@ -441,18 +446,33 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     }
 
     winIconInit();
+#if VERSION <= VERSION_DEMO_US
+    bx = 60.0f + bx;
+    tx = 4.0f + by;
+    winIconSet(ICON_HP, (Vec){bx, tx, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
+#else
     bx = 60.0f + bx;
     fy = 4.0f + by;
     winIconSet(ICON_HP, (Vec){bx, fy, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
+#endif
     for (i = 0; i < wp->party.wazaCount - 2; i++) {
         winIconSet(itemDataTable[ITEM_SHINE_SPRITE].icon_id, (Vec){bx + (f32)(i * 34), 4.0f + (by - 32.0f), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white2);
     }
 
     winTexInit(*wp->res->data);
+#if VERSION <= VERSION_DEMO_US
+    winTexSet(0x10, (Vec){170.0f + (x - 10.0f), tx, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+#else
     winTexSet(0x10, (Vec){8.0f + (170.0f + (x - 10.0f)), fy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+#endif
     winFontInit();
+#if VERSION <= VERSION_DEMO_US
+    winFontSetR((Vec){110.0f + (x - 10.0f), fy = 4.0f + (12.0f + by), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%s", winZenkakuStr(pd->currentHP));
+    winFontSet((Vec){180.0f + (x - 10.0f), fy, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%s", winZenkakuStr(pd->maximumHP));
+#else
     winFontSetR((Vec){10.0f + (110.0f + (x - 10.0f)), fy = 4.0f + (12.0f + by), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%s", winZenkakuStr(pd->currentHP));
     winFontSet((Vec){8.0f + (180.0f + (x - 10.0f)), fy, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%s", winZenkakuStr(pd->maximumHP));
+#endif
     winZClear();
 
     for (i = 0; i < wp->party.count; i++) {
@@ -618,13 +638,21 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     winFontSet((Vec){fy, y - 100.0f, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch("msg_menu_party_waza_kakunin"));
     winIconInit();
     winIconSet(ICON_BUTTON_X_ALT, (Vec){fy - 20.0f, y - 110.0f, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, white);
+#if VERSION <= VERSION_DEMO_US
+    winWazaGX(wp, 0, x - 5.0f, wy = 50.0f + y, 260.0f, 140.0f);
+#else
     winWazaGX(wp, 0, x - 5.0f, wy = 50.0f + y, 260.0f, 144.0f);
+#endif
     winFontInit();
     w1 = 0.8f * FontGetMessageWidth(msgSearch("msg_menu_party_waza"));
     fy = 45.0f + y;
     winFontSetEdge((Vec){((200.0f - w1) / 2.0f) + x, fy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("msg_menu_party_waza"));
     bx = 230.0f + x;
+#if VERSION <= VERSION_DEMO_US
+    winFontSetEdge((Vec){costX = bx - 20.0f, fy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, VERSION_PICK("\x82\x65\x82\x6F", msgSearch("btl_cost_disp_FP")));
+#else
     winFontSetEdge((Vec){bx - 20.0f, fy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, VERSION_PICK("\x82\x65\x82\x6F", msgSearch("btl_cost_disp_FP")));
+#endif
     for (i = 0; i < wp->party.wazaCount; i++) {
         char buf[0x40];
 #if VERSION >= VERSION_US

@@ -292,9 +292,13 @@ EVT_BEGIN(evt_rsh_door_open)
     READ_INT(LW(7))
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(4), 8388608)
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(6), 8388608)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_key_onoff, 0)
+#else
     CALL(evt_cam_letter_box_disable, 1)
     // Mario walks into the cabin as the door slides open and the page turns to reveal it.
     CALL(evt_mario_key_onoff, 0)
+#endif
     CALL(img_wait)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
@@ -311,7 +315,13 @@ EVT_BEGIN(evt_rsh_door_open)
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
     CALL(evt_img_free_capture, STRING("capture_img"), 1)
     CALL(evt_img_free_capture, STRING("capture_img"), 2)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
+    CALL(evt_img_alloc_capture, STRING("capture_img"), 1, STRING("offscreen"), 0, 0, 0, 0, 0)
+    CALL(evt_img_alloc_capture, STRING("capture_img"), 2, STRING("offscreen"), 0, 0, 0, 0, 0)
+#else
     CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 1, 0, 0, 0, 0)
+#endif
     CALL(evt_mapobj_set_offscreen, 1, STRING("rouka"), STRING("offscreen"))
     CALL_CHILD(PTR(simi_offscreen_check))
     CALL(evt_mapobj_set_offscreen, 1, STRING("w_tobira"), STRING("offscreen"))
@@ -327,9 +337,17 @@ EVT_BEGIN(evt_rsh_door_open)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_ROOM_IN1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_img_set_virtual_point, STRING("capture_img"), 0, 0, -80)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
+#else
+    CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
+#endif
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_img_wait_animend, STRING("capture_img"))
+#endif
         CALL(evt_mapobj_clear_offscreen, 1, STRING("rouka"))
         CALL(evt_mapobj_clear_offscreen, 1, STRING("w_tobira"))
         CALL(evt_mapobj_clear_offscreen, 1, STRING("e_tobira"))
@@ -337,12 +355,20 @@ EVT_BEGIN(evt_rsh_door_open)
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_npc_set_offscreen, STRING("車掌"), 0)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_img_onoff, STRING("capture_img"), 0)
+#else
         CALL(evt_img_wait_animend, STRING("capture_img"))
         CALL(evt_img_onoff, STRING("capture_img"), 0)
+#endif
     END_INLINE_EVENT
     // Control returns once Mario is inside.
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_key_onoff, 1)
+#else
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
+#endif
     CALL(evt_hitobj_attr_onoff, 0, 0, LW(4), 8388608)
     CALL(evt_hitobj_attr_onoff, 0, 0, LW(6), 8388608)
     SET_VALUE(LF(0), 0)
@@ -495,8 +521,12 @@ EVT_BEGIN(evt_rsh_door_close)
     READ_INT(LW(5))
     READ_INT(LW(6))
     READ_INT(LW(7))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_key_onoff, 0)
+#else
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
+#endif
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(4), 8388608)
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(6), 8388608)
     CALL(img_wait)
@@ -543,6 +573,17 @@ EVT_BEGIN(evt_rsh_door_close)
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_sub_get_mapname, LW(10))
+        SET_VALUE(LF(0), 0)
+        IF_STR_EQUAL(LW(10), STRING("rsh_02_a"))
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_STR_EQUAL(LW(10), STRING("rsh_02_b"))
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
+#else
         CALL(evt_sub_get_mapname, LW(10))
         SET_VALUE(LF(0), 0)
         IF_STR_EQUAL(LW(10), STRING("rsh_02_a"))
@@ -555,6 +596,7 @@ EVT_BEGIN(evt_rsh_door_close)
             SET_VALUE(LF(0), 1)
         END_IF
         IF_INT_EQUAL(LF(0), 1)
+#endif
             IF_STR_EQUAL(LW(1), STRING("heya_4"))
                 IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
                     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -570,7 +612,13 @@ EVT_BEGIN(evt_rsh_door_close)
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
     CALL(evt_img_free_capture, STRING("capture_img"), 1)
     CALL(evt_img_free_capture, STRING("capture_img"), 2)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 0, 0, 0, 608, 480)
+    CALL(evt_img_alloc_capture, STRING("capture_img"), 1, STRING("offscreen"), 0, 0, 0, 608, 480)
+    CALL(evt_img_alloc_capture, STRING("capture_img"), 2, STRING("offscreen"), 0, 0, 0, 608, 480)
+#else
     CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 1, 0, 0, 608, 480)
+#endif
     CALL(evt_mapobj_set_offscreen, 1, STRING("rouka"), STRING("offscreen"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)
     // The cabin is captured and the page turns back as Mario walks out into the corridor.
@@ -584,13 +632,42 @@ EVT_BEGIN(evt_rsh_door_close)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_ROOM_OUT1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_img_set_virtual_point, STRING("capture_img"), 0, 0, -70)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_2"))
+#else
+    CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_2"))
+#endif
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
         CALL(evt_hit_get_position, LW(6), LW(13), LW(14), LW(15))
         CALL(evt_mario_mov_pos, LW(13), LW(12), 300)
+#if VERSION <= VERSION_DEMO_US
     END_INLINE_EVENT
+    CALL(evt_img_wait_animend, STRING("capture_img"))
+    CALL(evt_img_onoff, STRING("capture_img"), 0)
+    CALL(evt_mapobj_clear_offscreen, 1, STRING("rouka"))
+#else
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_mapobj_clear_offscreen, 1, STRING("rouka"))
+#endif
+        CALL(evt_mapobj_clear_offscreen, 1, LW(1))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_clear_offscreen, 1, LW(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+#else
+        CALL(evt_mapobj_clear_offscreen, 1, LW(2))
+#endif
+        CALL(evt_npc_check, STRING("車掌"), LW(0))
+        IF_INT_EQUAL(LW(0), 1)
+            CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_NO_DRAW)
+        END_IF
+        IF_INT_EQUAL(LW(0), 1)
+            CALL(evt_npc_set_offscreen, STRING("車掌"), 0)
+#if VERSION <= VERSION_DEMO_US
+    END_IF
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_clear_offscreen, 1, STRING("rouka"))
         CALL(evt_mapobj_clear_offscreen, 1, LW(1))
@@ -606,7 +683,15 @@ EVT_BEGIN(evt_rsh_door_close)
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL_CHILD(simi_check)
+#else
+        END_IF
+    END_INLINE_EVENT
+    CALL(evt_img_wait_animend, STRING("capture_img"))
+    CALL(evt_img_onoff, STRING("capture_img"), 0)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(simi_check))
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_hit_get_position, LW(6), LW(10), LW(11), LW(12))
         ADD(LW(12), 50)
@@ -622,8 +707,12 @@ EVT_BEGIN(evt_rsh_door_close)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_attr_onoff, 0, 0, LW(4), 8388608)
     CALL(evt_hitobj_attr_onoff, 0, 0, LW(6), 8388608)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_key_onoff, 1)
+#else
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
+#endif
     RETURN
 EVT_END()
 
@@ -1438,7 +1527,11 @@ EVT_BEGIN(evt_rsh_04_rnd_npc_entry)
     CALL(evt_rsh_get_rnd_npc_talk_evt, 2, 3, LW(0), LW(3))
     CALL(evt_npc_entry, STRING("乗客４"), LW(1))
     CALL(evt_npc_set_tribe, STRING("乗客４"), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_set_position, STRING("乗客４"), -50, 30, -260)
+#else
     CALL(evt_npc_set_position, STRING("乗客４"), -85, 16, -255)
+#endif
     CALL(evt_npc_set_ry, STRING("乗客４"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("乗客４"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客４"), LW(3))

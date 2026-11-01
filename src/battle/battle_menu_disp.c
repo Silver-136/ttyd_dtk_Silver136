@@ -30,8 +30,13 @@ void DrawMainMenu(BattleWork* wp);
 #include "battle/battle_audience.h"
 #include "driver/camdrv.h"
 #include "driver/icondrv.h"
+#if VERSION <= VERSION_DEMO_US
+#include "pmario_sound.h"
+static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, u16 icon, const char* name, s32 cost, s32 p34, void* party);
+#else
 #include "pmario_sound.h"
 void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y);
+#endif
 void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v, f32 s);
 void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32 s);
 void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
@@ -389,10 +394,22 @@ void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v
     } else {
         iconDispGxCol(out, ICON_FLAG_2D | ICON_FLAG_GRAY, icon, (GXColor){c, c, c, 0xFF});
     }
+#if VERSION <= VERSION_DEMO_US
+}
+
+/**
+ * Draws the visible rows (up to 7) of a sub-menu list,
+ * 24 units apart and shifted by the fractional part of scrollPos, through DrawSubIconSub.
+ * The retail versions pass y on: in the US it is 1 to squeeze long party names,
+ * in PAL it is the name width that labels are scaled down to fit.
+ */
+static void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const char** names, s32* costs, s32* p34, void* party) {
+#else
 }
 
 /** Retail signature: y is the name-width setting described above. */
 void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const char** names, s32* costs, s32* p34, void* party, s32 y) {
+#endif
     Mtx out[7];
     Mtx m;
     BattleWork* wp = _battleWorkPointer;
@@ -408,13 +425,30 @@ void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const ch
         if ((s32)menu->scrollPos + i < cursor->count && (menu->rowFlags[i] & SUBMENU_ROW_VISIBLE)) {
             PSMTXTrans(m, 100.0f, 35.0f - 24.0f * i + ofs, 0.0f);
             PSMTXConcat(m, a[i], out[i]);
+#if VERSION <= VERSION_DEMO_US
+            DrawSubIconSub(menu, i, out[i], enabled[i], icons[i], names[i], costs[i], p34[i], party);
+#else
             DrawSubIconSub(menu, i, out[i], enabled[i], icons[i], names[i], costs[i], p34[i], party, y);
+#endif
         }
     }
+#if VERSION <= VERSION_DEMO_US
+}
+
+/**
+ * Draws one sub-menu row: the row bar, icon (greyed when disabled), name, FP cost,
+ * Star Power cost (btl_cost_disp_AP) and, for the partner list, HP/max HP.
+ * The cursor row uses the cycling seleItemCoordCol; the top and bottom rows fade as the list scrolls.
+ * The demos place the HP numbers differently; the US release squeezes party names over 150 units
+ * and PAL scales names to the width y.
+ */
+static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, u16 icon, const char* name, s32 cost, s32 p34, void* party) {
+#else
 }
 
 /** Retail signature: y selects the name squeezing described above. */
 void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y) {
+#endif
     BattleWork* wp = _battleWorkPointer;
     CameraEntry* cam;
     BattleCursor* cursor = menu->cursor;
@@ -502,9 +536,22 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
         PSMTXScale(scl, FontGetMessageWidth(name) > 150 ? 120.0f / FontGetMessageWidth(name) : 0.8f, 0.8f, 0.8f);
 #endif
     } else {
+#if VERSION <= VERSION_DEMO_US
+    PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
+    if (y != 0) {
+        PSMTXScale(scl, (FontGetMessageWidth(name) > y) ? (0.8f * y / FontGetMessageWidth(name)) : (0.8f), 0.8f, 0.8f);
+    } else {
+    if (y == 1) {
+        PSMTXScale(scl, (FontGetMessageWidth(name) > 150) ? (120.0f / FontGetMessageWidth(name)) : (0.8f), 0.8f, 0.8f);
+    } else {
         PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
     }
     PSMTXConcat(m, trn, out);
+#else
+        PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
+    }
+    PSMTXConcat(m, trn, out);
+#endif
     PSMTXConcat(out, scl, out);
     FontDrawStringMtx(out, name);
     if (cost != 0) {
@@ -582,9 +629,19 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
         s32 n;
         s32 hp;
         s32 maxhp;
+#if VERSION <= VERSION_DEMO_US
+        f32 x;
+#endif
         hp = entry->hp;
         maxhp = entry->maxHp;
+#if VERSION <= VERSION_DEMO_US
+        x = 30.0f;
+#endif
+#if VERSION <= VERSION_DEMO_US
+        PSMTXTrans(trn, x, 22.0f, 0.0f);
+#else
         PSMTXTrans(trn, 30.0f, 22.0f, 0.0f);
+#endif
         PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
         PSMTXConcat(m, trn, out);
         PSMTXConcat(out, scl, out);
@@ -613,20 +670,38 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
             buf3[0] = d3[j] + '0';
             buf3[1] = 0;
             if ((u32)gp->language == LANGUAGE_JP) {
+#if VERSION <= VERSION_DEMO_US
+            PSMTXTrans(trn, 32.0f + (30.0f + o3[j]), 25.0f, 0.0f);
+            PSMTXConcat(m, trn, out);
+#else
                 PSMTXTrans(trn, 26.0f + (30.0f + o3[j]), 25.0f, 0.0f);
             } else {
                 PSMTXTrans(trn, 28.0f + (30.0f + o3[j]), 25.0f, 0.0f);
             }
             PSMTXConcat(m, trn, out);
+#endif
             PSMTXConcat(out, scl, out);
             FontDrawStringMtx(out, buf3);
         }
+#if VERSION <= VERSION_DEMO_US
+        if (((u32)gp->language) == 1) {
+#else
         if ((u32)gp->language == LANGUAGE_JP) {
+#endif
+#if VERSION <= VERSION_DEMO_US
+            x += 10.0f;
+        }
+#endif
+#if VERSION <= VERSION_DEMO_US
+        PSMTXTrans(trn, 64.0f + x, 22.0f, 0.0f);
+        PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
+#else
             PSMTXTrans(trn, 92.0f, 22.0f, 0.0f);
         } else {
             PSMTXTrans(trn, 100.0f, 22.0f, 0.0f);
         }
         PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
+#endif
         PSMTXConcat(m, trn, out);
         PSMTXConcat(out, scl, out);
         FontDrawStringMtx(out, msgSearch("btl_disp_slash"));
@@ -654,11 +729,16 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
             buf3[0] = d3[j] + '0';
             buf3[1] = 0;
             if ((u32)gp->language == LANGUAGE_JP) {
+#if VERSION <= VERSION_DEMO_US
+            PSMTXTrans(trn, 72.0f + (x + o3[j]), 25.0f, 0.0f);
+            PSMTXConcat(m, trn, out);
+#else
                 PSMTXTrans(trn, 76.0f + (30.0f + o3[j]), 25.0f, 0.0f);
             } else {
                 PSMTXTrans(trn, 78.0f + (30.0f + o3[j]), 25.0f, 0.0f);
             }
             PSMTXConcat(m, trn, out);
+#endif
             PSMTXConcat(out, scl, out);
             FontDrawStringMtx(out, buf3);
         }
@@ -1790,7 +1870,11 @@ void DrawWeaponWin(void) {
 #if VERSION == VERSION_EU
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL, 220); // name width that the label is scaled down to fit
 #else
+#if VERSION <= VERSION_DEMO_US
+    DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL);
+#else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL, 0);
+#endif
 #endif
     v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
@@ -1881,12 +1965,20 @@ void DrawOperationWin(void) {
                 icons[i] = ICON_ITEM_COIN;
             }
             names[i] = items[idx].name;
+#if VERSION <= VERSION_DEMO_US
+            costs[i] = items->cost; // the demo reads the first row's cost for every row
+#else
             costs[i] = items[idx].cost;
+#endif
             p34[i] = 0;
         }
     }
     DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
+#if VERSION <= VERSION_DEMO_US
+    DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL);
+#else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL, 0);
+#endif
     v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
     if (items[cursor->absPos].help) {
@@ -1969,7 +2061,11 @@ void DrawChangePartyWin(void) {
 #if VERSION == VERSION_EU
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, items, 150); // name width that the label is scaled down to fit
 #else
+#if VERSION <= VERSION_DEMO_US
+    DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, items);
+#else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, items, 1);
+#endif
 #endif
     v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
@@ -2050,7 +2146,11 @@ void DrawMultiItemWin(void) {
         }
     }
     DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
+#if VERSION <= VERSION_DEMO_US
+    DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL);
+#else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL, 0);
+#endif
     v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
     if (items[cursor->absPos].help) {

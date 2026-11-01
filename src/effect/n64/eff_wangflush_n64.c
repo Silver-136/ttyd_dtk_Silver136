@@ -1,5 +1,6 @@
 // Paper Mario 64 effect: a rotating, expanding sprite with a color-cycling flash behind it; lasts `timer` frames.
 
+#include "version.h"
 #include "eff/n64/eff_wangflush_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -21,13 +22,27 @@ typedef struct EffWangFlushN64Work {
     s32 flashAlpha; // 0x28
     s32 timer;      // 0x2C
     s32 frame;      // 0x30
+#if VERSION <= VERSION_DEMO_US
 } EffWangFlushN64Work;
+
+// The demo defines the colours first
+static u8 color_rotation_data[] = {
+    0xFF, 0xFF, 0x52, 0xFF, 0xFF, 0x52, 0xB5, 0x94,
+    0x00, 0xB5, 0x94, 0x00, 0xFF, 0xFF, 0xD6, 0xFF,
+    0xFF, 0xD6, 0xB5, 0x94, 0x00, 0xB5, 0x94, 0x00,
+};
+#else
+} EffWangFlushN64Work;
+#endif
 
 /** 16x16 quad drawn for both the colour-cycling flash and the spinning white sprite. */
 static effN64Vtx size16x16_tex64x64_vtx[] = {
     {-8, -8, 0, 0, 1024, 0, 0, 0, 255},
     {8, -8, 0, 2048, 1024, 0, 0, 0, 255},
     {8, 8, 0, 2048, 3072, 0, 0, 0, 255},
+#if VERSION <= VERSION_DEMO_US
+    {-8, 8, 0, 0, 3072, 0, 0, 0, 255},
+#else
     {-8, 8, 0, 0, 3072, 0, 0, 0, 255},
 };
 
@@ -36,6 +51,7 @@ static u8 color_rotation_data[] = {
     0xFF, 0xFF, 0x52, 0xFF, 0xFF, 0x52, 0xB5, 0x94,
     0x00, 0xB5, 0x94, 0x00, 0xFF, 0xFF, 0xD6, 0xFF,
     0xFF, 0xD6, 0xB5, 0x94, 0x00, 0xB5, 0x94, 0x00,
+#endif
 };
 
 void effWangFlushMain(EffectEntry* effect);

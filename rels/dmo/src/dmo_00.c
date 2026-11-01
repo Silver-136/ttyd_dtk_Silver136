@@ -103,8 +103,17 @@ USER_FUNC(demo_init) {
     }
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/demo.tpl", getMarioStDvdRoot()) != 0U) {
         wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/demo.tpl", getMarioStDvdRoot());
+#if VERSION <= VERSION_DEMO_US
+        if (seqGetPrevSeq() == SEQ_LOGO) {
+#endif
         gp->areaFadeOutType = FADE_IN_BLACK;
         gp->areaFadeOutDuration = 500;
+#if VERSION <= VERSION_DEMO_US
+        } else {
+            gp->areaFadeOutType = FADE_IN_WHITE;
+            gp->areaFadeOutDuration = 500;
+        }
+#endif
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -559,7 +568,11 @@ USER_FUNC(make_msg) {
     u16 width;
 
     width = FontGetMessageWidthLine(msgSearch((const char*)evtGetValue(event, args[0])), &lines);
+#if VERSION <= VERSION_DEMO_US
+    sprintf(buf, "<clear><wpos %d %d %d %d><once_stop>", -width / 2 - 62, lines * 28 / 2 - 90, 400, 200);
+#else
     sprintf(buf, "<clear><wpos %d %d %d %d><once_stop>", -width / 2 - 62, lines * 28 / 2 - 84, 400, 200);
+#endif
     return EVT_RETURN_DONE;
 }
 
@@ -583,7 +596,11 @@ EVT_BEGIN(demo_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(10), 0)
     SPAWN_EVENT_GET_ID(PTR(buttonCheck), GW(10))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO1"))
+#else
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_DEMO1"))
+#endif
     CALL(evt_snd_bgm_scope, 0, 1)
     // The narrator opens the story ("the story of the Thousand-Year Door") while the book grows on screen.
     BEGIN_INLINE_EVENT_GET_ID(LW(9))
@@ -644,14 +661,23 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, PTR(buf), 0, 0)
     CALL(evt_msg_print_add, 0, STRING("op_book_08"))
     CALL(demo_winonoff, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_img_entry, STRING("img4"))
+    CALL(evt_img_entry, STRING("img3"))
+#else
     CALL(evt_img_entry, STRING("img1"))
+#endif
     CALL(evt_img_entry, STRING("img2"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_img_entry, STRING("img1"))
+#else
     CALL(evt_img_entry, STRING("img3"))
     CALL(evt_img_entry, STRING("img4"))
     CALL(evt_img_set_z, STRING("img1"), FLOAT(4.0f))
     CALL(evt_img_set_z, STRING("img2"), FLOAT(3.0f))
     CALL(evt_img_set_z, STRING("img3"), FLOAT(2.0f))
     CALL(evt_img_set_z, STRING("img4"), FLOAT(1.0f))
+#endif
     CALL(evt_img_set_paper, STRING("img1"), STRING("OFF_d_meku_right"))
     CALL(evt_img_clear_virtual_point, STRING("img1"))
     CALL(evt_img_alloc_capture, STRING("img1"), 0, 0, 1, 124, 0, 386, 480)
@@ -774,8 +800,12 @@ EVT_BEGIN(demo_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("ロテン１"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 0, STRING("クリボー１"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 0, STRING("チューさん１"), NPC_FLAG_NO_DRAW)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 6000)
+#else
     CALL(evt_mobj_flag_onoff, 0, STRING("hako"), MOBJ_FLAG_NO_DISP)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 6000)
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 1000, 3000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -794,7 +824,11 @@ EVT_BEGIN(demo_evt)
     LABEL(100)
     // New music; Peach strolls in and complains that Toadsworth is always watching over her.
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO2"))
+#else
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_DEMO2"))
+#endif
     CALL(evt_npc_move_position, STRING("peach"), 0, 450, 0, FLOAT(60.0f), 1)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("op_00"), 0, 0)

@@ -1,6 +1,7 @@
 // Paper Mario 64 effect: hagetaka flash, a 10-frame green twinkle that grows and then shrinks over its last 4
 // frames; itemdrv spawns it at random around coins and Pianta tokens.
 
+#include "version.h"
 #include "eff/n64/eff_hagetaka_flush_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -21,13 +22,27 @@ typedef struct EffHagetakaFlushN64Work {
     s32 alpha;     // 0x24
     f32 baseScale; // 0x28
     f32 scale;     // 0x2C
+#if VERSION <= VERSION_DEMO_US
 } EffHagetakaFlushN64Work;
+
+// The demo defines the colours first
+static u8 color_rotation_data[] = {
+    0xFF, 0xFF, 0x52, 0xFF, 0xFF, 0x52, 0xB5, 0x94,
+    0x00, 0xB5, 0x94, 0x00, 0xFF, 0xFF, 0xD6, 0xFF,
+    0xFF, 0xD6, 0xB5, 0x94, 0x00, 0xB5, 0x94, 0x00,
+};
+#else
+} EffHagetakaFlushN64Work;
+#endif
 
 /** Camera-facing 16x16 twinkle sprite. */
 static effN64Vtx size16x16_tex64x64_vtx[] = {
     {-8, -8, 0, 0, 1024, 0, 0, 0, 255},
     {8, -8, 0, 2048, 1024, 0, 0, 0, 255},
     {8, 8, 0, 2048, 3072, 0, 0, 0, 255},
+#if VERSION <= VERSION_DEMO_US
+    {-8, 8, 0, 0, 3072, 0, 0, 0, 255},
+#else
     {-8, 8, 0, 0, 3072, 0, 0, 0, 255},
 };
 
@@ -36,6 +51,7 @@ static u8 color_rotation_data[] = {
     0xFF, 0xFF, 0x52, 0xFF, 0xFF, 0x52, 0xB5, 0x94,
     0x00, 0xB5, 0x94, 0x00, 0xFF, 0xFF, 0xD6, 0xFF,
     0xFF, 0xD6, 0xB5, 0x94, 0x00, 0xB5, 0x94, 0x00,
+#endif
 };
 
 void effHagetakaFlushMain(EffectEntry* effect);

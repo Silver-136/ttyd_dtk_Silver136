@@ -1,6 +1,7 @@
 // Rogueport Sewers (tik) battle unit: Professor Frankly (frankli) in his lecture battle: its parts, defence/status
 // tables, and the lecture events.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_cmd.h"
@@ -25,7 +26,11 @@ static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[53];
 static EvtWord entry_event[29];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord phase_event[148];
+#else
 static EvtWord phase_event[160];
+#endif
 static EvtWord damage_event[10];
 static EvtWord wait_event[6];
 
@@ -203,11 +208,19 @@ static EVT_BEGIN(phase_event)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
             CALL(evt_btl_camera_set_moveto, 0, 71, 49, 213, 71, 35, 0, 30, 11)
             WAIT_FRAMES(30)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print, 2, STRING("mac_0_092_02"), 0, UNIT_ID_SELF)
+#else
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_02"), 0, -2)
+#endif
             CALL(evt_btl_camera_set_moveto, 0, 111, 85, 213, 111, 71, 0, 30, 11)
+#if VERSION <= VERSION_DEMO_US
+            WAIT_FRAMES(30)
+#else
             WAIT_FRAMES(30)
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+#endif
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_03"), 0, -2)
             CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, -1)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

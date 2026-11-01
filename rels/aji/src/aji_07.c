@@ -260,9 +260,13 @@ EVT_BEGIN(evt_tensou2)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_party_get_pos, 0, LW(5), LW(6), LW(7))
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP1_2"), LW(2), LW(3), LW(4), 0)
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_party_get_pos, 0, LW(5), LW(6), LW(7))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 70, 0, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -327,9 +331,15 @@ EVT_END()
 
 EVT_BEGIN(aji_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
+#else
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
+    CALL(evt_snd_set_rev_mode, 1)
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+#endif
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(tensou_init))

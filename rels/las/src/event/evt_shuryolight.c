@@ -1,5 +1,6 @@
 // Palace of Shadow (las, the "last" dungeon): the coloured lamps on Sir Grodus's (shuryo) field model and his staff, animated in the las_28 and las_29 scenes.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_shuryolight.h"
 #include "evt/evt_cmd.h"
@@ -185,9 +186,15 @@ static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
             break;
         }
     }
+#if VERSION <= VERSION_DEMO_US
     if (i != 5) {
         animPoseMain(lights[i].npc->poseId);
         animPoseDrawShape(lights[i].npc->poseId, lights[i].shape);
+#else
+    if (i != 5) {
+        animPoseMain(lights[i].npc->poseId);
+        animPoseDrawShape(lights[i].npc->poseId, lights[i].shape);
+#endif
     }
 }
 /** Switches lamp index to the given animation number and starts it looping on that lamp's pose. */

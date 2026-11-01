@@ -72,7 +72,11 @@ void BattleInit(FieldBattleInfo* info) {
 #if VERSION >= VERSION_US
     wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
 #else
+#if VERSION <= VERSION_DEMO_US
+    wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
+#else
     wp = _battleWorkPointer = (BattleWork*)_mapAlloc(sizeof(BattleWork));
+#endif
 #endif
     memset(_battleWorkPointer, 0, sizeof(BattleWork));
     wp->curtainSfxId = -1;
@@ -234,9 +238,26 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
     }
 
     enemyData = groupSetup->enemyData;
+#if VERSION <= VERSION_DEMO_US
+    heldItem = ITEM_NULL;
+#endif
     for (i = 0; i < groupSetup->numEnemies; enemyData++, i++) {
         enemy = BtlUnit_Entry(enemyData);
         enemy->groupSetupId = i;
+#if VERSION <= VERSION_DEMO_US
+        enemy->heldItem = heldItem;
+        enemy->heldItem = ITEM_NULL;
+        // The demo's enemies carry no held or stolen items.
+        heldItem = setup->stolenItems[enemy->groupSetupId];
+        if (heldItem) {
+            enemy->heldItem = heldItem;
+            enemy->flags |= BATTLE_UNIT_FLAG_STOLEN_ITEM;
+        } else {
+            enemy->heldItem = setup->heldItems[i];
+            BtlUnit_EquipItem(enemy, EQUIP_RESET, setup->heldItems[i]);
+        }
+        enemy->dropTable = setup->itemDropLists[i];
+#else
         enemy->heldItem = ITEM_NULL;
         heldItem = setup->stolenItems[enemy->groupSetupId];
         if (heldItem) {
@@ -247,6 +268,7 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
             BtlUnit_EquipItem(enemy, EQUIP_RESET, setup->heldItems[i]);
         }
         enemy->dropTable = setup->itemDropLists[i];
+#endif
         enemy->currentHp = enemy->maxHp;
         enemy->currentFp = enemy->maxFp;
     }

@@ -26,9 +26,15 @@ BattleUnitKind unit_boss_gesso_right_arm;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
+#if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table[4];
 BattleDataEntry gesso_right_arm_data_table[13];
 static BattleDataEntry data_table[3];
+#else
+static PoseTableEntry pose_table[4];
+BattleDataEntry gesso_right_arm_data_table[13];
+static BattleDataEntry data_table[3];
+#endif
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[25];
 static EvtWord damage_event[31];
@@ -90,8 +96,13 @@ BattleUnitKind unit_boss_gesso_right_arm = {
     &regist, // statusVulnerability
     1, // numParts
     parts, // parts
+#if VERSION <= VERSION_DEMO_US
+    init_event,
+    data_table,
+#else
     init_event, // initEventCode
     gesso_right_arm_data_table, // dataTable
+#endif
 };
 
 /** Defence of the R. Tentacle: no damage reduction. */
@@ -135,6 +146,9 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_NORMAL, "GSO_S1_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "GSO_S1_1"},
     {POSE_TYPE_DAMAGE, "GSO_D1_1"},
+#if VERSION <= VERSION_DEMO_US
+    {POSE_TYPE_ACTION, "GSO_S1_1"},
+#else
     {POSE_TYPE_ACTION, "GSO_S1_1"},
 };
 
@@ -153,6 +167,7 @@ BattleDataEntry gesso_right_arm_data_table[] = {
     {UNIT_DATA_COUNTER_PAYBACK_EVENT, gesso_right_arm_damage_event},
     {UNIT_DATA_COUNTER_HOLD_FAST_EVENT, gesso_right_arm_damage_event},
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, gesso_right_arm_damage_event},
+#endif
 };
 
 /** Data table of the R. Tentacle: event handlers for its arm hit pose and being defeated. */

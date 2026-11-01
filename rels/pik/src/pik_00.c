@@ -842,6 +842,16 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
         SET_VALUE(LW(0), 500)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(1), -500)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+#else
         SET_VALUE(LW(1), -500)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -850,6 +860,7 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
+#endif
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
         SET_VALUE(LW(0), 0)
@@ -957,9 +968,17 @@ EVT_BEGIN(evt_pik_yajirushi)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
 static EVT_BEGIN(evt_train)
     SET_VALUE(GF(11), 1)
     CALL(evt_hitobj_onoff, STRING("n_bero"), 1, 0)
+    // the demo also clears flag 3462 here (the dried-shroom shelf flag in the releases)
+    SET_VALUE(GSWF(GSWF_RSH02_SHELF_DRIED_SHROOM), 0)
+#else
+static EVT_BEGIN(evt_train)
+    SET_VALUE(GF(11), 1)
+    CALL(evt_hitobj_onoff, STRING("n_bero"), 1, 0)
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_SLIDE1_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -40, 500)
@@ -971,18 +990,31 @@ static EVT_BEGIN(evt_train)
         GOTO(0)
     END_IF
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_party_stop, 0)
+    WAIT_MS(200)
     CALL(evt_mario_mov_pos2, -215, -360, FLOAT(80.0f))
+#else
+    CALL(evt_mario_mov_pos2, -215, -360, FLOAT(80.0f))
+#endif
     CALL(evt_mario_mov_pos2, -230, -425, FLOAT(80.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_set_dir, 90, 300, 0)
+#else
     CALL(evt_mario_set_dir, 90, 300, 0)
     CALL(evt_party_stop, 0)
     WAIT_MS(200)
     CALL(evt_party_move_pos2, 0, -215, -360, FLOAT(80.0f))
+#endif
     CALL(evt_party_move_pos2, 0, -200, -425, FLOAT(80.0f))
     CALL(evt_party_set_dir, 0, 270, 300)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
     WAIT_MS(200)
     CALL(evt_party_move_pos2, 1, -215, -420, FLOAT(80.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_party_set_dir, 1, 270, 300)
+#else
     CALL(evt_party_set_dir, 1, 270, 300)
     CALL(evt_party_stop, 1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -991,6 +1023,7 @@ static EVT_BEGIN(evt_train)
     CALL(evt_party_set_dir, 0, 270, 200)
     CALL(evt_party_set_dir, 1, 270, 200)
     CALL(evt_party_stop, 0)
+#endif
     CALL(evt_party_stop, 1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_SLIDE1_3"), LW(0), LW(1), LW(2), 0)
@@ -1357,7 +1390,11 @@ static EVT_BEGIN(talk_mama)
             IF_INT_GREATER(LW(0), 0)
                 // Trouble Center request 29: Goldbob's wife asks what Mario needs, and he shows the Present.
                 CALL(evt_msg_print, 0, STRING("irai_29_14"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_win_item_select, PTR(iri_29_item_tbl), LW(0))
+#else
                 CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl), LW(0), 0)
+#endif
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     CALL(evt_pouch_remove_item, ITEM_PRESENT, LW(0))
                     // She learns the Present is from Little Bub and is moved.
@@ -1515,7 +1552,11 @@ static s32 item_tbl_madam[] = {
 static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_pik_04_06"), 0, STRING("マダム"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
+#else
     CALL(evt_win_item_select, 0, PTR(item_tbl_madam), LW(1), 0)
+#endif
     IF_INT_NOT_EQUAL(LW(1), -1)
         CALL(evt_msg_print, 0, STRING("stg6_pik_04_07"), 0, STRING("マダム"))
         CALL(evt_sub_get_coin, 30)
@@ -1539,7 +1580,11 @@ static EVT_BEGIN(talk_madam)
         CALL(evt_pouch_check_item, ITEM_WRESTLING_MAG, LW(0))
         IF_INT_GREATER(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_23_01"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_win_item_select, PTR(iri_23_item_tbl), LW(0))
+#else
             CALL(evt_win_item_select, 0, PTR(iri_23_item_tbl), LW(0), 0)
+#endif
             IF_INT_NOT_EQUAL(LW(0), -1)
                 CALL(evt_pouch_remove_item, ITEM_WRESTLING_MAG, LW(0))
                 CALL(evt_msg_print, 0, STRING("irai_23_02"), 0, 0)
@@ -1895,6 +1940,37 @@ EVT_END()
  * card, and after ten seconds the game
  * changes to a train map where Mario steps off (which one depends on story progress).  Sets GSWF_TRAIN_AT_POSHLEY.
  */
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(erase_house)
+    IF_INT_EQUAL(GF(11), 1)
+        RETURN
+    END_IF
+    CALL(under)
+    IF_INT_EQUAL(GF(10), 1)
+        SET_VALUE(GF(10), 0)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_1"), MAP_OBJ_FLAG_HIDDEN)
+    END_IF
+    RETURN
+EVT_END()
+
+/**
+ * Demo-only counterpart of erase_house (inside the demo's #if):
+ * unless GF(11) is set (the JP and later builds set it when boarding the train), it calls under and,
+ * once (GF(10) goes from 0 to 1), shows the left villa (ie_1) and hides its interior (naka).
+ */
+static EVT_BEGIN(appear_house)
+    IF_INT_EQUAL(GF(11), 1)
+        RETURN
+    END_IF
+    CALL(under)
+    IF_INT_EQUAL(GF(10), 0)
+        SET_VALUE(GF(10), 1)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("naka"), MAP_OBJ_FLAG_HIDDEN)
+    END_IF
+    RETURN
+EVT_END()
+#endif
 EVT_BEGIN(evt_pik_00_arrival)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_cont_onoff, 0)
@@ -1936,13 +2012,25 @@ EVT_BEGIN(evt_seacret)
     CALL(evt_img_free_capture, STRING("img"), 0)
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, 0, 0, 0, 0)
     CALL(evt_img_alloc_capture, STRING("img"), 2, STRING("ofs"), 1, 0, 0, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_img_set_position, STRING("img"), -4, -298)
+    CALL(evt_img_set_virtual_point, STRING("img"), 0, 0, 5)
+#else
     CALL(evt_img_clear_virtual_point, STRING("img"))
+#endif
     CALL(evt_snd_sfxon, STRING("SFX_STG6_MAP_CHANGE1"), 0)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
     CALL(evt_img_onoff, STRING("img"), 1)
     CALL(img_flag)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_1_sakai"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_set_offscreen, 1, STRING("e"), STRING("ofs"))
+    CALL(evt_mapobj_set_offscreen, 1, STRING("ie_1_sakai"), STRING("ofs"))
+#else
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("naka_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_set_offscreen, 1, STRING("naka_1"), STRING("ofs"))
+#endif
     WAIT_FRAMES(1)
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(evt_img_onoff, STRING("img"), 0)
@@ -1985,8 +2073,12 @@ EVT_END()
  * the spinning platform, the secret floor trigger, pit-fall return points,
  * and sets GF(11) so the villa roof stays visible when entering through n_bero.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(pik_00_init_evt)
+#else
 EVT_BEGIN(pik_00_init_evt)
     SET_VALUE(GF(11), 0)
+#endif
     SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
@@ -2089,11 +2181,21 @@ EVT_BEGIN(pik_00_init_evt)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bero_"), MAP_OBJ_FLAG_CLIP)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_1_N"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_run_case_evt, CASE_COND_UNDER, 1, STRING("a_home_yuka"), 0, PTR(erase_house), 0)
+    CALL(evt_run_case_evt, CASE_COND_NOT_UNDER, 1, STRING("a_home_yuka"), 0, PTR(appear_house), 0)
+    BEGIN_INLINE_EVENT
+        CALL(under)
+    END_INLINE_EVENT
+    CALL(evt_bero_get_entername, LW(0))
+#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_1_N"), MAP_OBJ_FLAG_CLIP)
     BEGIN_INLINE_EVENT
         CALL(under)
     END_INLINE_EVENT
     CALL(evt_bero_get_entername, LW(0))
+#endif
     IF_STR_EQUAL(LW(0), STRING("n_bero"))
         SET_VALUE(GF(11), 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -2116,6 +2218,21 @@ EVT_END()
 USER_FUNC(img_flag) {
     animPoseSetMaterialFlagOn(imgNameToPtr("img", gp->inBattle != 0)->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     return EVT_RETURN_DONE;
+#if VERSION <= VERSION_DEMO_US
+}
+
+/**
+ * The demo's version: while Yoshi is ridden it updates the hit object under Mario,
+ * which the house floor's case events (erase_house, appear_house) react to.
+ */
+static USER_FUNC(under) {
+    PartyEntry* party = partyGetPtr(0);
+
+    if (party != NULL && party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+        marioGetPtr()->hitobjUnder = marioSearchUnder();
+    }
+    return EVT_RETURN_DONE;
+#else
 }
 
 USER_FUNC(under) {
@@ -2142,6 +2259,7 @@ USER_FUNC(under) {
         event->userdata[0] = 0;
     }
     return EVT_RETURN_BLOCK;
+#endif
 }
 
 /**

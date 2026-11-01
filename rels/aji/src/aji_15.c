@@ -1,5 +1,6 @@
 // aji_15 (敵のアジト, X-Naut Fortress): the shower room where Peach takes a shower (peach_evt_syawa_main).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -399,9 +400,15 @@ EVT_BEGIN(aji_15_init_evt)
         ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    CALL(evt_snd_set_rev_mode, 1)
+    CALL_CHILD(peach_evt_syawa_init)
+#else
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     CALL_CHILD(PTR(peach_evt_syawa_init))
+#endif
     IF_INT_EQUAL(GSWF_AJI_15_VISITED, 0)
         SET_VALUE(GSWF_AJI_15_VISITED, 1)
     END_IF

@@ -106,6 +106,33 @@ static inline BOOL isAnimA13(const s8* a) {
         return TRUE;
     }
     return FALSE;
+#if VERSION <= VERSION_DEMO_US
+}
+
+/** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
+EVT_BEGIN(kpa_powerup_evt)
+    CALL(kpa_powerup, LW(0), LW(1), LW(2))
+    RETURN
+EVT_END()
+/** Event that runs fire_func with LW(0)-LW(3) to spawn a fire effect for Bowser's stage objects. */
+EVT_BEGIN(evt_fire)
+    CALL(fire_func, LW(0), LW(1), LW(2), LW(3))
+    RETURN
+EVT_END()
+extern EvtWord kpa_powerup_evt[];
+extern EvtWord evt_fire[];
+
+#include "driver/imgdrv.h"
+#include "driver/offscreendrv.h"
+#include "driver/camdrv.h"
+#include "system.h"
+#include "driver/npcdrv.h"
+
+// ---- BEGIN tail (defined in reverse of target order) ----
+
+/** Creates a bare map object. args: name, animation group. Waits (blocks) until the animation group has loaded. */
+USER_FUNC(evt_mobj_entry) {
+#else
 }
 
 // FAKE: itemEntry declared with the position first: the retail calls load x/y/z before the other arguments
@@ -131,6 +158,7 @@ EVT_END()
 
 /** Creates a bare map object. args: name, animation group. Waits (blocks) until the animation group has loaded. */
 USER_FUNC(evt_mobj_entry) {
+#endif
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     const char* anim = (const char*)evtGetValue(event, args[1]);
@@ -766,6 +794,17 @@ s32 mobj_timerswitch(MapObjectEntry* mobj) {
             mobj->flags &= ~MOBJ_FLAG_HIT;
             animPoseSetAnim(mobj->poseId, "S_1", 1);
             animPoseSetAnim(other->poseId, "S_1", 1);
+#if VERSION <= VERSION_DEMO_US
+                mobj->state = 0;
+                break; // the demo goes on to the pair check
+            }
+            if (other->state == 2) {
+                if (marioKeyOffChk() || marioCtrlOffChk()) {
+                    mobj->state = 0;
+                    break;
+                }
+                mobjRunEvent(mobj, (int*)mobj->event);
+#else
             mobj->state = 0;
             break;
         }
@@ -775,6 +814,7 @@ s32 mobj_timerswitch(MapObjectEntry* mobj) {
                 break;
             }
             mobjRunEvent(mobj, (s32*)mobj->event);
+#endif
             if (!strcmp(mobj->animName, "MOBJ_RedTimerSwitch")) {
                 mobj->flags &= ~MOBJ_FLAG_HIT;
                 other->flags &= ~MOBJ_FLAG_HIT;
@@ -1355,9 +1395,15 @@ s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
     strcat(oname, mobj->name);
     strcat(iname, mobj->name);
     switch (mobj->state) {
+#if VERSION <= VERSION_DEMO_US
+        case 0:
+            animGroupBaseAsync("P_box_y", type, NULL);
+            if (mobj->flags & MOBJ_FLAG_HIT) {
+#else
     case 0:
         animGroupBaseAsync("P_box_y", type, NULL);
         if (mobj->flags & MOBJ_FLAG_HIT) {
+#endif
             if (!strcmp(mobj->animName, "MOBJ_Lv1Block") || !strcmp(mobj->animName, "MOBJ_Lv1BigBlock")) {
             } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBigBlock")) {
                 if (pouchGetHammerLv() < 2 || (u16)mario->currMotionId != MARIO_MOTION_HAMMER_2) {
@@ -1424,10 +1470,14 @@ s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
         break;
     case 11:
         img = imgNameToPtr(iname, type);
+#if VERSION <= VERSION_DEMO_US
+            if (img->loopTimes >= 1.0f) {
+#else
         if (img->loopTimes >= 1.0f) {
             mobj->state = 12;
         }
         if (img->flags & IMAGE_FLAG_NO_CAPTURE) {
+#endif
             mobj->state = 12;
         }
         mobj->position = (Vec){0.0f, -2000.0f, 0.0f};
@@ -2271,16 +2321,28 @@ USER_FUNC(evt_mobj_itembox) {
 s32 mobj_signboard(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
+#if VERSION <= VERSION_DEMO_US
+            if (mobj->flags & MOBJ_FLAG_HIT) {
+                marioKeyOff(); // the demo's sign script handles the keys itself
+                mobjRunEvent(mobj, (int*)mobj->event);
+#else
         if (mobj->flags & MOBJ_FLAG_HIT) {
             marioKeyOff();
             mobjRunEvent(mobj, (s32*)mobj->event);
+#endif
             mobj->state++;
         }
         break;
     case 1:
+#if VERSION <= VERSION_DEMO_US
+            if (evtCheckID(mobj->eventId) != 1) {
+                marioKeyOn();
+                mobj->eventId = 0;
+#else
         if (evtCheckID(mobj->eventId) != 1) {
             marioKeyOn();
             mobj->eventId = 0;
+#endif
             mobj->flags &= ~MOBJ_FLAG_HIT;
             mobj->state = 0;
         }
@@ -2683,6 +2745,108 @@ USER_FUNC(evt_mobj_save_blk) {
     mobjCalcMtx(mobj);
     animPoseSetAnim(mobj->poseId, "S_1", 1);
     return EVT_RETURN_DONE;
+#if VERSION <= VERSION_DEMO_US
+}
+
+/** Plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit; not in JP. */
+static int mobj_blk(MapObjectEntry* mobj) {
+    switch (mobj->state) {
+        case 0:
+            if (mobj->flags & MOBJ_FLAG_HIT) {
+                psndSFXOn_3D((PSND_SFX_MOBJ_BLOCK_POWER_SHINE1 char*)0x1b7, &mobj->position);
+                animPoseSetAnim(mobj->poseId, "A_1", 1);
+                mobj->flags &= ~MOBJ_FLAG_HIT;
+                mobj->state++;
+            }
+            break;
+        case 1:
+            if ((void*)mobj->event) {
+                mobjRunEvent(mobj, (int*)mobj->event);
+                mobj->state++;
+            } else {
+                mobj->state = 3;
+            }
+            break;
+        case 2:
+            if (evtCheckID(mobj->eventId) != 1) {
+                mobj->eventId = 0;
+                mobj->state++;
+            }
+            break;
+        case 3:
+            if (!(mobj->flags & MOBJ_FLAG_HIT)) {
+                mobj->state = 0;
+                break;
+            }
+            if (animPoseGetLoopTimes(mobj->poseId) < 1.0f) {
+                break;
+            }
+            animPoseSetAnim(mobj->poseId, "S_1", 1);
+            mobj->state = 0;
+            mobj->flags &= ~MOBJ_FLAG_HIT;
+            break;
+    }
+    return 0;
+}
+
+/**
+ * Places a plain block that runs an event when hit from below.
+ * args: name, x, y, z, coinCost (0 yellow MOBJ_Block, 1 MOBJ_PinkBlock), event, flag variable. Not in JP.
+ */
+USER_FUNC(evt_mobj_blk) {
+    EvtWord* args = event->args;
+    PSND_SFX_MOBJ_BLOCK_POWER_SHINE1 char* name;
+    f32 x, y, z;
+    int coinCost;
+    int val;
+    int flagVar;
+    PSND_SFX_MOBJ_BLOCK_POWER_SHINE1 char* anim;
+    MapObjectEntry* mobj;
+    BOOL battleFlag;
+    name = (PSND_SFX_MOBJ_BLOCK_POWER_SHINE1 char*)evtGetValue(event, args[0]);
+    x = evtGetFloat(event, args[1]);
+    y = evtGetFloat(event, args[2]);
+    z = evtGetFloat(event, args[3]);
+    coinCost = args[4];
+    val = evtGetValue(event, args[5]);
+    flagVar = args[6];
+    battleFlag = gp->battleFlag != 0;
+    switch (coinCost) {
+        case 0:
+            anim = "MOBJ_Block";
+            break;
+        case 1:
+            anim = "MOBJ_PinkBlock";
+            break;
+        default:
+            anim = "MOBJ_Block";
+            break;
+    }
+    if (animGroupBaseAsync(anim, battleFlag, NULL) == 0) {
+        return EVT_RETURN_BLOCK;
+    }
+    mobjEntry(name, anim);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    mobj->mainFunc = mobj_blk;
+    mobj->event = val;
+    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
+    mobj->flags |= MOBJ_FLAG_HIT_HEAD;
+    mobj->flagVar = flagVar;
+    mobj->state = 0;
+    mobjCalcMtx(mobj);
+    animPoseSetAnim(mobj->poseId, "S_1", 1);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Main function of the ?
+ * blocks and badge (pink) blocks: the first hit pops out the stored item (or a coin,
+ * which is collected at once and sets the flag), or runs the event instead if one is set.
+ * The block then turns into an empty block that just bounces when hit again.
+ */
+static int mobj_badgeblk(MapObjectEntry* mobj) {
+#else
 }
 
 #if VERSION >= VERSION_US
@@ -2786,6 +2950,7 @@ USER_FUNC(evt_mobj_blk) {
  * The block then turns into an empty block that just bounces when hit again.
  */
 s32 mobj_badgeblk(MapObjectEntry* mobj) {
+#endif
     ItemEntry* item;
     switch (mobj->state) {
     case 0:
@@ -2918,6 +3083,16 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
             mobj->flags &= ~MOBJ_FLAG_HIT;
             break;
         }
+#if VERSION <= VERSION_DEMO_US
+            marioKeyOff();
+            // the demo has no dou_ maps
+            if (!strcmp(gp->currentMapName, "dou_02")) {
+                marioCtrlOff();
+            } else if ((!strcmp(gp->currentMapName, "dou_05") || !strcmp(gp->currentMapName, "dou_10")) && mobj->hitFlag == MOBJ_FLAG_HIT_PARTY) {
+                marioCtrlOff();
+            }
+            gp->systemLevelFlags |= SYSTEM_LEVEL_FLAG_STOP_LV0 | SYSTEM_LEVEL_FLAG_STOP_LV1;
+#else
         marioKeyOff();
         if (!strcmp(gp->currentMapName, "dou_02")) {
             marioCtrlOff();
@@ -2925,6 +3100,7 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
             marioCtrlOff();
         }
         gp->systemLevelFlags |= (SYSTEM_LEVEL_STOP_LV0 | SYSTEM_LEVEL_STOP_LV1);
+#endif
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_POWER_SHINE1 | PSND_SFX_BYPASS_MUTE), &mobj->position);
         animPoseSetAnim(mobj->poseId, "A_1", 1);
         itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, "pwrblk1", ITEM_SHINE_SPRITE, ITEM_TYPE_POP, -1, NULL);
@@ -2946,6 +3122,15 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
         }
         itemForceGet(itemEntry(mobj->position.x, 40.0f + mobj->position.y, mobj->position.z, "pwrblk2", ITEM_SHINE_SPRITE, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL));
         evtSetValue(NULL, mobj->flagVar, 1);
+#if VERSION <= VERSION_DEMO_US
+            marioKeyOn();
+            if (!strcmp(gp->currentMapName, "dou_02")) {
+                marioCtrlOn();
+            } else if ((!strcmp(gp->currentMapName, "dou_05") || !strcmp(gp->currentMapName, "dou_10")) && mobj->hitFlag == MOBJ_FLAG_HIT_PARTY) {
+                marioCtrlOn();
+            }
+            mobj->state = 90;
+#else
         marioKeyOn();
         if (!strcmp(gp->currentMapName, "dou_02")) {
             marioCtrlOn();
@@ -2953,6 +3138,7 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
             marioCtrlOn();
         }
         mobj->state = 90;
+#endif
         break;
     case 90:
         mobjDelete(mobj->name);
@@ -3022,9 +3208,15 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
     strcat(oname, mobj->name);
     strcat(iname, mobj->name);
     switch (mobj->state) {
+#if VERSION <= VERSION_DEMO_US
+        case 0:
+            animGroupBaseAsync("P_box_y", type, NULL); // the demo preloads nothing here
+            if (mobj->flags & MOBJ_FLAG_HIT) {
+#else
     case 0:
         animGroupBaseAsync("P_box_y", type, NULL);
         if (mobj->flags & MOBJ_FLAG_HIT) {
+#endif
             mobjRunEvent(mobj, (s32*)mobj->event);
             evtSetValue(NULL, mobj->flagVar, 1);
             mobj->state = 10;
@@ -3067,11 +3259,19 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
         img = imgNameToPtr(iname, type);
         if (img->loopTimes >= 1.0f) {
             mobj->state = 12;
+#if VERSION <= VERSION_DEMO_US
+            }
+            if (img->flags & IMAGE_FLAG_NO_CAPTURE) {
+                mobj->state = 12;
+            }
+            mobj->position = (f32){0.0f, -2000.0f, 0.0f};
+#else
         }
         if (img->flags & IMAGE_FLAG_NO_CAPTURE) {
             mobj->state = 12;
         }
         mobj->position = (Vec){0.0f, -2000.0f, 0.0f};
+#endif
         mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
         mobj->flags |= MOBJ_FLAG_HIT;
         break;
@@ -3102,8 +3302,12 @@ s32 mobj_10countblk(MapObjectEntry* mobj) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
             if (mobj->flags & MOBJ_FLAG_HIDDEN) {
+#if VERSION <= VERSION_DEMO_US
+                    mobj->flags &= ~MOBJ_FLAG_HIDDEN;
+#else
                 mobj->flags &= ~MOBJ_FLAG_HIDDEN;
                 strcpy(mobj->animName, "MOBJ_Block");
+#endif
             }
             animPoseSetAnim(mobj->poseId, "A_1", 1);
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_TEN_COUNT_HIT1), &mobj->position);
@@ -4741,8 +4945,15 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
     char buf[0x20];
     char buf2[0x20];
     BOOL ok = FALSE;
+#if VERSION <= VERSION_DEMO_US
+    int i;
+#endif
+#if VERSION <= VERSION_DEMO_US
+    NpcEntry* npc;
+#else
     NpcEntry* npc;
     s32 i;
+#endif
     MarioWork* mario = marioGetPtr();
     if (mobj->state < 10) {
         if (distABf(mario->position.x, mario->position.y, mobj->position.x, mobj->position.y) < 150.0f) {
@@ -4911,6 +5122,26 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
         npc->flags |= NPC_FLAG_NO_SHADOW;
     }
     return EVT_RETURN_DONE;
+#if VERSION <= VERSION_DEMO_US
+}
+
+/** demo-only: turn Mario to face the given angle */
+static USER_FUNC(kpa_set_dir) {
+    f32 dir = evtGetFloat(event, event->args[0]);
+    MarioWork* mario = marioGetPtr();
+    mario->directionView = dir;
+    mario->moveDirection = 270.0f;
+    mario->displayDirectionTarget = reviseAngle(270.0f - dir);
+    mario->displayDirection = mario->displayDirectionTarget;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Writes the name of the goal pole whose event is running (event->thisMapObj) to args[0],
+ * or 0 outside a map object event.
+ */
+static USER_FUNC(kpa_get_pole_name) {
+#else
 }
 
 /**
@@ -4918,6 +5149,7 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
  * or 0 outside a map object event.
  */
 USER_FUNC(kpa_get_pole_name) {
+#endif
     MapObjectEntry* mobj = event->thisMapObj;
     EvtWord* args = event->args;
     if (mobj != NULL) {
@@ -4950,7 +5182,21 @@ static USER_FUNC(kpa_get_level) {
 /** Writes the width of the player's collision box (Bowser's, growing with his level) to args[0] as an integer. */
 USER_FUNC(kpa_get_width) {
     EvtWord* args = event->args;
+#if VERSION <= VERSION_DEMO_US
+    evtSetValue(event, args[0], (int)marioGetPtr()->wPlayerCollisionBox.x);
+    return EVT_RETURN_DONE;
+}
+
+/** demo-only: read Mario's position into three float variables */
+static USER_FUNC(kpa_get_mario_pos) {
+    EvtWord* args = event->args;
+    MarioWork* mario = marioGetPtr();
+    evtSetFloat(event, args[0], mario->position.x);
+    evtSetFloat(event, args[1], mario->position.y);
+    evtSetFloat(event, args[2], mario->position.z);
+#else
     evtSetValue(event, args[0], (s32)marioGetPtr()->wPlayerCollisionBox.x);
+#endif
     return EVT_RETURN_DONE;
 }
 
@@ -5034,7 +5280,25 @@ USER_FUNC(kpa_clear_jump_data) {
  * shows the score, slides him and the flag down to the ground, then moves the camera on and hands control back.
  * Run by mobj_koopa_pole_evt with the score in LW(0).
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(kpa_powerup_evt)
+    CALL(kpa_powerup, LW(0), LW(1), LW(2))
+    RETURN
+EVT_END()
+/** The demo's copy of evt_fire (see above). */
+EVT_BEGIN(evt_fire)
+    CALL(fire_func, LW(0), LW(1), LW(2), LW(3))
+    RETURN
+EVT_END()
+
+/**
+ * The demo sets the pole speeds from Mario's height;
+ * the other versions use fixed speeds and an inline lowering event
+ */
 EVT_BEGIN(kpa_pole)
+#else
+EVT_BEGIN(kpa_pole)
+#endif
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -5048,12 +5312,29 @@ EVT_BEGIN(kpa_pole)
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_POST_JUMP1"), LW(1), LW(2), LW(3), 0)
     CALL(evt_mobj_get_x_position, LW(15), LW(4))
     CALL(kpa_get_width, LW(5))
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(5), FLOAT(0.599609375f))
+#else
     MULTIPLY_FLOAT(LW(5), FLOAT(0.5996094f))
+#endif
     SUBTRACT_FLOAT(LW(4), LW(5))
     CALL(evt_mario_set_pos, LW(4), LW(2), LW(3))
     CALL(kpa_score_to_str, LW(0))
+#if VERSION <= VERSION_DEMO_US
+    CALL(kpa_get_mario_pos, LW(0), LW(1), LW(2))
+    SUBTRACT_FLOAT(LW(1), FLOAT(25.0f))
+#endif
+#if VERSION <= VERSION_DEMO_US
+    SET_FLOAT_VALUE(LW(14), FLOAT(155.0f))
+    DIVIDE_FLOAT(LW(14), LW(1))
+    MULTIPLY_FLOAT(LW(14), FLOAT(1.5f))
+    SET_FLOAT_VALUE(LW(13), FLOAT(180.0f))
+    DIVIDE_FLOAT(LW(13), LW(1))
+    MULTIPLY_FLOAT(LW(13), FLOAT(1.5f))
+#else
     SET_FLOAT_VALUE(LW(14), FLOAT(2.0f))
     SET_FLOAT_VALUE(LW(13), FLOAT(2.0f))
+#endif
     SET_FLOAT_VALUE(LW(7), FLOAT(50.0f))
     BEGIN_INLINE_EVENT
         CALL(evt_mobj_get_position, LW(15), LW(3), LW(4), LW(5))
@@ -5061,11 +5342,23 @@ EVT_BEGIN(kpa_pole)
         CALL(kpa_disp_pole_score_main, LW(3), LW(7), LW(5), LW(13))
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(1), LW(2), LW(3))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_POST_SLIDE1"), LW(1), LW(2), LW(3), LW(10))
+    LOOP(0)
+        CALL(kpa_get_mario_pos, LW(0), LW(1), LW(2))
+        SUBTRACT_FLOAT(LW(1), FLOAT(1.5f))
+        CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
+        CALL(evt_mobj_get_position, LW(15), LW(3), LW(4), LW(5))
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_POST_SLIDE1"), LW(1), LW(2), LW(3), LW(10))
     BEGIN_INLINE_EVENT_GET_ID(LW(6))
         LOOP(0)
             CALL(evt_mobj_get_y_position, LW(15), LW(4))
+#endif
             SUBTRACT_FLOAT(LW(4), LW(14))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mobj_set_y_position, LW(15), LW(4))
+#else
             CALL(evt_mobj_set_y_position, LW(15), LW(4))
             WAIT_FRAMES(1)
             IF_INT_LESS_OR_EQUAL(LW(4), 25)
@@ -5078,7 +5371,12 @@ EVT_BEGIN(kpa_pole)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         SUBTRACT_FLOAT(LW(1), FLOAT(2.0f))
         CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
+#endif
         IF_INT_LESS_OR_EQUAL(LW(1), FLOAT(25.0f))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_mario_set_pos, LW(0), FLOAT(25.0f), LW(2))
+            CALL(evt_mobj_set_y_position, LW(15), FLOAT(25.0f))
+#else
             CALL(evt_mario_set_pos, LW(0), FLOAT(25.0f), LW(2))
             BREAK_LOOP
         END_IF
@@ -5087,6 +5385,7 @@ EVT_BEGIN(kpa_pole)
     LOOP(0)
         IS_EVENT_RUNNING(LW(6), LW(7))
         IF_INT_EQUAL(LW(7), 0)
+#endif
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -5099,14 +5398,22 @@ EVT_BEGIN(kpa_pole)
     WAIT_FRAMES(1)
     CALL(kpa_get_width, LW(3))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(3), FLOAT(1.19921875f))
+#else
     MULTIPLY_FLOAT(LW(3), FLOAT(1.1992188f))
+#endif
     ADD_FLOAT(LW(0), LW(3))
     CALL(evt_cam3d_get_shift, LW(0), LW(1), LW(2), LW(3))
     CALL(evt_cam3d_event_from_road, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
     CALL(evt_cam3d_evt_set, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9), 300, EASING_LINEAR)
     WAIT_MS(200)
     CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(kpa_set_dir, 270)
+#else
     CALL(evt_mario_set_dir, 270, 0, 0)
+#endif
     CALL(evt_mario_set_mov_spd, 0)
     WAIT_MS(200)
     ADD(LW(0), 20)

@@ -250,10 +250,17 @@ static EVT_BEGIN(evt_first)
         CALL(evt_party_cont_onoff, 0, 1)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(party_reset)
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_party_jump_pos, 0, LW(0), 0, LW(2), 500, 0, -1000)
         DEBUG_PUT_MSG(STRING("ビビアンしっぽ有効"))
         CALL(evt_party_vivian_tail, 0, 1)
     END_INLINE_EVENT
+#else
+        CALL(evt_party_jump_pos, 0, LW(0), 0, LW(2), 500, 0, -1000)
+        DEBUG_PUT_MSG(STRING("ビビアンしっぽ有効"))
+        CALL(evt_party_vivian_tail, 0, 1)
+    END_INLINE_EVENT
+#endif
     WAIT_MS(500)
     LOOP(3)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -305,8 +312,12 @@ static EVT_BEGIN(evt_first)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_dispflag_onoff, 0, 2)
+#else
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     // Control returns, the story advances and the Moon banner appears.
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)

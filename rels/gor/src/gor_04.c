@@ -804,6 +804,16 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
         SET_VALUE(LW(0), 500)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(1), -500)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+#else
         SET_VALUE(LW(1), -500)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -812,6 +822,7 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
+#endif
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
         SET_VALUE(LW(0), 0)
@@ -829,6 +840,18 @@ static EVT_BEGIN(hom_10_init_evt)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(evt_train)
+    // The Dried Shroom on the passenger car shelf comes back for every trip
+    SET_VALUE(GSWF(GSWF_RSH02_SHELF_DRIED_SHROOM), 0)
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
+    CALL(evt_sub_get_dist, LW(0), LW(2), LW(3), LW(5), LW(10))
+    IF_INT_GREATER(LW(10), 100)
+        CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
+    END_IF
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#else
 static EVT_BEGIN(evt_train)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
@@ -837,6 +860,7 @@ static EVT_BEGIN(evt_train)
         CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#endif
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_SLIDE1_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -40, 500)
     LABEL(0)
@@ -983,9 +1007,13 @@ EVT_BEGIN(evt_train2)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_party_run, 1)
+#else
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     // The partners follow Mario and he gets control back.
     CALL(evt_party_run, 1)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     // Wait until Mario moves, then free the camera.
@@ -2267,9 +2295,15 @@ EVT_BEGIN(gor_04_init_evt)
         END_IF
 #endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_sub_mail_event)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
+    RETURN
+#else
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
     RETURN
+#endif
 EVT_END()
 
 

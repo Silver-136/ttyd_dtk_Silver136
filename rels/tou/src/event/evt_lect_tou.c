@@ -1,3 +1,4 @@
+#include "version.h"
 #include "icon_ids.h"
 #include "evt/evt_window.h"
 #include "eff/eff_mario_balloon.h"
@@ -502,6 +503,9 @@ EVT_BEGIN(yoshi_party_lecture)
         LOOP(0)
             IF_INT_LESS_OR_EQUAL(LW(3), 0)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_snd_sfxon_3d, STRING("SFX_PARTY_YOSH_MOVE1"), LW(0), LW(1), LW(2), 0)
+#endif
                 SET_VALUE(LW(3), 10)
                 ELSE
                 SUBTRACT(LW(3), 1)
@@ -525,7 +529,12 @@ EVT_BEGIN(yoshi_party_lecture)
         SET_VALUE(LW(3), 0)
         LOOP(0)
             IF_INT_LESS_OR_EQUAL(LW(3), 0)
+#if VERSION <= VERSION_DEMO_US
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                CALL(evt_snd_sfxon_3d, STRING("SFX_PARTY_YOSH_MOVE1"), LW(0), LW(1), LW(2), 0)
+#else
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#endif
                 SET_VALUE(LW(3), 10)
                 ELSE
                 SUBTRACT(LW(3), 1)

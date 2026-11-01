@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "dou.h"
@@ -64,6 +65,27 @@ BattleUnitKind unit_killer_cannon = {
     60, // runRate
     9999, // pbSoftCap
     52, // width
+#if VERSION <= VERSION_DEMO_US
+    38,
+    5,
+    38,
+    0.0f,
+    19.0f,
+    0.0f,
+    0,
+    0,
+    0.0f,
+    0.0f,
+    0.0f,
+    26.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     38, // height
     {5, 38}, // hitOffset
     {0.0f, 19.0f, 0.0f}, // centerOffset
@@ -73,6 +95,7 @@ BattleUnitKind unit_killer_cannon = {
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
     20.0f, // vivianOffsetX
     10.0f, // vivianOffsetZ
+#endif
     {26.0f, 0.0f, 0.0f}, // bintaHitOffset
     {26.0f, 24.7f, 0.0f}, // kissHitOffset
     {-10.0f, 19.0f, 0.0f}, // cutBaseOffset

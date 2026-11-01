@@ -1,5 +1,6 @@
 // bom.rel (ボム村, Fahr Outpost): registers bom_00..bom_04 and the battle database; puffs of breath in the cold.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_mist.h"
@@ -100,13 +101,21 @@ USER_FUNC(bress) {
             timers[i]--;
         }
     }
+#if VERSION <= VERSION_DEMO_US
+    if (mario != NULL && event->userdata[0] == 0 && !marioChkSts(4) && !marioChkSts(0x10) && !marioChkSts(8)) {
+#else
     if (mario != NULL && event->userdata[0] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA) &&
         vivianGetStatus() != 2) {
+#endif
         effMistEntry(4, 30, mario->position.x, 24.0f + mario->position.y, mario->position.z, 270.0f - mario->displayDirection);
         event->userdata[0] = irand(60) + 60;
     }
+#if VERSION <= VERSION_DEMO_US
+    if (party != NULL && event->userdata[1] == 0 && !marioChkSts(4) && !marioChkSts(0x10) && !marioChkSts(8)) {
+#else
     if (party != NULL && event->userdata[1] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA) &&
         vivianGetStatus() != 2) {
+#endif
         effMistEntry(4, 30, party->position.x, party->position.y + offset[party->currentMemberId], party->position.z,
                      270.0f - party->displayDirection);
         event->userdata[1] = irand(60) + 60;

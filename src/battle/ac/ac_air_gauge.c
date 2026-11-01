@@ -1,5 +1,6 @@
 // Action command: air gauge (ac_air_gauge); press A repeatedly to fill a gauge that constantly drains.
 
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"
@@ -217,15 +218,45 @@ f32 _GetGaugeDecValue(void) {
     f32 base;
 
     switch ((u32)ac->params[7]) {
+#if VERSION <= VERSION_DEMO_US
+        case 0:
+            base = 0.0f;
+            t = _table_0;
+            break;
+        case 1:
+            base = 0.2f;
+            t = _table_1;
+            break;
+        case 2:
+            base = 0.3f;
+            t = _table_2;
+            break;
+#else
         case 0: base = 0.3f; t = _table_0; break;
         case 1: base = 0.33f; t = _table_1; break;
         case 2: base = 0.36f; t = _table_2; break;
+#endif
         case 3: base = 0.4f; t = _table_3; break;
+#if VERSION <= VERSION_DEMO_US
+        case 4:
+            base = 0.45f;
+            t = _table_4;
+            break;
+        case 5:
+            base = 0.45f;
+            t = _table_5;
+            break;
+#else
         case 4: base = 0.44f; t = _table_4; break;
         case 5: base = 0.47f; t = _table_5; break;
+#endif
         case 6:
         default: t = _table_6;
+#if VERSION <= VERSION_DEMO_US
+            base = 0.45f;
+#else
         base = 0.5f;
+#endif
         break;
     }
     while (pw->hold > t->frame) {

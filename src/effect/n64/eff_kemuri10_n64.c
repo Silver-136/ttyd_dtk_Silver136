@@ -1,5 +1,6 @@
 // Paper Mario 64 smoke effect 10 (kemuri: smoke) moving along a direction vector with a scale.
 
+#include "version.h"
 #include "eff/n64/eff_kemuri10_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -144,9 +145,15 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
     work->rot[0][3] = zr;
     work->rot[1][3] = zr;
     work->rot[2][3] = zr;
+#if VERSION <= VERSION_DEMO_US
+    work->scale = 0.1f * scale;
+    work->camera = 4;
+    return effect;
+#else
     work->scale = 0.1f * scale;
     work->camera = CAMERA_3D;
     return effect;
+#endif
 }
 
 /**
@@ -168,8 +175,12 @@ void effKemuri10Main(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
     // FAKE: the timer goes through a temporary for the decrement; `work->timer--;` changes the object
+#if VERSION <= VERSION_DEMO_US
+    timer = work->timer;
+#else
     timer = work->timer;
     camera = work->camera;
+#endif
     work->timer = timer - 1;
     work->counter++;
     timer = work->timer;
@@ -197,7 +208,11 @@ void effKemuri10Main(EffectEntry* effect) {
         work->scale *= 1.05f;
         work++;
     }
+#if VERSION <= VERSION_DEMO_US
+    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri10Disp, effect);
+#else
     dispEntry((CameraId)camera, dispCalcZ(&position), 2, (DispCallback)effKemuri10Disp, effect);
+#endif
 }
 
 /** Draws the smoke cloud mesh (stg_houki_kemuri_v, 192 vertices) with texture 0x1F, oriented by the direction frame. */

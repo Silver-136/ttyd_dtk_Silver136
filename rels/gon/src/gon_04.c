@@ -278,8 +278,12 @@ EVT_END()
  * turns back up instead. The outer IF_INT_NOT_EQUAL(1, 0) is always true, so its ELSE branch (the switch only
  * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_gon_04flowblock_updown1)
+#else
 EVT_BEGIN(evt_gon_04flowblock_updown1)
     SET_TYPE(239)
+#endif
     // The switch is disabled while the block moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
@@ -532,8 +536,12 @@ EVT_END()
  * and camera shake, and flips the state flag LSWF(7).
  */
 // This switch moves block 2 only after the large level-1 block has been broken.
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_gon_04flowblock_updown2)
+#else
 EVT_BEGIN(evt_gon_04flowblock_updown2)
     SET_TYPE(239)
+#endif
     // The switch is disabled while the block moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(GSWF_GON_04_LV1_BIG_BLOCK_BROKEN, 0)
@@ -1051,7 +1059,11 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0D, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF

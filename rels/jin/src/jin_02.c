@@ -1,5 +1,6 @@
 // jin_02 (ダイム寺院, Creepy Steeple): side room with a red switch and a camera shake event; doors to jin_00 and jin_03.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -137,8 +138,12 @@ EVT_END()
 EVT_BEGIN(evt_kaidan_temae)
     IF_INT_NOT_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
         CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_party_stop, 0)
+#else
         CALL(evt_mario_normalize)
         CALL(evt_party_stop, 0)
+#endif
         IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
             BEGIN_INLINE_EVENT_GET_ID(LW(3))
                 WAIT_MS(500)

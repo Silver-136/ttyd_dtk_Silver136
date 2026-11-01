@@ -15,8 +15,12 @@
 
 
 typedef struct SignalTimingWork {
+#if VERSION <= VERSION_DEMO_US
+    s32 hits; // 0x0
+#else
     s32 hits;       // 0x0
     s32 misses;     // 0x4
+#endif
     s32 index;      // 0x8
     s32 next;       // 0xC
     s32 frame;      // 0x10
@@ -119,8 +123,12 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 disp->iconX = -300.0f;
                 disp->iconY = 0.0f;
                 disp->slideTimer = 20;
+#if VERSION <= VERSION_DEMO_US
+                w->hits = 0;
+#else
                 w->hits = 0;
                 w->misses = 0;
+#endif
                 w->frame = 0;
                 w->index = 0;
                 w->next = 0;
@@ -261,9 +269,15 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                             loop = 1;
                             ac->acState = 1002;
                         }
+#if VERSION <= VERSION_DEMO_US
+                    } else if ((w->index >= ST_LEAD(work)) && (w->index < (ST_COUNT(work) + ST_LEAD(work)))) {
+                        w->misses++;
+                        if (w->frame >= w->rangeStart) {
+#else
                     } else if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                         w->misses++;
                         if (w->frame >= w->rangeStart) {
+#endif
                             w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;
                             if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
                                 psndSFXOn(sfxNg2);
@@ -277,9 +291,15 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 if ((!w->pressed) && (w->frame > w->okEnd)) {
                     w->pressed = 1;
                     work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = -1;
+#if VERSION <= VERSION_DEMO_US
+                    if ((w->index >= ST_LEAD(work)) && (w->index < (ST_COUNT(work) + ST_LEAD(work)))) {
+                        w->misses++;
+                        w->results[w->index - ST_LEAD(work)] = -1;
+#else
                     if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                         w->misses++;
                         w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;
+#endif
                         if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
                             psndSFXOn(sfxNg);
                         }

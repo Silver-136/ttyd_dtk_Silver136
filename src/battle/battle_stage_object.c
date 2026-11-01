@@ -1356,7 +1356,11 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
+#if VERSION <= VERSION_DEMO_US
+                -99, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
+#else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
+#endif
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
                 NULL, // attackEvtScript
@@ -1671,7 +1675,11 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
+#if VERSION <= VERSION_DEMO_US
+                -99, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
+#else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
+#endif
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
                 NULL, // attackEvtScript
@@ -1986,7 +1994,11 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
+#if VERSION <= VERSION_DEMO_US
+                -99, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
+#else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
+#endif
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
                 NULL, // attackEvtScript
@@ -2301,7 +2313,11 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
+#if VERSION <= VERSION_DEMO_US
+                -99, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
+#else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
+#endif
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
                 NULL, // attackEvtScript
@@ -3227,7 +3243,11 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
     if (isFirstCall) {
         for (i = 0; i < 64; i++) {
             unit = BattleGetUnitPtr(wp, i);
+#if VERSION <= VERSION_DEMO_US
+            if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && unit->ceilFallEventCode) {
+#else
             if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->ceilFallEventCode) {
+#endif
                 evt = evtEntry(unit->ceilFallEventCode, 10, 0);
                 if (evt) {
                     evt->unitId = unit->unitId;
@@ -3837,9 +3857,15 @@ USER_FUNC(_object_fall_attack) {
     FallObjectEntry* o;
     s32 k;
     const char* sfxTub2;
+#if VERSION <= VERSION_DEMO_US
     FallObjectEntry* o2;
     const char* sfxRest;
     s32 i;
+#else
+    FallObjectEntry* o2;
+    const char* sfxRest;
+    s32 i;
+#endif
     s32 sum;
     s32 r;
     u32 flags;
@@ -3972,9 +3998,15 @@ USER_FUNC(_object_fall_attack) {
 
     }
     sfxTub2 = (0, "SFX_BTL_STAGE_DAMAGE_TUB1"); // FAKE: comma expr makes the literal an early @ temp (same pointer)
+#if VERSION <= VERSION_DEMO_US
     sfxNormal = "SFX_BTL_STAGE_DAMAGE_NORMAL1";
     sfxRest = "SFX_REST_CONDITION1";
     w = event->userdatap[0];
+#else
+    sfxNormal = "SFX_BTL_STAGE_DAMAGE_NORMAL1";
+    sfxRest = "SFX_REST_CONDITION1";
+    w = event->userdatap[0];
+#endif
     done = TRUE;
     for (i = 0; i < w->count; i++) {
         e3 = &w->entries[i];
@@ -4050,7 +4082,11 @@ USER_FUNC(_object_fall_attack) {
                     break;
 
                 case STAGE_FALL_FORK:
+#if VERSION <= VERSION_DEMO_US
+                    e3->effect = effFallEntry(2, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);
+#else
                     e3->effect = effFallEntry(2, pos.x, pos.y, 5.0f + pos.z, width, hit.y - pos.y, dir, 1, 90);
+#endif
                     break;
 
                 case STAGE_FALL_STAGE_LIGHT:
@@ -4063,14 +4099,26 @@ USER_FUNC(_object_fall_attack) {
 
                 case STAGE_FALL_BOWSER_STATUE:
                     if (BtlUnit_GetBelong(unit) == 0) {
+#if VERSION <= VERSION_DEMO_US
+                        e3->effect = effFallEntry(6, -300.0f, pos.y, pos.z, 0.0f, 0.0f, dir, 1, 180);
+#else
                         e3->effect = effFallEntry(6, -300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
+#endif
                     } else {
+#if VERSION <= VERSION_DEMO_US
+                        e3->effect = effFallEntry(6, 300.0f, pos.y, pos.z, 0.0f, 0.0f, dir, 1, 180);
+#else
                         e3->effect = effFallEntry(6, 300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
+#endif
                     }
                     break;
 
                 case STAGE_FALL_METEOR:
+#if VERSION <= VERSION_DEMO_US
+                    e3->effect = effFallEntry(7, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 180);
+#else
                     e3->effect = effFallEntry(7, pos.x, pos.y, 5.0f + pos.z, width, hit.y - pos.y, dir, 1, 180);
+#endif
                     break;
 
             }
@@ -4128,9 +4176,15 @@ USER_FUNC(_object_fall_attack) {
                                 case STAGE_FALL_BUCKET:
                                     psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
                                     break;
+#if VERSION <= VERSION_DEMO_US
+                                case 5:
+                                    psndSFXOn_3D(sfxRest, &sfxPos);
+                                    break;
+#else
                                 case STAGE_FALL_WATER:
                                     psndSFXOn_3D(sfxRest, &sfxPos);
                                     break;
+#endif
                                 default:
                                     psndSFXOn_3D(sfxNormal, &sfxPos);
                                     break;

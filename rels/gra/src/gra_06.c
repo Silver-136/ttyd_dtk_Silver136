@@ -89,8 +89,12 @@ EVT_BEGIN(gra_06_ido_in_sub)
     CALL(evt_party_set_dir, 0, 270, -1)
     CALL(evt_party_set_dir, 1, 270, -1)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mario_jump_pos, 165, 0, 374, 800, 0, -1000)
+#else
         CALL(evt_mario_jump_pos, 165, 0, 374, 800, 0, -1000)
         CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
@@ -279,9 +283,15 @@ EVT_BEGIN(first_gra06jin)
     CALL(evt_cam3d_evt_set, -84, 562, 619, -431, 402, 73, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pos, -320, 0, 365)
     CALL(evt_party_set_pos, 0, -350, 0, 365)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_seq_wait, 2)
+    CALL(evt_mario_normalize)
+    BEGIN_INLINE_EVENT
+#else
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_normalize)
     BEGIN_INLINE_EVENT
+#endif
         WAIT_MS(1500)
         CALL(evt_telop_entry, 8)
     END_INLINE_EVENT
@@ -299,15 +309,24 @@ EVT_BEGIN(first_gra06jin)
     WAIT_FRAMES(1)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
+#else
+    CALL(evt_party_stop, 0)
+#endif
     CALL(evt_party_set_dir, 0, 90, 200)
     WAIT_MS(300)
     CALL(evt_msg_print_party, STRING("stg4_gra_19"))
     CALL(evt_party_run, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG4_08_STEEPLE_DEMO_EXT)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -376,8 +395,12 @@ EVT_BEGIN(teresa_oidasare_evt)
         END_IF
     END_LOOP
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_LAND_DAMAGE2"), LW(0), LW(1), LW(2), 0)
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_LAND_DAMAGE2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_set_pose, STRING("M_D_2"))
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 50)
     WAIT_MS(700)

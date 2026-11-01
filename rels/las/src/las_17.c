@@ -1,5 +1,6 @@
 // las_17 (ラストダンジョン, Palace of Shadow): a riddle room off las_10: the four enemy battles.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -152,7 +153,11 @@ EVT_BEGIN(enemy4_dead_evt)
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         WAIT_MS(500)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_SWITCH_BIKKURI_APPEAR1"), -225, 60, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_eff, STRING(""), STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0, 0, 0, 0)
+#else
         CALL(evt_eff, 0, STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0, 0, 0, 0)
+#endif
         WAIT_MS(100)
         CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF_LAS_17_SWITCH_PRESSED)
         WAIT_MS(500)
@@ -187,8 +192,12 @@ EVT_END()
  */
 EVT_BEGIN(las_17_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#else
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))

@@ -1,5 +1,6 @@
 // Spike Top (togemet): enemy battle unit; Creepy Steeple's copy of the unit data and scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -23,7 +24,11 @@
 BattleUnitKind unit_togemet;
 static PoseTableEntry pose_table[17];
 static PoseTableEntry pose_table_ceil[17];
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table_turn[14];
+#else
 static PoseTableEntry pose_table_turn[16];
+#endif
 static BattleDataEntry data_table[4];
 static BattleDataEntry data_table_ceil[14];
 static BattleWeapon weapon_met_attack;
@@ -151,9 +156,13 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE, "TMT_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TMT_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "TMT_A_1"},
+#if VERSION <= VERSION_DEMO_US
+    {POSE_TYPE_DAMAGE, "TMT_S_3"},
+#else
     {POSE_TYPE_DAMAGE, "TMT_S_3"},
     {POSE_TYPE_WALK, "TMT_W_1"},
     {POSE_TYPE_RUN, "TMT_R_1"},
+#endif
     {POSE_TYPE_DANGER, "TMT_S_3"},
     {POSE_TYPE_PERIL, "TMT_S_3"},
     {POSE_TYPE_ACTION, "TMT_S_3"},

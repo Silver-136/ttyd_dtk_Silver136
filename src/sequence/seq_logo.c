@@ -4,6 +4,9 @@
 #include "seq/seq_logo.h"
 #include "libc_decls.h"
 #include "driver/arcdrv.h"
+#if VERSION <= VERSION_DEMO_US
+#include "driver/animdrv.h"
+#endif
 #include "driver/effdrv.h"
 #include "driver/envdrv.h"
 #include "driver/fadedrv.h"
@@ -52,6 +55,14 @@ void seq_logoInit(SequenceWork* work) {
 #if VERSION >= VERSION_US
     wp->page = -1;
 #endif
+#if VERSION <= VERSION_DEMO_US
+    wp->texture = fileAllocf(4, "%s/monthry.tpl", getMarioStDvdRoot());
+    wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
+    wp->progressive = FALSE;
+    work->state = 0;
+    logoAsyncFirst();
+    VIConfigure(&sRMObjHReso);
+#else
     wp->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
 #if VERSION == VERSION_EU
@@ -94,7 +105,18 @@ void seq_logoInit(SequenceWork* work) {
         switch (OSGetResetCode() & 1) {
             case OS_RESET_RESTART:
                 VIConfigure(&sRMObjHReso);
+#endif
                 VIFlush();
+#if VERSION <= VERSION_DEMO_US
+    VIWaitForRetrace();
+    animGroupBaseAsync("c_pkr", 0, NULL);
+    animGroupBaseAsync("c_pnk", 0, NULL);
+    animGroupBaseAsync("c_windy", 0, NULL);
+    animGroupBaseAsync("OFF_d_meku", 0, NULL);
+    animGroupBaseAsync("EFF_Mugi", 0, NULL);
+    fileAsyncf(4, 0, "%s/e3.tpl", getMarioStDvdRoot());
+}
+#else
                 VIWaitForRetrace();
                 break;
 
@@ -109,6 +131,7 @@ void seq_logoInit(SequenceWork* work) {
         gp->flags |= GW_FLAG_VIDEO_MODE_SET;
     }
 }
+#endif
 
 
 /**
@@ -123,7 +146,12 @@ void seq_logoExit(SequenceWork* work) {
     envTexSetup();
     effTexSetup();
     marioPoseInit();
+#if VERSION <= VERSION_DEMO_US
     fileFree(wp->texture);
+    gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+#else
+    fileFree(wp->texture);
+#endif
 }
 
 void seq_logoMain(SequenceWork* work) {
@@ -214,8 +242,12 @@ void seq_logoMain(SequenceWork* work) {
 #else
             if (fadeIsFinish() && !wp->progressive) {
                 work->state++;
+#if VERSION <= VERSION_DEMO_US
+                time = gp->renderTime;
+#else
                 time = gp->renderTime;
                 gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+#endif
             }
             break;
 
@@ -813,9 +845,15 @@ void progDisp(CameraId camId, void* param) {
                     OSSetProgressiveMode(0);
                     wp->progressive = 0;
                     gp->flags &= ~GW_FLAG_PROGRESSIVE;
+#if VERSION <= VERSION_DEMO_US
                 }
                 gp->flags |= GW_FLAG_VIDEO_MODE_SET;
                 break;
+#else
+                }
+                gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+                break;
+#endif
 
             case 4:
                 if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {

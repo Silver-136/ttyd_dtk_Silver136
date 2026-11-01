@@ -1,6 +1,7 @@
 // Bowser (koopa) as the player in the Super Mario Bros. style side-scrolling interludes: work, level, camera,
 // fire attack and jump parameters.
 
+#include "version.h"
 #include "eff/eff_gonbaba_breath.h"
 #include "mario/mario.h"
 #include "koopa.h"
@@ -331,6 +332,7 @@ void kpa2DMain(void) {
     kpaHitCheck();
     if (mp->kpaNoHitTimer) {
         mp->kpaNoHitTimer--;
+#if VERSION <= VERSION_DEMO_US
     }
     mp->hitobjHead = NULL;
     mp->hitobjFront = NULL;
@@ -338,6 +340,15 @@ void kpa2DMain(void) {
     mp->hitobjPush = NULL;
     mp->hitobjWall = NULL;
     marioItemGetChk();
+#else
+    }
+    mp->hitobjHead = NULL;
+    mp->hitobjFront = NULL;
+    mp->hitobjFrontA = NULL;
+    mp->hitobjPush = NULL;
+    mp->hitobjWall = NULL;
+    marioItemGetChk();
+#endif
     kpaFireAttack();
     kpaFireMain();
     {
@@ -382,9 +393,15 @@ void kpa2DMain(void) {
             spd = mx;
         }
         marioCheckWall(spd, ang);
+#if VERSION <= VERSION_DEMO_US
     }
     mp->position.y += mp->floorMove.y;
     PSVECSubtract(&mp->position, &saved, &diff);
+#else
+    }
+    mp->position.y += mp->floorMove.y;
+    PSVECSubtract(&mp->position, &saved, &diff);
+#endif
     {
         f32 mag = PSVECMag(&diff);
         if (mag > spd) {
@@ -943,13 +960,27 @@ void kpaFireMain(void) {
                 ((EffGonbabaBreathWork*)((EffGonbabaBreathWork*)fireefp->userdata)->child->userdata)->position.y = y;
                 ((EffGonbabaBreathWork*)((EffGonbabaBreathWork*)fireefp->userdata)->child->userdata)->position.z = z;
             }
+#if VERSION <= VERSION_DEMO_US
+        }
+        // the demo checks the flame against every hit at every level, without the size cut-off
+        {
+            f32 sc;
+            f32 base;
+            fe = fireefp;
+#else
         }
         lv = kpaGetLevel();
         if (lv != 0) {
             fe = fireefp;
+#endif
             camGetPtr(CAMERA_3D);
+#if VERSION <= VERSION_DEMO_US
+            w = (EffGonbabaBreathWork*)fe->userdata;
+            base = w->scale;
+#else
             w = (EffGonbabaBreathWork*)fe->userdata;
             headScale = w->scale;
+#endif
             PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
             PSMTXRotRad(m50, 'y', 0.017453292f * (w->yaw - camGetPtr(CAMERA_3D)->viewYaw));
             if (w->yaw > 90.0f && w->yaw < 270.0f) {
@@ -962,22 +993,38 @@ void kpaFireMain(void) {
             w = w + 1;
             for (i = 1; i < fe->count; i++, w++) {
                 if (((i - 1) & 3) == 0 && w->delay == 0 && w->life > 0x10) {
+#if VERSION <= VERSION_DEMO_US
+                    void* hit;
+                    sc = 7.0f * w->scale;
+                    PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
+                    PSMTXScale(mb0, sc, sc, sc);
+#else
                     void* hit;
                     ballScale = 7.0f * w->scale;
                     f30 = ballScale * headScale;
                     if (!(f30 < 7.0f)) {
                         PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
                         PSMTXScale(mb0, ballScale, ballScale, ballScale);
+#endif
                         PSMTXConcat(m80, mb0, m80);
                         PSMTXConcat(m20, m80, m80);
                         zero = *(Vec*)vec3_802fc920;
                         PSMTXMultVec(m80, &zero, &out);
+#if VERSION <= VERSION_DEMO_US
+                    hit = kpaFlameHitCheck(out.x, out.y, out.z, sc * base);
+#else
                         hit = kpaFlameHitCheck(out.x, out.y, out.z, f30);
+#endif
                         if (hit) {
                             mario->kpaWork->flameHit = hit;
+#if VERSION <= VERSION_DEMO_US
+                        break;
+                    }
+#else
                             break;
                         }
                     }
+#endif
                 }
             }
         }

@@ -1,5 +1,6 @@
 // Pit of 100 Trials battle unit: the Chain-Chomp (`wanwan`): parts, stats, poses and AI scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -40,13 +41,21 @@ static BattleWeapon weapon_wanwan_attack;
 static EvtWord init_event[41];
 static EvtWord chain_event[23];
 static EvtWord damage_event[33];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord counter_damage_event[115];
+#else
 static EvtWord counter_damage_event[68];
+#endif
 static EvtWord dead_event[200];
 static EvtWord attack_event[452];
 static EvtWord wait_event[476];
 static EvtWord sound_gensui_event[22];
 static EvtWord wait_sound_event1[25];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_sound_event2[11];
+#else
 static EvtWord wait_sound_event2[12];
+#endif
 
 /**
  * Unit data of the Chain-Chomp in the Pit of 100 Trials: 7 HP, level 32;
@@ -83,8 +92,15 @@ BattleUnitKind unit_wanwan = {
     36.0f, // cutHeight
     0, // turnOrder
     0, // turnOrderVariance
+#if VERSION <= VERSION_DEMO_US
+    -1,
+#endif
+#if VERSION <= VERSION_DEMO_US
+    0,
+#else
     0, // swallowChance
     2, // swallowAttributes
+#endif
     100, // hammerKnockbackChance
     0, // itemStealParam
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
@@ -292,7 +308,19 @@ static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_GetPartsPos, LW(10), 1, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_PartsFaceDirectionSub, LW(10), 1, LW(2), 25)
     ADD(LW(3), 25)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_DivePartsPosition, LW(10), 1, LW(2), LW(3), LW(4), 5, 0, 0, 0, -1)
+    WAIT_FRAMES(30)
+    CALL(btlevtcmd_SetPartsFallAccel, LW(10), 1, FLOAT(1.0f))
+    CALL(btlevtcmd_GetPartsPos, LW(10), 1, LW(2), LW(3), LW(4))
+    CALL(btlevtcmd_TransStageFloorPosition, LW(2), LW(3), LW(4))
+    CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(2), 30)
+    CALL(btlevtcmd_JumpPartsPosition, LW(10), 1, LW(2), LW(3), LW(4), 20, -1)
+    CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(2), 15)
+    CALL(btlevtcmd_JumpPartsPosition, LW(10), 1, LW(2), LW(3), LW(4), 10, -1)
+#else
     CALL(btlevtcmd_DivePartsPosition, LW(10), 1, LW(2), LW(3), LW(4), 5, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -663,8 +691,13 @@ EVT_END()
 static EVT_BEGIN(wait_sound_event2)
     WAIT_FRAMES(LW(10))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT4"), LW(11), 0, EVT_NULLPTR)
+#if VERSION <= VERSION_DEMO_US
+    RETURN
+EVT_END()
+#else
     RETURN
 EVT_END_PAD()
+#endif
 
 /**
  * Per-frame script helper that animates the Chomp's chain (parts 2-9). args[0] = unit.
@@ -732,10 +765,17 @@ static USER_FUNC(chain_main) {
     dx = x1 - x2;
     dy = y1 - y2;
     dz = z1 - z2;
+#if VERSION <= VERSION_DEMO_US
+    len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 7;
+#else
     len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 8;
+#endif
     if (len < 10.0f) {
         len = 10.0f;
     }
+#if VERSION <= VERSION_DEMO_US
+    sag = 300.0f / (len * len);
+#else
     sag = 300.0f / (len * len);
     part = BtlUnit_GetPartsPtr(unit, 1);
     BtlUnit_GetPartsPos(part, &x, &y, &z);
@@ -743,11 +783,16 @@ static USER_FUNC(chain_main) {
         y = 110.0f;
     }
     BtlUnit_SetPartsPos(part, x, y, z);
+#endif
     BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 1), &x, &y, &z);
     x += -(unit->faceDirection * 16);
     y += 16.0f;
     BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 2), x, y, z);
+#if VERSION <= VERSION_DEMO_US
+    for (i = 2; i <= 6; i++) {
+#else
     for (i = 2; i <= 7; i++) {
+#endif
         BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, i), &x1, &y1, &z1);
         part = BtlUnit_GetPartsPtr(unit, i + 1);
         BtlUnit_GetPartsPos(part, &x2, &y2, &z2);

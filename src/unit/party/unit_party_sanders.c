@@ -39,7 +39,11 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 PoseTableEntry pose_table_sanders_stay[25];
 PoseTableEntry pose_table_counter_sanders[20];
+#if VERSION <= VERSION_DEMO_US
+static BattleDataEntry data_table[8];
+#else
 static BattleDataEntry data_table[9];
+#endif
 BattleUnitKindPart unitpartsdata_Party_Sanders[1];
 BattleUnitKind unitdata_Party_Sanders;
 static EvtWord battle_entry_event[59];
@@ -150,8 +154,12 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_TECH_MENU_FUNC, __makeTechMenuFunc},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {UNIT_DATA_WIN_REACTION_EVENT, party_win_reaction},
+#if VERSION <= VERSION_DEMO_US
+    {7, subset_attack_ready_jump_event},
+#else
     {UNIT_DATA_ATTACK_READY_EVENT, subset_attack_ready_jump_event},
     {UNIT_DATA_BATTLE_END_HIDE_EVENT, sanders_battle_end_event},
+#endif
     {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
     {0, NULL},
 };
@@ -531,8 +539,13 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(6))
     DIVIDE(LW(6), 2)
     ADD(LW(1), LW(6))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
+#else
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
+#endif
     CALL(btlevtcmd_StageDispellFog)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
@@ -711,6 +724,10 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(6))
     DIVIDE(LW(6), 2)
     ADD(LW(1), LW(6))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
+#else
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
         CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -718,6 +735,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     END_IF
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
+#endif
     CALL(btlevtcmd_StageDispellFog)
     // A miss: the enemy plays its dodge reaction.
     IF_INT_NOT_EQUAL(LW(5), 1)
@@ -1044,11 +1062,23 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
         SWITCH(LW(0))
+#if VERSION <= VERSION_DEMO_US
+            CASE_LESS_OR_EQUAL(2)
+#else
             CASE_LESS_OR_EQUAL(3)
+#endif
             SET_VALUE(LW(0), -1)
+#if VERSION <= VERSION_DEMO_US
+            CASE_LESS_OR_EQUAL(4)
+#else
             CASE_LESS_OR_EQUAL(5)
+#endif
             SET_VALUE(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+            CASE_LESS_OR_EQUAL(6)
+#else
             CASE_LESS_OR_EQUAL(7)
+#endif
             SET_VALUE(LW(0), 1)
             CASE_DEFAULT
             SET_VALUE(LW(0), 2)
@@ -1454,7 +1484,11 @@ EVT_BEGIN(sanders_appeal_event)
     DIVIDE(LW(6), 2)
     ADD(LW(1), LW(6))
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
+#else
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
+#endif
     CALL(btlevtcmd_StageDispellFog)
     BEGIN_INLINE_EVENT
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -1507,9 +1541,17 @@ static EVT_BEGIN(attack_audience_event)
     WAIT_MS(1000)
     CALL(evt_snd_sfxoff, LW(14))
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK4"), 0)
+#else
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK3"), 0)
+#endif
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff, STRING(""), STRING("sandars"), 3, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+#else
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+#endif
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 20, 13)
     CALL(_attack_aud, LW(3), 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -1543,6 +1585,9 @@ static EVT_BEGIN(attack_audience_event)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(15))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+#else
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1550,6 +1595,7 @@ EVT_END()
 EVT_BEGIN(sanders_battle_end_event)
     CALL(btlevtcmd_OnOffStatus, UNIT_ID_SELF, STATUS_HOLD_FAST, 0, 0, 0)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_sanders_stay))
+#endif
     RETURN
 EVT_END()
 

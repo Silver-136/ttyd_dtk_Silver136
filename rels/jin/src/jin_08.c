@@ -1,6 +1,7 @@
 // jin_08 (ダイム寺院, Creepy Steeple): parrot (oumu) room: chests with Mr. Softener and Power Plus, The Letter P, a key
 // and lock; door to jin_07.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -201,9 +202,15 @@ EVT_END()
  * Talk script of the parrot: repeats stg4_jin_40..42 one after the other (using LSW(2))
  * before the Ruby Star is recovered, then different lines for after the Ruby Star and after the final battle.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(oumu_talk)
+    CALL(evt_msg_toge, 1, 0, 0, 0)
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
 EVT_BEGIN(oumu_talk)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_LESS(STG4_15_03_THE_RUBY_STAR)
         SWITCH(LSW_JIN_08_PARROT_TALK_COUNT)
             CASE_EQUAL(0)
@@ -229,8 +236,12 @@ EVT_END()
  * and LSWF(1) is set for the jin_07 follow-up.
  */
 EVT_BEGIN(oumu_juyo_talk)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_key_onoff, 0)
+#else
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+#endif
     IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
         CALL(evt_msg_print, 0, STRING("stg4_jin_43"), 0, STRING("オウム"))
         SET_VALUE(GSWF_JIN_08_PARROT_SECRET_HEARD, 1)
@@ -295,9 +306,15 @@ EVT_BEGIN(oumu_check)
                 IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
                     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
                         CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
                         CALL(evt_party_cont_onoff, 0, 0)
                         CALL(mainwindow_opendisable)
                         WAIT_MS(1000)
+#else
+                        CALL(evt_party_cont_onoff, 0, 0)
+                        CALL(mainwindow_opendisable)
+                        WAIT_MS(1000)
+#endif
                         CALL_CHILD(PTR(oumu_juyo_talk))
                         CALL(evt_party_cont_onoff, 0, 1)
                         LOOP(0)
@@ -307,10 +324,15 @@ EVT_BEGIN(oumu_check)
                             END_IF
                             WAIT_FRAMES(1)
                         END_LOOP
+#if VERSION <= VERSION_DEMO_US
+                        CALL(evt_msg_print, 0, STRING("stg4_jin_45"), 0, STRING("オウム"))
+                        CALL(evt_mario_key_onoff, 1)
+#else
                         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
                         CALL(evt_msg_print, 0, STRING("stg4_jin_45"), 0, STRING("オウム"))
                         CALL(evt_mario_key_onoff, 1)
                         CALL(mainwindow_openenable)
+#endif
                     END_IF
                 END_IF
             END_IF
@@ -349,7 +371,11 @@ static s32 lock_tbl[] = {
 static EVT_BEGIN(lock_item_check)
     CALL(evt_pouch_check_item, ITEM_STEEPLE_KEY_0x17, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(lock_tbl), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -365,7 +391,11 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_POWER_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH)
+#else
     CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box01"))
     CALL(evt_item_get_item, STRING("item01"))
     CALL(evt_mario_key_onoff, 1)
@@ -423,8 +453,14 @@ EVT_BEGIN(jin_08_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 115, 0, 105, STRING("group87"), 125, GSWF_STARPIECE_70)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), 80, 0, -75, 0, 0, PTR(mobj_box01), GSWF(GSWF_JIN08_POWER_PLUS_CHEST_OPENED))
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), 60, 0, -65, 0, 0, PTR(mobj_box01), GSWF(GSWF_JIN08_POWER_PLUS_CHEST_OPENED))
+    CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -80, 0, 0, PTR(mobj_box02), GSWF(GSWF_JIN08_MR_SOFTENER_CHEST_OPENED))
+#else
     CALL(evt_mobj_itembox, STRING("mobj_box01"), 60, 0, -65, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_JIN_08_POWER_PLUS_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -65, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_JIN_08_MR_SOFTENER_CHEST)
+#endif
     SPAWN_EVENT(PTR(oumu_check))
     RETURN
 EVT_END()

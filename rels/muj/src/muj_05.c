@@ -1,6 +1,7 @@
 // muj_05 (無人島, Keelhaul Key): the skull rock: Admiral Bobbery joins (sanders_nakama), the gem
 // eyes and the skull rock's opening into Pirate's Grotto (dou_00).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -222,11 +223,19 @@ EVT_BEGIN(sanders_nakama)
     SET_VALUE(LW(3), 200)
     SPAWN_EVENT(PTR(sanders_rotate))
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print_party, STRING("stg5_muj_56"))
+#else
     CALL(evt_party_stop, 0)
     CALL(evt_msg_print_party, STRING("stg5_muj_56"))
+#endif
     CALL(evt_msg_print, 0, STRING("stg5_muj_62"), 0, STRING("me"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print_party, STRING("stg5_muj_63"))
+#else
     CALL(evt_msg_print_party, STRING("stg5_muj_63"))
     CALL(evt_party_run, 0)
+#endif
     CALL(evt_msg_print, 0, STRING("stg5_muj_69"), 0, STRING("me"))
     CALL_CHILD(PTR(sanders_nakama_sub))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
@@ -297,7 +306,11 @@ static EVT_BEGIN(sanders_talk)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_34_03"), 0, STRING("me"))
             ELSE
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
+#else
             CALL(evt_win_item_select, 0, PTR(itemsel_table01), LW(0), 0)
+#endif
             IF_INT_EQUAL(LW(0), -1)
                 RETURN
             END_IF
@@ -333,9 +346,13 @@ static EVT_BEGIN(sanders_talk)
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
             WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print_party, STRING("stg5_muj_49"))
+#else
             CALL(evt_party_stop, 0)
             CALL(evt_msg_print_party, STRING("stg5_muj_49"))
             CALL(evt_party_run, 0)
+#endif
         END_IF
     END_SWITCH
     RETURN
@@ -820,14 +837,22 @@ EVT_BEGIN(dokuroiwa_touch)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg5_muj_93_01"), 0, 0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_18_02_FLAVIOS_FAVOR_2)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print_party, STRING("stg5_muj_93_01_01"))
+#else
             CALL(evt_party_stop, 0)
             CALL(evt_msg_print_party, STRING("stg5_muj_93_01_01"))
             CALL(evt_party_run, 0)
+#endif
             SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
         END_IF
         CALL(evt_mario_key_onoff, 1)
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(itemsel_table), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             RETURN
         END_IF
@@ -1325,8 +1350,13 @@ EVT_END()
 EVT_BEGIN(muj_05_first)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_normalize)
+    CALL(evt_bero_exec_wait, 65536)
+#else
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_msg_print, 0, STRING("stg5_muj_33"), 0, STRING("サンダース"))
     SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN, 1)
     CALL(evt_mario_key_onoff, 1)

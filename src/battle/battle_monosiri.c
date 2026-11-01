@@ -1,5 +1,6 @@
 // Tattle (monosiri) data: per-unit-type tattle messages and the groups of unit types that share a tattle flag
 
+#include "version.h"
 enum { TATTLE_SAVE_FLAG_BASE = 0x117A };
 #include "battle/battle_monosiri.h"
 #include "battle/battle_unit.h"
@@ -311,7 +312,11 @@ TattleEntry monosiriMessageTable[] = {
     {"btl_un_gesso_right_arm", NULL, NULL, "c_gesso2", "GSO_Z1_1", "menu_monosiri_tik"}, //0xA (10)
     {"btl_un_togenoko", "btl_hlp_togenoko", "menu_enemy_033", "c_togenoko", "Z_1", "menu_monosiri_tik"}, //0xB (11)
     {"btl_un_kamec", "btl_hlp_kamec", "menu_enemy_086", "c_kamek", "KMK_Z_1", "menu_monosiri_tik"}, //0xC (12)
+#if VERSION <= VERSION_DEMO_US
+    {"btl_un_kamec_bunsin", "btl_hlp_kamec_bunshin", NULL, "c_kamek", "KMK_Z_1", "menu_monosiri_gor"}, //0xD (13)
+#else
     {"btl_un_kamec_bunsin", "btl_hlp_kamec_bunshin", NULL, "c_kamek", "KMK_Z_1", "menu_monosiri_tik"}, //0xD (13)
+#endif
     {"btl_un_nokonoko", "btl_hlp_nokonoko", "menu_enemy_004", "c_nokoteki", "NKT_Z_1", "menu_monosiri_hei"}, //0xE (14)
     {"btl_un_patapata", "btl_hlp_patapata", "menu_enemy_005", "c_nokoteki", "PTP_Z_1", "menu_monosiri_gon"}, //0xF (15)
     {"btl_un_chorobon", "btl_hlp_chorobon", "menu_enemy_006", "c_chorobon", "CBN_Z_1", "menu_monosiri_stn"}, //0x10 (16)
@@ -334,7 +339,11 @@ TattleEntry monosiriMessageTable[] = {
     {"btl_un_vivian1", "btl_hlp_vivian", "menu_enemy_112", "c_vivian", "PTR_M_1", "menu_monosiri_win"}, //0x21 (33)
     {"btl_un_magnum_battender", "btl_hlp_magnum_battender", "menu_enemy_139", "c_mb_robo_1b", "MGN_Z_1", "menu_monosiri_mri"}, //0x22 (34)
     {"btl_un_rocket_punch", NULL, NULL, NULL, "MGN_A1_4", "menu_monosiri_mri"}, //0x23 (35)
+#if VERSION <= VERSION_DEMO_US
+    {"btl_un_kurikuri", "btl_hlp_kuriboo", NULL, "c_kuribo", "KUR_Z_2", "menu_monosiri_tou"}, //0x24 (36)
+#else
     {"btl_un_kuriboo", "btl_hlp_kuriboo", NULL, "c_kuribo", "KUR_Z_2", "menu_monosiri_nara"}, //0x24 (36)
+#endif
     {"btl_un_nokonoko_fighter", "btl_hlp_nokonoko_fighter", "menu_enemy_188", "c_touginoko", "NKT_Z_1", "menu_monosiri_tou"}, //0x25 (37)
     {"btl_un_patapata_fighter", "btl_hlp_patapata_fighter", "menu_enemy_189", "c_touginoko", "PTP_Z_1", "menu_monosiri_tou"}, //0x26 (38)
     {"btl_un_sambo", "btl_hlp_sambo", "menu_enemy_055", "c_sanbo", "SNB_Z_1", "menu_monosiri_tou"}, //0x27 (39)
@@ -360,7 +369,11 @@ TattleEntry monosiriMessageTable[] = {
     {"btl_un_burst_wanwan", "btl_hlp_burst_wanwan", "menu_enemy_185", "c_wanwan_a", "WAN_Z_1", "menu_monosiri_tou"}, //0x3B (59)
     {"btl_un_togenoko_ace", "btl_hlp_togenoko_ace", "menu_enemy_175", "c_togenoko_b", "Z_1", "menu_monosiri_tou"}, //0x3C (60)
     {"btl_un_iron_sinemon", "btl_hlp_iron_sinemon", "menu_enemy_038", "c_sinemon_a", "SIN_Z_1", "menu_monosiri_tou"}, //0x3D (61)
+#if VERSION <= VERSION_DEMO_US
+    {"btl_un_iron_sinemon2", "btl_hlp_iron_sinemon", "menu_enemy_038", "c_sinemon_m", "SIN_Z_1", "menu_monosiri_tou"}, //0x3E (62)
+#else
     {"btl_un_iron_sinemon2", "btl_hlp_iron_sinemon2", "menu_enemy_039", "c_sinemon_m", "SIN_Z_1", "menu_monosiri_tou"}, //0x3E (62)
+#endif
     {"btl_un_koopa", "btl_hlp_koopa_tou", "menu_enemy_187", "c_koopa", "KPA_Z_1", "menu_monosiri_nara"}, //0x3F (63)
     {"btl_un_champion", "btl_hlp_champion", "menu_enemy_142", "c_bred_h", "Z_1", "menu_monosiri_tou"}, //0x40 (64)
     {"btl_un_macho_gance", "btl_hlp_macho_gansu", "menu_enemy_141", "c_m_gansu", "Z_1", "menu_monosiri_tou"}, //0x41 (65)
@@ -376,8 +389,14 @@ TattleEntry monosiriMessageTable[] = {
     {"btl_un_teresa", "btl_hlp_teresa", "menu_enemy_052", "c_teresa", "Z_1", "menu_monosiri_jin"}, //0x4B (75)
     {"btl_un_atmic_teresa", "btl_hlp_atomic_teresa", "menu_enemy_054", "c_atmic_trs", "Z_1", "menu_monosiri_jin"}, //0x4C (76)
     {"btl_un_hatena", "btl_hlp_hatena", "menu_enemy_124", "c_ranpel", "Z_1", "menu_monosiri_jin"}, //0x4D (77)
+#if VERSION <= VERSION_DEMO_US
+    {"btl_un_hatena", NULL, NULL, "c_kuribo", "KUR_Z_2", "menu_monosiri_gra"}, //0x4E (78)
+    {"btl_un_hatena", NULL, NULL, "c_ranpel", "Z_1", "menu_monosiri_gra"}, //0x4E (78)
+    {"btl_un_rampell", NULL, NULL, "c_kuribo", "KUR_Z_2", "menu_monosiri_jin"}, //0x4F (79)
+#else
     {"btl_un_hatena", NULL, NULL, "c_ranpel", "Z_1", "menu_monosiri_gra"}, //0x4E (78)
     {"btl_un_rampell", NULL, NULL, "c_ranpel", "Z_1", "menu_monosiri_jin"}, //0x4F (79)
+#endif
     {"btl_un_gullible_christine", NULL, NULL, "c_pkr", "PRK_Z_1", "menu_monosiri_jin"}, //0x50 (80)
     {"btl_un_gullible_nokotarou", NULL, NULL, "c_pnk", "PNK_Z_1", "menu_monosiri_jin"}, //0x51 (81)
     {"btl_un_gullible_yoshi", NULL, NULL, "c_babyyoshi", "PYS_Z_1", "menu_monosiri_jin"}, //0x52 (82)
@@ -397,14 +416,22 @@ TattleEntry monosiriMessageTable[] = {
     {"btl_un_cortez_rapier", NULL, NULL, "c_buki3", "KRT_Z_1", "menu_monosiri_dou"}, //0x60 (96)
     {"btl_un_cortez_sword", NULL, NULL, "c_buki2", "KRT_Z_1", "menu_monosiri_dou"}, //0x61 (97)
     {"btl_un_cortez_saber", NULL, NULL, "c_buki1", "KRT_Z_1", "menu_monosiri_dou"}, //0x62 (98)
+#if VERSION <= VERSION_DEMO_US
+    {"btl_un_kanbu3", "btl_hlp_kanbu3", "menu_enemy_145", "c_kanbu", "Z_1", "menu_monosiri_nara"}, //0x63 (99)
+#else
     {"btl_un_kanbu3", "btl_hlp_kanbu3", "menu_enemy_144", "c_kanbu", "Z_1", "menu_monosiri_nara"}, //0x63 (99)
+#endif
     {"btl_un_gundan_zako_group1", "btl_hlp_gundan_zako_group1", NULL, "c_zako_n", "Z_1", "menu_monosiri_nara"}, //0x64 (100)
     {"btl_un_gundan_zako_group2", "btl_hlp_gundan_zako_group1", NULL, "c_zako_n", "Z_1", "menu_monosiri_nara"}, //0x65 (101)
     {"btl_un_gundan_zako_group3", "btl_hlp_gundan_zako_group1", NULL, "c_zako_n", "Z_1", "menu_monosiri_nara"}, //0x66 (102)
     {"btl_un_kurokumorn", "btl_hlp_kurokumorn", "menu_enemy_065", "c_kmoon", "Z_1", "menu_monosiri_eki"}, //0x67 (103)
     {"btl_un_sambo_mummy", "btl_hlp_sambo_mummy", "menu_enemy_056", "c_sanbo_m", "SNB_Z_1", "menu_monosiri_eki"}, //0x68 (104)
     {"btl_un_patatogemet", "btl_hlp_patatogemet", "menu_enemy_051", "c_met", "PTM_Z_1", "menu_monosiri_eki"}, //0x69 (105)
+#if VERSION <= VERSION_DEMO_US
+    {"btl_un_purple_teresa", "btl_hlp_purple_teresa", "menu_enemy_053", "c_teresa_p", "Z_1", "menu_monosiri_pik"}, //0x6A (106)
+#else
     {"btl_un_purple_teresa", "btl_hlp_purple_teresa", "menu_enemy_053", "c_teresa_p", "Z_1", "menu_monosiri_sin"}, //0x6A (106)
+#endif
     {"btl_un_moamoa", "btl_hlp_moamoa", "menu_enemy_118", "c_g_moamoa", "S_3", "menu_monosiri_rsh"}, //0x6B (107)
     {"btl_un_moamoa_tentacle_a", NULL, NULL, "c_kuribo", "KUR_Z_2", "menu_monosiri_rsh"}, //0x6C (108)
     {"btl_un_moamoa_tentacl_b", NULL, NULL, "c_kuribo", "KUR_Z_2", "menu_monosiri_rsh"}, //0x6D (109)
@@ -434,6 +461,23 @@ TattleEntry monosiriMessageTable[] = {
     {"btl_un_majolyne4", "btl_hlp_majyorin2", "menu_enemy_107", "c_majyorin", "MJR_M_1", "menu_monosiri_nara"}, //0x85 (133)
     {"btl_un_marilyn4", "btl_hlp_maririn2", "menu_enemy_111", "c_maririn", "MRR_M_1", "menu_monosiri_nara"}, //0x86 (134)
     {"btl_un_rampell", "btl_hlp_ranperu_las", "menu_enemy_125", "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x87 (135)
+#if VERSION <= VERSION_DEMO_US
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_mario", "EM_Z_1", "menu_monosiri_nara"}, //0x88 (136)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x88 (136)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_pkr", "PRK_Z_1", "menu_monosiri_nara"}, //0x89 (137)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x89 (137)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_pnk", "PNK_Z_1", "menu_monosiri_nara"}, //0x8A (138)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8A (138)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_babyyoshi", "PYS_Z_1", "menu_monosiri_nara"}, //0x8B (139)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8B (139)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_windy", "PWD_Z_1", "menu_monosiri_nara"}, //0x8C (140)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8C (140)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_vivian", "PTR_M_1", "menu_monosiri_nara"}, //0x8D (141)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8D (141)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_bomt_n", "Z_1", "menu_monosiri_nara"}, //0x8E (142)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8E (142)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_tyutyu", "PCH_Z_1", "menu_monosiri_nara"}, //0x8F (143)
+#else
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x88 (136)
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x89 (137)
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8A (138)
@@ -442,6 +486,7 @@ TattleEntry monosiriMessageTable[] = {
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8D (141)
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8E (142)
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8F (143)
+#endif
     {"btl_un_koopa", "btl_hlp_koopa", "menu_enemy_149", "c_koopa", "KPA_Z_1", "menu_monosiri_nara"}, //0x90 (144)
     {"btl_un_kamec_obaba", "btl_hlp_kamec_obaba", "menu_enemy_150", "c_kamek_bb", "Z_1", "menu_monosiri_nara"}, //0x91 (145)
     {"btl_un_batten_leader", "btl_hlp_batsugalf", "menu_enemy_151", "c_shuryo", "Z_1", "menu_monosiri_las"}, //0x92 (146)
@@ -792,8 +837,12 @@ BattleUnitType* battle_monosiri_same_tbl[] = {
     same_tbl_cortez,
     same_tbl_magunum_battender,
     same_tbl_magunum_battender_mkii,
+#if VERSION <= VERSION_DEMO_US
+    same_tbl_moamoa,
+#else
     same_tbl_moamoa,
     same_tbl_iron_sinemon,
+#endif
     NULL
 };
 

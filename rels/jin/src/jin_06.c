@@ -1,5 +1,6 @@
 // jin_06 (ダイム寺院, Creepy Steeple): room with a Flower Saver chest, a jump stand and a peel-away wall; doors to jin_07.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -112,7 +113,11 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_FLOWER_SAVER, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)

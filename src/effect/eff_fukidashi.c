@@ -1,6 +1,7 @@
 // Emote bubble (Fukidashi: speech balloon) above Mario, a partner or an NPC; types pick the mark or icon shown,
 // with a sound for the surprise and question marks.
 
+#include "version.h"
 #include "eff/eff_fukidashi.h"
 #include "driver/camdrv.h"
 #include "evt/evt_word.h"
@@ -65,7 +66,11 @@ s8 anim_data_bikkuri_2[] = { 0, 0, 1, 2, 3, 5, 4, 5, -17, -1};
 s8 anim_data_hatena_2[] = { 0, 0, 2, 1, 3, 2, 3, -16, -1};
 s8 anim_data_tenten_2[] = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, -32, -1};
 s8* anim_data_table_2[] = { anim_data_bikkuri_2, anim_data_hatena_2, anim_data_bikkuri_2, anim_data_loop, anim_data_tenten_2, anim_data_moja, anim_data_loop };
+#if VERSION <= VERSION_DEMO_US
+u8 moja_model_color0_tbl[] ATTRIBUTE_ALIGN(32) = {0x22, 0x4E, 0xB7, 0xFF};
+#else
 u8 moja_model_color0_tbl[] ATTRIBUTE_ALIGN(32) = { 0x22, 0x4E, 0xB7, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+#endif
 u8 moja_model_dl_0_1[] ATTRIBUTE_ALIGN(32) = { 0x98, 0x00, 0x05, 0x1B, 0x0D, 0x00, 0x1A, 0x0D, 0x00, 0x18, 0x0C, 0x00, 0x19, 0x0C, 0x00, 0x12, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 u8 moja_model_dl_0_2[] ATTRIBUTE_ALIGN(32) = { 0x98, 0x00, 0x04, 0x1C, 0x0E, 0x00, 0x1A, 0x0D, 0x00, 0x20, 0x0E, 0x00, 0x1B, 0x0D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 u8 moja_model_dl_0_3[] ATTRIBUTE_ALIGN(32) = { 0x98, 0x00, 0x04, 0x1D, 0x0F, 0x00, 0x1C, 0x0E, 0x00, 0x21, 0x0F, 0x00, 0x20, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -525,9 +530,14 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 GXSetArray(GX_VA_NRM, moja_model_normal_tbl, 3);
                 GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
                 GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+#if VERSION <= VERSION_DEMO_US
+                GXSetArray(GX_VA_CLR0, moja_model_color0_tbl, 4);
+                for (j = 0, sp = moja_model_dl_0_size_tbl, dp = moja_model_dl_0_tbl; j < 21; j++, sp++, dp++) {
+#else
                 GXSetArray(GX_VA_CLR0, moja_model_color0_tbl, 4);
                 dp = moja_model_dl_0_tbl;
                 for (j = 0, sp = moja_model_dl_0_size_tbl; j < 21; j++, sp++, dp++) {
+#endif
                     GXCallDisplayList(*dp, *sp << 5);
                 }
                 break;
@@ -543,9 +553,17 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                     PSMTXConcat(mH, mD, mH);
                     PSMTXConcat(mH, mA, mH);
                     if (pass == 0) {
+#if VERSION <= VERSION_DEMO_US
+                        iconDispGxCol(mH, 0x200, ICON_ITEM_COIN, (GXColor){0xFF, 0xFF, 0xFF, alpha});
+#else
                         iconDispGxCol(mH, ICON_FLAG_CULL_BACK, ICON_ITEM_COIN, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
+#endif
                     } else {
+#if VERSION <= VERSION_DEMO_US
+                        iconDispGxCol(mH, 0x400, ICON_ITEM_COIN, (GXColor){0xA0, 0xA0, 0xA0, alpha});
+#else
                         iconDispGxCol(mH, ICON_FLAG_CULL_FRONT, ICON_ITEM_COIN, (GXColor){ 0xA0, 0xA0, 0xA0, alpha });
+#endif
                     }
                     PSMTXTrans(mA, 10.0f, 22.0f, 0.0f);
                     PSMTXConcat(mH, mA, mH);

@@ -46,8 +46,13 @@ BattleUnitKind unit_boss_gonbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table[7];
+static PoseTableEntry pose_table_weak[7];
+#else
 static PoseTableEntry pose_table[9];
 static PoseTableEntry pose_table_weak[9];
+#endif
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[3];
 static EvtWord battle_entry_event[375];
@@ -249,8 +254,13 @@ BattleUnitKind unit_boss_gonbaba = {
     0.0f,
 #endif
     0.0f,
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    250.0f,
+#else
     0.0f,
     20.0f,
+#endif
     0.0f,
     250.0f,
     0.0f,
@@ -319,9 +329,13 @@ static StatusVulnerability regist = {
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
+#if VERSION <= VERSION_DEMO_US
+    {POSE_TYPE_NORMAL, "GNB_S_3"},
+#else
     {POSE_TYPE_STOP, "GNB_Z_1"},
     {POSE_TYPE_DIZZY, "GNB_X_1"},
     {POSE_TYPE_NORMAL, "GNB_S_3"},
+#endif
     {POSE_TYPE_TALK, "GNB_T_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_3"},
     {POSE_TYPE_DAMAGE, "GNB_D_1"},
@@ -335,9 +349,13 @@ static PoseTableEntry pose_table[] = {
  */
 static PoseTableEntry pose_table_weak[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
+#if VERSION <= VERSION_DEMO_US
+    {5, "GNB_X_1"},
+#else
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
     {POSE_TYPE_STOP, "GNB_N_1"},
     {POSE_TYPE_DIZZY, "GNB_X_1"},
+#endif
     {POSE_TYPE_NORMAL, "GNB_S_4"},
     {POSE_TYPE_TALK, "GNB_T_4"},
     {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_4"},
@@ -809,8 +827,13 @@ EVT_BEGIN(negotiation_event)
         CALL(evt_btl_camera_noshake, 1)
         CALL(evt_btl_camera_shake_h, 1, 7, 0, 30, 12)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_batstage_set_aud_dark, 0, 180, 0)
+    CALL(evt_batstage_set_aud_dark_base, 0, 180, 0)
+#else
     CALL(evt_batstage_set_aud_dark, 0, 24, 0)
     CALL(evt_batstage_set_aud_dark_base, 0, 24, 0)
+#endif
     // Mario and his partner jump back in fright.
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(40)
@@ -1354,8 +1377,12 @@ EVT_BEGIN(gonbaba_damage_sub_event)
             RETURN
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
+#else
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
+#endif
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_btl_camera_wait_move_end)
@@ -1388,8 +1415,12 @@ EVT_BEGIN(gonbaba_damage_sub_event)
         RETURN
     END_IF
     // Third time: she gags again and wonders why crickets always make her faint (stg1_gon_31_04).
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 3)
+#else
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 3)
     CALL(btlevtcmd_WaitAttackEnd)
+#endif
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
@@ -1530,7 +1561,11 @@ static EVT_BEGIN(init_event)
     CALL(evt_audience_flag_on, 35, 512)
     CALL(evt_audience_flag_on, 53, 512)
     CALL(evt_audience_flag_on, 54, 512)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_audience_base_flag_on, 32768)
+#else
     CALL(evt_audience_base_flag_on, 16384)
+#endif
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
     CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(0.5f))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 0)

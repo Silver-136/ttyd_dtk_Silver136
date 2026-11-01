@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "driver/effdrv.h"
 #include "dolphin/types.h"
 #include <dolphin/mtx.h>
@@ -20,8 +21,14 @@ typedef struct RecoveryWork {
     f32 angle;       // 0x30
     u32 tick;        // 0x34
     struct MayaAnim* anim; // 0x38
+#if VERSION <= VERSION_DEMO_US
+    s32 delay;             // 0x3c
+    f32 baseY; // 0x40
+} RecoveryWork;
+#else
     s32 delay;       // 0x3c
     f32 baseY;       // 0x40
 } RecoveryWork;
+#endif
 
 EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z);

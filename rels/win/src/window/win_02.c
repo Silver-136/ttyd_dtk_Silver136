@@ -1,5 +1,6 @@
 // win_02 (ウィンディん家周辺, Boggly Woods): the path between win_01 and win_03.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -102,9 +103,15 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(evt_hikou_nobiru_init)
     CALL(evt_hit_bind_mapobj, STRING("a_dai"), STRING("hikou"))
     CALL(evt_hit_bind_mapobj, STRING("a_hi"), STRING("hikou"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan_ha"))
+    CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan2"))
+    CALL(evt_hit_bind_mapobj, STRING("A_hi_kabe"), STRING("S_nob_tree"))
+#else
     CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan2"))
     CALL(evt_hit_bind_mapobj, STRING("A_hi_kabe"), STRING("S_nob_tree"))
     CALL(evt_hit_bind_mapobj, STRING("A_dokan_nobi"), STRING("S_dokan2"))
+#endif
     SET_VALUE(LW(0), 175)
     CALL(evt_mapobj_trans, 1, STRING("S_dokan_ha"), 0, LW(0), 0)
     SET_FLOAT_VALUE(LW(2), LW(0))
@@ -120,8 +127,12 @@ EVT_BEGIN(evt_hikou_nobiru_init)
     CALL(evt_hit_bind_update, STRING("a_dai"))
     CALL(evt_hit_bind_update, STRING("a_hi"))
     CALL(evt_hit_bind_update, STRING("A_dokan1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_hit_bind_update, STRING("A_hi_kabe"))
+#else
     CALL(evt_hit_bind_update, STRING("A_dokan_nobi"))
     CALL(evt_hit_bind_update, STRING("A_hi_kabe"))
+#endif
     RETURN
 EVT_END()
 
@@ -142,9 +153,15 @@ EVT_BEGIN(evt_hikou_nobiru)
     CALL(evt_cam3d_evt_set, -307, 393, 533, -307, 297, -7, 3000, EASING_LINEAR)
     CALL(evt_hit_bind_mapobj, STRING("a_dai"), STRING("hikou"))
     CALL(evt_hit_bind_mapobj, STRING("a_hi"), STRING("hikou"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan_ha"))
+    CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan2"))
+    CALL(evt_hit_bind_mapobj, STRING("A_hi_kabe"), STRING("S_nob_tree"))
+#else
     CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan2"))
     CALL(evt_hit_bind_mapobj, STRING("A_hi_kabe"), STRING("S_nob_tree"))
     CALL(evt_hit_bind_mapobj, STRING("A_dokan_nobi"), STRING("S_dokan2"))
+#endif
     CALL(evt_hit_get_position, STRING("A_dokan1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_STEP_EXTEND1"), LW(0), LW(1), LW(2), LW(9))
     BEGIN_INLINE_EVENT
@@ -156,8 +173,12 @@ EVT_BEGIN(evt_hikou_nobiru)
             ADD_FLOAT(LW(2), 90)
             DIVIDE_FLOAT(LW(2), 90)
             CALL(evt_mapobj_scale, 1, STRING("S_dokan2"), 1, LW(2), 1)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_hit_bind_update, STRING("A_dokan1"))
+#else
             CALL(evt_hit_bind_update, STRING("A_dokan1"))
             CALL(evt_hit_bind_update, STRING("A_dokan_nobi"))
+#endif
             CALL(evt_hit_bind_update, STRING("A_hi_kabe"))
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP

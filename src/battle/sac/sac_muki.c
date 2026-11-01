@@ -101,6 +101,12 @@ EvtWord marioAttackEvent_Muki[];
  * Power Lift's weapon template (3 SP, targets Mario and the partner): set_weapon copies it and adds a sure
  * 3-turn Attack or Defense boost of the points earned in the minigame.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(marioAttackEvent_Muki)
+    CALL(btlevtcmd_ACSuccessEffect, LW(0), -100, 175, 0)
+    RETURN
+EVT_END()
+#endif
 static BattleWeapon weapon = {
     "btl_wn_sac_mukimuki_body", // name
     ICON_SAC_MUKI, // icon
@@ -371,7 +377,11 @@ void main_cursor(void) {
             ob = w->o3d[w->idx].link;
             if (ob) {
                 ob->kind = 5;
+#if VERSION <= VERSION_DEMO_US
+                    effHitEntry(0, 0x20, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
+#else
                 effHitEntry(0, 5, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
+#endif
                 switch (ob->type) {
                 case 0:
                     prev = w->atkBoost;

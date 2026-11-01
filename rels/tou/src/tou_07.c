@@ -299,7 +299,11 @@ static EVT_BEGIN(evt_champion)
         CALL(evt_party_move_pos2, 0, 3, -110, FLOAT(60.0f))
         CALL(evt_party_stop, 0)
         WAIT_MS(100)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_party_move_pos2, 0, 60, -100, FLOAT(60.0f))
+#else
         CALL(evt_party_move_pos2, 0, 70, -110, FLOAT(60.0f))
+#endif
         CALL(evt_party_set_dir_npc, 0, STRING("キノシコワ"))
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, 3, -110, FLOAT(60.0f))
@@ -459,11 +463,31 @@ EVT_BEGIN(evt_champion_re)
     WAIT_MS(1000)
     // She congratulates Mario on winning the title back.
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_140"), 0, STRING("キノシコワ"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_move_position, STRING("キノシコワ"), 40, -95, 0, FLOAT(80.0f), 1)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 40, -95, 0, FLOAT(80.0f), 1)
+#endif
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 30, -95, 0, FLOAT(80.0f), 1)
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_entry, STRING("belt"), ITEM_CHAMPS_BELT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+    CALL(evt_npc_entry, STRING("ベルト"), STRING("c_bred_h"))
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    ADD(LW(1), 56)
+    CALL(evt_npc_set_position, STRING("ベルト"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_set_anim, STRING("ベルト"), STRING("C_1"))
+    ADD(LW(1), 4)
+    ADD(LW(2), 15)
+    CALL(evt_eff, STRING("belt"), STRING("starstone"), 9, LW(0), LW(1), LW(2), FLOAT(0.75f), 0, 0, 0, 0, 0, 0, 0)
+    CALL(tou_07_belt_camid)
+    CALL(evt_item_entry, STRING("belt"), ITEM_CHAMPS_BELT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+    CALL(tou_07_icon_off)
+    CALL(evt_item_get_item, STRING("belt"))
+    CALL(evt_item_get_item_end_wait, STRING("belt"))
+#else
     CALL(evt_npc_entry, STRING("ベルト"), STRING("c_bred_h"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 56)
@@ -479,6 +503,7 @@ EVT_BEGIN(evt_champion_re)
     CALL(evt_item_get_item_end_wait, STRING("belt"))
     CALL(evt_npc_delete, STRING("ベルト"))
     CALL(evt_eff_delete, STRING("belt"))
+#endif
     // She guesses he means to move on and keeps him registered to defend his title.
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_141"), 0, STRING("キノシコワ"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
@@ -647,8 +672,12 @@ EVT_BEGIN(evt_tou_bed)
             WAIT_MS(200)
             CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP2"), LW(0), LW(1), LW(2), 0)
         END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+#else
         CALL(tou_07_snd_off)
         CALL(evt_snd_bgmoff, PSND_PAUSE)
+#endif
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GO_SLEEPING1"))
         CALL(evt_fade_entry, 4, 1000, 0, 0, 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -701,8 +730,12 @@ EVT_BEGIN(evt_tou_bed)
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+#else
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         CALL(tou_07_snd_on)
+#endif
         CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
     END_IF
     // Control returns to the player.
@@ -831,7 +864,11 @@ EVT_BEGIN(tou_07_init_evt)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_20_MAJORS_10TH_PLACE)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+#else
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+#endif
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_DEFAULT
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))

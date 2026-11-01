@@ -314,8 +314,13 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_RUN, "R_1"},
     {POSE_TYPE_RUN_HOME, "R_1"},
     {POSE_TYPE_WALK, "W_1"},
+#if VERSION <= VERSION_DEMO_US
+    {56, "I_1"},
+    {57, "I_1"},
+#else
     {POSE_TYPE_DANGER, "X_1"},
     {POSE_TYPE_PERIL, "X_1"},
+#endif
     {POSE_TYPE_TALK, "T_1"},
     {POSE_TYPE_ACTION, "S_1"},
 };
@@ -326,8 +331,13 @@ static PoseTableEntry pose_table_item_have[] = {
     {POSE_TYPE_STOP, "Y_1"},
     {POSE_TYPE_FREEZE, "Y_1"},
     {POSE_TYPE_CONFUSE, "K_1"},
+#if VERSION <= VERSION_DEMO_US
+    {4, "I_1"},
+    {3, "I_1"},
+#else
     {POSE_TYPE_POISON, "X_1"},
     {POSE_TYPE_DIZZY, "X_1"},
+#endif
     {POSE_TYPE_NORMAL, "S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},

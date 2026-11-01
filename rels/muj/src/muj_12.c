@@ -1,6 +1,7 @@
 // muj_12 (無人島, Keelhaul Key): Cortez's lair: Cortez appears, the scenes after his battle and
 // the bargain with him (korutesu_event_after, kosho_event), and the Crystal Star.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -566,12 +567,20 @@ static EVT_BEGIN(korutesu_event)
     SET_VALUE(LW(0), 5)
     SET_VALUE(LW(1), LW(10))
     // The story advances and the Crystal Star is awarded.
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_33_CORTEZ_AND_THE_TREASURE)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL_CHILD(evt_sub_starstone)
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL_CHILD(PTR(evt_sub_starstone))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ9"))
+#endif
     RETURN
 EVT_END()
 
@@ -713,7 +722,11 @@ EVT_BEGIN(kosho_event)
     SET_VALUE(GF(2), 1)
     DELETE_EVENT(LW(10))
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_set_position, STRING("jewel"), 0, -1000, 0)
+#else
     CALL(evt_item_delete, STRING("jewel"))
+#endif
     WAIT_MS(500)
     // Cortez has his Black Skull back and Flavio asks for thanks.
     CALL(evt_msg_print, 0, STRING("stg5_dou_37"), 0, STRING("コルテス"))

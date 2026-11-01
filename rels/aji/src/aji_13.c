@@ -53,8 +53,12 @@ typedef struct {
 } BeltWork;
 
 USER_FUNC(bg_cam_chk);
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(mario_chk);
+#else
 static USER_FUNC(mario_chk);
 USER_FUNC(hit_group_chk);
+#endif
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
 static EvtWord w_door_close[22];
@@ -127,7 +131,11 @@ static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
 }
 
 static EVT_BEGIN(w_door_close)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door2_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door2_2"), 0, 0, LW(0))
@@ -135,7 +143,11 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door2_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door2_2"), 0, 0, LW(0))
@@ -143,7 +155,11 @@ static EVT_BEGIN(w_door_open)
 EVT_END()
 
 static EVT_BEGIN(e_door_close)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -151,7 +167,11 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -613,6 +633,32 @@ EVT_BEGIN(move_up_down)
         CALL(evt_hit_bind_mapobj, LW(5), LW(6))
     END_IF
     MULTIPLY(LW(7), 100)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY(LW(8), 100)
+    SET_VALUE(LW(4), LW(8))
+    IF_STR_EQUAL(LW(5), STRING("A_ugoku_2"))
+        SET_VALUE(LW(3), 1)
+        SET_VALUE(GF(1), 0)
+        // The first platform (A_ugoku_2) starts only after someone is standing on it.
+        BEGIN_SIBLING_EVENT
+            LOOP(0)
+                CALL(evt_mario_get_name_hitobj_head, LW(10))
+                CALL(hit_group_chk, LW(10), LW(5), LW(10))
+                IF_INT_NOT_EQUAL(LW(10), 0)
+                    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                    IF_FLOAT_GREATER(LW(1), FLOAT(0.099609375f))
+                        SET_VALUE(GF(1), 1)
+                    END_IF
+                END_IF
+                WAIT_FRAMES(1)
+            END_LOOP
+        END_SIBLING_EVENT
+    ELSE
+        SET_VALUE(LW(3), 0)
+    END_IF
+    // Each cycle the platform glides from its first height to its second over the row's time, then pauses.
+    LOOP(0)
+#else
     MULTIPLY(LW(8), 100)
     SET_VALUE(LW(4), LW(8))
     IF_STR_EQUAL(LW(5), STRING("A_ugoku_2"))
@@ -637,6 +683,7 @@ EVT_BEGIN(move_up_down)
     END_IF
     // Each cycle the platform glides from its first height to its second over the row's time, then pauses.
     LOOP(0)
+#endif
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(7), LW(8), LW(9))
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -644,6 +691,16 @@ EVT_BEGIN(move_up_down)
         CALL(evt_mapobj_trans, 1, LW(6), 0, LW(0), 0)
         IF_INT_NOT_EQUAL(LW(5), 0)
             CALL(evt_hit_bind_update, LW(5))
+#if VERSION <= VERSION_DEMO_US
+        END_IF
+        IF_INT_NOT_EQUAL(LW(3), 0)
+            IF_INT_NOT_EQUAL(GF(1), 0)
+                MULTIPLY_FLOAT(LW(0), FLOAT(100.0f))
+                GOTO(5)
+            END_IF
+        END_IF
+        WAIT_FRAMES(1)
+#else
         END_IF
         IF_INT_NOT_EQUAL(LW(3), 0)
             IF_INT_NOT_EQUAL(GF(1), 0)
@@ -654,8 +711,33 @@ EVT_BEGIN(move_up_down)
             END_IF
         END_IF
         WAIT_FRAMES(1)
+#endif
         IF_INT_EQUAL(LW(1), 1)
             GOTO(0)
+#if VERSION <= VERSION_DEMO_US
+        END_IF
+        WAIT_MS(300)
+        LABEL(5)
+        IF_INT_NOT_EQUAL(LW(3), 0)
+            IF_INT_EQUAL(GF(1), 0)
+                SET_VALUE(LW(8), LW(4))
+            ELSE
+                MULTIPLY_FLOAT(LW(0), FLOAT(100.0f))
+                SET_VALUE(LW(8), LW(0))
+            END_IF
+            WAIT_MS(300)
+            LOOP(0)
+                IF_INT_EQUAL(GF(1), 0)
+                    BREAK_LOOP
+                END_IF
+                SET_VALUE(GF(1), 0)
+                WAIT_MS(1000)
+            END_LOOP
+        ELSE
+            WAIT_MS(300)
+        END_IF
+        LOOP(0)
+#else
         END_IF
         LABEL(5)
         IF_INT_NOT_EQUAL(LW(3), 0)
@@ -679,6 +761,7 @@ EVT_BEGIN(move_up_down)
             WAIT_MS(300)
         END_IF
         LOOP(0)
+#endif
             IF_INT_EQUAL(GF(0), 0)
                 BREAK_LOOP
             END_IF
@@ -696,9 +779,15 @@ EVT_BEGIN(move_up_down)
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(1)
+#if VERSION <= VERSION_DEMO_US
         END_IF
         SET_VALUE(LW(8), LW(4))
         WAIT_MS(300)
+#else
+        END_IF
+        SET_VALUE(LW(8), LW(4))
+        WAIT_MS(300)
+#endif
         LOOP(0)
             IF_INT_EQUAL(GF(0), 0)
                 BREAK_LOOP
@@ -778,7 +867,11 @@ ShikakeMoveTbl6 up_down_tbl = {
         {"A_ugoku_2", "S_ugoku_2", 0, -150, 2800},
         {"A_ugoku_h_4", "S_ugoku_h_4", 0, 100, 3000},
         {"A_ugoku_h_5", "S_ugoku_h_5", 0, -200, 4000},
+#if VERSION <= VERSION_DEMO_US
+        {"A_ugoku_h_6", "S_ugoku_h_6", 0, -150, 3000},
+#else
         {"A_ugoku_h_6", "S_ugoku_h_6", 40, -150, 3000},
+#endif
         {"A_ugoku_h_8", "S_ugoku_h_8", 20, -100, 2000},
         {"A_ugoku_h_9", "S_ugoku_h_9", -100, 20, 2000},
     },
@@ -998,7 +1091,11 @@ static EVT_BEGIN(evt_door_msg)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+#else
     CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
+#endif
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_pouch_remove_item, LW(0), LW(1))
         SET_VALUE(LW(0), STRING("e_bero"))
@@ -1018,8 +1115,12 @@ EVT_END()
 
 EVT_BEGIN(aji_13_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI7"))
+#else
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI7"))
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -1071,9 +1172,15 @@ EVT_BEGIN(aji_13_init_evt)
     END_IF
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 200, 60, 100, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, 300, 60, 100, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF(GSWF_AJI13_ULTRA_SHROOM), 0)
+    CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5996094f))
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
+#else
     CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF_AJI_13_ULTRA_SHROOM, 0)
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5996094f))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
+#endif
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
         CALL(evt_npc_check_delete, STRING("バリアーンＺ"))
     END_IF
@@ -1103,7 +1210,11 @@ USER_FUNC(hit_group_chk) {
 USER_FUNC(bg_cam_chk) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 
+#if VERSION <= VERSION_DEMO_US
+    if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW)) {
+#else
     if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW) && marioGetPtr()->airTimer == 0) {
+#endif
         camFollowYOn();
     }
     return EVT_RETURN_BLOCK;

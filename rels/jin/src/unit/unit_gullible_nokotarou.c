@@ -1,5 +1,6 @@
 // Koops (nokotarou) partner unit for the Doopliss fight in Creepy Steeple (placed off screen in the battle setup).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -344,26 +345,42 @@ static EVT_BEGIN(dead_event_nokotarou)
         CALL(evt_btl_camera_set_moveto, 0, 130, 58, 228, 130, 38, -20, 30, 11)
         WAIT_FRAMES(37)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_nok"), 0, -2)
+#if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         WAIT_MS(500)
+#else
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        WAIT_MS(500)
+#endif
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 0, 90, 58, 228, 90, 38, -20, 30, 11)
         WAIT_FRAMES(37)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_04"), 0, GW(16))
         WAIT_MS(200)
         CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         LOOP(0)
+#else
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        LOOP(0)
+#endif
             IF_INT_EQUAL(GW(19), 2)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
         CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
+#else
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     END_SWITCH
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)
     SET_VALUE(GW(20), 2)
@@ -576,7 +593,11 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         IF_INT_EQUAL(LW(6), 2)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 40)
+#else
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
+#endif
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         CALL_CHILD(_koura_rotate_stop)
         CALL_CHILD(_restore_koura_pose)

@@ -239,8 +239,13 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, // burnChance..sizeChangeStrength
+#if VERSION <= VERSION_DEMO_US
+    100, // atkChangeChance
+    2, // atkChangeTime
+#else
     100, // atkChangeChance
     3, // atkChangeTime
+#endif
     3, // atkChangeStrength
     0, 0, 0, 0, 0, 0, 0, 0, // defChangeChance..fastChance
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
@@ -280,8 +285,13 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
+#if VERSION <= VERSION_DEMO_US
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
+    6, // chargeStrength
+#else
     0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
     3, // chargeStrength
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE

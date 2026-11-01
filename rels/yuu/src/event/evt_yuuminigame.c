@@ -1,5 +1,6 @@
 // evt_yuuminigame: Pianta Parlor minigame framework: shared work alloc/free, main and display callbacks.
 
+#include "version.h"
 #include "eff/eff_minigame.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -167,8 +168,13 @@ USER_FUNC(evt_yuuminigame_alloc) {
             wp->init = yuuminigame_init_4slit;
             wp->main = yuuminigame_main_4slit;
             wp->disp = yuuminigame_disp_4slit;
+#if VERSION <= VERSION_DEMO_US
+            wp->data = _mapAlloc(0x24);
+            memset(wp->data, 0, 0x24);
+#else
             wp->data = _mapAlloc(0x28);
             memset(wp->data, 0, 0x28);
+#endif
             yuunpc_yuuminigame4_ptr = wp;
             break;
     }

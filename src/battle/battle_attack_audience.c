@@ -212,7 +212,11 @@ s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
         f32 z;
 
         BtlUnit_GetPos(unit, &x, &y, &z);
+#if VERSION <= VERSION_DEMO_US
+        y = y + (Vec)(BtlUnit_GetHeight(unit) + 10);
+#else
         y = y + (unit->sizeMultiplier * (f32)BtlUnit_GetHeight(unit) + 8.0f);
+#endif
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
         event->userdata[2] = 90;
     } else {

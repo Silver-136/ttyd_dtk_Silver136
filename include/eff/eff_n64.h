@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/types.h>
 #include "sdk/texPalette.h"
 
@@ -12,7 +13,13 @@ typedef struct eff_n64_work {
 
 typedef struct eff_set {
     s16 id;     // 0x0
+#if VERSION <= VERSION_DEMO_US
     char* name; // 0x4
+    const char* description; // 0x8
+    const char** users;      // 0xC, who uses the effect
+#else
+    char* name; // 0x4
+#endif
 } eff_set;
 
 // N64-style vertex, stride 0xE

@@ -1,6 +1,7 @@
 // win_01 (ウィンディん家周辺, Boggly Woods): the path to the Great Tree (mri_00), where a Puni guide leads Mario in; also back
 // to win_00 and on to win_02.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_pouch.h"
 #include "evt/evt_cmd.h"
@@ -308,6 +309,15 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MAIL_RECEPTION1"), LW(0), LW(1), LW(2), 0)
     DELETE_EVENT(LW(10))
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_sub_rumble_onoff, 1, 0)
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    SET_VALUE(LW(3), LW(2))
+    ADD(LW(3), 267)
+    SET_VALUE(LW(4), LW(2))
+    IF_INT_EQUAL(LF(0), 0)
+        CALL(evt_cam3d_evt_set, -184, 86, 262, -184, 38, -5, 1000, 11)
+#else
     CALL(evt_sub_rumble_onoff, 1, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), LW(2))
@@ -315,8 +325,13 @@ static EVT_BEGIN(peach_mail)
     SET_VALUE(LW(4), LW(2))
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_cam3d_evt_set, -184, 86, LW(3), -184, 38, LW(4), 1000, EASING_SINE_IN_OUT)
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_cam3d_evt_set, 184, 86, 262, 184, 38, -5, 1000, 11)
+#else
         CALL(evt_cam3d_evt_set, 184, 86, LW(3), 184, 38, LW(4), 1000, EASING_SINE_IN_OUT)
+#endif
     END_IF
     WAIT_MS(1000)
     // Mario reads Peach's letter, the partner reacts, and Mario can move again.

@@ -65,6 +65,9 @@ EVT_BEGIN(sac_mario_item_on_evt)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(sac_start_stardust)
+#else
 EVT_BEGIN(sac_mario_item_on_end_evt)
     CALL(evt_eff_delete, STRING("sac_itemget"))
     CALL(evt_eff_delete, STRING("sac_treasure"))
@@ -73,12 +76,22 @@ EVT_END()
 
 /** Six bursts of stardust 50 units above Mario, 10 frames apart, while the Crystal Star appears. */
 EVT_BEGIN(sac_start_stardust)
+#endif
     LOOP(6)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         ADD(LW(1), 50)
         CALL(evt_eff, STRING(""), STRING("stardust"), 5, LW(0), LW(1), LW(2), 30, 30, 10, 30, 0, 0, 0, 0)
         WAIT_FRAMES(10)
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    RETURN
+EVT_END()
+
+/** Same script, at its place in the demo's data. */
+EVT_BEGIN(sac_mario_item_on_end_evt)
+    CALL(evt_eff_delete, STRING("sac_itemget"))
+    CALL(evt_eff_delete, STRING("sac_treasure"))
+#endif
     RETURN
 EVT_END()
 

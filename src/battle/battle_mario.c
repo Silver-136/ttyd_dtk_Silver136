@@ -433,7 +433,11 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
+#if VERSION <= VERSION_DEMO_US
+    {1, 2, 2, 4, 4, 8, 0, 0}, // hpDamageWork
+#else
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
+#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -561,7 +565,11 @@ BattleWeapon marioWeapon_KaitenHammerInvolved = {
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#if VERSION <= VERSION_DEMO_US
+    TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+#else
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_RECOIL | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+#endif
     ELEMENT_NORMAL, // element
     ATTACKPATTERN_KAITEN_HAMMER_INVOLVED, // damagePattern
     3, // acLevel
@@ -646,7 +654,11 @@ BattleWeapon marioWeapon_UltraHammerInvolved = {
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#if VERSION <= VERSION_DEMO_US
+    TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+#else
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_RECOIL | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+#endif
     ELEMENT_NORMAL, // element
     ATTACKPATTERN_ULTRA_HAMMER_INVOLVED, // damagePattern
     3, // acLevel
@@ -971,8 +983,14 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+#if VERSION <= VERSION_DEMO_US
     0, 0, 0, // burnTime..freezeTime
     100, // sizeChangeChance
+    95, // sizeChangeChance
+#else
+    0, 0, 0, // burnTime..freezeTime
+    100, // sizeChangeChance
+#endif
     3, // sizeChangeTime
     -2, // sizeChangeStrength
     0, 0, 0, 0, 0, 0, 0, 0, // atkChangeChance..allergicTime
@@ -1012,8 +1030,14 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
     "msg_ac_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
+#if VERSION <= VERSION_DEMO_US
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     100, // sleepChance
+    95, // sleepChance
+#else
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    100, // sleepChance
+#endif
     5, // sleepTime
     0, 0, 0, 0, 0, 0, 0, 0, // stopChance..confuseChance
     0, 0, 0, 0, 0, 0, 0, 0, // confuseTime..freezeChance
@@ -1059,8 +1083,14 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+#if VERSION <= VERSION_DEMO_US
     0, // atkChangeStrength
     100, // defChangeChance
+    95, // defChangeChance
+#else
+    0, // atkChangeStrength
+    100, // defChangeChance
+#endif
     3, // defChangeTime
     -3, // defChangeStrength
     0, 0, 0, 0, 0, 0, 0, 0, // allergicChance..slowTime
@@ -1318,8 +1348,14 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     {0}, // pad_06
     251, // itemId
     NULL, // description
+#if VERSION <= VERSION_DEMO_US
     100, // baseAccuracy
     2, // baseFpCost
+    3, // baseFpCost
+#else
+    100, // baseAccuracy
+    2, // baseFpCost
+#endif
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
@@ -1340,8 +1376,14 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+#if VERSION <= VERSION_DEMO_US
     0, // poisonStrength
     100, // confuseChance
+    90, // confuseChance
+#else
+    0, // poisonStrength
+    100, // confuseChance
+#endif
     3, // confuseTime
     0, 0, 0, 0, 0, 0, 0, 0, // electricChance..freezeTime
     0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeChance..defChangeTime
@@ -1362,8 +1404,14 @@ BattleWeapon badgeWeapon_FireNaguri = {
     {0}, // pad_06
     252, // itemId
     NULL, // description
+#if VERSION <= VERSION_DEMO_US
     100, // baseAccuracy
     5, // baseFpCost
+    6, // baseFpCost
+#else
+    100, // baseAccuracy
+    5, // baseFpCost
+#endif
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #if VERSION >= VERSION_US
@@ -1375,7 +1423,11 @@ BattleWeapon badgeWeapon_FireNaguri = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
+#if VERSION <= VERSION_DEMO_US
+    {0xFFFFFFFF, 0, 0, 2, 1, 4, 252, 2}, // hpDamageWork
+#else
     {0xFFFFFFFF, 3, 0, 3, 1, 3, 252, 2}, // hpDamageWork
+#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1389,8 +1441,14 @@ BattleWeapon badgeWeapon_FireNaguri = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+#if VERSION <= VERSION_DEMO_US
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
     100, // burnChance
+    95, // burnChance
+#else
+    0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
+    100, // burnChance
+#endif
     3, // burnTime
     0, 0, 0, 0, 0, 0, 0, 0, // freezeChance..atkChangeStrength
     0, 0, 0, 0, 0, 0, 0, 0, // defChangeChance..fastChance
@@ -1414,8 +1472,14 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     {0}, // pad_06
     252, // itemId
     NULL, // description
+#if VERSION <= VERSION_DEMO_US
     100, // baseAccuracy
     5, // baseFpCost
+    6, // baseFpCost
+#else
+    100, // baseAccuracy
+    5, // baseFpCost
+#endif
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #if VERSION >= VERSION_US
@@ -1427,7 +1491,11 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     1, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
+#if VERSION <= VERSION_DEMO_US
+    {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
+#else
     {1, 5, 2, 5, 3, 5, 0, 0}, // hpDamageWork
+#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1441,8 +1509,14 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+#if VERSION <= VERSION_DEMO_US
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
     100, // burnChance
+    95, // burnChance
+#else
+    0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
+    100, // burnChance
+#endif
     3, // burnTime
     0, 0, 0, 0, 0, 0, 0, 0, // freezeChance..atkChangeStrength
     0, 0, 0, 0, 0, 0, 0, 0, // defChangeChance..fastChance
@@ -1486,8 +1560,14 @@ BattleWeapon badgeWeapon_IceNaguri = {
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+#if VERSION <= VERSION_DEMO_US
     0, // burnTime
     100, // freezeChance
+    90, // freezeChance
+#else
+    0, // burnTime
+    100, // freezeChance
+#endif
     2, // freezeTime
     0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeChance..defChangeTime
     0, 0, 0, 0, 0, 0, 0, 0, // defChangeStrength..slowChance
@@ -1508,8 +1588,14 @@ BattleWeapon badgeWeapon_Charge = {
     {0}, // pad_06
     256, // itemId
     "btl_hlp_cmd_operation_charge", // description
+#if VERSION <= VERSION_DEMO_US
     100, // baseAccuracy
     1, // baseFpCost
+    0, // baseFpCost
+#else
+    100, // baseAccuracy
+    1, // baseFpCost
+#endif
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
@@ -1548,8 +1634,14 @@ BattleWeapon badgeWeapon_ChargeP = {
     {0}, // pad_06
     257, // itemId
     "btl_hlp_cmd_operation_charge", // description
+#if VERSION <= VERSION_DEMO_US
     100, // baseAccuracy
     1, // baseFpCost
+    0, // baseFpCost
+#else
+    100, // baseAccuracy
+    1, // baseFpCost
+#endif
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
@@ -1703,8 +1795,13 @@ BattleWeapon badgeWeapon_3KaiItem = {
     {0}, // pad_06
     329, // itemId
     NULL, // description
+#if VERSION <= VERSION_DEMO_US
+    100, // baseAccuracy
+    10, // baseFpCost
+#else
     100, // baseAccuracy
     8, // baseFpCost
+#endif
     0, 0, 0.0f, 0, 0, 0, 0, NULL, // baseSpCost..hpDamageFn
     {0}, // hpDamageWork
     NULL, // fpDamageFn
@@ -1835,9 +1932,17 @@ BattleWeapon marioWeapon_BakuGame = {
     "msg_sac_3", // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
+#if VERSION <= VERSION_DEMO_US
     0, 0, 0, // targetWeightFlags..sleepTime
     100, // stopChance
     1, // stopTime
+    0, // stopChance
+    0, // stopTime
+#else
+    0, 0, 0, // targetWeightFlags..sleepTime
+    100, // stopChance
+    1, // stopTime
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
     0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
     0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeTime..defChangeStrength
@@ -2120,8 +2225,14 @@ BattleWeapon marioWeapon_Suki = {
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
+#if VERSION <= VERSION_DEMO_US
     0, 0, 0, 0, 0, 0, 0, // atkChangeTime..allergicTime
     100, // ohkoChance
+    0, // ohkoChance
+#else
+    0, 0, 0, 0, 0, 0, 0, // atkChangeTime..allergicTime
+    100, // ohkoChance
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
@@ -3713,9 +3824,15 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
                 CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
                 IF_INT_LESS(LW(1), 90)
                     IF_INT_GREATER_OR_EQUAL(LW(0), 90)
+#if VERSION <= VERSION_DEMO_US
                         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_N_7"))
                         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_MARIO_FALL_CRUSH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
                     END_IF
+#else
+                        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_N_7"))
+                        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_MARIO_FALL_CRUSH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+                    END_IF
+#endif
                 END_IF
                 SET_VALUE(LW(1), LW(0))
                 WAIT_FRAMES(1)
@@ -3780,7 +3897,11 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
                 GOTO(59)
             END_IF
             IF_INT_EQUAL(LW(3), LW(6))
+#if VERSION <= VERSION_DEMO_US
+                GOTO(59)
+#else
                 GOTO(58)
+#endif
             END_IF
             CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT, LW(5))
             SWITCH(LW(5))
@@ -3796,8 +3917,13 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
                 IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
                     CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
                     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+                    CALL(btlevtcmd_GetResultPrizeLv, LW(3), 1, LW(6))
+                    CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
+#else
                     CALL(btlevtcmd_GetResultPrizeLv, LW(3), 1, LW(7))
                     CALL(btlevtcmd_ACSuccessEffect, LW(7), LW(0), LW(1), LW(2))
+#endif
                 ELSE
                     CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT, LW(5))
                 END_IF
@@ -4747,6 +4873,17 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
 #endif
     // Without a well-timed press Mario just holds a pose and the attack ends.
     CALL(btlevtcmd_ACRGetResult, LW(15), LW(13))
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(LW(15), 1)
+        GOTO(91)
+    END_IF
+    IF_INT_LESS_OR_EQUAL(LW(15), -1)
+        GOTO(91)
+    END_IF
+    GOTO(92)
+    LABEL(91)
+        CALL(evt_audience_acrobat_notry)
+#else
     IF_INT_EQUAL(LW(15), 1)
         GOTO(91)
     END_IF
@@ -4756,6 +4893,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     GOTO(92)
     LABEL(91)
     CALL(evt_audience_acrobat_notry)
+#endif
     SET_VALUE(LW(0), 60)
     SUBTRACT(LW(0), LW(13))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -4767,11 +4905,20 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_S_1"))
     END_IF
     WAIT_FRAMES(10)
+#if VERSION <= VERSION_DEMO_US
+        GOTO(95)
+    LABEL(92)
+    END_IF
+    // Stylish: Mario backflips in place; for the plain Hammer and Ice Smash a second good press ends it in a pose
+    // with confetti.
+    IF_INT_NOT_EQUAL(LW(15), 0)
+#else
     GOTO(95)
     LABEL(92)
     // Stylish: Mario backflips in place; for the plain Hammer and Ice Smash a second good press ends it in a pose
     // with confetti.
     IF_INT_NOT_EQUAL(LW(15), 0)
+#endif
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
@@ -5408,13 +5555,25 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     SWITCH(LW(0))
         CASE_EQUAL(2)
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING2"), 0)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(2), STRING("M_H_13"))
+#else
         SET_VALUE(LW(2), STRING("M_H_14"))
+#endif
         CASE_EQUAL(1)
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING1"), 0)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(2), STRING("M_H_15"))
+#else
         SET_VALUE(LW(2), STRING("M_H_13"))
+#endif
         CASE_DEFAULT
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING3"), 0)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(2), STRING("M_H_14"))
+#else
         SET_VALUE(LW(2), STRING("M_H_15"))
+#endif
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(2))
     CALL(evt_snd_sfxon, STRING("SFX_MARIO_ATTACK_ULTRAQUAKE1"), 0)
@@ -6525,7 +6684,11 @@ EVT_BEGIN(marioAttackEvent_SuperChargeP)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static const Vec majinai_effect_pos = {0.0f, 0.0f, 0.0f};
+#else
 static const Vec majinai_effect_pos = {0.0f, 10.0f, 0.0f};
+#endif
 
 /**
  * Run at the start of Mario's attacks: if Merlee's next charm is the attack boost (merleeNextCurseType 1),

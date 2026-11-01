@@ -1,6 +1,7 @@
 // dou_03 (洞窟, Pirate's Grotto): hub room with the water gate that the Gate Handle operates (story 248).
 // Drifting barrels and bottles; doors to dou_04, dou_05, dou_09 and dou_12.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -291,7 +292,11 @@ EVT_BEGIN(watergate_handle)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(itemsel_table), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             RETURN
         END_IF
@@ -339,9 +344,13 @@ EVT_BEGIN(watergate_handle)
         CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)
         CALL(evt_msg_print, 0, STRING("stg5_dou_02"), 0, 0)
         WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print_party, STRING("stg5_dou_03"))
+#else
         CALL(evt_party_stop, 0)
         CALL(evt_msg_print_party, STRING("stg5_dou_03"))
         CALL(evt_party_run, 0)
+#endif
         SET_VALUE(LW(0), STRING("s_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
         CALL(evt_hitobj_attr_onoff, 1, 1, STRING("s_bero"), HIT_ATTR_SHIP_ONLY)

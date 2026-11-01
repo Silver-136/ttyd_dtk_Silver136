@@ -220,6 +220,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
         END_IF
         CALL(evt_npc_check, STRING("移動屋"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
@@ -229,12 +230,26 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_mobj_floatswitch_blue, 0, STRING("idou_sw"), 75, 60, 0, PTR(dokan_open), 0)
         END_IF
         CASE_DEFAULT
+#else
+        END_IF
+        CALL(evt_npc_check, STRING("移動屋"), LW(0))
+        IF_INT_EQUAL(LW(0), 1)
+            CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
+            CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, -30, 0)
+            CALL(evt_hit_bind_update, STRING("a_dokan_1"))
+            CALL(evt_mobj_floatswitch_blue, 0, STRING("idou_sw"), 75, 60, 0, PTR(dokan_open), 0)
+        END_IF
+        CASE_DEFAULT
+#endif
         CALL_CHILD(PTR(setup_normal))
         CALL(evt_npc_check, STRING("敵"), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 1)
             CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
             CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+#else
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         CALL(evt_npc_check, STRING("移動屋"), LW(0))
@@ -243,6 +258,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, -30, 0)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
             CALL(evt_mobj_floatswitch_blue, 0, STRING("idou_sw"), 75, 60, 0, PTR(dokan_open), 0)
+#endif
         END_IF
     END_SWITCH
     CALL_CHILD(PTR(iri_12_init))
@@ -336,7 +352,11 @@ NpcSetupInfo npcEnt_kuriboo[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -365,7 +385,11 @@ NpcSetupInfo npcEnt_patakuri[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -394,7 +418,11 @@ NpcSetupInfo npcEnt_hannya[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -423,7 +451,11 @@ NpcSetupInfo npcEnt_chorobon[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -452,7 +484,11 @@ NpcSetupInfo npcEnt_sinnosuke[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -481,7 +517,11 @@ NpcSetupInfo npcEnt_sinemon[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -510,7 +550,11 @@ NpcSetupInfo npcEnt_nokonoko[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -539,7 +583,11 @@ NpcSetupInfo npcEnt_patapata[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -568,7 +616,11 @@ NpcSetupInfo npcEnt_met[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -597,7 +649,11 @@ NpcSetupInfo npcEnt_patamet[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -626,7 +682,11 @@ NpcSetupInfo npcEnt_sambo[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -655,7 +715,11 @@ NpcSetupInfo npcEnt_honenoko[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -684,7 +748,11 @@ NpcSetupInfo npcEnt_karon[] = {
         karon_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -713,7 +781,11 @@ NpcSetupInfo npcEnt_dokugassun[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -741,7 +813,11 @@ NpcSetupInfo npcEnt_piders[] = {
         piders_blow_event, // blowEvent
         2, // territoryType
         {0.0f, 140.0f, 0.0f}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -770,7 +846,11 @@ NpcSetupInfo npcEnt_teresa[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -799,7 +879,11 @@ NpcSetupInfo npcEnt_hbom[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -828,7 +912,11 @@ NpcSetupInfo npcEnt_bubble[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -856,7 +944,11 @@ NpcSetupInfo npcEnt_wanwan[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -885,7 +977,11 @@ NpcSetupInfo npcEnt_mahoon[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -914,7 +1010,11 @@ NpcSetupInfo npcEnt_pakkun[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -943,7 +1043,11 @@ NpcSetupInfo npcEnt_togenoko[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -972,7 +1076,11 @@ NpcSetupInfo npcEnt_basabasa2[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -1001,7 +1109,11 @@ NpcSetupInfo npcEnt_togedaruma[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -1030,7 +1142,11 @@ NpcSetupInfo npcEnt_pansy[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -1053,7 +1169,11 @@ NpcSetupInfo npcEnt_zonbaba[] = {
         NULL, NULL, NULL, NULL, // findEvent..blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+        {200.0f, 100.0f, 140.0f}, // territoryLoiter
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -1251,13 +1371,23 @@ EVT_BEGIN(enemy_setup)
     // Pider family: the spiders hang high above the floor and keep that height as their home position.
     IF_STR_EQUAL(LW(1), STRING("パイダース"))
         CALL(evt_npc_setup, PTR(npcEnt_piders))
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 140, LW(4))
         CALL(evt_npc_set_home_position, STRING("敵"), LW(3), 140, LW(4))
     END_IF
-    IF_STR_EQUAL(LW(1), STRING("チュランタラー"))
-        CALL(evt_npc_setup, PTR(npcEnt_piders))
+#else
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 140, LW(4))
         CALL(evt_npc_set_home_position, STRING("敵"), LW(3), 140, LW(4))
+    END_IF
+#endif
+    IF_STR_EQUAL(LW(1), STRING("チュランタラー"))
+        CALL(evt_npc_setup, PTR(npcEnt_piders))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_set_position, STRING("敵"), LW(3), 140, LW(4))
+#else
+        CALL(evt_npc_set_position, STRING("敵"), LW(3), 140, LW(4))
+        CALL(evt_npc_set_home_position, STRING("敵"), LW(3), 140, LW(4))
+#endif
     END_IF
     // Bandit-type thieves share the Goomba setup.
     IF_STR_EQUAL(LW(1), STRING("ボロドー"))
@@ -1393,7 +1523,12 @@ EVT_BEGIN(enemy_setup)
     END_IF
     // Make the chosen spot the enemy's home, then arm its battle and watch for its defeat.
     CALL(evt_npc_get_position, STRING("敵"), LW(3), LW(4), LW(5))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_set_home_position, STRING("敵"), LW(3), LW(4), LW(5))
     CALL(evt_npc_set_battle_info, STRING("敵"), LW(2))
+#else
+    CALL(evt_npc_set_battle_info, STRING("敵"), LW(2))
+#endif
     CALL(setup_npc_ex_para, STRING("敵"))
     CALL(yattukeFlag)
     // Wait until the enemy is dead, then open the exit pipe and report the kill to Trouble Center job 12.
@@ -1522,10 +1657,27 @@ EVT_BEGIN(talk_idouya)
     CALL(evt_msg_select, 0, STRING("msg_jon_mover_select"))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+#if VERSION <= VERSION_DEMO_US
+        ADD(GSWF_TROUBLE_WORK(GSW_JON_FLOOR), 2)
+        CALL_CHILD(get_map_name)
+        SET_VALUE(LW(1), STRING("dokan_2"))
+#endif
         SET_VALUE(LW(2), 10)
         CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+        ADD(GSWF_TROUBLE_WORK(GSW_JON_FLOOR), 5)
+        CALL_CHILD(get_map_name)
+        SET_VALUE(LW(1), STRING("dokan_2"))
+#endif
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(2), 10)
+        CASE_EQUAL(2)
+        SET_VALUE(LW(0), STRING("tik_06"))
+        SET_VALUE(LW(1), STRING("dokan_3"))
+#else
         SET_VALUE(LW(2), 30)
         CASE_EQUAL(2)
+#endif
         SET_VALUE(LW(2), 10)
         CASE_EQUAL(3)
         CALL(evt_msg_continue)
@@ -1536,7 +1688,14 @@ EVT_BEGIN(talk_idouya)
         CALL(evt_msg_print_add, 0, STRING("msg_jon_mover_nocoin"))
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_continue)
+#endif
     MULTIPLY(LW(2), -1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_pouch_add_coin, LW(2))
+    IF_STR_EQUAL(LW(0), STRING("tik_06"))
+#else
     CALL(evt_pouch_add_coin, LW(2))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -1553,13 +1712,19 @@ EVT_BEGIN(talk_idouya)
     END_SWITCH
     IF_STR_EQUAL(LW(0), STRING("tik_06"))
         IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
+#endif
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
                 SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
             END_IF
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    CALL(evt_msg_print, 0, STRING("msg_jon_mover_2"), 0, 0)
+#else
         END_IF
     END_IF
     CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
     CALL(evt_msg_print_add, 0, STRING("msg_jon_mover_2"))
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_raster)
     END_INLINE_EVENT
@@ -1568,9 +1733,14 @@ EVT_BEGIN(talk_idouya)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     IF_STR_EQUAL(LW(0), STRING("tik_06"))
         SET_VALUE(GSW_PIT_FLOOR, 0)
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    CALL(evt_bero_mapchange, LW(0), LW(1))
+#else
     END_IF
     CALL(evt_mario_goodbye_party, 0)
     CALL(evt_bero_mapchange, LW(0), LW(1))
+#endif
     RETURN
 EVT_END()
 
@@ -1643,6 +1813,9 @@ EVT_BEGIN(talk_gyousyou)
     // The trader names the item and its price and asks Mario to confirm (the English text swaps the order of
     // name and price for some languages).
     IF_INT_GREATER_OR_EQUAL(LW(1), 240)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
+#else
         CALL(evt_sub_get_language, LW(0))
 #if VERSION >= VERSION_US
         SWITCH(LW(0))
@@ -1653,6 +1826,7 @@ EVT_BEGIN(talk_gyousyou)
         IF_INT_NOT_EQUAL(LW(0), 0)
 #endif
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2), LW(4))
+#endif
 #if VERSION >= VERSION_US
         END_SWITCH
 #else
@@ -1704,12 +1878,26 @@ EVT_BEGIN(talk_gyousyou)
     CALL(evt_win_coin_wait, LW(12))
     WAIT_MS(200)
     CALL(evt_win_coin_off, LW(12))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_continue)
     CALL(evt_pouch_get_coin, LW(0))
+#else
+    CALL(evt_pouch_get_coin, LW(0))
+#endif
     IF_INT_EQUAL(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
+#else
         CALL(evt_msg_print_add, 0, STRING("100kai_item_06"))
+#endif
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
+    CALL(evt_msg_print, 0, STRING("100kai_item_07"), 0, STRING("me"))
+#else
     CALL(evt_msg_print_add, 0, STRING("100kai_item_07"))
+#endif
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("100kai_item_08"))
@@ -1821,8 +2009,15 @@ EVT_END()
  * Spawned from enemy_setup.
  */
 EVT_BEGIN(dokan_open)
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(1000)
+#endif
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_key_onoff, 0)
+#else
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1000)
+#endif
 #if VERSION >= VERSION_US
     WAIT_MS(1000)
 #else
@@ -2974,11 +3169,16 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_S_1"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, SEQ_GAME)
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(4000)
+#else
     WAIT_MS(3500)
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 96)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 96)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(3), LW(0))
@@ -2986,6 +3186,15 @@ EVT_BEGIN(zonbaba_first_event)
         CALL(evt_party_move_pos, 0, LW(3), LW(2), 250)
     END_INLINE_EVENT
     WAIT_MS(2000)
+#else
+    CALL(evt_mario_set_pose, STRING("M_N_5B"))
+    BEGIN_INLINE_EVENT
+        SET_VALUE(LW(3), LW(0))
+        ADD(LW(3), -40)
+        CALL(evt_party_move_pos, 0, LW(3), LW(2), 250)
+    END_INLINE_EVENT
+    WAIT_MS(2000)
+#endif
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_set_dir_npc, STRING("敵"))
     CALL(evt_party_set_dir_npc, 0, STRING("敵"))

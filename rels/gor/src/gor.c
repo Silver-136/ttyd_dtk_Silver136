@@ -1,6 +1,7 @@
 // gor.rel (ゴロツキタウン, Rogueport): shared code and the REL prolog/epilog.
 // Registers the init events of gor_00..gor_04 and gor_10..gor_12.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_window.h"
@@ -78,6 +79,10 @@ void _epilog(void) {
 }
 
 /** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
+#if VERSION <= VERSION_DEMO_US
+void _unresolved(void) {
+}
+#else
 void _unresolved(void) {
 }
 
@@ -112,6 +117,7 @@ USER_FUNC(evt_gor_msg_cat_alloc) {
     evtSetValue(event, args[3], (EvtWord)gor_msg_cat_buf);
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Script helper for the wandering Rogueport villagers:
@@ -175,6 +181,35 @@ USER_FUNC(evt_goki_sub_intpl_get_value) {
     event->lwData[1] = intplGetValue(event->lwData[9], event->lwData[12], event->lwData[13], event->lwData[14], event->lwData[15]);
     event->lwData[14]++;
     return EVT_RETURN_DONE;
+#if VERSION <= VERSION_DEMO_US
+}
+
+/**
+ * Script helper (Japanese release and later): remembers the sound effect id args[0] of Mario's snoring
+ * so it can be stopped later (-1 for none).
+ */
+USER_FUNC(evt_gor_inemuri_snd_set) {
+    gor_inemuri_snd_id = evtGetValue(event, event->args[0]);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper (Japanese release and later): stops the snoring sound effect saved by evt_gor_inemuri_snd_set,
+ * if any.
+ */
+USER_FUNC(evt_gor_inemuri_snd_off) {
+    if (gor_inemuri_snd_id != -1) {
+        psndSFXOff(gor_inemuri_snd_id);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * NPC regular event shared by Rogueport villagers:
+ * lets the NPC wander (urouro) within 100 units of where it starts, with a 30 unit step.
+ */
+EVT_BEGIN(gor_villager_urouro)
+#else
 }
 
 /**
@@ -204,6 +239,7 @@ USER_FUNC(evt_gor_inemuri_snd_off) {
  * lets the NPC wander (urouro) within 100 units of where it starts, with a 30 unit step.
  */
 EVT_BEGIN(gor_villager_urouro)
+#endif
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -214,12 +250,22 @@ EVT_END()
  * Looping helper: plays Mario's sleeping voice at his position every 140 frames.
  * The Japanese release and later also remember the sound's id so it can be cut off when he wakes.
  */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(inemuri_snd)
     CALL(evt_gor_inemuri_snd_set, -1)
     LABEL(0)
+#else
+EVT_BEGIN(inemuri_snd)
+    CALL(evt_gor_inemuri_snd_set, -1)
+    LABEL(0)
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), LW(3))
     CALL(evt_gor_inemuri_snd_set, LW(3))
+#endif
     WAIT_FRAMES(140)
     GOTO(0)
     RETURN
@@ -296,9 +342,15 @@ EVT_BEGIN(mario_and_party_sleep)
     END_LOOP
     // Luigi has finished: the snoring stops.
     IF_INT_NOT_EQUAL(LW(15), -1)
+#if VERSION <= VERSION_DEMO_US
         DELETE_EVENT(LW(15))
         CALL(evt_gor_inemuri_snd_off)
     END_IF
+#else
+        DELETE_EVENT(LW(15))
+        CALL(evt_gor_inemuri_snd_off)
+    END_IF
+#endif
     // The partner wakes up.
     IF_INT_LESS_OR_EQUAL(LW(2), 0)
         CALL(evt_mario_get_party, LW(0))
@@ -356,17 +408,31 @@ EVT_BEGIN(luigi_gor_first_talk)
         CALL(evt_msg_print, 0, STRING("gor_luigi_00"), 0, STRING("me"))
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_16_THE_RETURN_OF_THE_QUEEN)
+            CALL(evt_msg_print, 0, STRING("gor_luigi_01"), 0, STRING("me"))
+#else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG8_16_THE_RETURN_OF_THE_QUEEN)
             SET_VALUE(LW(2), STRING("gor_luigi_01"))
             ELSE
             SET_VALUE(LW(2), STRING("gor_luigi_01_1"))
         END_IF
         CALL(evt_msg_print, 0, LW(2), 0, STRING("me"))
+#endif
+#if VERSION <= VERSION_DEMO_US
+        ELSE
+            CALL(evt_msg_print, 0, STRING("gor_luigi_01_1"), 0, STRING("me"))
+        END_IF
+#endif
         CALL(evt_mario_set_pose, STRING("M_N_5B"))
         WAIT_MS(500)
         SET_VALUE(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 1)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
+#if VERSION <= VERSION_DEMO_US
+        CASE_BETWEEN(STG1_17_FATHER_SON_REUNITED, STG2_24_BOSS_BATTLE)
+        CALL(evt_msg_print, 0, STRING("gor_luigi_02"), 0, STRING("me"))
+#else
         CASE_BETWEEN(STG1_17_FATHER_SON_REUNITED, STG2_24_BOSS_BATTLE)
         SET_VALUE(LW(2), STRING("gor_luigi_02"))
         CASE_BETWEEN(STG2_25_AFTER_THE_BOSS_BATTLE, STG3_31_GRUBBAS_PLANS)
@@ -385,6 +451,24 @@ EVT_BEGIN(luigi_gor_first_talk)
         SET_VALUE(LW(2), STRING("gor_luigi_09"))
     END_SWITCH
     CALL(evt_msg_print, 0, LW(2), 0, STRING("me"))
+#endif
+#if VERSION <= VERSION_DEMO_US
+        CASE_BETWEEN(STG2_25_AFTER_THE_BOSS_BATTLE, STG3_31_GRUBBAS_PLANS)
+        CALL(evt_msg_print, 0, STRING("gor_luigi_03"), 0, STRING("me"))
+        CASE_BETWEEN(STG3_32_BOSS_BATTLE, STG4_15_04_SHADOW_SIRENS_DOOPLISS)
+        CALL(evt_msg_print, 0, STRING("gor_luigi_04"), 0, STRING("me"))
+        CASE_BETWEEN(STG4_15_05_PEACH_X_NAUT_PHD_REPORT, STG5_42_PIRATES_VS_X_NAUTS)
+        CALL(evt_msg_print, 0, STRING("gor_luigi_05"), 0, STRING("me"))
+        CASE_BETWEEN(STG5_43_X_NAUTS_RETREAT, STG6_53_THE_REAL_GARNET_STAR)
+        CALL(evt_msg_print, 0, STRING("gor_luigi_06"), 0, STRING("me"))
+        CASE_BETWEEN(STG6_54_WELCOME_BACK, STG7_19_THE_DOOR_TO_LORD_CRUMP)
+        CALL(evt_msg_print, 0, STRING("gor_luigi_07"), 0, STRING("me"))
+        CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG8_15_GRODUS)
+        CALL(evt_msg_print, 0, STRING("gor_luigi_08"), 0, STRING("me"))
+        CASE_GREATER_OR_EQUAL(STG8_16_THE_RETURN_OF_THE_QUEEN)
+        CALL(evt_msg_print, 0, STRING("gor_luigi_09"), 0, STRING("me"))
+    END_SWITCH
+#endif
     CALL(evt_msg_select, 0, STRING("gor_luigi_yesno"))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("gor_luigi_12"))

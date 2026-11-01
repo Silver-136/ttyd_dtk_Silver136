@@ -237,7 +237,13 @@ BOOL pouchGetItem(ItemType type) {
         return 1;
     }
     if (type == ITEM_PIANTA_TOKEN) {
+#if VERSION <= VERSION_DEMO_US
+        if (yuwp->tokens < 0x7FFFFFFF) // the demo has no 99999 cap
+        if (yuwp->tokens < 99999)
+        {
+#else
         if (yuwp->tokens < 99999) {
+#endif
             yuwp->tokens++;
         }
         return 1;
@@ -424,6 +430,21 @@ BOOL pouchRemoveItem(ItemType type) {
  * battle and evt_pouch) and closes the gap; FALSE if the slot holds another item.
  * Badges drop their worn state too.
  */
+#if VERSION <= VERSION_DEMO_US
+extern inline void pouchShiftDemo(s32* table1, s32* table2, int i, s32 maximum) {
+    table1[i] = ITEM_NULL;
+    if (table2 != 0)
+        table2[i] = ITEM_NULL;
+    for (; i < maximum - 1; i++) {
+        table1[i] = table1[i + 1];
+        table1[i + 1] = ITEM_NULL;
+        if (table2 != 0) {
+            table2[i] = table2[i + 1];
+            table2[i] = ITEM_NULL;
+        }
+    }
+}
+#endif
 BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     s16* table1, * table2, * p;
     BOOL valid;
@@ -459,8 +480,13 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
         return FALSE;
     }
     for (i = index; i < maximum; p++, i++) {
+#if VERSION <= VERSION_DEMO_US
+        if (type == *p) {
+            pouchShiftDemo(table1, table2, i, maximum);
+#else
         if (type == *p) {
             pouchShift(table1, table2, i, maximum);
+#endif
             return TRUE;
         }
     }
@@ -630,7 +656,15 @@ s32 comp_aiueo(const void* a, const void* b) {
 
     pouchAiueoConv(msgSearch(itemDataTable[ia].name), bufA);
     pouchAiueoConv(msgSearch(itemDataTable[ib].name), bufB);
+#if VERSION <= VERSION_DEMO_US
+    if (r > 0)
+#endif
+#if VERSION <= VERSION_DEMO_US
+        return 1;
+    return -(r < 0);
+#else
     return strcmp(bufA, bufB);
+#endif
 }
 
 /** qqsort comparator: items by type_sort_order from the item table, ascending (pouchSortItem modes 1 and 3). */
@@ -641,6 +675,15 @@ s32 comp_kind(s16* a, s16* b) {
         return 1;
     }
     return -(x < y);
+#if VERSION <= VERSION_DEMO_US
+}
+
+/** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
+extern s32 comp_aiueo_r(const void* array, const void* b) {
+    s32 ia = *(s32*)array;
+    s32 ib = *(s32*)b;
+    s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
+#else
 }
 
 /** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
@@ -652,7 +695,16 @@ s32 comp_aiueo_r(const void* a, const void* b) {
 
     pouchAiueoConv(msgSearch(itemDataTable[ia].name), bufA);
     pouchAiueoConv(msgSearch(itemDataTable[ib].name), bufB);
+#endif
+#if VERSION <= VERSION_DEMO_US
+    if (r < 0)
+#endif
+#if VERSION <= VERSION_DEMO_US
+        return 1;
+    return -(r > 0);
+#else
     return strcmp(bufB, bufA);
+#endif
 }
 
 /** qqsort comparator: items by type_sort_order, descending (pouchSortItem modes 8 and 10). */
@@ -900,10 +952,19 @@ void pouchSortItem(s32 mode) {
                     equipped[j] = t2;
 #endif
                 }
+#if VERSION <= VERSION_DEMO_US
+                }
+                // The demo copies the lists back after every pass of the outer loop.
+                memcpy(pp[0]->badges, badges, sizeof(badges));
+#else
             }
         }
         memcpy(pp[0]->badges, badges, sizeof(badges));
+#endif
         memcpy(pp[0]->equippedBadges, equipped, sizeof(equipped));
+#if VERSION <= VERSION_DEMO_US
+            }
+#endif
     }
 }
 
@@ -1122,6 +1183,19 @@ s32 pouchGetPartyAttackLv(PartyId partyId) {
 }
 
 BOOL pouchAddKeepItem(s32 id) {
+#if VERSION <= VERSION_DEMO_US
+    s32 i;
+
+    for (i = 0; i < MAX_STORED_ITEMS; i++) {
+        if (mpp->storedItems[i] == 0) {
+            break;
+        }
+    }
+    if (i < MAX_STORED_ITEMS) {
+        mpp->storedItems[i] = id;
+        return TRUE;
+    }
+#else
     s32 i, j;
 
     for (i = MAX_STORED_ITEMS - 1; i >= 0; i--) {
@@ -1133,10 +1207,17 @@ BOOL pouchAddKeepItem(s32 id) {
             return TRUE;
         }
     }
+#endif
     return FALSE;
 }
 
 /** Takes the first copy of id out of storage, leaving an empty slot; FALSE if it is not stored. */
+#if VERSION <= VERSION_DEMO_US
+BOOL pouchRemoveKeepItem(s32 id) {
+    s32 i;
+
+    for (i = 0; i < MAX_STORED_ITEMS; i++) {
+#else
 BOOL pouchRemoveKeepItem(s32 id, s32 index) {
     s32 i, j;
 
@@ -1144,7 +1225,19 @@ BOOL pouchRemoveKeepItem(s32 id, s32 index) {
         return FALSE;
     }
     for (i = index; i < MAX_STORED_ITEMS; i++) {
+#endif
         if (mpp->storedItems[i] == id) {
+#if VERSION <= VERSION_DEMO_US
+            break;
+        }
+    }
+    if (i < MAX_STORED_ITEMS) {
+#endif
+#if VERSION <= VERSION_DEMO_US
+        mpp->storedItems[i] = 0;
+        return TRUE;
+    }
+#else
             mpp->storedItems[i] = 0;
             for (j = i; j < MAX_STORED_ITEMS - 1; j++) {
                 mpp->storedItems[j] = mpp->storedItems[j + 1];
@@ -1153,6 +1246,7 @@ BOOL pouchRemoveKeepItem(s32 id, s32 index) {
             return TRUE;
         }
     }
+#endif
     return FALSE;
 }
 
@@ -1271,6 +1365,39 @@ BOOL pouchEquipBadgeID(s32 badgeId) {
         }
     }
     return FALSE;
+#if VERSION <= VERSION_DEMO_US
+}
+
+/**
+ * Unequips the first worn copy of array badge; FALSE if none is worn.
+ * The Game Over sequence takes off Slow Go with it. Not in the US demo.
+ */
+BOOL pouchUnEquipBadgeID(s32 badgeId) {
+    int i;
+
+    for (i = 0; i < 200; i++) {
+        if (mpp->equippedBadges[i] == badgeId) {
+            if (mpp->equippedBadges[i]) {
+                mpp->equippedBadges[i] = 0;
+            }
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
+/**
+ * Puts array badge on sale at the badge shop (Lovely Howz)
+ * when array dropped badge item carrying ITEM_FLAG_BADGE_RETURN goes away uncollected (itemdrv.c itemCheckBadge),
+ * so it is not lost for good.
+ * In retail those are the badges field enemies drop when beaten (enemy_common_dead_event).
+ * Adds it to the special table outside battle; the demo adds it to the bargain table, in or out of battle.
+ */
+s32 pouchArriveBadge(s32 id) {
+    // The demo stocks an arriving badge in the bargain table.
+    return badgeShop_add(bdsw->bargain_table, (s32)id, 1);
+#else
 }
 
 // Descriptive name (not in the symbol maps).
@@ -1290,6 +1417,7 @@ BOOL pouchUnEquipBadgeID(s32 badgeId) {
 
 s32 pouchArriveBadge(s32 id) {
     return badgeShop_add(bdsw->special_table, (s16)id, 1);
+#endif
 }
 
 /**

@@ -1,6 +1,7 @@
 // tik_15 (埋没した都市, Rogueport Sewers): the large junction with pipes to tik_01 and tik_04 and exits to tik_16, tik_20 and
 // tik_21; Goombas, Paragoombas, Spiky Goombas, a Hammer Bro and a Magikoopa.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -170,8 +171,13 @@ EVT_BEGIN(tik_15_init_evt)
     END_IF
     CALL(evt_mobj_lv_blk, STRING("block00"), -370, 0, -25, 0, GSWF_TIK_15_LV1_BIG_BLOCK_1_BROKEN, STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("block01"), -420, 0, -25, 0, GSWF_TIK_15_LV1_BIG_BLOCK_2_BROKEN, STRING("MOBJ_Lv1BigBlock"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 50, 0, -30, ITEM_MUSHROOM, 0, GSWF(GSWF_TIK15_MUSHROOM_BLOCK_HIT), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), -140, 0, -30, ITEM_FIRE_FLOWER, 0, GSWF(GSWF_TIK15_FIRE_FLOWER_BLOCK_HIT), 0)
+#else
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 50, 0, -38, ITEM_MUSHROOM, 0, GSWF_TIK_15_MUSHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), -140, 0, -38, ITEM_FIRE_FLOWER, 0, GSWF_TIK_15_FIRE_FLOWER_BLOCK, 0)
+#endif
     RETURN
 EVT_END()
 

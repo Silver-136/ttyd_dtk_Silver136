@@ -1,5 +1,6 @@
 // tik_17 (埋没した都市, Rogueport Sewers): the room with the pipes to Poshley Heights (pik_01) and Keelhaul Key (muj_02).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -245,7 +246,11 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_FP_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#else
     CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box01"))
     CALL(evt_item_get_item, STRING("item01"))
     CALL(evt_mario_key_onoff, 1)
@@ -270,7 +275,11 @@ EVT_BEGIN(tik_17_init_evt)
     IF_INT_EQUAL(GSWF_TIK_17_LV2_BIGBIG_BLOCK_BROKEN, 0)
         CALL(evt_mobj_flag_onoff, 1, STRING("block"), MOBJ_FLAG_NO_CULL)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -125, 0, 0, PTR(mobj_box01), GSWF(GSWF_TIK17_FP_PLUS_CHEST_OPENED))
+#else
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -110, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_TIK_17_FP_PLUS_CHEST)
+#endif
     SET_VALUE(LW(0), STRING("dai_3"))
     SET_VALUE(LW(1), STRING("a_dai_3"))
     SET_VALUE(LW(2), 0)

@@ -288,8 +288,12 @@ EVT_BEGIN(kpa_dead)
     SET_VALUE(LSWF_KPA_STAGE_ENDED, 1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_key_onoff, 0)
+#else
     CALL(kpa_fire_off)
     CALL(evt_mario_key_onoff, 0)
+#endif
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_adjust_dir)
     CALL(kpa_nohitenemy_ct_clear)
@@ -372,6 +376,9 @@ EVT_END()
 USER_FUNC(kpa_nohitenemy_ct_clear) {
     MarioWork* mario = marioGetPtr();
 
+#if VERSION <= VERSION_DEMO_US
+    mario->kpaNoHitTimer = 0;
+#else
     mario->kpaNoHitTimer = 0;
     return EVT_RETURN_DONE;
 }
@@ -379,6 +386,7 @@ USER_FUNC(kpa_nohitenemy_ct_clear) {
 // Descriptive name (not in the symbol maps); placeholder unk_kpa_00000a08, JP kpa .text+0x944. See docs/NAME_PROVENANCE.md.
 USER_FUNC(kpa_fire_off) {
     kpaFireDelete();
+#endif
     return EVT_RETURN_DONE;
 }
 

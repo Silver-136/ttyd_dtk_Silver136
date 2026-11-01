@@ -1,5 +1,6 @@
 // las_26 (ラストダンジョン, Palace of Shadow): Gloomtail (ボンババ) and the bomb wall.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -162,8 +163,13 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_44"), 0, STRING("ボンババ"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff_fukidashi, 0, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, 3, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#endif
     WAIT_MS(1000)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
     BEGIN_INLINE_EVENT
@@ -213,11 +219,20 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_48"), 0, STRING("ボンババ"))
     CALL(evt_cam3d_evt_set, -299, 25, 748, -328, 134, -34, 3000, EASING_SINE_IN_OUT)
     WAIT_MS(2500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_set_battle_info, STRING("ボンババ"), 14)
+#else
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     // The battle with Gloomtail starts and the script waits for it to end.
     CALL(evt_npc_set_battle_info, STRING("ボンババ"), 14)
+#endif
     CALL(evt_npc_battle_start, STRING("ボンババ"))
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_wait_battle_end)
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
+#else
+    CALL(evt_npc_wait_battle_end)
+#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_archi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, 0, 25, 845, 0, 100, 150, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -328,8 +343,13 @@ EVT_BEGIN(bonbaba_evt)
     WAIT_MS(300)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1"), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff_fukidashi, 0, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, 3, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#endif
     WAIT_MS(1000)
     // Mario notices the chest; the story advances and he regains control.
     SET_VALUE(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
@@ -404,11 +424,19 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_set_tribe, STRING("クリハカセ"), STRING("クリハカセ"))
     CALL(evt_npc_set_position, STRING("クリハカセ"), -58, 0, -280)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 270)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_seq_wait, 2)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_TALK_POSE)
     CALL(evt_seq_wait, SEQ_GAME)
+#endif
     WAIT_MS(1000)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CEILING_BREAK1"), LW(10))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, -58, 200, -280, 60, 0, 0, 0, 0, 0, 0, 0)
+#else
     CALL(evt_eff64, 0, STRING("hokori_n64"), 0, -58, 200, -280, 60, 0, 0, 0, 0, 0, 0, 0)
+#endif
     WAIT_MS(1000)
     CALL(evt_snd_sfxoff, LW(10))
     WAIT_MS(1000)
@@ -480,17 +508,32 @@ EVT_END()
 EVT_BEGIN(las_26_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
         CALL(evt_snd_set_rev_mode, 2)
     ELSE
+#else
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+        CALL(evt_snd_set_rev_mode, 2)
+    ELSE
+#endif
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
+            CALL(evt_snd_set_rev_mode, 2)
+        ELSE
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#else
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
             CALL(evt_snd_set_rev_mode, 2)
         ELSE
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
             CALL(evt_snd_set_rev_mode, 2)
+#endif
         END_IF
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))

@@ -137,6 +137,15 @@ s32 marioGetPlaneStatus(void) {
         return 2;
     }
     return 1;
+#if VERSION <= VERSION_DEMO_US
+}
+
+/**
+ * Ends targetZ glide early: switches to the landing phase (sub-motion 50) from the current height.
+ * Called from evt_mario'speedSin plane command and when the field motion is changed while flying.
+ */
+void mario_plane_cancel(void) {
+#else
 }
 
 /**
@@ -144,17 +153,28 @@ s32 marioGetPlaneStatus(void) {
  * Called from evt_mario's plane command and when the field motion is changed while flying.
  */
 BOOL mario_plane_cancel(void) {
+#endif
     MarioWork* mario = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+    if ((u16)mp->currMotionId == MARIO_MOTION_PLANE && (s32)mp->currSubMotionId >= 12 && (s32)mp->currSubMotionId < 20) {
+#else
     if (mario->currMotionId != MARIO_MOTION_PLANE) {
         return FALSE;
     }
     if (mario->currSubMotionId >= 12 && mario->currSubMotionId < 20) {
+#endif
         mario->currSubMotionId = 50;
+#if VERSION <= VERSION_DEMO_US
+        mp->mot.plane.groundY = mp->position.y;
+    }
+}
+#else
         mario->mot.plane.groundY = mario->position.y;
         return TRUE;
     }
     return FALSE;
 }
+#endif
 
 /**
  * Re-applies the paper airplane animation in Mario's current colour (paper_plane[marioGetColor()])
@@ -341,10 +361,27 @@ void mot_plane(void) {
 #endif
     flyMain();
     if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
+#if VERSION <= VERSION_DEMO_US
+        MarioWork* target = marioGetPtr();
+#endif
+#if VERSION <= VERSION_DEMO_US
+        if ((u16)target->currMotionId == MARIO_MOTION_PLANE && (s32)target->currSubMotionId >= 12 && (s32)target->currSubMotionId < 20) {
+#else
         if (planeCancel()) {
+#endif
+#if VERSION <= VERSION_DEMO_US
+            target->currSubMotionId = 50;
+            target->mot.plane.groundY = target->position.y;
+        }
+#endif
+#if VERSION <= VERSION_DEMO_US
+        return;
+    }
+#else
             return;
         }
     }
+#endif
     if (mp->currSubMotionId == 20 || mp->currSubMotionId == 30) {
         camFollowYOff();
         mp->camShiftTargetY = 0.0f;
@@ -486,8 +523,12 @@ void mot_plane(void) {
 #endif
         break;
     case 70: {
+#if VERSION <= VERSION_DEMO_US
+            Vec p;
+#else
         Vec p;
         set_damage_root_ypos(mp->position.y);
+#endif
         p = mp->position;
         marioSetSplash(0, &p);
         mp->multiTimer = 16;
@@ -924,11 +965,19 @@ BOOL chkCollision(f32* outY) {
         y = mario->motPlane->tipPos.y;
         z = mario->motPlane->tipPos.z;
         mario->hitobjStandOn = NULL;
+#if VERSION <= VERSION_DEMO_US
+        dist = 2.0f;
+        hit = marioHitCheck(&ox, &oy, &oz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, -1.0f, 0.0f);
+#else
         dist = 10.1f;
         hit = marioHitCheck(&ox, &oy, &oz, &dist, &nx, &ny, &nz, x, y + r, z, 0.0f, -1.0f, 0.0f);
+#endif
         if (hit != NULL) {
             mario->hitobjStandOn = hit;
             ret = TRUE;
+#if VERSION <= VERSION_DEMO_US
+            *outY = oy;
+#else
             *outY = oy;
         }
     }
@@ -941,6 +990,7 @@ BOOL chkCollision(f32* outY) {
             mario->hitobjStandOn = hit;
             ret = TRUE;
             *outY = hpos.y;
+#endif
         }
     }
     mario->hitobjHead = NULL;

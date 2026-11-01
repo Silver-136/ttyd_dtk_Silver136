@@ -835,6 +835,17 @@ void btlseqTurn(BattleWork* wp) {
         case 0x3000049:
             if (!BattleWaitAllActiveEvtEnd(wp)) {
                 break;
+#if VERSION <= VERSION_DEMO_US
+            }
+            BattleIncSeq(wp, SEQ_TURN);
+            if (BattleCheckConcluded(wp)) {
+                BattleSetSeq(wp, SEQ_UNKNOWN, 3);
+                BattleSetSeq(wp, SEQ_END, 0x7000000);
+            } else {
+                BattleIncSeq(wp, SEQ_TURN);
+            }
+            break;
+#else
             }
             if (BattleCheckConcluded(wp)) {
                 BattleSetSeq(wp, SEQ_UNKNOWN, 3);
@@ -843,6 +854,7 @@ void btlseqTurn(BattleWork* wp) {
                 BattleIncSeq(wp, SEQ_TURN);
             }
             break;
+#endif
 
         case 0x3000012:
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
@@ -1420,9 +1432,15 @@ void btlseqTurn(BattleWork* wp) {
                 if (unit) {
                     ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_SLOW);
                     sfx |= ret;
+#if VERSION <= VERSION_DEMO_US
                     if (ret) {
                         BtlUnit_ResetMoveStatus(unit);
                         evt = evtEntry(subsetevt_status_recovery, 10, 0);
+#else
+                    if (ret) {
+                        BtlUnit_ResetMoveStatus(unit);
+                        evt = evtEntry(subsetevt_status_recovery, 10, 0);
+#endif
                         if (evt) {
                             unit->attackEventId = evt->eventId;
                             evt->unitId = unit->unitId;
@@ -1581,6 +1599,17 @@ void btlseqTurn(BattleWork* wp) {
                 default:
                     if (!BattleWaitAllActiveEvtEnd(wp)) {
                         break;
+#if VERSION <= VERSION_DEMO_US
+                    }
+                    BattleIncSeq(wp, SEQ_TURN);
+                    if (BattleCheckConcluded(wp)) {
+                        BattleSetSeq(wp, SEQ_UNKNOWN, 3);
+                        BattleSetSeq(wp, SEQ_END, 0x7000000);
+                    } else {
+                        BattleIncSeq(wp, SEQ_TURN);
+                    }
+                    break;
+#else
                     }
                     if (BattleCheckConcluded(wp)) {
                         BattleSetSeq(wp, SEQ_UNKNOWN, 3);
@@ -1589,6 +1618,7 @@ void btlseqTurn(BattleWork* wp) {
                         BattleIncSeq(wp, SEQ_TURN);
                     }
                     break;
+#endif
             }
             break;
 
@@ -1685,7 +1715,11 @@ void btlseqTurn(BattleWork* wp) {
                             unit->currentHp = unit->maxHp;
                         }
                         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &heartX, &heartY, &heartZ);
+#if VERSION <= VERSION_DEMO_US
+                        heartY += BtlUnit_GetHeight(unit);
+#else
                         heartY += unit->sizeMultiplier * BtlUnit_GetHeight(unit);
+#endif
                         effRecoveryEntry(0, n, heartX, heartY, heartZ);
                         evt = evtEntry(subsetevt_happy_heart, 10, 0);
                         if (evt) {
@@ -1727,7 +1761,11 @@ void btlseqTurn(BattleWork* wp) {
                     if (n > 0) {
                         BtlUnit_RecoverFp(unit, n);
                         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &flowerX, &flowerY, &flowerZ);
+#if VERSION <= VERSION_DEMO_US
+                        flowerY += BtlUnit_GetHeight(unit);
+#else
                         flowerY += unit->sizeMultiplier * BtlUnit_GetHeight(unit);
+#endif
                         effRecoveryEntry(1, n, flowerX, flowerY, flowerZ);
                         evt = evtEntry(subsetevt_happy_flower, 10, 0);
                         if (evt) {
@@ -2000,7 +2038,11 @@ void btlseqMove(BattleWork* wp) {
                     id = wp->movePriorityQueue[i];
                     if (id != -1) {
                         unit = BattleGetUnitPtr(wp, id);
+#if VERSION <= VERSION_DEMO_US
+                        if (unit) {
+#else
                         if (unit && unit->movesRemaining > 0) {
+#endif
                             state = unit->moveState;
                             if (state != 10 && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->attributeFlags & kUndead))) {
                                 if (state != 1) {
@@ -2113,8 +2155,12 @@ BOOL BattlePhaseEndCheck(void) {
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         if (wp->movePriorityQueue[i] != -1) {
             unit = BattleGetUnitPtr(wp, wp->movePriorityQueue[i]);
+#if VERSION <= VERSION_DEMO_US
+            if (unit && unit->moveState != 10 && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+#else
             if (unit && unit->moveState != 10 && unit->movesRemaining > 0 &&
                 !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+#endif
                 break;
             }
         }
@@ -2314,6 +2360,16 @@ void btlseqAct(BattleWork* wp) {
                             unit->movesRemaining = 0;
                         }
                         if (unit->movesRemaining <= 0) {
+#if VERSION <= VERSION_DEMO_US
+                            unit->moveState = 10;
+                            unit->activeTurns = 0;
+                            if (!(unit->tokenFlags & kHasRallyWinkStatus)) {
+                                unit->activeTurns = 0;
+                            } else {
+                                unit->tokenFlags &= ~kHasRallyWinkStatus;
+                            }
+                            if (!BtlUnit_GetBelong(unit) && unit->attackPhase == BATTLE_PHASE_PLAYER &&
+#else
                             unit->moveState = 10;
                             if (!(unit->tokenFlags & kHasRallyWinkStatus)) {
                                 unit->activeTurns = 0;
@@ -2321,6 +2377,7 @@ void btlseqAct(BattleWork* wp) {
                                 unit->tokenFlags &= ~kHasRallyWinkStatus;
                             }
                             if (!BtlUnit_GetBelong(unit) && unit->attackPhase == BATTLE_PHASE_PLAYER &&
+#endif
                                 !BattlePhaseEndCheck() && !(wp->flags & BATTLE_FLAG_RESET_TURN)) {
                                 unit->moveColorLv = 0x60;
                             }
@@ -2437,7 +2494,11 @@ void btlseqPhaseFirstProcess(BattleWork* wp) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             unit->moveColorLv = 0xFF;
+#if VERSION <= VERSION_DEMO_US
+            if (unit->moveState == 10) {
+#else
             if (unit->moveState == 10 && !BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
+#endif
                 continue;
             }
             if (unit->attackPhase == BattleGetSeq(wp, SEQ_PHASE) &&

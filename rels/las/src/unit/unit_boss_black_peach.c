@@ -552,8 +552,13 @@ BattleWeapon weapon_peach_dark_drag_last_attack = {
     1, // stylishCommandMultiplier
     1, // reserved_19
     1, // bingoSlotChance
+#if VERSION <= VERSION_DEMO_US
+    1, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+#else
     1, // reserved_1B
     NULL, // hpDamageFn
+#endif
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
@@ -564,7 +569,11 @@ BattleWeapon weapon_peach_dark_drag_last_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
+#if VERSION <= VERSION_DEMO_US
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE, // special
+#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -938,8 +947,13 @@ BattleUnitKind unit_boss_shadow_queen = {
     0,
     0.0f,
     0.0f,
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    "SFX_BOSS_QUEN_DAMAGED1",
+#else
     0.0f,
     "SFX_BOSS_QWEN_DAMAGED1",
+#endif
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
@@ -1052,7 +1066,11 @@ BattleDataEntry queen_data_table[] = {
 
 /** Parts of the Shadow Queen: 6 parts with their hit boxes, defence tables and pose tables. */
 BattleUnitKindPart queen_parts[] = {
+#if VERSION <= VERSION_DEMO_US
+    {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, 0.0f, 47.0f, 0.0f, 0.0f, 47.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, kMainPart | kGuardTargetPart, 0, peach_pose_table},
+#else
     {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, 0.0f, 47.0f, 0.0f, 0.0f, 47.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, kMainPart | kGuardTargetPart, 0, peach_pose_table},
+#endif
     {2, "btl_un_shadow_queen", "c_q_kage_b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, PART_ATTR_NO_TRANSLUCENT_POSE | PART_ATTR_NOT_TARGETABLE | PART_ATTR_NO_SHADOW, 0, queen_pose_table},
     {3, "btl_un_shadow_queen", "c_q_kage_f", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, PART_ATTR_NO_TRANSLUCENT_POSE | PART_ATTR_NOT_TARGETABLE | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, queen_pose_table},
     {4, "btl_un_shadow_queen", "c_q_kage_h", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, PART_ATTR_NO_TRANSLUCENT_POSE | PART_ATTR_NOT_TARGETABLE | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, queen_pose_table},
@@ -1154,8 +1172,13 @@ BattleUnitKind unit_boss_shadow_hand_1 = {
     0,
     0.0f,
     0.0f,
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    "SFX_BOSS_QUEN_DAMAGED1",
+#else
     0.0f,
     "SFX_BOSS_QWEN_DAMAGED1",
+#endif
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
@@ -1224,7 +1247,11 @@ PoseTableEntry queen_hand_1_pose_table[] = {
  * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
  */
 BattleDataEntry queen_hand_1_data_table[] = {
+#if VERSION <= VERSION_DEMO_US
+    {50, queen_hand_1_dead_event},
+#else
     {UNIT_DATA_DEAD_EVENT, queen_hand_1_dead_event},
+#endif
     {0, NULL},
 };
 
@@ -1292,8 +1319,13 @@ BattleUnitKind unit_boss_shadow_hand_2 = {
     0,
     0.0f,
     0.0f,
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    "SFX_BOSS_QUEN_DAMAGED1",
+#else
     0.0f,
     "SFX_BOSS_QWEN_DAMAGED1",
+#endif
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
@@ -1362,7 +1394,11 @@ PoseTableEntry queen_hand_2_pose_table[] = {
  * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
  */
 BattleDataEntry queen_hand_2_data_table[] = {
+#if VERSION <= VERSION_DEMO_US
+    {50, queen_hand_2_dead_event},
+#else
     {UNIT_DATA_DEAD_EVENT, queen_hand_2_dead_event},
+#endif
     {0, NULL},
 };
 
@@ -1430,8 +1466,13 @@ BattleUnitKind unit_boss_shadow_hand_small = {
     0,
     0.0f,
     0.0f,
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    "SFX_BOSS_QUEN_DAMAGED1",
+#else
     0.0f,
     "SFX_BOSS_QWEN_DAMAGED1",
+#endif
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
@@ -1500,7 +1541,11 @@ PoseTableEntry queen_hand_small_pose_table[] = {
  * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
  */
 BattleDataEntry queen_hand_small_data_table[] = {
+#if VERSION <= VERSION_DEMO_US
+    {50, queen_hand_small_dead_event},
+#else
     {UNIT_DATA_DEAD_EVENT, queen_hand_small_dead_event},
+#endif
     {0, NULL},
 };
 
@@ -1629,9 +1674,15 @@ EVT_BEGIN(peach_entry_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     WAIT_MS(300)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(queen_break_slot_flag2_on)
+    RETURN
+#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(queen_break_slot_flag2_on)
     RETURN
+#endif
 EVT_END()
 
 /** Damage event of the Shadow Queen (possessing Peach): the default damage handling. */
@@ -1639,8 +1690,12 @@ EVT_BEGIN(peach_damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_mode, 0, 0)
+#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+#endif
     RETURN
 EVT_END()
 
@@ -2034,10 +2089,15 @@ EVT_BEGIN(peack_attack_dark_drag)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_dark_drag_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
     WAIT_MS(750)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
+    WAIT_MS(750)
+#else
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_dark_drag_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
     WAIT_MS(750)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_dark_drag_attack))
+#endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
     WAIT_MS(750)
     CALL(evt_eff_softdelete, STRING("m_h_s1"))
@@ -2047,8 +2107,12 @@ EVT_BEGIN(peack_attack_dark_drag)
     // The target is dropped back where it stood.
     CALL(btlevtcmd_SetScale, LW(3), 1, 1, 1)
     CALL(battle_evt_majo_disp_on, LW(3), LW(4), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
+#else
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_dark_drag_attack))
+#endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_MS(750)
     // The mist closes in around her again.
@@ -2356,7 +2420,11 @@ EVT_BEGIN(queen_first_attack_message_evt)
     END_IF
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveto, 0, 83, 141, 412, 83, 111, 0, 30, 11)
+#else
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
+#endif
     WAIT_MS(800)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_142"), 0, -2)
     WAIT_MS(300)
@@ -2375,7 +2443,11 @@ EVT_BEGIN(queen_next_attack_message_evt)
     END_IF
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveto, 0, 83, 141, 412, 83, 111, 0, 30, 11)
+#else
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
+#endif
     WAIT_MS(800)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_143"), 0, -2)
     WAIT_MS(300)
@@ -2418,17 +2490,28 @@ EVT_BEGIN(queen_change_hand_small_evt)
     CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         RETURN
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    SET_VALUE(GF(1), 1)
+    BEGIN_INLINE_EVENT
+        IF_INT_NOT_EQUAL(GW(8), -1)
+#else
     END_IF
     SET_VALUE(GF(1), 1)
     BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(GW(8), -1)
             SET_VALUE(GF(1), 0)
+#endif
             CALL_CHILD(PTR(queen_hand_1_dead_event))
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_NOT_EQUAL(GW(9), -1)
+#else
         IF_INT_NOT_EQUAL(GW(9), -1)
             SET_VALUE(GF(1), 0)
+#endif
             CALL_CHILD(PTR(queen_hand_2_dead_event))
         END_IF
     END_INLINE_EVENT
@@ -2441,6 +2524,7 @@ EVT_BEGIN(queen_change_hand_small_evt)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
     END_LOOP
     LOOP(0)
         IF_INT_EQUAL(GF(1), 1)
@@ -2449,6 +2533,16 @@ EVT_BEGIN(queen_change_hand_small_evt)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1000)
+#else
+    END_LOOP
+    LOOP(0)
+        IF_INT_EQUAL(GF(1), 1)
+            BREAK_LOOP
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+    WAIT_MS(1000)
+#endif
     SET_VALUE(GW(11), 2)
     RETURN
 EVT_END()
@@ -2461,11 +2555,18 @@ EVT_BEGIN(queen_change_hand_big_evt)
     CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         RETURN
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    SET_VALUE(GF(1), 1)
+    BEGIN_INLINE_EVENT
+        IF_INT_NOT_EQUAL(GW(10), -1)
+#else
     END_IF
     SET_VALUE(GF(1), 1)
     BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(GW(10), -1)
             SET_VALUE(GF(1), 0)
+#endif
             CALL_CHILD(PTR(queen_hand_small_dead_event))
         END_IF
     END_INLINE_EVENT
@@ -2484,6 +2585,7 @@ EVT_BEGIN(queen_change_hand_big_evt)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
     END_LOOP
     LOOP(0)
         IF_INT_EQUAL(GF(1), 1)
@@ -2492,6 +2594,16 @@ EVT_BEGIN(queen_change_hand_big_evt)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1000)
+#else
+    END_LOOP
+    LOOP(0)
+        IF_INT_EQUAL(GF(1), 1)
+            BREAK_LOOP
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+    WAIT_MS(1000)
+#endif
     SET_VALUE(GW(11), 1)
     RETURN
 EVT_END()
@@ -2501,23 +2613,48 @@ EVT_BEGIN(queen_hand_big_life_check_evt)
     CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         RETURN
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    IF_INT_NOT_EQUAL(GW(8), -1)
+#else
     END_IF
     SET_VALUE(GF(0), 1)
     IF_INT_EQUAL(GW(8), -1)
+#endif
+#if VERSION <= VERSION_DEMO_US
+        RETURN
+    END_IF
+    IF_INT_NOT_EQUAL(GW(9), -1)
+        RETURN
+    END_IF
+#endif
         SET_VALUE(GF(0), 0)
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_1), 0)
         SET_VALUE(GW(8), LW(0))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_2), 0)
+#else
         CALL(btlevtcmd_OffPartsAttribute, GW(8), 1, kNotTargetable)
         CALL(btlevtcmd_OffAttribute, GW(8), kUnitNoHpGauge)
     END_IF
     IF_INT_EQUAL(GW(9), -1)
         SET_VALUE(GF(0), 0)
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_2), 0)
+#endif
         SET_VALUE(GW(9), LW(0))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_OffPartsAttribute, GW(8), 1, kNotTargetable)
+        CALL(btlevtcmd_OffPartsAttribute, GW(9), 1, kNotTargetable)
+    CALL(btlevtcmd_OffAttribute, GW(8), kUnitNoHpGauge)
+        CALL(btlevtcmd_OffAttribute, GW(9), kUnitNoHpGauge)
+    END_IF
+    LOOP(0)
+#else
         CALL(btlevtcmd_OffPartsAttribute, GW(9), 1, kNotTargetable)
         CALL(btlevtcmd_OffAttribute, GW(9), kUnitNoHpGauge)
     END_IF
     LOOP(0)
+#endif
         IF_INT_EQUAL(GF(0), 1)
             BREAK_LOOP
         END_IF
@@ -2552,7 +2689,11 @@ EVT_END()
 EVT_BEGIN(queen_hp_drain_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveto, 0, 83, 141, 412, 83, 111, 0, 30, 11)
+#else
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
+#endif
     WAIT_MS(800)
     // The queen calls Mario a troublesome little pest.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_144"), 0, -2)
@@ -2595,6 +2736,22 @@ EVT_BEGIN(queen_hp_drain_evt)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(queen_hp_drain_3_evt)
+#if VERSION <= VERSION_DEMO_US
+    END_INLINE_EVENT
+    CALL(queen_hp_drain_4_evt)
+    BEGIN_INLINE_EVENT
+        SET_VALUE(LW(0), 127)
+        LOOP(63)
+            SUBTRACT(LW(0), 2)
+            CALL(evt_snd_sfx_vol, LW(11), LW(0))
+            WAIT_MS(31)
+        END_LOOP
+        CALL(evt_snd_sfxoff, LW(11))
+    END_INLINE_EVENT
+    CALL(queen_hp_drain_4_evt)
+    IF_INT_GREATER(LW(10), 99)
+        SET_VALUE(LW(10), 99)
+#else
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), 127)
@@ -2608,6 +2765,7 @@ EVT_BEGIN(queen_hp_drain_evt)
     CALL(queen_hp_drain_4_evt)
     IF_INT_GREATER(LW(10), 7)
         SET_VALUE(LW(10), 7)
+#endif
     END_IF
     IF_INT_GREATER(LW(10), 99)
         SET_VALUE(LW(10), 99)
@@ -2630,7 +2788,11 @@ EVT_BEGIN(queen_hp_drain_evt)
     CALL(evt_eff_softdelete, STRING("m_h_s4_"))
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveto, 0, 83, 141, 412, 83, 111, 0, 30, 11)
+#else
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
+#endif
     WAIT_MS(800)
     // She says she has recovered and will punish Mario for resisting.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_142_01"), 0, -2)
@@ -2650,7 +2812,11 @@ EVT_END()
 EVT_BEGIN(queen_hp_drain_evt_miss)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveto, 0, 83, 141, 412, 83, 111, 0, 30, 11)
+#else
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
+#endif
     WAIT_MS(800)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_144"), 0, -2)
     WAIT_MS(300)
@@ -2677,7 +2843,11 @@ EVT_BEGIN(queen_first_damage_evt)
     CALL(evt_msg_print_battle_party, STRING("stg8_las_164"))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveto, 0, 83, 141, 412, 83, 111, 0, 1, 11)
+#else
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 1, 11)
+#endif
     WAIT_MS(350)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_165"), 0, -2)
     WAIT_MS(300)
@@ -2691,7 +2861,11 @@ EVT_END()
 EVT_BEGIN(queen_2_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveto, 0, 83, 141, 412, 83, 111, 0, 30, 11)
+#else
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
+#endif
     WAIT_MS(800)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_166"), 0, -2)
     WAIT_MS(300)
@@ -2705,7 +2879,11 @@ EVT_END()
 EVT_BEGIN(queen_4_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveto, 0, 83, 141, 412, 83, 111, 0, 30, 11)
+#else
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
+#endif
     WAIT_MS(800)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_167"), 0, -2)
     WAIT_MS(300)
@@ -2718,6 +2896,25 @@ EVT_END()
 /** Event script: the queen's line when she is about to die (stg8_las_168). */
 EVT_BEGIN(queen_dead_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    WAIT_MS(250)
+    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
+    WAIT_MS(800)
+    CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("KRT_D_1"))
+    CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("KRT_D_1"))
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("KRT_S_1"))
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRT_D_1"))
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("KRT_S_1"))
+    IF_INT_NOT_EQUAL(GW(8), -1)
+        CALL(btlevtcmd_AnimeChangePose, GW(8), 1, STRING("KRT_D_1"))
+    END_IF
+    IF_INT_NOT_EQUAL(GW(9), -1)
+        CALL(btlevtcmd_AnimeChangePose, GW(9), 1, STRING("KRT_D_1"))
+    END_IF
+    CALL(evt_msg_print, 2, STRING("stg8_las_168"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 30, 11)
     WAIT_MS(800)
@@ -2733,12 +2930,20 @@ EVT_BEGIN(queen_dead_hp_msg_evt)
         CALL(btlevtcmd_AnimeChangePose, GW(9), 1, STRING("KRT_D_1"))
     END_IF
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_168"), 0, -2)
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_StatusWindowOnOff, 1)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_S_1"))
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    WAIT_MS(1000)
+#else
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_S_1"))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(1000)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+#endif
     RETURN
 EVT_END()
 
@@ -3047,9 +3252,15 @@ EVT_BEGIN(queen_attack_black_wave)
     IF_INT_NOT_EQUAL(GW(9), -1)
         CALL(btlevtcmd_AnimeChangePose, GW(9), 1, STRING("KRT_S_1"))
     END_IF
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_peach_black_wave_attack))
     SET_VALUE(LF(0), 0)
     LABEL(0)
+#else
+    CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_peach_black_wave_attack))
+    SET_VALUE(LF(0), 0)
+    LABEL(0)
+#endif
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_wave_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -3078,6 +3289,15 @@ EVT_BEGIN(queen_attack_black_wave)
     GOTO(95)
     // The attack connects.
     LABEL(91)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    IF_INT_EQUAL(LF(0), 0)
+        // Deal the damage, reduced by the action command defence.
+        CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_wave_attack))
+        SET_VALUE(LF(0), 1)
+    END_IF
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_wave_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     IF_INT_EQUAL(LF(0), 0)
         // Deal the damage, reduced by the action command defence.
@@ -3085,6 +3305,7 @@ EVT_BEGIN(queen_attack_black_wave)
         SET_VALUE(LF(0), 1)
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_wave_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#endif
     LABEL(95)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -3143,8 +3364,12 @@ EVT_BEGIN(queen_attack_black_energy)
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(5))
     ADD(LW(1), LW(5))
     ADD(LW(1), -15)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff, STRING(""), STRING("charge"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 60, 0, 0, 0, 0, 0, 0)
+#else
     CALL(evt_eff, STRING(""), STRING("charge"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 60, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_BOSS_BPCH_DARK_POWER1"), LW(0), LW(1), LW(2), 0)
+#endif
     WAIT_MS(1000)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_black_energy_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, PTR(&weapon_peach_black_energy_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -3194,9 +3419,15 @@ EVT_BEGIN(queen_attack_bress1)
     WAIT_MS(80)
     // She settles back.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRT_S_1"))
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_peach_black_sigh_attack))
     SET_VALUE(LF(0), 0)
     LABEL(0)
+#else
+    CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_peach_black_sigh_attack))
+    SET_VALUE(LF(0), 0)
+    LABEL(0)
+#endif
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_sigh_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -3225,6 +3456,15 @@ EVT_BEGIN(queen_attack_bress1)
     GOTO(95)
     // The attack connects.
     LABEL(91)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    IF_INT_EQUAL(LF(0), 0)
+        // Deal the damage, reduced by the action command defence.
+        CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_sigh_attack))
+        SET_VALUE(LF(0), 1)
+    END_IF
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_sigh_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     IF_INT_EQUAL(LF(0), 0)
         // Deal the damage, reduced by the action command defence.
@@ -3232,6 +3472,7 @@ EVT_BEGIN(queen_attack_bress1)
         SET_VALUE(LF(0), 1)
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_sigh_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#endif
     LABEL(95)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -3289,9 +3530,15 @@ EVT_BEGIN(queen_attack_bress2)
     WAIT_MS(80)
     // She settles back.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRT_S_1"))
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_peach_black_temptation_attack))
     SET_VALUE(LF(0), 0)
     LABEL(0)
+#else
+    CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_peach_black_temptation_attack))
+    SET_VALUE(LF(0), 0)
+    LABEL(0)
+#endif
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_temptation_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -3320,6 +3567,15 @@ EVT_BEGIN(queen_attack_bress2)
     GOTO(95)
     // The attack connects.
     LABEL(91)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    IF_INT_EQUAL(LF(0), 0)
+        // Deal the damage, reduced by the action command defence.
+        CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_temptation_attack))
+        SET_VALUE(LF(0), 1)
+    END_IF
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_temptation_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     IF_INT_EQUAL(LF(0), 0)
         // Deal the damage, reduced by the action command defence.
@@ -3327,6 +3583,7 @@ EVT_BEGIN(queen_attack_bress2)
         SET_VALUE(LF(0), 1)
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_temptation_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#endif
     LABEL(95)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -3385,9 +3642,15 @@ EVT_BEGIN(queen_attack_bress3)
     WAIT_MS(80)
     // She settles back.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRT_S_1"))
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_peach_black_poison_attack))
     SET_VALUE(LF(0), 0)
     LABEL(0)
+#else
+    CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_peach_black_poison_attack))
+    SET_VALUE(LF(0), 0)
+    LABEL(0)
+#endif
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_poison_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -3416,6 +3679,15 @@ EVT_BEGIN(queen_attack_bress3)
     GOTO(95)
     // The attack connects.
     LABEL(91)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    IF_INT_EQUAL(LF(0), 0)
+        // Deal the damage, reduced by the action command defence.
+        CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_poison_attack))
+        SET_VALUE(LF(0), 1)
+    END_IF
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_poison_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     IF_INT_EQUAL(LF(0), 0)
         // Deal the damage, reduced by the action command defence.
@@ -3423,6 +3695,7 @@ EVT_BEGIN(queen_attack_bress3)
         SET_VALUE(LF(0), 1)
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_poison_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#endif
     LABEL(95)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -3452,7 +3725,11 @@ EVT_BEGIN(queen_attack_event)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
             CALL_CHILD(PTR(queen_attack_black_energy))
             CASE_EQUAL(3)
+#if VERSION <= VERSION_DEMO_US
+            CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 30, 30, 30)
+#else
             CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 20, 30, 30)
+#endif
             SWITCH(LW(0))
                 CASE_EQUAL(0)
                 CALL_CHILD(PTR(queen_attack_black_thunder))
@@ -3481,7 +3758,11 @@ EVT_BEGIN(queen_attack_event)
 #if VERSION >= VERSION_US
         CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 60, 20, 30, 30)
 #else
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 50, 30, 30, 30)
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 30, 20, 30, 30)
+#endif
 #endif
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEFENSE_UP, LW(1))
         IF_INT_EQUAL(LW(1), 1)
@@ -3530,10 +3811,17 @@ EVT_BEGIN(queen_damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_S_1"))
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+#else
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_S_1"))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
+#endif
 EVT_END()
 
 /** Dead event of the Shadow Queen: removes whichever big or small hands are still alive and kills the queen unit. */
@@ -3543,12 +3831,21 @@ EVT_BEGIN(queen_dead_event)
     CALL_CHILD(PTR(queen_dead_hp_msg_evt))
     CALL(evt_eff_softdelete, STRING("m_q"))
     SET_VALUE(GF(0), 0)
+#if VERSION <= VERSION_DEMO_US
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("KRT_S_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("KRT_S_1"))
         // Her head, body and hands sink away as the mist fades out.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_S_1"))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRT_O_1"))
+#else
+    BEGIN_INLINE_EVENT
+        CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("KRT_S_1"))
+        CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("KRT_S_1"))
+        // Her head, body and hands sink away as the mist fades out.
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_S_1"))
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRT_O_1"))
+#endif
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("KRT_S_1"))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("KRT_S_1"))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 5, STRING("KRT_O_2"))
@@ -3567,12 +3864,19 @@ EVT_BEGIN(queen_dead_event)
             CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 4, LW(0))
             CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 5, LW(0))
             SUBTRACT(LW(0), 4)
+#if VERSION <= VERSION_DEMO_US
+            WAIT_MS(10)
+#else
             WAIT_MS(50)
+#endif
         END_LOOP
         CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 2, 0)
         CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 3, 0)
         CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 4, 0)
         CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 5, 0)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GF(0), 1)
+#else
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -3593,6 +3897,7 @@ EVT_BEGIN(queen_dead_event)
             WAIT_MS(125)
         END_LOOP
         CALL(evt_snd_sfxoff, LW(10))
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(GW(8), -1)
@@ -3663,7 +3968,11 @@ EVT_BEGIN(queen_entry_event)
     CALL(evt_msg_print_battle_party, STRING("stg8_las_161"))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveto, 0, 83, 141, 412, 83, 111, 0, 1, 11)
+#else
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 1, 11)
+#endif
     WAIT_MS(350)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_162"), 0, -2)
     WAIT_MS(300)
@@ -3996,12 +4305,20 @@ EVT_BEGIN(queen_hand_1_dead_event)
         WAIT_MS(5)
     END_LOOP
     CALL(btlevtcmd_SetAlpha, GW(8), 1, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff_softdelete, STRING("m_h_1"))
+    WAIT_FRAMES(40)
+    CALL(btlevtcmd_ClearAllStatus, GW(8))
+    CALL(btlevtcmd_KillUnit, GW(8), 0)
+    SET_VALUE(GW(8), -1)
+#else
     CALL(evt_eff_softdelete, STRING("m_h_1"))
     WAIT_FRAMES(40)
     CALL(btlevtcmd_ClearAllStatus, GW(8))
     CALL(btlevtcmd_KillUnit, GW(8), 0)
     SET_VALUE(GW(8), -1)
     SET_VALUE(GF(1), 1)
+#endif
     RETURN
 EVT_END()
 
@@ -4089,12 +4406,20 @@ EVT_BEGIN(queen_hand_2_dead_event)
         WAIT_MS(5)
     END_LOOP
     CALL(btlevtcmd_SetAlpha, GW(9), 1, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff_softdelete, STRING("m_h_2"))
+    WAIT_FRAMES(40)
+    CALL(btlevtcmd_ClearAllStatus, GW(9))
+    CALL(btlevtcmd_KillUnit, GW(9), 0)
+    SET_VALUE(GW(9), -1)
+#else
     CALL(evt_eff_softdelete, STRING("m_h_2"))
     WAIT_FRAMES(40)
     CALL(btlevtcmd_ClearAllStatus, GW(9))
     CALL(btlevtcmd_KillUnit, GW(9), 0)
     SET_VALUE(GW(9), -1)
     SET_VALUE(GF(1), 1)
+#endif
     RETURN
 EVT_END()
 
@@ -4207,10 +4532,15 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_dark_drag_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
     WAIT_MS(750)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
+    WAIT_MS(750)
+#else
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_dark_drag_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
     WAIT_MS(750)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_dark_drag_attack))
+#endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 0, LW(5))
     WAIT_MS(750)
     CALL(evt_eff_softdelete, STRING("m_h_s1_"))
@@ -4220,8 +4550,12 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     // The target is dropped back where it stood.
     CALL(btlevtcmd_SetScale, LW(3), 1, 1, 1)
     CALL(battle_evt_majo_disp_on, LW(3), LW(4), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
+#else
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_dark_drag_attack))
+#endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_MS(750)
     LABEL(95)
@@ -4231,6 +4565,9 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     CALL(evt_eff, STRING("m_h_s1"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("m_h_s2"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("m_h_s3"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    BEGIN_INLINE_EVENT
+#endif
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HAND_APPEAR1_2"), 0)
 #if VERSION == VERSION_EU
     IF_INT_NOT_EQUAL(LW(15), 0)
@@ -4238,6 +4575,9 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     END_IF
 #endif
     CALL(queen_hand_small_drag_3_evt)
+#if VERSION <= VERSION_DEMO_US
+    END_INLINE_EVENT
+#endif
     RETURN
 EVT_END()
 
@@ -4311,13 +4651,22 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_1000hand_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
     WAIT_MS(500)
-    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_1000hand_attack))
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
+    WAIT_MS(500)
+#else
+    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_1000hand_attack))
+#endif
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(500)
+#else
     WAIT_MS(500)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_1000hand_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
     WAIT_MS(500)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_1000hand_attack))
+#endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_MS(500)
     WAIT_MS(1000)
@@ -4327,6 +4676,16 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_eff, STRING("m_h_s1"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("m_h_s2"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_eff, STRING("m_h_s3"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
+    IF_INT_NOT_EQUAL(LW(15), 0)
+        CALL(btlevtcmd_WaitEventEnd, LW(15))
+    END_IF
+    BEGIN_INLINE_EVENT
+        CALL(queen_hand_small_1000hand_2_evt)
+    END_INLINE_EVENT
+    WAIT_MS(1000)
+#else
     CALL(evt_eff, STRING("m_h_s3"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
 #if VERSION >= VERSION_US
     IF_INT_NOT_EQUAL(LW(15), 0)
@@ -4335,6 +4694,7 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
 #endif
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HAND_APPEAR1_2"), 0)
     CALL(queen_hand_small_1000hand_2_evt)
+#endif
     RETURN
 EVT_END()
 
@@ -4389,12 +4749,20 @@ EVT_BEGIN(queen_hand_small_dead_event)
     CALL(evt_eff_softdelete, STRING("m_h_s2"))
     CALL(evt_eff_softdelete, STRING("m_h_s3"))
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HAND_GOOUT1"), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(queen_hand_small_dead_evt)
+    WAIT_FRAMES(40)
+    CALL(btlevtcmd_ClearAllStatus, GW(10))
+    CALL(btlevtcmd_KillUnit, GW(10), 0)
+    SET_VALUE(GW(10), -1)
+#else
     CALL(queen_hand_small_dead_evt)
     WAIT_FRAMES(40)
     CALL(btlevtcmd_ClearAllStatus, GW(10))
     CALL(btlevtcmd_KillUnit, GW(10), 0)
     SET_VALUE(GW(10), -1)
     SET_VALUE(GF(1), 1)
+#endif
     RETURN
 EVT_END()
 
@@ -4447,7 +4815,11 @@ USER_FUNC(queen_hand_small_1000hand_2_evt) {
                 elem->speed = 1.0f + irand(200) / 100.0f;
                 elem->pos.x = (i % 10) * 20 + irand(15);
                 elem->pos.y = hand_wp->y - elem->ofs;
+#if VERSION <= VERSION_DEMO_US
+                elem->pos.z = (i / 10) * -20 + 70 + irand(15);
+#else
                 elem->pos.z = (i / 10) * -15 + 70 + irand(15);
+#endif
                 pose->dir = irand(20) - 10;
                 (*pose->mtx)[0][0] = 50.0f / (50.0f + irand(50));
                 (*pose->mtx)[1][1] = 50.0f / (50.0f + irand(50));
@@ -4548,7 +4920,11 @@ USER_FUNC(queen_hand_small_drag_1_evt) {
                 elem->speed = 1.0f + irand(200) / 100.0f;
                 elem->pos.x = (i % 10) * 20 - 200 + irand(15);
                 elem->pos.y = hand_wp->y - elem->ofs;
+#if VERSION <= VERSION_DEMO_US
+                elem->pos.z = (i / 10) * -20 + 70 + irand(15);
+#else
                 elem->pos.z = (i / 10) * -15 + 70 + irand(15);
+#endif
                 pose->dir = irand(20) - 10;
                 (*pose->mtx)[0][0] = 50.0f / (50.0f + irand(50));
                 (*pose->mtx)[1][1] = 50.0f / (50.0f + irand(50));
@@ -4664,7 +5040,11 @@ USER_FUNC(queen_hand_small_drag_3_evt) {
                 elem->speed = 1.0f + irand(200) / 100.0f;
                 elem->pos.x = (i % 10) * 20 + irand(15);
                 elem->pos.y = hand_wp->y - elem->ofs;
+#if VERSION <= VERSION_DEMO_US
+                elem->pos.z = (i / 10) * -20 + 70 + irand(15);
+#else
                 elem->pos.z = (i / 10) * -15 + 70 + irand(15);
+#endif
                 pose->dir = irand(20) - 10;
                 (*pose->mtx)[0][0] = 50.0f / (50.0f + irand(50));
                 (*pose->mtx)[1][1] = 50.0f / (50.0f + irand(50));
@@ -4792,7 +5172,11 @@ USER_FUNC(queen_hand_small_entry_evt) {
                 elem->speed = 1.0f + irand(200) / 100.0f;
                 elem->pos.x = (i % 10) * 20 + irand(15);
                 elem->pos.y = hand_wp->y - elem->ofs;
+#if VERSION <= VERSION_DEMO_US
+                elem->pos.z = (i / 10) * -20 + 70 + irand(15);
+#else
                 elem->pos.z = (i / 10) * -15 + 70 + irand(15);
+#endif
                 pose->dir = irand(20) - 10;
                 (*pose->mtx)[0][0] = 50.0f / (50.0f + irand(50));
                 (*pose->mtx)[1][1] = 50.0f / (50.0f + irand(50));
@@ -4821,7 +5205,11 @@ USER_FUNC(queen_hand_small_entry_evt) {
 }
 
 USER_FUNC(slot_init) {
+#if VERSION <= VERSION_DEMO_US
+    BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
+#else
     BattleBreakSlotGetPtr()->flags |= 4;
+#endif
     return EVT_RETURN_DONE;
 }
 
@@ -4868,7 +5256,11 @@ USER_FUNC(queen_hp_drain_5_evt) {
                 elem->speed = 1.0f + irand(200) / 100.0f;
                 elem->pos.x = (i % 10) * 20 + irand(15);
                 elem->pos.y = hand_wp->y - elem->ofs;
+#if VERSION <= VERSION_DEMO_US
+                elem->pos.z = (i / 10) * -20 + 70 + irand(15);
+#else
                 elem->pos.z = (i / 10) * -15 + 70 + irand(15);
+#endif
                 pose->dir = irand(20) - 10;
                 (*pose->mtx)[0][0] = 50.0f / (50.0f + irand(50));
                 (*pose->mtx)[1][1] = 50.0f / (50.0f + irand(50));
@@ -5004,7 +5396,11 @@ USER_FUNC(queen_hp_drain_2_evt) {
                 elem->speed = 1.0f + irand(200) / 100.0f;
                 elem->pos.x = (i % 10) * 40 - 200 + irand(15);
                 elem->pos.y = hand_wp->y - elem->ofs;
+#if VERSION <= VERSION_DEMO_US
+                elem->pos.z = (i / 10) * -20 + 270 + irand(15);
+#else
                 elem->pos.z = (i / 10) * -15 + 270 + irand(15);
+#endif
                 pose->dir = irand(20) - 10;
                 (*pose->mtx)[0][0] = 50.0f / (50.0f + irand(50));
                 (*pose->mtx)[1][1] = 50.0f / (50.0f + irand(50));
@@ -5118,7 +5514,11 @@ USER_FUNC(peach_hand1000_dark_drag_1_evt) {
                 elem->speed = 1.0f + irand(200) / 100.0f;
                 elem->pos.x = (i % 10) * 20 - 200 + irand(15);
                 elem->pos.y = hand_wp->y - elem->ofs;
+#if VERSION <= VERSION_DEMO_US
+                elem->pos.z = (i / 10) * -20 + 70 + irand(15);
+#else
                 elem->pos.z = (i / 10) * -15 + 70 + irand(15);
+#endif
                 pose->dir = irand(20) - 10;
                 (*pose->mtx)[0][0] = 50.0f / (50.0f + irand(50));
                 (*pose->mtx)[1][1] = 50.0f / (50.0f + irand(50));
@@ -5170,6 +5570,9 @@ USER_FUNC(peach_hand1000_dark_drag_1_evt) {
 USER_FUNC(eff_queen_set_alpha_evt) {
     s32 alpha = evtGetValue(event, *event->args);
 
+#if VERSION <= VERSION_DEMO_US
+    ((s32*)effNameToPtr("m_q2")->userdata)[10] = alpha;
+#else
     ((s32*)effNameToPtr("m_q2")->userdata)[10] = alpha;
     return EVT_RETURN_DONE;
 }
@@ -5177,6 +5580,7 @@ USER_FUNC(eff_queen_set_alpha_evt) {
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000af38, JP las .text+0xAE6C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(queen_break_slot_flag2_on) {
     BattleBreakSlotGetPtr()->flags |= 2;
+#endif
     return EVT_RETURN_DONE;
 }
 

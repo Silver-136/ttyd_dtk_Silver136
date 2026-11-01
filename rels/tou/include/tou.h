@@ -2,13 +2,18 @@
 
 #pragma once
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "evt/evt_word.h"
 #include "evt/evt_cmd.h"
 
 extern EvtWord all_juyoitem_lecture_rel[];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord all_party_lecture[];
+#else
 extern EvtWord all_party_lecture[];
 extern EvtWord evt_gardman_spawn[];
+#endif
 extern EvtWord evt_tou_08_cake[];
 extern EvtWord evt_tou_bed[];
 extern EvtWord evt_tou_chibi_yoshi[];

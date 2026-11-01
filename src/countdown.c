@@ -101,12 +101,21 @@ void countDownMain(void) {
                 wp->state++;
             }
             break;
+#if VERSION <= VERSION_DEMO_US
+            case 1:
+                if ((wp->flags & COUNTDOWN_FLAG_TIME_UP) != 0) {
+                    psndSFXOff(wp->sfxId);
+                    wp->sfxId = -1;
+                }
+                break;
+#else
         case 1:
             if ((wp->flags & COUNTDOWN_FLAG_TIME_UP) != 0) {
                 psndSFXOff(wp->sfxId);
                 wp->sfxId = -1;
             }
             break;
+#endif
         case 2:
             if (++wp->counter < 30) {
                 wp->offX = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 300.0f, wp->counter, 30);

@@ -1,6 +1,7 @@
 // Ext driver: draws many copies of one paper animation as flat textured quads with shadows; the
 // animation frame is rendered to a texture first.
 
+#include "version.h"
 #include "driver/extdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -471,11 +472,19 @@ void extLoadTev(void) {
 
 static u8 shadow_dl[32] ATTRIBUTE_ALIGN(32) = {
     0x80, 0x00, 0x04, 0x00, 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03,
+#if VERSION <= VERSION_DEMO_US
+};
+
+// The retail builds place shadow_vtx in small data; the demo keeps it in .data
+/** Corners of the shared shadow quad, 2.4 units square and flat on the ground, drawn under every copy. */
+static f32 shadow_vtx[16] = {
+#else
 };
 
 // The game keeps this 64-byte array in .sdata, above the -sdata 48 limit, hence the explicit section (layout debt);
 // 12 of the 16 floats are set
 __declspec(section ".sdata") static f32 shadow_vtx[16] = {
+#endif
     -1.2f, 0.0f, -1.2f,
     -1.2f, 0.0f, 1.2f,
     1.2f, 0.0f, 1.2f,

@@ -236,7 +236,11 @@ void mot_hip(void) {
             break;
         }
         fall = marioGetFallSpd();
+#if VERSION <= VERSION_DEMO_US
+            hit = marioChkLandon(&y, fall);
+#else
         hit = marioSearchGround(&y, &tmp1, &tmp2, fall, fall);
+#endif
         if (fall < -100.0f) {
             fall = -100.0f;
             mario->jumpSnapY = 0.0f;
@@ -254,17 +258,27 @@ void mot_hip(void) {
             mario->mot.hip.angle = 0.0f;
             mario->rotOfs.y = 0.0f;
             mario->airTimer = 0;
+#if VERSION <= VERSION_DEMO_US
+                mario->jumpPeakAirTime = 0;
+                mario->dispOfs2.y = 0.0f;
+                marioChgPose("M_A_1B");
+#else
             mario->jumpPeakAirTime = 0;
             mario->dispOfs2.y = 0.0f;
             marioChgPose("M_A_1B");
+#endif
             attr = hitGetAttr(hit);
             if (attr & HIT_ATTR_WATER_HAZARD) {
+#if VERSION <= VERSION_DEMO_US
+                    set_damage_root_ypos(mario->position.y);
+#else
                 set_damage_root_ypos(mario->position.y);
                 d = -0.4f;
                 mario->jumpVelocityY = d;
                 mario->jumpAccelerationY = d;
                 mario->jumpJerkY = 0.0f;
                 mario->jumpSnapY = 0.0f;
+#endif
                 marioChgMot(MARIO_MOTION_DAMAGE);
                 return;
             }
@@ -278,8 +292,13 @@ void mot_hip(void) {
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;
             }
+#if VERSION <= VERSION_DEMO_US
+                psndSFXOn_3D((char*)0x159, &mario->position);
+                evtEntry(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIO_DROP2), &mario->position);
             evtEntryType(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0, 0);
+#endif
         } else {
             mario->position.y += fall;
         }
@@ -317,10 +336,24 @@ void mot_hip(void) {
         mario->floorMove.z = 0.0f;
         mario->floorMove.y = 0.0f;
     }
+#if VERSION <= VERSION_DEMO_US
+}
+
+// JP and US do not inline chkground into mot_hip (PAL's longer copy and the demo's are too big anyway)
+// FAKE: keeps the following function(s) out of line as in the target; removing it changes the code
+#pragma dont_inline on
+/**
+ * Landing check for the spin jump: 0 while in the air,
+ * 1 when the floor sent Mario into the water (0x200) or spike (0xC00) damage motion, 2 for a normal landing.
+ * Also resets the spin rotation and turns camera y-follow back on (not in background mode in the PAL release).
+ */
+s32 chkground(void) {
+#else
 }
 
 #pragma dont_inline on
 s32 chkground(void) {
+#endif
     MarioWork* mario;
     HitEntry* hit;
     u32 attr;
@@ -349,6 +382,7 @@ s32 chkground(void) {
 #endif
         attr = hitGetAttr(hit);
         if (attr & HIT_ATTR_WATER_HAZARD) {
+#if VERSION <= VERSION_DEMO_US
             set_damage_root_ypos(mario->position.y);
             v = -0.4f;
             mario->jumpVelocityY = v;
@@ -356,6 +390,15 @@ s32 chkground(void) {
             mario->jumpJerkY = 0.0f;
             mario->jumpSnapY = 0.0f;
             marioChgMot(MARIO_MOTION_DAMAGE);
+#else
+            set_damage_root_ypos(mario->position.y);
+            v = -0.4f;
+            mario->jumpVelocityY = v;
+            mario->jumpAccelerationY = v;
+            mario->jumpJerkY = 0.0f;
+            mario->jumpSnapY = 0.0f;
+            marioChgMot(MARIO_MOTION_DAMAGE);
+#endif
             return 1;
         }
         if (attr & (HIT_ATTR_TOGE | 0x400)) {
@@ -366,12 +409,21 @@ s32 chkground(void) {
         return 2;
     }
     return 0;
+#if VERSION <= VERSION_DEMO_US
 }
 
 #pragma dont_inline reset
 
 /** Cleanup when the spin jump motion ends: resets the spin offsets and air timers and stops the looping sounds. */
 void mot_hip_post(void) {
+#else
+}
+
+#pragma dont_inline reset
+
+/** Cleanup when the spin jump motion ends: resets the spin offsets and air timers and stops the looping sounds. */
+void mot_hip_post(void) {
+#endif
     MarioWork* mario;
 
     mario = marioGetPtr();

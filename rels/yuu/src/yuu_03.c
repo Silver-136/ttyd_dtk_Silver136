@@ -57,11 +57,17 @@ typedef struct RyushiWork {
 } RyushiWork;
 static void* yuunpc_wp;
 s32 ryuwp;
+#if VERSION <= VERSION_DEMO_US
+RyushiWork* xwp;
+Monte* yuu_03_monte_p;
+static USER_FUNC(evt_ryushi_init);
+#else
 RyushiWork* xwp;
 Monte* yuu_03_monte_p;
 static void polygon(f32 x, f32 y, f32 w, f32 h, f32 u, f32 v);
 static f32 randf(f32 min, f32 max);
 USER_FUNC(evt_ryushi_init);
+#endif
 BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, SlitWork* data);
 #define REVISE360(a) ((3600.0f + (a)) - (s32)((3600.0f + (a)) / 360.0f) * 360)
 
@@ -234,8 +240,13 @@ USER_FUNC(yuunpc_go) {
 static USER_FUNC(evt_nomal_cange) {
     MarioWork* mario = marioGetPtr();
 
+#if VERSION <= VERSION_DEMO_US
+    if (isFirstCall) {
+        marioRollCancel();
+#else
     if (isFirstCall) {
         marioRollTryCancel();
+#endif
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             motSlitCancel3();
         }
@@ -476,13 +487,21 @@ USER_FUNC(evt_ryushi) {
         case 2:
         case 3:
         case 4:
+#if VERSION <= VERSION_DEMO_US
+            speed = 3.3333333f;
+#else
             speed = 2.9166667f;
+#endif
             alphaScale = 1.0f;
             break;
         case 6:
         case 7:
         case 8:
+#if VERSION <= VERSION_DEMO_US
+            speed = 3.3333333f;
+#else
             speed = 2.9166667f;
+#endif
             alphaScale = 1.0f;
             break;
     }
@@ -559,6 +578,9 @@ USER_FUNC(evt_ryushi) {
 }
 
 /** Event wrapper that runs yuu_03_icon_monte_entry as a blocking view event. */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ryushi_event)
+#else
 EVT_BEGIN(yuu_03_icon_monte_entry_evt)
     CALL(yuu_03_icon_monte_entry)
     RETURN
@@ -569,6 +591,7 @@ EVT_END()
  * and updates them each frame until GW(0) becomes 1 (gust over) or 2 (abort).
  */
 EVT_BEGIN(ryushi_event)
+#endif
     SET_VALUE(GW(0), 0)
     CALL(evt_ryushi_clr, LW(1))
     LOOP(0)
@@ -623,10 +646,18 @@ EVT_BEGIN(minigame04_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1520.0f), FLOAT(335.0f), FLOAT(850.0f), FLOAT(-1520.0f), FLOAT(65.0f), FLOAT(-25.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_cam3d_evt_set, FLOAT(1285.0f), FLOAT(334.0f), FLOAT(850.0f), FLOAT(1285.0f), FLOAT(65.0f), FLOAT(-25.0f), 5000, 0)
+#else
     CALL(evt_cam3d_evt_set, FLOAT(1285.0f), FLOAT(334.0f), FLOAT(850.0f), FLOAT(1285.0f), FLOAT(65.0f), FLOAT(-25.0f), 10000, EASING_LINEAR)
+#endif
     WAIT_MS(1000)
     CALL(evt_yuutitle_alloc, 0, 0, STRING("menu_title_minigame4"))
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(2000)
+#else
     WAIT_MS(7000)
+#endif
     CALL(evt_yuutitle_free)
     WAIT_MS(2000)
     RETURN
@@ -679,29 +710,79 @@ EVT_BEGIN(minigame04_start)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_MINIGAME1"))
     CALL(eff_call_minigame, 0, 0, 0, 500)
     WAIT_MS(3000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_key_onoff, 1)
+#else
     CALL(evt_mario_set_enable_key, 352)
     CALL(evt_cam_letter_box_onoff, 0, 0)
     CALL(evt_cam_letter_box_disable, 1)
+#endif
     CALL(yuunpc_go)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_yuucounter_alloc, 0, 70, 2, 701)
     CALL(evt_mario_key_onoff, 1)
     RETURN
+#else
+    CALL(evt_yuucounter_alloc, 0, 70, 2, 701)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+#endif
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(minigame04_end)
+#else
 EVT_BEGIN(minigame04_end)
     CALL(evt_cam_letter_box_onoff, 1, 0)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_cam3d_evt_set_now)
     CALL(evt_mario_set_enable_key, 0)
+#endif
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_normalize)
+#endif
+#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GW(0), 1)
+    CALL(evt_mario_cam_y_off)
+#else
+    SET_VALUE(GW(0), 1)
+#endif
     SET_VALUE(GF(0), 1)
     SET_VALUE(LW(3), 1)
+#if VERSION <= VERSION_DEMO_US
+    BEGIN_INLINE_EVENT
+        // Both demos watch Mario's height in an extra event (cancel the slit below -100, clamp him at -500); the releases wait for him to land instead
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        LOOP(0)
+            IF_INT_NOT_EQUAL(LW(3), 0)
+                IF_INT_LESS_OR_EQUAL(LW(1), -100)
+                    SET_VALUE(LW(3), 0)
+                    CALL(evt_slit_cancel)
+                    CALL(evt_mario_cam_y_off)
+                END_IF
+            END_IF
+            IF_INT_LESS_OR_EQUAL(LW(1), -500)
+                CALL(evt_mario_set_pos, LW(0), -500, LW(2))
+            ELSE
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+            END_IF
+            IF_INT_EQUAL(GF(0), 0)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_INLINE_EVENT
+    // Once Mario lands on something, he walks on to the goal side (x 1650) if he stopped short of it.
+    BEGIN_INLINE_EVENT
+        LOOP(0)
+#else
     BEGIN_INLINE_EVENT
         // If Mario finished in time and is above the course, he walks on to the goal side (x 1650) on landing;
         // otherwise the event just waits until he is standing on something.
         IF_INT_LESS(LW(0), 701)
             LOOP(0)
+#endif
                 CALL(evt_mario_get_name_hitobj_ride, LW(0))
                 IF_STR_NOT_EQUAL(LW(0), 0)
                     BREAK_LOOP
@@ -710,14 +791,27 @@ EVT_BEGIN(minigame04_end)
                     BREAK_LOOP
                 END_IF
                 WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+        END_LOOP
+        IF_INT_NOT_EQUAL(GF(0), 0)
+#else
             END_LOOP
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             IF_INT_GREATER(LW(1), -100)
                 IF_INT_NOT_EQUAL(GF(0), 0)
+#endif
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     IF_INT_LESS(LW(0), 1650)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_nomal_cange)
+#else
                         CALL(evt_mario_normalize)
+#endif
                         CALL(evt_mario_mov_pos2, 1650, LW(2), 120)
+#if VERSION <= VERSION_DEMO_US
+            END_IF
+        END_IF
+#else
                     END_IF
                 END_IF
                 ELSE
@@ -728,6 +822,7 @@ EVT_BEGIN(minigame04_end)
             CALL(evt_mario_wait_rideon)
             CALL(evt_mario_normalize)
         END_IF
+#endif
     END_INLINE_EVENT
     // Running the counter out to 701 plays the failure effect; otherwise the success effect plays.
     IF_INT_GREATER_OR_EQUAL(LW(0), 701)
@@ -777,13 +872,23 @@ EVT_BEGIN(minigame04_end)
     CALL(yuugijou_montemedal_disp_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_sfxoff, GW(10))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_fade_out, 1000)
+    SET_VALUE(GF(0), 0)
+#else
     CALL(evt_fade_out, 1000)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
     SET_VALUE(GF(0), 0)
+#endif
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL_CHILD(PTR(yuu_03_kaijo_init2))
     CALL(evt_cam_road_reset)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_slit_cancel)
+    CALL(evt_mario_normalize)
+#else
     CALL(yuu_03_cam_shift_reset)
+#endif
     WAIT_MS(500)
     CALL(re_init_yuunpc)
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE1"), GW(10))
@@ -831,10 +936,14 @@ EVT_BEGIN(yuu_03_init_evt)
 EVT_END()
 
 void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall) {
+#if VERSION <= VERSION_DEMO_US
+    SlitWork* data = ((MiniGameWork*)event->lwData[0])->data;
+#else
     SlitWork* data = ((MiniGameWork*)event->lwData[0])->data;
 
     data->viewEvent = evtEntryType(yuu_03_icon_monte_entry_evt, 0, 0, 0);
     data->viewEvent->lwData[0] = event->lwData[0];
+#endif
     data->flags |= 1;
     evt_ryushi_init(event, isFirstCall);
 }
@@ -874,13 +983,25 @@ void yuuminigame_main_4slit(EventEntry* event, BOOL isFirstCall) {
             wp->subEvent->lwData[0] = data->coins;
             switch (data->coins) {
                 case 0:
+#if VERSION <= VERSION_DEMO_US
+                    data->result = 0x2;
+#else
                     data->result = 0x105;
+#endif
                     break;
                 case 1:
+#if VERSION <= VERSION_DEMO_US
+                    data->result = 0x10A;
+#else
                     data->result = 0x103;
+#endif
                     break;
                 case 2:
+#if VERSION <= VERSION_DEMO_US
+                    data->result = 0x105;
+#else
                     data->result = 0x101;
+#endif
                     break;
                 case 10:
                 case 21:
@@ -1061,10 +1182,18 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                         speed = 0.0f;
                     } else {
+#if VERSION <= VERSION_DEMO_US
+                        speed = 1.6666666f;
+#else
                         speed = 0.0f;
+#endif
                     }
                 } else {
+#if VERSION <= VERSION_DEMO_US
+                    speed = 3.3333333f;
+#else
                     speed = 2.9166667f;
+#endif
                 }
                 break;
             case 6:
@@ -1074,10 +1203,18 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                         speed = -0.0f;
                     } else {
+#if VERSION <= VERSION_DEMO_US
+                        speed = -1.6666666f;
+#else
                         speed = -0.0f;
+#endif
                     }
                 } else {
+#if VERSION <= VERSION_DEMO_US
+                    speed = -3.3333333f;
+#else
                     speed = -2.9166667f;
+#endif
                 }
                 break;
         }

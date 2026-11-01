@@ -41,7 +41,11 @@ static EvtWord hikaru_yuka_init[40];
 EvtWord aji_12_init_evt[71];
 
 static EVT_BEGIN(e_door_close)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -49,7 +53,11 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -198,9 +206,15 @@ EVT_END()
  */
 EVT_BEGIN(aji_12_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
+#else
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
+    CALL(evt_snd_set_rev_mode, 1)
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+#endif
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
@@ -252,10 +266,17 @@ static USER_FUNC(thunder_main) {
 static USER_FUNC(mario_chk) {
     s32 n;
     char name[256];
+#if VERSION <= VERSION_DEMO_US
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
     HitEntry* hit;
     s32 i;
+#else
+    MarioWork* mario = marioGetPtr();
+    PartyEntry* party;
+    HitEntry* hit;
+    s32 i;
+#endif
     s32 j;
 
     if (isFirstCall) {
@@ -273,6 +294,10 @@ static USER_FUNC(mario_chk) {
     }
     for (i = 0; i < 50; i++) {
         hitGrpAttrOn((const char*)hit_list[i], 0x800);
+#if VERSION <= VERSION_DEMO_US
+    }
+    if (mario->hitobjUnder == NULL) {
+#else
     }
     party = partyGetPtr(0);
     if (party != NULL && party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
@@ -284,16 +309,25 @@ static USER_FUNC(mario_chk) {
         hit = (HitEntry*)mario->hitobjUnder;
     }
     if (hit == NULL) {
+#endif
         mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
         hitGrpAttrOff("A_hikaru_01", 0x800);
         event->userdata[2] = 0;
+#if VERSION <= VERSION_DEMO_US
+    } else if (strncmp(hitGetName(mario->hitobjUnder), "A_hikaru_", strlen("A_hikaru_")) != 0) {
+#else
     } else if (strncmp(hitGetName(hit), "A_hikaru_", strlen("A_hikaru_")) != 0) {
+#endif
         mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
         hitGrpAttrOff("A_hikaru_01", 0x800);
         event->userdata[2] = 0;
+#if VERSION <= VERSION_DEMO_US
+    } else if (strcmp(hitGetName(mario->hitobjUnder), "A_hikaru_01") == 0 && event->userdata[2] == 0) {
+#else
     } else if (strcmp(hitGetName(hit), "A_hikaru_01") == 0 && event->userdata[2] == 0) {
+#endif
         event->userdata[2] = 1;
         event->userdata[0] = 0;
         event->userdata[1] = 0;

@@ -1,6 +1,7 @@
 // jin_00 (ダイム寺院, Creepy Steeple): main hall: six Boo (teresa) NPCs, the Atomic Boo boss fight (drops Lucky Start),
 // a key and lock, save block; doors to jin_01-06, Twilight Trail (gra_06) and Twilight Town (usu_00).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -442,8 +443,12 @@ EVT_BEGIN(jin_00_dai_in_sub)
     CALL(evt_party_set_dir, 0, 270, -1)
     CALL(evt_party_set_dir, 1, 270, -1)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mario_jump_pos, 365, 40, 0, 700, 0, -1000)
+#else
         CALL(evt_mario_jump_pos, 365, 40, 0, 700, 0, -1000)
         CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
@@ -965,7 +970,11 @@ static s32 lock_tbl[] = {
 static EVT_BEGIN(lock_item_check)
     CALL(evt_pouch_check_item, ITEM_STEEPLE_KEY_0x16, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(lock_tbl), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -1376,7 +1385,11 @@ static void senteresa_ext_main(void) {
     Vec v;
     Vec d;
 
+#if VERSION <= VERSION_DEMO_US
+    if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL && strcmp(mp->paperAnimName, "P_H_1C") == 0) {
+#else
     if (marioGetAngleKaitenHammer() > 0.0f) {
+#endif
         hammer = 1;
     }
     PSVECSubtract(&mp->position, &g_vecRotCenter, &d);
@@ -1528,7 +1541,11 @@ static void senteresa_ext_main(void) {
                 computePos(&pTeresa[i], &v);
                 v.y = (*pose->mtx)[1][3];
                 (*pose->mtx)[0][3] = g_vecRotCenter.x + v.x;
+#if VERSION <= VERSION_DEMO_US
+                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
+#else
                 (*pose->mtx)[1][3] = v.y;
+#endif
                 (*pose->mtx)[2][3] = g_vecRotCenter.z + v.z;
                 pTeresa[i].bobPhase += 0.08f;
                 if (pTeresa[i].bobPhase > 3.1415927f) {

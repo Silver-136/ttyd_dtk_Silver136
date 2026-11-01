@@ -476,9 +476,15 @@ EVT_END()
  */
 EVT_BEGIN(time_bomb)
     // Controls off, the music fades out and the room begins to shake.
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     SET_VALUE(GF(10), 0)
+#else
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_mario_normalize)
+    SET_VALUE(GF(10), 0)
+#endif
     WAIT_WHILE(GF(15))
     WAIT_MS(1000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
@@ -541,6 +547,7 @@ EVT_BEGIN(time_bomb)
     WAIT_MS(2000)
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_cam3d_evt_set, 200, 305, -33, 0, 140, -338, 1000, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
     WAIT_MS(2000)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, 0, 0, -89)
@@ -548,6 +555,15 @@ EVT_BEGIN(time_bomb)
     CALL(evt_party_set_pos, 0, -50, 0, -89)
     CALL(evt_party_set_dir, 0, 90, 0)
     BEGIN_INLINE_EVENT
+#else
+    WAIT_MS(2000)
+    CALL(evt_party_stop, 0)
+    CALL(evt_mario_set_pos, 0, 0, -89)
+    CALL(evt_mario_set_dir, 90, 0, 0)
+    CALL(evt_party_set_pos, 0, -50, 0, -89)
+    CALL(evt_party_set_dir, 0, 90, 0)
+    BEGIN_INLINE_EVENT
+#endif
         CALL(evt_eff64, STRING("ripple00"), STRING("ripple_n64"), 0, 0, 150, -340, 0, 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(400)
         CALL(evt_eff64, STRING("ripple01"), STRING("ripple_n64"), 0, 0, 150, -340, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -569,7 +585,16 @@ EVT_BEGIN(time_bomb)
     DELETE_EVENT(LW(13))
     CALL(evt_item_move_3d_position, STRING("item00"), 0, 400, -340, 750, EASING_LINEAR)
     CALL(evt_item_set_position, STRING("item00"), 0, -1000, 0)
+#if VERSION <= VERSION_DEMO_US
     WAIT_MS(500)
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    ADD(LW(0), 30)
+    CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
+    CALL(evt_party_set_dir, 0, 270, -1)
+    CALL(evt_mario_set_dir, 270, 0, 0)
+#else
+    WAIT_MS(500)
+#endif
     CALL(evt_puni_set_dir, 1, 270)
     CALL(evt_cam3d_evt_set, 200, 213, 91, 0, 60, -215, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -692,6 +717,9 @@ EVT_BEGIN(time_bomb)
     CALL_CHILD(PTR(npc_dokan))
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, 0, 105, 269, 0, 45, -76, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_party_set_dir, 0, 270, -1)
+#endif
     WAIT_MS(200)
     CALL(evt_msg_print_party, STRING("stg2_mri_e23_05"))
     CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
@@ -704,8 +732,12 @@ EVT_BEGIN(time_bomb)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_23_TIME_BOMB_ACTIVATED)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_23_TIME_BOMB_ACTIVATED)
     CALL(evt_party_run, 0)
+#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -853,6 +885,14 @@ static EVT_BEGIN(punipuni_ball00)
         SET_VALUE(GF(15), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(15), 0)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_22_LORD_CRUMP_APPEARS)
+            CALL(evt_mario_key_onoff, 1)
+            SET_VALUE(GF(10), 1)
+            SPAWN_EVENT(punipuni_mario_halt)
+            RETURN
+        END_IF
+#endif
         ELSE
         SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)

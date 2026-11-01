@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "unit/unit_chorobon_gundan.h"
 #include "evt/evt_cmd.h"
@@ -73,7 +74,11 @@ static BattleUnitKindPart parts[1];
 BattleWeapon weapon_chorobon_gundan_attack;
 EvtWord chorogun_dead_reward[73];
 static EvtWord init_event[26];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord damage_event[80];
+#else
 static EvtWord damage_event[59];
+#endif
 static EvtWord attack_event[217];
 static EvtWord wait_event[6];
 ExtTexInfo chorogun_ext_entry_data[21];
@@ -138,7 +143,11 @@ BattleUnitKind unit_chorobon_gundan = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+#if VERSION <= VERSION_DEMO_US
+    kUnitLeader | kUnitNoSpin | UNIT_ATTR_NO_HP_GAUGE,
+#else
     kUnitLeader | kUnitNoSpin, // attributeFlags
+#endif
     &regist.v, // statusVulnerability
     1, // numParts
     parts, // parts
@@ -223,6 +232,37 @@ BattleWeapon weapon_chorobon_gundan_attack = {
     {0}, // pad_AE
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+#if VERSION <= VERSION_DEMO_US
+};
+
+/**
+ * Death script of the Fuzzy Horde: plays the defeat sound,
+ * pays out the unit's coins and experience points and spawns the star-point effect above it.
+ * Not present in the US demo.
+ */
+EVT_BEGIN(chorogun_dead_reward)
+    CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+    ADD(LW(2), 10)
+    CALL(btlevtcmd_GetCoin, LW(10), LW(0))
+    CALL(btlevtcmd_StoreCoin, LW(0))
+    CALL(btlevtcmd_GetExp, LW(10), LW(0))
+    CALL(btlevtcmd_StoreExp, LW(0))
+    CALL(btlevtcmd_GetPos, LW(10), LW(3), LW(1), LW(2))
+    ADD(LW(2), 10)
+    ADD(LW(1), 30)
+    CALL(_add_star_point_disp_offset, LW(10), LW(3), LW(1), LW(2))
+    CALL(evt_eff, STRING(""), STRING("star_point"), 0, LW(3), LW(1), LW(2), LW(0), 0, 0, 0, 0, 0, 0, 0)
+    IF_INT_GREATER_OR_EQUAL(LW(0), 1)
+        LOOP(LW(0))
+        END_LOOP
+    END_IF
+    RETURN
+EVT_END()
+
+/** Init event of the Fuzzy Horde: installs wait, attack, damage and default confusion events and clears unit work 0. */
+static EVT_BEGIN(init_event)
+#else
 };
 
 EVT_BEGIN(chorogun_dead_reward)
@@ -247,6 +287,7 @@ EVT_END()
 
 /** Init event of the Fuzzy Horde: installs wait, attack, damage and default confusion events and clears unit work 0. */
 static EVT_BEGIN(init_event)
+#endif
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
@@ -272,7 +313,18 @@ static EVT_BEGIN(damage_event)
         ADD(LW(0), 1)
     END_LOOP
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_FINAL_HIT, LW(0))
+#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(LW(0), 0)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_CHOROBON_GUNDAN_FEW_LEFT, LW(0))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(evt_btl_camera_set_mode, 0, 0)
+        CALL(chorogun_escape)
+        CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
+#else
+    IF_INT_EQUAL(LW(0), 0)
+#endif
         GOTO(99)
     END_IF
     CALL(chorogun_get_alive_num, LW(0))

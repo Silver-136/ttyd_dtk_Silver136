@@ -71,7 +71,11 @@ EvtWord badge_evt3[5];
 EvtWord aji_03_init_evt[525];
 
 static EVT_BEGIN(e_door_close)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -79,7 +83,11 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -938,7 +946,11 @@ static EVT_BEGIN(evt_haguruma)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_win_item_select, PTR(haguruma_tbl), LW(0))
+#else
     CALL(evt_win_item_select, 0, PTR(haguruma_tbl), LW(0), 0)
+#endif
     IF_INT_NOT_EQUAL(LW(0), -1)
         BEGIN_INLINE_EVENT
             CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -990,8 +1002,12 @@ EVT_END()
 EVT_BEGIN(aji_03_init_evt)
     // The room's music and ambience start, and the crane lights are hidden.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI3"))
+#else
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI3"))
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -1150,22 +1166,38 @@ void icon_disp(CameraId camera, void* param) {
         PSMTXRotRad(rot, 'z', 0.0f);
         PSMTXConcat(trans, scale, trans);
         PSMTXConcat(trans, rot, trans);
+#if VERSION <= VERSION_DEMO_US
+        iconDispGx2(trans, 0x4, ICON_ARROW);
+#else
         iconDispGx2(trans, 0x10, ICON_ARROW);
+#endif
         PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
         PSMTXConcat(trans, scale, trans);
+#if VERSION <= VERSION_DEMO_US
+        iconDispGx2(trans, 0x4, ICON_BUTTON_A);
+#else
         iconDispGx2(trans, 0x10, ICON_BUTTON_A);
+#endif
     } else {
         PSMTXTrans(trans, event->userdata[1] - 30, event->userdata[2] + 100, 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
         PSMTXRotRad(rot, 'z', 4.712389f);
         PSMTXConcat(trans, scale, trans);
         PSMTXConcat(trans, rot, trans);
+#if VERSION <= VERSION_DEMO_US
+        iconDispGx2(trans, 0x4, ICON_ARROW);
+#else
         iconDispGx2(trans, 0x10, ICON_ARROW);
+#endif
         PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
         PSMTXConcat(trans, scale, trans);
+#if VERSION <= VERSION_DEMO_US
+        iconDispGx2(trans, 0x4, ICON_BUTTON_B);
+#else
         iconDispGx2(trans, 0x10, ICON_BUTTON_B);
+#endif
     }
 }
 

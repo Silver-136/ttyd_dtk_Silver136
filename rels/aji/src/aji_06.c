@@ -360,7 +360,11 @@ EVT_BEGIN(peach_evt_kusuri_select)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, PTR(kusuri_list), LW(1))
+#else
         CALL(evt_win_item_select, 0, PTR(kusuri_list), LW(1), 0)
+#endif
         ELSE
         SET_VALUE(LW(1), -1)
     END_IF
@@ -1897,9 +1901,15 @@ EVT_BEGIN(aji_06_init_evt)
         ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
+#if VERSION <= VERSION_DEMO_US
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
+#else
+    END_IF
+    CALL(evt_snd_set_rev_mode, 1)
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+#endif
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_bero_get_entername, LW(0))

@@ -1,5 +1,6 @@
 // Battle unit data for the tree stage object (unit_object_tree).
 
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_stage_object.h"
 #include "battle/battle_sub.h"
@@ -15,7 +16,11 @@ USER_FUNC(_turn_tree);
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[25];
 static EvtWord damage_event[14];
+#if VERSION <= VERSION_DEMO_US
+static s32 _data[34];
+#else
 static s32 _data[35];
+#endif
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -118,8 +123,14 @@ static s32 _data[] = {
     -13, 0, 12, 0, -11, 0, 10, 0,
     -9, 0, 8, 0, -7, 0, 6, 0,
     -6, 0, 5, 0, -4, 0, 2, 0,
+#if VERSION <= VERSION_DEMO_US
+    -2, 0,
     -2, 0, 0,
 };
+#else
+    -2, 0, 0,
+};
+#endif
 
 /** The tree takes no damage reduction; every hit just triggers its shake and tip-over. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};

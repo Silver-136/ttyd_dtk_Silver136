@@ -47,10 +47,27 @@ void marioBottomless(void) {
     }
     if (marioBgmodeChk() == TRUE) {
         marioChgMot(MARIO_MOTION_BOTTOMLESS);
+#if VERSION <= VERSION_DEMO_US
+        return;
+#endif
+#if VERSION <= VERSION_DEMO_US
+    }
+    if (strcmp(gp->currentMapName, "eki_04") == 0) {
+        mario->position = (Vec){344.0f, 840.0f, 30.0f};
+    } else if (strcmp(gp->currentMapName, "gon_10") == 0) {
+        mario->position = (Vec){980.0f, 74.0f, -17.0f};
+    } else if (strcmp(gp->currentMapName, "muj_00") == 0) {
+        mario->position = (Vec){-182.0f, 25.0f, -104.0f};
+#else
     } else if (mario->bottomlessReload) {
         seqSetSeq(SEQ_MAP_CHANGE, gp->currentMapName, gp->beroEnterName);
+#endif
     } else {
+#if VERSION <= VERSION_DEMO_US
+        mario->position = (Vec){0.0f, 74.0f, 0.0f};
+#else
         mario->position = mario->bottomlessResetPosition;
+#endif
         party = partyGetPtr(marioGetPartyId());
         if (party) {
             party->position = mario->position;
@@ -62,6 +79,12 @@ void marioBottomless(void) {
         if (marioBgmodeChk() == TRUE) {
             mario->position.z = -450.0f;
         }
+#if VERSION <= VERSION_DEMO_US
+    }
+#endif
+#if VERSION <= VERSION_DEMO_US
+    marioChgMot(MARIO_MOTION_FORCE_RESET);
+#else
         marioChgMot(MARIO_MOTION_FORCE_RESET);
     }
 }
@@ -104,6 +127,7 @@ void marioReloadMapOnBottomlessOn(void) {
 void marioReloadMapOnBottomlessOff(void) {
     MarioWork* mario = marioGetPtr();
     mario->bottomlessReload = 0;
+#endif
 }
 
 /**
@@ -395,7 +419,11 @@ void marioUpdateKeyData(void) {
     mario->buttonTrg = gp->buttonNew[0] & mask;
     mario->buttonRepeat = gp->buttonRepeat[0] & mask;
     mario->buttonUp = gp->buttonUp[0] & mask;
+#if VERSION <= VERSION_DEMO_US
+    if (!(mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))) {
+#else
     if (!(mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_CTRL_OFF_2 | MARIO_FLAG_KEY_OFF))) {
+#endif
         if (mario->trigFlags & MARIO_TRIG_FLAG_DISABLE_STICK) {
             mario->wStickDir1 = 0;
             mario->wStickDir2 = 0;
@@ -413,7 +441,11 @@ void marioUpdateKeyData(void) {
             mario->analogB = 0;
         }
     }
+#if VERSION <= VERSION_DEMO_US
+    if ((mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) || !marioChkKey()) {
+#else
     if ((mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_CTRL_OFF_2 | MARIO_FLAG_KEY_OFF)) || !marioChkKey()) {
+#endif
         mario->wStickDir1 = 0;
         mario->wStickDir2 = 0;
         mario->substickX = 0;
@@ -468,6 +500,9 @@ void marioGetStick(f32* dir, f32* mag) {
         a = mario->moveDirection;
     }
     *dir = revise360(a + mario->targetYaw);
+#if VERSION <= VERSION_DEMO_US
+    *mag = m;
+#else
     *mag = m;
 }
 
@@ -487,6 +522,7 @@ s32 marioGetMovementSpeed(void) {
         return 2;
     }
     return 1;
+#endif
 }
 
 /** Resets the stick-rotation (rub) tracker; run at Mario init and when the tube motion starts. */

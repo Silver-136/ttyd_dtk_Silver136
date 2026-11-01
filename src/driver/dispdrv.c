@@ -23,9 +23,15 @@
 //.sdata
 static f32 offset_tbl[] = {
     400000.0f, 400000.0f, 600000.0f, 100000.0f, 100000.0f,
+#if VERSION <= VERSION_DEMO_US
+    300000.0f, 900000.0f, 1100000.0f, 1000000.0f, 500000.0f,
+    700000.0f //700K new in retail
+};
+#else
     300000.0f, 900000.0f, 1100000.0f, 1000000.0f, 500000.0f,
     700000.0f // render mode 10
 };
+#endif
 
 //.sbss
 DispEntry* currentWorkPtr;
@@ -61,9 +67,13 @@ void dispEntry(CameraId camId, f32 order, s32 renderMode, DispCallback callback,
 
     switch (renderMode) {
         case 2:
+#if VERSION <= VERSION_DEMO_US
+        case 5:
+#else
         case 5:
         case 9:
         case 10:
+#endif
             entry->order = offset_tbl[renderMode] + order;
             break;
         default:
@@ -146,10 +156,17 @@ void dispDraw(CameraId camId) {
                     GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
                     break;
                 case 2:
+#if VERSION <= VERSION_DEMO_US
                 case 5:
                 case 9:
                 case 10:
                     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+#else
+                case 5:
+                case 9:
+                case 10:
+                    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+#endif
                     GXSetZCompLoc(GX_TRUE);
                     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
                     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);

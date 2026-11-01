@@ -383,9 +383,13 @@ void mot_jump(void) {
         mario->multiTimer = 2;
         mario->currSubMotionId = 0;
         marioPreJump();
+#if VERSION <= VERSION_DEMO_US
+        if (mario->currMotionId != MARIO_MOTION_JUMP_3) {
+#else
         if (mario->currMotionId == MARIO_MOTION_JUMP_3) {
             camFollowYOn();
         } else {
+#endif
             camFollowYOff();
         }
         chgPoseB(mario);
@@ -471,8 +475,13 @@ void mot_upstairs(void) {
             mario->flags &= ~MARIO_FLAG_IS_STEPPING;
             if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                 motSlitContinue();
+#if VERSION <= VERSION_DEMO_US
+                } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
+                    motSlitContinue2();
+#else
             } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
                 marioChgMot2(MARIO_MOTION_SLIT);
+#endif
             } else {
                 marioChgMotAuto();
             }

@@ -296,8 +296,12 @@ EVT_END()
  * if Mario or his partner bumps the block with the head during the move,
  * it reverses and the switch is cancelled. Ends with a landing sound and the final shake.
  */
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(main_0)
+#else
 static EVT_BEGIN(main_0)
     SET_TYPE(239)
+#endif
     // The switch is pressed: the block stops reacting to hits while it moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
@@ -549,10 +553,17 @@ EVT_END()
  * lifts or lowers blk_1 by 489 units with its sound and a camera shake, and flips the saved state LSWF(5).
  * If the block cannot move the switch press is cancelled.
  */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(main_1)
     SET_TYPE(239)
     // The switch is pressed: the block stops reacting to hits while it moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
+#else
+EVT_BEGIN(main_1)
+    SET_TYPE(239)
+    // The switch is pressed: the block stops reacting to hits while it moves.
+    CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
+#endif
     IF_INT_NOT_EQUAL(1, 0)
         // The block rises if it is down and falls if it is up (remembered in a room flag).
         SET_VALUE(LW(10), 0)
@@ -787,7 +798,11 @@ s32 key_tbl00[] = {
 EVT_BEGIN(evt_chk00)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0C, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, PTR(key_tbl00), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(key_tbl00), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -815,7 +830,11 @@ s32 key_tbl01[] = {
 EVT_BEGIN(evt_chk01)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0E, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, PTR(key_tbl01), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(key_tbl01), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF

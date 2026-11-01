@@ -1,5 +1,6 @@
 // Pit of 100 Trials battle unit: the Bob-omb (`bomhei`): parts, stats, poses and AI scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -36,7 +37,11 @@ static EvtWord change_spark_event[70];
 static EvtWord attack_event[440];
 static EvtWord wait_event[6];
 static EvtWord damage_event_spark[25];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event_spark[292];
+#else
 static EvtWord attack_event_spark[288];
+#endif
 static EvtWord wait_event_spark[27];
 
 /** Unit data of the Bob-omb: stats, sounds, attributes, parts, init script and data table. */
@@ -123,7 +128,11 @@ static PoseTableEntry pose_table_spark[] = {
     {POSE_TYPE_FREEZE, "BOM_Y_2"},
     {POSE_TYPE_CONFUSE, "BOM_K_2"},
     {POSE_TYPE_POISON, "BOM_X_2"},
+#if VERSION <= VERSION_DEMO_US
+    {3, "BSA_X_2"},
+#else
     {POSE_TYPE_DIZZY, "BOM_X_2"},
+#endif
     {POSE_TYPE_NORMAL, "BOM_S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "BOM_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "BOM_Q_2"},
@@ -155,6 +164,9 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_bomhei", "c_bomhey", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterExplosive, pose_table},
 };
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {80, 80, 70, 0, 80, 150, 100, 70, 100, 80, 100, 80, 100, 80, 80, 90, 80, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     70, // sleep
     100, // stop
@@ -179,6 +191,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Attack data for the Bob-omb's body bump: 2 damage. */
 static BattleWeapon weapon_bomhei_attack = {
@@ -383,7 +396,11 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+#else
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+#endif
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_bomhei_attack))
     // Declare the attack.
@@ -446,7 +463,11 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 90)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("BOM_N_1"))
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(1000)
+#else
     WAIT_MS(500)
+#endif
     GOTO(98)
     // Hit: the damage is dealt and the Bob-omb is knocked back in two hops.
     LABEL(91)
@@ -467,7 +488,11 @@ static EVT_BEGIN(attack_event)
     LABEL(98)
     CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_BOMB_MOVE4"), STRING("SFX_ENM_BOMB_MOVE4"), 0, 10, 10, 0, 0)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
+#else
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
+#endif
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_KEEP, 1)
     LABEL(99)
@@ -526,7 +551,11 @@ static EVT_BEGIN(attack_event_spark)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+#else
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+#endif
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_bomhei_bomb))
     // Declare the attack; the lit Bob-omb hops twice and runs at the target like the normal bump.

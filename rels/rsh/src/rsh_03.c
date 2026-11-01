@@ -100,7 +100,11 @@ EvtWord evt_shop_close[317];
 #endif
 EvtWord evt_shop_door_init[36];
 static EvtWord evt_yuka_simi[45];
+#if VERSION <= VERSION_DEMO_US
+static const char* access_tbl[11];
+#else
 static const char* access_tbl[16];
+#endif
 static EvtWord evt_access[25];
 static EvtWord evt_access_entry[24];
 EvtWord rsh_03_init_evt[269];
@@ -366,7 +370,11 @@ s32 item_tbl_cook[] = {
 
 EVT_BEGIN(talk_cook_nabe_return)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_70_00"), 0, STRING("コック"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_win_item_select, PTR(item_tbl_cook), LW(1))
+#else
     CALL(evt_win_item_select, 0, PTR(item_tbl_cook), LW(1), 0)
+#endif
     IF_INT_NOT_EQUAL(LW(1), -1)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_70_01"), 0, STRING("コック"))
         CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
@@ -426,7 +434,11 @@ EVT_BEGIN(talk_cook)
         END_IF
         RETURN
         LABEL(0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         SWITCH(LW(1))
             CASE_EQUAL(ITEM_GOLDEN_LEAF)
             // The Golden Leaf, Mystic Egg and Keel Mango are taken one at a time.
@@ -540,7 +552,11 @@ EVT_BEGIN(talk_waitless_pias_return)
     CALL(evt_npc_get_reglid, STRING("ウェイトレス"), LW(10))
     DELETE_EVENT(LW(10))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_195"), 0, STRING("ウェイトレス"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_win_item_select, PTR(item_tbl_waitless), LW(1))
+#else
     CALL(evt_win_item_select, 0, PTR(item_tbl_waitless), LW(1), 0)
+#endif
     IF_INT_NOT_EQUAL(LW(1), -1)
 #if VERSION >= VERSION_US
         CALL(evt_mario_adjust_dir)
@@ -1296,6 +1312,35 @@ EVT_BEGIN(shop_door_close)
     CALL(evt_map_checkanim, STRING("mise_door_close"), LW(0), LW(1))
     WAIT_MS(LW(1))
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+
+/**
+ * Script helper (JP and later): sets the transparency args[0] (0 to 255) of every active NPC except the shop
+ * clerk (tenin), so the NPCs in the dining car fade out while the shop is entered.
+ */
+USER_FUNC(npc_alpha_except_tenin) {
+    s32 alpha = evtGetValue(event, event->args[0]);
+    NpcWork* wp = npcGetWorkPtr();
+    s32 i;
+    NpcEntry* npc;
+
+    for (i = 0, npc = wp->entries; i < wp->total; i++, npc++) {
+        // 店員
+        if ((npc->flags & NPC_FLAG_IN_USE) && (npc->flags & NPC_FLAG_READY) && strcmp(npc->description, "\x93\x58\x88\xF5") != 0) {
+            npcSetColor(npc->description, (GXColor){0xFF, 0xFF, 0xFF, alpha});
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Trigger on the shop door (tobira_omise) of the dining car:
+ * locks input, moves Mario and the partners to the door, opens it, walks in,
+ * then plays the page-turn transition into the shop interior while the dining car objects are hidden.
+ */
+EVT_BEGIN(evt_shop_open)
+#else
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002634, JP rsh .text+0x2570. See docs/NAME_PROVENANCE.md.
@@ -1320,6 +1365,7 @@ USER_FUNC(npc_alpha_except_tenin) {
  * then plays the page-turn transition into the shop interior while the dining car objects are hidden.
  */
 EVT_BEGIN(evt_shop_open)
+#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
@@ -1360,6 +1406,9 @@ EVT_BEGIN(evt_shop_open)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tobira"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_tobira_omise"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#else
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
@@ -1372,6 +1421,7 @@ EVT_BEGIN(evt_shop_open)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#endif
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_IN1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
@@ -1403,6 +1453,21 @@ EVT_BEGIN(evt_shop_close)
     CALL(evt_hitobj_attr_onoff, 0, 1, STRING("tobira_omise_heya"), 8388608)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_OUT1"), LW(0), LW(1), LW(2), 0)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, 11, 0, 255, 500)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value)
+            CALL(npc_alpha_except_tenin, LW(0))
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_INLINE_EVENT
+#else
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_OUT1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -1416,6 +1481,7 @@ EVT_BEGIN(evt_shop_close)
             END_IF
         END_LOOP
     END_INLINE_EVENT
+#endif
     CALL(evt_img_clear_virtual_point, STRING("capture_img"))
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_2"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
@@ -1571,12 +1637,23 @@ EVT_END()
 
 static const char* access_tbl[] = {
     "table_1",
+#if VERSION <= VERSION_DEMO_US
+    "stg6_rsh_268",
+    "table_2",
+#else
     "stg6_rsh_268",
     "stg6_rsh_268",
     "table_2",
     "stg6_rsh_268",
+#endif
     "stg6_rsh_268",
     "oubun",
+#if VERSION <= VERSION_DEMO_US
+    "stg6_rsh_269",
+    "shokki",
+    "stg6_rsh_270",
+    "memo",
+#else
     "stg6_rsh_269",
     "stg6_rsh_269",
     "shokki",
@@ -1584,6 +1661,7 @@ static const char* access_tbl[] = {
     "stg6_rsh_270",
     "memo",
     "stg6_rsh_271",
+#endif
     "stg6_rsh_271",
     NULL,
 };
@@ -1595,19 +1673,34 @@ static const char* access_tbl[] = {
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, LW(1), 0, 0)
+    IF_INT_LESS(GSW_TROUBLE_WORK(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
+        CALL(evt_msg_print, 0, LW(1), 0, 0)
+    ELSE
+        CALL(evt_msg_print, 0, LW(2), 0, 0)
+    END_IF
+    CALL(evt_mario_key_onoff, 1)
+#else
         CALL(evt_msg_print, 0, LW(1), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, LW(2), 0, 0)
     END_IF
     CALL(evt_mario_key_onoff, 1)
+#endif
     RETURN
 EVT_END()
 
 /** Registers the shelf triggers from access_tbl; each runs evt_access when Mario faces it. */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
+#if VERSION <= VERSION_DEMO_US
+    LOOP(0)
+        READ_INT2(LW(0), LW(1))
+#else
     LOOP(0)
         READ_INT3(LW(0), LW(1), LW(2))
+#endif
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
@@ -1913,7 +2006,11 @@ EVT_BEGIN(rsh_03_init_evt_nidome)
         ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+#else
             CALL(evt_snd_envoff, PSND_FADEOUT)
+#endif
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE
             CALL(evt_sub_get_mapname, LW(0))
