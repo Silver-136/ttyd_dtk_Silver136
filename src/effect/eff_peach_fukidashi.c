@@ -13,6 +13,9 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
+// EffPeachFukidashiWork.flags above the two icon bits: draw the cross (effSetPeachFukiBatu).
+enum { PEACH_FUKI_FLAG_CROSS = 0x80 };
+
 typedef struct EffPeachFukidashiWork {
     u32 flags;      // 0x0, bits 0-1: icon, 0x80: show a cross
     Vec position;   // 0x4
@@ -138,7 +141,7 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     }
 
     // red cross over the icon
-    if (work->flags & 0x80) {
+    if (work->flags & PEACH_FUKI_FLAG_CROSS) {
 #if VERSION >= VERSION_US
         char text[32] = "ﾗ"; // US: Latin-1 multiplication sign
 #else
@@ -163,5 +166,5 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
 
 /** Sets the name of the cross (batu) mark; rels/aji/src/aji_17.c calls it from an event script. */
 void effSetPeachFukiBatu(const char* name) {
-    ((EffPeachFukidashiWork*)effNameToPtr(name)->userdata)->flags |= 0x80;
+    ((EffPeachFukidashiWork*)effNameToPtr(name)->userdata)->flags |= PEACH_FUKI_FLAG_CROSS;
 }
