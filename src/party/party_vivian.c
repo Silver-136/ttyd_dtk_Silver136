@@ -170,22 +170,22 @@ s32 vivianGetStatus(void) {
     u8 st;
 
     if (party == NULL) {
-        return 0;
+        return VIVIAN_STATUS_INACTIVE;
     }
     if (party->currentMemberId != PARTY_MEMBER_VIVIAN || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        return 0;
+        return VIVIAN_STATUS_INACTIVE;
     }
     st = party->useMotionId;
     if (st < 10) {
-        return 1;
+        return VIVIAN_STATUS_SINKING;
     }
     if (st == 10) {
-        return 2;
+        return VIVIAN_STATUS_HIDDEN;
     }
     if (st >= 20 && st <= 27) {
-        return 3;
+        return VIVIAN_STATUS_RISING;
     }
-    return 4;
+    return VIVIAN_STATUS_OTHER;
 }
 
 /**

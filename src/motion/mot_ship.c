@@ -159,18 +159,18 @@ s32 marioShipGetDir(void) {
 s32 marioShipChanging(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId != MARIO_MOTION_SHIP) {
-        return 0;
+        return SHIP_STATUS_NONE;
     }
     if (mario->currSubMotionId == 10) {
-        return 2;
+        return SHIP_STATUS_SETTLING;
     }
     if ((mario->currSubMotionId >= 0 && mario->currSubMotionId <= 12) || (mario->currSubMotionId >= 30 && mario->currSubMotionId <= 48)) {
-        return 1;
+        return SHIP_STATUS_FOLDING;
     }
     if (mario->currSubMotionId == 50 || mario->currSubMotionId == 52) {
-        return 3;
+        return SHIP_STATUS_SAILING;
     }
-    return 0;
+    return SHIP_STATUS_NONE;
 }
 
 /**

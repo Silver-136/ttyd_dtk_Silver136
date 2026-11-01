@@ -353,7 +353,7 @@ USER_FUNC(kurokaron_move_position) {
     step = (20.0f * npc->moveSpeed) / 1000.0f;
     PSVECSubtract(&mario->position, &npc->position, &diff);
     marioDist = sqrtf(diff.x * diff.x + diff.z * diff.z);
-    if (marioDist < 80.0f && kurokaron_vivian_prev_sts == 3 && vivianGetStatus() == 0) {
+    if (marioDist < 80.0f && kurokaron_vivian_prev_sts == 3 && vivianGetStatus() == VIVIAN_STATUS_INACTIVE) {
         kurokaron_stop_cnt = 60;
     }
     kurokaron_vivian_prev_sts = vivianGetStatus();
@@ -362,7 +362,7 @@ USER_FUNC(kurokaron_move_position) {
         kurokaron_stop_cnt--;
         return EVT_RETURN_BLOCK;
     }
-    if (!(kurokaron_move_flag & 2) && vivianGetStatus() != 1 && vivianGetStatus() != 2 && vivianGetStatus() != 3 &&
+    if (!(kurokaron_move_flag & 2) && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN && vivianGetStatus() != VIVIAN_STATUS_RISING &&
         marioDist < 80.0f) {
         kurokaron_move_index = _kurokaron_run_away(npc->position.x, npc->position.z, mario->position.x, mario->position.z);
         kurokaron_run_cnt = 350;
@@ -999,7 +999,7 @@ static void senkaron_ext_main(void) {
                     }
                     break;
                 }
-                if (adz < 40.0f && vivianGetStatus() != 1 && vivianGetStatus() != 2 && vivianGetStatus() != 3) {
+                if (adz < 40.0f && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN && vivianGetStatus() != VIVIAN_STATUS_RISING) {
                     if ((*ep->mtx)[0][3] > 0.0f) {
                         if ((*ep->mtx)[0][3] > mario->position.x + scale - 10.0f && (*ep->mtx)[0][3] < mario->position.x + near) {
                             skwp->marioPushed |= 1;

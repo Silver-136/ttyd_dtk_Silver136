@@ -399,7 +399,7 @@ s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
         near = TRUE;
     }
     if (near && sqrtf(dx * dx + dz * dz) <= mario->wPlayerCollisionBox.x / 2.0f / 2.0f + wp->spacing / 2.0f * wp->scale &&
-        vivianGetStatus() != 1 && vivianGetStatus() != 2) {
+        vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
         return 1;
     }
     return 0;
@@ -450,7 +450,7 @@ s32 _firebar_hitCheck2(FirebarWork* wp) {
     ds = PSVECDotProduct(&side, &rel);
     r = 10.0f + mario->wPlayerCollisionBox.x;
     if (dp > -r / 2.0f && dp <= r / 2.0f + len && __fabsf(ds) <= mario->wPlayerCollisionBox.x / 2.0f + w &&
-        vivianGetStatus() != 1 && vivianGetStatus() != 2) {
+        vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
         return 1;
     }
     return 0;
@@ -506,7 +506,7 @@ void _firebar_rot(FirebarWork* wp) {
         if (wp->callback != NULL) {
             wp->callback(wp, 2);
         }
-    } else if (dist > wp->radius && dist < limit && !(wp->flags & 6) && hit == 0 && vivianGetStatus() != 1 && vivianGetStatus() != 2) {
+    } else if (dist > wp->radius && dist < limit && !(wp->flags & 6) && hit == 0 && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
         if (wp->speed > 0.0f) {
             if (wp->prevAngle < 0.0f && diff > 0.0f && wp->pos.y < mario->position.y) {
                 wp->hitCount++;
@@ -591,7 +591,7 @@ void _firebar_trans(FirebarWork* wp) {
             if (wp->callback != NULL) {
                 wp->callback(wp, 2);
             }
-        } else if (!(wp->flags & 6) && hit == 0 && vivianGetStatus() != 1 && vivianGetStatus() != 2) {
+        } else if (!(wp->flags & 6) && hit == 0 && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
             if (wp->prevAngle < 0.0f && diff > 0.0f && wp->pos.y < mario->position.y) {
                 wp->hitCount++;
                 if (wp->callback != NULL) {

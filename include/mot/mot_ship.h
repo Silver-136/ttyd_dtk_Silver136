@@ -10,6 +10,14 @@ BOOL marioChkSwirlPower(void);
 void marioForceShipAnime(void);
 void marioReInit_ship(void);
 void marioSetSwirlPower(s32 msec, f32 a, f32 b);
+// marioShipChanging: Boat Mode phase.
+enum {
+    SHIP_STATUS_NONE = 0,
+    SHIP_STATUS_FOLDING = 1,   // folding into or out of the boat
+    SHIP_STATUS_SETTLING = 2,  // settling onto the water
+    SHIP_STATUS_SAILING = 3,
+};
+
 s32 marioShipChanging(void);
 void marioShipForceStop(void);
 void marioShipSetDispDir(void);

@@ -24,6 +24,7 @@
 #include "mot/mot_stay.h"
 #include "mot/mot_slit.h"
 #include "mario/mario_kemuri.h"
+#include "mot/mot_jabara.h"
 
 
 typedef struct MotJabaraWork {
@@ -105,24 +106,24 @@ EVT_END()
  * Items and the hit code also check it.
  */
 s32 marioGetJabaraState(void) {
-    s32 state = 7;
+    s32 state = JABARA_STATE_OTHER;
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId != MARIO_MOTION_JABARA) {
-        state = 0;
+        state = JABARA_STATE_NONE;
     } else {
         s32 id = mario->currSubMotionId;
         if (id == 0x14) {
-            state = 1;
+            state = JABARA_STATE_RISING;
         } else if (id >= 0x46 && id <= 0x47) {
-            state = 2;
+            state = JABARA_STATE_GRAB_CEILING;
         } else if (id == 0x50) {
-            state = 3;
+            state = JABARA_STATE_HANG_MOVE;
         } else if (id >= 0x28 && id <= 0x2b) {
-            state = 4;
+            state = JABARA_STATE_BUMP_CEILING;
         } else if (id >= 0x32 && id <= 0x34) {
-            state = 5;
+            state = JABARA_STATE_SWING;
         } else if (id >= 0x1e && id <= 0x1f) {
-            state = 6;
+            state = JABARA_STATE_FALLING;
         }
     }
     return state;

@@ -188,8 +188,8 @@ void seq_battleMain(SequenceWork* work) {
             if (fbat->firstStrike.enabled != 0) {
                 BOOL ok = TRUE;
                 switch (fbat->firstStrike.type) {
-                    case 1:
-                    case 2:
+                    case FIRST_STRIKE_ENEMY:
+                    case FIRST_STRIKE_MARIO:
                         if (fbat->firstStrike.hitKind != 0) {
                             ok = FALSE;
                         }

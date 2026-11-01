@@ -879,7 +879,7 @@ USER_FUNC(evt_mario_normalize) {
                     event->userdata[0] = 3;
                 }
             } else if (mp->currMotionId == MARIO_MOTION_VIVIAN) {
-                if (vivianGetStatus() != 0 && vivianGetStatus() == 2) {
+                if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() == VIVIAN_STATUS_HIDDEN) {
                     vivianUnhold(partyGetPtr(marioGetPartyId()));
                     event->userdata[0] = 5;
                 }
@@ -930,7 +930,7 @@ USER_FUNC(evt_mario_normalize) {
         case 5:
             if (mp->currMotionId != MARIO_MOTION_VIVIAN) {
                 event->userdata[0] = 6;
-            } else if (vivianGetStatus() == 0) {
+            } else if (vivianGetStatus() == VIVIAN_STATUS_INACTIVE) {
                 event->userdata[0] = 6;
             }
             break;
@@ -2470,7 +2470,7 @@ USER_FUNC(evt_mario_paper_plane) {
 #endif
             return EVT_RETURN_DONE;
         }
-    } else if (marioGetPlaneStatus() == 2) {
+    } else if (marioGetPlaneStatus() == PLANE_STATUS_GLIDING) {
 #if VERSION <= VERSION_DEMO_US
         mp->trigFlags &= ~MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;
 #endif

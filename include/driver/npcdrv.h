@@ -359,6 +359,13 @@ typedef enum FbatCheckFlags {
     FBAT_CHECK_REACTION = (1 << 13),    // 0x2000, only NPCs with reactionFlags bit 0; no first-strike announce
 } FbatCheckFlags;
 
+// FirstStrikeInfo.type
+enum {
+    FIRST_STRIKE_NONE = 0,
+    FIRST_STRIKE_ENEMY = 1,  // "fb_sensei_sareta", 60-frame hold
+    FIRST_STRIKE_MARIO = 2,  // "fb_sensei_shita", slides in and out
+};
+
 typedef struct FirstStrikeInfo {
     BOOL enabled;        // 0x0
     u32 hitKind;            // 0x4, FbatHitKind, 0 when done

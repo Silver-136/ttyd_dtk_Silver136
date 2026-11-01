@@ -293,7 +293,7 @@ BOOL marioChkItemGetMotion(void) {
             ret = TRUE;
         }
     } else if (cur == MARIO_MOTION_SHIP) {
-        if (marioShipChanging() == 3) {
+        if (marioShipChanging() == SHIP_STATUS_SAILING) {
             ret = TRUE;
         }
     }

@@ -934,7 +934,7 @@ void npcMain(void) {
                                         marioFindable = 0;
                                         break;
                                     }
-                                    if (vivianGetStatus() != 0 && vivianGetStatus() != 1) {
+                                    if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
                                         marioFindable = 0;
                                     } else {
                                         marioFindable = 1;
@@ -1017,7 +1017,7 @@ void npcMain(void) {
                                         marioFindable = 0;
                                         break;
                                     }
-                                    if (vivianGetStatus() != 0 && vivianGetStatus() != 1) {
+                                    if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
                                         marioFindable = 0;
                                     } else {
                                         marioFindable = 1;
@@ -1190,7 +1190,7 @@ void npcMain(void) {
         FirstStrikeInfo* firstStrike = &fbat->firstStrike;
         if (firstStrike->enabled) {
             switch (firstStrike->type) {
-                case 2:
+                case FIRST_STRIKE_MARIO:
 #if VERSION <= VERSION_DEMO_US
                     (firstStrike->timer)++;
                     if (firstStrike->timer < 30) {
@@ -1216,12 +1216,12 @@ void npcMain(void) {
 #if VERSION <= VERSION_DEMO_US
                     dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
                     break;
-                case 1:
+                case FIRST_STRIKE_ENEMY:
                     (firstStrike->timer)++;
 #else
                     dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
                     break;
-                case 1:
+                case FIRST_STRIKE_ENEMY:
                     firstStrike->timer++;
 #endif
                     if (firstStrike->timer > 60) {
@@ -1725,16 +1725,16 @@ void fbatSetAttackAnnounce(s32 hitKind) {
         case FBAT_HIT_SHELL:
         case FBAT_HIT_BOMB:
             firstStrike->msg_tag = "fb_sensei_shita"; // You struck first!
-            firstStrike->type = 2;
+            firstStrike->type = FIRST_STRIKE_MARIO;
             firstStrike->color = (GXColor){ 0xFF, 0x80, 0x80, 0xFF };
             break;
         case FBAT_HIT_ENEMY_FIRST:
             firstStrike->msg_tag = "fb_sensei_sareta"; // Your foe struck first!
-            firstStrike->type = 1;
+            firstStrike->type = FIRST_STRIKE_ENEMY;
             firstStrike->color = (GXColor){ 0x80, 0x80, 0xFF, 0xFF };
             break;
         default:
-            firstStrike->type = 0;
+            firstStrike->type = FIRST_STRIKE_NONE;
             break;
     }
 }
@@ -2800,7 +2800,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                         !(npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)) {
                         hit = npc;
                         res.dist = dist;
-                        if (marioGetJabaraState() == 6) {
+                        if (marioGetJabaraState() == JABARA_STATE_FALLING) {
                             res.kind = FBAT_HIT_JUMP;
                             if (!soft) fbatSetAttackAnnounce(FBAT_HIT_JUMP);
                         } else if (mario->currMotionId == MARIO_MOTION_HIP) {
@@ -2810,7 +2810,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                             res.kind = FBAT_HIT_JUMP;
                             if (!soft) fbatSetAttackAnnounce(FBAT_HIT_JUMP);
                         }
-                    } else if (marioGetJabaraState() == 6 && !(npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)) {
+                    } else if (marioGetJabaraState() == JABARA_STATE_FALLING && !(npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)) {
                         res.kind = FBAT_HIT_JUMP;
                         hit = npc;
                         res.dist = dist;

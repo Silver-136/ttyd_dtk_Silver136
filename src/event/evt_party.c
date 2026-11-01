@@ -835,14 +835,14 @@ USER_FUNC(evt_party_vivian_hold) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (vivianGetStatus() != 0) {
+        if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE) {
             return EVT_RETURN_DONE;
         }
         p->flags |= PARTY_FLAG_IS_EVT_USE;
         p->flags |= PARTY_FLAG_IS_BEING_USED;
         partyChgRunMode(p, PARTY_RUN_USE);
     }
-    if (vivianGetStatus() != 2) {
+    if (vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -857,11 +857,11 @@ USER_FUNC(evt_party_vivian_unhold) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (vivianGetStatus() == 2) {
+        if (vivianGetStatus() == VIVIAN_STATUS_HIDDEN) {
             vivianUnhold(p);
         }
     }
-    return vivianGetStatus() == 0 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    return vivianGetStatus() == VIVIAN_STATUS_INACTIVE ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 /**

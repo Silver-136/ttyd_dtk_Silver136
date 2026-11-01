@@ -921,8 +921,8 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
         dz = z - entry->position.z;
         xzdist = sqrtf(dx * dx + dz * dz);
         dist = sqrtf(dx * dx + dy * dy + dz * dz);
-        if (xzdist < range && marioItemGetOk() && marioGetJabaraState() != 1 &&
-            marioGetJabaraState() != 4 && marioGetJabaraState() != 5) {
+        if (xzdist < range && marioItemGetOk() && marioGetJabaraState() != JABARA_STATE_RISING &&
+            marioGetJabaraState() != JABARA_STATE_BUMP_CEILING && marioGetJabaraState() != JABARA_STATE_SWING) {
             if (__fabs((y + mario->wPlayerCollisionBox.y * 0.5f) - entry->position.y) < mario->wPlayerCollisionBox.y * 0.5f + 10.0f) {
                 hit = NULL;
                 if (y < entry->position.y) {

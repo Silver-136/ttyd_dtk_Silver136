@@ -417,7 +417,7 @@ BOOL marioCaseEventValidChk(void) {
     if (mp->currMotionId == MARIO_MOTION_PLANE) {
         return FALSE;
     } else {
-        return vivianGetStatus() == 0;
+        return vivianGetStatus() == VIVIAN_STATUS_INACTIVE;
     }
 }
 
@@ -499,10 +499,10 @@ BOOL marioCheckMenuDisable(void) {
     if (wp->currMotionId == MARIO_MOTION_JABARA) {
         return TRUE;
     }
-    if (marioGetPlaneStatus() == 1) {
+    if (marioGetPlaneStatus() == PLANE_STATUS_TRANSITION) {
         return TRUE;
     }
-    if (marioShipChanging() == 1 || marioShipChanging() == 2) {
+    if (marioShipChanging() == SHIP_STATUS_FOLDING || marioShipChanging() == SHIP_STATUS_SETTLING) {
         return TRUE;
     }
     if (wp->currMotionId == MARIO_MOTION_DAMAGE || wp->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
@@ -517,7 +517,7 @@ BOOL marioCheckMenuDisable(void) {
 #if VERSION >= VERSION_US
     if (vivianGetStatus()) {
         if (!(partyGetPtr(marioGetPartyId())->flags & PARTY_FLAG_IS_EVT_USE)) {
-            if (vivianGetStatus() == 2) {
+            if (vivianGetStatus() == VIVIAN_STATUS_HIDDEN) {
                 return FALSE;
             }
         } else {
@@ -525,7 +525,7 @@ BOOL marioCheckMenuDisable(void) {
         }
     }
 #else
-    if (vivianGetStatus() && vivianGetStatus() == 2) {
+    if (vivianGetStatus() && vivianGetStatus() == VIVIAN_STATUS_HIDDEN) {
         return FALSE;
     }
 #endif
@@ -553,7 +553,7 @@ BOOL marioChkKey(void) {
     if (mp->keyOffCount) {
         return FALSE;
     }
-    if (marioShipChanging() == 1 || marioShipChanging() == 2) {
+    if (marioShipChanging() == SHIP_STATUS_FOLDING || marioShipChanging() == SHIP_STATUS_SETTLING) {
         return FALSE;
     }
     if (!marioRollKeyDisable()) {

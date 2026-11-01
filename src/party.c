@@ -1118,7 +1118,7 @@ void driveParty(PartyEntry* party) {
             if (!(party->flags & PARTY_FLAG_CTRL_OFF)) {
                 break;
             }
-            if (vivianGetStatus() != 2) {
+            if (vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
                 vivianShadow(party);
             }
             partyPreDisp(party);
@@ -1500,7 +1500,7 @@ s32 partyGoodbyeMain(PartyEntry* party) {
             party_dp = &partyDataTbl[party->currentMemberId];
             party_dp->use_func(party);
             if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
-                if (vivianGetStatus() == 0) {
+                if (vivianGetStatus() == VIVIAN_STATUS_INACTIVE) {
                     party->motionStep = 10;
                     party->runMode = PARTY_RUN_GOODBYE;
                 }
@@ -3024,7 +3024,7 @@ void party_damage_return(PartyEntry* party) {
             break;
     }
 #if VERSION > VERSION_DEMO_US
-    if (vivianGetStatus() != 2) {
+    if (vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
         vivianShadow(party);
     }
 #endif

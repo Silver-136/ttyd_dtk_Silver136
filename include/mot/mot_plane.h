@@ -30,6 +30,13 @@ typedef struct MotPlaneWork {
 } MotPlaneWork;                   // size 0x48
 
 void marioForcePlaneAnime(void);
+// marioGetPlaneStatus
+enum {
+    PLANE_STATUS_NONE = 0,
+    PLANE_STATUS_TRANSITION = 1,  // take-off or landing
+    PLANE_STATUS_GLIDING = 2,     // sub-motions 12-19
+};
+
 s32 marioGetPlaneStatus(void);
 s32 marioPlaneGetFlyingDir(void);
 void mot_plane(void);
