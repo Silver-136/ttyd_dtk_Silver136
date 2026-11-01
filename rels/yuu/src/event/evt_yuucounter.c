@@ -43,6 +43,7 @@ USER_FUNC(evt_yuucounter_main_func);
 USER_FUNC(yuucounter_disp_flag_onoff);
 
 static EvtWord main_evt[4];
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
 EvtWord yuucounter_window_disp_evt[6];
 #endif

@@ -30,6 +30,7 @@
 
 USER_FUNC(waku);
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord w_door_close[];
 #else

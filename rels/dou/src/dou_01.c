@@ -16,6 +16,7 @@
 
 
 static BeroEntry bero_entry_data[3];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord korutesu_event[];
 #else

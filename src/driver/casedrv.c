@@ -99,6 +99,7 @@ void caseMain(void) {
     HitEntry* push;
     HitEntry* hammer;
     HitEntry* head;
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 s32 fbatMode;
 #endif

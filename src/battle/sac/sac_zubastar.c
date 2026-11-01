@@ -537,6 +537,7 @@ USER_FUNC(zubastar_main) {
                 n++;
             }
         }
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
         top[n] = 364.0f;
         bot[n] = 304.0f;

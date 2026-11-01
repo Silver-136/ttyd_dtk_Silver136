@@ -52,6 +52,7 @@ EvtWord trap_main[122];
 EvtWord trap_restore[59];
 EvtWord wana_kemuri[130];
 EvtWord wana_offscreen[219];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord trap_event[];
 #else

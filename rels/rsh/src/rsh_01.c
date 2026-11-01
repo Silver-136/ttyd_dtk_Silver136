@@ -41,6 +41,7 @@ static EvtWord init_toron[70];
 static EvtWord talk_toron[63];
 static EvtWord init_madam[52];
 static s32 item_tbl_madam[2];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_madam_ring_return[];
 #else

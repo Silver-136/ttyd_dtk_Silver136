@@ -18,6 +18,7 @@ static EvtWord e_close[12];
 static EvtWord e_open[12];
 static BeroEntry bero_entry_data[3];
 EvtWord warning_event[38];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord muj_11_init_evt[];
 #else

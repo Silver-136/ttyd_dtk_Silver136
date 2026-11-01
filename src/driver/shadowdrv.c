@@ -1,5 +1,6 @@
 // Shadow driver: blob, cylinder, projected and depth shadows (shadowInit, shadowMain, shadowDisp).
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #define DTRIGF_WITH_INITIAL_VALUES
 #include <dtrigf.h>

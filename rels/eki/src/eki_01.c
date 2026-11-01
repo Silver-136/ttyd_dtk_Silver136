@@ -27,6 +27,7 @@ static EvtWord n_open[12];
 static BeroEntry bero_data[4];
 static EvtWord evt_origami[129];
 static s32 key_tbl[2];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_chk[];
 #else

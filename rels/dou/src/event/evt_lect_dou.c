@@ -94,6 +94,7 @@ static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord ship_majin_lecture_init[63];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord ship_majin_lecture[];
 #else

@@ -26,6 +26,7 @@ USER_FUNC(camera_curve_on);
 USER_FUNC(evt_kagemario_init);
 
 EvtWord gra_05_in_01[5];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gra_05_out_01[];
 #else

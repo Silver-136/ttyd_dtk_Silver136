@@ -20,6 +20,7 @@
 static BeroEntry bero_entry_data[5];
 EvtWord tik_18_cloud_evt[5];
 static HitDamageReturn hitDmgRetPoints[13];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_18_init_evt[];
 #else

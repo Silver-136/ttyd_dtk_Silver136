@@ -167,6 +167,7 @@ USER_FUNC(evt_yuuminigame_alloc) {
             wp->init = yuuminigame_init_4slit;
             wp->main = yuuminigame_main_4slit;
             wp->disp = yuuminigame_disp_4slit;
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 wp->data = _mapAlloc(0x24);
             memset(wp->data, 0, 0x24);

@@ -51,6 +51,7 @@ static USER_FUNC(killer_copy_status) {
 /**
  * Unit definition of the Bill Blaster: 5 HP, level 22, 3 parts, with its sounds, init script and data table.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_killer_cannon = {
     90,

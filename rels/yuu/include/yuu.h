@@ -48,6 +48,7 @@ typedef struct SlitWork {
     f32 rot1;
     f32 rot2;
     s32 monteCount;
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
     EventEntry* viewEvent;
 #endif

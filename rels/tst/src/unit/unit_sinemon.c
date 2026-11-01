@@ -30,6 +30,7 @@ static EvtWord wait_event[6];
 /**
  * Unit definition of the Moon Cleft: its HP, level, sizes, sounds, status vulnerability, parts and init script.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_sinemon = {
     114, // unitType

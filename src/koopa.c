@@ -320,6 +320,7 @@ void kpaMain(void) {
  * horizontal movement limited by his dash speed and walls, jumping and falling, floors and ceilings,
  * then the shared player effects, balloon and camera.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void kpa2DMain(void) {
 #else

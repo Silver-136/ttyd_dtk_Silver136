@@ -82,6 +82,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Elemental reactions of the Bullet Bill: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 0, 100, 0, 50, 150, 100, 75, 100, 75, 100, 75, 100, 75, 75, 0, 100, 100, 75, 100, 100, 95};
 #else

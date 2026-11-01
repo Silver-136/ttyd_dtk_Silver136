@@ -1431,6 +1431,7 @@ BOOL mobjCheckExec(void) {
     return FALSE;
 }
 
+#if VERSION > VERSION_DEMO_US
 static int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // was always inlined in retail but not in demo
     if (!strcmp(entry->animName, kururinName)) {
         ItemEntry* item = itemNameToPtr(entry->name);
@@ -1445,6 +1446,7 @@ static int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // was always inl
         return 0;
     }
 }
+#endif
 
 /**
  * For treasure chests (normal, big, gray, black) returns 2 once opened (state 99) and 1 while closed;
@@ -1584,6 +1586,24 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
 
     return ret;
 }
+
+#if VERSION <= VERSION_DEMO_US
+// A real function in the demo, defined after its callers.
+int mobjCheckKururingFloorItem(MapObjectEntry* entry) {
+    if (!strcmp(entry->animName, kururinName)) {
+        ItemEntry* item = itemNameToPtr(entry->name);
+        if (item != NULL && (item->flags & ITEM_FLAG_ACTIVE) && evtGetValue(0, entry->flagVar) == 0) {
+            return 1;
+        } else if (evtGetValue(0, entry->flagVar) != 0) {
+            return 1;
+        } else {
+            return 2;
+        }
+    } else {
+        return 0;
+    }
+}
+#endif
 
 /** Name of the flipping floor panels that hide Star Pieces, checked to treat their hidden item specially. */
 const char kururinName[] = "MOBJ_KururinFloor";

@@ -49,6 +49,7 @@ static const char* pika_tbl_rsh_06[10];
 static EvtWord hom_10_evt_resha_sub[102];
 EvtWord hom_10_evt_resha_right[35];
 EvtWord hom_10_evt_resha_left[28];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord hom_10_init_evt[];
 #else

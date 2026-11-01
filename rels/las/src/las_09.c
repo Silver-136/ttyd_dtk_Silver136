@@ -45,6 +45,7 @@ static EvtWord n_door_close[22];
 static EvtWord n_door_open[22];
 static BeroEntry bero_entry_data[8];
 static HitDamageReturn dmgRetPoint[58];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord first_evt[];
 #else

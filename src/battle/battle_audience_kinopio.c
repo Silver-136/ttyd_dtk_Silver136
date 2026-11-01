@@ -49,6 +49,7 @@ void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front);
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void BattleAudienceCtrlProcessKinopioNoGravity(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioAudBall(s32 index, s32 front);

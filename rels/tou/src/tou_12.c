@@ -26,6 +26,7 @@ static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];
 static BeroEntry bero_data[2];
 static EvtWord evt_kinoshikowa[111];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_block_broken[];
 #else

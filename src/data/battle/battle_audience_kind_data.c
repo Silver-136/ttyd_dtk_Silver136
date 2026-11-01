@@ -34,6 +34,7 @@ s32* audience_anim_kuriboo[19];
 s32* audience_anim_pakkun[19];
 s32* audience_anim_luigi[19];
 BattleAudienceItemKind audience_item_kinopio[12];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleAudienceItemKind audience_item_heiho[18];
 #else

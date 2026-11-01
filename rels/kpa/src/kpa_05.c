@@ -102,6 +102,7 @@ static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_koopa_get_level, GSW_KPA_BOWSER_LEVEL)
 #else

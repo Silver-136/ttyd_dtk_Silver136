@@ -106,6 +106,7 @@ s32 chusan_act_tbl[8];
 EvtWord evt_yuunpc_minigame1[69];
 EvtWord evt_yuunpc_minigame2[69];
 EvtWord evt_yuunpc_minigame3[69];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_yuunpc_minigame4[];
 #else

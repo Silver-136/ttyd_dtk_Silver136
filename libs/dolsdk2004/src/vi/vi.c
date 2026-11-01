@@ -1307,5 +1307,7 @@ int __VIGetLatchPosition(u32 port, s16* px, s16* py) {
 }
 
 #pragma force_active on
+#ifndef VERSION_G8ME01_DEMO
 __declspec(section ".data") u8 gap_05_803BF7CC_data[20] = {0};
+#endif
 #pragma force_active reset

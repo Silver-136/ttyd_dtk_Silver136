@@ -22,6 +22,7 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 BattleWeapon weapon_cortez_claw_float_attack;
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table[4];
 #else

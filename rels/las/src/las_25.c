@@ -29,6 +29,7 @@ static EvtWord e2_door_open[22];
 static BeroEntry bero_entry_data[5];
 static BeroEntry w_bero_mapchg[1];
 static s32 key_tbl[2];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord key_check_evt[];
 #else

@@ -61,6 +61,7 @@ BattleUnitKind unit_karon = {
     30, // level
     0, // bonusExp
     2, // bonusCoin
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 100,
 #else

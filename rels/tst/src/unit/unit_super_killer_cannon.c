@@ -51,6 +51,7 @@ static USER_FUNC(killer_copy_status) {
  * Unit definition of the B. Bill Blaster: its HP, level, sizes, sounds, status vulnerability,
  * parts and init script.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_super_killer_cannon = {
     125,

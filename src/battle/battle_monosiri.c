@@ -286,6 +286,7 @@ BattleUnitType same_tbl_moamoa[] = {
     UNIT_SMORG_MIASMA_TENTACLE_C,
     UNIT_SMORG_MIASMA_TENTACLE_B,
     UNIT_SMORG_MIASMA_TENTACLE_A,
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
     UNIT_SMORG_MIASMA_CLAW,
 #endif

@@ -27,6 +27,7 @@ static void majin_callback(s32 type);
 
 static BeroEntry bero_entry_data[2];
 static s32 key_tbl[2];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_majin[];
 #else

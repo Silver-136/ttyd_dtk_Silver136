@@ -17,6 +17,7 @@ s32 hitCalcVtxPosition(HitEntry* hit);
 void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
 
 s32 unk_8041840C;
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
 HitEntry* hitActiveListTop; // head of the active hit list (descriptive name, see docs/NAME_PROVENANCE.md)
 #endif

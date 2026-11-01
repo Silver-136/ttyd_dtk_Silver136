@@ -514,6 +514,7 @@ static USER_FUNC(powan_set_post_battle_event) {
 }
 
 /** args: unit id, part id. Keeps the part on the "pPlane1" joint of the unit's body animation. */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(powan_rider_follow) {
     EvtWord* args = event->args;

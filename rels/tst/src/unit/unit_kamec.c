@@ -94,6 +94,7 @@ static EvtWord trans_magic_event[7];
 static EvtWord recover_magic_event[142];
 static EvtWord all_recover_magic_event[180];
 static EvtWord bunsin_magic_event[160];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #if VERSION <= VERSION_DEMO_US
 static EvtWord spawn_event[];

@@ -1,6 +1,7 @@
 // Mario's paper boat motion (boat panel): turning into the boat, steering, swirls (whirlpools), the dash and
 // turning back.
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #define DTRIGF_WITH_INITIAL_VALUES
 #include <dtrigf.h>

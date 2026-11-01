@@ -53,6 +53,7 @@ EvtWord korutesu_rotate2[28];
 EvtWord korutesu_large[56];
 EvtWord korutesu_blur[43];
 static EvtWord starstone_fuwafuwa[53];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord korutesu_event[];
 #else

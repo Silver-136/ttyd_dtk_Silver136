@@ -44,6 +44,7 @@ FireScaleKey scale1[] = {
  * Eight vertex colours of the layered flame for the spark-throwing types: orange fire (type 5), blue (6)
  * and green (7). Read by effFireDisp3.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 FireScaleKey scale2[] = {
     { 0, 1.0f },

@@ -32,6 +32,7 @@ static EvtWord dmg_turn_event[64];
 static EvtWord wakeup_event[67];
 static EvtWord init_event_nokotarou[62];
 static EvtWord damage_event_nokotarou[24];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event_nokotarou[];

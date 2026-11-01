@@ -71,6 +71,7 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     data = __memAlloc(HEAP_EFFECT, sizeof(effExpBomData) * 10);
     effect->userdata = data;
     effect->callback = effExpBomMain;
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 for (i = 0; i < effect->count; i++, data++) {
 #else

@@ -28,6 +28,7 @@ static EvtWord iri_12_makkino_talk[7];
 static EvtWord iri_12_init[85];
 static EvtWord evt_kanban[16];
 static EvtWord evt_kanban2[45];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_06_init_evt[];
 #else

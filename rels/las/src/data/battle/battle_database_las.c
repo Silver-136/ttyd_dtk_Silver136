@@ -15,6 +15,7 @@
 #include "battle/battle_stage.h"
 #include "driver/npcdrv.h"
 
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
 EffectEntry* hi_fire_eff[6];
 #endif

@@ -27,6 +27,7 @@
 
 EvtWord bero_05_custom_in[30];
 EvtWord bero_05_custom_out[12];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static BeroEntry bero_entry_data[6];
 #else

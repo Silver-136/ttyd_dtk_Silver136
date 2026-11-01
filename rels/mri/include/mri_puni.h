@@ -132,6 +132,7 @@ typedef struct PuniData {
     s32 flags2;                         // 0x8, PuniFlags2
     u16 mode;                           // 0xC
     u16 prevMode;                       // 0xE
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 s32 modeHistIdx;   // 0x10, demo: index into modeHist (0-127)
     u16 modeHist[128];

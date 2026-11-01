@@ -30,6 +30,7 @@
 USER_FUNC(map_anim_flag_off);
 static USER_FUNC(peach_evt_toumei);
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord w_door_close[];
 #else

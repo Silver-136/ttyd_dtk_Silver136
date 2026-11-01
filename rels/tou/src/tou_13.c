@@ -22,6 +22,7 @@ static BeroEntry bero_data[3];
 static EvtWord evt_dakuto[44];
 EvtWord evt_nusumi[182];
 static EvtWord evt_first[42];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tou_13_init_evt[];
 #else

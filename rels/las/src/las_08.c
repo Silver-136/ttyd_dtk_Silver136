@@ -39,6 +39,7 @@ EvtWord hikari_anim[52];
 EvtWord taimatu_evt[18];
 s32 mugen_kairou_list[7];
 EvtWord mugen_kairou_init[96];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_08_init_evt[];
 #else

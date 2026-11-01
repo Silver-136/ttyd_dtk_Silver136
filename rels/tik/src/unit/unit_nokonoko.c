@@ -19,6 +19,7 @@
 
 BattleUnitKind unit_nokonoko;
 static PoseTableEntry pose_table[18];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[15];
 #else

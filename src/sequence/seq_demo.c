@@ -132,6 +132,7 @@ static u16 VolumeTable[] = {
 // clang-format on
 
 //.bss
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #include "manager/filemgr.h"
 typedef struct SeqDemoWork {

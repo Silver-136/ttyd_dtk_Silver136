@@ -20,6 +20,7 @@ USER_FUNC(evt_lottery) {
     lottery_info* lot;
     s32 day;
     s32 v;
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
     OSCalendarTime a1, a2, d1, d2, b1, b2, e;
 #else

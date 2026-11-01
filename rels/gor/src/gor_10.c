@@ -168,6 +168,7 @@ static USER_FUNC(depth) {
     return EVT_RETURN_BLOCK;
 }
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tegami_init_evt[];
 #else

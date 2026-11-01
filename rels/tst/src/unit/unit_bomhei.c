@@ -29,6 +29,7 @@ static BattleUnitKindPart parts[1];
 static StatusVulnerability regist;
 static BattleWeapon weapon_bomhei_attack;
 static BattleWeapon weapon_bomhei_bomb;
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord bomb_event[];
 #else

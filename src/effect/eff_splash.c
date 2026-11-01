@@ -316,6 +316,7 @@ void effSplashMain(EffectEntry* effect) {
  * Projects the splash position to the screen and reads the frame buffer pixel there for the water tint (the
  * retail build then overrides it with the map colour from eff_funemizu).
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
 #else

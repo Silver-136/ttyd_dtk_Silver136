@@ -35,6 +35,7 @@ static USER_FUNC(ss_set);
 static BeroEntry bero_entry_data[7];
 static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord water_shikake[];
 #else

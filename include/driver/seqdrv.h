@@ -15,6 +15,7 @@ typedef enum SequenceType {
     SEQ_BATTLE = 4,
     SEQ_GAME_OVER = 5,
     SEQ_LOAD = 6,
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 SEQ_E3 = 8
 #else

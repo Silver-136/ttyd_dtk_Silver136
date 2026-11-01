@@ -31,6 +31,7 @@ static EvtWord damage_event[10];
 static EvtWord phase_event[681];
 static EvtWord attack_event[5];
 static EvtWord wait_event[6];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord lecAttackEvent_Jump[];
 #else

@@ -40,6 +40,7 @@ static EvtWord wait_event[6];
  */
 BattleUnitKind unit_kurikuri = {
     UNIT_GOOMBA_GLITZVILLE, // unitType
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 "btl_un_kurikuri",
 #else

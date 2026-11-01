@@ -27,6 +27,7 @@ static EvtWord box_evt[30];
 static EvtWord switch_evt[62];
 static EvtWord block_break[22];
 static EvtWord hint_plate[14];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_15_init_evt[];
 #else

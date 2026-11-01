@@ -50,6 +50,7 @@ typedef enum IconFlags {
     ICON_FLAG_DATA_PENDING = (1 << 13),      // 0x2000, the icon data was not loaded yet at the entry
 } IconFlags;
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #define ICON_FLAG_NO_MAP_BLEND 0x80
 typedef struct IconEntry {

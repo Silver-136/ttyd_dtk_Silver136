@@ -89,6 +89,7 @@ EvtWord firebar_coin[68];
 FirebarSetup firebardesc[7];
 EvtWord firebar_evt[102];
 static HitDamageReturn dmgRetPoint[4];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_04_init_evt[];
 #else

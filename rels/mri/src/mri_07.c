@@ -25,6 +25,7 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord chibitoge_nakama[];
 #else

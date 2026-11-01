@@ -18,6 +18,7 @@
 #include "party.h"
 
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord epilogue_evt[];
 #else

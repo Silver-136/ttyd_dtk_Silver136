@@ -35,6 +35,7 @@
 #include "las.h"
 #include "driver/seqdrv.h"
 
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
 static char name[8];
 #endif

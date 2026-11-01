@@ -117,6 +117,7 @@ static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 /** Element modifiers of the Paragoomba while it still has its wings: none, no element is special to it. */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 /**
  * Status vulnerability of the Paragoomba while it still has its wings in the demo builds:

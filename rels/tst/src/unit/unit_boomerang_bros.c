@@ -120,6 +120,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Element reactions of Boomerang Bro: none, every element hits normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 /**
  * Status vulnerability of Boomerang Bro (the demos), as the percent chance a status takes hold:

@@ -42,6 +42,7 @@ BattleUnitKind unit_dark_keeper = {
     1, // dangerHP
     1, // perilHP
     28, // level
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 0,
 #else

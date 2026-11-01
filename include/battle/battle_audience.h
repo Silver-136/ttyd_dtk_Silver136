@@ -217,6 +217,7 @@ typedef struct BattleAudienceWindow {
 
 // BattleAudience.flags: 0x10..0x1000 are set by one BattleAudience_Case_* each and read by BattleAudience_PerAct.
 // 0x1, 0x2 (set, never read), 0x4 and 0x4000 (Hooktail only) are not named.
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 // The demos have one more flag (STYLISH_MISSED, 0x400), so the later bits are one higher.
 typedef enum BattleAudienceFlags {

@@ -32,6 +32,7 @@ static CamRoadWork* wp = &work;
 // (MarioSt.MAP) names the original: the strings are @2397/@2398, numbered between calcCurrentCamState and
 // camRoadSetup, where the map lists the stripped camRoadDraw (0x8b8 bytes, UNUSED in the demo as well), so
 // no build contains its code.
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 s32 camRoadSetup(const char* name) {
     char path[128];

@@ -65,6 +65,7 @@ static EvtWord dmg_first_attack_pos[19];
 static EvtWord yarn_event[44];
 static EvtWord entry_event[48];
 static EvtWord damage_event[10];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[];

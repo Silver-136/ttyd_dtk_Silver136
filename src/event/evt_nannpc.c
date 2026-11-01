@@ -27,6 +27,7 @@ char makestring[16];
  * Names are strings; a value without the top address bit is treated as a number
  * and looked up by its six-digit hex form, so scripts can name crowd NPCs by index. NULL if none matches.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static inline char* nanNPCEntryName(char* name) {
     if (!((EvtWord)name & 0x80000000)) {

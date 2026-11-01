@@ -46,6 +46,7 @@ EVT_BEGIN(gor_12_init_evt)
     CALL(evt_map_playanim, STRING("anm_umi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_kirakira"), MAP_ANIM_PLAY_LOOP, 0)
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
 #else

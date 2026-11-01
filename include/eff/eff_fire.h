@@ -36,6 +36,7 @@ typedef struct EffFireWork {
     f32 scaleY;     // 0x7C
     s32 reserved_80;     // 0x80, only set to 0
     s32 reserved_84;     // 0x84, only set to 0
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
     s32 useMapBlend;     // 0x88, adds the map blend-colour TEV stage
 #endif

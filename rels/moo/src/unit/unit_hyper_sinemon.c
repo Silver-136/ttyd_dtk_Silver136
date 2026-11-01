@@ -82,6 +82,7 @@ static BattleUnitKind unit_hyper_sinemon = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 #else

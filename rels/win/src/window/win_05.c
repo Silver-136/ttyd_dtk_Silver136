@@ -27,6 +27,7 @@
 EvtWord win_05_door_open[10];
 EvtWord win_05_door_close[10];
 static BeroEntry bero_entry_data[2];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord item_get00[];
 #else

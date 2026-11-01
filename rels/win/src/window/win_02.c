@@ -21,6 +21,7 @@
 
 
 static BeroEntry bero_entry_data[5];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_hikou_nobiru_init[];
 #else

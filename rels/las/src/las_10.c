@@ -59,6 +59,7 @@ const char* kabe_list_2[8];
 const char* kabe_list_3[8];
 EvtWord las_10_temae_kabe[12];
 static EvtWord first_evt[182];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tenkyugi_evt[];
 #else

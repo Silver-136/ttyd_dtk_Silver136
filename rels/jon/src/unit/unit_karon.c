@@ -105,6 +105,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Element response of the Dry Bones: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 70, 60, 0, 60, 100, 100, 60, 100, 60, 100, 60, 100, 60, 60, 10, 70, 100, 60, 100, 100, 90};
 #else

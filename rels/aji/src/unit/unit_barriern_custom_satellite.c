@@ -43,6 +43,7 @@ BattleUnitKind unit_barriern_custom_satellite = {
     9999, // pbSoftCap
     16, // width
     16, // height
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
     0,
     8,

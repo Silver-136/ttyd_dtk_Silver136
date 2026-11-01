@@ -31,6 +31,7 @@ static EvtWord door01_close[22];
 static EvtWord door01_open[22];
 static BeroEntry bero_entry_data[5];
 EvtWord honenoko_oidasare_evt[466];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gon_01_GATEEVENT_evt[];
 #else

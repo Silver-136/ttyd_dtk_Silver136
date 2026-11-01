@@ -39,6 +39,7 @@ static BeroEntry bero_entry_data[2];
 static EvtWord chibitoge_init[21];
 static EvtWord chibitoge_talk[111];
 static NpcSetupInfo npcEnt[2];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord chuchurina_sogu[812];
 #else

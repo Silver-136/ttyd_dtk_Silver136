@@ -42,6 +42,7 @@ static EvtWord door02_close[12];
 static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
 EvtWord evt_ori_open[130];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tsuritenjo_event[];
 #else

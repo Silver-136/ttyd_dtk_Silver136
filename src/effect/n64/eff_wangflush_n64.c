@@ -24,6 +24,7 @@ typedef struct EffWangFlushN64Work {
 } EffWangFlushN64Work;
 
 /** 16x16 quad drawn for both the colour-cycling flash and the spinning white sprite. */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static u8 color_rotation_data[] = {
     0xFF, 0xFF, 0x52, 0xFF, 0xFF, 0x52, 0xB5, 0x94,

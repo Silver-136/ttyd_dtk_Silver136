@@ -43,6 +43,7 @@ static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
 EvtWord n_bero_match_reset[14];
 static BeroEntry bero_data[3];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_takurami[];
 #else

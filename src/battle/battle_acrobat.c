@@ -36,6 +36,7 @@ s32 BattleAcrobatStart(BattleWork* work, s32 unitId, s32 windowStartFrame,
  * Returns EVT_RETURN_BLOCK while still waiting, EVT_RETURN_YIELD once decided.
  */
 s32 BattleAcrobatMain(BattleWork* work) {
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
     BattleActions* manager;
 #endif

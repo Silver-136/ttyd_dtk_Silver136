@@ -85,6 +85,7 @@ static BeroEntry bero_entry_data[2];
 static EvtWord gonbaba_standup_shake[23];
 static EvtWord gonbaba_fog_change[87];
 static EvtWord gonbaba_down_shake[83];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gonbaba_event[];
 #else

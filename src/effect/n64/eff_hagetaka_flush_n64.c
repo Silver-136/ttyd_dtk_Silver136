@@ -24,6 +24,7 @@ typedef struct EffHagetakaFlushN64Work {
 } EffHagetakaFlushN64Work;
 
 /** Camera-facing 16x16 twinkle sprite. */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static u8 color_rotation_data[] = {
     0xFF, 0xFF, 0x52, 0xFF, 0xFF, 0x52, 0xB5, 0x94,

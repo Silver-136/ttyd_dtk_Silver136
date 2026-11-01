@@ -47,6 +47,7 @@ USER_FUNC(evt_dokuroiwa_command_set);
 
 EvtWord sanders_rotate[28];
 EvtWord sanders_nakama_sub[13];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord sanders_nakama[];
 #else

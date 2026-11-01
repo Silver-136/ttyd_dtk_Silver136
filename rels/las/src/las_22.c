@@ -37,6 +37,7 @@ EvtWord kaitendai_evt[312];
 static EvtWord dai_evt[13];
 static s32 key_tbl[2];
 static EvtWord key_evt[5];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord key_check_evt[];
 #else

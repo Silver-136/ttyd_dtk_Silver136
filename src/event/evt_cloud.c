@@ -72,6 +72,7 @@ static USER_FUNC(evt_cloud_main) {
     if (party == NULL) {
         return EVT_RETURN_BLOCK;
     }
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
         return EVT_RETURN_BLOCK;

@@ -25,6 +25,7 @@ typedef struct EffKemuri9N64Work {
     s32 timer;       // 0x24
     s32 counter;     // 0x28
     s32 life;        // 0x2C
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 f32 anim;
 #else

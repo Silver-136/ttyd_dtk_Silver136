@@ -13,6 +13,7 @@
 
 static BeroEntry bero_entry_data[4];
 static BeroEntry e3_bero[2];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gon_00_init_evt[];
 #else

@@ -92,6 +92,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  * extra prone to poison, electric shock, burn, growing huge, attack up, defence up and speed up;
  * resists most other statuses.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {70, 90, 70, 150, 70, 150, 150, 70, 150, 70, 150, 70, 150, 70, 70, 90, 90, 150, 70, 0, 0, 30};
 #else

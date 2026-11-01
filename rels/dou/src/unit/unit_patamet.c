@@ -38,6 +38,7 @@ static EvtWord attack_event_pata[339];
 static EvtWord wait_event_pata[6];
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_ceil[18];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[15];
 #else

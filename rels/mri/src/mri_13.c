@@ -43,6 +43,7 @@ static EvtWord punipuni_ball00_init[54];
 static EvtWord punipuni_ball00[68];
 static EvtWord yuka_init[48];
 EvtWord yuka_slot[113];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord yuka_shake[];
 #else

@@ -28,6 +28,7 @@ USER_FUNC(set_pos);
 static EvtWord door_close[12];
 static EvtWord door_open[12];
 static BeroEntry bero_entry_data[3];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord push_evt[];
 #else

@@ -48,6 +48,7 @@ static EvtWord wait_event[6];
  * Unit definition of the Red Bones: 5 HP and level 14, with its sizes, damage sounds, status vulnerability,
  * parts and init script.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_red_honenoko = {
     22,

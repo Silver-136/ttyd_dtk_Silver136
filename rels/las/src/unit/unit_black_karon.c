@@ -113,6 +113,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 85, 40, 0, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 50, 100, 40, 100, 100, 85};
 #else

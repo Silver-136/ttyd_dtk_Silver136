@@ -50,6 +50,7 @@ static EvtWord kizayarou_talk[8];
 static EvtWord kizayarou_init[38];
 static NpcSetupInfo npcEnt[5];
 static BeroEntry bero_entry_data[3];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord witchtrio_momeru[];
 #else

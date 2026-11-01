@@ -32,6 +32,7 @@ static EvtWord switch_evt[46];
 EvtWord enemy1_dead_evt[11];
 EvtWord enemy2_dead_evt[11];
 EvtWord enemy3_dead_evt[11];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord enemy4_dead_evt[];
 #else

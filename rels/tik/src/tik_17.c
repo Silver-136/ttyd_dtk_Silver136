@@ -30,6 +30,7 @@ static EvtWord evt_switch_00[56];
 static EvtWord evt_switch_01_init[26];
 static EvtWord evt_switch_01_after[11];
 static EvtWord evt_switch_01[56];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord mobj_box01[];
 #else

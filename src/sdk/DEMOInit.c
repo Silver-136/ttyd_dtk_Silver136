@@ -89,6 +89,7 @@ static void __DEMOInitGX(void) {
     GXSetDispCopyGamma(GX_GM_1_0);
 }
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static inline void __DEMOInitRenderMode(GXRenderModeObj* mode) {
 #else

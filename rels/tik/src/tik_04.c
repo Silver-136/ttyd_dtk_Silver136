@@ -28,6 +28,7 @@
 #include "driver/itemdrv.h"
 
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static BeroEntry bero_entry_data[8];
 #else

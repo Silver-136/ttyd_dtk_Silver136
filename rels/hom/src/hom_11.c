@@ -15,6 +15,7 @@
 #include "pmario_sound.h"
 
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord hom_11_init_evt[];
 #else

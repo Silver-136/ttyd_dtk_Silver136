@@ -19,6 +19,7 @@ extern BattleWeapon ItemWeaponData_FirstLovePuddingBiribiri;
 extern BattleWeapon ItemWeaponData_FreshJuice;
 extern BattleWeapon ItemWeaponData_Funyafunya_Kun;
 extern BattleWeapon ItemWeaponData_FutarideForever;
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern BattleWeapon ItemWeaponData_FireCandy;
 #endif

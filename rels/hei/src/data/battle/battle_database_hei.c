@@ -99,6 +99,7 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_06_02_off[2];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_06_03_off[3];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_07_01_off[2];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_08_01_off[2];
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
 NpcBattleSelect R_btlgrpsel_hei_btlno_hei_08_02_off[2];
 #endif

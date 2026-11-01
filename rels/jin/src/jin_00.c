@@ -109,6 +109,7 @@ EvtWord e1_close[12];
 EvtWord e2_open[12];
 EvtWord e2_close[12];
 EvtWord jin_00_dai[16];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord jin_00_dai_in_sub[];
 #else

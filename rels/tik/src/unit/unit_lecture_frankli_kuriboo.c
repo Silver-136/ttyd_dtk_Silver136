@@ -25,6 +25,7 @@ static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[53];
 static EvtWord entry_event[29];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #if VERSION <= VERSION_DEMO_US
 static EvtWord phase_event[];

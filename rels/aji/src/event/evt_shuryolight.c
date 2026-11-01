@@ -176,6 +176,7 @@ EVT_BEGIN(shuryolight_tue_normal)
     RETURN
 EVT_END()
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void shuryolight_callback(void* param, s32 group) {
 #else

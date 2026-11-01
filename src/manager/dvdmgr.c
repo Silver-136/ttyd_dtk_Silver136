@@ -48,6 +48,7 @@ void DVDMgrDelete(void) {
     }
 }
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static s32 compare(const void* a, const void* b) {
 #else

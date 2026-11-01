@@ -77,6 +77,7 @@ static EvtWord out_w_bero[12];
 BeroEntry bero_witchtrio[1];
 static BeroEntry bero_entry_data[3];
 EvtWord meet_clouda[76];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord meet_clouda2[];
 #else

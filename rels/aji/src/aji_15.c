@@ -31,6 +31,7 @@ static BeroEntry bero_entry_data[2];
 EvtWord peach_evt_yuge[43];
 EvtWord peach_evt_syawa_main[798];
 EvtWord peach_evt_syawa_init[63];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_15_init_evt[];
 #else

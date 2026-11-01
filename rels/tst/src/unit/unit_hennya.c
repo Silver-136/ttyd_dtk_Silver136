@@ -37,6 +37,7 @@ BattleUnitKind unit_hennya = {
     0, // maxFp
     1, // dangerHP
     1, // perilHP
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 36,
     0,

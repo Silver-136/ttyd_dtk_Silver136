@@ -15,6 +15,7 @@
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
 
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
 static char name[8];
 #endif

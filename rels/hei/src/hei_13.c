@@ -24,6 +24,7 @@
 static BeroEntry bero_entry_data[5];
 static TreeAccess ki_data[2];
 EvtWord evt_anm_kan[59];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord hei_13_init_evt[];
 #else

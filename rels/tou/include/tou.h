@@ -8,6 +8,7 @@
 
 extern EvtWord all_juyoitem_lecture_rel[];
 extern EvtWord all_party_lecture[];
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
 extern EvtWord evt_gardman_spawn[];
 #endif

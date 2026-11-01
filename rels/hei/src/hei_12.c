@@ -25,6 +25,7 @@ extern s32 hei_test_water_tev[];
 
 static BeroEntry bero_entry_data[2];
 static EvtWord evt_chorobon[136];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord hei_12_init_evt[];
 #else

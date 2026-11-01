@@ -38,6 +38,7 @@ static USER_FUNC(ride_chk);
 static USER_FUNC(thunder_main);
 static USER_FUNC(loop_onoff);
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord w_door_close[];
 #else

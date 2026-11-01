@@ -30,6 +30,7 @@ static EvtWord haguruma_evt[194];
 static EvtWord dai_evt[13];
 const char* hosi_name[14];
 EvtWord hosi_sw_check[303];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord hosi_onoff[];
 #else

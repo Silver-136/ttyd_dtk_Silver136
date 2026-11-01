@@ -41,6 +41,7 @@ BattleUnitKind unit_yami_kuriboo = {
     1, // perilHP
     11, // level
     0, // bonusExp
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 1,
 #else

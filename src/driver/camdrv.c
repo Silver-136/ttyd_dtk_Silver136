@@ -668,6 +668,7 @@ void cam3dImgMain(CameraEntry* camera) {
     MTXPerspective(camera->projection, camera->fovY, camera->aspect, camera->near, camera->far);
 }
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void camEffMain(CameraEntry* camera) {
 #else

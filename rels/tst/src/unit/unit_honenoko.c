@@ -116,6 +116,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Damage-type modifiers of the Dull Bones: none, no special weakness or immunity. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 /**
  * Status vulnerability of the Dull Bones (100% is the normal chance): immune to Sleep and Poison; resists

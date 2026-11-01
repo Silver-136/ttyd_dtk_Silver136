@@ -12,6 +12,7 @@
 #include "seq/seq_battle.h"
 
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #include "seq/seq_demo.h"
 SequenceCallback seq_data[9][3] = {

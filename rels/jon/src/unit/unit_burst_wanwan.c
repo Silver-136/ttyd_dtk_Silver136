@@ -38,6 +38,7 @@ static BattleWeapon weapon_wanwan_attack;
 static EvtWord init_event[41];
 static EvtWord chain_event[23];
 static EvtWord damage_event[33];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #if VERSION <= VERSION_DEMO_US
 static EvtWord counter_damage_event[];

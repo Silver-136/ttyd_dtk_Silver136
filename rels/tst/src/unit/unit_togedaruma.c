@@ -112,6 +112,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 /** Defence of the Bristle while it is flipped on its back: none, every hit does its full damage. */
 static BattleUnitDefense defence_turn = {0};
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 /** Status vulnerability of the Bristle in the demo builds: immune to burn; resists most other statuses. */
 static StatusVulnerability regist = {40, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 70, 70, 50, 75, 100, 70, 100, 100, 95};

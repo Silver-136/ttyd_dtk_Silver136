@@ -24,6 +24,7 @@ static BattleDataEntry data_table_yoshi[2];
 static BattleUnitKindPart parts_yoshi[1];
 static EvtWord init_event_yoshi[24];
 EvtWord damage_event_yoshi[22];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event_yoshi[];

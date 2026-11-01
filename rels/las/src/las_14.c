@@ -77,6 +77,7 @@ static EvtWord evt_cloud_main_evt[4];
 static EvtWord cloud_evt[35];
 EvtWord touch_evt[2];
 static EvtWord hint_plate[14];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_14_init_evt[];
 #else

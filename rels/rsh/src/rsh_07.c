@@ -20,6 +20,7 @@ static BeroEntry bero_data_a[2];
 static BeroEntry bero_data_b[2];
 static BeroEntry bero_data_c[2];
 static EvtWord init_unten[6];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_unten[];
 #else

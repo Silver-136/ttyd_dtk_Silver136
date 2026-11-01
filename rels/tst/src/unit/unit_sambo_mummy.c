@@ -39,6 +39,7 @@ static PoseTableEntry pose_table_parts[3];
 static BattleDataEntry data_table[8];
 static BattleUnitKindPart parts[5];
 static EvtWord init_event[54];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dmg_avoid_counter_thorn_side_event[];
 #else

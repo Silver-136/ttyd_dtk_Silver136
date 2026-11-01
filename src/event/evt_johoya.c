@@ -114,6 +114,7 @@ USER_FUNC(johoya_keti_newjoho_check) {
 
 USER_FUNC(johoya_keti_newjoho_makelabel) {
     EvtWord* args = event->args;
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
     char tmp[64];
     const char* msg;

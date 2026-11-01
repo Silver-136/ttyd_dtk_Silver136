@@ -29,6 +29,7 @@ static EvtWord fmario_zoom_christine[19];
 static EvtWord gparty_zoom_christine[19];
 static EvtWord init_event_christine[42];
 EvtWord damage_event_christine[22];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event_christine[];

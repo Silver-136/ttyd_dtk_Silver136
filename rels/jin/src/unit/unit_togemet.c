@@ -23,6 +23,7 @@
 BattleUnitKind unit_togemet;
 static PoseTableEntry pose_table[17];
 static PoseTableEntry pose_table_ceil[17];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[14];
 #else

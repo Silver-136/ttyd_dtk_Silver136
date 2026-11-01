@@ -40,6 +40,7 @@ EvtWord evt_tojikome_nidome[104];
 EvtWord evt_tojikome_sandome[37];
 static EvtWord evt_tojikome_msg[30];
 EvtWord evt_postar[23];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tou_11_init_evt[];
 #else

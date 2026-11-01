@@ -204,6 +204,8 @@ DispEntry* dispGetCurWork(void) {
 }
 // Padding object: 28 zero bytes the retail .sdata holds after offset_tbl; no source form for them is known
 // (layout debt, docs/CLEANUP_BACKLOG.md)
+#if VERSION > VERSION_DEMO_US
 #pragma force_active on
 u32 gap_07_8040F344_sdata[7] = {0, 0, 0, 0, 0, 0, 0};
 #pragma force_active reset
+#endif

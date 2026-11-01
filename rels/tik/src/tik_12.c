@@ -37,6 +37,7 @@ static USER_FUNC(setmertn);
 s32 majinaisi_ryokin_kaisu_tbl[6];
 static BeroEntry bero_entry_data[2];
 EvtWord suisyou_kirakira[30];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord majinaisi_table_talk[];
 #else

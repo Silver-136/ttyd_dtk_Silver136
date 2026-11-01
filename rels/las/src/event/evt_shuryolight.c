@@ -176,6 +176,7 @@ EVT_END()
  * Display callback for Grodus's lamps: when the pose group being drawn is one of the lamp locators,
  * draws that lamp's shape (on newer versions after advancing its animation).
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void shuryolight_callback(void* param, s32 group) {
 #else

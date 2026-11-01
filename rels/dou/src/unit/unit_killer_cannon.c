@@ -65,6 +65,7 @@ BattleUnitKind unit_killer_cannon = {
     9999, // pbSoftCap
     52, // width
     38, // height
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
     5,
     38,

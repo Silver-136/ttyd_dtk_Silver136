@@ -164,6 +164,7 @@ BattleUnitKind unit_fire_bros = {
  * Defence of the Fire Bro: 1 against normal, ice, explosion and electric hits;
  * immune to fire (defence 99 cancels the hit).
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
 #else

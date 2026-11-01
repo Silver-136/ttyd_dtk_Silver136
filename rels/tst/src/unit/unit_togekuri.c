@@ -110,6 +110,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element modifiers of the Spiky Goomba: none, no element is special to it. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 /**
  * Status vulnerability of the Spiky Goomba in the demo builds:

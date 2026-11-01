@@ -1926,6 +1926,7 @@ BattleGroupSetup btlgrp_test_nakayama = {
 };
 
 /** Enemy lineup of test battle BTLNO_TEST_BARRIERN: Z-Yux, X-Yux. */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitSetup btlparty_test_barriern[] = {
     {

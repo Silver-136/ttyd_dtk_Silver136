@@ -73,6 +73,7 @@ static BattleUnitKindPart parts[1];
 BattleWeapon weapon_chorobon_gundan_attack;
 EvtWord chorogun_dead_reward[73];
 static EvtWord init_event[26];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord damage_event[80];
 #else

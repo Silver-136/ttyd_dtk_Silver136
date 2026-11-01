@@ -145,6 +145,7 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
     work->rot[1][3] = zr;
     work->rot[2][3] = zr;
     work->scale = 0.1f * scale;
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
     work->camera = CAMERA_3D;
 #endif

@@ -35,6 +35,7 @@ static EvtWord wait_event[102];
  * Jumping on it or hammering its front hurts the attacker; it charges at its target,
  * and a flip leaves it helpless on its back for a turn.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_yamitogedaruma = {
     165,

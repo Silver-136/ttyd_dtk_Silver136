@@ -68,6 +68,7 @@ void _prolog(void) {
  * No puffs while Mario is in certain states (marioChkSts 4, 8, 0x10), and from the JP release on,
  * none while vivianGetStatus() returns 2 (Vivian's shadow state). Simulates visible breath in the cold.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(bress) {
 #else

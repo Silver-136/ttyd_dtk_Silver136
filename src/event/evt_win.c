@@ -1,5 +1,6 @@
 // Script commands for the unit windows (unitwin): the shop, partner and item list windows.
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #define DTRIGF_WITH_INITIAL_VALUES
 #include <dtrigf.h>

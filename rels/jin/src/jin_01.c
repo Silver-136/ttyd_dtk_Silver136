@@ -28,6 +28,7 @@ static EvtWord s2_close[12];
 static EvtWord s2_open[12];
 static BeroEntry bero_entry_data[3];
 static EvtWord cam_shake[62];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_kaidan_oku[];
 #else

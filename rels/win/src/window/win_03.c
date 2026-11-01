@@ -38,6 +38,7 @@ EvtWord clouda_house_out[19];
 EvtWord cloud_out[12];
 EvtWord cloud_in[12];
 static BeroEntry bero_entry_data[5];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord lookat_house[];
 #else

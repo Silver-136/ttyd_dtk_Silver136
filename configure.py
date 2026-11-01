@@ -1098,6 +1098,7 @@ config.libs = [
             "-DMUSY_VERSION_MAJOR=2",
             "-DMUSY_VERSION_MINOR=0",
             "-DMUSY_VERSION_PATCH=3",
+            f"-DVERSION_{config.version}",
         ],
         "progress_category": "musyx",
         "src_dir": "libs/musyx/src/",

@@ -89,6 +89,7 @@ static void zFill(void) {
 }
 
 
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void imgDisp(CameraId camId, void* param) {
 #else

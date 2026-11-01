@@ -201,6 +201,7 @@ BattleStageData dou_btlstage_data[] = {
         NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgA2Evt
         bgset_dou_wave_event, // bgBEvt
         NULL, 0, // bgCEvt..reserved_1B0
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 0, // disableBgA1Destroy
         0, // disableBgA2Destroy

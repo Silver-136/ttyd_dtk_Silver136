@@ -33,6 +33,7 @@ static BattleUnitDefenseAttr defence_attr_turn;
 static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[12];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 #if VERSION <= VERSION_DEMO_US
 static EvtWord init_event2[];

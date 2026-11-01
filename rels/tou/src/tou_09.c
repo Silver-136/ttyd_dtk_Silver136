@@ -29,6 +29,7 @@ static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];
 EvtWord evt_in[68];
 static BeroEntry bero_data[4];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_toile[];
 #else

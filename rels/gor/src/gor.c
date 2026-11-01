@@ -28,6 +28,7 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
 static s32 gor_inemuri_snd_id;
 #endif

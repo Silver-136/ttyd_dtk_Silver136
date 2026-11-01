@@ -17,6 +17,7 @@
 
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[13];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_15_init_evt[];
 #else

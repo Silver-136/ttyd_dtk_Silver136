@@ -35,6 +35,7 @@ extern void partyWalkInit(PartyEntry* party, s32 mode);
 
 /** Map objects Ms. Mowz can sniff out: blocks, and from JP on the treasure chests and the Kururin floor. */
 char* mobj_list[] = {
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
     "MOBJ_TreasureBox",
     "MOBJ_BigTreasureBox",

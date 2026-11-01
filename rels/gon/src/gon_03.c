@@ -63,6 +63,7 @@ static USER_FUNC(senkaronFlagOffMesPushing);
 static USER_FUNC(senkaronFlagOnMesPushing);
 static USER_FUNC(senkaronGetMarioPushedFlag);
 static USER_FUNC(senkaronToEscape);
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
 USER_FUNC(leader_touch_check);
 #endif

@@ -49,6 +49,7 @@ BattleUnitKind unit_yami_togekuri = {
     1, // perilHP
     13, // level
     0, // bonusExp
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 1,
 #else

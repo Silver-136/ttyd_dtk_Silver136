@@ -33,6 +33,7 @@ static HitDamageReturn dmgRetPoint[3];
 const char* toge_data[18];
 EvtWord toge_evt_sub[121];
 EvtWord toge_evt[86];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_03_init_evt[];
 #else

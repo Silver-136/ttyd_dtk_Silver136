@@ -378,6 +378,7 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
  * States 1-5 are the drop: it falls under gravity, bounces on the ground (jump sound, puffs),
  * then the halves separate and tilt.
  */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static void effStarStoneMain(EffectEntry* effect) {
 #else

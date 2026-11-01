@@ -32,6 +32,7 @@ static USER_FUNC(evt_chuchu_back_loop);
 static EvtWord door_close[12];
 static EvtWord door_open[12];
 static BeroEntry bero_entry_data[2];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord chuchurina_sogu[598];
 #else

@@ -32,6 +32,7 @@ static BattleUnitDefense defence_guard;
 static BattleUnitDefenseAttr defence_attr_guard;
 static StatusVulnerability regist_guard;
 static PoseTableEntry pose_table[15];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[12];
 #else

@@ -37,6 +37,7 @@ static EvtWord box_evt[30];
 EvtWord vivian_check[92];
 static EvtWord switch_evt[48];
 static EvtWord hint_plate[14];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_18_init_evt[];
 #else

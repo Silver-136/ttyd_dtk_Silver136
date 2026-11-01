@@ -93,6 +93,7 @@ USER_FUNC(urouro_main_func) {
     f32 dist;
     f32 step;
     f32 lim;
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
     f32 temp;
 #else

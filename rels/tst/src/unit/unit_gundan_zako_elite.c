@@ -45,6 +45,7 @@ BattleUnitKind unit_gundan_zako_elite = {
     0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 3,
 #else

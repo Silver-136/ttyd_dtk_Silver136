@@ -521,6 +521,7 @@ USER_FUNC(evt_map_replace_mapobj) {
     case 0:
         effTorchEntry(0, pos.x, pos.y - 3.0f, pos.z, 0.6f);
         break;
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 case 1:
             effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);

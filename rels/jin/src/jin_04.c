@@ -45,6 +45,7 @@ static BeroEntry bero_entry_data[2];
 EvtWord ranperu_toujou[338];
 EvtWord starstone_jump_se[15];
 EvtWord irekawatta_mario_init[67];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord irekawatta_mario[];
 #else

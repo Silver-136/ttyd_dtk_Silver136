@@ -50,6 +50,7 @@ static PoseTableEntry pose_table[5];
 static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[1];
 EvtWord _test_event[20];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord stop_wait_event[];
 #else

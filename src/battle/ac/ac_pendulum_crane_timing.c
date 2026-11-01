@@ -37,6 +37,7 @@ typedef struct PendulumWork {
     s32 flag;     // 0x3C
     s32 rate;     // 0x40
     s32 sfxId;    // 0x44
+#include "version.h"
 #if VERSION > VERSION_DEMO_US
     s32 zone;     // 0x48
 #endif

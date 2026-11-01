@@ -45,6 +45,7 @@ static GXColor col_mini[] = {
     {0xAE, 0x69, 0xE0, 0xFF}, {0xBF, 0x7C, 0xF0, 0xFF}, {0xCD, 0x97, 0xF5, 0xFF}, {0xF3, 0xC0, 0xFA, 0xFF}, {0x81, 0x31, 0xBB, 0xFF},
 };
 static GXColor* col_tbl[] = {col_normal, col_poison, col_mega, col_cold, col_confu, col_sleep, col_mini, col_normal};
+#if VERSION > VERSION_DEMO_US
 #pragma force_active on
 #if VERSION >= VERSION_US
 u32 gap_07_8041E0A4_sdata[7] = {0,0,0,0,0,0,0};
@@ -52,6 +53,7 @@ u32 gap_07_8041E0A4_sdata[7] = {0,0,0,0,0,0,0};
 u32 gap_07_80417E8C_sdata[5] = {0,0,0,0,0};
 #endif
 #pragma force_active reset
+#endif
 
 void effGonbabaBreathMain(EffectEntry* effect);
 void effGonbabaBreathDisp(CameraId cameraId, EffectEntry* effect);

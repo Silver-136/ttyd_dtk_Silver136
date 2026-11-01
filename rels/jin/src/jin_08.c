@@ -35,6 +35,7 @@ static EvtWord evt_open[73];
 EvtWord evt_open_kagi[73];
 static EvtWord evt_unlock[11];
 EvtWord oumu_init[2];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord oumu_talk[];
 #else

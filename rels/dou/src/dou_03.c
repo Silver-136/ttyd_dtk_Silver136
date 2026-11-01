@@ -37,6 +37,7 @@ EvtWord watergate_geer_large[20];
 EvtWord nagare_taru[38];
 EvtWord nagare_taru_se[45];
 EvtWord nagare_bin[33];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord watergate_handle[];
 #else

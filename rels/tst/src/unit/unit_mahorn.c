@@ -68,6 +68,7 @@ static EvtWord recover_magic_event[96];
 static EvtWord wait_event[386];
 
 /** Unit definition of the Wizzerd: 10 HP, level 30, 5 parts, with its sounds, init script and data table. */
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 BattleUnitKind unit_mahorn = {
     161,

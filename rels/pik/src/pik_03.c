@@ -27,6 +27,7 @@
 EvtWord bero_in[45];
 EvtWord bero_out[53];
 static BeroEntry bero_data[2];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_daiza[];
 #else

@@ -27,6 +27,7 @@ static EvtWord init_event[70];
 static EvtWord phase_event[67];
 static EvtWord wait_event[57];
 EvtWord end_battle_evt[19];
+#include "version.h"
 #if VERSION <= VERSION_DEMO_US
 static EvtWord explosion_event[172];
 #else
