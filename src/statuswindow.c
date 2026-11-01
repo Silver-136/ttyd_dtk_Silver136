@@ -83,9 +83,6 @@ void valueUpdate(void);
 void statusWinInit(void) {
     wp = __memAlloc(HEAP_DEFAULT, sizeof(StatusWindowWork));
     memset(wp, 0, sizeof(StatusWindowWork));
-    // FAKE: empty null check after the memset; removing it changes the object
-    if (!wp) {
-    }
     wp->speed = 1.0f;
     wp->openX = -304.0f;
     wp->openY = 208.0f;

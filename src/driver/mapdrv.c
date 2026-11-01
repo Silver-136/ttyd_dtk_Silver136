@@ -222,9 +222,6 @@ void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
             sampler->tex->height = desc->textureHeader->height;
             switch (desc->textureHeader->format) {
                 case 4: sampler->tex->format = 0; break;
-                // FAKE: unreachable empty `if (!k) { }` between two cases; removing it changes the object
-                if (!k) {
-                }
                 case 5: sampler->tex->format = 1; break;
                 case 6: sampler->tex->format = 2; break;
                 case 14: sampler->tex->format = 3; break;

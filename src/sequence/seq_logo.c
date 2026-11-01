@@ -88,9 +88,6 @@ void seq_logoInit(SequenceWork* work) {
     logoAsyncFirst();
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
         VIConfigure(&sRMObjHReso);
-        // FAKE: empty if with dead tests of wp; removing it changes the object
-        if (!wp && !wp && !wp) {
-        }
 #endif
         VIFlush();
         VIWaitForRetrace();

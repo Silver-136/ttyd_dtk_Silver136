@@ -83,7 +83,6 @@ static inline f32 chb_sin(f32 x) {
         x2 = y * y;
         a = a * x2 - b;
         a = a * x2 + c;
-        a = a;
         a = a * y;
         a = -a;
     } else {
@@ -91,7 +90,6 @@ static inline f32 chb_sin(f32 x) {
         x2 = y * y;
         a = a * x2 - b;
         a = a * x2 + c;
-        a = a;
         a = a * y;
         a = -a;
     }
@@ -119,7 +117,6 @@ static inline f32 chb_cos(f32 x) {
             x2 = y * y;
             a = a * x2 - b;
             a = a * x2 + c;
-            a = a;
             a = -a;
         }
     } else if (x < 4.712389f) {
@@ -127,7 +124,6 @@ static inline f32 chb_cos(f32 x) {
         x2 = y * y;
         a = a * x2 - b;
         a = a * x2 + c;
-        a = a;
         a = -a;
     } else {
         y = 1.5707964f - (x - 4.712389f);

@@ -1124,6 +1124,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             next = msgGetCommand(msg + 1, tag, args);
 #endif
             msg = next;
+#if VERSION <= VERSION_DEMO_US
             /* FAKE: dead int guard (COLOURING W): msg is redefined in the arm while next is still live
                (the later newline test on next), so msg/next interfere and the target copy mr r21,r15 survives */
             {
@@ -1132,6 +1133,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     msg++;
                 }
             }
+#endif
 #if VERSION <= VERSION_DEMO_US
             if ((strcmp(tag, "k") == 0) || (strcmp(tag, "key") == 0)) {
 #else
