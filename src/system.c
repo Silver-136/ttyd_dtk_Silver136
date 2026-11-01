@@ -264,7 +264,7 @@ f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps) {
 static void* tmp0[0xC00];
 static u8 tmp1[0x100];
 
-static int (*comp)(void*, void*);
+static QSortCompare comp;
 
 /** Sorts an array of n element pointers with a quicksort, comparing through the callback qqsort stored in comp. */
 void fsort(void** base, u32 n) {
@@ -492,7 +492,7 @@ void fsort(void** base, u32 n) {
  * sorts a table of pointers (at most 0xC00 elements, size at most 0x100 bytes) with fsort,
  * then moves the elements into place by following the permutation cycles.
  */
-void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*)) {
+void qqsort(void* base, u32 n, u32 size, QSortCompare compare) {
     u8* dst;
     void** idx;
     u32 i;

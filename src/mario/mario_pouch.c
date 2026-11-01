@@ -2,6 +2,7 @@
 // Shine Sprites, the item and badge sorts.
 
 #include "version.h"
+#include "system.h"
 #include "mario/mario_pouch.h"
 #include "driver/msgdrv.h"
 #include "mario/mario_party.h"
@@ -19,7 +20,6 @@
 
 PouchData* mpp_gap;
 static PouchData* mpp;
-extern void qqsort(void* array, s32 num, s32 size, void* compare);
 
 /**
  * Max HP of each partner by partner id (row) and HP level
@@ -802,11 +802,11 @@ void pouchSortItem(s32 mode) {
         if (mode == 0)
             qqsort(items, n, 2, comp_aiueo);
         else if (mode == 1)
-            qqsort(items, n, 2, comp_kind);
+            qqsort(items, n, 2, (QSortCompare)comp_kind);
         else if (mode == 7)
             qqsort(items, n, 2, comp_aiueo_r);
         else if (mode == 8)
-            qqsort(items, n, 2, comp_kind_r);
+            qqsort(items, n, 2, (QSortCompare)comp_kind_r);
         memcpy(pp[0]->heldItems, items, sizeof(items));
     }
     if ((u32)(mode - 2) <= 1 || mode == 9 || mode == 10) {
@@ -822,11 +822,11 @@ void pouchSortItem(s32 mode) {
         if (mode == 2)
             qqsort(keys, n, 2, comp_aiueo);
         else if (mode == 3)
-            qqsort(keys, n, 2, comp_kind);
+            qqsort(keys, n, 2, (QSortCompare)comp_kind);
         else if (mode == 9)
             qqsort(keys, n, 2, comp_aiueo_r);
         else if (mode == 10)
-            qqsort(keys, n, 2, comp_kind_r);
+            qqsort(keys, n, 2, (QSortCompare)comp_kind_r);
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }
     if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
@@ -934,11 +934,11 @@ void pouchSortItem(s32 mode) {
         if (mode == 0) {
             qqsort(items, n, sizeof(s16), comp_aiueo);
         } else if (mode == 1) {
-            qqsort(items, n, sizeof(s16), comp_kind);
+            qqsort(items, n, sizeof(s16), (QSortCompare)comp_kind);
         } else if (mode == 7) {
             qqsort(items, n, sizeof(s16), comp_aiueo_r);
         } else if (mode == 8) {
-            qqsort(items, n, sizeof(s16), comp_kind_r);
+            qqsort(items, n, sizeof(s16), (QSortCompare)comp_kind_r);
         }
         memcpy(pp[0]->heldItems, items, sizeof(items));
     }
@@ -955,11 +955,11 @@ void pouchSortItem(s32 mode) {
         if (mode == 2) {
             qqsort(keys, n, sizeof(s16), comp_aiueo);
         } else if (mode == 3) {
-            qqsort(keys, n, sizeof(s16), comp_kind);
+            qqsort(keys, n, sizeof(s16), (QSortCompare)comp_kind);
         } else if (mode == 9) {
             qqsort(keys, n, sizeof(s16), comp_aiueo_r);
         } else if (mode == 10) {
-            qqsort(keys, n, sizeof(s16), comp_kind_r);
+            qqsort(keys, n, sizeof(s16), (QSortCompare)comp_kind_r);
         }
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }

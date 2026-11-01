@@ -58,7 +58,6 @@ typedef struct MonosiriWork {
     s32 alpha;          // 0x2C
 } MonosiriWork;
 
-void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*));
 int compare_func5_2(void* a, void* b);
 int compare_func6_2(void* a, void* b);
 
@@ -439,7 +438,7 @@ WinSortEnt tmp;
             w->log.badgeIds[w->log.badge.num++] = i - BADGE_MIN;
 }
     }
-    qqsort(w->log.badgeIds, w->log.badge.num, sizeof(s16), compare_func5_2);
+    qqsort(w->log.badgeIds, w->log.badge.num, sizeof(s16), (QSortCompare)compare_func5_2);
     w->log.badge.cursor = 0;
     w->log.badge.x = w->log.badge.tx = 320.0f;
     w->log.badge.y = w->log.badge.ty = -240.0f;
@@ -454,7 +453,7 @@ WinSortEnt tmp;
             w->log.recipeIds[w->log.recipe.num++] = i - ITEM_SHROOM_FRY;
 }
     }
-    qqsort(w->log.recipeIds, w->log.recipe.num, sizeof(s16), compare_func6_2);
+    qqsort(w->log.recipeIds, w->log.recipe.num, sizeof(s16), (QSortCompare)compare_func6_2);
     w->log.recipe.cursor = 0;
     w->log.recipe.x = w->log.recipe.tx = 320.0f;
     w->log.recipe.y = w->log.recipe.ty = -240.0f;
@@ -638,7 +637,7 @@ void winLogInit(WindowWork* w) {
 #endif
         }
     }
-    qqsort(w->log.badgeIds, w->log.badge.num, 2, compare_func5_2);
+    qqsort(w->log.badgeIds, w->log.badge.num, 2, (QSortCompare)compare_func5_2);
     w->log.badge.cursor = 0;
     w->log.badge.x = w->log.badge.tx = 320.0f;
     w->log.badge.y = w->log.badge.ty = -240.0f;
@@ -661,7 +660,7 @@ void winLogInit(WindowWork* w) {
 #endif
         }
     }
-    qqsort(w->log.recipeIds, w->log.recipe.num, 2, compare_func6_2);
+    qqsort(w->log.recipeIds, w->log.recipe.num, 2, (QSortCompare)compare_func6_2);
     w->log.recipe.cursor = 0;
     w->log.recipe.x = w->log.recipe.tx = 320.0f;
     w->log.recipe.y = w->log.recipe.ty = -240.0f;
@@ -2192,7 +2191,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
                 scale = 3.0f;
             }
             PSMTXTrans(m, mx + tubuDt[w->log.mapIdx].x, my + tubuDt[w->log.mapIdx].y, 0.0f);
-            animPoseSetLocalTime(w->log.pose, gp->retraceCount % (s32)(data->loopInfo)[2]);
+            animPoseSetLocalTime(w->log.pose, gp->retraceCount % (s32)data->loopInfo->end);
             animPoseMain(w->log.pose);
             animPoseDrawMtx(w->log.pose, m, 1, 0.0f, scale);
             animPoseDrawMtx(w->log.pose, m, 2, 0.0f, scale);

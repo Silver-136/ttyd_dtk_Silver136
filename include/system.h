@@ -34,7 +34,9 @@ typedef enum EasingType {
 } EasingType;
 
 f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps);
-//void qqsort(void* array, s32 num_elements, s32 element_size, s32(*compare)(const void**, const void**));
+// qqsort's comparator; many callers pass one with typed element pointers, through a cast
+typedef s32 (*QSortCompare)(const void*, const void*);
+void qqsort(void* base, u32 n, u32 size, QSortCompare compare);
 void makeKey(void);
 u32 keyGetButton(u32 chan);
 u32 keyGetButtonTrg(u32 chan);

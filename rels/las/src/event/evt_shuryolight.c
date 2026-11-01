@@ -294,7 +294,7 @@ static USER_FUNC(evt_shuryolight_get_anim_time) {
     ShuryoLight* light = &slhp->lights[index];
     AnimData* data = animPoseGetAnimDataPtr(light->npc->poseId);
 
-    evtSetValue(event, args[1], 1000.0f * (data->loopInfo[2] - data->loopInfo[1]) / 60.0f);
+    evtSetValue(event, args[1], 1000.0f * (data->loopInfo->end - data->loopInfo->start) / 60.0f);
     return EVT_RETURN_DONE;
 }
 /** Script helper: returns in args[1] the current animation number of lamp args[0]. */

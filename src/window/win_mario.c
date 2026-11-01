@@ -657,7 +657,7 @@ s32 i;
     winTexSet(0x12, (Vec){4.0f + rowB, 10.0f + (2.0f + (y - 112.0f)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
     animPoseGetAnimPosePtr(w->mario.poseId);
     anim = animPoseGetAnimDataPtr(w->mario.poseId);
-    animPoseSetLocalTime(w->mario.poseId, (f32)(gp->retraceCount % (s32)anim->loopInfo[2]));
+    animPoseSetLocalTime(w->mario.poseId, (f32)(gp->retraceCount % (s32)anim->loopInfo->end));
     animPoseMain(w->mario.poseId);
     winKageGX(w, x - 150.0f, y, 0.0f, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
     PSMTXTrans(mtx, x - 150.0f, y, 0.0f);
@@ -1060,7 +1060,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     animPoseGetAnimPosePtr(w->mario.poseId);
     anim = animPoseGetAnimDataPtr(w->mario.poseId);
     if (w->mario.hammerHold == 0) {
-        animPoseSetLocalTime(w->mario.poseId, (f32)(gp->retraceCount % (s32)anim->loopInfo[2]));
+        animPoseSetLocalTime(w->mario.poseId, (f32)(gp->retraceCount % (s32)anim->loopInfo->end));
     }
     animPoseMain(w->mario.poseId);
     winKageGX(w, x - 150.0f, y, 0.0f, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});

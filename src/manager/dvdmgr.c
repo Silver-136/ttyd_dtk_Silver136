@@ -97,7 +97,7 @@ void DVDMgrMain(void) {
         }
     }
 
-    qqsort(array, count, sizeof(u8), compare);
+    qqsort(array, count, sizeof(u8), (QSortCompare)compare);
 
     for (table = array, i = 0; i < count; table++, i++) {
         valid = FALSE;

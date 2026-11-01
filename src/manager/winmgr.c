@@ -35,7 +35,6 @@ typedef struct WinMgrSelectTbl {
     WinMgrDesc* descriptors; // 0x4
 } WinMgrSelectTbl;
 
-void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*));
 #if VERSION >= VERSION_US
 u16 pouchEquipBadge(s32 index);
 int select_comp_bteresa(void* a, void* b);
@@ -1211,7 +1210,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                     sel->items[sel->numItems++].id = i + BADGE_MIN;
                 }
             }
-            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_type);
+            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_type);
             break;
         case 13:
             m = getBadgeStarmaniacTableMaxCount();
@@ -1228,7 +1227,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                     sel->numItems++;
                 }
             }
-            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_starpiece);
+            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_starpiece);
             break;
         case 14:
             sel->items = __memAlloc(HEAP_DEFAULT, 4 * sizeof(WinMgrSelectItem));
@@ -1261,7 +1260,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 }
             }
 #if VERSION >= VERSION_US
-            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_bteresa);
+            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_bteresa);
 #endif
             break;
         case 17:

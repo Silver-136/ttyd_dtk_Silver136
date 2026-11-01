@@ -299,7 +299,7 @@ static USER_FUNC(evt_shuryolight_get_anim_time) {
     AnimData* data = animPoseGetAnimDataPtr(light->npc->poseId);
 
     // Convert the loop span from 60 Hz frames to integer milliseconds.
-    evtSetValue(event, args[1], 1000.0f * (data->loopInfo[2] - data->loopInfo[1]) / 60.0f);
+    evtSetValue(event, args[1], 1000.0f * (data->loopInfo->end - data->loopInfo->start) / 60.0f);
     return EVT_RETURN_DONE;
 }
 /** Script function: returns in args[1] the current animation (status) number of lamp args[0]. */

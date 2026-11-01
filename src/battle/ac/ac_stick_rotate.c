@@ -25,16 +25,16 @@ typedef enum StickRotateParam {
 typedef struct StickRotateWork {
     s8 dir;       // 0x0
     s8 prevDir;   // 0x1
-    s8 iconA;     // 0x2
-    s8 iconB;     // 0x3
+    s8 expectDir; // 0x2, the direction the next step must reach (also drawn as the stick icon)
+    s8 nextDir;   // 0x3, the direction after that
     s8 roll;      // 0x4
-    s8 stall;     // 0x5
+    s8 stepFrames; // 0x5, frames since the last step
     s8 iconDir;   // 0x6
     u8 iconTimer; // 0x7
-    u16 count;    // 0x8
+    u16 steps;    // 0x8, direction changes so far; 8 = one full turn
     u8 pad_A[2];
     s32 timer;    // 0xC
-    u16 slow;     // 0x10
+    u16 fastSteps; // 0x10, steps made sooner than STICK_ROTATE_PARAM_STEPS_A frames
     u8 pad_12[2];
     s32 endTimer; // 0x14
 } StickRotateWork;
@@ -137,12 +137,12 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 disp->iconX = -300.0f;
                 disp->iconY = 0.0f;
                 disp->slideTimer = 20;
-                sw->iconA = 0;
-                sw->iconB = 0;
+                sw->expectDir = 0;
+                sw->nextDir = 0;
                 sw->iconDir = 0;
                 sw->iconTimer = 0;
-                sw->slow = 0;
-                sw->stall = 0;
+                sw->fastSteps = 0;
+                sw->stepFrames = 0;
                 ac->acState = 99;
                 break;
             case 99:
@@ -151,11 +151,11 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 sw->timer = 120;
                 ac->acState = 1000;
                 sw->roll = 0;
-                sw->count = 0;
+                sw->steps = 0;
                 ac->outputParams[0] = 0;
                 if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
-                    sw->iconA = 3;
-                    sw->iconB = 2;
+                    sw->expectDir = 3;
+                    sw->nextDir = 2;
                 }
             case 1000:
                 if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
@@ -205,7 +205,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                     ac->outputParams[0] = work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT];
                 }
                 sw->timer--;
-                sw->stall++;
+                sw->stepFrames++;
                 if (work->actionCommands.params[STICK_ROTATE_PARAM_BUTTON] != 0 && !BattlePadCheckNow(work->actionCommands.params[STICK_ROTATE_PARAM_BUTTON])) {
                     sw->timer = 0;
                 }
@@ -248,47 +248,47 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                             if (t <= 0) {
                                 t = 8;
                             }
-                            sw->iconA = sw->dir;
-                            sw->iconB = t;
+                            sw->expectDir = sw->dir;
+                            sw->nextDir = t;
                         } else if ((s8)sw->roll != (s8)r) {
                             stickRotateFail(work);
                             restart = TRUE;
                             break;
                         }
                         if (sw->prevDir != sw->dir) {
-                            sw->count++;
-                            ac->outputParams[0] = (sw->count + 7) / 8;
+                            sw->steps++;
+                            ac->outputParams[0] = (sw->steps + 7) / 8;
                             if ((s32)ac->outputParams[0] > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT]) {
                                 ac->outputParams[0] = work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT];
                             }
                             if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_STRICT_UNUSED) {
-                                if (sw->count > 1) {
-                                    s8 st = sw->stall;
+                                if (sw->steps > 1) {
+                                    s8 st = sw->stepFrames;
                                     if (st > work->actionCommands.params[STICK_ROTATE_PARAM_STEPS_B]) {
                                         stickRotateFail(work);
                                         restart = TRUE;
                                         break;
                                     } else if (st < work->actionCommands.params[STICK_ROTATE_PARAM_STEPS_A]) {
-                                        sw->slow++;
-                                        if (sw->slow > work->actionCommands.params[STICK_ROTATE_PARAM_TIMEOUT]) {
+                                        sw->fastSteps++;
+                                        if (sw->fastSteps > work->actionCommands.params[STICK_ROTATE_PARAM_TIMEOUT]) {
                                             stickRotateFail(work);
                                             restart = TRUE;
                                             break;
                                         }
                                     }
                                 }
-                                sw->stall = 0;
+                                sw->stepFrames = 0;
                                 if (sw->roll != 0 && (s8)sw->roll != (s8)r) {
                                     stickRotateFail(work);
                                     restart = TRUE;
                                     break;
                                 }
-                                if (sw->dir != sw->iconA) {
+                                if (sw->dir != sw->expectDir) {
                                     stickRotateFail(work);
                                     restart = TRUE;
                                     break;
                                 } else {
-                                    s8 t = sw->iconB + sw->roll;
+                                    s8 t = sw->nextDir + sw->roll;
                                     if (t >= 9) {
                                         t = 1;
                                     }
@@ -296,9 +296,9 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                                         t = 8;
                                     }
                                     sw->prevDir = sw->dir;
-                                    sw->iconA = sw->iconB;
-                                    sw->iconB = t;
-                                    if (sw->count >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT] * 8) {
+                                    sw->expectDir = sw->nextDir;
+                                    sw->nextDir = t;
+                                    if (sw->steps >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT] * 8) {
                                         ac->result |= AC_RESULT_SUCCESS;
                                         stickRotateFail(work);
                                         restart = TRUE;
@@ -450,17 +450,17 @@ static void actionCommandDisp(f32 x, f32 y) {
             DRAW_STICK_ICON(v0, ICON_STICK_NEUTRAL);
             break;
         case 1000:
-            DRAW_STICK_ICON(v1, _get_icon_id(sw->iconA));
+            DRAW_STICK_ICON(v1, _get_icon_id(sw->expectDir));
             break;
         case 1001:
-            if (sw->stall < ac->params[STICK_ROTATE_PARAM_STEPS_A]) {
-                if (sw->count <= 1) {
-                    DRAW_STICK_ICON(v2, _get_icon_id(sw->iconA));
+            if (sw->stepFrames < ac->params[STICK_ROTATE_PARAM_STEPS_A]) {
+                if (sw->steps <= 1) {
+                    DRAW_STICK_ICON(v2, _get_icon_id(sw->expectDir));
                 } else {
                     DRAW_STICK_ICON(v3, _get_icon_id(sw->prevDir));
                 }
             } else {
-                DRAW_STICK_ICON(v4, _get_icon_id(sw->iconA));
+                DRAW_STICK_ICON(v4, _get_icon_id(sw->expectDir));
             }
             break;
         case 1002:

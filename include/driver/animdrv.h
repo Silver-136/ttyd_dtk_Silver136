@@ -78,12 +78,18 @@ typedef struct AnimValueKey {
     s32 value; // 0x4, copied into AnimationPose.curKeyValue
 } AnimValueKey;
 
+typedef struct AnimLoopInfo {
+    s32 loop;  // 0x0, loop flag
+    f32 start; // 0x4, first frame
+    f32 end;   // 0x8, last frame
+} AnimLoopInfo;
+
 struct AnimData {
     u8 pad_00[0x8 - 0x0];      // 0x0, no named access
     s32 keyframeCount;         // 0x8
     u8 pad_0C[0x20 - 0xC];     // 0xC, no named access
     s32 valueKeyCount;         // 0x20
-    f32* loopInfo;           // 0x24, f32[]: [0] loop flag (as s32), [1] start, [2] end frame
+    AnimLoopInfo* loopInfo;    // 0x24
     AnimKeyframe* keyframes;   // 0x28
     u8* vtxPosDeltas;          // 0x2C, 4-byte entries: index step, s8 x/y/z (1/16)
     u8* vtxNrmDeltas;          // 0x30, same layout as vtxPosDeltas

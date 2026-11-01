@@ -27,7 +27,6 @@
 #include "win/win_party.h"
 #include "win/win_root.h"
 
-void qqsort(void* base, u32 n, u32 size, s32 (*compare)(const void*, const void*));
 
 typedef struct WinSortData {
     const char* name;
@@ -1197,7 +1196,7 @@ void winBookGX(WindowWork* w, s32 a, f32 x, f32 y) {
         } else {
             animPoseSetAnim(pose, "HOS_E_1", 0);
         }
-        animPoseSetLocalTime(pose, gp->retraceCount % (s32)anim->loopInfo[2]);
+        animPoseSetLocalTime(pose, gp->retraceCount % (s32)anim->loopInfo->end);
         animPoseMain(pose);
         animPoseDraw(pose, 425.0f + x, y - 275.0f, 0.0f, 180.0f, 5.0f, 2);
 #endif

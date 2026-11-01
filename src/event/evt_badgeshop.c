@@ -244,7 +244,7 @@ void badgeShop_bottakuruGeneration(void) {
         }
     }
 
-    qqsort(table, 0x11, sizeof(table[0]), bottakuruComp);
+    qqsort(table, 0x11, sizeof(table[0]), (QSortCompare)bottakuruComp);
 
     for (i = 0; i < 4; i++) {
         for (m = 0; m < sizeof(badge_bottakuru_table) / sizeof(badge_bottakuru_table[0]); m++) {

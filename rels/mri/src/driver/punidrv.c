@@ -313,7 +313,7 @@ void puniMain(void) {
         (*pose->mtx)[2][0] = -s;
     }
     if (wp->poseNum != 0) {
-        qqsort(wp->sort, wp->poseNum, sizeof(PunidrvSort), (void*)compare);
+        qqsort(wp->sort, wp->poseNum, sizeof(PunidrvSort), compare);
     }
     wp->curTex = -1;
     wp->usedTmem = 0;

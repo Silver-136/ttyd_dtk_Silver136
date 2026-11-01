@@ -108,7 +108,7 @@ static s32 _sort(const void** sortA, const void** sortB) {
 
 /** Sorts this frame's draw requests by order before the cameras are drawn. */
 void dispSort(void) {
-    qqsort(pSortWork, entry_n, sizeof(DispEntry*), _sort);
+    qqsort(pSortWork, entry_n, sizeof(DispEntry*), (QSortCompare)_sort);
 }
 
 /**

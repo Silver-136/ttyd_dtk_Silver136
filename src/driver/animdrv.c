@@ -1155,7 +1155,7 @@ void animPoseMain(s32 poseId) {
     if (anim == NULL) {
         return;
     }
-    loop = *(s32*)anim->loopInfo;
+    loop = anim->loopInfo->loop;
     if (pose->type == 0) {
         ms = OSTicksToMilliseconds(gp->renderFieldTime);
     } else {
@@ -1165,8 +1165,8 @@ void animPoseMain(s32 poseId) {
     pose->rawFrame = 60.0f * tm / 1000.0f;
     pose->rawFrame *= pose->localTimeRate;
     cur = pose->rawFrame;
-    f = anim->loopInfo[2];
-    start = anim->loopInfo[1];
+    f = anim->loopInfo->end;
+    start = anim->loopInfo->start;
     len = f - start;
     if (0.0f == len) {
         pose->loopTime = cur - start;
@@ -1222,7 +1222,7 @@ void animPoseMain(s32 poseId) {
     if (loop != 0) {
         if (pose->nextKeyframeIdx >= anim->keyframeCount) {
             pose->nextKeyframeIdx = 0;
-            len = anim->loopInfo[2] - anim->keyframes[pose->keyframeIdx].time;
+            len = anim->loopInfo->end - anim->keyframes[pose->keyframeIdx].time;
         } else {
             len = anim->keyframes[pose->nextKeyframeIdx].time - start;
         }

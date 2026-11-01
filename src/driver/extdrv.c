@@ -2,6 +2,7 @@
 // animation frame is rendered to a texture first.
 
 #include "version.h"
+#include "system.h"
 #include "driver/extdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -17,7 +18,6 @@
 #include "libc_decls.h"
 
 void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame, f32 scale, GXTexObj* obj, void*** image, s32* x0, s32* y0, s32* x1, s32* y1);
-void qqsort(void* array, u32 num, u32 size, s32 (*compare)(const void*, const void*));
 
 
 static ExtdrvWork work[2];

@@ -2,13 +2,13 @@
 // light setup for the lights nearest to an object.
 
 #include "driver/lightdrv.h"
+#include "system.h"
 #include "driver/camdrv.h"
 #include "driver/mapdrv.h"
 #include "memory.h"
 #include <string.h>
 #include "libc_decls.h"
 
-void qqsort(void* base, u32 n, u32 size, s32 (*compare)(const void*, const void*));
 
 //.sbss
 static LightWork work[2];

@@ -6091,7 +6091,7 @@ USER_FUNC(make_pattern) {
     animPoseSetAnim(npc->poseId, "KRT_S_1", TRUE);
     animPoseGetAnimPosePtr(npc->poseId);
     data = animPoseGetAnimDataPtr(npc->poseId);
-    for (i = 0; i < (s32)(data->loopInfo)[2]; i += 3, d++) {
+    for (i = 0; i < (s32)data->loopInfo->end; i += 3, d++) {
         d->group = "c_s_hand";
         d->anim = "KRT_S_1";
         d->frame = 3.0f * i;

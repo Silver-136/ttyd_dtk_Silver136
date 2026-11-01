@@ -247,7 +247,7 @@ void effNiceMain(EffectEntry* effect) {
         case 4:
         case 5:
         case 6:
-            len = data->loopInfo[2];
+            len = data->loopInfo->end;
             {
             f32 tbl[7][6] = {
                 { 32.0f, 34.0f, 34.0f, 34.0f, 34.0f, 36.0f },
@@ -261,7 +261,7 @@ void effNiceMain(EffectEntry* effect) {
             start = tbl[type][gp->language];
 #else
         case 1: {
-            len = data->loopInfo[2];
+            len = data->loopInfo->end;
             start = ((u32)gp->language == LANGUAGE_JP) ? 32.0f : 34.0f;
 #endif
             if (pose->localFrame > start) {
@@ -278,7 +278,7 @@ void effNiceMain(EffectEntry* effect) {
             break;
         }
         case 2: {
-            len = data->loopInfo[2];
+            len = data->loopInfo->end;
             start = ((u32)gp->language == LANGUAGE_JP) ? 35.0f : 37.0f;
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
@@ -291,7 +291,7 @@ void effNiceMain(EffectEntry* effect) {
             break;
         }
         case 3: {
-            len = data->loopInfo[2];
+            len = data->loopInfo->end;
             start = ((u32)gp->language == LANGUAGE_JP) ? 45.0f : 40.0f;
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
@@ -304,7 +304,7 @@ void effNiceMain(EffectEntry* effect) {
             break;
         }
         case 4: {
-            len = data->loopInfo[2];
+            len = data->loopInfo->end;
             start = ((u32)gp->language == LANGUAGE_JP) ? 48.0f : 40.0f;
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);

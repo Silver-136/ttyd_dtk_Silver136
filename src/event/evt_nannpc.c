@@ -17,7 +17,6 @@
 #include "libc_decls.h"
 #include "driver/camdrv.h"
 
-void qqsort(void* array, s32 num, s32 size, s32 (*cmp)(void*, void*));
 
 NanNPCWork* nanNPCWork;
 char makestring[16];
@@ -267,7 +266,7 @@ void nannpc_ext_disp() {
             sp->idx = i;
             sp->z = np->pos.z;
         }
-        qqsort(w->sort, w->num, sizeof(NanNPCSort), (s32(*)(void*, void*))nannpc_zcompare);
+        qqsort(w->sort, w->num, sizeof(NanNPCSort), (QSortCompare)nannpc_zcompare);
         for (i = extGetPoseNum() - 1; i >= 0; i--) {
             idx = w->sort[i].idx;
             GXSetTevColor(GX_TEVREG0, w->npc[idx].color);
