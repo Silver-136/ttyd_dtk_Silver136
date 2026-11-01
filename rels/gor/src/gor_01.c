@@ -501,13 +501,13 @@ static EVT_BEGIN(sell_evt)
         RETURN
     END_IF
     LABEL(0)
-    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_06"))
         RETURN
     END_IF
     CALL(evt_msg_print_add, 0, STRING("badgeshop_07"))
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
     LABEL(0)
 #endif
     CALL(evt_win_other_select, SELECT_TYPE_BADGE_SELL)
@@ -585,7 +585,7 @@ static EVT_BEGIN(sell_evt)
         RETURN
     END_IF
     CALL(evt_msg_continue)
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
 #endif
     GOTO(0)
     RETURN
@@ -605,7 +605,7 @@ EVT_BEGIN(zaiko_buy_evt)
         RETURN
     END_IF
     LABEL(0)
-    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #else
         CALL(badgeshop_special_cnt, LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -616,7 +616,7 @@ EVT_BEGIN(zaiko_buy_evt)
         RETURN
     END_IF
     CALL(evt_msg_continue)
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
     LABEL(0)
 #endif
     CALL(evt_win_other_select, SELECT_TYPE_BADGE_BUY)
@@ -714,7 +714,7 @@ EVT_BEGIN(zaiko_buy_evt)
         RETURN
     END_IF
     CALL(evt_msg_continue)
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
 #endif
     GOTO(0)
     RETURN
@@ -2314,7 +2314,7 @@ EVT_BEGIN(bottakuru_talk)
     // Shopping loop: the stock window opens; backing out ends the visit, and too few coins sends Mario back to
     // the list.
     LABEL(0)
-    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
     CALL(evt_win_other_select, SELECT_TYPE_BADGE_CHARLIETON)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_win_coin_off, LW(12))
@@ -3354,7 +3354,7 @@ EVT_BEGIN(evt_badge_dummy)
         CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
         CALL(unitwincoin_disp_onoff, 0)
 #else
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
     CALL(get_value, LW(10), LW(11), LW(12), LW(13), LW(14))
     CALL(evt_sub_get_language, LW(0))
 #if VERSION >= VERSION_US

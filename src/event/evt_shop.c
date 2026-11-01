@@ -165,7 +165,7 @@ static EVT_BEGIN(buy_evt)
     // The shopkeeper turns to Mario, the coin and point windows open, and he names the item and its price.
     CALL(shopper_name, LW(9))
     CALL(evt_set_dir_to_target, LW(9), STRING("mario"))
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
     CALL(point_disp_onoff, 1)
     CALL(get_value, LW(10), LW(11), LW(12), LW(13))
     CALL(get_msg, LW(10), 0, LW(14))
@@ -273,7 +273,7 @@ static EVT_BEGIN(buy_evt)
             ELSE
             CALL(get_msg, LW(10), 34, LW(14))
             CALL(evt_msg_print, 0, LW(14), 0, LW(9))
-            CALL(evt_win_coin_on, 0, LW(8))
+            CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
             CALL(point_disp_onoff, 1)
             CALL(reset_shop_point)
             CALL(evt_win_coin_wait, LW(8))
@@ -535,7 +535,7 @@ static EVT_BEGIN(sell_evt)
     END_IF
     CALL(get_msg, LW(10), 7, LW(14))
     CALL(evt_msg_print_add, 0, LW(14))
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
     LABEL(0)
     CALL(item_data_db_arrange)
 #if VERSION <= VERSION_DEMO_US
@@ -603,7 +603,7 @@ static EVT_BEGIN(sell_evt)
         RETURN
     END_IF
     CALL(evt_msg_continue)
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
     GOTO(0)
     RETURN
 EVT_END()

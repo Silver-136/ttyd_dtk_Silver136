@@ -3,6 +3,7 @@
 
 #include "version.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_window.h"
 #include "driver/icondrv.h"
 #include "driver/msgdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -295,9 +296,6 @@ USER_FUNC(evt_win_one_message) {
     return EVT_RETURN_BLOCK;
 }
 
-#define COIN_WINDOW_COINS 0
-#define COIN_WINDOW_SHINE_SPRITES 1
-#define COIN_WINDOW_STAR_PIECES 2
 
 /**
  * Draws the coin counter window (type 0 coins, 1 Shine Sprites, 2 Star Pieces)

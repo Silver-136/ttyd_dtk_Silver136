@@ -4,6 +4,7 @@
 #include "evt/evt_save_flags.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_fade.h"
 #include "evt/evt_npc.h"
@@ -299,7 +300,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(get_ryoukin, LW(10))
     CALL(get_npcname, LW(11))
-    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
     CALL(msg_no, 0, LW(0))
     CALL(evt_msg_print_insert, 0, LW(0), 0, LW(11), LW(10))
     CALL(msg_no, 6, LW(0))

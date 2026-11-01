@@ -312,7 +312,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
 
     // Mario picks the stat to raise and the stat to lower, and confirms the trade.
     CALL(evt_msg_continue)
-    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
     LOOP(0)
         CALL(evt_win_other_select, SELECT_TYPE_STAT_SWAP_UP)
         IF_INT_EQUAL(LW(0), 0)
@@ -547,7 +547,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     // Mario picks the stat to raise and the stat to lower, and confirms the trade.
     // Mario picks the partner to rank up and the partner to rank down, and confirms the trade.
     CALL(evt_msg_continue)
-    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
     LOOP(0)
         CALL(evt_win_other_select, SELECT_TYPE_PARTY_SWAP_RANK_UP)
         IF_INT_EQUAL(LW(0), 0)

@@ -1087,7 +1087,7 @@ EVT_END()
  * and loops until Mario stops, has fewer than 3 sprites or nothing is left to raise.
  */
 EVT_BEGIN(powerupya_party_rtn)
-    CALL(evt_win_coin_on, 1, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_SHINE_SPRITES, LW(12))
     LOOP(0)
         CALL(evt_party_set_dir_pos, 0, -362, -200)
         CALL(evt_win_other_select, SELECT_TYPE_PARTY_RANK_UP)
@@ -1156,7 +1156,7 @@ EVT_BEGIN(powerupya_party_rtn)
                 END_IF
             END_IF
 #endif
-            CALL(evt_win_coin_on, 1, LW(12))
+            CALL(evt_win_coin_on, COIN_WINDOW_SHINE_SPRITES, LW(12))
         END_IF
     END_LOOP
     RETURN
@@ -1619,7 +1619,7 @@ EVT_BEGIN(johoyaperfect_talk)
 #if VERSION <= VERSION_DEMO_US
     END_IF
         CALL(johoya_data_alloc, STRING("jperfect_code"))
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
         CALL(evt_win_other_select, SELECT_TYPE_INFORMANT_PERFECT)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_win_coin_off, LW(12))
@@ -1663,7 +1663,7 @@ EVT_BEGIN(johoyaperfect_talk)
     END_IF
     LOOP(0)
         CALL(johoya_data_alloc, STRING("jperfect_code"))
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
         CALL(evt_win_other_select, SELECT_TYPE_INFORMANT_PERFECT)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_win_coin_off, LW(12))

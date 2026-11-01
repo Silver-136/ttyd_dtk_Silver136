@@ -368,7 +368,7 @@ EVT_BEGIN(uranaisi_next_evt)
                 CALL(evt_unitwin_alloc)
                             CALL(unitwincoin_disp_onoff, 1)
 #else
-                CALL(evt_win_coin_on, 0, LW(12))
+                CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #endif
                 CALL(evt_osreport, 0, LW(1))
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("ゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"), 0, STRING("me"))
@@ -392,7 +392,7 @@ EVT_BEGIN(uranaisi_next_evt)
                 CALL(evt_unitwin_alloc)
                             CALL(unitwincoin_disp_onoff, 1)
 #else
-                CALL(evt_win_coin_on, 0, LW(12))
+                CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #endif
                 CALL(evt_osreport, 0, LW(1))
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("ゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"), 0, STRING("me"))
@@ -424,7 +424,7 @@ EVT_BEGIN(uranaisi_next_evt)
 #if VERSION > VERSION_DEMO_US
         ELSE
         CALL(evt_msg_print, 0, STRING("uranaisi_17"), 0, STRING("me"))
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
         WAIT_MS(500)
         CALL(uranaisi_ryokin, 0, LW(2))
         CALL(evt_pouch_add_coin, LW(2))
@@ -449,7 +449,7 @@ EVT_BEGIN(uranaisi_starpiece_evt)
         CALL(evt_unitwin_alloc)
         CALL(unitwincoin_disp_onoff, 1)
 #else
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #endif
         CALL(evt_msg_print, 0, STRING("uranaisi_14"), 0, STRING("me"))
         CALL(uranaisi_ryokin, 1, LW(2))
@@ -489,7 +489,7 @@ EVT_BEGIN(uranaisi_supercoin_evt)
         CALL(evt_unitwin_alloc)
         CALL(unitwincoin_disp_onoff, 1)
 #else
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #endif
         CALL(evt_msg_print, 0, STRING("uranaisi_16"), 0, STRING("me"))
         CALL(uranaisi_ryokin, 2, LW(2))
@@ -1265,7 +1265,7 @@ EVT_BEGIN(uranaisi_table_talk)
         CALL(evt_unitwin_alloc)
     CALL(unitwincoin_disp_onoff, 1)
 #else
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #endif
         CALL(evt_uranaisi_msg_alloc)
         CALL(evt_uranaisi_msg_set, STRING("uranaisi_04"), LW(1))
@@ -1431,7 +1431,7 @@ EVT_BEGIN(starmaniac_talk)
     // Mario picks which badge to trade for from the list; backing out earns a "LAME!" and ends the talk.
     CALL(evt_msg_print_add, 0, STRING("starmaniac_07"))
     LABEL(0)
-    CALL(evt_win_coin_on, 2, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_STAR_PIECES, LW(12))
     CALL(evt_win_other_select, SELECT_TYPE_BADGE_STAR_PIECE)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_win_coin_off, LW(12))
@@ -1559,7 +1559,7 @@ EVT_BEGIN(johoyaketi_talk)
 #else
         CALL(evt_msg_print_insert, 0, STRING("johoyaketi_01"), 0, STRING("me"), LW(5), LW(4), LW(3))
 #endif
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
         CALL(evt_msg_select, 0, STRING("johoyaketi_02"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_pouch_get_coin, LW(0))

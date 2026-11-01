@@ -718,7 +718,7 @@ EVT_BEGIN(evt_hotdog)
     ELSE
         CALL(evt_msg_print, 0, STRING("stg3_tou_13"), 0, STRING("ホットドッグ"))
     END_IF
-    CALL(evt_win_coin_on, 0, LW(10))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(10))
     CALL(evt_msg_select, 0, STRING("stg3_tou_13_yn"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_pouch_get_coin, LW(0))
