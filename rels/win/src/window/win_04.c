@@ -1,7 +1,6 @@
 // win_04 (ウィンディん家周辺, Flurrie's house in Boggly Woods): the red-walled main room of Flurrie's house, with its
 // chandelier and mirror ball; exits west to win_03 and east through Flurrie's door to her bedroom win_05.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/animdrv.h"
 #include "evt/evt_window.h"
@@ -254,28 +253,6 @@ EVT_BEGIN(meet_clouda2)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER_OR_EQUAL(LW(0), 150)
             IF_INT_GREATER_OR_EQUAL(LW(1), 50)
-#if VERSION <= VERSION_DEMO_US
-                IF_INT_LESS(LW(1), 51)
-                    CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
-                    IF_INT_GREATER_OR_EQUAL(LW(1), 50)
-                        IF_INT_LESS(LW(1), 51)
-                            CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
-                            IF_INT_GREATER_OR_EQUAL(LW(1), 50)
-                                IF_INT_LESS(LW(1), 51)
-                                    BREAK_LOOP
-                                END_IF
-                            END_IF
-                        END_IF
-                    END_IF
-                    BREAK_LOOP
-                END_IF
-            END_IF
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_normalize)
-#else
                 IF_INT_LESS(LW(1), 51)
                     BREAK_LOOP
                 END_IF
@@ -299,7 +276,6 @@ EVT_BEGIN(meet_clouda2)
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
     CALL(evt_party_force_reset_outofscreen, 1)
-#endif
     CALL(evt_party_stop, 1)
     CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
     ADD(LW(0), 50)
@@ -308,19 +284,6 @@ EVT_BEGIN(meet_clouda2)
         ELSE
         SUBTRACT(LW(2), 50)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(120.0f))
-    CALL(evt_party_move_pos2, 1, 160, LW(2), FLOAT(120.0f))
-    CALL(evt_party_set_dir, 1, 90, 200)
-    LOOP(0)
-        IS_EVENT_RUNNING(LW(10), LW(0))
-        IF_INT_EQUAL(LW(0), 0)
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_02"), 0, STRING("extparty"))
-#else
     CALL(evt_party_move_pos2, 1, 160, LW(2), FLOAT(120.0f))
     CALL(evt_party_set_dir, 1, 90, 200)
     LOOP(0)
@@ -332,7 +295,6 @@ EVT_BEGIN(meet_clouda2)
     END_LOOP
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_02"), 0, STRING("extparty"))
     CALL(evt_party_run, 0)
-#endif
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_05_01_FLURRIE_LIVING_ROOM)
@@ -353,35 +315,6 @@ EVT_BEGIN(clouda_inai)
 EVT_END()
 
 EVT_BEGIN(clouda_irai)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 0)
-    BEGIN_INLINE_EVENT_GET_ID(LW(10))
-        CALL(evt_party_force_reset_outofscreen, 0)
-        CALL(evt_party_stop, 0)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_party_move_pos2, 0, 255, LW(2), FLOAT(120.0f))
-        CALL(evt_party_set_dir, 0, 90, 200)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT_GET_ID(LW(11))
-        CALL(evt_party_force_reset_outofscreen, 1)
-        CALL(evt_party_stop, 1)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_party_move_pos2, 1, 225, LW(2), FLOAT(120.0f))
-        CALL(evt_party_set_dir, 1, 90, 200)
-    END_INLINE_EVENT
-    LOOP(0)
-        IS_EVENT_RUNNING(LW(10), LW(0))
-        IS_EVENT_RUNNING(LW(11), LW(1))
-        IF_INT_EQUAL(LW(0), 0)
-            IF_INT_EQUAL(LW(1), 0)
-                BREAK_LOOP
-            END_IF
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    // Flurrie shrieks from behind the door that no one may come in, startling everyone.
-    CALL(evt_msg_toge, 2, 350, 100, 0)
-#else
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_party_force_reset_outofscreen, 0)
@@ -408,7 +341,6 @@ EVT_BEGIN(clouda_irai)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
-#endif
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_03"), 0, 0)
     CALL(evt_mario_set_dir, 90, 200, 0)
     CALL(evt_party_set_dir, 0, 90, -1)
@@ -662,11 +594,7 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, PTR(item_list), LW(0))
-#else
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
-#endif
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
         CALL(evt_msg_print, 0, STRING("stg2_win_e09_00_01"), 0, 0)

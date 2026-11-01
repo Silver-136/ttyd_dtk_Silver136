@@ -145,13 +145,8 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
 #if VERSION == VERSION_EU
     Vec marioPos;
 #endif
-#if VERSION <= VERSION_DEMO_US
-    f32 h;
-    f32 sx, sy, sz;
-#else
     f32 sx, sy, sz;
     f32 h;
-#endif
     f32 ang;
     if (p == NULL) {
         return EVT_RETURN_DONE;
@@ -542,11 +537,7 @@ USER_FUNC(evt_party_jump_pos) {
         if (__fabsf(dy) < 1.0f) {
             dy = hgt;
         } else if (dy >= 0.0f) {
-#if VERSION <= VERSION_DEMO_US
-                dy += 0.5f * p->height;
-#else
             dy += 37.0f;
-#endif
         } else if (searchUnder2(tmp, x, y, z) != NULL) {
             dy = hgt;
         }
@@ -575,24 +566,11 @@ USER_FUNC(evt_party_jump_pos) {
         mode = 0;
         ff = p->velY;
         {
-#if VERSION <= VERSION_DEMO_US
-                f32 groundY, dropDepth;
-#endif
-#if VERSION <= VERSION_DEMO_US
-                HitEntry* hit = partySearchGround(
-                    p, &groundY, &dropDepth, __fabsf(ff), __fabsf(ff));
-                if (hit != NULL && p->position.y + ff <= groundY) {
-#else
             HitEntry* hit = partySearchGround(p, __fabsf(ff), __fabsf(ff));
             if (hit != NULL && p->position.y + ff <= p->groundY) {
-#endif
                 p->hitobjStandOn = hit;
                 mode = 1;
-#if VERSION <= VERSION_DEMO_US
-                    p->position.y = groundY;
-#else
                 p->position.y = p->groundY;
-#endif
                 p->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
             }
         }
@@ -1115,10 +1093,6 @@ void evtPartyStrippedPool(f32* f) {
     f[1] = 0.5f;
     f[2] = 20.0f;
     f[3] = 0.0f;
-#if VERSION <= VERSION_DEMO_US
-    f[5] = -1000.0f;
-#else
     f[4] = 37.0f;
     f[5] = -1000.0f;
-#endif
 }

@@ -137,11 +137,7 @@ EVT_BEGIN(fall_gameover)
 #if VERSION >= VERSION_US
     WAIT_MS(1000)
 #else
-#if VERSION <= VERSION_DEMO_US
-    WAIT_FRAMES(120)
-#else
     WAIT_FRAMES(60)
-#endif
 #endif
     RETURN
 EVT_END()
@@ -210,12 +206,8 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_party_cont_onoff, 1, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
     CALL(evt_mario_clear_party, 1)
-#if VERSION <= VERSION_DEMO_US
-    WAIT_FRAMES(1)
-#else
     WAIT_FRAMES(1)
     CALL(evt_snd_bgm_unpause)
-#endif
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_D_2"))
     CALL(evt_mario_set_dir, 180, 0, 0)
@@ -358,19 +350,6 @@ void seq_gameOverMain(SequenceWork* work) {
             } else {
                 GXColor color = {0, 0, 0, 255};
                 fadeEntry(FADE_IN_BLACK, 1000, color);
-#if VERSION <= VERSION_DEMO_US
-            }
-            psndBGMOn(PSND_FADEOUT, (char*)0x93);
-            marioReset();
-            marioEntry();
-            marioReset();
-            marioEntry();
-            psndBGMOn(PSND_FADEOUT, (char*)0x93);
-            if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
-                sound.streams[psbgm[0].streamId].flags |= 0x8000;
-            }
-            wp->evt = evtEntryType(evt_gameover, 0, 0, 0);
-#else
             }
             marioReset();
             marioEntry();
@@ -379,7 +358,6 @@ void seq_gameOverMain(SequenceWork* work) {
                 sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }
             wp->evt = evtEntryType(evt_gameover, 0, 0, 0);
-#endif
             work->state++;
             break;
         case 5:
@@ -391,36 +369,13 @@ void seq_gameOverMain(SequenceWork* work) {
             {
                 GXColor color = {0, 0, 0, 255};
                 fadeEntry(36, 0, color);
-#if VERSION <= VERSION_DEMO_US
             }
             psndBGMOff_f_d(PSND_FADEOUT, 4000, FALSE);
             work->state++;
-#else
-            }
-            psndBGMOff_f_d(PSND_FADEOUT, 4000, FALSE);
-            work->state++;
-#endif
             break;
         case 6:
             if (!fadeIsFinish()) {
                 break;
-#if VERSION <= VERSION_DEMO_US
-            }
-            gp->resetType = 1;
-            _relUnLoad();
-            _unload("sys_00", NULL, NULL);
-            strcpy(gp->beroEnterName, "");
-            strcpy(gp->currentMapName, "");
-            strcpy(gp->currentAreaName, "");
-            statusWinDispOn();
-            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
-            if (gp->flags & GW_FLAG_E3) {
-                seqSetSeq(SEQ_E3, NULL, NULL);
-            } else {
-                seqSetSeq(SEQ_TITLE, NULL, NULL);
-            }
-            break;
-#else
             }
             _relUnLoad();
             _unload("sys_00", NULL, NULL);
@@ -435,6 +390,5 @@ void seq_gameOverMain(SequenceWork* work) {
                 seqSetSeq(SEQ_TITLE, NULL, NULL);
             }
             break;
-#endif
     }
 }

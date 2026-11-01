@@ -36,11 +36,7 @@ static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_dokugassun_attack;
 static BattleWeapon weapon_dokugassun_poisongas_attack;
 static EvtWord attack_event[69];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord poisongas_event[274];
-#else
 static EvtWord poisongas_event[303];
-#endif
 static PoseTableEntry pose_table[17];
 static BattleDataEntry data_table[3];
 static EvtWord init_event[37];
@@ -51,11 +47,7 @@ static EvtWord counter_event[2];
 static EvtWord unison_phase_event[140];
 static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord wait_event[12];
-#else
 static EvtWord wait_event[13];
-#endif
 
 /**
  * Unit data of the Poison Puff; ties together its sounds, parts, status vulnerability, init event
@@ -260,13 +252,8 @@ static BattleWeapon weapon_dokugassun_poisongas_attack = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_FRONT, // targetWeightFlags
-#if VERSION <= VERSION_DEMO_US
-    0, 0, 0, 0, 0, 0, // sleepChance..dizzyTime
-    50, // poisonChance
-#else
     0, 0, 0, 0, 0, 0, // sleepChance..dizzyTime
     70, // poisonChance
-#endif
     10, // poisonTime
     1, // poisonStrength
     0, 0, 0, 0, 0, 0, 0, 0, // confuseChance..burnTime
@@ -292,20 +279,11 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(poisongas_event))
         GOTO(99)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LW(0), 70)
-    ADD(LW(0), 30)
-#else
     SET_VALUE(LW(0), 65)
     ADD(LW(0), 35)
-#endif
     SUBTRACT(LW(0), 1)
     CALL(evt_sub_random, LW(0), LW(1))
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LW(0), 70)
-#else
     SET_VALUE(LW(0), 65)
-#endif
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(9), PTR(&weapon_dokugassun_attack))
         CALL_CHILD(PTR(normal_attack_event))
@@ -730,11 +708,6 @@ EVT_END()
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
-#if VERSION <= VERSION_DEMO_US
-    RETURN
-EVT_END()
-#else
     RETURN
 EVT_END_PAD()
-#endif
 

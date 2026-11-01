@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "version.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_database_common.h"
 
@@ -20,20 +19,10 @@ extern BattleWeapon ItemWeaponData_FirstLovePuddingBiribiri;
 extern BattleWeapon ItemWeaponData_FreshJuice;
 extern BattleWeapon ItemWeaponData_Funyafunya_Kun;
 extern BattleWeapon ItemWeaponData_FutarideForever;
-#if VERSION <= VERSION_DEMO_US
-extern BattleWeapon ItemWeaponData_FireCandy;
 extern BattleWeapon ItemWeaponData_Guruguru_Memawashi;
-#else
-extern BattleWeapon ItemWeaponData_Guruguru_Memawashi;
-#endif
 extern BattleWeapon ItemWeaponData_HealthySalad;
 extern BattleWeapon ItemWeaponData_Honey_Syrup;
-#if VERSION <= VERSION_DEMO_US
 extern BattleWeapon ItemWeaponData_IceCandy;
-extern BattleWeapon ItemWeaponData_FireCandy; // the demo's Fire Candy is a battle item
-#else
-extern BattleWeapon ItemWeaponData_IceCandy;
-#endif
 extern BattleWeapon ItemWeaponData_Irekaeeru;
 extern BattleWeapon ItemWeaponData_Jiwajiwa_Kinoko;
 extern BattleWeapon ItemWeaponData_Jiwajiwa_Syrup;

@@ -420,13 +420,8 @@ static EVT_BEGIN(guide_talk)
         CASE_EQUAL(STG2_03_01_SEALED_ENTRANCE)
         SPAWN_EVENT(PTR(seal_bigtree2))
         CASE_EQUAL(STG2_10_SECRET_ENTRANCE_REVEALED)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("stg2_mri_e10_05"), 0, STRING("me"))
-        CASE_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-#else
         CALL(evt_msg_print, 0, STRING("stg2_mri_e10_05"), 0, STRING("me"))
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-#endif
         CALL(evt_msg_print, 0, STRING("stg2_mri_e26_00_07"), 0, STRING("me"))
     END_SWITCH
     RETURN
@@ -933,14 +928,7 @@ static USER_FUNC(evt_cloud_main) {
     if (isFirstCall) {
         return EVT_RETURN_BLOCK;
     }
-#if VERSION <= VERSION_DEMO_US
     if (party == NULL) {
-        return EVT_RETURN_BLOCK;
-    }
-    if (party->currentMemberId != 5) {
-#else
-    if (party == NULL) {
-#endif
         return EVT_RETURN_BLOCK;
     }
     hit0 = cloudGetHitBreathout(0);
@@ -1324,12 +1312,8 @@ EVT_BEGIN(mario_see_you)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_party_run, 0)
-#else
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_run, 0)
-#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1564,23 +1548,6 @@ static EVT_BEGIN(sekai_yami_evt)
     SET_VALUE(LW(0), 46)
     SPAWN_EVENT(PTR(sekai_yami_puni))
     SET_VALUE(LW(0), 64)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sekai_yami_puni)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(3000)
-        CALL(evt_sub_intpl_msec_init, 11, 255, 0, 1000)
-        LOOP(0)
-            CALL(evt_sub_intpl_msec_get_value)
-            CALL(evt_mapobj_color, 1, STRING("S_yuka_hika_02"), 255, 255, 255, LW(0))
-            WAIT_FRAMES(1)
-            IF_INT_EQUAL(LW(1), 0)
-                BREAK_LOOP
-            END_IF
-        END_LOOP
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
-    END_INLINE_EVENT
-    CALL(evt_snd_sfxon, STRING("SFX_STG8_WORLD_DARK1"), 0)
-#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
@@ -1596,7 +1563,6 @@ static EVT_BEGIN(sekai_yami_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_STG8_WORLD_DARK1"), 0)
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -800, 800, 5000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1647,12 +1613,8 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_position, STRING("プニ族長老"), -120, 0, 300)
     CALL(evt_npc_set_ry, STRING("プニ族長老"), 270)
     CALL(evt_npc_set_position, STRING("ライバル"), -100, 0, 225)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_ry, STRING("ライバル"), 270)
-#else
     CALL(evt_npc_set_ry, STRING("ライバル"), 270)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
-#endif
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -1859,31 +1821,17 @@ EVT_BEGIN(mri_00_init_evt)
         END_IF
 #endif
         SPAWN_EVENT(PTR(mario_see_you))
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-    SWITCH(GSW(GSW_STORY_PROGRESS))
-        CASE_GREATER_OR_EQUAL(STG2_25_05_BOWSER_PETALBURG)
-        IF_INT_EQUAL(GSWF_TROUBLE_DONE(GSWF_MRI_LEFT_TREE_AFTER_STG2), 0)
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_26_PRAISE_FROM_THE_PUNI)
-#else
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_25_05_BOWSER_PETALBURG)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
-#endif
             BEGIN_INLINE_EVENT
                 CALL(evt_puni_wait_systemmode, 2)
                 SPAWN_EVENT(PTR(mario_see_you_init))
             END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        END_IF
-    END_SWITCH
-    CALL(evt_map_playanim, STRING("hikari_01"), 1, 0)
-#else
         END_IF
     END_SWITCH
     CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
-#endif
     CALL(evt_map_playanim, STRING("kawa_sibu_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kawa_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kawa_02"), MAP_ANIM_PLAY_LOOP, 0)

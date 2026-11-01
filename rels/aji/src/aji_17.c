@@ -191,11 +191,7 @@ static s32 wait_move_end_50hz(EventEntry* event, BOOL isFirstCall) {
 #pragma defer_codegen on
 
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_1")), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_2")), 0, 0, LW(0))
@@ -203,11 +199,7 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_1")), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_2")), 0, 0, LW(0))
@@ -350,11 +342,7 @@ EVT_BEGIN(evt_emergency)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_sub_intpl_msec_init, 11, 255, 32, 1000)
-#else
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 96, 1000)
-#endif
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_map_set_blend, 0, 255, LW(0), LW(0), 255)
@@ -363,11 +351,7 @@ EVT_BEGIN(evt_emergency)
             GOTO(0)
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_map_set_blend, 0, 255, 32, 32, 255)
-#else
     CALL(evt_map_set_blend, 0, 255, 96, 96, 255)
-#endif
     RETURN
 EVT_END()
 
@@ -3337,15 +3321,9 @@ EVT_BEGIN(aji_17_init_evt)
         CALL(evt_map_pauseanim, 0, STRING(("moza")))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("keyboard")), 0, PTR(tec_talk), 0)
 #endif
-#if VERSION <= VERSION_DEMO_US
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     RETURN
-#else
-    END_IF
-    CALL(evt_snd_set_rev_mode, 1)
-    RETURN
-#endif
 EVT_END()
 
 // target .data tail pad word

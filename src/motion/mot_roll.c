@@ -339,9 +339,6 @@ s32 marioRollTryCancel(void) {
  * returns 1 if it started. Called from evt_mario.
  */
 s32 marioRollCancel(void) {
-#if VERSION <= VERSION_DEMO_US
-    s32 ret = 0;
-#endif
     MarioWork* mario = marioGetPtr();
     if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
         return 0;
@@ -349,20 +346,9 @@ s32 marioRollCancel(void) {
     if (mario->mot.roll.flags & ROLL_FLAG_FIX) {
         return 0;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (!(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING)) {
-        ret = 1;
-#endif
     mario->currSubMotionId = 0x14;
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-#if VERSION <= VERSION_DEMO_US
-    }
-#endif
-#if VERSION <= VERSION_DEMO_US
-    return ret;
-#else
     return 1;
-#endif
 }
 
 /**
@@ -372,11 +358,7 @@ s32 marioRollCancel(void) {
  */
 void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-    MarioWork* m;
-#else
     MarioWork* m = marioGetPtr();
-#endif
 #if VERSION >= VERSION_US
     if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
         psndSFXOff(marioGetPtr()->motRoll->sfxId);
@@ -616,21 +598,6 @@ void mot_roll(void) {
         s32 z0 = 0;
         s32 z1;
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-#if VERSION <= VERSION_DEMO_US
-            marioAdjustMoveDir();
-            mario->hammerDir = 0;
-            v31 = mario->displayDirection;
-            if (v31 < 90.0f || v31 > 270.0f) {
-                mario->hammerDir = 1;
-                mario->directionView = revise360(270.0f - mario->targetYaw);
-                mario->moveDirection = 270.0f;
-            } else {
-                mario->hammerDir = 0;
-                mario->directionView = revise360(90.0f - mario->targetYaw);
-                mario->moveDirection = 90.0f;
-            }
-            marioGetRubInit();
-#else
         marioAdjustMoveDir();
         v31 = mario->displayDirection;
         if (v31 < 90.0f || v31 > 270.0f) {
@@ -643,7 +610,6 @@ void mot_roll(void) {
             mario->moveDirection = 90.0f;
         }
         marioGetRubInit();
-#endif
         mario->flags |= MARIO_FLAG_TUBE_MODE;
         mario->rollFlags = 0x10;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
@@ -691,18 +657,6 @@ void mot_roll(void) {
             mario->dispOfs.y = 1.0f;
         }
         if (--mario->multiTimer <= 0) {
-#if VERSION <= VERSION_DEMO_US
-                v31 = mario->displayDirection;
-                if (v31 < 90.0f || v31 > 270.0f) {
-                    mario->hammerDir = 1;
-                    mario->directionView = revise360(270.0f - mario->targetYaw);
-                    mario->moveDirection = 270.0f;
-                } else {
-                    mario->hammerDir = 0;
-                    mario->directionView = revise360(90.0f - mario->targetYaw);
-                    mario->moveDirection = 90.0f;
-                }
-#endif
             mario->currSubMotionId = 0x1e;
             marioChgPose("M_I_U");
             marioChgPaper("PM_R_1B");
@@ -783,15 +737,8 @@ void mot_roll(void) {
                 mario->directionView = 90.0f;
             }
             marioSetSpec();
-#if VERSION <= VERSION_DEMO_US
-                mario->rollFlags = 0;
-                mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-                mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-                mario->rot = (Vec){0.0f, 0.0f, 0.0f};
-#else
             mario->rollFlags = 0;
             marioOfsRotReset();
-#endif
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
             mario->flags &= ~MARIO_FLAG_TUBE_MODE;
@@ -820,13 +767,8 @@ void mot_roll(void) {
         roll_upstairs();
         return;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (!(mario->mot.roll.flags & ROLL_FLAG_FIX) && (mario->buttonTrg & PAD_BUTTON_B)) {
-        if (!(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING)) {
-#else
     if (mario->buttonTrg & PAD_BUTTON_B) {
         if (!rollChk()) {
-#endif
             mario->currSubMotionId = 0x14;
             camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         } else {
@@ -875,14 +817,7 @@ void mot_roll(void) {
         break;
     }
     mario->tubeScaleY = v26;
-#if VERSION <= VERSION_DEMO_US
-    if (mario->airTimer == 0) {
-        camFollowYOn();
-    }
     if (!mario->hitobjStandOn && mario->hitobjFront && !marioChkBero(mario->hitobjFront)) {
-#else
-    if (!mario->hitobjStandOn && mario->hitobjFront && !marioChkBero(mario->hitobjFront)) {
-#endif
         v26 = marioGetPtr()->motRoll->spdX;
         v27 = marioGetPtr()->motRoll->spdZ;
         v26 += 0.2f * -v26;
@@ -897,13 +832,8 @@ void mot_roll(void) {
         marioGetPtr()->motRoll->spdZ = v27;
     }
     if (mario->hitobjStandOn) {
-#if VERSION <= VERSION_DEMO_US
-        if (mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
-            {
-#else
         if (!(hitGetAttr(mario->hitobjStandOn) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE)) && mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
             if (!(strcmp(gp->currentMapName, "eki_04") == 0 && __fabsf(mario->groundSlope) >= 40.0f)) {
-#endif
                 MarioWork* m = marioGetPtr();
                 camFollowYOff();
                 m->jumpVelocityY = 2.85f;
@@ -912,15 +842,6 @@ void mot_roll(void) {
                 m->jumpSnapY = -0.02f;
                 m->flags |= MARIO_FLAG_IS_JUMPING;
                 m->airTimer = 1;
-#if VERSION <= VERSION_DEMO_US
-                psndSFXOn_3D((char*)0x17c, &marioGetPtr()->position);
-                mario->hitobjJumpFrom = mario->hitobjStandOn;
-                mario->hitobjStandOn = 0;
-                mario->fallStartPos = mario->position;
-                mario->lastGroundPos = mario->position;
-                camFollowYOff();
-            }
-#else
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_JUMP1), &marioGetPtr()->position);
                 mario->hitobjJumpFrom = mario->hitobjStandOn;
                 mario->hitobjStandOn = NULL;
@@ -928,35 +849,16 @@ void mot_roll(void) {
                 mario->lastGroundPos = mario->position;
                 camFollowYOff();
             }
-#endif
         }
         marioUpdateCamCollision(mario->position);
-#if VERSION <= VERSION_DEMO_US
-    } else {
-#endif
-#if VERSION <= VERSION_DEMO_US
-        mario->airTimer++;
-        mario->airTimer--;
-#else
         mario->airTimer = 0;
-#endif
     }
     if (mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) {
-#if VERSION <= VERSION_DEMO_US
-        if (mario->hitobjHead) {
-#else
         if (mario->hitobjHead) {
             if (mario->jumpVelocityY >= 0.0f) {
-#endif
                 mario->jumpVelocityY = -0.03f;
                 mario->jumpAccelerationY = -0.02f;
                 mario->jumpJerkY = -0.02f;
-#if VERSION <= VERSION_DEMO_US
-            mario->jumpSnapY = -0.002f;
-            mario->flags |= MARIO_FLAG_IS_FALLING;
-        }
-    }
-#else
                 mario->jumpSnapY = -0.002f;
             }
             mario->flags |= MARIO_FLAG_IS_FALLING;
@@ -970,7 +872,6 @@ void mot_roll(void) {
         }
         mario->airTimer++;
     }
-#endif
     v29 = marioGetPtr()->motRoll->spdX;
     v28 = marioGetPtr()->motRoll->spdZ;
     nx = 0.0f;
@@ -1044,10 +945,6 @@ void mot_roll(void) {
         if (angOut(tcA, 135.0f, v31) == 1) {
             nz = distABf(0.0f, 0.0f, nx, -nz);
             nx = -nz * (f32)sin(3.1415927f * mario->directionView / 180.0f);
-#if VERSION <= VERSION_DEMO_US
-            nz = nz * (f32)cos(3.1415927f * ((MarioWork*)mario)->directionView / 180.0f);
-        }
-#else
             nz = nz * (f32)cos(3.1415927f * ((MarioWork*)mario)->directionView / 180.0f);
         }
     }
@@ -1062,7 +959,6 @@ void mot_roll(void) {
                 v28 = 0.0f;
             }
         }
-#endif
     }
     if (mario->hitobjFront && !mario->wStickDir1 && !mario->wStickDir2 && !marioChkBero(mario->hitobjFront)) {
         v29 = 0.6f * -v29 + v29;
@@ -1267,15 +1163,7 @@ void mot_roll(void) {
     if (mario->wStickDir1 || mario->wStickDir2) {
         mario->mot.roll.flags |= ROLL_FLAG_STICK_UNUSED;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (!(mario->mot.roll.flags & ROLL_FLAG_FIX) && (mario->buttonTrg & PAD_BUTTON_B) && !(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING) && mario->hitobjStandOn) {
-        mario->currSubMotionId = 0x14;
-        camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-    }
     if (mario->baseSpeed) {
-#else
-    if (mario->baseSpeed) {
-#endif
         MarioWork* m = marioGetPtr();
         m->camShiftTargetZ = 0.0f;
         m->camShiftRate.z = 0.004f;
@@ -1347,15 +1235,6 @@ static inline void marioRollCan(void) {
     {
         f32 s;
         f32 c;
-#if VERSION <= VERSION_DEMO_US
-        f32 ox, oy, oz;
-        f32 dist;
-        f32 nx, ny, nz;
-        dist = 100.0f;
-        if (marioHitCheck(&ox, &oy, &oz, &dist, &nx, &ny, &nz, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y, mario->position.z, 0.0f, -1.0f, 0.0f)) {
-            f32 sq = sqrtf(nx * nx + nz * nz);
-            f32 ang = angleABf(0.0f, 0.0f, sq, -ny);
-#else
         f32 dist;
         Vec pos;
         Vec dir;
@@ -1369,7 +1248,6 @@ static inline void marioRollCan(void) {
         if (marioHitCheckVec(&pos, &dir, &out, &nrm, &dist)) {
             f32 sq = sqrtf(nrm.x * nrm.x + nrm.z * nrm.z);
             f32 ang = angleABf(0.0f, 0.0f, sq, -nrm.y);
-#endif
             f32 r = (f32)(s32)(0.5f + ang);
             if (rabs(ang) < 45.0) {
                 v26 = rollRad(r);
@@ -1383,10 +1261,6 @@ static inline void marioRollCan(void) {
                 }
             } else {
                 sincosf(&s, &c, 90.0f);
-#if VERSION <= VERSION_DEMO_US
-                dist = 100.0f;
-                marioHitCheck(&ox, &oy, &oz, &dist, &nx, &ny, &nz, mario->position.x, mario->position.y, mario->position.z, s, 0.0f, c);
-#else
                 dist = 100.0f;
                 pos = mario->position;
                 d2 = (Vec){0.0f, 0.0f, 0.0f};
@@ -1394,7 +1268,6 @@ static inline void marioRollCan(void) {
                 d2.z = c;
                 dir = d2;
                 marioHitCheckVec(&pos, &dir, &out, &nrm, &dist);
-#endif
             }
         }
     }
@@ -1408,13 +1281,7 @@ static inline void marioRollCan(void) {
 void marioRollStrippedPool(void) {
     MarioWork* mario = marioGetPtr();
     mario->dispOfs.x = 100.0f;
-#if VERSION <= VERSION_DEMO_US
     mario->dispOfs.y = 0.0f;
-    // FAKE: DEMO: dead store that puts -1.0f third in the .sdata2 pool (the demo marioRollCan passes -1.0f to marioHitCheck); this function is never called and the link strips it
-    mario->jumpVelocityY = -1.0f;
-#else
-    mario->dispOfs.y = 0.0f;
-#endif
     mario->dispOfs.z = 0.5f;
     mario->dispOfs2.x = 3.1415927f;
     mario->dispOfs2.y = 180.0f;

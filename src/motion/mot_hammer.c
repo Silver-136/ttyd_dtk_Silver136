@@ -218,15 +218,9 @@ void mot_hammer(void) {
                 break;
             }
             psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
-#if VERSION <= VERSION_DEMO_US
-        }
-        lvl->mot.hammer.hitKind = kind;
-    }
-#else
         }
         mario->mot.hammer.hitKind = kind;
     }
-#endif
     {
         f32 a = mario->mot.hammer.dir;
         BOOL r = FALSE;
@@ -266,67 +260,6 @@ void mot_hammer(void) {
             }
         }
         mario->currSubMotionId = 1;
-#if VERSION <= VERSION_DEMO_US
-        lvl->hitobjHammer = lvl->hitobjHammerNew;
-        px = lvl->position.x;
-        py = lvl->position.y;
-        pz = lvl->position.z;
-        if (!(lvl->dispFlags & MARIO_DISP_FLAG_REAR_POSE)) {
-            efType = -1;
-            switch (lvl->mot.hammer.hitKind) {
-                case 7:
-                    movePos(&px, &pz, 16.0f, toMovedir2(lvl->displayDirectionTarget, 0.0f));
-                    ez = 53.0f;
-                    efType = 0x16;
-                    break;
-                case 0:
-                case 6:
-                    movePos(&px, &pz, 25.0f, toMovedir2(lvl->displayDirectionTarget, 0.0f));
-                    ez = -3.0f;
-                    efType = 0x15;
-                    break;
-                case 5:
-                    movePos(&px, &pz, 31.0f, toMovedir2(lvl->displayDirectionTarget, 0.0f));
-                    ez = 5.0f;
-                    efType = 0x15;
-                    break;
-                case 4:
-                    movePos(&px, &pz, 30.0f, toMovedir2(lvl->displayDirectionTarget, 0.0f));
-                    ez = 30.0f;
-                    efType = 0x16;
-                    break;
-            }
-        } else {
-            efType = -1;
-            switch (lvl->mot.hammer.hitKind) {
-                case 7:
-                    movePos(&px, &pz, 16.0f, toMovedir2(lvl->displayDirectionTarget, -2.0f));
-                    ez = 53.0f;
-                    efType = 0x16;
-                    break;
-                case 0:
-                case 6:
-                    movePos(&px, &pz, 30.0f, toMovedir2(lvl->displayDirectionTarget, -6.0f));
-                    ez = -3.0f;
-                    efType = 0x15;
-                    break;
-                case 5:
-                    movePos(&px, &pz, 36.0f, toMovedir2(lvl->displayDirectionTarget, -6.0f));
-                    ez = 20.0f;
-                    efType = 0x16;
-                    break;
-                case 4:
-                    movePos(&px, &pz, 37.0f, toMovedir2(lvl->displayDirectionTarget, -6.0f));
-                    ez = 28.0f;
-                    efType = 0x16;
-                    break;
-            }
-        }
-        if (efType > 0) {
-            effKemuTestEntry(efType, px, py + ez, pz, 1.0f);
-        }
-        {
-#else
         mario->hitobjHammer = mario->hitobjHammerNew;
         px = mario->position.x;
         py = mario->position.y;
@@ -386,7 +319,6 @@ void mot_hammer(void) {
             effKemuTestEntry(efType, px, py + ez, pz, 1.0f);
         }
         {
-#endif
             MarioWork* m = marioGetPtr();
             snd = 0x161;
             switch (pouchGetHammerLv()) {
@@ -401,11 +333,7 @@ void mot_hammer(void) {
                 break;
             }
             // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
-#if VERSION <= VERSION_DEMO_US
-            for (i = 0; i < 5; i++) {
-#else
             for (i = 0; (u32)i < 10; i++) {
-#endif
                 if (pouchEquipCheckBadge(se_data[m->hammerSfxIdx])) {
                     snd = se_data[m->hammerSfxIdx + 1];
                     m->hammerSfxIdx += 2;
@@ -800,13 +728,9 @@ void mot_ham2_post(void) {
     marioPaperLightOn();
 #endif
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-#if VERSION <= VERSION_DEMO_US
-    lvl->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-#else
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
     mario->dispFlags &= ~MARIO_DISP_FLAG_FLIP;
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-#endif
     mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
     marioAdjustMoveDir();
 }
@@ -828,12 +752,7 @@ HitEntry* hitEstimate(s32* out) {
     Vec dir4Copy;
     f32 h;
     s32 i;
-#if VERSION <= VERSION_DEMO_US
     f32 k5 = 5.0f;
-    f32 ang;
-#else
-    f32 k5 = 5.0f;
-#endif
     mario = marioGetPtr();
     *out = 0;
     a = mario->displayDirection;
@@ -847,9 +766,6 @@ HitEntry* hitEstimate(s32* out) {
     }
     sincosf(&s, &c, a);
     h = mario->wPlayerCollisionBox.y;
-#if VERSION <= VERSION_DEMO_US
-    ang = 3.14159265f;
-#endif
     cy = (f32)cos(3.14159265f);
     pos = mario->position;
     {
@@ -867,9 +783,6 @@ HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    ang = 1.2217306f;
-#endif
     cy = (f32)cos(1.2217306f);
     {
         Vec dir2 = {0.0f, 0.0f, 0.0f};
@@ -888,9 +801,6 @@ HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    ang = 0.78539816f;
-#endif
     cy = (f32)cos(0.78539816f);
     {
         Vec dir3 = {0.0f, 0.0f, 0.0f};
@@ -909,9 +819,6 @@ HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    ang = 0.0f;
-#endif
     cy = (f32)cos(0.0f);
     {
         Vec dir4 = {0.0f, 0.0f, 0.0f};
@@ -952,33 +859,6 @@ HitEntry* hitEstimate(s32* out) {
 }
 
 /** Names of the small and big blocks that only a level 1, 2 or 3 hammer (Hammer, Super, Ultra) can break. */
-#if VERSION <= VERSION_DEMO_US
-const char* not_fullswing_mobj[] = {
-    "MOBJ_RedJumpStand",
-    "MOBJ_RedJumpStand2",
-    "MOBJ_BlueJumpStand",
-    "MOBJ_BlueJumpStand2",
-    "MOBJ_MapJumpStand",
-    "MOBJ_SaveBlock",
-    "MOBJ_RecoverBlock",
-    "MOBJ_Lv1BigBigBlock",
-    "MOBJ_Lv2BigBigBlock",
-    "MOBJ_Lv3BigBigBlock",
-    "MOBJ_green_FlowBlock",
-    "MOBJ_IceBlock",
-    "MOBJ_PowerBlock",
-    "MOBJ_TreasureBox",
-    "MOBJ_BigTreasureBox",
-    "MOBJ_Lock",
-    "MOBJ_GreenPipeL",
-    "MOBJ_GreenPipeW",
-    "MOBJ_Singboard",
-    "MOBJ_Arrow",
-    "MOBJ_HardWoodBox",
-    "MOBJ_BombRock",
-    NULL,
-};
-#endif
 static const char isS1_str[] = "MOBJ_Lv1Block";
 static const char isB1_str[] = "MOBJ_Lv1BigBlock";
 static const char isS2_str[] = "MOBJ_Lv2Block";

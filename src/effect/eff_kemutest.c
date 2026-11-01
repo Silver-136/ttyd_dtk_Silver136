@@ -71,15 +71,7 @@ static const KemuF3 kemu_h = { { 0.0f, 1.0f, 2.0f } };
 /** Zero vector copied into the sound position for the type 3 stage-burst sound in effKemuTestEntry. */
 static const Vec kemu_pos = { 0.0f, 0.0f, 0.0f };
 /** Zero vector effKemuTestMain starts its per-frame scratch position from. */
-#if VERSION <= VERSION_DEMO_US
-static const Vec kemu_tmp = {0.0f, 0.0f, 0.0f};
-
-// In the demo the burst tables are file-scope statics, first in .data.
-static f32 bom_dir[10] = {10.0f, 40.0f, 80.0f, 170.0f, 140.0f, 100.0f, 25.0f, 155.0f, 60.0f, 120.0f};
-static f32 bom_spd[10] = {2.2f, 2.7f, 3.0f, 2.2f, 2.7f, 3.0f, 1.9f, 1.9f, 1.5f, 1.5f};
-#else
 static const Vec kemu_tmp = { 0.0f, 0.0f, 0.0f };
-#endif
 
 /** Sets the X and Z rotation used by type 11, which is drawn tilted rather than camera-facing. */
 void effKemuTestSetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
@@ -388,17 +380,10 @@ static void effKemuTestMain(EffectEntry* effect) {
  * Spawns the smoke burst at (x, y, z): the type (0-19) picks the piece count and motion.
  * Spawned by the hammer motion (mot_hammer.c), partner code and event scripts.
  */
-#if VERSION <= VERSION_DEMO_US
-EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
-    static f32 bom_dir[10] = {10.0f, 40.0f, 80.0f, 170.0f, 140.0f, 100.0f, 25.0f, 155.0f, 60.0f, 120.0f};
-    static f32 bom_spd[10] = {2.2f, 2.7f, 3.0f, 2.2f, 2.7f, 3.0f, 1.9f, 1.9f, 1.5f, 1.5f};
-    EffectEntry* effect;
-#else
 EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     static f32 bom_dir[10] = { 10.0f, 40.0f, 80.0f, 170.0f, 140.0f, 100.0f, 25.0f, 155.0f, 60.0f, 120.0f };
     static f32 bom_spd[10] = { 2.2f, 2.7f, 3.0f, 2.2f, 2.7f, 3.0f, 1.9f, 1.9f, 1.5f, 1.5f };
     EffectEntry* effect;
-#endif
     KemuTestWork* work;
     s32 i;
     s32 count;

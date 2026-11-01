@@ -228,7 +228,6 @@ static EVT_BEGIN(evt_prologue)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 145, 122, 717, 145, 108, -180, 5000, EASING_SINE_IN_OUT)
     WAIT_MS(4000)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_set_position, STRING("パレッタ"), 500, 500, 0)
     SET_VALUE(GF(1), 0)
     BEGIN_INLINE_EVENT
@@ -254,33 +253,6 @@ static EVT_BEGIN(evt_prologue)
     END_INLINE_EVENT
     // Parakarry glides in to the mailbox, with a wing-beat sound at intervals until he lands.
     CALL(evt_npc_glide_position, STRING("パレッタ"), 210, 25, -30, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)
-#else
-    CALL(evt_npc_set_position, STRING("パレッタ"), 500, 500, 0)
-    SET_VALUE(GF(1), 0)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(3000)
-        LOOP(14)
-            CALL(evt_npc_get_position, STRING("パレッタ"), LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_OPN_PARETTA_MOVE1"), LW(0), LW(1), -100, 0)
-            WAIT_MS(200)
-        END_LOOP
-        LOOP(0)
-            CALL(evt_npc_get_position, STRING("パレッタ"), LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_OPN_PARETTA_MOVE1"), LW(0), LW(1), -100, 0)
-            WAIT_MS(400)
-            IF_INT_EQUAL(GF(1), 1)
-                BREAK_LOOP
-            END_IF
-        END_LOOP
-        LOOP(17)
-            CALL(evt_npc_get_position, STRING("パレッタ"), LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_OPN_PARETTA_MOVE1"), LW(0), LW(1), -100, 0)
-            WAIT_MS(200)
-        END_LOOP
-    END_INLINE_EVENT
-    // Parakarry glides in to the mailbox, with a wing-beat sound at intervals until he lands.
-    CALL(evt_npc_glide_position, STRING("パレッタ"), 210, 25, -30, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)
-#endif
     // The mailbox shakes as she drops the mail in.
     CALL(evt_npc_reverse_ry, STRING("パレッタ"))
     WAIT_MS(500)
@@ -295,12 +267,8 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_npc_reverse_ry, STRING("パレッタ"))
     WAIT_MS(500)
     // Parakarry calls out "Mail call!" and flies off.
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("pro_00"), 0, STRING("パレッタ"))
-#else
     CALL(evt_msg_print, 0, STRING("pro_00"), 0, STRING("パレッタ"))
     SET_VALUE(GF(1), 1)
-#endif
     CALL(evt_npc_glide_position, STRING("パレッタ"), 0, 300, -100, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)
     // Luigi opens the front door and walks out to the mailbox.
     CALL(evt_npc_set_position, STRING("ルイージ"), 20, 30, -150)

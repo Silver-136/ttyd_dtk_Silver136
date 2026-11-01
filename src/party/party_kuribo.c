@@ -49,21 +49,13 @@ USER_FUNC(pre_kurio_use) {
         return EVT_RETURN_DONE;
     }
 
-#if VERSION <= VERSION_DEMO_US
-    if (!(party->flags & PARTY_FLAG_IS_GROUNDED)) {
-#else
     if (party->flags2 & PARTY_DISP_FLAG_PAPER) {
-#endif
         return EVT_RETURN_DONE;
     }
 
-#if VERSION <= VERSION_DEMO_US
-    psndSetFlag(PSND_FLAG_MUTE_SFX);
-#else
     psndSetFlag(PSND_FLAG_MUTE_SFX);
     party->flags |= PARTY_FLAG_DISABLE_FLOORS;
     party->flags |= PARTY_FLAG_FORCE_FALL;
-#endif
 
     mario = party->playerPtr;
     if (event->lwData[0]) {
@@ -196,19 +188,11 @@ USER_FUNC(post_kurio_use) {
     if (!party) {
         return EVT_RETURN_DONE;
     }
-#if VERSION <= VERSION_DEMO_US
-    party->useMotionId = 10;
-#else
     party->useMotionId = 20;
-#endif
     marioStSystemLevel(0);
-#if VERSION <= VERSION_DEMO_US
-    psndClearFlag(PSND_FLAG_MUTE_SFX);
-#else
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
     party->flags &= ~PARTY_FLAG_FORCE_FALL;
-#endif
     return EVT_RETURN_DONE;
 }
 
@@ -237,16 +221,6 @@ EVT_END()
 s32 fbatNpcTalkCheck(void);
 
 
-#if VERSION <= VERSION_DEMO_US
-void kuribo_use_post(PartyEntry* party) {
-    party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
-    party->flags &= ~PARTY_FLAG_FORCE_FALL;
-}
-
-/** The demo starts the message right where Goombella stands; retail first walks her next to Mario. */
-void kuribo_use(PartyEntry* party) {
-    EventEntry* evt;
-#else
 void kuribo_use_post(PartyEntry* party) {
     party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
     party->flags &= ~PARTY_FLAG_FORCE_FALL;
@@ -257,15 +231,8 @@ void kuribo_use(PartyEntry* party) {
     HitEntry* wall;
     Vec pos;
     EventEntry* evt;
-#endif
 
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
-#if VERSION <= VERSION_DEMO_US
-        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
-        partyChgMoveMode(party, 0);
-        partyChgMot(party, 0);
-        partyChgPoseId(party, 1);
-#else
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         if (PSVECDistance(&player->position, &party->position) > 125.0f) {
             party->useMotionId = 0;
@@ -283,22 +250,13 @@ void kuribo_use(PartyEntry* party) {
             if (!wall) {
                 partyChgPoseId(party, 1);
                 party->moveSpeed = 0.0f;
-#endif
                 party->moveFrames = 100;
-#if VERSION <= VERSION_DEMO_US
-        party->useMotionId = 0;
-    }
-#else
                 party->useMotionId = 10;
             }
         }
     }
-#endif
 
     switch (party->useMotionId) {
-#if VERSION <= VERSION_DEMO_US
-        case 0:
-#else
     case 0:
         if (!partyGetAppearPos3(party, &party->moveTarget)) {
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
@@ -330,30 +288,16 @@ void kuribo_use(PartyEntry* party) {
         party->useMotionId = 10;
         break;
     case 10:
-#endif
         evt = evtEntryType(kurio_msg_evt, 0, 0, 26);
         marioStSystemLevel(1);
         evt->lwData[0] = fbatNpcTalkCheck();
-#if VERSION <= VERSION_DEMO_US
-            party->useMotionId = 1;
-#else
         party->useMotionId = 15;
-#endif
         break;
-#if VERSION <= VERSION_DEMO_US
-        case 10:
-#else
     case 20:
-#endif
         party->moveFrames = 5;
-#if VERSION <= VERSION_DEMO_US
-            party->useMotionId = 11;
-        case 11:
-#else
         party->useMotionId = 21;
         // fall through
     case 21:
-#endif
         if (--party->moveFrames > 0) {
             break;
         }
@@ -361,13 +305,9 @@ void kuribo_use(PartyEntry* party) {
         partyChgMoveMode(party, PARTY_MOVE_MODE_STAY);
         partyChgMot(party, PARTY_MOTION_STAY);
         partyChgPoseId(party, 1);
-#if VERSION <= VERSION_DEMO_US
-            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-#else
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
         party->flags &= ~PARTY_FLAG_FORCE_FALL;
-#endif
         break;
     }
     partyChkGnd(party);

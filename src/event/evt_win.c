@@ -1,6 +1,5 @@
 // Script commands for the unit windows (unitwin): the shop, partner and item list windows.
 
-#include "version.h"
 #include "evt/evt_cmd.h"
 #include "driver/icondrv.h"
 #include "driver/camdrv.h"
@@ -27,20 +26,11 @@
 #include <dolphin/mtx.h>
 #include <stdio.h>
 #include <string.h>
-#if VERSION <= VERSION_DEMO_US
-#include <stdlib.h>
 #include "icon_ids.h"
-#else
-#include "icon_ids.h"
-#endif
 #include "mario/mario_party.h"
 #include "driver/itemdrv.h"
 #include "statuswindow.h"
 #include "win/win_main.h"
-#if VERSION <= VERSION_DEMO_US
-#include "driver/casedrv.h"
-#include "evt/evt_case.h"
-#endif
 #include "data_tables.h"
 #include <dolphin/pad.h>
 
@@ -71,65 +61,35 @@ typedef struct UnitWinWork {
     u16 flags;             // 0x0, UnitWinFlags
     u16 pad2;              // 0x2
     UnitWinSell* entries;  // 0x4
-#if VERSION <= VERSION_DEMO_US
-    s32* goods;            // 0x8
-    s32 goodsMax;          // 0xC
-#else
     s32* goods;            // 0x8
     u16 itemFlags[6];      // 0xC
     s32 goodsMax;          // 0x18
-#endif
     EventEntry* evt;       // 0x1C
     EventEntry* childEvt;  // 0x20
     s32 goodsIdx;          // 0x24
     s32 timer;             // 0x28
     s32 coin;              // 0x2C
     s32 coinDisp;          // 0x30
-#if VERSION <= VERSION_DEMO_US
-    f32 cursor;            // 0x28
-    f32 scrollTop;         // 0x2C
-#else
     f32 cursor;            // 0x34
     u8 pad38[4];           // 0x38
-#endif
     f32 cursorX;           // 0x3C
     f32 cursorY;           // 0x40
     f32 scroll;            // 0x44
-#if VERSION <= VERSION_DEMO_US
-    u8 pad3C[4];           // 0x3C
-#else
     u8 pad48[4];           // 0x48
-#endif
     s32 skipEntry;         // 0x4C, never written (0 after the memset); both lists skip the entry equal to it
     s32 mode;              // 0x50
     u16 flags2;            // 0x54, UNITWIN_FREE_*
-#if VERSION <= VERSION_DEMO_US
-    u8 pad4A[2];           // 0x4A
-    s32 caseId[16];        // 0x4C, one case event per counter hit object
-#else
     u8 pad56[2];           // 0x56
-#endif
     s32 count;             // 0x58
-#if VERSION <= VERSION_DEMO_US
-    s32 coinTick;         // 0x90, coin count-up frame (ticks on odd frames)
-#else
     s32 coinTick;          // 0x5C
     s32 winId[3];          // 0x60
     u8 pad6C[0xE0 - 0x6C]; // 0x6C
     s32 selected;          // 0xE0
     s32 bought;            // 0xE4
-#endif
 } UnitWinWork;
 
 static s16* mario_status_point_table[3];
 s32 unitwin_coin_se_wait;
-#if VERSION <= VERSION_DEMO_US
-static UnitWinWork* _wp;
-
-static USER_FUNC(evt_unitwin_main_func);
-static USER_FUNC(evt_unitwin_select_func);
-static void evt_unitwin_disp_func(CameraId cameraId, void* param);
-#else
 static UnitWinWork* _wp;
 
 USER_FUNC(evt_unitwin_main_func);
@@ -147,7 +107,6 @@ WinMgrDesc unitwin_desc[3] = {
     {0, 0, 8, -240, -130, 500, 80, {0xF0, 0xF0, 0xF0, 0xFF}, unitwin_help_main, unitwin_help_disp},
     {2, 0, 8, -250, -130, 150, 45, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, unitwin_point_disp},
 };
-#endif
 
 /**
  * Tables of the unit window (partner and Mario lists): the partner ids in menu order (Goombella, Koops, Flurrie,
@@ -170,38 +129,6 @@ EVT_END()
 EVT_BEGIN(select_evt)
     CALL(evt_unitwin_select_func)
     RETURN
-#if VERSION <= VERSION_DEMO_US
-EVT_END()
-
-/**
- * Maps Yoshi's list icon (ICON_PARTY_YOSHI) to the icon for the colour Yoshi hatched in (pouchGetPartyColor);
- * other icons pass through.
- */
-static s32 unitwin_party_icon(s32 icon) {
-    if (icon == ICON_PARTY_YOSHI) {
-        switch (pouchGetPartyColor(4)) {
-            case 0:
-                icon = ICON_PARTY_YOSHI;
-                break;
-            case 1:
-                icon = ICON_PARTY_YOSHI_1;
-                break;
-            case 2:
-                icon = ICON_PARTY_YOSHI_2;
-                break;
-            case 3:
-                icon = ICON_PARTY_YOSHI_3;
-                break;
-            case 4:
-                icon = ICON_PARTY_YOSHI_4;
-                break;
-            case 5:
-                icon = ICON_PARTY_YOSHI_5;
-                break;
-            case 6:
-            default:
-                icon = ICON_PARTY_YOSHI_6;
-#else
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_8017599c, JP 0x8017599C. See docs/NAME_PROVENANCE.md.
@@ -229,23 +156,12 @@ void unitwin_name_disp(WinMgrEntry* entry) {
             pos.y *= gp->efbHeight / 2.0f;
             sprintf(buf, "%d", itemDataTable[wp->goods[i]].discount_price);
             PSMTXTrans(mtx, 12.0f * (strlen(buf) - 1) + pos.x, pos.y, pos.z);
-#endif
             iconNumberDispGx(mtx, itemDataTable[wp->goods[i]].discount_price, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    return icon;
-#endif
 }
 
 // never called: the linker strips it, its "%s_%04d" string stays in this object's .rodata (name descriptive)
-#if VERSION <= VERSION_DEMO_US
-static const char* unitwin_party_name(s32 i) {
-    const char* name;
-    switch (i) {
-        case 0:
-            name = msgSearch("name_party0");
-#else
 static void unitwin_fmt(char* buf, const char* name, s32 n) {
     sprintf(buf, "%s_%04d", name, n);
 }
@@ -264,7 +180,6 @@ void unitwin_help_disp(WinMgrEntry* entry) {
     s32* goods = wp->goods;
     if (!winMgrAction(wp->winId[1])) {
         entry->msg = msgSearch(itemDataTable[*(s32*)((u8*)goods + idx)].description);
-#endif
         winMgrHelpDraw(entry);
     }
 }
@@ -287,19 +202,6 @@ void unitwin_point_disp(WinMgrEntry* entry) {
             PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
             PSMTXConcat(trans, scale, trans);
             iconDispGx2(trans, ICON_FLAG_2D, VERSION_PICK(0x1F1, 0x226));
-#if VERSION <= VERSION_DEMO_US
-    }
-    return name;
-}
-
-/**
- * Demo: sets up the unit window work (_wp), the pointing-finger cursor icon and the per-frame main_evt,
- * and points the HP/FP/BP table at Mario's base stats for the stat windows.
- * Must run before the other unitwin commands.
- */
-USER_FUNC(evt_unitwin_alloc) {
-    UnitWinWork* wp = _mapAlloc(sizeof(UnitWinWork));
-#else
         } else {
             PSMTXScale(scale, 0.8f, 1.1f, 1.1f);
             PSMTXConcat(trans, scale, trans);
@@ -324,13 +226,8 @@ USER_FUNC(evt_unitwin_alloc) {
 USER_FUNC(evt_unitwin_alloc) {
     s32 useWinMgr = evtGetValue(event, event->args[0]);
     UnitWinWork* wp = _mapAlloc(sizeof(UnitWinWork));
-#endif
     memset(wp, 0, sizeof(UnitWinWork));
     wp->mode = 0;
-#if VERSION <= VERSION_DEMO_US
-    _wp = wp;
-    iconEntry2D("yubicursor_2", ICON_YUBI_CURSOR);
-#else
     _wp = wp;
     if (useWinMgr) {
         wp->flags |= UNITWIN_FLAG_WINMGR;
@@ -338,39 +235,22 @@ USER_FUNC(evt_unitwin_alloc) {
         wp->flags &= ~UNITWIN_FLAG_WINMGR;
     }
     iconEntry2D("yubicursor_2", ICON_YUBI_CURSOR);
-#endif
     iconFlagOn("yubicursor_2", ICON_FLAG_HIDDEN);
-#if VERSION <= VERSION_DEMO_US
-    iconFlagOn("yubicursor_2", ICON_FLAG_FLIP_X);
-    wp->evt = evtEntry(main_evt, 0, 0);
-    wp->evt->lwData[0] = (EvtWord)wp;
-    mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
-#else
     iconFlagOn("yubicursor_2", ICON_FLAG_FLIP_X);
     if (!(wp->flags & UNITWIN_FLAG_WINMGR)) {
         wp->evt = evtEntry(main_evt, 0, 0);
         wp->evt->lwData[0] = (EvtWord)wp;
     }
     mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
-#endif
     mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
     mario_status_point_table[2] = &pouchGetPtr()->maximumBP;
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_unitwin_free) {
-#if VERSION <= VERSION_DEMO_US
-    s32 i;
-#endif
-#if VERSION <= VERSION_DEMO_US
-    UnitWinWork* wp = _wp;
-    char name[32];
-    CaseEntry* entry;
-#else
     UnitWinWork* wp = _wp;
     s32 i;
     char name[32];
-#endif
     if (wp == NULL) {
         return EVT_RETURN_DONE;
     }
@@ -383,24 +263,12 @@ USER_FUNC(evt_unitwin_free) {
     for (i = 0; i < wp->goodsMax; i++) {
         mapObjFlagOff(wp->entries[i].mapObj, MAP_OBJ_FLAG_DISABLED);
         sprintf(name, "uwn%d", i);
-#if VERSION <= VERSION_DEMO_US
-        iconDelete(name);
-        entry = caseIdToPtr(wp->caseId[i]);
-#else
         iconDelete(name);
     }
     if (wp->flags & UNITWIN_FLAG_WINMGR) {
         for (i = 0; i < 3; i++) {
             winMgrDelete(wp->winId[i]);
-#endif
-#if VERSION <= VERSION_DEMO_US
-        if (evtCheckID(entry->evtId)) {
-            evtDeleteID(entry->evtId);
-#endif
         }
-#if VERSION <= VERSION_DEMO_US
-        caseDelete(wp->caseId[i]);
-#endif
     }
     iconDelete("yubicursor_2");
     _mapFree(_wp);
@@ -413,12 +281,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
     EvtWord* args = event->args;
     UnitWinSell* tbl = (UnitWinSell*)evtGetValue(event, args[0]);
     s32* goods = (s32*)evtGetValue(event, args[1]);
-#if VERSION <= VERSION_DEMO_US
     UnitWinWork* wp = _wp;
-    EvtWord caseWork[16];
-#else
-    UnitWinWork* wp = _wp;
-#endif
     char name[32];
     Vec pos;
     wp->entries = tbl;
@@ -433,41 +296,6 @@ USER_FUNC(evt_unitwin_selltable_setup) {
             iconEntry(name, itemDataTable[wp->goods[i]].icon_id);
             iconSetPos(name, pos.x, pos.y + 6.0f, pos.z);
             iconFlagOn(name, ICON_FLAG_NO_MAP_BLEND);
-#if VERSION <= VERSION_DEMO_US
-        }
-        caseWork[0] = (EvtWord)wp;
-        caseWork[1] = i;
-        wp->caseId[i] = evtRunCaseEntry(0, 0, wp->entries[i].hitName, 0, select_evt, caseWork);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Demo: the case event of one counter slot.
- * While the slot has an item it shows that item's name and description (through flag 1 and the timer)
- * and on A starts the row's script with the work in its LW(0);
- * then waits for that script to end and gives Mario control back.
- */
-static USER_FUNC(evt_unitwin_select_func) {
-    UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
-    if (wp->mode == 0) {
-        wp->goodsIdx = event->lwData[1];
-        if (wp->goods[wp->goodsIdx] != 0) {
-            wp->timer = 1;
-            wp->flags |= UNITWIN_FLAG_SELECTED;
-            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                marioKeyOff();
-                wp->childEvt = evtEntry(wp->entries[wp->goodsIdx].evt, 0, 0);
-                wp->childEvt->lwData[0] = (EvtWord)wp;
-                wp->mode = 1;
-                return EVT_RETURN_BLOCK;
-            }
-        }
-        return EVT_RETURN_DONE;
-    }
-    if (evtCheckID(wp->childEvt->eventId)) {
-        return EVT_RETURN_BLOCK;
-#else
         } else {
             wp->itemFlags[i] |= UNITWIN_ITEM_UNAVAILABLE;
         }
@@ -476,16 +304,9 @@ static USER_FUNC(evt_unitwin_select_func) {
     wp->evt->lwData[0] = (EvtWord)wp;
     for (i = 0; i < 3; i++) {
         wp->winId[i] = winMgrEntry(&unitwin_desc[i]);
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
-    wp->mode = 0;
-    marioKeyOn();
-    return EVT_RETURN_YIELD;
-#else
     wp->selected = -1;
     return EVT_RETURN_DONE;
-#endif
 }
 
 /**
@@ -522,177 +343,6 @@ USER_FUNC(unitwincoin_wait) {
  * it is drawn only while the lottery reports a ticket.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8017524c, JP 0x8017524C. See docs/NAME_PROVENANCE.md.
-#if VERSION <= VERSION_DEMO_US
-USER_FUNC(unitwin_window_select_func) {
-    EvtWord* args = event->args;
-    s32 useWinMgr = evtGetValue(event, *args++);
-    UnitWinWork* wp = _wp;
-    PouchData* party;
-    const char* name;
-    s32 prev;
-    s32 i;
-    s32 k;
-    s32 j;
-    s32 n;
-    s32 ng;
-    s32* p;
-    s32 t;
-    s32 id;
-    InformantWork* jdt = &_jdt;
-
-    if (isFirstCall) {
-        wp->mode = useWinMgr;
-        wp->cursor = 0.0f;
-        wp->scrollTop = 0.0f;
-        wp->scroll = 0.0f;
-        wp->cursorX = -25.0f;
-        wp->cursorY = 60.0f - 24.0f * (wp->cursor - wp->scrollTop);
-        statusWinForceOpen();
-        return EVT_RETURN_BLOCK;
-    }
-
-    switch (wp->mode) {
-        case 2:
-        case 3:
-            wp->count = 0;
-            for (k = 0; k < 20; k++) {
-                if (pouchHaveItem(k)) {
-                    wp->count++;
-                }
-            }
-            break;
-        case 12:
-            wp->count = 0;
-            for (k = 0; k < 200; k++) {
-                if (pouchHaveBadge(k)) {
-                    wp->count++;
-                }
-            }
-            break;
-        case 11:
-            wp->count = 0;
-            for (k = 0; k < 99; k++) {
-                if ((s16)badgeShop_get(bdsw->bargain_table, k + 0xF0) - badgeShop_ThrowCheck(k + 0xF0) > 0) {
-                    wp->count++;
-                }
-            }
-            break;
-        case 17:
-        case 18:
-            wp->count = jdt->count;
-            break;
-        case 13:
-            wp->count = 0;
-            for (k = 0; k < 99; k++) {
-                if ((s16)badgeShop_get(bdsw->starmaniac_table, k + 0xF0) > 0) {
-                    wp->count++;
-                }
-            }
-            break;
-        case 14:
-            wp->count = 0;
-            for (k = 0; k < 0x152; k++) {
-                if ((s16)badgeShop_get(bdsw->bottakuru_table, k + 1) > 0) {
-                    wp->count++;
-                }
-            }
-            break;
-        case 15:
-            wp->count = 0;
-            for (k = 0; badge_bottakuru100_table[k] != 0; k++) {
-                wp->count++;
-            }
-            break;
-        case 16:
-            wp->count = 0;
-            for (k = 0; k < 0x152; k++) {
-                if ((s16)badgeShop_get(bdsw->bteresa_table, k + 1) > 0) {
-                    wp->count++;
-                }
-            }
-            break;
-        case 4:
-            wp->count = 0;
-            for (k = 0; k < 32; k++) {
-                if (pouchKeepItem(k)) {
-                    wp->count++;
-                }
-            }
-            break;
-        case 5:
-        case 6:
-            wp->count = 0;
-            for (k = 0; (id = party_id_table[k]) != 0; k++) {
-                if (partyChkJoin(id)) {
-                    wp->count++;
-                }
-            }
-            break;
-        case 7:
-            wp->skipEntry = event->lwData[1];
-            wp->count = 0;
-            for (k = 0; (id = party_id_table[k]) != 0; k++) {
-                if (partyChkJoin(id) && wp->skipEntry != party_id_table[k]) {
-                    wp->count++;
-                }
-            }
-            break;
-        case 8:
-        case 9:
-            wp->count = 3;
-            break;
-        case 10:
-            wp->skipEntry = event->lwData[1];
-            wp->count = 2;
-            break;
-    }
-
-    prev = wp->cursor;
-    if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
-        wp->cursor += 1.0f;
-    }
-    if (keyGetDirRep(0) & DEMO_STICK_UP) {
-        wp->cursor -= 1.0f;
-    }
-    if (prev != (s32)wp->cursor) {
-        psndSFXOn((const char*)5);
-    }
-    if (wp->cursor >= wp->count) {
-        wp->cursor = 0.0f;
-        wp->scrollTop = 0.0f;
-    }
-    if (wp->cursor < 0.0f) {
-        wp->cursor = wp->count - 1;
-        if ((t = wp->count - 8) > 0) {
-            wp->scrollTop = t;
-        }
-    }
-    if (prev < wp->cursor) {
-        if (wp->cursor > 5.0f && wp->scrollTop < wp->count - 8) {
-            wp->scrollTop += 1.0f;
-        }
-    } else if (prev > wp->cursor) {
-        if (wp->cursor - wp->scrollTop < 3.0f && wp->scrollTop > 0.0f) {
-            wp->scrollTop -= 1.0f;
-        }
-    }
-    wp->scroll += (24.0f * wp->scrollTop - wp->scroll) / 6.0f;
-    wp->cursorX += (-25.0f - wp->cursorX) / 6.0f;
-    wp->cursorY += ((60.0f - 24.0f * (wp->cursor - wp->scrollTop)) - wp->cursorY) / 6.0f;
-
-    if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-        n = 0;
-        switch (wp->mode) {
-            case 2:
-            case 3:
-                statusWinForceOff();
-                for (i = 0; i < 20; i++) {
-                    if (pouchHaveItem(i)) {
-                        if (n == wp->cursor) {
-                            break;
-                        }
-                        n++;
-#else
 USER_FUNC(unitwin_lottery_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     UnitWinWork* wp = _wp;
@@ -721,63 +371,7 @@ static inline void unitWinClose(UnitWinWork* wp) {
         wp->selected = -1;
         winMgrClose(wp->winId[0]);
         winMgrClose(wp->winId[1]);
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
-                }
-                event->lwData[0] = 1;
-                event->lwData[1] = pouchHaveItem(i);
-                event->lwData[2] = (EvtWord)itemDataTable[pouchHaveItem(i)].id;
-                event->lwData[3] = itemDataTable[pouchHaveItem(i)].sell_price;
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 12:
-                statusWinForceOff();
-                for (i = 0; i < 200; i++) {
-                    if (pouchHaveBadge(i)) {
-                        if (n == wp->cursor) {
-                            break;
-                        }
-                        n++;
-                    }
-                }
-                event->lwData[0] = 1;
-                event->lwData[1] = pouchHaveBadge(i);
-                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-                event->lwData[3] = itemDataTable[event->lwData[1]].sell_price;
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 11:
-                statusWinForceOff();
-                for (i = 0; i < 99; i++) {
-                    if ((s16)badgeShop_get(bdsw->bargain_table, i + 0xF0) - badgeShop_ThrowCheck(i + 0xF0) > 0) {
-                        if (n == wp->cursor) {
-                            break;
-                        }
-                        n++;
-                    }
-                }
-                event->lwData[0] = 1;
-                event->lwData[1] = i + 0xF0;
-                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-                event->lwData[3] = itemDataTable[event->lwData[1]].buy_price;
-                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 17:
-                statusWinForceOff();
-                j = wp->cursor;
-                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
-                jdt->curIndex = j;
-                event->lwData[0] = 1;
-                event->lwData[1] = (EvtWord)jdt->infoEnd;
-                event->lwData[2] = (EvtWord)jdt->info[j].initEndPos;
-                event->lwData[3] = jdt->info[j].tagEndPos;
-                if (johoya_get(jdt->readFlags.perfectRead, jdt->info[j].storyId)) {
-                    event->lwData[4] = 0;
-                } else {
-                    event->lwData[4] = jdt->info[j].cost;
-#else
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_80174e98, JP 0x80174E98. See docs/NAME_PROVENANCE.md.
@@ -794,37 +388,7 @@ USER_FUNC(evt_unitwin_select_func) {
     if (wp->flags2 & UNITWIN_FREE_REQUEST) {
         wp->flags2 |= UNITWIN_FREE_OK;
         return EVT_RETURN_DONE;
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 18:
-                statusWinForceOff();
-                psndSFXOn((const char*)0x12);
-                j = wp->cursor;
-                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
-                jdt->curIndex = j;
-                event->lwData[0] = 1;
-                event->lwData[1] = (EvtWord)jdt->infoEnd;
-                event->lwData[2] = (EvtWord)jdt->info[j].initEndPos;
-                event->lwData[3] = jdt->info[j].tagEndPos;
-                if (johoya_get(jdt->readFlags.luigiRead, jdt->info[j].storyId)) {
-                    event->lwData[4] = 0;
-                } else {
-                    event->lwData[4] = 1;
-                }
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 13:
-                statusWinForceOff();
-                for (i = 0; i < 99; i++) {
-                    if ((s16)badgeShop_get(bdsw->starmaniac_table, i + 0xF0) > 0) {
-                        if (n == wp->cursor) {
-                            break;
-                        }
-                        n++;
-#else
     wp->flags &= ~UNITWIN_FLAG_SELECTED;
     btn = keyGetButtonTrg(0);
     // FAKE: `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() || !marioChkKey() changes the object
@@ -834,177 +398,18 @@ USER_FUNC(evt_unitwin_select_func) {
     if (party != NULL && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         unitWinClose(wp);
         return EVT_RETURN_BLOCK;
-#endif
-#if VERSION <= VERSION_DEMO_US
-                    }
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
-                if (itemDataTable[i + 0xF0].star_piece_price > pouchGetStarPiece()) {
-                    break;
-                }
-                event->lwData[0] = 1;
-                event->lwData[1] = i + 0xF0;
-                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-                event->lwData[3] = itemDataTable[event->lwData[1]].star_piece_price;
-                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 14:
-                statusWinForceOff();
-                for (i = 0; i < 0x152; i++) {
-                    if ((s16)badgeShop_get(bdsw->bottakuru_table, i + 1) > 0) {
-                        if (n == wp->cursor) {
-                            break;
-                        }
-                        n++;
-                    }
-                }
-                event->lwData[0] = 1;
-                event->lwData[1] = i + 1;
-                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-                event->lwData[3] = (itemDataTable[event->lwData[1]].buy_price * 12) / 10;
-                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 15:
-                statusWinForceOff();
-                for (i = 0; badge_bottakuru100_table[i] != 0; i++) {
-                    if (n == wp->cursor) {
-                        break;
-                    }
-                    n++;
-                }
-                event->lwData[0] = 1;
-                event->lwData[1] = badge_bottakuru100_table[i];
-                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-                event->lwData[3] = ((evtGetValue(NULL, GSW(GSW_JON_FLOOR)) + 11) * itemDataTable[event->lwData[1]].buy_price) / 10;
-                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 16:
-                statusWinForceOff();
-                for (i = 0; i < 0x152; i++) {
-                    if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
-                        if (n == wp->cursor) {
-                            break;
-                        }
-                        n++;
-                    }
-                }
-                event->lwData[0] = 1;
-                event->lwData[1] = i + 1;
-                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-                event->lwData[3] = (itemDataTable[event->lwData[1]].buy_price * 2 + 2) / 3;
-                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 4:
-                statusWinForceOff();
-                for (i = 0; i < 32; i++) {
-                    if (pouchKeepItem(i)) {
-                        if (n == wp->cursor) {
-                            break;
-                        }
-                        n++;
-                    }
-                }
-                event->lwData[0] = 1;
-                event->lwData[1] = pouchKeepItem(i);
-                event->lwData[2] = (EvtWord)itemDataTable[pouchKeepItem(i)].id;
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 5:
-            case 6:
-                party = pouchGetPtr();
-                for (i = 0; (id = party_id_table[i]) != 0; i++) {
-#else
     if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {
         unitWinClose(wp);
         return EVT_RETURN_BLOCK;
     }
     if (!(wp->flags & UNITWIN_FLAG_BUYING)) {
         if (hit != NULL) {
-#endif
-#if VERSION <= VERSION_DEMO_US
-                    if (partyChkJoin(id)) {
-                        if (n == wp->cursor) {
-                            break;
-                        }
-                        n++;
-                    }
-                }
-                if (!evtGetValue(event, GSWF(GSWF_MERLON_FIRST_UPGRADE_DONE))) {
-                    if (party->partyData[party_id_table[i]].techLevel < 1) {
-                        ng = 0;
-                    } else {
-                        ng = 1;
-                    }
-                } else {
-                    if (party->partyData[party_id_table[i]].techLevel < 2) {
-                        ng = 0;
-                    } else {
-                        ng = 2;
-                    }
-                }
-                if (ng) {
-                    break;
-                }
-                statusWinForceOff();
-                event->lwData[0] = 1;
-                event->lwData[1] = party_id_table[i];
-                if (useWinMgr == 6) {
-                    name = unitwin_party_name(i);
-                    event->lwData[3] = (EvtWord)name;
-                }
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 7:
-                party = pouchGetPtr();
-                for (i = 0, p = party_id_table; (id = *p) != 0; p++, i++) {
-                    if (partyChkJoin(id) && wp->skipEntry != *p) {
-                        if (n == wp->cursor) {
-                            break;
-                        }
-                        n++;
-                    }
-                }
-                if ((party->partyData[party_id_table[i]].techLevel > 0 ? 0 : 1) != 0) {
-                    break;
-                }
-                statusWinForceOff();
-                event->lwData[0] = 1;
-                event->lwData[2] = party_id_table[i];
-                name = unitwin_party_name(i);
-                event->lwData[4] = (EvtWord)name;
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 8:
-                pouchGetPtr();
-#endif
-#if VERSION <= VERSION_DEMO_US
-                for (i = 0; i < wp->count; i++) {
-                    if (n == wp->cursor) {
-#else
             for (i = 0; i < wp->goodsMax; i++) {
                 const char* hitName = hitGetName(hit);
                 if (!strcmp(wp->entries[i].hitName, hitName)) {
-#endif
                     break;
                 }
-#if VERSION <= VERSION_DEMO_US
-                    n++;
-#endif
-#if VERSION <= VERSION_DEMO_US
-                }
-                ng = 0;
-                for (j = 0; j < wp->count; j++) {
-                    if (j != wp->cursor) {
-                        if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
-                            ng = 1;
-                        }
-                    }
-#else
             }
             if (!(wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE) && i < wp->goodsMax) {
                 if (wp->selected != i) {
@@ -1018,27 +423,7 @@ USER_FUNC(evt_unitwin_select_func) {
                 }
                 found = TRUE;
             }
-#endif
         }
-#if VERSION <= VERSION_DEMO_US
-                if (ng) {
-                    break;
-                }
-                statusWinForceOff();
-                event->lwData[0] = 1;
-                event->lwData[1] = i;
-                event->lwData[2] = (EvtWord)mario_status_name_table[i];
-                event->lwData[3] = (EvtWord)mario_status_name_table[i == 0];
-                event->lwData[4] = (EvtWord)mario_status_name_table[i != 2 ? 2 : 1];
-                for (j = 0; j < wp->count; j++) {
-                    if (j == wp->cursor) {
-                        event->lwData[5 + j] = *mario_status_point_table[j] + mario_status_henka_table[j] * 2;
-                    } else {
-                        event->lwData[5 + j] = *mario_status_point_table[j] - mario_status_henka_table[j];
-                    }
-                }
-                wp->mode = 0;
-#else
         if (!found) {
             unitWinClose(wp);
         }
@@ -1053,7 +438,6 @@ USER_FUNC(evt_unitwin_select_func) {
                 winMgrClose(wp->winId[1]);
                 wp->selected = -1;
                 wp->bought = 0;
-#endif
             }
         }
     } else if (!evtCheckID(wp->childEvt->eventId)) {
@@ -1063,77 +447,12 @@ USER_FUNC(evt_unitwin_select_func) {
             wp->itemFlags[wp->goodsIdx] |= 1;
         }
     }
-#if VERSION <= VERSION_DEMO_US
-                for (i = 0; i < wp->count; i++) {
-                    if (n == wp->cursor) {
-                        break;
-                    }
-                    n++;
-                }
-                ng = 0;
-                for (j = 0; j < wp->count; j++) {
-                    if (j != wp->cursor) {
-                        if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
-                            ng++;
-                        }
-                    }
-                }
-                if (ng >= 2) {
-                    break;
-                }
-                statusWinForceOff();
-                event->lwData[0] = 1;
-                event->lwData[1] = i;
-                event->lwData[2] = (EvtWord)mario_status_name_table[i];
-                for (j = 0; j < wp->count; j++) {
-                    if (j == wp->cursor) {
-                        event->lwData[5 + j] = *mario_status_point_table[j] + mario_status_henka_table[j];
-                    } else {
-                        event->lwData[5 + j] = *mario_status_point_table[j];
-                    }
-                }
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-            case 10:
-                pouchGetPtr();
-                for (i = 0; i < 3; i++) {
-                    if (i != wp->skipEntry) {
-                        if (n == wp->cursor) {
-                            break;
-                        }
-                        n++;
-                    }
-                }
-                if (*mario_status_point_table[i] - mario_status_henka_table[i] <= 0) {
-                    break;
-                }
-                statusWinForceOff();
-#else
     for (i = 0; i < wp->goodsMax; i++) {
         obj = mapGetMapObj(wp->entries[i].mapObj);
         if (obj != NULL) {
             sprintf(name, "uwn%d", i);
             if (wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE) {
                 iconFlagOn(name, ICON_FLAG_HIDDEN);
-#endif
-#if VERSION <= VERSION_DEMO_US
-                event->lwData[0] = 1;
-                event->lwData[1] = i;
-                event->lwData[3] = (EvtWord)mario_status_name_table[i];
-                event->lwData[5 + i] = *mario_status_point_table[i] - mario_status_henka_table[i];
-                wp->mode = 0;
-                return EVT_RETURN_YIELD;
-        }
-#endif
-#if VERSION <= VERSION_DEMO_US
-    } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-        statusWinForceOff();
-        psndSFXOn((const char*)0x13);
-        event->lwData[0] = 0;
-        wp->mode = 0;
-        return EVT_RETURN_YIELD;
-    }
-#else
             } else if (obj->flags & MAP_OBJ_FLAG_HIDDEN) {
                 iconFlagOn(name, ICON_FLAG_HIDDEN);
             } else {
@@ -1141,7 +460,6 @@ USER_FUNC(evt_unitwin_select_func) {
             }
         }
     }
-#endif
     return EVT_RETURN_BLOCK;
 }
 
@@ -1309,12 +627,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
             wp->coinTick++;
             wp->coinTick %= 1200;
-#if VERSION <= VERSION_DEMO_US
-            if (abs(coin - wp->coin) == 1 || gp->retraceCount % 6 == 0) {
-                psndSFXOn("SFX_COUNT_COIN1");
-            }
-        }
-#else
             if (!unitwin_coin_se_wait) {
                 psndSFXOn("SFX_COUNT_COIN1");
                 unitwin_coin_se_wait = 7;
@@ -1323,7 +635,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         if (unitwin_coin_se_wait > 0) {
             unitwin_coin_se_wait--;
         }
-#endif
     }
 
     if (wp->flags & UNITWIN_FLAG_SHINE_WINDOW_UNUSED) {
@@ -1345,10 +656,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     delta = pouch->shineSpriteCount > wp->coinDisp ? 1 : -1;
                 }
                 wp->coinDisp += delta;
-#if VERSION <= VERSION_DEMO_US
-            }
-        }
-#else
             }
         }
     }
@@ -1365,7 +672,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             PSMTXTrans(mtx, 20.0f * i + -126.0f - 60.0f, -168.0f, 0.0f);
             iconNumberDispGx(mtx, (s8)buf[i] - '0', 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         }
-#endif
     }
 
     switch (mode = wp->mode) {

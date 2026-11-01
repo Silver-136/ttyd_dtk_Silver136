@@ -149,9 +149,6 @@ USER_FUNC(main_deka) {
     if (isFirstCall) {
         memset(w, 0, sizeof(DekaWork));
         w->unitId = evtGetValue(event, args[0]);
-#if VERSION <= VERSION_DEMO_US
-        yuka_init();
-#else
         yuka_init();
     }
     if (w->tex->address == NULL) {
@@ -159,7 +156,6 @@ USER_FUNC(main_deka) {
     }
     if (w->mesh->address == NULL) {
         return EVT_RETURN_DONE;
-#endif
     }
     main_base();
     main_gauge();
@@ -319,16 +315,10 @@ static void yuka_main(void) {
 USER_FUNC(yuka_end) {
     DekaWork* w = get_ptr();
 
-#if VERSION <= VERSION_DEMO_US
-    smartFree(w->tex);
-    w->tex->address = NULL;
-    smartFree(w->mesh);
-#else
     smartFree(w->tex);
     w->tex->address = NULL;
     smartFree(w->mesh);
     w->mesh->address = NULL;
-#endif
     mapGrpFlagOff("stg_b_yuka", (MAP_OBJ_FLAG_HIDDEN | MAP_OBJ_FLAG_KURURING));
     return EVT_RETURN_DONE;
 }
@@ -1152,30 +1142,17 @@ EVT_BEGIN(marioAttackEvent_Deka)
     WAIT_FRAMES(30)
     // The camera resets and the background and rippling floor are cleaned up.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(yuka_end)
     CALL(btlevtcmd_SacBgsetMove, 1)
-    CALL(end_deka)
-#else
-    CALL(btlevtcmd_SacBgsetMove, 1)
-#endif
     // Vivian stops tracking her position.
     IF_INT_NOT_EQUAL(LW(14), -1)
         CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
         IF_INT_EQUAL(LW(0), UNIT_VIVIAN)
             CALL(btlevtcmd_SetUnitWork, LW(14), SHADOW_TAIL_WORK_HOLD, 0)
         END_IF
-#if VERSION <= VERSION_DEMO_US
     END_IF
     CALL(yuka_end)
     CALL(end_deka)
     LABEL(99)
-#else
-    END_IF
-    CALL(yuka_end)
-    CALL(end_deka)
-    LABEL(99)
-#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1251,17 +1228,10 @@ void yuka_disp(CameraId cam, void* param) {
     volatile PPCWGPipe* fifo;
 
     w = get_ptr();
-#if VERSION <= VERSION_DEMO_US
-    camera = camGetPtr(cam);
-    {
-        m = w->mesh->address;
-        {
-#else
     camera = camGetPtr(cam);
     if (w->tex->address != NULL) {
         m = w->mesh->address;
         if (m != NULL) {
-#endif
             GXSetCullMode(GX_CULL_NONE);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

@@ -120,11 +120,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (flags & TARGET_CLASS_NO_MARIO_OR_SHELL) {
-#if VERSION <= VERSION_DEMO_US
-                        if (unit->currentKind == UNIT_MARIO) {
-#else
                 if (unit->currentKind == UNIT_MARIO || unit->currentKind == UNIT_SHELL_SHIELD) {
-#endif
                     ok = FALSE;
                     break;
                 }

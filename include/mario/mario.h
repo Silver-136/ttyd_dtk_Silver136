@@ -103,15 +103,9 @@ typedef enum MarioTrigFlags {
     MARIO_TRIG_FLAG_JABARA_CHK = (1 << 20),
     MARIO_TRIG_FLAG_JABARA_MOVE_CHK = (1 << 21),
     MARIO_TRIG_FLAG_START_JABARA_SPIN = (1 << 22),
-#if VERSION <= VERSION_DEMO_US
-    MARIO_TRIG_FLAG_DISABLE_UNUSED_INPUT = (1 << 28),
-    MARIO_TRIG_FLAG_DISABLE_TRIGGERS = (1 << 29),
-    MARIO_TRIG_FLAG_DISABLE_SUB_STICK = (1 << 30),
-#else
     MARIO_TRIG_FLAG_DISABLE_UNUSED_INPUT = (1 << 24),
     MARIO_TRIG_FLAG_DISABLE_TRIGGERS = (1 << 25),
     MARIO_TRIG_FLAG_DISABLE_SUB_STICK = (1 << 26),
-#endif
     MARIO_TRIG_FLAG_DISABLE_STICK = (1 << 27),
     MARIO_TRIG_FLAG_DISABLE_PARTY_SLIT = (1 << 30),
     MARIO_TRIG_FLAG_NORMALIZING = (1 << 31) // evt_mario_normalize running: the partner does not start slit mode
@@ -136,14 +130,8 @@ typedef struct MarioMotSlit {      // mot_slit.c (paper slit / side-step)
     f32 reserved_0;                      // 0x00, cleared on entry
     s32 counter;                   // 0x04
     f32 pushDir;                   // 0x08, 0 or 180: slide direction relative to targetYaw while pushing a 0x2000 wall
-#if VERSION <= VERSION_DEMO_US
-    f32 lastY;                // 0x0C, position.y last frame
-    s16 reserved_10; // 0x10, demo: mot_slit's second timer, accessed as MarioWork.slitTimer2
-    s16 resumeState; // 0x12, demo: state motSlitContinue2 returns to
-#else
     f32 lastY;                     // 0x0C, position.y last frame
     u8 pad10[4];                   // 0x10
-#endif
     s16 timer;                     // 0x14
     s16 count;                     // 0x16
     s16 flags;                     // 0x18, bit 0
@@ -386,20 +374,8 @@ typedef struct MarioWork {
     s8 hammerChargeTimer;          // 0x41, mot_hammer charge frames (capped at 20)
     s8 hammerChargeLv;             // 0x42, mot_hammer charge stage (3 = full)
     s8 hammerDir;                  // 0x43, mot_hammer swing side (0/1)
-#if VERSION <= VERSION_DEMO_US
-    union {
-#endif
     s32 currSubMotionId;           // 0x44
-#if VERSION <= VERSION_DEMO_US
-        s32 slitState;       // 0x44, demo: mot_slit's state machine runs on the sub-motion id
-    };
-    union {
-        s32 multiTimer; // 0x48, per-motion frame counter
-        s32 slitTimer;  // 0x48, demo: mot_slit's timer is the per-motion counter
-    };
-#else
     s32 multiTimer;                // 0x48, per-motion frame counter (Koopa footstep SFX every 20, npcdrv flag-1 shadow size); ttyd-tools wYawnTimer, but no yawn use here
-#endif
     s16 mutekiTimer;                     // 0x4C
     s16 forceMoveTimer;            // 0x4E
     s16 airTimer;                  // 0x50
@@ -473,14 +449,9 @@ typedef struct MarioWork {
     f32 stepUpY;                   // 0x1C4, height of a small step in front
     f32 wallPushDist;              // 0x1C8, largest push distance into the front wall
     f32 wallPushDir;               // 0x1CC, direction of that push
-#if VERSION <= VERSION_DEMO_US
-    s32 wallPushHold;            // 0x1D0, frames the push is held (14)
-    struct NpcEntry* touchNpc;   // 0x1D4, NPC Mario is touching (marioGetTouchNpcPtr)
-#else
     s32 wallPushHold;              // 0x1D0, frames the push is held (14)
     void* touchNpc;                // 0x1D4, NpcEntry* (marioGetTouchNpcPtr)
     struct NpcEntry* targetNpc;    // 0x1D8, NPC in range for interaction (npcdrv)
-#endif
     void* hitobjFrontA;             // 0x1DC, wall in front found on an A press
     void* hitobjFront;              // 0x1E0
     void* hitobjStandOn;           // 0x1E4, 0x1E8 US HitEntry
@@ -548,16 +519,12 @@ typedef struct MarioWork {
     u8 pad_2BC[0x2C0 - 0x2BC];     // 0x2BC, never accessed
     s16 coinDropTimer;             // 0x2C0, set to 3 s by npcdrv (with muteki); marioMain drops a coin every 30 frames
     u8 pad_2C2[0x2C4 - 0x2C2];     // 0x2C2, never accessed
-#if VERSION <= VERSION_DEMO_US
-    f32 kpaSpeed;              // 0x2C4, Bowser walk speed (koopa.c, koopa_motion.c)
-#else
     f32 kpaSpeed;                  // 0x2C4, Bowser walk speed (koopa.c, koopa_motion.c)
     u32 bottomlessReload;          // 0x2C8, marioReloadMapOnBottomlessOn/Off; u32: marioBottomless tests it unsigned (cmplwi)
     Vec bottomlessResetPosition;   // 0x2CC JP, 0x2E4 US
     s16 slitState;                 // 0x2D8, mot_slit state machine
     s16 slitTimer2;                // 0x2DA
     s32 slitTimer;                 // 0x2DC
-#endif
 } MarioWork;                       // size 0x2E0 JP, 0x2F8 US
 
 MarioWork* marioGetPtr(void);

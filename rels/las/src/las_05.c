@@ -1,7 +1,6 @@
 // las_05 (ラストダンジョン, Palace of Shadow): Dark Bones (黒カロン) and the swarm of Dull Bones (senkaron) that pushes
 // Mario around.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -1693,11 +1692,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(key_check_evt)
     CALL(evt_pouch_check_item, ITEM_PALACE_KEY_0x2E, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
-#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
-#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -1727,11 +1722,7 @@ static EVT_BEGIN(shan_init)
             CALL(evt_mapobj_flag_onoff, 1, 1, LW(3), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_get_position, LW(3), LW(4), LW(5), LW(6))
             SUBTRACT_FLOAT(LW(5), FLOAT(7.0f))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(4), LW(5), LW(6), FLOAT(0.7998047f), 1000, 0, 0, 0, 0, 0, 0)
-#else
             CALL(evt_eff, 0, STRING("fire"), 3, LW(4), LW(5), LW(6), FLOAT(0.7998047f), 1000, 0, 0, 0, 0, 0, 0)
-#endif
             ADD(LW(1), 1)
         END_LOOP
         ADD(LW(0), 1)
@@ -1741,12 +1732,8 @@ EVT_END()
 
 EVT_BEGIN(las_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#else
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
-#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))

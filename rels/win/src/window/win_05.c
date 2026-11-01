@@ -1,6 +1,5 @@
 // win_05 (ウィンディん家周辺, Flurrie's house in Boggly Woods): Flurrie's bedroom, with its canopy bed.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -81,11 +80,7 @@ static EVT_BEGIN(item_get00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_SUPER_APPEAL_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
-#else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
-#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)

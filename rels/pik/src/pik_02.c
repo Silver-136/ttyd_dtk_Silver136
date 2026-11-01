@@ -706,17 +706,10 @@ EVT_BEGIN(evt_garnet)
         CALL(evt_npc_majo_disp_off, STRING("マジョリン"))
     END_INLINE_EVENT
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_majo_disp_off, STRING("マリリン"))
     CALL(evt_npc_set_position, STRING("マジョリン"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("マリリン"), 0, -1000, 0)
     LOOP(2)
-#else
-    CALL(evt_npc_majo_disp_off, STRING("マリリン"))
-    CALL(evt_npc_set_position, STRING("マジョリン"), 0, -1000, 0)
-    CALL(evt_npc_set_position, STRING("マリリン"), 0, -1000, 0)
-    LOOP(2)
-#endif
         CALL(evt_npc_reverse_ry, STRING("ランペル"))
         WAIT_MS(400)
     END_LOOP
@@ -786,12 +779,8 @@ EVT_BEGIN(evt_garnet)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 1)
-#else
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
-#endif
     RETURN
 EVT_END()
 
@@ -868,25 +857,17 @@ EVT_END()
  */
 EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 0)
-#else
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_mario_key_onoff, 0)
-#endif
     CALL(starstone_entry, STRING("nise"), 5, 0, 57, -955, 1)
     CALL(evt_mario_set_pos, 60, 0, -500)
     CALL(evt_npc_set_position, STRING("ババ"), 140, 0, -500)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_npc_set_ry, STRING("ババ"), 270)
     CALL(evt_cam3d_evt_set, 0, 360, -338, 0, 250, -1130, 0, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_seq_wait, 2)
-#else
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
     CALL(evt_snd_bgm_scope, 0, 1)
-#endif
     CALL(evt_cam3d_evt_set, 0, 150, -338, 0, 40, -1130, 7000, EASING_LINEAR)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("ババ"), 140, -880, 0, 60, 0)
@@ -1239,13 +1220,6 @@ EVT_BEGIN(pik_02_init_evt)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK2"))
         CALL(evt_snd_set_rev_mode, 2)
-#if VERSION <= VERSION_DEMO_US
-    ELSE
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
-        CALL(evt_snd_bgm_scope, 0, 1)
-        CALL(evt_snd_envoff, PSND_FADEOUT)
-        CALL(evt_snd_set_rev_mode, 2)
-#endif
     END_IF
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_hit_bind_mapobj, STRING("a_ka_ten"), STRING("ka_ten"))

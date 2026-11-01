@@ -1,7 +1,6 @@
 // mri_04 (巨木の中, The Great Tree): the room where Ms. Mowz (chuchurina) appears and fights an X-Naut, with
 // the little Jabbi (chibitoge), planters and item boxes.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -176,13 +175,9 @@ static EVT_BEGIN(chuchurina_sogu)
     // Mario enters through the loading zone; Ms. Mowz and an X-Naut underling are already in the room.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_normalize)
-#else
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_onoff, 0, 2)
     CALL(evt_mario_normalize)
-#endif
     CALL(evt_npc_set_position, STRING("チュチュリーナ"), -75, 0, 30)
     CALL(evt_npc_set_ry, STRING("チュチュリーナ"), 90)
     CALL(evt_npc_set_position, STRING("第三勢力部下"), 0, 0, 40)
@@ -214,12 +209,7 @@ static EVT_BEGIN(chuchurina_sogu)
         CALL(evt_party_move_pos2, 0, 145, LW(2), FLOAT(120.0f))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_bero_exec_onoff, 0, 2)
         CALL(evt_puni_wait_systemmode, 2)
-#else
-        CALL(evt_puni_wait_systemmode, 2)
-#endif
         CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
         CALL(evt_puni_set_position, 1, 0, -1000, 0)
         WAIT_MS(400)
@@ -231,9 +221,6 @@ static EVT_BEGIN(chuchurina_sogu)
         CALL(evt_puni_set_anim, 1, 0)
         CALL(evt_bero_exec_onoff, 1, 2)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_seq_wait, 2)
-#endif
     CALL(evt_npc_set_anim, STRING("第三勢力部下"), STRING("D_2"))
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(1500)
@@ -323,11 +310,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_W_1"))
     CALL(evt_npc_get_position, STRING("チュチュリーナ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CHURINA_ESCAPE1"), LW(0), LW(1), LW(2), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 68, -120, 300, 20)
-#else
     CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 135, -200, 300, 10)
-#endif
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_DRAW)
     WAIT_MS(700)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
@@ -374,12 +357,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
     CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     // The story advances and Mario regains control.
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_13_MS_MOWZ)
-#else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_13_MS_MOWZ)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN

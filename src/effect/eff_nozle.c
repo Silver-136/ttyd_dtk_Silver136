@@ -1,6 +1,5 @@
 // Nozzle effect (nozle): a nozzle model drawn from display-list data, placed and rotated by the caller for a set life.
 
-#include "version.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -362,14 +361,7 @@ static u8 nozle_4_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0
  * Width and height percentages per frame as a type 0 or 2 nozzle grows in; read backwards from its
  * remaining life as it shrinks away at the end.
  */
-#if VERSION <= VERSION_DEMO_US
-static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}
-    // the demo keeps a fade-out half after the grow-in half
-    , {80, 100}, {79, 99}, {77, 97}, {75, 94}, {73, 91}, {70, 87}, {66, 83}, {62, 78}, {58, 73}, {54, 67}, {49, 61}, {44, 55}, {39, 49}, {34, 42}, {29, 36}, {24, 29}, {19, 23}, {14, 17}, {9, 11}, {5, 6}, {0, 0}, {0, 0}
-};
-#else
 static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}};
-#endif
 
 /**
  * Spawns a nozzle model (type picks the model) at (x, y, z) rotated by rx and ry for `life` frames;
@@ -494,13 +486,9 @@ void effNozleMain(EffectEntry* effect) {
     work->timer++;
     if (work->life < 0) {
         effDelete(effect);
-#if VERSION <= VERSION_DEMO_US
-    } else {
-#else
     } else if (type == 3) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), 8, (DispCallback)effNozleDisp, effect);
     } else {
-#endif
         dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effNozleDisp, effect);
     }
 }
@@ -550,15 +538,11 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
 
     cam = camGetPtr(cameraId);
-#if VERSION <= VERSION_DEMO_US
-    alpha = work->alpha;
-#else
     alpha = work->alpha;
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-#endif
     PSMTXTrans(a, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(b, 'y', 0.017453292f * work->rotY);
     PSMTXConcat(a, b, a);

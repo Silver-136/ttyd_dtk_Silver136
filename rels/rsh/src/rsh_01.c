@@ -1,7 +1,6 @@
 // rsh_01 (列車, Excess Express): car joining the driver's cab (rsh_00) and rsh_02: Toron, Madam, conductor, cook and
 // waitress NPCs; doors to Rogueport (gor_04), Riverside (hom_00) and Poshley Heights (pik_00) stations.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_window.h"
@@ -48,11 +47,7 @@ static NpcSetupInfo npc_data[7];
 NpcSetupInfo npc_data_2[3];
 static EvtWord evt_daiji_kami[41];
 EvtWord evt_pikary_arrival[141];
-#if VERSION <= VERSION_DEMO_US
-static const char* access_tbl[5];
-#else
 static const char* access_tbl[7];
-#endif
 static EvtWord evt_access[25];
 static EvtWord evt_access_entry[24];
 EvtWord rsh_01_init_evt[190];
@@ -384,11 +379,7 @@ static s32 item_tbl_madam[] = {
 static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_200"), 0, STRING("マダム"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
-#else
     CALL(evt_win_item_select, 0, PTR(item_tbl_madam), LW(1), 0)
-#endif
     IF_INT_NOT_EQUAL(LW(1), -1)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_201"), 0, STRING("マダム"))
         CALL(evt_sub_get_coin, 30)
@@ -632,17 +623,11 @@ EVT_END()
 // Triples: interaction hit, message before Rogueport Station, message from that story point onward.
 static const char* access_tbl[] = {
     "tana_5",
-#if VERSION <= VERSION_DEMO_US
-    "stg6_rsh_262",
-    "tana_4",
-    "stg6_rsh_263",
-#else
     "stg6_rsh_262",
     "stg6_rsh_267",
     "tana_4",
     "stg6_rsh_263",
     "stg6_rsh_267",
-#endif
     NULL,
 };
 
@@ -654,21 +639,11 @@ static const char* access_tbl[] = {
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, LW(1), 0, 0)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
-        CALL(evt_msg_print, 0, LW(1), 0, 0)
-    ELSE
-        CALL(evt_msg_print, 0, LW(2), 0, 0)
-    END_IF
-    CALL(evt_mario_key_onoff, 1)
-#else
         CALL(evt_msg_print, 0, LW(1), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, LW(2), 0, 0)
     END_IF
     CALL(evt_mario_key_onoff, 1)
-#endif
     RETURN
 EVT_END()
 
@@ -678,13 +653,8 @@ EVT_END()
  */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
-#if VERSION <= VERSION_DEMO_US
-    LOOP(0)
-        READ_INT2(LW(0), LW(1))
-#else
     LOOP(0)
         READ_INT3(LW(0), LW(1), LW(2))
-#endif
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
@@ -723,12 +693,8 @@ EVT_BEGIN(rsh_01_init_evt)
         CASE_DEFAULT
         SET_VALUE(LW(0), 2)
         CALL_CHILD(PTR(bero_case_switch_off))
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LW(1), STRING("stg6_rsh_261"))
-#else
         SET_VALUE(LW(1), STRING("stg6_rsh_261"))
         SET_VALUE(LW(2), STRING("stg6_rsh_261"))
-#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
@@ -856,21 +822,11 @@ EVT_END()
  */
 EVT_BEGIN(talk_syasyou)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
-        CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
-    ELSE
-        CALL(evt_msg_print, 0, STRING("stg6_rsh_c_09_1"), 0, 0)
-    END_IF
-    RETURN
-#else
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_09_1"), 0, 0)
     END_IF
     RETURN
-#endif
 EVT_END()
 
 /**
@@ -1115,15 +1071,9 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
                     CALL(evt_bero_exec_wait, 65536)
                     SET_VALUE(LW(0), STRING("s_bero"))
                     CALL_CHILD(PTR(bero_case_switch_off))
-#if VERSION <= VERSION_DEMO_US
                     SET_VALUE(LW(1), STRING("stg6_rsh_261"))
                     SET_VALUE(LW(2), STRING("stg6_rsh_261"))
                     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
-#else
-                    SET_VALUE(LW(1), STRING("stg6_rsh_261"))
-                    SET_VALUE(LW(2), STRING("stg6_rsh_261"))
-                    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
-#endif
                 END_INLINE_EVENT
             END_IF
         END_IF
@@ -1135,11 +1085,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
         ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-#else
             CALL(evt_snd_envoff, PSND_FADEOUT)
-#endif
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE
             CALL(evt_sub_get_mapname, LW(0))

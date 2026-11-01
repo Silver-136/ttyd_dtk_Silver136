@@ -41,11 +41,7 @@ static void actionCommandDisp(f32 x, f32 y);
 void battleAcDelete_Repeatedly(BattleWork* work);
 
 
-#if VERSION <= VERSION_DEMO_US
-static s32 _power_table[] = {80, 60, 50, 40, 28, 16, 8};
-#else
 static s32 _power_table[] = {55, 50, 45, 40, 35, 30, 25};
-#endif
 
 /**
  * Reads the script parameters: params[0] picks the input (A by default; 2 B, 3 X, 4 Y, 5 R, 6 stick left,

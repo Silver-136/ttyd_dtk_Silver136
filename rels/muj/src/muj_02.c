@@ -310,11 +310,7 @@ EVT_BEGIN(wedding_ring_consign)
     SET_VALUE(LW(0), 0)
     CALL(evt_pouch_check_item, ITEM_WEDDING_RING, LW(10))
     IF_INT_NOT_EQUAL(LW(10), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_item_select, PTR(itemsel_table00), LW(10))
-#else
         CALL(evt_win_item_select, 0, PTR(itemsel_table00), LW(10), 0)
-#endif
         IF_INT_NOT_EQUAL(LW(10), -1)
             CALL(evt_pouch_remove_item, ITEM_WEDDING_RING, LW(10))
             SET_VALUE(LW(0), 1)

@@ -1,7 +1,6 @@
 // Case driver: "cases" run an event script when Mario touches, jumps on, stands on or hammers a
 // named hit object (or when a custom condition function says so).
 
-#include "version.h"
 #include "driver/casedrv.h"
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"
@@ -101,9 +100,6 @@ void caseMain(void) {
     HitEntry* hammer;
     HitEntry* head;
 
-#if VERSION <= VERSION_DEMO_US
-    s32 fbatMode;
-#endif
     mario = marioGetPtr();
     partyGetPtr(marioGetPartyId());
     standOn = mario->hitobjStandOn;
@@ -114,13 +110,8 @@ void caseMain(void) {
     hammer = mario->hitobjHammer;
     head = mario->hitobjHead;
     btn = mario->buttonTrg;
-#if VERSION <= VERSION_DEMO_US
-    if ((u32)marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
-        ((fbatMode = fbatGetPointer()->mode) == 0 || fbatMode == 1) && marioCaseEventValidChk()) {
-#else
     if (marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
         !fbatPreventMarioEventChk() && marioCaseEventValidChk()) {
-#endif
         if (mario->currMotionId != MARIO_MOTION_STAY && mario->currMotionId != MARIO_MOTION_WALK && mario->currMotionId != MARIO_MOTION_DASH &&
             yoshiGetStatus() != YOSHI_STATUS_RIDING) {
             btn = 0;

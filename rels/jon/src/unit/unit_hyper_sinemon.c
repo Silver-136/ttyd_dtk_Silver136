@@ -1,4 +1,3 @@
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -81,20 +80,12 @@ BattleUnitKind unit_hyper_sinemon = {
     data_table, // dataTable
 };
 
-#if VERSION <= VERSION_DEMO_US
-static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
-#else
 static BattleUnitDefense defence = {{3, 99, 3, 3, 3}};
-#endif
 
 /** Damage reduction of the Hyper Cleft, flipped on its back: none, every attack type does full damage. */
 static BattleUnitDefense defence_turn = {0};
 
-#if VERSION <= VERSION_DEMO_US
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
-#else
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
-#endif
 
 static StatusVulnerability regist = {
     40, // sleep

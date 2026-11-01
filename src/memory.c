@@ -15,11 +15,7 @@ struct MapAllocEntry {
     u16 inuse; //0x8
     u16 currId; //0xA
     u8 field_0xC[0x20 - 0xC]; //0xC
-#if VERSION <= VERSION_DEMO_US
 };
-#else
-};
-#endif
 
 //.bss
 SmartWork smartWork;
@@ -36,11 +32,7 @@ SmartWork smartWork;
 
 // {fixed, size}: a fixed heap (1) has its size in KiB, the others (0) get size percent of the arena left over
 s32 size_table[HEAP_COUNT][2] = {
-#if VERSION <= VERSION_DEMO_US
-    {1, 0x3784}, //0xDE1000
-#else
     {1, 0x1C84}, // 0x721000, 7300 KiB (7.13 MiB)
-#endif
     {1, 0xD90},  // 0x364000, 3472 KiB (3.39 MiB)
     {1, 0xE0},   // 0x38000, 224 KiB
     {1, 0x80},   // 0x20000, 128 KiB
@@ -64,9 +56,6 @@ BOOL g_bFirstSmartAlloc;
 void* R_battlemapalloc_base_ptr;
 void* mapalloc_base_ptr;
 #else
-#if VERSION <= VERSION_DEMO_US
-SmartWork smartWork;
-#endif
 void* mapalloc_base_ptr;
 u32 mapalloc_size;
 BOOL g_bFirstSmartAlloc;

@@ -1,6 +1,5 @@
 // Star-power special move Supernova (sac_zubastar): the star-stone game and its damage to all enemies.
 
-#include "version.h"
 #include "eff/eff_starstone.h"
 #include "driver/fadedrv.h"
 #include "battle/battle.h"
@@ -538,13 +537,8 @@ USER_FUNC(zubastar_main) {
                 n++;
             }
         }
-#if VERSION <= VERSION_DEMO_US
-            top[n] = 364.0f;
-            bot[n] = 304.0f;
-#else
         top[n] = 344.0f;
         bot[n] = 264.0f;
-#endif
         for (i = 0; i < n; i++) {
             for (j = i + 1; j < n + 1; j++) {
                 if (top[i] > top[j]) {
@@ -701,14 +695,7 @@ USER_FUNC(zubastar_main) {
         if (w->ltimer >= 15) {
             w->cursor.timer = 27;
             w->cursor.f4 = 0;
-#if VERSION <= VERSION_DEMO_US
-                fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#endif
-#if VERSION <= VERSION_DEMO_US
-                btl_camera_shake_h(0, 5.0f, 0.0f, 30, 0);
-#else
             btl_camera_shake_h(0, 8.0f, 0.0f, 30, 0);
-#endif
         }
         break;
     case 27:
@@ -718,12 +705,7 @@ USER_FUNC(zubastar_main) {
         }
         break;
     case 28:
-#if VERSION <= VERSION_DEMO_US
-            w->cursor.timer = 30;
-            fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#else
         w->cursor.timer = 30;
-#endif
     case 30:
         w->cursor.pos = (Vec){0.0f, -1000.0f, 0.0f};
         break;

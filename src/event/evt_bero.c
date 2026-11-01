@@ -39,11 +39,7 @@ s32 BeroNUM, BeroNOWNUM;
 s32 BeroCAM; // pipe camera handshake: bero_case_exec_pipe_sub pokes it and polls it (POKE_INT / PEEK_INT)
 f32 BeroOX, BeroOY, BeroOZ; //offset position
 f32 BeroSX, BeroSY, BeroSZ; //start position
-#if VERSION <= VERSION_DEMO_US
-f32 BeroEX, BeroEY, BeroEZ; // end position
-#else
 f32 BeroEX, BeroEY, BeroEZ; //end position
-#endif
 Vec BeroPT, BeroAT;
 BOOL BeroMarioGO;
 
@@ -52,18 +48,6 @@ BOOL BeroMarioGO;
  * direction and start point worked out automatically. The entrance lookup falls back to it
  * when gp->beroEnterName is empty.
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(default_entevt)
-    SET_VALUE(LW(0), 0)
-    RETURN
-EVT_END()
-
-/** Exit script for entrances without one: LW(0) = 0 so the exit goes ahead. */
-EVT_BEGIN(default_outevt)
-    SET_VALUE(LW(0), 0)
-    RETURN
-EVT_END()
-#endif
 BeroEntry bero_null[] = {
     {
         NULL, // hitName
@@ -80,39 +64,6 @@ BeroEntry bero_null[] = {
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
     },
-#if VERSION <= VERSION_DEMO_US
-};
-
-/** Enter script for entrances without one: LW(0) = 0 so the normal entrance runs. */
-EVT_BEGIN(default_entevt)
-    SET_VALUE(LW(0), 0)
-    RETURN
-EVT_END()
-
-/** Exit script for entrances without one: LW(0) = 0 so the exit goes ahead. */
-EVT_BEGIN(default_outevt)
-    SET_VALUE(LW(0), 0)
-    RETURN
-EVT_END()
-
-/** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
-EVT_BEGIN(evt_bero_info_run_none)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-
-/** Arrival through a gate entrance (type 3): no walk-in, just gives control back to the player. */
-EVT_BEGIN(evt_bero_info_run_gate)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-
-/**
- * Sets where Mario respawns after falling into a bottomless pit; args are x, y, z as whole numbers.
- * Retail only (the demos lack it).
- */
-USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
-#else
 };
 
 /** Enter script for entrances without one: LW(0) = 0 so the normal entrance runs. */
@@ -142,7 +93,6 @@ EVT_END()
 // s32 x, s32 y, s32 z (new in retail)
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
-#endif
     EvtWord* args = event->args;
     s32 x, y, z;
 
@@ -626,18 +576,11 @@ USER_FUNC(evt_bero_get_info_num) {
 }
 
 USER_FUNC(bero_get_position_normal) {
-#if VERSION <= VERSION_DEMO_US
-    EvtWord* args = event->args;
-    MarioWork* wp = marioGetPtr();
-    s32 dir = evtGetValue(event, args[0]);
-    float halfTurn;
-#else
     EvtWord* args = event->args;
     MarioWork* wp = marioGetPtr();
     s32 dir = evtGetValue(event, args[0]);
     float halfTurn;
     f32 respawnZ;
-#endif
     f32 len = evtGetFloat(event, args[1]);
     s32* pos = (s32*)event->lwData[6];
     const char* name = (const char*)event->lwData[3];
@@ -775,12 +718,8 @@ USER_FUNC(bero_get_position_pipe_pure) {
     BeroSZ = start.z;
     BeroEX = end.x;
     BeroEY = (f32)(kind == BERO_DIR_UP ? end.y - 37.5f : end.y);
-#if VERSION <= VERSION_DEMO_US
-    BeroEZ = end.z;
-#else
     BeroEZ = end.z;
     marioSetBottomlessRespawnPosOnBeroEntry(BeroEX, BeroEY, BeroEZ);
-#endif
     return EVT_RETURN_DONE;
 }
 
@@ -1404,15 +1343,10 @@ EVT_BEGIN(bero_case_init_check)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(bero_case_exec_none)
-    CALL_CHILD(bero_case_init_check)
-#else
 EVT_BEGIN(bero_case_exec_none)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
     CALL(evt_mario_key_onoff, 1)
-#endif
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
@@ -1429,15 +1363,10 @@ EVT_BEGIN(bero_case_exec_none)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(bero_case_exec_road)
-    CALL_CHILD(bero_case_init_check)
-#else
 EVT_BEGIN(bero_case_exec_road)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
     CALL(evt_mario_key_onoff, 1)
-#endif
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
@@ -1465,15 +1394,10 @@ EVT_BEGIN(bero_case_exec_road)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(bero_case_exec_door)
-    CALL_CHILD(bero_case_init_check)
-#else
 EVT_BEGIN(bero_case_exec_door)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
     CALL(evt_mario_key_onoff, 1)
-#endif
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
@@ -1703,15 +1627,10 @@ EVT_BEGIN(bero_case_exec_pipe)
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-    CALL_CHILD(bero_case_init_check)
-#else
     END_IF
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
     CALL(evt_mario_key_onoff, 1)
-#endif
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
@@ -1766,15 +1685,10 @@ EVT_BEGIN(bero_case_exec_pipe)
 EVT_END()
 
 /** Exit trigger for gates: after bero_case_init_check, changes map straight away. */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(bero_case_exec_gate)
-    CALL_CHILD(bero_case_init_check)
-#else
 EVT_BEGIN(bero_case_exec_gate)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
     CALL(evt_mario_key_onoff, 1)
-#endif
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
@@ -1854,15 +1768,8 @@ EVT_END()
 EVT_BEGIN(bero_case_switch_on)
     CALL(evt_bero_switch_on, LW(0))
     CALL(evt_bero_get_info_num, LW(1))
-#if VERSION <= VERSION_DEMO_US
-    DEBUG_PUT_MSG(STRING("ベロ登録"))
-#endif
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(LW(0), 0)
-#else
     IF_INT_EQUAL(LW(0), 0)
         DEBUG_PUT_MSG(STRING("\203x\203\215\223o\230^"))
-#endif
         CALL_CHILD(PTR(bero_case_entry_sub))
         ELSE
         DEBUG_PUT_MSG(STRING("\203x\203\215\202\314\217o\202\304\215s\202\255\203f\201[\203^\202\314\223\361\217d\223o\230^\226h\216~\202\360\202\265\202\304\202\242\202\334\202\267"))
@@ -1874,49 +1781,14 @@ EVT_END()
 EVT_BEGIN(bero_case_switch_off)
     CALL(evt_bero_switch_off, LW(0))
     CALL(evt_bero_get_info_num, LW(1))
-#if VERSION <= VERSION_DEMO_US
-    DEBUG_PUT_MSG(STRING("ベロ削除"))
-#endif
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(LW(0), 0)
-#else
     IF_INT_EQUAL(LW(0), 0)
         DEBUG_PUT_MSG(STRING("\203x\203\215\215\355\217\234\202\265\202\334\202\265\202\275"))
-#endif
         CALL(evt_bero_case_id_load, LW(1), LW(15))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_del_case_evt, 0, LW(15))
-    ELSE
-        DEBUG_PUT_MSG(STRING("ベロの出て行くデータの二重削除防止をしています"))
-#else
         CALL(evt_del_case_evt, 0, LW(15))
         CALL(evt_hitobj_attr_onoff, 0, 0, LW(3), HIT_ATTR_BERO)
         ELSE
         DEBUG_PUT_MSG(STRING("\203x\203\215\202\314\215\355\217\234\227\\\226\361\202\340\202\265\202\255\202\315\203x\203\215\202\314\217o\202\304\215s\202\255\203f\201[\203^\202\314\223\361\217d\215\355\217\234\226h\216~\202\305\202\267"))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    RETURN
-EVT_END()
-/** Retail: same, and also clears hit attribute 0x800000 on the entrance's hit object. */
-EVT_BEGIN(bero_case_switch_off)
-    CALL(evt_bero_switch_off, LW(0))
-    CALL(evt_bero_get_info_num, LW(1))
-    IF_INT_EQUAL(LW(0), 0)
-        DEBUG_PUT_MSG(STRING("ベロ削除しました"))
-        CALL(evt_bero_case_id_load, LW(1), LW(15))
-        CALL(evt_del_case_evt, 0, LW(15))
-        CALL(evt_hitobj_attr_onoff, 0, 0, LW(3), 8388608)
-    ELSE
-        DEBUG_PUT_MSG(STRING("\203x\203\215\202\314\215\355\217\234\227\\\226\361\202\340\202\265\202\255\202\315\203x\203\215\202\314\217o\202\304\215s\202\255\203f\201[\203^\202\314\223\361\217d\215\355\217\234\226h\216~\202\305\202\267"))
-    END_IF
-    RETURN
-EVT_END()
-
-/** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
-EVT_BEGIN(evt_bero_info_run_none)
-    CALL(evt_mario_key_onoff, 1)
-#endif
     RETURN
 EVT_END()
 
@@ -2011,33 +1883,15 @@ EVT_END()
  * otherwise sets up Mario (background mode, partners, pipe pose), places him,
  * sets the pipe fade and spawns the walk-in.
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(evt_bero_info_run_gate)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-
-/**
- * Map-entry script run after evt_bero_get_info: on a save load just registers exits;
- * otherwise sets up Mario (background mode, partners, pipe pose), places him,
- * sets the pipe fade and spawns the walk-in.
- */
 EVT_BEGIN(evt_bero_info_run)
-#else
-EVT_BEGIN(evt_bero_info_run)
-#endif
     // Find the entrance Mario arrived by and whether he is in paper form.
     CALL(evt_bero_get_into_info)
     CALL(evt_bero_set_now_number, LW(1))
     CALL(evt_bero_read_mario_pera)
     CALL(evt_sub_get_system_flag, LW(0))
     // Loading a save: no walk-in; only arm the exits and start the NPCs.
-#if VERSION <= VERSION_DEMO_US
-    IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
-#else
     IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
         DEBUG_PUT_MSG(STRING("\203Z\201[\203u\203u\203\215\203b\203N\202\251\202\347\202\314\203\215\201[\203h\216\236\202\314\217\210\227\235"))
-#endif
         CALL(evt_bero_exec_onoff, 0, 1)
         WAIT_FRAMES(1)
         CALL(evt_bero_exec_get, LW(0))
@@ -2226,9 +2080,5 @@ EVT_END()
 // .bss definitions last (emitted in reverse order: BeroID, BeroSW, BeroINFOARR)
 BeroEntry* BeroINFOARR[16];
 s32 BeroSW[16];
-#if VERSION <= VERSION_DEMO_US
 s32 BeroID[16];
-#else
-s32 BeroID[16];
-#endif
 

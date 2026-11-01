@@ -1,6 +1,5 @@
 // las_07 (ラストダンジョン, Palace of Shadow): a connecting hall.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -234,15 +233,9 @@ static BeroEntry bero_entry_data[] = {
  */
 EVT_BEGIN(las_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
-#else
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-    CALL(evt_snd_set_rev_mode, 2)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-#endif
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     BEGIN_INLINE_EVENT

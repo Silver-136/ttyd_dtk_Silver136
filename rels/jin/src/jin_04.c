@@ -1,7 +1,6 @@
 // jin_04 (ダイム寺院, Creepy Steeple): Doopliss (Rampell) boss room: Doopliss and fake-Mario scenes and battles,
 // Goombella, Koops, Flurrie and Yoshi cutscenes, Ruby Star; door to jin_00.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_pouch.h"
 #include "evt/evt_cmd.h"
@@ -293,9 +292,6 @@ EVT_BEGIN(irekawatta_mario)
     // The Ruby Star scene plays while the music fades out.
     SET_VALUE(LW(0), -1)
     SET_VALUE(LW(1), STRING("rubystar"))
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_sub_starstone)
-#endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL_CHILD(PTR(evt_sub_starstone))
     WAIT_MS(500)
@@ -375,12 +371,8 @@ EVT_BEGIN(irekawatta_mario)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
-#else
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
-#endif
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_10_02_TRADING_PLACES)
     SET_VALUE(GSWF_JIN_TRADING_PLACES_ACTIVE, 1)
@@ -808,15 +800,9 @@ EVT_BEGIN(hontonosugata_mario)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_15_02_BACK_TO_NORMAL)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_15_03_THE_RUBY_STAR)
     SET_VALUE(LW(0), 4)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LW(1), STRING("rubystar"))
-    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    CALL_CHILD(evt_sub_starstone)
-#else
     SET_VALUE(LW(1), STRING("rubystar"))
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL_CHILD(PTR(evt_sub_starstone))
-#endif
     RETURN
 EVT_END()
 
@@ -930,18 +916,10 @@ EVT_BEGIN(jin_04_jumpstand)
             CASE_END
         END_SWITCH
         CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mario_dispflag_onoff, 1, 4)
-        // The demo always makes the partner jump along; the releases only when evt_party_dokan returns 1.
-        CALL(evt_party_dokan, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            BEGIN_INLINE_EVENT_GET_ID(LW(10))
-#else
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
         CALL(evt_party_dokan, 0, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             BEGIN_INLINE_EVENT_GET_ID(LW(10))
-#endif
                 CALL(evt_party_stop, 0)
                 WAIT_MS(300)
                 CALL(evt_mobj_get_position, STRING("mobj_jump"), LW(0), LW(1), LW(2))
@@ -949,15 +927,9 @@ EVT_BEGIN(jin_04_jumpstand)
                 CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_party_jump_pos, 0, -100, 670, 50, 1000, 0, -1000)
                 CALL(evt_party_run, 0)
-#if VERSION <= VERSION_DEMO_US
             END_INLINE_EVENT
         END_IF
         CALL(evt_mario_jump_pos, -75, 670, 50, 1000, 0, -1000)
-#else
-            END_INLINE_EVENT
-        END_IF
-        CALL(evt_mario_jump_pos, -75, 670, 50, 1000, 0, -1000)
-#endif
         LOOP(0)
             IS_EVENT_RUNNING(LW(10), LW(11))
             IF_INT_EQUAL(LW(11), 0)
@@ -969,13 +941,9 @@ EVT_BEGIN(jin_04_jumpstand)
         CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
         ELSE
         CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mario_dispflag_onoff, 1, 4)
-#else
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
         CALL(evt_party_dokan, 0, LW(0))
         IF_INT_EQUAL(LW(0), 1)
-#endif
             BEGIN_INLINE_EVENT_GET_ID(LW(10))
                 CALL(evt_party_stop, 0)
                 WAIT_MS(300)
@@ -984,15 +952,9 @@ EVT_BEGIN(jin_04_jumpstand)
                 CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_party_jump_pos, 0, -60, 450, 130, 500, 0, -1000)
                 CALL(evt_party_run, 0)
-#if VERSION <= VERSION_DEMO_US
             END_INLINE_EVENT
         END_IF
         CALL(evt_hitobj_onoff, STRING("MOBJ_mobj_jump"), 0, 0)
-#else
-            END_INLINE_EVENT
-        END_IF
-        CALL(evt_hitobj_onoff, STRING("MOBJ_mobj_jump"), 0, 0)
-#endif
         CALL(evt_mario_jump_pos, -30, 450, 110, 500, 0, -1000)
         CALL(evt_hitobj_onoff, STRING("MOBJ_mobj_jump"), 0, 1)
         CALL(evt_mario_key_onoff, 1)
@@ -1010,25 +972,12 @@ EVT_BEGIN(jin_04_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
-        CALL(evt_snd_set_rev_mode, 2)
-#else
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#endif
         CASE_DEFAULT
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
-        CALL(evt_snd_set_rev_mode, 2)
-#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
     END_SWITCH
     CALL(evt_snd_set_rev_mode, 2)
-#endif
-#if VERSION <= VERSION_DEMO_US
-    END_SWITCH
-#endif
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

@@ -203,12 +203,8 @@ EVT_END()
  * if Mario or his partner bumps the block with the head during the move,
  * it reverses and the switch is cancelled.
  */
-#if VERSION <= VERSION_DEMO_US
-static EVT_BEGIN(main_0)
-#else
 static EVT_BEGIN(main_0)
     SET_TYPE(239)
-#endif
     // The switch is pressed: the block stops reacting to hits while it moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
@@ -447,11 +443,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0F, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
-#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
-#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF

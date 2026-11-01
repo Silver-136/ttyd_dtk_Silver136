@@ -1,7 +1,6 @@
 // aji_11 (敵のアジト, X-Naut Fortress): the storage room where Peach finds the disk on a shelf and plays it
 // (peach_evt_disksys), and the gnawing creature (gajigaji).
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -48,11 +47,7 @@ static EvtWord peach_evt_stg5[105];
 EvtWord aji_11_init_evt[111];
 
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("door_w_A"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("door_w_B"), 0, 0, LW(0))
@@ -60,11 +55,7 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("door_w_A"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("door_w_B"), 0, 0, LW(0))
@@ -246,11 +237,7 @@ EVT_BEGIN(peach_evt_disksys)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, PTR(item_list), LW(0))
-#else
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
-#endif
     // Cancellation leaves the disk and the current interaction unchanged.
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
@@ -370,15 +357,9 @@ EVT_BEGIN(aji_11_init_evt)
         CASE_DEFAULT
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI6"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
-#else
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI6"))
-    CALL(evt_snd_set_rev_mode, 1)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-#endif
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_map_playanim, STRING("sikaku"), MAP_ANIM_PLAY_LOOP, 0)

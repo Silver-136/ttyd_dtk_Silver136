@@ -296,11 +296,7 @@ EVT_BEGIN(nokonoko_F_talk)
             CALL(evt_pouch_get_haveitemcnt, LW(0))
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_win_item_select, 1, LW(0))
-#else
                 CALL(evt_win_item_select, 0, 1, LW(0), 0)
-#endif
                 ELSE
                 SET_VALUE(LW(0), -1)
                 SET_VALUE(LF(0), 1)
@@ -358,11 +354,7 @@ EVT_BEGIN(nokonoko_F_talk)
             CALL(evt_pouch_get_haveitemcnt, LW(0))
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_win_item_select, 1, LW(0))
-#else
                 CALL(evt_win_item_select, 0, 1, LW(0), 0)
-#endif
                 ELSE
                 SET_VALUE(LW(0), -1)
                 SET_VALUE(LF(0), 1)
@@ -823,12 +815,8 @@ EVT_BEGIN(first_time_camera)
     WAIT_MS(100)
     CALL(evt_cam3d_evt_off, 500, EASING_QUADRATIC_OUT)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG1_NOK1"), 2000)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_01A_PETALBURG_1ST_TIME)
-#else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_01A_PETALBURG_1ST_TIME)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)

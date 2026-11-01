@@ -147,12 +147,8 @@ EVT_END()
  * if Mario or his partner bumps the block with the head during the move,
  * it reverses and the switch is cancelled.
  */
-#if VERSION <= VERSION_DEMO_US
-static EVT_BEGIN(main_0)
-#else
 static EVT_BEGIN(main_0)
     SET_TYPE(239)
-#endif
     // The switch is pressed: the block stops reacting to hits while it moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)

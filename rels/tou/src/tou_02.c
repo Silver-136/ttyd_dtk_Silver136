@@ -938,12 +938,6 @@ EVT_BEGIN(talk_kino5)
                         ELSE
                         CALL(evt_msg_print, 0, STRING(("stg3_npc_re_031")), 0, 0)
                     END_IF
-#if VERSION <= VERSION_DEMO_US
-                    WAIT_MS(300)
-                    CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
-                    WAIT_MS(600)
-                    CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
-#endif
                     ELSE
                     CALL(evt_mario_get_party, LW(0))
                     IF_INT_EQUAL(LW(0), 4)
@@ -1058,11 +1052,7 @@ EVT_END()
  */
 EVT_BEGIN(init_chu)
     SWITCH(GSW_STORY_PROGRESS)
-#if VERSION <= VERSION_DEMO_US
-        CASE_LESS(STORY_STG3_20_08_MS_MOWZ)
-#else
         CASE_LESS(STG3_20_05_MAJORS_4TH_PL)
-#endif
         CALL(evt_npc_set_position, STRING(("me")), 245, 0, 125)
         CASE_DEFAULT
         CALL(evt_npc_set_position, STRING(("me")), 0, -1000, 0)
@@ -1639,12 +1629,8 @@ EVT_BEGIN(evt_tougi2)
     WAIT_MS(500)
     SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_party_run, 0)
-#else
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_run, 0)
-#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1727,21 +1713,11 @@ void ext_fan_init(void) {
 
             pos.x = randf(-100.0f, 100.0f);
             pos.z = randf(-100.0f, 100.0f);
-#if VERSION <= VERSION_DEMO_US
-            fan->pos = pos;
-            fan->vel = (Vec){0.0f, 0.0f, 0.0f};
-        }
-    }
-    // the demo hides the first fan: ext_fan_main moves it onto Mario
-    extGetPosePtr()->flags &= ~1;
-    fan_wp->sfxId = psndSFXOn_3D("SFX_STG3_AUDIENCE_FAN1", &(Vec){0.0f, 0.0f, 0.0f});
-#else
             fan->pos = pos;
             fan->vel = (Vec){0.0f, 0.0f, 0.0f};
         }
     }
     fan_wp->sfxId = psndSFXOn_3D("SFX_STG3_AUDIENCE_FAN1", &(Vec){0.0f, 0.0f, 0.0f});
-#endif
     fan_wp->vol = psndSFX_get_vol(fan_wp->sfxId);
 }
 
@@ -1760,17 +1736,10 @@ static Vec fan_zero;
 void ext_fan_main(void) {
     MarioWork* mario = marioGetPtr();
     Fan* fan;
-#if VERSION <= VERSION_DEMO_US
-    s32 i;
-#endif
-#if VERSION <= VERSION_DEMO_US
-    ExtdrvPose* pose;
-#else
     ExtdrvPose* pose;
     s32 li;
     Fan* lfan;
     s32 i;
-#endif
     Vec dir;
     Vec target = {0.0f, 0.0f, 0.0f};
 
@@ -1779,20 +1748,6 @@ void ext_fan_main(void) {
     } else {
         fan_wp->hammerTimer = 0;
     }
-#if VERSION <= VERSION_DEMO_US
-    {
-        Fan* fan = fan_wp->fans;
-        s32 i;
-
-        // the first fan stands in for Mario
-        fan->pos = mario->position;
-#endif
-#if VERSION <= VERSION_DEMO_US
-        if (evtGetValue(NULL, GF(10))) {
-            target = fan->pos;
-        } else {
-            target = npcNameToPtr("チャンピョン")->position;
-#else
     if (evtGetValue(NULL, GF(10))) {
         ExtdrvPose* pose = extGetPosePtr();
         Fan* fan = fan_wp->fans;
@@ -1822,16 +1777,10 @@ void ext_fan_main(void) {
                     fan->flags |= 1;
                 } else {
                     fan->pos = npcNameToPtr("\203`\203\203\203\223\203s\203\207\203\223")->position;
-#endif
                     target = fan->pos;
                     pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
                     fan->flags |= 1;
                     break;
-#if VERSION <= VERSION_DEMO_US
-        }
-
-        for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-#else
                 }
             }
         }
@@ -1843,72 +1792,35 @@ void ext_fan_main(void) {
         s32 i;
 
         for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-#endif
             if (fan->state == 0) {
                 PSVECSubtract(&target, &fan->pos, &dir);
-#if VERSION <= VERSION_DEMO_US
-                if (PSVECMag(&field_0x28) > 50.0f) {
-#else
                 if (PSVECMag(&dir)) {
-#endif
                     PSVECNormalize(&dir, &dir);
                     dir.y = 0.0f;
-#if VERSION <= VERSION_DEMO_US
-                    PSVECScale(&field_0x28, &field_0x28, 0.4f);
-#else
                     PSVECScale(&dir, &dir, 0.1f);
-#endif
                     PSVECAdd(&fan->vel, &dir, &fan->vel);
                 }
             }
         }
-#if VERSION <= VERSION_DEMO_US
-    }
-
-    for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-#else
     }
 
     {
 
         for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-#endif
             if (fan->state == 0) {
                 s32 j;
                 Fan* other;
 
-#if VERSION <= VERSION_DEMO_US
-            f32 d;
-#endif
                 for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
-#if VERSION <= VERSION_DEMO_US
-                if (other->state == 0 && fan != other && (d = PSVECSquareDistance(&fan->pos, &other->pos)) < 900.0f) {
-#else
                     if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
-#endif
                         PSVECSubtract(&fan->pos, &other->pos, &dir);
-#if VERSION <= VERSION_DEMO_US
-                    if (d == 0.0f) {
-                        field_0x28.x = d = 1.0f;
-                    }
-#endif
-#if VERSION <= VERSION_DEMO_US
-                    field_0x28.y = 0.0f;
-                    PSVECScale(&field_0x28, &field_0x28, 8.0f * (1.0f / d));
-#else
                         dir.y = 0.0f;
                         PSVECNormalize(&dir, &dir);
                         PSVECScale(&dir, &dir, 5.0f);
-#endif
                         PSVECAdd(&fan->vel, &dir, &fan->vel);
-#if VERSION <= VERSION_DEMO_US
-                    PSVECSubtract(&other->vel, &field_0x28, &other->vel);
-                }
-#else
                         PSVECSubtract(&other->vel, &dir, &other->vel);
                     }
                 }
-#endif
             }
         }
     }
@@ -1959,20 +1871,11 @@ void ext_fan_main(void) {
 
                         angle = angleABf(mario->position.x, mario->position.z, fan->pos.x, fan->pos.z);
                         dir2 = cloudGetBreathDir();
-#if VERSION <= VERSION_DEMO_US
-                        fan->state = 20;
-                        dir2 = (angle + dir2) / 2.0f;
-#else
                         fan->state = 20;
                         angle = (angle + dir2) / 2.0f;
-#endif
                         fan->target = fan_zero;
                         spd = randf(0.1f, 0.2f);
-#if VERSION <= VERSION_DEMO_US
-                        angle = 6.2831855f * dir2 / 360.0f;
-#else
                         angle = 6.2831855f * angle / 360.0f;
-#endif
                         fan->param.x = spd * polySinf(angle);
                         fan->param.y = randf(0.03f, 0.06f);
                         fan->param.z = spd * -polyCosf(angle);
@@ -1986,13 +1889,6 @@ void ext_fan_main(void) {
         }
     }
     // Exclude hidden anchor fans and every fan that has left the walking state.
-#if VERSION <= VERSION_DEMO_US
-    fan_wp->count = fan_wp->num;
-
-    pose = extGetPosePtr();
-    fan = fan_wp->fans;
-    for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
-#else
     fan_wp->count = fan_wp->num;
 
     {
@@ -2003,16 +1899,6 @@ void ext_fan_main(void) {
         pose = extGetPosePtr();
         lfan = fan_wp->fans;
         for (li = 0; li < fan_wp->num; li++, pose++, lfan++) {
-#endif
-#if VERSION <= VERSION_DEMO_US
-        f32 angle;
-#endif
-#if VERSION <= VERSION_DEMO_US
-        switch (fan->state) {
-            case 0:
-                PSVECAdd(&fan->pos, &fan->vel, &fan->pos);
-                PSVECScale(&fan->vel, &fan->vel, 0.6f);
-#else
             switch (lfan->state) {
                 case 0: {
                     HitCheckQuery query;
@@ -2026,17 +1912,12 @@ void ext_fan_main(void) {
                     query.targetDistance = 25.0f + dist;
                     if (hitCheckVecFilter(&query, NULL)) {
                         C_VECReflect(&lfan->vel, &q->hitNormal, &lfan->vel);
-#endif
                     } else {
                         lfan->pos.x += lfan->vel.x;
                         lfan->pos.z += lfan->vel.z;
                         lfan->vel.x *= 0.6f;
                         lfan->vel.z *= 0.6f;
                     }
-#if VERSION <= VERSION_DEMO_US
-                if (fan->pos.z > 190.0f) {
-                    fan->pos.z = 190.0f;
-#else
                     if (lfan->pos.x < -350.0f) {
                         lfan->pos.x = -350.0f;
                     }
@@ -2045,20 +1926,7 @@ void ext_fan_main(void) {
                     }
                     if (lfan->pos.z > (h = 195.0f + li / 100.0f)) {
                         lfan->pos.z = h;
-#endif
                     }
-#if VERSION <= VERSION_DEMO_US
-                break;
-            case 10:
-                fan->pos.y += fan->param.x;
-                fan->param.x -= fan->param.z;
-                angle = angleABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
-                angle = 6.2831855f * angle / 360.0f;
-                fan->pos.x += fan->param.y * fan_sin(angle);
-                fan->pos.z += fan->param.y * -polyCosf(angle);
-                if (--fan->timer < 0) {
-                    fan->state = 100;
-#else
                     break;
                 }
                 case 10:
@@ -2070,21 +1938,9 @@ void ext_fan_main(void) {
                     lfan->pos.z += lfan->param.y * -polyCosf(angle);
                     if (--lfan->timer < 0) {
                         lfan->state = 100;
-#endif
                     }
                     break;
                 case 20:
-#if VERSION <= VERSION_DEMO_US
-                if (--fan->timer > 0) {
-                    fan->target.x += fan->param.x;
-                    fan->target.y += fan->param.y;
-                    fan->target.z += fan->param.z;
-                    fan->pos.x += fan->target.x;
-                    fan->pos.y += fan->target.y;
-                    fan->pos.z += fan->target.z;
-                } else {
-                    fan->state = 100;
-#else
                     if (--lfan->timer > 0) {
                         lfan->target.x += lfan->param.x;
                         lfan->target.y += lfan->param.y;
@@ -2094,255 +1950,11 @@ void ext_fan_main(void) {
                         lfan->pos.z += lfan->target.z;
                     } else {
                         lfan->state = 100;
-#endif
                     }
                     break;
                 case 100:
-#if VERSION <= VERSION_DEMO_US
-                pose->flags &= ~3;
-                fan->state++;
-#else
                     pose->flags &= ~(EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD);
                     lfan->state++;
-#endif
-                    break;
-                case 101:
-                    break;
-            }
-#if VERSION <= VERSION_DEMO_US
-        if (fan->state != 0) {
-#else
-            if (lfan->flags & 1) {
-                fan_wp->count--;
-            } else if (lfan->state != 0) {
-#endif
-                fan_wp->count--;
-            }
-#if VERSION <= VERSION_DEMO_US
-        (*pose->mtx)[0][3] = fan->pos.x;
-        (*pose->mtx)[1][3] = fan->pos.y;
-        (*pose->mtx)[2][3] = fan->pos.z;
-        pose->field_0x28 = angleABf(target.x, target.z, fan->pos.x, fan->pos.z);
-    }
-    pose_main();
-    ExtdrvPose* pose;
-    s32 li;
-    Fan* lfan;
-    s32 i;
-    Vec field_0x28;
-    Vec target = {0.0f, 0.0f, 0.0f};
-
-    if (mario->currMotionId == MARIO_MOTION_HAMMER) {
-        fan_wp->hammerTimer++;
-    } else {
-        fan_wp->hammerTimer = 0;
-    }
-    if (evtGetValue(NULL, GF(10))) {
-        ExtdrvPose* pose = extGetPosePtr();
-        Fan* fan = fan_wp->fans;
-
-        for (i = 0; i < fan_wp->num; i++, fan++, pose++) {
-            if (fan->state == 0) {
-                fan->pos = mario->position;
-                target = fan->pos;
-                pose->flags &= ~1;
-                fan->flags |= 1;
-                break;
-            }
-        }
-    } else {
-        s32 i;
-        s32 found = 0;
-
-        pose = extGetPosePtr();
-        fan = fan_wp->fans;
-
-        for (i = 0; i < fan_wp->num; i++, fan++, pose++) {
-            if (fan->state == 0) {
-                if (!found) {
-                    found = 1;
-                    fan->pos = mario->position;
-                    pose->flags &= ~1;
-                    fan->flags |= 1;
-                } else {
-                    fan->pos = npcNameToPtr("チャンピョン")->position;
-                    target = fan->pos;
-                    pose->flags &= ~1;
-                    fan->flags |= 1;
-                    break;
-                }
-            }
-        }
-    }
-
-    {
-
-        Fan* fan;
-        s32 i;
-
-        for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-            if (fan->state == 0) {
-                PSVECSubtract(&target, &fan->pos, &field_0x28);
-                if (PSVECMag(&field_0x28)) {
-                    PSVECNormalize(&field_0x28, &field_0x28);
-                    field_0x28.y = 0.0f;
-                    PSVECScale(&field_0x28, &field_0x28, 0.1f);
-                    PSVECAdd(&fan->vel, &field_0x28, &fan->vel);
-                }
-            }
-        }
-    }
-
-    {
-
-        for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-            if (fan->state == 0) {
-                s32 j;
-                Fan* other;
-
-                for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
-                    if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
-                        PSVECSubtract(&fan->pos, &other->pos, &field_0x28);
-                        field_0x28.y = 0.0f;
-                        PSVECNormalize(&field_0x28, &field_0x28);
-                        PSVECScale(&field_0x28, &field_0x28, 5.0f);
-                        PSVECAdd(&fan->vel, &field_0x28, &fan->vel);
-                        PSVECSubtract(&other->vel, &field_0x28, &other->vel);
-                    }
-                }
-            }
-        }
-    }
-
-    {
-        f32 angle;
-        f32 dist;
-        f32 dy;
-        f32 spd;
-        f32 x;
-        f32 z;
-        f32 dir2;
-        for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-            if (fan->state == 0) {
-                switch (check_hammer(fan)) {
-                    case 0:
-                        break;
-                    case 1:
-                        fan->state = 10;
-                        {
-                            f32 k;
-                            f32 mn;
-                            f32 r = rand() / 32767.0f;
-                            angle = (6.2831855f * ((r * (k = 225.0f - 135.0f)) + (mn = 135.0f))) / 360.0f;
-                        } // FAKE: hand-inlined randf(135.0f, 225.0f) (same rand() call, r*90+135), 6.28 first so its pool address is created before 90/135 as in the target
-                        dist = randf(400.0f, 500.0f);
-                        x = fan->pos.x + dist * fan_sin(angle);
-                        z = fan->pos.z - dist * polyCosf(angle);
-                        {
-                            Vec tgt = {0.0f, 0.0f, 0.0f};
-
-                            tgt.x = x;
-                            tgt.y = -100.0f;
-                            tgt.z = z;
-                            fan->target = tgt;
-                        }
-                        fan->param.y = randf(4.0f, 6.0f);
-                        fan->param.z = randf(0.1f, 0.2f);
-                        dy = fan->target.y - fan->pos.y;
-                        dist = distABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
-                        angleABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
-                        fan->timer = dist / fan->param.y;
-                        fan->param.x = dy / fan->timer + fan->param.z * fan->timer / 2.0f;
-                        // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
-                        psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
-                        break;
-                    case 2: {
-
-                        angle = angleABf(mario->position.x, mario->position.z, fan->pos.x, fan->pos.z);
-                        dir2 = cloudGetBreathDir();
-                        fan->state = 20;
-                        angle = (angle + dir2) / 2.0f;
-                        fan->target = fan_zero;
-                        spd = randf(0.1f, 0.2f);
-                        angle = 6.2831855f * angle / 360.0f;
-                        fan->param.x = spd * fan_sin(angle);
-                        fan->param.y = randf(0.03f, 0.06f);
-                        fan->param.z = spd * -polyCosf(angle);
-                        fan->timer = 120;
-                        // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
-                        psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    fan_wp->count = fan_wp->num;
-
-    {
-        f32 angle;
-        f32 dist;
-        f32 h;
-
-        pose = extGetPosePtr();
-        lfan = fan_wp->fans;
-        for (li = 0; li < fan_wp->num; li++, pose++, lfan++) {
-            switch (lfan->state) {
-                case 0: {
-                    HitCheckQuery query;
-                    HitCheckQuery* q = &query;
-                    PSVECNormalize(&lfan->vel, &lfan->vel);
-                    dist = PSVECMag(&lfan->vel);
-                    query.targetPos = lfan->pos;
-                    query.targetPos.y += 4.0f;
-                    query.targetDir = lfan->vel;
-                    query.targetDir.y = 0.0f;
-                    query.targetDistance = 25.0f + dist;
-                    if (hitCheckVecFilter(&query, NULL)) {
-                        C_VECReflect(&lfan->vel, &q->hitNormal, &lfan->vel);
-                    } else {
-                        lfan->pos.x += lfan->vel.x;
-                        lfan->pos.z += lfan->vel.z;
-                        lfan->vel.x *= 0.6f;
-                        lfan->vel.z *= 0.6f;
-                    }
-                    if (lfan->pos.x < -350.0f) {
-                        lfan->pos.x = -350.0f;
-                    }
-                    if (lfan->pos.x > 350.0f) {
-                        lfan->pos.x = 350.0f;
-                    }
-                    if (lfan->pos.z > (h = 195.0f + li / 100.0f)) {
-                        lfan->pos.z = h;
-                    }
-                    break;
-                }
-                case 10:
-                    lfan->pos.y += lfan->param.x;
-                    lfan->param.x -= lfan->param.z;
-                    angle = angleABf(lfan->pos.x, lfan->pos.z, lfan->target.x, lfan->target.z);
-                    angle = 6.2831855f * angle / 360.0f;
-                    lfan->pos.x += lfan->param.y * fan_sin(angle);
-                    lfan->pos.z += lfan->param.y * -polyCosf(angle);
-                    if (--lfan->timer < 0) {
-                        lfan->state = 100;
-                    }
-                    break;
-                case 20:
-                    if (--lfan->timer > 0) {
-                        lfan->target.x += lfan->param.x;
-                        lfan->target.y += lfan->param.y;
-                        lfan->target.z += lfan->param.z;
-                        lfan->pos.x += lfan->target.x;
-                        lfan->pos.y += lfan->target.y;
-                        lfan->pos.z += lfan->target.z;
-                    } else {
-                        lfan->state = 100;
-                    }
-                    break;
-                case 100:
-                    pose->flags &= ~3;
-                    lfan->state++;
                     break;
                 case 101:
                     break;
@@ -2352,14 +1964,6 @@ void ext_fan_main(void) {
             } else if (lfan->state != 0) {
                 fan_wp->count--;
             }
-            (*pose->mtx)[0][3] = lfan->pos.x;
-            (*pose->mtx)[1][3] = lfan->pos.y;
-            (*pose->mtx)[2][3] = lfan->pos.z;
-            pose->field_0x28 = angleABf(target.x, target.z, lfan->pos.x, lfan->pos.z);
-        }
-    }
-    psndSFX_pos(fan_wp->sfxId, &target);
-#else
             (*pose->mtx)[0][3] = lfan->pos.x;
             (*pose->mtx)[1][3] = lfan->pos.y;
             (*pose->mtx)[2][3] = lfan->pos.z;
@@ -2367,7 +1971,6 @@ void ext_fan_main(void) {
         }
     }
     psndSFX_pos(fan_wp->sfxId, &target);
-#endif
     psndSFX_vol(fan_wp->sfxId, fan_wp->vol * fan_wp->count / fan_wp->num);
 }
 
@@ -2381,25 +1984,11 @@ EVT_BEGIN(mario_momikucha_msg)
         ADD(LW(0), 2)
         MULTIPLY(LW(0), 1000)
         WAIT_MS(LW(0))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mario_get_pos, 0, LW(5), LW(7), LW(8))
-        CALL(evt_sub_random, 100, LW(0))
-        CALL(evt_sub_random, 100, LW(1))
-#else
         CALL(evt_sub_random, 200, LW(0))
         CALL(evt_sub_random, 200, LW(1))
-#endif
         SUBTRACT(LW(0), 50)
         SUBTRACT(LW(1), 50)
-#if VERSION <= VERSION_DEMO_US
-        ADD(LW(5), LW(0))
-        ADD(LW(8), LW(1))
-#endif
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_toge, 2, LW(5), LW(7), LW(8))
-#else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), 30, LW(1))
-#endif
         CALL(evt_end_count, LW(0))
         IF_INT_LESS(LW(0), 10)
             RETURN
@@ -2456,11 +2045,7 @@ EVT_BEGIN(evt_momikucha)
     CALL(evt_npc_set_position, STRING(("fan")), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING(("fan2")), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING(("fan3")), 0, -1000, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_ext_entry, 250, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
-#else
     CALL(evt_ext_entry, 200, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
-#endif
     IF_INT_EQUAL(GF(10), 0)
         CALL(evt_npc_set_position, STRING(("\203`\203\203\203\223\203s\203\207\203\223")), 0, 0, 0)
         CALL(evt_npc_change_interrupt, STRING(("\203`\203\203\203\223\203s\203\207\203\223")), 1, PTR(move_champ))
@@ -2526,20 +2111,11 @@ static EVT_BEGIN(evt_key)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     RETURN
-#if VERSION <= VERSION_DEMO_US
-EVT_END()
-
-/** Display-entry callback of the crowd: updates the poses (JP and later) and queues fan_disp. */
-static void ext_fan_dispent(void) {
-    pose_main();
-    dispEntry(CAMERA_3D, 0.0f, 1, fan_disp, NULL);
-#else
 EVT_END()
 
 void ext_fan_dispent(void) {
     pose_main();
     dispEntry(CAMERA_3D, 0.0f, 1, fan_disp, NULL);
-#endif
 }
 
 #pragma opt_propagation off
@@ -2553,14 +2129,10 @@ s32 check_hammer(Fan* fan) {
     f32 dist;
     Vec pos;
 
-#if VERSION <= VERSION_DEMO_US
-    if (mario->position.y > 0.0f) {
-#else
     if (mario->position.y > 0.0f) {
         return 0;
     }
     if (fan->flags & 1) {
-#endif
         return 0;
     }
     if (mario->currMotionId == MARIO_MOTION_HAMMER && fan_wp->hammerTimer > 10) {

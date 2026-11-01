@@ -1,5 +1,4 @@
 // TTYD's own version of the SDK's DEMOInit, set up with the game's memory manager
-#include "version.h"
 #include "sdk/DEMOInit.h"
 #include "memory.h"
 #include <dolphin/dvd.h>
@@ -109,11 +108,7 @@ static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
                 rmode = &GXMpal480IntDf;
                 break;
             default:
-#if VERSION <= VERSION_DEMO_US
-                OSPanic(demo_file, 0x203, demo_msg);
-#else
                 OSPanic(demo_file, 0x206, demo_msg);
-#endif
                 break;
         }
         GXAdjustForOverscan(rmode, &rmodeobj, 0, 16);
@@ -130,13 +125,8 @@ void DEMOInit(GXRenderModeObj* mode) {
     __DEMOInitMem();
     memInit();
     VIConfigure(rmode);
-#if VERSION <= VERSION_DEMO_US
-    DefaultFifo = __memAlloc(HEAP_DEFAULT, 0x60000);
-    DefaultFifoObj = GXInit(DefaultFifo, 0x60000);
-#else
     DefaultFifo = __memAlloc(HEAP_DEFAULT, 0x64000);
     DefaultFifoObj = GXInit(DefaultFifo, 0x64000);
-#endif
     __DEMOInitGX();
     __DEMOInitVI();
 }

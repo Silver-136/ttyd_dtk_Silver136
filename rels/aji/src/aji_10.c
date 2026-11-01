@@ -1,7 +1,6 @@
 // aji_10 (敵のアジト, X-Naut Fortress): Sir Grodus's (shuryo) room with the monitor: Peach's scenes with
 // Grodus, Lord Crump and the Shadow Sirens.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_shuryolight.h"
@@ -77,11 +76,7 @@ static NpcSetupInfo npcEnt[9];
 EvtWord aji_10_init_evt[279];
 
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("door_w_A"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("door_w_B"), 0, 0, LW(0))
@@ -89,11 +84,7 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("door_w_A"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("door_w_B"), 0, 0, LW(0))
@@ -101,11 +92,7 @@ static EVT_BEGIN(w_door_open)
 EVT_END()
 
 static EVT_BEGIN(e_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("door_e_A"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("door_e_B"), 0, 0, LW(0))
@@ -113,11 +100,7 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("door_e_A"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("door_e_B"), 0, 0, LW(0))
@@ -1427,12 +1410,8 @@ EVT_BEGIN(aji_10_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI5"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
-#else
     CALL(evt_snd_set_rev_mode, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
-#endif
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         DEBUG_PUT_MSG(STRING("npc setup"))
         CALL(evt_npc_setup, PTR(npcEnt))

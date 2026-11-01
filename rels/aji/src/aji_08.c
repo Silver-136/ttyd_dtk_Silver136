@@ -1,4 +1,3 @@
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_map.h"
@@ -197,15 +196,9 @@ EVT_END()
 
 EVT_BEGIN(aji_08_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
-#else
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
-    CALL(evt_snd_set_rev_mode, 1)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-#endif
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     SPAWN_EVENT_GET_ID(PTR(heya_tenura_onoff), LW(0))

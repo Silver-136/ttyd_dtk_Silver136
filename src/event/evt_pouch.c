@@ -1,6 +1,5 @@
 // Script commands for Mario's pouch: coins, star pieces, items, badges, HP/FP, partners and mail.
 
-#include "version.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_party.h"
 #include "mario/mario_pouch.h"
@@ -64,9 +63,6 @@ USER_FUNC(evt_pouch_remove_item) {
  * and re-clamps stats; args[2] gets 0 on success or -1 if that slot holds something else.
  */
 // Descriptive name (not in the symbol maps).
-#if VERSION <= VERSION_DEMO_US
-USER_FUNC(evt_pouch_add_keepitem) {
-#else
 USER_FUNC(evt_pouch_remove_item_index) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -86,7 +82,6 @@ USER_FUNC(evt_pouch_remove_item_index) {
  * args[1] gets 0 if it fit or -1 if storage is full.
  */
 USER_FUNC(evt_pouch_add_keepitem) {
-#endif
     EvtWord* args = event->args;
     if (pouchAddKeepItem(evtGetValue(event, args[0]))) {
         evtSetValue(event, args[1], 0);
@@ -97,23 +92,13 @@ USER_FUNC(evt_pouch_add_keepitem) {
 }
 
 USER_FUNC(evt_pouch_remove_keepitem) {
-#if VERSION <= VERSION_DEMO_US
-    EvtWord* args = event->args;
-    if (pouchRemoveKeepItem(evtGetValue(event, args[0]))) {
-        evtSetValue(event, args[1], 0);
-#else
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 index = evtGetValue(event, args[1]);
     if (pouchRemoveKeepItem(id, index)) {
         evtSetValue(event, args[2], 0);
-#endif
     } else {
-#if VERSION <= VERSION_DEMO_US
-        evtSetValue(event, args[1], -1);
-#else
         evtSetValue(event, args[2], -1);
-#endif
     }
     return EVT_RETURN_DONE;
 }

@@ -594,11 +594,7 @@ EVT_BEGIN(village_chief_talk)
                     CALL(evt_msg_print, 0, STRING("irai_17_02"), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING("irai_17_03"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-                    CALL(evt_win_item_select, PTR(iri_15_item_tbl), LW(0))
-#else
                     CALL(evt_win_item_select, 0, PTR(iri_15_item_tbl), LW(0), 0)
-#endif
                     IF_INT_NOT_EQUAL(LW(0), -1)
                         CALL(evt_pouch_remove_item, ITEM_ROUTING_SLIP, LW(0))
                         CALL(evt_msg_print, 0, STRING("irai_17_04"), 0, 0)
@@ -751,11 +747,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(vivian_talk)
     CALL(evt_pouch_check_item, ITEM_SUPERBOMBOMB, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
-#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
-#endif
         IF_INT_NOT_EQUAL(LW(0), -1)
             CALL_CHILD(PTR(usu00_vivian_joinup_event))
             RETURN
@@ -1428,12 +1420,8 @@ EVT_BEGIN(usu00_vivian_cry_event)
     WAIT_FRAMES(1)
     CALL(evt_npc_set_autotalkpose, STRING("ビビアン"), STRING("PTR_S_3"), STRING("PTR_T_3"))
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 0)
-#else
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_key_onoff, 0)
-#endif
     CALL(evt_mario_normalize)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, -71, 68, 588, -71, -8, 88, 1000, EASING_SINE_IN_OUT)
@@ -1592,22 +1580,13 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     SET_VALUE(LW(8), STRING("ビビアン"))
     SET_VALUE(LW(9), PARTY_MEMBER_VIVIAN)
     CALL_CHILD(PTR(all_party_lecture))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
-#else
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
-#endif
     CALL(evt_msg_print_party, STRING("stg4_usu_123"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
     CALL(evt_msg_print_party, STRING("stg4_usu_124"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_cam3d_evt_off, 1000, 11)
-#else
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
-#endif
     WAIT_MS(1000)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
     SET_VALUE(GSWF_JIN_TRADING_PLACES_ACTIVE, 0)
@@ -1725,15 +1704,9 @@ EVT_BEGIN(usu00_crowAB_talk_event)
                 CALL(evt_mario_balloon_off)
                 SET_VALUE(LW(15), 0)
                 CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_party_cont_onoff, 0, 0)
-                CALL(mainwindow_opendisable)
-                CALL_CHILD(cam_up)
-#else
                 CALL(evt_party_cont_onoff, 0, 0)
                 CALL(mainwindow_opendisable)
                 CALL_CHILD(PTR(cam_up))
-#endif
                 CALL(evt_npc_get_position, STRING("カラスＢ"), LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
                 IF_INT_EQUAL(LW(7), 2)
@@ -1743,15 +1716,9 @@ EVT_BEGIN(usu00_crowAB_talk_event)
                 END_IF
                 CALL_CHILD(PTR(cam_down))
                 CALL(evt_mario_key_onoff, 1)
-#if VERSION <= VERSION_DEMO_US
                 CALL(evt_party_cont_onoff, 0, 1)
                 CALL(mainwindow_openenable)
             END_IF
-#else
-                CALL(evt_party_cont_onoff, 0, 1)
-                CALL(mainwindow_openenable)
-            END_IF
-#endif
         END_IF
     END_IF
     // When Vivian is the partner in party status 2 (Guess: hiding Mario in her shadow), the crows talk for real:
@@ -1771,12 +1738,8 @@ EVT_BEGIN(usu00_crowAB_talk_event)
         SET_VALUE(LW(15), 0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_cont_onoff, 0, 0)
-#else
             CALL(evt_party_cont_onoff, 0, 0)
             CALL(mainwindow_opendisable)
-#endif
             CALL_CHILD(PTR(cam_up))
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＢ"), LW(0), LW(1), LW(2))
@@ -1799,12 +1762,8 @@ EVT_BEGIN(usu00_crowAB_talk_event)
             END_SWITCH
             CALL_CHILD(PTR(cam_down))
             CALL(evt_mario_key_onoff, 1)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_cont_onoff, 0, 1)
-#else
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(mainwindow_openenable)
-#endif
             SET_VALUE(GW(0), 1)
         END_IF
     END_IF
@@ -1868,15 +1827,9 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
                 CALL(evt_mario_balloon_off)
                 SET_VALUE(LW(15), 0)
                 CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_party_cont_onoff, 0, 0)
-                CALL(mainwindow_opendisable)
-                CALL_CHILD(cam_up)
-#else
                 CALL(evt_party_cont_onoff, 0, 0)
                 CALL(mainwindow_opendisable)
                 CALL_CHILD(PTR(cam_up))
-#endif
                 CALL(evt_npc_get_position, STRING("カラスＤ"), LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
                 CALL(evt_mario_get_mode, LW(7))
@@ -1887,15 +1840,9 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
                 END_IF
                 CALL_CHILD(PTR(cam_down))
                 CALL(evt_mario_key_onoff, 1)
-#if VERSION <= VERSION_DEMO_US
                 CALL(evt_party_cont_onoff, 0, 1)
                 CALL(mainwindow_openenable)
             END_IF
-#else
-                CALL(evt_party_cont_onoff, 0, 1)
-                CALL(mainwindow_openenable)
-            END_IF
-#endif
         END_IF
     END_IF
     // When Vivian is the partner in party status 2 (Guess: hiding Mario in her shadow), the crows talk for real:
@@ -1915,12 +1862,8 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
         SET_VALUE(LW(15), 0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_cont_onoff, 0, 0)
-#else
             CALL(evt_party_cont_onoff, 0, 0)
             CALL(mainwindow_opendisable)
-#endif
             CALL_CHILD(PTR(cam_up))
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＤ"), LW(0), LW(1), LW(2))
@@ -1945,15 +1888,9 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
             END_SWITCH
             CALL_CHILD(PTR(cam_down))
             CALL(evt_mario_key_onoff, 1)
-#if VERSION <= VERSION_DEMO_US
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(mainwindow_openenable)
             SET_VALUE(GW(1), 1)
-#else
-            CALL(evt_party_cont_onoff, 0, 1)
-            CALL(mainwindow_openenable)
-            SET_VALUE(GW(1), 1)
-#endif
         END_IF
     END_IF
     WAIT_FRAMES(1)
@@ -1998,11 +1935,7 @@ static KinopioData kino_dt = {
     176, // breakfastItem
     {250.0f, 16.0f, -300.0f}, // breakfastPos
     10, // ryoukin
-#if VERSION <= VERSION_DEMO_US
-    {427.0f, 16.0f, -200.0f}, // bed
-#else
     {431.0f, 16.0f, -195.0f}, // bed
-#endif
     {397.0f, 0.0f, -168.0f}, // bedside
     {135.0f, 122.0f, -171.0f, 366.0f, 46.0f, -228.0f}, // cam
     -50.0f, // bedDeg
@@ -3687,11 +3620,7 @@ static EVT_BEGIN(sekai_yami_evt)
     SPAWN_EVENT(PTR(sekai_yami_shake))
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING("stg8_dark_05"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-    WAIT_MS(3000)
-#else
     WAIT_MS(1500)
-#endif
     CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("muj_01"), STRING("sekai_yami2"))
@@ -3888,12 +3817,8 @@ static EVT_BEGIN(evt_after_peach)
     CALL(evt_msg_print, 0, STRING("stg4_usu_157"), 0, STRING("村長"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_16_LEAVING_TWILIGHT_TOWN)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 1)
-#else
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
-#endif
     CALL(evt_npc_restart_regular_event, STRING("村人Ｃ"))
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｃ"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_stop_for_event)
@@ -4100,7 +4025,6 @@ EVT_BEGIN(usu_00_init_evt)
         CALL_CHILD(PTR(bero_case_switch_on))
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bero"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("e_bero"), 8388612)
         CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_02"), 1)
@@ -4122,29 +4046,6 @@ EVT_BEGIN(usu_00_init_evt)
         CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_19"), 1)
         CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_20"), 1)
     END_IF
-#else
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bero"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("e_bero"), 8388612)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_02"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_03"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_04"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_06"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_07"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_08"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_09"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_10"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_11"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_12"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_13"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_14"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_15"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_16"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_17"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_18"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_19"), 1)
-        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_20"), 1)
-    END_IF
-#endif
     // Save block, Star Piece, NPCs, house doors (Bowser gets locked-out scripts) and the inn.
     IF_INT_EQUAL(GF(1), 0)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 365, 60, -50, 0, 0)

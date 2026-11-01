@@ -1230,23 +1230,13 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
         case STATUS_CHARGE:
             unit->chargeStrength += strength;
             if (unit->chargeStrength < 0) {
-#if VERSION <= VERSION_DEMO_US
-                unit->chargeStrength = 0;
-            } else if (unit->chargeStrength > 99) {
-#else
                 unit->chargeStrength = 0;
                 return FALSE;
             }
             if (unit->chargeStrength > 99) {
-#endif
                 unit->chargeStrength = 99;
             }
             break;
-#if VERSION <= VERSION_DEMO_US
-        case STATUS_ALLERGIC:
-            unit->allergicTurns = turns;
-            break;
-#else
         case STATUS_ALLERGIC:
             if (turns > 0) {
                 unit->allergicTurns = turns;
@@ -1255,24 +1245,12 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
                 return FALSE;
             }
             break;
-#endif
         case STATUS_FLIPPED:
             unit->flippedTurns = turns;
             break;
         case STATUS_INVISIBLE:
             unit->invisibleTurns = turns;
             break;
-#if VERSION <= VERSION_DEMO_US
-        case STATUS_PAYBACK:
-            unit->paybackTurns = turns;
-            if (turns > 0) {
-                unit->paybackTurns = turns;
-            } else {
-                unit->paybackTurns = 0;
-                return FALSE;
-            }
-            break;
-#else
         case STATUS_PAYBACK:
             if (turns > 0) {
                 unit->paybackTurns = turns;
@@ -1281,7 +1259,6 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
                 return FALSE;
             }
             break;
-#endif
         case STATUS_HOLD_FAST:
             unit->holdFastTurns = turns;
             break;
@@ -1332,12 +1309,8 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
 // the 0x1E bytes from sleepTurns are every status's turns and strength
 void BtlUnit_ClearStatus(BattleUnit* unit) {
     memset(&unit->sleepTurns, 0, sizeof(BtlStatusCopy));
-#if VERSION <= VERSION_DEMO_US
-    BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
-#else
     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
     BattleStatusChangeInfoWorkInit(unit);
-#endif
 }
 
 /**
@@ -1981,19 +1954,11 @@ s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon) {
         if (cost <= 0) {
             cost = 1;
         }
-#if VERSION <= VERSION_DEMO_US
     }
     if (cost >= 1000) {
         cost = 999;
     }
     return cost;
-#else
-    }
-    if (cost >= 1000) {
-        cost = 999;
-    }
-    return cost;
-#endif
 }
 
 /** Whether the unit can afford a move: enough FP (shared for partners) and enough Star Power (baseSpCost x 100 AP). */

@@ -1,6 +1,5 @@
 // Pirate's Grotto (dou) lecture script: the paper genie (peramajin) teaches the boat move on a ship-change platform, run when the Boat Curse is found in dou_07.
 
-#include "version.h"
 #include "icon_ids.h"
 #include "evt/evt_window.h"
 #include "eff/eff_fukidashi.h"
@@ -881,20 +880,10 @@ EVT_BEGIN(ship_majin_lecture)
         // again, and the loop repeats; otherwise it exits.
         CALL(evt_msg_print_add, 0, STRING("stg1_gon_majin4_15_1"))
         CALL(evt_msg_select, 0, STRING("stg1_gon_majin4_16"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_continue)
         CALL(evt_cam_letter_box_disable, 0)
-#else
-        CALL(evt_cam_letter_box_disable, 0)
-#endif
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_mario_set_dir, 90, 300, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_toge, 1, 0, 0, 0)
-            CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_17"), 0, STRING("ペラ魔人"))
-#else
             CALL(evt_msg_print_add, 0, STRING("stg1_gon_majin4_17"))
-#endif
             ELSE
             CALL(x_flag_set, 0, 2)
             WAIT_FRAMES(2)
@@ -921,11 +910,7 @@ EVT_BEGIN(ship_majin_lecture)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_18"), 0, STRING("ペラ魔人"))
-#else
     CALL(evt_msg_print_add, 0, STRING("stg1_gon_majin4_18"))
-#endif
     CALL(x_flag_wait, 0, 2)
     // The camera returns, the genie plays his P_2 animation and is moved out of sight, and the lecture ends.
     CALL(lect_map_cam_chg, STRING("S_Ship_Change_01"), 4)
@@ -956,13 +941,8 @@ static USER_FUNC(lect_push_r_check) {
 static USER_FUNC(evt_nomal_cange) {
     MarioWork* mario = marioGetPtr();
 
-#if VERSION <= VERSION_DEMO_US
-    if (isFirstCall) {
-        marioRollCancel(); // the demo has no marioRollTryCancel
-#else
     if (isFirstCall) {
         marioRollTryCancel();
-#endif
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             motSlitCancel3();
         }

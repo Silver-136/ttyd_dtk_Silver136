@@ -1,6 +1,5 @@
 // Battle database of the Moon (moo.rel): stage data, enemy groups and the encounter tables of its maps.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -501,11 +500,7 @@ BattleUnitSetup btlparty_moo_moo_02_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {70.0f, 40.0f, 0.0f}, // position
-#else
         {50.0f, 40.0f, -10.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_z, // itemDropTable
@@ -515,11 +510,7 @@ BattleUnitSetup btlparty_moo_moo_02_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {110.0f, 40.0f, 10.0f}, // position
-#else
         {130.0f, 40.0f, 10.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_z, // itemDropTable
@@ -577,11 +568,7 @@ BattleUnitSetup btlparty_moo_moo_02_03_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {70.0f, 40.0f, 0.0f}, // position
-#else
         {50.0f, 40.0f, -10.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_z, // itemDropTable
@@ -591,11 +578,7 @@ BattleUnitSetup btlparty_moo_moo_02_03_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {110.0f, 40.0f, 10.0f}, // position
-#else
         {130.0f, 40.0f, 10.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_z, // itemDropTable

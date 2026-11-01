@@ -53,14 +53,8 @@ static BeroEntry bero_entry_data[3];
 EvtWord nazo_event[178];
 EvtWord oidasare_event[156];
 ExtTexInfo test_ext_entry_data[31];
-#if VERSION <= VERSION_DEMO_US
-static s16 suifu_animtbl[41];
-static s16 suifu_animtbl[42];
-static s16 elmos_animtbl[21];
-#else
 static s16 suifu_animtbl[42];
 static s16 elmos_animtbl[22];
-#endif
 s32 senin_event_suifupos[380];
 s32 senin_event_erumospos[180];
 #if VERSION >= VERSION_US
@@ -371,12 +365,8 @@ EVT_BEGIN(oidasare_event)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_34_KICKED_OFF)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 1)
-#else
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
-#endif
     RETURN
 EVT_END()
 
@@ -425,24 +415,14 @@ static s16 suifu_animtbl[] = {
     8, 8, 9, 9, 10, 10, 11, 11,
     12, 12, 13, 13, 14, 14, 15, 15,
     16, 16, 17, 17, 18, 18, 19, 19,
-#if VERSION <= VERSION_DEMO_US
-    -1,
     -1, 0,
 };
-#else
-    -1, 0,
-};
-#endif
 
 /** Frame sequence of the Embers on the hidden dock, ended by -1. */
 static s16 elmos_animtbl[] = {
     20, 20, 21, 21, 22, 22, 23, 23,
     24, 24, 25, 25, 26, 26, 27, 27,
-#if VERSION <= VERSION_DEMO_US
-    28, 28, 29, 29, -1,
-#else
     28, 28, 29, 29, -1, 0,
-#endif
 };
 
 /** Positions (x, y, z, facing) of the 95 sailors on the hidden dock, placed by senin_event. */
@@ -588,42 +568,22 @@ EVT_BEGIN(senin_event)
     CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_position, STRING("水夫D"), -158, 44, -160)
     CALL(evt_npc_set_ry, STRING("水夫D"), 90)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_SHADOW_NO_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_TALK_ANIM | NPC_FLAG_SHADOW_NO_FLOOR)
-#else
     CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
-#endif
     CALL(evt_npc_flag_onoff, 0, STRING("水夫D"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("モニー"), -159, 44, -257)
     CALL(evt_npc_set_ry, STRING("モニー"), 90)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_SHADOW_NO_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_TALK_ANIM | NPC_FLAG_SHADOW_NO_FLOOR)
-#else
     CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
-#endif
     CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("ピートン"), -195, 44, -264)
     CALL(evt_npc_set_ry, STRING("ピートン"), 90)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_SHADOW_NO_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_TALK_ANIM | NPC_FLAG_SHADOW_NO_FLOOR)
-#else
     CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
-#endif
     CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("ガラの悪い水夫"), -45, 120, -289)
     CALL(evt_npc_set_ry, STRING("ガラの悪い水夫"), 270)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_SHADOW_NO_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_TALK_ANIM | NPC_FLAG_SHADOW_NO_FLOOR)
-#else
     CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
-#endif
     CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("オドオド水夫"), -18, 120, -179)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_SHADOW_NO_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_TALK_ANIM | NPC_FLAG_SHADOW_NO_FLOOR)
-#else
     CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
-#endif
     CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
 #if VERSION < VERSION_US
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)

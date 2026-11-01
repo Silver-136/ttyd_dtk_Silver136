@@ -1,4 +1,3 @@
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -3464,14 +3463,10 @@ EVT_BEGIN(stg_08_1_init_sub_event)
     CALL(evt_eff, STRING("_hi2"), STRING("fire"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
     CALL(evt_mapobj_get_position, STRING("hi3"), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("_hi3"), STRING("fire"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(check_battle_end)
-#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi3"), MAP_OBJ_FLAG_HIDDEN)
     CALL(check_battle_end)
-#endif
     CALL(evt_eff_softdelete, STRING("_hi1"))
     CALL(evt_eff_softdelete, STRING("_hi2"))
     CALL(evt_eff_softdelete, STRING("_hi3"))
@@ -3484,21 +3479,6 @@ EVT_BEGIN(stg_08_1_init_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(stg_08_6_init_sub_event)
-    CALL(evt_mapobj_get_position, STRING("hi1"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi1"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_get_position, STRING("hi2"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi2"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_get_position, STRING("hi3"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi3"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_get_position, STRING("hi4"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi4"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_get_position, STRING("hi5"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi5"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_get_position, STRING("hi6"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi6"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-#else
 EVT_BEGIN(stg_08_6_init_sub_event)
     BEGIN_SIBLING_EVENT
         CALL(hi_fire_main)
@@ -3509,18 +3489,8 @@ EVT_BEGIN(stg_08_6_init_sub_event)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi4"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi5"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi6"), MAP_OBJ_FLAG_HIDDEN)
-#endif
     CALL(check_battle_end)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_eff_softdelete, STRING("__hi1"))
-    CALL(evt_eff_softdelete, STRING("__hi2"))
-    CALL(evt_eff_softdelete, STRING("__hi3"))
-    CALL(evt_eff_softdelete, STRING("__hi4"))
-    CALL(evt_eff_softdelete, STRING("__hi5"))
-    CALL(evt_eff_softdelete, STRING("__hi6"))
-#else
     CALL(hi_fire_end)
-#endif
     RETURN
 EVT_END()
 

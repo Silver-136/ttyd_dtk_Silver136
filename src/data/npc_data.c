@@ -178,21 +178,13 @@ NpcTribeInfo npcTribe[] = {
     {/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76", "c_odo_k", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {/*"水夫"*/"\x90\x85\x95\x76", "c_suifu_k", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {/*"ボロ水夫"*/"\x83\x7B\x83\x8D\x90\x85\x95\x76", "c_boro_k", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
-#if VERSION <= VERSION_DEMO_US
-    {"エルモス", "c_elmos", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
-#else
     {/*"エルモス"*/"\x83\x47\x83\x8B\x83\x82\x83\x58", "c_elmos", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
-#endif
     {/*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58", "c_bomt_n", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_PARTY_MOVE1L", "SFX_FLD_NPC_PARTY_MOVE1R", 12000, "SFX_FLD_NPC_PARTY_JUMP1", "SFX_FLD_NPC_PARTY_LANDING1"},
     {/*"サンダースへろへろ"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58\x82\xD6\x82\xEB\x82\xD6\x82\xEB", "c_bomt_n", "D_2", "D_2", "D_2", "T_1", "W_3", "R_3", "D_1", "D_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_PARTY_MOVE1L", "SFX_FLD_NPC_PARTY_MOVE1R", 12000, "SFX_FLD_NPC_PARTY_JUMP1", "SFX_FLD_NPC_PARTY_LANDING1"},
     {/*"サンダースねむる"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58\x82\xCB\x82\xDE\x82\xE9", "c_bomt_n", "N_1", "N_1", "N_1", "T_1", "W_3", "R_3", "D_1", "D_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_PARTY_MOVE1L", "SFX_FLD_NPC_PARTY_MOVE1R", 12000, "SFX_FLD_NPC_PARTY_JUMP1", "SFX_FLD_NPC_PARTY_LANDING1"},
     {/*"コルテス"*/"\x83\x52\x83\x8B\x83\x65\x83\x58", "c_korutesu3", "KRT_S_1", "KRT_Z_1", "KRT_S_1", "KRT_T_2", "KRT_W_1", "KRT_R_1", "KRT_D_1", "KRT_D_1", 60.0f, 60.0f, 0.0f, 0.0f, -15.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {/*"クリチェロ"*/"\x83\x4E\x83\x8A\x83\x60\x83\x46\x83\x8D", "c_kuribo_n", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
-    {"コブロン", "c_koburon", "S_1", "Z_1", "S_1", "S_1", "S_1", "S_1", "D_1", "S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#else
     {/*"コブロン"*/"\x83\x52\x83\x75\x83\x8D\x83\x93", "c_koburon", "S_1", "Z_1", "S_1", "T_1", "S_1", "S_1", "D_1", "S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#endif
     {/*"運転手"*/"\x89\x5E\x93\x5D\x8E\xE8", "c_unten", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {/*"マダム"*/"\x83\x7D\x83\x5F\x83\x80", "c_rose", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {/*"グルメキノピオ"*/"\x83\x4F\x83\x8B\x83\x81\x83\x4C\x83\x6D\x83\x73\x83\x49", "c_kinodebu", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
@@ -237,11 +229,7 @@ NpcTribeInfo npcTribe[] = {
 #else
     {/*"トゲノコ"*/"\x83\x67\x83\x51\x83\x6D\x83\x52", "c_togenoko", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_NOKO_MOVE3L", "SFX_FLD_ENM_NOKO_MOVE3R", 12000, "SFX_FLD_ENM_NOKO_JUMP1", NULL},
 #endif
-#if VERSION <= VERSION_DEMO_US
-    {"NPCハンマーブロス", "c_burosu_h", "BRO_S_1", "BRO_Z_1", "BRO_S_1", "BRO_T_1", "BRO_W_1", "BRO_R_1", "BRO_D_1", "BRO_K_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_NPC_NOKO_MOVE1L", "SFX_FLD_NPC_NOKO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
-#else
     {/*"NPCハンマーブロス"*/"\x4E\x50\x43\x83\x6E\x83\x93\x83\x7D\x81\x5B\x83\x75\x83\x8D\x83\x58", "c_burosu_h", "BRO_S_1", "BRO_Z_1", "BRO_S_1", "BRO_T_1", "BRO_W_1", "BRO_R_1", "BRO_D_1", "BRO_K_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_NPC_NOKO_MOVE1L", "SFX_FLD_NPC_NOKO_MOVE1R", 6000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
-#endif
     {/*"カメックババ"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E\x83\x6F\x83\x6F", "c_kamek_be", "S_2", "Z_2", "S_2", "T_9", "W_2", "R_2", "S_2", "S_2", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 70.0f, NULL, NULL, 0, NULL, NULL},
     {/*"カメックババ（地上）"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E\x83\x6F\x83\x6F\x81\x69\x92\x6E\x8F\xE3\x81\x6A", "c_kamek_be", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 70.0f, "SFX_KUPPA_KAMEBABA_MOVE1L", "SFX_KUPPA_KAMEBABA_MOVE1R", 12000, "SFX_KUPPA_KAMEBABA_JUMP1", "SFX_KUPPA_KAMEBABA_LANDING1"},
     {/*"カメックババ（息切れ）"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E\x83\x6F\x83\x6F\x81\x69\x91\xA7\x90\xD8\x82\xEA\x81\x6A", "c_kamek_be", "I_1", "Z_1", "I_1", "T_3", "I_2", "I_2", "I_1", "I_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 70.0f, "SFX_KUPPA_KAMEBABA_MOVE1L", "SFX_KUPPA_KAMEBABA_MOVE1R", 12000, "SFX_KUPPA_KAMEBABA_JUMP1", "SFX_KUPPA_KAMEBABA_LANDING1"},
@@ -264,23 +252,6 @@ NpcTribeInfo npcTribe[] = {
     {/*"ヤミパタクリ"*/"\x83\x84\x83\x7E\x83\x70\x83\x5E\x83\x4E\x83\x8A", "c_kuribo_y", "PTK_S_1", "PTK_Z_2", "PTK_S_1", "PTK_T_1", "PTK_W_1", "PTK_R_1", "PTK_D_1", "PTK_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_PATAKURI_MOVE1", "SFX_FLD_ENM_PATAKURI_MOVE1", 12000, NULL, NULL},
     {/*"ホネノコ敵"*/"\x83\x7A\x83\x6C\x83\x6D\x83\x52\x93\x47", "c_karon_g_h", "KRN_S_1", "KRN_Z_1", "KRN_S_1", "KRN_T_1", "KRN_W_1", "KRN_R_1", "KRN_D_1", "KRN_K_1", 24.0f, 36.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_HONENOKO_MOVE1L", "SFX_FLD_ENM_HONENOKO_MOVE1R", 12000, NULL, NULL},
     {/*"ボム兵"*/"\x83\x7B\x83\x80\x95\xBA", "c_bomhey", "BOM_S_1", "BOM_Z_1", "BOM_S_1", "BOM_T_1", "BOM_W_1", "BOM_R_1", "BOM_D_1", "BOM_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_BOMB_MOVE1", "SFX_FLD_ENM_BOMB_MOVE1", 12000, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
-    {"メット", "c_met", "MET_S_1", "MET_Z_1", "MET_S_1", "MET_T_1", "MET_W_1", "MET_R_1", "MET_D_1", "MET_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
-    {"メット", "c_met", "MET_S_1", "MET_Z_1", "MET_S_1", "MET_T_1", "MET_W_1", "MET_R_1", "MET_D_1", "MET_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
-    {"トゲメット", "c_met", "TMT_S_1", "TMT_Z_1", "TMT_S_1", "TMT_T_1", "TMT_W_1", "TMT_R_1", "TMT_D_1", "TMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
-    {"トゲメット", "c_met", "TMT_S_1", "TMT_Z_1", "TMT_S_1", "TMT_T_1", "TMT_W_1", "TMT_R_1", "TMT_D_1", "TMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
-    {"パタトゲメット", "c_met", "PTM_S_1", "PTM_Z_1", "PTM_S_1", "PTM_T_1", "PTM_W_1", "PTM_R_1", "PTM_D_1", "PTM_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
-    {"パタトゲメット", "c_met", "PTM_S_1", "PTM_Z_1", "PTM_S_1", "PTM_T_1", "PTM_W_1", "PTM_R_1", "PTM_D_1", "PTM_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
-    {"パタメット", "c_met", "PMT_S_1", "PMT_Z_1", "PMT_S_1", "PMT_T_1", "PMT_W_1", "PMT_R_1", "PMT_D_1", "PMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
-    {"パタメット", "c_met", "PMT_S_1", "PMT_Z_1", "PMT_S_1", "PMT_T_1", "PMT_W_1", "PMT_R_1", "PMT_D_1", "PMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
-    {"ハイパーメット", "c_met_h", "MET_S_1", "MET_Z_1", "MET_S_1", "MET_T_1", "MET_W_1", "MET_R_1", "MET_D_1", "MET_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
-    {"ハイパーメット", "c_met_h", "MET_S_1", "MET_Z_1", "MET_S_1", "MET_T_1", "MET_W_1", "MET_R_1", "MET_D_1", "MET_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
-    {"ハイパートゲメット", "c_met_h", "TMT_S_1", "TMT_Z_1", "TMT_S_1", "TMT_T_1", "TMT_W_1", "TMT_R_1", "TMT_D_1", "TMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
-    {"ハイパートゲメット", "c_met_h", "TMT_S_1", "TMT_Z_1", "TMT_S_1", "TMT_T_1", "TMT_W_1", "TMT_R_1", "TMT_D_1", "TMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
-    {"ハイパーパタトゲメット", "c_met_h", "PTM_S_1", "PTM_Z_1", "PTM_S_1", "PTM_T_1", "PTM_W_1", "PTM_R_1", "PTM_D_1", "PTM_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
-    {"ハイパーパタトゲメット", "c_met_h", "PTM_S_1", "PTM_Z_1", "PTM_S_1", "PTM_T_1", "PTM_W_1", "PTM_R_1", "PTM_D_1", "PTM_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
-    {"ハイパーパタメット", "c_met_h", "PMT_S_1", "PMT_Z_1", "PMT_S_1", "PMT_T_1", "PMT_W_1", "PMT_R_1", "PMT_D_1", "PMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
-#else
     {/*"メット"*/"\x83\x81\x83\x62\x83\x67", "c_met", "MET_S_1", "MET_Z_1", "MET_S_1", "MET_T_1", "MET_W_1", "MET_R_1", "MET_D_1", "MET_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
     {/*"トゲメット"*/"\x83\x67\x83\x51\x83\x81\x83\x62\x83\x67", "c_met", "TMT_S_1", "TMT_Z_1", "TMT_S_1", "TMT_T_1", "TMT_W_1", "TMT_R_1", "TMT_D_1", "TMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
     {/*"パタトゲメット"*/"\x83\x70\x83\x5E\x83\x67\x83\x51\x83\x81\x83\x62\x83\x67", "c_met", "PTM_S_1", "PTM_Z_1", "PTM_S_1", "PTM_T_1", "PTM_W_1", "PTM_R_1", "PTM_D_1", "PTM_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
@@ -289,7 +260,6 @@ NpcTribeInfo npcTribe[] = {
     {/*"ハイパートゲメット"*/"\x83\x6E\x83\x43\x83\x70\x81\x5B\x83\x67\x83\x51\x83\x81\x83\x62\x83\x67", "c_met_h", "TMT_S_1", "TMT_Z_1", "TMT_S_1", "TMT_T_1", "TMT_W_1", "TMT_R_1", "TMT_D_1", "TMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
     {/*"ハイパーパタトゲメット"*/"\x83\x6E\x83\x43\x83\x70\x81\x5B\x83\x70\x83\x5E\x83\x67\x83\x51\x83\x81\x83\x62\x83\x67", "c_met_h", "PTM_S_1", "PTM_Z_1", "PTM_S_1", "PTM_T_1", "PTM_W_1", "PTM_R_1", "PTM_D_1", "PTM_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
     {/*"ハイパーパタメット"*/"\x83\x6E\x83\x43\x83\x70\x81\x5B\x83\x70\x83\x5E\x83\x81\x83\x62\x83\x67", "c_met_h", "PMT_S_1", "PMT_Z_1", "PMT_S_1", "PMT_T_1", "PMT_W_1", "PMT_R_1", "PMT_D_1", "PMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
-#endif
     {/*"サンボ"*/"\x83\x54\x83\x93\x83\x7B", "c_sanbo", "SNB_S_1", "SNB_Z_1", "SNB_S_1", "SNB_T_1", "SNB_W_1", "SNB_W_1", "SNB_D_1", "SNB_K_1", 20.0f, 80.0f, 0.0f, 0.0f, 0.0f, 999.0f, "SFX_FLD_ENM_SAMBO_MOVE1", NULL, 20000, NULL, NULL},
     {/*"サンボマミー"*/"\x83\x54\x83\x93\x83\x7B\x83\x7D\x83\x7E\x81\x5B", "c_sanbo_m", "SNB_S_1", "SNB_Z_1", "SNB_S_1", "SNB_T_1", "SNB_W_1", "SNB_W_1", "SNB_D_1", "SNB_K_1", 20.0f, 80.0f, 0.0f, 0.0f, 0.0f, 999.0f, "SFX_FLD_ENM_SAMBO_MOVE1", NULL, 20000, NULL, NULL},
     {/*"シンエモン"*/"\x83\x56\x83\x93\x83\x47\x83\x82\x83\x93", "c_sinemon", "SIN_S_1", "SIN_Z_1", "SIN_S_1", "SIN_T_1", "SIN_W_1", "SIN_R_1", "SIN_D_1", "SIN_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_EMON_MOVE1L", "SFX_FLD_ENM_EMON_MOVE1R", 12000, NULL, NULL},
@@ -298,11 +268,7 @@ NpcTribeInfo npcTribe[] = {
     {/*"シンノスケ"*/"\x83\x56\x83\x93\x83\x6D\x83\x58\x83\x50", "c_sinnosuke", "SIS_S_1", "SIS_Z_1", "SIS_S_1", "SIS_T_1", "SIS_W_1", "SIS_R_1", "SIS_D_1", "SIS_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_EMON_MOVE1L", "SFX_FLD_ENM_EMON_MOVE1R", 12000, NULL, NULL},
     {/*"バサバサ"*/"\x83\x6F\x83\x54\x83\x6F\x83\x54", "c_basabasa", "BSA_S_1", "BSA_S_1", "BSA_S_1", "BSA_T_1", "BSA_S_1", "BSA_S_1", "BSA_D_1", "BSA_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BASA_MOVE1", "SFX_FLD_ENM_BASA_MOVE1", 12000, NULL, NULL},
     {/*"バサバサチュルル"*/"\x83\x6F\x83\x54\x83\x6F\x83\x54\x83\x60\x83\x85\x83\x8B\x83\x8B", "c_cyuru", "CYU_S_1", "CYU_S_1", "CYU_S_1", "CYU_T_1", "CYU_S_1", "CYU_S_1", "CYU_D_1", "CYU_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BASA_MOVE1", "SFX_FLD_ENM_BASA_MOVE1", 12000, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
-    {"バサバサグリーン", "c_basabasa_g", "CYU_S_1", "CYU_S_1", "CYU_S_1", "CYU_T_1", "CYU_S_1", "CYU_S_1", "CYU_D_1", "CYU_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BASA_MOVE1", "SFX_FLD_ENM_BASA_MOVE1", 12000, NULL, NULL},
-#else
     {/*"バサバサグリーン"*/"\x83\x6F\x83\x54\x83\x6F\x83\x54\x83\x4F\x83\x8A\x81\x5B\x83\x93", "c_basabasa_g", "BSA_S_1", "BSA_S_1", "BSA_S_1", "BSA_T_1", "BSA_S_1", "BSA_S_1", "BSA_D_1", "BSA_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BASA_MOVE1", "SFX_FLD_ENM_BASA_MOVE1", 12000, NULL, NULL},
-#endif
     {/*"ノコノコ敵"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x93\x47", "c_nokoteki", "NKT_S_1", "NKT_Z_1", "NKT_S_1", "NKT_T_1", "NKT_W_1", "NKT_R_1", "NKT_D_1", "NKT_K_1", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_NOKO_MOVE3L", "SFX_FLD_ENM_NOKO_MOVE3R", 12000, "SFX_FLD_ENM_NOKO_JUMP1", NULL},
     {/*"パタパタ"*/"\x83\x70\x83\x5E\x83\x70\x83\x5E", "c_nokoteki", "PTP_S_1", "PTP_Z_1", "PTP_S_1", "PTP_T_1", "PTP_W_1", "PTP_R_1", "PTP_D_1", "PTP_K_1", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 30.0f, "SFX_FLD_ENM_PATA_MOVE1", "SFX_FLD_ENM_PATA_MOVE1", 12000, NULL, NULL},
     {/*"ヤミノコノコ"*/"\x83\x84\x83\x7E\x83\x6D\x83\x52\x83\x6D\x83\x52", "c_yaminoko", "NKT_S_1", "NKT_Z_1", "NKT_S_1", "NKT_T_1", "NKT_W_1", "NKT_R_1", "NKT_D_1", "NKT_K_1", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_NOKO_MOVE3L", "SFX_FLD_ENM_NOKO_MOVE3R", 12000, "SFX_FLD_ENM_NOKO_JUMP1", NULL},
@@ -315,17 +281,9 @@ NpcTribeInfo npcTribe[] = {
     {/*"ゴールドチョロボン"*/"\x83\x53\x81\x5B\x83\x8B\x83\x68\x83\x60\x83\x87\x83\x8D\x83\x7B\x83\x93", "c_chorobon_k", "CBN_S_1", "CBN_Z_1", "CBN_S_1", "CBN_T_1", "CBN_W_1", "CBN_R_1", "CBN_D_1", "CBN_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, "SFX_FLD_ENM_CHORO1_MOVE1", NULL},
     {/*"パンジーさん"*/"\x83\x70\x83\x93\x83\x57\x81\x5B\x82\xB3\x82\xF1", "c_pansy", "PAN_S_1", "PAN_Z_1", "PAN_S_1", "PAN_T_1", "PAN_W_1", "PAN_R_1", "PAN_D_1", "PAN_K_1", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_PANZI_MOVE1L", "SFX_FLD_ENM_PANZI_MOVE1R", 12000, NULL, NULL},
     {/*"きらめくパンジーさん"*/"\x82\xAB\x82\xE7\x82\xDF\x82\xAD\x83\x70\x83\x93\x83\x57\x81\x5B\x82\xB3\x82\xF1", "c_kpansy", "PAN_S_1_K", "PAN_Z_1_K", "PAN_S_1_K", "PAN_T_1_K", "PAN_W_1_K", "PAN_R_1_K", "PAN_D_1_K", "PAN_K_1_K", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_PANZI_MOVE1L", "SFX_FLD_ENM_PANZI_MOVE1R", 12000, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
-    {"キラー大砲", "c_killtai", "KTA_S_1", "KTA_Z_1", "KTA_S_1", "KTA_T_1", "KTA_S_1", "KTA_S_1", "KTA_D_1", "KTA_K_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#else
     {/*"キラー大砲"*/"\x83\x4C\x83\x89\x81\x5B\x91\xE5\x96\x43", "c_killtai", "KTA_S_1", "KTA_Z_1", "KTA_S_1", "KTA_T_1", "KTA_S_1", "KTA_S_1", "KTA_D_1", "KTA_K_1", 45.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#endif
     {/*"キラー"*/"\x83\x4C\x83\x89\x81\x5B", "c_kilr", "KIL_S_1", "KIL_Z_1", "KIL_S_1", "KIL_T_1", "KIL_W_1", "KIL_R_1", "KIL_D_1", "KIL_K_1", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
-    {"スーパーキラー大砲", "c_killtai_g", "KTA_S_1", "KTA_Z_1", "KTA_S_1", "KTA_T_1", "KTA_S_1", "KTA_S_1", "KTA_D_1", "KTA_K_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#else
     {/*"スーパーキラー大砲"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x89\x81\x5B\x91\xE5\x96\x43", "c_killtai_g", "KTA_S_1", "KTA_Z_1", "KTA_S_1", "KTA_T_1", "KTA_S_1", "KTA_S_1", "KTA_D_1", "KTA_K_1", 45.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#endif
     {/*"スーパーキラー"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x4C\x83\x89\x81\x5B", "c_kilr_g", "KIL_S_1", "KIL_Z_1", "KIL_S_1", "KIL_T_1", "KIL_W_1", "KIL_R_1", "KIL_D_1", "KIL_K_1", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {/*"トゲダルマー"*/"\x83\x67\x83\x51\x83\x5F\x83\x8B\x83\x7D\x81\x5B", "c_togedaruma", "TGD_S_1", "TGD_Z_1", "TGD_S_1", "TGD_T_1", "TGD_S_1", "TGD_S_1", "TGD_D_1", "TGD_K_1", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {/*"ヤミトゲダルマー"*/"\x83\x84\x83\x7E\x83\x67\x83\x51\x83\x5F\x83\x8B\x83\x7D\x81\x5B", "c_togedaruma_b", "TGD_S_1", "TGD_Z_1", "TGD_S_1", "TGD_T_1", "TGD_S_1", "TGD_S_1", "TGD_D_1", "TGD_K_1", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
@@ -371,20 +329,10 @@ NpcTribeInfo npcTribe[] = {
     {/*"チャンピオン"*/"\x83\x60\x83\x83\x83\x93\x83\x73\x83\x49\x83\x93", "c_bred_h", "Z_1", "Z_1", "Z_1", "Z_1", "Z_1", "Z_1", "Z_1", "Z_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {/*"マッチョガンス"*/"\x83\x7D\x83\x62\x83\x60\x83\x87\x83\x4B\x83\x93\x83\x58", "c_m_gansu", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {/*"ワンワン"*/"\x83\x8F\x83\x93\x83\x8F\x83\x93", "c_wanwan", "WAN_S_1A", "WAN_Z_1", "WAN_S_1A", "WAN_A_1", "WAN_S_1A", "WAN_S_1A", "WAN_D_1", "WAN_K_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
-    {"バブル", "c_bubble", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
-    {"バブル", "c_bubble", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
-    {"ファントム", "c_phantom", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
-    {"ファントム", "c_phantom", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
-    {"ヘビーボム", "c_heavy", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 40.0f, 60.0f, 0.0f, 0.0f, -10.0f, 20.0f, "SFX_FLD_ENM_BOMB_MOVE1", "SFX_FLD_ENM_BOMB_MOVE1", 12000, NULL, NULL},
-    {"ヘビーボム", "c_heavy", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 40.0f, 60.0f, 0.0f, 0.0f, -10.0f, 22.0f, "SFX_FLD_ENM_BOMB_MOVE1", "SFX_FLD_ENM_BOMB_MOVE1", 12000, NULL, NULL},
-    {"ジャイアントボム", "c_giant", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 40.0f, 60.0f, 0.0f, 0.0f, -10.0f, 20.0f, "SFX_FLD_ENM_BOMB_MOVE1", "SFX_FLD_ENM_BOMB_MOVE1", 12000, NULL, NULL},
-#else
     {/*"バブル"*/"\x83\x6F\x83\x75\x83\x8B", "c_bubble", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
     {/*"ファントム"*/"\x83\x74\x83\x40\x83\x93\x83\x67\x83\x80", "c_phantom", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
     {/*"ヘビーボム"*/"\x83\x77\x83\x72\x81\x5B\x83\x7B\x83\x80", "c_heavy", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 40.0f, 60.0f, 0.0f, 0.0f, -10.0f, 22.0f, "SFX_FLD_ENM_BOMB_MOVE1", "SFX_FLD_ENM_BOMB_MOVE1", 12000, NULL, NULL},
     {/*"ジャイアントボム"*/"\x83\x57\x83\x83\x83\x43\x83\x41\x83\x93\x83\x67\x83\x7B\x83\x80", "c_giant", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 40.0f, 60.0f, 0.0f, 0.0f, -10.0f, 22.0f, "SFX_FLD_ENM_BOMB_MOVE1", "SFX_FLD_ENM_BOMB_MOVE1", 12000, NULL, NULL},
-#endif
     {/*"バーストワンワン"*/"\x83\x6F\x81\x5B\x83\x58\x83\x67\x83\x8F\x83\x93\x83\x8F\x83\x93", "c_wanwan_a", "WAN_S_1A", "WAN_Z_1", "WAN_S_1A", "WAN_A_1", "WAN_S_1A", "WAN_S_1A", "WAN_D_1", "WAN_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {/*"トゲノコエース"*/"\x83\x67\x83\x51\x83\x6D\x83\x52\x83\x47\x81\x5B\x83\x58", "c_togenoko_b", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_NOKO_MOVE3L", "SFX_FLD_ENM_NOKO_MOVE3R", 12000, "SFX_FLD_ENM_NOKO_JUMP1", NULL},
     {/*"ダークキーパー"*/"\x83\x5F\x81\x5B\x83\x4E\x83\x4C\x81\x5B\x83\x70\x81\x5B", "c_monban_t", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},

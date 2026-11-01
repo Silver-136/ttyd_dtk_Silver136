@@ -162,12 +162,8 @@ void statusWinMain(void) {
                     if (wp->idle > gp->framerate * 10) {
                         wp->idle = gp->framerate * 10;
                         if (!wp->forcedClose && !wp->forceTimer && !statusWinCheck()) {
-#if VERSION <= VERSION_DEMO_US
-                            statusWinOpen();
-#else
                             statusWinOpen();
                             wp->flags |= STATUS_WINDOW_FLAG_MENU_ICONS;
-#endif
                         }
                     }
                 } else {
@@ -413,61 +409,6 @@ void statusWinDisp(CameraId camId, void* param) {
             numDisp(120.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyHp, 0);
         }
         numDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
-#if VERSION <= VERSION_DEMO_US
-    }
-
-    if (wp->flags & STATUS_WINDOW_FLAG_MENU_ICONS && !gp->inBattle) {
-        y2 = -180.0f + (wp->openY - wp->y);
-        MTXTrans(m2, -190.0f, y2, 0.0f);
-        MTXScale(s2, 0.75f, 0.75f, 0.75f);
-        MTXConcat(m2, s2, m2);
-        // US and PAL pick the menu icons (and the badge icon's offset) per language; JP and the demos use fixed icons
-        iconDispGxCol(m2, 0x10, ICON_212, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        if (swByteGet(GSW_STORY_PROGRESS) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA)) {
-            MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
-            MTXScale(s2, 0.75f, 0.75f, 0.75f);
-            MTXConcat(m2, s2, m2);
-            iconDispGxCol(m2, 0x10, (u16)party_icon_tbl[gp->language], (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        }
-        MTXTrans(m2, -190.0f, 50.0f + y2, 0.0f);
-        MTXScale(s2, 0.75f, 0.75f, 0.75f);
-        MTXConcat(m2, s2, m2);
-        iconDispGxCol(m2, 0x10, (u16)gear_icon_tbl[gp->language], (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        if (swByteGet(GSW_STORY_PROGRESS) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) {
-            f32 xoff[6] = {0.0f, 10.0f, 3.0f, 8.0f, 8.0f, 0.0f};
-            MTXTrans(m2, -130.0f + xoff[gp->language], 16.0f + y2, 0.0f);
-            MTXScale(s2, 0.75f, 0.75f, 0.75f);
-            MTXConcat(m2, s2, m2);
-            iconDispGxCol(m2, 0x10, (u16)badge_icon_tbl[gp->language], (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        }
-        MTXTrans(m2, -190.0f, y2 - 25.0f, 0.0f);
-        MTXScale(s2, 0.75f, 0.75f, 0.75f);
-        MTXConcat(m2, s2, m2);
-        iconDispGxCol(m2, 0x10, (u16)journal_icon_tbl[gp->language], (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        iconDispGxCol(m2, 0x10, 0x212, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        if (swByteGet(GSW_STORY_PROGRESS) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA)) {
-            MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
-            MTXScale(s2, 0.75f, 0.75f, 0.75f);
-            MTXConcat(m2, s2, m2);
-            iconDispGxCol(m2, 0x10, 0x213, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        }
-        MTXTrans(m2, -190.0f, 50.0f + y2, 0.0f);
-        MTXScale(s2, 0.75f, 0.75f, 0.75f);
-        MTXConcat(m2, s2, m2);
-        iconDispGxCol(m2, 0x10, 0x214, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        if (swByteGet(GSW_STORY_PROGRESS) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) {
-            MTXTrans(m2, -130.0f, 16.0f + y2, 0.0f);
-            MTXScale(s2, 0.75f, 0.75f, 0.75f);
-            MTXConcat(m2, s2, m2);
-            iconDispGxCol(m2, 0x10, 0x215, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        }
-        MTXTrans(m2, -190.0f, y2 - 25.0f, 0.0f);
-        MTXScale(s2, 0.75f, 0.75f, 0.75f);
-        MTXConcat(m2, s2, m2);
-        iconDispGxCol(m2, 0x10, 0x216, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    }
-}
-#else
     }
 
     if (wp->flags & STATUS_WINDOW_FLAG_MENU_ICONS && !gp->inBattle) {
@@ -516,7 +457,6 @@ void statusWinDisp(CameraId camId, void* param) {
 #endif
     }
 }
-#endif
 
 /**
  * Reads the values the HUD shows: from the pouch in the field (the partner from the party),
@@ -536,26 +476,9 @@ void statusGetValue(StatusValue* values) {
         values->maxAp = pouchGetMaxAP();
         values->starPoints = pouchGetStarPoint();
         values->coins = pouchGetCoin();
-#if VERSION <= VERSION_DEMO_US
-        if (!marioBgmodeChk()) {
-#endif
-#if VERSION <= VERSION_DEMO_US
-            values->party = marioGetParty();
-#else
         values->party = !marioBgmodeChk() ? (s16)marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
-#endif
         values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
         values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
-#if VERSION <= VERSION_DEMO_US
-            if (values->party) {
-                wp->cur.lastParty = values->party;
-            }
-        } else {
-            values->party = wp->cur.lastParty;
-            values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
-            values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
-        }
-#endif
     } else {
         bw = _battleWorkPointer;
         mario = BattleGetMarioPtr(bw);
@@ -672,11 +595,7 @@ void valueUpdate(void) {
         return;
     }
     d = calcStep(v.coins, wp->cur.coins);
-#if VERSION <= VERSION_DEMO_US
-    if (d && !(count % 6)) {
-#else
     if (d && !(count % 8)) {
-#endif
         psndSFXOn("SFX_COUNT_COIN1");
     }
     wp->cur.hp += calcStep(v.hp, wp->cur.hp);
@@ -812,16 +731,12 @@ void statusAPBlink(s32 frames) {
 }
 
 // Descriptive name (not in the symbol maps).
-#if VERSION <= VERSION_DEMO_US
-void statusFPBlink(s32 frames) {
-#else
 void statusClearBlink(void) {
     wp->blink = 0;
 }
 
 /** Makes the FP number blink for frames. */
 void statusFPBlink(s32 frames) {
-#endif
     wp->blink |= 2;
     wp->blinkTimer = frames;
 }

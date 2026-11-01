@@ -1,4 +1,3 @@
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -511,11 +510,7 @@ BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {50.0f, 0.0f, -10.0f}, // position
-#else
         {30.0f, 0.0f, -10.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_gundan_zako, // itemDropTable
@@ -525,11 +520,7 @@ BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {90.0f, 40.0f, 0.0f}, // position
-#else
         {70.0f, 40.0f, 0.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_z, // itemDropTable
@@ -539,11 +530,7 @@ BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {130.0f, 40.0f, 10.0f}, // position
-#else
         {150.0f, 40.0f, 20.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_z, // itemDropTable
@@ -621,11 +608,7 @@ BattleUnitSetup btlparty_aji_aji_04_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {70.0f, 40.0f, 0.0f}, // position
-#else
         {50.0f, 40.0f, -10.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_custom, // itemDropTable
@@ -635,11 +618,7 @@ BattleUnitSetup btlparty_aji_aji_04_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {110.0f, 40.0f, 10.0f}, // position
-#else
         {130.0f, 40.0f, 10.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_custom, // itemDropTable
@@ -696,11 +675,7 @@ BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {50.0f, 0.0f, -10.0f}, // position
-#else
         {30.0f, 0.0f, -10.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_gundan_zako_magician, // itemDropTable
@@ -710,11 +685,7 @@ BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {90.0f, 40.0f, 0.0f}, // position
-#else
         {70.0f, 40.0f, 0.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern, // itemDropTable
@@ -724,11 +695,7 @@ BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {130.0f, 40.0f, 10.0f}, // position
-#else
         {150.0f, 40.0f, 20.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_z, // itemDropTable
@@ -893,11 +860,7 @@ BattleUnitSetup btlparty_aji_aji_13_02_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {70.0f, 40.0f, 0.0f}, // position
-#else
         {50.0f, 40.0f, -10.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_z, // itemDropTable
@@ -907,11 +870,7 @@ BattleUnitSetup btlparty_aji_aji_13_02_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
-        {110.0f, 40.0f, 10.0f}, // position
-#else
         {130.0f, 40.0f, 10.0f}, // position
-#endif
         0, // hitOffsetX
         {0}, // unitWork
         battle_item_barriern_z, // itemDropTable

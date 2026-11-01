@@ -640,41 +640,17 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
     s32 i;
     s32 rank;
 
-#if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG3_34_RETURN_TO_ROGUEPORT) {
-        // the demo also counts the fighters taken out of the ranking
-        for (i = 0; i < rank_wp->count; i++) {
-            if (rank_wp->entries[i].flags & RANK_PLAYER) {
-#else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank = 0;
         for (i = 0; i < rank_wp->count; i++) {
             if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
                 if (rank_wp->entries[i].flags & RANK_PLAYER) {
-#endif
-                    break;
-                }
-#if VERSION <= VERSION_DEMO_US
-        }
-#endif
-#if VERSION <= VERSION_DEMO_US
-        rank = i;
-        rank = 0;
-        for (i = 0; i < rank_wp->count; i++) {
-            if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
-                if (rank_wp->entries[i].flags & RANK_PLAYER) {
                     break;
                 }
                 rank++;
             }
         }
         if (rank > 10) {
-#else
-                rank++;
-            }
-        }
-        if (rank > 10) {
-#endif
             rules = ruleDt_2bu;
             num = 10;
         } else {
@@ -711,41 +687,17 @@ static USER_FUNC(evt_tou_get_rule_info) {
     s32 i;
     s32 rank;
 
-#if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG3_34_RETURN_TO_ROGUEPORT) {
-        // the demo also counts the fighters taken out of the ranking
-        for (i = 0; i < rank_wp->count; i++) {
-            if (rank_wp->entries[i].flags & RANK_PLAYER) {
-#else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank = 0;
         for (i = 0; i < rank_wp->count; i++) {
             if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
                 if (rank_wp->entries[i].flags & RANK_PLAYER) {
-#endif
-                    break;
-                }
-#if VERSION <= VERSION_DEMO_US
-        }
-#endif
-#if VERSION <= VERSION_DEMO_US
-        rank = i;
-        rank = 0;
-        for (i = 0; i < rank_wp->count; i++) {
-            if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
-                if (rank_wp->entries[i].flags & RANK_PLAYER) {
                     break;
                 }
                 rank++;
             }
         }
         if (rank > 10) {
-#else
-                rank++;
-            }
-        }
-        if (rank > 10) {
-#endif
             rules = ruleDt_2bu;
             num = 10;
         } else {
@@ -937,11 +889,7 @@ static USER_FUNC(evt_tou_get_next_match) {
     if (rank > 0) {
         if (reverse) {
             evtSetValue(event, args[0], list[rank - 1]);
-#if VERSION <= VERSION_DEMO_US
-        } else if (rank != num - 1) {
-#else
         } else if (rank + 1 < num) {
-#endif
             evtSetValue(event, args[0], list[rank + 1]);
         } else {
             evtSetValue(event, args[0], list[rank - 1]);
@@ -1219,39 +1167,6 @@ static void insert(s32* arr, s32 n, s32 from, s32 to) {
         }
         arr[to] = tmp;
     }
-#if VERSION <= VERSION_DEMO_US
-}
-
-/**
- * Script helper that resets the arena ranking when the player starts the tournament again:
- * saves and frees the old table, takes the Champ's Belt from the inventory,
- * clears the per-fighter and story flags of the Glitz Pit run, and builds a fresh ranking.
- */
-USER_FUNC(tou2_rankingReset) {
-    s32 i;
-
-    rankingExit();
-    pouchRemoveItem(0x41);
-    for (i = 0; i < 20; i++) {
-        swClear(i + GSWF_TOU_FIGHTER_BELOW_BASE);
-    }
-    swClear(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN);
-    swClear(GSWF_TOU_CHAMP_OPENING_SEEN);
-    swClear(GSWF_TOU_CHAMP_WIN_SEEN);
-    swClear(GSWF_TOU_TITLE_MATCH_RESERVED);
-    swClear(GSWF_TOU_RANKING_SAVED);
-    swClear(GSWF_TOU_LAST_OPPONENT_VALID);
-    swClear(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN);
-    rankingInit();
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that saves the ranking to the game state
- * and rebuilds it (used when story progress changes which fighters are listed).
- */
-static USER_FUNC(evt_rankingReInit) {
-#else
 }
 
 /**
@@ -1284,7 +1199,6 @@ USER_FUNC(tou2_rankingReset) {
  * and rebuilds it (used when story progress changes which fighters are listed).
  */
 static USER_FUNC(evt_rankingReInit) {
-#endif
     rankingExit();
     rankingInit();
     return EVT_RETURN_DONE;
@@ -1374,11 +1288,7 @@ static void rankingInit(void) {
         }
 
         // If we're past this point in the story, Bandy Andy got "retired" and The Destructors were added.
-#if VERSION <= VERSION_DEMO_US
-        if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STORY_STG3_20_06_RAWK_HAWKS_WARNING) {
-#else
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_JOINED)) {
-#endif
             rank_wp->entries[FIGHTER_BANDITS].flags |= RANK_HIDDEN;
             rank_wp->entries[FIGHTER_SPINIA].flags &= ~RANK_HIDDEN;
 

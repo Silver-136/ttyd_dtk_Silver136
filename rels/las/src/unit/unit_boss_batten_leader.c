@@ -65,18 +65,11 @@ USER_FUNC(btlevtcmd_AnimeGetPose);
 USER_FUNC(datastrcopy);
 static USER_FUNC(enzan_lw_load);
 USER_FUNC(enzan_lw_load2);
-#if VERSION <= VERSION_DEMO_US
-static USER_FUNC(enzan_lw_save);
-static USER_FUNC(enzan_lw_save2);
-static USER_FUNC(pose_check_evt_run);
-static USER_FUNC(pose_check_evt_stop);
-#else
 static USER_FUNC(enzan_lw_save);
 USER_FUNC(enzan_lw_save2);
 USER_FUNC(pose_check_evt_run);
 USER_FUNC(pose_check_evt_stop);
 USER_FUNC(_hp_gauge_flag_on);
-#endif
 USER_FUNC(battenSatelliteToOutside);
 USER_FUNC(battenSatelliteToInside);
 USER_FUNC(battleGetBattenSatelliteInitPos);
@@ -162,11 +155,7 @@ static EvtWord damage_event[47];
 EvtWord damage_sub_event[148];
 static EvtWord phase_event[28];
 EvtWord monster_before_phase_event[195];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[126];
-#else
 static EvtWord dead_event[165];
-#endif
 static Vec splineTableIn1_1[5];
 static Vec splineTableIn2_1[5];
 static Vec splineTableIn2_2[5];
@@ -198,11 +187,7 @@ EvtWord batten_leader_ice_attack_event[321];
 EvtWord batten_leader_shikaeshi_attack_event[176];
 EvtWord batten_leader_yokeyoke_attack_event[176];
 EvtWord batten_leader_stop_attack_event[328];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord wait_event[15];
-#else
 static EvtWord wait_event[16];
-#endif
 
 /**
  * Event script: moves the battle camera to the close view of Sir Grodus (position 83, 84, 349 looking at 83, 60,
@@ -646,11 +631,7 @@ static PoseTableEntry pose_table_furafura[] = {
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, damage_sub_event},
-#if VERSION <= VERSION_DEMO_US
-    {50, dead_event},
-#else
     {UNIT_DATA_DEAD_EVENT, dead_event},
-#endif
     {0, NULL},
 };
 
@@ -1601,15 +1582,11 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 EVT_BEGIN(damage_sub_event)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_GetDamage, LW(10), LW(0))
-#else
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(_hp_gauge_flag_on, LW(10))
     END_IF
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
-#endif
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHitPos, LW(10), LW(11), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_ATTACK_MISS2"), LW(0), LW(1), LW(2), 0)
@@ -1753,24 +1730,6 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_WaitAttackEnd)
     SET_VALUE(LW(0), 9)
     LOOP(4)
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(0), LW(1))
-        CALL(btlevtcmd_GetUnitId, LW(1), LW(1))
-        IF_INT_NOT_EQUAL(LW(1), -1)
-            CALL(btlevtcmd_KillUnit, LW(1), 1)
-            CALL(btlevtcmd_CheckDamageCode, LW(1), DAMAGE_RESULT_ZERO_HP, LW(2))
-            IF_INT_EQUAL(LW(2), 0)
-                SET_VALUE(LW(10), LW(1))
-                BEGIN_INLINE_EVENT
-                    CALL_CHILD(subsetevt_dead_core)
-                    CALL(btlevtcmd_GetBodyId, LW(10), LW(11))
-                    CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), kHidden)
-                    CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), kNoShadow)
-                END_INLINE_EVENT
-                WAIT_MS(200)
-            END_IF
-        END_IF
-#else
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(0), LW(1))
         CALL(btlevtcmd_GetUnitId, LW(1), LW(1))
         IF_INT_NOT_EQUAL(LW(1), -1)
@@ -1786,17 +1745,10 @@ static EVT_BEGIN(dead_event)
                 WAIT_MS(200)
             END_IF
         END_IF
-#endif
         ADD(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-    END_LOOP
-    WAIT_MS(1000)
-    CALL(btlevtcmd_StatusWindowOnOff, 0)
-#else
     END_LOOP
     WAIT_MS(1000)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-#endif
     CALL(pose_check_evt_stop)
     CALL(enzan_lw_save)
     SET_VALUE(LW(5), PTR(&btl_shuryolight_pow_tenmetu))
@@ -2759,13 +2711,8 @@ static EVT_BEGIN(wait_event)
         WAIT_FRAMES(1)
         CALL(check_satellite)
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
-    RETURN
-EVT_END()
-#else
     RETURN
 EVT_END_PAD()
-#endif
 
 USER_FUNC(btlevtcmd_AnimeGetPose) {
     s32 id;
@@ -2950,10 +2897,6 @@ void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
                 animPoseDrawShape(pose, sh);
             }
             break;
-#if VERSION <= VERSION_DEMO_US
-    }
-}
-#else
     }
 }
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000d538, JP las .text+0xD46C. See docs/NAME_PROVENANCE.md.
@@ -2970,7 +2913,6 @@ USER_FUNC(_hp_gauge_flag_on) {
     }
     return EVT_RETURN_DONE;
 }
-#endif
 /**
  * Starts moving satellite n of the unit along a spline:
  * allocates a 5-point spline from table, remembers the table on the satellite's body part,

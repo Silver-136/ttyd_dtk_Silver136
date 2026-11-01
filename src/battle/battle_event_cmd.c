@@ -3730,9 +3730,6 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
     if (isFirstCall) {
         event->userdata[0] = time;
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
-#if VERSION <= VERSION_DEMO_US
-        itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
-#endif
         return EVT_RETURN_BLOCK;
     }
     if (--event->userdata[0] > 0) {
@@ -3781,12 +3778,7 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
             }
         }
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, pos.x, pos.y, pos.z);
-#if VERSION <= VERSION_DEMO_US
         effItemGetEntry(10, pos.x, 12.0f + pos.y, pos.z - 5.0f);
-        itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
-#else
-        effItemGetEntry(10, pos.x, 12.0f + pos.y, pos.z - 5.0f);
-#endif
         if (kind == UNIT_MARIO) {
             psndSFXOn_3D("SFX_ITEM_MARIO_USE1", &pos);
         } else if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX) {
@@ -4441,11 +4433,7 @@ USER_FUNC(btlevtcmd_GetConfuseActEvent) {
     while (!evt) {
         evt = BattleSetConfuseAct(_battleWorkPointer, unit);
         i++;
-#if VERSION <= VERSION_DEMO_US
-        if (i > 10) {
-#else
         if (i > 20) {
-#endif
             evt = subsetevt_confuse_flustered;
         }
     }
@@ -7020,29 +7008,7 @@ USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
  * Used by Star Power special moves that need a clear stage.
  */
 #endif
-#if VERSION <= VERSION_DEMO_US
-USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    BattleUnit* unit;
-    s32 id;
-
-    id = evtGetValue(event, args[0]);
-    id = BattleTransID(event, id);
-    unit = BattleGetUnitPtr(wp, id);
-    unit->hitEventCode = (void*)evtGetValue(event, args[1]);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script: slides the battle stage's background objects off screen (args[0] = 0: sideways 450 units for the back
- * layers, up 260 for the top layer) or back into place (nonzero) over 45 frames; blocks until done.
- * Used by Star Power special moves that need a clear stage.
- */
 USER_FUNC(btlevtcmd_SacBgsetMove) {
-#else
-USER_FUNC(btlevtcmd_SacBgsetMove) {
-#endif
     BattleWork* wp = _battleWorkPointer;
     s32 on, i;
     BattleStageObject* obj;

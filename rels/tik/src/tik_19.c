@@ -1,4 +1,3 @@
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -150,11 +149,7 @@ static EVT_BEGIN(evt_majin)
             ADD(LW(1), 30)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
             CALL(evt_msg_print, 0, STRING("mac_majin_10"), PTR(majin_callback), 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_win_item_select, PTR(key_tbl), LW(0))
-#else
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
-#endif
             IF_INT_EQUAL(LW(0), -1)
                 CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
                 ADD(LW(1), 30)
@@ -200,12 +195,7 @@ static EVT_BEGIN(evt_majin)
 EVT_END()
 
 static EVT_BEGIN(evt_majin2)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_normalize)
-#else
-    CALL(evt_mario_key_onoff, 0)
-#endif
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_pouch_add_item, ITEM_PLANE_CURSE, LW(0))
     CALL(evt_snd_bgmoff, PSND_PAUSE)

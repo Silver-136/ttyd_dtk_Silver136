@@ -573,11 +573,7 @@ EVT_BEGIN(konarikin_talk)
                     CALL(evt_pouch_check_item, ITEM_SHROOM_CAKE, LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_05"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-                        CALL(evt_win_item_select, PTR(iri_29_item_tbl1), LW(0))
-#else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl1), LW(0), 0)
-#endif
                         IF_INT_NOT_EQUAL(LW(0), -1)
                             CALL(evt_pouch_remove_item, ITEM_SHROOM_CAKE, LW(0))
                             CALL(evt_msg_print, 0, STRING("irai_29_08"), 0, 0)
@@ -592,11 +588,7 @@ EVT_BEGIN(konarikin_talk)
                     CALL(evt_pouch_check_item, ITEM_KEEL_MANGO, LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_06"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-                        CALL(evt_win_item_select, PTR(iri_29_item_tbl2), LW(0))
-#else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl2), LW(0), 0)
-#endif
                         IF_INT_NOT_EQUAL(LW(0), -1)
                             CALL(evt_pouch_remove_item, ITEM_KEEL_MANGO, LW(0))
                             CALL(evt_msg_print, 0, STRING("irai_29_09"), 0, 0)
@@ -611,11 +603,7 @@ EVT_BEGIN(konarikin_talk)
                     CALL(evt_pouch_check_item, ITEM_FRIGHT_MASK, LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_07"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-                        CALL(evt_win_item_select, PTR(iri_29_item_tbl3), LW(0))
-#else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl3), LW(0), 0)
-#endif
                         IF_INT_NOT_EQUAL(LW(0), -1)
                             CALL(evt_pouch_remove_item, ITEM_FRIGHT_MASK, LW(0))
                             CALL(evt_msg_print, 0, STRING("irai_29_10"), 0, 0)
@@ -1092,25 +1080,7 @@ EVT_BEGIN(koopa_door_evt)
         END_IF
     END_LOOP
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        SET_VALUE(LW(3), 226)
-        SET_VALUE(LW(5), -216)
-        CALL(evt_sub_get_dir, LW(3), LW(5), LW(0), LW(2), LW(6))
-        SUBTRACT(LW(6), 45)
-        IF_INT_LESS(LW(6), 0)
-            ADD(LW(6), 360)
-        END_IF
-        IF_INT_LESS(LW(6), 180)
-            CALL(evt_mario_mov_pos, 240, -210, 600)
-#else
         CALL(evt_mario_mov_pos, 230, -215, 600)
-#endif
-#if VERSION <= VERSION_DEMO_US
-        ELSE
-            CALL(evt_mario_mov_pos, 195, -210, 600)
-        END_IF
-#endif
     END_INLINE_EVENT
     WAIT_MS(300)
     CALL(evt_bero_mapchange, STRING("pik_02"), STRING(""))
@@ -1126,12 +1096,8 @@ EVT_BEGIN(pik_01_koopa_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     CALL(evt_cam3d_evt_set, -273, 145, 196, -273, 69, -237, 0, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_seq_wait, 2)
-#else
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
-#endif
     CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_INSTANT_TURN)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
@@ -1374,11 +1340,7 @@ static EVT_BEGIN(sekai_yami_evt)
             WAIT_MS(200)
         END_LOOP
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    WAIT_MS(3000)
-#else
     WAIT_MS(1000)
-#endif
     CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("bom_02"), STRING("sekai_yami2"))
@@ -1546,15 +1508,9 @@ EVT_BEGIN(pik_01_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 400, 95, 125, 0, GSWF_SHINE_38, 0)
     IF_INT_EQUAL(LF(0), 1)
         SET_VALUE(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(bero_case_switch_off)
-        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("nw_bero"), 8388612)
-    END_IF
-#else
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("nw_bero"), 8388612)
     END_IF
-#endif
     SET_VALUE(LF(1), 0)
     IF_INT_EQUAL(LF(0), 0)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)

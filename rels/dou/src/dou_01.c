@@ -1,7 +1,6 @@
 // dou_01 (洞窟, Pirate's Grotto): passage between dou_00 and dou_02 with two blue jump pads.
 // Plays a Cortez (korutesu) cutscene on first entry (story 243 to 244).
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -63,14 +62,9 @@ static BeroEntry bero_entry_data[] = {
  */
 static EVT_BEGIN(korutesu_event)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_normalize)
-    CALL(evt_seq_wait, 2)
-#else
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_normalize)
-#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)

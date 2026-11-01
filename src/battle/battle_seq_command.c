@@ -449,11 +449,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                 }
                 if (wp->flags & (BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_FREE) && wp->lectureUnitId != -1) {
-#if VERSION <= VERSION_DEMO_US
-                    cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x43);
-#else
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_JUMP_WEAPON);
-#endif
                 }
                 num++;
             }
@@ -500,11 +496,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                 }
                 if (wp->flags & (BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_FREE) && wp->lectureUnitId != -1) {
-#if VERSION <= VERSION_DEMO_US
-                    cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x44);
-#else
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_HAMMER_WEAPON);
-#endif
                 }
                 num++;
             }
@@ -625,12 +617,8 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].index = 0;
                 cmd->weapon[num].weapon = &defaultWeapon_Dummy_NoItem;
                 cmd->weapon[num].enabled = 0;
-#if VERSION <= VERSION_DEMO_US
-                cmd->weapon[num].disableReason = 0;
-#else
                 cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                 cmd->weapon[num].icon = ICON_UNAVAILABLE;
-#endif
                 if (cmd->weapon[num].weapon->name) {
                     cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
                 } else {
@@ -809,27 +797,17 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         if (info->battleFlags & NPC_BATTLE_NO_PARTY_CHANGE) {
             cmd->operation[0].enabled = 0;
             cmd->operation[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
-#if VERSION <= VERSION_DEMO_US
         }
         cmd->operation[0].cost = 0;
         num = 1;
-#else
-        }
-        cmd->operation[0].cost = 0;
-        num = 1;
-#endif
     }
     if (pouch->starPowersObtained != 0) {
         cmd->operation[num].type = 5;
         cmd->operation[num].enabled = 1;
         cmd->operation[num].name = msgSearch("btl_cmd_op_appeal");
         cmd->operation[num].icon = ICON_BTL_CMD_APPEAL;
-#if VERSION <= VERSION_DEMO_US
-        cmd->operation[num].disableReason = 0;
-#else
         cmd->operation[num].disableReason = CMD_DISABLE_NONE;
         cmd->operation[num].cost = 0;
-#endif
         cmd->operation[num].help = "btl_hlp_cmd_operation_appeal";
         num++;
     }
@@ -884,12 +862,8 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[num].name = msgSearch("btl_cmd_op_defend");
     cmd->operation[num].icon = ICON_BTL_CMD_DEFEND;
     cmd->operation[num].disableReason = CMD_DISABLE_NONE;
-#if VERSION <= VERSION_DEMO_US
-    cmd->operation[num].help = "btl_hlp_cmd_operation_defend";
-#else
     cmd->operation[num].cost = 0;
     cmd->operation[num].help = "btl_hlp_cmd_operation_defend";
-#endif
     if (unit->attributeFlags & kVeiled) {
         cmd->operation[num].enabled = 0;
         cmd->operation[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
@@ -898,12 +872,8 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[idx].type = 3;
     cmd->operation[idx].enabled = BtlUnit_CanActStatus(unit);
     cmd->operation[idx].name = msgSearch("btl_cmd_op_escape");
-#if VERSION <= VERSION_DEMO_US
-    cmd->operation[idx].icon = ICON_ARROW;
-#else
     cmd->operation[idx].icon = ICON_ARROW;
     cmd->operation[idx].cost = 0;
-#endif
     if (cmd->operation[idx].enabled) {
         cmd->operation[idx].disableReason = CMD_DISABLE_NONE;
     } else {
@@ -1492,11 +1462,7 @@ void BattleCommandDisplay(BattleWork* wp) {
 
     if (cmd != NULL) {
         SelectedItemCoordinateColorUpDate();
-#if VERSION <= VERSION_DEMO_US
-        dispEntry(CAMERA_2D, 501.0f, 0, BattleDrawEnemyHP, wp);
-#else
         dispEntry(CAMERA_2D, 902.0f, 0, BattleDrawEnemyHP, wp);
-#endif
         if (cmd->flags & CMD_MENU_ACT) {
             dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_ActMenuDisp, wp);
         }
@@ -2552,12 +2518,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             }
             break;
         case 1:
-#if VERSION <= VERSION_DEMO_US
-                    unit->attackEventCode = WEVT(&badgeWeapon_Charge);
-                    unit->attackEventFlags = 0;
-#else
             unit->attackEventFlags = 0;
-#endif
             if (unit->currentKind == UNIT_MARIO) {
                 unit->attackEventCode = badgeWeapon_Charge.attackEvtScript;
                 BtlActRec_AddCount(&wp->actRecord.marioCharges);
@@ -2567,12 +2528,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             }
             break;
         case 2:
-#if VERSION <= VERSION_DEMO_US
-                    unit->attackEventCode = WEVT(&badgeWeapon_SuperCharge);
-                    unit->attackEventFlags = 0;
-#else
             unit->attackEventFlags = 0;
-#endif
             if (unit->currentKind == UNIT_MARIO) {
                 unit->attackEventCode = badgeWeapon_SuperCharge.attackEvtScript;
                 BtlActRec_AddCount(&wp->actRecord.marioSuperCharges);
@@ -2628,11 +2584,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             BtlActRec_AddCount(&wp->actRecord.marioHammerMoves);
             break;
         case 4:
-#if VERSION <= VERSION_DEMO_US
-                    if (weapon->hpDamageFn) {
-#else
             if (_check_weapon_type_attack(weapon)) {
-#endif
                 BtlActRec_AddCount(&wp->actRecord.marioSpecialAttacks);
             } else {
                 BtlActRec_AddCount(&wp->actRecord.marioSpecialSupports);
@@ -2765,22 +2717,14 @@ s32 _check_present_item(void) {
     case ITEM_HEART:
         BtlUnit_RecoverHp(unit, 1);
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-#if VERSION <= VERSION_DEMO_US
-            pos.y += BtlUnit_GetHeight(unit);
-#else
         pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
-#endif
         effRecoveryEntry(0, 1, pos.x, pos.y, pos.z);
         BattleAudience_SetPresentItemNo(0);
         return 0;
     case ITEM_FLOWER:
         BtlUnit_RecoverFp(unit, 1);
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-#if VERSION <= VERSION_DEMO_US
-            pos.y += BtlUnit_GetHeight(unit);
-#else
         pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
-#endif
         effRecoveryEntry(1, 1, pos.x, pos.y, pos.z);
         BattleAudience_SetPresentItemNo(0);
         return 0;
@@ -3018,26 +2962,16 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
             return btldefaultevt_Wait;
         case 3:
             return btldefaultevt_Escape;
-#if VERSION <= VERSION_DEMO_US
-                case 1:
-                    return WEVT(&badgeWeapon_Charge);
-#else
         case 1:
             if (unit->currentKind == UNIT_MARIO) {
                 return badgeWeapon_Charge.attackEvtScript;
-#endif
             }
             return badgeWeapon_ChargeP.attackEvtScript;
-#if VERSION <= VERSION_DEMO_US
-                case 2:
-                    return WEVT(&badgeWeapon_SuperCharge);
-#else
         case 2:
             if (unit->currentKind == UNIT_MARIO) {
                 return badgeWeapon_SuperCharge.attackEvtScript;
             }
             return badgeWeapon_SuperChargeP.attackEvtScript;
-#endif
         case 8:
             return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
         case 0:
@@ -3055,11 +2989,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
                 if (cnt) {
                     cursor->absPos = list[irand(cnt)];
                 } else {
-#if VERSION <= VERSION_DEMO_US
-                        return subsetevt_confuse_flustered;
-#else
                     return NULL;
-#endif
                 }
             }
             if (!cmd->party[cursor->absPos].enabled) {

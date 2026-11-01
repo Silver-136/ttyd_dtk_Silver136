@@ -855,14 +855,6 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if ((*pose->mtx)[1][3] > mario->position.y + mario->wPlayerCollisionBox.y) {
         return 0;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (20.0f + mario->wPlayerCollisionBox.x) / 2 && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING) && wp->bounceCount < 2) {
-        marioChgMot(5);
-        if (mario->currMotionId != MARIO_MOTION_ROLL && mario->currMotionId != MARIO_MOTION_YOSHI) {
-            marioChgMot(5);
-        }
-        wp->bounceCount++;
-#else
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (20.0f + mario->wPlayerCollisionBox.x) / 2
         && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING)
         && wp->bounceCount < 2) {
@@ -870,7 +862,6 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
             marioChgMot(MARIO_MOTION_JUMP_SW);
         }
         wp->bounceCount++;
-#endif
         return 1;
     }
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
@@ -1019,11 +1010,7 @@ static void ext_moamoa_main(void) {
         if ((( !(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)) ) && ( mario->position.y > 200.0f )) && ( wp->dist < 30.0f) ) {
             cnt += 1.0f;
         }
-#if VERSION <= VERSION_DEMO_US
-        if ((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!hit)) && (!(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
-#else
         if (((((( wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && ( !(wp->flags & MOAMOA_WORK_FLAG_NO_HIT) )) && ( !marioKeyOffChk() )) && ( !marioCtrlOffChk() )) && ( !hit )) && ( !(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)) )) {
-#endif
             ret = moamoa_hit_check(pose, m);
             if (ret == 1) {
                 m->flags |= MOAMOA_FLAG_HIT;
@@ -1056,12 +1043,8 @@ static void ext_moamoa_main(void) {
             }
         }
         if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && ( !(m->flags & (MOAMOA_FLAG_TO_TARGET | MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) ) {
-#if VERSION <= VERSION_DEMO_US
-            if (mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOTION_WALK || mario->currMotionId == MARIO_MOTION_DASH) {
-#else
             if ((( (mario->currMotionId == MARIO_MOTION_STAY ) || (( (u16)(mario->currMotionId - MARIO_MOTION_WALK) ) <= 1 )) || (( (u16)(mario->currMotionId - MARIO_MOTION_SLIT) ) <= 1 )) ||
                 ( mario->currMotionId == MARIO_MOTION_YOSHI) ) {
-#endif
                 if ((( (mario->position.y > 200.0f ) && ( wp->dist > 30.0f )) && ( wp->dist < 100.0f )) && (i & 1)) {
                     if (m->flags & MOAMOA_FLAG_JUMPING) {
                         m->next = MOAMOA_STATE_APPROACH;
@@ -1464,11 +1447,7 @@ static void ext_moamoa_main(void) {
     mario->floorMove.y = 0.0f;
     mario->floorMove.z = 0.0f;
     if (!(wp->flags & (MOAMOA_WORK_FLAG_NO_PUSH | MOAMOA_WORK_FLAG_PARTY_IN_USE))) {
-#if VERSION <= VERSION_DEMO_US
-        mario->position.x -= cnt / 20.0f;
-#else
         mario->floorMove.x = ( -cnt ) / 20.0f;
-#endif
     }
 }
 #pragma opt_propagation reset
@@ -2190,16 +2169,6 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
         SET_VALUE(LW(0), 500)
-#if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LW(1), -500)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_1"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_2"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_3"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_4"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_5"), 1)
-    ELSE
-#else
         SET_VALUE(LW(1), -500)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -2208,7 +2177,6 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-#endif
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
         SET_VALUE(LW(0), 0)
@@ -2628,11 +2596,7 @@ EVT_BEGIN(rsh_06_init_evt_nidome)
         ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-#else
             CALL(evt_snd_envoff, PSND_FADEOUT)
-#endif
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE
             CALL(evt_snd_bgmoff, PSND_FADEOUT)

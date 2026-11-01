@@ -1,4 +1,3 @@
-#include "version.h"
 #include "icon_ids.h"
 #include "evt/evt_window.h"
 #include "eff/eff_mario_balloon.h"
@@ -486,12 +485,8 @@ static USER_FUNC(effitemget_busaiku) {
  * Mario faces left, the camera moves in front of him and his partner glides next to him.
  */
 EVT_BEGIN(christine_party_lecture_init)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_set_dir, 270, 0, 0)
-#else
     CALL(evt_mapdisp_onoff, 0)
     CALL(evt_mario_set_dir, 270, 0, 0)
-#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 40)
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(85.0f), FLOAT(500.0f), FLOAT(-20.0f), FLOAT(35.0f), FLOAT(-100.0f), 1000, EASING_LINEAR)
@@ -533,27 +528,17 @@ EVT_BEGIN(christine_party_lecture)
     WAIT_MS(500)
     CALL(evt_party_set_pose, 0, STRING("PKR_O_1"))
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_party_set_pose, 0, STRING("PKR_S_1"))
     CALL(evt_mapdisp_onoff, 1)
     RETURN
-#else
-    CALL(evt_party_set_pose, 0, STRING("PKR_S_1"))
-    CALL(evt_mapdisp_onoff, 1)
-    RETURN
-#endif
 EVT_END()
 
 /**
  * Sets up Ms. Mowz's (チュチュリーナ) partner lecture:
  * Mario is placed at the start of the stage, the camera moves in and the partner glides next to him.
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(chuchulina_party_lecture_init)
-#else
 EVT_BEGIN(chuchulina_party_lecture_init)
     CALL(evt_mapdisp_onoff, 0)
-#endif
     CALL(evt_mario_set_pos, 0, 0, -600)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -629,12 +614,8 @@ EVT_BEGIN(chuchulina_party_lecture)
     CALL(evt_msg_print, 0, STRING("lecture_friends_20"), 0, 0)
     CALL(evt_party_set_pose, 0, STRING("PCH_O_2"))
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_party_set_pose, 0, STRING("PCH_S_1"))
-#else
     CALL(evt_party_set_pose, 0, STRING("PCH_S_1"))
     CALL(evt_mapdisp_onoff, 1)
-#endif
     RETURN
 EVT_END()
 
@@ -805,12 +786,8 @@ EVT_END()
  * Sets up the Ultra Hammer lecture: Mario is moved aside while the Toad guide (キノピコ) is placed next to the stage
  * and the camera is set to face them.
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(hammer_lv3_juyoitem_lecture_init)
-#else
 EVT_BEGIN(hammer_lv3_juyoitem_lecture_init)
     CALL(evt_mapdisp_onoff, 0)
-#endif
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
     CALL(evt_mario_set_pos, 0, -600, 30)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1105,15 +1082,9 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     CALL(evt_npc_flag_onoff, 0, STRING("キノピコ"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("R_2"))
     CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(80.0f), 0)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_set_position, STRING("キノピコ"), 0, -1000, 0)
     CALL(evt_mapdisp_onoff, 1)
     RETURN
-#else
-    CALL(evt_npc_set_position, STRING("キノピコ"), 0, -1000, 0)
-    CALL(evt_mapdisp_onoff, 1)
-    RETURN
-#endif
 EVT_END()
 
 /**

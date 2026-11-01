@@ -1,6 +1,5 @@
 // Movie sequence: plays the opening THP movie (simple THP player).
 
-#include "version.h"
 #include "seq/seq_demo.h"
 #include "dolphin/ai.h"
 #include "dolphin/dvd.h"
@@ -129,25 +128,7 @@ static u16 VolumeTable[] = {
     21974, 22398, 22827, 23260, 23696, 24137, 24582, 25031,
     25484, 25941, 26402, 26868, 27337, 27810, 28288, 28769,
     29255, 29744, 30238, 30736, 31238, 31744, 32254, 32768
-#if VERSION <= VERSION_DEMO_US
 };
-// clang-format on
-
-//.bss
-#include "manager/filemgr.h"
-
-// work for the demo's movie sequence (seq_demoInit and on, at the end of the file)
-typedef struct SeqDemoWork {
-    BOOL fullScreen; // 0x0, draw the movie once at full size instead of twice at half size
-    s32 frame;       // 0x4, frame last drawn (-1 when none)
-    FileEntry* tpl;  // 0x8, mariost.tpl
-    u8 pad_C[4];     // 0xC
-} SeqDemoWork;
-
-static SeqDemoWork work;
-#else
-};
-#endif
 // clang-format on
 
 //.bss
@@ -1067,8 +1048,4 @@ void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 text
     GXPosition3s16(x, (s16)(y + polygonHeight), 0);
     GXTexCoord2u16(0, 1);
     GXEnd();
-#if VERSION <= VERSION_DEMO_US
 }
-#else
-}
-#endif

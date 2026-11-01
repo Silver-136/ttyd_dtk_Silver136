@@ -72,11 +72,7 @@
 typedef struct ShopSel {
     u8 field_0x0[8];
     s32* items;
-#if VERSION <= VERSION_DEMO_US
-    u8 field_0xC[0x18 - 0xC];
-#else
     u8 field_0xC[0x24 - 0xC];
-#endif
     s32 sel;
 } ShopSel;
 NpcEntry* fbatNpcTalkCheck(MarioWork* mario);
@@ -276,13 +272,6 @@ static EvtWord sekai_yami_evt[185];
 static EvtWord minnnanokoe_evt[397];
 EvtWord iri_09_init[10];
 EvtWord iri_09_tentyo_talk[172];
-#if VERSION <= VERSION_DEMO_US
-s32 iri_16_item_tbl[2];
-extern EvtWord iri_16_tyutyu_talk[];
-SimpleRecipe R_simple_recipe_table[26];
-CookRecipe R_cookbook_recipe_table[VERSION_PICK(289, 292)];
-s32 R_mystery_cook_list[20];
-#else
 s32 iri_16_item_tbl[2];
 static EvtWord iri_16_init[34];
 EvtWord iri_16_tyutyu_talk[445];
@@ -297,7 +286,6 @@ EvtWord gor_01_init_evt[VERSION_PICK(546, 548)];
 SimpleRecipe R_simple_recipe_table[26];
 CookRecipe R_cookbook_recipe_table[VERSION_PICK(289, 292)];
 s32 R_mystery_cook_list[20];
-#endif
 s32 special_cook_list[16];
 EvtWord cooking_evt_sub[284];
 s32 iri_18_item_tbl[2];
@@ -317,12 +305,8 @@ USER_FUNC(nancy_block_init_func) {
 
     z = npc->position.z;
     event->lwDataF[10] = z;
-#if VERSION <= VERSION_DEMO_US
-    event->lwDataF[11] = z;
-#else
     event->lwDataF[11] = z;
     npc->flags |= NPC_FLAG_RESUME_AFTER_TALK;
-#endif
     return EVT_RETURN_DONE;
 }
 
@@ -435,34 +419,17 @@ static USER_FUNC(mario_keyoff_wait) {
 static EVT_BEGIN(sell_evt)
     CALL(evt_pouch_get_havebadgecnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("badgeshop_06"), 0, STRING("バッジ店員"))
-        RETURN
-    END_IF
-    LABEL(0)
-    CALL(evt_win_coin_on, 0, LW(12))
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_06"))
         RETURN
     END_IF
     CALL(evt_msg_print_add, 0, STRING("badgeshop_07"))
     CALL(evt_win_coin_on, 0, LW(8))
     LABEL(0)
-#endif
     CALL(evt_win_other_select, 12)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_coin_off, LW(12))
-#else
         CALL(evt_win_coin_off, LW(8))
-#endif
         RETURN
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-    CALL(evt_msg_print_insert, 0, STRING("badgeshop_08"), 0, STRING("バッジ店員"), LW(2), LW(3))
-    CALL(evt_msg_select, 0, STRING("badgeshop_24"))
-#else
     END_IF
     CALL(evt_sub_get_language, LW(0))
 #if VERSION >= VERSION_US
@@ -482,71 +449,30 @@ static EVT_BEGIN(sell_evt)
     END_IF
 #endif
     CALL(evt_msg_select, 0, STRING("badgeshop_24"))
-#endif
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_continue)
-#endif
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(LW(0), 1)
-        GOTO(0)
-#else
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("badgeshop_09"))
         GOTO(0)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_pouch_remove_item, LW(1), LW(0))
-#else
     CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
-#endif
     CALL(evt_badgeShop_throw_inc, LW(1))
     CALL(evt_pouch_add_coin, LW(3))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_coin_wait, LW(12))
-#else
     CALL(evt_win_coin_wait, LW(8))
-#endif
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_coin_off, LW(12))
-#else
     CALL(evt_win_coin_off, LW(8))
-#endif
     CALL(evt_pouch_get_havebadgecnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("badgeshop_11"), 0, STRING("バッジ店員"))
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_11"))
-#endif
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("badgeshop_10"), 0, STRING("バッジ店員"))
-#else
     CALL(evt_msg_print_add, 0, STRING("badgeshop_10"))
-#endif
     CALL(evt_msg_select, 0, STRING("badgeshop_24"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_continue)
-#endif
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_22"))
-#endif
         RETURN
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-    GOTO(0)
-#else
     END_IF
     CALL(evt_msg_continue)
     CALL(evt_win_coin_on, 0, LW(8))
     GOTO(0)
-#endif
     RETURN
 EVT_END()
 
@@ -559,13 +485,6 @@ EVT_END()
 EVT_BEGIN(zaiko_buy_evt)
     CALL(evt_badgeShop_throw_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("badgeshop_37"), 0, STRING("バッジ店員"))
-        RETURN
-    END_IF
-    LABEL(0)
-    CALL(evt_win_coin_on, 0, LW(12))
-#else
         CALL(badgeshop_special_cnt, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("badgeshop_37"))
@@ -577,21 +496,11 @@ EVT_BEGIN(zaiko_buy_evt)
     CALL(evt_msg_continue)
     CALL(evt_win_coin_on, 0, LW(8))
     LABEL(0)
-#endif
     CALL(evt_win_other_select, 11)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_coin_off, LW(12))
-#else
         CALL(evt_win_coin_off, LW(8))
-#endif
         RETURN
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-    CALL(evt_msg_print_insert, 0, STRING("badgeshop_00"), 0, STRING("バッジ店員"), LW(2), LW(3), LW(4))
-    CALL(evt_msg_select, 0, STRING("badgeshop_24"))
-#else
     END_IF
     CALL(evt_sub_get_language, LW(0))
 #if VERSION >= VERSION_US
@@ -611,106 +520,50 @@ EVT_BEGIN(zaiko_buy_evt)
     END_IF
 #endif
     CALL(evt_msg_select, 0, STRING("badgeshop_24"))
-#endif
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_continue)
-#endif
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(LW(0), 1)
-#else
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_continue)
-#endif
         GOTO(0)
     END_IF
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), LW(3))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("badgeshop_01"), 0, STRING("バッジ店員"))
-        CALL(evt_win_coin_off, LW(12))
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_01"))
         CALL(evt_win_coin_off, LW(8))
-#endif
         RETURN
     END_IF
     CALL(evt_pouch_add_item, LW(1), LW(0))
     IF_INT_EQUAL(LW(0), -1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("badgeshop_02"), 0, STRING("バッジ店員"))
-        CALL(evt_win_coin_off, LW(12))
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_02"))
         CALL(evt_win_coin_off, LW(8))
-#endif
         RETURN
     END_IF
     CALL(evt_badgeShop_throw_dec, LW(1))
     MULTIPLY(LW(3), -1)
     CALL(evt_pouch_add_coin, LW(3))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_coin_wait, LW(12))
-#else
     CALL(evt_win_coin_wait, LW(8))
-#endif
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_coin_off, LW(12))
-#else
     CALL(evt_win_coin_off, LW(8))
-#endif
     CALL(evt_badgeShop_throw_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("badgeshop_11"), 0, STRING("バッジ店員"))
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_11"))
-#endif
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("badgeshop_38"), 0, STRING("バッジ店員"))
-#else
     CALL(evt_msg_print_add, 0, STRING("badgeshop_38"))
-#endif
     CALL(evt_msg_select, 0, STRING("badgeshop_24"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_continue)
-#endif
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_22"))
-#endif
         RETURN
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-    GOTO(0)
-#else
     END_IF
     CALL(evt_msg_continue)
     CALL(evt_win_coin_on, 0, LW(8))
     GOTO(0)
-#endif
     RETURN
 EVT_END()
 
 static EVT_BEGIN(buy_evt)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("badgeshop_36"), 0, STRING("バッジ店員"))
-#else
     CALL(evt_msg_print_add, 0, STRING("badgeshop_36"))
-#endif
     CALL(evt_msg_select, 0, STRING("badgeshop_35"))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_continue)
-        CALL(evt_msg_print, 0, STRING("badgeshop_05"), 0, STRING("バッジ店員"))
-        CASE_EQUAL(1)
-        CALL(evt_msg_continue)
-#else
         CALL(badgeshop_special_cnt, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_badgeShop_throw_get_kind_cnt, LW(0))
@@ -723,89 +576,25 @@ static EVT_BEGIN(buy_evt)
             CALL(evt_msg_print_add, 0, STRING("badgeshop_05"))
         END_IF
         CASE_EQUAL(1)
-#endif
         CALL_CHILD(PTR(zaiko_buy_evt))
         CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_continue)
-        CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
-#else
-        CALL(evt_msg_print_add, 0, STRING("badgeshop_22"))
-#endif
-    END_SWITCH
-#if VERSION <= VERSION_DEMO_US
-    RETURN
-EVT_END()
-/**
- * The badge shop's buy menu in the JP and later releases:
- * the greeting is appended to the open message window and Mario picks from three choices:
- * 0 closes with badgeshop_37 or _39 (no special stock; depends on whether the shop holds badges Mario sold)
- * or badgeshop_05, 1 runs zaiko_buy_evt (the stock list) and 2 leaves with badgeshop_22.
- */
-static EVT_BEGIN(buy_evt)
-    CALL(evt_msg_print_add, 0, STRING("badgeshop_36"))
-    CALL(evt_msg_select, 0, STRING("badgeshop_35"))
-    SWITCH(LW(0))
-        CASE_EQUAL(0)
-        CALL(badgeshop_special_cnt, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_badgeShop_throw_get_kind_cnt, LW(0))
-            IF_INT_EQUAL(LW(0), 0)
-                CALL(evt_msg_print_add, 0, STRING("badgeshop_37"))
-            ELSE
-                CALL(evt_msg_print_add, 0, STRING("badgeshop_39"))
-            END_IF
-        ELSE
-            CALL(evt_msg_print_add, 0, STRING("badgeshop_05"))
-        END_IF
-        CASE_EQUAL(1)
-        CALL_CHILD(zaiko_buy_evt)
-        CASE_EQUAL(2)
         CALL(evt_msg_print_add, 0, STRING("badgeshop_22"))
     END_SWITCH
-    RETURN
-EVT_END()
-
-/** The clerk greets Mario on his first visit (GSWF_GOR01_BADGE_SHOP_FIRST_TALK) instead of opening the menu */
-static EVT_BEGIN(first_shopping_evt)
-    CALL(evt_msg_print, 0, STRING("badgeshop_30"), 0, STRING("バッジ店員"))
-#endif
     RETURN
 EVT_END()
 
 EVT_BEGIN(badgeshopper_talk_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(unitwin_get_work_ptr, LW(10))
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_BADGE_SHOP_FIRST_TALK), 0)
-        CALL_CHILD(first_shopping_evt)
-        SET_VALUE(GSWF(GSWF_GOR01_BADGE_SHOP_FIRST_TALK), 1)
-        CALL(evt_mario_key_onoff, 1)
-        RETURN
-    END_IF
-#endif
     CALL(evt_msg_print, 0, STRING("badgeshop_04"), 0, STRING("バッジ店員"))
     CALL(evt_msg_select, 0, STRING("badgeshop_23"))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_continue)
-#endif
         CALL_CHILD(PTR(buy_evt))
-#if VERSION <= VERSION_DEMO_US
         CASE_EQUAL(1)
-        CALL(evt_msg_continue)
-#else
-        CASE_EQUAL(1)
-#endif
         CALL_CHILD(PTR(sell_evt))
         CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_continue)
-        CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_22"))
-#endif
     END_SWITCH
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -897,11 +686,7 @@ EVT_BEGIN(nancy_init_check)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
         SET_VALUE(LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
-        IF_INT_GREATER(LW(10), -575)
-#else
         IF_INT_GREATER(LW(10), -580)
-#endif
             IF_INT_LESS(LW(10), -400)
                 IF_INT_GREATER(LW(11), -10)
                     IF_INT_LESS(LW(11), 5)
@@ -1014,22 +799,6 @@ EVT_BEGIN(nancy_init_check)
     WAIT_MS(60)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_wait_landon)
-    // Guess: if a partner is still in use, wait for that to finish before Mario resumes his normal pose.
-    CALL(evt_mario_get_party, LW(0))
-    IF_INT_EQUAL(LW(0), 5)
-        LOOP(0)
-            CALL(evt_mario_party_use_check, LW(0))
-            IF_INT_EQUAL(LW(0), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_mario_set_pose, STRING("M_S_1"))
-    END_IF
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#else
     CALL(evt_mario_wait_landon)
     // Guess: if a partner is still in use, wait for that to finish before Mario resumes his normal pose.
     CALL(evt_mario_get_party, LW(0))
@@ -1044,7 +813,6 @@ EVT_BEGIN(nancy_init_check)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#endif
     // Mario steps on the lens: it breaks with a squish.
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_LENS_BREAK1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -1235,11 +1003,7 @@ EVT_BEGIN(nancy_talk)
         CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("gor_01_008"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_win_item_select, PTR(item_tbl_nancy), LW(1))
-#else
             CALL(evt_win_item_select, 0, PTR(item_tbl_nancy), LW(1), 0)
-#endif
             IF_INT_EQUAL(LW(1), -1)
                 SET_VALUE(LW(0), 0)
             END_IF
@@ -2233,23 +1997,13 @@ EVT_BEGIN(bomhei_talk)
 EVT_END()
 
 EVT_BEGIN(bottakuru_init)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW_TROUBLE_WORK(GSW_STORY_PROGRESS), STG2_25_AFTER_THE_BOSS_BATTLE)
-#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
-#endif
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_HIT)
-    CALL(evt_npc_set_ry, STRING("me"), 90)
-    SET_VALUE(GSWF(GSWF_GOR01_CHARLIETON_BOUGHT), 0)
-#else
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_ry, STRING("me"), 90)
     SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
-#endif
     RETURN
 EVT_END()
 
@@ -2258,11 +2012,6 @@ EVT_END()
  * greets Mario, then loops through a buy menu (coins checked, item added to the pouch, stock decremented)
  * until Mario declines or the stock is empty. The US release formats prices with the message formatter.
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(bottakuru_talk)
-    // If nothing is left to buy, Charlieton only thanks Mario.
-    CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
-#else
 EVT_BEGIN(bottakuru_talk)
     // Charlieton is sold out, or has nothing Mario can still buy: he only thanks him.
     CALL(U_evt_badgeShop_get_special_zaiko, LW(0))
@@ -2271,17 +2020,11 @@ EVT_BEGIN(bottakuru_talk)
         RETURN
         ELSE
         CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
-#endif
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("bottakuru_03"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
-        RETURN
-    END_IF
-#else
             RETURN
         END_IF
     END_IF
-#endif
     // Charlieton's sales pitch (a longer one on the first visit), then he asks if Mario wants to shop.
     IF_INT_EQUAL(GSWF_GOR_CHARLIETON_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("bottakuru_00"), 0, STRING("me"))
@@ -2318,12 +2061,6 @@ EVT_BEGIN(bottakuru_talk)
     END_IF
     // Charlieton quotes the price of the chosen item; for a badge (id 240 and up) he also gives its BP cost.
     IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(2), LW(3), LW(4))
-    ELSE
-        CALL(evt_msg_print_insert, 0, STRING("bottakuru_06"), 0, STRING("me"), LW(2), LW(3))
-    END_IF
-#else
         CALL(evt_sub_get_language, LW(0))
 #if VERSION >= VERSION_US
         SWITCH(LW(0))
@@ -2359,7 +2096,6 @@ EVT_BEGIN(bottakuru_talk)
         END_IF
 #endif
     END_IF
-#endif
     // Mario confirms or declines the purchase.
     CALL(evt_msg_select, 0, STRING("bottakuru_yesno"))
     IF_INT_EQUAL(LW(0), 1)
@@ -2388,26 +2124,17 @@ EVT_BEGIN(bottakuru_talk)
     SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 1)
     // Charlieton thanks Mario; if he is now sold out or Mario has no coins left the visit ends, otherwise he
     // offers more.
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
-#else
     CALL(U_evt_badgeShop_get_special_zaiko, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("bottakuru_15"))
         RETURN
         ELSE
         CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
-#endif
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("bottakuru_09"))
-#if VERSION <= VERSION_DEMO_US
-        RETURN
-    END_IF
-#else
             RETURN
         END_IF
     END_IF
-#endif
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("bottakuru_09"))
@@ -3312,30 +3039,12 @@ const char* badgemise_npc[] = {
     NULL,
 };
 
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(evt_badge_dummy)
-    SET_VALUE(LW(10), LW(0))
-#else
 EVT_BEGIN(evt_badge_dummy)
     CALL(evt_mario_normalize)
     SET_VALUE(LW(10), LW(0))
-#endif
     CALL(disp_off, LW(10))
     CALL(evt_set_dir_to_target, STRING("バッジ店員"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("バッジ店員"))
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_BADGE_SHOP_FIRST_TALK), 0)
-        CALL_CHILD(first_shopping_evt)
-        SET_VALUE(GSWF(GSWF_GOR01_BADGE_SHOP_FIRST_TALK), 1)
-        RETURN
-    END_IF
-#endif
-#if VERSION <= VERSION_DEMO_US
-    CALL(unitwincoin_disp_onoff, 1)
-    CALL(get_value, LW(10), LW(11), LW(12), LW(13), LW(14))
-    CALL(evt_msg_print_insert, 0, STRING("badgeshop_00"), 0, STRING("バッジ店員"), LW(11), LW(13), LW(14))
-    CALL(evt_msg_select, 0, STRING("badgeshop_24"))
-#else
     CALL(evt_win_coin_on, 0, LW(8))
     CALL(get_value, LW(10), LW(11), LW(12), LW(13), LW(14))
     CALL(evt_sub_get_language, LW(0))
@@ -3356,73 +3065,31 @@ EVT_BEGIN(evt_badge_dummy)
     END_IF
 #endif
     CALL(evt_msg_select, 0, STRING("badgeshop_24"))
-#endif
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_continue)
-        CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
-        CALL(unitwincoin_disp_onoff, 0)
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_22"))
         CALL(evt_win_coin_off, LW(8))
-#endif
         RETURN
     END_IF
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), LW(13))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_continue)
-        CALL(evt_msg_print, 0, STRING("badgeshop_01"), 0, STRING("バッジ店員"))
-        CALL(unitwincoin_disp_onoff, 0)
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_01"))
         CALL(evt_win_coin_off, LW(8))
-#endif
         RETURN
     END_IF
     CALL(evt_pouch_add_item, LW(12), LW(0))
     IF_INT_EQUAL(LW(0), -1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_continue)
-        CALL(evt_msg_print, 0, STRING("badgeshop_02"), 0, STRING("バッジ店員"))
-        CALL(unitwincoin_disp_onoff, 0)
-#else
         CALL(evt_msg_print_add, 0, STRING("badgeshop_02"))
         CALL(evt_win_coin_off, LW(8))
-#endif
         RETURN
     END_IF
     CALL(set_new_goods_list, LW(10), 0)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LW(0), LW(10))
-    CALL(evt_badgeShop_getBargainKind, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-#endif
     CALL(evt_badgeShop_special_dec, LW(12))
-#if VERSION <= VERSION_DEMO_US
-    ELSE
-#endif
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_badgeShop_throw_dec, LW(12))
-#else
     CALL(unitwin_set_bought, LW(10), LW(12))
-#endif
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-#endif
     MULTIPLY(LW(13), -1)
     CALL(evt_pouch_add_coin, LW(13))
-#if VERSION <= VERSION_DEMO_US
-    CALL(unitwincoin_wait)
-#else
     CALL(evt_win_coin_wait, LW(8))
-#endif
     WAIT_MS(200)
-#if VERSION <= VERSION_DEMO_US
-    CALL(unitwincoin_disp_onoff, 0)
-#else
     CALL(evt_win_coin_off, LW(8))
-#endif
     CALL(evt_msg_continue)
     RETURN
 EVT_END()
@@ -3449,11 +3116,7 @@ EVT_BEGIN(evt_open_02_01_f2)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_unitwin_alloc)
-#else
     CALL(evt_unitwin_alloc, 1)
-#endif
     CALL(badgeShop_getBargainTable, LW(0))
     CALL(evt_unitwin_selltable_setup, PTR(uwnobj_list), LW(0))
     RETURN
@@ -4617,16 +4280,9 @@ EVT_BEGIN(maffia_turn)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(maffia_assault)
-    SET_VALUE(GF(11), 1)
-    // Scene setup: the thugs are placed off to the south, out of sight.
-    CALL(evt_npc_set_position, STRING("マフィア１"), 75, 0, -400)
-#else
 EVT_BEGIN(maffia_assault)
     SET_VALUE(GF(11), 1)
     CALL(evt_npc_set_position, STRING("マフィア１"), 75, 0, -400)
-#endif
     CALL(evt_npc_set_ry, STRING("マフィア１"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -4819,12 +4475,8 @@ EVT_BEGIN(maffia_assault)
     ADD(LW(3), 300)
     CALL(evt_npc_set_ry, LW(10), 90)
     CALL(evt_npc_move_position, LW(10), LW(3), LW(2), 0, FLOAT(120.0f), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_position, LW(10), 0, -1000, 0)
-#else
     CALL(evt_npc_set_position, LW(10), 0, -1000, 0)
     SET_VALUE(GF(11), 0)
-#endif
     RETURN
 EVT_END()
 
@@ -5556,11 +5208,7 @@ EVT_BEGIN(iri_09_tentyo_talk)
             LOOP(0)
                 CALL(evt_msg_continue)
                 CALL(iri_09_item_tbl_make, LW(0), LW(1))
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_win_item_select, LW(1), LW(2))
-#else
                 CALL(evt_win_item_select, 0, LW(1), LW(2), 0)
-#endif
                 IF_INT_EQUAL(LW(2), -1)
                     SET_VALUE(LF(0), 1)
                     BREAK_LOOP
@@ -5663,11 +5311,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                 CALL(evt_npc_wait_pera, STRING("チュチュリーナ"))
                 // She asks for the item; Mario picks it from the item menu.
                 CALL(evt_msg_print, 0, STRING("irai_16_02"), 0, STRING("チュチュリーナ"))
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_win_item_select, PTR(iri_16_item_tbl), LW(0))
-#else
                 CALL(evt_win_item_select, 0, PTR(iri_16_item_tbl), LW(0), 0)
-#endif
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     // Mario hands it over and Ms. Mowz is overjoyed.
                     CALL(evt_pouch_remove_item, ITEM_ATTACK_FX_B_KEY_ITEM, LW(0))
@@ -5903,11 +5547,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_set_position, STRING("バッジ店長"), -114, 154, -173)
     CALL(evt_npc_flag_onoff, 1, STRING("バッジ店長"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f2_naka"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_unitwin_alloc)
-#else
     CALL(evt_unitwin_alloc, 1)
-#endif
     CALL(badgeShop_getBargainTable, LW(0))
     CALL(evt_unitwin_selltable_setup, PTR(uwnobj_list), LW(0))
     CALL(evt_cam3d_evt_set, -80, 225, 400, -80, 200, -100, 0, EASING_SINE_IN_OUT)
@@ -6193,11 +5833,7 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         IF_INT_EQUAL(GSWF_GOR_01_ULTRA_HAMMER_CHEST_FELL, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 146, -20, 1, 0, PTR(ultrahammer_get), GSWF(GSWF_GOR01_ULTRA_HAMMER_CHEST_OPENED))
-#else
             CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 110, -20, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
-#endif
             SPAWN_EVENT(ultrahammer_check)
         ELSE
             CALL(evt_mobj_itembox, STRING("mobj_box00"), 275, 0, 75, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
@@ -6236,639 +5872,6 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_roten"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_roten"), 1, 0)
     RETURN
-#if VERSION <= VERSION_DEMO_US
-EVT_END()
-
-/**
- * Zess T.'s one-ingredient recipes: for each ingredient, the dish made from it by itself before and after the
- * cookbook is solved.
- */
-SimpleRecipe R_simple_recipe_table[] = {
-    {"ファイアフラワー", "あつあつスープ", "あつあつスープ"},
-    {"びりびりキノコ", "キノコいため", "キノコいため"},
-    {"キノコ", "キノコいため", "キノコいため"},
-    {"スーパーキノコ", "キノコいため", "キノコいため"},
-    {"ウルトラキノコ", "キノコステーキ", "キノコステーキ"},
-    {"きんきゅうキノコ", "キノコホイルやき", "キノコホイルやき"},
-    {"しなびたキノコ", "", "キノコいため"},
-    {"ハニーシロップ", "フレッシュジュース", "フレッシュジュース"},
-    {"メイプルシロップ", "フレッシュジュース", "フレッシュジュース"},
-    {"ローヤルゼリー", "フレッシュジュース", "フレッシュジュース"},
-    {"じわじわキノコ", "キノコホイルやき", "キノコホイルやき"},
-    {"じわじわシロップ", "フレッシュジュース", "フレッシュジュース"},
-    {"ドライフラワー", "", "あつあつスープ"},
-    {"ふしぎなタマゴ", "めだまやき", "めだまやき"},
-    {"おうごんはっぱ", "ナンシーティー", "ナンシーティー"},
-    {"トロピコマンゴー", "フレッシュジュース", "フレッシュジュース"},
-    {"生パスタ", "スパゲティ", "スパゲティ"},
-    {"おかしのもと", "ムースケーキ", "ムースケーキ"},
-    {"レッド・カラリン", "", "スッキリドリンク"},
-    {"カメカメはっぱ", "カメカメティー", "カメカメティー"},
-    {"つくしんぼ", "", "あつあつスープ"},
-    {"ピチピーチ", "フレッシュジュース", "フレッシュジュース"},
-    {"ヤシの実", "スッキリドリンク", "スッキリドリンク"},
-    {"ゆきうさぎ", "", "あつあつスープ"},
-    {"どくキノコ", "", "キノコいため"},
-    {"たんこぶ", "", "ナンシースペシャル"},
-};
-
-/**
- * Zess T.'s two-ingredient recipes: pairs of ingredients and the dish they make. Version for the earlier
- * releases.
- */
-CookRecipe R_cookbook_recipe_table[] = {
-    {"キノコ", "かみなりゴロゴロ", "びりびりキノコ"},
-    {"キノコ", "かみなりドッカン", "びりびりキノコ"},
-    {"キノコ", "ファイアフラワー", "キノコホイルやき"},
-    {"キノコ", "びりびりキノコ", "キノコホイルやき"},
-    {"キノコ", "ふにゃふにゃくん", "しなびたキノコ"},
-    {"スーパーキノコ", "かみなりゴロゴロ", "びりびりキノコ"},
-    {"スーパーキノコ", "かみなりドッカン", "びりびりキノコ"},
-    {"スーパーキノコ", "ファイアフラワー", "ナンシーディナー"},
-    {"スーパーキノコ", "びりびりキノコ", "キノコホイルやき"},
-    {"スーパーキノコ", "ふにゃふにゃくん", "しなびたキノコ"},
-    {"スーパーキノコ", "キノコ", "キノコホイルやき"},
-    {"ウルトラキノコ", "かみなりゴロゴロ", "びりびりキノコ"},
-    {"ウルトラキノコ", "かみなりドッカン", "びりびりキノコ"},
-    {"ウルトラキノコ", "ファイアフラワー", "ナンシースペシャル"},
-    {"ウルトラキノコ", "びりびりキノコ", "キノコステーキ"},
-    {"ウルトラキノコ", "ふにゃふにゃくん", "しなびたキノコ"},
-    {"ウルトラキノコ", "キノコ", "キノコステーキ"},
-    {"ウルトラキノコ", "スーパーキノコ", "キノコステーキ"},
-    {"きんきゅうキノコ", "かみなりゴロゴロ", "びりびりキノコ"},
-    {"きんきゅうキノコ", "かみなりドッカン", "びりびりキノコ"},
-    {"きんきゅうキノコ", "ファイアフラワー", "ナンシーディナー"},
-    {"きんきゅうキノコ", "びりびりキノコ", "キノコホイルやき"},
-    {"きんきゅうキノコ", "ふにゃふにゃくん", "しなびたキノコ"},
-    {"きんきゅうキノコ", "キノコ", "キノコステーキ"},
-    {"きんきゅうキノコ", "スーパーキノコ", "キノコステーキ"},
-    {"きんきゅうキノコ", "ウルトラキノコ", "キノコステーキ"},
-    {"しなびたキノコ", "ファイアフラワー", "キノコいため"},
-    {"しなびたキノコ", "びりびりキノコ", "キノコいため"},
-    {"しなびたキノコ", "デカデカドリンク", "キノコ"},
-    {"しなびたキノコ", "キノコ", "キノコいため"},
-    {"しなびたキノコ", "スーパーキノコ", "キノコホイルやき"},
-    {"しなびたキノコ", "ウルトラキノコ", "キノコステーキ"},
-    {"しなびたキノコ", "きんきゅうキノコ", "キノコステーキ"},
-    {"ハニーシロップ", "こおりのいぶき", "アイスキャンディ"},
-    {"ハニーシロップ", "びりびりキノコ", "ハニーキノコ"},
-    {"ハニーシロップ", "キノコ", "ハニーキノコ"},
-    {"ハニーシロップ", "スーパーキノコ", "ハニーキノコＳ"},
-    {"ハニーシロップ", "ウルトラキノコ", "ハニーキノコＺ"},
-    {"ハニーシロップ", "きんきゅうキノコ", "ハニーキノコＳ"},
-    {"メイプルシロップ", "こおりのいぶき", "ナンシーフラッペ"},
-    {"メイプルシロップ", "びりびりキノコ", "メイプルキノコ"},
-    {"メイプルシロップ", "キノコ", "メイプルキノコ"},
-    {"メイプルシロップ", "スーパーキノコ", "メイプルキノコＳ"},
-    {"メイプルシロップ", "ウルトラキノコ", "メイプルキノコＺ"},
-    {"メイプルシロップ", "きんきゅうキノコ", "メイプルキノコＳ"},
-    {"メイプルシロップ", "ハニーシロップ", "フレッシュジュース"},
-    {"ローヤルゼリー", "こおりのいぶき", "ナンシーフラッペ"},
-    {"ローヤルゼリー", "びりびりキノコ", "ローヤルキノコ"},
-    {"ローヤルゼリー", "キノコ", "ローヤルキノコ"},
-    {"ローヤルゼリー", "スーパーキノコ", "ローヤルキノコＳ"},
-    {"ローヤルゼリー", "ウルトラキノコ", "ローヤルキノコＺ"},
-    {"ローヤルゼリー", "きんきゅうキノコ", "ローヤルキノコＳ"},
-    {"ローヤルゼリー", "ハニーシロップ", "フレッシュジュース"},
-    {"ローヤルゼリー", "メイプルシロップ", "ナンシーティー"},
-    {"じわじわキノコ", "かみなりゴロゴロ", "びりびりキノコ"},
-    {"じわじわキノコ", "かみなりドッカン", "びりびりキノコ"},
-    {"じわじわキノコ", "キラキラおとし", "ナンシーディナー"},
-    {"じわじわキノコ", "ファイアフラワー", "ナンシーディナー"},
-    {"じわじわキノコ", "びりびりキノコ", "キノコホイルやき"},
-    {"じわじわキノコ", "キノコ", "キノコホイルやき"},
-    {"じわじわキノコ", "スーパーキノコ", "ナンシーディナー"},
-    {"じわじわキノコ", "ウルトラキノコ", "ナンシースペシャル"},
-    {"じわじわキノコ", "きんきゅうキノコ", "ナンシーディナー"},
-    {"じわじわキノコ", "ハニーシロップ", "ハニーキノコ"},
-    {"じわじわキノコ", "メイプルシロップ", "メイプルキノコ"},
-    {"じわじわキノコ", "ローヤルゼリー", "ローヤルキノコＳ"},
-    {"じわじわシロップ", "キノコ", "キノコホイルやき"},
-    {"じわじわシロップ", "スーパーキノコ", "ナンシーディナー"},
-    {"じわじわシロップ", "ウルトラキノコ", "ナンシースペシャル"},
-    {"じわじわシロップ", "きんきゅうキノコ", "ナンシーディナー"},
-    {"じわじわシロップ", "ハニーシロップ", "フレッシュジュース"},
-    {"じわじわシロップ", "メイプルシロップ", "フレッシュジュース"},
-    {"じわじわシロップ", "ローヤルゼリー", "フレッシュジュース"},
-    {"じわじわシロップ", "じわじわキノコ", "じわじわキノコ"},
-    {"イレカエール", "かみなりゴロゴロ", "ゆらゆらじしん"},
-    {"イレカエール", "かみなりドッカン", "キラキラおとし"},
-    {"イレカエール", "キラキラおとし", "かみなりドッカン"},
-    {"イレカエール", "こおりのいぶき", "ファイアフラワー"},
-    {"イレカエール", "ファイアフラワー", "こおりのいぶき"},
-    {"イレカエール", "ゆらゆらじしん", "かみなりゴロゴロ"},
-    {"イレカエール", "テレサのふく", "てきヨケール"},
-    {"イレカエール", "びりびりキノコ", "スーパーキノコ"},
-    {"イレカエール", "てきヨケール", "テレサのふく"},
-    {"イレカエール", "まどわせのこな", "しかえしのこな"},
-    {"イレカエール", "しかえしのこな", "まどわせのこな"},
-    {"イレカエール", "ねむれよいこよ", "スッキリドリンク"},
-    {"イレカエール", "デカデカドリンク", "ミニミニくん"},
-    {"イレカエール", "カチカチコウラ", "ふにゃふにゃくん"},
-    {"イレカエール", "ミニミニくん", "デカデカドリンク"},
-    {"イレカエール", "ふにゃふにゃくん", "カチカチコウラ"},
-    {"イレカエール", "キノコ", "ハニーシロップ"},
-    {"イレカエール", "スーパーキノコ", "メイプルシロップ"},
-    {"イレカエール", "ウルトラキノコ", "ローヤルゼリー"},
-    {"イレカエール", "きんきゅうキノコ", "スーパーキノコ"},
-    {"イレカエール", "しなびたキノコ", "キノコ"},
-    {"イレカエール", "スッキリドリンク", "ねむれよいこよ"},
-    {"イレカエール", "ハニーシロップ", "キノコ"},
-    {"イレカエール", "メイプルシロップ", "スーパーキノコ"},
-    {"イレカエール", "ローヤルゼリー", "ウルトラキノコ"},
-    {"イレカエール", "じわじわキノコ", "どくキノコ"},
-    {"イレカエール", "じわじわシロップ", "ハニーシロップ"},
-    {"ドライフラワー", "ファイアフラワー", "あつあつスープ"},
-    {"ドライフラワー", "びりびりキノコ", "かみなりドッカン"},
-    {"ドライフラワー", "キノコ", "うちゅうしょく"},
-    {"ドライフラワー", "スーパーキノコ", "うちゅうしょく"},
-    {"ドライフラワー", "ウルトラキノコ", "うちゅうしょく"},
-    {"ドライフラワー", "きんきゅうキノコ", "うちゅうしょく"},
-    {"ドライフラワー", "しなびたキノコ", "うちゅうしょく"},
-    {"ドライフラワー", "じわじわキノコ", "うちゅうしょく"},
-    {"ドライフラワー", "ホットドッグ", "うちゅうしょく"},
-    {"ふしぎなタマゴ", "ファイアフラワー", "バクハツタマゴ"},
-    {"ふしぎなタマゴ", "キノコ", "キセツのオムレツ"},
-    {"ふしぎなタマゴ", "スーパーキノコ", "キセツのオムレツ"},
-    {"ふしぎなタマゴ", "ウルトラキノコ", "キセツのオムレツ"},
-    {"ふしぎなタマゴ", "きんきゅうキノコ", "キセツのオムレツ"},
-    {"ふしぎなタマゴ", "ドライフラワー", "うちゅうしょく"},
-    {"おうごんはっぱ", "こおりのいぶき", "ゆきうさぎ"},
-    {"おうごんはっぱ", "キノコ", "キノコいため"},
-    {"おうごんはっぱ", "スーパーキノコ", "キノコホイルやき"},
-    {"おうごんはっぱ", "ウルトラキノコ", "キノコステーキ"},
-    {"おうごんはっぱ", "きんきゅうキノコ", "キノコステーキ"},
-    {"おうごんはっぱ", "じわじわキノコ", "こうちゃキノコ"},
-    {"おうごんはっぱ", "ドライフラワー", "うちゅうしょく"},
-    {"トロピコマンゴー", "びりびりキノコ", "ナンシーディナー"},
-    {"トロピコマンゴー", "キノコ", "ナンシーディナー"},
-    {"トロピコマンゴー", "スーパーキノコ", "ナンシーディナー"},
-    {"トロピコマンゴー", "ウルトラキノコ", "ナンシーディナー"},
-    {"トロピコマンゴー", "ハニーシロップ", "フルーツパフェ"},
-    {"トロピコマンゴー", "メイプルシロップ", "フルーツパフェ"},
-    {"トロピコマンゴー", "ローヤルゼリー", "フルーツパフェ"},
-    {"トロピコマンゴー", "じわじわシロップ", "フルーツパフェ"},
-    {"トロピコマンゴー", "ドライフラワー", "うちゅうしょく"},
-    {"生パスタ", "びりびりキノコ", "ナンシーディナー"},
-    {"生パスタ", "キノコ", "ナンシースペシャル"},
-    {"生パスタ", "スーパーキノコ", "ナンシースペシャル"},
-    {"生パスタ", "ウルトラキノコ", "ナンシーデラックス"},
-    {"生パスタ", "きんきゅうキノコ", "ナンシースペシャル"},
-    {"生パスタ", "しなびたキノコ", "ナンシースペシャル"},
-    {"生パスタ", "ドライフラワー", "うちゅうしょく"},
-    {"生パスタ", "ふしぎなタマゴ", "ナンシーディナー"},
-    {"おかしのもと", "ファイアフラワー", "ファイアキャンディ"},
-    {"おかしのもと", "びりびりキノコ", "びりびりキャンディ"},
-    {"おかしのもと", "まどわせのこな", "メロメロケーキ"},
-    {"おかしのもと", "キノコ", "キノコケーキ"},
-    {"おかしのもと", "スーパーキノコ", "キノコケーキ"},
-    {"おかしのもと", "ウルトラキノコ", "キノコクレープ"},
-    {"おかしのもと", "きんきゅうキノコ", "キノコケーキ"},
-    {"おかしのもと", "ハニーシロップ", "ハニーあめ"},
-    {"おかしのもと", "メイプルシロップ", "ナンシークッキー"},
-    {"おかしのもと", "ローヤルゼリー", "ローヤルキャンディ"},
-    {"おかしのもと", "じわじわキノコ", "キノコケーキ"},
-    {"おかしのもと", "じわじわシロップ", "ナンシークッキー"},
-    {"おかしのもと", "ドライフラワー", "うちゅうしょく"},
-    {"おかしのもと", "ふしぎなタマゴ", "ナンシークッキー"},
-    {"おかしのもと", "トロピコマンゴー", "マンゴープディング"},
-    {"レッド・カラリン", "ファイアフラワー", "あつあつスープ"},
-    {"レッド・カラリン", "しなびたキノコ", "キノコ"},
-    {"レッド・カラリン", "スッキリドリンク", "すみぢる"},
-    {"レッド・カラリン", "ハニーシロップ", "スッキリドリンク"},
-    {"レッド・カラリン", "メイプルシロップ", "スッキリドリンク"},
-    {"レッド・カラリン", "ローヤルゼリー", "スッキリドリンク"},
-    {"レッド・カラリン", "生パスタ", "カラリーナパスタ"},
-    {"レッド・カラリン", "おかしのもと", "ファイアキャンディ"},
-    {"カメカメはっぱ", "キノコ", "キノコいため"},
-    {"カメカメはっぱ", "スーパーキノコ", "キノコホイルやき"},
-    {"カメカメはっぱ", "ウルトラキノコ", "キノコステーキ"},
-    {"カメカメはっぱ", "きんきゅうキノコ", "キノコステーキ"},
-    {"カメカメはっぱ", "ハニーシロップ", "フレッシュジュース"},
-    {"カメカメはっぱ", "メイプルシロップ", "フレッシュジュース"},
-    {"カメカメはっぱ", "ローヤルゼリー", "フレッシュジュース"},
-    {"カメカメはっぱ", "じわじわキノコ", "こうちゃキノコ"},
-    {"カメカメはっぱ", "じわじわシロップ", "フレッシュジュース"},
-    {"カメカメはっぱ", "ドライフラワー", "うちゅうしょく"},
-    {"カメカメはっぱ", "おうごんはっぱ", "ヘルスィーサラダ"},
-    {"カメカメはっぱ", "トロピコマンゴー", "カメまん"},
-    {"カメカメはっぱ", "生パスタ", "カメスパ"},
-    {"カメカメはっぱ", "レッド・カラリン", "すみぢる"},
-    {"つくしんぼ", "キノコ", "ナンシーディナー"},
-    {"つくしんぼ", "スーパーキノコ", "ナンシーディナー"},
-    {"つくしんぼ", "ウルトラキノコ", "ナンシースペシャル"},
-    {"つくしんぼ", "きんきゅうキノコ", "ナンシーディナー"},
-    {"つくしんぼ", "ドライフラワー", "うちゅうしょく"},
-    {"つくしんぼ", "ふしぎなタマゴ", "キセツのオムレツ"},
-    {"つくしんぼ", "カメカメはっぱ", "ヘルスィーサラダ"},
-    {"ピチピーチ", "びりびりキノコ", "ナンシーディナー"},
-    {"ピチピーチ", "まどわせのこな", "メロメロケーキ"},
-    {"ピチピーチ", "キノコ", "ナンシーディナー"},
-    {"ピチピーチ", "スーパーキノコ", "ナンシーディナー"},
-    {"ピチピーチ", "ウルトラキノコ", "ナンシースペシャル"},
-    {"ピチピーチ", "きんきゅうキノコ", "ナンシーディナー"},
-    {"ピチピーチ", "しなびたキノコ", "キノコ"},
-    {"ピチピーチ", "ハニーシロップ", "フルーツパフェ"},
-    {"ピチピーチ", "メイプルシロップ", "フルーツパフェ"},
-    {"ピチピーチ", "ローヤルゼリー", "フルーツパフェ"},
-    {"ピチピーチ", "ドライフラワー", "うちゅうしょく"},
-    {"ピチピーチ", "トロピコマンゴー", "フルーツパフェ"},
-    {"ピチピーチ", "おかしのもと", "ピーチタルト"},
-    {"ピチピーチ", "レッド・カラリン", "スッキリドリンク"},
-    {"ヤシの実", "ファイアフラワー", "ココナッツボム"},
-    {"ヤシの実", "ドライフラワー", "うちゅうしょく"},
-    {"ヤシの実", "トロピコマンゴー", "フレッシュジュース"},
-    {"ヤシの実", "生パスタ", "ナンシーディナー"},
-    {"ヤシの実", "おかしのもと", "ココナツキャンディ"},
-    {"ヤシの実", "カメカメはっぱ", "フレッシュジュース"},
-    {"ヤシの実", "ピチピーチ", "フレッシュジュース"},
-    {"キノコいため", "キラキラおとし", "ほしふるディナー"},
-    {"キノコいため", "ドライフラワー", "うちゅうしょく"},
-    {"キノコホイルやき", "キラキラおとし", "ほしふるディナー"},
-    {"キノコホイルやき", "ドライフラワー", "うちゅうしょく"},
-    {"キノコステーキ", "キラキラおとし", "ほしふるディナー"},
-    {"キノコステーキ", "ドライフラワー", "うちゅうしょく"},
-    {"しっぱいりょうり", "ドライフラワー", "うちゅうしょく"},
-    {"ハニーキノコ", "ドライフラワー", "うちゅうしょく"},
-    {"メイプルキノコ", "ドライフラワー", "うちゅうしょく"},
-    {"ローヤルキノコ", "ドライフラワー", "うちゅうしょく"},
-    {"ハニーキノコＳ", "ドライフラワー", "うちゅうしょく"},
-    {"メイプルキノコＳ", "ドライフラワー", "うちゅうしょく"},
-    {"ローヤルキノコＳ", "ドライフラワー", "うちゅうしょく"},
-    {"ハニーキノコＺ", "ドライフラワー", "うちゅうしょく"},
-    {"メイプルキノコＺ", "ドライフラワー", "うちゅうしょく"},
-    {"ローヤルキノコＺ", "ドライフラワー", "うちゅうしょく"},
-    {"ナンシーディナー", "カチカチコウラ", "カチカチりょうり"},
-    {"ナンシーディナー", "ドライフラワー", "うちゅうしょく"},
-    {"ナンシースペシャル", "カチカチコウラ", "カチカチりょうり"},
-    {"ナンシースペシャル", "ドライフラワー", "うちゅうしょく"},
-    {"ナンシーデラックス", "カチカチコウラ", "カチカチりょうり"},
-    {"ナンシーデラックス", "ドライフラワー", "うちゅうしょく"},
-    {"ナンシーダイナマイ", "ドライフラワー", "バクハツタマゴ"},
-    {"ナンシーティー", "レッド・カラリン", "すみぢる"},
-    {"ゆきうさぎ", "あつあつスープ", "いつまでもふたりで"},
-    {"キノコケーキ", "ドライフラワー", "うちゅうしょく"},
-    {"キノコクレープ", "ドライフラワー", "うちゅうしょく"},
-    {"ムースケーキ", "ドライフラワー", "うちゅうしょく"},
-    {"フルーツパフェ", "ドライフラワー", "うちゅうしょく"},
-    {"バクハツタマゴ", "ドライフラワー", "うちゅうしょく"},
-    {"イカスミパスタ", "ドライフラワー", "うちゅうしょく"},
-    {"スパゲティ", "ドライフラワー", "うちゅうしょく"},
-    {"スパゲティ", "レッド・カラリン", "カラリーナパスタ"},
-    {"スパゲティ", "カメカメはっぱ", "カメスパ"},
-    {"こうちゃキノコ", "レッド・カラリン", "すみぢる"},
-    {"どくキノコ", "イレカエール", "キノコ"},
-    {"どくキノコ", "ドライフラワー", "うちゅうしょく"},
-    {"どくキノコ", "おうごんはっぱ", "こうちゃキノコ"},
-    {"どくキノコ", "カメカメはっぱ", "こうちゃキノコ"},
-    {"ショコラケーキ", "ドライフラワー", "うちゅうしょく"},
-    {"マンゴープディング", "ドライフラワー", "うちゅうしょく"},
-    {"マンゴープディング", "ふしぎなタマゴ", "はつこいプディング"},
-    {"はつこいプディング", "ドライフラワー", "うちゅうしょく"},
-    {"ほしふるディナー", "ドライフラワー", "うちゅうしょく"},
-    {"ほしふるディナー", "フルーツパフェ", "ナンシーディナー"},
-    {"しれんのナベ", "ドライフラワー", "どくキノコ"},
-    {"いつまでもふたりで", "ドライフラワー", "うちゅうしょく"},
-    {"いつまでもふたりで", "どくキノコ", "しれんのナベ"},
-    {"すみぢる", "じわじわキノコ", "どくキノコ"},
-    {"すみぢる", "生パスタ", "イカスミパスタ"},
-    {"すみぢる", "おかしのもと", "ショコラケーキ"},
-    {"すみぢる", "ムースケーキ", "ショコラケーキ"},
-    {"すみぢる", "スパゲティ", "イカスミパスタ"},
-    {"キセツのオムレツ", "ドライフラワー", "うちゅうしょく"},
-    {"カメカメティー", "レッド・カラリン", "すみぢる"},
-    {"カメスパ", "ドライフラワー", "うちゅうしょく"},
-    {"カメスパ", "レッド・カラリン", "カラリーナパスタ"},
-    {"カメスパ", "すみぢる", "イカスミパスタ"},
-    {"カラリーナパスタ", "ドライフラワー", "うちゅうしょく"},
-    {"カラリーナパスタ", "ヤシの実", "ナンシーディナー"},
-    {"カラリーナパスタ", "すみぢる", "イカスミパスタ"},
-    {"メロメロケーキ", "ドライフラワー", "うちゅうしょく"},
-    {"ピーチタルト", "ドライフラワー", "うちゅうしょく"},
-    {"びりびりキャンディ", "ドライフラワー", "うちゅうしょく"},
-    {"ファイアキャンディ", "ドライフラワー", "うちゅうしょく"},
-    {"ハニーあめ", "ドライフラワー", "うちゅうしょく"},
-    {"ココナツキャンディ", "ドライフラワー", "うちゅうしょく"},
-    {"ローヤルキャンディ", "ドライフラワー", "うちゅうしょく"},
-    {"ナンシークッキー", "ドライフラワー", "うちゅうしょく"},
-    {"ヘルスィーサラダ", "ドライフラワー", "うちゅうしょく"},
-    {"ヘルスィーサラダ", "生パスタ", "ナンシーディナー"},
-    {"ヘルスィーサラダ", "キノコいため", "ナンシーディナー"},
-    {"ヘルスィーサラダ", "キノコホイルやき", "ナンシースペシャル"},
-    {"ヘルスィーサラダ", "キノコステーキ", "ナンシーデラックス"},
-    {"ヘルスィーサラダ", "イカスミパスタ", "ナンシースペシャル"},
-    {"ヘルスィーサラダ", "スパゲティ", "ナンシーディナー"},
-    {"ヘルスィーサラダ", "カメスパ", "ナンシーディナー"},
-    {"ヘルスィーサラダ", "カラリーナパスタ", "ナンシースペシャル"},
-    {"カメまん", "ドライフラワー", "うちゅうしょく"},
-    {"フレッシュジュース", "レッド・カラリン", "すみぢる"},
-    {"たんこぶ", "ドライフラワー", "うちゅうしょく"},
-    {"たんこぶ", "おうごんはっぱ", "ナンシーデラックス"},
-    {"きんかい", "イレカエール", "キノコ"},
-    {"きんかい×３", "イレカエール", "きんかい"},
-    {"ココナッツボム", "ドライフラワー", "ヤシの実"},
-    {"ココナッツボム", "バクハツタマゴ", "ナンシーダイナマイ"},
-    {"カチカチりょうり", "ドライフラワー", "カチカチコウラ"},
-};
-/**
- * Zess T.'s two-ingredient recipes: pairs of ingredients and the dish they make. Version for the later
- * releases.
- */
-CookRecipe R_cookbook_recipe_table[] = {
-    {"かみなりドッカン", "かみなりゴロゴロ", "しれんのナベ"},
-    {"キノコ", "かみなりゴロゴロ", "びりびりキノコ"},
-    {"キノコ", "かみなりドッカン", "びりびりキノコ"},
-    {"キノコ", "ファイアフラワー", "キノコホイルやき"},
-    {"キノコ", "びりびりキノコ", "キノコホイルやき"},
-    {"キノコ", "ふにゃふにゃくん", "しなびたキノコ"},
-    {"スーパーキノコ", "かみなりゴロゴロ", "びりびりキノコ"},
-    {"スーパーキノコ", "かみなりドッカン", "びりびりキノコ"},
-    {"スーパーキノコ", "ファイアフラワー", "ナンシーディナー"},
-    {"スーパーキノコ", "びりびりキノコ", "キノコホイルやき"},
-    {"スーパーキノコ", "ふにゃふにゃくん", "しなびたキノコ"},
-    {"スーパーキノコ", "キノコ", "キノコホイルやき"},
-    {"ウルトラキノコ", "かみなりゴロゴロ", "びりびりキノコ"},
-    {"ウルトラキノコ", "かみなりドッカン", "びりびりキノコ"},
-    {"ウルトラキノコ", "ファイアフラワー", "ナンシースペシャル"},
-    {"ウルトラキノコ", "びりびりキノコ", "キノコステーキ"},
-    {"ウルトラキノコ", "ふにゃふにゃくん", "しなびたキノコ"},
-    {"ウルトラキノコ", "キノコ", "キノコステーキ"},
-    {"ウルトラキノコ", "スーパーキノコ", "キノコステーキ"},
-    {"きんきゅうキノコ", "かみなりゴロゴロ", "びりびりキノコ"},
-    {"きんきゅうキノコ", "かみなりドッカン", "びりびりキノコ"},
-    {"きんきゅうキノコ", "ファイアフラワー", "ナンシーディナー"},
-    {"きんきゅうキノコ", "びりびりキノコ", "キノコホイルやき"},
-    {"きんきゅうキノコ", "ふにゃふにゃくん", "しなびたキノコ"},
-    {"きんきゅうキノコ", "キノコ", "キノコステーキ"},
-    {"きんきゅうキノコ", "スーパーキノコ", "キノコステーキ"},
-    {"きんきゅうキノコ", "ウルトラキノコ", "キノコステーキ"},
-    {"しなびたキノコ", "ファイアフラワー", "キノコいため"},
-    {"しなびたキノコ", "びりびりキノコ", "キノコいため"},
-    {"しなびたキノコ", "デカデカドリンク", "キノコ"},
-    {"しなびたキノコ", "キノコ", "キノコいため"},
-    {"しなびたキノコ", "スーパーキノコ", "キノコホイルやき"},
-    {"しなびたキノコ", "ウルトラキノコ", "キノコステーキ"},
-    {"しなびたキノコ", "きんきゅうキノコ", "キノコステーキ"},
-    {"ハニーシロップ", "こおりのいぶき", "アイスキャンディ"},
-    {"ハニーシロップ", "びりびりキノコ", "ハニーキノコ"},
-    {"ハニーシロップ", "キノコ", "ハニーキノコ"},
-    {"ハニーシロップ", "スーパーキノコ", "ハニーキノコＳ"},
-    {"ハニーシロップ", "ウルトラキノコ", "ハニーキノコＺ"},
-    {"ハニーシロップ", "きんきゅうキノコ", "ハニーキノコＳ"},
-    {"メイプルシロップ", "こおりのいぶき", "ナンシーフラッペ"},
-    {"メイプルシロップ", "びりびりキノコ", "メイプルキノコ"},
-    {"メイプルシロップ", "キノコ", "メイプルキノコ"},
-    {"メイプルシロップ", "スーパーキノコ", "メイプルキノコＳ"},
-    {"メイプルシロップ", "ウルトラキノコ", "メイプルキノコＺ"},
-    {"メイプルシロップ", "きんきゅうキノコ", "メイプルキノコＳ"},
-    {"メイプルシロップ", "ハニーシロップ", "フレッシュジュース"},
-    {"ローヤルゼリー", "こおりのいぶき", "ナンシーフラッペ"},
-    {"ローヤルゼリー", "びりびりキノコ", "ローヤルキノコ"},
-    {"ローヤルゼリー", "キノコ", "ローヤルキノコ"},
-    {"ローヤルゼリー", "スーパーキノコ", "ローヤルキノコＳ"},
-    {"ローヤルゼリー", "ウルトラキノコ", "ローヤルキノコＺ"},
-    {"ローヤルゼリー", "きんきゅうキノコ", "ローヤルキノコＳ"},
-    {"ローヤルゼリー", "ハニーシロップ", "フレッシュジュース"},
-    {"ローヤルゼリー", "メイプルシロップ", "ナンシーティー"},
-    {"じわじわキノコ", "かみなりゴロゴロ", "びりびりキノコ"},
-    {"じわじわキノコ", "かみなりドッカン", "びりびりキノコ"},
-    {"じわじわキノコ", "キラキラおとし", "ナンシーディナー"},
-    {"じわじわキノコ", "ファイアフラワー", "ナンシーディナー"},
-    {"じわじわキノコ", "びりびりキノコ", "キノコホイルやき"},
-    {"じわじわキノコ", "キノコ", "キノコホイルやき"},
-    {"じわじわキノコ", "スーパーキノコ", "ナンシーディナー"},
-    {"じわじわキノコ", "ウルトラキノコ", "ナンシースペシャル"},
-    {"じわじわキノコ", "きんきゅうキノコ", "ナンシーディナー"},
-    {"じわじわキノコ", "ハニーシロップ", "ハニーキノコ"},
-    {"じわじわキノコ", "メイプルシロップ", "メイプルキノコ"},
-    {"じわじわキノコ", "ローヤルゼリー", "メイプルキノコＳ"},
-    {"じわじわシロップ", "キノコ", "キノコホイルやき"},
-    {"じわじわシロップ", "スーパーキノコ", "ナンシーディナー"},
-    {"じわじわシロップ", "ウルトラキノコ", "ナンシースペシャル"},
-    {"じわじわシロップ", "きんきゅうキノコ", "ナンシーディナー"},
-    {"じわじわシロップ", "ハニーシロップ", "フレッシュジュース"},
-    {"じわじわシロップ", "メイプルシロップ", "フレッシュジュース"},
-    {"じわじわシロップ", "ローヤルゼリー", "フレッシュジュース"},
-    {"じわじわシロップ", "じわじわキノコ", "じわじわキノコ"},
-    {"イレカエール", "かみなりゴロゴロ", "ゆらゆらじしん"},
-    {"イレカエール", "かみなりドッカン", "キラキラおとし"},
-    {"イレカエール", "キラキラおとし", "かみなりドッカン"},
-    {"イレカエール", "こおりのいぶき", "ファイアフラワー"},
-    {"イレカエール", "ファイアフラワー", "こおりのいぶき"},
-    {"イレカエール", "ゆらゆらじしん", "かみなりゴロゴロ"},
-    {"イレカエール", "テレサのふく", "てきヨケール"},
-    {"イレカエール", "びりびりキノコ", "スーパーキノコ"},
-    {"イレカエール", "てきヨケール", "テレサのふく"},
-    {"イレカエール", "まどわせのこな", "しかえしのこな"},
-    {"イレカエール", "しかえしのこな", "まどわせのこな"},
-    {"イレカエール", "ねむれよいこよ", "スッキリドリンク"},
-    {"イレカエール", "デカデカドリンク", "ミニミニくん"},
-    {"イレカエール", "カチカチコウラ", "ふにゃふにゃくん"},
-    {"イレカエール", "ミニミニくん", "デカデカドリンク"},
-    {"イレカエール", "ふにゃふにゃくん", "カチカチコウラ"},
-    {"イレカエール", "キノコ", "ハニーシロップ"},
-    {"イレカエール", "スーパーキノコ", "メイプルシロップ"},
-    {"イレカエール", "ウルトラキノコ", "ローヤルゼリー"},
-    {"イレカエール", "きんきゅうキノコ", "スーパーキノコ"},
-    {"イレカエール", "しなびたキノコ", "キノコ"},
-    {"イレカエール", "スッキリドリンク", "ねむれよいこよ"},
-    {"イレカエール", "ハニーシロップ", "キノコ"},
-    {"イレカエール", "メイプルシロップ", "スーパーキノコ"},
-    {"イレカエール", "ローヤルゼリー", "ウルトラキノコ"},
-    {"イレカエール", "じわじわキノコ", "どくキノコ"},
-    {"イレカエール", "じわじわシロップ", "ハニーシロップ"},
-    {"ドライフラワー", "ファイアフラワー", "あつあつスープ"},
-    {"ドライフラワー", "びりびりキノコ", "かみなりドッカン"},
-    {"ドライフラワー", "キノコ", "うちゅうしょく"},
-    {"ドライフラワー", "スーパーキノコ", "うちゅうしょく"},
-    {"ドライフラワー", "ウルトラキノコ", "うちゅうしょく"},
-    {"ドライフラワー", "きんきゅうキノコ", "うちゅうしょく"},
-    {"ドライフラワー", "しなびたキノコ", "うちゅうしょく"},
-    {"ドライフラワー", "じわじわキノコ", "うちゅうしょく"},
-    {"ドライフラワー", "ホットドッグ", "うちゅうしょく"},
-    {"ふしぎなタマゴ", "ファイアフラワー", "バクハツタマゴ"},
-    {"ふしぎなタマゴ", "キノコ", "キセツのオムレツ"},
-    {"ふしぎなタマゴ", "スーパーキノコ", "キセツのオムレツ"},
-    {"ふしぎなタマゴ", "ウルトラキノコ", "キセツのオムレツ"},
-    {"ふしぎなタマゴ", "きんきゅうキノコ", "キセツのオムレツ"},
-    {"ふしぎなタマゴ", "ドライフラワー", "うちゅうしょく"},
-    {"おうごんはっぱ", "こおりのいぶき", "ゆきうさぎ"},
-    {"おうごんはっぱ", "キノコ", "きんきゅうキノコ"},
-    {"おうごんはっぱ", "スーパーキノコ", "きんきゅうキノコ"},
-    {"おうごんはっぱ", "ウルトラキノコ", "きんきゅうキノコ"},
-    {"おうごんはっぱ", "きんきゅうキノコ", "きんきゅうキノコ"},
-    {"おうごんはっぱ", "じわじわキノコ", "こうちゃキノコ"},
-    {"おうごんはっぱ", "ドライフラワー", "うちゅうしょく"},
-    {"トロピコマンゴー", "びりびりキノコ", "ナンシーディナー"},
-    {"トロピコマンゴー", "スーパーキノコ", "ナンシーディナー"},
-    {"トロピコマンゴー", "ウルトラキノコ", "ナンシーディナー"},
-    {"トロピコマンゴー", "ハニーシロップ", "フルーツパフェ"},
-    {"トロピコマンゴー", "メイプルシロップ", "フルーツパフェ"},
-    {"トロピコマンゴー", "ローヤルゼリー", "フルーツパフェ"},
-    {"トロピコマンゴー", "じわじわシロップ", "フルーツパフェ"},
-    {"トロピコマンゴー", "ドライフラワー", "うちゅうしょく"},
-    {"生パスタ", "びりびりキノコ", "ナンシーディナー"},
-    {"生パスタ", "キノコ", "ナンシーディナー"},
-    {"生パスタ", "スーパーキノコ", "ナンシーディナー"},
-    {"生パスタ", "ウルトラキノコ", "ナンシースペシャル"},
-    {"生パスタ", "きんきゅうキノコ", "ナンシーディナー"},
-    {"生パスタ", "しなびたキノコ", "ナンシーディナー"},
-    {"生パスタ", "ドライフラワー", "うちゅうしょく"},
-    {"生パスタ", "ふしぎなタマゴ", "ナンシーディナー"},
-    {"おかしのもと", "ファイアフラワー", "ファイアキャンディ"},
-    {"おかしのもと", "びりびりキノコ", "びりびりキャンディ"},
-    {"おかしのもと", "まどわせのこな", "メロメロケーキ"},
-    {"おかしのもと", "キノコ", "キノコケーキ"},
-    {"おかしのもと", "スーパーキノコ", "キノコケーキ"},
-    {"おかしのもと", "ウルトラキノコ", "キノコクレープ"},
-    {"おかしのもと", "きんきゅうキノコ", "キノコケーキ"},
-    {"おかしのもと", "ハニーシロップ", "ハニーあめ"},
-    {"おかしのもと", "メイプルシロップ", "ナンシークッキー"},
-    {"おかしのもと", "ローヤルゼリー", "ローヤルキャンディ"},
-    {"おかしのもと", "じわじわキノコ", "キノコケーキ"},
-    {"おかしのもと", "じわじわシロップ", "ナンシークッキー"},
-    {"おかしのもと", "ドライフラワー", "うちゅうしょく"},
-    {"おかしのもと", "ふしぎなタマゴ", "ナンシークッキー"},
-    {"おかしのもと", "トロピコマンゴー", "マンゴープディング"},
-    {"レッド・カラリン", "ファイアフラワー", "あつあつスープ"},
-    {"レッド・カラリン", "しなびたキノコ", "キノコ"},
-    {"レッド・カラリン", "スッキリドリンク", "すみぢる"},
-    {"レッド・カラリン", "ハニーシロップ", "スッキリドリンク"},
-    {"レッド・カラリン", "メイプルシロップ", "スッキリドリンク"},
-    {"レッド・カラリン", "ローヤルゼリー", "スッキリドリンク"},
-    {"レッド・カラリン", "生パスタ", "カラリーナパスタ"},
-    {"レッド・カラリン", "おかしのもと", "ファイアキャンディ"},
-    {"カメカメはっぱ", "キノコ", "きんきゅうキノコ"},
-    {"カメカメはっぱ", "スーパーキノコ", "きんきゅうキノコ"},
-    {"カメカメはっぱ", "ウルトラキノコ", "きんきゅうキノコ"},
-    {"カメカメはっぱ", "きんきゅうキノコ", "きんきゅうキノコ"},
-    {"カメカメはっぱ", "ハニーシロップ", "フレッシュジュース"},
-    {"カメカメはっぱ", "メイプルシロップ", "フレッシュジュース"},
-    {"カメカメはっぱ", "ローヤルゼリー", "フレッシュジュース"},
-    {"カメカメはっぱ", "じわじわキノコ", "こうちゃキノコ"},
-    {"カメカメはっぱ", "じわじわシロップ", "フレッシュジュース"},
-    {"カメカメはっぱ", "ドライフラワー", "うちゅうしょく"},
-    {"カメカメはっぱ", "おうごんはっぱ", "ヘルスィーサラダ"},
-    {"カメカメはっぱ", "トロピコマンゴー", "カメまん"},
-    {"カメカメはっぱ", "生パスタ", "カメスパ"},
-    {"カメカメはっぱ", "レッド・カラリン", "すみぢる"},
-    {"つくしんぼ", "キノコ", "ナンシーディナー"},
-    {"つくしんぼ", "スーパーキノコ", "ナンシーディナー"},
-    {"つくしんぼ", "ウルトラキノコ", "ナンシースペシャル"},
-    {"つくしんぼ", "きんきゅうキノコ", "ナンシーディナー"},
-    {"つくしんぼ", "ドライフラワー", "うちゅうしょく"},
-    {"つくしんぼ", "ふしぎなタマゴ", "キセツのオムレツ"},
-    {"つくしんぼ", "カメカメはっぱ", "ヘルスィーサラダ"},
-    {"ピチピーチ", "びりびりキノコ", "ナンシーディナー"},
-    {"ピチピーチ", "まどわせのこな", "メロメロケーキ"},
-    {"ピチピーチ", "スーパーキノコ", "ナンシーディナー"},
-    {"ピチピーチ", "ウルトラキノコ", "ナンシーディナー"},
-    {"ピチピーチ", "しなびたキノコ", "キノコ"},
-    {"ピチピーチ", "ハニーシロップ", "フルーツパフェ"},
-    {"ピチピーチ", "メイプルシロップ", "フルーツパフェ"},
-    {"ピチピーチ", "ローヤルゼリー", "フルーツパフェ"},
-    {"ピチピーチ", "ドライフラワー", "うちゅうしょく"},
-    {"ピチピーチ", "トロピコマンゴー", "フルーツパフェ"},
-    {"ピチピーチ", "おかしのもと", "ピーチタルト"},
-    {"ピチピーチ", "レッド・カラリン", "スッキリドリンク"},
-    {"ヤシの実", "ファイアフラワー", "ココナッツボム"},
-    {"ヤシの実", "ドライフラワー", "うちゅうしょく"},
-    {"ヤシの実", "トロピコマンゴー", "フレッシュジュース"},
-    {"ヤシの実", "生パスタ", "ナンシーディナー"},
-    {"ヤシの実", "おかしのもと", "ココナツキャンディ"},
-    {"ヤシの実", "カメカメはっぱ", "フレッシュジュース"},
-    {"ヤシの実", "ピチピーチ", "フレッシュジュース"},
-    {"キノコいため", "キラキラおとし", "ほしふるディナー"},
-    {"キノコいため", "ドライフラワー", "うちゅうしょく"},
-    {"キノコホイルやき", "キラキラおとし", "ほしふるディナー"},
-    {"キノコホイルやき", "ドライフラワー", "うちゅうしょく"},
-    {"キノコステーキ", "キラキラおとし", "ほしふるディナー"},
-    {"キノコステーキ", "ドライフラワー", "うちゅうしょく"},
-    {"しっぱいりょうり", "ドライフラワー", "うちゅうしょく"},
-    {"ハニーキノコ", "ドライフラワー", "うちゅうしょく"},
-    {"メイプルキノコ", "ドライフラワー", "うちゅうしょく"},
-    {"ローヤルキノコ", "ドライフラワー", "うちゅうしょく"},
-    {"ハニーキノコＳ", "ドライフラワー", "うちゅうしょく"},
-    {"メイプルキノコＳ", "ドライフラワー", "うちゅうしょく"},
-    {"ローヤルキノコＳ", "ドライフラワー", "うちゅうしょく"},
-    {"ハニーキノコＺ", "ドライフラワー", "うちゅうしょく"},
-    {"メイプルキノコＺ", "ドライフラワー", "うちゅうしょく"},
-    {"ローヤルキノコＺ", "ドライフラワー", "うちゅうしょく"},
-    {"ナンシーディナー", "カチカチコウラ", "カチカチりょうり"},
-    {"ナンシーディナー", "ドライフラワー", "うちゅうしょく"},
-    {"ナンシースペシャル", "カチカチコウラ", "カチカチりょうり"},
-    {"ナンシースペシャル", "ドライフラワー", "うちゅうしょく"},
-    {"ナンシーデラックス", "カチカチコウラ", "カチカチりょうり"},
-    {"ナンシーデラックス", "ドライフラワー", "うちゅうしょく"},
-    {"ナンシーダイナマイ", "ドライフラワー", "バクハツタマゴ"},
-    {"ナンシーティー", "レッド・カラリン", "すみぢる"},
-    {"ゆきうさぎ", "あつあつスープ", "いつまでもふたりで"},
-    {"キノコケーキ", "ドライフラワー", "うちゅうしょく"},
-    {"キノコクレープ", "ドライフラワー", "うちゅうしょく"},
-    {"ムースケーキ", "ドライフラワー", "うちゅうしょく"},
-    {"フルーツパフェ", "ドライフラワー", "うちゅうしょく"},
-    {"バクハツタマゴ", "ドライフラワー", "うちゅうしょく"},
-    {"イカスミパスタ", "ドライフラワー", "うちゅうしょく"},
-    {"スパゲティ", "ドライフラワー", "うちゅうしょく"},
-    {"スパゲティ", "レッド・カラリン", "カラリーナパスタ"},
-    {"スパゲティ", "カメカメはっぱ", "カメスパ"},
-    {"こうちゃキノコ", "レッド・カラリン", "すみぢる"},
-    {"どくキノコ", "イレカエール", "ウルトラキノコ"},
-    {"どくキノコ", "ドライフラワー", "うちゅうしょく"},
-    {"どくキノコ", "おうごんはっぱ", "こうちゃキノコ"},
-    {"ショコラケーキ", "ドライフラワー", "うちゅうしょく"},
-    {"マンゴープディング", "ドライフラワー", "うちゅうしょく"},
-    {"マンゴープディング", "ふしぎなタマゴ", "はつこいプディング"},
-    {"はつこいプディング", "ドライフラワー", "うちゅうしょく"},
-    {"ほしふるディナー", "ドライフラワー", "うちゅうしょく"},
-    {"ほしふるディナー", "フルーツパフェ", "ナンシーディナー"},
-    {"しれんのナベ", "ドライフラワー", "どくキノコ"},
-    {"いつまでもふたりで", "ドライフラワー", "うちゅうしょく"},
-    {"いつまでもふたりで", "どくキノコ", "しれんのナベ"},
-    {"すみぢる", "じわじわキノコ", "どくキノコ"},
-    {"すみぢる", "生パスタ", "イカスミパスタ"},
-    {"すみぢる", "おかしのもと", "ショコラケーキ"},
-    {"すみぢる", "ムースケーキ", "ショコラケーキ"},
-    {"すみぢる", "スパゲティ", "イカスミパスタ"},
-    {"キセツのオムレツ", "ドライフラワー", "うちゅうしょく"},
-    {"カメカメティー", "レッド・カラリン", "すみぢる"},
-    {"カメスパ", "ドライフラワー", "うちゅうしょく"},
-    {"カメスパ", "レッド・カラリン", "カラリーナパスタ"},
-    {"カメスパ", "すみぢる", "イカスミパスタ"},
-    {"カラリーナパスタ", "ドライフラワー", "うちゅうしょく"},
-    {"カラリーナパスタ", "ヤシの実", "ナンシーディナー"},
-    {"カラリーナパスタ", "すみぢる", "イカスミパスタ"},
-    {"メロメロケーキ", "ドライフラワー", "うちゅうしょく"},
-    {"ピーチタルト", "ドライフラワー", "うちゅうしょく"},
-    {"びりびりキャンディ", "ドライフラワー", "うちゅうしょく"},
-    {"ファイアキャンディ", "ドライフラワー", "うちゅうしょく"},
-    {"ハニーあめ", "ドライフラワー", "うちゅうしょく"},
-    {"ココナツキャンディ", "ドライフラワー", "うちゅうしょく"},
-    {"ローヤルキャンディ", "ドライフラワー", "うちゅうしょく"},
-    {"ナンシークッキー", "ドライフラワー", "うちゅうしょく"},
-    {"ヘルスィーサラダ", "ドライフラワー", "うちゅうしょく"},
-    {"ヘルスィーサラダ", "生パスタ", "ナンシーディナー"},
-    {"ヘルスィーサラダ", "キノコいため", "ナンシーディナー"},
-    {"ヘルスィーサラダ", "キノコホイルやき", "ナンシースペシャル"},
-    {"ヘルスィーサラダ", "キノコステーキ", "ナンシーデラックス"},
-    {"ヘルスィーサラダ", "イカスミパスタ", "ナンシースペシャル"},
-    {"ヘルスィーサラダ", "スパゲティ", "ナンシーディナー"},
-    {"ヘルスィーサラダ", "カメスパ", "ナンシーディナー"},
-    {"ヘルスィーサラダ", "カラリーナパスタ", "ナンシースペシャル"},
-    {"カメまん", "ドライフラワー", "うちゅうしょく"},
-    {"フレッシュジュース", "レッド・カラリン", "すみぢる"},
-    {"たんこぶ", "ドライフラワー", "うちゅうしょく"},
-    {"たんこぶ", "おうごんはっぱ", "ナンシーデラックス"},
-    {"きんかい", "イレカエール", "キノコ"},
-    {"きんかい×３", "イレカエール", "きんかい"},
-    {"ココナッツボム", "ドライフラワー", "ヤシの実"},
-    {"ココナッツボム", "バクハツタマゴ", "ナンシーダイナマイ"},
-    {"カチカチりょうり", "ドライフラワー", "カチカチコウラ"},
-};
-
-/** The 20 dishes the Mystery item can turn into when cooked. */
-s32 R_mystery_cook_list[] = {
-#else
 EVT_END()
 
 /**
@@ -7496,7 +6499,6 @@ CookRecipe R_cookbook_recipe_table[] = {
 };
 
 s32 R_mystery_cook_list[] = {
-#endif
     ITEM_FIRE_FLOWER,
     ITEM_TASTY_TONIC,
     ITEM_FRESH_JUICE,
@@ -7702,56 +6704,14 @@ USER_FUNC(cook_chk) {
     // the object in both versions)
     EvtWord* args = event->args;
     s32 item = evtGetValue(event, args[0]);
-#if VERSION <= VERSION_DEMO_US
-    ItemData* data = &itemDataTable[item];
-    FileEntry* file;
-    char ingredient[128];
-    char result[128];
-    char result2[128];
-#else
     ItemData* data = &itemDataTable[item];
     u32 i;
-#endif
 
     if (item == ITEM_MYSTERY) {
         item = naniga_okorukana_cook();
         evtSetValue(event, args[1], item);
         evtSetValue(event, args[2], item);
         return EVT_RETURN_DONE;
-#if VERSION <= VERSION_DEMO_US
-    }
-    file = fileAsyncf(0, NULL, "%s/cooking.xml", getMarioStDvdRoot());
-    if (file == NULL) {
-        return EVT_RETURN_BLOCK;
-    }
-    if (fileAsyncMissing(file)) {
-        evtSetValue(event, args[1], 0);
-        evtSetValue(event, args[2], 0);
-        return EVT_RETURN_DONE;
-    }
-    strcpy(ingredient, "");
-    strcpy(result, "");
-    strcpy(result2, "");
-    file = fileAllocf(0, "%s/cooking.xml", getMarioStDvdRoot());
-    parseInit(file->data[0], (u32)file->data[1]);
-    while (parsePush("<cooking_x1>")) {
-        parseTagGet1("<item>", 0, ingredient);
-        parseTagGet1("<cook_lv1>", 0, result);
-        parseTagGet1("<cook_lv2>", 0, result2);
-        parsePopNext();
-        if (strcmp(ingredient, data->id) == 0) {
-            break;
-        }
-        strcpy(ingredient, "");
-        strcpy(result, "");
-        strcpy(result2, "");
-    }
-    parsePop();
-    fileFree(file);
-    // FAKE: volatile casts, see the retail cook_chk.
-    evtSetValue(event, (volatile u32)args[1], itemNameToID(result));
-    evtSetValue(event, (volatile u32)args[2], itemNameToID(result2));
-#else
     }
     for (i = 0; i < 26; i++) {
         if (strcmp(data->id, R_simple_recipe_table[i].ingredient) == 0) {
@@ -7762,7 +6722,6 @@ USER_FUNC(cook_chk) {
     }
     evtSetValue(event, args[1], 0);
     evtSetValue(event, args[2], 0);
-#endif
     return EVT_RETURN_DONE;
 }
 
@@ -7773,16 +6732,8 @@ USER_FUNC(cook_chk2) {
     s32 item1 = evtGetValue(event, args[0]);
     s32 item2 = evtGetValue(event, args[1]);
     ItemData* data1 = &itemDataTable[item1];
-#if VERSION <= VERSION_DEMO_US
-    ItemData* data2 = &itemDataTable[item2];
-    FileEntry* file;
-    char a[128];
-    char b[128];
-    char out[128];
-#else
     ItemData* data2 = &itemDataTable[item2];
     u32 i;
-#endif
 
     if (item1 == ITEM_MYSTERY || item2 == ITEM_MYSTERY) {
         item2 = naniga_okorukana_cook();
@@ -7794,50 +6745,13 @@ USER_FUNC(cook_chk2) {
 #else
     for (i = 0; i < 289; i++) {
 #endif
-#if VERSION <= VERSION_DEMO_US
-        return EVT_RETURN_BLOCK;
-    }
-    if (fileAsyncMissing(file)) {
-        evtSetValue(event, args[2], 0);
-        return EVT_RETURN_DONE;
-    }
-    strcpy(a, "");
-    strcpy(b, "");
-    strcpy(out, "");
-    file = fileAllocf(0, "%s/cooking.xml", getMarioStDvdRoot());
-    parseInit(file->data[0], (u32)file->data[1]);
-    while (parsePush("<cooking_x2>")) {
-        parseTagGet1("<item1>", 0, a);
-        parseTagGet1("<item2>", 0, b);
-        parseTagGet1("<cook>", 0, out);
-        parsePopNext();
-#endif
-#if VERSION <= VERSION_DEMO_US
-        if ((strcmp(a, data1->id) == 0 && strcmp(b, data2->id) == 0) ||
-            (strcmp(a, data2->id) == 0 && strcmp(b, data1->id) == 0)) {
-#else
         if ((strcmp(data1->id, R_cookbook_recipe_table[i].a) == 0 && strcmp(data2->id, R_cookbook_recipe_table[i].b) == 0) ||
             (strcmp(data2->id, R_cookbook_recipe_table[i].a) == 0 && strcmp(data1->id, R_cookbook_recipe_table[i].b) == 0)) {
-#endif
-#if VERSION <= VERSION_DEMO_US
-            break;
-        }
-        strcpy(a, "");
-        strcpy(b, "");
-        strcpy(out, "");
-    }
-    parsePop();
-    fileFree(file);
-#endif
-#if VERSION <= VERSION_DEMO_US
-    evtSetValue(event, (volatile u32)args[2], itemNameToID(out));
-#else
             evtSetValue(event, (volatile u32)args[2], itemNameToID(R_cookbook_recipe_table[i].out));
             return EVT_RETURN_DONE;
         }
     }
     evtSetValue(event, args[2], 0);
-#endif
     return EVT_RETURN_DONE;
 }
 
@@ -7854,20 +6768,10 @@ USER_FUNC(make_item_tbl) {
     s32 i;
     s32 item;
 
-#if VERSION <= VERSION_DEMO_US
-    for (i = 0; i < cnt; i++) {
-        // the demo's argument is an item id: the first matching item is left out
-        item = pouchHaveItem(i);
-        if (item != 0) {
-            if (skip == item) {
-                skip = 0;
-            } else {
-#else
     for (i = 0; i < cnt; i++) {
         if (skip != i) {
             item = pouchHaveItem(i);
             if (item != 0) {
-#endif
                 item_tbl[n] = item;
                 n++;
             }
@@ -8041,13 +6945,9 @@ s32 iri_18_item_tbl[] = {
 EVT_BEGIN(cooking_evt)
     // Controls are locked while Mario and his partners walk up to Zess T.'s stove.
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LW(14), 0)
-#else
     SET_VALUE(LW(11), -1)
     SET_VALUE(LW(12), -1)
     SET_VALUE(LW(14), 0)
-#endif
     SET_VALUE(LW(15), 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ナンシー"), NPC_FLAG_NO_HIT)
     // The partners and Mario line up in front of her and face her.
@@ -8088,11 +6988,7 @@ EVT_BEGIN(cooking_evt)
             CALL(evt_pouch_check_item, ITEM_COOKBOOK, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
                 CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_win_item_select, PTR(iri_18_item_tbl), LW(0))
-#else
                 CALL(evt_win_item_select, 0, PTR(iri_18_item_tbl), LW(0), 0)
-#endif
                 ELSE
                 SET_VALUE(LW(0), -1)
                 SET_VALUE(LF(0), 1)
@@ -8218,11 +7114,7 @@ EVT_BEGIN(cooking_evt)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(make_item_tbl, LW(14), LW(0))
-#else
     CALL(make_item_tbl, LW(11), LW(0))
-#endif
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("gor_01_cook_005"))
         GOTO(5)
@@ -8230,11 +7122,7 @@ EVT_BEGIN(cooking_evt)
     // She asks for an ingredient; Mario picks it from his pouch (backing out asks again).
     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_007"))
     LABEL(1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, PTR(item_tbl), LW(0))
-#else
     CALL(evt_win_item_select, 1, PTR(item_tbl), LW(0), LW(1))
-#endif
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_msg_print, 0, STRING("gor_01_cook_008"), 0, STRING("ナンシー"))
         CALL(evt_msg_select, 0, STRING("gor_01_select"))
@@ -8247,30 +7135,18 @@ EVT_BEGIN(cooking_evt)
         END_SWITCH
     END_IF
     SET_VALUE(LW(14), LW(0))
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LF(0), 0)
-#else
     SET_VALUE(LW(11), LW(1))
     SET_VALUE(LF(0), 0)
-#endif
     // With the Cookbook recipes unlocked, Mario may add a second ingredient.
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(make_item_tbl, LW(14), LW(0))
-#else
         CALL(make_item_tbl, LW(11), LW(0))
-#endif
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("gor_01_cook_009"), 0, STRING("ナンシー"))
             CALL(evt_msg_select, 0, STRING("gor_01_select"))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_continue)
                 LABEL(2)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_win_item_select, PTR(item_tbl), LW(0))
-#else
                 CALL(evt_win_item_select, 1, PTR(item_tbl), LW(0), LW(1))
-#endif
                 IF_INT_EQUAL(LW(0), -1)
                     CALL(evt_msg_print, 0, STRING("gor_01_cook_010"), 0, STRING("ナンシー"))
                     CALL(evt_msg_select, 0, STRING("gor_01_cook_select"))
@@ -8278,15 +7154,9 @@ EVT_BEGIN(cooking_evt)
                         CASE_EQUAL(0)
                         SET_VALUE(LF(0), 1)
                         GOTO(3)
-#if VERSION <= VERSION_DEMO_US
                         CASE_EQUAL(1)
                         CALL(evt_msg_continue)
                         GOTO(2)
-#else
-                        CASE_EQUAL(1)
-                        CALL(evt_msg_continue)
-                        GOTO(2)
-#endif
                         CASE_EQUAL(2)
                         GOTO(0)
                     END_SWITCH
@@ -8295,12 +7165,8 @@ EVT_BEGIN(cooking_evt)
                     CALL(evt_msg_print, 0, STRING("gor_01_cook_011"), 0, STRING("ナンシー"))
                     GOTO(2)
                 END_IF
-#if VERSION <= VERSION_DEMO_US
-                SET_VALUE(LW(15), LW(0))
-#else
                 SET_VALUE(LW(15), LW(0))
                 SET_VALUE(LW(12), LW(1))
-#endif
                 ELSE
                 SET_VALUE(LF(0), 1)
             END_IF
@@ -8341,11 +7207,7 @@ EVT_BEGIN(cooking_evt)
     // The ingredients leave the pouch and the dish is worked out from the recipe.
     IF_INT_EQUAL(LW(15), 0)
         CALL(cook_chk, LW(14), LW(0), LW(1))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_pouch_remove_item, LW(14), LW(3))
-#else
         CALL(evt_pouch_remove_item_index, LW(14), LW(11), LW(3))
-#endif
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
             SET_VALUE(LW(2), LW(1))
             ELSE
@@ -8353,13 +7215,8 @@ EVT_BEGIN(cooking_evt)
         END_IF
         ELSE
         CALL(cook_chk2, LW(14), LW(15), LW(2))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_pouch_remove_item, LW(14), LW(3))
-        CALL(evt_pouch_remove_item, LW(15), LW(3))
-#else
         CALL(evt_pouch_remove_item_index, LW(14), LW(11), LW(3))
         CALL(evt_pouch_remove_item_index, LW(15), LW(12), LW(3))
-#endif
     END_IF
     IF_INT_EQUAL(LW(2), 0)
         SET_VALUE(LW(2), ITEM_MISTAKE)

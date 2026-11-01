@@ -664,12 +664,8 @@ static ShopperData35 shopper_data = {
  */
 // Charge only after the item was successfully added to the pouch.
 EVT_BEGIN(evt_hotdog)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 0)
-#else
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-#endif
     CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("mario"))
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), PARTNER_YOSHI)
@@ -1835,11 +1831,7 @@ static EVT_BEGIN(talk_sarary)
             RETURN
         END_IF
         CALL(evt_msg_print_add, 0, STRING("irai_24_032"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_unitwin_alloc)
-#else
         CALL(evt_unitwin_alloc, 0)
-#endif
         CALL(unitwincoin_disp_onoff, 1)
         CALL(evt_msg_select, 0, STRING("irai_24_033"))
         IF_INT_EQUAL(LW(0), 0)
@@ -2126,12 +2118,8 @@ static NpcSetupInfo npcEnt[] = {
  */
 EVT_BEGIN(evt_uron)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_party_stop, 0)
-#else
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
-#endif
     CALL(evt_snd_bgm_scope, 0, 1)
     BEGIN_INLINE_EVENT
         CALL(evt_telop_entry, 6)
@@ -2183,12 +2171,8 @@ EVT_BEGIN(evt_uron)
     CALL(evt_msg_print_party, STRING("stg3_tou_04"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 1)
-#else
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_snd_bgm_scope, 0, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_00_WELCOME_TO_GLITZVILLE)
@@ -2224,29 +2208,7 @@ static USER_FUNC(mario_chk) {
     if (marioChkKey() && marioChkCtrl()) {
         ok = TRUE;
     }
-#if VERSION <= VERSION_DEMO_US
     evtSetValue(event, args[0], ok != FALSE);
-    return EVT_RETURN_DONE;
-}
-
-/** The demo's champion reset: the releases use evt_rankingReset of tou.c, which also rebuilds the ranking. */
-static USER_FUNC(rankingReset) {
-    s32 i;
-
-    pouchRemoveItem(ITEM_CHAMPS_BELT);
-    for (i = 0; i < 20; i++) {
-        swClear(i + GSWF_TOU_FIGHTER_BELOW_BASE);
-    }
-    swClear(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN);
-    swClear(GSWF_TOU_CHAMP_OPENING_SEEN);
-    swClear(GSWF_TOU_CHAMP_WIN_SEEN);
-    swClear(GSWF_TOU_TITLE_MATCH_RESERVED);
-    swClear(GSWF_TOU_RANKING_SAVED);
-    swClear(GSWF_TOU_LAST_OPPONENT_VALID);
-    swClear(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN);
-#else
-    evtSetValue(event, args[0], ok != FALSE);
-#endif
     return EVT_RETURN_DONE;
 }
 
@@ -2477,12 +2439,8 @@ EVT_BEGIN(evt_tamago_move)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_change_interrupt, STRING("ホットドッグ"), 1, PTR(dummy))
-#else
     CALL(evt_mario_normalize)
     CALL(evt_npc_change_interrupt, STRING("ホットドッグ"), 1, PTR(dummy))
-#endif
     CALL(evt_npc_restart_regular_event, STRING("ホットドッグ"))
     CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("たまご"))
     SET_VALUE(LW(3), 400)
@@ -2537,12 +2495,8 @@ EVT_END()
 EVT_BEGIN(evt_tamago)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_wait_move_end)
-#else
     CALL(evt_mario_normalize)
     CALL(evt_mario_wait_move_end)
-#endif
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg3_tou_241"), 0, 0)
     WAIT_MS(300)
@@ -2552,15 +2506,9 @@ EVT_BEGIN(evt_tamago)
     WAIT_MS(300)
     CALL(evt_mario_set_dir, 270, 300, 0)
     CALL(evt_cam3d_evt_set, -345, 169, 544, -345, 38, -204, 1000, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    WAIT_MS(1000)
-    SET_VALUE(GF(0), 0)
-    SPAWN_EVENT(evt_tamago_move)
-#else
     WAIT_MS(1000)
     SET_VALUE(GF(0), 0)
     SPAWN_EVENT(PTR(evt_tamago_move))
-#endif
     SPAWN_EVENT(PTR(evt_oyaji_move))
     WAIT_MS(6000)
     LABEL(0)
@@ -2581,12 +2529,8 @@ EVT_END()
  * and the story advances to STG3_12_THE_MINI_YOSHI_EGG.
  */
 EVT_BEGIN(talk_tamago)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 0)
-#else
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-#endif
     CALL(evt_party_stop, 0)
     CALL(eff_sleep_off)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2744,12 +2688,8 @@ EVT_END()
 
 EVT_BEGIN(evt_gondora)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_party_stop, 0)
-#else
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
-#endif
     CALL(evt_party_stop, 1)
     CALL(evt_mario_set_pos, -20, 315, 410)
     CALL(evt_party_set_pos, 0, 20, 315, 410)
@@ -2795,7 +2735,6 @@ EVT_BEGIN(evt_gondora)
 EVT_END()
 
 EVT_BEGIN(evt_gondora2)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2805,17 +2744,6 @@ EVT_BEGIN(evt_gondora2)
         CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     END_IF
     BEGIN_INLINE_EVENT
-#else
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_normalize)
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
-    CALL(evt_sub_get_dist, LW(0), LW(2), LW(3), LW(5), LW(10))
-    IF_INT_GREATER(LW(10), 100)
-        CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
-    END_IF
-    BEGIN_INLINE_EVENT
-#endif
         CALL(evt_npc_status_onoff, 1, STRING("飛空船"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_flag_onoff, 1, STRING("飛空船"), NPC_FLAG_NO_HIT)
     END_INLINE_EVENT
@@ -2837,12 +2765,8 @@ EVT_BEGIN(evt_gondora2)
         WAIT_MS(300)
         CALL(evt_party_move_pos2, 0, 20, 490, FLOAT(80.0f))
         CALL(evt_party_move_pos2, 0, 20, 410, FLOAT(80.0f))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_party_stop, 0)
-#else
         CALL(evt_mario_set_dir, 270, 200, 0)
         CALL(evt_party_stop, 0)
-#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(600)
@@ -2851,25 +2775,15 @@ EVT_BEGIN(evt_gondora2)
         CALL(evt_party_stop, 1)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, 20, 410, FLOAT(80.0f))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_mov_pos2, -20, 410, FLOAT(80.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
     SET_VALUE(LW(0), 120)
-#else
-    CALL(evt_mario_mov_pos2, -20, 410, FLOAT(80.0f))
-    CALL(evt_mario_set_dir, 90, 200, 0)
-    SET_VALUE(LW(0), 120)
-#endif
     SET_VALUE(LW(1), 0)
     CALL_CHILD(PTR(evt_gondora_mon))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
-#if VERSION <= VERSION_DEMO_US
-            CALL(rankingReset)
-#else
             CALL(evt_rankingReset)
-#endif
         END_IF
     END_IF
     BEGIN_INLINE_EVENT
@@ -2984,12 +2898,8 @@ EVT_BEGIN(evt_peach_after)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_cam3d_evt_off, 500, 11)
-#else
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_npc_set_position, STRING("美女"), 0, -1000, 0)
-#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
@@ -3154,12 +3064,8 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_set_position, STRING("シンエモンＡ"), 50, 0, 375)
     CALL(evt_npc_set_ry, STRING("シンエモンＡ"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_entry, STRING("シンエモンＢ"), STRING("c_sinemon_m"))
-#else
     CALL(evt_npc_set_scale, STRING("シンエモンＡ"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
     CALL(evt_npc_entry, STRING("シンエモンＢ"), STRING("c_sinemon_m"))
-#endif
     CALL(evt_npc_set_tribe, STRING("シンエモンＢ"), STRING("アイアンシンエモン2"))
     CALL(evt_npc_set_position, STRING("シンエモンＢ"), -50, 0, 400)
     CALL(evt_npc_set_ry, STRING("シンエモンＢ"), 90)
@@ -3311,15 +3217,9 @@ EVT_BEGIN(evt_telbox)
     MODULO(LW(0), 10)
     CALL(evt_mapobj_get_position, STRING("tel_box"), LW(10), LW(11), LW(12))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(10), LW(11), LW(12))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     SWITCH(LW(0))
-#else
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_normalize)
-    SWITCH(LW(0))
-#endif
         CASE_EQUAL(0)
         CALL(evt_msg_print, 0, STRING("stg3_tel_01"), 0, 0)
         CASE_EQUAL(1)
@@ -3521,18 +3421,10 @@ EVT_END()
 
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-#else
     CALL(evt_mario_normalize)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-#endif
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_PLUS_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
-#else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
-#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)
@@ -3811,11 +3703,7 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(tou_01_kanban_moji_flag_sync)
     END_INLINE_EVENT
 #else
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 615, 160, -10, 0, 0)
-#else
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 610, 160, 20, 0, 0)
-#endif
 #endif
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)

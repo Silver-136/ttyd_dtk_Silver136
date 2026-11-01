@@ -128,15 +128,9 @@ void nokonoko_move(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyWalkInit(party, 1);
-#if VERSION <= VERSION_DEMO_US
     }
     partyUpdMoveSpd(party);
     partyRecordFootmark(party);
-#else
-    }
-    partyUpdMoveSpd(party);
-    partyRecordFootmark(party);
-#endif
     switch (party->moveMode) {
     case 0:
         party_move_mode_stay(party);
@@ -326,21 +320,12 @@ void nokonoko_use(PartyEntry* party) {
     }
 
     switch (party->useMotionId) {
-#if VERSION <= VERSION_DEMO_US
-        case 0:
-            if (player->currMotionId == MARIO_MOTION_DAMAGE_TOGE || player->currMotionId == MARIO_MOTION_DAMAGE) {
-                party->useMotionId = 70;
-                break;
-            }
-            partyClearJumpPara(party);
-#else
     case 0:
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
         }
         partyClearJumpPara(party);
-#endif
         party->flags |= PARTY_FLAG_DISABLE_FLOORS;
         party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         partyChgPose(party, "PNK_K_2");
@@ -364,21 +349,12 @@ void nokonoko_use(PartyEntry* party) {
         mario->trigFlags |= MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
         mario->baseSpeed = 0.0f;
         break;
-#if VERSION <= VERSION_DEMO_US
-        case 1:
-            if (player->currMotionId == MARIO_MOTION_DAMAGE_TOGE || player->currMotionId == MARIO_MOTION_DAMAGE) {
-                party->useMotionId = 70;
-                break;
-            }
-            party->displayDirection = revise360(45.0f + party->displayDirection);
-#else
     case 1:
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
         }
         party->displayDirection = revise360(45.0f + party->displayDirection);
-#endif
         party->position.x += (party->moveTarget.x - party->position.x) / (f32)party->moveFrames;
         party->position.y += (party->moveTarget.y - party->position.y) / (f32)party->moveFrames;
         party->position.z += (party->moveTarget.z - party->position.z) / (f32)party->moveFrames;
@@ -391,21 +367,12 @@ void nokonoko_use(PartyEntry* party) {
         party->displayDirection = mario->displayDirectionTarget;
         party->useMotionId = 2;
         partyChgPose(party, "PNK_A_1");
-#if VERSION <= VERSION_DEMO_US
-        case 2:
-            if (player->currMotionId == MARIO_MOTION_DAMAGE_TOGE || player->currMotionId == MARIO_MOTION_DAMAGE) {
-                party->useMotionId = 70;
-                break;
-            }
-            if (player->hitobjStandOn == NULL) {
-#else
     case 2:
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
         }
         if (mario->hitobjStandOn == NULL) {
-#endif
             break;
         }
         marioChgMot(MARIO_MOTION_JUMP);
@@ -514,13 +481,8 @@ void nokonoko_use(PartyEntry* party) {
             }
         }
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
-#if VERSION <= VERSION_DEMO_US
-                if (player->currMotionId == MARIO_MOTION_SHIP || player->currMotionId == MARIO_MOTION_JABARA || player->currMotionId == MARIO_MOTION_PLANE || player->currMotionId == MARIO_MOTION_ROLL ||
-                    (player->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
-#else
             if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL || (u16)(mario->currMotionId - MARIO_MOTION_DAMAGE) <= 1 ||
                 (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
-#endif
                 nokonoko_finish(party);
                 noko_se_off();
                 break;
@@ -574,11 +536,7 @@ void nokonoko_use(PartyEntry* party) {
 #if VERSION >= VERSION_US
             partyChkWallAround(party, &party->position, spd, dir, party->width, party->height);
 #else
-#if VERSION <= VERSION_DEMO_US
-                marioChkWallAround(&party->position, spd, dir, party->width, party->height);
-#else
             marioChkWallAround(&party->position, 1, spd, dir, party->width, party->height);
-#endif
 #endif
             party->useMotionId = 70;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
@@ -1083,17 +1041,10 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
         sincosf(&s2, &c2, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s2 * party->width);
-#if VERSION <= VERSION_DEMO_US
         party->position.z = hz + 0.5f * (c2 * party->width);
         party->position.z -= w * (f32)cos(3.1415927f * (party->targetDir - 90.0f) / 180.0f);
         party->position.x -= w * (f32)sin(3.1415927f * (party->targetDir - 90.0f) / 180.0f);
         vx = s * party->moveSpeed;
-#else
-        party->position.z = hz + 0.5f * (c2 * party->width);
-        party->position.z -= w * (f32)cos(3.1415927f * (party->targetDir - 90.0f) / 180.0f);
-        party->position.x -= w * (f32)sin(3.1415927f * (party->targetDir - 90.0f) / 180.0f);
-        vx = s * party->moveSpeed;
-#endif
         vz = c * party->moveSpeed;
         d = vx * nx + vz * nz;
         party->position.x += 0.5f * (vx - d * nx);
@@ -1119,13 +1070,9 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
         sincosf(&s3, &c3, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s3 * party->width);
-#if VERSION <= VERSION_DEMO_US
-        party->position.z = hz + 0.5f * (c3 * party->width);
-#else
         party->position.z = hz + 0.5f * (c3 * party->width);
         party->position.z -= w * (f32)cos(3.1415927f * (90.0f + party->targetDir) / 180.0f);
         party->position.x -= w * (f32)sin(3.1415927f * (90.0f + party->targetDir) / 180.0f);
-#endif
         vx = s * party->moveSpeed;
         vz = c * party->moveSpeed;
         d = vx * nx + vz * nz;

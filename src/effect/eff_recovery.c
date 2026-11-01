@@ -232,15 +232,9 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     work->position.z = z;
     work->timer = 0;
     work->tick = gp->retraceCount;
-#if VERSION <= VERSION_DEMO_US
     work->alpha = 255;
     work->baseY = -30.0f;
     {
-#else
-    work->alpha = 255;
-    work->baseY = -30.0f;
-    {
-#endif
         Vec sfxPos;
         Vec pos = { 0.0f, 0.0f, 0.0f };
         pos.x = work->position.x;
@@ -337,12 +331,8 @@ void effRecoveryMain(EffectEntry* effect) {
     s32 done = 0;
     s32 type = work->type;
     u32 n = 0;
-#if VERSION <= VERSION_DEMO_US
-    f32 x, y, z;
-#else
     f32 x, y, z;
     f32 baseY = work->baseY;
-#endif
     f32 a, d;
 
     effCalcMayaAnim(work->anim);
@@ -423,11 +413,7 @@ void effRecoveryMain(EffectEntry* effect) {
                 if (p->timer < 16) {
                     p->timer++;
                     p->position.x = intplGetValue(EASING_QUADRATIC_IN, p->position.x, 0.0f, p->timer, 16);
-#if VERSION <= VERSION_DEMO_US
-                        p->position.y = intplGetValue(1, p->position.y, -30.0f, p->timer, 16);
-#else
                     p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, baseY, p->timer, 16);
-#endif
                     p->position.z = intplGetValue(EASING_QUADRATIC_IN, p->position.z, 0.0f, p->timer, 20);
                     p->scale.x = p->scale.y = p->scale.z = intplGetValue(EASING_QUADRATIC_IN, 1.0f, 0.0f, p->timer, 16);
                 } else {
@@ -444,17 +430,7 @@ void effRecoveryMain(EffectEntry* effect) {
                 work = effect->userdata;
                 if (type != 7 && type != 8) {
                     Vec sfxPos;
-#if VERSION <= VERSION_DEMO_US
-                    s32 count = amount * 10;
-                    if (count > 100) {
-                        count = 100;
-                    }
-#endif
-#if VERSION <= VERSION_DEMO_US
-                    effStardustEntry(2, count, 30, x, y - 20.0f, z, 30.0f, 30.0f);
-#else
                     effStardustEntry(2, 2, 30, x, y - 20.0f, z, 30.0f, 30.0f);
-#endif
                     {
                         Vec pos = { 0.0f, 0.0f, 0.0f };
                         pos.x = work->position.x;

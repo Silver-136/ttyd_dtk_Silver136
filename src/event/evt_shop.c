@@ -81,11 +81,7 @@ WinMgrDesc list_desc[3];
 static EvtWord buy_evt[VERSION_PICK(326, 366)];
 EvtWord shopper_talk_evt[];
 EvtWord first_shopping_evt[86];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord sell_evt[193];
-#else
 static EvtWord sell_evt[VERSION_PICK(196, 207)];
-#endif
 EvtWord keep_evt[VERSION_PICK(148, 167)];
 EvtWord unkeep_evt[147];
 EvtWord point_evt[VERSION_PICK(15, 35)];
@@ -139,14 +135,6 @@ WinMgrDesc list_desc[] = {
  * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
  * then runs the shop's own buy_evt with LW(0) = the item id.
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(evt_shoplist)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(disp_list)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-#endif
 static EVT_BEGIN(buy_evt)
     // Mario stops and the item's highlight goes away;
     // a first-time shopper hears the shopping explanation instead.
@@ -519,11 +507,7 @@ static EVT_BEGIN(sell_evt)
     CALL(evt_win_coin_on, 0, LW(8))
     LABEL(0)
     CALL(item_data_db_arrange)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, 3, LW(1))
-#else
     CALL(evt_win_item_select, 1, 3, LW(1), LW(4))
-#endif
     CALL(item_data_db_restore)
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(get_msg, LW(10), 22, LW(14))
@@ -559,11 +543,7 @@ static EVT_BEGIN(sell_evt)
         CALL(evt_msg_print_add, 0, LW(14))
         GOTO(0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_pouch_remove_item, LW(1), LW(0))
-#else
     CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
-#endif
     CALL(evt_pouch_add_coin, LW(3))
     CALL(evt_win_coin_wait, LW(8))
     WAIT_MS(200)
@@ -615,21 +595,13 @@ EVT_BEGIN(keep_evt)
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
 #endif
     LABEL(0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, 4, LW(1))
-#else
     CALL(evt_win_item_select, 1, 4, LW(1), LW(4))
-#endif
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(get_msg, LW(10), 22, LW(14))
         CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_pouch_remove_item, LW(1), LW(0))
-#else
     CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
-#endif
     CALL(evt_pouch_add_keepitem, LW(1), LW(0))
     CALL(keep_pouchcheck_func)
     SET_VALUE(LF(0), 0)
@@ -677,21 +649,13 @@ EVT_BEGIN(unkeep_evt)
     CALL(get_msg, LW(10), 19, LW(14))
     CALL(evt_msg_print_add, 0, LW(14))
     LABEL(0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, 5, LW(1))
-#else
     CALL(evt_win_item_select, 1, 5, LW(1), LW(4))
-#endif
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(get_msg, LW(10), 22, LW(14))
         CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_pouch_remove_keepitem, LW(1), LW(0))
-#else
     CALL(evt_pouch_remove_keepitem, LW(1), LW(4), LW(0))
-#endif
     CALL(evt_pouch_add_item, LW(1), LW(0))
     CALL(unkeep_pouchcheck_func)
     SET_VALUE(LF(0), 0)
@@ -1143,17 +1107,12 @@ USER_FUNC(point_disp_onoff) {
  */
 USER_FUNC(point_wait) {
     ShopWork* wp = _wp;
-#if VERSION <= VERSION_DEMO_US
-    PouchData* pouch = pouchGetPtr();
-    return wp->points != SHOP_PTS(pouch) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
-#else
     PouchData* pouch = pouchGetPtr();
     if (wp->points != pouch->shopPoints) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
-#endif
 }
 
 /** Sets or clears ShopWork flag bits; args: on/off, mask. The talk script sets SHOP_FLAG_TALKING while the counter menu is up. */
@@ -1447,11 +1406,7 @@ USER_FUNC(evt_shop_main_func) {
         }
         return EVT_RETURN_BLOCK;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (winGhostDiaryChk()) {
-#else
     if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {
-#endif
         if (wp->sel != -1) {
             wp->sel = -1;
             winMgrClose(wp->win[0]);

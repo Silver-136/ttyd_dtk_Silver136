@@ -1,6 +1,5 @@
 // Paper Mario 64 effect: a snowman that drops in, then hops along a preset path kicking up snow dust and vapor.
 
-#include "version.h"
 #include "eff/eff_n64.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -42,35 +41,7 @@ static u8 land_hscale_data[] = "dZRLHFJYdlnlf`_`ceddddddddd";
 static u8 jump2_hscale_data[] = {100, 90, 82, 76, 72, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 74, 89, 103, 116, 118, 120, 120, 120, 120, 118, 114, 110};
 
 /** Turn in degrees over the long spinning hop: two sways back and forth before it leaves the ground. */
-#if VERSION <= VERSION_DEMO_US
 static s8 jump2_ry_data[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 10, 16, 22, 28, 33, 38, 40, 41, 41, 40, 38, 33, 28, 22, 16, 10, 5, 1, 1, 5, 10, 16, 22, 28, 33, 38, 40, 41, 41, 40, 38, 33, 28, 22, 16, 10, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-// An older jump table the demo still carries; nothing reads it.
-typedef struct SnowmanJumpStep {
-    s16 x;
-    s16 y;
-    s8 dy;
-    u8 wscale;
-    u8 hscale;
-} SnowmanJumpStep;
-
-/**
- * The demo's unused hop table: position, rise and width/height in percent per frame of a slide-in and bounce.
- */
-static SnowmanJumpStep adata[] = {
-    {-200, 200, 30, 100, 100}, {-180, 180, 30, 100, 100}, {-160, 160, 30, 100, 100}, {-140, 140, 30, 100, 100},
-    {-120, 120, 30, 100, 100}, {-100, 100, 30, 100, 100}, {-80, 80, 30, 100, 100}, {-60, 60, 30, 100, 100},
-    {-40, 40, 30, 100, 100}, {-20, 20, 30, 100, 100}, {0, 0, 30, 100, 100}, {0, 0, 30, 120, 80},
-    {0, 0, 10, 130, 70}, {0, 0, 5, 135, 65}, {0, 0, 2, 138, 62}, {0, 0, 0, 140, 60},
-    {0, 0, 0, 140, 60}, {0, 0, -1, 140, 60}, {0, 0, -1, 140, 60}, {0, 0, -2, 138, 62},
-    {0, 0, -2, 135, 65}, {0, 0, -3, 130, 70}, {0, 0, -4, 120, 80}, {0, 0, -6, 100, 100},
-    {0, 0, -6, 100, 100}, {0, 0, -8, 100, 100}, {0, 1, -12, 100, 100}, {0, 3, -18, 100, 100},
-    {0, 5, -26, 100, 100}, {0, 10, -36, 100, 100}, {0, 15, -48, 100, 100}, {0, 20, -62, 100, 100},
-    {0, 28, -78, 100, 100}, {5, 30, -96, 100, 100}, {8, 30, -96, 100, 100}, {10, 30, -96, 100, 100},
-};
-#else
-static s8 jump2_ry_data[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 10, 16, 22, 28, 33, 38, 40, 41, 41, 40, 38, 33, 28, 22, 16, 10, 5, 1, 1, 5, 10, 16, 22, 28, 33, 38, 40, 41, 41, 40, 38, 33, 28, 22, 16, 10, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-#endif
 
 void effSnowmanMain(EffectEntry* effect);
 void effSnowmanDisp(CameraId cameraId, EffectEntry* effect);

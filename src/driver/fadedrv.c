@@ -65,12 +65,8 @@ void fadeInit(void) {
         entry->fadeSpotY = 0.0f;
         entry->animOffsetX = 0.0f;
         entry->animOffsetY = 0.0f;
-#if VERSION <= VERSION_DEMO_US
-        entry->scale = 1.0f;
-#else
         entry->scale = 1.0f;
         entry->delayFrames = 0;
-#endif
     }
 
     wp->lastEntryId = -1;
@@ -147,15 +143,11 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
     }
     // FAKE: types 3-5 are tested as one unsigned compare, (u32)(type - 3) <= 2; type >= 3 && type <= 5 changes the
     // object
-#if VERSION <= VERSION_DEMO_US
-        if (((u32)(type - FADE_IN_SPOT) <= FADE_IN_SPOT_3D - FADE_IN_SPOT || type == FADE_OUT_SPOT_3D) && duration < 1000) {
-#else
     if (type == 7) {
         type = 3;
     } else if (type == 8) {
         type = 4;
     } else if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
-#endif
         duration = 1000;
     }
     // no default: a type without a case here would go on with entry and id uninitialised
@@ -163,23 +155,6 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
         case 0x1: case 0x2: case 0x3: case 0x4: case 0x5: case 0x6: case 0x9: case 0xA: case 0xB: case 0xC: case 0xD: case 0xE: case 0xF:
             id = 0;
             entry = &wp->entries[0];
-#if VERSION <= VERSION_DEMO_US
-            fadeReset(2);
-            entry->delayFrames = 0;
-            switch (type) {
-                case FADE_IN_IRIS:
-                case FADE_IN_SPOT:
-                case FADE_IN_SPOT_3D:
-                case FADE_IN_BLACK:
-                case FADE_IN_BLACK_2D:
-                case FADE_IN_BLACK_3D:
-                    if (duration) {
-                        entry->delayFrames = 2;
-                    }
-                    break;
-            }
-            break;
-#else
             fadeReset(2);
             entry->delayFrames = 0;
             switch (type) {
@@ -190,7 +165,6 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
                     break;
             }
             break;
-#endif
         case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28: case 0x33:
             id = 1;
             entry = &wp->entries[1];
@@ -510,11 +484,6 @@ void fadeMain(void) {
         switch (entry->type) {
             case 1: case 3: case 5: case 9: case 11: case 14:
                 switch (entry->state) {
-#if VERSION <= VERSION_DEMO_US
-                    case 0:
-                        entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
-                        entry->progress = entry->elapsed / entry->duration;
-#else
                     case 0:
                         if (entry->duration != 0) {
                             // FAKE: no-op (s32) cast of the u32 delayFrames; removing it changes the object
@@ -524,22 +493,6 @@ void fadeMain(void) {
                                 entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
                             }
                             entry->progress = entry->elapsed / entry->duration;
-#endif
-                            entry->progress = 1.0f - entry->progress;
-                            entry->rotation += 10.0f;
-                            if (entry->progress < 0.0f) {
-                                entry->progress = 0.0f;
-                                entry->flags |= FADE_FLAG_DONE;
-                                entry->state++;
-#if VERSION <= VERSION_DEMO_US
-                        }
-                        if (entry->duration != 0) {
-                            if ((s32)entry->delayFrames != 0) {
-                                entry->delayFrames--;
-                            } else {
-                                entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
-                            }
-                            entry->progress = entry->elapsed / entry->duration;
                             entry->progress = 1.0f - entry->progress;
                             entry->rotation += 10.0f;
                             if (entry->progress < 0.0f) {
@@ -553,39 +506,21 @@ void fadeMain(void) {
                             entry->state++;
                         }
                         break;
-#else
-                            }
-                        } else {
-                            entry->progress = 0.0f;
-                            entry->flags |= FADE_FLAG_DONE;
-                            entry->state++;
-                        }
-                        break;
-#endif
                 }
                 break;
             case 2: case 4: case 6: case 10: case 12: case 13: case 15:
                 switch (entry->state) {
-#if VERSION <= VERSION_DEMO_US
-                    case 0:
-                        entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
-#else
                     case 0:
                         if (entry->duration != 0) {
                             entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
-#endif
                             entry->progress = entry->elapsed / entry->duration;
                             entry->rotation -= 10.0f;
-#if VERSION <= VERSION_DEMO_US
-                        if (entry->progress > 1.0f) {
-#else
                             if (entry->progress > 1.0f) {
                                 entry->progress = 1.0f;
                                 entry->flags |= FADE_FLAG_DONE;
                                 entry->state++;
                             }
                         } else {
-#endif
                             entry->progress = 1.0f;
                             entry->flags |= FADE_FLAG_DONE;
                             entry->state++;

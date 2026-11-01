@@ -106,12 +106,8 @@ void effMajinaiMain(EffectEntry* effect) {
                 animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND);
             }
             if (animPoseGetLoopTimes(work->poseId) >= 0.93f) {
-#if VERSION <= VERSION_DEMO_US
-                effStardustEntry(0, 16, 60, work->position.x, 55.0f + work->position.y, work->position.z, 45.0f, 45.0f);
-#else
                 effStardustEntry(0, 16, 60, work->position.x, 55.0f * work->scale + work->position.y,
                                  work->position.z, 45.0f * work->scale, 45.0f * work->scale);
-#endif
                 work->state++;
             }
             break;

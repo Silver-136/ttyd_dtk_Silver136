@@ -75,11 +75,7 @@ static BattleUnitSetup entry_rocket_punch;
 static EvtWord init_event[92];
 static EvtWord waku_event[23];
 static EvtWord damage_event[111];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[216];
-#else
 static EvtWord dead_event[234];
-#endif
 static EvtWord entry_event[78];
 static EvtWord attack_event[150];
 EvtWord stamp_attack_event[352];
@@ -121,27 +117,11 @@ BattleUnitKind unit_boss_magnum_battender = {
     50, // runRate
     6, // pbSoftCap
     120, // width
-#if VERSION <= VERSION_DEMO_US
-    160,
-    30,
-    100,
-    0.0f,
-    80.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    30.0f,
-    115.0f,
-    0.0f,
-#else
     160, // height
     {30, 100}, // hitOffset
     {0.0f, 80.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {30.0f, 115.0f, 0.0f}, // talkTogeBaseOffset
-#endif
     {60.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
     0.0f, // vivianOffsetX
@@ -206,13 +186,8 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_STOP, "MGN_2D_1"},
     {POSE_TYPE_FREEZE, "MGN_2D_1"},
     {POSE_TYPE_CONFUSE, "MGN_X_1"},
-#if VERSION <= VERSION_DEMO_US
-    {4, "MGN_S_1"},
-    {3, "MGN_S_1"},
-#else
     {POSE_TYPE_POISON, "MGN_X_1"},
     {POSE_TYPE_DIZZY, "MGN_X_1"},
-#endif
     {POSE_TYPE_NORMAL, "MGN_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "MGN_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MGN_Q_1"},
@@ -232,13 +207,8 @@ static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_STOP, "MGN_2D_2"},
     {POSE_TYPE_FREEZE, "MGN_2D_2"},
     {POSE_TYPE_CONFUSE, "MGN_X_2"},
-#if VERSION <= VERSION_DEMO_US
-    {4, "MGN_S_2"},
-    {3, "MGN_S_2"},
-#else
     {POSE_TYPE_POISON, "MGN_X_2"},
     {POSE_TYPE_DIZZY, "MGN_X_2"},
-#endif
     {POSE_TYPE_NORMAL, "MGN_S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "MGN_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MGN_Q_2"},
@@ -586,51 +556,31 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     WAIT_MS(500)
     CALL(arm_check, 0, LW(0))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
             SET_VALUE(LW(10), LW(0))
-#else
-    IF_INT_NOT_EQUAL(LW(0), -1)
-        CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
-        IF_INT_EQUAL(LW(1), 0)
-            SET_VALUE(LW(10), LW(0))
-#endif
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
                 CALL(arm_end, 0)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        END_IF
-    END_IF
-    CALL(arm_check, 1, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), -1)
-#else
         END_IF
     END_IF
     CALL(arm_check, 1, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
-#endif
             SET_VALUE(LW(10), LW(0))
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
                 CALL(arm_end, 1)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
-#if VERSION <= VERSION_DEMO_US
             END_INLINE_EVENT
         END_IF
     END_IF
-#else
-            END_INLINE_EVENT
-        END_IF
-    END_IF
-#endif
     SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))
@@ -1250,13 +1200,8 @@ static BattleWeapon weapon_batten_rocket_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
-    COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
-#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-#endif
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

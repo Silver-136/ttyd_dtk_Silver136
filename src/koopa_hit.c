@@ -626,17 +626,6 @@ BOOL kpaFlameHitFilter(HitCheckQuery* query, HitEntry* entry) {
 HitEntry* kpaFlameHitCheck(f32 x, f32 y, f32 z, f32 r) {
     marioGetPtr();
     return hitCheckSphereFilter(kpaFlameHitFilter, x, y, z, r);
-#if VERSION <= VERSION_DEMO_US
-}
-
-// FAKE: stand-in for a function the linker stripped from the original object; its 0.5f is the first
-// literal in the target .sdata2 pool (codegen runs bottom-up, so it must sit last in the file). The map file
-// of the Japanese July 2004 demo (MarioSt.MAP) shows the head of koopa_hit.o as kpaSearchWallFront (kept there, 0x320 bytes) and the stripped
-// _reflect2/_reflect; the demo kpaSearchWallFront's literals are 45, 0.75, 0.25, 0.5, so the US original
-// (whose only literal left is 0.5) was a different version and cannot be taken from the demo.
-/** demo only: Koopa's front-wall search (two rays at 3/4 and 1/4 of the body height), called from searchFrontWall */
-HitEntry* kpaSearchWallFront(Vec* pos, f32* outB, f32 dx, f32 dz) {
-#else
 }
 
 // FAKE: stand-in for a function the linker stripped from the original object; its 0.5f is the first
@@ -645,47 +634,5 @@ HitEntry* kpaSearchWallFront(Vec* pos, f32* outB, f32 dx, f32 dz) {
 // _reflect2/_reflect; the demo kpaSearchWallFront's literals are 45, 0.75, 0.25, 0.5, so the US original
 // (whose only literal left is 0.5) was a different version and cannot be taken from the demo.
 static f32 kpaHalf(f32 v) {
-#endif
-#if VERSION <= VERSION_DEMO_US
-    Vec p;
-    Vec dir;
-    Vec hp;
-    Vec nrm;
-    f32 s, c;
-    f32 bestDist;
-    f32 dist;
-    f32 range;
-    f32 h2;
-    f32 mx, mz;
-    f32 half;
-    f32 h1;
-    HitEntry* hit;
-    HitEntry* hit2;
-    MarioWork* mario;
-
-    mario = marioGetPtr();
-    sincosf(&s, &c, dz);
-    if (marioChkSts(0x10) && (__fabsf(mario->groundRot.x) >= 45.0f || __fabsf(mario->groundRot.z) >= 45.0f)) {
-        pos->x += dx * s;
-        pos->z += dx * c;
-#endif
-#if VERSION <= VERSION_DEMO_US
-        return NULL;
-    }
-    half = 0.5f * mario->wPlayerCollisionBox.x;
-    h1 = 0.75f * mario->wPlayerCollisionBox.y;
-    h2 = 0.25f * mario->wPlayerCollisionBox.y;
-    range = half + dx;
-    bestDist = range;
-    p = *pos;
-    p.y += h1;
-    dir = (Vec){s, 0.0f, c};
-    hit = marioHitCheckVec(&p, &dir, &hp, &nrm, &bestDist);
-    if (hit) {
-        if (chkBalloon(hit)) {
-            mario->hitobjFrontWall = hit;
-        }
-#else
     return 0.5f * v;
 }
-#endif

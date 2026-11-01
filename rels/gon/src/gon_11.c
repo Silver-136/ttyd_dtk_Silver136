@@ -1,7 +1,6 @@
 // gon_11 (ゴンババ, Hooktail Castle): Hooktail's (Gonbaba's) lair: cutscenes, the Hooktail boss fight (story 55, 56) and the Diamond Star.
 // Also a chest that gives an Attack FX item.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_cmd.h"
@@ -625,15 +624,9 @@ EVT_BEGIN(gonbaba_event)
     // Hooktail is defeated, father and son are reunited: the story advances and the Diamond Star is awarded.
     SET_VALUE(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADEOUT)
-    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-#else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
-#endif
     SET_VALUE(LW(0), 1)
     SET_VALUE(LW(1), STRING("stone"))
     CALL_CHILD(PTR(evt_sub_starstone))
@@ -810,11 +803,6 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     if (ptmp == NULL) {
         return 0;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (ptmp->currentMemberId != PARTY_MEMBER_FLURRIE) {
-        return EVT_RETURN_BLOCK;
-    }
-#endif
     hit0 = cloudGetHitBreathout(0);
     hit1 = cloudGetHitBreathout(1);
     hit2 = cloudGetHitBreathout(2);

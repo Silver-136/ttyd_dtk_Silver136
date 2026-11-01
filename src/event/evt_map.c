@@ -1,7 +1,6 @@
 // Script commands for map objects and map-wide settings: animations, blend, fog, colour and
 // offscreen drawing (mapdrv).
 
-#include "version.h"
 #include "eff/eff_fire.h"
 #include "driver/animdrv.h"
 #include "driver/hitdrv.h"
@@ -522,24 +521,12 @@ USER_FUNC(evt_map_replace_mapobj) {
     case 0:
         effTorchEntry(0, pos.x, pos.y - 3.0f, pos.z, 0.6f);
         break;
-#if VERSION <= VERSION_DEMO_US
-        case 1:
-            effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
-            break;
-        case 1: {
-            EffectEntry* eff = effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
-            ((EffFireWork*)eff->userdata)->useMapBlend = 1;
-            break;
-        }
-    }
-#else
     case 1: {
         EffectEntry* eff = effFireEntry(5, 0, pos.x, pos.y, pos.z, 0.4f);
         ((EffFireWork*)eff->userdata)->useMapBlend = 1;
         break;
     }
     }
-#endif
     return EVT_RETURN_DONE;
 }
 

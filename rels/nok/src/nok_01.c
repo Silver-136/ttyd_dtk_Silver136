@@ -549,11 +549,7 @@ EVT_BEGIN(boss_noko_talk)
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                     // Request 17: the mayor takes the Routing Slip from Mario.
                     CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-                    CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
-#else
                     CALL(evt_win_item_select, 0, PTR(iri_17_item_tbl), LW(0), 0)
-#endif
                     IF_INT_NOT_EQUAL(LW(0), -1)
                         CALL(evt_pouch_remove_item, ITEM_ROUTING_SLIP, LW(0))
                         CALL(evt_msg_print, 0, STRING("irai_17_01"), 0, 0)
@@ -1162,12 +1158,8 @@ EVT_BEGIN(nokotarou_tabidachi)
     CALL(evt_npc_delete, LW(3))
     SET_VALUE(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
     RESUME_TYPES_OTHER(4)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_cam3d_evt_off, 500, 11)
-#else
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_party_run, 0)
@@ -1620,11 +1612,7 @@ static EVT_BEGIN(evt_kusa_4)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_4"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
-#else
         CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
-#endif
     END_IF
     RETURN
 EVT_END()
@@ -1639,11 +1627,7 @@ static EVT_BEGIN(evt_kusa_5)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_5"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
-#else
         CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
-#endif
     END_IF
     RETURN
 EVT_END()
@@ -1658,11 +1642,7 @@ static EVT_BEGIN(evt_kusa_6)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
-#else
         CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
-#endif
     END_IF
     RETURN
 EVT_END()

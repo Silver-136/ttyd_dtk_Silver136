@@ -1,7 +1,6 @@
 // Window driver: the window list and the drawing of window frames, speech bubbles with their tails
 // and the system windows, from the window frame textures.
 
-#include "version.h"
 #include "driver/windowdrv.h"
 #include "dolphin/os.h"
 #include "driver/arcdrv.h"
@@ -52,20 +51,6 @@ void windowInit(void) {
     w[5].flags = 0;
     w[5].userdata = NULL;
     w[6].flags = 0;
-#if VERSION <= VERSION_DEMO_US
-    w[6].userdata = NULL;
-    winTpl = NULL;
-    tpl_loaded = FALSE;
-}
-
-void windowLoadTpl(const char* name);
-
-/** the demo loads msgWindow.tpl synchronously */
-void windowTexSetup(void) {
-    s32 i;
-
-    windowLoadTpl("font/msgWindow.tpl");
-#else
     w[6].userdata = NULL;
     winTpl = NULL;
     tpl_loaded = FALSE;
@@ -80,45 +65,17 @@ void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
 
     UnpackTexPalette(winTpl);
     DVDMgrClose(entry);
-#endif
     wakuTexObj = __memAlloc(HEAP_DEFAULT, sizeof(GXTexObj) * winTpl->numDescriptors);
 
     for (i = 0; i < winTpl->numDescriptors; i++) {
         TEXGetGXTexObjFromPalette(winTpl, &wakuTexObj[i], i);
-#if VERSION <= VERSION_DEMO_US
-    }
-}
-
-/** inlined into windowTexSetup; the linker strips the unreferenced copy */
-void windowLoadTpl(const char* name) {
-#else
     }
     tpl_loaded = TRUE;
 }
 
 void windowTexSetup(void) {
-#endif
     DVDEntry* entry;
     u32 size;
-#if VERSION <= VERSION_DEMO_US
-    u32 len;
-#endif
-#if VERSION <= VERSION_DEMO_US
-    char path[128];
-
-    arcOpen(name, (void**)&winTpl, &size);
-    if (winTpl) {
-        UnpackTexPalette(winTpl);
-    } else {
-        sprintf(path, "%s/%s", getMarioStDvdRoot(), name);
-        entry = DVDMgrOpen(path, 2, 0);
-        if (entry) {
-            len = OSRoundUp32B(DVDMgrGetLength(entry));
-            winTpl = __memAlloc(HEAP_DEFAULT, len);
-            DVDMgrRead(entry, winTpl, len, 0);
-            DVDMgrClose(entry);
-            UnpackTexPalette(winTpl);
-#else
     char path[128];
     s32 i;
 
@@ -138,7 +95,6 @@ void windowTexSetup(void) {
 
         for (i = 0; i < winTpl->numDescriptors; i++) {
             TEXGetGXTexObjFromPalette(winTpl, &wakuTexObj[i], i);
-#endif
         }
     }
 }
@@ -1108,16 +1064,10 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
     }
 end:
     ;
-#if VERSION <= VERSION_DEMO_US
-}
-
-TEXPalette* winTpl;
-#else
 }
 
 BOOL tpl_loaded; // TRUE once msgWindow.tpl is unpacked and wakuTexObj is built (new in retail)
 TEXPalette* winTpl; //new in retail
-#endif
 
 /**
  * Draws a speech balloon at (x, y) with its tail pointing at the speaker:

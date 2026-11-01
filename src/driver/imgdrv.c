@@ -2,7 +2,6 @@
  * Images for event scripts: screen captures (imgCapture) drawn as planes or projections (imgDisp,
  * imgDisp_ProjPlane).
  */
-#include "version.h"
 #include "driver/imgdrv.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -137,21 +136,12 @@ void imgDisp(CameraId camId, void* param) {
             mp[i] = NULL;
         }
     }
-#if VERSION <= VERSION_DEMO_US
     if (first == -1) {
         entry->flags |= IMAGE_FLAG_NO_CAPTURE;
         return;
     }
     entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;
     animSetPaperTexMtx(mp[0], mp[1], mp[2]);
-#else
-    if (first == -1) {
-        entry->flags |= IMAGE_FLAG_NO_CAPTURE;
-        return;
-    }
-    entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;
-    animSetPaperTexMtx(mp[0], mp[1], mp[2]);
-#endif
     animSetPaperTexObj(texs[0], texs[1], texs[2], datas[0], datas[1], datas[2],
                        entry->shadows[0].offscreenId != -1 ? 1 : 0, entry->shadows[1].offscreenId != -1 ? 1 : 0);
     if (entry->animName != NULL) {
@@ -201,10 +191,6 @@ void imgDisp(CameraId camId, void* param) {
     animPoseDrawMtx(entry->poseId, m3, 1, 0.0f, scale);
     animPoseDrawMtx(entry->poseId, m3, 2, 0.0f, scale);
     animPoseDrawMtx(entry->poseId, m3, 3, 0.0f, scale);
-#if VERSION <= VERSION_DEMO_US
-    animSetPaperTexMtx(NULL, NULL, NULL);
-    sysWaitDrawSync();
-#else
     animSetPaperTexMtx(NULL, NULL, NULL);
     e2 = wp->entries;
     for (i = 0; i < wp->count; i++, e2++) {
@@ -213,7 +199,6 @@ void imgDisp(CameraId camId, void* param) {
             break;
     }
     if (i < wp->count) sysWaitDrawSync();
-#endif
 }
 
 
@@ -311,9 +296,6 @@ static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
 
 void imgCapture_Prim(ImageEntry* entry, s32 id) {
     ImageShadow* sh = &entry->shadows[id];
-#if VERSION <= VERSION_DEMO_US
-    void* src;
-#endif
     s32 offId;
     u16 w, h;
     s32 fmt;
@@ -328,9 +310,6 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
             if (sh->flags & IMG_SHADOW_COPY_PENDING) {
                 offscreenGetTexObj(offId, &obj, &buf);
                 if (obj) {
-#if VERSION <= VERSION_DEMO_US
-                    src = buf->address;
-#endif
                     w = GXGetTexObjWidth(obj);
                     h = GXGetTexObjHeight(obj);
                     fmt = GXGetTexObjFmt(obj);
@@ -340,11 +319,7 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
                     } else if (sh->allocMode == 2) {
                         sh->data = smartAlloc(size, 0);
                     }
-#if VERSION <= VERSION_DEMO_US
-                    memcpy(sh->data->address, src, size);
-#else
                     memcpy(sh->data->address, buf->address, size);
-#endif
                     DCFlushRange(sh->data->address, size);
                     GXInitTexObj(&sh->texObj, sh->data->address, w, h, fmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
                     GXInitTexObjLOD(&sh->texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
@@ -512,11 +487,7 @@ void imgMain(void) {
                     if (entry->shadows[shadow].flags & IMG_SHADOW_ACTIVE) break;
                 }
                 if (shadow != 3) {
-#if VERSION <= VERSION_DEMO_US
-                    dispEntry(entry->camId, 0.0f, 1, imgDisp, entry);
-#else
                     dispEntry(entry->camId, entry->order, 1, imgDisp, entry);
-#endif
                     switch (entry->shadowId) {
                         case 0:
                             animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_DEPTH_SHADOW);
@@ -650,21 +621,12 @@ void imgShadowDisp(CameraId camId, void* param) {
             mp[i] = NULL;
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    if (first == -1) {
-        entry->flags |= IMAGE_FLAG_NO_CAPTURE;
-        return;
-    }
-    entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;
-    animSetPaperTexMtx((void*)mp[0], (void*)mp[1], (void*)mp[2]);
-#else
     if (first == -1) {
         entry->flags |= IMAGE_FLAG_NO_CAPTURE;
         return;
     }
     entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;
     animSetPaperTexMtx(mp[0], mp[1], mp[2]);
-#endif
     animSetPaperTexObj(objs[0], objs[1], objs[2], datas[0], datas[1], datas[2],
                        entry->shadows[0].offscreenId != -1 ? 1 : 0, entry->shadows[1].offscreenId != -1 ? 1 : 0);
     if (entry->animName != NULL) {

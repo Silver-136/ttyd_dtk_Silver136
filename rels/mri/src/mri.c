@@ -397,11 +397,7 @@ s32 mri_itemsel_table[] = {
  * so the Puni switch can show it when Mario sets the orb on its pedestal. The item id is returned in LW(10).
  */
 EVT_BEGIN(mri_punipuni_setup)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-#else
     CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -20000, 0, ITEM_TYPE_STILL, -1, 0)
-#endif
     CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH_GET)
     RETURN
 EVT_END()
@@ -414,11 +410,7 @@ EVT_BEGIN(mri_punipuni_itemselect)
         CALL(evt_msg_print, 0, STRING("sys_no_item_to_put_on"), 0, 0)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, PTR(mri_itemsel_table), LW(0))
-#else
     CALL(evt_win_item_select, 0, PTR(mri_itemsel_table), LW(0), 0)
-#endif
     IF_INT_EQUAL(LW(0), -1)
         RETURN
     END_IF
@@ -439,11 +431,7 @@ EVT_END()
 EVT_BEGIN(mri_punipuni_itemremove)
     CALL(evt_target_flag_onoff, LW(11), 1, 1)
     CALL(evt_pouch_add_item, ITEM_PUNI_ORB, LW(0))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_set_position, LW(10), 0, -1000, 0)
-#else
     CALL(evt_item_set_position, LW(10), 0, -20000, 0)
-#endif
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("sys_stg2_punitama_off"), 0, 0)
     RETURN
@@ -644,16 +632,6 @@ EVT_BEGIN(mri_waterfall_effect)
 EVT_END()
 
 EVT_BEGIN(mri_guide_hagure_check)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_puni_get_lsw_index, LSW(0), 0, LW(0), LW(1), LW(2), LW(3))
-    CALL(evt_puni_get_trap_index, 1, LW(4))
-    SET_VALUE(LW(1), 0)
-    IF_INT_NOT_EQUAL(LW(4), 0)
-        SET_VALUE(LW(1), 3)
-        DEBUG_PUT_MSG(STRING("ガイド・トラップにはまっている"))
-    END_IF
-    IF_INT_NOT_EQUAL(LW(0), 0)
-#else
     CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, 0, LW(0), LW(1), LW(2), LW(3))
     CALL(evt_puni_get_trap_index, 1, LW(4))
     SET_VALUE(LW(1), 0)
@@ -662,7 +640,6 @@ EVT_BEGIN(mri_guide_hagure_check)
         DEBUG_PUT_MSG(STRING("ガイド・トラップにはまっている"))
     END_IF
     IF_INT_NOT_EQUAL(LW(0), 0)
-#endif
         SET_VALUE(LW(1), 1)
         DEBUG_PUT_MSG(STRING("ガイド・別のエリアにはぐれている"))
     END_IF
@@ -670,15 +647,9 @@ EVT_BEGIN(mri_guide_hagure_check)
     IF_INT_EQUAL(LW(0), 16)
         SET_VALUE(LW(1), 2)
         DEBUG_PUT_MSG(STRING("ガイド・同じエリアではぐれている"))
-#if VERSION <= VERSION_DEMO_US
     END_IF
     DEBUG_PUT_MSG(STRING("ガイド・普通の状態"))
     RETURN
-#else
-    END_IF
-    DEBUG_PUT_MSG(STRING("ガイド・普通の状態"))
-    RETURN
-#endif
 EVT_END()
 
 EVT_BEGIN(mri_guide_goryu)
@@ -686,12 +657,8 @@ EVT_BEGIN(mri_guide_goryu)
     IF_INT_EQUAL(LW(1), 0)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_puni_set_lsw_index, LSW(0), 0, 0, 0, 0, 0)
-#else
     CALL(evt_puni_set_lsw_index, LSW_MRI_PUNI_RECORDS, 0, 0, 0, 0, 0)
     CALL(evt_puni_set_trap_index, 1, 0)
-#endif
     CALL(evt_puni_init_puni, 1, 30, 0, -1000, 0, 0)
     CALL(evt_puni_flag_onoff, 1, 1, 65536)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

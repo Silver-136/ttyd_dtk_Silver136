@@ -1,7 +1,6 @@
 // Mario's side of the partners: which partner is out, calling them (entry/hello/goodbye/kill), the partner
 // button, and partner join/leave, HP and level helpers.
 
-#include "version.h"
 #include "mario/mario_party.h"
 #include "mario/mario_pouch.h"
 #include "mario/mario.h"
@@ -26,10 +25,6 @@ static inline void marioPartyKillSlot1(void) {
     if (mario->currPartySlotId[1] >= 0) {
         partyKill(mario->currPartySlotId[1]);
         mario->currPartySlotId[1] = -1;
-#if VERSION <= VERSION_DEMO_US
-    }
-}
-#else
     }
 }
 
@@ -127,7 +122,6 @@ s32 marioUsePartyMain(void) {
     }
     return 0;
 }
-#endif
 
 /**
  * Puts a party member out at once, replacing whoever held the slot:
@@ -209,69 +203,7 @@ BOOL marioPartyGoodbye(void) {
 /** Removes both the partner and the follower at once with no animation (save load, end of battle, E3 sequence). */
 void marioPartyKill(void) {
     marioPartyKillSlot0();
-#if VERSION <= VERSION_DEMO_US
     marioPartyKillSlot1();
-}
-
-/**
- * The demo has one function for the partner button:
- * the request flag is trigFlags 0x100000, and the wait for partyDoWork runs here (retail splits it out into
- * marioUsePartyMain).
- */
-s32 marioUseParty(void) {
-    MarioWork* mario = marioGetPtr();
-    PartyEntry* party;
-
-    if ((mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) && marioKeyOffChk()) {
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
-        return 0;
-    }
-    if (mario->currPartySlotId[0] < 0) {
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
-        return 0;
-    }
-    if (mario->flags & MARIO_FLAG_IS_8_BIT) {
-        return 0;
-    }
-    if ((mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) || mario->airTimer != 0) {
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
-        return 0;
-    }
-    if (mario->currMotionId != MARIO_MOTION_STAY && mario->currMotionId != MARIO_MOTION_WALK && mario->currMotionId != MARIO_MOTION_DASH) {
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
-        return 0;
-    }
-    if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
-        return 0;
-    }
-    if (partyGetPtr(marioGetPartyId())->flags & PARTY_FLAG_IS_BEING_USED) {
-        return 0;
-    }
-    party = partyGetPtr(marioGetPartyId());
-    if (party == NULL) {
-        return 0;
-    }
-    // 1 = PARTY_MEMBER_GOOMBELLA, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
-    if (party->currentMemberId == 1 && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
-        return 0;
-    }
-    if (party->currentMemberId == 4 && yoshiGetStatus()) {
-        return 0;
-    }
-    if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK)) {
-        if (mario->buttonTrg & PAD_BUTTON_X) {
-            mario->trigFlags |= MARIO_TRIG_FLAG_JABARA_CHK;
-            mario->partyUseDelay = 5;
-        }
-    } else if (--mario->partyUseDelay <= 0) {
-        mario->partyUseDelay = 0;
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
-        return partyDoWork();
-    }
-    return 0;
-#else
-    marioPartyKillSlot1();
-#endif
 }
 
 /**

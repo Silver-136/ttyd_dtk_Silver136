@@ -35,23 +35,10 @@ typedef struct {
 } SlotCards8;
 typedef struct {
     s32 v[5];
-#if VERSION <= VERSION_DEMO_US
-} SlotCards5;
-
-BreakSlotReel* BattleBreakSlotReelGetPtr(s32 no);
-void BattleBreakSlot_Start(void);
-static void BattleBreakSlotDispReel(CameraId camId, void* param);
-static void item_appear_force(BreakSlotReel* reel, s32 item);
-
-// the demo keeps these in .data, ahead of the effect scripts
-u16 tex_id_list_small[5] = {0x2B, 0x2D, 0x2F, 0x2E, 0x2C};
-u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
-#else
 } SlotCards5;
 
 void BattleBreakSlotDispReel(CameraId camId, void* param);
 void item_appear_force(BreakSlotReel* reel, s32 item);
-#endif
 
 /** BINGO! with three Mushrooms: fully restores Mario's HP and, unless the partner is knocked out, the partner's. */
 EVT_BEGIN(kinoko_effect)
@@ -585,11 +572,7 @@ void BattleBreakSlot_Main(void) {
             if (slot->phaseTimer == count + 150) {
                 BattleAudienceAddTargetNum(0.0f, updown);
                 slot->phase = 8;
-#if VERSION <= VERSION_DEMO_US
-                slot->flags &= ~BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
-#else
                 slot->flags &= ~4;
-#endif
 #if VERSION >= VERSION_US
                 {
 #else
@@ -779,22 +762,14 @@ void BattleBreakSlot_Main(void) {
                         BattleBreakSlotReelGetPtr(1)->item == 4 && rr->item == 4) {
                         break;
                     }
-#if VERSION <= VERSION_DEMO_US
-                    if ((slot->flags & BREAK_SLOT_FLAG_LECTURE) && rr->item != 3) {
-#else
                     if ((slot->flags & 2) && BattleBreakSlotReelGetPtr(0)->item == 4 &&
                         BattleBreakSlotReelGetPtr(1)->item == 4 && rr->item == 4) {
                         break;
                     }
                     if ((slot->flags & BREAK_SLOT_FLAG_LECTURE) && rr->item != 3) {
-#endif
                         break;
                     }
-#if VERSION <= VERSION_DEMO_US
-                    if ((slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_STAR) && rr->item != 2) {
-#else
                     if ((slot->flags & 4) && rr->item != 3) {
-#endif
                         break;
                     }
                     if ((dbg2->flags & BATTLE_DEBUG_SLOT_ITEM) && rr->item != dbg2->slotItem) {
@@ -976,13 +951,8 @@ void BattleBreakSlot_PointInc(void) {
             if (slot->flags & BREAK_SLOT_FLAG_LECTURE) {
                 item_appear_force(reel, 3);
             }
-#if VERSION <= VERSION_DEMO_US
-            if (slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_STAR) {
-                item_appear_force(reel, 2);
-#else
             if (slot->flags & 4) {
                 item_appear_force(reel, 3);
-#endif
             }
             break;
         case 1:
@@ -997,13 +967,8 @@ void BattleBreakSlot_PointInc(void) {
             if (slot->flags & BREAK_SLOT_FLAG_LECTURE) {
                 item_appear_force(reel, 3);
             }
-#if VERSION <= VERSION_DEMO_US
-            if (slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_STAR) {
-                item_appear_force(reel, 2);
-#else
             if (slot->flags & 4) {
                 item_appear_force(reel, 3);
-#endif
             }
             break;
         case 2:

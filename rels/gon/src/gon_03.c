@@ -1,7 +1,6 @@
 // gon_03 (ゴンババ, Hooktail Castle): hall between gon_02 and gon_04 with a bone-enemy leader fight and the Richard NPC (story 38, 39, 46).
 // Castle Key (0x0C) item and a spinning floor.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -63,12 +62,8 @@ static USER_FUNC(senkaronAttackStart);
 static USER_FUNC(senkaronFlagOffMesPushing);
 static USER_FUNC(senkaronFlagOnMesPushing);
 static USER_FUNC(senkaronGetMarioPushedFlag);
-#if VERSION <= VERSION_DEMO_US
-static USER_FUNC(senkaronToEscape);
-#else
 static USER_FUNC(senkaronToEscape);
 USER_FUNC(leader_touch_check);
-#endif
 void nokotaro_callback(s32 type);
 static void senkaron_ext_init(void);
 static void senkaron_ext_main(void);
@@ -476,13 +471,8 @@ static EVT_BEGIN(senkaron_event)
         // reaching it shoves him back to gon_01.
         LOOP(0)
             WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            IF_INT_GREATER_OR_EQUAL(LW(0), 350)
-#else
             CALL(leader_touch_check)
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-#endif
                 BREAK_LOOP
             END_IF
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -785,10 +775,6 @@ void nokotaro_callback(s32 type) {
         case 1:
             partyChgPose(party, (const char*)nokotaro_pose[0]);
             break;
-#if VERSION <= VERSION_DEMO_US
-    }
-}
-#else
     }
 }
 
@@ -810,7 +796,6 @@ USER_FUNC(leader_touch_check) {
     }
     return EVT_RETURN_DONE;
 }
-#endif
 
 /** Random float in [min, max] from rand(). */
 static f32 randf(f32 min, f32 max) {

@@ -1,6 +1,5 @@
 // gra_04 (ウスグラの道, Twilight Trail): the woods between gra_03 and gra_05.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -37,7 +36,6 @@ static EVT_BEGIN(in_evt)
 EVT_END()
 
 static EVT_BEGIN(out_evt)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
     CALL(roll_release_check, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -46,16 +44,6 @@ static EVT_BEGIN(out_evt)
         CALL(evt_mario_mov_pos2, FLOAT(-315.0f), FLOAT(-15.0f), FLOAT(80.0f))
     END_IF
     CALL(evt_mario_normalize)
-#else
-    CALL(evt_mario_key_onoff, 0)
-    CALL(roll_release_check, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        DEBUG_PUT_MSG(STRING("ロール解除できません"))
-        CALL(evt_mario_wait_landon)
-        CALL(evt_mario_mov_pos2, FLOAT(-315.0f), FLOAT(-15.0f), FLOAT(80.0f))
-    END_IF
-    CALL(evt_mario_normalize)
-#endif
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
     CALL(evt_mario_get_exparty, LW(0))
@@ -64,11 +52,7 @@ static EVT_BEGIN(out_evt)
         BEGIN_INLINE_EVENT_GET_ID(LW(10))
             CALL(evt_party_stop, 1)
             CALL(evt_party_move_pos2, 1, -375, -20, FLOAT(150.0f))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_stop, 1)
-#else
             CALL(evt_mario_kill_party, 1)
-#endif
         END_INLINE_EVENT
     END_IF
     CALL(evt_mario_get_party, LW(0))
@@ -77,11 +61,7 @@ static EVT_BEGIN(out_evt)
         BEGIN_INLINE_EVENT_GET_ID(LW(11))
             CALL(evt_party_stop, 0)
             CALL(evt_party_move_pos2, 0, -375, -25, FLOAT(150.0f))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_stop, 1)
-#else
             CALL(evt_mario_kill_party, 0)
-#endif
         END_INLINE_EVENT
     END_IF
     CALL(evt_mario_mov_pos2, -375, -30, FLOAT(150.0f))
@@ -100,13 +80,9 @@ static EVT_BEGIN(out_evt)
     CALL(evt_mario_kill_party, 1)
     CALL(evt_mario_set_pos, -242, 10, -450)
     CALL(evt_mario_mov_pos2, -190, -450, FLOAT(150.0f))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 1)
-#else
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
-#endif
     CALL(evt_cam_road_reset)
     CALL(evt_cam_shift_reset)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
@@ -121,16 +97,6 @@ EVT_END()
  */
 static EVT_BEGIN(out_evt2)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_normalize)
-    CALL(roll_release_check, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_mario_normalize)
-    ELSE
-        DEBUG_PUT_MSG(STRING("ロール解除できません"))
-    END_IF
-    CALL(evt_mario_mov_pos2, -242, -450, FLOAT(150.0f))
-#else
     CALL(roll_release_check, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_normalize)
@@ -138,7 +104,6 @@ static EVT_BEGIN(out_evt2)
         DEBUG_PUT_MSG(STRING("ロール解除できません"))
     END_IF
     CALL(evt_mario_mov_pos2, -242, -450, FLOAT(150.0f))
-#endif
     WAIT_MS(800)
     CALL(evt_cam3d_evt_set_now)
     CALL(evt_mario_bgmode_off)
@@ -153,9 +118,6 @@ static EVT_BEGIN(out_evt2)
     CALL(evt_party_set_pos, 1, -400, 5, -20)
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_mov_pos2, -280, -10, FLOAT(150.0f))
-#else
     CALL(evt_party_set_pos, 0, -373, 0, -32)
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
@@ -163,7 +125,6 @@ static EVT_BEGIN(out_evt2)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -280, -10, FLOAT(150.0f))
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_road_reset)
     CALL(evt_cam_shift_reset)

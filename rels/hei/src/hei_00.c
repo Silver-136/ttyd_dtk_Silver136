@@ -817,15 +817,11 @@ USER_FUNC(dist_check) {
 }
 
 EVT_BEGIN(moji_msg)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 0)
-#else
     CALL(hei_00_mario_keyoff_check, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-#endif
     CALL(evt_msg_print, 0, STRING("stg1_hei_02_01"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -960,15 +956,9 @@ static EVT_BEGIN(dokan_evt)
     WAIT_MS(2000)
     DELETE_EVENT(LW(0))
     CALL(evt_cam3d_evt_set, 145, 100, 450, 145, 40, -140, 1000, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(cam_shake2)
-    WAIT_MS(1000)
-    SET_VALUE(GF(1), 1)
-#else
     CALL_CHILD(PTR(cam_shake2))
     WAIT_MS(1000)
     SET_VALUE(GF(1), 1)
-#endif
     CALL(evt_paper_entry, STRING("OFF_hei_00"))
     CALL(evt_offscreen_entry, STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 0, STRING("isi_0"), STRING("offscreen"))
@@ -977,12 +967,8 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_hei_00"))
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_img_clear_virtual_point, STRING("img"))
-#else
     CALL(evt_img_set_virtual_point, STRING("img"), 150, 25, 20)
     CALL(evt_img_set_position, STRING("img"), 9, -14)
-#endif
     CALL(evt_img_set_shadow, STRING("img"), 2)
     WAIT_FRAMES(1)
     SPAWN_EVENT(PTR(evt_snd))
@@ -1029,30 +1015,6 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     RETURN
-#if VERSION <= VERSION_DEMO_US
-EVT_END()
-
-/**
- * Script helper: sets args[0] to TRUE when Mario's button input
- * or his control is switched off (a cutscene is running), else FALSE.
- */
-USER_FUNC(hei_00_mario_keyoff_check) {
-    EvtWord* args = event->args;
-
-    if (marioKeyOffChk() || marioCtrlOffChk()) {
-        evtSetValue(event, args[0], TRUE);
-    } else {
-        evtSetValue(event, args[0], FALSE);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Map-init script: if the Sun Stone has already been placed, hides its empty socket and shows the stone model,
- * shifting the second stone into position when the Moon Stone is placed as well.
- */
-EVT_BEGIN(setting_sun_stone)
-#else
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_hei_000002a8, JP hei .text+0x1E4. See docs/NAME_PROVENANCE.md.
@@ -1072,7 +1034,6 @@ USER_FUNC(hei_00_mario_keyoff_check) {
  * shifting the second stone into position when the Moon Stone is placed as well.
  */
 EVT_BEGIN(setting_sun_stone)
-#endif
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taiyou_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
@@ -1099,11 +1060,7 @@ static s32 itemsel_table00[] = {
 EVT_BEGIN(sun_stone_set_event)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
         CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_item_select, PTR(itemsel_table00), LW(0))
-#else
         CALL(evt_win_item_select, 0, PTR(itemsel_table00), LW(0), 0)
-#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -1153,11 +1110,7 @@ static s32 itemsel_table01[] = {
 EVT_BEGIN(moon_stone_set_event)
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
         CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
-#else
         CALL(evt_win_item_select, 0, PTR(itemsel_table01), LW(0), 0)
-#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN

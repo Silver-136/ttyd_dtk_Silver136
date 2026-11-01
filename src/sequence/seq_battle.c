@@ -49,32 +49,7 @@ void seq_battleInit(SequenceWork* work) {
     FieldBattleData* fbat;
     NpcEntry* npc;
 
-#if VERSION <= VERSION_DEMO_US
-    MapData* map;
-#endif
-#if VERSION <= VERSION_DEMO_US
-    seq_battle_unk_8041874c = gp->debugBattle;
-    // the demo starts reading the battle map now
-    fbatGetPointer();
-    switch (pouchGetPtr()->rank) {
-        case 0:
-            map = mapDataPtr(bti01);
-            break;
-        case 1:
-            map = mapDataPtr(bti02);
-            break;
-        case 2:
-            map = mapDataPtr(bti03);
-            break;
-        case 3:
-        default:
-            map = mapDataPtr(bti04);
-            break;
-    }
-    bmapPreLoad(map->mapName, NULL);
-#else
     debug_battle_flag = gp->debugBattle;
-#endif
     fbat = fbatGetPointer();
     npc = fbat->target;
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_24_BOSS_BATTLE) {
@@ -86,20 +61,6 @@ void seq_battleInit(SequenceWork* work) {
     psndENVOff(PSND_PAUSE);
     padRumbleOff(0);
     evtStopAll(4);
-#if VERSION <= VERSION_DEMO_US
-    psndSetFlag(PSND_FLAG_MUTE_SFX);
-    switch (fbatGetPointer()->hitKind) {
-        case FBAT_HIT_BOMB:
-        case FBAT_HIT_SHELL:
-            if (seq_battle_unk_8041874c == 0) {
-                marioCtrlOff();
-                partyCtrlOff();
-                padRumbleOff(0);
-            }
-            break;
-    }
-}
-#else
     psndSetFlag(PSND_FLAG_MUTE_SFX);
     switch (fbatGetPointer()->hitKind) {
         case FBAT_HIT_BOMB:
@@ -112,7 +73,6 @@ void seq_battleInit(SequenceWork* work) {
             break;
     }
 }
-#endif
 
 /** Leaves the battle sequence; battle_exit tears the battle down and restores the field. */
 void seq_battleExit(SequenceWork* work) {
@@ -131,21 +91,12 @@ static const char bti04[7];
  * starts the battle via battle_init, then once the battle ends returns to the field (or game over on a kiosk
  * timeout; states 10/11 end a debug battle).
  */
-#if VERSION <= VERSION_DEMO_US
 void seq_battleMain(SequenceWork* work) {
     FieldBattleData* fbat;
     BattleStageData* stage;
     PouchData* pouch;
 
     switch (work->state) {
-#else
-void seq_battleMain(SequenceWork* work) {
-    FieldBattleData* fbat;
-    BattleStageData* stage;
-    PouchData* pouch;
-
-    switch (work->state) {
-#endif
         case 0: {
             GXColor color = {0, 0, 0, 255};
             fadeEntry(FADE_CURTAIN_UP_DOWN_A1, 1000, color);
@@ -165,10 +116,6 @@ void seq_battleMain(SequenceWork* work) {
                 work->state++;
             }
             break;
-#if VERSION <= VERSION_DEMO_US
-        case 2:
-            battle_init();
-#else
         case 2:
             pouchGetPtr();
             switch (fbatGetPointer()->hitKind) {
@@ -189,11 +136,7 @@ void seq_battleMain(SequenceWork* work) {
             }
             fbat = fbatGetPointer();
             fbat->battleWait = 0;
-#endif
             work->state++;
-#if VERSION <= VERSION_DEMO_US
-        case 3: {
-#else
         case 3: {
             // FAKE: wait flag and goto check; a plain break while still waiting changes the object
             BOOL wait;
@@ -246,7 +189,6 @@ void seq_battleMain(SequenceWork* work) {
             }
             work->state++;
         case 5: {
-#endif
             Vec pos;
             if (battleSeqEndCheck()) {
                 work->counter = 0;
@@ -266,11 +208,7 @@ void seq_battleMain(SequenceWork* work) {
             psndSetPosDirListener(&pos, camGetPtr(CAMERA_3D)->viewYaw);
             break;
         }
-#if VERSION <= VERSION_DEMO_US
-        case 4:
-#else
         case 6:
-#endif
             if (++work->counter > 30) {
                 if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT)) {
                     seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
@@ -297,54 +235,13 @@ void seq_battleMain(SequenceWork* work) {
 BOOL battle_init(void) {
     FieldBattleData* fbat;
     NpcEntry* npc;
-#if VERSION <= VERSION_DEMO_US
     PouchData* pouch;
-    MapData* map;
-    MapData* map2;
-    BattleStageData* stage;
-#else
-    PouchData* pouch;
-#endif
     FieldBattleInfo* info;
     PartyEntry* party;
 
     fbat = fbatGetPointer();
     npc = fbat->target;
-#if VERSION <= VERSION_DEMO_US
-    stage = npc->battleInfo.stageData;
-#endif
-#if VERSION <= VERSION_DEMO_US
     pouch = pouchGetPtr();
-    // the demo takes Mario's control and loads the battle map here (later versions: seq_battleMain states 2 and 3)
-    if (seq_battle_unk_8041874c == 0) {
-        marioCtrlOff();
-        partyCtrlOff();
-        marioGetPtr()->flags &= ~MARIO_FLAG_ACTIVE;
-        padRumbleOff(0);
-    }
-    switch (pouch->rank) {
-        case 0:
-            map = mapDataPtr(bti01);
-            break;
-        case 1:
-            map = mapDataPtr(bti02);
-            break;
-        case 2:
-            map = mapDataPtr(bti03);
-            break;
-        case 3:
-        default:
-            map = mapDataPtr(bti04);
-            break;
-    }
-    map2 = NULL;
-    if (stage->specificStageDataDir) {
-        map2 = mapDataPtr(stage->specificStageDataDir);
-    }
-    bmapLoad(map->mapName, stage->specificStageDataDir);
-#else
-    pouch = pouchGetPtr();
-#endif
     camSetMode(CAMERA_3D, 2);
     if (gp->debugBattle) {
         const char* msg = DbgBtlSel_GetMsgDataPtr();
@@ -365,14 +262,6 @@ BOOL battle_init(void) {
     npcReleaseFiledNpc();
     gp->inBattle = 1;
     evtmgrReInit();
-#if VERSION <= VERSION_DEMO_US
-    if (map && map->eventAddr) {
-        evtEntry(map->eventAddr, 0, 0);
-    }
-    if (map2 && map2->eventAddr) {
-        evtEntry(map2->eventAddr, 0, 0);
-    }
-#endif
     psndSetFlag(PSND_FLAG_BATTLE_START);
     info = &fbat->info;
     BattleInformationInit(info);
@@ -425,15 +314,9 @@ BOOL battle_init(void) {
     info->ruleType = npc->battleInfo.battleRule[0];
     info->ruleParam = npc->battleInfo.battleRule[1];
     info->ruleParam2 = npc->battleInfo.battleRule[2];
-#if VERSION <= VERSION_DEMO_US
     BattleInit(info);
     return FALSE;
 }
-#else
-    BattleInit(info);
-    return FALSE;
-}
-#endif
 
 void battle_exit(void) {
     LightEntry* light;
@@ -470,13 +353,8 @@ void battle_exit(void) {
         marioCtrlOn();
         partyCtrlOn();
         marioGetPtr()->flags |= MARIO_FLAG_ACTIVE;
-#if VERSION <= VERSION_DEMO_US
-    }
-    psndClearFlag(PSND_FLAG_BATTLE_START);
-#else
     }
     L_psndBGM_stop();
-#endif
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     light = lightGetPaperCraft();
     {
@@ -485,13 +363,9 @@ void battle_exit(void) {
     }
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
     PSMTXMultVec(mtx, &light->position, &light->position);
-#if VERSION <= VERSION_DEMO_US
-    if ((evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG2_24_BOSS_BATTLE) && evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
-#else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE) {
         psndBGMOn_f(PSND_CONTINUE | PSND_FADEIN, 0, 0x2EE, 1);
     } else if (evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
-#endif
         psndBGMOn(PSND_CONTINUE | PSND_FADEIN, NULL);
         psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
     }
@@ -501,20 +375,12 @@ void battle_exit(void) {
  * gon_11, whose message file a debug battle loads when its menu has none, and the battle stage maps for
  * Mario's rank (bti_01 to bti_04, the stage gets bigger as he rises).
  */
-#if VERSION <= VERSION_DEMO_US
-static const char bti01[] = "bti_01";
-#else
 static const char gon11[] = "gon_11";
 /**
  * Names of the battle stage maps for Mario's rank (bti_01 to bti_04, the stage gets bigger as he rises),
  * and gon_11, whose message file a debug battle loads when its menu has none.
  */
 static const char bti01[] = "bti_01";
-#endif
 static const char bti02[] = "bti_02";
 static const char bti03[] = "bti_03";
-#if VERSION <= VERSION_DEMO_US
 static const char bti04[] = "bti_04";
-#else
-static const char bti04[] = "bti_04";
-#endif

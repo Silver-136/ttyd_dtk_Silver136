@@ -780,12 +780,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_cam_letter_box_onoff, 1, 1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_normalize)
-    CALL(evt_cam3d_evt_set, 340, 100, -53, 340, 80, -302, 0, 11)
-#else
     CALL(evt_cam3d_evt_set, 340, 100, -53, 340, 80, -302, 0, EASING_SINE_IN_OUT)
-#endif
     CALL(evt_mario_set_pos, -580, 0, 0)
     CALL(evt_party_set_pos, 0, -580, 0, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -795,12 +790,8 @@ static EVT_BEGIN(first_evt)
     END_INLINE_EVENT
     WAIT_MS(4000)
     CALL(evt_cam3d_evt_set, 200, 150, 1001, -40, 130, 348, 6000, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    WAIT_MS(6000)
-#else
     WAIT_MS(6000)
     CALL(evt_mario_normalize)
-#endif
     CALL(evt_mario_mov_pos2, -351, 0, FLOAT(120.0f))
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, -380, 97, 267, -380, 38, -9, 0, EASING_SINE_IN_OUT)
@@ -819,15 +810,9 @@ static EVT_BEGIN(first_evt)
     CALL(evt_mario_set_pose, STRING(("M_N_2")))
     WAIT_MS(500)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_01_FAHR_OUTPOST_1ST_VISIT)
-    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-    SET_VALUE(LW(0), STRING("w_bero"))
-#else
     SET_VALUE(GSW_STORY_PROGRESS, STG7_01_FAHR_OUTPOST_1ST_VISIT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     SET_VALUE(LW(0), STRING(("w_bero")))
-#endif
     CALL_CHILD(PTR(bero_case_switch_on))
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)
@@ -839,12 +824,7 @@ EVT_BEGIN(evt_bom_01_karakara)
     SET_VALUE(LW(9), LW(0))
     SET_VALUE(LW(8), 0)
     LOOP(0)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_mapobj_get_position, LW(9), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_AMB_WINDVANE1"), LW(0), LW(1), LW(2), LW(10))
-#else
-        CALL(evt_mapobj_get_position, LW(9), LW(0), LW(1), LW(2))
-#endif
         CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 1, 10, 1000)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -869,12 +849,7 @@ EVT_BEGIN(evt_bom_01_karakara)
             WAIT_FRAMES(1)
         END_LOOP
         BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
             WAIT_MS(900)
-            CALL(evt_snd_sfxoff, LW(10))
-#else
-            WAIT_MS(900)
-#endif
         END_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 10, 1, 1000)
         LABEL(1)

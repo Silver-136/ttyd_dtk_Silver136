@@ -1,6 +1,5 @@
 // Battle drawing helpers: 2D and textured-quad drawing, pose lookup and unit item display.
 
-#include "version.h"
 #include "battle/battle_disp.h"
 #include "battle/battle.h"
 #include "battle/battle_menu_disp.h"
@@ -34,16 +33,9 @@
 // Statuses that select the unit's pose, in priority order (_GetStatusPoseType)
 s32 _status_pose_table[] = {
     STATUS_INSTANT_KILL,
-#if VERSION <= VERSION_DEMO_US
-    STATUS_SLEEP,
-#endif
     STATUS_STOP,
-#if VERSION <= VERSION_DEMO_US
-    STATUS_FREEZE,
-#else
     STATUS_FREEZE,
     STATUS_SLEEP,
-#endif
     STATUS_POISON,
     STATUS_CONFUSE,
     STATUS_DIZZY,
@@ -370,12 +362,8 @@ void btlDispMain(void) {
                 if (target->damageEventId && evtCheckID(target->damageEventId)) goto next;
                 BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
                 BtlUnit_GetPos(target, &tpos.x, &tpos.y, &tpos.z);
-#if VERSION <= VERSION_DEMO_US
-                tpos.z += 5.0f;
-#else
                 tpos.z += 7.0f;
                 h = BattleGetFloorHeight(wp, tpos.x, tpos.y, tpos.z);
-#endif
                 switch (unit->work[SHELL_SHIELD_WORK_FOLLOW]) {
                     case 2:
                         // FAKE: double temp for the fabs result (register order of the diff/fabs webs)
@@ -393,34 +381,18 @@ void btlDispMain(void) {
                         break;
                     case 3:
                         if (__fabs(pos.x - tpos.x) < 1.0) {
-#if VERSION <= VERSION_DEMO_US
-                            BtlUnit_SetPos(unit, tpos.x, tpos.y, tpos.z);
-#else
                             BtlUnit_SetPos(unit, tpos.x, h, tpos.z);
-#endif
                             unit->work[SHELL_SHIELD_WORK_FOLLOW] = 1;
                         } else if (tpos.x > pos.x) {
                             pos.x += 1.0f;
-#if VERSION <= VERSION_DEMO_US
-                            BtlUnit_SetPos(unit, pos.x, tpos.y, tpos.z);
-#else
                             BtlUnit_SetPos(unit, pos.x, h, tpos.z);
-#endif
                         } else {
                             pos.x -= 1.0f;
-#if VERSION <= VERSION_DEMO_US
-                            BtlUnit_SetPos(unit, pos.x, tpos.y, tpos.z);
-#else
                             BtlUnit_SetPos(unit, pos.x, h, tpos.z);
-#endif
                         }
                         break;
                     default:
-#if VERSION <= VERSION_DEMO_US
-                        BtlUnit_SetPos(unit, tpos.x, tpos.y, tpos.z);
-#else
                         BtlUnit_SetPos(unit, tpos.x, h, tpos.z);
-#endif
                         break;
                 }
             }

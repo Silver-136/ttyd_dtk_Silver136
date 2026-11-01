@@ -1,6 +1,5 @@
 // Star-power special move Showstopper (sac_suki): the button-sequence game that can defeat enemies outright.
 
-#include "version.h"
 #include "eff/n64/eff_crystal_n64.h"
 #include "eff/eff_starstone.h"
 #include "battle/battle.h"
@@ -110,13 +109,8 @@ static BattleWeapon weapon = {
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
-#if VERSION <= VERSION_DEMO_US
-    0, 0, 0, 0, 0, 0, 0, // atkChangeTime..allergicTime
-    0, // ohkoChance
-#else
     0, 0, 0, 0, 0, 0, 0, // atkChangeTime..allergicTime
     100, // ohkoChance
-#endif
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
@@ -474,15 +468,6 @@ static void disp_2D(CameraId cam, void* param) {
         iconDispGx(&b, ICON_FLAG_2D, ICON_AC_BAR_LEFT, 1.0f);
     }
     GXSetScissor(0, 0x91, gp->fbWidth, 0x50);
-#if VERSION <= VERSION_DEMO_US
-    for (i = 0; i < 7; i++) {
-        u16 icon;
-        if (w->btn2[i].state != 0) {
-            if (i < w->prev) {
-                switch (w->btn2[i].button) {
-                    case 0x100:
-                        icon = ICON_BUTTON_A_PRESSED;
-#else
     for (i = 0; i < 7; i++) {
         _disp_2D(0, i);
         _disp_2D(1, i);
@@ -526,206 +511,60 @@ void _disp_2D(s32 side, s32 idx) {
             t = ICON_BUTTON_A_PRESSED;
         }
         icon = t;
-#endif
         break;
-#if VERSION <= VERSION_DEMO_US
-                    case 0x200:
-                        icon = ICON_BUTTON_B_PRESSED;
-#else
     case PAD_BUTTON_B:
         t = ICON_BUTTON_B;
         if (idx < cur) {
             t = ICON_BUTTON_B_PRESSED;
         }
         icon = t;
-#endif
         break;
-#if VERSION <= VERSION_DEMO_US
-                    case 0x400:
-                        icon = ICON_BUTTON_X_PRESSED;
-#else
     case PAD_BUTTON_X:
         t = ICON_BUTTON_X;
         if (idx < cur) {
             t = ICON_BUTTON_X_PRESSED;
         }
         icon = t;
-#endif
         break;
-#if VERSION <= VERSION_DEMO_US
-                    case 0x800:
-                        icon = ICON_BUTTON_Y_PRESSED;
-#else
     case PAD_BUTTON_Y:
         t = ICON_BUTTON_Y;
         if (idx < cur) {
             t = ICON_BUTTON_Y_PRESSED;
         }
         icon = t;
-#endif
         break;
-#if VERSION <= VERSION_DEMO_US
-                    case 0x40:
-                        icon = ICON_TRIGGER_L_PRESSED;
-#else
     case PAD_TRIGGER_L:
         t = ICON_TRIGGER_L;
         if (idx < cur) {
             t = ICON_TRIGGER_L_PRESSED;
         }
         icon = t;
-#endif
         break;
-#if VERSION <= VERSION_DEMO_US
-                    case 0x20:
-                        icon = ICON_TRIGGER_R_PRESSED;
-#else
     case PAD_TRIGGER_R:
         t = ICON_TRIGGER_R;
         if (idx < cur) {
             t = ICON_TRIGGER_R_PRESSED;
         }
         icon = t;
-#endif
         break;
-#if VERSION <= VERSION_DEMO_US
-                    case 0x10:
-                        icon = ICON_TRIGGER_Z_PRESSED;
-                        break;
-                    default:
-                        icon = 0;
-                        break;
-                }
-            } else {
-                switch (w->btn2[i].button) {
-                    case 0x100:
-                        icon = ICON_BUTTON_A;
-                        break;
-                    case 0x200:
-                        icon = ICON_BUTTON_B;
-                        break;
-                    case 0x400:
-                        icon = ICON_BUTTON_X;
-                        break;
-                    case 0x800:
-                        icon = ICON_BUTTON_Y;
-                        break;
-                    case 0x40:
-                        icon = ICON_TRIGGER_L;
-                        break;
-                    case 0x20:
-                        icon = ICON_TRIGGER_R;
-                        break;
-                    case 0x10:
-                        icon = ICON_TRIGGER_Z;
-                        break;
-                    default:
-                        icon = 0;
-#else
     case PAD_TRIGGER_Z:
         t = ICON_TRIGGER_Z;
         if (idx < cur) {
             t = ICON_TRIGGER_Z_PRESSED;
         }
         icon = t;
-#endif
         break;
-#if VERSION <= VERSION_DEMO_US
-                }
-#endif
     }
     if (icon) {
         Vec pos = {0.0f, 0.0f, 0.0f};
-#if VERSION <= VERSION_DEMO_US
-                pos.x = w->btn2[i].pos.x;
-                pos.y = 60.0f + ((80.0f + w->btn2[i].pos.y) + w->offsetY);
-                pos.z = w->btn2[i].pos.z;
-#else
         pos.x = b->pos.x;
         pos.y = 60.0f + (w->offsetY + (b->pos.y + yoff));
         pos.z = b->pos.z;
-#endif
         iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
-        if (w->btn[i].state == 2) {
-            if (i < w->cur) {
-                switch (w->btn[i].button) {
-                    case 0x100:
-                        icon = ICON_BUTTON_A_PRESSED;
-                        break;
-                    case 0x200:
-                        icon = ICON_BUTTON_B_PRESSED;
-                        break;
-                    case 0x400:
-                        icon = ICON_BUTTON_X_PRESSED;
-                        break;
-                    case 0x800:
-                        icon = ICON_BUTTON_Y_PRESSED;
-                        break;
-                    case 0x40:
-                        icon = ICON_TRIGGER_L_PRESSED;
-                        break;
-                    case 0x20:
-                        icon = ICON_TRIGGER_R_PRESSED;
-                        break;
-                    case 0x10:
-                        icon = ICON_TRIGGER_Z_PRESSED;
-                        break;
-                    default:
-                        icon = 0;
-                        break;
-                }
-            } else {
-                switch (w->btn[i].button) {
-                    case 0x100:
-                        icon = ICON_BUTTON_A;
-                        break;
-                    case 0x200:
-                        icon = ICON_BUTTON_B;
-                        break;
-                    case 0x400:
-                        icon = ICON_BUTTON_X;
-                        break;
-                    case 0x800:
-                        icon = ICON_BUTTON_Y;
-                        break;
-                    case 0x40:
-                        icon = ICON_TRIGGER_L;
-                        break;
-                    case 0x20:
-                        icon = ICON_TRIGGER_R;
-                        break;
-                    case 0x10:
-                        icon = ICON_TRIGGER_Z;
-                        break;
-                    default:
-                        icon = 0;
-                        break;
-                }
-            }
-            if (icon) {
-                Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = w->btn[i].pos.x;
-                pos.y = 60.0f + (w->btn[i].pos.y + w->offsetY);
-                pos.z = w->btn[i].pos.z;
-                iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
-            }
-        }
-    }
-    for (i = 0; i < 7; i++) {
-        _disp_2D(0, i);
-        _disp_2D(1, i);
-    }
-    GXSetScissor(0, 0, gp->fbWidth, gp->efbHeight);
-}
-#endif
 static void disp_3D(CameraId cam, void* param) {
-#if VERSION <= VERSION_DEMO_US
-    get_ptr();
-#endif
 }
 
 /** Translucent 3D draw callback; draws nothing. */

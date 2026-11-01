@@ -1,4 +1,3 @@
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "rels/yuu/include/yuu.h"
@@ -43,13 +42,9 @@ void iconDispGxCol(Mtx pos, s16 flags, u16 iconId, GXColor color);
 USER_FUNC(evt_yuucounter_main_func);
 USER_FUNC(yuucounter_disp_flag_onoff);
 
-#if VERSION <= VERSION_DEMO_US
-static EvtWord main_evt[4];
-#else
 static EvtWord main_evt[4];
 EvtWord yuucounter_window_disp_evt[6];
 EvtWord yuucounter_window_null_evt[2];
-#endif
 
 /**
  * Returns the bits of the counter's display flags selected by mask (1 hide, 2 freeze the value,
@@ -141,7 +136,6 @@ USER_FUNC(evt_yuucounter_alloc) {
             break;
     }
     wp->event = evtEntry(main_evt, 0, 0);
-#if VERSION <= VERSION_DEMO_US
     wp->event->lwData[0] = (EvtWord)wp;
     if (wp->type == 1) {
         evtYuuSetWindowEvt(yuucounter_window_disp_evt);
@@ -149,15 +143,6 @@ USER_FUNC(evt_yuucounter_alloc) {
         evtYuuSetWindowEvt(yuucounter_window_null_evt);
     }
     return EVT_RETURN_DONE;
-#else
-    wp->event->lwData[0] = (EvtWord)wp;
-    if (wp->type == 1) {
-        evtYuuSetWindowEvt(yuucounter_window_disp_evt);
-    } else {
-        evtYuuSetWindowEvt(yuucounter_window_null_evt);
-    }
-    return EVT_RETURN_DONE;
-#endif
 }
 
 /**
@@ -222,21 +207,12 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
             break;
         case 1:
             if (!(wp->dispFlags & 2)) {
-#if VERSION <= VERSION_DEMO_US
                 if (wp->data >= 0) {
                     if (wp->dispFlags & 4) {
                         wp->dispFlags &= ~4;
                         wp->lastTime = gp->renderTime;
                     }
                     wp->elapsed += (s32)gp->renderTime - (s32)wp->lastTime;
-#else
-                if (wp->data >= 0) {
-                    if (wp->dispFlags & 4) {
-                        wp->dispFlags &= ~4;
-                        wp->lastTime = gp->renderTime;
-                    }
-                    wp->elapsed += (s32)gp->renderTime - (s32)wp->lastTime;
-#endif
                     wp->lastTime = gp->renderTime;
                     wp->data = wp->limit - OSTicksToMilliseconds(wp->elapsed);
                 } else {
@@ -355,27 +331,6 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
         case 2:
             break;
     }
-#if VERSION <= VERSION_DEMO_US
-}
-
-/** args[0] = on/off, args[1] = flag mask. Sets or clears those display flag bits of the counter (JP and later). */
-USER_FUNC(yuucounter_disp_flag_onoff) {
-    EvtWord* args = event->args;
-    BOOL on = evtGetValue(event, args[0]);
-    u32 mask = evtGetValue(event, args[1]);
-    YuuCounterWork* wp = _wp;
-
-    if (on) {
-        wp->dispFlags |= mask;
-    } else {
-        wp->dispFlags &= ~mask;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** The counter's per-frame event, started by evt_yuucounter_alloc; runs evt_yuucounter_main_func. */
-static EVT_BEGIN(main_evt)
-#else
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00009d5c, JP yuu .text+0x9C90. See docs/NAME_PROVENANCE.md.
@@ -395,7 +350,6 @@ USER_FUNC(yuucounter_disp_flag_onoff) {
 
 /** The counter's per-frame event, started by evt_yuucounter_alloc; runs evt_yuucounter_main_func. */
 static EVT_BEGIN(main_evt)
-#endif
     CALL(evt_yuucounter_main_func)
     RETURN
 EVT_END()

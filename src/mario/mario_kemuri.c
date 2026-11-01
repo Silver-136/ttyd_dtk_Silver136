@@ -16,21 +16,12 @@
 #include "eff/n64/eff_water_damage_n64.h"
 #include "koopa.h"
 #include "libc_decls.h"
-#if VERSION <= VERSION_DEMO_US
-#include "version.h"
-
-// FAKE: keeps the following function(s) out of line as in the target; removing it changes the code
-#pragma dont_inline on
-static void kemuri(void);
-static void kemuri_mugi(void);
-#else
 #include "mario/mario_kemuri.h"
 
 extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 s, f32 c);
 
 void kemuri(void);
 void kemuri_mugi(void);
-#endif
 void mario_kemuri_landon(void);
 
 
@@ -137,28 +128,16 @@ void mario_land_kemuri(void) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
-static inline
-#endif
 void mario_kemuri_landon(void) {
     static s32 cnt = 0;
     static s32 cnt2 = 10;
     MarioWork* mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
     s32 type = 0;
 
     if (strcmp(gp->currentMapName, "mri_05") == 0) {
         type = 10;
     }
     if (mario->currMotionId == MARIO_MOTION_JUMP && mario->airTimer == 1 && cnt2 == 10) {
-#else
-    s32 type = 0;
-
-    if (strcmp(gp->currentMapName, "mri_05") == 0) {
-        type = 10;
-    }
-    if (mario->currMotionId == MARIO_MOTION_JUMP && mario->airTimer == 1 && cnt2 == 10) {
-#endif
         effWaterDamageN64Entry(type + 5, 30, mario->position.x, mario->position.y, mario->position.z, 1.0f);
         cnt2 = 0;
         effRippleEntry(0, mario->position.x, 11.0f + mario->position.y, mario->position.z);

@@ -1,6 +1,5 @@
 // Star-power special move Art Attack (sac_scissor): drawing around enemies with the star to damage them.
 
-#include "version.h"
 #include "eff/eff_starstone.h"
 #include "icon_ids.h"
 #include "battle/battle_status_effect.h"
@@ -1141,18 +1140,6 @@ void scissor_disp_control(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();
     f32* pts = (f32*)w->points;
     s32 i;
-#if VERSION <= VERSION_DEMO_US
-    BattleWork* wp;
-    BattleUnit* unit;
-    Vec pos;
-    Vec a;
-    Vec b;
-    f32 width;
-    f32 height;
-    f32 hw;
-    f32 hh;
-    f32 sign;
-#endif
     w->blinkFrame = w->blinkFrame + 1;
     if (w->blinkFrame >= 60) {
         w->blinkFrame -= 60;
@@ -1183,81 +1170,7 @@ void scissor_disp_control(CameraId camera, void* param) {
         GXSetChanMatColor(GX_COLOR0A0, HSV2RGB(hsv));
         GXBegin(GX_LINES, GX_VTXFMT0, 2);
         GXPosition3f32(pts[i * 2], pts[i * 2 + 1], 0.0f);
-#if VERSION <= VERSION_DEMO_US
         GXPosition3f32(pts[i * 2 + 2], pts[i * 2 + 3], 0.0f);
-    }
-    // The demo outlines each enemy's cut box in red (scissor_damage's box).
-    wp = _battleWorkPointer;
-    GXSetChanMatColor(4, (GXColor){0xFF, 0x00, 0x00, 0xFF});
-    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
-        unit = BattleGetUnitPtr(wp, i);
-        if (unit == NULL)
-            continue;
-        if (BtlUnit_GetBelong(unit) != 1)
-            continue;
-        if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))
-            continue;
-        if (BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->attributes & kNotTargetable)
-            continue;
-        if (unit->attributeFlags & kCeiling) {
-            sign = -1.0f;
-        } else {
-            sign = 1.0f;
-        }
-        width = unit->cutWidth * unit->sizeMultiplier;
-        height = unit->cutHeight * unit->sizeMultiplier;
-        BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-        pos.x = unit->cutBaseOffset.x * unit->sizeMultiplier + pos.x;
-        hw = 0.5f * width;
-        hh = 0.5f * height;
-        pos.y = sign * (unit->cutBaseOffset.y * unit->sizeMultiplier) + pos.y;
-        a.x = pos.x - hw;
-        a.y = pos.y + hh;
-        a.z = pos.z;
-        btlGetScreenPoint(&a, &a);
-        b.x = pos.x + hw;
-        b.y = pos.y + hh;
-        b.z = pos.z;
-        btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
-        GXPosition3f32(a.x, a.y, 0.0f);
-        GXPosition3f32(b.x, b.y, 0.0f);
-        a.x = pos.x + hw;
-        a.y = pos.y + hh;
-        a.z = pos.z;
-        btlGetScreenPoint(&a, &a);
-        b.x = pos.x + hw;
-        b.y = pos.y - hh;
-        b.z = pos.z;
-        btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
-        GXPosition3f32(a.x, a.y, 0.0f);
-        GXPosition3f32(b.x, b.y, 0.0f);
-        a.x = pos.x + hw;
-        a.y = pos.y - hh;
-        a.z = pos.z;
-        btlGetScreenPoint(&a, &a);
-        b.x = pos.x - hw;
-        b.y = pos.y - hh;
-        b.z = pos.z;
-        btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
-        GXPosition3f32(a.x, a.y, 0.0f);
-        GXPosition3f32(b.x, b.y, 0.0f);
-        a.x = pos.x - hw;
-        a.y = pos.y - hh;
-        a.z = pos.z;
-        btlGetScreenPoint(&a, &a);
-        b.x = pos.x - hw;
-        b.y = pos.y + hh;
-        b.z = pos.z;
-        btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
-        GXPosition3f32(a.x, a.y, 0.0f);
-        GXPosition3f32(b.x, b.y, 0.0f);
-#else
-        GXPosition3f32(pts[i * 2 + 2], pts[i * 2 + 3], 0.0f);
-#endif
     }
 }
 
@@ -1399,11 +1312,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(30)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_btl_camera_set_moveto, 0, 75, 120, 600, 75, 70, 0, 30, 0)
-#else
         CALL(evt_btl_camera_set_moveto, 0, 75, 105, 600, 75, 55, 0, 30, 0)
-#endif
     END_SIBLING_EVENT
     // Once the star is in place as the drawing cursor, the timer runs, the crowd cheers and help shows.
     CALL(wait_star_standby)

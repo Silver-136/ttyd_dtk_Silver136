@@ -1,7 +1,6 @@
 // gon_06 (ゴンババ, Hooktail Castle): room with a chest opened by the Black Key (0x22) that gives the Paper Curse.
 // Paper genie (peramajin) scene (story 43 to 45), Attack FX R item, Dry Bones-type enemies.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -185,12 +184,8 @@ EVT_BEGIN(tsuritenjo_event)
     CALL(evt_mario_normalize)
     CALL(evt_mario_set_pos, 620, 0, 0)
     CALL(evt_party_set_pos, 0, 670, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_bero_mario_go_init)
-#else
     CALL(evt_cam_road_reset)
     CALL(evt_bero_mario_go_init)
-#endif
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 1)
     SPAWN_EVENT(PTR(bero_play_enter_anime))
@@ -223,12 +218,8 @@ EVT_BEGIN(tsuritenjo_event)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_13_01_50_SECONDS_TO_ESCAPE)
     CALL(evt_npc_change_fbat_mode, 1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_start_for_event)
-#else
     CALL(evt_npc_start_for_event)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     RETURN
@@ -349,11 +340,7 @@ static EVT_BEGIN(evt_majin)
                     CALL(evt_mario_set_dir, 270, 200, 0)
                 END_IF
             END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_win_item_select, PTR(key_tbl), LW(0))
-#else
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
-#endif
             // Mario backs out of the menu and the chest tells him to use the key.
             IF_INT_EQUAL(LW(0), -1)
                 CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
@@ -376,12 +363,8 @@ static EVT_BEGIN(evt_majin)
                 ADD(LW(1), 50)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
                 CALL(evt_msg_print, 0, STRING("stg1_gon_12_11"), PTR(majin_callback), 0)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_cam3d_evt_set, 380, 110, 330, 380, 57, 23, 500, 11)
-#else
                 CALL(evt_mario_set_pose, STRING("M_I_N"))
                 CALL(evt_cam3d_evt_set, 380, 110, 330, 380, 57, 23, 500, EASING_SINE_IN_OUT)
-#endif
             END_IF
         END_IF
     END_IF
@@ -400,12 +383,7 @@ EVT_END()
 static EVT_BEGIN(evt_majin2)
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(evt_npc_stop_for_event)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_normalize)
-#else
-    CALL(evt_mario_key_onoff, 0)
-#endif
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_pouch_add_item, ITEM_PAPER_CURSE, LW(0))
     CALL(evt_snd_bgmoff, PSND_PAUSE)

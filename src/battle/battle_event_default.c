@@ -1,6 +1,5 @@
 // Default battle events: standard guard, escape, damage and badge-effect scripts shared by all units.
 
-#include "version.h"
 #include "eff/eff_fire.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle.h"
@@ -639,30 +638,14 @@ EVT_END()
 /** Action for a unit that does nothing this turn: restarts its wait event. */
 EVT_BEGIN(btldefaultevt_Appeal)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), POSE_TYPE_NEUTRAL)
-#else
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#endif
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), LW(1))
         ADD(LW(1), 53)
         ADD(LW(3), 35)
         SET_VALUE(LW(4), LW(2))
-#if VERSION <= VERSION_DEMO_US
-        ADD(LW(2), 250)
-    ELSE
-        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-        SET_VALUE(LW(3), LW(1))
-        ADD(LW(1), 150)
-        ADD(LW(3), 80)
-        SET_VALUE(LW(4), LW(2))
-        ADD(LW(2), 400)
-    END_IF
-    CALL(evt_btl_camera_set_mode, 0, 3)
-#else
         ADD(LW(2), 250)
     ELSE
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -673,7 +656,6 @@ EVT_BEGIN(btldefaultevt_Appeal)
         ADD(LW(2), 400)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-#endif
     CALL(evt_btl_camera_set_moveto, 0, LW(0), LW(1), LW(2), LW(0), LW(3), LW(4), 30, 11)
     CALL(evt_batstage_light_set_player_on, 0)
     WAIT_FRAMES(30)
@@ -943,18 +925,12 @@ EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
-#if VERSION <= VERSION_DEMO_US
-            CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(4), LW(0), LW(1), LW(2))
-            ADD(LW(1), 50)
-            CALL(evt_eff, STRING(""), STRING("recovery"), 0, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
-#else
             CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
             CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(7))
             MULTIPLY_FLOAT(LW(7), LW(6))
             CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(4), LW(0), LW(1), LW(2))
             ADD(LW(1), LW(7))
             CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
-#endif
             WAIT_FRAMES(120)
             CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, LW(4), LW(5))
         END_SIBLING_EVENT
@@ -963,22 +939,13 @@ EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
     CALL(_get_flower_suitoru_point, UNIT_ID_SELF, LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
         BEGIN_SIBLING_EVENT
-#if VERSION <= VERSION_DEMO_US
-            CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
-#else
             CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
             CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(7))
             MULTIPLY_FLOAT(LW(7), LW(6))
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
-#endif
             CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(4), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-            ADD(LW(1), 50)
-            CALL(evt_eff, STRING(""), STRING("recovery"), 1, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
-#else
             ADD(LW(1), LW(7))
             CALL(evt_eff, 0, STRING("recovery"), 1, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
-#endif
             WAIT_FRAMES(120)
             CALL(btlevtcmd_RecoverFp, UNIT_ID_SELF, LW(4), LW(5))
         END_SIBLING_EVENT

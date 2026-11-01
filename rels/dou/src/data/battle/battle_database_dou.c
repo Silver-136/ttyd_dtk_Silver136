@@ -1,6 +1,5 @@
 // Pirate's Grotto (dou) battle setups: enemy groups, battle stages and the field-battle tables for the area's maps.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -201,17 +200,10 @@ BattleStageData dou_btlstage_data[] = {
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgA2Evt
         bgset_dou_wave_event, // bgBEvt
-#if VERSION <= VERSION_DEMO_US
-        NULL, 0, // bgCEvt..reserved_1B0
-        0, // disableBgA1Destroy
-        0, // disableBgA2Destroy
-        0, // disableBgBDestroy
-#else
         NULL, 0, // bgCEvt..reserved_1B0
         1, // disableBgA1Destroy
         1, // disableBgA2Destroy
         1, // disableBgBDestroy
-#endif
     },
     {
         "bti_01", // globalStageDataDir

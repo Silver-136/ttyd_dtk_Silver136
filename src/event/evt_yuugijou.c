@@ -22,24 +22,16 @@
 PiantaParlorWork yuugijouwork;
 
 //.sbss
-#if VERSION <= VERSION_DEMO_US
-PiantaParlorWork* yuwp;
-#else
 PiantaParlorWork* yuwp;
 EvtWord* yuu_window_evt;
-#endif
 
 EVT_BEGIN(minigame_end)
     SET_VALUE(GW(0), 2)
     SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
     CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
     CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_bero_mapchange, STRING("gor_03"), STRING("A_dokan_02"))
-#else
     CALL(evt_mario_set_enable_key, 0)
     CALL(evt_bero_mapchange, STRING("gor_03"), STRING("A_dokan_02"))
-#endif
     RETURN
 EVT_END()
 
@@ -48,9 +40,6 @@ EVT_END()
  * Freezes Mario in place, runs the minigame's own window script (evtYuuSetWindowEvt),
  * asks whether to quit and runs minigame_end on the first choice, then flags it closed.
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(window_open)
-#else
 EVT_BEGIN(window_open)
     CALL(evt_mario_cont_onoff, 0)
     BEGIN_SIBLING_EVENT
@@ -62,21 +51,15 @@ EVT_BEGIN(window_open)
     END_SIBLING_EVENT
     CALL(yuuminigame_get_window_evt, LW(0))
     CALL_CHILD(LW(0))
-#endif
     CALL(evt_msg_print, 0, STRING("sysyuu_all_01"), 0, 0)
     CALL(evt_msg_select, 0, STRING("sysyuu_all_02"))
     CALL(evt_msg_continue)
     IF_INT_EQUAL(LW(0), 0)
         CALL(yuuminigame_end)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(yuuminigame_window_end)
-    RETURN
-#else
     CALL(yuuminigame_window_end)
     CALL(evt_mario_cont_onoff, 1)
     RETURN
-#endif
 EVT_END()
 
 /** Clamps a value to zero from below; used for the per-rank values of the default records. */
@@ -84,15 +67,9 @@ static inline s32 MAX0(s32 x) {
     return x >= 0 ? x : 0;
 }
 
-#if VERSION <= VERSION_DEMO_US
 void yuugijou_init(void) {
     s32 t;
     yuwp = &yuugijouwork;
-#else
-void yuugijou_init(void) {
-    s32 t;
-    yuwp = &yuugijouwork;
-#endif
     memset(yuwp, 0, sizeof(PiantaParlorWork));
 
     yuwp->recordOn[0][0] = 1;
@@ -101,19 +78,6 @@ void yuugijou_init(void) {
     yuwp->recordOn[0][3] = 1;
     yuwp->recordOn[0][4] = 1;
 
-#if VERSION <= VERSION_DEMO_US
-    yuwp->recordScore[0][0] = 0x18EE8;
-    yuwp->recordScore[0][1] = 0x1708E;
-    yuwp->recordScore[0][2] = 0x13F42;
-    yuwp->recordScore[0][3] = 0x1318C;
-    yuwp->recordScore[0][4] = 0x125FC;
-
-    yuwp->recordParam[0][0] = 0x1F;
-    yuwp->recordParam[0][1] = 0x18;
-    yuwp->recordParam[0][2] = 0x16;
-    yuwp->recordParam[0][3] = 0x11;
-    yuwp->recordParam[0][4] = 0xB;
-#else
     yuwp->recordScore[0][0] = 0x5B964;
     yuwp->recordScore[0][1] = 0x5825A;
     yuwp->recordScore[0][2] = 0x4F826;
@@ -125,7 +89,6 @@ void yuugijou_init(void) {
     yuwp->recordParam[0][2] = 0xF;
     yuwp->recordParam[0][3] = 0xB;
     yuwp->recordParam[0][4] = 0xA;
-#endif
 
     yuwp->recordOn[1][0] = 1;
     yuwp->recordOn[1][1] = 1;
@@ -133,19 +96,6 @@ void yuugijou_init(void) {
     yuwp->recordOn[1][3] = 1;
     yuwp->recordOn[1][4] = 1;
 
-#if VERSION <= VERSION_DEMO_US
-    yuwp->recordScore[1][0] = 0x1D2;
-    yuwp->recordScore[1][1] = 0x1EA;
-    yuwp->recordScore[1][2] = 0x200;
-    yuwp->recordScore[1][3] = 0x21B;
-    yuwp->recordScore[1][4] = 0x22A;
-
-    yuwp->recordParam[1][0] = 0x18;
-    yuwp->recordParam[1][1] = 0x15;
-    yuwp->recordParam[1][2] = 0x12;
-    yuwp->recordParam[1][3] = 0xE;
-    yuwp->recordParam[1][4] = 0x8;
-#else
     yuwp->recordScore[1][0] = 2;
     yuwp->recordScore[1][1] = 5;
     yuwp->recordScore[1][2] = 0x12;
@@ -161,7 +111,6 @@ void yuugijou_init(void) {
     yuwp->recordParam[1][3] = MAX0(t / 700);
     t = (700 - (s32)yuwp->recordScore[1][4]) * 15;
     yuwp->recordParam[1][4] = MAX0(t / 700);
-#endif
 
     yuwp->recordOn[2][0] = 1;
     yuwp->recordOn[2][1] = 1;
@@ -341,17 +290,9 @@ void monteCountDisp(void) {
         yuwp->dispTick = 0;
         if (monte_snd_flag == 0 && y != 0) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
-#if VERSION <= VERSION_DEMO_US
-                }
-#endif
-#if VERSION <= VERSION_DEMO_US
-                monte_snd_flag = 0; // the demo plays the count sound every step
-                if (y != 0) {
-#else
             monte_snd_flag = 8;
         }
         if (y != 0) {
-#endif
             y = y / 10;
             if (y == 0) {
                 s32 sg;
@@ -364,31 +305,14 @@ void monteCountDisp(void) {
             }
             yuwp->dispTokens += y;
         }
-#if VERSION <= VERSION_DEMO_US
-            }
-            monte_snd_flag = 0;
-#else
     }
     if (monte_snd_flag != 0) {
         monte_snd_flag--;
-#endif
     }
 }
 
 USER_FUNC(yuugijou_add_montemedal) {
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
-    s32 immediate = evtGetValue(event, args[0]);
-    yuwp->tokens += evtGetValue(event, args[1]); // no 99999 cap in the demo
-    s32 sum = yuwp->tokens + evtGetValue(event, args[1]);
-    if (sum < 0x1869F) {
-        yuwp->tokens = sum;
-    } else {
-        yuwp->tokens = 0x1869F;
-    }
-    if (immediate != 0)
-        yuwp->dispTokens = yuwp->tokens;
-#else
     s32 immediate = evtGetValue(event, args[0]);
     s32 sum = yuwp->tokens + evtGetValue(event, args[1]);
     if (sum < 99999) {
@@ -398,7 +322,6 @@ USER_FUNC(yuugijou_add_montemedal) {
     }
     if (immediate != 0) {
         yuwp->dispTokens = yuwp->tokens;
-#endif
     }
     return EVT_RETURN_DONE;
 }
@@ -510,23 +433,6 @@ USER_FUNC(yuuminigame_window_end) {
 USER_FUNC(yuuminigame_end) {
     evtEntryType(minigame_end, 0, 0, 0xEF);
     return EVT_RETURN_DONE;
-#if VERSION <= VERSION_DEMO_US
-}
-
-/** Retail: writes to args[0] the current minigame's window script, set by evtYuuSetWindowEvt. */
-USER_FUNC(yuuminigame_get_window_evt) {
-    evtSetValue(event, event->args[0], (EvtWord)yuu_window_evt);
-    return EVT_RETURN_DONE;
-}
-
-/** Retail: sets the script window_open runs as immediate child before the quit prompt; each minigame sets its own. */
-void evtYuuSetWindowEvt(EvtWord* evt) {
-    yuu_window_evt = evt;
-}
-
-/** Opens the minigame pause window (window_open); called by the menu code (win_main.c, state 400). */
-void evtYuuWindow(void) {
-#else
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_802243a4, JP 0x802243A4. See docs/NAME_PROVENANCE.md.
@@ -543,7 +449,6 @@ void evtYuuSetWindowEvt(EvtWord* evt) {
 
 /** Opens the minigame pause window (window_open); called by the menu code (win_main.c, state 400). */
 void evtYuuWindow(void) {
-#endif
     yuwp->flags &= ~PARLOR_FLAG_WINDOW_DONE;
     evtEntryType(window_open, 0, 0, 0);
 }

@@ -1,7 +1,6 @@
 // Crystal Star effect ("star stone", types 0-6 for the seven stars): spins with a shine sound, sparkles and dust;
 // setting state 1 drops it, and the stars drawn by effStarStoneDisp_2 split in two when they land.
 
-#include "version.h"
 #include "eff/n64/eff_snow_dust_n64.h"
 #include "eff/eff_starstone.h"
 #include "driver/camdrv.h"
@@ -513,13 +512,8 @@ void effStarStoneMain(EffectEntry* effect) {
             ((EffSnowDustN64Work*)w->dust->userdata)->position.y = -1000.0f;
             ((EffSnowDustN64Work*)w->dust->userdata)->position.z = 0.0f;
         }
-#if VERSION <= VERSION_DEMO_US
-        GXSetVtxAttrFmt (w->state < 3 && cam == 4) {
-            shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale);
-#else
         if (w->state < 3 && cam == CAMERA_3D) {
             shadowSetMode(shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale), w->a);
-#endif
         }
     }
     if (!(w->flags & STAR_STONE_FLAG_EXTERNAL_DRAW)) {
@@ -687,9 +681,6 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect) {
     for (dlIdx[0] = 0; dlIdx[0] < 19U; dlIdx[0]++) {
         if ((w->flags & STAR_STONE_FLAG_FALLING) || (dlIdx[0] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[0]], diamond_2_2_dl_0_size_tbl[dlIdx[0]] << 5);
-#if VERSION <= VERSION_DEMO_US
-            }
-#endif
         }
     }
 
@@ -717,18 +708,9 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-#if VERSION <= VERSION_DEMO_US
-        {
-            u8* sz;
-            u8** dl;
-            u32 n;
-#endif
     for (dlIdx[1] = 0; dlIdx[1] < 19U; dlIdx[1]++) {
         if ((w->flags & STAR_STONE_FLAG_FALLING) || (dlIdx[1] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[1]], diamond_2_2_dl_1_size_tbl[dlIdx[1]] << 5);
-#if VERSION <= VERSION_DEMO_US
-            }
-#endif
         }
     }
 

@@ -1,6 +1,5 @@
 // Rogueport Sewers (tik) battle unit: Koopa Paratroopa (patapata): its parts, defence/status tables, and attack events.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -33,11 +32,7 @@ static EvtWord dmg_fall_event[189];
 static EvtWord patapata_dmg_first_attack_pos[19];
 static EvtWord attack_event_patapata[541];
 static PoseTableEntry pose_table[18];
-#if VERSION <= VERSION_DEMO_US
-static PoseTableEntry pose_table_turn[15];
-#else
 static PoseTableEntry pose_table_turn[17];
-#endif
 static BattleDataEntry data_table[3];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -494,13 +489,9 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "NKT_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "NKT_D_1"},
     {POSE_TYPE_DAMAGE, "NKT_D_1"},
-#if VERSION <= VERSION_DEMO_US
-    {POSE_TYPE_DANGER, "NKT_K_2"},
-#else
     {POSE_TYPE_RUN, "NKT_R_1"},
     {POSE_TYPE_WALK, "NKT_W_1"},
     {POSE_TYPE_DANGER, "NKT_K_2"},
-#endif
     {POSE_TYPE_PERIL, "NKT_K_2"},
     {POSE_TYPE_TALK, "NKT_S_2"},
     {POSE_TYPE_ACTION, "NKT_S_2"},

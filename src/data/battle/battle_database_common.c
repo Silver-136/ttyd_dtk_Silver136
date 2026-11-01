@@ -338,11 +338,7 @@ ItemDropData battle_item_met[] = {
     {ITEM_POWER_PUNCH, 5, 5},
     {ITEM_MINI_MR_MINI, 5, 5},
     {ITEM_POWER_JUMP, 0, 2},
-#if VERSION <= VERSION_DEMO_US
-    {ITEM_POWER_JUMP, 0, 2},
-#else
     {ITEM_POWER_SMASH, 0, 2},
-#endif
     {ITEM_SHRINK_STOMP, 0, 2},
     {0},
 };
@@ -356,11 +352,7 @@ ItemDropData battle_item_togemet[] = {
     {ITEM_POWER_PUNCH, 5, 5},
     {ITEM_REPEL_CAPE, 5, 5},
     {ITEM_POWER_JUMP, 0, 2},
-#if VERSION <= VERSION_DEMO_US
-    {ITEM_POWER_JUMP, 0, 2},
-#else
     {ITEM_POWER_SMASH, 0, 2},
-#endif
     {ITEM_SHRINK_STOMP, 0, 2},
     {0},
 };

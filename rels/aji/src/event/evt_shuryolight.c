@@ -1,4 +1,3 @@
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_shuryolight.h"
 #include "evt/evt_cmd.h"
@@ -187,16 +186,9 @@ static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
         }
     }
     // Only the first light bound to this group is advanced and drawn.
-#if VERSION <= VERSION_DEMO_US
-    if (i != 5) {
-        // The Japanese demo draws the light without advancing its animation first.
-        animPoseMain(lights[i].npc->poseId);
-        animPoseDrawShape(lights[i].npc->poseId, lights[i].shape);
-#else
     if (i != 5) {
         animPoseMain(lights[i].npc->poseId);
         animPoseDrawShape(lights[i].npc->poseId, lights[i].shape);
-#endif
     }
 }
 /**

@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "version.h"
 #include <dolphin/types.h>
 
 typedef void (*SequenceCallback)(struct SequenceWork* work);
@@ -16,14 +15,8 @@ typedef enum SequenceType {
     SEQ_BATTLE = 4,
     SEQ_GAME_OVER = 5,
     SEQ_LOAD = 6,
-#if VERSION <= VERSION_DEMO_US
-    SEQ_E3 = 8
     SEQ_E3 = 7
 } SequenceType;
-#else
-    SEQ_E3 = 7
-} SequenceType;
-#endif
 
 typedef struct SequenceWork {
     SequenceType sequence; //0x0

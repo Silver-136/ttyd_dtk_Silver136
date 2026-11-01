@@ -1,7 +1,6 @@
 // Wheat smoke effects (mugi: wheat) using the EFF_Mugi model, or EFF_Hana on the "win" map.
 // Entries: effMugiKemuriEntry and effMugiKemuri2Entry.
 
-#include "version.h"
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
 #include "driver/mapdrv.h"
@@ -44,21 +43,7 @@ void effMugiKemuriDisp(CameraId camId, void* param);
 
 // FAKE: one-use inline helper; writing the call out changes the object in both versions
 inline f32 mugiKemuriAngle(effMugiKemuriData *data) {
-#if VERSION <= VERSION_DEMO_US
     return 6.2831855f * reviseAngle(data->rot.y);
-}
-
-/**
- * The demo has one more entry function here.
- * Nothing calls it, so the linker drops it, but its type string stays at the end of the unit's .rodata.
- */
-EffectEntry* effMugiEntry(void) {
-    EffectEntry* effect = effEntry();
-    effect->type = "Mugi";
-    return effect;
-#else
-    return 6.2831855f * reviseAngle(data->rot.y);
-#endif
 }
 
 /** Spawns the wheat/flower smoke puffs behind Mario at (x, y, z) heading `angle`; called from mario_kemuri.c. */

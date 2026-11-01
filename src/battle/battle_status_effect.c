@@ -27,44 +27,7 @@ typedef struct StChgMsgData {
     const char* name;
     const char* msg1;
     const char* msg0;
-#if VERSION <= VERSION_DEMO_US
 } StChgMsgData;
-
-// Status Type Priority Data. The demo defines it first; its .data follows that order (retail keeps it in .sdata).
-/**
- * Demo copy of the status announcement order: Charge first, then Poison, Sleep and so on, ending with -1.
- * BattleStatusChangeMsgMain shows pending messages in this order and _get_pri ranks queued changes by it.
- */
-s8 _st_pri_data[] = {
-    STATUS_CHARGE, //charge is elevated
-    STATUS_POISON, //poison is elevated
-    STATUS_SLEEP,
-    STATUS_STOP,
-    STATUS_DIZZY,
-    STATUS_CONFUSE,
-    STATUS_ELECTRIC,
-    STATUS_DODGY,
-    STATUS_BURN,
-    STATUS_FREEZE,
-    STATUS_HUGE,
-    STATUS_TINY,
-    STATUS_ATTACK_UP,
-    STATUS_ATTACK_DOWN,
-    STATUS_DEFENSE_UP,
-    STATUS_DEFENSE_DOWN,
-    STATUS_ALLERGIC,
-    STATUS_INVISIBLE,
-    STATUS_FAST,
-    STATUS_SLOW,
-    STATUS_PAYBACK,
-    STATUS_HOLD_FAST,
-    STATUS_HP_REGEN,
-    STATUS_FP_REGEN,
-    -1,
-};
-#else
-} StChgMsgData;
-#endif
 
 /**
  * Message for each status change announcement (the Japanese status name is only a label):
@@ -96,9 +59,6 @@ StChgMsgData _st_chg_msg_data[] = {
     { 22, "\203{\203\200\203J\203E\203\223\203^\201[", "msg_st_chg_bombcounter", "msg_st_chg_bombcounter" },
     { 23, "\202\266\202\355\202\266\202\355\202g\202o", "msg_st_chg_reg_hp", "msg_st_chg_reg_hp" },
     { 24, "\202\266\202\355\202\266\202\355\202e\202o", "msg_st_chg_reg_fp", "msg_st_chg_reg_fp" },
-#if VERSION <= VERSION_DEMO_US
-    { -1, "", "", "" },
-#else
     { -1, "", "", "" },
 };
 
@@ -130,7 +90,6 @@ s8 _st_pri_data[] = {
     STATUS_HP_REGEN,
     STATUS_FP_REGEN,
     -1,
-#endif
 };
 
 //local prototypes

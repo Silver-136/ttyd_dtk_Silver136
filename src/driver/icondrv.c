@@ -302,19 +302,9 @@ void iconEntry(const char* name, u16 iconId) {
         if (!strncmp(gp->currentMapName, "aji", 3) && evtGetValue(0, GSW_STORY_PROGRESS) == STG7_25_THE_LAST_MAIL) {
             entry->uflags &= ~ICON_FLAG_NO_MAP_BLEND;
         } else {
-#if VERSION <= VERSION_DEMO_US
-        data->uflags |= ICON_FLAG_NO_MAP_BLEND;
-        if (!strncmp(gp->currentMapName, "aji", 3) && evtGetValue(0, GSW(GSW_STORY_PROGRESS)) == STG7_25_THE_LAST_MAIL) {
-            data->uflags &= ~ICON_FLAG_NO_MAP_BLEND;
-        } else {
-            data->uflags |= ICON_FLAG_NO_MAP_BLEND;
-        }
-    }
-#else
             entry->uflags |= ICON_FLAG_NO_MAP_BLEND;
         }
     }
-#endif
 }
 
 /** Creates a named icon showing iconId drawn with the 2D (screen) camera. */
@@ -676,13 +666,8 @@ void iconGX(Mtx mtx, IconEntry* entry) {
         GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
-#if VERSION <= VERSION_DEMO_US
-        if (!(data->uflags & ICON_FLAG_2D) && !(data->uflags & ICON_FLAG_NO_MAP_BLEND) &&
-            (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND)) {
-#else
         if (!(entry->uflags & ICON_FLAG_2D) && !(entry->uflags & ICON_FLAG_NO_MAP_BLEND) && !(entry->uflags & ICON_FLAG_ITEM_NO_MAP_BLEND) &&
             (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND)) {
-#endif
             GXColor blend;
             mapGetBlend(&blend);
             GXSetTevColor(GX_TEVREG1, blend);

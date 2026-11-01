@@ -119,11 +119,7 @@ static NpcSetupInfo npcEnt[4];
 EvtWord aji_01_init_evt[171];
 
 static EVT_BEGIN(w1_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), 0, 0, LW(0))
@@ -131,11 +127,7 @@ static EVT_BEGIN(w1_door_open)
 EVT_END()
 
 static EVT_BEGIN(w1_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), 0, 0, LW(0))
@@ -143,11 +135,7 @@ static EVT_BEGIN(w1_door_close)
 EVT_END()
 
 static EVT_BEGIN(e1_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door2_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door2_1"), 0, 0, LW(0))
@@ -155,11 +143,7 @@ static EVT_BEGIN(e1_door_open)
 EVT_END()
 
 static EVT_BEGIN(e1_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door2_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door2_1"), 0, 0, LW(0))
@@ -167,11 +151,7 @@ static EVT_BEGIN(e1_door_close)
 EVT_END()
 
 static EVT_BEGIN(w2_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door3_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door3_2"), 0, 0, LW(0))
@@ -179,11 +159,7 @@ static EVT_BEGIN(w2_door_open)
 EVT_END()
 
 static EVT_BEGIN(w2_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door3_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door3_2"), 0, 0, LW(0))
@@ -191,11 +167,7 @@ static EVT_BEGIN(w2_door_close)
 EVT_END()
 
 static EVT_BEGIN(e2_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door4_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door4_1"), 0, 0, LW(0))
@@ -203,11 +175,7 @@ static EVT_BEGIN(e2_door_open)
 EVT_END()
 
 static EVT_BEGIN(e2_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door4_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door4_1"), 0, 0, LW(0))
@@ -313,11 +281,7 @@ EVT_BEGIN(n4_door_close)
 EVT_END()
 
 EVT_BEGIN(w3_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door5_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door5_2"), 0, 0, LW(0))
@@ -326,11 +290,7 @@ EVT_END()
 
 /** Closing step of door w3 (S_door5_1/S_door5_2 along Z); the same slide as w3_door_open. */
 EVT_BEGIN(w3_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door5_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door5_2"), 0, 0, LW(0))
@@ -338,11 +298,7 @@ EVT_BEGIN(w3_door_close)
 EVT_END()
 
 static EVT_BEGIN(e3_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door10_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door10_1"), 0, 0, LW(0))
@@ -350,11 +306,7 @@ static EVT_BEGIN(e3_door_open)
 EVT_END()
 
 static EVT_BEGIN(e3_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door10_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door10_1"), 0, 0, LW(0))
@@ -362,11 +314,7 @@ static EVT_BEGIN(e3_door_close)
 EVT_END()
 
 EVT_BEGIN(w4_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door11_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door11_2"), 0, 0, LW(0))
@@ -375,11 +323,7 @@ EVT_END()
 
 /** Closing step of door w4 (S_door11_1/S_door11_2 along Z); the same slide as w4_door_open. */
 EVT_BEGIN(w4_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door11_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door11_2"), 0, 0, LW(0))
@@ -387,11 +331,7 @@ EVT_BEGIN(w4_door_close)
 EVT_END()
 
 EVT_BEGIN(e4_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door12_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door12_1"), 0, 0, LW(0))
@@ -400,11 +340,7 @@ EVT_END()
 
 /** Closing step of door e4 (S_door12_1/S_door12_2 along Z); the same slide as e4_door_open. */
 EVT_BEGIN(e4_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door12_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door12_1"), 0, 0, LW(0))
@@ -412,11 +348,7 @@ EVT_BEGIN(e4_door_close)
 EVT_END()
 
 EVT_BEGIN(w5_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door13_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door13_2"), 0, 0, LW(0))
@@ -425,11 +357,7 @@ EVT_END()
 
 /** Closing step of door w5 (S_door13_1/S_door13_2 along Z); the same slide as w5_door_open. */
 EVT_BEGIN(w5_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door13_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door13_2"), 0, 0, LW(0))
@@ -437,11 +365,7 @@ EVT_BEGIN(w5_door_close)
 EVT_END()
 
 EVT_BEGIN(e5_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door14_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door14_1"), 0, 0, LW(0))
@@ -450,11 +374,7 @@ EVT_END()
 
 /** Closing step of door e5 (S_door14_1/S_door14_2 along Z); the same slide as e5_door_open. */
 EVT_BEGIN(e5_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door14_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door14_1"), 0, 0, LW(0))
@@ -766,11 +686,7 @@ EVT_BEGIN(elv_unlock1)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, PTR(elv_key1), LW(0))
-#else
     CALL(evt_win_item_select, 0, PTR(elv_key1), LW(0), 0)
-#endif
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -814,11 +730,7 @@ EVT_BEGIN(elv_unlock2)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, PTR(elv_key2), LW(0))
-#else
     CALL(evt_win_item_select, 0, PTR(elv_key2), LW(0), 0)
-#endif
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -1099,12 +1011,8 @@ EVT_BEGIN(ele_1)
         SET_VALUE(LW(0), LW(5))
         CALL_CHILD(PTR(ele1_door_close))
         SET_VALUE(GW(0), LW(5))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_party_run, 0)
-#else
         CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
         CALL(evt_party_run, 0)
-#endif
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
@@ -1169,12 +1077,8 @@ EVT_BEGIN(ele_1)
         SET_VALUE(LW(0), LW(8))
         CALL_CHILD(PTR(ele1_door_close))
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GW(0), LW(8))
-#else
     SET_VALUE(GW(0), LW(8))
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1438,12 +1342,8 @@ EVT_BEGIN(ele_2)
         SET_VALUE(LW(0), LW(5))
         CALL_CHILD(PTR(ele2_door_close))
         SET_VALUE(GW(1), LW(5))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_party_run, 0)
-#else
         CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
         CALL(evt_party_run, 0)
-#endif
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
@@ -1509,12 +1409,8 @@ EVT_BEGIN(ele_2)
         SET_VALUE(LW(0), LW(8))
         CALL_CHILD(PTR(ele2_door_close))
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GW(1), LW(8))
-#else
     SET_VALUE(GW(1), LW(8))
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -2102,18 +1998,10 @@ EVT_BEGIN(peach_evt_ele_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
-#else
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
-#else
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
-#endif
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -2491,15 +2379,9 @@ static NpcSetupInfo npcEnt[] = {
  * and otherwise starts BGM_STG7_DUN2 and the elevator and door lock setup.
  */
 EVT_BEGIN(aji_01_init_evt)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(peach_evt_init)
-    CALL(evt_snd_set_rev_mode, 1)
-    IF_INT_EQUAL(LW(15), 1)
-#else
     CALL_CHILD(PTR(peach_evt_init))
     CALL(evt_snd_set_rev_mode, 1)
     IF_INT_EQUAL(LW(15), 1)
-#endif
         RETURN
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))

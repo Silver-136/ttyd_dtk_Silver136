@@ -1,6 +1,5 @@
 // Shadow driver: blob, cylinder, projected and depth shadows (shadowInit, shadowMain, shadowDisp).
 
-#include "version.h"
 #include "driver/shadowdrv.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -83,48 +82,6 @@ static u8 cube_dl_top[64] ATTRIBUTE_ALIGN(32) = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-#if VERSION <= VERSION_DEMO_US
-u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
-    0x80,
-    0x00,
-    0x04,
-    0x38,
-    0x01,
-    0x39,
-    0x01,
-    0x3A,
-    0x01,
-    0x3B,
-    0x01,
-    0x00,
-};
-u8 cube_dl_side[32] ATTRIBUTE_ALIGN(32) = {
-    0x98,
-    0x00,
-    0x0A,
-    0x35,
-    0x02,
-    0x38,
-    0x01,
-    0x36,
-    0x02,
-    0x39,
-    0x01,
-    0x37,
-    0x02,
-    0x3A,
-    0x01,
-    0x38,
-    0x02,
-    0x3B,
-    0x01,
-    0x39,
-    0x02,
-    0x38,
-    0x01,
-    0x00,
-};
-#endif
 static f32 vertex_tbl[180] ATTRIBUTE_ALIGN(32) = {
     0.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 1.0f,
@@ -206,9 +163,6 @@ CharShadowWork* cswp = &char_shadow_work;
 ProjShadowWork* pswp = &proj_shadow_work;
 DepthShadowWork* dswp = &depth_shadow_work;
 /** Side lengths of the square shadow textures (400, 256, 128, 64 pixels) that a shadow config picks from. */
-#if VERSION <= VERSION_DEMO_US
-u16 ShadowSizeTbl[4] = {0x190, 0x100, 0x80, 0x40};
-#else
 u16 ShadowSizeTbl[4] = {0x190, 0x100, 0x80, 0x40};
 u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
     0x80, 0x00, 0x04, 0x38, 0x01, 0x39, 0x01, 0x3A, 0x01, 0x3B, 0x01, 0x00,
@@ -217,7 +171,6 @@ u8 cube_dl_side[32] ATTRIBUTE_ALIGN(32) = {
     0x98, 0x00, 0x0A, 0x35, 0x02, 0x38, 0x01, 0x36, 0x02, 0x39, 0x01, 0x37,
     0x02, 0x3A, 0x01, 0x38, 0x02, 0x3B, 0x01, 0x39, 0x02, 0x38, 0x01, 0x00,
 };
-#endif
 static GXColor color_tbl[3] ATTRIBUTE_ALIGN(32) = {
     {0x00, 0x00, 0x00, 0x6E}, {0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x16},
 };
@@ -321,11 +274,7 @@ static inline void shadowSetupPolygon(void) {
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
-#if VERSION <= VERSION_DEMO_US
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA); // no shadow alpha register in the demo
-#else
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_RASA, GX_CA_ZERO);
-#endif
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
@@ -862,15 +811,9 @@ void cylinderShadowDraw(CameraId cameraId, void* param) {
             GXClearBoundingBox();
         }
         PSMTXConcat(view, entry->mtx, m);
-#if VERSION <= VERSION_DEMO_US
         GXLoadPosMtxImm(m, GX_PNMTX0);
         shadowSetTev(entry->alpha);
         GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-#else
-        GXLoadPosMtxImm(m, GX_PNMTX0);
-        shadowSetTev(entry->alpha);
-        GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-#endif
         GXSetCullMode(GX_CULL_BACK);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_LO_CLEAR);
         GXSetBlendMode(GX_BM_LOGIC, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
@@ -919,15 +862,9 @@ s32 shadowEntry(f32 x, f32 y, f32 z, f32 size) {
     entry->camId = CAMERA_3D;
     entry->volume = 1.0f;
     entry->decay = 0.2f;
-#if VERSION <= VERSION_DEMO_US
     entry->decay2 = 0.4f;
     entry->alpha = 0xFF;
     cswp->numEntries++;
-#else
-    entry->decay2 = 0.4f;
-    entry->alpha = 0xFF;
-    cswp->numEntries++;
-#endif
     return id;
 }
 
@@ -954,15 +891,9 @@ s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size) {
     entry->camId = CAMERA_3D;
     entry->volume = 1.0f;
     entry->decay = 0.2f;
-#if VERSION <= VERSION_DEMO_US
     entry->decay2 = 0.4f;
     entry->alpha = 0xFF;
     cswp->numEntries++;
-#else
-    entry->decay2 = 0.4f;
-    entry->alpha = 0xFF;
-    cswp->numEntries++;
-#endif
     return id;
 }
 
@@ -971,16 +902,12 @@ const Vec vec3_802c1af0 = {0.0f, 0.0f, 0.0f};
 /** Sets the volume shape of shadow id: 0 cylinder, 1 cube. */
 void shadowSetType(s32 id, u8 type) {
     ShadowEntry* entry = &cswp->entries[id];
-#if VERSION <= VERSION_DEMO_US
-    entry->type = type;
-#else
     entry->type = type;
 }
 
 void shadowSetMode(s32 id, u8 alpha) {
     ShadowEntry* entry = &cswp->entries[id];
     entry->alpha = alpha;
-#endif
 }
 
 /** Sets how a cylinder shadow fades with height: its volume and the two decay factors. */
@@ -1135,24 +1062,11 @@ ShadowConfig* shadowGetProjShadowConfig(void) {
  * depth ramp) from the shadow light's view and projection.
  */
 static inline void shadowCalcTexMtx(ProjShadowWork* wp, Mtx texMtx, Mtx depthMtx) {
-#if VERSION <= VERSION_DEMO_US
-    u32 is16;
-#endif
-#if VERSION <= VERSION_DEMO_US
-    ShadowConfig* cfg = &shadowConfig[wp->configIdx];
-#else
     ShadowConfig* cfg = &shadowConfig[wp->configIdx];
     u32 is16 = cfg->format > 2;
-#endif
     Mtx m;
     Mtx dm;
-#if VERSION <= VERSION_DEMO_US
     f32 n, f, d, scale;
-
-    is16 = cfg->format > 2;
-#else
-    f32 n, f, d, scale;
-#endif
 
     if (texMtx) {
         if (cfg->projType == 0) {
@@ -1279,8 +1193,4 @@ const char str_802C1B18[] = "actual depth from the light (8bit depth)";
 const char str_802C1B44[] = "projected shadow depth map (8bit depth)";
 const char str_802C1B6C[] = "result scene (16bit depth)";
 const char str_802C1B88[] = "actual depth from the light (16bit depth)";
-#if VERSION <= VERSION_DEMO_US
-const char str_802C1BB4[0x2C] = "projected shadow depth map (16bit depth)";
-#else
 const char str_802C1BB4[] = "projected shadow depth map (16bit depth)";
-#endif

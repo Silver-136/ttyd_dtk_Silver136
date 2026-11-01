@@ -241,11 +241,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STORAGE_KEY_0x13, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
-#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
-#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -284,15 +280,10 @@ EVT_BEGIN(evt_chuchu)
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_npc_set_position, STRING("チュチュリーナ"), -100, 50, -60)
     CALL(evt_npc_set_ry, STRING("チュチュリーナ"), 270)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_seq_wait, 2)
-    WAIT_MS(1000)
-#else
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(200)
     CALL(evt_party_stop, 0)
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir_npc, STRING("チュチュリーナ"))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -300,11 +291,7 @@ EVT_BEGIN(evt_chuchu)
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_party_set_dir_npc, 0, STRING("チュチュリーナ"))
-#else
         CALL(evt_party_set_dir, 0, 270, 300)
-#endif
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING("p"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
     CALL(evt_set_dir_to_target, STRING("チュチュリーナ"), STRING("mario"))
@@ -709,9 +696,6 @@ EVT_BEGIN(tou_06_init_evt)
     END_IF
     // The flies over the garbage and, from JP on, Trouble Center job 13.
     CALL(evt_map_playanim, STRING("anm_hae"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_sub_get_system_flag, LW(0))
-#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
         CALL_CHILD(PTR(iri_13_init))
@@ -719,7 +703,6 @@ EVT_BEGIN(tou_06_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidan"), MAP_OBJ_FLAG_CLIP)
     // Unless map events are skipped: Ms. Mowz's scene on the first visit, else music for the story stage.
     CALL(evt_sub_get_system_flag, LW(0))
-#endif
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
@@ -733,32 +716,17 @@ EVT_BEGIN(tou_06_init_evt)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-#endif
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-#endif
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             END_SWITCH
         END_IF
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-    // The older versions set up job 13 here instead.
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), 13)
-        CALL_CHILD(iri_13_init)
-#endif
     END_IF
     RETURN
 EVT_END()

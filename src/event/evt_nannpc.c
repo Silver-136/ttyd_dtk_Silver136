@@ -1,6 +1,5 @@
 // Script commands for crowd NPCs (nannpc): many simple sprite NPCs drawn through extdrv.
 
-#include "version.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_nannpc.h"
 #include "driver/extdrv.h"
@@ -28,30 +27,6 @@ char makestring[16];
  * Names are strings; a value without the top address bit is treated as a number
  * and looked up by its six-digit hex form, so scripts can name crowd NPCs by index. NULL if none matches.
  */
-#if VERSION <= VERSION_DEMO_US
-static inline NanNPC* nanNPCEntryName(NanNPC* npc) {
-    if (!((EvtWord)npc & 0x80000000)) {
-        sprintf(makestring, "%06x", npc);
-        npc = makestring;
-    }
-    return npc;
-}
-
-/** the demo search through that helper */
-static inline NanNPC* nanNPCSearch2(NanNPC* npc) {
-    s32 i;
-    NanNPC* p;
-    NanNPCWork* w = nanNPCWork;
-    for (i = 0; i < w->num; i++) {
-        p = &w->npc[i];
-        npc = nanNPCEntryName(npc);
-        if (!strcmp((NanNPC*)p->npc, npc)) {
-            return p;
-        }
-    }
-    return NULL;
-}
-#endif
 static inline NanNPC* nanNPCSearch(char* name) {
     s32 i;
     NanNPC* p;
@@ -486,22 +461,12 @@ USER_FUNC(evt_nannpc_entry) {
     w = nanNPCWork;
     for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
         p = (NanNPC*)((u8*)w->npc + off);
-#if VERSION <= VERSION_DEMO_US
-        str = nanNPCEntryName((NanNPC*)npc);
-        str = (NanNPC*)npc;
-        if (!(((EvtWord)str) & 0x80000000)) {
-            sprintf(makestring, "%06x", npc);
-            str = makestring;
-        }
-        strcmp((NanNPC*)p->npc, str);
-#else
         str = (char*)name;
         if (!((EvtWord)str & 0x80000000)) {
             sprintf(makestring, "%06x", name);
             str = makestring;
         }
         strcmp((char*)p->name, str);
-#endif
         if (!p->pose) {
             strcpy((char*)p->name, str);
             p->pose = &pose[i];
@@ -652,17 +617,6 @@ USER_FUNC(evt_nannpc_move_position2) {
     Vec diff;
     Vec step;
     args = event->args;
-#if VERSION <= VERSION_DEMO_US
-    npc = nanNPCSearch2((NanNPC*)evtGetValue(event, args[0]));
-    now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
-    npc = nanNPCSearch((NanNPC*)evtGetValue(event, args[0]));
-    if (gp->inBattle) {
-        now = gp->renderTime;
-    } else {
-        now = gp->renderFieldTime;
-    }
-    target.x = evtGetValue(event, args[1]);
-#else
     npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
     if (gp->inBattle) {
         now = gp->renderTime;
@@ -670,7 +624,6 @@ USER_FUNC(evt_nannpc_move_position2) {
         now = gp->renderFieldTime;
     }
     target.x = evtGetValue(event, args[1]);
-#endif
     target.y = evtGetValue(event, args[2]);
     target.z = evtGetValue(event, args[3]);
     speed = evtGetFloat(event, args[4]);
@@ -695,13 +648,8 @@ USER_FUNC(evt_nannpc_move_position2) {
  * blocking until it lands.
  */
 USER_FUNC(evt_nannpc_jump_position) {
-#if VERSION <= VERSION_DEMO_US
-    EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch2((NanNPC*)evtGetValue(event, args[0]));
-#else
     EvtWord* args = event->args;
     NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
-#endif
     f32 x = evtGetValue(event, args[1]);
     f32 y = evtGetValue(event, args[2]);
     f32 z = evtGetValue(event, args[3]);

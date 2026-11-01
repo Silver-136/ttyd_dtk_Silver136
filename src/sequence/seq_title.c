@@ -56,10 +56,6 @@ const char* DbgBtlSel_GetMsgDataPtr(void) {
     return NULL;
 }
 
-#if VERSION <= VERSION_DEMO_US
-void seq_titleInit(SequenceWork* work) {
-    memset(wp2, 0, sizeof(TitleWork));
-#else
 void seq_titleInit(SequenceWork* work) {
     titleInit(work);
     gp->flags &= ~GW_FLAG_NO_ENTRANCE;
@@ -88,18 +84,11 @@ s32 getDebugMode(void) {
 
 void titleInit(SequenceWork* work) {
     memset(wp2, 0, sizeof(TitleWork));
-#endif
     wp2->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
     wp2->topPosX = 0.0f;
     wp2->topPosY = 1000.0f;
     wp2->bottomPosX = 0.0f;
     wp2->bottomPosY = -1000.0f;
-#if VERSION <= VERSION_DEMO_US
-    wp2->fadeAlpha = 0.0f;
-    if (seqGetPrevSeq() != SEQ_LOAD && seqGetPrevSeq() != SEQ_MAP_CHANGE && seqGetPrevSeq() == SEQ_GAME_OVER) {
-        psndStopAllFadeOut();
-    }
-#else
     wp2->fadeAlpha = 0.0f;
     wp2->debug = 0;
     if (seqGetPrevSeq() == SEQ_LOAD) {
@@ -113,12 +102,7 @@ void titleInit(SequenceWork* work) {
             psndStopAllFadeOut();
         }
     }
-#endif
     if (seqGetPrevSeq() != SEQ_LOAD) {
-#if VERSION <= VERSION_DEMO_US
-        if (seqGetPrevSeq() == SEQ_GAME_OVER) {
-            psndBGMOn(PSND_FADEOUT, "BGM_DIGEST1");
-#else
         if (seqGetPrevSeq() == SEQ_GAME_OVER) {
             if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
                 SoundSetOutputMode(SND_OUTPUTMODE_MONO);
@@ -126,7 +110,6 @@ void titleInit(SequenceWork* work) {
                 SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
             }
             psndBGMOn(PSND_FADEOUT, "BGM_DIGEST1");
-#endif
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }
@@ -139,55 +122,20 @@ void titleInit(SequenceWork* work) {
     }
     camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX;
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
-#if VERSION <= VERSION_DEMO_US
-    gp->flags &= ~GW_FLAG_NO_ENTRANCE;
-    gp->flags &= ~0x40;
-    gp->flags &= ~GW_FLAG_NO_SAVE_BLOCK;
-    gp->flags &= ~GW_FLAG_E3;
-}
-/** Later versions: titleInit does the setup, then the same flags are cleared. */
-void seq_titleInit(SequenceWork* work) {
-    titleInit(work);
-    gp->flags &= ~GW_FLAG_NO_ENTRANCE;
-    gp->flags &= ~0x40;
-    gp->flags &= ~GW_FLAG_NO_SAVE_BLOCK;
-    gp->flags &= ~GW_FLAG_E3;
-}
-
-/** Leaves the title sequence: frees mariost.tpl and fades out all sound unless going on to the file select. */
-void seq_titleExit(SequenceWork* work) {
-    fileFree(wp2->texture);
-    if (seqGetNextSeq() != SEQ_LOAD) {
-        psndStopAllFadeOut();
-    }
-}
-
-/** Per-frame title sequence; all the work is in titleMain. */
-void seq_titleMain(SequenceWork* work) {
-    titleMain(work);
-#endif
 }
 
 
 void titleMain(SequenceWork* work) {
     switch (wp2->state) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
-            if (psndBGMStartCheck(0) != 0U) {
-#else
             if (psndBGMStartCheck(0) != 0U
                 && animGroupBaseAsync("OFF_d_maku_left_right", 2, 0)
                 && animGroupBaseAsync("OFF_d_maku_center", 2, 0)) {
-#endif
                 if (seqGetPrevSeq() == SEQ_LOAD) {
                     fadeEntry(0x40, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#if VERSION <= VERSION_DEMO_US
-                    fadeEntry(FADE_CURTAIN_CENTER_Z2_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
-#else
                     fadeEntry(0x1F, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     wp2->topPosY = 120.0f;
                     wp2->bottomPosY = -170.0f;
-#endif
                     wp2->timer = 0;
                 } else if (seqGetPrevSeq() == SEQ_GAME_OVER) {
                     fadeEntry(0x15, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -197,11 +145,7 @@ void titleMain(SequenceWork* work) {
                     fadeEntry(0x15, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     fadeEntry(0x22, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     fadeSetNarrowFast();
-#if VERSION <= VERSION_DEMO_US
-                    wp2->timer = 38;
-#else
                     wp2->timer = 23;
-#endif
                 }
                 wp2->state++;
             }
@@ -219,15 +163,11 @@ void titleMain(SequenceWork* work) {
                     wp2->state++;
                 } else {
                     wp2->topPosY = 120.0f;
-#if VERSION <= VERSION_DEMO_US
-                    wp2->bottomPosY = -170.0f;
-#else
                     wp2->bottomPosY = -170.0f;
 #if VERSION >= VERSION_US
                     wp2->counter = 0;
 #endif
                     wp2->frame = 0;
-#endif
                     wp2->state = 3;
                 }
             }
@@ -252,12 +192,8 @@ void titleMain(SequenceWork* work) {
 #if VERSION == VERSION_US
                 wp2->counter = 0;
 #endif
-#if VERSION <= VERSION_DEMO_US
-                wp2->state++;
-#else
                 wp2->frame = 0;
                 wp2->state++;
-#endif
             }
             break;
         case 3:
@@ -296,11 +232,7 @@ void titleMain(SequenceWork* work) {
             break;
         case 20:
             fadeEntry(0x21, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
-#if VERSION <= VERSION_DEMO_US
-            fadeEntry(FADE_OUT_WHITE, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
-#else
             fadeEntry(FADE_OUT_BLACK, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
-#endif
             psndBGMOff_f_d(PSND_FADEOUT, 1000, 0);
             wp2->counter = 0;
             wp2->state++;
@@ -317,16 +249,11 @@ void titleMain(SequenceWork* work) {
                 wp2->fadeAlpha = 0.0f;
             }
             if (fadeIsFinish()) {
-#if VERSION <= VERSION_DEMO_US
-                fadeReset(1);
-                gp->areaFadeInType = FADE_OUT_WHITE;
-#else
                 fadeReset(1);
                 if (pouchGetHP() <= 0) {
                     pouchSetHP(1);
                 }
                 gp->areaFadeInType = FADE_OUT_BLACK;
-#endif
                 gp->areaFadeInDuration = 0;
                 seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
             }
@@ -334,7 +261,6 @@ void titleMain(SequenceWork* work) {
     }
     if (wp2->state != 12 && work->state < 14) {
         dispEntry(CAMERA_3D, 0.0f, 0, disp1, NULL);
-#if VERSION <= VERSION_DEMO_US
         dispEntry(CAMERA_3D_EFFECTB, 0.0f, 0, disp2, NULL);
         // a button sequence on the title screen turns on debug mode (getDebugMode)
         switch (wp2->debug) {
@@ -382,55 +308,6 @@ void titleMain(SequenceWork* work) {
                 break;
         }
     }
-#else
-        dispEntry(CAMERA_3D_EFFECTB, 0.0f, 0, disp2, NULL);
-        // a button sequence on the title screen turns on debug mode (getDebugMode)
-        switch (wp2->debug) {
-            case 0:
-                if (keyGetButtonTrg(0) & ~PAD_BUTTON_X) {
-                    wp2->debug = 0;
-                } else if (keyGetButtonTrg(0) & PAD_BUTTON_X) {
-                    wp2->debug++;
-                }
-                break;
-            case 1:
-                if (keyGetButtonTrg(0) & ~PAD_BUTTON_B) {
-                    wp2->debug = 0;
-                } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-                    wp2->debug++;
-                }
-                break;
-            case 2:
-                if (keyGetButtonTrg(0) & ~PAD_TRIGGER_R) {
-                    wp2->debug = 0;
-                } else if (keyGetButtonTrg(0) & PAD_TRIGGER_R) {
-                    wp2->debug++;
-                }
-                break;
-            case 3:
-                if (keyGetButtonTrg(0) & ~PAD_BUTTON_B) {
-                    wp2->debug = 0;
-                } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-                    wp2->debug++;
-                }
-                break;
-            case 4:
-                if (keyGetButtonTrg(0) & ~PAD_BUTTON_Y) {
-                    wp2->debug = 0;
-                } else if (keyGetButtonTrg(0) & PAD_BUTTON_Y) {
-                    wp2->debug++;
-                }
-                break;
-            case 5:
-                if (keyGetButtonTrg(0) & ~PAD_TRIGGER_L) {
-                    wp2->debug = 0;
-                } else if (keyGetButtonTrg(0) & PAD_TRIGGER_L) {
-                    wp2->debug = -1;
-                }
-                break;
-        }
-    }
-#endif
 }
 
 /** 3D-camera draw callback: draws the title background image from mariost.tpl through the 2D camera. */
@@ -480,17 +357,6 @@ void disp2(CameraId cameraId, void* param) {
     GXSetProjection(cam->projection, cam->projType);
     GXSetViewport(cam->viewport[0], cam->viewport[1], cam->viewport[2],
                   cam->viewport[3], cam->viewport[4], cam->viewport[5]);
-#if VERSION <= VERSION_DEMO_US
-    winTexInit(*wp2->texture->data);
-    winTexSetNearest(tbl[gp->language], (Vec){wp2->topPosX, wp2->topPosY - 20.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    winTexSet(gp->language + 7, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    winTexSet(gp->language + 9, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    winTexSet(5, (Vec){wp2->topPosX, wp2->topPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    winTexSet(6, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    winTexSetNearest(5, (Vec){wp2->topPosX, wp2->topPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    winTexSet(6, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    s = (f32)sin((f32)gp->retraceCount / 30.0f);
-#else
     winTexInit(*wp2->texture->data);
 #if VERSION >= VERSION_US
     winTexSetNearest(tbl[gp->language], (Vec){wp2->topPosX, wp2->topPosY - 20.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -505,7 +371,6 @@ void disp2(CameraId cameraId, void* param) {
 #endif
     wp2->frame++;
     s = (f32)sin(6.2831855f * (f32)wp2->frame / 120.0f);
-#endif
     alpha = (s32)(wp2->fadeAlpha * (459.0f * s));
     if (alpha < 0) {
         alpha = 0;
@@ -567,11 +432,7 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
     MTXScale(scaleMtx, 1.0f, 1.0f, 1.0f);
-#if VERSION <= VERSION_DEMO_US
-    MTXTrans(mtx, (f32)gp->retraceCount / -200.0f, 0.0f, 0.0f);
-#else
     MTXTrans(mtx, (f32)wp2->frame / -200.0f, 0.0f, 0.0f);
-#endif
     MTXConcat(scaleMtx, mtx, mtx);
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
@@ -607,12 +468,8 @@ static void titleLoadDemo(void) {
     animGroupBaseAsync("c_peach", 0, 0);
     animGroupBaseAsync("c_nazo", 0, 0);
     animGroupBaseAsync("MOBJ_GoldenTreasureBox", 0, 0);
-#if VERSION <= VERSION_DEMO_US
-    animGroupBaseAsync("c_roten", 0, 0);
-#else
     animGroupBaseAsync("MOBJ_BigTreasureBox", 0, 0);
     animGroupBaseAsync("c_roten", 0, 0);
-#endif
     animGroupBaseAsync("c_kuribo_n", 0, 0);
     animGroupBaseAsync("c_tyusan", 0, 0);
 }

@@ -78,11 +78,7 @@ static inline void cloudCalcPos(PartyEntry* party) {
     dir = toMovedir(dir + ((dir < 90.0f || dir >= 270.0f) ? -90.0f : 90.0f));
     movePos(&party->moveTarget.x, &party->moveTarget.z, 3.3f, dir);
     party->moveTarget.y += 10.0f;
-#if VERSION <= VERSION_DEMO_US
-    }
-#else
 }
-#endif
 
 void mot_cloud(void) {
     MarioWork* mario = marioGetPtr();
@@ -233,14 +229,9 @@ struct HitEntry* cloudGetHitBreathout(s32 which) {
  * Current reach of Flurrie's gust in units (grows 2 per frame up to 120), or 0 when she is not mid-gust.
  * No callers in this tree.
  */
-#if VERSION <= VERSION_DEMO_US
-f32 cloudGetBreathDist() {
-    PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
-#else
 f32 cloudGetBreathDist(void) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
-#endif
     f32 breathDist;
 
     if (party == NULL) {
@@ -257,11 +248,7 @@ f32 cloudGetBreathDist(void) {
     }
 
     return breathDist;
-#if VERSION <= VERSION_DEMO_US
 }
-#else
-}
-#endif
 
 #if VERSION >= VERSION_US
 /**
@@ -291,11 +278,7 @@ void cloudLockAnimationsOn(PartyEntry* party) {
 void cloud_hover_init(PartyEntry* party) {
     party->work.cloud.hoverAngle = 0.0f;
     party->work.cloud.hoverSpeed = 4.25f;
-#if VERSION <= VERSION_DEMO_US
 }
-#else
-}
-#endif
 
 /** Advances Flurrie's idle bob and sets her display offset to a 0-6 unit sine wave above her position. */
 // Descriptive name (not in the symbol maps); placeholder unk_8018206c, JP 0x8018206C. See docs/NAME_PROVENANCE.md.
@@ -345,11 +328,7 @@ void cloud_init(PartyEntry* party) {
     party->memberKind = PARTY_MEMBER_FLURRIE;
     party->moveKind = 1;
     party->height = 38.0f;
-#if VERSION <= VERSION_DEMO_US
-    party->size = 36.0f;
-#else
     party->width = 24.0f;
-#endif
     party->work.cloud.reserved_174 = 0;
     party->work.cloud.breathEffect = NULL;
     party->work.cloud.hoverAngleBits = 0;
@@ -423,27 +402,17 @@ void _cloud_use(PartyEntry* party) {
         party->useMotionId = CLOUD_USE_APPROACH_INIT;
         party->useStruct = __memAlloc(HEAP_DEFAULT, sizeof(PartyCloud));
         memset(party->useStruct, 0, sizeof(PartyCloud));
-#if VERSION <= VERSION_DEMO_US
-        CLOUD_WORK(party)->sfxId = -1;
         CLOUD_WORK(party)->reserved_0 = 100.0f;
-#else
-        CLOUD_WORK(party)->reserved_0 = 100.0f;
-#endif
         CLOUD_WORK(party)->breathDistMax = 120.0f;
         CLOUD_WORK(party)->sweep[0].angle = 0.0f;
         CLOUD_WORK(party)->sweep[0].reverse = 0;
         CLOUD_WORK(party)->sweep[1].angle = 0.0f;
         CLOUD_WORK(party)->sweep[1].reverse = 1;
-#if VERSION <= VERSION_DEMO_US
-        party->work.cloud.breathEffect = NULL;
-        if (party->flags & PARTY_FLAG_IS_EVT_USE) {
-#else
         party->work.cloud.breathEffect = NULL;
         if (CLOUD_WORK(party) != NULL) {
             CLOUD_WORK(party)->sfxId = -1;
         }
         if (party->flags & PARTY_FLAG_IS_EVT_USE) {
-#endif
             CLOUD_WORK(party)->autoTimer = sysMsec2Frame(party->actionTime);
         }
     }
@@ -490,17 +459,11 @@ void _cloud_use(PartyEntry* party) {
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             mario->camShiftRate.x = 0.03f;
             mario->camShiftTargetX = 70.0f * (revise360(270.0f - mario->displayDirectionTarget) <= 180.0f ? -1.0f : 1.0f);
-#if VERSION <= VERSION_DEMO_US
-            }
-            CLOUD_WORK(party)->sfxId = psndSFXOn_3D((const char*)0x930, &mario->position);
-        case 11:
-#else
         }
         if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId == 0xFFFFFFFF) {
             CLOUD_WORK(party)->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CLAUD_WIND1), &party->playerPtr->position);
         }
     case CLOUD_USE_BREATH_START:
-#endif
         cloudCalcPos(party);
         party->position = party->moveTarget;
         if (--party->moveFrames > 0) {
@@ -565,12 +528,6 @@ void _cloud_use(PartyEntry* party) {
         } else if (--CLOUD_WORK(party)->autoTimer > 0) {
             break;
         }
-#if VERSION <= VERSION_DEMO_US
-            if ((u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
-                psndSFXOff(CLOUD_WORK(party)->sfxId);
-                CLOUD_WORK(party)->sfxId = -1;
-            }
-#endif
         CLOUD_WORK(party)->hitFront = NULL;
         CLOUD_WORK(party)->hitDown = NULL;
         CLOUD_WORK(party)->hitSweep[0] = NULL;
@@ -578,15 +535,11 @@ void _cloud_use(PartyEntry* party) {
         party->moveFrames = sysMsec2Frame(200);
         party->useMotionId = CLOUD_USE_BREATH_FINISH;
         if (party->flags & PARTY_FLAG_IS_EVT_USE) {
-#if VERSION <= VERSION_DEMO_US
-                party->useMotionId = 20;
-#else
             party->useMotionId = CLOUD_USE_CLEANUP;
         }
         if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
             psndSFXOff(CLOUD_WORK(party)->sfxId);
             CLOUD_WORK(party)->sfxId = -1;
-#endif
         }
         break;
     case CLOUD_USE_BREATH_FINISH:
@@ -604,10 +557,6 @@ void _cloud_use(PartyEntry* party) {
             break;
         }
         party->useMotionId = CLOUD_USE_CLEANUP;
-#if VERSION <= VERSION_DEMO_US
-        case 20:
-            cloudCalcPos(party);
-#else
     case CLOUD_USE_CLEANUP:
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
@@ -619,48 +568,25 @@ void _cloud_use(PartyEntry* party) {
             party->work.cloud.breathEffect = NULL;
         }
         cloudCalcPos(party);
-#endif
         party->position = party->moveTarget;
-#if VERSION <= VERSION_DEMO_US
-            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-            party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-#else
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         if (mario->currMotionId == MARIO_MOTION_CLOUD) {
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-#endif
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
             marioAdjustMoveDir();
-#if VERSION <= VERSION_DEMO_US
-            party->trigFlags |= PARTY_TRIG_HALF_PUSH;
-            partyChgRunMode(party, 2);
-#else
             party->trigFlags |= PARTY_TRIG_HALF_PUSH;
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             marioChgMot(MARIO_MOTION_STAY);
         }
         party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         partyChgRunMode(party, PARTY_RUN_MOVE);
-#endif
         party->moveArg = 0;
         partyChgMoveMode(party, PARTY_MOVE_MODE_BEHIND_MARIO);
-#if VERSION <= VERSION_DEMO_US
-            partyChgMot(party, 1);
-            party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-            marioChgMot(MARIO_MOTION_STAY);
-#else
         partyChgMot(party, PARTY_MOTION_WALK);
-#endif
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             mario->camShiftRate.x = 0.01f;
             mario->camShiftTargetX = 0.0f;
         }
-#if VERSION <= VERSION_DEMO_US
-            party->flags &= ~PARTY_FLAG_IS_EVT_USE;
-            if (party->work.cloud.breathEffect != NULL) {
-#else
         party->flags &= ~PARTY_FLAG_IS_EVT_USE;
         if (party->useStruct != NULL) {
             __memFree(HEAP_DEFAULT, party->useStruct);
@@ -683,7 +609,6 @@ void cloud_exit(PartyEntry* party) {
         CLOUD_WORK(party)->sfxId = -1;
     }
     if (party->work.cloud.breathEffect != NULL) {
-#endif
         effSoftDelete(party->work.cloud.breathEffect);
         party->work.cloud.breathEffect = NULL;
     }
@@ -691,32 +616,6 @@ void cloud_exit(PartyEntry* party) {
         __memFree(HEAP_DEFAULT, party->useStruct);
         party->useStruct = NULL;
     }
-#if VERSION <= VERSION_DEMO_US
-            break;
-    }
-}
-
-/**
- * Flurrie's exit handler (party_data.c), run when she leaves the field:
- * stops the gust sound and effect, frees the gust work
- * and puts Mario back in his standing motion with the camera shift cleared.
- */
-void cloud_exit(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-
-    if (party->work.cloud.breathEffect != NULL) {
-        effSoftDelete(party->work.cloud.breathEffect);
-        party->work.cloud.breathEffect = NULL;
-    }
-    if (party->useStruct != NULL) {
-        if ((u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
-            psndSFXOff(CLOUD_WORK(party)->sfxId);
-            CLOUD_WORK(party)->sfxId = -1;
-        }
-        __memFree(HEAP_DEFAULT, party->useStruct);
-        party->useStruct = NULL;
-    }
-#endif
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
     marioAdjustMoveDir();
@@ -733,11 +632,7 @@ void cloud_exit(PartyEntry* party) {
 void getHitBreatheout2(PartyEntry* party, f32 angle) {
     f32 dirSin, dirCos, ys, yc;
     f32 hx, hy, hz, dist, nx, ny, nz;
-#if VERSION <= VERSION_DEMO_US
-    f32 ofsX, ofsZ;
-#else
     f32 ofsZ, ofsX;
-#endif
     f32 dir, sign, height;
     s16 kind;
     HitEntry* hit;
@@ -768,14 +663,9 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
     }
     CLOUD_WORK(party)->hitFront = hit;
     ofsX = 0.0f;
-#if VERSION <= VERSION_DEMO_US
-    ofsZ = 0.0f;
-    movePos(&ofsX, &ofsZ, 24.0f, dir);
-#else
     ofsZ = 0.0f;
     if (party->work.cloud.breathEffect != NULL) {
         movePos(&ofsX, &ofsZ, 24.0f, dir);
-#endif
         BREATH_PARTICLES(party)->x = party->position.x + ofsX;
         BREATH_PARTICLES(party)->y = 18.0f + party->position.y;
         BREATH_PARTICLES(party)->z = party->position.z + ofsZ;
@@ -785,14 +675,9 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
         if (cl->breathDir >= 90.0f && cl->breathDir <= 270.0f) {
             BREATH_PARTICLES(party)->rot = -25.0f;
         } else {
-#if VERSION <= VERSION_DEMO_US
-        BREATH_PARTICLES(party)->rot = 205.0f;
-    }
-#else
             BREATH_PARTICLES(party)->rot = 205.0f;
         }
     }
-#endif
     cl = CLOUD_WORK(party);
     if (cl->breathDir >= 90.0f && cl->breathDir <= 270.0f) {
         sign = 1.0f;
@@ -830,42 +715,6 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
  * otherwise replaces it with the remembered point.
  * Does nothing with no partner or when Flurrie is out but not gusting.
  */
-#if VERSION <= VERSION_DEMO_US
-u8 cloudGetStatus() {
-    u32 partyId = marioGetPartyId();
-    PartyEntry* party = partyGetPtr(partyId);
-    u8 status = 2;
-
-    if (party == NULL || (party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
-        status = 0;
-        return status;
-    } else if (party->useMotionId == 10 && party->useMotionId < 20) {
-        status = 1;
-    }
-
-    return status;
-}
-
-/**
- * Saves the 3D camera's look-at point into cloud_at and, if Mario's camera is zoomed in,
- * requests a zoom-out (marioCamZoomOffReq2(600)).
- * Called when Mario's Flurrie motion ends (mot_cloud_post in mario_motion.c).
- */
-void cloudResetAt() {
-    u32 partyId = marioGetPartyId();
-    PartyEntry* party = partyGetPtr(partyId);
-
-    if (party == NULL || party->currentMemberId != PARTY_MEMBER_FLURRIE) {
-        return;
-    } else {
-        cloud_at.x = camGetPtr(CAMERA_3D)->cameraAt.x;
-        cloud_at.y = camGetPtr(CAMERA_3D)->cameraAt.y;
-        cloud_at.z = camGetPtr(CAMERA_3D)->cameraAt.z;
-
-        marioCamZoomOffReq2(600);
-    }
-}
-#endif
 void cloudGetAt(Vec* position) {
     MarioWork* mario = marioGetPtr();
     u32 partyId = marioGetPartyId();

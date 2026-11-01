@@ -166,47 +166,6 @@ TubuDt tubuDt[] = {
     {-33, -50, 0, 0, 382, "gor"},
     {-33, -62, 0, 0, 382, "gor"},
     {-33, -74, 1, 0, 382, "las"},
-#if VERSION <= VERSION_DEMO_US
-};
-
-// Order-forced: the same winLogAddMenu as the demo copy above; its static msg_help is emitted where the
-// function is defined, after tubuDt in retail and before it in the demo.
-/** The seven Crystal Stars in chapter order; the Journal's Crystal Stars page shows the ones Mario has. */
-CameraId stone_tbl[] = {ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
-
-/** Adds a Journal entry button and re-spaces the buttons (same as the demo copy above). */
-static inline void winLogAddMenu(WindowWork* w, CameraId id) {
-    static const char* msg_help[] = {
-        "msg_menu_kiroku_map",
-        "msg_menu_kiroku_stone",
-        "msg_menu_kiroku_badge",
-        "msg_menu_kiroku_ryori",
-        "msg_menu_kiroku_mono",
-    };
-    WinLogMenu* m = &w->log.menu[w->log.count];
-    CameraId i;
-    m->id = id;
-    m->timer = 0;
-    m->state = 0;
-    m->msg = msg_help[id];
-    w->log.count++;
-    for (i = 0; i < w->log.count; i++) {
-        w->log.menu[i].x = 0.0f;
-        w->log.menu[i].tx = 0.0f;
-        w->log.menu[i].ty = w->log.menu[i].y = 45.0f * w->log.count / 2.0f - 45.0f * i;
-    }
-}
-
-/**
- * Sets up the Journal when the pause menu opens:
- * adds the entries unlocked by story progress (map always; Tattle log once Goombella joins;
- * Crystal Stars at Frankly's; badge log after the badge tutorial;
- * recipe log once unlocked), spawns the seven Crystal Star effects (unowned ones dark),
- * finds Mario's spot on the world map for the current area, and builds the sorted badge,
- * recipe and Tattle lists with their found counts.
- */
-void winLogInit(WindowWork* w) {
-#else
 };
 
 s32 stone_tbl[] = {ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
@@ -246,24 +205,12 @@ static inline void winLogAddMenu(WindowWork* w, s32 id) {
  * recipe and Tattle lists with their found counts.
  */
 void winLogInit(WindowWork* w) {
-#endif
-#if VERSION <= VERSION_DEMO_US
-    CameraId j;
-    CameraId i;
-#endif
-#if VERSION <= VERSION_DEMO_US
-    u32 k;
-    EffectEntry* e;
-    const char* area;
-    TattleEntry* t;
-#else
     u32 k;
     const char* area;
     s32 i;
     s32 j;
     TattleEntry* t;
     EffectEntry* e;
-#endif
     WinSortEnt tmp;
 
     w->log.state = 0;
@@ -293,12 +240,8 @@ void winLogInit(WindowWork* w) {
             ((EffStarStoneWork*)e->userdata)->b = 0x20;
         }
         ((EffStarStoneWork*)e->userdata)->cam = CAMERA_2D;
-#if VERSION <= VERSION_DEMO_US
-        ((EffStarStoneWork*)e->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
-#else
         ((EffStarStoneWork*)e->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
         ((EffStarStoneWork*)e->userdata)->flags |= STAR_STONE_FLAG_EXTERNAL_DRAW;
-#endif
     }
 
     w->mapRes = NULL;
@@ -339,13 +282,8 @@ void winLogInit(WindowWork* w) {
     }
     if (!strncmp(gp->currentMapName, "hom", 3)) area = "eki";
     if (!strncmp(gp->currentMapName, "jon", 3)) area = "tik";
-#if VERSION <= VERSION_DEMO_US
-    if (!strcmp(gp->currentMapName, "gra_06"))
-        area = "jin";
-#else
     if (!strcmp(gp->currentMapName, "gra_06")) area = "jin";
     if (!strcmp(gp->currentMapName, "muj_10") || !strcmp(gp->currentMapName, "muj_11") || !strcmp(gp->currentMapName, "muj_12")) area = "dou";
-#endif
 
     for (k = 0; k < sizeof(tubuDt) / sizeof(TubuDt); k++) {
         if (!area || !strcmp(area, tubuDt[k].map)) break;
@@ -678,13 +616,7 @@ s32 winLogMain(WindowWork* w) {
         by = 120.0f + w->log.scrollY;
         for (k = 0; k < sizeof(tubuDt) / sizeof(TubuDt); k++) {
             t = &tubuDt[k];
-#if VERSION <= VERSION_DEMO_US
-                if (swByteGet(GSW_STORY_PROGRESS) < t->id)
-                    break;
-                {
-#else
             if (swByteGet(0) >= t->id || tubuCheck(t->type)) { // GSW_STORY_PROGRESS
-#endif
                 if (t->big) {
                     f32 d = distABf(bx + t->x, by + t->y, x, y);
                     if (min > d) {
@@ -1116,29 +1048,18 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             PSMTXRotRad(m1, 'x', 0.43633232f);
             PSMTXRotRad(m2, 'y', 0.017453292f * (51.42857f * i - w->log.stoneAngle));
             PSMTXMultVec(m2, &v, &v);
-#if VERSION <= VERSION_DEMO_US
-            PSMTXMultVec(m1, &v, &v);
-            winKageGX(w, (GXColor){0x00, 0x00, 0x00, 0x80}, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f);
-            wk = w->log.eff[i]->userdata;
-#else
             PSMTXMultVec(m1, &v, &v);
             winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
             // FAKE: wk is reloaded before each position store; one load changes the object
             wk = w->log.eff[i]->userdata;
-#endif
             wk->position.x = v.x + (x + w->log.stoneWinX);
             wk = w->log.eff[i]->userdata;
             wk->position.y = 20.0f + (v.y + (y + w->log.stoneWinY));
             wk = w->log.eff[i]->userdata;
-#if VERSION <= VERSION_DEMO_US
-            wk->position.z = v.z;
-            winKageGX(w, (GXColor){0x00, 0x00, 0x00, 0x80}, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f);
-#else
             wk->position.z = v.z;
         }
         for (i = 0; i < 7; i++) {
             effStarStoneDraw(CAMERA_2D, w->log.eff[i]);
-#endif
         }
     }
     if (w->log.badge.x < 320.0f && w->log.badge.y > -240.0f) {
@@ -1265,13 +1186,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
         winTexInit(*w->res->data);
         for (i = 0; i < sizeof(tubuDt) / sizeof(TubuDt); i++) {
             t = &tubuDt[i];
-#if VERSION <= VERSION_DEMO_US
-            if (swByteGet(GSW_STORY_PROGRESS) < t->id)
-                break;
-            {
-#else
             if (swByteGet(0) >= t->id || tubuCheck(t->type)) { // GSW_STORY_PROGRESS
-#endif
                 if (w->log.mapSel == i) {
                     // FAKE: the texture id goes through a spare temporary tex in a comma expression; ((gp->retraceCount >> 4) & 1) ? 0xB9 : 0xBA changes the object
                     winTexSet((tex = 0xBA, ((gp->retraceCount >> 4) & 1) ? tex = 0xB9 : 0, tex), (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
@@ -1289,39 +1204,19 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
             id = ICON_SAC_BAKUGAME;
             k = 1;
         } else if (sw >= STG2_41_FRANKLYS_HOUSE_STG_2 && sw < STG3_32_BOSS_BATTLE) {
-#if VERSION <= VERSION_DEMO_US
-            id = ICON_SAC_SUKI;
-#else
             id = ICON_SAC_MUKI;
-#endif
             k = 2;
         } else if (sw >= STG3_51_FRANKLYS_HOUSE_STG_3 && sw < STG4_15_03_THE_RUBY_STAR) {
-#if VERSION <= VERSION_DEMO_US
-            id = ICON_SAC_MUKI;
-#else
             id = ICON_SAC_SCISSOR;
-#endif
             k = 3;
         } else if (sw >= STG4_31_FRANKLYS_HOUSE_STG_4 && sw < STG5_43_X_NAUTS_RETREAT) {
-#if VERSION <= VERSION_DEMO_US
-            id = ICON_SAC_ZUBASTAR;
-#else
             id = ICON_SAC_GENKI1;
-#endif
             k = 4;
         } else if (sw >= STG5_61_FRANKLYS_HOUSE_STG_5 && sw < STG6_53_THE_REAL_GARNET_STAR) {
-#if VERSION <= VERSION_DEMO_US
-            id = ICON_SAC_SCISSOR;
-#else
             id = ICON_SAC_SUKI;
-#endif
             k = 5;
         } else if (sw >= STG6_71_FRANKLYS_HOUSE_STG_6 && sw < STG7_20_LORD_CRUMP_DEFEATED) {
-#if VERSION <= VERSION_DEMO_US
-            id = ICON_SAC_GENKI1;
-#else
             id = ICON_SAC_ZUBASTAR;
-#endif
             k = 6;
         }
         if (id != -1) {
@@ -1467,19 +1362,11 @@ MonosiriWork* monosiriInit(s32 id, f32 x, f32 y) {
     m->x = x;
     m->y = y;
     m->curX = 500.0f;
-#if VERSION <= VERSION_DEMO_US
     m->curY = -300.0f;
     m->alpha = 0;
     m->pose1 = -1;
     m->pose2 = -1;
     return m;
-#else
-    m->curY = -300.0f;
-    m->alpha = 0;
-    m->pose1 = -1;
-    m->pose2 = -1;
-    return m;
-#endif
 }
 
 /**
@@ -1513,14 +1400,7 @@ void monosiriMain(MonosiriWork* m) {
 #else
         m->file2 = fileAllocf(FILE_TYPE_RAW, "%s/w/jp/mono.dat", getMarioStDvdRoot());
 #endif
-#if VERSION <= VERSION_DEMO_US
-            m->state++;
-            m->alpha = 0;
-            m->pose1 = -1;
-            m->pose2 = -1;
-#else
         m->state++;
-#endif
         TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
         m->smart = smartAlloc(GXGetTexBufferSize(GXGetTexObjWidth(&tex), GXGetTexObjHeight(&tex), GX_TF_RGB5A3, GX_FALSE, 0), 0);
         break;
@@ -1577,38 +1457,18 @@ BOOL monosiriCloseWait(MonosiriWork* m) {
 void monosiriExit(MonosiriWork* m) {
     if (m) {
         if (m->file1) {
-#if VERSION <= VERSION_DEMO_US
-            fileFree(m->file1);
-        }
-#else
             fileFree(m->file1);
             m->file1 = NULL;
         }
-#endif
         if (m->file2) {
-#if VERSION <= VERSION_DEMO_US
-            fileFree(m->file2);
-#else
             fileFree(m->file2);
             m->file2 = NULL;
-#endif
         }
         if (m->pose1 != -1) {
-#if VERSION <= VERSION_DEMO_US
-            animPoseRelease(m->pose1);
-        }
-#else
             animPoseRelease(m->pose1);
             m->pose1 = -1;
         }
-#endif
         if (m->pose2 != -1) {
-#if VERSION <= VERSION_DEMO_US
-            animPoseRelease(m->pose2);
-        }
-        smartFree(m->smart);
-        _mapFree(m);
-#else
             animPoseRelease(m->pose2);
             m->pose2 = -1;
         }
@@ -1617,7 +1477,6 @@ void monosiriExit(MonosiriWork* m) {
             m->smart = NULL;
         }
         _mapFree(m);
-#endif
     }
 }
 
@@ -1789,14 +1648,8 @@ void monosiri_disp(CameraId camera, void* param) {
     u16 th;
 
     x = m->curX;
-#if VERSION <= VERSION_DEMO_US
-    y = m->curY;
-    if (m->file1)
-    {
-#else
     y = m->curY;
     if (m->file1) {
-#endif
         winHalfBookGX(*(TEXPalette**)m->file1->data, 0, x, y);
         TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
         tw = GXGetTexObjWidth(&tex);
@@ -1893,11 +1746,7 @@ void monosiri_disp(CameraId camera, void* param) {
         sprintf(buf, "%s\201@%s", msgSearch("menu_monosiri_derutokoro"), msgSearch(te->locationTag));
 #endif
         w = 0.75f * FontGetMessageWidth(buf);
-#if VERSION <= VERSION_DEMO_US
-        winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 210.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
-#else
         winFontSet((Vec){1.0f + ((16.0f + x) + (248.0f - w) / 2.0f), y - 210.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
-#endif
     }
 }
 

@@ -1,4 +1,3 @@
-#include "version.h"
 #include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -240,13 +239,8 @@ static BattleWeapon weapon_wakka_attack = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
-#if VERSION <= VERSION_DEMO_US
-    0, 0, // sleepChance..sleepTime
-    100, // stopChance
-#else
     0, 0, // sleepChance..sleepTime
     80, // stopChance
-#endif
     3, // stopTime
     0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
     0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
@@ -284,13 +278,8 @@ static BattleWeapon weapon_wawawa_attack = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-#if VERSION <= VERSION_DEMO_US
-    0, 0, // sleepChance..sleepTime
-    100, // stopChance
-#else
     0, 0, // sleepChance..sleepTime
     80, // stopChance
-#endif
     3, // stopTime
     0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
     0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance

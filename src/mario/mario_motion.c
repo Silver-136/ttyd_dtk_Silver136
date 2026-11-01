@@ -56,19 +56,11 @@ typedef struct MarioMotTblEntry {
     void (*main)(void);
     void (*unk)(void);
     void (*post)(void);
-#if VERSION <= VERSION_DEMO_US
-} MarioMotTblEntry;
-
-static NpcEntry mot_talk(NpcEntry);
-static NpcEntry mot_getItem(NpcEntry);
-static NpcEntry mot_kaze(NpcEntry);
-#else
 } MarioMotTblEntry;
 
 void mot_talk(void);
 void mot_getItem(void);
 void mot_kaze(void);
-#endif
 void mot_bottomless(void);
 void mot_forceReset(void);
 void mot_shadow(void);
@@ -115,11 +107,7 @@ MarioMotTblEntry marioMotTbl[] = {
     {mot_plane, NULL, mot_plane_post},
     {mot_ship, NULL, mot_ship_post},
     {mot_yoshi, NULL, mot_yoshi_post},
-#if VERSION <= VERSION_DEMO_US
-    {mot_cloud, NULL, mot_cloud_post},
-#else
     {mot_cloud, NULL, cloudResetAt},
-#endif
     {mot_vivian, NULL, mot_vivian_post},
     {mot_dokan, NULL, NULL},
     {mot_grasp, NULL, NULL},
@@ -149,15 +137,11 @@ MarioJumpData marioJumpData = {
 void marioChgMoveMotion(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_PLANE) {
-#if VERSION <= VERSION_DEMO_US
-        mario_plane_cancel();
-#else
         mario_plane_cancel();
         return;
     }
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
         allPartyForceRideOn();
-#endif
         return;
     }
 #if VERSION >= VERSION_US
@@ -239,19 +223,12 @@ void marioChgRollMotion(void) {
  * In tube mode only the height is stored (retail also puffs smoke and jumps); on Yoshi, yoshi_jumpStand jumps.
  */
 void marioChgJumpStandMotion(f32 v) {
-#if VERSION <= VERSION_DEMO_US
-    MarioWork* mario = marioGetPtr();
-    // The demo does not follow the camera up, and in status 0x10 only stores the height.
-    if (marioChkSts(0x10)) {
-        mario->mot.jump.standHeight = v;
-#else
     MarioWork* mario = marioGetPtr();
     camFollowYOn();
     if (marioChkSts(MARIO_STS_ROLL)) {
         mario->mot.jump.standHeight = v;
         effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
         marioChgMot(MARIO_MOTION_JUMP_STAND);
-#endif
     } else if (mario->currMotionId == MARIO_MOTION_YOSHI) {
         mario->mot.jump.standHeight = v;
         yoshi_jumpStand();
@@ -419,15 +396,11 @@ void marioChgMotSub(MarioMotion id, s32 callPost) {
     }
     mario->prevMotionId = mario->currMotionId;
     mario->currMotionId = id;
-#if VERSION <= VERSION_DEMO_US
-    if (callPost) {
-#else
     if (callPost) {
         if (marioMotTbl[mario->prevMotionId].post) {
             marioMotTbl[mario->prevMotionId].post();
         }
     } else if (mario->prevMotionId == MARIO_MOTION_JABARA) {
-#endif
         if (marioMotTbl[mario->prevMotionId].post) {
             marioMotTbl[mario->prevMotionId].post();
         }
@@ -823,13 +796,8 @@ void marioLandOn(void) {
             marioChgMot(MARIO_MOTION_STAY);
             return;
         }
-#if VERSION <= VERSION_DEMO_US
-        if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-            marioChgMotSub(MARIO_MOTION_STAY, FALSE); // the demo has no slit re-entry
-#else
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             marioSlitReenter();
-#endif
             return;
         }
         if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
@@ -850,10 +818,6 @@ void marioLandOn(void) {
             }
             quake_kpaLandOn();
             return;
-#if VERSION <= VERSION_DEMO_US
-        }
-        marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after landing
-#else
         }
         if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
 #if VERSION >= VERSION_US
@@ -872,7 +836,6 @@ void marioLandOn(void) {
             return;
         }
         marioSlitSetAfterLand();
-#endif
         return;
     }
     flags = mario->flags;
@@ -893,31 +856,13 @@ void marioLandOn(void) {
         marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
         return;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (flags & MARIO_FLAG_PAPER_MODE) {
-        marioChgMotSub(MARIO_MOTION_STAY, FALSE);
-#else
     if (flags & MARIO_FLAG_PAPER_MODE) {
         marioSlitReenter();
-#endif
         return;
     }
     if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
         motSlitCancel();
     }
-#if VERSION <= VERSION_DEMO_US
-}
-
-// FAKE: unreferenced stand-in (deadstripped by the linker) that only creates the demo's three stray
-// .rodata doubles 0.5, 3.0 and 0.0 between the mot_talk and earlier pools; the original function that used
-// them is not in the demo DOL. A file-scope const array or <math.h> constants place them at the start of
-// the section instead.
-static f32 marioDemoHalf(f32 void) {
-    if (void < 0.0) {
-        return void;
-    }
-    return 0.5 * void * (3.0 - void);
-#endif
 }
 
 void mot_talk(void) {
@@ -1058,14 +1003,10 @@ BOOL marioChkTransform(void) {
     if (!(mario->buttonTrg & PAD_BUTTON_Y)) {
         return FALSE;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (mario->currMotionId == MARIO_MOTION_YOSHI) {
-#else
     if (!(mario->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON) && mario->partyUseDelay) {
         return FALSE;
     }
     if (mario->currMotionId == MARIO_MOTION_YOSHI) {
-#endif
         return FALSE;
     }
     if (pouchCheckItem(ITEM_BOAT_CURSE) > 0 && marioChkShipPlace(mario->hitobjStandOn)) {
@@ -1114,9 +1055,6 @@ BOOL marioChkItemMotion(void) {
 
 /** Always 0: a left-over stick-rub check; marioMain's air movement would skip the stick while it returned nonzero. */
 s32 L_marioChkRub(void) {
-#if VERSION <= VERSION_DEMO_US
-    MarioWork* mario = marioGetPtr();
-#endif
     return 0;
 }
 
@@ -1161,36 +1099,9 @@ s32 marioRollChgChk(void) {
  */
 void marioChgMotJump2(void) {
     MarioWork* mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-    if (kpaGetBodyStatus() != 2) {
-#else
     if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED && mario->currMotionId != MARIO_MOTION_ROLL) {
-#endif
         marioChgMot(MARIO_MOTION_JUMP_NPC);
     }
-#if VERSION <= VERSION_DEMO_US
-}
-
-/**
- * In the demo the Flurrie motion lives here: party_cloud.c has no mot_cloud yet,
- * and the motion's post function resets the camera target.
- */
-static NpcEntry mot_cloud(NpcEntry) {
-    MarioWork* mario = marioGetPtr();
-
-    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        mario->flags &= ~(MARIO_FLAG_HAS_INPUT_JUMP | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_JUMPING);
-        mario->multiTimer = 0;
-        mario->airTimer = 0;
-        mario->currSubMotionId = 0;
-    }
-}
-
-/** Leaving the demo's Flurrie motion: puts the camera target back on Mario (cloudResetAt). */
-static NpcEntry mot_cloud_post(NpcEntry) {
-    cloudResetAt();
-#endif
 }
 
 /** TRUE for display angles strictly between 90 and 270 degrees, so mot_kaze ends facing 180 rather than 0. */

@@ -1,6 +1,5 @@
 // Mario's damage motions: knock-back, falling in water, spikes (toge) and the return to the last safe spot.
 
-#include "version.h"
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"
@@ -127,7 +126,6 @@ void mot_damage(void) {
     f32 d;
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
-#if VERSION <= VERSION_DEMO_US
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         if (mario->jumpVelocityY == 0.0f) {
             mario->jumpVelocityY = -6.0f;
@@ -137,17 +135,6 @@ void mot_damage(void) {
         }
         marioClearSlitFloor();
         marioOfsRotReset();
-#else
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        if (mario->jumpVelocityY == 0.0f) {
-            mario->jumpVelocityY = -6.0f;
-            mario->jumpAccelerationY = 0.0f;
-            mario->jumpJerkY = 0.0f;
-            mario->jumpSnapY = 0.0f;
-        }
-        marioClearSlitFloor();
-        marioOfsRotReset();
-#endif
         mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         marioAdjustMoveDir();
         marioSlitForceCancel();
@@ -162,11 +149,7 @@ void mot_damage(void) {
         mario->airTimer = 0;
         mario->baseSpeed = 0.0f;
         mario->multiTimer = 20;
-#if VERSION <= VERSION_DEMO_US
-        if (mario->prevMotionId != MARIO_MOTION_YOSHI) {
-#else
         if (mario->prevMotionId != MARIO_MOTION_YOSHI && mario->prevMotionId != MARIO_MOTION_PLANE) {
-#endif
             Vec pos = mario->position;
             marioSetSplash(0, &pos);
         }
@@ -288,22 +271,12 @@ void mot_damage(void) {
         mario->currSubMotionId = 13;
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioSetFallPara();
-#if VERSION <= VERSION_DEMO_US
-            mario->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
-            mario->multiTimer = 1;
-            break;
-#else
         mario->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
         mario->multiTimer = 1;
         break;
-#endif
     case 13:
         if (--mario->multiTimer > 0) {
             break;
-#if VERSION <= VERSION_DEMO_US
-            }
-            mario->currSubMotionId = 20;
-#else
         }
         mario->currSubMotionId = 20;
         break;
@@ -318,7 +291,6 @@ void mot_damage(void) {
         marioSetFallPara();
         mario->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
         mario->currSubMotionId = 20;
-#endif
         break;
     case 20: {
         HitEntry* h;
@@ -424,23 +396,13 @@ void mot_damageToge(void) {
     f32 d;
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
-#if VERSION <= VERSION_DEMO_US
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         marioClearSlitFloor();
         mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-#else
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        marioClearSlitFloor();
-        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-#endif
         marioAdjustMoveDir();
         marioSlitForceCancel();
-#if VERSION <= VERSION_DEMO_US
-        marioYoshiForceCancel();
-#else
         marioYoshiForceCancel();
         nokonoko_use_cancel();
-#endif
         marioNoUpdateCamPos();
         bomhei_use_cancel2();
         mario->currSubMotionId = 0;

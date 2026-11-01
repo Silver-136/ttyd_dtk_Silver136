@@ -929,12 +929,8 @@ EVT_BEGIN(evt_champion_win)
     ADD(LW(1), 4)
     ADD(LW(2), 15)
     CALL(evt_eff, STRING("belt"), STRING("starstone"), 9, LW(0), LW(1), LW(2), FLOAT(0.75f), 0, 0, 0, 0, 0, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("belt"), ITEM_CHAMPS_BELT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-#else
     CALL(tou_08_belt_camid)
     CALL(evt_item_entry, STRING("belt"), ITEM_CHAMPS_BELT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-#endif
     CALL(icon_off)
     CALL(evt_item_get_item, STRING("belt"))
     CALL(evt_item_get_item_end_wait, STRING("belt"))
@@ -1261,11 +1257,7 @@ EVT_BEGIN(tou_08_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -120, 12, -135, ITEM_TYPE_STILL, GSWF(GSWF_TOU08_ICE_STORM), 0)
-#else
     CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -240, 0, -90, ITEM_TYPE_STILL, GSWF_TOU_08_ICE_STORM, 0)
-#endif
     CALL_CHILD(PTR(evt_tou_locker_init))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -1307,20 +1299,12 @@ EVT_BEGIN(tou_08_init_evt)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-#endif
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
             IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-#endif
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             END_IF
             CASE_DEFAULT
@@ -1329,11 +1313,7 @@ EVT_BEGIN(tou_08_init_evt)
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 ELSE
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-#endif
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             END_IF
         END_SWITCH

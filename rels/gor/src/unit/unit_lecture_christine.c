@@ -1,6 +1,5 @@
 // unit_lecture_christine: Goombella as she appears in the action-command tutorial battle.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/unit_work.h"
@@ -446,20 +445,13 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
         // Guard lesson: he asks Mario to press the A button as she lands, and waits for it.
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 2, STRING("mac_0_b_t2_006"), 0, UNIT_ID_LECTURE)
-        WAIT_FRAMES(1)
-        LABEL(11)
-#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_006"), 0, -6)
         WAIT_FRAMES(1)
         LABEL(11)
-#endif
         CALL(btlevtcmd_PadCheckTrigger, 0, PAD_BUTTON_A, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             WAIT_FRAMES(1)
             GOTO(11)
-#if VERSION <= VERSION_DEMO_US
         END_IF
         WAIT_MS(50)
         BEGIN_INLINE_EVENT
@@ -468,33 +460,16 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
         END_INLINE_EVENT
         WAIT_MS(100)
         CASE_EQUAL(7)
-#else
-        END_IF
-        WAIT_MS(50)
-        BEGIN_INLINE_EVENT
-            WAIT_MS(100)
-            CALL(evt_msg_continue)
-        END_INLINE_EVENT
-        WAIT_MS(100)
-        CASE_EQUAL(7)
-#endif
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
         // Superguard lesson: he asks for the B button instead, and waits for it.
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 2, STRING("mac_0_b_t2_014"), 0, UNIT_ID_LECTURE)
-        WAIT_FRAMES(1)
-        LABEL(12)
-#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_014"), 0, -6)
         WAIT_FRAMES(1)
         LABEL(12)
-#endif
         CALL(btlevtcmd_PadCheckTrigger, 0, PAD_BUTTON_B, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             WAIT_FRAMES(1)
             GOTO(12)
-#if VERSION <= VERSION_DEMO_US
         END_IF
         WAIT_MS(50)
         BEGIN_INLINE_EVENT
@@ -503,16 +478,6 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
         END_INLINE_EVENT
         WAIT_MS(100)
     END_SWITCH
-#else
-        END_IF
-        WAIT_MS(50)
-        BEGIN_INLINE_EVENT
-            WAIT_MS(100)
-            CALL(evt_msg_continue)
-        END_INLINE_EVENT
-        WAIT_MS(100)
-    END_SWITCH
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
         CALL(evt_btl_camera_set_zoom, 0, FLOAT(162.5f))

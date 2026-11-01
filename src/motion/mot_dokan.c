@@ -32,9 +32,6 @@ static void _partyEntry(s32 flag) {
 
     mario = marioGetPtr();
     if (mario->flags & MARIO_FLAG_BG_MODE) {
-#if VERSION <= VERSION_DEMO_US
-        return;
-#else
         return;
     }
     count = 0;
@@ -43,7 +40,6 @@ static void _partyEntry(s32 flag) {
     }
     if (partyGetPtr(mario->currPartySlotId[1]) != NULL) {
         count++;
-#endif
     }
     for (i = 0; i < 2; i++) {
         if (mario->currPartySlotId[i] < 0) {
@@ -70,11 +66,6 @@ static void _partyEntry(s32 flag) {
                 party->scale = zero;
             }
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
-#if VERSION <= VERSION_DEMO_US
-            party->flags |= PARTY_FLAG_FORCE_FALL;
-            party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
-            party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
-#else
             party->flags |= PARTY_FLAG_FORCE_FALL;
             if (count == 1) {
                 off = 180.0f;
@@ -83,7 +74,6 @@ static void _partyEntry(s32 flag) {
             }
             party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
             party->displayDirectionTarget = revise360(mario->displayDirection + off);
-#endif
             party->displayDirection = mario->displayDirection;
             party->moveDir = mario->moveDirection;
         } else {
@@ -94,11 +84,6 @@ static void _partyEntry(s32 flag) {
                 party->scale = zero;
             }
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
-#if VERSION <= VERSION_DEMO_US
-            party->flags |= PARTY_FLAG_FORCE_FALL;
-            party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
-            party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
-#else
             party->flags |= PARTY_FLAG_FORCE_FALL;
             if (count == 1) {
                 off = 180.0f;
@@ -107,7 +92,6 @@ static void _partyEntry(s32 flag) {
             }
             party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
             party->displayDirectionTarget = revise360(mario->displayDirection + off);
-#endif
             party->displayDirection = mario->displayDirection;
             party->moveDir = mario->moveDirection;
         }

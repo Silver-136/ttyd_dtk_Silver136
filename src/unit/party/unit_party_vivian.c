@@ -31,17 +31,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "icon_ids.h"
-#if VERSION <= VERSION_DEMO_US
-#include "unit/party/unit_party_vivian.h"
-#include "libc_decls.h"
-
-static USER_FUNC(_vivian_make_extra_work_area);
-static USER_FUNC(_disp_heart_entry_stop_check);
-static USER_FUNC(_disp_heart_entry_stop);
-static void _disp_heart(CameraId camera, void* param);
-static USER_FUNC(_disp_heart_entry);
-static USER_FUNC(_make_kagenuke_weapon);
-#else
 #include "battle/battle_damage.h"
 
 USER_FUNC(_vivian_make_extra_work_area);
@@ -51,7 +40,6 @@ void _disp_heart(CameraId camera, void* param);
 USER_FUNC(_disp_heart_entry);
 USER_FUNC(_make_kagenuke_weapon);
 USER_FUNC(_get_vivian_attack_position);
-#endif
 USER_FUNC(_get_move_frame);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
@@ -595,13 +583,8 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-#if VERSION <= VERSION_DEMO_US
-    0, // poisonStrength
-    90, // confuseChance
-#else
     0, // poisonStrength
     100, // confuseChance
-#endif
     3, // confuseTime
     0, 0, 0, 0, 0, 0, 0, 0, // electricChance..freezeTime
     0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeChance..defChangeTime
@@ -659,18 +642,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     CALL(btlevtcmd_StartAC, 1)
     // She glides under the stage to a spot beside the enemy and rises out of the floor there.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
-    CALL(btlevtcmd_TransStageFloorPosition, LW(6), LW(7), LW(8))
-    CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 30)
-    SUBTRACT(LW(1), 20)
-    IF_INT_LESS(LW(1), LW(7))
-        SET_VALUE(LW(1), LW(7))
-    END_IF
-    CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#else
     CALL(_get_vivian_attack_position, LW(3), LW(0), LW(1), LW(2))
-#endif
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 50, 0, EASING_CUBIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHADOW_TAIL_WORK_HOLD, 1)
@@ -681,20 +653,9 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     // She turns to face the enemy and glides in close if she is not there yet.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_TransStageFloorPosition, LW(6), LW(7), LW(8))
-    CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 30)
-    SUBTRACT(LW(1), 20)
-    IF_INT_LESS(LW(1), LW(7))
-        SET_VALUE(LW(1), LW(7))
-#else
     CALL(_get_vivian_attack_position, LW(3), LW(0), LW(1), LW(2))
     CALL(_get_vivian_attack_position, LW(3), LW(6), LW(7), LW(8))
     CALL(btlevtcmd_TransStageFloorPosition, LW(6), LW(7), LW(8))
-#endif
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-#endif
     CALL(btlevtcmd_GetFaceDirection, LW(3), LW(15))
     MULTIPLY(LW(15), -1)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -870,12 +831,8 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
     CALL(btlevtcmd_StopAC)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_btl_camera_set_zoom, 0, 350)
-#else
     CALL(evt_btl_camera_set_zoom, 0, 350)
     CALL(evt_btl_camera_set_posoffset, 0, 0, 0, 0)
-#endif
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A2_2"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A2_3"))
@@ -913,12 +870,8 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     CALL(btlevtcmd_InviteApInfoReport)
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
-#else
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_posoffset, 0, 0, 0, 0)
-#endif
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

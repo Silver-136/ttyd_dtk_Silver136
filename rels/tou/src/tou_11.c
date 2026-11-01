@@ -1,7 +1,6 @@
 // tou_11 (闘技場, Glitz Pit): an empty minor-league locker room, hidden behind the tou_09 lockers, where Mario is
 // shut in before the title match; exits to tou_04 and tou_09 (the shut-in scenes iris out to tou_03).
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cloud.h"
@@ -336,11 +335,7 @@ EVT_BEGIN(tou_11_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome"))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-#endif
         SPAWN_EVENT(PTR(evt_tojikome_nidome))
         CALL(evt_mario_set_pos, 30, 0, -100)
         CALL(evt_party_set_pos, 0, 60, 0, -100)
@@ -349,11 +344,7 @@ EVT_BEGIN(tou_11_init_evt)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("sandome"))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-#endif
         SPAWN_EVENT(PTR(evt_tojikome_sandome))
         CALL(evt_mario_set_pos, 30, 0, -100)
         CALL(evt_party_set_pos, 0, 60, 0, -100)
@@ -371,19 +362,11 @@ EVT_BEGIN(tou_11_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-#endif
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
-#endif
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))

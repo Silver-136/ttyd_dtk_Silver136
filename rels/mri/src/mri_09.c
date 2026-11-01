@@ -155,12 +155,7 @@ static BeroEntry bero_entry_data[] = {
  * It captures the panel, shows the roll animation with a slot sound,
  * then hides the panel and releases the capture.
  */
-#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(wall_roll_sub)
-    CALL(evt_paper_entry, LW(0))
-#else
-EVT_BEGIN(wall_roll_sub)
-#endif
     CALL(evt_img_entry, LW(2))
     CALL(evt_img_set_paper, LW(2), LW(0))
     CALL(evt_offscreen_entry, LW(3))
@@ -243,15 +238,9 @@ EVT_BEGIN(wall_roll)
     CALL(evt_hitobj_onoff, STRING("A_isk_01A"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_f2_rak04"), 1, 0)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_MRI09_WALL_PANELS_ROLLED), 1)
-    WAIT_FRAMES(1)
-    CALL(evt_puni_all_fall_check)
-#else
     SET_VALUE(GSWF_MRI_09_WALL_PUZZLE_SOLVED, 1)
     WAIT_FRAMES(1)
     CALL(evt_puni_all_fall_check)
-#endif
     CALL(evt_puni_set_maze)
     CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -277,16 +266,10 @@ EVT_BEGIN(wall_roll)
 EVT_END()
 
 static EVT_BEGIN(breakyuka_init)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_MRI09_FLOOR_BROKEN), 1)
-    IF_INT_EQUAL(GSWF(GSWF_MRI09_FLOOR_BROKEN), 0)
-        CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 0)
-#else
     IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 0)
         ELSE
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 1)
-#endif
     END_IF
     RETURN
 EVT_END()
@@ -542,21 +525,12 @@ EVT_BEGIN(mri_09_init_evt)
         CALL(evt_mobj_switch_red, 1, STRING("slot00"), -80, 0, 135, PTR(slot00_event), 0)
         CALL(evt_mobj_switch_red, 1, STRING("slot01"), -30, 0, 135, PTR(slot01_event), 0)
         CALL(evt_mobj_switch_red, 1, STRING("slot02"), 30, 0, 135, PTR(slot02_event), 0)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_mobj_switch_red, 1, STRING("slot03"), 80, 0, 135, PTR(slot03_event), 0)
         CALL(evt_paper_entry, STRING("OFF_d_roll_down"))
         CALL(evt_paper_entry, STRING("OFF_d_roll_up"))
         CALL(evt_paper_entry, STRING("OFF_d_roll_left"))
         CALL(evt_paper_entry, STRING("OFF_d_roll_right"))
         CASE_GREATER_OR_EQUAL(STG2_21_02_MATCHING_THE_PATTERNS)
-#else
-        CALL(evt_mobj_switch_red, 1, STRING("slot03"), 80, 0, 135, PTR(slot03_event), 0)
-        CALL(evt_paper_entry, STRING("OFF_d_roll_down"))
-        CALL(evt_paper_entry, STRING("OFF_d_roll_up"))
-        CALL(evt_paper_entry, STRING("OFF_d_roll_left"))
-        CALL(evt_paper_entry, STRING("OFF_d_roll_right"))
-        CASE_GREATER_OR_EQUAL(STG2_21_02_MATCHING_THE_PATTERNS)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_01A"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_isk_01A"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)

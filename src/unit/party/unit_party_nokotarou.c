@@ -49,11 +49,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 PoseTableEntry pose_table_nokotarou_stay[26];
 PoseTableEntry pose_table_nokotarou_turn[12];
-#if VERSION <= VERSION_DEMO_US
-static BattleDataEntry data_table[11];
-#else
 static BattleDataEntry data_table[12];
-#endif
 BattleUnitKindPart unitpartsdata_Party_Nokotarou[1];
 BattleUnitKind unitdata_Party_Nokotarou;
 static EvtWord battle_entry_event[59];
@@ -78,12 +74,8 @@ EvtWord partyNokotarouAttack_KouraGuard[];
 EvtWord partyNokotarouAttack_TsuranukiKoura[VERSION_PICK(931, 942)];
 EvtWord nokotarou_appeal_event[34];
 static EvtWord party_win_reaction[16];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_audience_event[263];
-#else
 static EvtWord attack_audience_event[263];
 EvtWord nokotarou_revive_event[16];
-#endif
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static BattleUnitDefense defence_turn;
@@ -153,12 +145,8 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_WAKEUP_EVENT, wakeup_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {UNIT_DATA_WIN_REACTION_EVENT, party_win_reaction},
-#if VERSION <= VERSION_DEMO_US
-    {7, subset_attack_ready_jump_event},
-#else
     {UNIT_DATA_ATTACK_READY_EVENT, subset_attack_ready_jump_event},
     {UNIT_DATA_REVIVE_EVENT, nokotarou_revive_event},
-#endif
     {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
     {0, NULL},
 };
@@ -870,9 +858,6 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
         GOTO(99)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_GetResultAC, LW(0))
-#else
     CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPIN_SPEED, 0)
@@ -881,7 +866,6 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
     END_IF
     // The hit, with the rating effect after a good command.
     CALL(btlevtcmd_GetResultAC, LW(0))
-#endif
     IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
@@ -1050,11 +1034,7 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
         SET_VALUE(LW(0), 100)
         SET_VALUE(LW(1), 30)
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_AcSetParamAll, 2, LW(0), 1, 90, LW(1), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
-#else
     CALL(btlevtcmd_AcSetParamAll, 2, LW(0), 1, 95, LW(1), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
-#endif
     CALL(btlevtcmd_AcSetFlag, AC_GAUGE_TIMING_FLAG_WRAP | AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 19, 1, 60)
     WAIT_FRAMES(22)
@@ -1119,16 +1099,6 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
         GOTO(50)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
-    CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_NOKOTAROU_SPIN_TARGET, 0)
-        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-        CALL_CHILD(_koura_rotate_stop)
-    END_IF
-    CALL(btlevtcmd_GetResultAC, LW(0))
-#else
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
     CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1137,7 +1107,6 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
         CALL_CHILD(_koura_rotate_stop)
     END_IF
     CALL(btlevtcmd_GetResultAC, LW(0))
-#endif
     IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
@@ -1428,13 +1397,9 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), 1, POSE_TYPE_NEUTRAL)
         CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kHidden)
         CALL(btlevtcmd_OnAttribute, LW(3), kShellShielded | kUnitNeverTargetable)
-#if VERSION <= VERSION_DEMO_US
-        CALL(_check_mario_move_count, LW(0))
-#else
         CALL(btlevtcmd_StartWaitEvent, LW(3))
         // If Mario still has a move this turn, the shell opens to let him act.
         CALL(_check_mario_move_count, LW(0))
-#endif
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
             CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1682,9 +1647,6 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_GetResultAC, LW(0))
-#else
     CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_EFFECT_END, 1)
@@ -1693,7 +1655,6 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
         CALL_CHILD(_koura_rotate_stop)
     END_IF
     CALL(btlevtcmd_GetResultAC, LW(0))
-#endif
     IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         CALL(btlevtcmd_AcGetOutputParam, 2, LW(9))
@@ -1846,11 +1807,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_NOKO_ATTACK2"), 0)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 15)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE, 0)
-#endif
     CALL(_attack_aud, LW(3), 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
@@ -1876,9 +1833,6 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(8), LW(1), LW(2))
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-#else
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1887,7 +1841,6 @@ EVT_BEGIN(nokotarou_revive_event)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence))
     CALL(btlevtcmd_OffStatusFlag, LW(10), UNIT_STATUS_FLAG_FLIPPED)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_nokotarou_stay))
-#endif
     RETURN
 EVT_END()
 

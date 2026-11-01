@@ -1,7 +1,6 @@
 // mri_16 (巨木の中, The Great Tree): the water room: the mechanism that drains the water (water_shikake) and
 // the rising bars (bar_shikake), with an item box.
 
-#include "version.h"
 #include "mri_puni.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -226,22 +225,12 @@ EVT_END()
 EVT_BEGIN(water_shikake)
     // The blue switch has been pressed: controls off and the music dips; Punies already on the lower level are
     // put at fixed spots there.
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 0)
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_wait_landon)
-        CALL(evt_mario_set_mov_spd, FLOAT(0.0f))
-    END_INLINE_EVENT
-    CALL(evt_mario_normalize)
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(40))
-#else
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_wait_landon)
         CALL(evt_mario_set_mov_spd, FLOAT(0.0f))
     END_INLINE_EVENT
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(3))
-#endif
     SET_VALUE(LW(10), 1)
     LOOP(0)
         SET_VALUE(LF(0), 1)
@@ -411,11 +400,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_SHRINK_STOMP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
-#else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
-#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)

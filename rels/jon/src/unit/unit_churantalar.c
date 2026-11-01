@@ -1,6 +1,5 @@
 // Pit of 100 Trials battle unit: the Arantula (`churantalar`): parts, stats, poses and AI scripts.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -66,14 +65,8 @@ static EvtWord dmg_first_attack_pos[19];
 static EvtWord yarn_event[44];
 static EvtWord entry_event[48];
 static EvtWord damage_event[10];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[183];
-static EvtWord dead_event[189];
-static EvtWord blow_dead_event[98];
-#else
 static EvtWord dead_event[189];
 static EvtWord blow_dead_event[104];
-#endif
 static EvtWord battle_end_event[7];
 static EvtWord yure_event[76];
 static EvtWord move_kuutei_event[83];
@@ -629,12 +622,8 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
     CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_KillUnit, LW(10), 1)
-#else
     CALL(btlevtcmd_SetPos, LW(10), 0, -1000, 0)
     CALL(btlevtcmd_KillUnit, LW(10), 1)
-#endif
     RETURN
 EVT_END()
 
@@ -666,12 +655,8 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNotTargetable)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
     CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
-#else
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
     CALL(btlevtcmd_SetPos, LW(10), 0, -1000, 0)
-#endif
     CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
@@ -946,26 +931,10 @@ static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PAI_A_2a"))
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
-    ELSE
-        CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 40, 0)
-#else
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(1))
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
-#endif
-#if VERSION <= VERSION_DEMO_US
-        ELSE
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 30, 0)
-        END_IF
-    END_IF
-#endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 0, 110, 5)
     LOOP(5)
@@ -1011,27 +980,11 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PAI_A_2a"))
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
-    ELSE
-        CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 40, 0)
-#else
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(1))
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
-#endif
-#if VERSION <= VERSION_DEMO_US
-        ELSE
-            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 30, 0)
-        END_IF
-    END_IF
-#endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_ROTATION, LW(0))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, LW(0), 100, 5)

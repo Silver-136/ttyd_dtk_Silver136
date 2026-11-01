@@ -1,7 +1,6 @@
 // tik_18 (埋没した都市, Rogueport Sewers): the passage between tik_06, tik_07 and tik_17, with a cloud event
 // (tik_18_cloud_evt); a Magikoopa, a Koopatrol and Spanias.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -147,13 +146,8 @@ EVT_BEGIN(tik_18_init_evt)
         CALL(evt_npc_check_delete, STRING("ハンニャー２"))
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("ue"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -30, ITEM_SLOW_SHROOM, 0, GSWF(GSWF_TIK18_SLOW_SHROOM_BLOCK_HIT), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -30, ITEM_GRADUAL_SYRUP, 0, GSWF(GSWF_TIK18_GRADUAL_SYRUP_BLOCK_HIT), 0)
-#else
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -38, ITEM_SLOW_SHROOM, 0, GSWF_TIK_18_SLOW_SHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -38, ITEM_GRADUAL_SYRUP, 0, GSWF_TIK_18_GRADUAL_SYRUP_BLOCK, 0)
-#endif
     RETURN
 EVT_END()
 

@@ -1,6 +1,5 @@
 // las_22 (ラストダンジョン, Palace of Shadow): the room with the turntable (kaitendai).
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -411,11 +410,7 @@ EVT_END()
 static EVT_BEGIN(key_check_evt)
     CALL(evt_pouch_check_item, ITEM_PALACE_KEY_0x2F, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
-#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
-#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -455,12 +450,8 @@ EVT_END()
  */
 EVT_BEGIN(las_22_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS6"))
-#else
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS6"))
     CALL(evt_snd_set_rev_mode, 2)
-#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))

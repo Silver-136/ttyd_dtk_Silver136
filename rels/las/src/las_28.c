@@ -1,6 +1,5 @@
 // las_28 (ラストダンジョン, Palace of Shadow): Sir Grodus (シュリョー) and then Bowser and Kammy Koopa.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_shuryolight.h"
 #include "eff/n64/eff_guruguru_n64.h"
@@ -282,12 +281,8 @@ static EVT_BEGIN(first_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_14_01_QUEENS_CHAMBER)
     CALL_CHILD(PTR(bero_case_entry))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 1)
-#else
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
-#endif
     CALL(evt_party_run, 0)
     RETURN
 EVT_END()
@@ -323,13 +318,8 @@ EVT_BEGIN(syuryo_thunder)
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
-        CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(3), LW(4), LW(5), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
-#else
         CALL(evt_eff, 0, STRING("hit"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
         CALL(evt_eff, 0, STRING("hit"), 2, LW(3), LW(4), LW(5), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
-#endif
     END_INLINE_EVENT
     ADD(LW(0), LW(3))
     ADD(LW(1), LW(4))
@@ -337,11 +327,7 @@ EVT_BEGIN(syuryo_thunder)
     DIVIDE(LW(0), 2)
     DIVIDE(LW(1), 2)
     DIVIDE(LW(2), 2)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_eff64, STRING(""), STRING("thunder_n64"), 5, LW(0), LW(1), LW(2), FLOAT(20.0f), FLOAT(37.0f), 0, 0, 0, 0, 0, 0)
-#else
     CALL(evt_eff64, 0, STRING("thunder_n64"), 5, LW(0), LW(1), LW(2), FLOAT(20.0f), FLOAT(37.0f), 0, 0, 0, 0, 0, 0)
-#endif
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_SHURYO_THUNDER1"), LW(0), LW(1), LW(2), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.059570313f), 500)
@@ -358,25 +344,13 @@ EVT_BEGIN(syuryo_thunder)
             CASE_EQUAL(4)
             CALL(evt_party_set_pose, 0, STRING("PYS_D_5"))
             CASE_EQUAL(6)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_set_pose, 0, STRING("PTR_D_5"))
-#else
             CALL(evt_party_set_pose, 0, STRING("PTR_D_4"))
-#endif
             CASE_EQUAL(3)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_set_pose, 0, STRING("PBM_D_5"))
-#else
             CALL(evt_party_set_pose, 0, STRING("D_4"))
-#endif
             CASE_EQUAL(5)
             CALL(evt_party_set_pose, 0, STRING("PWD_D_5"))
             CASE_EQUAL(7)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_set_pose, 0, STRING("PCH_D_5"))
-#else
             CALL(evt_party_set_pose, 0, STRING("PCH_D_4"))
-#endif
         END_SWITCH
         WAIT_MS(100)
         CALL(evt_party_get_dispdir, 0, LW(0))
@@ -400,11 +374,7 @@ EVT_BEGIN(syuryo_thunder)
             CASE_EQUAL(6)
             CALL(evt_party_set_pose, 0, STRING("PTR_D_3"))
             CASE_EQUAL(3)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_set_pose, 0, STRING("PBM_D_3"))
-#else
             CALL(evt_party_set_pose, 0, STRING("D_3"))
-#endif
             CASE_EQUAL(5)
             CALL(evt_party_set_pose, 0, STRING("PWD_D_3"))
             CASE_EQUAL(7)
@@ -474,12 +444,8 @@ EVT_BEGIN(syuryo_evt)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_normalize)
-#else
     CALL(evt_mario_normalize)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
-#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 30)
     ADD(LW(2), 25)
@@ -571,12 +537,8 @@ EVT_BEGIN(syuryo_evt)
     CALL(evt_mario_set_pose, STRING("M_R_1"))
     WAIT_WHILE(GF(0))
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_battle_info, STRING("シュリョー"), 15)
-#else
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_npc_set_battle_info, STRING("シュリョー"), 15)
-#endif
     CALL(evt_npc_battle_start, STRING("シュリョー"))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -663,11 +625,7 @@ EVT_BEGIN(syuryo_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_PEACH_SURPRISED1_2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_set_anim, STRING("ピーチ姫"), STRING("P_B_1F"))
     ADD(LW(1), 48)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_eff_fukidashi, 2, STRING(""), 0, 0, 0, LW(0), LW(1), LW(2), 0, 0, 60)
-#else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_POS, 0, 0, 0, 0, LW(0), LW(1), LW(2), 0, 0, 60)
-#endif
     WAIT_MS(2000)
     CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_4F"), STRING("P_T_4F"))
     CALL(evt_msg_print, 0, STRING("stg8_las_74"), 0, STRING("ピーチ姫"))
@@ -745,11 +703,7 @@ EVT_BEGIN(syuryo_evt)
         CASE_EQUAL(5)
         CALL(evt_party_set_pose, 0, STRING("PWD_S_1"))
         CASE_EQUAL(3)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_party_set_pose, 0, STRING("PBM_S_1"))
-#else
         CALL(evt_party_set_pose, 0, STRING("S_1"))
-#endif
         CASE_EQUAL(6)
         CALL(evt_party_set_pose, 0, STRING("PTR_S_1"))
         CASE_EQUAL(7)
@@ -846,11 +800,7 @@ EVT_BEGIN(koopa_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CEILING_BREAK1"), 75, 300, 0, LW(0))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, 75, 300, 0, 90, 0, 0, 0, 0, 0, 0, 0)
-#else
     CALL(evt_eff64, 0, STRING("hokori_n64"), 0, 75, 300, 0, 90, 0, 0, 0, 0, 0, 0, 0)
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(1500)
         CALL(evt_snd_sfxoff, LW(0))
@@ -866,11 +816,7 @@ EVT_BEGIN(koopa_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.029296875f), 1500)
     CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CEILING_BREAK1"), 75, 300, 0, LW(0))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, 75, 300, 0, 72, 0, 0, 0, 0, 0, 0, 0)
-#else
     CALL(evt_eff64, 0, STRING("hokori_n64"), 0, 75, 300, 0, 72, 0, 0, 0, 0, 0, 0, 0)
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(1200)
         CALL(evt_snd_sfxoff, LW(0))
@@ -956,11 +902,7 @@ EVT_BEGIN(koopa_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.029296875f), FLOAT(0.0f), 1000)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_eff, STRING(""), STRING("hit"), 0, LW(2), LW(0), LW(4), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
-#else
     CALL(evt_eff, 0, STRING("hit"), 0, LW(2), LW(0), LW(4), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
-#endif
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KOOPA_STRIKE1"), LW(2), LW(0), LW(4), 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KOOPA_STRIKE2"), LW(2), LW(0), LW(4), 0)
     CALL(evt_npc_set_anim, STRING("シュリョー"), STRING("D_4"))
@@ -1003,11 +945,7 @@ EVT_BEGIN(koopa_evt)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 1000)
     END_INLINE_EVENT
     CALL(evt_npc_get_position, STRING("クッパ"), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_eff64, STRING(""), STRING("kemuri1_n64"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-#else
     CALL(evt_eff64, 0, STRING("kemuri1_n64"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-#endif
     CALL(evt_npc_set_anim, STRING("クッパ"), STRING("KPA_D_2"))
     CALL(evt_npc_pera_onoff, STRING("クッパ"), 0)
     CALL(evt_npc_set_ry, STRING("クッパ"), 0)
@@ -1085,11 +1023,7 @@ EVT_BEGIN(koopa_evt)
     WAIT_MS(300)
     CALL(evt_npc_get_position, STRING("クッパ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_SURPRISED1_1"), LW(0), LW(1), LW(2), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_eff_fukidashi, 1, STRING(""), STRING("クッパ"), 0, 0, 0, 0, 0, 0, 0, 30)
-#else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("クッパ"), 0, 0, 0, 0, 0, 0, 0, 30)
-#endif
     WAIT_MS(600)
     CALL(evt_npc_flag_onoff, 1, STRING("クッパ"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_set_autotalkpose, STRING("クッパ"), STRING("KPA_S_1"), STRING("KPA_T_1"))
@@ -1127,11 +1061,7 @@ EVT_BEGIN(koopa_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_91"), 0, STRING("クッパ"))
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     WAIT_MS(800)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_eff_fukidashi, 1, STRING(""), STRING("ババ"), 0, 0, 0, 0, 0, 0, 0, 30)
-#else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("ババ"), 0, 0, 0, 0, 0, 0, 0, 30)
-#endif
     CALL(evt_npc_get_position, STRING("ババ"), LW(2), LW(3), LW(4))
     SET_VALUE(LW(5), LW(3))
     ADD(LW(5), 5)
@@ -1194,19 +1124,10 @@ EVT_BEGIN(koopa_evt)
         CALL(evt_npc_kamek_move_position, STRING("ババ"), LW(0), LW(2), 5, 0, FLOAT(120.0f), 0)
     END_INLINE_EVENT
     WAIT_MS(400)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_battle_info, STRING("クッパ"), 13)
-#else
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_npc_set_battle_info, STRING("クッパ"), 13)
-#endif
     CALL(evt_npc_battle_start, STRING("クッパ"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_wait_battle_end)
-    CALL(evt_snd_bgmoff, PSND_FADEOUT)
-#else
-    CALL(evt_npc_wait_battle_end)
-#endif
     CALL(evt_eff_delete, STRING("baria"))
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, -30, 0, 0)
@@ -1241,11 +1162,7 @@ EVT_BEGIN(koopa_evt)
     WAIT_MS(500)
     CALL(evt_mario_set_dir, 90, 300, 0)
     WAIT_MS(300)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_eff_fukidashi, 3, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
-#else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
-#endif
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -50, 84, 330, -50, 35, -18, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
@@ -1263,11 +1180,7 @@ EVT_BEGIN(koopa_evt)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_set_pose, STRING("M_N_5B"))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_eff_fukidashi, 3, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 36)
-#else
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36)
-#endif
     END_INLINE_EVENT
     CALL(evt_msg_print, 0, STRING("stg8_las_104"), 0, STRING("ピーチ姫"))
     WAIT_MS(500)
@@ -1330,11 +1243,7 @@ static EVT_BEGIN(shan_init)
         CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(9.0f))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.69921875f), 1000, 0, 0, 0, 0, 0, 0)
-#else
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.69921875f), 1000, 0, 0, 0, 0, 0, 0)
-#endif
         ADD(LW(0), 1)
     END_LOOP
     RETURN
@@ -1342,26 +1251,13 @@ EVT_END()
 
 EVT_BEGIN(las_28_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     ELSE
-#else
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
-        CALL(evt_snd_envoff, PSND_FADEOUT)
-    ELSE
-#endif
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-#endif
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
-#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
     END_IF
     CALL(evt_snd_set_rev_mode, 2)
-#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_14_LOCK)

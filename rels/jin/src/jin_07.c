@@ -1,7 +1,6 @@
 // jin_07 (ダイム寺院, Creepy Steeple): Boo (teresa) room with flames and a treasure chest, and a Star Piece;
 // doors to jin_06 and jin_08.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
@@ -697,12 +696,8 @@ EVT_BEGIN(jin_07_init_evt)
             CALL(evt_cam_road_reset)
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_wait_landon)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_mario_key_onoff, 1)
-#else
             CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
             CALL(evt_mario_key_onoff, 1)
-#endif
         END_INLINE_EVENT
     END_IF
     IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)

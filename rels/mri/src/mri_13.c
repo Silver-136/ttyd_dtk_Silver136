@@ -1,7 +1,6 @@
 // mri_13 (巨木の中, The Great Tree): the room with the moving floor set off by the counter switches
 // (yuka_event), a Puni-ball pad, a save block and a recovery block.
 
-#include "version.h"
 #include "mri_puni.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -288,13 +287,8 @@ USER_FUNC(evt_puni_force_pose) {
 }
 
 EVT_BEGIN(yuka_shake)
-#if VERSION <= VERSION_DEMO_US
-    LOOP(0)
-        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1500)
-#else
     LOOP(5)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 1000)
-#endif
     END_LOOP
     RETURN
 EVT_END()
@@ -304,19 +298,6 @@ EVT_END()
  * a series of shakes that die down over about 10 seconds, ending in a final stronger one.
  */
 EVT_BEGIN(yuka_shake2)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0087890625f), FLOAT(0.0f), 1000)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0078125f), FLOAT(0.0f), 1000)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0068359375f), FLOAT(0.0f), 1000)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.005859375f), FLOAT(0.0f), 1000)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 1000)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 1000)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0029296875f), FLOAT(0.0f), 1000)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.001953125f), FLOAT(0.0f), 1000)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 1000)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0146484375f), FLOAT(0.0f), 1000)
-#else
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0087890625f), 1000)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0078125f), 1000)
@@ -328,7 +309,6 @@ EVT_BEGIN(yuka_shake2)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.001953125f), 1000)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0009765625f), 1000)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0146484375f), 1000)
-#endif
     RETURN
 EVT_END()
 
@@ -527,12 +507,8 @@ EVT_BEGIN(yuka_event)
     CALL(evt_target_set_position, 0, -55, -309, 50)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_06_WATER_SWITCH)
     CALL(evt_puni_set_hamari, -180, -310, 60, 2, -2, -306, -312)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 1)
-#else
     CALL(evt_puni_winddisable_onoff, 0)
     CALL(evt_mario_key_onoff, 1)
-#endif
     RETURN
 EVT_END()
 

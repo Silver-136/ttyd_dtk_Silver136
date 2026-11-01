@@ -68,11 +68,7 @@ static USER_FUNC(make_list) {
 }
 
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -80,11 +76,7 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -92,11 +84,7 @@ static EVT_BEGIN(w_door_open)
 EVT_END()
 
 static EVT_BEGIN(e_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door2_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door2_2"), 0, 0, LW(0))
@@ -104,11 +92,7 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door2_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door2_2"), 0, 0, LW(0))
@@ -178,11 +162,7 @@ EVT_BEGIN(evt_machine)
         RETURN
     END_IF
     CALL(make_list)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, PTR(key_list), LW(10))
-#else
     CALL(evt_win_item_select, 0, PTR(key_list), LW(10), 0)
-#endif
     SWITCH(LW(10))
         CASE_EQUAL(ITEM_CARD_KEY_0x1D)
         IF_INT_EQUAL(LW(0), 0)
@@ -315,15 +295,9 @@ EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
     // The fortress music and ambience start and the exits are set up.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
-#else
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-    CALL(evt_snd_set_rev_mode, 1)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-#endif
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_16_FACTORY_DOOR)

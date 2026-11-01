@@ -142,11 +142,7 @@ static EVT_BEGIN(jumpstand_evt)
     CALL(evt_mobj_get_position, STRING("me"), LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), LW(1))
     ADD(LW(3), 700)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), LW(3), LW(2), 2000, 1)
-#else
     CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), LW(3), LW(2), 4000, 3)
-#endif
     RETURN
 EVT_END()
 

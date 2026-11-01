@@ -118,11 +118,7 @@ void effPointGetMain(EffectEntry* effect) {
     work->timer++;
     switch (work->state) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
-            work->position.x = intplGetValue(11, -1000.0f, 50.0f * work->scale, work->timer, 45);
-#else
             work->position.x = intplGetValue(EASING_SINE_IN_OUT, -1000.0f, 0.0f, work->timer, 45);
-#endif
             if (work->timer >= 45) {
                 work->timer = 0;
                 work->state++;
@@ -141,11 +137,7 @@ void effPointGetMain(EffectEntry* effect) {
             }
             break;
         case 2:
-#if VERSION <= VERSION_DEMO_US
-            work->position.x = intplGetValue(11, 50.0f * work->scale, 1000.0f, work->timer, 60);
-#else
             work->position.x = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 1000.0f, work->timer, 60);
-#endif
             if (work->timer >= 60) {
                 effDelete(effect);
                 return;
@@ -171,35 +163,19 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     f32 h;
     GXColor color;
 #else
-#if VERSION <= VERSION_DEMO_US
-    f32 wide;
-    f32 width;
-#else
     f32 base;
     f32 y1;
     f32 width;
     f32 wide;
     f32 x0;
-#endif
     f32 ox;
-#if VERSION <= VERSION_DEMO_US
     f32 oy;
-    f32 x;
-#else
-    f32 oy;
-#endif
 #endif
     GXTexObj texObj;
     Mtx mtx;
     Mtx scaleMtx;
-#if VERSION <= VERSION_DEMO_US
-    Mtx baseMtx;
-    s32 digits[3];
-    s32 n;
-#else
     Mtx baseMtx;
     char buf[32];
-#endif
     s32 i;
     s32 pass;
 #if VERSION >= VERSION_US
@@ -349,23 +325,6 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         }
-#if VERSION <= VERSION_DEMO_US
-        n = work->number;
-        digits[0] = n / 100;
-        n = n % 100;
-        digits[1] = n / 10;
-        digits[2] = n % 10;
-        shown = FALSE;
-#endif
-#if VERSION <= VERSION_DEMO_US
-        for (i = 0; i < 3; i++) {
-            x = ox + (-176.0f + (f32)((i - 3) * 32));
-            if (digits[i] == 0 && !shown) {
-                continue;
-            }
-            PSMTXScale(scaleMtx, 0.1f, 1.0f, 1.0f);
-            PSMTXTrans(mtx, (f32)digits[i], 0.0f, 0.0f);
-#else
         for (i = 0; i < strlen(buf); i++) {
             PSMTXTrans(mtx, ox + (32.0f * (f32)i + base / 2.0f), oy, 0.0f);
             PSMTXConcat(baseMtx, mtx, mtx);
@@ -373,12 +332,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetCurrentMtx(GX_PNMTX0);
             PSMTXScale(scaleMtx, 0.1f, 1.0f, 1.0f);
             PSMTXTrans(mtx, (f32)((s8)buf[i] - '0'), 0.0f, 0.0f);
-#endif
             PSMTXConcat(scaleMtx, mtx, mtx);
-#if VERSION <= VERSION_DEMO_US
-            GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
-            PSMTXTrans(mtx, x, oy, 0.0f);
-#else
             GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             GXPosition3f32(0.0f, y1, 0.0f);
@@ -400,46 +354,20 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         }
         PSMTXTrans(mtx, 10.0f + (ox + (32.0f * (f32)strlen(buf) + base / 2.0f)), oy, 0.0f);
-#endif
         PSMTXConcat(baseMtx, mtx, mtx);
-#if VERSION <= VERSION_DEMO_US
-            GXLoadPosMtxImm(mtx, GX_PNMTX0);
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(-width / 2.0f, width / 2.0f, 0.0f);
-#else
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         PSMTXIdentity(mtx);
         GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3f32(0.0f, y1, 0.0f);
-#endif
         GXTexCoord2f32(0.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
-            GXPosition3f32(width / 2.0f, width / 2.0f, 0.0f);
-#else
         GXPosition3f32(wide, y1, 0.0f);
-#endif
         GXTexCoord2f32(1.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
-            GXPosition3f32(width / 2.0f, -width / 2.0f, 0.0f);
-#else
         GXPosition3f32(wide, x0, 0.0f);
-#endif
         GXTexCoord2f32(1.0f, 1.0f);
-#if VERSION <= VERSION_DEMO_US
-            GXPosition3f32(-width / 2.0f, -width / 2.0f, 0.0f);
-#else
         GXPosition3f32(0.0f, x0, 0.0f);
-#endif
         GXTexCoord2f32(0.0f, 1.0f);
 #endif
-#if VERSION <= VERSION_DEMO_US
-            shown = TRUE;
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
-    }
-#else
 }
-#endif

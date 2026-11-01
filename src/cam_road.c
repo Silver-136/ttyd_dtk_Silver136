@@ -1,6 +1,5 @@
 // Camera roads: moves the field camera along the camera curves stored in each map's camroad file.
 
-#include "version.h"
 #include "system.h"
 #include "driver/arcdrv.h"
 #include "driver/mapdrv.h"
@@ -90,17 +89,7 @@ s32 camRoadSetup(const char* name) {
     } else {
         wp->state = 0x64;
     }
-#if VERSION <= VERSION_DEMO_US
     return 1;
-}
-// FAKE: the demo copy of the stand-in for the stripped camRoadDraw strings (see the note above the retail copy)
-/** The demo pools the two strings ahead of camRoadSetup's, so the stand-in follows camRoadSetup. */
-static void camRoadStrippedReport(const char* p, s32 a, s32 b) {
-    OSReport("%scam = %d\n", p, a);
-    OSReport("%scurve = %d\n", p, b);
-#else
-    return 1;
-#endif
 }
 /**
  * Turns the current road state into camera parameters:

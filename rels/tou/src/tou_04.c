@@ -542,7 +542,6 @@ EVT_BEGIN(move_g)
         CASE_EQUAL(5)
         SET_VALUE(LF(0), 1)
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_get_position, STRING("me"), LW(10), LW(11), LW(12))
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(10), -520)
@@ -551,16 +550,6 @@ EVT_BEGIN(move_g)
         GOTO(1)
     END_IF
     LABEL(10)
-#else
-    CALL(evt_npc_get_position, STRING("me"), LW(10), LW(11), LW(12))
-    IF_INT_EQUAL(LW(0), 1)
-        SET_VALUE(LW(10), -520)
-        SET_VALUE(LW(11), 0)
-        SET_VALUE(LW(12), 0)
-        GOTO(1)
-    END_IF
-    LABEL(10)
-#endif
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_sub_get_dist, LW(0), LW(2), LW(10), LW(12), LW(6))
@@ -959,12 +948,8 @@ EVT_BEGIN(talk_g_4)
         CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
         IF_INT_EQUAL(LW(3), -350)
             CALL(evt_msg_print, 0, STRING("stg3_tou_42"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
-#else
             CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
             CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
-#endif
             IF_INT_LESS(LW(0), LW(3))
                 ADD(LW(3), 50)
                 CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
@@ -1014,12 +999,8 @@ EVT_BEGIN(talk_g_4)
             // He steps aside and opens the way to the office.
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
-#else
             CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
             CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
-#endif
             IF_INT_LESS(LW(0), LW(3))
                 ADD(LW(3), 50)
                 CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
@@ -1029,12 +1010,8 @@ EVT_BEGIN(talk_g_4)
                 CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
                 CALL(evt_npc_set_ry, STRING("me"), 90)
             END_IF
-#if VERSION <= VERSION_DEMO_US
-            CALL(memoryRY)
-#else
             CALL(memoryRY)
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
-#endif
             SET_VALUE(LW(0), 5)
             CALL_CHILD(PTR(bero_case_switch_on))
             ELSE
@@ -1329,14 +1306,9 @@ static EVT_BEGIN(init_brots)
                     CALL(evt_npc_set_position, STRING("me"), 525, 0, 425)
                 END_SWITCH
             END_SWITCH
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-    RETURN
-#else
         END_IF
     END_IF
     RETURN
-#endif
 EVT_END()
 
 // Reuse a map-allocated selection string; US measures localized entries, while JP uses a fixed width.
@@ -1355,11 +1327,7 @@ static USER_FUNC(make_list) {
     s32 i;
 
     if (tmp == NULL) {
-#if VERSION <= VERSION_DEMO_US
-        tmp = _mapAlloc(0x400);
-#else
         tmp = _mapAlloc(0x1000);
-#endif
     }
 #if VERSION >= VERSION_US
     {
@@ -2254,11 +2222,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STORAGE_KEY_0x12, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
-#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
-#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -2465,19 +2429,11 @@ EVT_BEGIN(tou_04_init_evt)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
-#endif
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
-#endif
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
@@ -2558,12 +2514,8 @@ EVT_BEGIN(tou_04_init_evt)
         ADD(LW(2), 1)
     END_LOOP
     SWITCH(GSW_STORY_PROGRESS)
-#if VERSION <= VERSION_DEMO_US
-        CASE_LESS(STG3_04_GONZALES_IS_BORN)
-#else
         CASE_LESS(STG3_03_GRUBBA)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-#endif
         SET_VALUE(LW(0), 5)
         CALL_CHILD(PTR(bero_case_switch_on))
         CASE_DEFAULT
@@ -2631,18 +2583,9 @@ EVT_BEGIN(tou_04_init_evt)
             IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
                 IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
                     SET_VALUE(LW(0), 5)
-#if VERSION <= VERSION_DEMO_US
-                CALL_CHILD(bero_case_switch_on)
-                IF_INT_EQUAL(GSWF(GSWF_TOU_REENTERED_LEAGUE), 0)
-                    SET_VALUE(LW(0), 5)
-                    CALL_CHILD(bero_case_switch_on)
-                END_IF
-            END_IF
-#else
                     CALL_CHILD(PTR(bero_case_switch_on))
                 END_IF
             END_IF
-#endif
         END_IF
     END_IF
     // Housekeeping: a poisoned partner is removed, and a pending match sends the partner away.

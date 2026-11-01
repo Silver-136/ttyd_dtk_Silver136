@@ -46,12 +46,8 @@ typedef struct WinBadgeEnt {
 } WinBadgeEnt;
 
 typedef struct WinMarioState {
-#if VERSION <= VERSION_DEMO_US
-    s32 poseId; // 0x188
-#else
     s32 poseId; // 0x188
     s32 hammerHold; // 0x18C, frames the hammer pose holds (30 once the swing reaches loop time 0.89); the pose time only follows retraceCount while 0
-#endif
     s32 mode;   // 0x190, 0 = Mario page, 1 = special move list (A on the star power row); switched on in winMarioMain, opens the list in the draw
     s32 specialCursor; // 0x194, cursor in the special move list (wraps at specialCount); selects the superActionTable help and help box y
     s32 specialCount; // 0x198, number of star powers obtained (bits of starPowersObtained); list length, SP orb count, star power rows reachable
@@ -240,13 +236,9 @@ typedef struct WindowWork {
     s32 active;                 // 0x24
     FileEntry* res;             // 0x28, win.tpl
     FileEntry* mailRes;         // 0x2C, mail tpl
-#if VERSION <= VERSION_DEMO_US
-    FileEntry* mapRes;        // 0x30, log map tpl
-#else
     FileEntry* mapRes;          // 0x30, log map tpl
     smartEntry* texBuf;         // 0x34, background capture texture
     s32 texBufValid;            // 0x38
-#endif
     EventEntry* currentEvent;   // 0x3C
     s32 tabSel;                 // 0x40
     s32 tabNum;                 // 0x44

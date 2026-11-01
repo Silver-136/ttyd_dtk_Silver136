@@ -1,4 +1,3 @@
-#include "version.h"
 #include "icon_ids.h"
 #include "eff/eff_mario_balloon.h"
 #include "eff/eff_fukidashi.h"
@@ -488,14 +487,7 @@ EVT_BEGIN(sanders_party_lecture)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_party_stop, 0)
     WAIT_FRAMES(16)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    SUBTRACT(LW(0), 40)
-    CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(80.0f))
     CALL(evt_party_set_dir, 0, 90, 300)
-#else
-    CALL(evt_party_set_dir, 0, 90, 300)
-#endif
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(90.0f), FLOAT(510.0f), FLOAT(-20.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_LINEAR)
     WAIT_MS(1000)
     CALL(evt_msg_print_add, 0, STRING("lecture_friends_16"))

@@ -536,15 +536,9 @@ static EVT_BEGIN(talk_soncho)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_msg_print, 0, STRING("stg7_bom_21"), 0, STRING("me"))
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                EVT_CMD(evt_msg_print, 0, STRING("stg7_bom_21_01"), 0, STRING("me"))
-                EVT_CMD(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
-                RETURN
-#else
                 CALL(evt_msg_print, 0, STRING("stg7_bom_21_01"), 0, STRING("me"))
                 CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
                 RETURN
-#endif
             END_IF
             WAIT_MS(300)
             CALL(evt_party_stop, 0)
@@ -871,11 +865,7 @@ static EVT_BEGIN(talk_murabito_h)
             CALL(evt_msg_print_add, 0, STRING("irai_26_03"))
             CALL(evt_msg_select, 0, STRING("irai_26_03_s"))
             CALL(evt_msg_print_add, 0, STRING("irai_26_04"))
-#if VERSION <= VERSION_DEMO_US
-            EVT_CMD(evt_win_item_select, PTR(iri_26_item_tbl), LW(0))
-#else
             CALL(evt_win_item_select, 0, PTR(iri_26_item_tbl), LW(0), 0)
-#endif
             IF_INT_NOT_EQUAL(LW(0), -1)
                 CALL(evt_pouch_remove_item, ITEM_HONEY_CANDY, LW(0))
                 CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -1096,11 +1086,7 @@ static EVT_BEGIN(talk_white)
                 IF_INT_EQUAL(LF(0), 1)
                     CALL(evt_msg_print, 0, STRING("irai_25_19"), 0, STRING("ホワイト"))
                 END_IF
-#if VERSION <= VERSION_DEMO_US
-                EVT_CMD(evt_win_item_select, PTR(iri_25_item_tbl), LW(0))
-#else
                 CALL(evt_win_item_select, 0, PTR(iri_25_item_tbl), LW(0), 0)
-#endif
                 IF_INT_NOT_EQUAL(LW(0), 109)
                     RETURN
                 END_IF
@@ -1767,9 +1753,6 @@ static EVT_BEGIN(sekai_yami_evt)
         CALL(evt_npc_wait_pera, STRING("ボムヘイG"))
         CALL(evt_npc_reverse_ry, STRING("ボムヘイG"))
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    EVT_CMD(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 3000)
-#endif
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0068359375f))
     LOOP(5)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), LW(0), 1000)
@@ -1851,11 +1834,7 @@ static KinopioData kino_dt = {
     198, // breakfastItem
     {-425.0f, 50.0f, -200.0f}, // breakfastPos
     15, // ryoukin
-#if VERSION <= VERSION_DEMO_US
-    {-291.0f, 46.0f, -225.0f}, // bed
-#else
     {-285.0f, 46.0f, -223.0f}, // bed
-#endif
     {-273.0f, 30.0f, -177.0f}, // bedside
     {-445.0f, 258.0f, 88.0f, -341.0f, 92.0f, -191.0f}, // cam
     -25.0f, // bedDeg
@@ -1967,19 +1946,11 @@ EVT_BEGIN(bom_02_init_evt)
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 1)
             CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, ITEM_TYPE_STILL, GSWF_BOM_02_SNOW_BUNNY, 0)
         END_IF
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-    EVT_CMD(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie1_naka"), MAP_OBJ_FLAG_CLIP)
-    EVT_CMD(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie2_naka"), MAP_OBJ_FLAG_CLIP)
-    EVT_CMD(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie3_naka"), MAP_OBJ_FLAG_CLIP)
-    RETURN
-#else
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie1_naka"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie2_naka"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie3_naka"), MAP_OBJ_FLAG_CLIP)
     RETURN
-#endif
 EVT_END()
 
 /**

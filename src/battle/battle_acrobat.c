@@ -1,6 +1,5 @@
 // Acrobat timing window: a short timed-press prompt and its result, used during Mario and partner attacks.
 
-#include "version.h"
 #include "battle/battle_acrobat.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_unit.h"
@@ -52,17 +51,12 @@ s32 BattleAcrobatMain(BattleWork* work) {
         work->stylishResult = 1;
         return EVT_RETURN_YIELD;
     }
-#if VERSION <= VERSION_DEMO_US
-    if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
-        dispEntry(CAMERA_3D, 900.0f, 1, _accrobat_timing_icon_disp, unit);
-#else
     if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
         Vec pos = { 0 };
         pos.x = unit->position.x;
         pos.y = unit->position.y;
         pos.z = 15.0f + unit->position.z;
         dispEntry(CAMERA_3D, dispCalcZ(&pos), 1, _accrobat_timing_icon_disp, unit);
-#endif
     }
     if (unit->badgesEquipped.AutoCommand && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
         doSimplified = TRUE;

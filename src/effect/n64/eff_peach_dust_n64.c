@@ -1,6 +1,5 @@
 // Paper Mario 64 effect: Peach dust whose particle layout comes from three 16x16 masks, one per type.
 
-#include "version.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -197,16 +196,10 @@ void effPeachDustMain(EffectEntry* effect) {
             p->tex = -1;
         } else {
             p->frame++;
-#if VERSION <= VERSION_DEMO_US
-            f = p->frame;
-            if (f - 1 < 25) {
-                p->scale = 0.4f * (0.01f * scale_data[f - 1]);
-#else
             f = p->frame;
             g = f - 1;
             if (g < 25) {
                 p->scale = 0.4f * (0.01f * scale_data[g]);
-#endif
             } else {
                 p->scale += 0.1f * (0.1f - p->scale);
             }

@@ -37,12 +37,8 @@
 #define UNIT_WORK_HAS_ATTACKED 13       // 1 once it has attacked in its own form; phase_event starts mutating only after that
 #define UNIT_WORK_TAIL_EVENT_ID 14      // id of the vivian_shadow_tail_event spawned for the Vivian form (0 = none); mutate_event deletes it
 
-#if VERSION <= VERSION_DEMO_US
-USER_FUNC(yoshi_original_color_anim_set);
-#else
 USER_FUNC(mario_shadow_guard_check);
 USER_FUNC(yoshi_original_color_anim_set);
-#endif
 static USER_FUNC(_krb_get_dir);
 static USER_FUNC(vivian_comeback);
 static USER_FUNC(eff_scanning);
@@ -69,17 +65,9 @@ static EvtWord entry_event[46];
 static EvtWord damage_event[22];
 static EvtWord dead_event[261];
 static EvtWord unison_phase_event[87];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[61];
-#else
 static EvtWord phase_event[68];
-#endif
 static EvtWord attack_event[29];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord ogg_attack_event[481];
-#else
 static EvtWord ogg_attack_event[491];
-#endif
 static EvtWord wait_event[6];
 static BattleUnitDefense defence_fmario;
 static BattleUnitDefenseAttr defence_attr_fmario;
@@ -113,11 +101,7 @@ static BattleUnitKindPart parts_christine[1];
 static EvtWord fmario_zoom_christine[19];
 static EvtWord gparty_zoom_christine[19];
 static EvtWord init_event_christine[72];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event_christine[73];
-#else
 static EvtWord dead_event_christine[80];
-#endif
 static EvtWord attack_event_christine[690];
 static EvtWord wait_event_christine[6];
 static BattleWeapon enemyWeapon_NokotarouKouraAttack;
@@ -149,11 +133,7 @@ static StatusVulnerability regist_clauda;
 static BattleDataEntry data_table_clauda[2];
 static BattleUnitKindPart parts_clauda[1];
 static EvtWord init_event_clauda[80];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event_clauda[73];
-#else
 static EvtWord dead_event_clauda[80];
-#endif
 static EvtWord attack_event_clauda[393];
 static EvtWord wait_event_clauda[6];
 static BattleWeapon enemyWeapon_YoshiNormalAttack;
@@ -163,11 +143,7 @@ static StatusVulnerability regist_yoshi;
 static BattleDataEntry data_table_yoshi[2];
 static BattleUnitKindPart parts_yoshi[1];
 static EvtWord init_event_yoshi[54];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event_yoshi[73];
-#else
 static EvtWord dead_event_yoshi[80];
-#endif
 static EvtWord attack_event_yoshi[748];
 static EvtWord wait_event_yoshi[6];
 BattleUnitDefense defence_vivian;
@@ -805,13 +781,9 @@ static EVT_BEGIN(phase_event)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HAS_ATTACKED, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
-                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FORM, LW(0))
-#else
                 CALL(mario_shadow_guard_check, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
                     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FORM, LW(0))
-#endif
                     IF_INT_EQUAL(LW(0), 0)
                         CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                         CALL_CHILD(PTR(mutate_event))
@@ -821,14 +793,9 @@ static EVT_BEGIN(phase_event)
                         IF_INT_LESS(LW(0), 3)
                             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                             CALL_CHILD(PTR(mutate_event))
-#if VERSION <= VERSION_DEMO_US
-                            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-                        END_IF
-#else
                             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                         END_IF
                     END_IF
-#endif
                 END_IF
             END_IF
         END_IF
@@ -967,13 +934,9 @@ static EVT_BEGIN(ogg_attack_event)
     LABEL(91)
     // Deal the damage, reduced by the action command defence.
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
-#else
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(1.0f))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(2.0f))
-#endif
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 15, 0)
         CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 135, 0, 20)
@@ -1162,11 +1125,7 @@ static BattleWeapon weapon_masao_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION, // special
-#if VERSION <= VERSION_DEMO_US
-    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-#else
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
-#endif
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -1240,11 +1199,7 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION, // special
-#if VERSION <= VERSION_DEMO_US
-    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-#else
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
-#endif
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -1991,15 +1946,9 @@ static EVT_BEGIN(dead_event_christine)
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(500)
-#else
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    WAIT_MS(500)
-#endif
     CALL_CHILD(dead_event)
     RETURN
 EVT_END()
@@ -2046,11 +1995,7 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(14), MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DrawLots, LW(0), 2, 80, 20)
-#else
     CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
-#endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
         SET_VALUE(LW(11), 0)
@@ -2475,15 +2420,9 @@ static EVT_BEGIN(dead_event_nokotarou)
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(500)
-#else
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    WAIT_MS(500)
-#endif
     CALL_CHILD(dead_event)
     RETURN
 EVT_END()
@@ -2597,11 +2536,7 @@ static EVT_BEGIN(attack_event_nokotarou)
         CALL_CHILD(PTR(wakeup_event))
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_DrawLots, LW(0), 2, 80, 20)
-#else
     CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
-#endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL_CHILD(PTR(attack_event_nokotarou_koura))
@@ -2680,11 +2615,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         IF_INT_EQUAL(LW(6), 2)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_FaceDirectionAdd, -29999997, LW(0), 40)
-#else
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
-#endif
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         // The spinning stops and he pops out of the shell.
         CALL_CHILD(_koura_rotate_stop)
@@ -2993,12 +2924,8 @@ static EVT_BEGIN(dead_event_clauda)
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
-#else
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -3279,12 +3206,8 @@ static EVT_BEGIN(dead_event_yoshi)
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
-#else
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -3684,15 +3607,9 @@ EVT_BEGIN(dead_event_vivian)
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_D_3"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(500)
-#else
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_D_3"))
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    WAIT_MS(500)
-#endif
     CALL_CHILD(dead_event)
     RETURN
 EVT_END()
@@ -3926,12 +3843,8 @@ EVT_BEGIN(dead_event_sanders)
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
-#else
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -4140,11 +4053,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION, // special
-#if VERSION <= VERSION_DEMO_US
-    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-#else
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
-#endif
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -4185,11 +4094,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION, // special
-#if VERSION <= VERSION_DEMO_US
-    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-#else
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
-#endif
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -4313,12 +4218,8 @@ EVT_BEGIN(dead_event_chuchurina)
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_D_3"))
-#else
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_D_3"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -4626,29 +4527,6 @@ static USER_FUNC(eff_scanning) {
 
     ((effScanningData*)eff->userdata)->scale = unit->sizeMultiplier;
     return EVT_RETURN_DONE;
-#if VERSION <= VERSION_DEMO_US
-}
-
-/**
- * Script helper: returns 1 in args[0] if Mario currently has a shadow guard (the Vivian partner's protective
- * status) and 0 otherwise. JP and later.
- */
-USER_FUNC(mario_shadow_guard_check) {
-    EvtWord* args = event->args;
-
-    if (BtlUnit_CheckShadowGuard(BattleGetMarioPtr(_battleWorkPointer)) == 1) {
-        evtSetValue(event, args[0], 1);
-    } else {
-        evtSetValue(event, args[0], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-/**
- * Script helper: clears flag 2 on Vivian's partner data so she can rejoin Mario's party
- * after the fight (the pouch's partyData[6] flags).
- */
-static USER_FUNC(vivian_comeback) {
-#else
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000855c, JP las .text+0x8490. See docs/NAME_PROVENANCE.md.
@@ -4667,7 +4545,6 @@ USER_FUNC(mario_shadow_guard_check) {
  * after the fight (the pouch's partyData[6] flags).
  */
 static USER_FUNC(vivian_comeback) {
-#endif
     pouchGetPtr()->partyData[6].flags &= ~2;
     return 1;
 }

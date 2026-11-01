@@ -315,11 +315,7 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_STATUS_VULNERABILITY, // special
-#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
-#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
     50, // stopChance
@@ -361,11 +357,7 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_STATUS_VULNERABILITY, // special
-#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE, // special
-#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, // poisonTime..poisonStrength

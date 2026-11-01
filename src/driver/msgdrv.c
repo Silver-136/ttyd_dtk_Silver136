@@ -85,27 +85,6 @@ MsgIcon msgIcon[] = {
 };
 
 /** Sound effects of the message windows by window type: the sound when it opens, then the one when it closes. */
-#if VERSION <= VERSION_DEMO_US
-MessageWork msgWork;
-static smartEntry dummySmartList; // stands in for a message file that failed to load
-BOOL msgSEflag;             // msgSEInit and related functions are unused
-const char* msgSortDvdData; // the text msg_compare sorts the lookup table by
-u16 g5_active_s772;
-
-//.sdata
-MessageWork* msgw = &msgWork;
-/** Empty text that a message file which failed to load is replaced with. */
-static char NoMessage[] = ""; // the text of dummySmartList
-const char* ErrMessage[7] = {R_no_messages_JP, R_no_messages_US, R_no_messages_DE, R_no_messages_FR,
-                             R_no_messages_ES, R_no_messages_IT, R_no_messages_DU};
-const char* ErrMessage[2] = {R_no_messages_JP, R_no_messages_US};
-const char* paperPoseTbl[6] = {
-    "PM_Y_1B", "PM_Y_2B", "PM_F_1B",
-    "PM_F_3B", "PM_C_1B", "PM_C_2B"
-};
-const char* language_dir[7] = {"msg/JP", "msg/US", "msg/DE", "msg/FR", "msg/SP", "msg/IT", "msg/US"};
-const char* language_dir[2] = {"msg", "emsg"};
-#endif
 s32 msgWindowOpen_SE_Data[] = {
     0x16, 0x17, 0x1A, 0x1B, 0x20, 0x21, 0x1C, 0x1D,
     0x20, 0x21, 0x1C, 0x1D, 0x18, 0x19, 0x22, 0x23,
@@ -214,13 +193,8 @@ void msgLoad(const char* filename, s32 index) {
     sprintf(filepath, "./%s/%s.txt", language_dir[gp->language], filename);
 
     if (entry->address) {
-#if VERSION <= VERSION_DEMO_US
-        if (entry->address != &dummySmartList) {
-            smartFree(entry->address);
-#else
         if (index == 1) {
             __memFree(HEAP_DEFAULT, entry->address);
-#endif
         }
         entry->address = NULL;
     }
@@ -230,11 +204,6 @@ void msgLoad(const char* filename, s32 index) {
         sprintf(dvdpath, "%s/%s", getMarioStDvdRoot(), filepath);
         dvd = DVDMgrOpen(dvdpath, 2, 0);
         if (dvd) {
-#if VERSION <= VERSION_DEMO_US
-            entry->length = DVDMgrGetLength(dvd);
-            entry->address = smartAlloc(OSRoundUp32B(entry->length), 0);
-            DVDMgrRead(dvd, entry->address->address, OSRoundUp32B(entry->length), 0);
-#else
             entry->length = DVDMgrGetLength(dvd);
             switch (index) {
                 case 0:
@@ -245,7 +214,6 @@ void msgLoad(const char* filename, s32 index) {
                     break;
             }
             DVDMgrRead(dvd, entry->address, OSRoundUp32B(entry->length), 0);
-#endif
             DVDMgrClose(dvd);
         }
     }
@@ -253,26 +221,14 @@ void msgLoad(const char* filename, s32 index) {
 
     if (!entry->address) {
         entry->length = 0;
-#if VERSION <= VERSION_DEMO_US
-        entry->address = &dummySmartList;
-        dummySmartList.address = NoMessage;
-    }
-    msgptr = msgEntryText(entry);
-#else
         entry->count = 0;
     } else {
         msgptr = entry->address;
-#endif
         msgcount = 0;
         while (*(s8*)msgptr) {
             msgptr += strlen(msgptr) + 1;
             msgcount++;
         }
-#if VERSION <= VERSION_DEMO_US
-    entry->count = msgcount / 2; // tag, message
-
-    if (!entry->count) {
-#else
         entry->count = msgcount / 2; //tag, message
     }
 
@@ -280,21 +236,11 @@ void msgLoad(const char* filename, s32 index) {
         smartFree(entry->lookup);
     }
     if (!entry->count) {
-#endif
         entry->lookup = NULL;
     } else {
         ofs = 0;
-#if VERSION <= VERSION_DEMO_US
-        if (entry->lookup) {
-            smartFree(entry->lookup);
-        }
-#endif
         entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), 0);
-#if VERSION <= VERSION_DEMO_US
-        str = msgEntryText(entry);
-#else
         str = entry->address;
-#endif
         lookup = entry->lookup->address;
         for (i = 0; i < entry->count; i++, lookup++) {
             lookup->startaddr = ofs;
@@ -304,11 +250,7 @@ void msgLoad(const char* filename, s32 index) {
             ofs += strlen(str) + 1;
             str += strlen(str) + 1;
         }
-#if VERSION <= VERSION_DEMO_US
-        msgSortDvdData = msgEntryText(entry);
-#else
         msgSortDvdData = entry->address;
-#endif
         qsort(entry->lookup->address, entry->count, sizeof(MsgLookupEntry), msg_compare);
     }
 }
@@ -927,14 +869,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
     }
 
     while (TRUE) {
-#if VERSION <= VERSION_DEMO_US
-        {
-            s32 gz = 0;
-            if (gz != 0) {
-                y = 0;
-            }
-        }
-#endif
         check = *(u8*)msg;
 #if VERSION >= VERSION_US
         if (_ismbblead((s8)check)) {
@@ -2144,17 +2078,12 @@ void msgWindow_Disp(CameraId camId, void* param) {
         break;
     case WINDOW_TYPE_PLATE:
     case WINDOW_TYPE_KANBAN:
-#if VERSION <= VERSION_DEMO_US
-        case 10:
-        case 7:
-#else
     case WINDOW_TYPE_HOUSOU:
         windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->width, window->height);
         GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 2.0f, camera->scissor[2], 0x68);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
     case WINDOW_TYPE_DIARY:
-#endif
         windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->width, window->height);
         GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], 0x7E);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);

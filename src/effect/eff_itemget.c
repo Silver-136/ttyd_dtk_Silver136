@@ -1,7 +1,6 @@
 // Item get / use sparkle (ItemGet): sparkles spread around the item position, spawned when Mario obtains or uses an
 // item. Element 0 is the header: types 0, 3 and 9 draw seven sparkles, type 10 (item use in battle) five.
 
-#include "version.h"
 #include "driver/camdrv.h"
 #include "eff/eff_itemget.h"
 #include "driver/dispdrv.h"
@@ -35,11 +34,7 @@ static GXColor color_tbl[10] = {
     { 0x51, 0x75, 0x9D, 0xFF }, { 0xC8, 0xB2, 0x25, 0xFF },
 };
 /** Base size of the sparkles per effect type 0-9, in tenths: 5.0 for types 0-2 down to 1.0. */
-#if VERSION <= VERSION_DEMO_US
-u8 size_tbl[10] = {0x32, 0x32, 0x32, 0x28, 0x14, 0x14, 0x14, 0x0A, 0x0A, 0x0F};
-#else
 u8 size_tbl[10] = { 0x32, 0x32, 0x32, 0x28, 0x0C, 0x0C, 0x0C, 0x0A, 0x0A, 0x0F};
-#endif
 
 /**
  * Spawns item sparkles at (x, y, z): types 0, 3 and 9 use seven, type 10 (battle item use) five.

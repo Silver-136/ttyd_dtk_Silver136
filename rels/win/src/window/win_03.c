@@ -1,6 +1,5 @@
 // win_03 (ウィンディん家周辺, Boggly Woods): the path between win_02 and Flurrie's house (win_04), with two Piranha Plants.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -176,12 +175,8 @@ EVT_BEGIN(lookat_house)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_change_fbat_mode, 7)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_stop_for_event)
-#else
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_normalize)
-#endif
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_02"), 0, STRING("extparty"))
     SET_VALUE(GSW_STORY_PROGRESS, STG2_04_EXTENDING_PLANE_PANEL)
     CALL(evt_npc_change_fbat_mode, 1)
@@ -389,11 +384,6 @@ EVT_BEGIN(win_03_init_evt)
         CALL(evt_npc_check_delete, STRING(/*"パックン1"*/"\x83\x70\x83\x62\x83\x4E\x83\x93\x31"))
         SPAWN_EVENT(cloud_lostitem)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    RETURN
-EVT_END()
-#else
     RETURN
 EVT_END_PAD4()
-#endif
 

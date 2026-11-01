@@ -81,17 +81,7 @@ USER_FUNC(evt_npc_slave_entry) {
     slave->battleInfo = npc->battleInfo;
     npcSetSlave(npc, slave, id);
     evtSetValue(event, index, (EvtWord)&slave->description);
-#if VERSION <= VERSION_DEMO_US
     return EVT_RETURN_DONE;
-}
-
-// FAKE: the demo's .rodata keeps an orphan "%f%f%f" just before "_s%d"; an unreferenced static that prints an NPC position
-// leaves the string where the original's stripped code did
-static void npc_report_pos(NpcEntry* npc) {
-    OSReport("%f%f%f", npc->position.x, npc->position.y, npc->position.z);
-#else
-    return EVT_RETURN_DONE;
-#endif
 }
 
 /** const char* lookupName */
@@ -551,18 +541,10 @@ USER_FUNC(evt_npc_move_position) {
         if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
             npcTuningRy(npc, npc->moveDir);
         }
-#if VERSION <= VERSION_DEMO_US
-    }
-
-    // Integrate move offset along heading (NPC_STATUS_STOPPED freezes it; the demo has no freeze flag)
-    if (!(npc->statusFlags & NPC_STATUS_STOPPED))
-    {
-#else
     }
 
     // Advance the move offset along the heading (not while NPC_STATUS_STOPPED)
     if (!(npc->statusFlags & NPC_STATUS_STOPPED)) {
-#endif
         f32 temp = (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
         npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * temp);
         temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
@@ -2035,13 +2017,8 @@ USER_FUNC(evt_npc_wait_battle_end) {
     party = partyGetPtr(marioGetPartyId());
     if (party) {
         partyCtrlOn();
-#if VERSION <= VERSION_DEMO_US
-    }
-    psndClearFlag(PSND_FLAG_BATTLE_START);
-#else
     }
     L_psndBGM_stop();
-#endif
 #if VERSION >= VERSION_US
     marioFBattlePost();
 #endif
@@ -2152,11 +2129,7 @@ USER_FUNC(evt_npc_get_drop_item) {
     if (npc->battleInfo.battleFlags & NPC_BATTLE_NO_ITEM_DROP) {
         evtSetValue(event, index, 0);
     } else {
-#if VERSION <= VERSION_DEMO_US
-        evtSetValue(event, index, 0); // the demo never reports a dropped item
-#else
         evtSetValue(event, index, npc->battleInfo.itemDropped);
-#endif
     }
     return EVT_RETURN_DONE;
 }
@@ -2606,19 +2579,11 @@ void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
             x = (36.0f * npc->scale.x) + npc->position.x;
         }
         effect = effKemuri10N64Entry(0, x, (18.0f * npc->scale.x) + npc->position.y, npc->position.z, dirX, 0.0f, 0.0f,
-#if VERSION <= VERSION_DEMO_US
-                                     npc->scale.x);
-        if (!strcmp(gp->currentMapName, "kpa_01")) {
-            ((EffKemuri10N64Work*)effect->userdata)->camera = 7;
-        }
-    }
-#else
                                      npc->scale.x);
         if (!strcmp(gp->currentMapName, "kpa_01")) {
             ((EffKemuri10N64Work*)effect->userdata)->camera = CAMERA_3D_EFFECTB;
         }
     }
-#endif
 }
 
 /**

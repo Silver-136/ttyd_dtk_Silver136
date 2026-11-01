@@ -1,6 +1,5 @@
 // jin_01 (ダイム寺院, Creepy Steeple): side room with a red switch and a Golden Leaf item; doors to jin_00 and jin_03.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -150,12 +149,8 @@ EVT_END()
 // The rear switch decrements the staircase position when the current value is at most 1.
 EVT_BEGIN(evt_kaidan_oku)
     IF_INT_LESS_OR_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_mario_key_onoff, 0)
-#else
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_normalize)
-#endif
         CALL(evt_party_stop, 0)
         IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
             BEGIN_INLINE_EVENT_GET_ID(LW(3))

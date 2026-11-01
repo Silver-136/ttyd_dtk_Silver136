@@ -73,19 +73,6 @@ typedef struct SplineWork {
     s32 msec;      // 0x1C
     OSTime start;  // 0x20
     s32 manual;    // 0x28
-#if VERSION <= VERSION_DEMO_US
-} SplineWork;
-
-// coin_fmt is only used by p1x function the linker stripped; force_active keeps the string in .rodata
-#pragma force_active on
-/** Format of three floats for p1x coin-position helper the linker stripped; nothing reads it. */
-// FAKE: force_active keeps p1x stripped function's string in .rodata; nothing reads it
-static const char coin_fmt[] = "%f%f%f";
-#pragma force_active reset
-
-/** Black text colour of the "You got N coins!" line in the coin reward window (coingetDisp). */
-static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
-#else
 } SplineWork;
 
 #pragma force_active on
@@ -94,7 +81,6 @@ static const char coin_fmt[] = "%f%f%f";
 
 /** Black text colour of the "You got N coins!" line in the coin reward window (coingetDisp). */
 static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
-#endif
 
 USER_FUNC(bgm_start_wait);
 USER_FUNC(stone_bg);
@@ -108,14 +94,6 @@ s32 evt_sub_mail_event_end[1];
  * Sway of a hammered tree, one row per frame for 25 frames: the trunk's tilt in degrees and the leaves' two
  * offsets, swinging out and settling back to rest. tree_evt reads it.
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(evt_sub_stopwatch)
-    LOOP(0)
-        WAIT_FRAMES(1)
-    END_LOOP
-    RETURN
-EVT_END()
-#endif
 s32 tree_data[] = {
     -230000000, -230000000, -230000000, -230000547, -229998519, -229998338, -230001199, -229996749,
     -229996348, -230001643, -229995557, -229995012, -230001570, -229995811, -229995310, -230000702,
@@ -242,18 +220,8 @@ EVT_END()
  * and sways map object LW(2) sideways through kusa_data for 12 frames.
  * Run per bush by evt_sub_kusa_access_entry.
  */
-#if VERSION <= VERSION_DEMO_US
-static s32 kusa_data[] = {
-    FLOAT(0.0f), FLOAT(-1.874f), FLOAT(-2.999f), FLOAT(-2.22f), FLOAT(-0.776f), FLOAT(0.0f), FLOAT(-0.776f), FLOAT(-2.22f),
-    FLOAT(-2.999f), FLOAT(-2.443f), FLOAT(-1.22f), FLOAT(0.0f),
-};
-#endif
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(kusa_evt)
-#else
 EVT_BEGIN(kusa_evt)
     SET_TYPE(0)
-#endif
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(10), LW(11), LW(12), 0)
     IF_INT_NOT_EQUAL(LW(3), 0)
@@ -288,11 +256,6 @@ EVT_BEGIN(evt_sub_kusa_access_entry)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
-WinMgrDesc coinget_window_desc[] = {
-    {0, 0, 8, -175, 120, 350, 42, {0xE1, 0xD7, 0x9B, 0xFF}, NULL, coingetDisp},
-};
-#endif
 EVT_BEGIN(evt_sub_starstone)
     // Mario stops and the star goes into his pouch; the Doopliss scene (-1) adds nothing.
     CALL(evt_mario_key_onoff, 0)
@@ -433,13 +396,8 @@ EVT_BEGIN(evt_sub_starstone)
     ADD(LW(3), 48)
     CALL(evt_item_set_position, LW(7), LW(2), LW(3), LW(4))
 #else
-#if VERSION <= VERSION_DEMO_US
-        SUBTRACT_FLOAT(LW(8), FLOAT(0.205078125f))
-        ADD_FLOAT(LW(9), FLOAT(0.2822265625f))
-#else
         SUBTRACT_FLOAT(LW(8), FLOAT(0.20507813f))
         ADD_FLOAT(LW(9), FLOAT(0.28222656f))
-#endif
         WAIT_FRAMES(1)
     END_LOOP
 #endif
@@ -494,12 +452,8 @@ EVT_BEGIN(evt_sub_starstone)
     END_LOOP
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STAGE_CLEAR1"))
-#else
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STAGE_CLEAR1"))
     CALL(evt_snd_envoff, PSND_FADEOUT)
-#endif
     CALL(evt_eff_softdelete, STRING("sub_hikari"))
     CALL(stone_bg_open, LW(7))
     // The curtain comes down (the map's own star object is hidden behind it),
@@ -660,14 +614,10 @@ EVT_BEGIN(evt_sub_starstone)
         CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
         CALL(evt_bero_mapchange, STRING("pik_01"), 0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(LF(8), 1)
-#else
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
         CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
         CALL(evt_snd_sfx_all_stop)
-#endif
         CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
         CALL(evt_fade_end_wait)
         WAIT_MS(2000)
@@ -1112,11 +1062,7 @@ EVT_BEGIN(mail_evt_usu_01)
         SET_VALUE(LW(11), LW(1))
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 300, -2000, 300, 2000, LW(5))
-#else
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 110, -2000, 110, 2000, LW(5))
-#endif
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
@@ -1948,9 +1894,6 @@ USER_FUNC(evt_sub_get_coin) {
     MarioWork* mario = marioGetPtr();
     Vec a = mario->position;
     Vec b = a;
-#if VERSION <= VERSION_DEMO_US
-    Vec scr;
-#endif
     f32 rad = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
     f32 s;
     f32 c;
@@ -1977,25 +1920,11 @@ USER_FUNC(evt_sub_get_coin) {
     eff = event->userdatap[1];
     work = event->wInterpWork;
     switch (state) {
-#if VERSION <= VERSION_DEMO_US
-        case 0:
-            // the demo draws the coin icon in 2D at Mario's screen position
-            iconEntry2D("iraiCoin", ICON_ITEM_COIN);
-#else
     case 0:
         iconEntry("iraiCoin", ICON_ITEM_COIN);
-#endif
-#if VERSION <= VERSION_DEMO_US
-            getScreenPoint(&p1y, &scr);
-#endif
-#if VERSION <= VERSION_DEMO_US
-            iconSetPos("iraiCoin", scr.x, scr.y, scr.z);
-            iconFlagOn("iraiCoin", ICON_FLAG_CAM_EFFECT_A);
-#else
         iconSetPos("iraiCoin", b.x, b.y, b.z);
         iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN | ICON_FLAG_CAM_EFFECT_A);
         ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
-#endif
         marioChgGetItemMotion();
         event->userdata3 = winMgrEntry(coinget_window_desc);
         winMgrOpen(event->userdata3);

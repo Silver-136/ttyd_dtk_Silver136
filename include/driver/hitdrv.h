@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "version.h"
 #include <dolphin/mtx.h>
 #include "driver/mapdrv.h"
 
@@ -94,12 +93,8 @@ struct HitEntry {
     };
     struct HitEntry* parent;        // 0xD4
     struct HitEntry* child;         // 0xD8
-#if VERSION <= VERSION_DEMO_US
-    struct HitEntry* sibling; // 0xDC
-#else
     struct HitEntry* sibling;       // 0xDC
     struct HitEntry* siblingActive; // 0xE0
-#endif
 };
 
 void hitInit(void);

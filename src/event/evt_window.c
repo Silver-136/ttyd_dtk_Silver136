@@ -62,17 +62,11 @@ WinMgrDesc coin_desc = {
  */
 USER_FUNC(evt_win_item_select) {
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
-    s32 type = evtGetValue(event, args[0]);
-    WinMgrSelect* sel;
-    s32 result;
-#else
     s32 getCursor = evtGetValue(event, args[0]);
     s32 type = evtGetValue(event, args[1]);
     WinMgrSelect* sel;
     s32 result;
     s32 cursor;
-#endif
     if (isFirstCall) {
         event->userdatap[0] = winMgrSelectEntry(type, 0, 1);
         marioKeyOff();
@@ -81,25 +75,15 @@ USER_FUNC(evt_win_item_select) {
     result = winMgrSelect(sel);
     if (result == 0) {
         return EVT_RETURN_BLOCK;
-#if VERSION <= VERSION_DEMO_US
-    }
-    winMgrSelectDelete(sel);
-#else
     }
     cursor = winMgrSelectGetCursor(sel);
     winMgrSelectDelete(sel);
-#endif
     marioKeyOn();
-#if VERSION <= VERSION_DEMO_US
-    evtSetValue(event, args[1], result);
-    return EVT_RETURN_DONE;
-#else
     evtSetValue(event, args[2], result);
     if (getCursor != 0) {
         evtSetValue(event, args[3], cursor);
     }
     return EVT_RETURN_DONE;
-#endif
 }
 
 /**
@@ -354,16 +338,6 @@ static void coin_disp(WinMgrEntry* entry) {
         }
         w->timer++;
         w->timer = w->timer % 1200;
-#if VERSION <= VERSION_DEMO_US
-        if (__abs(target - w->coins) == 1 || gp->retraceCount % 6 == 0) {
-            psndSFXOn("SFX_COUNT_COIN1");
-        }
-        if (coinwin_se_wait == 0) {
-            psndSFXOn(SFX_NAME_WORD(0x2005B));
-            coinwin_se_wait = 7;
-        }
-    }
-#else
         if (coinwin_se_wait == 0) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_COUNT_COIN1 | PSND_SFX_BYPASS_MUTE));
             coinwin_se_wait = 7;
@@ -372,7 +346,6 @@ static void coin_disp(WinMgrEntry* entry) {
     if (coinwin_se_wait > 0) {
         coinwin_se_wait--;
     }
-#endif
 }
 
 /**

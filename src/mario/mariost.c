@@ -209,24 +209,14 @@ GXRenderModeObj GXNtsc480ProgMarioSt = {
 //local prototypes
 void viPostCallback(u32 retraceCount);
 void* gcDvdCheckThread(void* param);
-#if VERSION <= VERSION_DEMO_US
 void gcRumbleCheck(void);
-#else
-void gcRumbleCheck(void);
-#endif
 void gcResetCheck(void);
 
 
 void marioStInit(void) {
     static u8 stack[0x1000];
     // the releases also start cold after a shutdown reset
-#if VERSION <= VERSION_DEMO_US
-    if (!OSIsRestart()
-        || (OSGetResetCode() & OS_RESET_SHUTDOWN)
-    ) {
-#else
     if (!OSIsRestart() || (OSGetResetCode() & OS_RESET_SHUTDOWN)) {
-#endif
         DEMOInit(&GXNtsc480IntDfMarioSt);
     } else {
         switch (OSGetResetCode() & OS_RESET_HOTRESET) {
@@ -238,29 +228,14 @@ void marioStInit(void) {
                 break;
         }
     }
-#if VERSION <= VERSION_DEMO_US
     DEMOEnableGPHangWorkaround(5);
     setupErrorHandler();
     DEMOPadInit();
-    DVDSetAutoFatalMessaging(TRUE); // the demo has no error handler: the SDK shows the DVD error message
-#else
-    DEMOEnableGPHangWorkaround(5);
-    setupErrorHandler();
-    DEMOPadInit();
-#endif
     GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
     __GXSetIndirectMask(0);
     memset(gp, 0, sizeof(GlobalWork));
     gp->fbWidth = DEMOGetRenderModeObj()->fbWidth;
-#if VERSION <= VERSION_DEMO_US
     gp->efbHeight = DEMOGetRenderModeObj()->efbHeight;
-    if (OSIsRestart()) {
-        gp->flags |= GW_FLAG_VIDEO_MODE_SET;
-    }
-    gp->flags |= GW_FLAG_E3;
-#else
-    gp->efbHeight = DEMOGetRenderModeObj()->efbHeight;
-#endif
     gp->rumbleEnabled = 1;
     gp->soundMode = 0;
 
@@ -326,18 +301,12 @@ void marioStInit(void) {
     gp->language = LANGUAGE_US;
 #else
     if (OSGetFontEncode() == OS_FONT_ENCODE_SJIS && !(gp->flags & GW_FLAG_E3)) {
-#if VERSION <= VERSION_DEMO_US
-    gp->language = 0; // Japanese text whatever the console font
-    gp->language = 1; // English text whatever the console font
-    gp->framerate = 60;
-#else
         gp->language = LANGUAGE_JP;
     } else {
         // game language: 1 English, 2 German, 3 French, 4 Spanish, 5 Italian
         gp->language = LANGUAGE_US;
     }
     gp->framerate = 60;
-#endif
 #endif
     gp->systemLevelFlags = 0;
     badgeShop_init(); //Badge Shop
@@ -398,9 +367,6 @@ void marioStInit(void) {
     } else {
         SoundSetOutputMode(1);
     }
-#if VERSION <= VERSION_DEMO_US
-    none_key = OSGetTime();
-#endif
 }
 
 void marioStMain(void) {
@@ -472,18 +438,8 @@ void marioStMain(void) {
         if (i >= 4) {
             // After two minutes without input in the field or in battle, raise the kiosk timeout flag
             // (only read in kiosk mode, by seq_game and seq_battle).
-#if VERSION <= VERSION_DEMO_US
-            if (OSTicksToSeconds(OSGetTime() - none_key) > 60) {
-                if (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE) {
-#else
             if (OSTicksToSeconds(OSGetTime() - none_key) > 120 && (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE)) {
-#endif
                 gp->flags |= GW_FLAG_E3_TIMEOUT;
-#if VERSION <= VERSION_DEMO_US
-                } else {
-                    gp->resetType = 1;
-                }
-#endif
             }
         } else {
             none_key = OSGetTime();
@@ -679,10 +635,6 @@ void* gcDvdCheckThread(void* param) {
 #endif
                 gp->dvdError = TRUE;
                 break;
-#if VERSION <= VERSION_DEMO_US
-            case DVD_STATE_FATAL_ERROR:
-                break;
-#else
             case DVD_STATE_FATAL_ERROR:
 #if VERSION >= VERSION_US
                 msgId = 13;
@@ -691,7 +643,6 @@ void* gcDvdCheckThread(void* param) {
 #endif
                 gp->dvdError = TRUE;
                 break;
-#endif
             default:
                 gp->dvdError = FALSE;
                 break;
@@ -715,10 +666,6 @@ void* gcDvdCheckThread(void* param) {
         } else {
             SoundCloseCover();
         }
-#if VERSION <= VERSION_DEMO_US
-        if (gp->dvdError) {
-            DEMOBeforeRender();
-#else
         if (gp->dvdError) {
             if (cardIsExec()) {
                 gp->dvdError = FALSE;
@@ -730,23 +677,14 @@ void* gcDvdCheckThread(void* param) {
         if (gp->dvdError) {
 #endif
             DEMOBeforeRender();
-#endif
             if (msgId) {
                 message = romFontGetMessage(msgId);
                 // FAKE: s32 -> f32 -> s32 round trip; the plain assignment changes the object
-#if VERSION <= VERSION_DEMO_US
-                width = 0.8f * romFontGetWidth(message);
-#else
                 width = (f32)romFontGetWidth(message);
-#endif
                 MTXPerspective(mtx, 25.0f, 1.2666667f, 1.0f, 10000.0f);
                 GXSetProjection(mtx, GX_PERSPECTIVE);
                 xpos = -width / 2.0f;
-#if VERSION <= VERSION_DEMO_US
-                romFontPrintGX(xpos, 0.0f, 0.8f, &(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, message);
-#else
                 romFontPrintGX(xpos, 60.0f, 1.0f, &(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, message);
-#endif
             }
             DEMODoneRender();
             makeKey();
@@ -837,11 +775,7 @@ void gcResetCheck(void) {
         VIWaitForRetrace();
         psndExit();
         DVDMgrDelete();
-#if VERSION <= VERSION_DEMO_US
-        if (DvdCheckTreadOn) {
-#else
         if ((OSGetCurrentThread() != &DvdCheckThread) && DvdCheckTreadOn) {
-#endif
             OSCancelThread(&DvdCheckThread);
             DvdCheckTreadOn = FALSE;
         }
@@ -851,11 +785,7 @@ void gcResetCheck(void) {
         }
         if (gp->resetType != 2) {
             if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
-#if VERSION <= VERSION_DEMO_US
-                code = OS_RESET_RESTART;
-#else
                 code = OS_RESET_SHUTDOWN;
-#endif
             } else {
                 if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
                     code = OS_RESET_RESTART;

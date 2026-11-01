@@ -1,6 +1,5 @@
 // Boat water (funemizu: boat water): ripples and splash spray around a boat, tinted with a per-map water colour.
 
-#include "version.h"
 #include "eff/eff_funemizu.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -21,14 +20,10 @@ void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect);
 typedef struct ColorEntry {
     char* name;
     GXColor color;
-#if VERSION <= VERSION_DEMO_US
-} ColorEntry;
-#else
 } ColorEntry;
 
 /** Water tint used when the current map has no entry in funemizu_color_tbl: plain white. */
 static const GXColor funemizu_default_color = {0xFF, 0xFF, 0xFF, 0xFF};
-#endif
 
 // Model data in the exporter's layout: indexed vertex arrays (positions, normals, colours, texture coordinates),
 // display lists of GX commands (each padded to 32 bytes with GX_NOP) and, per list table, the list sizes in
@@ -197,27 +192,17 @@ void effFunemizuMain(EffectEntry* effect) {
     Vec position;
     Vec v = {0.0f, 0.0f, 0.0f};
     s32 i;
-#if VERSION <= VERSION_DEMO_US
     s32 type;
     CameraId cam;
     s32 dead = 0;
-#else
-    s32 type;
-    CameraId cam;
-    s32 dead = 0;
-#endif
     f32 a, b, s, c, t, f;
 
     v.x = work->position.x;
     v.y = work->position.y;
     v.z = work->position.z;
     position = v;
-#if VERSION <= VERSION_DEMO_US
-    type = work->type;
-#else
     type = work->type;
     cam = work->cam;
-#endif
     work->timer++;
     if (work->timer > 1000) {
         work->timer -= 1000;
@@ -282,17 +267,9 @@ void effFunemizuMain(EffectEntry* effect) {
         }
     }
     if (type == 0 || type == 2) {
-#if VERSION <= VERSION_DEMO_US
-        dispEntry(work->cam, dispCalcZ(&position), 8, (DispCallback)effFunemizuDisp, effect);
-#else
         dispEntry(cam, dispCalcZ(&position), 2, (DispCallback)effFunemizuDisp, effect);
-#endif
     } else {
-#if VERSION <= VERSION_DEMO_US
-        dispEntry(work->cam, dispCalcZ(&position), 8, (DispCallback)effFunemizuShibukiDisp, effect);
-#else
         dispEntry(cam, dispCalcZ(&position), 2, (DispCallback)effFunemizuShibukiDisp, effect);
-#endif
     }
 }
 
@@ -311,16 +288,8 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx scale;
     Mtx rot;
     Mtx mtx;
-#if VERSION <= VERSION_DEMO_US
-    GXTexObj texObj;
-    f32 proj[7];
-    f32 vp[6];
-    f32 sx, sy, sz;
-    u8 argb[4];
-#else
     GXTexObj texObj;
     GXColor color;
-#endif
     CameraEntry* cam;
     f32 z;
     s32 type;
@@ -328,68 +297,16 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     u32 u;
 
     cam = camGetPtr(cameraId);
-#if VERSION <= VERSION_DEMO_US
-    type = work->type;
-    // The demo eases the water colour toward the frame buffer under the boat.
-    GXSetProjection(cam->projection, cam->projType);
-    GXGetProjectionv(proj);
-    GXGetViewportv(vp);
-    GXProject(work->position.x, work->position.y, work->position.z, cam->view, proj, vp, &sx, &sy, &sz);
-    if (sx > 0.0f && sx < 608.0f && sy > 0.0f && sy < 480.0f) {
-        // FAKE: unprototyped call: the SDK u16 parameters would add two narrowings (FAKES.md)
-        ((void (*)())GXPeekARGB)((s32)sx, (s32)sy, argb);
-#else
     type = work->type;
     color = effFunemizuGetMapColor();
-#endif
     if (type == 0) {
-#if VERSION <= VERSION_DEMO_US
-            {
-                s32 r = funemizu_color0_tbl[0];
-                s32 g = funemizu_color0_tbl[1];
-                s32 b = funemizu_color0_tbl[2];
-                r += (argb[1] - r) / 16;
-                g += (argb[2] - g) / 16;
-                b += (argb[3] - b) / 16;
-#endif
-#if VERSION <= VERSION_DEMO_US
-                funemizu_color0_tbl[0] = r;
-                funemizu_color0_tbl[1] = g;
-                funemizu_color0_tbl[2] = b;
-            }
-            DCFlushRange(funemizu_color0_tbl, 4);
-#else
         funemizu_color0_tbl[0] = color.r;
         funemizu_color0_tbl[1] = color.g;
         funemizu_color0_tbl[2] = color.b;
-#endif
     } else {
-#if VERSION <= VERSION_DEMO_US
-            {
-                s32 r = gor_fune_color0_tbl[0];
-                s32 g = gor_fune_color0_tbl[1];
-                s32 b = gor_fune_color0_tbl[2];
-                r += (argb[1] - r) / 16;
-                g += (argb[2] - g) / 16;
-                b += (argb[3] - b) / 16;
-#endif
-#if VERSION <= VERSION_DEMO_US
-                gor_fune_color0_tbl[0] = r;
-                gor_fune_color0_tbl[1] = g;
-                gor_fune_color0_tbl[2] = b;
-            }
-            DCFlushRange(gor_fune_color0_tbl, 4);
-        }
-    }
-    if (work->cam != 4) {
-        gor_fune_color0_tbl[0] = 0x00;
-        gor_fune_color0_tbl[1] = 0x00;
-        gor_fune_color0_tbl[2] = 0xFF;
-#else
         gor_fune_color0_tbl[0] = color.r;
         gor_fune_color0_tbl[1] = color.g;
         gor_fune_color0_tbl[2] = color.b;
-#endif
     }
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
@@ -536,10 +453,6 @@ void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-#if VERSION <= VERSION_DEMO_US
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-#endif
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     effGetTexObj(0x40, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);

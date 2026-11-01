@@ -223,11 +223,7 @@ void effSnowfallMain(EffectEntry* effect) {
         dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), 10, (DispCallback)effSnowfallDisp, effect);
     }
 #else
-#if VERSION <= VERSION_DEMO_US
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSnowfallDisp, effect);
-#else
     dispEntry(CAMERA_3D, dispCalcZ(&position), 10, (DispCallback)effSnowfallDisp, effect);
-#endif
 #endif
 }
 

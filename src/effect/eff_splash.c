@@ -1,7 +1,6 @@
 // Water splash: columns and droplets rising and falling around a point; types 0-4 vary the shape and size,
 // type 3 also adds a water-damage effect.
 
-#include "version.h"
 #include "eff/eff_splash.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -322,19 +321,11 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     f32 proj[7];
     f32 vp[6];
-#if VERSION <= VERSION_DEMO_US
-    f32 sx, sy, sz;
-    u8 argb[4];
-    GXColor c;
-
-    cam = camGetPtr(cameraId);
-#else
     f32 sx, sy, sz;
     union { u32 word; struct { u8 a, r, g, b; } color; } pixel;
     GXColor c;
 
     cam = camGetPtr(cameraId);
-#endif
     GXSetProjection(cam->projection, cam->projType);
     GXGetProjectionv(proj);
     GXGetViewportv(vp);
@@ -347,35 +338,11 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
         work->color.b = pixel.color.b;
         work->color.a = 255;
     }
-#if VERSION <= VERSION_DEMO_US
-    work->hasColor = 1;
-    // The demo picks the water colour per map here; retail asks eff_funemizu.
-    if (strcmp(gp->currentMapName, "muj_02") == 0) {
-        work->color.r = 0x20;
-        work->color.g = 0x2C;
-        work->color.b = 0x5D;
-    } else if (strcmp(gp->currentMapName, "muj_00") == 0 || strcmp(gp->currentMapName, "muj_04") == 0) {
-        work->color.r = 0x00;
-        work->color.g = 0x20;
-        work->color.b = 0xC3;
-#else
     work->hasColor = 1;
     c = effFunemizuGetMapColor();
     work->color.r = c.r;
     work->color.g = c.g;
     work->color.b = c.b;
-#endif
-#if VERSION <= VERSION_DEMO_US
-    } else if (strcmp(gp->currentAreaName, "dou") == 0) {
-        work->color.r = 0x00;
-        work->color.g = 0x04;
-        work->color.b = 0x55;
-    } else if (strcmp(gp->currentAreaName, "gor") == 0) {
-        work->color.r = 0x00;
-        work->color.g = 0x04;
-        work->color.b = 0x61;
-    }
-#endif
 }
 
 /**
@@ -402,12 +369,8 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     f32 w;
     u32 k2;
     u8* sz;
-#if VERSION <= VERSION_DEMO_US
-    u8** dl;
-#else
     u8** dl;
     s32 kb;
-#endif
 
     cam = camGetPtr(cameraId);
     type = work->type;
@@ -542,30 +505,16 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
             for (k = 0; k < 9; k++) {
                 ang = 6.2831855f * (f32)k / 8.0f;
                 cs = (f32)cos(ang);
-#if VERSION <= VERSION_DEMO_US
-                    sn = (f32)sin(ang);
-                    kb = k & 1;
-                    GXPosition3f32(a * sn, 0.0f, a * cs);
-#else
                 sn = (f32)sin(ang);
                 kb = k & 1;
                 GXPosition3f32(a * sn, 0.0f, a * cs);
-#endif
                 GXColor4u8((u8)(255.0f * r0), (u8)(255.0f * g0), (u8)(255.0f * b0), 255);
-#if VERSION <= VERSION_DEMO_US
-                    GXTexCoord2f32((f32)(k & 1), 0.1f);
-#else
                 GXTexCoord2f32((f32)kb, 0.1f);
-#endif
                 cs = (f32)cos(ang);
                 sn = (f32)sin(ang);
                 GXPosition3f32(b * sn, c, b * cs);
                 GXColor4u8((u8)(255.0f * r1), (u8)(255.0f * g1), (u8)(255.0f * b1), 255);
-#if VERSION <= VERSION_DEMO_US
-                    GXTexCoord2f32((f32)(k & 1), 2.1f);
-#else
                 GXTexCoord2f32((f32)kb, 2.1f);
-#endif
             }
             break;
         case 3:

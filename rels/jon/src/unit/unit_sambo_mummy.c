@@ -1,4 +1,3 @@
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -158,11 +157,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_4 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
-    {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#else
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -201,11 +196,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_3 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
-    {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#else
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -244,11 +235,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_2 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
-    {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#else
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -330,11 +317,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_4 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
-    {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -370,11 +353,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_3 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
-    {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -410,11 +389,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_2 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
-    {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags

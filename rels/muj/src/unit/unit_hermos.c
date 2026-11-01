@@ -222,11 +222,7 @@ static BattleWeapon weapon_bubble_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_STATUS_VULNERABILITY, // special
-#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
-#endif
     COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -268,11 +264,7 @@ static BattleWeapon weapon_bubble_fire_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_STATUS_VULNERABILITY, // special
-#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
-#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -319,11 +311,7 @@ static BattleWeapon weapon_bubble_all_fire_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_STATUS_VULNERABILITY, // special
-#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
-#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -638,11 +626,7 @@ static USER_FUNC(eff_fire) {
     f32 z;
 
     if (isFirstCall) {
-#if VERSION <= VERSION_DEMO_US
-        eff = effFireEntry(6, 90, 0.0f, -1000.0f, 0.0f, 1.0f);
-#else
         eff = effFireEntry(6, 106, 0.0f, -1000.0f, 0.0f, 1.0f);
-#endif
         ((EffFireWork*)eff->userdata)->scaleX = 0.0f;
         ((EffFireWork*)eff->userdata)->scaleY = 0.0f;
     }

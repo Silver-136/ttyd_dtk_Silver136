@@ -267,20 +267,7 @@ USER_FUNC(door_entry) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(house_close_se)
-    CALL_CHILD(house_open_se)
-    RETURN
-EVT_END()
-
-/**
- * Fades the map's first blend colour from white to black over 300 ms,
- * darkening everything not flagged NO_BLEND (the town around a house); spawned by house_in.
- */
 EVT_BEGIN(evt_dark)
-#else
-EVT_BEGIN(evt_dark)
-#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -510,12 +497,8 @@ EVT_BEGIN(house_in)
     CALL(evt_hitobj_onoff, LW(1), 1, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_FLAG_NO_MAP_BLEND2)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#else
     CALL(evt_mario_party_door_halve_hitbox)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#endif
     CALL(out_pos, LW(10), LW(0), LW(2))
     CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(135.0f))
     CALL(evt_party_move_beside_mario, 0)
@@ -540,15 +523,9 @@ EVT_BEGIN(house_in)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
     END_LOOP
     CALL(snd_door_in)
     POKE_INT(0, PTR(&DoorFLAG))
-#else
-    END_LOOP
-    CALL(snd_door_in)
-    POKE_INT(0, PTR(&DoorFLAG))
-#endif
     RETURN
 EVT_END()
 
@@ -575,12 +552,8 @@ EVT_BEGIN(house_out)
         SPAWN_EVENT(PTR(evt_light))
     END_INLINE_EVENT
     SPAWN_EVENT_GET_ID(PTR(out_dooranim), LW(15))
-#if VERSION <= VERSION_DEMO_US
-    WAIT_MS(1000)
-#else
     WAIT_MS(1000)
     CALL(evt_mario_party_door_halve_hitbox)
-#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(out_pos, LW(10), LW(0), LW(2))
     CALL(evt_mario_party_door_move, LW(0), LW(2), FLOAT(135.0f))
@@ -614,12 +587,8 @@ EVT_BEGIN(house_out)
     CALL(door_group, LW(10), LW(0))
     CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_NO_MAP_BLEND2)
-#if VERSION <= VERSION_DEMO_US
-    CALL(npc_light, LW(10))
-#else
     CALL(npc_light, LW(10))
     CALL(snd_door_out)
-#endif
     RETURN
 EVT_END()
 
@@ -757,12 +726,8 @@ EVT_BEGIN(evt_door_open)
             END_INLINE_EVENT
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_door_param, LW(0), 5, LW(1), LW(2), LW(3))
-#else
     CALL(evt_mario_party_door_halve_hitbox)
     CALL(evt_door_param, LW(0), 5, LW(1), LW(2), LW(3))
-#endif
     CALL(evt_mario_mov_pos2, LW(1), LW(3), FLOAT(135.0f))
     CALL(evt_party_move_beside_mario, 0)
     CALL(evt_party_move_beside_mario, 1)
@@ -1853,18 +1818,6 @@ USER_FUNC(npc_hide_onoff) {
  * Copies the DoorParam in args[0] onto the map heap and returns the copy in args[1],
  * so a map can change it with evt_door_set_param (Rogueport, gor_01/gor_02).
  */
-#if VERSION <= VERSION_DEMO_US
-EvtWord door_close_se(snd_door_in) {
-    psndSetFlag(PSND_FLAG_DOOR_IN);
-    return EVT_RETURN_DONE;
-}
-
-/** Clears PSND_FLAG_DOOR_IN after Mario walks back out. */
-EvtWord door_close_se(snd_door_out) {
-    psndClearFlag(PSND_FLAG_DOOR_IN);
-    return EVT_RETURN_DONE;
-}
-#endif
 USER_FUNC(evt_door_data_copy) {
     EvtWord* args = event->args;
     DoorParam* src = (DoorParam*)evtGetValue(event, args[0]);

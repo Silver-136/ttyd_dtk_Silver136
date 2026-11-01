@@ -58,16 +58,10 @@ typedef struct EndMoa {
 } EndMoa;
 typedef struct EndWork {
     FileEntry* tpl;
-#if VERSION <= VERSION_DEMO_US
-    s32 alpha;
-    s32 npcLoadNum;     // credit NPCs whose animation groups have been requested so far
-    s32 npcLoadRequest; // credit NPCs that left the screen since the last preload pass
-#else
     s32 mode;
     s32 alpha;
     s32 alpha2;
     s32 tevAlpha;
-#endif
     s32 win1[3];
     s32 win2[3];
     s32 field_0x2c;
@@ -101,11 +95,7 @@ ExtTexInfo* end_moa_ext_data;
 EndMoa* end_moa_tbl;
 extern EndWork* end_wp;
 extern CreditMsg end_staff_roll_msg_tbl[50];
-#if VERSION <= VERSION_DEMO_US
-extern CreditNpc R_credits_npc_info[151];
-#else
 extern CreditNpc R_credits_npc_info[152];
-#endif
 static inline f32 tanf(f32 x) { return tan(x); }
 s32 msgWindow_Entry(const char* msg, s32 a, s32 b);
 typedef void (*voidfunctionptr)(void);
@@ -254,13 +244,9 @@ USER_FUNC(evt_end_credit_npc_get_wait_type) {
         return 2;
     }
     if (R_credits_npc_info[id].evt != NULL) {
-#if VERSION <= VERSION_DEMO_US
-        evtSetValue(event, args[1], 0);
-#else
         evtSetValue(event, args[1], 0);
     } else if (strcmp(R_credits_npc_info[id].agb, "c_gazigazi") == 0) {
         evtSetValue(event, args[1], 2);
-#endif
     } else {
         evtSetValue(event, args[1], 1);
     }
@@ -565,19 +551,11 @@ USER_FUNC(evt_end_credit_npc_main) {
 
     inBattle = gp->inBattle != 0;
     if (R_credits_npc_info[id].evt != NULL) {
-#if VERSION <= VERSION_DEMO_US
         evtEntry(R_credits_npc_info[id].evt, 0, 0);
         if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
             animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
         }
         return 2;
-#else
-        evtEntry(R_credits_npc_info[id].evt, 0, 0);
-        if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
-            animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
-        }
-        return 2;
-#endif
     }
     if (isFirstCall) {
         actor = _mapAlloc(sizeof(CreditActor));
@@ -589,35 +567,22 @@ USER_FUNC(evt_end_credit_npc_main) {
                 actor->angle = -20.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
-#if VERSION <= VERSION_DEMO_US
             case 1:
             case 4:
                 actor->angle = 160.0f;
-#else
-            case 1:
-            case 4:
-                actor->angle = 160.0f;
-#endif
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
             case 2:
                 actor->angle = 250.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
-#if VERSION <= VERSION_DEMO_US
-            case 3:
-#endif
             default:
                 actor->angle = 70.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
-#if VERSION <= VERSION_DEMO_US
-                break;
-#else
                 break;
         }
         if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
             animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
-#endif
         }
         event->userdatap[0] = actor;
     }
@@ -628,15 +593,9 @@ USER_FUNC(evt_end_credit_npc_main) {
             y = -240.0f;
             r = 100.0f;
             break;
-#if VERSION <= VERSION_DEMO_US
         case 1:
         case 4:
             x = -304.0f;
-#else
-        case 1:
-        case 4:
-            x = -304.0f;
-#endif
             y = 240.0f;
             r = 100.0f;
             break;
@@ -645,9 +604,6 @@ USER_FUNC(evt_end_credit_npc_main) {
             y = -240.0f;
             r = 100.0f;
             break;
-#if VERSION <= VERSION_DEMO_US
-        case 3:
-#endif
         default:
             x = 304.0f;
             y = 240.0f;
@@ -683,9 +639,6 @@ USER_FUNC(evt_end_credit_npc_main) {
             if (actor->angle > actor->limit) {
                 animPoseRelease(actor->poseId);
                 _mapFree(actor);
-#if VERSION <= VERSION_DEMO_US
-                end_wp->npcLoadRequest++; // one more NPC for evt_end_credit_npc_preload child load
-#endif
                 return 2;
             }
             break;
@@ -696,7 +649,6 @@ USER_FUNC(evt_end_credit_npc_main) {
     PSMTXTrans(m2, x / 2.0f, y / 2.0f, 0.0f);
     PSMTXConcat(m2, m1, actor->mtx);
     PSMTXScale(m3, 1.0f, 1.0f, 0.01f);
-#if VERSION <= VERSION_DEMO_US
     PSMTXConcat(actor->mtx, m3, actor->mtx);
     if (animPoseGetVivianType(actor->poseId)) {
         v = (Vec){0.0f, 0.0f, 0.0f};
@@ -709,20 +661,6 @@ USER_FUNC(evt_end_credit_npc_main) {
         animPoseSetAnim(actor->poseId, "GAZ_A_1", 1);
     }
     animPoseMain(actor->poseId);
-#else
-    PSMTXConcat(actor->mtx, m3, actor->mtx);
-    if (animPoseGetVivianType(actor->poseId)) {
-        v = (Vec){0.0f, 0.0f, 0.0f};
-        v.x = actor->mtx[0][3];
-        v.y = actor->mtx[1][3];
-        v.z = actor->mtx[2][3];
-        animPoseVivianMain(actor->poseId, &v);
-    }
-    if (strcmp((const char*)animPoseGetCurrentAnim(actor->poseId), "GAZ_A_1") == 0 && animPoseGetLoopTimes(actor->poseId) > 0.9f) {
-        animPoseSetAnim(actor->poseId, "GAZ_A_1", 1);
-    }
-    animPoseMain(actor->poseId);
-#endif
     dispEntry(CAMERA_3D, 0.0f, 1, end_credit_npc_disp, actor);
     return 0;
 }
@@ -741,14 +679,10 @@ EVT_BEGIN(end_credit_npc_parade)
             CALL(evt_end_credit_npc_main, LW(0))
         END_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 1)
-#if VERSION <= VERSION_DEMO_US
-            WAIT_MS(2000)
-#else
             WAIT_MS(1920)
         END_IF
         IF_INT_EQUAL(LW(1), 2)
             WAIT_MS(6000)
-#endif
         END_IF
         ADD(LW(0), 1)
         IF_INT_GREATER_OR_EQUAL(LW(0), 152)
@@ -840,34 +774,18 @@ void end_image_disp(CameraId cameraId, void* param) {
     f32 h;
     CameraEntry* cam = camGetPtr(cameraId);
     s32 id = evtGetValue(NULL, GW(11));
-#if VERSION <= VERSION_DEMO_US
-    s32 pos = evtGetValue(NULL, GW(12));
-    GXTexObj obj;
-#else
     s32 pos = evtGetValue(NULL, GW(12));
     Vec camPos;
     Vec up;
     Vec target;
     GXTexObj obj;
-#endif
     Mtx mtx;
-#if VERSION <= VERSION_DEMO_US
-    Mtx scale;
-#else
     Mtx scale;
     Mtx lookAt;
-#endif
 
     if (end_wp->tpl == NULL) {
         return;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (end_wp->alpha == 0) {
-        return;
-    }
-    id %= ((TEXPalette*)*end_wp->tpl->data)->numDescriptors;
-    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-#else
     if (id >= ((TEXPalette*)*end_wp->tpl->data)->numDescriptors) {
         return;
     }
@@ -875,24 +793,13 @@ void end_image_disp(CameraId cameraId, void* param) {
         id = 53;
     }
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-#endif
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-#if VERSION <= VERSION_DEMO_US
-    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-#else
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-#endif
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-#if VERSION <= VERSION_DEMO_US
-    GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, end_wp->alpha});
-    TEXGetGXTexObjFromPalette(*end_wp->tpl->data, &obj, id);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    GXSetNumTevStages(1);
-#else
     GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, end_wp->alpha});
     switch (end_wp->mode) {
         case 0:
@@ -917,15 +824,8 @@ void end_image_disp(CameraId cameraId, void* param) {
     switch (end_wp->mode) {
         case 0:
             GXSetNumTevStages(1);
-#endif
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
             GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-#if VERSION <= VERSION_DEMO_US
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    switch (pos) {
-#else
             GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
             break;
         default:
@@ -943,34 +843,17 @@ void end_image_disp(CameraId cameraId, void* param) {
             break;
     }
     switch (pos) {
-#endif
         case 0:
-#if VERSION <= VERSION_DEMO_US
-            PSMTXTrans(mtx, 55.0f, 30.0f, -30.0f);
-#else
             PSMTXTrans(mtx, 51.0f, 30.0f, -30.0f);
-#endif
             break;
         case 1:
-#if VERSION <= VERSION_DEMO_US
-            PSMTXTrans(mtx, -55.0f, -30.0f, -30.0f);
-#else
             PSMTXTrans(mtx, -51.0f, -30.0f, -30.0f);
-#endif
             break;
         case 2:
-#if VERSION <= VERSION_DEMO_US
-            PSMTXTrans(mtx, -55.0f, 30.0f, -30.0f);
-#else
             PSMTXTrans(mtx, -51.0f, 30.0f, -30.0f);
-#endif
             break;
         case 3:
-#if VERSION <= VERSION_DEMO_US
-            PSMTXTrans(mtx, 55.0f, -30.0f, -30.0f);
-#else
             PSMTXTrans(mtx, 51.0f, -30.0f, -30.0f);
-#endif
             break;
         case 4:
             PSMTXTrans(mtx, 0.0f, 30.0f, -30.0f);
@@ -1007,10 +890,6 @@ void end_image_disp(CameraId cameraId, void* param) {
         GXPosition3f32(-w / 2.0f, -h / 2.0f, 0.0f);
         GXTexCoord2f32(0.0f, 1.0f);
         GXEnd();
-#if VERSION <= VERSION_DEMO_US
-    }
-}
-#else
     }
     if (end_wp->alpha2 > 0) {
         f32 w2;
@@ -1051,7 +930,6 @@ void end_image_disp(CameraId cameraId, void* param) {
         GXEnd();
     }
 }
-#endif
 
 /**
  * Runs the pictures shown beside the credits: waits until the roll asks for a picture (GW(10) = 1),
@@ -1172,13 +1050,8 @@ EVT_BEGIN(end_return_title_evt)
 #else
     CALL_CHILD(PTR(evt_memcard_save))
 #endif
-#if VERSION <= VERSION_DEMO_US
-    CALL(end_bgm_wait_stop)
-    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
-#else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
-#endif
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 2000, -1, -1)
     CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
     RETURN
@@ -1195,19 +1068,9 @@ EVT_BEGIN(end_00_init_evt)
     CALL(evt_bg_set_color, 0, 0, 0, 255)
     SET_VALUE(GF(10), 0)
     CALL(evt_end_staff_roll_init)
-#if VERSION <= VERSION_DEMO_US
-    BEGIN_INLINE_EVENT
-        CALL(evt_end_credit_npc_preload)
-    END_INLINE_EVENT
-#endif
     SPAWN_EVENT(PTR(end_credit_npc_parade))
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_end_staff_roll_msg_main)
-        SPAWN_EVENT(end_return_title_evt)
-#else
-        CALL(evt_end_staff_roll_msg_main)
-#endif
     END_INLINE_EVENT
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STAFF_ROLL1"))
     SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
@@ -1223,11 +1086,7 @@ EVT_BEGIN(end_credit_gesso_evt)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_set_position, STRING("gesso"), 0, LW(0), 0)
-#else
         CALL(evt_npc_set_position, STRING("gesso"), 130, LW(0), 0)
-#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -1239,47 +1098,27 @@ EVT_END()
 
 EVT_BEGIN(end_credit_gonbaba_evt)
     CALL(evt_npc_entry, STRING("gonbaba"), STRING("c_gonbaba"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_anim, STRING("gonbaba"), STRING("GNB_S_1"))
-#else
     CALL(evt_npc_set_anim, STRING("gonbaba"), STRING("GNB_S_3"))
-#endif
     CALL(evt_npc_flag_onoff, 1, STRING("gonbaba"), NPC_FLAG_NO_CULL)
     CALL(evt_end_npc_silhouette_on, STRING("gonbaba"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_sub_intpl_msec_init, 11, 10000, 2000, 2000)
-#else
     CALL(evt_npc_set_scale, STRING("gonbaba"), FLOAT(0.5f), FLOAT(0.5f), FLOAT(0.5f))
     CALL(evt_npc_set_rotate, STRING("gonbaba"), 0, 180, 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -10000, -1300, 2000)
-#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_set_position, STRING("gonbaba"), LW(0), -100, 0)
-#else
         CALL(evt_npc_set_position, STRING("gonbaba"), LW(0), -20, 200)
-#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
     WAIT_MS(3000)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_sub_intpl_msec_init, 11, 2000, 10000, 2000)
-#else
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -1300, -10000, 2000)
-#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_set_position, STRING("gonbaba"), LW(0), -100, 0)
-#else
         CALL(evt_npc_set_position, STRING("gonbaba"), LW(0), -20, 200)
-#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -1289,74 +1128,17 @@ EVT_BEGIN(end_credit_gonbaba_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(end_credit_batten_evt)
-    CALL(evt_npc_entry, STRING("batten"), STRING("c_mb_robo_1b"))
-    CALL(evt_npc_set_anim, STRING("batten"), STRING("MGN_W_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("batten"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("batten"))
-    CALL(evt_sub_intpl_msec_init, 11, -4000, 4000, 5000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("batten"), 0, LW(0), 0)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_delete, STRING("batten"))
-    RETURN
-EVT_END()
-
-/** Demo parade script for Cortez (korutesu): rises up through the middle of the screen. */
-EVT_BEGIN(end_credit_korutesu_evt)
-    CALL(evt_npc_entry, STRING("kortesu"), STRING("c_korutesu1"))
-    CALL(evt_npc_set_anim, STRING("kortesu"), STRING("KRT_S_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("kortesu"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("kortesu"))
-    CALL(evt_sub_intpl_msec_init, 11, -4000, 4000, 5000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("kortesu"), 0, LW(0), 0)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_delete, STRING("kortesu"))
-    RETURN
-EVT_END()
-
-/**
- * Demo parade script for the second robot model (c_mb_robo_2b):
- * rises up through the middle of the screen as a silhouette.
- */
-EVT_BEGIN(end_credit_batten2_evt)
-    CALL(evt_npc_entry, STRING("batten2"), STRING("c_mb_robo_2b"))
-    CALL(evt_npc_set_anim, STRING("batten2"), STRING("MGN_W_1"))
-#else
 EVT_BEGIN(end_credit_batten2_evt)
     CALL(evt_npc_entry, STRING("batten2"), STRING("c_mb_robo_2a"))
     CALL(evt_npc_set_anim, STRING("batten2"), STRING("J_2"))
-#endif
     CALL(evt_npc_flag_onoff, 1, STRING("batten2"), NPC_FLAG_NO_CULL)
     CALL(evt_end_npc_silhouette_on, STRING("batten2"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_sub_intpl_msec_init, 11, -4000, 4000, 5000)
-#else
     CALL(evt_npc_set_rotate, STRING("batten2"), 180, 0, 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 4000, -4000, 4000)
-#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_set_position, STRING("batten2"), 0, LW(0), 0)
-#else
         CALL(evt_npc_set_position, STRING("batten2"), 100, LW(0), 0)
-#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -1367,14 +1149,6 @@ EVT_BEGIN(end_credit_batten2_evt)
 EVT_END()
 
 /** Parade script (releases) for Atomic Boo (c_atmic_trs): drifts across the screen at 0.8 scale. */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(end_credit_queen_evt)
-    CALL(evt_npc_entry, STRING("queen"), STRING("c_q_kage"))
-    CALL(evt_npc_set_anim, STRING("queen"), STRING("KRT_S_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("queen"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("queen"))
-    CALL(evt_sub_intpl_msec_init, 11, -4000, 4000, 5000)
-#else
 EVT_BEGIN(end_credit_atomic_evt)
     CALL(evt_npc_entry, STRING("atomic"), STRING("c_atmic_trs"))
     CALL(evt_npc_set_anim, STRING("atomic"), STRING("W_1"))
@@ -1383,13 +1157,9 @@ EVT_BEGIN(end_credit_atomic_evt)
     CALL(evt_npc_set_rotate, STRING("atomic"), 0, 180, 0)
     CALL(evt_npc_set_scale, STRING("atomic"), FLOAT(0.7998047f), FLOAT(0.7998047f), FLOAT(0.7998047f))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -5000, 5000, 6000)
-#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_set_position, STRING("queen"), 0, LW(0), 0)
-#else
         CALL(evt_npc_set_position, STRING("atomic"), LW(0), 20, 0)
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
@@ -1446,15 +1216,11 @@ EVT_BEGIN(end_credit_para_evt)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
         CALL(evt_npc_set_position, STRING("para"), 50, LW(0), 0)
-#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_delete, STRING("queen"))
-#else
     CALL(evt_npc_delete, STRING("para"))
     RETURN
 EVT_END()
@@ -1520,247 +1286,7 @@ EVT_BEGIN(end_credit_queen_evt)
         END_IF
     END_LOOP
     CALL(evt_npc_delete, STRING("queen"))
-#endif
     RETURN
-#if VERSION <= VERSION_DEMO_US
-EVT_END()
-/** Parade script (releases) for the Blooper (gesso, model c_gesso): rises up through the screen as a silhouette. */
-EVT_BEGIN(end_credit_gesso_evt)
-    CALL(evt_npc_entry, STRING("gesso"), STRING("c_gesso"))
-    CALL(evt_npc_set_anim, STRING("gesso"), STRING("GSO_S2_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("gesso"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("gesso"))
-    CALL(evt_sub_intpl_msec_init, 11, -4000, 4000, 5000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("gesso"), 130, LW(0), 0)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_delete, STRING("gesso"))
-    RETURN
-EVT_END()
-
-/**
- * Parade script (releases) for Hooktail (ゴンババ):
- * shrunk child half size and turned around, she slides in parent the left past the camera.
- */
-EVT_BEGIN(end_credit_gonbaba_evt)
-    CALL(evt_npc_entry, STRING("gonbaba"), STRING("c_gonbaba"))
-    CALL(evt_npc_set_anim, STRING("gonbaba"), STRING("GNB_S_3"))
-    CALL(evt_npc_flag_onoff, 1, STRING("gonbaba"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("gonbaba"))
-    CALL(evt_npc_set_scale, STRING("gonbaba"), FLOAT(0.5f), FLOAT(0.5f), FLOAT(0.5f))
-    CALL(evt_npc_set_rotate, STRING("gonbaba"), 0, 180, 0)
-    CALL(evt_sub_intpl_msec_init, 11, -10000, -1300, 2000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("gonbaba"), LW(0), -20, 200)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    WAIT_MS(3000)
-    CALL(evt_sub_intpl_msec_init, 11, -1300, -10000, 2000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("gonbaba"), LW(0), -20, 200)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_delete, STRING("gonbaba"))
-    RETURN
-EVT_END()
-
-/**
- * Parade script (releases) for the second Magnus robot model flipped upside down (c_mb_robo_2a):
- * falls down the screen as a silhouette.
- */
-EVT_BEGIN(end_credit_batten2_evt)
-    CALL(evt_npc_entry, STRING("batten2"), STRING("c_mb_robo_2a"))
-    CALL(evt_npc_set_anim, STRING("batten2"), STRING("J_2"))
-    CALL(evt_npc_flag_onoff, 1, STRING("batten2"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("batten2"))
-    CALL(evt_npc_set_rotate, STRING("batten2"), 180, 0, 0)
-    CALL(evt_sub_intpl_msec_init, 11, 4000, -4000, 4000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("batten2"), 100, LW(0), 0)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_delete, STRING("batten2"))
-    RETURN
-EVT_END()
-
-/** Parade script (releases) for Atomic Boo (c_atmic_trs): drifts across the screen at 0.8 scale. */
-EVT_BEGIN(end_credit_atomic_evt)
-    CALL(evt_npc_entry, STRING("atomic"), STRING("c_atmic_trs"))
-    CALL(evt_npc_set_anim, STRING("atomic"), STRING("W_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("atomic"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("atomic"))
-    CALL(evt_npc_set_rotate, STRING("atomic"), 0, 180, 0)
-    CALL(evt_npc_set_scale, STRING("atomic"), FLOAT(0.7998047f), FLOAT(0.7998047f), FLOAT(0.7998047f))
-    CALL(evt_sub_intpl_msec_init, 11, -5000, 5000, 6000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("atomic"), LW(0), 20, 0)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_delete, STRING("atomic"))
-    RETURN
-EVT_END()
-
-/** Parade script (releases) for Cortez (korutesu): slides in parent the left, low on the screen. */
-EVT_BEGIN(end_credit_korutesu_evt)
-    CALL(evt_npc_entry, STRING("korutesu"), STRING("c_korutesu1"))
-    CALL(evt_npc_set_anim, STRING("korutesu"), STRING("KRT_S_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("korutesu"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_NO_CULL)
-    CALL(evt_npc_set_ry, STRING("korutesu"), 90)
-    CALL(evt_end_npc_silhouette_on, STRING("korutesu"))
-    CALL(evt_sub_intpl_msec_init, 11, -10000, -2000, 2000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("korutesu"), LW(0), -150, 0)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    WAIT_MS(3000)
-    CALL(evt_sub_intpl_msec_init, 11, -2000, -10000, 2000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("korutesu"), LW(0), -150, 0)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_delete, STRING("korutesu"))
-    RETURN
-EVT_END()
-
-/**
- * Parade script (releases) for the c_bom_sen model, the Bob-omb crowd sprite of Fahr Outpost's cannon scene
- * (bom_01's evt_bom1000), in anim S_2: falls down the screen as a silhouette.
- */
-EVT_BEGIN(end_credit_para_evt)
-    WAIT_MS(1000)
-    CALL(evt_npc_entry, STRING("para"), STRING("c_bom_sen"))
-    CALL(evt_npc_set_anim, STRING("para"), STRING("S_2"))
-    CALL(evt_npc_flag_onoff, 1, STRING("para"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("para"))
-    CALL(evt_sub_intpl_msec_init, 11, 3000, -3000, 6000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("para"), 50, LW(0), 0)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_delete, STRING("para"))
-    RETURN
-EVT_END()
-
-/**
- * Parade script (releases) for the first Magnus robot model (c_mb_robo_1a):
- * slides in parent the right as a silhouette at 0.6 scale.
- */
-EVT_BEGIN(end_credit_batten_evt)
-    CALL(evt_npc_entry, STRING("batten"), STRING("c_mb_robo_1a"))
-    CALL(evt_npc_set_anim, STRING("batten"), STRING("W_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("batten"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("batten"))
-    CALL(evt_npc_set_scale, STRING("batten"), FLOAT(0.5996094f), FLOAT(0.5996094f), FLOAT(0.5996094f))
-    CALL(evt_sub_intpl_msec_init, 11, 10000, 500, 2000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("batten"), LW(0), -70, 200)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    WAIT_MS(3000)
-    CALL(evt_sub_intpl_msec_init, 11, 500, 10000, 2000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("batten"), LW(0), -70, 200)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_delete, STRING("batten"))
-    RETURN
-EVT_END()
-
-/** Parade script (releases) for the Shadow Queen (c_q_kage_m): slides in parent the left at half size. */
-EVT_BEGIN(end_credit_queen_evt)
-    WAIT_MS(7000)
-    CALL(evt_npc_entry, STRING("queen"), STRING("c_q_kage_m"))
-    CALL(evt_npc_set_anim, STRING("queen"), STRING("KRT_Z_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("queen"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("queen"))
-    CALL(evt_npc_set_scale, STRING("queen"), FLOAT(0.5f), FLOAT(0.5f), FLOAT(0.5f))
-    CALL(evt_npc_set_ry, STRING("queen"), 90)
-    CALL(evt_sub_intpl_msec_init, 11, -10000, -1000, 2000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("queen"), LW(0), -20, 200)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    WAIT_MS(3000)
-    CALL(evt_sub_intpl_msec_init, 11, -1000, -10000, 2000)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-        CALL(evt_npc_set_position, STRING("queen"), LW(0), -20, 200)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_delete, STRING("queen"))
-    RETURN
-EVT_END()
-
-
-/** Model name of the Smorg silhouette used in the ending's closing pictures. */
-const char* end_moa_ext_anim = "c_n_moa_a";
-
-/** Animation name of the Smorg silhouette used in the ending's closing pictures. */
-const char* end_moa_ext_pose = "S_1";
-
-/** Script helper: queues the ending picture draw callback (_unresolved) for this frame. */
-USER_FUNC(evt_end_image_disp_entry) {
-#else
 EVT_END()
 
 /** Model name of the Smorg silhouette used in the ending's closing pictures. */
@@ -1772,7 +1298,6 @@ const char* end_moa_ext_pose = "S_1";
 /** Script helper: queues the ending picture draw callback (end_image_disp) for this frame. */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000012e0, JP end .text+0x121C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_disp_entry) {
-#endif
     dispEntry(CAMERA_3D, 0.0f, 7, end_image_disp, NULL);
     return 0;
 }
@@ -1780,9 +1305,6 @@ USER_FUNC(evt_end_image_disp_entry) {
 /** Script helper: sets the opacity (0 to 255) of the ending picture to args[0]. */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000012a4, JP end .text+0x11E0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_set_alpha) {
-#if VERSION <= VERSION_DEMO_US
-    end_wp->alpha = evtGetValue(event, event->args[0]);
-#else
     end_wp->alpha = evtGetValue(event, event->args[0]);
     return 2;
 }
@@ -1817,7 +1339,6 @@ USER_FUNC(evt_end_image_set_mode) {
 // Descriptive name (not in the symbol maps); placeholder unk_end_000011f0, JP end .text+0x112C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_set_blend) {
     end_wp->tevAlpha = evtGetValue(event, event->args[0]);
-#endif
     return 2;
 }
 
@@ -1861,11 +1382,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
     switch (end_wp->pos) {
         case 0:
             x = -274;
-#if VERSION <= VERSION_DEMO_US
-            y = -20;
-#else
             y = -24;
-#endif
             break;
         case 1:
             x = 274;
@@ -1873,11 +1390,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             break;
         case 2:
             x = 274;
-#if VERSION <= VERSION_DEMO_US
-            y = -20;
-#else
             y = -24;
-#endif
             break;
         case 3:
             x = -274;
@@ -1885,11 +1398,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             break;
         case 4:
             x = 0;
-#if VERSION <= VERSION_DEMO_US
-            y = -80;
-#else
             y = -60;
-#endif
             break;
     }
     switch (state) {
@@ -1909,41 +1418,21 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                         wx += 10;
 #endif
                     }
-#if VERSION <= VERSION_DEMO_US
-                    sprintf(buf1, "<clear><wait %d><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", 0, wx - 62, wy, msg);
-#else
                     sprintf(buf1, "<clear><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", wx - 62, wy, msg);
-#endif
                     end_wp->win1[i] = msgWindow_Entry(buf1, 0, 0);
                 }
             }
             for (i = 0; i < 3; i++) {
                 if (end_staff_roll_msg_tbl[idx].msg2[i] != NULL) {
                     msg2 = msgSearch(end_staff_roll_msg_tbl[idx].msg2[i]);
-#if VERSION <= VERSION_DEMO_US
-                    wx2 = x + 8;
-#else
                     wx2 = x;
-#endif
                     wy2 = y - i * 24 - 50;
                     if (x == 0) {
-#if VERSION <= VERSION_DEMO_US
-                        wx2 -= FontGetMessageWidth(msg2) / 2;
-#else
                         wx2 = x - FontGetMessageWidth(msg2) / 2.0f;
-#endif
                     } else if (x > 0) {
-#if VERSION <= VERSION_DEMO_US
-                        wx2 -= FontGetMessageWidth(msg2);
-#else
                         wx2 = x - FontGetMessageWidth(msg2);
-#endif
                     }
-#if VERSION <= VERSION_DEMO_US
-                    sprintf(buf2, "<clear><wait %d><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0>%s</speed></col><wait 5200></dkey><once_stop>", 0, wx2 - 62, wy2, msg2);
-#else
                     sprintf(buf2, "<clear><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0>%s</speed></col><wait 5200></dkey><once_stop>", wx2 - 62, wy2, msg2);
-#endif
                     end_wp->win2[i] = msgWindow_Entry(buf2, 0, 0);
                 } else {
                     end_wp->win2[i] = -1;
@@ -1980,16 +1469,11 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                     if (end_staff_roll_msg_tbl[n].msg1[i] != NULL) {
                         break;
                     }
-#if VERSION <= VERSION_DEMO_US
-                }
-                if (i < 3) {
-#else
                 }
             } else {
                 i = 0;
             }
             if (i < 3) {
-#endif
                 for (i = 0; i < 3; i++) {
                     if (end_wp->win1[i] != -1) {
                         msgWindow_Continue(end_wp->win1[i]);
@@ -2001,18 +1485,10 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                     msgWindow_Continue(end_wp->win2[i]);
                 }
             }
-#if VERSION <= VERSION_DEMO_US
-                evtSetValue(event, GW(10), 2);
-                state++;
-#else
             evtSetValue(event, GW(10), 2);
             if (n < ARRAY_SIZE(end_staff_roll_msg_tbl)) {
                 state++;
-#endif
             } else {
-#if VERSION <= VERSION_DEMO_US
-                psndBGMOn(PSND_FADEOUT, (char*)0xCD);
-#endif
                 state += 2;
             }
             break;
@@ -2023,22 +1499,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             }
             break;
         case 4:
-#if VERSION <= VERSION_DEMO_US
-            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                evtSetValue(event, GW(10), 2);
-                state++;
-            }
-            break;
-        case 5:
-            if (evtGetValue(event, GW(10)) == 0) {
-#endif
-#if VERSION <= VERSION_DEMO_US
-                return 2;
-            }
-            break;
-#else
             return 2;
-#endif
     }
     event->userdata[0] = state;
     event->userdata[1] = idx;
@@ -2057,27 +1518,15 @@ USER_FUNC(evt_end_staff_roll_init) {
     s32 i;
 
     if (isFirstCall) {
-#if VERSION <= VERSION_DEMO_US
-        end_wp->npcLoadNum = 0;
-        end_wp->npcLoadRequest = 0;
-        end_wp->tpl = NULL;
-        end_wp->alpha = 0;
-#else
         end_wp->tpl = NULL;
         end_wp->alpha = 0;
         end_wp->mode = 0;
-#endif
         end_wp->pos = 0;
         psndSetFlag(PSND_FLAG_NO_SFX);
 #if VERSION < VERSION_US
         gp->language = 1;
         JUTFont_Free();
-#if VERSION <= VERSION_DEMO_US
         JUTFontSetup(1);
-        msgLoad("global", 1);
-#else
-        JUTFontSetup(1);
-#endif
 #endif
     }
     if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/ending.tpl", getMarioStDvdRoot()) == 0) {
@@ -2086,24 +1535,13 @@ USER_FUNC(evt_end_staff_roll_init) {
     if (end_wp->tpl == NULL) {
         end_wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/ending.tpl", getMarioStDvdRoot());
     }
-#if VERSION <= VERSION_DEMO_US
-    end_wp->npcLoadNum = 10;
-#endif
-#if VERSION <= VERSION_DEMO_US
-    for (i = 0; i < end_wp->npcLoadNum; i++) {
-#else
     for (i = 0; i < 5; i++) {
-#endif
         if (!animGroupBaseAsync(R_credits_npc_info[i].agb, inBattle, NULL)) {
             return 0;
         }
     }
     // FAKE: empty five-iteration loop retained; removing it changes the object.
-#if VERSION <= VERSION_DEMO_US
-    for (i = 0; i < end_wp->npcLoadNum; i++) {
-#else
     for (i = 0; i < 5; i++) {
-#endif
     }
     return 2;
 }
@@ -2117,9 +1555,6 @@ void end_staff_roll_exit(void) {
     gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
-#endif
-#if VERSION <= VERSION_DEMO_US
-    msgLoad("global", 1);
 #endif
 }
 #pragma dont_inline reset

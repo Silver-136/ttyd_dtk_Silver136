@@ -66,13 +66,7 @@ typedef struct EffectEntry {
 
 typedef struct EffectSet {
     s16 id;           // 0x0
-#if VERSION <= VERSION_DEMO_US
     const char* name; // 0x4
-    const char* jpName;     // 0x8, debug name (Japanese)
-    const char** typeNames; // 0xC, NULL-terminated debug names of the effect's types, or NULL
-#else
-    const char* name; // 0x4
-#endif
 } EffectSet;
 
 typedef struct EffectWork {

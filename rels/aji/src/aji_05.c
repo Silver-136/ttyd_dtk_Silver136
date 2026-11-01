@@ -1,6 +1,5 @@
 // aji_05 (敵のアジト, X-Naut Fortress): an electrified floor-panel room (hikaru_yuka).
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
@@ -43,11 +42,7 @@ static EvtWord hikaru_yuka_init[48];
 EvtWord aji_05_init_evt[77];
 
 static EVT_BEGIN(e_door_close)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -55,11 +50,7 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
-#if VERSION <= VERSION_DEMO_US
-    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
-#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
-#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -172,15 +163,9 @@ static EvtWord hikaru_yuka_init[] = {
  */
 EVT_BEGIN(aji_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
-#else
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-    CALL(evt_snd_set_rev_mode, 1)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-#endif
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
@@ -202,35 +187,14 @@ EVT_END()
 static USER_FUNC(ride_chk) {
     static s32 onoff[24];
     char hitName[64];
-#if VERSION <= VERSION_DEMO_US
     char name[64];
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
     HitEntry* hit;
     s32 i;
-#else
-    char name[64];
-    MarioWork* mario = marioGetPtr();
-    PartyEntry* party = partyGetPtr(0);
-    HitEntry* hit;
-    s32 i;
-#endif
 
     if (isFirstCall) {
         memset(onoff, 0, sizeof(onoff));
-#if VERSION <= VERSION_DEMO_US
-    }
-    if (party != NULL && party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        hit = mario->hitobjStandOn;
-        if (hit == NULL) {
-            hit = mario->hitobjJumpFrom;
-        }
-    } else {
-        hit = (HitEntry*)mario->hitobjUnder;
-    }
-    // panels stay lit for 30 frames after being touched
-    for (i = 0; i < 24; i++) {
-#else
     }
     if (party != NULL && party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         hit = mario->hitobjStandOn;
@@ -242,21 +206,9 @@ static USER_FUNC(ride_chk) {
     }
     // Contact resets the counter to 30; the same call decrements it before testing visibility.
     for (i = 0; i < 24; i++) {
-#endif
-#if VERSION <= VERSION_DEMO_US
-        MarioWork* mario = marioGetPtr();
-#endif
-#if VERSION <= VERSION_DEMO_US
-        if (mario->hitobjUnder != NULL) {
-#else
         if (hit != NULL) {
-#endif
             sprintf(hitName, "A_hikaru_%02d", i + 1);
-#if VERSION <= VERSION_DEMO_US
-            if (strcmp(mario->hitobjUnder->joint->name, hitName) == 0) {
-#else
             if (strcmp(hit->joint->name, hitName) == 0) {
-#endif
                 onoff[i] = 30;
             }
         }

@@ -1,6 +1,5 @@
 // las_21 (ラストダンジョン, Palace of Shadow): the room of floating blocks (floatblk).
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -406,15 +405,9 @@ EVT_END()
  * Event script: switch handler for floating block 21blk1:
  * toggles it between Y -130 and Y -580 using floatblk_evt and remembers the position in LSWF(8).
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(floatblk21_1_evt)
-    SET_TYPE(239)
-    IF_INT_EQUAL(LSWF(8), 0)
-#else
 EVT_BEGIN(floatblk21_1_evt)
     SET_TYPE(239)
     IF_INT_EQUAL(LSWF_LAS_21_BLK1_LOWERED, 0)
-#endif
         SET_VALUE(LW(0), STRING("21blk1"))
         SET_VALUE(LW(1), STRING("MOBJ_21blk1"))
         SET_VALUE(LW(2), STRING("21switch1"))
@@ -443,12 +436,8 @@ EVT_END()
  * Event script: switch handler for floating block 21blk2:
  * toggles it between Y -130 and Y -580 and remembers the position in LSWF(9).
  */
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(floatblk21_2_evt)
-#else
 EVT_BEGIN(floatblk21_2_evt)
     SET_TYPE(239)
-#endif
     IF_INT_EQUAL(LSWF_LAS_21_BLK2_LOWERED, 0)
         SET_VALUE(LW(0), STRING("21blk2"))
         SET_VALUE(LW(1), STRING("MOBJ_21blk2"))
@@ -486,12 +475,8 @@ EVT_BEGIN(las_21_init_evt)
     ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#else
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
-#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))

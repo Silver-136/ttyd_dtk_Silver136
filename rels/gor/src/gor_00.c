@@ -218,13 +218,6 @@ ExtTexInfo nannpc_entry_data01[41];
 static s16 suifu_animtbl[42];
 static s16 suifu_run_animtbl[22];
 Vec suifu100kaidanDOWN[];
-#if VERSION <= VERSION_DEMO_US
-Vec suifu100kaidanUP[];
-extern EvtWord mony_run_away[];
-extern EvtWord peton_run_away[];
-extern EvtWord mony_peton_depart[];
-static EvtWord mony_peton_event[251];
-#else
 Vec suifu100kaidanUP[];
 EvtWord marco_run_away[100];
 EvtWord gorotsuki_kikan[];
@@ -233,7 +226,6 @@ EvtWord mony_run_away[108];
 EvtWord peton_run_away[88];
 EvtWord mony_peton_depart[VERSION_PICK(61, 64)];
 EvtWord gor_00_koopa_evt[1095];
-#endif
 #if VERSION == VERSION_EU
 static EvtWord peach_mail[215];
 #else
@@ -417,9 +409,6 @@ static EVT_BEGIN(mony_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
         CALL(evt_npc_set_ry, STRING("me"), 90)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_set_position, STRING("me"), 130, 15, 250)
-#else
         CALL(evt_npc_set_position, STRING("me"), 130, 15, 250)
     END_SWITCH
     RETURN
@@ -432,7 +421,6 @@ EVT_BEGIN(gor_00_mony_regl)
         WAIT_WHILE(GF(15))
 #endif
         CALL_CHILD(PTR(mony_run_away))
-#endif
     END_SWITCH
     RETURN
 EVT_END()
@@ -532,31 +520,6 @@ static EVT_BEGIN(peton_init)
         CALL(evt_npc_set_position, STRING("me"), 185, 15, 250)
     END_SWITCH
     RETURN
-#if VERSION <= VERSION_DEMO_US
-EVT_END()
-
-/**
- * Regular event of Frankie (Peton).
- * Same as gor_00_mony_regl: on the Chapter 5 arrival step it runs peton_run_away;
- * the US and later releases first wait for GF(15).
- */
-EVT_BEGIN(gor_00_peton_regl)
-    SWITCH(GSW(GSW_STORY_PROGRESS))
-        CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
-        WAIT_WHILE(GF(15))
-        CALL_CHILD(peton_run_away)
-    END_SWITCH
-    RETURN
-EVT_END()
-
-/**
- * Talk event of Frankie (Peton).
- * At STG2_44_FINDING_DON_PIANTA it runs the shared talk scene mony_peton_talk;
- * at STG2_45_DAUGHTER_LOCATED he says mac_2_087_01,
- * or mac_2_085_01 once Mario has helped him and Francesca.
- */
-static EVT_BEGIN(peton_talk)
-#else
 EVT_END()
 
 EVT_BEGIN(gor_00_peton_regl)
@@ -577,7 +540,6 @@ EVT_END()
  * or mac_2_085_01 once Mario has helped him and Francesca.
  */
 static EVT_BEGIN(peton_talk)
-#endif
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
         CALL_CHILD(PTR(mony_peton_talk))
@@ -604,10 +566,6 @@ static EVT_BEGIN(marco_init)
         CALL(evt_npc_entry, STRING("第三部下"), STRING("c_zako_n"))
         CALL(evt_npc_set_tribe, STRING("第三部下"), STRING("第三勢力部下"))
         CALL(evt_npc_set_position, STRING("第三部下"), 0, -1000, 0)
-#if VERSION <= VERSION_DEMO_US
-    END_SWITCH
-    RETURN
-#else
     END_SWITCH
     RETURN
 EVT_END()
@@ -662,7 +620,6 @@ EVT_BEGIN(marco_party_move)
     CALL(evt_party_set_dir, 0, 270, 200)
     CALL(evt_party_run, 0)
     RETURN
-#endif
 EVT_END()
 
 static EVT_BEGIN(marco_talk)
@@ -1282,11 +1239,7 @@ EVT_BEGIN(suifubomb_a_talk)
                 RETURN
             END_IF
             CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_win_item_select, LW(10), LW(0))
-#else
             CALL(evt_win_item_select, 0, LW(10), LW(0), 0)
-#endif
             CALL(delete_itemsel_table)
             IF_INT_EQUAL(LW(0), -1)
                 CALL(evt_msg_print, 0, STRING("irai_06_006"), 0, STRING("me"))
@@ -1527,15 +1480,9 @@ EVT_BEGIN(tentyou_init)
         CALL(evt_npc_set_tribe, STRING("店長"), STRING("店員男"))
         CALL(evt_npc_set_ry, STRING("店長"), 90)
         CALL(evt_npc_set_position, STRING("店長"), -12, 128, 40)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_change_interrupt, STRING("店長"), 6, PTR(tentyou_talk))
-        CALL(evt_npc_flag_onoff, 1, STRING("店長"), NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
-    END_SWITCH
-#else
         CALL(evt_npc_change_interrupt, STRING("店長"), 6, PTR(tentyou_talk))
         CALL(evt_npc_flag_onoff, 1, STRING("店長"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     END_SWITCH
-#endif
     RETURN
 EVT_END()
 
@@ -1559,12 +1506,8 @@ EVT_BEGIN(tenin_init)
         CALL(evt_npc_set_tribe, STRING("店員"), STRING("店員女"))
         CALL(evt_npc_set_ry, STRING("店員"), 90)
         CALL(evt_npc_set_position, STRING("店員"), -30, 128, 120)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_change_interrupt, STRING("店員"), 6, PTR(tenin_talk))
-#else
         CALL(evt_npc_change_interrupt, STRING("店員"), 6, PTR(tenin_talk))
         CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-#endif
     END_SWITCH
     RETURN
 EVT_END()
@@ -1673,11 +1616,7 @@ EVT_BEGIN(mokorim_talk)
             CALL(evt_mario_set_pose, STRING("M_I_Z"))
             WAIT_MS(500)
         END_IF
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_unitwin_alloc)
-#else
         CALL(evt_unitwin_alloc, 0)
-#endif
         CALL(unitwincoin_disp_onoff, 1)
         CALL(evt_msg_print, 0, STRING("salari_before_004"), 0, 0)
         CALL(evt_msg_select, 0, STRING("salari_before_005"))
@@ -1743,13 +1682,9 @@ EVT_BEGIN(mokorim_talk)
                 WAIT_FRAMES(1)
             END_LOOP
             CALL(evt_msg_print, 0, STRING("salari_after_001"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_mario_set_pose, STRING("M_N_7"))
-#else
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
             CALL(evt_mario_set_pose, STRING("M_N_7"))
-#endif
             WAIT_MS(500)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             CALL(evt_cam3d_evt_set, 500, 120, 90, 500, 55, -280, 800, EASING_SINE_IN_OUT)
@@ -1771,11 +1706,7 @@ EVT_BEGIN(mokorim_talk)
                     CASE_EQUAL(3)
                     SET_VALUE(LW(0), 999)
                 END_SWITCH
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_unitwin_alloc)
-#else
                 CALL(evt_unitwin_alloc, 0)
-#endif
                 CALL(unitwincoin_disp_onoff, 1)
                 CALL(evt_msg_print_insert, 0, STRING("salari_after_003"), 0, 0, LW(0))
                 CALL(evt_pouch_add_coin, LW(0))
@@ -1797,15 +1728,9 @@ EVT_BEGIN(mokorim_talk)
                 LOOP(0)
                     CALL(evt_msg_print_add, 0, STRING("salari_after_007"))
                     CALL(evt_msg_select, 0, STRING("salari_after_008"))
-#if VERSION <= VERSION_DEMO_US
-                    CALL(evt_msg_continue)
-                    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_ANIM)
-                    SWITCH(LW(0))
-#else
                     CALL(evt_msg_continue)
                     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
                     SWITCH(LW(0))
-#endif
                         CASE_EQUAL(0)
                         CALL(evt_msg_print, 0, STRING("salari_after_009"), 0, 0)
                         CASE_EQUAL(1)
@@ -1820,15 +1745,9 @@ EVT_BEGIN(mokorim_talk)
                         CALL(evt_msg_print, 0, STRING("salari_after_014"), 0, 0)
                         CASE_EQUAL(6)
                         CALL(evt_msg_print, 0, STRING("salari_after_015"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
-                    END_SWITCH
-                    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_ANIM)
-                    CALL(evt_msg_print, 0, STRING("salari_after_016"), 0, 0)
-#else
                     END_SWITCH
                     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
                     CALL(evt_msg_print, 0, STRING("salari_after_016"), 0, 0)
-#endif
                     CALL(evt_msg_select, 0, STRING("salari_after_017"))
                     IF_INT_EQUAL(LW(0), 0)
                         ELSE
@@ -1948,14 +1867,8 @@ static NpcSetupInfo npcEnt[] = {
         /*"モニー"*/"\x83\x82\x83\x6A\x81\x5B", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
-#if VERSION <= VERSION_DEMO_US
         mony_init, // initEvent
         gor_00_mony_regl, // regularEvent
-        NULL, // regularEvent
-#else
-        mony_init, // initEvent
-        gor_00_mony_regl, // regularEvent
-#endif
         mony_talk, // talkEvent
         NULL, NULL, NULL, NULL, NULL, 0, // deadEvent..territoryType
         {0}, // territoryBase
@@ -1966,14 +1879,8 @@ static NpcSetupInfo npcEnt[] = {
         /*"ピートン"*/"\x83\x73\x81\x5B\x83\x67\x83\x93", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
-#if VERSION <= VERSION_DEMO_US
         peton_init, // initEvent
         gor_00_peton_regl, // regularEvent
-        NULL, // regularEvent
-#else
-        peton_init, // initEvent
-        gor_00_peton_regl, // regularEvent
-#endif
         peton_talk, // talkEvent
         NULL, NULL, NULL, NULL, NULL, 0, // deadEvent..territoryType
         {0}, // territoryBase
@@ -2602,24 +2509,8 @@ EVT_BEGIN(enter_gorotsuki_town)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    BEGIN_INLINE_EVENT
-        WAIT_MS(1000)
-        SET_FLOAT_VALUE(LW(0), FLOAT(1.0f))
-        LOOP(14)
-            WAIT_MS(200)
-#endif
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_map_set_playrate, STRING("hiki_nami"), LW(0))
-            ADD_FLOAT(LW(0), FLOAT(0.2f))
-#else
     CALL(evt_map_set_playrate, STRING("hiki_nami"), FLOAT(0.25f))
-#endif
     // The wake slows down and the area title card fades in and out.
-#if VERSION <= VERSION_DEMO_US
-        END_LOOP
-    END_INLINE_EVENT
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1500)
@@ -2648,12 +2539,8 @@ EVT_BEGIN(enter_gorotsuki_town)
     BEGIN_INLINE_EVENT
         CALL(evt_telop_entry, 0)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG0_03_TO_ROGUEPORT)
-#else
     SET_VALUE(GSW_STORY_PROGRESS, STG0_03_TO_ROGUEPORT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-#endif
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(LW(0), 0)
     CALL(evt_snd_bgm_scope, 0, 0)
@@ -2877,16 +2764,6 @@ EVT_BEGIN(gundan1000tai_beforebattle)
         CALL(evt_npc_move_position, STRING("第三勢力部下Ｂ"), LW(10), LW(12), 0, FLOAT(180.0f), 0)
     END_INLINE_EVENT
     ADD(LW(10), 50)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_move_position, STRING("第三勢力幹部"), LW(10), LW(12), 0, FLOAT(180.0f), 0)
-    // Top Mario's HP up to 5 before the fight; the demos skip this (their main executables have no HP commands).
-    CALL(evt_pouch_get_hp, LW(0))
-    IF_INT_LESS(LW(0), 5)
-        CALL(evt_pouch_set_hp, 5)
-    END_IF
-    // The fight against Lord Crump.
-    CALL(evt_npc_set_battle_info, STRING("第三勢力幹部"), 2)
-#else
     CALL(evt_npc_move_position, STRING("第三勢力幹部"), LW(10), LW(12), 0, FLOAT(180.0f), 0)
     CALL(evt_pouch_get_hp, LW(0))
     IF_INT_LESS(LW(0), 5)
@@ -2894,7 +2771,6 @@ EVT_BEGIN(gundan1000tai_beforebattle)
     END_IF
     // The fight against Lord Crump.
     CALL(evt_npc_set_battle_info, STRING("第三勢力幹部"), 2)
-#endif
     CALL(evt_npc_battle_start, STRING("第三勢力幹部"))
     CALL(evt_npc_wait_battle_end)
     // After the fight: everyone is placed for the next scene and the story advances; the sailors return to
@@ -4534,9 +4410,6 @@ void suifu100taikikan_seq01(NanNPC* npc) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(gorotsuki_kikan)
-#else
 EVT_BEGIN(marco_run_away)
     CALL(evt_npc_set_ry, STRING("マルコ"), 270)
     CALL(evt_npc_move_position, STRING("マルコ"), -130, 200, 0, FLOAT(240.0f), 0)
@@ -4565,7 +4438,6 @@ EVT_END()
  * and the story becomes STG5_59_ROGUEPORT_DOCK before the peach_mail event starts.
  */
 EVT_BEGIN(gorotsuki_kikan)
-#endif
     // Mario, his partner, Flavio, Cortez and the sailors are placed on the pier; the crowd of 100 sailors is
     // set up.
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -4629,15 +4501,9 @@ EVT_BEGIN(gorotsuki_kikan)
         IF_INT_EQUAL(LW(0), 100)
             BREAK_LOOP
         END_IF
-#if VERSION <= VERSION_DEMO_US
-    END_LOOP
-    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_59_ROGUEPORT_DOCK)
-#else
     END_LOOP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_59_ROGUEPORT_DOCK)
-#endif
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_ry, STRING("水夫Ａ"), 270)
         CALL(evt_npc_move_position, STRING("水夫Ａ"), -146, 218, 0, FLOAT(240.0f), 0)
@@ -4817,20 +4683,11 @@ EVT_BEGIN(into_gor_ship)
     // Control returns to Mario.
     DELETE_EVENT(LW(9))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 1)
-#else
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
-#endif
     RETURN
-#if VERSION <= VERSION_DEMO_US
 EVT_END()
 
-/**
- * Francesca (Mony) hops off the ship, runs along the pier, up the back stairs and out of the map,
- * then is hidden below it. JP and later releases.
- */
 EVT_BEGIN(mony_run_away)
     CALL(evt_npc_jump_position_nohit, STRING("モニー"), 145, 15, 225, 400, 20)
     CALL(evt_npc_set_ry, STRING("モニー"), 270)
@@ -4850,10 +4707,6 @@ EVT_BEGIN(mony_run_away)
     RETURN
 EVT_END()
 
-/**
- * Frankie (Peton) runs along the pier, up the back stairs and out of the map, then is hidden below it.
- * JP and later releases.
- */
 EVT_BEGIN(peton_run_away)
     CALL(evt_npc_move_position, STRING("ピートン"), -230, -170, 0, FLOAT(240.0f), 0)
     CALL(evt_npc_move_position, STRING("ピートン"), -230, -400, 0, FLOAT(240.0f), 0)
@@ -4870,94 +4723,7 @@ EVT_BEGIN(peton_run_away)
     RETURN
 EVT_END()
 
-/**
- * Frankie and Francesca's goodbye after the voyage:
- * sets STG5_64_03_F_F_ARRIVE, they speak (mac_5_038, mac_5_039),
- * and then each jumps off the ship at the dock and runs off in turn.
- * In the US and later releases it also clears GF(15). JP and later releases (earlier ones use mony_peton_event).
- */
 EVT_BEGIN(mony_peton_depart)
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_64_03_F_F_ARRIVE)
-    SET_VALUE(GF(15), 0)
-    CALL(evt_msg_print, 0, STRING("mac_5_038"), 0, STRING("モニー"))
-    CALL(evt_msg_print, 0, STRING("mac_5_039"), 0, STRING("ピートン"))
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_INTANGIBLE)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_INTANGIBLE)
-    CALL(evt_npc_set_ry, STRING("モニー"), 270)
-    WAIT_MS(300)
-    CALL(evt_npc_restart_regular_event, STRING("モニー"))
-    WAIT_MS(60)
-    CALL(evt_npc_jump_position_nohit, STRING("ピートン"), 185, 15, 225, 400, 20)
-    CALL(evt_npc_set_ry, STRING("ピートン"), 270)
-    CALL(evt_npc_move_position, STRING("ピートン"), -130, 200, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_restart_regular_event, STRING("ピートン"))
-    RETURN
-EVT_END()
-/** Mony and Peton step off the ship and run off into town one after the other */
-static EVT_BEGIN(mony_peton_event)
-#else
-EVT_END()
-
-EVT_BEGIN(mony_run_away)
-#endif
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("mac_5_038"), 0, STRING("モニー"))
-    CALL(evt_msg_print, 0, STRING("mac_5_039"), 0, STRING("ピートン"))
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_INTANGIBLE)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_INTANGIBLE)
-    CALL(evt_npc_set_ry, STRING("モニー"), 270)
-    WAIT_MS(300)
-    BEGIN_INLINE_EVENT
-#endif
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 145, 15, 225, 400, 20)
-    CALL(evt_npc_set_ry, STRING("モニー"), 270)
-    CALL(evt_npc_move_position, STRING("モニー"), -130, 200, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_move_position, STRING("モニー"), -230, -170, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_move_position, STRING("モニー"), -230, -400, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_set_ry, STRING("モニー"), 90)
-    CALL(evt_npc_move_position, STRING("モニー"), 250, -330, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_set_ry, STRING("モニー"), 270)
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 270, 35, -400, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 260, 55, -450, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 230, 75, -480, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 210, 95, -520, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 150, 115, -530, 400, 20)
-    CALL(evt_npc_move_position, STRING("モニー"), 0, -570, 0, FLOAT(180.0f), 0)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_set_position, STRING("モニー"), 0, -1000, 0)
-    END_INLINE_EVENT
-    WAIT_MS(60)
-    CALL(evt_npc_jump_position_nohit, STRING("ピートン"), 185, 15, 225, 400, 20)
-    CALL(evt_npc_set_ry, STRING("ピートン"), 270)
-    CALL(evt_npc_move_position, STRING("ピートン"), -130, 200, 0, FLOAT(240.0f), 0)
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("ピートン"), -230, -170, 0, FLOAT(240.0f), 0)
-#else
-    CALL(evt_npc_set_position, STRING("モニー"), 0, -1000, 0)
-    RETURN
-EVT_END()
-
-EVT_BEGIN(peton_run_away)
-    CALL(evt_npc_move_position, STRING("ピートン"), -230, -170, 0, FLOAT(240.0f), 0)
-#endif
-    CALL(evt_npc_move_position, STRING("ピートン"), -230, -400, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_set_ry, STRING("ピートン"), 90)
-    CALL(evt_npc_move_position, STRING("ピートン"), 250, -330, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_set_ry, STRING("ピートン"), 270)
-    CALL(evt_npc_jump_position_nohit, STRING("ピートン"), 270, 35, -400, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("ピートン"), 260, 55, -450, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("ピートン"), 230, 75, -480, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("ピートン"), 210, 95, -520, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("ピートン"), 150, 115, -530, 400, 20)
-    CALL(evt_npc_move_position, STRING("ピートン"), 0, -570, 0, FLOAT(180.0f), 0)
-    CALL(evt_npc_set_position, STRING("ピートン"), 0, -1000, 0)
-    RETURN
-EVT_END()
-
-EVT_BEGIN(mony_peton_depart)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_64_03_F_F_ARRIVE)
-#else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
 #if VERSION >= VERSION_US
     SET_VALUE(GF(15), 0)
@@ -4974,7 +4740,6 @@ EVT_BEGIN(mony_peton_depart)
     CALL(evt_npc_set_ry, STRING("ピートン"), 270)
     CALL(evt_npc_move_position, STRING("ピートン"), -130, 200, 0, FLOAT(240.0f), 0)
     CALL(evt_npc_restart_regular_event, STRING("ピートン"))
-#endif
     RETURN
 EVT_END()
 
@@ -5657,41 +5422,6 @@ static USER_FUNC(get_yoshi_color) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
     return EVT_RETURN_DONE;
-#if VERSION <= VERSION_DEMO_US
-}
-
-/**
- * Deletes every NPC on the map, cancelling their regular events first. Used to clear the cast for the epilogue.
- * JP and later releases.
- */
-USER_FUNC(npc_all_delete) {
-    NpcWork* wp = npcGetWorkPtr();
-    s32 i;
-    s32 total = wp->total;
-    NpcEntry* npc = wp->entries;
-
-    for (i = 0; i < total; i++, npc++) {
-        if (npc->flags & NPC_FLAG_IN_USE) {
-            if (npc->moveEvent != NULL) {
-                if (npc->regularEvtId != 0) {
-                    evtDeleteID(npc->regularEvtId);
-                }
-                npc->regularEvtId = 0;
-                npc->moveEvent = NULL;
-            }
-            npcDelete(npc);
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Sets sail for Keelhaul Key after Cortez's talk:
- * shrinks Mario, the partners and Cortez out of sight, flips the ship over like paper, bobs it,
- * fades in its wake and slides it 800 units out of the harbor in 10 seconds before changing to the map muj_20.
- */
-EVT_BEGIN(gor_muj_ship_start)
-#else
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_gor_000006d8, JP gor .text+0x60C. See docs/NAME_PROVENANCE.md.
@@ -5722,7 +5452,6 @@ USER_FUNC(npc_all_delete) {
  * fades in its wake and slides it 800 units out of the harbor in 10 seconds before changing to the map muj_20.
  */
 EVT_BEGIN(gor_muj_ship_start)
-#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_c_hikinami"), MAP_OBJ_TEV_CALLBACK(1))
@@ -5922,19 +5651,7 @@ static EVT_BEGIN(mobj_box00)
 EVT_END()
 
 static EVT_BEGIN(epilogue_npc_entry)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_delete, STRING("モニー"))
-    CALL(evt_npc_delete, STRING("ピートン"))
-    CALL(evt_npc_delete, STRING("マルコ"))
-    CALL(evt_npc_delete, STRING("水夫Ｃ"))
-    CALL(evt_npc_delete, STRING("水夫Ｄ"))
-    CALL(evt_npc_delete, STRING("めがね水夫"))
-    CALL(evt_npc_delete, STRING("水夫ボム兵Ｃ"))
-    CALL(evt_npc_delete, STRING("コルテス"))
-    CALL(evt_npc_delete, STRING("ババ"))
-#else
     CALL(npc_all_delete)
-#endif
     // Remove the regular harbor NPCs so only the epilogue cast remains.
     // Peach and Toadsworth wait at the right of the pier.
     CALL(evt_npc_entry, STRING("ピーチ姫"), STRING("c_peach"))
@@ -6189,17 +5906,10 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_move_position, STRING("プニオ"), 65, 205, 0, 40, 0)
     WAIT_WHILE(GF(0))
     WAIT_MS(200)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_8"), STRING("P_T_14"))
-    CALL(evt_msg_print, 0, STRING("ep_20"), 0, STRING("ピーチ姫"))
-    CALL(evt_npc_set_anim, STRING("ピーチ姫"), STRING("P_S_7"))
-    CALL(evt_item_delete, STRING("puniko_kino"))
-#else
     CALL(evt_npc_set_anim, STRING("ピーチ姫"), STRING("P_S_7"))
     CALL(evt_item_delete, STRING("puniko_kino"))
     CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_7"), STRING("P_T_13"))
     CALL(evt_msg_print, 0, STRING("ep_20"), 0, STRING("ピーチ姫"))
-#endif
     // Everyone turns to Peach as she thanks the party.
     WAIT_MS(500)
     CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), NPC_FLAG_INSTANT_TURN)
@@ -6722,23 +6432,7 @@ EVT_BEGIN(return_gorotsuki_town)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    BEGIN_INLINE_EVENT
-        WAIT_MS(1000)
-        SET_FLOAT_VALUE(LW(0), FLOAT(1.0f))
-        LOOP(14)
-            WAIT_MS(200)
-#endif
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_map_set_playrate, STRING("hiki_nami"), LW(0))
-            ADD_FLOAT(LW(0), FLOAT(0.2f))
-#else
     CALL(evt_map_set_playrate, STRING("hiki_nami"), FLOAT(0.25f))
-#endif
-#if VERSION <= VERSION_DEMO_US
-        END_LOOP
-    END_INLINE_EVENT
-#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1500)
@@ -6766,12 +6460,8 @@ EVT_BEGIN(return_gorotsuki_town)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("mac_8_02"), 0, STRING("party"))
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG9_02_RETURN_TO_ROGUEPORT)
-#else
     SET_VALUE(GSW_STORY_PROGRESS, STG9_02_RETURN_TO_ROGUEPORT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)
@@ -6806,15 +6496,9 @@ EVT_BEGIN(gor_00_init_evt)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
             ELSE
             CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-#if VERSION <= VERSION_DEMO_US
         END_IF
         CALL(evt_snd_bgm_scope, 0, 1)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
-#else
-        END_IF
-        CALL(evt_snd_bgm_scope, 0, 1)
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
-#endif
         CASE_BETWEEN(STG0_04_GOOMBELLA_ASSAULTED, STG0_06_1000_X_NAUTS_AFTER)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -6958,9 +6642,6 @@ EVT_BEGIN(gor_00_init_evt)
             SPAWN_EVENT(PTR(epilogue_evt))
         END_IF
         CASE_EQUAL(STG5_58_FAIR_WINDS)
-#if VERSION <= VERSION_DEMO_US
-        CALL_CHILD(gor_muj_ship_init)
-#endif
         SPAWN_EVENT(PTR(gorotsuki_kikan))
         CASE_EQUAL(STG9_01_END_CREDITS)
         CALL_CHILD(PTR(return_gorotsuki_town_init))

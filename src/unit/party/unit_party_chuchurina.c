@@ -264,11 +264,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
-#if VERSION <= VERSION_DEMO_US
-    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
-#else
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
-#endif
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -311,11 +307,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
-#if VERSION <= VERSION_DEMO_US
-    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
-#else
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
-#endif
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -815,11 +807,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     END_IF
     // If the enemy would counter this slap, she straightens up, the slap lands and the script ends here.
     LABEL(21)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
-#else
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), LW(12), 256, LW(0))
-#endif
     SWITCH(LW(0))
         CASE_OR_EQUAL(7)
         CASE_OR_EQUAL(8)
@@ -831,7 +819,6 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         CASE_OR_EQUAL(14)
         CASE_OR_EQUAL(15)
         CASE_OR_EQUAL(16)
-#if VERSION <= VERSION_DEMO_US
         CASE_OR_EQUAL(17)
         IF_INT_EQUAL(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackLeft))
             SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackLeftLast))
@@ -839,15 +826,6 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
             SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackRightLast))
         END_IF
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-#else
-        CASE_OR_EQUAL(17)
-        IF_INT_EQUAL(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackLeft))
-            SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackLeftLast))
-        ELSE
-            SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackRightLast))
-        END_IF
-        BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-#endif
             SET_VALUE(LW(7), LW(13))
             CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
             // BUG: this IF never gets an END_IF (END_SIBLING_EVENT comes first); the rest of the script is indented one level deeper because of it
@@ -1157,11 +1135,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(btlevtcmd_AcSetFlag, AC_REPEATEDLY_LV_FLAG_NO_FULL_BONUS | AC_REPEATEDLY_LV_FLAG_INSTANT_GAUGE_DISP | AC_REPEATEDLY_LV_FLAG_HOLD_OVERHEAT)
     END_SWITCH
     CALL(btlevtcmd_AcSetParamAll, 1, 240, 178, LW(0), LW(1), 100, 1, EVT_NULLPTR)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_AcSetGaugeParam, 100, 100, 100, 100)
-#else
     CALL(btlevtcmd_AcSetGaugeParam, 34, 68, 100, 100)
-#endif
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
     // Camera pulls back over her and the gauge command runs.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
@@ -1532,15 +1506,8 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, EASING_CUBIC_IN, 0, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
         CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 0, 0, 0, 0)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_D_3"))
-        CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-        WAIT_MS(300)
-#else
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
         CALL(evt_audience_acrobat_notry)
-#endif
         CALL(evt_audience_ap_recovery)
         CALL(btlevtcmd_InviteApInfoReport)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -1920,10 +1887,6 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     CALL(btlevtcmd_StartAC, 1)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 20)
-#else
         CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(7))
         MULTIPLY_FLOAT(LW(6), 12)
@@ -1931,7 +1894,6 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(7))
-#endif
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 235, MOVE_SOUND_FROM_TABLE, 0)
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -1962,23 +1924,6 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_K_1"))
-#if VERSION <= VERSION_DEMO_US
-    WAIT_FRAMES(6)
-    IF_INT_GREATER_OR_EQUAL(LW(5), 0)
-        CALL_CHILD(subsetevt_check_target_movable)
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_KISSED_CHUCHURINA)
-        END_IF
-    END_IF
-    CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
-    MULTIPLY_FLOAT(LW(6), 16)
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 25)
-    ADD(LW(1), 40)
-    CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(6))
-    MULTIPLY(LW(6), -45)
-    CALL(evt_eff, STRING(""), STRING("kiss"), 0, LW(0), LW(1), LW(2), LW(6), 0, 0, 0, 0, 0, 0, 0)
-#else
     WAIT_FRAMES(6)
     IF_INT_GREATER_OR_EQUAL(LW(5), 0)
         CALL_CHILD(subsetevt_check_target_movable)
@@ -1996,7 +1941,6 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     CALL(btlevtcmd_GetFaceDirection, LW(3), LW(6))
     MULTIPLY(LW(6), 45)
     CALL(evt_eff, 0, STRING("kiss"), 0, LW(0), LW(1), LW(2), LW(6), 0, 0, 0, 0, 0, 0, 0)
-#endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_KISS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     // Hearts rise from the ally, and two seconds later it regains HP by the gauge level.
     WAIT_FRAMES(40)
@@ -2029,7 +1973,6 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_audience_ap_recovery)
-#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_InviteApInfoReport)
     CALL_CHILD(subsetevt_check_target_movable)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -2037,15 +1980,6 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
         CALL(btlevtcmd_StartWaitEvent, LW(3))
     END_IF
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
-#else
-    CALL(btlevtcmd_InviteApInfoReport)
-    CALL_CHILD(subsetevt_check_target_movable)
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_ResetFaceDirection, LW(3))
-        CALL(btlevtcmd_StartWaitEvent, LW(3))
-    END_IF
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
-#endif
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)

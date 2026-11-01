@@ -1,7 +1,6 @@
 // hei_13 (平原, Petal Meadows): field linking hei_00 and hei_01 with pipes.
 // Horsetail item, a Close Call block, bricks and a Happy Heart.
 
-#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -141,11 +140,7 @@ EVT_BEGIN(hei_13_init_evt)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_item_entry, STRING("i"), ITEM_HAPPY_HEART, 325, 200, -100, ITEM_ENTRY_STAY, GSWF(GSWF_HEI13_HAPPY_HEART_TAKEN), 0)
-#else
         CALL(evt_item_entry, STRING("i"), ITEM_HAPPY_HEART, 325, 200, -100, ITEM_TYPE_STILL, GSWF_HEI_13_HAPPY_HEART, 0)
-#endif
     END_IF
     CALL(evt_mobj_brick, STRING("10m"), 325, 60, -100, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF_HEI_13_TEN_COIN_BRICK)
     SET_VALUE(LW(0), PTR(ki_data))

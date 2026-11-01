@@ -720,15 +720,9 @@ void npcMain(void) {
     Vec dv;
     Vec dv2;
 
-#if VERSION <= VERSION_DEMO_US
     npcwork = gp->inBattle ? &work.battle : &work.field;
     marioGetPtr()->targetNpc = NULL;
     kpaSfx = "SFX_KUPPA_3RD_WATER_FALL1";
-#else
-    npcwork = gp->inBattle ? &work.battle : &work.field;
-    marioGetPtr()->targetNpc = NULL;
-    kpaSfx = "SFX_KUPPA_3RD_WATER_FALL1";
-#endif
 
     npcMainCount++;
 
@@ -1384,15 +1378,9 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     dist = PSVECDistance(&marioPos, &npc->position);
     if (dist > range) {
         return FALSE;
-#if VERSION <= VERSION_DEMO_US
-    }
-    mario->targetNpc = npc;
-    r2 = angleABf(mario->position.x, mario->position.z, npc->position.x, npc->position.z);
-#else
     }
     mario->targetNpc = npc;
     angle = angleABf(mario->position.x, mario->position.z, npc->position.x, npc->position.z);
-#endif
     if (__fabsf(compAngle(angle, mario->directionView)) < 40.0f) {
         dx = (range - dist) * -polySinf((6.2831855f * mario->directionView) / 360.0f);
         dz = (range - dist) * polyCosf((6.2831855f * mario->directionView) / 360.0f);
@@ -1411,11 +1399,7 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     mario->position.z += dz;
     // FAKE: the height goes through the spare dz; passing mario->wPlayerCollisionBox.y directly changes the object
     dz = mario->wPlayerCollisionBox.y;
-#if VERSION <= VERSION_DEMO_US
-    marioChkWallAround(&mario->position, 0.0f, 160.0f + r2, 20.0f, dz);
-#else
     marioChkWallAround(&mario->position, 0, 0.0f, 160.0f + angle, 20.0f, dz);
-#endif
     return TRUE;
 }
 #pragma opt_propagation reset
@@ -1841,19 +1825,11 @@ void fbatEncountCheck(void) {
         if (marioKeyOffChk() || marioCtrlOffChk()) {
             return;
         }
-#if VERSION <= VERSION_DEMO_US
     }
     if (itemPickUpFromFieldCheck()) {
         return;
     }
     data = gp->fbatData;
-#else
-    }
-    if (itemPickUpFromFieldCheck()) {
-        return;
-    }
-    data = gp->fbatData;
-#endif
     kind = (u32*)&data->hitKind;
     npc = fbatHitCheck(FBAT_CHECK_ENEMY | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_SPIN_HAMMER | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_TOUCH | FBAT_CHECK_CURRENT, kind);
     if (npc && (data->mode == 1)) {
@@ -2079,11 +2055,7 @@ void fbatEncountCheck(void) {
     data = gp->fbatData;
     if (data->mode == 1) {
         u32 *kind = (u32*)&data->hitKind;
-#if VERSION <= VERSION_DEMO_US
-        npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind); // no 0x200 check in the demo
-#else
         npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
-#endif
         if (npc && (data->mode == 1)) {
             u32 k = *kind;
             FieldBattleData *d = gp->fbatData;
@@ -2176,13 +2148,8 @@ void marioChgMoveMotion(void);
 // The do-while keeps the deleted arm from leaving branches behind.
 static inline void fbatRecoverItems(NpcEntry* npc) {
     NpcBattleInfo* b = &npc->battleInfo;
-#if VERSION <= VERSION_DEMO_US
-    s32 i;
-    s32 z;
-#else
     s32 z;
     s32 i;
-#endif
     i = 0;
     z = 0;
     if (i != 0) {
@@ -2224,15 +2191,9 @@ void fbatBattleMode(void) {
     s32 result;
     s32 mult;
     NpcEntry* cur;
-#if VERSION <= VERSION_DEMO_US
-    FieldBattleInfo* info;
-    s32 stolen; // block-local in the demo (fbatBattleMode case 4)
-    BOOL skip;
-#else
     FieldBattleInfo* info;
     s32 stolen;
     BOOL skip;
-#endif
     BOOL win;
     s32 res;
     PouchData* pouch;
@@ -2241,17 +2202,11 @@ void fbatBattleMode(void) {
     cur = data->target;
     pouch = pouchGetPtr();
     mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-    cur->rotation.y = 0.0f;
-    if ((u32)data->kind == FBAT_HIT_ENEMY_FIRST) {
-        marioChgPose("M_D_1");
-#else
     cur->rotation.y = 0.0f;
     // FAKE: dead int-guarded re-definition keeps mario a named web (COLOURING M)
     num = 0;
     if (num != 0) {
         mario = NULL;
-#endif
     }
     switch (data->subState) {
         case 0:
@@ -2271,11 +2226,7 @@ void fbatBattleMode(void) {
                 data->mode = 1;
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
-            data->target->interruptFlags = 0;
-#else
             data->target->interruptFlags &= NPC_INTERRUPT_KEPT;
-#endif
             evtStopID(data->target->regularEvtId);
             info = &data->info;
             if (!(cur->battleInfo.battleFlags & NPC_BATTLE_NO_BUMP_ATTACK)) {
@@ -2305,19 +2256,11 @@ void fbatBattleMode(void) {
                     gp->fbatData->firstStrike.enabled = TRUE;
                 }
                 marioFBattlePrepare();
-#if VERSION <= VERSION_DEMO_US
-                seqSetSeq(SEQ_BATTLE, NULL, NULL);
-                if ((u32)data->kind == FBAT_HIT_ENEMY_FIRST) {
-                    marioChgDamagePose();
-                }
-                data->subState = 1;
-#else
                 seqSetSeq(SEQ_BATTLE, NULL, NULL);
                 if ((u32)data->hitKind == FBAT_HIT_ENEMY_FIRST) {
                     marioChgDamagePose();
                 }
                 data->subState = 1;
-#endif
             } else {
                 if (win) {
                     BattleInformationSetResult(info, BATTLE_RESULT_WIN_FIELD);
@@ -2343,15 +2286,9 @@ void fbatBattleMode(void) {
                     data->merleeEvtId = evt->eventId;
                     BattleMajinaiDone();
                     marioKeyOff();
-#if VERSION <= VERSION_DEMO_US
-                    wp = npcGetWorkPtrInline();
-                    result = wp->total;
-                    for (num = 0, cur = wp->entries; num < result; num++, cur++) {
-#else
                     wp = npcGetWorkPtrInline();
                     num = wp->total;
                     for (result = 0, cur = wp->entries; result < num; result++, cur++) {
-#endif
                         if (cur && (cur->flags & NPC_FLAG_READY) && (cur->flags & NPC_FLAG_STOP_FOR_EVENT)) {
                             cur->statusFlags |= NPC_STATUS_STOPPED;
                             evtStopID(cur->regularEvtId);
@@ -2370,15 +2307,9 @@ void fbatBattleMode(void) {
                 marioFBattlePost();
                 data->merleeEvtId = 0;
                 data->subState = 4;
-#if VERSION <= VERSION_DEMO_US
-                wp = npcGetWorkPtrInline();
-                result = wp->total;
-                for (num = 0, cur = wp->entries; num < result; num++, cur++) {
-#else
                 wp = npcGetWorkPtrInline();
                 num = wp->total;
                 for (result = 0, cur = wp->entries; result < num; result++, cur++) {
-#endif
                     if (cur && (cur->flags & NPC_FLAG_READY) && (cur->flags & NPC_FLAG_STOP_FOR_EVENT) &&
                 (cur->statusFlags & NPC_STATUS_STOPPED)) {
                         cur->statusFlags &= ~NPC_STATUS_STOPPED;
@@ -2392,9 +2323,6 @@ void fbatBattleMode(void) {
             marioChgMoveMotion();
             if (!gp->inBattle) {
                 FieldBattleInfo* info4;
-#if VERSION <= VERSION_DEMO_US
-                s32 stolen;
-#endif
                 info4 = &data->info;
                 res = BattleInformationGetResult(info4);
                 // FAKE: the stolen check as a loop with break over a byte offset (int counter): MWCC unrolls it
@@ -2407,10 +2335,6 @@ void fbatBattleMode(void) {
                         if (*(ItemType*)((u8*)cur->battleInfo.stolenItems + k)) {
                             stolen = TRUE;
                             break;
-#if VERSION <= VERSION_DEMO_US
-                        }
-                    }
-#else
                         }
                     }
                 }
@@ -2424,7 +2348,6 @@ void fbatBattleMode(void) {
                                  (((s32)(AddrWord)info4 + 1) / res) + ((res + 2) / (s32)(AddrWord)info4) + (((s32)(AddrWord)info4 + 2) / res);
                         res = 0;
                     }
-#endif
                 }
                 data->mode = 1;
                 if (res == BATTLE_RESULT_WIN || res == BATTLE_RESULT_WIN_FIELD) {
@@ -2456,12 +2379,8 @@ void fbatBattleMode(void) {
                     if (cur->flags & NPC_FLAG_AUTO_MOVE_ANIM) {
                         cur->moveAnimState = 0;
                     }
-#if VERSION <= VERSION_DEMO_US
-                    cur->wFbatHitCheckRelated = 90;
-#else
                     cur->wFbatHitCheckRelated = 90;
                     cur->interruptFlags &= ~NPC_INTERRUPT_NO_FIND;
-#endif
                     cur->interruptFlags |= NPC_INTERRUPT_MOVE;
                     if (cur->flags & NPC_FLAG_TALK_POSE) {
                         animPoseSetAnim(cur->poseId, cur->currentAnim, 1);
@@ -2784,12 +2703,8 @@ void* fbatHitCheck(u32 flags, void* result) {
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
             if (!fbat_canHit(npc)) break;
             if (flags & FBAT_CHECK_CURRENT) {
-#if VERSION <= VERSION_DEMO_US
-                f32 r, angle;
-#else
                 f32 angle, r;
                 MarioWork* m;
-#endif
                 f32 c, s, x, y, z;
                 if (mario->currMotionId != MARIO_MOTION_HAMMER_2) break;
                 angle = marioGetAngleKaitenHammer();
@@ -2984,11 +2899,7 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
 
     evtGetPtrID(npc->regularEvtId);
     flags = npc->interruptFlags;
-#if VERSION <= VERSION_DEMO_US
-    if (flags) {
-#else
     if (flags & ~NPC_INTERRUPT_KEPT) {
-#endif
         evt = NULL;
         if ((flags & NPC_INTERRUPT_DEAD) && npc->deadEvent) {
             evt = evtEntry(npc->deadEvent, 0, EVENT_START_IMMEDIATE);
@@ -3003,13 +2914,7 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
             evt->wNpcEventType = NPC_EVENT_BLOW;
             evt->ownerNPC = npc;
         } else if ((flags & NPC_INTERRUPT_FIND) && npc->findEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
-#if VERSION <= VERSION_DEMO_US
-                   !(npc->flags & NPC_FLAG_NO_FIND)
-                   && !(flags & NPC_INTERRUPT_NO_FIND)
-        ) {
-#else
                    !(npc->flags & NPC_FLAG_NO_FIND) && !(flags & NPC_INTERRUPT_NO_FIND)) {
-#endif
             evt = evtEntry(npc->findEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = NPC_EVENT_FIND;
             evt->ownerNPC = npc;
@@ -3027,22 +2932,14 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
         if (evt) {
             evtDeleteID(npc->regularEvtId);
             npc->regularEvtId = evt->eventId;
-#if VERSION <= VERSION_DEMO_US
-            npc->interruptFlags = 0;
-#else
             npc->interruptFlags &= NPC_INTERRUPT_KEPT;
-#endif
             npc->statusFlags &= ~NPC_STATUS_NO_FIND_ONCE;
             npc->moveTicks = 0;
             npc->moveSpeed = 0.0f;
             return TRUE;
         }
     }
-#if VERSION <= VERSION_DEMO_US
-    npc->interruptFlags = 0;
-#else
     npc->interruptFlags &= NPC_INTERRUPT_KEPT;
-#endif
     npc->statusFlags &= ~NPC_STATUS_NO_FIND_ONCE;
     return FALSE;
 }
@@ -3402,17 +3299,10 @@ USER_FUNC(_majinai_effect) {
     EffectEntry* effect;
 
     if (isFirstCall) {
-#if VERSION <= VERSION_DEMO_US
-        event->userdatap[0] = effMajinaiEntry(0, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y + MAJINAI_EFFECT_OFS_Y, mario->position.z);
-        effect = event->userdatap[0];
-        ((EffMajinaiWork*)effect->userdata)->scale = 0.8f;
-        effSetName(event->userdatap[0], "mjef_coinup");
-#else
         event->userdatap[0] = effMajinaiEntry(0, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y + 16.0f, mario->position.z);
         effect = event->userdatap[0];
         ((EffMajinaiWork*)effect->userdata)->scale = 0.8f;
         effSetName(event->userdatap[0], "mjef_coinup");
-#endif
     }
     if (event->userdata[0] && effNameToPtr("mjef_coinup")) {
         return EVT_RETURN_BLOCK;
@@ -3680,7 +3570,6 @@ s32 npcCalcScore(NpcEntry* npc) {
 }
 
 BOOL npcCheckBlow(NpcEntry* npc) {
-#if VERSION <= VERSION_DEMO_US
     Vec pos;
 
     if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) {
@@ -3690,17 +3579,6 @@ BOOL npcCheckBlow(NpcEntry* npc) {
         return FALSE;
     }
     pos = npc->position;
-#else
-    Vec pos;
-
-    if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) {
-        return FALSE;
-    }
-    if (npc->flags & NPC_FLAG_NO_HIT) {
-        return FALSE;
-    }
-    pos = npc->position;
-#endif
     if (cloudGetBreathPower(pos, npc->width) > 0.0f) {
         return TRUE;
     }

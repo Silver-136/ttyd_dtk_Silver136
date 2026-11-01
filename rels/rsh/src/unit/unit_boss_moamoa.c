@@ -214,27 +214,6 @@ BattleUnitKind unit_boss_moamoa = {
     50, // runRate
     6, // pbSoftCap
     160, // width
-#if VERSION <= VERSION_DEMO_US
-    80,
-    0,
-    24,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    280.0f,
-    40.0f,
-    0.0f,
-    80.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    250.0f,
-    0.0f,
-#else
     80, // height
     {0, 24}, // hitOffset
     {0.0f, 0.0f, 0.0f}, // centerOffset
@@ -244,7 +223,6 @@ BattleUnitKind unit_boss_moamoa = {
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
     15.0f, // vivianOffsetX
     10.0f, // vivianOffsetZ
-#endif
     {80.0f, 0.0f, 0.0f}, // bintaHitOffset
     {10.0f, 80.0f, 20.0f}, // kissHitOffset
     {0.0f, 70.0f, 0.0f}, // cutBaseOffset

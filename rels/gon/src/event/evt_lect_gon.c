@@ -1,6 +1,5 @@
 // Hooktail Castle (gon) lecture script: the paper genie (peramajin) teaches the slit move (squeezing through narrow gaps), run when the Paper Curse is found in gon_06.
 
-#include "version.h"
 #include "icon_ids.h"
 #include "evt/evt_window.h"
 #include "eff/eff_fukidashi.h"
@@ -596,13 +595,8 @@ static USER_FUNC(lect_push_r_check) {
 static USER_FUNC(evt_nomal_cange) {
     MarioWork* mario = marioGetPtr();
 
-#if VERSION <= VERSION_DEMO_US
-    if (isFirstCall) {
-        marioRollCancel();
-#else
     if (isFirstCall) {
         marioRollTryCancel();
-#endif
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             motSlitCancel3();
         }
@@ -669,12 +663,7 @@ EVT_BEGIN(slit_majin_lecture)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     // The genie announces the paper curse and tells Mario to hold the R button.
     CALL(evt_msg_print, 0, STRING("stg1_gon_12_13"), 0, STRING("ペラ魔人"))
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_toge, 1, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("stg1_gon_12_14"), 0, STRING("ペラ魔人"))
-#else
     CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_14"))
-#endif
     // Practice loop: the prompt icon blinks while Mario tries to turn sideways.
     LOOP(0)
         LOOP(0)
@@ -734,13 +723,9 @@ EVT_BEGIN(slit_majin_lecture)
                     END_IF
                 END_IF
             END_LOOP
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_mario_key_onoff, 0)
-#else
             CALL(evt_msg_continue)
             // Control is returned to normal and the prompt is dismissed.
             CALL(evt_mario_key_onoff, 0)
-#endif
             CALL(evt_mario_key_onoff, 0)
             CALL(lect_status_on)
             CALL(evt_mario_trigflag_onoff, 0, MARIO_TRIG_FLAG_DISABLE_STICK)
@@ -768,29 +753,10 @@ EVT_BEGIN(slit_majin_lecture)
             IF_INT_EQUAL(LW(11), 1)
                 BREAK_LOOP
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_continue)
-                CALL(evt_msg_toge, 1, 0, 0, 0)
-#else
                 CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-#endif
                 CALL(evt_msg_print, 0, STRING("stg1_gon_12_15_1"), 0, STRING("ペラ魔人"))
             END_IF
         END_LOOP
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_15"))
-        CALL(evt_msg_toge, 1, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg1_gon_12_15"), 0, STRING("ペラ魔人"))
-        // The genie asks whether Mario understands the curse.
-        CALL(evt_msg_select, 0, STRING("stg1_gon_12_15_yn"))
-        CALL(evt_msg_continue)
-        // No: the genie scolds him and the lesson repeats.
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_msg_toge, 1, 0, 0, 0)
-            CALL(evt_msg_print, 0, STRING("stg1_gon_12_16"), 0, STRING("ペラ魔人"))
-            CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_16"))
-        ELSE
-#else
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg1_gon_12_15"), 0, STRING("ペラ魔人"))
         // The genie asks whether Mario understands the curse.
@@ -799,16 +765,10 @@ EVT_BEGIN(slit_majin_lecture)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_16"))
             ELSE
-#endif
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_toge, 1, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("stg1_gon_12_17"), 0, STRING("ペラ魔人"))
-#else
     CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_17"))
-#endif
     // The genie says farewell and disappears.
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_2"))
     WAIT_MS(200)

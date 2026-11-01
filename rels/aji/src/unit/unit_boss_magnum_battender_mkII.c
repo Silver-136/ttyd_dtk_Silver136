@@ -70,19 +70,11 @@ EffectEntry* eff_jet[2];
 s32 jetCount;
 static s32* list;
 EffectEntry* eff_suikomi;
-#if VERSION <= VERSION_DEMO_US
 s32 screamId;
 s32 scream_fade_timer;
 u8 scream_fade_start_vol;
 u8 scream_fade_vol;
 TargetWork* wp_target;
-#else
-s32 screamId;
-s32 scream_fade_timer;
-u8 scream_fade_start_vol;
-u8 scream_fade_vol;
-TargetWork* wp_target;
-#endif
 s32 targetSoundId;
 static EffectEntry* eff_charge;
 static ArmWork* work[2];
@@ -123,11 +115,7 @@ EvtWord aud_no_hit_event[16];
 static EvtWord init_event[92];
 static EvtWord waku_event[23];
 static EvtWord damage_event[111];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[216];
-#else
 static EvtWord dead_event[234];
-#endif
 static EvtWord entry_event[78];
 static EvtWord attack_event[320];
 EvtWord drill_attack_event[392];
@@ -168,27 +156,11 @@ BattleUnitKind unit_boss_magnum_battender_mkII = {
     50, // runRate
     6, // pbSoftCap
     120, // width
-#if VERSION <= VERSION_DEMO_US
-    160,
-    30,
-    100,
-    0.0f,
-    80.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    30.0f,
-    115.0f,
-    0.0f,
-#else
     160, // height
     {30, 100}, // hitOffset
     {0.0f, 80.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {30.0f, 115.0f, 0.0f}, // talkTogeBaseOffset
-#endif
     {60.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
     0.0f, // vivianOffsetX
@@ -257,13 +229,8 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_STOP, "MGN_2D_1"},
     {POSE_TYPE_FREEZE, "MGN_2D_1"},
     {POSE_TYPE_CONFUSE, "MGN_X_1"},
-#if VERSION <= VERSION_DEMO_US
-    {4, "MGN_S_1"},
-    {3, "MGN_S_1"},
-#else
     {POSE_TYPE_POISON, "MGN_X_1"},
     {POSE_TYPE_DIZZY, "MGN_X_1"},
-#endif
     {POSE_TYPE_NORMAL, "MGN_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "MGN_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MGN_Q_1"},
@@ -283,13 +250,8 @@ static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_STOP, "MGN_2D_2"},
     {POSE_TYPE_FREEZE, "MGN_2D_2"},
     {POSE_TYPE_CONFUSE, "MGN_X_2"},
-#if VERSION <= VERSION_DEMO_US
-    {4, "MGN_S_2"},
-    {3, "MGN_S_2"},
-#else
     {POSE_TYPE_POISON, "MGN_X_2"},
     {POSE_TYPE_DIZZY, "MGN_X_2"},
-#endif
     {POSE_TYPE_NORMAL, "MGN_S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "MGN_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MGN_Q_2"},
@@ -745,15 +707,6 @@ USER_FUNC(aud_suikomi) {
                 break;
             }
         }
-#if VERSION <= VERSION_DEMO_US
-    }
-    // The audience scream stops as soon as the last member is pulled in.
-    if (done < 20) {
-        return EVT_RETURN_BLOCK;
-    }
-    psndSFXOff(screamId);
-    return EVT_RETURN_DONE;
-#else
     }
     return done < 20 ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
@@ -771,7 +724,6 @@ USER_FUNC(aud_scream_fadeout) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
-#endif
 }
 
 /** Returns the position of the boss's pod, 10 units right of and 78 above the unit, for the audience cannon. */
@@ -1086,50 +1038,31 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     WAIT_MS(500)
     CALL(arm_check, 0, LW(0))
-#if VERSION <= VERSION_DEMO_US
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
             SET_VALUE(LW(10), LW(0))
-#else
-    IF_INT_NOT_EQUAL(LW(0), -1)
-        CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
-        IF_INT_EQUAL(LW(1), 0)
-            SET_VALUE(LW(10), LW(0))
-#endif
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
                 CALL(arm_end, 0)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
-    END_IF
-    CALL(arm_check, 1, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), -1)
-#else
         END_IF
     END_IF
     CALL(arm_check, 1, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
-#endif
             SET_VALUE(LW(10), LW(0))
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
                 CALL(arm_end, 1)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
-#if VERSION <= VERSION_DEMO_US
             END_INLINE_EVENT
         END_IF
     END_IF
-#else
-            END_INLINE_EVENT
-        END_IF
-    END_IF
-#endif
     SET_VALUE(LW(10), -2)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))
@@ -1695,19 +1628,11 @@ EVT_BEGIN(aud_attack_event)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_INHALE1"), EVT_NULLPTR, 0, LW(15))
     // It sucks 20 audience members into its pod.
-#if VERSION <= VERSION_DEMO_US
     CALL(aud_suikomi, UNIT_ID_SELF)
     BEGIN_SIBLING_EVENT
         CALL(aud_scream_fadeout)
     END_SIBLING_EVENT
     CALL(evt_snd_sfxoff, LW(15))
-#else
-    CALL(aud_suikomi, UNIT_ID_SELF)
-    BEGIN_SIBLING_EVENT
-        CALL(aud_scream_fadeout)
-    END_SIBLING_EVENT
-    CALL(evt_snd_sfxoff, LW(15))
-#endif
     // It sinks back down and the jets shut off.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -2149,11 +2074,7 @@ static BattleWeapon weapon_batten_rocket_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
-#if VERSION <= VERSION_DEMO_US
-    COUNTER_RESIST_ALL & ~(COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_PREEMPTIVE_SPIKY), // counterResistFlags
-#else
     COUNTER_RESIST_ALL, // counterResistFlags
-#endif
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

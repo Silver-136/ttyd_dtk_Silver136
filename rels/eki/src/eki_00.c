@@ -1,7 +1,6 @@
 // eki_00 (駅, Riverside Station): entrance room with a lift, bridge, paper-fold event and a Smorg (moamoa) cutscene
 // Close Call P item; doors to eki_01 and the platform (hom_00).
 
-#include "version.h"
 #include "driver/imgdrv.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -702,14 +701,6 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if ((*pose->mtx)[1][3] > mario->position.y + mario->wPlayerCollisionBox.y) {
         return 0;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (mario->wPlayerCollisionBox.x + 20.0f) / 2 && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & 0x20000) && !(mario->flags & 0x10000) && wp->bounceCount < 2) {
-        marioChgMot(5);
-        if (mario->currMotionId != MARIO_MOTION_ROLL && mario->currMotionId != MARIO_MOTION_YOSHI) {
-            marioChgMot(5);
-        }
-        wp->bounceCount++;
-#else
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (mario->wPlayerCollisionBox.x + 20.0f) / 2
         && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING)
         && wp->bounceCount < 2) {
@@ -717,7 +708,6 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
             marioChgMot(MARIO_MOTION_JUMP_SW);
         }
         wp->bounceCount++;
-#endif
         return 1;
     }
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
@@ -882,11 +872,7 @@ static void ext_moamoa_main(void) {
     for (i = 0; i < wp->count; i++, pose++, moa++) {
         wp->angle = angleABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
         wp->dist = distABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
-#if VERSION <= VERSION_DEMO_US
-        if ((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!hit)) && (!(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
-#else
         if ((((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!marioKeyOffChk())) && (!marioCtrlOffChk())) && (!hit)) && (!(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
-#endif
             ret = moamoa_hit_check(pose, moa);
             if (ret == 1) {
                 moa->flags |= MOAMOA_FLAG_HIT;
@@ -1326,17 +1312,12 @@ static void ext_moamoa_main(void) {
         moa->lastZ = (*pose->mtx)[2][3];
     }
 
-#if VERSION <= VERSION_DEMO_US
-    moamoa_pose_main();
-    {
-#else
     moamoa_pose_main();
     if (wp->flags & MOAMOA_WORK_FLAG_PARTY_IN_USE) {
         mario->floorMove.x = 0.0f;
         mario->floorMove.y = 0.0f;
         mario->floorMove.z = 0.0f;
     } else {
-#endif
         pv = (Vec){mario->floorMove.x, mario->floorMove.y, mario->floorMove.z};
         if (PSVECMag(&pv) > 2.0f) {
             PSVECNormalize(&pv, &pv);
@@ -1438,20 +1419,10 @@ static BeroEntry bero_data[] = {
 };
 
 EVT_BEGIN(evt_bridge)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_normalize)
-#else
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(500)
-#endif
     SET_VALUE(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_bero_mapchange, STRING("hom_00"), STRING("n_bero_2"))
-    CALL(evt_mario_key_onoff, 1)
-#else
-    CALL(evt_bero_mapchange, STRING("hom_00"), STRING("n_bero_2"))
-#endif
     RETURN
 EVT_END()
 
@@ -1513,11 +1484,7 @@ static EVT_BEGIN(evt_origami)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("kaidann_A"), 1, 1)
     CALL(evt_map_checkanim, STRING("anm_ori"), LW(0), LW(1))
-#if VERSION <= VERSION_DEMO_US
-    WAIT_MS(LW(1))
-#else
     WAIT_MS(1600)
-#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1000)
     CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
@@ -1813,25 +1780,6 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_hitobj_onoff, STRING("a_eki_00"), 1, 0)
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_41_ORIGAMI_STAIRS)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
-    ELSE
-        CALL(evt_mapobj_rotate, 1, STRING("s_lever"), 0, 0, -80)
-    END_IF
-    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_40_SWATTING_SMORGS)
-        CALL(evt_del_case_evt, 0, GW(10))
-    END_IF
-    SWITCH(GSW(GSW_STORY_PROGRESS))
-        CASE_LESS(STG6_40_SWATTING_SMORGS)
-        CASE_EQUAL(STG6_40_SWATTING_SMORGS)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
-        CASE_DEFAULT
-        CALL(evt_mapobj_rotate, 1, STRING("s_lever"), 0, 0, -80)
-    END_SWITCH
-    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_41_ORIGAMI_STAIRS)
-#else
     CALL(evt_hitobj_onoff, STRING("a_eki_00"), 1, 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_40_SWATTING_SMORGS)
@@ -1841,7 +1789,6 @@ EVT_BEGIN(evt_elv_down)
         CALL(evt_mapobj_rotate, 1, STRING("s_lever"), 0, 0, -80)
     END_SWITCH
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
-#endif
         CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
     END_IF
     CALL(evt_item_delete_check, STRING("item"), LW(0))
@@ -2055,11 +2002,7 @@ static s32 item_tbl[] = {
 EVT_BEGIN(evt_elv)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_38_RIDE_THE_ELEVATOR)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_win_item_select, PTR(item_tbl), LW(1))
-#else
         CALL(evt_win_item_select, 0, PTR(item_tbl), LW(1), 0)
-#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN

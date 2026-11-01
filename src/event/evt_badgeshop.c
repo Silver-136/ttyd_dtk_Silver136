@@ -2,10 +2,6 @@
  * Part of the backend for the shops (badge shop functions for event scripts).
  */
 #include "version.h"
-#if VERSION <= VERSION_DEMO_US
-#define DTRIGF_WITH_INITIAL_VALUES
-#include <dtrigf.h>
-#endif
 #include "evt/evt_badgeshop.h"
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
@@ -106,17 +102,6 @@ s32 badge_bteresa_table_card_gold[] = { // Pianta Parlor Gold Card
 /** Extra Pianta Parlor prizes unlocked by the Platinum Card. */
 s32 badge_bteresa_table_card_platinum[] = { //Pianta Parlor Platinum Card
     ITEM_QUAKE_HAMMER, ITEM_MONEY_MONEY, ITEM_ULTRA_SHROOM, ITEM_JAMMIN_JELLY, ITEM_NULL
-#if VERSION <= VERSION_DEMO_US
-};
-
-// demo only: not referenced in the demo dol (four rows of four decreasing values, then 0)
-s32 badge_bteresa_table_nedan[] = {
-    400, 200, 100, 50,
-    800, 600, 400, 200,
-    1600, 900, 500, 300,
-    9999, 999, 599, 399,
-    0
-#endif
 };
 
 //.bss
@@ -621,34 +606,15 @@ USER_FUNC(evt_badgeShop_bottakuru_dec) {
 }
 
 #pragma opt_common_subs reset
-#if VERSION <= VERSION_DEMO_US
-static inline s32 badgeShop_ThrowCount(s32 itemId) {
-    int i;
-    s32 stockedCount;
-
-    for (stockedCount = 0, i = 0; i < bdsw->bargainNum; i++) {
-        if (itemId == bdsw->bargainBadges[i + bdsw->bargainNum]) {
-            stockedCount++;
-        }
-    }
-    return stockedCount;
-}
-#endif
 USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
     EvtWord* args = event->args;
     s16 badge;
     s32 count;
     int i;
 
-#if VERSION <= VERSION_DEMO_US
-    for (stockedCount = 0, i = 0; i < 99; i++) {
-        // the demo also subtracts badgeShop_ThrowCount, which is always 0 (the badgeShop_ThrowCheck bug)
-        if ((badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN))) - badgeShop_ThrowCount(i + BADGE_MIN) > 0) {
-#else
     for (count = 0, i = 0; i < BADGE_COUNT; i++) {
         badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN));
         if (badge > 0) {
-#endif
             count++;
         }
     }
@@ -688,9 +654,6 @@ USER_FUNC(evt_badgeShop_bottakuru_get_kind_cnt) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
-USER_FUNC(evt_badgeShop_bteresa_get_kind_cnt) {
-#else
 USER_FUNC(U_evt_badgeShop_get_special_zaiko) {
     EvtWord* args = event->args;
     s16 badge;
@@ -709,7 +672,6 @@ USER_FUNC(U_evt_badgeShop_get_special_zaiko) {
 
 /** Counts how many different prizes the Pianta Parlor has in stock and writes it to args[0]. */
 USER_FUNC(evt_badgeShop_bteresa_get_kind_cnt) {
-#endif
     EvtWord* args = event->args;
     s16 badge;
     s32 count;
@@ -732,12 +694,6 @@ USER_FUNC(evt_badgeShop_bteresa_get_kind_cnt) {
  * which never hold a badge id, so it always returns 0.
  * Guess: it was meant to count copies already set aside.
  */
-#if VERSION <= VERSION_DEMO_US
-USER_FUNC(evt_badgeShop_getBargainKind) {
-    evtSetValue(event, event->args[0], !(((s32*)event->lwData[0])[6] < bdsw->bargainNum));
-    return EVT_RETURN_DONE;
-}
-#endif
 s32 badgeShop_ThrowCheck(s32 itemId) {
     int i;
     s32 count;

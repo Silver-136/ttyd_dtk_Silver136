@@ -282,12 +282,7 @@ USER_FUNC(btlevtcmd_SetEventCeilFall);
 #if VERSION == VERSION_EU
 USER_FUNC(btlevtcmd_SetCounterAcCallBack);
 #endif
-#if VERSION <= VERSION_DEMO_US
-USER_FUNC(btlevtcmd_SetCounterAcCallBack);
 USER_FUNC(btlevtcmd_SetFallAccel);
-#else
-USER_FUNC(btlevtcmd_SetFallAccel);
-#endif
 USER_FUNC(btlevtcmd_SetJumpSpeed);
 USER_FUNC(btlevtcmd_SetMoveSoundDataWork);
 USER_FUNC(btlevtcmd_SetMoveSpeed);

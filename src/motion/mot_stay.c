@@ -117,7 +117,6 @@ void mot_stay(void) {
         MARIO_STAY(mario).deepSleepTimer = 0;
         mario->idleKeyTimer = 0;
         marioSoundInit();
-#if VERSION <= VERSION_DEMO_US
         marioResetCamFollowRate();
         if (mario->flags & MARIO_FLAG_IS_8_BIT) {
             marioChgPose("M_S_1");
@@ -127,17 +126,6 @@ void mot_stay(void) {
             mario->flags &= ~MARIO_FLAG_IS_PUSHING;
         } else {
             if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-#else
-        marioResetCamFollowRate();
-        if (mario->flags & MARIO_FLAG_IS_8_BIT) {
-            marioChgPose("M_S_1");
-            if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-                mario->baseSpeed = 0.0f;
-            }
-            mario->flags &= ~MARIO_FLAG_IS_PUSHING;
-        } else {
-            if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-#endif
                 motSlitContinue();
             } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
                 marioChgMot2(MARIO_MOTION_SLIT);
@@ -156,15 +144,9 @@ void mot_stay(void) {
                 }
             } else {
                 marioChgPoseTime("M_U_2", 10);
-#if VERSION <= VERSION_DEMO_US
             }
         }
         if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-#else
-            }
-        }
-        if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-#endif
             mario->baseSpeed = 0.0f;
         }
         mario->flags &= ~MARIO_FLAG_IS_PUSHING;
@@ -371,15 +353,10 @@ void marioChgMotAuto(void) {
 
 /** Cleanup when the stay motion ends: stops the idle sound and the charge-up voice. */
 void mot_stay_post(void) {
-#if VERSION <= VERSION_DEMO_US
-    MarioWork* mario;
-    mario = marioGetPtr();
-#else
     MarioWork* mario;
     MarioMotion id = marioGetPtr()->currMotionId;
     if (id != MARIO_MOTION_HAMMER_2 && id != MARIO_MOTION_JABARA) {
         mario = marioGetPtr();
-#endif
         if (mario->soundId[0] != (u32)-1) {
             psndSFXOff(mario->soundId[0]);
             mario->soundId[0] = -1;

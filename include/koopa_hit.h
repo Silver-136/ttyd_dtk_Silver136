@@ -2,14 +2,9 @@
 
 #pragma once
 
-#include "version.h"
 #include "driver/hitdrv.h"
 
 HitEntry* kpaChkHitobjRide(void);
-#if VERSION <= VERSION_DEMO_US
-long kpaClearHitobjRide(void);
-HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz);
-#else
 long kpaClearHitobjRide(void);
 // kpaEnemyHitChk results
 typedef enum KpaEnemyHit {
@@ -19,7 +14,6 @@ typedef enum KpaEnemyHit {
     KPA_ENEMY_HIT_STAR = 3,    // touched while Bowser is invincible
     KPA_ENEMY_HIT_BOWSER = 4,  // it hurts Bowser
 } KpaEnemyHit;
-#endif
 
 s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w);
 HitEntry* kpaFlameHitCheck(f32 x, f32 y, f32 z, f32 r);

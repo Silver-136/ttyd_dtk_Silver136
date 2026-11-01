@@ -250,22 +250,14 @@ EVT_BEGIN(evt_kou2)
     IF_INT_EQUAL(GSWF_AJI_09_DOT_MARIO_SEEN, 0)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("tenjo"))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_mario_normalize)
-#else
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mario_normalize)
-#endif
             CALL(dot_mario)
             WAIT_MS(1000)
             SET_VALUE(GSWF_AJI_09_DOT_MARIO_SEEN, 1)
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_snd_envoff, PSND_FADEOUT)
-#else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_mario_key_onoff, 1)
-#endif
         END_IF
     END_IF
     IF_INT_EQUAL(GF(1), 0)
@@ -866,11 +858,6 @@ EVT_BEGIN(aji_09_init_evt)
             CALL(evt_cam_letter_box_disable, 0)
         END_INLINE_EVENT
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STORY_STG6_53_THE_REAL_GARNET_STAR)
-        CALL(evt_item_entry, STRING("item_00"), ITEM_REPEL_CAPE, -180, 12, -135, ITEM_ENTRY_FIXED, GSWF(GSWF_AJI09_REPEL_CAPE_TAKEN), 0)
-    END_IF
-#endif
     SPAWN_EVENT(PTR(evt_emergency))
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -882,15 +869,9 @@ EVT_BEGIN(aji_09_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_memo"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     RETURN
-#else
-    END_IF
-    CALL(evt_snd_set_rev_mode, 1)
-    RETURN
-#endif
 EVT_END()
 
 
