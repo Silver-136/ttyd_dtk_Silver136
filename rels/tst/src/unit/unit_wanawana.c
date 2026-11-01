@@ -126,7 +126,7 @@ static PoseTableEntry pose_table[] = {
     {28, "S_1"},
     {31, "S_1"},
     {39, "S_1"},
-    {BTL_POSE_STAY_DEFAULT, "S_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 /** Data table of the trap unit `wanawana`: it has no special reaction scripts. */

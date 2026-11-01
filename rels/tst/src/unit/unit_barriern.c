@@ -323,8 +323,8 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_WALK, "W_1"},
     {POSE_TYPE_DANGER, "X_1"},
     {POSE_TYPE_PERIL, "X_1"},
-    {BTL_POSE_TALK, "T_1"},
-    {BTL_POSE_STAY_DEFAULT, "S_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 /**

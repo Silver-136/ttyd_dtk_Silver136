@@ -158,14 +158,14 @@ PoseTableEntry pose_table_yoshi_stay[] = {
     {POSE_TYPE_DANGER, "PYS_D_2"},
     {POSE_TYPE_ESCAPE_STUMBLE, "PYS_D_4"},
     {POSE_TYPE_ESCAPE_RECOVER, "PYS_D_2"},
-    {BTL_POSE_TALK, "PYS_T_1"},
+    {POSE_TYPE_TALK, "PYS_T_1"},
     {POSE_TYPE_ITEM, "PYS_I_1"},
     {POSE_TYPE_COMMAND, "PYS_C_1"},
     {POSE_TYPE_APPEAL, "PYS_O_1"},
     {POSE_TYPE_ZERO_GRAVITY, "PYS_F_1"},
     {49, "PYS_F_1"},
     {POSE_TYPE_DEFEND, "PYS_G_1"},
-    {BTL_POSE_STAY_DEFAULT, "PYS_S_1"},
+    {POSE_TYPE_ACTION, "PYS_S_1"},
 };
 
 /** Egg poses of the first colour (green, CHU_C_1): the same frame for every state. */
@@ -173,7 +173,7 @@ PoseTableEntry pose_table_egg_g[] = {
     {BTL_POSE_NORMAL, "CHU_C_1"},
     {31, "CHU_C_1"},
     {BTL_POSE_DAMAGE, "CHU_C_1"},
-    {BTL_POSE_STAY_DEFAULT, "CHU_C_1"},
+    {POSE_TYPE_ACTION, "CHU_C_1"},
 };
 
 /** Egg poses of the second colour (yellow, CHU_C_2): the same frame for every state. */
@@ -181,7 +181,7 @@ PoseTableEntry pose_table_egg_y[] = {
     {BTL_POSE_NORMAL, "CHU_C_2"},
     {31, "CHU_C_2"},
     {BTL_POSE_DAMAGE, "CHU_C_2"},
-    {BTL_POSE_STAY_DEFAULT, "CHU_C_2"},
+    {POSE_TYPE_ACTION, "CHU_C_2"},
 };
 
 /** Egg poses of the third colour (pink, CHU_C_3): the same frame for every state. */
@@ -189,7 +189,7 @@ PoseTableEntry pose_table_egg_p[] = {
     {BTL_POSE_NORMAL, "CHU_C_3"},
     {31, "CHU_C_3"},
     {BTL_POSE_DAMAGE, "CHU_C_3"},
-    {BTL_POSE_STAY_DEFAULT, "CHU_C_3"},
+    {POSE_TYPE_ACTION, "CHU_C_3"},
 };
 
 /**
@@ -1550,7 +1550,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
         CASE_DEFAULT
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, LW(12), PTR(pose_table_egg_g))
     END_SWITCH
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(12), BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(12), POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 1, 4)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 2, PTR(&partyWeapon_YoshiEggAttack_Minimini))
     LABEL(20)
@@ -1698,7 +1698,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 7, LW(15))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     WAIT_FRAMES(10)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     LABEL(90)
     IF_INT_NOT_EQUAL(LW(12), LW(13))
         ADD(LW(12), 1)
@@ -2711,7 +2711,7 @@ static EVT_BEGIN(attack_audience_event)
         CASE_DEFAULT
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, LW(12), PTR(pose_table_egg_g))
     END_SWITCH
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(12), BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(12), POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, LW(12), FLOAT(7.5f))
     CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, LW(12), FLOAT(0.099609375f))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(12), PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)

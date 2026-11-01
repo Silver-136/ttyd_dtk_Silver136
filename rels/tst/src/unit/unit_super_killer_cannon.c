@@ -199,8 +199,8 @@ static PoseTableEntry pose_table[] = {
     {56, "KTA_X_1"},
     {57, "KTA_X_1"},
     {50, "KTA_A_1"},
-    {BTL_POSE_TALK, "KTA_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "KTA_S_1"},
+    {POSE_TYPE_TALK, "KTA_T_1"},
+    {POSE_TYPE_ACTION, "KTA_S_1"},
 };
 
 /** Data table of the B. Bill Blaster: it has no special reaction scripts. */

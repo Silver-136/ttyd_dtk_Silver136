@@ -107,8 +107,8 @@ static PoseTableEntry pose_table[] = {
     {BTL_POSE_DAMAGE, "EM_D_1"},
     {POSE_TYPE_RUN, "EM_R_1"},
     {POSE_TYPE_WALK, "EM_W_1"},
-    {BTL_POSE_TALK, "EM_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "EM_S_1"},
+    {POSE_TYPE_TALK, "EM_T_1"},
+    {POSE_TYPE_ACTION, "EM_S_1"},
 };
 
 /** Data table of the `marco` placeholder unit: no events. */

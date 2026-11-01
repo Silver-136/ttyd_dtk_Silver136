@@ -106,7 +106,7 @@ static PoseTableEntry pose_table[] = {
     {31, "CAT_S_1"},
     {BTL_POSE_DAMAGE, "CAT_K_1"},
     {POSE_TYPE_WALK, "CAT_W_1"},
-    {BTL_POSE_STAY_DEFAULT, "CAT_S_1"},
+    {POSE_TYPE_ACTION, "CAT_S_1"},
 };
 
 /** Pose table of the coin the UFO carries (part 2): every pose shows BRT_O_1. */
@@ -114,7 +114,7 @@ static PoseTableEntry pose_table_2[] = {
     {BTL_POSE_NORMAL, "BRT_O_1"},
     {31, "BRT_O_1"},
     {BTL_POSE_DAMAGE, "BRT_O_1"},
-    {BTL_POSE_STAY_DEFAULT, "BRT_O_1"},
+    {POSE_TYPE_ACTION, "BRT_O_1"},
 };
 
 /** Data table of the test UFO unit: it has no special reaction scripts. */

@@ -181,8 +181,8 @@ static PoseTableEntry pose_table[] = {
     {42, "SIN_R_1"},
     {56, "SIN_I_1"},
     {57, "SIN_I_1"},
-    {BTL_POSE_TALK, "SIN_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "SIN_S_1"},
+    {POSE_TYPE_TALK, "SIN_T_1"},
+    {POSE_TYPE_ACTION, "SIN_S_1"},
 };
 
 /**
@@ -203,8 +203,8 @@ static PoseTableEntry pose_table_turn[] = {
     {39, "SIN_D_2"},
     {56, "SIN_K_2"},
     {57, "SIN_K_2"},
-    {BTL_POSE_TALK, "SIN_D_2"},
-    {BTL_POSE_STAY_DEFAULT, "SIN_D_2"},
+    {POSE_TYPE_TALK, "SIN_D_2"},
+    {POSE_TYPE_ACTION, "SIN_D_2"},
 };
 
 /**

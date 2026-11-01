@@ -1,5 +1,4 @@
 // Battle unit Fuzzy Horde (`chorobon_gundan`): tst.rel's copy of rels/hei/src/unit/unit_chorobon_gundan.c.
-#include "unit/chorogun_tst.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -197,7 +196,7 @@ static PoseTableEntry pose_table[] = {
     {50, "CBN_A_1"},
     {POSE_TYPE_RUN, "CBN_R_1"},
     {POSE_TYPE_WALK, "CBN_W_1"},
-    {BTL_POSE_STAY_DEFAULT, "CBN_S_1"},
+    {POSE_TYPE_ACTION, "CBN_S_1"},
 };
 
 /**
@@ -235,7 +234,7 @@ BattleWeapon weapon_chorobon_gundan_attack = {
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-    TARGET_PROP_NO_FLOATING | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    TARGET_PROP_NO_FLOATING2 | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F

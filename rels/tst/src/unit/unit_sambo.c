@@ -399,8 +399,8 @@ static PoseTableEntry pose_table_body4[] = {
     {POSE_TYPE_WALK, "SNB_W_1"},
     {POSE_TYPE_DANGER, "SNB_X_1"},
     {POSE_TYPE_PERIL, "SNB_X_1"},
-    {BTL_POSE_TALK, "SNB_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "SNB_S_1"},
+    {POSE_TYPE_TALK, "SNB_T_1"},
+    {POSE_TYPE_ACTION, "SNB_S_1"},
 };
 
 /** Pose table of the Pokey once it is down to three segments (part 2). */
@@ -423,8 +423,8 @@ static PoseTableEntry pose_table_body3[] = {
     {POSE_TYPE_WALK, "SNB_W_2"},
     {POSE_TYPE_DANGER, "SNB_X_2"},
     {POSE_TYPE_PERIL, "SNB_X_2"},
-    {BTL_POSE_TALK, "SNB_T_2"},
-    {BTL_POSE_STAY_DEFAULT, "SNB_S_2"},
+    {POSE_TYPE_TALK, "SNB_T_2"},
+    {POSE_TYPE_ACTION, "SNB_S_2"},
 };
 
 /** Pose table of the Pokey once it is down to two segments (part 3). */
@@ -447,8 +447,8 @@ static PoseTableEntry pose_table_body2[] = {
     {POSE_TYPE_WALK, "SNB_W_3"},
     {POSE_TYPE_DANGER, "SNB_X_3"},
     {POSE_TYPE_PERIL, "SNB_X_3"},
-    {BTL_POSE_TALK, "SNB_T_3"},
-    {BTL_POSE_STAY_DEFAULT, "SNB_S_3"},
+    {POSE_TYPE_TALK, "SNB_T_3"},
+    {POSE_TYPE_ACTION, "SNB_S_3"},
 };
 
 /** Pose table of the Pokey once only its head is left (part 4). */
@@ -471,15 +471,15 @@ static PoseTableEntry pose_table_body1[] = {
     {POSE_TYPE_WALK, "SNB_W_4"},
     {POSE_TYPE_DANGER, "SNB_X_4"},
     {POSE_TYPE_PERIL, "SNB_X_4"},
-    {BTL_POSE_TALK, "SNB_T_4"},
-    {BTL_POSE_STAY_DEFAULT, "SNB_S_4"},
+    {POSE_TYPE_TALK, "SNB_T_4"},
+    {POSE_TYPE_ACTION, "SNB_S_4"},
 };
 
 /** Pose table of the loose segment the Pokey throws or sheds (part 5). */
 static PoseTableEntry pose_table_parts[] = {
     {BTL_POSE_NORMAL, "SNB_B_1"},
     {BTL_POSE_DAMAGE, "SNB_B_1"},
-    {BTL_POSE_STAY_DEFAULT, "SNB_B_1"},
+    {POSE_TYPE_ACTION, "SNB_B_1"},
 };
 
 /**
@@ -599,7 +599,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, 4)
     CALL_CHILD(_body_param_set)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CALL_DEPTH, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 5, BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 5, POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_MOVE1"), STRING("SFX_ENM_SAMBO_MOVE1"), 0, 6, 6)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_MOVE1"), STRING("SFX_ENM_SAMBO_MOVE1"), 0, 6, 6)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

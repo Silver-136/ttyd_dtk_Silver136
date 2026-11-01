@@ -195,8 +195,8 @@ static PoseTableEntry pose_table_patakuri[] = {
     {POSE_TYPE_WALK, "PTK_W_1"},
     {POSE_TYPE_DANGER, "PTK_I_1"},
     {POSE_TYPE_PERIL, "PTK_I_1"},
-    {BTL_POSE_TALK, "PTK_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "PTK_S_1"},
+    {POSE_TYPE_TALK, "PTK_T_1"},
+    {POSE_TYPE_ACTION, "PTK_S_1"},
 };
 
 /**
@@ -364,7 +364,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_FaceDirectionSub, LW(3), LW(0), 50)
     SUBTRACT(LW(1), 10)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -20, 1, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY_DEFAULT)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
     GOTO(98)
     // A hit: it crashes into the target, the camera shakes and the damage is dealt.
@@ -427,8 +427,8 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_WALK, "KUR_W_1"},
     {POSE_TYPE_DANGER, "KUR_I_1"},
     {POSE_TYPE_PERIL, "KUR_I_1"},
-    {BTL_POSE_TALK, "KUR_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "KUR_S_1"},
+    {POSE_TYPE_TALK, "KUR_T_1"},
+    {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
 /**
@@ -648,7 +648,7 @@ static EVT_BEGIN(attack_event)
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    SET_VALUE(LW(15), BTL_POSE_STAY_DEFAULT)
+    SET_VALUE(LW(15), POSE_TYPE_ACTION)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, LW(15))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MoveDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -666,7 +666,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_kuriboo_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_kuriboo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    SET_VALUE(LW(15), BTL_POSE_STAY_DEFAULT)
+    SET_VALUE(LW(15), POSE_TYPE_ACTION)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, LW(15))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 0)

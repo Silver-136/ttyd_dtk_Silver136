@@ -222,8 +222,8 @@ static PoseTableEntry pose_table[] = {
     {40, "KRN_W_1"},
     {56, "KRN_X_1"},
     {57, "KRN_X_1"},
-    {BTL_POSE_TALK, "KRN_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "KRN_S_1"},
+    {POSE_TYPE_TALK, "KRN_T_1"},
+    {POSE_TYPE_ACTION, "KRN_S_1"},
 };
 
 /**

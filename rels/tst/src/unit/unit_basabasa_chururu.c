@@ -184,8 +184,8 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_WALK, "CYU_W_1"},
     {POSE_TYPE_DANGER, "CYU_X_1"},
     {POSE_TYPE_PERIL, "CYU_X_1"},
-    {BTL_POSE_TALK, "CYU_T_1"},
-    {BTL_POSE_STAY_DEFAULT, "CYU_S_1"},
+    {POSE_TYPE_TALK, "CYU_T_1"},
+    {POSE_TYPE_ACTION, "CYU_S_1"},
 };
 
 /**
@@ -209,8 +209,8 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_WALK, "CYU_S_1"},
     {POSE_TYPE_DANGER, "CYU_X_2"},
     {POSE_TYPE_PERIL, "CYU_X_2"},
-    {BTL_POSE_TALK, "CYU_T_2"},
-    {BTL_POSE_STAY_DEFAULT, "CYU_S_2"},
+    {POSE_TYPE_TALK, "CYU_T_2"},
+    {POSE_TYPE_ACTION, "CYU_S_2"},
 };
 
 /**
