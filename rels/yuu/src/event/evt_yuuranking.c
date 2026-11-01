@@ -86,9 +86,7 @@ static inline void yuuDrawCenter(f32 x, f32 y, f32 scale, const char* msg, s32 w
     PSMTXConcat(trans, scl, mtx);
     FontDrawMessageMtx(mtx, msg);
 }
-#endif
 
-#if VERSION >= VERSION_US
 /** US: left-aligned at x, squeezed to fit width. */
 static inline void yuuDrawLeft(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
@@ -106,9 +104,7 @@ static inline void yuuDrawLeft(f32 x, f32 y, f32 scale, const char* msg, s32 wid
     PSMTXConcat(trans, scl, mtx);
     FontDrawMessageMtx(mtx, msg);
 }
-#endif
 
-#if VERSION >= VERSION_US
 // US: right-aligned at x, squeezed to fit width.
 // FAKE: x offset + work pointer instead of x, so wp->x is read after the width test as in the target
 static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 width, YuuRankingWork* wp) {

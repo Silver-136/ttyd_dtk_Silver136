@@ -77,27 +77,23 @@ static EvtWord cam_shake2[27];
 EvtWord evt_snd[234];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord moji_msg[];
-#else
-EvtWord moji_msg[22];
-#endif
 static EvtWord switch_evt[303];
-#if VERSION <= VERSION_DEMO_US
 static EvtWord dokan_evt[335];
-#else
-static EvtWord dokan_evt[345];
-#endif
 EvtWord setting_sun_stone[43];
 static s32 itemsel_table00[2];
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord sun_stone_set_event[];
-#else
-EvtWord sun_stone_set_event[68];
-#endif
 EvtWord setting_moon_stone[43];
 static s32 itemsel_table01[2];
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord moon_stone_set_event[];
 #else
+EvtWord moji_msg[22];
+static EvtWord switch_evt[303];
+static EvtWord dokan_evt[345];
+EvtWord setting_sun_stone[43];
+static s32 itemsel_table00[2];
+EvtWord sun_stone_set_event[68];
+EvtWord setting_moon_stone[43];
+static s32 itemsel_table01[2];
 EvtWord moon_stone_set_event[68];
 #endif
 static EvtWord ki_data_evt_01[20];

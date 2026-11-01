@@ -2680,59 +2680,60 @@ EVT_END()
 /** The escape wall at the left edge of the stage, which closes in battles that cannot be fled. */
 #if VERSION > VERSION_DEMO_US
 BattleStageObjectData _object_wall_data = {"escape_wall", 4, 5, {-175.0f, 0.0f, 0.0f}, 0, 0};
-#endif
 
 /** The overhead spotlight; the entry with no name ends the list. */
-#if VERSION > VERSION_DEMO_US
 BattleStageObjectData _object_spot_light_data[] = {
     {"spotlight", 6, 7, {0.0f, 240.0f, 0.0f}, 0, 0},
     {NULL, 6, 7, {0.0f, 0.0f, 0.0f}, 0, 0},
 };
-#endif
 
 /** Unit setup for a hittable stage tree, spawned for stage objects that ask for one (unit_object_tree.c). */
-#if VERSION > VERSION_DEMO_US
 BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
-#endif
 
 /** Unit setup for a hittable stage switch, spawned for stage objects that ask for one (unit_object_switch.c). */
-#if VERSION > VERSION_DEMO_US
 BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
-#endif
 
 /** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(_object_turn_event_A1)
     SET_VALUE(LW(9), 0)
     CALL_CHILD(PTR(_object_turn_event_core))
     RETURN
 EVT_END()
-#endif
 
 /** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(_object_turn_event_A2)
     SET_VALUE(LW(9), 1)
     CALL_CHILD(PTR(_object_turn_event_core))
     RETURN
 EVT_END()
-#endif
 
 /** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(_object_turn_event_B)
     SET_VALUE(LW(9), 2)
     CALL_CHILD(PTR(_object_turn_event_core))
     RETURN
 EVT_END()
-#endif
 
 /** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(_nozzle_turn_event)
     CALL(_nozzle_turn)
     RETURN
 EVT_END()
+#else
+
+/** The overhead spotlight; the entry with no name ends the list. */
+
+/** Unit setup for a hittable stage tree, spawned for stage objects that ask for one (unit_object_tree.c). */
+
+/** Unit setup for a hittable stage switch, spawned for stage objects that ask for one (unit_object_switch.c). */
+
+/** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
+
+/** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
+
+/** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
+
+/** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
 #endif
 
 #if VERSION < VERSION_US
@@ -2742,11 +2743,7 @@ EVT_BEGIN(_close_wall_event)
     CALL(_announce_wall_message)
     RETURN
 EVT_END()
-#endif
-#endif
 
-#if VERSION < VERSION_US
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(_nozzle_work_event_0)
     SET_VALUE(LW(10), 0)
     CALL_CHILD(PTR(_nozzle_work_event_core))

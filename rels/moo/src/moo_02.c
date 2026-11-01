@@ -27,20 +27,12 @@ EvtWord n_bero_out[12];
 static BeroEntry bero_entry_data[6];
 #if VERSION >= VERSION_US
 static EvtWord dokan_evt[122];
-#else
-static EvtWord dokan_evt[102];
-#endif
-#if VERSION < VERSION_US
-static EvtWord rock_main[79];
-#endif
-#if VERSION >= VERSION_US
 static EvtWord rock_evt0[15];
-#else
-static EvtWord rock_evt0[21];
-#endif
-#if VERSION >= VERSION_US
 static EvtWord rock_evt1[15];
 #else
+static EvtWord dokan_evt[102];
+static EvtWord rock_main[79];
+static EvtWord rock_evt0[21];
 static EvtWord rock_evt1[21];
 #endif
 EvtWord moo_02_init_evt[132];

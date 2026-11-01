@@ -685,16 +685,9 @@ EVT_BEGIN(evt_down)
     END_LOOP
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_sfxoff, LW(10))
-#else
-    CALL(evt_snd_sfxoff, LW(9))
-#endif
     CALL(evt_hitobj_onoff, STRING("a_door_3"), 1, 1)
-#if VERSION > VERSION_DEMO_US
-    CALL(evt_cam3d_evt_set, FLOAT(-78.0f), FLOAT(133.0f), FLOAT(-450.0f), FLOAT(307.0f), FLOAT(56.5f), FLOAT(-65.0f), 10000, EASING_SINE_IN_OUT)
-#endif
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_mario_get_party, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 0)
@@ -706,12 +699,17 @@ EVT_BEGIN(evt_down)
     END_IF
     SUBTRACT_FLOAT(LW(3), FLOAT(1325.0f))
     SUBTRACT_FLOAT(LW(6), FLOAT(1325.0f))
-#endif
     // The elevator box sinks.
     CALL(evt_hit_bind_mapobj, STRING("a_hako"), STRING("hako"))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_sfxon, STRING("SFX_STG6_PIK_ELEVATOR_MOVE1"), LW(10))
 #else
+    CALL(evt_snd_sfxoff, LW(9))
+    CALL(evt_hitobj_onoff, STRING("a_door_3"), 1, 1)
+    CALL(evt_cam3d_evt_set, FLOAT(-78.0f), FLOAT(133.0f), FLOAT(-450.0f), FLOAT(307.0f), FLOAT(56.5f), FLOAT(-65.0f), 10000, EASING_SINE_IN_OUT)
+    CALL(evt_mario_cont_onoff, 0)
+    CALL(evt_party_cont_onoff, 0, 0)
+    // The elevator box sinks.
+    CALL(evt_hit_bind_mapobj, STRING("a_hako"), STRING("hako"))
     CALL(evt_snd_sfxon, STRING("SFX_STG6_PIK_ELEVATOR_MOVE1"), LW(9))
 #endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 13250, 0, 10000)

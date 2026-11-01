@@ -127,9 +127,7 @@ void seq_titleMain(SequenceWork* work) {
 s32 getDebugMode(void) {
     return wp2->debug;
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /**
  * Later versions' title setup (called by seq_titleInit):
  * loads mariost.tpl, parks the logo off screen,

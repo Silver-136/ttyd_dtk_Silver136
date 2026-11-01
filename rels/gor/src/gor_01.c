@@ -6774,9 +6774,7 @@ USER_FUNC(cook_chk) {
     evtSetValue(event, args[2], 0);
     return EVT_RETURN_DONE;
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /**
  * Zess T.'s two-ingredient recipe lookup: given items args[0] and args[1] (in either order),
  * returns the dish in args[2] or 0 if the pair has no recipe.

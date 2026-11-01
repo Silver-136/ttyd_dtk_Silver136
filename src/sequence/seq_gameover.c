@@ -83,49 +83,43 @@ EVT_BEGIN(fall_gameover)
     SPAWN_EVENT(_fall_char)
 #if VERSION >= VERSION_US
     WAIT_MS(166)
-#else
-    WAIT_FRAMES(10)
-#endif
     SET_VALUE(LW(0), STRING("a"))
     SPAWN_EVENT(_fall_char)
-#if VERSION >= VERSION_US
     WAIT_MS(333)
-#else
-    WAIT_FRAMES(20)
-#endif
     SET_VALUE(LW(0), STRING("m"))
     SPAWN_EVENT(_fall_char)
-#if VERSION >= VERSION_US
     WAIT_MS(166)
-#else
-    WAIT_FRAMES(10)
-#endif
     SET_VALUE(LW(0), STRING("e"))
     SPAWN_EVENT(_fall_char)
-#if VERSION >= VERSION_US
     WAIT_MS(166)
-#else
-    WAIT_FRAMES(10)
-#endif
     SET_VALUE(LW(0), STRING("o"))
     SPAWN_EVENT(_fall_char)
-#if VERSION >= VERSION_US
     WAIT_MS(166)
-#else
-    WAIT_FRAMES(10)
-#endif
     SET_VALUE(LW(0), STRING("v"))
     SPAWN_EVENT(_fall_char)
-#if VERSION >= VERSION_US
     WAIT_MS(166)
-#else
-    WAIT_FRAMES(10)
-#endif
     SET_VALUE(LW(0), STRING("e2"))
     SPAWN_EVENT(_fall_char)
-#if VERSION >= VERSION_US
     WAIT_MS(500)
 #else
+    WAIT_FRAMES(10)
+    SET_VALUE(LW(0), STRING("a"))
+    SPAWN_EVENT(_fall_char)
+    WAIT_FRAMES(20)
+    SET_VALUE(LW(0), STRING("m"))
+    SPAWN_EVENT(_fall_char)
+    WAIT_FRAMES(10)
+    SET_VALUE(LW(0), STRING("e"))
+    SPAWN_EVENT(_fall_char)
+    WAIT_FRAMES(10)
+    SET_VALUE(LW(0), STRING("o"))
+    SPAWN_EVENT(_fall_char)
+    WAIT_FRAMES(10)
+    SET_VALUE(LW(0), STRING("v"))
+    SPAWN_EVENT(_fall_char)
+    WAIT_FRAMES(10)
+    SET_VALUE(LW(0), STRING("e2"))
+    SPAWN_EVENT(_fall_char)
     WAIT_FRAMES(30)
 #endif
     SET_VALUE(LW(0), STRING("r"))

@@ -128,34 +128,25 @@ static EvtWord evt_access_entry[24];
 EvtWord rsh_03_init_evt[269];
 #if VERSION >= VERSION_US
 EvtWord rsh_03_a_init_evt[141];
+EvtWord rsh_03_b_init_evt[90];
+static const char* window_tbl[5];
+EvtWord rsh_03_c_init_evt[217];
+EvtWord rsh_03_init_evt_nidome[219];
+EvtWord rsh_03_a_init_evt_nidome[23];
+EvtWord rsh_03_b_init_evt_nidome[11];
+EvtWord rsh_03_c_init_evt_nidome[80];
 #else
 EvtWord rsh_03_a_init_evt[62];
-#endif
-#if VERSION >= VERSION_US
-EvtWord rsh_03_b_init_evt[90];
-#else
 EvtWord rsh_03_b_init_evt[11];
-#endif
 static const char* window_tbl[5];
-#if VERSION >= VERSION_US
-EvtWord rsh_03_c_init_evt[217];
-#else
 EvtWord rsh_03_c_init_evt[71];
-#endif
-#if VERSION >= VERSION_US
-EvtWord rsh_03_init_evt_nidome[219];
-#else
 #if VERSION == VERSION_DEMO_JP
 EvtWord rsh_03_init_evt_nidome[139];
 #else
 EvtWord rsh_03_init_evt_nidome[140];
 #endif
-#endif
 EvtWord rsh_03_a_init_evt_nidome[23];
 EvtWord rsh_03_b_init_evt_nidome[11];
-#if VERSION >= VERSION_US
-EvtWord rsh_03_c_init_evt_nidome[80];
-#else
 EvtWord rsh_03_c_init_evt_nidome[50];
 #endif
 

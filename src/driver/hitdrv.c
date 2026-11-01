@@ -855,9 +855,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
     f32 minDist;
     HitVector* vec;
     f32 reach;
-#endif
 
-#if VERSION > VERSION_DEMO_US
     mapGetWork();
     closest = NULL;
 #endif

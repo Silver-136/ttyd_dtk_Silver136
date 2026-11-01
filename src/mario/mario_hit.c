@@ -1493,76 +1493,34 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
     sn = (f32)sin(a);
 #if VERSION <= VERSION_DEMO_US
     ox = 0.25f * (mario->wPlayerCollisionBox.x * sn);
-#else
-    sx = 0.25f * (mario->wPlayerCollisionBox.x * sn);
-#endif
     sn = (f32)cos(a);
-#if VERSION <= VERSION_DEMO_US
     oz = 0.25f * (mario->wPlayerCollisionBox.x * -sn);
     nox = -ox;
     top = hh + range;
-#else
-    sz = 0.25f * (mario->wPlayerCollisionBox.x * -sn);
-    nsx = -sx;
-    d1 = yl + d0;
-#endif
     py = mario->position.y + ofs;
-#if VERSION <= VERSION_DEMO_US
     ystart = py + hh;
     px = mario->position.x;
     pz = mario->position.z;
     noz = -oz;
     zero = 0.0f;
     mone = -1.0f;
-#else
-    pyl = py + yl;
-    x0 = mario->position.x;
-    z0 = mario->position.z;
-    {
-    dir = (Vec){0.0f, -1.0f, 0.0f};
-#endif
     for (i = 0; i < 5; i++) {
         if (i == 0) {
-#if VERSION <= VERSION_DEMO_US
             dx = 0.0f;
             dz = dx;
-#else
-            z = x = 0.0f;
-#endif
         } else if (i == 1) {
-#if VERSION <= VERSION_DEMO_US
             dx = ox;
             dz = oz;
-#else
-            x = sx;
-            z = sz;
-#endif
         } else if (i == 2) {
-#if VERSION <= VERSION_DEMO_US
             dx = noz;
             dz = oz;
-#else
-            x = -sz;
-            z = sz;
-#endif
         } else if (i == 3) {
-#if VERSION <= VERSION_DEMO_US
             dx = oz;
             dz = nox;
-#else
-            x = sz;
-            z = nsx;
-#endif
         } else if (i == 4) {
-#if VERSION <= VERSION_DEMO_US
             dx = nox;
             dz = noz;
-#else
-            x = nsx;
-            z = -sz;
-#endif
         }
-#if VERSION <= VERSION_DEMO_US
         ray = *(volatile LandonRay*)&zv0; // FAKE: copies a 24-byte zero template; a real (LandonRay){0} adds a .rodata object and shifts every pool
         ray.pos.x = px + dx;
         ray.pos.y = ystart;
@@ -1576,30 +1534,13 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
         nx = nrm.x;
         ny = nrm.y;
         nz = nrm.z;
-#else
-        {
-            Vec v = {0.0f, 0.0f, 0.0f};
-            v.x = x0 + x;
-            v.y = pyl;
-            v.z = z0 + z;
-            dist = d1;
-            hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
-        }
-#endif
         if (hit) {
-#if VERSION <= VERSION_DEMO_US
             mario->groundSlope = marioHitNrmAngleXYZ(nx, ny, nz);
             d = (s32)(100.0f * ((ystart - hy) - dist) + 0.5f) / 100.0f;
             if (__fabsf(d) < 0.1f) {
                 *y = (s32)(100.0f * hy + 0.5f) / 100.0f;
-#else
-            mario->groundSlope = marioHitNrmAnglePtr(&outNrm);
-            if (__fabsf((s32)(100.0f * ((pyl - outPos.y) - dist) + 0.5f) / 100.0f) < 0.1f) {
-                *y = outPos.y;
-#endif
                 return hit;
             }
-#if VERSION <= VERSION_DEMO_US
         }
         // FAKE: dead re-definition (gz is 0) at the loop end gives zero/mone two reaching defs in IRO pass 0, so they stay named
         // vregs (callee-saved order f27/f28) instead of being constant-propagated; the same guard before the loop shifts the
@@ -1609,6 +1550,48 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
             if (gz != 0) {
                 zero = 0.0f;
                 mone = -1.0f;
+#else
+    sx = 0.25f * (mario->wPlayerCollisionBox.x * sn);
+    sn = (f32)cos(a);
+    sz = 0.25f * (mario->wPlayerCollisionBox.x * -sn);
+    nsx = -sx;
+    d1 = yl + d0;
+    py = mario->position.y + ofs;
+    pyl = py + yl;
+    x0 = mario->position.x;
+    z0 = mario->position.z;
+    {
+    dir = (Vec){0.0f, -1.0f, 0.0f};
+    for (i = 0; i < 5; i++) {
+        if (i == 0) {
+            z = x = 0.0f;
+        } else if (i == 1) {
+            x = sx;
+            z = sz;
+        } else if (i == 2) {
+            x = -sz;
+            z = sz;
+        } else if (i == 3) {
+            x = sz;
+            z = nsx;
+        } else if (i == 4) {
+            x = nsx;
+            z = -sz;
+        }
+        {
+            Vec v = {0.0f, 0.0f, 0.0f};
+            v.x = x0 + x;
+            v.y = pyl;
+            v.z = z0 + z;
+            dist = d1;
+            hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
+        }
+        if (hit) {
+            mario->groundSlope = marioHitNrmAnglePtr(&outNrm);
+            if (__fabsf((s32)(100.0f * ((pyl - outPos.y) - dist) + 0.5f) / 100.0f) < 0.1f) {
+                *y = outPos.y;
+                return hit;
+            }
 #endif
         }
     }

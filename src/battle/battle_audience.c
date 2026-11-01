@@ -569,38 +569,18 @@ u8 BattleAudience_CheckReaction(void) {
     audience->event = NULL;
 #if VERSION <= VERSION_DEMO_US
     if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL) {
-#endif
     return FALSE;
 }
-#if VERSION <= VERSION_DEMO_US
 return FALSE;
 }
-#endif
 
-#if VERSION <= VERSION_DEMO_US
 static u8 check_exe_phase_evt_status(BattleAudienceMember* member) {
     u8 status = member->status;
-#else
-u8 check_exe_phase_evt_status(s32 index, s32 type) {
-    BattleAudienceMember* member;
-    u8 status;
-#endif
 
-#if VERSION <= VERSION_DEMO_US
     if (status == AUDIENCE_STATUS_SLEEP)
-#else
-    member = BattleAudienceGetPtr(index);
-    if (!(u8)BattleAudience_GetSysCtrl(index)) {
-#endif
         return FALSE;
-#if VERSION <= VERSION_DEMO_US
     if (status == AUDIENCE_STATUS_ESCAPE)
-#else
-    }
-    if (member->type != type) {
-#endif
         return FALSE;
-#if VERSION <= VERSION_DEMO_US
     if (status == AUDIENCE_STATUS_ENTER)
         return FALSE;
     if (status == 21)
@@ -609,11 +589,23 @@ u8 check_exe_phase_evt_status(s32 index, s32 type) {
         return FALSE;
     if (member->flags & AUDIENCE_MEMBER_FLAG_FRONT_CENTER) {
         return TRUE;
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
     return TRUE;
 #else
+    return FALSE;
+}
+
+u8 check_exe_phase_evt_status(s32 index, s32 type) {
+    BattleAudienceMember* member;
+    u8 status;
+
+    member = BattleAudienceGetPtr(index);
+    if (!(u8)BattleAudience_GetSysCtrl(index)) {
+        return FALSE;
+    }
+    if (member->type != type) {
+        return FALSE;
+    }
     status = member->status;
     if (status == AUDIENCE_STATUS_SLEEP) return FALSE;
     if (status == AUDIENCE_STATUS_ESCAPE) return FALSE;
@@ -2640,23 +2632,20 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
         PSMTXConcat(rot, scl, scl);
 #if VERSION <= VERSION_DEMO_US
         if (m->type != 2) {
-#endif
         scl[0][3] = scl[0][3] + (m->hopX + (-ox + m->position.x));
-#if VERSION > VERSION_DEMO_US
+            scl[1][3] = scl[1][3] + (m->hopY + (-oy + m->position.y));
+        scl[2][3] = scl[2][3] + (m->hopZ + (-oz + m->position.z));
+        } else {
+            scl[0][3] = scl[0][3] + (m->hopX + (-ox + m->position.x));
+            scl[1][3] = scl[1][3] + (m->bobOffset + (m->hopY + (-oy + m->position.y)));
+            scl[2][3] = scl[2][3] + (m->hopZ + (-oz + m->position.z));
+#else
+        scl[0][3] = scl[0][3] + (m->hopX + (-ox + m->position.x));
         scl[2][3] = scl[2][3] + (m->hopZ + (-oz + m->position.z));
         if (m->type != AUDIENCE_BOO) {
-#endif
             scl[1][3] = scl[1][3] + (m->hopY + (-oy + m->position.y));
-#if VERSION <= VERSION_DEMO_US
-        scl[2][3] = scl[2][3] + (m->hopZ + (-oz + m->position.z));
-#endif
         } else {
-#if VERSION <= VERSION_DEMO_US
-            scl[0][3] = scl[0][3] + (m->hopX + (-ox + m->position.x));
-#endif
             scl[1][3] = scl[1][3] + (m->bobOffset + (m->hopY + (-oy + m->position.y)));
-#if VERSION <= VERSION_DEMO_US
-            scl[2][3] = scl[2][3] + (m->hopZ + (-oz + m->position.z));
 #endif
         }
         PSMTXConcat(cam->view, scl, fin);
@@ -2692,41 +2681,41 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
 #if VERSION <= VERSION_DEMO_US
         if (flip == 1)
             off += 4;
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        AUD_POS(nhw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
+        GXWGFifo.u8 = cr;
+            GXWGFifo.u8 = cg;
+            GXWGFifo.u8 = cb;
+            GXWGFifo.u8 = ca;
+        AUD_TEX(uvs[off * 2], uvs[off * 2 + 1]);
+        AUD_POS(hw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
+        GXWGFifo.u8 = cr;
+            GXWGFifo.u8 = cg;
+            GXWGFifo.u8 = cb;
+            GXWGFifo.u8 = ca;
+        AUD_TEX(uvs[(off + 1) * 2], uvs[(off + 1) * 2 + 1]);
+        AUD_POSS(hw, 0.0f, 0.0f);
+        GXWGFifo.u8 = cr;
+            GXWGFifo.u8 = cg;
+            GXWGFifo.u8 = cb;
+            GXWGFifo.u8 = ca;
+        AUD_TEX(uvs[(off + 2) * 2], uvs[(off + 2) * 2 + 1]);
+        AUD_POSS(nhw, 0.0f, 0.0f);
+        GXWGFifo.u8 = cr;
+            GXWGFifo.u8 = cg;
+            GXWGFifo.u8 = cb;
+            GXWGFifo.u8 = ca;
 #else
         if (flip == 1) off += 4;
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){cr, cg, cb, ca});
-#endif
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         AUD_POS(nhw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
-#if VERSION <= VERSION_DEMO_US
-        GXWGFifo.u8 = cr;
-            GXWGFifo.u8 = cg;
-            GXWGFifo.u8 = cb;
-            GXWGFifo.u8 = ca;
-#endif
         AUD_TEX(uvs[off * 2], uvs[off * 2 + 1]);
         AUD_POS(hw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
-#if VERSION <= VERSION_DEMO_US
-        GXWGFifo.u8 = cr;
-            GXWGFifo.u8 = cg;
-            GXWGFifo.u8 = cb;
-            GXWGFifo.u8 = ca;
-#endif
         AUD_TEX(uvs[(off + 1) * 2], uvs[(off + 1) * 2 + 1]);
         AUD_POSS(hw, 0.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
-        GXWGFifo.u8 = cr;
-            GXWGFifo.u8 = cg;
-            GXWGFifo.u8 = cb;
-            GXWGFifo.u8 = ca;
-#endif
         AUD_TEX(uvs[(off + 2) * 2], uvs[(off + 2) * 2 + 1]);
         AUD_POSS(nhw, 0.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
-        GXWGFifo.u8 = cr;
-            GXWGFifo.u8 = cg;
-            GXWGFifo.u8 = cb;
-            GXWGFifo.u8 = ca;
 #endif
         AUD_TEX(uvs[(off + 3) * 2], uvs[(off + 3) * 2 + 1]);
         }
@@ -3320,28 +3309,25 @@ s32 BattleAudience_HaitiRandForFallObject(void) {
     s32 col = 10;
 #if VERSION <= VERSION_DEMO_US
     irand(18);
-#else
-    irand(12);
-#endif
     switch (row) {
     case 0:
-#if VERSION <= VERSION_DEMO_US
         col = irand(18) + 1;
-#else
-        col = irand(12) + 4;
-#endif
         break;
     case 1:
-#if VERSION <= VERSION_DEMO_US
         col = irand(16) + 2;
-#else
-        col = irand(10) + 5;
-#endif
         break;
     case 2:
-#if VERSION <= VERSION_DEMO_US
         col = irand(14) + 3;
 #else
+    irand(12);
+    switch (row) {
+    case 0:
+        col = irand(12) + 4;
+        break;
+    case 1:
+        col = irand(10) + 5;
+        break;
+    case 2:
         col = irand(8) + 6;
 #endif
         break;
@@ -3693,27 +3679,24 @@ void BattleAudienceNumToTarget(void) {
 static void BattleAudienceNumToTargetSub(void) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
     s32 i;
+
+    audience->presentCount = 0;
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
+        if ((u8)BattleAudience_GetExist(i) == TRUE && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_ESCAPE) {
+            audience->presentCount++;
+        }
+    }
 #else
 s32 BattleAudienceNumToTargetSub(void) {
     s32 i, count;
-#endif
 
-#if VERSION <= VERSION_DEMO_US
-    audience->presentCount = 0;
-#else
     BattleAudienceBaseGetPtr();
     count = 0;
-#endif
     for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if ((u8)BattleAudience_GetExist(i) == TRUE && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_ESCAPE) {
-#if VERSION <= VERSION_DEMO_US
-            audience->presentCount++;
-#else
             count++;
-#endif
         }
     }
-#if VERSION > VERSION_DEMO_US
     return count;
 #endif
 }

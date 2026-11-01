@@ -420,51 +420,38 @@ EVT_BEGIN(luigi_gor_first_talk)
         CASE_BETWEEN(STG1_17_FATHER_SON_REUNITED, STG2_24_BOSS_BATTLE)
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print, 0, STRING("gor_luigi_02"), 0, STRING("me"))
-#else
-        SET_VALUE(LW(2), STRING("gor_luigi_02"))
-#endif
         CASE_BETWEEN(STG2_25_AFTER_THE_BOSS_BATTLE, STG3_31_GRUBBAS_PLANS)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print, 0, STRING("gor_luigi_03"), 0, STRING("me"))
-#else
-        SET_VALUE(LW(2), STRING("gor_luigi_03"))
-#endif
         CASE_BETWEEN(STG3_32_BOSS_BATTLE, STG4_15_04_SHADOW_SIRENS_DOOPLISS)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print, 0, STRING("gor_luigi_04"), 0, STRING("me"))
-#else
-        SET_VALUE(LW(2), STRING("gor_luigi_04"))
-#endif
         CASE_BETWEEN(STG4_15_05_PEACH_X_NAUT_PHD_REPORT, STG5_42_PIRATES_VS_X_NAUTS)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print, 0, STRING("gor_luigi_05"), 0, STRING("me"))
-#else
-        SET_VALUE(LW(2), STRING("gor_luigi_05"))
-#endif
         CASE_BETWEEN(STG5_43_X_NAUTS_RETREAT, STG6_53_THE_REAL_GARNET_STAR)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print, 0, STRING("gor_luigi_06"), 0, STRING("me"))
-#else
-        SET_VALUE(LW(2), STRING("gor_luigi_06"))
-#endif
         CASE_BETWEEN(STG6_54_WELCOME_BACK, STG7_19_THE_DOOR_TO_LORD_CRUMP)
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print, 0, STRING("gor_luigi_07"), 0, STRING("me"))
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STORY_STG8_15_GRODUS)
         CALL(evt_msg_print, 0, STRING("gor_luigi_08"), 0, STRING("me"))
+        CASE_GREATER_OR_EQUAL(STG8_16_THE_RETURN_OF_THE_QUEEN)
+        CALL(evt_msg_print, 0, STRING("gor_luigi_09"), 0, STRING("me"))
+    END_SWITCH
 #else
+        SET_VALUE(LW(2), STRING("gor_luigi_02"))
+        CASE_BETWEEN(STG2_25_AFTER_THE_BOSS_BATTLE, STG3_31_GRUBBAS_PLANS)
+        SET_VALUE(LW(2), STRING("gor_luigi_03"))
+        CASE_BETWEEN(STG3_32_BOSS_BATTLE, STG4_15_04_SHADOW_SIRENS_DOOPLISS)
+        SET_VALUE(LW(2), STRING("gor_luigi_04"))
+        CASE_BETWEEN(STG4_15_05_PEACH_X_NAUT_PHD_REPORT, STG5_42_PIRATES_VS_X_NAUTS)
+        SET_VALUE(LW(2), STRING("gor_luigi_05"))
+        CASE_BETWEEN(STG5_43_X_NAUTS_RETREAT, STG6_53_THE_REAL_GARNET_STAR)
+        SET_VALUE(LW(2), STRING("gor_luigi_06"))
+        CASE_BETWEEN(STG6_54_WELCOME_BACK, STG7_19_THE_DOOR_TO_LORD_CRUMP)
         SET_VALUE(LW(2), STRING("gor_luigi_07"))
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG8_15_GRODUS)
         SET_VALUE(LW(2), STRING("gor_luigi_08"))
-#endif
         CASE_GREATER_OR_EQUAL(STG8_16_THE_RETURN_OF_THE_QUEEN)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_print, 0, STRING("gor_luigi_09"), 0, STRING("me"))
-#else
         SET_VALUE(LW(2), STRING("gor_luigi_09"))
-#endif
     END_SWITCH
-#if VERSION > VERSION_DEMO_US
     CALL(evt_msg_print, 0, LW(2), 0, STRING("me"))
 #endif
     CALL(evt_msg_select, 0, STRING("gor_luigi_yesno"))

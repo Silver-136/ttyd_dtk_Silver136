@@ -1646,14 +1646,42 @@ EVT_BEGIN(roof_shake_attack_event)
         CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
 #if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
-#else
-        CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
-#endif
         ADD(LW(2), 10)
-#if VERSION <= VERSION_DEMO_US
         SET_VALUE(LW(6), 30)
         CALL(evt_sub_random, 2, LW(5))
+            SWITCH(LW(5))
+                CASE_EQUAL(0)
+                CALL(evt_eff, 0, STRING("fall"), 4, LW(0), LW(1), LW(2), 20, 20, 0, 1, 60, 0, 0, 0)
+                CASE_EQUAL(1)
+                CALL(evt_eff, 0, STRING("fall"), 5, LW(0), LW(1), LW(2), 20, 20, 0, 1, 60, 0, 0, 0)
+                CASE_EQUAL(2)
+                CALL(evt_eff, 0, STRING("fall"), 8, LW(0), LW(1), LW(2), 20, 20, 0, 1, 60, 0, 0, 0)
+            END_SWITCH
+            WAIT_FRAMES(4)
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
+    IF_INT_EQUAL(LW(5), 1)
+                BEGIN_INLINE_EVENT
+                    WAIT_FRAMES(LW(6))
+                CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
+        END_INLINE_EVENT
+    END_IF
+    IF_INT_EQUAL(LW(5), 3)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+    END_IF
+    IF_INT_EQUAL(LW(5), 6)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+    END_IF
+    IF_INT_EQUAL(LW(5), 2)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+    END_IF
+    LABEL(90)
+    END_LOOP
+    WAIT_FRAMES(32)
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
 #else
+        CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+        ADD(LW(2), 10)
         SET_VALUE(LW(8), LW(1))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
@@ -1670,29 +1698,11 @@ EVT_BEGIN(roof_shake_attack_event)
             CALL(eff_fall_entry, LW(14), 8, LW(0), LW(1), LW(2), 20, LW(8), 0, 1, 60)
         END_SWITCH
         BEGIN_INLINE_EVENT_GET_ID(LW(15))
-#endif
             SWITCH(LW(5))
-#if VERSION <= VERSION_DEMO_US
-                CASE_EQUAL(0)
-                CALL(evt_eff, 0, STRING("fall"), 4, LW(0), LW(1), LW(2), 20, 20, 0, 1, 60, 0, 0, 0)
-#endif
                 CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_eff, 0, STRING("fall"), 5, LW(0), LW(1), LW(2), 20, 20, 0, 1, 60, 0, 0, 0)
-                CASE_EQUAL(2)
-                CALL(evt_eff, 0, STRING("fall"), 8, LW(0), LW(1), LW(2), 20, 20, 0, 1, 60, 0, 0, 0)
-            END_SWITCH
-            WAIT_FRAMES(4)
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
-    IF_INT_EQUAL(LW(5), 1)
-                BEGIN_INLINE_EVENT
-                    WAIT_FRAMES(LW(6))
-#else
                 CALL(eff_fall_hit_wait, LW(14))
-#endif
                 CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
                 CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
-#if VERSION > VERSION_DEMO_US
                 CASE_EQUAL(3)
                 CALL(eff_fall_hit_wait, LW(14))
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -1705,9 +1715,7 @@ EVT_BEGIN(roof_shake_attack_event)
                 CASE_DEFAULT
                 CALL(eff_fall_hit_wait, LW(14))
             END_SWITCH
-#endif
         END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
         SET_VALUE(LW(0), 0)
         ADD(LW(0), LW(13))
         CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, LW(0), LW(15))
@@ -1727,36 +1735,17 @@ EVT_BEGIN(roof_shake_attack_event)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, LW(0), 0)
         GOTO(92)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(LW(5), 3)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-#else
     ADD(LW(13), 1)
     IF_INT_LESS(LW(13), 10)
         GOTO(93)
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(LW(5), 6)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-#else
     CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(0), 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
-#endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(LW(5), 2)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-    END_IF
-    LABEL(90)
-    END_LOOP
-    WAIT_FRAMES(32)
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
 #endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_PARTNER, 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

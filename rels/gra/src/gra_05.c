@@ -210,13 +210,8 @@ static EVT_BEGIN(out_evt)
     CALL(evt_mario_get_exparty, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LF(0), 1)
-#else
-    CALL(evt_cam3d_evt_set_now)
-    CALL(evt_party_stop, 0)
-#endif
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_hit_get_position, STRING("ana_1"), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(150.0f))
     END_INLINE_EVENT
     END_IF
@@ -225,12 +220,8 @@ static EVT_BEGIN(out_evt)
     SET_VALUE(LF(1), 1)
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_hit_get_position, STRING("ana_1"), LW(0), LW(1), LW(2))
-#else
-        CALL(evt_party_force_reset_outofscreen, 0)
-#endif
         CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(150.0f))
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
     END_IF
     CALL(evt_cam3d_evt_set_now)
     WAIT_MS(500)
@@ -239,15 +230,22 @@ static EVT_BEGIN(out_evt)
     END_IF
     IF_INT_EQUAL(LF(1), 1)
         DELETE_EVENT(LW(11))
+        END_IF
+        WAIT_FRAMES(1)
 #else
+    CALL(evt_cam3d_evt_set_now)
+    CALL(evt_party_stop, 0)
+    BEGIN_INLINE_EVENT_GET_ID(LW(10))
+        CALL(evt_hit_get_position, STRING("ana_1"), LW(0), LW(1), LW(2))
+        CALL(evt_party_force_reset_outofscreen, 0)
+        CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(150.0f))
+    END_INLINE_EVENT
     LOOP(0)
         IS_EVENT_RUNNING(LW(10), LW(0))
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
-#endif
         END_IF
         WAIT_FRAMES(1)
-#if VERSION > VERSION_DEMO_US
     END_LOOP
     CALL(evt_party_run, 0)
 #endif

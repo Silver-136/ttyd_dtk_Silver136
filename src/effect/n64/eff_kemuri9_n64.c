@@ -167,21 +167,19 @@ void effKemuri9Main(EffectEntry* effect) {
  */
 #if VERSION <= VERSION_DEMO_US
 static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
-#else
-void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
-#endif
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri9N64Work* work = effect->userdata;
-#if VERSION <= VERSION_DEMO_US
     BOOL last;
-#endif
     s32 i;
-#if VERSION <= VERSION_DEMO_US
     s32 frame;
-#endif
     s32 u;
-#if VERSION <= VERSION_DEMO_US
     s32 blend;
+#else
+void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
+    CameraEntry* camera = camGetPtr(cameraId);
+    EffKemuri9N64Work* work = effect->userdata;
+    s32 i;
+    s32 u;
 #endif
     u16 type;
     s32 v;

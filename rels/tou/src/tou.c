@@ -2071,46 +2071,40 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
                 IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
 #if VERSION == VERSION_EU
                     IF_INT_EQUAL(LF(3), 0)
-#endif
                     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(3), LW(1))
-#if VERSION == VERSION_EU
                     ELSE
                         CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(1), LW(3))
                     END_IF
                 ELSE
                     IF_INT_EQUAL(LF(3), 0)
                         CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-#endif
                     ELSE
-#if VERSION == VERSION_EU
                         CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(1), LW(3))
-#else
-                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-#endif
                 END_IF
-#if VERSION == VERSION_EU
                 END_IF
-#endif
                 ELSE
-#if VERSION == VERSION_EU
                 IF_INT_EQUAL(LF(3), 0)
-#endif
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-#if VERSION == VERSION_EU
                 ELSE
                     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(1), LW(3))
                 END_IF
-#endif
             END_IF
             ELSE
-#if VERSION == VERSION_EU
             IF_INT_EQUAL(LF(3), 0)
-#endif
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
-#if VERSION == VERSION_EU
             ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(1), LW(3))
             END_IF
+#else
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(3), LW(1))
+                    ELSE
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
+                END_IF
+                ELSE
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
+            END_IF
+            ELSE
+            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
 #endif
         END_IF
     END_IF

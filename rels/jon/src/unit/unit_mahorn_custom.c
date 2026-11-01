@@ -225,6 +225,8 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 30, 30, 100, 20, 100, 100, 20, 100, 20, 100, 20, 100, 20, 20, 10, 55, 100, 20, 100, 100, 20};
+
+static StatusVulnerability regist_bunsin = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 0};
 #else
 static StatusVulnerability regist = {
     0, // sleep
@@ -250,11 +252,7 @@ static StatusVulnerability regist = {
     100, // invisible
     20, // ohko
 };
-#endif
 
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist_bunsin = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 0};
-#else
 static StatusVulnerability regist_bunsin = {
     0, // sleep
     0, // stop

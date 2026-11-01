@@ -130,27 +130,24 @@ GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 0}, {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 127},
     {255, 255, 255, 204},
 };
-#endif
 /** The round cloud model's four display lists. */
-#if VERSION > VERSION_DEMO_US
 void* cloud_dl_0_tbl[] = {cloud_dl_0_0, cloud_dl_0_1, cloud_dl_0_2, cloud_dl_0_3};
-#endif
 /** Size in 32-byte units of each of the round cloud model's four display lists. */
 u8 cloud_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
-#if VERSION <= VERSION_DEMO_US
-s8 batten_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
-#else
 s8 batten_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 };
-#endif
-#if VERSION > VERSION_DEMO_US
 GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 0}, {255, 255, 255, 153},
     {255, 255, 255, 127}, {255, 255, 255, 204},
 };
+#else
+/** The round cloud model's four display lists. */
+/** Size in 32-byte units of each of the round cloud model's four display lists. */
+u8 cloud_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
+s8 batten_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
 #endif
 void* batten_dl_0_tbl[] = {batten_dl_0_0, batten_dl_0_1, batten_dl_0_2, batten_dl_0_3};
 /** Size in 32-byte units of each of the X-shaped (batten) cloud model's four display lists. */

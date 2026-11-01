@@ -279,9 +279,9 @@ void unitwin_point_disp(WinMgrEntry* entry) {
         }
     }
 }
-#endif
 
-#if VERSION <= VERSION_DEMO_US
+#else
+
 static s32 iconid_conv(s32 icon) {
     if (icon == ICON_PARTY_YOSHI) {
         switch (pouchGetPartyColor(4)) {
@@ -578,9 +578,7 @@ USER_FUNC(unitwin_set_bought) {
     wp->bought = evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 static inline void unitWinClose(UnitWinWork* wp) {
     if (wp->selected != -1) {
         wp->selected = -1;
@@ -588,19 +586,8 @@ static inline void unitWinClose(UnitWinWork* wp) {
         winMgrClose(wp->winId[1]);
     }
 }
-#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_80174e98, JP 0x80174E98. See docs/NAME_PROVENANCE.md.
-#if VERSION <= VERSION_DEMO_US
-/** list window: arg = window kind; returns lwData[0] = 1 and the picked entry in lwData[1..] */
-USER_FUNC(unitwin_window_select_func) {
-    EvtWord* args = event->args;
-    s32 arg = evtGetValue(event, *args++);
-    UnitWinWork* wp = _wp;
-    PouchData* pouch;
-    const char* name;
-    s32 prev;
-#else
 USER_FUNC(evt_unitwin_select_func) {
     UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
     s32 found = FALSE;
@@ -608,18 +595,7 @@ USER_FUNC(evt_unitwin_select_func) {
     PartyEntry* party = partyGetPtr(0);
     HitEntry* hit = mario->hitobjStandOn;
     u32 btn;
-#endif
     s32 i;
-#if VERSION <= VERSION_DEMO_US
-    s32 k;
-    s32 j;
-    s32 n;
-    s32 ng;
-    s32* p;
-    s32 t;
-    s32 id;
-    InformantWork* jdt = &_jdt;
-#else
     char name[32];
     MapObject* obj;
     if (wp->flags2 & UNITWIN_FREE_REQUEST) {
@@ -628,35 +604,14 @@ USER_FUNC(evt_unitwin_select_func) {
     }
     wp->flags &= ~UNITWIN_FLAG_SELECTED;
     btn = keyGetButtonTrg(0);
-#endif
     // FAKE: `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() || !marioChkKey() changes the object
-#if VERSION <= VERSION_DEMO_US
-    if (isFirstCall) {
-        wp->mode = arg;
-        wp->cursor = 0.0f;
-        wp->scrollTop = 0.0f;
-        wp->scroll = 0.0f;
-        wp->cursorX = -25.0f;
-        wp->cursorY = 60.0f - 24.0f * (wp->cursor - wp->scrollTop);
-        statusWinForceOpen();
-#else
     if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE)) {
         btn = 0;
     }
     if (party != NULL && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         unitWinClose(wp);
-#endif
         return EVT_RETURN_BLOCK;
     }
-#if VERSION <= VERSION_DEMO_US
-    switch (wp->mode) {
-        case 2:
-        case 3:
-            wp->count = 0;
-            for (k = 0; k < 20; k++) {
-                if (pouchHaveItem(k)) {
-                    wp->count++;
-#else
     if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {
         unitWinClose(wp);
         return EVT_RETURN_BLOCK;
@@ -667,17 +622,8 @@ USER_FUNC(evt_unitwin_select_func) {
                 const char* hitName = hitGetName(hit);
                 if (!strcmp(wp->entries[i].hitName, hitName)) {
                     break;
-#endif
                 }
             }
-#if VERSION <= VERSION_DEMO_US
-            break;
-        case 12:
-            wp->count = 0;
-            for (k = 0; k < 200; k++) {
-                if (pouchHaveBadge(k)) {
-                    wp->count++;
-#else
             if (!(wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE) && i < wp->goodsMax) {
                 if (wp->selected != i) {
                     if (wp->selected == -1) {
@@ -689,17 +635,8 @@ USER_FUNC(evt_unitwin_select_func) {
                     winMgrHelpInit(winMgrGetPtr(wp->winId[1]));
                 }
                 found = TRUE;
-#endif
             }
         }
-#if VERSION <= VERSION_DEMO_US
-        break;
-    case 11:
-        wp->count = 0;
-        for (k = 0; k < 99; k++) {
-            if ((s16)badgeShop_get(bdsw->bargain_table, k + 0xF0) - badgeShop_ThrowCheck(k + 0xF0) > 0) {
-                wp->count++;
-#else
         if (!found) {
             unitWinClose(wp);
         }
@@ -714,10 +651,82 @@ USER_FUNC(evt_unitwin_select_func) {
                 winMgrClose(wp->winId[1]);
                 wp->selected = -1;
                 wp->bought = 0;
-#endif
             }
         }
-#if VERSION <= VERSION_DEMO_US
+    } else if (!evtCheckID(wp->childEvt->eventId)) {
+        wp->flags &= ~UNITWIN_FLAG_BUYING;
+        marioKeyOn();
+        if (wp->bought) {
+            wp->itemFlags[wp->goodsIdx] |= 1;
+        }
+    }
+    for (i = 0; i < wp->goodsMax; i++) {
+        obj = mapGetMapObj(wp->entries[i].mapObj);
+        if (obj != NULL) {
+            sprintf(name, "uwn%d", i);
+            if (wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE) {
+                iconFlagOn(name, ICON_FLAG_HIDDEN);
+            } else if (obj->flags & MAP_OBJ_FLAG_HIDDEN) {
+                iconFlagOn(name, ICON_FLAG_HIDDEN);
+            } else {
+                iconFlagOff(name, ICON_FLAG_HIDDEN);
+#else
+
+
+// Descriptive name (not in the symbol maps); placeholder unk_80174e98, JP 0x80174E98. See docs/NAME_PROVENANCE.md.
+/** list window: arg = window kind; returns lwData[0] = 1 and the picked entry in lwData[1..] */
+USER_FUNC(unitwin_window_select_func) {
+    EvtWord* args = event->args;
+    s32 arg = evtGetValue(event, *args++);
+    UnitWinWork* wp = _wp;
+    PouchData* pouch;
+    const char* name;
+    s32 prev;
+    s32 i;
+    s32 k;
+    s32 j;
+    s32 n;
+    s32 ng;
+    s32* p;
+    s32 t;
+    s32 id;
+    InformantWork* jdt = &_jdt;
+    // FAKE: `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() || !marioChkKey() changes the object
+    if (isFirstCall) {
+        wp->mode = arg;
+        wp->cursor = 0.0f;
+        wp->scrollTop = 0.0f;
+        wp->scroll = 0.0f;
+        wp->cursorX = -25.0f;
+        wp->cursorY = 60.0f - 24.0f * (wp->cursor - wp->scrollTop);
+        statusWinForceOpen();
+        return EVT_RETURN_BLOCK;
+    }
+    switch (wp->mode) {
+        case 2:
+        case 3:
+            wp->count = 0;
+            for (k = 0; k < 20; k++) {
+                if (pouchHaveItem(k)) {
+                    wp->count++;
+                }
+            }
+            break;
+        case 12:
+            wp->count = 0;
+            for (k = 0; k < 200; k++) {
+                if (pouchHaveBadge(k)) {
+                    wp->count++;
+            }
+        }
+        break;
+    case 11:
+        wp->count = 0;
+        for (k = 0; k < 99; k++) {
+            if ((s16)badgeShop_get(bdsw->bargain_table, k + 0xF0) - badgeShop_ThrowCheck(k + 0xF0) > 0) {
+                wp->count++;
+            }
+        }
     break;
     case 17:
     case 18:
@@ -728,16 +737,8 @@ USER_FUNC(evt_unitwin_select_func) {
     for (k = 0; k < 99; k++) {
         if ((s16)badgeShop_get(bdsw->starmaniac_table, k + 0xF0) > 0) {
             wp->count++;
-#else
-    } else if (!evtCheckID(wp->childEvt->eventId)) {
-        wp->flags &= ~UNITWIN_FLAG_BUYING;
-        marioKeyOn();
-        if (wp->bought) {
-            wp->itemFlags[wp->goodsIdx] |= 1;
-#endif
         }
     }
-#if VERSION <= VERSION_DEMO_US
     break;
     case 14:
     wp->count = 0;
@@ -894,18 +895,7 @@ USER_FUNC(evt_unitwin_select_func) {
         event->lwData[3] = jdt->info[j].tagEndPos;
         if (johoya_get(jdt->readFlags.perfectRead, jdt->info[j].storyId)) {
             event->lwData[4] = 0;
-#else
-    for (i = 0; i < wp->goodsMax; i++) {
-        obj = mapGetMapObj(wp->entries[i].mapObj);
-        if (obj != NULL) {
-            sprintf(name, "uwn%d", i);
-            if (wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE) {
-                iconFlagOn(name, ICON_FLAG_HIDDEN);
-            } else if (obj->flags & MAP_OBJ_FLAG_HIDDEN) {
-                iconFlagOn(name, ICON_FLAG_HIDDEN);
-#endif
             } else {
-#if VERSION <= VERSION_DEMO_US
                 event->lwData[4] = jdt->info[j].cost;
             }
             wp->mode = 0;
@@ -1080,8 +1070,6 @@ USER_FUNC(evt_unitwin_select_func) {
                 if (j != wp->cursor) {
                     if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
                         ng = 1;
-#else
-                iconFlagOff(name, ICON_FLAG_HIDDEN);
 #endif
             }
         }

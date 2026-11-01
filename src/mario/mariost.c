@@ -83,26 +83,21 @@ BOOL DvdCheckTreadOn;
 GXRenderModeObj sRMObjHReso = {
 #if VERSION == VERSION_EU
     VI_TVMODE_PAL_INT, //viTVmode
-#else
-    VI_TVMODE_NTSC_INT, //viTVmode
-#endif
     0x260, //fbWidth
     0x1C0, //efbHeight
-#if VERSION == VERSION_EU
     0x212, //xfbHeight
-#else
-    0x1C0, //xfbHeight
-#endif
     0x1B, //viXOrigin
-#if VERSION == VERSION_EU
     0x16, //viYOrigin
-#else
-    0x10, //viYOrigin
-#endif
     0x29A, //viWidth
-#if VERSION == VERSION_EU
     0x212, //viHeight
 #else
+    VI_TVMODE_NTSC_INT, //viTVmode
+    0x260, //fbWidth
+    0x1C0, //efbHeight
+    0x1C0, //xfbHeight
+    0x1B, //viXOrigin
+    0x10, //viYOrigin
+    0x29A, //viWidth
     0x1C0, //viHeight
 #endif
     VI_XFBMODE_DF, //xFBmode
@@ -146,26 +141,21 @@ GXRenderModeObj sRMObjHReso_prog = {
 GXRenderModeObj GXNtsc480IntDfMarioSt = {
 #if VERSION == VERSION_EU
     VI_TVMODE_PAL_INT, //viTVmode
-#else
-    VI_TVMODE_NTSC_INT, //viTVmode
-#endif
     0x260, //fbWidth
     0x1E0, //efbHeight
-#if VERSION == VERSION_EU
     0x238, //xfbHeight
-#else
-    0x1E0, //xfbHeight
-#endif
     0x1E, //viXOrigin
-#if VERSION == VERSION_EU
     0x6, //viYOrigin
-#else
-    0x0, //viYOrigin
-#endif
     0x294, //viWidth
-#if VERSION == VERSION_EU
     0x238, //viHeight
 #else
+    VI_TVMODE_NTSC_INT, //viTVmode
+    0x260, //fbWidth
+    0x1E0, //efbHeight
+    0x1E0, //xfbHeight
+    0x1E, //viXOrigin
+    0x0, //viYOrigin
+    0x294, //viWidth
     0x1E0, //viHeight
 #endif
     VI_XFBMODE_DF, //xFBmode

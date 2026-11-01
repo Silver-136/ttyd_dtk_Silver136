@@ -747,24 +747,14 @@ EVT_BEGIN(plane_majin_lecture)
         CALL(evt_mario_set_enable_key, 2048)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)
-#endif
         LOOP(0)
-#if VERSION <= VERSION_DEMO_US
             CALL(lect_status_off)
             WAIT_FRAMES(1)
             CALL(evt_mario_get_motion, LW(3))
             IF_INT_EQUAL(LW(3), 24)
-#else
-            CALL(evt_key_get_buttontrg, 0, LW(0))
-            IF_BITS_SET(LW(0), PAD_BUTTON_Y)
-#endif
                 BREAK_LOOP
             END_IF
-#if VERSION > VERSION_DEMO_US
-            WAIT_FRAMES(1)
-#endif
         END_LOOP
-#if VERSION <= VERSION_DEMO_US
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(lect_status_on)
@@ -774,6 +764,13 @@ EVT_BEGIN(plane_majin_lecture)
         CALL(mainwindow_openenable)
         CALL(evt_cam_letter_box_disable, 0)
 #else
+        LOOP(0)
+            CALL(evt_key_get_buttontrg, 0, LW(0))
+            IF_BITS_SET(LW(0), PAD_BUTTON_Y)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
         CALL(evt_msg_continue)
         CALL(evt_mario_paper_plane, 1)
         // Mario turns into a paper airplane and glides off the panel, and the view follows him down.

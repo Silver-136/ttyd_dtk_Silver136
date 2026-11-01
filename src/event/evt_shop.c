@@ -750,17 +750,16 @@ EVT_BEGIN(point_evt)
     OPCODE_END_SCRIPT,
     0 // US: the object is 0x8C bytes (trailing zero word)
 };
+
+// US: point window icon per language (first object of evt_shop .sdata)
+u16 point_disp_icons[] = {0x226, 0x227, 0x228, 0x227, 0x229, 0x22A};
 #else
     CALL(get_shop_point, LW(0))
     CALL(get_msg, LW(10), 25, LW(14))
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(0))
     RETURN
 EVT_END()
-#endif
 
-#if VERSION >= VERSION_US
-// US: point window icon per language (first object of evt_shop .sdata)
-u16 point_disp_icons[] = {0x226, 0x227, 0x228, 0x227, 0x229, 0x22A};
 #endif
 
 #if VERSION > VERSION_DEMO_US

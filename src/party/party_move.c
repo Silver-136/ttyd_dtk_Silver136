@@ -197,9 +197,7 @@ void L_getTargetPos(s32 id, Vec* pos) {
         pos->z = mario->position.z;
     }
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /**
  * Demo: direction in degrees from (x, z) to what trail id chases: Mario for trail 0;
  * for trail 1 the partner in slot 0, or Mario while Koops's nokonokoGetStatus is 3.
@@ -222,9 +220,26 @@ f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
     }
     return angleABf(x, z, mario->position.x, mario->position.z);
 }
-#endif
 
-#if VERSION <= VERSION_DEMO_US
+/**
+ * Demo: horizontal distance from (x, z) to what trail id chases (Mario, or the slot 0 partner for trail 1;
+ * Mario while Koops's nokonokoGetStatus is 3).
+ */
+f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
+    MarioWork* mario = marioGetPtr();
+    BOOL far = FALSE;
+    PartyEntry* other = anotherPartyGetPtr(id != 0);
+    Vec pos;
+
+    if (id == 0) {
+        return distABf(x, z, mario->position.x, mario->position.z);
+    }
+    if (other) {
+        if (nokonokoGetStatus(other) == 3 ||
+            PSVECDistance(&mario->position, &other->position) >= 150.0f) {
+#else
+
+
 /**
  * Demo: direction in degrees from (x, z) to what trail id chases: Mario for trail 0;
  * for trail 1 the partner in slot 0, or Mario while Koops's nokonokoGetStatus is 3.
@@ -233,36 +248,16 @@ f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
     MarioWork* mario;
     PartyEntry* other;
     BOOL far;
-#else
-/**
- * Demo: horizontal distance from (x, z) to what trail id chases (Mario, or the slot 0 partner for trail 1;
- * Mario while Koops's nokonokoGetStatus is 3).
- */
-f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
-    MarioWork* mario = marioGetPtr();
-    BOOL far = FALSE;
-    PartyEntry* other = anotherPartyGetPtr(id != 0);
-#endif
     Vec pos;
 
     if (id == 0) {
-#if VERSION <= VERSION_DEMO_US
         mario = marioGetPtr();
         return angleABf(x, z, mario->position.x, mario->position.z);
-#else
-        return distABf(x, z, mario->position.x, mario->position.z);
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
     far = FALSE;
     other = anotherPartyGetPtr(id != 0);
-#endif
     if (other) {
-#if VERSION <= VERSION_DEMO_US
         if (nokonokoGetStatus(other) == 3) {
-#else
-        if (nokonokoGetStatus(other) == 3 ||
-            PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #endif
             far = TRUE;
         }
@@ -270,18 +265,8 @@ f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
 #if VERSION <= VERSION_DEMO_US
     partyTargetPos(other, far, &pos);
     return angleABf(x, z, pos.x, pos.z);
-#else
-    if (other && !far) {
-        getTargetPos(id, &pos);
-        return distABf(x, z, pos.x, pos.z);
-#endif
     }
-#if VERSION > VERSION_DEMO_US
-    return distABf(x, z, mario->position.x, mario->position.z);
-}
-#endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Demo: horizontal distance from (x, z) to what trail id chases (Mario, or the slot 0 partner for trail 1;
  * Mario while Koops's nokonokoGetStatus is 3).
@@ -290,31 +275,35 @@ f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
     MarioWork* mario;
     PartyEntry* other;
     BOOL far;
+    Vec pos;
+
+    if (id == 0) {
+        mario = marioGetPtr();
+        return distABf(x, z, mario->position.x, mario->position.z);
+    }
+    far = FALSE;
+    other = anotherPartyGetPtr(id != 0);
+    if (other) {
+        if (nokonokoGetStatus(other) == 3) {
 #else
+    if (other && !far) {
+        getTargetPos(id, &pos);
+        return distABf(x, z, pos.x, pos.z);
+    }
+    return distABf(x, z, mario->position.x, mario->position.z);
+}
+
 /** Demo: 3D distance from p to what trail id chases, picked as in partyGetTargetDir. */
 f32 partyGetTargetDist3D(s32 id, Vec* p) {
     MarioWork* mario = marioGetPtr();
     BOOL far = FALSE;
     PartyEntry* other = anotherPartyGetPtr(id != 0);
-#endif
     Vec pos;
 
     if (id == 0) {
-#if VERSION <= VERSION_DEMO_US
-        mario = marioGetPtr();
-        return distABf(x, z, mario->position.x, mario->position.z);
-#else
         return PSVECDistance(&marioGetPtr()->position, p);
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
-    far = FALSE;
-    other = anotherPartyGetPtr(id != 0);
-#endif
     if (other) {
-#if VERSION <= VERSION_DEMO_US
-        if (nokonokoGetStatus(other) == 3) {
-#else
         if (nokonokoGetStatus(other) == 3 ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #endif
@@ -324,46 +313,40 @@ f32 partyGetTargetDist3D(s32 id, Vec* p) {
 #if VERSION <= VERSION_DEMO_US
     partyTargetPos(other, far, &pos);
     return distABf(x, z, pos.x, pos.z);
-#else
-    if (other && !far) {
-        getTargetPos(id, &pos);
-        return PSVECDistance(&pos, p);
-#endif
     }
-#if VERSION > VERSION_DEMO_US
-    return PSVECDistance(&marioGetPtr()->position, p);
-}
-#endif
 
-#if VERSION <= VERSION_DEMO_US
 /** Demo: 3D distance from p to what trail id chases, picked as in partyGetTargetDir. */
 f32 partyGetTargetDist3D(s32 id, Vec* p) {
     PartyEntry* other;
     BOOL far;
+    Vec pos;
+
+    if (id == 0) {
+        return PSVECDistance(&marioGetPtr()->position, p);
+    }
+    far = FALSE;
+    other = anotherPartyGetPtr(id != 0);
+    if (other) {
+        if (nokonokoGetStatus(other) == 3) {
 #else
+    if (other && !far) {
+        getTargetPos(id, &pos);
+        return PSVECDistance(&pos, p);
+    }
+    return PSVECDistance(&marioGetPtr()->position, p);
+}
+
 /** Demo: vertical distance from height y to what trail id chases, picked as in partyGetTargetDir. */
 f32 partyGetTargetDistY(s32 id, f32 y) {
     MarioWork* mario = marioGetPtr();
     BOOL far = FALSE;
     PartyEntry* other = anotherPartyGetPtr(id != 0);
-#endif
     Vec pos;
 
     if (id == 0) {
-#if VERSION <= VERSION_DEMO_US
-        return PSVECDistance(&marioGetPtr()->position, p);
-#else
         return __fabsf(mario->position.y - y);
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
-    far = FALSE;
-    other = anotherPartyGetPtr(id != 0);
-#endif
     if (other) {
-#if VERSION <= VERSION_DEMO_US
-        if (nokonokoGetStatus(other) == 3) {
-#else
         if (nokonokoGetStatus(other) == 3 ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
 #endif
@@ -556,20 +539,29 @@ void partyClearFootmark(void) {
 void partyClearFootmark2(void) {
 #if VERSION <= VERSION_DEMO_US
     Vec pos = marioGetPtr()->position;
-#else
-    MarioWork* mario = marioGetPtr();
-#endif
     PartyEntry* other = partyGetPtr(marioGetPartyId());
-#if VERSION <= VERSION_DEMO_US
     Footmark* a = footmarkBuf[0];
     Footmark* b = footmarkBuf[1];
-#else
-    Vec pos;
-#endif
     u32 i;
     Footmark* fm;
 
-#if VERSION > VERSION_DEMO_US
+    for (i = 0; i < 80; i++) {
+        a->pos = pos;
+        b->pos = pos;
+        a->flag = 0;
+        b->flag = 0;
+        a++;
+        b++;
+    }
+    writeId[0] = 0;
+    readId[0] = 0;
+#else
+    MarioWork* mario = marioGetPtr();
+    PartyEntry* other = partyGetPtr(marioGetPartyId());
+    Vec pos;
+    u32 i;
+    Footmark* fm;
+
     if (other) {
         if (nokonokoGetStatus(other) == 3 ||
             PSVECDistance(&mario->position, &other->position) >= 150.0f) {
@@ -581,24 +573,11 @@ void partyClearFootmark2(void) {
         pos = mario->position;
     }
     fm = footmarkBuf[1];
-#endif
     for (i = 0; i < 80; i++) {
-#if VERSION <= VERSION_DEMO_US
-        a->pos = pos;
-        b->pos = pos;
-        a->flag = 0;
-        b->flag = 0;
-        a++;
-        b++;
-#else
         fm->pos = pos;
         fm->flag = 0;
         fm++;
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
-    writeId[0] = 0;
-    readId[0] = 0;
 #endif
     writeId[1] = 0;
     readId[1] = 0;
@@ -2524,9 +2503,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
     partyAppearAdjustY(party, mario, out);
     return FALSE;
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 const Vec vec3_802ce0ac = {0.0f, 0.0f, 0.0f};
 const Vec vec3_802ce0b8 = {0.0f, 0.0f, 0.0f};
 #endif

@@ -63,6 +63,9 @@ u32 R_battlemapalloc_size;
 BOOL g_bFirstSmartAlloc;
 void* R_battlemapalloc_base_ptr;
 void* mapalloc_base_ptr;
+// US map heap: callers pass the heap base; battle maps get their own sub-heap
+#define MAPBASE_PARAM void* base_,
+#define MAPBASE ((MapAllocEntry*)base_)
 #else
 #if VERSION <= VERSION_DEMO_US
 SmartWork smartWork;
@@ -70,12 +73,6 @@ SmartWork smartWork;
 void* mapalloc_base_ptr;
 u32 mapalloc_size;
 BOOL g_bFirstSmartAlloc;
-#endif
-#if VERSION >= VERSION_US
-// US map heap: callers pass the heap base; battle maps get their own sub-heap
-#define MAPBASE_PARAM void* base_,
-#define MAPBASE ((MapAllocEntry*)base_)
-#else
 #if VERSION <= VERSION_DEMO_US
 static u16 count;
 #define COUNT count

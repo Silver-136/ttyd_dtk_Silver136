@@ -47,11 +47,9 @@ static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
 #if VERSION < VERSION_US
 EvtWord gesso_arm_wait_event[4];
-#endif
-#if VERSION >= VERSION_US
-static EvtWord battle_entry_event[313];
-#else
 static EvtWord battle_entry_event[315];
+#else
+static EvtWord battle_entry_event[313];
 #endif
 static EvtWord init_event[121];
 BattleUnitSetup entry_gesso_left_arm_entry_data;

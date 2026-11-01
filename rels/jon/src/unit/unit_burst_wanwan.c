@@ -144,19 +144,15 @@ BattleUnitKind unit_burst_wanwan = {
 
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
-#else
-static BattleUnitDefense defence = {{3, 99, 99, 3, 3}};
-#endif
 
-#if VERSION <= VERSION_DEMO_US
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
-#else
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 2, 0, 0}};
-#endif
 
-#if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 65, 65, 100, 65, 100, 100, 65, 100, 65, 100, 65, 100, 65, 65, 45, 30, 100, 65, 100, 100, 95};
 #else
+static BattleUnitDefense defence = {{3, 99, 99, 3, 3}};
+
+static BattleUnitDefenseAttr defence_attr = {{0, 2, 2, 0, 0}};
+
 static StatusVulnerability regist = {
     0, // sleep
     70, // stop

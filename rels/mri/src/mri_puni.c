@@ -5112,12 +5112,11 @@ void puniMoveMain(PuniData* p) {
             break;
     }
 }
-#endif
 
-#if VERSION <= VERSION_DEMO_US
-static void puniOption(void) {
-#else
 void puniOption(void) {
+#else
+
+static void puniOption(void) {
 #endif
     PuniData* p;
     PuniData* q;
@@ -5580,24 +5579,8 @@ void puni_puni_main(void) {
                         break;
                     case PUNI_MODE_DEAD:
                         p->flags &= ~PUNI_FLAG_STRAY;
-#else
-                puniModeMain(p);
-            }
-        }
-        puniOption();
-    } else {
-#endif
 
-#if VERSION > VERSION_DEMO_US
-        for (i = 1, p = Punidat + 1; i <= 109; i++, p++) {
-            if (p->flags & PUNI_FLAG_ACTIVE) {
-                PartyEntry* party;
-                PuniTarget* tt;
-                s32 jj;
-                party = partyGetPtr(marioGetPartyId());
-#endif
 
-#if VERSION <= VERSION_DEMO_US
                 // FAKE: the (u32) round trip keeps the name out of constant propagation, so its address is hoisted into a saved
                 // register before the loop as in the demo.
                 puniModeDeadSfx(p, (const char*)(u32)"SFX_STG2_FIGHT_TOGE3");
@@ -5670,6 +5653,19 @@ void puni_puni_main(void) {
                 puniModeCustom(p);
                 break;
 #else
+                puniModeMain(p);
+            }
+        }
+        puniOption();
+    } else {
+
+        for (i = 1, p = Punidat + 1; i <= 109; i++, p++) {
+            if (p->flags & PUNI_FLAG_ACTIVE) {
+                PartyEntry* party;
+                PuniTarget* tt;
+                s32 jj;
+                party = partyGetPtr(marioGetPartyId());
+
                 p->breathPower = 0.0f;
                 if (Punigp->windDisabled == 0 && party != NULL) {
                     p->breathPower = cloudGetBreathPower(p->pos, 10.0f);

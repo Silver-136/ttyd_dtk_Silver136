@@ -63,17 +63,11 @@ EvtWord partySandersAttack_NormalAttack[970];
 #endif
 #if VERSION >= VERSION_US
 EvtWord partySandersAttack_SuperBombAttack[1118];
-#else
-EvtWord partySandersAttack_SuperBombAttack[1116];
-#endif
-#if VERSION >= VERSION_US
 EvtWord partySandersAttack_CounterSet[242];
-#else
-EvtWord partySandersAttack_CounterSet[201];
-#endif
-#if VERSION >= VERSION_US
 EvtWord partySandersAttack_TimeBombSet[331];
 #else
+EvtWord partySandersAttack_SuperBombAttack[1116];
+EvtWord partySandersAttack_CounterSet[201];
 EvtWord partySandersAttack_TimeBombSet[290];
 #endif
 EvtWord _shot_bomb_event[155];

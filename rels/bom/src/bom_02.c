@@ -688,21 +688,19 @@ static EVT_BEGIN(talk_murabito_e)
             CALL(evt_msg_print, 0, STRING("irai_30_002"), 0, 0)
 #if VERSION < VERSION_US
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
-#endif
                 CALL(evt_msg_print_add, 0, STRING("irai_30_003"))
-#if VERSION >= VERSION_US
-            END_IF
-#endif
                 ELSE
-#if VERSION >= VERSION_US
+                CALL(evt_msg_continue)
+#else
+                CALL(evt_msg_print_add, 0, STRING("irai_30_003"))
+            END_IF
+                ELSE
             SET_VALUE(LF(0), 0)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                 SET_VALUE(LF(0), 1)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("irai_30_002"), 0, 0)
-#endif
                 CALL(evt_msg_continue)
-#if VERSION >= VERSION_US
             END_IF
 #endif
                 CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)

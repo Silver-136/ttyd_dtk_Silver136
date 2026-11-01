@@ -72,30 +72,21 @@ EvtWord talk_iron2[30];
 static NpcSetupInfo npcEnt[11];
 #if VERSION >= VERSION_US
 EvtWord evt_saisyo_after[733];
-#else
-EvtWord evt_saisyo_after[691];
-#endif
-#if VERSION >= VERSION_US
 EvtWord evt_saisyo_after_re[367];
-#else
-EvtWord evt_saisyo_after_re[325];
-#endif
 EvtWord evt_tou_chibi_yoshi[424];
-#if VERSION >= VERSION_US
 static EvtWord evt_1st_leagu[235];
-#else
-static EvtWord evt_1st_leagu[214];
-#endif
-#if VERSION >= VERSION_US
 EvtWord evt_1st_leagu_re[249];
-#else
-EvtWord evt_1st_leagu_re[228];
-#endif
 static EvtWord evt_door[25];
 EvtWord evt_rec[274];
-#if VERSION >= VERSION_US
 static EvtWord evt_gardman[202];
 #else
+EvtWord evt_saisyo_after[691];
+EvtWord evt_saisyo_after_re[325];
+EvtWord evt_tou_chibi_yoshi[424];
+static EvtWord evt_1st_leagu[214];
+EvtWord evt_1st_leagu_re[228];
+static EvtWord evt_door[25];
+EvtWord evt_rec[274];
 #if VERSION == VERSION_DEMO_JP
 static EvtWord evt_gardman[237];
 #else

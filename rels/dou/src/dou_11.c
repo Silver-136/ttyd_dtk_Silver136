@@ -79,8 +79,6 @@ EvtWord ukishima_init1[34];
 EvtWord ukishima_part1[50];
 EvtWord ukishima_init2[34];
 EvtWord ukishima_part2[50];
-#endif
-#if VERSION > VERSION_DEMO_US
 EvtWord ukishima_switch1_evt[23];
 EvtWord ukishima_switch2_evt[23];
 #endif
@@ -93,11 +91,9 @@ EvtWord suifu_orei[339];
 EvtWord escapeway_event[98];
 #if VERSION > VERSION_DEMO_US
 EvtWord bombwall_escape_move[58];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord bombwall_bomb[181];
-#else
 static EvtWord bombwall_bomb[187];
+#else
+static EvtWord bombwall_bomb[181];
 #endif
 static EvtWord bombwall_init[128];
 EvtWord bombwall_suifuout_secheck[77];
@@ -1240,9 +1236,7 @@ EVT_BEGIN(ukishima_switch1_evt)
     END_IF
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /**
  * Event of the second blue island switch (mobj02):
  * sets its flag and runs ukishima_part1 or ukishima_part2 depending on how many switches are now down.

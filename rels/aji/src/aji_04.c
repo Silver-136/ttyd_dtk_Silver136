@@ -491,9 +491,7 @@ EVT_BEGIN(UNK_0x00022be8)
     WAIT_MS(1500)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(UNK_0x00022c3c)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 70, 100)
     LABEL(0)

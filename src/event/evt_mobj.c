@@ -5318,19 +5318,10 @@ EVT_BEGIN(kpa_pole)
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_POST_SLIDE1"), LW(1), LW(2), LW(3), LW(10))
 #if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT_GET_ID(LW(6))
-#endif
         LOOP(0)
-#if VERSION <= VERSION_DEMO_US
-            CALL(kpa_get_mario_pos, LW(0), LW(1), LW(2))
-            SUBTRACT_FLOAT(LW(1), FLOAT(1.5f))
-            CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
-            CALL(evt_mobj_get_position, LW(15), LW(3), LW(4), LW(5))
-#else
             CALL(evt_mobj_get_y_position, LW(15), LW(4))
-#endif
             SUBTRACT_FLOAT(LW(4), LW(14))
             CALL(evt_mobj_set_y_position, LW(15), LW(4))
-#if VERSION > VERSION_DEMO_US
             WAIT_FRAMES(1)
             IF_INT_LESS_OR_EQUAL(LW(4), 25)
                 CALL(evt_mobj_set_y_position, LW(15), FLOAT(25.0f))
@@ -5342,12 +5333,8 @@ EVT_BEGIN(kpa_pole)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         SUBTRACT_FLOAT(LW(1), FLOAT(2.0f))
         CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
-#endif
         IF_INT_LESS_OR_EQUAL(LW(1), FLOAT(25.0f))
             CALL(evt_mario_set_pos, LW(0), FLOAT(25.0f), LW(2))
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_mobj_set_y_position, LW(15), FLOAT(25.0f))
-#else
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -5355,6 +5342,17 @@ EVT_BEGIN(kpa_pole)
     LOOP(0)
         IS_EVENT_RUNNING(LW(6), LW(7))
         IF_INT_EQUAL(LW(7), 0)
+#else
+        LOOP(0)
+            CALL(kpa_get_mario_pos, LW(0), LW(1), LW(2))
+            SUBTRACT_FLOAT(LW(1), FLOAT(1.5f))
+            CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
+            CALL(evt_mobj_get_position, LW(15), LW(3), LW(4), LW(5))
+            SUBTRACT_FLOAT(LW(4), LW(14))
+            CALL(evt_mobj_set_y_position, LW(15), LW(4))
+        IF_INT_LESS_OR_EQUAL(LW(1), FLOAT(25.0f))
+            CALL(evt_mario_set_pos, LW(0), FLOAT(25.0f), LW(2))
+            CALL(evt_mobj_set_y_position, LW(15), FLOAT(25.0f))
 #endif
             BREAK_LOOP
         END_IF

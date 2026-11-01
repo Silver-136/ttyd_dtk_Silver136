@@ -463,21 +463,11 @@ EVT_BEGIN(evt_wall2)
     IF_INT_EQUAL(LW(1), 0)
         SPAWN_EVENT(PTR(evt_sakaba_4))
         WAIT_MS(150)
-#endif
     SPAWN_EVENT(PTR(evt_sakaba_1))
-#if VERSION >= VERSION_US
         WAIT_MS(150)
-#else
-    WAIT_MS(100)
-#endif
     SPAWN_EVENT(PTR(evt_sakaba_2))
-#if VERSION >= VERSION_US
         WAIT_MS(150)
-#else
-    WAIT_MS(100)
-#endif
     SPAWN_EVENT(PTR(evt_sakaba_3))
-#if VERSION >= VERSION_US
         ELSE
         SPAWN_EVENT(PTR(evt_sakaba_3))
         WAIT_MS(150)
@@ -485,12 +475,16 @@ EVT_BEGIN(evt_wall2)
         WAIT_MS(150)
         SPAWN_EVENT(PTR(evt_sakaba_1))
         WAIT_MS(150)
-#else
-    WAIT_MS(100)
-#endif
     SPAWN_EVENT(PTR(evt_sakaba_4))
-#if VERSION >= VERSION_US
     END_IF
+#else
+    SPAWN_EVENT(PTR(evt_sakaba_1))
+    WAIT_MS(100)
+    SPAWN_EVENT(PTR(evt_sakaba_2))
+    WAIT_MS(100)
+    SPAWN_EVENT(PTR(evt_sakaba_3))
+    WAIT_MS(100)
+    SPAWN_EVENT(PTR(evt_sakaba_4))
 #endif
     RETURN
 EVT_END()

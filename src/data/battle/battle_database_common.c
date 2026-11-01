@@ -1356,10 +1356,8 @@ ItemDropData battle_item_poison_pakkun[] = {
     {ITEM_FP_PLUS, 0, 1},
     {0},
 };
-#endif
 
 /** Frost Piranha: held items and drops by weight, after a first row of no item. */
-#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_ice_pakkun[] = {
     {0, 200, 300},
     {ITEM_SUPER_SHROOM, 0, 5},
@@ -1367,10 +1365,8 @@ ItemDropData battle_item_ice_pakkun[] = {
     {ITEM_ICE_SMASH, 0, 1},
     {0},
 };
-#endif
 
 /** Pale Piranha: held items and drops by weight, after a first row of no item. */
-#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_monochrome__pakkun[] = {
     {0, 200, 300},
     {ITEM_MUSHROOM, 0, 5},
@@ -1378,20 +1374,16 @@ ItemDropData battle_item_monochrome__pakkun[] = {
     {ITEM_FP_PLUS, 0, 1},
     {0},
 };
-#endif
 
 /** Pider: held items and drops by weight, after a first row of no item. */
-#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_piders[] = {
     {0, 200, 300},
     {ITEM_SLOW_SHROOM, 0, 10},
     {ITEM_GRADUAL_SYRUP, 0, 5},
     {0},
 };
-#endif
 
 /** Arantula: held items and drops by weight, after a first row of no item. */
-#if VERSION > VERSION_DEMO_US
 ItemDropData battle_item_churantalar[] = {
     {0, 200, 300},
     {ITEM_SLOW_SHROOM, 0, 10},
@@ -1400,6 +1392,15 @@ ItemDropData battle_item_churantalar[] = {
     {ITEM_ALL_OR_NOTHING, 0, 2},
     {0},
 };
+#else
+
+/** Frost Piranha: held items and drops by weight, after a first row of no item. */
+
+/** Pale Piranha: held items and drops by weight, after a first row of no item. */
+
+/** Pider: held items and drops by weight, after a first row of no item. */
+
+/** Arantula: held items and drops by weight, after a first row of no item. */
 #endif
 
 /** Yux: holds and drops no items. */

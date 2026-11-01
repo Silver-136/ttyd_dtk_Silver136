@@ -1255,26 +1255,22 @@ BOOL pouchAddKeepItem(s32 id) {
 
 #if VERSION <= VERSION_DEMO_US
     for (i = 0; i < MAX_STORED_ITEMS; i++) {
-#else
-    for (i = MAX_STORED_ITEMS - 1; i >= 0; i--) {
-#endif
         if (mpp->storedItems[i] == 0) {
-#if VERSION <= VERSION_DEMO_US
             break;
-#else
-            for (j = i; j > 0; j--) {
-                mpp->storedItems[j] = mpp->storedItems[j - 1];
-#endif
             }
-#if VERSION > VERSION_DEMO_US
-            mpp->storedItems[0] = id;
-            return TRUE;
-#endif
         }
-#if VERSION <= VERSION_DEMO_US
     if (i < MAX_STORED_ITEMS) {
         mpp->storedItems[i] = id;
         return TRUE;
+#else
+    for (i = MAX_STORED_ITEMS - 1; i >= 0; i--) {
+        if (mpp->storedItems[i] == 0) {
+            for (j = i; j > 0; j--) {
+                mpp->storedItems[j] = mpp->storedItems[j - 1];
+            }
+            mpp->storedItems[0] = id;
+            return TRUE;
+        }
 #endif
     }
     return FALSE;
@@ -1284,37 +1280,31 @@ BOOL pouchAddKeepItem(s32 id) {
 #if VERSION <= VERSION_DEMO_US
 BOOL pouchRemoveKeepItem(s32 id) {
     s32 i;
+
+    for (i = 0; i < MAX_STORED_ITEMS; i++) {
+        if (mpp->storedItems[i] == id) {
+            break;
+            }
+        }
+    if (i < MAX_STORED_ITEMS) {
+        mpp->storedItems[i] = 0;
+        return TRUE;
 #else
 BOOL pouchRemoveKeepItem(s32 id, s32 index) {
     s32 i, j;
-#endif
 
-#if VERSION <= VERSION_DEMO_US
-    for (i = 0; i < MAX_STORED_ITEMS; i++) {
-#else
     if (mpp->storedItems[index] != id) {
         return FALSE;
     }
     for (i = index; i < MAX_STORED_ITEMS; i++) {
-#endif
         if (mpp->storedItems[i] == id) {
-#if VERSION <= VERSION_DEMO_US
-            break;
-#else
             mpp->storedItems[i] = 0;
             for (j = i; j < MAX_STORED_ITEMS - 1; j++) {
                 mpp->storedItems[j] = mpp->storedItems[j + 1];
                 mpp->storedItems[j + 1] = 0;
-#endif
             }
-#if VERSION > VERSION_DEMO_US
             return TRUE;
-#endif
         }
-#if VERSION <= VERSION_DEMO_US
-    if (i < MAX_STORED_ITEMS) {
-        mpp->storedItems[i] = 0;
-        return TRUE;
 #endif
     }
     return FALSE;

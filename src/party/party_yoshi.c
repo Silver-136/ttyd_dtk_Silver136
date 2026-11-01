@@ -1433,28 +1433,25 @@ void searchGround2(PartyEntry* party) {
     Vec ground; // the search fills only .y
     Vec pos;
     f32 depth;
-#endif
 
     if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
-#if VERSION <= VERSION_DEMO_US
         hit = _partySearchGround(party, &ground.y, &depth, 11.0f, 0.0f);
-#else
-        hit = partySearchGround(party, 11.0f, 0.0f);
-#endif
     }
-#if VERSION > VERSION_DEMO_US
-    if (hit == NULL) {
-#endif
         L_sweatEntry(party, hit);
-#if VERSION <= VERSION_DEMO_US
         if (hit == NULL) {
-#endif
         return;
-#if VERSION <= VERSION_DEMO_US
     }
     if (party->yoshiPsndSFXId != -1) {
         psndSFXOff(party->yoshiPsndSFXId);
         party->yoshiPsndSFXId = -1;
+#else
+
+    if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
+        hit = partySearchGround(party, 11.0f, 0.0f);
+    }
+    if (hit == NULL) {
+        L_sweatEntry(party, hit);
+        return;
 #endif
     }
     attr = hitGetAttr(hit);

@@ -2489,13 +2489,11 @@ EVT_BEGIN(evt_kurikuri_lose)
 #if VERSION == VERSION_EU
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print_insert, 0, PTR("stg3_tou_118_61"), 0, PTR("ガンス"), LW(0))
-#else
-    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_118_61"), 0, LW(2), LW(0))
-#endif
-#if VERSION == VERSION_EU
     ELSE
         CALL(evt_msg_print_insert, 0, PTR("stg3_tou_re_118_61"), 0, PTR("キノシコワ"), LW(0))
     END_IF
+#else
+    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_118_61"), 0, LW(2), LW(0))
 #endif
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_85"), 0, STRING("\223G\202P"))
@@ -2780,13 +2778,11 @@ EVT_BEGIN(evt_shinemon_lose)
 #if VERSION == VERSION_EU
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print_insert, 0, PTR("stg3_tou_118_61"), 0, PTR("ガンス"), LW(0))
-#else
-    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_118_61"), 0, LW(2), LW(0))
-#endif
-#if VERSION == VERSION_EU
     ELSE
         CALL(evt_msg_print_insert, 0, PTR("stg3_tou_re_118_61"), 0, PTR("キノシコワ"), LW(0))
     END_IF
+#else
+    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_118_61"), 0, LW(2), LW(0))
 #endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 60, 143, 263, 60, 95, -8, 0, EASING_LINEAR)
@@ -3525,13 +3521,11 @@ EVT_BEGIN(evt_default_opening)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 5)
         CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, 0)
-#else
-    CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, EASING_LINEAR)
-#endif
-#if VERSION == VERSION_EU
     ELSE
         CALL(evt_cam3d_evt_set, -65, 163, 335, -65, 115, -8, 0, 0)
     END_IF
+#else
+    CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, EASING_LINEAR)
 #endif
     WAIT_FRAMES(1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -3689,13 +3683,11 @@ EVT_BEGIN(evt_default_win)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 5)
         CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, 0)
-#else
-    CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, EASING_LINEAR)
-#endif
-#if VERSION == VERSION_EU
     ELSE
         CALL(evt_cam3d_evt_set, -65, 163, 335, -65, 115, -8, 0, 0)
     END_IF
+#else
+    CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, EASING_LINEAR)
 #endif
     WAIT_FRAMES(1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)

@@ -4969,25 +4969,26 @@ EVT_BEGIN(ItemEvent_LastDinner)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_SYSTEM_ON)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
-#endif
     CALL(evt_eff, 0, STRING("indirect"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, 0, STRING("hit"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
-    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
-#endif
     WAIT_MS(250)
     CALL(evt_eff, 0, STRING("hit"), 1, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
-    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
-#endif
     WAIT_MS(250)
     CALL(evt_eff, 0, STRING("hit"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
-    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
-#endif
     WAIT_MS(250)
     CALL(evt_eff, 0, STRING("hit"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#else
+    CALL(evt_eff, 0, STRING("indirect"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff, 0, STRING("hit"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
+    WAIT_MS(250)
+    CALL(evt_eff, 0, STRING("hit"), 1, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
+    WAIT_MS(250)
+    CALL(evt_eff, 0, STRING("hit"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
+    WAIT_MS(250)
+    CALL(evt_eff, 0, STRING("hit"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
 #endif
     WAIT_MS(1750)
@@ -5041,85 +5042,86 @@ EVT_BEGIN(ItemEvent_Kaminari_Dokkan)
     CALL_CHILD(PTR(ItemEvent_Kaminari))
     RETURN
 EVT_END()
-#endif
 
 /** Thunder Bolt: 5 lightning damage to one enemy. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Kaminari_Gorogoro)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Gorogoro))
     CALL_CHILD(PTR(ItemEvent_Kaminari))
     RETURN
 EVT_END()
-#endif
 
 /** Ruin Powder: confuses every enemy for three turns. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Madowaseno_Kona)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Madowaseno_Kona))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
-#endif
 
 /** Power Punch: makes the chosen ally huge (attack up) for three turns. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Dekadeka_Drink)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Dekadeka_Drink))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
-#endif
 
 /** Courage Shell: raises the chosen ally's defence by 3 for three turns. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Katikati_Koura)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Katikati_Koura))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
-#endif
 
 /** Mini Mr. Mini: shrinks every enemy (attack down) for three turns. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Minimini_Kun)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Minimini_Kun))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
-#endif
 
 /** Mr. Softener: lowers every enemy's defence by 3 for three turns. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Funyafunya_Kun)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Funyafunya_Kun))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
-#endif
 
 /** Tasty Tonic: cures the chosen ally's bad status effects. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Sukkiri_Drink)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Sukkiri_Drink))
     CALL_CHILD(PTR(ItemEvent_Support_RefreshEffect))
     RETURN
 EVT_END()
-#endif
 
 /** Spite Pouch: gives the chosen ally payback for three turns. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Shikaeshino_Kona)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Shikaeshino_Kona))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
-#endif
 
 /** Koopa Curse: slows the chosen enemy for three turns. */
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(ItemEvent_Kameno_Noroi)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Kameno_Noroi))
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
+#else
+
+/** Thunder Bolt: 5 lightning damage to one enemy. */
+
+/** Ruin Powder: confuses every enemy for three turns. */
+
+/** Power Punch: makes the chosen ally huge (attack up) for three turns. */
+
+/** Courage Shell: raises the chosen ally's defence by 3 for three turns. */
+
+/** Mini Mr. Mini: shrinks every enemy (attack down) for three turns. */
+
+/** Mr. Softener: lowers every enemy's defence by 3 for three turns. */
+
+/** Tasty Tonic: cures the chosen ally's bad status effects. */
+
+/** Spite Pouch: gives the chosen ally payback for three turns. */
+
+/** Koopa Curse: slows the chosen enemy for three turns. */
 #endif

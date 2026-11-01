@@ -687,56 +687,49 @@ void fadeMain(void) {
                             case FADE_PIPE_LEFT_A1:
 #if VERSION <= VERSION_DEMO_US
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN1"));
-#else
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN1 | PSND_SFX_KEEP));
-#endif
                                 break;
                             case FADE_PIPE_RIGHT_A1:
-#if VERSION <= VERSION_DEMO_US
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN2"));
-#else
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN2 | PSND_SFX_KEEP));
-#endif
                                 break;
                             case FADE_PIPE_UP_A1:
-#if VERSION <= VERSION_DEMO_US
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN3"));
-#else
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN3 | PSND_SFX_KEEP));
-#endif
                                 break;
                             case FADE_PIPE_DOWN_A1:
-#if VERSION <= VERSION_DEMO_US
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN4"));
-#else
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN4 | PSND_SFX_KEEP));
-#endif
                                 break;
                             case FADE_PIPE_LEFT_A2:
-#if VERSION <= VERSION_DEMO_US
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN5"));
-#else
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN5 | PSND_SFX_KEEP));
-#endif
                                 break;
                             case FADE_PIPE_RIGHT_A2:
-#if VERSION <= VERSION_DEMO_US
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN6"));
-#else
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN6 | PSND_SFX_KEEP));
-#endif
                                 break;
                             case FADE_PIPE_UP_A2:
-#if VERSION <= VERSION_DEMO_US
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN7"));
-#else
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN7 | PSND_SFX_KEEP));
-#endif
                                 break;
                             case FADE_PIPE_DOWN_A2:
-#if VERSION <= VERSION_DEMO_US
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN8"));
 #else
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN1 | PSND_SFX_KEEP));
+                                break;
+                            case FADE_PIPE_RIGHT_A1:
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN2 | PSND_SFX_KEEP));
+                                break;
+                            case FADE_PIPE_UP_A1:
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN3 | PSND_SFX_KEEP));
+                                break;
+                            case FADE_PIPE_DOWN_A1:
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN4 | PSND_SFX_KEEP));
+                                break;
+                            case FADE_PIPE_LEFT_A2:
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN5 | PSND_SFX_KEEP));
+                                break;
+                            case FADE_PIPE_RIGHT_A2:
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN6 | PSND_SFX_KEEP));
+                                break;
+                            case FADE_PIPE_UP_A2:
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN7 | PSND_SFX_KEEP));
+                                break;
+                            case FADE_PIPE_DOWN_A2:
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN8 | PSND_SFX_KEEP));
 #endif
                                 break;
@@ -1014,35 +1007,29 @@ void fadeMain(void) {
                             case FADE_CURTAIN_SIDES_A1:
                             case FADE_CURTAIN_SIDES_A1_TOP:
                             entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_BTL_KORTESS_CHANGE1"));
-#else
-                            case 0x18: case 0x1B: case 0x3F:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_BTL_KORTESS_CHANGE1 | PSND_SFX_KEEP));
-#endif
                                 break;
-#if VERSION <= VERSION_DEMO_US
                             case FADE_CURTAIN_SIDES_A2_3D:
                             case FADE_CURTAIN_SIDES_A2:
                             case FADE_CURTAIN_SIDES_A2_TOP:
                             entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_BTL_KORTESS_CHANGE2"));
-#else
-                            case 0x19: case 0x1C: case 0x40:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_BTL_KORTESS_CHANGE2 | PSND_SFX_KEEP));
-#endif
                                 break;
-#if VERSION <= VERSION_DEMO_US
                             case FADE_CURTAIN_CENTER_A1_3D:
                             case FADE_CURTAIN_CENTER_A1:
                             entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_UP1"));
-#else
-                            case 0x1D: case 0x23:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_STG_START_CURTAIN_UP1 | PSND_SFX_KEEP));
-#endif
                                 break;
-#if VERSION <= VERSION_DEMO_US
                             case FADE_CURTAIN_CENTER_A2_3D:
                             case FADE_CURTAIN_CENTER_A2:
                             entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
 #else
+                            case 0x18: case 0x1B: case 0x3F:
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_BTL_KORTESS_CHANGE1 | PSND_SFX_KEEP));
+                                break;
+                            case 0x19: case 0x1C: case 0x40:
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_BTL_KORTESS_CHANGE2 | PSND_SFX_KEEP));
+                                break;
+                            case 0x1D: case 0x23:
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_STG_START_CURTAIN_UP1 | PSND_SFX_KEEP));
+                                break;
                             case 0x1E: case 0x24:
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_STG_START_CURTAIN_DOWN1 | PSND_SFX_KEEP));
 #endif
@@ -1138,22 +1125,14 @@ void fadeMain(void) {
             case FADE_CURTAIN_CENTER_Z1:
             case FADE_CURTAIN_LEAVE:
             case FADE_CURTAIN_ENTER:
-#else
-            case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28:
-#endif
                 dispEntry(CAMERA_FADE, 0.0f, 0, disp_maku, entry);
                 break;
-#if VERSION <= VERSION_DEMO_US
             case FADE_CURTAIN_SIDES_A1:
             case FADE_CURTAIN_SIDES_A2:
             case FADE_CURTAIN_SIDES_A1_TOP:
             case FADE_CURTAIN_SIDES_A2_TOP:
-#else
-            case 0x1B: case 0x1C: case 0x3F: case 0x40:
-#endif
                 dispEntry(CAMERA_FADE2, 0.0f, 0, disp_maku, entry);
                 break;
-#if VERSION <= VERSION_DEMO_US
             case FADE_CURTAIN_SIDES_A1_3D:
             case FADE_CURTAIN_SIDES_A2_3D:
             case FADE_CURTAIN_SIDES_Z1_3D:
@@ -1164,12 +1143,8 @@ void fadeMain(void) {
             case FADE_CURTAIN_LEAVE_3D:
             case FADE_CURTAIN_ENTER_3D:
             case FADE_PAGE_FLIP_FOUR:
-#else
-            case 0x18: case 0x19: case 0x1A: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x33:
-#endif
                 dispEntry(CAMERA_3D_IMAGE, 0.0f, 0, disp_maku, entry);
                 break;
-#if VERSION <= VERSION_DEMO_US
             case FADE_PAGE_FLIP_Z1:
             case FADE_PAGE_FLIP_A1:
             case FADE_PAGE_FLIP_Z1_OFFSCREEN:
@@ -1184,6 +1159,15 @@ void fadeMain(void) {
             case FADE_STORY_PEACH_A2:
             case FADE_STORY_BOWSER_A2:
 #else
+            case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28:
+                dispEntry(CAMERA_FADE, 0.0f, 0, disp_maku, entry);
+                break;
+            case 0x1B: case 0x1C: case 0x3F: case 0x40:
+                dispEntry(CAMERA_FADE2, 0.0f, 0, disp_maku, entry);
+                break;
+            case 0x18: case 0x19: case 0x1A: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x33:
+                dispEntry(CAMERA_3D_IMAGE, 0.0f, 0, disp_maku, entry);
+                break;
             case 0x31: case 0x32: case 0x34: case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: case 0x3A:
             case 0x3B: case 0x3C: case 0x3D: case 0x3E:
 #endif

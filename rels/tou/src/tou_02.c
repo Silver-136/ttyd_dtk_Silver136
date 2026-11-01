@@ -901,11 +901,9 @@ EVT_BEGIN(talk_kino5)
                     CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10))
                     CASE_DEFAULT
                     CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10), LW(10))
+                END_SWITCH
 #else
                 CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10), LW(10))
-#endif
-#if VERSION == VERSION_EU
-                END_SWITCH
 #endif
             ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05"), 0, 0, LW(10))
@@ -1885,24 +1883,21 @@ void ext_fan_main(void) {
                 Fan* other;
 #if VERSION <= VERSION_DEMO_US
                 f32 d;
-#endif
 
                 for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
-#if VERSION <= VERSION_DEMO_US
                     if (other->state == 0 && fan != other && (d = PSVECSquareDistance(&fan->pos, &other->pos)) < 900.0f) {
-#else
-                    if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
-#endif
                         PSVECSubtract(&fan->pos, &other->pos, &dir);
-#if VERSION <= VERSION_DEMO_US
                         if (d == 0.0f) {
                             dir.x = d = 1.0f;
                         }
-#endif
                         dir.y = 0.0f;
-#if VERSION <= VERSION_DEMO_US
                         PSVECScale(&dir, &dir, 8.0f * (1.0f / d));
 #else
+
+                for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
+                    if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
+                        PSVECSubtract(&fan->pos, &other->pos, &dir);
+                        dir.y = 0.0f;
                         PSVECNormalize(&dir, &dir);
                         PSVECScale(&dir, &dir, 5.0f);
 #endif
@@ -1994,20 +1989,7 @@ void ext_fan_main(void) {
         f32 angle;
         f32 dist;
         f32 h;
-#endif
         pose = extGetPosePtr();
-#if VERSION <= VERSION_DEMO_US
-        fan = fan_wp->fans;
-        for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
-            f32 angle;
-
-            switch (fan->state) {
-                case 0:
-                    PSVECAdd(&fan->pos, &fan->vel, &fan->pos);
-                    PSVECScale(&fan->vel, &fan->vel, 0.6f);
-                    if (fan->pos.z < -190.0f) {
-                        fan->pos.z = -190.0f;
-#else
         lfan = fan_wp->fans;
         for (li = 0; li < fan_wp->num; li++, pose++, lfan++) {
             switch (lfan->state) {
@@ -2028,12 +2010,7 @@ void ext_fan_main(void) {
                         lfan->pos.z += lfan->vel.z;
                         lfan->vel.x *= 0.6f;
                         lfan->vel.z *= 0.6f;
-#endif
                     }
-#if VERSION <= VERSION_DEMO_US
-                    if (fan->pos.z > 190.0f) {
-                        fan->pos.z = 190.0f;
-#else
                     if (lfan->pos.x < -350.0f) {
                         lfan->pos.x = -350.0f;
                     }
@@ -2042,33 +2019,44 @@ void ext_fan_main(void) {
                     }
                     if (lfan->pos.z > (h = 195.0f + li / 100.0f)) {
                         lfan->pos.z = h;
-#endif
                     }
                     break;
-#if VERSION > VERSION_DEMO_US
                 }
-#endif
                 case 10:
-#if VERSION <= VERSION_DEMO_US
-                    fan->pos.y += fan->param.x;
-                    fan->param.x -= fan->param.z;
-                    angle = angleABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
-#else
                     lfan->pos.y += lfan->param.x;
                     lfan->param.x -= lfan->param.z;
                     angle = angleABf(lfan->pos.x, lfan->pos.z, lfan->target.x, lfan->target.z);
-#endif
                     angle = 6.2831855f * angle / 360.0f;
-#if VERSION <= VERSION_DEMO_US
-                    fan->pos.x += fan->param.y * polySinf(angle);
-                    fan->pos.z += fan->param.y * -polyCosf(angle);
-                    if (--fan->timer < 0) {
-                        fan->state = 100;
-#else
                     lfan->pos.x += lfan->param.y * polySinf(angle);
                     lfan->pos.z += lfan->param.y * -polyCosf(angle);
                     if (--lfan->timer < 0) {
                         lfan->state = 100;
+#else
+        pose = extGetPosePtr();
+        fan = fan_wp->fans;
+        for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
+            f32 angle;
+
+            switch (fan->state) {
+                case 0:
+                    PSVECAdd(&fan->pos, &fan->vel, &fan->pos);
+                    PSVECScale(&fan->vel, &fan->vel, 0.6f);
+                    if (fan->pos.z < -190.0f) {
+                        fan->pos.z = -190.0f;
+                    }
+                    if (fan->pos.z > 190.0f) {
+                        fan->pos.z = 190.0f;
+                    }
+                    break;
+                case 10:
+                    fan->pos.y += fan->param.x;
+                    fan->param.x -= fan->param.z;
+                    angle = angleABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
+                    angle = 6.2831855f * angle / 360.0f;
+                    fan->pos.x += fan->param.y * polySinf(angle);
+                    fan->pos.z += fan->param.y * -polyCosf(angle);
+                    if (--fan->timer < 0) {
+                        fan->state = 100;
 #endif
                     }
                     break;

@@ -134,46 +134,41 @@ USER_FUNC(evt_lottery) {
                 } else if (day == lot->days[1]) {
 #if VERSION > VERSION_DEMO_US
                     do {
-#endif
                         lot->todayNum = lot->number % 1000 + rand() % 10 * 1000;
-#if VERSION > VERSION_DEMO_US
                     } while (lot->todayNum == lot->number);
-#endif
                     lot->flags |= LOTTERY_FLAG_MATCH3;
                 } else if (day == lot->days[2]) {
-#if VERSION > VERSION_DEMO_US
                     do {
-#endif
                         lot->todayNum = lot->number % 100 + rand() % 100 * 100;
-#if VERSION > VERSION_DEMO_US
                     } while (lot->todayNum == lot->number || lot->todayNum % 1000 == lot->number % 1000);
-#endif
                     lot->flags |= LOTTERY_FLAG_MATCH2;
                 } else if (day == lot->days[3]) {
-#if VERSION > VERSION_DEMO_US
                     do {
-#endif
                         lot->todayNum = lot->number % 10 + rand() % 1000 * 10;
-#if VERSION > VERSION_DEMO_US
                     } while (lot->todayNum == lot->number || lot->todayNum % 1000 == lot->number % 1000 ||
                         lot->todayNum % 100 == lot->number % 100);
-#endif
                     lot->flags |= LOTTERY_FLAG_MATCH1;
                 } else {
-#if VERSION <= VERSION_DEMO_US
-                    for (;;) {
-#else
                     do {
-#endif
                         lot->todayNum = rand() % 10000;
-#if VERSION <= VERSION_DEMO_US
+                    } while (lot->todayNum == lot->number || lot->number % 1000 == lot->todayNum % 1000 ||
+                        lot->number % 100 == lot->todayNum % 100 || lot->number % 10 == lot->todayNum % 10);
+#else
+                        lot->todayNum = lot->number % 1000 + rand() % 10 * 1000;
+                    lot->flags |= LOTTERY_FLAG_MATCH3;
+                } else if (day == lot->days[2]) {
+                        lot->todayNum = lot->number % 100 + rand() % 100 * 100;
+                    lot->flags |= LOTTERY_FLAG_MATCH2;
+                } else if (day == lot->days[3]) {
+                        lot->todayNum = lot->number % 10 + rand() % 1000 * 10;
+                    lot->flags |= LOTTERY_FLAG_MATCH1;
+                } else {
+                    for (;;) {
+                        lot->todayNum = rand() % 10000;
                     if (lot->todayNum != lot->number) {
                         break;
                     }
                 }
-#else
-                    } while (lot->todayNum == lot->number || lot->number % 1000 == lot->todayNum % 1000 ||
-                        lot->number % 100 == lot->todayNum % 100 || lot->number % 10 == lot->todayNum % 10);
 #endif
                 }
             } else {

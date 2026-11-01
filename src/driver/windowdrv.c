@@ -90,28 +90,15 @@ void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
     }
 #if VERSION > VERSION_DEMO_US
     tpl_loaded = TRUE;
-#endif
 }
 
-#if VERSION <= VERSION_DEMO_US
-/** inlined into windowTexSetup; the linker strips the unreferenced copy */
-void windowLoadTpl(const char* name) {
-#else
 /** the demo loads msgWindow.tpl synchronously */
 void windowTexSetup(void) {
-#endif
     DVDEntry* entry;
     u32 size;
-#if VERSION <= VERSION_DEMO_US
-    u32 len;
-#endif
     char path[128];
     s32 i;
 
-#if VERSION <= VERSION_DEMO_US
-    arcOpen(name, (void**)&winTpl, &size);
-    if (winTpl) {
-#else
     winTpl = NULL;
     tpl_loaded = FALSE;
     winTpl = arcOpen("font/msgWindow.tpl", NULL, NULL);
@@ -123,9 +110,25 @@ void windowTexSetup(void) {
         entry->info.cb.userData = entry;
         DVDMgrReadAsync(entry, winTpl, size, 0, windowTexSetup_callback);
     } else {
-#endif
         UnpackTexPalette(winTpl);
-#if VERSION <= VERSION_DEMO_US
+        wakuTexObj = __memAlloc(HEAP_DEFAULT, sizeof(GXTexObj) * winTpl->numDescriptors);
+
+        for (i = 0; i < winTpl->numDescriptors; i++) {
+            TEXGetGXTexObjFromPalette(winTpl, &wakuTexObj[i], i);
+#else
+}
+
+/** inlined into windowTexSetup; the linker strips the unreferenced copy */
+void windowLoadTpl(const char* name) {
+    DVDEntry* entry;
+    u32 size;
+    u32 len;
+    char path[128];
+    s32 i;
+
+    arcOpen(name, (void**)&winTpl, &size);
+    if (winTpl) {
+        UnpackTexPalette(winTpl);
         } else {
             sprintf(path, "%s/%s", getMarioStDvdRoot(), name);
             entry = DVDMgrOpen(path, 2, 0);
@@ -135,11 +138,6 @@ void windowTexSetup(void) {
                 DVDMgrRead(entry, winTpl, len, 0);
                 DVDMgrClose(entry);
                 UnpackTexPalette(winTpl);
-#else
-        wakuTexObj = __memAlloc(HEAP_DEFAULT, sizeof(GXTexObj) * winTpl->numDescriptors);
-
-        for (i = 0; i < winTpl->numDescriptors; i++) {
-            TEXGetGXTexObjFromPalette(winTpl, &wakuTexObj[i], i);
 #endif
         }
     }

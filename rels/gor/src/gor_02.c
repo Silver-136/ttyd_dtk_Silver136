@@ -250,14 +250,10 @@ s32 powerupya_item_tbl[2];
 EvtWord powerupya_stardust[32];
 EvtWord powerupya_mario_move[48];
 EvtWord powerupya_party_move[38];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord powerupya_orb_use[];
-#else
 EvtWord powerupya_orb_use[544];
-#endif
-#if VERSION > VERSION_DEMO_US
 EvtWord powerupya_talk[119];
+#else
+extern EvtWord powerupya_orb_use[];
 #endif
 EvtWord mapball_init[19];
 EvtWord powerupya_init[58];
@@ -393,19 +389,13 @@ static EvtWord evt_door_04_01[12];
 static EvtWord evt_wall_04[38];
 #if VERSION >= VERSION_US
 static EvtWord evt_door_04_open[19];
-#else
-#if VERSION == VERSION_DEMO_JP
-static EvtWord evt_door_04_open[12];
-#else
-static EvtWord evt_door_04_open[14];
-#endif
-#endif
-#if VERSION >= VERSION_US
 static EvtWord evt_door_04_close[21];
 #else
 #if VERSION == VERSION_DEMO_JP
+static EvtWord evt_door_04_open[12];
 static EvtWord evt_door_04_close[14];
 #else
+static EvtWord evt_door_04_open[14];
 static EvtWord evt_door_04_close[16];
 #endif
 #endif
@@ -472,46 +462,22 @@ EvtWord book_center_init[22];
 EvtWord epigraphy_map[];
 #if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage1[258];
-#else
-#if VERSION == VERSION_DEMO_JP
-EvtWord epigraphy_map_after_stage1[246];
-#else
-EvtWord epigraphy_map_after_stage1[251];
-#endif
-#endif
-#if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage2[400];
-#else
-#if VERSION == VERSION_DEMO_JP
-EvtWord epigraphy_map_after_stage2[388];
-#else
-EvtWord epigraphy_map_after_stage2[393];
-#endif
-#endif
-#if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage3[368];
-#else
-#if VERSION == VERSION_DEMO_JP
-EvtWord epigraphy_map_after_stage3[356];
-#else
-EvtWord epigraphy_map_after_stage3[361];
-#endif
-#endif
-#if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage4[297];
-#else
-#if VERSION == VERSION_DEMO_JP
-EvtWord epigraphy_map_after_stage4[285];
-#else
-EvtWord epigraphy_map_after_stage4[290];
-#endif
-#endif
-#if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage5[225];
 #else
 #if VERSION == VERSION_DEMO_JP
+EvtWord epigraphy_map_after_stage1[246];
+EvtWord epigraphy_map_after_stage2[388];
+EvtWord epigraphy_map_after_stage3[356];
+EvtWord epigraphy_map_after_stage4[285];
 EvtWord epigraphy_map_after_stage5[213];
 #else
+EvtWord epigraphy_map_after_stage1[251];
+EvtWord epigraphy_map_after_stage2[393];
+EvtWord epigraphy_map_after_stage3[361];
+EvtWord epigraphy_map_after_stage4[290];
 EvtWord epigraphy_map_after_stage5[218];
 #endif
 #endif
@@ -562,11 +528,10 @@ EvtWord front_wall_keshi[27];
 EvtWord tobiori_check[48];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gor_02_init_evt[];
+
 #else
 EvtWord gor_02_init_evt[543];
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /**
  * Turns off the east side's collision pieces ("A_kabe", "A_saku", "A_kmn", "A_gomi", "A_l_ura_gomi")
  * so Mario can pass through them. The house doors' open callbacks (evt_door_01_open to evt_door_06_open and
@@ -1328,19 +1293,7 @@ EVT_BEGIN(powerupya_party_move)
     CALL(evt_party_set_dir, 0, 90, 200)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION <= VERSION_DEMO_US
-/**
- * The demo has no Up Arrow trade: Merlon takes the item and turns the star chart himself.
- * This talk event has the name that retail gives to its door animation.
- */
-EVT_BEGIN(powerupya_direct_talk)
-    IF_INT_EQUAL(GSWF_GOR_MERLON_HINT_PENDING, 1)
-        IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
-            CALL(evt_msg_print, 0, STRING("powerup_ev_01"), 0, STRING("me"))
-            CALL(evt_cam3d_evt_set, -355, 114, 371, -355, 45, -23, 500, EASING_SINE_IN_OUT)
-#else
 EVT_BEGIN(powerupya_orb_use)
     // Mario holds out the Up Arrow: it floats across to Merlon and vanishes.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1359,11 +1312,7 @@ EVT_BEGIN(powerupya_orb_use)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("watasu"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-#endif
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_msg_print, 0, STRING("powerup_ev_02"), 0, STRING("me"))
-#else
     // Merlon reacts to the arrow and speaks.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("powerup_ev_04"), 0, STRING("me"))
@@ -1376,12 +1325,8 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_cam3d_evt_set, -335, 100, 158, -335, 33, -236, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("powerup_ev_05"), 0, STRING("me"))
-#endif
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 1)
-#else
     // Merlon spins on the spot; star dust sprays and the shine sounds play.
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_2"))
     WAIT_MS(500)
@@ -1432,14 +1377,7 @@ EVT_BEGIN(powerupya_orb_use)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(0), -365)
             CALL(evt_mario_set_dir, 90, 200, 0)
-#endif
             ELSE
-#if VERSION <= VERSION_DEMO_US
-            CALL(evt_pouch_check_item, ITEM_UP_ARROW, LW(0))
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(evt_msg_print, FUKIDASHI_AT_MARIO, STRING("powerup_ev_04"), 0, STRING("me"))
-                CALL(evt_msg_print, 0, STRING("powerup_ev_05"), 0, STRING("me"))
-#else
             CALL(evt_mario_set_dir, 270, 200, 0)
         END_IF
     END_INLINE_EVENT
@@ -1478,9 +1416,7 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_snd_sfxon_3d, STRING("SFX_FLD_NPC_LANDING1"), LW(7), LW(8), LW(9), 0)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     WAIT_MS(750)
-#endif
     CALL(evt_msg_print, 0, STRING("powerup_ev_06"), 0, STRING("me"))
-#if VERSION > VERSION_DEMO_US
     // Mario and the partner walk over to the stone while Merlon picks it up.
     SPAWN_EVENT(PTR(powerupya_mario_move))
     CALL(evt_party_stop, 0)
@@ -1502,6 +1438,28 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1500)
     CALL(evt_eff_softdelete, STRING("aaax"))
+#else
+
+/**
+ * The demo has no Up Arrow trade: Merlon takes the item and turns the star chart himself.
+ * This talk event has the name that retail gives to its door animation.
+ */
+EVT_BEGIN(powerupya_direct_talk)
+    IF_INT_EQUAL(GSWF_GOR_MERLON_HINT_PENDING, 1)
+        IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
+            CALL(evt_msg_print, 0, STRING("powerup_ev_01"), 0, STRING("me"))
+            CALL(evt_cam3d_evt_set, -355, 114, 371, -355, 45, -23, 500, EASING_SINE_IN_OUT)
+    WAIT_MS(500)
+    CALL(evt_msg_print, 0, STRING("powerup_ev_02"), 0, STRING("me"))
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+    WAIT_MS(500)
+    SET_VALUE(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 1)
+            ELSE
+            CALL(evt_pouch_check_item, ITEM_UP_ARROW, LW(0))
+            IF_INT_NOT_EQUAL(LW(0), 0)
+                CALL(evt_msg_print, FUKIDASHI_AT_MARIO, STRING("powerup_ev_04"), 0, STRING("me"))
+                CALL(evt_msg_print, 0, STRING("powerup_ev_05"), 0, STRING("me"))
+    CALL(evt_msg_print, 0, STRING("powerup_ev_06"), 0, STRING("me"))
 #endif
     SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
     // The blue stone turns red and the music fades.

@@ -1853,20 +1853,18 @@ EVT_BEGIN(bero_case_switch_off)
     CALL(evt_bero_get_info_num, LW(1))
 #if VERSION <= VERSION_DEMO_US
     DEBUG_PUT_MSG(STRING("ベロ削除"))
-#endif
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION > VERSION_DEMO_US
-        DEBUG_PUT_MSG(STRING("\203x\203\215\215\355\217\234\202\265\202\334\202\265\202\275"))
-#endif
         CALL(evt_bero_case_id_load, LW(1), LW(15))
         CALL(evt_del_case_evt, 0, LW(15))
-#if VERSION > VERSION_DEMO_US
-        CALL(evt_hitobj_attr_onoff, 0, 0, LW(3), HIT_ATTR_BERO)
-#endif
         ELSE
-#if VERSION <= VERSION_DEMO_US
         DEBUG_PUT_MSG(STRING("ベロの出て行くデータの二重削除防止をしています"))
 #else
+    IF_INT_EQUAL(LW(0), 0)
+        DEBUG_PUT_MSG(STRING("\203x\203\215\215\355\217\234\202\265\202\334\202\265\202\275"))
+        CALL(evt_bero_case_id_load, LW(1), LW(15))
+        CALL(evt_del_case_evt, 0, LW(15))
+        CALL(evt_hitobj_attr_onoff, 0, 0, LW(3), HIT_ATTR_BERO)
+        ELSE
         DEBUG_PUT_MSG(STRING("\203x\203\215\202\314\215\355\217\234\227\\\226\361\202\340\202\265\202\255\202\315\203x\203\215\202\314\217o\202\304\215s\202\255\203f\201[\203^\202\314\223\361\217d\215\355\217\234\226h\216~\202\305\202\267"))
 #endif
     END_IF

@@ -383,27 +383,24 @@ static EVT_BEGIN(phase_event)
             IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_268"), 0, UNIT_ID_SELF)
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
+                CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_269"), 0, LW(0))
+                ELSE
+                CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_270"), 0, UNIT_ID_SELF)
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
 #else
                 CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_268"), 0, -2)
-#endif
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
-#if VERSION > VERSION_DEMO_US
                 CALL(btlevtcmd_SetTalkPoseType, LW(0), POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, LW(0), POSE_TYPE_ACTION)
-#endif
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_269"), 0, LW(0))
                 ELSE
-#if VERSION <= VERSION_DEMO_US
-                CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_270"), 0, UNIT_ID_SELF)
-#else
                 CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_270"), 0, -2)
-#endif
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
-#if VERSION > VERSION_DEMO_US
                 CALL(btlevtcmd_SetTalkPoseType, LW(0), POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, LW(0), POSE_TYPE_ACTION)
 #endif

@@ -1090,9 +1090,7 @@ void mapUnLoad(void) {
 BOOL mapPreLoad(const char* map) {
     return TRUE;
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /**
  * Loads the field map map into MapWork slot 0 as its only entry; called by seq_mapchange.
  * The demo first unpacks the map's compressed archive.
@@ -1127,15 +1125,7 @@ void mapLoad(const char* map) {
  */
 BOOL mapPreLoad(const char* map) {
     FileEntry* file = (FileEntry*)fileAsyncf(0, NULL, "%s/b/%s", getMarioStDvdRoot(), map);
-#else
-void bmapUnLoad(void) {
-    MapEntry* entry2;
-    MapEntry* entry;
-    int i;
-    MapWork* wp;
-#endif
 
-#if VERSION <= VERSION_DEMO_US
     if (file == NULL) {
         return FALSE;
     }
@@ -1189,6 +1179,12 @@ MapWork* wp2;
     MapEntry* entry2;
     int i;
 #else
+void bmapUnLoad(void) {
+    MapEntry* entry2;
+    MapEntry* entry;
+    int i;
+    MapWork* wp;
+
     sysWaitDrawSync();
 #endif
     i = 0;

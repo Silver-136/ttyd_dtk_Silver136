@@ -376,12 +376,9 @@ EvtWord togedaruma_return_event[44];
 EvtWord barriern_init_event[37];
 #if VERSION >= VERSION_US
 EvtWord barriern_move_event[90];
-#else
-EvtWord barriern_move_event[89];
-#endif
-#if VERSION >= VERSION_US
 EvtWord barriern2_move_event[90];
 #else
+EvtWord barriern_move_event[89];
 EvtWord barriern2_move_event[70];
 #endif
 EvtWord barriern_dead_event[17];
@@ -547,11 +544,9 @@ EvtWord zakoM2D_init_event[37];
 EvtWord zakoM2D_move_event[95];
 #if VERSION > VERSION_DEMO_US
 EvtWord zakoM2D_find_event[179];
-#endif
-#if VERSION <= VERSION_DEMO_US
-extern EvtWord zakoM2D_find_start_event[];
-#else
 EvtWord zakoM2D_find_start_event[88];
+#else
+extern EvtWord zakoM2D_find_start_event[];
 #endif
 EvtWord gesso2D_init_event[34];
 EvtWord gesso2D_move_event[262];
@@ -4643,216 +4638,160 @@ EVT_BEGIN(enemy_event_dead_event)
     CALL(evt_npc_return_interrupt, STRING("me"))
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(enemy_slave_common_dead_event)
     CALL(evt_npc_delete, STRING("me"))
     CALL(evt_npc_return_interrupt, STRING("me"))
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(enemy_common_flag_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(testenemynpc_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(npc_urouro_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(kuriboo_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(patakuri_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(patapata_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_WALL_BOUNCE | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(patamet_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(chorobon_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(pansy_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(twinkling_pansy_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(karon_dead_event)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(sambo_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_UPDATE_BY_EVENT)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(togedaruma_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(piders_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(basabasa_dead_event)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(basabasa2_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(basabasa2_dead_event)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(teresa_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(teresa_dead_event)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(bubble_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(hbom_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(zakowiz_dead_event)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(hannya_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     CALL(evt_npc_status_onoff, 0, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(kamec_dead_event)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(kamec2_dead_event)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(hbross_dead_event)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(zakoM2D_dead_event)
     CALL(evt_npc_status_onoff, 0, STRING("slave_0"), NPC_STATUS_DEAD)
     CALL_CHILD(enemy_2d_common_dead_event)

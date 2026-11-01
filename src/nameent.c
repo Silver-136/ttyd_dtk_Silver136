@@ -298,15 +298,10 @@ const char* nameEntGetName(void) {
 static inline BOOL nameEntLoad(void) {
 #if VERSION >= VERSION_US
     const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
-#endif
-#if VERSION >= VERSION_US
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
-#else
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != 0U) {
-#endif
-#if VERSION >= VERSION_US
         wp->tplFile = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #else
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != 0U) {
         wp->tplFile = fileAllocf(FILE_TYPE_TPL, NAME_TPL_JP, getMarioStDvdRoot());
 #endif
         return TRUE;

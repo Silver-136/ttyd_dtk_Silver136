@@ -922,24 +922,21 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
             func = partyDataTbl[party->currentMemberId].post_func;
             if (func) {
                 func(party);
-#endif
             }
-#if VERSION <= VERSION_DEMO_US
-            partyUsePost(party);
-#else
             break;
         case 1:
         case 2:
             partyForceSlitOff(party);
             break;
-#endif
     }
-#if VERSION > VERSION_DEMO_US
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 #pragma dont_inline on
+#else
+            }
+            partyUsePost(party);
+    }
+
 #endif
 /**
  * Switches the partner to run mode mode (0 stand, 1 wait, 2 follow, 3 ability, 4-7 appear, 8 goodbye,

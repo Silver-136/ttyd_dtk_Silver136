@@ -137,42 +137,39 @@ void _prolog(void);
 
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord end_credit_npc_parade[];
-#else
-EvtWord end_credit_npc_parade[44];
-#endif
-#if VERSION > VERSION_DEMO_US
-EvtWord end_image_blend_loop[123];
-#endif
 // US: "THE END" texture per language (indexed by gp->language)
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord end_image_main_evt[];
-#else
-EvtWord end_image_main_evt[187];
-#endif
 EvtWord end_return_title_evt[];
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord end_00_init_evt[];
-#else
-EvtWord end_00_init_evt[63];
-#endif
 EvtWord end_credit_gesso_evt[48];
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord end_credit_gonbaba_evt[];
 extern EvtWord end_credit_batten2_evt[];
 extern EvtWord end_credit_atomic_evt[];
 extern EvtWord end_credit_korutesu_evt[];
 extern EvtWord end_credit_para_evt[];
 extern EvtWord end_credit_batten_evt[];
+EvtWord end_credit_queen_evt[];
+
+
+
+
+
+/** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
 #else
+EvtWord end_credit_npc_parade[44];
+EvtWord end_image_blend_loop[123];
+// US: "THE END" texture per language (indexed by gp->language)
+EvtWord end_image_main_evt[187];
+EvtWord end_return_title_evt[];
+EvtWord end_00_init_evt[63];
+EvtWord end_credit_gesso_evt[48];
 EvtWord end_credit_gonbaba_evt[89];
 EvtWord end_credit_batten2_evt[54];
 EvtWord end_credit_atomic_evt[60];
 EvtWord end_credit_korutesu_evt[81];
 EvtWord end_credit_para_evt[50];
 EvtWord end_credit_batten_evt[83];
-#endif
 EvtWord end_credit_queen_evt[];
-#if VERSION > VERSION_DEMO_US
 EvtWord end_credit_moamoa_evt[108];
 f32 fd_end_00_negone_one_374[2] __attribute__((aligned(8)));
 f32 fd_end_00_neg_one_382;
@@ -188,11 +185,9 @@ f32 fd_end_00___local_3PIO2_368;
 f32 fd_end_00_one_negone_359[2] __attribute__((aligned(8)));
 f32 fd_end_00___local_PIO2_367;
 f32 fd_end_00_one_364;
-#endif
 
 
 
-#if VERSION > VERSION_DEMO_US
 /**
  * REL prolog of the ending module (the releases keep it in end_00.c):
  * runs the static constructors, registers the init event of end_00 and, in the US and later versions,
@@ -211,9 +206,7 @@ void _prolog(void) {
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
 #endif
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /**
  * REL epilog of the ending module: runs the static destructors, ends the staff roll (end_staff_roll_exit) and,
  * in the US and later versions, lets the 2D letterbox bars come back.
@@ -229,10 +222,8 @@ void _epilog(void) {
     camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
 #endif
 }
-#endif
 
 /** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
-#if VERSION > VERSION_DEMO_US
 void _unresolved(void) {
 }
 #endif
@@ -1623,13 +1614,19 @@ EVT_BEGIN(end_credit_para_evt)
     END_LOOP
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_delete, STRING("queen"))
-#else
-    CALL(evt_npc_delete, STRING("para"))
-#endif
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+
+
+/** Model name of the Smorg silhouette used in the ending's closing pictures. */
+
+/** Animation name of the Smorg silhouette used in the ending's closing pictures. */
+#else
+    CALL(evt_npc_delete, STRING("para"))
+    RETURN
+EVT_END()
+
 EVT_BEGIN(end_credit_batten_evt)
     CALL(evt_npc_entry, STRING("batten"), STRING("c_mb_robo_1a"))
     CALL(evt_npc_set_anim, STRING("batten"), STRING("W_1"))
@@ -1660,9 +1657,7 @@ EVT_BEGIN(end_credit_batten_evt)
     CALL(evt_npc_delete, STRING("batten"))
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /** Demo parade script for the Shadow Queen model (c_q_kage): rises up through the middle of the screen. */
 EVT_BEGIN(end_credit_queen_evt)
     WAIT_MS(7000)
@@ -1696,15 +1691,11 @@ EVT_BEGIN(end_credit_queen_evt)
     CALL(evt_npc_delete, STRING("queen"))
     RETURN
 EVT_END()
-#endif
 
 /** Model name of the Smorg silhouette used in the ending's closing pictures. */
-#if VERSION > VERSION_DEMO_US
 const char* end_moa_ext_anim = "c_n_moa_a";
-#endif
 
 /** Animation name of the Smorg silhouette used in the ending's closing pictures. */
-#if VERSION > VERSION_DEMO_US
 const char* end_moa_ext_pose = "S_1";
 #endif
 
@@ -2394,70 +2385,67 @@ EVT_BEGIN(end_credit_moamoa_evt)
     CALL(evt_npc_delete, STRING("モアモア"))
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-#endif
 
 /** Float constant -1 used by the ending's trigonometric code, placed here by the compiler. */
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_neg_one_382 = -1.0f;
-#endif
 
 /** Float constant pi used by the ending's trigonometric code, placed here by the compiler. */
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_PI_383 = 3.1415927f;
-#endif
 
 /** Float constant 3 pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_3PIO2_385 = 4.712389f;
-#endif
 
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-#endif
 
 /** Float constant pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_PIO2_384 = 1.5707964f;
-#endif
 
 /** Float constant 1 used by the ending's trigonometric code, placed here by the compiler. */
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_one_381 = 1.0f;
-#endif
 
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-#endif
 
 /** Float constant -1 used by the ending's trigonometric code, placed here by the compiler. */
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_neg_one_365 = -1.0f;
-#endif
 
 /** Float constant pi used by the ending's trigonometric code, placed here by the compiler. */
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_PI_366 = 3.1415927f;
-#endif
 
 /** Float constant 3 pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_3PIO2_368 = 4.712389f;
-#endif
 
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-#endif
 
 /** Float constant pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_PIO2_367 = 1.5707964f;
-#endif
 
 /** Float constant 1 used by the ending's trigonometric code, placed here by the compiler. */
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_one_364 = 1.0f;
+#else
+
+
+/** Float constant -1 used by the ending's trigonometric code, placed here by the compiler. */
+
+/** Float constant pi used by the ending's trigonometric code, placed here by the compiler. */
+
+/** Float constant 3 pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
+
+
+/** Float constant pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
+
+/** Float constant 1 used by the ending's trigonometric code, placed here by the compiler. */
+
+
+/** Float constant -1 used by the ending's trigonometric code, placed here by the compiler. */
+
+/** Float constant pi used by the ending's trigonometric code, placed here by the compiler. */
+
+/** Float constant 3 pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
+
+
+/** Float constant pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
+
+/** Float constant 1 used by the ending's trigonometric code, placed here by the compiler. */
 #endif

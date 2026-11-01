@@ -3612,8 +3612,6 @@ USER_FUNC(_majinai_effect) {
         event->userdatap[0] = effMajinaiEntry(0, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y + 4.0f, mario->position.z);
 #else
         event->userdatap[0] = effMajinaiEntry(0, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y + 16.0f, mario->position.z);
-#endif
-#if VERSION > VERSION_DEMO_US
         effect = event->userdatap[0];
         ((EffMajinaiWork*)effect->userdata)->scale = 0.8f;
 #endif

@@ -208,12 +208,9 @@ void BattleStatusIconMain(BattleUnit* unit) {
                     d = &_disp_table[i];
                     break;
             }
-#else
-            IconDispTableEntry* d = &_disp_table[i];
-#endif
-#if VERSION >= VERSION_US
             e = &icon->icons[icon->numStatusIcons];
 #else
+            IconDispTableEntry* d = &_disp_table[i];
             BattleWorkStatusIconEntry* e = &icon->icons[icon->numStatusIcons];
 #endif
             if (d->id == -1) break;

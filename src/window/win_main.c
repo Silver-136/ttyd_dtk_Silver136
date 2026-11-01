@@ -875,13 +875,23 @@ EVT_BEGIN(evt_lecture_msg)
     RETURN
 #if VERSION == VERSION_DEMO_JP
 EVT_END()
+
+
+
+static USER_FUNC(itemUseFunc) {
+    PartyEntry* party;
 #else
 OPCODE_END_SCRIPT,
     0 // US and the US demo: a trailing zero word in the object (the JP gap_05 data word)
 };
 static USER_FUNC(itemUseFunc) {
     PartyEntry* party;
+
+
+
 #endif
+    MarioWork* mario;
+    ItemData* item;
 #else
 #if VERSION >= VERSION_US
     LOOP(0)
@@ -899,18 +909,9 @@ EVT_END_PAD() // US: the script ends with one zero word (object 0x1E4 bytes)
 #else
 EVT_END()
 #endif
-#endif
 
 
 
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
-static USER_FUNC(itemUseFunc) {
-    PartyEntry* party;
-#endif
-    MarioWork* mario;
-    ItemData* item;
-#else
 USER_FUNC(itemUseFunc) {
     PartyEntry* party;
     MarioWork* mario;
@@ -1404,12 +1405,12 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 #if VERSION <= VERSION_DEMO_US
 #if VERSION != VERSION_DEMO_JP
-    va_list args;
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    FontDrawColor(color);
-    FontDrawScaleVec(scale);
-    ((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
+va_list args;
+va_start(args, fmt);
+vsprintf(buf, fmt, args);
+FontDrawColor(color);
+FontDrawScaleVec(scale);
+((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
 }
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 #endif

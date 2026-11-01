@@ -310,21 +310,20 @@ void mot_jabara(void) {
         marioChgPaper("PM_J_1B");
 #if VERSION <= VERSION_DEMO_US
         mario->multiTimer = 8;
-#endif
         mario->lastGroundPos = mario->position;
-#if VERSION <= VERSION_DEMO_US
         psndSFXOn_3D(SFX_NAME_WORD(0x182), &mario->position);
         jabaraSetSpd(0.2f, 0.005f, 1.5f);
-#endif
         marioChkGnd();
-#if VERSION > VERSION_DEMO_US
+        break;
+    case 10:
+#else
+        mario->lastGroundPos = mario->position;
+        marioChkGnd();
         if (mario->currMotionId != MARIO_MOTION_JABARA) {
             mario->currSubMotionId = 0x64;
         }
-#endif
         break;
     case 10:
-#if VERSION > VERSION_DEMO_US
         if (mario->currMotionId != MARIO_MOTION_JABARA) {
             mario->currSubMotionId = 0x64;
             break;

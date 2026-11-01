@@ -50,17 +50,11 @@ static EvtWord evt_first[525];
 #endif
 #if VERSION >= VERSION_US
 EvtWord rock_main[105];
-#else
-static EvtWord rock_main[79];
-#endif
-#if VERSION >= VERSION_US
 static EvtWord rock_evt0[15];
-#else
-static EvtWord rock_evt0[21];
-#endif
-#if VERSION >= VERSION_US
 static EvtWord rock_evt1[15];
 #else
+static EvtWord rock_main[79];
+static EvtWord rock_evt0[21];
 static EvtWord rock_evt1[21];
 #endif
 EvtWord moo_00_init_evt[133];

@@ -25,16 +25,11 @@
 static BeroEntry bero_entry_data[3];
 #if VERSION < VERSION_US
 static EvtWord rock_main[79];
-#endif
-#if VERSION >= VERSION_US
-static EvtWord rock_evt0[15];
-#else
 static EvtWord rock_evt0[21];
-#endif
-#if VERSION >= VERSION_US
-static EvtWord rock_evt1[15];
-#else
 static EvtWord rock_evt1[21];
+#else
+static EvtWord rock_evt0[15];
+static EvtWord rock_evt1[15];
 #endif
 EvtWord moo_06_init_evt[93];
 

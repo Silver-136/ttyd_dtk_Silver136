@@ -169,23 +169,10 @@ BattleUnitKind unit_fire_bros = {
  * immune to fire (defence 99 cancels the hit).
  */
 static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
-#else
-/**
- * Defence of Fire Bro per element (normal, fire, ice, explosion, electric), subtracted from each hit:
- * 1 against every element.
- */
-static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
-#endif
 
-#if VERSION <= VERSION_DEMO_US
 /** Element reactions of Fire Bro: fire immune; the other elements hit normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
-#else
-/** Element reactions of Fire Bro: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
-#endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Status vulnerability of Fire Bro (the demos), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -194,6 +181,15 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 40, 60, 100, 80, 100, 100, 95};
 #else
+/**
+ * Defence of Fire Bro per element (normal, fire, ice, explosion, electric), subtracted from each hit:
+ * 1 against every element.
+ */
+static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
+
+/** Element reactions of Fire Bro: none, every element hits normally. */
+static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+
 /**
  * Status vulnerability of Fire Bro (the final versions), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;

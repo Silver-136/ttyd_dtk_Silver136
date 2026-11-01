@@ -2344,20 +2344,20 @@ static EVT_BEGIN(dead_event)
             CALL(btlevtcmd_ftomsec, 80, LW(0))
             WAIT_MS(LW(0))
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_MOVE2"), EVT_NULLPTR, 0, LW(15))
-#endif
             CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-#if VERSION > VERSION_DEMO_US
             CALL(evt_snd_sfxoff, LW(15))
-#endif
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_1B_1"))
             CASE_EQUAL(3)
-#if VERSION > VERSION_DEMO_US
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_MOVE2"), EVT_NULLPTR, 0, LW(15))
-#endif
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3B_1"))
             CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-#if VERSION > VERSION_DEMO_US
             CALL(evt_snd_sfxoff, LW(15))
+#else
+            CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_1B_1"))
+            CASE_EQUAL(3)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3B_1"))
+            CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
 #endif
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_1B_1"))
         END_SWITCH

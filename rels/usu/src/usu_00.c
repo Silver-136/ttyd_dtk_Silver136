@@ -156,19 +156,13 @@ static EvtWord cam_down[8];
 EvtWord usu00_check_vivian[33];
 #if VERSION >= VERSION_US
 EvtWord usu00_crowAB_talk_event[338];
-#else
-#if VERSION == VERSION_DEMO_JP
-EvtWord usu00_crowAB_talk_event[291];
-#else
-EvtWord usu00_crowAB_talk_event[299];
-#endif
-#endif
-#if VERSION >= VERSION_US
 EvtWord usu00_crowCDE_talk_event[346];
 #else
 #if VERSION == VERSION_DEMO_JP
+EvtWord usu00_crowAB_talk_event[291];
 EvtWord usu00_crowCDE_talk_event[299];
 #else
+EvtWord usu00_crowAB_talk_event[299];
 EvtWord usu00_crowCDE_talk_event[307];
 #endif
 #endif

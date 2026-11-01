@@ -97,9 +97,7 @@ void mot_cloud(void) {
         mario->currSubMotionId = 0;
     }
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /**
  * Saves the 3D camera's look-at point into cloud_at and, if Mario's camera is zoomed in,
  * requests a zoom-out (marioCamZoomOffReq2(600)).
@@ -215,16 +213,15 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
 
     return breathPower;
 }
-#endif
 
-#if VERSION <= VERSION_DEMO_US
-static void getHitBreatheout2(PartyEntry* party, f32 tilt);
-struct HitEntry* cloudGetHitBreathout(s32 which) {
-    PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
-#else
 struct HitEntry* cloudGetHitBreathout(s32 which) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
+#else
+
+static void getHitBreatheout2(PartyEntry* party, f32 tilt);
+struct HitEntry* cloudGetHitBreathout(s32 which) {
+    PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
 #endif
     struct HitEntry* hitBreathout;
 

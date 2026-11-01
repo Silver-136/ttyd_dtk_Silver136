@@ -105,36 +105,24 @@ EvtWord flush_off[106];
 EvtWord last_evt_1[1078];
 #if VERSION >= VERSION_US
 EvtWord last_evt_2[358];
+EvtWord last_evt_3[1349];
+EvtWord b_peach_fuwafuwa[39];
+EvtWord last_evt_3_1[524];
+EvtWord koe_evt[78];
+EvtWord majo_kyorokyoro[84];
+EvtWord last_evt_3_2[1837];
 #else
 EvtWord last_evt_2[383];
-#endif
-#if VERSION < VERSION_US
 EvtWord nise_mario_init[29];
-#endif
-#if VERSION >= VERSION_US
-EvtWord last_evt_3[1349];
-#else
 #if VERSION == VERSION_DEMO_JP
 EvtWord last_evt_3[1376];
 #else
 EvtWord last_evt_3[1379];
 #endif
-#endif
 EvtWord b_peach_fuwafuwa[39];
-#if VERSION >= VERSION_US
-EvtWord last_evt_3_1[524];
-#else
 EvtWord last_evt_3_1[540];
-#endif
-#if VERSION >= VERSION_US
-EvtWord koe_evt[78];
-#else
 EvtWord koe_evt[65];
-#endif
 EvtWord majo_kyorokyoro[84];
-#if VERSION >= VERSION_US
-EvtWord last_evt_3_2[1837];
-#else
 EvtWord last_evt_3_2[1821];
 #endif
 EvtWord last_evt_4[1836];

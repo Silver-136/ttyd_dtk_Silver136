@@ -239,21 +239,20 @@ EVT_BEGIN(evt_memcard_check)
     // Load the save data from the Memory Card in Slot A and act on the result.
 #if VERSION > VERSION_DEMO_US
     SET_VALUE(LF(10), 0)
-#endif
     LOOP(0)
-#if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(LW(10), 0)
-#endif
             CALL(evt_msg_print, 0, STRING("msg_mcard_fileload_warnning"), 0, 0)
             CALL(memcard_load)
-#if VERSION > VERSION_DEMO_US
         END_IF
-#endif
         CALL(memcard_code, LW(0))
-#if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(LW(10), 1)
             CALL(memcard_buf_reset)
         END_IF
+#else
+    LOOP(0)
+            CALL(evt_msg_print, 0, STRING("msg_mcard_fileload_warnning"), 0, 0)
+            CALL(memcard_load)
+        CALL(memcard_code, LW(0))
 #endif
         SWITCH(LW(0))
             // Loaded: the game may start.

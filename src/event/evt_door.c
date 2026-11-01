@@ -225,9 +225,7 @@ USER_FUNC(snd_door_in) {
     psndSetFlag(PSND_FLAG_DOOR_IN);
     return EVT_RETURN_DONE;
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(snd_door_out) {
     psndClearFlag(PSND_FLAG_DOOR_IN);
     return EVT_RETURN_DONE;

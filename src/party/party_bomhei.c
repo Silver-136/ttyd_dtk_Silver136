@@ -273,9 +273,9 @@ void bomhei_use_post(PartyEntry* party) {
     bomheiCleanSfx(party);
     bomheiFree(party);
 }
-#endif
 
-#if VERSION <= VERSION_DEMO_US
+#else
+
 /**
  * Party table post-use handler (demo): drops Mario's carry flag with a standing pose,
  * stops the sounds and frees the use work.
@@ -980,26 +980,29 @@ static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
 #if VERSION <= VERSION_DEMO_US
     f32 x, y, z;
     f32 hx, hy, hz, d, nx, ny, nz;
-#else
-    HitCheckQuery query;
-#endif
     HitEntry* hit;
-#if VERSION > VERSION_DEMO_US
-    f32 x, z;
-    f32 rf;
-#endif
 
     marioGetPtr();
     x = pos->x;
-#if VERSION <= VERSION_DEMO_US
     y = pos->y;
-#endif
     z = pos->z;
     movePos(&x, &z, dist, angle);
-#if VERSION <= VERSION_DEMO_US
     d = 4.0f;
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &d, &nx, &ny, &nz, x, 2.0f + y, z, 0.0f, -1.0f, 0.0f);
+    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
+        pos->x = x;
+        pos->y = y;
+        pos->z = z;
 #else
+    HitCheckQuery query;
+    HitEntry* hit;
+    f32 x, z;
+    f32 rf;
+
+    marioGetPtr();
+    x = pos->x;
+    z = pos->z;
+    movePos(&x, &z, dist, angle);
     query.targetDistance = 4.0f;
     {
         Vec start = {0.0f, 0.0f, 0.0f};
@@ -1011,13 +1014,7 @@ static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
         query.targetDir = dir;
     }
     hit = hitCheckVecFilter(&query, NULL);
-#endif
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
-#if VERSION <= VERSION_DEMO_US
-        pos->x = x;
-        pos->y = y;
-        pos->z = z;
-#else
         if (query.hitPos.x >= 0.0f) {
             rf = 0.5f;
         } else {

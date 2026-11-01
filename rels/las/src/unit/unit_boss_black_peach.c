@@ -2673,19 +2673,18 @@ EVT_BEGIN(queen_hand_big_life_check_evt)
     END_IF
     IF_INT_EQUAL(GW(9), -1)
         SET_VALUE(GF(0), 0)
-#endif
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_2), 0)
         SET_VALUE(GW(9), LW(0))
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_OffPartsAttribute, GW(8), 1, PART_ATTR_NOT_TARGETABLE)
-#endif
         CALL(btlevtcmd_OffPartsAttribute, GW(9), 1, kNotTargetable)
-#if VERSION <= VERSION_DEMO_US
-        CALL(btlevtcmd_OffAttribute, GW(8), kUnitNoHpGauge)
-#endif
         CALL(btlevtcmd_OffAttribute, GW(9), kUnitNoHpGauge)
-#if VERSION > VERSION_DEMO_US
     END_IF
+#else
+        CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_2), 0)
+        SET_VALUE(GW(9), LW(0))
+        CALL(btlevtcmd_OffPartsAttribute, GW(8), 1, PART_ATTR_NOT_TARGETABLE)
+        CALL(btlevtcmd_OffPartsAttribute, GW(9), 1, kNotTargetable)
+        CALL(btlevtcmd_OffAttribute, GW(8), kUnitNoHpGauge)
+        CALL(btlevtcmd_OffAttribute, GW(9), kUnitNoHpGauge)
 #endif
     LOOP(0)
         IF_INT_EQUAL(GF(0), 1)

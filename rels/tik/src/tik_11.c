@@ -56,25 +56,16 @@ EvtWord powerdownya_face_left[16];
 #endif
 #if VERSION >= VERSION_US
 EvtWord powerdownya_mario_level_rtn[639];
+EvtWord powerdownya_party_lank_rtn[963];
+EvtWord powerdownya_table_talk[105];
 #else
 #if VERSION == VERSION_DEMO_JP
 EvtWord powerdownya_mario_level_rtn[613];
-#else
-EvtWord powerdownya_mario_level_rtn[616];
-#endif
-#endif
-#if VERSION >= VERSION_US
-EvtWord powerdownya_party_lank_rtn[963];
-#else
-#if VERSION == VERSION_DEMO_JP
 EvtWord powerdownya_party_lank_rtn[896];
 #else
+EvtWord powerdownya_mario_level_rtn[616];
 EvtWord powerdownya_party_lank_rtn[937];
 #endif
-#endif
-#if VERSION >= VERSION_US
-EvtWord powerdownya_table_talk[105];
-#else
 EvtWord powerdownya_table_talk[84];
 #endif
 EvtWord powerdownya_direct_talk[8];

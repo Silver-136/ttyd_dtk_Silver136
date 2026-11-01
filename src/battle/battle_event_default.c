@@ -1047,24 +1047,18 @@ EVT_BEGIN(btldefaultevt_Wait)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(btldefaultevt_LectureEnd)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, UNIT_DATA_LECTURE_END_EVENT)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(btldefaultevt_Defend)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommand))
     CALL_CHILD(PTR(_Defence_core))
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(btldefaultevt_DefendParty)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommandP))
     CALL_CHILD(PTR(_Defence_core))

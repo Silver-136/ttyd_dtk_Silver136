@@ -1823,35 +1823,30 @@ EVT_BEGIN(talk_gyousyou)
             CASE_EQUAL(0)
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
             CASE_DEFAULT
-#else
-        IF_INT_NOT_EQUAL(LW(0), 0)
-#endif
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2), LW(4))
-#if VERSION >= VERSION_US
         END_SWITCH
-#else
-            ELSE
-            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
-        END_IF
-#endif
         ELSE
         CALL(evt_sub_get_language, LW(0))
-#if VERSION >= VERSION_US
         SWITCH(LW(0))
             CASE_EQUAL(0)
-#else
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2))
-            ELSE
-#endif
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
-#if VERSION >= VERSION_US
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("100kai_item_04"), LW(3))
             CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
         END_SWITCH
 #else
+        IF_INT_NOT_EQUAL(LW(0), 0)
+            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2), LW(4))
+            ELSE
+            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
+        END_IF
+        ELSE
+        CALL(evt_sub_get_language, LW(0))
+        IF_INT_NOT_EQUAL(LW(0), 0)
+            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2))
+            ELSE
+            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
         END_IF
 #endif
 #endif

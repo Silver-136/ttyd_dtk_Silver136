@@ -194,9 +194,9 @@ const char* battlePartyMsgStr[] = {"_kur", "_nok", "_yos", "_win", "_viv", "_bom
 #if VERSION > VERSION_DEMO_US
 static const char* battlePartyMsgPad[6] = {0};
 #endif
-#endif
 
-#if VERSION >= VERSION_US
+#else
+
 #include "mario/mariost.h"
 // US-only localized article/plural helpers (evt_msg_fmt_int / evtMsgFmtInt, evt_msg_fmt_str / evtMsgFmtStr, below).
 // clang-format off
@@ -992,9 +992,7 @@ USER_FUNC(evt_msg_fmt_int) {
     evtSetValue(event, out, (EvtWord)msg_count_buf);
     return EVT_RETURN_DONE;
 }
-#endif
 
-#if VERSION >= VERSION_US
 // US: the scratch buffers are defined after the functions (their .bss follows the partyLabel statics, reversed).
 char msg_article_buf[0xA00];
 char msg_num_buf[0xA00];

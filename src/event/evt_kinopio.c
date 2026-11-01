@@ -604,21 +604,20 @@ EVT_BEGIN(evt_50)
     CALL(get_bedside, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(60.0f))
-#else
-    CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(90.0f))
-#endif
     CALL(get_npctalk, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(60.0f))
-#else
-    CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(90.0f))
-    CALL(evt_mario_set_dir_npc, LW(10))
-#endif
     CALL(msg_no, 11, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(10))
-#if VERSION <= VERSION_DEMO_US
     CALL(evt_fade_entry, FADE_OUT_SPOT, 100, 255, 255, 255)
+    CALL(evt_fade_end_wait)
+    CALL(evt_fade_entry, FADE_IN_SPOT, 100, 255, 255, 255)
 #else
+    CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(90.0f))
+    CALL(get_npctalk, LW(0), LW(1), LW(2))
+    CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(90.0f))
+    CALL(evt_mario_set_dir_npc, LW(10))
+    CALL(msg_no, 11, LW(0))
+    CALL(evt_msg_print, 0, LW(0), 0, LW(10))
     CALL(evt_mario_set_dir_npc, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"))
     CALL(evt_party_set_dir_npc, 0, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"))
     WAIT_MS(300)
@@ -627,11 +626,7 @@ EVT_BEGIN(evt_50)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 40)
     CALL(evt_fade_set_spot_pos, LW(0), LW(1), LW(2))
-#endif
     CALL(evt_fade_end_wait)
-#if VERSION <= VERSION_DEMO_US
-    CALL(evt_fade_entry, FADE_IN_SPOT, 100, 255, 255, 255)
-#else
     CALL(evt_fade_entry, FADE_IN_SPOT2, 150, 255, 255, 255)
 #endif
     CALL(evt_fade_end_wait)

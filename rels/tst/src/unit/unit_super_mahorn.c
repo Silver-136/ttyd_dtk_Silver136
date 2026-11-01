@@ -219,6 +219,8 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {10, 50, 50, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 30, 75, 100, 40, 100, 100, 90};
+
+static StatusVulnerability regist_bunsin = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 90};
 #else
 static StatusVulnerability regist = {
     10, // sleep
@@ -244,11 +246,7 @@ static StatusVulnerability regist = {
     100, // invisible
     90, // ohko
 };
-#endif
 
-#if VERSION <= VERSION_DEMO_US
-static StatusVulnerability regist_bunsin = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 90};
-#else
 static StatusVulnerability regist_bunsin = {
     0, // sleep
     0, // stop
@@ -660,17 +658,15 @@ static EVT_BEGIN(attack_event)
         ELSE
 #if VERSION > VERSION_DEMO_US
             LABEL(10)
-#endif
             // Otherwise it rolls for an attack by weight: punch, magic, all-target magic or a support spell.
-#if VERSION <= VERSION_DEMO_US
-            LABEL(10)
-#endif
             SET_VALUE(LW(0), 0)
-#if VERSION > VERSION_DEMO_US
             ADD(LW(0), 30)
-#endif
             ADD(LW(0), 60)
-#if VERSION <= VERSION_DEMO_US
+#else
+            // Otherwise it rolls for an attack by weight: punch, magic, all-target magic or a support spell.
+            LABEL(10)
+            SET_VALUE(LW(0), 0)
+            ADD(LW(0), 60)
             ADD(LW(0), 40)
 #endif
             ADD(LW(0), 10)

@@ -81,25 +81,16 @@ EvtWord minigame01_start_cam[40];
 EvtWord minigame01_start_cam_cancel[20];
 #if VERSION >= VERSION_US
 EvtWord minigame01_start[1504];
+EvtWord minigame01_end[224];
+EvtWord yuu_00_init_evt[437];
 #else
 #if VERSION == VERSION_DEMO_JP
 EvtWord minigame01_start[348];
-#else
-EvtWord minigame01_start[355];
-#endif
-#endif
-#if VERSION >= VERSION_US
-EvtWord minigame01_end[224];
-#else
-#if VERSION == VERSION_DEMO_JP
 EvtWord minigame01_end[227];
 #else
+EvtWord minigame01_start[355];
 EvtWord minigame01_end[236];
 #endif
-#endif
-#if VERSION >= VERSION_US
-EvtWord yuu_00_init_evt[437];
-#else
 EvtWord yuu_00_init_evt[11];
 #endif
 

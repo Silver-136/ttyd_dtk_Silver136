@@ -70,36 +70,37 @@ static StatusVulnerability regist = {
     0, // invisible
     0, // ohko
 };
-#endif
 
 /** Poses while the fuse has 3 or more turns left (all frames use B_2). */
-#if VERSION > VERSION_DEMO_US
 static PoseTableEntry pose_table_3[] = {
     {POSE_TYPE_NORMAL, "B_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_2"},
     {POSE_TYPE_DAMAGE, "B_2"},
     {POSE_TYPE_ACTION, "B_2"},
 };
-#endif
 
 /** Poses while the fuse has 2 turns left (all frames use B_3). */
-#if VERSION > VERSION_DEMO_US
 static PoseTableEntry pose_table_2[] = {
     {POSE_TYPE_NORMAL, "B_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_3"},
     {POSE_TYPE_DAMAGE, "B_3"},
     {POSE_TYPE_ACTION, "B_3"},
 };
-#endif
 
 /** Poses while the fuse has 1 turn left (all frames use B_4). */
-#if VERSION > VERSION_DEMO_US
 static PoseTableEntry pose_table_1[] = {
     {POSE_TYPE_NORMAL, "B_4"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_4"},
     {POSE_TYPE_DAMAGE, "B_4"},
     {POSE_TYPE_ACTION, "B_4"},
 };
+#else
+
+/** Poses while the fuse has 3 or more turns left (all frames use B_2). */
+
+/** Poses while the fuse has 2 turns left (all frames use B_3). */
+
+/** Poses while the fuse has 1 turn left (all frames use B_4). */
 #endif
 
 /**

@@ -167,9 +167,9 @@ TubuDt tubuDt[] = {
     {-33, -62, 0, 0, 382, "gor"},
     {-33, -74, 1, 0, 382, "las"},
 };
-#endif
 
-#if VERSION <= VERSION_DEMO_US
+#else
+
 static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
 #endif
 s32 stone_tbl[] = {ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
@@ -1372,35 +1372,31 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
         } else if (sw >= STG2_41_FRANKLYS_HOUSE_STG_2 && sw < STG3_32_BOSS_BATTLE) {
 #if VERSION <= VERSION_DEMO_US
             id = ICON_SAC_SUKI;
-#else
-            id = ICON_SAC_MUKI;
-#endif
             k = 2;
         } else if (sw >= STG3_51_FRANKLYS_HOUSE_STG_3 && sw < STG4_15_03_THE_RUBY_STAR) {
-#if VERSION <= VERSION_DEMO_US
             id = ICON_SAC_MUKI;
-#else
-            id = ICON_SAC_SCISSOR;
-#endif
             k = 3;
         } else if (sw >= STG4_31_FRANKLYS_HOUSE_STG_4 && sw < STG5_43_X_NAUTS_RETREAT) {
-#if VERSION <= VERSION_DEMO_US
             id = ICON_SAC_ZUBASTAR;
-#else
-            id = ICON_SAC_GENKI1;
-#endif
             k = 4;
         } else if (sw >= STG5_61_FRANKLYS_HOUSE_STG_5 && sw < STG6_53_THE_REAL_GARNET_STAR) {
-#if VERSION <= VERSION_DEMO_US
             id = ICON_SAC_SCISSOR;
-#else
-            id = ICON_SAC_SUKI;
-#endif
             k = 5;
         } else if (sw >= STG6_71_FRANKLYS_HOUSE_STG_6 && sw < STG7_20_LORD_CRUMP_DEFEATED) {
-#if VERSION <= VERSION_DEMO_US
             id = ICON_SAC_GENKI1;
 #else
+            id = ICON_SAC_MUKI;
+            k = 2;
+        } else if (sw >= STG3_51_FRANKLYS_HOUSE_STG_3 && sw < STG4_15_03_THE_RUBY_STAR) {
+            id = ICON_SAC_SCISSOR;
+            k = 3;
+        } else if (sw >= STG4_31_FRANKLYS_HOUSE_STG_4 && sw < STG5_43_X_NAUTS_RETREAT) {
+            id = ICON_SAC_GENKI1;
+            k = 4;
+        } else if (sw >= STG5_61_FRANKLYS_HOUSE_STG_5 && sw < STG6_53_THE_REAL_GARNET_STAR) {
+            id = ICON_SAC_SUKI;
+            k = 5;
+        } else if (sw >= STG6_71_FRANKLYS_HOUSE_STG_6 && sw < STG7_20_LORD_CRUMP_DEFEATED) {
             id = ICON_SAC_ZUBASTAR;
 #endif
             k = 6;

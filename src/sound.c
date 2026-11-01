@@ -2583,13 +2583,7 @@ void SoundAIDMACallback(void) {
     s32 n;
     s16* out;
     s16* src;
-#else
-    s16* src;
-    s32 n;
-    s16* out;
-#endif
 
-#if VERSION >= VERSION_US
     if (sound.callback != NULL) {
         sound.callback();
     }
@@ -2597,6 +2591,10 @@ void SoundAIDMACallback(void) {
     address = sound.dmaAddress;
     length = sound.dmaLength;
 #else
+    s16* src;
+    s32 n;
+    s16* out;
+
     sound.callback();
     sound.dmaAddress = (u8*)(AIGetDMAStartAddr() | 0x80000000);
     sound.dmaLength = length = AIGetDMALength();

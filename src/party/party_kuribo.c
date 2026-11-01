@@ -257,9 +257,7 @@ void kuribo_use_post(PartyEntry* party) {
     party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
     party->flags &= ~PARTY_FLAG_FORCE_FALL;
 }
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /** The demo starts the message right where Goombella stands; retail first walks her next to Mario. */
 void kuribo_use(PartyEntry* party) {
     MarioWork* player = party->playerPtr;

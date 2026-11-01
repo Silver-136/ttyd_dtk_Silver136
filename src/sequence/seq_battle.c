@@ -35,9 +35,7 @@
 #include "seq/seq_battle.h"
 #if VERSION <= VERSION_DEMO_US
 #include "data/mapdata.h"
-#endif
 
-#if VERSION <= VERSION_DEMO_US
 static void battle_init(void);
 BOOL bmapPreLoad(const char* map, const char* map2);
 static const char bti01[7];
@@ -275,9 +273,11 @@ void seq_battleMain(SequenceWork* work) {
             break;
     }
 }
-#endif
 
-#if VERSION <= VERSION_DEMO_US
+/** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
+BOOL battle_init(void) {
+#else
+
 /**
  * Per-frame battle sequence: curtain fade, audience texture loads,
  * waits out a pending first strike (up to 200 frames), loads the bti_01..04 audience stage for Mario's rank,
@@ -355,9 +355,6 @@ Vec pos;
 }
 /** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
 static void battle_init(void) {
-#else
-/** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
-BOOL battle_init(void) {
 #endif
     FieldBattleData* fbat;
     NpcEntry* npc;

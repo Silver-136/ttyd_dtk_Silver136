@@ -867,31 +867,25 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
 #if VERSION <= VERSION_DEMO_US
             SET_VALUE(LW(0), 65)
             SET_VALUE(LW(1), 3)
-#else
-            SET_VALUE(LW(0), 66)
-            SET_VALUE(LW(1), 2)
-#endif
             CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(LW(0), 60)
             SET_VALUE(LW(1), 3)
-#else
-            SET_VALUE(LW(0), 62)
-            SET_VALUE(LW(1), 2)
-#endif
             CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(LW(0), 50)
             SET_VALUE(LW(1), 4)
-#else
-            SET_VALUE(LW(0), 58)
-            SET_VALUE(LW(1), 2)
-#endif
         END_SWITCH
-#if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 6, 3, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
         CALL(btlevtcmd_AcSetGaugeParam, 51, 68, 85, 100)
 #else
+            SET_VALUE(LW(0), 66)
+            SET_VALUE(LW(1), 2)
+            CASE_EQUAL(2)
+            SET_VALUE(LW(0), 62)
+            SET_VALUE(LW(1), 2)
+            CASE_DEFAULT
+            SET_VALUE(LW(0), 58)
+            SET_VALUE(LW(1), 2)
+        END_SWITCH
         CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 5, 3, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
         CALL(btlevtcmd_AcSetGaugeParam, 60, 80, 100, 100)
 #endif
@@ -902,60 +896,50 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
             CASE_LESS_OR_EQUAL(-3)
 #if VERSION <= VERSION_DEMO_US
             SET_VALUE(LW(0), 80)
-#else
-            SET_VALUE(LW(0), 120)
-#endif
             SET_VALUE(LW(1), 0)
             CASE_EQUAL(-2)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(LW(0), 70)
-#else
-            SET_VALUE(LW(0), 100)
-#endif
             SET_VALUE(LW(1), 0)
             CASE_EQUAL(-1)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(LW(0), 60)
-#else
-            SET_VALUE(LW(0), 80)
-#endif
             SET_VALUE(LW(1), 1)
             CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(LW(0), 50)
-#else
-            SET_VALUE(LW(0), 70)
-#endif
             SET_VALUE(LW(1), 2)
             CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(LW(0), 45)
             SET_VALUE(LW(1), 3)
-#else
-            SET_VALUE(LW(0), 66)
-            SET_VALUE(LW(1), 2)
-#endif
             CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(LW(0), 40)
             SET_VALUE(LW(1), 3)
-#else
-            SET_VALUE(LW(0), 62)
-            SET_VALUE(LW(1), 2)
-#endif
             CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
             SET_VALUE(LW(0), 35)
             SET_VALUE(LW(1), 4)
-#else
-            SET_VALUE(LW(0), 58)
-            SET_VALUE(LW(1), 2)
-#endif
         END_SWITCH
-#if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 4, 2, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
         CALL(btlevtcmd_AcSetGaugeParam, 25, 50, 75, 100)
 #else
+            SET_VALUE(LW(0), 120)
+            SET_VALUE(LW(1), 0)
+            CASE_EQUAL(-2)
+            SET_VALUE(LW(0), 100)
+            SET_VALUE(LW(1), 0)
+            CASE_EQUAL(-1)
+            SET_VALUE(LW(0), 80)
+            SET_VALUE(LW(1), 1)
+            CASE_EQUAL(0)
+            SET_VALUE(LW(0), 70)
+            SET_VALUE(LW(1), 2)
+            CASE_EQUAL(1)
+            SET_VALUE(LW(0), 66)
+            SET_VALUE(LW(1), 2)
+            CASE_EQUAL(2)
+            SET_VALUE(LW(0), 62)
+            SET_VALUE(LW(1), 2)
+            CASE_DEFAULT
+            SET_VALUE(LW(0), 58)
+            SET_VALUE(LW(1), 2)
+        END_SWITCH
         CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 3, 2, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
         CALL(btlevtcmd_AcSetGaugeParam, 34, 68, 100, 100)
 #endif

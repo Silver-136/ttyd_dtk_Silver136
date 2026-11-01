@@ -392,9 +392,7 @@ EVT_BEGIN(yuucounter_window_disp_evt)
     CALL(yuucounter_disp_flag_onoff, 1, 4)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION > VERSION_DEMO_US
 /** Empty script used for counters that are not timers (JP and later). */
 EVT_BEGIN(yuucounter_window_null_evt)
     RETURN
