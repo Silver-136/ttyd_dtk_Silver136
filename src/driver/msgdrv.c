@@ -1313,7 +1313,7 @@ continue;
                 }
                 continue;
             default:
-                if (((((u32)gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
+                if ((((gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
                     glyphD = kanjiSearch((u16)(check + 0x821F));
                 } else {
                     glyphD = hankakuSearch(check);
@@ -1829,7 +1829,7 @@ continue;
                 }
                 continue;
             default:
-                if (((((u32)gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
+                if ((((gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
                     glyphD = kanjiSearch((u16)(check + 0x821F));
                 } else {
                     glyphD = hankakuSearch(check);
@@ -2347,7 +2347,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     data->charCount++;
                 } else {
 #if VERSION >= VERSION_US
-                    if ((u32)gp->language == LANGUAGE_JP) {
+                    if (gp->language == LANGUAGE_JP) {
                         glyph = kanjiSearch(0x94B5);
                     } else {
                         glyph = hankakuSearch(-48);
@@ -2507,7 +2507,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             }
             continue;
         default:
-            if ((u32)gp->language == LANGUAGE_JP && (s8)check >= '0' && (s8)check <= '9') {
+            if (gp->language == LANGUAGE_JP && (s8)check >= '0' && (s8)check <= '9') {
                 // full-width digit: '0' + 0x821F is Shift-JIS 0x824F, the full-width zero
                 glyphD = kanjiSearch((u16)(check + 0x821F));
             } else {
@@ -2626,7 +2626,7 @@ const char* msgSearch(const char* tag) {
  */
 BOOL _ismbblead(u32 c) {
 #if VERSION >= VERSION_US
-    if ((u32)gp->language != LANGUAGE_JP) {
+    if (gp->language != LANGUAGE_JP) {
         return FALSE;
     }
 #endif

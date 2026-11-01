@@ -956,7 +956,7 @@ typedef struct BattleUnit {
     s8 fpDamageTaken;                            // 0x26D
     s8 fpLost;                                   // 0x26E (US 0x272), FP actually lost by the last hit (fpDamageTaken clamped to current FP)
     s8 superguardCountTaken;                     // 0x26F (US 0x273), attacker's superguardedCount when this unit superguarded it
-    s32 damagePattern;                           // 0x270, damage pattern of the last hit (selects the hurt pose), 0 when cleared
+    u32 damagePattern;                           // 0x270, damage pattern of the last hit (selects the hurt pose), 0 when cleared
     s32 damageCode;                              // 0x274
     BattleUnitToken_Flags tokenFlags;           // 0x278
     s32 superguardedCount;                       // 0x27C (US 0x280), times this unit was superguarded this turn; weapon special 0x20 subtracts it from damage

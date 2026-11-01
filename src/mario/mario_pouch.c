@@ -538,7 +538,7 @@ void pouchHiraToKata(const char* src, char* dst) {
     u16* d = (u16*)dst;
     s32 i;
 #if VERSION >= VERSION_US
-    if ((u32)gp->language == LANGUAGE_JP) {
+    if (gp->language == LANGUAGE_JP) {
         s = (u16*)src; /* FAKE: s and d re-assigned (both already hold these values) inside the language branch */
         d = (u16*)dst;
         for (i = 0; i < len; i++) {
@@ -649,7 +649,7 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
     u16 c;
     s32 i;
 #if VERSION >= VERSION_US
-    if ((u32)gp->language == LANGUAGE_JP) {
+    if (gp->language == LANGUAGE_JP) {
         s = (u16*)src; /* FAKE: s and d set inside the language branch, the same spelling as in pouchHiraToKata */
         d = (u16*)dst;
         for (i = 0; i < len; i++) {
@@ -1560,7 +1560,7 @@ void pouchOpenMail(s32 mailId) {
 }
 
 /** Mail state for the mail menu: 2 when read, 1 when received but unread, 0 when not received. */
-u32 pouchCheckMail(s32 mailId) {
+s32 pouchCheckMail(s32 mailId) {
     s32 mask = (1 << (mailId % 32));
     if (mpp->emailReadFlags[mailId / 32] & mask) {
         return 2;

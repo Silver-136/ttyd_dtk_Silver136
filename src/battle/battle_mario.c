@@ -7113,8 +7113,7 @@ USER_FUNC(_kaiten_hammer_acrobat_rotate) {
     }
     BtlUnit_AddRotate(unit, 0, event->userdata[2], 0);
     event->userdata[0]--;
-    // FAKE: (s32) cast on the u32 userdata3; the plain compare with 0 changes the object
-    if ((s32)event->userdata3 == 0) {
+    if (event->userdata3 == 0) {
         event->userdata[1] -= event->userdata[2];
         if (event->userdata[1] <= 270) {
             event->userdata3 = 1;

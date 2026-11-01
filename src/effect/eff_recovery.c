@@ -796,7 +796,7 @@ void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
     for (i = 0; i < 2; i++) {
         if (i == 0) {
 #if VERSION >= VERSION_US
-            if ((u32)gp->language == LANGUAGE_SP) {
+            if (gp->language == LANGUAGE_SP) {
                 effGetTexObj(173, &texObj);
             } else {
                 effGetTexObj(111, &texObj);
@@ -808,7 +808,7 @@ void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0x00, 0x00, 0x00, 0xA0 });
         } else {
 #if VERSION >= VERSION_US
-            if ((u32)gp->language == LANGUAGE_SP) {
+            if (gp->language == LANGUAGE_SP) {
                 effGetTexObj(172, &texObj);
             } else {
                 effGetTexObj(110, &texObj);

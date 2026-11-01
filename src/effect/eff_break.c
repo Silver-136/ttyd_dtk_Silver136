@@ -82,7 +82,7 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     effect = effEntry();
     // FAKE: dead language test (both languages use 7 entries); plain `count = 7;` changes the object
     count = 7;
-    if ((u32)gp->language != LANGUAGE_JP) {
+    if (gp->language != LANGUAGE_JP) {
         count = 7;
     }
 #endif

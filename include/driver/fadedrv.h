@@ -123,7 +123,7 @@ typedef struct FadeEntry {
     s32 sfxId; //0x98, SFX started by the fade, psndSFXOff on finish
     OffscreenCallback callback; //0x9C
     void* offparam; //0xA0
-    u32 delayFrames; //0xA4, frames to wait before the fade advances
+    s32 delayFrames; //0xA4, frames to wait before the fade advances
 } FadeEntry;
 
 // FadeWork.flags

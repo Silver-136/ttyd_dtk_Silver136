@@ -150,7 +150,7 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
 #if VERSION >= VERSION_US
             count = acrobat_tbl[gp->language].count + 1;
 #else
-            if ((u32)gp->language == LANGUAGE_JP) {
+            if (gp->language == LANGUAGE_JP) {
                 count = 8;
             } else {
                 count = 7;
@@ -262,7 +262,7 @@ void effNiceMain(EffectEntry* effect) {
 #else
         case 1: {
             len = data->loopInfo->end;
-            start = ((u32)gp->language == LANGUAGE_JP) ? 32.0f : 34.0f;
+            start = (gp->language == LANGUAGE_JP) ? 32.0f : 34.0f;
 #endif
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
@@ -279,7 +279,7 @@ void effNiceMain(EffectEntry* effect) {
         }
         case 2: {
             len = data->loopInfo->end;
-            start = ((u32)gp->language == LANGUAGE_JP) ? 35.0f : 37.0f;
+            start = (gp->language == LANGUAGE_JP) ? 35.0f : 37.0f;
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
                 if (t < 0.0f) {
@@ -292,7 +292,7 @@ void effNiceMain(EffectEntry* effect) {
         }
         case 3: {
             len = data->loopInfo->end;
-            start = ((u32)gp->language == LANGUAGE_JP) ? 45.0f : 40.0f;
+            start = (gp->language == LANGUAGE_JP) ? 45.0f : 40.0f;
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
                 if (t < 0.0f) {
@@ -305,7 +305,7 @@ void effNiceMain(EffectEntry* effect) {
         }
         case 4: {
             len = data->loopInfo->end;
-            start = ((u32)gp->language == LANGUAGE_JP) ? 48.0f : 40.0f;
+            start = (gp->language == LANGUAGE_JP) ? 48.0f : 40.0f;
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
                 if (t < 0.0f) {
@@ -348,9 +348,9 @@ void effNiceDisp(CameraId cameraId, void* param) {
     PSMTXConcat(mtx, scale, mtx);
 #if VERSION >= VERSION_US
 #if VERSION == VERSION_EU
-    if ((u32)gp->language != 0) {
+    if (gp->language != 0) {
 #else
-    if (((u32)gp->language == LANGUAGE_US && wp->type == 3) || ((u32)gp->language == LANGUAGE_US && wp->type == 4) || ((u32)gp->language == LANGUAGE_IT && wp->type == 6)) {
+    if ((gp->language == LANGUAGE_US && wp->type == 3) || (gp->language == LANGUAGE_US && wp->type == 4) || (gp->language == LANGUAGE_IT && wp->type == 6)) {
 #endif
         PSMTXScale(scale, 0.7f, 0.7f, 0.7f);
         PSMTXConcat(mtx, scale, mtx);

@@ -175,8 +175,7 @@ void _get_item_announce_disp(CameraId cameraId, void* param) {
     no = BattleAudience_GetPresentItemNo();
     itemName = msgSearch(itemDataTable[no].name);
 #if VERSION >= VERSION_US
-    // FAKE: (u32) cast before the compare with LANGUAGE_JP; the plain compare changes the object
-    if ((u32)gp->language == LANGUAGE_JP) {
+    if (gp->language == LANGUAGE_JP) {
         msg = msgSearch("btl_msg_get_item");
         sprintf(buf, msg, itemName);
     } else {

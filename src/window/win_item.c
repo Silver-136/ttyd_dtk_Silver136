@@ -138,7 +138,7 @@ static WinMgrDesc window_desc[2] = {
     {2, 0, 8, -280, 145, 200, 50, {0xFF, 0x99, 0x00, 0xFF}, 0, itemUseDisp2},
 };
 #if VERSION >= VERSION_US
-#define WI_SLASH ((u32)gp->language != LANGUAGE_JP ? "/" : "\201^")
+#define WI_SLASH (gp->language != LANGUAGE_JP ? "/" : "\201^")
 #else
 #define WI_SLASH "\201^"
 #endif
@@ -205,7 +205,7 @@ void winItemInit(WindowWork* w) {
     winMgrSetPriority(w->useWin[0], -200);
     winMgrSetPriority(w->useWin[1], -100);
 #if VERSION >= VERSION_US
-    fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+    fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
 #elif VERSION <= VERSION_DEMO_US
     fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
 #else
@@ -457,8 +457,7 @@ s32 winItemMain(WindowWork* w) {
         break;
     case 200:
         if (w->buttonTrg & PAD_BUTTON_A) {
-            // FAKE: the (s32) cast makes the == 1 compare signed; without it the object changes
-            if ((s32)pouchCheckMail(w->item.mail[w->item.mailSel].id) == 1) {
+            if (pouchCheckMail(w->item.mail[w->item.mailSel].id) == 1) {
                 pouchOpenMail(w->item.mail[w->item.mailSel].id);
             }
             swSet(GSWF_MAIL_OPENED_ONCE); // GSWF_MAIL_TUTORIAL_REPEAT_OFF
@@ -551,13 +550,13 @@ s32 winItemMain(WindowWork* w) {
                 w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
 #else
 #if VERSION >= VERSION_US
-            w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+            w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
             w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
             if (w->mailRes) {
 #if VERSION >= VERSION_US
-                w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+                w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
                 w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif

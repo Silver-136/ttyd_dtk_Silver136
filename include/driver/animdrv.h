@@ -248,7 +248,7 @@ typedef void (*AnimPoseDispCallback)(void* userdata, s32 group, Mtx* modeling);
 
 typedef struct AnimationPose {
     u32 flags;                          // 0x0, AnimationPoseFlags
-    s32 typeFlags;                      // 0x4, AnimPoseTypeFlags
+    u32 typeFlags;                      // 0x4, AnimPoseTypeFlags
     s32 references;                     // 0x8
     s32 type;                           // 0xC
     s32 fileId;                         // 0x10
@@ -287,7 +287,7 @@ typedef struct AnimationPose {
     struct smartEntry* paperCapture1;   // 0x9C, second paper capture (never allocated in C)
     GXTexObj paperTexObj[2];            // 0xA0, texture objects for paperCapture0 / paperCapture1
     void (*gxCallback)(s32 wXluStage);  // 0xE0
-    BOOL disableDraw;                   // 0xE4
+    u32 disableDraw;                   // 0xE4
     s32 materialFlag;                   // 0xE8
     s32 materialLightFlag;              // 0xEC, MaterialLightFlags
     GXColor materialColor;              // 0xF0
@@ -344,11 +344,11 @@ typedef struct AnimationWork {
     GXTexObj* curTexObj;            // 0x38
     Mtx paperMtx[3];                  // 0x3C
     Mtx* paperMtxPtr[3];              // 0xCC
-    u32 paperTexMode0;                   // 0xD8, animSetPaperTexObj a7 (both fields get it); == 0 tested with texChange1 in the paper draw path
-    u32 paperTexMode1;                   // 0xDC, animSetPaperTexObj a7; == 0 tested with check2 in the paper draw path
+    s32 paperTexMode0;                   // 0xD8, animSetPaperTexObj a7 (both fields get it); == 0 tested with texChange1 in the paper draw path
+    s32 paperTexMode1;                   // 0xDC, animSetPaperTexObj a7; == 0 tested with check2 in the paper draw path
     s32 currDispMode;                 // 0xE0
     u8 pad_E4[0xE8 - 0xE4];       // 0xE4, never accessed
-    u32 mbUseFloatScratch;            // 0xE8
+    s32 mbUseFloatScratch;            // 0xE8
     Vec* floatScratch;              // 0xEC
     s32 floatScratchRP;              // 0xF0
     s32 floatScratchWP;              // 0xF4

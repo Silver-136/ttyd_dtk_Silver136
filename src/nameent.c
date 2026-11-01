@@ -30,7 +30,7 @@ void nameEntDisp(CameraId cameraId, void* param);
 
 //.data
 #if VERSION >= VERSION_US
-#define NAME_LANG_PICK(jp, en) ((u32)gp->language == LANGUAGE_JP ? (jp) : (en))
+#define NAME_LANG_PICK(jp, en) (gp->language == LANGUAGE_JP ? (jp) : (en))
 #else
 #define NAME_LANG_PICK(jp, en) (jp)
 #endif
@@ -178,7 +178,7 @@ void nameEntOn(s32 type) {
     wp->loadState = 1;
     wp->state = 0;
 #if VERSION >= VERSION_US
-    if ((u32)gp->language == LANGUAGE_JP) {
+    if (gp->language == LANGUAGE_JP) {
         wp->charTable = hiragana_tbl;
     } else {
         wp->charTable = latin_tbl;
@@ -196,14 +196,14 @@ void nameEntOn(s32 type) {
     strcpy(wp->name, "");
     for (i = 0; i < 8; i++) {
 #if VERSION >= VERSION_US
-        strcat(wp->name, (u32)gp->language == LANGUAGE_JP ? "　" : " ");
+        strcat(wp->name, gp->language == LANGUAGE_JP ? "　" : " ");
 #else
         strcat(wp->name, "　");
 #endif
     }
     wp->maskAlpha = 0.0f;
 #if VERSION >= VERSION_US
-    if ((u32)gp->language == LANGUAGE_JP) {
+    if (gp->language == LANGUAGE_JP) {
         switch (type) {
             case 2:
                 hiragana_tbl[9] = "　";
@@ -266,7 +266,7 @@ const char* nameEntGetName(void) {
         return NULL;
     }
 #if VERSION >= VERSION_US
-    if ((u32)gp->language == LANGUAGE_JP) {
+    if (gp->language == LANGUAGE_JP) {
         for (j = 7; j >= 1; j--) {
             if (strncmp(&wp->name[j * 2], "　", 2)) {
                 break;
@@ -359,7 +359,7 @@ s32 nameMain(void) {
                     off = wp->cursorX;
 #if VERSION >= VERSION_US
                     // FAKE: no-op (s32) cast; the plain ?: changes the object
-                    if (off >= 10 && wp->cursorY >= (s32)((u32)gp->language == LANGUAGE_JP ? 4 : 6)) {
+                    if (off >= 10 && wp->cursorY >= (s32)(gp->language == LANGUAGE_JP ? 4 : 6)) {
 #else
                     if (off >= 10 && wp->cursorY >= 4) {
 #endif
@@ -389,7 +389,7 @@ s32 nameMain(void) {
                                 s32 k;
                                 s32 o;
 #if VERSION >= VERSION_US
-                                if ((u32)gp->language == LANGUAGE_JP) {
+                                if (gp->language == LANGUAGE_JP) {
                                     n = strlen(wp->name) / 2;
                                     for (k = 0, o = 0; k < n; o += 2, k++) {
                                         if (strncmp(&wp->name[o], "　", 2)) {
@@ -468,7 +468,7 @@ s32 nameMain(void) {
                         if (wp->nameLen >= 8) {
 #else
 #if VERSION >= VERSION_US
-                        if ((u32)gp->language == LANGUAGE_JP) {
+                        if (gp->language == LANGUAGE_JP) {
                             ((u16*)wp->name)[wp->nameLen] = *(u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
                         } else {
                             wp->name[wp->nameLen] = *wp->charTable[wp->cursorY * NAMEENT_COLS + off];
@@ -557,7 +557,7 @@ s32 nameMain(void) {
                     } else if (wp->nameLen == 8) {
                         wp->nameLen = 7;
 #if VERSION >= VERSION_US
-                        if ((u32)gp->language == LANGUAGE_JP) {
+                        if (gp->language == LANGUAGE_JP) {
                             ((u16*)wp->name)[wp->nameLen] = *(u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + wp->cursorX];
                         } else {
                             wp->name[wp->nameLen] = *wp->charTable[wp->cursorY * NAMEENT_COLS + wp->cursorX];
@@ -571,7 +571,7 @@ s32 nameMain(void) {
                     }
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_START) {
 #if VERSION >= VERSION_US
-                    if ((u32)gp->language == LANGUAGE_JP) {
+                    if (gp->language == LANGUAGE_JP) {
                         len = strlen(wp->name) / 2;
                         for (j = 0, off = 0; j < len; off += 2, j++) {
                             if (strncmp(&wp->name[off], "　", 2)) {
@@ -641,7 +641,7 @@ s32 nameMain(void) {
 #endif
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 #if VERSION >= VERSION_US
-                    if ((u32)gp->language == LANGUAGE_JP) {
+                    if (gp->language == LANGUAGE_JP) {
                         if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "　", 2)) {
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                             wp->state = 101;
@@ -745,7 +745,7 @@ s32 nameMain(void) {
             }
             idx = wp->cursorX;
 #if VERSION >= VERSION_US
-            if (idx > 9 && wp->cursorY > ((u32)gp->language == LANGUAGE_JP ? 3 : 5)) {
+            if (idx > 9 && wp->cursorY > (gp->language == LANGUAGE_JP ? 3 : 5)) {
 #else
             if (idx > 9 && wp->cursorY > 3) {
 #endif
@@ -872,7 +872,7 @@ void nameEntDisp(CameraId cameraId, void* param) {
         }
     }
 #if VERSION >= VERSION_US
-    for (j = (u32)gp->language == LANGUAGE_JP ? 0 : 2; j < 4; j++) {
+    for (j = gp->language == LANGUAGE_JP ? 0 : 2; j < 4; j++) {
 #else
     for (j = 0; j < 4; j++) {
 #endif
@@ -893,7 +893,7 @@ void nameEntDisp(CameraId cameraId, void* param) {
     for (n = 0; n < 8; n++) {
         memset(buf, 0, sizeof(buf));
 #if VERSION >= VERSION_US
-        if ((u32)gp->language == LANGUAGE_JP) {
+        if (gp->language == LANGUAGE_JP) {
             strncpy(buf, &wp->name[n * 2], 2);
         } else {
             strncpy(buf, &wp->name[n], 1);

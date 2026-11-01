@@ -181,7 +181,7 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     s32 i;
     s32 u;
 #endif
-    u16 type;
+    s32 type;
     s32 v;
     GXColor color;
     GXTexObj texObj;
@@ -312,8 +312,7 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
 #else
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        // FAKE: no-op cast of type to s32; the plain comparison changes the object
-        if ((s32)type != 0) {
+        if (type != 0) {
             h = 16.0f;
             w = h;
         } else {

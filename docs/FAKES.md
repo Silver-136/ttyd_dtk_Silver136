@@ -256,9 +256,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/pmario_sound.c | psndBGMMain | f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object | see comment |
 | Both | src/pmario_sound.c | psndSFXChk | no-op mask of the u16 serial; key != sfx->serial changes the object | see comment |
 | Both | src/pmario_sound.c | psndStrippedPool | stand-in that nothing calls; deleting it changes the object (its s32-to-f32 conversion likely shapes the constant pool, as hitStrippedPool does in hitdrv.c) | see comment |
-| Both | src/battle/battle.c | BattleConsumeReserveItem | (s32) cast before the zero test; the plain test changes the object | see comment |
 | Both | src/battle/battle_ac_help.c | BattleAcHelpMain | spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object | see comment |
-| US | src/battle/battle_attack_audience.c | _get_item_announce_disp | (u32) cast before the compare with LANGUAGE_JP; the plain compare changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudience_CheckReactionPerPhase | comma expression; `--member->statusTimer <= 0` changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceItemCtrlProcess | s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceDispAudience | block-local degrees-to-radians temporary (shadows s32 k); the constant written directly changes the object | see comment |
@@ -266,9 +264,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_audience.c | BattleAudience_GetPPAudienceNum_Sub | one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceJoy_Sub | no-op (s32) cast; `a + b` changes the object | see comment |
 | Both | src/battle/battle_break_slot.c | BattleBreakSlot_Init | i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object | see comment |
-| JP | src/battle/battle_break_slot.c | BattleBreakSlot_Main | no-op (u32) cast; the plain comparison changes the object | see comment |
 | Both | src/battle/battle_break_slot.c | BattleBreakSlotDispReel | i is set before the reel pointer; `for (i = 0; ...)` changes the object | see comment |
-| Both | src/battle/battle_damage.c | BattleDamageDirect | (u32) casts give unsigned compares; without them the object changes | see comment |
 | Both | src/battle/battle_damage.c | BattleCalculateDamage | dead guard (fn == NULL returned above); the plain call changes the object | see comment |
 | Both | src/battle/battle_damage.c | BattleCalculateFpDamage | dead guard (fn == NULL returned above); the plain call changes the object | see comment |
 | Both | src/battle/battle_damage.c | BattleSetStatusDamageFromWeapon | no-op (s8) cast on rate; the plain argument changes the object | see comment |
@@ -292,7 +288,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_PadCheckNow | args is reused to hold the result index; a separate index local changes the object | see comment |
 | Both | src/battle/battle_icon.c | btlIconStrippedPool | not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool. | see comment |
 | Both | src/battle/battle_mario.c | (file scope) | no-op (char*) cast; PTR(battle_mario_nullstr) changes the object | see comment |
-| Both | src/battle/battle_mario.c | _kaiten_hammer_acrobat_rotate | (s32) cast on the u32 userdata3; the plain compare with 0 changes the object | see comment |
 | Both | src/battle/battle_seq.c | btlseqFirstAct | u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object | see comment |
 | Both | src/battle/battle_seq.c | btlseqTurn | string held in sfxName before the call; passing the literal directly changes the object | see comment |
 | Both | src/battle/battle_seq.c | btlseqAct | block-local unit shadowing the function's; using the function's unit changes the object | see comment |
@@ -347,10 +342,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/animdrv.c | animPose_AllocBuffer | macro twin of the animPoseGetBaseData inline above, used by every caller below; calling the inline instead changes the object | see comment |
 | Both | src/driver/animdrv.c | animEffectAsync | (u32) casts on the zero tests (unsigned compares); plain model == 0 / anim == 0 change the object | see comment |
 | Both | src/driver/animdrv.c | animPoseSetEffect | the paper pose's file entry found by byte offset (files + fileId * 16); animPoseGetBaseData(animPoseGetAnimPosePtr(pose->paperId)) changes the object | see comment |
-| Both | src/driver/animdrv.c | materialProc | (u32) cast on the BOOL (unsigned compare); the plain test changes the object | see comment |
 | Both | src/driver/animdrv.c | rpCurData | renderProc's per-draw pose-data read as an inline; its call-site temp gives the target wp/data register order | see comment |
-| Both | src/driver/animdrv.c | _animPoseDrawMtx | (s32) cast on the u32 flag (signed compare); the plain test changes the object | see comment |
-| Both | src/driver/animdrv.c | animPoseRelease | (u32) cast on typeFlags (unsigned compare); the plain test changes the object | see comment |
 | Both | src/driver/animdrv.c | animGroupBaseAsync | (u32) cast (unsigned compare); plain model == 0 changes the object | see comment |
 | Both | src/driver/arcdrv.c | arcOpen | info used through the pointer infop; passing &info directly changes the object | see comment |
 | Both | src/driver/camdrv.c | camMain | dead zero store (every field is set below); removing it changes the object | see comment |
@@ -358,7 +350,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/envdrv.c | envGlare | texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call changes the object | see comment |
 | Both | src/driver/envdrv.c | envWaterParent | one-use inline helper for obj->parent; writing it out changes the object | see comment |
 | Both | src/driver/fadedrv.c | fadeEntry | types 3-5 are tested as one unsigned compare, (u32)(type - 3) <= 2; type >= 3 && type <= 5 changes the object | see comment |
-| Both | src/driver/fadedrv.c | fadeMain | no-op (s32) cast of the u32 delayFrames; removing it changes the object | see comment |
 | Both | src/driver/fadedrv.c | z | `one` (1.0f) is only a factor in the returned depth; dropping the product changes the object | see comment |
 | Both | src/driver/fadedrv.c | fadeMadd | a * b + 0.0f through an inline helper (disp_maku); the plain product changes the object | see comment |
 | Both | src/driver/fadedrv.c | disp_maku | depth is halved in place inside the expression; depth * 0.5f / 180.0f changes the object | see comment |
@@ -432,7 +423,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_kemuri1_n64.c | effKemuri1Disp | colour filled in through a pointer to a zeroed compound literal; (GXColor){work->r, work->g, work->b, 0xFF} changes the object | see comment |
 | Both | src/effect/n64/eff_kemuri5_n64.c | effKemuri5Main | sin result in a block-scoped temporary; writing it into the assignment changes the object | see comment |
 | Both | src/effect/n64/eff_kemuri8_n64.c | effKemuri8N64Entry | one-use inline inline_fn computes radius * -sin; writing it out changes the object | see comment |
-| Both | src/effect/n64/eff_kemuri9_n64.c | effKemuri9Disp | no-op cast of type to s32; the plain comparison changes the object | see comment |
 | Both | src/effect/n64/eff_magic3_n64.c | effMagic3N64Entry | nx * nx + ny * ny + nz * nz with ny * ny written as 1.0f and nz * nz as nz (exact for ny = -1, nz = 0); the plain sum changes the object | see comment |
 | Both | src/effect/n64/eff_magic3_n64.c | effMagic3Main | magic3_scale(a, b) is 3.0f * a + b; the written-out sum changes the object | see comment |
 | Both | src/effect/n64/eff_magic_horao_n64.c | effMagicHoraoDisp | ang is assigned in a comma expression inside the initializer; assigning it in its own statement changes the object | see comment |
@@ -570,12 +560,10 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/sequence/seq_battle.c | loadTpl | unreferenced word in neither symbol map; removing it changes the object | see comment |
 | Both | src/sequence/seq_battle.c | seq_battleMain | wait flag and goto check; a plain break while still waiting changes the object | see comment |
 | Both | src/sequence/seq_e3.c | seq_e3Main | a second loop counter; reusing the function's i changes the object | see comment |
-| Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object Shadow Box | see comment |
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
 | JP | src/sequence/seq_logo.c | seq_logoInit | empty if with dead tests of wp; removing it changes the object | see comment |
 | Both | src/unit/party/unit_party_chuchurina.c | _chuchu_item_steal | dead re-test (table is non-NULL in this branch); without it the object changes | see comment |
 | Both | src/unit/party/unit_party_yoshi.c | yoshiStrippedPool | stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool (as kpaStrippedPool does in koopa.c); removing it changes the object | see comment |
-| Both | src/window/win_item.c | winItemMain | the (s32) cast makes the == 1 compare signed; without it the object changes | see comment |
 | Both | src/window/win_item.c | itemUseDisp | white is copied through the spare white2 into white3; white3 = white changes the object | see comment |
 | Both | src/window/win_log.c | winLogDisp | wk is reloaded before each position store; one load changes the object | see comment |
 | Both | src/window/win_log.c | mapGX | c2 and c0 are never read; GXColor white = {0xFF, 0xFF, 0xFF, 0xFF} alone changes the object | see comment |

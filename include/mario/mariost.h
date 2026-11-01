@@ -79,7 +79,7 @@ typedef struct GlobalWork {
     void* mapAlloc; //0x160
     s32 mapEventId; //0x164, map init event id (seq_mapchange.c)
     FieldBattleData* fbatData; //0x168
-    s32 language; //0x16C, Language
+    u32 language; //0x16C, Language
     u16 fbWidth; //0x170
     u16 efbHeight; //0x172
     s32 gSW0; //0x174

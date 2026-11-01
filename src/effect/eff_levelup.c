@@ -111,7 +111,7 @@ EffectEntry* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 limit) {
 #if VERSION >= VERSION_US
         a = 0.0f;
         b = a;
-        s = (u32)gp->language == LANGUAGE_FR ? 0.9f : 1.0f;
+        s = gp->language == LANGUAGE_FR ? 0.9f : 1.0f;
         for (j = 0; j < i - 1; j++) {
             effGetTexObj(texid_tbl[gp->language][j], &texObj);
             a += s * (f32)GXGetTexObjWidth(&texObj);
@@ -296,7 +296,7 @@ void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
             effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language] + tofs - sizeof(s32)), &texObj2);
             width = GXGetTexObjWidth(&texObj2);
             height = GXGetTexObjHeight(&texObj2);
-            if ((u32)gp->language == LANGUAGE_FR) {
+            if (gp->language == LANGUAGE_FR) {
                 width *= 0.9f;
                 height *= 0.9f;
             }

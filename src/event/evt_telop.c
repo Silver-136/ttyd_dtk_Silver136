@@ -199,7 +199,7 @@ void telop(CameraId cameraId, void* param) {
 
 #if VERSION >= VERSION_US
     {
-        const char* def = (u32)gp->language != LANGUAGE_JP ? "???" : "？？？";
+        const char* def = gp->language != LANGUAGE_JP ? "???" : "？？？";
         msg = (msg_tbl[wp->id] != NULL) ? msgSearch(msg_tbl[wp->id]) : def;
     }
 #else
@@ -207,7 +207,7 @@ void telop(CameraId cameraId, void* param) {
 #endif
     width = FontGetMessageWidth(msg);
     scale = 1.0f;
-    if ((u32)gp->language != LANGUAGE_JP) {
+    if (gp->language != LANGUAGE_JP) {
         if ((f32)width / (texW - 100.0f) < scale) {
             // FAKE: no-op self-assignment (the branch keeps scale); without it the comparison is laid out differently
             scale = scale;

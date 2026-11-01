@@ -621,7 +621,7 @@ void logoDisp(CameraId camId, void* param) {
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetNumChans(0);
                 GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, 0xFF});
-                if ((u32)gp->language == LANGUAGE_JP) { // blue for Japanese
+                if (gp->language == LANGUAGE_JP) { // blue for Japanese
                     GXSetTevColor(GX_TEVREG1, (GXColor){0, 0x46, 0xFF, 0xFF});
                 } else { // red for every other language
                     GXSetTevColor(GX_TEVREG1, (GXColor){0xDC, 0, 0, 0xFF});

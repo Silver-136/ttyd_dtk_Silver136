@@ -563,7 +563,7 @@ USER_FUNC(evt_exchange_msg_set) {
     s32 n = exchange_ret_tbl_no();
 
 #if VERSION >= VERSION_US
-    if ((u32)gp->language == LANGUAGE_JP) {
+    if (gp->language == LANGUAGE_JP) {
         sprintf(exchange_msgp, msg, value, exchange_ryokin_medal_tbl[n][0].medal, exchange_ryokin_medal_tbl[n][0].ryokin, exchange_ryokin_medal_tbl[n][1].medal, exchange_ryokin_medal_tbl[n][1].ryokin, exchange_ryokin_medal_tbl[n][2].medal, exchange_ryokin_medal_tbl[n][2].ryokin);
     } else {
         sprintf(exchange_msgp, msg, value);

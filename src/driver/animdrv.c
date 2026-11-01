@@ -1149,8 +1149,7 @@ void animPoseMain(s32 poseId) {
 #if VERSION > VERSION_DEMO_US
     OSInitFastCast();
 #endif
-    // FAKE: (s32) cast on the u32 flag (signed compare); the plain test changes the object
-    if ((s32)wp->mbUseFloatScratch != 0) {
+    if (wp->mbUseFloatScratch != 0) {
         grpA = (u8*)wp->vtxArrayPos;
         grpB = (u8*)wp->vtxArrayNrm;
     } else {
@@ -2450,8 +2449,7 @@ void materialProc(s32 shapeId, s32 xluStage) {
 #endif
             for (i = 0; i < drawCount; i++, draw++) {
                 s32 texCount = draw->texCount;
-                // FAKE: (u32) cast on the BOOL (unsigned compare); the plain test changes the object
-                if ((u32)wp->curPose->disableDraw == 0) {
+                if (wp->curPose->disableDraw == 0) {
                     lightPos = (Vec){0.0f, 0.0f, 0.0f};
                     PSMTXMultVec(*g_modeling_mtx, &lightPos, &lightPos);
                     mapSetMaterialLight(wp->curPose->materialLightFlag, lightPos);
@@ -2464,8 +2462,7 @@ void materialProc(s32 shapeId, s32 xluStage) {
                     mapSetMaterialTev(texCount, draw->drawMode, wp->curPose->materialFlag, *g_modeling_mtx);
                 }
                 pose = wp->curPose;
-                // FAKE: (u32) cast on typeFlags (unsigned compare); the plain test changes the object
-                if ((u32)pose->typeFlags != 0) {
+                if (pose->typeFlags != 0) {
                     cd = wp->curPoseData;
                     texChange1 = animSetMaterial_ChangeTexture(cd, draw, pose, wp->texObjs[0], wp->texDatas[0], *wp->paperMtxPtr[0], 1);
                     check1 = texChange1;
@@ -2621,8 +2618,7 @@ void renderProc(s32 shapeId, s32 unused) {
                 s32* firstId;
                 AnimDrawCallEntry* drawCall;
                 texCount = draw->texCount;
-                // FAKE: (u32) cast on the BOOL (unsigned compare); the plain test changes the object
-                if ((u32)wp->curPose->disableDraw == 0) {
+                if (wp->curPose->disableDraw == 0) {
                     lightPos = (Vec){ 0.0f, 0.0f, 0.0f };
                     MTXMultVec(*g_modeling_mtx, &lightPos, &lightPos);
                     lightPos2 = lightPos;
@@ -2640,8 +2636,7 @@ void renderProc(s32 shapeId, s32 unused) {
                     mapSetMaterialTev(texCount, draw->drawMode, wp->curPose->materialFlag, *g_modeling_mtx);
                 }
                 pose = wp->curPose;
-                // FAKE: (u32) cast on typeFlags (unsigned compare); the plain test changes the object
-                if ((u32)pose->typeFlags != 0) {
+                if (pose->typeFlags != 0) {
                     GXTexObj* currTexObj;
                     cd = wp->curPoseData;
                     texChange1 = animSetMaterial_ChangeTexture(cd, draw, pose, wp->texObjs[0], wp->texDatas[0], *wp->paperMtxPtr[0], 1);
@@ -2655,8 +2650,7 @@ void renderProc(s32 shapeId, s32 unused) {
                     } else {
                         check2 = FALSE;
                     }
-                    // FAKE: (s32) casts on the u32 paperTexMode fields (signed compares); the plain tests change the object
-                    if (check1 && (texChange1 && (s32)wp->paperTexMode0 == 0 || check2 && (s32)wp->paperTexMode1 == 0) && !draw->drawMode) {
+                    if (check1 && (texChange1 && wp->paperTexMode0 == 0 || check2 && wp->paperTexMode1 == 0) && !draw->drawMode) {
                         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
                     }
                     if (check1 && !draw->drawMode) {
@@ -2710,8 +2704,7 @@ void renderProc(s32 shapeId, s32 unused) {
                 posFirstId = draw->firstIdPos;
                 nrmFirstId = draw->firstIdNrm;
                 clr0FirstId = draw->firstIdClr0;
-                // FAKE: (s32) cast on the u32 flag (signed compare); the plain test changes the object
-                if ((s32)wp->mbUseFloatScratch != 0) {
+                if (wp->mbUseFloatScratch != 0) {
                     posVtxPtr = (Vec*)((u8*)wp->vtxArrayPos + posVtxSize);
                     nrmVtxPtr = (Vec*)((u8*)wp->vtxArrayNrm + nrmVtxSize);
                 } else {
@@ -3065,8 +3058,7 @@ void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f3
     wp->curPose = pose;
     wp->curAnimData = anim;
     wp->curPoseData = data;
-    // FAKE: (s32) cast on the u32 flag (signed compare); the plain test changes the object
-    if ((s32)wp->mbUseFloatScratch != 0) {
+    if (wp->mbUseFloatScratch != 0) {
         DCFlushRange(wp->vtxArrayPos, animPoseGetBaseData(pose)->bufferPosNum * sizeof(Vec));
         DCFlushRange(wp->vtxArrayNrm, animPoseGetBaseData(pose)->bufferNrmNum * sizeof(Vec));
     } else {
@@ -3277,8 +3269,7 @@ inline void animPoseFileRelease(s32 fileId) {
 void animPoseRelease(s32 poseId) {
     AnimationPose* pose = &wp->poses[poseId];
 
-    // FAKE: (u32) cast on typeFlags (unsigned compare); the plain test changes the object
-    if ((u32)pose->typeFlags != 0) {
+    if (pose->typeFlags != 0) {
         animPaperPoseRelease(poseId);
     } else {
         if (pose->flags & ANIM_POSE_FLAG_WORLD_POSITION_EVAL) {

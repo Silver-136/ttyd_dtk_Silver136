@@ -668,7 +668,7 @@ void kpa_status_disp(CameraId camera, void* param) {
 #if VERSION >= VERSION_US
     iconDispGx(1.0f, &pos, KPA_ICON_2D, kpa_status_icon_tbl[gp->language][0]);
 #else
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, (u32)gp->language ? 0x210 : 0x206);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, gp->language ? 0x210 : 0x206);
 #endif
     pos.x = 50.0f;
     pos.y = 160.0f;

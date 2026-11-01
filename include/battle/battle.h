@@ -311,7 +311,7 @@ struct BattleWork {
     s32 commandDisabled[5];             // 0x19038, set to 3 by Bowser's command-blocking attacks
 #endif
     s32 luckEventId;                    // 0x1904C
-    u32 reserveItems[4];                // 0x19050
+    s32 reserveItems[4];                // 0x19050
     s32 curtainSfxId;                    // 0x19060
     u8 lastAcSuccess;                   // 0x19064 (US 0x19074), 1 after a successful action command (btlevtcmd_ResultACDefence)
     u8 pad_19065[0x19068 - 0x19065];    // 0x19065, never accessed

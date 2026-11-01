@@ -1127,7 +1127,7 @@ void loadDraw(CameraId camera, void* param) {
         FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
 #else
 #if VERSION >= VERSION_US
-        if ((u32)gp->language == LANGUAGE_JP) {
+        if (gp->language == LANGUAGE_JP) {
             str = "データ";
         } else {
             str = msgSearch("msg_mcard_file");
@@ -1191,7 +1191,7 @@ void loadDraw(CameraId camera, void* param) {
                     iconDispGxCol(m, 4, (u16)stone_id[k], i == wp->slot ? white : gray);
 #else
 #if VERSION >= VERSION_US
-            if ((u32)gp->language == LANGUAGE_JP) {
+            if (gp->language == LANGUAGE_JP) {
                 str = "こわれています";
             } else {
                 str = msgSearch("msg_mcard_kowareteru");
@@ -1202,14 +1202,14 @@ void loadDraw(CameraId camera, void* param) {
             str = msgSearch("msg_mcard_kowaretitle");
             FontDrawString(win1[0]->x - FontGetMessageWidth(str) / 2, 70.0f + win1[0]->y, str);
         } else if (flags & CARD_SAVE_FLAG_ERASED) {
-            if ((u32)gp->language == LANGUAGE_JP) {
+            if (gp->language == LANGUAGE_JP) {
                 str = "ニューゲーム";
             } else {
                 str = msgSearch("msg_mcard_new_game");
             }
             FontDrawString(win1[0]->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1[0]->y, str);
         } else if (gsw0 == 0) {
-            if ((u32)gp->language == LANGUAGE_JP) {
+            if (gp->language == LANGUAGE_JP) {
                 str = "はじめから";
             } else {
                 str = msgSearch("msg_mcard_hajimekara");
@@ -1219,7 +1219,7 @@ void loadDraw(CameraId camera, void* param) {
                 FontDrawString(win1[0]->x - FontGetMessageWidth(name) / 2, 70.0f + win1[0]->y, name);
             }
         } else {
-            FontGetMessageWidth((u32)gp->language != LANGUAGE_JP ? "88" : "８８");
+            FontGetMessageWidth(gp->language != LANGUAGE_JP ? "88" : "８８");
 #else
             str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
@@ -1247,9 +1247,9 @@ void loadDraw(CameraId camera, void* param) {
 #if VERSION >= VERSION_US
                 FontDrawString(win1[0]->x - FontGetMessageWidth(name) / 2, 70.0f + win1[0]->y, name);
             }
-            sprintf(buf2, (u32)gp->language != LANGUAGE_JP ? "%s %s" : "%s　%s", msgSearch("msg_menu_mario_level"), winZenkakuStr(level));
+            sprintf(buf2, gp->language != LANGUAGE_JP ? "%s %s" : "%s　%s", msgSearch("msg_menu_mario_level"), winZenkakuStr(level));
             FontDrawString(win1[0]->x - FontGetMessageWidth(buf2) / 2.0f, 30.0f + win1[0]->y, buf2);
-            sprintf(buf2, (u32)gp->language != LANGUAGE_JP ? "%s " : "%s　", msgSearch("msg_menu_mario_num_playtime"));
+            sprintf(buf2, gp->language != LANGUAGE_JP ? "%s " : "%s　", msgSearch("msg_menu_mario_num_playtime"));
 #else
                 FontDrawString(win1->x - FontGetMessageWidth(name) / 2, 70.0f + win1->y, name);
             }
@@ -1269,7 +1269,7 @@ void loadDraw(CameraId camera, void* param) {
             FontDrawString(win1[0]->x - w / 2.0f, win1[0]->y, buf2);
             FontDrawScaleVec((Vec){1.0f, 1.0f, 1.0f});
             w = FontGetMessageWidth(buf2);
-            sprintf(buf2, (u32)gp->language != LANGUAGE_JP ? "%s " : "%s　", msgSearch("msg_menu_mario_num_playtime"));
+            sprintf(buf2, gp->language != LANGUAGE_JP ? "%s " : "%s　", msgSearch("msg_menu_mario_num_playtime"));
             strcat(buf2, winZenkakuStrPad(hours, 2));
             x = FontGetMessageWidth(buf2);
             if (w > 200.0f) {

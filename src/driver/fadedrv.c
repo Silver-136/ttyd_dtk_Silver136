@@ -586,8 +586,7 @@ void fadeMain(void) {
                     case 0:
 #if VERSION > VERSION_DEMO_US
                         if (entry->duration != 0) {
-                            // FAKE: no-op (s32) cast of the u32 delayFrames; removing it changes the object
-                            if ((s32)entry->delayFrames != 0) {
+                            if (entry->delayFrames != 0) {
                                 entry->delayFrames--;
                             } else {
                                 entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);

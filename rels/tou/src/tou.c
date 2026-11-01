@@ -1028,7 +1028,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     x = -winW * x;
     windowDispGX_System(0, 0xFF, x - 30.0f, 165.0f, 310.0f, 330.0f);
 #if VERSION >= VERSION_US
-    if ((u32)gp->language == LANGUAGE_JP) {
+    if (gp->language == LANGUAGE_JP) {
         title = "\203\211\203\223\203L\203\223\203O";
     } else {
         title = msgSearch("stg3_ranking");
@@ -1067,7 +1067,7 @@ static void disp_proc(CameraId cameraId, void* param) {
             PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
             if (rank != 0) {
 #if VERSION >= VERSION_US
-                if ((u32)gp->language == LANGUAGE_JP) {
+                if (gp->language == LANGUAGE_JP) {
                     sprintf(buf, "%s%s", rank / 10 ? suuji[rank / 10] : "", suuji[rank % 10]);
                 } else {
                     sprintf(buf, "%2d", rank);

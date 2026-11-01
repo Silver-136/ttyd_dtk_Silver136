@@ -595,8 +595,7 @@ void BattleBreakSlot_Main(void) {
 #if VERSION >= VERSION_US
                 {
 #else
-                // FAKE: no-op (u32) cast; the plain comparison changes the object
-                if ((u32)gp->language == LANGUAGE_JP) {
+                if (gp->language == LANGUAGE_JP) {
 #endif
                     switch (BattleBreakSlotReelGetPtr(0)->item) {
                         case 0:

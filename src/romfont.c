@@ -260,13 +260,13 @@ void romFontMake(void);
  */
 const char* romFontGetMessage(s32 msg) {
 #if VERSION <= VERSION_DEMO_US
-    if (wp->language != 0 && (u32)gp->language == 0) {
+    if (wp->language != 0 && gp->language == 0) {
         return msg_tbl[1][msg];
     }
     return msg_tbl[gp->language][msg];
 #else
 #if VERSION >= VERSION_US
-    if (wp->language != ROM_FONT_LANGUAGE_SJIS && (u32)gp->language == LANGUAGE_JP) {
+    if (wp->language != ROM_FONT_LANGUAGE_SJIS && gp->language == LANGUAGE_JP) {
         return msg_tbl[1][msg];
     }
     return msg_tbl[gp->language][msg];

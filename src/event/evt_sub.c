@@ -2041,7 +2041,7 @@ void coingetDisp(WinMgrEntry* entry) {
         u16 lines;
         s32 w;
 
-        if ((u32)gp->language == LANGUAGE_JP) {
+        if (gp->language == LANGUAGE_JP) {
             sprintf(buf, msgSearch("msg_window_coin_get"), work[0]);
         } else {
             strcpy(buf, msgSearch("msg_window_coin_get"));

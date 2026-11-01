@@ -200,7 +200,7 @@ struct EventEntry {
                 void* userdatap[3];
             }; // 0x78
             union {
-                u32 userdata3;
+                s32 userdata3;
                 f32 userdata3f;
             };                         // 0x84, 4th scratch word after userdata[3] (state/counter/window id/float z/saved flags)
             union {

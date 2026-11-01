@@ -664,7 +664,7 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
 #if VERSION <= VERSION_DEMO_US
             PSMTXTrans(trn, 32.0f + (30.0f + o3[j]), 25.0f, 0.0f);
 #else
-            if ((u32)gp->language == LANGUAGE_JP) {
+            if (gp->language == LANGUAGE_JP) {
                 PSMTXTrans(trn, 26.0f + (30.0f + o3[j]), 25.0f, 0.0f);
             } else {
                 PSMTXTrans(trn, 28.0f + (30.0f + o3[j]), 25.0f, 0.0f);
@@ -675,12 +675,12 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
             FontDrawStringMtx(out, buf3);
         }
 #if VERSION <= VERSION_DEMO_US
-        if (((u32)gp->language) == 1) {
+        if ((gp->language) == 1) {
             x += 10.0f;
         }
         PSMTXTrans(trn, 64.0f + x, 22.0f, 0.0f);
 #else
-        if ((u32)gp->language == LANGUAGE_JP) {
+        if (gp->language == LANGUAGE_JP) {
             PSMTXTrans(trn, 92.0f, 22.0f, 0.0f);
         } else {
             PSMTXTrans(trn, 100.0f, 22.0f, 0.0f);
@@ -721,7 +721,7 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
 #if VERSION <= VERSION_DEMO_US
             PSMTXTrans(trn, 72.0f + (x + o3[j]), 25.0f, 0.0f);
 #else
-            if ((u32)gp->language == LANGUAGE_JP) {
+            if (gp->language == LANGUAGE_JP) {
                 PSMTXTrans(trn, 76.0f + (30.0f + o3[j]), 25.0f, 0.0f);
             } else {
                 PSMTXTrans(trn, 78.0f + (30.0f + o3[j]), 25.0f, 0.0f);
@@ -921,7 +921,7 @@ void DrawMenuPinchMark(void) {
             PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 0.0f);
         }
         PSMTXConcat(cam->view, m, out);
-        if ((u32)gp->language != LANGUAGE_JP) {
+        if (gp->language != LANGUAGE_JP) {
             PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(out, s, out);
         }
@@ -982,7 +982,7 @@ void DrawMenuPartyPinchMark(void) {
             PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 0.0f);
         }
         PSMTXConcat(cam->view, m, out);
-        if ((u32)gp->language != LANGUAGE_JP) {
+        if (gp->language != LANGUAGE_JP) {
             PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(out, s, out);
         }

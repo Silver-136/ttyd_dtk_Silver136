@@ -1006,7 +1006,7 @@ void winNameDisp(WinMgrEntry* win) {
 
     name = msgSearch(itemDataTable[entry->itemId].name);
 #if VERSION >= VERSION_US
-    if ((u32)gp->language == LANGUAGE_JP) {
+    if (gp->language == LANGUAGE_JP) {
         if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
             sprintf(buffer, msgSearch("msg_window_badge_get"), name);
         } else {
@@ -1056,7 +1056,7 @@ void winNameDisp2(WinMgrEntry* win) {
 
     name = msgSearch(itemDataTable[entry->itemId].name);
 #if VERSION >= VERSION_US
-    if ((u32)gp->language == LANGUAGE_JP) {
+    if (gp->language == LANGUAGE_JP) {
         sprintf(buffer, msgSearch("msg_window_item_release"), name);
     } else {
         strcpy(buffer, msgSearch("msg_window_item_release"));

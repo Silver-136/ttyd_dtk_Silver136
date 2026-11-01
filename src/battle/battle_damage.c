@@ -67,9 +67,8 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     }
     target->damagePattern = pattern;
     if (target->attributeFlags & kUnitNoSpin) {
-        // FAKE: (u32) casts give unsigned compares; without them the object changes
-        if ((u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_L || (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_R ||
-            (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_L_LAST || (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_R_LAST) {
+        if (target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_L || target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_R ||
+            target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_L_LAST || target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_R_LAST) {
             target->damagePattern = ATTACKPATTERN_NULL;
         }
     }
@@ -297,8 +296,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                 result |= DAMAGE_RESULT_DEATH;
                 _checkDamageCode_EmergencyRevival(target, &result);
             }
-            // FAKE: (u32) cast gives an unsigned compare; without it the object changes
-            if ((u32)target->damagePattern == ATTACKPATTERN_BLOW) {
+            if (target->damagePattern == ATTACKPATTERN_BLOW) {
                 s32 b = 1;
                 if ((result & DAMAGE_RESULT_DEATH) && !(result & DAMAGE_RESULT_REVIVAL) && (result & DAMAGE_RESULT_FINAL_HIT) && target->vulnStatus->galeForceRate) {
                     b = 0;
@@ -317,8 +315,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                 }
             }
         }
-    // FAKE: (u32) cast gives an unsigned compare; without it the object changes
-    } else if ((u32)target->damagePattern == ATTACKPATTERN_BLOW) {
+    } else if (target->damagePattern == ATTACKPATTERN_BLOW) {
         target->damagePattern = ATTACKPATTERN_NULL;
     }
     target->tokenFlags |= kDamagedThisTurn;

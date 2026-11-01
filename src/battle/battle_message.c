@@ -48,7 +48,7 @@ USER_FUNC(btlevtcmd_AnnounceMessage) {
         switch (type) {
             case 1:
 #if VERSION >= VERSION_US
-                if ((u32)gp->language == LANGUAGE_JP) {
+                if (gp->language == LANGUAGE_JP) {
                     sprintf(announce->text, text, msgSearch(itemDataTable[announce->params[0]].name));
                 } else {
                     strcpy(announce->text, text);

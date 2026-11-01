@@ -290,13 +290,13 @@ void winMain(void) {
                     fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), name);
 #else
 #if VERSION >= VERSION_US
-                fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+                fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
                 fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
                 {
 #if VERSION >= VERSION_US
-                    fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
+                    fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
 #else
                     const char* name = winGetMapTplName();
                     fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), name);
@@ -1179,7 +1179,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
         vsprintf(buf, fmt, args);
         msg = buf;
     }
-    if ((u32)gp->language != LANGUAGE_JP) {
+    if (gp->language != LANGUAGE_JP) {
         ref = FontGetMessageWidth("999");
     } else {
         ref = FontGetMessageWidth("９９９");
@@ -1236,7 +1236,7 @@ void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* 
     } else {
         msg = fmt;
     }
-    if ((u32)gp->language != 0) {
+    if (gp->language != 0) {
         ref = scale.x * FontGetMessageWidth("999");
     } else {
         ref = scale.x * FontGetMessageWidth("９９９");

@@ -509,7 +509,7 @@ void pouchGetStarStone(u32 id);
 s32 pouchReceiveMailCount(void);
 void pouchReceiveMail(s32 mailId);
 void pouchOpenMail(s32 mailId);
-u32 pouchCheckMail(s32 mailId);
+s32 pouchCheckMail(s32 mailId);
 s32 pouchGetPartyColor(PartyId partnerId);
 void pouchSetPartyColor(PartyId partnerId, s32 color);
 void pouchSetYoshiName(const char* name);

@@ -305,7 +305,7 @@ void effTexSetup(void) {
     wp->texture = arcOpen("effect.tpl", 0, 0);
     if (!wp->texture) {
 #if VERSION >= VERSION_US
-        sprintf(path, "%s/e/%s/effect.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+        sprintf(path, "%s/e/%s/effect.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
         sprintf(path, EFF_TPL_JP, getMarioStDvdRoot());
 #endif
@@ -419,7 +419,7 @@ void effMain(void) {
             }
         }
     }
-    if ((u32)wp->language != (u32)gp->language) {
+    if ((u32)wp->language != gp->language) {
         if (wp->handle) {
             fileFree(wp->handle);
             wp->handle = NULL;

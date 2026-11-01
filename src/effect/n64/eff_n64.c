@@ -367,7 +367,7 @@ void effTexSetupN64(void) {
         sprintf(path, "%s/eff/jp/effect_n64.tpl", getMarioStDvdRoot());
 #else
 #if VERSION >= VERSION_US
-        lang = (u32)gp->language == LANGUAGE_JP ? "jp" : "us";
+        lang = gp->language == LANGUAGE_JP ? "jp" : "us";
         sprintf(path, "%s/e/%s/effect_n64.tpl", getMarioStDvdRoot(), lang);
 #else
         sprintf(path, "%s/e/jp/effect_n64.tpl", getMarioStDvdRoot());
