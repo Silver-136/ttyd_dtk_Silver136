@@ -613,39 +613,22 @@ EVT_END()
  * it takes pose type 47 and shows a toge_flush spark just above the top of the stack (its height scaled by its
  * size), then waits 60 frames.
  */
+/**
+ * Data-table events 37 and 39, run by btldefaultevt_Damage for damage codes 31 and 33,
+ * which BattleCheckCounter gives the Pokey when its top or front spikes hurt the attacker:
+ * it takes pose type 47 and shows a toge_flush spark just above the top of the stack (its height scaled by its
+ * size), then waits 60 frames.
+ */
+static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 47)
+    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_GetHeight, LW(10), LW(3))
+    CALL(btlevtcmd_GetStatusMg, LW(10), LW(4))
 #if VERSION <= VERSION_DEMO_US
-/**
- * Data-table events 37 and 39, run by btldefaultevt_Damage for damage codes 31 and 33,
- * which BattleCheckCounter gives the Pokey when its top or front spikes hurt the attacker:
- * it takes pose type 47 and shows a toge_flush spark just above the top of the stack (its height scaled by its
- * size), then waits 60 frames.
- */
-static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 47)
-    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetHeight, LW(10), LW(3))
-    CALL(btlevtcmd_GetStatusMg, LW(10), LW(4))
     MULTIPLY(LW(3), LW(4))
-ADD(LW(1), LW(3))
-    ADD(LW(1), 5)
-    ADD(LW(2), 10)
-    CALL(evt_eff, STRING(""), STRING("toge_flush"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
-    WAIT_FRAMES(60)
-    RETURN
-EVT_END()
 #else
-/**
- * Data-table events 37 and 39, run by btldefaultevt_Damage for damage codes 31 and 33,
- * which BattleCheckCounter gives the Pokey when its top or front spikes hurt the attacker:
- * it takes pose type 47 and shows a toge_flush spark just above the top of the stack (its height scaled by its
- * size), then waits 60 frames.
- */
-static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 47)
-    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetHeight, LW(10), LW(3))
-    CALL(btlevtcmd_GetStatusMg, LW(10), LW(4))
     MULTIPLY_FLOAT(LW(3), LW(4))
+#endif
     ADD(LW(1), LW(3))
     ADD(LW(1), 5)
     ADD(LW(2), 10)
@@ -653,7 +636,6 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
     WAIT_FRAMES(60)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Damage handler: unit work 0 holds the number of body segments left (4 to 1),

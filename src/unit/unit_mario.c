@@ -700,7 +700,6 @@ EVT_BEGIN(btlataudevtMarioJump)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Audience-attack reaction: Mario runs off the stage,
  * reappears in the audience and hammers the chosen audience member,
@@ -717,7 +716,11 @@ EVT_BEGIN(btlataudevtMarioHammer)
     MULTIPLY(LW(8), -1)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(8), LW(1), LW(2), 0, -1, 0)
+#else
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(8), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     WAIT_FRAMES(20)
     // He reappears at the edge of the audience area; the camera homes in on the chosen audience member and he walks up.
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
@@ -727,12 +730,20 @@ EVT_BEGIN(btlataudevtMarioHammer)
     MULTIPLY(LW(6), LW(5))
     MULTIPLY(LW(6), -1)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(6), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_btl_camera_set_mode, 0, 13)
+#else
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_AUDIENCE)
+#endif
     CALL(evt_btl_camera_set_homing_unit_audience, 0, UNIT_ID_SELF, 1, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 100)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     CALL(evt_btl_camera_set_zoom, 0, 200)
     // Wind-up: picks the swing poses for his hammer upgrade level and raises the hammer with its hold sound.
     CALL(_get_mario_hammer_lv, LW(0))
@@ -740,11 +751,19 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CASE_EQUAL(2)
         SET_VALUE(LW(0), STRING("M_H_5A"))
         SET_VALUE(LW(1), STRING("M_H_5B"))
+#if VERSION <= VERSION_DEMO_US
         SET_VALUE(LW(2), STRING("M_H_15"))
+#else
+        SET_VALUE(LW(2), STRING("M_H_14"))
+#endif
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("M_H_9A"))
         SET_VALUE(LW(1), STRING("M_H_9B"))
+#if VERSION <= VERSION_DEMO_US
         SET_VALUE(LW(2), STRING("M_H_14"))
+#else
+        SET_VALUE(LW(2), STRING("M_H_15"))
+#endif
         CASE_DEFAULT
         SET_VALUE(LW(0), STRING("M_H_1A"))
         SET_VALUE(LW(1), STRING("M_H_1B"))
@@ -786,11 +805,16 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND1"), 0)
     END_SWITCH
     CALL(_attack_aud, LW(3), 0)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_btl_camera_set_mode, 0, 3)
+#else
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+#endif
     CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
     // The camera returns to the stage view after a pause while Mario heads back.
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         WAIT_MS(1500)
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_btl_camera_set_mode, 0, 0)
         WAIT_MS(1000)
     END_SIBLING_EVENT
@@ -801,100 +825,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(8), LW(1), LW(2))
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-    RETURN
-EVT_END()
 #else
-/**
- * Audience-attack reaction: Mario runs off the stage,
- * reappears in the audience and hammers the chosen audience member,
- * using the swing poses and sounds of his current hammer level, then returns home.
- * The US and later releases add a follow-through pose and walk him back through the audience area.
- */
-EVT_BEGIN(btlataudevtMarioHammer)
-    // Mario runs off the side of the stage.
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetStageSize, LW(3), EVT_NULLPTR, EVT_NULLPTR)
-    CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(4))
-    SET_VALUE(LW(8), LW(3))
-    MULTIPLY(LW(8), LW(4))
-    MULTIPLY(LW(8), -1)
-    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(8), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-    WAIT_FRAMES(20)
-    // He reappears at the edge of the audience area; the camera homes in on the chosen audience member and he walks up.
-    CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetStageAudienceAreaSize, LW(4), EVT_NULLPTR, EVT_NULLPTR)
-    CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
-    SET_VALUE(LW(6), LW(4))
-    MULTIPLY(LW(6), LW(5))
-    MULTIPLY(LW(6), -1)
-    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(6), LW(1), LW(2))
-    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_AUDIENCE)
-    CALL(evt_btl_camera_set_homing_unit_audience, 0, UNIT_ID_SELF, 1, LW(3))
-    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
-    CALL(evt_btl_camera_set_zoom, 0, 100)
-    CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-    CALL(evt_btl_camera_set_zoom, 0, 200)
-    // Wind-up: picks the swing poses for his hammer upgrade level and raises the hammer with its hold sound.
-    CALL(_get_mario_hammer_lv, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(2)
-        SET_VALUE(LW(0), STRING("M_H_5A"))
-        SET_VALUE(LW(1), STRING("M_H_5B"))
-        SET_VALUE(LW(2), STRING("M_H_14"))
-        CASE_EQUAL(3)
-        SET_VALUE(LW(0), STRING("M_H_9A"))
-        SET_VALUE(LW(1), STRING("M_H_9B"))
-        SET_VALUE(LW(2), STRING("M_H_15"))
-        CASE_DEFAULT
-        SET_VALUE(LW(0), STRING("M_H_1A"))
-        SET_VALUE(LW(1), STRING("M_H_1B"))
-        SET_VALUE(LW(2), STRING("M_H_13"))
-    END_SWITCH
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(0))
-    CALL(_get_mario_hammer_lv, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(2)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CASE_EQUAL(1)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CASE_DEFAULT
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    END_SWITCH
-    WAIT_MS(500)
-    // He swings, with the swing sound of his hammer level.
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(1))
-    WAIT_FRAMES(1)
-    CALL(_get_mario_hammer_lv, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(2)
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING2"), 0)
-        CASE_EQUAL(1)
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING1"), 0)
-        CASE_DEFAULT
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING3"), 0)
-    END_SWITCH
-    // The hammer lands: ground-thump sound, the audience member is struck and the camera shakes.
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(2))
-    WAIT_FRAMES(7)
-    CALL(_get_mario_hammer_lv, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(2)
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND3"), 0)
-        CASE_EQUAL(1)
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND2"), 0)
-        CASE_DEFAULT
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND1"), 0)
-    END_SWITCH
-    CALL(_attack_aud, LW(3), 0)
-    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-    CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
-    // The camera returns to the stage view after a pause while Mario heads back.
-    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-        WAIT_MS(1500)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_MS(1000)
     END_SIBLING_EVENT
@@ -914,10 +845,10 @@ EVT_BEGIN(btlataudevtMarioHammer)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(8), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Pose sounds for Mario: on the low-HP pant pose M_S_3, at a quarter of the loop,

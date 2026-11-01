@@ -182,6 +182,12 @@ void bomhei_exit(PartyEntry* party) {
 }
 #endif
 
+/**
+ * Cancels a bomb in progress (demo): back to run mode 2 unless in run mode 9,
+ * clears the use flags and frees the use work.
+ * Called before plane, ship and bellows rides and on run-mode changes (party_move.c).
+ * Unlike the release versions it leaves Mario's carry flag and the sounds alone.
+ */
 #if VERSION <= VERSION_DEMO_US
 /** Party table exit handler (demo): drops Mario's carry flag, stops the bomb sounds and frees the use work. */
 void bomhei_exit(PartyEntry* party) {
@@ -195,16 +201,8 @@ void bomhei_exit(PartyEntry* party) {
  * Called before plane, ship and bellows rides and on run-mode changes (party_move.c).
  * Unlike the release versions it leaves Mario's carry flag and the sounds alone.
  */
-void bomhei_use_cancel() {
-#else
-/**
- * Cancels a bomb in progress (demo): back to run mode 2 unless in run mode 9,
- * clears the use flags and frees the use work.
- * Called before plane, ship and bellows rides and on run-mode changes (party_move.c).
- * Unlike the release versions it leaves Mario's carry flag and the sounds alone.
- */
-void bomhei_use_cancel(void) {
 #endif
+void bomhei_use_cancel(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
     if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
 #if VERSION > VERSION_DEMO_US

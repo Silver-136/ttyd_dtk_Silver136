@@ -96,237 +96,49 @@ EvtWord subset_attack_ready_jump_event[2];
  * other enemies run their data-table KO event or subsetevt_dead_core.
  * US on, a revived enemy also loses its holding-stolen-item flag.
  */
+/**
+ * KO reaction for a unit (LW(10) = unit, LW(11) = part) whose HP reached 0.
+ * Mario and the partners first walk home.
+ * Mario then runs his data-table event 51 when a Life Shroom revives him (damage code bit 0x800), else event 49.
+ * A partner with a Life Shroom keels over, uses it up and gets back up with 10 HP;
+ * otherwise it is KO'd and, when it stood in front, swaps places with Mario.
+ * Enemies revived by a Life Shroom spin down, show it and recover 10 HP;
+ * other enemies run their data-table KO event or subsetevt_dead_core.
+ * US on, a revived enemy also loses its holding-stolen-item flag.
+ */
+EVT_BEGIN(subsetevt_dead)
+    // The command cursor will no longer return to this unit.
+    // Mario and the partners first float or walk back home; enemies skip ahead.
+    CALL(_disable_restore_command_cursor)
+    CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
+    SWITCH(LW(0))
+        CASE_EQUAL(UNIT_MARIO)
+        GOTO(0)
+        CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
+        GOTO(0)
+        CASE_DEFAULT
+        GOTO(1)
+    END_SWITCH
+    LABEL(0)
+    CALL(btlevtcmd_CheckAttribute, LW(10), kFloating, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
+        CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
+        CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
 #if VERSION <= VERSION_DEMO_US
-/**
- * KO reaction for a unit (LW(10) = unit, LW(11) = part) whose HP reached 0.
- * Mario and the partners first walk home.
- * Mario then runs his data-table event 51 when a Life Shroom revives him (damage code bit 0x800), else event 49.
- * A partner with a Life Shroom keels over, uses it up and gets back up with 10 HP;
- * otherwise it is KO'd and, when it stood in front, swaps places with Mario.
- * Enemies revived by a Life Shroom spin down, show it and recover 10 HP;
- * other enemies run their data-table KO event or subsetevt_dead_core.
- * US on, a revived enemy also loses its holding-stolen-item flag.
- */
-EVT_BEGIN(subsetevt_dead)
-    // The command cursor will no longer return to this unit.
-    // Mario and the partners first float or walk back home; enemies skip ahead.
-    CALL(_disable_restore_command_cursor)
-    CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(UNIT_MARIO)
-        GOTO(0)
-        CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
-        GOTO(0)
-        CASE_DEFAULT
-        GOTO(1)
-    END_SWITCH
-    LABEL(0)
-    CALL(btlevtcmd_CheckAttribute, LW(10), kFloating, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
-        CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
-        CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
         CALL(btlevtcmd_DivePosition, LW(10), LW(2), LW(3), LW(4), 0, 0, EASING_LINEAR, 0, -1)
-    ELSE
-        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_WALK)
-        CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
-        CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
-        CALL(btlevtcmd_MovePosition, LW(10), LW(2), LW(3), LW(4), 0, -1, 0)
-    END_IF
-    CALL(btlevtcmd_ResetFaceDirection, LW(10))
-    LABEL(1)
-    // The unit is marked KO'd.
-    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 1, 1, 1)
-    CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(UNIT_MARIO)
-        // Mario: his Life Shroom revival (data-table event 51) when one saves him, else his KO event 49.
-        CALL(btlevtcmd_ClearAllStatus, LW(10))
-        CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
-        IF_INT_NOT_EQUAL(LW(1), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-        ELSE
-            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
-        END_IF
-        CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
-        // A partner saved by a Life Shroom runs its own revival event if it has one, else the one below.
-        CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
-        IF_INT_NOT_EQUAL(LW(1), 0)
-            CALL(btlevtcmd_ClearAllStatus, LW(10))
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-            ELSE
-                // The partner keels over, the Life Shroom icon shows above it and the Shroom is used up.
-                CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_KO)
-                BEGIN_SIBLING_EVENT
-                    CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
-                    CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-                END_SIBLING_EVENT
-                WAIT_FRAMES(60)
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_ConsumeItemReserve, LW(10), ITEM_LIFE_SHROOM)
-                BEGIN_SIBLING_EVENT
-                    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                    ADD(LW(1), 40)
-                    CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 90)
-                END_SIBLING_EVENT
-                WAIT_FRAMES(90)
-                CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
-                CALL(btlevtcmd_SetHp, LW(10), 0)
-                CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                ADD(LW(1), 30)
-                CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
-                WAIT_MS(2000)
-                CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
-                CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
-                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-            END_IF
-        ELSE
-            // No Life Shroom: the partner runs its KO event and falls over.
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
-            ELSE
-            END_IF
-            CALL(btlevtcmd_KillUnit, LW(10), 1)
-            CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(11))
-            CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_KO)
-            BEGIN_SIBLING_EVENT
-                CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
-                CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-            END_SIBLING_EVENT
-            // A KO'd partner standing in front of Mario swaps places with him, as long as Mario still has HP.
-            CALL(btlevtcmd_GetHomePos, LW(10), LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_GetPartnerId, LW(10), LW(4))
-            CALL(btlevtcmd_GetHomePos, LW(4), LW(6), LW(7), LW(8))
-            IF_INT_LESS(LW(0), 0)
-                MULTIPLY(LW(0), -1)
-            END_IF
-            IF_INT_LESS(LW(6), 0)
-                MULTIPLY(LW(6), -1)
-            END_IF
-            IF_INT_LESS(LW(0), LW(6))
-                WAIT_MS(500)
-                CALL(_check_at_dm_event_wait, UNIT_ID_MARIO)
-                CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))
-                IF_INT_GREATER(LW(0), 0)
-                    CALL_CHILD(btldefaultevt_ChangePosition)
-                END_IF
-            END_IF
-        END_IF
-        CASE_DEFAULT
-        // Enemies: a Life Shroom revival runs the unit's own event 51 when it has one.
-        CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
-        IF_INT_NOT_EQUAL(LW(1), 0)
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-            ELSE
-                // The standard enemy revival: the enemy spins and tips over, and the Life Shroom icon shows.
-                CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
-                SET_VALUE(LW(0), 48)
-                LABEL(5)
-                WAIT_FRAMES(1)
-                CALL(btlevtcmd_AddRotate, LW(10), 0, -15, 0)
-                SUBTRACT(LW(0), 1)
-                IF_INT_GREATER(LW(0), 0)
-                    GOTO(5)
-                END_IF
-                CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
-                CALL(btlevtcmd_SetRotateOffset, LW(10), 0, 0, 0)
-                SET_VALUE(LW(0), 30)
-                LABEL(6)
-                WAIT_FRAMES(1)
-                CALL(btlevtcmd_AddRotate, LW(10), 3, 0, 0)
-                SUBTRACT(LW(0), 1)
-                IF_INT_GREATER(LW(0), 0)
-                    GOTO(6)
-                END_IF
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_ConsumeItemReserve, LW(10), ITEM_LIFE_SHROOM)
-                BEGIN_SIBLING_EVENT
-                    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                    ADD(LW(1), 40)
-                    CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 120)
-                END_SIBLING_EVENT
-                WAIT_FRAMES(90)
-                // The enemy rights itself, recovers 10 HP with the recovery sparkle, hops up and idles again.
-                SET_VALUE(LW(0), 30)
-                LABEL(7)
-                WAIT_FRAMES(1)
-                CALL(btlevtcmd_AddRotate, LW(10), -3, 0, 0)
-                SUBTRACT(LW(0), 1)
-                IF_INT_GREATER(LW(0), 0)
-                    GOTO(7)
-                END_IF
-                CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
-                CALL(btlevtcmd_SetHp, LW(10), 0)
-                CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                ADD(LW(1), 30)
-                CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
-                WAIT_MS(2000)
-                CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
-                CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
-                CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
-                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-            END_IF
-        ELSE
-            // No Life Shroom: the enemy's own KO event 49, else the standard spin-and-smoke defeat.
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
-            ELSE
-                CALL_CHILD(subsetevt_dead_core)
-            END_IF
-        END_IF
-    END_SWITCH
-    RETURN
-EVT_END()
 #else
-/**
- * KO reaction for a unit (LW(10) = unit, LW(11) = part) whose HP reached 0.
- * Mario and the partners first walk home.
- * Mario then runs his data-table event 51 when a Life Shroom revives him (damage code bit 0x800), else event 49.
- * A partner with a Life Shroom keels over, uses it up and gets back up with 10 HP;
- * otherwise it is KO'd and, when it stood in front, swaps places with Mario.
- * Enemies revived by a Life Shroom spin down, show it and recover 10 HP;
- * other enemies run their data-table KO event or subsetevt_dead_core.
- * US on, a revived enemy also loses its holding-stolen-item flag.
- */
-EVT_BEGIN(subsetevt_dead)
-    // The command cursor will no longer return to this unit.
-    // Mario and the partners first float or walk back home; enemies skip ahead.
-    CALL(_disable_restore_command_cursor)
-    CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(UNIT_MARIO)
-        GOTO(0)
-        CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
-        GOTO(0)
-        CASE_DEFAULT
-        GOTO(1)
-    END_SWITCH
-    LABEL(0)
-    CALL(btlevtcmd_CheckAttribute, LW(10), kFloating, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
-        CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
-        CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
         CALL(btlevtcmd_DivePosition, LW(10), LW(2), LW(3), LW(4), 0, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
+#endif
         ELSE
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_WALK)
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
         CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, LW(10), LW(2), LW(3), LW(4), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, LW(10), LW(2), LW(3), LW(4), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     END_IF
     CALL(btlevtcmd_ResetFaceDirection, LW(10))
     LABEL(1)
@@ -367,12 +179,14 @@ EVT_BEGIN(subsetevt_dead)
                     CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 90)
                 END_SIBLING_EVENT
                 WAIT_FRAMES(90)
+#if VERSION > VERSION_DEMO_US
                 // In the retail releases the partner's event 67 also runs (Koops uses it to stand upright).
                 CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_REVIVE_EVENT)
                 IF_INT_NOT_EQUAL(LW(0), 0)
                     CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_REVIVE_EVENT)
                 END_IF
                 // The partner gets back up with 10 HP, the recovery sparkle shows and it hops back to idle.
+#endif
                 CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
                 CALL(btlevtcmd_SetHp, LW(10), 0)
                 CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
@@ -383,7 +197,11 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
                 CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
                 CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+                CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+#else
                 CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
+#endif
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF
             ELSE
@@ -475,10 +293,15 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
                 CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
                 CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+                CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+                CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
+#else
                 CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
                 CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
 #if VERSION >= VERSION_US
                 CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_STOLEN_ITEM)
+#endif
 #endif
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF
@@ -495,7 +318,6 @@ EVT_BEGIN(subsetevt_dead)
     END_SWITCH
     RETURN
 EVT_END()
-#endif
 
 /**
  * Standard enemy defeat: spins the unit, puffs it away in smoke,

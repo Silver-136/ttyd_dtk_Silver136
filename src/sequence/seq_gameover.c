@@ -101,16 +101,6 @@ EVT_BEGIN(fall_gameover)
     SET_VALUE(LW(0), STRING("e2"))
     SPAWN_EVENT(_fall_char)
     WAIT_FRAMES(30)
-    SET_VALUE(LW(0), STRING("r"))
-    SPAWN_EVENT_GET_ID(PTR(_fall_char_last), LW(10))
-    LOOP(0)
-        IS_EVENT_RUNNING(LW(10), LW(11))
-        IF_INT_EQUAL(LW(11), 0)
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    WAIT_FRAMES(120)
 #else
 #if VERSION >= VERSION_US
     WAIT_MS(166)
@@ -159,6 +149,7 @@ EVT_BEGIN(fall_gameover)
 #else
     WAIT_FRAMES(30)
 #endif
+#endif
     SET_VALUE(LW(0), STRING("r"))
     SPAWN_EVENT_GET_ID(PTR(_fall_char_last), LW(10))
     LOOP(0)
@@ -168,6 +159,9 @@ EVT_BEGIN(fall_gameover)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    WAIT_FRAMES(120)
+#else
 #if VERSION >= VERSION_US
     WAIT_MS(1000)
 #else
@@ -242,11 +236,14 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
     CALL(evt_mario_clear_party, 1)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION > VERSION_DEMO_US
+    CALL(evt_snd_bgm_unpause)
+#endif
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_D_2"))
     CALL(evt_mario_set_dir, 180, 0, 0)
     CALL(evt_mario_adjust_dir)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("f"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("i"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n"), MAP_OBJ_FLAG_HIDDEN)
@@ -266,17 +263,7 @@ EVT_BEGIN(evt_gameover)
         CALL(evt_mapobj_trans, 1, STRING("v"), 0, 200, 0)
         CALL(evt_mapobj_trans, 1, STRING("e2"), 0, 200, 0)
         CALL(evt_mapobj_trans, 1, STRING("r"), 0, 200, 0)
-        CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
-    CALL(evt_cam3d_evt_set, 0, 208, 653, 0, 91, -30, 0, EASING_SINE_IN_OUT)
-    WAIT_FRAMES(1)
-    CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL_CHILD(fall_gameover)
 #else
-    CALL(evt_snd_bgm_unpause)
-    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-    CALL(evt_mario_set_pose, STRING("M_D_2"))
-    CALL(evt_mario_set_dir, 180, 0, 0)
-    CALL(evt_mario_adjust_dir)
 #if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), LANGUAGE_SP)
@@ -323,10 +310,14 @@ EVT_BEGIN(evt_gameover)
 #if VERSION >= VERSION_US
     END_IF
 #endif
+#endif
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
     CALL(evt_cam3d_evt_set, 0, 208, 653, 0, 91, -30, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(fall_gameover)
+#else
 #if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), LANGUAGE_SP)

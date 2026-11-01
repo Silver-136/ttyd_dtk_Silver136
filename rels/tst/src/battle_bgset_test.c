@@ -1928,34 +1928,16 @@ BattleGroupSetup btlgrp_test_nakayama = {
 
 /** Enemy lineup of test battle BTLNO_TEST_BARRIERN: Z-Yux, X-Yux. */
 BattleUnitSetup btlparty_test_barriern[] = {
+    {
+        &unit_barriern_z, // unitKindParams
+        1, // alliance
+        {0}, // pad_05
+        BATTLE_PHASE_ENEMY, // attackPhase
 #if VERSION <= VERSION_DEMO_US
-    {
-        &unit_barriern_z, // unitKindParams
-        1, // alliance
-        {0}, // pad_05
-        BATTLE_PHASE_ENEMY,
-{90.0f, 60.0f, 0.0f},
-0, // hitOffsetX
-        {4, 0, 0, 0}, // unitWork
-        battle_item_NONE, // itemDropTable
-    },
-    {
-        &unit_barriern_custom, // unitKindParams
-        1, // alliance
-        {0}, // pad_05
-        BATTLE_PHASE_ENEMY,
-{170.0f, 60.0f, 0.0f},
-0, // hitOffsetX
-        {4, 0, 0, 0}, // unitWork
-        battle_item_NONE, // itemDropTable
-    },
+        {90.0f, 60.0f, 0.0f},
 #else
-    {
-        &unit_barriern_z, // unitKindParams
-        1, // alliance
-        {0}, // pad_05
-        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
+#endif
         0, // hitOffsetX
         {4, 0, 0, 0}, // unitWork
         battle_item_NONE, // itemDropTable
@@ -1965,12 +1947,15 @@ BattleUnitSetup btlparty_test_barriern[] = {
         1, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
+#if VERSION <= VERSION_DEMO_US
+        {170.0f, 60.0f, 0.0f},
+#else
         {130.0f, 40.0f, 10.0f}, // position
+#endif
         0, // hitOffsetX
         {4, 0, 0, 0}, // unitWork
         battle_item_NONE, // itemDropTable
     },
-#endif
 };
 
 /**

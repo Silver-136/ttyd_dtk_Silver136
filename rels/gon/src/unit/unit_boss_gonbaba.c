@@ -385,53 +385,23 @@ static BattleDataEntry data_table[] = {
  * audience.
  */
 static BattleUnitKindPart parts[] = {
+    {
+        1, // partNum
+        "btl_un_gonbaba", // partName
+        "c_gonbaba", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {230.0f, 36.0f, 60.0f}, // hitBaseOffset
+        {230.0f, 36.0f, 60.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // hitHeight
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
 #if VERSION >= VERSION_US
-    {
-        1, // partNum
-        "btl_un_gonbaba", // partName
-        "c_gonbaba", // modelName
-        {0.0f, 0.0f, 0.0f}, // positionOffset
-        {230.0f, 36.0f, 60.0f}, // hitBaseOffset
-        {230.0f, 36.0f, 60.0f}, // hitCursorBaseOffset
-        20, // shadowSize
-        30, // hitHeight
-        255, // baseAlpha
-        &defence, // defense
-        &defence_attr, // defenseAttr
         kImportantPart | kPartUnitWorkDefense, // attributes
-        0, // counterAttributes
-        pose_table, // poseTable
-    },
-    {
-        2, // partNum
-        "btl_un_gonbaba", // partName
-        "c_gonbaba", // modelName
-        {100.0f, 0.0f, 0.0f}, // positionOffset
-        {250.0f, 110.0f, 25.0f}, // hitBaseOffset
-        {250.0f, 110.0f, 25.0f}, // hitCursorBaseOffset
-        20, // shadowSize
-        30, // hitHeight
-        255, // baseAlpha
-        &defence, // defense
-        &defence_attr, // defenseAttr
-        kMainPart | kGuardTargetPart | kPartUnitWorkDefense | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden, // attributes
-        0, // counterAttributes
-        pose_table, // poseTable
-    },
 #else
-    {
-        1, // partNum
-        "btl_un_gonbaba", // partName
-        "c_gonbaba", // modelName
-        {0.0f, 0.0f, 0.0f}, // positionOffset
-        {230.0f, 36.0f, 60.0f}, // hitBaseOffset
-        {230.0f, 36.0f, 60.0f}, // hitCursorBaseOffset
-        20, // shadowSize
-        30, // hitHeight
-        255, // baseAlpha
-        &defence, // defense
-        &defence_attr, // defenseAttr
         0x22, // attributes
+#endif
         0, // counterAttributes
         pose_table, // poseTable
     },
@@ -447,11 +417,14 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
+#if VERSION >= VERSION_US
+        kMainPart | kGuardTargetPart | kPartUnitWorkDefense | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden, // attributes
+#else
         0x1600029, // attributes
+#endif
         0, // counterAttributes
         pose_table, // poseTable
     },
-#endif
     {
         3, // partNum
         "btl_un_gonbaba", // partName

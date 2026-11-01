@@ -234,7 +234,6 @@ static inline f32 planeCamFloor(void) {
  * Handles landing on the ground, hitting walls (falling back to the jump motion),
  * dropping into water (splash, then the water damage motion) and the camera following the flight.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Plane Mode motion (from a plane panel): Mario jumps, spins and folds into a paper airplane,
  * then glides with the stick pitching it up and down (flyMain); A or B or a key-off lands him.
@@ -250,320 +249,13 @@ void mot_plane(void) {
     mp = marioGetPtr();
     if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+#if VERSION <= VERSION_DEMO_US
         mp->motStruct = __memAlloc(HEAP_DEFAULT, 0x48);
         memset(mp->motStruct, 0, 0x48);
-        {
-            MarioWork* m2 = marioGetPtr();
-            m2->motPlane->sfxId = -1;
-        }
-        mp->currSubMotionId = 0;
-    }
-    switch (mp->currSubMotionId) {
-        case 0:
-            planeSetSpd(0.4f, 0.01f, 2.0f);
-            marioPreJump();
-            marioChgPose("M_J_1B");
-            mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-            mp->currSubMotionId = 1;
-            mp->airTimer = 0;
-            mp->baseSpeed = 0.0f;
-            mp->mot.plane.turnSpeed = 0.0f;
-            mp->mot.plane.startY = mp->position.y;
-            mp->mot.plane.groundY = 0.0f;
-            mp->motPlane->flags = (hitGetAttr(mp->hitobjJumpFrom) >> 4) & 1;
-            psndSFXOn_3D((const char*)0x17d, &mp->position);
-            psndSFXOn_3D((const char*)0xaf, &mp->position);
-        case 1:
-            marioMakeJumpPara();
-            planeRoll1(mp, 0.125f, 30.0f);
-            done = FALSE;
-            mp->displayDirection += mp->mot.plane.turnSpeed;
-            if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
-                if (mp->displayDirection >= 630.0f) {
-                    done = TRUE;
-                }
-            } else {
-                if (mp->displayDirection <= -630.0f) {
-                    done = TRUE;
-                }
-            }
-            if (done) {
-                mp->currSubMotionId = 2;
-                mp->multiTimer = 20;
-                marioPaperOn(paper_plane[marioGetColor()]);
-                marioChgPaper("PM_P_1A");
-                marioChgPose("M_Z_1");
-                mp->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
-                animPoseSetLocalTime(mp->paperPoseId, 0.0f);
-                animPoseSetLocalTime(mp->paperAnimGroupId[marioAnimeId()], 0.0f);
-                evt = evtEntry(sound_evt, 0, 0);
-                evt->lwData[0] = (s32)(1024.0f * mp->position.x) + -230000000;
-                evt->lwData[1] = (s32)(1024.0f * mp->position.y) + -230000000;
-                evt->lwData[2] = (s32)(1024.0f * mp->position.z) + -230000000;
-            }
-            if (mp->jumpVelocityY > 0.0f) {
-                mp->position.y += mp->jumpVelocityY;
-            }
-            break;
-        case 2:
-            animPoseSetLocalTime(mp->paperPoseId, 0.0f);
-            animPoseSetLocalTime(mp->paperAnimGroupId[marioAnimeId()], 0.0f);
-            planeRoll1(mp, 0.125f, 30.0f);
-            done = FALSE;
-            mp->displayDirection += mp->mot.plane.turnSpeed;
-            if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
-                if (mp->displayDirection >= 1260.0f) {
-                    mp->displayDirection = 1260.0f;
-                    done = TRUE;
-                }
-            } else {
-                if (mp->displayDirection <= -1080.0f) {
-                    mp->displayDirection = -1080.0f;
-                    done = TRUE;
-                }
-            }
-            if (done) {
-                mp->multiTimer = 60;
-                mp->currSubMotionId = 3;
-            }
-            break;
-        case 3:
-            if (--mp->multiTimer > 0) {
-                if ((s32)mp->multiTimer == 40) {
-                    allPartyRidePlane();
-                }
-                break;
-            }
-            marioChgPaper("PM_P_1B");
-            mp->motPlane->yaw = (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? 90.0f : 270.0f;
-            mp->mot.plane.turnSpeed = 0.0f;
-            mp->motPlane->pitch = 0.0f;
-            mp->motPlane->roll = 0.0f;
-            mp->motPlane->pitchSpeed = 0.0f;
-            mp->motPlane->diveSpeed = 0.0f;
-            if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
-                mp->rotOfs.x = planeData[33];
-                mp->dispOfs.x = planeData[34];
-            } else {
-                mp->rotOfs.x = planeData[35];
-                mp->dispOfs.x = planeData[36];
-            }
-            mp->wPlayerCollisionBox.x = 20.0f;
-            mp->wPlayerCollisionBox.y = 12.333333f;
-            mp->baseSpeed = __fabsf(0.02f * mp->wStickDir1);
-            mp->currSubMotionId = 12;
-            mp->baseSpeed = 1.0f;
-            mp->motPlane->diveSpeed = 2.0f;
-            {
-                MarioWork* m = marioGetPtr();
-                m->camShiftTargetZ = 0.0f;
-                m->camShiftRate.z = 0.004f;
-            }
-            mp->camShiftTargetX = 70.0f * ((mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? -1.0f : 1.0f);
-            mp->camShiftTargetY = -70.0f;
-            break;
-    }
-    if (mp->position.y < 100.0f) {
-        mp->camShiftTargetY = __fabsf(planeData[38]);
-    }
-    flyMain();
-    if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-        MarioWork* m = marioGetPtr();
-        if ((u16)m->currMotionId == MARIO_MOTION_PLANE && (s32)m->currSubMotionId >= 12 && (s32)m->currSubMotionId < 20) {
-            m->currSubMotionId = 50;
-            m->mot.plane.groundY = m->position.y;
-        }
-        return;
-    }
-    if ((s32)mp->currSubMotionId == 20 || (s32)mp->currSubMotionId == 30) {
-        camFollowYOff();
-        mp->camShiftTargetY = 0.0f;
-        mp->camShiftTargetX = 0.0f;
-        marioClearJumpPara();
-        mp->baseSpeed = 0.0f;
-        planeSfxOff();
-        planeReset();
-        allPartyRideOff2();
-        if ((s32)mp->currSubMotionId == 20) {
-            marioChgMot(MARIO_MOTION_JUMP);
-        } else if ((s32)mp->currSubMotionId == 30) {
-            marioChgMot(MARIO_MOTION_STAY);
-        }
-    }
-    switch (mp->currSubMotionId) {
-        case 40:
-            camFollowYOff();
-            planeSfxOff();
-            mp->multiTimer = sysMsec2Frame(520);
-            mp->currSubMotionId = 41;
-            break;
-        case 41:
-            if (--mp->multiTimer > 0) {
-                break;
-            }
-            planeReset();
-            marioChgPose("M_J_1C");
-            mp->position.y = 1.0f + (mp->mot.plane.groundY - 37.0f);
-            mp->baseSpeed = 0.0f;
-            marioSetFallPara();
-            mp->jumpVelocityY = 0.0f;
-            mp->jumpAccelerationY *= 0.5f;
-            mp->jumpJerkY *= 0.5f;
-            mp->jumpSnapY *= 0.5f;
-            mp->currSubMotionId = 90;
-            mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-            allPartyRideOff2();
-            break;
-        case 60:
-            camFollowYOff();
-            mp->multiTimer = sysMsec2Frame(520);
-            mp->currSubMotionId = 61;
-        case 61:
-            if (mp->baseSpeed > 1.0f) {
-                mp->currSubMotionId = 14;
-                break;
-            }
-            if (--mp->multiTimer > 0) {
-                break;
-            }
-            mp->currSubMotionId = 52;
-            break;
-        case 50:
-            camFollowYOff();
-            mp->multiTimer = sysMsec2Frame(520);
-            mp->currSubMotionId = 52;
-            break;
-        case 51:
-            camFollowYOff();
-            mp->multiTimer = sysMsec2Frame(100);
-            mp->currSubMotionId = 52;
-            break;
-        case 52:
-            if (--mp->multiTimer > 0) {
-                break;
-            }
-        case 53:
-            planeSfxOff();
-            planeReset();
-            mp->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-            mp->baseSpeed = 0.0f;
-            mp->mot.plane.turnSpeed = 0.0f;
-            mp->position.y = 1.0f + mp->mot.plane.groundY;
-            marioPreJump();
-            mp->jumpVelocityY *= 0.5f;
-            marioChgPose("M_J_1B");
-            mp->currSubMotionId = 80;
-            psndSFXOn_3D((const char*)0x180, &mp->position);
-            allPartyRideOff2();
-        case 80:
-            planeRoll2(mp, 0.3f, 28.0f);
-            mp->displayDirection = revise360(mp->displayDirection + mp->mot.plane.turnSpeed);
-            marioMakeJumpPara();
-            mp->position.y += mp->jumpVelocityY;
-            marioChkOverhead();
-            if (mp->jumpVelocityY < 0.0f || mp->hitobjHead != NULL) {
-                marioSetFallPara();
-                mp->jumpVelocityY *= 0.5f;
-                mp->jumpAccelerationY *= 0.5f;
-                mp->jumpJerkY *= 0.5f;
-                mp->jumpSnapY *= 0.5f;
-                mp->currSubMotionId = 90;
-                mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-                mp->multiTimer = 20;
-            }
-            break;
-        case 90:
-            if ((s32)mp->multiTimer > 0) {
-                planeRoll2(mp, 0.3f, 28.0f);
-                mp->displayDirection = revise360(mp->displayDirection + mp->mot.plane.turnSpeed);
-                if (--mp->multiTimer <= 0) {
-                    mp->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-                }
-            }
-            marioMakeJumpPara();
-            if (mp->jumpVelocityY <= -20.0f) {
-                mp->jumpVelocityY = -20.0f;
-            }
-            {
-                HitEntry* hit;
-                mp->hitobjStandOn = NULL;
-                hit = marioSearchGround(&y, &b, &c, mp->jumpVelocityY, mp->jumpVelocityY);
-                if (hit != NULL) {
-                    mp->position.y = y;
-                    mp->hitobjStandOn = hit;
-                } else {
-                    mp->position.y += mp->jumpVelocityY;
-                }
-            }
-            if (mp->hitobjStandOn != NULL) {
-                camFollowYOn();
-                allPartyRideOff2();
-                mp->airTimer = 0;
-                mp->jumpPeakAirTime = 0;
-                mp->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-                marioAdjustMoveDir();
-                planeReset();
-                if (mp->motStruct != NULL) {
-                    __memFree(HEAP_DEFAULT, mp->motStruct);
-                    mp->motStruct = NULL;
-                }
-                mp->camShiftTargetX = 0.0f;
-                mp->camShiftTargetY = 0.0f;
-                marioChgMot(MARIO_MOTION_STAY);
-            }
-            break;
-        case 70: {
-            Vec p;
-            p = mp->position;
-            marioSetSplash(0, &p);
-            mp->multiTimer = 16;
-            mp->currSubMotionId = 71;
-            mp->jumpVelocityY = -2.0f;
-            mp->jumpAccelerationY = 0.0f;
-            mp->jumpJerkY = 0.0f;
-            mp->jumpSnapY = 0.0f;
-            camFollowYOff();
-        }
-        case 71:
-            marioMakeJumpPara();
-            mp->position.y += mp->jumpVelocityY;
-            if (mp->position.y >= mp->mot.plane.groundY - 100.0f) {
-                break;
-            }
-            mp->currSubMotionId = 72;
-        case 72:
-            mp->camShiftTargetY = 0.0f;
-            mp->camShiftTargetX = 0.0f;
-            marioClearJumpPara();
-            planeSfxOff();
-            mp->baseSpeed = 0.0f;
-            planeReset();
-            allPartyRideOff2();
-            marioSetFallPara();
-            camFollowYOn();
-            marioChgMot(MARIO_MOTION_DAMAGE);
-    }
-    marioUpdateCamCollision(mp->position);
-    mp->moveDist = mp->baseSpeed;
-}
 #else
-/**
- * Plane Mode motion (from a plane panel): Mario jumps, spins and folds into a paper airplane,
- * then glides with the stick pitching it up and down (flyMain); A or B or a key-off lands him.
- * Handles landing on the ground, hitting walls (falling back to the jump motion),
- * dropping into water (splash, then the water damage motion) and the camera following the flight.
- */
-void mot_plane(void) {
-    MarioWork* mp;
-    BOOL done;
-    EventEntry* evt;
-    f32 y, b, c;
-
-    mp = marioGetPtr();
-    if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
-        mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mp->motStruct = __memAlloc(HEAP_DEFAULT, sizeof(MotPlaneWork));
         memset(mp->motStruct, 0, sizeof(MotPlaneWork));
+#endif
         {
             MarioWork* m2 = marioGetPtr();
             m2->motPlane->sfxId = -1;
@@ -584,8 +276,13 @@ void mot_plane(void) {
         mp->mot.plane.groundY = 0.0f;
         // bit 4 of the take-off panel is HIT_ATTR_PLANE_PANEL_R -> MOT_PLANE_FLAG_RIGHT
         mp->motPlane->flags = (hitGetAttr(mp->hitobjJumpFrom) >> 4) & 1;
+#if VERSION <= VERSION_DEMO_US
+        psndSFXOn_3D((const char*)0x17d, &mp->position);
+        psndSFXOn_3D((const char*)0xaf, &mp->position);
+#else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE_JUMP1), &mp->position);
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_5), &mp->position);
+#endif
     case 1:
         marioMakeJumpPara();
         planeRoll1(mp, 0.125f, 30.0f);
@@ -610,9 +307,15 @@ void mot_plane(void) {
             animPoseSetLocalTime(mp->paperPoseId, 0.0f);
             animPoseSetLocalTime(mp->paperAnimGroupId[marioAnimeId()], 0.0f);
             evt = evtEntry(sound_evt, 0, 0);
+#if VERSION <= VERSION_DEMO_US
+            evt->lwData[0] = (s32)(1024.0f * mp->position.x) + -230000000;
+            evt->lwData[1] = (s32)(1024.0f * mp->position.y) + -230000000;
+            evt->lwData[2] = (s32)(1024.0f * mp->position.z) + -230000000;
+#else
             evt->lwData[0] = FLOAT(mp->position.x);
             evt->lwData[1] = FLOAT(mp->position.y);
             evt->lwData[2] = FLOAT(mp->position.z);
+#endif
         }
         if (mp->jumpVelocityY > 0.0f) {
             mp->position.y += mp->jumpVelocityY;
@@ -642,7 +345,11 @@ void mot_plane(void) {
         break;
     case 3:
         if (--mp->multiTimer > 0) {
+#if VERSION <= VERSION_DEMO_US
+            if ((s32)mp->multiTimer == 40) {
+#else
             if (mp->multiTimer == 40) {
+#endif
                 allPartyRidePlane();
             }
             break;
@@ -676,17 +383,31 @@ void mot_plane(void) {
         mp->camShiftTargetY = -70.0f;
         break;
     }
+#if VERSION <= VERSION_DEMO_US
+    if (mp->position.y < 100.0f) {
+        mp->camShiftTargetY = __fabsf(planeData[38]);
+    }
+    flyMain();
+    if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
+        MarioWork* m = marioGetPtr();
+        if ((u16)m->currMotionId == MARIO_MOTION_PLANE && (s32)m->currSubMotionId >= 12 && (s32)m->currSubMotionId < 20) {
+            m->currSubMotionId = 50;
+            m->mot.plane.groundY = m->position.y;
+        }
+        return;
+    }
+    if ((s32)mp->currSubMotionId == 20 || (s32)mp->currSubMotionId == 30) {
+#else
 #if VERSION >= VERSION_US
     // US: per-map floor below which the camera stops following the plane
     if (mp->position.y < planeCamFloor()) {
         mp->camShiftTargetY = __fabsf(planeData[38]);
         camFollowYOff();
-    }
 #else
     if (mp->position.y < 100.0f) {
         mp->camShiftTargetY = __fabsf(planeData[38]);
-    }
 #endif
+    }
     flyMain();
     if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
         if (planeCancel()) {
@@ -694,6 +415,7 @@ void mot_plane(void) {
         }
     }
     if (mp->currSubMotionId == 20 || mp->currSubMotionId == 30) {
+#endif
         camFollowYOff();
         mp->camShiftTargetY = 0.0f;
         mp->camShiftTargetX = 0.0f;
@@ -702,9 +424,15 @@ void mot_plane(void) {
         planeSfxOff();
         planeReset();
         allPartyRideOff2();
+#if VERSION <= VERSION_DEMO_US
+        if ((s32)mp->currSubMotionId == 20) {
+            marioChgMot(MARIO_MOTION_JUMP);
+        } else if ((s32)mp->currSubMotionId == 30) {
+#else
         if (mp->currSubMotionId == 20) {
             marioChgMot(MARIO_MOTION_JUMP);
         } else if (mp->currSubMotionId == 30) {
+#endif
             marioChgMot(MARIO_MOTION_STAY);
         }
     }
@@ -771,7 +499,11 @@ void mot_plane(void) {
         mp->jumpVelocityY *= 0.5f;
         marioChgPose("M_J_1B");
         mp->currSubMotionId = 80;
+#if VERSION <= VERSION_DEMO_US
+        psndSFXOn_3D((const char*)0x180, &mp->position);
+#else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE3), &mp->position);
+#endif
         allPartyRideOff2();
     case 80:
         planeRoll2(mp, 0.3f, 28.0f);
@@ -791,7 +523,11 @@ void mot_plane(void) {
         }
         break;
     case 90:
+#if VERSION <= VERSION_DEMO_US
+        if ((s32)mp->multiTimer > 0) {
+#else
         if (mp->multiTimer > 0) {
+#endif
             planeRoll2(mp, 0.3f, 28.0f);
             mp->displayDirection = revise360(mp->displayDirection + mp->mot.plane.turnSpeed);
             if (--mp->multiTimer <= 0) {
@@ -829,13 +565,17 @@ void mot_plane(void) {
             mp->camShiftTargetY = 0.0f;
             marioChgMot(MARIO_MOTION_STAY);
         }
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         marioChkWallAround(&mp->position, 0, 0.0f, 0.0f, mp->wPlayerCollisionBox.z, mp->wPlayerCollisionBox.y);
+#endif
 #endif
         break;
     case 70: {
         Vec p;
+#if VERSION > VERSION_DEMO_US
         set_damage_root_ypos(mp->position.y);
+#endif
         p = mp->position;
         marioSetSplash(0, &p);
         mp->multiTimer = 16;
@@ -868,7 +608,6 @@ void mot_plane(void) {
     marioUpdateCamCollision(mp->position);
     mp->moveDist = mp->baseSpeed;
 }
-#endif
 
 
 

@@ -531,7 +531,6 @@ EVT_END()
  * right answers are counted in LW(14) and after the fifth the statue turns around,
  * the quiz ends and STG7_13_QUIZ_CLEARED is set.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * The statue's quiz, the case script of a_sekizou_1_a.
  * The statue wakes up and asks whether to take its quiz (stg7_aji_02);
@@ -560,287 +559,16 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
     SPAWN_EVENT(sekizou_talk)
     CALL(evt_msg_print, 0, STRING("stg7_aji_01"), 0, 0)
-    CALL(evt_msg_select, 0, STRING("stg7_aji_02"))
-    IF_INT_EQUAL(LW(0), 1)
-        SET_VALUE(LW(0), 360)
-        SET_VALUE(LW(1), 500)
-        SET_VALUE(LW(2), STRING("DOSN"))
-        CALL_CHILD(sekizou_kaiten)
-        SPAWN_EVENT(sekizou_talk)
-        CALL(evt_msg_print_add, 0, STRING("stg7_aji_04"))
-        WAIT_MS(500)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
-        CALL(evt_mario_key_onoff, 1)
-        RETURN
-    END_IF
-    SET_VALUE(LW(0), 360)
-    SET_VALUE(LW(1), 500)
-    SET_VALUE(LW(2), STRING("DOSN"))
-    CALL_CHILD(sekizou_kaiten)
-    SPAWN_EVENT(sekizou_talk)
-    CALL(evt_msg_print_add, 0, STRING("stg7_aji_05"))
-    WAIT_MS(500)
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_QUIZ1"))
-    CALL_CHILD(offscreen_to_kuizu)
-    WAIT_MS(500)
-    CALL(evt_cam3d_evt_set, 0, 83, 591, 0, 100, 91, 1000, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    SET_VALUE(LW(13), 0)
-    SET_VALUE(LW(14), 0)
-    SET_VALUE(LW(15), 0)
-    // The questions are read one at a time from the quiz table; each is multiple choice.
-    SET_INT_READ_ADDR(PTR(&kuizu_data))
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    LOOP(0)
-        READ_INT4(LW(9), LW(10), LW(11), LW(12))
-        SET_VALUE(LF(0), 0)
-        SET_VALUE(LW(0), 360)
-        SET_VALUE(LW(1), 500)
-        SET_VALUE(LW(2), STRING("DOSN2"))
-        SPAWN_EVENT(sekizou_kaiten)
-        WAIT_MS(500)
-        IF_INT_NOT_EQUAL(LW(13), 0)
-            CALL(evt_snd_sfxon, STRING("SFX_STG7_QUIZ_START1"), 0)
-        END_IF
-        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-        SPAWN_EVENT(sekizou_talk)
-        SET_VALUE(LW(5), 0)
-        CALL(evt_msg_print, 0, LW(10), PTR(callback), 0)
-        LOOP(0)
-            CALL(evt_msg_select, 0, LW(11))
-            WAIT_FRAMES(1)
-            IF_INT_EQUAL(LW(0), LW(12))
-                SET_VALUE(LF(0), 1)
-                DEBUG_PUT_MSG(STRING("せいかい"))
-            ELSE
-                SET_VALUE(LF(0), 0)
-                DEBUG_PUT_MSG(STRING("ふせいかい"))
-            END_IF
-            SUBTRACT(LW(0), 2)
-            IF_INT_EQUAL(LW(13), 0)
-                SET_VALUE(LW(0), 0)
-            END_IF
-            IF_INT_EQUAL(LF(1), 1)
-                SET_VALUE(LW(0), 0)
-                SET_VALUE(LF(1), 0)
-            END_IF
-            IF_INT_EQUAL(LW(0), 0)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print_add, 0, STRING("stg7_aji_20"))
-                CALL(evt_msg_select, 0, STRING("stg7_aji_03"))
-                IF_INT_EQUAL(LW(0), 0)
-                    SET_VALUE(LF(1), 0)
-                    BREAK_LOOP
-                ELSE
-                    SPAWN_EVENT(sekizou_talk)
-                    CALL(evt_msg_print_add, 0, STRING("stg7_aji_21"))
-                END_IF
-            ELSE
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-        CALL(evt_msg_continue)
-        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-        ADD(LW(13), 1)
-        CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, 11)
-        WAIT_MS(500)
-        IF_INT_EQUAL(LF(0), 1)
-SPAWN_EVENT(quiz_ok)
-IF_INT_EQUAL(LW(14), 4)
-                CALL(evt_snd_sfxon, STRING("SFX_STG7_GOOD_SOUND2"), 0)
-ELSE
-                CALL(evt_snd_sfxon, STRING("SFX_STG7_GOOD_SOUND1"), 0)
-END_IF
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_ao"), MAP_OBJ_FLAG_HIDDEN)
-ADD(LW(14), 1)
-            DEBUG_PUT_REG(LW(14))
-            SWITCH(LW(14))
-                CASE_LESS(4)
-                SET_VALUE(LW(0), 360)
-                SET_VALUE(LW(1), 500)
-                SET_VALUE(LW(2), STRING("DOSN2"))
-                SPAWN_EVENT(sekizou_kaiten2)
-                WAIT_MS(500)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_22"), 0, 0)
-                CASE_EQUAL(4)
-                SET_VALUE(LW(0), 360)
-                SET_VALUE(LW(1), 500)
-                SET_VALUE(LW(2), STRING("DOSN2"))
-                SPAWN_EVENT(sekizou_kaiten2)
-                WAIT_MS(500)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_23"), 0, 0)
-                SET_VALUE(LF(1), 1)
-                CASE_EQUAL(5)
-                SET_VALUE(LW(0), 1080)
-                SET_VALUE(LW(1), 1000)
-                SET_VALUE(LW(2), STRING("DOSN2"))
-                SPAWN_EVENT(sekizou_kaiten)
-                WAIT_MS(1000)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_24"), 0, 0)
-                CALL_CHILD(offscreen_to_normal)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-                CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_25"), 0, 0)
-BREAK_LOOP
-            END_SWITCH
-        ELSE
-SPAWN_EVENT(quiz_ng)
-IF_INT_EQUAL(LW(15), 2)
-                CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND2"), 0)
-ELSE
-                CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND1"), 0)
-END_IF
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_aka"), MAP_OBJ_FLAG_HIDDEN)
-ADD(LW(15), 1)
-            DEBUG_PUT_REG(LW(15))
-            SWITCH(LW(15))
-                CASE_EQUAL(1)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_26"), 0, 0)
-                CASE_EQUAL(2)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_27"), 0, 0)
-                SET_VALUE(LF(1), 1)
-                CASE_EQUAL(3)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_28"), 0, 0)
-                CALL_CHILD(offscreen_to_normal)
-                CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG7_DUN2"))
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-                SET_VALUE(LW(0), 360)
-                SET_VALUE(LW(1), 500)
-                SET_VALUE(LW(2), STRING("DOSN"))
-                SPAWN_EVENT(sekizou_kaiten2)
-                WAIT_MS(250)
-                CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_29"), 0, 0)
-                CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 250, -50)
-                CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 250, 50)
-BEGIN_INLINE_EVENT
-    CALL(evt_npc_jump_position_nohit, STRING("バリアーン１"), 50, 20, -50, 300, 0)
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
-                END_INLINE_EVENT
-                WAIT_MS(300)
-                BEGIN_INLINE_EVENT
-                    CALL(evt_npc_jump_position_nohit, STRING("バリアーン２"), 50, 20, 50, 300, 0)
-                    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
-                END_INLINE_EVENT
-                WAIT_MS(300)
-                WAIT_MS(500)
-                CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_30"), 0, 0)
-                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-                BEGIN_INLINE_EVENT
-                    CALL(evt_npc_move_position, STRING("バリアーン１"), LW(0), LW(2), 1000, 0, 0)
-                END_INLINE_EVENT
-                WAIT_MS(100)
-                BEGIN_INLINE_EVENT
-                    CALL(evt_npc_move_position, STRING("バリアーン２"), LW(0), LW(2), 1000, 0, 0)
-                END_INLINE_EVENT
-                WAIT_MS(100)
-                CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-                CALL(evt_mario_set_pose, STRING("M_N_7"))
-                WAIT_MS(500)
-                CALL(evt_npc_set_link, STRING("バリアーン１"), STRING("バリアーン２"))
-                CALL(evt_npc_set_battle_info, STRING("バリアーン１"), 15)
-                CALL(evt_npc_battle_start, STRING("バリアーン１"))
-                CALL(evt_npc_wait_battle_end)
-                CALL(evt_mario_set_pose, STRING("M_S_1"))
-                CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-                CALL(evt_npc_set_position, STRING("バリアーン１"), 0, -1000, 0)
-                CALL(evt_npc_set_position, STRING("バリアーン２"), 0, -1000, 0)
-                WAIT_MS(1000)
-                CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 2300, EASING_SINE_IN_OUT)
-                WAIT_MS(300)
-                SET_VALUE(LW(0), 1080)
-                SET_VALUE(LW(1), 1500)
-                SET_VALUE(LW(2), STRING("DOSN"))
-                CALL_CHILD(sekizou_kaiten)
-                CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_31"), 0, 0)
-BREAK_LOOP
-            END_SWITCH
-        END_IF
-        CALL(evt_cam3d_evt_set, 0, 83, 591, 0, 100, 91, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(500)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ao"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
-    END_LOOP
-    CALL(evt_snd_sfxon, STRING("SFX_STG7_QUAKE1"), LW(10))
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 1500)
-    CALL(evt_snd_sfxoff, LW(10))
-    // The statue shakes and drops the Elevator Key, then Mario gets control back.
-    CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 100, 0, ITEM_TYPE_FALL, -1, PTR(evt_item))
-    CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-    SPAWN_EVENT(sekizou_talk)
-    CALL(evt_msg_print, 0, STRING("stg7_aji_32"), 0, 0)
-    SET_VALUE(LW(0), 360)
-    SET_VALUE(LW(1), 500)
-    SET_VALUE(LW(2), STRING("DOSN"))
-    CALL_CHILD(sekizou_kaiten2)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
-    SET_VALUE(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(evt_mario_key_onoff, 1)
-    CALL(evt_exit_case_evt)
-    RETURN
-EVT_END()
 #else
-/**
- * The statue's quiz, the case script of a_sekizou_1_a.
- * The statue wakes up and asks whether to take its quiz (stg7_aji_02);
- * on yes it moves Mario onto the quiz set (BGM_EVT_QUIZ1/2)
- * and asks questions read from kuizu_data (map animation, question text, choice text, correct choice),
- * turning its head and flapping its mouth with every text.
- * Wrong answers earn a scolding and an offer to stop;
- * right answers are counted in LW(14) and after the fifth the statue turns around,
- * the quiz ends and STG7_13_QUIZ_CLEARED is set.
- */
-EVT_BEGIN(kuizu_sekizou)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
-    // The statue wakes up with a rumble and a camera shake.
-    CALL(evt_snd_sfxon, STRING("SFX_STG7_QUAKE1"), GW(10))
-    BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 2500)
-    END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 1500, EASING_SINE_IN_OUT)
-    WAIT_MS(2500)
-    CALL(evt_snd_sfxoff, GW(10))
-    WAIT_MS(300)
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DSN_AWAKE1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
-    WAIT_MS(500)
     SET_VALUE(LW(8), 0)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
     SPAWN_EVENT(PTR(sekizou_talk))
     CALL(evt_msg_print, 0, STRING("stg7_aji_01"), PTR(kuti_callback), 0)
+#endif
     CALL(evt_msg_select, 0, STRING("stg7_aji_02"))
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(0), 360)
@@ -863,8 +591,10 @@ EVT_BEGIN(kuizu_sekizou)
     SPAWN_EVENT(PTR(sekizou_talk))
     CALL(evt_msg_print_add, 0, STRING("stg7_aji_05"))
     WAIT_MS(500)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_map_playanim, STRING("anm_denshoku"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_mamekyuu"), MAP_ANIM_PLAY_LOOP, 0)
+#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_QUIZ1"))
     CALL_CHILD(PTR(offscreen_to_kuizu))
     WAIT_MS(500)
@@ -878,8 +608,10 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     LOOP(0)
         READ_INT4(LW(9), LW(10), LW(11), LW(12))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_map_playanim, LW(9), MAP_ANIM_PLAY_LOOP, 0)
         WAIT_MS(400)
+#endif
         SET_VALUE(LF(0), 0)
         SET_VALUE(LW(0), 360)
         SET_VALUE(LW(1), 500)
@@ -932,7 +664,14 @@ EVT_BEGIN(kuizu_sekizou)
         CALL(evt_msg_continue)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
         ADD(LW(13), 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, 11)
+        WAIT_MS(500)
         IF_INT_EQUAL(LF(0), 1)
+SPAWN_EVENT(quiz_ok)
+#else
+        IF_INT_EQUAL(LF(0), 1)
+#endif
             IF_INT_EQUAL(LW(14), 4)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_GOOD_SOUND2"), 0)
             ELSE
@@ -940,10 +679,12 @@ EVT_BEGIN(kuizu_sekizou)
             END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_ao"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION > VERSION_DEMO_US
             SPAWN_EVENT(PTR(UNK_0x00022a90))
             WAIT_MS(1500)
             CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, EASING_SINE_IN_OUT)
             WAIT_FRAMES(1)
+#endif
             ADD(LW(14), 1)
             DEBUG_PUT_REG(LW(14))
             SWITCH(LW(14))
@@ -954,7 +695,11 @@ EVT_BEGIN(kuizu_sekizou)
                 SPAWN_EVENT(PTR(sekizou_kaiten2))
                 WAIT_MS(500)
                 SPAWN_EVENT(PTR(sekizou_talk))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg7_aji_22"), 0, 0)
+#else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_22"), PTR(kuti_callback), 0)
+#endif
                 CASE_EQUAL(4)
                 SET_VALUE(LW(0), 360)
                 SET_VALUE(LW(1), 500)
@@ -962,7 +707,11 @@ EVT_BEGIN(kuizu_sekizou)
                 SPAWN_EVENT(PTR(sekizou_kaiten2))
                 WAIT_MS(500)
                 SPAWN_EVENT(PTR(sekizou_talk))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg7_aji_23"), 0, 0)
+#else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_23"), PTR(kuti_callback), 0)
+#endif
                 SET_VALUE(LF(1), 1)
                 CASE_EQUAL(5)
                 SET_VALUE(LW(0), 1080)
@@ -971,17 +720,29 @@ EVT_BEGIN(kuizu_sekizou)
                 SPAWN_EVENT(PTR(sekizou_kaiten))
                 WAIT_MS(1000)
                 SPAWN_EVENT(PTR(sekizou_talk))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg7_aji_24"), 0, 0)
+#else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_24"), PTR(kuti_callback), 0)
+#endif
                 CALL_CHILD(PTR(offscreen_to_normal))
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg7_aji_25"), 0, 0)
+BREAK_LOOP
+            END_SWITCH
+        ELSE
+SPAWN_EVENT(quiz_ng)
+#else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_25"), PTR(kuti_callback), 0)
                 BREAK_LOOP
             END_SWITCH
             CALL_CHILD(PTR(quiz_ok))
         ELSE
+#endif
             IF_INT_EQUAL(LW(15), 2)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND2"), 0)
             ELSE
@@ -989,25 +750,41 @@ EVT_BEGIN(kuizu_sekizou)
             END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_aka"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION > VERSION_DEMO_US
             SPAWN_EVENT(PTR(quiz_ng))
             WAIT_MS(1500)
             CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, EASING_SINE_IN_OUT)
             WAIT_FRAMES(1)
+#endif
             ADD(LW(15), 1)
             DEBUG_PUT_REG(LW(15))
             SWITCH(LW(15))
                 CASE_EQUAL(1)
                 SPAWN_EVENT(PTR(sekizou_talk))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg7_aji_26"), 0, 0)
+                CASE_EQUAL(2)
+                SPAWN_EVENT(sekizou_talk)
+                CALL(evt_msg_print, 0, STRING("stg7_aji_27"), 0, 0)
+#else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_26"), PTR(kuti_callback), 0)
                 CASE_EQUAL(2)
                 SPAWN_EVENT(PTR(sekizou_talk))
                 CALL(evt_msg_print, 0, STRING("stg7_aji_27"), PTR(kuti_callback), 0)
+#endif
                 SET_VALUE(LF(1), 1)
                 CASE_EQUAL(3)
                 SPAWN_EVENT(PTR(sekizou_talk))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg7_aji_28"), 0, 0)
+                CALL_CHILD(offscreen_to_normal)
+                CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG7_DUN2"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
+#else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_28"), PTR(kuti_callback), 0)
                 CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
                 CALL_CHILD(PTR(offscreen_to_normal))
+#endif
                 SET_VALUE(LW(0), 360)
                 SET_VALUE(LW(1), 500)
                 SET_VALUE(LW(2), STRING("DOSN"))
@@ -1015,6 +792,13 @@ EVT_BEGIN(kuizu_sekizou)
                 WAIT_MS(250)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg7_aji_29"), 0, 0)
+                CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 250, -50)
+                CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 250, 50)
+BEGIN_INLINE_EVENT
+    CALL(evt_npc_jump_position_nohit, STRING("バリアーン１"), 50, 20, -50, 300, 0)
+#else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_29"), PTR(kuti_callback), 0)
 #if VERSION >= VERSION_US
                 CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 200, -50)
@@ -1042,10 +826,14 @@ EVT_BEGIN(kuizu_sekizou)
 #else
                     CALL(evt_npc_jump_position_nohit, STRING("バリアーン１"), 50, 20, -50, 300, 0)
 #endif
+#endif
                     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
                 END_INLINE_EVENT
                 WAIT_MS(300)
                 BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+                    CALL(evt_npc_jump_position_nohit, STRING("バリアーン２"), 50, 20, 50, 300, 0)
+#else
 #if VERSION >= VERSION_US
                     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 200, 20, 300)
                     LOOP(0)
@@ -1059,10 +847,16 @@ EVT_BEGIN(kuizu_sekizou)
 #else
                     CALL(evt_npc_jump_position_nohit, STRING("バリアーン２"), 50, 20, 50, 300, 0)
 #endif
+#endif
                     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
                 END_INLINE_EVENT
                 WAIT_MS(300)
                 WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
+                SPAWN_EVENT(sekizou_talk)
+                CALL(evt_msg_print, 0, STRING("stg7_aji_30"), 0, 0)
+#else
 #if VERSION >= VERSION_US
                 CALL(evt_npc_flag_onoff, 0, STRING("バリアーン１"), NPC_FLAG_INSTANT_TURN)
                 CALL(evt_npc_flag_onoff, 0, STRING("バリアーン２"), NPC_FLAG_INSTANT_TURN)
@@ -1070,6 +864,7 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
                 CALL(evt_msg_print, 0, STRING("stg7_aji_30"), PTR(kuti_callback), 0)
+#endif
                 CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 BEGIN_INLINE_EVENT
@@ -1089,8 +884,10 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL(evt_npc_wait_battle_end)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+#if VERSION > VERSION_DEMO_US
                 CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG7_DUN2"), 2000)
                 CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"), 2000)
+#endif
                 CALL(evt_npc_set_position, STRING("バリアーン１"), 0, -1000, 0)
                 CALL(evt_npc_set_position, STRING("バリアーン２"), 0, -1000, 0)
                 WAIT_MS(1000)
@@ -1102,10 +899,16 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL_CHILD(PTR(sekizou_kaiten))
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg7_aji_31"), 0, 0)
+BREAK_LOOP
+            END_SWITCH
+#else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_31"), PTR(kuti_callback), 0)
                 BREAK_LOOP
             END_SWITCH
             CALL_CHILD(PTR(UNK_0x00022be8))
+#endif
         END_IF
         CALL(evt_cam3d_evt_set, 0, 83, 591, 0, 100, 91, 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
@@ -1122,7 +925,11 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 100, 0, ITEM_TYPE_FALL, -1, PTR(evt_item))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
     SPAWN_EVENT(PTR(sekizou_talk))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_aji_32"), 0, 0)
+#else
     CALL(evt_msg_print, 0, STRING("stg7_aji_32"), PTR(kuti_callback), 0)
+#endif
     SET_VALUE(LW(0), 360)
     SET_VALUE(LW(1), 500)
     SET_VALUE(LW(2), STRING("DOSN"))
@@ -1135,7 +942,6 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Initial state of the quiz statue: eyes (me_mae) shown,

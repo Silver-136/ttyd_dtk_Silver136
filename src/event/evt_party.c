@@ -133,74 +133,30 @@ USER_FUNC(evt_party_set_camid) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * If the partner is off screen, walks it toward Mario a unit at a time,
+ * snapping it to the floor below (or Mario's height), until it is on screen; clears its footmarks first.
+ * The EU release also stops once Mario himself is off screen.
+ */
+USER_FUNC(evt_party_force_reset_outofscreen) {
+    MarioWork* mario;
+    PartyEntry* p = GETPARTY(event->args);
+    Vec from;
+    Vec dir;
+    Vec out1;
+    Vec out2;
+    Vec pos;
+    Vec pos2;
 #if VERSION <= VERSION_DEMO_US
-/**
- * If the partner is off screen, walks it toward Mario a unit at a time,
- * snapping it to the floor below (or Mario's height), until it is on screen; clears its footmarks first.
- * The EU release also stops once Mario himself is off screen.
- */
-USER_FUNC(evt_party_force_reset_outofscreen) {
-    MarioWork* mario;
-    PartyEntry* p = GETPARTY(event->args);
-    Vec from;
-    Vec dir;
-    Vec out1;
-    Vec out2;
-    Vec pos;
-    Vec pos2;
-f32 h;
+    f32 h;
     f32 sx, sy, sz;
-f32 ang;
-    if (p == NULL) {
-        return EVT_RETURN_DONE;
-    }
-    pos = p->position;
-    marioGetScreenPos(pos, &sx, &sy, &sz);
-    if (marioChkInScreen((s32)sx, (s32)sy)) {
-        return EVT_RETURN_DONE;
-    }
-    partyClearFootmark();
-    mario = p->playerPtr;
-    dir = (Vec){0.0f, -1.0f, 0.0f};
-    while (1) {
-        pos2 = p->position;
-        marioGetScreenPos(pos2, &sx, &sy, &sz);
-        if (marioChkInScreen((s32)sx, (s32)sy)) {
-            break;
-        }
-        ang = angleABf(p->position.x, p->position.z, mario->position.x, mario->position.z);
-        movePos(&p->position.x, &p->position.z, 1.0f, ang);
-        h = 100.0f;
-        from = p->position;
-        from.y += 50.0f;
-        if (partyHitCheck(p, &from, &dir, &out1, &out2, &h) != NULL) {
-            p->position.y = out1.y;
-        } else {
-            p->position.y = mario->position.y;
-        }
-    }
-    return EVT_RETURN_DONE;
-}
 #else
-/**
- * If the partner is off screen, walks it toward Mario a unit at a time,
- * snapping it to the floor below (or Mario's height), until it is on screen; clears its footmarks first.
- * The EU release also stops once Mario himself is off screen.
- */
-USER_FUNC(evt_party_force_reset_outofscreen) {
-    MarioWork* mario;
-    PartyEntry* p = GETPARTY(event->args);
-    Vec from;
-    Vec dir;
-    Vec out1;
-    Vec out2;
-    Vec pos;
-    Vec pos2;
 #if VERSION == VERSION_EU
     Vec marioPos;
 #endif
     f32 sx, sy, sz;
     f32 h;
+#endif
     f32 ang;
     if (p == NULL) {
         return EVT_RETURN_DONE;
@@ -217,12 +173,14 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
         pos2 = p->position;
         marioGetScreenPos(pos2, &sx, &sy, &sz);
         if (marioChkInScreen((s32)sx, (s32)sy)) {
+#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
             break;
         }
         marioPos = ((MarioWork*)mario)->position;
         marioGetScreenPos(marioPos, &sx, &sy, &sz);
         if (!marioChkInScreen((s32)sx, (s32)sy)) {
+#endif
 #endif
             break;
         }
@@ -239,7 +197,6 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
     }
     return EVT_RETURN_DONE;
 }
-#endif
 
 USER_FUNC(evt_party_outofscreen) {
     PartyEntry* p;

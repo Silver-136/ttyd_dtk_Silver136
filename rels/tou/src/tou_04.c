@@ -1368,7 +1368,6 @@ static EVT_BEGIN(init_brots)
 EVT_END()
 
 // Reuse a map-allocated selection string; US measures localized entries, while JP uses a fixed width.
-#if VERSION <= VERSION_DEMO_US
 /**
  * Script helper: builds the menu text for Brots's "Seven Wonders" list,
  * a <select> tag followed by the seven entry names (stg3_tou_hushigi_list_1 to 7,
@@ -1391,39 +1390,11 @@ static USER_FUNC(make_list) {
     s32 i;
 
     if (tmp == NULL) {
+#if VERSION <= VERSION_DEMO_US
         tmp = _mapAlloc(0x400);
     }
     sprintf(tmp, "<select %d %d %d %d>", 0, 7, 300, 140);
-    for (i = 0; i < 7; i++) {
-        strcat(tmp, "\n");
-        strcat(tmp, msgSearch(list[i]));
-    }
-    evtSetValue(event, args[0], (EvtWord)tmp);
-    return EVT_RETURN_DONE;
-}
 #else
-/**
- * Script helper: builds the menu text for Brots's "Seven Wonders" list,
- * a <select> tag followed by the seven entry names (stg3_tou_hushigi_list_1 to 7,
- * The Sealed Wall to Grubba and Jolene), in a buffer allocated once from the map heap,
- * and returns it in args[0].
- * In US and later the menu width fits the longest entry plus 80; earlier versions use a fixed width of 300.
- */
-static USER_FUNC(make_list) {
-    static char* tmp;
-    static const char* list[] = {
-        "stg3_tou_hushigi_list_1",
-        "stg3_tou_hushigi_list_2",
-        "stg3_tou_hushigi_list_3",
-        "stg3_tou_hushigi_list_4",
-        "stg3_tou_hushigi_list_5",
-        "stg3_tou_hushigi_list_6",
-        "stg3_tou_hushigi_list_7",
-    };
-    EvtWord* args = event->args;
-    s32 i;
-
-    if (tmp == NULL) {
         tmp = _mapAlloc(0x1000);
     }
 #if VERSION >= VERSION_US
@@ -1440,6 +1411,7 @@ static USER_FUNC(make_list) {
 #else
     sprintf(tmp, "<select %d %d %d %d>", 0, 7, 300, 140);
 #endif
+#endif
     for (i = 0; i < 7; i++) {
         strcat(tmp, "\n");
         strcat(tmp, msgSearch(list[i]));
@@ -1447,7 +1419,6 @@ static USER_FUNC(make_list) {
     evtSetValue(event, args[0], (EvtWord)tmp);
     return EVT_RETURN_DONE;
 }
-#endif
 
 static EVT_BEGIN(talk_brots)
     IF_INT_EQUAL(GSWF_TOU_04_SEVEN_WONDERS_HEARD, 0)
@@ -2483,265 +2454,6 @@ EVT_END()
  * and chooses the entry scene (Grubba escort, Jolene escort, champion escape, storage room talk) from flags
  * and story progress.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Map init for tou_04, the corridor: sets up the guards and doors, the Last Stand badge item, save blocks,
- * and chooses the entry scene (Grubba escort, Jolene escort, champion escape, storage room talk) from flags
- * and story progress.
- */
-EVT_BEGIN(tou_04_init_evt)
-    // Set up the doors, guards, the Last Stand badge on the floor and the two save blocks.
-    SET_VALUE(LW(0), PTR(bero_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    CALL(evt_cam_road_reset)
-    SPAWN_EVENT(evt_drop)
-    CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_item_entry, STRING("item_01"), ITEM_LAST_STAND, 515, 15, 125, ITEM_TYPE_STILL, GSWF_TOU_04_LAST_STAND, 0)
-    CALL(evt_mobj_save_blk, STRING("mobj_save1"), -520, 60, -110, 0, 0)
-    CALL(evt_mobj_save_blk, STRING("mobj_save3"), 450, 60, -465, 0, 0)
-    // If one of the pending escort scenes is waiting (Grubba, or Jolene bringing Mario to the minors,
-    // majors or champion's room), Mario and his partner start in place for it and it runs.
-    SET_VALUE(LW(1), 0)
-    IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
-        CALL(kemuri_stop)
-        CALL(evt_mario_set_pos, -350, 0, -580)
-        CALL(evt_party_set_pos, 0, -350, 0, -600)
-        SET_VALUE(LW(1), 1)
-        SPAWN_EVENT(evt_gans)
-    END_IF
-    IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MINORS, 1)
-        CALL(kemuri_stop)
-        CALL(evt_mario_set_pos, -390, 0, -510)
-        CALL(evt_party_set_pos, 0, -390, 0, -510)
-        SPAWN_EVENT(evt_kinoshikowa)
-    END_IF
-    IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
-        CALL(kemuri_stop)
-        CALL(evt_mario_set_pos, -390, 0, -510)
-        CALL(evt_party_set_pos, 0, -390, 0, -510)
-        SPAWN_EVENT(evt_kinoshikowa2)
-    END_IF
-    IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
-        CALL(kemuri_stop)
-        CALL(evt_mario_set_pos, -625, 0, -300)
-        CALL(evt_party_set_pos, 0, -630, 0, -300)
-        SPAWN_EVENT(evt_kinoshikowa3)
-    END_IF
-    // Choose the music and ambience for the story point: quiet while Grubba's plans unfold,
-    // the league theme for most of the story and the ring-side theme otherwise.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
-        CALL(evt_snd_envoff, PSND_FADEOUT)
-    ELSE
-        IF_INT_EQUAL(LW(1), 0)
-            SWITCH(GSW_STORY_PROGRESS)
-                CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-                CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-                CASE_DEFAULT
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
-                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
-            END_SWITCH
-        ELSE
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
-        END_IF
-    END_IF
-    // Reset the guard-escort flags so only the one for the trip about to run stays set.
-    IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
-        SET_VALUE(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
-        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 0)
-        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 1)
-        SET_VALUE(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_TOU_09_TOILET_WARP_PENDING, 1)
-        SET_VALUE(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
-        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 0)
-        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 0)
-        SET_VALUE(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_TOU_08_TOILET_WARP_PENDING, 1)
-        SET_VALUE(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
-        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 0)
-        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 0)
-        SET_VALUE(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 0)
-    END_IF
-    // Run the guard escort for the trip that is pending (minors, majors, title room or champion's room),
-    // with Mario placed at its starting door.
-    IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)
-        CALL(evt_mario_set_pos, -625, 0, 300)
-        CALL(evt_party_set_pos, 0, -640, 0, 300)
-        SPAWN_EVENT(evt_gardman)
-    END_IF
-    IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 1)
-        CALL(evt_mario_set_pos, -625, 0, -300)
-        CALL(evt_party_set_pos, 0, -640, 0, -300)
-        CALL(evt_party_set_pos, 1, 0, -1000, 0)
-        SPAWN_EVENT(evt_gardman2)
-    END_IF
-    IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 1)
-        CALL(evt_mario_set_pos, -625, 0, -300)
-        CALL(evt_party_set_pos, 0, -640, 0, -300)
-        CALL(evt_party_set_pos, 1, 0, -1000, 0)
-        CALL(evt_mario_set_dir, 270, 0, 0)
-        CALL(evt_party_set_dir, 0, 270, 0)
-        SPAWN_EVENT(evt_gardman3)
-    END_IF
-    IF_INT_EQUAL(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 1)
-        CALL(evt_mario_set_pos, 350, 0, -580)
-        CALL(evt_party_set_pos, 0, 350, 0, -600)
-        CALL(evt_party_set_pos, 1, 0, -1000, 0)
-        SPAWN_EVENT(evt_gardman4)
-    END_IF
-    // Coming back from the toilets, Mario appears by the toilet door
-    // and its scene runs instead of the usual setup.
-    IF_INT_EQUAL(GSWF_TOU_09_TOILET_WARP_PENDING, 1)
-        CALL(evt_mario_set_pos, 530, 0, 530)
-        CALL(evt_party_set_pos, 0, 530, 0, 530)
-        CALL(evt_cam_road_reset)
-        SPAWN_EVENT(evt_toile)
-        RETURN
-    END_IF
-    IF_INT_EQUAL(GSWF_TOU_08_TOILET_WARP_PENDING, 1)
-        CALL(evt_mario_set_pos, 530, 0, 530)
-        CALL(evt_party_set_pos, 0, 530, 0, 530)
-        CALL(evt_cam_road_reset)
-        SPAWN_EVENT(evt_toile2)
-        RETURN
-    END_IF
-    // Close every door and open only those that fit the story: Grubba's office early on,
-    // then the door for Mario's current ranking.
-    SET_VALUE(LW(2), 0)
-    LOOP(11)
-        SET_VALUE(LW(0), LW(2))
-        CALL_CHILD(bero_case_switch_off)
-        ADD(LW(2), 1)
-    END_LOOP
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        SET_VALUE(LW(0), 5)
-        CALL_CHILD(bero_case_switch_on)
-        CASE_DEFAULT
-        CALL(evt_tou_get_ranking, LW(0))
-        SWITCH(LW(0))
-            CASE_LESS(1)
-            SET_VALUE(LW(0), 3)
-            CALL_CHILD(bero_case_switch_on)
-            CASE_LESS(11)
-            SET_VALUE(LW(0), 6)
-            CALL_CHILD(bero_case_switch_on)
-            CASE_DEFAULT
-            SET_VALUE(LW(0), 7)
-            CALL_CHILD(bero_case_switch_on)
-        END_SWITCH
-    END_SWITCH
-    // Always-open doors, and the special doors for the minor-league return, the first Rawk Hawk match
-    // and Grubba's plans.
-    SET_VALUE(LW(0), 0)
-    CALL_CHILD(bero_case_switch_on)
-    SET_VALUE(LW(0), 8)
-    CALL_CHILD(bero_case_switch_on)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_02_BACK_TO_THE_MINORS)
-        SET_VALUE(LW(0), STRING("s_bero_7"))
-        CALL_CHILD(bero_case_switch_on)
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_03_THE_YELLOW_BLOCK)
-        SET_VALUE(LW(0), STRING("s_bero_7"))
-        CALL_CHILD(bero_case_switch_on)
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
-            SET_VALUE(LW(0), 10)
-            CALL_CHILD(bero_case_switch_on)
-            SET_VALUE(LW(0), 0)
-            CALL_CHILD(bero_case_switch_off)
-            SET_VALUE(LW(0), 8)
-            CALL_CHILD(bero_case_switch_off)
-            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
-            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
-        END_IF
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
-        SET_VALUE(LW(0), 10)
-        CALL_CHILD(bero_case_switch_on)
-        SET_VALUE(LW(0), 0)
-        CALL_CHILD(bero_case_switch_off)
-        SET_VALUE(LW(0), 8)
-        CALL_CHILD(bero_case_switch_off)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
-    END_IF
-    // After Grubba's plans, the guard's office door stays shut unless Mario was called back by Jolene.
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
-        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
-            SET_VALUE(LW(0), 5)
-            CALL_CHILD(bero_case_switch_on)
-        ELSE
-            IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
-                SET_VALUE(LW(0), 5)
-                CALL_CHILD(bero_case_switch_on)
-            END_IF
-            IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
-                SET_VALUE(LW(0), 5)
-                CALL_CHILD(bero_case_switch_on)
-            END_IF
-        END_IF
-    END_IF
-    // Housekeeping: a poisoned partner is removed, and a pending match sends the partner away.
-    CALL(evt_cam_road_reset)
-    IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
-        IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
-            CALL(evt_mario_kill_party, 0)
-        END_IF
-    END_IF
-    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
-        CALL(evt_party_set_pos, 1, 0, -1000, 0)
-        CALL(evt_party_stop, 1)
-        CALL(evt_mario_clear_party, 1)
-    END_IF
-    // The storage room is locked until Mario has the key;
-    // when he is a top-eleven fighter the storage-room talk starts.
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
-        CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x12, 0, 10, -550, 0, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_04_STORAGE_DOOR_UNLOCKED)
-        SET_VALUE(LW(0), STRING("s_bero_4"))
-        CALL_CHILD(bero_case_switch_off)
-    ELSE
-        SET_VALUE(LW(0), STRING("s_bero_4"))
-        CALL_CHILD(bero_case_switch_on)
-    END_IF
-    IF_INT_NOT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
-        IF_INT_NOT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
-            CALL(evt_tou_get_ranking, LW(0))
-            IF_INT_LESS_OR_EQUAL(LW(0), 11)
-                IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
-                    SPAWN_EVENT(evt_souko_talk)
-                END_IF
-            END_IF
-        END_IF
-    END_IF
-    // Rawk Hawk's escape scene and the rematch return from the ring play at their story points.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_05_MAJORS_4TH_PL)
-        SPAWN_EVENT(evt_bred_nigeru)
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("s_bero_7"))
-            CALL(evt_tou_get_ranking, LW(1))
-            IF_INT_EQUAL(LW(1), 10)
-                SPAWN_EVENT(out_from_tou_10_re)
-            END_IF
-        END_IF
-    END_IF
-    RETURN
-EVT_END()
-#else
 /**
  * Map init for tou_04, the corridor: sets up the guards and doors, the Last Stand badge item, save blocks,
  * and chooses the entry scene (Grubba escort, Jolene escort, champion escape, storage room talk) from flags
@@ -2794,11 +2506,19 @@ EVT_BEGIN(tou_04_init_evt)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
+#endif
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
+#endif
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
@@ -2879,7 +2599,9 @@ EVT_BEGIN(tou_04_init_evt)
         ADD(LW(2), 1)
     END_LOOP
     SWITCH(GSW_STORY_PROGRESS)
+#if VERSION > VERSION_DEMO_US
         CASE_LESS(STG3_03_GRUBBA)
+#endif
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
         SET_VALUE(LW(0), 5)
         CALL_CHILD(PTR(bero_case_switch_on))
@@ -2930,9 +2652,14 @@ EVT_BEGIN(tou_04_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         SET_VALUE(LW(0), 8)
         CALL_CHILD(PTR(bero_case_switch_off))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
+#else
 #if VERSION < VERSION_US
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
+#endif
 #endif
     END_IF
     // After Grubba's plans, the guard's office door stays shut unless Mario was called back by Jolene.
@@ -2946,10 +2673,15 @@ EVT_BEGIN(tou_04_init_evt)
                 CALL_CHILD(PTR(bero_case_switch_on))
             END_IF
             IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
+#if VERSION <= VERSION_DEMO_US
+                SET_VALUE(LW(0), 5)
+                CALL_CHILD(bero_case_switch_on)
+#else
                 IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
                     SET_VALUE(LW(0), 5)
                     CALL_CHILD(PTR(bero_case_switch_on))
                 END_IF
+#endif
             END_IF
         END_IF
     END_IF
@@ -3000,5 +2732,4 @@ EVT_BEGIN(tou_04_init_evt)
     END_IF
     RETURN
 EVT_END()
-#endif
 

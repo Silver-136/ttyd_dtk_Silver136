@@ -89,34 +89,12 @@ MarioMotTblEntry marioMotTbl[] = {
     {mot_jump, NULL, NULL},
 #if VERSION <= VERSION_DEMO_US
     {mot_jumpNpc, NULL, NULL},
-    {mot_jumpSw, NULL, NULL},
-        {mot_jumpStand, NULL, NULL},
-        {mot_jump, NULL, NULL},
-        {mot_jump, NULL, NULL},
-        {mot_jumpSmall, NULL, NULL},
-        {mot_fall, NULL, mot_fall_post},
-        {mot_fall, NULL, NULL},
-        {mot_upstairs, NULL, NULL},
-        {mot_land, NULL, NULL},
-        {mot_talk, NULL, NULL},
-        {mot_getItem, NULL, NULL},
-        {mot_hip, NULL, mot_hip_post},
-        {mot_hip, NULL, mot_hip_post},
-        {mot_hammer, NULL, NULL},
-        {mot_hammer2, NULL, mot_ham2_post},
-        {mot_jabara, NULL, mot_jabara_post},
-        {mot_slit, NULL, mot_slit_post},
-        {mot_roll, NULL, mot_roll_post},
-        {mot_kaze, NULL, NULL},
-        {mot_plane, NULL, mot_plane_post},
-        {mot_ship, NULL, mot_ship_post},
-        {mot_yoshi, NULL, mot_yoshi_post},
-    {mot_cloud, NULL, mot_cloud_post},
 #else
 #if VERSION >= VERSION_US
     {mot_jumpNpc, NULL, mot_jumpNpc_post},
 #else
     {mot_jumpNpc, NULL, NULL},
+#endif
 #endif
     {mot_jumpSw, NULL, NULL},
     {mot_jumpStand, NULL, NULL},
@@ -140,6 +118,9 @@ MarioMotTblEntry marioMotTbl[] = {
     {mot_plane, NULL, mot_plane_post},
     {mot_ship, NULL, mot_ship_post},
     {mot_yoshi, NULL, mot_yoshi_post},
+#if VERSION <= VERSION_DEMO_US
+    {mot_cloud, NULL, mot_cloud_post},
+#else
     {mot_cloud, NULL, cloudResetAt},
 #endif
     {mot_vivian, NULL, mot_vivian_post},
@@ -168,7 +149,6 @@ MarioJumpData marioJumpData = {
     -18.0f,
 };
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Puts Mario back into stay/walk/dash from the field battle code (fbatBattleMode state 4).
  * The plane is cancelled, the tube makes the partners ride on (not in the demo),
@@ -181,31 +161,7 @@ void marioChgMoveMotion(void) {
         mario_plane_cancel();
         return;
     }
-    if (mario->currMotionId == MARIO_MOTION_YOSHI) {
-        return;
-    }
-    if (!mario->baseSpeed) {
-        marioChgStayMotion();
-    }
-    if (mario->baseSpeed > mario->baseWalkSpeed) {
-        marioChgMot(MARIO_MOTION_DASH);
-    } else {
-        marioChgMot(MARIO_MOTION_WALK);
-    }
-}
-#else
-/**
- * Puts Mario back into stay/walk/dash from the field battle code (fbatBattleMode state 4).
- * The plane is cancelled, the tube makes the partners ride on (not in the demo),
- * and Yoshi (and, US and later, the damage motions) are left alone.
- * With no speed it switches to stay but then still to walk, as there is no return.
- */
-void marioChgMoveMotion(void) {
-    MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId == MARIO_MOTION_PLANE) {
-        mario_plane_cancel();
-        return;
-    }
+#if VERSION > VERSION_DEMO_US
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
         allPartyForceRideOn();
         return;
@@ -214,6 +170,7 @@ void marioChgMoveMotion(void) {
     if ((u16)(mario->currMotionId - MARIO_MOTION_DAMAGE) <= 1) {
         return;
     }
+#endif
 #endif
     if (mario->currMotionId == MARIO_MOTION_YOSHI) {
         return;
@@ -228,7 +185,6 @@ void marioChgMoveMotion(void) {
         marioChgMot(MARIO_MOTION_WALK);
     }
 }
-#endif
 
 /**
  * Stops Mario in the standing motion unless he is riding the boat or Yoshi,

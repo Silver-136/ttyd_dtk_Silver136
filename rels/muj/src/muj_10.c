@@ -531,114 +531,6 @@ s32 senin_event_erumospos[] = {
  * Sets up the crowd of 95 sailors on the hidden dock (mass NPCs with the sailor animation table) from
  * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Sets up the crowd of 95 sailors on the hidden dock (mass NPCs with the sailor animation table) from
- * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka.
- */
-EVT_BEGIN(senin_event)
-    // The crew is driven out: Mario loses control and the dock crowd is placed.
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_nannpc_init, PTR(test_ext_entry_data), 0, 0, 0, 155)
-    CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
-    CALL(evt_nannpcwork_flag_onoff, 0, 1)
-    SET_INT_READ_ADDR(PTR(senin_event_suifupos))
-    SET_VALUE(LW(0), 0)
-    LOOP(95)
-        CALL(evt_nannpc_entry, LW(0))
-        CALL(evt_nannpc_set_func, LW(0), 0)
-        CALL(evt_nannpc_set_animtbl, LW(0), PTR(suifu_animtbl))
-        READ_INT4(LW(1), LW(2), LW(3), LW(4))
-        CALL(evt_nannpc_set_position, LW(0), LW(1), LW(2), LW(3))
-        CALL(evt_nannpc_set_dir, LW(0), LW(4))
-        CALL(evt_nannpc_ppflag_onoff, LW(0), 0, 4)
-        ADD(LW(0), 1)
-    END_LOOP
-    SET_INT_READ_ADDR(PTR(senin_event_erumospos))
-    SET_VALUE(LW(0), 95)
-    LOOP(60)
-        CALL(evt_nannpc_entry, LW(0))
-        CALL(evt_nannpc_set_func, LW(0), 0)
-        CALL(evt_nannpc_set_animtbl, LW(0), PTR(elmos_animtbl))
-        READ_INT3(LW(1), LW(2), LW(3))
-        CALL(evt_nannpc_set_position, LW(0), LW(1), LW(2), LW(3))
-        CALL(evt_nannpc_set_dir, LW(0), 90)
-        CALL(evt_nannpc_set_color, LW(0), 255, 255, 255, 0)
-        CALL(evt_nannpc_ppflag_onoff, LW(0), 0, 4)
-        ADD(LW(0), 1)
-    END_LOOP
-    SET_RAW_VALUE(LW(0), GW(0))
-    SET_FLOAT_VALUE(LW(1), FLOAT(1.5f))
-    // The ship starts to bob.
-    SPAWN_EVENT(muj_ship_puka)
-    CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
-    BEGIN_INLINE_EVENT
-        LOOP(0)
-            CALL(evt_mapobj_trans, 1, STRING("S_b"), 0, GW(0), 0)
-            CALL(evt_hit_bind_update, STRING("A_b"))
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(suifu_option_init_func)
-        LOOP(0)
-            CALL(suifu_option_func, GW(0))
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_INLINE_EVENT
-    CALL(evt_npc_entry, STRING("オドオド水夫"), STRING("c_odo_k"))
-    CALL(evt_npc_set_tribe, STRING("オドオド水夫"), STRING("オドオド水夫"))
-    CALL(evt_npc_entry, STRING("ピートン"), STRING("c_m_waka"))
-    CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
-    CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
-    CALL(evt_npc_set_position, STRING("コルテス"), 0, -1000, 0)
-    CALL(evt_npc_set_ry, STRING("コルテス"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
-    CALL(evt_npc_set_position, STRING("水夫D"), -158, 44, -160)
-    CALL(evt_npc_set_ry, STRING("水夫D"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
-    CALL(evt_npc_flag_onoff, 0, STRING("水夫D"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_set_position, STRING("モニー"), -159, 44, -257)
-    CALL(evt_npc_set_ry, STRING("モニー"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
-    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_set_position, STRING("ピートン"), -195, 44, -264)
-    CALL(evt_npc_set_ry, STRING("ピートン"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
-    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_set_position, STRING("ガラの悪い水夫"), -45, 120, -289)
-    CALL(evt_npc_set_ry, STRING("ガラの悪い水夫"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_set_position, STRING("オドオド水夫"), -18, 120, -179)
-    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
-    CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
-    CALL(evt_bero_exec_wait, 65536)
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("stg5_dou_19_01"), 0, STRING("水夫D"))
-    CALL(evt_msg_print, 0, STRING("stg5_dou_19_02"), 0, STRING("モニー"))
-    CALL(evt_msg_print, 0, STRING("stg5_dou_19_03"), 0, STRING("ガラの悪い水夫"))
-    CALL(evt_cam3d_evt_set, -150, 300, 682, -150, 150, -175, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_npc_set_position, STRING("コルテス"), -215, 120, -160)
-    // Cortez appears on the dock.
-    CALL_CHILD(korutesu_apper)
-    CALL(evt_msg_print, 0, STRING("stg5_dou_19_04"), 0, STRING("コルテス"))
-    CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR3"), 0)
-    SET_VALUE(LW(0), 95)
-    LOOP(60)
-        CALL(evt_nannpc_set_func, LW(0), PTR(elmosalpha_func))
-        ADD(LW(0), 1)
-    END_LOOP
-    WAIT_MS(3000)
-    // The story advances and the crew boards the ship at muj_00.
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_41_01_ALL_ABOARD)
-    CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
-    CALL(evt_bero_mapchange, STRING("muj_00"), STRING(""))
-    RETURN
-EVT_END()
-#else
 /**
  * Sets up the crowd of 95 sailors on the hidden dock (mass NPCs with the sailor animation table) from
  * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka.
@@ -703,18 +595,60 @@ EVT_BEGIN(senin_event)
     CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_position, STRING("水夫D"), -158, 44, -160)
     CALL(evt_npc_set_ry, STRING("水夫D"), 90)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+#endif
     CALL(evt_npc_flag_onoff, 0, STRING("水夫D"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("モニー"), -159, 44, -257)
     CALL(evt_npc_set_ry, STRING("モニー"), 90)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+#endif
     CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("ピートン"), -195, 44, -264)
     CALL(evt_npc_set_ry, STRING("ピートン"), 90)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+#endif
     CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("ガラの悪い水夫"), -45, 120, -289)
     CALL(evt_npc_set_ry, STRING("ガラの悪い水夫"), 270)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_set_position, STRING("オドオド水夫"), -18, 120, -179)
+    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+    CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
+    CALL(evt_bero_exec_wait, 65536)
+    WAIT_MS(1000)
+    CALL(evt_msg_print, 0, STRING("stg5_dou_19_01"), 0, STRING("水夫D"))
+    CALL(evt_msg_print, 0, STRING("stg5_dou_19_02"), 0, STRING("モニー"))
+    CALL(evt_msg_print, 0, STRING("stg5_dou_19_03"), 0, STRING("ガラの悪い水夫"))
+    CALL(evt_cam3d_evt_set, -150, 300, 682, -150, 150, -175, 500, EASING_SINE_IN_OUT)
+    WAIT_MS(500)
+    CALL(evt_npc_set_position, STRING("コルテス"), -215, 120, -160)
+    // Cortez appears on the dock.
+    CALL_CHILD(korutesu_apper)
+    CALL(evt_msg_print, 0, STRING("stg5_dou_19_04"), 0, STRING("コルテス"))
+    CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR3"), 0)
+    SET_VALUE(LW(0), 95)
+    LOOP(60)
+        CALL(evt_nannpc_set_func, LW(0), PTR(elmosalpha_func))
+        ADD(LW(0), 1)
+    END_LOOP
+    WAIT_MS(3000)
+    // The story advances and the crew boards the ship at muj_00.
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_41_01_ALL_ABOARD)
+    CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
+    CALL(evt_bero_mapchange, STRING("muj_00"), STRING(""))
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("オドオド水夫"), -18, 120, -179)
@@ -745,9 +679,9 @@ EVT_BEGIN(senin_event)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
     CALL(evt_bero_mapchange, STRING("muj_00"), STRING(""))
 #endif
+#endif
     RETURN
 EVT_END()
-#endif
 
 #if VERSION >= VERSION_US
 /**
@@ -818,74 +752,6 @@ static HitDamageReturn hitDmgRetPoints[] = {
  * hides or places sailors, Mony and Cortez for the current stage and spawns the scene (nazo_event,
  * oidasare_event, senin_event or korutesu_appear_event).
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Map init for muj_10 (the hidden dock): picks music for the story stage, registers the exits and NPCs,
- * hides or places sailors, Mony and Cortez for the current stage and spawns the scene (nazo_event,
- * oidasare_event, senin_event or korutesu_appear_event).
- */
-EVT_BEGIN(muj_10_init_evt)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ8"))
-    ELSE
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ8"))
-    END_IF
-    CALL(evt_snd_set_rev_mode, 2)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    CALL(evt_cam_road_reset)
-    CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_npc_sound_data_set, STRING("めがね水夫"), STRING("SFX_STG5_KANBU_GLASSES_MOVE1L"), STRING("SFX_STG5_KANBU_GLASSES_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_30_SHIPWRECKED_SAILORS)
-        SPAWN_EVENT(nazo_event)
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
-        SPAWN_EVENT(oidasare_event)
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-SPAWN_EVENT(senin_event)
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
-    END_IF
-    CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_map_playanim, STRING("noname"), MAP_ANIM_PLAY_LOOP, 0)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
-        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-            CALL(evt_map_playanim, STRING("fune"), MAP_ANIM_PLAY_LOOP, 0)
-        END_IF
-        BEGIN_INLINE_EVENT
-            LOOP(0)
-                CALL(evt_mapobj_get_position, STRING("S_b"), LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SHIP_KOR_SHAKE1"), LW(0), LW(1), LW(2), 0)
-                WAIT_MS(2000)
-            END_LOOP
-        END_INLINE_EVENT
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hasi_rope01"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hasi_rope02"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hasi_m"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_10_sui02_01"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("A_hasi_ita"), 1, 0)
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hasi_zan"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_10_sui02_02"), MAP_OBJ_FLAG_HIDDEN)
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-            SPAWN_EVENT(dai3_shurai_after)
-        END_IF
-    END_IF
-    CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-    CALL_CHILD(evt_gazigazi_entry)
-    CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
-    RETURN
-EVT_END()
-#else
 EVT_BEGIN(muj_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))
@@ -897,21 +763,6 @@ EVT_BEGIN(muj_10_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION >= VERSION_US
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_cam_road_reset)
-    CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_npc_sound_data_set, STRING("めがね水夫"), STRING("SFX_STG5_KANBU_GLASSES_MOVE1L"), STRING("SFX_STG5_KANBU_GLASSES_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_30_SHIPWRECKED_SAILORS)
-        SPAWN_EVENT(PTR(nazo_event))
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
-        SPAWN_EVENT(PTR(oidasare_event))
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-        CALL_CHILD(PTR(senin_event))
-        SPAWN_EVENT(PTR(korutesu_appear_event))
-#else
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_cam_road_reset)
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -923,7 +774,15 @@ EVT_BEGIN(muj_10_init_evt)
         SPAWN_EVENT(oidasare_event)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
+#if VERSION <= VERSION_DEMO_US
         SPAWN_EVENT(senin_event)
+#else
+#if VERSION >= VERSION_US
+        CALL_CHILD(PTR(senin_event))
+        SPAWN_EVENT(PTR(korutesu_appear_event))
+#else
+        SPAWN_EVENT(senin_event)
+#endif
 #endif
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
@@ -955,14 +814,22 @@ EVT_BEGIN(muj_10_init_evt)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
+#if VERSION <= VERSION_DEMO_US
+            SPAWN_EVENT(dai3_shurai_after)
+#else
 #if VERSION >= VERSION_US
             SPAWN_EVENT(PTR(dai3_shurai_after))
 #else
             SPAWN_EVENT(dai3_shurai_after)
 #endif
+#endif
         END_IF
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gazigazi_entry)
+    CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
+#else
 #if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_gazigazi_entry))
 #else
@@ -973,9 +840,9 @@ EVT_BEGIN(muj_10_init_evt)
         CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, -260, 135, -145, 0, 0)
         CALL(evt_mobj_save_blk, STRING("s_blk"), -45, 83, 0, 0, 0)
     END_IF
+#endif
     RETURN
 EVT_END()
-#endif
 
 void elmosalpha_func(NanNPC* npc) {
     s32 elapsed;

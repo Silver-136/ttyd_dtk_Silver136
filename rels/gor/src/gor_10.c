@@ -428,19 +428,16 @@ EVT_END()
  * In JP and later it starts the sea animations and does nothing else if map events are being skipped.
  */
 EVT_BEGIN(gor_10_init_evt)
-#if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
-        CALL_CHILD(tegami_init_evt)
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(evt_map_playanim, STRING("anm_umi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
+#endif
     IF_INT_LESS(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
         CALL_CHILD(PTR(tegami_init_evt))
-#endif
         ELSE
         CALL_CHILD(PTR(mezame_init_evt))
     END_IF

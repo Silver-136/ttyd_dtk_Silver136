@@ -721,7 +721,6 @@ f32 marioGetAngleKaitenHammer(void) {
  * Cleanup when the spin hammer motion ends early:
  * paper animation off, camera shift reset and the facing and mirror locks released.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Cleanup when the spin hammer motion ends early:
  * paper animation off, camera shift reset and the facing and mirror locks released.
@@ -737,39 +736,21 @@ void mot_ham2_post(void) {
         m->camShiftRate.z = 0.01f;
     }
     marioPaperOff();
+#if VERSION <= VERSION_DEMO_US
     marioPaperLightOn();
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-    mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-    marioAdjustMoveDir();
-}
 #else
-/**
- * Cleanup when the spin hammer motion ends early:
- * paper animation off, camera shift reset and the facing and mirror locks released.
- */
-void mot_ham2_post(void) {
-    MarioWork* mario = marioGetPtr();
-    if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
-        marioPaperOff();
-    }
-    {
-        MarioWork* m = marioGetPtr();
-        m->camShiftTargetZ = 0.0f;
-        m->camShiftRate.z = 0.01f;
-    }
-    marioPaperOff();
 #if VERSION < VERSION_US
     marioPaperLightOn();
 #endif
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
     mario->dispFlags &= ~MARIO_DISP_FLAG_FLIP;
+#endif
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
     mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
     marioAdjustMoveDir();
 }
-#endif
 
 /**
  * Probes in front of Mario where the hammer will land and returns the hit object, or NULL;

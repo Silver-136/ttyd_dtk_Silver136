@@ -234,37 +234,6 @@ static USER_FUNC(set_msg) {
     event->lwData[0] = 0;
     event->lwData[1] = 0;
     if (!party) {
-        return EVT_RETURN_DONE;
-    }
-    for (pass = 0; pass < 2; pass++) {
-        if (pass == 0) {
-            range = 150.0f;
-        } else {
-            range = 10000.0f;
-        }
-        item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
-        if (item) {
-            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
-            event->lwData[1] = (pass == 0) + 1;
-            cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, item->position.x, item->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
-            cp->moveDir = partyToMovedir(party, cp->displayDirectionTarget);
-            cp->targetDir = cp->moveDir;
-            return EVT_RETURN_DONE;
-        }
-        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
-        if (mobj) {
-            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
-            event->lwData[1] = (pass == 0) + 1;
-            cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, mobj->position.x, mobj->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
-            cp->moveDir = partyToMovedir(party, cp->displayDirectionTarget);
-            cp->targetDir = cp->moveDir;
-            return EVT_RETURN_DONE;
-        }
-    }
-    event->lwData[0] = (EvtWord) "map_no_exist";
-    event->lwData[1] = 0;
-    return EVT_RETURN_DONE;
-}
 #else
 /**
  * The demo stops at the first item or block in range and has no buried treasure table.
@@ -290,6 +259,7 @@ USER_FUNC(set_msg) {
     event->lwData[0] = 0;
     event->lwData[1] = 0;
     if (!cp) {
+#endif
         return EVT_RETURN_DONE;
     }
     for (pass = 0; pass < 2; pass++) {
@@ -298,6 +268,31 @@ USER_FUNC(set_msg) {
         } else {
             range = 10000.0f;
         }
+#if VERSION <= VERSION_DEMO_US
+        item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
+        if (item) {
+            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
+            event->lwData[1] = (pass == 0) + 1;
+            cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, item->position.x, item->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
+            cp->moveDir = partyToMovedir(party, cp->displayDirectionTarget);
+            cp->targetDir = cp->moveDir;
+            return EVT_RETURN_DONE;
+        }
+        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
+        if (mobj) {
+            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
+            event->lwData[1] = (pass == 0) + 1;
+            cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, mobj->position.x, mobj->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
+            cp->moveDir = partyToMovedir(party, cp->displayDirectionTarget);
+            cp->targetDir = cp->moveDir;
+            return EVT_RETURN_DONE;
+        }
+    }
+    event->lwData[0] = (EvtWord) "map_no_exist";
+    event->lwData[1] = 0;
+    return EVT_RETURN_DONE;
+}
+#else
         type = -1;
         item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
         mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
@@ -404,13 +399,13 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
  * a Kururin floor item or a block from mobj_list);
  * party_motion.c and party_move.c play her sniffing pose while it is TRUE.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Whether there is something to sniff within 150 units of Mario (an item, an unopened item box,
  * a Kururin floor item or a block from mobj_list);
  * party_motion.c and party_move.c play her sniffing pose while it is TRUE.
  */
 BOOL chuchu_searchObject(void) {
+#if VERSION <= VERSION_DEMO_US
     char** name;
     PartyEntry* cp = partyGetPtr(marioGetPartyId());
     MapObjectEntry* mobj;
@@ -434,14 +429,7 @@ BOOL chuchu_searchObject(void) {
         }
     }
     return FALSE;
-}
 #else
-/**
- * Whether there is something to sniff within 150 units of Mario (an item, an unopened item box,
- * a Kururin floor item or a block from mobj_list);
- * party_motion.c and party_move.c play her sniffing pose while it is TRUE.
- */
-BOOL chuchu_searchObject(void) {
     PartyEntry* cp = partyGetPtr(marioGetPartyId());
     MarioWork* player = cp->playerPtr;
 
@@ -452,8 +440,8 @@ BOOL chuchu_searchObject(void) {
         return TRUE;
     }
     return chuchu_findTreasure(cp, 150.0f) != 0;
-}
 #endif
+}
 
 /** Party table init handler: Ms. Mowz is member kind 7, 20 units tall and 24 wide. */
 void chuchu_init(PartyEntry* party) {

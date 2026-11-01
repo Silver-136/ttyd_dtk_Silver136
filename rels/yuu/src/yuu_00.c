@@ -388,7 +388,6 @@ EVT_BEGIN(minigame01_start_cam_cancel)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Phase 1 of Plane Mode: builds the five floating platforms (S_dai_01 to S_dai_05;
  * US and later pick a random height and direction for each), plays the opening camera (skippable),
@@ -398,6 +397,7 @@ EVT_BEGIN(minigame01_start)
     CALL(yuu_atai_init)
     CALL(yuu_atai_push, LW(0))
     CALL(evt_map_playanim, STRING("neon_01"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
     SET_VALUE(LW(0), STRING("S_dai_01"))
         SET_VALUE(LW(1), STRING("A_dai_01"))
         SET_VALUE(LW(2), -150)
@@ -475,59 +475,7 @@ EVT_BEGIN(minigame01_start)
         CALL(yuuminigame_set_dataadr, 5, LW(15))
     // The platforms are ready. On the first round the camera flies over the course; A or B skips it.
     CALL(yuu_atai_pop, LW(0))
-    CALL(yuuminigame1_opening_chk, LW(0), LW(1))
-    IF_INT_NOT_EQUAL(LW(1), 0)
-        SPAWN_EVENT_GET_ID(PTR(minigame01_start_cam), LW(8))
-        LOOP(0)
-            IS_EVENT_RUNNING(LW(8), LW(9))
-            IF_INT_EQUAL(LW(9), 0)
-                CALL(evt_seq_wait, SEQ_GAME)
-                BREAK_LOOP
-            ELSE
-                CALL(evt_key_get_buttontrg, 0, LW(9))
-                IF_BITS_SET(LW(9), PAD_BUTTON_A | PAD_BUTTON_B)
-                    DELETE_EVENT(LW(8))
-                    CALL(evt_seq_wait, SEQ_GAME)
-                    CALL_CHILD(minigame01_start_cam_cancel)
-                    BREAK_LOOP
-                END_IF
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(yuuminigame1_opening_on_off, LW(0), 0)
-        CALL_CHILD(yuu_00_kaijo_init2)
-        CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
-        WAIT_FRAMES(1)
-    END_IF
-    // The music starts, Mario poses, the spotlights stop and the start signal plays.
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_MINIGAME1"))
-    WAIT_MS(200)
-    CALL(evt_mario_set_pose, STRING("M_I_1"))
-    WAIT_MS(400)
-    WAIT_MS(200)
-    CALL(evt_mario_set_pose, STRING("M_S_1"))
-    WAIT_MS(600)
-    CALL(evt_map_playanim, STRING("neon_01"), MAP_ANIM_PLAY_AT_END, 0)
-    SET_VALUE(GF(0), 0)
-    CALL(eff_call_minigame, 0, 0, 0, 500)
-    WAIT_MS(3000)
-    // Mario becomes a paper airplane, the controls come back and the coin counter appears.
-    CALL(evt_change_plane)
-    CALL(evt_mario_key_onoff, 1)
-    WAIT_MS(1000)
-    CALL(evt_yuucounter_alloc, 0, 70, 0, 0)
-    RETURN
-EVT_END()
 #else
-/**
- * Phase 1 of Plane Mode: builds the five floating platforms (S_dai_01 to S_dai_05;
- * US and later pick a random height and direction for each), plays the opening camera (skippable),
- * shows the countdown effect, switches Mario into plane mode and starts the coin counter.
- */
-EVT_BEGIN(minigame01_start)
-    CALL(yuu_atai_init)
-    CALL(yuu_atai_push, LW(0))
-    CALL(evt_map_playanim, STRING("neon_01"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION >= VERSION_US
     CALL(evt_sub_random, 5, LW(0))
     SWITCH(LW(0))
@@ -1036,6 +984,7 @@ EVT_BEGIN(minigame01_start)
 #if VERSION >= VERSION_US
     CALL(yuuminigame1_floor_on_off, LW(0), 1)
 #endif
+#endif
     CALL(yuuminigame1_opening_chk, LW(0), LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         SPAWN_EVENT_GET_ID(PTR(minigame01_start_cam), LW(8))
@@ -1074,14 +1023,19 @@ EVT_BEGIN(minigame01_start)
     WAIT_MS(3000)
     // Mario becomes a paper airplane, the controls come back and the coin counter appears.
     CALL(evt_change_plane)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_key_onoff, 1)
+    WAIT_MS(1000)
+    CALL(evt_yuucounter_alloc, 0, 70, 0, 0)
+#else
     CALL(evt_cam_letter_box_onoff, 0, 0)
     CALL(evt_cam_letter_box_disable, 1)
     WAIT_MS(1000)
     CALL(evt_yuucounter_alloc, 0, 70, 0, 0)
     CALL(evt_mario_key_onoff, 1)
+#endif
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(minigame01_end)
 #if VERSION <= VERSION_DEMO_US
@@ -1096,73 +1050,6 @@ EVT_BEGIN(minigame01_end)
     CALL(evt_moving_floor_delete, LW(15))
     CALL(yuuminigame_get_dataadr, 5, LW(15))
     CALL(evt_moving_floor_delete, LW(15))
-    CALL(evt_mario_adjust_dir)
-    IF_INT_LESS(LW(0), 0)
-        CALL(eff_call_minigame, 2, 0, 0, 500)
-        CALL(evt_mario_set_pose, STRING("M_I_S"))
-        WAIT_MS(3800)
-        CALL(evt_mario_set_pose, STRING("M_D_2"))
-        WAIT_MS(200)
-    ELSE
-        CALL(eff_call_minigame, 1, 0, 0, 500)
-        WAIT_MS(500)
-        IF_INT_LESS(LW(1), 1)
-            CALL(evt_mario_set_pose, STRING("M_X_1"))
-        ELSE
-            IF_INT_GREATER(LW(1), 1)
-                CALL(evt_mario_set_pose, STRING("M_V_2"))
-            ELSE
-                CALL(evt_mario_set_pose, STRING("M_I_1"))
-            END_IF
-        END_IF
-        WAIT_MS(3500)
-    END_IF
-    // The tally screen shows the score and Mario receives his piantas, then the ranking screen records it.
-    CALL(evt_yuucounter_free)
-    CALL(yuugijou_montemedal_disp_onoff, 1)
-    CALL(evt_yuuranking_alloc, 0, 0, 0, 0, LW(0), LW(2), LW(1), 0)
-    WAIT_FRAMES(1)
-    CALL(yuuranking_wait_button)
-    CALL(yuuranking_get_monte, LW(3))
-    CALL(yuugijou_add_montemedal, 0, LW(3))
-    CALL(yuugijou_montemedal_wait)
-    CALL(evt_yuuranking_free)
-    WAIT_MS(200)
-    CALL(evt_yuuranking_alloc, 0, 0, 0, 1, LW(0), LW(2), LW(1), 0)
-    WAIT_FRAMES(1)
-    CALL(yuuranking_wait_button)
-    CALL(evt_yuuranking_free)
-    // With fewer than 10 piantas the game ends; otherwise the player picks Continue (10 piantas) or Quit.
-    SET_VALUE(LW(1), 10)
-    CALL(yuugijou_get_montemedal, LW(0))
-    IF_INT_LESS(LW(0), LW(1))
-        SET_VALUE(LW(0), 1)
-    ELSE
-        CALL(evt_msg_select, 0, STRING("sysyuu_00_00"))
-    END_IF
-    // Quitting sends Mario back through the pipe to gor_03.
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
-        CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
-        CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
-        CALL(evt_bero_mapchange, STRING("gor_03"), STRING("A_dokan_02"))
-        RETURN
-    END_IF
-    // Continuing pays 10 piantas; the stage fades out, Mario returns to the start and the lights come back on.
-    MULTIPLY(LW(1), -1)
-    CALL(yuugijou_add_montemedal, 0, LW(1))
-    CALL(yuugijou_montemedal_wait)
-    WAIT_MS(200)
-    CALL(yuugijou_montemedal_disp_onoff, 0)
-    CALL(evt_snd_bgmoff, PSND_FADEOUT)
-    CALL(evt_snd_sfxoff, GW(10))
-    CALL(evt_fade_out, 1000)
-    CALL(re_fall_rtn)
-    CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL_CHILD(yuu_00_kaijo_init2)
-    WAIT_MS(500)
-    CALL_CHILD(light_sub_event)
 #else
     CALL(evt_cam_letter_box_onoff, 1, 0)
     CALL(evt_cam_letter_box_disable, 0)
@@ -1190,6 +1077,7 @@ EVT_BEGIN(minigame01_end)
 #endif
     // Crashing on the ground (a negative score) plays the failure effect;
     // landing on a platform plays the success effect and Mario poses by how well he did.
+#endif
     CALL(evt_mario_adjust_dir)
     IF_INT_LESS(LW(0), 0)
         CALL(eff_call_minigame, 2, 0, 0, 500)
@@ -1255,10 +1143,11 @@ EVT_BEGIN(minigame01_end)
     CALL(re_fall_rtn)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL_CHILD(PTR(yuu_00_kaijo_init2))
+#if VERSION > VERSION_DEMO_US
     CALL(yuu_00_cam_shift_reset)
+#endif
     WAIT_MS(500)
     CALL_CHILD(PTR(light_sub_event))
-#endif
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE1"), GW(10))
     CALL(evt_fade_in, 1000)
     RETURN

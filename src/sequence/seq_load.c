@@ -289,484 +289,10 @@ static inline BOOL loadStart(void) {
 #if VERSION <= VERSION_DEMO_US
 /** Later versions: the same menu with no return value. */
 static BOOL loadMain(SequenceWork* seq) {
-u32 trg;
-    u32 dir;
-    s32 code;
-    s32 prev;
-    s32 i;
-    s32 sound;
-    u16 flags;
-
-    trg = keyGetButtonTrg(0);
-    keyGetButtonRep(0);
-    dir = keyGetDirRep(0);
-    code = cardGetCode();
-    if (cardIsExec() || !fadeIsFinish()) {
-        trg = 0;
-        dir = 0;
-    }
-    if (wp->cardCode != code) {
-        trg = 0;
-        dir = 0;
-    }
-    wp->cardCode = code;
-    for (i = 0; i < 4; i++) {
-        flags = cardGetFilePtr()->saves[i].data.flags;
-        if (!(flags & CARD_SAVE_FLAG_ERASED) || (flags & CARD_SAVE_FLAG_NO_VALID_COPY)) {
-            break;
-        }
-    }
-    if (i < 4) {
-        wp->flags &= ~LOAD_FLAG_NO_DELETE;
-    } else {
-        wp->flags |= LOAD_FLAG_NO_DELETE;
-    }
-    wp->flags &= ~LOAD_FLAG_NO_COPY;
-    for (i = 0; i < 4; i++) {
-        flags = cardGetFilePtr()->saves[i].data.flags;
-        if (!(flags & CARD_SAVE_FLAG_ERASED) && !(flags & CARD_SAVE_FLAG_NO_VALID_COPY)) {
-            break;
-        }
-    }
-    if (i >= 4) {
-        wp->flags |= LOAD_FLAG_NO_COPY;
-    }
-
-    switch (wp->state) {
-        case 0:
-            wp->state++;
-        case 1:
-            wp->msg = msgSearch("msg_savefile_select");
-            prev = wp->slot;
-            if (dir & DEMO_STICK_UP) {
-                wp->slot = win_dt[prev].next[0];
-            } else if (dir & DEMO_STICK_DOWN) {
-                wp->slot = win_dt[prev].next[1];
-            } else if (dir & DEMO_STICK_LEFT) {
-                wp->slot = win_dt[prev].next[2];
-            } else if (dir & DEMO_STICK_RIGHT) {
-                wp->slot = win_dt[prev].next[3];
-            } else if (trg & PAD_BUTTON_A) {
-                flags = cardGetFilePtr()->saves[wp->slot].data.flags;
-                switch (wp->slot) {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                        if (flags & CARD_SAVE_FLAG_NO_VALID_COPY) {
-                            SFX(PSND_SFX_CURSOR_CANCEL1);
-                        } else if (flags & CARD_SAVE_FLAG_ERASED) {
-                            wp->state = 0x1e;
-                            SFX(PSND_SFX_CURSOR_OK1);
-                        } else {
-                            wp->state = 0x14;
-                            SFX(PSND_SFX_CURSOR_OK1);
-                        }
-                        break;
-                    case 4:
-                        if (!(wp->flags & LOAD_FLAG_NO_DELETE)) {
-                            for (i = 0; i < 4; i++) {
-                                flags = cardGetFilePtr()->saves[i].data.flags;
-                                if (!(flags & CARD_SAVE_FLAG_ERASED) || (flags & CARD_SAVE_FLAG_NO_VALID_COPY)) {
-                                    break;
-                                }
-                            }
-                            if (i < 4) {
-                                SFX(PSND_SFX_CURSOR_OK1);
-                                wp->slot = 0;
-                                wp->state = 0x28;
-                            } else {
-                                SFX(PSND_SFX_CURSOR_CANCEL1);
-                            }
-                        }
-                        break;
-                    case 5:
-                        if (!(wp->flags & LOAD_FLAG_NO_COPY)) {
-                            for (i = 0; i < 4; i++) {
-                                flags = cardGetFilePtr()->saves[i].data.flags;
-                                if (!(flags & CARD_SAVE_FLAG_NO_VALID_COPY) && !(flags & CARD_SAVE_FLAG_ERASED)) {
-                                    break;
-                                }
-                            }
-                            if (i < 4) {
-                                SFX(PSND_SFX_CURSOR_OK1);
-                                wp->slot = 0;
-                                wp->state = 0x32;
-                            } else {
-                                SFX(PSND_SFX_CURSOR_CANCEL1);
-                            }
-                        }
-                        break;
-                    case 6:
-                        SFX(PSND_SFX_CURSOR_CANCEL1);
-                        wp->state = 0xa;
-                        break;
-                    case 7:
-                        SFX(PSND_SFX_CURSOR_OK1);
-                        wp->state = 0x64;
-                        break;
-                    case 8:
-                        SFX(PSND_SFX_CURSOR_OK1);
-                        wp->state = 0xc8;
-                        break;
-                }
-            } else if (trg & PAD_BUTTON_B) {
-                SFX(PSND_SFX_CURSOR_CANCEL1);
-                wp->state = 0xa;
-            }
-            if (prev != wp->slot) {
-                if (wp->slot < 4) {
-                    SFX(9);
-                } else {
-                    SFX(PSND_SFX_CURSOR_MOVE1);
-                }
-            }
-            wp->tx = win_dt[wp->slot].x + win_dt[wp->slot].ofsX;
-            wp->ty = win_dt[wp->slot].y + win_dt[wp->slot].ofsY;
-            break;
-        case 0xa:
-            fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
-            wp->state++;
-            break;
-        case 0xb:
-            if (fadeIsFinish()) {
-                seqSetSeq(SEQ_TITLE, NULL, NULL);
-            }
-            break;
-        case 0x14:
-            wp->flags |= LOAD_FLAG_HIDE_CURSOR;
-            wp->evt = evtEntryType(evt_memcard_start, 0, 0, 0);
-            wp->evt->lwData[0] = wp->slot;
-            wp->state++;
-            break;
-        case 0x15:
-            if (!evtCheckID(wp->evt->eventId)) {
-                wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
-                if (evtGetValue(NULL, GW(0)) == 1) {
-                    wp->state++;
-                } else {
-                    wp->state = 1;
-                }
-            }
-            break;
-        case 0x16:
-            fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
-            psndBGMOff_f_d(PSND_FADEOUT, 3000, 0);
-wp->state++;
-            break;
-        case 0x17:
-            if (fadeIsFinish()) {
-                wp->flags |= LOAD_FLAG_HIDE_CURSOR;
-                wp->evt = evtEntryType(evt_continue, 0, 0, 0);
-                wp->state++;
-            }
-            break;
-        case 0x18:
-            if (!evtCheckID(wp->evt->eventId)) {
-                wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
-                continueGame();
-            }
-            break;
-        case 0x1e:
-            fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
-            wp->state++;
-            break;
-        case 0x1f:
-            if (fadeIsFinish()) {
-                wp->state++;
-            }
-            break;
-        case 0x20:
-            if (nameEntPrepare()) {
-                nameEntOn(0);
-                fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 255});
-                wp->state++;
-            }
-            break;
-        case 0x21:
-            if (fadeIsFinish() && !nameEntWait()) {
-                fadeEntry(FADE_CURTAIN_SIDES_A1_3D, 0, (GXColor){0, 0, 0, 255});
-                if (!nameEntIsCancel()) {
-                    psndBGMOff_f_d(PSND_FADEOUT, 3000, 0);
-                }
-                wp->state++;
-            }
-            break;
-        case 0x22:
-            if (fadeIsFinish()) {
-                nameEntOff();
-                if (nameEntIsCancel()) {
-                    fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 255});
-                    wp->state = 1;
-                } else {
-                    strcpy((char*)gp->playerName, nameEntGetName());
-                    gp->lastSlot = wp->slot;
-                    if (code == 0) {
-                        gp->saveSlot = wp->slot;
-                        wp->evt = evtEntryType(evt_memcard_save, 0, 0, 0);
-                        wp->evt->lwData[0] = 0x17;
-                        wp->state++;
-                    } else {
-                        // demo: the new-game setup runs once the name is in, or after the first save
-                        stg0_00_init();
-                        gp->saveSlot = wp->slot;
-                        marioPartyKill();
-                        {
-                            MarioWork* m = marioGetPtr();
-                            m->prevPartyMemberId[0] = 0;
-                            m->prevPartyMemberId[1] = 0;
-                        }
-                        gp->areaFadeInType = FADE_NONE;
-                        gp->areaFadeOutType = FADE_CURTAIN_SIDES_A2_3D;
-                        swInit();
-                        swByteSet(0, STG0_00_PROLOGUE);
-                        seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
-                    }
-}
-            }
-            break;
-        case 0x23:
-            if (!evtCheckID(wp->evt->eventId)) {
-                stg0_00_init();
-                gp->saveSlot = wp->slot;
-                marioPartyKill();
-{
-    MarioWork* m = marioGetPtr();
-    m->prevPartyMemberId[0] = 0;
-    m->prevPartyMemberId[1] = 0;
-}
-gp->areaFadeInType = FADE_NONE;
-gp->areaFadeOutType = FADE_CURTAIN_SIDES_A2_3D;
-swInit();
-swByteSet(0, STG0_00_PROLOGUE);
-seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
-            }
-            break;
-        case 0x28:
-            wp->msg = msgSearch("msg_savefile_delete_select");
-            prev = wp->slot;
-            if (dir & DEMO_STICK_UP) {
-                wp->slot = win_dt2[prev].next[0];
-            } else if (dir & DEMO_STICK_DOWN) {
-                wp->slot = win_dt2[prev].next[1];
-            } else if (dir & DEMO_STICK_LEFT) {
-                wp->slot = win_dt2[prev].next[2];
-            } else if (dir & DEMO_STICK_RIGHT) {
-                wp->slot = win_dt2[prev].next[3];
-            } else if (trg & PAD_BUTTON_A) {
-                if (prev < 4) {
-                    flags = cardGetFilePtr()->saves[wp->slot].data.flags;
-                    if ((flags & CARD_SAVE_FLAG_NO_VALID_COPY) || !(flags & CARD_SAVE_FLAG_ERASED)) {
-                        SFX(PSND_SFX_CURSOR_OK1);
-                        wp->state++;
-                    } else {
-                        SFX(PSND_SFX_CURSOR_CANCEL1);
-                    }
-                } else {
-                    wp->slot = 4;
-                    wp->state = 1;
-                    SFX(PSND_SFX_CURSOR_CANCEL1);
-                }
-            } else if (trg & PAD_BUTTON_B) {
-                wp->slot = 4;
-                wp->state = 1;
-                SFX(PSND_SFX_CURSOR_CANCEL1);
-            }
-            if (prev != wp->slot && wp->slot < 4) {
-                SFX(9);
-            }
-            wp->tx = win_dt2[wp->slot].x + win_dt2[wp->slot].ofsX;
-            wp->ty = win_dt2[wp->slot].y + win_dt2[wp->slot].ofsY;
-            break;
-        case 0x29:
-            wp->flags |= LOAD_FLAG_HIDE_CURSOR;
-            wp->evt = evtEntryType(evt_memcard_delete, 0, 0, 0);
-            wp->evt->lwData[0] = wp->slot;
-            wp->state++;
-            break;
-        case 0x2a:
-            if (!evtCheckID(wp->evt->eventId)) {
-                wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
-                wp->slot = 4;
-                wp->state = 1;
-}
-            break;
-        case 0x32:
-            wp->msg = msgSearch("msg_savefile_copy_select");
-            prev = wp->slot;
-            if (dir & DEMO_STICK_UP) {
-                wp->slot = win_dt2[prev].next[0];
-            } else if (dir & DEMO_STICK_DOWN) {
-                wp->slot = win_dt2[prev].next[1];
-            } else if (dir & DEMO_STICK_LEFT) {
-                wp->slot = win_dt2[prev].next[2];
-            } else if (dir & DEMO_STICK_RIGHT) {
-                wp->slot = win_dt2[prev].next[3];
-            } else if (trg & PAD_BUTTON_A) {
-                if (prev < 4) {
-                    flags = cardGetFilePtr()->saves[wp->slot].data.flags;
-                    if (!(flags & CARD_SAVE_FLAG_NO_VALID_COPY) && !(flags & CARD_SAVE_FLAG_ERASED)) {
-                        wp->state = 0x33;
-                        wp->copyFrom = wp->slot;
-                        wp->copyTo = (wp->copyFrom + 1) % 4;
-                        wp->slot = wp->copyTo;
-                        SFX(PSND_SFX_CURSOR_OK1);
-                    }
-                } else {
-                    wp->slot = 5;
-                    wp->state = 1;
-                    SFX(PSND_SFX_CURSOR_CANCEL1);
-                }
-            } else if (trg & PAD_BUTTON_B) {
-                wp->slot = 5;
-                wp->state = 1;
-                SFX(PSND_SFX_CURSOR_CANCEL1);
-            }
-            if (prev != wp->slot && wp->slot < 4) {
-                SFX(9);
-            }
-            wp->tx = win_dt2[wp->slot].x + win_dt2[wp->slot].ofsX;
-            wp->ty = win_dt2[wp->slot].y + win_dt2[wp->slot].ofsY;
-            break;
-        case 0x33:
-            wp->msg = msgSearch("msg_savefile_copy_point");
-            prev = wp->slot;
-            if (dir & DEMO_STICK_UP) {
-                do {
-                    wp->slot = win_dt3[wp->slot].next[0];
-                } while (wp->slot == wp->copyFrom);
-            } else if (dir & DEMO_STICK_DOWN) {
-                do {
-                    wp->slot = win_dt3[wp->slot].next[1];
-                } while (wp->slot == wp->copyFrom);
-            } else if (dir & DEMO_STICK_LEFT) {
-                do {
-                    wp->slot = win_dt3[wp->slot].next[2];
-                } while (wp->slot == wp->copyFrom);
-            } else if (dir & DEMO_STICK_RIGHT) {
-                do {
-                    wp->slot = win_dt3[wp->slot].next[3];
-                } while (wp->slot == wp->copyFrom);
-            } else if (trg & PAD_BUTTON_A) {
-                wp->state = 0x34;
-                wp->copyTo = wp->slot;
-                SFX(PSND_SFX_CURSOR_OK1);
-            } else if (trg & PAD_BUTTON_B) {
-                wp->slot = wp->copyFrom;
-                wp->state = 0x32;
-                SFX(PSND_SFX_CURSOR_CANCEL1);
-            }
-            if (prev != wp->slot && wp->slot < 4) {
-                SFX(9);
-            }
-            wp->copyTo = wp->slot;
-            wp->tx = win_dt2[wp->slot].x + win_dt2[wp->slot].ofsX;
-            wp->ty = win_dt2[wp->slot].y + win_dt2[wp->slot].ofsY;
-            break;
-        case 0x34:
-            wp->flags |= LOAD_FLAG_HIDE_CURSOR;
-            wp->evt = evtEntryType(evt_memcard_copy, 0, 0, 0);
-            wp->evt->lwData[0] = wp->copyFrom;
-            wp->evt->lwData[1] = wp->copyTo;
-            wp->state++;
-            break;
-        case 0x35:
-            if (!evtCheckID(wp->evt->eventId)) {
-                wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
-                wp->slot = 5;
-                wp->state = 1;
-}
-            break;
-        case 0x64:
-        wp->flags |= LOAD_FLAG_DIM;
-            if (dir & DEMO_STICK_UP) {
-                wp->soundModeSel--;
-                SFX(PSND_SFX_CURSOR_MOVE1);
-            } else if (dir & DEMO_STICK_DOWN) {
-                wp->soundModeSel++;
-                SFX(PSND_SFX_CURSOR_MOVE1);
-            } else if (trg & PAD_BUTTON_A) {
-                switch (wp->soundModeSel) {
-                    case 0:
-                        OSSetSoundMode(0);
-                        SoundSetOutputMode(OS_SOUND_MODE_MONO);
-                        gp->soundMode = 0;
-                        break;
-                    case 1:
-                        OSSetSoundMode(OS_SOUND_MODE_STEREO);
-                        SoundSetOutputMode(1);
-                        gp->soundMode = 0;
-                        break;
-                    case 2:
-                        OSSetSoundMode(OS_SOUND_MODE_STEREO);
-                        SoundSetOutputMode(2);
-                        gp->soundMode = 1;
-                        break;
-                }
-                SFX(PSND_SFX_CURSOR_OK1);
-                wp->soundMode = wp->soundModeSel;
-                wp->flags &= ~LOAD_FLAG_DIM;
-                wp->state = 1;
-            } else if (trg & PAD_BUTTON_B) {
-                SFX(PSND_SFX_CURSOR_CANCEL1);
-                wp->soundModeSel = wp->soundMode;
-                wp->flags &= ~LOAD_FLAG_DIM;
-                wp->state = 1;
-            }
-            if (wp->soundModeSel >= 3) {
-                wp->soundModeSel = 0;
-            }
-            if (wp->soundModeSel < 0) {
-                wp->soundModeSel = 2;
-            }
-            wp->tx = -74.0f;
-            wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
-            break;
-            case 0xc8:
-            wp->flags |= LOAD_FLAG_DIM;
-            if (dir & DEMO_STICK_UP) {
-                wp->rumbleOffSel--;
-                SFX(PSND_SFX_CURSOR_MOVE1);
-            } else if (dir & DEMO_STICK_DOWN) {
-                wp->rumbleOffSel++;
-                SFX(PSND_SFX_CURSOR_MOVE1);
-            } else if (trg & PAD_BUTTON_A) {
-                gp->rumbleEnabled = wp->rumbleOffSel == 0;
-                SFX(PSND_SFX_CURSOR_OK1);
-                wp->rumbleOff = wp->rumbleOffSel;
-                wp->flags &= ~LOAD_FLAG_DIM;
-                wp->state = 1;
-                if (gp->rumbleEnabled) {
-                    evtEntryType(evt_shake, 0, 0, 0);
-                }
-            } else if (trg & PAD_BUTTON_B) {
-                SFX(PSND_SFX_CURSOR_CANCEL1);
-                wp->rumbleOffSel = wp->rumbleOff;
-                wp->flags &= ~LOAD_FLAG_DIM;
-                wp->state = 1;
-            }
-            if (wp->rumbleOffSel >= 2) {
-                wp->rumbleOffSel = 0;
-            }
-            if (wp->rumbleOffSel < 0) {
-                wp->rumbleOffSel = 1;
-            }
-            wp->tx = -74.0f;
-            wp->ty = 4.0f + (30.0f - 50.0f * wp->rumbleOffSel);
-            break;
-    }
-    wp->x += (wp->tx - wp->x) / 4.0f;
-    wp->y += (wp->ty - wp->y) / 4.0f;
-    {
-        f32 s = 2.0f * (f32)sin(gp->retraceCount / 8.0f);
-        wp->x += __fabsf(s);
-    }
-    dispEntry(CAMERA_2D, 1000.0f, 0, loadDraw, NULL);
-    return FALSE;
-}
 #else
 /** Later versions: the same menu with no return value. */
 void loadMain(SequenceWork* seq) {
+#endif
     u32 trg;
     u32 dir;
     s32 code;
@@ -881,7 +407,9 @@ void loadMain(SequenceWork* seq) {
                         break;
                     case 7:
                         SFX(PSND_SFX_CURSOR_OK1);
+#if VERSION > VERSION_DEMO_US
                         psndBGMOff(PSND_SILENT);
+#endif
                         wp->state = 0x64;
                         break;
                     case 8:
@@ -930,7 +458,11 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0x16:
             fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
+#if VERSION <= VERSION_DEMO_US
+            psndBGMOff_f_d(PSND_FADEOUT, 3000, 0);
+#else
             psndBGMOff_f_d(PSND_FADEOUT, 2000, 0);
+#endif
             wp->state++;
             break;
         case 0x17:
@@ -980,6 +512,27 @@ void loadMain(SequenceWork* seq) {
                 } else {
                     strcpy((char*)gp->playerName, nameEntGetName());
                     gp->lastSlot = wp->slot;
+#if VERSION <= VERSION_DEMO_US
+                    if (code == 0) {
+                        gp->saveSlot = wp->slot;
+                        wp->evt = evtEntryType(evt_memcard_save, 0, 0, 0);
+                        wp->evt->lwData[0] = 0x17;
+                        wp->state++;
+                    } else {
+                        // demo: the new-game setup runs once the name is in, or after the first save
+                        stg0_00_init();
+                        gp->saveSlot = wp->slot;
+                        marioPartyKill();
+                        {
+                            MarioWork* m = marioGetPtr();
+                            m->prevPartyMemberId[0] = 0;
+                            m->prevPartyMemberId[1] = 0;
+                        }
+                        gp->areaFadeInType = FADE_NONE;
+                        gp->areaFadeOutType = FADE_CURTAIN_SIDES_A2_3D;
+                        swInit();
+                        swByteSet(0, STG0_00_PROLOGUE);
+#else
                     stg0_00_init();
                     gp->saveSlot = wp->slot;
                     marioPartyKill();
@@ -1002,6 +555,7 @@ void loadMain(SequenceWork* seq) {
                         wp->evt->lwData[0] = 0x17;
                         wp->state++;
                     } else {
+#endif
                         seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
                     }
                 }
@@ -1009,6 +563,20 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0x23:
             if (!evtCheckID(wp->evt->eventId)) {
+#if VERSION <= VERSION_DEMO_US
+                stg0_00_init();
+                gp->saveSlot = wp->slot;
+                marioPartyKill();
+{
+    MarioWork* m = marioGetPtr();
+    m->prevPartyMemberId[0] = 0;
+    m->prevPartyMemberId[1] = 0;
+}
+gp->areaFadeInType = FADE_NONE;
+gp->areaFadeOutType = FADE_CURTAIN_SIDES_A2_3D;
+swInit();
+swByteSet(0, STG0_00_PROLOGUE);
+#endif
                 seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
             }
             break;
@@ -1056,6 +624,11 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0x2a:
             if (!evtCheckID(wp->evt->eventId)) {
+#if VERSION <= VERSION_DEMO_US
+                wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
+                wp->slot = 4;
+                wp->state = 1;
+#else
                 if (evtGetValue(NULL, GF(0)) == 0) {
                     wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                     wp->slot = 4;
@@ -1065,6 +638,7 @@ void loadMain(SequenceWork* seq) {
                     seq->state = 1;
                     return;
                 }
+#endif
             }
             break;
         case 0x32:
@@ -1148,6 +722,11 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0x35:
             if (!evtCheckID(wp->evt->eventId)) {
+#if VERSION <= VERSION_DEMO_US
+                wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
+                wp->slot = 5;
+                wp->state = 1;
+#else
                 if (evtGetValue(NULL, GF(0)) == 0) {
                     wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                     wp->slot = 5;
@@ -1157,10 +736,24 @@ void loadMain(SequenceWork* seq) {
                     seq->state = 1;
                     return;
                 }
+#endif
             }
             break;
         case 0x64:
             wp->flags |= LOAD_FLAG_DIM;
+#if VERSION <= VERSION_DEMO_US
+            if (dir & DEMO_STICK_UP) {
+                wp->soundModeSel--;
+                SFX(PSND_SFX_CURSOR_MOVE1);
+            } else if (dir & DEMO_STICK_DOWN) {
+                wp->soundModeSel++;
+                SFX(PSND_SFX_CURSOR_MOVE1);
+            } else if (trg & PAD_BUTTON_A) {
+                switch (wp->soundModeSel) {
+                    case 0:
+                        OSSetSoundMode(0);
+                        SoundSetOutputMode(OS_SOUND_MODE_MONO);
+#else
             sound = wp->soundModeSel;
             if (dir & DEMO_STICK_UP) {
                 wp->soundModeSel = wp->soundModeSel - 1;
@@ -1172,17 +765,27 @@ void loadMain(SequenceWork* seq) {
                 switch (sound) {
                     case 0:
                         OSSetSoundMode(OS_SOUND_MODE_MONO);
+#endif
                         gp->soundMode = 0;
                         break;
                     case 1:
                         OSSetSoundMode(OS_SOUND_MODE_STEREO);
+#if VERSION <= VERSION_DEMO_US
+                        SoundSetOutputMode(1);
+#endif
                         gp->soundMode = 0;
                         break;
                     case 2:
                         OSSetSoundMode(OS_SOUND_MODE_STEREO);
+#if VERSION <= VERSION_DEMO_US
+                        SoundSetOutputMode(2);
+#endif
                         gp->soundMode = 1;
                         break;
                 }
+#if VERSION <= VERSION_DEMO_US
+                SFX(PSND_SFX_CURSOR_OK1);
+#else
                 if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
                     SoundSetOutputMode(SND_OUTPUTMODE_MONO);
                 } else {
@@ -1191,9 +794,17 @@ void loadMain(SequenceWork* seq) {
                 SFX(PSND_SFX_CURSOR_OK1);
                 psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 psndENVOff(PSND_FADEOUT);
+#endif
                 wp->soundMode = wp->soundModeSel;
                 wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
+#if VERSION <= VERSION_DEMO_US
+                } else if (trg & PAD_BUTTON_B) {
+                    SFX(PSND_SFX_CURSOR_CANCEL1);
+                    wp->soundModeSel = wp->soundMode;
+                    wp->flags &= ~LOAD_FLAG_DIM;
+                    wp->state = 1;
+#else
                 break;
             } else if (trg & PAD_BUTTON_B) {
                 SFX(PSND_SFX_CURSOR_CANCEL1);
@@ -1208,12 +819,14 @@ void loadMain(SequenceWork* seq) {
                 wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
                 break;
+#endif
             }
             if (wp->soundModeSel >= 3) {
                 wp->soundModeSel = 0;
             }
             if (wp->soundModeSel < 0) {
                 wp->soundModeSel = 2;
+#if VERSION > VERSION_DEMO_US
             }
             if (wp->soundModeSel != sound) {
                 switch (wp->soundModeSel) {
@@ -1228,6 +841,7 @@ void loadMain(SequenceWork* seq) {
                         break;
                 }
                 psndENVOn(PSND_RESTART | PSND_FADEIN, (const char*)PSND_ENV_SYS_FL1);
+#endif
             }
             wp->tx = -74.0f;
             wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
@@ -1271,9 +885,13 @@ void loadMain(SequenceWork* seq) {
         f32 s = 2.0f * (f32)sin(gp->retraceCount / 8.0f);
         wp->x += __fabsf(s);
     }
+#if VERSION <= VERSION_DEMO_US
+    dispEntry(CAMERA_2D, 1000.0f, 0, loadDraw, NULL);
+    return FALSE;
+#else
     dispEntry(CAMERA_3D, 1000.0f, 0, loadDraw, NULL);
-}
 #endif
+}
 
 /** Draws the texture id from name.tpl stretched over the rectangle (x0, y0)-(x1, y1). */
 static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
@@ -1616,21 +1234,20 @@ void loadDraw(CameraId camera, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 #if VERSION >= VERSION_US
     GXLoadPosMtxImm(cam->view, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    loadDrawBg(0x35, -304.0f, 240.0f, -272.0f, -240.0f);
-    loadDrawBg(0x34, -272.0f, 240.0f, 272.0f, -240.0f);
-    loadDrawBg(0x36, 272.0f, 240.0f, 304.0f, -240.0f);
-
-    win1[0] = win_dt;
 #else
     // FAKE: win1 reused as a cam alias before its win_dt web, so the win_dt web becomes a lifetime-split temp
     // (addi straight into win1's register, loop 1 iterates a copy) as in the target
     win1 = (WinDt*)cam;
     GXLoadPosMtxImm(((CameraEntry*)win1)->view, GX_PNMTX0);
+#endif
     GXSetCurrentMtx(GX_PNMTX0);
     loadDrawBg(0x35, -304.0f, 240.0f, -272.0f, -240.0f);
     loadDrawBg(0x34, -272.0f, 240.0f, 272.0f, -240.0f);
     loadDrawBg(0x36, 272.0f, 240.0f, 304.0f, -240.0f);
+#if VERSION >= VERSION_US
+
+    win1[0] = win_dt;
+#else
 
     win1 = win_dt;
 #endif

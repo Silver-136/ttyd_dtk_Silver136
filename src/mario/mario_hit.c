@@ -711,19 +711,29 @@ void marioChkGnd2(void) {
 }
 
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * The demo always probes at 0.375 of the collision width, allows steeper ground only in the slit,
  * and takes the first ground it finds.
  */
 HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     f32 dist;
+#if VERSION <= VERSION_DEMO_US
     f32 yl, sx, sz, x0, y0, z0, a;
     f32 x, z;
     f32 lim;
     f32 sn;
     HitEntry* hit;
     s32 i;
+#else
+    f32 best, yl, sx, sz, x0, y0, z0, a;
+    f32 x, z;
+    f32 lim;
+    f32 dir;
+    f32 sn;
+    HitEntry* found;
+    s32 i;
+    HitEntry* hit;
+#endif
     MarioWork* mario = marioGetPtr();
     mario->groundRot.x = 0.0f;
     mario->groundRot.y = 0.0f;
@@ -742,6 +752,7 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     spd += 0.01f;
     yl = 5.0f + __fabsf(h);
     *b = -1.0f;
+#if VERSION <= VERSION_DEMO_US
     if (mario->baseSpeed) {
         a = revise360(mario->directionView - mario->targetYaw);
     } else {
@@ -755,103 +766,7 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     y0 = mario->position.y;
     {
         Vec dir;
-        Vec outPos;
-        Vec outNrm;
-        x0 = mario->position.x;
-        z0 = mario->position.z;
-        for (i = 0; i < 5; i++) {
-            if (i == 0) {
-                z = x = 0.0f;
-            } else if (i == 1) {
-                x = sx;
-                z = sz;
-            } else if (i == 2) {
-                x = -sz;
-                z = sx;
-            } else if (i == 3) {
-                x = sz;
-                z = -sx;
-            } else if (i == 4) {
-                x = -sx;
-                z = -sz;
-            }
-            {
-                Vec v = {0.0f, 0.0f, 0.0f};
-                dir = (Vec){0.0f, -1.0f, 0.0f};
-                v.x = x0 + x;
-                v.y = y0 + yl;
-                v.z = z0 + z;
-                dist = yl + spd;
-                hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
-            }
-            if (hit) {
-                if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-                    lim = 75.0f;
-                } else {
-                    lim = 50.0f;
-                }
-                if (marioHitNrmAnglePtr(&outNrm) >= lim) {
-                    hit = NULL;
-                }
-            }
-            if (hit) {
-                mario->groundSlope = marioHitNrmAnglePtr(&outNrm);
-                if (outPos.y < y0 && __fabsf(outPos.y - y0) >= 2.0f) {
-                    if (__fabsf(outPos.y - y0) > __fabsf(h)) {
-                        *b = __fabsf(y0 - outPos.y);
-                        *c = angleABf(x0, z0, outPos.x, outPos.z);
-                    } else {
-                        *y = outPos.y;
-                        *b = 0.0f;
-                        *c = angleABf(x0, z0, outPos.x, outPos.z);
-                        marioUpdateCamCollision(outPos);
-                        return hit;
-                    }
-                } else if (__fabsf(outPos.y - y0) <= 11.0f) {
-                    *y = outPos.y;
-                    *b = 0.0f;
-                    *c = angleABf(x0, z0, outPos.x, outPos.z);
-                    marioUpdateCamCollision(outPos);
-                    return hit;
-                }
-            }
-        }
-    }
-    return NULL;
-}
 #else
-/**
- * The demo always probes at 0.375 of the collision width, allows steeper ground only in the slit,
- * and takes the first ground it finds.
- */
-HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
-    f32 dist;
-    f32 best, yl, sx, sz, x0, y0, z0, a;
-    f32 x, z;
-    f32 lim;
-    f32 dir;
-    f32 sn;
-    HitEntry* found;
-    s32 i;
-    HitEntry* hit;
-    MarioWork* mario = marioGetPtr();
-    mario->groundRot.x = 0.0f;
-    mario->groundRot.y = 0.0f;
-    mario->groundRot.z = 0.0f;
-    mario->groundSlope = 0.0f;
-    if (mario->flags & MARIO_FLAG_FORCE_WALL) {
-        *y = mario->position.y;
-        return NULL;
-    }
-    if (mario->flags & MARIO_FLAG_FLOORS_DISABLED) {
-        *y = mario->position.y;
-        return NULL;
-    }
-    *y = mario->position.y;
-    spd = __fabsf(spd);
-    spd += 0.01f;
-    yl = 5.0f + __fabsf(h);
-    *b = -1.0f;
 #if VERSION >= VERSION_US
     if (mario->currMotionId != MARIO_MOTION_HAMMER_2) {
         if (mario->baseSpeed) {
@@ -885,12 +800,17 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     y0 = mario->position.y;
     {
     Vec dir = {0.0f, -1.0f, 0.0f};
+#endif
     Vec outPos;
     Vec outNrm;
     x0 = mario->position.x;
+#if VERSION <= VERSION_DEMO_US
+    z0 = mario->position.z;
+#else
     found = NULL;
     z0 = mario->position.z;
     best = -10000.0f;
+#endif
     for (i = 0; i < 5; i++) {
         if (i == 0) {
             z = x = 0.0f;
@@ -909,6 +829,9 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
         }
         {
             Vec v = {0.0f, 0.0f, 0.0f};
+#if VERSION <= VERSION_DEMO_US
+            dir = (Vec){0.0f, -1.0f, 0.0f};
+#endif
             v.x = x0 + x;
             v.y = y0 + yl;
             v.z = z0 + z;
@@ -916,9 +839,13 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
             hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
         }
         if (hit) {
+#if VERSION <= VERSION_DEMO_US
+            if (mario->flags & MARIO_FLAG_PAPER_MODE) {
+#else
             if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
                 lim = 75.0f;
             } else if (mario->currMotionId == MARIO_MOTION_HIP) {
+#endif
                 lim = 75.0f;
             } else {
                 lim = 50.0f;
@@ -933,31 +860,48 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
                 if (__fabsf(outPos.y - y0) > __fabsf(h)) {
                     *b = __fabsf(y0 - outPos.y);
                     *c = angleABf(x0, z0, outPos.x, outPos.z);
+#if VERSION <= VERSION_DEMO_US
+                } else {
+                    *y = outPos.y;
+#else
                 } else if (outPos.y > best) {
                     *y = outPos.y;
                     best = outPos.y;
+#endif
                     *b = 0.0f;
                     *c = angleABf(x0, z0, outPos.x, outPos.z);
                     marioUpdateCamCollision(outPos);
+#if VERSION <= VERSION_DEMO_US
+                    return hit;
+                }
+            } else if (__fabsf(outPos.y - y0) <= 11.0f) {
+                *y = outPos.y;
+#else
                     found = hit;
                 }
             } else if (__fabsf(outPos.y - y0) <= 11.0f && outPos.y > best) {
                 *y = outPos.y;
                 best = outPos.y;
+#endif
                 *b = 0.0f;
                 *c = angleABf(x0, z0, outPos.x, outPos.z);
                 marioUpdateCamCollision(outPos);
+#if VERSION <= VERSION_DEMO_US
+                return hit;
+#else
                 found = hit;
+#endif
             }
         }
     }
     }
+#if VERSION > VERSION_DEMO_US
     if (found) {
         return found;
     }
+#endif
     return NULL;
 }
-#endif
 
 typedef struct LandonRay {
     Vec pos;
@@ -1026,12 +970,12 @@ static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm,
     return hit;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * The demo probes three points (on flat ground the three points 3 units ahead) with the landon ray check
  * and takes the first ground it finds.
  */
 HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
+#if VERSION <= VERSION_DEMO_US
     LandonRay ray;
     Vec nrm;
     Vec hp;
@@ -1043,6 +987,14 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     s32 end;
     f32 rz, rx;
     s32 i;
+#else
+    f32 dist;
+    f32 lim, best, hh, x0, y0, z0, a, r;
+    f32 sn;
+    HitEntry* found;
+    s32 i;
+    s32 end;
+#endif
     HitEntry* hit;
     MarioWork* mario = marioGetPtr();
     mario->groundRot.x = 0.0f;
@@ -1056,6 +1008,7 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
         *y = mario->position.y;
         return NULL;
     }
+#if VERSION <= VERSION_DEMO_US
     spd = __fabsf(spd);
     spd += 0.01f;
     hh = mario->wPlayerCollisionBox.y;
@@ -1174,33 +1127,7 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
             }
         }
     }
-    return NULL;
-}
 #else
-/**
- * The demo probes three points (on flat ground the three points 3 units ahead) with the landon ray check
- * and takes the first ground it finds.
- */
-HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
-    f32 dist;
-    f32 lim, best, hh, x0, y0, z0, a, r;
-    f32 sn;
-    HitEntry* found;
-    s32 i;
-    s32 end;
-    HitEntry* hit;
-    MarioWork* mario = marioGetPtr();
-    mario->groundRot.x = 0.0f;
-    mario->groundRot.y = 0.0f;
-    mario->groundRot.z = 0.0f;
-    if (mario->flags & MARIO_FLAG_FORCE_WALL) {
-        *y = mario->position.y;
-        return NULL;
-    }
-    if (mario->flags & MARIO_FLAG_FLOORS_DISABLED) {
-        *y = mario->position.y;
-        return NULL;
-    }
     hh = mario->wPlayerCollisionBox.y;
     spd = __fabsf(spd);
     found = NULL;
@@ -1302,9 +1229,9 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     if (found) {
         return found;
     }
+#endif
     return NULL;
 }
-#endif
 
 /**
  * Hurts Mario on spikes (toge): if the wall in front (within half his width),
@@ -1731,94 +1658,19 @@ void marioHitStrippedPool2(f32* f) {
 #endif
 
 f32 marioChkOverhead(void) {
-#if VERSION <= VERSION_DEMO_US
-    Vec pos;
-        s32 hj;
-        f32 h;
-    f32 d;
-    MarioWork* mario = marioGetPtr();
-        if (mario->currMotionId == MARIO_MOTION_JUMP_3) {
-            return mario->position.y;
-        }
-        if (mario->currMotionId == MARIO_MOTION_JABARA) {
-            pos = mario->position;
-            h = mario->wPlayerCollisionBox.y;
-            if (!jabaraNoHitChk()) {
-                h += 5.0f;
-                mario->hitobjHead = marioSearchHead_jabara(&pos, &h, &hj, 0.0f);
-                if (!mario->hitobjHead) {
-                    mario->hitobjHead = marioSearchHead(&pos, &h, d);
-    }
-            }
-        } else if (mario->flags & MARIO_FLAG_TUBE_MODE) {
-            pos = mario->position;
-            mario->hitobjHead = marioSearchHead_roll(&pos, &h, 40.0f);
-        } else {
-            pos = mario->position;
-            h = mario->wPlayerCollisionBox.y;
-            d = (mario->flags & MARIO_FLAG_IS_JUMPING) ? mario->jumpVelocityY : 10.0f;
-            if (mario->characterId == CHARACTER_BOWSER) {
-                mario->hitobjHead = kpaSearchHead(d, &pos, &h);
-            } else {
-                mario->hitobjHead = marioSearchHead(&pos, &h, d);
-            }
-        }
-        mario->position.x = pos.x;
-        if (mario->hitobjHead) {
-            if (marioChkHeadBlock(mario->hitobjHead)) {
-                mario->baseSpeed = 0.0f;
-                mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-            }
-            mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
-            if (mario->characterId == CHARACTER_BOWSER) {
-                marioItemGetDisable();
-                if (!kpaGetBodyStatus()) {
-                    marioClearJumpPara();
-                }
-            }
-            pos.y = (s32)(10.0f * (pos.y - marioGetHeightInl()) + 0.5f) / 10.0f - 1.0f;
-            if (!(mario->flags & MARIO_FLAG_IS_FALLING) && pos.y < mario->lastGroundPos.y) {
-                pos.y = mario->lastGroundPos.y;
-                if (!(mario->flags & MARIO_FLAG_TUBE_MODE) && mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_VIVIAN && mario->characterId != CHARACTER_BOWSER) {
-                    if (mario->baseSpeed == 0.0f) {
-                        marioChgStayMotion();
-                    } else {
-    ((BOOL (*)(s32))marioChgMot)(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
-    }
-                }
-            }
-            if (mario->currMotionId == MARIO_MOTION_JUMP || mario->currMotionId == MARIO_MOTION_JUMP_STAND) {
-                psndSFXOn_3D((const char*)0x156, &mario->position);
-                marioClearJumpPara();
-                mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-                if (mario->characterId != CHARACTER_BOWSER) {
-                    marioChgMot(MARIO_MOTION_FALL);
-                    marioSetFallPara();
-                }
-                mario->position.y = pos.y;
-            }
-        } else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-            if (h >= 0.0f && h <= 5.0f) {
-                mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
-            } else {
-                mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
-            }
-        } else {
-            if (h >= 0.0f && h + mario->wPlayerCollisionBox.y <= 47.0f) {
-                mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
-            } else {
-                mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
-            }
-        }
-#else
+#if VERSION > VERSION_DEMO_US
     // FAKE: pa..pd are never used; removing them changes the object
     Vec pa = {0.0f, 0.0f, 0.0f};
     Vec pb = {0.0f, -1.0f, 0.0f};
     Vec pc = {0.0f, 0.0f, 0.0f};
     Vec pd = {0.0f, 0.0f, 0.0f};
+#endif
     Vec pos;
     s32 hj;
     f32 h;
+#if VERSION <= VERSION_DEMO_US
+    f32 d;
+#endif
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_JUMP_3) {
         return mario->position.y;
@@ -1830,14 +1682,20 @@ f32 marioChkOverhead(void) {
             h += 5.0f;
             mario->hitobjHead = marioSearchHead_jabara(&pos, &h, &hj, 0.0f);
             if (!mario->hitobjHead) {
+#if VERSION <= VERSION_DEMO_US
+                mario->hitobjHead = marioSearchHead(&pos, &h, d);
+#else
                 mario->hitobjHead = marioSearchHead(&pos, &h, (mario->flags & MARIO_FLAG_IS_JUMPING) ? mario->jumpVelocityY : 10.0f);
+#endif
             }
         }
     } else if (mario->flags & MARIO_FLAG_TUBE_MODE) {
         pos = mario->position;
         mario->hitobjHead = marioSearchHead_roll(&pos, &h, 40.0f);
     } else {
+#if VERSION > VERSION_DEMO_US
         f32 d;
+#endif
         pos = mario->position;
         h = mario->wPlayerCollisionBox.y;
         d = (mario->flags & MARIO_FLAG_IS_JUMPING) ? mario->jumpVelocityY : 10.0f;
@@ -1863,6 +1721,13 @@ f32 marioChkOverhead(void) {
         pos.y = (s32)(10.0f * (pos.y - marioGetHeightInl()) + 0.5f) / 10.0f - 1.0f;
         if (!(mario->flags & MARIO_FLAG_IS_FALLING) && pos.y < mario->lastGroundPos.y) {
             pos.y = mario->lastGroundPos.y;
+#if VERSION <= VERSION_DEMO_US
+            if (!(mario->flags & MARIO_FLAG_TUBE_MODE) && mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_VIVIAN && mario->characterId != CHARACTER_BOWSER) {
+                if (mario->baseSpeed == 0.0f) {
+                    marioChgStayMotion();
+                } else {
+((BOOL (*)(s32))marioChgMot)(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
+#else
             if (!(mario->flags & MARIO_FLAG_TUBE_MODE) && mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_PLANE &&
                 mario->currMotionId != MARIO_MOTION_VIVIAN && mario->characterId != CHARACTER_BOWSER && !marioChkSlitEnd()) {
                 if (mario->baseSpeed == 0.0f) {
@@ -1881,11 +1746,16 @@ f32 marioChkOverhead(void) {
 #else
                     marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
 #endif
+#endif
                 }
             }
         }
         if (mario->currMotionId == MARIO_MOTION_JUMP || mario->currMotionId == MARIO_MOTION_JUMP_STAND) {
+#if VERSION <= VERSION_DEMO_US
+            psndSFXOn_3D((const char*)0x156, &mario->position);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HEAD1), &mario->position);
+#endif
             marioClearJumpPara();
             mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
             if (mario->characterId != CHARACTER_BOWSER) {
@@ -1907,7 +1777,6 @@ f32 marioChkOverhead(void) {
             mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
         }
     }
-#endif
     return pos.y;
 }
 
@@ -1963,7 +1832,6 @@ static inline void marioSearchHeadOfs(MarioWork* mario, f32 deg, f32* px, f32* p
     *pz = 0.5f * ((mario->wPlayerCollisionBox.x - 0.5f) * -t);
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Finds a ceiling over pos: five rays up from half of *h (Mario's height) for up to *h + dd,
  * ignoring walls (slopes of 50-130 degrees).
@@ -1983,113 +1851,30 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
     f32 x, z;
     HitEntry* hit;
     s32 i;
+#if VERSION <= VERSION_DEMO_US
     void* vp;
     MarioWork* mario = marioGetPtr();
     vp = (void*)h;
+#else
+    MarioWork* mario = marioGetPtr();
+#endif
     if (mario->baseSpeed) {
         hh = mario->directionView;
     } else {
         hh = toMovedir(mario->displayDirection);
     }
     marioSearchHeadOfs(mario, hh, &sx, &sz);
+#if VERSION <= VERSION_DEMO_US
     a = *((f32*)vp);
     hh = 0.5f * a;
     top = a + dd;
     *((f32*)vp) = -1.0f;
-    for (i = 0; i < 5; i++) {
-        if (i == 0) {
-            z = x = 0.0f;
-        } else if (i == 1) {
-            x = sx;
-            z = sz;
-        } else if (i == 2) {
-            x = -sz;
-            z = sx;
-        } else if (i == 3) {
-            x = sz;
-            z = -sx;
-        } else if (i == 4) {
-            x = -sx;
-            z = -sz;
-        }
-        {
-            Vec v = {0.0f, 0.0f, 0.0f};
-            Vec dir = {0.0f, 1.0f, 0.0f};
-            dist = top;
-            v.x = pos->x + x;
-            v.y = pos->y + hh;
-            v.z = pos->z + z;
-            p = v;
-            d = dir;
-            hit = marioHitCheck2(&p, &d, &outPos, &outNrm, &dist);
-        }
-        if (hit) {
-            f32 r = marioHitNrmAngle(&outNrm);
-            if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-                f32 lim = (mario->flags & MARIO_FLAG_PAPER_MODE) ? 75.0f : 50.0f;
-                if (r <= 180.0f - lim && r >= lim) {
-                    hit = NULL;
-                }
-            }
-        }
-        if (mario->flags & MARIO_FLAG_TUBE_MODE) {
-            if (hit) {
-                outPos.y = (s32)(100.0f * outPos.y + hh) / 100.0f;
-                outPos.y = outPos.y - 0.05f * a;
-                if (pos->y + a >= outPos.y) {
-                    pos->y = outPos.y;
-                    *((f32*)vp) = 0.0f;
-                    return hit;
-                }
-                *((f32*)vp) = outPos.y - pos->y - a;
-                return NULL;
-            }
-        } else {
-            if (hit) {
-                outPos.y = (s32)(100.0f * outPos.y + hh) / 100.0f;
-                if (pos->y + a >= outPos.y) {
-                    pos->y = outPos.y;
-                    *((f32*)vp) = 0.0f;
-                    return hit;
-                }
-                *((f32*)vp) = outPos.y - pos->y - a;
-                return NULL;
-            }
-        }
-    }
-    return NULL;
-}
 #else
-/**
- * Finds a ceiling over pos: five rays up from half of *h (Mario's height) for up to *h + dd,
- * ignoring walls (slopes of 50-130 degrees).
- * If his head reaches it, pos->y is set to the ceiling, *h to 0 and the hit is returned;
- * otherwise *h gets the gap (-1 if none).
- * The US and PAL releases also ignore ceilings while falling faster than 10 per frame.
- */
-HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
-    Vec p;
-    Vec d;
-    Vec outPos, outNrm;
-    f32 dist;
-    f32 hh;
-    f32 sx, sz;
-    f32 a;
-    f32 top;
-    f32 x, z;
-    HitEntry* hit;
-    s32 i;
-    MarioWork* mario = marioGetPtr();
-    if (mario->baseSpeed) {
-        hh = mario->directionView;
-    } else {
-        hh = toMovedir(mario->displayDirection);
-    }
-    marioSearchHeadOfs(mario, hh, &sx, &sz);
     a = *h;
     hh = 0.5f * a;
     top = a + dd;
     *h = -1.0f;
+#endif
     for (i = 0; i < 5; i++) {
         if (i == 0) {
             z = x = 0.0f;
@@ -2120,7 +1905,11 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
         if (hit) {
             f32 r = marioHitNrmAngle(&outNrm);
             if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
+#if VERSION <= VERSION_DEMO_US
+                f32 lim = (mario->flags & MARIO_FLAG_PAPER_MODE) ? 75.0f : 50.0f;
+#else
                 f32 lim = ((u32)mario->dispFlags & MARIO_DISP_FLAG_SLIT) ? 75.0f : 50.0f;
+#endif
                 if (r <= 180.0f - lim && r >= lim) {
                     hit = NULL;
                 }
@@ -2132,15 +1921,30 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
                 outPos.y = outPos.y - 0.05f * a;
                 if (pos->y + a >= outPos.y) {
                     pos->y = outPos.y;
+#if VERSION <= VERSION_DEMO_US
+                    *((f32*)vp) = 0.0f;
+                    return hit;
+                }
+                *((f32*)vp) = outPos.y - pos->y - a;
+#else
                     *h = 0.0f;
                     return hit;
                 }
                 *h = outPos.y - pos->y - a;
+#endif
                 return NULL;
             }
         } else {
             if (hit) {
                 outPos.y = (s32)(100.0f * outPos.y + hh) / 100.0f;
+#if VERSION <= VERSION_DEMO_US
+                if (pos->y + a >= outPos.y) {
+                    pos->y = outPos.y;
+                    *((f32*)vp) = 0.0f;
+                    return hit;
+                }
+                *((f32*)vp) = outPos.y - pos->y - a;
+#else
 #if VERSION >= VERSION_US
                 if (mario->jumpVelocityY < -10.0f) {
                     *h = outPos.y - pos->y - a;
@@ -2153,13 +1957,13 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
                     return hit;
                 }
                 *h = outPos.y - pos->y - a;
+#endif
                 return NULL;
             }
         }
     }
     return NULL;
 }
-#endif
 
 /** cos(a) as f32, for marioSearchHead_roll's side offsets. */
 inline f32 marioSearchHead_roll_cos(f32 a) {
@@ -2713,129 +2517,6 @@ static inline void sfwVecSetNested(Vec* d, Vec v) {
  * pos just moves with no wall check.
  */
 static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
-    Vec p;
-    Vec dir;
-    Vec hp;
-    Vec bestNrm;
-    Vec nrm;
-    f32 heights[4];
-    f32 s, c;
-    f32 s2, c2;
-    f32 half;
-    f32 range;
-    f32 mx, mz;
-    f32 bestDist;
-    f32 dist;
-    HitEntry* hit2;
-    s32 i;
-    s32 count;
-    HitEntry* best;
-    HitEntry* hit;
-    MarioWork* mario;
-
-    mario = marioGetPtr();
-    if (mario->characterId == 2 && (mario->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)) {
-        return kpaSearchWallFront(pos, h, dx, dz);
-    }
-    if (vivianGetStatus() == 2) {
-        return NULL;
-    }
-    sincosf(&s, &c, dz);
-    if (marioChkSts(MARIO_STS_ROLL) && !strcmp(gp->currentMapName, "eki_04") &&
-        (__fabsf(mario->groundRot.x) >= 45.0f || __fabsf(mario->groundRot.z) >= 45.0f)) {
-        pos->x += dx * s;
-        pos->z += dx * c;
-        return NULL;
-    }
-    count = 2;
-    if (mario->characterId == CHARACTER_BOWSER) {
-        heights[0] = 0.75f * mario->wPlayerCollisionBox.y;
-        heights[1] = 11.0f;
-    } else if (mario->currMotionId == MARIO_MOTION_YOSHI) {
-        heights[0] = 0.75f * marioGetHeightInl();
-        heights[1] = 11.0f;
-    } else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-        heights[0] = 27.75f;
-        heights[1] = 11.0f;
-        if (mario->airTimer) {
-            count = 3;
-            heights[2] = 0.1f;
-        }
-    } else {
-        heights[0] = 12.0f;
-        heights[1] = 11.0f;
-    }
-    half = 0.5f * w;
-    best = NULL;
-    range = half + dx;
-    bestDist = range;
-    p = *pos;
-    dir = (Vec){s, 0.0f, c};
-    for (i = 0; i < count; i++) {
-        p.y = pos->y + heights[i];
-        dist = range;
-        hit = marioHitCheckVecInl(&p, &dir, &hp, &nrm, &dist);
-        if (hit) {
-            if (chkBalloon(hit)) {
-                mario->hitobjFrontWall = hit;
-            }
-            if (best) {
-                if (dist < bestDist) {
-                    bestDist = dist;
-                    best = hit;
-                    bestNrm = nrm;
-                }
-            } else {
-                bestDist = dist;
-                best = hit;
-                bestNrm = nrm;
-            }
-        }
-    }
-    if (best) {
-        sfwSlide(&bestNrm, s * dx, c * dx, &mx, &mz);
-    }
-    hit2 = NULL;
-    sincosf(&s2, &c2, dz + 45.0f);
-    {
-        Vec dir2;
-        p = *pos;
-        sfwVecSetNested(&dir2, (Vec){s2, 0.0f, c2});
-        dist = half;
-        for (i = 0; i < count; i++) {
-            p.y = pos->y + heights[i];
-            dist = half;
-            hit2 = marioHitCheckVecInl(&p, &dir2, NULL, NULL, &dist);
-            if (hit2) {
-                break;
-            }
-        }
-    }
-    if (hit2) {
-        hit2 = NULL;
-        sincosf(&s2, &c2, dz - 45.0f);
-        for (i = 0; i < count; i++) {
-            p.y = pos->y + heights[i];
-            dist = half;
-            hit2 = marioHitCheckVecInl(&p, &(Vec){s2, 0.0f, c2}, NULL, NULL, &dist);
-        }
-    }
-    if (best) {
-        if (!hit2) {
-            *h = dist;
-            pos->x += mx;
-            pos->z += mz;
-        } else {
-            *h = 0.0f;
-        }
-        return best;
-    }
-    if (!hit2) {
-        pos->x += dx * s;
-        pos->z += dx * c;
-    }
-    return NULL;
-}
 #else
 /**
  * Moves pos dx in direction dz (degrees) unless a wall blocks it:
@@ -2846,6 +2527,7 @@ static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
  * pos just moves with no wall check.
  */
 HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
+#endif
     Vec p;
     Vec dir;
     Vec hp;
@@ -2867,6 +2549,11 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
     MarioWork* mario;
 
     mario = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+    if (mario->characterId == 2 && (mario->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)) {
+        return kpaSearchWallFront(pos, h, dx, dz);
+    }
+#endif
     if (vivianGetStatus() == 2) {
         return NULL;
     }
@@ -2879,6 +2566,10 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
     }
     count = 2;
     if (mario->characterId == CHARACTER_BOWSER) {
+#if VERSION <= VERSION_DEMO_US
+        heights[0] = 0.75f * mario->wPlayerCollisionBox.y;
+        heights[1] = 11.0f;
+#else
         if (mario->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) {
             count = 3;
             heights[0] = 0.75f * mario->wPlayerCollisionBox.y;
@@ -2894,11 +2585,16 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
             heights[0] = 0.75f * mario->wPlayerCollisionBox.y;
             heights[1] = 11.0f;
         }
+#endif
     } else if (mario->currMotionId == MARIO_MOTION_YOSHI) {
         heights[0] = 0.75f * marioGetHeightInl();
         heights[1] = 11.0f;
     } else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
+#if VERSION <= VERSION_DEMO_US
+        heights[0] = 27.75f;
+#else
         heights[0] = VERSION_PICK(27.75f, 26.640001f);
+#endif
         heights[1] = 11.0f;
         if (mario->airTimer) {
             count = 3;
@@ -2907,10 +2603,12 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
     } else {
         heights[0] = 12.0f;
         heights[1] = 11.0f;
+#if VERSION > VERSION_DEMO_US
         if (mario->airTimer) {
             count = 3;
             heights[2] = 7.0f;
         }
+#endif
     }
     half = 0.5f * w;
     best = NULL;
@@ -2983,7 +2681,6 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
     }
     return NULL;
 }
-#endif
 
 /**
  * The sideways spears (yoko yari) of Pirate's Grotto dou_10:

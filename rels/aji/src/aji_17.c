@@ -1422,21 +1422,16 @@ EVT_BEGIN(peach_evt_dance)
     CALL(peach_set_pose, STRING("P_O_Z_1"))
     CALL(evt_npc_set_anim, STRING("ホログラム"), STRING("P_O_Z_1"))
     CALL(evt_npc_set_anim, STRING("ホログラム2"), STRING("P_O_Z_1R"))
-    WAIT_MS(350)
-    CALL(peach_set_pose, STRING("P_O_S_1"))
-    CALL(horogram_set_pose, STRING("P_O_S_2"))
-    WAIT_MS(1000)
-    // The waltz music starts and the dance timer begins.
 #else
     CALL(evt_npc_set_position, STRING("\203_\203~\201["), LW(2), FLOAT(5.0f), LW(3))
     CALL(peach_set_pose, STRING("P_O_Z_1"))
     CALL(evt_npc_set_anim, STRING("\203z\203\215\203O\203\211\203\200"), STRING("P_O_Z_1"))
     CALL(evt_npc_set_anim, STRING("\203z\203\215\203O\203\211\203\2002"), STRING("P_O_Z_1R"))
+#endif
     WAIT_MS(350)
     CALL(peach_set_pose, STRING("P_O_S_1"))
     CALL(horogram_set_pose, STRING("P_O_S_2"))
     WAIT_MS(1000)
-#endif
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_PEACH_WALTZ1"))
     CALL(bgm_start_wait)
@@ -3351,37 +3346,27 @@ EVT_BEGIN(aji_17_init_evt)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_kill_party, 0)
         ELSE
-#if VERSION >= VERSION_US
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
     END_IF
-    // After the final battle the room's machine runs again and the keyboard can be used to talk to TEC
-    // (tec_talk).
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kurai"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kikai"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION >= VERSION_US
         CALL(evt_map_playanim, STRING("kika_1"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("kika_2"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("kika_3"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("moni_1"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_map_playanim, STRING("moza"), MAP_ANIM_PLAY_LOOP, 0)
-        CALL(evt_map_pauseanim, 0, STRING("moza"))
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)
 #else
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
-    END_IF
-    IF_INT_GREATER(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kurai"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kikai"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_map_playanim, STRING("kika_1"), 1, 0)
         CALL(evt_map_playanim, STRING("kika_2"), 1, 0)
         CALL(evt_map_playanim, STRING("kika_3"), 1, 0)
         CALL(evt_map_playanim, STRING("moni_1"), 2, 0)
         CALL(evt_map_playanim, STRING("moza"), 1, 0)
+#endif
         CALL(evt_map_pauseanim, 0, STRING("moza"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)
-#endif
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     RETURN

@@ -597,148 +597,13 @@ EVT_END()
  * partners leave, Mario hops in and sleeps with the sound muted, HP and FP are restored,
  * and the partners return.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Rest in the Glitz Pit bed (stg3_yado_00/01, with a yes/no prompt):
  * partners leave, Mario hops in and sleeps with the sound muted, HP and FP are restored,
  * and the partners return.
  */
 EVT_BEGIN(evt_tou_bed)
-    CALL(evt_mario_key_onoff, 0)
-    SET_VALUE(LF(0), 0)
-    SET_VALUE(LF(1), 0)
-    SET_VALUE(LF(2), 0)
-    CALL(evt_sub_get_mapname, LW(0))
-    IF_STR_EQUAL(LW(0), STRING("tou_07"))
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("tou_08"))
-        SET_VALUE(LF(1), 1)
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("tou_10"))
-        SET_VALUE(LF(2), 1)
-    END_IF
-    CALL(evt_msg_print, 0, STRING("stg3_yado_00"), 0, 0)
-    CALL(evt_msg_select, 0, STRING("stg3_yado_01"))
-    CALL(evt_msg_continue)
-    // Mario sends his partners away and the camera frames the bed.
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mario_get_party, LW(12))
-        CALL(evt_mario_get_exparty, LW(13))
-        CALL(evt_mario_goodbye_party, 0)
-        CALL(evt_mario_goodbye_party, 1)
-        IF_INT_EQUAL(LF(0), 1)
-            CALL(evt_cam3d_evt_set, -135, 193, 295, 120, 45, 82, 0, EASING_SINE_IN_OUT)
-        END_IF
-        IF_INT_EQUAL(LF(1), 1)
-            CALL(evt_cam3d_evt_set, -49, 117, 190, 152, 45, -10, 0, EASING_SINE_IN_OUT)
-        END_IF
-        IF_INT_EQUAL(LF(2), 1)
-            CALL(evt_cam3d_evt_set, -75, 160, 266, 155, 65, -10, 0, EASING_SINE_IN_OUT)
-        END_IF
-        WAIT_FRAMES(1)
-        // Mario hops into the bed.
-        CALL(evt_mario_flag_onoff, 1, 768)
-        IF_INT_EQUAL(LF(0), 1)
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP5"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_mario_jump_pos, 115, 32, 90, FLOAT(400.0f), 0, -1000)
-            CALL(evt_mario_set_pos, 115, 32, 90)
-        END_IF
-        IF_INT_EQUAL(LF(1), 1)
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP3"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_mario_jump_pos, 205, 16, -115, FLOAT(400.0f), 0, -1000)
-            CALL(evt_mario_set_pos, 205, 16, -115)
-        END_IF
-        IF_INT_EQUAL(LF(2), 1)
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP1"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_mario_jump_pos, 228, 17, -90, FLOAT(400.0f), 0, -1000)
-            CALL(evt_mario_set_pos, 228, 17, -90)
-        END_IF
-        CALL(evt_mario_adjust_dir)
-        WAIT_MS(200)
-        // He falls asleep: the music is swapped for a lullaby, the screen irises out and Mario
-        // and his partners recover.
-        BEGIN_INLINE_EVENT_GET_ID(LW(10))
-            CALL(paper_on, FLOAT(-45.0f))
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
-            WAIT_MS(200)
-            CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP2"), LW(0), LW(1), LW(2), 0)
-        END_INLINE_EVENT
-        CALL(evt_snd_bgmoff, PSND_PAUSE)
-        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GO_SLEEPING1"))
-        CALL(evt_fade_entry, 4, 1000, 0, 0, 0)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_fade_set_spot_pos, LW(0), LW(1), LW(2))
-        CALL(evt_fade_end_wait)
-        IF_INT_EQUAL(LF(0), 1)
-            CALL(evt_pouch_mario_recovery)
-        ELSE
-            CALL(mario_recovery)
-        END_IF
-        CALL(evt_pouch_all_party_recovery)
-        WAIT_MS(3000)
-        // The sleep ends: Mario wakes and the partners return to their places beside him.
-        DELETE_EVENT(LW(10))
-        CALL(paper_off)
-        CALL(evt_mario_set_pose, STRING("M_S_1"))
-        CALL(evt_mario_flag_onoff, 0, 768)
-        IF_INT_EQUAL(LF(0), 1)
-            IF_INT_NOT_EQUAL(LW(12), 0)
-                CALL(evt_mario_set_party_pos, 0, LW(12), 75, 37, 100)
-            END_IF
-            IF_INT_NOT_EQUAL(LW(13), 0)
-                CALL(evt_mario_set_party_pos, 1, LW(13), 75, 37, 105)
-            END_IF
-            CALL(evt_mario_set_pos, 115, 32, 90)
-        END_IF
-        IF_INT_EQUAL(LF(1), 1)
-            IF_INT_NOT_EQUAL(LW(12), 0)
-                CALL(evt_mario_set_party_pos, 0, LW(12), 160, 22, -115)
-            END_IF
-            IF_INT_NOT_EQUAL(LW(13), 0)
-                CALL(evt_mario_set_party_pos, 1, LW(13), 160, 22, -110)
-            END_IF
-            CALL(evt_mario_set_pos, 205, 16, -115)
-        END_IF
-        IF_INT_EQUAL(LF(2), 1)
-            IF_INT_NOT_EQUAL(LW(12), 0)
-                CALL(evt_mario_set_party_pos, 0, LW(12), 183, 22, -90)
-            END_IF
-            IF_INT_NOT_EQUAL(LW(13), 0)
-                CALL(evt_mario_set_party_pos, 1, LW(13), 205, 22, -85)
-            END_IF
-            CALL(evt_mario_set_pos, 228, 17, -90)
-        END_IF
-        // The camera and music return to normal and the screen fades back in.
-        CALL(evt_mario_set_dir, 270, 0, 0)
-        CALL(evt_party_set_dir, 0, 270, 0)
-        CALL(evt_party_set_dir, 1, 270, 0)
-        CALL(evt_mario_adjust_dir)
-        CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
-        WAIT_FRAMES(1)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-        CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
-    END_IF
-    // Control returns to the player.
-    CALL(evt_party_run, 0)
-    CALL(evt_party_run, 1)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-#else
-/**
- * Rest in the Glitz Pit bed (stg3_yado_00/01, with a yes/no prompt):
- * partners leave, Mario hops in and sleeps with the sound muted, HP and FP are restored,
- * and the partners return.
- */
-EVT_BEGIN(evt_tou_bed)
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(tou_07_mario_keyoff_check, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -746,6 +611,7 @@ EVT_BEGIN(evt_tou_bed)
     END_IF
 #endif
     // Work out which Glitz Pit room's bed this is, since the camera and bed spot differ per room.
+#endif
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
@@ -779,8 +645,13 @@ EVT_BEGIN(evt_tou_bed)
             CALL(evt_cam3d_evt_set, -75, 160, 266, 155, 65, -10, 0, EASING_SINE_IN_OUT)
         END_IF
         WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+        // Mario hops into the bed.
+        CALL(evt_mario_flag_onoff, 1, 768)
+#else
         // Mario hops into the bed.
         CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL)
+#endif
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP5"), LW(0), LW(1), LW(2), 0)
@@ -812,7 +683,9 @@ EVT_BEGIN(evt_tou_bed)
             WAIT_MS(200)
             CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP2"), LW(0), LW(1), LW(2), 0)
         END_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
         CALL(tou_07_snd_off)
+#endif
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GO_SLEEPING1"))
         CALL(evt_fade_entry, 4, 1000, 0, 0, 0)
@@ -830,7 +703,11 @@ EVT_BEGIN(evt_tou_bed)
         DELETE_EVENT(LW(10))
         CALL(paper_off)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mario_flag_onoff, 0, 768)
+#else
         CALL(evt_mario_flag_onoff, 0, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL)
+#endif
         IF_INT_EQUAL(LF(0), 1)
             IF_INT_NOT_EQUAL(LW(12), 0)
                 CALL(evt_mario_set_party_pos, 0, LW(12), 75, 37, 100)
@@ -867,7 +744,9 @@ EVT_BEGIN(evt_tou_bed)
         WAIT_FRAMES(1)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+#if VERSION > VERSION_DEMO_US
         CALL(tou_07_snd_on)
+#endif
         CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
     END_IF
     // Control returns to the player.
@@ -876,7 +755,6 @@ EVT_BEGIN(evt_tou_bed)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 /** Bed entry point: registers evt_tou_bed to run when Mario presses A in front of the bed named in LW(0). */
 static EVT_BEGIN(bed_entry)

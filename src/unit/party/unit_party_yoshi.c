@@ -371,43 +371,7 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-BattleWeapon partyWeapon_YoshiNormalAttack = {
-    "btl_wn_pys_normal", // name
-    ICON_PARTNER_MOVE_NORMAL, // icon
-    {0}, // pad_06
-    0, // itemId
-    "msg_pys_hip_drop", // description
-    100, // baseAccuracy
-    0, 0, 0, // baseFpCost..superguardsAllowed
-    1.0f, // reserved_14
-    1, // stylishCommandMultiplier
-    1, // reserved_19
-    100, // bingoSlotChance
-    50, // reserved_1B
-    weaponGetPowerFromPartyAttackLv, // hpDamageFn
-    {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
-    NULL, // fpDamageFn
-    {0}, // fpDamageWork
-    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-    TARGET_PROP_NO_CEILING | TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
-    3, // acLevel
-    2, // reserved_6F
-    "msg_ac_hip_drop", // acHelpMsg
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
-    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
-    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
-    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
-    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
-    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
-    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
-    {0}, // pad_AE
-    partyYoshiAttack_NormalAttack,
-{0, 10, 10, 100, 10, 5, 5, 5, 5, 5, 0, 0},
-};
-#else
+#endif
 BattleWeapon partyWeapon_YoshiNormalAttack = {
     "btl_wn_pys_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -442,13 +406,16 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyYoshiAttack_NormalAttack, // attackEvtScript
+#if VERSION <= VERSION_DEMO_US
+    {0, 10, 10, 100, 10, 5, 5, 5, 5, 5, 0, 0},
+#else
 #if VERSION >= VERSION_US
     {0, 10, 10, 100, 10, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 10, 10, 100, 10, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #endif
-};
 #endif
+};
 
 /**
  * Gulp (4 FP), the hit on an enemy spat out as a shot at the enemies behind it (swallow attribute 2):

@@ -63,7 +63,6 @@ void sndFree(void* ptr) {
  * hooks the audio DMA callback and allocates the song (4), effect (40),
  * DVD audio (2) and stream (3) channel tables with their buffers. Fade in/out default to 10 and 500 ms.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Boots the sound system: sets up ARAM and its queue, starts MusyX (64 voices, 12 MB of ARAM),
  * prepares the reverb, chorus and delay effects, sets stereo output,
@@ -71,7 +70,11 @@ void sndFree(void* ptr) {
  * DVD audio (2) and stream (3) channel tables with their buffers. Fade in/out default to 10 and 500 ms.
  */
 void SoundInit(void) {
+#if VERSION <= VERSION_DEMO_US
     SND_HOOKS hooks = (SND_HOOKS){sndMalloc, sndFree};
+#else
+    SND_HOOKS hooks = (SND_HOOKS){ sndMalloc, sndFree };
+#endif
     void* data;
     SoundStream* streams;
     SoundSong* songs;
@@ -122,195 +125,11 @@ void SoundInit(void) {
     sndAuxCallbackPrepareDelay(&dly);
     sndSetAuxProcessingCallbacks(0, sndAuxCallbackReverbHI, &revH, 0xFF, 0, sndAuxCallbackChorus, &cho, 0xFF, 0);
     sndVolume(0x7F, 0, 0xFF);
+#if VERSION <= VERSION_DEMO_US
     sound.outputMode = SND_OUTPUTMODE_STEREO;
     sndOutputMode(SND_OUTPUTMODE_STEREO);
     sound.callback = AIRegisterDMACallback(SoundAIDMACallback);
-    sound.sampleBank = 0;
-    sound.sampleIndex = 0;
-    sound.fadeIn = 10;
-    sound.fadeOut = 500;
-    sound.dataId = 0;
-    sound.slibId = 0;
-    sound.coverState = 0;
-    sound.slotCount = 0;
-    sound.nextGroupId = 0;
-
-    data = sndMalloc(0x20000);
-    sound.filedata = data;
-    if (data == NULL) {
-        while (1)
-            ;
-    } // infinite loop
-
-    sound.groups = NULL;
-
-    // force register
-    tempsong = (sound.songs = sndMalloc(sizeof(SoundSong) * 4));
-    songs = tempsong;
-    if (songs == NULL) {
-        while (1)
-            ;
-    } // infinite loop
-
-    for (i = 0; i < 4; i++, songs++) {
-        songs->seqId = -1;
-        songs->group = NULL;
-    }
-
-    effects = sndMalloc(sizeof(SoundEffect) * 40);
-    sound.effects = effects;
-    if (effects == NULL) {
-        while (1)
-            ;
-    } // infinite loop
-
-    for (i = 0; i < 40; i++, effects++) {
-        effects->flags = 0;
-        effects->voiceId = -1;
-        effects->priority = 0;
-        effects->vol = 0x7F;
-        effects->pan = 0x40;
-    }
-
-    // force register
-    tempdvd = (sound.dvds = sndMalloc(sizeof(SoundDVD) * 2));
-    dvds = tempdvd;
-    if (dvds == NULL) {
-        while (1)
-            ;
-    } // infinite loop
-
-    for (i = 0; i < 2; i++, dvds++) {
-        dvds->flags = 0;
-    }
-
-    streams = sndMalloc(sizeof(SoundStream) * 3);
-    sound.streams = streams;
-    if (streams == NULL) {
-        while (1)
-            ;
-    } // infinite loop
-
-    temp = streams;
-    for (i = 0; i < 3; i++, temp++) {
-        temp->flags = 0;
-
-        ptr = sndMalloc(SS_LOAD_BUFFER_SIZE);
-        if (ptr == NULL) {
-            while (1)
-                ;
-        } // infinite loop
-        temp->entries[0].loadBuffer[0] = ptr;
-
-        ptr = sndMalloc(SS_LOAD_BUFFER_SIZE);
-        if (ptr == NULL) {
-            while (1)
-                ;
-        } // infinite loop
-        temp->entries[0].loadBuffer[1] = ptr;
-
-        size = sndStreamAllocLength(0xE00, 0);
-        ptr = sndMalloc(size);
-        if (ptr == NULL) {
-            while (1)
-                ;
-        } // infinite loop
-        temp->entries[0].buffer = ptr;
-
-        ptr = sndMalloc(SS_LOAD_BUFFER_SIZE);
-        if (ptr == NULL) {
-            while (1)
-                ;
-        } // infinite loop
-        temp->entries[1].loadBuffer[0] = ptr;
-
-        ptr = sndMalloc(SS_LOAD_BUFFER_SIZE);
-        if (ptr == NULL) {
-            while (1)
-                ;
-        } // infinite loop
-        temp->entries[1].loadBuffer[1] = ptr;
-
-        size = sndStreamAllocLength(0xE00, 0);
-        ptr = sndMalloc(size);
-        if (ptr == NULL) {
-            while (1)
-                ;
-        } // infinite loop
-        temp->entries[1].buffer = ptr;
-    }
-
-    slot = sound.aux;
-    slot->callback = sndAuxCallbackReverbHI;
-    slot->data = &revH;
-    slot->midi = 0xFF;
-    slot->seqId = 0;
-
-    slot++;
-    slot->callback = sndAuxCallbackChorus;
-    slot->data = &cho;
-    slot->midi = 0xFF;
-    slot->seqId = 0;
-}
 #else
-/**
- * Boots the sound system: sets up ARAM and its queue, starts MusyX (64 voices, 12 MB of ARAM),
- * prepares the reverb, chorus and delay effects, sets stereo output,
- * hooks the audio DMA callback and allocates the song (4), effect (40),
- * DVD audio (2) and stream (3) channel tables with their buffers. Fade in/out default to 10 and 500 ms.
- */
-void SoundInit(void) {
-    SND_HOOKS hooks = (SND_HOOKS){ sndMalloc, sndFree };
-    void* data;
-    SoundStream* streams;
-    SoundSong* songs;
-    SoundDVD* dvds;
-    SoundEffect* effects;
-    int i;
-    SoundStream* temp;
-    SoundSong* tempsong;
-    SoundDVD* tempdvd;
-    void* ptr;
-    u32 size;
-    SoundTemp* slot;
-
-    ARInit(aramMemArray, 8);
-    ARQInit();
-    AIInit(0);
-    ARAlloc(0xBFC000); // 12MB-16KB (reserved)
-    sndSetHooks(&hooks);
-    sndInit(0x40, 0xC, 0x2C, 1, 1, 0xBFC000);
-    revH.tempDisableFX = 0;
-    revH.time = 3.0f;
-    revH.preDelay = 0.1f;
-    revH.damping = 0.3f;
-    revH.coloration = 0.0f;
-    revH.crosstalk = 0.0f;
-    revH.mix = 0.8f;
-    sndAuxCallbackPrepareReverbHI(&revH);
-    revS.tempDisableFX = 0;
-    revS.time = 2.0f;
-    revS.preDelay = 0.1f;
-    revS.damping = 0.5f;
-    revS.coloration = 0.5f;
-    revS.mix = 0.5f;
-    sndAuxCallbackPrepareReverbSTD(&revS);
-    cho.baseDelay = 10;
-    cho.variation = 0;
-    cho.period = 500;
-    sndAuxCallbackPrepareChorus(&cho);
-    dly.delay[0] = 60;
-    dly.delay[1] = 90;
-    dly.delay[2] = 70;
-    dly.feedback[0] = 20;
-    dly.feedback[1] = 20;
-    dly.feedback[2] = 20;
-    dly.output[0] = 50;
-    dly.output[1] = 50;
-    dly.output[2] = 50;
-    sndAuxCallbackPrepareDelay(&dly);
-    sndSetAuxProcessingCallbacks(0, sndAuxCallbackReverbHI, &revH, 0xFF, 0, sndAuxCallbackChorus, &cho, 0xFF, 0);
-    sndVolume(0x7F, 0, 0xFF);
     if (sound.outputMode != SND_OUTPUTMODE_STEREO) {
         sound.outputMode = SND_OUTPUTMODE_STEREO;
         sndOutputMode(SND_OUTPUTMODE_STEREO);
@@ -323,6 +142,7 @@ void SoundInit(void) {
         while (1)
             ;
     }
+#endif
 #endif
     sound.sampleBank = 0;
     sound.sampleIndex = 0;
@@ -451,7 +271,6 @@ void SoundInit(void) {
     slot->midi = 0xFF;
     slot->seqId = 0;
 }
-#endif
 
 /**
  * Per-frame sound update: notices songs that ended on their own (marks their group and frees the channel),

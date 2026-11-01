@@ -51,19 +51,19 @@ BattleUnitKind unit_pakkun_flower = {
     "btl_un_pakkun_flower",
 #if VERSION <= VERSION_DEMO_US
     13,
+#else
+    15,
+#endif
     0,
-        1,
-        1,
+    1,
+    1,
+#if VERSION <= VERSION_DEMO_US
     35,
         0,
         1,
         70,
         3,
 #else
-    15,
-    0,
-    1,
-    1,
     33,
     1,
     3,
@@ -686,33 +686,21 @@ static USER_FUNC(shadow_scale_memory) {
  * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
  * while the ceiling still exists, so the plant knows whether it can hang from it.
  */
+/**
+ * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
+ * while the ceiling still exists, so the plant knows whether it can hang from it.
+ */
+static USER_FUNC(pakkun_ceil_exist) {
+    EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US
-/**
- * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
- * while the ceiling still exists, so the plant knows whether it can hang from it.
- */
-static USER_FUNC(pakkun_ceil_exist) {
-    EvtWord* args = event->args;
     if (_battleWorkPointer->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
-        evtSetValue(event, args[0], 0);
-    } else {
-        evtSetValue(event, args[0], 1);
-    }
-    return EVT_RETURN_DONE;
-}
 #else
-/**
- * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
- * while the ceiling still exists, so the plant knows whether it can hang from it.
- */
-static USER_FUNC(pakkun_ceil_exist) {
-    EvtWord* args = event->args;
 
     if (TST_BATTLE_WORK(_battleWorkPointer)->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
+#endif
         evtSetValue(event, args[0], 0);
     } else {
         evtSetValue(event, args[0], 1);
     }
     return EVT_RETURN_DONE;
 }
-#endif

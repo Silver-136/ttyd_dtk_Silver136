@@ -334,7 +334,6 @@ EVT_END()
  * Mario and the partner drop from above onto the trail and land,
  * control returns and the Steeple door's n_bero case is switched on again.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Scene when Mario comes out of the Steeple carried by the Boos:
  * Mario and the partner drop from above onto the trail and land,
@@ -354,109 +353,13 @@ EVT_BEGIN(teresa_oidasare_evt)
     CALL(evt_cam3d_event_from_road, 65, 60, -115, 0, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_mario_set_pose, STRING("M_D_1"))
-    CALL(evt_mario_get_party, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(0)
-        CASE_DEFAULT
-        BEGIN_INLINE_EVENT
-            WAIT_MS(300)
-            CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 370, 70, 800)
-            LOOP(0)
-                CALL(evt_sub_intpl_msec_get_value)
-                CALL(evt_party_set_pos, 0, 72, LW(0), -155)
-                WAIT_FRAMES(1)
-                IF_INT_EQUAL(LW(1), 0)
-                    BREAK_LOOP
-                END_IF
-            END_LOOP
-            CALL(evt_mario_get_party, LW(0))
-            SWITCH(LW(0))
-                CASE_EQUAL(1)
-                CALL(evt_party_set_pose, 0, STRING("PKR_D_1"))
-                CASE_EQUAL(2)
-                CALL(evt_party_set_pose, 0, STRING("PNK_D_1"))
-                CASE_EQUAL(4)
-                CALL(evt_party_set_pose, 0, STRING("PYS_D_1"))
-                CASE_EQUAL(5)
-                CALL(evt_party_set_pose, 0, STRING("PWD_D_1"))
-            END_SWITCH
-            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 50)
-        END_INLINE_EVENT
-    END_SWITCH
-    CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 360, 60, 800)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        CALL(evt_mario_set_pos, 65, LW(0), -115)
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_LAND_DAMAGE2"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_set_pose, STRING("M_D_2"))
-    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 50)
-    WAIT_MS(700)
-    CALL(evt_mario_get_party, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(0)
-        CASE_DEFAULT
-        BEGIN_INLINE_EVENT
-            CALL(evt_party_get_pos, 0, LW(7), LW(8), LW(9))
-            CALL(evt_party_jump_pos, 0, LW(7), LW(8), LW(9), 300, 0, 10)
-        END_INLINE_EVENT
-    END_SWITCH
-    CALL(evt_mario_set_pose, STRING("M_U_3"))
-    WAIT_MS(300)
-    CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_mario_get_party, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(1)
-        CALL(evt_party_set_pose, 0, STRING("PKR_S_1"))
-        CASE_EQUAL(2)
-        CALL(evt_party_set_pose, 0, STRING("PNK_S_1"))
-        CASE_EQUAL(4)
-        CALL(evt_party_set_pose, 0, STRING("PYS_S_1"))
-        CASE_EQUAL(5)
-        CALL(evt_party_set_pose, 0, STRING("PWD_S_1"))
-    END_SWITCH
-    // Control returns and the Steeple door is switched on again.
-    CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
-    CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_party_cont_onoff, 0, 1)
-    CALL(evt_mario_key_onoff, 1)
-    CALL(evt_party_run, 0)
-    SET_VALUE(GSWF_JIN_BOOS_THREW_MARIO_OUT, 0)
-    SET_VALUE(LW(0), STRING("n_bero"))
-    CALL_CHILD(bero_case_switch_on)
-    RETURN
-EVT_END()
-#else
-/**
- * Scene when Mario comes out of the Steeple carried by the Boos:
- * Mario and the partner drop from above onto the trail and land,
- * control returns and the Steeple door's n_bero case is switched on again.
- */
-EVT_BEGIN(teresa_oidasare_evt)
-    // Mario and his partner are placed high above the trail, as if dropped out of the Steeple.
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_mario_set_dir, 270, 0, 0)
-    CALL(evt_mario_adjust_dir)
-    WAIT_FRAMES(1)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_mario_set_pos, 65, 360, -115)
-    CALL(evt_party_set_pos, 0, 72, 370, -155)
-    CALL(evt_cam3d_event_from_road, 65, 60, -115, 0, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
-    CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, EASING_SINE_IN_OUT)
-    CALL(evt_seq_wait, SEQ_GAME)
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
     // They fall and land hard, with the camera shaking.
+#endif
     CALL(evt_mario_set_pose, STRING("M_D_1"))
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
@@ -498,7 +401,9 @@ EVT_BEGIN(teresa_oidasare_evt)
     END_LOOP
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_LAND_DAMAGE2"), LW(0), LW(1), LW(2), 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_set_pose, STRING("M_D_2"))
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 50)
     WAIT_MS(700)
@@ -527,12 +432,17 @@ EVT_BEGIN(teresa_oidasare_evt)
     END_SWITCH
     // Control returns and the Steeple door is switched on again.
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_cont_onoff, 1)
+    CALL(evt_party_cont_onoff, 0, 1)
+#else
 #if VERSION < VERSION_US
     CALL(evt_mario_cont_onoff, 1)
 #endif
     CALL(evt_party_cont_onoff, 0, 1)
 #if VERSION >= VERSION_US
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+#endif
 #endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
@@ -541,7 +451,6 @@ EVT_BEGIN(teresa_oidasare_evt)
     CALL_CHILD(PTR(bero_case_switch_on))
     RETURN
 EVT_END()
-#endif
 
 /**
  * Init script of gra_06, the end of the trail: a Star Piece,

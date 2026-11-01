@@ -335,7 +335,6 @@ EVT_END()
  * Then every swarm Fuzzy runs away (chorogun_escape_all) and a second later the Horde unit (the Gold Fuzzy's
  * unit work 2) is removed; the demos only set the flag at the end.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Run by the Fuzzy Horde's damage event after a lethal hit, as the Horde: waits 2 seconds;
  * from JP on it stops if the Horde is gone or the Gold Fuzzy's unit work 1 is already set, and otherwise sets it
@@ -346,24 +345,7 @@ EVT_END()
 EVT_BEGIN(escape_chorogun_event)
     WAIT_MS(2000)
     CALL(get_gold_chorobon_id, LW(4))
-    CALL(chorogun_escape_all)
-    WAIT_MS(1000)
-    CALL(btlevtcmd_GetUnitWork, LW(4), UNIT_WORK_CHOROGUN, LW(3))
-    CALL(btlevtcmd_KillUnit, LW(3), 0)
-    CALL(btlevtcmd_SetUnitWork, LW(4), UNIT_WORK_CHOROGUN_GONE, 1)
-    RETURN
-EVT_END()
-#else
-/**
- * Run by the Fuzzy Horde's damage event after a lethal hit, as the Horde: waits 2 seconds;
- * from JP on it stops if the Horde is gone or the Gold Fuzzy's unit work 1 is already set, and otherwise sets it
- * and pays out the Horde's coins and EXP (chorogun_dead_reward).
- * Then every swarm Fuzzy runs away (chorogun_escape_all) and a second later the Horde unit (the Gold Fuzzy's
- * unit work 2) is removed; the demos only set the flag at the end.
- */
-EVT_BEGIN(escape_chorogun_event)
-    WAIT_MS(2000)
-    CALL(get_gold_chorobon_id, LW(4))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), -1)
@@ -377,13 +359,16 @@ EVT_BEGIN(escape_chorogun_event)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(10))
     CALL_CHILD(chorogun_dead_reward)
 #endif
+#endif
     CALL(chorogun_escape_all)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetUnitWork, LW(4), UNIT_WORK_CHOROGUN, LW(3))
     CALL(btlevtcmd_KillUnit, LW(3), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_SetUnitWork, LW(4), UNIT_WORK_CHOROGUN_GONE, 1)
+#endif
     RETURN
 EVT_END()
-#endif
 
 /**
  * Init script of the Gold Fuzzy: installs the wait,
@@ -413,7 +398,6 @@ EVT_END()
  * Otherwise it runs the default damage script, and the first time its HP drops to 7
  * or less (but not 0) it spawns the Fuzzy horde (entry_chorogun) with call_chorogun_event.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Damage handler of the Gold Fuzzy.
  * If its Fuzzy horde has been summoned and this hit would knock it out (damage flag 0x200 without the Life
@@ -425,6 +409,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -437,39 +422,7 @@ static EVT_BEGIN(damage_event)
                         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))
                         CALL(btlevtcmd_KillUnit, LW(3), 0)
                         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, 1)
-                    END_IF
-                END_IF
-            END_IF
-        END_IF
-    CALL_CHILD(btldefaultevt_Damage)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_CALLED, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
-        IF_INT_LESS_OR_EQUAL(LW(0), 7)
-            IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-                CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_chorogun), 0)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))
-                CALL_CHILD(call_chorogun_event)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_CALLED, 1)
-                GOTO(99)
-            END_IF
-        END_IF
-    END_IF
-    LABEL(99)
-    RETURN
-EVT_END()
 #else
-/**
- * Damage handler of the Gold Fuzzy.
- * If its Fuzzy horde has been summoned and this hit would knock it out (damage flag 0x200 without the Life
- * Shroom flag 0x800), it hands out the horde's rewards (chorogun_dead_reward),
- * makes all the Fuzzies escape and removes the horde unit.
- * Otherwise it runs the default damage script, and the first time its HP drops to 7
- * or less (but not 0) it spawns the Fuzzy horde (entry_chorogun) with call_chorogun_event.
- */
-static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
-    SET_VALUE(LW(11), 1)
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(0))
     CALL(btlevtcmd_GetUnitId, LW(0), LW(1))
@@ -494,6 +447,7 @@ static EVT_BEGIN(damage_event)
                         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))
                         CALL(btlevtcmd_KillUnit, LW(3), 0)
                     END_IF
+#endif
                 END_IF
             END_IF
         END_IF
@@ -504,8 +458,10 @@ static EVT_BEGIN(damage_event)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 7)
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_JP
                 CALL(btlevtcmd_WaitAttackEnd)
+#endif
 #endif
                 CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_chorogun), 0)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))
@@ -518,7 +474,6 @@ static EVT_BEGIN(damage_event)
     LABEL(99)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Damage handler for when the Gold Fuzzy was hit by a counter attack:

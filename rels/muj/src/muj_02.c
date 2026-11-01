@@ -683,8 +683,9 @@ void printCount(CameraId camera, void* param) {
 #endif
     s32 n;
 
-#if VERSION >= VERSION_US
+    // %3d回
     n = evtGetValue(NULL, GW(0));
+#if VERSION >= VERSION_US
     FontDrawStart();
     switch ((u32)gp->language) {
         case 0:
@@ -720,8 +721,6 @@ void printCount(CameraId camera, void* param) {
             break;
     }
 #else
-    // %3d回
-    n = evtGetValue(NULL, GW(0));
     sprintf(buf, "%3d回", n);
     FontDrawStart();
     FontDrawStringPitch(90.0f, 120.0f, 20.0f, buf);

@@ -2952,159 +2952,6 @@ EVT_END()
  * crowds of sailors leap between the ships, and Mario fights Lord Crump in a battle.
  * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * The big scene of Keelhaul Key: the pirate and X-Naut ships come together,
- * Cortez and Lord Crump (the X-Naut "third force", dai3) trade insults (stg5_muj_118 to 123),
- * crowds of sailors leap between the ships, and Mario fights Lord Crump in a battle.
- * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
- */
-EVT_BEGIN(kaizoku_vs_dai3)
-    // The fight begins: Mario loses control and the crowds on both ships are set up.
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_mario_clear_party, 1)
-    CALL(evt_mario_set_pos, 0, -1000, 0)
-    CALL(evt_party_set_pos, 0, 0, -1000, 0)
-    CALL(evt_npc_set_position, STRING("コルテス"), 20, 40, -1800)
-    CALL(evt_npc_set_ry, STRING("コルテス"), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("コルテス"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_set_position, STRING("第三勢力幹部"), -945, 150, -5)
-    CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_NO_HIT | NPC_FLAG_INSTANT_TURN | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_flag_onoff, 0, STRING("第三勢力幹部"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
-    SET_VALUE(GW(1), 0)
-    SET_VALUE(GW(2), -1200)
-    SET_VALUE(GW(3), 0)
-    SPAWN_EVENT_GET_ID(PTR(dai3_move_every), LW(10))
-    SET_VALUE(GW(4), 0)
-    SET_VALUE(GW(5), 0)
-    SET_VALUE(GW(6), -2000)
-    SPAWN_EVENT_GET_ID(PTR(kaizoku_move_every), LW(11))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hai"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_cam3d_evt_set, -847, 334, 977, -847, 78, -475, 0, EASING_SINE_IN_OUT)
-    CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_msg_print, 0, STRING("stg5_muj_118"), 0, STRING("第三勢力幹部"))
-    DELETE_EVENT(GW(8))
-    CALL(evt_cam3d_evt_set, 0, 470, -91, 0, 400, -383, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(600)
-    CALL(evt_npc_flag_onoff, 0, STRING("第三勢力幹部"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_npc_set_position, STRING("第三勢力幹部"), -1105, 60, 30)
-    SPAWN_EVENT(dai3_butai_setup)
-    WAIT_FRAMES(2)
-    SPAWN_EVENT_GET_ID(PTR(dai3_butai_main), LW(12))
-    SPAWN_EVENT_GET_ID(PTR(dai3_kanbu_main), LW(13))
-    SPAWN_EVENT(kaizoku_setup)
-    WAIT_FRAMES(2)
-    SPAWN_EVENT_GET_ID(PTR(kaizoku_main), LW(14))
-    SPAWN_EVENT_GET_ID(PTR(mario_main), LW(15))
-    WAIT_MS(400)
-    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_VIEW_CORRECTION)
-    CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
-    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    CALL(evt_msg_print, 0, STRING("stg5_muj_119"), 0, STRING("コルテス"))
-    CALL(evt_msg_continue)
-    SET_VALUE(GF(0), 1)
-    SET_VALUE(GF(1), 1)
-    BEGIN_INLINE_EVENT
-        SET_VALUE(GF(10), 1)
-        SPAWN_EVENT(kaizoku_move_trace_se)
-        SET_VALUE(LW(0), 20000)
-        CALL_CHILD(kaizoku_move_trace)
-        SET_VALUE(GF(10), 0)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        SET_VALUE(GF(11), 1)
-        SPAWN_EVENT(dai3_move_trace_se)
-        SET_VALUE(LW(0), 15000)
-        CALL_CHILD(dai3_move_trace)
-        SET_VALUE(GF(11), 0)
-        CALL_CHILD(dai3_kurukuru)
-        SET_VALUE(GF(1), 0)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        WAIT_MS(4000)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_120"), 0, STRING("第三勢力幹部"))
-        CALL(evt_msg_continue)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        WAIT_MS(500)
-        CALL_CHILD(iwapera_offscreen)
-        CALL(evt_mapobj_get_position, STRING("S_iwa_before"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon, STRING("SFX_OFF5_SHIP_APPEAR1"), 0)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_BOSS_STG5_KORTESS1"))
-        WAIT_MS(3500)
-        CALL(evt_cam3d_evt_set, 0, 2650, 2025, 0, 250, 225, 500, EASING_SINE_IN_OUT)
-        CALL_CHILD(iwapera_offscreen_end)
-        WAIT_MS(4000)
-        SPAWN_EVENT_GET_ID(PTR(cam_dai3_vs_kaizoku), LW(10))
-        WAIT_MS(9500)
-        DELETE_EVENT(LW(10))
-        CALL(evt_cam3d_evt_set, -205, 528, 672, -205, 108, -278, 0, EASING_SINE_IN_OUT)
-        WAIT_MS(1400)
-        CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, EASING_SINE_IN_OUT)
-        WAIT_MS(200)
-        SET_VALUE(GF(0), 0)
-    END_INLINE_EVENT
-    WAIT_WHILE(GF(0))
-    WAIT_WHILE(GF(1))
-    DELETE_EVENT(LW(10))
-    DELETE_EVENT(LW(11))
-    DELETE_EVENT(LW(12))
-    DELETE_EVENT(LW(13))
-    DELETE_EVENT(LW(14))
-    DELETE_EVENT(LW(15))
-    CALL(evt_msg_print, 0, STRING("stg5_muj_121"), 0, STRING("第三勢力幹部"))
-    CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_party_cont_onoff, 0, 1)
-    WAIT_MS(1000)
-    CALL(evt_cam3d_evt_set, -120, 320, 259, -163, 115, -249, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg5_muj_122"), 0, STRING("コルテス"))
-    WAIT_MS(500)
-    CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    CALL(tobikakaru_init)
-    SPAWN_EVENT_GET_ID(PTR(tobikakari_kemuri), LW(15))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_ELM_VS_3RD1"), -226, 120, -460, LW(9))
-    CALL(evt_snd_sfx_dist, LW(9), 30)
-    WAIT_MS(2500)
-    CALL(evt_cam3d_evt_set, -369, 245, -37, 0, 67, -303, 0, EASING_SINE_IN_OUT)
-    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_DRAW)
-    CALL(evt_mario_set_dir, 90, 200, 0)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg5_muj_123"), 0, STRING("マルコ"))
-    CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 0, EASING_SINE_IN_OUT)
-    CALL(evt_npc_flag_onoff, 0, STRING("コルテス"), NPC_FLAG_NO_DRAW)
-    WAIT_MS(500)
-BEGIN_INLINE_EVENT
-    CALL(evt_party_set_dir, 0, 270, 200)
-        CALL(evt_party_jump_pos, 0, -405, 60, -237, 1000, 0, 80)
-    END_INLINE_EVENT
-    CALL(evt_mario_set_dir, 270, 200, 0)
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP3"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_jump_pos, -430, 60, -212, 1000, 0, 80)
-    CALL(evt_snd_sfxoff, LW(9))
-    CALL(evt_npc_release_filednpc, 1)
-    CALL(evt_npc_set_battle_info, STRING("第三勢力幹部"), 5)
-    // The battle with Lord Crump starts.
-    CALL(evt_npc_battle_start, STRING("第三勢力幹部"))
-    CALL(evt_npc_wait_battle_end)
-    DELETE_EVENT(LW(15))
-    CALL(tobikakaru_end)
-    // After the battle the story advances and the X-Naut ship is beaten back.
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
-    SET_VALUE(LW(0), 0)
-    CALL_CHILD(dai3_beat_back)
-    RETURN
-EVT_END()
-#else
 /**
  * The big scene of Keelhaul Key: the pirate and X-Naut ships come together,
  * Cortez and Lord Crump (the X-Naut "third force", dai3) trade insults (stg5_muj_118 to 123),
@@ -3195,6 +3042,14 @@ EVT_BEGIN(kaizoku_vs_dai3)
         CALL_CHILD(PTR(iwapera_offscreen_end))
         WAIT_MS(4000)
         SPAWN_EVENT_GET_ID(PTR(cam_dai3_vs_kaizoku), LW(10))
+#if VERSION <= VERSION_DEMO_US
+        WAIT_MS(9500)
+        DELETE_EVENT(LW(10))
+        CALL(evt_cam3d_evt_set, -205, 528, 672, -205, 108, -278, 0, EASING_SINE_IN_OUT)
+        WAIT_MS(1400)
+        CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, EASING_SINE_IN_OUT)
+        WAIT_MS(200)
+#else
 #if VERSION == VERSION_EU
         CALL(evt_sub_get_framerate, LW(0))
         IF_INT_EQUAL(LW(0), 60)
@@ -3214,6 +3069,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
             CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, 11)
             WAIT_MS(240)
         END_IF
+#endif
 #endif
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
@@ -3248,8 +3104,12 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 0, EASING_SINE_IN_OUT)
     CALL(evt_npc_flag_onoff, 0, STRING("コルテス"), NPC_FLAG_NO_DRAW)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    BEGIN_INLINE_EVENT
+#else
     CALL(evt_party_run, 0)
     BEGIN_INLINE_EVENT_GET_ID(LW(3))
+#endif
         CALL(evt_party_set_dir, 0, 270, 200)
         CALL(evt_party_jump_pos, 0, -405, 60, -237, 1000, 0, 80)
     END_INLINE_EVENT
@@ -3258,6 +3118,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_jump_pos, -430, 60, -212, 1000, 0, 80)
     CALL(evt_snd_sfxoff, LW(9))
+#if VERSION > VERSION_DEMO_US
     LOOP(0)
         IS_EVENT_RUNNING(LW(3), LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -3265,6 +3126,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#endif
     CALL(evt_npc_release_filednpc, 1)
     CALL(evt_npc_set_battle_info, STRING("第三勢力幹部"), 5)
     // The battle with Lord Crump starts.
@@ -3278,7 +3140,6 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL_CHILD(PTR(dai3_beat_back))
     RETURN
 EVT_END()
-#endif
 
 /**
  * The crew's cheers after the X-Nauts are driven off ("YAHOOOOOOO!", "WE DID IT!" and so on,
@@ -3438,7 +3299,6 @@ EVT_END()
  * Mario's party comments (stg5_muj_126), the story becomes STG5_43_X_NAUTS_RETREAT,
  * the game autosaves and the map changes to aji_10 (Pirate's Grotto).
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * After Lord Crump is beaten the X-Naut ship retreats:
  * resets the ships' positions, Crump curses (stg5_muj_125), the ship sails away,
@@ -3447,81 +3307,17 @@ EVT_END()
  */
 EVT_BEGIN(dai3_beat_back)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_npc_set_position, STRING("第三勢力幹部"), -448, 60, -236)
-    CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 0, EASING_SINE_IN_OUT)
-    SET_FLOAT_VALUE(GW(1), FLOAT(0.0f))
-    SET_VALUE(GW(2), -416)
-    SET_VALUE(GW(3), -334)
-    SET_FLOAT_VALUE(GW(4), FLOAT(0.0f))
-    SET_VALUE(GW(5), -78)
-    SET_VALUE(GW(6), -267)
-    SPAWN_EVENT_GET_ID(PTR(dai3_move_every), LW(10))
-    SPAWN_EVENT_GET_ID(PTR(kaizoku_move_every), LW(11))
-    SPAWN_EVENT(dai3_butai_setup)
-    SPAWN_EVENT(kaizoku_setup)
-    WAIT_FRAMES(1)
-    SPAWN_EVENT_GET_ID(PTR(dai3_butai_main), LW(12))
-    SPAWN_EVENT_GET_ID(PTR(dai3_kanbu_main), LW(13))
-    SPAWN_EVENT_GET_ID(PTR(kaizoku_main), LW(14))
-    SPAWN_EVENT_GET_ID(PTR(mario_main2), LW(15))
-    WAIT_FRAMES(2)
-    SET_VALUE(GW(1), 273)
-    SET_VALUE(GW(4), 215)
-    IF_INT_EQUAL(LW(0), 0)
-    ELSE
-        CALL(evt_seq_wait, SEQ_GAME)
-    END_IF
-    SET_FLOAT_VALUE(GW(7), GW(1))
-    SPAWN_EVENT_GET_ID(PTR(nameraka_rotate), LW(9))
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("stg5_muj_125"), 0, STRING("第三勢力幹部"))
-    SET_VALUE(GF(11), 1)
-    SPAWN_EVENT(dai3_move_trace_se)
-    SET_VALUE(LW(0), 3500)
-    SPAWN_EVENT(dai3_taisan_move_trace01)
-    WAIT_MS(3500)
-    SET_VALUE(GF(11), 0)
-    DELETE_EVENT(LW(9))
-    CALL(evt_cam3d_evt_set, -141, 262, 147, -45, 43, -397, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_set_dir, 90, 200, 0)
-    END_INLINE_EVENT
-    CALL(evt_msg_print_party, STRING("stg5_muj_126"))
-    SPAWN_EVENT_GET_ID(PTR(senin_kansei), LW(10))
-    WAIT_MS(3000)
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
-    DELETE_EVENT(LW(10))
-    CALL(evt_fade_entry, 6, 1000, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1500)
-    SET_VALUE(LF(10), 0)
-    SET_VALUE(LW(0), 24)
-    CALL_CHILD(evt_memcard_save)
-    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
-    CALL(evt_snd_sfx_all_stop)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_MARIO_A1, 0, FADE_STORY_MARIO_A3, 0)
-    CALL(evt_bero_mapchange, STRING("aji_10"), STRING(""))
-    RETURN
-EVT_END()
 #else
-/**
- * After Lord Crump is beaten the X-Naut ship retreats:
- * resets the ships' positions, Crump curses (stg5_muj_125), the ship sails away,
- * Mario's party comments (stg5_muj_126), the story becomes STG5_43_X_NAUTS_RETREAT,
- * the game autosaves and the map changes to aji_10 (Pirate's Grotto).
- */
-EVT_BEGIN(dai3_beat_back)
-    CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_pos, 0, -71, 45, -240)
+#endif
     CALL(evt_npc_set_position, STRING("第三勢力幹部"), -448, 60, -236)
     CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 0, EASING_SINE_IN_OUT)
     SET_FLOAT_VALUE(GW(1), FLOAT(0.0f))
@@ -3572,10 +3368,14 @@ EVT_BEGIN(dai3_beat_back)
     WAIT_MS(1500)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 24)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_memcard_save)
+#else
 #if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
     CALL_CHILD(PTR(evt_memcard_save))
+#endif
 #endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
@@ -3584,7 +3384,6 @@ EVT_BEGIN(dai3_beat_back)
     CALL(evt_bero_mapchange, STRING("aji_10"), STRING(""))
     RETURN
 EVT_END()
-#endif
 
 /** Positions (x, y, z, facing) of the 95 sailors aboard the ship when the crew leaves Keelhaul Key. */
 s32 leave_island_suifupos[] = {
@@ -4357,17 +4156,6 @@ EVT_BEGIN(muj_00_init_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ2"))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#if VERSION >= VERSION_US
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
-    CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
-    CALL(evt_npc_sound_data_set, STRING("マルコ"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
-        CALL_CHILD(PTR(kiza_entry))
-    END_IF
-    CALL_CHILD(PTR(koburon_evt))
-#else
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
@@ -4377,7 +4165,6 @@ EVT_BEGIN(muj_00_init_evt)
         CALL_CHILD(kiza_entry)
     END_IF
     CALL_CHILD(koburon_evt)
-#endif
     CALL(evt_npc_entry, STRING("船ダミー"), STRING("c_suifu_b"))
     CALL(evt_npc_flag_onoff, 1, STRING("船ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -4423,14 +4210,6 @@ EVT_BEGIN(muj_00_init_evt)
     END_IF
     // Register the hazard-water return points and the biting Gazigazi.
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-#if VERSION >= VERSION_US
-    CALL_CHILD(PTR(evt_gazigazi_entry))
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(STG5_10_HAUNTED)
-        SPAWN_EVENT(PTR(mujinto_hyochaku))
-        CASE_EQUAL(STG5_36_HOLE_IN_THE_WALL)
-        CALL_CHILD(PTR(nannpc_mode_setup))
-#else
     CALL_CHILD(evt_gazigazi_entry)
     // Start the scene that belongs to the current story stage.
     SWITCH(GSW_STORY_PROGRESS)
@@ -4439,20 +4218,9 @@ EVT_BEGIN(muj_00_init_evt)
         // The X-Naut ship is about to arrive (dai3_shurai).
         CASE_EQUAL(STG5_36_HOLE_IN_THE_WALL)
         CALL_CHILD(nannpc_mode_setup)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
-#if VERSION >= VERSION_US
-        SPAWN_EVENT(PTR(dai3_shurai))
-        SPAWN_EVENT(PTR(suifu_random_sub))
-        CASE_EQUAL(STG5_40_TRUE_IDENTITY)
-        CALL_CHILD(PTR(nannpc_mode_setup))
-        SPAWN_EVENT(PTR(suifu_random_sub))
-        CASE_EQUAL(STG5_41_01_ALL_ABOARD)
-        CALL_CHILD(PTR(nannpc_mode_setup))
-        CALL_CHILD(PTR(mario_main_init))
-#else
         SPAWN_EVENT(dai3_shurai)
         SPAWN_EVENT(suifu_random_sub)
         CASE_EQUAL(STG5_40_TRUE_IDENTITY)
@@ -4462,25 +4230,17 @@ EVT_BEGIN(muj_00_init_evt)
         CASE_EQUAL(STG5_41_01_ALL_ABOARD)
         CALL_CHILD(nannpc_mode_setup)
         CALL_CHILD(mario_main_init)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
-#if VERSION >= VERSION_US
-        SPAWN_EVENT(PTR(kaizoku_vs_dai3))
-        CASE_EQUAL(STG5_42_PIRATES_VS_X_NAUTS)
-        CALL_CHILD(PTR(nannpc_mode_setup))
-        CALL_CHILD(PTR(mario_main_init))
-#else
         SPAWN_EVENT(kaizoku_vs_dai3)
         // Both ships are shown and the X-Nauts are beaten back (dai3_beat_back).
         CASE_EQUAL(STG5_42_PIRATES_VS_X_NAUTS)
         CALL_CHILD(nannpc_mode_setup)
         CALL_CHILD(mario_main_init)
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
@@ -4503,13 +4263,12 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
         CALL(evt_sub_status_gauge_force_update)
-        CALL_CHILD(PTR(nannpc_mode_setup))
 #else
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
         END_IF
-        CALL_CHILD(nannpc_mode_setup)
 #endif
+        CALL_CHILD(nannpc_mode_setup)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))

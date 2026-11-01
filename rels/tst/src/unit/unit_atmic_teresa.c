@@ -283,27 +283,12 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     0, 0, // baseFpCost..baseSpCost
 #if VERSION <= VERSION_DEMO_US
     0,
-    1.0f, // reserved_14
-        1, // stylishCommandMultiplier
-        1, // reserved_19
-        1, // bingoSlotChance
-        1, // reserved_1B
-        weaponGetPowerDefault, // hpDamageFn
-        {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-        NULL, // fpDamageFn
-        {0}, // fpDamageWork
-        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-        TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-        ELEMENT_NORMAL, 0, // element..damagePattern
-        3, // acLevel
-        2, // reserved_6F
-        NULL,
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
 #else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
+#endif
 #endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
@@ -320,6 +305,9 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
+#if VERSION <= VERSION_DEMO_US
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+#else
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
@@ -349,27 +337,12 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     0, 0, // baseFpCost..baseSpCost
 #if VERSION <= VERSION_DEMO_US
     0,
-    1.0f, // reserved_14
-        1, // stylishCommandMultiplier
-        1, // reserved_19
-        1, // bingoSlotChance
-        1, // reserved_1B
-        weaponGetPowerDefault, // hpDamageFn
-        {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-        NULL, // fpDamageFn
-        {0}, // fpDamageWork
-        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-        TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-        ELEMENT_NORMAL, 0, // element..damagePattern
-        3, // acLevel
-        2, // reserved_6F
-        NULL,
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
 #else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
+#endif
 #endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
@@ -386,6 +359,9 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
+#if VERSION <= VERSION_DEMO_US
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+#else
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags

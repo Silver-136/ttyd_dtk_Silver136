@@ -126,129 +126,6 @@ void statusWinReInit(void) {
  * toggles with Z (held for 10 seconds, with a sound) and pops open for 2 seconds when a value changes.
  * Then starts and runs the slide animation (16 frames in, 28 out).
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Per-frame HUD logic in the field: hidden when Mario is not himself (a transformation or another character)
- * and left alone in the Pit of 100 Trials ("yuu").
- * While Mario can move it opens after he stands still for 10 seconds, closes when he walks,
- * toggles with Z (held for 10 seconds, with a sound) and pops open for 2 seconds when a value changes.
- * Then starts and runs the slide animation (16 frames in, 28 out).
- */
-void statusWinMain(void) {
-    MarioWork* mario;
-    f32 inv;
-    f32 one;
-    f32 t;
-
-    one = 1.0f;
-    mario = marioGetPtr();
-    if (mario->characterId) {
-        wp->flags = STATUS_WINDOW_FLAG_CLOSED;
-        wp->duration = one;
-        wp->timer = one;
-        wp->tEnd = 0.0f;
-        wp->t = 0.0f;
-        return;
-    }
-    if (!strcmp(gp->currentAreaName, "yuu")) {
-        return;
-    }
-    switch (seqGetSeq()) {
-        case SEQ_GAME:
-        case SEQ_MAP_CHANGE:
-            if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE) || !(mario->flags & MARIO_FLAG_ACTIVE)) {
-                if (statusWinCheck()) {
-                    statusWinClose();
-                }
-                valueCheck();
-                wp->idle = 0;
-                wp->forceTimer = 0;
-            } else {
-                if (VECDistance(&wp->prevPos, &mario->position) < 1.0f) {
-                    wp->idle++;
-                    if (wp->idle > gp->framerate * 10) {
-                        wp->idle = gp->framerate * 10;
-                        if (!wp->forcedClose && !wp->forceTimer && !statusWinCheck()) {
-                            statusWinOpen();
-}
-                    }
-                } else {
-                    wp->idle = 0;
-                    wp->forcedClose = 0;
-                    if (!wp->forceTimer && statusWinCheck()) {
-                        statusWinClose();
-                    }
-                }
-                if (mario->buttonTrg & PAD_TRIGGER_Z) {
-                    if (!statusWinCheck()) {
-                        statusWinOpen();
-                        wp->forceTimer = gp->framerate * 10;
-                        psndSFXOn((const char*)0x2A);
-                        wp->flags |= STATUS_WINDOW_FLAG_MENU_ICONS;
-                    } else {
-                        statusWinClose();
-                        wp->forceTimer = gp->framerate * 10;
-                        wp->forcedClose = 1;
-                        psndSFXOn((const char*)0x2B);
-                    }
-                }
-                if (valueCheck()) {
-                    wp->forceTimer = gp->framerate * 2;
-                    if (!statusWinCheck()) {
-                        statusWinOpen();
-                    }
-                }
-            }
-            if (wp->forceTimer) {
-                wp->forceTimer--;
-            }
-            wp->prevPos = mario->position;
-            if (wp->flags & STATUS_WINDOW_FLAG_FORCE_OPEN) {
-                wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
-            }
-            if (wp->flags & STATUS_WINDOW_FLAG_FORCE_CLOSE) {
-                wp->flags &= ~(STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
-            }
-            break;
-        case SEQ_BATTLE:
-            break;
-        default:
-            if (statusWinCheck()) {
-                statusWinClose();
-            }
-            break;
-    }
-    if (wp->flags & STATUS_WINDOW_FLAG_OPEN_REQ || wp->flags & STATUS_WINDOW_FLAG_CLOSE_REQ || wp->flags & STATUS_WINDOW_FLAG_FORCE_OPEN_REQ || wp->flags & STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ) {
-        wp->tStart = wp->t;
-        wp->tEnd = (wp->flags & (STATUS_WINDOW_FLAG_OPEN_REQ | STATUS_WINDOW_FLAG_FORCE_OPEN_REQ)) ? 1.0f : 0.0f;
-        wp->timer = 0.0f;
-        wp->duration = (wp->flags & (STATUS_WINDOW_FLAG_OPEN_REQ | STATUS_WINDOW_FLAG_FORCE_OPEN_REQ)) ? 16.0f / wp->speed : 28.0f / wp->speed;
-        wp->flags &= ~STATUS_WINDOW_FLAG_OPEN_REQ;
-        wp->flags &= ~STATUS_WINDOW_FLAG_CLOSE_REQ;
-        wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN_REQ;
-        wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ;
-    }
-    wp->timer += one;
-    if (wp->timer >= wp->duration) {
-        wp->timer = wp->duration;
-        wp->t = wp->tEnd;
-        if (wp->t == 0.0f) {
-            wp->flags &= ~STATUS_WINDOW_FLAG_MENU_ICONS;
-        }
-    } else {
-        inv = (f32)cos(3.1415927f * wp->timer / wp->duration);
-        wp->t = wp->tStart + (wp->tEnd - wp->tStart) * (one - inv) / 2.0f;
-    }
-    t = wp->t;
-    inv = 1.0f - t;
-    wp->x = wp->openX * t + wp->closeX * inv;
-    wp->y = wp->openY * t + wp->closeY * inv;
-    valueUpdate();
-    if (!(wp->flags & STATUS_WINDOW_FLAG_DISP_OFF)) {
-        dispEntry(CAMERA_2D, 500.0f, 0, statusWinDisp, NULL);
-    }
-}
-#else
 /**
  * Per-frame HUD logic in the field: hidden when Mario is not himself (a transformation or another character)
  * and left alone in the Pit of 100 Trials ("yuu").
@@ -293,7 +170,9 @@ void statusWinMain(void) {
                         wp->idle = gp->framerate * 10;
                         if (!wp->forcedClose && !wp->forceTimer && !statusWinCheck()) {
                             statusWinOpen();
+#if VERSION > VERSION_DEMO_US
                             wp->flags |= STATUS_WINDOW_FLAG_MENU_ICONS;
+#endif
                         }
                     }
                 } else {
@@ -307,13 +186,21 @@ void statusWinMain(void) {
                     if (!statusWinCheck()) {
                         statusWinOpen();
                         wp->forceTimer = gp->framerate * 10;
+#if VERSION <= VERSION_DEMO_US
+                        psndSFXOn((const char*)0x2A);
+#else
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
+#endif
                         wp->flags |= STATUS_WINDOW_FLAG_MENU_ICONS;
                     } else {
                         statusWinClose();
                         wp->forceTimer = gp->framerate * 10;
                         wp->forcedClose = 1;
+#if VERSION <= VERSION_DEMO_US
+                        psndSFXOn((const char*)0x2B);
+#else
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
+#endif
                     }
                 }
                 if (valueCheck()) {
@@ -352,10 +239,14 @@ void statusWinMain(void) {
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN_REQ;
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ;
     }
+#if VERSION <= VERSION_DEMO_US
+    wp->timer += one;
+#else
 #if VERSION >= VERSION_US
     wp->timer += 60.0f / gp->framerate;
 #else
     wp->timer += one;
+#endif
 #endif
     if (wp->timer >= wp->duration) {
         wp->timer = wp->duration;
@@ -376,7 +267,6 @@ void statusWinMain(void) {
         dispEntry(CAMERA_2D, 500.0f, 0, statusWinDisp, NULL);
     }
 }
-#endif
 
 // FAKE: iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which
 // evaluates the arguments in the retail order; the plain call changes the object.

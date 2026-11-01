@@ -110,18 +110,16 @@ static USER_FUNC(_steal_item) {
         s32 item = 0;
 #if VERSION == VERSION_EU
         s32 count;
+#else
+        s32 count = 0;
+#endif
         s32 held = 0;
         s32 r;
         s32 i;
+#if VERSION == VERSION_EU
         s32 heldMax = GetHeldItemCount; // PAL: read as in the other Pider thieves, but this one only takes badges
 
         count = 0;
-#else
-        s32 count = 0;
-        s32 held = 0;
-        s32 r;
-        s32 i;
-
 #endif
         for (i = 0; i < 200; i++) {
             if (pouch->badges[i] != 0) {

@@ -613,7 +613,6 @@ void marioFBattlePrepare(void) {
     partyCtrlOff();
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Undoes marioFBattlePrepare once the battle start is over or cancelled:
  * restores movement, puts Mario back after the accordion motion, gets him off Yoshi,
@@ -624,31 +623,18 @@ void marioFBattlePost(void) {
     MarioWork* wp = mp;
 
     wp->flags &= ~MARIO_FLAG_PRE_BATTLE_PHYSICS;
-    if (wp->currMotionId == MARIO_MOTION_YOSHI) {
-        marioYoshiForceCancel();
-    }
-    partyCtrlOn();
-    if (wp->currMotionId == MARIO_MOTION_HAMMER) {
-        marioChgMot(MARIO_MOTION_STAY);
-    }
-}
-#else
-/**
- * Undoes marioFBattlePrepare once the battle start is over or cancelled:
- * restores movement, puts Mario back after the accordion motion, gets him off Yoshi,
- * gives the partner control back and ends a hammer swing.
- * The US and PAL releases also move the partner back to its spot beside Mario.
- */
-void marioFBattlePost(void) {
-    MarioWork* wp = mp;
-
-    wp->flags &= ~MARIO_FLAG_PRE_BATTLE_PHYSICS;
+#if VERSION > VERSION_DEMO_US
     if (wp->currMotionId == MARIO_MOTION_JABARA) {
         wp->position = R_last_position;
     }
+#endif
     if (wp->currMotionId == MARIO_MOTION_YOSHI) {
         marioYoshiForceCancel();
     }
+#if VERSION <= VERSION_DEMO_US
+    partyCtrlOn();
+    if (wp->currMotionId == MARIO_MOTION_HAMMER) {
+#else
 #if VERSION >= VERSION_US
     {
         PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -661,10 +647,10 @@ void marioFBattlePost(void) {
 #endif
     partyCtrlOn();
     if (wp->currMotionId == MARIO_MOTION_HAMMER || wp->currMotionId == MARIO_MOTION_JABARA) {
+#endif
         marioChgMot(MARIO_MOTION_STAY);
     }
 }
-#endif
 
 /** Returns how many marioCtrlOff calls are outstanding (0 means Mario has control). */
 s32 marioCtrlOffChk(void) {

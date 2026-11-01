@@ -2922,7 +2922,6 @@ void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
 }
 #pragma dont_inline reset
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Picks the random action of a Confused Mario or partner
  * and returns its script (btlevtcmd in battle_event_cmd.c retries while it returns NULL):
@@ -2948,179 +2947,13 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     if (unit->currentKind != UNIT_MARIO && (unit->currentKind < TYPE_PARTNER_MIN || unit->currentKind >= TYPE_PARTNER_MAX)) {
         return subsetevt_confuse_flustered;
     }
-    _btlcmd_MakeActClassTable(wp);
-    {
-        u8 cnt;
-        u8 i;
-        _btlcmd_GetCursorPtr(cmd, 14, &cursor);
-        cnt = 0;
-        for (i = 0; i < cursor->count; i++) {
-            if (cmd->act[i].enabled && cmd->act[i].type != 4 && cmd->act[i].type != 2) {
-                list[cnt++] = i;
-            }
-        }
-        list[cnt] = -1;
-        if (cnt) {
-            cursor->absPos = list[irand(cnt)];
-        } else {
-            return subsetevt_confuse_flustered;
-        }
-    }
-    cmd->actType = cmd->act[cursor->absPos].type;
-    if (!cmd->act[cursor->absPos].enabled) {
-        return subsetevt_confuse_flustered;
-    }
-    switch (cmd->actType) {
-        case 0:
-        case 1:
-        case 2:
-        case 4:
-        case 6:
-        case 7:
-        case 8:
-            _btlcmd_MakeSelectWeaponTable(wp, cmd->actType);
-            {
-                u8 cnt;
-                u8 i;
-                _btlcmd_GetCursorPtr(cmd, cmd->actType, &cursor);
-                cnt = 0;
-                for (i = 0; i < cursor->count; i++) {
-                    weapon = cmd->weapon[i].weapon;
-                    if (cmd->weapon[i].enabled && ((u32)weapon->special & SPECIAL_CONFUSED_ACTION) &&
-                        !(weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) && (weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
-                        list[cnt++] = i;
-                    }
-                }
-                list[cnt] = -1;
-                if (cnt) {
-                    cursor->absPos = list[irand(cnt)];
-                } else {
-                    return NULL;
-                }
-            }
-            if (!cmd->weapon[cursor->absPos].enabled) {
-                return subsetevt_confuse_flustered;
-            }
-            _btlcmd_SelectWeaponDecide(wp, cmd->actType, cursor->absPos);
-            weapon = cmd->weapon[cursor->absPos].weapon;
-            if (!((u32)weapon->special & SPECIAL_CONFUSED_ACTION)) {
-                return subsetevt_confuse_flustered;
-            }
-            if ((weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) || !(weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
-                return subsetevt_confuse_flustered;
-            }
-            if (wp->weaponTargets.numTargets <= 0) {
-                return subsetevt_confuse_flustered;
-            }
-            wp->weaponTargets.currentTarget = irand(wp->weaponTargets.numTargets);
-            wp->flags |= BATTLE_FLAG_ACT_DECIDED_UNUSED;
-            return weapon->attackEvtScript;
-        case 5:
-            _btlcmd_MakeOperationTable(wp);
-            {
-                u8 cnt;
-                u8 i;
-                _btlcmd_GetCursorPtr(cmd, 5, &cursor);
-                cnt = 0;
-                for (i = 0; i < cursor->count; i++) {
-                    if (cmd->operation[i].enabled) {
-                        if (cmd->operation[i].type == 0 || cmd->operation[i].type == 6 || cmd->operation[i].type == 3) {
-                            list[cnt++] = i;
-                        }
-                    }
-                }
-                list[cnt] = -1;
-                if (cnt) {
-                    cursor->absPos = list[irand(cnt)];
-                } else {
-                    return subsetevt_confuse_flustered;
-                }
-            }
-            if (!cmd->operation[cursor->absPos].enabled) {
-                return subsetevt_confuse_flustered;
-            }
-            cmd->operationType = cmd->operation[cursor->absPos].type;
-            switch ((u32)cmd->operationType) {
-                case 6:
-                    if (unit->currentKind == UNIT_MARIO) {
-                        return btldefaultevt_Defend;
-                    }
-                    return btldefaultevt_DefendParty;
-                case 5:
-                    return btldefaultevt_Appeal;
-                case 7:
-                    return btldefaultevt_Wait;
-                case 3:
-                    return btldefaultevt_Escape;
-                    case 1:
-                    return badgeWeapon_Charge.attackEvtScript;
-                case 2:
-                    return badgeWeapon_SuperCharge.attackEvtScript;
-                    case 8:
-                    return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
-                case 0: {
-                    u8 cnt;
-                    u8 i;
-                    _btlcmd_GetCursorPtr(cmd, 10, &cursor);
-                    cnt = 0;
-                    for (i = 0; i < cursor->count; i++) {
-                        if (cmd->party[i].enabled) {
-                            list[cnt++] = i;
-                        }
-                    }
-                    list[cnt] = -1;
-                    if (cnt) {
-                        cursor->absPos = list[irand(cnt)];
-                    } else {
-                        return subsetevt_confuse_flustered;
-}
-                }
-                    if (!cmd->party[cursor->absPos].enabled) {
-                        return subsetevt_confuse_flustered;
-                    }
-                    cmd->partyKind = cmd->party[cursor->absPos].kind;
-                    cmd->cursor[1].absPos = 0;
-                    return btldefaultevt_ChangeParty;
-                case 4:
-                    return subsetevt_confuse_flustered;
-                default:
-                    return subsetevt_confuse_flustered;
-            }
-        default:
-            return subsetevt_confuse_flustered;
-    }
-}
-#else
-/**
- * Picks the random action of a Confused Mario or partner
- * and returns its script (btlevtcmd in battle_event_cmd.c retries while it returns NULL):
- * a random enabled command other than Items or Special,
- * then a random single-target move usable while confused aimed at a random target, or Defend,
- * Run Away or Change Partner from Tactics.
- * Enemies, and cases with no valid pick, get subsetevt_confuse_flustered.
- * The US and PAL releases first drop a Double or Triple Dip in progress.
- */
-void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
-    BattleCommand* cmd = &wp->commandMenu;
-    BattleCursor* cursor;
-    s16 list[24];
-    BattleWeapon* weapon;
-
-    if (unit->moveState == 3) {
-        unit->moveState = 0;
-    }
-    BattleAcHelpSetDispType(0);
-    if (unit->alliance) {
-        return subsetevt_confuse_flustered;
-    }
-    if (unit->currentKind != UNIT_MARIO && (unit->currentKind < TYPE_PARTNER_MIN || unit->currentKind >= TYPE_PARTNER_MAX)) {
-        return subsetevt_confuse_flustered;
-    }
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     if (cmd->dipMode) {
         unit->moveState = 0;
         cmd->dipMode = 0;
     }
+#endif
 #endif
     _btlcmd_MakeActClassTable(wp);
     {
@@ -3160,7 +2993,11 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         cnt = 0;
         for (i = 0; i < cursor->count; i++) {
             weapon = cmd->weapon[i].weapon;
+#if VERSION <= VERSION_DEMO_US
+            if (cmd->weapon[i].enabled && ((u32)weapon->special & SPECIAL_CONFUSED_ACTION) &&
+#else
             if (cmd->weapon[i].enabled && (weapon->special & SPECIAL_CONFUSED_ACTION) &&
+#endif
                 !(weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) && (weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
                 list[cnt++] = i;
             }
@@ -3177,7 +3014,11 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         }
         _btlcmd_SelectWeaponDecide(wp, cmd->actType, cursor->absPos);
         weapon = cmd->weapon[cursor->absPos].weapon;
+#if VERSION <= VERSION_DEMO_US
+        if (!((u32)weapon->special & SPECIAL_CONFUSED_ACTION)) {
+#else
         if (!(weapon->special & SPECIAL_CONFUSED_ACTION)) {
+#endif
             return subsetevt_confuse_flustered;
         }
         if ((weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) || !(weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
@@ -3214,7 +3055,11 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
             return subsetevt_confuse_flustered;
         }
         cmd->operationType = cmd->operation[cursor->absPos].type;
+#if VERSION <= VERSION_DEMO_US
+        switch ((u32)cmd->operationType) {
+#else
         switch (cmd->operationType) {
+#endif
         case 6:
             if (unit->currentKind == UNIT_MARIO) {
                 return btldefaultevt_Defend;
@@ -3227,6 +3072,14 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         case 3:
             return btldefaultevt_Escape;
         case 1:
+#if VERSION <= VERSION_DEMO_US
+            return badgeWeapon_Charge.attackEvtScript;
+        case 2:
+            return badgeWeapon_SuperCharge.attackEvtScript;
+            case 8:
+            return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
+        case 0: {
+#else
             if (unit->currentKind == UNIT_MARIO) {
                 return badgeWeapon_Charge.attackEvtScript;
             }
@@ -3240,6 +3093,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
             return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
         case 0:
             {
+#endif
                 u8 cnt;
                 u8 i;
                 _btlcmd_GetCursorPtr(cmd, 10, &cursor);
@@ -3253,7 +3107,11 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
                 if (cnt) {
                     cursor->absPos = list[irand(cnt)];
                 } else {
+#if VERSION <= VERSION_DEMO_US
+                    return subsetevt_confuse_flustered;
+#else
                     return NULL;
+#endif
                 }
             }
             if (!cmd->party[cursor->absPos].enabled) {
@@ -3271,7 +3129,6 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         return subsetevt_confuse_flustered;
     }
 }
-#endif
 
 #pragma dont_inline on
 /**

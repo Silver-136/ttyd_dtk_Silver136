@@ -98,6 +98,10 @@ void effIndirectMain(EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_US
 /** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
 static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
+#else
+/** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
+void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
+#endif
     EffIndirectWork* work = effect->userdata;
     CameraEntry* camera;
     s32 type;
@@ -109,20 +113,32 @@ static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx scale;
     Mtx final;
     GXTexObj texObj;
-void* indTex;
+#if VERSION <= VERSION_DEMO_US
+    void* indTex;
     f32 indMtx[2][3];
+#endif
     camera = camGetPtr(CAMERA_2D);
     type = work->type;
     alpha = work->alpha;
+#if VERSION <= VERSION_DEMO_US
     indTex = work->work->address;
+#endif
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
     switch (type) {
         case 0:
-        effGetTexObj(0x86, &texObj);
-        GXLoadTexObj(&texObj, GX_TEXMAP0);
+#if VERSION <= VERSION_DEMO_US
+            effGetTexObj(0x86, &texObj);
+#else
+#if VERSION >= VERSION_US
+            effGetTexObj(0x6A, &texObj);
+#else
+            effGetTexObj(0x86, &texObj);
+#endif
+#endif
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
             break;
         case 1:
             effGetTexObj(0x45, &texObj);
@@ -138,8 +154,10 @@ void* indTex;
     GXPixModeSync();
     GXInitTexObj(&texObj, buffer, 304, 240, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXLoadTexObj(&texObj, GX_TEXMAP1);
+#if VERSION <= VERSION_DEMO_US
     GXInitTexObj(&texObj, indTex, 64, 64, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXLoadTexObj(&texObj, GX_TEXMAP2);
+#endif
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXScale(scale, work->scale, work->scale, work->scale);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camera->viewYaw));
@@ -150,7 +168,11 @@ void* indTex;
 
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+#if VERSION <= VERSION_DEMO_US
     GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, alpha});
+#else
+    GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
+#endif
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
@@ -158,6 +180,7 @@ void* indTex;
     PSMTXConcat(mtx, camera->view, mtx);
     PSMTXConcat(mtx, final, mtx);
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX3x4);
+#if VERSION <= VERSION_DEMO_US
     indMtx[0][0] = 0.5f;
     indMtx[0][1] = 0.0f;
     indMtx[0][2] = 0.0f;
@@ -165,6 +188,7 @@ void* indTex;
     indMtx[1][1] = 0.5f;
     indMtx[1][2] = 0.0f;
     GXSetIndTexMtx(GX_ITM_0, indMtx, 1);
+#endif
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
@@ -204,111 +228,8 @@ void* indTex;
     GXPosition3f32(-size / 2, -size / 2, 0.0f);
     GXTexCoord2f32(0.0f, v);
     GXEnd();
+#if VERSION <= VERSION_DEMO_US
     GXSetNumIndStages(0);
     GXSetTevDirect(GX_TEVSTAGE1);
-}
-#else
-/** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
-void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
-    EffIndirectWork* work = effect->userdata;
-    CameraEntry* camera;
-    s32 type;
-    u8 alpha;
-    void* buffer;
-    f32 u, v, size, half;
-    Mtx mtx;
-    Mtx rot;
-    Mtx scale;
-    Mtx final;
-    GXTexObj texObj;
-
-    camera = camGetPtr(CAMERA_2D);
-    type = work->type;
-    alpha = work->alpha;
-    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-    GXSetZCompLoc(GX_TRUE);
-    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
-    switch (type) {
-        case 0:
-#if VERSION >= VERSION_US
-            effGetTexObj(0x6A, &texObj);
-#else
-            effGetTexObj(0x86, &texObj);
 #endif
-            GXLoadTexObj(&texObj, GX_TEXMAP0);
-            break;
-        case 1:
-            effGetTexObj(0x45, &texObj);
-            GXLoadTexObj(&texObj, GX_TEXMAP0);
-            break;
-    }
-
-    // copy the framebuffer for the distortion
-    GXSetTexCopySrc(0, 0, 608, 480);
-    GXSetTexCopyDst(304, 240, GX_TF_RGB565, GX_TRUE);
-    buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), 3)->address;
-    GXCopyTex(buffer, GX_FALSE);
-    GXPixModeSync();
-    GXInitTexObj(&texObj, buffer, 304, 240, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
-    GXLoadTexObj(&texObj, GX_TEXMAP1);
-
-    PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-    PSMTXScale(scale, work->scale, work->scale, work->scale);
-    PSMTXRotRad(rot, 'y', MTXDegToRad(-camera->viewYaw));
-    PSMTXConcat(mtx, scale, scale);
-    PSMTXConcat(scale, rot, final);
-    PSMTXRotRad(rot, 'z', MTXDegToRad(work->rotZ));
-    PSMTXConcat(final, rot, final);
-
-    GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
-    GXSetNumTexGens(2);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    C_MTXLightPerspective(mtx, 25.0f, 1.2666667f, 0.5f, -0.5f, 0.505f, 0.505f);
-    PSMTXConcat(mtx, camera->view, mtx);
-    PSMTXConcat(mtx, final, mtx);
-    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX3x4);
-    GXSetNumTevStages(2);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-    GXSetCullMode(GX_CULL_NONE);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    PSMTXConcat(camera->view, final, final);
-    GXLoadPosMtxImm(final, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    v = u = 1.0f;
-    switch (type) {
-        case 0:
-            u = 2.0f;
-            break;
-        case 1:
-            v = u = 2.0f;
-            break;
-    }
-    size = 32.0f;
-    half = 16.0f;
-    GXPosition3f32(-size / 2, half, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(half, half, 0.0f);
-    GXTexCoord2f32(u, 0.0f);
-    GXPosition3f32(half, -size / 2, 0.0f);
-    GXTexCoord2f32(u, v);
-    GXPosition3f32(-size / 2, -size / 2, 0.0f);
-    GXTexCoord2f32(0.0f, v);
-    GXEnd();
 }
-#endif

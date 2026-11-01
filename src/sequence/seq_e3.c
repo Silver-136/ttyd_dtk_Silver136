@@ -75,7 +75,6 @@ seq_e3_entry e3_tbl[4] = {
     { 23, 140.0f, 100.0f },
     { 35, -140.0f, -100.0f },
     { 96, 140.0f, -100.0f },
-};
 #else
 /**
  * The four scenarios of the trade-show menu: the story progress each one starts at and where its box sits
@@ -85,8 +84,8 @@ seq_e3_entry e3_tbl[3] = {
     { 23, -140.0f, 100.0f },
     { 35, 140.0f, 100.0f },
     { 96, 0.0f, -100.0f },
-};
 #endif
+};
 #if VERSION < VERSION_US
 #if VERSION <= VERSION_DEMO_US
 char* anim_tbl[4 * 4] = {

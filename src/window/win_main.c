@@ -1828,16 +1828,14 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     }
     {
         s32 w = ref - FontGetMessageWidth(msg);
-        PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
-    }
 #else
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
     {
         s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
+#endif
         PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
     }
-#endif
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);

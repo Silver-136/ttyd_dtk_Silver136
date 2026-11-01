@@ -373,7 +373,6 @@ return ret;
  * turns Mario to face left or right on screen, restores his normal collision (marioSetSpec),
  * clears Tube Mode and the paper animation, frees the motion's work and dismounts the partners.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Cleanup when the roll motion ends: stops the roll sound, resets the camera shift,
  * turns Mario to face left or right on screen, restores his normal collision (marioSetSpec),
@@ -381,12 +380,27 @@ return ret;
  */
 void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
-MarioWork* m;
-m = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+    MarioWork* m;
+#else
+    MarioWork* m = marioGetPtr();
+#if VERSION >= VERSION_US
+    if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
+        psndSFXOff(marioGetPtr()->motRoll->sfxId);
+        marioGetPtr()->motRoll->sfxId = -1;
+#else
+    if (m->mot.roll.sfxId != -1U) {
+        psndSFXOff(m->mot.roll.sfxId);
+        m->mot.roll.sfxId = -1;
+#endif
+    }
+#endif
+    m = marioGetPtr();
     m->camShiftTargetZ = 0.0f;
     m->camShiftRate.z = 0.004f;
     {
         f32 d = revise360(mario->directionView - mario->targetYaw);
+#if VERSION <= VERSION_DEMO_US
         do {
             if (d >= 180.0f) {
                 mario->displayDirection = 0.0f;
@@ -400,50 +414,7 @@ m = marioGetPtr();
                 mario->directionView = 90.0f;
             }
         } while (0);
-    }
-    marioSetSpec();
-    mario->rollFlags = 0;
-    mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-    mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-    mario->rot = (Vec){0.0f, 0.0f, 0.0f};
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
-    mario->flags &= ~MARIO_FLAG_TUBE_MODE;
-    marioPaperOff();
-    marioAdjustMoveDir();
-    marioChgPose("M_S_1");
-    if (marioGetPtr()->motStruct) {
-        __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
-        mario = 0;
-        marioGetPtr()->motStruct = (void*)mario;
-    }
-    allPartyRideOff();
-}
 #else
-/**
- * Cleanup when the roll motion ends: stops the roll sound, resets the camera shift,
- * turns Mario to face left or right on screen, restores his normal collision (marioSetSpec),
- * clears Tube Mode and the paper animation, frees the motion's work and dismounts the partners.
- */
-void mot_roll_post(void) {
-    MarioWork* mario = marioGetPtr();
-    MarioWork* m = marioGetPtr();
-#if VERSION >= VERSION_US
-    if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
-        psndSFXOff(marioGetPtr()->motRoll->sfxId);
-        marioGetPtr()->motRoll->sfxId = -1;
-    }
-#else
-    if (m->mot.roll.sfxId != -1U) {
-        psndSFXOff(m->mot.roll.sfxId);
-        m->mot.roll.sfxId = -1;
-    }
-#endif
-    m = marioGetPtr();
-    m->camShiftTargetZ = 0.0f;
-    m->camShiftRate.z = 0.004f;
-    {
-        f32 d = revise360(mario->directionView - mario->targetYaw);
         if (d >= 180.0f) {
             mario->displayDirection = 0.0f;
             mario->displayDirectionTarget = 0.0f;
@@ -455,6 +426,7 @@ void mot_roll_post(void) {
             mario->moveDirection = 90.0f;
             mario->directionView = 90.0f;
         }
+#endif
     }
     marioSetSpec();
     mario->rollFlags = 0;
@@ -469,82 +441,40 @@ void mot_roll_post(void) {
     marioChgPose("M_S_1");
     if (marioGetPtr()->motStruct) {
         __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
+#if VERSION <= VERSION_DEMO_US
+        mario = 0;
+        marioGetPtr()->motStruct = (void*)mario;
+#else
         marioGetPtr()->motStruct = NULL;
+#endif
     }
     allPartyRideOff();
 }
-#endif
 
 /**
  * Instantly turns Mario back from Tube Mode (the same reset as mot_roll_post) and puts him in the stay motion;
  * used by evt_mario.
  */
+/**
+ * Instantly turns Mario back from Tube Mode (the same reset as mot_roll_post) and puts him in the stay motion;
+ * used by evt_mario.
+ */
+void marioRollForceCancel(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->currMotionId == MARIO_MOTION_ROLL) {
 #if VERSION <= VERSION_DEMO_US
-/**
- * Instantly turns Mario back from Tube Mode (the same reset as mot_roll_post) and puts him in the stay motion;
- * used by evt_mario.
- */
-void marioRollForceCancel(void) {
-    MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId == MARIO_MOTION_ROLL) {
-MarioWork* m;
-m = marioGetPtr();
-        m->camShiftTargetZ = 0.0f;
-        m->camShiftRate.z = 0.004f;
-        {
-            f32 d = revise360(mario->directionView - mario->targetYaw);
-            if (d >= 180.0f) {
-                mario->displayDirection = 0.0f;
-                mario->displayDirectionTarget = 0.0f;
-                mario->moveDirection = 270.0f;
-                do {
-                    mario->directionView = 270.0f;
-                } while (0);
-            } else {
-                mario->displayDirection = 180.0f;
-                mario->displayDirectionTarget = 180.0f;
-                mario->moveDirection = 90.0f;
-                mario->directionView = 90.0f;
-            }
-        }
-        marioSetSpec();
-        mario->rollFlags = 0;
-        mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-        mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-        mario->rot = (Vec){0.0f, 0.0f, 0.0f};
-        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
-        mario->flags &= ~MARIO_FLAG_TUBE_MODE;
-        marioPaperOff();
-        marioAdjustMoveDir();
-        marioChgPose("M_S_1");
-        if (marioGetPtr()->motStruct) {
-            __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
-            mario = 0;
-            marioGetPtr()->motStruct = (void*)mario;
-        }
-        allPartyRideOff();
-        marioChgMotSub(MARIO_MOTION_STAY, 0);
-    }
-}
+        MarioWork* m;
 #else
-/**
- * Instantly turns Mario back from Tube Mode (the same reset as mot_roll_post) and puts him in the stay motion;
- * used by evt_mario.
- */
-void marioRollForceCancel(void) {
-    MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId == MARIO_MOTION_ROLL) {
         MarioWork* m = marioGetPtr();
 #if VERSION >= VERSION_US
         if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
             psndSFXOff(marioGetPtr()->motRoll->sfxId);
             marioGetPtr()->motRoll->sfxId = -1;
-        }
 #else
         if (m->mot.roll.sfxId != -1U) {
             psndSFXOff(m->mot.roll.sfxId);
             m->mot.roll.sfxId = -1;
+#endif
         }
 #endif
         m = marioGetPtr();
@@ -556,7 +486,13 @@ void marioRollForceCancel(void) {
                 mario->displayDirection = 0.0f;
                 mario->displayDirectionTarget = 0.0f;
                 mario->moveDirection = 270.0f;
+#if VERSION <= VERSION_DEMO_US
+                do {
+                    mario->directionView = 270.0f;
+                } while (0);
+#else
                 mario->directionView = 270.0f;
+#endif
             } else {
                 mario->displayDirection = 180.0f;
                 mario->displayDirectionTarget = 180.0f;
@@ -577,13 +513,17 @@ void marioRollForceCancel(void) {
         marioChgPose("M_S_1");
         if (marioGetPtr()->motStruct) {
             __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
+#if VERSION <= VERSION_DEMO_US
+            mario = 0;
+            marioGetPtr()->motStruct = (void*)mario;
+#else
             marioGetPtr()->motStruct = NULL;
+#endif
         }
         allPartyRideOff();
         marioChgMotSub(MARIO_MOTION_STAY, 0);
     }
 }
-#endif
 
 void marioSetRollDispDir(void) {
     MarioWork* mario = marioGetPtr();
@@ -1392,13 +1332,12 @@ void mot_roll(void) {
             if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
                 psndSFXOff(marioGetPtr()->motRoll->sfxId);
                 marioGetPtr()->motRoll->sfxId = -1;
-            }
 #else
             if (m->mot.roll.sfxId != -1U) {
                 psndSFXOff(m->mot.roll.sfxId);
                 m->mot.roll.sfxId = -1;
-            }
 #endif
+            }
         }
         {
             MarioWork* m = marioGetPtr();

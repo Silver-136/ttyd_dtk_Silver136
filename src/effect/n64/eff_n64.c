@@ -353,55 +353,31 @@ void effInit64(void) {
  * otherwise reads it from the game disc (path by version and language) in the background;
  * textures become available once unpacked.
  */
+/**
+ * Loads effect_n64.tpl from the archive if present,
+ * otherwise reads it from the game disc (path by version and language) in the background;
+ * textures become available once unpacked.
+ */
+void effTexSetupN64(void) {
+    const char* lang;
+    DVDEntry* entry;
+    char path[128];
+    u32 length;
+
+    wp->effTexture = NULL;
+    wp->effTextureLoaded = FALSE;
+    wp->effTexture = (TEXPalette*)arcOpen("effect_n64.tpl", 0, 0);
+    if (wp->effTexture == NULL) {
 #if VERSION <= VERSION_DEMO_US
-/**
- * Loads effect_n64.tpl from the archive if present,
- * otherwise reads it from the game disc (path by version and language) in the background;
- * textures become available once unpacked.
- */
-void effTexSetupN64(void) {
-    const char* lang;
-    DVDEntry* entry;
-    char path[128];
-    u32 length;
-
-    wp->effTexture = NULL;
-    wp->effTextureLoaded = FALSE;
-    wp->effTexture = (TEXPalette*)arcOpen("effect_n64.tpl", 0, 0);
-    if (wp->effTexture == NULL) {
         sprintf(path, "%s/eff/jp/effect_n64.tpl", getMarioStDvdRoot());
-        entry = DVDMgrOpen(path, 2, 0);
-        length = OSRoundUp32B(DVDMgrGetLength(entry));
-        wp->effTexture = (TEXPalette*)__memAlloc(HEAP_DEFAULT, length);
-        entry->info.cb.userData = entry;
-        DVDMgrReadAsync(entry, wp->effTexture, length, 0, _callback_tpl);
-    } else {
-        UnpackTexPalette(wp->effTexture);
-        wp->effTextureLoaded = TRUE;
-    }
-}
 #else
-/**
- * Loads effect_n64.tpl from the archive if present,
- * otherwise reads it from the game disc (path by version and language) in the background;
- * textures become available once unpacked.
- */
-void effTexSetupN64(void) {
-    const char* lang;
-    DVDEntry* entry;
-    char path[128];
-    u32 length;
-
-    wp->effTexture = NULL;
-    wp->effTextureLoaded = FALSE;
-    wp->effTexture = (TEXPalette*)arcOpen("effect_n64.tpl", 0, 0);
-    if (wp->effTexture == NULL) {
 #if VERSION >= VERSION_US
         lang = (u32)gp->language == LANGUAGE_JP ? "jp" : "us";
         sprintf(path, "%s/e/%s/effect_n64.tpl", getMarioStDvdRoot(), lang);
 #else
         sprintf(path, "%s/e/jp/effect_n64.tpl", getMarioStDvdRoot());
 #endif
+#endif
         entry = DVDMgrOpen(path, 2, 0);
         length = OSRoundUp32B(DVDMgrGetLength(entry));
         wp->effTexture = (TEXPalette*)__memAlloc(HEAP_DEFAULT, length);
@@ -412,7 +388,6 @@ void effTexSetupN64(void) {
         wp->effTextureLoaded = TRUE;
     }
 }
-#endif
 
 /** Fills obj with effect texture id from the loaded palette, or a 1x1 placeholder until loading has finished. */
 void effGetTexObjN64(u32 id, GXTexObj* obj) {

@@ -1075,10 +1075,9 @@ static USER_FUNC(party_cannot_use_command) {
 #else
     s32 icon = 0;
 #endif
-#if VERSION >= VERSION_US
-
     switch (r) {
         case 0:
+#if VERSION >= VERSION_US
             if (unit != NULL) {
                 unit->usCommandDisabled[0] = 3;
             }
@@ -1090,8 +1089,6 @@ static USER_FUNC(party_cannot_use_command) {
             }
             icon = 340;
 #else
-    switch (r) {
-        case 0:
             wp->commandDisabled[3] = 3;
             icon = 336;
             break;

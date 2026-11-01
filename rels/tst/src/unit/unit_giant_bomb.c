@@ -805,59 +805,21 @@ static EVT_BEGIN(explosion_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
     CALL(evt_snd_sfxoff, LW(0))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, -1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(5))
-    DIVIDE(LW(5), 2)
-    CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
-    MULTIPLY(LW(5), LW(6))
-ADD(LW(1), LW(5))
-    CALL(evt_eff, 0, STRING("bomb"), 5, LW(0), LW(1), LW(2), FLOAT(2.0f), 0, 0, 0, 0, 0, 0, 0)
-    CALL(btlevtcmd_StageDispellFog)
-    WAIT_MS(300)
-    CALL(evt_eff, 0, STRING("bomb"), 4, -40, 30, 20, FLOAT(2.0f), 0, 0, 0, 0, 0, 0, 0)
-    WAIT_MS(125)
-    CALL(evt_eff, 0, STRING("bomb"), 4, 40, 90, 20, FLOAT(2.0f), 0, 0, 0, 0, 0, 0, 0)
-    WAIT_MS(125)
-    CALL(evt_eff, 0, STRING("bomb"), 4, 40, 30, 20, FLOAT(2.0f), 0, 0, 0, 0, 0, 0, 0)
-    WAIT_MS(125)
-    CALL(evt_eff, 0, STRING("bomb"), 4, -40, 90, 20, FLOAT(2.0f), 0, 0, 0, 0, 0, 0, 0)
-    WAIT_MS(125)
-    CALL(evt_eff, 0, STRING("bomb"), 4, -100, 60, 20, FLOAT(2.0f), 0, 0, 0, 0, 0, 0, 0)
-    WAIT_MS(125)
-    CALL(evt_eff, 0, STRING("bomb"), 4, 100, 60, 20, FLOAT(2.0f), 0, 0, 0, 0, 0, 0, 0)
-    CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
-    CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_heavy_bomb_super_explosion))
-    CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_heavy_bomb_super_explosion), LW(3), LW(4))
-    IF_INT_EQUAL(LW(3), -1)
-        GOTO(99)
-    END_IF
-    CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_heavy_bomb_super_explosion))
-    CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_heavy_bomb_super_explosion))
-    SET_VALUE(LW(10), 0)
-    LABEL(10)
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_heavy_bomb_super_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 1)
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_heavy_bomb_super_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    END_IF
-    CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
-    IF_INT_NOT_EQUAL(LW(3), -1)
-        ADD(LW(10), 1)
-        GOTO(10)
-    END_IF
-    LABEL(99)
-    SET_VALUE(LW(10), -2)
-#else
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 60, 4)
+#endif
 #endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(5))
     DIVIDE(LW(5), 2)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY(LW(5), LW(6))
+#else
     MULTIPLY_FLOAT(LW(5), LW(6))
+#endif
     ADD(LW(1), LW(5))
     CALL(evt_eff, 0, STRING("bomb"), 5, LW(0), LW(1), LW(2), FLOAT(2.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(btlevtcmd_StageDispellFog)
@@ -893,6 +855,9 @@ ADD(LW(1), LW(5))
         GOTO(10)
     END_IF
     LABEL(99)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LW(10), -2)
+#else
     SET_VALUE(LW(10), UNIT_ID_SELF)
 #endif
     CALL_CHILD(subsetevt_dead_core)

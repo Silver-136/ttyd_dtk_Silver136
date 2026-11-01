@@ -299,36 +299,28 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
-#if VERSION <= VERSION_DEMO_US
-/** Item-box script for the chest mobj_box00 (demos): gives the Damage Dodge P badge, picked up with the chest-open animation. */
-static EVT_BEGIN(mobj_box00)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_item_entry, STRING("item00"), ITEM_DAMAGE_DODGE_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
-    CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
-    CALL(evt_item_get_item, STRING("item00"))
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-#else
 /**
  * Item-box script for the chest mobj_box00: gives the Defend Plus P badge in the US and PAL releases
  * and the Damage Dodge P badge in the Japanese ones (and demos), picked up with the chest-open animation.
  */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_entry, STRING("item00"), ITEM_DAMAGE_DODGE_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
+#else
 #if VERSION >= VERSION_US
     CALL(evt_item_entry, STRING("item00"), ITEM_DEFEND_PLUS_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
 #else
     CALL(evt_item_entry, STRING("item00"), ITEM_DAMAGE_DODGE_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
 #endif
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Waterfall fade loop: every frame adds GW(0) to the waterfall alpha (clamped to 0 through 255),

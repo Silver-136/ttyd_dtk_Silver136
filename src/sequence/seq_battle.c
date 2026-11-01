@@ -361,17 +361,24 @@ Vec pos;
 }
 /** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
 static void battle_init(void) {
-FieldBattleData* fbat;
+#else
+/** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
+BOOL battle_init(void) {
+#endif
+    FieldBattleData* fbat;
     NpcEntry* npc;
     PouchData* pouch;
-MapData* map;
+#if VERSION <= VERSION_DEMO_US
+    MapData* map;
     MapData* map2;
     BattleStageData* stage;
-FieldBattleInfo* info;
+#endif
+    FieldBattleInfo* info;
     PartyEntry* party;
 
     fbat = fbatGetPointer();
     npc = fbat->target;
+#if VERSION <= VERSION_DEMO_US
     stage = npc->battleInfo.stageData;
     pouch = pouchGetPtr();
     if (debug_battle_flag == 0) {
@@ -400,6 +407,9 @@ FieldBattleInfo* info;
         map2 = mapDataPtr(stage->specificStageDataDir);
     }
     bmapLoad(map->mapName, stage->specificStageDataDir);
+#else
+    pouch = pouchGetPtr();
+#endif
     camSetMode(CAMERA_3D, 2);
     if (gp->debugBattle) {
         const char* msg = DbgBtlSel_GetMsgDataPtr();
@@ -409,105 +419,30 @@ FieldBattleInfo* info;
             msgLoad(gon11, 0);
         }
     }
+#if VERSION <= VERSION_DEMO_US
     memClear(HEAP_BATTLE);
     smartAutoFree(2);
-    _battleWorkPointer = NULL;
-    animPoseBattleInit();
-    npcReleaseFiledNpc();
-    gp->inBattle = 1;
-    evtmgrReInit();
-    if (map && map->eventAddr) {
-        evtEntry(map->eventAddr, 0, 0);
-    }
-    if (map2 && map2->eventAddr) {
-        evtEntry(map2->eventAddr, 0, 0);
-    }
-    psndSetFlag(PSND_FLAG_BATTLE_START);
-    info = &fbat->info;
-    BattleInformationInit(info);
-    BattleInformationSetMode(info, 0);
-    party = partyGetPtr(marioGetPartyId());
-    if (party) {
-        s32 id = party->currentMemberId;
-        BattleUnitType kind = BattleTransPartyIdToUnitKind(id);
-        if (!(pouch->partyData[id].flags & 2)) {
-            BattleInformationSetParty(info, kind);
-        }
-    }
-    if (fbat->firstAttackFlags & 1) {
-        BattleInformationSetFirstAttack(info, FIRST_ATTACK_NONE);
-    } else {
-        switch (fbat->hitKind) {
-            case FBAT_HIT_JUMP:
-                BattleInformationSetFirstAttack(info, FIRST_ATTACK_JUMP);
-                break;
-            case FBAT_HIT_HIP:
-                BattleInformationSetFirstAttack(info, FIRST_ATTACK_SPIN_JUMP);
-                break;
-            case FBAT_HIT_JUMP_UNUSED:
-                BattleInformationSetFirstAttack(info, FIRST_ATTACK_JUMP_UNUSED);
-                break;
-            case FBAT_HIT_HAMMER:
-                BattleInformationSetFirstAttack(info, FIRST_ATTACK_HAMMER);
-                break;
-            case FBAT_HIT_SPIN_HAMMER:
-                BattleInformationSetFirstAttack(info, FIRST_ATTACK_SPIN_HAMMER);
-                break;
-            case FBAT_HIT_ULTRA_SPIN_HAMMER:
-                BattleInformationSetFirstAttack(info, FIRST_ATTACK_ULTRA_HAMMER);
-                break;
-            case FBAT_HIT_SHELL:
-                BattleInformationSetFirstAttack(info, FIRST_ATTACK_SHELL);
-                break;
-            case FBAT_HIT_BOMB:
-                BattleInformationSetFirstAttack(info, FIRST_ATTACK_BOMB);
-                break;
-            case FBAT_HIT_ENEMY_FIRST:
-                BattleInformationSetFirstAttack(info, fbat->firstAttackParam);
-                break;
-            default:
-                BattleInformationSetFirstAttack(info, FIRST_ATTACK_NONE);
-                break;
-        }
-    }
-    BattleInfomationSetBattleSetupInfo(info, &npc->battleInfo);
-    info->ruleType = npc->battleInfo.battleRule[0];
-    info->ruleParam = npc->battleInfo.battleRule[1];
-    info->ruleParam2 = npc->battleInfo.battleRule[2];
-    BattleInit(info);
-}
 #else
-/** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
-BOOL battle_init(void) {
-    FieldBattleData* fbat;
-    NpcEntry* npc;
-    PouchData* pouch;
-    FieldBattleInfo* info;
-    PartyEntry* party;
-
-    fbat = fbatGetPointer();
-    npc = fbat->target;
-    pouch = pouchGetPtr();
-    camSetMode(CAMERA_3D, 2);
-    if (gp->debugBattle) {
-        const char* msg = DbgBtlSel_GetMsgDataPtr();
-        if (msg) {
-            msgLoad(msg, 0);
-        } else {
-            msgLoad(gon11, 0);
-        }
-    }
 #if VERSION >= VERSION_US
     battleMapAlloc();
 #else
     memClear(HEAP_BATTLE);
     smartAutoFree(2);
 #endif
+#endif
     _battleWorkPointer = NULL;
     animPoseBattleInit();
     npcReleaseFiledNpc();
     gp->inBattle = 1;
     evtmgrReInit();
+#if VERSION <= VERSION_DEMO_US
+    if (map && map->eventAddr) {
+        evtEntry(map->eventAddr, 0, 0);
+    }
+    if (map2 && map2->eventAddr) {
+        evtEntry(map2->eventAddr, 0, 0);
+    }
+#endif
     psndSetFlag(PSND_FLAG_BATTLE_START);
     info = &fbat->info;
     BattleInformationInit(info);
@@ -561,9 +496,10 @@ BOOL battle_init(void) {
     info->ruleParam = npc->battleInfo.battleRule[1];
     info->ruleParam2 = npc->battleInfo.battleRule[2];
     BattleInit(info);
+#if VERSION > VERSION_DEMO_US
     return FALSE;
-}
 #endif
+}
 
 #if VERSION <= VERSION_DEMO_US
 /**
@@ -574,49 +510,6 @@ BOOL battle_init(void) {
  * resumes the time-bomb music in the Great Tree).
  */
 static void battle_exit(void) {
-    LightEntry* light;
-    Mtx mtx;
-
-    BattleEnd();
-    itemReInit();
-    iconReInit();
-    extReset();
-    bmapUnLoad();
-    if (camGetPtr(CAMERA_3D)->flags & CAMERA_FLAG_ROAD) {
-        camSetMode(CAMERA_3D, 1);
-    } else {
-        camSetMode(CAMERA_3D, 3);
-    }
-    npcReset(TRUE);
-    mobjReset(TRUE);
-    offscreenReset(TRUE);
-    imgAutoRelease(1);
-    effAutoRelease(TRUE);
-    animPoseAutoRelease(TRUE);
-    evtmgrReInit();
-    npcRecoveryFiledNpc();
-    gp->inBattle = 0;
-    memClear(HEAP_BATTLE);
-    evtStartAll(4);
-    if (debug_battle_flag == 0) {
-        marioCtrlOn();
-        partyCtrlOn();
-        marioGetPtr()->flags |= MARIO_FLAG_ACTIVE;
-    }
-    psndClearFlag(PSND_FLAG_BATTLE_START);
-    psndClearFlag(PSND_FLAG_MUTE_SFX);
-    light = lightGetPaperCraft();
-    {
-        Vec v = {-200.0f, 100.0f, 100.0f};
-        light->position = v;
-    }
-    PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
-    PSMTXMultVec(mtx, &light->position, &light->position);
-    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_24_BOSS_BATTLE) && evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
-        psndBGMOn(PSND_CONTINUE | PSND_FADEIN, NULL);
-        psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
-    }
-}
 #else
 /**
  * Tears the battle down and restores the field:
@@ -626,13 +519,16 @@ static void battle_exit(void) {
  * resumes the time-bomb music in the Great Tree).
  */
 void battle_exit(void) {
+#endif
     LightEntry* light;
     Mtx mtx;
 
     BattleEnd();
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     battleMapFree();
     smartAutoFree(2);
+#endif
 #endif
     itemReInit();
     iconReInit();
@@ -652,8 +548,12 @@ void battle_exit(void) {
     evtmgrReInit();
     npcRecoveryFiledNpc();
     gp->inBattle = 0;
+#if VERSION <= VERSION_DEMO_US
+    memClear(HEAP_BATTLE);
+#else
 #if VERSION < VERSION_US
     memClear(HEAP_BATTLE);
+#endif
 #endif
     evtStartAll(4);
     if (debug_battle_flag == 0) {
@@ -661,7 +561,11 @@ void battle_exit(void) {
         partyCtrlOn();
         marioGetPtr()->flags |= MARIO_FLAG_ACTIVE;
     }
+#if VERSION <= VERSION_DEMO_US
+    psndClearFlag(PSND_FLAG_BATTLE_START);
+#else
     L_psndBGM_stop();
+#endif
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     light = lightGetPaperCraft();
     {
@@ -670,14 +574,17 @@ void battle_exit(void) {
     }
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
     PSMTXMultVec(mtx, &light->position, &light->position);
+#if VERSION <= VERSION_DEMO_US
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_24_BOSS_BATTLE) && evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
+#else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE) {
         psndBGMOn_f(PSND_CONTINUE | PSND_FADEIN, 0, 0x2EE, 1);
     } else if (evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
+#endif
         psndBGMOn(PSND_CONTINUE | PSND_FADEIN, NULL);
         psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
     }
 }
-#endif
 
 /**
  * gon_11, whose message file a debug battle loads when its menu has none, and the battle stage maps for

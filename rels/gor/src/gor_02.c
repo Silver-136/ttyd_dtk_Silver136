@@ -1115,7 +1115,6 @@ EVT_END()
  * takes 3 Shine Sprites (supercoins) for each rank up, runs powerupya_party_lank_rtn,
  * and loops until Mario stops, has fewer than 3 sprites or nothing is left to raise.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Merlon's partner rank up menu: lets Mario pick a partner from the other-party window,
  * takes 3 Shine Sprites (supercoins) for each rank up, runs powerupya_party_lank_rtn,
@@ -1135,69 +1134,10 @@ EVT_BEGIN(powerupya_party_rtn)
         IF_INT_NOT_EQUAL(LW(1), LW(8))
             CALL(evt_mario_goodbye_party, 0)
             CALL(evt_mario_hello_party, 0, LW(1))
-        END_IF
-        CALL(evt_msg_print, 0, STRING("powerup_02"), 0, STRING("me"))
-        CALL(evt_msg_select, 0, STRING("powerup_03"))
-        CALL(evt_msg_continue)
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_pouch_get_supercoin, LW(0))
-            SUBTRACT(LW(0), 1)
-            CALL(evt_pouch_set_supercoin, LW(0))
-            WAIT_FRAMES(4)
-            SUBTRACT(LW(0), 1)
-            CALL(evt_pouch_set_supercoin, LW(0))
-            WAIT_FRAMES(4)
-            SUBTRACT(LW(0), 1)
-            CALL(evt_pouch_set_supercoin, LW(0))
-            WAIT_FRAMES(4)
-            CALL(evt_win_coin_wait, LW(12))
-            WAIT_MS(500)
-            CALL(evt_win_coin_off, LW(12))
-            CALL(evt_mario_get_party, LW(8))
-            CALL(unitwin_getpartylank, LW(8), LW(0))
-            ADD(LW(0), 1)
-            CALL(unitwin_setpartylank, LW(8), LW(0))
-            CALL_CHILD(powerupya_party_lank_rtn)
-            CALL(evt_pouch_get_supercoin, LW(0))
-            IF_INT_LESS(LW(0), 3)
-                CALL(evt_msg_print, 0, STRING("powerup_13"), 0, STRING("me"))
-                BREAK_LOOP
-            END_IF
-            CALL(evt_msg_print, 0, STRING("powerup_15"), 0, STRING("me"))
-                CALL(evt_msg_select, 0, STRING("powerup_03"))
-                IF_INT_EQUAL(LW(0), 0)
-                    CALL(evt_msg_continue)
-                ELSE
-                    CALL(evt_msg_print_add, 0, STRING("powerup_13_02"))
-                    BREAK_LOOP
-                END_IF
-                CALL(evt_win_coin_on, 1, LW(12))
-        END_IF
-    END_LOOP
-    RETURN
-EVT_END()
-#else
-/**
- * Merlon's partner rank up menu: lets Mario pick a partner from the other-party window,
- * takes 3 Shine Sprites (supercoins) for each rank up, runs powerupya_party_lank_rtn,
- * and loops until Mario stops, has fewer than 3 sprites or nothing is left to raise.
- */
-EVT_BEGIN(powerupya_party_rtn)
-    CALL(evt_win_coin_on, 1, LW(12))
-    LOOP(0)
-        CALL(evt_party_set_dir_pos, 0, -362, -200)
-        CALL(evt_win_other_select, 6)
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_win_coin_off, LW(12))
-            CALL(evt_msg_print, 0, STRING("powerup_13_01"), 0, STRING("me"))
-            BREAK_LOOP
-        END_IF
-        CALL(evt_mario_get_party, LW(8))
-        IF_INT_NOT_EQUAL(LW(1), LW(8))
-            CALL(evt_mario_goodbye_party, 0)
-            CALL(evt_mario_hello_party, 0, LW(1))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             CALL(evt_party_stop, 0)
+#endif
 #endif
         END_IF
         CALL(evt_msg_print, 0, STRING("powerup_02"), 0, STRING("me"))
@@ -1227,6 +1167,16 @@ EVT_BEGIN(powerupya_party_rtn)
                 CALL(evt_msg_print, 0, STRING("powerup_13"), 0, STRING("me"))
                 BREAK_LOOP
             END_IF
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print, 0, STRING("powerup_15"), 0, STRING("me"))
+                CALL(evt_msg_select, 0, STRING("powerup_03"))
+                IF_INT_EQUAL(LW(0), 0)
+                    CALL(evt_msg_continue)
+                ELSE
+                    CALL(evt_msg_print_add, 0, STRING("powerup_13_02"))
+                    BREAK_LOOP
+                END_IF
+#else
             CALL(evt_win_party_lankup_chk, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, 0, STRING("powerup_13"), 0, STRING("me"))
@@ -1241,12 +1191,12 @@ EVT_BEGIN(powerupya_party_rtn)
                     BREAK_LOOP
                 END_IF
             END_IF
+#endif
             CALL(evt_win_coin_on, 1, LW(12))
         END_IF
     END_LOOP
     RETURN
 EVT_END()
-#endif
 
 /**
  * Talk event of Merlon at his table.
@@ -1554,9 +1504,7 @@ EVT_BEGIN(powerupya_orb_use)
     WAIT_MS(750)
 #endif
     CALL(evt_msg_print, 0, STRING("powerup_ev_06"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
-#else
+#if VERSION > VERSION_DEMO_US
     // Mario and the partner walk over to the stone while Merlon picks it up.
     SPAWN_EVENT(PTR(powerupya_mario_move))
     CALL(evt_party_stop, 0)
@@ -1578,9 +1526,9 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1500)
     CALL(evt_eff_softdelete, STRING("aaax"))
+#endif
     SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
     // The blue stone turns red and the music fades.
-#endif
     CALL(stonechangertn, STRING("S_i01_sui_aka"))
 #if VERSION > VERSION_DEMO_US
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
@@ -1710,7 +1658,6 @@ EVT_BEGIN(powerupya_init)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Talk event of Grifty (情報屋完璧), the traveling minstrel who sells tales: after his greeting (johoyaperfect_00,
  * or 00_01 on later talks in JP and later) Mario picks a tale from a list (johoya_data_alloc,
@@ -1723,6 +1670,7 @@ EVT_BEGIN(johoyaperfect_talk)
     IF_INT_EQUAL(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("johoyaperfect_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 1)
+#if VERSION <= VERSION_DEMO_US
     END_IF
         CALL(johoya_data_alloc, STRING("jperfect_code"))
         CALL(evt_win_coin_on, 0, LW(12))
@@ -1763,21 +1711,7 @@ EVT_BEGIN(johoyaperfect_talk)
             END_IF
         END_IF
         CALL(johoya_data_free)
-        RETURN
-EVT_END()
 #else
-/**
- * Talk event of Grifty (情報屋完璧), the traveling minstrel who sells tales: after his greeting (johoyaperfect_00,
- * or 00_01 on later talks in JP and later) Mario picks a tale from a list (johoya_data_alloc,
- * evt_win_other_select 17).
- * A tale already heard is retold for free (johoyaperfect_06); a new one is offered for its coin price
- * (johoyaperfect_01 and 02), refused when Mario is short (09), otherwise paid for, told and marked as read.
- * The data is then freed; JP and later loop back to the list.
- */
-EVT_BEGIN(johoyaperfect_talk)
-    IF_INT_EQUAL(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 0)
-        CALL(evt_msg_print, 0, STRING("johoyaperfect_00"), 0, STRING("me"))
-        SET_VALUE(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 1)
     ELSE
         CALL(evt_msg_print, 0, STRING("johoyaperfect_00_01"), 0, STRING("me"))
     END_IF
@@ -1835,9 +1769,9 @@ EVT_BEGIN(johoyaperfect_talk)
         END_IF
         CALL(johoya_data_free)
     END_LOOP
+#endif
     RETURN
 EVT_END()
-#endif
 
 /**
  * Init event of Professor Frankly (Kuri-hakase): lets him pass through walls and places him by story stage:
@@ -3814,7 +3748,6 @@ static const char* door_data_03_mobj[] = {
     NULL,
 };
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Called when the house 03 door closes: brings the music and ambience back.
  * At STG4_34_BOBBERY_DECLINES, once (GSWF_GOR02_BOBBERY_DECLINE_SCENE_DONE),
@@ -3824,6 +3757,9 @@ static const char* door_data_03_mobj[] = {
  * The JP and later releases also turn the outside hit objects back on.
  */
 static EVT_BEGIN(evt_door_03_close)
+#if VERSION > VERSION_DEMO_US
+    SPAWN_EVENT(PTR(gor_02_hitobj_on))
+#endif
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
@@ -3836,13 +3772,33 @@ static EVT_BEGIN(evt_door_03_close)
             CALL(evt_party_move_pos2, 0, LW(0), LW(2), 60)
             CALL(evt_party_set_dir, 0, 270, -1)
             CALL(evt_mario_set_dir, 90, 300, 0)
+#if VERSION <= VERSION_DEMO_US
             CALL(evt_msg_print_party, STRING("mac_4_058"))
+#else
+#if VERSION == VERSION_EU
+            CALL(evt_party_stop, 0)
+            CALL(evt_msg_print_party, STRING("mac_4_058"))
+            CALL(evt_party_run, 0)
+#else
+            CALL(evt_msg_print_party, STRING("mac_4_058"))
+#endif
+#endif
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_THINK1_2"), LW(0), LW(1), LW(2), 0)
             CALL(evt_mario_set_pose, STRING("M_I_Z"))
             WAIT_MS(1000)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
+#if VERSION <= VERSION_DEMO_US
             CALL(evt_msg_print_party, STRING("mac_4_059"))
+#else
+#if VERSION == VERSION_EU
+            CALL(evt_party_stop, 0)
+            CALL(evt_msg_print_party, STRING("mac_4_059"))
+            CALL(evt_party_run, 0)
+#else
+            CALL(evt_msg_print_party, STRING("mac_4_059"))
+#endif
+#endif
             SET_VALUE(GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE, 1)
             CALL(evt_mario_key_onoff, 1)
         END_IF
@@ -3854,71 +3810,14 @@ static EVT_BEGIN(evt_door_03_close)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(500)
     CALL(evt_party_stop, 1)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_party_move_pos2, 1, -36, 140, FLOAT(120.0f))
     CALL(evt_party_set_dir, 1, 90, -1)
     CALL(evt_mario_set_dir, 270, 200, 0)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("mac_4_087"), 0, STRING("extparty"))
     CALL(evt_party_set_dir, 1, 270, -1)
-    CALL(evt_party_move_pos2, 1, -165, 140, FLOAT(120.0f))
-    CALL(evt_mario_clear_party, 1)
-    SET_VALUE(GSW_STORY_PROGRESS, STG4_37_TO_THE_PORT)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
 #else
-/**
- * Called when the house 03 door closes: brings the music and ambience back.
- * At STG4_34_BOBBERY_DECLINES, once (GSWF_GOR02_BOBBERY_DECLINE_SCENE_DONE),
- * the partner comments on Bobbery declining (mac_4_058, mac_4_059).
- * At STG4_36_BOBBERYS_DECISION it runs the scene where Bobbery decides to join,
- * moving the party members (mac_4_087) and advancing the story to STG4_37_TO_THE_PORT.
- * The JP and later releases also turn the outside hit objects back on.
- */
-static EVT_BEGIN(evt_door_03_close)
-    SPAWN_EVENT(PTR(gor_02_hitobj_on))
-    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
-    CALL(evt_snd_env_lpf, 0, 0)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_34_BOBBERY_DECLINES)
-        IF_INT_EQUAL(GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE, 0)
-            CALL(evt_door_end_wait)
-            CALL(evt_mario_key_onoff, 0)
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            ADD(LW(0), 40)
-            CALL(evt_party_move_pos2, 0, LW(0), LW(2), 60)
-            CALL(evt_party_set_dir, 0, 270, -1)
-            CALL(evt_mario_set_dir, 90, 300, 0)
-#if VERSION == VERSION_EU
-            CALL(evt_party_stop, 0)
-            CALL(evt_msg_print_party, STRING("mac_4_058"))
-            CALL(evt_party_run, 0)
-#else
-            CALL(evt_msg_print_party, STRING("mac_4_058"))
-#endif
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_THINK1_2"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_mario_set_pose, STRING("M_I_Z"))
-            WAIT_MS(1000)
-            CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION == VERSION_EU
-            CALL(evt_party_stop, 0)
-            CALL(evt_msg_print_party, STRING("mac_4_059"))
-            CALL(evt_party_run, 0)
-#else
-            CALL(evt_msg_print_party, STRING("mac_4_059"))
-#endif
-            SET_VALUE(GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE, 1)
-            CALL(evt_mario_key_onoff, 1)
-        END_IF
-    END_IF
-    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG4_36_BOBBERYS_DECISION)
-        RETURN
-    END_IF
-    CALL(evt_door_end_wait)
-    CALL(evt_mario_key_onoff, 0)
-    WAIT_MS(500)
-    CALL(evt_party_stop, 1)
     CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
     IF_INT_LESS_OR_EQUAL(LW(2), 39)
         CALL(evt_party_set_pos, 1, -17, 0, 57)
@@ -3929,13 +3828,13 @@ static EVT_BEGIN(evt_door_03_close)
     CALL(evt_msg_print, 0, STRING("mac_4_087"), 0, STRING("extparty"))
     CALL(evt_party_set_dir, 1, 270, -1)
     CALL(evt_party_move_pos2, 1, -36, 140, FLOAT(120.0f))
+#endif
     CALL(evt_party_move_pos2, 1, -165, 140, FLOAT(120.0f))
     CALL(evt_mario_clear_party, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_37_TO_THE_PORT)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Called when the house 03 door opens: dips the music and ambience to 50 percent and low-passes the ambience.
@@ -4216,65 +4115,41 @@ static EVT_BEGIN(evt_wall_04)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Called when the house 04 door opens: dips the music and ambience to 50 percent and low-passes the ambience.
  * The JP and later releases also turn off the outside hit objects,
  * and the US and later releases switch off the hit object polySurface1317.
  */
 static EVT_BEGIN(evt_door_04_open)
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_env_lpf, 0, 800)
-    RETURN
-EVT_END()
-#else
-/**
- * Called when the house 04 door opens: dips the music and ambience to 50 percent and low-passes the ambience.
- * The JP and later releases also turn off the outside hit objects,
- * and the US and later releases switch off the hit object polySurface1317.
- */
-static EVT_BEGIN(evt_door_04_open)
+#if VERSION > VERSION_DEMO_US
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
 #if VERSION >= VERSION_US
     CALL(evt_hitobj_onoff, STRING("polySurface1317"), 1, 0)
 #endif
+#endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Called when the house 04 door closes: brings the music and ambience back.
  * The JP and later releases also turn the outside hit objects back on,
  * and the US and later releases switch polySurface1317 back on.
  */
 static EVT_BEGIN(evt_door_04_close)
-    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
-    CALL(evt_snd_env_lpf, 0, 0)
-    RETURN
-EVT_END()
-#else
-/**
- * Called when the house 04 door closes: brings the music and ambience back.
- * The JP and later releases also turn the outside hit objects back on,
- * and the US and later releases switch polySurface1317 back on.
- */
-static EVT_BEGIN(evt_door_04_close)
+#if VERSION > VERSION_DEMO_US
     SPAWN_EVENT(PTR(gor_02_hitobj_on))
 #if VERSION >= VERSION_US
     CALL(evt_hitobj_onoff, STRING("polySurface1317"), 1, 1)
 #endif
+#endif
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
-#endif
 
 /** NPCs shown inside house 04 (the thieves' house) when its door opens. */
 static const char* door_data_04_npc[] = {
@@ -6045,182 +5920,6 @@ EVT_END()
  * and the partner head out (mac_0_104 to 120).
  * It ends with the Rogueport theme and STG0_16_FRANKLYS_HOUSE.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Frankly's first epigraphy scene, after the Thousand-Year Door (STG0_15_THE_PEDESTAL):
- * the pouch's Star Power
- * is filled, Frankly explains the light that shone on Mario (a special move) and offers to show it outside
- * (mac_0_103_01 to 06), then reads the Magical Map: the next Crystal Star is in Petal Meadows, reached by a pipe
- * under the city; he learns that Princess Peach sent the map and had visited him, and stays in town while Mario
- * and the partner head out (mac_0_104 to 120).
- * It ends with the Rogueport theme and STG0_16_FRANKLYS_HOUSE.
- */
-EVT_BEGIN(epigraphy_map)
-    // Mario's Star Power gauge is filled and control is taken away while Mario
-    // and the partner are moved into place.
-    CALL(evt_pouch_get_max_ap, LW(0))
-    CALL(evt_pouch_set_ap, LW(0))
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_mario_clear_party, 1)
-    CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_party_cont_onoff, 0, 1)
-    SPAWN_EVENT(Mario_Party_position)
-    CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
-    // A hidden Peach stand-in is loaded; a short narration plays over a camera view of the house.
-    CALL(evt_npc_entry, STRING("ピーチダミー"), STRING("c_peach"))
-    CALL(evt_seq_wait, SEQ_GAME)
-    WAIT_MS(2000)
-    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("mac_0_102"), 0, 0)
-    WAIT_MS(2000)
-    // The screen irises out, then back in on the inside of Frankly's house.
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    SET_VALUE(LW(0), PTR(&door_data_02))
-    SPAWN_EVENT(evt_door_open_quick)
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1000)
-    CALL(evt_msg_print_party, STRING("mac_0_103"))
-    CALL(evt_msg_print, 0, STRING("mac_0_103_01"), 0, STRING("クリハカセ"))
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_0_103_02"))
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_0_103_03"), 0, STRING("クリハカセ"))
-    CALL(evt_msg_select, 0, STRING("mac_0_103_03_yesno"))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_msg_print_add, 0, STRING("mac_0_103_04"))
-        CALL(evt_msg_select, 0, STRING("mac_0_103_03_yesno"))
-        IF_INT_EQUAL(LW(0), 0)
-            GOTO(10)
-        END_IF
-        CALL(evt_msg_print_add, 0, STRING("mac_0_103_06"))
-        GOTO(20)
-    END_IF
-    LABEL(10)
-    CALL(evt_msg_print_add, 0, STRING("mac_0_103_05"))
-    BEGIN_INLINE_EVENT_GET_ID(LW(10))
-        // The group walks outside and Frankly starts the special move demonstration battle.
-        CALL(evt_party_move_pos2, 0, -220, -90, FLOAT(120.0f))
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT_GET_ID(LW(11))
-        CALL(evt_npc_move_position, STRING("クリハカセ"), -190, -210, 0, FLOAT(120.0f), 0)
-        CALL(evt_npc_move_position, STRING("クリハカセ"), -210, -90, 0, FLOAT(120.0f), 0)
-    END_INLINE_EVENT
-    CALL(evt_mario_mov_pos2, -210, -80, FLOAT(120.0f))
-    WAIT_FRAMES(1)
-    CALL(evt_npc_set_battle_info, STRING("クリハカセ"), 4)
-    CALL(evt_npc_battle_start, STRING("クリハカセ"))
-    CALL(evt_npc_wait_battle_end)
-    DELETE_EVENT(LW(10))
-    DELETE_EVENT(LW(11))
-    // Back in the house after the demonstration, Frankly reads the Magical Map.
-    CALL(evt_npc_set_position, STRING("クリハカセ"), -140, 0, -225)
-    CALL_CHILD(Mario_Party_position)
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("mac_0_104"), 0, STRING("クリハカセ"))
-    LABEL(20)
-    CALL(evt_msg_print_party, STRING("mac_0_105"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_msg_print, 0, STRING("mac_0_106"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -250, 133, 93, -180, 43, -210, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(200)
-    CALL(evt_msg_print_party, STRING("mac_0_107"))
-    CALL(evt_msg_print, 0, STRING("mac_0_108"), 0, STRING("クリハカセ"))
-    CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)
-    WAIT_MS(200)
-    CALL_CHILD(book_close)
-    CALL(evt_npc_set_ry, STRING("クリハカセ"), 270)
-    WAIT_MS(200)
-    CALL(evt_msg_print, 0, STRING("mac_0_109"), 0, STRING("クリハカセ"))
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAND_UP1_4"), LW(0), LW(1), LW(2), 0)
-    END_INLINE_EVENT
-    CALL(evt_mario_set_pose, STRING("M_I_2"))
-    WAIT_MS(500)
-    CALL(evt_mario_set_pose, STRING("M_S_1"))
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_0_110"), 0, STRING("クリハカセ"))
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
-    END_INLINE_EVENT
-    CALL(evt_mario_set_pose, STRING("M_N_2"))
-    WAIT_MS(400)
-    CALL(evt_mario_set_pose, STRING("M_S_1"))
-    WAIT_MS(500)
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_0_111"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_0_112"))
-    CALL(evt_msg_print, 0, STRING("mac_0_113"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_msg_print, 0, STRING("mac_0_114"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -150, 100, 82, -150, 47, -217, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    // He walks to the table, spreads the map out and then hands it back to Mario.
-    CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_move_position, STRING("クリハカセ"), -150, -205, 0, FLOAT(60.0f), 0)
-    WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tizu_on"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_npc_get_position, STRING("クリハカセ"), LW(0), LW(1), LW(2))
-    ADD(LW(2), 10)
-    CALL(evt_item_entry, STRING("item_map"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item_map"), ITEM_FLAG_NO_TOUCH)
-    CALL(evt_item_set_scale, STRING("item_map"), FLOAT(0.5498047f))
-    BEGIN_INLINE_EVENT_GET_ID(LW(10))
-        LOOP(0)
-            CALL(evt_npc_get_position, STRING("クリハカセ"), LW(0), LW(1), LW(2))
-            ADD(LW(2), 10)
-            CALL(evt_item_set_position, STRING("item_map"), LW(0), LW(1), LW(2))
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_INLINE_EVENT
-    CALL(evt_npc_move_position, STRING("クリハカセ"), -165, -215, 0, FLOAT(60.0f), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("クリハカセ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-    WAIT_MS(500)
-    DELETE_EVENT(LW(10))
-    CALL(evt_mario_set_pose, STRING("M_C_3"))
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    ADD(LW(0), 20)
-    ADD(LW(1), 20)
-    ADD(LW(2), 10)
-    CALL(evt_item_set_position, STRING("item_map"), LW(0), LW(1), LW(2))
-    WAIT_MS(700)
-    CALL(evt_item_set_position, STRING("item_map"), 0, -1000, 0)
-    CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
-    ADD(LW(0), 10)
-    CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(60.0f))
-    CALL(evt_cam3d_evt_set, -180, 100, 82, -180, 47, -217, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(200)
-    CALL(evt_msg_print_party, STRING("mac_0_117"))
-    CALL(evt_msg_print, 0, STRING("mac_0_118"), 0, STRING("クリハカセ"))
-    CALL(evt_msg_print_party, STRING("mac_0_119"))
-    CALL(evt_mario_set_dir, 270, 200, 0)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_0_120"))
-    // The camera returns to normal, the party follows Mario and the Rogueport theme resumes.
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(evt_party_run, 0)
-    CALL(evt_mario_key_onoff, 1)
-    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-    SET_VALUE(GSWF_GOR_FRANKLY_FIRST_MAP_READ, 1)
-    SET_VALUE(GSW_STORY_PROGRESS, STG0_16_FRANKLYS_HOUSE)
-    RETURN
-EVT_END()
-#else
 /**
  * Frankly's first epigraphy scene, after the Thousand-Year Door (STG0_15_THE_PEDESTAL):
  * the pouch's Star Power
@@ -6387,11 +6086,16 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_msg_print_party, STRING("mac_0_120"))
     // The camera returns to normal, the party follows Mario and the Rogueport theme resumes.
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF_GOR_FRANKLY_FIRST_MAP_READ, 1)
+#else
 #if VERSION == VERSION_EU
     SET_VALUE(GSWF_GOR_FRANKLY_FIRST_MAP_READ, 1)
 #endif
@@ -6402,82 +6106,16 @@ EVT_BEGIN(epigraphy_map)
 #if VERSION != VERSION_EU
     SET_VALUE(GSWF_GOR_FRANKLY_FIRST_MAP_READ, 1)
 #endif
+#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG0_16_FRANKLYS_HOUSE)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Frankly's cutscene after Chapter 1 (STG1_30_ZESS_T):
  * he deciphers the Magical Map for the next Crystal Star (mac_1_004 to 010_03)
  * and sets STG1_31_FRANKLYS_HOUSE_STG_1.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Frankly's cutscene after Chapter 1 (STG1_30_ZESS_T):
- * he deciphers the Magical Map for the next Crystal Star (mac_1_004 to 010_03)
- * and sets STG1_31_FRANKLYS_HOUSE_STG_1.
- */
-EVT_BEGIN(epigraphy_map_after_stage1)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_party_cont_onoff, 0, 1)
-    SPAWN_EVENT(Mario_Party_position)
-    CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
-    CALL(evt_seq_wait, SEQ_GAME)
-    WAIT_MS(2000)
-    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("mac_1_004"), 0, 0)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    SET_VALUE(LW(0), PTR(&door_data_02))
-    SPAWN_EVENT(evt_door_open_quick)
-    WAIT_FRAMES(1)
-    CALL(evt_mapobj_trans, 1, STRING("S_open_book"), -15, 0, 0)
-    CALL(evt_mapobj_rotate, 1, STRING("S_open_book_r"), 0, 0, 180)
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1000)
-    CALL_CHILD(book_close)
-    CALL(evt_msg_print, 0, STRING("mac_1_005"), 0, STRING("クリハカセ"))
-    WAIT_MS(333)
-    CALL(evt_msg_print_party, STRING("mac_1_006"))
-    WAIT_MS(333)
-    CALL(evt_msg_print, 0, STRING("mac_1_007"), 0, STRING("クリハカセ"))
-    CALL(evt_msg_print_party, STRING("mac_1_008"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_1_009"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_1_010"))
-    WAIT_MS(333)
-    CALL(evt_msg_print, 0, STRING("mac_1_010_01"), 0, STRING("クリハカセ"))
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAND_UP1_2"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_set_pose, STRING("M_N_2"))
-    CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
-    ADD(LW(0), 10)
-    ADD(LW(2), 20)
-    CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(60.0f))
-    CALL(evt_msg_print_party, STRING("mac_1_010_02"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("mac_1_010_03"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(evt_party_run, 0)
-    CALL(evt_mario_key_onoff, 1)
-    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-    SET_VALUE(GSW_STORY_PROGRESS, STG1_31_FRANKLYS_HOUSE_STG_1)
-    RETURN
-EVT_END()
-#else
 /**
  * Frankly's cutscene after Chapter 1 (STG1_30_ZESS_T):
  * he deciphers the Magical Map for the next Crystal Star (mac_1_004 to 010_03)
@@ -6535,25 +6173,27 @@ EVT_BEGIN(epigraphy_map_after_stage1)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("mac_1_010_03"), 0, STRING("クリハカセ"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
+#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG1_31_FRANKLYS_HOUSE_STG_1)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Frankly's cutscene after Chapter 2 (STG2_40_THOUSAND_YEAR_DOOR):
  * he deciphers the map for the next star (mac_2_002_01 to 06) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Frankly's cutscene after Chapter 2 (STG2_40_THOUSAND_YEAR_DOOR):
  * he deciphers the map for the next star (mac_2_002_01 to 06) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
@@ -6566,7 +6206,7 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
-    SPAWN_EVENT(Mario_Party_position)
+    SPAWN_EVENT(PTR(Mario_Party_position))
     CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(2000)
@@ -6575,13 +6215,13 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_fade_entry, 2, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), PTR(&door_data_02))
-    SPAWN_EVENT(evt_door_open_quick)
+    SPAWN_EVENT(PTR(evt_door_open_quick))
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     CALL(evt_fade_entry, 1, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
-    CALL_CHILD(book_close)
+    CALL_CHILD(PTR(book_close))
     CALL(evt_msg_print, 0, STRING("mac_2_002_02"), 0, STRING("クリハカセ"))
     CALL(evt_msg_print_party, STRING("mac_2_002_03"))
     CALL(evt_cam3d_evt_set, -140, 70, 4, -140, 32, -218, 500, EASING_SINE_IN_OUT)
@@ -6607,107 +6247,11 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_FALL_CRUSH1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_D_8"))
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_party_set_breed_pose, 0, 9)
-BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
-    END_INLINE_EVENT
-    WAIT_MS(1500)
-    CALL(evt_mario_set_pose, STRING("M_U_3"))
-    CALL(evt_party_set_breed_pose, 0, 1)
-    WAIT_MS(500)
-    // The partner and Frankly work out where to go next.
-    CALL(evt_cam3d_evt_set, -208, 70, 4, -208, 32, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_msg_print_party, STRING("mac_2_002_07"))
-    CALL(evt_cam3d_evt_set, -140, 63, -40, -140, 32, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_2_002"), 0, STRING("クリハカセ"))
-    CALL(evt_msg_print_party, STRING("mac_2_003"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_2_004"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -208, 70, 4, -208, 32, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_2_005"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_2_006"), 0, STRING("クリハカセ"))
-    CALL(evt_msg_print_party, STRING("mac_2_007"))
-    CALL(evt_msg_print, 0, STRING("mac_2_008"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_msg_print, 0, STRING("mac_2_009"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -208, 66, -20, -208, 33, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_FRAMES(1)
-    CALL(evt_msg_print_party, STRING("mac_2_010"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_FRAMES(1)
-    CALL(evt_msg_print, 0, STRING("mac_2_011"), 0, STRING("クリハカセ"))
-    // The camera returns to normal and control goes back to the player.
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(evt_party_run, 0)
-    CALL(evt_mario_key_onoff, 1)
-    // The Rogueport theme and ambience resume.
-    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-    SET_VALUE(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
-    RETURN
-EVT_END()
 #else
-/**
- * Frankly's cutscene after Chapter 2 (STG2_40_THOUSAND_YEAR_DOOR):
- * he deciphers the map for the next star (mac_2_002_01 to 06) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
- */
-EVT_BEGIN(epigraphy_map_after_stage2)
-    // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_party_cont_onoff, 0, 1)
-    SPAWN_EVENT(PTR(Mario_Party_position))
-    CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
-    CALL(evt_seq_wait, SEQ_GAME)
-    WAIT_MS(2000)
-    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("mac_2_002_01"), 0, 0)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    SET_VALUE(LW(0), PTR(&door_data_02))
-    SPAWN_EVENT(PTR(evt_door_open_quick))
-    WAIT_MS(1000)
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1000)
-    CALL_CHILD(PTR(book_close))
-    CALL(evt_msg_print, 0, STRING("mac_2_002_02"), 0, STRING("クリハカセ"))
-    CALL(evt_msg_print_party, STRING("mac_2_002_03"))
-    CALL(evt_cam3d_evt_set, -140, 70, 4, -140, 32, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_msg_print, 0, STRING("mac_2_002_04"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -208, 63, -40, -208, 32, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_2_002_05"))
-    CALL(evt_cam3d_evt_set, -140, 63, -40, -140, 32, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_2_002_06"), 0, STRING("クリハカセ"))
-    BEGIN_INLINE_EVENT
-        // Surprise: a startled sting plays.
-        CALL(evt_snd_bgmoff, PSND_PAUSE)
-        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED2"))
-        WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_FRAMES(1)
-    // Mario and the partner fall over with a crash and the camera shakes, then they get back up.
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_FALL_CRUSH1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_set_pose, STRING("M_D_8"))
     CALL(evt_party_set_breed_pose, 0, 8)
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     END_INLINE_EVENT
@@ -6745,119 +6289,29 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_msg_print, 0, STRING("mac_2_011"), 0, STRING("クリハカセ"))
     // The camera returns to normal and control goes back to the player.
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     // The Rogueport theme and ambience resume.
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
+#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG2_41_FRANKLYS_HOUSE_STG_2)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Frankly's cutscene after Chapter 3 (STG3_50_THOUSAND_YEAR_DOOR):
  * he deciphers the map for the next star (mac_3_001_01 on);
  * if the Twilight Town pipe has not been reached he adds a hint. Sets STG3_51_FRANKLYS_HOUSE_STG_3.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Frankly's cutscene after Chapter 3 (STG3_50_THOUSAND_YEAR_DOOR):
- * he deciphers the map for the next star (mac_3_001_01 on);
- * if the Twilight Town pipe has not been reached he adds a hint. Sets STG3_51_FRANKLYS_HOUSE_STG_3.
- */
-EVT_BEGIN(epigraphy_map_after_stage3)
-    // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_party_cont_onoff, 0, 1)
-    SPAWN_EVENT(Mario_Party_position)
-    CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
-    CALL(evt_seq_wait, SEQ_GAME)
-    WAIT_MS(2000)
-    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("mac_3_001_01"), 0, 0)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    SET_VALUE(LW(0), PTR(&door_data_02))
-    CALL_CHILD(evt_door_open_quick)
-    WAIT_FRAMES(1)
-    CALL_CHILD(book_center_init)
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("mac_3_001_02"), 0, STRING("クリハカセ"))
-    WAIT_MS(250)
-    CALL(evt_msg_print_party, STRING("mac_3_001_03"))
-    WAIT_MS(250)
-    CALL(evt_msg_print, 0, STRING("mac_3_001_04"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_3_001_05"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(250)
-    CALL(evt_msg_print_party, STRING("mac_3_001_06"))
-    CALL(evt_msg_print, 0, STRING("mac_3_001_07"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -208, 70, 4, -208, 32, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(250)
-    CALL(evt_msg_print_party, STRING("mac_3_001_07"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(750)
-    CALL(evt_msg_print, 0, STRING("mac_3_002"), 0, STRING("クリハカセ"))
-    WAIT_MS(250)
-    CALL(evt_msg_print_party, STRING("mac_3_003"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(750)
-    CALL(evt_msg_print, 0, STRING("mac_3_004"), 0, STRING("クリハカセ"))
-    BEGIN_INLINE_EVENT
-        CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 500, EASING_SINE_IN_OUT)
-    END_INLINE_EVENT
-    CALL(evt_npc_move_position, STRING("クリハカセ"), -145, -285, 0, FLOAT(60.0f), 0)
-    WAIT_MS(500)
-    CALL(evt_npc_move_position, STRING("クリハカセ"), -135, -225, 0, FLOAT(60.0f), 0)
-    WAIT_MS(500)
-    CALL(evt_mapobj_get_position, STRING("S_open_book"), LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_PUT_BOOK1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
-    WAIT_MS(500)
-    CALL_CHILD(book_open)
-    WAIT_MS(500)
-    CALL(evt_npc_move_position, STRING("クリハカセ"), -145, -225, 0, FLOAT(60.0f), 0)
-    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クリハカセ"), 0, 0, 0, 0, 0, 0, 0, 30)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_3_005"), 0, STRING("クリハカセ"))
-    WAIT_FRAMES(1)
-    IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
-        CALL(evt_msg_print_party, STRING("mac_3_006"))
-    ELSE
-        CALL(evt_msg_print_party, STRING("mac_3_007"))
-        CALL(evt_msg_print, 0, STRING("mac_3_009"), 0, STRING("クリハカセ"))
-        WAIT_MS(1500)
-        CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クリハカセ"), 0, 0, 0, 0, 0, 0, 0, 60)
-        WAIT_MS(1000)
-        CALL(evt_msg_print, 0, STRING("mac_3_010"), 0, STRING("クリハカセ"))
-    END_IF
-    // The camera returns to normal and control goes back to the player.
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(evt_party_run, 0)
-    CALL(evt_mario_key_onoff, 1)
-    // The Rogueport theme and ambience resume.
-    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-    SET_VALUE(GSW_STORY_PROGRESS, STG3_51_FRANKLYS_HOUSE_STG_3)
-    RETURN
-EVT_END()
-#else
 /**
  * Frankly's cutscene after Chapter 3 (STG3_50_THOUSAND_YEAR_DOOR):
  * he deciphers the map for the next star (mac_3_001_01 on);
@@ -6941,20 +6395,23 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     END_IF
     // The camera returns to normal and control goes back to the player.
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     // The Rogueport theme and ambience resume.
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
+#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG3_51_FRANKLYS_HOUSE_STG_3)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Frankly's epigraphy scene after Chapter 4 (STG4_30_THOUSAND_YEAR_DOOR):
@@ -6965,80 +6422,6 @@ EVT_END()
  * the map points to Keelhaul Key
  * (mac_4_002, 003). It sets STG4_31_FRANKLYS_HOUSE_STG_4.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Frankly's epigraphy scene after Chapter 4 (STG4_30_THOUSAND_YEAR_DOOR):
- * hearing of Princess Peach's e-mail
- * he explains that the treasure is the spirit of an ancient demon beaten by four heroes
- * and that the Thousand-Year
- * Door may be weakening, so the stars must still be gathered (mac_4_001_01 to 12);
- * the map points to Keelhaul Key
- * (mac_4_002, 003). It sets STG4_31_FRANKLYS_HOUSE_STG_4.
- */
-EVT_BEGIN(epigraphy_map_after_stage4)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_party_cont_onoff, 0, 1)
-    SPAWN_EVENT(Mario_Party_position)
-    CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
-    CALL(evt_seq_wait, SEQ_GAME)
-    WAIT_MS(2000)
-    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("mac_4_001_01"), 0, 0)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    SET_VALUE(LW(0), PTR(&door_data_02))
-    SPAWN_EVENT(evt_door_open_quick)
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("mac_4_001_02"), 0, STRING("クリハカセ"))
-    CALL(evt_msg_print_party, STRING("mac_4_001_03"))
-    CALL(evt_msg_print, 0, STRING("mac_4_001_04"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_4_001_05"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_4_001_06"))
-    CALL(evt_npc_set_ry, STRING("クリハカセ"), 270)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_4_001_07"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_4_001_08"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -260, 125, 256, -180, 75, -54, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_4_001_09"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -208, 77, 28, -208, 35, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_4_001_10"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_4_001_11"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_4_001_12"))
-    CALL(evt_msg_print, 0, STRING("mac_4_002"), 0, STRING("クリハカセ"))
-    CALL(evt_msg_print_party, STRING("mac_4_002"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_msg_print, 0, STRING("mac_4_003"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(evt_party_run, 0)
-    CALL(evt_mario_key_onoff, 1)
-    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-    SET_VALUE(GSW_STORY_PROGRESS, STG4_31_FRANKLYS_HOUSE_STG_4)
-    RETURN
-EVT_END()
-#else
 /**
  * Frankly's epigraphy scene after Chapter 4 (STG4_30_THOUSAND_YEAR_DOOR):
  * hearing of Princess Peach's e-mail
@@ -7104,19 +6487,22 @@ EVT_BEGIN(epigraphy_map_after_stage4)
     WAIT_MS(800)
     CALL(evt_msg_print, 0, STRING("mac_4_003"), 0, STRING("クリハカセ"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
+#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG4_31_FRANKLYS_HOUSE_STG_4)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Frankly's epigraphy scene after Chapter 5 (STG5_60_RETURN_TO_KEELHAUL):
@@ -7125,68 +6511,6 @@ EVT_END()
  * It sets
  * STG5_61_FRANKLYS_HOUSE_STG_5.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Frankly's epigraphy scene after Chapter 5 (STG5_60_RETURN_TO_KEELHAUL):
- * the next Crystal Star is in Poshley
- * Heights, reached on the Excess Express, and he suggests asking Don Pianta for tickets (mac_5_002 to 009).
- * It sets
- * STG5_61_FRANKLYS_HOUSE_STG_5.
- */
-EVT_BEGIN(epigraphy_map_after_stage5)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_party_cont_onoff, 0, 1)
-    SPAWN_EVENT(Mario_Party_position)
-    CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
-    CALL(evt_seq_wait, SEQ_GAME)
-    WAIT_MS(2000)
-    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("mac_5_002"), 0, STRING("クリハカセ"))
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    SET_VALUE(LW(0), PTR(&door_data_02))
-    SPAWN_EVENT(evt_door_open_quick)
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1000)
-    CALL_CHILD(book_close)
-    CALL(evt_msg_print_party, STRING("mac_5_002"))
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_5_003"), 0, STRING("クリハカセ"))
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_5_004"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("mac_5_005"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -208, 77, 28, -208, 35, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_5_006"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_5_007"), 0, STRING("クリハカセ"))
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_5_008"))
-    CALL(evt_mario_set_dir, 270, 270, 0)
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_set_pose, STRING("M_N_2"))
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("mac_5_009"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(evt_party_run, 0)
-    CALL(evt_mario_key_onoff, 1)
-    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-    SET_VALUE(GSW_STORY_PROGRESS, STG5_61_FRANKLYS_HOUSE_STG_5)
-    RETURN
-EVT_END()
-#else
 /**
  * Frankly's epigraphy scene after Chapter 5 (STG5_60_RETURN_TO_KEELHAUL):
  * the next Crystal Star is in Poshley
@@ -7240,19 +6564,22 @@ EVT_BEGIN(epigraphy_map_after_stage5)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("mac_5_009"), 0, STRING("クリハカセ"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
+#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG5_61_FRANKLYS_HOUSE_STG_5)
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(epigraphy_map_after_stage6)
     CALL(evt_mario_key_onoff, 0)
@@ -7261,54 +6588,6 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(Mario_Party_position)
-    CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
-    CALL(evt_seq_wait, SEQ_GAME)
-    WAIT_MS(2000)
-    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("mac_6_002_00"), 0, STRING("クリハカセ"))
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    SET_VALUE(LW(0), PTR(&door_data_02))
-    CALL_CHILD(evt_door_open_quick)
-    WAIT_FRAMES(1)
-    CALL_CHILD(book_center_init)
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("mac_6_002"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_6_003"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -208, 77, 28, -208, 35, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_6_004"))
-    CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_6_005"), 0, STRING("クリハカセ"))
-    CALL(evt_npc_move_position, STRING("クリハカセ"), -145, -285, 0, FLOAT(60.0f), 0)
-    WAIT_MS(500)
-    CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)
-    WAIT_MS(200)
-    CALL(evt_npc_move_position, STRING("クリハカセ"), -135, -225, 0, FLOAT(60.0f), 0)
-    WAIT_MS(500)
-    CALL(evt_mapobj_get_position, STRING("S_open_book"), LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_PUT_BOOK1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
-    WAIT_MS(500)
-    CALL_CHILD(book_open)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_6_005_01"), 0, STRING("クリハカセ"))
-    CALL(evt_sub_save_playtime, GSW_GOR_FRANKLY_STG6_START_TIME)
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(evt_party_run, 0)
-    CALL(evt_mario_key_onoff, 1)
-    SET_VALUE(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
-    SET_VALUE(GSW_STORY_PROGRESS, STG6_71_FRANKLYS_HOUSE_STG_6)
-#else
     SPAWN_EVENT(PTR(Mario_Party_position))
     CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -7351,11 +6630,14 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     CALL(evt_msg_print, 0, STRING("mac_6_005_01"), 0, STRING("クリハカセ"))
     CALL(evt_sub_save_playtime, GSW_GOR_FRANKLY_STG6_START_TIME)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_71_FRANKLYS_HOUSE_STG_6)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
 #if VERSION >= VERSION_US
@@ -7374,7 +6656,6 @@ EVT_END()
  * with a different line depending on whether Mario has the Ultra Hammer,
  * then sets STG6_72_3_MINUTES_LATER and restores the controls and music.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Cutscene when Frankly finishes the Chapter 6 research after three minutes of play time:
  * Frankly and the partner discuss it (mac_6_007 to 015),
@@ -7417,75 +6698,27 @@ EVT_BEGIN(kurihakase_after3minutes)
     CALL(evt_party_run, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_72_3_MINUTES_LATER)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(evt_mario_key_onoff, 1)
-    CALL(evt_cam_letter_box_onoff, 0, 0)
-    CALL(evt_cam_letter_box_disable, 0)
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-    CALL(evt_snd_env_lpf, 0, 800)
-    RETURN
-EVT_END()
-#else
-/**
- * Cutscene when Frankly finishes the Chapter 6 research after three minutes of play time:
- * Frankly and the partner discuss it (mac_6_007 to 015),
- * with a different line depending on whether Mario has the Ultra Hammer,
- * then sets STG6_72_3_MINUTES_LATER and restores the controls and music.
- */
-EVT_BEGIN(kurihakase_after3minutes)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_msg_print, 0, STRING("mac_6_007"), 0, STRING("クリハカセ"))
-    WAIT_MS(500)
-    CALL(evt_party_stop, 0)
-    CALL(evt_msg_print_party, STRING("mac_6_008"))
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_6_009"), 0, STRING("クリハカセ"))
-    CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_cam3d_evt_set, LW(0), 95, 73, LW(0), 43, -217, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_6_010"))
-    CALL(evt_cam3d_evt_set, -157, 95, 73, -147, 43, -217, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_6_011"), 0, STRING("クリハカセ"))
-    CALL(evt_cam3d_evt_set, -197, 121, 185, -197, 50, -217, 0, EASING_SINE_IN_OUT)
-    CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        WAIT_MS(500)
-        CALL(evt_msg_print_party, STRING("mac_6_012"))
-        WAIT_MS(500)
-        CALL(evt_msg_print, 0, STRING("mac_6_013"), 0, STRING("クリハカセ"))
-    ELSE
-        WAIT_MS(500)
-        CALL(evt_msg_print_party, STRING("mac_6_012_01"))
-        WAIT_MS(500)
-        CALL(evt_msg_print, 0, STRING("mac_6_013_01"), 0, STRING("クリハカセ"))
-    END_IF
-    WAIT_MS(500)
-    CALL(evt_msg_print_party, STRING("mac_6_014"))
-    CALL(evt_cam3d_evt_set, -157, 95, 73, -147, 43, -217, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("mac_6_015"), 0, STRING("クリハカセ"))
-    CALL(evt_party_run, 0)
-    SET_VALUE(GSW_STORY_PROGRESS, STG6_72_3_MINUTES_LATER)
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+#else
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #endif
+#endif
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Spots Mario is put back on when he falls or is hurt on a hazard:

@@ -1497,15 +1497,8 @@ EVT_END()
  * the guard (ガードマン) opens the door, walks in and closes it, calls Mario to his match (stg3_tou_74),
  * and Jolene says Security is here to escort him (75). Control then returns to Mario.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Spawned once the first match is reserved: in the pre-US versions it first waits for Mario to be free for 240
- * frames.
- * If Mario stands by the door (x within 35, z at or below -60) he is bounced back to (40, 0, -120);
- * the guard (ガードマン) opens the door, walks in and closes it, calls Mario to his match (stg3_tou_74),
- * and Jolene says Security is here to escort him (75). Control then returns to Mario.
- */
 static EVT_BEGIN(evt_gardman)
+#if VERSION <= VERSION_DEMO_US
     SET_VALUE(LW(0), 0)
     LOOP(0)
         ADD(LW(0), 1)
@@ -1531,70 +1524,7 @@ static EVT_BEGIN(evt_gardman)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)
     WAIT_FRAMES(1)
-BEGIN_INLINE_EVENT
-        WAIT_MS(200)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        IF_INT_GREATER(LW(2), -60)
-            RETURN
-        END_IF
-        IF_INT_LESS(LW(0), -35)
-            RETURN
-        END_IF
-        IF_INT_GREATER(LW(0), 35)
-            RETURN
-        END_IF
-        CALL(evt_mario_normalize)
-        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_mario_set_pose, STRING("M_N_7"))
-        CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_NO_HIT)
-        CALL(evt_mario_jump_pos, 40, 0, -120, 400, 1, -1000)
-        CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), NPC_FLAG_NO_HIT)
-        WAIT_MS(500)
-        CALL(evt_mario_set_pose, STRING("M_S_1"))
-        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-        CALL(evt_mario_set_dir_npc, STRING("キノシコワ"))
-        CALL(evt_mario_set_dir_npc, STRING("ガードマン"))
-    END_INLINE_EVENT
-    // The guard opens the door, walks in and the door closes behind him.
-    SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(bero_open_door_play_se)
-    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(n_door_open)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_npc_status_onoff, 0, STRING("ガードマン"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_set_dir_to_target, STRING("ガードマン"), STRING("mario"))
-    CALL(evt_npc_set_position, STRING("ガードマン"), 0, 0, -170)
-    CALL(evt_npc_move_position, STRING("ガードマン"), 0, -90, 0, FLOAT(80.0f), 1)
-    SET_VALUE(LW(1), 0)
-    SPAWN_EVENT(bero_close_door_play_se)
-    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        CALL_CHILD(n_door_open)
-        IF_INT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-    END_LOOP
-    CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
-    CALL(evt_msg_print, 0, STRING("stg3_tou_74"), 0, STRING("ガードマン"))
-    WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_75"), 0, STRING("キノシコワ"))
-    WAIT_MS(300)
-    CALL(evt_npc_status_onoff, 1, STRING("ガードマン"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
 #else
-static EVT_BEGIN(evt_gardman)
     CALL(tou_10_mario_free_wait)
     // Take control once Mario has landed and finished talking.
     CALL(evt_mario_key_onoff, 0)
@@ -1607,6 +1537,7 @@ static EVT_BEGIN(evt_gardman)
     WAIT_FRAMES(1)
 #endif
     // If Mario stands in the doorway, he is startled and hops back out of the way.
+#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1669,7 +1600,6 @@ static EVT_BEGIN(evt_gardman)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(evt_match_make_sub)
     CALL(evt_cam3d_evt_set, -75, 91, 188, -75, 57, -1, 1000, EASING_SINE_IN_OUT)

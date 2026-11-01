@@ -1835,7 +1835,6 @@ EVT_BEGIN(usu01_check_vivian)
 EVT_END()
 
 EVT_BEGIN(usu01_crowFG_talk_event)
-#if VERSION <= VERSION_DEMO_US
     // No balloon is showing yet; GW(0) keeps the watcher quiet once the crows have talked.
     SET_VALUE(LW(15), 0)
     LABEL(0)
@@ -1847,127 +1846,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＦ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 20, LW(0), LW(2), LW(6))
-    IF_INT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(15), 0)
-            CALL(evt_mario_balloon_tenten)
-            SET_VALUE(LW(15), 1)
-        END_IF
-    ELSE
-        IF_INT_EQUAL(LW(15), 1)
-            CALL(evt_mario_balloon_off)
-            SET_VALUE(LW(15), 0)
-        END_IF
-    END_IF
-    // A pressed with the balloon up: Mario's controls lock,
-    // the camera rises to the crows and crow F caws (stg4_jin_153).
-    IF_INT_EQUAL(LW(15), 1)
-        CALL(evt_key_get_buttontrg, 0, LW(0))
-        CALL(evt_mario_party_use_check, LW(1))
-        IF_INT_EQUAL(LW(1), 0)
-            IF_BITS_SET(LW(0), 256)
-                CALL(evt_mario_balloon_off)
-                SET_VALUE(LW(15), 0)
-                CALL(evt_mario_key_onoff, 0)
-                CALL(evt_party_cont_onoff, 0, 0)
-                CALL_CHILD(cam_up)
-                CALL(evt_npc_get_position, STRING("カラスＦ"), LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-                CALL(evt_msg_print, 0, STRING("stg4_jin_153"), 0, STRING("カラスＦ"))
-                CALL_CHILD(cam_down)
-                CALL(evt_mario_key_onoff, 1)
-                CALL(evt_party_cont_onoff, 0, 1)
-            END_IF
-        END_IF
-    END_IF
-    // The crows only speak when Vivian is the partner and Mario hides in her shadow.
-    CALL(evt_mario_get_party, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 6)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_IF
-    CALL(evt_party_get_status, 6, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 2)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_IF
-    // Once Vivian has joined, the camera rises and the crows hold a conversation chosen by story progress.
-    IF_INT_EQUAL(LW(15), 1)
-        CALL(evt_mario_balloon_off)
-        SET_VALUE(LW(15), 0)
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
-            CALL(evt_mario_key_onoff, 0)
-            CALL(evt_party_cont_onoff, 0, 0)
-            CALL_CHILD(cam_up)
-            WAIT_MS(1000)
-            CALL(evt_npc_get_position, STRING("カラスＦ"), LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-            SWITCH(GSW_STORY_PROGRESS)
-                CASE_LESS(STG4_14_NAME_GUESSING)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_137"), 0, STRING("カラスＦ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_138"), 0, STRING("カラスＧ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_139"), 0, STRING("カラスＦ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_140"), 0, STRING("カラスＧ"))
-                CALL_CHILD(cam_down)
-                // The first time, Vivian and Mario step aside and she proposes searching under Creepy Steeple
-                // for the villain's real name (stg4_usu_149_viv, 150_viv).
-                IF_INT_EQUAL(GSWF_USU_01_CROWS_FG_PARTNER_TALK_DONE, 0)
-                    CALL(evt_party_cont_onoff, 0, 1)
-                    LOOP(0)
-                        CALL(evt_party_get_status, 6, LW(0))
-                        IF_INT_EQUAL(LW(0), 0)
-                            BREAK_LOOP
-                        END_IF
-                        WAIT_FRAMES(1)
-                    END_LOOP
-                    WAIT_MS(400)
-                    CALL(evt_party_stop, 0)
-                    CALL(evt_party_move_pos2, 0, 280, 350, FLOAT(80.0f))
-                    WAIT_FRAMES(1)
-                    CALL(evt_party_set_dir, 0, 270, 200)
-                    CALL(evt_mario_set_dir, 90, 200, 0)
-                    WAIT_MS(300)
-                    CALL(evt_msg_print_party, STRING("stg4_usu_149"))
-                    WAIT_MS(300)
-                    CALL(evt_mario_set_pose, STRING("M_N_2"))
-                    WAIT_MS(500)
-                    CALL(evt_mario_set_pose, STRING("M_S_1"))
-                    CALL(evt_msg_print_party, STRING("stg4_usu_150"))
-                    WAIT_MS(300)
-                    SET_VALUE(GSWF_USU_01_CROWS_FG_PARTNER_TALK_DONE, 1)
-                    CALL(evt_party_cont_onoff, 0, 0)
-                    CALL(evt_party_run, 0)
-                END_IF
-                CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_141"), 0, STRING("カラスＦ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_142"), 0, STRING("カラスＧ"))
-                CALL_CHILD(cam_down)
-                CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_142_1"), 0, STRING("カラスＦ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_142_2"), 0, STRING("カラスＧ"))
-                CALL_CHILD(cam_down)
-                CASE_DEFAULT
-                CALL(evt_msg_print, 0, STRING("stg4_usu_142_2_1"), 0, STRING("カラスＦ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_142_2_2"), 0, STRING("カラスＧ"))
-                CALL_CHILD(cam_down)
-            END_SWITCH
-            // Controls come back; GW(0) keeps the crows quiet until usu01_check_vivian resets it.
-            CALL(evt_party_cont_onoff, 0, 1)
-            CALL(evt_mario_key_onoff, 1)
-            SET_VALUE(GW(0), 1)
-        END_IF
-    END_IF
-#else
-    // No balloon is showing yet; GW(0) keeps the watcher quiet once the crows have talked.
-    SET_VALUE(LW(15), 0)
-    LABEL(0)
-    IF_INT_NOT_EQUAL(GW(0), 0)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_IF
-    // Check whether Mario is within 20 units of crow F.
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_position, STRING("カラスＦ"), LW(3), LW(4), LW(5))
-    CALL(evt_sub_area_check, 1, LW(3), LW(5), 20, LW(0), LW(2), LW(6))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
@@ -1988,6 +1867,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
     END_IF
 #endif
     // Show the "..." balloon over Mario while he is in range and hide it when he leaves.
+#endif
     IF_INT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_balloon_tenten)
@@ -2010,7 +1890,9 @@ EVT_BEGIN(usu01_crowFG_talk_event)
                 SET_VALUE(LW(15), 0)
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_party_cont_onoff, 0, 0)
+#if VERSION > VERSION_DEMO_US
                 CALL(mainwindow_opendisable)
+#endif
                 CALL_CHILD(PTR(cam_up))
                 CALL(evt_npc_get_position, STRING("カラスＦ"), LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
@@ -2018,7 +1900,9 @@ EVT_BEGIN(usu01_crowFG_talk_event)
                 CALL_CHILD(PTR(cam_down))
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_party_cont_onoff, 0, 1)
+#if VERSION > VERSION_DEMO_US
                 CALL(mainwindow_openenable)
+#endif
             END_IF
         END_IF
     END_IF
@@ -2040,7 +1924,9 @@ EVT_BEGIN(usu01_crowFG_talk_event)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
+#if VERSION > VERSION_DEMO_US
             CALL(mainwindow_opendisable)
+#endif
             CALL_CHILD(PTR(cam_up))
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＦ"), LW(0), LW(1), LW(2))
@@ -2095,17 +1981,17 @@ EVT_BEGIN(usu01_crowFG_talk_event)
             // Controls come back; GW(0) keeps the crows quiet until usu01_check_vivian resets it.
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_mario_key_onoff, 1)
+#if VERSION > VERSION_DEMO_US
             CALL(mainwindow_openenable)
+#endif
             SET_VALUE(GW(0), 1)
         END_IF
     END_IF
-#endif
     WAIT_FRAMES(1)
     GOTO(0)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Background watcher for crows H and I: when Mario stands within 80 units of crow H,
  * a "..." balloon shows over him
@@ -2127,105 +2013,7 @@ EVT_BEGIN(usu01_crowHI_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＨ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 80, LW(0), LW(2), LW(6))
-    IF_INT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(15), 0)
-            CALL(evt_mario_balloon_tenten)
-            SET_VALUE(LW(15), 1)
-        END_IF
-    ELSE
-        IF_INT_EQUAL(LW(15), 1)
-            CALL(evt_mario_balloon_off)
-            SET_VALUE(LW(15), 0)
-        END_IF
-    END_IF
-    // A pressed with the balloon up: Mario's controls lock,
-    // the camera rises to the crows and crow H caws (stg4_jin_153).
-    IF_INT_EQUAL(LW(15), 1)
-        CALL(evt_key_get_buttontrg, 0, LW(0))
-        CALL(evt_mario_party_use_check, LW(1))
-        IF_INT_EQUAL(LW(1), 0)
-            IF_BITS_SET(LW(0), 256)
-                CALL(evt_mario_balloon_off)
-                SET_VALUE(LW(15), 0)
-                CALL(evt_mario_key_onoff, 0)
-                CALL_CHILD(cam_up)
-                CALL(evt_npc_get_position, STRING("カラスＨ"), LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-                CALL(evt_msg_print, 0, STRING("stg4_jin_153"), 0, STRING("カラスＨ"))
-                CALL_CHILD(cam_down)
-                CALL(evt_mario_key_onoff, 1)
-            END_IF
-        END_IF
-    END_IF
-    // The crows only speak when Vivian is the partner and Mario hides in her shadow.
-    CALL(evt_mario_get_party, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 6)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_IF
-    CALL(evt_party_get_status, 6, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 2)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_IF
-    // Once Vivian has joined, the camera rises and the crows chat about their children.
-    IF_INT_EQUAL(LW(15), 1)
-        CALL(evt_mario_balloon_off)
-        SET_VALUE(LW(15), 0)
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
-            CALL(evt_mario_key_onoff, 0)
-            CALL(evt_party_cont_onoff, 0, 0)
-            CALL_CHILD(cam_up)
-            WAIT_MS(1000)
-            CALL(evt_npc_get_position, STRING("カラスＨ"), LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-            SWITCH(GSW_STORY_PROGRESS)
-                CASE_LESS(STG4_14_NAME_GUESSING)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_143"), 0, STRING("カラスＨ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_144"), 0, STRING("カラスＩ"))
-                CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_145"), 0, STRING("カラスＨ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_146"), 0, STRING("カラスＩ"))
-                CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_146_1"), 0, STRING("カラスＨ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_146_2"), 0, STRING("カラスＩ"))
-                CASE_DEFAULT
-                CALL(evt_msg_print, 0, STRING("stg4_usu_146_2_1"), 0, STRING("カラスＨ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_146_2_2"), 0, STRING("カラスＩ"))
-            END_SWITCH
-            CALL_CHILD(cam_down)
-            // Controls come back; GW(1) keeps the crows quiet until usu01_check_vivian resets it.
-            CALL(evt_party_cont_onoff, 0, 1)
-            CALL(evt_mario_key_onoff, 1)
-            SET_VALUE(GW(1), 1)
-        END_IF
-    END_IF
-    WAIT_FRAMES(1)
-    GOTO(0)
-    RETURN
-EVT_END()
-#else
-/**
- * Background watcher for crows H and I: when Mario stands within 80 units of crow H,
- * a "..." balloon shows over him
- * (US and later: only while he stands, walks, dashes or rides in Vivian's shadow,
- * and no other partner's action is in use); pressing A makes the crow caw (stg4_jin_153).
- * When Mario is hidden in Vivian's shadow (after STG4_13_VIVIAN_JOINS) the crows talk instead,
- * by story progress (stg4_usu_143 to 146_2_2); that sets GW(1),
- * which keeps the watcher quiet until usu01_check_vivian clears it.
- */
-EVT_BEGIN(usu01_crowHI_talk_event)
-    // No balloon is showing yet; GW(1) keeps the watcher quiet once the crows have talked.
-    SET_VALUE(LW(15), 0)
-    LABEL(0)
-    IF_INT_NOT_EQUAL(GW(1), 0)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_IF
-    // Check whether Mario is within 80 units of crow H.
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_position, STRING("カラスＨ"), LW(3), LW(4), LW(5))
-    CALL(evt_sub_area_check, 1, LW(3), LW(5), 80, LW(0), LW(2), LW(6))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
@@ -2246,6 +2034,7 @@ EVT_BEGIN(usu01_crowHI_talk_event)
     END_IF
 #endif
     // Show the "..." balloon over Mario while he is in range and hide it when he leaves.
+#endif
     IF_INT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_balloon_tenten)
@@ -2294,7 +2083,9 @@ EVT_BEGIN(usu01_crowHI_talk_event)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
+#if VERSION > VERSION_DEMO_US
             CALL(mainwindow_opendisable)
+#endif
             CALL_CHILD(PTR(cam_up))
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＨ"), LW(0), LW(1), LW(2))
@@ -2317,7 +2108,9 @@ EVT_BEGIN(usu01_crowHI_talk_event)
             // Controls come back; GW(1) keeps the crows quiet until usu01_check_vivian resets it.
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_mario_key_onoff, 1)
+#if VERSION > VERSION_DEMO_US
             CALL(mainwindow_openenable)
+#endif
             SET_VALUE(GW(1), 1)
         END_IF
     END_IF
@@ -2325,9 +2118,7 @@ EVT_BEGIN(usu01_crowHI_talk_event)
     GOTO(0)
     RETURN
 EVT_END()
-#endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Background watcher for crow J: when Mario stands within 20 units of crow J, a "..." balloon shows over him
  * (US and later: only while he stands, walks, dashes or rides in Vivian's shadow,
@@ -2348,100 +2139,7 @@ EVT_BEGIN(usu01_crowJ_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＪ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 20, LW(0), LW(2), LW(6))
-    IF_INT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(15), 0)
-            CALL(evt_mario_balloon_tenten)
-            SET_VALUE(LW(15), 1)
-        END_IF
-    ELSE
-        IF_INT_EQUAL(LW(15), 1)
-            CALL(evt_mario_balloon_off)
-            SET_VALUE(LW(15), 0)
-        END_IF
-    END_IF
-    // A pressed with the balloon up: Mario's controls lock,
-    // the camera rises to the crow and it caws (stg4_jin_153).
-    IF_INT_EQUAL(LW(15), 1)
-        CALL(evt_key_get_buttontrg, 0, LW(0))
-        CALL(evt_mario_party_use_check, LW(1))
-        IF_INT_EQUAL(LW(1), 0)
-            IF_BITS_SET(LW(0), 256)
-                CALL(evt_mario_balloon_off)
-                SET_VALUE(LW(15), 0)
-                CALL(evt_mario_key_onoff, 0)
-                CALL_CHILD(cam_up)
-                CALL(evt_npc_get_position, STRING("カラスＪ"), LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-                CALL(evt_msg_print, 0, STRING("stg4_jin_153"), 0, STRING("カラスＪ"))
-                CALL_CHILD(cam_down)
-                CALL(evt_mario_key_onoff, 1)
-            END_IF
-        END_IF
-    END_IF
-    // The crow only speaks when Vivian is the partner and Mario hides in her shadow.
-    CALL(evt_mario_get_party, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 6)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_IF
-    CALL(evt_party_get_status, 6, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 2)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_IF
-    // Once Vivian has joined, the camera rises and crow J muses aloud by story progress.
-    IF_INT_EQUAL(LW(15), 1)
-        CALL(evt_mario_balloon_off)
-        SET_VALUE(LW(15), 0)
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
-            CALL(evt_mario_key_onoff, 0)
-            CALL(evt_party_cont_onoff, 0, 0)
-            CALL_CHILD(cam_up)
-            WAIT_MS(1000)
-            CALL(evt_npc_get_position, STRING("カラスＪ"), LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
-            SWITCH(GSW_STORY_PROGRESS)
-                CASE_LESS(STG4_14_NAME_GUESSING)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_147"), 0, STRING("カラスＪ"))
-                CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_148"), 0, STRING("カラスＪ"))
-                CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_148_1"), 0, STRING("カラスＪ"))
-                CASE_DEFAULT
-                CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_1"), 0, STRING("カラスＪ"))
-            END_SWITCH
-            // Camera returns, Mario's controls come back and the partner is released.
-            CALL_CHILD(cam_down)
-            CALL(evt_mario_key_onoff, 1)
-            CALL(evt_party_cont_onoff, 0, 1)
-            SET_VALUE(GW(2), 1)
-        END_IF
-    END_IF
-    WAIT_FRAMES(1)
-    GOTO(0)
-    RETURN
-EVT_END()
-#else
-/**
- * Background watcher for crow J: when Mario stands within 20 units of crow J, a "..." balloon shows over him
- * (US and later: only while he stands, walks, dashes or rides in Vivian's shadow,
- * and no other partner's action is in use); pressing A makes the crow caw (stg4_jin_153).
- * When Mario is hidden in Vivian's shadow (after STG4_13_VIVIAN_JOINS) the crow talks instead,
- * by story progress (stg4_usu_147 to 148_1_1); that sets GW(2),
- * which keeps the watcher quiet until usu01_check_vivian clears it.
- */
-EVT_BEGIN(usu01_crowJ_talk_event)
-    // No balloon is showing yet; GW(2) keeps the watcher quiet once the crow has talked.
-    SET_VALUE(LW(15), 0)
-    LABEL(0)
-    IF_INT_NOT_EQUAL(GW(2), 0)
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_IF
-    // Check whether Mario is within 20 units of crow J.
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_position, STRING("カラスＪ"), LW(3), LW(4), LW(5))
-    CALL(evt_sub_area_check, 1, LW(3), LW(5), 20, LW(0), LW(2), LW(6))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
@@ -2462,6 +2160,7 @@ EVT_BEGIN(usu01_crowJ_talk_event)
     END_IF
 #endif
     // Show the "..." balloon over Mario while he is in range and hide it when he leaves.
+#endif
     IF_INT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_balloon_tenten)
@@ -2510,7 +2209,9 @@ EVT_BEGIN(usu01_crowJ_talk_event)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
+#if VERSION > VERSION_DEMO_US
             CALL(mainwindow_opendisable)
+#endif
             CALL_CHILD(PTR(cam_up))
             WAIT_MS(1000)
             CALL(evt_npc_get_position, STRING("カラスＪ"), LW(0), LW(1), LW(2))
@@ -2529,7 +2230,9 @@ EVT_BEGIN(usu01_crowJ_talk_event)
             CALL_CHILD(PTR(cam_down))
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_party_cont_onoff, 0, 1)
+#if VERSION > VERSION_DEMO_US
             CALL(mainwindow_openenable)
+#endif
             SET_VALUE(GW(2), 1)
         END_IF
     END_IF
@@ -2537,7 +2240,6 @@ EVT_BEGIN(usu01_crowJ_talk_event)
     GOTO(0)
     RETURN
 EVT_END()
-#endif
 
 /**
  * NPCs inside house 1, the aunt's home: the aunt in her human and pig forms and the three children;

@@ -1128,112 +1128,6 @@ void partyMoveNoHosei(PartyEntry* party) {
  * hosei 1 adds the corrections of partyGetMoveDirSpd.
  */
 static s32 partyMoveMain(PartyEntry* party, s32 hosei) {
-    Vec pos;
-    Vec pos2;
-    f32 spd;
-    f32 dir;
-f32 depth;
-f32 h;
-    HitEntry* hit;
-    f32 v;
-
-    party->hitobjFront = NULL;
-    party->hitobjPush = NULL;
-    pos = party->position;
-    spd = 0.0f;
-    if (hosei) {
-        partyGetMoveDirSpd(party, &dir, &spd);
-    } else {
-        dir = party->targetDir;
-        spd = party->moveSpeed * ((party->flags & PARTY_FLAG_IN_SHALLOW_WATER) ? 0.75f : 1.0f);
-    }
-    if (!(party->flags & PARTY_FLAG_DISABLE_FRONT_WALL_CHK)) {
-        hit = partySearchFrontWall(party, &pos, spd, dir);
-        if (hit) {
-            party->hitobjFront = hit;
-            if (party->moveSpeed) {
-                party->hitobjPush = hit;
-            }
-        }
-        if (hit) {
-            party->position.x = pos.x;
-            party->position.z = pos.z;
-        } else {
-            marioChkWallAround(&pos, spd, dir, party->width, party->height);
-            party->position.x = pos.x;
-            party->position.z = pos.z;
-        }
-    } else {
-        movePos(&party->position.x, &party->position.z, spd, dir);
-    }
-    if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
-        pos2 = party->position;
-        h = party->height;
-        hit = partySearchHead(party, &pos2, &h, party->displayDirection);
-        if (hit) {
-            party->hitobjHead = hit;
-        }
-    }
-    if (party->flags & PARTY_FLAG_IS_JUMPING) {
-        dir = toMovedirSimple(party->displayDirectionTarget);
-        if (!party->hitobjHead) {
-            party->position.y += party->velY;
-        }
-        party->velY += party->accelY;
-        party->flags &= ~PARTY_FLAG_IS_GROUNDED;
-        return 1;
-    }
-    hit = NULL;
-    if (!(party->flags & PARTY_FLAG_FORCE_FALL) && party->velY <= 0.0f) {
-        v = __fabsf(party->velY);
-        hit = _partySearchGround(party, &pos.y, &depth, v, v);
-        if (hit) {
-            if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
-                party->hitobjStandOn = hit;
-                party->flags &= ~PARTY_FLAG_IS_GROUNDED;
-                if (!(party->flags & PARTY_FLAG_IS_FALLING)) {
-                    party->flags |= PARTY_FLAG_IS_FALLING;
-                    if (!party->accelY) {
-                        party->accelY = -1.4f;
-                    }
-                }
-                party->position.y += party->velY;
-                party->velY += party->accelY;
-                return 2;
-            }
-            if (depth != 0.0f) {
-                hit = NULL;
-            } else {
-                party->position.y = pos.y;
-            }
-        }
-    }
-    party->hitobjStandOn = hit;
-    if (!hit) {
-        if (!(party->flags & PARTY_FLAG_DISABLE_FLOORS)) {
-            party->flags &= ~PARTY_FLAG_IS_GROUNDED;
-            if (!(party->flags & PARTY_FLAG_IS_FALLING)) {
-                party->flags |= PARTY_FLAG_IS_FALLING;
-                if (!party->accelY) {
-                    party->accelY = -1.4f;
-                }
-            }
-            party->position.y += party->velY;
-            party->velY += party->accelY;
-            return 2;
-        }
-    } else if (party->flags & PARTY_FLAG_IS_FALLING) {
-        party->flags &= ~PARTY_FLAG_IS_FALLING;
-        party->flags |= PARTY_FLAG_IS_GROUNDED;
-        party->velY = 0.0f;
-        party->accelY = 0.0f;
-        party->position.y = pos.y;
-        return 3;
-    } else {
-        party->position.y = pos.y;
-    }
-    return 0;
-}
 #else
 /**
  * Moves the partner one frame: walls in front (or a straight move with wall checks off), the ceiling,
@@ -1241,10 +1135,14 @@ f32 h;
  * hosei 1 adds the corrections of partyGetMoveDirSpd.
  */
 s32 partyMoveMain(PartyEntry* party, s32 hosei) {
+#endif
     Vec pos;
     Vec pos2;
     f32 spd;
     f32 dir;
+#if VERSION <= VERSION_DEMO_US
+    f32 depth;
+#endif
     f32 h;
     HitEntry* hit;
     f32 v;
@@ -1271,10 +1169,14 @@ s32 partyMoveMain(PartyEntry* party, s32 hosei) {
             party->position.x = pos.x;
             party->position.z = pos.z;
         } else {
+#if VERSION <= VERSION_DEMO_US
+            marioChkWallAround(&pos, spd, dir, party->width, party->height);
+#else
 #if VERSION >= VERSION_US
             partyChkWallAround(party, &pos, spd, dir, party->width, party->height);
 #else
             marioChkWallAround(&pos, 1, spd, dir, party->width, party->height);
+#endif
 #endif
             party->position.x = pos.x;
             party->position.z = pos.z;
@@ -1302,8 +1204,12 @@ s32 partyMoveMain(PartyEntry* party, s32 hosei) {
     hit = NULL;
     if (!(party->flags & PARTY_FLAG_FORCE_FALL) && party->velY <= 0.0f) {
         v = __fabsf(party->velY);
+#if VERSION <= VERSION_DEMO_US
+        hit = _partySearchGround(party, &pos.y, &depth, v, v);
+#else
         hit = partySearchGround(party, v, v);
         pos.y = party->groundY;
+#endif
         if (hit) {
             if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
                 party->hitobjStandOn = hit;
@@ -1318,7 +1224,11 @@ s32 partyMoveMain(PartyEntry* party, s32 hosei) {
                 party->velY += party->accelY;
                 return 2;
             }
+#if VERSION <= VERSION_DEMO_US
+            if (depth != 0.0f) {
+#else
             if (party->dropDepth != 0.0f) {
+#endif
                 hit = NULL;
             } else {
                 party->position.y = pos.y;
@@ -1351,7 +1261,6 @@ s32 partyMoveMain(PartyEntry* party, s32 hosei) {
     }
     return 0;
 }
-#endif
 
 void partyChgMoveMode(PartyEntry* party, s32 mode) {
     // FAKE: the copy p and its self-assignment in case 4/5 keep the empty case 4/5 arm; the plain switch changes the object
@@ -1671,37 +1580,19 @@ void party_move_mode_wait(PartyEntry* party) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Readies a walking partner: grounded, footmark trail restarted at whatever it follows, homing distance 50,
  * then stand pose, move mode 1 and motion 0 unless Mario has partner walking disabled.
  * The PAL release also ends any jump.
  */
 void partyWalkInit(PartyEntry* party) {
+#if VERSION <= VERSION_DEMO_US
     u8* p114;
     MarioWork* mario = party->playerPtr;
 
     party->flags |= PARTY_FLAG_IS_GROUNDED;
     partyClearFootmark();
-    party->moveArg = 0;
-    party->reserved_44 = 0x10;
-    party->homingDist = 50.0f;
-    party->reserved_3E = 0;
-    party->accelY = 1.8f;
-    party->velY = 0.0f;
-    if (!(mario->flags & MARIO_FLAG_PARTY_WALK_DISABLED)) {
-        partyChgPoseId(party, 1);
-        partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
-        partyChgMot(party, PARTY_MOTION_STAY);
-    }
-}
 #else
-/**
- * Readies a walking partner: grounded, footmark trail restarted at whatever it follows, homing distance 50,
- * then stand pose, move mode 1 and motion 0 unless Mario has partner walking disabled.
- * The PAL release also ends any jump.
- */
-void partyWalkInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
     party->flags |= PARTY_FLAG_IS_GROUNDED;
@@ -1713,6 +1604,7 @@ void partyWalkInit(PartyEntry* party) {
     } else {
         partyClearFootmark2();
     }
+#endif
     party->moveArg = 0;
     party->reserved_44 = 0x10;
     party->homingDist = 50.0f;
@@ -1725,7 +1617,6 @@ void partyWalkInit(PartyEntry* party) {
         partyChgMot(party, PARTY_MOTION_STAY);
     }
 }
-#endif
 
 /**
  * move_func of the walking partners (partyDataTbl):

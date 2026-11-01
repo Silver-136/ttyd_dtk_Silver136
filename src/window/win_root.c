@@ -1654,8 +1654,7 @@ u8 enemy_monoshiri_sort_table[] = {
     0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF,
     0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6,
 };
-#endif
-#if VERSION > VERSION_DEMO_US
+#else
 /** Sort options of the Tattle Log: by number, by where the enemy appears most, or by name. */
 WinSortData sort_7[] = {
     {"msg_menu_sort_number", sort_7_1_func},
@@ -1774,28 +1773,6 @@ static void sort_4_1_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 4 : 11);
     wp->sortRev = 1 - wp->sortRev;
     winMakeEquipList(wp);
-    wp->badge.sel[1] = 0;
-    wp->badge.page[1] = wp->badge.sel[1] / 8;
-}
-
-/** Equipped badges by type, through the pouch (modes 5/12). */
-static void sort_4_2_func(WindowWork* wp) {
-    pouchSortItem(!wp->sortRev ? 5 : 12);
-    wp->sortRev = 1 - wp->sortRev;
-    winMakeEquipList(wp);
-    wp->badge.sel[1] = 0;
-    wp->badge.page[1] = wp->badge.sel[1] / 8;
-}
-
-/** Equipped badges by name, then by BP cost, through the pouch. */
-static void sort_4_3_func(WindowWork* wp) {
-    pouchSortItem(!wp->sortRev ? 4 : 11);
-    pouchSortItem(!wp->sortRev ? 6 : 13);
-    wp->sortRev = 1 - wp->sortRev;
-    winMakeEquipList(wp);
-    wp->badge.sel[1] = 0;
-    wp->badge.page[1] = wp->badge.sel[1] / 8;
-}
 #else
 /**
  * qqsort compare for the equipped badge list (WinBadgeEnt) by name;
@@ -1862,9 +1839,18 @@ void sort_4_1_func(WindowWork* wp) {
         qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_1_r);
     }
     wp->sortRev = 1 - wp->sortRev;
+#endif
     wp->badge.sel[1] = 0;
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
+#if VERSION <= VERSION_DEMO_US
+
+/** Equipped badges by type, through the pouch (modes 5/12). */
+static void sort_4_2_func(WindowWork* wp) {
+    pouchSortItem(!wp->sortRev ? 5 : 12);
+    wp->sortRev = 1 - wp->sortRev;
+    winMakeEquipList(wp);
+#else
 
 /** Demo: equipped badges by type, through the pouch (modes 5/12). */
 void sort_4_2_func(WindowWork* wp) {
@@ -1874,9 +1860,19 @@ void sort_4_2_func(WindowWork* wp) {
         qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_2_r);
     }
     wp->sortRev = 1 - wp->sortRev;
+#endif
     wp->badge.sel[1] = 0;
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
+#if VERSION <= VERSION_DEMO_US
+
+/** Equipped badges by name, then by BP cost, through the pouch. */
+static void sort_4_3_func(WindowWork* wp) {
+    pouchSortItem(!wp->sortRev ? 4 : 11);
+    pouchSortItem(!wp->sortRev ? 6 : 13);
+    wp->sortRev = 1 - wp->sortRev;
+    winMakeEquipList(wp);
+#else
 
 /** Demo: equipped badges by name, then by BP cost, through the pouch. */
 void sort_4_3_func(WindowWork* wp) {
@@ -1932,16 +1928,16 @@ void sort_4_3_func(WindowWork* wp) {
         }
     }
     wp->sortRev = 1 - wp->sortRev;
+#endif
     wp->badge.sel[1] = 0;
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
 
-#endif
 
 /** Journal badge log by name, retail: names folded to katakana first. */
-#if VERSION <= VERSION_DEMO_US
 /** Journal badge log by name, retail: names folded to katakana first. */
 s32 compare_func5_1(const void* a, const void* b) {
+#if VERSION <= VERSION_DEMO_US
     const s16* ea = a;
     const s16* eb = b;
     s16 ia = *ea + BADGE_MIN;
@@ -1954,10 +1950,7 @@ s32 compare_func5_1(const void* a, const void* b) {
         return -1;
     }
     return 0;
-}
 #else
-/** Journal badge log by name, retail: names folded to katakana first. */
-s32 compare_func5_1(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
     s16 ia = *(s16*)a + BADGE_MIN;
@@ -1966,12 +1959,12 @@ s32 compare_func5_1(const void* a, const void* b) {
     pouchHiraToKata(msgSearch(itemDataTable[ia].name), buf1);
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
     return strcmp(buf1, buf2);
-}
 #endif
+}
 
-#if VERSION <= VERSION_DEMO_US
 /** Reverse of compare_func5_1 (demo). */
 s32 compare_func5_1_r(const void* a, const void* b) {
+#if VERSION <= VERSION_DEMO_US
     const s16* ea = a;
     const s16* eb = b;
     s16 ia = *ea + BADGE_MIN;
@@ -1984,10 +1977,7 @@ s32 compare_func5_1_r(const void* a, const void* b) {
         return -1;
     }
     return 0;
-}
 #else
-/** Reverse of compare_func5_1 (demo). */
-s32 compare_func5_1_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
     s16 ia = *(s16*)a + BADGE_MIN;
@@ -1996,8 +1986,8 @@ s32 compare_func5_1_r(const void* a, const void* b) {
     pouchHiraToKata(msgSearch(itemDataTable[ia].name), buf1);
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
     return strcmp(buf2, buf1);
-}
 #endif
+}
 
 /** qqsort compare for the Journal badge log by type_sort_order. */
 s32 compare_func5_2(const void* a, const void* b) {
@@ -2049,62 +2039,28 @@ void sort_5_2_func(WindowWork* wp) {
     wp->log.badge.idx = wp->log.badge.cursor / 28;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Journal badge log by BP cost.
  * The demo sorts by name first, then bubbles by BP cost only; its first press puts the highest cost first.
  */
 void sort_5_3_func(WindowWork* wp) {
     if (!wp->sortRev) {
+#if VERSION > VERSION_DEMO_US
+        ItemData* db;
+        ItemData* da;
+#endif
         s16 a;
         s16 b;
         s32 i;
         s32 j;
+#if VERSION <= VERSION_DEMO_US
         qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_1);
         for (i = 0; i < wp->log.badge.num - 1; i++) {
             for (j = i + 1; j < wp->log.badge.num; j++) {
                 a = wp->log.badgeIds[i];
                 b = wp->log.badgeIds[j];
                 if (itemDataTable[a + BADGE_MIN].bp_cost < itemDataTable[b + BADGE_MIN].bp_cost) {
-                    wp->log.badgeIds[i] = b;
-                    wp->log.badgeIds[j] = a;
-                }
-            }
-        }
-    } else {
-        s16 a;
-        s16 b;
-        s32 i;
-        s32 j;
-        qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_1_r);
-        for (i = 0; i < wp->log.badge.num - 1; i++) {
-            for (j = i + 1; j < wp->log.badge.num; j++) {
-                a = wp->log.badgeIds[i];
-                b = wp->log.badgeIds[j];
-                if (itemDataTable[a + BADGE_MIN].bp_cost > itemDataTable[b + BADGE_MIN].bp_cost) {
-                    wp->log.badgeIds[i] = b;
-                    wp->log.badgeIds[j] = a;
-                }
-            }
-        }
-    }
-    wp->sortRev = 1 - wp->sortRev;
-    wp->log.badge.cursor = 0;
-    wp->log.badge.idx = wp->log.badge.cursor / 28;
-}
 #else
-/**
- * Journal badge log by BP cost.
- * The demo sorts by name first, then bubbles by BP cost only; its first press puts the highest cost first.
- */
-void sort_5_3_func(WindowWork* wp) {
-    if (!wp->sortRev) {
-        ItemData* db;
-        ItemData* da;
-        s16 a;
-        s16 b;
-        s32 i;
-        s32 j;
         s32 swap;
         for (i = 0; i < wp->log.badge.num - 1; ++i) {
             for (j = i + 1; j < wp->log.badge.num; ++j) {
@@ -2122,17 +2078,29 @@ void sort_5_3_func(WindowWork* wp) {
                     }
                 }
                 if (swap) {
+#endif
                     wp->log.badgeIds[i] = b;
                     wp->log.badgeIds[j] = a;
                 }
             }
         }
     } else {
+#if VERSION > VERSION_DEMO_US
         ItemData* db;
         ItemData* da;
+#endif
         s16 a;
         s16 b;
         s32 i;
+#if VERSION <= VERSION_DEMO_US
+        s32 j;
+        qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_1_r);
+        for (i = 0; i < wp->log.badge.num - 1; i++) {
+            for (j = i + 1; j < wp->log.badge.num; j++) {
+                a = wp->log.badgeIds[i];
+                b = wp->log.badgeIds[j];
+                if (itemDataTable[a + BADGE_MIN].bp_cost > itemDataTable[b + BADGE_MIN].bp_cost) {
+#else
         s32 swap;
         s32 j;
         for (i = 0; i < wp->log.badge.num - 1; ++i) {
@@ -2151,6 +2119,7 @@ void sort_5_3_func(WindowWork* wp) {
                     }
                 }
                 if (swap) {
+#endif
                     wp->log.badgeIds[i] = b;
                     wp->log.badgeIds[j] = a;
                 }
@@ -2161,12 +2130,11 @@ void sort_5_3_func(WindowWork* wp) {
     wp->log.badge.cursor = 0;
     wp->log.badge.idx = wp->log.badge.cursor / 28;
 }
-#endif
 
 /** Journal recipe log by name, retail: names folded to katakana first. */
-#if VERSION <= VERSION_DEMO_US
 /** Journal recipe log by name, retail: names folded to katakana first. */
 s32 compare_func6_1(const void* a, const void* b) {
+#if VERSION <= VERSION_DEMO_US
     const s16* ea = a;
     const s16* eb = b;
     s16 ia = *ea + ITEM_SHROOM_FRY;
@@ -2179,10 +2147,7 @@ s32 compare_func6_1(const void* a, const void* b) {
         return -1;
     }
     return 0;
-}
 #else
-/** Journal recipe log by name, retail: names folded to katakana first. */
-s32 compare_func6_1(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
     s16 ia = *(s16*)a + ITEM_SHROOM_FRY;
@@ -2191,12 +2156,12 @@ s32 compare_func6_1(const void* a, const void* b) {
     pouchHiraToKata(msgSearch(itemDataTable[ia].name), buf1);
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
     return strcmp(buf1, buf2);
-}
 #endif
+}
 
-#if VERSION <= VERSION_DEMO_US
 /** Reverse of compare_func6_1 (demo). */
 s32 compare_func6_1_r(const void* a, const void* b) {
+#if VERSION <= VERSION_DEMO_US
     const s16* ea = a;
     const s16* eb = b;
     s16 ia = *ea + ITEM_SHROOM_FRY;
@@ -2209,10 +2174,7 @@ s32 compare_func6_1_r(const void* a, const void* b) {
         return -1;
     }
     return 0;
-}
 #else
-/** Reverse of compare_func6_1 (demo). */
-s32 compare_func6_1_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
     s16 ia = *(s16*)a + ITEM_SHROOM_FRY;
@@ -2221,8 +2183,8 @@ s32 compare_func6_1_r(const void* a, const void* b) {
     pouchHiraToKata(msgSearch(itemDataTable[ia].name), buf1);
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
     return strcmp(buf2, buf1);
-}
 #endif
+}
 
 /** qqsort compare for the Journal recipe log by type_sort_order. */
 s32 compare_func6_2(const void* a, const void* b) {
@@ -2867,6 +2829,16 @@ void winZClear(void) {
  * its picture (flags 0x1000) and scroll arrows.
  */
 static void winMailDisp(WindowWork* wp) {
+#else
+/**
+ * Draws the mail window opened from the Items page while it is on screen.
+ * As a list: one row per letter with a sender colour (MailData flags 1/2/4), an opened/unopened envelope,
+ * its two-digit number and title.
+ * While a letter is read (item.state 202): its header, the body scrolled by mailLine,
+ * its picture (flags 0x1000) and scroll arrows.
+ */
+void winMailDisp(WindowWork* wp) {
+#endif
     s32 i;
     s32 id;
     s32 kind;
@@ -2883,35 +2855,67 @@ static void winMailDisp(WindowWork* wp) {
                 kind = wp->item.mail[i].kind;
                 mail = mailGetPtr(id);
                 {
-                    GXColor black = {0x00, 0x00, 0x00, 0xFF};
-                    if (mail->flags & MAIL_FLAG_PEACH) {
-                        col = (GXColor){0xD7, 0xAC, 0xBC, 0xFF};
-                    } else if (mail->flags & MAIL_FLAG_TROUBLE) {
-                        col = (GXColor){0xD3, 0xD7, 0xAC, 0xFF};
-                    } else if (mail->flags & MAIL_FLAG_INFO) {
-                        col = (GXColor){0xAC, 0xC2, 0xD7, 0xFF};
-                    } else {
-                        col = (GXColor){0xE1, 0xE1, 0xE1, 0xFF};
-                    }
-                    winTexInit((TEXPalette*)*wp->res->data);
-                    winTexSet(0x77, (Vec){4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-                    white = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-                    winTexSet((u32)((s32)pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-                    winTexSet(0x65 + (kind + 1) / 10, (Vec){2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-                    winTexSet(0x65 + (kind + 1) % 10, (Vec){2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-                    winFontInit();
-                    winFontSetLabel((Vec){120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, mail->name);
-}
+#if VERSION <= VERSION_DEMO_US
+                GXColor black = {0x00, 0x00, 0x00, 0xFF};
+                if (mail->flags & MAIL_FLAG_PEACH) {
+                    col = (GXColor){0xD7, 0xAC, 0xBC, 0xFF};
+                } else if (mail->flags & MAIL_FLAG_TROUBLE) {
+                    col = (GXColor){0xD3, 0xD7, 0xAC, 0xFF};
+                } else if (mail->flags & MAIL_FLAG_INFO) {
+                    col = (GXColor){0xAC, 0xC2, 0xD7, 0xFF};
+                } else {
+                    col = (GXColor){0xE1, 0xE1, 0xE1, 0xFF};
+                }
+                winTexInit((TEXPalette*)*wp->res->data);
+                winTexSet(0x77, (Vec){4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+                white = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+                winTexSet((u32)((s32)pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+                winTexSet(0x65 + (kind + 1) / 10, (Vec){2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+                winTexSet(0x65 + (kind + 1) % 10, (Vec){2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+                winFontInit();
+                winFontSetLabel((Vec){120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, mail->name);
+#else
+                GXColor black = { 0x00, 0x00, 0x00, 0xFF };
+                if (mail->flags & MAIL_FLAG_PEACH) {
+                    col = (GXColor){ 0xD7, 0xAC, 0xBC, 0xFF };
+                } else if (mail->flags & MAIL_FLAG_TROUBLE) {
+                    col = (GXColor){ 0xD3, 0xD7, 0xAC, 0xFF };
+                } else if (mail->flags & MAIL_FLAG_INFO) {
+                    col = (GXColor){ 0xAC, 0xC2, 0xD7, 0xFF };
+                } else {
+                    col = (GXColor){ 0xE1, 0xE1, 0xE1, 0xFF };
+                }
+                winTexInit((TEXPalette*)*wp->res->data);
+                winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, col);
+                white = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
+                // FAKE: the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object
+                winTexSet((u32)((s32)pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){ 72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
+                winTexSet(0x65 + (kind + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
+                winTexSet(0x65 + (kind + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
+                winFontInit();
+#if VERSION >= VERSION_US
+                winFontSetWidth((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
+#else
+                winFontSetLabel((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
+#endif
+#endif
+                }
             }
             GXSetScissor(0, 0, 0x260, 0x1E0);
         } else {
             s32 kind2 = wp->item.mail[wp->item.mailSel].kind;
+#if VERSION <= VERSION_DEMO_US
             GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
             GXColor black = {0x00, 0x00, 0x00, 0xFF};
+#else
+            GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
+            GXColor black = { 0x00, 0x00, 0x00, 0xFF };
+#endif
             GXColor col;
 
             mail = mailGetPtr(wp->item.mail[wp->item.mailSel].id);
             if (mail->flags & MAIL_FLAG_PEACH) {
+#if VERSION <= VERSION_DEMO_US
                 col = (GXColor){0xD7, 0xAC, 0xBC, 0xFF};
             } else if (mail->flags & MAIL_FLAG_TROUBLE) {
                 col = (GXColor){0xD3, 0xD7, 0xAC, 0xFF};
@@ -2938,85 +2942,7 @@ static void winMailDisp(WindowWork* wp) {
 }
             GXSetScissor(0, 0, 0x260, 0x1E0);
 {
-                winIconInit();
-                if (wp->item.mailLine == 0) {
-                    if ((gp->retraceCount & 0x1F) < 0x14) {
-                        winIconSet(ICON_ARROW_DOWN, (Vec){360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    }
-} else if (wp->item.mailLine + 8 == wp->item.mailLines) {
-    if ((gp->retraceCount & 0x1F) < 0x14) {
-                        winIconSet(ICON_ARROW_UP, (Vec){360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    }
-                } else {
-                    if ((gp->retraceCount & 0x1F) < 0x14) {
-                        winIconSet(ICON_ARROW_UP, (Vec){360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                        winIconSet(ICON_ARROW_DOWN, (Vec){360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    }
-                }
-                winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){360.0f + wp->item.mailX, 20.0f + (wp->item.mailY - 230.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            }
-        }
-    }
-}
 #else
-/**
- * Draws the mail window opened from the Items page while it is on screen.
- * As a list: one row per letter with a sender colour (MailData flags 1/2/4), an opened/unopened envelope,
- * its two-digit number and title.
- * While a letter is read (item.state 202): its header, the body scrolled by mailLine,
- * its picture (flags 0x1000) and scroll arrows.
- */
-void winMailDisp(WindowWork* wp) {
-    s32 i;
-    s32 id;
-    s32 kind;
-    GXColor col;
-    MailData* mail;
-
-    if (wp->item.mailX < 320.0f && wp->item.mailY > -240.0f) {
-        winMailGX(wp, wp->item.mailX, wp->item.mailY);
-        if (wp->item.state != 202) {
-            for (i = 0; i < wp->item.mailNum; i++) {
-                GXColor white;
-
-                id = wp->item.mail[i].id;
-                kind = wp->item.mail[i].kind;
-                mail = mailGetPtr(id);
-                {
-                GXColor black = { 0x00, 0x00, 0x00, 0xFF };
-                if (mail->flags & MAIL_FLAG_PEACH) {
-                    col = (GXColor){ 0xD7, 0xAC, 0xBC, 0xFF };
-                } else if (mail->flags & MAIL_FLAG_TROUBLE) {
-                    col = (GXColor){ 0xD3, 0xD7, 0xAC, 0xFF };
-                } else if (mail->flags & MAIL_FLAG_INFO) {
-                    col = (GXColor){ 0xAC, 0xC2, 0xD7, 0xFF };
-                } else {
-                    col = (GXColor){ 0xE1, 0xE1, 0xE1, 0xFF };
-                }
-                winTexInit((TEXPalette*)*wp->res->data);
-                winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, col);
-                white = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
-                // FAKE: the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object
-                winTexSet((u32)((s32)pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){ 72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
-                winTexSet(0x65 + (kind + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
-                winTexSet(0x65 + (kind + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
-                winFontInit();
-#if VERSION >= VERSION_US
-                winFontSetWidth((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
-#else
-                winFontSetLabel((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
-#endif
-                }
-            }
-            GXSetScissor(0, 0, 0x260, 0x1E0);
-        } else {
-            s32 kind2 = wp->item.mail[wp->item.mailSel].kind;
-            GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
-            GXColor black = { 0x00, 0x00, 0x00, 0xFF };
-            GXColor col;
-
-            mail = mailGetPtr(wp->item.mail[wp->item.mailSel].id);
-            if (mail->flags & MAIL_FLAG_PEACH) {
                 col = (GXColor){ 0xD7, 0xAC, 0xBC, 0xFF };
             } else if (mail->flags & MAIL_FLAG_TROUBLE) {
                 col = (GXColor){ 0xD3, 0xD7, 0xAC, 0xFF };
@@ -3051,27 +2977,43 @@ void winMailDisp(WindowWork* wp) {
             }
             GXSetScissor(0, 0, 0x260, 0x1E0);
             if (wp->item.mailLines > 8) {
+#endif
                 winIconInit();
                 if (wp->item.mailLine == 0) {
                     if ((gp->retraceCount & 0x1F) < 0x14) {
+#if VERSION <= VERSION_DEMO_US
+                        winIconSet(ICON_ARROW_DOWN, (Vec){360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    }
+} else if (wp->item.mailLine + 8 == wp->item.mailLines) {
+    if ((gp->retraceCount & 0x1F) < 0x14) {
+                        winIconSet(ICON_ARROW_UP, (Vec){360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+#else
                         winIconSet(ICON_ARROW_DOWN, (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                     }
                 } else if (wp->item.mailLine + 6 == wp->item.mailLines) {
                     if ((gp->retraceCount & 0x1F) < 0x14) {
                         winIconSet(ICON_ARROW_UP, (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#endif
                     }
                 } else {
                     if ((gp->retraceCount & 0x1F) < 0x14) {
+#if VERSION <= VERSION_DEMO_US
+                        winIconSet(ICON_ARROW_UP, (Vec){360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                        winIconSet(ICON_ARROW_DOWN, (Vec){360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    }
+                }
+                winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){360.0f + wp->item.mailX, 20.0f + (wp->item.mailY - 230.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+#else
                         winIconSet(ICON_ARROW_UP, (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                         winIconSet(ICON_ARROW_DOWN, (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                     }
                 }
                 winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){ 360.0f + wp->item.mailX, 20.0f + (wp->item.mailY - 230.0f), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#endif
             }
         }
     }
 }
-#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_8014d5dc, JP 0x8014D5DC. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US

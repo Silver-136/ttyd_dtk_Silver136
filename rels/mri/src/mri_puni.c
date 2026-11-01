@@ -3329,28 +3329,13 @@ static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
     switch (p->modeStep) {
         case 0:
             psndSFXOn_3D(sfx, &p->pos);
-            {
-                Vec v = {0.0f, 0.0f, 0.0f};
-                p->vel = v;
-            }
-            p->anim = 4;
-            p->modeStep = 1;
-            break;
-        case 1:
-            break;
-    }
-}
-
-/** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
-void puniModeDead(PuniData* p) {
-    puniModeDeadSfx(p, "SFX_STG2_FIGHT_TOGE3");
-}
 #else
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
 void puniModeDead(PuniData* p) {
     switch (p->modeStep) {
         case 0:
             psndSFXOn_3D("SFX_STG2_FIGHT_TOGE3", &p->pos);
+#endif
             {
                 Vec v = {0.0f, 0.0f, 0.0f};
                 p->vel = v;
@@ -3361,6 +3346,12 @@ void puniModeDead(PuniData* p) {
         case 1:
             break;
     }
+}
+#if VERSION <= VERSION_DEMO_US
+
+/** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
+void puniModeDead(PuniData* p) {
+    puniModeDeadSfx(p, "SFX_STG2_FIGHT_TOGE3");
 }
 #endif
 
@@ -3864,35 +3855,6 @@ void puniModeUpdraft(PuniData *p) {
 
 #if VERSION <= VERSION_DEMO_US
 static inline void puniModeWonderSfx(PuniData* p, const char* sfx) {
-Vec pos;
-
-    switch (p->modeStep) {
-        case 0:
-        psndSFXOn_3D(sfx, &p->pos);
-        if (p->effect != NULL) {
-                effDelete(p->effect);
-                p->effect = NULL;
-            }
-            pos = p->pos;
-            pos.y += 15.0f;
-            pos.z += 3.0f;
-            p->effect = effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
-            p->timer = 20;
-            p->anim = 9;
-            p->animTime = 0;
-            p->flags |= PUNI_FLAG_OWN_ANIM_TIME;
-            p->modeStep = 1;
-        case 1:
-            if (p->timer-- == 0) {
-                p->npc->flags &= ~NPC_FLAG_RECORD_DEFEAT;
-                p->mode = PUNI_MODE_FUNBARI;
-                p->anim = 1;
-                p->flags &= ~PUNI_FLAG_OWN_ANIM_TIME;
-                p->modeStep = 0;
-            }
-            break;
-    }
-}
 #else
 /**
  * Wonder mode: pops the soap bubble (sound and burst effect),
@@ -3900,11 +3862,16 @@ Vec pos;
  * The demo build has this as a helper taking the sound name.
  */
 void puniModeWonder(PuniData* p) {
+#endif
     Vec pos;
 
     switch (p->modeStep) {
         case 0:
+#if VERSION <= VERSION_DEMO_US
+            psndSFXOn_3D(sfx, &p->pos);
+#else
             psndSFXOn_3D("SFX_STG2_SOAPBALL_BREAK1", &p->pos);
+#endif
             if (p->effect != NULL) {
                 effDelete(p->effect);
                 p->effect = NULL;
@@ -3912,10 +3879,14 @@ void puniModeWonder(PuniData* p) {
             pos = p->pos;
             pos.y += 15.0f;
             pos.z += 3.0f;
+#if VERSION <= VERSION_DEMO_US
+            p->effect = effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
+#else
 #if VERSION >= VERSION_US
             effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
 #else
             p->effect = effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
+#endif
 #endif
             p->timer = 20;
             p->anim = 9;
@@ -3933,7 +3904,6 @@ void puniModeWonder(PuniData* p) {
             break;
     }
 }
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 /**

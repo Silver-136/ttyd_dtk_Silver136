@@ -1795,6 +1795,10 @@ EVT_END()
  * Move event of Fuzzies: bounces 2 to 4 times 50 units in random directions,
  * turns to face Mario and pauses up to half a second.
  */
+/**
+ * Move event of Fuzzies: bounces 2 to 4 times 50 units in random directions,
+ * turns to face Mario and pauses up to half a second.
+ */
 #if VERSION <= VERSION_DEMO_US
 /** Init event of Fuzzies: jumping enemy flags. Demo position of the retail definition below. */
 EVT_BEGIN(chorobon_init_event)
@@ -1806,6 +1810,7 @@ EVT_END()
  * Move event of Fuzzies: bounces 2 to 4 times 50 units in random directions,
  * turns to face Mario and pauses up to half a second.
  */
+#endif
 EVT_BEGIN(chorobon_move_event)
     CALL(evt_npc_set_scale, STRING("me"), 1, 1, 1)
     CALL(evt_npc_set_walk_anim, STRING("me"))
@@ -1813,41 +1818,22 @@ EVT_BEGIN(chorobon_move_event)
     CALL(evt_sub_random, 3, LW(4))
     ADD(LW(4), 2)
     LOOP(LW(4))
-        CALL(evt_sub_random, 360, LW(3))
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), 50)
-        CALL(evt_npc_jump_position, STRING("me"), LW(0), -10000, LW(2), 300, 0, FLOAT(30.0f), 0)
-        END_LOOP
-    CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(3))
-    CALL(evt_npc_set_ry, STRING("me"), LW(3))
-    CALL(evt_sub_random, 500, LW(4))
-    ADD(LW(4), 10)
-    WAIT_MS(LW(4))
-    GOTO(0)
-    RETURN
-EVT_END()
-#else
-/**
- * Move event of Fuzzies: bounces 2 to 4 times 50 units in random directions,
- * turns to face Mario and pauses up to half a second.
- */
-EVT_BEGIN(chorobon_move_event)
-    CALL(evt_npc_set_scale, STRING("me"), 1, 1, 1)
-    CALL(evt_npc_set_walk_anim, STRING("me"))
-    LABEL(0)
-    CALL(evt_sub_random, 3, LW(4))
-    ADD(LW(4), 2)
-    LOOP(LW(4))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         WAIT_FRAMES(1)
+#endif
 #endif
         CALL(evt_sub_random, 360, LW(3))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), 50)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_jump_position, STRING("me"), LW(0), -10000, LW(2), 300, 0, FLOAT(30.0f), 0)
+#else
 #if VERSION >= VERSION_US
         CALL(evt_npc_jump_position, STRING("me"), LW(0), LW(1), LW(2), 300, 0, FLOAT(30.0f), 0)
 #else
         CALL(evt_npc_jump_position, STRING("me"), LW(0), -10000, LW(2), 300, 0, FLOAT(30.0f), 0)
+#endif
 #endif
     END_LOOP
     CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(3))
@@ -1858,7 +1844,6 @@ EVT_BEGIN(chorobon_move_event)
     GOTO(0)
     RETURN
 EVT_END()
-#endif
 
 /** Find event of Fuzzies: "!" balloon and three quick bounces toward Mario. */
 EVT_BEGIN(chorobon_find_event)
@@ -2964,18 +2949,12 @@ static USER_FUNC(kamec_fire_magic_delete) {
 }
 /** Lost event of Yux: hovers through its standing poses for 2 s and resumes. */
 EVT_BEGIN(barriern_lost_event)
-    CALL(evt_npc_set_anim, STRING("me"), STRING("S_3"))
-    WAIT_FRAMES(60)
-    CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
-    WAIT_FRAMES(60)
-    CALL(evt_npc_return_interrupt, STRING("me"))
-    RETURN
-EVT_END()
 #else
 EVT_BEGIN(barriern_lost_event)
 #if VERSION == VERSION_EU
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_JUMPING)
 #endif
+#endif
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_3"))
     WAIT_FRAMES(60)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
@@ -2983,7 +2962,6 @@ EVT_BEGIN(barriern_lost_event)
     CALL(evt_npc_return_interrupt, STRING("me"))
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(barriern_return_event)
 #if VERSION == VERSION_EU

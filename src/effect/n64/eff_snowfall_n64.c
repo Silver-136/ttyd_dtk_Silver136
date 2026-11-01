@@ -181,49 +181,6 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
  * US and PAL draw on layer 10 (the battle camera in battle), JP on layer 10, the demos on layer 2.
  */
 static void effSnowfallMain(EffectEntry* effect) {
-    s32 i, life, count, h;
-    f32 hf;
-    Vec position;
-    Vec tmp = {0.0f, 0.0f, 0.0f};
-    EffSnowfallParticle* p;
-
-    p = effect->userdata;
-
-    tmp.x = SNOWFALL_WORK->position.x;
-    tmp.y = SNOWFALL_WORK->position.y;
-    tmp.z = SNOWFALL_WORK->position.z;
-    position = tmp;
-    camGetPtr(CAMERA_3D);
-    if (SNOWFALL_WORK->life < 100) {
-        SNOWFALL_WORK->life--;
-    }
-    if (SNOWFALL_WORK->life < 0) {
-        effDelete(effect);
-        return;
-    }
-    SNOWFALL_WORK->frame++;
-    life = SNOWFALL_WORK->life;
-    count = SNOWFALL_WORK->count;
-    if (life < 10) {
-        SNOWFALL_WORK->alpha = life * 25;
-    }
-    hf = 166.0f;
-    h = hf;
-    p++;
-    for (i = 0; i < count; i++, p++) {
-        if (p->timer > 0) {
-            p->timer--;
-            if (p->timer > 0) {
-                continue;
-            }
-        }
-        p->position.x += p->velocity.x;
-        p->position.y += p->velocity.y;
-        p->position.z += p->velocity.z;
-        cam_clip_chk(p, 550, h, life);
-    }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSnowfallDisp, effect);
-}
 #else
 /**
  * Moves the particles by their velocity (after each one's start delay)
@@ -232,6 +189,7 @@ static void effSnowfallMain(EffectEntry* effect) {
  * US and PAL draw on layer 10 (the battle camera in battle), JP on layer 10, the demos on layer 2.
  */
 void effSnowfallMain(EffectEntry* effect) {
+#endif
     s32 i, life, count, h;
     f32 hf;
     Vec position;
@@ -274,6 +232,9 @@ void effSnowfallMain(EffectEntry* effect) {
         p->position.z += p->velocity.z;
         cam_clip_chk(p, 550, h, life);
     }
+#if VERSION <= VERSION_DEMO_US
+    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSnowfallDisp, effect);
+#else
 #if VERSION >= VERSION_US
     if (gp->inBattle == 0) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), 10, (DispCallback)effSnowfallDisp, effect);
@@ -283,8 +244,8 @@ void effSnowfallMain(EffectEntry* effect) {
 #else
     dispEntry(CAMERA_3D, dispCalcZ(&position), 10, (DispCallback)effSnowfallDisp, effect);
 #endif
-}
 #endif
+}
 
 /**
  * Draws each visible particle as a camera-facing cluster of small flake quads (eff_snowfall_v) with texture 99,

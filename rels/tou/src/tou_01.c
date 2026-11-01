@@ -2876,17 +2876,13 @@ EVT_BEGIN(evt_gondora2)
 #endif
     SET_VALUE(LW(0), 120)
     SET_VALUE(LW(1), 0)
-#if VERSION <= VERSION_DEMO_US
-    CALL_CHILD(evt_gondora_mon)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
-            SET_VALUE(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
-            CALL(rankingReset)
-#else
     CALL_CHILD(PTR(evt_gondora_mon))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
+#if VERSION <= VERSION_DEMO_US
+            CALL(rankingReset)
+#else
             CALL(evt_rankingReset)
 #endif
         END_IF

@@ -867,132 +867,40 @@ EVT_END()
  * league, the stg3_npc_re_031/032 lines. With Yoshi as the partner the _yos variants address him by the Yoshi's
  * name (LW(10)).
  */
+/**
+ * Talk script of the fifth Toad (キノピオ５), a parent who brought their son to the Glitz Pit: before Gonzales
+ * debuts the son is a fan of Prince Mush (stg3_npc_02_06_01);
+ * until the title match the line follows Mario's rank
+ * (02 to 05), then congratulations (06) and, after the chapter, a farewell (07) or, when Mario re-entered the
+ * league, the stg3_npc_re_031/032 lines. With Yoshi as the partner the _yos variants address him by the Yoshi's
+ * name (LW(10)).
+ */
+EVT_BEGIN(talk_kino5)
+    CALL(evt_pouch_get_yoshiname, LW(10))
+    SWITCH(GSW_STORY_PROGRESS)
+        CASE_LESS(STG3_04_GONZALES_IS_BORN)
+        CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_01"), 0, 0)
+        CASE_LESS(STG3_32_BOSS_BATTLE)
+        // Up to the title match the line follows Mario's rank, naming the Yoshi when he is the partner.
+        CALL(evt_tou_get_ranking, LW(0))
+        SWITCH(LW(0))
+            CASE_GREATER(15)
+            CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_02"), 0, 0)
+            CASE_GREATER(10)
+            CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_03"), 0, 0)
+            CASE_GREATER(5)
+            CALL(evt_mario_get_party, LW(0))
+            IF_INT_EQUAL(LW(0), 4)
+                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_04_yos"), 0, 0, LW(10))
+            ELSE
+                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_04"), 0, 0, LW(10))
+            END_IF
+            CASE_GREATER(0)
+            CALL(evt_mario_get_party, LW(0))
+            IF_INT_EQUAL(LW(0), 4)
 #if VERSION <= VERSION_DEMO_US
-/**
- * Talk script of the fifth Toad (キノピオ５), a parent who brought their son to the Glitz Pit: before Gonzales
- * debuts the son is a fan of Prince Mush (stg3_npc_02_06_01);
- * until the title match the line follows Mario's rank
- * (02 to 05), then congratulations (06) and, after the chapter, a farewell (07) or, when Mario re-entered the
- * league, the stg3_npc_re_031/032 lines. With Yoshi as the partner the _yos variants address him by the Yoshi's
- * name (LW(10)).
- */
-EVT_BEGIN(talk_kino5)
-    CALL(evt_pouch_get_yoshiname, LW(10))
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_01"), 0, 0)
-        CASE_LESS(STG3_32_BOSS_BATTLE)
-        // Up to the title match the line follows Mario's rank, naming the Yoshi when he is the partner.
-        CALL(evt_tou_get_ranking, LW(0))
-        SWITCH(LW(0))
-            CASE_GREATER(15)
-            CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_02"), 0, 0)
-            CASE_GREATER(10)
-            CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_03"), 0, 0)
-            CASE_GREATER(5)
-            CALL(evt_mario_get_party, LW(0))
-            IF_INT_EQUAL(LW(0), 4)
-                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_04_yos"), 0, 0, LW(10))
-            ELSE
-                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_04"), 0, 0, LW(10))
-            END_IF
-            CASE_GREATER(0)
-            CALL(evt_mario_get_party, LW(0))
-            IF_INT_EQUAL(LW(0), 4)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10), LW(10))
-            ELSE
-                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05"), 0, 0, LW(10))
-            END_IF
-            CASE_DEFAULT
-            CALL(evt_mario_get_party, LW(0))
-            IF_INT_EQUAL(LW(0), 4)
-                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_06_yos"), 0, 0, LW(10))
-            ELSE
-                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_06"), 0, 0, LW(10))
-            END_IF
-        END_SWITCH
-        CASE_DEFAULT
-        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
-            CALL(evt_mario_get_party, LW(0))
-            IF_INT_EQUAL(LW(0), 4)
-                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_07_yos"), 0, 0, LW(10))
-            ELSE
-                CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_07"), 0, 0)
-            END_IF
-        ELSE
-            CALL(evt_tou_get_ranking, LW(0))
-            SWITCH(LW(0))
-                CASE_EQUAL(0)
-                CALL(evt_mario_get_party, LW(0))
-                IF_INT_EQUAL(LW(0), 4)
-                    CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_yos"), 0, 0)
-                ELSE
-                    CALL(evt_msg_print, 0, STRING("stg3_npc_re_032"), 0, 0)
-                END_IF
-                CASE_LESS_OR_EQUAL(10)
-                CALL(evt_mario_get_party, LW(0))
-                IF_INT_EQUAL(LW(0), 4)
-                    CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_1_yos"), 0, 0)
-                ELSE
-                    CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_1"), 0, 0)
-                END_IF
-                CASE_DEFAULT
-                IF_INT_EQUAL(GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS, 0)
-                    CALL(evt_mario_get_party, LW(0))
-                    IF_INT_EQUAL(LW(0), 4)
-                        CALL(evt_msg_print_insert, 0, STRING("stg3_npc_re_031_yos"), 0, 0, LW(10))
-                    ELSE
-                        CALL(evt_msg_print, 0, STRING("stg3_npc_re_031"), 0, 0)
-                    END_IF
-                    WAIT_MS(300)
-                    CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
-                    WAIT_MS(600)
-                    CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
-                ELSE
-                    CALL(evt_mario_get_party, LW(0))
-                    IF_INT_EQUAL(LW(0), 4)
-                        CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_1_yos"), 0, 0)
-                    ELSE
-                        CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_1"), 0, 0)
-                    END_IF
-                END_IF
-            END_SWITCH
-        END_IF
-    END_SWITCH
-    RETURN
-EVT_END()
 #else
-/**
- * Talk script of the fifth Toad (キノピオ５), a parent who brought their son to the Glitz Pit: before Gonzales
- * debuts the son is a fan of Prince Mush (stg3_npc_02_06_01);
- * until the title match the line follows Mario's rank
- * (02 to 05), then congratulations (06) and, after the chapter, a farewell (07) or, when Mario re-entered the
- * league, the stg3_npc_re_031/032 lines. With Yoshi as the partner the _yos variants address him by the Yoshi's
- * name (LW(10)).
- */
-EVT_BEGIN(talk_kino5)
-    CALL(evt_pouch_get_yoshiname, LW(10))
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_01"), 0, 0)
-        CASE_LESS(STG3_32_BOSS_BATTLE)
-        // Up to the title match the line follows Mario's rank, naming the Yoshi when he is the partner.
-        CALL(evt_tou_get_ranking, LW(0))
-        SWITCH(LW(0))
-            CASE_GREATER(15)
-            CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_02"), 0, 0)
-            CASE_GREATER(10)
-            CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_03"), 0, 0)
-            CASE_GREATER(5)
-            CALL(evt_mario_get_party, LW(0))
-            IF_INT_EQUAL(LW(0), 4)
-                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_04_yos"), 0, 0, LW(10))
-            ELSE
-                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_04"), 0, 0, LW(10))
-            END_IF
-            CASE_GREATER(0)
-            CALL(evt_mario_get_party, LW(0))
-            IF_INT_EQUAL(LW(0), 4)
 #if VERSION == VERSION_EU
                 CALL(evt_sub_get_language, LW(0))
                 SWITCH(LW(0))
@@ -1010,6 +918,7 @@ EVT_BEGIN(talk_kino5)
 #if VERSION == VERSION_EU
                 END_SWITCH
 #endif
+#endif
             ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05"), 0, 0, LW(10))
             END_IF
@@ -1054,6 +963,12 @@ EVT_BEGIN(talk_kino5)
                     ELSE
                         CALL(evt_msg_print, 0, STRING("stg3_npc_re_031"), 0, 0)
                     END_IF
+#if VERSION <= VERSION_DEMO_US
+                WAIT_MS(300)
+                CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
+                WAIT_MS(600)
+                CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
+#endif
                 ELSE
                     CALL(evt_mario_get_party, LW(0))
                     IF_INT_EQUAL(LW(0), 4)
@@ -1067,7 +982,6 @@ EVT_BEGIN(talk_kino5)
     END_SWITCH
     RETURN
 EVT_END()
-#endif
 
 /** NPC init for Toadette (kinopiko): placed at (-490, 0, 25). */
 EVT_BEGIN(init_kinopiko)
@@ -2541,19 +2455,17 @@ static EVT_BEGIN(evt_poster_8)
         ELSE
             CALL(evt_mapobj_get_position, STRING("p_m_8_e"), LW(0), LW(1), LW(2))
         END_IF
-        CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x13, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, -1, PTR(evt_key))
-        CALL(evt_item_set_move_dir_speed, STRING("key"), FLOAT(180.0f), FLOAT(90.0f))
-        CALL(evt_item_set_gravity, STRING("key"), FLOAT(1.0f))
-        CALL(evt_item_set_bound_rate, STRING("key"), FLOAT(0.5996094f))
-        CALL(evt_item_set_jump_power, STRING("key"), FLOAT(500.0f))
-        CALL(evt_item_status_on, STRING("key"), ITEM_STATUS_CUSTOM_LAUNCH)
 #else
         CALL(evt_mapobj_get_position, STRING("p_m_8"), LW(0), LW(1), LW(2))
+#endif
         CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x13, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, -1, PTR(evt_key))
         CALL(evt_item_set_move_dir_speed, STRING("key"), FLOAT(180.0f), FLOAT((90.0f)))
         CALL(evt_item_set_gravity, STRING("key"), FLOAT((1.0f)))
         CALL(evt_item_set_bound_rate, STRING("key"), FLOAT(0.5996094f))
         CALL(evt_item_set_jump_power, STRING("key"), FLOAT(500.0f))
+#if VERSION >= VERSION_US
+        CALL(evt_item_status_on, STRING("key"), ITEM_STATUS_CUSTOM_LAUNCH)
+#else
         CALL(evt_item_status_on, STRING("key"), 16)
 #endif
     END_IF
@@ -2641,38 +2553,25 @@ EVT_BEGIN(tou_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     IF_INT_EQUAL(GSWF_TOU_02_ARENA_TOUR_RETURN, 1)
-#if VERSION >= VERSION_US
-        CALL_CHILD(bero_case_entry)
-        SPAWN_EVENT(PTR(evt_tougi2))
-        ELSE
-        CALL_CHILD(evt_bero_info_run)
-#else
         CALL_CHILD(PTR(bero_case_entry))
         SPAWN_EVENT(PTR(evt_tougi2))
         ELSE
         CALL_CHILD(PTR(evt_bero_info_run))
-#endif
     END_IF
     // NPCs and the Star Piece panel.
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(init_kinopio_f))
 #if VERSION >= VERSION_US
     CALL(evt_npc_change_interrupt, STRING("キノピオ女"), 6, PTR(talk_kinopio_f))
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -260, 0, -120, STRING("sita"), 125, GSWF_STARPIECE_56)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_02_THE_GUARD_BACKS_OFF)
-        SET_VALUE(LW(0), 3)
-        CALL_CHILD(bero_case_switch_off)
-        SET_VALUE(LW(0), 4)
-        CALL_CHILD(bero_case_switch_off)
 #else
     CALL(evt_npc_change_interrupt, STRING("\203L\203m\203s\203I\217\227"), 6, PTR(talk_kinopio_f))
+#endif
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -260, 0, -120, STRING("sita"), 125, GSWF_STARPIECE_56)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_02_THE_GUARD_BACKS_OFF)
         SET_VALUE(LW(0), 3)
         CALL_CHILD(PTR(bero_case_switch_off))
         SET_VALUE(LW(0), 4)
         CALL_CHILD(PTR(bero_case_switch_off))
-#endif
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)

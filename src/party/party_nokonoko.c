@@ -264,606 +264,6 @@ static inline void noko_star(PartyEntry* party, s32 n) {
  * Off screen, he is placed near Mario and the toss ends at once.
  * nokonokoGetStatus reports the state; the US release reworked the wall push-out.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Shell Toss, run every frame while Koops is in use.
- * He tucks into his shell beside Mario, shoots forward 120 units (picking up the first item it touches),
- * stops spinning in place while X is held (or while an event holds it),
- * then slides back to a safe spot next to Mario; hitting a wall ends the throw early.
- * Off screen, he is placed near Mario and the toss ends at once.
- * nokonokoGetStatus reports the state; the US release reworked the wall push-out.
- */
-void nokonoko_use(PartyEntry* party) {
-    Vec out;
-    Vec out2;
-    Vec rp;
-    f32 sx;
-    f32 sy;
-    f32 sz;
-    f32 mx;
-    f32 mz;
-    f32 dir;
-    f32 spd;
-    f32 s2x;
-    u8* moveDistPtr;
-    f32 s2y;
-    f32 s2z;
-    f32 s3x;
-    f32 s3y;
-    f32 s3z;
-    u32 flags;
-    HitEntry* hit;
-    BOOL b;
-    f32 dy;
-    f32 dx;
-    f32 qx;
-    f32 qy;
-    f32 qz;
-    f32 dz;
-    MarioWork* mario = party->playerPtr;
-
-    if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && marioKeyOffChk()) {
-        marioGetScreenPos(party->position, &sx, &sy, &sz);
-        if (!marioChkInScreen((s32)sx, (s32)sy)) {
-            mx = mario->position.x;
-            mz = mario->position.z;
-            movePos(&mx, &mz, 160.0f, angleABf(mario->position.x, mario->position.z, party->position.x, party->position.z));
-            party->position.x = mx;
-            party->position.z = mz;
-            nokonoko_finish(party);
-            return;
-        }
-    }
-    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
-        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
-        party->work.nokonoko.heldItem = NULL;
-        party->work.nokonoko.shellSpinBits = 0;
-        party->work.nokonoko.word17C = 0;
-        party->work.nokonoko.word180 = 0;
-        if (party->flags & PARTY_FLAG_IS_EVT_USE) {
-            if (party->actionTime > 0) {
-                party->work.nokonoko.shellFlags |= 1;
-            }
-        } else {
-            party->work.nokonoko.shellFlags &= ~1;
-        }
-        party->useMotionId = 0;
-    }
-
-    switch (party->useMotionId) {
-        case 0:
-        partyClearJumpPara(party);
-            party->flags |= PARTY_FLAG_DISABLE_FLOORS;
-            party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            partyChgPose(party, "PNK_K_2");
-            party->height = 18.5f;
-            party->useMotionId = 1;
-            party->moveFrames = 100;
-            party->work.nokonoko.heldItem = NULL;
-            party->work.nokonoko.dashed = 0;
-            marioAdjustMoveDir();
-            mario->baseSpeed = 0.0f;
-            party->moveTarget = mario->position;
-            movePos(&party->moveTarget.x, &party->moveTarget.z, 2.0f, toMovedirSimple(mario->displayDirectionTarget));
-            party->moveFrames = 4;
-            party->velY = 0.0f;
-            party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-            party->moveSpeed = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z) /
-                               (f32)party->moveFrames;
-            party->displayDirection = revise360(45.0f + party->displayDirection);
-            party->useMotionId = 1;
-            marioChgSmallJumpMotion();
-            mario->trigFlags |= MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
-            mario->baseSpeed = 0.0f;
-            break;
-        case 1:
-        party->displayDirection = revise360(45.0f + party->displayDirection);
-            party->position.x += (party->moveTarget.x - party->position.x) / (f32)party->moveFrames;
-            party->position.y += (party->moveTarget.y - party->position.y) / (f32)party->moveFrames;
-            party->position.z += (party->moveTarget.z - party->position.z) / (f32)party->moveFrames;
-            if (--party->moveFrames > 0) {
-                break;
-            }
-            party->position = party->moveTarget;
-            party->moveSpeed = 0.0f;
-            party->displayDirectionTarget = mario->displayDirectionTarget;
-            party->displayDirection = mario->displayDirectionTarget;
-            party->useMotionId = 2;
-            partyChgPose(party, "PNK_A_1");
-        case 2:
-        if (mario->hitobjStandOn == NULL) {
-                break;
-            }
-            marioChgMot(MARIO_MOTION_JUMP);
-            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-            mario->baseSpeed = 0.0f;
-            party->useMotionId = 10;
-            party->moveFrames = 15;
-            party->moveSpeed = 0.0f;
-            party->moveDistance = 0.0f;
-            party->targetDir = toMovedir(mario->displayDirectionTarget);
-            psndSFXOn_3D((const char*)0x92d, &party->position);
-            break;
-        case 10:
-            psndSFXOn_3D((const char*)0x92a, &party->position);
-            noko_star(party, 3);
-            party->flags |= PARTY_FLAG_DISABLE_FLOORS;
-            party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
-            party->useMotionId = 11;
-        case 11:
-            party->moveSpeed += 2.0f;
-            if (party->moveSpeed > 10.0f) {
-                party->moveSpeed = 10.0f;
-            }
-        case 12:
-            noko_spin(party);
-            if (gp->retraceCount & 1) {
-                effKemuTestDrawCam(effKemuTestEntry(0, party->position.x, party->height / 4.0f + party->position.y,
-                                                    party->position.z, 0.3f),
-                                   party->camId);
-            }
-            party->moveDistance += party->moveSpeed;
-            NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); break;)
-            if (ccwall(party, 0) != NULL) {
-                party->useMotionId = 50;
-                psndSFXOn_3D((const char*)0x92c, &party->position);
-                noko_star(party, 1);
-                break;
-            }
-            if (party->moveDistance >= 120.0f) {
-                party->useMotionId = 12;
-                party->moveSpeed += 0.15f * (-1.0f - party->moveSpeed);
-                if (party->moveSpeed <= 0.0f) {
-                    party->moveSpeed = 0.0f;
-                    if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
-                        if (mario->buttonHold & PAD_BUTTON_X) {
-                            party->useMotionId = 13;
-                            party->moveFrames = 0;
-                        } else {
-                            party->useMotionId = 50;
-                        }
-                    } else if (party->work.nokonoko.shellFlags & 1) {
-                        party->moveFrames = 5;
-                        party->useMotionId = 21;
-                        party->work.nokonoko.dashed = 1;
-                        if ((u32)nokoSe == 0xFFFFFFFFU) {
-                            nokoSe = psndSFXOn_3D((const char*)0x92e, &party->position);
-                        }
-                    } else {
-                        party->useMotionId = 50;
-                    }
-                }
-            }
-            break;
-        case 13:
-            if (++party->moveFrames >= 5) {
-                party->moveFrames = 5;
-                party->useMotionId = 20;
-                party->work.nokonoko.dashed = 1;
-                if ((u32)nokoSe == 0xFFFFFFFFU) {
-                    nokoSe = psndSFXOn_3D((const char*)0x92e, &party->position);
-                }
-            }
-        case 20:
-            noko_spin(party);
-            if (gp->retraceCount % 30 == 0) {
-                effKemuTestDrawCam(effKemuTestEntry(5, party->position.x, party->position.y, party->position.z, 1.0f),
-                                   party->camId);
-            }
-            if (ccwall(party, 0) != NULL) {
-                party->useMotionId = 50;
-                psndSFXOn_3D((const char*)0x92c, &party->position);
-                noko_star(party, 1);
-                noko_se_off();
-                break;
-            }
-            NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); noko_se_off(); break;)
-            if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
-                if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL ||
-                    (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
-                        nokonoko_finish(party);
-                    noko_se_off();
-                    break;
-                }
-                if (mario->buttonHold & PAD_BUTTON_X) {
-                    break;
-                }
-                party->useMotionId = party->work.nokonoko.dashed != 0 ? 80 : 50;
-                noko_se_off();
-                break;
-            }
-            if (party->work.nokonoko.shellFlags & 1) {
-                party->useMotionId = 80;
-            } else {
-                party->useMotionId = 50;
-            }
-            noko_se_off();
-            break;
-        case 21:
-            noko_spin(party);
-            if (gp->retraceCount % 30 == 0) {
-                effKemuTestDrawCam(effKemuTestEntry(5, party->position.x, party->position.y, party->position.z, 1.0f),
-                                   party->camId);
-            }
-            break;
-    }
-
-    moveDistPtr = (u8*)&party->moveDistance;
-    switch (party->useMotionId) {
-        case 50:
-            partyClearJumpPara(party);
-            party->useMotionId = 51;
-            party->moveSpeed = 0.0f;
-            party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-            psndSFXOn_3D((const char*)0x92b, &party->position);
-            break;
-        case 51: {
-            f32 lim = party->work.nokonoko.dashed != 0 ? 20.0f : 10.0f;
-            party->moveSpeed += 0.3f * (lim - party->moveSpeed);
-            if (party->moveSpeed >= lim) {
-                party->moveSpeed = lim;
-                if ((*(f32*)moveDistPtr) < 10.0f) {
-                    party->useMotionId = 52;
-                }
-            }
-        }
-        case 52:
-            if (ccwall(party, 1) != NULL) {
-                partyGetMoveDirSpd(party, &dir, &spd);
-                marioChkWallAround(&party->position, spd, dir, party->width, party->height);
-                party->useMotionId = 70;
-                psndSFXOn_3D((const char*)0x92c, &party->position);
-                noko_star(party, 1);
-                return;
-            }
-            noko_spin(party);
-            party->moveSpeed += 0.1f * (-1.0f - party->moveSpeed);
-            (*(f32*)moveDistPtr) -= party->moveSpeed;
-            if ((*(f32*)moveDistPtr) <= 0.0f) {
-                (*(f32*)moveDistPtr) = 0.0f;
-                party->useMotionId = 53;
-                party->moveSpeed += 0.1f * (-1.0f - party->moveSpeed);
-                party->work.nokonoko.shellSpin = 50.0f;
-            }
-            break;
-        case 53:
-            if (ccwall(party, 1) != NULL) {
-                party->useMotionId = 70;
-                return;
-            }
-            party->work.nokonoko.shellSpin -= 2.2f;
-            if (party->work.nokonoko.shellSpin <= 0.0f) {
-                party->work.nokonoko.shellSpin = 0.0f;
-            }
-            noko_spin(party);
-            party->moveSpeed += (-2.0f - party->moveSpeed) * (party->work.nokonoko.dashed != 0 ? 0.2f : 0.1f);
-            (*(f32*)moveDistPtr) -= party->moveSpeed;
-            if (party->moveSpeed <= 0.0f) {
-                party->moveSpeed = 0.0f;
-                flags = lookupSafetyPos(party->moveTarget, party->height, &out);
-                if (party->hitobjStandOn != NULL && ((u32)(flags - 1) <= 1 || flags == 4 || flags == 8)) {
-                    party->useMotionId = 70;
-                    break;
-                }
-                switch (flags) {
-                    case 3:
-                        lookupSafetyPosSub(party->moveTarget, party->height, 135.0f, &out);
-                        break;
-                    case 5:
-                        lookupSafetyPosSub(party->moveTarget, party->height, 315.0f, &out);
-                        break;
-                    case 10:
-                        lookupSafetyPosSub(party->moveTarget, party->height, 225.0f, &out);
-                        break;
-                    case 12:
-                        lookupSafetyPosSub(party->moveTarget, party->height, 315.0f, &out);
-                        break;
-                    case 7:
-                    case 14:
-                    case 15:
-                        party->useMotionId = 70;
-                        break;
-                    case 1:
-                        lookupSafetyPosSub(party->moveTarget, party->height, 270.0f, &out);
-                        break;
-                    case 8:
-                        lookupSafetyPos3(party->moveTarget, party->height, &out);
-                        break;
-                    default:
-                        lookupSafetyPos2(party->moveTarget, party->height, &out);
-                        break;
-                }
-                party->useMotionId = 54;
-                party->moveTarget = out;
-                (*(f32*)moveDistPtr) = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-                party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-            }
-            break;
-        case 54:
-            noko_spin(party);
-            party->moveSpeed += 0.5f;
-            if (party->moveSpeed >= 4.0f) {
-                party->moveSpeed = 4.0f;
-            }
-            (*(f32*)moveDistPtr) -= party->moveSpeed;
-            if ((*(f32*)moveDistPtr) <= 10.0f) {
-                party->useMotionId = 70;
-                party->moveSpeed = 0.0f;
-                return;
-            }
-            break;
-        case 55:
-            if (ccwall(party, 1) != NULL) {
-                party->useMotionId = 70;
-                return;
-            }
-            noko_spin(party);
-            party->work.nokonoko.shellSpin -= 2.2f;
-            if (party->work.nokonoko.shellSpin <= 0.0f) {
-                party->work.nokonoko.shellSpin = 0.0f;
-            }
-            party->moveSpeed += (-2.0f - party->moveSpeed) * (party->work.nokonoko.dashed != 0 ? 0.2f : 0.1f);
-            if (party->moveSpeed <= 0.0f) {
-                party->useMotionId = 70;
-                party->moveSpeed = 0.0f;
-                return;
-            }
-            break;
-        case 70:
-            dx = party->position.x - mario->position.x;
-            dy = party->position.y - mario->position.y;
-            dz = party->position.z - mario->position.z;
-            qx = dx * dx;
-            qy = dy * dy;
-            qz = dz * dz;
-            if ((f32)sqrt(qz + (qx + qy)) < 5.0f) {
-                f32 a;
-                a = mario->directionView + (mario->directionView >= 180.0 ? -90.0f : 90.0f);
-                movePos(&party->position.x, &party->position.z, 0.5f * mario->wPlayerCollisionBox.x, a);
-                ccwall(party, 1);
-            }
-            party->moveSpeed = 0.0f;
-            party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            party->flags2 |= PARTY_DISP_FLAG_DISP_DIR_SNAP;
-            party->useMotionId = 71;
-            break;
-        case 71:
-            if (party->work.nokonoko.heldItem != NULL) {
-                itemNokoForceGet(party->work.nokonoko.heldItem);
-                party->work.nokonoko.heldItem = NULL;
-            }
-            nokonoko_finish(party);
-            return;
-    }
-
-    switch (party->useMotionId) {
-        case 80:
-            party->useMotionId = 81;
-            party->moveSpeed = 0.0f;
-            party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-            (*(f32*)moveDistPtr) += 75.0f;
-            psndSFXOn_3D((const char*)0x92b, &party->position);
-        case 81:
-            noko_spin(party);
-            party->moveSpeed += 3.0f;
-            if (party->moveSpeed >= 18.0f) {
-                party->moveSpeed = 18.0f;
-            }
-            NOKO_PICK_UP_NEAR_ITEM(party, psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1);)
-            hit = ccwall(party, 1);
-            if (hit != NULL) {
-                if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
-                    party->useMotionId = 100;
-                    return;
-                }
-                mobjHitObjPtrToPtr(hit);
-                party->useMotionId = 110;
-                return;
-            }
-            (*(f32*)moveDistPtr) -= party->moveSpeed;
-            if ((*(f32*)moveDistPtr) <= 20.0f) {
-                party->useMotionId = 82;
-            }
-            break;
-        case 82:
-            noko_spin(party);
-            party->moveSpeed += 0.35f * (-1.0f - party->moveSpeed);
-            NOKO_PICK_UP_NEAR_ITEM(party, psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1);)
-            if (ccwall(party, 1) != NULL) {
-                party->useMotionId = 100;
-                break;
-            }
-            (*(f32*)moveDistPtr) -= party->moveSpeed;
-            if ((*(f32*)moveDistPtr) <= 0.0f) {
-                (*(f32*)moveDistPtr) = distABf(party->moveTarget.x, party->moveTarget.z, party->position.x, party->position.z);
-                party->useMotionId = 84;
-                party->work.nokonoko.shellSpin = 50.0f;
-                party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-            }
-            break;
-        case 84:
-            noko_spin(party);
-            if (ccwall(party, 1) != NULL) {
-                party->useMotionId = 100;
-                break;
-            }
-            (*(f32*)moveDistPtr) -= party->moveSpeed;
-            if ((*(f32*)moveDistPtr) <= 30.0f) {
-                party->useMotionId = 86;
-                party->moveSpeed = 0.0f;
-                party->moveFrames = sysMsec2Frame(500);
-            }
-            break;
-        case 86:
-            noko_spin(party);
-            if (--party->moveFrames <= 0) {
-                party->useMotionId = 100;
-            }
-            if (ccwall(party, 1) != NULL) {
-                party->useMotionId = 100;
-            }
-            break;
-        case 100:
-            ccwall(party, 1);
-            dy = party->position.x - mario->position.x;
-            dx = party->position.y - mario->position.y;
-            dz = party->position.z - mario->position.z;
-            qx = dy * dy;
-            qy = dx * dx;
-            qz = dz * dz;
-            if ((f32)sqrt(qz + (qx + qy)) < 5.0f) {
-                f32 a;
-                a = mario->directionView + (mario->directionView >= 180.0 ? 90.0f : -90.0f);
-                movePos(&party->position.x, &party->position.z, 0.5f * mario->wPlayerCollisionBox.x, a);
-                ccwall(party, 1);
-            }
-            party->moveSpeed = 0.0f;
-            party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            if (party->work.nokonoko.heldItem != NULL) {
-                itemNokoForceGet(party->work.nokonoko.heldItem);
-                party->work.nokonoko.heldItem = NULL;
-            }
-            if (party->hitobjStandOn == NULL) {
-                party->useMotionId = 88;
-                break;
-            }
-            if (party->work.nokonoko.heldItem != NULL) {
-                itemNokoForceGet(party->work.nokonoko.heldItem);
-                party->work.nokonoko.heldItem = NULL;
-            }
-            nokonoko_finish(party);
-            return;
-        case 88:
-            party->moveSpeed = 0.0f;
-            flags = lookupSafetyPos(party->moveTarget, party->height, &out2);
-            if (party->hitobjStandOn != NULL && ((u32)(flags - 1) <= 1 || flags == 4 || flags == 8)) {
-                party->useMotionId = 70;
-                break;
-            }
-            switch (flags) {
-                case 3:
-                    lookupSafetyPosSub(party->moveTarget, party->height, 135.0f, &out2);
-                    break;
-                case 5:
-                    lookupSafetyPosSub(party->moveTarget, party->height, 315.0f, &out2);
-                    break;
-                case 10:
-                    lookupSafetyPosSub(party->moveTarget, party->height, 225.0f, &out2);
-                    break;
-                case 12:
-                    lookupSafetyPosSub(party->moveTarget, party->height, 315.0f, &out2);
-                    break;
-                case 7:
-                case 14:
-                case 15:
-                    party->useMotionId = 70;
-                    break;
-                case 1:
-                    lookupSafetyPosSub(party->moveTarget, party->height, 270.0f, &out2);
-                    break;
-                case 8:
-                    lookupSafetyPos3(party->moveTarget, party->height, &out2);
-                    break;
-                default:
-                    lookupSafetyPos2(party->moveTarget, party->height, &out2);
-                    break;
-            }
-            party->useMotionId = 90;
-            party->moveTarget = out2;
-            (*(f32*)moveDistPtr) = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-            party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-            party->work.nokonoko.shellSpin = 50.0f;
-            break;
-        case 90:
-            noko_spin(party);
-            party->moveSpeed += 0.5f;
-            if (party->moveSpeed >= 4.0f) {
-                party->moveSpeed = 4.0f;
-            }
-            (*(f32*)moveDistPtr) -= party->moveSpeed;
-            if ((*(f32*)moveDistPtr) <= 10.0f) {
-                party->useMotionId = 70;
-                party->moveSpeed = 0.0f;
-            }
-            break;
-        case 110:
-            party->moveSpeed = 0.0f;
-            party->velY = 15.0f;
-            party->accelY = 0.0f;
-            party->moveFrames = sysMsec2Frame(1000);
-            party->useMotionId = 111;
-        case 111:
-            party->position.y += party->velY;
-            marioGetScreenPos(party->position, &s2x, &s2y, &s2z);
-            if (s2y <= -300.0f) {
-                party->moveFrames = sysMsec2Frame(800);
-                party->useMotionId = 112;
-            }
-            break;
-        case 112:
-            if (--party->moveFrames > 0) {
-                break;
-            }
-            if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
-                partyGetReturnPos(&rp);
-            } else {
-                rp = mario->position;
-                b = FALSE;
-                if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
-                    b = TRUE;
-                }
-                movePos(&rp.x, &rp.z, 30.0f, toMovedir2(b ? 0.0f : 180.0f, -30.0f));
-            }
-            party->position.x = rp.x;
-            party->position.y = 1000.0f + rp.y;
-            party->position.z = rp.z;
-            party->velY = 0.0f;
-            party->accelY = -1.0f;
-            party->moveSpeed = 0.0f;
-            party->flags |= PARTY_FLAG_IS_FALLING;
-            party->flags |= PARTY_FLAG_FORCE_FALL;
-            party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
-            party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
-            party->flags2 &= ~PARTY_DISP_FLAG_DISP_DIR_SNAP;
-            party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            party->height = 37.0f;
-            party->useMotionId = 113;
-            break;
-        case 113:
-            marioGetScreenPos(party->position, &s3x, &s3y, &s3z);
-            if (s3y > 240.0f) {
-                party->flags &= ~PARTY_FLAG_FORCE_FALL;
-            }
-            partyMove(party);
-            if (party->velY <= -6.0f) {
-                party->accelY = 0.0f;
-                party->velY = -6.0f;
-            }
-            if (party->position.y < -2000.0f) {
-                party->position = mario->position;
-                party->position.y += 200.0f;
-            }
-            if (party->hitobjStandOn != NULL) {
-                party->displayDirectionTarget = mario->displayDirectionTarget;
-                party->displayDirection = party->displayDirectionTarget;
-                if (!((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
-                    party->useMotionId = 114;
-                    party->moveFrames = 30;
-                }
-            }
-            break;
-        case 114:
-            if (--party->moveFrames > 0) {
-                break;
-            }
-            nokonoko_finish(party);
-            return;
-    }
-    if (party->useMotionId != 100) {
-        partyMoveNoHosei(party);
-    }
-}
-#else
 /**
  * Shell Toss, run every frame while Koops is in use.
  * He tucks into his shell beside Mario, shoots forward 120 units (picking up the first item it touches),
@@ -931,10 +331,12 @@ void nokonoko_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
     case 0:
+#if VERSION > VERSION_DEMO_US
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
         }
+#endif
         partyClearJumpPara(party);
         party->flags |= PARTY_FLAG_DISABLE_FLOORS;
         party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -960,10 +362,12 @@ void nokonoko_use(PartyEntry* party) {
         mario->baseSpeed = 0.0f;
         break;
     case 1:
+#if VERSION > VERSION_DEMO_US
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
         }
+#endif
         party->displayDirection = revise360(45.0f + party->displayDirection);
         party->position.x += (party->moveTarget.x - party->position.x) / (f32)party->moveFrames;
         party->position.y += (party->moveTarget.y - party->position.y) / (f32)party->moveFrames;
@@ -978,10 +382,12 @@ void nokonoko_use(PartyEntry* party) {
         party->useMotionId = 2;
         partyChgPose(party, "PNK_A_1");
     case 2:
+#if VERSION > VERSION_DEMO_US
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
         }
+#endif
         if (mario->hitobjStandOn == NULL) {
             break;
         }
@@ -993,10 +399,17 @@ void nokonoko_use(PartyEntry* party) {
         party->moveSpeed = 0.0f;
         party->moveDistance = 0.0f;
         party->targetDir = toMovedir(mario->displayDirectionTarget);
+#if VERSION <= VERSION_DEMO_US
+        psndSFXOn_3D((const char*)0x92d, &party->position);
+        break;
+    case 10:
+        psndSFXOn_3D((const char*)0x92a, &party->position);
+#else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_LEAP1), &party->position);
         break;
     case 10:
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA1), &party->position);
+#endif
         noko_star(party, 3);
         party->flags |= PARTY_FLAG_DISABLE_FLOORS;
         party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
@@ -1014,6 +427,12 @@ void nokonoko_use(PartyEntry* party) {
                                party->camId);
         }
         party->moveDistance += party->moveSpeed;
+#if VERSION <= VERSION_DEMO_US
+        NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); break;)
+        if (ccwall(party, 0) != NULL) {
+            party->useMotionId = 50;
+            psndSFXOn_3D((const char*)0x92c, &party->position);
+#else
         if (party->work.nokonoko.heldItem == NULL) {
             party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,
                                                               0.5f * party->width + 12.0f);
@@ -1028,12 +447,17 @@ void nokonoko_use(PartyEntry* party) {
         if (ccwall(party, 0) != NULL) {
             party->useMotionId = 50;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
+#endif
             noko_star(party, 1);
             break;
         }
         if (party->moveDistance >= 120.0f) {
             party->useMotionId = 12;
+#if VERSION <= VERSION_DEMO_US
+            party->moveSpeed += 0.15f * (-1.0f - party->moveSpeed);
+#else
             party->moveSpeed += 0.15f * ((-1.0f) - party->moveSpeed);
+#endif
             if (party->moveSpeed <= 0.0f) {
                 party->moveSpeed = 0.0f;
                 if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
@@ -1048,7 +472,11 @@ void nokonoko_use(PartyEntry* party) {
                     party->useMotionId = 21;
                     party->work.nokonoko.dashed = 1;
                     if ((u32)nokoSe == 0xFFFFFFFFU) {
+#if VERSION <= VERSION_DEMO_US
+                        nokoSe = psndSFXOn_3D((const char*)0x92e, &party->position);
+#else
                         nokoSe = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_HOLD1), &party->position);
+#endif
                     }
                 } else {
                     party->useMotionId = 50;
@@ -1062,7 +490,11 @@ void nokonoko_use(PartyEntry* party) {
             party->useMotionId = 20;
             party->work.nokonoko.dashed = 1;
             if ((u32)nokoSe == 0xFFFFFFFFU) {
+#if VERSION <= VERSION_DEMO_US
+                nokoSe = psndSFXOn_3D((const char*)0x92e, &party->position);
+#else
                 nokoSe = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_HOLD1), &party->position);
+#endif
             }
         }
     case 20:
@@ -1073,11 +505,20 @@ void nokonoko_use(PartyEntry* party) {
         }
         if (ccwall(party, 0) != NULL) {
             party->useMotionId = 50;
+#if VERSION <= VERSION_DEMO_US
+            psndSFXOn_3D((const char*)0x92c, &party->position);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
+#endif
             noko_star(party, 1);
             noko_se_off();
             break;
         }
+#if VERSION <= VERSION_DEMO_US
+        NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); noko_se_off(); break;)
+        if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
+            if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL ||
+#else
         if (party->work.nokonoko.heldItem == NULL) {
             party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,
                                                               0.5f * party->width + 12.0f);
@@ -1092,6 +533,7 @@ void nokonoko_use(PartyEntry* party) {
         }
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL || (u16)(mario->currMotionId - MARIO_MOTION_DAMAGE) <= 1 ||
+#endif
                 (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
                 nokonoko_finish(party);
                 noko_se_off();
@@ -1128,14 +570,22 @@ void nokonoko_use(PartyEntry* party) {
         party->useMotionId = 51;
         party->moveSpeed = 0.0f;
         party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+#if VERSION <= VERSION_DEMO_US
+        psndSFXOn_3D((const char*)0x92b, &party->position);
+#else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_BACK1), &party->position);
+#endif
         break;
     case 51: {
         f32 lim = party->work.nokonoko.dashed != 0 ? 20.0f : 10.0f;
         party->moveSpeed += 0.3f * (lim - party->moveSpeed);
         if (party->moveSpeed >= lim) {
             party->moveSpeed = lim;
+#if VERSION <= VERSION_DEMO_US
+            if ((*(f32*)moveDistPtr) < 10.0f) {
+#else
             if (party->moveDistance < 10.0f) {
+#endif
                 party->useMotionId = 52;
             }
         }
@@ -1143,6 +593,11 @@ void nokonoko_use(PartyEntry* party) {
     case 52:
         if (ccwall(party, 1) != NULL) {
             partyGetMoveDirSpd(party, &dir, &spd);
+#if VERSION <= VERSION_DEMO_US
+            marioChkWallAround(&party->position, spd, dir, party->width, party->height);
+            party->useMotionId = 70;
+            psndSFXOn_3D((const char*)0x92c, &party->position);
+#else
 #if VERSION >= VERSION_US
             partyChkWallAround(party, &party->position, spd, dir, party->width, party->height);
 #else
@@ -1150,16 +605,26 @@ void nokonoko_use(PartyEntry* party) {
 #endif
             party->useMotionId = 70;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
+#endif
             noko_star(party, 1);
             return;
         }
         noko_spin(party);
+#if VERSION <= VERSION_DEMO_US
+        party->moveSpeed += 0.1f * (-1.0f - party->moveSpeed);
+        (*(f32*)moveDistPtr) -= party->moveSpeed;
+        if ((*(f32*)moveDistPtr) <= 0.0f) {
+            (*(f32*)moveDistPtr) = 0.0f;
+            party->useMotionId = 53;
+            party->moveSpeed += 0.1f * (-1.0f - party->moveSpeed);
+#else
         party->moveSpeed += 0.1f * ((-1.0f) - party->moveSpeed);
         party->moveDistance -= party->moveSpeed;
         if (party->moveDistance <= 0.0f) {
             party->moveDistance = 0.0f;
             party->useMotionId = 53;
             party->moveSpeed += 0.1f * ((-1.0f) - party->moveSpeed);
+#endif
             party->work.nokonoko.shellSpin = 50.0f;
         }
         break;
@@ -1173,8 +638,13 @@ void nokonoko_use(PartyEntry* party) {
             party->work.nokonoko.shellSpin = 0.0f;
         }
         noko_spin(party);
+#if VERSION <= VERSION_DEMO_US
+        party->moveSpeed += (-2.0f - party->moveSpeed) * (party->work.nokonoko.dashed != 0 ? 0.2f : 0.1f);
+        (*(f32*)moveDistPtr) -= party->moveSpeed;
+#else
         party->moveSpeed += ((-2.0f) - party->moveSpeed) * (party->work.nokonoko.dashed != 0 ? 0.2f : 0.1f);
         party->moveDistance -= party->moveSpeed;
+#endif
         if (party->moveSpeed <= 0.0f) {
             party->moveSpeed = 0.0f;
             flags = lookupSafetyPos(party->moveTarget, party->height, &out);
@@ -1212,7 +682,11 @@ void nokonoko_use(PartyEntry* party) {
             }
             party->useMotionId = 54;
             party->moveTarget = out;
+#if VERSION <= VERSION_DEMO_US
+            (*(f32*)moveDistPtr) = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+#else
             party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+#endif
             party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
         }
         break;
@@ -1222,8 +696,13 @@ void nokonoko_use(PartyEntry* party) {
         if (party->moveSpeed >= 4.0f) {
             party->moveSpeed = 4.0f;
         }
+#if VERSION <= VERSION_DEMO_US
+        (*(f32*)moveDistPtr) -= party->moveSpeed;
+        if ((*(f32*)moveDistPtr) <= 10.0f) {
+#else
         party->moveDistance -= party->moveSpeed;
         if (party->moveDistance <= 10.0f) {
+#endif
             party->useMotionId = 70;
             party->moveSpeed = 0.0f;
             return;
@@ -1239,7 +718,11 @@ void nokonoko_use(PartyEntry* party) {
         if (party->work.nokonoko.shellSpin <= 0.0f) {
             party->work.nokonoko.shellSpin = 0.0f;
         }
+#if VERSION <= VERSION_DEMO_US
+        party->moveSpeed += (-2.0f - party->moveSpeed) * (party->work.nokonoko.dashed != 0 ? 0.2f : 0.1f);
+#else
         party->moveSpeed += ((-2.0f) - party->moveSpeed) * (party->work.nokonoko.dashed != 0 ? 0.2f : 0.1f);
+#endif
         if (party->moveSpeed <= 0.0f) {
             party->useMotionId = 70;
             party->moveSpeed = 0.0f;
@@ -1255,7 +738,11 @@ void nokonoko_use(PartyEntry* party) {
         qz = dz * dz;
         if ((f32)sqrt(qz + (qx + qy)) < 5.0f) {
             f32 a;
+#if VERSION <= VERSION_DEMO_US
+            a = mario->directionView + (mario->directionView >= 180.0 ? -90.0f : 90.0f);
+#else
             a = mario->directionView + (mario->directionView >= 180.0 ? (-90.0f) : 90.0f);
+#endif
             movePos(&party->position.x, &party->position.z, 0.5f * mario->wPlayerCollisionBox.x, a);
             ccwall(party, 1);
         }
@@ -1278,14 +765,22 @@ void nokonoko_use(PartyEntry* party) {
         party->useMotionId = 81;
         party->moveSpeed = 0.0f;
         party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+#if VERSION <= VERSION_DEMO_US
+        (*(f32*)moveDistPtr) += 75.0f;
+        psndSFXOn_3D((const char*)0x92b, &party->position);
+#else
         party->moveDistance += 75.0f;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_BACK1), &party->position);
+#endif
     case 81:
         noko_spin(party);
         party->moveSpeed += 3.0f;
         if (party->moveSpeed >= 18.0f) {
             party->moveSpeed = 18.0f;
         }
+#if VERSION <= VERSION_DEMO_US
+        NOKO_PICK_UP_NEAR_ITEM(party, psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1);)
+#else
         if (party->work.nokonoko.heldItem == NULL) {
             party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,
                                                               0.5f * party->width + 12.0f);
@@ -1295,6 +790,7 @@ void nokonoko_use(PartyEntry* party) {
                 noko_star(party, 1);
             }
         }
+#endif
         hit = ccwall(party, 1);
         if (hit != NULL) {
             if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
@@ -1305,13 +801,22 @@ void nokonoko_use(PartyEntry* party) {
             party->useMotionId = 110;
             return;
         }
+#if VERSION <= VERSION_DEMO_US
+        (*(f32*)moveDistPtr) -= party->moveSpeed;
+        if ((*(f32*)moveDistPtr) <= 20.0f) {
+#else
         party->moveDistance -= party->moveSpeed;
         if (party->moveDistance <= 20.0f) {
+#endif
             party->useMotionId = 82;
         }
         break;
     case 82:
         noko_spin(party);
+#if VERSION <= VERSION_DEMO_US
+        party->moveSpeed += 0.35f * (-1.0f - party->moveSpeed);
+        NOKO_PICK_UP_NEAR_ITEM(party, psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1);)
+#else
         party->moveSpeed += 0.35f * ((-1.0f) - party->moveSpeed);
         if (party->work.nokonoko.heldItem == NULL) {
             party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,
@@ -1322,13 +827,20 @@ void nokonoko_use(PartyEntry* party) {
                 noko_star(party, 1);
             }
         }
+#endif
         if (ccwall(party, 1) != NULL) {
             party->useMotionId = 100;
             break;
         }
+#if VERSION <= VERSION_DEMO_US
+        (*(f32*)moveDistPtr) -= party->moveSpeed;
+        if ((*(f32*)moveDistPtr) <= 0.0f) {
+            (*(f32*)moveDistPtr) = distABf(party->moveTarget.x, party->moveTarget.z, party->position.x, party->position.z);
+#else
         party->moveDistance -= party->moveSpeed;
         if (party->moveDistance <= 0.0f) {
             party->moveDistance = distABf(party->moveTarget.x, party->moveTarget.z, party->position.x, party->position.z);
+#endif
             party->useMotionId = 84;
             party->work.nokonoko.shellSpin = 50.0f;
             party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
@@ -1340,8 +852,13 @@ void nokonoko_use(PartyEntry* party) {
             party->useMotionId = 100;
             break;
         }
+#if VERSION <= VERSION_DEMO_US
+        (*(f32*)moveDistPtr) -= party->moveSpeed;
+        if ((*(f32*)moveDistPtr) <= 30.0f) {
+#else
         party->moveDistance -= party->moveSpeed;
         if (party->moveDistance <= 30.0f) {
+#endif
             party->useMotionId = 86;
             party->moveSpeed = 0.0f;
             party->moveFrames = sysMsec2Frame(500);
@@ -1367,7 +884,11 @@ void nokonoko_use(PartyEntry* party) {
         qz = dz * dz;
         if ((f32)sqrt(qz + (qx + qy)) < 5.0f) {
             f32 a;
+#if VERSION <= VERSION_DEMO_US
+            a = mario->directionView + (mario->directionView >= 180.0 ? 90.0f : -90.0f);
+#else
             a = mario->directionView + (mario->directionView >= 180.0 ? 90.0f : (-90.0f));
+#endif
             movePos(&party->position.x, &party->position.z, 0.5f * mario->wPlayerCollisionBox.x, a);
             ccwall(party, 1);
         }
@@ -1424,7 +945,11 @@ void nokonoko_use(PartyEntry* party) {
         }
         party->useMotionId = 90;
         party->moveTarget = out2;
+#if VERSION <= VERSION_DEMO_US
+        (*(f32*)moveDistPtr) = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+#else
         party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+#endif
         party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
         party->work.nokonoko.shellSpin = 50.0f;
         break;
@@ -1434,8 +959,13 @@ void nokonoko_use(PartyEntry* party) {
         if (party->moveSpeed >= 4.0f) {
             party->moveSpeed = 4.0f;
         }
+#if VERSION <= VERSION_DEMO_US
+        (*(f32*)moveDistPtr) -= party->moveSpeed;
+        if ((*(f32*)moveDistPtr) <= 10.0f) {
+#else
         party->moveDistance -= party->moveSpeed;
         if (party->moveDistance <= 10.0f) {
+#endif
             party->useMotionId = 70;
             party->moveSpeed = 0.0f;
         }
@@ -1449,7 +979,11 @@ void nokonoko_use(PartyEntry* party) {
     case 111:
         party->position.y += party->velY;
         marioGetScreenPos(party->position, &s2x, &s2y, &s2z);
+#if VERSION <= VERSION_DEMO_US
+        if (s2y <= -300.0f) {
+#else
         if (s2y <= (-300.0f)) {
+#endif
             party->moveFrames = sysMsec2Frame(800);
             party->useMotionId = 112;
         }
@@ -1466,13 +1000,21 @@ void nokonoko_use(PartyEntry* party) {
             if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
                 b = TRUE;
             }
+#if VERSION <= VERSION_DEMO_US
+            movePos(&rp.x, &rp.z, 30.0f, toMovedir2(b ? 0.0f : 180.0f, -30.0f));
+#else
             movePos(&rp.x, &rp.z, 30.0f, toMovedir2(b ? 0.0f : 180.0f, (-30.0f)));
+#endif
         }
         party->position.x = rp.x;
         party->position.y = 1000.0f + rp.y;
         party->position.z = rp.z;
         party->velY = 0.0f;
+#if VERSION <= VERSION_DEMO_US
+        party->accelY = -1.0f;
+#else
         party->accelY = (-1.0f);
+#endif
         party->moveSpeed = 0.0f;
         party->flags |= PARTY_FLAG_IS_FALLING;
         party->flags |= PARTY_FLAG_FORCE_FALL;
@@ -1489,11 +1031,19 @@ void nokonoko_use(PartyEntry* party) {
             party->flags &= ~PARTY_FLAG_FORCE_FALL;
         }
         partyMove(party);
+#if VERSION <= VERSION_DEMO_US
+        if (party->velY <= -6.0f) {
+            party->accelY = 0.0f;
+            party->velY = -6.0f;
+        }
+        if (party->position.y < -2000.0f) {
+#else
         if (party->velY <= (-6.0f)) {
             party->accelY = 0.0f;
             party->velY = (-6.0f);
         }
         if (party->position.y < (-2000.0f)) {
+#endif
             party->position = mario->position;
             party->position.y += 200.0f;
         }
@@ -1517,7 +1067,6 @@ void nokonoko_use(PartyEntry* party) {
         partyMoveNoHosei(party);
     }
 }
-#endif
 
 /**
  * Ends Shell Toss if Koops is in use: runs nokonoko_use_post, then returns him to follow mode,

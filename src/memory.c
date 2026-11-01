@@ -38,15 +38,15 @@ SmartWork smartWork;
 s32 size_table[HEAP_COUNT][2] = {
 #if VERSION <= VERSION_DEMO_US
     {1, 0x3784},
-    {1, 0xD90}, //0x364000, 3472 KiB/3.39 MiB
-        {1, 0xE0}, //0x38000, 224 KiB
-        {1, 0x80}, //0x20000, 128 KiB
-        {1, 0x100}, //0x40000, 256 KiB
 #else
     {1, 0x1C84}, // 0x721000, 7300 KiB (7.13 MiB)
+#endif
     {1, 0xD90},  // 0x364000, 3472 KiB (3.39 MiB)
     {1, 0xE0},   // 0x38000, 224 KiB
     {1, 0x80},   // 0x20000, 128 KiB
+#if VERSION <= VERSION_DEMO_US
+    {1, 0x100}, //0x40000, 256 KiB
+#else
 #if VERSION < VERSION_US
     {1, 0x100},  // 0x40000, 256 KiB: the battle heap
 #endif

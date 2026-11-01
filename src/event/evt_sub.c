@@ -424,7 +424,6 @@ EVT_BEGIN(evt_sub_kusa_access_entry)
 EVT_END()
 #endif
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * The Crystal Star pickup cutscene.
  * LW(0) is the star (1 Diamond ... 7 Crystal, -1 the chapter 4 scene where the star is shown with Doopliss as
@@ -500,7 +499,7 @@ EVT_BEGIN(evt_sub_starstone)
     // Crystal Star fanfare starts.
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
-    ELSE
+        ELSE
         CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     END_IF
     CALL(evt_sub_get_sincos, 0, LW(5), LW(6))
@@ -514,21 +513,35 @@ EVT_BEGIN(evt_sub_starstone)
     IF_INT_EQUAL(LF(8), 0)
         CALL(evt_mario_set_pose, STRING("M_N_3"))
     END_IF
+#if VERSION <= VERSION_DEMO_US
     // Fade back in; the camera closes in while the star spirals up around him, spinning,
     // until it hovers overhead.
     CALL(evt_fade_entry, FADE_IN_BLACK, 300, 255, 255, 255)
+#else
+#if VERSION < VERSION_US
+    CALL(evt_fade_entry, FADE_IN_BLACK, 300, 255, 255, 255)
+#endif
+#endif
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GET_STARSTONE1"))
     CALL(bgm_start_wait)
+#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_US
+    // Fade back in; the camera closes in while the star spirals up around him, spinning,
+    // until it hovers overhead.
+    CALL(evt_fade_entry, FADE_IN_BLACK, 300, 255, 255, 255)
+#endif
+#endif
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
-    ELSE
+        ELSE
         CALL(evt_cam3d_evt_set_rel, 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
     END_IF
     CALL(evt_snd_sfxon_3d, STRING("SFX_SE2_EVT_STARSTONE_GET1"), LW(5), LW(3), LW(6), 0)
     SET_VALUE(LW(7), LW(1))
     SET_FLOAT_VALUE(LW(8), FLOAT(35.0f))
     SET_FLOAT_VALUE(LW(9), LW(3))
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 0, 3600, 170)
     LOOP(171)
         CALL(evt_sub_intpl_get_value)
@@ -550,337 +563,7 @@ EVT_BEGIN(evt_sub_starstone)
     END_LOOP
     // Mario cheers and holds the star high in a burst of light, and the chapter's "You got a Crystal Star!"
     // message shows.
-    IF_INT_NOT_EQUAL(LF(8), 1)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAPPY1"), LW(0), LW(1), LW(2), 0)
-    END_IF
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_npc_set_anim, STRING("にせマリオ"), STRING("EM_I_1"))
-    ELSE
-        CALL(evt_mario_set_pose, STRING("M_P_2"))
-    END_IF
-    CALL(evt_item_get_position, LW(7), LW(0), LW(1), LW(2))
-    ADD(LW(1), 16)
-    CALL(evt_eff64, STRING("sub_hikari"), STRING("radiation_n64"), 12, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
-    ADD(LW(2), -10)
-    CALL(evt_eff, STRING("sub_bg"), STRING("itemget"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(stone_bg, LW(7))
-    IF_INT_EQUAL(LF(1), 1)
-        CALL(evt_msg_print, 0, STRING("stg1_gon_33_18"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(2), 1)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_e25_03"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(3), 1)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_475"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(4), 1)
-        CALL(evt_msg_print, 0, STRING("stg4_jin_39"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(5), 1)
-        CALL(evt_msg_print, 0, STRING("stg5_dou_29_01"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(6), 1)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_20"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(7), 1)
-        CALL(evt_msg_print, 0, STRING("stg7_aji_42_02"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_msg_print, 0, STRING("stg4_jin_10_02"), 0, 0)
-    END_IF
-    // Wait out the fanfare, then the stage-clear jingle plays and the light fades.
-    LOOP(0)
-        CALL(get_stop, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STAGE_CLEAR1"))
-    CALL(evt_eff_softdelete, STRING("sub_hikari"))
-    CALL(stone_bg_open, LW(7))
-    // The curtain comes down (the map's own star object is hidden behind it),
-    // STAGE CLEAR appears and Mario cheers.
-    BEGIN_INLINE_EVENT
-        IF_INT_EQUAL(LF(1), 1)
-            SET_VALUE(LW(0), STRING("gon_11_S"))
-        END_IF
-        IF_INT_EQUAL(LF(2), 1)
-            SET_VALUE(LW(0), STRING("S"))
-        END_IF
-        IF_INT_EQUAL(LF(3), 1)
-            SET_VALUE(LW(0), STRING("S"))
-        END_IF
-        IF_INT_EQUAL(LF(4), 1)
-            SET_VALUE(LW(0), STRING("S_jin04"))
-        END_IF
-        IF_INT_EQUAL(LF(5), 1)
-            SET_VALUE(LW(0), STRING("S"))
-        END_IF
-        IF_INT_EQUAL(LF(6), 1)
-            SET_VALUE(LW(0), STRING("S"))
-        END_IF
-        IF_INT_EQUAL(LF(7), 1)
-            SET_VALUE(LW(0), STRING("S_aji_14"))
-        END_IF
-        IF_INT_EQUAL(LF(8), 1)
-            SET_VALUE(LW(0), STRING("S_jin04"))
-        END_IF
-        WAIT_FRAMES(10)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
-    END_INLINE_EVENT
-    CALL(evt_fade_entry, FADE_CURTAIN_ENTER_3D, 0, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1000)
-    CALL(evt_eff, STRING("sub_clear"), STRING("stageclear"), 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(stageclear_wait)
-    IF_INT_NOT_EQUAL(LF(8), 1)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAPPY2"), LW(0), LW(1), LW(2), 0)
-    END_IF
-    WAIT_MS(2000)
-    // The curtain closes and the chapter's diary page sums up what happened.
-    CALL(evt_fade_entry, FADE_CURTAIN_CENTER_A2_3D, 0, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    CALL(evt_item_delete, LW(7))
-    WAIT_MS(1000)
-    IF_INT_EQUAL(LF(1), 1)
-        CALL(evt_msg_print, 0, STRING("stg1_gon_34"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(2), 1)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_e25_04"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(3), 1)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_475_01"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(4), 1)
-        CALL(evt_msg_print, 0, STRING("stg4_jin_39_01"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(5), 1)
-        CALL(evt_msg_print, 0, STRING("stg5_dou_29_02"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(6), 1)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_20_01"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(7), 1)
-        CALL(evt_msg_print, 0, STRING("stg7_aji_42_03"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_msg_print, 0, STRING("stg4_jin_10_03"), 0, 0)
-    END_IF
-    WAIT_MS(1000)
-    IF_INT_EQUAL(LF(1), 1)
-        SET_VALUE(LW(0), 1)
-    END_IF
-    IF_INT_EQUAL(LF(2), 1)
-        SET_VALUE(LW(0), 4)
-    END_IF
-    IF_INT_EQUAL(LF(3), 1)
-        SET_VALUE(LW(0), 7)
-    END_IF
-    IF_INT_EQUAL(LF(4), 1)
-        SET_VALUE(LW(0), 10)
-    END_IF
-    IF_INT_EQUAL(LF(5), 1)
-        SET_VALUE(LW(0), 13)
-    END_IF
-    IF_INT_EQUAL(LF(6), 1)
-        SET_VALUE(LW(0), 16)
-    END_IF
-    IF_INT_EQUAL(LF(7), 1)
-        SET_VALUE(LW(0), 19)
-    END_IF
-    IF_INT_EQUAL(LF(8), 1)
-        SET_VALUE(LW(0), 22)
-    END_IF
-    SET_VALUE(LF(10), 0)
-    CALL_CHILD(evt_memcard_save)
-    // Move on: Peach's interlude (aji_10) after chapters 1-3, then usu_00, muj_12, pik_03 and pik_01 after
-    // chapters 4-7. The Doopliss scene instead fades back in where it is.
-    CALL(evt_mario_init_camid)
-    CALL(evt_party_init_camid, 0)
-    CALL(evt_party_init_camid, 1)
-    IF_INT_EQUAL(LF(1), 1)
-        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-        CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
-        CALL(evt_snd_sfx_all_stop)
-        CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-        WAIT_MS(2000)
-        CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_MARIO_A1, 0, FADE_STORY_MARIO_A3, 0)
-        CALL(evt_bero_mapchange, STRING("aji_10"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(2), 1)
-        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-        CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
-        CALL(evt_snd_sfx_all_stop)
-        CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-        WAIT_MS(2000)
-        CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_MARIO_A1, 0, FADE_STORY_MARIO_A3, 0)
-        CALL(evt_bero_mapchange, STRING("aji_10"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(3), 1)
-        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-        CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
-        CALL(evt_snd_sfx_all_stop)
-        CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-        WAIT_MS(2000)
-        CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_MARIO_A1, 0, FADE_STORY_MARIO_A3, 0)
-        CALL(evt_bero_mapchange, STRING("aji_10"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(4), 1)
-        CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 800, FADE_IN_WHITE, 800)
-        CALL(evt_bero_mapchange, STRING("usu_00"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(5), 1)
-        CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 800, FADE_IN_WHITE, 800)
-        CALL(evt_bero_mapchange, STRING("muj_12"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(6), 1)
-        CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_WHITE, 800, FADE_IN_WHITE, 800)
-        CALL(evt_bero_mapchange, STRING("pik_03"), STRING("next"))
-    END_IF
-    IF_INT_EQUAL(LF(7), 1)
-        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-        CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
-        CALL(evt_snd_sfx_all_stop)
-        CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-        WAIT_MS(2000)
-        CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_MARIO_A1, 0, FADE_STORY_MARIO_A3, 0)
-        CALL(evt_bero_mapchange, STRING("pik_01"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-        WAIT_MS(2000)
-        CALL(evt_eff_delete, STRING("sub_bg"))
-        CALL(evt_eff_delete, STRING("sub_clear"))
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_jin04"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_fade_reset, 1)
-        CALL(evt_npc_set_camid, STRING("にせマリオ"), 4)
-        CALL(evt_mario_set_pose, STRING("M_D_2"))
-        CALL(evt_fade_entry, FADE_IN_WHITE, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-    END_IF
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
 #else
-/**
- * The Crystal Star pickup cutscene.
- * LW(0) is the star (1 Diamond ... 7 Crystal, -1 the chapter 4 scene where the star is shown with Doopliss as
- * Mario, NPC "nise Mario"), LW(1) the item entry, LW(2) the pickup flag.
- * Adds the star to the pouch, spins it up around Mario with the fanfare, prints the chapter's lines,
- * runs the stage-clear curtain and save prompt, then changes map:
- * Peach's interlude at aji_10 after chapters 1-3, usu_00, muj_12 and so on after the others.
- * US and PAL time the spin in milliseconds and scale its steps by the frame rate.
- */
-EVT_BEGIN(evt_sub_starstone)
-    // Mario stops and the star goes into his pouch; the Doopliss scene (-1) adds nothing.
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_party_stop, 0)
-    SWITCH(LW(0))
-        CASE_EQUAL(1)
-        CALL(evt_pouch_get_starstone, 1)
-        CALL(evt_pouch_add_item, ITEM_DIAMOND_STAR, LW(2))
-        CASE_EQUAL(2)
-        CALL(evt_pouch_get_starstone, 2)
-        CALL(evt_pouch_add_item, ITEM_EMERALD_STAR, LW(2))
-        CASE_EQUAL(3)
-        CALL(evt_pouch_get_starstone, 3)
-        CALL(evt_pouch_add_item, ITEM_GOLD_STAR, LW(2))
-        CASE_EQUAL(4)
-        CALL(evt_pouch_get_starstone, 4)
-        CALL(evt_pouch_add_item, ITEM_RUBY_STAR, LW(2))
-        CASE_EQUAL(5)
-        CALL(evt_pouch_get_starstone, 5)
-        CALL(evt_pouch_add_item, ITEM_SAPPHIRE_STAR, LW(2))
-        CASE_EQUAL(6)
-        CALL(evt_pouch_get_starstone, 6)
-        CALL(evt_pouch_add_item, ITEM_GARNET_STAR, LW(2))
-        CASE_EQUAL(7)
-        CALL(evt_pouch_get_starstone, 7)
-        CALL(evt_pouch_add_item, ITEM_CRYSTAL_STAR, LW(2))
-        CASE_EQUAL(-1)
-    END_SWITCH
-    // Remember which star this is for the rest of the scene.
-    IF_INT_EQUAL(LW(0), 1)
-        SET_VALUE(LF(1), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 2)
-        SET_VALUE(LF(2), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 3)
-        SET_VALUE(LF(3), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 4)
-        SET_VALUE(LF(4), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 5)
-        SET_VALUE(LF(5), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 6)
-        SET_VALUE(LF(6), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 7)
-        SET_VALUE(LF(7), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), -1)
-        SET_VALUE(LF(8), 1)
-    END_IF
-    // The fanfare lasts at least 9.7 seconds; the screen flashes white with a chime.
-    CALL(set_stop, 0)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(9700)
-        CALL(set_stop, 1)
-    END_INLINE_EVENT
-    CALL(evt_snd_sfxon, STRING("SFX_EVT_STARSTONE_WHITEOUT1"), 0)
-    CALL(evt_fade_entry, FADE_OUT_BLACK, 300, 255, 255, 255)
-    CALL(evt_fade_end_wait)
-    // In the flash the star appears beside Mario (or Doopliss posing as him), he strikes a pose and the
-    // Crystal Star fanfare starts.
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
-        ELSE
-        CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
-    END_IF
-    CALL(evt_sub_get_sincos, 0, LW(5), LW(6))
-    MULTIPLY_FLOAT(LW(5), FLOAT(40.0f))
-    MULTIPLY_FLOAT(LW(6), FLOAT(40.0f))
-    ADD_FLOAT(LW(5), LW(2))
-    ADD_FLOAT(LW(6), LW(4))
-    CALL(evt_item_set_position, LW(1), LW(5), LW(3), LW(6))
-    CALL(evt_mario_adjust_dir)
-    WAIT_MS(500)
-    IF_INT_EQUAL(LF(8), 0)
-        CALL(evt_mario_set_pose, STRING("M_N_3"))
-    END_IF
-#if VERSION < VERSION_US
-    CALL(evt_fade_entry, FADE_IN_BLACK, 300, 255, 255, 255)
-#endif
-    CALL(evt_snd_bgmoff, PSND_PAUSE)
-    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GET_STARSTONE1"))
-    CALL(bgm_start_wait)
-#if VERSION >= VERSION_US
-    // Fade back in; the camera closes in while the star spirals up around him, spinning,
-    // until it hovers overhead.
-    CALL(evt_fade_entry, FADE_IN_BLACK, 300, 255, 255, 255)
-#endif
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
-        ELSE
-        CALL(evt_cam3d_evt_set_rel, 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
-    END_IF
-    CALL(evt_snd_sfxon_3d, STRING("SFX_SE2_EVT_STARSTONE_GET1"), LW(5), LW(3), LW(6), 0)
-    SET_VALUE(LW(7), LW(1))
-    SET_FLOAT_VALUE(LW(8), FLOAT(35.0f))
-    SET_FLOAT_VALUE(LW(9), LW(3))
 #if VERSION >= VERSION_US
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 0, 3600, 2833)
     LOOP(0)
@@ -928,6 +611,7 @@ EVT_BEGIN(evt_sub_starstone)
 #endif
     // Mario cheers and holds the star high in a burst of light, and the chapter's "You got a Crystal Star!"
     // message shows.
+#endif
     IF_INT_NOT_EQUAL(LF(8), 1)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAPPY1"), LW(0), LW(1), LW(2), 0)
@@ -978,7 +662,9 @@ EVT_BEGIN(evt_sub_starstone)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STAGE_CLEAR1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_envoff, PSND_FADEOUT)
+#endif
     CALL(evt_eff_softdelete, STRING("sub_hikari"))
     CALL(stone_bg_open, LW(7))
     // The curtain comes down (the map's own star object is hidden behind it),
@@ -1076,6 +762,11 @@ EVT_BEGIN(evt_sub_starstone)
         SET_VALUE(LW(0), 22)
     END_IF
     SET_VALUE(LF(10), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_memcard_save)
+    // Move on: Peach's interlude (aji_10) after chapters 1-3, then usu_00, muj_12, pik_03 and pik_01 after
+    // chapters 4-7. The Doopliss scene instead fades back in where it is.
+#else
 #if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
@@ -1083,6 +774,7 @@ EVT_BEGIN(evt_sub_starstone)
 #endif
     // Move on: Peach's interlude (aji_10) after chapters 1-3, then usu_00, muj_12, pik_03 and pik_01 after
     // chapters 4-7. The Doopliss scene instead fades back in where it is.
+#endif
     CALL(evt_mario_init_camid)
     CALL(evt_party_init_camid, 0)
     CALL(evt_party_init_camid, 1)
@@ -1139,9 +831,11 @@ EVT_BEGIN(evt_sub_starstone)
         CALL(evt_bero_mapchange, STRING("pik_01"), 0)
     END_IF
     IF_INT_EQUAL(LF(8), 1)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
         CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
         CALL(evt_snd_sfx_all_stop)
+#endif
         CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
         CALL(evt_fade_end_wait)
         WAIT_MS(2000)
@@ -1157,7 +851,6 @@ EVT_BEGIN(evt_sub_starstone)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Rumbles controller 0 in ten bursts of ten 50 ms pulses with two seconds between,

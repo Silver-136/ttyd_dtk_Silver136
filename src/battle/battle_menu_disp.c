@@ -1993,137 +1993,68 @@ void BattleMenuDisp_WeaponSelect_End(BattleWork* wp) {
  * the cursor and the help window (the item description for items and cooked dishes,
  * otherwise the move's description).
  */
+/**
+ * Draws the move list: the ring icons, rows with each move's FP and Star Power costs,
+ * the cursor and the help window (the item description for items and cooked dishes,
+ * otherwise the move's description).
+ */
+void DrawWeaponWin(void) {
+    Mtx rowMtx[7];
+    Mtx iconMtx[5];
+    Vec iconPos[5];
+    f32 iconAngle[5];
+    s32 enabled[7];
+    const char* names[7];
+    s32 costs[7];
+    s32 p34[7];
+    u16 icons[8];
+    Vec v;
+    f32 x;
+    f32 y;
+    BattleWork* wp = _battleWorkPointer;
+    BattleCommand* cmd;
+    BattleSubMenu* menu;
+    BattleCursor* cursor;
+    BattleUnit* unit;
+    BattleWeapon* weapon;
+    const char* help;
+    s32 i;
+    s32 idx;
+
+    cmd = &wp->commandMenu;
+    menu = cmd->subMenu;
+    cursor = menu->cursor;
+    unit = BattleGetUnitPtr(wp, wp->activeUnitId);
+    weapon = menu->weapons[cursor->absPos].weapon;
+    DrawSubMenuCommonProcess(&x, &y, iconMtx, iconPos, iconAngle, rowMtx);
+    for (i = 0; i < 7; i++) {
+        idx = (s32)menu->scrollPos + i;
+        if (idx < cursor->count) {
+            enabled[i] = menu->weapons[idx].enabled;
+            icons[i] = cmd->weapon[idx].icon;
+            names[i] = menu->weapons[idx].name;
+            if (menu->weapons[idx].weapon) {
+                costs[i] = BtlUnit_GetWeaponCost(unit, menu->weapons[idx].weapon);
+            } else {
+                costs[i] = 0;
+            }
+            if (menu->weapons[idx].weapon) {
+                p34[i] = (u8)menu->weapons[idx].weapon->baseSpCost;
+            } else {
+                p34[i] = 0;
+            }
+        }
+    }
+    DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draws the move list: the ring icons, rows with each move's FP and Star Power costs,
- * the cursor and the help window (the item description for items and cooked dishes,
- * otherwise the move's description).
- */
-void DrawWeaponWin(void) {
-    Mtx rowMtx[7];
-    Mtx iconMtx[5];
-    Vec iconPos[5];
-    f32 iconAngle[5];
-    s32 enabled[7];
-    const char* names[7];
-    s32 costs[7];
-    s32 p34[7];
-    u16 icons[8];
-    Vec v;
-    f32 x;
-    f32 y;
-    BattleWork* wp = _battleWorkPointer;
-    BattleCommand* cmd;
-    BattleSubMenu* menu;
-    BattleCursor* cursor;
-    BattleUnit* unit;
-    BattleWeapon* weapon;
-    const char* help;
-    s32 i;
-    s32 idx;
-
-    cmd = &wp->commandMenu;
-    menu = cmd->subMenu;
-    cursor = menu->cursor;
-    unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-    weapon = menu->weapons[cursor->absPos].weapon;
-    DrawSubMenuCommonProcess(&x, &y, iconMtx, iconPos, iconAngle, rowMtx);
-    for (i = 0; i < 7; i++) {
-        idx = (s32)menu->scrollPos + i;
-        if (idx < cursor->count) {
-            enabled[i] = menu->weapons[idx].enabled;
-            icons[i] = cmd->weapon[idx].icon;
-            names[i] = menu->weapons[idx].name;
-            if (menu->weapons[idx].weapon) {
-                costs[i] = BtlUnit_GetWeaponCost(unit, menu->weapons[idx].weapon);
-            } else {
-                costs[i] = 0;
-            }
-            if (menu->weapons[idx].weapon) {
-                p34[i] = (u8)menu->weapons[idx].weapon->baseSpCost;
-            } else {
-                p34[i] = 0;
-            }
-        }
-    }
-    DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL);
-    v = (Vec){-60.0f, 35.0f, 0.0f};
-    DrawMenuCursorAndScrollArrow(&v);
-    if (weapon) {
-        if (weapon->itemId) {
-            help = itemDataTable[weapon->itemId].description;
-        } else if (weapon == &ItemWeaponData_CookingItem) {
-            help = itemDataTable[menu->weapons[cursor->absPos].itemId].description;
-        } else {
-            help = weapon->description;
-        }
-    } else {
-        help = itemDataTable[menu->weapons[cursor->absPos].itemId].description;
-    }
-    if (help) {
-        DrawMenuHelpWin(help, x, y);
-    }
-}
 #else
-/**
- * Draws the move list: the ring icons, rows with each move's FP and Star Power costs,
- * the cursor and the help window (the item description for items and cooked dishes,
- * otherwise the move's description).
- */
-void DrawWeaponWin(void) {
-    Mtx rowMtx[7];
-    Mtx iconMtx[5];
-    Vec iconPos[5];
-    f32 iconAngle[5];
-    s32 enabled[7];
-    const char* names[7];
-    s32 costs[7];
-    s32 p34[7];
-    u16 icons[8];
-    Vec v;
-    f32 x;
-    f32 y;
-    BattleWork* wp = _battleWorkPointer;
-    BattleCommand* cmd;
-    BattleSubMenu* menu;
-    BattleCursor* cursor;
-    BattleUnit* unit;
-    BattleWeapon* weapon;
-    const char* help;
-    s32 i;
-    s32 idx;
-
-    cmd = &wp->commandMenu;
-    menu = cmd->subMenu;
-    cursor = menu->cursor;
-    unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-    weapon = menu->weapons[cursor->absPos].weapon;
-    DrawSubMenuCommonProcess(&x, &y, iconMtx, iconPos, iconAngle, rowMtx);
-    for (i = 0; i < 7; i++) {
-        idx = (s32)menu->scrollPos + i;
-        if (idx < cursor->count) {
-            enabled[i] = menu->weapons[idx].enabled;
-            icons[i] = cmd->weapon[idx].icon;
-            names[i] = menu->weapons[idx].name;
-            if (menu->weapons[idx].weapon) {
-                costs[i] = BtlUnit_GetWeaponCost(unit, menu->weapons[idx].weapon);
-            } else {
-                costs[i] = 0;
-            }
-            if (menu->weapons[idx].weapon) {
-                p34[i] = (u8)menu->weapons[idx].weapon->baseSpCost;
-            } else {
-                p34[i] = 0;
-            }
-        }
-    }
-    DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
 #if VERSION == VERSION_EU
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL, 220); // name width that the label is scaled down to fit
 #else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL, 0);
 #endif
+#endif
     v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
     if (weapon) {
@@ -2141,7 +2072,6 @@ void DrawWeaponWin(void) {
         DrawMenuHelpWin(help, x, y);
     }
 }
-#endif
 
 /** Sets up the Tactics list on Mario's or the partner's cursor; flag bit 0 plays the ring icons' leaving animation. */
 void BattleMenuDisp_Operation_Init(BattleWork* wp, BOOL flag) {
@@ -2273,105 +2203,60 @@ void BattleMenuDisp_ChangePartySelect_End(BattleWork* wp) {
 }
 
 /** Draws the Change Partner list with each partner's HP, the cursor and the help window. */
+/** Draws the Change Partner list with each partner's HP, the cursor and the help window. */
+void DrawChangePartyWin(void) {
+    Mtx rowMtx[7];
+    Mtx iconMtx[5];
+    Vec iconPos[5];
+    f32 iconAngle[5];
+    s32 enabled[7];
+    const char* names[7];
+    s32 costs[7];
+    s32 p34[7];
+    u16 icons[8];
+    Vec v;
+    f32 x;
+    f32 y;
+    BattleWork* wp = _battleWorkPointer;
+    BattleSubMenu* menu = wp->commandMenu.subMenu;
+    BattleCursor* cursor = menu->cursor;
+    BattleCommandParty* items;
+    s32 i;
+    s32 idx;
+
+    BattleGetUnitPtr(wp, wp->activeUnitId);
+    items = wp->commandMenu.party;
+    DrawSubMenuCommonProcess(&x, &y, iconMtx, iconPos, iconAngle, rowMtx);
+    for (i = 0; i < 7; i++) {
+        idx = (s32)menu->scrollPos + i;
+        if (idx < cursor->count) {
+            enabled[i] = items[idx].enabled;
+            if (items[idx].icon) {
+                icons[i] = items[idx].icon;
+            } else {
+                icons[i] = ICON_ITEM_COIN;
+            }
+            names[i] = items[idx].name;
+            costs[i] = 0;
+            p34[i] = 0;
+        }
+    }
+    DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
 #if VERSION <= VERSION_DEMO_US
-/** Draws the Change Partner list with each partner's HP, the cursor and the help window. */
-void DrawChangePartyWin(void) {
-    Mtx rowMtx[7];
-    Mtx iconMtx[5];
-    Vec iconPos[5];
-    f32 iconAngle[5];
-    s32 enabled[7];
-    const char* names[7];
-    s32 costs[7];
-    s32 p34[7];
-    u16 icons[8];
-    Vec v;
-    f32 x;
-    f32 y;
-    BattleWork* wp = _battleWorkPointer;
-    BattleSubMenu* menu = wp->commandMenu.subMenu;
-    BattleCursor* cursor = menu->cursor;
-    BattleCommandParty* items;
-    s32 i;
-    s32 idx;
-
-    BattleGetUnitPtr(wp, wp->activeUnitId);
-    items = wp->commandMenu.party;
-    DrawSubMenuCommonProcess(&x, &y, iconMtx, iconPos, iconAngle, rowMtx);
-    for (i = 0; i < 7; i++) {
-        idx = (s32)menu->scrollPos + i;
-        if (idx < cursor->count) {
-            enabled[i] = items[idx].enabled;
-            if (items[idx].icon) {
-                icons[i] = items[idx].icon;
-            } else {
-                icons[i] = ICON_ITEM_COIN;
-            }
-            names[i] = items[idx].name;
-            costs[i] = 0;
-            p34[i] = 0;
-        }
-    }
-    DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, items);
-    v = (Vec){-60.0f, 35.0f, 0.0f};
-    DrawMenuCursorAndScrollArrow(&v);
-    if (items[cursor->absPos].help) {
-        DrawMenuHelpWin(items[cursor->absPos].help, x, y);
-    }
-}
 #else
-/** Draws the Change Partner list with each partner's HP, the cursor and the help window. */
-void DrawChangePartyWin(void) {
-    Mtx rowMtx[7];
-    Mtx iconMtx[5];
-    Vec iconPos[5];
-    f32 iconAngle[5];
-    s32 enabled[7];
-    const char* names[7];
-    s32 costs[7];
-    s32 p34[7];
-    u16 icons[8];
-    Vec v;
-    f32 x;
-    f32 y;
-    BattleWork* wp = _battleWorkPointer;
-    BattleSubMenu* menu = wp->commandMenu.subMenu;
-    BattleCursor* cursor = menu->cursor;
-    BattleCommandParty* items;
-    s32 i;
-    s32 idx;
-
-    BattleGetUnitPtr(wp, wp->activeUnitId);
-    items = wp->commandMenu.party;
-    DrawSubMenuCommonProcess(&x, &y, iconMtx, iconPos, iconAngle, rowMtx);
-    for (i = 0; i < 7; i++) {
-        idx = (s32)menu->scrollPos + i;
-        if (idx < cursor->count) {
-            enabled[i] = items[idx].enabled;
-            if (items[idx].icon) {
-                icons[i] = items[idx].icon;
-            } else {
-                icons[i] = ICON_ITEM_COIN;
-            }
-            names[i] = items[idx].name;
-            costs[i] = 0;
-            p34[i] = 0;
-        }
-    }
-    DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
 #if VERSION == VERSION_EU
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, items, 150); // name width that the label is scaled down to fit
 #else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, items, 1);
 #endif
+#endif
     v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
     if (items[cursor->absPos].help) {
         DrawMenuHelpWin(items[cursor->absPos].help, x, y);
     }
 }
-#endif
 
 /** Sets up the Double/Triple Dip choice list; flag bit 0 plays the ring icons' leaving animation. */
 void BattleMenuDisp_MultiItem_Init(BattleWork* wp, BOOL flag) {

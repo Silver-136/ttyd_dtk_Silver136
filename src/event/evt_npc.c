@@ -2013,58 +2013,36 @@ USER_FUNC(evt_npc_battle_start) {
  * then gives control back to Mario and the partner and stops the battle music handling.
  * The US release also runs marioFBattlePost.
  */
+/**
+ * Blocks until a field battle has ended and the game is back in the field sequence with a result,
+ * then gives control back to Mario and the partner and stops the battle music handling.
+ * The US release also runs marioFBattlePost.
+ */
+USER_FUNC(evt_npc_wait_battle_end) {
+    FieldBattleInfo* info = &fbatGetPointer()->info;
+    PartyEntry* party;
+
+    if (seqGetSeq() != SEQ_GAME) {
+        return EVT_RETURN_BLOCK;
+    }
+    if (BattleInformationGetResult(info) == BATTLE_RESULT_NONE) {
+        return EVT_RETURN_BLOCK;
+    }
+    marioCtrlOn();
+    party = partyGetPtr(marioGetPartyId());
+    if (party) {
+        partyCtrlOn();
+    }
 #if VERSION <= VERSION_DEMO_US
-/**
- * Blocks until a field battle has ended and the game is back in the field sequence with a result,
- * then gives control back to Mario and the partner and stops the battle music handling.
- * The US release also runs marioFBattlePost.
- */
-USER_FUNC(evt_npc_wait_battle_end) {
-    FieldBattleInfo* info = &fbatGetPointer()->info;
-    PartyEntry* party;
-
-    if (seqGetSeq() != SEQ_GAME) {
-        return EVT_RETURN_BLOCK;
-    }
-    if (BattleInformationGetResult(info) == BATTLE_RESULT_NONE) {
-        return EVT_RETURN_BLOCK;
-    }
-    marioCtrlOn();
-    party = partyGetPtr(marioGetPartyId());
-    if (party) {
-        partyCtrlOn();
-    }
     psndClearFlag(PSND_FLAG_BATTLE_START);
-    return EVT_RETURN_DONE;
-}
 #else
-/**
- * Blocks until a field battle has ended and the game is back in the field sequence with a result,
- * then gives control back to Mario and the partner and stops the battle music handling.
- * The US release also runs marioFBattlePost.
- */
-USER_FUNC(evt_npc_wait_battle_end) {
-    FieldBattleInfo* info = &fbatGetPointer()->info;
-    PartyEntry* party;
-
-    if (seqGetSeq() != SEQ_GAME) {
-        return EVT_RETURN_BLOCK;
-    }
-    if (BattleInformationGetResult(info) == BATTLE_RESULT_NONE) {
-        return EVT_RETURN_BLOCK;
-    }
-    marioCtrlOn();
-    party = partyGetPtr(marioGetPartyId());
-    if (party) {
-        partyCtrlOn();
-    }
     L_psndBGM_stop();
 #if VERSION >= VERSION_US
     marioFBattlePost();
 #endif
+#endif
     return EVT_RETURN_DONE;
 }
-#endif
 
 /** s32 resultStoreIndex */
 // s32 resultStoreIndex

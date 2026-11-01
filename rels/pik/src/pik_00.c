@@ -2083,18 +2083,13 @@ EVT_END()
  * and sets GF(11) so the villa roof stays visible when entering through n_bero.
  */
 EVT_BEGIN(pik_00_init_evt)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
-        SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-        CALL_CHILD(hom_10_evt_resha_right)
-#else
+#if VERSION > VERSION_DEMO_US
     SET_VALUE(GF(11), 0)
+#endif
     SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
-#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
         ELSE

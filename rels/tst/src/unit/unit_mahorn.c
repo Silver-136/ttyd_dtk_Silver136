@@ -433,114 +433,55 @@ static BattleWeapon weapon_mahorn_recover_magic = {
  * attack spell (50), spell on all targets (30), Huge (10), Defense up (10), confuse (10) or heal an ally (10).
  * The first two weights are 60 and 10 in the demo versions.
  */
+/**
+ * Attack AI of the Wizzerd. In a fixed-attack battle it always casts the attack spell.
+ * Otherwise it uses an enemy item if it has one, then draws one of:
+ * attack spell (50), spell on all targets (30), Huge (10), Defense up (10), confuse (10) or heal an ally (10).
+ * The first two weights are 60 and 10 in the demo versions.
+ */
+static EVT_BEGIN(attack_event)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
+        CALL_CHILD(attack_magic_event)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        CALL_CHILD(LW(0))
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+        RETURN
+    END_IF
+    LABEL(10)
+    SET_VALUE(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-/**
- * Attack AI of the Wizzerd. In a fixed-attack battle it always casts the attack spell.
- * Otherwise it uses an enemy item if it has one, then draws one of:
- * attack spell (50), spell on all targets (30), Huge (10), Defense up (10), confuse (10) or heal an ally (10).
- * The first two weights are 60 and 10 in the demo versions.
- */
-static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
-        CALL_CHILD(attack_magic_event)
-        GOTO(99)
-    END_IF
-    CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-        RETURN
-    END_IF
-    LABEL(10)
-    SET_VALUE(LW(0), 0)
-ADD(LW(0), 60)
-ADD(LW(0), 10)
-ADD(LW(0), 10)
+    ADD(LW(0), 60)
     ADD(LW(0), 10)
-    ADD(LW(0), 10)
-    ADD(LW(0), 10)
-    SUBTRACT(LW(0), 1)
-    CALL(evt_sub_random, LW(0), LW(1))
-    SET_VALUE(LW(0), 60)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
-        CALL_CHILD(attack_magic_event)
-        GOTO(99)
-    END_IF
-ADD(LW(0), 10)
-IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_all_attack_magic))
-        CALL_CHILD(all_attack_magic_event)
-        GOTO(99)
-END_IF
-    ADD(LW(0), 10)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_dekadeka_magic))
-        CALL_CHILD(dekadeka_magic_event)
-        GOTO(99)
-    END_IF
-    ADD(LW(0), 10)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_katikati_magic))
-        CALL_CHILD(katikati_magic_event)
-        GOTO(99)
-    END_IF
-    ADD(LW(0), 10)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_confuse_magic))
-        CALL_CHILD(confuse_magic_event)
-        GOTO(99)
-    END_IF
-    ADD(LW(0), 10)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_recover_magic))
-        CALL_CHILD(recover_magic_event)
-        GOTO(99)
-    END_IF
-    GOTO(10)
-    LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-    RETURN
-EVT_END()
 #else
-/**
- * Attack AI of the Wizzerd. In a fixed-attack battle it always casts the attack spell.
- * Otherwise it uses an enemy item if it has one, then draws one of:
- * attack spell (50), spell on all targets (30), Huge (10), Defense up (10), confuse (10) or heal an ally (10).
- * The first two weights are 60 and 10 in the demo versions.
- */
-static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
-        CALL_CHILD(attack_magic_event)
-        GOTO(99)
-    END_IF
-    CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-        RETURN
-    END_IF
-    LABEL(10)
-    SET_VALUE(LW(0), 0)
     ADD(LW(0), 50)
     ADD(LW(0), 30)
+#endif
     ADD(LW(0), 10)
     ADD(LW(0), 10)
     ADD(LW(0), 10)
     ADD(LW(0), 10)
     SUBTRACT(LW(0), 1)
     CALL(evt_sub_random, LW(0), LW(1))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LW(0), 60)
+#else
     SET_VALUE(LW(0), 50)
+#endif
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
         CALL_CHILD(attack_magic_event)
         GOTO(99)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    ADD(LW(0), 10)
+#else
     ADD(LW(0), 30)
+#endif
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(9), PTR(&weapon_mahorn_all_attack_magic))
         CALL_CHILD(all_attack_magic_event)
@@ -575,7 +516,6 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Pose table of the Wizzerd: its 17 battle poses (status, hurt and action) and the animation each one plays;

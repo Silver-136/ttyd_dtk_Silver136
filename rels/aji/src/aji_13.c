@@ -654,7 +654,6 @@ EVT_BEGIN(move_left_right)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Script for one platform of up_down_tbl: binds the hit area to the map object
  * and moves it between two heights over the row's time.
@@ -673,68 +672,7 @@ EVT_BEGIN(move_up_down)
     END_IF
     MULTIPLY(LW(7), 100)
     MULTIPLY(LW(8), 100)
-    LOOP(0)
-        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(7), LW(8), LW(9))
-        LABEL(0)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
-        CALL(evt_mapobj_trans, 1, LW(6), 0, LW(0), 0)
-        IF_INT_NOT_EQUAL(LW(5), 0)
-            CALL(evt_hit_bind_update, LW(5))
-        END_IF
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 1)
-            GOTO(0)
-        END_IF
-        WAIT_MS(300)
-        LOOP(0)
-            IF_INT_EQUAL(GF(0), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(8), LW(7), LW(9))
-        // Then it glides back, and the cycle repeats forever.
-        LABEL(1)
-        CALL(evt_sub_intpl_msec_get_value)
-        DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
-        CALL(evt_mapobj_trans, 1, LW(6), 0, LW(0), 0)
-        IF_INT_NOT_EQUAL(LW(5), 0)
-            CALL(evt_hit_bind_update, LW(5))
-        END_IF
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 1)
-            GOTO(1)
-        END_IF
-        WAIT_MS(300)
-        LOOP(0)
-            IF_INT_EQUAL(GF(0), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_LOOP
-    RETURN
-EVT_END()
-#else
-/**
- * Script for one platform of up_down_tbl: binds the hit area to the map object
- * and moves it between two heights over the row's time.
- * In the JP and later releases the platform A_ugoku_2 only starts
- * after something is standing on it (GF(1) is set once its movement value passes a small threshold).
- */
-EVT_BEGIN(move_up_down)
-    // The hit area is tied to the platform and the row's heights are scaled for smooth movement.
-    SET_VALUE(LW(5), LW(0))
-    SET_VALUE(LW(6), LW(1))
-    SET_VALUE(LW(7), LW(2))
-    SET_VALUE(LW(8), LW(3))
-    SET_VALUE(LW(9), LW(4))
-    IF_INT_NOT_EQUAL(LW(5), 0)
-        CALL(evt_hit_bind_mapobj, LW(5), LW(6))
-    END_IF
-    MULTIPLY(LW(7), 100)
-    MULTIPLY(LW(8), 100)
+#if VERSION > VERSION_DEMO_US
     SET_VALUE(LW(4), LW(8))
     IF_STR_EQUAL(LW(5), STRING("A_ugoku_2"))
         SET_VALUE(LW(3), 1)
@@ -757,6 +695,7 @@ EVT_BEGIN(move_up_down)
         SET_VALUE(LW(3), 0)
     END_IF
     // Each cycle the platform glides from its first height to its second over the row's time, then pauses.
+#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(7), LW(8), LW(9))
         LABEL(0)
@@ -766,6 +705,7 @@ EVT_BEGIN(move_up_down)
         IF_INT_NOT_EQUAL(LW(5), 0)
             CALL(evt_hit_bind_update, LW(5))
         END_IF
+#if VERSION > VERSION_DEMO_US
         IF_INT_NOT_EQUAL(LW(3), 0)
             IF_INT_NOT_EQUAL(GF(1), 0)
 #if VERSION < VERSION_US
@@ -774,10 +714,14 @@ EVT_BEGIN(move_up_down)
                 GOTO(5)
             END_IF
         END_IF
+#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(0)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        WAIT_MS(300)
+#else
         LABEL(5)
         IF_INT_NOT_EQUAL(LW(3), 0)
             IF_INT_EQUAL(GF(1), 0)
@@ -799,6 +743,7 @@ EVT_BEGIN(move_up_down)
         ELSE
             WAIT_MS(300)
         END_IF
+#endif
         LOOP(0)
             IF_INT_EQUAL(GF(0), 0)
                 BREAK_LOOP
@@ -818,7 +763,9 @@ EVT_BEGIN(move_up_down)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(1)
         END_IF
+#if VERSION > VERSION_DEMO_US
         SET_VALUE(LW(8), LW(4))
+#endif
         WAIT_MS(300)
         LOOP(0)
             IF_INT_EQUAL(GF(0), 0)
@@ -829,7 +776,6 @@ EVT_BEGIN(move_up_down)
     END_LOOP
     RETURN
 EVT_END()
-#endif
 
 /**
  * Script for one platform of r_tbl: binds the hit area to the map object

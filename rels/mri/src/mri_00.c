@@ -1572,10 +1572,8 @@ static EVT_BEGIN(sekai_yami_evt)
     SET_VALUE(LW(0), 46)
     SPAWN_EVENT(PTR(sekai_yami_puni))
     SET_VALUE(LW(0), 64)
-#if VERSION <= VERSION_DEMO_US
-    SPAWN_EVENT(sekai_yami_puni)
-#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
+#if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 1000)

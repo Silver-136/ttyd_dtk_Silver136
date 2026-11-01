@@ -1795,7 +1795,6 @@ s32 partyDokanInit(PartyEntry* party) {
  * once partyDokanEnd sets step 100 she plays the PM_D_1B exit paper for 18 frames,
  * then returns to normal and waits beside Mario, offset so two partners do not overlap.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * The partner's frames in the pipe (run mode 10):
  * she spins at Mario's position, growing back to full size on the vertical kinds;
@@ -1805,94 +1804,25 @@ s32 partyDokanInit(PartyEntry* party) {
 s32 partyDokanMain(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     s32 n;
+#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_US
+    f32 s;
+    f32 c;
+#endif
 
+#endif
     switch (party->motionStep) {
         case 0:
             party->position = mario->position;
             party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
+#if VERSION <= VERSION_DEMO_US
             party->scale.x += 0.05f;
             if (party->scale.x >= 1.0f) {
                 party->scale.x = 1.0f;
             }
             party->scale.y = party->scale.x;
             party->scale.z = party->scale.x;
-            break;
-        case 10:
-            party->rot.x += party->spinSpeed;
-            break;
-        case 100:
-            switch (party->dirKind) {
-                case 0:
-                case 1:
-                    partyChgPaper(party, "PM_D_1B");
-                    party->moveFrames = 18;
-                    party->motionStep = 101;
-                    break;
-                case 4:
-                    partyChgPaper(party, "PM_D_1B");
-                    party->moveFrames = 18;
-                    party->motionStep = 101;
-                    break;
-            }
-            break;
-        case 101:
-            switch (party->dirKind) {
-                case 0:
-                case 1:
-                    party->position.z += -0.2f;
-                    break;
-            }
-            if (--party->moveFrames <= 0) {
-                party->motionStep = 102;
-            }
-            break;
-        case 102:
-            party->scale = (Vec){1.0f, 1.0f, 1.0f};
-            party->rot = (Vec){0.0f, 0.0f, 0.0f};
-            party->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-            party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-            party->displayDirectionTarget = mario->displayDirectionTarget;
-            party->displayDirection = party->displayDirectionTarget;
-            party->targetDir = mario->directionView;
-            party->moveDir = mario->directionView;
-            partyPaperOff(party);
-            party->flags2 &= ~PARTY_DISP_FLAG_NO_FLIP;
-            party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            animPoseSetMaterialLightFlagOn(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
-            party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
-            party->flags &= ~PARTY_FLAG_FORCE_FALL;
-            partyShadowOn(party);
-            party->trailPos = party->position;
-            partyChgRunMode(party, PARTY_RUN_WAIT);
-            if ((s8)party->dirKind == 4) {
-                party->position.z += -4.0f;
-            }
-            if (party->currentSlotId == 1) {
-                party->position.z += -4.0f;
-            }
-            break;
-    }
-    return 0;
-}
 #else
-/**
- * The partner's frames in the pipe (run mode 10):
- * she spins at Mario's position, growing back to full size on the vertical kinds;
- * once partyDokanEnd sets step 100 she plays the PM_D_1B exit paper for 18 frames,
- * then returns to normal and waits beside Mario, offset so two partners do not overlap.
- */
-s32 partyDokanMain(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-    s32 n;
-#if VERSION >= VERSION_US
-    f32 s;
-    f32 c;
-#endif
-
-    switch (party->motionStep) {
-        case 0:
-            party->position = mario->position;
-            party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
 #if VERSION < VERSION_US
             party->scale.x += 0.05f;
             if (party->scale.x >= 1.0f) {
@@ -1901,14 +1831,17 @@ s32 partyDokanMain(PartyEntry* party) {
             party->scale.y = party->scale.x;
             party->scale.z = party->scale.x;
 #endif
+#endif
             break;
         case 10:
             party->rot.x += party->spinSpeed;
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             party->position = mario->position;
             sincosf(&s, &c, mario->targetYaw);
             party->position.x = mario->position.x + -5.0f * s;
             party->position.z = mario->position.z + 5.0f * c;
+#endif
 #endif
             break;
         case 100:
@@ -1918,6 +1851,10 @@ s32 partyDokanMain(PartyEntry* party) {
                     partyChgPaper(party, "PM_D_1B");
                     party->moveFrames = 18;
                     party->motionStep = 101;
+#if VERSION <= VERSION_DEMO_US
+                    break;
+                case 4:
+#else
 #if VERSION >= VERSION_US
                     party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
                     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -1931,6 +1868,7 @@ s32 partyDokanMain(PartyEntry* party) {
                     break;
                 case 4:
 #endif
+#endif
                     partyChgPaper(party, "PM_D_1B");
                     party->moveFrames = 18;
                     party->motionStep = 101;
@@ -1941,10 +1879,14 @@ s32 partyDokanMain(PartyEntry* party) {
             switch (party->dirKind) {
                 case 0:
                 case 1:
+#if VERSION <= VERSION_DEMO_US
+                    party->position.z += -0.2f;
+#else
 #if VERSION >= VERSION_US
                     party->position.z -= 0.2f;
 #else
                     party->position.z += -0.2f;
+#endif
 #endif
                     break;
             }
@@ -1962,12 +1904,27 @@ s32 partyDokanMain(PartyEntry* party) {
             party->targetDir = mario->directionView;
             party->moveDir = mario->directionView;
             partyPaperOff(party);
+#if VERSION <= VERSION_DEMO_US
+            party->flags2 &= ~PARTY_DISP_FLAG_NO_FLIP;
+            party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
+            animPoseSetMaterialLightFlagOn(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
+#else
             animPoseSetMaterialLightFlagOn(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
             party->flags2 &= ~PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
+#endif
             party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
             party->flags &= ~PARTY_FLAG_FORCE_FALL;
             partyShadowOn(party);
+#if VERSION <= VERSION_DEMO_US
+            party->trailPos = party->position;
+            partyChgRunMode(party, PARTY_RUN_WAIT);
+            if ((s8)party->dirKind == 4) {
+                party->position.z += -4.0f;
+            }
+            if (party->currentSlotId == 1) {
+                party->position.z += -4.0f;
+#else
             partyVivianTailStart(party);
             party->trailPos = party->position;
             partyChgRunMode(party, PARTY_RUN_WAIT);
@@ -1999,12 +1956,12 @@ s32 partyDokanMain(PartyEntry* party) {
                     party->position.z += -3.0f;
                     party->position.x += -1.5f;
                 }
+#endif
             }
             break;
     }
     return 0;
 }
-#endif
 
 /**
  * Called by mot_dokan as Mario leaves the pipe:
@@ -2506,6 +2463,10 @@ static inline void partyChgRunMo(PartyEntry* party) {
  * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
  * used by party_yoshi when Mario mounts Yoshi.
  */
+/**
+ * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
+ * used by party_yoshi when Mario mounts Yoshi.
+ */
 #if VERSION <= VERSION_DEMO_US
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"
@@ -2938,38 +2899,20 @@ const Vec party_unused_zero_vec1 = {0.0f, 0.0f, 0.0f};
  * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
  * used by party_yoshi when Mario mounts Yoshi.
  */
-void party_force_ride_yoshi(PartyEntry* party) {
-    Vec pos;
-
-    partyForceChgRunMode(party, 12, 10);
-    party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-    getRidePos(party, &pos);
-    party->position = pos;
-    partyChgPoseId(party, 1);
-    party->velY = 0.0f;
-    partyShadowOff(party);
-    party->displayDirectionTarget = party->playerPtr->displayDirectionTarget;
-    party->moveDir = toMovedir(party->displayDirectionTarget);
-}
-#else
-/**
- * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
- * used by party_yoshi when Mario mounts Yoshi.
- */
-void party_force_ride_yoshi(PartyEntry* party) {
-    Vec pos;
-
-    partyForceChgRunMode(party, 12, 10);
-    party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-    getRidePos(party, &pos);
-    party->position = pos;
-    partyChgPoseId(party, 1);
-    party->velY = 0.0f;
-    partyShadowOff(party);
-    party->displayDirectionTarget = party->playerPtr->displayDirectionTarget;
-    party->moveDir = toMovedir(party->displayDirectionTarget);
-}
 #endif
+void party_force_ride_yoshi(PartyEntry* party) {
+    Vec pos;
+
+    partyForceChgRunMode(party, 12, 10);
+    party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+    getRidePos(party, &pos);
+    party->position = pos;
+    partyChgPoseId(party, 1);
+    party->velY = 0.0f;
+    partyShadowOff(party);
+    party->displayDirectionTarget = party->playerPtr->displayDirectionTarget;
+    party->moveDir = toMovedir(party->displayDirectionTarget);
+}
 
 /** Snaps the follower to her seat behind Mario on Yoshi (party_yoshi, while Yoshi carries Mario). */
 void party_ride_yoshi_force_move(void) {
@@ -3055,107 +2998,6 @@ s32 partyRideYoshiMain(PartyEntry* party) {
  * waits for Mario's return fall, then drops her in from above next to him and resumes following.
  */
 static void party_damage_return(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-    f32 x, y, z;
-    f32 mx, my, mz;
-    f32 lim;
-    Vec pos;
-
-    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
-        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
-        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-        if (!(party->trigFlags & PARTY_TRIG_SPLASH)) {
-            party->motionStep = 10;
-        } else {
-            party->motionStep = 0;
-            party->moveFrames = 100;
-        }
-    }
-    switch (party->motionStep) {
-        case 0:
-            if (--party->moveFrames > 0) {
-                break;
-            }
-            party->motionStep = 10;
-        case 10:
-        partyChgPoseId(party, 9);
-        party->moveFrames = sysMsec2Frame(200);
-            party->motionStep = 11;
-        case 11:
-            if (--party->moveFrames > 0) {
-                break;
-            }
-            party->velY = 15.0f;
-            party->accelY = 0.0f;
-            party->motionStep = 12;
-        case 12:
-            party->position.y += party->velY;
-            marioGetScreenPos(party->position, &x, &y, &z);
-            marioGetScreenPos(mario->position, &mx, &my, &mz);
-            lim = (my < -100.0f) ? my : -100.0f;
-            if (y <= lim) {
-                party->moveFrames = 32;
-                party->motionStep = 20;
-            }
-            break;
-        case 20:
-        if (mario->currMotionId == MARIO_MOTION_DAMAGE) {
-                if (!marioWaitDamageReturnFall()) {
-                    break;
-                }
-            } else if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
-                if (!marioWaitDamageTogeReturnFall()) {
-                    break;
-                }
-            }
-            party->motionStep = 21;
-        case 21:
-            if (--party->moveFrames > 0) {
-                break;
-            }
-            partyGetAppearPos(party, &pos);
-            party->position.x = pos.x;
-            party->position.z = pos.z;
-            party->velY = 0.0f;
-            party->accelY = -1.0f;
-            party->moveSpeed = 0.0f;
-            party->flags |= PARTY_FLAG_IS_FALLING;
-            party->flags |= PARTY_FLAG_FORCE_FALL;
-            party->motionStep = 22;
-            break;
-        case 22:
-{
-            f32 sx, sy, sz;
-            marioGetScreenPos(party->position, &sx, &sy, &sz);
-            if (sy > 240.0f) {
-                party->flags &= ~PARTY_FLAG_FORCE_FALL;
-            }
-        }
-        partyMove(party);
-            if (party->velY <= -6.0f) {
-                party->accelY = 0.0f;
-                party->velY = -6.0f;
-            }
-            if (party->position.y < -2000.0f) {
-                party->position = mario->position;
-                party->position.y += 200.0f;
-                party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
-            }
-            if (party->hitobjStandOn && !((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
-                party->motionStep = 23;
-                party->moveFrames = 30;
-            }
-            break;
-        case 23:
-            if (--party->moveFrames > 0) {
-                break;
-            }
-            partyChgRunMode(party, PARTY_RUN_MOVE);
-            party->moveMode = PARTY_MOVE_MODE_STAY;
-            party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            break;
-    }
-}
 #else
 /**
  * Brings the partner back after Mario takes damage from a pit or spikes (run mode 13):
@@ -3163,6 +3005,7 @@ static void party_damage_return(PartyEntry* party) {
  * waits for Mario's return fall, then drops her in from above next to him and resumes following.
  */
 void party_damage_return(PartyEntry* party) {
+#endif
     MarioWork* mario = party->playerPtr;
     f32 x, y, z;
     f32 mx, my, mz;
@@ -3186,7 +3029,11 @@ void party_damage_return(PartyEntry* party) {
             }
             party->motionStep = 10;
         case 10:
+#if VERSION <= VERSION_DEMO_US
+            partyChgPoseId(party, 9);
+#else
             partyChgPoseId(party, 8);
+#endif
             party->moveFrames = sysMsec2Frame(200);
             party->motionStep = 11;
         case 11:
@@ -3207,6 +3054,7 @@ void party_damage_return(PartyEntry* party) {
             }
             break;
         case 20:
+#if VERSION > VERSION_DEMO_US
             marioGetScreenPos(party->position, &x, &y, &z);
 #if VERSION >= VERSION_US
             if (y > -100.0f) {
@@ -3216,6 +3064,7 @@ void party_damage_return(PartyEntry* party) {
             if (y <= -100.0f) {
                 party->position.y += 1.0f;
             }
+#endif
 #endif
             if (mario->currMotionId == MARIO_MOTION_DAMAGE) {
                 if (!marioWaitDamageReturnFall()) {
@@ -3242,9 +3091,18 @@ void party_damage_return(PartyEntry* party) {
             party->motionStep = 22;
             break;
         case 22:
+#if VERSION <= VERSION_DEMO_US
+            {
+            f32 sx, sy, sz;
+            marioGetScreenPos(party->position, &sx, &sy, &sz);
+            if (sy > 240.0f) {
+                party->flags &= ~PARTY_FLAG_FORCE_FALL;
+            }
+#else
             marioGetScreenPos(party->position, &x, &y, &z);
             if (y > 240.0f) {
                 party->flags &= ~PARTY_FLAG_FORCE_FALL;
+#endif
             }
             partyMove(party);
             if (party->velY <= -6.0f) {
@@ -3258,7 +3116,9 @@ void party_damage_return(PartyEntry* party) {
             }
             // bit 9 of the attributes is HIT_ATTR_WATER_HAZARD
             if (party->hitobjStandOn && !((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
+#if VERSION > VERSION_DEMO_US
                 partyChgPoseId(party, 9);
+#endif
                 party->motionStep = 23;
                 party->moveFrames = 30;
             }
@@ -3272,11 +3132,12 @@ void party_damage_return(PartyEntry* party) {
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             break;
     }
+#if VERSION > VERSION_DEMO_US
     if (vivianGetStatus() != 2) {
         vivianShadow(party);
     }
-}
 #endif
+}
 
 /** Puts the partner back on Mario's camera (evt_party). */
 void partyInitCamId(PartyEntry* party) {

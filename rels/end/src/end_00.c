@@ -311,8 +311,9 @@ USER_FUNC(evt_end_credit_npc_get_wait_type) {
 /** Pointer to the ending's work data (end_work), used by the ending callbacks. */
 EndWork* end_wp = &end_work;
 
-#if VERSION <= VERSION_DEMO_US
+// PAL credits: the European staff entries
 CreditMsg end_staff_roll_msg_tbl[] = {
+#if VERSION <= VERSION_DEMO_US
     0, 0, 0, 0, NULL, 0, "a00", NULL,
     0, 0, 0, 1, 0, "a01", 0, "b00",
     NULL, 0, 0, 0, 2, 0, "a02", 0,
@@ -371,11 +372,7 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     0, 0, 4, 49, "c00", NULL, 0, "c01",
     NULL, 0, 0, 4, 50, "c02", 0, 0,
     "c02", 0, 0,
-};
 #else
-#if VERSION == VERSION_EU
-// PAL credits: the European staff entries
-CreditMsg end_staff_roll_msg_tbl[] = {
     {0, 0, 0, {NULL, NULL, NULL}, {"a00", NULL, NULL}},
     {0, 0, 1, {NULL, "a01", NULL}, {"b00", NULL, NULL}},
     {0, 0, 2, {NULL, "a02", NULL}, {"b01", NULL, NULL}},
@@ -385,6 +382,7 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     {0, 0, 6, {NULL, "a05", NULL}, {"b06", NULL, NULL}},
     {0, 0, 7, {NULL, "a06", NULL}, {"b07", NULL, NULL}},
     {0, 0, 8, {NULL, "a07", NULL}, {"b08", NULL, NULL}},
+#if VERSION == VERSION_EU
     {0, 0, 9, {NULL, "a08", NULL}, {"b09", "b10", "b11"}},
     {0, 0, 10, {NULL, "a09", NULL}, {"b12", NULL, NULL}},
     {0, 0, 11, {NULL, NULL, NULL}, {"b13", NULL, NULL}},
@@ -421,16 +419,6 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     {0, 0, 42, {NULL, "a38", NULL}, {"b90", "b91", NULL}},
     {0, 0, 43, {NULL, "a39", NULL}, {"b56", NULL, NULL}},
 #else
-CreditMsg end_staff_roll_msg_tbl[] = {
-    {0, 0, 0, {NULL, NULL, NULL}, {"a00", NULL, NULL}},
-    {0, 0, 1, {NULL, "a01", NULL}, {"b00", NULL, NULL}},
-    {0, 0, 2, {NULL, "a02", NULL}, {"b01", NULL, NULL}},
-    {0, 0, 3, {NULL, NULL, NULL}, {"b02", "b03", NULL}},
-    {0, 0, 4, {NULL, "a03", NULL}, {"b04", NULL, NULL}},
-    {0, 0, 5, {NULL, "a04", NULL}, {"b05", NULL, NULL}},
-    {0, 0, 6, {NULL, "a05", NULL}, {"b06", NULL, NULL}},
-    {0, 0, 7, {NULL, "a06", NULL}, {"b07", NULL, NULL}},
-    {0, 0, 8, {NULL, "a07", NULL}, {"b08", NULL, NULL}},
     {0, 0, 9, {NULL, "a08", NULL}, {"b09", NULL, NULL}},
     {0, 0, 10, {NULL, NULL, NULL}, {"b10", "b11", NULL}},
     {0, 1, 11, {NULL, "a09", NULL}, {"b12", NULL, NULL}},
@@ -488,8 +476,8 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     {0, 0, 47, {NULL, "a29", NULL}, {"b62", "b63", NULL}},
     {0, 0, 48, {NULL, "a30", NULL}, {"b64", NULL, NULL}},
     {0, 4, 49, {"c00", NULL, NULL}, {"c01", NULL, NULL}},
-};
 #endif
+};
 
 CreditNpc R_credits_npc_info[] = {
 #if VERSION <= VERSION_DEMO_US
@@ -714,7 +702,6 @@ CreditNpc R_credits_npc_info[] = {
  * The next character's animation group is requested early so it is loaded in time.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00001d90, JP end .text+0x1CCC. See docs/NAME_PROVENANCE.md.
-#if VERSION <= VERSION_DEMO_US
 /**
  * Runs one silhouette of the character parade (credit NPC number args[0] in R_credits_npc_info).
  * Characters with their own script (evt) just start it.
@@ -738,121 +725,11 @@ USER_FUNC(evt_end_credit_npc_main) {
     inBattle = gp->inBattle != 0;
     if (R_credits_npc_info[id].evt != NULL) {
         evtEntry(R_credits_npc_info[id].evt, 0, 0);
-        return 2;
-    }
-    if (isFirstCall) {
-        actor = _mapAlloc(sizeof(CreditActor));
-        memset(actor, 0, sizeof(CreditActor));
-        actor->state = 0;
-        actor->pos = end_wp->pos;
-        switch (actor->pos) {
-            case 0:
-                actor->angle = -20.0f;
-                actor->limit = 90.0f + actor->angle + 30.0f;
-                break;
-            case 1:
-            actor->angle = 160.0f;
-                actor->limit = 90.0f + actor->angle + 30.0f;
-                break;
-            case 2:
-                actor->angle = 250.0f;
-                actor->limit = 90.0f + actor->angle + 30.0f;
-                break;
-                case 3:
-default:
-                actor->angle = 70.0f;
-                actor->limit = 90.0f + actor->angle + 30.0f;
-                break;
-        }
-        event->userdatap[0] = actor;
-    }
-    actor = event->userdatap[0];
-    switch (actor->pos) {
-        case 0:
-            x = 304.0f;
-            y = -240.0f;
-            r = 100.0f;
-            break;
-        case 1:
-        x = -304.0f;
-            y = 240.0f;
-            r = 100.0f;
-            break;
-        case 2:
-            x = -304.0f;
-            y = -240.0f;
-            r = 100.0f;
-            break;
-            case 3:
-default:
-            x = 304.0f;
-            y = 240.0f;
-            r = 100.0f;
-            break;
-    }
-    if (!animGroupBaseAsync(R_credits_npc_info[id].agb, inBattle, NULL)) {
-        return 0;
-    }
-    switch (actor->state) {
-        case 0:
-        EXIGetType(0, 2, &type);
-            if (type != EXI_IS_VIEWER) {
-                actor->poseId = animPoseEntry(R_credits_npc_info[id].agb, inBattle);
-                animPoseSetAnim(actor->poseId, R_credits_npc_info[id].anim, 1);
-            } else {
-                actor->poseId = animPoseEntry("a_mario", inBattle);
-                animPoseSetAnim(actor->poseId, "M_W_1", 1);
-            }
-actor->state++;
-            break;
-        case 1:
-        actor->angle += 0.15f;
-        if (actor->angle > actor->limit) {
-                animPoseRelease(actor->poseId);
-                _mapFree(actor);
-                end_wp->npcLoadRequest++;
-                return 2;
-            }
-            break;
-    }
-    PSMTXTrans(m1, 0.0f, r, 0.0f);
-    PSMTXRotRad(m2, 'z', 0.017453292f * actor->angle);
-    PSMTXConcat(m2, m1, m1);
-    PSMTXTrans(m2, x / 2.0f, y / 2.0f, 0.0f);
-    PSMTXConcat(m2, m1, actor->mtx);
-    PSMTXScale(m3, 1.0f, 1.0f, 0.01f);
-    PSMTXConcat(actor->mtx, m3, actor->mtx);
-    animPoseMain(actor->poseId);
-    dispEntry(CAMERA_3D, 0.0f, 1, end_credit_npc_disp, actor);
-    return 0;
-}
-#else
-/**
- * Runs one silhouette of the character parade (credit NPC number args[0] in R_credits_npc_info).
- * Characters with their own script (evt) just start it.
- * Others get a CreditActor that is drawn as a silhouette spinning around a screen corner chosen by the current
- * staff roll position, rotating until it passes its limit angle and is then freed.
- * The next character's animation group is requested early so it is loaded in time.
- */
-USER_FUNC(evt_end_credit_npc_main) {
-    s32 id = evtGetValue(event, event->args[0]);
-    BOOL inBattle;
-    CreditActor* actor;
-    f32 x;
-    f32 y;
-    f32 r;
-    Mtx m1;
-    Mtx m2;
-    Mtx m3;
-    Vec v;
-    u32 type;
-
-    inBattle = gp->inBattle != 0;
-    if (R_credits_npc_info[id].evt != NULL) {
-        evtEntry(R_credits_npc_info[id].evt, 0, 0);
+#if VERSION > VERSION_DEMO_US
         if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
             animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
         }
+#endif
         return 2;
     }
     if (isFirstCall) {
@@ -866,7 +743,9 @@ USER_FUNC(evt_end_credit_npc_main) {
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
             case 1:
+#if VERSION > VERSION_DEMO_US
             case 4:
+#endif
                 actor->angle = 160.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
@@ -874,13 +753,18 @@ USER_FUNC(evt_end_credit_npc_main) {
                 actor->angle = 250.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
+#if VERSION <= VERSION_DEMO_US
+            case 3:
+#endif
             default:
                 actor->angle = 70.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
+#if VERSION > VERSION_DEMO_US
         }
         if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
             animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
+#endif
         }
         event->userdatap[0] = actor;
     }
@@ -892,7 +776,9 @@ USER_FUNC(evt_end_credit_npc_main) {
             r = 100.0f;
             break;
         case 1:
+#if VERSION > VERSION_DEMO_US
         case 4:
+#endif
             x = -304.0f;
             y = 240.0f;
             r = 100.0f;
@@ -902,6 +788,9 @@ USER_FUNC(evt_end_credit_npc_main) {
             y = -240.0f;
             r = 100.0f;
             break;
+#if VERSION <= VERSION_DEMO_US
+        case 3:
+#endif
         default:
             x = 304.0f;
             y = 240.0f;
@@ -913,6 +802,16 @@ USER_FUNC(evt_end_credit_npc_main) {
     }
     switch (actor->state) {
         case 0:
+#if VERSION <= VERSION_DEMO_US
+            EXIGetType(0, 2, &type);
+                if (type != EXI_IS_VIEWER) {
+                    actor->poseId = animPoseEntry(R_credits_npc_info[id].agb, inBattle);
+                    animPoseSetAnim(actor->poseId, R_credits_npc_info[id].anim, 1);
+                } else {
+                    actor->poseId = animPoseEntry("a_mario", inBattle);
+                    animPoseSetAnim(actor->poseId, "M_W_1", 1);
+                }
+#else
 #if VERSION >= VERSION_US
             actor->poseId = animPoseEntry(R_credits_npc_info[id].agb, inBattle);
             animPoseSetAnim(actor->poseId, R_credits_npc_info[id].anim, 1);
@@ -926,17 +825,25 @@ USER_FUNC(evt_end_credit_npc_main) {
                 animPoseSetAnim(actor->poseId, "M_W_1", 1);
             }
 #endif
+#endif
             actor->state++;
             break;
         case 1:
+#if VERSION <= VERSION_DEMO_US
+            actor->angle += 0.15f;
+#else
 #if VERSION >= VERSION_US
             actor->angle += 9.0f / gp->framerate;
 #else
             actor->angle += 0.15f;
 #endif
+#endif
             if (actor->angle > actor->limit) {
                 animPoseRelease(actor->poseId);
                 _mapFree(actor);
+#if VERSION <= VERSION_DEMO_US
+                end_wp->npcLoadRequest++;
+#endif
                 return 2;
             }
             break;
@@ -948,6 +855,7 @@ USER_FUNC(evt_end_credit_npc_main) {
     PSMTXConcat(m2, m1, actor->mtx);
     PSMTXScale(m3, 1.0f, 1.0f, 0.01f);
     PSMTXConcat(actor->mtx, m3, actor->mtx);
+#if VERSION > VERSION_DEMO_US
     if (animPoseGetVivianType(actor->poseId)) {
         v = (Vec){0.0f, 0.0f, 0.0f};
         v.x = actor->mtx[0][3];
@@ -958,11 +866,11 @@ USER_FUNC(evt_end_credit_npc_main) {
     if (strcmp((const char*)animPoseGetCurrentAnim(actor->poseId), "GAZ_A_1") == 0 && animPoseGetLoopTimes(actor->poseId) > 0.9f) {
         animPoseSetAnim(actor->poseId, "GAZ_A_1", 1);
     }
+#endif
     animPoseMain(actor->poseId);
     dispEntry(CAMERA_3D, 0.0f, 1, end_credit_npc_disp, actor);
     return 0;
 }
-#endif
 
 /**
  * Runs the parade of characters during the staff roll:
@@ -1082,6 +990,12 @@ EVT_END()
  * for picture 9 it shows the version where Ms. Mowz was met with Koops if that flag is set.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00001324, JP end .text+0x1260. See docs/NAME_PROVENANCE.md.
+/**
+ * Guess (details): draw callback of the ending pictures (Japanese release and later):
+ * draws the picture selected by GW(11) from ending.tpl in the position given by GW(12), with the fade alpha,
+ * the overlay picture and the cross-blend of end_image_blend_loop;
+ * for picture 9 it shows the version where Ms. Mowz was met with Koops if that flag is set.
+ */
 #if VERSION <= VERSION_DEMO_US
 /**
  * Requests the animation groups of the credit NPCs after the ones already loaded,
@@ -1108,6 +1022,7 @@ USER_FUNC(evt_end_credit_npc_preload) {
  * the overlay picture and the cross-blend of end_image_blend_loop;
  * for picture 9 it shows the version where Ms. Mowz was met with Koops if that flag is set.
  */
+#endif
 void end_image_disp(CameraId cameraId, void* param) {
     s32 i;
     f32 w;
@@ -1115,24 +1030,46 @@ void end_image_disp(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(cameraId);
     s32 id = evtGetValue(NULL, GW(11));
     s32 pos = evtGetValue(NULL, GW(12));
+#if VERSION > VERSION_DEMO_US
+    Vec camPos;
+    Vec up;
+    Vec target;
+#endif
     GXTexObj obj;
     Mtx mtx;
     Mtx scale;
+#if VERSION > VERSION_DEMO_US
+    Mtx lookAt;
 
+#endif
     if (end_wp->tpl == NULL) {
         return;
     }
+#if VERSION <= VERSION_DEMO_US
     if (end_wp->alpha == 0) {
         return;
     }
     id %= ((TEXPalette*)*end_wp->tpl->data)->numDescriptors;
+#else
+    if (id >= ((TEXPalette*)*end_wp->tpl->data)->numDescriptors) {
+        return;
+    }
+    if (id == 9 && swGet(0x5E7)) { // GSWF_GON_12_MOWZ_MET_WITH_KOOPS
+        id = 53;
+    }
+#endif
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
+#if VERSION > VERSION_DEMO_US
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+#endif
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, end_wp->alpha});
+#if VERSION <= VERSION_DEMO_US
     TEXGetGXTexObjFromPalette(*end_wp->tpl->data, &obj, id);
     GXLoadTexObj(&obj, GX_TEXMAP0);
     GXSetNumTevStages(1);
@@ -1153,84 +1090,7 @@ void end_image_disp(CameraId cameraId, void* param) {
             break;
         case 3:
             PSMTXTrans(mtx, 55.0f, -30.0f, -30.0f);
-            break;
-        case 4:
-            PSMTXTrans(mtx, 0.0f, 30.0f, -30.0f);
-            break;
-    }
-    PSMTXScale(scale, 0.6f, 0.6f, 1.0f);
-    PSMTXConcat(mtx, scale, mtx);
-    PSMTXConcat(cam->view, mtx, mtx);
-    GXLoadPosMtxImm(mtx, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    GXSetCullMode(GX_CULL_NONE);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    for (i = 0; i < 2; i++) {
-        if (i == 0) {
-            GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, end_wp->alpha});
-            GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-        } else {
-            GXSetChanMatColor(GX_COLOR0A0, (GXColor){0, 0, 0, end_wp->alpha});
-            GXSetZMode(GX_TRUE, GX_GREATER, GX_FALSE);
-        }
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        w = GXGetTexObjWidth(&obj);
-        h = GXGetTexObjHeight(&obj);
-        GXPosition3f32(-w / 2.0f, h / 2.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 0.0f);
-        GXPosition3f32(w / 2.0f, h / 2.0f, 0.0f);
-        GXTexCoord2f32(1.0f, 0.0f);
-        GXPosition3f32(w / 2.0f, -h / 2.0f, 0.0f);
-        GXTexCoord2f32(1.0f, 1.0f);
-        GXPosition3f32(-w / 2.0f, -h / 2.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 1.0f);
-        GXEnd();
-    }
-}
 #else
-/**
- * Guess (details): draw callback of the ending pictures (Japanese release and later):
- * draws the picture selected by GW(11) from ending.tpl in the position given by GW(12), with the fade alpha,
- * the overlay picture and the cross-blend of end_image_blend_loop;
- * for picture 9 it shows the version where Ms. Mowz was met with Koops if that flag is set.
- */
-void end_image_disp(CameraId cameraId, void* param) {
-    s32 i;
-    f32 w;
-    f32 h;
-    CameraEntry* cam = camGetPtr(cameraId);
-    s32 id = evtGetValue(NULL, GW(11));
-    s32 pos = evtGetValue(NULL, GW(12));
-    Vec camPos;
-    Vec up;
-    Vec target;
-    GXTexObj obj;
-    Mtx mtx;
-    Mtx scale;
-    Mtx lookAt;
-
-    if (end_wp->tpl == NULL) {
-        return;
-    }
-    if (id >= ((TEXPalette*)*end_wp->tpl->data)->numDescriptors) {
-        return;
-    }
-    if (id == 9 && swGet(0x5E7)) { // GSWF_GON_12_MOWZ_MET_WITH_KOOPS
-        id = 53;
-    }
-    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-    GXSetZCompLoc(GX_TRUE);
-    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, end_wp->alpha});
     switch (end_wp->mode) {
         case 0:
             TEXGetGXTexObjFromPalette(*end_wp->tpl->data, &obj, id);
@@ -1284,6 +1144,7 @@ void end_image_disp(CameraId cameraId, void* param) {
             break;
         case 3:
             PSMTXTrans(mtx, 51.0f, -30.0f, -30.0f);
+#endif
             break;
         case 4:
             PSMTXTrans(mtx, 0.0f, 30.0f, -30.0f);
@@ -1321,6 +1182,7 @@ void end_image_disp(CameraId cameraId, void* param) {
         GXTexCoord2f32(0.0f, 1.0f);
         GXEnd();
     }
+#if VERSION > VERSION_DEMO_US
     if (end_wp->alpha2 > 0) {
         f32 w2;
         f32 h2;
@@ -1359,8 +1221,8 @@ void end_image_disp(CameraId cameraId, void* param) {
         GXTexCoord2f32(0.0f, 1.0f);
         GXEnd();
     }
-}
 #endif
+}
 
 /**
  * Runs the pictures shown beside the credits: waits until the roll asks for a picture (GW(10) = 1),
@@ -1462,7 +1324,6 @@ EVT_BEGIN(end_image_main_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * End of the credits: fades the screen to black, restores the font, sets the story to STG9_01_END_CREDITS,
  * saves the game to the memory card (the European release first heals Mario and the party),
@@ -1475,28 +1336,13 @@ EVT_BEGIN(end_return_title_evt)
     SET_VALUE(GF(10), 1)
     CALL(evt_end_font_restore)
     SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
+#if VERSION <= VERSION_DEMO_US
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 21)
     CALL_CHILD(evt_memcard_save)
     CALL(end_bgm_wait_stop)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 2000, -1, -1)
-    CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
-    RETURN
-EVT_END()
 #else
-/**
- * End of the credits: fades the screen to black, restores the font, sets the story to STG9_01_END_CREDITS,
- * saves the game to the memory card (the European release first heals Mario and the party),
- * fades the music out and changes map to the title screen.
- */
-EVT_BEGIN(end_return_title_evt)
-    CALL(evt_fade_entry, FADE_OUT_BLACK_2D, 2000, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1500)
-    SET_VALUE(GF(10), 1)
-    CALL(evt_end_font_restore)
-    SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
 #if VERSION == VERSION_EU
     CALL(evt_pouch_mario_recovery) // PAL: the party is healed before the save
     CALL(evt_pouch_all_party_recovery)
@@ -1510,11 +1356,11 @@ EVT_BEGIN(end_return_title_evt)
 #endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
+#endif
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 2000, -1, -1)
     CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Map init for end_00 (the only room): hides Mario and the partner, sets the fixed camera and black background,
@@ -1968,7 +1814,6 @@ USER_FUNC(evt_end_image_set_blend) {
  * Starts end_image_main_evt on its first call.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000bc8, JP end .text+0xB04. See docs/NAME_PROVENANCE.md.
-#if VERSION <= VERSION_DEMO_US
 /**
  * Script helper that runs the whole staff roll:
  * steps through end_staff_roll_msg_tbl, and for each entry opens two message windows (job title and names) at
@@ -2008,7 +1853,11 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
     switch (end_wp->pos) {
         case 0:
             x = -274;
+#if VERSION <= VERSION_DEMO_US
             y = -20;
+#else
+            y = -24;
+#endif
             break;
         case 1:
             x = 274;
@@ -2016,7 +1865,11 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             break;
         case 2:
             x = 274;
+#if VERSION <= VERSION_DEMO_US
             y = -20;
+#else
+            y = -24;
+#endif
             break;
         case 3:
             x = -274;
@@ -2024,7 +1877,11 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             break;
         case 4:
             x = 0;
+#if VERSION <= VERSION_DEMO_US
             y = -80;
+#else
+            y = -60;
+#endif
             break;
     }
     switch (state) {
@@ -2038,14 +1895,25 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                         wx = x - 0.8f * FontGetMessageWidth(msg) / 2.0f;
                     } else if (x > 0) {
                         wx = x - 0.8f * FontGetMessageWidth(msg);
+#if VERSION <= VERSION_DEMO_US
                     }
                     sprintf(buf1, "<clear><wait %d><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", 0, wx - 62, wy, msg);
+#else
+#if VERSION == VERSION_EU
+                    }
+                    if (strcmp(end_staff_roll_msg_tbl[idx].msg1[i], "c00") == 0) {
+                        wx += 10;
+#endif
+                    }
+                    sprintf(buf1, "<clear><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", wx - 62, wy, msg);
+#endif
                     end_wp->win1[i] = msgWindow_Entry(buf1, 0, 0);
                 }
             }
             for (i = 0; i < 3; i++) {
                 if (end_staff_roll_msg_tbl[idx].msg2[i] != NULL) {
                     msg2 = msgSearch(end_staff_roll_msg_tbl[idx].msg2[i]);
+#if VERSION <= VERSION_DEMO_US
                     wx2 = x + 8;
                     wy2 = y - i * 24 - 50;
                     if (x == 0) {
@@ -2054,168 +1922,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                         wx2 -= FontGetMessageWidth(msg2);
                     }
                     sprintf(buf2, "<clear><wait %d><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0>%s</speed></col><wait 5200></dkey><once_stop>", 0, wx2 - 62, wy2, msg2);
-                    end_wp->win2[i] = msgWindow_Entry(buf2, 0, 0);
-                } else {
-                    end_wp->win2[i] = -1;
-                }
-            }
-            evtSetValue(event, GW(10), 1);
-            evtSetValue(event, GW(11), end_staff_roll_msg_tbl[idx].type);
-            evtSetValue(event, GW(12), end_staff_roll_msg_tbl[idx].pos);
-            state++;
-            break;
-        case 1:
-            for (i = 0; i < 3; i++) {
-                if (end_wp->win1[i] != -1 && windowCheckID(end_wp->win1[i])) {
-                    break;
-                }
-            }
-            if (i < 3) {
-                break;
-            }
-            for (i = 0; i < 3; i++) {
-                if (end_wp->win2[i] != -1 && windowCheckID(end_wp->win2[i])) {
-                    break;
-                }
-            }
-            if (i < 3) {
-                break;
-            }
-            state++;
-            break;
-        case 2:
-            n = idx + 1;
-            if (n < ARRAY_SIZE(end_staff_roll_msg_tbl)) {
-                for (i = 0; i < 3; i++) {
-                    if (end_staff_roll_msg_tbl[n].msg1[i] != NULL) {
-                        break;
-                    }
-                }
-                if (i < 3) {
-                    for (i = 0; i < 3; i++) {
-                        if (end_wp->win1[i] != -1) {
-                            msgWindow_Continue(end_wp->win1[i]);
-                        }
-                    }
-                }
-                for (i = 0; i < 3; i++) {
-                    if (end_wp->win2[i] != -1) {
-                        msgWindow_Continue(end_wp->win2[i]);
-                    }
-                }
-                evtSetValue(event, GW(10), 2);
-                state++;
-            } else {
-                // the last entry stays up, with BGM_EVT_PEACH1 (BGM id 0xCD), until A is pressed
-                psndBGMOn(PSND_FADE_OUT, (char*)0xCD);
-                state += 2;
-            }
-            break;
-            case 3:
-            if (evtGetValue(event, GW(10)) == 0) {
-                state = 0;
-                idx++;
-            }
-            break;
-            case 4:
-            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                evtSetValue(event, GW(10), 2);
-                state++;
-            }
-            break;
-        case 5:
-            if (evtGetValue(event, GW(10)) == 0) {
-                return 2;
-            }
-            break;
-}
-    event->userdata[0] = state;
-    event->userdata[1] = idx;
-    return 0;
-}
 #else
-/**
- * Script helper that runs the whole staff roll:
- * steps through end_staff_roll_msg_tbl, and for each entry opens two message windows (job title and names) at
- * one of five screen positions, waits the entry's time, closes them and starts the next,
- * while telling end_image_main_evt when to show each picture (GW(10) and GW(11)).
- * Starts end_image_main_evt on its first call.
- */
-USER_FUNC(evt_end_staff_roll_msg_main) {
-    s32 state = event->userdata[0];
-    s32 idx = event->userdata[1];
-    s32 i;
-    const char* msg;
-    const char* msg2;
-    s32 x;
-    s32 y;
-    s32 wx;
-    s32 wx2;
-    s32 wy;
-    s32 wy2;
-    s32 n;
-    char buf1[0x400];
-    char buf2[0x400];
-
-    if (isFirstCall) {
-        state = 0;
-        idx = 0;
-        for (i = 0; i < 3; i++) {
-            end_wp->win1[i] = -1;
-        }
-        for (i = 0; i < 3; i++) {
-            end_wp->win2[i] = -1;
-        }
-        evtSetValue(event, GW(10), 0);
-        end_wp->evt = evtEntry(end_image_main_evt, 0, 0);
-    }
-    end_wp->pos = end_staff_roll_msg_tbl[idx].pos;
-    switch (end_wp->pos) {
-        case 0:
-            x = -274;
-            y = -24;
-            break;
-        case 1:
-            x = 274;
-            y = 250;
-            break;
-        case 2:
-            x = 274;
-            y = -24;
-            break;
-        case 3:
-            x = -274;
-            y = 250;
-            break;
-        case 4:
-            x = 0;
-            y = -60;
-            break;
-    }
-    switch (state) {
-        case 0:
-            for (i = 0; i < 3; i++) {
-                if (end_staff_roll_msg_tbl[idx].msg1[i] != NULL) {
-                    msg = msgSearch(end_staff_roll_msg_tbl[idx].msg1[i]);
-                    wx = x;
-                    wy = y - i * 22 - 4;
-                    if (x == 0) {
-                        wx = x - 0.8f * FontGetMessageWidth(msg) / 2.0f;
-                    } else if (x > 0) {
-                        wx = x - 0.8f * FontGetMessageWidth(msg);
-#if VERSION == VERSION_EU
-                    }
-                    if (strcmp(end_staff_roll_msg_tbl[idx].msg1[i], "c00") == 0) {
-                        wx += 10;
-#endif
-                    }
-                    sprintf(buf1, "<clear><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", wx - 62, wy, msg);
-                    end_wp->win1[i] = msgWindow_Entry(buf1, 0, 0);
-                }
-            }
-            for (i = 0; i < 3; i++) {
-                if (end_staff_roll_msg_tbl[idx].msg2[i] != NULL) {
-                    msg2 = msgSearch(end_staff_roll_msg_tbl[idx].msg2[i]);
                     wx2 = x;
                     wy2 = y - i * 24 - 50;
                     if (x == 0) {
@@ -2224,6 +1931,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                         wx2 = x - FontGetMessageWidth(msg2);
                     }
                     sprintf(buf2, "<clear><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0>%s</speed></col><wait 5200></dkey><once_stop>", wx2 - 62, wy2, msg2);
+#endif
                     end_wp->win2[i] = msgWindow_Entry(buf2, 0, 0);
                 } else {
                     end_wp->win2[i] = -1;
@@ -2261,6 +1969,25 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                         break;
                     }
                 }
+#if VERSION <= VERSION_DEMO_US
+            if (i < 3) {
+                for (i = 0; i < 3; i++) {
+                    if (end_wp->win1[i] != -1) {
+                        msgWindow_Continue(end_wp->win1[i]);
+                    }
+                }
+            }
+            for (i = 0; i < 3; i++) {
+                if (end_wp->win2[i] != -1) {
+                    msgWindow_Continue(end_wp->win2[i]);
+                }
+            }
+            evtSetValue(event, GW(10), 2);
+            state++;
+        } else {
+            // the last entry stays up, with BGM_EVT_PEACH1 (BGM id 0xCD), until A is pressed
+            psndBGMOn(PSND_FADE_OUT, (char*)0xCD);
+#else
             } else {
                 i = 0;
             }
@@ -2280,6 +2007,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             if (n < ARRAY_SIZE(end_staff_roll_msg_tbl)) {
                 state++;
             } else {
+#endif
                 state += 2;
             }
             break;
@@ -2290,13 +2018,25 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             }
             break;
         case 4:
+#if VERSION <= VERSION_DEMO_US
+            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                evtSetValue(event, GW(10), 2);
+                state++;
+            }
+            break;
+        case 5:
+            if (evtGetValue(event, GW(10)) == 0) {
+                return 2;
+            }
+            break;
+#else
             return 2;
+#endif
     }
     event->userdata[0] = state;
     event->userdata[1] = idx;
     return 0;
 }
-#endif
 
 /**
  * Script helper: prepares the staff roll.
@@ -2305,7 +2045,6 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
  * then it waits until ending.tpl (the picture file) and the first characters' animation groups have loaded.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000a6c, JP end .text+0x9A8. See docs/NAME_PROVENANCE.md.
-#if VERSION <= VERSION_DEMO_US
 /**
  * Script helper: prepares the staff roll.
  * On the first call it resets the roll state, mutes the sound effects,
@@ -2317,6 +2056,7 @@ USER_FUNC(evt_end_staff_roll_init) {
     s32 i;
 
     if (isFirstCall) {
+#if VERSION <= VERSION_DEMO_US
         end_wp->npcLoadNum = 0;
         end_wp->npcLoadRequest = 0;
         end_wp->tpl = NULL;
@@ -2327,35 +2067,7 @@ USER_FUNC(evt_end_staff_roll_init) {
         JUTFont_Free();
         JUTFontSetup(1);
         msgLoad("global", 1);
-}
-    if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/ending.tpl", getMarioStDvdRoot()) == 0) {
-        return 0;
-    }
-    if (end_wp->tpl == NULL) {
-        end_wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/ending.tpl", getMarioStDvdRoot());
-    }
-    end_wp->npcLoadNum = 10;
-    for (i = 0; i < end_wp->npcLoadNum; i++) {
-        if (!animGroupBaseAsync(R_credits_npc_info[i].agb, inBattle, NULL)) {
-            return 0;
-        }
-    }
-    for (i = 0; i < end_wp->npcLoadNum; i++) {
-}
-    return 2;
-}
 #else
-/**
- * Script helper: prepares the staff roll.
- * On the first call it resets the roll state, mutes the sound effects,
- * and in the Japanese versions switches the language to English for the credits text;
- * then it waits until ending.tpl (the picture file) and the first characters' animation groups have loaded.
- */
-USER_FUNC(evt_end_staff_roll_init) {
-    BOOL inBattle = gp->inBattle ? TRUE : FALSE;
-    s32 i;
-
-    if (isFirstCall) {
         end_wp->tpl = NULL;
         end_wp->alpha = 0;
         end_wp->mode = 0;
@@ -2366,6 +2078,7 @@ USER_FUNC(evt_end_staff_roll_init) {
         JUTFont_Free();
         JUTFontSetup(1);
 #endif
+#endif
     }
     if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/ending.tpl", getMarioStDvdRoot()) == 0) {
         return 0;
@@ -2373,21 +2086,28 @@ USER_FUNC(evt_end_staff_roll_init) {
     if (end_wp->tpl == NULL) {
         end_wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/ending.tpl", getMarioStDvdRoot());
     }
+#if VERSION <= VERSION_DEMO_US
+    end_wp->npcLoadNum = 10;
+    for (i = 0; i < end_wp->npcLoadNum; i++) {
+#else
     for (i = 0; i < 5; i++) {
+#endif
         if (!animGroupBaseAsync(R_credits_npc_info[i].agb, inBattle, NULL)) {
             return 0;
         }
     }
+#if VERSION <= VERSION_DEMO_US
+    for (i = 0; i < end_wp->npcLoadNum; i++) {
+#else
     // FAKE: empty five-iteration loop retained; removing it changes the object.
     for (i = 0; i < 5; i++) {
+#endif
     }
     return 2;
 }
-#endif
 
 #pragma dont_inline on
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000a14, JP end .text+0x950. See docs/NAME_PROVENANCE.md.
-#if VERSION <= VERSION_DEMO_US
 /**
  * Cleans up after the staff roll: frees the ending picture file, lets sound effects play again and,
  * in the Japanese versions, switches back to Japanese text (and in the demos reloads the global messages).
@@ -2395,26 +2115,19 @@ USER_FUNC(evt_end_staff_roll_init) {
 void end_staff_roll_exit(void) {
     fileFree(end_wp->tpl);
     psndClearFlag(PSND_FLAG_NO_SFX);
+#if VERSION <= VERSION_DEMO_US
     gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
     msgLoad("global", 1);
-}
 #else
-/**
- * Cleans up after the staff roll: frees the ending picture file, lets sound effects play again and,
- * in the Japanese versions, switches back to Japanese text (and in the demos reloads the global messages).
- */
-void end_staff_roll_exit(void) {
-    fileFree(end_wp->tpl);
-    psndClearFlag(PSND_FLAG_NO_SFX);
 #if VERSION < VERSION_US
     gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
 #endif
-}
 #endif
+}
 #pragma dont_inline reset
 
 /**
@@ -2422,33 +2135,26 @@ void end_staff_roll_exit(void) {
  * restores Japanese text where the credits switched it, or turns the sound effects back on.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000009cc, JP end .text+0x908. See docs/NAME_PROVENANCE.md.
-#if VERSION <= VERSION_DEMO_US
 /**
  * Script helper: puts the font and messages back to normal before the game continues:
  * restores Japanese text where the credits switched it, or turns the sound effects back on.
  */
 USER_FUNC(evt_end_font_restore) {
+#if VERSION <= VERSION_DEMO_US
     gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
     msgLoad("global", 1);
-    return 2;
-}
 #else
-/**
- * Script helper: puts the font and messages back to normal before the game continues:
- * restores Japanese text where the credits switched it, or turns the sound effects back on.
- */
-USER_FUNC(evt_end_font_restore) {
 #if VERSION < VERSION_US
     gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
 #endif
     psndClearFlag(PSND_FLAG_NO_SFX);
+#endif
     return 2;
 }
-#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_000009a4, JP end .text+0x8E0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(end_bgm_wait_stop) {

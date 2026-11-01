@@ -196,7 +196,6 @@ USER_FUNC(evt_mario_dokan_prepare) {
  * arg 0 = pipe type (evt_bero passes 2 up, 3 down, 5 sideways).
  * Blocks while the spin runs; the partners leave as he goes in.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Plays Mario's paper pipe animation, then switches to the pipe motion;
  * arg 0 = pipe type (evt_bero passes 2 up, 3 down, 5 sideways).
@@ -208,175 +207,10 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
     s32 type = evtGetValue(event, args[0]);
     PartyEntry* party;
     s32 ret;
-{
-        static const char names[] = "DOKAN_TATE_DOWNIN\0\0\0DOKAN_TATE_UPIN\0DOKAN_TATE_DOWNOUT\0\0DOKAN_TATE_UPOUT\0\0\0\0DOKAN_YOKO_IN\0\0\0DOKAN_YOKO_OUT\0";
-    }
-
-    if (isFirstCall) {
-        event->userdata[1] = 0;
-        if (mp->currMotionId == MARIO_MOTION_DOKAN) {
-            marioPaperOff();
-            mp->scale = (Vec){1.0f, 1.0f, 1.0f};
-            mp->rot = (Vec){0.0f, 0.0f, 0.0f};
-            mp->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-            mp->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-} else {
-            switch (type) {
-                case 4:
-                case 5:
-                    event->userdata[1] = 20;
-                    ret = 2;
-                    break;
-                case 1:
-                    if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
-                        marioUpdateCamPos();
-                        camFollowYOn();
-}
-                    event->userdata[1] = 0;
-                    break;
-                case 0:
-                    event->userdata[1] = 2;
-                    break;
-                case 2:
-                    event->userdata[1] = 10;
-                    break;
-                case 3:
-                    event->userdata[1] = 10;
-                    break;
-            }
-        }
-        if (type == 2 || type == 3) {
-            marioSlitForceCancel();
-            marioRollForceCancel();
-            partyShadowOff(partyGetPtr(marioGetPartyId()));
-            partyShadowOff(partyGetPtr(marioGetExtraPartyId()));
-            marioPaperOn("p_dokan_y");
-            marioPaperLightOff();
-            marioChgPaper("PM_D_1A");
-            marioChgPose("M_Z_1");
-            mp->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
-            mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-            mp->displayDirection = mp->displayDirectionTarget;
-            mp->mot.dokan.rotSpeed = 0.0f;
-            mp->dispOfs = (Vec){0.0f, 0.0f, (mp->flags & MARIO_FLAG_BG_MODE) ? -16.0f : 0.0f};
-            event->userdata[0] = 0;
-            marioNoUpdateCamPos();
-            if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
-                camFollowYOff();
-            }
-        } else if (type == 5) {
-            partyGoodbye(marioGetPartyId());
-            partyGoodbye(marioGetExtraPartyId());
-        }
-    }
-
-    switch (event->userdata[1]) {
-        case 2:
-            marioSlitForceCancel();
-            marioRollForceCancel();
-            marioPaperOn("p_dokan_y");
-            marioPaperLightOff();
-            marioChgPaper("PM_D_1A");
-            marioChgPose("M_Z_1");
-            mp->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
-            mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-            ret = 2;
-            mp->scale = (Vec){1.0f, 1.0f, 1.0f};
-            mp->mot.dokan.rotSpeed = 30.0f;
-            event->userdata[0] = 8;
-            event->userdata[1] = 3;
-            break;
-        case 3:
-            ret = 0;
-            if (--event->userdata[0] > 0) {
-                break;
-            }
-            event->userdata[0] = 10;
-            event->userdata[1] = 4;
-            break;
-        case 4:
-            ret = 0;
-            if (--event->userdata[0] > 0) {
-                break;
-            }
-            ret = 2;
-            break;
-        case 0:
-            mp->scale = (Vec){0.0f, 0.0f, 0.0f};
-            mp->dispOfs = (Vec){0.0f, 0.0f, (mp->flags & MARIO_FLAG_BG_MODE) ? -16.0f : 0.0f};
-            if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
-                mp->position.z += -8.0f;
-            }
-            party = partyGetPtr(marioGetPartyId());
-            if (party) {
-                party->position = mp->position;
-                party->scale.x = mp->scale.x;
-                party->scale.y = mp->scale.y;
-                party->scale.z = mp->scale.z;
-                party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-                party->rot = (Vec){0.0f, 0.0f, 0.0f};
-                party->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-                party->rotOfsY = mp->rotOfs.y;
-                party->dispOfs.y = mp->dispOfs.y;
-                party->dispOfs.z = mp->dispOfs.z;
-            }
-            party = partyGetPtr(marioGetExtraPartyId());
-            if (party) {
-                party->position = mp->position;
-                party->scale.x = mp->scale.x;
-                party->scale.y = mp->scale.y;
-                party->scale.z = mp->scale.z;
-                party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-                party->rot = (Vec){0.0f, 0.0f, 0.0f};
-                party->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-                party->rotOfsY = mp->rotOfs.y;
-                party->dispOfs.y = mp->dispOfs.y;
-                party->dispOfs.z = mp->dispOfs.z;
-            }
-            ret = 2;
-            break;
-        case 10:
-        mp->mot.dokan.rotSpeed += 1.0f;
-            if (mp->mot.dokan.rotSpeed > 30.0f) {
-                mp->mot.dokan.rotSpeed = 30.0f;
-            }
-event->userdata[0]++;
-            if (event->userdata[0] > 10) {
-                mp->displayDirection += mp->mot.dokan.rotSpeed;
-                mp->mot.dokan.rotSpeed += 0.1f;
-                if (mp->mot.dokan.rotSpeed > 30.0f) {
-                    mp->mot.dokan.rotSpeed = 30.0f;
-                }
-            }
-            if (event->userdata[0] < sysMsec2Frame(300)) {
-                ret = 0;
-            } else {
-                partyGoodbye(marioGetPartyId());
-                partyGoodbye(marioGetExtraPartyId());
-                ret = 2;
-            }
-            break;
-    }
-    if (ret == 2) {
-        mp->dokanType = type;
-        marioChgMot(MARIO_MOTION_DOKAN);
-    }
-    return ret;
-}
-#else
-/**
- * Plays Mario's paper pipe animation, then switches to the pipe motion;
- * arg 0 = pipe type (evt_bero passes 2 up, 3 down, 5 sideways).
- * Blocks while the spin runs; the partners leave as he goes in.
- */
-USER_FUNC(evt_mario_paper_pose_dokan) {
-    EvtWord* args = event->args;
-    MarioWork* mp = marioGetPtr();
-    s32 type = evtGetValue(event, args[0]);
-    PartyEntry* party;
-    s32 ret;
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     f32 s, c;
+#endif
 #endif
     {
         static const char names[] = "DOKAN_TATE_DOWNIN\0\0\0DOKAN_TATE_UPIN\0DOKAN_TATE_DOWNOUT\0\0DOKAN_TATE_UPOUT\0\0\0\0DOKAN_YOKO_IN\0\0\0DOKAN_YOKO_OUT\0";
@@ -390,8 +224,10 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             mp->rot = (Vec){0.0f, 0.0f, 0.0f};
             mp->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
             mp->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             mp->dispOfs2 = (Vec){0.0f, 0.0f, 0.0f};
+#endif
 #endif
         } else {
             switch (type) {
@@ -404,10 +240,12 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
                     if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
                         marioUpdateCamPos();
                         camFollowYOn();
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
                         sincosf(&s, &c, mp->targetYaw);
                         mp->dispOfs2.x = -0.4f * s;
                         mp->dispOfs2.z = -0.4f * c;
+#endif
 #endif
                     }
                     event->userdata[1] = 0;
@@ -488,7 +326,13 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             party = partyGetPtr(marioGetPartyId());
             if (party) {
                 party->position = mp->position;
+#if VERSION <= VERSION_DEMO_US
+                party->scale.x = mp->scale.x;
+                party->scale.y = mp->scale.y;
+                party->scale.z = mp->scale.z;
+#else
                 party->scale = mp->scale;
+#endif
                 party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
                 party->rot = (Vec){0.0f, 0.0f, 0.0f};
                 party->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
@@ -499,7 +343,13 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
                 party->position = mp->position;
+#if VERSION <= VERSION_DEMO_US
+                party->scale.x = mp->scale.x;
+                party->scale.y = mp->scale.y;
+                party->scale.z = mp->scale.z;
+#else
                 party->scale = mp->scale;
+#endif
                 party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
                 party->rot = (Vec){0.0f, 0.0f, 0.0f};
                 party->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
@@ -510,6 +360,12 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             ret = 2;
             break;
         case 10:
+#if VERSION <= VERSION_DEMO_US
+            mp->mot.dokan.rotSpeed += 1.0f;
+                if (mp->mot.dokan.rotSpeed > 30.0f) {
+                    mp->mot.dokan.rotSpeed = 30.0f;
+                }
+#else
 #if VERSION >= VERSION_US
             mp->mot.dokan.rotSpeed = 30.0f;
 #else
@@ -517,6 +373,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             if (mp->mot.dokan.rotSpeed > 30.0f) {
                 mp->mot.dokan.rotSpeed = 30.0f;
             }
+#endif
 #endif
             event->userdata[0]++;
             if (event->userdata[0] > 10) {
@@ -541,7 +398,6 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
     }
     return ret;
 }
-#endif
 
 const char* a_mario_group[] = {
     "M_Z_1", "M_Z_9", "M_S_1", "M_S_3", "M_W_1", "M_R_1", "M_J_1A", "M_J_1B", "M_J_1C", "M_H_1",
@@ -959,7 +815,6 @@ USER_FUNC(evt_mario_set_pose) {
  * gets him off Yoshi or out of Vivian's shadow, cancels Tube Mode and paper slit,
  * waits for a partner ride to end. Blocks until done.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Brings Mario back to his normal standing state before a cutscene:
  * gets him off Yoshi or out of Vivian's shadow, cancels Tube Mode and paper slit,
@@ -968,127 +823,11 @@ USER_FUNC(evt_mario_set_pose) {
 USER_FUNC(evt_mario_normalize) {
     s32 ret = 0;
     MarioWork* mp = marioGetPtr();
-BOOL off;
+#if VERSION <= VERSION_DEMO_US
+    BOOL off;
 
     if (isFirstCall) {
-        event->userdata[1] = 0;
-        off = !marioChkCtrl();
-        if (off) {
-            event->userdata[1] = 1;
-            marioCtrlOn();
-            partyCtrlOn();
-        }
-        if (mp->currMotionId != MARIO_MOTION_YOSHI && mp->currMotionId != MARIO_MOTION_ROLL && mp->currMotionId != MARIO_MOTION_VIVIAN &&
-            !(mp->dispFlags & MARIO_DISP_FLAG_SLIT)) {
-            marioChgMot(MARIO_MOTION_STAY);
-            if (event->userdata[1]) {
-                marioCtrlOff();
-                partyCtrlOff();
-            }
-            return EVT_RETURN_DONE;
-        }
-        event->userdata[0] = 0;
-    }
-    switch (event->userdata[0]) {
-        case 0:
-            ret = 0;
-            if (mp->currMotionId == MARIO_MOTION_ROLL) {
-                marioRollCancel();
-                event->userdata[0] = 1;
-            } else if (mp->currMotionId == MARIO_MOTION_SLIT) {
-                if (mp->flags & MARIO_FLAG_PAPER_MODE) {
-                    motSlitCancel2();
-                    event->userdata[0] = 1;
-                }
-            } else if (mp->currMotionId == MARIO_MOTION_YOSHI) {
-                if (yoshiGetStatus() != YOSHI_STATUS_FLUTTER && marioGetoffYoshi()) {
-                    event->userdata[0] = 3;
-                }
-            } else if (mp->currMotionId == MARIO_MOTION_VIVIAN) {
-                if (vivianGetStatus() != 0 && vivianGetStatus() == 2) {
-                    vivianUnhold(partyGetPtr(marioGetPartyId()));
-                    event->userdata[0] = 5;
-                }
-            } else if (mp->currMotionId == MARIO_MOTION_STAY) {
-                if (!(mp->dispFlags & MARIO_DISP_FLAG_SLIT)) {
-                    ret = 2;
-                }
-            }
-            break;
-        case 1:
-            ret = 0;
-            if (mp->currMotionId == MARIO_MOTION_ROLL) {
-                if (mp->rollFlags == 0) {
-                    event->userdata[0] = 2;
-                }
-            } else if (mp->currMotionId == MARIO_MOTION_SLIT) {
-                if (marioGetMotSlitCancel3()) {
-                    ret = 0;
-                } else {
-                    ret = 2;
-                }
-            } else {
-                ret = 2;
-            }
-            break;
-    }
-
-    switch (event->userdata[0]) {
-        case 2:
-            ret = 0;
-            if (!partyRideChk(partyGetPtr(marioGetPartyId())) && !partyRideChk(partyGetPtr(marioGetExtraPartyId()))) {
-                ret = 2;
-            }
-            break;
-        case 3:
-            if (mp->currMotionId != MARIO_MOTION_YOSHI) {
-                event->userdata[0] = 4;
-            } else if (yoshiGetStatus() == YOSHI_STATUS_INACTIVE) {
-                event->userdata[0] = 4;
-            }
-            break;
-        case 4:
-            if (mp->hitobjStandOn) {
-                event->userdata[0] = 10;
-                event->userdata[2] = 3;
-            }
-            break;
-        case 5:
-            if (mp->currMotionId != MARIO_MOTION_VIVIAN) {
-                event->userdata[0] = 6;
-            } else if (vivianGetStatus() == 0) {
-                event->userdata[0] = 6;
-            }
-            break;
-        case 6:
-            if (mp->hitobjStandOn) {
-                event->userdata[0] = 10;
-                event->userdata[2] = 3;
-            }
-            break;
-        case 10:
-            if (--event->userdata[2] > 0) {
-                ret = 2;
-            }
-            break;
-    }
-    if (ret == 2) {
-        if (event->userdata[1]) {
-            marioCtrlOff();
-            partyCtrlOff();
-        }
-    }
-    return ret;
-}
 #else
-/**
- * Brings Mario back to his normal standing state before a cutscene:
- * gets him off Yoshi or out of Vivian's shadow, cancels Tube Mode and paper slit,
- * waits for a partner ride to end. Blocks until done.
- */
-USER_FUNC(evt_mario_normalize) {
-    s32 ret = 0;
-    MarioWork* mp = marioGetPtr();
     PartyEntry* party;
     BOOL off;
 
@@ -1110,6 +849,7 @@ USER_FUNC(evt_mario_normalize) {
 #endif
         }
         mp->trigFlags |= MARIO_TRIG_FLAG_NORMALIZING;
+#endif
         event->userdata[1] = 0;
         off = !marioChkCtrl();
         if (off) {
@@ -1117,10 +857,21 @@ USER_FUNC(evt_mario_normalize) {
             marioCtrlOn();
             partyCtrlOn();
         }
+#if VERSION > VERSION_DEMO_US
         event->userdata[0] = 0;
+#endif
         if (mp->currMotionId != MARIO_MOTION_YOSHI && mp->currMotionId != MARIO_MOTION_ROLL && mp->currMotionId != MARIO_MOTION_VIVIAN &&
             !(mp->dispFlags & MARIO_DISP_FLAG_SLIT)) {
             marioChgMot(MARIO_MOTION_STAY);
+#if VERSION <= VERSION_DEMO_US
+            if (event->userdata[1]) {
+                marioCtrlOff();
+                partyCtrlOff();
+            }
+            return EVT_RETURN_DONE;
+        }
+        event->userdata[0] = 0;
+#else
             if (partyRideChk(partyGetPtr(marioGetPartyId())) || partyRideChk(partyGetPtr(marioGetExtraPartyId()))) {
                 event->userdata[0] = 2;
             } else {
@@ -1132,6 +883,7 @@ USER_FUNC(evt_mario_normalize) {
                 return EVT_RETURN_DONE;
             }
         }
+#endif
     }
 
     switch (event->userdata[0]) {
@@ -1218,7 +970,9 @@ USER_FUNC(evt_mario_normalize) {
             break;
     }
     if (ret == 2) {
+#if VERSION > VERSION_DEMO_US
         mp->trigFlags &= ~MARIO_TRIG_FLAG_NORMALIZING;
+#endif
         if (event->userdata[1]) {
             marioCtrlOff();
             partyCtrlOff();
@@ -1226,7 +980,6 @@ USER_FUNC(evt_mario_normalize) {
     }
     return ret;
 }
-#endif
 
 /** Writes Mario's motion id to arg 0 (the previous one while a motion change is pending). */
 USER_FUNC(evt_mario_get_motion) {
@@ -1395,7 +1148,6 @@ static inline f32 doorAngle(f32 cam) {
     return 270.0f;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** the demo turns the partners behind Mario by the camera only, without close-follow mode */
 USER_FUNC(evt_mario_party_door_move) {
     EvtWord* args = event->args;
@@ -1407,109 +1159,10 @@ USER_FUNC(evt_mario_party_door_move) {
     s32 ret;
     f32 sx, sy, sz;
     f32 dist;
-
-    if (isFirstCall) {
-        party = partyGetPtr(marioGetPartyId());
-        if (party) {
-            marioGetScreenPos(party->position, &sx, &sy, &sz);
-            if (!(0.0f <= sx && sx <= 600.0f && 0.0f <= sy && sy <= 535.0f)) {
-                party->position = mp->position;
-            }
-            if (mp->position.y > party->position.y) {
-                party->position = mp->position;
-            }
-            party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
-            party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
-            party->trigFlags |= PARTY_TRIG_DOOR_MOVE;
-        }
-        party = partyGetPtr(marioGetExtraPartyId());
-        if (party) {
-            marioGetScreenPos(party->position, &sx, &sy, &sz);
-            if (!(0.0f <= sx && sx <= 600.0f && 0.0f <= sy && sy <= 535.0f)) {
-                party->position = mp->position;
-            }
-            if (mp->position.y > party->position.y) {
-                party->position = mp->position;
-            }
-            party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
-            party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
-            party->trigFlags |= PARTY_TRIG_DOOR_MOVE;
-        }
-        event->userdata[0] = 0;
-        event->userdata[2] = 0;
-    }
-
-    ret = 0;
-    switch (event->userdata[0]) {
-        case 0:
-            dist = distABf(mp->position.x, mp->position.z, x, z);
-            mp->directionView = angleABf(mp->position.x, mp->position.z, x, z);
-            if (mp->flags & MARIO_FLAG_BG_MODE) {
-                spd *= 0.4f;
-            }
-            {
-                s32 n = (f32)gp->framerate * (dist / spd);
-                spd = spd / (f32)gp->framerate;
-                marioSetForceMove(mp->directionView, n, spd);
-            }
-            event->userdata[0] = 2;
-            break;
-        case 2:
-            if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
-                break;
-            }
-            event->userdata[1] = sysMsec2Frame(10);
-            event->userdata[0] = 4;
-        case 4:
-            if (--event->userdata[1] > 0) {
-                break;
-            }
-            event->userdata[1] = sysMsec2Frame(400);
-            event->userdata[0] = 6;
-            party = partyGetPtr(marioGetPartyId());
-            if (party) {
-                partyMoveBehindMario3(party, 0, revise360(270.0f - camGetPtr(CAMERA_3D)->viewYaw));
-            }
-            party = partyGetPtr(marioGetExtraPartyId());
-            if (party) {
-                partyMoveBehindMario3(party, 0, revise360(270.0f - camGetPtr(CAMERA_3D)->viewYaw));
-            }
-            break;
-        case 6:
-            if (--event->userdata[1] > 0) {
-                break;
-            }
-            party = partyGetPtr(marioGetPartyId());
-            if (party) {
-                party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
-                party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
-                party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
-            }
-            party = partyGetPtr(marioGetExtraPartyId());
-            if (party) {
-                party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
-                party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
-                party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
-            }
-            ret = 2;
-            break;
-    }
-    return ret;
-}
-#else
-/** the demo turns the partners behind Mario by the camera only, without close-follow mode */
-USER_FUNC(evt_mario_party_door_move) {
-    EvtWord* args = event->args;
-    MarioWork* mp = marioGetPtr();
-    f32 x = evtGetFloat(event, args[0]);
-    f32 z = evtGetFloat(event, args[1]);
-    f32 spd = evtGetFloat(event, args[2]);
-    PartyEntry* party;
-    s32 ret;
-    f32 sx, sy, sz;
-    f32 dist;
+#if VERSION > VERSION_DEMO_US
     f32 cam;
 
+#endif
     if (isFirstCall) {
         party = partyGetPtr(marioGetPartyId());
         if (party) {
@@ -1520,8 +1173,12 @@ USER_FUNC(evt_mario_party_door_move) {
             if (mp->position.y > party->position.y) {
                 party->position = mp->position;
             }
+#if VERSION <= VERSION_DEMO_US
+            party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
+#else
             party->trigFlags |= PARTY_TRIG_HALF_PUSH;
             partyFollowCloseOn(party);
+#endif
             party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
             party->trigFlags |= PARTY_TRIG_DOOR_MOVE;
         }
@@ -1534,8 +1191,12 @@ USER_FUNC(evt_mario_party_door_move) {
             if (mp->position.y > party->position.y) {
                 party->position = mp->position;
             }
+#if VERSION <= VERSION_DEMO_US
+            party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
+#else
             party->trigFlags |= PARTY_TRIG_HALF_PUSH;
             partyFollowCloseOn(party);
+#endif
             party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
             party->trigFlags |= PARTY_TRIG_DOOR_MOVE;
         }
@@ -1554,7 +1215,11 @@ USER_FUNC(evt_mario_party_door_move) {
             {
                 s32 n = (f32)gp->framerate * (dist / spd);
                 spd = spd / (f32)gp->framerate;
+#if VERSION <= VERSION_DEMO_US
+                marioSetForceMove(mp->directionView, n, spd);
+#else
                 marioSetForceMove(n, mp->directionView, spd);
+#endif
             }
             event->userdata[0] = 2;
             break;
@@ -1570,6 +1235,11 @@ USER_FUNC(evt_mario_party_door_move) {
             }
             event->userdata[1] = sysMsec2Frame(400);
             event->userdata[0] = 6;
+#if VERSION <= VERSION_DEMO_US
+            party = partyGetPtr(marioGetPartyId());
+            if (party) {
+                partyMoveBehindMario3(party, 0, revise360(270.0f - camGetPtr(CAMERA_3D)->viewYaw));
+#else
             cam = camGetPtr(CAMERA_3D)->viewYaw;
             party = partyGetPtr(marioGetPartyId());
             if (party) {
@@ -1580,21 +1250,31 @@ USER_FUNC(evt_mario_party_door_move) {
                 if (party->moveKind == 1) {
                     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
                 }
+#endif
             }
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
+#if VERSION <= VERSION_DEMO_US
+                partyMoveBehindMario3(party, 0, revise360(270.0f - camGetPtr(CAMERA_3D)->viewYaw));
+#else
                 partyMoveBehindMario3(party, 0,
                     !strcmp(gp->currentMapName, "pik_00") ? (party->position.x > 0.0f ? 270.0f : 90.0f)
                     : !strcmp(gp->currentMapName, "muj_01") ? 30.0f : 270.0f);
                 if (party->moveKind == 1) {
                     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
                 }
+#endif
             }
             break;
         case 6:
             if (--event->userdata[1] > 0) {
                 break;
             }
+#if VERSION <= VERSION_DEMO_US
+            party = partyGetPtr(marioGetPartyId());
+            if (party) {
+                party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
+#else
             cam = camGetPtr(CAMERA_3D)->viewYaw;
             party = partyGetPtr(marioGetPartyId());
             if (party) {
@@ -1606,11 +1286,15 @@ USER_FUNC(evt_mario_party_door_move) {
                     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
                 }
                 partyFollowCloseOff(party);
+#endif
                 party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
                 party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
             }
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
+#if VERSION <= VERSION_DEMO_US
+                party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
+#else
                 partyMoveBehindMario3(party, 0,
                     !strcmp(gp->currentMapName, "pik_00") ? (party->position.x > 0.0f ? 270.0f : 90.0f)
                     : !strcmp(gp->currentMapName, "muj_01") ? 30.0f : 270.0f);
@@ -1618,9 +1302,11 @@ USER_FUNC(evt_mario_party_door_move) {
                     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
                 }
                 partyFollowCloseOff(party);
+#endif
                 party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
                 party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
             }
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             event->userdata[0] = 8;
             event->userdata[1] = 1;
@@ -1630,12 +1316,12 @@ USER_FUNC(evt_mario_party_door_move) {
                 break;
             }
 #endif
+#endif
             ret = 2;
             break;
     }
     return ret;
 }
-#endif
 
 /** the demo moves the partners behind Mario without close-follow mode or the ride-kind angles */
 USER_FUNC(evt_mario_party_bero_move) {

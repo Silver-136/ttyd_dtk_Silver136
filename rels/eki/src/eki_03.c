@@ -341,147 +341,6 @@ EVT_END()
  * the sun's heat-haze shader and glare, and the 15 posters that Flurrie can blow away.
  * Posters already blown are hidden; the wall behind them is opened by evt_chk once all are gone.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Map init for eki_03: sets up the doors to eki_01 and eki_04, the HP Plus item,
- * the Shine Sprite block (power-up block), the brick blocks (one holds a Thunder Rage),
- * the sun's heat-haze shader and glare, and the 15 posters that Flurrie can blow away.
- * Posters already blown are hidden; the wall behind them is opened by evt_chk once all are gone.
- */
-EVT_BEGIN(eki_03_init_evt)
-    // Doors, music and ambience; the music is dipped in volume.
-    SET_VALUE(LW(0), PTR(bero_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    CALL(evt_cam_road_reset)
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI4"))
-    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-    // The HP Plus item, the Shine Sprite block and the brick blocks (one holds a Thunder Rage).
-    CALL(evt_item_entry, STRING("item"), ITEM_HP_PLUS, -550, 220, -50, ITEM_TYPE_STILL, GSWF_EKI_03_HP_PLUS, 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk01"), 475, 100, 25, 0, GSWF_SHINE_36, 0)
-    CALL(evt_mobj_brick, STRING("blk01"), 250, 300, -100, 0, 0, 0, LSWF(1))
-    CALL(evt_mobj_brick, STRING("blk02"), 250, 385, -100, ITEM_THUNDER_RAGE, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_EKI_03_THUNDER_RAGE_HIDDEN_BLOCK)
-    // The sun gets its heat-haze shimmer and glare.
-    CALL(evt_map_set_tevcallback, 2, PTR(sun_tev))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sun"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sun"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sun"), MAP_OBJ_FLAG_NO_COLOR_STAGE)
-    BEGIN_INLINE_EVENT
-        CALL(test_glare)
-    END_INLINE_EVENT
-    // The first posters on the walls: each one Flurrie has not yet blown away is made blowable; blown ones are
-    // hidden along with their hit areas.
-    CALL(evt_cloud_init)
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_1_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_1"), STRING("a_kami_1"), PTR(evt_poster_1))
-    ELSE
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_hitobj_onoff, STRING("a_kami_1"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_2_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_2"), STRING("a_kami_2"), PTR(evt_poster_2))
-    ELSE
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_3_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_3"), STRING("a_kami_3"), PTR(evt_poster_3))
-    ELSE
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_3"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_hitobj_onoff, STRING("a_kami_3"), 1, 0)
-    END_IF
-    // The posters in the middle of the room (4 to 9), with the same handling.
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_4_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_4"), STRING("a_kami_4"), PTR(evt_poster_4))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_4"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_5_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_5"), STRING("a_kami_12"), PTR(evt_poster_5))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_6_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_6"), STRING("a_kami_11"), PTR(evt_poster_6))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_6"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_7_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_7"), STRING("a_kami_11"), PTR(evt_poster_7))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_7"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_8_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_8"), STRING("a_kami_12"), PTR(evt_poster_8))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_8"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_9_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_9"), STRING("a_kami_12"), PTR(evt_poster_9))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_9"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
-    END_IF
-    // Posters 10 to 13 also open up extra hit areas once blown away.
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_10_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_10"), STRING("a_kami_10"), PTR(evt_poster_10))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_10"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
-        CALL(evt_hitobj_onoff, STRING("a_kami_13"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_11_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_11"), STRING("a_kami_10"), PTR(evt_poster_11))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_11"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
-        CALL(evt_hitobj_onoff, STRING("a_kami_14"), 1, 0)
-        CALL(evt_hitobj_onoff, STRING("a_kami_15"), 1, 0)
-        CALL(evt_hitobj_onoff, STRING("a_kami_6"), 1, 0)
-        CALL(evt_hitobj_onoff, STRING("a_kami_7"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_12_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_12"), STRING("a_kami_10"), PTR(evt_poster_12))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_12"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
-        CALL(evt_hitobj_onoff, STRING("a_kami_8"), 1, 0)
-        CALL(evt_hitobj_onoff, STRING("a_kami_9"), 1, 0)
-        CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
-        CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_13_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_13"), STRING("a_kami_10"), PTR(evt_poster_13))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_13"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
-    END_IF
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_14_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_14"), STRING("a_kami_11"), PTR(evt_poster_14))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_14"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
-    END_IF
-    // Poster 15; then the wall behind the posters is closed until all are gone.
-    IF_INT_EQUAL(GSWF_EKI_03_POSTER_15_BLOWN_AWAY, 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_15"), STRING("a_kami_11"), PTR(evt_poster_15))
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_15"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
-    END_IF
-    CALL(evt_hitobj_onoff, STRING("a_kabe"), 1, 0)
-    SET_VALUE(LW(0), 1)
-    CALL_CHILD(bero_case_switch_off)
-    CALL_CHILD(evt_chk)
-    RETURN
-EVT_END()
-#else
 /**
  * Map init for eki_03: sets up the doors to eki_01 and eki_04, the HP Plus item,
  * the Shine Sprite block (power-up block), the brick blocks (one holds a Thunder Rage),
@@ -499,11 +358,16 @@ EVT_BEGIN(eki_03_init_evt)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     // The HP Plus item, the Shine Sprite block and the brick blocks (one holds a Thunder Rage).
     CALL(evt_item_entry, STRING("item"), ITEM_HP_PLUS, -550, 220, -50, ITEM_TYPE_STILL, GSWF_EKI_03_HP_PLUS, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_powerupblk, STRING("pblk01"), 475, 100, 25, 0, GSWF_SHINE_36, 0)
+    CALL(evt_mobj_brick, STRING("blk01"), 250, 300, -100, 0, 0, 0, LSWF(1))
+#else
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 450, 100, 10, 0, GSWF_SHINE_36, 0)
 #if VERSION >= VERSION_US
     CALL(evt_mobj_blk, STRING("blk01"), 250, 300, -100, 0, 0, LSWF_EKI_03_BRICK_BLK01)
 #else
     CALL(evt_mobj_brick, STRING("blk01"), 250, 300, -100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_EKI_03_BRICK_BLK01)
+#endif
 #endif
     CALL(evt_mobj_brick, STRING("blk02"), 250, 385, -100, ITEM_THUNDER_RAGE, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_EKI_03_THUNDER_RAGE_HIDDEN_BLOCK)
     // The sun gets its heat-haze shimmer and glare.
@@ -518,21 +382,39 @@ EVT_BEGIN(eki_03_init_evt)
     // hidden along with their hit areas.
     CALL(evt_cloud_init)
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_1_BLOWN_AWAY, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_cloud_ent, 0, STRING("kami_1"), STRING("a_kami_1"), PTR(evt_poster_1))
+    ELSE
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
+#else
         CALL(evt_cloud_ent, 0, STRING("kami_0"), STRING("a_kami_1"), PTR(evt_poster_1))
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_0"), MAP_OBJ_FLAG_HIDDEN)
+#endif
         CALL(evt_hitobj_onoff, STRING("a_kami_1"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_2_BLOWN_AWAY, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_cloud_ent, 0, STRING("kami_2"), STRING("a_kami_2"), PTR(evt_poster_2))
+    ELSE
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
+#else
         CALL(evt_cloud_ent, 0, STRING("kami_17"), STRING("a_kami_2"), PTR(evt_poster_2))
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_17"), MAP_OBJ_FLAG_HIDDEN)
+#endif
         CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_3_BLOWN_AWAY, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_cloud_ent, 0, STRING("kami_3"), STRING("a_kami_3"), PTR(evt_poster_3))
+    ELSE
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_3"), MAP_OBJ_FLAG_HIDDEN)
+#else
         CALL(evt_cloud_ent, 0, STRING("kami_16"), STRING("a_kami_3"), PTR(evt_poster_3))
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_16"), MAP_OBJ_FLAG_HIDDEN)
+#endif
         CALL(evt_hitobj_onoff, STRING("a_kami_3"), 1, 0)
     END_IF
     // The posters in the middle of the room (4 to 9), with the same handling.
@@ -598,6 +480,9 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kami_8"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_9"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
+#endif
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_13_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_13"), STRING("a_kami_10"), PTR(evt_poster_13))
@@ -624,7 +509,6 @@ EVT_BEGIN(eki_03_init_evt)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
-#endif
 
 /**
  * Map TEV callback for the "sun" object: redraws a 64x64 indirect texture every frame as a scrolling sine wave

@@ -878,64 +878,6 @@ USER_FUNC(irai_end_func) {
  * with texts centred or squeezed to fit; solved requests are grey and the active one is red.
  */
 void irai_window_disp(CameraId camera, void* param) {
-    IraiWork* wp = param;
-    u32 left;
-    u32 top;
-    u32 width;
-    u32 height;
-    const char* msg2;
-    s32 i;
-    const char* msg;
-    s32 no;
-    Mtx trans;
-    Mtx scale;
-    Mtx trans2;
-    Mtx scale2;
-    f32 nameW;
-    f32 w;
-
-    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA3, 0xFF, 0xFF}, -280.0f, 170.0f, 135.0f, 90.0f, 12.0f);
-    FontDrawStart();
-    FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    FontDrawScale(0.85f);
-    msg = msgSearch("irai_name1_win");
-    FontDrawEdge();
-    iraiDrawCentered(msg, -280.0f, 152.0f, 135.0f, 115.0f, scale, trans, nameW);
-    msg2 = msgSearch("irai_name2_win");
-    iraiDrawCentered(msg2, -280.0f, 127.0f, 135.0f, 115.0f, scale, trans, nameW);
-    FontDrawEdgeOff();
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -129.0f, 170.0f, 410.0f, 340.0f, 12.0f);
-    windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA3, 0xFF, 0xFF}, -103.0f, 190.0f, 120.0f, 40.0f, 12.0f);
-    windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA3, 0xFF, 0xFF}, 91.0f, 190.0f, 120.0f, 40.0f, 12.0f);
-    FontDrawStart();
-    FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    FontDrawScale(0.85f);
-    msg2 = msgSearch("irai_client_win");
-    FontDrawEdge();
-    iraiDrawCentered(msg2, -103.0f, 180.0f, 120.0f, 100.0f, scale2, trans2, w);
-    FontDrawEdgeOff();
-    msg2 = msgSearch("irai_contents_win");
-    FontDrawEdge();
-    iraiDrawCentered(msg2, 91.0f, 180.0f, 120.0f, 100.0f, scale2, trans2, w);
-    FontDrawEdgeOff();
-    GXGetScissor(&left, &top, &width, &height);
-    GXSetScissor(175, 98, 410, 304);
-    FontDrawStart();
-    FontDrawColor((GXColor){0x00, 0x00, 0x00, 0xFF});
-    FontDrawScale(0.85f);
-    for (i = 0; i < wp->count; i++) {
-        if (swGet(SWF_TROUBLE_DONE(wp->list[i]))) {
-            FontDrawColor((GXColor){0x80, 0x80, 0x80, 0xFF});
-        } else {
-            FontDrawColor((GXColor){0x00, 0x00, 0x00, 0xFF});
-        }
-        if (wp->list[i] == swByteGet(SW_TROUBLE_ACCEPTED)) {
-            FontDrawColor((GXColor){0xFF, 0x00, 0x00, 0xFF});
-        }
-        no = wp->list[i] - 1;
-        iraiDrawFit(wp->client[no], -119.0f, wp->scroll + (140 - i * 30), 180.0f, w);
-        iraiDrawFit(wp->contents[no], 51.0f, wp->scroll + (140 - i * 30), 260.0f, w);
 #else
 /**
  * Adds an integer to a float; kept as a separate function
@@ -955,15 +897,30 @@ static inline f32 iraiAddI(f32 a, s32 b) {
  */
 void irai_window_disp(CameraId camera, void* param) {
     f32 negX;
+#endif
     IraiWork* wp = param;
     u32 left;
     u32 top;
     u32 width;
     u32 height;
+#if VERSION >= VERSION_US
+    const char* msg2;
+    s32 i;
+    const char* msg;
+    s32 no;
+    Mtx trans;
+    Mtx scale;
+    Mtx trans2;
+    Mtx scale2;
+    f32 nameW;
+    f32 w;
+
+#else
     const char* msg;
     s32 i;
     s32 no;
 
+#endif
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA3, 0xFF, 0xFF}, -280.0f, 170.0f, 135.0f, 90.0f, 12.0f);
     FontDrawStart();
@@ -971,8 +928,14 @@ void irai_window_disp(CameraId camera, void* param) {
     FontDrawScale(0.85f);
     msg = msgSearch("irai_name1_win");
     FontDrawEdge();
+#if VERSION >= VERSION_US
+    iraiDrawCentered(msg, -280.0f, 152.0f, 135.0f, 115.0f, scale, trans, nameW);
+    msg2 = msgSearch("irai_name2_win");
+    iraiDrawCentered(msg2, -280.0f, 127.0f, 135.0f, 115.0f, scale, trans, nameW);
+#else
     FontDrawString(msg, -270.0f, 152.0f);
     FontDrawString(msgSearch("irai_name2_win"), -270.0f, 127.0f);
+#endif
     FontDrawEdgeOff();
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -129.0f, 170.0f, 410.0f, 340.0f, 12.0f);
     windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA3, 0xFF, 0xFF}, -103.0f, 190.0f, 120.0f, 40.0f, 12.0f);
@@ -980,6 +943,15 @@ void irai_window_disp(CameraId camera, void* param) {
     FontDrawStart();
     FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     FontDrawScale(0.85f);
+#if VERSION >= VERSION_US
+    msg2 = msgSearch("irai_client_win");
+    FontDrawEdge();
+    iraiDrawCentered(msg2, -103.0f, 180.0f, 120.0f, 100.0f, scale2, trans2, w);
+    FontDrawEdgeOff();
+    msg2 = msgSearch("irai_contents_win");
+    FontDrawEdge();
+    iraiDrawCentered(msg2, 91.0f, 180.0f, 120.0f, 100.0f, scale2, trans2, w);
+#else
     negX = -77.0f;
     msg = msgSearch("irai_client_win");
     FontDrawEdge();
@@ -988,6 +960,7 @@ void irai_window_disp(CameraId camera, void* param) {
     msg = msgSearch("irai_contents_win");
     FontDrawEdge();
     FontDrawString(msg, 115.0f, 180.0f);
+#endif
     FontDrawEdgeOff();
     GXGetScissor(&left, &top, &width, &height);
     GXSetScissor(175, 98, 410, 304);
@@ -1004,6 +977,10 @@ void irai_window_disp(CameraId camera, void* param) {
             FontDrawColor((GXColor){0xFF, 0x00, 0x00, 0xFF});
         }
         no = wp->list[i] - 1;
+#if VERSION >= VERSION_US
+        iraiDrawFit(wp->client[no], -119.0f, wp->scroll + (140 - i * 30), 180.0f, w);
+        iraiDrawFit(wp->contents[no], 51.0f, wp->scroll + (140 - i * 30), 260.0f, w);
+#else
         FontDrawString(wp->client[no], -119.0f, iraiAddI(wp->scroll, 140 - i * 30));
         FontDrawString(wp->contents[no], 51.0f, wp->scroll + (140 - i * 30));
 #endif

@@ -871,7 +871,6 @@ EVT_END()
  * the Thousand-Year Door. The story becomes STG7_25_00_1_BOWSER_POSHLEY_SANCTUM, the game is saved and the
  * map changes to aji_18.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Bowser interlude in the sanctum (STG7_25_00_BOWSER_POSHLEY_HEIGHTS), with the player as Bowser:
  * Bowser and Kammy (ババ) walk in, Bowser takes the fake Garnet Star from the altar (the star effect "nise"
@@ -885,336 +884,9 @@ EVT_END()
  */
 EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_snd_envoff, PSND_FADEOUT)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(starstone_entry, STRING("nise"), 5, 0, 57, -955, 1)
-    CALL(evt_mario_set_pos, 60, 0, -500)
-    CALL(evt_npc_set_position, STRING("ババ"), 140, 0, -500)
-    CALL(evt_mario_set_dir, 270, 0, 0)
-    CALL(evt_npc_set_ry, STRING("ババ"), 270)
-    CALL(evt_cam3d_evt_set, 0, 360, -338, 0, 250, -1130, 0, EASING_SINE_IN_OUT)
-    CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_cam3d_evt_set, 0, 150, -338, 0, 40, -1130, 7000, EASING_LINEAR)
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("ババ"), 140, -880, 0, 60, 0)
-        CALL(evt_npc_set_position, STRING("ババ"), 140, 9, -885)
-        CALL(evt_npc_move_position, STRING("ババ"), 140, -925, 0, 60, 0)
-    END_INLINE_EVENT
-    CALL(evt_mario_mov_pos2, 60, -880, 60)
-    CALL(evt_mario_set_pos, 60, 9, -885)
-    CALL(evt_mario_mov_pos2, 60, -925, 60)
-    CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_013_01"), 0, STRING("mario"))
-    CALL(evt_cam3d_evt_set, 60, 127, -467, 60, 80, -914, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(600)
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_HAPPY2_1"), LW(0), LW(1), LW(2), 0)
-    CALL(set_starstone_pos, STRING("nise"), 80, 85, -915)
-    CALL(kpa_chg_pose, STRING("KPA_Y_1"))
-    CALL(evt_eff64, STRING("sub_hikari"), STRING("radiation_n64"), 2, 60, 56, -925, 1, 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_eff, STRING("sub_bg"), STRING("itemget"), 0, 60, 56, -935, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(stone_bg)
-    CALL(evt_snd_bgmoff, PSND_PAUSE)
-    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GET_IMPORTANT_ITEM1"))
-    WAIT_MS(2000)
-    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    CALL(evt_eff_softdelete, STRING("sub_hikari"))
-    CALL(evt_eff_softdelete, STRING("sub_bg"))
-    WAIT_MS(300)
-    CALL(reset_stone_cam)
-    CALL(evt_mario_init_camid)
-    CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_6"), STRING("KPA_T_6"))
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_014"), 0, STRING("mario"))
-    WAIT_MS(500)
-    CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("U_1"), STRING("T_5"))
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_015"), 0, STRING("ババ"))
-    CALL(evt_cam3d_evt_set, 19, 143, -268, 19, 74, -914, 800, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_npc_status_onoff, 1, STRING("ポワン探偵"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_set_position, STRING("ポワン探偵"), -80, 0, -600)
-    CALL(evt_npc_set_ry, STRING("ポワン探偵"), 90)
-    WAIT_MS(300)
-    CALL(evt_npc_move_position, STRING("ポワン探偵"), -70, -800, 0, FLOAT(80.0f), 0)
-    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("ポワン探偵"), 0, 0, 0, 0, 0, 0, 0, 60)
-    WAIT_MS(1000)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(700)
-        CALL(kpa_chg_pose, STRING("KPA_S_1"))
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        SUBTRACT_FLOAT(LW(0), 35)
-        ADD_FLOAT(LW(1), 20)
-        CALL(set_starstone_pos, STRING("nise"), LW(0), LW(1), LW(2))
-    END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, -65, 60, -563, -65, 40, -762, 800, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_016"), 0, STRING("ポワン探偵"))
-    CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("S_1"), STRING("T_1"))
-    CALL(evt_npc_set_stay_anim, STRING("ババ"))
-    CALL(evt_cam3d_evt_set, 10, 113, -367, 10, 55, -914, 1000, EASING_SINE_IN_OUT)
-    WAIT_MS(1300)
-    SET_VALUE(GF(0), 0)
-    BEGIN_INLINE_EVENT
-        LOOP(0)
-            IF_INT_NOT_EQUAL(GF(0), 0)
-                BREAK_LOOP
-            END_IF
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            SUBTRACT_FLOAT(LW(0), 35)
-            ADD_FLOAT(LW(1), 20)
-            CALL(set_starstone_pos, STRING("nise"), LW(0), LW(1), LW(2))
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        SUBTRACT_FLOAT(LW(0), 35)
-        ADD_FLOAT(LW(1), 20)
-        CALL(set_starstone_pos, STRING("nise"), LW(0), LW(1), LW(2))
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
-        CALL(evt_npc_move_position, STRING("ババ"), 111, -781, 1750, 0, 0)
-    END_INLINE_EVENT
-    CALL(evt_mario_mov_pos, 60, -800, 1750)
-    SET_VALUE(GF(0), 1)
-    CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_017"), 0, STRING("mario"))
-    CALL(evt_msg_select, 0, STRING("kpa_stg7_018"))
-    SWITCH(LW(0))
-        CASE_EQUAL(0)
-        SET_VALUE(LW(1), STRING("kpa_stg7_019"))
-        SET_VALUE(LW(2), STRING("kpa_stg7_020"))
-        CASE_EQUAL(1)
-        SET_VALUE(LW(1), STRING("kpa_stg7_021"))
-        SET_VALUE(LW(2), STRING("kpa_stg7_022"))
-        CASE_EQUAL(2)
-        SET_VALUE(LW(1), STRING("kpa_stg7_023"))
-        SET_VALUE(LW(2), STRING("kpa_stg7_024"))
-    END_SWITCH
-    CALL(evt_msg_print_add, 0, LW(1))
-    CALL(evt_cam3d_evt_set, -65, 60, -563, -65, 40, -762, 800, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_npc_get_position, STRING("ポワン探偵"), LW(3), LW(4), LW(5))
-        SET_VALUE(LW(6), LW(3))
-        SUBTRACT(LW(6), 1)
-        LOOP(10)
-            CALL(evt_npc_set_position, STRING("ポワン探偵"), LW(6), LW(4), LW(5))
-            WAIT_FRAMES(2)
-            ADD(LW(6), 2)
-            CALL(evt_npc_set_position, STRING("ポワン探偵"), LW(6), LW(4), LW(5))
-            WAIT_FRAMES(2)
-            SUBTRACT(LW(6), 2)
-        END_LOOP
-        CALL(evt_npc_set_position, STRING("ポワン探偵"), LW(3), LW(4), LW(5))
-    END_IF
-    CALL(evt_msg_print, 0, LW(2), 0, STRING("ポワン探偵"))
-    CALL(evt_cam3d_evt_set, 10, 113, -367, 10, 55, -914, 800, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmoff, PSND_PAUSE)
-        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED3"))
-        WAIT_MS(1000)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    END_INLINE_EVENT
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_SURPRISED2_1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_npc_set_anim, STRING("ババ"), STRING("P_1"))
-    CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_5"), STRING("KPA_T_5"))
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_025"), 0, STRING("mario"))
-    CALL(get_starstone_pos, STRING("nise"), LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_STONE_DOWN1"), LW(0), LW(1), LW(2), LW(15))
-    BEGIN_INLINE_EVENT
-        LOOP(0)
-            CALL(get_starstone_seq, STRING("nise"), LW(0))
-            IF_INT_EQUAL(LW(0), 3)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_snd_sfxoff, LW(15))
-        CALL(get_starstone_pos, STRING("nise"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_STONE_BREAK1"), LW(0), LW(1), LW(2), 0)
-    END_INLINE_EVENT
-    CALL(starstone_fall, STRING("nise"))
-    WAIT_MS(1000)
-    CALL(get_starstone_pos, STRING("nise"), LW(0), LW(1), LW(2))
-    LOOP(10)
-        CALL(set_starstone_pos, STRING("nise"), 0, -1000, 0)
-        WAIT_FRAMES(2)
-        CALL(set_starstone_pos, STRING("nise"), LW(0), LW(1), LW(2))
-        WAIT_FRAMES(2)
-    END_LOOP
-    CALL(evt_eff_softdelete, STRING("nise"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_move_position, STRING("ババ"), -13, -792, 0, FLOAT(90.0f), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_NO_HIT)
-    WAIT_FRAMES(1)
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_026"), 0, STRING("ババ"))
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_027"), 0, STRING("ポワン探偵"))
-    CALL(evt_npc_set_ry, STRING("ババ"), 90)
-    WAIT_MS(300)
-    CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_028"), 0, STRING("mario"))
-    CALL(kpa_chg_pose, STRING("KPA_I_2"))
-    SET_VALUE(GF(0), 0)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(200)
-        SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
-        LOOP(0)
-            CALL(evt_sub_get_stopwatch, LW(0), LW(1))
-            IF_INT_GREATER_OR_EQUAL(LW(1), 30000)
-                BREAK_LOOP
-            END_IF
-            IF_INT_NOT_EQUAL(GF(0), 0)
-                BREAK_LOOP
-            END_IF
-            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 150)
-            WAIT_MS(150)
-        END_LOOP
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        WAIT_MS(200)
-        LOOP(0)
-            IF_INT_NOT_EQUAL(GF(0), 0)
-                BREAK_LOOP
-            END_IF
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_ANGRY1"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_ANGRY2"), LW(0), LW(1), LW(2), 0)
-            WAIT_MS(300)
-        END_LOOP
-    END_INLINE_EVENT
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_029"), 0, STRING("ババ"))
-    WAIT_MS(1000)
-    CALL(evt_npc_set_position, STRING("パタクリ"), -250, 130, -800)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_PKURI_GLASS_BREAK1"), -250, 130, -800, LW(0))
-    LOOP(0)
-        CALL(evt_snd_sfxchk, LW(0), LW(1))
-        IF_INT_NOT_EQUAL(LW(1), 0)
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    CALL(kpa_chg_pose, STRING("KPA_S_1"))
-    SET_VALUE(GF(0), 1)
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_SURPRISED1_2"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
-    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("ババ"), 0, 0, 0, 0, 0, 0, 0, 60)
-    WAIT_MS(1000)
-    CALL(evt_mario_set_dir, 270, 300, 0)
-    CALL(evt_npc_set_ry, STRING("ババ"), 270)
-    WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_030"), 0, STRING("パタクリ"))
-    CALL(evt_npc_set_position, STRING("パタクリ"), -200, 80, -800)
-    CALL(evt_npc_set_ry, STRING("パタクリ"), 90)
-    WAIT_MS(1000)
-    SET_VALUE(GW(0), 80)
-    BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 330, 1300)
-        LABEL(1)
-        CALL(evt_sub_intpl_msec_get_value)
-        CALL(evt_sub_get_sincos, LW(0), LW(2), LW(3))
-        MULTIPLY_FLOAT(LW(2), FLOAT(50.0f))
-        ADD_FLOAT(LW(2), FLOAT(80.0f))
-        SET_VALUE(GW(0), LW(2))
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 1)
-            GOTO(1)
-        END_IF
-    END_INLINE_EVENT
-    CALL(evt_npc_get_position, STRING("ポワン探偵"), LW(2), LW(3), LW(4))
-    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, -200, LW(2), 1300)
-    LABEL(2)
-    CALL(evt_sub_intpl_msec_get_value)
-    CALL(evt_npc_set_position, STRING("パタクリ"), LW(0), GW(0), -800)
-    WAIT_FRAMES(1)
-    IF_INT_EQUAL(LW(1), 1)
-        GOTO(2)
-    END_IF
-    CALL(evt_npc_flag_onoff, 0, STRING("パタクリ"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_set_anim, STRING("パタクリ"), STRING("PTK_A_1"))
-    CALL(evt_npc_get_position, STRING("パタクリ"), LW(2), LW(3), LW(4))
-    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, LW(3), 30, 1200)
-    LABEL(0)
-    CALL(evt_sub_intpl_msec_get_value)
-    CALL(evt_npc_set_position, STRING("パタクリ"), LW(2), LW(0), LW(4))
-    WAIT_FRAMES(1)
-    IF_INT_EQUAL(LW(1), 1)
-        GOTO(0)
-    END_IF
-    CALL(evt_npc_set_anim, STRING("パタクリ"), STRING("PTK_S_2"))
-    SET_VALUE(LW(5), LW(0))
-    SUBTRACT(LW(5), 5)
-    CALL(evt_eff, STRING(""), STRING("kemuri"), 0, LW(2), LW(5), LW(4), 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_PKURI_LANDING1"), LW(2), LW(0), LW(4), 0)
-    WAIT_MS(300)
-    CALL(evt_npc_set_anim, STRING("パタクリ"), STRING("PTK_S_3"))
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_031"), 0, STRING("ババ"))
-    CALL(evt_cam3d_evt_set, -65, 83, -504, -65, 47, -852, 800, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_npc_set_autotalkpose, STRING("パタクリ"), STRING("PTK_S_3"), STRING("PTK_T_2"))
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_032"), 0, STRING("パタクリ"))
-    CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("S_1"), STRING("T_1"))
-    CALL(evt_npc_set_stay_anim, STRING("ババ"))
-    CALL(evt_cam3d_evt_set, 20, 114, -369, 20, 58, -914, 800, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_033"), 0, STRING("mario"))
-    CALL(evt_npc_set_ry, STRING("ババ"), 90)
-    WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_034"), 0, STRING("ババ"))
-    CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_4"), STRING("KPA_T_3"))
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_035"), 0, STRING("mario"))
-    WAIT_MS(300)
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_mario_mov_pos2, LW(0), -400, FLOAT(90.0f))
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        WAIT_MS(400)
-        CALL(evt_npc_get_position, STRING("ババ"), LW(0), LW(1), LW(2))
-        CALL(evt_npc_move_position, STRING("ババ"), LW(0), -400, 0, FLOAT(90.0f), 0)
-    END_INLINE_EVENT
-    WAIT_MS(800)
-    CALL(evt_npc_flag_onoff, 1, STRING("パタクリ"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_get_position, STRING("パタクリ"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_glide_position, STRING("パタクリ"), LW(0), LW(1), -400, 0, FLOAT(90.0f), FLOAT(30.0f), 1, 0)
-    CALL(evt_cam3d_evt_set, -65, 60, -563, -65, 40, -762, 800, EASING_SINE_IN_OUT)
-    WAIT_MS(800)
-    CALL(evt_msg_print, 0, STRING("kpa_stg7_036"), 0, STRING("ポワン探偵"))
-    // The story advances and the game is saved.
-    SET_VALUE(GSW_STORY_PROGRESS, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
-    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
-    CALL(evt_fade_entry, 6, 300, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(2000)
-    SET_VALUE(LF(10), 0)
-    SET_VALUE(LW(0), 20)
-    CALL_CHILD(evt_memcard_save)
-    CALL(evt_mario_set_mode, 0)
-    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
-    CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_BOWSER_A1, 0, FADE_STORY_BOWSER_A3, 0)
-    // The scene continues in aji_18.
-    CALL(evt_bero_mapchange, STRING("aji_18"), STRING("e_bero"))
-    RETURN
-EVT_END()
-#else
-/**
- * Bowser interlude in the sanctum (STG7_25_00_BOWSER_POSHLEY_HEIGHTS), with the player as Bowser:
- * Bowser and Kammy (ババ) walk in, Bowser takes the fake Garnet Star from the altar (the star effect "nise"
- * follows
- * his hand), Pennington accuses them of theft and Bowser names himself in one of three ways picked from a menu
- * (kpa_stg7_018); Pennington reveals the star is a fake, it falls and breaks,
- * and he says he gave the real one to
- * "Luigi"; a Paragoomba (パタクリ) crashes in to report that Mario has the seven Crystal Stars and is heading for
- * the Thousand-Year Door. The story becomes STG7_25_00_1_BOWSER_POSHLEY_SANCTUM, the game is saved and the
- * map changes to aji_18.
- */
-EVT_BEGIN(pik_02_koopa_evt)
-    CALL(evt_snd_envoff, PSND_FADEOUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(starstone_entry, STRING("nise"), 5, 0, 57, -955, 1)
     CALL(evt_mario_set_pos, 60, 0, -500)
@@ -1223,8 +895,10 @@ EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_npc_set_ry, STRING("ババ"), 270)
     CALL(evt_cam3d_evt_set, 0, 360, -338, 0, 250, -1130, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
     CALL(evt_snd_bgm_scope, 0, 1)
+#endif
     CALL(evt_cam3d_evt_set, 0, 150, -338, 0, 40, -1130, 7000, EASING_LINEAR)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("ババ"), 140, -880, 0, 60, 0)
@@ -1523,11 +1197,15 @@ EVT_BEGIN(pik_02_koopa_evt)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 20)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_memcard_save)
+#else
 #if VERSION >= VERSION_US
     CALL_CHILD(evt_memcard_save_wrapper)
 #else
     CALL_CHILD(PTR(evt_memcard_save))
 #endif
+#endif
     CALL(evt_mario_set_mode, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
@@ -1536,7 +1214,6 @@ EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_bero_mapchange, STRING("aji_18"), STRING("e_bero"))
     RETURN
 EVT_END()
-#endif
 
 /**
  * Puts the fake Garnet Star ("nisemono") back on the altar when the Thousand-Year Door has been opened
@@ -1558,77 +1235,6 @@ EVT_END()
  * the Garnet Star theft scene (evt_garnet) on first entry, the return-trip door change, the fake star,
  * and the Bowser interlude.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Map init script for pik_02: loads the entrances (depending on whether the Garnet Star theft is still to come),
- * music and ambience, NPCs, the blue switch that opens the curtain (evt_sw),
- * the painting and the altar case events (evt_kaiga, evt_daiza),
- * the Garnet Star theft scene (evt_garnet) on first entry, the return-trip door change, the fake star,
- * and the Bowser interlude.
- */
-EVT_BEGIN(pik_02_init_evt)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
-        SET_VALUE(LW(0), PTR(bero_data))
-        CALL(evt_bero_get_info)
-        CALL_CHILD(bero_case_entry)
-        CALL_CHILD(haikei_off)
-    ELSE
-        SET_VALUE(LW(0), PTR(bero_data))
-        CALL(evt_bero_get_info)
-        CALL_CHILD(evt_bero_info_run)
-    END_IF
-    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK2"))
-        CALL(evt_snd_set_rev_mode, 2)
-    ELSE
-        CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_EVT_KUPPA1"))
-        CALL(evt_snd_bgm_scope, 0, 1)
-        CALL(evt_snd_envoff, PSND_FADE_OUT)
-        CALL(evt_snd_set_rev_mode, 2)
-    END_IF
-    CALL(evt_npc_setup, PTR(npc_data))
-    CALL(evt_hit_bind_mapobj, STRING("a_ka_ten"), STRING("ka_ten"))
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_52_THE_HIDDEN_PIPE)
-        CALL(evt_mobj_switch_blue, 0, STRING("sw"), -300, 330, -975, PTR(evt_sw), 0)
-        SET_VALUE(LW(0), 1)
-        CALL_CHILD(bero_case_switch_off)
-    ELSE
-        CALL(evt_mapobj_trans, 1, STRING("ka_ten"), 0, 150, 0)
-        CALL(evt_hit_bind_update, STRING("a_ka_ten"))
-    END_IF
-    CALL(evt_bero_get_entername, LW(0))
-    IF_STR_EQUAL(LW(0), STRING("s_bero"))
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaiga"), 0, PTR(evt_kaiga), GW(10))
-    END_IF
-    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("dai_a"), 0, PTR(evt_daiza), 0)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door_1"), MAP_OBJ_FLAG_CLIP)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
-        SPAWN_EVENT(evt_garnet)
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
-        BEGIN_INLINE_EVENT
-            CALL(evt_bero_exec_wait, 65536)
-            CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_MARIO_A1, 0, FADE_STORY_MARIO_A3, 0)
-            SET_VALUE(LW(0), STRING("s_bero"))
-            CALL_CHILD(bero_case_switch_off)
-            CALL(evt_bero_overwrite, STRING("s_bero"), PTR(s_bero_peach))
-            SET_VALUE(LW(0), STRING("s_bero"))
-            CALL_CHILD(bero_case_switch_on)
-        END_INLINE_EVENT
-    END_IF
-    CALL_CHILD(nise_starstone_init)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
-        CALL(evt_mario_set_mode, 2)
-        CALL(evt_mario_kill_party, 0)
-        SPAWN_EVENT(pik_02_koopa_evt)
-    END_IF
-    CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("saku_2"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_cam_letter_box_disable, 0)
-    RETURN
-EVT_END()
-#else
 /**
  * Map init script for pik_02: loads the entrances (depending on whether the Garnet Star theft is still to come),
  * music and ambience, NPCs, the blue switch that opens the curtain (evt_sw),
@@ -1650,6 +1256,13 @@ EVT_BEGIN(pik_02_init_evt)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK2"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_set_rev_mode, 2)
+    ELSE
+        CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_EVT_KUPPA1"))
+        CALL(evt_snd_bgm_scope, 0, 1)
+        CALL(evt_snd_envoff, PSND_FADE_OUT)
+#endif
         CALL(evt_snd_set_rev_mode, 2)
     END_IF
     CALL(evt_npc_setup, PTR(npc_data))
@@ -1689,12 +1302,13 @@ EVT_BEGIN(pik_02_init_evt)
         SPAWN_EVENT(PTR(pik_02_koopa_evt))
     END_IF
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_jav"), MAP_OBJ_FLAG_CLIP)
+#endif
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("saku_2"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_cam_letter_box_disable, 0)
     RETURN
 EVT_END()
-#endif
 

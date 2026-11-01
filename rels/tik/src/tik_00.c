@@ -1384,7 +1384,9 @@ EVT_BEGIN(starmaniac_talk)
         CALL(evt_msg_print, 0, STRING("starmaniac_02"), 0, STRING("me"))
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION > VERSION_DEMO_US
+    CALL(tik_snd_off)
+#endif
     IF_INT_EQUAL(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("starmaniac_00"), 0, STRING("me"))
         SET_VALUE(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 1)
@@ -1394,12 +1396,18 @@ EVT_BEGIN(starmaniac_talk)
     CALL(evt_msg_select, 0, STRING("starmaniac_03"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_05"))
+#if VERSION > VERSION_DEMO_US
+        CALL(tik_snd_on)
+#endif
         RETURN
     END_IF
     // Mario has no Star Pieces: Dazzle accuses him of trying to swindle him and ends the talk.
     CALL(evt_pouch_get_starpiece, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_06"))
+#if VERSION > VERSION_DEMO_US
+        CALL(tik_snd_on)
+#endif
         RETURN
     END_IF
     CALL(evt_msg_print_add, 0, STRING("starmaniac_07"))
@@ -1409,76 +1417,11 @@ EVT_BEGIN(starmaniac_talk)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print, 0, STRING("starmaniac_08"), 0, STRING("me"))
+#if VERSION <= VERSION_DEMO_US
         RETURN
     END_IF
     CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(2), LW(3), LW(4))
-    CALL(evt_msg_select, 0, STRING("starmaniac_10"))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_win_coin_off, LW(12))
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_11"))
-        GOTO(0)
-    END_IF
-    // Mario is out of badge room: Dazzle sends him away; otherwise the badge is handed over
-    // and the Star Pieces are paid.
-    CALL(evt_pouch_add_item, LW(1), LW(0))
-    IF_INT_EQUAL(LW(0), -1)
-        CALL(evt_win_coin_off, LW(12))
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_15"))
-        RETURN
-    END_IF
-    CALL(evt_badgeShop_starmaniac_dec, LW(1))
-    MULTIPLY(LW(3), -1)
-    CALL(evt_pouch_add_starpiece, LW(3))
-    CALL(evt_win_coin_wait, LW(12))
-    WAIT_MS(500)
-    CALL(evt_win_coin_off, LW(12))
-    // If Dazzle is out of badges, or Mario out of Star Pieces, he cheers and the talk ends.
-    CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
-        RETURN
-    END_IF
-    CALL(evt_pouch_get_starpiece, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
-        RETURN
-    END_IF
-    CALL(evt_msg_print_add, 0, STRING("starmaniac_13"))
-    CALL(evt_msg_select, 0, STRING("starmaniac_10"))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_14"))
-        RETURN
-    END_IF
-    CALL(evt_msg_continue)
-    GOTO(0)
 #else
-    CALL(tik_snd_off)
-    IF_INT_EQUAL(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 0)
-        CALL(evt_msg_print, 0, STRING("starmaniac_00"), 0, STRING("me"))
-        SET_VALUE(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 1)
-    ELSE
-        CALL(evt_msg_print, 0, STRING("starmaniac_01"), 0, STRING("me"))
-    END_IF
-    CALL(evt_msg_select, 0, STRING("starmaniac_03"))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_05"))
-        CALL(tik_snd_on)
-        RETURN
-    END_IF
-    // Mario has no Star Pieces: Dazzle accuses him of trying to swindle him and ends the talk.
-    CALL(evt_pouch_get_starpiece, LW(0))
-    IF_INT_LESS_OR_EQUAL(LW(0), 0)
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_06"))
-        CALL(tik_snd_on)
-        RETURN
-    END_IF
-    CALL(evt_msg_print_add, 0, STRING("starmaniac_07"))
-    LABEL(0)
-    CALL(evt_win_coin_on, 2, LW(12))
-    CALL(evt_win_other_select, 13)
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_win_coin_off, LW(12))
-        CALL(evt_msg_print, 0, STRING("starmaniac_08"), 0, STRING("me"))
         CALL(tik_snd_on)
         RETURN
     END_IF
@@ -1499,6 +1442,7 @@ EVT_BEGIN(starmaniac_talk)
         CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(2), LW(3), LW(4))
     END_IF
 #endif
+#endif
     CALL(evt_msg_select, 0, STRING("starmaniac_10"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_win_coin_off, LW(12))
@@ -1511,7 +1455,9 @@ EVT_BEGIN(starmaniac_talk)
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print_add, 0, STRING("starmaniac_15"))
+#if VERSION > VERSION_DEMO_US
         CALL(tik_snd_on)
+#endif
         RETURN
     END_IF
     CALL(evt_badgeShop_starmaniac_dec, LW(1))
@@ -1524,24 +1470,31 @@ EVT_BEGIN(starmaniac_talk)
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
+#if VERSION > VERSION_DEMO_US
         CALL(tik_snd_on)
+#endif
         RETURN
     END_IF
     CALL(evt_pouch_get_starpiece, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
+#if VERSION > VERSION_DEMO_US
         CALL(tik_snd_on)
+#endif
         RETURN
     END_IF
     CALL(evt_msg_print_add, 0, STRING("starmaniac_13"))
     CALL(evt_msg_select, 0, STRING("starmaniac_10"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_14"))
+#if VERSION > VERSION_DEMO_US
         CALL(tik_snd_on)
+#endif
         RETURN
     END_IF
     CALL(evt_msg_continue)
     GOTO(0)
+#if VERSION > VERSION_DEMO_US
     CALL(tik_snd_on)
 #endif
     RETURN
@@ -2808,7 +2761,6 @@ EVT_BEGIN(tensou_init_event)
         CALL(evt_map_playanim, STRING("anm_tiktik"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
         END_IF
-    IF_INT_EQUAL(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
 #else
         CASE_LESS(STG9_02_RETURN_TO_ROGUEPORT)
         CASE_DEFAULT
@@ -2816,8 +2768,8 @@ EVT_BEGIN(tensou_init_event)
         CALL(evt_map_playanim, STRING("anm_Terop"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("anm_tiktik"), MAP_ANIM_PLAY_LOOP, 0)
     END_SWITCH
-    IF_INT_EQUAL(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
 #endif
+    IF_INT_EQUAL(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
         RETURN
     END_IF
     SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)

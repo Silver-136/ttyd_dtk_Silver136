@@ -103,19 +103,17 @@ BattleUnitKind unit_boss_champion = {
     1,
 #if VERSION <= VERSION_DEMO_US
     49,
-    0,
-        0,
-        100,
-        0,
-        50,
-    8,
 #else
     34,
+#endif
     0,
     0,
     100,
     0,
     50,
+#if VERSION <= VERSION_DEMO_US
+    8,
+#else
 #if VERSION >= VERSION_US
     7,
 #else
@@ -515,28 +513,12 @@ BattleWeapon weapon_champion_roof_shake_last_attack = {
     0, 0, // baseFpCost..baseSpCost
 #if VERSION <= VERSION_DEMO_US
     0,
-    1.0f, // reserved_14
-        1, // stylishCommandMultiplier
-        1, // reserved_19
-        1, // bingoSlotChance
-        1, // reserved_1B
-        NULL, // hpDamageFn
-        {0}, // hpDamageWork
-        NULL, // fpDamageFn
-        {0}, // fpDamageWork
-        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
-        TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-        ELEMENT_NORMAL, // element
-        ATTACKPATTERN_NO_DAMAGE_FINISH, // damagePattern
-        3, // acLevel
-        2, // reserved_6F
-        NULL,
-    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH,
 #else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
+#endif
 #endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
@@ -547,13 +529,20 @@ BattleWeapon weapon_champion_roof_shake_last_attack = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
     ATTACKPATTERN_NO_DAMAGE_FINISH, // damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
+#if VERSION <= VERSION_DEMO_US
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH,
+#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags

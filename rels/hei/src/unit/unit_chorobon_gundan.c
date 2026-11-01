@@ -55,31 +55,25 @@ void chorogun_ext_init(void);
 extern EvtWord escape_chorogun_event[];
 
 BattleUnitKind unit_chorobon_gundan;
-#if VERSION <= VERSION_DEMO_US
 // The demo has no padding after these three (the retail sizes are aligned up).
 typedef struct {
     BattleUnitDefense v;
-} DefencePad;
-typedef struct {
-    BattleUnitDefenseAttr v;
-} DefenceAttrPad;
-typedef struct {
-    StatusVulnerability v;
-} RegistPad;
-#else
-typedef struct {
-    BattleUnitDefense v;
+#if VERSION > VERSION_DEMO_US
     u8 pad[3];
-} DefencePad;
-typedef struct {
-    BattleUnitDefenseAttr v;
-    u8 pad[3];
-} DefenceAttrPad;
-typedef struct {
-    StatusVulnerability v;
-    u8 pad[2];
-} RegistPad;
 #endif
+} DefencePad;
+typedef struct {
+    BattleUnitDefenseAttr v;
+#if VERSION > VERSION_DEMO_US
+    u8 pad[3];
+#endif
+} DefenceAttrPad;
+typedef struct {
+    StatusVulnerability v;
+#if VERSION > VERSION_DEMO_US
+    u8 pad[2];
+#endif
+} RegistPad;
 static DefencePad defence;
 static DefenceAttrPad defence_attr;
 static RegistPad regist;

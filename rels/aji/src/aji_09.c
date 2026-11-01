@@ -809,75 +809,6 @@ EVT_END()
 
 EVT_BEGIN(aji_09_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
-#if VERSION <= VERSION_DEMO_US
-    // The exits are set up and the changing-room clothes and hit areas start hidden.
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    CALL(evt_hitobj_onoff, STRING("A_R_fuku_g"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("R_fuku_g"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fuku1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fuku2"), MAP_OBJ_FLAG_HIDDEN)
-    SET_VALUE(LF(0), 0)
-    // During Peach's disguise scenes (chapter 3) she takes over and her scene starts.
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_33_01_PEACH_TECS_REQUEST)
-        IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG3_33_03_PEACH_GRODUS)
-            SET_VALUE(LF(0), 1)
-        END_IF
-    END_IF
-    IF_INT_EQUAL(LF(0), 1)
-        CALL(evt_mario_set_mode, 1)
-        CALL(evt_mario_kill_party, 0)
-        SPAWN_EVENT(peach_evt_stg3)
-    ELSE
-        SET_VALUE(GF(0), 0)
-        // Otherwise the two changing booths get their curtain scripts and the lockers are set up.
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_omo"), 0, PTR(evt_kou1), 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_ura"), 0, PTR(evt_kou1), 0)
-        SET_VALUE(GF(1), 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou2_ka_omo"), 0, PTR(evt_kou2), 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou2_ka_ura"), 0, PTR(evt_kou2), 0)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fuku1_p"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fuku2_g"), MAP_OBJ_FLAG_HIDDEN)
-    END_IF
-    CALL_CHILD(evt_rokka_init)
-    CALL(evt_bero_get_entername, LW(0))
-    // Entering from the ceiling (tenjo): Mario and his partner drop into the room and land.
-    IF_STR_EQUAL(LW(0), STRING("tenjo"))
-        CALL(evt_cam_letter_box_disable, 1)
-        CALL(evt_mario_key_onoff, 0)
-        CALL(evt_mario_cont_onoff, 0)
-        CALL(evt_party_cont_onoff, 0, 0)
-        CALL(evt_party_cont_onoff, 1, 0)
-        CALL(evt_mario_set_pos, 170, 107, -115)
-        CALL(evt_party_set_pos, 0, 160, 107, -105)
-        CALL(evt_party_set_pos, 1, 150, 107, -95)
-        BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, SEQ_GAME)
-            CALL(evt_mario_cont_onoff, 1)
-            CALL(evt_party_cont_onoff, 0, 1)
-            CALL(evt_party_cont_onoff, 1, 1)
-            CALL(evt_mario_wait_landon)
-            CALL(evt_mario_key_onoff, 1)
-            CALL(evt_cam_letter_box_disable, 0)
-        END_INLINE_EVENT
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
-        CALL(evt_item_entry, STRING("item_00"), ITEM_REPEL_CAPE, -180, 12, -135, ITEM_TYPE_STILL, GSWF(4213), 0)
-    END_IF
-SPAWN_EVENT(evt_emergency)
-    CALL(evt_mario_get_mode, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo1"), 0, PTR(evt_memo1), 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo2"), 0, PTR(evt_memo2), 0)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
-    ELSE
-        // As Peach: the notes are hidden and her music plays.
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_memo"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
-        CALL(evt_snd_envoff, PSND_FADEOUT)
-    END_IF
-#else
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_hitobj_onoff, STRING("A_R_fuku_g"), 1, 0)
@@ -921,6 +852,7 @@ SPAWN_EVENT(evt_emergency)
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_party_cont_onoff, 1, 1)
             CALL(evt_mario_wait_landon)
+#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
             LOOP(30)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -935,9 +867,15 @@ SPAWN_EVENT(evt_emergency)
                 WAIT_FRAMES(1)
             END_LOOP
 #endif
+#endif
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_cam_letter_box_disable, 0)
         END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
+        CALL(evt_item_entry, STRING("item_00"), ITEM_REPEL_CAPE, -180, 12, -135, ITEM_TYPE_STILL, GSWF(4213), 0)
+#endif
     END_IF
     SPAWN_EVENT(PTR(evt_emergency))
     CALL(evt_mario_get_mode, LW(0))
@@ -951,6 +889,7 @@ SPAWN_EVENT(evt_emergency)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     RETURN

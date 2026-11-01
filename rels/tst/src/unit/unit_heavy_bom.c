@@ -784,22 +784,19 @@ static EVT_BEGIN(explosion_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
     CALL(evt_snd_sfxoff, LW(0))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, -1)
-#if VERSION <= VERSION_DEMO_US
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(5))
-    DIVIDE(LW(5), 2)
-    CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
-    MULTIPLY(LW(5), LW(6))
-#else
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 60, 4)
+#endif
 #endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(5))
     DIVIDE(LW(5), 2)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
+#if VERSION <= VERSION_DEMO_US
+    MULTIPLY(LW(5), LW(6))
+#else
     MULTIPLY_FLOAT(LW(5), LW(6))
 #endif
     ADD(LW(1), LW(5))

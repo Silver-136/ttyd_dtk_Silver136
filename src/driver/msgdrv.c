@@ -107,15 +107,14 @@ MessageWork* msgw = &msgWork;
 static char NoMessage[] = "";
 const char* ErrMessage[VERSION_PICK(2, 7)] = {
     R_no_messages_JP, R_no_messages_US,
-};
 #else
 const char* ErrMessage[VERSION_PICK(2, 7)] = {
     R_no_messages_JP, R_no_messages_US,
 #if VERSION >= VERSION_US
     R_no_messages_DE, R_no_messages_FR, R_no_messages_ES, R_no_messages_IT, R_no_messages_DU
 #endif
-};
 #endif
+};
 const char* paperPoseTbl[6] = {
     "PM_Y_1B", "PM_Y_2B", "PM_F_1B",
     "PM_F_3B", "PM_C_1B", "PM_C_2B"
@@ -154,6 +153,7 @@ void msgInit(void) {
     msgLoad("global", 1);
 }
 
+/** the demo loads the text into a smart heap block and points a missing file at an empty text */
 #if VERSION <= VERSION_DEMO_US
 /** The text of a loaded message file (the demo keeps it in a smart heap block). */
 static inline const char* msgEntryText(MessageEntry* entry) {
@@ -161,19 +161,33 @@ static inline const char* msgEntryText(MessageEntry* entry) {
 }
 
 /** the demo loads the text into a smart heap block and points a missing file at an empty text */
+#endif
 void msgLoad(const char* filename, s32 index) {
     MessageEntry* entry;
     const char* str;
     MsgLookupEntry* lookup;
     const char* msgptr;
     int i;
+#if VERSION <= VERSION_DEMO_US
     DVDEntry* dvd;
     s32 msgcount;
+#else
+#if VERSION >= VERSION_US
+    s32 msgcount;
+    DVDEntry* dvd;
+    s32 max;
+    s32 len;
+#else
+    DVDEntry* dvd;
+    s32 msgcount;
+#endif
+#endif
     u32 ofs;
     char filepath[64];
     char dvdpath[128];
 
     entry = &msgw->entries[index];
+#if VERSION <= VERSION_DEMO_US
     sprintf(filepath, "./%s/%s.txt", language_dir[gp->language], filename);
     if (entry->address) {
         if (entry->address != &dummySmartList) {
@@ -205,50 +219,7 @@ void msgLoad(const char* filename, s32 index) {
     }
     entry->count = msgcount / 2; // tag, message
 
-    if (!entry->count) {
-        entry->lookup = NULL;
-    } else {
-        ofs = 0;
-        if (entry->lookup) {
-            smartFree(entry->lookup);
-        }
-        entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), 0);
-        str = msgEntryText(entry);
-        lookup = entry->lookup->address;
-        for (i = 0; i < entry->count; i++, lookup++) {
-            lookup->startaddr = ofs;
-            ofs += strlen(str) + 1;
-            str += strlen(str) + 1;
-            lookup->endaddr = ofs;
-            ofs += strlen(str) + 1;
-            str += strlen(str) + 1;
-        }
-        msgSortDvdData = (void*)msgEntryText(entry);
-        qsort(entry->lookup->address, entry->count, sizeof(MsgLookupEntry), msg_compare);
-    }
-}
 #else
-/** the demo loads the text into a smart heap block and points a missing file at an empty text */
-void msgLoad(const char* filename, s32 index) {
-    MessageEntry* entry;
-    const char* str;
-    MsgLookupEntry* lookup;
-    const char* msgptr;
-    int i;
-#if VERSION >= VERSION_US
-    s32 msgcount;
-    DVDEntry* dvd;
-    s32 max;
-    s32 len;
-#else
-    DVDEntry* dvd;
-    s32 msgcount;
-#endif
-    u32 ofs;
-    char filepath[64];
-    char dvdpath[128];
-
-    entry = &msgw->entries[index];
 #if VERSION >= VERSION_US
     // US: the global message buffer is allocated once, sized for the largest message file of all languages
     if (!entry->address && index == 1) {
@@ -329,12 +300,21 @@ void msgLoad(const char* filename, s32 index) {
     if (entry->lookup) {
         smartFree(entry->lookup);
     }
+#endif
     if (!entry->count) {
         entry->lookup = NULL;
     } else {
         ofs = 0;
+#if VERSION <= VERSION_DEMO_US
+        if (entry->lookup) {
+            smartFree(entry->lookup);
+        }
+        entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), 0);
+        str = msgEntryText(entry);
+#else
         entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), 0);
         str = entry->address;
+#endif
         lookup = entry->lookup->address;
         for (i = 0; i < entry->count; i++, lookup++) {
             lookup->startaddr = ofs;
@@ -344,11 +324,14 @@ void msgLoad(const char* filename, s32 index) {
             ofs += strlen(str) + 1;
             str += strlen(str) + 1;
         }
+#if VERSION <= VERSION_DEMO_US
+        msgSortDvdData = (void*)msgEntryText(entry);
+#else
         msgSortDvdData = entry->address;
+#endif
         qsort(entry->lookup->address, entry->count, sizeof(MsgLookupEntry), msg_compare);
     }
 }
-#endif
 
 /** Records y as the top of a new page for paging back with Z, up to 110 pages, unless the window keeps no page list. */
 static inline void msgAddPage(smartEntry* smart, s32 y) {
@@ -2189,8 +2172,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
                 savedScroll = -posY;
 #endif
-#if VERSION >= VERSION_US
             } else if (strcmp(tag, "scale") == 0) {
+#if VERSION >= VERSION_US
                 sscanf(args, "%f", &scale.x);
                 flags &= ~MSG_CHAR_SCALE_X;
                 scale.y = scale.x;
@@ -2202,7 +2185,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 flags &= ~MSG_CHAR_SCALE_X;
                 scale = one;
 #else
-            } else if (strcmp(tag, "scale") == 0) {
                 sscanf(args, "%f", &scale);
             } else if (strcmp(tag, "/scale") == 0) {
                 scale = 1.0f;

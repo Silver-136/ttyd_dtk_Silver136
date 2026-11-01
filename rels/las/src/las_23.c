@@ -249,7 +249,6 @@ static HitDamageReturn dmgRetPoint[] = {
  * and before STG8_06_MOVING_PLANETS it hides the lower floor and pipe;
  * afterwards it switches to the moved layout with the west door leading to a different room (w_bero_mapchg).
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Map init script for las_23, a junction room of the Palace:
  * music (first or third Palace theme by story), the doors, return points for the bottomless pits,
@@ -263,44 +262,9 @@ EVT_BEGIN(las_23_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_paipu"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("jav_01"), 1, 0)
-        CALL(evt_hitobj_onoff, STRING("jav_02"), 1, 0)
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
-        SET_VALUE(LW(0), STRING("w_bero"))
-        CALL_CHILD(bero_case_switch_off)
-        CALL(evt_bero_overwrite, STRING("w_bero"), PTR(w_bero_mapchg))
-        SET_VALUE(LW(0), STRING("w_bero"))
-        CALL_CHILD(bero_case_switch_on)
-        SPAWN_EVENT(hikari_evt)
-    END_IF
-    CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))
-    CALL_CHILD(evt_gazigazi_entry)
-    RETURN
-EVT_END()
-#else
-/**
- * Map init script for las_23, a junction room of the Palace:
- * music (first or third Palace theme by story), the doors, return points for the bottomless pits,
- * and before STG8_06_MOVING_PLANETS it hides the lower floor and pipe;
- * afterwards it switches to the moved layout with the west door leading to a different room (w_bero_mapchg).
- */
-EVT_BEGIN(las_23_init_evt)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
-    ELSE
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
-    END_IF
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -310,8 +274,10 @@ EVT_BEGIN(las_23_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_paipu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("jav_01"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("jav_02"), 1, 0)
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         CALL(evt_hitobj_onoff, STRING("jav_03"), 1, 0)
+#endif
 #endif
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
@@ -327,5 +293,4 @@ EVT_BEGIN(las_23_init_evt)
     CALL_CHILD(PTR(evt_gazigazi_entry))
     RETURN
 EVT_END()
-#endif
 

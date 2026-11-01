@@ -531,7 +531,6 @@ USER_FUNC(_btlgon_get_escape_param) {
  * Either way she then sets unit work 3, lunges at the stands, takes away audience members
  * (gon_extra_eaten_event) and is set to 10 HP.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Hooktail's surrender scene, run by her KO event the first time her HP runs out: she begs Mario to stop
  * (stg1_gon_23, 24) and offers in turn coins (24), a rare badge (26) and a sniff of her feet (28), each a yes/no
@@ -757,509 +756,14 @@ EVT_BEGIN(negotiation_event)
         CALL(evt_btl_camera_noshake, 1)
         CALL(evt_btl_camera_shake_h, 1, 7, 0, 30, 12)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_batstage_set_aud_dark, 0, 180, 0)
     CALL(evt_batstage_set_aud_dark_base, 0, 180, 0)
-BEGIN_INLINE_EVENT
-        WAIT_FRAMES(40)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_7"))
-        CALL(btlevtcmd_SetFallAccel, UNIT_ID_MARIO, FLOAT(0.69921875f))
-        CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_JumpPosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 20, -1)
-        WAIT_FRAMES(60)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        WAIT_FRAMES(40)
-        CALL(btlevtcmd_SetFallAccel, UNIT_ID_PARTNER, FLOAT(0.69921875f))
-        CALL(btlevtcmd_GetPos, UNIT_ID_PARTNER, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_JumpPosition, UNIT_ID_PARTNER, LW(0), LW(1), LW(2), 20, -1)
-    END_INLINE_EVENT
-    // Hooktail snaps at eight audience members (gon_extra_eaten_event for each): members 32 and 53 tumble out
-    // and flee, the others are eaten.
-    SET_VALUE(LW(0), 13)
-    SPAWN_EVENT(gon_extra_eaten_event)
-    SET_VALUE(LW(0), 14)
-    SPAWN_EVENT(gon_extra_eaten_event)
-    SET_VALUE(LW(0), 32)
-    SPAWN_EVENT(gon_extra_eaten_event)
-    SET_VALUE(LW(0), 33)
-    SPAWN_EVENT(gon_extra_eaten_event)
-    SET_VALUE(LW(0), 34)
-    SPAWN_EVENT(gon_extra_eaten_event)
-    SET_VALUE(LW(0), 35)
-    SPAWN_EVENT(gon_extra_eaten_event)
-    SET_VALUE(LW(0), 53)
-    SPAWN_EVENT(gon_extra_eaten_event)
-    SET_VALUE(LW(0), 54)
-    SPAWN_EVENT(gon_extra_eaten_event)
-    // Her HP is set back to 10 and a recovery effect shows her gaining strength.
-    CALL(btlevtcmd_SetHp, UNIT_ID_SELF, 10)
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    SET_VALUE(LW(0), 40)
-    ADD(LW(1), 180)
-    ADD(LW(2), 70)
-    CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
-    // She chews with her eating pose (GNB_E_1) and her extra part 3 is shown.
-    BEGIN_INLINE_EVENT
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_E_1"))
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_EAT_APPEAR1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("GNB_P_1"))
-        CALL(btlevtcmd_ftomsec, 14, LW(0))
-        WAIT_MS(LW(0))
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
-        CALL(btlevtcmd_ftomsec, 56, LW(0))
-        WAIT_MS(LW(0))
-    END_INLINE_EVENT
-    CALL(btlevtcmd_ftomsec, 32, LW(0))
-    WAIT_MS(LW(0))
-    // The audience panics: each remaining member jumps up and scrambles away from the stage, then is removed.
-    CALL(evt_snd_sfxon, STRING("SFX_AUDIENCE_GNB_PANIC1"), 0)
-    SET_VALUE(LW(0), 0)
-    LOOP(100)
-        CALL(evt_audience_flag_check, LW(0), 1, LW(4))
-        IF_INT_EQUAL(LW(4), 0)
-            GOTO(60)
-        END_IF
-        CALL(evt_audience_flag_check, LW(0), 16, LW(4))
-        IF_INT_NOT_EQUAL(LW(4), 0)
-            GOTO(60)
-        END_IF
-        BEGIN_INLINE_EVENT
-            CALL(evt_audience_flag_on, LW(0), 18)
-            IF_INT_LESS(LW(0), 40)
-                CALL(evt_audience_set_animpose, LW(0), 7, 0)
-            ELSE
-                CALL(evt_audience_set_animpose, LW(0), 9, 0)
-            END_IF
-            CALL(evt_audience_get_position, LW(0), LW(1), LW(2), LW(3))
-            CALL(evt_sub_random, 5, LW(5))
-            ADD(LW(5), 17)
-            ADD(LW(2), LW(5))
-            CALL(evt_sub_random, 8, LW(6))
-            ADD(LW(6), 4)
-            SET_VALUE(LW(11), LW(0))
-            MODULO(LW(11), 10)
-            IF_INT_NOT_EQUAL(LW(11), 0)
-                SET_VALUE(LW(11), -1)
-            ELSE
-                CALL(evt_sub_random, 2, LW(11))
-                SWITCH(LW(11))
-                    CASE_EQUAL(0)
-                    CASE_EQUAL(1)
-                    SET_VALUE(LW(11), -1)
-                    CASE_DEFAULT
-                    SET_VALUE(LW(11), -1)
-                END_SWITCH
-            END_IF
-            CALL(evt_audience_jump_position_firstsp, LW(0), LW(1), LW(2), LW(3), LW(6), FLOAT(0.5f))
-            CALL(evt_sub_random, 11, LW(7))
-            WAIT_FRAMES(LW(7))
-            SUBTRACT(LW(2), LW(5))
-            CALL(evt_audience_jump_position_firstsp, LW(0), LW(1), LW(2), LW(3), LW(6), FLOAT(0.0f))
-            CALL(evt_audience_set_animpose, LW(0), 7, 0)
-            CALL(evt_sub_random, 300, LW(6))
-            ADD(LW(6), 400)
-            WAIT_MS(LW(6))
-            IF_INT_EQUAL(LW(0), 43)
-                CALL(evt_audience_set_animpose, LW(0), 9, 0)
-                CALL(evt_audience_set_rotate, LW(0), -90, 100, 0)
-                CALL(evt_audience_get_position, LW(0), LW(1), LW(2), LW(3))
-                ADD(LW(2), 2)
-                CALL(evt_audience_set_position, LW(0), LW(1), LW(2), LW(3))
-                IF_INT_NOT_EQUAL(LW(11), -1)
-                    CALL(evt_snd_sfxoff, LW(11))
-                END_IF
-            ELSE
-                CALL(evt_audience_get_position, LW(0), LW(8), LW(9), LW(10))
-                SET_VALUE(LW(12), LW(0))
-                MODULO(LW(12), 10)
-                IF_INT_NOT_EQUAL(LW(12), 0)
-                    SET_VALUE(LW(12), -1)
-                ELSE
-                    CALL(evt_sub_random, 1, LW(12))
-                    IF_INT_EQUAL(LW(12), 0)
-                        CALL(evt_snd_sfxon_3d, STRING("SFX_AUDIENCE_PANIC_RUN1"), LW(8), LW(9), LW(10), LW(12))
-                    ELSE
-                        CALL(evt_snd_sfxon_3d, STRING("SFX_AUDIENCE_PANIC_RUN2"), LW(8), LW(9), LW(10), LW(12))
-                    END_IF
-                    BEGIN_SIBLING_EVENT_GET_ID(LW(13))
-                        LOOP(1000)
-                            CALL(evt_audience_get_position, LW(0), LW(1), LW(2), LW(3))
-                            CALL(evt_snd_sfx_pos, LW(12), LW(1), LW(2), LW(3))
-                            IF_INT_NOT_EQUAL(LW(11), -1)
-                                CALL(evt_snd_sfx_pos, LW(11), LW(1), LW(2), LW(3))
-                            END_IF
-                            WAIT_FRAMES(1)
-                        END_LOOP
-                    END_SIBLING_EVENT
-                END_IF
-                CALL(evt_audience_set_animpose, LW(0), 7, 0)
-                CALL(_btlgon_get_escape_param, LW(1), LW(3), LW(5), LW(6), LW(7))
-                CALL(evt_audience_get_position, LW(0), LW(8), LW(9), LW(10))
-                ADD(LW(5), LW(8))
-                ADD(LW(6), LW(10))
-                CALL(evt_audience_move_position_speed, LW(0), LW(5), LW(2), LW(6), LW(7))
-                IF_INT_NOT_EQUAL(LW(11), -1)
-                    CALL(evt_snd_sfxoff, LW(11))
-                END_IF
-                IF_INT_NOT_EQUAL(LW(12), -1)
-                    DELETE_EVENT(LW(13))
-                    CALL(evt_snd_sfxoff, LW(12))
-                END_IF
-                CALL(evt_audience_delete, LW(0))
-                CALL(evt_audience_num_updown_in_event, FLOAT(-1.0f))
-            END_IF
-        END_INLINE_EVENT
-        LABEL(60)
-        ADD(LW(0), 1)
-    END_LOOP
-    // Any audience members left are removed.
-    LOOP(100)
-        CALL(evt_audience_delete, LW(0))
-        CALL(evt_audience_num_updown_in_event, FLOAT(-1.0f))
-        ADD(LW(0), 1)
-    END_LOOP
-    CALL(btlevtcmd_ftomsec, 38, LW(0))
-    WAIT_MS(LW(0))
-    // Chewing sounds play while the camera pulls back; then it moves in on her and part 3 is hidden again.
-    BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_ftomsec, 4, LW(0))
-        WAIT_MS(LW(0))
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_EAT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_ftomsec, 45, LW(0))
-        WAIT_MS(LW(0))
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_EAT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_ftomsec, 46, LW(0))
-        WAIT_MS(LW(0))
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_EAT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_ftomsec, 46, LW(0))
-        WAIT_MS(LW(0))
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_EAT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_ftomsec, 46, LW(0))
-        WAIT_MS(LW(0))
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_EAT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_ftomsec, 44, LW(0))
-        WAIT_MS(LW(0))
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_EAT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_ftomsec, 46, LW(0))
-        WAIT_MS(LW(0))
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_EAT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    END_SIBLING_EVENT
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, 0, 140, 900, 0, 60, 0, 30, 0)
-    CALL(btlevtcmd_ftomsec, 284, LW(0))
-    WAIT_MS(LW(0))
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, -115, 50, 200, -115, -30, -670, 20, 0)
-    WAIT_FRAMES(25)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_S_5"))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_StatusWindowOnOff, 0)
-    // Goombella or Koops is appalled.
-    CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(224)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_31_00_kur"), 0, UNIT_ID_PARTNER)
-        CASE_EQUAL(225)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_31_00_nok"), 0, UNIT_ID_PARTNER)
-    END_SWITCH
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, 40, 98, 686, 57, 125, 182, 1, 0)
-    WAIT_FRAMES(1)
-    CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 310, 60, 0)
-    CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_5"))
-    CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_5"))
-    CALL(evt_msg_print, 2, STRING("stg1_gon_31_01"), 0, UNIT_ID_SELF)
-    CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 0, 0, 0)
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, -115, 40, 200, -115, 39, 170, 1, 0)
-    WAIT_FRAMES(1)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_S_3"))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    SUBTRACT(LW(0), 260)
-    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
-    // The partner urges Mario to finish her off.
-    CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(224)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_31_02"), 0, UNIT_ID_PARTNER)
-        CASE_EQUAL(225)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_31_03"), 0, UNIT_ID_PARTNER)
-    END_SWITCH
-    CALL(btlevtcmd_StatusWindowOnOff, 1)
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, 0, 110, 860, 0, 60, 170, 20, 0)
-    WAIT_FRAMES(20)
-    // Mario and his partner jump to new home positions in front of her, the turn counter is reset and the
-    // battle resumes.
-    CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(6))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(6), POSE_TYPE_RUN)
-    CALL(btlevtcmd_GetHomePos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetHomePos, UNIT_ID_PARTNER, LW(3), LW(4), LW(5))
-    CALL(btlevtcmd_GetStageAudienceAreaSize, EVT_NULLPTR, LW(6), EVT_NULLPTR)
-    CALL(btlevtcmd_GetStageSize, EVT_NULLPTR, EVT_NULLPTR, LW(7))
-    BEGIN_INLINE_EVENT
-        ADD(LW(4), LW(6))
-        ADD(LW(5), LW(7))
-        ADD(LW(5), 80)
-        CALL(btlevtcmd_SetFallAccel, UNIT_ID_PARTNER, FLOAT(0.69921875f))
-        CALL(btlevtcmd_JumpPosition, UNIT_ID_PARTNER, LW(3), LW(4), LW(5), 27, -1)
-        CALL(btlevtcmd_SetHomePos, UNIT_ID_PARTNER, LW(3), LW(4), LW(5))
-    END_INLINE_EVENT
-    ADD(LW(1), LW(6))
-    ADD(LW(2), LW(7))
-    ADD(LW(2), 80)
-    CALL(btlevtcmd_SetFallAccel, UNIT_ID_MARIO, FLOAT(0.69921875f))
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_J_1B"))
-    CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_JumpPosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 27, 0)
-    CALL(btlevtcmd_SetHomePos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_MARIO_JUMP_LANDING1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_GetBodyId, UNIT_ID_MARIO, LW(3))
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, LW(3), STRING("M_I_Y"))
-    CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(4))
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(4), POSE_TYPE_ACTION)
-    WAIT_FRAMES(30)
-    CALL(btlevtcmd_reset_turn)
-    CALL(evt_btl_camera_set_prilimit, 0)
-    CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_PARTY_IN_AUDIENCE)
-    CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
-    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
-    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-    RETURN
-EVT_END()
 #else
-/**
- * Hooktail's surrender scene, run by her KO event the first time her HP runs out: she begs Mario to stop
- * (stg1_gon_23, 24) and offers in turn coins (24), a rare badge (26) and a sniff of her feet (28), each a yes/no
- * choice (LW(10) = offer, LW(5) = the accepted one); Mario shakes his head at each refusal.
- * If he accepts one she bites him as he walks up (weapon_gonbaba_kamituki_attack), gloats that he was duped
- * (stg1_gon_30, with Goombella's or Koops' reply) and the fight goes on.
- * If he refuses all three she grumbles that he is not very trusting (stg1_gon_31).
- * Either way she then sets unit work 3, lunges at the stands, takes away audience members
- * (gon_extra_eaten_event) and is set to 10 HP.
- */
-EVT_BEGIN(negotiation_event)
-    CALL(evt_btl_camera_set_prilimit, 1)
-    CALL(evt_btl_camera_wait_move_end)
-    // Hooktail's HP has run out: her status effects are cleared, her normal pose table comes back with the
-    // weakened stay and talk poses (GNB_S_4, GNB_T_4), and the camera closes in.
-    CALL(btlevtcmd_ClearAllStatus, UNIT_ID_SELF)
-    CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
-    WAIT_FRAMES(20)
-    CALL(btlevtcmd_reset_move_color_lv_all)
-    CALL(btlevtcmd_StatusWindowOnOff, 0)
-    CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
-    CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
-    CALL(evt_msg_print, 2, STRING("stg1_gon_23"), 0, UNIT_ID_SELF)
-    // Wait until Mario is back at his home position.
-    LABEL(0)
-    CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetHomePos, UNIT_ID_MARIO, LW(3), LW(4), LW(5))
-    IF_INT_NOT_EQUAL(LW(0), LW(3))
-        WAIT_FRAMES(1)
-        GOTO(0)
-    END_IF
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
-    WAIT_FRAMES(5)
-    SET_VALUE(LW(10), 0)
-    CALL(evt_msg_print, 2, STRING("stg1_gon_24"), 0, UNIT_ID_SELF)
-    CALL(evt_btl_camera_set_mode, 1, 0)
-    WAIT_FRAMES(20)
-    CALL(evt_msg_select, 0, STRING("stg1_gon_24_yesno1"))
-    CALL(evt_msg_continue)
-    IF_INT_EQUAL(LW(0), 0)
-        SET_VALUE(LW(5), 0)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_25"), 0, UNIT_ID_SELF)
-        GOTO(40)
-    END_IF
-    // If he refuses, Mario shakes his head and she offers a rare badge instead, another yes/no choice.
-    CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_NO1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_C"))
-    CALL(btlevtcmd_AnimeFlagOnOff, UNIT_ID_MARIO, 1, PART_ANIM_RESTART, 1)
-    WAIT_MS(667)
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 1, 0)
-    WAIT_FRAMES(5)
-    SET_VALUE(LW(10), 1)
-    CALL(evt_msg_print, 2, STRING("stg1_gon_26"), 0, UNIT_ID_SELF)
-    CALL(evt_btl_camera_set_mode, 1, 0)
-    WAIT_FRAMES(20)
-    CALL(evt_msg_select, 0, STRING("stg1_gon_26_yesno1"))
-    CALL(evt_msg_continue)
-    IF_INT_EQUAL(LW(0), 0)
-        SET_VALUE(LW(5), 1)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_27"), 0, UNIT_ID_SELF)
-        GOTO(40)
-    END_IF
-    // If he refuses again, he shakes his head and she offers to let him smell her feet, a last yes/no choice.
-    CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_NO1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_C"))
-    CALL(btlevtcmd_AnimeFlagOnOff, UNIT_ID_MARIO, 1, PART_ANIM_RESTART, 1)
-    WAIT_MS(667)
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 1, 0)
-    WAIT_FRAMES(5)
-    SET_VALUE(LW(10), 2)
-    CALL(evt_msg_print, 2, STRING("stg1_gon_28"), 0, UNIT_ID_SELF)
-    CALL(evt_btl_camera_set_mode, 1, 0)
-    WAIT_FRAMES(20)
-    CALL(evt_msg_select, 0, STRING("stg1_gon_28_yesno1"))
-    CALL(evt_msg_continue)
-    IF_INT_EQUAL(LW(0), 0)
-        SET_VALUE(LW(5), 2)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_29"), 0, UNIT_ID_SELF)
-        GOTO(40)
-    END_IF
-    CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_NO2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_C"))
-    CALL(btlevtcmd_AnimeFlagOnOff, UNIT_ID_MARIO, 1, PART_ANIM_RESTART, 1)
-    WAIT_MS(1000)
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 15, 0)
-    WAIT_FRAMES(15)
-    CALL(evt_msg_print, 2, STRING("stg1_gon_31"), 0, UNIT_ID_SELF)
-    GOTO(50)
-    LABEL(40)
-    // He accepted an offer: if Koops' Shell Shield guards Mario, it opens (its event 59) until he is back.
-    CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(3))
-    IF_INT_NOT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_RunDataEventChild, LW(3), 59)
-        CALL(btlevtcmd_SetUnitWork, LW(3), 2, 0)
-    END_IF
-    // Mario walks up to take the offer.
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, POSE_TYPE_RUN)
-    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_MARIO, FLOAT(3.0f))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 400)
-    CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, LW(0), 0, LW(2), 0, -1, 0)
-    IF_INT_EQUAL(LW(5), 0)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_C_4"))
-    ELSE
-        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, BTL_POSE_STAY)
-    END_IF
-    WAIT_MS(700)
-    // As he comes close, Hooktail bites him (GNB_A_2) and the bite's damage is checked against his guard.
-    BEGIN_INLINE_EVENT
-        CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_BITE1"), EVT_NULLPTR, 0, -220, 80, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_ftomsec, 15, LW(0))
-        WAIT_MS(LW(0))
-        CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_BITE2"), EVT_NULLPTR, 0, -260, 40, 0, EVT_NULLPTR)
-    END_INLINE_EVENT
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_A_2"))
-    CALL(btlevtcmd_ftomsec, 20, LW(0))
-    WAIT_MS(LW(0))
-    CALL(btlevtcmd_GetBodyId, UNIT_ID_MARIO, LW(4))
-    CALL(btlevtcmd_ResultACDefence, UNIT_ID_MARIO, PTR(&weapon_gonbaba_kamituki_attack))
-    CALL(btlevtcmd_StatusWindowOnOff, 0)
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, LW(4), PTR(&weapon_gonbaba_kamituki_attack), 1048832, LW(5))
-    WAIT_MS(500)
-    // If the bite KOs Mario with no Life Shroom to revive him, the scene ends here; otherwise it waits for
-    // his damage reaction.
-    CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))
-    IF_INT_LESS_OR_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDamageCode, UNIT_ID_MARIO, DAMAGE_RESULT_REVIVAL, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_btl_camera_set_prilimit, 0)
-            RETURN
-        END_IF
-        WAIT_MS(1500)
-        CALL(_wait_damage_event_end, UNIT_ID_MARIO)
-    ELSE
-        WAIT_MS(1500)
-    END_IF
-    // Wait until Mario is back at his home position, then the Shell Shield closes again.
-    CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), EVT_NULLPTR, EVT_NULLPTR)
-    CALL(btlevtcmd_GetHomePos, UNIT_ID_MARIO, LW(1), EVT_NULLPTR, EVT_NULLPTR)
-    LABEL(41)
-    IF_INT_NOT_EQUAL(LW(0), LW(1))
-        WAIT_FRAMES(1)
-        GOTO(41)
-    END_IF
-    CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(3))
-    IF_INT_NOT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_SetUnitWork, LW(3), 2, 1)
-    END_IF
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 1, 0)
-    WAIT_FRAMES(5)
-    CALL(evt_msg_print, 2, STRING("stg1_gon_30"), 0, UNIT_ID_SELF)
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, -115, 50, 265, -115, 49, 170, 1, 0)
-    WAIT_FRAMES(5)
-    // Goombella or Koops calls her a coward.
-    CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(224)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_30_01"), 0, UNIT_ID_PARTNER)
-        CASE_EQUAL(225)
-        CALL(evt_msg_print, 2, STRING("stg1_gon_30_02"), 0, UNIT_ID_PARTNER)
-    END_SWITCH
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
-    WAIT_FRAMES(5)
-    CALL(evt_msg_print, 2, STRING("stg1_gon_30_03"), 0, UNIT_ID_SELF)
-    CALL(evt_btl_camera_set_mode, 1, 3)
-    CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 20, 0)
-    WAIT_FRAMES(20)
-    CALL(evt_msg_print, 2, STRING("stg1_gon_30_04"), 0, UNIT_ID_SELF)
-    CALL(btlevtcmd_StatusWindowOnOff, 0)
-    LABEL(50)
-    CALL(evt_btl_camera_set_mode, 1, 0)
-    // Both paths meet here: unit work 3 is set to 1 (the surrender is used up) and Hooktail turns toward the
-    // audience with heavy steps that shake the camera.
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 1)
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_W_4"))
-    CALL(btlevtcmd_ftomsec, 35, LW(0))
-    WAIT_MS(LW(0))
-    CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_MOVE1"), EVT_NULLPTR, 0, -75, 0, 30, EVT_NULLPTR)
-    CALL(evt_btl_camera_shake_h, 1, 2, 0, 10, 13)
-    CALL(btlevtcmd_ftomsec, 23, LW(0))
-    WAIT_MS(LW(0))
-    CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_MOVE1"), EVT_NULLPTR, 0, -12, 0, -30, EVT_NULLPTR)
-    CALL(evt_btl_camera_shake_h, 1, 2, 0, 10, 13)
-    CALL(btlevtcmd_ftomsec, 34, LW(0))
-    WAIT_MS(LW(0))
-    CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_MOVE1"), EVT_NULLPTR, 0, -31, 0, 30, EVT_NULLPTR)
-    CALL(evt_btl_camera_shake_h, 1, 2, 0, 10, 13)
-    CALL(btlevtcmd_ftomsec, 23, LW(0))
-    WAIT_MS(LW(0))
-    CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_MOVE1"), EVT_NULLPTR, 0, 125, 0, -30, EVT_NULLPTR)
-    CALL(evt_btl_camera_shake_h, 1, 2, 0, 10, 13)
-    CALL(btlevtcmd_ftomsec, 34, LW(0))
-    WAIT_MS(LW(0))
-    CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_MOVE1"), EVT_NULLPTR, 0, 137, 0, 30, EVT_NULLPTR)
-    CALL(evt_btl_camera_shake_h, 1, 2, 0, 10, 13)
-    CALL(btlevtcmd_ftomsec, 17, LW(0))
-    WAIT_MS(LW(0))
-    WAIT_FRAMES(120)
-    // She is moved out to the front of the stage, over the audience area.
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetStageAudienceAreaSize, EVT_NULLPTR, LW(3), EVT_NULLPTR)
-    ADD(LW(1), LW(3))
-    CALL(btlevtcmd_GetStageSize, EVT_NULLPTR, EVT_NULLPTR, LW(3))
-    ADD(LW(2), LW(3))
-    ADD(LW(2), 80)
-    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    ADD(LW(0), 260)
-    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    // Her light is moved, the camera rumbles and the audience area is darkened.
-    CALL(_set_gonbaba_light)
-    CALL(evt_btl_camera_shake_h, 1, 7, 0, 6000, 0)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(600)
-        CALL(evt_btl_camera_noshake, 1)
-        CALL(evt_btl_camera_shake_h, 1, 7, 0, 30, 12)
-    END_INLINE_EVENT
     CALL(evt_batstage_set_aud_dark, 0, 24, 0)
     CALL(evt_batstage_set_aud_dark_base, 0, 24, 0)
     // Mario and his partner jump back in surprise.
+#endif
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(40)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_7"))
@@ -1532,7 +1036,6 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Script helper: moves the paper-craft light to (-600, 150, 1500), the direction (-200, 50, 500) scaled by 3,
@@ -1982,93 +1485,47 @@ EVT_END()
  * and the battle-entry event, sets her speaking body part to part 1 and clears her unit work (0 to 5;
  * 3 is the negotiation flag, 5 the attack-order counter).
  */
+/**
+ * Init script of Hooktail: registers her wait, attack and damage handlers (confusion uses the default handler)
+ * and the battle-entry event, sets her speaking body part to part 1 and clears her unit work (0 to 5;
+ * 3 is the negotiation flag, 5 the attack-order counter).
+ */
+static EVT_BEGIN(init_event)
+    CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
+    CALL(btlevtcmd_SetTalkBodyId, UNIT_ID_SELF, 1)
+    CALL(evt_audience_delete, 13)
+    CALL(evt_audience_entry, 13, 0)
+    CALL(evt_audience_delete, 14)
+    CALL(evt_audience_entry, 14, 0)
+    CALL(evt_audience_delete, 32)
+    CALL(evt_audience_entry, 32, 0)
+    CALL(evt_audience_delete, 33)
+    CALL(evt_audience_entry, 33, 0)
+    CALL(evt_audience_delete, 34)
+    CALL(evt_audience_entry, 34, 0)
+    CALL(evt_audience_delete, 35)
+    CALL(evt_audience_entry, 35, 0)
+    CALL(evt_audience_delete, 53)
+    CALL(evt_audience_entry, 53, 0)
+    CALL(evt_audience_delete, 54)
+    CALL(evt_audience_entry, 54, 0)
+    CALL(evt_audience_flag_on, 13, 512)
+    CALL(evt_audience_flag_on, 14, 512)
+    CALL(evt_audience_flag_on, 32, 512)
+    CALL(evt_audience_flag_on, 33, 512)
+    CALL(evt_audience_flag_on, 34, 512)
+    CALL(evt_audience_flag_on, 35, 512)
+    CALL(evt_audience_flag_on, 53, 512)
+    CALL(evt_audience_flag_on, 54, 512)
 #if VERSION <= VERSION_DEMO_US
-/**
- * Init script of Hooktail: registers her wait, attack and damage handlers (confusion uses the default handler)
- * and the battle-entry event, sets her speaking body part to part 1 and clears her unit work (0 to 5;
- * 3 is the negotiation flag, 5 the attack-order counter).
- */
-static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
-    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
-    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
-    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
-    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetTalkBodyId, UNIT_ID_SELF, 1)
-    CALL(evt_audience_delete, 13)
-    CALL(evt_audience_entry, 13, 0)
-    CALL(evt_audience_delete, 14)
-    CALL(evt_audience_entry, 14, 0)
-    CALL(evt_audience_delete, 32)
-    CALL(evt_audience_entry, 32, 0)
-    CALL(evt_audience_delete, 33)
-    CALL(evt_audience_entry, 33, 0)
-    CALL(evt_audience_delete, 34)
-    CALL(evt_audience_entry, 34, 0)
-    CALL(evt_audience_delete, 35)
-    CALL(evt_audience_entry, 35, 0)
-    CALL(evt_audience_delete, 53)
-    CALL(evt_audience_entry, 53, 0)
-    CALL(evt_audience_delete, 54)
-    CALL(evt_audience_entry, 54, 0)
-    CALL(evt_audience_flag_on, 13, 512)
-    CALL(evt_audience_flag_on, 14, 512)
-    CALL(evt_audience_flag_on, 32, 512)
-    CALL(evt_audience_flag_on, 33, 512)
-    CALL(evt_audience_flag_on, 34, 512)
-    CALL(evt_audience_flag_on, 35, 512)
-    CALL(evt_audience_flag_on, 53, 512)
-    CALL(evt_audience_flag_on, 54, 512)
     CALL(evt_audience_base_flag_on, 32768)
-    CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
-    CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(0.5f))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_POWER_DOWN, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART_DEFENSE, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 0)
-    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-    RETURN
-EVT_END()
 #else
-/**
- * Init script of Hooktail: registers her wait, attack and damage handlers (confusion uses the default handler)
- * and the battle-entry event, sets her speaking body part to part 1 and clears her unit work (0 to 5;
- * 3 is the negotiation flag, 5 the attack-order counter).
- */
-static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
-    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
-    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
-    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
-    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetTalkBodyId, UNIT_ID_SELF, 1)
-    CALL(evt_audience_delete, 13)
-    CALL(evt_audience_entry, 13, 0)
-    CALL(evt_audience_delete, 14)
-    CALL(evt_audience_entry, 14, 0)
-    CALL(evt_audience_delete, 32)
-    CALL(evt_audience_entry, 32, 0)
-    CALL(evt_audience_delete, 33)
-    CALL(evt_audience_entry, 33, 0)
-    CALL(evt_audience_delete, 34)
-    CALL(evt_audience_entry, 34, 0)
-    CALL(evt_audience_delete, 35)
-    CALL(evt_audience_entry, 35, 0)
-    CALL(evt_audience_delete, 53)
-    CALL(evt_audience_entry, 53, 0)
-    CALL(evt_audience_delete, 54)
-    CALL(evt_audience_entry, 54, 0)
-    CALL(evt_audience_flag_on, 13, 512)
-    CALL(evt_audience_flag_on, 14, 512)
-    CALL(evt_audience_flag_on, 32, 512)
-    CALL(evt_audience_flag_on, 33, 512)
-    CALL(evt_audience_flag_on, 34, 512)
-    CALL(evt_audience_flag_on, 35, 512)
-    CALL(evt_audience_flag_on, 53, 512)
-    CALL(evt_audience_flag_on, 54, 512)
     CALL(evt_audience_base_flag_on, 16384)
+#endif
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
     CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(0.5f))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 0)
@@ -2080,7 +1537,6 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-#endif
 
 /** Phase event: empty, it does nothing. */
 static EVT_BEGIN(phase_event)

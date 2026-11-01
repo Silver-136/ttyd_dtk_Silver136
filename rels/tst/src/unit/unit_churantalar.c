@@ -967,7 +967,6 @@ EVT_END()
  * beside it, then swings part 2 in three steps with SFX_ENM_PAIDA_ATTACK1 each (z rotation 0 to 110, to 70,
  * to 100 degrees) and stores the final angle in unit work 4.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Wind-up of the Arantula's attack: turns toward the target, takes pose PAI_A_1 and shows part 2 (pose PAI_A_2a)
  * beside it, then swings part 2 in three steps with SFX_ENM_PAIDA_ATTACK1 each (z rotation 0 to 110, to 70,
@@ -982,6 +981,7 @@ static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PAI_A_2a"))
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
@@ -993,57 +993,14 @@ static EVT_BEGIN(piders_attack_common_event1)
             CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 30, 0)
         END_IF
     END_IF
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(evt_sub_intpl_init, 4, 0, 110, 5)
-    LOOP(5)
-        CALL(evt_sub_intpl_get_value)
-        MULTIPLY(LW(0), LW(8))
-        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, LW(0))
-        WAIT_FRAMES(1)
-    END_LOOP
-    WAIT_FRAMES(20)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(evt_sub_intpl_init, 4, 110, 70, 5)
-    LOOP(5)
-        CALL(evt_sub_intpl_get_value)
-        MULTIPLY(LW(0), LW(8))
-        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, LW(0))
-        WAIT_FRAMES(1)
-    END_LOOP
-    WAIT_FRAMES(15)
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(evt_sub_intpl_init, 4, 70, 100, 5)
-    LOOP(5)
-        CALL(evt_sub_intpl_get_value)
-        MULTIPLY(LW(0), LW(8))
-        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, LW(0))
-        WAIT_FRAMES(1)
-    END_LOOP
-    WAIT_FRAMES(10)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_ROTATION, LW(0))
-    RETURN
-EVT_END()
 #else
-/**
- * Wind-up of the Arantula's attack: turns toward the target, takes pose PAI_A_1 and shows part 2 (pose PAI_A_2a)
- * beside it, then swings part 2 in three steps with SFX_ENM_PAIDA_ATTACK1 each (z rotation 0 to 110, to 70,
- * to 100 degrees) and stores the final angle in unit work 4.
- */
-static EVT_BEGIN(piders_attack_common_event1)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
-    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    ADD(LW(2), FLOAT(3.0f))
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PAI_A_1"))
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PAI_A_2a"))
-    CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(1))
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
 #endif
+#endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, 4, 0, 110, 5)
     LOOP(5)
@@ -1074,13 +1031,11 @@ static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_ROTATION, LW(0))
     RETURN
 EVT_END()
-#endif
 
 /**
  * Shorter wind-up (no script of this unit calls it): turns to the target, shows part 2 and swings it from the
  * angle in unit work 4 to 100 degrees with one SFX_ENM_PAIDA_ATTACK1.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Shorter wind-up (no script of this unit calls it): turns to the target, shows part 2 and swings it from the
  * angle in unit work 4 to 100 degrees with one SFX_ENM_PAIDA_ATTACK1.
@@ -1095,6 +1050,7 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
+#if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
     ELSE
@@ -1105,40 +1061,14 @@ static EVT_BEGIN(piders_attack_common_event1_2)
             CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 30, 0)
         END_IF
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_ROTATION, LW(0))
-    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(evt_sub_intpl_init, 4, LW(0), 100, 5)
-    LOOP(5)
-        CALL(evt_sub_intpl_get_value)
-        MULTIPLY(LW(0), LW(8))
-        CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 2, 0, 0, LW(0))
-        WAIT_FRAMES(1)
-    END_LOOP
-    WAIT_FRAMES(5)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_ROTATION, LW(0))
-    RETURN
-EVT_END()
 #else
-/**
- * Shorter wind-up (no script of this unit calls it): turns to the target, shows part 2 and swings it from the
- * angle in unit work 4 to 100 degrees with one SFX_ENM_PAIDA_ATTACK1.
- */
-static EVT_BEGIN(piders_attack_common_event1_2)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
-    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
-    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    ADD(LW(2), FLOAT(3.0f))
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PAI_A_1"))
-    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PAI_A_2a"))
-    CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(1))
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
 #endif
+#endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_ROTATION, LW(0))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, 4, LW(0), 100, 5)
@@ -1152,7 +1082,6 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_ROTATION, LW(0))
     RETURN
 EVT_END()
-#endif
 
 /**
  * Ends the single shot's wind-up: rotates part 2 back from 100 degrees to 0 over 15 frames, returns to PAI_S_1

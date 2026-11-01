@@ -319,9 +319,10 @@ s32 winMarioMain(WindowWork* w) {
 void winMarioMain2(void) {
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** US: plain ASCII digits */
+// US: plain ASCII digits
 const char* winZenkakuStr(s32 n) {
+#if VERSION <= VERSION_DEMO_US
     const char* tbl[10] = {"０", "１", "２", "３", "４",
                            "５", "６", "７", "８", "９"};
     static char tmp2[0x100];
@@ -332,18 +333,11 @@ const char* winZenkakuStr(s32 n) {
     for (i = 0; i < strlen(buf); i++) {
         strcat(tmp2, tbl[(s8)buf[i] - '0']);
     }
-    return tmp2;
-}
 #else
 #if VERSION >= VERSION_US
-/** US: plain ASCII digits */
-// US: plain ASCII digits
-const char* winZenkakuStr(s32 n) {
     static char tmp2[0x100];
     sprintf(tmp2, "%d", n);
 #else
-/** US: plain ASCII digits */
-const char* winZenkakuStr(s32 n) {
     const char* tbl[10] = {"０", "１", "２", "３", "４",
                            "５", "６", "７", "８", "９"};
     static char tmp2[0x100];
@@ -361,9 +355,9 @@ const char* winZenkakuStr(s32 n) {
         strcat(tmp2, tbl[(s8)buf[i] - '0']);
     }
 #endif
+#endif
     return tmp2;
 }
-#endif
 
 #if VERSION >= VERSION_US
 char winZenkakuStrPad_buf[0x100];
@@ -682,8 +676,6 @@ s32 i;
 }
 }
 #else
-#if VERSION >= VERSION_US
-
 /**
  * Draws the Mario window (menu slot idx): name, level and rank, the gear and curse bubbles, HP/FP/BP,
  * the Star Power gauge, Star Points, coins, Star Pieces, Shine Sprites and play time (capped at 99:59),
@@ -692,6 +684,7 @@ s32 i;
  */
 // US: every float live range has its own variable (register order); rowC is the second value of rowB
 void winMarioDisp(s32 camId, void* param, s32 idx) {
+#if VERSION >= VERSION_US
     f32 rowC;
     // FAKE: q1/q2 hold copies of row0/row1 for the dead guards after the specialCount block (register order, no code)
     f32 q1[1];
@@ -735,13 +728,6 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     f32 row3;
     f32 rubyW;
 #else
-/**
- * Draws the Mario window (menu slot idx): name, level and rank, the gear and curse bubbles, HP/FP/BP,
- * the Star Power gauge, Star Points, coins, Star Pieces, Shine Sprites and play time (capped at 99:59),
- * Mario's model, and the special-move list when open.
- * US: every float live range has its own variable (register order); rowC is the second value of rowB
- */
-void winMarioDisp(s32 camId, void* param, s32 idx) {
     static s32 pri[6] = {3, 2, 8, 10, 7, 9};
 #endif
     WindowWork* w;

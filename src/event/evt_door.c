@@ -867,126 +867,6 @@ EVT_BEGIN(evt_door_open)
 EVT_END()
 
 EVT_BEGIN(evt_door_open_bom_01)
-#if VERSION <= VERSION_DEMO_US
-    // Run the door's open script, then set up the rooms as evt_door_open does, without moving the camera.
-    CALL(evt_door_param, LW(0), 7, LW(1), LW(2))
-    IF_INT_NOT_EQUAL(LW(1), 0)
-        SPAWN_EVENT(LW(1))
-    END_IF
-    CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
-    IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_door_save_mapflag, LW(1))
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_CLIP)
-    END_IF
-    CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
-    IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
-    IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
-    END_IF
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
-    IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
-    END_IF
-    IF_INT_NOT_EQUAL(LW(2), 0)
-        CALL(evt_hitobj_onoff, LW(2), 1, 1)
-    END_IF
-    CALL(door_dark_flag, LW(0), 1)
-    // The door swings open with its sound.
-    SPAWN_EVENT(door_open_se)
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
-    IF_INT_NOT_EQUAL(LW(7), 0)
-        BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
-            CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
-            LABEL(0)
-            CALL(evt_sub_intpl_msec_get_value)
-            SET_VALUE(LW(5), LW(1))
-            SET_VALUE(LW(1), 0)
-            SPAWN_EVENT(LW(7))
-            WAIT_FRAMES(1)
-            IF_INT_EQUAL(LW(5), 1)
-                GOTO(0)
-            END_IF
-        END_INLINE_EVENT
-    END_IF
-    // Hold the door open until the map's cutscene clears GF(0).
-    WAIT_MS(500)
-    SET_VALUE(GF(0), 1)
-    LOOP(0)
-        IF_INT_EQUAL(GF(0), 0)
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    // The outside darkens and the door swings shut.
-    SPAWN_EVENT(door_dark)
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
-    IF_INT_NOT_EQUAL(LW(7), 0)
-        BEGIN_INLINE_EVENT
-            SPAWN_EVENT(door_close_se)
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
-            CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
-            LABEL(1)
-            CALL(evt_sub_intpl_msec_get_value)
-            SET_VALUE(LW(5), LW(1))
-            SET_VALUE(LW(1), 1)
-            SPAWN_EVENT(LW(7))
-            WAIT_FRAMES(1)
-            IF_INT_EQUAL(LW(5), 1)
-                GOTO(1)
-            END_IF
-        END_INLINE_EVENT
-    END_IF
-    // The house wall swings open, the outside finishes darkening and the out-piece swings down.
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
-    IF_INT_NOT_EQUAL(LW(9), 0)
-        BEGIN_INLINE_EVENT
-            SPAWN_EVENT(house_open_se)
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
-            SET_VALUE(LW(6), 0)
-            CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-            LABEL(2)
-            CALL(evt_sub_intpl_msec_get_value)
-            SET_VALUE(LW(5), LW(1))
-            SET_VALUE(LW(1), 0)
-            SPAWN_EVENT(LW(9))
-            SET_VALUE(LW(6), 1)
-            WAIT_FRAMES(1)
-            IF_INT_EQUAL(LW(5), 1)
-                GOTO(2)
-            END_IF
-        END_INLINE_EVENT
-    END_IF
-    WAIT_MS(500)
-    SPAWN_EVENT(door_dark2)
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
-    IF_INT_NOT_EQUAL(LW(8), 0)
-        BEGIN_INLINE_EVENT
-            WAIT_MS(500)
-            SPAWN_EVENT(door_down_se)
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
-            CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
-            LABEL(3)
-            CALL(evt_sub_intpl_msec_get_value)
-            SPAWN_EVENT(LW(8))
-            WAIT_FRAMES(1)
-            IF_INT_EQUAL(LW(1), 1)
-                GOTO(3)
-            END_IF
-        END_INLINE_EVENT
-    END_IF
-    // The indoor sound takes over.
-#else
     CALL(evt_door_param, LW(0), 7, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         SPAWN_EVENT(LW(1))
@@ -1016,8 +896,10 @@ EVT_BEGIN(evt_door_open_bom_01)
     END_IF
     CALL(door_dark_flag, LW(0), 1)
     SPAWN_EVENT(PTR(door_open_se))
+#if VERSION > VERSION_DEMO_US
 #if VERSION < VERSION_US
     CALL(evt_mario_party_door_halve_hitbox)
+#endif
 #endif
     CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
@@ -1102,7 +984,6 @@ EVT_BEGIN(evt_door_open_bom_01)
             END_IF
         END_INLINE_EVENT
     END_IF
-#endif
     WAIT_MS(500)
     CALL(snd_door_in)
     RETURN

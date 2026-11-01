@@ -40,13 +40,12 @@ typedef struct {
         NpcDeadInfo deadInfo[64]; //0x19B4
         BadgeShopWork badgeShop; //0x1EB4
         PiantaParlorWork parlor; //0x1FD8
+        InformantUnknown informant; //0x2110
 #if VERSION >= VERSION_US
-        InformantUnknown informant; //0x2230 (US parlor work is 0x120 bigger)
         u8 pad_225B[0x2260 - 0x225B]; //0x225B
     } data;
     u8 __align[0x3FF0 - 0x2260]; //0x2260
 #else
-        InformantUnknown informant; //0x2110
         u8 pad_213B[0x2140 - 0x213B]; //0x213B
     } data;
     u8 __align[0x3FF0 - 0x2140]; //0x2140

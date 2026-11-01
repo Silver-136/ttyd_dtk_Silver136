@@ -1314,6 +1314,14 @@ void winFullDisp(WinMgrEntry* win) {
  * and the icon flags are 0x40/0x100 where retail has 0x100/0x200.
  */
 static void itemseq_GetItem(ItemEntry* entry) {
+#else
+/**
+ * The demo's item-get sequence: no retail sub-states 2 (control off) and 8 (motion abort),
+ * so retail 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
+ * and the icon flags are 0x40/0x100 where retail has 0x100/0x200.
+ */
+void itemseq_GetItem(ItemEntry* entry) {
+#endif
     ItemWork* wp = itemGetWork();
     MarioWork* mario;
     s32 type, bgm;
@@ -1323,6 +1331,14 @@ static void itemseq_GetItem(ItemEntry* entry) {
     switch (entry->subState) {
         case 0:
             entry->flags2 &= ~ITEM_FLAG2_RELEASED;
+#if VERSION > VERSION_DEMO_US
+            if (entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP) {
+                entry->flags2 |= ITEM_FLAG2_SAVED_LOST_BADGE;
+            } else {
+                entry->flags2 &= ~ITEM_FLAG2_SAVED_LOST_BADGE;
+            }
+            entry->flags &= ~ITEM_FLAG_LOST_BADGE_TO_SHOP;
+#endif
             if (entry->flags & ITEM_FLAG_QUICK_GET) {
                 if (itemGetPouch(entry)) {
                     entry->timer = 0;
@@ -1339,12 +1355,24 @@ static void itemseq_GetItem(ItemEntry* entry) {
             marioKeyOff();
             marioStSystemLevel(2);
             psndSetFlag(PSND_FLAG_MUTE_SFX);
+#if VERSION > VERSION_DEMO_US
+            mario->floorMove.x = 0.0f;
+            mario->floorMove.z = 0.0f;
+            mario->baseSpeed = 0.0f;
+            mario->moveDist = 0.0f;
+#endif
             if (entry->itemId == ITEM_SUPER_BOOTS || entry->itemId == ITEM_ULTRA_BOOTS || entry->itemId == ITEM_SUPER_HAMMER || entry->itemId == ITEM_ULTRA_HAMMER) {
                 entry->flags2 |= ITEM_FLAG2_UPGRADE_GET;
             }
         case 1:
             if (!(entry->flags & ITEM_FLAG_FORCE_GET) || entry->flags & ITEM_FLAG_NOKO_GET) {
                 if (!marioChkItemGetMotion()) {
+#if VERSION > VERSION_DEMO_US
+                    if (mario->currMotionId == MARIO_MOTION_JUMP_SW || (u16)(mario->currMotionId - 6) <= 2 ||
+                        mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
+                        entry->subState = 8;
+                    }
+#endif
                     break;
                 }
             }
@@ -1381,6 +1409,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
                 bgm = 2;
             }
             wp->effect = effItemGetEntry(type, mario->position.x, 62.0f + mario->position.y, mario->position.z);
+#if VERSION <= VERSION_DEMO_US
             if (type == 0 || type == 3) {
                 if (entry->flags2 & ITEM_FLAG2_UPGRADE_GET) {
                     ((ItemGetWork*)wp->effect->userdata)->camera = 5;
@@ -1390,290 +1419,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
                     ((ItemGetWork*)wp->effect->userdata)->camera = 5;
                     marioSetCamId(CAMERA_3D_EFFECTA);
                     iconFlagOn(entry->name, 0x40);
-                }
-            }
-            if (!(entry->flags & ITEM_FLAG_NO_GET_BGM)) {
-                if (psndBGMChkSilent(0)) {
-                    entry->flags |= ITEM_FLAG_BGM_SILENT;
-                }
-                switch (bgm) {
-                    case 0:
-                        if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-                        }
-                        psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_STARPIECE1");
-                        break;
-                    case 1:
-                        if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-                        }
-                        psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_KEYITEM1");
-                        break;
-                    case 2:
-                        if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-                        }
-                        psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_BADGE1");
-                        break;
-                    case 3:
-                        if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-                        }
-                        psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_IMPORTANT_ITEM1");
-                        break;
-                    default:
-                        if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
-                        }
-                        psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
-                        break;
-                }
-            }
-            if (type == 8) {
-                evtSetValue(NULL, GSW_TIK_STAR_PIECES_FOUND_COUNT, evtGetValue(NULL, GSW_TIK_STAR_PIECES_FOUND_COUNT) + 1);
-            }
-            entry->flags &= ~ITEM_FLAG_GET_BGM_ENDED;
-            itemGetSound(entry);
-            entry->winId[0] = winMgrEntry(&itemdrv_window_desc[0]);
-            winMgrOpen(entry->winId[0]);
-            winMgrSetParam(entry->winId[0], entry);
-            if (!(entry->flags2 & ITEM_FLAG2_UPGRADE_GET)) {
-                entry->winId[1] = winMgrEntry(&itemdrv_window_desc[1]);
-                winMgrOpen(entry->winId[1]);
-                winMgrSetParam(entry->winId[1], entry);
-            }
-            if (!itemGetPouch(entry)) {
-                entry->winId[2] = winMgrEntry(&itemdrv_window_desc[2]);
-                winMgrOpen(entry->winId[2]);
-                winMgrSetParam(entry->winId[2], entry);
-            }
-            if (entry->itemId == ITEM_WEDDING_RING) {
-                iconChange(entry->name, 0x114);
-            }
-            break;
-        case 2:
-            if (!(entry->flags & ITEM_FLAG_NO_GET_BGM) && !(entry->flags & ITEM_FLAG_GET_BGM_ENDED)) {
-                if (psndBGMChk(1)) {
-                    entry->flags |= ITEM_FLAG_GET_BGM_ENDED;
-                    psndBGMOff(PSND_FADE_OUT | PSND_SLOT(1));
-                    if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                        psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
-                    }
-                }
-            }
-            if (winMgrAction(entry->winId[0])) {
-                break;
-            }
-            if (!(keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B))) {
-                break;
-            }
-            winMgrCloseAutoDelete(entry->winId[0]);
-            if (!(entry->flags2 & ITEM_FLAG2_UPGRADE_GET)) {
-                winMgrCloseAutoDelete(entry->winId[1]);
-            }
-            if (!(entry->flags & ITEM_FLAG_NO_GET_BGM) && !(entry->flags & ITEM_FLAG_GET_BGM_ENDED)) {
-                psndBGMOff(PSND_FADE_OUT | PSND_SLOT(1));
-                if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
-                    psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
-                }
-            }
-            if (entry->flags2 & ITEM_FLAG2_UPGRADE_GET) {
-                entry->subState = 5;
-                break;
-            }
-            if (entry->itemId >= ITEM_MIN && entry->itemId < ITEM_MAX && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & GW_FLAG_E3)) {
-                swSet(0xEB);
-                entry->subState = 3;
-                wp->msgWindowId = msgWindow_Entry(msgSearch("item_first_hit"), 0, 0);
-                break;
-            }
-            effSoftDelete(wp->effect);
-            marioSetCamId(CAMERA_3D);
-            iconFlagOff(entry->name, 0x40);
-            if (entry->itemId == ITEM_WEDDING_RING) {
-                iconChange(entry->name, 0x115);
-            }
-            if (entry->flags2 & ITEM_FLAG2_IN_POUCH) {
-                itemGetEnd(entry);
-                itemDelete(entry->name);
-                break;
-            }
-            entry->subState = 4;
-            winMgrCloseAutoDelete(entry->winId[2]);
-            marioChgStayMotion();
-            iconFlagOn(entry->name, ICON_FLAG_HIDDEN);
-            {
-                s32 id = entry->itemId;
-                if (id >= BADGE_MIN && id < BADGE_MAX) {
-                    wp->select = winMgrSelectEntry(2, id, 1);
-                } else {
-                    wp->select = winMgrSelectEntry(1, id, 1);
-                }
-            }
-            break;
-        case 3:
-            if (windowCheckID(wp->msgWindowId)) {
-                break;
-            }
-            effSoftDelete(wp->effect);
-            marioSetCamId(CAMERA_3D);
-            iconFlagOff(entry->name, 0x40);
-            itemGetEnd(entry);
-            itemDelete(entry->name);
-            break;
-        case 4:
-            select = winMgrSelect(wp->select);
-            if (!select) {
-                break;
-            }
-            winMgrSelectDelete(wp->select);
-            if (select >= 0) {
-                pouchRemoveItem(select);
-                itemGetPouch(entry);
-                entry->flags2 &= ~ITEM_FLAG2_IN_POUCH;
-                entry->itemId = select;
-                entry->evtCode = NULL;
-                entry->flags &= ~(ITEM_FLAG_COLLECT_GSWF | ITEM_FLAG_COLLECT_LSWF);
-                iconChange(entry->name, itemDataTable[entry->itemId].icon_id);
-            }
-            entry->speed = 85.0f;
-            entry->velocityY = 120.0f;
-            entry->bounceFactor = 0.7f;
-            entry->gravityScale = 1.0f;
-            entry->winId[0] = winMgrEntry(&itemdrv_window_desc[3]);
-            winMgrOpen(entry->winId[0]);
-            winMgrSetParam(entry->winId[0], entry);
-            marioChgGetItemMotion();
-            iconFlagOff(entry->name, ICON_FLAG_HIDDEN);
-            if (mario->flags & MARIO_FLAG_BG_MODE) {
-                entry->flags2 |= ITEM_FLAG2_NO_Z_MOVE;
-            }
-            entry->subState = 7;
-            break;
-        case 5:
-            wp->lectureEvt = evtEntryType(all_juyoitem_lecture, 0, 0, 0);
-            wp->lectureEvt->lwData[8] = (EvtWord)entry;
-            wp->lectureEvt->lwData[9] = (EvtWord)wp->effect;
-            psndClearFlag(PSND_FLAG_MUTE_SFX);
-            entry->subState = 6;
-            break;
-        case 6:
-            if (evtCheckID(wp->lectureEvt->eventId)) {
-                break;
-            }
-            itemGetEnd(entry);
-            itemDelete(entry->name);
-            break;
-        case 7:
-            if (!(keyGetButtonTrg(0) & PAD_BUTTON_A)) {
-                break;
-            }
-            winMgrCloseAutoDelete(entry->winId[0]);
-            entry->flags2 |= ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
-            itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
-            entry->flags &= ~ITEM_FLAG_CUSTOM_BOUND;
-            if (entry->itemId >= KEY_ITEM_MIN && entry->itemId < KEY_ITEM_MAX) {
-                entry->timer = 0;
-            } else if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
-                entry->timer = 0;
-            } else {
-                entry->timer = 20000;
-            }
-            entry->flags2 |= ITEM_FLAG2_RELEASED;
-            entry->flags2 &= ~ITEM_FLAG2_CARRIED;
-            entry->flags &= ~ITEM_FLAG_NO_TOUCH_GET;
-            itemGetEnd(entry);
-            break;
-    }
-}
 #else
-/**
- * The demo's item-get sequence: no retail sub-states 2 (control off) and 8 (motion abort),
- * so retail 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
- * and the icon flags are 0x40/0x100 where retail has 0x100/0x200.
- */
-void itemseq_GetItem(ItemEntry* entry) {
-    ItemWork* wp = itemGetWork();
-    MarioWork* mario;
-    s32 type, bgm;
-    s32 select;
-
-    mario = marioGetPtr();
-    switch (entry->subState) {
-        case 0:
-            entry->flags2 &= ~ITEM_FLAG2_RELEASED;
-            if (entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP) {
-                entry->flags2 |= ITEM_FLAG2_SAVED_LOST_BADGE;
-            } else {
-                entry->flags2 &= ~ITEM_FLAG2_SAVED_LOST_BADGE;
-            }
-            entry->flags &= ~ITEM_FLAG_LOST_BADGE_TO_SHOP;
-            if (entry->flags & ITEM_FLAG_QUICK_GET) {
-                if (itemGetPouch(entry)) {
-                    entry->timer = 0;
-                    itemGetSound(entry);
-                    itemDelete(entry->name);
-                } else {
-                    itemModeChange(entry, ITEM_MODE_FALL_NO_PICKUP);
-                }
-                break;
-            }
-            entry->subState = 1;
-            entry->timer = 0;
-            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-            marioKeyOff();
-            marioStSystemLevel(2);
-            psndSetFlag(PSND_FLAG_MUTE_SFX);
-            mario->floorMove.x = 0.0f;
-            mario->floorMove.z = 0.0f;
-            mario->baseSpeed = 0.0f;
-            mario->moveDist = 0.0f;
-            if (entry->itemId == ITEM_SUPER_BOOTS || entry->itemId == ITEM_ULTRA_BOOTS || entry->itemId == ITEM_SUPER_HAMMER || entry->itemId == ITEM_ULTRA_HAMMER) {
-                entry->flags2 |= ITEM_FLAG2_UPGRADE_GET;
-            }
-        case 1:
-            if (!(entry->flags & ITEM_FLAG_FORCE_GET) || entry->flags & ITEM_FLAG_NOKO_GET) {
-                if (!marioChkItemGetMotion()) {
-                    if (mario->currMotionId == MARIO_MOTION_JUMP_SW || (u16)(mario->currMotionId - 6) <= 2 ||
-                        mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
-                        entry->subState = 8;
-                    }
-                    break;
-                }
-            }
-            entry->subState = 2;
-            marioChgGetItemMotion();
-            {
-                f32 y = 50.0f + mario->position.y, z = mario->position.z;
-                entry->position.x = mario->position.x;
-                entry->position.y = y;
-                entry->position.z = z;
-            }
-            type = 7;
-            bgm = -1;
-            if (entry->itemId == ITEM_SHINE_SPRITE) {
-                type = 4;
-                bgm = -1;
-            } else if (entry->itemId == ITEM_STAR_PIECE) {
-                type = 8;
-                bgm = 0;
-            } else if (entry->itemId < 0xC) {
-                type = 3;
-                bgm = 3;
-            } else if (entry->itemId < ITEM_DIAMOND_STAR) {
-                type = 6;
-                bgm = 1;
-            } else if (entry->itemId < KEY_ITEM_MAX) {
-                type = 0;
-                bgm = -1;
-            } else if (entry->itemId < ITEM_MAX) {
-                type = 7;
-                bgm = -1;
-            } else if (entry->itemId < BADGE_MAX) {
-                type = 5;
-                bgm = 2;
-            }
-            wp->effect = effItemGetEntry(type, mario->position.x, 62.0f + mario->position.y, mario->position.z);
             if (entry->flags2 & ITEM_FLAG2_UPGRADE_GET) {
                 ((ItemGetWork*)wp->effect->userdata)->camera = 5;
                 iconFlagOn(entry->name, ICON_FLAG_CAM_EFFECT_B);
@@ -1683,6 +1429,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 iconFlagOn(entry->name, ICON_FLAG_CAM_EFFECT_A);
                 if (type == 0 || type == 3) {
                     marioSetCamId(CAMERA_3D_EFFECTA);
+#endif
                 }
             }
             if (!(entry->flags & ITEM_FLAG_NO_GET_BGM)) {
@@ -1692,31 +1439,51 @@ void itemseq_GetItem(ItemEntry* entry) {
                 switch (bgm) {
                     case 0:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
+#if VERSION <= VERSION_DEMO_US
+                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
+#else
                             psndBGMOff(0x3800);
+#endif
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_STARPIECE1");
                         break;
                     case 1:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
+#if VERSION <= VERSION_DEMO_US
+                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
+#else
                             psndBGMOff(0x3800);
+#endif
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_KEYITEM1");
                         break;
                     case 2:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
+#if VERSION <= VERSION_DEMO_US
+                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
+#else
                             psndBGMOff(0x3800);
+#endif
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_BADGE1");
                         break;
                     case 3:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
+#if VERSION <= VERSION_DEMO_US
+                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
+#else
                             psndBGMOff(0x3800);
+#endif
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_IMPORTANT_ITEM1");
                         break;
                     default:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
+#if VERSION <= VERSION_DEMO_US
+                            psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
+#else
                             psndBGMOff(0x3800);
+#endif
                         }
                         psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
                         break;
@@ -1741,6 +1508,9 @@ void itemseq_GetItem(ItemEntry* entry) {
                 winMgrSetParam(entry->winId[2], entry);
             }
             if (entry->itemId == ITEM_WEDDING_RING) {
+#if VERSION <= VERSION_DEMO_US
+                iconChange(entry->name, 0x114);
+#else
 #if VERSION >= VERSION_US
                 iconChange(entry->name, 0x11B);
 #else
@@ -1749,19 +1519,26 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             if (!entry->effect) {
                 iconNameToPtr(entry->name)->uflags |= ICON_FLAG_ITEM_NO_MAP_BLEND;
+#endif
             }
             break;
         case 2:
+#if VERSION > VERSION_DEMO_US
             if (!(entry->flags2 & ITEM_FLAG2_UPGRADE_GET)) {
                 marioCtrlOff();
                 entry->flags2 |= ITEM_FLAG2_CTRL_OFF;
             }
             entry->subState = 3;
         case 3:
+#endif
             if (!(entry->flags & ITEM_FLAG_NO_GET_BGM) && !(entry->flags & ITEM_FLAG_GET_BGM_ENDED)) {
                 if (psndBGMChk(1)) {
                     entry->flags |= ITEM_FLAG_GET_BGM_ENDED;
+#if VERSION <= VERSION_DEMO_US
+                    psndBGMOff(PSND_FADE_OUT | PSND_SLOT(1));
+#else
                     psndBGMOff(0x201);
+#endif
                     if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                         psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                     }
@@ -1778,23 +1555,40 @@ void itemseq_GetItem(ItemEntry* entry) {
                 winMgrCloseAutoDelete(entry->winId[1]);
             }
             if (!(entry->flags & ITEM_FLAG_NO_GET_BGM) && !(entry->flags & ITEM_FLAG_GET_BGM_ENDED)) {
+#if VERSION <= VERSION_DEMO_US
+                psndBGMOff(PSND_FADE_OUT | PSND_SLOT(1));
+#else
                 psndBGMOff(0x201);
+#endif
                 if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                     psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 }
             }
             if (entry->flags2 & ITEM_FLAG2_UPGRADE_GET) {
+#if VERSION <= VERSION_DEMO_US
+                entry->subState = 5;
+#else
                 entry->subState = 6;
+#endif
                 break;
             }
             if (entry->itemId >= ITEM_MIN && entry->itemId < ITEM_MAX && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & GW_FLAG_E3)) { // GSWF_ITEM_TUTORIAL_SEEN
                 swSet(0xEB); // GSWF_ITEM_TUTORIAL_SEEN
+#if VERSION <= VERSION_DEMO_US
+                entry->subState = 3;
+#else
                 entry->subState = 4;
+#endif
                 wp->msgWindowId = msgWindow_Entry(msgSearch("item_first_hit"), 0, 0);
                 break;
             }
             effSoftDelete(wp->effect);
             marioSetCamId(CAMERA_3D);
+#if VERSION <= VERSION_DEMO_US
+            iconFlagOff(entry->name, 0x40);
+            if (entry->itemId == ITEM_WEDDING_RING) {
+                iconChange(entry->name, 0x115);
+#else
             iconFlagOff(entry->name, ICON_FLAG_CAM_EFFECT_A);
             if (entry->itemId == ITEM_WEDDING_RING) {
 #if VERSION >= VERSION_US
@@ -1805,13 +1599,18 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             if (!entry->effect) {
                 iconNameToPtr(entry->name)->uflags &= ~ICON_FLAG_ITEM_NO_MAP_BLEND;
+#endif
             }
             if (entry->flags2 & ITEM_FLAG2_IN_POUCH) {
                 itemGetEnd(entry);
                 itemDelete(entry->name);
                 break;
             }
+#if VERSION <= VERSION_DEMO_US
+            entry->subState = 4;
+#else
             entry->subState = 5;
+#endif
             winMgrCloseAutoDelete(entry->winId[2]);
             marioChgStayMotion();
             iconFlagOn(entry->name, ICON_FLAG_HIDDEN);
@@ -1824,32 +1623,53 @@ void itemseq_GetItem(ItemEntry* entry) {
                 }
             }
             break;
+#if VERSION <= VERSION_DEMO_US
+        case 3:
+#else
         case 4:
+#endif
             if (windowCheckID(wp->msgWindowId)) {
                 break;
             }
             effSoftDelete(wp->effect);
             marioSetCamId(CAMERA_3D);
+#if VERSION <= VERSION_DEMO_US
+            iconFlagOff(entry->name, 0x40);
+#else
             iconFlagOff(entry->name, ICON_FLAG_CAM_EFFECT_A);
+#endif
             itemGetEnd(entry);
             itemDelete(entry->name);
             break;
+#if VERSION <= VERSION_DEMO_US
+        case 4:
+#else
         case 5:
+#endif
             select = winMgrSelect(wp->select);
             if (!select) {
                 break;
             }
             winMgrSelectDelete(wp->select);
+#if VERSION <= VERSION_DEMO_US
+            if (select >= 0) {
+#else
             if (select < 0) {
                 if (entry->flags2 & ITEM_FLAG2_SAVED_LOST_BADGE) {
                     entry->flags |= ITEM_FLAG_LOST_BADGE_TO_SHOP;
                 }
             } else {
+#endif
                 pouchRemoveItem(select);
                 itemGetPouch(entry);
                 entry->flags2 &= ~ITEM_FLAG2_IN_POUCH;
                 entry->itemId = select;
                 entry->evtCode = NULL;
+#if VERSION <= VERSION_DEMO_US
+                entry->flags &= ~(ITEM_FLAG_COLLECT_GSWF | ITEM_FLAG_COLLECT_LSWF);
+                iconChange(entry->name, itemDataTable[entry->itemId].icon_id);
+            }
+#else
                 entry->collectFlag = 0;
                 entry->flags &= ~(ITEM_FLAG_COLLECT_GSWF | ITEM_FLAG_COLLECT_LSWF);
                 iconChange(entry->name, itemDataTable[entry->itemId].icon_id);
@@ -1859,6 +1679,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 entry->flags |= ITEM_FLAG_LOST_BADGE_TO_SHOP;
             }
             entry->flags &= ~ITEM_FLAG_FORCE_GET;
+#endif
             entry->speed = 85.0f;
             entry->velocityY = 120.0f;
             entry->bounceFactor = 0.7f;
@@ -1871,23 +1692,39 @@ void itemseq_GetItem(ItemEntry* entry) {
             if (mario->flags & MARIO_FLAG_BG_MODE) {
                 entry->flags2 |= ITEM_FLAG2_NO_Z_MOVE;
             }
+#if VERSION <= VERSION_DEMO_US
+            entry->subState = 7;
+            break;
+        case 5:
+#else
             entry->subState = 9;
             break;
         case 6:
+#endif
             wp->lectureEvt = evtEntryType(all_juyoitem_lecture, 0, 0, 0);
             wp->lectureEvt->lwData[8] = (EvtWord)entry;
             wp->lectureEvt->lwData[9] = (EvtWord)wp->effect;
             psndClearFlag(PSND_FLAG_MUTE_SFX);
+#if VERSION <= VERSION_DEMO_US
+            entry->subState = 6;
+            break;
+        case 6:
+#else
             entry->subState = 7;
             break;
         case 7:
+#endif
             if (evtCheckID(wp->lectureEvt->eventId)) {
                 break;
             }
             itemGetEnd(entry);
             itemDelete(entry->name);
             break;
+#if VERSION <= VERSION_DEMO_US
+        case 7:
+#else
         case 9:
+#endif
             if (!(keyGetButtonTrg(0) & PAD_BUTTON_A)) {
                 break;
             }
@@ -1907,6 +1744,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             entry->flags &= ~ITEM_FLAG_NO_TOUCH_GET;
             itemGetEnd(entry);
             break;
+#if VERSION > VERSION_DEMO_US
         case 8:
             if (mario->flags & MARIO_FLAG_BG_MODE) {
                 entry->flags2 |= ITEM_FLAG2_NO_Z_MOVE;
@@ -1939,9 +1777,9 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             marioKeyOn();
             break;
+#endif
     }
 }
-#endif
 
 // FAKE: unused file-scope static; removing it changes the object
 static s32 _move_dir_1090;
@@ -1957,314 +1795,6 @@ static s32 _move_dir_1090;
  * becomes resting when it stops.
  */
 static void itemseq_Bound(ItemEntry* entry) {
-    static s32 _move_dir;
-    MarioWork* mario;
-    CameraEntry* camera;
-    HitEntry* hit;
-    MapObjectEntry* mobj;
-    BOOL isFloor, bounce;
-    s64 delta;
-    f32 t2sq, dt, dy, t2, dx, t1;
-    f32 dz, v, peak, height;
-    f32 newX, newZ;
-    s32 newDir;
-    Vec pos;
-    s32 itemId;
-
-    mario = marioGetPtr();
-    camera = camGetPtr(CAMERA_3D);
-    switch (entry->subState) {
-        case 0:
-            entry->subState = 1;
-            entry->airTime = 0;
-            entry->baseTime = gp->renderTime;
-            entry->curTime = gp->renderTime;
-            entry->bounceCount = 0;
-            if (entry->flags2 & ITEM_FLAG2_SKIP_BOUND_INIT) {
-                break;
-            }
-            switch (entry->mode) {
-                case ITEM_MODE_SCATTER_NO_PICKUP:
-                    entry->flags2 |= ITEM_FLAG2_NO_PICKUP_RISING;
-                case ITEM_MODE_SCATTER:
-                    if (!(entry->flags & ITEM_FLAG_CUSTOM_BOUND)) {
-                        entry->bounceFactor = 1.0f;
-                        entry->gravityScale = 1.0f;
-                        entry->maxBounces = 0;
-                        entry->velocityY = 500.0f;
-                    }
-                    if (!(entry->flags2 & ITEM_FLAG2_SPREAD)) {
-                        switch (entry->itemId) {
-                            case ITEM_COIN:
-                            case ITEM_HEART:
-                            case ITEM_FLOWER:
-                                entry->speed = irand(30) + 45;
-                                if (irand(100) < 50) {
-                                    entry->direction = 90.0f + camera->viewYaw + irand(60) - 30.0f;
-                                } else {
-                                    entry->direction = camera->viewYaw - 90.0f + irand(60) - 30.0f;
-                                }
-                                break;
-                            default:
-                                entry->speed = 100.0f;
-                                if (irand(100) < 50) {
-                                    entry->direction = 90.0f + camera->viewYaw + irand(30) - 15.0f;
-                                } else {
-                                    entry->direction = camera->viewYaw - 90.0f + irand(30) - 15.0f;
-                                }
-                                break;
-                        }
-} else {
-                        entry->direction = _move_dir;
-                        _move_dir += 132;
-                        if (_move_dir >= 360) {
-                            _move_dir -= 360;
-                        }
-                        entry->speed = 0.67f * (irand(30) + 65);
-                    }
-                    break;
-                case ITEM_MODE_FALL_NO_PICKUP:
-                    entry->flags2 |= ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
-                case ITEM_MODE_FALL:
-                    if (!(entry->flags & ITEM_FLAG_CUSTOM_BOUND)) {
-                        entry->bounceFactor = 1.0f;
-                        entry->gravityScale = 1.0f;
-                        entry->maxBounces = 0;
-                    }
-                    entry->speed = 0.0f;
-                    entry->direction = 0;
-                    entry->velocityY = 0.0f;
-                    break;
-                case ITEM_MODE_POP:
-                    entry->bounceFactor = 1.0f;
-                    entry->gravityScale = 1.0f;
-                    entry->maxBounces = 0;
-                    entry->velocityY = 500.0f;
-                    entry->speed = 0.0f;
-                    entry->direction = 0;
-                    entry->flags2 |= ITEM_FLAG2_POP_VANISH;
-                    entry->flags2 |= ITEM_FLAG2_NO_PICKUP_RISING;
-                    break;
-            }
-            break;
-        case 1:
-            entry->curTime = gp->renderTime;
-            delta = entry->curTime - entry->baseTime;
-            dt = OSTicksToMicroseconds(delta) / 1000000.0f;
-            t1 = OSTicksToMicroseconds(entry->airTime) / 1000000.0f;
-            t2 = OSTicksToMicroseconds(entry->airTime + delta) / 1000000.0f;
-            dx = dt * (entry->speed * (f32)sin(6.2831855f * entry->direction / 360.0f));
-            dz = (f32)cos(6.2831855f * entry->direction / 360.0f);
-            dz = dt * (entry->speed * -dz);
-            if (entry->flags2 & ITEM_FLAG2_NO_Z_MOVE) {
-                dz = 0.0f;
-            }
-            t2sq = t2 * t2;
-            dy = entry->velocityY * dt + (-980.0f * entry->gravityScale) * (t2sq - t1 * t1);
-            if (entry->flags2 & ITEM_FLAG2_NO_PICKUP_RISING) {
-                if (entry->bounceCount != 0 || dy < 0.0f) {
-                    entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_RISING;
-                }
-            }
-            if (entry->flags2 & ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND && entry->bounceCount != 0) {
-                entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
-            }
-            if (entry->flags2 & ITEM_FLAG2_POP_VANISH && dy < 0.0f) {
-                effStardustEntry(1, 3, 30, entry->position.x, entry->position.y, entry->position.z, 16.0f, 16.0f);
-                itemDelete(entry->name);
-                return;
-            }
-            newDir = entry->direction;
-            hit = itemHitCheckSide(entry, &newX, dx, &newZ, dz, &newDir);
-            entry->position.x = newX;
-            entry->position.z = newZ;
-            entry->direction = newDir;
-            if (hit) {
-                entry->speed *= 0.25f;
-            }
-            if (!(entry->flags2 & ITEM_FLAG2_POP_VANISH) && !(entry->flags & ITEM_FLAG_NO_CEILING_HIT)) {
-                {
-                    // FAKE: itemHitCheckUp written out here (inlining it leaves the Y block below in the wrong stack order);
-                    // h/r are the inline's result copies and keep the same register pressure. hit* declared in reverse for ascending slots.
-                    HitEntry* h;
-                    HitEntry* r;
-                    f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
-                    f32 x, y, z;
-
-                    if (dy <= 0.0f) {
-                        r = NULL;
-                    } else {
-                        x = entry->position.x;
-                        y = 20.0f + entry->position.y;
-                        z = entry->position.z;
-                        hitDist = 20.0 + fabs(dy);
-                        if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
-                            entry->position.y = hitY - 20.0f - 4.0f;
-                            r = h;
-                        } else {
-                            x = entry->position.x;
-                            y = entry->position.y;
-                            z = entry->position.z;
-                            hitDist = 20.0 + fabs(dy);
-                            if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
-                                entry->position.y = hitY - 20.0f;
-                                r = h;
-                            } else {
-                                r = NULL;
-                            }
-                        }
-                    }
-                    hit = r;
-                }
-                if (hit) {
-                    entry->velocityY = -entry->velocityY / 4.0f;
-                    dy = 0.0f;
-                    entry->airTime = 0;
-                    entry->baseTime = entry->curTime;
-                }
-            }
-            if (entry->flags2 & ITEM_FLAG2_SUNK && entry->position.y <= -1000.0f) {
-                itemModeChange(entry, ITEM_MODE_STILL);
-                entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_RISING;
-                entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
-                entry->flags2 &= ~ITEM_FLAG2_TIMER_WAIT_LAND;
-                if (entry->itemId >= KEY_ITEM_MIN && entry->itemId < KEY_ITEM_MAX) {
-                    entry->timer = 0;
-                } else if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
-                    entry->timer = 0;
-                } else {
-                    entry->timer = 20000;
-                }
-                entry->flags2 |= ITEM_FLAG2_RELEASED;
-                entry->flags2 &= ~ITEM_FLAG2_CARRIED;
-                break;
-            }
-            if (dy >= 0.0f) {
-                hit = NULL;
-                entry->position.y += dy;
-            }
-            // FAKE: no-op u32 cast so the earlier masked status value is not reused (target reloads status here)
-            else if (*(u32*)&entry->flags2 & ITEM_FLAG2_SUNK) {
-                hit = NULL;
-                entry->position.y += dy;
-            } else {
-                // FAKE: itemHitCheckY written out here; the result goes through h so the caller's hit is set in each arm
-                // (coalesces into r26 like the target). hit* declared in reverse for ascending stack slots.
-                f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
-                HitEntry* h;
-                f32 x = entry->position.x, y = 20.0f + entry->position.y, z = entry->position.z;
-                hitDist = 20.0 + fabs(dy);
-                h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f);
-                if (h) {
-                    entry->position.y = hitY;
-                    hit = h;
-                } else {
-                    hit = NULL;
-                    entry->position.y += dy;
-                }
-            }
-            if (hit) {
-                if (hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID)) {
-                    entry->flags2 |= ITEM_FLAG2_SUNK;
-                    {
-                        Vec sndPos = (Vec){0.0f, 0.0f, 0.0f};
-                        sndPos.x = entry->position.x;
-                        sndPos.y = entry->position.y;
-                        sndPos.z = entry->position.z;
-                        psndSFXOn_3D((const char*)0x194, &sndPos);
-                    }
-                    effSplashEntry(0, entry->position.x, entry->position.y, entry->position.z, 0.7f);
-                    entry->flags |= ITEM_FLAG_NO_TOUCH_GET;
-                } else {
-                    entry->bounceCount++;
-                    if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ) && entry->maxBounces != 0 && entry->bounceCount >= entry->maxBounces) {
-                        itemModeChange(entry, ITEM_MODE_GROUND);
-                        entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_RISING;
-                        entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
-                        entry->flags2 &= ~ITEM_FLAG2_TIMER_WAIT_LAND;
-                        break;
-                    }
-                    {
-                        pos = (Vec){entry->position.x, entry->position.y, entry->position.z};
-                        switch (itemId = entry->itemId) {
-                            case ITEM_COIN:
-                                psndSFXOn_3D("SFX_COIN_LEAPED1", &pos);
-                                break;
-                            case ITEM_PIANTA_TOKEN:
-                                psndSFXOn_3D("SFX_EVT_GAME_MONTE_LEAPED1", &pos);
-                                break;
-                            case ITEM_HEART:
-                                psndSFXOn_3D("SFX_HEART_LEAPED1", &pos);
-                                break;
-                            case ITEM_FLOWER:
-                                psndSFXOn_3D("SFX_FLOWER_LEAPED1", &pos);
-                                break;
-                            case ITEM_STAR_PIECE:
-                                psndSFXOn_3D("SFX_STAR_PIECE_LEAPED1", &pos);
-                                break;
-                            case ITEM_DIAMOND_STAR:
-                            case ITEM_EMERALD_STAR:
-                            case ITEM_GOLD_STAR:
-                            case ITEM_RUBY_STAR:
-                            case ITEM_SAPPHIRE_STAR:
-                            case ITEM_GARNET_STAR:
-                            case ITEM_CRYSTAL_STAR:
-                                psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
-                                break;
-                            default:
-                                if (itemId >= BADGE_MIN && itemId < BADGE_MAX) {
-                                    psndSFXOn_3D("SFX_BADGE_LEAPED1", &pos);
-                                } else {
-                                    psndSFXOn_3D("SFX_ITEM_LEAPED1", &pos);
-                                }
-                                break;
-                        }
-                    }
-                    isFloor = FALSE;
-                    if (entry->flags & ITEM_FLAG_ELASTIC && entry->velocityY != 0.0f) {
-                        bounce = TRUE;
-                    } else if (hitGetAttr(hit) & HIT_ATTR_MOBJ && entry->velocityY != 0.0f) {
-                        mobj = mobjHitObjPtrToPtr(hit);
-                        if (mario->characterId == CHARACTER_BOWSER) {
-                            bounce = FALSE;
-                        } else if (mobj && strcmp(mobj->animName, "MOBJ_KururinFloor")) {
-                            bounce = TRUE;
-                            isFloor = TRUE;
-                        } else {
-                            goto no_bounce;
-                        }
-                    } else {
-                    no_bounce:
-                        bounce = FALSE;
-                    }
-                    if (!bounce) {
-                        v = entry->velocityY * dt + (-980.0f * entry->gravityScale) * ((t2 + dt) * (t2 + dt) - t2sq);
-                        entry->velocityY = 0.7f * (entry->bounceFactor * (-v / dt));
-                    }
-                    peak = fabs(0.5f * (entry->velocityY / (-980.0f * entry->gravityScale)));
-                    height = entry->velocityY * peak + peak * ((-980.0f * entry->gravityScale) * peak);
-                    if (!isFloor && height <= 8.0f) {
-                        itemModeChange(entry, ITEM_MODE_GROUND);
-                        entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_RISING;
-                        entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
-                        entry->flags2 &= ~ITEM_FLAG2_TIMER_WAIT_LAND;
-                    }
-                    if (entry->flags & ITEM_FLAG_BOUND_NEXT && entry->bounceCount <= 1) {
-                        entry->direction = entry->savedDirection;
-                        entry->speed = entry->savedSpeed;
-                        entry->flags &= ~ITEM_FLAG_BOUND_NEXT;
-                    }
-                    entry->airTime = 0;
-                    entry->baseTime = gp->renderTime;
-                    break;
-                }
-            }
-            entry->airTime += delta;
-            entry->baseTime = entry->curTime;
-            break;
-    }
-    entry->flags2 &= ~ITEM_FLAG2_SKIP_BOUND_INIT;
-}
 #else
 /**
  * Moves a bouncing or falling item: gravity, bouncing off floors (with fewer, lower bounces each time),
@@ -2272,6 +1802,7 @@ static void itemseq_Bound(ItemEntry* entry) {
  * becomes resting when it stops.
  */
 void itemseq_Bound(ItemEntry* entry) {
+#endif
     static s32 _move_dir;
     MarioWork* mario;
     CameraEntry* camera;
@@ -2329,10 +1860,12 @@ void itemseq_Bound(ItemEntry* entry) {
                                 }
                                 break;
                         }
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
                         if (!strcmp(gp->currentMapName, "aji_03")) {
                             entry->direction = irand(90);
                         }
+#endif
 #endif
                     } else {
                         entry->direction = _move_dir;
@@ -2374,7 +1907,12 @@ void itemseq_Bound(ItemEntry* entry) {
             t1 = OSTicksToMicroseconds(entry->airTime) / 1000000.0f;
             t2 = OSTicksToMicroseconds(entry->airTime + delta) / 1000000.0f;
             dx = dt * (entry->speed * (f32)sin(6.2831855f * entry->direction / 360.0f));
+#if VERSION <= VERSION_DEMO_US
+            dz = (f32)cos(6.2831855f * entry->direction / 360.0f);
+            dz = dt * (entry->speed * -dz);
+#else
             { f32 c = (f32)cos(6.2831855f * entry->direction / 360.0f); dz = dt * (entry->speed * -c); } // FAKE: cos result in a local
+#endif
             if (entry->flags2 & ITEM_FLAG2_NO_Z_MOVE) {
                 dz = 0.0f;
             }
@@ -2416,16 +1954,26 @@ void itemseq_Bound(ItemEntry* entry) {
                         x = entry->position.x;
                         y = 20.0f + entry->position.y;
                         z = entry->position.z;
+#if VERSION <= VERSION_DEMO_US
+                        hitDist = 20.0 + fabs(dy);
+                        if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
+#else
                         { f64 d = __fabs(dy); hitDist = 20.0 + d; }
                         if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
+#endif
                             entry->position.y = hitY - 20.0f - 4.0f;
                             r = h;
                         } else {
                             x = entry->position.x;
                             y = entry->position.y;
                             z = entry->position.z;
+#if VERSION <= VERSION_DEMO_US
+                            hitDist = 20.0 + fabs(dy);
+                            if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
+#else
                             { f64 d = __fabs(dy); hitDist = 20.0 + d; }
                             if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
+#endif
                                 entry->position.y = hitY - 20.0f;
                                 r = h;
                             } else {
@@ -2456,7 +2004,9 @@ void itemseq_Bound(ItemEntry* entry) {
                 }
                 entry->flags2 |= ITEM_FLAG2_RELEASED;
                 entry->flags2 &= ~ITEM_FLAG2_CARRIED;
+#if VERSION > VERSION_DEMO_US
                 entry->flags |= ITEM_FLAG_LOST_BADGE_TO_SHOP;
+#endif
                 break;
             }
             if (dy >= 0.0f) {
@@ -2473,7 +2023,11 @@ void itemseq_Bound(ItemEntry* entry) {
                 f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
                 HitEntry* h;
                 f32 x = entry->position.x, y = 20.0f + entry->position.y, z = entry->position.z;
+#if VERSION <= VERSION_DEMO_US
+                hitDist = 20.0 + fabs(dy);
+#else
                 { f64 d = __fabs(dy); hitDist = 20.0 + d; }
+#endif
                 h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f);
                 if (h) {
                     entry->position.y = hitY;
@@ -2491,7 +2045,11 @@ void itemseq_Bound(ItemEntry* entry) {
                         sndPos.x = entry->position.x;
                         sndPos.y = entry->position.y;
                         sndPos.z = entry->position.z;
+#if VERSION <= VERSION_DEMO_US
+                        psndSFXOn_3D((const char*)0x194, &sndPos);
+#else
                         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_WATER1), &sndPos);
+#endif
                     }
                     effSplashEntry(0, entry->position.x, entry->position.y, entry->position.z, 0.7f);
                     entry->flags |= ITEM_FLAG_NO_TOUCH_GET;
@@ -2522,7 +2080,17 @@ void itemseq_Bound(ItemEntry* entry) {
                         case ITEM_STAR_PIECE:
                             psndSFXOn_3D("SFX_STAR_PIECE_LEAPED1", &pos);
                             break;
+#if VERSION <= VERSION_DEMO_US
+                        case ITEM_DIAMOND_STAR:
+                        case ITEM_EMERALD_STAR:
+                        case ITEM_GOLD_STAR:
+                        case ITEM_RUBY_STAR:
+                        case ITEM_SAPPHIRE_STAR:
+                        case ITEM_GARNET_STAR:
+                        case ITEM_CRYSTAL_STAR:
+#else
                         case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
+#endif
                             psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
                             break;
                         default:
@@ -2555,7 +2123,11 @@ void itemseq_Bound(ItemEntry* entry) {
                         v = entry->velocityY * dt + (-980.0f * entry->gravityScale) * ((t2 + dt) * (t2 + dt) - t2sq);
                         entry->velocityY = 0.7f * (entry->bounceFactor * (-v / dt));
                     }
+#if VERSION <= VERSION_DEMO_US
+                    peak = fabs(0.5f * (entry->velocityY / (-980.0f * entry->gravityScale)));
+#else
                     { f64 d = __fabs(0.5f * (entry->velocityY / (-980.0f * entry->gravityScale))); peak = d; } // FAKE: fabs result in an f64 local
+#endif
                     height = entry->velocityY * peak + peak * ((-980.0f * entry->gravityScale) * peak);
                     if (!isFloor && height <= 8.0f) {
                         itemModeChange(entry, ITEM_MODE_GROUND);
@@ -2579,7 +2151,6 @@ void itemseq_Bound(ItemEntry* entry) {
     }
     entry->flags2 &= ~ITEM_FLAG2_SKIP_BOUND_INIT;
 }
-#endif
 
 /** Moves an item to (x, y, z). */
 void itemSetPosition(ItemEntry* entry, f32 x, f32 y, f32 z) {

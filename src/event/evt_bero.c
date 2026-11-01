@@ -1450,24 +1450,11 @@ EVT_END()
 EVT_BEGIN(bero_case_exec_door)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(bero_case_init_check)
-    IF_INT_EQUAL(LW(0), 1)
-        RETURN
-    END_IF
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_hitobj_attr_onoff, 0, 1, LW(3), HIT_ATTR_BERO)
-    CALL(evt_bero_mario_go_init)
-    SPAWN_EVENT(bero_play_out_anime)
-    BEGIN_INLINE_EVENT
-        SET_VALUE(LW(0), LW(5))
-        MULTIPLY(LW(0), 45)
-        CALL(evt_mario_set_force_dir, LW(0))
-        CALL(evt_mario_wait_landon)
-        CALL(evt_bero_mario_go_wait)
-        CALL(bero_get_position_normal, 0, FLOAT(150.0f))
 #else
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
     CALL(evt_mario_key_onoff, 1)
+#endif
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
@@ -1481,6 +1468,9 @@ EVT_BEGIN(bero_case_exec_door)
         CALL(evt_mario_set_force_dir, LW(0))
         CALL(evt_mario_wait_landon)
         CALL(evt_bero_mario_go_wait)
+#if VERSION <= VERSION_DEMO_US
+        CALL(bero_get_position_normal, 0, FLOAT(150.0f))
+#else
 #if VERSION == VERSION_EU
         CALL(evt_sub_get_mapname, LW(10))
         IF_STR_EQUAL(LW(10), STRING("tou_04"))

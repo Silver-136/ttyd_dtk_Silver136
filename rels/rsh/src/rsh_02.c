@@ -1244,7 +1244,6 @@ EVT_BEGIN(evt_toron_catch2)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Spawned by the map init during STG6_24: loops until the story has reached STG6_24_02_ANOTHER_CLUE
  * and Mario stands at x -110 or less (not below -330 in JP and later), z -70 or less, hidden with Vivian's
@@ -1266,155 +1265,11 @@ EVT_BEGIN(evt_toron_appear)
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_GREATER(LW(0), -110)
-        GOTO(100)
-    END_IF
-    IF_INT_GREATER(LW(2), -70)
-        GOTO(100)
-    END_IF
-    SET_VALUE(LW(0), 0)
-    LOOP(0)
-        CALL(evt_mario_party_use_check, LW(1))
-        IF_INT_EQUAL(LW(1), 6)
-            ADD(LW(0), 1)
-            IF_INT_GREATER(LW(0), 300)
-                BREAK_LOOP
-            END_IF
-        ELSE
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    IF_INT_LESS(LW(0), 300)
-        GOTO(100)
-    END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_NO_HIT)
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    IF_INT_LESS(LW(0), -200)
-        CALL(evt_npc_set_position, STRING("トロン"), -130, -50, -278)
-        CALL(evt_npc_set_ry, STRING("トロン"), 270)
-        CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRON_APPEAR1"), LW(0), LW(1), LW(2), 0)
-        SET_FLOAT_VALUE(LW(3), FLOAT(0.8330078f))
-        SET_VALUE(LW(4), 1)
-        SET_VALUE(LF(0), 0)
-        LOOP(60)
-            ADD_FLOAT(LW(1), LW(3))
-            CALL(evt_npc_set_position, STRING("トロン"), LW(0), LW(1), LW(2))
-            CALL(evt_mario_party_use_check, LW(5))
-            IF_INT_NOT_EQUAL(LW(5), 6)
-                BEGIN_INLINE_EVENT
-                    LOOP(100)
-                        SUBTRACT_FLOAT(LW(1), LW(3))
-                        CALL(evt_npc_set_position, STRING("トロン"), LW(0), LW(1), LW(2))
-                        WAIT_FRAMES(1)
-                    END_LOOP
-                    CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
-                END_INLINE_EVENT
-                SET_VALUE(LF(0), 1)
-                BREAK_LOOP
-            END_IF
-            ADD(LW(4), 1)
-            WAIT_FRAMES(1)
-        END_LOOP
-        IF_INT_EQUAL(LF(0), 1)
-            GOTO(100)
-        END_IF
-    ELSE
-        CALL(evt_npc_pera_onoff, STRING("トロン"), 0)
-        CALL(evt_npc_set_rotate, STRING("トロン"), 180, 180, 90)
-        CALL(evt_npc_set_position, STRING("トロン"), -300, 2, -220)
-        CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRON_APPEAR1"), LW(0), LW(1), LW(2), 0)
-        SET_FLOAT_VALUE(LW(3), FLOAT(0.5f))
-        SET_VALUE(LW(4), 1)
-        SET_VALUE(LF(0), 0)
-        LOOP(60)
-            ADD_FLOAT(LW(0), LW(3))
-            CALL(evt_npc_set_position, STRING("トロン"), LW(0), LW(1), LW(2))
-            CALL(evt_mario_party_use_check, LW(5))
-            IF_INT_NOT_EQUAL(LW(5), 6)
-                BEGIN_INLINE_EVENT
-                    LOOP(100)
-                        SUBTRACT_FLOAT(LW(0), LW(3))
-                        CALL(evt_npc_set_position, STRING("トロン"), LW(0), LW(1), LW(2))
-                        WAIT_FRAMES(1)
-                    END_LOOP
-                    CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
-                END_INLINE_EVENT
-                SET_VALUE(LF(0), 1)
-                BREAK_LOOP
-            END_IF
-            ADD(LW(4), 1)
-            WAIT_FRAMES(1)
-        END_LOOP
-        IF_INT_EQUAL(LF(0), 1)
-            GOTO(100)
-        END_IF
-    END_IF
-    LABEL(2)
-    CALL(evt_mario_party_use_check, LW(0))
-    WAIT_FRAMES(1)
-    IF_INT_EQUAL(LW(0), 6)
-        GOTO(2)
-    END_IF
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
-    CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
-    CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_jump_position_nohit, STRING("トロン"), LW(0), LW(1), LW(2), 300, 20)
-    WAIT_FRAMES(1)
-    CALL(evt_npc_set_anim, STRING("トロン"), STRING("B_1"))
-    WAIT_MS(500)
-    CALL(evt_npc_set_anim, STRING("トロン"), STRING("B_2"))
-    CALL(evt_npc_set_autotalkpose, STRING("トロン"), STRING("B_2"), STRING("T_2"))
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    IF_INT_LESS(LW(0), -200)
-        LOOP(10)
-            CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
-            ADD(LW(1), 1)
-            CALL(evt_npc_set_position, STRING("トロン"), LW(0), LW(1), LW(2))
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_IF
-    CALL(evt_snd_bgmoff, PSND_FADEOUT)
-    CALL(evt_msg_print, 0, STRING("stg6_rsh_181"), 0, STRING("トロン"))
-    WAIT_MS(500)
-    CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
-    CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_NO_HIT)
-    // The chase music starts and the catch begins.
-    SET_VALUE(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
-    CALL(evt_del_case_evt, 0, GW(11))
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_EGG1"))
-    SPAWN_EVENT(evt_toron_catch)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-#else
-/**
- * Spawned by the map init during STG6_24: loops until the story has reached STG6_24_02_ANOTHER_CLUE
- * and Mario stands at x -110 or less (not below -330 in JP and later), z -70 or less, hidden with Vivian's
- * ability (partner 6) for over 300 frames; then Toron (トロン) rises into view with an appear sound at one of two
- * spots (sinking away again if Mario comes out within 60 frames). Once Mario leaves the shadow, Toron jumps out
- * and taunts him (stg6_rsh_181), the story moves to STG6_25_ZIP_TOAD_APPEARS, the chase music starts and
- * evt_toron_catch is spawned.
- */
-EVT_BEGIN(evt_toron_appear)
-    LABEL(100)
-    CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
-    CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
-    CALL(evt_npc_set_ry, STRING("トロン"), 270)
-    CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
-    WAIT_FRAMES(1)
-    // Wait until Mario has found the clue and hides in the shadows with Vivian.
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_24_02_ANOTHER_CLUE)
-        GOTO(100)
-    END_IF
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    IF_INT_GREATER(LW(0), -110)
+#if VERSION > VERSION_DEMO_US
         GOTO(100)
     END_IF
     IF_INT_LESS(LW(0), -330)
+#endif
         GOTO(100)
     END_IF
     IF_INT_GREATER(LW(2), -70)
@@ -1472,6 +1327,9 @@ EVT_BEGIN(evt_toron_appear)
         CALL(evt_npc_pera_onoff, STRING("トロン"), 0)
         CALL(evt_npc_set_rotate, STRING("トロン"), 180, 180, 90)
         CALL(evt_npc_set_position, STRING("トロン"), -300, 2, -220)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
+#else
 #if VERSION >= VERSION_US
         CALL(evt_npc_set_ry, STRING("トロン"), 90)
 #endif
@@ -1479,6 +1337,7 @@ EVT_BEGIN(evt_toron_appear)
 #if VERSION >= VERSION_US
         ADD(LW(1), 2)
 #endif
+#endif
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRON_APPEAR1"), LW(0), LW(1), LW(2), 0)
         SET_FLOAT_VALUE(LW(3), FLOAT(0.5f))
         SET_VALUE(LW(4), 1)
@@ -1516,12 +1375,14 @@ EVT_BEGIN(evt_toron_appear)
     CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
     CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
     CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     IF_INT_GREATER(LW(10), -200)
         SET_VALUE(LW(0), -260)
     END_IF
     SET_VALUE(LW(1), 2)
+#endif
 #endif
     CALL(evt_npc_jump_position_nohit, STRING("トロン"), LW(0), LW(1), LW(2), 300, 20)
     WAIT_FRAMES(1)
@@ -1551,7 +1412,6 @@ EVT_BEGIN(evt_toron_appear)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Trigger on the paper spot (a_kami) between STG6_24_A_VITAL_CLUE and the next clue:

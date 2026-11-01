@@ -66,76 +66,24 @@ BOOL battleSeqEndCheck(void) {
  * records the info and initialises the battle subsystems (pad, action-command help, icons, action commands,
  * after-reaction queue, display, units, partner info, stage, audience, Bingo).
  */
+/**
+ * Starts a battle from the field's FieldBattleInfo:
+ * allocates and clears BattleWork (battle allocator; JP uses the map allocator),
+ * records the info and initialises the battle subsystems (pad, action-command help, icons, action commands,
+ * after-reaction queue, display, units, partner info, stage, audience, Bingo).
+ */
+void BattleInit(FieldBattleInfo* info) {
+    BattleWork* wp;
 #if VERSION <= VERSION_DEMO_US
-/**
- * Starts a battle from the field's FieldBattleInfo:
- * allocates and clears BattleWork (battle allocator; JP uses the map allocator),
- * records the info and initialises the battle subsystems (pad, action-command help, icons, action commands,
- * after-reaction queue, display, units, partner info, stage, audience, Bingo).
- */
-void BattleInit(FieldBattleInfo* info) {
-    BattleWork* wp;
     wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
-    memset(_battleWorkPointer, 0, sizeof(BattleWork));
-    wp->curtainSfxId = -1;
-    wp->lectureUnitId = -1;
-    wp->fbatInfo = info;
-    BattlePadInit();
-    BattleAcHelpInit();
-    BattleIconInit();
-    BattleActionCommandManagerInit(wp);
-    BattleAfterReactionQueueInit();
-    BattleStatusChangeMsgWorkInit();
-    btlDispInit();
-    BattleSetSeq(wp, SEQ_UNKNOWN, 0);
-    BattleSetSeq(wp, SEQ_INIT, 0x1000000);
-    wp->seqEndWork = NULL;
-    wp->commandMenu.flags = 0;
-    wp->commandMenu.cursor[0].absPos = 0;
-    wp->commandMenu.cursor[0].relPos = 0;
-    wp->commandMenu.cursor[1].absPos = 0;
-    wp->commandMenu.cursor[1].relPos = 0;
-    wp->commandMenu.cursor[2].absPos = 0;
-    wp->commandMenu.cursor[2].relPos = 0;
-    wp->commandMenu.cursor[3].absPos = 0;
-    wp->commandMenu.cursor[3].relPos = 0;
-    wp->commandMenu.cursor[4].absPos = 0;
-    wp->commandMenu.cursor[4].relPos = 0;
-    wp->commandMenu.cursor[5].absPos = 0;
-    wp->commandMenu.cursor[5].relPos = 0;
-    wp->commandMenu.cursor[6].absPos = 0;
-    wp->commandMenu.cursor[6].relPos = 0;
-    wp->commandMenu.cursor[7].absPos = 0;
-    wp->commandMenu.cursor[7].relPos = 0;
-    wp->commandMenu.cursor[8].absPos = 0;
-    wp->commandMenu.cursor[8].relPos = 0;
-    wp->commandMenu.cursor[9].absPos = 0;
-    wp->commandMenu.cursor[9].relPos = 0;
-    wp->commandMenu.subMenu = 0;
-    wp->turnCount = 0;
-    memset(wp->reserveItems, 0, sizeof(wp->reserveItems));
-    wp->flags = 0;
-    BtlUnit_Init();
-    BattlePartyInfoWorkInit(wp);
-    BattleStageInit();
-    BattleAudience_Init();
-    BattleBreakSlot_Init();
-}
 #else
-/**
- * Starts a battle from the field's FieldBattleInfo:
- * allocates and clears BattleWork (battle allocator; JP uses the map allocator),
- * records the info and initialises the battle subsystems (pad, action-command help, icons, action commands,
- * after-reaction queue, display, units, partner info, stage, audience, Bingo).
- */
-void BattleInit(FieldBattleInfo* info) {
-    BattleWork* wp;
 
 #if VERSION >= VERSION_US
     wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
 #else
     wp = _battleWorkPointer = (BattleWork*)_mapAlloc(sizeof(BattleWork));
 #endif
+#endif
     memset(_battleWorkPointer, 0, sizeof(BattleWork));
     wp->curtainSfxId = -1;
     wp->lectureUnitId = -1;
@@ -181,7 +129,6 @@ void BattleInit(FieldBattleInfo* info) {
     BattleAudience_Init();
     BattleBreakSlot_Init();
 }
-#endif
 
 /**
  * Runs one battle frame: removes units marked for deletion, then the pad, sequence, action-command,
@@ -221,69 +168,42 @@ BOOL BattleMain(void) {
  * Tears a battle down: deletes every unit, ends the icon, menu, stage, audience and Bingo subsystems,
  * frees the command submenu and BattleWork, and clears _battleWorkPointer.
  */
+/**
+ * Tears a battle down: deletes every unit, ends the icon, menu, stage, audience and Bingo subsystems,
+ * frees the command submenu and BattleWork, and clears _battleWorkPointer.
+ */
+void BattleEnd(void) {
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    int i;
+    void* subMenu;
+
+    for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
+        unit = BattleGetUnitPtr(wp, i);
+        if (unit) {
+            BtlUnit_Delete(unit);
+        }
+    }
+    BattleIconEnd();
+    battleMenuDispEnd();
+    BattleStageEnd();
+    BattleAudience_End();
+    BattleBreakSlot_End();
+    subMenu = wp->commandMenu.subMenu;
+    if (subMenu) {
+        BattleFree(subMenu);
+    }
 #if VERSION <= VERSION_DEMO_US
-/**
- * Tears a battle down: deletes every unit, ends the icon, menu, stage, audience and Bingo subsystems,
- * frees the command submenu and BattleWork, and clears _battleWorkPointer.
- */
-void BattleEnd(void) {
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit;
-    int i;
-    void* subMenu;
-
-    for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
-        unit = BattleGetUnitPtr(wp, i);
-        if (unit) {
-            BtlUnit_Delete(unit);
-        }
-    }
-    BattleIconEnd();
-    battleMenuDispEnd();
-    BattleStageEnd();
-    BattleAudience_End();
-    BattleBreakSlot_End();
-    subMenu = wp->commandMenu.subMenu;
-    if (subMenu) {
-        BattleFree(subMenu);
-    }
     BattleFree(wp);
-    _battleWorkPointer = NULL;
-}
 #else
-/**
- * Tears a battle down: deletes every unit, ends the icon, menu, stage, audience and Bingo subsystems,
- * frees the command submenu and BattleWork, and clears _battleWorkPointer.
- */
-void BattleEnd(void) {
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit;
-    int i;
-    void* subMenu;
-
-    for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
-        unit = BattleGetUnitPtr(wp, i);
-        if (unit) {
-            BtlUnit_Delete(unit);
-        }
-    }
-    BattleIconEnd();
-    battleMenuDispEnd();
-    BattleStageEnd();
-    BattleAudience_End();
-    BattleBreakSlot_End();
-    subMenu = wp->commandMenu.subMenu;
-    if (subMenu) {
-        BattleFree(subMenu);
-    }
 #if VERSION >= VERSION_US
     BattleFree(wp);
 #else
     _mapFree(wp);
 #endif
+#endif
     _battleWorkPointer = NULL;
 }
-#endif
 
 extern BattleUnitSetup entryunit_party[7];
 

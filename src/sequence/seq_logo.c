@@ -1073,10 +1073,6 @@ void progDisp(CameraId camId, void* param) {
                     VISetBlack(FALSE);
                     wp->progressive = 0;
                 }
-                break;
-        }
-    }
-}
 #else
 /**
  * JP and demo progressive-scan prompt: asks whether to display in progressive scan (left/right toggles,
@@ -1259,10 +1255,12 @@ void progDisp(CameraId camId, void* param) {
                     wp->progressive = 0;
                 }
 #endif
+#endif
                 break;
         }
     }
 }
+#if VERSION >= VERSION_US
 
 /* FAKE: the US build places this static first in .sbss, ahead of progDisp's; a static inside a
    deferred-inline helper defined last gives that order */

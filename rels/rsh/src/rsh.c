@@ -284,7 +284,6 @@ EVT_END()
  * the partner comments in cabin 5 at the blanket and conductor stages,
  * the BGM dip in cabins 5 and 4 for the ghost scenes, and Zip Toad becoming touchable.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Runs when Mario walks into a cabin door (LW(0) is the door table of evt_rsh_door_entry):
  * locks input, plays the door slide sound and animation, walks Mario in,
@@ -304,197 +303,10 @@ EVT_BEGIN(evt_rsh_door_open)
     READ_INT(LW(7))
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(4), 8388608)
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(6), 8388608)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(img_wait)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
-    CALL_CHILD(kami_check)
-    CALL(evt_hit_get_position, LW(4), LW(10), LW(11), LW(12))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_SLIDE1"), LW(10), LW(11), LW(12), 0)
-    CALL(evt_map_playanim, LW(5), MAP_ANIM_PLAY_ONCE, 0)
-    CALL(evt_map_checkanim, LW(5), LW(10), LW(11))
-    WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(3), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_hit_get_position, LW(4), LW(10), LW(11), LW(12))
-    SUBTRACT(LW(12), 50)
-    CALL(evt_mario_party_door_move, LW(10), LW(12), FLOAT(80.0f))
-    CALL(evt_img_free_capture, STRING("capture_img"), 0)
-    CALL(evt_img_free_capture, STRING("capture_img"), 1)
-    CALL(evt_img_free_capture, STRING("capture_img"), 2)
-    CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
-    CALL(evt_img_alloc_capture, STRING("capture_img"), 1, STRING("offscreen"), 0, 0, 0, 0, 0)
-    CALL(evt_img_alloc_capture, STRING("capture_img"), 2, STRING("offscreen"), 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_set_offscreen, 1, STRING("rouka"), STRING("offscreen"))
-    CALL_CHILD(simi_offscreen_check)
-    CALL(evt_mapobj_set_offscreen, 1, STRING("w_tobira"), STRING("offscreen"))
-    CALL(evt_mapobj_set_offscreen, 1, STRING("e_tobira"), STRING("offscreen"))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_npc_check, STRING("車掌"), LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_npc_set_offscreen, STRING("車掌"), STRING("offscreen"))
-        CALL(evt_npc_flag_onoff, 1, STRING("車掌"), NPC_FLAG_NO_DRAW)
-    END_IF
-    BEGIN_INLINE_EVENT
-        WAIT_MS(300)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_ROOM_IN1"), LW(0), LW(1), LW(2), 0)
-    END_INLINE_EVENT
-    CALL(evt_img_set_virtual_point, STRING("capture_img"), 0, 0, -80)
-    CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
-    CALL(evt_img_onoff, STRING("capture_img"), 1)
-    BEGIN_INLINE_EVENT
-        CALL(evt_img_wait_animend, STRING("capture_img"))
-        CALL(evt_mapobj_clear_offscreen, 1, STRING("rouka"))
-        CALL(evt_mapobj_clear_offscreen, 1, STRING("w_tobira"))
-        CALL(evt_mapobj_clear_offscreen, 1, STRING("e_tobira"))
-        CALL(evt_npc_check, STRING("車掌"), LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(evt_npc_set_offscreen, STRING("車掌"), 0)
-        END_IF
-        CALL(evt_img_onoff, STRING("capture_img"), 0)
-    END_INLINE_EVENT
-    // Control returns once Mario is inside.
-    CALL(evt_mario_key_onoff, 1)
-    CALL(evt_hitobj_attr_onoff, 0, 0, LW(4), 8388608)
-    CALL(evt_hitobj_attr_onoff, 0, 0, LW(6), 8388608)
-    SET_VALUE(LF(0), 0)
-    CALL(evt_sub_get_mapname, LW(10))
-    IF_STR_EQUAL(LW(10), STRING("rsh_02_a"))
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_STR_EQUAL(LW(10), STRING("rsh_02_b"))
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_INT_EQUAL(LF(0), 1)
-        IF_STR_EQUAL(LW(1), STRING("heya_5"))
-            SWITCH(GSW_STORY_PROGRESS)
-                CASE_EQUAL(STG6_19_GIVE_BLANKET)
-                CALL(evt_mario_key_onoff, 0)
-                CALL(evt_img_wait_animend, STRING("capture_img"))
-                CALL(evt_party_stop, 0)
-                WAIT_MS(300)
-                CALL(evt_mario_get_party, LW(0))
-                SWITCH(LW(0))
-                    CASE_EQUAL(1)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_146_0"), 0, STRING("party"))
-                    CASE_EQUAL(2)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_146_1"), 0, STRING("party"))
-                    CASE_EQUAL(4)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_146_2"), 0, STRING("party"))
-                    CASE_EQUAL(5)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_146_3"), 0, STRING("party"))
-                    CASE_EQUAL(6)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_146_4"), 0, STRING("party"))
-                    CASE_EQUAL(3)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_146_5"), 0, STRING("party"))
-                    CASE_EQUAL(7)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_146_6"), 0, STRING("party"))
-                END_SWITCH
-                CALL(evt_party_run, 0)
-                CALL(evt_mario_key_onoff, 1)
-                // During the vital clue stage the background music dips for the ghost scenes.
-                CASE_BETWEEN(STG6_24_A_VITAL_CLUE, STG6_24_02_ANOTHER_CLUE)
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-                CASE_EQUAL(STG6_43_CONDUCTOR_APPEARS)
-                CALL(evt_mario_key_onoff, 0)
-                CALL(evt_img_wait_animend, STRING("capture_img"))
-                CALL(evt_party_stop, 0)
-                WAIT_MS(300)
-                CALL(evt_mario_get_party, LW(0))
-                SWITCH(LW(0))
-                    CASE_EQUAL(1)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_224_0"), 0, STRING("party"))
-                    CASE_EQUAL(2)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_224_1"), 0, STRING("party"))
-                    CASE_EQUAL(4)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_224_2"), 0, STRING("party"))
-                    CASE_EQUAL(5)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_224_3"), 0, STRING("party"))
-                    CASE_EQUAL(6)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_224_4"), 0, STRING("party"))
-                    CASE_EQUAL(3)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_224_5"), 0, STRING("party"))
-                    CASE_EQUAL(7)
-                    CALL(evt_msg_print, 0, STRING("stg6_rsh_224_6"), 0, STRING("party"))
-                END_SWITCH
-                CALL(evt_party_run, 0)
-                CALL(evt_mario_key_onoff, 1)
-                CASE_DEFAULT
-                CALL(evt_mario_key_onoff, 0)
-                CALL(evt_img_wait_animend, STRING("capture_img"))
-                CALL(evt_mario_key_onoff, 1)
-            END_SWITCH
-        END_IF
-    END_IF
-    SET_VALUE(LF(0), 0)
-    CALL(evt_sub_get_mapname, LW(10))
-    IF_STR_EQUAL(LW(10), STRING("rsh_02_a"))
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_STR_EQUAL(LW(10), STRING("rsh_02_b"))
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_INT_EQUAL(LF(0), 1)
-        IF_STR_EQUAL(LW(1), STRING("heya_4"))
-            IF_INT_EQUAL(GSWF_RSH_GOURMET_NOISE_TALK_DONE, 1)
-                SET_VALUE(GSWF_RSH_NOISY_ROOM_CHECKED, 1)
-            END_IF
-            IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(0))
-            END_IF
-            SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 1)
-        END_IF
-    END_IF
-    SET_VALUE(LF(0), 0)
-    CALL(evt_sub_get_mapname, LW(10))
-    IF_STR_EQUAL(LW(10), STRING("rsh_04_a"))
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_STR_EQUAL(LW(10), STRING("rsh_04_b"))
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_STR_EQUAL(LW(10), STRING("rsh_04_c"))
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_INT_EQUAL(LF(0), 1)
-        IF_STR_EQUAL(LW(1), STRING("heya_5"))
-            // Remember which cabin Mario is now inside.
-            SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 1)
-        END_IF
-        IF_STR_EQUAL(LW(1), STRING("heya_3"))
-            SET_VALUE(GSWF_RSH_04_IN_ROOM_3, 1)
-        END_IF
-    END_IF
-    RETURN
-EVT_END()
-#else
-/**
- * Runs when Mario walks into a cabin door (LW(0) is the door table of evt_rsh_door_entry):
- * locks input, plays the door slide sound and animation, walks Mario in,
- * then plays the page-turn capture while the cabin is revealed.
- * Also plays the story reactions that happen on entering a cabin:
- * the partner comments in cabin 5 at the blanket and conductor stages,
- * the BGM dip in cabins 5 and 4 for the ghost scenes, and Zip Toad becoming touchable.
- */
-EVT_BEGIN(evt_rsh_door_open)
-    SET_INT_READ_ADDR(LW(0))
-    READ_INT(LW(1))
-    READ_INT(LW(2))
-    READ_INT(LW(3))
-    READ_INT(LW(4))
-    READ_INT(LW(5))
-    READ_INT(LW(6))
-    READ_INT(LW(7))
-    CALL(evt_hitobj_attr_onoff, 0, 1, LW(4), 8388608)
-    CALL(evt_hitobj_attr_onoff, 0, 1, LW(6), 8388608)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_cam_letter_box_disable, 1)
     // Mario walks into the cabin as the door slides open and the page turns to reveal it.
+#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(img_wait)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
@@ -512,7 +324,13 @@ EVT_BEGIN(evt_rsh_door_open)
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
     CALL(evt_img_free_capture, STRING("capture_img"), 1)
     CALL(evt_img_free_capture, STRING("capture_img"), 2)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
+    CALL(evt_img_alloc_capture, STRING("capture_img"), 1, STRING("offscreen"), 0, 0, 0, 0, 0)
+    CALL(evt_img_alloc_capture, STRING("capture_img"), 2, STRING("offscreen"), 0, 0, 0, 0, 0)
+#else
     CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 1, 0, 0, 0, 0)
+#endif
     CALL(evt_mapobj_set_offscreen, 1, STRING("rouka"), STRING("offscreen"))
     CALL_CHILD(PTR(simi_offscreen_check))
     CALL(evt_mapobj_set_offscreen, 1, STRING("w_tobira"), STRING("offscreen"))
@@ -528,9 +346,15 @@ EVT_BEGIN(evt_rsh_door_open)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_ROOM_IN1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_img_set_virtual_point, STRING("capture_img"), 0, 0, -80)
+#endif
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_img_wait_animend, STRING("capture_img"))
+#endif
         CALL(evt_mapobj_clear_offscreen, 1, STRING("rouka"))
         CALL(evt_mapobj_clear_offscreen, 1, STRING("w_tobira"))
         CALL(evt_mapobj_clear_offscreen, 1, STRING("e_tobira"))
@@ -538,12 +362,16 @@ EVT_BEGIN(evt_rsh_door_open)
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_npc_set_offscreen, STRING("車掌"), 0)
         END_IF
+#if VERSION > VERSION_DEMO_US
         CALL(evt_img_wait_animend, STRING("capture_img"))
+#endif
         CALL(evt_img_onoff, STRING("capture_img"), 0)
     END_INLINE_EVENT
     // Control returns once Mario is inside.
     CALL(evt_mario_key_onoff, 1)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_cam_letter_box_disable, 0)
+#endif
     CALL(evt_hitobj_attr_onoff, 0, 0, LW(4), 8388608)
     CALL(evt_hitobj_attr_onoff, 0, 0, LW(6), 8388608)
     SET_VALUE(LF(0), 0)
@@ -616,6 +444,7 @@ EVT_BEGIN(evt_rsh_door_open)
                 CALL(evt_img_wait_animend, STRING("capture_img"))
                 CALL(evt_mario_key_onoff, 1)
             END_SWITCH
+#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
                 CALL(evt_npc_check, STRING("トロン"), LW(10))
@@ -623,6 +452,7 @@ EVT_BEGIN(evt_rsh_door_open)
                     CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_INTANGIBLE)
                 END_IF
             END_IF
+#endif
 #endif
         END_IF
     END_IF
@@ -643,6 +473,9 @@ EVT_BEGIN(evt_rsh_door_open)
                 SET_VALUE(GSWF_RSH_NOISY_ROOM_CHECKED, 1)
             END_IF
             IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(0))
+#else
                 CALL(evt_snd_bgmoff, PSND_SILENT)
 #if VERSION == VERSION_EU
             END_IF
@@ -651,6 +484,7 @@ EVT_BEGIN(evt_rsh_door_open)
                 IF_INT_EQUAL(LW(10), 1)
                     CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_INTANGIBLE)
                 END_IF
+#endif
 #endif
             END_IF
             SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 1)
@@ -678,7 +512,6 @@ EVT_BEGIN(evt_rsh_door_open)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 /**
  * Runs when Mario leaves a cabin (LW(0) is the door table of evt_rsh_door_entry):

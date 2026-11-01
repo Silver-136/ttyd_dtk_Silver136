@@ -288,291 +288,94 @@ USER_FUNC(cameraman_on) {
  * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
  */
 //.data
+/**
+ * .data The innkeeper's talk script: asks to stay, takes an Inn Coupon or the price,
+ * puts Mario to bed with a spotlight fade and sleep music, restores HP/FP and partners,
+ * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
+ */
+EVT_BEGIN(kinopio_house_talk_evt)
+    CALL(evt_mario_key_onoff, 0)
+    CALL(get_ryoukin, LW(10))
+    CALL(get_npcname, LW(11))
+    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(msg_no, 0, LW(0))
+    CALL(evt_msg_print_insert, 0, LW(0), 0, LW(11), LW(10))
+    CALL(msg_no, 6, LW(0))
+    CALL(evt_msg_select, 0, LW(0))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(msg_no, 2, LW(0))
+        CALL(evt_msg_print_add, 0, LW(0))
+        CALL(evt_mario_key_onoff, 1)
+        CALL(evt_win_coin_off, LW(12))
+        RETURN
+    END_IF
+    CALL(power_chk, LW(0))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(msg_no, 1, LW(0))
+        CALL(evt_msg_print_add, 0, LW(0))
+        CALL(msg_no, 6, LW(0))
+        CALL(evt_msg_select, 0, LW(0))
+        IF_INT_EQUAL(LW(0), 1)
+            CALL(msg_no, 2, LW(0))
+            CALL(evt_msg_print_add, 0, LW(0))
+            CALL(evt_mario_key_onoff, 1)
+            CALL(evt_win_coin_off, LW(12))
+            RETURN
+        END_IF
+    END_IF
+    // With an Inn Coupon, offer to use it instead of paying.
+    SET_VALUE(LF(0), 0)
+    CALL(evt_pouch_check_item, ITEM_INN_COUPON, LW(0))
+    IF_INT_GREATER(LW(0), 0)
+        CALL(msg_no, 7, LW(0))
+        CALL(evt_msg_print_add, 0, LW(0))
+        CALL(msg_no, 8, LW(0))
+        CALL(evt_msg_select, 0, LW(0))
+        IF_INT_EQUAL(LW(0), 0)
+            SET_VALUE(LF(0), 1)
+            CALL(evt_pouch_remove_item, ITEM_INN_COUPON, LW(0))
+        END_IF
+    END_IF
+    // Otherwise pay the price, or turn Mario away if he is short of coins.
+    IF_INT_EQUAL(LF(0), 0)
+        CALL(coin_chk, LW(0))
+        IF_INT_EQUAL(LW(0), 1)
+            CALL(msg_no, 4, LW(0))
+            CALL(evt_msg_print_add, 0, LW(0))
+            CALL(evt_mario_key_onoff, 1)
+            CALL(evt_win_coin_off, LW(12))
+            RETURN
+        END_IF
+        CALL(get_ryoukin, LW(10))
+        MULTIPLY(LW(10), -1)
+        CALL(evt_pouch_add_coin, LW(10))
+        WAIT_MS(1000)
+    END_IF
+    // "Enjoy your stay!": the partners step away and Mario walks to the bedside (or the inn's own walk-to-bed
+    // script runs) while the camera moves to the bed view.
+    CALL(evt_win_coin_off, LW(12))
+    CALL(msg_no, 3, LW(0))
+    CALL(evt_msg_print_add, 0, LW(0))
+    CALL(get_npcname, LW(0))
+    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_NO_HIT)
+    CALL(evt_mario_get_party, LW(11))
+    CALL(evt_mario_get_exparty, LW(12))
+    CALL(evt_mario_get_pos, 0, LW(13), LW(14), LW(15))
+    CALL(evt_mario_goodbye_party, 1)
+    CALL(evt_mario_goodbye_party, 0)
+    CALL(get_to_bed_evt, LW(0))
+    IF_INT_EQUAL(LW(0), 0)
+        BEGIN_INLINE_EVENT
+            WAIT_MS(1000)
+            CALL(get_cam, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
+            CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, EASING_SINE_IN_OUT)
+        END_INLINE_EVENT
+        CALL(get_bedside, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-/**
- * .data The innkeeper's talk script: asks to stay, takes an Inn Coupon or the price,
- * puts Mario to bed with a spotlight fade and sleep music, restores HP/FP and partners,
- * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
- */
-EVT_BEGIN(kinopio_house_talk_evt)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(get_ryoukin, LW(10))
-    CALL(get_npcname, LW(11))
-    CALL(evt_win_coin_on, 0, LW(12))
-    CALL(msg_no, 0, LW(0))
-    CALL(evt_msg_print_insert, 0, LW(0), 0, LW(11), LW(10))
-    CALL(msg_no, 6, LW(0))
-    CALL(evt_msg_select, 0, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(msg_no, 2, LW(0))
-        CALL(evt_msg_print_add, 0, LW(0))
-        CALL(evt_mario_key_onoff, 1)
-        CALL(evt_win_coin_off, LW(12))
-        RETURN
-    END_IF
-    CALL(power_chk, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(msg_no, 1, LW(0))
-        CALL(evt_msg_print_add, 0, LW(0))
-        CALL(msg_no, 6, LW(0))
-        CALL(evt_msg_select, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(msg_no, 2, LW(0))
-            CALL(evt_msg_print_add, 0, LW(0))
-            CALL(evt_mario_key_onoff, 1)
-            CALL(evt_win_coin_off, LW(12))
-            RETURN
-        END_IF
-    END_IF
-    // With an Inn Coupon, offer to use it instead of paying.
-    SET_VALUE(LF(0), 0)
-    CALL(evt_pouch_check_item, ITEM_INN_COUPON, LW(0))
-    IF_INT_GREATER(LW(0), 0)
-        CALL(msg_no, 7, LW(0))
-        CALL(evt_msg_print_add, 0, LW(0))
-        CALL(msg_no, 8, LW(0))
-        CALL(evt_msg_select, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
-            SET_VALUE(LF(0), 1)
-            CALL(evt_pouch_remove_item, ITEM_INN_COUPON, LW(0))
-        END_IF
-    END_IF
-    // Otherwise pay the price, or turn Mario away if he is short of coins.
-    IF_INT_EQUAL(LF(0), 0)
-        CALL(coin_chk, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(msg_no, 4, LW(0))
-            CALL(evt_msg_print_add, 0, LW(0))
-            CALL(evt_mario_key_onoff, 1)
-            CALL(evt_win_coin_off, LW(12))
-            RETURN
-        END_IF
-        CALL(get_ryoukin, LW(10))
-        MULTIPLY(LW(10), -1)
-        CALL(evt_pouch_add_coin, LW(10))
-        WAIT_MS(1000)
-    END_IF
-    // "Enjoy your stay!": the partners step away and Mario walks to the bedside (or the inn's own walk-to-bed
-    // script runs) while the camera moves to the bed view.
-    CALL(evt_win_coin_off, LW(12))
-    CALL(msg_no, 3, LW(0))
-    CALL(evt_msg_print_add, 0, LW(0))
-    CALL(get_npcname, LW(0))
-    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_NO_HIT)
-    CALL(evt_mario_get_party, LW(11))
-    CALL(evt_mario_get_exparty, LW(12))
-    CALL(evt_mario_get_pos, 0, LW(13), LW(14), LW(15))
-    CALL(evt_mario_goodbye_party, 1)
-    CALL(evt_mario_goodbye_party, 0)
-    CALL(get_to_bed_evt, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        BEGIN_INLINE_EVENT
-            WAIT_MS(1000)
-            CALL(get_cam, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
-            CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, EASING_SINE_IN_OUT)
-        END_INLINE_EVENT
-        CALL(get_bedside, LW(0), LW(1), LW(2))
         CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(60.0f))
-        ELSE
-        BEGIN_INLINE_EVENT_GET_ID(LW(0))
-            CALL_CHILD(LW(0))
-        END_INLINE_EVENT
-        LOOP(0)
-            IS_EVENT_RUNNING(LW(0), LW(1))
-            IF_INT_EQUAL(LW(1), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(get_cam, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
-        CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, EASING_SINE_IN_OUT)
-        WAIT_MS(500)
-    END_IF
-    // Mario jumps into bed with a yelp and lies down flat with sleeping sounds.
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_flag_onoff, 1, 768)
-    CALL(get_bed, LW(0), LW(1), LW(2))
-    CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), FLOAT(400.0f), 0, -1000)
-    CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
-    CALL(evt_mario_adjust_dir)
-    WAIT_MS(200)
-BEGIN_INLINE_EVENT_GET_ID(LW(10))
-        CALL(get_beddeg, LW(0))
-        CALL(paper_on, LW(0))
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
-        WAIT_MS(200)
-        CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP2"), LW(0), LW(1), LW(2), 0)
-        END_INLINE_EVENT
-    // Sound effects mute, the sleep tune plays and a spotlight closes in on Mario until the screen is black.
-    CALL(snd_off)
-    CALL(evt_snd_bgmoff, PSND_PAUSE)
-    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GO_SLEEPING1"))
-    CALL(evt_fade_entry, 4, 3000, 0, 0, 0)
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_fade_set_spot_pos, LW(0), LW(1), LW(2))
-    CALL(evt_fade_end_wait)
-    CALL(evt_fade_entry, FADE_OUT_BLACK_2D, 0, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    // In the dark, HP, FP and the partners are restored, breakfast is set out, and the party is put
-    // back on its feet beside the bed facing the innkeeper.
-    CALL(evt_pouch_mario_recovery)
-    CALL(evt_pouch_all_party_recovery)
-    CALL(breakfast)
-    WAIT_MS(3000)
-    DELETE_EVENT(LW(10))
-    CALL(paper_off)
-    IF_INT_NOT_EQUAL(LW(11), 0)
-        CALL(get_bed, LW(0), LW(1), LW(2))
-        CALL(evt_mario_set_party_pos, 0, LW(11), LW(0), LW(1), LW(2))
-    END_IF
-    IF_INT_NOT_EQUAL(LW(12), 0)
-        CALL(get_bed, LW(0), LW(1), LW(2))
-        CALL(offset, FLOAT(30.0f), LW(3), LW(4))
-        ADD_FLOAT(LW(0), LW(3))
-        ADD_FLOAT(LW(2), LW(4))
-        CALL(evt_mario_set_party_pos, 1, LW(12), LW(0), LW(1), LW(2))
-    END_IF
-    CALL(evt_mario_flag_onoff, 0, 768)
-    CALL(get_bedside, LW(0), LW(1), LW(2))
-    CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
-    CALL(get_npcname, LW(0))
-    CALL(evt_set_dir_to_target, LW(0), STRING("mario"))
-    CALL(evt_mario_set_dir_npc, LW(0))
-    CALL(evt_party_set_dir_npc, 0, LW(0))
-    CALL(evt_party_set_dir_npc, 1, LW(0))
-    CALL(evt_mario_adjust_dir)
-    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
-    WAIT_FRAMES(1)
-    CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_INSTANT_TURN)
-ADD(GSW_INN_STAY_COUNT, 1)
-    IF_INT_GREATER(GSW_INN_STAY_COUNT, INN_STAY_COUNT_CAP)
-        SET_VALUE(GSW_INN_STAY_COUNT, INN_STAY_COUNT_CAP)
-    END_IF
-    IF_INT_EQUAL(GSW_INN_STAY_COUNT, INN_COMMEMORATIVE_STAY)
-        CALL_CHILD(evt_50)
-        RETURN
-    END_IF
-    CALL(evt_snd_bgmoff, PSND_FADE_OUT | PSND_SLOT(1))
-    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    CALL(snd_on)
-    CALL(evt_fade_entry, FADE_IN_BLACK_2D, 1000, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    CALL(get_from_bed_evt, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        BEGIN_INLINE_EVENT_GET_ID(LW(10))
-            CALL_CHILD(LW(0))
-        END_INLINE_EVENT
-        LOOP(0)
-            IS_EVENT_RUNNING(LW(10), LW(11))
-            IF_INT_EQUAL(LW(11), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_IF
-    CALL(evt_party_run, 0)
-    CALL(evt_party_run, 1)
-    CALL(get_npctalk, LW(0), LW(1), LW(2))
-    CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(60.0f))
-    CALL(evt_fade_end_wait)
-    CALL(get_npcname, LW(11))
-    CALL(msg_no, 5, LW(0))
-    CALL(evt_msg_print, 0, LW(0), 0, LW(11))
-    CALL(get_npcname, LW(0))
-    CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_NO_HIT)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
 #else
-/**
- * .data The innkeeper's talk script: asks to stay, takes an Inn Coupon or the price,
- * puts Mario to bed with a spotlight fade and sleep music, restores HP/FP and partners,
- * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
- */
-EVT_BEGIN(kinopio_house_talk_evt)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(get_ryoukin, LW(10))
-    CALL(get_npcname, LW(11))
-    CALL(evt_win_coin_on, 0, LW(12))
-    CALL(msg_no, 0, LW(0))
-    CALL(evt_msg_print_insert, 0, LW(0), 0, LW(11), LW(10))
-    CALL(msg_no, 6, LW(0))
-    CALL(evt_msg_select, 0, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(msg_no, 2, LW(0))
-        CALL(evt_msg_print_add, 0, LW(0))
-        CALL(evt_mario_key_onoff, 1)
-        CALL(evt_win_coin_off, LW(12))
-        RETURN
-    END_IF
-    CALL(power_chk, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(msg_no, 1, LW(0))
-        CALL(evt_msg_print_add, 0, LW(0))
-        CALL(msg_no, 6, LW(0))
-        CALL(evt_msg_select, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(msg_no, 2, LW(0))
-            CALL(evt_msg_print_add, 0, LW(0))
-            CALL(evt_mario_key_onoff, 1)
-            CALL(evt_win_coin_off, LW(12))
-            RETURN
-        END_IF
-    END_IF
-    // With an Inn Coupon, offer to use it instead of paying.
-    SET_VALUE(LF(0), 0)
-    CALL(evt_pouch_check_item, ITEM_INN_COUPON, LW(0))
-    IF_INT_GREATER(LW(0), 0)
-        CALL(msg_no, 7, LW(0))
-        CALL(evt_msg_print_add, 0, LW(0))
-        CALL(msg_no, 8, LW(0))
-        CALL(evt_msg_select, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
-            SET_VALUE(LF(0), 1)
-            CALL(evt_pouch_remove_item, ITEM_INN_COUPON, LW(0))
-        END_IF
-    END_IF
-    // Otherwise pay the price, or turn Mario away if he is short of coins.
-    IF_INT_EQUAL(LF(0), 0)
-        CALL(coin_chk, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(msg_no, 4, LW(0))
-            CALL(evt_msg_print_add, 0, LW(0))
-            CALL(evt_mario_key_onoff, 1)
-            CALL(evt_win_coin_off, LW(12))
-            RETURN
-        END_IF
-        CALL(get_ryoukin, LW(10))
-        MULTIPLY(LW(10), -1)
-        CALL(evt_pouch_add_coin, LW(10))
-        WAIT_MS(1000)
-    END_IF
-    // "Enjoy your stay!": the partners step away and Mario walks to the bedside (or the inn's own walk-to-bed
-    // script runs) while the camera moves to the bed view.
-    CALL(evt_win_coin_off, LW(12))
-    CALL(msg_no, 3, LW(0))
-    CALL(evt_msg_print_add, 0, LW(0))
-    CALL(get_npcname, LW(0))
-    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_NO_HIT)
-    CALL(evt_mario_get_party, LW(11))
-    CALL(evt_mario_get_exparty, LW(12))
-    CALL(evt_mario_get_pos, 0, LW(13), LW(14), LW(15))
-    CALL(evt_mario_goodbye_party, 1)
-    CALL(evt_mario_goodbye_party, 0)
-    CALL(get_to_bed_evt, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        BEGIN_INLINE_EVENT
-            WAIT_MS(1000)
-            CALL(get_cam, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
-            CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, EASING_SINE_IN_OUT)
-        END_INLINE_EVENT
-        CALL(get_bedside, LW(0), LW(1), LW(2))
         CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(90.0f))
+#endif
     ELSE
         BEGIN_INLINE_EVENT_GET_ID(LW(0))
             CALL_CHILD(LW(0))
@@ -590,32 +393,49 @@ EVT_BEGIN(kinopio_house_talk_evt)
     END_IF
     // Mario jumps into bed with a yelp and lies down flat with sleeping sounds.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_mario_flag_onoff, 1, 768)
+#else
     CALL(evt_snd_sfxon_3d, 131230, LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL | MARIO_FLAG_WALLS_DISABLED)
+#endif
     CALL(get_bed, LW(0), LW(1), LW(2))
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), FLOAT(400.0f), 0, -1000)
     CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
     CALL(evt_mario_adjust_dir)
     WAIT_MS(200)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_SHADOW_OFF)
+#endif
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(get_beddeg, LW(0))
         CALL(paper_on, LW(0))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
+        WAIT_MS(200)
+        CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP2"), LW(0), LW(1), LW(2), 0)
+#else
         CALL(evt_snd_sfxon_3d, 132026, LW(0), LW(1), LW(2), 0)
         WAIT_MS(200)
         CALL(evt_snd_sfxon_3d, 132027, LW(0), LW(1), LW(2), 0)
+#endif
     END_INLINE_EVENT
     // Sound effects mute, the sleep tune plays and a spotlight closes in on Mario until the screen is black.
     CALL(snd_off)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GO_SLEEPING1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_fade_entry, 4, 3000, 0, 0, 0)
+#else
 #if VERSION >= VERSION_US
     CALL(evt_fade_entry, FADE_OUT_SPOT, 6000, 0, 0, 0)
 #else
     CALL(evt_fade_entry, 4, 3000, 0, 0, 0)
+#endif
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_fade_set_spot_pos, LW(0), LW(1), LW(2))
@@ -630,7 +450,9 @@ EVT_BEGIN(kinopio_house_talk_evt)
     WAIT_MS(3000)
     DELETE_EVENT(LW(10))
     CALL(paper_off)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_SHADOW_OFF)
+#endif
     IF_INT_NOT_EQUAL(LW(11), 0)
         CALL(get_bed, LW(0), LW(1), LW(2))
         CALL(evt_mario_set_party_pos, 0, LW(11), LW(0), LW(1), LW(2))
@@ -642,7 +464,11 @@ EVT_BEGIN(kinopio_house_talk_evt)
         ADD_FLOAT(LW(2), LW(4))
         CALL(evt_mario_set_party_pos, 1, LW(12), LW(0), LW(1), LW(2))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_flag_onoff, 0, 768)
+#else
     CALL(evt_mario_flag_onoff, 0, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL | MARIO_FLAG_WALLS_DISABLED)
+#endif
     CALL(get_bedside, LW(0), LW(1), LW(2))
     CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
     CALL(get_npcname, LW(0))
@@ -650,24 +476,37 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_mario_set_dir_npc, LW(0))
     CALL(evt_party_set_dir_npc, 0, LW(0))
     CALL(evt_party_set_dir_npc, 1, LW(0))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_adjust_dir)
+#endif
     CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_INSTANT_TURN)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(snd_on)
+#endif
     ADD(GSW_INN_STAY_COUNT, 1)
     IF_INT_GREATER(GSW_INN_STAY_COUNT, INN_STAY_COUNT_CAP)
         SET_VALUE(GSW_INN_STAY_COUNT, INN_STAY_COUNT_CAP)
     END_IF
     IF_INT_EQUAL(GSW_INN_STAY_COUNT, INN_COMMEMORATIVE_STAY)
         CALL_CHILD(evt_50)
+#if VERSION <= VERSION_DEMO_US
+        RETURN
+    END_IF
+    CALL(evt_snd_bgmoff, PSND_FADE_OUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    CALL(snd_on)
+#else
         CALL(get_npcname, LW(0))
         CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_NO_HIT)
         RETURN
     END_IF
     CALL(evt_mario_adjust_dir)
+#endif
     CALL(evt_fade_entry, FADE_IN_BLACK_2D, 1000, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(get_from_bed_evt, LW(0))
@@ -686,11 +525,16 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(get_npctalk, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(60.0f))
+    CALL(evt_fade_end_wait)
+#else
     CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(90.0f))
     CALL(evt_fade_end_wait)
     CALL(get_npcname, LW(11))
     CALL(evt_mario_set_dir_npc, LW(11))
     CALL(evt_party_set_dir_npc, 0, LW(11))
+#endif
     CALL(get_npcname, LW(11))
     CALL(msg_no, 5, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(11))
@@ -699,7 +543,6 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 /** Retail 50th-stay celebration with the Lakitu cameraman's photo and the 200-coin gift; see the demo version above. */
 EVT_BEGIN(evt_50)

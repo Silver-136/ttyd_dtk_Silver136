@@ -75,7 +75,6 @@ static inline s32 MAX0(s32 x) {
     return x >= 0 ? x : 0;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Resets the Pianta Parlor work: token counts and flags cleared,
  * and the default record tables (five ranks per minigame, score plus a derived per-rank value) filled in.
@@ -83,13 +82,18 @@ static inline s32 MAX0(s32 x) {
  * The demo has its own records; US/PAL keep eight record rows, JP four.
  */
 void yuugijou_init(void) {
+#if VERSION > VERSION_DEMO_US
+    s32 t;
+#endif
     yuwp = &yuugijouwork;
     memset(yuwp, 0, sizeof(PiantaParlorWork));
+
     yuwp->recordOn[0][0] = 1;
     yuwp->recordOn[0][1] = 1;
     yuwp->recordOn[0][2] = 1;
     yuwp->recordOn[0][3] = 1;
     yuwp->recordOn[0][4] = 1;
+#if VERSION <= VERSION_DEMO_US
 
     yuwp->recordScore[0][0] = 0x18EE8;
     yuwp->recordScore[0][1] = 0x1708E;
@@ -103,77 +107,7 @@ void yuugijou_init(void) {
     yuwp->recordParam[0][3] = 0x11;
     yuwp->recordParam[0][4] = 0xB;
 
-    yuwp->recordOn[1][0] = 1;
-    yuwp->recordOn[1][1] = 1;
-    yuwp->recordOn[1][2] = 1;
-    yuwp->recordOn[1][3] = 1;
-    yuwp->recordOn[1][4] = 1;
-
-    yuwp->recordScore[1][0] = 0x1D2;
-    yuwp->recordScore[1][1] = 0x1EA;
-    yuwp->recordScore[1][2] = 0x200;
-    yuwp->recordScore[1][3] = 0x21B;
-    yuwp->recordScore[1][4] = 0x22A;
-
-    yuwp->recordParam[1][0] = 0x18;
-    yuwp->recordParam[1][1] = 0x15;
-    yuwp->recordParam[1][2] = 0x12;
-    yuwp->recordParam[1][3] = 0xE;
-    yuwp->recordParam[1][4] = 0x8;
-
-    yuwp->recordOn[2][0] = 1;
-    yuwp->recordOn[2][1] = 1;
-    yuwp->recordOn[2][2] = 1;
-    yuwp->recordOn[2][3] = 1;
-    yuwp->recordOn[2][4] = 1;
-
-    yuwp->recordScore[2][0] = 0x62E8;
-    yuwp->recordScore[2][1] = 0x5410;
-    yuwp->recordScore[2][2] = 0x4B96;
-    yuwp->recordScore[2][3] = 0x2D82;
-    yuwp->recordScore[2][4] = 0x23DC;
-
-    yuwp->recordParam[2][0] = 0x25;
-    yuwp->recordParam[2][1] = 0x20;
-    yuwp->recordParam[2][2] = 0x1B;
-    yuwp->recordParam[2][3] = 0xC;
-    yuwp->recordParam[2][4] = 0x9;
-
-    yuwp->recordOn[3][0] = 1;
-    yuwp->recordOn[3][1] = 1;
-    yuwp->recordOn[3][2] = 1;
-    yuwp->recordOn[3][3] = 1;
-    yuwp->recordOn[3][4] = 1;
-
-    yuwp->recordScore[3][0] = 0x4EFC;
-    yuwp->recordScore[3][1] = 0x4416;
-    yuwp->recordScore[3][2] = 0x302A;
-    yuwp->recordScore[3][3] = 0x2044;
-    yuwp->recordScore[3][4] = 0x1428;
-
-    yuwp->recordParam[3][0] = 0x21;
-    yuwp->recordParam[3][1] = 0x1C;
-    yuwp->recordParam[3][2] = 0x16;
-    yuwp->recordParam[3][3] = 0x10;
-    yuwp->recordParam[3][4] = 0xC;
-}
 #else
-/**
- * Resets the Pianta Parlor work: token counts and flags cleared,
- * and the default record tables (five ranks per minigame, score plus a derived per-rank value) filled in.
- * Called on a new game (mariost.c) and from event.c.
- * The demo has its own records; US/PAL keep eight record rows, JP four.
- */
-void yuugijou_init(void) {
-    s32 t;
-    yuwp = &yuugijouwork;
-    memset(yuwp, 0, sizeof(PiantaParlorWork));
-
-    yuwp->recordOn[0][0] = 1;
-    yuwp->recordOn[0][1] = 1;
-    yuwp->recordOn[0][2] = 1;
-    yuwp->recordOn[0][3] = 1;
-    yuwp->recordOn[0][4] = 1;
 
     yuwp->recordScore[0][0] = 0x5B964;
     yuwp->recordScore[0][1] = 0x5825A;
@@ -187,11 +121,27 @@ void yuugijou_init(void) {
     yuwp->recordParam[0][3] = 0xB;
     yuwp->recordParam[0][4] = 0xA;
 
+#endif
     yuwp->recordOn[1][0] = 1;
     yuwp->recordOn[1][1] = 1;
     yuwp->recordOn[1][2] = 1;
     yuwp->recordOn[1][3] = 1;
     yuwp->recordOn[1][4] = 1;
+#if VERSION <= VERSION_DEMO_US
+
+    yuwp->recordScore[1][0] = 0x1D2;
+    yuwp->recordScore[1][1] = 0x1EA;
+    yuwp->recordScore[1][2] = 0x200;
+    yuwp->recordScore[1][3] = 0x21B;
+    yuwp->recordScore[1][4] = 0x22A;
+
+    yuwp->recordParam[1][0] = 0x18;
+    yuwp->recordParam[1][1] = 0x15;
+    yuwp->recordParam[1][2] = 0x12;
+    yuwp->recordParam[1][3] = 0xE;
+    yuwp->recordParam[1][4] = 0x8;
+
+#else
 
     yuwp->recordScore[1][0] = 2;
     yuwp->recordScore[1][1] = 5;
@@ -209,11 +159,27 @@ void yuugijou_init(void) {
     t = (700 - (s32)yuwp->recordScore[1][4]) * 15;
     yuwp->recordParam[1][4] = MAX0(t / 700);
 
+#endif
     yuwp->recordOn[2][0] = 1;
     yuwp->recordOn[2][1] = 1;
     yuwp->recordOn[2][2] = 1;
     yuwp->recordOn[2][3] = 1;
     yuwp->recordOn[2][4] = 1;
+#if VERSION <= VERSION_DEMO_US
+
+    yuwp->recordScore[2][0] = 0x62E8;
+    yuwp->recordScore[2][1] = 0x5410;
+    yuwp->recordScore[2][2] = 0x4B96;
+    yuwp->recordScore[2][3] = 0x2D82;
+    yuwp->recordScore[2][4] = 0x23DC;
+
+    yuwp->recordParam[2][0] = 0x25;
+    yuwp->recordParam[2][1] = 0x20;
+    yuwp->recordParam[2][2] = 0x1B;
+    yuwp->recordParam[2][3] = 0xC;
+    yuwp->recordParam[2][4] = 0x9;
+
+#else
 
     yuwp->recordScore[2][0] = 0x20850;
     yuwp->recordScore[2][1] = 0x20436;
@@ -233,11 +199,26 @@ void yuugijou_init(void) {
     yuwp->recordParam[2][4] = MAX0(((s32)yuwp->recordScore[2][4] - 109000) / 2000) + 1;
 #endif
 
+#endif
     yuwp->recordOn[3][0] = 1;
     yuwp->recordOn[3][1] = 1;
     yuwp->recordOn[3][2] = 1;
     yuwp->recordOn[3][3] = 1;
     yuwp->recordOn[3][4] = 1;
+#if VERSION <= VERSION_DEMO_US
+
+    yuwp->recordScore[3][0] = 0x4EFC;
+    yuwp->recordScore[3][1] = 0x4416;
+    yuwp->recordScore[3][2] = 0x302A;
+    yuwp->recordScore[3][3] = 0x2044;
+    yuwp->recordScore[3][4] = 0x1428;
+
+    yuwp->recordParam[3][0] = 0x21;
+    yuwp->recordParam[3][1] = 0x1C;
+    yuwp->recordParam[3][2] = 0x16;
+    yuwp->recordParam[3][3] = 0x10;
+    yuwp->recordParam[3][4] = 0xC;
+#else
 
     yuwp->recordScore[3][0] = 0x16BDE;
     yuwp->recordScore[3][1] = 0x16968;
@@ -342,8 +323,8 @@ void yuugijou_init(void) {
     yuwp->recordParam[3][3] = MAX0(t / 2000) + 3;
     yuwp->recordParam[3][4] = MAX0(((s32)yuwp->recordScore[3][4] - 74000) / 2000) + 4;
 #endif
-}
 #endif
+}
 static inline s32 cmpSign(s32 a, s32 b) {
     if (a > b) {
         return 1;

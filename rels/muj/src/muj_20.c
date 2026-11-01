@@ -2108,7 +2108,6 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
  * Display callback for the title logo: draws the logo texture for the current language
  * and the Press Start text with the wp alpha.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Display callback for the title logo: draws the logo texture for the current language
  * and the Press Start text with the wp alpha.
@@ -2119,6 +2118,17 @@ static void draw(CameraId camera, void* param) {
     f32 viewport[6];
     f32 projection[7];
     CameraEntry* cam;
+#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_US
+    // US: logo texture per language (indexed by gp->language)
+#if VERSION == VERSION_EU
+    s32 logoTex[6] = {0x13, 0x13, 0x14, 0x15, 0x16, 0x17};
+#else
+    s32 logoTex[6] = {0x15, 0x15, 0x16, 0x17, 0x18, 0x19};
+#endif
+#endif
+
+#endif
     GXGetViewportv(viewport);
     GXGetProjectionv(projection);
     cam = camGetPtr(CAMERA_2D);
@@ -2127,6 +2137,7 @@ static void draw(CameraId camera, void* param) {
     cam = camGetPtr(CAMERA_2D);
     *camGetCurPtr() = *cam;
     winTexInit(*(TEXPalette**)wp->tpl->data);
+#if VERSION <= VERSION_DEMO_US
     winTexSet(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
     // the demo blinks PRESS START under the logo once the ship has arrived (GF(0))
     if (evtGetValue(NULL, GF(0))) {
@@ -2141,48 +2152,17 @@ static void draw(CameraId camera, void* param) {
         }
         pressStartGX(wp, alpha, 0.0f, -100.0f);
     }
-*camGetCurPtr() = saved;
-    GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
-    GXSetProjectionv(projection);
-}
 #else
-/**
- * Display callback for the title logo: draws the logo texture for the current language
- * and the Press Start text with the wp alpha.
- */
-static void draw(CameraId camera, void* param) {
-    LogoWork* wp = param;
-    CameraEntry saved;
-    f32 viewport[6];
-    f32 projection[7];
-    CameraEntry* cam;
-#if VERSION >= VERSION_US
-    // US: logo texture per language (indexed by gp->language)
-#if VERSION == VERSION_EU
-    s32 logoTex[6] = {0x13, 0x13, 0x14, 0x15, 0x16, 0x17};
-#else
-    s32 logoTex[6] = {0x15, 0x15, 0x16, 0x17, 0x18, 0x19};
-#endif
-#endif
-
-    GXGetViewportv(viewport);
-    GXGetProjectionv(projection);
-    cam = camGetPtr(CAMERA_2D);
-    GXSetProjection(camGetPtr(CAMERA_2D)->projection, cam->projType);
-    saved = *camGetCurPtr();
-    cam = camGetPtr(CAMERA_2D);
-    *camGetCurPtr() = *cam;
-    winTexInit(*(TEXPalette**)wp->tpl->data);
 #if VERSION >= VERSION_US
     winTexSetNearest(logoTex[gp->language], (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
 #else
     winTexSetNearest(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
 #endif
+#endif
     *camGetCurPtr() = saved;
     GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
     GXSetProjectionv(projection);
 }
-#endif
 
 /**
  * The title scene of the opening (entered as "prologue" from aaa_00 after the Mario's house prologue):
@@ -2463,59 +2443,9 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(logo) {
-    LogoWork* wp;
-
-    if (isFirstCall) {
-        wp = _mapAlloc(sizeof(LogoWork));
-        memset(wp, 0, sizeof(LogoWork));
-        event->userdatap[0] = wp;
-    }
-    wp = event->userdatap[0];
-    switch (wp->state) {
-        case 0:
-            wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
-            wp->alpha = 0;
-            wp->y = 0.0f;
-            wp->counter = 0;
-            wp->state++;
-            break;
-        case 1:
-            if (wp->counter < VERSION_PICK(180, FPS_FRAMES(180))) {
-                wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 255.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
-                wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
-            } else if (gp->retraceCount % 15 == 0) {
-                wp->state++;
-            }
-            break;
-        case 2:
-        if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START))) {
-            wp->counter = 0;
-                wp->state++;
-                evtSetValue(event, GF(1), 1);
-            }
-            break;
-        case 3:
-            if (wp->counter < VERSION_PICK(120, FPS_FRAMES(120))) {
-                wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 255.0f, 0.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
-                wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
-            } else {
-                wp->state++;
-            }
-            break;
-        case 4:
-            fileFree(wp->tpl);
-            wp->tpl = NULL;
-            _mapFree(wp);
-            evtSetValue(event, GF(2), 1);
-            return EVT_RETURN_DONE;
-    }
-    if (wp->tpl) {
-        dispEntry(CAMERA_2D, 1000.0f, 0, draw, wp);
-    }
-    return EVT_RETURN_BLOCK;
-}
 #else
 USER_FUNC(logo) {
+#endif
     LogoWork* wp;
 
     if (isFirstCall) {
@@ -2524,10 +2454,12 @@ USER_FUNC(logo) {
         event->userdatap[0] = wp;
     }
     wp = event->userdatap[0];
+#if VERSION > VERSION_DEMO_US
     if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/mariost.tpl", getMarioStDvdRoot()) == 0) {
         return EVT_RETURN_BLOCK;
     }
     // Fade states increment the same counter once for alpha and again for vertical position.
+#endif
     switch (wp->state) {
         case 0:
             wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
@@ -2539,17 +2471,25 @@ USER_FUNC(logo) {
         case 1:
             if (wp->counter < VERSION_PICK(180, FPS_FRAMES(180))) {
                 wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 255.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
+#if VERSION <= VERSION_DEMO_US
+                wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
+#else
 #if VERSION >= VERSION_US
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, FPS_FRAMES(180));
 #else
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, 180);
+#endif
 #endif
             } else if (gp->retraceCount % 15 == 0) {
                 wp->state++;
             }
             break;
         case 2:
+#if VERSION <= VERSION_DEMO_US
+            if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START))) {
+#else
             if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_START))) {
+#endif
                 wp->counter = 0;
                 wp->state++;
                 evtSetValue(event, GF(1), 1);
@@ -2558,10 +2498,14 @@ USER_FUNC(logo) {
         case 3:
             if (wp->counter < VERSION_PICK(120, FPS_FRAMES(120))) {
                 wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 255.0f, 0.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
+#if VERSION <= VERSION_DEMO_US
+                wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
+#else
 #if VERSION >= VERSION_US
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, FPS_FRAMES(120));
 #else
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, 120);
+#endif
 #endif
             } else {
                 wp->state++;
@@ -2579,5 +2523,4 @@ USER_FUNC(logo) {
     }
     return EVT_RETURN_BLOCK;
 }
-#endif
 

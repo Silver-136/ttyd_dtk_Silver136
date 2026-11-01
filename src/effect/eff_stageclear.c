@@ -150,15 +150,14 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
         case 1:
             n = 7;
             break;
-    }
 #else
     if ((u32)gp->language != LANGUAGE_JP) {
         n = 14;
     }
     if (type % 10 == 1) {
         n = 7;
-    }
 #endif
+    }
     effect->type = "StageClear";
     effect->count = n;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(StageClearWork));

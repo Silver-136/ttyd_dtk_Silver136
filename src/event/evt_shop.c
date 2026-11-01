@@ -141,6 +141,13 @@ WinMgrDesc list_desc[] = {
  * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
  * then runs the shop's own buy_evt with LW(0) = the item id.
  */
+/**
+ * Runs when Mario presses A on a shelf item (started by evt_shop_main_func with LW(0) = the ShopWork):
+ * the shopkeeper names the item and price, and on yes takes the coins, gives the item,
+ * adds a shop point (doubled during the timed sales at the Great Tree (mri_07),
+ * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
+ * then runs the shop's own buy_evt with LW(0) = the item id.
+ */
 #if VERSION <= VERSION_DEMO_US
 /** the demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
 EVT_BEGIN(evt_shoplist)
@@ -156,6 +163,7 @@ EVT_END()
  * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
  * then runs the shop's own buy_evt with LW(0) = the item id.
  */
+#endif
 static EVT_BEGIN(buy_evt)
     // Mario stops and the item's highlight goes away;
     // a first-time shopper hears the shopping explanation instead.
@@ -175,130 +183,13 @@ static EVT_BEGIN(buy_evt)
     CALL(get_value, LW(10), LW(11), LW(12), LW(13))
     CALL(get_msg, LW(10), 0, LW(14))
     CALL(evt_sub_get_language, LW(0))
+#if VERSION <= VERSION_DEMO_US
     IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(13), LW(11))
         ELSE
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
     END_IF
-    CALL(get_msg, LW(10), 24, LW(14))
-    CALL(evt_msg_select, 0, LW(14))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(get_msg, LW(10), 22, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        CALL(evt_win_coin_off, LW(8))
-        CALL(point_disp_onoff, 0)
-        RETURN
-    END_IF
-    CALL(evt_pouch_get_coin, LW(0))
-    IF_INT_LESS(LW(0), LW(13))
-        CALL(get_msg, LW(10), 1, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        CALL(evt_win_coin_off, LW(8))
-        CALL(point_disp_onoff, 0)
-        RETURN
-    END_IF
-    CALL(evt_pouch_add_item, LW(12), LW(0))
-    IF_INT_EQUAL(LW(0), -1)
-        CALL(get_msg, LW(10), 2, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        CALL(evt_win_coin_off, LW(8))
-        CALL(point_disp_onoff, 0)
-        RETURN
-    END_IF
-    // Bought: a shop point is added (two during a timed double-points sale) and the coins are paid.
-    CALL(set_buy_item_id, LW(12))
-    CALL(evt_sub_load_progresstime, GSW_SHOP_MRI_07_SALE_START_TIME, LW(0))
-    CALL(evt_sub_load_progresstime, GSW_SHOP_USU_01_SALE_START_TIME, LW(1))
-    CALL(evt_sub_load_progresstime, GSW_SHOP_RSH_03_SALE_START_TIME, LW(2))
-    CALL(add_shop_point, 1, LW(0), LW(1), LW(2))
-    MULTIPLY(LW(13), -1)
-    CALL(evt_pouch_add_coin, LW(13))
-    CALL(evt_win_coin_wait, LW(8))
-    CALL(point_wait)
-    WAIT_MS(200)
-    CALL(evt_win_coin_off, LW(8))
-    CALL(point_disp_onoff, 0)
-    CALL(evt_msg_continue)
-    CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
-        IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
-            SET_VALUE(GSWF_ITEM_TUTORIAL_SEEN, 1)
-            CALL(evt_msg_print, 0, STRING("item_first_hit"), 0, 0)
-        END_IF
-    END_IF
-    LOOP(0)
-        CALL(chk_shop_point, LW(0), LW(1), LW(2))
-        IF_INT_EQUAL(LW(0), -1)
-            GOTO(123)
-            RETURN
-        END_IF
-        SET_VALUE(LF(0), 0)
-        CALL(get_shop_point, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 300)
-            CALL(get_msg, LW(10), 26, LW(14))
-            CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
-            ELSE
-            CALL(get_msg, LW(10), 34, LW(14))
-            CALL(evt_msg_print, 0, LW(14), 0, LW(9))
-            CALL(evt_win_coin_on, 0, LW(8))
-            CALL(point_disp_onoff, 1)
-            CALL(reset_shop_point)
-            CALL(evt_win_coin_wait, LW(8))
-            CALL(point_wait)
-            WAIT_MS(500)
-            CALL(evt_win_coin_off, LW(8))
-            CALL(point_disp_onoff, 0)
-            SET_VALUE(LF(0), 1)
-        END_IF
-        // With a full item bag the prize is kept for later (the 300-point prize is remembered by a flag).
-        CALL(evt_pouch_add_item, LW(1), LW(0))
-        IF_INT_EQUAL(LW(0), -1)
-            CALL(get_msg, LW(10), 27, LW(14))
-            CALL(evt_msg_print, 0, LW(14), 0, LW(9))
-            IF_INT_EQUAL(LF(0), 1)
-                SET_VALUE(GSWF_SHOP_POINT_PRIZE_PENDING, 1)
-            END_IF
-            GOTO(123)
-            RETURN
-        END_IF
-        CALL(exchange_shop_point)
-    END_LOOP
-    // Finally the shop's own after-purchase script runs, if it has one.
-    LABEL(123)
-    CALL(get_buy_evt, LW(1))
-    IF_INT_NOT_EQUAL(LW(1), 0)
-        SET_VALUE(LW(0), LW(12))
-        CALL_CHILD(LW(1))
-    END_IF
-    RETURN
-EVT_END()
 #else
-/**
- * Runs when Mario presses A on a shelf item (started by evt_shop_main_func with LW(0) = the ShopWork):
- * the shopkeeper names the item and price, and on yes takes the coins, gives the item,
- * adds a shop point (doubled during the timed sales at the Great Tree (mri_07),
- * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
- * then runs the shop's own buy_evt with LW(0) = the item id.
- */
-static EVT_BEGIN(buy_evt)
-    // Mario stops and the item's highlight goes away;
-    // a first-time shopper hears the shopping explanation instead.
-    CALL(evt_mario_normalize)
-    SET_VALUE(LW(10), LW(0))
-    CALL(disp_off, LW(10))
-    IF_INT_EQUAL(GSWF_SHOP_TUTORIAL_SEEN, 0)
-        SET_VALUE(GSWF_SHOP_TUTORIAL_SEEN, 1)
-        CALL_CHILD(PTR(first_shopping_evt))
-        RETURN
-    END_IF
-    // The shopkeeper turns to Mario, the coin and point windows open, and he names the item and its price.
-    CALL(shopper_name, LW(9))
-    CALL(evt_set_dir_to_target, LW(9), STRING("mario"))
-    CALL(evt_win_coin_on, 0, LW(8))
-    CALL(point_disp_onoff, 1)
-    CALL(get_value, LW(10), LW(11), LW(12), LW(13))
-    CALL(get_msg, LW(10), 0, LW(14))
-    CALL(evt_sub_get_language, LW(0))
 #if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(LANGUAGE_JP)
@@ -316,6 +207,7 @@ static EVT_BEGIN(buy_evt)
     END_IF
 #endif
     // Mario decides: "no", too few coins or a full item bag each end the purchase with the shopkeeper's line.
+#endif
     CALL(get_msg, LW(10), 24, LW(14))
     CALL(evt_msg_select, 0, LW(14))
     IF_INT_EQUAL(LW(0), 1)
@@ -354,6 +246,9 @@ static EVT_BEGIN(buy_evt)
     WAIT_MS(200)
     CALL(evt_win_coin_off, LW(8))
     CALL(point_disp_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_continue)
+#else
 #if VERSION >= VERSION_US
     CALL(get_msg, LW(10), 11, LW(14))
     CALL(evt_msg_print_add, 0, LW(14))
@@ -361,6 +256,7 @@ static EVT_BEGIN(buy_evt)
     CALL(evt_msg_continue)
 #endif
     // The first item ever bought brings up the item tutorial, except on kiosk units.
+#endif
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
         IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
@@ -378,6 +274,9 @@ static EVT_BEGIN(buy_evt)
         CALL(get_shop_point, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 300)
             CALL(get_msg, LW(10), 26, LW(14))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
+#else
 #if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
@@ -390,6 +289,7 @@ static EVT_BEGIN(buy_evt)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
+#endif
 #endif
             ELSE
             CALL(get_msg, LW(10), 34, LW(14))
@@ -426,7 +326,6 @@ static EVT_BEGIN(buy_evt)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 /**
  * Talk script the shop setup gives the shopkeeper NPC:
@@ -651,6 +550,9 @@ static EVT_BEGIN(sell_evt)
     CALL(item_data_db_arrange)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_win_item_select, 3, LW(1))
+#else
+    CALL(evt_win_item_select, 1, 3, LW(1), LW(4))
+#endif
     CALL(item_data_db_restore)
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(get_msg, LW(10), 22, LW(14))
@@ -663,33 +565,13 @@ static EVT_BEGIN(sell_evt)
     CALL(item_data_db_restore)
     CALL(get_msg, LW(10), 8, LW(14))
     CALL(evt_sub_get_language, LW(0))
+#if VERSION <= VERSION_DEMO_US
     IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(3), LW(2))
     ELSE
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
     END_IF
-    CALL(get_msg, LW(10), 24, LW(14))
-    CALL(evt_msg_select, 0, LW(14))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(get_msg, LW(10), 9, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        GOTO(0)
-    END_IF
-    CALL(evt_pouch_remove_item, LW(1), LW(0))
 #else
-    CALL(evt_win_item_select, 1, 3, LW(1), LW(4))
-    CALL(item_data_db_restore)
-    IF_INT_LESS_OR_EQUAL(LW(1), 0)
-        CALL(get_msg, LW(10), 22, LW(14))
-        CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
-        CALL(evt_win_coin_off, LW(8))
-        RETURN
-    END_IF
-    CALL(item_data_db_arrange)
-    CALL(name_price, LW(1), LW(2), LW(3))
-    CALL(item_data_db_restore)
-    CALL(get_msg, LW(10), 8, LW(14))
-    CALL(evt_sub_get_language, LW(0))
 #if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(LANGUAGE_JP)
@@ -706,6 +588,7 @@ static EVT_BEGIN(sell_evt)
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
     END_IF
 #endif
+#endif
     CALL(get_msg, LW(10), 24, LW(14))
     CALL(evt_msg_select, 0, LW(14))
     IF_INT_EQUAL(LW(0), 1)
@@ -713,6 +596,9 @@ static EVT_BEGIN(sell_evt)
         CALL(evt_msg_print_add, 0, LW(14))
         GOTO(0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_pouch_remove_item, LW(1), LW(0))
+#else
     CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
 #endif
     CALL(evt_pouch_add_coin, LW(3))
@@ -740,57 +626,6 @@ static EVT_BEGIN(sell_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
-EVT_BEGIN(keep_evt)
-    CALL(keep_pouchcheck_func)
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(get_msg, LW(10), 12, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        RETURN
-    END_IF
-    IF_INT_EQUAL(LW(1), 0)
-        CALL(get_msg, LW(10), 13, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        RETURN
-    END_IF
-    CALL(get_msg, LW(10), 14, LW(14))
-    CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
-    LABEL(0)
-    CALL(evt_win_item_select, 4, LW(1))
-    IF_INT_LESS_OR_EQUAL(LW(1), 0)
-        CALL(get_msg, LW(10), 22, LW(14))
-        CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
-        RETURN
-    END_IF
-    CALL(evt_pouch_remove_item, LW(1), LW(0))
-    CALL(evt_pouch_add_keepitem, LW(1), LW(0))
-    CALL(keep_pouchcheck_func)
-    SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(LW(0), 0)
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_INT_EQUAL(LW(1), 0)
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_INT_EQUAL(LF(0), 1)
-        CALL(get_msg, LW(10), 15, LW(14))
-        CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
-        RETURN
-    END_IF
-    CALL(get_msg, LW(10), 16, LW(14))
-    CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
-    CALL(get_msg, LW(10), 24, LW(14))
-    CALL(evt_msg_select, 0, LW(14))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(get_msg, LW(10), 22, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        RETURN
-    END_IF
-    CALL(evt_msg_continue)
-    GOTO(0)
-    RETURN
-EVT_END()
-#else
 /**
  * Counter menu option for storing items: checks Mario has an item and the shop has free storage,
  * then lets him pick items one by one and moves each from his pouch to the stored-item list (pouch keep items).
@@ -809,6 +644,11 @@ EVT_BEGIN(keep_evt)
         RETURN
     END_IF
     CALL(get_msg, LW(10), 14, LW(14))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
+    LABEL(0)
+    CALL(evt_win_item_select, 4, LW(1))
+#else
 #if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
     SWITCH(LW(0))
@@ -823,12 +663,17 @@ EVT_BEGIN(keep_evt)
 #endif
     LABEL(0)
     CALL(evt_win_item_select, 1, 4, LW(1), LW(4))
+#endif
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(get_msg, LW(10), 22, LW(14))
         CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_pouch_remove_item, LW(1), LW(0))
+#else
     CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
+#endif
     CALL(evt_pouch_add_keepitem, LW(1), LW(0))
     CALL(keep_pouchcheck_func)
     SET_VALUE(LF(0), 0)
@@ -856,7 +701,6 @@ EVT_BEGIN(keep_evt)
     GOTO(0)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Counter menu option for taking stored items back:

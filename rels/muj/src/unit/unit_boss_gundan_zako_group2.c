@@ -623,362 +623,94 @@ USER_FUNC(zakogun_ext_init2) {
  * Per-frame update of formation 2 (25 X-Nauts):
  * moves each member through its state machine and updates its pose matrix and sounds.
  */
+/**
+ * Per-frame update of formation 2 (25 X-Nauts):
+ * moves each member through its state machine and updates its pose matrix and sounds.
+ */
+void zakogun_ext_main2(void) {
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit = zakogun_get_ptr();
+    ExtdrvPose* pose = extGetPosePtr();
+    BattleStageObject* body;
+    s32 i;
+    ZakoGun* zako;
+    f32 x, y, z;
+    Mtx m;
+    const char* se1;
+    const char* se2;
+    const char* se3;
+
+    if (unit == NULL) {
+        return;
+    }
+    body = BattleSearchObjectPtr("if_body");
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
+    se1 = (0, "SFX_BOSS_TEAM_3RD_ATTACK2");
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
+    se2 = (0, "SFX_BOSS_TEAM_3RD_MOVE_CAILING2");
+    se3 = "SFX_BOSS_TEAM_3RD_ATTACK2";
+    for (i = 0; i < 25; i++, pose++) {
+        zako = &zakogun[i];
+        pose->texId = zako->poseBase + zako->poseCount / zako->poseDiv;
+        zako->poseCount++;
+        if (zako->poseCount >= zako->poseNum * zako->poseDiv) {
+            zako->poseCount = 0;
+        }
+        switch (zako->state) {
+            case 0:
+                zako->state = 5;
+                zako->rot.x = zako->rot.y = zako->rot.z = 0.0f;
+                zakogun_set_pose(zako, 0x25, 4, 6);
+                break;
+            case 5:
+                zako->pos.x = zako->home.x = body->position.x - 250.0f + i * 20.0f;
+                zako->pos.y = zako->home.y = body->position.y - 35.0f;
+                zako->pos.z = zako->home.z = 0.0f;
+                zako->state = 10;
+                break;
+            case 10:
+                zako->pos.x = zako->home.x = body->position.x + unit->position.x - 250.0f + i * 20.0f;
+                zako->pos.y = zako->home.y = body->position.y - 35.0f;
+                if (zako->pos.y < unit->position.y) {
+                    zako->pos.y = unit->position.y;
+                }
+                zako->pos.z = zako->home.z = -10.0f;
+                break;
+            case 20:
+                BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
+                zako->start = zako->pos;
+                if (zako->pos.x >= x) {
+                    zako->target.x = zako->pos.x - 30.0f;
+                    zako->rot.y = 0.0f;
+                } else {
+                    zako->target.x = 15.0f + zako->pos.x;
+                    zako->rot.y = 180.0f;
+                }
+                zako->target.y = zako->start.y - 2.0f;
+                zako->state = 25;
+                zako->timer = zako->timerMax = 8;
+            case 25:
+                zako->pos.x = intplGetValue(EASING_QUADRATIC_OUT, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.y = intplGetValue(EASING_QUADRATIC_OUT, zako->start.y, zako->target.y, (zako->timerMax - zako->timer) * 2, zako->timerMax);
+                zako->timer--;
+                if (zako->timer < 0) {
+                    BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
+                    if (__fabs(zako->pos.x - x) <= 20.0) {
+                        zako->state = 30;
+                    } else {
+                        zako->state = 20;
+                    }
+                }
+                break;
+            case 30:
+                BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
+                zako->vel.x = rand() / 32767.0f - 0.5f;
+                zako->vel.y = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-/**
- * Per-frame update of formation 2 (25 X-Nauts):
- * moves each member through its state machine and updates its pose matrix and sounds.
- */
-void zakogun_ext_main2(void) {
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit = zakogun_get_ptr();
-    ExtdrvPose* pose = extGetPosePtr();
-    BattleStageObject* body;
-    s32 i;
-    ZakoGun* zako;
-    f32 x, y, z;
-    Mtx m;
-    const char* se1;
-    const char* se2;
-    const char* se3;
-
-    if (unit == NULL) {
-        return;
-    }
-    body = BattleSearchObjectPtr("if_body");
-    // FAKE: the (0, "...") comma expressions keep these two names out of constant propagation so they stay in
-    // saved registers as in the game; plain assignments change zakogun_ext_main2 (no runtime effect).
-    se1 = (0, "SFX_BOSS_TEAM_3RD_ATTACK2");
-    se2 = (0, "SFX_BOSS_TEAM_3RD_MOVE_CAILING2");
-    se3 = "SFX_BOSS_TEAM_3RD_ATTACK2";
-    for (i = 0; i < 25; i++, pose++) {
-        zako = &zakogun[i];
-        pose->texId = zako->poseBase + zako->poseCount / zako->poseDiv;
-        zako->poseCount++;
-        if (zako->poseCount >= zako->poseNum * zako->poseDiv) {
-            zako->poseCount = 0;
-        }
-        switch (zako->state) {
-            case 0:
-                zako->state = 5;
-                zako->rot.x = zako->rot.y = zako->rot.z = 0.0f;
-                zakogun_set_pose(zako, 0x25, 4, 6);
-                break;
-            case 5:
-                zako->pos.x = zako->home.x = body->position.x - 250.0f + i * 20.0f;
-                zako->pos.y = zako->home.y = body->position.y - 35.0f;
-                zako->pos.z = zako->home.z = 0.0f;
-                zako->state = 10;
-                break;
-            case 10:
-                zako->pos.x = zako->home.x = body->position.x + unit->position.x - 250.0f + i * 20.0f;
-                zako->pos.y = zako->home.y = body->position.y - 35.0f;
-                if (zako->pos.y < unit->position.y) {
-                    zako->pos.y = unit->position.y;
-                }
-                zako->pos.z = zako->home.z = -10.0f;
-                break;
-            case 20:
-                BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-                zako->start = zako->pos;
-                if (zako->pos.x >= x) {
-                    zako->target.x = zako->pos.x - 30.0f;
-                    zako->rot.y = 0.0f;
-                } else {
-                    zako->target.x = 15.0f + zako->pos.x;
-                    zako->rot.y = 180.0f;
-                }
-                zako->target.y = zako->start.y - 2.0f;
-                zako->state = 25;
-                zako->timer = zako->timerMax = 8;
-            case 25:
-                zako->pos.x = intplGetValue(EASING_QUADRATIC_OUT, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.y = intplGetValue(EASING_QUADRATIC_OUT, zako->start.y, zako->target.y, (zako->timerMax - zako->timer) * 2, zako->timerMax);
-                zako->timer--;
-                if (zako->timer < 0) {
-                    BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-                    if (__fabs(zako->pos.x - x) <= 20.0) {
-                        zako->state = 30;
-                    } else {
-                        zako->state = 20;
-                    }
-                }
-                break;
-            case 30:
-                BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-                zako->vel.x = rand() / 32767.0f - 0.5f;
-                zako->vel.y = 0.0f;
                 zako->vel.z = 0.2f;
-                zako->target.y = y + work->count * 2.0f;
-                zako->state = 35;
-                zakogun_set_pose(zako, 0x2C, 1, 1);
-                psndSFXOn(se1);
-            case 35:
-                zako->pos.x += zako->vel.x;
-                zako->pos.y += zako->vel.y;
-                zako->pos.z += zako->vel.z;
-                zako->vel.y += -0.5f;
-                if (zako->pos.y < zako->target.y) {
-                    zako->pos.y = zako->target.y;
-                    zako->state = 40;
-                    work->count++;
-                    if (work->count == 25) {
-                        unit->work[UNIT_WORK_ALL_LANDED] = 1;
-                    }
-                }
-                break;
-            case 40:
-                if (work->count == 25) {
-                    zako->state = 45;
-                    zako->timer = irand(60);
-                }
-                break;
-            case 45:
-                zako->timer--;
-                if (zako->timer <= 0) {
-                    zako->vel.x = -5.0f;
-                    zako->vel.y = 3.0f;
-                    zako->state = 48;
-                    zakogun_set_pose(zako, 0x22, 1, 1);
-                    zako->rot.y = 0.0f;
-                }
-                break;
-            case 48:
-                zako->pos.x += zako->vel.x;
-                zako->pos.y += zako->vel.y;
-                zako->vel.y += -0.5f;
-                if (zako->pos.y < 0.0f) {
-                    zako->pos.y = 0.0f;
-                    zakogun_set_pose(zako, 0x16, 10, 1);
-                    zako->state = 49;
-                }
-                break;
-            case 49:
-                zako->pos.x += zako->vel.x;
-                if (zako->pos.x <= -300.0f) {
-                    zako->state = 50;
-                    zako->pos.x = 300.0f;
-                    zako->pos.y = zako->home.y;
-                    zako->pos.z = zako->home.z;
-                    zakogun_set_pose(zako, 0x25, 4, 6);
-                    if (i == 0) {
-                        psndSFXOn(se2);
-                    }
-                }
-                break;
-            case 50:
-            BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-            zako->rot.y = 0.0f;
-                zako->start = zako->pos;
-                zako->target.x = zako->pos.x - 30.0f;
-                if (zako->target.x < zako->home.x) {
-                    zako->target.x = zako->home.x;
-                }
-                zako->target.y = zako->start.y - 2.0f;
-                zako->state = 55;
-                zako->timer = zako->timerMax = 8;
-                btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
-            case 55:
-                zako->pos.x = intplGetValue(EASING_QUADRATIC_OUT, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.y = intplGetValue(EASING_QUADRATIC_OUT, zako->start.y, zako->target.y, (zako->timerMax - zako->timer) * 2, zako->timerMax);
-                zako->timer--;
-                if (zako->timer < 0) {
-                    if (zako->pos.x <= zako->home.x) {
-                        zako->pos.x = zako->home.x;
-                        zako->state = 10;
-                    } else {
-                        zako->state = 50;
-                    }
-                }
-                break;
-            case 60:
-                zakogun_set_pose(zako, 0x29, 3, 6);
-                zako->state = 65;
-                zako->timer = 120;
-            case 65:
-                zako->pos.x = body->position.x - 250.0f + i * 20.0f;
-                zako->pos.y = body->position.y - 35.0f;
-                zako->pos.z = 0.0f;
-                zako->timer--;
-                if (zako->timer < 0) {
-                    zako->state = 10;
-                    zakogun_set_pose(zako, 0x25, 4, 6);
-                }
-                break;
-            case 80:
-                zako->timer = irand(10);
-                zako->state = 82;
-            case 82:
-                zako->timer--;
-                if (zako->timer <= 0) {
-                    zako->state = 83;
-                    zako->vel.y = 0.0f;
-                    psndSFXOn(se3);
-                }
-                break;
-            case 83:
-                zako->vel.y += -0.5f;
-                zako->pos.y += zako->vel.y;
-                if (zako->pos.y <= 0.0f) {
-                    zako->pos.y = 0.0f;
-                    zako->state = 84;
-                    zakogun_set_pose(zako, 0x21, 3, 3);
-                }
-                break;
-            case 84:
-                zako->start = zako->pos;
-                zako->target.x = zako->start.x + irand(100) - 50.0f;
-                zako->target.y = 0.0f;
-                zako->target.z = zako->start.z + irand(20) - 10.0f;
-                zako->state = 85;
-                zako->timer = zako->timerMax = 20;
-                zako->vel.y = (2.0f * (zako->target.y - zako->start.y) - -200.0f) / 40.0f;
-            case 85:
-                zako->pos.x = intplGetValue(EASING_LINEAR, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.z = intplGetValue(EASING_LINEAR, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.y += zako->vel.y;
-                zako->vel.y += -0.5f;
-                zako->timer--;
-                if (zako->timer < 0) {
-                    zako->state = 86;
-                }
-                break;
-            case 86:
-                zako->start = zako->pos;
-                zako->target.x = zako->start.x + irand(50) - 25.0f;
-                zako->target.y = 0.0f;
-                zako->target.z = zako->start.z + irand(10) - 5.0f;
-                zako->state = 87;
-                zako->timer = zako->timerMax = 10;
-                zako->vel.y = (2.0f * (zako->target.y - zako->start.y) - -50.0f) / 20.0f;
-            case 87:
-                zako->pos.x = intplGetValue(EASING_LINEAR, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.z = intplGetValue(EASING_LINEAR, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.y += zako->vel.y;
-                zako->vel.y += -0.5f;
-                zako->timer--;
-                if (zako->timer < 0) {
-                    zako->state = 88;
-                    zako->rot.y = 0.0f;
-                    zako->timer = 48;
-                }
-                break;
-            case 88:
-                zako->rot.y -= 15.0f;
-                zako->timer--;
-                if (zako->timer <= 0) {
-                    zako->rot.y = 0.0f;
-                    zako->state = 89;
-                }
-                break;
-            case 89:
-                zako->rot.x += 3.0f;
-                if (zako->rot.x >= 90.0f) {
-                    zako->state = -1;
-                    zako->pos = (Vec){0.0f, -1000.0f, 0.0f};
-                }
-                break;
-            case 90:
-                zako->pos.x = 0.0f;
-                zako->pos.y = -1000.0f;
-                zako->pos.z = 0.0f;
-                zako->state = -1;
-                break;
-        }
-        PSMTXIdentity(*pose->mtx);
-        PSMTXRotRad(m, 'x', zako->rot.x * 0.017453292f);
-        PSMTXConcat(*pose->mtx, m, *pose->mtx);
-        PSMTXRotRad(m, 'y', zako->rot.y * 0.017453292f);
-        PSMTXConcat(*pose->mtx, m, *pose->mtx);
-        (*pose->mtx)[0][3] = zako->pos.x;
-        (*pose->mtx)[1][3] = zako->pos.y;
-        (*pose->mtx)[2][3] = zako->pos.z + i * 0.25f;
-    }
-}
 #else
-/**
- * Per-frame update of formation 2 (25 X-Nauts):
- * moves each member through its state machine and updates its pose matrix and sounds.
- */
-void zakogun_ext_main2(void) {
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit = zakogun_get_ptr();
-    ExtdrvPose* pose = extGetPosePtr();
-    BattleStageObject* body;
-    s32 i;
-    ZakoGun* zako;
-    f32 x, y, z;
-    Mtx m;
-    const char* se1;
-    const char* se2;
-    const char* se3;
-
-    if (unit == NULL) {
-        return;
-    }
-    body = BattleSearchObjectPtr("if_body");
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    se1 = (0, "SFX_BOSS_TEAM_3RD_ATTACK2");
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    se2 = (0, "SFX_BOSS_TEAM_3RD_MOVE_CAILING2");
-    se3 = "SFX_BOSS_TEAM_3RD_ATTACK2";
-    for (i = 0; i < 25; i++, pose++) {
-        zako = &zakogun[i];
-        pose->texId = zako->poseBase + zako->poseCount / zako->poseDiv;
-        zako->poseCount++;
-        if (zako->poseCount >= zako->poseNum * zako->poseDiv) {
-            zako->poseCount = 0;
-        }
-        switch (zako->state) {
-            case 0:
-                zako->state = 5;
-                zako->rot.x = zako->rot.y = zako->rot.z = 0.0f;
-                zakogun_set_pose(zako, 0x25, 4, 6);
-                break;
-            case 5:
-                zako->pos.x = zako->home.x = body->position.x - 250.0f + i * 20.0f;
-                zako->pos.y = zako->home.y = body->position.y - 35.0f;
-                zako->pos.z = zako->home.z = 0.0f;
-                zako->state = 10;
-                break;
-            case 10:
-                zako->pos.x = zako->home.x = body->position.x + unit->position.x - 250.0f + i * 20.0f;
-                zako->pos.y = zako->home.y = body->position.y - 35.0f;
-                if (zako->pos.y < unit->position.y) {
-                    zako->pos.y = unit->position.y;
-                }
-                zako->pos.z = zako->home.z = -10.0f;
-                break;
-            case 20:
-                BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-                zako->start = zako->pos;
-                if (zako->pos.x >= x) {
-                    zako->target.x = zako->pos.x - 30.0f;
-                    zako->rot.y = 0.0f;
-                } else {
-                    zako->target.x = 15.0f + zako->pos.x;
-                    zako->rot.y = 180.0f;
-                }
-                zako->target.y = zako->start.y - 2.0f;
-                zako->state = 25;
-                zako->timer = zako->timerMax = 8;
-            case 25:
-                zako->pos.x = intplGetValue(EASING_QUADRATIC_OUT, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.y = intplGetValue(EASING_QUADRATIC_OUT, zako->start.y, zako->target.y, (zako->timerMax - zako->timer) * 2, zako->timerMax);
-                zako->timer--;
-                if (zako->timer < 0) {
-                    BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-                    if (__fabs(zako->pos.x - x) <= 20.0) {
-                        zako->state = 30;
-                    } else {
-                        zako->state = 20;
-                    }
-                }
-                break;
-            case 30:
-                BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-                zako->vel.x = rand() / 32767.0f - 0.5f;
-                zako->vel.y = 0.0f;
                 zako->vel.z = 1.5f;
+#endif
                 zako->target.y = y + work->count * 2.0f;
                 zako->state = 35;
                 zakogun_set_pose(zako, 0x2C, 1, 1);
@@ -1038,6 +770,9 @@ void zakogun_ext_main2(void) {
                 }
                 break;
             case 50:
+#if VERSION <= VERSION_DEMO_US
+            BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
+#else
 #if VERSION >= VERSION_US
             {
                 BattleUnit* tgt = BattleGetUnitPtr(wp, work->targetId);
@@ -1052,6 +787,7 @@ void zakogun_ext_main2(void) {
             }
 #else
                 BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
+#endif
 #endif
                 zako->rot.y = 0.0f;
                 zako->start = zako->pos;
@@ -1180,7 +916,6 @@ void zakogun_ext_main2(void) {
         (*pose->mtx)[2][3] = zako->pos.z + i * 0.25f;
     }
 }
-#endif
 
 /** Script helper for group 2 attack: sets the 25 X-Nauts to attack state 20 and blocks until they finish. */
 USER_FUNC(zakogun_attack2) {

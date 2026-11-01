@@ -354,21 +354,12 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     0, 0, // baseFpCost..baseSpCost
 #if VERSION <= VERSION_DEMO_US
     0,
-    1.0f, // reserved_14
-        1, // stylishCommandMultiplier
-        1, // reserved_19
-        1, // bingoSlotChance
-        1, // reserved_1B
-        weaponGetPowerDefault,
-    {5, 0, 0, 0, 0, 0, 0, 0},
-    NULL, // fpDamageFn
-        {0}, // fpDamageWork
-        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
 #else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
+#endif
 #endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
@@ -376,6 +367,12 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
+#if VERSION <= VERSION_DEMO_US
+    {5, 0, 0, 0, 0, 0, 0, 0},
+    NULL, // fpDamageFn
+        {0}, // fpDamageWork
+        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+#else
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork

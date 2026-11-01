@@ -329,253 +329,6 @@ EVT_END()
  * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
  * if the timid sailor has not yet been persuaded, otherwise he talks according to the story stage.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
- * if the timid sailor has not yet been persuaded, otherwise he talks according to the story stage.
- */
-static EVT_BEGIN(marco_talk)
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_17_WINE_OBTAINED)
-        IF_INT_EQUAL(GSWF_MUJ_01_BOBBERY_MISSING_SCENE_SEEN, 0)
-            // While Bobbery is being found, the timid sailor must first be persuaded.
-            CALL_CHILD(settoku_event_main)
-        END_IF
-    END_SWITCH
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_22_0"), 0, STRING("me"))
-        CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_13_BOBBERY_THE_BRIDGE)
-        IF_INT_EQUAL(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 0)
-            CALL(evt_msg_print, 0, STRING("stg5_muj_31"), 0, STRING("me"))
-            SET_VALUE(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 1)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg5_muj_32"), 0, STRING("me"))
-        END_IF
-        CASE_EQUAL(STG5_15_RUNAWAY_SAILORS)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_31_01"), 0, STRING("me"))
-        CALL(evt_mario_set_pose, STRING("M_I_2"))
-        WAIT_MS(500)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_31_02"), 0, STRING("me"))
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(evt_cam3d_evt_set, LW(0), 97, 459, LW(0), 45, 163, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(1000)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_31_02_01"), 0, STRING("me"))
-        SET_VALUE(GSW_STORY_PROGRESS, STG5_16_FLAVIOS_WINE)
-        CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(500)
-        CASE_EQUAL(STG5_16_FLAVIOS_WINE)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_npc_get_position, STRING("マルコ"), LW(10), LW(11), LW(12))
-        CALL(evt_npc_flag_onoff, 1, STRING("マルコ"), NPC_FLAG_NO_HIT)
-        IF_INT_LESS_OR_EQUAL(LW(0), LW(10))
-            ADD(LW(10), -30)
-            CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(120.0f))
-            CALL(evt_mario_set_dir, 90, 200, 0)
-            CALL(evt_party_move_behind_mario, 0)
-        ELSE
-            ADD(LW(10), 30)
-            CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(120.0f))
-            CALL(evt_mario_set_dir, 270, 200, 0)
-            CALL(evt_party_move_behind_mario, 0)
-        END_IF
-        CALL(evt_npc_flag_onoff, 0, STRING("マルコ"), NPC_FLAG_NO_HIT)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_31_02_02"), 0, STRING("me"))
-        CALL(make_itemsel_table, LW(11))
-        IF_INT_EQUAL(LW(11), 0)
-            CALL(delete_itemsel_table)
-            RETURN
-        END_IF
-        CALL(evt_win_item_select, LW(10), LW(0))
-        CALL(delete_itemsel_table)
-        IF_INT_EQUAL(LW(0), -1)
-            RETURN
-        END_IF
-        CALL(evt_mario_set_pose, STRING("M_C_3"))
-        CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
-        ADD(LW(4), 20)
-        ADD(LW(5), 10)
-        CALL(evt_mario_get_reqdir, LW(6))
-        IF_FLOAT_EQUAL(LW(6), FLOAT(0.0f))
-            ADD(LW(3), -20)
-        ELSE
-            ADD(LW(3), 20)
-        END_IF
-        CALL(evt_item_entry, STRING("watasu"), LW(0), LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
-        CALL(evt_item_flag_on, STRING("watasu"), ITEM_FLAG_NO_TOUCH_GET)
-        WAIT_MS(500)
-        CALL(evt_npc_set_anim, STRING("me"), STRING("I_1"))
-        WAIT_MS(500)
-        CALL(evt_item_delete, STRING("watasu"))
-        BEGIN_INLINE_EVENT
-            WAIT_MS(500)
-            CALL(evt_mario_set_pose, STRING("M_S_1"))
-        END_INLINE_EVENT
-        CALL(evt_npc_set_anim, STRING("me"), STRING("I_2"))
-        WAIT_MS(500)
-        SET_VALUE(LF(1), 0)
-        IF_INT_GREATER_OR_EQUAL(LW(0), 165)
-            IF_INT_LESS(LW(0), 177)
-                SET_VALUE(LF(0), 1)
-            END_IF
-        END_IF
-        IF_INT_GREATER_OR_EQUAL(LW(0), 148)
-            IF_INT_LESS(LW(0), 161)
-                SET_VALUE(LF(0), 1)
-            END_IF
-        END_IF
-        IF_INT_GREATER_OR_EQUAL(LW(0), 179)
-            IF_INT_LESS(LW(0), 236)
-                SET_VALUE(LF(0), 1)
-            END_IF
-        END_IF
-        CALL(evt_pouch_remove_item, LW(0), LW(1))
-        IF_INT_EQUAL(LF(0), 0)
-            CALL(evt_msg_print, 0, STRING("stg5_muj_31_02_03"), 0, STRING("me"))
-            RETURN
-        END_IF
-        IF_INT_NOT_EQUAL(LW(0), ITEM_COCONUT)
-            CALL(evt_msg_print, 0, STRING("stg5_muj_31_02_04"), 0, STRING("me"))
-            RETURN
-        END_IF
-        CALL(evt_msg_print, 0, STRING("stg5_muj_31_02_05"), 0, STRING("me"))
-        CALL(evt_npc_set_anim, STRING("me"), STRING("I_1"))
-        WAIT_MS(500)
-        CALL(evt_npc_set_anim, STRING("me"), STRING("I_2"))
-        WAIT_MS(500)
-        // Flavio hands over the Chuckola Cola.
-        CALL(evt_item_entry, STRING("itemwine"), ITEM_CHUCKOLA_COLA, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-        CALL(evt_item_flag_on, STRING("itemwine"), ITEM_FLAG_NO_TOUCH_GET)
-        CALL(evt_item_get_item, STRING("itemwine"))
-        CALL(evt_msg_print, 0, STRING("stg5_muj_31_03"), 0, STRING("me"))
-        SET_VALUE(GSW_STORY_PROGRESS, STG5_17_WINE_OBTAINED)
-        CASE_EQUAL(STG5_17_WINE_OBTAINED)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_31_03"), 0, STRING("me"))
-        CASE_EQUAL(STG5_18_BOBBERY_RESCUE_2)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_32"), 0, STRING("me"))
-        CASE_EQUAL(STG5_18_01_BOBBERY_JOINS)
-        LOOP(0)
-            CALL(evt_mario_party_use_check, LW(0))
-            IF_INT_EQUAL(LW(0), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_cam3d_evt_set, -60, 95, 491, -60, 35, 146, 500, EASING_SINE_IN_OUT)
-        CALL(evt_party_stop, 0)
-        CALL(evt_mario_get_party, LW(0))
-        SET_VALUE(LF(10), 0)
-        IF_INT_NOT_EQUAL(LW(0), 3)
-            SET_VALUE(LF(10), 1)
-            CALL(evt_mario_hello_exparty_pos, 15, -25, 0, 210)
-        END_IF
-        SET_VALUE(GF(0), 1)
-        BEGIN_INLINE_EVENT
-            CALL(evt_party_move_pos2, 0, 0, 170, FLOAT(120.0f))
-            CALL(evt_party_set_dir, 0, 270, -1)
-            SET_VALUE(GF(0), 0)
-        END_INLINE_EVENT
-        CALL(evt_msg_print, 0, STRING("stg5_muj_71"), 0, STRING("me"))
-        WAIT_WHILE(GF(0))
-        IF_INT_EQUAL(LF(10), 0)
-            CALL(evt_msg_print_party, STRING("stg5_muj_72"))
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg5_muj_72_bom"), 0, STRING("extparty"))
-        END_IF
-        CALL(evt_msg_print, 0, STRING("stg5_muj_79"), 0, STRING("me"))
-        IF_INT_EQUAL(LF(10), 0)
-            CALL(evt_msg_print, 0, STRING("stg5_muj_80"), 0, STRING("party"))
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg5_muj_80"), 0, STRING("extparty"))
-        END_IF
-        CALL(evt_set_dir_to_target, STRING("ガラの悪い水夫"), STRING("me"))
-        CALL(evt_msg_print, 0, STRING("stg5_muj_81"), 0, STRING("ガラの悪い水夫"))
-        CALL(evt_npc_get_position, STRING("ガラの悪い水夫"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SAILER_FART1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_81_01"), 0, STRING("ガラの悪い水夫"))
-        CALL(evt_msg_print, 0, STRING("stg5_muj_81_02"), 0, STRING("ガラの悪い水夫"))
-        CALL(evt_msg_print, 0, STRING("stg5_muj_82"), 0, STRING("me"))
-        IF_INT_EQUAL(LF(10), 0)
-            CALL(evt_msg_print, 0, STRING("stg5_muj_83"), 0, STRING("party"))
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg5_muj_83"), 0, STRING("extparty"))
-        END_IF
-        CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
-        LOOP(3)
-            SET_VALUE(LW(0), 0)
-            SET_VALUE(LW(1), 180)
-            CALL_CHILD(marco_kyorokyoro)
-            WAIT_MS(160)
-            SET_VALUE(LW(0), 180)
-            SET_VALUE(LW(1), 0)
-            CALL_CHILD(marco_kyorokyoro)
-            WAIT_MS(160)
-        END_LOOP
-        WAIT_MS(1000)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_85"), 0, STRING("me"))
-        CALL(evt_cam3d_evt_set, -60, 144, 753, -60, 40, 162, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(500)
-        BEGIN_INLINE_EVENT
-            CALL(evt_msg_print, 0, STRING("stg5_muj_86"), 0, STRING("ガラの悪い水夫"))
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            CALL(evt_set_dir_to_target, STRING("水夫A"), STRING("me"))
-            WAIT_MS(500)
-            CALL(evt_npc_get_position, STRING("水夫A"), LW(0), LW(1), LW(2))
-            ADD(LW(0), 20)
-            ADD(LW(1), 40)
-            CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-            CALL(evt_msg_print, 0, STRING("stg5_muj_87"), 0, 0)
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            CALL(evt_set_dir_to_target, STRING("水夫ボム兵"), STRING("me"))
-            WAIT_MS(1000)
-            CALL(evt_msg_print, 0, STRING("stg5_muj_88"), 0, STRING("水夫ボム兵"))
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            CALL(evt_set_dir_to_target, STRING("オドオド水夫"), STRING("me"))
-            WAIT_MS(1500)
-            CALL(evt_npc_get_position, STRING("オドオド水夫"), LW(0), LW(1), LW(2))
-            ADD(LW(0), -30)
-            ADD(LW(1), 40)
-            CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-            CALL(evt_msg_togelr, 0)
-            CALL(evt_msg_print, 0, STRING("stg5_muj_88_01"), 0, 0)
-        END_INLINE_EVENT
-        WAIT_MS(3000)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("me"))
-        LOOP(3)
-            SET_VALUE(LW(0), 0)
-            SET_VALUE(LW(1), 180)
-            CALL_CHILD(marco_kyorokyoro)
-            WAIT_MS(160)
-            SET_VALUE(LW(0), 180)
-            SET_VALUE(LW(1), 0)
-            CALL_CHILD(marco_kyorokyoro)
-            WAIT_MS(160)
-        END_LOOP
-        WAIT_MS(1000)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_90"), 0, STRING("me"))
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg5_sys_00"), 0, 0)
-        IF_INT_EQUAL(LF(10), 1)
-            CALL(evt_mario_goodbye_party, 1)
-        END_IF
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
-        CALL(evt_party_stop, 1)
-        CALL(evt_mario_set_party_pos, 1, 9, LW(0), LW(1), LW(2))
-        WAIT_MS(1000)
-        CALL(evt_party_run, 1)
-        CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-        SET_VALUE(GSW_STORY_PROGRESS, STG5_18_02_FLAVIOS_FAVOR_2)
-        CALL(evt_party_run, 0)
-        CASE_BETWEEN(STG5_19_GEMS_AND_JINGLES, STG5_34_KICKED_OFF)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_90_10"), 0, STRING("me"))
-    END_SWITCH
-    RETURN
-EVT_END()
-#else
 /**
  * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
  * if the timid sailor has not yet been persuaded, otherwise he talks according to the story stage.
@@ -632,7 +385,11 @@ static EVT_BEGIN(marco_talk)
             CALL(delete_itemsel_table)
             RETURN
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_win_item_select, LW(10), LW(0))
+#else
         CALL(evt_win_item_select, 0, LW(10), LW(0), 0)
+#endif
         CALL(delete_itemsel_table)
         IF_INT_EQUAL(LW(0), -1)
             RETURN
@@ -709,17 +466,26 @@ static EVT_BEGIN(marco_talk)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_cam3d_evt_set, -60, 95, 491, -60, 35, 146, 500, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_party_stop, 0)
+#else
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
         CALL(evt_mario_mov_pos2, -34, 162, FLOAT(120.0f))
         CALL(evt_mario_set_dir, 270, 200, 0)
         CALL(evt_npc_set_ry_lr, STRING("me"), 1)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
+#endif
         CALL(evt_mario_get_party, LW(0))
         SET_VALUE(LF(10), 0)
         IF_INT_NOT_EQUAL(LW(0), 3)
             SET_VALUE(LF(10), 1)
             CALL(evt_mario_hello_exparty_pos, 15, -25, 0, 210)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GF(0), 1)
+        BEGIN_INLINE_EVENT
+            CALL(evt_party_move_pos2, 0, 0, 170, FLOAT(120.0f))
+#else
         CALL(evt_party_stop, 0)
         CALL(evt_party_stop, 1)
         SET_VALUE(GF(0), 1)
@@ -729,6 +495,7 @@ static EVT_BEGIN(marco_talk)
             ELSE
                 CALL(evt_party_move_pos2, 0, 20, 170, FLOAT(120.0f))
             END_IF
+#endif
             CALL(evt_party_set_dir, 0, 270, -1)
             SET_VALUE(GF(0), 0)
         END_INLINE_EVENT
@@ -757,7 +524,9 @@ static EVT_BEGIN(marco_talk)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_83"), 0, STRING("extparty"))
         END_IF
+#if VERSION > VERSION_DEMO_US
         CALL(evt_party_run, 1)
+#endif
         CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
         LOOP(3)
             SET_VALUE(LW(0), 0)
@@ -801,6 +570,9 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_88_01"), 0, 0)
         END_INLINE_EVENT
         WAIT_MS(3000)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("me"))
+#else
 #if VERSION >= VERSION_US
         IF_INT_EQUAL(LF(10), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("party"))
@@ -811,6 +583,7 @@ static EVT_BEGIN(marco_talk)
         END_IF
 #else
         CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("me"))
+#endif
 #endif
         LOOP(3)
             SET_VALUE(LW(0), 0)
@@ -843,7 +616,6 @@ static EVT_BEGIN(marco_talk)
     END_SWITCH
     RETURN
 EVT_END()
-#endif
 
 /**
  * Init event of the bespectacled sailor: placed in the camp between STG5_13_BOBBERY_THE_BRIDGE

@@ -1838,13 +1838,11 @@ EVT_BEGIN(evt_elv_down)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
         CALL(evt_del_case_evt, 0, GW(10))
     END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
-        CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
 #else
     END_SWITCH
+#endif
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
         CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
-#endif
     END_IF
     CALL(evt_item_delete_check, STRING("item"), LW(0))
     IF_INT_EQUAL(LW(0), 0)

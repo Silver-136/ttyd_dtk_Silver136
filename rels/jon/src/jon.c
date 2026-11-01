@@ -178,7 +178,6 @@ EvtWord zonbaba_first_event[677];
 #endif
 
 EVT_BEGIN(jon_init_evt)
-#if VERSION <= VERSION_DEMO_US
     // When map events are skipped (a debug warp), the floor number is derived from the name of the map.
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
@@ -205,120 +204,17 @@ EVT_BEGIN(jon_init_evt)
             SET_VALUE(GSW_PIT_FLOOR, 99)
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
     // Remember the deepest floor reached, then set up the signboard, the mover, the trader and the enemies of
     // this floor.
     SET_VALUE(LSW(0), GSW_PIT_FLOOR)
     SET_VALUE(LW(0), LSW(0))
-    ADD(LW(0), 1)
-    IF_INT_GREATER(LW(0), GSW_JON_DEEPEST_LEVEL)
-        SET_VALUE(GSW_JON_DEEPEST_LEVEL, LW(0))
-    END_IF
-    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kanban"), 0, PTR(evt_kanban), 0)
-    CALL_CHILD(idouya_setup)
-    CALL_CHILD(gyousyou_setup)
-    CALL_CHILD(enemy_setup)
-    // Choose the floor layout from the floor number: the boss floor, a rest-room floor, the floor before one,
-    // or a plain floor.
-    SET_VALUE(LW(0), GSW_PIT_FLOOR)
-    ADD(LW(0), 1)
-    SET_VALUE(LW(1), LW(0))
-    MODULO(LW(1), 10)
-    SET_VALUE(LW(2), LW(0))
-    DIVIDE(LW(2), 10)
-    SWITCH(LW(1))
-        CASE_EQUAL(0)
-        IF_INT_EQUAL(LW(2), 10)
-            CALL_CHILD(setup_boss)
-        ELSE
-            CALL_CHILD(setup_return)
-            CALL(evt_mobj_floatswitch_blue, 0, STRING("sw"), -75, 60, 0, PTR(dokan_open2), 0)
-        END_IF
-        CASE_EQUAL(9)
-        CALL_CHILD(setup_prev_return)
-        CALL(evt_npc_check, STRING("敵"), LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 1)
-            CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
-            CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)
-            CALL(evt_hit_bind_update, STRING("a_dokan_1"))
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
-        END_IF
-        CASE_DEFAULT
-        CALL_CHILD(setup_normal)
-        CALL(evt_npc_check, STRING("敵"), LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 1)
-            CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
-            CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)
-            CALL(evt_hit_bind_update, STRING("a_dokan_1"))
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
-        END_IF
-        END_SWITCH
-    // Trouble Center job 12 is set up on every floor map.
-    CALL_CHILD(iri_12_init)
-    CALL(evt_sub_get_mapname, LW(0))
-    // On floor 50 the graffiti wall of Trouble Center job 30 shows its before or after state and reacts to
-    // Bobbery.
-    IF_STR_EQUAL(LW(0), STRING("jon_04"))
-        IF_INT_EQUAL(GSW_PIT_FLOOR, 49)
-            IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 0)
-                SET_VALUE(LF(0), 0)
-                    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
-                        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
-                            SET_VALUE(LF(0), 1)
-                        END_IF
-                    END_IF
-                    IF_INT_EQUAL(LF(0), 0)
-                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
-                        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
-                        IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
-                        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
-                            CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
-                            CALL(evt_set_case_wrk, LW(1), 15, LW(0))
-                        END_IF
-                        END_IF
-                    ELSE
-                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
-                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-                    END_IF
-            ELSE
-                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-            END_IF
-        ELSE
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-        END_IF
-    END_IF
 #else
-    // When map events are skipped (a debug warp), the floor number is derived from the name of the map.
-    CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
-        CALL(evt_sub_get_mapname, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("jon_00"))
-            SET_VALUE(GSW_PIT_FLOOR, 0)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("jon_01"))
-            SET_VALUE(GSW_PIT_FLOOR, 50)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("jon_02"))
-            SET_VALUE(GSW_PIT_FLOOR, 80)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("jon_03"))
-            SET_VALUE(GSW_PIT_FLOOR, 9)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("jon_04"))
-            SET_VALUE(GSW_PIT_FLOOR, 49)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("jon_05"))
-            SET_VALUE(GSW_PIT_FLOOR, 79)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("jon_06"))
-            SET_VALUE(GSW_PIT_FLOOR, 99)
-        END_IF
-    END_IF
     // Remember the deepest floor reached, then set up the signboard, the mover, the trader and the enemies of
     // this floor.
     SET_VALUE(LSW_JON_PIT_FLOOR, GSW_PIT_FLOOR)
     SET_VALUE(LW(0), LSW_JON_PIT_FLOOR)
+#endif
     ADD(LW(0), 1)
     IF_INT_GREATER(LW(0), GSW_JON_DEEPEST_LEVEL)
         SET_VALUE(GSW_JON_DEEPEST_LEVEL, LW(0))
@@ -352,6 +248,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
+#if VERSION > VERSION_DEMO_US
         CALL(evt_npc_check, STRING("移動屋"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
@@ -359,6 +256,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
             CALL(evt_mobj_floatswitch_blue, 0, STRING("idou_sw"), 75, 60, 0, PTR(dokan_open), 0)
         END_IF
+#endif
         CASE_DEFAULT
         CALL_CHILD(PTR(setup_normal))
         CALL(evt_npc_check, STRING("敵"), LW(0))
@@ -368,6 +266,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
+#if VERSION > VERSION_DEMO_US
         CALL(evt_npc_check, STRING("移動屋"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
@@ -375,6 +274,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
             CALL(evt_mobj_floatswitch_blue, 0, STRING("idou_sw"), 75, 60, 0, PTR(dokan_open), 0)
         END_IF
+#endif
     END_SWITCH
     CALL_CHILD(PTR(iri_12_init))
     CALL(evt_sub_get_mapname, LW(0))
@@ -383,6 +283,26 @@ EVT_BEGIN(jon_init_evt)
     IF_STR_EQUAL(LW(0), STRING("jon_04"))
         IF_INT_EQUAL(GSW_PIT_FLOOR, 49)
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 0)
+#if VERSION <= VERSION_DEMO_US
+                SET_VALUE(LF(0), 0)
+                    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
+                        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+                            SET_VALUE(LF(0), 1)
+                        END_IF
+                    END_IF
+                    IF_INT_EQUAL(LF(0), 0)
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+                        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
+                        IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
+                        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
+                            CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
+                            CALL(evt_set_case_wrk, LW(1), 15, LW(0))
+                        END_IF
+                        END_IF
+                    ELSE
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+#else
 #if VERSION >= VERSION_US
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
@@ -414,6 +334,7 @@ EVT_BEGIN(jon_init_evt)
 #if VERSION >= VERSION_US
                     END_IF
 #endif
+#endif
                 END_IF
                 ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
@@ -424,7 +345,6 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
     END_IF
-#endif
     IF_INT_NOT_EQUAL(GSW_PIT_FLOOR, 99)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_100DN1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -1888,7 +1808,6 @@ EVT_BEGIN(idouya_setup)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Talk script of the peddler (行商人, tribe ボッタクール, a rip-off merchant):
  * offers an item shop window with coin display.
@@ -1921,82 +1840,11 @@ EVT_BEGIN(talk_gyousyou)
         GOTO(0)
     END_IF
     IF_INT_GREATER_OR_EQUAL(LW(1), 240)
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
     ELSE
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
-    END_IF
-    CALL(evt_msg_select, 0, STRING("100kai_item_00"))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_win_coin_off, LW(12))
-        CALL(evt_msg_print_add, 0, STRING("100kai_item_05"))
-        RETURN
-    END_IF
-    // Mario agrees: the item goes into his pouch, or the trader sighs that he cannot carry any more.
-    CALL(evt_pouch_add_item, LW(1), LW(0))
-    IF_INT_EQUAL(LW(0), -1)
-        CALL(evt_win_coin_off, LW(12))
-        IF_INT_GREATER_OR_EQUAL(LW(1), 240)
-            CALL(evt_msg_print_add, 0, STRING("100kai_item_09"))
-        ELSE
-            CALL(evt_msg_print_add, 0, STRING("100kai_item_09"))
-        END_IF
-        RETURN
-    END_IF
-    MULTIPLY(LW(3), -1)
-    CALL(evt_pouch_add_coin, LW(3))
-    CALL(evt_win_coin_wait, LW(12))
-    WAIT_MS(200)
-    CALL(evt_win_coin_off, LW(12))
-    CALL(evt_msg_continue)
-    CALL(evt_pouch_get_coin, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
-        RETURN
-    END_IF
-    CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
-    CALL(evt_msg_print, 0, STRING("100kai_item_07"), 0, STRING("me"))
-    CALL(evt_msg_select, 0, STRING("100kai_item_00"))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_msg_print_add, 0, STRING("100kai_item_08"))
-        RETURN
-    END_IF
-    CALL(evt_msg_continue)
-    GOTO(0)
-    RETURN
-EVT_END()
 #else
-/**
- * Talk script of the peddler (行商人, tribe ボッタクール, a rip-off merchant):
- * offers an item shop window with coin display.
- * Mario picks an item at its price, the peddler checks the coins and the item pouch,
- * and he can keep buying until he declines or is out of coins.
- * Non-Japanese versions word the price message by language order (US and later use a format string for
- * non-English).
- */
-EVT_BEGIN(talk_gyousyou)
-    CALL(evt_msg_print, 0, STRING("100kai_item_01"), 0, STRING("me"))
-    CALL(evt_msg_select, 0, STRING("100kai_item_00"))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_msg_print_add, 0, STRING("100kai_item_02"))
-        RETURN
-    END_IF
-    CALL(evt_msg_continue)
-    // Show the coin window and the list of goods; closing it ends the sale with a goodbye.
-    LABEL(0)
-    CALL(evt_win_coin_on, 0, LW(12))
-    CALL(evt_win_other_select, 15)
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_win_coin_off, LW(12))
-        CALL(evt_msg_print, 0, STRING("100kai_item_10"), 0, STRING("me"))
-        RETURN
-    END_IF
-    CALL(evt_pouch_get_coin, LW(0))
-    IF_INT_LESS(LW(0), LW(3))
-        CALL(evt_win_coin_off, LW(12))
-        CALL(evt_msg_print, 0, STRING("100kai_item_03"), 0, STRING("me"))
-        GOTO(0)
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(LW(1), 240)
         CALL(evt_sub_get_language, LW(0))
 #if VERSION >= VERSION_US
         SWITCH(LW(0))
@@ -2034,6 +1882,7 @@ EVT_BEGIN(talk_gyousyou)
 #else
         END_IF
 #endif
+#endif
     END_IF
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
@@ -2057,12 +1906,23 @@ EVT_BEGIN(talk_gyousyou)
     CALL(evt_win_coin_wait, LW(12))
     WAIT_MS(200)
     CALL(evt_win_coin_off, LW(12))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_continue)
+    CALL(evt_pouch_get_coin, LW(0))
+    IF_INT_EQUAL(LW(0), 0)
+        CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
+        RETURN
+    END_IF
+    CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
+    CALL(evt_msg_print, 0, STRING("100kai_item_07"), 0, STRING("me"))
+#else
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("100kai_item_06"))
         RETURN
     END_IF
     CALL(evt_msg_print_add, 0, STRING("100kai_item_07"))
+#endif
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("100kai_item_08"))
@@ -2072,7 +1932,6 @@ EVT_BEGIN(talk_gyousyou)
     GOTO(0)
     RETURN
 EVT_END()
-#endif
 
 /**
  * The traveling trader (gyousyou) of the Pit of 100 Trials, who sells items to Mario; talk_gyousyou runs the
@@ -2174,43 +2033,17 @@ EVT_END()
  * with the pipe-appear sound, once the floor's enemy is beaten. Controls are locked meanwhile.
  * Spawned from enemy_setup.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Raises the exit pipe (a_dokan_1 / dokan_1_s) 30 units out of the floor over half a second,
  * with the pipe-appear sound, once the floor's enemy is beaten. Controls are locked meanwhile.
  * Spawned from enemy_setup.
  */
 EVT_BEGIN(dokan_open)
+#if VERSION <= VERSION_DEMO_US
     WAIT_MS(1000)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_letter_box_wait)
-    WAIT_MS(500)
-    SET_VALUE(LW(2), STRING("a_dokan_1"))
-    SET_VALUE(LW(3), STRING("dokan_1_s"))
-    CALL(evt_mapobj_get_position, LW(3), LW(7), LW(8), LW(9))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(7), LW(8), LW(9), 0)
-    CALL(evt_hit_bind_mapobj, LW(2), LW(3))
-    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 300, 500)
-    LABEL(0)
-    CALL(evt_sub_intpl_msec_get_value)
-    DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-    CALL(evt_mapobj_trans, 1, LW(3), 0, LW(0), 0)
-    CALL(evt_hit_bind_update, LW(2))
-    WAIT_FRAMES(1)
-    IF_INT_EQUAL(LW(1), 1)
-        GOTO(0)
-    END_IF
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
 #else
-/**
- * Raises the exit pipe (a_dokan_1 / dokan_1_s) 30 units out of the floor over half a second,
- * with the pipe-appear sound, once the floor's enemy is beaten. Controls are locked meanwhile.
- * Spawned from enemy_setup.
- */
-EVT_BEGIN(dokan_open)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1000)
 #if VERSION >= VERSION_US
@@ -2218,6 +2051,7 @@ EVT_BEGIN(dokan_open)
 #else
     CALL(evt_cam_letter_box_wait)
 #endif
+#endif
     WAIT_MS(500)
     SET_VALUE(LW(2), STRING("a_dokan_1"))
     SET_VALUE(LW(3), STRING("dokan_1_s"))
@@ -2238,7 +2072,6 @@ EVT_BEGIN(dokan_open)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Variant used in rest rooms: pressing the blue float switch ("sw") raises the exit pipe a_dokan_3 the same way

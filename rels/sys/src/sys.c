@@ -573,7 +573,6 @@ void display_func(CameraId cameraId, void* param) {
             GXColor4u8(0xFF, 0xFF, 0xFF, 0);
         }
         GXTexCoord2f32(u, v);
-    }
 #else
     msg = msgSearch(msg_tbl[wp->type]);
     FontDrawStart();
@@ -600,8 +599,8 @@ void display_func(CameraId cameraId, void* param) {
             FontDrawStringMtx(mtx, buf);
             break;
         }
-    }
 #endif
+    }
 
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
@@ -1350,77 +1349,6 @@ static USER_FUNC(display) {
 SysChar* chr;
     s32 type = evtGetValue(event, event->args[0]);
     s32 i;
-    if (isFirstCall) {
-        wp = _mapAlloc(sizeof(SysWork));
-        event->userdatap[0] = wp;
-        memset(wp, 0, sizeof(SysWork));
-        wp->type = type;
-        wp->angle = 0.0f;
-        wp->count = 0;
-        while (lang_tbl[gp->language][type][wp->count] != -1) {
-            wp->count++;
-        }
-        for (i = 0; i < wp->count; i++) {
-            wp->chars[i].x = 36.0f * i - (f32)((wp->count - 1) * 36) / 2;
-            wp->chars[i].y = 40.0f;
-            wp->chars[i].z = 0.0f;
-            wp->chars[i].rot = 90.0f;
-            wp->chars[i].timer = i * 20 + 1;
-            wp->chars[i].state = 0;
-            wp->chars[i].texid = lang_tbl[gp->language][type][i];
-        }
-    }
-    wp = event->userdatap[0];
-    g_wp = wp;
-    switch (wp->state) {
-        case 0:
-        if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]) != 0U) {
-                wp->file = fileAllocf(FILE_TYPE_TPL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]);
-wp->state++;
-            }
-            break;
-        case 2:
-            for (i = 0; i < wp->count; i++) {
-                chr = &wp->chars[i];
-                switch (chr->state) {
-                    case 0:
-                        chr->timer--;
-                        if (chr->timer < 0) {
-                            chr->timer = 0;
-                            chr->state++;
-                            effStardustN64SetDrawCam(effStardustN64Entry(4, chr->x, chr->y, chr->z, 40.0f), CAMERA_3D_EFFECTA);
-                        }
-                        break;
-                    case 1:
-                        chr->rot = intplGetValue(EASING_CUBIC_OUT, 90.0f, 1800.0f, chr->timer, 90);
-                        chr->timer++;
-                        if (chr->timer > 90) {
-                            chr->state++;
-                        }
-                        break;
-                    case 2:
-                        if (i == wp->count - 1) {
-                            wp->angle += 0.8f;
-                            if (wp->angle > 360.0f) {
-                                wp->angle -= 360.0f;
-                            }
-                            wp->alpha += 0x30;
-                            if (wp->alpha > 10000) {
-                                wp->alpha = 10000;
-                            }
-}
-                        break;
-                }
-            }
-            break;
-        case 3:
-            break;
-    }
-    if (wp->state != 0) {
-        dispEntry(CAMERA_3D_EFFECTA, 0.0f, 2, display_func, wp);
-    }
-    return EVT_RETURN_BLOCK;
-}
 #else
 USER_FUNC(display) {
     SysWork* wp;
@@ -1434,6 +1362,7 @@ USER_FUNC(display) {
     s32 i;
 #endif
 
+#endif
     if (isFirstCall) {
         wp = _mapAlloc(sizeof(SysWork));
         event->userdatap[0] = wp;
@@ -1445,6 +1374,10 @@ USER_FUNC(display) {
             wp->count++;
         }
         for (i = 0; i < wp->count; i++) {
+#if VERSION <= VERSION_DEMO_US
+            wp->chars[i].x = 36.0f * i - (f32)((wp->count - 1) * 36) / 2;
+            wp->chars[i].y = 40.0f;
+#else
 #if VERSION >= VERSION_US
             // US: letters are laid out by width (gaps marked -2 are half width), centred on the title
             f32 left = 0.0f;
@@ -1480,6 +1413,7 @@ USER_FUNC(display) {
             wp->chars[i].x = 36.0f * i - (f32)((wp->count - 1) * 36) / 2;
             wp->chars[i].y = 40.0f;
 #endif
+#endif
             wp->chars[i].z = 0.0f;
             wp->chars[i].rot = 90.0f;
             wp->chars[i].timer = i * 20 + 1;
@@ -1491,8 +1425,13 @@ USER_FUNC(display) {
     g_wp = wp;
     switch (wp->state) {
         case 0:
+#if VERSION <= VERSION_DEMO_US
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]) != 0U) {
+                    wp->file = fileAllocf(FILE_TYPE_TPL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]);
+#else
             if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/e/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]) != 0U) {
                 wp->file = fileAllocf(FILE_TYPE_TPL, "%s/e/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]);
+#endif
                 wp->state++;
             }
             break;
@@ -1522,6 +1461,11 @@ USER_FUNC(display) {
                                 wp->angle -= 360.0f;
                             }
                             wp->alpha += 0x30;
+#if VERSION <= VERSION_DEMO_US
+                            if (wp->alpha > 10000) {
+                                wp->alpha = 10000;
+                            }
+#else
 #if VERSION >= VERSION_US
                             if (wp->alpha > 0x4000) {
                                 wp->alpha = 0x4000;
@@ -1530,6 +1474,7 @@ USER_FUNC(display) {
                             if (wp->alpha > 10000) {
                                 wp->alpha = 10000;
                             }
+#endif
 #endif
                         }
                         break;
@@ -1540,14 +1485,15 @@ USER_FUNC(display) {
             break;
     }
     if (wp->state != 0) {
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
         dispEntry(CAMERA_3D, 0.0f, 2, sys_01_msg_tex_capture_func, wp);
+#endif
 #endif
         dispEntry(CAMERA_3D_EFFECTA, 0.0f, 2, display_func, wp);
     }
     return EVT_RETURN_BLOCK;
 }
-#endif
 
 USER_FUNC(start) {
     SysWork* wp = g_wp;

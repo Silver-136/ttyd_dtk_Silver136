@@ -321,25 +321,19 @@ static void FontDrawStringVec(Vec pos, const s8* str) {
     }
 }
 
-#if VERSION >= VERSION_US
 /**
  * Draws a single-line string at x, y with proportional spacing;
  * message tags are drawn as text in JP and the demos and skipped in the US and PAL releases.
  */
 // US: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
 void FontDrawString(f32 x, f32 y, const char* msg) {
+#if VERSION >= VERSION_US
     // US: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
     FontDrawStringVecPitch((Vec){x, y, 0.0f}, -1.0f, (const s8*)msg);
-}
 #else
-/**
- * Draws a single-line string at x, y with proportional spacing;
- * message tags are drawn as text in JP and the demos and skipped in the US and PAL releases.
- */
-void FontDrawString(f32 x, f32 y, const char* msg) {
     FontDrawStringVec((Vec){x, y, 0.0f}, (const s8*)msg);
-}
 #endif
+}
 
 /**
  * JP and demo: FontDrawStringPitch's copy of FontDrawStringVecPitch.

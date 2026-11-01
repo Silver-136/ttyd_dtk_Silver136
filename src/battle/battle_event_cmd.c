@@ -5606,75 +5606,65 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
             name = "SFX_SYSTEM_NICE_25PERCENT1";
 #if VERSION >= VERSION_US
             w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][1];
-            eff = 0;
-            break;
-        case 1:
-            scale *= 0.6f;
-            name = "SFX_SYSTEM_NICE_50PERCENT1";
-            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][2];
-            eff = 0;
-            break;
-        case 2:
-            scale *= 1.2f;
-            name = "SFX_SYSTEM_NICE1";
-            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][3];
-            eff = 0;
-            break;
-        case 3:
-            scale *= 1.2f;
-            name = "SFX_SYSTEM_GOOD1";
-            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][4];
-            eff = 1;
-            break;
-        case 4:
-            scale *= 1.2f;
-            name = "SFX_SYSTEM_GREAT1";
-            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][5];
-            eff = 2;
-            break;
-        case 5:
-            name = "SFX_SYSTEM_WONDERFUL1";
-            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][6];
-            eff = 3;
-            break;
-        case 6:
-            name = "SFX_SYSTEM_EXCELLENT1";
-            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][7];
 #else
             w = 90.0f;
+#endif
             eff = 0;
             break;
         case 1:
             scale *= 0.6f;
             name = "SFX_SYSTEM_NICE_50PERCENT1";
+#if VERSION >= VERSION_US
+            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][2];
+#else
             w = 90.0f;
+#endif
             eff = 0;
             break;
         case 2:
             scale *= 1.2f;
             name = "SFX_SYSTEM_NICE1";
+#if VERSION >= VERSION_US
+            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][3];
+#else
             w = 90.0f;
+#endif
             eff = 0;
             break;
         case 3:
             scale *= 1.2f;
             name = "SFX_SYSTEM_GOOD1";
+#if VERSION >= VERSION_US
+            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][4];
+#else
             w = 90.0f;
+#endif
             eff = 1;
             break;
         case 4:
             scale *= 1.2f;
             name = "SFX_SYSTEM_GREAT1";
+#if VERSION >= VERSION_US
+            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][5];
+#else
             w = 120.0f;
+#endif
             eff = 2;
             break;
         case 5:
             name = "SFX_SYSTEM_WONDERFUL1";
+#if VERSION >= VERSION_US
+            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][6];
+#else
             w = 150.0f;
+#endif
             eff = 3;
             break;
         case 6:
             name = "SFX_SYSTEM_EXCELLENT1";
+#if VERSION >= VERSION_US
+            w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][7];
+#else
             w = 180.0f;
 #endif
             eff = 4;

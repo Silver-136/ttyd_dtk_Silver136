@@ -198,27 +198,12 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
     0, 0, // baseFpCost..baseSpCost
 #if VERSION <= VERSION_DEMO_US
     0,
-    1.0f, // reserved_14
-        1, // stylishCommandMultiplier
-        1, // reserved_19
-        1, // bingoSlotChance
-        1, // reserved_1B
-        weaponGetPowerDefault, // hpDamageFn
-        {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
-        NULL, // fpDamageFn
-        {0}, // fpDamageWork
-        TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
-        TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-        ELEMENT_NORMAL, 0, // element..damagePattern
-        3, // acLevel
-        2, // reserved_6F
-        NULL,
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
 #else
 #if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
+#endif
 #endif
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
@@ -235,6 +220,9 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
+#if VERSION <= VERSION_DEMO_US
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+#else
     SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
@@ -909,36 +897,24 @@ static USER_FUNC(shadow_scale_memory) {
  * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
  * while the ceiling still exists, so the plant knows whether it can hang from it.
  */
+/**
+ * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
+ * while the ceiling still exists, so the plant knows whether it can hang from it.
+ */
+static USER_FUNC(pakkun_ceil_exist) {
+    EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US
-/**
- * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
- * while the ceiling still exists, so the plant knows whether it can hang from it.
- */
-static USER_FUNC(pakkun_ceil_exist) {
-    EvtWord* args = event->args;
     if (_battleWorkPointer->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
-        evtSetValue(event, args[0], 0);
-    } else {
-        evtSetValue(event, args[0], 1);
-    }
-    return EVT_RETURN_DONE;
-}
 #else
-/**
- * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
- * while the ceiling still exists, so the plant knows whether it can hang from it.
- */
-static USER_FUNC(pakkun_ceil_exist) {
-    EvtWord* args = event->args;
 
     if (TST_BATTLE_WORK(_battleWorkPointer)->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
+#endif
         evtSetValue(event, args[0], 0);
     } else {
         evtSetValue(event, args[0], 1);
     }
     return EVT_RETURN_DONE;
 }
-#endif
 
 /**
  * Script helper: puffs one green vapour effect at a random spot on one side of the stage (x about -125 when

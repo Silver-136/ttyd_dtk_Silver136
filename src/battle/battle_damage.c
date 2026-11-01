@@ -1166,33 +1166,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
         } else {
             y += BtlUnit_GetHeight(unit) / 2;
         }
-#if VERSION <= VERSION_DEMO_US
-        switch (type) {
-            case STATUS_SLEEP:
-                effStampN64Entry(0, x, y, 10.0f + z);
-                break;
-            case STATUS_CONFUSE:
-                effStampN64Entry(1, x, y, 10.0f + z);
-                break;
-            case STATUS_DEFENSE_UP:
-            case STATUS_DEFENSE_DOWN:
-                eff = effStampN64Entry(2, x, y, 10.0f + z);
-                STAMP_COL(eff, 0, 0, 200, 0, 0, 10);
-                break;
-            case STATUS_HUGE:
-            case STATUS_TINY:
-            case STATUS_ATTACK_UP:
-            case STATUS_ATTACK_DOWN:
-            case STATUS_CHARGE:
-                eff = effStampN64Entry(2, x, y, 10.0f + z);
-                STAMP_COL(eff, 200, 0, 0, 10, 0, 0);
-                break;
-            default:
-                eff = effStampN64Entry(2, x, y, 10.0f + z);
-                STAMP_COL(eff, 200, 200, 200, 10, 10, 10);
-                break;
-        }
-#else
+#if VERSION > VERSION_DEMO_US
         switch (unit->currentKind) {
             case UNIT_HOOKTAIL:
             case UNIT_GLOOMTAIL:
@@ -1207,6 +1181,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
                 break;
 #endif
         }
+#endif
         switch (type) {
             case STATUS_SLEEP:
                 effStampN64Entry(0, x, y, 10.0f + z);
@@ -1214,6 +1189,20 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
             case STATUS_CONFUSE:
                 effStampN64Entry(1, x, y, 10.0f + z);
                 break;
+#if VERSION <= VERSION_DEMO_US
+            case STATUS_DEFENSE_UP:
+            case STATUS_DEFENSE_DOWN:
+                eff = effStampN64Entry(2, x, y, 10.0f + z);
+                STAMP_COL(eff, 0, 0, 200, 0, 0, 10);
+                break;
+            case STATUS_HUGE:
+            case STATUS_TINY:
+            case STATUS_ATTACK_UP:
+            case STATUS_ATTACK_DOWN:
+            case STATUS_CHARGE:
+                eff = effStampN64Entry(2, x, y, 10.0f + z);
+                STAMP_COL(eff, 200, 0, 0, 10, 0, 0);
+#else
             case STATUS_STOP:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 110, 110, 10, 10, 10);
@@ -1302,13 +1291,13 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
             case STATUS_INSTANT_KILL:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 10, 10, 10);
+#endif
                 break;
             default:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 200, 200, 200, 10, 10, 10);
                 break;
         }
-#endif
         switch (type) {
             case STATUS_DEFENSE_UP:
             case STATUS_DEFENSE_DOWN:

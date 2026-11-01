@@ -335,74 +335,34 @@ void mot_hip(void) {
 #if VERSION > VERSION_DEMO_US
 #pragma dont_inline on
 #endif
+/**
+ * Landing check for the spin jump: 0 while in the air,
+ * 1 when the floor sent Mario into the water (0x200) or spike (0xC00) damage motion, 2 for a normal landing.
+ * Also resets the spin rotation and turns camera y-follow back on (not in background mode in the PAL release).
+ */
+s32 chkground(void) {
+    MarioWork* mario;
+    HitEntry* hit;
+    u32 attr;
+    f32 y;
+    f32 v;
+
+    mario = marioGetPtr();
+    hit = marioChkLandon(&y, 1.0f);
+    if (hit != NULL) {
+        mario->hitobjStandOn = hit;
+        mario->hitobjJumpFrom = NULL;
+        mario->position.y = y;
+        mario->mot.hip.angle = 0.0f;
+        mario->rotOfs.y = 0.0f;
+        mario->dispOfs2.y = 0.0f;
+        mario->airTimer = 0;
+        mario->jumpPeakAirTime = 0;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+        mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
 #if VERSION <= VERSION_DEMO_US
-/**
- * Landing check for the spin jump: 0 while in the air,
- * 1 when the floor sent Mario into the water (0x200) or spike (0xC00) damage motion, 2 for a normal landing.
- * Also resets the spin rotation and turns camera y-follow back on (not in background mode in the PAL release).
- */
-s32 chkground(void) {
-    MarioWork* mario;
-    HitEntry* hit;
-    u32 attr;
-    f32 y;
-    f32 v;
-
-    mario = marioGetPtr();
-    hit = marioChkLandon(&y, 1.0f);
-    if (hit != NULL) {
-        mario->hitobjStandOn = hit;
-        mario->hitobjJumpFrom = NULL;
-        mario->position.y = y;
-        mario->mot.hip.angle = 0.0f;
-        mario->rotOfs.y = 0.0f;
-        mario->dispOfs2.y = 0.0f;
-        mario->airTimer = 0;
-        mario->jumpPeakAirTime = 0;
-        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-        mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         camFollowYOn();
-        attr = hitGetAttr(hit);
-        if (attr & HIT_ATTR_WATER_HAZARD) {
-            set_damage_root_ypos(mario->position.y);
-            marioChgMot(MARIO_MOTION_DAMAGE);
-            return 1;
-        }
-        if (attr & (HIT_ATTR_TOGE | 0x400)) {
-            set_damage_root_ypos(mario->position.y);
-            marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
-            return 1;
-        }
-        return 2;
-    }
-    return 0;
-}
 #else
-/**
- * Landing check for the spin jump: 0 while in the air,
- * 1 when the floor sent Mario into the water (0x200) or spike (0xC00) damage motion, 2 for a normal landing.
- * Also resets the spin rotation and turns camera y-follow back on (not in background mode in the PAL release).
- */
-s32 chkground(void) {
-    MarioWork* mario;
-    HitEntry* hit;
-    u32 attr;
-    f32 y;
-    f32 v;
-
-    mario = marioGetPtr();
-    hit = marioChkLandon(&y, 1.0f);
-    if (hit != NULL) {
-        mario->hitobjStandOn = hit;
-        mario->hitobjJumpFrom = NULL;
-        mario->position.y = y;
-        mario->mot.hip.angle = 0.0f;
-        mario->rotOfs.y = 0.0f;
-        mario->dispOfs2.y = 0.0f;
-        mario->airTimer = 0;
-        mario->jumpPeakAirTime = 0;
-        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-        mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
 #if VERSION == VERSION_EU
         if (!marioBgmodeChk()) {
 #endif
@@ -410,14 +370,17 @@ s32 chkground(void) {
 #if VERSION == VERSION_EU
         }
 #endif
+#endif
         attr = hitGetAttr(hit);
         if (attr & HIT_ATTR_WATER_HAZARD) {
             set_damage_root_ypos(mario->position.y);
+#if VERSION > VERSION_DEMO_US
             v = -0.4f;
             mario->jumpVelocityY = v;
             mario->jumpAccelerationY = v;
             mario->jumpJerkY = 0.0f;
             mario->jumpSnapY = 0.0f;
+#endif
             marioChgMot(MARIO_MOTION_DAMAGE);
             return 1;
         }
@@ -430,7 +393,6 @@ s32 chkground(void) {
     }
     return 0;
 }
-#endif
 
 #pragma dont_inline reset
 

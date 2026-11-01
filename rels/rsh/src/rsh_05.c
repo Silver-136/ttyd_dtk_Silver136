@@ -1720,14 +1720,12 @@ static EVT_BEGIN(evt_moamoa_escape)
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_npc_flag_onoff, 1, STRING("ウェイトレス"), NPC_FLAG_INTANGIBLE)
-        CALL(evt_npc_status_onoff, 1, STRING("ウェイトレス"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_move_position, STRING("ウェイトレス"), 0, 15, 1000, 0, 1)
-        CALL(evt_npc_set_ry, STRING("ウェイトレス"), 270)
-        CALL(evt_npc_flag_onoff, 0, STRING("ウェイトレス"), NPC_FLAG_INTANGIBLE)
-#else
+#endif
         CALL(evt_npc_status_onoff, 1, STRING(("ウェイトレス")), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING(("ウェイトレス")), 0, 15, 1000, 0, 1)
         CALL(evt_npc_set_ry, STRING(("ウェイトレス")), 270)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 0, STRING("ウェイトレス"), NPC_FLAG_INTANGIBLE)
 #endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT

@@ -266,14 +266,13 @@ EVT_BEGIN(evt_memcard_check)
             CALL_CHILD(PTR(evt_memcard_nosave))
             CASE_EQUAL(CARD_RESULT_WRONGDEVICE)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_card"))
+            CALL_CHILD(PTR(evt_memcard_nosave))
 #if VERSION <= VERSION_DEMO_US
-            CALL_CHILD(evt_memcard_nosave)
             // Corrupted card: offer to format it (asking twice), then to create a save file;
             // any refusal or failure offers to play without saving.
             CASE_OR_EQUAL(-13)
             CASE_OR_EQUAL(-6)
 #else
-            CALL_CHILD(PTR(evt_memcard_nosave))
             CASE_OR_EQUAL(CARD_RESULT_ENCODING)
             CASE_OR_EQUAL(CARD_RESULT_BROKEN)
             CALL(memcard_watch_start)
