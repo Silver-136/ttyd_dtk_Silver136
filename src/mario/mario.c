@@ -1542,7 +1542,7 @@ void marioMove(void) {
                 stick = stick * stick;
                 if (stick < 25) {
                     marioChgPose("M_Z_1");
-                } else if (stick < 3025) {
+                } else if (stick < STICK_DASH_MIN_SQ) {
                     marioChgPose("M_W_1");
                 } else {
                     marioChgPose("M_R_1");

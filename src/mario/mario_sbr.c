@@ -551,7 +551,7 @@ s32 marioGetMovementSpeed(void) {
     if (x == 0 && mario->wStickDir2 == 0) {
         return 0;
     }
-    if (x * x + mario->wStickDir2 * mario->wStickDir2 > 3025) {
+    if (x * x + mario->wStickDir2 * mario->wStickDir2 > STICK_DASH_MIN_SQ) {
         return 2;
     }
     return 1;

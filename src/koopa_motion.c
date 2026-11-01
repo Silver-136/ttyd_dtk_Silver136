@@ -323,7 +323,7 @@ void kpa_walk(void) {
             if (kpaGetStageViewType() == KPA_VIEW_3D) {
                 m->directionView = m->controlStickAngle;
             }
-            if (m->wStickDir1 * m->wStickDir1 + m->wStickDir2 * m->wStickDir2 > 3025) {
+            if (m->wStickDir1 * m->wStickDir1 + m->wStickDir2 * m->wStickDir2 > STICK_DASH_MIN_SQ) {
                 marioChgMot(MARIO_MOTION_DASH);
             }
         }
@@ -394,7 +394,7 @@ void kpa_dash(void) {
             if (kpaGetStageViewType() == KPA_VIEW_3D) {
                 m->directionView = m->controlStickAngle;
             }
-            if (m->wStickDir1 * m->wStickDir1 + m->wStickDir2 * m->wStickDir2 <= 3025) {
+            if (m->wStickDir1 * m->wStickDir1 + m->wStickDir2 * m->wStickDir2 <= STICK_DASH_MIN_SQ) {
                 marioChgMot(MARIO_MOTION_WALK);
             }
         }

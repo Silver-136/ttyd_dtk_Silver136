@@ -1620,7 +1620,7 @@ void getStick(PartyEntry* party, f32* angle, f32* speed) {
     ang = revise360(ang + party->camDir);
     *angle = ang;
     if (dist > 0.0f) {
-        if (x * x + y * y > 3025) {
+        if (x * x + y * y > STICK_DASH_MIN_SQ) {
             dist = 1.5f * (mario->baseDashSpeed * marioGetMoveRate(ang));
         } else {
             dist = 1.5f * (mario->baseWalkSpeed * marioGetMoveRate(ang));

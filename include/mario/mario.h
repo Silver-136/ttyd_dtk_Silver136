@@ -4,6 +4,9 @@
 #include <dolphin/mtx.h>
 #include "driver/dispdrv.h"
 
+// Squared control stick magnitude (55 * 55) that separates walking from dashing.
+#define STICK_DASH_MIN_SQ 3025
+
 #pragma enumsalwaysint off
 typedef enum MarioMotion {
     MARIO_MOTION_STAY,         // 0x0
