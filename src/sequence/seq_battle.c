@@ -302,7 +302,7 @@ void seq_battleMain(SequenceWork* work) {
             battle_init();
             work->state++;
         case 3: {
-Vec pos;
+            Vec pos;
             if (battleSeqEndCheck()) {
                 work->counter = 0;
                 work->state++;

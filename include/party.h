@@ -284,7 +284,7 @@ typedef struct PartyEntry {
 #if VERSION <= VERSION_DEMO_US
     };
 };
-u8 pad_4C[0x4D - 0x4C];
+    u8 pad_4C[0x4D - 0x4C];
 #else
     u8 pad_50[0x51 - 0x50];             // 0x50, never accessed
 #endif

@@ -78,7 +78,7 @@ static BeroEntry bero_entry_data[] = {
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
     },
-{
+    {
         "n_bero_2", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId

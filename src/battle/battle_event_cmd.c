@@ -5482,7 +5482,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
             w = 180.0f;
             eff = 4;
             break;
-default: return EVT_RETURN_DONE;
+        default: return EVT_RETURN_DONE;
     }
     w *= scale;
     h = w / 2.0f;

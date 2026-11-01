@@ -1345,7 +1345,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(display) {
     SysWork* wp;
-SysChar* chr;
+    SysChar* chr;
     s32 type = evtGetValue(event, event->args[0]);
     s32 i;
 #else

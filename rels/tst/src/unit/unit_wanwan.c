@@ -114,8 +114,8 @@ BattleUnitKind unit_wanwan = {
     0.0f,
     17.0f,
     23.4f,
-0.0f,
-0.0f,
+    0.0f,
+    0.0f,
     18.0f,
     0.0f,
 #else

@@ -313,7 +313,7 @@ TubuDt tubuDt[] = {
  * recipe and Tattle lists with their found counts.
  */
 void winLogInit(WindowWork* w) {
-s32 j;
+    s32 j;
     s32 i;
     u32 k;
     EffectEntry* e;

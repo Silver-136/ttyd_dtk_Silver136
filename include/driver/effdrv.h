@@ -68,7 +68,7 @@ typedef struct EffectSet {
     s16 id;           // 0x0
     const char* name; // 0x4
 #if VERSION <= VERSION_DEMO_US
-const char* jpName;     // 0x8, debug name (Japanese)
+    const char* jpName;     // 0x8, debug name (Japanese)
     const char** typeNames;
 #endif
 } EffectSet;

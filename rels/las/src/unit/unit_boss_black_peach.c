@@ -5281,7 +5281,7 @@ USER_FUNC(queen_hand_small_entry_evt) {
 
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(slot_init) {
-BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
+    BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
 #else
 USER_FUNC(slot_init) {
     BattleBreakSlotGetPtr()->flags |= 4;

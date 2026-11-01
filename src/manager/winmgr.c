@@ -188,7 +188,9 @@ static const char name_party6[12];
 // The demos keep these two as real functions at the end of the file.
 static const char* party_name_table_rtn(s32 id);
 static s32 iconid_conv(s32 icon);
-#define select_party_name party_name_table_rtn
+static inline const char* select_party_name(s32 id) {
+    return party_name_table_rtn(id);
+}
 #else
 static inline const char* select_party_name(u16 id) {
     const char* name;

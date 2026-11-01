@@ -231,9 +231,9 @@ BattleUnitKind unit_boss_moamoa = {
     0.0f,
     0.0f,
     0.0f,
-250.0f,
+    250.0f,
     0.0f,
-80.0f,
+    80.0f,
     0.0f,
     0.0f,
 #else

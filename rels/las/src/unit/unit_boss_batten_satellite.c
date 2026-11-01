@@ -118,9 +118,9 @@ BattleUnitKind unit_boss_batten_satellite = {
     0.0f, // vivianOffsetZ
 #if VERSION <= VERSION_DEMO_US
     0.0f,
-0,
     0,
-0.0f,
+    0,
+    0.0f,
     0.0f,
     0.0f,
     8.0f,

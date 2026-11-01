@@ -61,9 +61,9 @@ BattleUnitKind unit_barriern_z_satellite = {
     0.0f, // vivianOffsetZ
 #if VERSION <= VERSION_DEMO_US
     0.0f,
-0,
+    0,
     -16,
-0.0f,
+    0.0f,
     0.0f,
     0.0f,
     8.0f,

@@ -81,7 +81,6 @@ typedef enum SeqEndDispFlags {
 
 void _GetExpIcon_Init(BattleSeqEndWork* work);
 
-
 void _GetExpIcon_Main(BattleWork* wp);
 void _LvupParamConfirmDisp(CameraId camId, void* param);
 void _LvupParamHelpMsgDisp(CameraId camId, void* param);

@@ -484,7 +484,7 @@ typedef struct MarioWork {
     s32 wallPushHold;              // 0x1D0, frames the push is held (14)
 #if VERSION <= VERSION_DEMO_US
     struct NpcEntry* touchNpc;
-struct HitEntry* hitobjFrontA;      // 0x1DC, wall in front found on an A press
+    struct HitEntry* hitobjFrontA;      // 0x1DC, wall in front found on an A press
     struct HitEntry* hitobjFront;       // 0x1E0
     struct HitEntry* hitobjStandOn;     // 0x1E4, 0x1E8 US
     struct HitEntry* hitobjJumpFrom;    // 0x1E8, 0x1EC US

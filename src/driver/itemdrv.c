@@ -226,7 +226,7 @@ void itemCoinDrop(Vec* position) {
  */
 #if VERSION <= VERSION_DEMO_US
 static BOOL itemGetCheck(ItemEntry* entry) {
-s32 fbatMode = fbatGetPointer()->mode;
+    s32 fbatMode = fbatGetPointer()->mode;
 #else
 BOOL itemGetCheck(ItemEntry* entry) {
 #endif
@@ -310,7 +310,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
 /** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
 #if VERSION <= VERSION_DEMO_US
 static BOOL itemGetNokoCheck(ItemEntry* entry) {
-s32 fbatMode = fbatGetPointer()->mode;
+    s32 fbatMode = fbatGetPointer()->mode;
 #else
 BOOL itemGetNokoCheck(ItemEntry* entry) {
 #endif

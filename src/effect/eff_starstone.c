@@ -612,7 +612,7 @@ void effStarStoneMain(EffectEntry* effect) {
  */
 #if VERSION <= VERSION_DEMO_US
 static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
-u32 i;
+    u32 i;
     u8* size;
     u8** list;
 #else

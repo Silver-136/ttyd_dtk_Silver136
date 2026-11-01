@@ -6855,7 +6855,7 @@ s32 stg5_list[] = {
 
 #if VERSION <= VERSION_DEMO_US
 s32 stg5_list[] = {
-93, 94, 99,
+    93, 94, 99,
 };
 #endif
 

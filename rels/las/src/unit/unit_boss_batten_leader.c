@@ -515,8 +515,8 @@ BattleUnitKind unit_boss_batten_leader = {
     66, // height
 #if VERSION <= VERSION_DEMO_US
     7,
-68,
-0.0f,
+    68,
+    0.0f,
     33.0f,
     0.0f,
     0,
