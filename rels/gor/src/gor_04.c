@@ -1006,8 +1006,8 @@ EVT_BEGIN(evt_train2)
     END_IF
 #if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-    // The partners follow Mario and he gets control back.
 #endif
+    // The partners follow Mario and he gets control back.
     CALL(evt_party_run, 1)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)

@@ -197,18 +197,22 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
 #if VERSION <= VERSION_DEMO_US
     BattleUnit* party;
     BattleUnit* mario;
-#endif
     int i;
     BattleUnitSetup* enemyData;
     NpcBattleInfo* setup;
     BattleGroupSetup* groupSetup;
     PouchData* pouch;
     BattleUnit* system;
-#if VERSION > VERSION_DEMO_US
-    BattleUnit* mario;
-#endif
     BattleUnitType partyId;
-#if VERSION > VERSION_DEMO_US
+#else
+    int i;
+    BattleUnitSetup* enemyData;
+    NpcBattleInfo* setup;
+    BattleGroupSetup* groupSetup;
+    PouchData* pouch;
+    BattleUnit* system;
+    BattleUnit* mario;
+    BattleUnitType partyId;
     BattleUnit* party;
 #endif
     BattleUnit* enemy;

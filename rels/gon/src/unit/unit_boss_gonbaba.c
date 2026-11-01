@@ -806,8 +806,8 @@ EVT_BEGIN(negotiation_event)
 #else
     CALL(evt_batstage_set_aud_dark, 0, 24, 0)
     CALL(evt_batstage_set_aud_dark_base, 0, 24, 0)
-    // Mario and his partner jump back in fright.
 #endif
+    // Mario and his partner jump back in fright.
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(40)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_7"))

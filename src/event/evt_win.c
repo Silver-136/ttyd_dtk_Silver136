@@ -387,13 +387,12 @@ USER_FUNC(evt_unitwin_alloc) {
 USER_FUNC(evt_unitwin_free) {
 #if VERSION > VERSION_DEMO_US
     UnitWinWork* wp = _wp;
-#endif
     s32 i;
-#if VERSION <= VERSION_DEMO_US
-    UnitWinWork* wp = _wp;
-#endif
     char name[32];
-#if VERSION <= VERSION_DEMO_US
+#else
+    s32 i;
+    UnitWinWork* wp = _wp;
+    char name[32];
     CaseEntry* entry;
 #endif
     if (wp == NULL) {

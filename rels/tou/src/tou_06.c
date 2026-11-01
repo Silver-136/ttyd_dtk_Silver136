@@ -718,8 +718,8 @@ EVT_BEGIN(tou_06_init_evt)
         CALL_CHILD(PTR(iri_13_init))
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidan"), MAP_OBJ_FLAG_CLIP)
-    // Unless map events are skipped: Ms. Mowz's scene on the first visit, else music for the story stage.
 #endif
+    // Unless map events are skipped: Ms. Mowz's scene on the first visit, else music for the story stage.
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN

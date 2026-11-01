@@ -1527,8 +1527,8 @@ static EVT_BEGIN(evt_gardman)
 #else
     WAIT_FRAMES(1)
 #endif
-    // If Mario stands in the doorway, he is startled and hops back out of the way.
 #endif
+    // If Mario stands in the doorway, he is startled and hops back out of the way.
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

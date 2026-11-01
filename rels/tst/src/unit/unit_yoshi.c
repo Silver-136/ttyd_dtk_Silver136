@@ -1175,8 +1175,8 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     CALL(_get_nomikomi_hit_position, UNIT_ID_SELF, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-    // He walks up to the enemy and faces it.
 #endif
+    // He walks up to the enemy and faces it.
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)

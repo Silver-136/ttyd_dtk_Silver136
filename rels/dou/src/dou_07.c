@@ -181,8 +181,8 @@ EVT_BEGIN(peramajin_before)
         CALL(evt_win_item_select, PTR(key_tbl), LW(10))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(10), 0)
-        // Mario cancels the menu: the chest sulks and stays shut.
 #endif
+        // Mario cancels the menu: the chest sulks and stays shut.
         IF_INT_EQUAL(LW(10), -1)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
             CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_10"), PTR(majin_callback), 0)
@@ -326,8 +326,8 @@ EVT_BEGIN(peramajin_after)
     CALL(evt_party_run, 0)
     CALL_CHILD(PTR(ship_majin_lecture))
     CALL(evt_party_stop, 0)
-    // Mario flickers while the lecture ends and he returns to his spot.
 #endif
+    // Mario flickers while the lecture ends and he returns to his spot.
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)

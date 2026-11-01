@@ -333,8 +333,8 @@ BOOL SoundLoadDVD2(const char* path) {
 #else
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".pool");
     entry = DVDMgrOpen(_ssGetStr(), 2, 0);
-    // FAKE: dead store; removing it changes the object
 #endif
+    // FAKE: dead store; removing it changes the object
     length = entry == NULL;
     if (entry == NULL) {
         pointer = NULL;

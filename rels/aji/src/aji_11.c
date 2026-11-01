@@ -268,8 +268,8 @@ EVT_BEGIN(peach_evt_disksys)
     CALL(evt_win_item_select, PTR(item_list), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
-    // Cancellation leaves the disk and the current interaction unchanged.
 #endif
+    // Cancellation leaves the disk and the current interaction unchanged.
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)

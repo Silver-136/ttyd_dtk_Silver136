@@ -1667,8 +1667,8 @@ void party_motion_homing_fly(PartyEntry* party) {
                     py = distABf(px, pz, s2.x, s2.z);
                     dir = angleABf(px, pz, s2.x, s2.z);
                     if (py <= 5.0f) {
-                        // FAKE: no-op function-pointer cast; the plain call changes the object
 #endif
+                        // FAKE: no-op function-pointer cast; the plain call changes the object
                         ((void (*)(PartyEntry*))partyChgMotSlitFloor)(party);
                     }
                 }

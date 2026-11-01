@@ -2020,8 +2020,8 @@ EVT_BEGIN(evt_elv_up)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
         CALL(evt_del_case_evt, 0, GW(10))
     END_IF
-    // The partner and Mario walk out of the cage and the doors close behind them.
 #endif
+    // The partner and Mario walk out of the cage and the doors close behind them.
     BEGIN_INLINE_EVENT
         CALL(evt_party_jump_pos, 0, 190, 0, -65, 500, 0, -1000)
         CALL(evt_party_stop, 0)

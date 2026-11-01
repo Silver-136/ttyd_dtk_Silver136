@@ -550,8 +550,8 @@ static EVT_BEGIN(dead_event)
     WAIT_FRAMES(60)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_batstage_set_aud_dark, 0, 1, 0)
-    // Five healing sparkles appear as he recovers to full HP and loses the KO status.
 #endif
+    // Five healing sparkles appear as he recovers to full HP and loses the KO status.
     CALL(evt_eff, STRING(""), STRING("recovery"), 0, 250, 30, 104, 4, 0, 0, 0, 0, 0, 0, 0)
     WAIT_FRAMES(30)
     CALL(evt_eff, STRING(""), STRING("recovery"), 0, 220, 30, 103, 5, 0, 0, 0, 0, 0, 0, 0)

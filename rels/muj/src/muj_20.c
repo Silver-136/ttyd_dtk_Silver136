@@ -2452,8 +2452,8 @@ USER_FUNC(logo) {
     if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/mariost.tpl", getMarioStDvdRoot()) == 0) {
         return EVT_RETURN_BLOCK;
     }
-    // Fade states increment the same counter once for alpha and again for vertical position.
 #endif
+    // Fade states increment the same counter once for alpha and again for vertical position.
     switch (wp->state) {
         case 0:
             wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());

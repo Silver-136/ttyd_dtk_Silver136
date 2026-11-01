@@ -552,8 +552,8 @@ void vivian_use(PartyEntry* party) {
         party->trailPos.y += d;
     }
     s = party->trailPos;
-    // FAKE: stores NULL into an already NULL rippleEffect; dropping the store changes the object
 #endif
+    // FAKE: stores NULL into an already NULL rippleEffect; dropping the store changes the object
     if (party->work.vivian.rippleEffect == NULL) {
         party->work.vivian.rippleEffect = NULL;
     } else if (party->work.vivian.rippleEffect->flags == 0) {

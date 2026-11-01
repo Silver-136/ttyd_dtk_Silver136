@@ -322,8 +322,8 @@ static EVT_BEGIN(song_event)
     SET_VALUE(LW(6), 0)
 #if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
-    // The pre-damage check decides between a dodge and a hit for each target in turn.
 #endif
+    // The pre-damage check decides between a dodge and a hit for each target in turn.
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))

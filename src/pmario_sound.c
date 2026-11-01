@@ -9965,8 +9965,8 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
             if (old == (u32)bgm_name) {
 #else
             if (old == id) {
-                // FAKE: empty then-branch; if (fade2->state != PSND_FADE_STATE_OUT) changes the object
 #endif
+                // FAKE: empty then-branch; if (fade2->state != PSND_FADE_STATE_OUT) changes the object
                 if (fade2->state == PSND_FADE_STATE_OUT) {
                 } else {
                     goto done;
@@ -11316,17 +11316,20 @@ static inline PaperSoundEnv* psndENVGetFree(void) {
 BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
 #if VERSION > VERSION_DEMO_US
     s32 idx;
-#endif
     u16 cur;
     u16* env;
     PaperSoundFade* fade;
     s32 o;
     PaperSoundEnv* e;
-#if VERSION > VERSION_DEMO_US
     s32 id;
-#endif
     SoundEnvList* list;
-#if VERSION <= VERSION_DEMO_US
+#else
+    u16 cur;
+    u16* env;
+    PaperSoundFade* fade;
+    s32 o;
+    PaperSoundEnv* e;
+    SoundEnvList* list;
     s32 id;
     s32 idx;
 #endif

@@ -1074,8 +1074,8 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
     GXSetCurrentMtx(GX_PNMTX0);
 #if VERSION > VERSION_DEMO_US
     PSMTXIdentity(ident);
-    // Each row has thirty-eight drawn pieces followed by one skipped entry.
 #endif
+    // Each row has thirty-eight drawn pieces followed by one skipped entry.
     p = broken_wp->pieces->address;
     for (y = 0, yo = 0; y < 30; y++, yo += 16, p++) {
         py = 232.0f - yo;
@@ -1762,8 +1762,8 @@ EVT_BEGIN(evt_mapwrite)
 #if VERSION > VERSION_DEMO_US
     CALL(map_disp_onoff, 0)
     WAIT_FRAMES(1)
-    // The Magical Map fills the screen and its paper animation for this Crystal Star plays.
 #endif
+    // The Magical Map fills the screen and its paper animation for this Crystal Star plays.
     CALL(evt_paper_entry, STRING("OFF_d_tizu_tex"))
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_tizu_tex"))

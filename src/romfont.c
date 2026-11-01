@@ -557,20 +557,24 @@ s32 romFontGetWidth(const char* message) {
     u16 c16;
     RomFontChar* glyph;
     u32 c;
-#endif
     s32 width = 0;
     s32 i = 0;
     s32 max = 0;
-#if VERSION >= VERSION_US
-    u16 c16;
-    RomFontChar* glyph;
-    u32 c;
-#endif
 
     for (;;) {
         c = message[i];
         c16 = *(u16*)&message[i];
-#if VERSION >= VERSION_US
+#else
+    s32 width = 0;
+    s32 i = 0;
+    s32 max = 0;
+    u16 c16;
+    RomFontChar* glyph;
+    u32 c;
+
+    for (;;) {
+        c = message[i];
+        c16 = *(u16*)&message[i];
         if (wp->language != ROM_FONT_LANGUAGE_SJIS) {
             if (c == 0x00) {
                 if (max < width) {

@@ -154,8 +154,8 @@ EVT_END()
 static EVT_BEGIN(main_0)
 #if VERSION > VERSION_DEMO_US
     SET_TYPE(239)
-    // The switch is pressed: the block stops reacting to hits while it moves.
 #endif
+    // The switch is pressed: the block stops reacting to hits while it moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
         // The block rises if it is down and falls if it is up (remembered in a room flag).

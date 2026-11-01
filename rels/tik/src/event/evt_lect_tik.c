@@ -773,8 +773,8 @@ EVT_BEGIN(plane_majin_lecture)
         END_LOOP
         CALL(evt_msg_continue)
         CALL(evt_mario_paper_plane, 1)
-        // Mario turns into a paper airplane and glides off the panel, and the view follows him down.
 #endif
+        // Mario turns into a paper airplane and glides off the panel, and the view follows him down.
         CALL(x_flag_set, 0, 2)
         CALL(lecture_button_set_seq, 0, 3)
         BEGIN_INLINE_EVENT
@@ -862,8 +862,8 @@ EVT_BEGIN(plane_majin_lecture)
             CALL(evt_cam3d_evt_set, FLOAT(-300.0f), FLOAT(-460.0f), FLOAT(457.0f), FLOAT(-300.0f), FLOAT(-558.0f), FLOAT(-101.799805f), 1200, EASING_LINEAR)
             CALL(x_flag_set, 0, 2)
             CALL(evt_mario_paper_plane, 0)
-            // After "I zoned out", Mario lands, the panel slides back in and the demon goes over it again.
 #endif
+            // After "I zoned out", Mario lands, the panel slides back in and the demon goes over it again.
             CALL(evt_mario_wait_landon)
             CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(80.0f), FLOAT(42.0f), FLOAT(-101.799805f), 1000, EASING_SINE_IN_OUT)
             SET_FLOAT_VALUE(LW(1), FLOAT(2.6660156f))

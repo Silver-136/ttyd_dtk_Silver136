@@ -4956,9 +4956,9 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     WAIT_FRAMES(10)
     GOTO(95)
     LABEL(92)
+#endif
     // Stylish: Mario backflips in place; for the plain Hammer and Ice Smash a second good press ends it in a pose
     // with confetti.
-#endif
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)

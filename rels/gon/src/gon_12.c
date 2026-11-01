@@ -144,8 +144,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_mario_mov_pos2, 130, 0, FLOAT(150.0f))
 #if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-    // The story advances: Mario has met Ms. Mowz.
 #endif
+    // The story advances: Mario has met Ms. Mowz.
     CALL(evt_party_stop, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_heya"), MAP_OBJ_FLAG_CLIP)

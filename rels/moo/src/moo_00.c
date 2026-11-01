@@ -308,8 +308,8 @@ static EVT_BEGIN(evt_first)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
-    // Control returns, the story advances and the Moon banner appears.
 #endif
+    // Control returns, the story advances and the Moon banner appears.
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)

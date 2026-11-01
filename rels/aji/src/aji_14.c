@@ -335,8 +335,8 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_snd_envoff, PSND_FADEOUT)
-    // The fight against Magnus von Grapple 2.0 begins.
 #endif
+    // The fight against Magnus von Grapple 2.0 begins.
     CALL(evt_npc_set_battle_info, STRING("ロボット"), 5)
     CALL(evt_npc_battle_start, STRING("ロボット"))
     CALL(evt_npc_wait_battle_end)

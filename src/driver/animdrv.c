@@ -1092,14 +1092,11 @@ void animPoseMain(s32 poseId) {
     s32 nextFrame;
 #if VERSION <= VERSION_DEMO_US
     s32 k;
-#endif
     AnimKeyframe* kf;
     AnimKeyframe* kfEnd;
     s32 i;
-#if VERSION <= VERSION_DEMO_US
     s32 j;
     s32 n;
-#endif
     AnimationPoseData* file;
     AnimData* anim;
     AnimationPose* poses;
@@ -1108,10 +1105,20 @@ void animPoseMain(s32 poseId) {
     u8* q;
     f32 key;
     u8* v;
-#if VERSION <= VERSION_DEMO_US
     AnimVtxDelta* d;
     AnimTexDelta* td;
 #else
+    AnimKeyframe* kf;
+    AnimKeyframe* kfEnd;
+    s32 i;
+    AnimationPoseData* file;
+    AnimData* anim;
+    AnimationPose* poses;
+    u8* grpB;
+    u8* grpA;
+    u8* q;
+    f32 key;
+    u8* v;
     f32 x;
     f32 y;
 #endif
@@ -1141,8 +1148,8 @@ void animPoseMain(s32 poseId) {
     anim = file->anims[pose->animId].data;
 #if VERSION > VERSION_DEMO_US
     OSInitFastCast();
-    // FAKE: (s32) cast on the u32 flag (signed compare); the plain test changes the object
 #endif
+    // FAKE: (s32) cast on the u32 flag (signed compare); the plain test changes the object
     if ((s32)wp->mbUseFloatScratch != 0) {
         grpA = (u8*)wp->vtxArrayPos;
         grpB = (u8*)wp->vtxArrayNrm;

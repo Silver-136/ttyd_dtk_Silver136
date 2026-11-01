@@ -835,21 +835,22 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
     f32 distance;
     s32 j;
     f32 minDist;
-#else
-    f32 temp;
-#endif
     HitVector* vector;
-#if VERSION <= VERSION_DEMO_US
     MapEntry* mapEntry;
     s32 mapIdx;
     f32 reach;
     f32 temp;
-#endif
     Vec position;
     Vec hitNormalTmp;
     Vec normal;
     Vec endPos;
-#if VERSION > VERSION_DEMO_US
+#else
+    f32 temp;
+    HitVector* vector;
+    Vec position;
+    Vec hitNormalTmp;
+    Vec normal;
+    Vec endPos;
     HitEntry* entry;
     HitEntry* closest;
     int i;

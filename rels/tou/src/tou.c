@@ -3152,8 +3152,8 @@ EVT_BEGIN(evt_michel_8)
         CALL(evt_npc_move_position, STRING("キノシコワ"), 30, -100, 0, FLOAT(80.0f), 1)
         CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("ポグ"))
     END_INLINE_EVENT
-    // The guard, Swoop and Jolene leave through the door in turn.
 #endif
+    // The guard, Swoop and Jolene leave through the door in turn.
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))

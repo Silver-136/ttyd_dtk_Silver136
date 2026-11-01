@@ -1427,6 +1427,24 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
     f32 mone;
     f32 zero;
     f32 d;
+    f32 dist;
+    f32 noz;
+    f32 nox;
+    f32 top;
+    f32 ystart;
+    f32 ox;
+    f32 oz;
+    f32 px;
+    f32 hh;
+    f32 range;
+    f32 sn;
+    f32 pz;
+    f32 py;
+    f32 x, z;
+    s32 i;
+    HitEntry* hit;
+    MarioWork* mario = marioGetPtr();
+    f32 a;
 #else
     Vec dir;
     Vec outPos;
@@ -1442,28 +1460,12 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
     f32 z0;
     f32 a;
     f32 sn;
-#endif
     f32 dist;
-#if VERSION <= VERSION_DEMO_US
-    f32 noz;
-    f32 nox;
-    f32 top;
-    f32 ystart;
-    f32 ox;
-    f32 oz;
-    f32 px;
-    f32 hh;
-    f32 range;
-    f32 sn;
-    f32 pz;
-#endif
     f32 py;
     f32 x, z;
     s32 i;
     HitEntry* hit;
     MarioWork* mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
-    f32 a;
 #endif
     mario->groundRot.x = 0.0f;
     mario->groundRot.y = 0.0f;

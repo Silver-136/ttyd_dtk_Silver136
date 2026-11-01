@@ -1074,8 +1074,8 @@ EVT_BEGIN(roll_majin_lecture)
     CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_14"), 0, STRING("ペラ魔人"))
 #else
     CALL(evt_msg_print_add, 0, STRING("stg4_usu_majin3_14"))
-    // Practice: only R and the stick work, with button prompts, until Mario rolls into a tube.
 #endif
+    // Practice: only R and the stick work, with button prompts, until Mario rolls into a tube.
     LOOP(0)
         CALL(lecture_button_flag_on_off, 0, 2, 1)
         CALL(lecture_button_set_icon_id, 0, ICON_TRIGGER_R)

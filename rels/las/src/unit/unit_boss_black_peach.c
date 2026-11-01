@@ -3301,8 +3301,8 @@ EVT_BEGIN(queen_attack_black_wave)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION > VERSION_DEMO_US
     IF_INT_EQUAL(LF(0), 0)
-        // Deal the damage, reduced by the action command defence.
 #endif
+        // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_wave_attack))
 #if VERSION > VERSION_DEMO_US
         SET_VALUE(LF(0), 1)
@@ -3455,8 +3455,8 @@ EVT_BEGIN(queen_attack_bress1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION > VERSION_DEMO_US
     IF_INT_EQUAL(LF(0), 0)
-        // Deal the damage, reduced by the action command defence.
 #endif
+        // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_sigh_attack))
 #if VERSION > VERSION_DEMO_US
         SET_VALUE(LF(0), 1)
@@ -3555,8 +3555,8 @@ EVT_BEGIN(queen_attack_bress2)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION > VERSION_DEMO_US
     IF_INT_EQUAL(LF(0), 0)
-        // Deal the damage, reduced by the action command defence.
 #endif
+        // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_temptation_attack))
 #if VERSION > VERSION_DEMO_US
         SET_VALUE(LF(0), 1)
@@ -3656,8 +3656,8 @@ EVT_BEGIN(queen_attack_bress3)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION > VERSION_DEMO_US
     IF_INT_EQUAL(LF(0), 0)
-        // Deal the damage, reduced by the action command defence.
 #endif
+        // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_poison_attack))
 #if VERSION > VERSION_DEMO_US
         SET_VALUE(LF(0), 1)

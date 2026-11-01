@@ -232,8 +232,8 @@ static USER_FUNC(ride_chk) {
     } else {
         hit = (HitEntry*)mario->hitobjUnder;
     }
-    // Contact resets the counter to 30; the same call decrements it before testing visibility.
 #endif
+    // Contact resets the counter to 30; the same call decrements it before testing visibility.
     for (i = 0; i < 24; i++) {
 #if VERSION <= VERSION_DEMO_US
         MarioWork* mario = marioGetPtr();

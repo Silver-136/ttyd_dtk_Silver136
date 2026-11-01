@@ -293,8 +293,8 @@ EVT_END()
 EVT_BEGIN(evt_gon_04flowblock_updown1)
 #if VERSION > VERSION_DEMO_US
     SET_TYPE(239)
-    // The switch is disabled while the block moves.
 #endif
+    // The switch is disabled while the block moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
         // Decide the direction from the saved state (only the ELSE arm below can run): with LSWF(6) clear the
@@ -554,8 +554,8 @@ EVT_END()
 EVT_BEGIN(evt_gon_04flowblock_updown2)
 #if VERSION > VERSION_DEMO_US
     SET_TYPE(239)
-    // The switch is disabled while the block moves.
 #endif
+    // The switch is disabled while the block moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(GSWF_GON_04_LV1_BIG_BLOCK_BROKEN, 0)
         // The block only moves once big block A in this room has been broken.

@@ -297,8 +297,8 @@ EVT_BEGIN(evt_rsh_door_open)
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(6), 8388608)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_cam_letter_box_disable, 1)
-    // Mario walks into the cabin as the door slides open and the page turns to reveal it.
 #endif
+    // Mario walks into the cabin as the door slides open and the page turns to reveal it.
     CALL(evt_mario_key_onoff, 0)
     CALL(img_wait)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)

@@ -2610,8 +2610,8 @@ EVT_BEGIN(enter_gorotsuki_town)
     END_INLINE_EVENT
 #else
     CALL(evt_map_set_playrate, STRING("hiki_nami"), FLOAT(0.25f))
-    // The wake slows down and the area title card fades in and out.
 #endif
+    // The wake slows down and the area title card fades in and out.
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1500)
@@ -2879,8 +2879,8 @@ EVT_BEGIN(gundan1000tai_beforebattle)
     IF_INT_LESS(LW(0), 5)
         CALL(evt_pouch_set_hp, 5)
     END_IF
-    // The fight against Lord Crump.
 #endif
+    // The fight against Lord Crump.
     CALL(evt_npc_set_battle_info, STRING("第三勢力幹部"), 2)
     CALL(evt_npc_battle_start, STRING("第三勢力幹部"))
     CALL(evt_npc_wait_battle_end)
@@ -5851,9 +5851,9 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_delete, STRING("ババ"))
 #else
     CALL(npc_all_delete)
+#endif
     // Remove the regular harbor NPCs so only the epilogue cast remains.
     // Peach and Toadsworth wait at the right of the pier.
-#endif
     CALL(evt_npc_entry, STRING("ピーチ姫"), STRING("c_peach"))
     CALL(evt_npc_set_tribe, STRING("ピーチ姫"), STRING("ピーチ姫"))
     CALL(evt_npc_set_position, STRING("ピーチ姫"), 125, 15, 235)

@@ -231,8 +231,8 @@ EVT_BEGIN(bonbaba_evt)
     WAIT_MS(2500)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
-    // The battle with Gloomtail starts and the script waits for it to end.
 #endif
+    // The battle with Gloomtail starts and the script waits for it to end.
     CALL(evt_npc_set_battle_info, STRING("ボンババ"), 14)
     CALL(evt_npc_battle_start, STRING("ボンババ"))
     CALL(evt_npc_wait_battle_end)

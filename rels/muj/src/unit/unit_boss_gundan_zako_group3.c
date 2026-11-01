@@ -53,8 +53,8 @@ typedef struct ZakoGunWork {
     s32 targetId;
 #if VERSION >= VERSION_US
     u8 us_pad08[0xC];
-    // US: 12 more bytes here
 #endif
+    // US: 12 more bytes here
     s32 state;
     s32 timer;
     Vec pos;

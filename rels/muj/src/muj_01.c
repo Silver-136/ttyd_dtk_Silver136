@@ -2095,8 +2095,8 @@ static EVT_BEGIN(sekai_yami_evt)
         WAIT_MS(500)
         LOOP(2)
 #endif
-            // The screen flashes white several times.
 #endif
+            // The screen flashes white several times.
             CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
             CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
             WAIT_MS(100)

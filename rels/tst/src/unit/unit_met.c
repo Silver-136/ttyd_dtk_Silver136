@@ -873,8 +873,8 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
 #if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
-    // It hops back toward its original spot and carries on as a floor unit.
 #endif
+    // It hops back toward its original spot and carries on as a floor unit.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

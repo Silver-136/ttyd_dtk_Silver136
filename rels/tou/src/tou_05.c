@@ -358,8 +358,8 @@ EVT_BEGIN(evt_hiki_open)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-    // The partner comes over to the desk when it is the special drawer and Grubba's secret is still unknown.
 #endif
+    // The partner comes over to the desk when it is the special drawer and Grubba's secret is still unknown.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #if VERSION <= VERSION_DEMO_US

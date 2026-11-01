@@ -694,8 +694,8 @@ EVT_BEGIN(move_up_down)
     ELSE
         SET_VALUE(LW(3), 0)
     END_IF
-    // Each cycle the platform glides from its first height to its second over the row's time, then pauses.
 #endif
+    // Each cycle the platform glides from its first height to its second over the row's time, then pauses.
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(7), LW(8), LW(9))
         LABEL(0)

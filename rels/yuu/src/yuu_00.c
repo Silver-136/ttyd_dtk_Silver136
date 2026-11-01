@@ -986,9 +986,9 @@ EVT_BEGIN(minigame01_end)
     CALL(yuuminigame_get_dataadr, 5, LW(15))
     CALL(evt_moving_floor_delete, LW(15))
 #endif
+#endif
     // Crashing on the ground (a negative score) plays the failure effect;
     // landing on a platform plays the success effect and Mario poses by how well he did.
-#endif
     CALL(evt_mario_adjust_dir)
     IF_INT_LESS(LW(0), 0)
         CALL(eff_call_minigame, 2, 0, 0, 500)

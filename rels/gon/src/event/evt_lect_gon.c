@@ -674,8 +674,8 @@ EVT_BEGIN(slit_majin_lecture)
     CALL(evt_msg_print, 0, STRING("stg1_gon_12_14"), 0, STRING("ペラ魔人"))
 #else
     CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_14"))
-    // Practice loop: the prompt icon blinks while Mario tries to turn sideways.
 #endif
+    // Practice loop: the prompt icon blinks while Mario tries to turn sideways.
     LOOP(0)
         LOOP(0)
             CALL(lecture_button_flag_on_off, 0, 2, 1)
@@ -736,8 +736,8 @@ EVT_BEGIN(slit_majin_lecture)
             END_LOOP
 #if VERSION > VERSION_DEMO_US
             CALL(evt_msg_continue)
-            // Control is returned to normal and the prompt is dismissed.
 #endif
+            // Control is returned to normal and the prompt is dismissed.
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mario_key_onoff, 0)
             CALL(lect_status_on)

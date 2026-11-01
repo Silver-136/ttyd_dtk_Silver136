@@ -1797,8 +1797,8 @@ EVT_BEGIN(last_evt_3)
     CALL(evt_npc_release_filednpc, 1)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
-    // The battle with the Shadow Queen in Peach's form starts and the script waits for it to end.
 #endif
+    // The battle with the Shadow Queen in Peach's form starts and the script waits for it to end.
     CALL(evt_npc_set_battle_info, STRING("ブラックピーチ"), 16)
     CALL(evt_npc_battle_start, STRING("ブラックピーチ"))
     CALL(evt_npc_wait_battle_end)

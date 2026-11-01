@@ -256,8 +256,8 @@ static EVT_BEGIN(evt_prologue)
             WAIT_MS(200)
         END_LOOP
     END_INLINE_EVENT
-    // Parakarry glides in to the mailbox, with a wing-beat sound at intervals until he lands.
 #endif
+    // Parakarry glides in to the mailbox, with a wing-beat sound at intervals until he lands.
     CALL(evt_npc_glide_position, STRING("パレッタ"), 210, 25, -30, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)
     // The mailbox shakes as she drops the mail in.
     CALL(evt_npc_reverse_ry, STRING("パレッタ"))

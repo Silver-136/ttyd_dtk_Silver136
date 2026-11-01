@@ -1855,8 +1855,8 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
 #else
     CALL(evt_eff, 0, STRING("kiss"), 3, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_ENM_TOGENOKO_CALL1"), LW(0), LW(1), LW(2), 0)
-    // Stylish chance as he calls.
 #endif
+    // Stylish chance as he calls.
     CALL(btlevtcmd_ftof, 33, LW(0))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         WAIT_FRAMES(LW(0))

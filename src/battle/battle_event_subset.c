@@ -167,8 +167,8 @@ EVT_BEGIN(subsetevt_dead)
                 IF_INT_NOT_EQUAL(LW(0), 0)
                     CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_REVIVE_EVENT)
                 END_IF
-                // The partner gets back up with 10 HP, the recovery sparkle shows and it hops back to idle.
 #endif
+                // The partner gets back up with 10 HP, the recovery sparkle shows and it hops back to idle.
                 CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
                 CALL(btlevtcmd_SetHp, LW(10), 0)
                 CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
@@ -707,8 +707,8 @@ EVT_BEGIN(subsetevt_damage)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(_set_hp_gauge_fade_flag, LW(10))
         END_IF
-        // No damage: a normal hit still shows the hurt pose; anything else plays the miss sound.
 #endif
+        // No damage: a normal hit still shows the hurt pose; anything else plays the miss sound.
         CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(DAMAGE_CODE_NORMAL)
