@@ -247,15 +247,9 @@ struct HitEntry* cloudGetHitBreathout(s32 which) {
     if (party == NULL) {
         return NULL;
     }
-#if VERSION <= VERSION_DEMO_US
-
-    if (
-        party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0 || party->useMotionId < CLOUD_USE_BREATH_INIT) {
-#else
 
     if (party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0 ||
         party->useMotionId < CLOUD_USE_BREATH_INIT) {
-#endif
         return NULL;
     }
 
@@ -290,11 +284,10 @@ f32 cloudGetBreathDist(void) {
         breathDist = 0.0f;
         return breathDist;
     }
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
     if ((party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0) || party->useMotionId < CLOUD_USE_BREATH_INIT) {
 #else
-
     if (party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0 ||
         party->useMotionId < CLOUD_USE_BREATH_INIT) {
 #endif
@@ -306,12 +299,11 @@ f32 cloudGetBreathDist(void) {
 
     return breathDist;
 }
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
 /** Resets Flurrie's idle bob: phase 0 degrees, advancing 4.25 degrees per frame. */
 static inline void cloud_hover_init(PartyEntry* party) {
 #else
-
 #if VERSION >= VERSION_US
 /**
  * Lets Flurrie follow and bob again after a cutscene froze her,
@@ -342,12 +334,11 @@ void cloud_hover_init(PartyEntry* party) {
     party->work.cloud.hoverAngle = 0.0f;
     party->work.cloud.hoverSpeed = 4.25f;
 }
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
 /** Advances Flurrie's idle bob and sets her display offset to a 0-6 unit sine wave above her position. */
 static inline void cloud_hover_main(PartyEntry* party) {
 #else
-
 /** Advances Flurrie's idle bob and sets her display offset to a 0-6 unit sine wave above her position. */
 // Descriptive name (not in the symbol maps); placeholder unk_8018206c, JP 0x8018206C. See docs/NAME_PROVENANCE.md.
 void cloud_hover_main(PartyEntry* party) {
@@ -764,8 +755,8 @@ void cloud_exit(PartyEntry* party) {
     mario->camShiftRate.x = 0.01f;
     mario->camShiftTargetX = 0.0f;
 }
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
 /**
  * Gust strength (0-100) at a point: nonzero only while Flurrie is mid-gust,
  * the point is within 10 units of 18 below her,
@@ -842,7 +833,6 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle) {
     f32 hx, hy, hz, dist, nx, ny, nz;
     f32 ofsX, ofsZ;
 #else
-
 /**
  * Per-frame gust update: casts the straight ray at one of three heights (8, 20, 40 above Mario, cycling each
  * frame), places and scales the cloud effect in front of Flurrie, then casts the two swinging side rays.
@@ -1013,11 +1003,10 @@ void cloudGetAt(Vec* position) {
     if (party == NULL || (party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
         return;
     }
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
     if ((mario->dispFlags & (MARIO_DISP_FLAG_HIDE << 20)) == 0) {
 #else
-
     if ((mario->dispFlags & MARIO_DISP_FLAG_ZOOM) == 0) {
 #endif
         CameraEntry* camera = camGetPtr(CAMERA_3D);

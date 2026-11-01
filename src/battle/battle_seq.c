@@ -1085,12 +1085,8 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000020: {
-#if VERSION <= VERSION_DEMO_US
-                BattleUnit* unit;
-#else
                 // FAKE: block-local unit shadowing the function's; using the function's unit changes the object
                 BattleUnit *unit;
-#endif
                 sfxName = "SFX_CONDITION_BREAK_ICE1";
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     unit = BattleGetUnitPtr(wp, i);

@@ -3210,32 +3210,6 @@ void* fbatHitCheck(u32 flags, void* result) {
                 f20 = flags & FBAT_CHECK_JUMP;
                 for (i = 0; i < total; i++, npc++) {
                     f32 dx, dz;
-#if VERSION <= VERSION_DEMO_US
-                    if (npc == NULL)
-                        continue;
-                    if (!(npc->flags & NPC_FLAG_READY))
-                        continue;
-                    if (f1000a) {
-                        if (!(npc->flags & NPC_FLAG_ENEMY))
-                            continue;
-                    } else {
-                        if (npc->flags & NPC_FLAG_ENEMY)
-                            continue;
-                    }
-                    if (soft && !(npc->reactionFlags & 1))
-                        continue;
-                    if (npc->flags & NPC_FLAG_NO_HIT)
-                        continue;
-                    if (npc->statusFlags & NPC_STATUS_DEAD)
-                        continue;
-                    if (npc->flags & NPC_FLAG_2D)
-                        continue;
-                    // FAKE: `(*(T*)&...)` reads, as above (FAKES.md, fbatHitCheck)
-                    if (mario->position.y >= (*(f32*)&((NpcEntry*)npc)->position.y) + (*(f32*)&((NpcEntry*)npc)->height))
-                        continue;
-                    if (mario->position.y + mario->wPlayerCollisionBox.y <= (*(f32*)&((NpcEntry*)npc)->position.y))
-                        continue;
-#else
                     if (npc == NULL) continue;
                     if (!(npc->flags & NPC_FLAG_READY)) continue;
                     if (f1000a) {
@@ -3249,7 +3223,6 @@ void* fbatHitCheck(u32 flags, void* result) {
                     if (npc->flags & NPC_FLAG_2D) continue;
                     if (mario->position.y >= (*(f32*)&((NpcEntry*)npc)->position.y) + (*(f32*)&((NpcEntry*)npc)->height)) continue;
                     if (mario->position.y + mario->wPlayerCollisionBox.y <= (*(f32*)&((NpcEntry*)npc)->position.y)) continue;
-#endif
                     dz = mario->position.z - npc->position.z;
                     dx = mario->position.x - (*(f32*)&((NpcEntry*)npc)->position.x);
                     dist = sqrtf(dx * dx + dz * dz);
@@ -3275,22 +3248,12 @@ void* fbatHitCheck(u32 flags, void* result) {
                             res.kind = FBAT_HIT_TOUCH;
                             hit = npc;
                             res.dist = dist;
-#if VERSION <= VERSION_DEMO_US
-                            if (!soft)
-                                fbatSetAttackAnnounce(FBAT_HIT_TOUCH);
-#else
                             if (!soft) fbatSetAttackAnnounce(FBAT_HIT_TOUCH);
-#endif
                         } else if (pouchEquipCheckBadge(ITEM_CHILL_OUT)) {
                             res.kind = FBAT_HIT_TOUCH;
                             hit = npc;
                             res.dist = dist;
-#if VERSION <= VERSION_DEMO_US
-                            if (!soft)
-                                fbatSetAttackAnnounce(FBAT_HIT_TOUCH);
-#else
                             if (!soft) fbatSetAttackAnnounce(FBAT_HIT_TOUCH);
-#endif
                         } else {
                             res.kind = FBAT_HIT_ENEMY_FIRST;
                             hit = npc;
@@ -3301,30 +3264,13 @@ void* fbatHitCheck(u32 flags, void* result) {
                             res.evtId = (*(s32*)&((NpcEntry*)npc)->attackMode);
                         }
                     }
-#if VERSION <= VERSION_DEMO_US
-                    if (!f20)
-                        continue;
-#else
                     if (!f20) continue;
-#endif
                     if ((mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING) &&
                         !(npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)) {
                         hit = npc;
                         res.dist = dist;
                         if (marioGetJabaraState() == 6) {
                             res.kind = FBAT_HIT_JUMP;
-#if VERSION <= VERSION_DEMO_US
-                            if (!soft)
-                                fbatSetAttackAnnounce(FBAT_HIT_JUMP);
-                        } else if (mario->currMotionId == MARIO_MOTION_HIP) {
-                            res.kind = FBAT_HIT_HIP;
-                            if (!soft)
-                                fbatSetAttackAnnounce(FBAT_HIT_HIP);
-                        } else {
-                            res.kind = FBAT_HIT_JUMP;
-                            if (!soft)
-                                fbatSetAttackAnnounce(FBAT_HIT_JUMP);
-#else
                             if (!soft) fbatSetAttackAnnounce(FBAT_HIT_JUMP);
                         } else if (mario->currMotionId == MARIO_MOTION_HIP) {
                             res.kind = FBAT_HIT_HIP;
@@ -3332,18 +3278,12 @@ void* fbatHitCheck(u32 flags, void* result) {
                         } else {
                             res.kind = FBAT_HIT_JUMP;
                             if (!soft) fbatSetAttackAnnounce(FBAT_HIT_JUMP);
-#endif
                         }
                     } else if (marioGetJabaraState() == 6 && !(npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)) {
                         res.kind = FBAT_HIT_JUMP;
                         hit = npc;
                         res.dist = dist;
-#if VERSION <= VERSION_DEMO_US
-                        if (!soft)
-                            fbatSetAttackAnnounce(FBAT_HIT_JUMP);
-#else
                         if (!soft) fbatSetAttackAnnounce(FBAT_HIT_JUMP);
-#endif
                     }
                 }
             }
@@ -3352,15 +3292,8 @@ void* fbatHitCheck(u32 flags, void* result) {
 
     if (flags & FBAT_CHECK_HAMMER) {
         while (hit == NULL) {
-#if VERSION <= VERSION_DEMO_US
-            if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0)
-                break;
-            if (!fbat_canHit(npc))
-                break;
-#else
             if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
             if (!fbat_canHit(npc)) break;
-#endif
             if (flags & FBAT_CHECK_CURRENT) {
                 MarioWork* m;
                 s32 v;
@@ -3430,12 +3363,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                     res.dist = dist;
                     hit = npc;
                     res.kind = FBAT_HIT_HAMMER;
-#if VERSION <= VERSION_DEMO_US
-                    if (!soft)
-                        fbatSetAttackAnnounce(FBAT_HIT_HAMMER);
-#else
                     if (!soft) fbatSetAttackAnnounce(FBAT_HIT_HAMMER);
-#endif
                     break;
                 }
             } else {
@@ -3457,12 +3385,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                     res.dist = dist;
                     hit = npc;
                     res.kind = FBAT_HIT_HAMMER;
-#if VERSION <= VERSION_DEMO_US
-                    if (!soft)
-                        fbatSetAttackAnnounce(FBAT_HIT_HAMMER);
-#else
                     if (!soft) fbatSetAttackAnnounce(FBAT_HIT_HAMMER);
-#endif
                     break;
                 }
             }
@@ -3526,12 +3449,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                             rp->kind = FBAT_HIT_ULTRA_SPIN_HAMMER;
                         }
                     } // FAKE: store through a pointer to res (keeps the two branch stores, no if-conversion); same field
-#if VERSION <= VERSION_DEMO_US
-                    if (!soft)
-                        fbatSetAttackAnnounce(res.kind);
-#else
                     if (!soft) fbatSetAttackAnnounce(res.kind);
-#endif
                     break;
                 }
             } else {
@@ -3560,12 +3478,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                             rp->kind = FBAT_HIT_ULTRA_SPIN_HAMMER;
                         }
                     } // FAKE: store through a pointer to res (keeps the two branch stores, no if-conversion); same field
-#if VERSION <= VERSION_DEMO_US
-                    if (!soft)
-                        fbatSetAttackAnnounce(res.kind);
-#else
                     if (!soft) fbatSetAttackAnnounce(res.kind);
-#endif
                     break;
                 }
             }
@@ -3634,12 +3547,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 res.dist = dist;
                 hit = npc;
                 res.kind = FBAT_HIT_SHELL;
-#if VERSION <= VERSION_DEMO_US
-                if (!soft)
-                    fbatSetAttackAnnounce(FBAT_HIT_SHELL);
-#else
                 if (!soft) fbatSetAttackAnnounce(FBAT_HIT_SHELL);
-#endif
                 break;
             }
             break;
@@ -3690,12 +3598,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 res.dist = dist;
                 hit = npc;
                 res.kind = FBAT_HIT_BOMB;
-#if VERSION <= VERSION_DEMO_US
-                if (!soft)
-                    fbatSetAttackAnnounce(FBAT_HIT_BOMB);
-#else
                 if (!soft) fbatSetAttackAnnounce(FBAT_HIT_BOMB);
-#endif
                 break;
             }
             break;

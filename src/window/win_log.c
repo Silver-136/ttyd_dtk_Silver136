@@ -344,23 +344,10 @@ void winLogInit(WindowWork* w) {
     w->log.cursor = 0;
     w->log.count = 0;
     winLogAddMenu(w, 0);
-#if VERSION <= VERSION_DEMO_US
-    if (swByteGet(0) >= STG0_16_FRANKLYS_HOUSE)
-        winLogAddMenu(w, 1);
-    if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS)
-        winLogAddMenu(w, 4);
-    if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL)
-        winLogAddMenu(w, 2);
-    if (swGet(GSWF_RECIPE_LOG_UNLOCKED))
-        winLogAddMenu(w, 3);
-
-#else
     if (swByteGet(0) >= STG0_16_FRANKLYS_HOUSE) winLogAddMenu(w, 1); // GSW_STORY_PROGRESS
     if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS) winLogAddMenu(w, 4); // GSW_STORY_PROGRESS
     if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL) winLogAddMenu(w, 2); // GSW_STORY_PROGRESS
     if (swGet(GSWF_RECIPE_LOG_UNLOCKED)) winLogAddMenu(w, 3); // GSWF_GOR_ZESS_T_DISH_RECEIVED
-
-#endif
     w->log.stoneNum = 0;
     for (i = 0; i < 7; i++) {
         if (pouchCheckItem(stone_tbl[i])) {
@@ -395,15 +382,8 @@ void winLogInit(WindowWork* w) {
     w->log.scrollX = w->log.scrollY = 0.0f;
 
     area = gp->currentAreaName;
-#if VERSION <= VERSION_DEMO_US
-    if (!strcmp(gp->currentMapName, "pik_02") || !strcmp(gp->currentMapName, "pik_03"))
-        area = "sin";
-    if (!strcmp(gp->currentMapName, "win_04") || !strcmp(gp->currentMapName, "win_05"))
-        area = "hou";
-#else
     if (!strcmp(gp->currentMapName, "pik_02") || !strcmp(gp->currentMapName, "pik_03")) area = "sin";
     if (!strcmp(gp->currentMapName, "win_04") || !strcmp(gp->currentMapName, "win_05")) area = "hou";
-#endif
     if (!strncmp(gp->currentMapName, "rsh", 3)) {
         if (swByteGet(0) < STG6_27_RIVERSIDE_STATION) { // GSW_STORY_PROGRESS
             area = "gor";
@@ -462,23 +442,10 @@ void winLogInit(WindowWork* w) {
         w->log.scrollX -= dx;
         w->log.scrollY -= dy;
     }
-#if VERSION <= VERSION_DEMO_US
-    if (w->log.scrollX > 0.0f)
-        w->log.scrollX = 0.0f;
-    if (w->log.scrollY > 0.0f)
-        w->log.scrollY = 0.0f;
-    if (w->log.scrollX < -148.0f)
-        w->log.scrollX = -148.0f;
-    if (w->log.scrollY < -240.0f)
-        w->log.scrollY = -240.0f;
-
-#else
     if (w->log.scrollX > 0.0f) w->log.scrollX = 0.0f;
     if (w->log.scrollY > 0.0f) w->log.scrollY = 0.0f;
     if (w->log.scrollX < -148.0f) w->log.scrollX = -148.0f;
     if (w->log.scrollY < -240.0f) w->log.scrollY = -240.0f;
-
-#endif
     w->log.stoneSel = 0;
     w->log.stoneAngle = w->log.stoneAngleTgt = 51.42857f * w->log.stoneSel;
     w->log.stoneWinTgtX = w->log.stoneWinX = 0.0f;
@@ -550,23 +517,6 @@ void winLogInit(WindowWork* w) {
     w->log.enemyNum = 0;
     for (i = 1; i < 0xD8; i++) {
         t = battleGetUnitMonosiriPtr(i);
-#if VERSION <= VERSION_DEMO_US
-        if (!t->tattleLogTag)
-            continue;
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG8_07_BELDAM_CONFRONTATION) {
-            if (i == UNIT_BELDAM_CHAPTER8 || i == UNIT_MARILYN_CHAPTER8 || i == UNIT_DOOPLISS_CHAPTER8)
-                continue;
-        } else {
-            if (i == UNIT_BELDAM_CHAPTER2 || i == UNIT_MARILYN_CHAPTER2 || i == UNIT_DOOPLISS_CHAPTER4_FIGHT1)
-                continue;
-        }
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG8_15_GRODUS) {
-            if (i == UNIT_BOWSER_CHAPTER8)
-                continue;
-        } else {
-            if (i == UNIT_BOWSER_CHAPTER3)
-                continue;
-#else
         if (!t->tattleLogTag) continue;
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG8_07_BELDAM_CONFRONTATION) {
             if (i == UNIT_BELDAM_CHAPTER8 || i == UNIT_MARILYN_CHAPTER8 || i == UNIT_DOOPLISS_CHAPTER8) continue;
@@ -577,7 +527,6 @@ void winLogInit(WindowWork* w) {
             if (i == UNIT_BOWSER_CHAPTER8) continue;
         } else {
             if (i == UNIT_BOWSER_CHAPTER3) continue;
-#endif
         }
         w->log.enemy[w->log.enemyNum].kind = enemy_monoshiri_sort_table[i];
         w->log.enemy[w->log.enemyNum++].id = i;
@@ -599,15 +548,8 @@ void winLogInit(WindowWork* w) {
     w->log.enemyKnown = 0;
     for (i = 1; i < 0xD8; i++) {
         t = battleGetUnitMonosiriPtr(i);
-#if VERSION <= VERSION_DEMO_US
-        if (!t->tattleLogTag)
-            continue;
-        if (i == UNIT_BELDAM_CHAPTER2 || i == UNIT_MARILYN_CHAPTER2 || i == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || i == UNIT_BOWSER_CHAPTER3)
-            continue;
-#else
         if (!t->tattleLogTag) continue;
         if (i == UNIT_BELDAM_CHAPTER2 || i == UNIT_MARILYN_CHAPTER2 || i == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || i == UNIT_BOWSER_CHAPTER3) continue;
-#endif
         if (swGet(i + GSWF_TATTLE_BASE)) {
             w->log.enemyKnown++;
         }
@@ -866,12 +808,7 @@ s32 winLogMain(WindowWork* w) {
             w->log.mapWinTgtY = -480.0f;
             fileFree(w->mapRes);
             w->mapRes = NULL;
-#if VERSION <= VERSION_DEMO_US
-            if (w->log.pose != -1)
-                animPoseRelease(w->log.pose);
-#else
             if (w->log.pose != -1) animPoseRelease(w->log.pose);
-#endif
             w->log.pose = -1;
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
@@ -938,34 +875,6 @@ s32 winLogMain(WindowWork* w) {
         }
         w->log.mapX += dx;
         w->log.mapY += dy;
-#if VERSION <= VERSION_DEMO_US
-        if (w->log.mapX < 16.0f)
-            w->log.mapX = 16.0f;
-        if (w->log.mapY < 8.0f)
-            w->log.mapY = 8.0f;
-        if (w->log.mapX >= 604.0f)
-            w->log.mapX = 604.0f;
-        if (w->log.mapY >= 468.0f)
-            w->log.mapY = 468.0f;
-        ix = w->log.mapX + w->log.scrollX - 230.0f;
-        iy = w->log.mapY + w->log.scrollY - 120.0f;
-        if (ix >= 166.0f)
-            w->log.scrollX -= ix - 166.0f;
-        if (ix <= -150.0f)
-            w->log.scrollX -= 150.0f + ix;
-        if (iy >= 80.0f)
-            w->log.scrollY -= iy - 80.0f;
-        if (iy <= -80.0f)
-            w->log.scrollY -= 80.0f + iy;
-        if (w->log.scrollX > 0.0f)
-            w->log.scrollX = 0.0f;
-        if (w->log.scrollY > 0.0f)
-            w->log.scrollY = 0.0f;
-        if (w->log.scrollX < -148.0f)
-            w->log.scrollX = -148.0f;
-        if (w->log.scrollY < -240.0f)
-            w->log.scrollY = -240.0f;
-#else
         if (w->log.mapX < 16.0f) w->log.mapX = 16.0f;
         if (w->log.mapY < 8.0f) w->log.mapY = 8.0f;
         if (w->log.mapX >= 604.0f) w->log.mapX = 604.0f;
@@ -980,7 +889,6 @@ s32 winLogMain(WindowWork* w) {
         if (w->log.scrollY > 0.0f) w->log.scrollY = 0.0f;
         if (w->log.scrollX < -148.0f) w->log.scrollX = -148.0f;
         if (w->log.scrollY < -240.0f) w->log.scrollY = -240.0f;
-#endif
         w->helpTgtX = -230.0f + w->log.scrollX + w->log.mapX;
         w->helpTgtY = -120.0f + w->log.scrollY + w->log.mapY;
         w->helpTgtX -= 24.0f;
@@ -2012,20 +1920,10 @@ void monosiriMain(MonosiriWork* m) {
         break;
     case 1:
         t = battleGetUnitMonosiriPtr(m->id);
-#if VERSION <= VERSION_DEMO_US
-        if (!animGroupBaseAsync(t->modelName, group, NULL))
-            break;
-        if (m->id == UNIT_SMORG && !animGroupBaseAsync("c_n_moa_a", group, NULL))
-            break;
-        m->alpha += 20;
-        if (m->alpha > 255)
-            m->alpha = 255;
-#else
         if (!animGroupBaseAsync(t->modelName, group, NULL)) break;
         if (m->id == UNIT_SMORG && !animGroupBaseAsync("c_n_moa_a", group, NULL)) break;
         m->alpha += 20;
         if (m->alpha > 255) m->alpha = 255;
-#endif
         if (m->pose1 == -1) {
             if (m->id == UNIT_SMORG) {
                 m->pose1 = animPoseEntry(t->modelName, group);

@@ -278,12 +278,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 
     obj = wp->entries[index].objects;
     for (i = 0; i < wp->entries[index].numJoints; i++, obj++) {
-#if VERSION <= VERSION_DEMO_US
-        if (!obj->joints)
-            break;
-#else
         if (!obj->joints) break;
-#endif
     }
     obj->flags = 0;
     obj->joints = joint;
@@ -320,39 +315,16 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
                     // FAKE: the empty `if (!obj) { }` and `if (1) { }` blocks keep the target block layout of the blend-mode count
                     if (t == 2) {
                         n2++;
-#if VERSION <= VERSION_DEMO_US
-                        if (!obj) {}
-                    } else if (t == 1) {
-                        if (1) {}
-#else
                         if (!obj) {
                         }
                     }
                     else if (t == 1) {
                         if (1) {
                         }
-#endif
                         n1++;
                     }
                     for (k = 0; k < 8; k++) {
                         MapMatSampler* tex = obj->joints->parts[i].material->samplers[k];
-#if VERSION <= VERSION_DEMO_US
-                        if (!tex)
-                            break;
-                        t = tex->blendMode;
-                        if (t == 2)
-                            n2++;
-                        else if (t == 1)
-                            n1++;
-                    }
-                }
-                if (n2)
-                    obj->blendMode = 2;
-                else if (n1)
-                    obj->blendMode = 1;
-                else
-                    obj->blendMode = 0;
-#else
                         if (!tex) break;
                         t = tex->blendMode;
                         if (t == 2) n2++;
@@ -362,7 +334,6 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
                 if (n2) obj->blendMode = 2;
                 else if (n1) obj->blendMode = 1;
                 else obj->blendMode = 0;
-#endif
                 break;
             }
             case 1: {
@@ -394,27 +365,11 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
                 obj->flags |= MAP_OBJ_FLAG_DEPTH_OFFSET;
             }
             switch (joint->drawMode->blendType) {
-#if VERSION <= VERSION_DEMO_US
-                case 0:
-                    obj->blendMode = 2;
-                    break;
-                case 1:
-                    obj->blendMode = 0;
-                    break;
-                case 2:
-                    obj->blendMode = 1;
-                    break;
-                case 3:
-                default:
-                    obj->blendMode = 2;
-                    break;
-#else
                 case 0: obj->blendMode = 2; break;
                 case 1: obj->blendMode = 0; break;
                 case 2: obj->blendMode = 1; break;
                 case 3:
                 default: obj->blendMode = 2; break;
-#endif
             }
         }
         if (obj->flags & MAP_OBJ_FLAG_GROUP) {

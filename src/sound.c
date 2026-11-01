@@ -70,11 +70,7 @@ void sndFree(void* ptr) {
  * DVD audio (2) and stream (3) channel tables with their buffers. Fade in/out default to 10 and 500 ms.
  */
 void SoundInit(void) {
-#if VERSION <= VERSION_DEMO_US
-    SND_HOOKS hooks = (SND_HOOKS){sndMalloc, sndFree};
-#else
     SND_HOOKS hooks = (SND_HOOKS){ sndMalloc, sndFree };
-#endif
     void* data;
     SoundStream* streams;
     SoundSong* songs;

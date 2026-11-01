@@ -1244,11 +1244,10 @@ void loadDraw(CameraId camera, void* param) {
     loadDrawBg(0x35, -304.0f, 240.0f, -272.0f, -240.0f);
     loadDrawBg(0x34, -272.0f, 240.0f, 272.0f, -240.0f);
     loadDrawBg(0x36, 272.0f, 240.0f, 304.0f, -240.0f);
-#if VERSION >= VERSION_US
 
+#if VERSION >= VERSION_US
     win1[0] = win_dt;
 #else
-
     win1 = win_dt;
 #endif
     for (i = 0; i < 9; i++) {

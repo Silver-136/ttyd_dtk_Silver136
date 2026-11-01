@@ -1843,15 +1843,14 @@ void sort_4_1_func(WindowWork* wp) {
     wp->badge.sel[1] = 0;
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
 /** Equipped badges by type, through the pouch (modes 5/12). */
 static void sort_4_2_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 5 : 12);
     wp->sortRev = 1 - wp->sortRev;
     winMakeEquipList(wp);
 #else
-
 /** Demo: equipped badges by type, through the pouch (modes 5/12). */
 void sort_4_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
@@ -1864,8 +1863,8 @@ void sort_4_2_func(WindowWork* wp) {
     wp->badge.sel[1] = 0;
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
 /** Equipped badges by name, then by BP cost, through the pouch. */
 static void sort_4_3_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 4 : 11);
@@ -1873,7 +1872,6 @@ static void sort_4_3_func(WindowWork* wp) {
     wp->sortRev = 1 - wp->sortRev;
     winMakeEquipList(wp);
 #else
-
 /** Demo: equipped badges by name, then by BP cost, through the pouch. */
 void sort_4_3_func(WindowWork* wp) {
     ItemData* db;
@@ -2904,13 +2902,8 @@ void winMailDisp(WindowWork* wp) {
             GXSetScissor(0, 0, 0x260, 0x1E0);
         } else {
             s32 kind2 = wp->item.mail[wp->item.mailSel].kind;
-#if VERSION <= VERSION_DEMO_US
-            GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
-            GXColor black = {0x00, 0x00, 0x00, 0xFF};
-#else
             GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
             GXColor black = { 0x00, 0x00, 0x00, 0xFF };
-#endif
             GXColor col;
 
             mail = mailGetPtr(wp->item.mail[wp->item.mailSel].id);
@@ -2997,19 +2990,11 @@ void winMailDisp(WindowWork* wp) {
                     }
                 } else {
                     if ((gp->retraceCount & 0x1F) < 0x14) {
-#if VERSION <= VERSION_DEMO_US
-                        winIconSet(ICON_ARROW_UP, (Vec){360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                        winIconSet(ICON_ARROW_DOWN, (Vec){360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    }
-                }
-                winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){360.0f + wp->item.mailX, 20.0f + (wp->item.mailY - 230.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#else
                         winIconSet(ICON_ARROW_UP, (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                         winIconSet(ICON_ARROW_DOWN, (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                     }
                 }
                 winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){ 360.0f + wp->item.mailX, 20.0f + (wp->item.mailY - 230.0f), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-#endif
             }
         }
     }

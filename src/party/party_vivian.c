@@ -156,13 +156,12 @@ void mot_vivian_post(void) {
 cancel:
     vivian_cancel_req = 1;
 }
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
 /** Party table init for Vivian: 24 wide by 35 tall, flying follower, base shadow size 10, tail shown and no ripple. */
 void vivian_init(PartyEntry* party) {
     party->memberKind = PARTY_MEMBER_VIVIAN;
 #else
-
 void vivian_init_801809C0(PartyEntry* party) {
     party->memberKind = 6;
 #endif
@@ -225,8 +224,8 @@ void vivianUnhold(PartyEntry* party) {
         party->useMotionId = 20;
     }
 }
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
 
 /**
  * Moves Vivian's tail point (trailPos) a tenth of the way toward her each frame,
@@ -238,7 +237,6 @@ void vivianShadow(PartyEntry* party) {
 
     {
 #else
-
 /** Demo copy: hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
 void partyVivianTailStop(PartyEntry* party) {
     if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {

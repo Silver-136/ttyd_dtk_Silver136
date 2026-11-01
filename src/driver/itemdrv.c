@@ -2080,17 +2080,7 @@ void itemseq_Bound(ItemEntry* entry) {
                         case ITEM_STAR_PIECE:
                             psndSFXOn_3D("SFX_STAR_PIECE_LEAPED1", &pos);
                             break;
-#if VERSION <= VERSION_DEMO_US
-                        case ITEM_DIAMOND_STAR:
-                        case ITEM_EMERALD_STAR:
-                        case ITEM_GOLD_STAR:
-                        case ITEM_RUBY_STAR:
-                        case ITEM_SAPPHIRE_STAR:
-                        case ITEM_GARNET_STAR:
-                        case ITEM_CRYSTAL_STAR:
-#else
                         case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
-#endif
                             psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
                             break;
                         default:

@@ -93,8 +93,8 @@ void yuugijou_init(void) {
     yuwp->recordOn[0][2] = 1;
     yuwp->recordOn[0][3] = 1;
     yuwp->recordOn[0][4] = 1;
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
     yuwp->recordScore[0][0] = 0x18EE8;
     yuwp->recordScore[0][1] = 0x1708E;
     yuwp->recordScore[0][2] = 0x13F42;
@@ -106,9 +106,7 @@ void yuugijou_init(void) {
     yuwp->recordParam[0][2] = 0x16;
     yuwp->recordParam[0][3] = 0x11;
     yuwp->recordParam[0][4] = 0xB;
-
 #else
-
     yuwp->recordScore[0][0] = 0x5B964;
     yuwp->recordScore[0][1] = 0x5825A;
     yuwp->recordScore[0][2] = 0x4F826;
@@ -120,15 +118,14 @@ void yuugijou_init(void) {
     yuwp->recordParam[0][2] = 0xF;
     yuwp->recordParam[0][3] = 0xB;
     yuwp->recordParam[0][4] = 0xA;
-
 #endif
     yuwp->recordOn[1][0] = 1;
     yuwp->recordOn[1][1] = 1;
     yuwp->recordOn[1][2] = 1;
     yuwp->recordOn[1][3] = 1;
     yuwp->recordOn[1][4] = 1;
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
     yuwp->recordScore[1][0] = 0x1D2;
     yuwp->recordScore[1][1] = 0x1EA;
     yuwp->recordScore[1][2] = 0x200;
@@ -140,9 +137,7 @@ void yuugijou_init(void) {
     yuwp->recordParam[1][2] = 0x12;
     yuwp->recordParam[1][3] = 0xE;
     yuwp->recordParam[1][4] = 0x8;
-
 #else
-
     yuwp->recordScore[1][0] = 2;
     yuwp->recordScore[1][1] = 5;
     yuwp->recordScore[1][2] = 0x12;
@@ -158,15 +153,14 @@ void yuugijou_init(void) {
     yuwp->recordParam[1][3] = MAX0(t / 700);
     t = (700 - (s32)yuwp->recordScore[1][4]) * 15;
     yuwp->recordParam[1][4] = MAX0(t / 700);
-
 #endif
     yuwp->recordOn[2][0] = 1;
     yuwp->recordOn[2][1] = 1;
     yuwp->recordOn[2][2] = 1;
     yuwp->recordOn[2][3] = 1;
     yuwp->recordOn[2][4] = 1;
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
     yuwp->recordScore[2][0] = 0x62E8;
     yuwp->recordScore[2][1] = 0x5410;
     yuwp->recordScore[2][2] = 0x4B96;
@@ -178,9 +172,7 @@ void yuugijou_init(void) {
     yuwp->recordParam[2][2] = 0x1B;
     yuwp->recordParam[2][3] = 0xC;
     yuwp->recordParam[2][4] = 0x9;
-
 #else
-
     yuwp->recordScore[2][0] = 0x20850;
     yuwp->recordScore[2][1] = 0x20436;
     yuwp->recordScore[2][2] = 0x20184;
@@ -198,15 +190,14 @@ void yuugijou_init(void) {
 #else
     yuwp->recordParam[2][4] = MAX0(((s32)yuwp->recordScore[2][4] - 109000) / 2000) + 1;
 #endif
-
 #endif
     yuwp->recordOn[3][0] = 1;
     yuwp->recordOn[3][1] = 1;
     yuwp->recordOn[3][2] = 1;
     yuwp->recordOn[3][3] = 1;
     yuwp->recordOn[3][4] = 1;
-#if VERSION <= VERSION_DEMO_US
 
+#if VERSION <= VERSION_DEMO_US
     yuwp->recordScore[3][0] = 0x4EFC;
     yuwp->recordScore[3][1] = 0x4416;
     yuwp->recordScore[3][2] = 0x302A;
@@ -219,7 +210,6 @@ void yuugijou_init(void) {
     yuwp->recordParam[3][3] = 0x10;
     yuwp->recordParam[3][4] = 0xC;
 #else
-
     yuwp->recordScore[3][0] = 0x16BDE;
     yuwp->recordScore[3][1] = 0x16968;
     yuwp->recordScore[3][2] = 0x16382;

@@ -550,12 +550,7 @@ void disp2(CameraId cameraId, void* param) {
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 
-#if VERSION <= VERSION_DEMO_US
-PSTATIC
-void pressStartGX(s32 alpha, f32 x, f32 y) {
-#else
 PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
-#endif
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
     Mtx mtx, scaleMtx;
