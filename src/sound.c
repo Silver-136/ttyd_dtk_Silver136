@@ -2183,20 +2183,20 @@ void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
             stream->loopStart = 0;
         }
         switch (type) {
-            case 0:
+            case SOUND_STREAM_TYPE_RAW:
                 stream->entries[0].size = stream->loopEnd;
                 stream->entries[1].size = stream->loopEnd;
                 stream->entries[0].loopStart = stream->loopStart;
                 stream->entries[1].loopStart = stream->loopStart;
                 stream->dataOffset = 0x40;
                 break;
-            case 1:
+            case SOUND_STREAM_TYPE_DPCM:
                 stream->flags |= SOUND_STREAM_FLAG_DPCM;
                 stream->entries[0].hist = stream->entries[0].initHist;
                 stream->entries[1].hist = stream->entries[1].initHist;
                 stream->dataOffset = 0x40;
                 break;
-            case 2:
+            case SOUND_STREAM_TYPE_ADPCM:
                 stream->flags |= SOUND_STREAM_FLAG_ADPCM;
                 src = (u8*)&header->coef0;
                 dst = (u8*)&stream->entries[0].info;
