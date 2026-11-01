@@ -14,6 +14,10 @@ enum {
 };
 
 // CameraEntry.stateA: the timed move of the field camera (camMain).
+// Fully shown letterbox bars, in pixels (camera letterBoxTop / letterBoxBottom).
+#define LETTER_BOX_TOP_HEIGHT 49
+#define LETTER_BOX_BOTTOM_HEIGHT 44
+
 typedef enum CameraMoveState {
     CAM_MOVE_NONE = 0,
     CAM_MOVE_BACK = 1,       // progressA runs 1 -> 0: evt_cam3d_evt_off

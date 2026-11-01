@@ -615,7 +615,7 @@ USER_FUNC(evt_cam_letter_box_disable) {
 USER_FUNC(evt_cam_letter_box_wait) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
 
-    if ((camera->flags & CAMERA_FLAG_LETTER_BOX) && camera->letterBoxTop == 49 && camera->letterBoxBottom == 44) {
+    if ((camera->flags & CAMERA_FLAG_LETTER_BOX) && camera->letterBoxTop == LETTER_BOX_TOP_HEIGHT && camera->letterBoxBottom == LETTER_BOX_BOTTOM_HEIGHT) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

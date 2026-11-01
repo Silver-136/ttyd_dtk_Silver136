@@ -827,17 +827,17 @@ void camLetterBox(void) {
     if (camera->flags & CAMERA_FLAG_LETTER_BOX) {
         camera->letterBoxAlpha = 0xFF;
         camera->letterBoxTop += 3;
-        if (camera->letterBoxTop > 0x31) {
-            camera->letterBoxTop = 0x31;
+        if (camera->letterBoxTop > LETTER_BOX_TOP_HEIGHT) {
+            camera->letterBoxTop = LETTER_BOX_TOP_HEIGHT;
         }
         camera->letterBoxBottom += 3;
-        if (camera->letterBoxBottom > 0x2C) {
-            camera->letterBoxBottom = 0x2C;
+        if (camera->letterBoxBottom > LETTER_BOX_BOTTOM_HEIGHT) {
+            camera->letterBoxBottom = LETTER_BOX_BOTTOM_HEIGHT;
         }
         if (camera->flags & CAMERA_FLAG_LETTER_BOX_INSTANT) {
             camera->flags &= ~CAMERA_FLAG_LETTER_BOX_INSTANT;
-            camera->letterBoxTop = 0x31;
-            camera->letterBoxBottom = 0x2C;
+            camera->letterBoxTop = LETTER_BOX_TOP_HEIGHT;
+            camera->letterBoxBottom = LETTER_BOX_BOTTOM_HEIGHT;
         }
     } else {
         camera->letterBoxAlpha -= ((0xFF / gp->framerate) * 2);
