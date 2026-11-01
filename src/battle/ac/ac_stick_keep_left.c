@@ -54,7 +54,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
         autoCommand = 1;
     }
     work->actionCommands.params[3] = 0;
-    if (work->actionCommands.acState != 0) {
+    if (work->actionCommands.acState != AC_STATE_INIT) {
         if (work->actionCommands.params[2] != 0) {
             work->actionCommands.params[3] = 1;
         } else {
@@ -69,7 +69,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
             break;
         }
         switch (work->actionCommands.acState) {
-            case 0:
+            case AC_STATE_INIT:
                 work->actionCommands.result = AC_RESULT_RUNNING;
                 cw->idx = 0;
                 memset(disp, 0, sizeof(BattleACDispParams));
@@ -84,15 +84,15 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 for (i = 0; i < 12; i++) {
                     cw->sfx[i] = -1;
                 }
-                work->actionCommands.acState = 99;
+                work->actionCommands.acState = AC_STATE_WAIT_START;
                 break;
-            case 99:
+            case AC_STATE_WAIT_START:
                 break;
-            case 100:
+            case AC_STATE_START:
                 cw->timer = 120;
-                work->actionCommands.acState = 1000;
+                work->actionCommands.acState = AC_STATE_RUN;
                 // fallthrough
-            case 1000:
+            case AC_STATE_RUN:
                 if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
                     if (work->actionCommands.setupFlags & AC_SETUP_FLAG_RETRIES) {
                         work->actionCommands.setupParam--;
@@ -113,22 +113,22 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     if (--cw->timer <= 0) {
                         work->actionCommands.result = 0;
                         loop = 1;
-                        work->actionCommands.acState = 1003;
+                        work->actionCommands.acState = AC_STATE_RUN + 3;
                     }
                 } else {
                     work->actionCommands.outputParams[0] = 1;
-                    work->actionCommands.acState = 1001;
+                    work->actionCommands.acState = AC_STATE_RUN + 1;
                     cw->timer = 1;
                     cw->idx = 1;
                     work->actionCommands.outputParams[1] = 0;
                 }
                 break;
-            case 1001:
+            case AC_STATE_RUN + 1:
                 if (work->actionCommands.countdown > 0) {
                     work->actionCommands.countdown--;
                     loop = 1;
                     work->actionCommands.result = AC_RESULT_SUCCESS;
-                    work->actionCommands.acState = 1003;
+                    work->actionCommands.acState = AC_STATE_RUN + 3;
                 }
                 cw->timer--;
                 if (cw->timer < 0) {
@@ -136,7 +136,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     work->actionCommands.outputParams[1]++;
                     if (cw->idx >= work->actionCommands.params[0] + 2) {
                         work->actionCommands.result &= ~AC_RESULT_RUNNING;
-                        work->actionCommands.acState = 1003;
+                        work->actionCommands.acState = AC_STATE_RUN + 3;
                         work->actionCommands.outputParams[2] = 2;
                         if (work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL) {
                             work->actionCommands.result |= AC_RESULT_SUCCESS;
@@ -184,20 +184,20 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         work->actionCommands.result |= AC_RESULT_SUCCESS;
                         work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         loop = 1;
-                        work->actionCommands.acState = 1003;
+                        work->actionCommands.acState = AC_STATE_RUN + 3;
                     } else if (ok) {
                         work->actionCommands.result |= AC_RESULT_SUCCESS;
                         work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         loop = 1;
-                        work->actionCommands.acState = 1003;
+                        work->actionCommands.acState = AC_STATE_RUN + 3;
                     } else if (!(work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
                         work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         loop = 1;
-                        work->actionCommands.acState = 1003;
+                        work->actionCommands.acState = AC_STATE_RUN + 3;
                     }
                 }
                 break;
-            case 1003: {
+            case AC_STATE_RUN + 3: {
                 s32 k;
                 // retail runs this empty loop over the signal sound slots 0..idx-2
                 j = cw->idx - 2;
@@ -206,19 +206,19 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     }
                 }
             }
-                work->actionCommands.acState = 1004;
+                work->actionCommands.acState = AC_STATE_RUN + 4;
                 break;
-            case 1005:
+            case AC_STATE_RUN + 5:
                 cw->endTimer = 60;
-                work->actionCommands.acState = 1006;
+                work->actionCommands.acState = AC_STATE_RUN + 6;
                 break;
-            case 1006:
+            case AC_STATE_RUN + 6:
                 cw->endTimer--;
                 if (cw->endTimer <= 0) {
-                    work->actionCommands.acState = 1007;
+                    work->actionCommands.acState = AC_STATE_RUN + 7;
                 }
                 break;
-            case 1007:
+            case AC_STATE_RUN + 7:
                 work->actionCommands.maincb = NULL;
                 work->actionCommands.dispcb = NULL;
                 work->actionCommands.resultcb = NULL;
@@ -246,9 +246,9 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
     BattleACDispParams* disp = &ac->disp;
 
     switch (work->actionCommands.acState) {
-        case 99:
-        case 100:
-        case 1000:
+        case AC_STATE_WAIT_START:
+        case AC_STATE_START:
+        case AC_STATE_RUN:
             disp->iconStep = -1;
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
@@ -256,7 +256,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
                 disp->slideTimer--;
             }
             break;
-        case 1001:
+        case AC_STATE_RUN + 1:
             disp->iconStep = cw->idx - 1;
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
@@ -264,13 +264,13 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
                 disp->slideTimer--;
             }
             break;
-        case 1002:
-        case 1003:
-        case 1004:
+        case AC_STATE_RUN + 2:
+        case AC_STATE_RUN + 3:
+        case AC_STATE_RUN + 4:
             actionCommandDisp(30.0f, 0.0f, disp->iconStep);
             break;
-        case 1005:
-        case 1006:
+        case AC_STATE_RUN + 5:
+        case AC_STATE_RUN + 6:
             if (disp->slideTimer >= 40) {
                 disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
@@ -286,7 +286,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
 
 /** Called by btlevtcmd_StopAC: starts the slide-out and the 60-frame end wait. */
 void battleAcDelete_StickKeepLeft(BattleWork* work) {
-    work->actionCommands.acState = 1005;
+    work->actionCommands.acState = AC_STATE_RUN + 5;
 }
 
 /**
@@ -316,16 +316,16 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     count = ac->params[0];
     idx = ((SklWork*)ac->work)->idx - 1;
     switch (ac->acState) {
-        case 0:
-        case 99:
-        case 100: {
+        case AC_STATE_INIT:
+        case AC_STATE_WAIT_START:
+        case AC_STATE_START: {
             Vec p = {0.0f, 0.0f, 0.0f};
             p.x = -200.0f + x;
             p.y = 70.0f + y;
             iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_NEUTRAL, 1.0f);
             break;
         }
-        case 1000:
+        case AC_STATE_RUN:
             if (gp->retraceCount & 8) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;

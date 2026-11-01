@@ -138,7 +138,7 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
     }
     pressed = 0;
     switch (work->actionCommands.acState) {
-        case 0:
+        case AC_STATE_INIT:
             memset(d, 0, sizeof(BattleACDispParams));
             d->iconX = -300.0f;
             d->iconY = 0.0f;
@@ -152,11 +152,11 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
             work->actionCommands.result = AC_RESULT_RUNNING;
             r->grace = 0;
             _init_param(work);
-            work->actionCommands.acState = 99;
+            work->actionCommands.acState = AC_STATE_WAIT_START;
             break;
-        case 99:
+        case AC_STATE_WAIT_START:
             break;
-        case 100:
+        case AC_STATE_START:
             if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) &&
                   (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
                 if (r->holdMask) {
@@ -166,9 +166,9 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
                 }
             }
             BattleAcGaugeSeInit();
-            work->actionCommands.acState = 1000;
+            work->actionCommands.acState = AC_STATE_RUN;
             work->actionCommands.outputParams[0] = 1;
-        case 1000:
+        case AC_STATE_RUN:
             switch (work->actionCommands.params[0]) {
                 case 10:
                     if (r->resetFlag) {
@@ -272,19 +272,19 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
                 work->actionCommands.result |= AC_RESULT_SUCCESS;
             }
             battleAcDelete_Repeatedly(work);
-            work->actionCommands.acState = 1002;
+            work->actionCommands.acState = AC_STATE_RUN + 2;
             break;
-        case 1002:
+        case AC_STATE_RUN + 2:
             r->endTimer = 60;
-            work->actionCommands.acState = 1003;
+            work->actionCommands.acState = AC_STATE_RUN + 3;
             break;
-        case 1003:
+        case AC_STATE_RUN + 3:
             r->endTimer--;
             if (r->endTimer <= 0) {
-                work->actionCommands.acState = 1004;
+                work->actionCommands.acState = AC_STATE_RUN + 4;
             }
             break;
-        case 1004:
+        case AC_STATE_RUN + 4:
             work->actionCommands.maincb = NULL;
             work->actionCommands.dispcb = NULL;
             work->actionCommands.resultcb = NULL;
@@ -308,18 +308,18 @@ void battleAcDisp_Repeatedly(CameraId cameraId, void* param) {
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
     switch (ac->acState) {
-        case 99:
-        case 100:
-        case 1000:
-        case 1001:
+        case AC_STATE_WAIT_START:
+        case AC_STATE_START:
+        case AC_STATE_RUN:
+        case AC_STATE_RUN + 1:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY);
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
             break;
-        case 1002:
-        case 1003:
+        case AC_STATE_RUN + 2:
+        case AC_STATE_RUN + 3:
             if (disp->slideTimer >= 40) {
                 disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
@@ -344,7 +344,7 @@ void battleAcDelete_Repeatedly(BattleWork* work) {
             break;
     }
     BattleAcGaugeSeDelete();
-    work->actionCommands.acState = 1002;
+    work->actionCommands.acState = AC_STATE_RUN + 2;
 }
 
 /**

@@ -97,7 +97,7 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 se
     entry = ActionCommandList;
     work->actionCommands.acUnit = unit;
     work->actionCommands.setupFlags = setupFlags;
-    work->actionCommands.acState = 0;
+    work->actionCommands.acState = AC_STATE_INIT;
     work->actionCommands.resultCount = 0;
     work->actionCommands.result = AC_RESULT_RUNNING;
     work->actionCommands.maincb = NULL;
@@ -121,7 +121,7 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 se
 
 /** Starts the prepared action command (state 100 tells its main callback to begin). */
 void BattleActionCommandStart(BattleWork* work) {
-    work->actionCommands.acState = 100;
+    work->actionCommands.acState = AC_STATE_START;
 }
 
 /** Ends the active action command early through its delete callback. */

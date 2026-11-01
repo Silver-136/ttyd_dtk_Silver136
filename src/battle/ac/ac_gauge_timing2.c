@@ -64,7 +64,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
         autoCommand = 1;
     }
     switch (work->actionCommands.acState) {
-        case 0:
+        case AC_STATE_INIT:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
@@ -73,7 +73,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             disp->color = (GXColor){255, 255, 255, 255};
             gw->frame = 0;
             gw->frame2 = 0;
-            work->actionCommands.acState = 99;
+            work->actionCommands.acState = AC_STATE_WAIT_START;
             work->actionCommands.result = AC_RESULT_RUNNING;
             gw->totalFrames = work->actionCommands.params[1];
             gw->hit = 0;
@@ -92,10 +92,10 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             work->actionCommands.outputParams[1] = 0;
             break;
 
-        case 99:
+        case AC_STATE_WAIT_START:
             break;
 
-        case 100:
+        case AC_STATE_START:
             if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     work->actionCommands.setupParam = 30;
@@ -104,12 +104,12 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                     gw->miss = 1;
                     work->actionCommands.setupParam = 30;
                 }
-                work->actionCommands.acState = 1001;
+                work->actionCommands.acState = AC_STATE_RUN + 1;
                 break;
             }
-            work->actionCommands.acState = 1000;
+            work->actionCommands.acState = AC_STATE_RUN;
 
-        case 1000:
+        case AC_STATE_RUN:
             gw->frame++;
             pressed = 0;
             if (BattlePadCheckTrigger(gw->button)) {
@@ -136,7 +136,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                 } else {
                     work->actionCommands.result = 0;
                 }
-                work->actionCommands.acState = 1002;
+                work->actionCommands.acState = AC_STATE_RUN + 2;
                 break;
             }
             gw->frame2++;
@@ -214,7 +214,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             }
             break;
 
-        case 1001:
+        case AC_STATE_RUN + 1:
             work->actionCommands.setupParam--;
             if (work->actionCommands.setupParam < 0) {
                 if (gw->miss) {
@@ -230,23 +230,23 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             }
             break;
 
-        case 1002:
-            work->actionCommands.acState = 1003;
+        case AC_STATE_RUN + 2:
+            work->actionCommands.acState = AC_STATE_RUN + 3;
 
-        case 1003:
+        case AC_STATE_RUN + 3:
             work->actionCommands.outputParams[1] = 1;
             work->actionCommands.doneFlags |= AC_DONE_FLAG_FINISHED;
             gw->endTimer = 60;
-            work->actionCommands.acState = 1004;
+            work->actionCommands.acState = AC_STATE_RUN + 4;
 
-        case 1004:
+        case AC_STATE_RUN + 4:
             gw->endTimer--;
             if (gw->endTimer <= 0) {
-                work->actionCommands.acState = 1005;
+                work->actionCommands.acState = AC_STATE_RUN + 5;
             }
             break;
 
-        case 1005:
+        case AC_STATE_RUN + 5:
             work->actionCommands.maincb = NULL;
             work->actionCommands.dispcb = NULL;
             work->actionCommands.resultcb = NULL;
@@ -271,18 +271,18 @@ void battleAcDisp_GaugeTiming2(CameraId cameraId, void* param) {
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
     switch (ac->acState) {
-        case 99:
+        case AC_STATE_WAIT_START:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
-        case 100:
-        case 1000:
-        case 1002:
+        case AC_STATE_START:
+        case AC_STATE_RUN:
+        case AC_STATE_RUN + 2:
             actionCommandDisp(disp->iconX, disp->iconY);
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
             break;
-        case 1003:
-        case 1004:
+        case AC_STATE_RUN + 3:
+        case AC_STATE_RUN + 4:
             if (disp->slideTimer >= 40) {
                 disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
@@ -299,7 +299,7 @@ void battleAcDisp_GaugeTiming2(CameraId cameraId, void* param) {
 /** Called by btlevtcmd_StopAC: unless the command already finished, starts the 60-frame end wait. */
 void battleAcDelete_GaugeTiming2(BattleWork* work) {
     if (!(work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED)) {
-        work->actionCommands.acState = 1003;
+        work->actionCommands.acState = AC_STATE_RUN + 3;
     }
 }
 
@@ -395,11 +395,11 @@ static void actionCommandDisp(f32 x, f32 y) {
     pressedIcon = BattleACGetButtonIcon(PAD_BUTTON_A, 1);
     icon = BattleACGetButtonIcon(PAD_BUTTON_A, 0);
     switch (ac->acState) {
-        case 99:
-        case 100:
-        case 1002:
-        case 1003:
-        case 1004: {
+        case AC_STATE_WAIT_START:
+        case AC_STATE_START:
+        case AC_STATE_RUN + 2:
+        case AC_STATE_RUN + 3:
+        case AC_STATE_RUN + 4: {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 // FAKE: e0 and e1 are never used; removing them changes the object
                 Vec e0 = {0.0f, 0.0f, 0.0f};
@@ -409,7 +409,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 iconDispGx(&p, ICON_FLAG_2D, icon, 1.0f);
                 break;
         }
-        case 1000:
+        case AC_STATE_RUN:
             if (gw->hit) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 // FAKE: e0 and e1 are never used; removing them changes the object

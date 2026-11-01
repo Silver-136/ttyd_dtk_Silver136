@@ -89,7 +89,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
     BtlUnit_GetPartsPtr(unit, work->actionCommands.params[PENDULUM_PARAM_PARTS_ID]);
 
     switch (work->actionCommands.acState) {
-        case 0:
+        case AC_STATE_INIT:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
@@ -107,11 +107,11 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             work->actionCommands.outputParams[1] = _get_angle_hp(50);
             work->actionCommands.outputParams[2] = _get_angle_hp(0);
             cw->rate = 50;
-            work->actionCommands.acState = 99;
+            work->actionCommands.acState = AC_STATE_WAIT_START;
             work->actionCommands.result = AC_RESULT_RUNNING;
             cw->sfxId = -1;
             break;
-        case 100:
+        case AC_STATE_START:
             BtlUnit_SetRotateOffset(unit, 0.0f, (f32)work->actionCommands.params[PENDULUM_PARAM_ROT_OFFSET], 0.0f);
             unit = BattleGetUnitPtr(work, work->actionCommands.params[PENDULUM_PARAM_UNIT_ID]);
             BtlUnit_GetPartsPtr(unit, work->actionCommands.params[PENDULUM_PARAM_PARTS_ID]);
@@ -120,8 +120,8 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             cw->frame = 0;
             cw->speed = 0.5f;
             cw->flag = 1;
-            work->actionCommands.acState = 1000;
-        case 1000:
+            work->actionCommands.acState = AC_STATE_RUN;
+        case AC_STATE_RUN:
             cw->frame++;
             cw->ang360 = (f32)(((cw->cur + cw->vel) % (work->actionCommands.params[PENDULUM_PARAM_PERIOD] * 2)) * 360 /
                                (work->actionCommands.params[PENDULUM_PARAM_PERIOD] * 2));
@@ -202,29 +202,29 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
                 work->actionCommands.outputParams[0] = 1;
                 work->actionCommands.result = AC_RESULT_SUCCESS;
                 work->actionCommands.resultCount++;
-                work->actionCommands.acState = 1002;
+                work->actionCommands.acState = AC_STATE_RUN + 2;
                 break;
             }
             if (cw->frame > work->actionCommands.params[PENDULUM_PARAM_MAX_FRAMES]) {
                 work->actionCommands.result = 0;
-                work->actionCommands.acState = 1002;
+                work->actionCommands.acState = AC_STATE_RUN + 2;
             }
             break;
-        case 1002:
+        case AC_STATE_RUN + 2:
             ac->doneFlags |= AC_DONE_FLAG_FINISHED;
             cw->endTimer = 60;
             if (cw->sfxId != 0xFFFFFFFF) {
                 psndSFXOff(cw->sfxId);
             }
-            work->actionCommands.acState = 1003;
-        case 1003:
+            work->actionCommands.acState = AC_STATE_RUN + 3;
+        case AC_STATE_RUN + 3:
             cw->endTimer--;
             if (cw->endTimer > 0) {
                 break;
             }
-            work->actionCommands.acState = 1004;
+            work->actionCommands.acState = AC_STATE_RUN + 4;
             break;
-        case 1004:
+        case AC_STATE_RUN + 4:
             work->actionCommands.maincb = NULL;
             work->actionCommands.dispcb = NULL;
             work->actionCommands.resultcb = NULL;
@@ -251,17 +251,17 @@ void battleAcDisp_PendulumCraneTiming(CameraId cameraId, void* param) {
     BattleActions* ac = &w->actionCommands;
     disp = &ac->disp;
     switch (ac->acState) {
-        case 99:
+        case AC_STATE_WAIT_START:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
-        case 100:
-        case 1000:
+        case AC_STATE_START:
+        case AC_STATE_RUN:
             actionCommandDisp(disp->iconX, disp->iconY);
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
             break;
-        case 1002:
-        case 1003:
+        case AC_STATE_RUN + 2:
+        case AC_STATE_RUN + 3:
             if (disp->slideTimer >= 40) {
                 disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
@@ -280,7 +280,7 @@ void battleAcDelete_PendulumCraneTiming(BattleWork* work) {
     if (work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED) {
         return;
     }
-    work->actionCommands.acState = 1002;
+    work->actionCommands.acState = AC_STATE_RUN + 2;
 }
 
 /**

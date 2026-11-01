@@ -78,7 +78,7 @@ static void actionCommandDisp(f32 x, f32 y) {
 
 /** Called by btlevtcmd_StopAC: starts the 60-frame end wait. */
 void battleAcDelete_TimingA(BattleWork* work) {
-    work->actionCommands.acState = 1000;
+    work->actionCommands.acState = AC_STATE_RUN;
 }
 
 /**
@@ -96,10 +96,10 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     int iconSlot;
     switch (work->actionCommands.acState) {
 #endif
-        case 99:
+        case AC_STATE_WAIT_START:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             // no break: case 100 sets iconX to 30.0f, so the icon does not slide in
-        case 100:
+        case AC_STATE_START:
 #if VERSION > VERSION_DEMO_US
             disp->iconX = 30.0f;
 #endif
@@ -108,8 +108,8 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
                 disp->slideTimer--;
             }
             break;
-        case 1000:
-        case 1001:
+        case AC_STATE_RUN:
+        case AC_STATE_RUN + 1:
             if (disp->slideTimer >= 40) {
 #if VERSION <= VERSION_DEMO_US
                 disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
@@ -229,28 +229,28 @@ s32 battleAcMain_TimingA(BattleWork* work) {
     BattleACDispParams* disp = &ac->disp;
 
     switch (work->actionCommands.acState) {
-        case 0:
+        case AC_STATE_INIT:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
-            work->actionCommands.acState = 99;
+            work->actionCommands.acState = AC_STATE_WAIT_START;
             // FAKE: flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object
             ((TimingAWork*)work->actionCommands.work)->flags &= ~1;
             work->actionCommands.outputParams[0] = 0;
             break;
-        case 100:
+        case AC_STATE_START:
             break;
-        case 1000:
+        case AC_STATE_RUN:
             tw->endTimer = 60;
-            work->actionCommands.acState = 1001;
-        case 1001:
+            work->actionCommands.acState = AC_STATE_RUN + 1;
+        case AC_STATE_RUN + 1:
             tw->endTimer--;
             if (tw->endTimer <= 0) {
-                work->actionCommands.acState = 1002;
+                work->actionCommands.acState = AC_STATE_RUN + 2;
             }
             break;
-        case 1002:
+        case AC_STATE_RUN + 2:
             work->actionCommands.maincb = NULL;
             work->actionCommands.dispcb = NULL;
             work->actionCommands.resultcb = NULL;
