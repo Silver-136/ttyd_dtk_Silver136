@@ -28,6 +28,15 @@
 double cos(float);
 #endif
 HitEntry* hitEstimate(s32* out);
+
+// hitEstimate's *out: what the swing will hit; it picks the pose, the effect and the swing length.
+enum {
+    HAMMER_HIT_NONE = 0,
+    HAMMER_HIT_HIGH = 4,     // a wall or object at high height
+    HAMMER_HIT_MIDDLE = 5,
+    HAMMER_HIT_LOW = 6,
+    HAMMER_HIT_OVERHEAD = 7, // just above Mario's head height
+};
 static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32* hy, f32* hz, f32* nx, f32* ny, f32* nz);
 
 
@@ -179,25 +188,25 @@ void mot_hammer(void) {
         if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
             s32 ok = chkBlock(mobjHitObjPtrToPtr(hit));
             if (ok) {
-                kind = 0;
+                kind = HAMMER_HIT_NONE;
             }
         }
         switch (pouchGetHammerLv()) {
         case 1:
-            marioChgPose(kind == 7 ? "M_H_2" : "M_H_1");
+            marioChgPose(kind == HAMMER_HIT_OVERHEAD ? "M_H_2" : "M_H_1");
             break;
         case 2:
-            marioChgPose(kind == 7 ? "M_H_5" : "M_H_4");
+            marioChgPose(kind == HAMMER_HIT_OVERHEAD ? "M_H_5" : "M_H_4");
             break;
         case 3:
-            marioChgPose(kind == 7 ? "M_H_8" : "M_H_7");
+            marioChgPose(kind == HAMMER_HIT_OVERHEAD ? "M_H_8" : "M_H_7");
             break;
         }
-        if (kind != 0) {
+        if (kind != HAMMER_HIT_NONE) {
             {
                 // FAKE: spare copy of kind in its own block; using kind directly changes the object
                 s32 k = kind;
-                mario->mot.hammer.hitFrames = k == 7 ? 3 : k;
+                mario->mot.hammer.hitFrames = k == HAMMER_HIT_OVERHEAD ? 3 : k;
             }
             mario->flags |= MARIO_FLAG_HAMMER_HIT_WALL;
         } else {
@@ -270,23 +279,23 @@ void mot_hammer(void) {
         if (!(mario->dispFlags & MARIO_DISP_FLAG_REAR_POSE)) {
             efType = -1;
             switch (mario->mot.hammer.hitKind) {
-                case 7:
+                case HAMMER_HIT_OVERHEAD:
                     movePos(&px, &pz, 16.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
                     ez = 53.0f;
                     efType = 0x16;
                     break;
-                case 0:
-                case 6:
+                case HAMMER_HIT_NONE:
+                case HAMMER_HIT_LOW:
                     movePos(&px, &pz, 25.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
                     ez = -3.0f;
                     efType = 0x15;
                     break;
-                case 5:
+                case HAMMER_HIT_MIDDLE:
                     movePos(&px, &pz, 31.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
                     ez = 5.0f;
                     efType = 0x15;
                     break;
-                case 4:
+                case HAMMER_HIT_HIGH:
                     movePos(&px, &pz, 30.0f, toMovedir2(mario->displayDirectionTarget, 0.0f));
                     ez = 30.0f;
                     efType = 0x16;
@@ -295,23 +304,23 @@ void mot_hammer(void) {
         } else {
             efType = -1;
             switch (mario->mot.hammer.hitKind) {
-                case 7:
+                case HAMMER_HIT_OVERHEAD:
                     movePos(&px, &pz, 16.0f, toMovedir2(mario->displayDirectionTarget, -2.0f));
                     ez = 53.0f;
                     efType = 0x16;
                     break;
-                case 0:
-                case 6:
+                case HAMMER_HIT_NONE:
+                case HAMMER_HIT_LOW:
                     movePos(&px, &pz, 30.0f, toMovedir2(mario->displayDirectionTarget, -6.0f));
                     ez = -3.0f;
                     efType = 0x15;
                     break;
-                case 5:
+                case HAMMER_HIT_MIDDLE:
                     movePos(&px, &pz, 36.0f, toMovedir2(mario->displayDirectionTarget, -6.0f));
                     ez = 20.0f;
                     efType = 0x16;
                     break;
-                case 4:
+                case HAMMER_HIT_HIGH:
                     movePos(&px, &pz, 37.0f, toMovedir2(mario->displayDirectionTarget, -6.0f));
                     ez = 28.0f;
                     efType = 0x16;
@@ -774,7 +783,7 @@ HitEntry* hitEstimate(s32* out) {
     f32 ang;
 #endif
     mario = marioGetPtr();
-    *out = 0;
+    *out = HAMMER_HIT_NONE;
     a = mario->displayDirection;
     {
         f32 off = (marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE) ? -20.0f : 0.0f;
@@ -804,7 +813,7 @@ HitEntry* hitEstimate(s32* out) {
         q.targetDistance = 14.0f;
         hit = hitCheckVecFilter(&q, NULL);
         if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
-            *out = 7;
+            *out = HAMMER_HIT_OVERHEAD;
             return hit;
         }
     }
@@ -827,7 +836,7 @@ HitEntry* hitEstimate(s32* out) {
         q.targetDistance = 26.0f;
         hit = hitCheckVecFilter(&q, NULL);
         if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
-            *out = (q.hitPos.y - mario->position.y > 30.0f) ? 4 : 5;
+            *out = (q.hitPos.y - mario->position.y > 30.0f) ? HAMMER_HIT_HIGH : HAMMER_HIT_MIDDLE;
             return hit;
         }
     }
@@ -850,7 +859,7 @@ HitEntry* hitEstimate(s32* out) {
         q.targetDistance = 30.0f;
         hit = hitCheckVecFilter(&q, NULL);
         if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
-            *out = 5;
+            *out = HAMMER_HIT_MIDDLE;
             return hit;
         }
     }
@@ -888,7 +897,7 @@ HitEntry* hitEstimate(s32* out) {
                 q.targetDistance = d;
                 hit = hitCheckVecFilter(&q, NULL);
                 if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
-                    *out = (q.hitPos.y - mario->position.y > 13.0f) ? 5 : 6;
+                    *out = (q.hitPos.y - mario->position.y > 13.0f) ? HAMMER_HIT_MIDDLE : HAMMER_HIT_LOW;
                     return hit;
                 }
             }

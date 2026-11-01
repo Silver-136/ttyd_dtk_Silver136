@@ -13,6 +13,14 @@ enum {
     CAM_MODE_NO_ROAD = 3,  // field camera with no road loaded: nothing runs
 };
 
+// CameraEntry.stateA: the timed move of the field camera (camMain).
+typedef enum CameraMoveState {
+    CAM_MOVE_NONE = 0,
+    CAM_MOVE_BACK = 1,       // progressA runs 1 -> 0: evt_cam3d_evt_off
+    CAM_MOVE_TO_UNUSED = 2,  // handled like CAM_MOVE_TO_STORED, never set
+    CAM_MOVE_TO_STORED = 3,  // progressA runs 0 -> 1 towards storedPos/storedAt
+} CameraMoveState;
+
 typedef struct CameraEntry CameraEntry;
 typedef void (*CameraCallback)(CameraEntry* entry);
 

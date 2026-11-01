@@ -2,6 +2,7 @@
 
 #include "version.h"
 #include "battle/battle_audience.h"
+#include "battle/battle_audience_anim.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_unit.h"
@@ -2441,30 +2442,30 @@ void BattleAudienceAnimProcess(void) {
             continue;
         }
         switch (pc[0]) {
-        case -2:
+        case AUD_OP_FRAME:
             m->texId = pc[1];
             m->animWait = pc[2];
             m->animPc += 3;
             break;
-        case -3:
+        case AUD_OP_RESTART:
             m->animPc = m->animStart;
             break;
-        case -4:
+        case AUD_OP_LABEL:
             m->animPc += 2;
             break;
-        case -5:
+        case AUD_OP_GOTO:
             target = pc[1];
             m->animPc = m->animStart;
-            while (!(m->animPc[0] == -4 && m->animPc[1] == target)) {
+            while (!(m->animPc[0] == AUD_OP_LABEL && m->animPc[1] == target)) {
                 m->animPc++;
             }
             break;
-        case -6:
+        case AUD_OP_REPEAT:
             m->animLoop[m->animDepth] = pc[1];
             m->animDepth++;
             m->animPc += 2;
             break;
-        case -7:
+        case AUD_OP_END_REPEAT:
             m->animLoop[m->animDepth - 1]--;
             if (m->animLoop[m->animDepth - 1] <= 0) {
                 m->animDepth--;
@@ -2473,17 +2474,17 @@ void BattleAudienceAnimProcess(void) {
                 n = 1;
                 do {
                     m->animPc--;
-                    if (m->animPc[0] == -6) n--;
-                    if (m->animPc[0] == -7) n++;
+                    if (m->animPc[0] == AUD_OP_REPEAT) n--;
+                    if (m->animPc[0] == AUD_OP_END_REPEAT) n++;
                 } while (n > 0);
                 m->animPc += 2;
             }
             break;
-        case -8:
+        case AUD_OP_WAIT:
             m->animWait = pc[1];
             m->animPc += 2;
             break;
-        case -1:
+        case AUD_OP_END:
             break;
         }
     }

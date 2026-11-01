@@ -153,7 +153,7 @@ USER_FUNC(evt_cam3d_evt_zoom_in) {
     camera->storedAt.z += (f32)dist * (f32)sin(camera->viewYaw);
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
-    camera->stateA = 3;
+    camera->stateA = CAM_MOVE_TO_STORED;
     camera->curveA = curve;
     return EVT_RETURN_DONE;
 }
@@ -186,7 +186,7 @@ USER_FUNC(evt_cam3d_evt_set_at) {
     camera->storedAt = at;
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
-    camera->stateA = 3;
+    camera->stateA = CAM_MOVE_TO_STORED;
     camera->curveA = curve;
     return EVT_RETURN_DONE;
 }
@@ -217,7 +217,7 @@ USER_FUNC(evt_cam3d_evt_set) {
     camera->storedAt = at;
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
-    camera->stateA = 3;
+    camera->stateA = CAM_MOVE_TO_STORED;
     camera->curveA = curve;
     return EVT_RETURN_DONE;
 }
@@ -264,7 +264,7 @@ USER_FUNC(evt_cam3d_evt_set_rel) {
     }
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
-    camera->stateA = 3;
+    camera->stateA = CAM_MOVE_TO_STORED;
     camera->curveA = curve;
     return EVT_RETURN_DONE;
 }
@@ -302,7 +302,7 @@ USER_FUNC(evt_cam3d_evt_set_npc_rel) {
     camera->storedAt = npcAt;
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
-    camera->stateA = 3;
+    camera->stateA = CAM_MOVE_TO_STORED;
     camera->curveA = curve;
     return EVT_RETURN_DONE;
 }
@@ -344,7 +344,7 @@ USER_FUNC(evt_cam3d_evt_set_rel_dir) {
     camera->storedAt = marAt;
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
-    camera->stateA = 3;
+    camera->stateA = CAM_MOVE_TO_STORED;
     camera->curveA = curve;
     return EVT_RETURN_DONE;
 }
@@ -368,7 +368,7 @@ USER_FUNC(evt_cam3d_evt_off) {
     camera->presetAt = camera->cameraAt;
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
-    camera->stateA = 1;
+    camera->stateA = CAM_MOVE_BACK;
     camera->curveA = curve;
     return EVT_RETURN_DONE;
 }
@@ -473,7 +473,7 @@ USER_FUNC(evt_cam3d_evt_set_now) {
     camera->presetAt = camera->storedAt;
     camera->startTimeA = gp->renderTime;
     camera->durationA = 0;
-    camera->stateA = 3;
+    camera->stateA = CAM_MOVE_TO_STORED;
     camera->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }

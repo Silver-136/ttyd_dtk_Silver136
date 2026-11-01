@@ -111,7 +111,7 @@ CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 ne
     camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);
     camera->callback = callback;
     camera->mode = CAM_MODE_OFF;
-    camera->stateA = 0;
+    camera->stateA = CAM_MOVE_NONE;
     camera->progressA = 0.0f;
     camera->fovY = fovY;
     camera->aspect = aspect;
@@ -398,7 +398,7 @@ void camLoadRoad(CameraId cameraId, const char* filename) {
     camera->viewOffset.z = 0.0f;
     camera->viewOffset.y = 0.0f;
     camera->viewOffset.x = 0.0f;
-    camera->stateA = 0;
+    camera->stateA = CAM_MOVE_NONE;
     camera->curveA = EASING_SINE_IN_OUT;
     camera->progressA = 0.0f;
     camera->curveB = EASING_SINE_IN_OUT;
@@ -413,7 +413,7 @@ void camUnLoadRoad(CameraId cameraId) {
     CameraEntry* camera = camGetPtr(cameraId);
     camera->flags &= ~CAMERA_FLAG_ROAD;
     camGetPtr(cameraId)->mode = CAM_MODE_OFF;
-    camera->stateA = 0;
+    camera->stateA = CAM_MOVE_NONE;
     camera->progressA = 0.0f;
     camera->fovY = 25.0f;
     camera->rollAngle = 0.0f;
@@ -451,33 +451,33 @@ void cam3dMain(CameraEntry* camera) {
     switch (camera->mode) {
         case CAM_MODE_FIELD:
             switch (camera->stateA) {
-                case 1:
+                case CAM_MOVE_BACK:
                     if (camera->durationA > 0) {
                         camera->progressA = 1.0f - (f32)(gp->renderTime - camera->startTimeA) / (f32)camera->durationA;
                         if (camera->progressA < 0.0f) {
                             camera->progressA = 0.0f;
-                            camera->stateA = 0;
+                            camera->stateA = CAM_MOVE_NONE;
                         }
                     } else {
                         camera->progressA = 0.0f;
-                        camera->stateA = 0;
+                        camera->stateA = CAM_MOVE_NONE;
                     }
                     break;
-                case 2:
-                case 3:
+                case CAM_MOVE_TO_UNUSED:
+                case CAM_MOVE_TO_STORED:
                     if (camera->durationA > 0) {
                         camera->progressA = (f32)(gp->renderTime - camera->startTimeA) / (f32)camera->durationA;
                         if (camera->progressA > 1.0f) {
                             camera->progressA = 1.0f;
-                            camera->stateA = 0;
+                            camera->stateA = CAM_MOVE_NONE;
                         }
                     } else {
                         camera->progressA = 1.0f;
-                        camera->stateA = 0;
+                        camera->stateA = CAM_MOVE_NONE;
                     }
                     break;
 
-                case 0:
+                case CAM_MOVE_NONE:
                     break;
             }
 
@@ -567,9 +567,9 @@ void cam3dMain(CameraEntry* camera) {
                 work.at.z = camera->storedAt.z;
 
                 switch (camera->stateA) {
-                    case 0:
-                    case 1:
-                    case 2:
+                    case CAM_MOVE_NONE:
+                    case CAM_MOVE_BACK:
+                    case CAM_MOVE_TO_UNUSED:
                         if (camera->flags & CAMERA_FLAG_ROAD) {
                             MarioWork* mario = marioGetPtr();
                             f32 bank = 0.0f;
@@ -592,7 +592,7 @@ void cam3dMain(CameraEntry* camera) {
                         }
                         break;
 
-                    case 3:
+                    case CAM_MOVE_TO_STORED:
                         work2.fovY = work.fovY;
                         work2.aspect = work.aspect;
                         work2.far = work.far;
