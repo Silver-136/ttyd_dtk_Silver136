@@ -23,11 +23,28 @@ typedef struct Moamoa {
     u16 flags;          // 0x00
     s16 state;          // 0x02
     s16 timer;          // 0x04
-    Vec target;         // 0x08
-    f32 vy;             // 0x14
-    s16 jumpTimer;      // 0x18
-    f32 speed;          // 0x1C
-    f32 gravity;        // 0x20
+    union {             // 0x08
+        Vec target;     // jump (MOAMOA_STATE_JUMP): where it lands
+        Vec driftVel;   // MOAMOA_STATE_BLOWN_DRIFT: added to its position every frame
+    };
+    union {             // 0x14
+        f32 vy;         // jump: vertical speed, reduced by gravity every frame
+        f32 driftAccelX; // blown: added to driftVel every frame, as are the two below
+    };
+    union {             // 0x18
+        s16 jumpTimer;  // jump: frames left
+        s16 driftTimer; // blown: frames left
+    };
+    union {             // 0x1C
+        f32 speed;      // jump: horizontal speed
+        f32 driftAccelY;
+        f32 circleHeight; // MOAMOA_STATE_GATHER_UNUSED: height above the target it circles
+    };
+    union {             // 0x20
+        f32 gravity;    // jump
+        f32 driftAccelZ;
+        f32 circleRadius; // MOAMOA_STATE_GATHER_UNUSED
+    };
     s16 next;           // 0x24
     f32 lastX;          // 0x28
     f32 lastZ;          // 0x2C

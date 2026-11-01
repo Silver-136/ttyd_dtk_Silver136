@@ -17,9 +17,9 @@ typedef enum StickRotateParam {
     STICK_ROTATE_PARAM_START_TIME = 1,
     STICK_ROTATE_PARAM_BUTTON = 2,
     STICK_ROTATE_PARAM_NEED_COUNT = 3,
-    STICK_ROTATE_PARAM_STEPS_A = 4,
-    STICK_ROTATE_PARAM_STEPS_B = 5,
-    STICK_ROTATE_PARAM_TIMEOUT = 6,
+    STICK_ROTATE_PARAM_FAST_STEP_FRAMES = 4, // a step made in fewer frames counts as a fast step
+    STICK_ROTATE_PARAM_MAX_STEP_FRAMES = 5,  // a step taking more frames fails the command
+    STICK_ROTATE_PARAM_MAX_FAST_STEPS = 6,   // more fast steps than this fail the command
 } StickRotateParam;
 
 typedef struct StickRotateWork {
@@ -34,7 +34,7 @@ typedef struct StickRotateWork {
     u16 steps;    // 0x8, direction changes so far; 8 = one full turn
     u8 pad_A[2];
     s32 timer;    // 0xC
-    u16 fastSteps; // 0x10, steps made sooner than STICK_ROTATE_PARAM_STEPS_A frames
+    u16 fastSteps; // 0x10, steps made sooner than STICK_ROTATE_PARAM_FAST_STEP_FRAMES frames
     u8 pad_12[2];
     s32 endTimer; // 0x14
 } StickRotateWork;
@@ -264,13 +264,13 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                             if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_STRICT_UNUSED) {
                                 if (sw->steps > 1) {
                                     s8 st = sw->stepFrames;
-                                    if (st > work->actionCommands.params[STICK_ROTATE_PARAM_STEPS_B]) {
+                                    if (st > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_STEP_FRAMES]) {
                                         stickRotateFail(work);
                                         restart = TRUE;
                                         break;
-                                    } else if (st < work->actionCommands.params[STICK_ROTATE_PARAM_STEPS_A]) {
+                                    } else if (st < work->actionCommands.params[STICK_ROTATE_PARAM_FAST_STEP_FRAMES]) {
                                         sw->fastSteps++;
-                                        if (sw->fastSteps > work->actionCommands.params[STICK_ROTATE_PARAM_TIMEOUT]) {
+                                        if (sw->fastSteps > work->actionCommands.params[STICK_ROTATE_PARAM_MAX_FAST_STEPS]) {
                                             stickRotateFail(work);
                                             restart = TRUE;
                                             break;
@@ -453,7 +453,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             DRAW_STICK_ICON(v1, _get_icon_id(sw->expectDir));
             break;
         case 1001:
-            if (sw->stepFrames < ac->params[STICK_ROTATE_PARAM_STEPS_A]) {
+            if (sw->stepFrames < ac->params[STICK_ROTATE_PARAM_FAST_STEP_FRAMES]) {
                 if (sw->steps <= 1) {
                     DRAW_STICK_ICON(v2, _get_icon_id(sw->expectDir));
                 } else {
@@ -491,7 +491,7 @@ void actionCommandDisp2(f32 x, f32 y) {
         case 1000:
         case 1001:
             sw->iconTimer++;
-            if (sw->iconTimer >= (ac->params[STICK_ROTATE_PARAM_STEPS_A] + ac->params[STICK_ROTATE_PARAM_STEPS_B]) / 2) {
+            if (sw->iconTimer >= (ac->params[STICK_ROTATE_PARAM_FAST_STEP_FRAMES] + ac->params[STICK_ROTATE_PARAM_MAX_STEP_FRAMES]) / 2) {
                 s32 step;
                 sw->iconTimer = 0;
                 step = sw->roll;

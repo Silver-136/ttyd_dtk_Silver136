@@ -1108,7 +1108,7 @@ void animPoseMain(s32 poseId) {
     f32 key;
     u8* v;
 #if VERSION <= VERSION_DEMO_US
-    u8* d;
+    AnimVtxDelta* d;
     AnimTexDelta* td;
 #else
     f32 x;
@@ -1118,7 +1118,7 @@ void animPoseMain(s32 poseId) {
     f32 z;
     s32 loop;
     s32 cnt;
-    s32 b;
+    s8 b;
     s32 nC;
     s32 nE;
     f32 t;
@@ -1280,27 +1280,27 @@ void animPoseMain(s32 poseId) {
             for (k = 0; k <= frame; k++) {
                 kf = &anim->keyframes[k];
                 {
-                    u8* delta;
+                    AnimVtxDelta* delta;
                     u8* pos;
                     pos = (u8*)pose->bufferVtxPos;
-                    delta = anim->vtxPosDeltas + kf->vtxPosStart * 4;
+                    delta = &anim->vtxPosDeltas[kf->vtxPosStart];
                     n = kf->vtxPosCount;
-                    for (j = 0; j < n; j++, delta += 4) {
-                        pos += delta[0] * sizeof(Vec);
-                        ((Vec*)pos)->x += s * (f32)(s8)delta[1];
-                        ((Vec*)pos)->y += s * (f32)(s8)delta[2];
-                        ((Vec*)pos)->z += s * (f32)(s8)delta[3];
+                    for (j = 0; j < n; j++, delta++) {
+                        pos += delta->step * sizeof(Vec);
+                        ((Vec*)pos)->x += s * (f32)delta->x;
+                        ((Vec*)pos)->y += s * (f32)delta->y;
+                        ((Vec*)pos)->z += s * (f32)delta->z;
 #else
             for (; kf < kfEnd; kf++) {
-                { u8* d; u8* e;
+                { AnimVtxDelta* d; AnimVtxDelta* e;
                 v = (u8*)pose->bufferVtxPos;
-                d = anim->vtxPosDeltas + kf->vtxPosStart * 4;
-                e = d + kf->vtxPosCount * 4;
-                for (; d < e; d += 4) {
-                    v += d[0] * sizeof(Vec);
-                    x = __OSs8tof32((s8*)(d + 1));
-                    y = __OSs8tof32((s8*)(d + 2));
-                    z = __OSs8tof32((s8*)(d + 3));
+                d = &anim->vtxPosDeltas[kf->vtxPosStart];
+                e = d + kf->vtxPosCount;
+                for (; d < e; d++) {
+                    v += d->step * sizeof(Vec);
+                    x = __OSs8tof32(&d->x);
+                    y = __OSs8tof32(&d->y);
+                    z = __OSs8tof32(&d->z);
                     ((Vec*)v)->x += s * x;
                     ((Vec*)v)->y += s * y;
                     ((Vec*)v)->z += s * z;
@@ -1309,26 +1309,26 @@ void animPoseMain(s32 poseId) {
                 }
 #if VERSION <= VERSION_DEMO_US
                 {
-                    u8* delta;
+                    AnimVtxDelta* delta;
                     u8* nrm;
                     nrm = (u8*)pose->bufferVtxNrm;
-                    delta = anim->vtxNrmDeltas + kf->vtxNrmStart * 4;
+                    delta = &anim->vtxNrmDeltas[kf->vtxNrmStart];
                     n = kf->vtxNrmCount;
-                    for (j = 0; j < n; j++, delta += 4) {
-                        nrm += delta[0] * sizeof(Vec);
-                        ((Vec*)nrm)->x += s * (f32)(s8)delta[1];
-                        ((Vec*)nrm)->y += s * (f32)(s8)delta[2];
-                        ((Vec*)nrm)->z += s * (f32)(s8)delta[3];
+                    for (j = 0; j < n; j++, delta++) {
+                        nrm += delta->step * sizeof(Vec);
+                        ((Vec*)nrm)->x += s * (f32)delta->x;
+                        ((Vec*)nrm)->y += s * (f32)delta->y;
+                        ((Vec*)nrm)->z += s * (f32)delta->z;
 #else
-                { u8* d; u8* e;
+                { AnimVtxDelta* d; AnimVtxDelta* e;
                 v = (u8*)pose->bufferVtxNrm;
-                d = anim->vtxNrmDeltas + kf->vtxNrmStart * 4;
-                e = d + kf->vtxNrmCount * 4;
-                for (; d < e; d += 4) {
-                    v += d[0] * sizeof(Vec);
-                    x = __OSs8tof32((s8*)(d + 1));
-                    y = __OSs8tof32((s8*)(d + 2));
-                    z = __OSs8tof32((s8*)(d + 3));
+                d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
+                e = d + kf->vtxNrmCount;
+                for (; d < e; d++) {
+                    v += d->step * sizeof(Vec);
+                    x = __OSs8tof32(&d->x);
+                    y = __OSs8tof32(&d->y);
+                    z = __OSs8tof32(&d->z);
                     ((Vec*)v)->x += s * x;
                     ((Vec*)v)->y += s * y;
                     ((Vec*)v)->z += s * z;
@@ -1337,43 +1337,43 @@ void animPoseMain(s32 poseId) {
                 }
 #if VERSION <= VERSION_DEMO_US
                 {
-                    u8* delta;
+                    AnimVisDelta* delta;
                     u8* v;
                     v = (u8*)pose->bufferGroupVisibility;
-                    delta = anim->visDeltas + kf->visStart * 2;
+                    delta = &anim->visDeltas[kf->visStart];
                     n = kf->visCount;
-                    for (j = 0; j < n; j++, delta += 2) {
-                        v += delta[0];
-                        v[0] += delta[1];
+                    for (j = 0; j < n; j++, delta++) {
+                        v += delta->step;
+                        v[0] += delta->add;
 #else
-                { u8* d; u8* e; s8* v;
+                { AnimVisDelta* d; AnimVisDelta* e; s8* v;
                 v = pose->bufferGroupVisibility;
-                d = anim->visDeltas + kf->visStart * 2;
-                e = d + kf->visCount * 2;
-                for (; d < e; d += 2) {
-                    v += d[0];
-                    v[0] += d[1];
+                d = &anim->visDeltas[kf->visStart];
+                e = d + kf->visCount;
+                for (; d < e; d++) {
+                    v += d->step;
+                    v[0] += d->add;
 #endif
                 }
                 }
 #if VERSION <= VERSION_DEMO_US
                 {
-                    u8* delta;
+                    AnimNodeDelta* delta;
                     u8* node;
                     node = (u8*)pose->bufferNode;
-                    delta = anim->nodeDeltas + kf->nodeStart * 4;
+                    delta = &anim->nodeDeltas[kf->nodeStart];
                     n = kf->nodeCount;
-                    for (j = 0; j < n; j++, delta += 4) {
-                        node += delta[0] * 4;
-                        *(f32*)node += s * (f32)(s8)delta[1];
+                    for (j = 0; j < n; j++, delta++) {
+                        node += delta->step * 4;
+                        *(f32*)node += s * (f32)delta->value;
 #else
-                { u8* d; u8* e;
+                { AnimNodeDelta* d; AnimNodeDelta* e;
                 v = (u8*)pose->bufferNode;
-                d = anim->nodeDeltas + kf->nodeStart * 4;
-                e = d + kf->nodeCount * 4;
-                for (; d < e; d += 4) {
-                    v += d[0] * 4;
-                    x = __OSs8tof32((s8*)(d + 1));
+                d = &anim->nodeDeltas[kf->nodeStart];
+                e = d + kf->nodeCount;
+                for (; d < e; d++) {
+                    v += d->step * 4;
+                    x = __OSs8tof32(&d->value);
                     *(f32*)v += s * x;
 #endif
                 }
@@ -1390,15 +1390,15 @@ void animPoseMain(s32 poseId) {
                         ((AnimTexMtx*)tex)->transS += td->transS;
                         ((AnimTexMtx*)tex)->transT += td->transT;
 #else
-                { u8* d; u8* e;
+                { AnimTexDelta* d; AnimTexDelta* e;
                 v = (u8*)pose->bufferTexAnimEntries;
-                d = (u8*)&anim->texDeltas[kf->texStart];
-                e = d + kf->texCount * sizeof(AnimTexDelta);
-                for (; d < e; d += sizeof(AnimTexDelta)) {
-                    v += d[0] * sizeof(AnimTexMtx);
-                    v[0] += d[1];
-                    ((AnimTexMtx*)v)->transS += ((AnimTexDelta*)d)->transS;
-                    ((AnimTexMtx*)v)->transT += ((AnimTexDelta*)d)->transT;
+                d = &anim->texDeltas[kf->texStart];
+                e = d + kf->texCount;
+                for (; d < e; d++) {
+                    v += d->step * sizeof(AnimTexMtx);
+                    v[0] += d->bindAdd;
+                    ((AnimTexMtx*)v)->transS += d->transS;
+                    ((AnimTexMtx*)v)->transT += d->transT;
 #endif
                 }
                 }
@@ -1411,27 +1411,27 @@ void animPoseMain(s32 poseId) {
             for (k = pose->lastFrameZero + 1; k <= frame; k++) {
                 kf = &anim->keyframes[k];
                 {
-                    u8* delta;
+                    AnimVtxDelta* delta;
                     u8* pos;
                     pos = (u8*)pose->bufferVtxPos;
-                    delta = anim->vtxPosDeltas + kf->vtxPosStart * 4;
+                    delta = &anim->vtxPosDeltas[kf->vtxPosStart];
                     n = kf->vtxPosCount;
-                    for (j = 0; j < n; j++, delta += 4) {
-                        pos += delta[0] * sizeof(Vec);
-                        ((Vec*)pos)->x += s * (f32)(s8)delta[1];
-                        ((Vec*)pos)->y += s * (f32)(s8)delta[2];
-                        ((Vec*)pos)->z += s * (f32)(s8)delta[3];
+                    for (j = 0; j < n; j++, delta++) {
+                        pos += delta->step * sizeof(Vec);
+                        ((Vec*)pos)->x += s * (f32)delta->x;
+                        ((Vec*)pos)->y += s * (f32)delta->y;
+                        ((Vec*)pos)->z += s * (f32)delta->z;
 #else
             for (; kf < kfEnd; kf++) {
-                { u8* d; u8* e;
+                { AnimVtxDelta* d; AnimVtxDelta* e;
                 v = (u8*)pose->bufferVtxPos;
-                d = anim->vtxPosDeltas + kf->vtxPosStart * 4;
-                e = d + kf->vtxPosCount * 4;
-                for (; d < e; d += 4) {
-                    v += d[0] * sizeof(Vec);
-                    x = __OSs8tof32((s8*)(d + 1));
-                    y = __OSs8tof32((s8*)(d + 2));
-                    z = __OSs8tof32((s8*)(d + 3));
+                d = &anim->vtxPosDeltas[kf->vtxPosStart];
+                e = d + kf->vtxPosCount;
+                for (; d < e; d++) {
+                    v += d->step * sizeof(Vec);
+                    x = __OSs8tof32(&d->x);
+                    y = __OSs8tof32(&d->y);
+                    z = __OSs8tof32(&d->z);
                     ((Vec*)v)->x += s * x;
                     ((Vec*)v)->y += s * y;
                     ((Vec*)v)->z += s * z;
@@ -1440,26 +1440,26 @@ void animPoseMain(s32 poseId) {
                 }
 #if VERSION <= VERSION_DEMO_US
                 {
-                    u8* delta;
+                    AnimVtxDelta* delta;
                     u8* nrm;
                     nrm = (u8*)pose->bufferVtxNrm;
-                    delta = anim->vtxNrmDeltas + kf->vtxNrmStart * 4;
+                    delta = &anim->vtxNrmDeltas[kf->vtxNrmStart];
                     n = kf->vtxNrmCount;
-                    for (j = 0; j < n; j++, delta += 4) {
-                        nrm += delta[0] * sizeof(Vec);
-                        ((Vec*)nrm)->x += s * (f32)(s8)delta[1];
-                        ((Vec*)nrm)->y += s * (f32)(s8)delta[2];
-                        ((Vec*)nrm)->z += s * (f32)(s8)delta[3];
+                    for (j = 0; j < n; j++, delta++) {
+                        nrm += delta->step * sizeof(Vec);
+                        ((Vec*)nrm)->x += s * (f32)delta->x;
+                        ((Vec*)nrm)->y += s * (f32)delta->y;
+                        ((Vec*)nrm)->z += s * (f32)delta->z;
 #else
-                { u8* d; u8* e;
+                { AnimVtxDelta* d; AnimVtxDelta* e;
                 v = (u8*)pose->bufferVtxNrm;
-                d = anim->vtxNrmDeltas + kf->vtxNrmStart * 4;
-                e = d + kf->vtxNrmCount * 4;
-                for (; d < e; d += 4) {
-                    v += d[0] * sizeof(Vec);
-                    x = __OSs8tof32((s8*)(d + 1));
-                    y = __OSs8tof32((s8*)(d + 2));
-                    z = __OSs8tof32((s8*)(d + 3));
+                d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
+                e = d + kf->vtxNrmCount;
+                for (; d < e; d++) {
+                    v += d->step * sizeof(Vec);
+                    x = __OSs8tof32(&d->x);
+                    y = __OSs8tof32(&d->y);
+                    z = __OSs8tof32(&d->z);
                     ((Vec*)v)->x += s * x;
                     ((Vec*)v)->y += s * y;
                     ((Vec*)v)->z += s * z;
@@ -1468,43 +1468,43 @@ void animPoseMain(s32 poseId) {
                 }
 #if VERSION <= VERSION_DEMO_US
                 {
-                    u8* delta;
+                    AnimVisDelta* delta;
                     u8* v;
                     v = (u8*)pose->bufferGroupVisibility;
-                    delta = anim->visDeltas + kf->visStart * 2;
+                    delta = &anim->visDeltas[kf->visStart];
                     n = kf->visCount;
-                    for (j = 0; j < n; j++, delta += 2) {
-                        v += delta[0];
-                        v[0] += delta[1];
+                    for (j = 0; j < n; j++, delta++) {
+                        v += delta->step;
+                        v[0] += delta->add;
 #else
-                { u8* d; u8* e; s8* v;
+                { AnimVisDelta* d; AnimVisDelta* e; s8* v;
                 v = pose->bufferGroupVisibility;
-                d = anim->visDeltas + kf->visStart * 2;
-                e = d + kf->visCount * 2;
-                for (; d < e; d += 2) {
-                    v += d[0];
-                    v[0] += d[1];
+                d = &anim->visDeltas[kf->visStart];
+                e = d + kf->visCount;
+                for (; d < e; d++) {
+                    v += d->step;
+                    v[0] += d->add;
 #endif
                 }
                 }
 #if VERSION <= VERSION_DEMO_US
                 {
-                    u8* delta;
+                    AnimNodeDelta* delta;
                     u8* node;
                     node = (u8*)pose->bufferNode;
-                    delta = anim->nodeDeltas + kf->nodeStart * 4;
+                    delta = &anim->nodeDeltas[kf->nodeStart];
                     n = kf->nodeCount;
-                    for (j = 0; j < n; j++, delta += 4) {
-                        node += delta[0] * 4;
-                        *(f32*)node += s * (f32)(s8)delta[1];
+                    for (j = 0; j < n; j++, delta++) {
+                        node += delta->step * 4;
+                        *(f32*)node += s * (f32)delta->value;
 #else
-                { u8* d; u8* e;
+                { AnimNodeDelta* d; AnimNodeDelta* e;
                 v = (u8*)pose->bufferNode;
-                d = anim->nodeDeltas + kf->nodeStart * 4;
-                e = d + kf->nodeCount * 4;
-                for (; d < e; d += 4) {
-                    v += d[0] * 4;
-                    x = __OSs8tof32((s8*)(d + 1));
+                d = &anim->nodeDeltas[kf->nodeStart];
+                e = d + kf->nodeCount;
+                for (; d < e; d++) {
+                    v += d->step * 4;
+                    x = __OSs8tof32(&d->value);
                     *(f32*)v += s * x;
 #endif
                 }
@@ -1521,15 +1521,15 @@ void animPoseMain(s32 poseId) {
                         ((AnimTexMtx*)tex)->transS += td->transS;
                         ((AnimTexMtx*)tex)->transT += td->transT;
 #else
-                { u8* d; u8* e;
+                { AnimTexDelta* d; AnimTexDelta* e;
                 v = (u8*)pose->bufferTexAnimEntries;
-                d = (u8*)&anim->texDeltas[kf->texStart];
-                e = d + kf->texCount * sizeof(AnimTexDelta);
-                for (; d < e; d += sizeof(AnimTexDelta)) {
-                    v += d[0] * sizeof(AnimTexMtx);
-                    v[0] += d[1];
-                    ((AnimTexMtx*)v)->transS += ((AnimTexDelta*)d)->transS;
-                    ((AnimTexMtx*)v)->transT += ((AnimTexDelta*)d)->transT;
+                d = &anim->texDeltas[kf->texStart];
+                e = d + kf->texCount;
+                for (; d < e; d++) {
+                    v += d->step * sizeof(AnimTexMtx);
+                    v[0] += d->bindAdd;
+                    ((AnimTexMtx*)v)->transS += d->transS;
+                    ((AnimTexMtx*)v)->transT += d->transT;
 #endif
                 }
                 }
@@ -1562,34 +1562,34 @@ void animPoseMain(s32 poseId) {
 #endif
         kf = &anim->keyframes[nextFrame];
 #if VERSION > VERSION_DEMO_US
-        { u8* d; u8* e;
+        { AnimVtxDelta* d; AnimVtxDelta* e;
 #endif
         s = 0.0625f * t;
         v = grpA;
-        d = anim->vtxPosDeltas + kf->vtxPosStart * 4;
+        d = &anim->vtxPosDeltas[kf->vtxPosStart];
 #if VERSION <= VERSION_DEMO_US
         v = (u8*)pose->bufferVtxPos;
         n = kf->vtxPosCount;
         apmCopyTo(grpA, v, nA, sizeof(Vec));
         v = grpA;
-        for (j = 0; j < n; j++, d += 4) {
+        for (j = 0; j < n; j++, d++) {
 #else
-        e = d + kf->vtxPosCount * 4;
+        e = d + kf->vtxPosCount;
         p = (u8*)pose->bufferVtxPos;
         if (nA != 0) {
             memcpy_as4(grpA, p, nA * sizeof(Vec));
         }
-        for (; d < e; d += 4) {
+        for (; d < e; d++) {
 #endif
-            v += d[0] * sizeof(Vec);
+            v += d->step * sizeof(Vec);
 #if VERSION <= VERSION_DEMO_US
-            ((Vec*)v)->x += (f32)(s8)d[1] * s;
-            ((Vec*)v)->y += (f32)(s8)d[2] * s;
-            ((Vec*)v)->z += (f32)(s8)d[3] * s;
+            ((Vec*)v)->x += (f32)d->x * s;
+            ((Vec*)v)->y += (f32)d->y * s;
+            ((Vec*)v)->z += (f32)d->z * s;
 #else
-            x = __OSs8tof32((s8*)(d + 1));
-            y = __OSs8tof32((s8*)(d + 2));
-            z = __OSs8tof32((s8*)(d + 3));
+            x = __OSs8tof32(&d->x);
+            y = __OSs8tof32(&d->y);
+            z = __OSs8tof32(&d->z);
             ((Vec*)v)->x += x * s;
             ((Vec*)v)->y += y * s;
             ((Vec*)v)->z += z * s;
@@ -1597,33 +1597,33 @@ void animPoseMain(s32 poseId) {
         }
 #if VERSION > VERSION_DEMO_US
         }
-        { u8* d; u8* e; u8* v;
+        { AnimVtxDelta* d; AnimVtxDelta* e; u8* v;
         v = grpB;
 #endif
-        d = anim->vtxNrmDeltas + kf->vtxNrmStart * 4;
+        d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
 #if VERSION <= VERSION_DEMO_US
         v = (u8*)pose->bufferVtxNrm;
         n = kf->vtxNrmCount;
         apmCopyTo(grpB, v, nB, sizeof(Vec));
         v = grpB;
-        for (j = 0; j < n; j++, d += 4) {
+        for (j = 0; j < n; j++, d++) {
 #else
-        e = d + kf->vtxNrmCount * 4;
+        e = d + kf->vtxNrmCount;
         p = (u8*)pose->bufferVtxNrm;
         if (nB != 0) {
             memcpy_as4(grpB, p, nB * sizeof(Vec));
         }
-        for (; d < e; d += 4) {
+        for (; d < e; d++) {
 #endif
-            v += d[0] * sizeof(Vec);
+            v += d->step * sizeof(Vec);
 #if VERSION <= VERSION_DEMO_US
-            ((Vec*)v)->x += (f32)(s8)d[1] * s;
-            ((Vec*)v)->y += (f32)(s8)d[2] * s;
-            ((Vec*)v)->z += (f32)(s8)d[3] * s;
+            ((Vec*)v)->x += (f32)d->x * s;
+            ((Vec*)v)->y += (f32)d->y * s;
+            ((Vec*)v)->z += (f32)d->z * s;
 #else
-            x = __OSs8tof32((s8*)(d + 1));
-            y = __OSs8tof32((s8*)(d + 2));
-            z = __OSs8tof32((s8*)(d + 3));
+            x = __OSs8tof32(&d->x);
+            y = __OSs8tof32(&d->y);
+            z = __OSs8tof32(&d->z);
             ((Vec*)v)->x += x * s;
             ((Vec*)v)->y += y * s;
             ((Vec*)v)->z += z * s;
@@ -1631,13 +1631,15 @@ void animPoseMain(s32 poseId) {
         }
 #if VERSION > VERSION_DEMO_US
         }
-        { u8* d; u8* e; u8* v;
+        { AnimNodeDelta* d; AnimNodeDelta* e; u8* v;
+#else
+        { AnimNodeDelta* d;
 #endif
-        d = anim->nodeDeltas + kf->nodeStart * 4;
+        d = &anim->nodeDeltas[kf->nodeStart];
 #if VERSION <= VERSION_DEMO_US
         v = (u8*)pose->bufferNode;
 #else
-        e = d + kf->nodeCount * 4;
+        e = d + kf->nodeCount;
 #endif
         dt = anim->keyframes[nextFrame].time - anim->keyframes[frame].time;
 #if VERSION <= VERSION_DEMO_US
@@ -1648,33 +1650,31 @@ void animPoseMain(s32 poseId) {
 #endif
         v = (u8*)pose->nodes;
 #if VERSION <= VERSION_DEMO_US
-        for (j = 0; j < n; j++, d += 4) {
+        for (j = 0; j < n; j++, d++) {
 #else
         if (nD != 0) {
             memcpy_as4(v, p, nD * 4);
         }
-        for (; d < e; d += 4) {
+        for (; d < e; d++) {
 #endif
-            b = (s8)d[3];
-            v += d[0] * 4;
+            b = d->tangentEnd;
+            v += d->step * 4;
             if (b < 0x59 && b > -0x59) {
                 f32 hb;
 #if VERSION > VERSION_DEMO_US
-                x = __OSs8tof32((s8*)(d + 1));
+                x = __OSs8tof32(&d->value);
 #endif
                 t2 = t * t;
                 t3 = apmMul(t, t2);
                 hb = -2.0f * t3 + 3.0f * t2;
-                *(f32*)v = *(f32*)v + ((t + (t3 - 2.0f * t2)) * (dt * tanfTbl[(s8)d[2] + 0x59]) +
+                *(f32*)v = *(f32*)v + ((t + (t3 - 2.0f * t2)) * (dt * tanfTbl[d->tangentStart + 0x59]) +
 #if VERSION <= VERSION_DEMO_US
-                                hb * (0.0625f * (f32)(s8)d[1]) +
+                                hb * (0.0625f * (f32)d->value) +
 #else
                                 hb * (0.0625f * x) +
 #endif
                                 (t3 - t2) * (dt * tanfTbl[b + 0x59]));
-#if VERSION > VERSION_DEMO_US
             }
-#endif
         }
         }
     }

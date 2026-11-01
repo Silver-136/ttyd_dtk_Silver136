@@ -918,13 +918,13 @@ static void ext_moamoa_main(void) {
                 angle = (wp->breathDir + wp->angle) / 2.0f;
                 moa->flags |= (MOAMOA_FLAG_HIT | MOAMOA_FLAG_BLOWN);
                 moa->state = MOAMOA_STATE_BLOWN_DRIFT;
-                moa->target = moamoa_zero_vec;
+                moa->driftVel = moamoa_zero_vec;
                 spd = randf(0.1f, 0.2f);
                 rad = (6.2831855f * angle) / 360.0f;
-                moa->vy = spd * polySinf(rad);
-                moa->speed = randf(0.03f, 0.06f);
-                moa->gravity = spd * (-polyCosf(rad));
-                moa->jumpTimer = 120;
+                moa->driftAccelX = spd * polySinf(rad);
+                moa->driftAccelY = randf(0.03f, 0.06f);
+                moa->driftAccelZ = spd * (-polyCosf(rad));
+                moa->driftTimer = 120;
                 wp->hitCount++;
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");
                 hit = 1;
@@ -1007,8 +1007,8 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_GATHER_INIT_UNUSED:
-                moa->speed = randf(0.0f, 200.0f);
-                moa->gravity = randf(0.0f, (300.0f * moa->speed) / 200.0f);
+                moa->circleHeight = randf(0.0f, 200.0f);
+                moa->circleRadius = randf(0.0f, (300.0f * moa->circleHeight) / 200.0f);
                 moa->state++;
                 moa->timer = 0;
 
@@ -1021,10 +1021,10 @@ static void ext_moamoa_main(void) {
                 tx = wp->target[i % 3].x;
                 ty = wp->target[i % 3].y;
                 tz = wp->target[i % 3].z;
-                tx += s * (moa->gravity * ((f32) sin(((f32) (i + gp->retraceCount)) / 4.0f)));
+                tx += s * (moa->circleRadius * ((f32) sin(((f32) (i + gp->retraceCount)) / 4.0f)));
                 r = i + gp->retraceCount;
-                ty += moa->speed * s;
-                tz += s * ((-moa->gravity) * ((f32) cos(r / 4.0f)));
+                ty += moa->circleHeight * s;
+                tz += s * ((-moa->circleRadius) * ((f32) cos(r / 4.0f)));
                 (*pose->mtx)[0][3] += (tx - (*pose->mtx)[0][3]) / 15.0f;
                 (*pose->mtx)[1][3] += (ty - (*pose->mtx)[1][3]) / 15.0f;
                 (*pose->mtx)[2][3] += (tz - (*pose->mtx)[2][3]) / 15.0f;
@@ -1203,13 +1203,13 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_BLOWN_DRIFT:
-                if ((--moa->jumpTimer) > 0) {
-                    moa->target.x += moa->vy;
-                    moa->target.y += moa->speed;
-                    moa->target.z += moa->gravity;
-                    (*pose->mtx)[0][3] += moa->target.x;
-                    (*pose->mtx)[1][3] += moa->target.y;
-                    (*pose->mtx)[2][3] += moa->target.z;
+                if ((--moa->driftTimer) > 0) {
+                    moa->driftVel.x += moa->driftAccelX;
+                    moa->driftVel.y += moa->driftAccelY;
+                    moa->driftVel.z += moa->driftAccelZ;
+                    (*pose->mtx)[0][3] += moa->driftVel.x;
+                    (*pose->mtx)[1][3] += moa->driftVel.y;
+                    (*pose->mtx)[2][3] += moa->driftVel.z;
                 } else {
                     moa->state = MOAMOA_STATE_RESPAWN;
                 }

@@ -65,6 +65,25 @@ typedef struct AnimKeyframe {
     s32 nodeCount;   // 0x28
 } AnimKeyframe;
 
+typedef struct AnimVtxDelta {
+    u8 step; // 0x0, index step in the vertex buffer
+    s8 x;    // 0x1, in 1/16 units
+    s8 y;    // 0x2
+    s8 z;    // 0x3
+} AnimVtxDelta;
+
+typedef struct AnimVisDelta {
+    u8 step; // 0x0, index step in the group visibility buffer
+    u8 add;  // 0x1, added to the byte there
+} AnimVisDelta;
+
+typedef struct AnimNodeDelta {
+    u8 step;         // 0x0, index step in the node buffer
+    s8 value;        // 0x1, in 1/16 units
+    s8 tangentStart; // 0x2, Hermite tangent as an angle in degrees (tanfTbl)
+    s8 tangentEnd;   // 0x3, same; outside -88..88 the node keeps the base value between keyframes
+} AnimNodeDelta;
+
 typedef struct AnimTexDelta {
     u8 step;    // 0x0, AnimTexMtx index step
     u8 bindAdd; // 0x1, added to texBindIdx
@@ -91,11 +110,11 @@ struct AnimData {
     s32 valueKeyCount;         // 0x20
     AnimLoopInfo* loopInfo;    // 0x24
     AnimKeyframe* keyframes;   // 0x28
-    u8* vtxPosDeltas;          // 0x2C, 4-byte entries: index step, s8 x/y/z (1/16)
-    u8* vtxNrmDeltas;          // 0x30, same layout as vtxPosDeltas
+    AnimVtxDelta* vtxPosDeltas; // 0x2C
+    AnimVtxDelta* vtxNrmDeltas; // 0x30
     AnimTexDelta* texDeltas;   // 0x34
-    u8* visDeltas;             // 0x38, 2-byte entries: index step, add
-    u8* nodeDeltas;            // 0x3C, 4-byte entries: index step, s8 value, s8 tangents
+    AnimVisDelta* visDeltas;   // 0x38
+    AnimNodeDelta* nodeDeltas; // 0x3C
     AnimValueKey* valueKeys;   // 0x40
     Vec bboxMin;               // 0x44, paper-mode bounds (animPaperPoseDispSub)
     Vec bboxMax;               // 0x50
