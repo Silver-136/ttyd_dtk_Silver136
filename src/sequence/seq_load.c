@@ -1041,20 +1041,47 @@ void loadDraw(CameraId camera, void* param) {
         }
 #if VERSION <= VERSION_DEMO_US
         switch (win1[i].tex) {
+#else
+#if VERSION >= VERSION_US
+        switch (win1[0][i].tex) {
+#else
+        switch (win1[i].tex) {
+#endif
+#endif
             case 10:
             case 11:
             case 12:
             case 13: {
                 col.a = 0xfe;
                 winTexInit(*wp->file->data);
+#if VERSION <= VERSION_DEMO_US
                 winTexSet(0xe, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
                 winTexInit(*wp->file->data);
                 winTexSet(win1[i].tex, (Vec){win1[i].x, 60.0f + win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+#else
+#if VERSION >= VERSION_US
+                winTexSet(0xe, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+                winTexInit(*wp->file->data);
+                winTexSet(win1[0][i].tex, (Vec){win1[0][i].x, 60.0f + win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+#else
+                winTexSet(0xe, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+                winTexInit(*wp->file->data);
+                winTexSet(win1[i].tex, (Vec){win1[i].x, 60.0f + win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+#endif
+#endif
                 break;
             }
             default: {
                 winTexInit_x2(*wp->file->data);
+#if VERSION <= VERSION_DEMO_US
                 winTexSet_x2(win1[i].tex, win1[i].tex2, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+#else
+#if VERSION >= VERSION_US
+                winTexSet_x2(win1[0][i].tex, win1[0][i].tex2, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+#else
+                winTexSet_x2(win1[i].tex, win1[i].tex2, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+#endif
+#endif
                 break;
             }
         }
@@ -1064,6 +1091,7 @@ void loadDraw(CameraId camera, void* param) {
     FontDrawStart();
     {
         const char* msg = wp->msg;
+#if VERSION <= VERSION_DEMO_US
         FontDrawString(-FontGetMessageWidth(msg) / 2, 192.0f, msg);
 }
 
@@ -1078,6 +1106,42 @@ const char* str;
         u64 hours;
         s32 mins;
         char* name = (char*)save->data.global.playerName;
+#else
+        FontDrawMessage(-FontGetMessageWidth(msg) / 2, 192, msg);
+    }
+
+#if VERSION >= VERSION_US
+    for (i = 0; i < 4; i++, win1[0]++) {
+        CardSaveSlot* save = &cardGetFilePtr()->saves[i];
+        u16 flags;
+        OSTime time;
+        u16 stars;
+        s32 gsw0;
+        char* name;
+        s16 level;
+#else
+    for (i = 0; i < 4; i++, win1++) {
+        CardSaveSlot* save = &cardGetFilePtr()->saves[i];
+        u16 flags = save->data.flags;
+        s16 level = save->data.pouch.level;
+        OSTime time = save->data.global.retraceLocalTime;
+        u16 stars = save->data.pouch.starPowersObtained;
+        s32 gsw0 = save->data.global.gSW0;
+        char* name = (char*)save->data.global.playerName;
+#endif
+        const char* str;
+        s32 hours;
+        s32 mins;
+#if VERSION >= VERSION_US
+        flags = save->data.flags;
+        level = save->data.pouch.level;
+        time = save->data.global.retraceLocalTime;
+        stars = save->data.pouch.starPowersObtained;
+        gsw0 = save->data.global.gSW0;
+        name = (char*)save->data.global.playerName;
+#endif
+
+#endif
         FontDrawStart();
         FontDrawColor((GXColor){192, 192, 192, 255});
         if (i == wp->slot) {
@@ -1085,8 +1149,23 @@ const char* str;
         }
         FontDrawScale(0.6f);
         FontDrawEdge();
+#if VERSION <= VERSION_DEMO_US
         sprintf(buf, "データ%d", i + 1);
         FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
+#else
+#if VERSION >= VERSION_US
+        if ((u32)gp->language == LANGUAGE_JP) {
+            str = "データ";
+        } else {
+            str = msgSearch("msg_mcard_file");
+        }
+        sprintf(buf, "%s%s", str, winZenkakuStr(i + 1));
+        FontDrawString(win1[0]->x - 100.0f, 84.0f + win1[0]->y, buf);
+#else
+        sprintf(buf, "\203f\201[\203^%s", winZenkakuStr(i + 1));
+        FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
+#endif
+#endif
         FontDrawEdgeOff();
         FontDrawScale(1.0f);
         FontDrawColor((GXColor){32, 32, 32, 255});
@@ -1094,6 +1173,7 @@ const char* str;
             FontDrawColor((GXColor){0, 0, 0, 255});
         }
         if (flags & CARD_SAVE_FLAG_NO_VALID_COPY) {
+#if VERSION <= VERSION_DEMO_US
             str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
 } else if (flags & CARD_SAVE_FLAG_ERASED) {
@@ -1136,195 +1216,7 @@ const char* str;
                     PSMTXScale(s, 0.7f, 0.7f, 0.7f);
                     PSMTXConcat(m, s, m);
                     iconDispGxCol(m, 4, (u16)stone_id[k], i == wp->slot ? white : gray);
-                }
-            }
-}
-    }
-
-    if (wp->flags & LOAD_FLAG_DIM) {
-        wp->alpha += 0.05f;
-    } else {
-        wp->alpha -= 0.05f;
-    }
-    if (wp->alpha < 0.0f) {
-        wp->alpha = 0.0f;
-    }
-    if (wp->alpha > 1.0f) {
-        wp->alpha = 1.0f;
-    }
-    nameMaskGX(wp->alpha);
-
-    if (wp->state >= 100 && wp->state < 200) {
-        winTexInit(*wp->file->data);
-        winTexSet(0xf, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-        winTexInit_x2(*wp->file->data);
-        winTexSet_x2(0x13, 0x1f, (Vec){0.0f, 100.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-        for (i = 0; i < 3; i++) {
-            if (i == wp->soundModeSel) {
-                winTexInit(*wp->file->data);
-                winTexSet(0x33, (Vec){0.0f, 50 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
-                winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x15, 0x33, (Vec){-4.0f, 54 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-            } else {
-                winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x15, 0x33, (Vec){0.0f, 50 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-            }
-        }
-    }
-
-    if (wp->state >= 200 && wp->state < 300) {
-        winTexInit(*wp->file->data);
-        winTexSet(0xf, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-        winTexInit_x2(*wp->file->data);
-        winTexSet_x2(0x14, 0x1f, (Vec){0.0f, 100.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-        for (i = 0; i < 2; i++) {
-            if (i == wp->rumbleOffSel) {
-                winTexInit(*wp->file->data);
-                winTexSet(0x33, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
-                winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x18, 0x33, (Vec){-4.0f, 34 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-            } else {
-                winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x18, 0x33, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-            }
-        }
-    }
-
-    if (wp->state == 0x33 && wp->copyTo < 4) {
-        f32 angle[4][4] = {
-            {0.0f, -90.0f, -180.0f, -135.0f},
-            {90.0f, 0.0f, 135.0f, 180.0f},
-            {0.0f, -45.0f, 0.0f, -90.0f},
-            {45.0f, 0.0f, 90.0f, 0.0f},
-        };
-        f32 cx;
-        f32 cy;
-        if (!(f32)fmod(angle[wp->copyFrom][wp->copyTo], 90.0)) {
-            f32 c0 = wp->copyFrom % 2;
-            f32 r0 = wp->copyFrom / 2;
-            f32 r1 = wp->copyTo / 2;
-            if (r0 == r1) {
-                cx = 0.0f;
-                cy = 120.0f - 140.0f * r0;
-            } else {
-                cx = -150.0f + 300.0f * c0;
-                cy = 50.0f;
-            }
-        } else {
-            cx = 0.0f;
-            cy = 50.0f;
-        }
-        cy -= 40.0f;
-        winTexInit(*wp->file->data);
-        winTexSetRot(0x1d, (Vec){2.0f + cx, cy - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128}, angle[wp->copyFrom][wp->copyTo]);
-        winTexSetRot(0x1d, (Vec){cx, cy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, angle[wp->copyFrom][wp->copyTo]);
-    }
-
-    if (!(wp->flags & LOAD_FLAG_HIDE_CURSOR)) {
-        winTexInit(*wp->file->data);
-        winTexSet(0, (Vec){2.0f + wp->x, wp->y - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128});
-        winTexSet(0, (Vec){wp->x, wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-    }
-}
 #else
-#if VERSION >= VERSION_US
-        switch (win1[0][i].tex) {
-#else
-        switch (win1[i].tex) {
-#endif
-            case 10:
-            case 11:
-            case 12:
-            case 13: {
-                col.a = 0xfe;
-                winTexInit(*wp->file->data);
-#if VERSION >= VERSION_US
-                winTexSet(0xe, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-                winTexInit(*wp->file->data);
-                winTexSet(win1[0][i].tex, (Vec){win1[0][i].x, 60.0f + win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-#else
-                winTexSet(0xe, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-                winTexInit(*wp->file->data);
-                winTexSet(win1[i].tex, (Vec){win1[i].x, 60.0f + win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-#endif
-                break;
-            }
-            default: {
-                winTexInit_x2(*wp->file->data);
-#if VERSION >= VERSION_US
-                winTexSet_x2(win1[0][i].tex, win1[0][i].tex2, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-#else
-                winTexSet_x2(win1[i].tex, win1[i].tex2, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-#endif
-                break;
-            }
-        }
-    }
-
-    windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, -250.0f, 200.0f, 500.0f, 40.0f, 20.0f);
-    FontDrawStart();
-    {
-        const char* msg = wp->msg;
-        FontDrawMessage(-FontGetMessageWidth(msg) / 2, 192, msg);
-    }
-
-#if VERSION >= VERSION_US
-    for (i = 0; i < 4; i++, win1[0]++) {
-        CardSaveSlot* save = &cardGetFilePtr()->saves[i];
-        u16 flags;
-        OSTime time;
-        u16 stars;
-        s32 gsw0;
-        char* name;
-        s16 level;
-#else
-    for (i = 0; i < 4; i++, win1++) {
-        CardSaveSlot* save = &cardGetFilePtr()->saves[i];
-        u16 flags = save->data.flags;
-        s16 level = save->data.pouch.level;
-        OSTime time = save->data.global.retraceLocalTime;
-        u16 stars = save->data.pouch.starPowersObtained;
-        s32 gsw0 = save->data.global.gSW0;
-        char* name = (char*)save->data.global.playerName;
-#endif
-        const char* str;
-        s32 hours;
-        s32 mins;
-#if VERSION >= VERSION_US
-        flags = save->data.flags;
-        level = save->data.pouch.level;
-        time = save->data.global.retraceLocalTime;
-        stars = save->data.pouch.starPowersObtained;
-        gsw0 = save->data.global.gSW0;
-        name = (char*)save->data.global.playerName;
-#endif
-
-        FontDrawStart();
-        FontDrawColor((GXColor){192, 192, 192, 255});
-        if (i == wp->slot) {
-            FontDrawColor((GXColor){255, 255, 255, 255});
-        }
-        FontDrawScale(0.6f);
-        FontDrawEdge();
-#if VERSION >= VERSION_US
-        if ((u32)gp->language == LANGUAGE_JP) {
-            str = "データ";
-        } else {
-            str = msgSearch("msg_mcard_file");
-        }
-        sprintf(buf, "%s%s", str, winZenkakuStr(i + 1));
-        FontDrawString(win1[0]->x - 100.0f, 84.0f + win1[0]->y, buf);
-#else
-        sprintf(buf, "\203f\201[\203^%s", winZenkakuStr(i + 1));
-        FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
-#endif
-        FontDrawEdgeOff();
-        FontDrawScale(1.0f);
-        FontDrawColor((GXColor){32, 32, 32, 255});
-        if (i == wp->slot) {
-            FontDrawColor((GXColor){0, 0, 0, 255});
-        }
-        if (flags & CARD_SAVE_FLAG_NO_VALID_COPY) {
 #if VERSION >= VERSION_US
             if ((u32)gp->language == LANGUAGE_JP) {
                 str = "こわれています";
@@ -1436,6 +1328,7 @@ const char* str;
                     PSMTXTrans(m, (win1->x - 106.0f) + k * 32, *(f32*)((u8*)win1 + offsetof(WinDt, y)) - 52.0f, 0.0f);
 #endif
                     iconDispGxCol(m, 0, (u16)stone_id[k], i == wp->slot ? white : gray);
+#endif
                 }
             }
         }
@@ -1480,6 +1373,14 @@ const char* str;
         for (i = 0; i < 2; i++) {
             if (i == wp->rumbleOffSel) {
                 winTexInit(*wp->file->data);
+#if VERSION <= VERSION_DEMO_US
+                winTexSet(0x33, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
+                winTexInit_x2(*wp->file->data);
+                winTexSet_x2(i + 0x18, 0x33, (Vec){-4.0f, 34 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
+            } else {
+                winTexInit_x2(*wp->file->data);
+                winTexSet_x2(i + 0x18, 0x33, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
+#else
 #if VERSION >= VERSION_US
                 winTexSet(0x20, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
                 winTexInit_x2(*wp->file->data);
@@ -1494,6 +1395,7 @@ const char* str;
             } else {
                 winTexInit_x2(*wp->file->data);
                 winTexSet_x2(i + 0x18, 0x33, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
+#endif
 #endif
             }
         }
@@ -1534,12 +1436,13 @@ const char* str;
         winTexSet(0, (Vec){2.0f + wp->x, wp->y - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128});
         winTexSet(0, (Vec){wp->x, wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
     }
+#if VERSION > VERSION_DEMO_US
 
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
     GXSetProjectionv(proj);
     *camGetCurPtr() = saved;
-}
 #endif
+}
 
 /** Icons of the seven Crystal Stars, drawn on a save file's panel for each star that file has collected. */
 #if VERSION > VERSION_DEMO_US

@@ -2307,8 +2307,6 @@ EVT_BEGIN(gor_04_init_evt)
 END_IF
 // The mail event runs in the background.
 SPAWN_EVENT(evt_sub_mail_event)
-RETURN
-EVT_END()
 #else
 #if VERSION >= VERSION_US
         END_IF
@@ -2323,9 +2321,9 @@ EVT_END()
     END_IF
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
+#endif
     RETURN
 EVT_END()
-#endif
 
 
 static USER_FUNC(ramp_r) {

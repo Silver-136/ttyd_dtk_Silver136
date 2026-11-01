@@ -1040,191 +1040,6 @@ void npcMain(void) {
                                     dist = sqrtf(dist);
                                     if (dist > 0.25f * entry->searchRange) {
                                         if (dist > entry->searchRange) {
-                                            trig = 0;
-                                            goto done14;
-                                        } else if ((angleToMario = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, angleToMario))) >
-                                                   0.5f * entry->searchAngle) {
-                                            trig = 0;
-                                            goto done14;
-                                        }
-                                    }
-                                    {
-                                        if (dy > entry->territoryLoiter.y) {
-                                            trig = 0;
-                                        } else if (-dy > entry->territoryHoming.y) {
-                                            trig = 0;
-                                        } else if (st == NPC_EVENT_RETURN) {
-                                            if (entry->territoryType == NPC_TERRITORY_TYPE_CIRCLE) {
-                                                f32 tz = entry->territoryBase.z - entry->position.z;
-                                                f32 tx = entry->territoryBase.x - entry->position.x;
-                                                f32 d = sqrtf(tx * tx + tz * tz);
-                                                if (d > 0.75 * entry->territoryHoming.x) {
-                                                    trig = 0;
-                                                }
-                                            } else {
-                                                if (entry->position.x < entry->territoryBase.x - 0.75f * entry->territoryHoming.x ||
-                                                    entry->position.x > entry->territoryBase.x + 0.75f * entry->territoryHoming.x ||
-                                                    entry->position.z < entry->territoryBase.z - 0.75f * entry->territoryHoming.z ||
-                                                    entry->position.z > entry->territoryBase.z + 0.75f * entry->territoryHoming.z) {
-                                                    trig = 0;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        done14:
-                            if (trig) {
-                                entry->interruptFlags |= NPC_INTERRUPT_FIND;
-                            }
-                        }
-                    }
-                interrupt:
-                    npcCheckInterrupt(entry);
-                }
-                if (!(entry->flags & NPC_FLAG_HIDE)) {
-                    CameraEntry* cam;
-
-                    cam = camGetPtr((CameraId)4);
-                    PSMTXMultVec(cam->view, &entry->position, &dv);
-                    cam = camGetPtr((CameraId)4);
-                    PSMTX44MultVec(cam->projection, &dv, &dv);
-                    if ((dv.z > -1.0f && dv.z < 0.0f && dv.x >= -2.0f && dv.x <= 2.0f && dv.y >= -2.0f && dv.y <= 2.0f) ||
-                        (entry->flags & NPC_FLAG_NO_CULL)) {
-                        if (entry->color.r != 0xFF || entry->color.g != 0xFF || entry->color.b != 0xFF ||
-                            entry->color.a != 0xFF) {
-                            animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
-                            animPoseSetMaterialEvtColor(entry->poseId, entry->color);
-                        } else {
-                            animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_COLOR);
-                        }
-                        prio = 5000.0f + 5000.0f * dv.z;
-                        if (prio < 0.0f) {
-                            prio = 0.0f;
-                        } else if (prio > 10000.0f) {
-                            prio = 10000.0f;
-                        }
-                        prio *= -1.0f;
-                        if (!(entry->flags & NPC_FLAG_NO_DRAW) &&
-                            (!(entry->wFbatHitCheckRelated & 2) || (entry->statusFlags & NPC_STATUS_STOPPED))) {
-                            if (entry->color.a != 0xFF) {
-                                dispEntry((CameraId)entry->cameraId, prio, 2, npcDisp_xlu, entry);
-                            } else {
-                                dispEntry((CameraId)entry->cameraId, prio, 0, npcDisp, entry);
-                                dispEntry((CameraId)entry->cameraId, prio, 1, npcDisp, entry);
-                                dispEntry((CameraId)entry->cameraId, prio, 2, npcDisp, entry);
-                            }
-                            if (!(entry->flags & NPC_FLAG_VIVIAN_TYPE)) {
-                                if (!(entry->flags & NPC_FLAG_NO_SHADOW)) {
-                                    Vec shadowPos = entry->position;
-                                    if (entry->tribe) {
-                                        shadowPos.x += entry->tribe->shadowOffsetX * entry->scale.x * sinfd(reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f);
-                                        shadowPos.y += entry->tribe->shadowOffsetY * entry->scale.y;
-                                        shadowPos.z += entry->tribe->shadowOffsetZ * entry->scale.z;
-                                    }
-                                    {
-                                        s32 shadowId = shadowEntry(
-                                            shadowPos.x, shadowPos.y, shadowPos.z,
-                                            1.33f * (entry->shadowScale * (entry->width / 3.0f * entry->scale.x)));
-                                        if (entry->flags & NPC_FLAG_SHADOW_NO_FLOOR) {
-                                            shadowSetCollision(shadowId, 0);
-                                        }
-                                    }
-                                }
-                            } else {
-                                Vec floorPos = entry->position;
-                                f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
-                                hitDist = 100.0f;
-                                if (hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, floorPos.x, 1.0f + floorPos.y, floorPos.z,
-                                                   0.0f, -1.0f, 0.0f)) {
-                                    floorPos.y = hitY;
-                                }
-                                animPoseVivianMain(entry->poseId, &floorPos);
-                                {
-                                    s32 shadowId = shadowEntry(entry->position.x, entry->position.y, entry->position.z,
-                                                         entry->shadowScale * (entry->width / 3.0f * entry->scale.x));
-                                    if (entry->flags & NPC_FLAG_SHADOW_NO_FLOOR) {
-                                        shadowSetCollision(shadowId, 0);
-                                    }
-                                }
-                            }
-                            if (entry->flags & NPC_FLAG_BLUR) {
-                                dispEntry((CameraId)entry->cameraId, prio, 2, npcDisp_blur, entry);
-                            }
-                        }
-                        if (entry->offscreenId != -1) {
-                            if (entry->color.a != 0xFF) {
-                                dispEntry((CameraId)1, prio, 2, npcDisp_offscreen_xlu, entry);
-                            } else {
-                                dispEntry((CameraId)1, prio, 0, npcDisp_offscreen, entry);
-                                dispEntry((CameraId)1, prio, 1, npcDisp_offscreen, entry);
-                                dispEntry((CameraId)1, prio, 2, npcDisp_offscreen, entry);
-                            }
-                        }
-                    }
-                }
-                entry->prevPosition = entry->position;
-                if (entry->flags & NPC_FLAG_BLUR && !(npcMainCount & 1)) {
-                    entry->positionHistory[4] = entry->positionHistory[3];
-                    entry->positionHistory[3] = entry->positionHistory[2];
-                    entry->positionHistory[2] = entry->positionHistory[1];
-                    entry->positionHistory[1] = entry->positionHistory[0];
-                    entry->positionHistory[0] = entry->position;
-                }
-            }
-            entry->statusFlags &= ~NPC_STATUS_UPDATE;
-        }
-    }
-
-    fbat = gp->fbatData;
-    {
-        FirstStrikeInfo* firstStrike = &fbat->firstStrike;
-        if (firstStrike->enabled) {
-            switch (firstStrike->type) {
-                case 2:
-                    (firstStrike->timer)++;
-                    if (firstStrike->timer < 30) {
-                        firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 30);
-                    } else if (firstStrike->timer < 150) {
-                        firstStrike->x = 0.0f;
-                    } else if (firstStrike->timer < 180) {
-                        firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 150, 30);
-                    } else {
-                        firstStrike->hitKind = 0;
-                        break;
-                    }
-                    firstStrike->y = 0.0f;
-                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
-                    break;
-                case 1:
-                    (firstStrike->timer)++;
-                    if (firstStrike->timer > 60) {
-                        firstStrike->hitKind = 0;
-                        break;
-                    }
-                    firstStrike->x = 0.0f;
-                    firstStrike->y = 0.0f;
-                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
-                    break;
-            }
-        }
-        switch (fbat->mode) {
-            case 1:
-                npcKoopaModeMain();
-                break;
-            case 2:
-            case 3:
-                fbatTalkMode();
-                break;
-            case 5:
-                fbatBattleMode();
-                break;
-            case 6:
-                break;
-        }
-        fbat->sandersBombTrigger = 0;
-    }
-}
 #else
 #if VERSION >= VERSION_US
                                     if (sd > 0.25f * entry->searchRange) {
@@ -1233,6 +1048,7 @@ void npcMain(void) {
                                     dist = sqrtf(dist);
                                     if (dist > 0.25f * entry->searchRange) {
                                         if (dist > entry->searchRange) {
+#endif
 #endif
                                             trig = 0;
                                             goto done14;
@@ -1279,9 +1095,15 @@ void npcMain(void) {
                 if (!(entry->flags & NPC_FLAG_HIDE)) {
                     CameraEntry* cam;
 
+#if VERSION <= VERSION_DEMO_US
+                    cam = camGetPtr((CameraId)4);
+                    PSMTXMultVec(cam->view, &entry->position, &dv);
+                    cam = camGetPtr((CameraId)4);
+#else
                     cam = camGetPtr(CAMERA_3D);
                     PSMTXMultVec(cam->view, &entry->position, &dv);
                     cam = camGetPtr(CAMERA_3D);
+#endif
                     PSMTX44MultVec(cam->projection, &dv, &dv);
                     if ((dv.z > -1.0f && dv.z < 0.0f && dv.x >= -2.0f && dv.x <= 2.0f && dv.y >= -2.0f && dv.y <= 2.0f) ||
                         (entry->flags & NPC_FLAG_NO_CULL)) {
@@ -1348,11 +1170,19 @@ void npcMain(void) {
                         }
                         if (entry->offscreenId != -1) {
                             if (entry->color.a != 0xFF) {
+#if VERSION <= VERSION_DEMO_US
+                                dispEntry((CameraId)1, prio, 2, npcDisp_offscreen_xlu, entry);
+                            } else {
+                                dispEntry((CameraId)1, prio, 0, npcDisp_offscreen, entry);
+                                dispEntry((CameraId)1, prio, 1, npcDisp_offscreen, entry);
+                                dispEntry((CameraId)1, prio, 2, npcDisp_offscreen, entry);
+#else
                                 dispEntry(CAMERA_OFFSCREEN2, prio, 2, npcDisp_offscreen_xlu, entry);
                             } else {
                                 dispEntry(CAMERA_OFFSCREEN2, prio, 0, npcDisp_offscreen, entry);
                                 dispEntry(CAMERA_OFFSCREEN2, prio, 1, npcDisp_offscreen, entry);
                                 dispEntry(CAMERA_OFFSCREEN2, prio, 2, npcDisp_offscreen, entry);
+#endif
                             }
                         }
                     }
@@ -1376,6 +1206,15 @@ void npcMain(void) {
         if (firstStrike->enabled) {
             switch (firstStrike->type) {
                 case 2:
+#if VERSION <= VERSION_DEMO_US
+                    (firstStrike->timer)++;
+                    if (firstStrike->timer < 30) {
+                        firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 30);
+                    } else if (firstStrike->timer < 150) {
+                        firstStrike->x = 0.0f;
+                    } else if (firstStrike->timer < 180) {
+                        firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 150, 30);
+#else
                     firstStrike->timer++;
                     if (firstStrike->timer < 20) {
                         firstStrike->x = intplGetValue(EASING_CUBIC_OUT, -600.0f, 0.0f, firstStrike->timer, 20);
@@ -1383,22 +1222,34 @@ void npcMain(void) {
                         firstStrike->x = 0.0f;
                     } else if (firstStrike->timer < 100) {
                         firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 80, 20);
+#endif
                     } else {
                         firstStrike->hitKind = 0;
                         break;
                     }
                     firstStrike->y = 0.0f;
+#if VERSION <= VERSION_DEMO_US
+                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+                    break;
+                case 1:
+                    (firstStrike->timer)++;
+#else
                     dispEntry(CAMERA_FADE, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
                     break;
                 case 1:
                     firstStrike->timer++;
+#endif
                     if (firstStrike->timer > 60) {
                         firstStrike->hitKind = 0;
                         break;
                     }
                     firstStrike->x = 0.0f;
                     firstStrike->y = 0.0f;
+#if VERSION <= VERSION_DEMO_US
+                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+#else
                     dispEntry(CAMERA_FADE, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+#endif
                     break;
             }
         }
@@ -1419,7 +1270,6 @@ void npcMain(void) {
         fbat->sandersBombTrigger = 0;
     }
 }
-#endif
 
 #if VERSION >= VERSION_US
 /** Zero vector left over in the NPC driver's constants; nothing reads it (its place differs by version). */

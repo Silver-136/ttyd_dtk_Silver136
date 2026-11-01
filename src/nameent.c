@@ -366,162 +366,13 @@ s32 nameMain(void) {
                     off = wp->cursorX;
 #if VERSION <= VERSION_DEMO_US
                     if (off >= 10 && wp->cursorY >= 4) {
-                        switch (wp->cursorY) {
-                            case 4:
-                                wp->charTable = hiragana_tbl;
-                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_FONT_CHANGE1 | PSND_SFX_BYPASS_MUTE));
-                                break;
-                            case 5:
-                                wp->charTable = katakana_tbl;
-                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_FONT_CHANGE1 | PSND_SFX_BYPASS_MUTE));
-                                break;
-                            case 6:
-                                if (wp->nameLen > 0) {
-                                    wp->nameLen--;
-                                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1 | PSND_SFX_BYPASS_MUTE));
-                                }
-                                break;
-                            case 7:
-                                wp->confirmSel = 1;
-                                wp->state = 100;
-                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                                break;
-                        }
-                    } else if (wp->nameLen < 8) {
-                        ((u16*)wp->name)[wp->nameLen] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
-                        wp->nameLen++;
-                        if (wp->nameLen >= 8) {
-                            wp->cursorX = 10;
-                            wp->cursorY = 7;
-                        }
-                        psndSFXOn((const char*)0xA);
-                    } else if (wp->nameLen == 8) {
-                        ((u16*)wp->name)[wp->nameLen - 1] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
-                        wp->cursorX = 10;
-                        wp->cursorY = 7;
-                        psndSFXOn((const char*)0xA);
-                    }
-                } else if (keyGetButtonTrg(0) & PAD_BUTTON_START) {
-                    wp->cursorX = 10;
-                    wp->cursorY = 7;
-                    wp->confirmSel = 1;
-                    wp->state = 100;
-                    psndSFXOn((const char*)0x12);
-                } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-                    if (wp->nameLen > 0) {
-                        wp->nameLen--;
-                        ((u16*)wp->name)[wp->nameLen] = *(u16*)"　";
-                        psndSFXOn((const char*)0xB);
-                    } else if (wp->nameLen == 0 && wp->type == 0) {
-                        psndSFXOn((const char*)0x13);
-                        wp->state = 101;
-                        wp->flags |= NAMEENT_FLAG_CANCELLED;
-                    }
-                } else if (keyGetDirRep(0) & DEMO_STICK_LEFT) {
-                    wp->cursorX--;
-                    if (wp->cursorY > 3) {
-                        if (wp->cursorX < 0) {
-                            wp->cursorX = 10;
-                            if (wp->cursorY > 7) {
-                                wp->cursorY = 7;
-                            }
-                        }
-                    } else if (wp->cursorX < 0) {
-                        wp->cursorX = 13;
-                    }
-                    psndSFXOn((const char*)5);
-                } else if (keyGetDirRep(0) & DEMO_STICK_RIGHT) {
-                    wp->cursorX++;
-                    if (wp->cursorY > 3) {
-                        if (wp->cursorX >= 10 && wp->cursorY > 7) {
-                            wp->cursorY = 7;
-                        }
-                        if (wp->cursorX >= 11) {
-                            wp->cursorX = 0;
-                        }
-                    } else if (wp->cursorX >= NAMEENT_COLS) {
-                        wp->cursorX = 0;
-                    }
-                    psndSFXOn((const char*)5);
-                } else if (keyGetDirRep(0) & DEMO_STICK_UP) {
-                    wp->cursorY--;
-                    if (wp->cursorY < 0) {
-                        wp->cursorY = wp->cursorX > 9 ? 7 : 8;
-                    }
-                    psndSFXOn((const char*)5);
-                } else if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
-                    wp->cursorY++;
-                    if (wp->cursorX > 9) {
-                        if (wp->cursorY >= 4) {
-                            wp->cursorX = 10;
-                        }
-                        if (wp->cursorY >= 8) {
-                            wp->cursorY = 0;
-                        }
-                    } else if (wp->cursorY >= 9) {
-                        wp->cursorY = 0;
-                    }
-                    psndSFXOn((const char*)5);
-                }
-            }
-            idx = wp->cursorX;
-            if (idx > 9 && wp->cursorY > 3) {
-                wp->x2 = 100.0f;
-                wp->y2 = (f32)(-20 - (wp->cursorY - 4) * 34);
-                wp->x2 -= 6.0f;
-                wp->y2 += 6.0f;
-            } else {
-                wp->x2 = (f32)(idx * 24 - 190 + (idx / 5) * 30);
-                wp->y2 = (f32)(112 - wp->cursorY * 28);
-                wp->x2 -= 16.0f;
-                wp->y2 -= 12.0f;
-            }
-            wp->maskAlpha -= 0.05f;
-            if (wp->maskAlpha <= 0.0f) {
-                wp->maskAlpha = 0.0f;
-            }
-            break;
-        case 100:
-            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                if (wp->confirmSel == 0) {
-                    wp->state++;
-                    psndSFXOn((const char*)0x12);
-                } else {
-                    wp->state = 0;
-                    psndSFXOn((const char*)0x13);
-                }
-            } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-                wp->state = 0;
-                psndSFXOn((const char*)0x13);
-            } else if (keyGetDirRep(0) & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
-                wp->confirmSel = 1 - wp->confirmSel;
-                psndSFXOn((const char*)5);
-            }
-            wp->x2 = -60.0f;
-            wp->y2 = -30.0f - 40.0f * (f32)wp->confirmSel;
-            wp->maskAlpha += 0.05f;
-            if (wp->maskAlpha >= 1.0f) {
-                wp->maskAlpha = 1.0f;
-            }
-            break;
-    }
-    wp->x1 += (wp->x2 - wp->x1) / FPS_EASE(4.0f);
-    wp->y1 += (wp->y2 - wp->y1) / FPS_EASE(4.0f);
-    wp->x1 += __fabs(2.0f * (f32)sin(gp->retraceCount / 8.0f));
-    idx = wp->nameLen >= 8 ? wp->nameLen - 1 : wp->nameLen;
-    wp->caretTargetX = idx * 32 - 106;
-    wp->caretTargetY = 135.0f;
-    wp->caretX += (wp->caretTargetX - wp->caretX) / FPS_EASE(4.0f);
-    wp->caretY += (wp->caretTargetY - wp->caretY) / FPS_EASE(4.0f);
-    wp->caretY += __fabs(2.0f * (f32)sin(gp->retraceCount / 8.0f));
-    return 0;
-}
 #else
 #if VERSION >= VERSION_US
                     // FAKE: no-op (s32) cast; the plain ?: changes the object
                     if (off >= 10 && wp->cursorY >= (s32)((u32)gp->language == LANGUAGE_JP ? 4 : 6)) {
 #else
                     if (off >= 10 && wp->cursorY >= 4) {
+#endif
 #endif
                         switch (wp->cursorY) {
                             case 4:
@@ -538,6 +389,12 @@ s32 nameMain(void) {
                                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1 | PSND_SFX_BYPASS_MUTE));
                                 }
                                 break;
+#if VERSION <= VERSION_DEMO_US
+                            case 7:
+                                wp->confirmSel = 1;
+                                wp->state = 100;
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
+#else
                             case 7: {
                                 s32 n;
                                 s32 k;
@@ -612,9 +469,15 @@ s32 nameMain(void) {
                                 }
 #endif
                             }
+#endif
                                 break;
                         }
                     } else if (wp->nameLen < 8) {
+#if VERSION <= VERSION_DEMO_US
+                        ((u16*)wp->name)[wp->nameLen] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
+                        wp->nameLen++;
+                        if (wp->nameLen >= 8) {
+#else
 #if VERSION >= VERSION_US
                         if ((u32)gp->language == LANGUAGE_JP) {
                             ((u16*)wp->name)[wp->nameLen] = *(u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
@@ -627,9 +490,80 @@ s32 nameMain(void) {
                         wp->nameLen++;
                         if (wp->nameLen >= 8) {
                             wp->nameLen = 7;
+#endif
                             wp->cursorX = 10;
                             wp->cursorY = 7;
                         }
+#if VERSION <= VERSION_DEMO_US
+                        psndSFXOn((const char*)0xA);
+                    } else if (wp->nameLen == 8) {
+                        ((u16*)wp->name)[wp->nameLen - 1] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
+                        wp->cursorX = 10;
+                        wp->cursorY = 7;
+                        psndSFXOn((const char*)0xA);
+                    }
+                } else if (keyGetButtonTrg(0) & PAD_BUTTON_START) {
+                    wp->cursorX = 10;
+                    wp->cursorY = 7;
+                    wp->confirmSel = 1;
+                    wp->state = 100;
+                    psndSFXOn((const char*)0x12);
+                } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
+                    if (wp->nameLen > 0) {
+                        wp->nameLen--;
+                        ((u16*)wp->name)[wp->nameLen] = *(u16*)"　";
+                        psndSFXOn((const char*)0xB);
+                    } else if (wp->nameLen == 0 && wp->type == 0) {
+                        psndSFXOn((const char*)0x13);
+                        wp->state = 101;
+                        wp->flags |= NAMEENT_FLAG_CANCELLED;
+                    }
+                } else if (keyGetDirRep(0) & DEMO_STICK_LEFT) {
+                    wp->cursorX--;
+                    if (wp->cursorY > 3) {
+                        if (wp->cursorX < 0) {
+                            wp->cursorX = 10;
+                            if (wp->cursorY > 7) {
+                                wp->cursorY = 7;
+                            }
+                        }
+                    } else if (wp->cursorX < 0) {
+                        wp->cursorX = 13;
+                    }
+                    psndSFXOn((const char*)5);
+                } else if (keyGetDirRep(0) & DEMO_STICK_RIGHT) {
+                    wp->cursorX++;
+                    if (wp->cursorY > 3) {
+                        if (wp->cursorX >= 10 && wp->cursorY > 7) {
+                            wp->cursorY = 7;
+                        }
+                        if (wp->cursorX >= 11) {
+                            wp->cursorX = 0;
+                        }
+                    } else if (wp->cursorX >= NAMEENT_COLS) {
+                        wp->cursorX = 0;
+                    }
+                    psndSFXOn((const char*)5);
+                } else if (keyGetDirRep(0) & DEMO_STICK_UP) {
+                    wp->cursorY--;
+                    if (wp->cursorY < 0) {
+                        wp->cursorY = wp->cursorX > 9 ? 7 : 8;
+                    }
+                    psndSFXOn((const char*)5);
+                } else if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
+                    wp->cursorY++;
+                    if (wp->cursorX > 9) {
+                        if (wp->cursorY >= 4) {
+                            wp->cursorX = 10;
+                        }
+                        if (wp->cursorY >= 8) {
+                            wp->cursorY = 0;
+                        }
+                    } else if (wp->cursorY >= 9) {
+                        wp->cursorY = 0;
+                    }
+                    psndSFXOn((const char*)5);
+#else
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_SET1));
                     } else if (wp->nameLen == 8) {
                         wp->nameLen = 7;
@@ -817,13 +751,18 @@ s32 nameMain(void) {
                         }
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                     }
+#endif
                 }
             }
             idx = wp->cursorX;
+#if VERSION <= VERSION_DEMO_US
+            if (idx > 9 && wp->cursorY > 3) {
+#else
 #if VERSION >= VERSION_US
             if (idx > 9 && wp->cursorY > ((u32)gp->language == LANGUAGE_JP ? 3 : 5)) {
 #else
             if (idx > 9 && wp->cursorY > 3) {
+#endif
 #endif
                 wp->x2 = 100.0f;
                 wp->y2 = (f32)(-20 - (wp->cursorY - 4) * 34);
@@ -844,17 +783,31 @@ s32 nameMain(void) {
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                 if (wp->confirmSel == 0) {
                     wp->state++;
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn((const char*)0x12);
+                } else {
+                    wp->state = 0;
+                    psndSFXOn((const char*)0x13);
+#else
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                 } else {
                     wp->state = 0;
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
+#endif
                 }
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                 wp->state = 0;
+#if VERSION <= VERSION_DEMO_US
+                psndSFXOn((const char*)0x13);
+            } else if (keyGetDirRep(0) & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
+                wp->confirmSel = 1 - wp->confirmSel;
+                psndSFXOn((const char*)5);
+#else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
             } else if (keyGetDirRep(0) & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
                 wp->confirmSel = 1 - wp->confirmSel;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
+#endif
             }
             wp->x2 = -60.0f;
             wp->y2 = -30.0f - 40.0f * (f32)wp->confirmSel;
@@ -875,7 +828,6 @@ s32 nameMain(void) {
     wp->caretY += __fabs(2.0f * (f32)sin(gp->retraceCount / 8.0f));
     return 0;
 }
-#endif
 
 /**
  * Draws the name entry screen in 2D: background, the name boxes with the 8 typed characters, the character grid,

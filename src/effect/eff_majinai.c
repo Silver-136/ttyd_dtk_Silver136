@@ -105,52 +105,6 @@ void effMajinaiMain(EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_US
                 for (i = 0; i < 5; i++) {
                     animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
-                }
-} else {
-                unit = BattleGetMarioPtr(_battleWorkPointer);
-                animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND);
-            }
-            if (animPoseGetLoopTimes(work->poseId) >= 0.93f) {
-                effStardustEntry(0, 16, 60, work->position.x, 55.0f + work->position.y, work->position.z, 45.0f, 45.0f);
-work->state++;
-            }
-            break;
-        case 2:
-            if (animPoseGetLoopTimes(work->poseId) >= 1.0f) {
-                work->state++;
-            }
-            break;
-        case 3:
-            // restore the map and fade out
-            map = mapGetWork();
-            color = map->entries[0].color.r + 5;
-            if (color > 255) {
-                color = 255;
-            }
-            map->entries[0].color = (GXColor){color, color, color, 0xFF};
-            map->entries[0].flags |= 8;
-            if (!gp->inBattle) {
-                mario = marioGetPtr();
-                for (i = 0; i < 5; i++) {
-                    animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
-                }
-} else {
-                unit = BattleGetMarioPtr(_battleWorkPointer);
-                animPoseSetMaterialFlagOff(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND);
-            }
-            work->alpha -= 5;
-            if (work->alpha < 0) {
-                if (work->poseId != -1) {
-                    animPoseRelease(work->poseId);
-                }
-                mapGetWork()->entries[0].flags &= ~8;
-                effDelete(effect);
-                return;
-            }
-            break;
-    }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMajinaiDisp, effect);
-}
 #else
 #if VERSION == VERSION_EU
                 for (i = 0; i < 3; i++) {
@@ -162,14 +116,19 @@ work->state++;
 #if VERSION == VERSION_EU
                     }
 #endif
+#endif
                 }
             } else {
                 unit = BattleGetMarioPtr(_battleWorkPointer);
                 animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND);
             }
             if (animPoseGetLoopTimes(work->poseId) >= 0.93f) {
+#if VERSION <= VERSION_DEMO_US
+                effStardustEntry(0, 16, 60, work->position.x, 55.0f + work->position.y, work->position.z, 45.0f, 45.0f);
+#else
                 effStardustEntry(0, 16, 60, work->position.x, 55.0f * work->scale + work->position.y,
                                  work->position.z, 45.0f * work->scale, 45.0f * work->scale);
+#endif
                 work->state++;
             }
             break;
@@ -189,6 +148,10 @@ work->state++;
             map->entries[0].flags |= 8;
             if (!gp->inBattle) {
                 mario = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+                for (i = 0; i < 5; i++) {
+                    animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
+#else
 #if VERSION == VERSION_EU
                 for (i = 0; i < 3; i++) {
                     if (mario->paperAnimGroupId[i] != -1) {
@@ -198,6 +161,7 @@ work->state++;
                     animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
 #if VERSION == VERSION_EU
                     }
+#endif
 #endif
                 }
             } else {
@@ -217,7 +181,6 @@ work->state++;
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMajinaiDisp, effect);
 }
-#endif
 
 /** Draws the MOBJ_EFF_majinai animation pose at the effect position. */
 void effMajinaiDisp(CameraId cameraId, EffectEntry* effect) {

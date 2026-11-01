@@ -858,9 +858,43 @@ void pouchSortItem(s32 mode) {
             }
         }
         for (n = i; n < MAX_BADGES; n++) {
+#else
+#if VERSION == VERSION_EU
+        count = 0;
+        for (n = 0; n < MAX_BADGES; n++) {
+            if (pp[0]->badges[n] != 0) {
+                badges[count] = pp[0]->badges[n];
+                count++;
+                equipped[count - 1] = pp[0]->equippedBadges[n];
+            }
+        }
+        for (n = count; n < MAX_BADGES; n++) {
+#else
+#if VERSION >= VERSION_US
+        /* FAKE: block-scoped (shadowing j/i) locals and separate sort counter m steer register colouring */
+        ItemData* a;
+        ItemData* b;
+        s32 m;
+        s32 j;
+        s32 i;
+        const char* ida;
+
+#endif
+        i = 0;
+        for (n = 0; n < MAX_BADGES; n++) {
+            if (pp[0]->badges[n] != 0) {
+                badges[i] = pp[0]->badges[n];
+                i++;
+                equipped[i - 1] = pp[0]->equippedBadges[n];
+            }
+        }
+        for (n = i; n < MAX_BADGES; n++) {
+#endif
+#endif
             badges[n] = 0;
             equipped[n] = 0;
         }
+#if VERSION <= VERSION_DEMO_US
         for (n = 0; n < i - 1; n++) {
             for (j = n + 1; j < i; j++) {
                 ItemData* a = &itemDataTable[badges[n]];
@@ -905,40 +939,6 @@ void pouchSortItem(s32 mode) {
 }
 #else
 #if VERSION == VERSION_EU
-        count = 0;
-        for (n = 0; n < MAX_BADGES; n++) {
-            if (pp[0]->badges[n] != 0) {
-                badges[count] = pp[0]->badges[n];
-                count++;
-                equipped[count - 1] = pp[0]->equippedBadges[n];
-            }
-        }
-        for (n = count; n < MAX_BADGES; n++) {
-#else
-#if VERSION >= VERSION_US
-        /* FAKE: block-scoped (shadowing j/i) locals and separate sort counter m steer register colouring */
-        ItemData* a;
-        ItemData* b;
-        s32 m;
-        s32 j;
-        s32 i;
-        const char* ida;
-
-#endif
-        i = 0;
-        for (n = 0; n < MAX_BADGES; n++) {
-            if (pp[0]->badges[n] != 0) {
-                badges[i] = pp[0]->badges[n];
-                i++;
-                equipped[i - 1] = pp[0]->equippedBadges[n];
-            }
-        }
-        for (n = i; n < MAX_BADGES; n++) {
-#endif
-            badges[n] = 0;
-            equipped[n] = 0;
-        }
-#if VERSION == VERSION_EU
         for (j = 0; j < count - 1; j++) {
             for (l = j + 1; l < count; l++) {
                 BOOL swap;
@@ -953,42 +953,6 @@ void pouchSortItem(s32 mode) {
                 pouchHiraToKata(idb, keyB);
                 ida = keyA;
                 idb = keyB;
-                if (mode == 4) {
-                    if (strcmp(ida, idb) > 0) {
-                        swap = TRUE;
-                    }
-                } else if (mode == 11) {
-                    if (strcmp(ida, idb) < 0) {
-                        swap = TRUE;
-                    }
-                } else if (mode == 5) {
-                    if (itemDataTable[bn].type_sort_order > itemDataTable[bj].type_sort_order) {
-                        swap = TRUE;
-                    }
-                } else if (mode == 12) {
-                    if (itemDataTable[bn].type_sort_order < itemDataTable[bj].type_sort_order) {
-                        swap = TRUE;
-                    }
-                } else if (mode == 6) {
-                    if (ca > cb) {
-                        swap = TRUE;
-                    } else if (ca == cb && itemDataTable[bn].type_sort_order > itemDataTable[bj].type_sort_order) {
-                        swap = TRUE;
-                    }
-                } else if (mode == 13) {
-                    if (ca < cb) {
-                        swap = TRUE;
-                    } else if (ca == cb && itemDataTable[bn].type_sort_order < itemDataTable[bj].type_sort_order) {
-                        swap = TRUE;
-                    }
-                }
-                if (swap) {
-                    t1 = badges[j];
-                    t2 = equipped[j];
-                    badges[j] = badges[l];
-                    equipped[j] = equipped[l];
-                    badges[l] = t1;
-                    equipped[l] = t2;
 #else
 #if VERSION >= VERSION_US
         for (m = 0; m < i - 1; m++) {
@@ -1013,6 +977,7 @@ void pouchSortItem(s32 mode) {
                 const char* idb = b->id;
 #endif
                 swap = FALSE;
+#endif
                 if (mode == 4) {
                     if (strcmp(ida, idb) > 0) {
                         swap = TRUE;
@@ -1022,27 +987,51 @@ void pouchSortItem(s32 mode) {
                         swap = TRUE;
                     }
                 } else if (mode == 5) {
+#if VERSION == VERSION_EU
+                    if (itemDataTable[bn].type_sort_order > itemDataTable[bj].type_sort_order) {
+#else
                     if (a->type_sort_order > b->type_sort_order) {
+#endif
                         swap = TRUE;
                     }
                 } else if (mode == 12) {
+#if VERSION == VERSION_EU
+                    if (itemDataTable[bn].type_sort_order < itemDataTable[bj].type_sort_order) {
+#else
                     if (a->type_sort_order < b->type_sort_order) {
+#endif
                         swap = TRUE;
                     }
                 } else if (mode == 6) {
                     if (ca > cb) {
                         swap = TRUE;
+#if VERSION == VERSION_EU
+                    } else if (ca == cb && itemDataTable[bn].type_sort_order > itemDataTable[bj].type_sort_order) {
+#else
                     } else if (ca == cb && a->type_sort_order > b->type_sort_order) {
+#endif
                         swap = TRUE;
                     }
                 } else if (mode == 13) {
                     if (ca < cb) {
                         swap = TRUE;
+#if VERSION == VERSION_EU
+                    } else if (ca == cb && itemDataTable[bn].type_sort_order < itemDataTable[bj].type_sort_order) {
+#else
                     } else if (ca == cb && a->type_sort_order < b->type_sort_order) {
+#endif
                         swap = TRUE;
                     }
                 }
                 if (swap) {
+#if VERSION == VERSION_EU
+                    t1 = badges[j];
+                    t2 = equipped[j];
+                    badges[j] = badges[l];
+                    equipped[j] = equipped[l];
+                    badges[l] = t1;
+                    equipped[l] = t2;
+#else
 #if VERSION >= VERSION_US
                     t1 = badges[m];
                     t2 = equipped[m];

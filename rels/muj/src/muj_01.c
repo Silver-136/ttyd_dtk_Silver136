@@ -2091,21 +2091,6 @@ static EVT_BEGIN(sekai_yami_evt)
 #if VERSION <= VERSION_DEMO_US
         WAIT_MS(1000)
         LOOP(2)
-            CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
-            CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
-            WAIT_MS(100)
-            CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
-            WAIT_MS(100)
-            END_LOOP
-    END_INLINE_EVENT
-    WAIT_MS(3000)
-    CALL(evt_snd_sfxoff, LW(0))
-    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
-    // Fade out and continue the scene at pik_01.
-    CALL(evt_bero_mapchange, STRING("pik_01"), STRING("sekai_yami2"))
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
 #else
 #if VERSION >= VERSION_US
         WAIT_MS(100)
@@ -2115,10 +2100,17 @@ EVT_END()
         LOOP(2)
 #endif
             // The screen flashes white several times.
+#endif
             CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
             CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
             WAIT_MS(100)
             CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
+#if VERSION <= VERSION_DEMO_US
+            WAIT_MS(100)
+            END_LOOP
+    END_INLINE_EVENT
+    WAIT_MS(3000)
+#else
 #if VERSION >= VERSION_US
             WAIT_MS(400)
 #else
@@ -2131,6 +2123,7 @@ EVT_END()
 #else
     WAIT_MS(1000)
 #endif
+#endif
     CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     // Fade out and continue the scene at pik_01.
@@ -2138,7 +2131,6 @@ EVT_END()
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(minnnanokoe_evt)
     // Everyone's voices: Mario loses control and the crew gathers.

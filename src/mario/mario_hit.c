@@ -2127,16 +2127,6 @@ void marioCheckWall(f32 dx, f32 dz) {
                 mario->wallPushTimer = 20;
                 if (!(hitGetAttr(hit) & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                     mario->hitobjPush = hit;
-                }
-            }
-            mario->position = pos;
-        }
-    } else {
-        mario->position = pos;
-    }
-    marioChkWallAround(&mario->position, dx, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
-    dou10_yoko_yari(&mario->frontWallDist);
-}
 #else
 #if VERSION >= VERSION_US
             {
@@ -2152,6 +2142,7 @@ void marioCheckWall(f32 dx, f32 dz) {
                 if (!(hitGetAttr(hit) & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                     mario->hitobjPush = hit;
 #endif
+#endif
                 }
             }
             mario->position = pos;
@@ -2159,10 +2150,13 @@ void marioCheckWall(f32 dx, f32 dz) {
     } else {
         mario->position = pos;
     }
+#if VERSION <= VERSION_DEMO_US
+    marioChkWallAround(&mario->position, dx, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
+#else
     marioChkWallAround(&mario->position, 0, dx, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
+#endif
     dou10_yoko_yari(&mario->frontWallDist);
 }
-#endif
 
 /**
  * Wall check while Mario stands still: finds the wall he faces (hitobjFront, frontWallDist;

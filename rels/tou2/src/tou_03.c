@@ -1631,27 +1631,6 @@ EVT_BEGIN(evt_random_battle)
     CALL(evt_npc_check, STRING("敵３"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_npc_set_position, STRING("敵３"), 0, -1000, 0)
-    END_IF
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    ADD(LW(0), -50)
-    ADD(LW(2), -20)
-    CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
-    // The Iron Clefts moan about losing and Grubba cheers Gonzales, or they gloat and Grubba calls the upset.
-    CALL(evt_npc_get_battle_result, LW(0))
-    IF_INT_EQUAL(LW(0), BATTLE_RESULT_WIN)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_406"), 0, STRING("乱"))
-        WAIT_MS(300)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_403_02"), 0, STRING("ガンス"))
-        WAIT_MS(300)
-    ELSE
-        CALL_CHILD(evt_damage_pose)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_405"), 0, STRING("乱"))
-        WAIT_MS(300)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_406_01"), 0, STRING("ガンス"))
-        WAIT_MS(300)
-    END_IF
-    RETURN
-EVT_END()
 #else
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_battle_info, STRING("乱"), 10)
@@ -1689,6 +1668,7 @@ EVT_END()
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_npc_set_position, STRING("\223G\202R"), 0, -1000, 0)
 #endif
+#endif
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(0), -50)
@@ -1696,6 +1676,11 @@ EVT_END()
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_battle_result, LW(0))
     IF_INT_EQUAL(LW(0), BATTLE_RESULT_WIN)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg3_tou_406"), 0, STRING("乱"))
+        WAIT_MS(300)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_403_02"), 0, STRING("ガンス"))
+#else
 #if VERSION >= VERSION_US
         CALL(evt_npc_set_anim, STRING("乱"), STRING("SIN_K_1"))
         CALL(evt_npc_set_anim, STRING("乱２"), STRING("SIN_K_1"))
@@ -1713,9 +1698,15 @@ EVT_END()
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg3_tou_403_02"), 0, STRING("\203K\203\223\203X"))
 #endif
+#endif
         WAIT_MS(300)
         ELSE
         CALL_CHILD(PTR(evt_damage_pose))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg3_tou_405"), 0, STRING("乱"))
+        WAIT_MS(300)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_406_01"), 0, STRING("ガンス"))
+#else
 #if VERSION >= VERSION_US
         CALL(evt_msg_print, 0, STRING("stg3_tou_405"), 0, STRING("乱"))
         WAIT_MS(300)
@@ -1725,11 +1716,11 @@ EVT_END()
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg3_tou_406_01"), 0, STRING("\203K\203\223\203X"))
 #endif
+#endif
         WAIT_MS(300)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 /**
  * Bowser's ambush, played after a won match at rank 5 until GSWF_TOU_BOWSER_RAID_DONE is set:
@@ -2141,126 +2132,6 @@ EVT_BEGIN(evt_match)
     CALL(evt_npc_set_battle_rule, STRING("敵１"), GSW_GLITZ_PIT_CONDITION, GSW_GLITZ_PIT_CONDITION_PARAM, GSW_GLITZ_PIT_CONDITION_PARAM2)
     CALL(evt_npc_battle_start, STRING("敵１"))
     CALL(evt_npc_wait_battle_end)
-    CALL(evt_npc_get_battle_rule_keep_result, LW(0))
-    CALL(evt_tou_set_rule_result, LW(0))
-    SET_VALUE(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
-    SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    ADD(LW(0), -50)
-    ADD(LW(2), -20)
-    CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_npc_get_battle_result, LW(0))
-    BEGIN_INLINE_EVENT
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-            CALL(evt_npc_set_stay_anim, STRING("ガンス"))
-            CALL(evt_npc_set_autotalkpose, STRING("ガンス"), STRING("S_2"), STRING("T_2"))
-        ELSE
-            CALL(evt_npc_set_stay_anim, STRING("キノシコワ"))
-            CALL(evt_npc_set_autotalkpose, STRING("キノシコワ"), STRING("S_2"), STRING("T_2"))
-        END_IF
-    END_INLINE_EVENT
-    // Mario won: the victory music and scene, a special one the first time against each of the three teams.
-    IF_INT_EQUAL(LW(0), BATTLE_RESULT_WIN)
-        SWITCH(GSW_GLITZ_PIT_OPPONENT)
-            CASE_EQUAL(19)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
-            IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 0)
-                SET_VALUE(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 1)
-                CALL_CHILD(evt_kurikuri_win)
-            ELSE
-                CALL_CHILD(evt_default_win)
-            END_IF
-            CASE_EQUAL(10)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
-            IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN, 0)
-                SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN, 1)
-                CALL_CHILD(evt_shinemon_win)
-            ELSE
-                CALL_CHILD(evt_default_win)
-            END_IF
-            CASE_EQUAL(0)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU3"))
-            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_FIRST_WIN, 0)
-                SET_VALUE(GSWF_TOU_RAWK_HAWK_FIRST_WIN, 1)
-                CALL_CHILD(evt_champ_win)
-            ELSE
-                CALL_CHILD(evt_default_win)
-            END_IF
-            CASE_DEFAULT
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
-            CALL_CHILD(evt_default_win)
-        END_SWITCH
-        // Update the ranking; a win at rank 7 or rank 5 can set off the Iron Clefts' or Bowser's ambush.
-        CALL(evt_tou_get_ranking, LW(10))
-        CALL(evt_tou_set_ranking_win_lose, 0, GSW_GLITZ_PIT_OPPONENT)
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
-                CALL(evt_tou_get_ranking, LW(10))
-            ELSE
-                IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_20_MAJORS_10TH_PLACE)
-                    CALL(evt_tou_get_ranking, LW(10))
-                END_IF
-            END_IF
-            CALL(evt_tou_get_ranking, LW(0))
-            SWITCH(LW(0))
-                CASE_EQUAL(7)
-                IF_INT_EQUAL(GSWF_TOU_RANK_7_MAIL_DONE, 0)
-                    CALL_CHILD(evt_random_battle)
-                END_IF
-                CASE_EQUAL(5)
-                IF_INT_EQUAL(GSWF_TOU_RANK_5_BOWSER_EVENT_DONE, 0)
-                    CALL_CHILD(evt_random_battle2)
-                END_IF
-            END_SWITCH
-        ELSE
-            IF_INT_EQUAL(LW(10), 1)
-                IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
-                    SET_VALUE(LW(10), 0)
-                END_IF
-            END_IF
-        END_IF
-    ELSE
-        // Mario lost: the loss scene; losses to the Iron Clefts are counted.
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
-        SWITCH(GSW_GLITZ_PIT_OPPONENT)
-            CASE_EQUAL(19)
-            CALL_CHILD(evt_kurikuri_lose)
-            CASE_EQUAL(10)
-            CALL_CHILD(evt_shinemon_lose)
-            CASE_EQUAL(0)
-            CALL_CHILD(evt_champ_lose)
-            CASE_DEFAULT
-            CALL_CHILD(evt_default_lose)
-        END_SWITCH
-        IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
-            IF_INT_LESS(GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT, 100)
-                ADD(GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT, 1)
-            END_IF
-        END_IF
-        CALL(evt_tou_set_ranking_win_lose, 1, GSW_GLITZ_PIT_OPPONENT)
-        CALL(evt_tou_get_ranking, LW(10))
-    END_IF
-    // The first match moves the story on. Fade out to the locker room that fits Mario's rank:
-    // the champion's room, the major-league room (ranks 1 to 10) or the minor-league room.
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
-        SET_VALUE(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-        SET_VALUE(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
-    END_IF
-    CALL(evt_fade_set_mapchange_type, 0, 2, 300, 1, 300)
-    CALL(evt_snd_envoff, PSND_FADEOUT)
-    CALL(snd_sfx_stop)
-    SWITCH(LW(10))
-        CASE_LESS(1)
-        CALL(evt_bero_mapchange, STRING("tou_07"), 0)
-        CASE_LESS(11)
-        CALL(evt_bero_mapchange, STRING("tou_08"), 0)
-        CASE_DEFAULT
-        CALL(evt_bero_mapchange, STRING("tou_10"), 0)
-    END_SWITCH
-    RETURN
-EVT_END()
 #else
 #if VERSION >= VERSION_US
         CALL(evt_npc_set_attack_mode, STRING("敵１"), 16)
@@ -2280,6 +2151,7 @@ EVT_END()
     CALL(evt_npc_battle_start, STRING("\223G\202P"))
     CALL(evt_npc_wait_battle_end)
 #endif
+#endif
     CALL(evt_npc_get_battle_rule_keep_result, LW(0))
     CALL(evt_tou_set_rule_result, LW(0))
     SET_VALUE(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
@@ -2291,6 +2163,13 @@ EVT_END()
     CALL(evt_npc_get_battle_result, LW(0))
     BEGIN_INLINE_EVENT
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_npc_set_stay_anim, STRING("ガンス"))
+            CALL(evt_npc_set_autotalkpose, STRING("ガンス"), STRING("S_2"), STRING("T_2"))
+        ELSE
+            CALL(evt_npc_set_stay_anim, STRING("キノシコワ"))
+            CALL(evt_npc_set_autotalkpose, STRING("キノシコワ"), STRING("S_2"), STRING("T_2"))
+#else
 #if VERSION >= VERSION_US
             CALL(evt_npc_set_stay_anim, STRING("ガンス"))
             CALL(evt_npc_set_autotalkpose, STRING("ガンス"), STRING("S_2"), STRING("T_2"))
@@ -2303,6 +2182,7 @@ EVT_END()
             ELSE
             CALL(evt_npc_set_stay_anim, STRING("\203L\203m\203V\203R\203\217"))
             CALL(evt_npc_set_autotalkpose, STRING("\203L\203m\203V\203R\203\217"), STRING("S_2"), STRING("T_2"))
+#endif
 #endif
         END_IF
     END_INLINE_EVENT
@@ -2343,9 +2223,13 @@ EVT_END()
                 CALL(evt_tou_get_ranking, LW(10))
                 ELSE
                 IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_20_MAJORS_10TH_PLACE)
+#if VERSION <= VERSION_DEMO_US
+                    CALL(evt_tou_get_ranking, LW(10))
+#else
                     IF_INT_GREATER(LW(10), 1)
                         CALL(evt_tou_get_ranking, LW(10))
                     END_IF
+#endif
                 END_IF
             END_IF
             CALL(evt_tou_get_ranking, LW(0))
@@ -2405,7 +2289,6 @@ EVT_END()
     END_SWITCH
     RETURN
 EVT_END()
-#endif
 
 /**
  * First-time opening against the Goomba Bros.

@@ -3637,68 +3637,25 @@ static EVT_BEGIN(sekai_yami_evt)
     WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
     LOOP(2)
-        CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
-        CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
-        WAIT_MS(100)
-        CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
-        WAIT_MS(100)
-        END_LOOP
-    // The villagers turn about in panic and the crows fly off.
-    SET_VALUE(LW(0), STRING("村人Ａ"))
-    SPAWN_EVENT(sekai_yami_npc)
-    SET_VALUE(LW(0), STRING("村人Ｂ"))
-    SPAWN_EVENT(sekai_yami_npc)
-    SET_VALUE(LW(0), STRING("村人Ｃ"))
-    SPAWN_EVENT(sekai_yami_npc)
-    SET_VALUE(LW(0), STRING("村人Ｄ"))
-    SPAWN_EVENT(sekai_yami_npc)
-    SET_VALUE(LW(0), STRING("村人Ｅ"))
-    SPAWN_EVENT(sekai_yami_npc)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(100)
-        CALL(evt_npc_status_onoff, 1, STRING("カラスＣ"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_get_position, STRING("カラスＣ"), LW(0), LW(1), LW(2))
-        CALL(evt_npc_set_ry, STRING("カラスＣ"), 270)
-        CALL(evt_npc_jump_position_nohit, STRING("カラスＣ"), -10, 250, LW(2), 1500, 30)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        WAIT_MS(100)
-        CALL(evt_npc_status_onoff, 1, STRING("カラスＤ"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_set_ry, STRING("カラスＤ"), 90)
-        CALL(evt_npc_get_position, STRING("カラスＤ"), LW(0), LW(1), LW(2))
-        CALL(evt_npc_jump_position_nohit, STRING("カラスＤ"), 100, 250, LW(2), 1500, 30)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        WAIT_MS(100)
-        CALL(evt_npc_status_onoff, 1, STRING("カラスＥ"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_set_ry, STRING("カラスＥ"), 90)
-        CALL(evt_npc_get_position, STRING("カラスＥ"), LW(0), LW(1), LW(2))
-        CALL(evt_npc_jump_position_nohit, STRING("カラスＥ"), 150, 250, LW(2), 1500, 30)
-    END_INLINE_EVENT
-    CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(0))
-    SPAWN_EVENT(sekai_yami_shake)
-    WAIT_MS(2000)
-    CALL(evt_msg_print, 0, STRING("stg8_dark_05"), 0, 0)
-    WAIT_MS(3000)
-    CALL(evt_snd_sfxoff, LW(0))
-    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
-    CALL(evt_bero_mapchange, STRING("muj_01"), STRING("sekai_yami2"))
-    RETURN
-EVT_END()
 #else
 #if VERSION >= VERSION_US
     LOOP(1)
 #else
     LOOP(2)
 #endif
+#endif
         CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
         CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
         WAIT_MS(100)
         CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
+#if VERSION <= VERSION_DEMO_US
+        WAIT_MS(100)
+#else
 #if VERSION >= VERSION_US
         WAIT_MS(500)
 #else
         WAIT_MS(100)
+#endif
 #endif
     END_LOOP
     // The villagers turn about in panic and the crows fly off.
@@ -3737,13 +3694,16 @@ EVT_END()
     SPAWN_EVENT(PTR(sekai_yami_shake))
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING("stg8_dark_05"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(3000)
+#else
     WAIT_MS(1500)
+#endif
     CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("muj_01"), STRING("sekai_yami2"))
     RETURN
 EVT_END()
-#endif
 
 /**
  * Spawns a woman (おばさん, tribe ウスグラおばさん) and three children (子供１ to ３, tribes ウスグラ子供A to C) of Twilight Town for

@@ -3197,50 +3197,6 @@ EVT_BEGIN(aji_17_init_evt)
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
         END_IF
-        SET_VALUE(GSWF_AJI_17_LAST_SCENE_SEEN, 1)
-        SPAWN_EVENT(evt_last)
-    ELSE
-        SPAWN_EVENT(evt_last2)
-        SET_VALUE(LW(0), PTR(bero_entry_data))
-        CALL(evt_bero_get_info)
-        CALL_CHILD(bero_case_entry)
-        RETURN
-    END_IF
-END_IF
-// Otherwise the emergency lights start and the room's entrances are set up.
-SPAWN_EVENT(evt_emergency)
-SET_VALUE(LW(0), PTR(bero_entry_data))
-CALL(evt_bero_get_info)
-SWITCH(GSW_STORY_PROGRESS)
-    CASE_EQUAL(STG1_18_01_PEACH_AN_OPEN_DOOR)
-    CASE_EQUAL(STG3_33_03_PEACH_GRODUS)
-    CASE_EQUAL(STG4_15_04_SHADOW_SIRENS_DOOPLISS)
-    CASE_DEFAULT
-    CALL_CHILD(evt_bero_info_run)
-END_SWITCH
-CALL(evt_mario_get_mode, LW(0))
-IF_INT_EQUAL(LW(0), 1)
-    CALL(evt_mario_kill_party, 0)
-ELSE
-    // As Mario, the fortress music and ambience play; as Peach, her partner is removed.
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
-END_IF
-// After the final battle the room's machine runs again and the keyboard can be used to talk to TEC
-// (tec_talk).
-IF_INT_GREATER(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kurai"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kikai"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_map_playanim, STRING("kika_1"), 1, 0)
-    CALL(evt_map_playanim, STRING("kika_2"), 1, 0)
-    CALL(evt_map_playanim, STRING("kika_3"), 1, 0)
-    CALL(evt_map_playanim, STRING("moni_1"), 2, 0)
-    CALL(evt_map_playanim, STRING("moza"), 1, 0)
-    CALL(evt_map_pauseanim, 0, STRING("moza"))
-    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)
-END_IF
-RETURN
-EVT_END()
 #else
 #if VERSION >= VERSION_US
             END_IF
@@ -3252,16 +3208,21 @@ EVT_END()
                 CALL(evt_pouch_all_party_recovery)
             END_IF
 #endif
+#endif
             SET_VALUE(GSWF_AJI_17_LAST_SCENE_SEEN, 1)
             SPAWN_EVENT(PTR(evt_last))
             ELSE
             SPAWN_EVENT(PTR(evt_last2))
             SET_VALUE(LW(0), PTR(bero_entry_data))
             CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(bero_case_entry)
+#else
 #if VERSION >= VERSION_US
             CALL_CHILD(bero_case_entry)
 #else
             CALL_CHILD(PTR(bero_case_entry))
+#endif
 #endif
             RETURN
         END_IF
@@ -3275,10 +3236,14 @@ EVT_END()
         CASE_EQUAL(STG3_33_03_PEACH_GRODUS)
         CASE_EQUAL(STG4_15_04_SHADOW_SIRENS_DOOPLISS)
         CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_bero_info_run)
+#else
 #if VERSION >= VERSION_US
         CALL_CHILD(evt_bero_info_run)
 #else
         CALL_CHILD(PTR(evt_bero_info_run))
+#endif
 #endif
     END_SWITCH
     CALL(evt_mario_get_mode, LW(0))
@@ -3291,6 +3256,13 @@ EVT_END()
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kurai"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kikai"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_map_playanim, STRING("kika_1"), 1, 0)
+        CALL(evt_map_playanim, STRING("kika_2"), 1, 0)
+        CALL(evt_map_playanim, STRING("kika_3"), 1, 0)
+        CALL(evt_map_playanim, STRING("moni_1"), 2, 0)
+        CALL(evt_map_playanim, STRING("moza"), 1, 0)
+#else
 #if VERSION >= VERSION_US
         CALL(evt_map_playanim, STRING("kika_1"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("kika_2"), MAP_ANIM_PLAY_LOOP, 0)
@@ -3304,13 +3276,15 @@ EVT_END()
         CALL(evt_map_playanim, STRING("moni_1"), 2, 0)
         CALL(evt_map_playanim, STRING("moza"), 1, 0)
 #endif
+#endif
         CALL(evt_map_pauseanim, 0, STRING("moza"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)
     END_IF
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     RETURN
 EVT_END()
-#endif
 
 // target .data tail pad word
 

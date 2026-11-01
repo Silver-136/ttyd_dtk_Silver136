@@ -366,17 +366,6 @@ void mot_plane(void) {
 #if VERSION <= VERSION_DEMO_US
     if (mp->position.y < 100.0f) {
         mp->camShiftTargetY = __fabsf(planeData[38]);
-    }
-    flyMain();
-    if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-        MarioWork* m = marioGetPtr();
-        if ((u16)m->currMotionId == MARIO_MOTION_PLANE && (s32)m->currSubMotionId >= 12 && (s32)m->currSubMotionId < 20) {
-            m->currSubMotionId = 50;
-            m->mot.plane.groundY = m->position.y;
-        }
-        return;
-    }
-    if ((s32)mp->currSubMotionId == 20 || (s32)mp->currSubMotionId == 30) {
 #else
 #if VERSION >= VERSION_US
     // US: per-map floor below which the camera stops following the plane
@@ -387,9 +376,20 @@ void mot_plane(void) {
     if (mp->position.y < 100.0f) {
         mp->camShiftTargetY = __fabsf(planeData[38]);
 #endif
+#endif
     }
     flyMain();
     if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
+#if VERSION <= VERSION_DEMO_US
+        MarioWork* m = marioGetPtr();
+        if ((u16)m->currMotionId == MARIO_MOTION_PLANE && (s32)m->currSubMotionId >= 12 && (s32)m->currSubMotionId < 20) {
+            m->currSubMotionId = 50;
+            m->mot.plane.groundY = m->position.y;
+        }
+        return;
+    }
+    if ((s32)mp->currSubMotionId == 20 || (s32)mp->currSubMotionId == 30) {
+#else
         if (planeCancel()) {
             return;
         }

@@ -1690,8 +1690,6 @@ s32 partyDokanInit(PartyEntry* party) {
     party->displayDirection = mario->displayDirection;
     party->moveDir = mario->moveDirection;
     party->position = mario->position;
-    return 0;
-}
 #else
 #if VERSION >= VERSION_US
             party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
@@ -1750,9 +1748,9 @@ s32 partyDokanInit(PartyEntry* party) {
     party->position = mario->position;
 #endif
     partyVivianTailStop(party);
+#endif
     return 0;
 }
-#endif
 
 /**
  * The partner's frames in the pipe (run mode 10):

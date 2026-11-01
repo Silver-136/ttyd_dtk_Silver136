@@ -727,13 +727,66 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
                 winIconSet(ICON_SP_ORB_1 + i, (Vec){cx + (f32)(i * 22), rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
             } else {
                 winIconSet(ICON_SP_ORB_EMPTY, (Vec){cx + (f32)(i * 22), rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
+#else
+#if VERSION >= VERSION_US
+        col6 = 10.0f + (40.0f + x);
+        nameW3 = 106.0f + y;
+        winIconSet(ICON_MENU_SP, (Vec){col6, nameW3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
+        cx3 = 70.0f + y;
+        winIconSet(ICON_SAC_DEKA, (Vec){col6, cx3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
+        winFontInit();
+        winFontSetWidth((Vec){10.0f + (70.0f + x), 10.0f + cx3, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, 175.0f, msgSearch("msg_menu_mario_special"));
+        winIconInit();
+        cx4 = 10.0f + (80.0f + x);
+        for (i = 0; i < w->mario.specialCount; i++) {
+            if (i < pouch->currentSP / 100) {
+                winIconSet(ICON_SP_ORB_1 + i, (Vec){cx4 + (f32)(i * 22), nameW3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
+            } else {
+                winIconSet(ICON_SP_ORB_EMPTY, (Vec){cx4 + (f32)(i * 22), nameW3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
+#else
+        col = 10.0f + (40.0f + x);
+        rowB = 106.0f + y;
+        winIconSet(ICON_MENU_SP, (Vec){col, rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
+        cx = 70.0f + y;
+        winIconSet(ICON_SAC_DEKA, (Vec){col, cx, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
+        winFontInit();
+        winFontSet((Vec){10.0f + (70.0f + x), 10.0f + cx, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch("msg_menu_mario_special"));
+        winIconInit();
+        cx = 10.0f + (80.0f + x);
+        for (i = 0; i < w->mario.specialCount; i++) {
+            if (i < pouch->currentSP / 100) {
+                winIconSet(ICON_SP_ORB_1 + i, (Vec){cx + (f32)(i * 22), rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
+            } else {
+                winIconSet(ICON_SP_ORB_EMPTY, (Vec){cx + (f32)(i * 22), rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
+#endif
+#endif
             }
         }
     }
+#if VERSION > VERSION_DEMO_US
 
+#if VERSION >= VERSION_US
+    // FAKE: two dead int guards (gz is 0; folded after register allocation, no code): the first redefines q1/q2 so
+    // they are not propagated, the second consumes them into y
+    {
+        s32 gz = 0;
+        if (gz != 0) {
+            q1[0] = -q1[0];
+            q2[0] = -q2[0];
+        }
+    }
+    {
+        s32 gz = 0;
+        if (gz != 0) {
+            y = q1[0] + q2[0];
+        }
+    }
+#endif
+#endif
     left = 10.0f + x;
     winKirinukiGX(w, 0, left, 10.0f + (20.0f + y), 260.0f, 150.0f);
     winIconInit();
+#if VERSION <= VERSION_DEMO_US
     rowB = 10.0f + (20.0f + x);
     winIconSet(ICON_STAR_POINT, (Vec){rowB, 10.0f + y, 0.0f}, (Vec){0.62f, 0.62f, 0.62f}, white);
     winIconSet(ICON_ITEM_COIN, (Vec){rowB, 10.0f + (y - 28.0f), 0.0f}, (Vec){0.62f, 0.62f, 0.62f}, white);
@@ -778,86 +831,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     animPoseGetAnimPosePtr(w->mario.poseId);
     anim = animPoseGetAnimDataPtr(w->mario.poseId);
     animPoseSetLocalTime(w->mario.poseId, (f32)(gp->retraceCount % (s32)anim->loopInfo->end));
-    animPoseMain(w->mario.poseId);
-    winKageGX(w, x - 150.0f, y, 0.0f, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
-    PSMTXTrans(mtx, x - 150.0f, y, 0.0f);
-    winZClear();
-    animPoseDrawMtx(w->mario.poseId, mtx, 2, 0.0f, 5.0f);
-
-    if (w->mario.mode) {
-        winWazaGX(w, 0, x - 270.0f, 160.0f, 270.0f, 254.0f);
-        winFontInit();
-        winFontSetEdge((Vec){(90.0f + x) - 270.0f, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("msg_menu_mario_sac_waza"));
-        numX = rowB - 270.0f;
-        winFontSetEdge((Vec){numX, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, "ＳＰ");
-        x = left - 270.0f;
-        cx = (17.0f + rowB) - 270.0f;
-        for (i = 0; i < w->mario.specialCount; i++) {
-            char sbuf[0x20];
-
-            winFontSetLabel((Vec){x, (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, superActionTable[i]->name);
-            sprintf(sbuf, "%d", (u8)superActionTable[i]->baseSpCost);
-            winFontSet((Vec){numX, (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, sbuf);
-            winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "ＳＰ");
-        }
-}
-}
 #else
-#if VERSION >= VERSION_US
-        col6 = 10.0f + (40.0f + x);
-        nameW3 = 106.0f + y;
-        winIconSet(ICON_MENU_SP, (Vec){col6, nameW3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-        cx3 = 70.0f + y;
-        winIconSet(ICON_SAC_DEKA, (Vec){col6, cx3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-        winFontInit();
-        winFontSetWidth((Vec){10.0f + (70.0f + x), 10.0f + cx3, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, 175.0f, msgSearch("msg_menu_mario_special"));
-        winIconInit();
-        cx4 = 10.0f + (80.0f + x);
-        for (i = 0; i < w->mario.specialCount; i++) {
-            if (i < pouch->currentSP / 100) {
-                winIconSet(ICON_SP_ORB_1 + i, (Vec){cx4 + (f32)(i * 22), nameW3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-            } else {
-                winIconSet(ICON_SP_ORB_EMPTY, (Vec){cx4 + (f32)(i * 22), nameW3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-#else
-        col = 10.0f + (40.0f + x);
-        rowB = 106.0f + y;
-        winIconSet(ICON_MENU_SP, (Vec){col, rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-        cx = 70.0f + y;
-        winIconSet(ICON_SAC_DEKA, (Vec){col, cx, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-        winFontInit();
-        winFontSet((Vec){10.0f + (70.0f + x), 10.0f + cx, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch("msg_menu_mario_special"));
-        winIconInit();
-        cx = 10.0f + (80.0f + x);
-        for (i = 0; i < w->mario.specialCount; i++) {
-            if (i < pouch->currentSP / 100) {
-                winIconSet(ICON_SP_ORB_1 + i, (Vec){cx + (f32)(i * 22), rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-            } else {
-                winIconSet(ICON_SP_ORB_EMPTY, (Vec){cx + (f32)(i * 22), rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
-#endif
-            }
-        }
-    }
-
-#if VERSION >= VERSION_US
-    // FAKE: two dead int guards (gz is 0; folded after register allocation, no code): the first redefines q1/q2 so
-    // they are not propagated, the second consumes them into y
-    {
-        s32 gz = 0;
-        if (gz != 0) {
-            q1[0] = -q1[0];
-            q2[0] = -q2[0];
-        }
-    }
-    {
-        s32 gz = 0;
-        if (gz != 0) {
-            y = q1[0] + q2[0];
-        }
-    }
-#endif
-    left = 10.0f + x;
-    winKirinukiGX(w, 0, left, 10.0f + (20.0f + y), 260.0f, 150.0f);
-    winIconInit();
 #if VERSION >= VERSION_US
     rowB2 = 10.0f + (20.0f + x);
     winIconSet(ICON_STAR_POINT, (Vec){rowB2, 10.0f + y, 0.0f}, (Vec){0.62f, 0.62f, 0.62f}, white);
@@ -946,6 +920,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     if (w->mario.hammerHold == 0) {
         animPoseSetLocalTime(w->mario.poseId, (f32)(gp->retraceCount % (s32)anim->loopInfo->end));
     }
+#endif
     animPoseMain(w->mario.poseId);
     winKageGX(w, x - 150.0f, y, 0.0f, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
     PSMTXTrans(mtx, x - 150.0f, y, 0.0f);
@@ -953,6 +928,22 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     animPoseDrawMtx(w->mario.poseId, mtx, 2, 0.0f, 5.0f);
 
     if (w->mario.mode) {
+#if VERSION <= VERSION_DEMO_US
+        winWazaGX(w, 0, x - 270.0f, 160.0f, 270.0f, 254.0f);
+        winFontInit();
+        winFontSetEdge((Vec){(90.0f + x) - 270.0f, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("msg_menu_mario_sac_waza"));
+        numX = rowB - 270.0f;
+        winFontSetEdge((Vec){numX, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, "ＳＰ");
+        x = left - 270.0f;
+        cx = (17.0f + rowB) - 270.0f;
+        for (i = 0; i < w->mario.specialCount; i++) {
+            char sbuf[0x20];
+
+            winFontSetLabel((Vec){x, (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, superActionTable[i]->name);
+            sprintf(sbuf, "%d", (u8)superActionTable[i]->baseSpCost);
+            winFontSet((Vec){numX, (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, sbuf);
+            winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "ＳＰ");
+#else
 #if VERSION >= VERSION_US
         const char* msg = msgSearch("msg_menu_mario_sac_waza");
         winWazaGX(w, 0, x - 270.0f, 160.0f, 270.0f, 254.0f);
@@ -987,7 +978,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             winFontSet((Vec){x - (f32)(FontGetMessageWidth(sbuf) / 2), (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, sbuf);
             winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "ＳＰ");
 #endif
+#endif
         }
     }
 }
-#endif

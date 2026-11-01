@@ -929,51 +929,6 @@ void viPostCallback(u32 retraceCount) {
         gp->systemLv0Time += gp->retraceDeltaTime;
     }
     if (!gp->dvdError && !winCheck()) {
-        gp->renderTime += gp->retraceDeltaTime;
-        if (!gp->inBattle) {
-            gp->renderFieldTime += gp->retraceDeltaTime;
-        }
-    }
-    gp->retraceTime = time;
-    gp->retraceCount = retraceCount;
-    if (battleDisableHResetCheck()) {
-        gp->resetButtonDown = FALSE;
-    } else {
-        if (!gp->resetButtonDown) {
-            if (OSGetResetButtonState()) {
-                gp->resetButtonDown = TRUE;
-            }
-        } else {
-            if (!OSGetResetButtonState()) {
-                gp->resetType = 1;
-            }
-        }
-        if (gp->keyDataValid) {
-            if (OSIsRestart() && !gp->restartChecked) {
-                if ((keyGetButton(0) & reset) == reset) {
-                    gp->resetType = 0;
-                    goto exitcheck;
-                } else {
-                    gp->restartChecked = TRUE;
-                }
-            }
-            if ((keyGetButton(0) & reset) == reset) {
-                if (!gp->softResetWait) {
-                    gp->softResetWait = TRUE;
-                    gp->softResetTimeout = OSGetTime();
-                }
-                if (OSTicksToMilliseconds(OSGetTime() - gp->softResetTimeout) > 500) {
-                    gp->resetType = 1;
-                }
-            } else {
-                gp->softResetWait = FALSE;
-            }
-}
-    }
-exitcheck:
-    gcRumbleCheck();
-    psndMainInt();
-}
 #else
 #if VERSION >= VERSION_US
     if (!gp->dvdError && !winCheck()) {
@@ -1004,6 +959,7 @@ exitcheck:
     }
     if (!gp->dvdError && !winCheck()) {
 #endif
+#endif
         gp->renderTime += gp->retraceDeltaTime;
         if (!gp->inBattle) {
             gp->renderFieldTime += gp->retraceDeltaTime;
@@ -1043,16 +999,17 @@ exitcheck:
             } else {
                 gp->softResetWait = FALSE;
             }
+#if VERSION > VERSION_DEMO_US
             if (DVDGetDriveStatus() == DVD_STATE_FATAL_ERROR) {
                 gp->resetType = 0;
             }
+#endif
         }
     }
 exitcheck:
     gcRumbleCheck();
     psndMainInt();
 }
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 /**
@@ -1151,24 +1108,7 @@ void* gcDvdCheckThread(void* param) {
             SoundCloseCover();
         }
         if (gp->dvdError) {
-#if VERSION <= VERSION_DEMO_US
-            DEMOBeforeRender();
-            if (msgId) {
-                message = romFontGetMessage(msgId);
-                width = 0.8f * romFontGetWidth(message);
-                MTXPerspective(mtx, 25.0f, 1.2666667f, 1.0f, 10000.0f);
-                GXSetProjection(mtx, GX_PERSPECTIVE);
-                xpos = -width / 2.0f;
-                romFontPrintGX(xpos, 0.0f, 0.8f, &(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, message);
-            }
-            DEMODoneRender();
-            makeKey();
-            gcResetCheck();
-        }
-        OSYieldThread();
-    }
-}
-#else
+#if VERSION > VERSION_DEMO_US
             if (cardIsExec()) {
                 gp->dvdError = FALSE;
             }
@@ -1178,15 +1118,24 @@ void* gcDvdCheckThread(void* param) {
 #else
         if (gp->dvdError) {
 #endif
+#endif
             DEMOBeforeRender();
             if (msgId) {
                 message = romFontGetMessage(msgId);
+#if VERSION <= VERSION_DEMO_US
+                width = 0.8f * romFontGetWidth(message);
+#else
                 // FAKE: s32 -> f32 -> s32 round trip; the plain assignment changes the object
                 width = (f32)romFontGetWidth(message);
+#endif
                 MTXPerspective(mtx, 25.0f, 1.2666667f, 1.0f, 10000.0f);
                 GXSetProjection(mtx, GX_PERSPECTIVE);
                 xpos = -width / 2.0f;
+#if VERSION <= VERSION_DEMO_US
+                romFontPrintGX(xpos, 0.0f, 0.8f, &(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, message);
+#else
                 romFontPrintGX(xpos, 60.0f, 1.0f, &(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, message);
+#endif
             }
             DEMODoneRender();
             makeKey();
@@ -1195,7 +1144,6 @@ void* gcDvdCheckThread(void* param) {
         OSYieldThread();
     }
 }
-#endif
 
 /**
  * Rumble safety, run from viPostCallback: forces a pad's motor off for 30 seconds

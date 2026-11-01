@@ -656,11 +656,22 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     }
 #if VERSION <= VERSION_DEMO_US
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
+#else
+
+#if VERSION >= VERSION_US
+    base = wp->entries;
+    for (entry = base, i = 0; i < wp->count; i++, entry++) {
+#else
+    for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
+#endif
+#endif
         if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
             break;
         }
     }
+
     if (i >= wp->count) {
+#if VERSION <= VERSION_DEMO_US
         entry = wp->entries;
         if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_COIN && entry->flags & ITEM_FLAG_REPLACEABLE) {
             itemDelete(entry->name);
@@ -675,149 +686,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
                 } else {
                     entry = NULL;
                 }
-            }
-        }
-        if (entry == NULL) {
-            return NULL;
-        }
-    }
-
-    memset(entry, 0, sizeof(ItemEntry));
-    strcpy(entry->name, name);
-    entry->position.x = x;
-    entry->position.y = y;
-    entry->position.z = z;
-    entry->itemId = itemId;
-    entry->type = type;
-    entry->evtCode = pickupEvt;
-    entry->flags |= ITEM_FLAG_ACTIVE;
-    entry->scale = 1.0f;
-    entry->alpha = 0xFF;
-    if (collectFlag != -1) {
-        if (isGswf) {
-            entry->collectFlag = collectFlag;
-            entry->flags |= ITEM_FLAG_COLLECT_GSWF;
-        } else if (isLswf) {
-            entry->collectFlag = collectFlag;
-            entry->flags |= ITEM_FLAG_COLLECT_LSWF;
-        }
-    } else {
-        entry->collectFlag = -1;
-    }
-
-    switch (entry->itemId) {
-        case ITEM_DIAMOND_STAR:
-        case ITEM_EMERALD_STAR:
-        case ITEM_GOLD_STAR:
-        case ITEM_RUBY_STAR:
-        case ITEM_SAPPHIRE_STAR:
-        case ITEM_GARNET_STAR:
-        case ITEM_CRYSTAL_STAR:
-            entry->effect = effStarStoneEntry(entry->itemId - ITEM_DIAMOND_STAR, x, 16.0f + y, z, 1.0f);
-            break;
-        default:
-        iconEntry(entry->name, itemDataTable[itemId].icon_id);
-            {
-                char* nm = entry->name;
-                iconSetPos(nm, x, y, z);
-            }
-            iconSetScale(entry->name, entry->scale);
-            iconSetAlpha(entry->name, entry->alpha);
-            break;
-    }
-    entry->bounceFactor = entry->gravityScale = 1.0f;
-    entry->baseTime = gp->renderTime;
-    switch (entry->itemId) {
-        case ITEM_COIN:
-        case ITEM_PIANTA_TOKEN:
-        case ITEM_HEART:
-        case ITEM_FLOWER:
-            entry->flags |= ITEM_FLAG_QUICK_GET;
-            break;
-    }
-
-    switch (type) {
-        case ITEM_TYPE_STILL_NO_TOUCH:
-            entry->flags |= ITEM_FLAG_NO_TOUCH_GET;
-        case ITEM_TYPE_STILL:
-            itemModeChange(entry, ITEM_MODE_STILL);
-            break;
-        case ITEM_TYPE_GROUND:
-            itemModeChange(entry, ITEM_MODE_GROUND);
-            break;
-        case ITEM_TYPE_GROUND_NO_TOUCH:
-            itemModeChange(entry, ITEM_MODE_GROUND);
-            entry->flags |= ITEM_FLAG_NO_TOUCH_GET;
-            break;
-        case ITEM_TYPE_SCATTER_NO_PICKUP:
-            itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
-            break;
-        case ITEM_TYPE_SCATTER_TIMED:
-            entry->timer = 5000;
-            itemModeChange(entry, ITEM_MODE_SCATTER);
-            break;
-        case ITEM_TYPE_DROP_LONG:
-            entry->flags2 |= ITEM_FLAG2_TIMER_WAIT_LAND;
-            entry->timer = 20000;
-            itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
-            break;
-        case ITEM_TYPE_DROP_LONG_REPLACEABLE:
-            entry->flags2 |= ITEM_FLAG2_TIMER_WAIT_LAND;
-            entry->timer = 20000;
-            itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
-            entry->flags |= ITEM_FLAG_REPLACEABLE;
-            break;
-            case ITEM_TYPE_DROP:
-            entry->flags2 |= ITEM_FLAG2_TIMER_WAIT_LAND;
-            entry->timer = 8000;
-            itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
-            break;
-        case ITEM_TYPE_DROP_REPLACEABLE:
-            entry->flags2 |= ITEM_FLAG2_TIMER_WAIT_LAND;
-            entry->timer = 8000;
-            itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
-            entry->flags |= ITEM_FLAG_REPLACEABLE;
-            break;
-        case ITEM_TYPE_SCATTER_NO_PICKUP_TIMED_LAND:
-            entry->flags2 |= ITEM_FLAG2_TIMER_WAIT_LAND;
-        case ITEM_TYPE_SCATTER_NO_PICKUP_TIMED:
-            entry->timer = 5000;
-            itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
-            break;
-        case ITEM_TYPE_SPREAD_TIMED:
-            entry->timer = 5000;
-            entry->flags2 |= ITEM_FLAG2_SPREAD;
-            itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
-            break;
-        case ITEM_TYPE_SCATTER:
-            itemModeChange(entry, ITEM_MODE_SCATTER);
-            break;
-        case ITEM_TYPE_FALL:
-            itemModeChange(entry, ITEM_MODE_FALL);
-            break;
-        case ITEM_TYPE_FALL_NO_PICKUP:
-            itemModeChange(entry, ITEM_MODE_FALL_NO_PICKUP);
-            break;
-        case ITEM_TYPE_POP:
-            itemModeChange(entry, ITEM_MODE_POP);
-            break;
-    }
-    return entry;
-}
 #else
-
-#if VERSION >= VERSION_US
-    base = wp->entries;
-    for (entry = base, i = 0; i < wp->count; i++, entry++) {
-#else
-    for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-#endif
-        if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
-            break;
-        }
-    }
-
-    if (i >= wp->count) {
 #if VERSION >= VERSION_US
         entry = NULL;
         for (e = base, i = 0; i < wp->count; i++, e++) {
@@ -860,6 +729,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
                     entry = NULL;
                 }
 #endif
+#endif
             }
         }
         if (entry == NULL) {
@@ -874,7 +744,11 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     entry->position.z = z;
     entry->itemId = itemId;
     entry->type = type;
+#if VERSION <= VERSION_DEMO_US
+    entry->evtCode = pickupEvt;
+#else
     entry->evtCode = evtCode;
+#endif
     entry->flags |= ITEM_FLAG_ACTIVE;
     entry->scale = 1.0f;
     entry->alpha = 0xFF;
@@ -895,9 +769,17 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
         entry->effect = effStarStoneEntry(entry->itemId - ITEM_DIAMOND_STAR, x, 16.0f + y, z, 1.0f);
         break;
     default:
+#if VERSION <= VERSION_DEMO_US
+        iconEntry(entry->name, itemDataTable[itemId].icon_id);
+            {
+                char* nm = entry->name;
+                iconSetPos(nm, x, y, z);
+            }
+#else
         entry->effect = NULL;
         iconEntry(entry->name, itemDataTable[itemId].icon_id);
         iconSetPos(entry->name, x, y, z);
+#endif
         iconSetScale(entry->name, entry->scale);
         iconSetAlpha(entry->name, entry->alpha);
         break;
@@ -941,8 +823,10 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
             itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
             entry->flags |= ITEM_FLAG_REPLACEABLE;
             break;
+#if VERSION > VERSION_DEMO_US
         case ITEM_TYPE_DROP_LOST_BADGE:
             entry->flags |= ITEM_FLAG_LOST_BADGE_TO_SHOP;
+#endif
         case ITEM_TYPE_DROP:
             entry->flags2 |= ITEM_FLAG2_TIMER_WAIT_LAND;
             entry->timer = 8000;
@@ -980,7 +864,6 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     }
     return entry;
 }
-#endif
 
 /**
  * Removes the named field item (and its name windows);

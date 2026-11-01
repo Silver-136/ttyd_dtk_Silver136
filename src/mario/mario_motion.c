@@ -733,21 +733,6 @@ void marioFall(void) {
             mario->position.y = y;
 #if VERSION <= VERSION_DEMO_US
             if (marioPriCheckJabara() && a != -1 && rub >= 0) {
-                marioChgMot(MARIO_MOTION_JABARA);
-                return;
-            }
-        }
-    } else {
-        mario->position.y += spd;
-    }
-    if (mario->characterId != CHARACTER_BOWSER) {
-        if (mario->hitobjStandOn) {
-            marioLandOn();
-        }
-    } else if (kpaChkHitobjRide()) {
-        marioLandOn();
-    }
-}
 #else
 #if VERSION >= VERSION_US
             if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) && marioPriCheckJabara() && a != -1 && rub >= 0) {
@@ -755,6 +740,7 @@ void marioFall(void) {
             if (marioPriCheckJabara() && a != -1 && rub >= 0) {
 #endif
                 camFollowYOn();
+#endif
                 marioChgMot(MARIO_MOTION_JABARA);
                 return;
             }
@@ -770,7 +756,6 @@ void marioFall(void) {
         marioLandOn();
     }
 }
-#endif
 
 /**
  * Mario touches down: plays the landing sound for the floor type, clears the jump state,
@@ -876,49 +861,12 @@ void marioLandOn(void) {
     }
 #if VERSION <= VERSION_DEMO_US
     if (mario->controlStickSensitivity > 0.0f && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-        if (mario->characterId == CHARACTER_BOWSER) {
-            if (kpaFireAttackCheck()) {
-                marioChgMot(MARIO_MOTION_STAY);
-            } else {
-                marioChgMot(MARIO_MOTION_WALK);
-            }
-            quake_kpaLandOn();
-            return;
-        }
-marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after landing
-        return;
-}
-    flags = mario->flags;
-    if (flags & MARIO_FLAG_TUBE_MODE) {
-        marioChgRollMotion();
-        return;
-    }
-    if (mario->characterId == CHARACTER_BOWSER) {
-        marioChgMot(MARIO_MOTION_STAY);
-        quake_kpaLandOn();
-        return;
-    }
-    if (mario->currMotionId != MARIO_MOTION_SLIT) {
-        if (!(flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-            marioChgMot(MARIO_MOTION_STAY);
-            return;
-        }
-        marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
-        return;
-    }
-    if (flags & MARIO_FLAG_PAPER_MODE) {
-        marioChgMotSub(MARIO_MOTION_STAY, FALSE);
-        return;
-    }
-    if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
-        motSlitCancel();
-    }
-}
 #else
 #if VERSION >= VERSION_US
     if (mario->controlStickSensitivity > 0.0f && !(mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
 #else
     if (mario->controlStickSensitivity > 0.0f && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+#endif
 #endif
         if (mario->characterId == CHARACTER_BOWSER) {
             if (kpaFireAttackCheck()) {
@@ -929,6 +877,9 @@ marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after land
             quake_kpaLandOn();
             return;
         }
+#if VERSION <= VERSION_DEMO_US
+        marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after landing
+#else
         if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
 #if VERSION >= VERSION_US
             if (marioPriCheckJabara()) {
@@ -946,6 +897,7 @@ marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after land
             return;
         }
         marioSlitSetAfterLand();
+#endif
         return;
     }
     flags = mario->flags;
@@ -967,14 +919,17 @@ marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after land
         return;
     }
     if (flags & MARIO_FLAG_PAPER_MODE) {
+#if VERSION <= VERSION_DEMO_US
+        marioChgMotSub(MARIO_MOTION_STAY, FALSE);
+#else
         marioSlitReenter();
+#endif
         return;
     }
     if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
         motSlitCancel();
     }
 }
-#endif
 
 /**
  * Talk motion: turns Mario left or right to face the NPC he touched and takes that NPC's talk pose;

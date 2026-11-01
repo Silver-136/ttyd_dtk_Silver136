@@ -1819,192 +1819,6 @@ u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 cou
 #if VERSION <= VERSION_DEMO_US
 /** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
 static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
-s16* dst;
-    SoundStream* stream;
-    SoundStreamEntry* entry;
-    unsigned int len2;
-    s16* buffer1;
-    s16* buffer2;
-    s16* src16;
-    u32 i;
-    u32 n;
-    s32 j;
-    u8* src8;
-    u8* src8b;
-    len2 = p_l2;
-    buffer1 = p_b1;
-    buffer2 = p_b2;
-    stream = &sound.streams[(u8)user];
-    stream->samplePos = 0;
-    if ((stream->flags & (SOUND_STREAM_FLAG_MUTE | SOUND_STREAM_FLAG_END | SOUND_STREAM_FLAG_PAUSE)) || sound.coverState) {
-        if (!(stream->flags & SOUND_STREAM_FLAG_ADPCM)) {
-            for (; len1 != 0; len1--) {
-                *(buffer1++) = 0;
-                stream->samplePos++;
-            }
-            for (; len2 != 0; len2--) {
-                *(buffer2++) = 0;
-                stream->samplePos++;
-            }
-            return stream->samplePos;
-        } else {
-            j = (s32)(len1 / 14 * 8);
-            j /= 2;
-            for (; j != 0; j--) {
-                *(buffer1++) = 0;
-            }
-            j = (s32)(len2 / 14 * 8);
-            j /= 2;
-            for (; j != 0; j--) {
-                *(buffer2++) = 0;
-            }
-            return len1 + len2;
-        }
-    }
-    if (user & 0x100) {
-        entry = &stream->entries[1];
-    } else {
-        entry = &stream->entries[0];
-    }
-    if (stream->flags & SOUND_STREAM_FLAG_DPCM) {
-        ssDecodeDPCM(stream, entry, buffer2, len2,
-                     ssDecodeDPCM(stream, entry, buffer1, len1, entry->loadBuffer[entry->curBuf] + entry->srcPos));
-    } else if (stream->flags & SOUND_STREAM_FLAG_ADPCM) {
-        dst = buffer1; // FAKE: dst (not a u8* dst8) for the byte copies, so dst's split webs number above i/n
-        src8 = entry->loadBuffer[entry->curBuf];
-        src8 = src8 + entry->srcPos;
-        n = ((len1 + 13) / 14) * 8;
-        while (n != 0) {
-            if (stream->flags & SOUND_STREAM_FLAG_END) {
-                *(u8*)dst = 0;
-                dst = (s16*)((u8*)dst + 1);
-                n--;
-                continue;
-            }
-*(u8*)dst = *(src8++);
-            dst = (s16*)((u8*)dst + 1);
-            n--;
-            entry->srcPos++;
-            if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
-                if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
-                    entry->pos -= entry->srcPos;
-                    entry->srcPos = 0;
-                    src8 = entry->loadBuffer[entry->curBuf];
-                    continue;
-                }
-                entry->loaded = 0;
-                entry->srcPos = 0;
-                entry->curBuf = 1 - entry->curBuf;
-                src8 = entry->loadBuffer[entry->curBuf];
-            }
-            entry->pos++;
-            if (entry->pos >= stream->loopEnd) {
-                entry->pos = stream->loopStart;
-                if (!(stream->flags & SOUND_STREAM_FLAG_LOOP)) {
-                    stream->flags |= SOUND_STREAM_FLAG_END;
-                    break;
-                }
-            }
-        }
-        // FAKE: loop 2 reads through its own copy of src8; the copy takes the pre-RA scheduler's cycle-1 slot so `mr dst,buffer2`
-        // issues after mulhwu (magic constant and dst then share r3, as in the target); the copy itself colours to a self-move (FAKES.md)
-        src8b = src8;
-        dst = buffer2;
-        n = ((len2 + 13) / 14) * 8;
-        while (n != 0) {
-            if (stream->flags & SOUND_STREAM_FLAG_END) {
-                *(u8*)dst = 0;
-                dst = (s16*)((u8*)dst + 1);
-                n--;
-                continue;
-            }
-*(u8*)dst = *(src8b++);
-            dst = (s16*)((u8*)dst + 1);
-            n--;
-            entry->srcPos++;
-            if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
-                if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
-                    entry->pos -= entry->srcPos;
-                    entry->srcPos = 0;
-                    src8b = entry->loadBuffer[entry->curBuf];
-                    continue;
-                }
-                entry->loaded = 0;
-                entry->srcPos = 0;
-                entry->curBuf = 1 - entry->curBuf;
-                src8b = entry->loadBuffer[entry->curBuf];
-            }
-            entry->pos++;
-            if (entry->pos >= stream->loopEnd) {
-                entry->pos = stream->loopStart;
-                if (!(stream->flags & SOUND_STREAM_FLAG_LOOP)) {
-                    stream->flags |= SOUND_STREAM_FLAG_END;
-                    break;
-                }
-            }
-        }
-        stream->samplePos = len1 + len2;
-    } else {
-        i = len1;
-        dst = buffer1;
-        src16 = (s16*)(entry->loadBuffer[entry->curBuf] + (entry->srcPos & (~1)));
-        while (i != 0) {
-            *(dst++) = *(src16++);
-            i--;
-            stream->samplePos++;
-            entry->srcPos += 2;
-            if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
-                if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
-                    entry->pos -= entry->srcPos;
-                    entry->srcPos = 0;
-                    src16 = (s16*)entry->loadBuffer[entry->curBuf];
-                    continue;
-                }
-                entry->loaded = 0;
-                entry->srcPos = 0;
-                entry->curBuf = 1 - entry->curBuf;
-                src16 = (s16*)entry->loadBuffer[entry->curBuf];
-            }
-            entry->pos += 2;
-            if (entry->pos >= stream->loopEnd) {
-                entry->pos = stream->loopStart;
-                if (!(stream->flags & SOUND_STREAM_FLAG_LOOP)) {
-                    stream->flags |= SOUND_STREAM_FLAG_END;
-                    break;
-                }
-            }
-        }
-        i = len2;
-        dst = buffer2;
-        while (i != 0) {
-            *(dst++) = *(src16++);
-            i--;
-            stream->samplePos++;
-            entry->srcPos += 2;
-            if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
-                if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
-                    entry->pos -= entry->srcPos;
-                    entry->srcPos = 0;
-                    src16 = (s16*)entry->loadBuffer[entry->curBuf];
-                    continue;
-                }
-                entry->loaded = 0;
-                entry->srcPos = 0;
-                entry->curBuf = 1 - entry->curBuf;
-                src16 = (s16*)entry->loadBuffer[entry->curBuf];
-            }
-            entry->pos += 2;
-            if (entry->pos >= stream->loopEnd) {
-                entry->pos = stream->loopStart;
-                if (!(stream->flags & SOUND_STREAM_FLAG_LOOP)) {
-                    stream->flags |= SOUND_STREAM_FLAG_END;
-                    break;
-                }
-            }
-        }
-    }
-    return stream->samplePos;
-}
 #else
 #if VERSION >= VERSION_US
 /** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
@@ -2013,6 +1827,7 @@ u32 _sscallback(void* p_b1, u32 p_l1, void* p_b2, u32 p_l2, u32 user) {
 #else
 /** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
 u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
+#endif
 #endif
     s16* dst;
     SoundStream* stream;
@@ -2026,6 +1841,12 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
     s32 j;
     u8* src8;
     u8* src8b;
+#if VERSION <= VERSION_DEMO_US
+    len2 = p_l2;
+    buffer1 = p_b1;
+    buffer2 = p_b2;
+    stream = &sound.streams[(u8)user];
+#else
 
     // FAKE: len2/buffer1/buffer2 are copied from the params into locals of a different type (unsigned int, s16*) so
     // IRO cannot propagate the copies; the params then coalesce into r3/r5/r6 and these statement copies give the
@@ -2046,6 +1867,7 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
     buffer2 = p_b2;
     stream = &sound.streams[(u8)user];
 #endif
+#endif
     stream->samplePos = 0;
     if ((stream->flags & (SOUND_STREAM_FLAG_MUTE | SOUND_STREAM_FLAG_END | SOUND_STREAM_FLAG_PAUSE)) || sound.coverState) {
         if (!(stream->flags & SOUND_STREAM_FLAG_ADPCM)) {
@@ -2086,11 +1908,24 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
         src8 = src8 + entry->srcPos;
         n = ((len1 + 13) / 14) * 8;
         while (n != 0) {
+#if VERSION <= VERSION_DEMO_US
+            if (stream->flags & SOUND_STREAM_FLAG_END) {
+                *(u8*)dst = 0;
+                dst = (s16*)((u8*)dst + 1);
+                n--;
+                continue;
+            }
+*(u8*)dst = *(src8++);
+            dst = (s16*)((u8*)dst + 1);
+            n--;
+            entry->srcPos++;
+#else
             *(((u8*)dst)++) = *(src8++);
             n--;
             entry->srcPos++;
 #if VERSION >= VERSION_US
             entry->pos++;
+#endif
 #endif
             if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
                 if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
@@ -2104,8 +1939,12 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
                 entry->curBuf = 1 - entry->curBuf;
                 src8 = entry->loadBuffer[entry->curBuf];
             }
+#if VERSION <= VERSION_DEMO_US
+            entry->pos++;
+#else
 #if VERSION < VERSION_US
             entry->pos++;
+#endif
 #endif
             if (entry->pos >= stream->loopEnd) {
                 entry->pos = stream->loopStart;
@@ -2121,11 +1960,24 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
         dst = buffer2;
         n = ((len2 + 13) / 14) * 8;
         while (n != 0) {
+#if VERSION <= VERSION_DEMO_US
+            if (stream->flags & SOUND_STREAM_FLAG_END) {
+                *(u8*)dst = 0;
+                dst = (s16*)((u8*)dst + 1);
+                n--;
+                continue;
+            }
+*(u8*)dst = *(src8b++);
+            dst = (s16*)((u8*)dst + 1);
+            n--;
+            entry->srcPos++;
+#else
             *(((u8*)dst)++) = *(src8b++);
             n--;
             entry->srcPos++;
 #if VERSION >= VERSION_US
             entry->pos++;
+#endif
 #endif
             if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
                 if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
@@ -2139,8 +1991,12 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
                 entry->curBuf = 1 - entry->curBuf;
                 src8b = entry->loadBuffer[entry->curBuf];
             }
+#if VERSION <= VERSION_DEMO_US
+            entry->pos++;
+#else
 #if VERSION < VERSION_US
             entry->pos++;
+#endif
 #endif
             if (entry->pos >= stream->loopEnd) {
                 entry->pos = stream->loopStart;
@@ -2212,7 +2068,6 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
     }
     return stream->samplePos;
 }
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 f64 SoundDemoStrippedRate(const char* ext, f64 t) {

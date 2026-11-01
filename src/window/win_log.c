@@ -2039,14 +2039,6 @@ void monosiri_disp(CameraId camera, void* param) {
         te = battleGetUnitMonosiriPtr(id);
 #if VERSION <= VERSION_DEMO_US
         sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
-        w = 0.75f * FontGetMessageWidth(buf);
-        winFontInit();
-        winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 180.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
-        sprintf(buf, "%s\201@%s", msgSearch("menu_monosiri_derutokoro"), msgSearch(te->locationTag));
-        w = 0.75f * FontGetMessageWidth(buf);
-        winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 210.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
-}
-}
 #else
         if (id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || id == UNIT_DOOPLISS_CHAPTER8) {
             if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
@@ -2066,9 +2058,15 @@ void monosiri_disp(CameraId camera, void* param) {
             sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
 #endif
         }
+#endif
         w = 0.75f * FontGetMessageWidth(buf);
         winFontInit();
         winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 180.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
+#if VERSION <= VERSION_DEMO_US
+        sprintf(buf, "%s\201@%s", msgSearch("menu_monosiri_derutokoro"), msgSearch(te->locationTag));
+        w = 0.75f * FontGetMessageWidth(buf);
+        winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 210.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
+#else
 #if VERSION >= VERSION_US
         sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%s %s" : "%s\201@%s", msgSearch("menu_monosiri_derutokoro"), msgSearch(te->locationTag));
 #else
@@ -2076,7 +2074,7 @@ void monosiri_disp(CameraId camera, void* param) {
 #endif
         w = 0.75f * FontGetMessageWidth(buf);
         winFontSet((Vec){1.0f + ((16.0f + x) + (248.0f - w) / 2.0f), y - 210.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
+#endif
     }
 }
-#endif
 

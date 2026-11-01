@@ -857,18 +857,33 @@ static void progDisp(CameraId camId, void* param) {
  */
 void progDisp(CameraId camId, void* param) {
 #endif
+#else
+/**
+ * JP and demo progressive-scan prompt: asks whether to display in progressive scan (left/right toggles,
+ * A confirms, 10 s idle picks the current choice), shows the result for 2 s and switches the video mode.
+ * param is unused
+ */
+void progDisp(CameraId camId, void* param) {
+#endif
     static OSTime time;
     const char* msg;
     f32 width;
     u32 button;
     s32 type;
 
-    camGetPtr(camId); //unused
+    camGetPtr(camId);
     if (wp->progressive) {
+#if VERSION < VERSION_US
         switch (wp->promptStep) {
             case 0:
                 wp->lastInputTime = OSGetTime();
                 wp->promptStep++;
+#else
+        switch (wp->progState) {
+            case 0:
+                wp->lastInput = OSGetTime();
+                wp->progState++;
+#endif
                 break;
 
             case 1:
@@ -881,15 +896,22 @@ void progDisp(CameraId camId, void* param) {
                     gp->substickY[0] ||
                     gp->triggerLeft[0] ||
                     gp->triggerRight[0]) {
+#if VERSION < VERSION_US
                     wp->lastInputTime = OSGetTime();
                 } else {
                     if (OSTicksToSeconds(OSGetTime() - wp->lastInputTime) > 10) {
+#else
+                    wp->lastInput = OSGetTime();
+                } else {
+                    if (OSTicksToSeconds(OSGetTime() - wp->lastInput) > 10) {
+#endif
                         button = PAD_BUTTON_A;
                     }
                 }
                 if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT) || keyGetDirTrg(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
                     wp->toggle = 1 - wp->toggle;
                 } else if (button & PAD_BUTTON_A) {
+#if VERSION < VERSION_US
                     time = gp->renderTime;
                     wp->promptStep++;
                 }
@@ -918,94 +940,7 @@ void progDisp(CameraId camId, void* param) {
                     -((width) / 2.0f - (f32)(75 * ((2 * wp->toggle) - 1))),
                     -160.0f,
                     0.7f,
-                    &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
-                    msg);
-                break;
-
-            case 2:
-                if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
-                    wp->promptStep++;
-                }
-                type = 3; //progressive turned on
-                if (wp->toggle) {
-                    type = 4; //progressive turned off
-                }
-                msg = romFontGetMessage(type);
-                width = (f32)romFontGetWidth(msg);
-                romFontPrintGX(
-                    -(0.7f * width) / 2.0f,
-                    -145.0f,
-                    0.7f,
-                    &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
-                    msg);
-                break;
-
-            case 3:
-                if (!wp->toggle) {
-                    VISetBlack(TRUE);
-                    OSSetProgressiveMode(1);
-                    VIConfigure(&sRMObjHReso_prog);
-                    VIFlush();
-                    VIWaitForRetrace();
-                    VIWaitForRetrace();
-                    time = gp->renderTime;
-                    wp->promptStep++;
-                    gp->flags |= GW_FLAG_PROGRESSIVE;
-                } else {
-                    OSSetProgressiveMode(0);
-                    wp->progressive = 0;
-                    gp->flags &= ~GW_FLAG_PROGRESSIVE;
-                }
-#if VERSION > VERSION_DEMO_US
-                gp->flags |= GW_FLAG_VIDEO_MODE_SET;
-#endif
-                break;
-
-            case 4:
-                if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
-                    VISetBlack(FALSE);
-                    wp->progressive = 0;
-                }
 #else
-/**
- * JP and demo progressive-scan prompt: asks whether to display in progressive scan (left/right toggles,
- * A confirms, 10 s idle picks the current choice), shows the result for 2 s and switches the video mode.
- * param is unused
- */
-void progDisp(CameraId camId, void* param) {
-    static OSTime time;
-    const char* msg;
-    f32 width;
-    u32 button;
-    s32 type;
-
-    camGetPtr(camId);
-    if (wp->progressive) {
-        switch (wp->progState) {
-            case 0:
-                wp->lastInput = OSGetTime();
-                wp->progState++;
-                break;
-
-            case 1:
-                button = keyGetButtonTrg(0);
-                if (gp->dirs[0] ||
-                    gp->button[0] ||
-                    gp->stickX[0] ||
-                    gp->stickY[0] ||
-                    gp->substickX[0] ||
-                    gp->substickY[0] ||
-                    gp->triggerLeft[0] ||
-                    gp->triggerRight[0]) {
-                    wp->lastInput = OSGetTime();
-                } else {
-                    if (OSTicksToSeconds(OSGetTime() - wp->lastInput) > 10) {
-                        button = PAD_BUTTON_A;
-                    }
-                }
-                if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT) || keyGetDirTrg(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
-                    wp->toggle = 1 - wp->toggle;
-                } else if (button & PAD_BUTTON_A) {
 #if VERSION == VERSION_EU
                     time = gp->renderTime;
 #endif
@@ -1056,11 +991,57 @@ void progDisp(CameraId camId, void* param) {
 #endif
                     -160.0f,
                     1.0f,
+#endif
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
                     msg);
                 break;
 
             case 2:
+#if VERSION < VERSION_US
+                if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
+                    wp->promptStep++;
+                }
+                type = 3; //progressive turned on
+                if (wp->toggle) {
+                    type = 4; //progressive turned off
+                }
+                msg = romFontGetMessage(type);
+                width = (f32)romFontGetWidth(msg);
+                romFontPrintGX(
+                    -(0.7f * width) / 2.0f,
+                    -145.0f,
+                    0.7f,
+                    &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
+                    msg);
+                break;
+
+            case 3:
+                if (!wp->toggle) {
+                    VISetBlack(TRUE);
+                    OSSetProgressiveMode(1);
+                    VIConfigure(&sRMObjHReso_prog);
+                    VIFlush();
+                    VIWaitForRetrace();
+                    VIWaitForRetrace();
+                    time = gp->renderTime;
+                    wp->promptStep++;
+                    gp->flags |= GW_FLAG_PROGRESSIVE;
+                } else {
+                    OSSetProgressiveMode(0);
+                    wp->progressive = 0;
+                    gp->flags &= ~GW_FLAG_PROGRESSIVE;
+                }
+#if VERSION > VERSION_DEMO_US
+                gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+#endif
+                break;
+
+            case 4:
+                if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
+                    VISetBlack(FALSE);
+                    wp->progressive = 0;
+                }
+#else
 #if VERSION == VERSION_EU
                 if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
 #else
