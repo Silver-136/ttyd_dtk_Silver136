@@ -75,6 +75,32 @@ static StatusVulnerability regist;
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {
+    100, // sleep
+    100, // stop
+    100, // dizzy
+    100, // poison
+    100, // confuse
+    100, // electric
+    100, // burn
+    100, // freeze
+    100, // huge
+    100, // tiny
+    100, // attackUp
+    100, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    100, // allergic
+    100, // fright
+    100, // galeForce
+    100, // fast
+    100, // slow
+    100, // dodgy
+    100, // invisible
+    100, // ohko
+};
+#endif
 PoseTableEntry pose_table_christine_stay[] = {
     {POSE_TYPE_FREEZE, "PKR_D_5"},
     {POSE_TYPE_STOP, "PKR_D_5"},
@@ -103,6 +129,14 @@ PoseTableEntry pose_table_christine_stay[] = {
     {POSE_TYPE_ACTION, "PKR_S_1"},
 };
 
+#if VERSION <= VERSION_DEMO_US
+PoseTableEntry pose_table_dictionary_page[] = {
+    {POSE_TYPE_NORMAL, "ZYO_Z_1"},
+    {31, "ZYO_Z_1"},
+    {POSE_TYPE_DAMAGE, "ZYO_Z_1"},
+    {BTL_POSE_STAY_DEFAULT, "ZYO_Z_1"},
+};
+#endif
 /**
  * Goombella's battle data events: Appeal (5), the reaction when an audience member is attacked (6), her move
  * menu builder (1), nothing on a First Strike (48), the victory cheer (64), an empty step run after a move's
@@ -217,6 +251,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(wait_event)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
+    RETURN
+EVT_END()
+#endif
 /**
  * Headbonk (btl_wn_pkr_normal), Goombella's free basic move, run by partyChristineAttack_NormalAttack:
  * a jump on one enemy that is not on the ceiling, a timed A press before each landing for a second bonk,
@@ -1517,6 +1557,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Goombella's status vulnerabilities: base rate (100) for every status. */
+#if VERSION > VERSION_DEMO_US
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -1541,9 +1582,11 @@ static StatusVulnerability regist = {
     100, // invisible
     100, // ohko
 };
+#endif
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 #if VERSION <= VERSION_DEMO_US
+#if VERSION > VERSION_DEMO_US
 PoseTableEntry pose_table_dictionary_page[] = {
     {POSE_TYPE_NORMAL, "ZYO_Z_1"},
     {31, "ZYO_Z_1"},
@@ -1551,15 +1594,18 @@ PoseTableEntry pose_table_dictionary_page[] = {
     {BTL_POSE_STAY_DEFAULT, "ZYO_Z_1"},
 };
 #endif
+#endif
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
 /** Victory reaction (data tag 64): Goombella's PKR_Y_1 cheer for 64 frames, then her stay pose. */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Returns in args[4] the angle (degrees) of the movement from point (args[0], args[1]) to (args[2], args[3]),

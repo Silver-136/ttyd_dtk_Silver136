@@ -152,11 +152,13 @@ s32 fp_tex_tbl[6] = {56, 56, 57, 58, 58, 58};
 s32 bp_tex_tbl[6] = {59, 59, 60, 61, 62, 63};
 #endif
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(_rank_up_event)
     CALL(_get_rank_up_msg, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, 0)
     RETURN
 EVT_END()
+#endif
 
 
 
@@ -1436,6 +1438,13 @@ EVT_BEGIN(_koura_delete_event)
     END_IF
     RETURN
 EVT_END()
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(_rank_up_event)
+    CALL(_get_rank_up_msg, LW(0))
+    CALL(evt_msg_print, 0, LW(0), 0, 0)
+    RETURN
+EVT_END()
+#endif
 
 #if VERSION >= VERSION_US
 // Descriptive name (not in the symbol maps).

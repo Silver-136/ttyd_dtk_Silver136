@@ -34,6 +34,13 @@ static inline void recoveryQuad(f32 l, f32 r, f32 t, f32 b, f32 u) {
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
+#if VERSION <= VERSION_DEMO_US
+static u8 color_rotation_data[] = {
+    0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
+    0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,
+    0xB4, 0xFE, 0xB4, 0xD5, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5, 0xAC,
+};
+#endif
 /**
  * Keyframes of the recovery icon over 79 frames: it grows from nothing while dropping into place,
  * bounces, holds, then dips and shoots upward at the end.
@@ -151,11 +158,13 @@ MayaHermitKey recovery_effHermit_0[] = {
     },
 };
 /** Twelve pastel colours the recovery sparkles cycle through, one step per frame. */
+#if VERSION > VERSION_DEMO_US
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,
     0xB4, 0xFE, 0xB4, 0xD5, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5, 0xAC,
 };
+#endif
 /** The recovery icon's square plane that carries the heart or flower texture. */
 s16 recovery_effFace_pPlane2_q007_0[] = {
     4, // vertex count
@@ -584,7 +593,9 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     s32 type;
     s32 i;
+#if VERSION > VERSION_DEMO_US
     u8* c;
+#endif
     GXColor color;
     GXTexObj texObj;
     Mtx transMtx;
@@ -665,8 +676,15 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
     for (i = 1; i < effect->count; i++, p++) {
+#if VERSION <= VERSION_DEMO_US
+        {
+            u32 k = (i + gp->retraceCount) % 12;
+            color = (GXColor){ color_rotation_data[k * 3], color_rotation_data[k * 3 + 1], color_rotation_data[k * 3 + 2], p->alpha };
+        }
+#else
         c = &color_rotation_data[((i + gp->retraceCount) % 12) * 3];
         color = (GXColor){ c[0], c[1], c[2], p->alpha };
+#endif
         GXSetTevColor(GX_TEVREG0, color);
         PSMTXTrans(transMtx, p->position.x, p->position.y, p->position.z);
         PSMTXScale(scaleMtx, p->scale.x, p->scale.y, p->scale.z);
@@ -837,7 +855,9 @@ void effRecoveryDisp4(CameraId cameraId, EffectEntry* effect) {
     Mtx scaleMtx;
     Mtx base;
     GXTexObj texObj;
+#if VERSION > VERSION_DEMO_US
     u8* c;
+#endif
     f32 w;
     f32 nw;
     f32 l;
@@ -874,8 +894,15 @@ void effRecoveryDisp4(CameraId cameraId, EffectEntry* effect) {
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha * work->alpha / 255 });
             } else {
+#if VERSION <= VERSION_DEMO_US
+                {
+                    u32 k = (i + gp->retraceCount) % 12;
+                    color = (GXColor){ color_rotation_data[k * 3], color_rotation_data[k * 3 + 1], color_rotation_data[k * 3 + 2], alpha * work->alpha / 255 };
+                }
+#else
                 c = &color_rotation_data[((i + gp->retraceCount) % 12) * 3];
                 color = (GXColor){ c[0], c[1], c[2], alpha * work->alpha / 255 };
+#endif
                 effGetTexObj(20, &texObj);
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetChanMatColor(GX_COLOR0A0, color);

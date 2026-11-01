@@ -94,11 +94,13 @@ s32 _hammer_badge_table[9] = {ITEM_POWER_SMASH, ITEM_PIERCING_BLOW, ITEM_HAMMER_
  * Started by BattleCommandInput when the player picks a greyed-out command:
  * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
  */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(_btl_cmd_error_msg_event)
     CALL(_get_msg, LW(0))
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -30, LW(0), 60)
     RETURN
 EVT_END()
+#endif
 
 void BattleCommandInit(BattleWork* wp) {
     wp->commandMenu.state = 0;
@@ -693,6 +695,13 @@ BattleCheckPartyEntry _checkPartyTable[8] = {
     {UNIT_BOBBERY, "btl_cmd_pt_sanders", ICON_PARTY_BOBBERY, "btl_hlp_cmd_operation_party6"},
     {UNIT_MS_MOWZ, "btl_cmd_pt_chuchurina", ICON_PARTY_MS_MOWZ, "btl_hlp_cmd_operation_party7"},
 };
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(_btl_cmd_error_msg_event)
+    CALL(_get_msg, LW(0))
+    CALL(btlevtcmd_AnnounceMessage, 0, 0, -30, LW(0), 60)
+    RETURN
+EVT_END()
+#endif
 
 void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type) {
     BattleUnit* unit;

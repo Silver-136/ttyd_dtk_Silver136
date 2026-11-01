@@ -62,10 +62,16 @@ BinaryFontHeader* pfh; //pointer to font header
 #define FONT_CH(c) (c)
 #endif
 
+
 //local prototypes
 void JUTFont_DrawStart(GXColor color);
 void _JUTFont_DrawPos(u16 code, s16 x, s16 y);
 u16 JUTFont_CodeToGlyph(u32 code);
+
+/** Glyph of a single-byte character. */
+static inline u16 fontByteGlyph(s8 c) {
+    return JUTFont_CodeToGlyph(FONT_CH(c));
+}
 #if VERSION >= VERSION_US
 void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg);
 #endif
@@ -515,7 +521,7 @@ void FontDrawStringMtx(Mtx mtx, const char* msg) {
                     }
                     break;
                 default:
-                    code = JUTFont_CodeToGlyph(FONT_CH(*((const s8*)msg)++));
+                    code = fontByteGlyph(*msg++);
                     break;
             }
         }
@@ -681,7 +687,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
                     }
                     break;
                 default:
-                    code = JUTFont_CodeToGlyph(FONT_CH(*((const s8*)msg)++));
+                    code = fontByteGlyph(*msg++);
                     break;
             }
         }
@@ -766,7 +772,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                     }
                     break;
                 default:
-                    code = JUTFont_CodeToGlyph(FONT_CH(*((const s8*)msg)++));
+                    code = fontByteGlyph(*msg++);
                     break;
             }
         }
@@ -853,7 +859,7 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
                     }
                     break;
                 default:
-                    code = JUTFont_CodeToGlyph(FONT_CH(*((const s8*)msg)++));
+                    code = fontByteGlyph(*msg++);
                     break;
             }
         }
@@ -958,7 +964,11 @@ void JUTFontSetup(u16 font) {
 #endif
 
     if (!pfh) {
+#if VERSION <= VERSION_DEMO_US
+        sprintf(path, "%s/font/%s.bfn", getMarioStDvdRoot(), fontname[font]);
+#else
         sprintf(path, "%s/f/%s.bfn", getMarioStDvdRoot(), fontname[font]);
+#endif
         dvd = DVDMgrOpen(path, 2, 0);
         size = DVDMgrGetLength(dvd);
 #if VERSION >= VERSION_US

@@ -95,7 +95,7 @@ EvtWord evt_door_open[508];
 #if VERSION >= VERSION_US
 EvtWord evt_door_open_bom_01[336];
 #else
-#if VERSION == VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_US
 EvtWord evt_door_open_bom_01[336];
 #else
 EvtWord evt_door_open_bom_01[338];

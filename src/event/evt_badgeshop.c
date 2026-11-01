@@ -3,7 +3,7 @@
  */
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-#define DTRIGF_WITH_INITIAL_VALUES
+#define DTRIGF_PLAIN_DATA
 #include <dtrigf.h>
 #include "evt/evt_badgeshop.h"
 #else
@@ -16,23 +16,27 @@
 #include <string.h>
 
 //.data
+#if VERSION > VERSION_DEMO_US
 s32 badge_starmaniac_table[] = { //Dazzle
     ITEM_ATTACK_FX_Y, ITEM_CHILL_OUT, ITEM_PRETTY_LUCKY, ITEM_HAPPY_HEART,
     ITEM_HAPPY_FLOWER, ITEM_HAPPY_HEART_P, ITEM_ITEM_HOG, ITEM_HEART_FINDER,
     ITEM_FLOWER_FINDER, ITEM_PEEKABOO, ITEM_QUICK_CHANGE, ITEM_FLOWER_SAVER,
     ITEM_FLOWER_SAVER_P, ITEM_POWER_PLUS, ITEM_POWER_PLUS_P, ITEM_NULL
 };
+#endif
 
 /**
  * Charlieton's Rogueport stock: the badges
  * and items he can offer; the bargain slots store indexes into it.
  */
+#if VERSION > VERSION_DEMO_US
 s32 badge_bottakuru_table[] = { //Charlieton Rogueport
     ITEM_SHOOTING_STAR, ITEM_EARTH_QUAKE, ITEM_BOOS_SHEET, ITEM_REPEL_CAPE,
     ITEM_STOPWATCH, ITEM_ULTRA_SHROOM, ITEM_JAMMIN_JELLY, ITEM_DRIED_SHROOM,
     ITEM_DOUBLE_PAIN, ITEM_JUMPMAN, ITEM_HAMMERMAN, ITEM_ATTACK_FX_G,
     ITEM_SLOW_GO, ITEM_MEGA_RUSH, ITEM_TIMING_TUTOR, ITEM_W_EMBLEM, ITEM_NULL
 };
+#endif
 
 //.sdata
 s32 badge_special_table[] = { //Lovely Howz of Badges
@@ -71,6 +75,20 @@ s32 badge_special_table_stage_6_clear[] = { //Poshley Heights
     ITEM_SIMPLIFIER, ITEM_UNSIMPLIFIER, ITEM_ATTACK_FX_P, ITEM_NULL
 };
 
+#if VERSION <= VERSION_DEMO_US
+s32 badge_starmaniac_table[] = { //Dazzle
+    ITEM_ATTACK_FX_Y, ITEM_CHILL_OUT, ITEM_PRETTY_LUCKY, ITEM_HAPPY_HEART,
+    ITEM_HAPPY_FLOWER, ITEM_HAPPY_HEART_P, ITEM_ITEM_HOG, ITEM_HEART_FINDER,
+    ITEM_FLOWER_FINDER, ITEM_PEEKABOO, ITEM_QUICK_CHANGE, ITEM_FLOWER_SAVER,
+    ITEM_FLOWER_SAVER_P, ITEM_POWER_PLUS, ITEM_POWER_PLUS_P, ITEM_NULL
+};
+s32 badge_bottakuru_table[] = { //Charlieton Rogueport
+    ITEM_SHOOTING_STAR, ITEM_EARTH_QUAKE, ITEM_BOOS_SHEET, ITEM_REPEL_CAPE,
+    ITEM_STOPWATCH, ITEM_ULTRA_SHROOM, ITEM_JAMMIN_JELLY, ITEM_DRIED_SHROOM,
+    ITEM_DOUBLE_PAIN, ITEM_JUMPMAN, ITEM_HAMMERMAN, ITEM_ATTACK_FX_G,
+    ITEM_SLOW_GO, ITEM_MEGA_RUSH, ITEM_TIMING_TUTOR, ITEM_W_EMBLEM, ITEM_NULL
+};
+#endif
 /** Charlieton's stock in the Pit of 100 Trials: basic recovery and attack items. */
 s32 badge_bottakuru100_table[] = { //Charlieton Pit of 100 Trials
     ITEM_MUSHROOM, ITEM_SUPER_SHROOM, ITEM_HONEY_SYRUP, ITEM_MAPLE_SYRUP,
@@ -154,6 +172,7 @@ s32 getBadgeBteresaTableMaxCount(void) {
  */
 void badgeShop_init(void) {
     s32* ptr;
+    s32* p2;
 
     bdsw = &badgeshopwork;
     memset(bdsw->special_table, 0, sizeof(bdsw->special_table));
@@ -175,8 +194,8 @@ void badgeShop_init(void) {
 
     badgeShop_bottakuruGeneration();
 
-    for (ptr = badge_bteresa_table; *ptr; ++ptr) {
-        badgeShop_add(bdsw->bteresa_table, (s16)*ptr, 1);
+    for (p2 = badge_bteresa_table; *p2; ++p2) {
+        badgeShop_add(bdsw->bteresa_table, (s16)*p2, 1);
     }
 }
 
@@ -238,6 +257,7 @@ void badgeShop_bottakuruGeneration(void) {
 
 void badgeShop_bteresaGeneration(void) {
     s32* ptr;
+    s32* p2;
     s32 has;
 
     has = pouchCheckItem(ITEM_SPECIAL_CARD);
@@ -274,8 +294,8 @@ void badgeShop_bteresaGeneration(void) {
     if (has) {
         if (!evtGetValue(NULL, GSWF_PARLOR_PLATINUM_CARD_PRIZES_ADDED)) {
             evtSetValue(NULL, GSWF_PARLOR_PLATINUM_CARD_PRIZES_ADDED, 1);
-            for (ptr = badge_bteresa_table_card_platinum; *ptr; ptr++) {
-                badgeShop_add(bdsw->bteresa_table, (s16)*ptr, 1);
+            for (p2 = badge_bteresa_table_card_platinum; *p2; p2++) {
+                badgeShop_add(bdsw->bteresa_table, (s16)*p2, 1);
             }
         }
     }
@@ -638,7 +658,7 @@ USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
     EvtWord* args = event->args;
     s16 badge;
     s32 count;
-    int i;
+    long i; // FAKE: `long` (same size): the int form allocates registers differently in the demos
 
     for (count = 0, i = 0; i < BADGE_COUNT; i++) {
 #if VERSION <= VERSION_DEMO_US

@@ -3,7 +3,7 @@
 
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-#define DTRIGF_WITH_INITIAL_VALUES
+#define DTRIGF_PLAIN_DATA
 #include <dtrigf.h>
 #include "dolphin/types.h"
 #else

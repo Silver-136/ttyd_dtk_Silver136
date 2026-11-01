@@ -189,6 +189,7 @@ s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
 };
 
 /** The ring model's 20 display lists, drawn with wakka_dl_0_size_tbl. */
+#if VERSION > VERSION_DEMO_US
 void* wakka_dl_0_tbl[] = {
     wakka_dl_0_0, // 0
     wakka_dl_0_1, // 1
@@ -211,8 +212,10 @@ void* wakka_dl_0_tbl[] = {
     wakka_dl_0_18, // 18
     wakka_dl_0_19, // 19
 };
+#endif
 
 // Texture scroll offsets: -3.5 / 24 * i for i = 0..24
+#if VERSION > VERSION_DEMO_US
 f32 scroll_tbl[] = {
     0.0f, -0.14583334f, -0.29166669f, -0.43750003f, -0.58333337f,
     -0.72916669f, -0.87500006f, -1.0208334f, -1.1666667f, -1.3125f,
@@ -220,6 +223,7 @@ f32 scroll_tbl[] = {
     -2.1875f, -2.3333333f, -2.4791667f, -2.625f, -2.7708333f,
     -2.9166667f, -3.0625f, -3.2083333f, -3.3541667f, -3.5f
 };
+#endif
 
 s8 wakka_normal_tbl[] ATTRIBUTE_ALIGN(32) = {
 #if VERSION <= VERSION_DEMO_US
@@ -454,6 +458,30 @@ u8 wakka_dl_0_19[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
+#if VERSION <= VERSION_DEMO_US
+void* wakka_dl_0_tbl[] = {
+    wakka_dl_0_0, // 0
+    wakka_dl_0_1, // 1
+    wakka_dl_0_2, // 2
+    wakka_dl_0_3, // 3
+    wakka_dl_0_4, // 4
+    wakka_dl_0_5, // 5
+    wakka_dl_0_6, // 6
+    wakka_dl_0_7, // 7
+    wakka_dl_0_8, // 8
+    wakka_dl_0_9, // 9
+    wakka_dl_0_10, // 10
+    wakka_dl_0_11, // 11
+    wakka_dl_0_12, // 12
+    wakka_dl_0_13, // 13
+    wakka_dl_0_14, // 14
+    wakka_dl_0_15, // 15
+    wakka_dl_0_16, // 16
+    wakka_dl_0_17, // 17
+    wakka_dl_0_18, // 18
+    wakka_dl_0_19, // 19
+};
+#endif
 /** Display-list sizes (32-byte units) of the ring model's lists. */
 u8 wakka_dl_0_size_tbl[] = {
     1, // 0
@@ -488,6 +516,15 @@ static f32 scale_tbl[] = {
     3.2f, 3.4f, 3.6f, 3.8f, 4.0f,
     4.2f, 4.4f, 4.6f, 4.8f, 5.0f,
 };
+#if VERSION <= VERSION_DEMO_US
+f32 scroll_tbl[] = {
+    0.0f, -0.14583334f, -0.29166669f, -0.43750003f, -0.58333337f,
+    -0.72916669f, -0.87500006f, -1.0208334f, -1.1666667f, -1.3125f,
+    -1.4583334f, -1.6041666f, -1.75f, -1.8958334f, -2.0416667f,
+    -2.1875f, -2.3333333f, -2.4791667f, -2.625f, -2.7708333f,
+    -2.9166667f, -3.0625f, -3.2083333f, -3.3541667f, -3.5f
+};
+#endif
 #endif
 void effUltraHammerMain(EffectEntry* effect);
 void effUltraHammerDisp(CameraId camId, void* param);

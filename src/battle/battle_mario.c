@@ -110,14 +110,14 @@ static EvtWord marioAttackEvent_NormalJump[VERSION_PICK(889, 963)];
 static EvtWord marioAttackEvent_KururinJump[1210];
 EvtWord marioAttackEvent_JyabaraJump[];
 EvtWord marioAttackEvent_GatsuDokaJump[VERSION_PICK(624, 638)];
-#if VERSION == VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_US
 EvtWord marioAttackEvent_TatsumakiJump[1661];
 #else
 EvtWord marioAttackEvent_TatsumakiJump[VERSION_PICK(1668, 1679)];
 #endif
 EvtWord marioAttackEvent_RenzokuJump[840];
 EvtWord marioAttackEvent_TugiTugiJump[VERSION_PICK(793, 775)];
-#if VERSION == VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_US
 EvtWord marioAttackEvent_NormalHammer_Core[1312];
 #else
 EvtWord marioAttackEvent_NormalHammer_Core[VERSION_PICK(1326, 1333)];
@@ -3797,6 +3797,18 @@ EVT_END()
  * enemy with badgeWeapon_TatsumakiJumpInvolved.
  */
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(marioAttackEvent_GatsunJump)
+    SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
+    CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
+    RETURN
+EVT_END()
+EVT_BEGIN(marioAttackEvent_DokanJump)
+    SET_VALUE(LW(12), PTR(&badgeWeapon_DokanJump))
+    CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
+    RETURN
+EVT_END()
+#endif
 EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     // Target the selected enemy: the attack is declared, the badge's FP cost paid, Merlee's attack charm used
     // if due, and the stomp's Action Command set up.
@@ -4847,6 +4859,20 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
 EVT_END()
 #endif
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(marioAttackEvent_MiniminiFumi)
+    CALL_CHILD(PTR(marioAttackEvent_NormalJump))
+    RETURN
+EVT_END()
+EVT_BEGIN(marioAttackEvent_NemuraseFumi)
+    CALL_CHILD(PTR(marioAttackEvent_NormalJump))
+    RETURN
+EVT_END()
+EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
+    CALL_CHILD(PTR(marioAttackEvent_NormalJump))
+    RETURN
+EVT_END()
+#endif
 /**
  * Power Bounce badge attack: Mario keeps bouncing on one enemy while each timed press succeeds.
  * The number of bounces allowed is capped by mario_get_renzoku_count_max,
@@ -5362,6 +5388,28 @@ EVT_END()
  * LW(12) is the weapon and LW(14) picks the badge variant of the swing.
  */
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(marioAttackEvent_NormalHammer)
+    SET_VALUE(LW(14), 0)
+    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    RETURN
+EVT_END()
+EVT_BEGIN(marioAttackEvent_GatsunHammer)
+    SET_VALUE(LW(14), 1)
+    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    RETURN
+EVT_END()
+EVT_BEGIN(marioAttackEvent_IceNaguri)
+    SET_VALUE(LW(14), 0)
+    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    RETURN
+EVT_END()
+EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
+    SET_VALUE(LW(14), 1)
+    CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
+    RETURN
+EVT_END()
+#endif
 EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     // On a First Strike Mario starts at his home spot facing the target; on a normal turn the attack is declared,
     // FP are paid and Merlee's charm is checked.
@@ -7968,6 +8016,18 @@ EVT_BEGIN(_NormalCharge_core)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(marioAttackEvent_NormalCharge)
+    SET_VALUE(LW(12), PTR(&badgeWeapon_Charge))
+    CALL_CHILD(PTR(_NormalCharge_core))
+    RETURN
+EVT_END()
+EVT_BEGIN(marioAttackEvent_NormalChargeP)
+    SET_VALUE(LW(12), PTR(&badgeWeapon_ChargeP))
+    CALL_CHILD(PTR(_NormalCharge_core))
+    RETURN
+EVT_END()
+#endif
 /**
  * Super Charge and Super Charge P: the same pose and spin as Charge with the super charge sound
  * and the weapon in LW(12). No map, chest or shop in the tree gives ITEM_SUPER_CHARGE or ITEM_SUPER_CHARGE_P.
@@ -8001,74 +8061,96 @@ EVT_BEGIN(_SuperCharge_core)
     RETURN
 EVT_END()
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
     CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
     RETURN
 EVT_END()
+#endif
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_DokanJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DokanJump))
     CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
     RETURN
 EVT_END()
+#endif
 
 /** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_MiniminiFumi)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
 EVT_END()
+#endif
 
 /** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_NemuraseFumi)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
 EVT_END()
+#endif
 
 /** Soft Stomp badge attack: a normal jump; the defense-down effect comes from the badge's weapon data. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
 EVT_END()
+#endif
 
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
     RETURN
 EVT_END()
+#endif
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_GatsunHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
     RETURN
 EVT_END()
+#endif
 
 /** Ice Smash badge attack: a normal hammer swing (LW(14) = 0); the freeze comes from badgeWeapon_IceNaguri. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_IceNaguri)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
     RETURN
 EVT_END()
+#endif
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
     RETURN
 EVT_END()
+#endif
 
 /** Charge badge move for Mario. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_NormalCharge)
     SET_VALUE(LW(12), PTR(&badgeWeapon_Charge))
     CALL_CHILD(PTR(_NormalCharge_core))
     RETURN
 EVT_END()
+#endif
 
 /** Charge P badge move for the partner. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_NormalChargeP)
     SET_VALUE(LW(12), PTR(&badgeWeapon_ChargeP))
     CALL_CHILD(PTR(_NormalCharge_core))
     RETURN
 EVT_END()
+#endif
 
 /** Super Charge badge move for Mario. */
 EVT_BEGIN(marioAttackEvent_SuperCharge)

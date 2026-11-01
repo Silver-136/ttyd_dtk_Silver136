@@ -33,7 +33,7 @@ USER_FUNC(_disable_restore_command_cursor);
 #if VERSION >= VERSION_US
 EvtWord subsetevt_dead[612];
 #else
-#if VERSION == VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_US
 EvtWord subsetevt_dead[595];
 #else
 EvtWord subsetevt_dead[608];

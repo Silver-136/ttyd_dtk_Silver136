@@ -1,5 +1,7 @@
 // Battle units: creating, spawning, deleting and updating the units and parts that fight in a battle.
 
+// FAKE: the demos' status functions take the enum here while their callers see the s8 prototypes.
+#define BATTLE_UNIT_STATUS_ENUM
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "battle/battle.h"
@@ -984,11 +986,19 @@ void _CheckMoveCount(BattleUnit* unit) {
  * for statuses with no strength (sleep, stop, dizzy, ...) both get the turn count.
  * A size, attack or defense change of the other sign reads as 0.
  */
+#if VERSION <= VERSION_DEMO_US
+void BtlUnit_GetStatus(BattleUnit* unit, StatusEffectType type, s8* turns, s8* strength) {
+#else
 void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
+#endif
     s8 status_turns = 0;
     s8 status_strength = 0;
 
+#if VERSION <= VERSION_DEMO_US
+    switch ((s8)type) {
+#else
     switch (type) {
+#endif
         case STATUS_SLEEP:
             status_strength = unit->sleepTurns;
             status_turns = status_strength;
@@ -1116,7 +1126,11 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
     }
 }
 
+#if VERSION <= VERSION_DEMO_US
+BOOL BtlUnit_SetStatus(BattleUnit* unit, StatusEffectType type, s8 turns, s8 strength) {
+#else
 BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
+#endif
 #if VERSION <= VERSION_DEMO_US
     switch ((s8)type) {
 #else
@@ -1348,7 +1362,11 @@ void BtlUnit_ClearStatus(BattleUnit* unit) {
  * attack and defense changes, poison and regen), clearing its strength when the turns run out.
  * Returns TRUE when the status just wore off; FALSE when it continues, was not active, or the unit is KO'd.
  */
+#if VERSION <= VERSION_DEMO_US
+BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, StatusEffectType type) {
+#else
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
+#endif
     s8 turns, strength;
 
     if (!unit) {
@@ -1364,7 +1382,11 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
     if (!turns) {
         return FALSE;
     }
+#if VERSION <= VERSION_DEMO_US
+    switch ((s8)type) {
+#else
     switch (type) {
+#endif
         case STATUS_SLEEP:
             if (turns > 1) {
                 turns--;
@@ -1467,7 +1489,11 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
 }
 
 /** Returns TRUE while the status effect has turns left; Electric also counts as active when the unit wears Zap Tap. */
+#if VERSION <= VERSION_DEMO_US
+BOOL BtlUnit_CheckStatus(BattleUnit* unit, StatusEffectType type) {
+#else
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, s8 type) {
+#endif
     s8 turns, strength;
 
     if (!unit) {
@@ -1477,7 +1503,11 @@ BOOL BtlUnit_CheckStatus(BattleUnit* unit, s8 type) {
     if (turns) {
         return TRUE;
     }
+#if VERSION <= VERSION_DEMO_US
+    if ((s8)type == STATUS_ELECTRIC && unit->badgesEquipped.ZapTap) {
+#else
     if (type == STATUS_ELECTRIC && unit->badgesEquipped.ZapTap) {
+#endif
         return TRUE;
     }
     return FALSE;

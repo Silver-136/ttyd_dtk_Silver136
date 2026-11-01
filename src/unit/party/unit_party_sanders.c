@@ -87,6 +87,32 @@ static EvtWord attack_event[2];
 BattleUnitSetup entry_bomzou;
 static EvtWord party_win_reaction[9];
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {
+    100, // sleep
+    100, // stop
+    100, // dizzy
+    100, // poison
+    100, // confuse
+    100, // electric
+    100, // burn
+    100, // freeze
+    100, // huge
+    100, // tiny
+    100, // attackUp
+    100, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    100, // allergic
+    100, // fright
+    100, // galeForce
+    100, // fast
+    100, // slow
+    100, // dodgy
+    100, // invisible
+    100, // ohko
+};
+#endif
 /**
  * Bobbery's normal pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze,
  * instant KO), the hurt poses, walking and running, low HP, the failed Run Away tumble, talking, item use,
@@ -261,7 +287,11 @@ EVT_END()
 /** Hit reaction: straightens his rotation (left over from his moves), then runs the default damage script. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(LW(10), -2)
+#else
     SET_VALUE(LW(10), UNIT_ID_SELF)
+#endif
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -531,7 +561,11 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_ATTACK1"), 0, 0, -1, -1, 0, 0)
     ADD(LW(2), 5)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, -2, 1)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_KEEP, 1)
+#endif
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK2"), LW(14))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
     WAIT_FRAMES(60)
@@ -541,8 +575,13 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(6))
     DIVIDE(LW(6), 2)
     ADD(LW(1), LW(6))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
+#else
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
+#endif
     CALL(btlevtcmd_StageDispellFog)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
@@ -560,7 +599,11 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("J_1A"))
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(8)
@@ -569,7 +612,11 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 20)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
+#endif
     WAIT_FRAMES(20)
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -577,7 +624,11 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
@@ -1210,7 +1261,11 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_ATTACK1"), 0, 0, -1, -1, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 60, -2, 1)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 60, MOVE_SOUND_KEEP, 1)
+#endif
         CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
@@ -1268,7 +1323,11 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_ATTACK1"), 0, 0, -1, -1, 0, 0)
     ADD(LW(2), 5)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(13), -2, 1)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(13), MOVE_SOUND_KEEP, 1)
+#endif
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 300)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
@@ -1325,11 +1384,23 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
         SWITCH(LW(0))
+#if VERSION <= VERSION_DEMO_US
+CASE_LESS_OR_EQUAL(2)
+#else
             CASE_LESS_OR_EQUAL(3)
+#endif
             SET_VALUE(LW(0), -1)
+#if VERSION <= VERSION_DEMO_US
+CASE_LESS_OR_EQUAL(4)
+#else
             CASE_LESS_OR_EQUAL(5)
+#endif
             SET_VALUE(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CASE_LESS_OR_EQUAL(6)
+#else
             CASE_LESS_OR_EQUAL(7)
+#endif
             SET_VALUE(LW(0), 1)
             CASE_DEFAULT
             SET_VALUE(LW(0), 2)
@@ -1373,7 +1444,11 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, MOVE_SOUND_FROM_TABLE)
+#endif
     END_SIBLING_EVENT
     WAIT_FRAMES(60)
     DELETE_EVENT(LW(15))
@@ -1383,11 +1458,19 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     DIVIDE(LW(6), 2)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.25f))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
+#endif
     END_SIBLING_EVENT
     // Stylish: pressing A as he lands makes him stretch and squash for the audience; otherwise he lands in a heap.
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 15)
@@ -1460,7 +1543,11 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
 #if VERSION >= VERSION_US
@@ -1511,7 +1598,11 @@ EVT_BEGIN(partySandersAttack_CounterSet)
     ELSE
         CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
         SUBTRACT(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(0), LW(6))
+#else
         CALL(btlevtcmd_GetResultPrizeLv, -1, LW(0), LW(6))
+#endif
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
@@ -1551,6 +1642,18 @@ EVT_BEGIN(partySandersAttack_CounterSet)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+BattleUnitSetup entry_bomzou = {
+    &unit_bomzou, // unitKindParams
+    ALLIANCE_NEUTRAL, // alliance
+    {0}, // pad_05
+    BATTLE_PHASE_BEFORE_PLAYER, // attackPhase
+    {1000.0f, 0.0f, 1000.0f}, // position
+    0, // hitOffsetX
+    {0}, // unitWork
+    NULL, // itemDropTable
+};
+#endif
 /**
  * Bobbery's Bomb Squad: for each successful action command he throws one of up to three bombs (unit_bomzou)
  * along the aimed arc (_shot_bomb_event); bombs that land off the stage are removed, the rest explode next turn.
@@ -1735,7 +1838,11 @@ EVT_BEGIN(sanders_appeal_event)
     DIVIDE(LW(6), 2)
     ADD(LW(1), LW(6))
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
+#else
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
+#endif
     CALL(btlevtcmd_StageDispellFog)
     BEGIN_INLINE_EVENT
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -1748,11 +1855,22 @@ EVT_BEGIN(sanders_appeal_event)
     END_SIBLING_EVENT
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(party_win_reaction)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("Y_1"))
+    WAIT_FRAMES(48)
+    RETURN
+EVT_END()
+#endif
 /**
  * Audience-attack reaction (data tag 6): Bobbery runs offstage, reappears in the audience,
  * lights his fuse for a second and explodes on the chosen audience member,
@@ -1767,7 +1885,11 @@ static EVT_BEGIN(attack_audience_event)
     MULTIPLY(LW(8), -1)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(8), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(8), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     WAIT_FRAMES(20)
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageAudienceAreaSize, LW(4), EVT_NULLPTR, EVT_NULLPTR)
@@ -1781,16 +1903,28 @@ static EVT_BEGIN(attack_audience_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 100)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 30)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK2"), LW(14))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
     WAIT_MS(1000)
     CALL(evt_snd_sfxoff, LW(14))
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK4"), 0)
+#else
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK3"), 0)
+#endif
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff, STRING(""), STRING("sandars"), 3, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+#else
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+#endif
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 20, 13)
     CALL(_attack_aud, LW(3), 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -1807,7 +1941,11 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, MOVE_SOUND_FROM_TABLE)
+#endif
     END_SIBLING_EVENT
     WAIT_FRAMES(60)
     DELETE_EVENT(LW(15))
@@ -1817,11 +1955,19 @@ static EVT_BEGIN(attack_audience_event)
     DIVIDE(LW(6), 2)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.25f))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
+#endif
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -1841,6 +1987,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Bobbery's status chances: 100 for every status (badges lower them in battle). */
+#if VERSION > VERSION_DEMO_US
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -1865,6 +2012,7 @@ static StatusVulnerability regist = {
     100, // invisible
     100, // ohko
 };
+#endif
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(attack_event)
@@ -1875,6 +2023,7 @@ EVT_END()
  * Setup for each time bomb that Bomb Squad spawns (unit_bomzou): on Bobbery's side,
  * acting before the player's turn, placed off stage until the throw moves it.
  */
+#if VERSION > VERSION_DEMO_US
 BattleUnitSetup entry_bomzou = {
     &unit_bomzou, // unitKindParams
     ALLIANCE_NEUTRAL, // alliance
@@ -1885,13 +2034,16 @@ BattleUnitSetup entry_bomzou = {
     {0}, // unitWork
     NULL, // itemDropTable
 };
+#endif
 
 /** Victory reaction (data tag 64): Bobbery's Y_1 pose for 48 frames. */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("Y_1"))
     WAIT_FRAMES(48)
     RETURN
 EVT_END()
+#endif
 
 USER_FUNC(_sanders_make_extra_work_area) {
     BattleWork* wp = _battleWorkPointer;

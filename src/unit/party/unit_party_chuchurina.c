@@ -100,6 +100,32 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {
+    100, // sleep
+    100, // stop
+    100, // dizzy
+    100, // poison
+    100, // confuse
+    100, // electric
+    100, // burn
+    100, // freeze
+    100, // huge
+    100, // tiny
+    100, // attackUp
+    100, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    100, // allergic
+    100, // fright
+    100, // galeForce
+    100, // fast
+    100, // slow
+    100, // dodgy
+    100, // invisible
+    100, // ohko
+};
+#endif
 PoseTableEntry pose_table_chuchurina_stay[] = {
     {POSE_TYPE_FREEZE, "PCH_D_4"},
     {POSE_TYPE_STOP, "PCH_D_4"},
@@ -251,6 +277,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(wait_event)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
+    RETURN
+EVT_END()
+#endif
 BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     "btl_wn_pcr_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -276,7 +308,11 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
+#if VERSION <= VERSION_DEMO_US
+    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
+#else
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
+#endif
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -319,7 +355,11 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
+#if VERSION <= VERSION_DEMO_US
+    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
+#else
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
+#endif
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -1637,6 +1677,12 @@ EVT_END()
  * weapon (_make_madowase_weapon) that is then applied to each target; misses make the target dodge.
  */
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(main_evt)
+    CALL(mono_main)
+    RETURN
+EVT_END()
+#endif
 EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -3230,6 +3276,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Ms. Mowz's status vulnerabilities: base rate (100) for every status. */
+#if VERSION > VERSION_DEMO_US
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -3254,6 +3301,7 @@ static StatusVulnerability regist = {
     100, // invisible
     100, // ohko
 };
+#endif
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(attack_event)
@@ -3261,19 +3309,23 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /** Idle: plays the stay pose from the current pose table. */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Kiss Thief's spawned helper: runs mono_main, which draws the captured greyscale screen every frame;
  * the move deletes this event when the effect ends.
  */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(main_evt)
     CALL(mono_main)
     RETURN
 EVT_END()
+#endif
 
 s32 mono_alpha;
 

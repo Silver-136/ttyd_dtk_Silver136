@@ -3505,8 +3505,10 @@ s32 BattleAudience_GetPPAudienceNum_L(void) {
     return BattleAudience_GetPPAudienceNum_RL_Sub(0);
 }
 
+#if VERSION > VERSION_DEMO_US
 #pragma push
 #pragma opt_loop_invariants off
+#endif
 /**
  * Counts the members in one half of the stands (offset 0 = left ten columns, 10 = right) that are present
  * and taking part: not asleep, in a shell or leaving (BattleAudience_GetPPAudienceNum_Sub).
@@ -3526,7 +3528,9 @@ s32 BattleAudience_GetPPAudienceNum_RL_Sub(s32 offset) {
     }
     return count;
 }
+#if VERSION > VERSION_DEMO_US
 #pragma pop
+#endif
 
 /** TRUE when member id exists and takes part: not asleep (13), hiding in its shell (17) or leaving (12). */
 BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id) {

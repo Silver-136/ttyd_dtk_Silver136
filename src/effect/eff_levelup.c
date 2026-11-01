@@ -37,6 +37,9 @@ static s32 texid_tbl[6][6] = {
     { 118, 119, 120, 121, 122, 123 },
 };
 #endif
+#if VERSION <= VERSION_DEMO_US
+static s32 texid_tbl[2][6] = { { 146, 147, 148, 149, 150, 151 }, { 146, 147, 148, 149, 150, 151 } };
+#endif
 /**
  * Per-frame height of each banner letter as it drops in over 46 frames: it falls from 500 to the ground, then
  * bounces twice. The first letter touching down shakes the camera. Read by effLevelupMain.
@@ -50,7 +53,9 @@ u16 y_trans[] = {
 #if VERSION < VERSION_US
 
 /** Effect texture ids of the banner's six letter sprites, one row per language (all rows are the same). */
+#if VERSION > VERSION_DEMO_US
 static s32 texid_tbl[2][6] = { { 146, 147, 148, 149, 150, 151 }, { 146, 147, 148, 149, 150, 151 } };
+#endif
 #endif
 /**
  * Per-frame vertical stretch in percent of the banner letters after the first two, once landed: they grow

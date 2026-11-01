@@ -255,7 +255,7 @@ void seq_loadMain(SequenceWork* seq) {
             break;
         case 3: {
             GXColor c = {0, 0, 0, 255};
-            fadeEntry(0x1c, 0, c);
+            fadeEntry(FADE_CURTAIN_SIDES_A2, 0, c);
             seq->state++;
             break;
         }
@@ -416,7 +416,7 @@ wp->state = 0x64;
             wp->ty = win_dt[wp->slot].y + win_dt[wp->slot].ofsY;
             break;
         case 0xa:
-            fadeEntry(0x1b, 0, (GXColor){0, 0, 0, 255});
+            fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
             wp->state++;
             break;
         case 0xb:
@@ -441,7 +441,7 @@ wp->state = 0x64;
             }
             break;
         case 0x16:
-            fadeEntry(0x1b, 0, (GXColor){0, 0, 0, 255});
+            fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
 psndBGMOff_f_d(PSND_FADEOUT, 3000, 0);
 wp->state++;
             break;
@@ -459,7 +459,7 @@ wp->state++;
             }
             break;
         case 0x1e:
-            fadeEntry(0x1b, 0, (GXColor){0, 0, 0, 255});
+            fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
             wp->state++;
             break;
         case 0x1f:
@@ -470,13 +470,13 @@ wp->state++;
         case 0x20:
             if (nameEntPrepare()) {
                 nameEntOn(0);
-                fadeEntry(0x1c, 0, (GXColor){0, 0, 0, 255});
+                fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 255});
                 wp->state++;
             }
             break;
         case 0x21:
             if (fadeIsFinish() && !nameEntWait()) {
-                fadeEntry(0x18, 0, (GXColor){0, 0, 0, 255});
+                fadeEntry(FADE_CURTAIN_SIDES_A1_3D, 0, (GXColor){0, 0, 0, 255});
                 if (!nameEntIsCancel()) {
                     psndBGMOff_f_d(PSND_FADEOUT, 3000, 0);
                 }
@@ -487,7 +487,7 @@ wp->state++;
             if (fadeIsFinish()) {
                 nameEntOff();
                 if (nameEntIsCancel()) {
-                    fadeEntry(0x1c, 0, (GXColor){0, 0, 0, 255});
+                    fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 255});
                     wp->state = 1;
                 } else {
                     strcpy((char*)gp->playerName, nameEntGetName());
@@ -872,7 +872,7 @@ void loadMain(SequenceWork* seq) {
             wp->ty = win_dt[wp->slot].y + win_dt[wp->slot].ofsY;
             break;
         case 0xa:
-            fadeEntry(0x1b, 0, (GXColor){0, 0, 0, 255});
+            fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
             wp->state++;
             break;
         case 0xb:
@@ -897,7 +897,7 @@ void loadMain(SequenceWork* seq) {
             }
             break;
         case 0x16:
-            fadeEntry(0x1b, 0, (GXColor){0, 0, 0, 255});
+            fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
             psndBGMOff_f_d(PSND_FADEOUT, 2000, 0);
             wp->state++;
             break;
@@ -915,7 +915,7 @@ void loadMain(SequenceWork* seq) {
             }
             break;
         case 0x1e:
-            fadeEntry(0x1b, 0, (GXColor){0, 0, 0, 255});
+            fadeEntry(FADE_CURTAIN_SIDES_A1, 0, (GXColor){0, 0, 0, 255});
             wp->state++;
             break;
         case 0x1f:
@@ -926,13 +926,13 @@ void loadMain(SequenceWork* seq) {
         case 0x20:
             if (nameEntPrepare()) {
                 nameEntOn(0);
-                fadeEntry(0x1c, 0, (GXColor){0, 0, 0, 255});
+                fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 255});
                 wp->state++;
             }
             break;
         case 0x21:
             if (fadeIsFinish() && !nameEntWait()) {
-                fadeEntry(0x18, 0, (GXColor){0, 0, 0, 255});
+                fadeEntry(FADE_CURTAIN_SIDES_A1_3D, 0, (GXColor){0, 0, 0, 255});
                 if (!nameEntIsCancel()) {
                     psndBGMOff_f_d(PSND_FADEOUT, 3000, 0);
                 }
@@ -943,7 +943,7 @@ void loadMain(SequenceWork* seq) {
             if (fadeIsFinish()) {
                 nameEntOff();
                 if (nameEntIsCancel()) {
-                    fadeEntry(0x1c, 0, (GXColor){0, 0, 0, 255});
+                    fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 255});
                     wp->state = 1;
                 } else {
                     strcpy((char*)gp->playerName, nameEntGetName());

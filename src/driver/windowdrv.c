@@ -1111,6 +1111,15 @@ BOOL tpl_loaded; // TRUE once msgWindow.tpl is unpacked and wakuTexObj is built 
 #endif
 TEXPalette* winTpl; //new in retail
 
+/** Whether the window frame textures can be drawn; the demos load them synchronously and need no check. */
+static inline BOOL windowTplReady(void) {
+#if VERSION <= VERSION_DEMO_US
+    return TRUE;
+#else
+    return tpl_loaded;
+#endif
+}
+
 /**
  * Draws a speech balloon at (x, y) with its tail pointing at the speaker:
  * the shadow layer then the face, or only one layer for TEC-XX (type 8) windows.
@@ -1160,7 +1169,7 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
     f32 twothirds, third;
     f32 right, bottom, innerLeft, innerRight, innerTop, innerBottom;
 
-    if (tpl_loaded) {
+    if (windowTplReady()) {
         // Any texture map id the caller passes is replaced by 0, so the border always uses GX_TEXMAP0.
         if (gxTexMapID) {
             gxTexMapID = 0;
@@ -1341,7 +1350,7 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
     f32 twothirds, third;
     f32 right, bottom, innerLeft, innerRight, innerTop, innerBottom;
 
-    if (tpl_loaded) {
+    if (windowTplReady()) {
         // Any texture map id the caller passes is replaced by 0, so the border always uses GX_TEXMAP0.
         if (gxTexMapID) {
             gxTexMapID = 0;

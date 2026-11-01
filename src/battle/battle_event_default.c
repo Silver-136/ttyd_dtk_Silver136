@@ -565,6 +565,13 @@ EVT_BEGIN(btldefaultevt_ChangeParty)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(btldefaultevt_ProtectPartner)
+    CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(3))
+    CALL(btlevtcmd_SetGuard, UNIT_ID_SELF, LW(3))
+    RETURN
+EVT_END()
+#endif
 /**
  * Jitters the unit sideways for electric-shock paralysis ("biribiri"), then restarts its wait event.
  * battle_seq would run it for Electric units, but its chance there is irand(100) < 0, so it never plays.
@@ -640,18 +647,33 @@ EVT_BEGIN(btldefaultevt_guard_return)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(btldefaultevt_Wait)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+EVT_BEGIN(btldefaultevt_LectureEnd)
+CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, 69)
+    RETURN
+EVT_END()
+#endif
 /** Action for a unit that does nothing this turn: restarts its wait event. */
 EVT_BEGIN(btldefaultevt_Appeal)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), POSE_TYPE_NEUTRAL)
+#if VERSION <= VERSION_DEMO_US
+#else
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
+#endif
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), LW(1))
         ADD(LW(1), 53)
         ADD(LW(3), 35)
         SET_VALUE(LW(4), LW(2))
         ADD(LW(2), 250)
+#if VERSION <= VERSION_DEMO_US
+#else
     ELSE
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), LW(1))
@@ -660,6 +682,7 @@ EVT_BEGIN(btldefaultevt_Appeal)
         SET_VALUE(LW(4), LW(2))
         ADD(LW(2), 400)
     END_IF
+#endif
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, LW(0), LW(1), LW(2), LW(0), LW(3), LW(4), 30, 11)
     CALL(evt_batstage_light_set_player_on, 0)
@@ -714,6 +737,18 @@ EVT_BEGIN(_Defence_core)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(btldefaultevt_Defend)
+    SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommand))
+    CALL_CHILD(PTR(_Defence_core))
+    RETURN
+EVT_END()
+EVT_BEGIN(btldefaultevt_DefendParty)
+    SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommandP))
+    CALL_CHILD(PTR(_Defence_core))
+    RETURN
+EVT_END()
+#endif
 /**
  * The Run Away command: Mario and the partner turn and run in place
  * while the escape action command plays (the gauge uses the enemy group's run rate).
@@ -930,12 +965,20 @@ EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
+#if VERSION <= VERSION_DEMO_US
+#else
             CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
             CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(7))
             MULTIPLY_FLOAT(LW(7), LW(6))
+#endif
             CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(4), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+ADD(LW(1), 50)
+CALL(evt_eff, STRING(""), STRING("recovery"), 0, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
+#else
             ADD(LW(1), LW(7))
             CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
+#endif
             WAIT_FRAMES(120)
             CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, LW(4), LW(5))
         END_SIBLING_EVENT
@@ -944,13 +987,21 @@ EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
     CALL(_get_flower_suitoru_point, UNIT_ID_SELF, LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
         BEGIN_SIBLING_EVENT
+#if VERSION <= VERSION_DEMO_US
+#else
             CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
             CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(7))
             MULTIPLY_FLOAT(LW(7), LW(6))
+#endif
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
             CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(4), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+ADD(LW(1), 50)
+CALL(evt_eff, STRING(""), STRING("recovery"), 1, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
+#else
             ADD(LW(1), LW(7))
             CALL(evt_eff, 0, STRING("recovery"), 1, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
+#endif
             WAIT_FRAMES(120)
             CALL(btlevtcmd_RecoverFp, UNIT_ID_SELF, LW(4), LW(5))
         END_SIBLING_EVENT
@@ -974,21 +1025,26 @@ EVT_BEGIN(btldefaultevt_avoid_counter_event)
     RETURN
 EVT_END()
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(btldefaultevt_ProtectPartner)
     CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(3))
     CALL(btlevtcmd_SetGuard, UNIT_ID_SELF, LW(3))
     RETURN
 EVT_END()
+#endif
 
 EVT_BEGIN(btldefaultevt_Dummy)
     RETURN
 EVT_END()
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(btldefaultevt_Wait)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(btldefaultevt_LectureEnd)
 #if VERSION <= VERSION_DEMO_US
 CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, 69)
@@ -997,18 +1053,23 @@ CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, 69)
 #endif
     RETURN
 EVT_END()
+#endif
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(btldefaultevt_Defend)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommand))
     CALL_CHILD(PTR(_Defence_core))
     RETURN
 EVT_END()
+#endif
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(btldefaultevt_DefendParty)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommandP))
     CALL_CHILD(PTR(_Defence_core))
     RETURN
 EVT_END()
+#endif
 
 USER_FUNC(_backfire) {
     s32 id;

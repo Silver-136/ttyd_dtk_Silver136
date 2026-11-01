@@ -33,6 +33,11 @@ typedef struct EffTimestampN64Work {
     s32 delay[10];      // 0x14C
 } EffTimestampN64Work;
 
+#if VERSION <= VERSION_DEMO_US
+static u8 colr[17] = {255, 255, 255, 198, 138, 130, 130, 130, 130, 130, 175, 215, 250, 255, 255, 255, 255};
+static u8 colg[17] = {130, 130, 130, 130, 130, 165, 213, 255, 255, 255, 255, 255, 255, 225, 198, 159, 130};
+static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130, 130, 130, 130, 130, 130};
+#endif
 /**
  * Layout of the ten pieces, three numbers each: X and Y offset from the centre
  * and the frames before it fades in.
@@ -48,9 +53,15 @@ static u8 scale_data[4] = {120, 80, 40, 60};
  * Red, green and blue of each piece: the pieces run through the rainbow from red through green
  * and blue back to red (only the first ten entries are used).
  */
+#if VERSION > VERSION_DEMO_US
 static u8 colr[17] = {255, 255, 255, 198, 138, 130, 130, 130, 130, 130, 175, 215, 250, 255, 255, 255, 255};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u8 colg[17] = {130, 130, 130, 130, 130, 165, 213, 255, 255, 255, 255, 255, 255, 225, 198, 159, 130};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130, 130, 130, 130, 130, 130};
+#endif
 
 void effTimestampMain(EffectEntry* effect);
 void effTimestampDisp(CameraId cameraId, EffectEntry* effect);
@@ -179,8 +190,8 @@ void effTimestampDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx rot;
     Mtx mtx;
     s32 frame;
-    s32 bright;
     s32 i;
+    s32 bright;
     effN64Vtx* vtx;
     effN64Vtx* p;
     s32 t;

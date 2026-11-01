@@ -85,14 +85,17 @@ BattleUnitKind unit_object_tree = {
  * The tree's single part: a hidden, shadowless Mario-model body (guard cover,
  * no HP gauge) used only as a hit target.
  */
+#if VERSION > VERSION_DEMO_US
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_tree", "b_mario", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
 };
+#endif
 
 /**
  * Init for a stage tree the player can hit (spawned by battle_stage_object.c as _entry_tree_data):
  * registers the wait, attack and damage scripts, never moves, and idles. Its part is hidden and has no shadow.
  */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -102,11 +105,13 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Hit reaction: wobbles the tree object up and down (_rumble_tree),
  * then tips it over to 90 degrees and snaps it back upright (_turn_tree).
  */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -114,10 +119,12 @@ static EVT_BEGIN(damage_event)
     CALL(_turn_tree, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Vertical offsets applied on successive frames by _rumble_tree: a decaying wobble that settles at zero.
  */
+#if VERSION > VERSION_DEMO_US
 static s32 _data[] = {
     -5, 0, 15, 0, -15, 0, 14, 0,
     -13, 0, 12, 0, -11, 0, 10, 0,
@@ -129,6 +136,7 @@ static s32 _data[] = {
     -2, 0, 0,
 #endif
 };
+#endif
 
 /** The tree takes no damage reduction; every hit just triggers its shake and tip-over. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
@@ -178,11 +186,41 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+#if VERSION <= VERSION_DEMO_US
+static BattleUnitKindPart parts[] = {
+    {1, "btl_un_tree", "b_mario", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
+};
+static EVT_BEGIN(init_event)
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
+    CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+static EVT_BEGIN(damage_event)
+    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(11), 1)
+    CALL(_rumble_tree, UNIT_ID_SELF)
+    CALL(_turn_tree, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+#endif
 /** The tree never acts on its own turn; it just returns to its (empty) idle script. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#if VERSION <= VERSION_DEMO_US
+static s32 _data[] = {
+    -5, 0, 15, 0, -15, 0, 14, 0,
+    -13, 0, 12, 0, -11, 0, 10, 0,
+    -9, 0, 8, 0, -7, 0, 6, 0,
+    -6, 0, 5, 0, -4, 0, 2, 0,
+    -2, 0,
+};
+#endif
 
 static EVT_BEGIN(wait_event)
     RETURN

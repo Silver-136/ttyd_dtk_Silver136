@@ -318,7 +318,7 @@ marioKeyOff();
                         evtEntryType(key_off, 0, 0, 0);
                         break;
                     default:
-                        fadeEntry(0x1c, 0, (GXColor){0, 0, 0, 0});
+                        fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 0});
                         break;
                 }
                 statusWinForceUpdate();
@@ -541,7 +541,7 @@ void seq_mapChangeMain(SequenceWork* work) {
                 evtEntryType(key_off, 0, 0, 0);
                 break;
             default:
-                fadeEntry(0x1c, 0, (GXColor){0, 0, 0, 0});
+                fadeEntry(FADE_CURTAIN_SIDES_A2, 0, (GXColor){0, 0, 0, 0});
                 break;
             }
             statusWinForceUpdate();
@@ -719,6 +719,9 @@ sprintf(mapFile, "./bg/%s.tpl", newMapName);
     }
 }
 
+#if VERSION <= VERSION_DEMO_US
+static const char mc_tou2[] = "tou2";
+#endif
 static const char mc_tou_03[] = "tou_03";
 static const char mc_rel_fmt[] = "%s/rel/%s.rel";
 /**
@@ -726,7 +729,9 @@ static const char mc_rel_fmt[] = "%s/rel/%s.rel";
  * the area REL path, and the test (tst) and Pit of 100 Trials (jon) areas, whose REL gets its own buffer.
  */
 static const char mc_tou[] = "tou";
+#if VERSION > VERSION_DEMO_US
 static const char mc_tou2[] = "tou2";
+#endif
 static const char mc_tst[] = "tst";
 static const char mc_jon[] = "jon";
 

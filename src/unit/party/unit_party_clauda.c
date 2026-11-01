@@ -249,6 +249,32 @@ BattleWeapon partyWeapon_ClaudaKumogakureAttack = {
     {0, 0, 0, 100, 0, 0, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {
+    100, // sleep
+    100, // stop
+    100, // dizzy
+    100, // poison
+    100, // confuse
+    100, // electric
+    100, // burn
+    100, // freeze
+    100, // huge
+    100, // tiny
+    100, // attackUp
+    100, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    100, // allergic
+    100, // fright
+    100, // galeForce
+    100, // fast
+    100, // slow
+    100, // dodgy
+    100, // invisible
+    100, // ohko
+};
+#endif
 PoseTableEntry pose_table_clauda_stay[] = {
     {POSE_TYPE_FREEZE, "PWD_D_5"},
     {POSE_TYPE_STOP, "PWD_D_5"},
@@ -399,6 +425,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(wait_event)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
+    RETURN
+EVT_END()
+#endif
 /**
  * Flurrie's Body Slam: she floats over the enemy and drops onto it,
  * the action command deciding whether the slam connects at full strength, then floats back home.
@@ -623,19 +655,43 @@ EVT_BEGIN(partyClaudaAttack_BreathAttack)
     SUBTRACT(LW(1), 3)
     SWITCH(LW(1))
         CASE_LESS_OR_EQUAL(-3)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 420)
+#else
         SET_VALUE(LW(0), 300)
+#endif
         CASE_EQUAL(-2)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 360)
+#else
         SET_VALUE(LW(0), 300)
+#endif
         CASE_EQUAL(-1)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 320)
+#else
         SET_VALUE(LW(0), 300)
+#endif
         CASE_EQUAL(0)
         SET_VALUE(LW(0), 300)
         CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 270)
+#else
         SET_VALUE(LW(0), 300)
+#endif
         CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 240)
+#else
         SET_VALUE(LW(0), 300)
+#endif
         CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), 180)
+#else
         SET_VALUE(LW(0), 300)
+#endif
     END_SWITCH
     CALL(btlevtcmd_AcGetDifficulty, LW(1))
     CALL(btlevtcmd_AcSetParamAll, 1, LW(0), 4, 40, 60, 80, 100, LW(1))
@@ -807,45 +863,101 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
             SET_VALUE(LW(0), 70)
             SET_VALUE(LW(1), 2)
             CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 65)
+            SET_VALUE(LW(1), 3)
+#else
             SET_VALUE(LW(0), 66)
             SET_VALUE(LW(1), 2)
+#endif
             CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 60)
+            SET_VALUE(LW(1), 3)
+#else
             SET_VALUE(LW(0), 62)
             SET_VALUE(LW(1), 2)
+#endif
             CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 50)
+            SET_VALUE(LW(1), 4)
+#else
             SET_VALUE(LW(0), 58)
             SET_VALUE(LW(1), 2)
+#endif
         END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 6, 3, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
+        CALL(btlevtcmd_AcSetGaugeParam, 51, 68, 85, 100)
+#else
         CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 5, 3, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
         CALL(btlevtcmd_AcSetGaugeParam, 60, 80, 100, 100)
+#endif
         CASE_DEFAULT
         CALL(btlevtcmd_AcGetDifficulty, LW(0))
         SUBTRACT(LW(0), 3)
         SWITCH(LW(0))
             CASE_LESS_OR_EQUAL(-3)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 80)
+#else
             SET_VALUE(LW(0), 120)
+#endif
             SET_VALUE(LW(1), 0)
             CASE_EQUAL(-2)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 70)
+#else
             SET_VALUE(LW(0), 100)
+#endif
             SET_VALUE(LW(1), 0)
             CASE_EQUAL(-1)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 60)
+#else
             SET_VALUE(LW(0), 80)
+#endif
             SET_VALUE(LW(1), 1)
             CASE_EQUAL(0)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 50)
+#else
             SET_VALUE(LW(0), 70)
+#endif
             SET_VALUE(LW(1), 2)
             CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 45)
+            SET_VALUE(LW(1), 3)
+#else
             SET_VALUE(LW(0), 66)
             SET_VALUE(LW(1), 2)
+#endif
             CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 40)
+            SET_VALUE(LW(1), 3)
+#else
             SET_VALUE(LW(0), 62)
             SET_VALUE(LW(1), 2)
+#endif
             CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LW(0), 35)
+            SET_VALUE(LW(1), 4)
+#else
             SET_VALUE(LW(0), 58)
             SET_VALUE(LW(1), 2)
+#endif
         END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 4, 2, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
+        CALL(btlevtcmd_AcSetGaugeParam, 25, 50, 75, 100)
+#else
         CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 3, 2, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
         CALL(btlevtcmd_AcSetGaugeParam, 34, 68, 100, 100)
+#endif
     END_SWITCH
     CALL(btlevtcmd_AcSetFlag, 0)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 17, 1, 60)
@@ -1124,6 +1236,13 @@ EVT_BEGIN(clauda_appeal_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(party_win_reaction)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_Y_1"))
+    CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+    RETURN
+EVT_END()
+#endif
 /**
  * Audience-attack reaction (data tag 6): Flurrie body slams an audience member about to throw junk
  * or nothing (attack_bad_audience_event) and kisses one holding a real item (attack_good_audience_event).
@@ -1287,6 +1406,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Flurrie's status vulnerabilities: base rate (100) for every status. */
+#if VERSION > VERSION_DEMO_US
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -1311,6 +1431,7 @@ static StatusVulnerability regist = {
     100, // invisible
     100, // ohko
 };
+#endif
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(attack_event)
@@ -1318,17 +1439,21 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /** Idle: plays the stay pose from the current pose table. */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
+#endif
 
 /** Victory reaction (data tag 64): plays Flurrie's PWD_Y_1 pose to the end. */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_Y_1"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
+#endif
 
 USER_FUNC(_clauda_make_extra_work_area) {
     BattleWork* wp = _battleWorkPointer;

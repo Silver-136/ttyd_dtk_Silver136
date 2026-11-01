@@ -44,6 +44,13 @@ TitleWork* wp2 = &work2;
 #define TITLE_FRAMES_PER_SEC 60
 #endif
 
+/** Resting height of the title logo; the demos show it higher. */
+#if VERSION <= VERSION_DEMO_US
+#define TITLE_TOP_Y 130.0f
+#else
+#define TITLE_TOP_Y 120.0f
+#endif
+
 // local prototypes
 void titleInit(SequenceWork* work);
 void titleMain(SequenceWork* work);
@@ -170,16 +177,16 @@ static void titleMain(SequenceWork* work) {
         case 0:
 if (psndBGMStartCheck(0) != 0U) {
 if (seqGetPrevSeq() == SEQ_LOAD) {
-                    fadeEntry(0x40, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    fadeEntry(0x1F, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
+                    fadeEntry(FADE_CURTAIN_SIDES_A2_TOP, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    fadeEntry(FADE_CURTAIN_CENTER_Z2_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
 wp2->timer = 0;
                 } else if (seqGetPrevSeq() == SEQ_GAME_OVER) {
-                    fadeEntry(0x15, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    fadeEntry(0x1D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
+                    fadeEntry(FADE_OUT_WHITE_3D, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    fadeEntry(FADE_CURTAIN_CENTER_A1_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     wp2->timer = 78;
                 } else {
-                    fadeEntry(0x15, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    fadeEntry(0x22, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
+                    fadeEntry(FADE_OUT_WHITE_3D, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    fadeEntry(FADE_CURTAIN_ENTER_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     fadeSetNarrowFast();
 wp2->timer = 38;
 }
@@ -195,10 +202,10 @@ wp2->timer = 38;
             }
             if (fadeIsFinish()) {
                 if (seqGetPrevSeq() != SEQ_LOAD) {
-                    fadeEntry(0x14, 500, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    fadeEntry(FADE_IN_WHITE_3D, 500, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     wp2->state++;
                 } else {
-                    wp2->topPosY = 120.0f;
+                    wp2->topPosY = TITLE_TOP_Y;
                     wp2->bottomPosY = -170.0f;
 wp2->state = 3;
                 }
@@ -206,7 +213,7 @@ wp2->state = 3;
             break;
         case 2:
             wp2->topPosX = 0.0f;
-            wp2->topPosY = intplGetValue(EASING_BOUNCE_SHRINKING, 300.0f, 120.0f, wp2->counter, VERSION_PICK(60, gp->framerate));
+            wp2->topPosY = intplGetValue(EASING_BOUNCE_SHRINKING, 300.0f, TITLE_TOP_Y, wp2->counter, VERSION_PICK(60, gp->framerate));
             wp2->timer--;
             if (wp2->timer == 0) {
                 if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
@@ -237,11 +244,11 @@ wp2->state = 10;
                 }
 break;
         case 10:
-            fadeEntry(0x3F, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            fadeEntry(FADE_CURTAIN_SIDES_A1_TOP, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             wp2->state++;
         case 11:
             if (fadeIsFinish()) {
-                fadeEntry(0x1A, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                fadeEntry(FADE_CURTAIN_SIDES_Z1_3D, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                 wp2->state++;
             }
             break;
@@ -252,14 +259,14 @@ break;
             }
             break;
         case 20:
-            fadeEntry(0x21, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
+            fadeEntry(FADE_CURTAIN_LEAVE_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
 fadeEntry(FADE_OUT_WHITE, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
 psndBGMOff_f_d(PSND_FADEOUT, 1000, 0);
             wp2->counter = 0;
             wp2->state++;
             break;
         case 21:
-            wp2->topPosY = intplGetValue(EASING_SINE_IN_OUT, 120.0f, 400.0f, wp2->counter, VERSION_PICK(60, gp->framerate));
+            wp2->topPosY = intplGetValue(EASING_SINE_IN_OUT, TITLE_TOP_Y, 400.0f, wp2->counter, VERSION_PICK(60, gp->framerate));
             wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -170.0f, -400.0f, wp2->counter, VERSION_PICK(60, gp->framerate));
             wp2->counter++;
             if (wp2->counter > VERSION_PICK(60, gp->framerate)) {
@@ -290,18 +297,18 @@ void titleMain(SequenceWork* work) {
                 && animGroupBaseAsync("OFF_d_maku_left_right", 2, 0)
                 && animGroupBaseAsync("OFF_d_maku_center", 2, 0)) {
                 if (seqGetPrevSeq() == SEQ_LOAD) {
-                    fadeEntry(0x40, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    fadeEntry(0x1F, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
-                    wp2->topPosY = 120.0f;
+                    fadeEntry(FADE_CURTAIN_SIDES_A2_TOP, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    fadeEntry(FADE_CURTAIN_CENTER_Z2_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
+                    wp2->topPosY = TITLE_TOP_Y;
                     wp2->bottomPosY = -170.0f;
                     wp2->timer = 0;
                 } else if (seqGetPrevSeq() == SEQ_GAME_OVER) {
-                    fadeEntry(0x15, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    fadeEntry(0x1D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
+                    fadeEntry(FADE_OUT_WHITE_3D, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    fadeEntry(FADE_CURTAIN_CENTER_A1_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     wp2->timer = 78;
                 } else {
-                    fadeEntry(0x15, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    fadeEntry(0x22, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
+                    fadeEntry(FADE_OUT_WHITE_3D, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    fadeEntry(FADE_CURTAIN_ENTER_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     fadeSetNarrowFast();
                     wp2->timer = 23;
                 }
@@ -317,10 +324,10 @@ void titleMain(SequenceWork* work) {
             }
             if (fadeIsFinish()) {
                 if (seqGetPrevSeq() != SEQ_LOAD) {
-                    fadeEntry(0x14, 500, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    fadeEntry(FADE_IN_WHITE_3D, 500, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     wp2->state++;
                 } else {
-                    wp2->topPosY = 120.0f;
+                    wp2->topPosY = TITLE_TOP_Y;
                     wp2->bottomPosY = -170.0f;
 #if VERSION >= VERSION_US
                     wp2->counter = 0;
@@ -332,7 +339,7 @@ void titleMain(SequenceWork* work) {
             break;
         case 2:
             wp2->topPosX = 0.0f;
-            wp2->topPosY = intplGetValue(EASING_BOUNCE_SHRINKING, 300.0f, 120.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
+            wp2->topPosY = intplGetValue(EASING_BOUNCE_SHRINKING, 300.0f, TITLE_TOP_Y, wp2->counter, TITLE_FRAMES_PER_SEC);
             wp2->timer--;
             if (wp2->timer == 0) {
                 if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
@@ -374,11 +381,11 @@ void titleMain(SequenceWork* work) {
 #endif
             break;
         case 10:
-            fadeEntry(0x3F, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            fadeEntry(FADE_CURTAIN_SIDES_A1_TOP, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             wp2->state++;
         case 11:
             if (fadeIsFinish()) {
-                fadeEntry(0x1A, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                fadeEntry(FADE_CURTAIN_SIDES_Z1_3D, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                 wp2->state++;
             }
             break;
@@ -389,14 +396,14 @@ void titleMain(SequenceWork* work) {
             }
             break;
         case 20:
-            fadeEntry(0x21, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
+            fadeEntry(FADE_CURTAIN_LEAVE_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
             fadeEntry(FADE_OUT_BLACK, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
             psndBGMOff_f_d(PSND_FADEOUT, 1000, 0);
             wp2->counter = 0;
             wp2->state++;
             break;
         case 21:
-            wp2->topPosY = intplGetValue(EASING_SINE_IN_OUT, 120.0f, 400.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
+            wp2->topPosY = intplGetValue(EASING_SINE_IN_OUT, TITLE_TOP_Y, 400.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
             wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -170.0f, -400.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {

@@ -1137,11 +1137,27 @@ void BtlUnit_SetMoveSpeed(BattleUnit* unit, f32 moveSpeedXZ);
 void BtlUnit_SetPartsMoveSpeed(BattleUnitPart* part, f32 moveSpeedXZ);
 void BtlUnit_SetJumpSpeed(BattleUnit* unit, f32 moveSpeedY);
 s8 BtlUnit_GetBelong(BattleUnit* unit);
+#if VERSION <= VERSION_DEMO_US && defined(BATTLE_UNIT_STATUS_ENUM)
+void BtlUnit_GetStatus(BattleUnit* unit, StatusEffectType type, s8* turns, s8* strength);
+#else
 void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength);
+#endif
+#if VERSION <= VERSION_DEMO_US && defined(BATTLE_UNIT_STATUS_ENUM)
+BOOL BtlUnit_SetStatus(BattleUnit* unit, StatusEffectType type, s8 turns, s8 strength);
+#else
 BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength);
+#endif
 void BtlUnit_ClearStatus(BattleUnit* unit);
+#if VERSION <= VERSION_DEMO_US && defined(BATTLE_UNIT_STATUS_ENUM)
+BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, StatusEffectType type);
+#else
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type);
+#endif
+#if VERSION <= VERSION_DEMO_US && defined(BATTLE_UNIT_STATUS_ENUM)
+BOOL BtlUnit_CheckStatus(BattleUnit* unit, StatusEffectType type);
+#else
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, s8 type);
+#endif
 s32 BtlUnit_CheckStatusFlag(BattleUnit* unit, s32 flags);
 void BtlUnit_OnStatusFlag(BattleUnit* unit, s32 flags);
 void BtlUnit_OffStatusFlag(BattleUnit* unit, s32 flags);

@@ -140,9 +140,16 @@ const char* latin_tbl[] = {
 };
 #endif
 
+// The demos still load the name entry textures from the old window folder.
+#if VERSION <= VERSION_DEMO_US
+#define NAME_TPL_JP "%s/window/jp/name.tpl"
+#else
+#define NAME_TPL_JP "%s/w/jp/name.tpl"
+#endif
+
 #if VERSION <= VERSION_DEMO_US
 BOOL nameEntPrepare(void) {
-return fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0;
+return fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != 0;
 }
 #else
 BOOL nameEntPrepare(void) {
@@ -150,7 +157,7 @@ BOOL nameEntPrepare(void) {
     const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
     return fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0;
 #else
-    return fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0;
+    return fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != 0;
 #endif
 }
 #endif
@@ -287,12 +294,12 @@ static inline BOOL nameEntLoad(void) {
 #if VERSION >= VERSION_US
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
 #else
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != 0U) {
 #endif
 #if VERSION >= VERSION_US
         wp->tplFile = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #else
-        wp->tplFile = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/name.tpl", getMarioStDvdRoot());
+        wp->tplFile = fileAllocf(FILE_TYPE_TPL, NAME_TPL_JP, getMarioStDvdRoot());
 #endif
         return TRUE;
     }
@@ -1169,7 +1176,9 @@ void nameBG(void) {
     GXTexCoord2f32(1.0f, 0.0f);
 }
 
+#if VERSION > VERSION_DEMO_US
 #pragma inline_max_total_size(100000)
+#endif
 /** Draws one textured quad from name.tpl texture id at (x, y), w x h, with the texture scaled to fit. */
 static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;

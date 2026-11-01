@@ -77,10 +77,12 @@ EVT_END()
  * Started by btlseqFirstAct on a normal battle start (no first strike):
  * pops the stage background layers in with _set_haikei_entry_scale.
  */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(_default_haikei_set_entry_event)
     CALL(_set_haikei_entry_scale)
     RETURN
 EVT_END()
+#endif
 
 void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience);
 void btlseqInit(BattleWork* wp);
@@ -175,6 +177,12 @@ const char* _rule_msg_table_after[] = {
     "a", "a", "a", "stg3_tou_cp_047", "a", "a", "a", "stg3_tou_cp_054",
     "stg3_tou_cp_053", "stg3_tou_cp_052", "a", "a",
 };
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(_default_haikei_set_entry_event)
+    CALL(_set_haikei_entry_scale)
+    RETURN
+EVT_END()
+#endif
 
 /**
  * Per-frame driver of the battle flow, called from the battle main loop (battle.c):
@@ -483,7 +491,7 @@ void btlseqFirstAct(BattleWork* wp) {
             if (--wp->ruleDispTimer > 0) {
                 break;
             }
-            fadeEntry(0x17, 200, c);
+            fadeEntry(FADE_CURTAIN_VERTICAL_A2, 200, c);
             wp->curtainSfxId = psndSFXOn("SFX_OFF_BTL_START_CURTAIN_UP1");
             BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000002);
 

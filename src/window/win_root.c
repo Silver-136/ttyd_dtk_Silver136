@@ -60,6 +60,7 @@ void sort_7_3_func(WindowWork* wp);
 void sort_8_1_func(WindowWork* wp);
 void sort_8_2_func(WindowWork* wp);
 
+#if VERSION > VERSION_DEMO_US
 u8 enemy_monoshiri_sort_table[] = {
     0x00, 0x01, 0x02, 0x03, 0x2F, 0x30, 0x94, 0x2A, 0x62, 0x95, 0x96, 0x12, 0x24, 0x24, 0x0A, 0x0B,
     0x32, 0x14, 0x4D, 0x54, 0x33, 0x32, 0x15, 0x63, 0x43, 0x38, 0x4F, 0x3E, 0x6B, 0x6E, 0x6F, 0x79,
@@ -77,6 +78,7 @@ u8 enemy_monoshiri_sort_table[] = {
     0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF,
     0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6,
 };
+#endif
 
 #include "driver/dispdrv.h"
 #include "driver/swdrv.h"
@@ -166,6 +168,9 @@ s32 winRootMain(WindowWork* w) {
     static char* msg_help[] = {
         "msg_menu_mario", "msg_menu_nakama", "msg_menu_mochimono", "msg_menu_badge", "msg_menu_kiroku",
     };
+#if VERSION <= VERSION_DEMO_US
+    s32 x;
+#endif
     s32 i;
     s32 ret;
 
@@ -182,11 +187,22 @@ s32 winRootMain(WindowWork* w) {
             WIN_ROOT_ADD_TAB(3);
         }
         WIN_ROOT_ADD_TAB(4);
+#if VERSION <= VERSION_DEMO_US
+        {
+            s32 j;
+            for (j = 0; j < w->tabNum; j++) {
+                if (w->tab[j].id == w->menuSel) {
+                    w->tabSel = j;
+                }
+            }
+        }
+#else
         for (i = 0; i < w->tabNum; i++) {
             if (w->tab[i].id == w->menuSel) {
                 w->tabSel = i;
             }
         }
+#endif
         for (i = 0; i < 5; i++) {
             w->menu[i].state = -1;
             w->menu[i].x = w->menu[i].y = 1000.0f;
@@ -440,7 +456,11 @@ s32 winRootMain(WindowWork* w) {
 // Removing it changes the object.
 void winRootStrippedPool(f32* f) {
     f[0] = 185.0f;
+#if VERSION <= VERSION_DEMO_US
+    f[1] = 180.0f;
+#else
     f[1] = 1000.0f;
+#endif
 }
 
 static void winTabDisp(WindowWork* wp);
@@ -492,7 +512,11 @@ void winRootDisp(s32 camId, WindowWork* wp) {
         winMailDisp(wp);
         winMsgDisp(wp, wp->msgOfsX, wp->msgOfsY);
         winSortGX(wp);
+#if VERSION <= VERSION_DEMO_US
+        {
+#else
         if (!(wp->flags & WINDOW_FLAG_BOOK_OPEN)) {
+#endif
             winTexInit((TEXPalette*)*wp->res->data);
             winTexSet(0, (Vec){2.0f + wp->helpX, wp->helpY - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x00, 0x00, 0x00, 0x80});
             winTexSet(0, (Vec){wp->helpX, wp->helpY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
@@ -909,7 +933,9 @@ static inline void winRootTexQuad(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f
     GXTexCoord2f32(1.0f, 0.0f);
 }
 
+#if VERSION > VERSION_DEMO_US
 #pragma inline_max_total_size(100000)
+#endif
 /**
  * Draws a "kirinuki" (cut-out) inset panel of w x h at (x, y) from 8-pixel corner and edge pieces,
  * used for the boxes inside the pages.
@@ -1611,6 +1637,26 @@ WinSortData sort_6[] = {
     {"msg_menu_sort_kind", sort_6_2_func},
     {NULL, NULL},
 };
+#if VERSION <= VERSION_DEMO_US
+u8 enemy_monoshiri_sort_table[] = {
+    0x00, 0x01, 0x02, 0x03, 0x2F, 0x30, 0x94, 0x2A, 0x62, 0x95, 0x96, 0x12, 0x24, 0x97, 0x0A, 0x0B,
+    0x32, 0x14, 0x4D, 0x54, 0x33, 0x98, 0x15, 0x63, 0x43, 0x38, 0x4F, 0x3E, 0x6B, 0x6E, 0x6F, 0x79,
+    0x7A, 0x7B, 0x75, 0x99, 0x7D, 0x0C, 0x0D, 0x36, 0x1B, 0x1D, 0x4E, 0x56, 0x2C, 0x2D, 0x23, 0x0E,
+    0x0F, 0x25, 0x7E, 0x26, 0x7F, 0x27, 0x80, 0x2B, 0x18, 0x19, 0x1A, 0x5A, 0x13, 0x50, 0x51, 0x29,
+    0x66, 0x67, 0x04, 0x05, 0x06, 0x3C, 0x3D, 0x52, 0x1F, 0x20, 0x40, 0x47, 0x48, 0x68, 0x9A, 0x9B,
+    0x9C, 0x9D, 0x9E, 0x9F, 0x4A, 0x4B, 0x34, 0x35, 0x39, 0x21, 0x5B, 0x5C, 0x57, 0x69, 0xA0, 0xA1,
+    0xA2, 0xA3, 0xA4, 0x76, 0x81, 0x82, 0x83, 0x44, 0x37, 0x22, 0x49, 0x6A, 0xA5, 0xA6, 0xA7, 0xA8,
+    0x45, 0x3A, 0x53, 0x70, 0x71, 0x72, 0x73, 0x6C, 0x6D, 0x76, 0xA9, 0x41, 0x4C, 0x5D, 0x5E, 0x59,
+    0x5F, 0x84, 0x16, 0x17, 0x64, 0x79, 0x7A, 0x68, 0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93,
+    0x29, 0x28, 0x78, 0x74, 0x7C, 0x7C, 0x7C, 0x7C, 0x7C, 0x07, 0x08, 0x09, 0x10, 0x11, 0x2E, 0x1C,
+    0x1E, 0x60, 0x3B, 0x31, 0x3F, 0x55, 0x46, 0x42, 0x58, 0x61, 0x8B, 0x65, 0xAC, 0xAD, 0xAE, 0xAF,
+    0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF,
+    0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE, 0xCF,
+    0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF,
+    0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6,
+};
+#endif
+#if VERSION > VERSION_DEMO_US
 /** Sort options of the Tattle Log: by number, by where the enemy appears most, or by name. */
 WinSortData sort_7[] = {
     {"msg_menu_sort_number", sort_7_1_func},
@@ -1625,6 +1671,7 @@ WinSortData sort_8[] = {
     {NULL, NULL},
 };
 WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort_7, sort_8};
+#endif
 
 /** Items list by name (pouchSortItem 0, reversed 7), then rebuilds the page list. */
 void sort_1_1_func(WindowWork* wp) {
@@ -1886,6 +1933,22 @@ void sort_4_3_func(WindowWork* wp) {
 #endif
 
 /** Journal badge log by name, retail: names folded to katakana first. */
+#if VERSION <= VERSION_DEMO_US
+s32 compare_func5_1(const void* a, const void* b) {
+    const s16* ea = a;
+    const s16* eb = b;
+    s16 ia = *ea + BADGE_MIN;
+    s16 ib = *eb + BADGE_MIN;
+    s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
+
+    if (r > 0) {
+        return 1;
+    } else if (r < 0) {
+        return -1;
+    }
+    return 0;
+}
+#else
 s32 compare_func5_1(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -1896,7 +1959,24 @@ s32 compare_func5_1(const void* a, const void* b) {
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
     return strcmp(buf1, buf2);
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+s32 compare_func5_1_r(const void* a, const void* b) {
+    const s16* ea = a;
+    const s16* eb = b;
+    s16 ia = *ea + BADGE_MIN;
+    s16 ib = *eb + BADGE_MIN;
+    s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
+
+    if (r < 0) {
+        return 1;
+    } else if (r > 0) {
+        return -1;
+    }
+    return 0;
+}
+#else
 s32 compare_func5_1_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -1907,6 +1987,7 @@ s32 compare_func5_1_r(const void* a, const void* b) {
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
     return strcmp(buf2, buf1);
 }
+#endif
 
 /** qqsort compare for the Journal badge log by type_sort_order. */
 s32 compare_func5_2(const void* a, const void* b) {
@@ -1958,6 +2039,46 @@ void sort_5_2_func(WindowWork* wp) {
     wp->log.badge.idx = wp->log.badge.cursor / 28;
 }
 
+#if VERSION <= VERSION_DEMO_US
+void sort_5_3_func(WindowWork* wp) {
+    if (!wp->sortRev) {
+        s16 a;
+        s16 b;
+        s32 i;
+        s32 j;
+        qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_1);
+        for (i = 0; i < wp->log.badge.num - 1; i++) {
+            for (j = i + 1; j < wp->log.badge.num; j++) {
+                a = wp->log.badgeIds[i];
+                b = wp->log.badgeIds[j];
+                if (itemDataTable[a + BADGE_MIN].bp_cost < itemDataTable[b + BADGE_MIN].bp_cost) {
+                    wp->log.badgeIds[i] = b;
+                    wp->log.badgeIds[j] = a;
+                }
+            }
+        }
+    } else {
+        s16 a;
+        s16 b;
+        s32 i;
+        s32 j;
+        qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_1_r);
+        for (i = 0; i < wp->log.badge.num - 1; i++) {
+            for (j = i + 1; j < wp->log.badge.num; j++) {
+                a = wp->log.badgeIds[i];
+                b = wp->log.badgeIds[j];
+                if (itemDataTable[a + BADGE_MIN].bp_cost > itemDataTable[b + BADGE_MIN].bp_cost) {
+                    wp->log.badgeIds[i] = b;
+                    wp->log.badgeIds[j] = a;
+                }
+            }
+        }
+    }
+    wp->sortRev = 1 - wp->sortRev;
+    wp->log.badge.cursor = 0;
+    wp->log.badge.idx = wp->log.badge.cursor / 28;
+}
+#else
 void sort_5_3_func(WindowWork* wp) {
     if (!wp->sortRev) {
         ItemData* db;
@@ -2022,8 +2143,25 @@ void sort_5_3_func(WindowWork* wp) {
     wp->log.badge.cursor = 0;
     wp->log.badge.idx = wp->log.badge.cursor / 28;
 }
+#endif
 
 /** Journal recipe log by name, retail: names folded to katakana first. */
+#if VERSION <= VERSION_DEMO_US
+s32 compare_func6_1(const void* a, const void* b) {
+    const s16* ea = a;
+    const s16* eb = b;
+    s16 ia = *ea + ITEM_SHROOM_FRY;
+    s16 ib = *eb + ITEM_SHROOM_FRY;
+    s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
+
+    if (r > 0) {
+        return 1;
+    } else if (r < 0) {
+        return -1;
+    }
+    return 0;
+}
+#else
 s32 compare_func6_1(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -2034,7 +2172,24 @@ s32 compare_func6_1(const void* a, const void* b) {
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
     return strcmp(buf1, buf2);
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+s32 compare_func6_1_r(const void* a, const void* b) {
+    const s16* ea = a;
+    const s16* eb = b;
+    s16 ia = *ea + ITEM_SHROOM_FRY;
+    s16 ib = *eb + ITEM_SHROOM_FRY;
+    s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
+
+    if (r < 0) {
+        return 1;
+    } else if (r > 0) {
+        return -1;
+    }
+    return 0;
+}
+#else
 s32 compare_func6_1_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -2045,6 +2200,7 @@ s32 compare_func6_1_r(const void* a, const void* b) {
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
     return strcmp(buf2, buf1);
 }
+#endif
 
 /** qqsort compare for the Journal recipe log by type_sort_order. */
 s32 compare_func6_2(const void* a, const void* b) {
@@ -2152,7 +2308,39 @@ static inline u32 getMonosiriPlace(const char* place) {
     return i;
 }
 
+#if VERSION <= VERSION_DEMO_US
+WinSortData sort_7[] = {
+    {"msg_menu_sort_number", sort_7_1_func},
+    {"msg_menu_sort_place", sort_7_2_func},
+    {"msg_menu_sort_aiueo", sort_7_3_func},
+    {NULL, NULL},
+};
+WinSortData sort_8[] = {
+    {"msg_menu_sort_aiueo", sort_8_1_func},
+    {"msg_menu_sort_number", sort_8_2_func},
+    {NULL, NULL},
+};
+WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort_7, sort_8};
+#endif
+
 /** qqsort compare for the Tattle Log by where the enemy is found (getMonosiriPlace of its locationTag). */
+#if VERSION <= VERSION_DEMO_US
+s32 compare_func2(const void* a, const void* b) {
+    const WinSortEnt* ea = a;
+    const WinSortEnt* eb = b;
+    TattleEntry* ta = battleGetUnitMonosiriPtr(ea->id);
+    TattleEntry* tb = battleGetUnitMonosiriPtr(eb->id);
+    s32 ia = getMonosiriPlace(ta->locationTag);
+    s32 ib = getMonosiriPlace(tb->locationTag);
+
+    if (ia > ib) {
+        return 1;
+    } else if (ia < ib) {
+        return -1;
+    }
+    return 0;
+}
+#else
 s32 compare_func2(const void* a, const void* b) {
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
     TattleEntry* tb = battleGetUnitMonosiriPtr(((WinSortEnt*)b)->id);
@@ -2166,8 +2354,26 @@ s32 compare_func2(const void* a, const void* b) {
     }
     return 0;
 }
+#endif
 
 /** Reverse of compare_func2. */
+#if VERSION <= VERSION_DEMO_US
+s32 compare_func2_r(const void* a, const void* b) {
+    const WinSortEnt* ea = a;
+    const WinSortEnt* eb = b;
+    TattleEntry* ta = battleGetUnitMonosiriPtr(ea->id);
+    TattleEntry* tb = battleGetUnitMonosiriPtr(eb->id);
+    s32 ia = getMonosiriPlace(ta->locationTag);
+    s32 ib = getMonosiriPlace(tb->locationTag);
+
+    if (ia < ib) {
+        return 1;
+    } else if (ia > ib) {
+        return -1;
+    }
+    return 0;
+}
+#else
 s32 compare_func2_r(const void* a, const void* b) {
     TattleEntry* ta = battleGetUnitMonosiriPtr(((WinSortEnt*)a)->id);
     TattleEntry* tb = battleGetUnitMonosiriPtr(((WinSortEnt*)b)->id);
@@ -2181,6 +2387,7 @@ s32 compare_func2_r(const void* a, const void* b) {
     }
     return 0;
 }
+#endif
 
 /** Tattle Log by place: sorts by number first, then by place. */
 void sort_7_2_func(WindowWork* wp) {

@@ -45,9 +45,13 @@ static s16 geso_shibuki_texcoord0_tbl[] __attribute__((aligned(32))) = { -11004,
  * Height of the first six spray columns of the Blooper splash (type 3) per frame, in 96ths:
  * they shoot up to about two and a half times full height, then sink over 60 frames.
  */
+#if VERSION > VERSION_DEMO_US
 static u8 geso_scale_dt[] = { 0x60, 0x60, 0x72, 0x88, 0x9F, 0xB6, 0xCC, 0xDF, 0xEE, 0xF7, 0xF9, 0xF7, 0xF5, 0xF3, 0xF1, 0xEE, 0xEB, 0xE8, 0xE4, 0xE1, 0xDD, 0xD9, 0xD5, 0xD0, 0xCC, 0xC7, 0xC2, 0xBD, 0xB8, 0xB3, 0xAE, 0xA8, 0xA3, 0x9D, 0x97, 0x91, 0x8C, 0x86, 0x80, 0x7A, 0x74, 0x6D, 0x67, 0x61, 0x5B, 0x55, 0x4F, 0x49, 0x43, 0x3D, 0x37, 0x31, 0x2B, 0x25, 0x20, 0x1A, 0x15, 0x0F, 0x0A, 0x05, 0x00};
+#endif
 /** Path of the Blooper splash spray columns: an x, y offset pair per frame for 71 frames. */
+#if VERSION > VERSION_DEMO_US
 static s8 geso_trans_dt[] = { -40, -12, -40, -12, -39, -9, -39, -6, -39, -3, -39, 0, -38, 3, -38, 5, -38, 8, -39, 10, -40, 12, -41, 13, -42, 13, -43, 13, -45, 13, -47, 13, -49, 13, -51, 12, -52, 12, -54, 12, -56, 12, -57, 12, -58, 12, -59, 12, -61, 12, -62, 12, -63, 12, -65, 12, -66, 12, -67, 12, -69, 12, -70, 12, -71, 12, -73, 12, -74, 12, -75, 12, -76, 12, -78, 12, -79, 12, -80, 12, -81, 12, -83, 12, -84, 12, -85, 12, -87, 12, -88, 12, -89, 12, -90, 12, -92, 12, -93, 12, -94, 12, -95, 12, -97, 12, -98, 12, -99, 12, -100, 12, -102, 12, -103, 12, -104, 12, -106, 12, -107, 12, -108, 12, -109, 12, -111, 12, -112, 12, -113, 12, -114, 12, -116, 12, -117, 12, -118, 12, -120, 12};
+#endif
 static s8 geso_shibuki_normal_tbl[] __attribute__((aligned(32))) = { 0, 0, 64};
 static u8 geso_shibuki_color0_tbl[] __attribute__((aligned(32))) = { 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 static u8 geso_shibuki_dl_0_0[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x0C, 0x00, 0x01, 0x0C, 0x0D, 0x00, 0x01, 0x0D, 0x06, 0x00, 0x00, 0x00, 0x07, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x03, 0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -57,6 +61,10 @@ static u8 geso_shibuki_dl_0_3[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x0
 static u8 geso_shibuki_dl_0_4[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x10, 0x00, 0x01, 0x10, 0x11, 0x00, 0x01, 0x11, 0x0A, 0x00, 0x01, 0x08, 0x0B, 0x00, 0x01, 0x0A, 0x04, 0x00, 0x00, 0x09, 0x05, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00 };
 /** The five display lists of the Blooper spray (shibuki) model. */
 static u8* geso_shibuki_dl_0_tbl[] = { geso_shibuki_dl_0_0, geso_shibuki_dl_0_1, geso_shibuki_dl_0_2, geso_shibuki_dl_0_3, geso_shibuki_dl_0_4 };
+#if VERSION <= VERSION_DEMO_US
+static u8 geso_scale_dt[] = { 0x60, 0x60, 0x72, 0x88, 0x9F, 0xB6, 0xCC, 0xDF, 0xEE, 0xF7, 0xF9, 0xF7, 0xF5, 0xF3, 0xF1, 0xEE, 0xEB, 0xE8, 0xE4, 0xE1, 0xDD, 0xD9, 0xD5, 0xD0, 0xCC, 0xC7, 0xC2, 0xBD, 0xB8, 0xB3, 0xAE, 0xA8, 0xA3, 0x9D, 0x97, 0x91, 0x8C, 0x86, 0x80, 0x7A, 0x74, 0x6D, 0x67, 0x61, 0x5B, 0x55, 0x4F, 0x49, 0x43, 0x3D, 0x37, 0x31, 0x2B, 0x25, 0x20, 0x1A, 0x15, 0x0F, 0x0A, 0x05, 0x00};
+static s8 geso_trans_dt[] = { -40, -12, -40, -12, -39, -9, -39, -6, -39, -3, -39, 0, -38, 3, -38, 5, -38, 8, -39, 10, -40, 12, -41, 13, -42, 13, -43, 13, -45, 13, -47, 13, -49, 13, -51, 12, -52, 12, -54, 12, -56, 12, -57, 12, -58, 12, -59, 12, -61, 12, -62, 12, -63, 12, -65, 12, -66, 12, -67, 12, -69, 12, -70, 12, -71, 12, -73, 12, -74, 12, -75, 12, -76, 12, -78, 12, -79, 12, -80, 12, -81, 12, -83, 12, -84, 12, -85, 12, -87, 12, -88, 12, -89, 12, -90, 12, -92, 12, -93, 12, -94, 12, -95, 12, -97, 12, -98, 12, -99, 12, -100, 12, -102, 12, -103, 12, -104, 12, -106, 12, -107, 12, -108, 12, -109, 12, -111, 12, -112, 12, -113, 12, -114, 12, -116, 12, -117, 12, -118, 12, -120, 12};
+#endif
 /** Display-list sizes (32-byte units) of the Blooper spray (shibuki) model's five lists. */
 static u8 geso_shibuki_dl_0_size_tbl[] = { 1, 1, 1, 1, 1};
 
@@ -342,7 +350,7 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
         sysWaitDrawSync();
 #if VERSION <= VERSION_DEMO_US
         // FAKE: unprototyped call: the SDK u16 parameters would add two narrowings (FAKES.md)
-        ((void (*)())GXPeekARGB)((s32)sx, (u16)sy, argb);
+        ((void (*)())GXPeekARGB)((s32)sx, (s32)sy, argb);
         work->color.r = argb[1];
         work->color.g = argb[2];
         work->color.b = argb[3];

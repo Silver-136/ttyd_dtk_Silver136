@@ -38,10 +38,19 @@ void effStageClearMain(EffectEntry* effect);
 void effStageClearDisp(CameraId cameraId, EffectEntry* effect);
 
 #if VERSION < VERSION_US
+#if VERSION <= VERSION_DEMO_US
+static s32 tex_jp[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3};
+s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};
+#endif
 static s32 tex_us[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA0, 0x9E, 0xA3, 0xA0, 0xA4, 0xA5};
 s32 tex_shadow_us[] = {0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAA, 0xA8, 0xAD, 0xAA, 0xAE, 0xAF};
 #endif
 #if VERSION < VERSION_US
+#if VERSION <= VERSION_DEMO_US
+static s32* texid_tbl[] = {tex_jp, tex_shadow_jp, tex_us, tex_shadow_us};
+s32 shake_dt[] = {2, 6, 2, 0, -1};
+s32 shake_dt2[] = {12, 36, 12, 0, -1};
+#endif
 /** Shakes the camera when a banner letter lands: 50 frames lightly, or 100 frames harder for the last letter (LW 1). */
 static EVT_BEGIN(evt_shake)
     IF_INT_EQUAL(LW(1), 0)
@@ -87,17 +96,27 @@ static EVT_BEGIN(evt_shake)
 EVT_END()
 #else
 /** Letter textures of the stage-clear banner, Japanese then English, each with a matching shadow list. */
+#if VERSION > VERSION_DEMO_US
 static s32 tex_jp[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3};
+#endif
+#if VERSION > VERSION_DEMO_US
 s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};
+#endif
 /** Banner letters, shadows and letter count for each language. */
+#if VERSION > VERSION_DEMO_US
 static s32* texid_tbl[] = {tex_jp, tex_shadow_jp, tex_us, tex_shadow_us};
+#endif
 /** Rainbow (niji) texture laid over the banner letters, Japanese then English. */
 static u32 niji_tbl[] = {0xAC, 0xB0};
 #endif
 /** Shake pattern handed to an ordinary letter's camera-shake event in LW 0; evt_shake does not read it. */
+#if VERSION > VERSION_DEMO_US
 s32 shake_dt[] = {2, 6, 2, 0, -1};
+#endif
 /** Stronger shake pattern handed to the last letter's shake event; also unread. */
+#if VERSION > VERSION_DEMO_US
 s32 shake_dt2[] = {12, 36, 12, 0, -1};
+#endif
 /** Size percentages per frame as a banner letter pops in: it overshoots to 120% and settles near 100%. */
 static u8 scale_dt[] = {0x00, 0x00, 0x16, 0x2E, 0x47, 0x5D, 0x6E, 0x78, 0x77, 0x6E, 0x66};
 

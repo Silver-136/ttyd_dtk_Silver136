@@ -945,6 +945,17 @@ found:
     }
 }
 
+// The demos still use the long map file names.
+#if VERSION <= VERSION_DEMO_US
+#define MAP_PATH_DAT "./map/%s/map.dat"
+#define MAP_PATH_TPL "./map/%s/texture.tpl"
+#define MAP_PATH_CAMROAD "./map/%s/camera_road.bin"
+#else
+#define MAP_PATH_DAT "./m/%s/d"
+#define MAP_PATH_TPL "./m/%s/t"
+#define MAP_PATH_CAMROAD "./m/%s/c"
+#endif
+
 /**
  * Loads map into entry group of wp: map.dat and texture.tpl from the archive or the disc,
  * the joint tree as map and hit objects (scaled x10), the map's lights and fog, the camera road (field only),
@@ -968,7 +979,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     error_count = 0;
     strncpy(wp->entries[group].name, map, sizeof(wp->entries[group].name));
 
-    sprintf(str1, "./m/%s/d", map);
+    sprintf(str1, MAP_PATH_DAT, map);
     arcOpen(str1, &wp->entries[group].dat, &wp->entries[group].datSize);
     if (!wp->entries[group].dat) {
         sprintf(str2, "%s/%s", ".", str1);
@@ -979,7 +990,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         DVDMgrClose(dvd);
     }
 
-    sprintf(str1, "./m/%s/t", map);
+    sprintf(str1, MAP_PATH_TPL, map);
     wp->entries[group].tpl = NULL;
     arcOpen(str1, &wp->entries[group].tpl, &wp->entries[group].tplSize);
     if (wp->entries[group].tpl) {
@@ -1065,7 +1076,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             wp->entries[group].flags &= ~MAP_ENTRY_FOG;
         }
         if (activeGroup != 1) {
-            sprintf(str1, "./m/%s/c", map);
+            sprintf(str1, MAP_PATH_CAMROAD, map);
             camLoadRoad(CAMERA_3D, str1);
         }
         camSetTypePersp(CAMERA_3D);
@@ -1136,7 +1147,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     error_count = 0;
     strncpy(wp->entries[group].name, map, sizeof(wp->entries[group].name));
 
-    sprintf(str1, "./m/%s/d", map);
+    sprintf(str1, MAP_PATH_DAT, map);
     arcOpen(str1, &wp->entries[group].dat, &wp->entries[group].datSize);
     if (!wp->entries[group].dat) {
         sprintf(str2, "%s/%s", ".", str1);
@@ -1147,7 +1158,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         DVDMgrClose(dvd);
     }
 
-    sprintf(str1, "./m/%s/t", map);
+    sprintf(str1, MAP_PATH_TPL, map);
     wp->entries[group].tpl = NULL;
     arcOpen(str1, &wp->entries[group].tpl, &wp->entries[group].tplSize);
     if (wp->entries[group].tpl) {
@@ -1229,7 +1240,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             wp->entries[group].flags &= ~MAP_ENTRY_FOG;
         }
         if (activeGroup != 1) {
-            sprintf(str1, "./m/%s/c", map);
+            sprintf(str1, MAP_PATH_CAMROAD, map);
             camLoadRoad(CAMERA_3D, str1);
         }
         camSetTypePersp(CAMERA_3D);

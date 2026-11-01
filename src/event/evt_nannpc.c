@@ -521,7 +521,8 @@ str = nanNPCEntryName((char*)name);
 /** Places crowd NPC args[0] at X, Y, Z args[1]-args[3] and makes that its target position too. */
 USER_FUNC(evt_nannpc_set_position) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     f32 x = evtGetFloat(event, args[1]);
     npc->pos.x = x;
     npc->target.x = x;
@@ -537,7 +538,8 @@ USER_FUNC(evt_nannpc_set_position) {
 /** Returns crowd NPC args[0]'s position in args[1]-args[3]. */
 USER_FUNC(evt_nannpc_get_position) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     evtSetFloat(event, args[1], npc->pos.x);
     evtSetFloat(event, args[2], npc->pos.y);
     evtSetFloat(event, args[3], npc->pos.z);
@@ -547,7 +549,8 @@ USER_FUNC(evt_nannpc_get_position) {
 /** Sets crowd NPC args[0]'s display offset (hosei) to args[1]-args[3]. */
 USER_FUNC(evt_nannpc_set_hosei_position) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     npc->hosei.x = evtGetFloat(event, args[1]);
     npc->hosei.y = evtGetFloat(event, args[2]);
     npc->hosei.z = evtGetFloat(event, args[3]);
@@ -560,7 +563,8 @@ USER_FUNC(evt_nannpc_set_hosei_position) {
  */
 USER_FUNC(evt_nannpc_set_size) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     npc->sizeX = evtGetFloat(event, args[1]);
     npc->sizeY = evtGetFloat(event, args[2]);
     return EVT_RETURN_DONE;
@@ -587,7 +591,8 @@ void evt_nannpc_set_animtbl_sub(NanNPC* npc, s16* tbl) {
 /** Gives crowd NPC args[0] the animation table args[1] (texture ids ended by -1); an empty table clears it. */
 USER_FUNC(evt_nannpc_set_animtbl) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     s16* tbl = (s16*)evtGetValue(event, args[1]);
     s32 n;
     npc->animtbl = tbl;
@@ -609,7 +614,8 @@ USER_FUNC(evt_nannpc_set_animtbl) {
 /** Sets crowd NPC args[0]'s facing to args[1] degrees. */
 USER_FUNC(evt_nannpc_set_dir) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     npc->dir = evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;
 }
@@ -617,7 +623,8 @@ USER_FUNC(evt_nannpc_set_dir) {
 /** Stores args[2] in work slot args[1] of crowd NPC args[0], for the map's own NPC functions. */
 USER_FUNC(evt_nannpc_set_work) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     s32 idx = evtGetValue(event, args[1]);
     npc->work[idx] = evtGetValue(event, args[2]);
     return EVT_RETURN_DONE;
@@ -626,7 +633,8 @@ USER_FUNC(evt_nannpc_set_work) {
 /** Reads work slot args[1] of crowd NPC args[0] into args[2]. */
 USER_FUNC(evt_nannpc_get_work) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     evtSetValue(event, args[2], npc->work[evtGetValue(event, args[1])]);
     return EVT_RETURN_DONE;
 }
@@ -690,7 +698,8 @@ USER_FUNC(evt_nannpc_jump_position) {
 #if VERSION <= VERSION_DEMO_US
 NanNPC* npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
 #else
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
 #endif
     f32 x = evtGetValue(event, args[1]);
     f32 y = evtGetValue(event, args[2]);
@@ -767,7 +776,8 @@ USER_FUNC(evt_nannpc_ppflag_onoff) {
 /** Sets crowd NPC args[0]'s per-frame function to args[1]; map rels use it to run each NPC's own behaviour. */
 USER_FUNC(evt_nannpc_set_func) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     npc->func = (void (*)(NanNPC*))evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;
 }
@@ -775,7 +785,8 @@ USER_FUNC(evt_nannpc_set_func) {
 /** Pins crowd NPC args[0]'s shadow to height args[1] (pose flag 0x10). */
 USER_FUNC(evt_nannpc_set_shadow_position) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     npc->pose->flags |= EXT_POSE_FLAG_SHADOW_POS;
     npc->pose->shadowY = evtGetFloat(event, args[1]);
     return EVT_RETURN_DONE;
@@ -784,7 +795,8 @@ USER_FUNC(evt_nannpc_set_shadow_position) {
 /** Tints crowd NPC args[0] with RGBA args[1]-args[4] (used when the crowd draws NPCs one by one). */
 USER_FUNC(evt_nannpc_set_color) {
     EvtWord* args = event->args;
-    NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCSearch(name);
     npc->color.r = evtGetValue(event, args[1]);
     npc->color.g = evtGetValue(event, args[2]);
     npc->color.b = evtGetValue(event, args[3]);

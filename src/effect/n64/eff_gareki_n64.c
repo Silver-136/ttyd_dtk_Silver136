@@ -30,6 +30,9 @@ void gareki_dl(s32 type);
 void effGarekiMain(EffectEntry* effect);
 void effGarekiDisp(CameraId cameraId, EffectEntry* effect);
 
+#if VERSION <= VERSION_DEMO_US
+static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
+#endif
 /** Starting (x, y) offset of each of the eight rubble pieces from the chunk's centre. */
 static f32 trans_data[] = {-5.0f, -4.0f, -3.0f, -2.0f, 2.0f, -3.0f, 5.0f, -4.0f, -4.0f, 2.0f, -1.0f, 4.0f, 3.0f, 2.0f, 5.0f, 4.0f};
 
@@ -98,19 +101,21 @@ static effN64Vtx stg__s_v[] = {
 };
 
 /** Sideways speed of each of the eight rubble pieces when the chunk breaks. */
+#if VERSION > VERSION_DEMO_US
 static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
+#endif
 
 /**
  * Spawns a falling rubble chunk (gareki = rubble) at (x, y, z) that drops until it reaches groundY,
  * then breaks into eight pieces. type is not read. Spawned only from event scripts through evt_eff.
  */
-EffectEntry* effGarekiN64Entry(f32 x, f32 y, f32 z, f32 groundY) {
+EffectEntry* effGarekiN64Entry(s32 type, f32 x, f32 y, f32 z, f32 groundY) {
     f32* tp;
-    s32 i;
     EffGarekiN64Work* work;
     f32* vp;
     EffectEntry* effect;
     EffGarekiN64Work* piece;
+    s32 i;
 
     effect = effEntry();
     effect->type = "GarekiN64";

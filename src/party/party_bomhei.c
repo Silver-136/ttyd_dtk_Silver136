@@ -90,6 +90,17 @@ static inline void bomheiCleanSfx(PartyEntry* p) {
     }
 }
 
+/** Stops the sounds of a bomb use; the demos keep a third id at 0x17C. */
+static inline void bomheiCleanUseSfx(PartyEntry* p) {
+#if VERSION <= VERSION_DEMO_US
+    if ((u32)p->work.bomhei.reserved_17C != 0xFFFFFFFFU) {
+        psndSFXOff(p->work.bomhei.reserved_17C);
+        p->work.bomhei.reserved_17C = -1;
+    }
+#endif
+    bomheiCleanSfx(p);
+}
+
 static inline void bomheiCleanFlags(PartyEntry* p) {
     p->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     p->flags &= ~PARTY_FLAG_FORCE_FALL;
@@ -114,7 +125,7 @@ void bomhei_bye(PartyEntry* party) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyGoodbyeInit(party);
         party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
-        bomheiCleanSfx(party);
+        bomheiCleanUseSfx(party);
     }
     if (partyGoodbyeMain(party)) {
         partyChgRunMode(party, PARTY_RUN_DELETE);
@@ -172,7 +183,7 @@ void bomhei_exit(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
 void bomhei_exit(PartyEntry* party) {
     party->playerPtr->flags &= ~(MARIO_FLAG_ACTIVE << 13);
-    bomheiCleanSfx(party);
+    bomheiCleanUseSfx(party);
     bomheiFree(party);
 }
 void bomhei_use_cancel() {
@@ -215,7 +226,7 @@ void bomhei_use_cancel2(void) {
             p->moveMode = PARTY_MOVE_MODE_STAY;
         }
         bomheiCleanFlags(p);
-        bomheiCleanSfx(p);
+        bomheiCleanUseSfx(p);
         bomheiFree(p);
     }
 }
@@ -258,7 +269,7 @@ void bomhei_use_post(PartyEntry* party) {
         mario->flags &= ~(MARIO_FLAG_ACTIVE << 13);
         marioChgPose("M_S_1");
     }
-    bomheiCleanSfx(party);
+    bomheiCleanUseSfx(party);
     bomheiFree(party);
 }
 #endif

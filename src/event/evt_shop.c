@@ -86,7 +86,7 @@ static EvtWord sell_evt[193];
 #else
 static EvtWord sell_evt[VERSION_PICK(196, 207)];
 #endif
-#if VERSION == VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_US
 EvtWord keep_evt[145];
 #else
 EvtWord keep_evt[VERSION_PICK(148, 167)];

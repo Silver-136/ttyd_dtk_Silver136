@@ -11087,7 +11087,7 @@ void psndMapChange(void) {
     psnd.flags &= ~PSND_FLAG_DOOR_IN;
     for (i = 0; i < 40; i++) {
         sfx = &pssfx[i];
-        if (sfx->listId != 0xFFFFFFFF && !(sfx->flags & (PSND_SFX_ENV | PSND_SFX_KEEP))) {
+        if (sfx->listId != 0xFFFFFFFF && !(sfx->flags & (PSFX_FLAG_ENV | PSFX_FLAG_KEEP))) {
             sfx->flags |= PSFX_FLAG_FADE_OUT;
         }
     }
@@ -12290,7 +12290,7 @@ if ((evtGetValue(NULL, GSW_STORY_PROGRESS) <= STG0_02_MARIOS_HOUSE) && (sid == 0
     }
     if ((sid == PSND_SFX_STG2_BOMB_TIMER1) || (sid == PSND_SFX_STG7_ALART_WARNING1)) {
 #if VERSION <= VERSION_DEMO_US
-sfx->flags |= PSFX_FLAG_BATTLE_START | PSND_SFX_KEEP;
+sfx->flags |= PSFX_FLAG_BATTLE_START | PSFX_FLAG_KEEP;
 #else
         sfx->flags |= (PSFX_FLAG_KEEP | PSFX_FLAG_NO_MUTE);
 #endif
@@ -12580,7 +12580,100 @@ static inline void psndEnvDone(PaperSoundEnv* e) {
  * 1 loops at a fixed position, 2 repeats at a fixed position at intervals, 3 plays once at the listener.
  * Also runs the environment fades and low-pass filter.
  */
+/** Number of environment sounds in the table. */
 #if VERSION <= VERSION_DEMO_US
+#define PSENV_COUNT 0x75
+#else
+#define PSENV_COUNT 0x76
+#endif
+
+#if VERSION <= VERSION_DEMO_US
+/** Volume of environment sound e under its channel's fade; the demos write it through a pointer. */
+static inline void psndENVVolume(PaperSoundEnv* e, PaperSoundWork* p, u8* vol) {
+    PaperSoundFade* f = NULL;
+    s16 dip;
+
+    if (p->envId[0] == e->id) {
+        f = &p->fade[0];
+    }
+    if (p->envId[1] == e->id) {
+        f = &p->fade[1];
+    }
+    if (f == NULL) {
+        *vol = e->volume * p->envVolume / 100;
+    } else {
+        if (f->dipState == 0) {
+            dip = 0x7F;
+        } else {
+            dip = f->dipTime * 0x7F / f->dipTimeMax;
+        }
+        if (f->state == 0) {
+            *vol = p->envVolume * (e->volume * dip / 127) / 100;
+        } else {
+            s16 faded = f->timeMax * (e->volume * dip / 127) / f->time;
+            *vol = faded * p->envVolume / 100;
+        }
+    }
+}
+#endif
+#if VERSION <= VERSION_DEMO_US
+/** the ENV sound has finished: wait for its next play */
+static inline void psndENVRestart(PaperSoundEnv* e) {
+    e->sfx = -1;
+    e->state = 0;
+    e->timer = 0;
+    switch (e->type) {
+        case 0:
+            e->timer = e->interval * PSND_FPS;
+            e->timer += irand(e->intervalRand) * PSND_FPS;
+            break;
+        case 2:
+            e->timer = e->interval * PSND_FPS;
+            e->timer += irand(e->intervalRand) * PSND_FPS;
+            break;
+        case 3:
+            break;
+    }
+}
+
+/** a playing ENV sound follows its channel volume and low-pass value */
+static inline void psndENVApply(PaperSoundEnv* e) {
+    PaperSoundEffect* sfx;
+    u8 vol;
+    u16 lpf;
+    s32 id;
+
+    psndENVVolume(e, &psnd, &vol);
+    // FAKE: the first read of e->sfx goes through an s32 pointer (same value): a plain read is shared with the second
+    // read below, the target loads it twice
+    id = *(s32*)&e->sfx;
+    if ((u32)id != 0xFFFFFFFF) {
+        sfx = &pssfx[id & 0xFF];
+        if (sfx->listId != 0xFFFFFFFF) {
+            sfx->volume = vol;
+        }
+    }
+    lpf = 0;
+    if (psnd.envId[0] == e->id)
+        lpf = psnd.envLpf[0];
+    if (psnd.envId[1] == e->id)
+        lpf = psnd.envLpf[1];
+    id = e->sfx;
+    if ((u32)id != 0xFFFFFFFF) {
+        sfx = &pssfx[id & 0xFF];
+        if (sfx->listId != 0xFFFFFFFF) {
+            SoundEffectEntry* entry = &pssfxlist[sfx->listId & 0x1FFF];
+            sfx->lpf = lpf;
+            if (sfx->flags & PSFX_FLAG_START) {
+            } else if (!(entry->fxId & SFX_FLAG_STREAM)) {
+                if (!(entry->fxId & SFX_FLAG_STREAM)) {
+                    SoundEfxSetLPF(sfx->channel, (s16)lpf);
+                }
+            }
+        }
+    }
+}
+
 static void psndENVMain(void) {
     s32 i;
     PaperSoundEnv* e;
@@ -12619,8 +12712,10 @@ static void psndENVMain(void) {
                         e->position.x += r * (f32)sin(a2);
                         e->position.z -= r * (f32)cos(a2);
                         {
-                            u8 vv = psndEnvVolume(e, &psnd);
-                            e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_LISTENER_OFFSET), vv, 0xff, 0, &e->position, 0, e->dist, 0);
+                            u8 vol;
+
+                            psndENVVolume(e, &psnd, &vol);
+                            e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_LISTENER_OFFSET), vol, 0xff, 0, &e->position, 0, e->dist, 0);
                         }
                         e->state++;
                         break;
@@ -12630,15 +12725,17 @@ static void psndENVMain(void) {
                             if (s->channel != 0xFFFFFFFF || (s->flags & PSFX_FLAG_START))
                                 break;
                         }
-                        psndEnvDone(e);
+                        psndENVRestart(e);
                         break;
                 }
                 break;
             case 1:
                 switch (e->state) {
                     case 0: {
-                        u8 vv = psndEnvVolume(e, &psnd);
-                        e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff, 0, &e->position, 0, e->dist, 0);
+                        u8 vol;
+
+                        psndENVVolume(e, &psnd, &vol);
+                        e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vol, 0xff, 0, &e->position, 0, e->dist, 0);
                     }
                         e->state++;
                         break;
@@ -12648,9 +12745,10 @@ static void psndENVMain(void) {
                             if (s->channel != 0xFFFFFFFF || (s->flags & PSFX_FLAG_START))
                                 break;
                         }
-e->sfx = -1;
+                        // the demo does not restart a one-shot ambient sound: it stays in its last state
+                        e->sfx = -1;
                         e->state++;
-break;
+                        break;
                 }
                 break;
             case 2:
@@ -12661,8 +12759,10 @@ break;
                             e->state++;
                         break;
                     case 1: {
-                        u8 vv = psndEnvVolume(e, &psnd);
-                        e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff, 0, &e->position, 0, e->dist, 0);
+                        u8 vol;
+
+                        psndENVVolume(e, &psnd, &vol);
+                        e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vol, 0xff, 0, &e->position, 0, e->dist, 0);
                     }
                         e->state++;
                         break;
@@ -12672,24 +12772,27 @@ break;
                             if (s->channel != 0xFFFFFFFF || (s->flags & PSFX_FLAG_START))
                                 break;
                         }
-                        psndEnvDone(e);
+                        psndENVRestart(e);
                         break;
                 }
                 break;
             case 3:
                 switch (e->state) {
                     case 0: {
-                        u8 vv = psndEnvVolume(e, &psnd);
-                        e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_AT_LISTENER), vv, 0xff, 0, &e->position, 0, e->dist, 0);
+                        u8 vol;
+
+                        psndENVVolume(e, &psnd, &vol);
+                        e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_AT_LISTENER), vol, 0xff, 0, &e->position, 0, e->dist, 0);
                     }
                         e->state++;
                         break;
                     case 1:
-if (e->sfx == 0xFFFFFFFF || psndSFXChk(e->sfx) != 0) {
+                        // the demo only checks that the sound still exists, and does not restart it
+                        if (e->sfx == 0xFFFFFFFF || psndSFXChk(e->sfx) != 0) {
                             e->sfx = -1;
                             e->state++;
                         }
-break;
+                        break;
                 }
                 break;
         }
@@ -12741,12 +12844,12 @@ break;
                     }
                 }
                 if (psnd.fade[i].state == 4 && psnd.fade[i].timeMax > 0)
-                    psnd.fade[i].timeMax--;
+                    (psnd.fade[i].timeMax)--;
                 if (psnd.fade[i].dipState == 8 && psnd.fade[i].dipTime > psnd.fade[i].dipTimeMax * psnd.fade[i].dipPercent / 100)
-                    psnd.fade[i].dipTime--;
+                    (psnd.fade[i].dipTime)--;
                 if (psnd.fade[i].dipState == 0x10) {
                     if (psnd.fade[i].dipTime < psnd.fade[i].dipTimeMax)
-                        psnd.fade[i].dipTime++;
+                        (psnd.fade[i].dipTime)++;
                     else
                         psnd.fade[i].dipState = 0;
                 }
@@ -13002,12 +13105,12 @@ static inline s32 psndENVSearch(const char** names, const char* name) {
     if (SFX_NAME_IS_ID(name)) {
         return SFX_NAME_ID(name);
     }
-    for (id = 0; id < 0x76; id++, names++) {
+    for (id = 0; id < PSENV_COUNT; id++, names++) {
         if (strcmp(*names, name) == 0) {
             break;
         }
     }
-    if (id >= 0x76) {
+    if (id >= PSENV_COUNT) {
         id = 0;
     }
     return id;
@@ -13104,9 +13207,9 @@ if (cur == id)
     }
     for (;; list++) {
 #if VERSION <= VERSION_DEMO_US
-        if (list->id == 0x76)
+        if (list->id == PSENV_COUNT)
 #else
-        if (list->id == 0x76) {
+        if (list->id == PSENV_COUNT) {
 #endif
             break;
 #if VERSION <= VERSION_DEMO_US

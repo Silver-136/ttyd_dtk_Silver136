@@ -105,16 +105,40 @@ static s16 nozle_1_texcoord1_tbl[] __attribute__((aligned(32))) = {
     16384, -5461, 16384, -8192, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 };
+#if VERSION <= VERSION_DEMO_US
+static GXColor nozle_1_color0_tbl[] __attribute__((aligned(32))) = {
+    {255, 255, 255, 204}, {255, 255, 255, 51}, {255, 255, 255, 76}, {255, 255, 255, 102},
+    {255, 255, 255, 0}, {255, 255, 255, 127}, {0, 0, 0, 0}, {0, 0, 0, 0},
+};
+#endif
 static u32 nozle_1_dl_0_0[] __attribute__((aligned(32))) = {0x98000A0D, 0x00042222, 0x0B000221, 0x21220004, 0x1A1A2100, 0x03181814, 0x00041B1B, 0x13000519, 0x191B0004, 0x0D0D1A00, 0x030B0B0A, 0x00020A0A, 0x08000008, 0x08000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_0_1[] __attribute__((aligned(32))) = {0x98000A0B, 0x00022121, 0x09000020, 0x20210003, 0x18182000, 0x00161613, 0x00051919, 0x12000017, 0x171A0003, 0x0B0B1900, 0x00090908, 0x00000808, 0x06000006, 0x06000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_0_2[] __attribute__((aligned(32))) = {0x98000A09, 0x00002020, 0x0700001F, 0x1F200000, 0x16161F00, 0x00141412, 0x00001717, 0x11000015, 0x15190000, 0x09091800, 0x00070706, 0x00000606, 0x04000004, 0x04000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_0_3[] __attribute__((aligned(32))) = {0x98000A07, 0x00001F1F, 0x0500001E, 0x1E1F0000, 0x14141E00, 0x00121211, 0x00001515, 0x10000013, 0x13180000, 0x07071700, 0x00050504, 0x00000404, 0x02000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_0_4[] __attribute__((aligned(32))) = {0x98000A05, 0x00001E1E, 0x0300001C, 0x1C1E0000, 0x12121D00, 0x000F0F10, 0x00001313, 0x0F00000E, 0x0E170000, 0x05051600, 0x00010102, 0x00000000, 0x00000103, 0x03000000, 0x00000000, 0x00000000};
+#if VERSION <= VERSION_DEMO_US
+static u32 nozle_1_dl_0_5[] __attribute__((aligned(32))) = {0x98000401, 0x00011D1D, 0x1C000110, 0x10030000, 0x1C1C1D00, 0x000F0F00, 0x00000000, 0x00000000};
+static u32 nozle_1_dl_0_6[] __attribute__((aligned(32))) = {0x9800041C, 0x00011010, 0x0E000111, 0x111D0000, 0x0F0F0F00, 0x000E0E00, 0x00000000, 0x00000000};
+static u32 nozle_1_dl_0_7[] __attribute__((aligned(32))) = {0x9800040E, 0x00011111, 0x15000102, 0x020F0000, 0x0E0E1600, 0x00010100, 0x00000000, 0x00000000};
+static u32 nozle_1_dl_0_8[] __attribute__((aligned(32))) = {0x9800030C, 0x00040C0C, 0x1B00040D, 0x0D0A0002, 0x0A0A0000, 0x00000000, 0x00000000, 0x00000000};
+static u32 nozle_1_dl_0_9[] __attribute__((aligned(32))) = {0x98000316, 0x00000101, 0x15000102, 0x02000001, 0x03030000, 0x00000000, 0x00000000, 0x00000000};
+static void* nozle_1_dl_0_tbl[] __attribute__((aligned(32))) = {nozle_1_dl_0_0, nozle_1_dl_0_1, nozle_1_dl_0_2, nozle_1_dl_0_3, nozle_1_dl_0_4, nozle_1_dl_0_5, nozle_1_dl_0_6, nozle_1_dl_0_7, nozle_1_dl_0_8, nozle_1_dl_0_9};
+static u8 nozle_1_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01};
+#endif
 static u32 nozle_1_dl_1_0[] __attribute__((aligned(32))) = {0x98000A30, 0x00043131, 0x2E000230, 0x30450004, 0x2D2D4400, 0x032B2B37, 0x00042E2E, 0x3600052C, 0x2C3E0004, 0x28283D00, 0x0326262D, 0x00022525, 0x2B000023, 0x23000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_1_1[] __attribute__((aligned(32))) = {0x98000A2E, 0x00023030, 0x2C00002F, 0x2F440003, 0x2B2B4300, 0x00292936, 0x00052C2C, 0x3500002A, 0x2A3D0003, 0x26263C00, 0x0024242B, 0x00002323, 0x2900000C, 0x0C000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_1_2[] __attribute__((aligned(32))) = {0x98000A2C, 0x00002F2F, 0x2A000022, 0x22430000, 0x29294200, 0x001A1A35, 0x00002A2A, 0x3400001B, 0x1B3C0000, 0x24243B00, 0x000D0D29, 0x00000C0C, 0x2700000A, 0x0A000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_1_3[] __attribute__((aligned(32))) = {0x98000A2A, 0x00002222, 0x28000021, 0x21420000, 0x1A1A4100, 0x00181834, 0x00001B1B, 0x33000019, 0x193B0000, 0x0D0D3A00, 0x000B0B27, 0x00000A0A, 0x25000008, 0x08000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_1_4[] __attribute__((aligned(32))) = {0x98000A28, 0x00002121, 0x26000020, 0x20410000, 0x18184000, 0x00161633, 0x00001919, 0x32000017, 0x173A0000, 0x0B0B3900, 0x00090925, 0x00000808, 0x23000106, 0x06000000, 0x00000000, 0x00000000};
+#if VERSION <= VERSION_DEMO_US
+static u32 nozle_1_dl_1_5[] __attribute__((aligned(32))) = {0x98000424, 0x00011F1F, 0x3F000114, 0x14260000, 0x20204000, 0x00161600, 0x00000000, 0x00000000};
+static u32 nozle_1_dl_1_6[] __attribute__((aligned(32))) = {0x9800043F, 0x00011414, 0x31000115, 0x15400000, 0x16163200, 0x00171700, 0x00000000, 0x00000000};
+static u32 nozle_1_dl_1_7[] __attribute__((aligned(32))) = {0x98000431, 0x00011515, 0x38000107, 0x07320000, 0x17173900, 0x00090900, 0x00000000, 0x00000000};
+static u32 nozle_1_dl_1_8[] __attribute__((aligned(32))) = {0x9800032F, 0x00042727, 0x3E000428, 0x282D0002, 0x25250000, 0x00000000, 0x00000000, 0x00000000};
+static u32 nozle_1_dl_1_9[] __attribute__((aligned(32))) = {0x98000339, 0x00000909, 0x38000107, 0x07230001, 0x06060000, 0x00000000, 0x00000000, 0x00000000};
+static void* nozle_1_dl_1_tbl[] __attribute__((aligned(32))) = {nozle_1_dl_1_0, nozle_1_dl_1_1, nozle_1_dl_1_2, nozle_1_dl_1_3, nozle_1_dl_1_4, nozle_1_dl_1_5, nozle_1_dl_1_6, nozle_1_dl_1_7, nozle_1_dl_1_8, nozle_1_dl_1_9};
+static u8 nozle_1_dl_1_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01};
+#endif
 static s16 nozle_3_vertex_tbl[] __attribute__((aligned(32))) = {
     -1120, 0, 0, -495, 0, 0,
     0, 0, 0, 495, 0, 0,
@@ -251,6 +275,9 @@ static u32 nozle_3_dl_0_14[] __attribute__((aligned(32))) = {0x98000400, 0x22000
 static u32 nozle_3_dl_0_15[] __attribute__((aligned(32))) = {0x98000400, 0x20000000, 0x06002200, 0x22003400, 0x00000700, 0x35003500, 0x2A000000, 0x06003600, 0x36003300, 0x00000900, 0x33003300, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_3_dl_0_16[] __attribute__((aligned(32))) = {0x98000300, 0x06000000, 0x00000100, 0x01000100, 0x00000100, 0x02000200, 0x00000000, 0x01000300, 0x03000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static void* nozle_3_dl_0_tbl[] __attribute__((aligned(32))) = {nozle_3_dl_0_0, nozle_3_dl_0_1, nozle_3_dl_0_2, nozle_3_dl_0_3, nozle_3_dl_0_4, nozle_3_dl_0_5, nozle_3_dl_0_6, nozle_3_dl_0_7, nozle_3_dl_0_8, nozle_3_dl_0_9, nozle_3_dl_0_10, nozle_3_dl_0_11, nozle_3_dl_0_12, nozle_3_dl_0_13, nozle_3_dl_0_14, nozle_3_dl_0_15, nozle_3_dl_0_16};
+#if VERSION <= VERSION_DEMO_US
+static u8 nozle_3_dl_0_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
+#endif
 static u32 nozle_3_dl_1_0[] __attribute__((aligned(32))) = {0x98001100, 0x39000000, 0x12001300, 0x13003800, 0x00001200, 0x12001200, 0x3E000000, 0x11001800, 0x18003D00, 0x00001100, 0x17001700, 0x43000000, 0x13001D00, 0x1D004200, 0x00001300, 0x1C001C00, 0x48000000, 0x14002200, 0x22004700, 0x00001400, 0x21002100, 0x4D000000, 0x15003B00, 0x3B004C00, 0x00001500, 0x3A003A00, 0x52000000, 0x16004000, 0x40005100, 0x00001600, 0x3F003F00, 0x55000000, 0x17004500, 0x45005400, 0x00001700, 0x44004400, 0x69000000, 0x17005800, 0x58005300, 0x00001700, 0x43004300, 0x68000000, 0x18005600, 0x56000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_3_dl_1_1[] __attribute__((aligned(32))) = {0x98001100, 0x37000000, 0x12001100, 0x11003600, 0x00001200, 0x10001000, 0x3C000000, 0x11001600, 0x16003B00, 0x00001100, 0x15001500, 0x41000000, 0x13001B00, 0x1B004000, 0x00001300, 0x1A001A00, 0x46000000, 0x14002000, 0x20004500, 0x00001400, 0x1F001F00, 0x4B000000, 0x15003900, 0x39004A00, 0x00001500, 0x38003800, 0x50000000, 0x16003E00, 0x3E004F00, 0x00001600, 0x3D003D00, 0x53000000, 0x17004300, 0x43006000, 0x00001700, 0x42004200, 0x61000000, 0x17004600, 0x46005700, 0x00001700, 0x47004700, 0x58000000, 0x18004900, 0x49000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_3_dl_1_2[] __attribute__((aligned(32))) = {0x98000E00, 0x38000000, 0x12001200, 0x12003700, 0x00001200, 0x11001100, 0x3D000000, 0x11001700, 0x17003C00, 0x00001100, 0x16001600, 0x42000000, 0x13001C00, 0x1C004100, 0x00001300, 0x1B001B00, 0x47000000, 0x14002100, 0x21004600, 0x00001400, 0x20002000, 0x4C000000, 0x15003A00, 0x3A004B00, 0x00001500, 0x39003900, 0x51000000, 0x16003F00, 0x3F005000, 0x00001600, 0x3E003E00, 0x54000000, 0x17004400, 0x44005300, 0x00001700, 0x43004300, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
@@ -269,6 +296,9 @@ static u32 nozle_3_dl_1_14[] __attribute__((aligned(32))) = {0x98000400, 0x57000
 static u32 nozle_3_dl_1_15[] __attribute__((aligned(32))) = {0x98000400, 0x55000000, 0x17004500, 0x45006900, 0x00001700, 0x58005800, 0x5F000000, 0x17005900, 0x59006800, 0x00001800, 0x56005600, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_3_dl_1_16[] __attribute__((aligned(32))) = {0x98000300, 0x3B000000, 0x11001500, 0x15003600, 0x00001200, 0x10001000, 0x35000000, 0x12000F00, 0x0F000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static void* nozle_3_dl_1_tbl[] __attribute__((aligned(32))) = {nozle_3_dl_1_0, nozle_3_dl_1_1, nozle_3_dl_1_2, nozle_3_dl_1_3, nozle_3_dl_1_4, nozle_3_dl_1_5, nozle_3_dl_1_6, nozle_3_dl_1_7, nozle_3_dl_1_8, nozle_3_dl_1_9, nozle_3_dl_1_10, nozle_3_dl_1_11, nozle_3_dl_1_12, nozle_3_dl_1_13, nozle_3_dl_1_14, nozle_3_dl_1_15, nozle_3_dl_1_16};
+#if VERSION <= VERSION_DEMO_US
+static u8 nozle_3_dl_1_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
+#endif
 static s16 nozle_4_vertex_tbl[] __attribute__((aligned(32))) = {
     -23040, 0, 0, -17280, 0, 0,
     -11520, 0, 0, -5760, 0, 0,
@@ -307,6 +337,11 @@ static s16 nozle_4_texcoord1_tbl[] __attribute__((aligned(32))) = {
     8192, 12288, 8192, 16384, 8192, 20480, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 };
+#if VERSION <= VERSION_DEMO_US
+static GXColor nozle_4_color0_tbl[] __attribute__((aligned(32))) = {
+    {255, 255, 255, 127}, {255, 255, 255, 76}, {255, 255, 255, 0},
+};
+#endif
 static u32 nozle_4_dl_0_0[] __attribute__((aligned(32))) = {0x98000612, 0x00001212, 0x13000013, 0x13090000, 0x00000A00, 0x00010100, 0x00000303, 0x01000002, 0x02000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_4_dl_0_1[] __attribute__((aligned(32))) = {0x98000613, 0x00001313, 0x14000014, 0x140A0000, 0x01010B00, 0x00040401, 0x00000202, 0x02000005, 0x05000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_4_dl_0_2[] __attribute__((aligned(32))) = {0x98000614, 0x00001414, 0x15000015, 0x150B0000, 0x04040C00, 0x00060602, 0x00000505, 0x03000007, 0x07000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
@@ -315,46 +350,90 @@ static u32 nozle_4_dl_0_4[] __attribute__((aligned(32))) = {0x98000616, 0x000016
 static u32 nozle_4_dl_0_5[] __attribute__((aligned(32))) = {0x98000617, 0x00001717, 0x18000018, 0x180E0000, 0x0A0A0F00, 0x000C0C05, 0x00000B0B, 0x0600000D, 0x0D000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_4_dl_0_6[] __attribute__((aligned(32))) = {0x98000618, 0x00001818, 0x19000119, 0x190F0000, 0x0C0C1000, 0x010E0E06, 0x00000D0D, 0x0700010F, 0x0F000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_4_dl_0_7[] __attribute__((aligned(32))) = {0x98000619, 0x00011919, 0x1A00021A, 0x1A100001, 0x0E0E1100, 0x02101007, 0x00010F0F, 0x08000211, 0x11000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+#if VERSION <= VERSION_DEMO_US
+static s8 nozle_1_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
+#else
 static s8 nozle_1_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 };
+#endif
+#if VERSION > VERSION_DEMO_US
 static GXColor nozle_1_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 204}, {255, 255, 255, 51}, {255, 255, 255, 76}, {255, 255, 255, 102},
     {255, 255, 255, 0}, {255, 255, 255, 127}, {0, 0, 0, 0}, {0, 0, 0, 0},
 };
+#endif
+#if VERSION > VERSION_DEMO_US
 static u32 nozle_1_dl_0_5[] __attribute__((aligned(32))) = {0x98000401, 0x00011D1D, 0x1C000110, 0x10030000, 0x1C1C1D00, 0x000F0F00, 0x00000000, 0x00000000};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u32 nozle_1_dl_0_6[] __attribute__((aligned(32))) = {0x9800041C, 0x00011010, 0x0E000111, 0x111D0000, 0x0F0F0F00, 0x000E0E00, 0x00000000, 0x00000000};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u32 nozle_1_dl_0_7[] __attribute__((aligned(32))) = {0x9800040E, 0x00011111, 0x15000102, 0x020F0000, 0x0E0E1600, 0x00010100, 0x00000000, 0x00000000};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u32 nozle_1_dl_0_8[] __attribute__((aligned(32))) = {0x9800030C, 0x00040C0C, 0x1B00040D, 0x0D0A0002, 0x0A0A0000, 0x00000000, 0x00000000, 0x00000000};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u32 nozle_1_dl_0_9[] __attribute__((aligned(32))) = {0x98000316, 0x00000101, 0x15000102, 0x02000001, 0x03030000, 0x00000000, 0x00000000, 0x00000000};
+#endif
+#if VERSION > VERSION_DEMO_US
 static void* nozle_1_dl_0_tbl[] __attribute__((aligned(32))) = {nozle_1_dl_0_0, nozle_1_dl_0_1, nozle_1_dl_0_2, nozle_1_dl_0_3, nozle_1_dl_0_4, nozle_1_dl_0_5, nozle_1_dl_0_6, nozle_1_dl_0_7, nozle_1_dl_0_8, nozle_1_dl_0_9};
+#endif
 /** Display-list sizes (32-byte units) for the first layer of nozzle model 1 (type 0). */
+#if VERSION > VERSION_DEMO_US
 static u8 nozle_1_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u32 nozle_1_dl_1_5[] __attribute__((aligned(32))) = {0x98000424, 0x00011F1F, 0x3F000114, 0x14260000, 0x20204000, 0x00161600, 0x00000000, 0x00000000};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u32 nozle_1_dl_1_6[] __attribute__((aligned(32))) = {0x9800043F, 0x00011414, 0x31000115, 0x15400000, 0x16163200, 0x00171700, 0x00000000, 0x00000000};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u32 nozle_1_dl_1_7[] __attribute__((aligned(32))) = {0x98000431, 0x00011515, 0x38000107, 0x07320000, 0x17173900, 0x00090900, 0x00000000, 0x00000000};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u32 nozle_1_dl_1_8[] __attribute__((aligned(32))) = {0x9800032F, 0x00042727, 0x3E000428, 0x282D0002, 0x25250000, 0x00000000, 0x00000000, 0x00000000};
+#endif
+#if VERSION > VERSION_DEMO_US
 static u32 nozle_1_dl_1_9[] __attribute__((aligned(32))) = {0x98000339, 0x00000909, 0x38000107, 0x07230001, 0x06060000, 0x00000000, 0x00000000, 0x00000000};
+#endif
+#if VERSION > VERSION_DEMO_US
 static void* nozle_1_dl_1_tbl[] __attribute__((aligned(32))) = {nozle_1_dl_1_0, nozle_1_dl_1_1, nozle_1_dl_1_2, nozle_1_dl_1_3, nozle_1_dl_1_4, nozle_1_dl_1_5, nozle_1_dl_1_6, nozle_1_dl_1_7, nozle_1_dl_1_8, nozle_1_dl_1_9};
+#endif
 /** Display-list sizes for the second layer of nozzle model 1 (type 0), drawn over the first. */
+#if VERSION > VERSION_DEMO_US
 static u8 nozle_1_dl_1_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01};
+#endif
 static s8 nozle_3_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64, 0,
 };
 /** Display-list sizes for list set 0 of nozzle model 3 (type 2), drawn after set 1. */
+#if VERSION > VERSION_DEMO_US
 static u8 nozle_3_dl_0_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
+#endif
 /** Display-list sizes for list set 1 of nozzle model 3 (type 2), drawn first. */
+#if VERSION > VERSION_DEMO_US
 static u8 nozle_3_dl_1_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
+#endif
+#if VERSION <= VERSION_DEMO_US
+static s8 nozle_4_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64, 0};
+#else
 static s8 nozle_4_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 };
+#endif
+#if VERSION > VERSION_DEMO_US
 static GXColor nozle_4_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 127}, {255, 255, 255, 76}, {255, 255, 255, 0},
 };
+#endif
 static void* nozle_4_dl_0_tbl[] = {nozle_4_dl_0_0, nozle_4_dl_0_1, nozle_4_dl_0_2, nozle_4_dl_0_3, nozle_4_dl_0_4, nozle_4_dl_0_5, nozle_4_dl_0_6, nozle_4_dl_0_7};
 /** Display-list sizes for nozzle model 4, drawn once for each spray piece of type 3. */
 static u8 nozle_4_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};

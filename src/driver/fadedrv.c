@@ -118,7 +118,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
 #if VERSION > VERSION_DEMO_US
     // types 16-21 are types 9, 10, 11, 12, 14 and 15 in near-white (0xF0F0F0)
 #endif
-    if (type == 16) {
+    if (type == FADE_IN_WHITE) {
         type = FADE_IN_BLACK;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
     }
@@ -126,23 +126,23 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
         type = FADE_OUT_BLACK;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
     }
-    if (type == 18) {
-        type = 11;
+    if (type == FADE_IN_WHITE_2D) {
+        type = FADE_IN_BLACK_2D;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
     }
-    if (type == 19) {
-        type = 12;
+    if (type == FADE_OUT_WHITE_2D) {
+        type = FADE_OUT_BLACK_2D;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
     }
-    if (type == 20) {
-        type = 14;
+    if (type == FADE_IN_WHITE_3D) {
+        type = FADE_IN_BLACK_3D;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
     }
-    if (type == 21) {
-        type = 15;
+    if (type == FADE_OUT_WHITE_3D) {
+        type = FADE_OUT_BLACK_3D;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
     }
-    if ((type == 1 || type == 2) && duration < 1000) {
+    if ((type == FADE_IN_IRIS || type == FADE_OUT_IRIS) && duration < 1000) {
         duration = 1000;
     }
 #if VERSION <= VERSION_DEMO_US
@@ -161,19 +161,19 @@ if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
     // no default: a type without a case here would go on with entry and id uninitialised
     switch (type) {
 #if VERSION <= VERSION_DEMO_US
-        case 0x1:
-        case 0x2:
-        case 0x3:
-        case 0x4:
-        case 0x5:
-        case 0x6:
-        case 0x9:
-        case 0xA:
-        case 0xB:
-        case 0xC:
-        case 0xD:
-        case 0xE:
-        case 0xF:
+        case FADE_IN_IRIS:
+        case FADE_OUT_IRIS:
+        case FADE_IN_SPOT:
+        case FADE_OUT_SPOT:
+        case FADE_IN_SPOT_3D:
+        case FADE_OUT_SPOT_3D:
+        case FADE_IN_BLACK:
+        case FADE_OUT_BLACK:
+        case FADE_IN_BLACK_2D:
+        case FADE_OUT_BLACK_2D:
+        case FADE_COVER_BLACK_2D:
+        case FADE_IN_BLACK_3D:
+        case FADE_OUT_BLACK_3D:
 #else
         case 0x1: case 0x2: case 0x3: case 0x4: case 0x5: case 0x6: case 0x9: case 0xA: case 0xB: case 0xC: case 0xD: case 0xE: case 0xF:
 #endif
@@ -191,25 +191,25 @@ if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
                     break;
 #if VERSION <= VERSION_DEMO_US
         case FADE_CURTAIN_UP_DOWN_A1:
-        case 0x17:
-        case 0x18:
-        case 0x19:
-        case 0x1A:
-        case 0x1B:
-        case 0x1C:
-        case 0x1D:
-        case 0x1E:
-        case 0x1F:
-        case 0x20:
-        case 0x21:
-        case 0x22:
-        case 0x23:
-        case 0x24:
-        case 0x25:
-        case 0x26:
-        case 0x27:
-        case 0x28:
-        case 0x33:
+        case FADE_CURTAIN_VERTICAL_A2:
+        case FADE_CURTAIN_SIDES_A1_3D:
+        case FADE_CURTAIN_SIDES_A2_3D:
+        case FADE_CURTAIN_SIDES_Z1_3D:
+        case FADE_CURTAIN_SIDES_A1:
+        case FADE_CURTAIN_SIDES_A2:
+        case FADE_CURTAIN_CENTER_A1_3D:
+        case FADE_CURTAIN_CENTER_A2_3D:
+        case FADE_CURTAIN_CENTER_Z2_3D:
+        case FADE_CURTAIN_CENTER_Z1_3D:
+        case FADE_CURTAIN_LEAVE_3D:
+        case FADE_CURTAIN_ENTER_3D:
+        case FADE_CURTAIN_CENTER_A1:
+        case FADE_CURTAIN_CENTER_A2:
+        case FADE_CURTAIN_CENTER_Z2:
+        case FADE_CURTAIN_CENTER_Z1:
+        case FADE_CURTAIN_LEAVE:
+        case FADE_CURTAIN_ENTER:
+        case FADE_PAGE_FLIP_FOUR:
 #else
             }
             break;
@@ -219,14 +219,14 @@ if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
             entry = &wp->entries[1];
             break;
 #if VERSION <= VERSION_DEMO_US
-        case 0x29:
-        case 0x2A:
-        case 0x2B:
-        case 0x2C:
-        case 0x2D:
-        case 0x2E:
-        case 0x2F:
-        case 0x30:
+        case FADE_PIPE_UP_A1:
+        case FADE_PIPE_UP_A2:
+        case FADE_PIPE_DOWN_A1:
+        case FADE_PIPE_DOWN_A2:
+        case FADE_PIPE_LEFT_A1:
+        case FADE_PIPE_LEFT_A2:
+        case FADE_PIPE_RIGHT_A1:
+        case FADE_PIPE_RIGHT_A2:
 #else
         case 0x29: case 0x2A: case 0x2B: case 0x2C: case 0x2D: case 0x2E: case 0x2F: case 0x30:
 #endif
@@ -235,19 +235,19 @@ if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
             fadeReset(0);
             break;
 #if VERSION <= VERSION_DEMO_US
-        case 0x31:
-        case 0x32:
-        case 0x34:
-        case 0x35:
-        case 0x36:
-        case 0x37:
-        case 0x38:
-        case 0x39:
-        case 0x3A:
-        case 0x3B:
-        case 0x3C:
-        case 0x3D:
-        case 0x3E:
+        case FADE_PAGE_FLIP_Z1:
+        case FADE_PAGE_FLIP_A1:
+        case FADE_PAGE_FLIP_Z1_OFFSCREEN:
+        case FADE_PAGE_FLIP_A1_OFFSCREEN:
+        case FADE_STORY_MARIO_A3:
+        case FADE_STORY_MARIO_A1:
+        case FADE_STORY_PEACH_A3:
+        case FADE_STORY_PEACH_A1:
+        case FADE_STORY_BOWSER_A3:
+        case FADE_STORY_BOWSER_A1:
+        case FADE_STORY_MARIO_A2:
+        case FADE_STORY_PEACH_A2:
+        case FADE_STORY_BOWSER_A2:
 #else
         case 0x31: case 0x32: case 0x34: case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: case 0x3A: case 0x3B: case 0x3C: case 0x3D: case 0x3E:
 #endif
@@ -255,11 +255,11 @@ if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
             entry = &wp->entries[3];
             switch (type) {
 #if VERSION <= VERSION_DEMO_US
-                case 0x32:
-                case 0x35:
-                case 0x36:
-                case 0x38:
-                case 0x3A:
+                case FADE_PAGE_FLIP_A1:
+                case FADE_PAGE_FLIP_A1_OFFSCREEN:
+                case FADE_STORY_MARIO_A3:
+                case FADE_STORY_PEACH_A3:
+                case FADE_STORY_BOWSER_A3:
 #else
                 case 0x32: case 0x35: case 0x36: case 0x38: case 0x3A:
 #endif
@@ -268,8 +268,8 @@ if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
             }
             break;
 #if VERSION <= VERSION_DEMO_US
-        case 0x3F:
-        case 0x40:
+        case FADE_CURTAIN_SIDES_A1_TOP:
+        case FADE_CURTAIN_SIDES_A2_TOP:
 #else
         case 0x3F: case 0x40:
 #endif
@@ -289,50 +289,50 @@ if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
     entry->animOffsetX = 0.0f;
     entry->animOffsetY = 0.0f;
     entry->scale = 1.0f;
-    if (type != 0x32 && type != 0x35) {
+    if (type != FADE_PAGE_FLIP_A1 && type != FADE_PAGE_FLIP_A1_OFFSCREEN) {
         entry->callback = NULL;
     }
     wp->lastEntryId = id;
-    if (type == 0x22 || type == 0x28) {
+    if (type == FADE_CURTAIN_ENTER_3D || type == FADE_CURTAIN_ENTER) {
         entry->scale = 3.0f;
     }
     switch (type) {
-        case 0x2B:
+        case FADE_PIPE_DOWN_A1:
             entry->animFile = "OFF_d_dokan_down";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x2C:
+        case FADE_PIPE_DOWN_A2:
             entry->animFile = "OFF_d_dokan_down";
             entry->animName = "A_2";
             entry->imageType = 2;
             break;
-        case 0x29:
+        case FADE_PIPE_UP_A1:
             entry->animFile = "OFF_d_dokan_up";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x2A:
+        case FADE_PIPE_UP_A2:
             entry->animFile = "OFF_d_dokan_up";
             entry->animName = "A_2";
             entry->imageType = 2;
             break;
-        case 0x2D:
+        case FADE_PIPE_LEFT_A1:
             entry->animFile = "OFF_d_dokan_left";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x2E:
+        case FADE_PIPE_LEFT_A2:
             entry->animFile = "OFF_d_dokan_left";
             entry->animName = "A_2";
             entry->imageType = 2;
             break;
-        case 0x2F:
+        case FADE_PIPE_RIGHT_A1:
             entry->animFile = "OFF_d_dokan_right";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x30:
+        case FADE_PIPE_RIGHT_A2:
             entry->animFile = "OFF_d_dokan_right";
             entry->animName = "A_2";
             entry->imageType = 2;
@@ -342,114 +342,114 @@ if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x17:
+        case FADE_CURTAIN_VERTICAL_A2:
             entry->animFile = "OFF_d_maku_up_down";
             entry->animName = "A_2";
             entry->imageType = 2;
             break;
-        case 0x18:
-        case 0x1B:
-        case 0x3F:
+        case FADE_CURTAIN_SIDES_A1_3D:
+        case FADE_CURTAIN_SIDES_A1:
+        case FADE_CURTAIN_SIDES_A1_TOP:
             entry->animFile = "OFF_d_maku_left_right";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x1A:
+        case FADE_CURTAIN_SIDES_Z1_3D:
             entry->animFile = "OFF_d_maku_left_right";
             entry->animName = "Z_1";
             entry->imageType = 2;
             break;
-        case 0x19:
-        case 0x1C:
-        case 0x40:
+        case FADE_CURTAIN_SIDES_A2_3D:
+        case FADE_CURTAIN_SIDES_A2:
+        case FADE_CURTAIN_SIDES_A2_TOP:
             entry->animFile = "OFF_d_maku_left_right";
             entry->animName = "A_2";
             entry->imageType = 2;
             break;
-        case 0x1D:
-        case 0x23:
+        case FADE_CURTAIN_CENTER_A1_3D:
+        case FADE_CURTAIN_CENTER_A1:
             entry->animFile = "OFF_d_maku_center";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x1E:
-        case 0x24:
+        case FADE_CURTAIN_CENTER_A2_3D:
+        case FADE_CURTAIN_CENTER_A2:
             entry->animFile = "OFF_d_maku_center";
             entry->animName = "A_2";
             entry->imageType = 2;
             break;
-        case 0x1F:
-        case 0x22:
-        case 0x25:
-        case 0x28:
+        case FADE_CURTAIN_CENTER_Z2_3D:
+        case FADE_CURTAIN_ENTER_3D:
+        case FADE_CURTAIN_CENTER_Z2:
+        case FADE_CURTAIN_ENTER:
             entry->animFile = "OFF_d_maku_center";
             entry->animName = "Z_2";
             entry->imageType = 2;
             break;
-        case 0x20:
-        case 0x26:
+        case FADE_CURTAIN_CENTER_Z1_3D:
+        case FADE_CURTAIN_CENTER_Z1:
             entry->animFile = "OFF_d_maku_center";
             entry->animName = "Z_1";
             entry->imageType = 2;
             break;
-        case 0x31:
-        case 0x34:
+        case FADE_PAGE_FLIP_Z1:
+        case FADE_PAGE_FLIP_Z1_OFFSCREEN:
             entry->animFile = "OFF_d_meku";
             entry->animName = "Z_1";
             entry->imageType = 2;
             break;
-        case 0x32:
-        case 0x35:
+        case FADE_PAGE_FLIP_A1:
+        case FADE_PAGE_FLIP_A1_OFFSCREEN:
             entry->animFile = "OFF_d_meku";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x33:
+        case FADE_PAGE_FLIP_FOUR:
             entry->animFile = "OFF_d_four_meku_5sec";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x36:
+        case FADE_STORY_MARIO_A3:
             entry->animFile = "OFF_f_in_out_mario";
             entry->animName = "A_3";
             entry->imageType = 2;
             break;
-        case 0x37:
+        case FADE_STORY_MARIO_A1:
             entry->animFile = "OFF_f_in_out_mario";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x38:
+        case FADE_STORY_PEACH_A3:
             entry->animFile = "OFF_f_in_out_peach";
             entry->animName = "A_3";
             entry->imageType = 2;
             break;
-        case 0x39:
+        case FADE_STORY_PEACH_A1:
             entry->animFile = "OFF_f_in_out_peach";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x3A:
+        case FADE_STORY_BOWSER_A3:
             entry->animFile = "OFF_f_in_out_kuppa";
             entry->animName = "A_3";
             entry->imageType = 2;
             break;
-        case 0x3B:
+        case FADE_STORY_BOWSER_A1:
             entry->animFile = "OFF_f_in_out_kuppa";
             entry->animName = "A_1";
             entry->imageType = 2;
             break;
-        case 0x3C:
+        case FADE_STORY_MARIO_A2:
             entry->animFile = "OFF_f_in_out_mario";
             entry->animName = "A_2";
             entry->imageType = 2;
             break;
-        case 0x3D:
+        case FADE_STORY_PEACH_A2:
             entry->animFile = "OFF_f_in_out_peach";
             entry->animName = "A_2";
             entry->imageType = 2;
             break;
-        case 0x3E:
+        case FADE_STORY_BOWSER_A2:
             entry->animFile = "OFF_f_in_out_kuppa";
             entry->animName = "A_2";
             entry->imageType = 2;
@@ -572,12 +572,12 @@ void fadeMain(void) {
         }
         switch (entry->type) {
 #if VERSION <= VERSION_DEMO_US
-            case 1:
-            case 3:
-            case 5:
-            case 9:
-            case 11:
-            case 14:
+            case FADE_IN_IRIS:
+            case FADE_IN_SPOT:
+            case FADE_IN_SPOT_3D:
+            case FADE_IN_BLACK:
+            case FADE_IN_BLACK_2D:
+            case FADE_IN_BLACK_3D:
 #else
             case 1: case 3: case 5: case 9: case 11: case 14:
 #endif
@@ -613,13 +613,13 @@ void fadeMain(void) {
                 }
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 2:
-            case 4:
-            case 6:
-            case 10:
-            case 12:
-            case 13:
-            case 15:
+            case FADE_OUT_IRIS:
+            case FADE_OUT_SPOT:
+            case FADE_OUT_SPOT_3D:
+            case FADE_OUT_BLACK:
+            case FADE_OUT_BLACK_2D:
+            case FADE_COVER_BLACK_2D:
+            case FADE_OUT_BLACK_3D:
 #else
             case 2: case 4: case 6: case 10: case 12: case 13: case 15:
 #endif
@@ -647,14 +647,14 @@ void fadeMain(void) {
                 }
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 0x29:
-            case 0x2A:
-            case 0x2B:
-            case 0x2C:
-            case 0x2D:
-            case 0x2E:
-            case 0x2F:
-            case 0x30:
+            case FADE_PIPE_UP_A1:
+            case FADE_PIPE_UP_A2:
+            case FADE_PIPE_DOWN_A1:
+            case FADE_PIPE_DOWN_A2:
+            case FADE_PIPE_LEFT_A1:
+            case FADE_PIPE_LEFT_A2:
+            case FADE_PIPE_RIGHT_A1:
+            case FADE_PIPE_RIGHT_A2:
 #else
             case 0x29: case 0x2A: case 0x2B: case 0x2C: case 0x2D: case 0x2E: case 0x2F: case 0x30:
 #endif
@@ -665,7 +665,7 @@ void fadeMain(void) {
 #else
                         if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
 #endif
-                            if (entry->paperPoseId < 0 && (entry->type == 0x2A || entry->type == 0x2C || entry->type == 0x2E || entry->type == 0x30)) {
+                            if (entry->paperPoseId < 0 && (entry->type == FADE_PIPE_UP_A2 || entry->type == FADE_PIPE_DOWN_A2 || entry->type == FADE_PIPE_LEFT_A2 || entry->type == FADE_PIPE_RIGHT_A2)) {
                                 wp->flags |= FADE_WORK_LOAD_BLACK;
                             }
                             break;
@@ -686,56 +686,56 @@ void fadeMain(void) {
                         imgClearVirtualPoint(entry->image);
                         fadeCapture("fImg_dokan", NULL, 0);
                         switch (entry->type) {
-                            case 0x2D:
+                            case FADE_PIPE_LEFT_A1:
 #if VERSION <= VERSION_DEMO_US
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN1"));
 #else
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN1 | PSND_SFX_KEEP));
 #endif
                                 break;
-                            case 0x2F:
+                            case FADE_PIPE_RIGHT_A1:
 #if VERSION <= VERSION_DEMO_US
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN2"));
 #else
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN2 | PSND_SFX_KEEP));
 #endif
                                 break;
-                            case 0x29:
+                            case FADE_PIPE_UP_A1:
 #if VERSION <= VERSION_DEMO_US
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN3"));
 #else
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN3 | PSND_SFX_KEEP));
 #endif
                                 break;
-                            case 0x2B:
+                            case FADE_PIPE_DOWN_A1:
 #if VERSION <= VERSION_DEMO_US
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN4"));
 #else
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN4 | PSND_SFX_KEEP));
 #endif
                                 break;
-                            case 0x2E:
+                            case FADE_PIPE_LEFT_A2:
 #if VERSION <= VERSION_DEMO_US
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN5"));
 #else
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN5 | PSND_SFX_KEEP));
 #endif
                                 break;
-                            case 0x30:
+                            case FADE_PIPE_RIGHT_A2:
 #if VERSION <= VERSION_DEMO_US
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN6"));
 #else
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN6 | PSND_SFX_KEEP));
 #endif
                                 break;
-                            case 0x2A:
+                            case FADE_PIPE_UP_A2:
 #if VERSION <= VERSION_DEMO_US
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN7"));
 #else
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN7 | PSND_SFX_KEEP));
 #endif
                                 break;
-                            case 0x2C:
+                            case FADE_PIPE_DOWN_A2:
 #if VERSION <= VERSION_DEMO_US
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN8"));
 #else
@@ -750,10 +750,10 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN8"));
                             entry->flags |= FADE_FLAG_DONE;
                             switch (entry->type) {
 #if VERSION <= VERSION_DEMO_US
-                                case 0x2A:
-                                case 0x2C:
-                                case 0x2E:
-                                case 0x30:
+                                case FADE_PIPE_UP_A2:
+                                case FADE_PIPE_DOWN_A2:
+                                case FADE_PIPE_LEFT_A2:
+                                case FADE_PIPE_RIGHT_A2:
 #else
                                 case 0x2A: case 0x2C: case 0x2E: case 0x30:
 #endif
@@ -769,14 +769,14 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN8"));
                 }
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 0x31:
-            case 0x34:
-            case 0x37:
-            case 0x39:
-            case 0x3B:
-            case 0x3C:
-            case 0x3D:
-            case 0x3E:
+            case FADE_PAGE_FLIP_Z1:
+            case FADE_PAGE_FLIP_Z1_OFFSCREEN:
+            case FADE_STORY_MARIO_A1:
+            case FADE_STORY_PEACH_A1:
+            case FADE_STORY_BOWSER_A1:
+            case FADE_STORY_MARIO_A2:
+            case FADE_STORY_PEACH_A2:
+            case FADE_STORY_BOWSER_A2:
 #else
             case 0x31: case 0x34: case 0x37: case 0x39: case 0x3B: case 0x3C: case 0x3D: case 0x3E:
 #endif
@@ -808,14 +808,14 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN8"));
                         entry->image->animName = entry->animName;
                         imgClearVirtualPoint(entry->image);
                         switch (entry->type) {
-                            case 0x34:
+                            case FADE_PAGE_FLIP_Z1_OFFSCREEN:
                                 offscreenEntry("fOff_peron");
                                 fadeCapture("fImg_peron", "fOff_peron", 0);
                                 break;
 #if VERSION <= VERSION_DEMO_US
-                            case 0x37:
-                            case 0x39:
-                            case 0x3B:
+                            case FADE_STORY_MARIO_A1:
+                            case FADE_STORY_PEACH_A1:
+                            case FADE_STORY_BOWSER_A1:
 #else
                             case 0x37: case 0x39: case 0x3B:
 #endif
@@ -829,9 +829,9 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_STORY1"));
 #endif
                                 break;
 #if VERSION <= VERSION_DEMO_US
-                            case 0x3C:
-                            case 0x3D:
-                            case 0x3E:
+                            case FADE_STORY_MARIO_A2:
+                            case FADE_STORY_PEACH_A2:
+                            case FADE_STORY_BOWSER_A2:
 #else
                             case 0x3C: case 0x3D: case 0x3E:
 #endif
@@ -849,12 +849,12 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_STORY1"));
                         if (entry->image->loopTimes >= 1.0f) {
                             switch (entry->type) {
 #if VERSION <= VERSION_DEMO_US
-                                case 0x37:
-                                case 0x39:
-                                case 0x3B:
-                                case 0x3C:
-                                case 0x3D:
-                                case 0x3E:
+                                case FADE_STORY_MARIO_A1:
+                                case FADE_STORY_PEACH_A1:
+                                case FADE_STORY_BOWSER_A1:
+                                case FADE_STORY_MARIO_A2:
+                                case FADE_STORY_PEACH_A2:
+                                case FADE_STORY_BOWSER_A2:
 #else
                                 case 0x37: case 0x39: case 0x3B: case 0x3C: case 0x3D: case 0x3E:
 #endif
@@ -877,11 +877,11 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_STORY1"));
                 }
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 0x32:
-            case 0x35:
-            case 0x36:
-            case 0x38:
-            case 0x3A:
+            case FADE_PAGE_FLIP_A1:
+            case FADE_PAGE_FLIP_A1_OFFSCREEN:
+            case FADE_STORY_MARIO_A3:
+            case FADE_STORY_PEACH_A3:
+            case FADE_STORY_BOWSER_A3:
 #else
             case 0x32: case 0x35: case 0x36: case 0x38: case 0x3A:
 #endif
@@ -894,9 +894,9 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_STORY1"));
                         imgClearVirtualPoint(entry->image);
                         switch (entry->type) {
 #if VERSION <= VERSION_DEMO_US
-                            case 0x36:
-                            case 0x38:
-                            case 0x3A:
+                            case FADE_STORY_MARIO_A3:
+                            case FADE_STORY_PEACH_A3:
+                            case FADE_STORY_BOWSER_A3:
 psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_STORY2"));
 #else
                             case 0x36: case 0x38: case 0x3A:
@@ -904,8 +904,8 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_STORY2"));
 #endif
                                 break;
 #if VERSION <= VERSION_DEMO_US
-                            case 0x32:
-                            case 0x35:
+                            case FADE_PAGE_FLIP_A1:
+                            case FADE_PAGE_FLIP_A1_OFFSCREEN:
 psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
 #else
                             case 0x32: case 0x35:
@@ -922,7 +922,7 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
                             animPaperPoseRelease(entry->paperPoseId);
                             entry->paperPoseId = -1;
                             entry->image = NULL;
-                            if (entry->type == 0x35) {
+                            if (entry->type == FADE_PAGE_FLIP_A1_OFFSCREEN) {
                                 offscreenDelete("fOff_peron");
                             }
                             entry->state++;
@@ -965,7 +965,7 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
                         break;
                 }
                 break;
-            case 0x17:
+            case FADE_CURTAIN_VERTICAL_A2:
                 switch (entry->state) {
                     case 0:
 #if VERSION <= VERSION_DEMO_US
@@ -1007,24 +1007,24 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
                 }
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 0x18:
-            case 0x19:
-            case 0x1A:
-            case 0x1B:
-            case 0x1C:
-            case 0x1D:
-            case 0x1E:
-            case 0x1F:
-            case 0x20:
-            case 0x22:
-            case 0x23:
-            case 0x24:
-            case 0x25:
-            case 0x26:
-            case 0x28:
-            case 0x33:
-            case 0x3F:
-            case 0x40:
+            case FADE_CURTAIN_SIDES_A1_3D:
+            case FADE_CURTAIN_SIDES_A2_3D:
+            case FADE_CURTAIN_SIDES_Z1_3D:
+            case FADE_CURTAIN_SIDES_A1:
+            case FADE_CURTAIN_SIDES_A2:
+            case FADE_CURTAIN_CENTER_A1_3D:
+            case FADE_CURTAIN_CENTER_A2_3D:
+            case FADE_CURTAIN_CENTER_Z2_3D:
+            case FADE_CURTAIN_CENTER_Z1_3D:
+            case FADE_CURTAIN_ENTER_3D:
+            case FADE_CURTAIN_CENTER_A1:
+            case FADE_CURTAIN_CENTER_A2:
+            case FADE_CURTAIN_CENTER_Z2:
+            case FADE_CURTAIN_CENTER_Z1:
+            case FADE_CURTAIN_ENTER:
+            case FADE_PAGE_FLIP_FOUR:
+            case FADE_CURTAIN_SIDES_A1_TOP:
+            case FADE_CURTAIN_SIDES_A2_TOP:
 #else
             case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C: case 0x1D: case 0x1E: case 0x1F: case 0x20:
             case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x28: case 0x33: case 0x3F: case 0x40:
@@ -1040,9 +1040,9 @@ psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
                         }
                         switch (entry->type) {
 #if VERSION <= VERSION_DEMO_US
-                            case 0x18:
-                            case 0x1B:
-                            case 0x3F:
+                            case FADE_CURTAIN_SIDES_A1_3D:
+                            case FADE_CURTAIN_SIDES_A1:
+                            case FADE_CURTAIN_SIDES_A1_TOP:
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_BTL_KORTESS_CHANGE1"));
 #else
                             case 0x18: case 0x1B: case 0x3F:
@@ -1050,9 +1050,9 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_BTL_KORTESS_CHANGE1"));
 #endif
                                 break;
 #if VERSION <= VERSION_DEMO_US
-                            case 0x19:
-                            case 0x1C:
-                            case 0x40:
+                            case FADE_CURTAIN_SIDES_A2_3D:
+                            case FADE_CURTAIN_SIDES_A2:
+                            case FADE_CURTAIN_SIDES_A2_TOP:
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_BTL_KORTESS_CHANGE2"));
 #else
                             case 0x19: case 0x1C: case 0x40:
@@ -1060,8 +1060,8 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_BTL_KORTESS_CHANGE2"));
 #endif
                                 break;
 #if VERSION <= VERSION_DEMO_US
-                            case 0x1D:
-                            case 0x23:
+                            case FADE_CURTAIN_CENTER_A1_3D:
+                            case FADE_CURTAIN_CENTER_A1:
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_UP1"));
 #else
                             case 0x1D: case 0x23:
@@ -1069,8 +1069,8 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_UP1"));
 #endif
                                 break;
 #if VERSION <= VERSION_DEMO_US
-                            case 0x1E:
-                            case 0x24:
+                            case FADE_CURTAIN_CENTER_A2_3D:
+                            case FADE_CURTAIN_CENTER_A2:
 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
 #else
                             case 0x1E: case 0x24:
@@ -1089,13 +1089,13 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
 #endif
                         animPoseSetAnim(entry->poseId, entry->animName, TRUE);
                         entry->state++;
-                        if (entry->type == 0x22 || entry->type == 0x28) {
+                        if (entry->type == FADE_CURTAIN_ENTER_3D || entry->type == FADE_CURTAIN_ENTER) {
                             entry->scale = 3.0f;
                             entry->scaleTimer = 0;
                         }
                     case 1:
                         animPoseMain(entry->poseId);
-                        if (entry->type == 0x22 || entry->type == 0x28) {
+                        if (entry->type == FADE_CURTAIN_ENTER_3D || entry->type == FADE_CURTAIN_ENTER) {
                             if (!(entry->flags & FADE_FLAG_NARROW_FAST)) {
                                 if (entry->scaleTimer < FPS_FRAMES(180)) {
                                     entry->scale = intplGetValue(EASING_SINE_OUT, 3.0f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(180));
@@ -1107,7 +1107,7 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
                             }
                         }
                         if (animPoseGetLoopTimes(entry->poseId) >= 1.0f) {
-                            if (entry->type == 0x22 || entry->type == 0x28) {
+                            if (entry->type == FADE_CURTAIN_ENTER_3D || entry->type == FADE_CURTAIN_ENTER) {
                                 if (!(entry->flags & FADE_FLAG_NARROW_FAST)) {
                                     if (entry->scaleTimer == FPS_FRAMES(180)) {
                                         entry->flags |= FADE_FLAG_DONE;
@@ -1123,7 +1123,7 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
                                 entry->flags |= FADE_FLAG_DONE;
                                 entry->state++;
                                 psndSFXOff(entry->sfxId);
-                                if (entry->type == 0x19 || entry->type == 0x1C || entry->type == 0x40) {
+                                if (entry->type == FADE_CURTAIN_SIDES_A2_3D || entry->type == FADE_CURTAIN_SIDES_A2 || entry->type == FADE_CURTAIN_SIDES_A2_TOP) {
                                     animPoseRelease(entry->poseId);
                                     entry->poseId = -1;
                                 }
@@ -1138,8 +1138,8 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
                 }
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 0x21:
-            case 0x27:
+            case FADE_CURTAIN_LEAVE_3D:
+            case FADE_CURTAIN_LEAVE:
 #else
             case 0x21: case 0x27:
 #endif
@@ -1165,58 +1165,58 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
         switch (entry->type) {
 #if VERSION <= VERSION_DEMO_US
             case FADE_CURTAIN_UP_DOWN_A1:
-            case 0x17:
-            case 0x23:
-            case 0x24:
-            case 0x25:
-            case 0x26:
-            case 0x27:
-            case 0x28:
+            case FADE_CURTAIN_VERTICAL_A2:
+            case FADE_CURTAIN_CENTER_A1:
+            case FADE_CURTAIN_CENTER_A2:
+            case FADE_CURTAIN_CENTER_Z2:
+            case FADE_CURTAIN_CENTER_Z1:
+            case FADE_CURTAIN_LEAVE:
+            case FADE_CURTAIN_ENTER:
 #else
             case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28:
 #endif
                 dispEntry(CAMERA_FADE, 0.0f, 0, disp_maku, entry);
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 0x1B:
-            case 0x1C:
-            case 0x3F:
-            case 0x40:
+            case FADE_CURTAIN_SIDES_A1:
+            case FADE_CURTAIN_SIDES_A2:
+            case FADE_CURTAIN_SIDES_A1_TOP:
+            case FADE_CURTAIN_SIDES_A2_TOP:
 #else
             case 0x1B: case 0x1C: case 0x3F: case 0x40:
 #endif
                 dispEntry(CAMERA_FADE2, 0.0f, 0, disp_maku, entry);
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 0x18:
-            case 0x19:
-            case 0x1A:
-            case 0x1D:
-            case 0x1E:
-            case 0x1F:
-            case 0x20:
-            case 0x21:
-            case 0x22:
-            case 0x33:
+            case FADE_CURTAIN_SIDES_A1_3D:
+            case FADE_CURTAIN_SIDES_A2_3D:
+            case FADE_CURTAIN_SIDES_Z1_3D:
+            case FADE_CURTAIN_CENTER_A1_3D:
+            case FADE_CURTAIN_CENTER_A2_3D:
+            case FADE_CURTAIN_CENTER_Z2_3D:
+            case FADE_CURTAIN_CENTER_Z1_3D:
+            case FADE_CURTAIN_LEAVE_3D:
+            case FADE_CURTAIN_ENTER_3D:
+            case FADE_PAGE_FLIP_FOUR:
 #else
             case 0x18: case 0x19: case 0x1A: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x33:
 #endif
                 dispEntry(CAMERA_3D_IMAGE, 0.0f, 0, disp_maku, entry);
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 0x31:
-            case 0x32:
-            case 0x34:
-            case 0x35:
-            case 0x36:
-            case 0x37:
-            case 0x38:
-            case 0x39:
-            case 0x3A:
-            case 0x3B:
-            case 0x3C:
-            case 0x3D:
-            case 0x3E:
+            case FADE_PAGE_FLIP_Z1:
+            case FADE_PAGE_FLIP_A1:
+            case FADE_PAGE_FLIP_Z1_OFFSCREEN:
+            case FADE_PAGE_FLIP_A1_OFFSCREEN:
+            case FADE_STORY_MARIO_A3:
+            case FADE_STORY_MARIO_A1:
+            case FADE_STORY_PEACH_A3:
+            case FADE_STORY_PEACH_A1:
+            case FADE_STORY_BOWSER_A3:
+            case FADE_STORY_BOWSER_A1:
+            case FADE_STORY_MARIO_A2:
+            case FADE_STORY_PEACH_A2:
+            case FADE_STORY_BOWSER_A2:
 #else
             case 0x31: case 0x32: case 0x34: case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: case 0x3A:
             case 0x3B: case 0x3C: case 0x3D: case 0x3E:
@@ -1226,33 +1226,33 @@ entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_STG_START_CURTAIN_DOWN1"));
                 }
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 0xB:
-            case 0xC:
-            case 0xD:
+            case FADE_IN_BLACK_2D:
+            case FADE_OUT_BLACK_2D:
+            case FADE_COVER_BLACK_2D:
 #else
             case 0xB: case 0xC: case 0xD:
 #endif
                 dispEntry(CAMERA_2D, 1000.0f, 0, disp_texture, wp);
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 5:
-            case 6:
-            case 0xE:
-            case 0xF:
+            case FADE_IN_SPOT_3D:
+            case FADE_OUT_SPOT_3D:
+            case FADE_IN_BLACK_3D:
+            case FADE_OUT_BLACK_3D:
 #else
             case 5: case 6: case 0xE: case 0xF:
 #endif
                 dispEntry(CAMERA_3D, 0.0f, 7, disp_texture, wp);
                 break;
 #if VERSION <= VERSION_DEMO_US
-            case 0x29:
-            case 0x2A:
-            case 0x2B:
-            case 0x2C:
-            case 0x2D:
-            case 0x2E:
-            case 0x2F:
-            case 0x30:
+            case FADE_PIPE_UP_A1:
+            case FADE_PIPE_UP_A2:
+            case FADE_PIPE_DOWN_A1:
+            case FADE_PIPE_DOWN_A2:
+            case FADE_PIPE_LEFT_A1:
+            case FADE_PIPE_LEFT_A2:
+            case FADE_PIPE_RIGHT_A1:
+            case FADE_PIPE_RIGHT_A2:
 #else
             case 0x29: case 0x2A: case 0x2B: case 0x2C: case 0x2D: case 0x2E: case 0x2F: case 0x30:
 #endif
@@ -1296,12 +1296,12 @@ void disp_texture(CameraId camId, void* param) {
     camera = camGetPtr(CAMERA_2D);
     work = wp;
     switch (work->entries[0].type) {
-        case 1:
-        case 3:
-        case 5:
+        case FADE_IN_IRIS:
+        case FADE_IN_SPOT:
+        case FADE_IN_SPOT_3D:
         case FADE_IN_BLACK:
-        case 11:
-        case 14:
+        case FADE_IN_BLACK_2D:
+        case FADE_IN_BLACK_3D:
             if (work->entries[0].flags & FADE_FLAG_DONE) {
                 return;
             }
@@ -1327,8 +1327,8 @@ void disp_texture(CameraId camId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     switch (work->entries[0].type) {
-        case 1:
-        case 2:
+        case FADE_IN_IRIS:
+        case FADE_OUT_IRIS:
             GXLoadPosMtxImm(camera->view, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             TEXGetGXTexObjFromPalette(wp->texture, &obj, 0);
@@ -1341,14 +1341,14 @@ void disp_texture(CameraId camId, void* param) {
                 PSMTXTrans(mtx2, -0.5f, -0.5f, 0.0f);
                 PSMTXConcat(mtx1, mtx3, mtx3);
                 PSMTXConcat(mtx3, mtx2, work->entries[0].texMtx);
-            } else if (work->entries[0].type == 2) {
+            } else if (work->entries[0].type == FADE_OUT_IRIS) {
                 PSMTXTrans(work->entries[0].texMtx, 1.0f, 1.0f, 0.0f);
             }
             break;
-        case 3:
-        case 4:
-        case 5:
-        case 6:
+        case FADE_IN_SPOT:
+        case FADE_OUT_SPOT:
+        case FADE_IN_SPOT_3D:
+        case FADE_OUT_SPOT_3D:
             GXLoadPosMtxImm(camera->view, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             TEXGetGXTexObjFromPalette(wp->texture, &obj, 1);
@@ -1364,16 +1364,16 @@ void disp_texture(CameraId camId, void* param) {
                 PSMTXConcat(mtx1, mtx3, mtx3);
                 PSMTXConcat(mtx3, mtx4, mtx3);
                 PSMTXConcat(mtx3, mtx2, work->entries[0].texMtx);
-            } else if (work->entries[0].type == 4 || work->entries[0].type == 6) {
+            } else if (work->entries[0].type == FADE_OUT_SPOT || work->entries[0].type == FADE_OUT_SPOT_3D) {
                 PSMTXTrans(work->entries[0].texMtx, 1.0f, 1.0f, 0.0f);
             }
             break;
         case FADE_IN_BLACK:
         case FADE_OUT_BLACK:
-        case 11:
-        case 12:
-        case 14:
-        case 15:
+        case FADE_IN_BLACK_2D:
+        case FADE_OUT_BLACK_2D:
+        case FADE_IN_BLACK_3D:
+        case FADE_OUT_BLACK_3D:
             GXLoadPosMtxImm(camera->view, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             GXInitTexObj(&obj, i4tex, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -1381,7 +1381,7 @@ void disp_texture(CameraId camId, void* param) {
             PSMTXIdentity(work->entries[0].texMtx);
             work->entries[0].color.a = 255.0f * work->entries[0].progress;
             break;
-        case 13:
+        case FADE_COVER_BLACK_2D:
             GXLoadPosMtxImm(camera->view, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             GXInitTexObj(&obj, i4tex, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -1514,10 +1514,10 @@ void disp_maku(CameraId camId, void* param) {
 
     camera = camGetPtr(camId);
     switch (entry->type) {
-        case 0x17:
-        case 0x19:
-        case 0x1C:
-        case 0x40:
+        case FADE_CURTAIN_VERTICAL_A2:
+        case FADE_CURTAIN_SIDES_A2_3D:
+        case FADE_CURTAIN_SIDES_A2:
+        case FADE_CURTAIN_SIDES_A2_TOP:
             if (entry->flags & FADE_FLAG_DONE) {
                 return;
             }
@@ -1535,11 +1535,19 @@ void disp_maku(CameraId camId, void* param) {
     }
     if (entry->flags & FADE_FLAG_VIRTUAL_POS) {
         camera = camGetPtr(CAMERA_3D);
+#if VERSION > VERSION_DEMO_US
         mag = 3.141592f;
+#endif
         depth = camera->fovY;
+#if VERSION <= VERSION_DEMO_US
+        depth *= 0.5f;
+        mag = depth / 180.0f;
+        depth = tan(3.141592f * mag);
+#else
         // FAKE: depth is halved in place inside the expression; depth * 0.5f / 180.0f changes the object
         depth = (depth *= 0.5f) / 180.0f;
         depth = tan(mag * depth);
+#endif
         depth = 24.0f / depth;
         PSVECSubtract(&camGetPtr(CAMERA_3D)->cameraPos, &entry->VirtualPos, &dist);
         camera = camGetPtr(CAMERA_3D);

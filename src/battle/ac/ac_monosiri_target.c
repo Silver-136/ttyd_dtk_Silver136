@@ -207,6 +207,6 @@ static void actionCommandDisp(f32 x, f32 y) {
     if (__fabs(cw->pos.x - cw->targetPos.x) < 15.0) {
         icon = pressedIcon;
     }
-    iconDispGx(&(Vec){-200.0f + x, 50.0f + y, 0.0f}, 0x10, icon, 1.0f);
+    iconDispGx(&(Vec){-200.0f + x, 50.0f + y, 0.0f}, ICON_FLAG_2D, icon, 1.0f);
 }
 

@@ -45,6 +45,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** The bomb has no status vulnerabilities (all zero). */
+#if VERSION > VERSION_DEMO_US
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -69,30 +70,37 @@ static StatusVulnerability regist = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /** Poses while the fuse has 3 or more turns left (all frames use B_2). */
+#if VERSION > VERSION_DEMO_US
 static PoseTableEntry pose_table_3[] = {
     {POSE_TYPE_NORMAL, "B_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_2"},
     {POSE_TYPE_DAMAGE, "B_2"},
     {POSE_TYPE_ACTION, "B_2"},
 };
+#endif
 
 /** Poses while the fuse has 2 turns left (all frames use B_3). */
+#if VERSION > VERSION_DEMO_US
 static PoseTableEntry pose_table_2[] = {
     {POSE_TYPE_NORMAL, "B_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_3"},
     {POSE_TYPE_DAMAGE, "B_3"},
     {POSE_TYPE_ACTION, "B_3"},
 };
+#endif
 
 /** Poses while the fuse has 1 turn left (all frames use B_4). */
+#if VERSION > VERSION_DEMO_US
 static PoseTableEntry pose_table_1[] = {
     {POSE_TYPE_NORMAL, "B_4"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_4"},
     {POSE_TYPE_DAMAGE, "B_4"},
     {POSE_TYPE_ACTION, "B_4"},
 };
+#endif
 
 /**
  * Unit data of the bomb that Admiral Bobbery's Bomb Squad leaves on the field (its debug name in the game
@@ -182,6 +190,50 @@ BattleWeapon weapon_bomzou_explosion = {
     {0, 10, 10, 100, 30, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {
+    0, // sleep
+    0, // stop
+    0, // dizzy
+    0, // poison
+    0, // confuse
+    0, // electric
+    0, // burn
+    0, // freeze
+    0, // huge
+    0, // tiny
+    0, // attackUp
+    0, // attackDown
+    0, // defenseUp
+    0, // defenseDown
+    0, // allergic
+    0, // fright
+    0, // galeForce
+    0, // fast
+    0, // slow
+    0, // dodgy
+    0, // invisible
+    0, // ohko
+};
+static PoseTableEntry pose_table_3[] = {
+    {POSE_TYPE_NORMAL, "B_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "B_2"},
+    {POSE_TYPE_DAMAGE, "B_2"},
+    {POSE_TYPE_ACTION, "B_2"},
+};
+static PoseTableEntry pose_table_2[] = {
+    {POSE_TYPE_NORMAL, "B_3"},
+    {POSE_TYPE_DAMAGE_GUARDED, "B_3"},
+    {POSE_TYPE_DAMAGE, "B_3"},
+    {POSE_TYPE_ACTION, "B_3"},
+};
+static PoseTableEntry pose_table_1[] = {
+    {POSE_TYPE_NORMAL, "B_4"},
+    {POSE_TYPE_DAMAGE_GUARDED, "B_4"},
+    {POSE_TYPE_DAMAGE, "B_4"},
+    {POSE_TYPE_ACTION, "B_4"},
+};
+#endif
 /**
  * The bomb's single part: the bomb model (c_bakudan), the main target,
  * which cannot be tattled or have its HP shown.
@@ -217,6 +269,14 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(damage_event)
+    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(11), 1)
+    CALL_CHILD(PTR(btldefaultevt_Damage))
+    RETURN
+EVT_END()
+#endif
 /**
  * At the start of each player phase, burns one turn off the fuse and swaps the pose table to the shorter fuse;
  * when the fuse reaches 0 it takes the phase, plays the "B_2" pose for 36 frames and explodes.
@@ -247,6 +307,12 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(attack_event)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+#endif
 /**
  * Idle loop: plays the fuse pose, and once only one turn is left on the fuse puffs a sweat effect above the bomb
  * every 45-89 frames as a warning.
@@ -269,6 +335,12 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(dead_event)
+    CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT_BOMZOU)
+    RETURN
+EVT_END()
+#endif
 /**
  * Battle-end data event (tag 63, run by the battle end sequence):
  * stops the fuse sizzle loop whose sound id Bobbery's Bomb Squad throw stored in unit work 1,
@@ -353,25 +425,31 @@ static BattleDataEntry data_table[] = {
 #endif
 
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
 EVT_END()
+#endif
 
 /** The bomb never acts on its own turn; it just returns to its idle loop. */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Death data event (tag 49): queues explosion_event (tag 53) as an after-reaction,
  * so a bomb that is knocked out still blows up.
  */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT_BOMZOU)
     RETURN
 EVT_END()
+#endif
 
