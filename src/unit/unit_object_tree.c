@@ -96,10 +96,6 @@ static BattleUnitKindPart parts[] = {
  * registers the wait, attack and damage scripts, never moves, and idles. Its part is hidden and has no shadow.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Init for a stage tree the player can hit (spawned by battle_stage_object.c as _entry_tree_data):
- * registers the wait, attack and damage scripts, never moves, and idles. Its part is hidden and has no shadow.
- */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -116,10 +112,6 @@ EVT_END()
  * then tips it over to 90 degrees and snaps it back upright (_turn_tree).
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Hit reaction: wobbles the tree object up and down (_rumble_tree),
- * then tips it over to 90 degrees and snaps it back upright (_turn_tree).
- */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)

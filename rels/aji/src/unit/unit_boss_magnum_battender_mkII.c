@@ -696,13 +696,6 @@ USER_FUNC(get_aud_num) {
  * Blocks until all 20 arrived.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Script function for the audience attack's suction:
- * picks 20 random audience members, makes them spin
- * and fly toward the boss's pod (a dust-cloud effect and SFX_AUDIENCE_PANIC_SCREAM1 start),
- * and removes each when it arrives. The list of 20 is kept for the shots that follow.
- * Blocks until all 20 arrived.
- */
 static USER_FUNC(aud_suikomi) {
 #else
 /**

@@ -95,10 +95,6 @@ s32 _hammer_badge_table[9] = {ITEM_POWER_SMASH, ITEM_PIERCING_BLOW, ITEM_HAMMER_
  * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Started by BattleCommandInput when the player picks a greyed-out command:
- * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
- */
 EVT_BEGIN(_btl_cmd_error_msg_event)
     CALL(_get_msg, LW(0))
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -30, LW(0), 60)

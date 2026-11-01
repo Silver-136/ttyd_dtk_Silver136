@@ -1331,11 +1331,6 @@ static inline double fabs(double x) { return __fabs(x); }
  * Mario's marker at his location, the frame, and bobbing arrows on the sides that can still scroll.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draws the world map panel: the scrolled map texture,
- * the route dots revealed so far (the hovered place blinks), the current chapter's goal icon,
- * Mario's marker at his location, the frame, and bobbing arrows on the sides that can still scroll.
- */
 static void mapGX(WindowWork* w, f32 x, f32 y) {
 #else
 /**
@@ -1484,11 +1479,6 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
  * Doopliss as "?" until his name is guessed), page arrows and the Z sort hint.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draws the Tattle log page: the known/total count,
- * 16 entries in two columns with their log numbers (unknown enemies as "???",
- * Doopliss as "?" until his name is guessed), page arrows and the Z sort hint.
- */
 static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
 #else
 /**

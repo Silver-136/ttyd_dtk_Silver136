@@ -925,10 +925,6 @@ static const char* hpfp_name_table[7][2] = {
  * the chosen target blinks while the item takes effect and the others gray out. Also draws the hand cursor.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * winMgr draw callback for the item target window: Mario with his HP and FP, then each partner with HP;
- * the chosen target blinks while the item takes effect and the others gray out. Also draws the hand cursor.
- */
 static void itemUseDisp(WinMgrEntry* entry) {
 #else
 /**

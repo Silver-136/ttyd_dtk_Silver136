@@ -1005,11 +1005,6 @@ BOOL marioChkShipMoveMode(void) {
  * keeps the engine sound playing and moves Mario; stores the distance moved in mario->moveDist.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Per-frame boat steering: accelerates toward the stick direction,
- * drifts and slows with water friction (shipData constants), adds any whirlpool push,
- * keeps the engine sound playing and moves Mario; stores the distance moved in mario->moveDist.
- */
 static void shipMove(void) {
 #else
 /**

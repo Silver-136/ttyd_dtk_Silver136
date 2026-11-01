@@ -176,10 +176,6 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
  * and cycles its texture frame; deletes the effect once all particles have expired.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Advances every particle (spreading outward, scale from a table then easing to 0.1)
- * and cycles its texture frame; deletes the effect once all particles have expired.
- */
 static void effPeachDustMain(EffectEntry* effect) {
 #else
 /**

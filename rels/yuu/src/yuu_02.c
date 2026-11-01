@@ -148,10 +148,6 @@ Vec fukkipoint[] = {
  * so the checkpoint arrow icon is drawn for the whole minigame.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Event wrapper that runs yuu_02_icon_monte_entry as a blocking view event,
- * so the checkpoint arrow icon is drawn for the whole minigame.
- */
 EVT_BEGIN(yuu_02_icon_monte_entry_evt)
     CALL(yuu_02_icon_monte_entry)
     RETURN

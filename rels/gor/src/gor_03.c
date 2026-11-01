@@ -4116,12 +4116,6 @@ EVT_END()
  * again.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Close callback of building 1's back door: the reverse of evt_door_01_1_open, turning that collision off,
- * hiding
- * the outside models and NPCs again, clearing the doors no-blend flags, restoring the sound and showing "pblk2"
- * again.
- */
 EVT_BEGIN(evt_door_01_1_close)
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_gaitou"), 1, 0)

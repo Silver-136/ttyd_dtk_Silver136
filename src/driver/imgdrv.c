@@ -637,10 +637,6 @@ void imgSetShadow(ImageEntry* entry, s32 shadowId) {
  * so it casts a projected or depth shadow, and counts the shadow draw for shadowdrv.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draw callback on the shadow camera: draws the image's pose with its captured textures into the shadow pass
- * so it casts a projected or depth shadow, and counts the shadow draw for shadowdrv.
- */
 static void imgShadowDisp(CameraId camId, void* param) {
 #else
 /**

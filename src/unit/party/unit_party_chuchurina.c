@@ -2273,10 +2273,6 @@ EVT_END()
  * the move deletes this event when the effect ends.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Kiss Thief's spawned helper: runs mono_main, which draws the captured greyscale screen every frame;
- * the move deletes this event when the effect ends.
- */
 static EVT_BEGIN(main_evt)
     CALL(mono_main)
     RETURN

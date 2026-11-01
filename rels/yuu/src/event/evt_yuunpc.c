@@ -1534,13 +1534,6 @@ static inline void yuunpc_walk(YuuNpc* npc) {
  * and then update their pose.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Per-frame update of the Paper Mode crowd and racers. Spectators are handled like the other games.
- * Racers read the terrain code under them to pick a destination,
- * react to the current wind state of the minigame by walking, running, stopping or jumping,
- * move with hitcheck and fallcheck, are flagged out when they fall below y -100 or -500,
- * and then update their pose.
- */
 static void yuunpc_pose_minigame4_main(void) {
 #else
 /**

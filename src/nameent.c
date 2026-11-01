@@ -835,11 +835,6 @@ s32 nameMain(void) {
  * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draws the name entry screen in 2D: background, the name boxes with the 8 typed characters, the character grid,
- * the side buttons, the caret, the prompt window for this type and, while confirming,
- * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
- */
 static void nameEntDisp(CameraId cameraId, void* param) {
 #else
 /**

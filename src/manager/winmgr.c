@@ -1654,11 +1654,6 @@ static inline s32 select_party_icon(u16 id) {
  * cursor and scroll arrows.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draws the partner list of the rank-up and rank-swap menus:
- * name, portrait (Yoshi in his colour) and one rank icon per rank already earned, with the two column titles,
- * cursor and scroll arrows.
- */
 static void select_disp_party(WinMgrEntry* entry) {
 s32 i;
 #else

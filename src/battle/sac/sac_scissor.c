@@ -964,11 +964,6 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
  * args[0] gets the rating level for the popup when every enemy was hit, else -1; the crowd cheers louder.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Applies one closed loop: scores every enemy the loop covers (skipping KO'd, evasive,
- * untargetable and immune ones and some defense attributes) and hits each with Art Attack.
- * args[0] gets the rating level for the popup when every enemy was hit, else -1; the crowd cheers louder.
- */
 static s32 scissor_damage(EventEntry* evt, BOOL first) {
 #else
 /**

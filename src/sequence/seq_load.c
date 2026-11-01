@@ -926,11 +926,6 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
  * the prompt message and the wobbling cursor (hidden while a card script runs).
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draws the file menu: the four save slot windows (name, level, play time, crystal star icons;
- * new or corrupted file messages), the copy/delete/back buttons, the sound and rumble options,
- * the prompt message and the wobbling cursor (hidden while a card script runs).
- */
 static void loadDraw(CameraId camera, void* param) {
 #else
 /**

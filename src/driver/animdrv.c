@@ -2444,11 +2444,6 @@ static inline void animSetCullMode(s32 cullMode) {
  * including substituted paper textures.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Sets up the material of shape shapeId for draw stage xluStage:
- * the matrices, lighting, cull mode, alpha test and blending, the tint colours and textures,
- * including substituted paper textures.
- */
 static void materialProc(s32 shapeId, s32 xluStage) {
 #else
 /**
@@ -2569,10 +2564,6 @@ static inline AnimationPoseData* rpCurData(void) {
  * and the file's colours and texture coordinates, then sends its polygons.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draws shape shapeId of the current pose: points GX at the pose's evaluated vertex positions and normals
- * and the file's colours and texture coordinates, then sends its polygons.
- */
 static void renderProc(s32 shapeId, s32 unused) {
 #else
 /**
@@ -2850,11 +2841,6 @@ void renderProc(s32 shapeId, s32 unused) {
  * Vivian, Marilyn and Beldam's hair and tail chains are bent towards their movement on the way.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Walks the pose's group tree from groupId (children, then siblings) and draws each visible group:
- * pushes its node matrix, sets up its material and draws its shape.
- * Vivian, Marilyn and Beldam's hair and tail chains are bent towards their movement on the way.
- */
 static void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
 #else
 /**

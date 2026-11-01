@@ -423,11 +423,6 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
  * then the halves separate and tilt.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * State 0 spins the texture and trails dust, with a looping shine sound when allowed.
- * States 1-5 are the drop: it falls under gravity, bounces on the ground (jump sound, puffs),
- * then the halves separate and tilt.
- */
 static void effStarStoneMain(EffectEntry* effect) {
 #else
 /**

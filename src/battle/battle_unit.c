@@ -987,11 +987,6 @@ void _CheckMoveCount(BattleUnit* unit) {
  * A size, attack or defense change of the other sign reads as 0.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Reads a status effect's turns and strength into the optional outputs;
- * for statuses with no strength (sleep, stop, dizzy, ...) both get the turn count.
- * A size, attack or defense change of the other sign reads as 0.
- */
 void BtlUnit_GetStatus(BattleUnit* unit, StatusEffectType type, s8* turns, s8* strength) {
 #else
 /**
@@ -1380,11 +1375,6 @@ void BtlUnit_ClearStatus(BattleUnit* unit) {
  * Returns TRUE when the status just wore off; FALSE when it continues, was not active, or the unit is KO'd.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Counts a status effect down by one turn at the end of the unit's turn (sleep, timed statuses, size,
- * attack and defense changes, poison and regen), clearing its strength when the turns run out.
- * Returns TRUE when the status just wore off; FALSE when it continues, was not active, or the unit is KO'd.
- */
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, StatusEffectType type) {
 #else
 /**

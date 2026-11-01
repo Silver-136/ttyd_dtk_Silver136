@@ -258,10 +258,6 @@ USER_FUNC(pre_kurio_use) {
  * lets Mario move again and unmutes sound effects (retail also restores her floor collision).
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Last step of the field Tattle script: advances kuribo_use to its wind-down state,
- * lets Mario move again and unmutes sound effects (retail also restores her floor collision).
- */
 static USER_FUNC(post_kurio_use) {
 #else
 /**

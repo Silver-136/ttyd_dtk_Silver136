@@ -148,10 +148,6 @@ s32 marioGetPlaneStatus(void) {
  * Called from evt_mario's plane command and when the field motion is changed while flying.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Ends a glide early: switches to the landing phase (sub-motion 50) from the current height.
- * Called from evt_mario's plane command and when the field motion is changed while flying.
- */
 void mario_plane_cancel(void) {
 #else
 /**
@@ -901,12 +897,6 @@ static f32 planeDead270(void) {
  * (mario->hitobjHead). Returns TRUE on any hit, with the hit height in *outY.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Checks the plane against the world: rays ahead of its front point for walls (mario->hitobjFront),
- * downward rays under its front and nose points for a floor (mario->hitobjStandOn,
- * plus from JP on a ray between the two), and with no floor a short upward ray for a ceiling
- * (mario->hitobjHead). Returns TRUE on any hit, with the hit height in *outY.
- */
 static BOOL chkCollision(f32* outY) {
 #else
 /**

@@ -37,13 +37,6 @@ static inline void marioPartyKillSlot1(void) {
  * Always returns 0; marioUsePartyMain later fires the ability.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Partner button check, run every frame from marioMain:
- * X arms MARIO_TRIG_FLAG_USE_PARTNER with a 5-frame partyUseDelay when Mario stands,
- * walks or dashes with a usable partner.
- * Airborne, field-battle locks, slits, an airborne Goombella or a busy Yoshi block or cancel it.
- * Always returns 0; marioUsePartyMain later fires the ability.
- */
 s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;

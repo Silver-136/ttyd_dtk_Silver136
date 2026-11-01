@@ -137,11 +137,6 @@ static const Vec vecB = {0.0f, 0.0f, 0.0f};
  * then a 1.5 s speech-bubble effect over her. In the retail versions a far find skips the sniff.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Script helper: reads set_msg's result (LW0 message, LW1 2 near / 1 far / 0 nothing) and,
- * if something was found, plays a 42-frame sniff (sound 0x945, pose PCH_Y_1) and
- * then a 1.5 s speech-bubble effect over her. In the retail versions a far find skips the sniff.
- */
 static USER_FUNC(search_result) {
 #else
 /**

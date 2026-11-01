@@ -589,11 +589,6 @@ EVT_END()
  * and the center wall "A_center_kabe_atr" once Gus has been beaten or paid off.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Turns the east side's collision pieces back on after gor_02_hitobj_off,
- * then reopens the ones that must stay open: the fence piece "A_saku_04" once the fence has been removed,
- * and the center wall "A_center_kabe_atr" once Gus has been beaten or paid off.
- */
 EVT_BEGIN(gor_02_hitobj_on)
     CALL(evt_hitobj_onoff, STRING("A_kabe"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_saku"), 1, 1)
@@ -1288,10 +1283,6 @@ s32 powerupya_item_tbl[] = {
  * spawned while he spins up in the air in powerupya_orb_use and stopped with DELETE_EVENT.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Loops forever spawning a Stardust particle burst above Merlon's NPC every frame;
- * spawned while he spins up in the air in powerupya_orb_use and stopped with DELETE_EVENT.
- */
 EVT_BEGIN(powerupya_stardust)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -1308,10 +1299,6 @@ EVT_END()
  * depending on whether he is south of z=-210, and faces him right.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Walks Mario to the spot beside the stone (-395, -160) or (-404, -220),
- * depending on whether he is south of z=-210, and faces him right.
- */
 EVT_BEGIN(powerupya_mario_move)
     WAIT_MS(200)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1334,10 +1321,6 @@ EVT_END()
  * by the same two routes as powerupya_mario_move.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Walks the active partner to the spot beside the stone (-425, -186),
- * by the same two routes as powerupya_mario_move.
- */
 EVT_BEGIN(powerupya_party_move)
     WAIT_MS(200)
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1564,12 +1547,6 @@ EVT_END()
  * Falls back to powerup_ev_03 or powerup_05.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Talk event of Merlon in the retail versions, run when the player talks to him at the portent point.
- * If the portent is pending he describes it (powerup_ev_01 and 02) while the door opens;
- * otherwise, if Mario has the Up Arrow, asks him to hand it over and runs powerupya_orb_use.
- * Falls back to powerup_ev_03 or powerup_05.
- */
 EVT_BEGIN(powerupya_talk)
     IF_INT_EQUAL(GSWF_GOR_MERLON_HINT_PENDING, 1)
         IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
@@ -4814,11 +4791,6 @@ USER_FUNC(lecture) {
  * Gus, Bonetail and the Atomic Boo are checked after the per-stage lists.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Finds the next enemy tattle that Mario can still learn at this story stage:
- * returns in args[0] 1 if one exists, and its enemy id in args[1].
- * Gus, Bonetail and the Atomic Boo are checked after the per-stage lists.
- */
 static USER_FUNC(monosiri_check) {
 #else
 /**

@@ -1710,11 +1710,6 @@ ExtTexInfo ext_fan_data[] = {
  * and starts the crowd noise SFX_STG3_AUDIENCE_FAN1, keeping its full volume.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Init callback of the lobby fan crowd (extdrv sprites): allocates FanWork and one Fan per pose, gives each fan
- * a random facing, a random Toad, Toadette or Lakitu walk animation and a random spot within 100 of the centre,
- * and starts the crowd noise SFX_STG3_AUDIENCE_FAN1, keeping its full volume.
- */
 static void ext_fan_init(void) {
 #else
 /**

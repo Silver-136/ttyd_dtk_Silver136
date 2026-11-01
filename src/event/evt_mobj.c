@@ -1378,12 +1378,6 @@ USER_FUNC(evt_mobj_jumpstand_blue) {
  * and plays the "P_box_y" paper-peel animation through an offscreen capture before deleting itself.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Main function of the hammer-level blocks: a hit only counts with a strong enough hammer (Lv1 any,
- * Lv1 huge block needs Super Hammer and a spin-charged hammer, Lv2 needs Ultra Hammer).
- * It then runs the event, sets the flag variable
- * and plays the "P_box_y" paper-peel animation through an offscreen capture before deleting itself.
- */
 static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
 #else
 /**
@@ -3201,11 +3195,6 @@ USER_FUNC(evt_mobj_powerupblk) {
  * capture, then deletes itself.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Main function of the brick blocks: when hit it runs the event,
- * sets the flag variable and breaks apart with the "P_box_y" paper-peel animation drawn through an offscreen
- * capture, then deletes itself.
- */
 static s32 mobj_brickblk(MapObjectEntry* mobj) {
 #else
 /**
@@ -3306,11 +3295,6 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
  * and starts a 200-frame window in which every further hit gives another coin; then it becomes an empty block.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Main function of the coin blocks that pay out several coins (MOBJ_10CountBlock):
- * the first hit gives a coin, sets the flag variable (or runs the event instead)
- * and starts a 200-frame window in which every further hit gives another coin; then it becomes an empty block.
- */
 static s32 mobj_10countblk(MapObjectEntry* mobj) {
 #else
 /**
@@ -3520,10 +3504,6 @@ USER_FUNC(evt_mobj_brick) {
  * sets the flag variable, turns off the panel's collision and fades it out over 64 frames before deleting it.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Main function of the breakable floor panels: a spin jump onto one (Super Boots) runs the event,
- * sets the flag variable, turns off the panel's collision and fades it out over 64 frames before deleting it.
- */
 static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
 #else
 /**
@@ -4983,13 +4963,6 @@ USER_FUNC(evt_mobj_koopa_sango) {
  * event, flag, 400/500 points, and the fireballs fly off towards the camera and are deleted.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Main function of the Fire Bar platforms in Bowser's stages:
- * rotates its column of c_fireber NPCs around the base every frame (typeDataF[3] degrees) with a crackling sound
- * while Mario is near.
- * Fire breath (anything at level 3) breaks the base:
- * event, flag, 400/500 points, and the fireballs fly off towards the camera and are deleted.
- */
 static s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
 #else
 /**

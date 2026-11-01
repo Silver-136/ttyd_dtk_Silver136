@@ -462,12 +462,6 @@ void main_target(void) {
  * and a poison mushroom makes Mario dizzy. The audience cheers or boos.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Moves one of Mario's shots (with a three-point trail):
- * launches it from Mario at the reticle angle under gravity, and when it comes close to a falling item pops it:
- * hearts add 1 to Mario's HP total (big ones 3), partner icons to the partner's HP, flowers to FP,
- * and a poison mushroom makes Mario dizzy. The audience cheers or boos.
- */
 static void main_weapon(s32 idx) {
 #else
 /**

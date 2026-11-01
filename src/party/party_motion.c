@@ -2072,10 +2072,6 @@ void party_set_behind_dir(PartyEntry* party, f32 dir) {
  * Mario, or for a second partner the first one when it is out.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Movement direction (degrees) of whoever this partner follows:
- * Mario, or for a second partner the first one when it is out.
- */
 static inline f32 partyGetFollowDir(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     PartyEntry* other;
@@ -2613,12 +2609,6 @@ void party_motion_beside_mario(PartyEntry* party) {
  * so the partner does not move sideways at all.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Moves a jumping partner forward by moveSpeed along targetDir, stopped by walls;
- * records the wall in hitobjFront/hitobjPush.
- * With the front wall check disabled it moves a scratch vector that is never stored,
- * so the partner does not move sideways at all.
- */
 static inline void partyJumpFrontMove(PartyEntry* party) {
     // With front-wall checks disabled, only the local Vec is moved; the party position is not updated.
     Vec v;
@@ -3187,10 +3177,6 @@ void allPartySlitOn(void) {
  * Called from mot_slit.c.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Mario left Paper Mode: both partners still in it start their turn-back animation (slitStep 40).
- * Called from mot_slit.c.
- */
 void allPartySlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party && (party->flags & PARTY_FLAG_PAPER_MODE) && party->slitStep < 40) {
@@ -3208,10 +3194,6 @@ void allPartySlitOff(void) {
  * and by the all_party_slit_off script helper.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Ends Paper Mode at once on both partners; used when Mario's own Paper Mode is cut short (mot_slit.c)
- * and by the all_party_slit_off script helper.
- */
 void allPartyForceSlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -3452,12 +3434,6 @@ BOOL party_slit(PartyEntry* party) {
  * Guess: an unused partner tube mode.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * A roll state like Mario's tube mode ("p_roll" paper animation, PM_R_1A/1B) for slitOn 2,
- * spinning with speed and ending at slitStep 100; returns FALSE while ending.
- * Nothing in the tree sets slitOn to 2, so as built it returns TRUE at once.
- * Guess: an unused partner tube mode.
- */
 BOOL party_roll(PartyEntry* party) {
     BOOL ret = TRUE;
     f32 x;
@@ -3566,10 +3542,6 @@ BOOL party_roll(PartyEntry* party) {
  * Any other flying partner gets an unset value.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Close-follow distance: 18 for walking partners; 30 for Flurrie and Vivian, 8 during a door move.
- * Any other flying partner gets an unset value.
- */
 static f32 partyStayDist(PartyEntry* party) {
     // Nonzero moveKind is supported here only for Flurrie and Vivian.
     f32 d;
@@ -3946,10 +3918,6 @@ void party_force_reset_outofscreen(PartyEntry* party) {
  * moves the partner to (122, 130, -313). Guess: works around a partner stuck on the upper floor.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Rogueport (gor_01): when Mario stands on one floor of a house and the partner on the floor above it,
- * moves the partner to (122, 130, -313). Guess: works around a partner stuck on the upper floor.
- */
 static void partyGorFix(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     if (!strcmp(gp->currentMapName, "gor_01") && mario->hitobjStandOn && party->hitobjStandOn &&
@@ -3964,6 +3932,8 @@ static void partyGorFix(PartyEntry* party) {
  * Ms. Mowz's sniffing pose (PCH_A2_1) for 30 frames,
  * when chuchu_searchObject finds an item or hidden treasure within 150 units of Mario.
  */
+// The demos define the jump, follow, stay, damage, slit and roll motions here, after the helpers above; retail defines
+// them earlier in the file. The object's function order follows the definitions, so each order keeps its own copies.
 #if VERSION <= VERSION_DEMO_US
 /**
  * Moves a jumping partner forward by moveSpeed along targetDir, stopped by walls;

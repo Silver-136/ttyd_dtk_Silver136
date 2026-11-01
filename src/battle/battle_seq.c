@@ -78,10 +78,6 @@ EVT_END()
  * pops the stage background layers in with _set_haikei_entry_scale.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Started by btlseqFirstAct on a normal battle start (no first strike):
- * pops the stage background layers in with _set_haikei_entry_scale.
- */
 EVT_BEGIN(_default_haikei_set_entry_event)
     CALL(_set_haikei_entry_scale)
     RETURN
@@ -2213,14 +2209,6 @@ BOOL BattlePhaseEndCheck(void) {
  * the audience reaction and the unit's act-end event, and returns to btlseqMove.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * SEQ_ACT steps, one unit's action: Mario or the partner gets the command menu (BattleCommandInput)
- * unless asleep, stopped, frozen or KO'd (turn skipped), veiled by Vivian or flipped (their own data scripts).
- * Then runs the chosen attack script, or the zero-gravity can't-move script,
- * or the confused action half the time when Confused;
- * afterwards updates moves left, Charge, Double/Triple Dip progress,
- * the audience reaction and the unit's act-end event, and returns to btlseqMove.
- */
 static void btlseqAct(BattleWork* wp) {
 #else
 /**

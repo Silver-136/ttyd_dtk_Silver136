@@ -196,10 +196,6 @@ EVT_END()
  * while its text is shown (it is spawned next to every statue message).
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Makes the statue's lower jaw (kuti, kuti2) flap for three open-and-close cycles
- * while its text is shown (it is spawned next to every statue message).
- */
 EVT_BEGIN(sekizou_talk)
     RETURN
 EVT_END()

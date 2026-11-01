@@ -1020,11 +1020,6 @@ USER_FUNC(tiz_stone) {
  * each tile whose delay is over is drawn flying off with its own rotation and velocity.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draw callback of the screen-shatter effect.
- * On the first call it copies the frame to a texture, then draws it as a 38 by 30 grid of 16 pixel tiles;
- * each tile whose delay is over is drawn flying off with its own rotation and velocity.
- */
 static void tiz_broken_draw(CameraId cameraId, void* param) {
 #else
 /**
@@ -1144,13 +1139,6 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
  * Parts of it are written with hand-expanded math to keep the original code.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Blocking script helper for evt_mapwrite: shatters the screen into the item-get view. On the first call it sets
- * up a 38 by 30 grid of tiles, each flying outward from the centre after a delay proportional to its distance
- * (param_tbl); every frame it moves the tiles and queues tiz_broken_draw on camera 8, and it returns once every
- * tile has left the screen (|x| over 340 or |y| over 260), freeing its buffers.
- * Parts of it are written with hand-expanded math to keep the original code.
- */
 static USER_FUNC(tiz_broken) {
 #else
 /**
@@ -1454,12 +1442,6 @@ USER_FUNC(map_bgmode_end) {
  * The speed ramps up over the first 20 percent of the time and down over the last 20 percent.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Script helper that turns the camera around the pedestal.
- * args: [0] start angle, [1] end angle, [2] duration in ms, [3] receives the current angle,
- * [4] receives 1 while still turning and 0 when done.
- * The speed ramps up over the first 20 percent of the time and down over the last 20 percent.
- */
 static USER_FUNC(cam_mahojin_kaiten_main) {
 #else
 /**

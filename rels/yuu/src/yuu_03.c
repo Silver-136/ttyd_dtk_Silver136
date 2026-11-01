@@ -479,10 +479,6 @@ USER_FUNC(evt_ryushi_clr) {
  * wraps them around the view, fades them in and out with the state timer, and queues ryushi_disp.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Per-frame update of the wind particles: moves them at a speed set by the current Paper Mode wind state,
- * wraps them around the view, fades them in and out with the state timer, and queues ryushi_disp.
- */
 static USER_FUNC(evt_ryushi) {
 #else
 /**

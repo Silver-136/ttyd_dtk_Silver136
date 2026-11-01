@@ -907,11 +907,6 @@ s32 end_overlay_tex_tbl[6] = {52, 52, 54, 55, 55, 56};
  * by driving evt_end_image_set_mode and the TEV blend value.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Japanese release and later: loops the two ending pictures during the last credit image:
- * shows one, cross-fades to the next and back, with long holds (about 18 s) and 4 s fades,
- * by driving evt_end_image_set_mode and the TEV blend value.
- */
 EVT_BEGIN(end_image_blend_loop)
     LOOP(0)
         CALL(evt_end_image_set_mode, 1)
@@ -2369,10 +2364,6 @@ USER_FUNC(evt_end_moamoa_exit) {
  * raises it up the screen over 2 seconds, holds it for 3 seconds, lowers it away, and cleans it up.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Parade script for the giant Smorg: builds the big Smorg out of 300 small Moamoa as a silhouette,
- * raises it up the screen over 2 seconds, holds it for 3 seconds, lowers it away, and cleans it up.
- */
 EVT_BEGIN(end_credit_moamoa_evt)
     CALL(evt_npc_entry, STRING("モアモアダミー"), STRING("c_n_moa_a"))
     CALL(evt_npc_set_position, STRING("モアモアダミー"), 0, -1000, 0)

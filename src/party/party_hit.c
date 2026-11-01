@@ -594,12 +594,6 @@ static inline void partyWallSlide(Vec* out, Vec n, f32 d, f32 sn, f32 cs) {
  * No callers in this tree.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Wall probe with Mario's filter (marioHitCheckVec) at 0.75 and 0.5 of the height and step height (11,
- * or 1 when airborne or yoshiGetStatus() is 2; an extra 1-unit ray in one corner of gor_02):
- * slides *pos along the nearest wall, or moves it by dist; it stays put when both diagonals are blocked.
- * No callers in this tree.
- */
 HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     Vec qpos;
     Vec qdir;

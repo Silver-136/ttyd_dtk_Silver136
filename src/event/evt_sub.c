@@ -126,10 +126,6 @@ s32 tree_data[] = {
  * and read how long it has run with evt_sub_get_stopwatch (Peach's timed tasks in aji_06, aji_16 and aji_17).
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Stopwatch script that just waits a frame forever: scripts spawn it with SPAWN_EVENT_GET_ID
- * and read how long it has run with evt_sub_get_stopwatch (Peach's timed tasks in aji_06, aji_16 and aji_17).
- */
 EVT_BEGIN(evt_sub_stopwatch)
     LOOP(0)
         WAIT_FRAMES(1)
@@ -281,12 +277,6 @@ WinMgrDesc coinget_window_desc[] = {
  * and LW(3)/LW(4) (leaves, shifted) through tree_data for 25 frames. Run per tree by evt_sub_tree_access_entry.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Shakes a tree hit with the hammer: plays the tree and leaves sounds,
- * drops falling-leaf effects (LW(0) picks the leaf variant), spawns the optional drop script in LW(5),
- * then sways map objects LW(2) (trunk, rotated)
- * and LW(3)/LW(4) (leaves, shifted) through tree_data for 25 frames. Run per tree by evt_sub_tree_access_entry.
- */
 EVT_BEGIN(tree_evt)
     SET_TYPE(0)
     SET_VALUE(LF(0), 0)
@@ -350,11 +340,6 @@ EVT_END()
  * and registers a hammer case on each hit object that runs tree_evt.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Map setup helper: walks the tree table at LW(0) (rows of six words: leaf variant 0-6, hit object, trunk,
- * leaves, leaves, drop script; a first word of 7 ends it)
- * and registers a hammer case on each hit object that runs tree_evt.
- */
 EVT_BEGIN(evt_sub_tree_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -375,11 +360,6 @@ EVT_END()
  * Run per bush by evt_sub_kusa_access_entry.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Shakes a bush Mario checks: plays the grass sound at Mario, spawns the optional drop script in LW(3),
- * and sways map object LW(2) sideways through kusa_data for 12 frames.
- * Run per bush by evt_sub_kusa_access_entry.
- */
 EVT_BEGIN(kusa_evt)
     SET_TYPE(0)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
@@ -405,11 +385,6 @@ EVT_END()
  * kusa_evt.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Map setup helper: walks the bush table at LW(0) (rows of four words: kind, hit object, map object,
- * drop script; a first word of 4 ends it) and registers an A-button case in front of each one that runs
- * kusa_evt.
- */
 EVT_BEGIN(evt_sub_kusa_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)

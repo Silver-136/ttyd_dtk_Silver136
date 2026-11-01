@@ -1397,10 +1397,6 @@ static inline BOOL marioChkRollMot(void) {
  * so a jump or fall finishes; skipped for plane, boat, damage, pits, accordion, Yoshi and Vivian's shadow.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Runs Mario's motion and physics while control is off through marioCtrlOff2 (the pause menu opening),
- * so a jump or fall finishes; skipped for plane, boat, damage, pits, accordion, Yoshi and Vivian's shadow.
- */
 static void marioCtrlOff2Main(void) {
 #else
 /**
@@ -1568,12 +1564,6 @@ void marioMove(void) {
  * from the Japanese release on) and spikes.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Mario's horizontal movement: forced moves (Yoshi, tube, boat),
- * air steering from the stick (weaker with Slow Go or as a tube), shallow-water slowdown, damage floors,
- * slopes and moving floors, the air speed cap, then the wall checks (plus the dou_10 side spears while a tube,
- * from the Japanese release on) and spikes.
- */
 static void marioMoveMain(void) {
 #else
 /**
@@ -2464,10 +2454,6 @@ void marioDispBlur(CameraId camId, void* param) {
  * offsets and tube squash, draws the pose and runs the animation at 75% speed in shallow water.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draw callback for Mario: builds his model matrix from scale, the facing mirror, rotation,
- * offsets and tube squash, draws the pose and runs the animation at 75% speed in shallow water.
- */
 static void marioDisp(CameraId camId, void* param) {
 #else
 /**

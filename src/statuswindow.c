@@ -326,10 +326,6 @@ static inline void numDisp(f32 x, f32 y, s32 value, BOOL small) {
  * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draws the HUD: the HP, FP, Star Power and coin/Star Point banners with their icons and numbers,
- * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
- */
 static void statusWinDisp(CameraId camId, void* param) {
 #else
 /**
@@ -496,10 +492,6 @@ void statusWinDisp(CameraId camId, void* param) {
  * from Mario's and the partner's battle units in battle.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Reads the values the HUD shows: from the pouch in the field (the partner from the party),
- * from Mario's and the partner's battle units in battle.
- */
 static void statusGetValue(StatusValue* values) {
 #else
 /**

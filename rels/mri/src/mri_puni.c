@@ -2782,10 +2782,6 @@ void puniModeSearch(PuniData* p) {
  * nudging away when too close and jittering sideways on floors 13 and 18 when it stands still.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Gather mode: the Puni walks to a gather target (targets with PUNI_TARGET_FLAG_MASS, e.g. a Puni Orb pedestal),
- * nudging away when too close and jittering sideways on floors 13 and 18 when it stands still.
- */
 static void puniModeMass(PuniData* p) {
 #else
 /**
@@ -3561,13 +3557,6 @@ void puniModeWind(PuniData* p) {
  * a Puni that falls out of the world is put back at the recovery position.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Fall mode: the Puni falls under gravity (0.45 per frame) until it hits something.
- * Depending on what it lands on (attribute 0x100, 0x200,
- * a pit marker target or ordinary floor) it chooses the next mode:
- * the trap/pedestal modes, the water mode or lost mode;
- * a Puni that falls out of the world is put back at the recovery position.
- */
 static void puniModeFall(PuniData* p) {
 #else
 /**
@@ -6269,14 +6258,6 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
  * The blockers 103 to 109 are placed at the down pipes.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Sets up the Puni crowd when a map starts (called through mri_puni_init).
- * args[0] = 2 means the map was entered through a loading zone, whose direction in args[2] sets the entry flags;
- * Punies that Mario had with him (those the story has recruited: Punio, his sister, the little Jabbi,
- * the rival and the first GSW_MRI_PUNI_FOLLOWERS+4 others) are placed either beside Mario after a save load,
- * walking in from the loading zone, or at their saved lost position; trapped ones are skipped.
- * The blockers 103 to 109 are placed at the down pipes.
- */
 static USER_FUNC(evt_puni_setup) {
 #else
 /**
@@ -7596,11 +7577,6 @@ USER_FUNC(puni_disp_info_kassencheck) {
  * packed in the parameter) with the icon for the counter background, faded by the counter opacity.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draw callback for the Puni counter at the lower left of the screen: skipped while a shop menu is open;
- * draws the pair of numbers (count in the map and total with Mario,
- * packed in the parameter) with the icon for the counter background, faded by the counter opacity.
- */
 static void puniCountDisp(CameraId unused, void* param) {
 #else
 /**

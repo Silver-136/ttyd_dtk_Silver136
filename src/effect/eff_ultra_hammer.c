@@ -575,10 +575,6 @@ EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 
  * each of the three rings waits for its start delay, then runs its 25-step scroll/scale table and repeats.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Counts down and fades alpha in the last 16 frames;
- * each of the three rings waits for its start delay, then runs its 25-step scroll/scale table and repeats.
- */
 static void effUltraHammerMain(EffectEntry* effect) {
 #else
 /**

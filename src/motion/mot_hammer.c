@@ -758,11 +758,6 @@ void mot_ham2_post(void) {
  * 7 something just above Mario's head height) that picks the swing pose and sound.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Probes in front of Mario where the hammer will land and returns the hit object, or NULL;
- * *out gets the hit kind (0 nothing, 4/5/6 a wall or object at high, middle or low height,
- * 7 something just above Mario's head height) that picks the swing pose and sound.
- */
 static HitEntry* hitEstimate(s32* out) {
 #else
 /**

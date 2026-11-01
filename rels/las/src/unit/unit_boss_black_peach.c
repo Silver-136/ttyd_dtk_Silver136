@@ -4737,10 +4737,6 @@ USER_FUNC(queen_hand_small_1000hand_set_offset_evt) {
  * randomised positions, ready for the thousand-hands attack.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Script helper (runs until done): raises the swarm of small hands from below the floor (y from -80 to 0) in
- * randomised positions, ready for the thousand-hands attack.
- */
 static USER_FUNC(queen_hand_small_1000hand_2_evt) {
 #else
 /**
@@ -5118,10 +5114,6 @@ USER_FUNC(queen_hand_small_dead_evt) {
  * positions; used when the small hand unit enters.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Script helper (runs until done): raises the swarm of small hands out of the floor (y -80 to 0) at randomised
- * positions; used when the small hand unit enters.
- */
 static USER_FUNC(queen_hand_small_entry_evt) {
 #else
 /**
@@ -5215,10 +5207,6 @@ USER_FUNC(peach_shock_evt) {
  * raises the hand swarm in front of the stage as the queen takes her heal.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Script helper (runs until done): the last stage of the HP drain:
- * raises the hand swarm in front of the stage as the queen takes her heal.
- */
 static USER_FUNC(queen_hp_drain_5_evt) {
 #else
 /**
@@ -5366,10 +5354,6 @@ USER_FUNC(queen_hp_drain_3_evt) {
  * the HP drain.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Script helper (runs until done): raises a hand swarm from y -110 to -30 closer to the audience (Z 270) during
- * the HP drain.
- */
 static USER_FUNC(queen_hp_drain_2_evt) {
 #else
 /**
@@ -5497,10 +5481,6 @@ USER_FUNC(queen_kankyaku_delete_evt) {
  * 200 units left.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Script helper (runs until done): raises the hand swarm for the possessed Peach's dark drag attack, shifted
- * 200 units left.
- */
 static USER_FUNC(peach_hand1000_dark_drag_1_evt) {
 #else
 /**

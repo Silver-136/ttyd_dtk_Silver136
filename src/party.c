@@ -1006,10 +1006,6 @@ void partyPrevRunMode(PartyEntry* party) {
  * ending her ability first (evt_party and party_move).
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Returns the partner to the run mode she had before the current one,
- * ending her ability first (evt_party and party_move).
- */
 void partyPrevRunMode(PartyEntry* party) {
     if (party->runMode == party->prevRunMode) {
         return;
@@ -1103,11 +1099,6 @@ s32 partyDokanMain(PartyEntry* party);
  * A frozen partner only gets drawn. Afterwards updates dust, the off-screen flag and her display.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Runs one partner's frame by run mode (see partyChgRunMode):
- * her move, ability, appear, goodbye, pipe, ride and damage handlers, or frees her in mode 14.
- * A frozen partner only gets drawn. Afterwards updates dust, the off-screen flag and her display.
- */
 static void driveParty(PartyEntry* party) {
 #else
 /**
@@ -2933,11 +2924,6 @@ s32 partyRideYoshiMain(PartyEntry* party) {
  * waits for Mario's return fall, then drops her in from above next to him and resumes following.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Brings the partner back after Mario takes damage from a pit or spikes (run mode 13):
- * after a splash it waits 100 frames, plays her hurt pose, flies her up off screen,
- * waits for Mario's return fall, then drops her in from above next to him and resumes following.
- */
 static void party_damage_return(PartyEntry* party) {
 #else
 /**
@@ -3190,11 +3176,6 @@ void partyMakeDispDir(PartyEntry* party) {
  * then draws her shadow, following Vivian's shadow tail when she is out or used.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Applies the partner's pose and paper animation changes,
- * advances her model and queues her draw at her screen depth (flickering while invincible after damage),
- * then draws her shadow, following Vivian's shadow tail when she is out or used.
- */
 static void partyPreDisp(PartyEntry* party) {
 #else
 /**

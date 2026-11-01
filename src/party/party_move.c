@@ -171,10 +171,6 @@ static void getTargetPos(s32 id, Vec* pos) {
  * Koops's nokonokoGetStatus is not 3 and it is within 150 units of Mario, else Mario.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Where trail id is chasing: the other party member (anotherPartyGetPtr) when it exists,
- * Koops's nokonokoGetStatus is not 3 and it is within 150 units of Mario, else Mario.
- */
 void L_getTargetPos(s32 id, Vec* pos) {
     MarioWork* mario2;
     MarioWork* mario;
@@ -772,10 +768,6 @@ static inline f32 partySpdRate(PartyEntry* party) {
  * Mario's own speed while he pushes) and returns it; with no target it slows to a stop.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Eases moveSpeed toward the target speed (targetSpeed scaled by Mario's playerGravity, 0.75 in shallow water;
- * Mario's own speed while he pushes) and returns it; with no target it slows to a stop.
- */
 static inline f32 partyUpdSpd(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 f;
@@ -919,11 +911,6 @@ void partyPlaySfxPartyLanding1(PartyEntry* party) {
  * the rest alternate two steps.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Footstep sounds, counted on footstepTimer; arg 0 walking, 1 running (steps twice as often).
- * Flavio, the Yoshi egg and Punio have their own sounds and timing, flying partners (moveKind 1) a single sound;
- * the rest alternate two steps.
- */
 void partyWalkSe(PartyEntry* party, s32 arg) {
     s32 leftStepFrame;
     s32 stepFrames;
@@ -1122,11 +1109,6 @@ void partyMoveNoHosei(PartyEntry* party) {
  * hosei 1 adds the corrections of partyGetMoveDirSpd.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Moves the partner one frame: walls in front (or a straight move with wall checks off), the ceiling,
- * then a jump or the ground search and falling. Returns 0 on the ground, 1 jumping, 2 falling, 3 just landed.
- * hosei 1 adds the corrections of partyGetMoveDirSpd.
- */
 static s32 partyMoveMain(PartyEntry* party, s32 hosei) {
 #else
 /**
@@ -2092,11 +2074,6 @@ static inline void partyAppearMoveBack(Vec* out, f32 d, f32 ang) {
  * Returns FALSE if none; out starts at Mario's position. On the plane it keeps Mario's position.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Where the partner appears next to Mario: 30 units behind him (behind and to the side when he has two party
- * members), else to his sides or front, the first spot with no wall in the way and floor within 100 units below.
- * Returns FALSE if none; out starts at Mario's position. On the plane it keeps Mario's position.
- */
 BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
     HitCheckQuery query;
     f32 s;
@@ -2293,10 +2270,6 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
  * places a partner as it joins or appears (party.c).
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Like partyGetAppearPos but checks only behind or beside Mario, with floor within 38 units below;
- * places a partner as it joins or appears (party.c).
- */
 BOOL partyGetAppearPos2(PartyEntry* party, Vec* out) {
     HitCheckQuery query;
     f32 s;
@@ -2379,12 +2352,6 @@ BOOL partyGetAppearPos2(PartyEntry* party, Vec* out) {
  * Used by Goombella, Ms. Mowz and party_motion.c to put the partner back by Mario.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Finds a free spot 30 units from Mario in nine directions around his facing:
- * no wall, floor within 87 units at under 60 degrees, no NPC close.
- * If every spot has an NPC it takes the one farthest from it.
- * Used by Goombella, Ms. Mowz and party_motion.c to put the partner back by Mario.
- */
 BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
     HitCheckQuery query;
     s32 angles[9] = {45, 135, -135, 315, -315, 180, -180, 90, -90};
@@ -2480,11 +2447,6 @@ static inline void partyAppearAdjustY(PartyEntry* party, MarioWork* mario, Vec* 
  * door walks in Twilight Town's usu_00 use their own fan. Falls back to partyGetAppearPos and returns FALSE.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * The partner's follow spot: radius units (26, 28 on door walks, 32 for Flurrie) from Mario,
- * or from the other party member, in direction homeDir, else fanned around it;
- * door walks in Twilight Town's usu_00 use their own fan. Falls back to partyGetAppearPos and returns FALSE.
- */
 BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
     PartyEntry* other = NULL;
     MarioWork* mario = party->playerPtr;

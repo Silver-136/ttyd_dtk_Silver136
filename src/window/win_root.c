@@ -2815,13 +2815,6 @@ void winZClear(void) {
  * its picture (flags 0x1000) and scroll arrows.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draws the mail window opened from the Items page while it is on screen.
- * As a list: one row per letter with a sender colour (MailData flags 1/2/4), an opened/unopened envelope,
- * its two-digit number and title.
- * While a letter is read (item.state 202): its header, the body scrolled by mailLine,
- * its picture (flags 0x1000) and scroll arrows.
- */
 static void winMailDisp(WindowWork* wp) {
 #else
 /**

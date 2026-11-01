@@ -322,11 +322,6 @@ void kpaMain(void) {
  * then the shared player effects, balloon and camera.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Side-scrolling Bowser update: hit checks, item pickup, the fire attack, the star timer,
- * horizontal movement limited by his dash speed and walls, jumping and falling, floors and ceilings,
- * then the shared player effects, balloon and camera.
- */
 static void kpa2DMain(void) {
 #else
 /**

@@ -841,10 +841,6 @@ static inline void shadowSetMatZero(void) {
  * each volume darkens the ground it passes through, and its screen area goes to the shadow's offscreen region.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Draws the cylinder (mode 2, the default) character shadows:
- * each volume darkens the ground it passes through, and its screen area goes to the shadow's offscreen region.
- */
 static void cylinderShadowDraw(CameraId cameraId, void* param) {
 #else
 /**

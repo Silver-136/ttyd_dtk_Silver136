@@ -135,12 +135,6 @@ static const char bti04[7];
  * timeout; states 10/11 end a debug battle).
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Per-frame battle sequence: curtain fade, audience texture loads,
- * waits out a pending first strike (up to 200 frames), loads the bti_01..04 audience stage for Mario's rank,
- * starts the battle via battle_init, then once the battle ends returns to the field (or game over on a kiosk
- * timeout; states 10/11 end a debug battle).
- */
 void seq_battleMain(SequenceWork* work) {
     FieldBattleData* fbat;
     BattleStageData* stage;

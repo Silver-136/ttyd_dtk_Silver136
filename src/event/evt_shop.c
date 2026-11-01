@@ -1185,10 +1185,6 @@ USER_FUNC(point_disp_onoff) {
  * retail plays a tick sound each frame meanwhile.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Blocks until the shop points window has counted up to Mario's points;
- * retail plays a tick sound each frame meanwhile.
- */
 static USER_FUNC(point_wait) {
 #else
 /**
@@ -1469,13 +1465,6 @@ USER_FUNC(unkeep_pouchcheck_func) {
  * Hides the icons of one-off items once bought and of shelves whose map object is hidden.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Shop driver, every frame: when Mario stands on a shelf's hit object,
- * opens the name and description windows for that item; A starts buy_evt.
- * Waits while a partner ability, the Ghost Diary or (retail) a field item pickup is active,
- * and on rsh_03 on day 3 until the shopkeeper is woken.
- * Hides the icons of one-off items once bought and of shelves whose map object is hidden.
- */
 static USER_FUNC(evt_shop_main_func) {
 #else
 /**

@@ -609,10 +609,6 @@ void iconGetWidthHight(u16* width, u16* height, s32 iconId) {
  * flips, 2D or map-lit 3D lighting, grayscale and colour tint, culling. Shared by every icon draw path.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Sets up GX and draws one icon quad with matrix mtx:
- * flips, 2D or map-lit 3D lighting, grayscale and colour tint, culling. Shared by every icon draw path.
- */
 static void iconGX(Mtx mtx, IconEntry* entry) {
 #else
 /**

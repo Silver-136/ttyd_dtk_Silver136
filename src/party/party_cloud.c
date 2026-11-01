@@ -132,11 +132,6 @@ void cloudResetAt(void) {
  * otherwise 2 (also when the partner is not Flurrie).
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Gale Force state for evt_party.c's script wait:
- * 0 when there is no partner or Flurrie is not gusting, 1 while the gust is in its start state (10),
- * otherwise 2 (also when the partner is not Flurrie).
- */
 u8 cloudGetStatus(void) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
@@ -158,10 +153,6 @@ u8 cloudGetStatus(void) {
  * -1 while she is still moving into position, 0 when there is no gust work. No callers in this tree.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Direction of Flurrie's gust in movement degrees:
- * -1 while she is still moving into position, 0 when there is no gust work. No callers in this tree.
- */
 f32 cloudGetBreathDir(void) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
     f32 breathDir;
@@ -191,13 +182,6 @@ f32 cloudGetBreathDir(void) {
  * npcdrv.c uses it to tell whether an NPC is caught by the gust.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Gust strength (0-100) at a point: nonzero only while Flurrie is mid-gust,
- * the point is within 10 units of 18 below her,
- * within reach (allowing half the target's width)
- * and within 30 degrees of the gust's direction (cosine falloff).
- * npcdrv.c uses it to tell whether an NPC is caught by the gust.
- */
 f32 cloudGetBreathPower(f32 size, Vec* pos) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
     f32 breathPower;

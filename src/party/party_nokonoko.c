@@ -970,12 +970,6 @@ void nokotaro_hold_cancel(PartyEntry* party) {
  * Mode 0 is the outbound throw; mode 1 the return, where hitobjAction is only set after a held shot.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Shell collision for Shell Toss: snaps the shell onto floors within 11 units,
- * then probes ahead along its direction (centre, then each side) for a wall and pushes it out along the wall.
- * Returns the wall hit, or NULL.
- * Mode 0 is the outbound throw; mode 1 the return, where hitobjAction is only set after a held shot.
- */
 static HitEntry* ccwall(PartyEntry* party, s32 mode) {
 #else
 /**

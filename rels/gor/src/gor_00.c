@@ -645,11 +645,6 @@ EVT_END()
  * hops it up onto the ledge at (90, 50, 150) and turns it to face left, then lets it follow again.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Moves Mario's partner out of the way before Marco's (Flavio's) departure talk:
- * depending on where the partner stands it walks it to the pier,
- * hops it up onto the ledge at (90, 50, 150) and turns it to face left, then lets it follow again.
- */
 EVT_BEGIN(marco_party_move)
     CALL(evt_party_stop, 0)
     CALL(evt_party_force_reset_outofscreen, 0)

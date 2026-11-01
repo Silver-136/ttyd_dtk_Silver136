@@ -2416,14 +2416,6 @@ static inline void sfwVecSetNested(Vec* d, Vec v) {
  * pos just moves with no wall check.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Moves pos dx in direction dz (degrees) unless a wall blocks it:
- * rays at two to four heights (by character and mode) reach half the width w ahead, plus 45-degree side rays.
- * On a wall pos slides along it, *h gets the distance and the wall is returned;
- * balloon walls (chkBalloon) also go in hitobjFrontWall.
- * On Riverside Station's eki_04, in marioChkSts state 0x10 on a slope of 45 degrees or more,
- * pos just moves with no wall check.
- */
 static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
 #else
 /**

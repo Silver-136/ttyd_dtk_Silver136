@@ -795,12 +795,6 @@ static void _mapclsofs_all(CloudWork* wp) {
  * runs the end event (iri_16_cloud_evt) and the entry is released. If the breath stops first the cloud resets.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Running script of one dark cloud entry: waits for Flurrie's breath to touch the cloud's hit area,
- * then builds a paper-cloud image of the scenery under it and counts how long the breath keeps hitting it;
- * when the count reaches the limit the cloud plays its blow-away animation,
- * runs the end event (iri_16_cloud_evt) and the entry is released. If the breath stops first the cloud resets.
- */
 static USER_FUNC(evt_cloud_main) {
     CloudWork* wp = (CloudWork*)event->lwData[0];
     s32 inBattle = gp->inBattle != 0;

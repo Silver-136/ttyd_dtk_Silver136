@@ -461,10 +461,6 @@ EVT_END()
  * so a bomb that is knocked out still blows up.
  */
 #if VERSION > VERSION_DEMO_US
-/**
- * Death data event (tag 49): queues explosion_event (tag 53) as an after-reaction,
- * so a bomb that is knocked out still blows up.
- */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT_BOMZOU)
     RETURN

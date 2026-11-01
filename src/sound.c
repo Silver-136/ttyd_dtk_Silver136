@@ -2155,11 +2155,6 @@ const char* paths[1];
  * allocates the MusyX stream(s) (one, or a left/right pair panned hard) and starts loading the data.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Disc read callback for a stream header: reads format (PCM16, DPCM or ADPCM with its coefficients),
- * sample rate, channel count, loop points and sizes,
- * allocates the MusyX stream(s) (one, or a left/right pair panned hard) and starts loading the data.
- */
 static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
 #else
 /**

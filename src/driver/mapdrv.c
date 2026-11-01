@@ -254,12 +254,6 @@ void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
  * when its centre-to-corner distance is under about 141 units. Panics on a joint without a draw mode.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Takes the next free MapObject of map entry index and fills it from joint:
- * local and world matrices (rotation in degrees), blend mode from the draw mode and the materials,
- * group and shadow flags, centre, and the bounding-box cull flag
- * when its centre-to-corner distance is under about 141 units. Panics on a joint without a draw mode.
- */
 static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 #else
 /**
@@ -447,12 +441,6 @@ static void mapResetPaperCraftAmbColor(void);
  * while a character shadow projection is on.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Records the material setup and cull mode of each eligible part of map entry group into GX display lists,
- * in two passes (size, then copy into one buffer at the heap tail).
- * Only for ver1.02 map files, and skips light-masked parts and Mario's shadow receivers
- * while a character shadow projection is on.
- */
 static void makeDisplayList(BOOL group) {
 #else
 /**
@@ -862,11 +850,6 @@ found:
  * textures, bounding box corners, animation table and display lists.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Loads map into entry group of wp: map.dat and texture.tpl from the archive or the disc,
- * the joint tree as map and hit objects (scaled x10), the map's lights and fog, the camera road (field only),
- * textures, bounding box corners, animation table and display lists.
- */
 static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     MapFileInfo* info;
     u32 datSize, k;
@@ -3922,10 +3905,6 @@ void mapObjFlagOff(const char* name, u32 flags) {
  * retail versions skip the display-list flag on objects without a display list.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Sets flags on obj and its whole subtree, and its later siblings when doNext;
- * retail versions skip the display-list flag on objects without a display list.
- */
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
 #else
 /**

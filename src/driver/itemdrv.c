@@ -1605,11 +1605,6 @@ static s32 _move_dir_1090;
  * becomes resting when it stops.
  */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Moves a bouncing or falling item: gravity, bouncing off floors (with fewer, lower bounces each time),
- * walls and ceilings, landing on map objects, water and lava, and despawning where needed;
- * becomes resting when it stops.
- */
 static void itemseq_Bound(ItemEntry* entry) {
 #else
 /**
