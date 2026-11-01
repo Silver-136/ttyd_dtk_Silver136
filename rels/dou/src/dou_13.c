@@ -52,7 +52,7 @@ static BeroEntry bero_entry_data[] = {
 /**
  * Init script of dou_13, the side passage between dou_08 and dou_09:
  * music and ambience, exits, and links its Bill Blaster pairs (cannon 1 with 2, cannon 3 with 4)
- * so they fire in turn when they exist.
+ * as NPC groups (npcSetLink) when they exist.
  */
 EVT_BEGIN(dou_13_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))

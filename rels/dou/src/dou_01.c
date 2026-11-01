@@ -73,7 +73,7 @@ static EVT_BEGIN(korutesu_event)
 #endif
     CALL(evt_mario_normalize)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)

@@ -1,5 +1,5 @@
-// dou_04 (洞窟, Pirate's Grotto): room off dou_03 with a lift raised by a red switch.
-// Grotto Key and Star Piece items, and a Goomba NPC (Kurichero) who gives a Couples Cake request.
+// dou_04 (洞窟, Pirate's Grotto): room off dou_03 with two lifts started by a red switch.
+// Grotto Key and Star Piece items, and a Goomba NPC (Kurichero) whose Trouble Center job 21 (TROUBLE_LOOKING_FOR_A_GAL) rewards a Couples Cake.
 
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
@@ -57,7 +57,7 @@ EvtWord dou_04_init_evt[96];
 
 /**
  * Script helper: stores in args[0] whether Mario's menu is currently disabled (marioCheckMenuDisable),
- * so the lift scripts can stop moving while a menu or message is open.
+ * the lift scripts store it in LF(11) but never test it.
  */
 USER_FUNC(evt_mario_check_menu) {
     // Return the menu-disabled state, not whether a menu is currently open.
@@ -89,7 +89,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Moves the large box platform (s04_m_hako_a) and the water bridge (mizuhashi) by the offsets in GW(0) to GW(2)
+ * Moves the large box platform (s04_m_hako_a) and mizuhashi (no Y offset) by the offsets in GW(0) to GW(2)
  * every frame, rebinds its hit area, and shifts Mario and the partners by the box's movement while they ride it.
  */
 // Carry riders by the change in X translation, not by the full accumulated offset.
@@ -215,7 +215,8 @@ EVT_END()
  * One step of the first lift platform (s04_m_hako_b, hit area a04_m_hako_02):
  * LW(0) = 0 lowers it from the offset in LW(3) down to -180 at 0.75 per frame,
  * anything else raises it back to 0.
- * It carries Mario and the partners, stops while a menu is open, and leaves the final offset in LW(4).
+ * It carries Mario and the partners, stops early when Mario's head touches soko2 (lowering) or soko1 (raising),
+ * and leaves the final offset in LW(4).
  */
 EVT_BEGIN(lift_event_00)
     IF_INT_EQUAL(LW(0), 0)
@@ -470,7 +471,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 };
 
 /**
- * Init of the Goomba Kurichero: during Trouble Center job 21 (the Couples Cake request) he is placed at (-183,
+ * Init of the Goomba Kurichero: during Trouble Center job 21 he is placed at (-183,
  * 10, 135) facing east.
  */
 static EVT_BEGIN(kuribo_init)
@@ -482,7 +483,7 @@ static EVT_BEGIN(kuribo_init)
 EVT_END()
 
 EVT_BEGIN(kuribo_talk)
-    // Only while the Couples Cake request is active does he have anything to say.
+    // Only while job 21 is active does he have anything to say.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LOOKING_FOR_A_GAL)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             // First talk: he thanks Mario for taking the request and says he feels lonely on the island.
@@ -491,7 +492,7 @@ EVT_BEGIN(kuribo_talk)
         ELSE
             // Later talks: if Goombella is the partner, she is the cute girl he has been waiting for.
             CALL(evt_mario_get_party, LW(0))
-            IF_INT_EQUAL(LW(0), 1)
+            IF_INT_EQUAL(LW(0), PARTY_MEMBER_GOOMBELLA)
                 CALL(evt_party_stop, 0)
                 // Mario and Goombella walk up to him, and he asks whether they found a cute girl, then notices
                 // Goombella.
@@ -673,22 +674,22 @@ EVT_BEGIN(kuribo_talk)
                 WAIT_FRAMES(1)
                 CALL(evt_npc_wait_pera, STRING("me"))
                 SWITCH(LW(0))
-                    CASE_EQUAL(2)
+                    CASE_EQUAL(PARTY_MEMBER_KOOPS)
                     SET_VALUE(LW(0), STRING("irai_21_014"))
                     SET_VALUE(LW(1), STRING("irai_21_015"))
-                    CASE_EQUAL(5)
+                    CASE_EQUAL(PARTY_MEMBER_FLURRIE)
                     SET_VALUE(LW(0), STRING("irai_21_016"))
                     SET_VALUE(LW(1), STRING("irai_21_017"))
-                    CASE_EQUAL(4)
+                    CASE_EQUAL(PARTY_MEMBER_YOSHI)
                     SET_VALUE(LW(0), STRING("irai_21_018"))
                     SET_VALUE(LW(1), STRING("irai_21_019"))
-                    CASE_EQUAL(6)
+                    CASE_EQUAL(PARTY_MEMBER_VIVIAN)
                     SET_VALUE(LW(0), STRING("irai_21_020"))
                     SET_VALUE(LW(1), STRING("irai_21_021"))
-                    CASE_EQUAL(3)
+                    CASE_EQUAL(PARTY_MEMBER_BOBBERY)
                     SET_VALUE(LW(0), STRING("irai_21_022"))
                     SET_VALUE(LW(1), STRING("irai_21_023"))
-                    CASE_EQUAL(7)
+                    CASE_EQUAL(PARTY_MEMBER_MS_MOWZ)
                     SET_VALUE(LW(0), STRING("irai_21_024"))
                     SET_VALUE(LW(1), STRING("irai_21_025"))
                 END_SWITCH
@@ -712,7 +713,7 @@ EVT_BEGIN(kuribo_talk)
     RETURN
 EVT_END()
 
-/** NPC setup of dou_04: the Goomba Kurichero, who talks to Mario about the Couples Cake request. */
+/** NPC setup of dou_04: the Goomba Kurichero, whose talk script runs job 21. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"クリチェロ"*/"\x83\x4E\x83\x8A\x83\x60\x83\x46\x83\x8D", // name

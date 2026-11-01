@@ -55,7 +55,7 @@ EvtWord peramajin_after[297];
 #endif
 EvtWord dou_07_init_evt[89];
 
-/** Registration script of the Ember (エルモス, erumosu) enemy: does nothing. */
+/** Empty regular-event script of the Ember (エルモス, erumosu); npcEnt does not use it (bubble_move_event). */
 static EVT_BEGIN(erumosu_regl)
     RETURN
 EVT_END()
@@ -268,7 +268,7 @@ EVT_BEGIN(peramajin_before)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_07"), PTR(majin_callback), 0)
-    // The Ember ghost appears from the chest and the story advances to the Grotto key stage.
+    // The Ember fades in at (100, -6, -37) and the story advances to the Grotto key stage.
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR1"), 0)
     CALL_CHILD(PTR(apper_elmos))
     CALL(evt_mobj_exec_cancel, STRING("mobj_box00"))
@@ -291,7 +291,7 @@ EVT_BEGIN(peramajin_after)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_PERAMAJIN1"))
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(bgm_start_wait)
-    // The wooden room fades and the paper genie unfolds from the chest.
+    // The map object s02_moku fades out and the paper genie appears.
     SET_VALUE(LW(1), 60)
     LOOP(LW(1))
         SET_VALUE(LW(0), 255)

@@ -49,7 +49,7 @@ static EvtWord dou_puka_event_main2[60];
 static HitDamageReturn hitDmgRetPoints[18];
 EvtWord dou_03_init_evt[130];
 
-/** Enter event of the dou_03 doors: switches the "on_off" hit object on and lets Mario through. */
+/** Enter event of the dou_03 doors: switches the "on_off" hit object group off; leaves LW(0) = 0. */
 EVT_BEGIN(dou_03_custom)
     CALL(evt_hitobj_onoff, STRING("on_off"), 1, 0)
     SET_VALUE(LW(0), 0)
@@ -282,7 +282,7 @@ EVT_END()
  * Talk-to-winch event (A_makimaki): before the floodgate is raised,
  * asks for the Gate Handle (a message if Mario does not have one, otherwise the item menu), then fits it,
  * cranks the winch with shaking and gear sounds, raises the gate, sweeps away the barrel and bottle,
- * and the partner comments (stg5_dou_02 and 03).
+ * Cortez is heard (stg5_dou_02) and the partner comments (stg5_dou_03).
  * Sets STG5_22_FLOODGATE_HANDLE and re-enables the exit; afterwards it only gives a short message.
  */
 // Stop the stored barrel/bottle bobbing events before their downstream translation.

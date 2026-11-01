@@ -228,7 +228,7 @@ EVT_BEGIN(bigdoor_event_init)
 #if VERSION > VERSION_DEMO_US
         DEBUG_PUT_MSG(STRING("dou_05：扉が開く後の処理"))
 #endif
-        CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero_3"), 4)
+        CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero_3"), HIT_ATTR_NPC_ONLY)
         CALL(evt_mapobj_trans, 0, STRING("tetu"), 1, 100, 0)
     END_IF
     RETURN
@@ -236,7 +236,7 @@ EVT_END()
 
 /**
  * Event of the blue switch: the camera looks at the big door, the screen shakes,
- * the door slab rises (2 s) and drops back with a thud, Cortez speaks (stg5_dou_10),
+ * the door slab rises (2 s) and stays up, SFX_SLIDE_DOOR1_DOWN and a bigger shake follow, Cortez speaks (stg5_dou_10),
  * the exit w_bero_3 is enabled and STG5_20_THE_BLUE_BLOCK is set.
  */
 EVT_BEGIN(bigdoor_event)
@@ -282,7 +282,7 @@ EVT_BEGIN(bigdoor_event)
     CALL(evt_msg_print, 0, STRING("stg5_dou_10"), 0, 0)
     SET_VALUE(LW(0), STRING("w_bero_3"))
     CALL_CHILD(PTR(bero_case_switch_on))
-    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero_3"), 4)
+    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero_3"), HIT_ATTR_NPC_ONLY)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_20_THE_BLUE_BLOCK)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
@@ -302,10 +302,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 };
 
 #if VERSION <= VERSION_DEMO_US
-/**
- * Item-box script for the chest mobj_box00: gives the Defend Plus P badge in the US and PAL releases
- * and the Damage Dodge P badge in the Japanese ones (and demos), picked up with the chest-open animation.
- */
+/** Item-box script for the chest mobj_box00 (demos): gives the Damage Dodge P badge, picked up with the chest-open animation. */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_entry, STRING("item00"), ITEM_DAMAGE_DODGE_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)

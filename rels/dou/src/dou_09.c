@@ -122,8 +122,8 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Clears the state and offset registers of floating platform 0 (state 0 = idle, 1 = being ridden,
- * 2 = stepped off; offset = its current height).
+ * Clears the state and offset registers of floating platform 0 (state 0 = idle, 1 = dipping,
+ * 2 = dip finished; offset = its current height).
  */
 // Four floating objects use state/height pairs GW(0/1), GW(2/3), GW(4/5), GW(6/7).
 static EVT_BEGIN(dou_puka_event_init0)
@@ -136,7 +136,7 @@ EVT_END()
  * Stand-on case script for floating platform 0:
  * if idle it marks the platform as ridden, runs the extra callback in LW(3)
  * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
- * and marks it as stepped off.
+ * and marks the dip as finished (state 2).
  */
 static EVT_BEGIN(dou_puka_event_0)
     IF_INT_NOT_EQUAL(GW(0), 0)
@@ -154,7 +154,7 @@ EVT_END()
 
 /**
  * Step-off case script for floating platform 0:
- * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ * once the dip has finished (state 2) it sets the platform back to idle so it can dip again.
  */
 static EVT_BEGIN(dou_puka_event_rev_0)
     IF_INT_NOT_EQUAL(GW(0), 2)
@@ -181,7 +181,7 @@ EVT_END()
 
 /**
  * Idle bobbing of floating platform 0: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
- * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ * dou_normal_puka, stops it during a dip and restarts it when the dip has finished.
  */
 static EVT_BEGIN(dou_puka_event_sub0)
     CALL(evt_sub_random, 400, LW(0))
@@ -209,8 +209,8 @@ static EVT_BEGIN(dou_puka_event_sub0)
 EVT_END()
 
 /**
- * Clears the state and offset registers of floating platform 1 (state 0 = idle, 1 = being ridden,
- * 2 = stepped off; offset = its current height).
+ * Clears the state and offset registers of floating platform 1 (state 0 = idle, 1 = dipping,
+ * 2 = dip finished; offset = its current height).
  */
 static EVT_BEGIN(dou_puka_event_init1)
     SET_VALUE(GW(2), 0)
@@ -222,7 +222,7 @@ EVT_END()
  * Stand-on case script for floating platform 1:
  * if idle it marks the platform as ridden, runs the extra callback in LW(3)
  * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
- * and marks it as stepped off.
+ * and marks the dip as finished (state 2).
  */
 static EVT_BEGIN(dou_puka_event_1)
     IF_INT_NOT_EQUAL(GW(2), 0)
@@ -240,7 +240,7 @@ EVT_END()
 
 /**
  * Step-off case script for floating platform 1:
- * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ * once the dip has finished (state 2) it sets the platform back to idle so it can dip again.
  */
 static EVT_BEGIN(dou_puka_event_rev_1)
     IF_INT_NOT_EQUAL(GW(2), 2)
@@ -267,7 +267,7 @@ EVT_END()
 
 /**
  * Idle bobbing of floating platform 1: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
- * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ * dou_normal_puka, stops it during a dip and restarts it when the dip has finished.
  */
 static EVT_BEGIN(dou_puka_event_sub1)
     CALL(evt_sub_random, 400, LW(0))
@@ -295,8 +295,8 @@ static EVT_BEGIN(dou_puka_event_sub1)
 EVT_END()
 
 /**
- * Clears the state and offset registers of floating platform 2 (state 0 = idle, 1 = being ridden,
- * 2 = stepped off; offset = its current height).
+ * Clears the state and offset registers of floating platform 2 (state 0 = idle, 1 = dipping,
+ * 2 = dip finished; offset = its current height).
  */
 static EVT_BEGIN(dou_puka_event_init2)
     SET_VALUE(GW(4), 0)
@@ -308,7 +308,7 @@ EVT_END()
  * Stand-on case script for floating platform 2:
  * if idle it marks the platform as ridden, runs the extra callback in LW(3)
  * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
- * and marks it as stepped off.
+ * and marks the dip as finished (state 2).
  */
 static EVT_BEGIN(dou_puka_event_2)
     IF_INT_NOT_EQUAL(GW(4), 0)
@@ -326,7 +326,7 @@ EVT_END()
 
 /**
  * Step-off case script for floating platform 2:
- * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ * once the dip has finished (state 2) it sets the platform back to idle so it can dip again.
  */
 static EVT_BEGIN(dou_puka_event_rev_2)
     IF_INT_NOT_EQUAL(GW(4), 2)
@@ -353,7 +353,7 @@ EVT_END()
 
 /**
  * Idle bobbing of floating platform 2: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
- * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ * dou_normal_puka, stops it during a dip and restarts it when the dip has finished.
  */
 static EVT_BEGIN(dou_puka_event_sub2)
     CALL(evt_sub_random, 400, LW(0))
@@ -381,8 +381,8 @@ static EVT_BEGIN(dou_puka_event_sub2)
 EVT_END()
 
 /**
- * Clears the state and offset registers of floating platform 3 (state 0 = idle, 1 = being ridden,
- * 2 = stepped off; offset = its current height).
+ * Clears the state and offset registers of floating platform 3 (state 0 = idle, 1 = dipping,
+ * 2 = dip finished; offset = its current height).
  */
 static EVT_BEGIN(dou_puka_event_init3)
     SET_VALUE(GW(6), 0)
@@ -394,7 +394,7 @@ EVT_END()
  * Stand-on case script for floating platform 3:
  * if idle it marks the platform as ridden, runs the extra callback in LW(3)
  * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
- * and marks it as stepped off.
+ * and marks the dip as finished (state 2).
  */
 static EVT_BEGIN(dou_puka_event_3)
     IF_INT_NOT_EQUAL(GW(6), 0)
@@ -412,7 +412,7 @@ EVT_END()
 
 /**
  * Step-off case script for floating platform 3:
- * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ * once the dip has finished (state 2) it sets the platform back to idle so it can dip again.
  */
 static EVT_BEGIN(dou_puka_event_rev_3)
     IF_INT_NOT_EQUAL(GW(6), 2)
@@ -439,7 +439,7 @@ EVT_END()
 
 /**
  * Idle bobbing of floating platform 3: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
- * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ * dou_normal_puka, stops it during a dip and restarts it when the dip has finished.
  */
 static EVT_BEGIN(dou_puka_event_sub3)
     CALL(evt_sub_random, 400, LW(0))
@@ -500,7 +500,7 @@ EVT_END()
 /**
  * Case script run when Bobbery bombs the cracked wall S_ki:
  * plays SFX_OFF_WALL_BREAK1, enables the w_bero exit,
- * sets GSWF_DOU09_BOMB_WALL_BLOWN and shatters the wall as a folding paper image (OFF_d_bom_ver2)
+ * sets GSWF_DOU_09_BOMB_WALL_BLOWN and shatters the wall as a folding paper image (OFF_d_bom_ver2)
  * before hiding it and its hit area.
  */
 static EVT_BEGIN(bombwall_bomb)
@@ -546,7 +546,7 @@ static EVT_BEGIN(bombwall_bomb)
 EVT_END()
 
 /**
- * Sets up the bomb wall: until GSWF_DOU09_BOMB_WALL_BLOWN is set it closes the w_bero exit
+ * Sets up the bomb wall: until GSWF_DOU_09_BOMB_WALL_BLOWN is set it closes the w_bero exit
  * and lets Bobbery's bomb trigger bombwall_bomb on A_ki1; afterwards the wall is already hidden.
  */
 static EVT_BEGIN(bombwall_init)

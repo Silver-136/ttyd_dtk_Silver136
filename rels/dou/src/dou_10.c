@@ -358,8 +358,8 @@ EVT_BEGIN(namiyoke_atari_check)
 EVT_END()
 
 /**
- * Wave spawner of the wave-dodging section: first a run of 9 waves staggered along the room (the near lanes are
- * only used for later ones), then forever one new wave every 1.5 to 2 seconds at the far end (X = 1040) in one
+ * Wave spawner of the wave-dodging section: first up to 9 waves staggered along the room (the lanes Z = -125 and -50
+ * only from the sixth wave on), then forever one new wave every 1.5 to 2 seconds at the far end (X = 1040) in one
  * of four lanes (Z = -125, -50, 25, 100), up to 15 at once.
  */
 EVT_BEGIN(namiyoke_main)
@@ -523,8 +523,8 @@ EVT_END()
 
 /**
  * Spear trap loop (only one at a time, guarded by GW(15)):
- * the spear S_yari shoots up and retracts on a timer,
- * repeating until GW(15) is set to 2 (same pattern as yari_trap_sub in dou_02).
+ * the spear S_yari thrusts 150 units along Z and retracts on a timer,
+ * repeating until GW(15) is set to 2 (as yari_trap_sub in dou_02, but no hit attribute is toggled).
  */
 static EVT_BEGIN(yari_trap_sub)
     IF_INT_NOT_EQUAL(GW(15), 0)
@@ -712,9 +712,9 @@ USER_FUNC(dou_namiatari_check) {
 
 /**
  * Script helper: moves one wave forward by 1.35 per frame (X) and bobs it with a sine;
- * the wave rises out of the water at the start and sinks again after 200 (or -340 in the far lanes).
+ * the wave rises out of the water at the start and sinks again past X = 200 (or -340 in the lanes Z = 25 and 100).
  * Writes the position to args[0..2] and sets LW(15) to 1 once the wave has finished its run (X < 0, or < -540 in
- * the far lanes).
+ * the lanes Z = 25 and 100).
  */
 USER_FUNC(nami_running_func) {
     f32* lwf = event->lwDataF;
