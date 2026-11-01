@@ -650,7 +650,6 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
         }
         GXSetScissor(0, 0, 608, 480);
         if (entry->lines > 2) {
-            // FAKE: spare copy of entry->scroll; testing the field directly changes the object
             s32 scroll = entry->scroll;
 
             if (scroll == 0) {

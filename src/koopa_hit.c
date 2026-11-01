@@ -440,7 +440,7 @@ HitEntry* kpaChkHitobjRide(void) {
                                     r = w->rideHit[8];
                                     if (!r) {
                                         r = w->rideHit[9];
-                                        // FAKE: dead test (both branches return r); dropping it changes the object
+                                        // retail keeps this compare (both branches return r)
                                         if (r) {
                                             return r;
                                         } else {

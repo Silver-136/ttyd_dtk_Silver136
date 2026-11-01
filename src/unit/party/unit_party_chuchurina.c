@@ -2451,7 +2451,7 @@ USER_FUNC(_chuchu_item_steal) {
         if (table == NULL) {
             pick = 0;
         } else {
-            // FAKE: dead re-test (table is non-NULL in this branch); without it the object changes
+            // retail tests table again (non-NULL in this branch)
             if (table != NULL) {
                 s32 i;
                 total = 0;

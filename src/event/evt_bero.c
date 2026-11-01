@@ -446,7 +446,7 @@ static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
     s32 kind = bero->directionId;
     switch (kind) {
     case BERO_DIR_AUTO:
-        // FAKE: dead test (kind is 20000 in this case); removing it changes the object
+        // retail compares kind here (it is 20000 in this case)
         if (kind == BERO_DIR_NONE) {
             kind = BERO_DIR_NONE;
         } else {

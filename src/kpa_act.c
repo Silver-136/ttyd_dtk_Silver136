@@ -183,7 +183,6 @@ void kpaAddScore(s32 score) {
  * Used for stomped enemies (npcdrv) and power-ups (evt_mobj).
  */
 void kpaAddScorePos(s32 score, Vec* pos) {
-    // FAKE: sc is a spare copy of score; clamping score itself (as kpaAddScore does) changes the object
     s32 sc = score;
     if (score > KPA_SCORE_PICKUP_CAP) {
         sc = KPA_SCORE_PICKUP_CAP;

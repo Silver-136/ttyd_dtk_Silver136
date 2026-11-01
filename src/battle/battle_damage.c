@@ -430,7 +430,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         return 0;
     }
     damage = weapon->hpDamageWork[0];
-    // FAKE: dead guard (fn == NULL returned above); the plain call changes the object
+    // retail tests fn again here (fn == NULL returned above)
     if (fn) {
         damage = fn(attacker, weapon, target, part);
     }
@@ -658,7 +658,7 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
         !(wp->actionCommands.result & AC_RESULT_SUCCESS)) {
         return 0;
     }
-    // FAKE: dead guard (fn == NULL returned above); the plain call changes the object
+    // retail tests fn again here (fn == NULL returned above)
     if (fn) {
         damage = fn(attacker, weapon, target, part);
     }

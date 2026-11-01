@@ -4435,7 +4435,6 @@ USER_FUNC(chain_main) {
     dy = me->position.y - cy;
     dz = me->position.z - cz;
     {
-        // FAKE: spare temporary dist; the inline form used in the loops below changes the object here
         f32 dist = (f32)sqrt(dx * dx + dy * dy + dz * dz);
         t = 1.0f - len / dist;
     }

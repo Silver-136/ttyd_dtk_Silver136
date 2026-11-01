@@ -655,7 +655,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     for (i = 0; i < wp->party.wazaCount; i++) {
         char buf[0x40];
         winFontSetLabel((Vec){10.0f + x, iy = (wy - ((f32)(i * 26))) - 30.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black2, winPartyDt[wp->party.dtIdx].waza[i]->name);
-        sprintf(buf, "%d", (u8)winPartyDt[wp->party.dtIdx].waza[i]->baseFpCost);
+        sprintf(buf, "%d", winPartyDt[wp->party.dtIdx].waza[i]->baseFpCost);
         winFontSet((Vec){costX, iy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black2, buf);
         winFontSet((Vec){(17.0f + bx) - 20.0f, iy, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black2, VERSION_PICK("ＦＰ", msgSearch("btl_cost_disp_FP")));
 #else
@@ -667,7 +667,6 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
 #else
         winFontSetLabel((Vec){10.0f + x, fy = (wy - (f32)(i * 26)) - 30.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black2, winPartyDt[wp->party.dtIdx].waza[i]->name);
 #endif
-        // FAKE: the FP cost (s8 baseFpCost, never negative) is read through a (u8) cast; the plain field read changes the object
         sprintf(buf, "%s", winZenkakuStr((u8)winPartyDt[wp->party.dtIdx].waza[i]->baseFpCost));
         winFontSet((Vec){(((238.0f + x) - 20.0f) - (f32)(FontGetMessageWidth(buf) / 2)) - 2.0f, fy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black2, buf);
         winFontSet((Vec){2.0f + (2.0f + ((17.0f + bx) - 20.0f)), fy - 10.0f, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black2, VERSION_PICK("ＦＰ", msgSearch("btl_cost_disp_FP")));

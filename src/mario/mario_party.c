@@ -375,7 +375,6 @@ void partyLeft(PartyId partnerId) {
 BOOL partyChkJoin(PartyId partnerId) {
     BOOL ret = FALSE;
     if (partnerId < PARTNER_COUNT) {
-        // FAKE: spare u32 temporary; assigning ret directly changes the object
         u32 joined = pouchGetPtr()->partyData[partnerId].flags & POUCH_PARTY_FLAG_JOINED;
         ret = joined;
     }

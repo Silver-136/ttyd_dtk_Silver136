@@ -309,7 +309,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                         }
                     } else if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                         sw->roll = 0;
-                        // FAKE: GUIDED tested a second time (always true here); without the second test the object changes
+                        // retail tests GUIDED a second time (always true here)
                         if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                             stickRotateFail(work);
                             restart = TRUE;

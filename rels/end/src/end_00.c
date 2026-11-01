@@ -2042,7 +2042,7 @@ USER_FUNC(evt_end_staff_roll_init) {
 #if VERSION <= VERSION_DEMO_US
     for (i = 0; i < end_wp->npcLoadNum; i++) {
 #else
-    // FAKE: empty five-iteration loop retained; removing it changes the object.
+    // retail runs this empty loop; the demos' version still counts npcLoadNum here.
     for (i = 0; i < 5; i++) {
 #endif
     }

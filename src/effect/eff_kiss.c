@@ -224,7 +224,6 @@ void effKissMain(EffectEntry* effect) {
     case 4:
         work->position.x += 0.2f;
         {
-            // FAKE: spare local s for the sine; __fabsf((f32)sin(...)) in place changes the object
             f32 s = sin(9.424778f * (f32)work->frame / 60.0f);
 
             work->position.y = 2.0f * __fabsf(s);

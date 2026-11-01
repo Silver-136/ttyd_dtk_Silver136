@@ -1113,7 +1113,7 @@ BOOL marioChkItemMotion(void) {
     if (mario->flags & (MARIO_FLAG_PAPER_MODE | MARIO_FLAG_TUBE_MODE)) {
         return FALSE;
     }
-    // FAKE: repeated test of trig (already known nonzero); removing it changes the object
+    // retail repeats this test (trig is known nonzero here)
     if (!trig) {
         return FALSE;
     }

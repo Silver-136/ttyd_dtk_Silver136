@@ -141,7 +141,6 @@ BOOL parseGet1Next(s32 type, void* data) {
         return result;
     }
 
-    // FAKE: posStack is a spare copy of parse.pos; indexing parse.pos directly changes the object
     posStack = parse.pos;
     state = 0;
     p = parse.ptr;

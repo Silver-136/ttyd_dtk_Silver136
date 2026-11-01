@@ -42,7 +42,7 @@ typedef struct CloudWork {
 } CloudWork;
 
 static CloudWork cloud[16];
-static u8 cloud_once_flag;
+static s8 cloud_once_flag;
 static CloudWork* cloud_p;
 
 static USER_FUNC(evt_cloud_main);
@@ -84,8 +84,7 @@ static USER_FUNC(evt_cloud_main) {
     hit3 = cloudGetHitBreathout(3);
     switch (wp->state) {
         case 0:
-            // FAKE: no-op (s32) cast; the plain comparison changes the object
-            if ((s32)cloud_once_flag == 1) {
+            if (cloud_once_flag == 1) {
                 break;
             }
             hit = hitNameToPtr(wp->hitName);

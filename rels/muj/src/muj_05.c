@@ -120,7 +120,7 @@ USER_FUNC(evt_dokuroiwa_command_check) {
     s32 i;
     EvtWord* args = event->args;
 
-    // FAKE: empty seven-iteration loop; removing it changes the object.
+    // retail runs this empty loop (mtctr/bdnz).
     for (i = 0; i < 7; i++) {
     }
     // Report 0 for the first unfilled slot, 1 for a mismatch, or 2 when all seven match.

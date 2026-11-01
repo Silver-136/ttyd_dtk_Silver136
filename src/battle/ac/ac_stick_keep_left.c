@@ -199,7 +199,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 break;
             case 1003: {
                 s32 k;
-                // FAKE: empty loop (no body) over the signal sound slots 0..idx-2; removing it changes the object
+                // retail runs this empty loop over the signal sound slots 0..idx-2
                 j = cw->idx - 2;
                 if (j >= 0) {
                     for (k = 0; k <= j; k++) {

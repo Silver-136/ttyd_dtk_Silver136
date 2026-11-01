@@ -742,7 +742,7 @@ void mobjMain(void) {
 #if VERSION <= VERSION_DEMO_US
         if (!(gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)))) {
 #else
-        // FAKE: `gp->inBattle != 0 ||` is always false here; without it the object changes
+        // retail (US on) reads inBattle again; `gp->inBattle != 0 ||` is always false here
 #if VERSION >= VERSION_US
         if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
 #else
