@@ -525,7 +525,7 @@ USER_FUNC(yuugijou_set_yupflag) {
 
 /** Flags the pause window as finished (flag 8), which evtYuuWindowEndChk reports to the window code. */
 USER_FUNC(yuuminigame_window_end) {
-    yuwp->flags |= 8;
+    yuwp->flags |= PARLOR_FLAG_WINDOW_DONE;
     return EVT_RETURN_DONE;
 }
 

@@ -677,7 +677,7 @@ USER_FUNC(evt_unitwin_select_func) {
         wp->flags &= ~UNITWIN_FLAG_BUYING;
         marioKeyOn();
         if (wp->bought) {
-            wp->itemFlags[wp->goodsIdx] |= 1;
+            wp->itemFlags[wp->goodsIdx] |= UNITWIN_ITEM_UNAVAILABLE;
         }
     }
     for (i = 0; i < wp->goodsMax; i++) {
