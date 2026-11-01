@@ -3,21 +3,21 @@
 Everything left to clean up, in one place. All five builds (US, JP, PAL, US demo, JP demo) must stay byte-identical
 to the original games through every step; US retail is the priority for readability; nothing here changes behaviour. Per-function detail for the fakes lives in
 [FAKES.md](FAKES.md); invented names are listed in [NAME_PROVENANCE.md](NAME_PROVENANCE.md). Counts are from
-2026-10-25 (game code unless marked; the "at adoption" column is the LLCOOLT tree at `85ac972b`).
+2026-11-01 (game code unless marked; the "at adoption" column is the LLCOOLT tree at `85ac972b`).
 
 ## 1. Matching tricks (debt by policy)
 
 | Item | Now | At adoption | Notes |
 | --- | --- | --- | --- |
-| FAKES.md rows | 595 (555 both, 28 US, 12 JP) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: certification review marks every device it finds that the bytes need; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
-| FAKE comment sites | 837 in 243 files (libs 20; up from 306 because the certification review marked existing tricks, 2026-10-27) | 320 (libs 94) | |
+| FAKES.md rows | 556 (514 both, 25 US, 9 JP, 7 demos, 1 PAL) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: certification review marks every device it finds that the bytes need; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
+| FAKE comment sites | 801 in 232 files (libs 22; up from 306 because the certification review marked existing tricks, 2026-10-27) | 320 (libs 94) | |
 | `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | 143 / 4 / 112 / 4 (libs: `dont_inline` 6, VI's three pairs) | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units; round 16: OSLink); the rest are per-function pairs with no whole-unit equivalent |
-| `__declspec(section)` placements | 18 (libs 35) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects; the library sites are mostly genuine (see section 7) |
-| `#pragma force_active` | 15 lines in 7 files (libs 10) | 776 | the library pairs keep the `gap_*` objects |
+| `__declspec(section)` placements | 18 (libs 36) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects; the library sites are mostly genuine (see section 7) |
+| `#pragma force_active` | 16 lines in 7 files (libs 10) | 776 | the library pairs keep the `gap_*` objects |
 | `gap_*` padding objects | 8 (libs 7) | 142 | eff_kemutest's gaps are real storage; the library gaps are scaffolding (section 7) |
 | `fd_*` math-static data | 28 lines, end_00 only | 16,730 lines in 607 files | end_00 is built without the REL precompiled header |
-| inline asm | 6 (libs 284) | 19 | library sites sorted in section 7: mostly genuine assembly, three TRK candidates for C |
-| raw pointer arithmetic | 26 (libs 15) | 28 | all documented fakes |
+| inline asm | 8 (libs 286) | 19 | library sites sorted in section 7: mostly genuine assembly, three TRK candidates for C |
+| raw pointer arithmetic | 27 (libs 15) | 28 | all documented fakes |
 
 FAKES.md rows by kind (approximate): spare temporaries or copies that steer register choice ~65, byte-offset
 struct views 21, dead stores / self-assignments / dead conditions 20, comma expressions `(0, x)` 19, placement or
@@ -25,8 +25,12 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 2. Types and declarations
 
-- Calls through function-pointer casts: 40 (icon drawing family 18, window frame 4, party slit-floor motion 3,
-  sound pitch 2, party menu setup 2, puni map data getters 3, single sites). Each needs a prototype that the
+- Raw numbers with no name yet: certification `magic` notes, outcome per note in `cleanup_notes/magic_notes_outcome.tsv`
+  (431: 56 applied 2026-11-01, 95 settled earlier, 25 kept on purpose, 255 still need a new name with evidence: precheck
+  results, AC states, audience slots and animations, pose-look types, bero kinds, fade types in scripts).
+
+- Calls through function-pointer casts: 37 (icon drawing 10, window frame 5, party slit-floor motion 4, marioChgMot 2,
+  sound pitch 2, cos 2, party menu setup 2, puni map data getters 3, single sites). Each needs a prototype that the
   definition and every caller compile identically with. Tested without a fit (retail mismatches, Codex rounds 12-13,
   cleanup_notes/codex_round13_intake.md): iconDispGx (best 14/22), iconDispGx2 (JP definition), windowDispGX_Waku_col
   float-first (fits all but msgdrv), BtlUnit_snd_se_pos word pitch, typed puni getidx calls (the casts cross
