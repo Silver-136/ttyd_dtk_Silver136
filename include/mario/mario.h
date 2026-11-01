@@ -7,6 +7,9 @@
 // Squared control stick magnitude (55 * 55) that separates walking from dashing.
 #define STICK_DASH_MIN_SQ 3025
 
+// Danger: at or below this HP Mario stands in his tired pose.
+#define MARIO_DANGER_HP 5
+
 // MarioWork.dokanType, the argument of evt_mario_paper_pose_dokan: spellings from the game's own name table there.
 // IN comes into the room out of the pipe, OUT leaves through it; TATE vertical, YOKO sideways.
 typedef enum DokanType {

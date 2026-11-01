@@ -24,7 +24,7 @@
 
 /** TRUE when Mario is at 5 HP or less, which switches his idle to the tired pose (M_S_3) and breathing sounds. */
 static inline BOOL lowHP(void) {
-    BOOL r = pouchGetHP() <= 5;
+    BOOL r = pouchGetHP() <= MARIO_DANGER_HP;
     return r;
 }
 
