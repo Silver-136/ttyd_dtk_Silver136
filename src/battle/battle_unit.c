@@ -44,7 +44,7 @@ BOOL BtlUnit_Init(void) {
     int i;
     BattleWork* wp = _battleWorkPointer;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         BattleSetUnitPtr(wp, i, NULL);
     }
     return TRUE;
